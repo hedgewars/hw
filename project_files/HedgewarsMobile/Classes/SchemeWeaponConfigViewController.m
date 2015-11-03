@@ -49,7 +49,7 @@
 
 -(NSString *)selectedScript {
     if (selectedScript == nil)
-        self.selectedScript = @"Normal.plist";
+        self.selectedScript = @"";
     return selectedScript;
 }
 
@@ -167,7 +167,7 @@
     else if (self.topControl.selectedSegmentIndex == 1)
         return [self.listOfWeapons count];
     else
-        return [self.listOfScripts count];
+        return [self.listOfScripts count] + 1; // +1 for fake 'Normal'
 }
 
 // Customize the appearance of table view cells.
@@ -206,14 +206,31 @@
             self.lastIndexPath_we = indexPath;
         }
     } else {
-        cell.textLabel.text = [[[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension]
-                               stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-        //cell.detailTextLabel.text = ;
-        if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
-            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
-            cell.accessoryView = checkbox;
-            [checkbox release];
-            self.lastIndexPath_lu = indexPath;
+        if (row == 0)
+        {
+            cell.textLabel.text = @"Normal";
+            
+            if ([self.selectedScript isEqualToString:@""])
+            {
+                UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+                cell.accessoryView = checkbox;
+                [checkbox release];
+                self.lastIndexPath_lu = indexPath;
+            }
+        }
+        else
+        {
+            row--;
+            
+            cell.textLabel.text = [[[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension]
+                                   stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            //cell.detailTextLabel.text = ;
+            if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
+                UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+                cell.accessoryView = checkbox;
+                [checkbox release];
+                self.lastIndexPath_lu = indexPath;
+            }
         }
     }
 
@@ -312,46 +329,63 @@
             self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
         } else {
             self.lastIndexPath_lu = indexPath;
-            self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
-
-            // some styles disable or force the choice of a particular scheme/weaponset
-            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
-            NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
-            [path release];
-            NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
-            [configFile release];
-
-            self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
-            NSString *scheme = [scriptOptions objectAtIndex:0];
-            if ([scheme isEqualToString:@"locked"])
+            
+            if (newRow == 0)
             {
+                self.selectedScript = nil;
+                self.scriptCommand = nil;
+                
                 self.selectedScheme = @"Default.plist";
-                [self.topControl setEnabled:NO forSegmentAtIndex:0];
-            }
-            else
-            {
-                if (scheme && ![scheme isEqualToString:@"*"])
-                {
-                    NSString *correctScheme = [scheme stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    self.selectedScheme = [NSString stringWithFormat:@"%@.plist", correctScheme];
-                }
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
-            }
-
-            NSString *weapon = [scriptOptions objectAtIndex:1];
-            if ([weapon isEqualToString:@"locked"])
-            {
+                
                 self.selectedWeapon = @"Default.plist";
-                [self.topControl setEnabled:NO forSegmentAtIndex:1];
+                [self.topControl setEnabled:YES forSegmentAtIndex:1];
             }
             else
             {
-                if (weapon && ![weapon isEqualToString:@"*"])
+                newRow--;
+                
+                self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
+                
+                // some styles disable or force the choice of a particular scheme/weaponset
+                NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
+                NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
+                [path release];
+                NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
+                [configFile release];
+                
+                self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
+                NSString *scheme = [scriptOptions objectAtIndex:0];
+                if ([scheme isEqualToString:@"locked"])
                 {
-                    NSString *correctWeapon = [weapon stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    self.selectedWeapon = [NSString stringWithFormat:@"%@.plist", correctWeapon];
+                    self.selectedScheme = @"Default.plist";
+                    [self.topControl setEnabled:NO forSegmentAtIndex:0];
                 }
-                [self.topControl setEnabled:YES forSegmentAtIndex:1];
+                else
+                {
+                    if (scheme && ![scheme isEqualToString:@"*"])
+                    {
+                        NSString *correctScheme = [scheme stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                        self.selectedScheme = [NSString stringWithFormat:@"%@.plist", correctScheme];
+                    }
+                    [self.topControl setEnabled:YES forSegmentAtIndex:0];
+                }
+                
+                NSString *weapon = [scriptOptions objectAtIndex:1];
+                if ([weapon isEqualToString:@"locked"])
+                {
+                    self.selectedWeapon = @"Default.plist";
+                    [self.topControl setEnabled:NO forSegmentAtIndex:1];
+                }
+                else
+                {
+                    if (weapon && ![weapon isEqualToString:@"*"])
+                    {
+                        NSString *correctWeapon = [weapon stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                        self.selectedWeapon = [NSString stringWithFormat:@"%@.plist", correctWeapon];
+                    }
+                    [self.topControl setEnabled:YES forSegmentAtIndex:1];
+                }
             }
         }
 
