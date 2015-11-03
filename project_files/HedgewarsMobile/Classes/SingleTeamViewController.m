@@ -401,7 +401,6 @@
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.teamDictionary = nil;
     self.teamName = nil;
     self.normalHogSprite = nil;
@@ -411,7 +410,9 @@
     [super viewDidUnload];
 }
 
--(void) dealloc {
+-(void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     releaseAndNil(teamDictionary);
     releaseAndNil(teamName);
     releaseAndNil(normalHogSprite);
