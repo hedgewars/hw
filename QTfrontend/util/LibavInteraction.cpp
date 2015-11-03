@@ -106,8 +106,8 @@ LibavInteraction::LibavInteraction() : QObject()
             if (!pCodec->pix_fmts)
                 continue;
             bool yuv420Supported = false;
-            for (const PixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
-                if (*pfmt == PIX_FMT_YUV420P)
+            for (const AVPixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
+                if (*pfmt == AV_PIX_FMT_YUV420P)
                 {
                     yuv420Supported = true;
                     break;
