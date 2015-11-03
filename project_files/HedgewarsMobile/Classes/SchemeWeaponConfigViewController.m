@@ -407,7 +407,6 @@
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -423,7 +422,9 @@
     [super viewDidUnload];
 }
 
--(void) dealloc {
+-(void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
     releaseAndNil(listOfScripts);
