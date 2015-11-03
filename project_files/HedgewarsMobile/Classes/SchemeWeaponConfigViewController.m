@@ -20,6 +20,7 @@
 #import "SchemeWeaponConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define DISABLED_GAME_STYLES @[@""]
 
 #define LABEL_TAG 57423
 #define TABLE_TAG 45657
@@ -73,7 +74,7 @@
 -(NSArray *)listOfScripts {
     if (listOfScripts == nil)
         self.listOfScripts = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL]
-                              filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.lua'"]];
+                              filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.lua' AND NOT (SELF IN %@)", DISABLED_GAME_STYLES]];
     return listOfScripts;
 }
 
