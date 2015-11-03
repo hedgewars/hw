@@ -7,10 +7,11 @@
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
  + Extensive changes to TechRacer: Variable terrain types, enhanced parameters, hwmap interpreter, fuel limiter, etc. 
+ + HedgeEditor - create missions/etc. in-game! see http://hedgewars.org/HedgeEditor
  + Map previews can now take script parameters into account and preview waypoints in TechRacer
  + Added a couple new flags
  + Various tweaks to the interface and in-game chat
- + Divided teams options will now just be ignored when more/less than 2 teams, instead of displaying a fatal error
+ + Divided teams options will now just be ignored when more/less than 2 teams/clans, instead of displaying a fatal error
  + Added 6 TechRacer maps to TechMaps
  + Added 3 SpeedShoppa Challenges: Shoppa Love, Ropes and Crates, The Customer is King
  + Hammer damage is now rounded up. This means it can be used to execute hedgehogs with only 1 hp.
