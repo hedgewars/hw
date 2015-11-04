@@ -106,7 +106,7 @@ LibavInteraction::LibavInteraction() : QObject()
             if (!pCodec->pix_fmts)
                 continue;
             bool yuv420Supported = false;
-#if LIBAVCODEC_VERSION_MAJOR > 56
+#if LIBAVUTIL_VERSION_MAJOR > 51
             for (const AVPixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
                 if (*pfmt == AV_PIX_FMT_YUV420P)
 #else
