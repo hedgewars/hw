@@ -349,6 +349,24 @@
         return NSLocalizedString(@"Nvr", @"Short for 'Never'");
     else if ([keyString isEqualToString:@"Mines Time"] && sliderValue == -1)
         return NSLocalizedString(@"Rnd", @"Short for 'Random'");
+    else if ([keyString isEqualToString:@"World Edge"])
+        switch (sliderValue)
+        {
+            case 0:
+                return NSLocalizedString(@"None", nil);
+            
+            case 1:
+                return NSLocalizedString(@"Wrap", nil);
+                
+            case 2:
+                return NSLocalizedString(@"Bounce", nil);
+                
+            case 3:
+                return NSLocalizedString(@"Sea", nil);
+                
+            default:
+                return @"";
+        }
     else
         return [NSString stringWithFormat:@"%ld", (long)sliderValue];
 }
