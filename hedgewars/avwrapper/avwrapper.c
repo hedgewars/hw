@@ -190,7 +190,7 @@ static int WriteAudioFrame()
     if (!g_pAStream)
         return 0;
 
-    AVPacket Packet = { 0 };
+    AVPacket Packet;
     av_init_packet(&Packet);
 
     int NumSamples = fread(g_pSamples, 2*g_Channels, g_NumSamples, g_pSoundFile);
