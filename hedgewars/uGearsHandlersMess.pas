@@ -1094,6 +1094,7 @@ begin
     AllInactive := false;
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
+    WorldWrap(Gear);
     Gear^.dY := Gear^.dY + cGravity;
     CheckGearDrowning(Gear);
     CheckCollision(Gear);
