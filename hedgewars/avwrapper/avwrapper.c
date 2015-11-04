@@ -158,7 +158,11 @@ static void AddAudioStream()
     else
         g_NumSamples = g_pAudio->frame_size;
     g_pSamples = (int16_t*)av_malloc(g_NumSamples*g_Channels*sizeof(int16_t));
+#if LIBAVUTIL_VERSION_MAJOR > 52
+    g_pAFrame = av_frame_alloc();
+#else
     g_pAFrame = avcodec_alloc_frame();
+#endif
     if (!g_pAFrame)
     {
         Log("Could not allocate frame\n");
@@ -241,7 +245,11 @@ static int AddVideoStream()
     g_pVideo->time_base.den = g_Framerate.num;
     g_pVideo->time_base.num = g_Framerate.den;
     //g_pVideo->gop_size = 12; /* emit one intra frame every twelve frames at most */
+#if LIBAVUTIL_VERSION_MAJOR > 51
+    g_pVideo->pix_fmt = AV_PIX_FMT_YUV420P;
+#else
     g_pVideo->pix_fmt = PIX_FMT_YUV420P;
+#endif
 
     // set quality
     if (g_VQuality > 100)
@@ -299,7 +307,12 @@ static int AddVideoStream()
 #endif
         return FatalError("Could not open video codec %s", g_pVCodec->long_name);
 
+#if LIBAVUTIL_VERSION_MAJOR > 52
+    g_pVFrame = av_frame_alloc();
+#else
     g_pVFrame = avcodec_alloc_frame();
+#endif
+
     if (!g_pVFrame)
         return FatalError("Could not allocate frame");
 
@@ -317,10 +330,18 @@ static int WriteFrame(AVFrame* pFrame)
     // write interleaved audio frame
     if (g_pAStream)
     {
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+        VideoTime = (double)av_stream_get_end_pts(g_pVStream)*g_pVStream->time_base.num/g_pVStream->time_base.den;
+#else
         VideoTime = (double)g_pVStream->pts.val*g_pVStream->time_base.num/g_pVStream->time_base.den;
+#endif
         do
         {
+#if LIBAVFORMAT_VERSION_MAJOR > 55
+            AudioTime = (double)av_stream_get_end_pts(g_pAStream)*g_pAStream->time_base.num/g_pAStream->time_base.den;
+#else
             AudioTime = (double)g_pAStream->pts.val*g_pAStream->time_base.num/g_pAStream->time_base.den;
+#endif
             ret = WriteAudioFrame();
         }
         while (AudioTime < VideoTime && ret);
@@ -526,14 +547,22 @@ AVWRAP_DECL int AVWrapper_Close()
         avcodec_close(g_pVideo);
         av_free(g_pVideo);
         av_free(g_pVStream);
+#if LIBAVUTIL_VERSION_MAJOR > 52
+        av_frame_free(&g_pVFrame);
+#else
         av_free(g_pVFrame);
+#endif
     }
     if (g_pAStream)
     {
         avcodec_close(g_pAudio);
         av_free(g_pAudio);
         av_free(g_pAStream);
+#if LIBAVUTIL_VERSION_MAJOR > 52
+        av_frame_free(&g_pAFrame);
+#else
         av_free(g_pAFrame);
+#endif
         av_free(g_pSamples);
         fclose(g_pSoundFile);
     }
