@@ -116,7 +116,7 @@ LibavInteraction::LibavInteraction() : QObject()
             if (!pCodec->pix_fmts)
                 continue;
             bool yuv420Supported = false;
-            for (const AVPixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
+            for (const enum AVPixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
                 if (*pfmt == AV_PIX_FMT_YUV420P)
                 {
                     yuv420Supported = true;
@@ -131,7 +131,7 @@ LibavInteraction::LibavInteraction() : QObject()
             if (!pCodec->sample_fmts)
                 continue;
             bool s16Supported = false;
-            for (const AVSampleFormat* pfmt = pCodec->sample_fmts; *pfmt != -1; pfmt++)
+            for (const enum AVSampleFormat* pfmt = pCodec->sample_fmts; *pfmt != -1; pfmt++)
                 if (*pfmt == AV_SAMPLE_FMT_S16)
                 {
                     s16Supported = true;
