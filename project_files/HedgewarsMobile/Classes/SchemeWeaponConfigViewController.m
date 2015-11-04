@@ -20,7 +20,7 @@
 #import "SchemeWeaponConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define DISABLED_GAME_STYLES @[@""]
+#define DISABLED_GAME_STYLES @[@"Frenzy.lua", @"Gravity.lua", @"HedgeEditor.lua", @"Continental_supplies.lua", @"Space_Invasion.lua", @"Tumbler.lua"]
 
 #define LABEL_TAG 57423
 #define TABLE_TAG 45657
