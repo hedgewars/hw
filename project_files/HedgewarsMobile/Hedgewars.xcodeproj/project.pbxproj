@@ -2114,10 +2114,7 @@
 				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "";
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-Wl,-no_order_inits",
-				);
+				OTHER_LDFLAGS = "-lz";
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -2234,7 +2231,6 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
-					"-Wl,-no_order_inits",
 					"-framework",
 					MessageUI,
 				);
@@ -2399,7 +2395,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
-					"-Wl,-no_order_inits",
 					"-framework",
 					MessageUI,
 				);
@@ -2482,7 +2477,6 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
-					"-Wl,-no_order_inits",
 					"-framework",
 					MessageUI,
 				);
