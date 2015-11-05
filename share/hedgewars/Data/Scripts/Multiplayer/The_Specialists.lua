@@ -127,48 +127,48 @@ function CreateTeam()
 
 			if z == 1 then
 
-					SetHogName(hhs[i],"Soldier")
+					SetHogName(hhs[i],loc("Soldier"))
 					SetHogHat(hhs[i], "sf_vega")
 					SetHealth(hhs[i],200)
 
 			elseif z == 2 then
 
 					SetHogHat(hhs[i], "Glasses")
-					SetHogName(hhs[i],"Engineer")
+					SetHogName(hhs[i],loc("Engineer"))
 
 			elseif z == 3 then
 
-					SetHogName(hhs[i],"Ninja")
+					SetHogName(hhs[i],loc("Ninja"))
 					SetHogHat(hhs[i], "NinjaFull")
 					SetHealth(hhs[i],80)
 
 			elseif z == 4 then
 
-					SetHogName(hhs[i],"Demo")
+					SetHogName(hhs[i],loc("Demo"))
 					SetHogHat(hhs[i], "Skull")
 					SetHealth(hhs[i],200)
 
 			elseif z == 5 then
 
-					SetHogName(hhs[i],"Sniper")
+					SetHogName(hhs[i],loc("Sniper"))
 					SetHogHat(hhs[i], "Sniper")
 					SetHealth(hhs[i],120)
 
 			elseif z == 6 then
 
-					SetHogName(hhs[i],"Saint")
+					SetHogName(hhs[i],loc("Saint"))
 					SetHogHat(hhs[i], "angel")
 					SetHealth(hhs[i],300)
 
 			elseif z == 7 then
 
-					SetHogName(hhs[i],"Pyro")
+					SetHogName(hhs[i],loc("Pyro"))
 					SetHogHat(hhs[i], "Gasmask")
 					SetHealth(hhs[i],150)
 
 			elseif z == 8 then
 
-					SetHogName(hhs[i],"Loon")
+					SetHogName(hhs[i],loc("Loon"))
 					SetHogHat(hhs[i], "clown")
 					SetHealth(hhs[i],100)
 

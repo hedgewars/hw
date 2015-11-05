@@ -158,9 +158,9 @@ local MapList =
 
 function BoolToCfgTxt(p)
 	if p == false then
-		return("Disabled")
+		return loc("Disabled")
 	else
-		return("Enabled")
+		return loc("Enabled")
 	end
 end
 
