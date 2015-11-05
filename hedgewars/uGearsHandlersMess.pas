@@ -1960,7 +1960,7 @@ begin
     if land = 0 then land:= TestCollisionYwithGear(Gear,-2);
     if land = 0 then land:= TestCollisionXwithGear(Gear,-2);
     if land = 0 then land:= TestCollisionYwithGear(Gear, 2);
-    if (land <> 0) and (land and lfBouncy = 0) then
+    if (land <> 0) and ((land and lfBouncy = 0) or ((Gear^.State and gstMoving) = 0)) then
         begin
         if ((Gear^.State and gstMoving) <> 0) or (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
