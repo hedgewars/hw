@@ -20,6 +20,9 @@
 #import "SavedGamesViewController.h"
 #import "GameInterfaceBridge.h"
 
+@interface SavedGamesViewController ()
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *clearAllButton;
+@end
 
 @implementation SavedGamesViewController
 @synthesize tableView, listOfSavegames;
@@ -37,7 +40,10 @@
     [self.tableView reloadData];
 }
 
--(void) viewDidLoad {
+-(void) viewDidLoad
+{
+    [super viewDidLoad];
+    
     [self.tableView setBackgroundColorForAnyTable:[UIColor clearColor]];
 
     NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
@@ -48,10 +54,11 @@
     background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:background atIndex:0];
     [background release];
-
+    
+    [self.clearAllButton setTitle:NSLocalizedString(@"Clear All", nil)];
+    
     if (self.listOfSavegames == nil)
         [self updateTable];
-    [super viewDidLoad];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -241,6 +248,7 @@
 -(void) dealloc {
     releaseAndNil(tableView);
     releaseAndNil(listOfSavegames);
+    releaseAndNil(_clearAllButton);
     [super dealloc];
 }
 
