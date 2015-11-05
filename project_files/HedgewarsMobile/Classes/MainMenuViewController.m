@@ -94,7 +94,7 @@
     else
     {
         // let's not prompt for rating when app crashed >_>
-        [Appirater appLaunched];
+        [Appirater appLaunched:YES];
     }
 
     /*
