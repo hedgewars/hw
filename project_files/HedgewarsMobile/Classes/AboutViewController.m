@@ -119,6 +119,7 @@
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;
     label.text = footerString;
+    [footerString release];
 
     label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];
