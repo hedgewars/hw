@@ -207,7 +207,6 @@
 		61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		61A976B3136F668500DD9878 /* uCursor.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A976B2136F668500DD9878 /* uCursor.pas */; };
-		61AC067412B2E32D000B52A2 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AC067312B2E32D000B52A2 /* Appirater.m */; };
 		61B37A1F17837C78009F283D /* ArgParsers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A1D17837C78009F283D /* ArgParsers.pas */; };
 		61B37A2017837C78009F283D /* uVisualGearsList.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A1E17837C78009F283D /* uVisualGearsList.pas */; };
 		61B37A80178381DB009F283D /* uGearsHandlersMess.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */; };
@@ -273,6 +272,9 @@
 		F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBD1B9B95A400A78ADF /* Icon-76.png */; };
 		F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */; };
 		F6756D801BD8550500B6AB6B /* LabelWithIBLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */; };
+		F67FC8121BEC06E700A9DC75 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F67FC8101BEC06E700A9DC75 /* Appirater.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F67FC8141BEC072B00A9DC75 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F67FC8131BEC072B00A9DC75 /* StoreKit.framework */; };
+		F67FC8161BEC17AC00A9DC75 /* Appirater.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */; };
 		F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BA38451BA7A834005D16EA /* GameLogViewController.m */; };
 		F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */; };
 		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
@@ -674,8 +676,6 @@
 		61A4A39312A5CCC2004D81E6 /* uVariables.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVariables.pas; path = ../../hedgewars/uVariables.pas; sourceTree = SOURCE_ROOT; };
 		61A4A3A112A5CD56004D81E6 /* uCaptions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCaptions.pas; path = ../../hedgewars/uCaptions.pas; sourceTree = SOURCE_ROOT; };
 		61A976B2136F668500DD9878 /* uCursor.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCursor.pas; path = ../../hedgewars/uCursor.pas; sourceTree = SOURCE_ROOT; };
-		61AC067212B2E32D000B52A2 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Appirater.h; path = Classes/Appirater.h; sourceTree = "<group>"; };
-		61AC067312B2E32D000B52A2 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appirater.m; path = Classes/Appirater.m; sourceTree = "<group>"; };
 		61B37A1D17837C78009F283D /* ArgParsers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = ArgParsers.pas; path = ../../hedgewars/ArgParsers.pas; sourceTree = SOURCE_ROOT; };
 		61B37A1E17837C78009F283D /* uVisualGearsList.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGearsList.pas; path = ../../hedgewars/uVisualGearsList.pas; sourceTree = SOURCE_ROOT; };
 		61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlersMess.pas; path = ../../hedgewars/uGearsHandlersMess.pas; sourceTree = SOURCE_ROOT; };
@@ -766,6 +766,11 @@
 		F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Resources/Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
 		F6756D7E1BD8550500B6AB6B /* LabelWithIBLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelWithIBLocalization.h; sourceTree = "<group>"; };
 		F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelWithIBLocalization.m; sourceTree = "<group>"; };
+		F67FC80F1BEC06E700A9DC75 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		F67FC8101BEC06E700A9DC75 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		F67FC8111BEC06E700A9DC75 /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
+		F67FC8131BEC072B00A9DC75 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Appirater.bundle; sourceTree = "<group>"; };
 		F6BA38441BA7A834005D16EA /* GameLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLogViewController.h; sourceTree = "<group>"; };
 		F6BA38451BA7A834005D16EA /* GameLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLogViewController.m; sourceTree = "<group>"; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -788,6 +793,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F67FC8141BEC072B00A9DC75 /* StoreKit.framework in Frameworks */,
 				F6FF25A21BB8AEE300124053 /* GameController.framework in Frameworks */,
 				F6D7E0C81B7698BF004F3BCF /* libstdc++.dylib in Frameworks */,
 				F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */,
@@ -868,8 +874,7 @@
 				61F8535314578999002CA294 /* Helpers */,
 				61641FE21437CD8F006E049C /* Headers */,
 				61DE91561258B76800B80214 /* Custom UIs */,
-				61AC067212B2E32D000B52A2 /* Appirater.h */,
-				61AC067312B2E32D000B52A2 /* Appirater.m */,
+				F67FC80E1BEC06E700A9DC75 /* Appirater */,
 				61006F93128DE31F00EBA7F7 /* CreationChamber.h */,
 				61006F94128DE31F00EBA7F7 /* CreationChamber.m */,
 				6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */,
@@ -904,6 +909,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F67FC8131BEC072B00A9DC75 /* StoreKit.framework */,
 				F6FF25A11BB8AEE300124053 /* GameController.framework */,
 				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
@@ -1398,6 +1404,18 @@
 			path = "Resources/Frontend/Help Bubbles";
 			sourceTree = "<group>";
 		};
+		F67FC80E1BEC06E700A9DC75 /* Appirater */ = {
+			isa = PBXGroup;
+			children = (
+				F67FC80F1BEC06E700A9DC75 /* Appirater.h */,
+				F67FC8101BEC06E700A9DC75 /* Appirater.m */,
+				F67FC8111BEC06E700A9DC75 /* AppiraterDelegate.h */,
+				F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */,
+			);
+			name = Appirater;
+			path = Classes/Appirater;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1658,6 +1676,7 @@
 				61188C0412A6FE880026C5DA /* savesButton@2x.png in Resources */,
 				61188C0512A6FE8F0026C5DA /* Data in Resources */,
 				61188C0612A6FE950026C5DA /* smallerBackground@2x~iphone.png in Resources */,
+				F67FC8161BEC17AC00A9DC75 /* Appirater.bundle in Resources */,
 				F65724FD1B7E784700A86262 /* helpabove.png in Resources */,
 				F6F07BDE1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib in Resources */,
 				61188C0712A6FE960026C5DA /* settingsButton@2x.png in Resources */,
@@ -1877,12 +1896,12 @@
 				61A4A3A212A5CD56004D81E6 /* uCaptions.pas in Sources */,
 				61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */,
 				61F544C712AF1748007FD913 /* HoldTableViewCell.m in Sources */,
-				61AC067412B2E32D000B52A2 /* Appirater.m in Sources */,
 				61E2E12E12BAAEE30051B659 /* ServerProtocolNetwork.m in Sources */,
 				61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */,
 				F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */,
 				61EDB5B0135B3F97009B29A6 /* GameInterfaceBridge.m in Sources */,
 				61A976B3136F668500DD9878 /* uCursor.pas in Sources */,
+				F67FC8121BEC06E700A9DC75 /* Appirater.m in Sources */,
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
 				61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */,
 				611D7A50142FDCD3006E0798 /* uTouch.pas in Sources */,
