@@ -23,6 +23,7 @@ interface
 uses uFloat, uTypes, SDLh;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
+function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer, newUid: LongWord): PGear;
 procedure DeleteGear(Gear: PGear);
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
@@ -164,11 +165,16 @@ end;
 
 
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
+begin
+AddGear:= AddGear(X, Y, Kind, State, dX, dY, Timer, 0);
+end;
+function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer, newUid: LongWord): PGear;
 var gear: PGear;
     //c: byte;
     cakeData: PCakeData;
 begin
-inc(GCounter);
+if newUid = 0 then
+    inc(GCounter);
 
 AddFileLog('AddGear: #' + inttostr(GCounter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 
@@ -186,7 +192,9 @@ gear^.dY:= dY;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
-gear^.uid:= GCounter;
+if newUid = 0 then
+     gear^.uid:= GCounter
+else gear^.uid:= newUid;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
 gear^.Density:= _1;
@@ -466,6 +474,8 @@ case Kind of
                 gear^.Tag:= Y
                 end;
    gtAirAttack: begin
+                gear^.Health:= 6;
+                gear^.Damage:= 30;
                 gear^.Z:= cHHZ+2;
                 gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
                 end;

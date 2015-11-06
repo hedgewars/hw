@@ -1,21 +1,36 @@
 + features
 * bugfixes
 
+0.9.22 -> 0.9.23
+ * Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
+
 0.9.21 -> 0.9.22
+ + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
  + Extensive changes to TechRacer: Variable terrain types, enhanced parameters, hwmap interpreter, fuel limiter, etc. 
+ + HedgeEditor - create missions/etc. in-game! see http://hedgewars.org/HedgeEditor
  + Map previews can now take script parameters into account and preview waypoints in TechRacer
  + Added a couple new flags
- + Small improvements to the interface and in-game chat
- + Divided teams options will now just be ignored when more/less than 2 teams, instead of displaying a fatal error
+ + Various tweaks to the interface and in-game chat
+ + Divided teams options will now just be ignored when more/less than 2 teams/clans, instead of displaying a fatal error
  + Added 6 TechRacer maps to TechMaps
  + Added 3 SpeedShoppa Challenges: Shoppa Love, Ropes and Crates, The Customer is King
  + Hammer damage is now rounded up. This means it can be used to execute hedgehogs with only 1 hp.
  + Improved "Art" theme.
  * Generated bridges/girders are now connected better to the land mass
  * Fixed rubberband sprite
+ * Fixed Wind-Indicator being wrong in certain situations
+ * Melon Bomb Pieces now bounce on Rubberband
+ * Reduced menu music volume
  * The game will now fallback to default voicepack if a team's voicepack is not locally installed. (Instead of rendering team voiceless)
  * Hammer now does more damage when the Extra-Damage utility is used
  * Many other bug fixes
+
+Lua-API:
+ + New map parameter: MapFeatureSize -- numeric representation of detail slider below map preview; use within onGameInit()/onPreviewInit()
+ + New function: SetMaxBuildDistance([ distInPx ]) -- specify how many pixels away a hedgehog can still place girders/etc. set to 0 for no limit; call with no param to reset to default
+ + New hook: onSuddenDeath() -- called by engine when sudden death begins
+ * Previously missing gear states are now available (gstSubmersible, gstFrozen and gstNoGravity)
+ * Fixed OnHogAttack giving the incorrect AmmoType (amNothing) under certain conditions
 
 0.9.20 -> 0.9.21:
  + New type of randomly generated maps: Perlin Maps.

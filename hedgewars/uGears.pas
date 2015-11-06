@@ -320,6 +320,7 @@ case step of
                     Ammoz[amTardis].Probability:= 0;
                     end;
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+                ScriptCall('onSuddenDeath');
                 playSound(sndSuddenDeath);
                 StopMusic;
                 if SDMusicFN <> '' then PlayMusic
