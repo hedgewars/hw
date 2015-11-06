@@ -771,6 +771,9 @@
 		F67FC8111BEC06E700A9DC75 /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
 		F67FC8131BEC072B00A9DC75 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Appirater.bundle; sourceTree = "<group>"; };
+		F67FC81F1BEC280D00A9DC75 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Locale/tr.lproj/About.strings; sourceTree = "<group>"; };
+		F67FC8201BEC280D00A9DC75 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Locale/tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F67FC8211BEC280D00A9DC75 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Locale/tr.lproj/Scheme.strings; sourceTree = "<group>"; };
 		F6BA38441BA7A834005D16EA /* GameLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLogViewController.h; sourceTree = "<group>"; };
 		F6BA38451BA7A834005D16EA /* GameLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLogViewController.m; sourceTree = "<group>"; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1490,6 +1493,7 @@
 				Portuguese,
 				Romanian,
 				ru,
+				tr,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1997,6 +2001,7 @@
 				61C6783F14B3DD020087425A /* Portuguese */,
 				6154A53114C37E4A00F6EEF6 /* Romanian */,
 				F65725291B7EB9CC00A86262 /* ru */,
+				F67FC81F1BEC280D00A9DC75 /* tr */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -2016,6 +2021,7 @@
 				61C6784B14B3DD0B0087425A /* Portuguese */,
 				6154A53E14C37E5400F6EEF6 /* Romanian */,
 				F657252A1B7EB9CC00A86262 /* ru */,
+				F67FC8201BEC280D00A9DC75 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2035,6 +2041,7 @@
 				61C6784C14B3DD140087425A /* Portuguese */,
 				6154A54014C37EB100F6EEF6 /* Romanian */,
 				F657252B1B7EB9CC00A86262 /* ru */,
+				F67FC8211BEC280D00A9DC75 /* tr */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
