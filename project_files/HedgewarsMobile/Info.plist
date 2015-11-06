@@ -21,7 +21,7 @@
 		<string>Icon-76@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.AC27.Hedgewars</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
