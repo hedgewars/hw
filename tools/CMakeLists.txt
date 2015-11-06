@@ -58,7 +58,7 @@ if(APPLE AND NOT SKIPBUNDLE)
 
     #create the .dmg for deployment
     #first make sure .app exists, then remove any old .dmg with same name, finally run the script
-    add_custom_target(dmg COMMAND "if [ ! -a Hedgewars.app ]; then make install\; fi;"
+    add_custom_target(dmg COMMAND make install
                           COMMAND rm -f ${CMAKE_BINARY_DIR}/Hedgewars-${HEDGEWARS_VERSION}.dmg
                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/create-dmg.sh
                                   --volname "Hedgewars ${HEDGEWARS_VERSION}"

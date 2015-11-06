@@ -68,3 +68,7 @@ function onGearDelete(gear)
 		end
 	end
 end
+
+function onNewTurn()
+    SetWeapon(amBaseballBat)
+end

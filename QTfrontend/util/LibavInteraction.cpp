@@ -21,7 +21,9 @@
 #if VIDEOREC
 extern "C"
 {
+#include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
+#include "libavutil/avutil.h"
 }
 
 #include <QVector>
@@ -30,13 +32,25 @@ extern "C"
 
 #include "HWApplication.h"
 
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(54, 25, 0)
-#define CodecID AVCodecID
+// compatibility section
+#if LIBAVCODEC_VERSION_MAJOR < 55
+#define av_codec_is_encoder(x)          x->encode
+#define AVCodecID                       CodecID
+#endif
+
+#if LIBAVFORMAT_VERSION_MAJOR < 54
+#define avformat_find_stream_info(x, y) av_find_stream_info(x)
+#define avformat_close_input(x)         av_close_input_file(*(x))
+#endif
+
+#if LIBAVUTIL_VERSION_MAJOR < 54
+#define AVPixelFormat                   PixelFormat
+#define AV_PIX_FMT_YUV420P              PIX_FMT_YUV420P
 #endif
 
 struct Codec
 {
-    CodecID id;
+    AVCodecID id;
     bool isAudio;
     QString shortName; // used for identification
     QString longName; // used for displaying to user
@@ -56,7 +70,7 @@ QList<Codec> codecs;
 QMap<QString,Format> formats;
 
 // test if given format supports given codec
-bool FormatQueryCodec(AVOutputFormat *ofmt, enum CodecID codec_id)
+bool FormatQueryCodec(AVOutputFormat *ofmt, enum AVCodecID codec_id)
 {
 #if LIBAVFORMAT_VERSION_MAJOR >= 54
     return avformat_query_codec(ofmt, codec_id, FF_COMPLIANCE_NORMAL) == 1;
@@ -76,11 +90,7 @@ LibavInteraction::LibavInteraction() : QObject()
     AVCodec* pCodec = NULL;
     while ((pCodec = av_codec_next(pCodec)))
     {
-#if LIBAVCODEC_VERSION_MAJOR >= 54
         if (!av_codec_is_encoder(pCodec))
-#else
-        if (!pCodec->encode)
-#endif
             continue;
 
         if (pCodec->type != AVMEDIA_TYPE_VIDEO && pCodec->type != AVMEDIA_TYPE_AUDIO)
@@ -106,8 +116,8 @@ LibavInteraction::LibavInteraction() : QObject()
             if (!pCodec->pix_fmts)
                 continue;
             bool yuv420Supported = false;
-            for (const PixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
-                if (*pfmt == PIX_FMT_YUV420P)
+            for (const enum AVPixelFormat* pfmt = pCodec->pix_fmts; *pfmt != -1; pfmt++)
+                if (*pfmt == AV_PIX_FMT_YUV420P)
                 {
                     yuv420Supported = true;
                     break;
@@ -121,7 +131,7 @@ LibavInteraction::LibavInteraction() : QObject()
             if (!pCodec->sample_fmts)
                 continue;
             bool s16Supported = false;
-            for (const AVSampleFormat* pfmt = pCodec->sample_fmts; *pfmt != -1; pfmt++)
+            for (const enum AVSampleFormat* pfmt = pCodec->sample_fmts; *pfmt != -1; pfmt++)
                 if (*pfmt == AV_SAMPLE_FMT_S16)
                 {
                     s16Supported = true;
@@ -274,11 +284,7 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
     QByteArray utf8path = filepath.toUtf8();
     if (avformat_open_input(&pContext, utf8path.data(), NULL, NULL) < 0)
         return "";
-#if LIBAVFORMAT_VERSION_MAJOR < 53
-    if (av_find_stream_info(pContext) < 0)
-#else
     if (avformat_find_stream_info(pContext, NULL) < 0)
-#endif
         return "";
 
     int s = float(pContext->duration)/AV_TIME_BASE;
@@ -312,11 +318,7 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
     AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);
     if (pComment)
         desc += QString("\n") + pComment->value;
-#if LIBAVFORMAT_VERSION_MAJOR < 53
-    av_close_input_file(pContext);
-#else
     avformat_close_input(&pContext);
-#endif
     return desc;
 }
 

@@ -628,7 +628,9 @@ begin
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L)
         end
     else
         lua_pushnil(L);
@@ -642,7 +644,9 @@ begin
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L)
         end
     else
         lua_pushnil(L);
@@ -656,7 +660,9 @@ begin
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L)
         end
     else
         lua_pushnil(L);
@@ -675,9 +681,8 @@ begin
             health:= cHealthCaseAmount;
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), HealthCrate, health, 0);
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
-        else
-            lua_pushnil(L);
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end
     else
         lua_pushnil(L);
@@ -694,9 +699,8 @@ begin
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
-        else
-            lua_pushnil(L);
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end
     else
         lua_pushnil(L);
@@ -713,9 +717,8 @@ begin
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
-        else
-            lua_pushnil(L);
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
        end
     else
         lua_pushnil(L);
@@ -917,29 +920,30 @@ begin
             lua_pushinteger(L, gear^.AdvBounce);
             lua_pushinteger(L, Integer(gear^.ImpactSound));
             lua_pushinteger(L, gear^.nImpactSounds);
-            lua_pushinteger(L, gear^.Tint)
+            lua_pushinteger(L, gear^.Tint);
+            lua_pushinteger(L, gear^.Damage)
             end
         else
             begin
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-            lua_pushnil(L)
+            lua_pushnil(L); lua_pushnil(L)
             end
         end
     else
         begin
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-        lua_pushnil(L)
+        lua_pushnil(L); lua_pushnil(L)
         end;
-    lc_getgearvalues:= 11
+    lc_getgearvalues:= 12
 end;
 
 function lc_setgearvalues(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-// Currently allows 1-12 params
-//    if CheckLuaParamCount(L, 12, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint') then
+// Currently allows 1-13 params
+//    if CheckLuaParamCount(L, 13, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage') then
 //        begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -965,7 +969,9 @@ begin
             if not lua_isnoneornil(L, 11) then
                 gear^.nImpactSounds := lua_tointeger(L, 11);
             if not lua_isnoneornil(L, 12) then
-                gear^.Tint := lua_tointeger(L, 12)
+                gear^.Tint := lua_tointeger(L, 12);
+            if not lua_isnoneornil(L, 13) then
+                gear^.Damage := lua_tointeger(L, 13);
             end;
 //        end
 //    else
@@ -2885,6 +2891,12 @@ end;
 
 procedure GetGlobals;
 begin
+// TODO
+// Use setters instead, because globals should be read-only!
+// Otherwise globals might be changed by Lua, but then unexpectatly overwritten by engine when a ScriptCall is triggered by whatever Lua is doing!
+// Sure, one could work around that in engine (e.g. by setting writable globals in SetGlobals only when their engine-side value has actually changed since SetGlobals was called the last time...), but things just get messier and messier then.
+// It is inconsistent anyway to have some globals be read-only and others not with no indication whatsoever.
+// -- sheepluva
 TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
 end;
 

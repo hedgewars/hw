@@ -28,9 +28,10 @@ import Data.Maybe
 import Database.MySQL.Simple
 import Database.MySQL.Simple.QueryResults
 import Database.MySQL.Simple.Result
-import Data.List (lookup)
+import Data.List (lookup, elem)
 import qualified Data.ByteString.Char8 as B
 import Data.Word
+import Data.Int
 --------------------------
 import CoreTypes
 import Utils
@@ -49,6 +50,15 @@ dbQueryAchievement =
     "INSERT INTO achievements (time, typeid, userid, value, filename, location, protocol) \
     \ VALUES (?, (SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
     \ ?, ?, ?, ?)"
+
+dbQueryGamesHistory =
+    "INSERT INTO rating_games (script, protocol, filename, time) \
+    \ VALUES (?, ?, ?, ?)"
+
+dbQueryGameId = "SELECT LAST_INSERT_ID()"
+
+dbQueryGamesHistoryPlaces = "INSERT INTO rating_players (userid, gameid, place) \
+    \ VALUES ((SELECT uid FROM users WHERE name = ?), ?, ?)"
 
 dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
 
@@ -83,36 +93,54 @@ dbInteractionLoop dbConn = forever $ do
 
         SendStats clients rooms ->
                 void $ execute dbConn dbQueryStats (clients, rooms)
-        StoreAchievements p fileName teams info ->
-            mapM_ (execute dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
+        StoreAchievements p fileName teams script info ->
+            sequence_ $ parseStats dbConn p fileName teams script info
 
 
 --readTime = read . B.unpack . B.take 19 . B.drop 8
 readTime = B.take 19 . B.drop 8
 
 parseStats :: 
-    Word16 
+    Connection
+    -> Word16 
     -> B.ByteString 
     -> [(B.ByteString, B.ByteString)] 
-    -> [B.ByteString] 
-    -> [(B.ByteString, B.ByteString, B.ByteString, Int, B.ByteString, B.ByteString, Int)]
-parseStats p fileName teams = ps
+    -> B.ByteString
+    -> [B.ByteString]
+    -> [IO Int64]
+parseStats dbConn p fileName teams script = ps
     where
     time = readTime fileName
+    ps :: [B.ByteString] -> [IO Int64]
     ps [] = []
-    ps ("DRAW" : bs) = ps bs
-    ps ("WINNERS" : n : bs) = ps $ drop (readInt_ n) bs
-    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
+    ps ("DRAW" : bs) = execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time)
+        : places (map drawParams teams)
+        : ps bs
+    ps ("WINNERS" : n : bs) = let winNum = readInt_ n in execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time)
+        : places (map (placeParams (take winNum bs)) teams)
+        : ps (drop winNum bs)
+    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) = execute dbConn dbQueryAchievement
         ( time
         , typ
         , fromMaybe "" (lookup teamname teams)
-        , readInt_ value
+        , (readInt_ value) :: Int
         , fileName
         , location
-        , fromIntegral p
+        , (fromIntegral p) :: Int
         ) : ps bs
     ps (b:bs) = ps bs
-
+    drawParams t = (snd t, 0 :: Int)
+    placeParams winners t = (snd t, if (fst t) `elem` winners then 1 else 2 :: Int)
+    places :: [(B.ByteString, Int)] -> IO Int64
+    places params = do
+        res <- query_ dbConn dbQueryGameId
+        let gameId = case res of
+                [Only a] -> a
+                _ -> 0
+        mapM_ (execute dbConn dbQueryGamesHistoryPlaces . midInsert gameId) params
+        return 0
+    midInsert :: Int -> (a, b) -> (a, Int, b)
+    midInsert g (a, b) = (a, g, b)
 
 dbConnectionLoop mySQLConnectionInfo =
     Control.Exception.handle (\(e :: SomeException) -> hPutStrLn stderr $ show e) $

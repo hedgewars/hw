@@ -1094,6 +1094,7 @@ begin
     AllInactive := false;
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
+    WorldWrap(Gear);
     Gear^.dY := Gear^.dY + cGravity;
     CheckGearDrowning(Gear);
     CheckCollision(Gear);
@@ -1959,7 +1960,7 @@ begin
     if land = 0 then land:= TestCollisionYwithGear(Gear,-2);
     if land = 0 then land:= TestCollisionXwithGear(Gear,-2);
     if land = 0 then land:= TestCollisionYwithGear(Gear, 2);
-    if (land <> 0) and (land and lfBouncy = 0) then
+    if (land <> 0) and ((land and lfBouncy = 0) or ((Gear^.State and gstMoving) = 0)) then
         begin
         if ((Gear^.State and gstMoving) <> 0) or (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
@@ -2675,7 +2676,7 @@ begin
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
             end;
-        Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
+        Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             FollowGear^.State:= FollowGear^.State or gstSubmersible;
         StopSoundChan(Gear^.SoundChannel, 4000);
@@ -2708,7 +2709,7 @@ begin
         end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.Target.X - 5 * Gear^.Tag * 15);
+    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * Gear^.Health * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
@@ -2718,7 +2719,6 @@ begin
             Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.Target.Y) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
-    Gear^.Health := 6;
     Gear^.doStep := @doStepAirAttackWork;
     Gear^.SoundChannel := LoopSound(sndPlane, 4000);
 
@@ -5198,7 +5198,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPoisonCloud(Gear: PGear);
 begin
-    WorldWrap(Gear);
+    // don't bounce
+    if WorldEdge <> weBounce then
+        WorldWrap(Gear);
     if Gear^.Timer = 0 then
         begin
         DeleteGear(Gear);
@@ -5254,13 +5256,12 @@ while i > 0 do
                         d:= 2
                     else
                         d:= 3;
-                    // always round up
-                    if dmg mod d > 0 then
-                        dmg:= dmg div d + 1
-                    else
-                        dmg:= dmg div d;
 
-                    ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
+                    // always rounding down
+                    dmg:= dmg div d;
+
+                    if dmg > 0 then
+                        ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
                     end;
                 end;
 
@@ -5430,7 +5431,7 @@ begin
         for i:= 0 to graves.size - 1 do
             if graves.ar^[i]^.Health > 0 then
                 begin
-                resgear := AddGear(hwRound(graves.ar^[i]^.X), hwRound(graves.ar^[i]^.Y), gtHedgehog, gstWait, _0, _0, 0);
+                resgear := AddGear(hwRound(graves.ar^[i]^.X), hwRound(graves.ar^[i]^.Y), gtHedgehog, gstWait, _0, _0, 0,graves.ar^[i]^.Pos);
                 resgear^.Hedgehog := graves.ar^[i]^.Hedgehog;
                 resgear^.Health := graves.ar^[i]^.Health;
                 PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
@@ -5792,9 +5793,16 @@ For now we assume a "ray" like a deagle projected out from the gun.
 All these effects assume the ray's angle is not changed and that the target type was unchanged over a number of ticks.  This is a simplifying assumption for "gun was applying freezing effect to the same target".
   * When fired at water a layer of ice textured land is added above the water.
   * When fired at non-ice land (land and lfLandMask and not lfIce) the land is overlaid with a thin layer of ice textured land around that point (say, 1 or 2px into land, 1px above). For attractiveness, a slope would probably be needed.
-  * When fired at a hog (land and $00FF <> 0), while the hog is targetted, the hog's state is set to frozen.  As long as the gun is on the hog, a frozen hog sprite creeps up from the feet to the head.  If the effect is interrupted before reaching the top, the freezing state is cleared.
-A frozen hog will animate differently.  To be decided, but possibly in a similar fashion to a grave when it comes to explosions.  The hog might (possibly) not be damaged by explosions.  This might make freezing potentially useful for friendlies in a bad position.  It might be better to allow damage though.
-A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
+  * When fired at a hog (land and $00FF <> 0), while the hog is targetted, the hog's state is set to frozen.
+    As long as the gun is on the hog, a frozen hog sprite creeps up from the feet to the head.
+    If the effect is interrupted before reaching the top, the freezing state is cleared.
+A frozen hog will animate differently.
+    To be decided, but possibly in a similar fashion to a grave when it comes to explosions.
+    The hog might (possibly) not be damaged by explosions.
+    This might make freezing potentially useful for friendlies in a bad position.
+    It might be better to allow damage though.
+A frozen hog stays frozen for a certain number of turns.
+    Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
 *)
 
 

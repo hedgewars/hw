@@ -451,7 +451,7 @@ with Gear^,
             if CurAmmoType = amAirMine then newGear^.Hedgehog:= nil;
 
             if ((CurAmmoType = amMine) or (CurAmmoType = amSMine) or (CurAmmoType = amAirMine)) and (GameFlags and gfInfAttack <> 0) then
-                newGear^.FlightTime:= GameTicks + 1000
+                newGear^.FlightTime:= GameTicks + min(TurnTimeLeft,1000)
             else if CurAmmoType = amDrill then
                 newGear^.FlightTime:= GameTicks + 250;
             if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
@@ -572,6 +572,7 @@ end;
 procedure doStepHedgehogDead(Gear: PGear);
 const frametime = 200;
       timertime = frametime * 6;
+var grave:  PGear;
 begin
 if Gear^.Hedgehog^.Unplaced then
     exit;
@@ -587,7 +588,10 @@ else if Gear^.Timer = 1 then
     Gear^.Hedgehog^.Effects[heFrozen]:= 0;
     Gear^.State:= Gear^.State or gstNoDamage;
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+    grave:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0);
+    grave^.Hedgehog:= Gear^.Hedgehog;
+    grave^.Pos:= Gear^.uid;
+    
     DeleteGear(Gear);
     SetAllToActive
     end
@@ -906,6 +910,7 @@ if isFalling then
         end;
     Gear^.State:= Gear^.State or gstMoving;
     if (Gear^.State and gstHHDriven <> 0) and
+       (FollowGear <> nil) and
        (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
         begin
         // TODO: why so aggressive at setting FollowGear when falling?

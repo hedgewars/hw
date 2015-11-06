@@ -21,12 +21,11 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
-#include "libavformat/avformat.h"
-#include "libavutil/mathematics.h"
 
-#ifndef AVIO_FLAG_WRITE
-#define AVIO_FLAG_WRITE AVIO_WRONLY
-#endif
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libavutil/avutil.h"
+#include "libavutil/mathematics.h"
 
 #if (defined _MSC_VER)
 #define AVWRAP_DECL __declspec(dllexport)
@@ -57,10 +56,37 @@ static int16_t* g_pSamples;
 static int g_NumSamples;
 
 
+// compatibility section
 #if LIBAVCODEC_VERSION_MAJOR < 54
 #define OUTBUFFER_SIZE 200000
 static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
+#define avcodec_open2(x, y, z)              avcodec_open(x, y)
 #endif
+
+#if LIBAVCODEC_VERSION_MAJOR < 56
+#define av_frame_alloc                      avcodec_alloc_frame
+#define av_frame_free                       av_freep
+#endif
+
+#if LIBAVCODEC_VERSION_MAJOR < 57
+#define AV_CODEC_CAP_DELAY                  CODEC_CAP_DELAY
+#define AV_CODEC_CAP_VARIABLE_FRAME_SIZE    CODEC_CAP_VARIABLE_FRAME_SIZE
+#define AV_CODEC_FLAG_GLOBAL_HEADER         CODEC_FLAG_GLOBAL_HEADER
+#define AV_CODEC_FLAG_QSCALE                CODEC_FLAG_QSCALE
+#endif
+
+#if LIBAVFORMAT_VERSION_MAJOR < 53
+#define AVIO_FLAG_WRITE                     AVIO_WRONLY
+#endif
+
+#if LIBAVFORMAT_VERSION_MAJOR < 54
+#define avformat_new_stream(x, y)           av_new_stream(x, y->type == AVMEDIA_TYPE_AUDIO)
+#endif
+
+#if LIBAVUTIL_VERSION_MAJOR < 54
+#define AV_PIX_FMT_YUV420P                  PIX_FMT_YUV420P
+#endif
+
 
 // pointer to function from hwengine (uUtils.pas)
 static void (*AddFileLogRaw)(const char* pString);
@@ -105,11 +131,7 @@ static void Log(const char* pFmt, ...)
 
 static void AddAudioStream()
 {
-#if LIBAVFORMAT_VERSION_MAJOR >= 53
     g_pAStream = avformat_new_stream(g_pContainer, g_pACodec);
-#else
-    g_pAStream = av_new_stream(g_pContainer, 1);
-#endif
     if(!g_pAStream)
     {
         Log("Could not allocate audio stream\n");
@@ -131,26 +153,22 @@ static void AddAudioStream()
     g_pAudio->bit_rate = 160000;
 
     // for codecs that support variable bitrate use it, it should be better
-    g_pAudio->flags |= CODEC_FLAG_QSCALE;
+    g_pAudio->flags |= AV_CODEC_FLAG_QSCALE;
     g_pAudio->global_quality = 1*FF_QP2LAMBDA;
 
     // some formats want stream headers to be separate
     if (g_pFormat->flags & AVFMT_GLOBALHEADER)
-        g_pAudio->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        g_pAudio->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 
     // open it
-#if LIBAVCODEC_VERSION_MAJOR >= 53
     if (avcodec_open2(g_pAudio, g_pACodec, NULL) < 0)
-#else
-    if (avcodec_open(g_pAudio, g_pACodec) < 0)
-#endif
     {
         Log("Could not open audio codec %s\n", g_pACodec->long_name);
         return;
     }
 
 #if LIBAVCODEC_VERSION_MAJOR >= 54
-    if (g_pACodec->capabilities & CODEC_CAP_VARIABLE_FRAME_SIZE)
+    if (g_pACodec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
 #else
     if (g_pAudio->frame_size == 0)
 #endif
@@ -158,7 +176,7 @@ static void AddAudioStream()
     else
         g_NumSamples = g_pAudio->frame_size;
     g_pSamples = (int16_t*)av_malloc(g_NumSamples*g_Channels*sizeof(int16_t));
-    g_pAFrame = avcodec_alloc_frame();
+    g_pAFrame = av_frame_alloc();
     if (!g_pAFrame)
     {
         Log("Could not allocate frame\n");
@@ -172,7 +190,7 @@ static int WriteAudioFrame()
     if (!g_pAStream)
         return 0;
 
-    AVPacket Packet = { 0 };
+    AVPacket Packet;
     av_init_packet(&Packet);
 
     int NumSamples = fread(g_pSamples, 2*g_Channels, g_NumSamples, g_pSoundFile);
@@ -217,11 +235,7 @@ static int WriteAudioFrame()
 // add a video output stream
 static int AddVideoStream()
 {
-#if LIBAVFORMAT_VERSION_MAJOR >= 53
     g_pVStream = avformat_new_stream(g_pContainer, g_pVCodec);
-#else
-    g_pVStream = av_new_stream(g_pContainer, 0);
-#endif
     if (!g_pVStream)
         return FatalError("Could not allocate video stream");
 
@@ -241,20 +255,20 @@ static int AddVideoStream()
     g_pVideo->time_base.den = g_Framerate.num;
     g_pVideo->time_base.num = g_Framerate.den;
     //g_pVideo->gop_size = 12; /* emit one intra frame every twelve frames at most */
-    g_pVideo->pix_fmt = PIX_FMT_YUV420P;
+    g_pVideo->pix_fmt = AV_PIX_FMT_YUV420P;
 
     // set quality
     if (g_VQuality > 100)
         g_pVideo->bit_rate = g_VQuality;
     else
     {
-        g_pVideo->flags |= CODEC_FLAG_QSCALE;
+        g_pVideo->flags |= AV_CODEC_FLAG_QSCALE;
         g_pVideo->global_quality = g_VQuality*FF_QP2LAMBDA;
     }
 
     // some formats want stream headers to be separate
     if (g_pFormat->flags & AVFMT_GLOBALHEADER)
-        g_pVideo->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        g_pVideo->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 
 #if LIBAVCODEC_VERSION_MAJOR < 53
     // for some versions of ffmpeg x264 options must be set explicitly
@@ -292,14 +306,12 @@ static int AddVideoStream()
     AVDictionary* pDict = NULL;
     if (strcmp(g_pVCodec->name, "libx264") == 0)
         av_dict_set(&pDict, "preset", "medium", 0);
+#endif
 
     if (avcodec_open2(g_pVideo, g_pVCodec, &pDict) < 0)
-#else
-    if (avcodec_open(g_pVideo, g_pVCodec) < 0)
-#endif
         return FatalError("Could not open video codec %s", g_pVCodec->long_name);
 
-    g_pVFrame = avcodec_alloc_frame();
+    g_pVFrame = av_frame_alloc();
     if (!g_pVFrame)
         return FatalError("Could not allocate frame");
 
@@ -317,10 +329,10 @@ static int WriteFrame(AVFrame* pFrame)
     // write interleaved audio frame
     if (g_pAStream)
     {
-        VideoTime = (double)g_pVStream->pts.val*g_pVStream->time_base.num/g_pVStream->time_base.den;
+        VideoTime = (double)g_pVFrame->pts * g_pVStream->time_base.num/g_pVStream->time_base.den;
         do
         {
-            AudioTime = (double)g_pAStream->pts.val*g_pAStream->time_base.num/g_pAStream->time_base.den;
+            AudioTime = (double)g_pAFrame->pts * g_pAStream->time_base.num/g_pAStream->time_base.den;
             ret = WriteAudioFrame();
         }
         while (AudioTime < VideoTime && ret);
@@ -496,7 +508,7 @@ AVWRAP_DECL int AVWrapper_Close()
 {
     int ret;
     // output buffered frames
-    if (g_pVCodec->capabilities & CODEC_CAP_DELAY)
+    if (g_pVCodec->capabilities & AV_CODEC_CAP_DELAY)
     {
         do
             ret = WriteFrame(NULL);
@@ -526,14 +538,14 @@ AVWRAP_DECL int AVWrapper_Close()
         avcodec_close(g_pVideo);
         av_free(g_pVideo);
         av_free(g_pVStream);
-        av_free(g_pVFrame);
+        av_frame_free(&g_pVFrame);
     }
     if (g_pAStream)
     {
         avcodec_close(g_pAudio);
         av_free(g_pAudio);
         av_free(g_pAStream);
-        av_free(g_pAFrame);
+        av_frame_free(&g_pAFrame);
         av_free(g_pSamples);
         fclose(g_pSoundFile);
     }

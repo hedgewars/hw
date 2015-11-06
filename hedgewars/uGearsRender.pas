@@ -728,7 +728,7 @@ begin
                 amHellishBomb: DrawSpriteRotated(sprHandHellish, hx, hy, sign, aangle);
                 amGasBomb: DrawSpriteRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
-                amAirMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
+                amAirMine: DrawSpriteRotated(sprHandAirMine, hx, hy, sign, aangle);
                 amSMine: DrawSpriteRotated(sprHandSMine, hx, hy, sign, aangle);
                 amKnife: DrawSpriteRotatedF(sprHandKnife, hx, hy, 0, sign, aangle);
                 amSeduction: begin
