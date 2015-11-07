@@ -100,8 +100,8 @@ replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString B.ByteString
         -> Map.Map B.ByteString [B.ByteString]
         -> [B.ByteString]
-        -> ([B.ByteString], [B.ByteString])
-replayToDemo ti mParams prms msgs = if not sane then ([], []) else ([scriptName], concat [
+        -> (Maybe GameDetails, [B.ByteString])
+replayToDemo ti mParams prms msgs = if not sane then (Nothing, []) else (Just $ GameDetails scriptName infRopes vamp infattacks, concat [
         [em "TD"]
         , maybeScript
         , maybeMap
@@ -125,7 +125,7 @@ replayToDemo ti mParams prms msgs = if not sane then ([], []) else ([scriptName]
         sane = Set.null (keys1 Set.\\ Map.keysSet mParams)
             && Set.null (keys2 Set.\\ Map.keysSet prms)
             && (not . null . drop 41 $ scheme)
-            && (not . null . tail $ prms Map.! "AMMO")
+            && (not . null . drop 8 $ prms Map.! "AMMO")
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+", "+perlin+"]
         scriptName = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms
         maybeScript = let s = scriptName in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
@@ -162,6 +162,9 @@ replayToDemo ti mParams prms msgs = if not sane then ([], []) else ([scriptName]
                             ])
                         $ hedgehogs t
                         )
+        infRopes = ammoStr `B.index` 7  == '9'
+        vamp = gameFlags .&. 0x00000200 /= 0
+        infattacks = gameFlags .&. 0x00100000 /= 0
 
 drawnMapData :: B.ByteString -> [B.ByteString]
 drawnMapData =
