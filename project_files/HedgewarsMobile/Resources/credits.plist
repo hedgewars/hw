@@ -3,9 +3,9 @@
 <plist version="1.0">
 <array>
 	<array>
-		<string>Andrey &quot;UnC0Rr&quot; Korotaev</string>
+		<string>Andrey &quot;unC0Rr&quot; Korotaev</string>
 		<string>Igor &quot;Displacer&quot; Ulyanov</string>
-		<string>Derek &quot;Nemo&quot; Pomery</string>
+		<string>Derek &quot;nemo&quot; Pomery</string>
 		<string>Martin &quot;Affect&quot; Boze</string>
 		<string>David &quot;Krawek&quot; Cuadrado</string>
 		<string>Martin &quot;Ttsmj&quot; Minarik</string>
@@ -13,12 +13,20 @@
 		<string>Vittorio &quot;Koda&quot; Giovara</string>
 		<string>Mario &quot;Smaxx&quot; Liebisch</string>
 		<string>Carlos &quot;Palewolf&quot; Vives</string>
-		<string>Richard &quot;Sheepluva&quot; Korlyi</string>
+		<string>Richard &quot;sheepluva&quot; Karolyi</string>
 		<string>Henning &quot;Prg&quot; Kühn</string>
 		<string>Henrik &quot;Henek&quot; Rostedt</string>
-		<string>John &quot;Mikade&quot; Lambert</string>
+		<string>John &quot;mikade&quot; Lambert</string>
 		<string>Mayur &quot;Zorg&quot; Pawashe</string>
 		<string>Richard &quot;Xeli&quot; Deurwaarder</string>
+		<string>Simeon Maxein</string>
+		<string>Meng Xiangyun</string>
+		<string>Stepan Podoskin</string>
+		<string>Szabolcs Orbàn</string>
+		<string>Drew Gottlieb</string>
+		<string>Ondrej Skopek</string>
+		<string>Julia Struchenko</string>
+		<string>Anton &quot;antonc27&quot; Malmygin</string>
 	</array>
 	<array>
 		<string>John &quot;Fizzy&quot; Dum</string>
@@ -26,7 +34,8 @@
 		<string>Stanko Tadić</string>
 		<string>Julien Koesten</string>
 		<string>Joshua O&apos;Sullivan</string>
-		<string>Nils Luck</string>
+		<string>Nils Lück</string>
+		<string>Guillaume Englert</string>
 		<string>Trey Perry</string>
 	</array>
 	<array>
@@ -42,16 +51,16 @@
 		<string>Jie Luo</string>
 		<string>Andrey Korotaev</string>
 		<string>Nina Kuisma</string>
-		<string>Antoine Turmel</string>
-		<string>Peter Hüwe, Mario Liebisch, Richard Karolyi</string>
+		<string>Antoine Turmel, Clement Woitrain, Matisumi</string>
+		<string>Peter Hüwe, Mario Liebisch, Richard Karolyi, Wuzzy</string>
 		<string>Talos Kriti</string>
-		<string>Luca Bonora, Marco Bresciani</string>
-		<string>Adam Etienne</string>
+		<string>Luca Bonora, Marco Bresciani, Gianfranco Costamagna</string>
+		<string>Adam Etienne, Marco Bresciani</string>
 		<string>Anthony Bellew</string>
 		<string>Lukas Urbonas</string>
 		<string>Maciej Mroziński, Wojciech Latkowski, Piotr Mitana, Maciej Górny</string>
 		<string>Fábio Canário</string>
-		<string>Andrey Korotaev</string>
+		<string>Andrey Korotaev, Vitaly Novichkov, Anton Malmygin</string>
 		<string>Jose Riha</string>
 		<string>Carlos Vives</string>
 		<string>Niklas Grahn, Henrik Rostedt</string>
@@ -80,9 +89,18 @@
 		<string>Lua game modes and missions</string>
 		<string>Desktop frontend improvements</string>
 		<string>Android port</string>
+		<string>Android netplay, portability abstraction</string>
+		<string>WebGL port, some pas2c and GLES2 work</string>
+		<string>Video recording</string>
+		<string>Campaign support, first campaign</string>
+		<string>Keybinds, feedback, maps and hats interfaces</string>
+		<string>Login dialogs, frontend improvements</string>
+		<string>Icegun weapon</string>
+		<string>Current developer of iPhone/iPad versions</string>
 	</array>
 	<array>
 		<string>Main graphics</string>
+		<string></string>
 		<string></string>
 		<string></string>
 		<string></string>

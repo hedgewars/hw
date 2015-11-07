@@ -27,7 +27,10 @@
     return rotationManager(interfaceOrientation);
 }
 
--(void) viewDidLoad {
+-(void) viewDidLoad
+{
+    [super viewDidLoad];
+    
     [self.tableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     self.tableView.allowsSelection = NO;
 
@@ -48,12 +51,23 @@
     [self.view insertSubview:background atIndex:0];
     [background release];
 
-    [super viewDidLoad];
+    [self localizeSegmentedControl];
 }
 
 -(IBAction) buttonPressed:(id) sender {
     [[AudioManagerController mainManager] playBackSound];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Segmented Control
+
+- (void)localizeSegmentedControl
+{
+    for (NSUInteger i = 0; i < self.segmentedControl.numberOfSegments; i++)
+    {
+        NSString *oldTitle = [self.segmentedControl titleForSegmentAtIndex:i];
+        [self.segmentedControl setTitle:NSLocalizedStringFromTable(oldTitle, @"About", nil) forSegmentAtIndex:i];
+    }
 }
 
 -(IBAction) segmentedControlChanged:(id) sender {
@@ -119,6 +133,7 @@
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;
     label.text = footerString;
+    [footerString release];
 
     label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];

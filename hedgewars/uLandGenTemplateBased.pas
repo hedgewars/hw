@@ -9,7 +9,7 @@ procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 var minDistance, dabDiv: LongInt; // different details size
 
 implementation
-uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
+uses uVariables, uTypes, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
 
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
@@ -327,6 +327,9 @@ begin
         DivideEdges(Template.FillPointsCount, pa)
     until i = pa.Count;
 
+{$IFDEF IPHONEOS}
+    if GameType <> gmtLandPreview then
+{$ENDIF}
     // make it smooth
     BezierizeEdge(pa, _0_2);
 end;

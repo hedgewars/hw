@@ -58,7 +58,7 @@
 #pragma mark -
 #pragma mark preview
 -(int) sendToEngine:(NSString *)string {
-    unsigned char length = [string length];
+    unsigned char length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);

@@ -41,7 +41,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
 
-    self.navigationItem.title = @"List of teams";
+    self.navigationItem.title = NSLocalizedString(@"List of teams", nil);
 }
 
 // load the list of teams in the teams directory
@@ -136,43 +136,43 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (childController == nil) {
-        childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    }
-
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    SingleTeamViewController *singleTeamViewController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    
     NSInteger row = [indexPath row];
     NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
 
     // this must be set so childController can load the correct plist
-    childController.teamName = [selectedTeamFile stringByDeletingPathExtension];
-    [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+    singleTeamViewController.teamName = [selectedTeamFile stringByDeletingPathExtension];
+    [singleTeamViewController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
-    [self.navigationController pushViewController:childController animated:YES];
+    [self.navigationController pushViewController:singleTeamViewController animated:YES];
+    [singleTeamViewController release];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
-    if (childController.view.superview == nil )
-        childController = nil;
 }
 
--(void) viewDidUnload {
+-(void) viewDidUnload
+{
     self.listOfTeams = nil;
-    childController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
--(void) dealloc {
+-(void) dealloc
+{
     releaseAndNil(listOfTeams);
-    releaseAndNil(childController);
     [super dealloc];
 }
 

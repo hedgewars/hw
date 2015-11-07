@@ -61,6 +61,7 @@ type
 {$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
             sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton, sprTargetButton,
+            sprSwitchButton,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
@@ -455,7 +456,7 @@ type
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
-            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn);
+            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,

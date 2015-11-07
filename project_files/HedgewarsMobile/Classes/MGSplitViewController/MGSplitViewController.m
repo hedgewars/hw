@@ -152,8 +152,6 @@
 	_delegate = nil;
 	_viewControllers = nil;
 	[self.view.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
-    [super dealloc];
 }
 
 

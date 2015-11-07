@@ -38,11 +38,13 @@
 
     NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FORTS_DIRECTORY() error:NULL];
     NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / IMGNUM_PER_FORT)];
-    // we need to remove the double entries and the L.png suffix
-    for (NSUInteger i = 0; i < [directoryContents count]; i++) {
-        if (i % IMGNUM_PER_FORT == IMGNUM_PER_FORT-1) {
-            NSString *currentName = [directoryContents objectAtIndex:i];
-            NSString *correctName = [currentName substringToIndex:([currentName length] - 5)];
+    // we assume here that fort's images has one image with the 'L.png' suffix and we remove this suffix to get the correct name
+    for (NSUInteger i = 0; i < [directoryContents count]; i++)
+    {
+        NSString *currentName = [directoryContents objectAtIndex:i];
+        if ([currentName rangeOfString:@"L.png"].location != NSNotFound)
+        {
+            NSString *correctName = [currentName stringByReplacingOccurrencesOfString:@"L.png" withString:@""];
             [filteredContents addObject:correctName];
         }
     }

@@ -20,7 +20,8 @@
 #import "MainMenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GameConfigViewController.h"
-#import "SettingsContainerViewController.h"
+#import "MGSplitViewController.h"
+#import "SettingsBaseViewController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
@@ -29,14 +30,23 @@
 #import "ServerProtocolNetwork.h"
 #import "GameInterfaceBridge.h"
 
+#import "SettingsBaseViewController.h"
+#import "GeneralSettingsViewController.h"
+#import "TeamSettingsViewController.h"
+#import "WeaponSettingsViewController.h"
+#import "SchemeSettingsViewController.h"
+#import "SupportViewController.h"
+
+#ifdef DEBUG
+#import "GameLogViewController.h"
+#endif
+
 @interface MainMenuViewController ()
 @property (retain, nonatomic) IBOutlet UIButton *simpleGameButton;
 @property (retain, nonatomic) IBOutlet UIButton *missionsButton;
 @end
 
 @implementation MainMenuViewController
-@synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController,
-            restoreViewController, missionsViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -46,6 +56,9 @@
 -(void) viewDidLoad {
     self.view.frame = [[UIScreen mainScreen] safeBounds];
     [super viewDidLoad];
+    
+    [self.simpleGameButton setTitle:NSLocalizedString(@"Simple", nil) forState:UIControlStateNormal];
+    [self.missionsButton setTitle:NSLocalizedString(@"Missions", nil) forState:UIControlStateNormal];
     
     [self.simpleGameButton applyDarkBlueQuickStyle];
     [self.missionsButton applyDarkBlueQuickStyle];
@@ -69,19 +82,19 @@
 
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
-    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue]) {
-        if (self.restoreViewController == nil) {
-            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
-            RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
-            if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
-                restored.modalPresentationStyle = UIModalPresentationFormSheet;
-            self.restoreViewController = restored;
-            [restored release];
-        }
-        [self performSelector:@selector(presentViewController:) withObject:self.restoreViewController afterDelay:0.25];
-    } else {
+    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue])
+    {
+        NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
+        RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
+        if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
+            restored.modalPresentationStyle = UIModalPresentationFormSheet;
+
+        [self performSelector:@selector(presentViewController:) withObject:restored afterDelay:0.25];
+    }
+    else
+    {
         // let's not prompt for rating when app crashed >_>
-        [Appirater appLaunched];
+        [Appirater appLaunched:YES];
     }
 
     /*
@@ -92,6 +105,7 @@
 - (void) presentViewController:(UIViewController *)vc
 {
     [self presentViewController:vc animated:NO completion:nil];
+    [vc release];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -104,99 +118,134 @@
     UIButton *button = (UIButton *)sender;
     UIAlertView *alert;
     NSString *xib = nil;
-    NSString *debugStr = nil;
 
     [[AudioManagerController mainManager] playClickSound];
     switch (button.tag) {
         case 0:
-            if (nil == self.gameConfigViewController) {
-                xib = IS_IPAD() ? @"GameConfigViewController-iPad" : @"GameConfigViewController-iPhone";
+            xib = IS_IPAD() ? @"GameConfigViewController-iPad" : @"GameConfigViewController-iPhone";
 
-                GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
-                gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                self.gameConfigViewController = gcvc;
-                [gcvc release];
-            }
-            [self presentViewController:self.gameConfigViewController animated:YES completion:nil];
+            GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
+            gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+
+            [self presentViewController:gcvc animated:YES completion:nil];
+            [gcvc release];
             break;
         case 2:
-            if (nil == self.settingsViewController) {
-                SettingsContainerViewController *svrc = [[SettingsContainerViewController alloc] initWithNibName:nil bundle:nil];
-                svrc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                self.settingsViewController = svrc;
-                [svrc release];
+            if (IS_IPAD())
+            {
+                // the contents on the right of the splitview, setting targetController to nil to avoid creating the table
+                SettingsBaseViewController *rightController = [[SettingsBaseViewController alloc] init];
+                rightController.targetController = nil;
+                UINavigationController *rightNavController = [[UINavigationController alloc] initWithRootViewController:rightController];
+                [rightController release];
+                
+                // the contens on the left of the splitview, setting targetController that will receive push/pop actions
+                SettingsBaseViewController *leftController = [[SettingsBaseViewController alloc] init];
+                leftController.targetController = rightNavController.topViewController;
+                UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
+                [leftController release];
+                
+                MGSplitViewController *splitViewRootController = [[MGSplitViewController alloc] init];
+                splitViewRootController.delegate = nil;
+                splitViewRootController.showsMasterInPortrait = YES;
+                splitViewRootController.viewControllers = [NSArray arrayWithObjects:leftNavController, rightNavController, nil];
+                [leftNavController release];
+                [rightNavController release];
+
+                [self presentViewController:splitViewRootController animated:YES completion:nil];
+                [splitViewRootController release];
             }
-            [self presentViewController:self.settingsViewController animated:YES completion:nil];
+            else
+            {
+                NSMutableArray *tabBarNavigationControllers = [[NSMutableArray alloc] initWithCapacity:5];
+                
+                UIViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                generalSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"General",@"") imageName:@"flower" selectedImageName:@"flower_filled"];
+                UINavigationController *generalNavController = [[UINavigationController alloc] initWithRootViewController:generalSettingsViewController];
+                [generalSettingsViewController release];
+                [tabBarNavigationControllers addObject:generalNavController];
+                [generalNavController release];
+                
+                UIViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                teamSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Teams",@"") imageName:@"teams" selectedImageName:@"teams_filled"];
+                UINavigationController *teamNavController = [[UINavigationController alloc] initWithRootViewController:teamSettingsViewController];
+                [teamSettingsViewController release];
+                [tabBarNavigationControllers addObject:teamNavController];
+                [teamNavController release];
+                
+                UIViewController *weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                weaponSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Weapons",@"") imageName:@"bullet" selectedImageName:@"bullet_filled"];
+                UINavigationController *weaponNavController = [[UINavigationController alloc] initWithRootViewController:weaponSettingsViewController];
+                [weaponSettingsViewController release];
+                [tabBarNavigationControllers addObject:weaponNavController];
+                [weaponNavController release];
+                
+                UIViewController *schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                schemeSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Schemes",@"") imageName:@"target" selectedImageName:@"target_filled"];
+                UINavigationController *schemeNavController = [[UINavigationController alloc] initWithRootViewController:schemeSettingsViewController];
+                [schemeSettingsViewController release];
+                [tabBarNavigationControllers addObject:schemeNavController];
+                [schemeNavController release];
+                
+                UIViewController *supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                supportViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Support",@"") imageName:@"heart" selectedImageName:@"heart_filled"];
+                UINavigationController *supportNavController = [[UINavigationController alloc] initWithRootViewController:supportViewController];
+                [supportViewController release];
+                [tabBarNavigationControllers addObject:supportNavController];
+                [supportNavController release];
+                
+                UITabBarController *settingsTabController = [[UITabBarController alloc] init];
+                settingsTabController.viewControllers = tabBarNavigationControllers;
+                [tabBarNavigationControllers release];
+                
+                [self presentViewController:settingsTabController animated:YES completion:nil];
+                [settingsTabController release];
+            }
             break;
         case 3:
 #ifdef DEBUG
-            if ([[NSFileManager defaultManager] fileExistsAtPath:DEBUG_FILE()])
-                debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
-            else
-                debugStr = [[NSString alloc] initWithString:@"Here be log"];
-            UITextView *scroll = [[UITextView alloc] initWithFrame:self.view.frame];
-            scroll.text = debugStr;
-            [debugStr release];
-            scroll.editable = NO;
-            scroll.alpha = 0;
-
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-            [btn addTarget:btn action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-            btn.frame = CGRectMake(self.view.frame.size.width-58, -6, 64, 64);
-            btn.backgroundColor = [UIColor blackColor];
-            btn.titleLabel.textColor = [UIColor whiteColor];
-            btn.titleLabel.textAlignment = UITextAlignmentCenter;
-            btn.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
-            [btn setTitle:@"Close" forState:UIControlStateNormal];
-            btn.alpha = 0;
-            [btn.layer setCornerRadius:10.0f];
-            [btn.layer setMasksToBounds:YES];
-
-            [self.view addSubview:scroll];
-            [self.view addSubview:btn];
-
-            [UIView beginAnimations:@"fadein" context:NULL];
-            [UIView setAnimationDuration:0.25f];
-            btn.alpha = 1;
-            scroll.alpha = 1;
-            [UIView commitAnimations];
-            [scroll release];
+            {
+                GameLogViewController *gameLogVC = [[GameLogViewController alloc] init];
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:gameLogVC];
+                [gameLogVC release];
+                
+                [self presentViewController:navController animated:YES completion:nil];
+                [navController release];
+            }
 #else
-            debugStr = debugStr; // prevent compiler warning
-            if (nil == self.aboutViewController) {
+            {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 if ([about respondsToSelector:@selector(setModalPresentationStyle:)])
                      about.modalPresentationStyle = UIModalPresentationFormSheet;
-                self.aboutViewController = about;
+                
+                [self presentViewController:about animated:YES completion:nil];
                 [about release];
             }
-            [self presentViewController:self.aboutViewController animated:YES completion:nil];
 #endif
             break;
         case 4:
-            if (nil == self.savedGamesViewController) {
+            {
                 SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
                 savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 if ([savedgames respondsToSelector:@selector(setModalPresentationStyle:)])
                     savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
-                self.savedGamesViewController = savedgames;
+                
+                [self presentViewController:savedgames animated:YES completion:nil];
                 [savedgames release];
             }
-            [self presentViewController:self.savedGamesViewController animated:YES completion:nil];
             break;
         case 5:
-            if (nil == self.missionsViewController) {
+            {
                 xib = IS_IPAD() ? @"MissionTrainingViewController-iPad" : @"MissionTrainingViewController-iPhone";
                 MissionTrainingViewController *missions = [[MissionTrainingViewController alloc] initWithNibName:xib bundle:nil];
                 missions.modalTransitionStyle = IS_IPAD() ? UIModalTransitionStyleCoverVertical : UIModalTransitionStyleCrossDissolve;
                 if ([missions respondsToSelector:@selector(setModalPresentationStyle:)])
                     missions.modalPresentationStyle = UIModalPresentationPageSheet;
-                self.missionsViewController = missions;
+                
+                [self presentViewController:missions animated:YES completion:nil];
                 [missions release];
             }
-            [self presentViewController:self.missionsViewController animated:YES completion:nil];
             break;
         case 6:
             [GameInterfaceBridge registerCallingController:self];
@@ -214,42 +263,27 @@
     }
 }
 
+- (UITabBarItem *)tabBarItemWithTitle: (NSString *)title
+                            imageName: (NSString *)imageName
+                    selectedImageName: (NSString *)selectedImageName
+{
+    return [[[UITabBarItem alloc] initWithTitle:title
+                                          image:[UIImage imageNamed:imageName]
+                                  selectedImage:[UIImage imageNamed:selectedImageName]] autorelease];
+}
+
 #pragma mark -
 -(void) viewDidUnload {
-    self.gameConfigViewController = nil;
-    self.settingsViewController = nil;
-    self.aboutViewController = nil;
-    self.savedGamesViewController = nil;
-    self.restoreViewController = nil;
-    self.missionsViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) didReceiveMemoryWarning {
-    if (self.settingsViewController.view.superview == nil)
-        self.settingsViewController = nil;
-    if (self.gameConfigViewController.view.superview == nil)
-        self.gameConfigViewController = nil;
-    if (self.aboutViewController.view.superview == nil)
-        self.aboutViewController = nil;
-    if (self.savedGamesViewController.view.superview == nil)
-        self.savedGamesViewController = nil;
-    if (self.restoreViewController.view.superview == nil)
-        self.restoreViewController = nil;
-    if (self.missionsViewController.view.superview == nil)
-        self.missionsViewController = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {
-    releaseAndNil(settingsViewController);
-    releaseAndNil(gameConfigViewController);
-    releaseAndNil(aboutViewController);
-    releaseAndNil(savedGamesViewController);
-    releaseAndNil(restoreViewController);
-    releaseAndNil(missionsViewController);
     [_simpleGameButton release];
     [_missionsButton release];
     [super dealloc];

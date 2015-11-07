@@ -24,6 +24,13 @@
 #import "GameInterfaceBridge.h"
 #import "HelpPageLobbyViewController.h"
 
+@interface GameConfigViewController ()
+@property (nonatomic, retain) IBOutlet UISegmentedControl *tabsSegmentedControl; //iPhone only
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton; //iPhone only
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *startButton; //iPhone only
+@end
+
 @implementation GameConfigViewController
 @synthesize imgContainer, titleImage, sliderBackground, helpPage,
             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
@@ -31,6 +38,8 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
+
+#pragma mark - Buttons
 
 -(IBAction) buttonPressed:(id) sender {
     UIButton *theButton = (UIButton *)sender;
@@ -55,12 +64,7 @@
             if ([self isEverythingSet] == NO)
                 return;
             theButton.enabled = NO;
-            for (UIView *oneView in self.imgContainer.subviews) {
-                if ([oneView isMemberOfClass:[UIImageView class]]) {
-                    UIImageView *anImageView = (UIImageView *)oneView;
-                    [anImageView removeFromSuperview];
-                }
-            }
+            [self clearImgContainer];
             [self startGame:theButton];
 
             break;
@@ -78,6 +82,17 @@
         default:
             DLog(@"Nope");
             break;
+    }
+}
+
+#pragma mark - Tabs Segmented Control
+
+- (void)localizeTabsSegmentedControl
+{
+    for (NSUInteger i = 0; i < self.tabsSegmentedControl.numberOfSegments; i++)
+    {
+        NSString *oldTitle = [self.tabsSegmentedControl titleForSegmentAtIndex:i];
+        [self.tabsSegmentedControl setTitle:NSLocalizedString(oldTitle, nil) forSegmentAtIndex:i];
     }
 }
 
@@ -120,6 +135,8 @@
     }
 
 }
+
+#pragma mark -
 
 -(BOOL) isEverythingSet {
     // don't start playing if the preview is in progress
@@ -229,73 +246,95 @@
     [gameDictionary release];
 }
 
--(void) loadNiceHogs {
-    @autoreleasepool {
+-(void) loadNiceHogs
+{
+    @autoreleasepool
+    {
     
-    srand(time(NULL));
-    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
-    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
-    [filePath release];
+        NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
+        UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
+        [filePath release];
 
-    NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
-    NSUInteger numberOfHats = [hatArray count];
-    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
-
-    if (self.imgContainer != nil)
-        [self.imgContainer removeFromSuperview];
-
-    self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    NSInteger numberOfHogs = 1 + random() % 20;
-    DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
-    for (int i = 0; i < numberOfHogs; i++) {
-        NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
-
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
-        NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
-        for (int j = 0; j < animationFrames; j++) {
-            int x = ((j*32)/(int)hatSprite.size.height)*32;
-            int y = (j*32)%(int)hatSprite.size.height;
-            UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
-            UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
-            UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
-            [animation addObject:hogWithHat];
-        }
-        [hatSprite release];
-        [hatFile release];
-
-        UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
-        hog.animationImages = animation;
-        hog.animationDuration = 3;
-        [animation release];
-
-        int x = 20*i+random()%128;
-        if (x > 320 - 32)
-            x = i*random()%32;
-        hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
-        [self.imgContainer addSubview:hog];
-        [hog startAnimating];
-        [hog release];
-    }
-
-    // don't place the nice hogs if there is no space for them
-    if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
-         self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
-        self.imgContainer.alpha = 0;
-
-    [self.view addSubview:self.imgContainer];
-    [hogSprite release];
+        NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
+        NSUInteger numberOfHats = [hatArray count];
+        int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 16 : 1;
         
+        self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+        NSInteger numberOfHogs = 1 + arc4random_uniform(15);
+        DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
+        for (int i = 0; i < numberOfHogs; i++) {
+            NSString *hat = [hatArray objectAtIndex:arc4random_uniform((int)numberOfHats)];
+
+            NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
+            UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
+            NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
+            for (int j = 0; j < animationFrames; j++) {
+                int x = ((j*32)/(int)hatSprite.size.height)*32;
+                int y = (j*32)%(int)hatSprite.size.height;
+                UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
+                UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
+                UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
+                [animation addObject:hogWithHat];
+            }
+            [hatSprite release];
+            [hatFile release];
+
+            UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
+            hog.animationImages = animation;
+            hog.animationDuration = 3;
+            [animation release];
+
+            int x = 20*i+arc4random_uniform(128);
+            while (x > 320 - 32)
+                x = i*arc4random_uniform(32);
+            
+            hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
+            [self.imgContainer addSubview:hog];
+            [hog startAnimating];
+            [hog release];
+        }
+        [hogSprite release];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self.view addSubview:self.imgContainer];
+            
+            // don't place the nice hogs if there is no space for them
+            if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
+                 self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
+                self.imgContainer.alpha = 0;
+            
+            self.isDrawingNiceHogs = NO;
+        });
     }
 }
 
--(void) viewDidLoad {
+- (void)clearImgContainer
+{
+    for (UIView *oneView in [self.imgContainer subviews])
+    {
+        if ([oneView isMemberOfClass:[UIImageView class]])
+        {
+            UIImageView *anImageView = (UIImageView *)oneView;
+            [anImageView removeFromSuperview];
+        }
+    }
+    
+    [self.imgContainer removeFromSuperview];
+    self.imgContainer = nil;
+}
+
+-(void) viewDidLoad
+{
+    [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor blackColor];
 
     CGRect screenRect = [[UIScreen mainScreen] safeBounds];
     self.view.frame = screenRect;
 
-    if (IS_IPAD()) {
+    if (IS_IPAD())
+    {
         // the label for the filter slider
         UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
                                                    andTitle:nil
@@ -314,13 +353,19 @@
         [self.view addSubview:maxLabel];
         self.mapConfigViewController.maxLabel = maxLabel;
         [maxLabel release];
-    } else {
+    }
+    else
+    {
+        [self localizeTabsSegmentedControl];
+        
+        [self.backButton setTitle:NSLocalizedString(@"Back", nil)];
+        [self.startButton setTitle:NSLocalizedString(@"Start", nil)];
+        
         self.mapConfigViewController.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height-44);
     }
+    
     [self.view addSubview:self.mapConfigViewController.view];
     [self.view bringSubviewToFront:self.mapConfigViewController.slider];
-
-    [super viewDidLoad];
 }
 
 -(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval) duration {
@@ -329,8 +374,6 @@
 
     [self updateiPadUIForInterfaceOrientation:toInterfaceOrientation];
 
-    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
-                                                                            duration:duration];
     if (self.helpPage)
     {
         self.helpPage.view.frame = self.view.frame;
@@ -361,9 +404,15 @@
     }
 }
 
--(void) viewWillAppear:(BOOL)animated {
-//    if (IS_IPAD())
-//        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (IS_IPAD() && !self.imgContainer && !self.isDrawingNiceHogs)
+    {
+        self.isDrawingNiceHogs = YES;
+        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+    }
     
     if (IS_IPAD())
     {
@@ -371,38 +420,23 @@
         UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
         [self updateiPadUIForInterfaceOrientation:currentOrientation];
     }
-    
-    [self.mapConfigViewController viewWillAppear:animated];
-    [self.teamConfigViewController viewWillAppear:animated];
-    [self.schemeWeaponConfigViewController viewWillAppear:animated];
-    // add other controllers here and below
-
-    [super viewWillAppear:animated];
 }
 
--(void) viewDidAppear:(BOOL)animated {
-    [self.mapConfigViewController viewDidAppear:animated];
-    [self.teamConfigViewController viewDidAppear:animated];
-    [self.schemeWeaponConfigViewController viewDidAppear:animated];
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
+
+    if (IS_IPAD())
+    {
+        // need to call this again in order to fix layout on iOS 9 when going back from rotated stats page
+        UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [self updateiPadUIForInterfaceOrientation:currentOrientation];
+    }
 }
 
--(void) viewWillDisappear:(BOOL)animated {
-    [self.mapConfigViewController viewWillDisappear:animated];
-    [self.teamConfigViewController viewWillDisappear:animated];
-    [self.schemeWeaponConfigViewController viewWillDisappear:animated];
-    [super viewWillDisappear:animated];
-}
-
--(void) viewDidDisappear:(BOOL)animated {
-    [self.mapConfigViewController viewDidDisappear:animated];
-    [self.teamConfigViewController viewDidDisappear:animated];
-    [self.schemeWeaponConfigViewController viewDidDisappear:animated];
-    [super viewDidDisappear:animated];
-}
-
--(void) didReceiveMemoryWarning {
-    self.imgContainer = nil;
+-(void) didReceiveMemoryWarning
+{
+    [self clearImgContainer];
 
     if (self.titleImage.superview == nil)
         self.titleImage = nil;
@@ -434,6 +468,9 @@
 }
 
 -(void) dealloc {
+    releaseAndNil(_tabsSegmentedControl);
+    releaseAndNil(_backButton);
+    releaseAndNil(_startButton);
     releaseAndNil(imgContainer);
     releaseAndNil(titleImage);
     releaseAndNil(sliderBackground);

@@ -16,29 +16,29 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "portal" -- The map to be played
 	Theme = "Hell" -- The theme to be used
-	Goals = "use the portal to move fast and far, use it to kill, use it with caution !"  --the goal ...
+	Goals = loc("Use the portal to move fast and far, use it to kill, use it with caution!")  --the goal ...
 	
 	
 ----AddTeam(teamname, color, grave, fort, voicepack, flag)--
-	AddTeam("Subject", 14483406, "Simple", "Island", "Default", "cm_star")
-	player = AddHog("player", 0, 10, "Terminator_Glasses")
+	AddTeam(loc("Subject"), 14483406, "Simple", "Island", "Default", "cm_star")
+	player = AddHog(loc("player"), 0, 10, "Terminator_Glasses")
 
-	AddTeam("Hell Army", 1170801, "Simple", "Island", "Default", "cm_galaxy")
-	enemy1 = AddHog("Lucifer", 1, 200, "thinkingcap")
-	enemy2 = AddHog("voldemort", 1, 150, "WizardHat")
-	enemy3 = AddHog("zombi", 1, 100, "zombi")
-	enemy4 = AddHog("Predator", 1, 14, "predator")
-	enemy5 = AddHog("oneye", 1, 50, "cyclops")
-	enemy6 = AddHog("razac", 1, 50, "plaguemask")
-	enemy7 = AddHog("C-2", 1, 50, "cyborg1")
-	enemy8 = AddHog("Rider", 1, 50, "scif_SparkssHelmet")
+	AddTeam(loc("Hell Army"), 1170801, "Simple", "Island", "Default", "cm_galaxy")
+	enemy1 = AddHog(loc("Lucifer"), 1, 200, "thinkingcap")
+	enemy2 = AddHog(loc("voldemort"), 1, 150, "WizardHat")
+	enemy3 = AddHog(loc("zombi"), 1, 100, "zombi")
+	enemy4 = AddHog(loc("Predator"), 1, 14, "predator")
+	enemy5 = AddHog(loc("oneye"), 1, 50, "cyclops")
+	enemy6 = AddHog(loc("razac"), 1, 50, "plaguemask")
+	enemy7 = AddHog(loc("C-2"), 1, 50, "cyborg1")
+	enemy8 = AddHog(loc("Rider"), 1, 50, "scif_SparkssHelmet")
 
-	AddTeam("badmad", 1170801, "Simple", "Island", "Default", "cm_jupiter")
-	enemy9 = AddHog("C-1", 1, 50, "cyborg2")
-	enemy10 = AddHog("hiden", 1, 40, "daftpunkguymanuel")
-	enemy11 = AddHog("ronald", 1, 70, "clown")
-	enemy12 = AddHog("phosphatoglucidique", 1, 50, "chef")
-	enemy13 = AddHog("Lestat", 1, 30, "draculakz")
+	AddTeam(loc("badmad"), 1170801, "Simple", "Island", "Default", "cm_jupiter")
+	enemy9 = AddHog(loc("C-1"), 1, 50, "cyborg2")
+	enemy10 = AddHog(loc("hiden"), 1, 40, "daftpunkguymanuel")
+	enemy11 = AddHog(loc("ronald"), 1, 70, "clown")
+	enemy12 = AddHog(loc("phosphatoglucidique"), 1, 50, "chef")
+	enemy13 = AddHog(loc("Lestat"), 1, 30, "draculakz")
 
 	SetGearPosition(player, 350, 1820)
     SetGearPosition(enemy1, 2037, 1313)
@@ -168,7 +168,7 @@ function onGameStart()
 
 
 	ShowMission (loc("Portal mission"), loc("training"), "", -amPortalGun, 5000)
-	HogSay(player, "I should get myself a portal gun, maybe this crate has one", SAY_THINK)
+	HogSay(player, loc("I should get myself a portal gun, maybe this crate has one"), SAY_THINK)
 	
 
 
@@ -204,11 +204,11 @@ function onGearDelete(gear)
 
 	if gear == portalgun then
 		--AddAmmo(player, amPortalGun, 10000)
-		HogSay(player, "GREAT ! Let's kill all this enemies, using portals", SAY_THINK)
+		HogSay(player, loc("GREAT ! Let's kill all this enemies, using portals"), SAY_THINK)
 	end
 
 	if gear == girder then 
-		HogSay(player, "Will be useful if I need a new plateform or if I want to rise....", SAY_THINK)
+		HogSay(player, loc("Will be useful if I need a new plateform or if I want to rise...."), SAY_THINK)
 	end
 	
 	if gear == parachute then

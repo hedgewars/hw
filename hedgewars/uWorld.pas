@@ -1930,7 +1930,7 @@ if(ammoType = amNothing)then
     ammoType:= CurrentHedgehog^.CurAmmoType;
 
 if(CurrentHedgehog <> nil)then
-    if (Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0 then
+    if ((Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0) and (ammoType <> amDrillStrike) then
         begin
         utilityWidget.sprite:= sprTimerButton;
         animateWidget(@utilityWidget, true, true);
@@ -1942,7 +1942,7 @@ if(CurrentHedgehog <> nil)then
         end
     else if ammoType = amSwitch then
         begin
-        utilityWidget.sprite:= sprTargetButton;
+        utilityWidget.sprite:= sprSwitchButton;
         animateWidget(@utilityWidget, true, true);
         end
     else if utilityWidget.show then

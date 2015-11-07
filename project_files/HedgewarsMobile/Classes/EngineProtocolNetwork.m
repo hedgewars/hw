@@ -197,7 +197,7 @@
 
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
 -(int) sendToEngine:(NSString *)string {
-    uint8_t length = [string length];
+    uint8_t length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 
     [self dumpRawData:[string UTF8String] ofSize:length];
     SDLNet_TCP_Send(csd, &length, 1);
@@ -206,7 +206,7 @@
 
 // wrapper that computes the length of the message and then sends the command string, skipping file writing
 -(int) sendToEngineNoSave:(NSString *)string {
-    uint8_t length = [string length];
+    uint8_t length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
@@ -341,19 +341,25 @@
                 NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
                 NSArray *info = [tempStr componentsSeparatedByString:@" "];
                 NSString *arg = [info objectAtIndex:0];
-                int index = [arg length] + 3;
+                int index = [arg lengthOfBytesUsingEncoding:NSUTF8StringEncoding] + 3;
                 switch (buffer[1]) {
                     case 'r':           // winning team
                         [statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
                     case 'D':           // best shot
-                        [statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
+                    {
+                        NSString *hogName = [NSString stringWithUTF8String:&buffer[index]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"The best shot award won by %@ (with %@ points)", nil), hogName, arg]];
                         break;
+                    }
                     case 'k':           // best hedgehog
-                        [statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kill(s) in a turn", &buffer[index], arg]];
+                    {
+                        NSString *hogName = [NSString stringWithUTF8String:&buffer[index]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"The best killer is %@ with %@ kill(s) in a turn", nil), hogName, arg]];
                         break;
+                    }
                     case 'K':           // number of hogs killed
-                        [statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%@ hedgehog(s) were killed during this round", nil), arg]];
                         break;
                     case 'H':           // team health/graph
                         break;
@@ -364,14 +370,23 @@
                         [[statsArray objectAtIndex:0] addObject:tempStr];
                         break;
                     case 's':           // self damage
-                        [statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
+                    {
+                        NSString *hogName = [NSString stringWithUTF8String:&buffer[index]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%@ thought it's good to shoot his own hedgehogs with %@ points", nil), hogName, arg]];
                         break;
+                    }
                     case 'S':           // friendly fire
-                        [statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
+                    {
+                        NSString *hogName = [NSString stringWithUTF8String:&buffer[index]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%@ killed %@ of his own hedgehogs", nil), hogName, arg]];
                         break;
+                    }
                     case 'B':           // turn skipped
-                        [statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
+                    {
+                        NSString *hogName = [NSString stringWithUTF8String:&buffer[index]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%@ was scared and skipped turn %@ times", nil), hogName, arg]];
                         break;
+                    }
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");
                         break;

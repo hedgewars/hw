@@ -30,7 +30,7 @@
 #pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
-    self.navigationItem.title = @"Edit game options";
+    self.navigationItem.title = NSLocalizedString(@"Edit game options", nil);
     [super viewDidLoad];
 }
 
@@ -179,7 +179,7 @@
 
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"from the settings table");
+                cell.textLabel.text = NSLocalizedString(@"Sound", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {
