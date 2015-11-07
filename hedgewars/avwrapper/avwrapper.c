@@ -321,13 +321,7 @@ static int AddVideoStream()
 #endif
 
     // open the codec
-#if LIBAVCODEC_VERSION_MAJOR >= 53
-    AVDictionary* pDict = NULL;
-    if (strcmp(g_pVCodec->name, "libx264") == 0)
-        av_dict_set(&pDict, "preset", "medium", 0);
-#endif
-
-    if (avcodec_open2(g_pVideo, g_pVCodec, &pDict) < 0)
+    if (avcodec_open2(g_pVideo, g_pVCodec, NULL) < 0)
         return FatalError("Could not open video codec %s", g_pVCodec->long_name);
 
     g_pVFrame = av_frame_alloc();
