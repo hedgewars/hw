@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable #-}
+{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
 module CoreTypes where
 
 import Control.Concurrent
@@ -120,7 +120,7 @@ data CheckInfo =
     {
         recordFileName :: String,
         recordTeams :: [TeamInfo],
-        recordScript :: B.ByteString
+        details :: Maybe GameDetails
     }
 
 data ClientInfo =
@@ -346,9 +346,20 @@ data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
-    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] B.ByteString [B.ByteString]
+    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] GameDetails [B.ByteString]
     | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
+
+data GameDetails =
+    GameDetails {
+        gameScript :: B.ByteString
+        , infRope
+        , isVamp
+        , infAttacks :: Bool
+    } deriving (Show, Read)
+
+instance NFData GameDetails where
+    rnf (GameDetails a b c d) = a `deepseq` b `deepseq` c `deepseq` d `deepseq` ()
 
 data CoreMessage =
     Accept ClientInfo

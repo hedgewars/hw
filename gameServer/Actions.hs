@@ -762,10 +762,11 @@ processAction (CheckFailed msg) = do
 
 
 processAction (CheckSuccess info) = do
-    Just (CheckInfo fileName teams script) <- client's checkInfo
+    Just (CheckInfo fileName teams gameDetails) <- client's checkInfo
     p <- client's clientProto
     si <- gets serverInfo
-    io $ writeChan (dbQueries si) $ StoreAchievements p (B.pack fileName) (map toPair teams) script info
+    when (isJust gameDetails)
+        $ io $ writeChan (dbQueries si) $ StoreAchievements p (B.pack fileName) (map toPair teams) (fromJust gameDetails) info
     io $ moveCheckedRecord fileName
     where
         toPair t = (teamname t, teamowner t)
