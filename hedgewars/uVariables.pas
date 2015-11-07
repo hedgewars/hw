@@ -441,10 +441,12 @@ const
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprJumpWidget
             (FileName: 'pause'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 120; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprPauseButton
-            (FileName: 'pause'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;//TODO correct image
-            Width: 120; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTimerButton
-            (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;//TODO correct image
-            Width: 120; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTargetButton
+            (FileName: 'timerbutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTimerButton
+            (FileName: 'targetbutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTargetButton
+            (FileName: 'switchbutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprSwitchButton
 {$ENDIF}
             (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprFlake
@@ -1363,7 +1365,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 4;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 4;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2154,6 +2156,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
                           ammoprop_AltUse or
+                          ammoprop_NeedUpDown or
                           ammoprop_NoRoundEnd;
                 Count: 2;
                 NumPerTurn: 0;
@@ -2235,6 +2238,7 @@ const
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_NeedUpDown or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;

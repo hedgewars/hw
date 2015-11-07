@@ -1517,7 +1517,7 @@ function HandleHedgeEditor()
 				end
 
 
-				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
+				AddCaption(loc(cat[cIndex]),0xffba00ff,capgrpMessage)
 				AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
 				wallsVisible = true
 			else
@@ -1791,7 +1791,7 @@ function onGameStart()
 
 				loc("Generator") .. ": " .. loc("Generates power.")  .. "|" ..
 				loc("Respawner") .. ": " .. loc("Resurrects dead hedgehogs.")  .. "|" ..
-				loc("Teleporation Node") .. ": " .. loc("Allows free teleportation between other nodes.")  .. "|" ..
+				loc("Teleportation Node") .. ": " .. loc("Allows free teleportation between other nodes.")  .. "|" ..
 				loc("Construction Station") .. ": " .. loc("Allows placement of girders, rubber-bands, mines, sticky mines and barrels.")  .. "|" ..
 				loc("Support Station") .. ": " .. loc("Allows the placement of weapons, utiliites, and health crates.")  .. "|" ..
 

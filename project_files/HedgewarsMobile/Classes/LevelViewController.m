@@ -31,7 +31,6 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    srandom(time(NULL));
 
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Brutal",@""),
@@ -57,10 +56,6 @@
     [self.tableView reloadData];
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
-}
-
--(void) viewWillDisappear:(BOOL)animated {
- // stuff like checking that at least 1 field was selected
 }
 
 #pragma mark -
@@ -133,7 +128,7 @@
     if (theSwitch.on) {
         numberOfSections = 2;
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        level = 1 + (random() % ([levelArray count] - 1));
+        level = 1 + arc4random_uniform((int)[levelArray count] - 1);
     } else {
         numberOfSections = 1;
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];

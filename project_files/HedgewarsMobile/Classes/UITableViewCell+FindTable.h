@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2015 Anton Malmygin <antonc27@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,22 +13,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
 
 #import <UIKit/UIKit.h>
 
+@interface UITableViewCell (FindTable)
 
-@class SettingsBaseViewController;
-@class MGSplitViewController;
-
-@interface SettingsContainerViewController : UIViewController {
-    SettingsBaseViewController *baseController;
-    MGSplitViewController *splitViewRootController;
-}
-
-@property (nonatomic,retain) SettingsBaseViewController *baseController;
-@property (nonatomic,retain) MGSplitViewController *splitViewRootController;
+- (UITableView *)findTable;
 
 @end

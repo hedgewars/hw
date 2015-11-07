@@ -19,7 +19,7 @@
 
 #import "HedgewarsAppDelegate.h"
 #import "MainMenuViewController.h"
-
+#import "Appirater.h"
 
 @implementation SDLUIKitDelegate (customDelegate)
 
@@ -50,7 +50,16 @@
 }
 
 // override the direct execution of SDL_main to allow us to implement our own frontend
--(void) postFinishLaunch {
+-(void) postFinishLaunch
+{
+    // Setup Appirater
+    [Appirater setAppId:@"391234866"];
+    [Appirater setDaysUntilPrompt:3];
+    [Appirater setUsesUntilPrompt:5];
+    [Appirater setSignificantEventsUntilPrompt:-1];
+    [Appirater setTimeBeforeReminding:1];
+    //[Appirater setDebug:YES];
+    
     [self performSelector:@selector(hideLaunchScreen) withObject:nil afterDelay:0.0];
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];

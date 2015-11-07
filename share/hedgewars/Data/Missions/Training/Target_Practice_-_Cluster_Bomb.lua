@@ -3,7 +3,7 @@ HedgewarsScriptLoad("/Scripts/TargetPractice.lua")
 local params = {
 	ammoType = amClusterBomb,
 	gearType = gtClusterBomb,
-	missionTitle = "Cluster Bomb Training",
+	missionTitle = loc("Cluster Bomb Training"),
 	solidLand = false,
 	map = "Trash",
 	theme = "Golf",

@@ -32,7 +32,6 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    srandom(time(NULL));
 
     voiceBeingPlayed = NULL;
 
@@ -129,7 +128,7 @@
     NSString *voiceDir = [[NSString alloc] initWithFormat:@"%@/%@/",VOICES_DIRECTORY(),[voiceArray objectAtIndex:newRow]];
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:voiceDir error:NULL];
 
-    int index = random() % [array count];
+    int index = arc4random_uniform((int)[array count]);
 
     voiceBeingPlayed = Mix_LoadWAV([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
     [voiceDir release];

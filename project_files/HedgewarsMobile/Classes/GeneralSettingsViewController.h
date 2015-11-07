@@ -18,9 +18,9 @@
 
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerWithDoneButton.h"
 
-
-@interface GeneralSettingsViewController : UITableViewController <EditableCellViewDelegate> {
+@interface GeneralSettingsViewController : TableViewControllerWithDoneButton <EditableCellViewDelegate> {
 
 }
 

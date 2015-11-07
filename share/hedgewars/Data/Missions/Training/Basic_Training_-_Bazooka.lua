@@ -141,7 +141,7 @@ function onGameTick20()
 		game_lost = true
 		time_goal = 1
 		AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
-		ShowMission(loc("Bazooka Training"), loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
+		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 	end
 
 	-- If the goal is reached or we've lost ...
@@ -162,11 +162,11 @@ function onGameTick20()
 				SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%%."), (score/shots)*100))
 			end
 			if score == score_goal then
-				SendStat(siGameResult, "You have finished the bazooka training!")
+				SendStat(siGameResult, loc("You have finished the bazooka training!"))
 				SendStat(siCustomAchievement, string.format(loc("%.1f seconds were remaining."), (time_goal/1000), math.ceil(time_goal/12)))
 			end
 			if game_lost then
-				SendStat(siGameResult, "You lose!")
+				SendStat(siGameResult, loc("You lose!"))
 			end
 
 			-- Finally we end the game ...
@@ -224,7 +224,7 @@ function onGearDamage(gear, damage)
 		if not game_lost then
 			game_lost = true
 			AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
-			ShowMission(loc("Bazooka Training") , loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
+			ShowMission(loc("Bazooka Training") , loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 			time_goal = 1
 		end

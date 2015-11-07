@@ -18,7 +18,7 @@
 
 
 #import "HoldTableViewCell.h"
-
+#import "UITableViewCell+FindTable.h"
 
 @implementation HoldTableViewCell
 @synthesize delegate;
@@ -64,22 +64,6 @@
             [self.delegate holdAction:self.textLabel.text onTable:tableView];
         }
     }
-}
-
-- (UITableView *)findTable
-{
-    UIView *tableView = self.superview;
-    while (![tableView isKindOfClass:[UITableView class]] || (tableView == nil))
-    {
-        tableView = tableView.superview;
-        
-        if ([tableView isEqual:self.window])
-        {
-            tableView = nil;
-        }
-    }
-    
-    return (UITableView *)tableView;
 }
 
 -(void) dealloc {

@@ -18,13 +18,10 @@
 
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerWithDoneButton.h"
 
-
-@class SingleWeaponViewController;
-
-@interface WeaponSettingsViewController : UITableViewController {
+@interface WeaponSettingsViewController : TableViewControllerWithDoneButton {
     NSMutableArray *listOfWeapons;
-    SingleWeaponViewController *childController;
 }
 
 @property (nonatomic, retain) NSMutableArray *listOfWeapons;

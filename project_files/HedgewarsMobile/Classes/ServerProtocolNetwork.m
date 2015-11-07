@@ -69,14 +69,14 @@ static ServerProtocolNetwork *serverConnection;
 #pragma mark Communication layer
 -(int) sendToServer:(NSString *)command {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
-    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     [message release];
     return result;
 }
 
 -(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
-    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     [message release];
     return result;
 }

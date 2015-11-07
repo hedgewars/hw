@@ -20,6 +20,11 @@
 #import "RestoreViewController.h"
 #import "GameInterfaceBridge.h"
 
+@interface RestoreViewController ()
+@property (retain, nonatomic) IBOutlet UIButton *restoreButton;
+@property (retain, nonatomic) IBOutlet UIButton *dismissButton;
+@end
+
 @implementation RestoreViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -33,7 +38,14 @@
     if (theButton.tag != 0) {
         [[AudioManagerController mainManager] playClickSound];
         [GameInterfaceBridge registerCallingController:self.presentingViewController];
-        [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
+        
+        // Since iOS 8, the file system layout of app containers has changed.
+        // So, we must rely now on saved game filename, not full path.
+        NSString *oldSavedGamePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"];
+        NSString *savedGameFile = [oldSavedGamePath lastPathComponent];
+        NSString *newSavedGamePath = [NSString stringWithFormat:@"%@%@", SAVES_DIRECTORY(), savedGameFile];
+        
+        [GameInterfaceBridge startSaveGame:newSavedGamePath];
     } else {
         [[AudioManagerController mainManager] playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
@@ -44,6 +56,12 @@
 
 -(void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self.restoreButton setTitle:NSLocalizedString(@"Restore", nil) forState:UIControlStateNormal];
+    [self.dismissButton setTitle:NSLocalizedString(@"Dismiss", nil) forState:UIControlStateNormal];
+    
+    [self.restoreButton applyDarkBlueQuickStyle];
+    [self.dismissButton applyDarkBlueQuickStyle];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -55,6 +73,8 @@
 }
 
 -(void) dealloc {
+    [_restoreButton release];
+    [_dismissButton release];
     [super dealloc];
 }
 

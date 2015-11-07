@@ -3,7 +3,7 @@ HedgewarsScriptLoad("/Scripts/TargetPractice.lua")
 local params = {
 	ammoType = amShotgun,
 	gearType = gtShotgunShot,
-	missionTitle = "Target Practice: Shotgun",
+	missionTitle = loc("Target Practice: Shotgun"),
 	solidLand = false,
 	map = "SB_Haunty",
 	theme = "Halloween",
