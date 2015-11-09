@@ -52,8 +52,8 @@ dbQueryAchievement =
     \ ?, ?, ?, ?)"
 
 dbQueryGamesHistory =
-    "INSERT INTO rating_games (script, protocol, filename, time) \
-    \ VALUES (?, ?, ?, ?)"
+    "INSERT INTO rating_games (script, protocol, filename, time, vamp, ropes, infattacks) \
+    \ VALUES (?, ?, ?, ?, ?, ?, ?)"
 
 dbQueryGameId = "SELECT LAST_INSERT_ID()"
 
@@ -93,8 +93,8 @@ dbInteractionLoop dbConn = forever $ do
 
         SendStats clients rooms ->
                 void $ execute dbConn dbQueryStats (clients, rooms)
-        StoreAchievements p fileName teams script info ->
-            sequence_ $ parseStats dbConn p fileName teams script info
+        StoreAchievements p fileName teams g info ->
+            sequence_ $ parseStats dbConn p fileName teams g info
 
 
 --readTime = read . B.unpack . B.take 19 . B.drop 8
@@ -105,18 +105,18 @@ parseStats ::
     -> Word16 
     -> B.ByteString 
     -> [(B.ByteString, B.ByteString)] 
-    -> B.ByteString
+    -> GameDetails
     -> [B.ByteString]
     -> [IO Int64]
-parseStats dbConn p fileName teams script = ps
+parseStats dbConn p fileName teams (GameDetails script infRopes vamp infAttacks) = ps
     where
     time = readTime fileName
     ps :: [B.ByteString] -> [IO Int64]
     ps [] = []
-    ps ("DRAW" : bs) = execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time)
+    ps ("DRAW" : bs) = execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time, vamp, infRopes, infAttacks)
         : places (map drawParams teams)
         : ps bs
-    ps ("WINNERS" : n : bs) = let winNum = readInt_ n in execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time)
+    ps ("WINNERS" : n : bs) = let winNum = readInt_ n in execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time, vamp, infRopes, infAttacks)
         : places (map (placeParams (take winNum bs)) teams)
         : ps (drop winNum bs)
     ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) = execute dbConn dbQueryAchievement

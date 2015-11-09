@@ -70,11 +70,11 @@ loadReplay p blackList = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "
     where
         loadFile :: String -> IO (Maybe CheckInfo, [B.ByteString])
         loadFile fileName = E.handle (\(e :: SomeException) ->
-                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Just $ CheckInfo fileName [] "", [])) $ do
+                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Just $ CheckInfo fileName [] Nothing, [])) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
             let d = replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs)
             d `deepseq` return $ (
-                Just (CheckInfo fileName teams (head $ fst d))
+                Just (CheckInfo fileName teams (fst d))
                 , snd d
                 )
 
