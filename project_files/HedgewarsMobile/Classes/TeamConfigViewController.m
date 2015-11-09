@@ -210,7 +210,7 @@
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
     label.backgroundColor = [UIColor clearColor];
-    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 
     if (section == 0)
         label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove a team.",@"");

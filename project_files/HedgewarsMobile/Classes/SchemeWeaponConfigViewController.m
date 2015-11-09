@@ -275,7 +275,7 @@
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
     label.backgroundColor = [UIColor clearColor];
-    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 
     label.text = NSLocalizedString(@"Setting a Style might force a particular Scheme or Weapon configuration.",@"");
 
