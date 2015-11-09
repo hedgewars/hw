@@ -38,13 +38,13 @@ import EngineInteraction
 
 pickReplayFile :: Int -> [String] -> IO String
 pickReplayFile p blackList = do
-    files <- liftM (filter (\f -> sameProto f && notBlacklisted f)) $ getDirectoryContents "replays"
+    files <- liftM (filter (\f -> sameProto f && notBlacklisted ("replays/" ++ f))) $ getDirectoryContents "replays"
     if (not $ null files) then
         return $ "replays/" ++ head files
         else
         return ""
     where
-        sameProto = (isSuffixOf ('.' : show p))
+        sameProto = isSuffixOf ('.' : show p)
         notBlacklisted = flip notElem blackList
 
 saveReplay :: RoomInfo -> IO ()
