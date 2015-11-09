@@ -2650,7 +2650,11 @@ begin
 
     AfterAttack;
 
-    HHGear^.State := HHGear^.State and (not (gstAttacking or gstAttacked or gstMoving));
+    // make sure hog doesn't end up facing in wrong direction due to high jump
+    if (HHGear^.State and gstHHHJump) <> 0 then
+        HHGear^.dX.isNegative := (not HHGear^.dX.isNegative);
+
+    HHGear^.State := HHGear^.State and (not (gstAttacking or gstAttacked or gstMoving or gstHHJumping or gstHHHJump));
     HHGear^.Message := HHGear^.Message and (not gmAttack);
 
     Gear^.doStep := @doStepParachuteWork;
