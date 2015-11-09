@@ -744,10 +744,6 @@ processAction CheckRecord = do
 
     blackList <- liftM (map (recordFileName . fromJust . checkInfo) . filter (isJust . checkInfo)) allClientsS
 
-    readyCheckersIds <- io $ do
-        allci <- allClientsM rnc
-        filterM (client'sM rnc (isJust . checkInfo)) allci
-
     (cinfo, l) <- io $ loadReplay (fromIntegral p) blackList
     when (isJust cinfo) $
         mapM_ processAction [
