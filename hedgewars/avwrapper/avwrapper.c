@@ -149,6 +149,10 @@ static void AddAudioStream()
     g_pAudio->sample_rate = g_Frequency;
     g_pAudio->channels = g_Channels;
 
+    // set time base as invers of sample rate
+    g_pAudio->time_base.den = g_pAStream->time_base.den = g_Frequency;
+    g_pAudio->time_base.num = g_pAStream->time_base.num = 1;
+
     // set quality
     g_pAudio->bit_rate = 160000;
 
@@ -254,8 +258,8 @@ static int AddVideoStream()
        of which frame timestamps are represented. for fixed-fps content,
        timebase should be 1/framerate and timestamp increments should be
        identically 1. */
-    g_pVideo->time_base.den = g_Framerate.num;
-    g_pVideo->time_base.num = g_Framerate.den;
+    g_pVideo->time_base.den = g_pVStream->time_base.den = g_Framerate.num;
+    g_pVideo->time_base.num = g_pVStream->time_base.num = g_Framerate.den;
     //g_pVideo->gop_size = 12; /* emit one intra frame every twelve frames at most */
     g_pVideo->pix_fmt = AV_PIX_FMT_YUV420P;
 
