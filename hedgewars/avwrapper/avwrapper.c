@@ -311,6 +311,9 @@ static int AddVideoStream()
     if (!g_pVFrame)
         return FatalError("Could not allocate frame");
 
+    g_pVFrame->width = g_Width;
+    g_pVFrame->height = g_Height;
+    g_pVFrame->format = AV_PIX_FMT_YUV420P;
     g_pVFrame->linesize[0] = g_Width;
     g_pVFrame->linesize[1] = g_Width/2;
     g_pVFrame->linesize[2] = g_Width/2;
