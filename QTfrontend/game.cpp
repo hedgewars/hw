@@ -17,7 +17,6 @@
  */
 
 #include <QApplication>
-#include <QClipboard>
 
 #include <QString>
 #include <QCheckBox>
@@ -260,12 +259,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 .arg("Feedback")
                 .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
             return;
-        }
-        case 'y':
-        {
-            // copy string to clipboard
-            QApplication::clipboard()->setText(QString::fromUtf8(msg.mid(2)));
-            break;
         }
         case 'i':
         {

@@ -726,7 +726,8 @@ end;
 
 procedure CopyToClipboard(var newContent: shortstring);
 begin
-    SendIPC(_S'y' + copy(newContent, 1, 253) + #0);
+    // SDL2 clipboard
+    SDL_SetClipboardText(Str2PChar(newContent));
 end;
 
 procedure CopySelectionToClipboard();

@@ -990,7 +990,10 @@ function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongIn
 
 // SDL 2 clipboard functions
 function SDL_HasClipboardText(): Boolean; cdecl; external SDLLibName;
+// returns nil if memory for clipboard contents copy couldn't be allocated
 function SDL_GetClipboardText(): PChar; cdecl; external SDLLibName;
+// returns 0 on success or negative error number on failure
+function SDL_SetClipboardText(const text: PChar): LongInt; cdecl; external SDLLibName;
 
 procedure SDLNet_Write16(value: Word; buf: Pointer);
 procedure SDLNet_Write32(value: LongWord; buf: Pointer);
