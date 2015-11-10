@@ -6,18 +6,11 @@ compiler:
   - gcc
   - clang
 env:
-  # Default build. Release.
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
-  # Debug build
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
-  # Everything that's optional
-  - BUILD_ARGS="-DBUILD_ENGINE_C=1"
-  - BUILD_ARGS="-DNOPNG=1"
-  - BUILD_ARGS="-DNOVIDEOREC=1"
-  - BUILD_ARGS="-DNOSERVER=1"
-  - BUILD_ARGS="-DLUA_SYSTEM=0"
-  - BUILD_ARGS="-DPHYSFS_SYSTEM=0"
-  - BUILD_ARGS="-DGL2=1"
+  - BUILD_ARGS="-DNOSERVER=1 -DBUILD_ENGINE_C=1"
+  - BUILD_ARGS="-DNOSERVER=1 -DNOVIDEOREC=1 -DNOPNG=1"
+  - BUILD_ARGS="-DNOSERVER=1 -DLUA_SYSTEM=0 -DPHYSFS_SYSTEM=0"
 matrix:
   allow_failures:
     # Failures we expect here
