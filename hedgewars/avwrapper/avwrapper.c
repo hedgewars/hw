@@ -192,6 +192,8 @@ static int WriteAudioFrame()
 
     AVPacket Packet;
     av_init_packet(&Packet);
+    Packet.data = NULL;
+    Packet.size = 0;
 
     int NumSamples = fread(g_pSamples, 2*g_Channels, g_NumSamples, g_pSoundFile);
 
