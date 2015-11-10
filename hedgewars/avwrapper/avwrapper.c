@@ -273,7 +273,7 @@ static int AddVideoStream()
        identically 1. */
     g_pVideo->time_base.den = g_pVStream->time_base.den = g_Framerate.num;
     g_pVideo->time_base.num = g_pVStream->time_base.num = g_Framerate.den;
-    //g_pVideo->gop_size = 12; /* emit one intra frame every twelve frames at most */
+
     g_pVideo->pix_fmt = AV_PIX_FMT_YUV420P;
 
     // set quality
