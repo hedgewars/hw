@@ -371,6 +371,7 @@ static int WriteFrame(AVFrame* pFrame)
     Packet.size = 0;
 
     g_pVFrame->pts++;
+#if LIBAVCODEC_VERSION_MAJOR < 58
     if (g_pFormat->flags & AVFMT_RAWPICTURE)
     {
         /* raw video case. The API will change slightly in the near
@@ -385,6 +386,7 @@ static int WriteFrame(AVFrame* pFrame)
         return 0;
     }
     else
+#endif
     {
 #if LIBAVCODEC_VERSION_MAJOR >= 54
         int got_packet;
