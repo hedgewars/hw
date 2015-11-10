@@ -514,7 +514,7 @@ AVWRAP_DECL int AVWrapper_Close()
     {
         do
             ret = WriteFrame(NULL);
-        while (ret >= 0);
+        while (ret > 0);
         if (ret < 0)
             return ret;
     }
@@ -523,7 +523,7 @@ AVWRAP_DECL int AVWrapper_Close()
     {
         ret = WriteAudioFrame();
     }
-    while(ret >= 0);
+    while(ret > 0);
     if (ret < 0)
         return ret;
 
