@@ -196,6 +196,7 @@ schemeParams = [
     , ("e$minesnum", 1)
     , ("e$minedudpct", 1)
     , ("e$explosives", 1)
+    , ("e$airmines", 0)
     , ("e$healthprob", 1)
     , ("e$hcaseamount", 1)
     , ("e$waterrise", 1)
