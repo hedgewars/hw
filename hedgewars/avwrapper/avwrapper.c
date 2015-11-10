@@ -66,6 +66,17 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 #if LIBAVCODEC_VERSION_MAJOR < 56
 #define av_frame_alloc                      avcodec_alloc_frame
 #define av_frame_free                       av_freep
+#define av_packet_rescale_ts                rescale_ts
+
+static void rescale_ts(AVPacket *pkt, AVRational ctb, AVRational stb)
+{
+    if (pkt->pts != AV_NOPTS_VALUE)
+        pkt->pts = av_rescale_q(pkt->pts, ctb, stb);
+    if (pkt->dts != AV_NOPTS_VALUE)
+        pkt->dts = av_rescale_q(pkt->dts, ctb, stb);
+    if (pkt->duration > 0)
+        pkt->duration = av_rescale_q(pkt->duration, ctb, stb);
+}
 #endif
 
 #if LIBAVCODEC_VERSION_MAJOR < 57
@@ -216,6 +227,8 @@ static int WriteAudioFrame()
         return FatalError("avcodec_encode_audio2 failed");
     if (!got_packet)
         return 0;
+
+    av_packet_rescale_ts(&Packet, g_pAudio->time_base, g_pAStream->time_base);
 #else
     if (NumSamples == 0)
         return 0;
@@ -374,10 +387,7 @@ static int WriteFrame(AVFrame* pFrame)
         if (!got_packet)
             return 0;
 
-        if (Packet.pts != AV_NOPTS_VALUE)
-            Packet.pts = av_rescale_q(Packet.pts, g_pVideo->time_base, g_pVStream->time_base);
-        if (Packet.dts != AV_NOPTS_VALUE)
-            Packet.dts = av_rescale_q(Packet.dts, g_pVideo->time_base, g_pVStream->time_base);
+        av_packet_rescale_ts(&Packet, g_pVideo->time_base, g_pVStream->time_base);
 #else
         Packet.size = avcodec_encode_video(g_pVideo, g_OutBuffer, OUTBUFFER_SIZE, pFrame);
         if (Packet.size < 0)
