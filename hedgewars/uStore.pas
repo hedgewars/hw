@@ -53,9 +53,7 @@ procedure MakeCrossHairs;
 procedure InitOffscreenOpenGL;
 {$ENDIF}
 
-{$IFDEF SDL2}
 procedure WarpMouse(x, y: Word); inline;
-{$ENDIF}
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 procedure SetSkyColor(r, g, b: real);
 
@@ -63,18 +61,13 @@ implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
     , uPhysFSLayer
     , uDebug
-    {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
-    {$IF NOT DEFINED(SDL2) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
+    {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var MaxTextureSize: LongInt;
-{$IFDEF SDL2}
     SDLwindow: PSDL_Window;
     SDLGLcontext: PSDL_GLContext;
-{$ELSE}
-    SDLPrimSurface: PSDL_Surface;
-{$ENDIF}
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
@@ -689,9 +682,6 @@ begin
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$ENDIF}
-{$IFNDEF SDL2} // vsync is default in SDL2
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, LongInt((cReducedQuality and rqDesyncVBlank) = 0));
-{$ENDIF}
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
@@ -708,16 +698,10 @@ var buf: array[byte] of char;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
-{$IFDEF SDL2}
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_GetCurrentVideoDriver()) + ')');
-{$ELSE}
-    buf[0]:= char(0); // avoid compiler hint
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
-{$ENDIF}
 
     AuxBufNum:= AuxBufNum;
 
-{$IFDEF SDL2}
     // TODO: this function creates an opengles1.1 context
     // un-comment below and add proper logic to support opengles2.0
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -726,7 +710,6 @@ begin
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
     SDLTry(SDLGLcontext <> nil, 'SDLGLcontext', true);
     SDLTry(SDL_GL_SetSwapInterval(1) = 0, 'SDL_GL_SetSwapInterval', true);
-{$ENDIF}
 
     // get the max (h and v) size for textures that the gpu can support
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
@@ -1084,7 +1067,6 @@ WeaponTooltipTex:= nil
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
-{$IFDEF SDL2}
 procedure InitOffscreenOpenGL;
 begin
     // create hidden window
@@ -1095,30 +1077,13 @@ begin
     SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
     SetupOpenGL();
 end;
-{$ELSE}
-procedure InitOffscreenOpenGL;
-var ArgCount: LongInt;
-    PrgName: pchar;
-begin
-    ArgCount:= 1;
-    PrgName:= 'hwengine';
-    glutInit(@ArgCount, @PrgName);
-    glutInitWindowSize(cScreenWidth, cScreenHeight);
-    // we do not need a window, but without this call OpenGL will not initialize
-    glutCreateWindow('hedgewars video rendering (glut hidden window)');
-    glutHideWindow();
-    // we do not need to set this callback, but it is required for GLUT3 compat
-    glutDisplayFunc(@SwapBuffers);
-    SetupOpenGL();
-end;
-{$ENDIF} // SDL2
 {$ENDIF} // USE_VIDEO_RECORDING
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     reinit: boolean = false;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
-    {$IFDEF SDL2}x, y: LongInt;{$ENDIF}
+    x, y: LongInt;
 begin
     if cOnlyStats then
         begin
@@ -1141,30 +1106,12 @@ begin
         end;
 
     AddFileLog('Preparing to change video parameters...');
-{$IFDEF SDL2}
     if SDLwindow = nil then
-{$ELSE}
-    if SDLPrimSurface = nil then
-{$ENDIF}
         begin
         // set window title
-    {$IFNDEF SDL2}
-        SDL_WM_SetCaption(_P'Hedgewars', nil);
-    {$ENDIF}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, 'IMG_Init', true);
         WriteLnToConsole(msgOK);
-        // load engine icon
-    {$IFNDEF DARWIN}
-    {$IFNDEF SDL2}
-        ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
-        if ico <> nil then
-            begin
-            SDL_WM_SetIcon(ico, 0);
-            SDL_FreeSurface(ico)
-            end;
-    {$ENDIF}
-    {$ENDIF}
         end
     else
         begin
@@ -1189,10 +1136,6 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
-    {$IFNDEF SDL2}
-        SDL_FreeSurface(SDLPrimSurface);
-        SDLPrimSurface:= nil;
-    {$ENDIF}
 {$ENDIF}
         end;
 
@@ -1206,7 +1149,6 @@ begin
  *)
     SetupOpenGLAttributes();
 {$ENDIF}
-{$IFDEF SDL2}
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
     y:= SDL_WINDOWPOS_CENTERED_MASK;
@@ -1227,23 +1169,6 @@ begin
     if SDLwindow = nil then
         SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
-{$ELSE}
-    flags:= SDL_OPENGL or SDL_RESIZABLE;
-    if cFullScreen then
-        flags:= flags or SDL_FULLSCREEN;
-    if not cOnlyStats then
-        begin
-    {$IFDEF WIN32}
-        s:= SDL_getenv('SDL_VIDEO_CENTERED');
-        SDL_putenv('SDL_VIDEO_CENTERED=1');
-    {$ENDIF}
-        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, 0, flags);
-        SDLTry(SDLPrimSurface <> nil, true);
-    {$IFDEF WIN32}
-        SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));
-    {$ENDIF}
-        end;
-{$ENDIF}
 
     SetupOpenGL();
     if reinit then
@@ -1266,7 +1191,6 @@ begin
         end;
 end;
 
-{$IFDEF SDL2}
 // for sdl1.2 we directly call SDL_WarpMouse()
 // for sdl2 we provide a SDL_WarpMouse() which just calls this function
 // this has the advantage of reducing 'uses' and 'ifdef' statements
@@ -1275,17 +1199,12 @@ procedure WarpMouse(x, y: Word); inline;
 begin
     SDL_WarpMouseInWindow(SDLwindow, x, y);
 end;
-{$ENDIF}
 
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 begin
     if GameType = gmtRecord then
         exit;
-{$IFDEF SDL2}
     SDL_GL_SwapWindow(SDLwindow);
-{$ELSE}
-    SDL_GL_SwapBuffers();
-{$ENDIF}
 end;
 
 procedure SetSkyColor(r, g, b: real);
@@ -1312,22 +1231,16 @@ begin
     // init all count texture pointers
     for i:= Low(CountTexz) to High(CountTexz) do
         CountTexz[i] := nil;
-{$IFDEF SDL2}
     SDLwindow:= nil;
     SDLGLcontext:= nil;
-{$ELSE}
-    SDLPrimSurface:= nil;
-{$ENDIF}
 end;
 
 procedure freeModule;
 begin
     StoreRelease(false);
     TTF_Quit();
-{$IFDEF SDL2}
     SDL_GL_DeleteContext(SDLGLcontext);
     SDL_DestroyWindow(SDLwindow);
-{$ENDIF}
     SDL_Quit();
 end;
 end.

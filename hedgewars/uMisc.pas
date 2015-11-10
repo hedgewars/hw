@@ -30,11 +30,7 @@ procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  MakeScreenshot(filename: shortstring; k: LongInt): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
-{$IFDEF SDL2}
 function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
-{$ELSE}
-function  SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
-{$ENDIF}
 
 implementation
 uses SysUtils, uVariables, uUtils
@@ -261,7 +257,7 @@ image^.height:= cScreenHeight div k;
 image^.size:= size;
 image^.buffer:= p;
 
-SDL_CreateThread(@SaveScreenshot{$IFDEF SDL2}, 'snapshot'{$ENDIF}, image);
+SDL_CreateThread(@SaveScreenshot, 'snapshot', image);
 MakeScreenshot:= true; // possibly it is not true but we will not wait for thread to terminate
 end;
 
@@ -279,11 +275,7 @@ begin
     end;
 end;
 
-{$IFDEF SDL2}
 function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
-{$ELSE}
-function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
-{$ENDIF}
 begin
     SDL_RectMake.x:= x;
     SDL_RectMake.y:= y;
@@ -299,29 +291,14 @@ begin
 end;
 
 procedure initModule;
-{$IFDEF SDL2}
 const SDL_PIXELFORMAT_ABGR8888 = (1 shl 28) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4;
-{$ELSE}
-const format: TSDL_PixelFormat = (
-        palette: nil; BitsPerPixel: 32; BytesPerPixel: 4;
-        Rloss: 0; Gloss: 0; Bloss: 0; Aloss: 0;
-        Rshift: RShift; Gshift: GShift; Bshift: BShift; Ashift: AShift;
-        RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
-        colorkey: 0; alpha: 255);
-{$ENDIF}
 begin
-{$IFDEF SDL2}
     conversionFormat:= SDL_AllocFormat(SDL_PIXELFORMAT_ABGR8888);
-{$ELSE}
-    conversionFormat:= @format;
-{$ENDIF}
 end;
 
 procedure freeModule;
 begin
-{$IFDEF SDL2}
     SDL_FreeFormat(conversionFormat);
-{$ENDIF}
 end;
 
 end.

@@ -84,7 +84,6 @@ QStringList SDLInteraction::getResolutions() const
 {
     QStringList result;
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
     int modesNumber = SDL_GetNumDisplayModes(0);
     SDL_DisplayMode mode;
 
@@ -95,22 +94,6 @@ QStringList SDLInteraction::getResolutions() const
         if ((mode.w >= 640) && (mode.h >= 480))
             result << QString("%1x%2").arg(mode.w).arg(mode.h);
     }
-#else
-    SDL_Rect **modes;
-
-    modes = SDL_ListModes(NULL, SDL_FULLSCREEN);
-
-    if((modes == (SDL_Rect **)0) || (modes == (SDL_Rect **)-1))
-    {
-        result << "640x480";
-    }
-    else
-    {
-        for(int i = 0; modes[i]; ++i)
-            if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
-                result << QString("%1x%2").arg(modes[i]->w).arg(modes[i]->h);
-    }
-#endif
 
     return result;
 }
@@ -121,7 +104,7 @@ void SDLInteraction::addGameControllerKeys() const
     QStringList result;
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
-
+// TODO or not TODO?
 #else
     int i = 0;
     while(i < 1024 && sdlkeys[i][1][0] != '\0')
@@ -280,14 +263,9 @@ void SDLInteraction::stopMusic()
 
 QSize SDLInteraction::getCurrentResolution()
 {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
     SDL_DisplayMode mode;
 
     SDL_GetDesktopDisplayMode(0, &mode);
 
     return QSize(mode.w, mode.h);
-#else
-    SDL_VideoInfo * vi = SDL_GetVideoInfo();
-    return QSize(vi->current_w, vi->current_h);
-#endif
 }

@@ -137,11 +137,7 @@ procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: Longword;
     isTerminated: boolean;
-{$IFDEF SDL2}
     previousGameState: TGameState;
-{$ELSE}
-    prevFocusState: boolean;
-{$ENDIF}
 begin
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
@@ -149,10 +145,9 @@ begin
     begin
         SDL_PumpEvents();
 
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL2}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
         begin
             case event.type_ of
-{$IFDEF SDL2}
                 SDL_KEYDOWN:
                     if (GameState = gsChat) then
                         KeyPressChat(event.key.keysym.sym)
@@ -210,45 +205,6 @@ begin
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-{$ENDIF}
-{$ELSE}
-                SDL_KEYDOWN:
-                    if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym)
-                    else
-                        if GameState >= gsGame then ProcessKey(event.key);
-                SDL_KEYUP:
-                    if (GameState <> gsChat) and (GameState >= gsGame) then
-                        ProcessKey(event.key);
-
-                SDL_MOUSEBUTTONDOWN:
-                    if GameState = gsConfirm then
-                        ParseCommand('quit', true)
-                    else
-                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
-
-                SDL_MOUSEBUTTONUP:
-                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
-
-                SDL_ACTIVEEVENT:
-                    if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
-                    begin
-                        prevFocusState:= cHasFocus;
-                        cHasFocus:= event.active.gain = 1;
-                        if prevFocusState xor cHasFocus then
-                            onFocusStateChanged()
-                    end;
-
-                SDL_VIDEORESIZE:
-                begin
-                    // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
-                    // Change by sheepluva:
-                    // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
-                    // Maybe just fixes the symptom not the actual cause(?), I'm too tired to find out :P
-                    cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
-                    cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
-                    cScreenResizeDelay:= RealTicks+500;
-                end;
 {$ENDIF}
                 SDL_JOYAXISMOTION:
                     ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
@@ -350,11 +306,7 @@ begin
     if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
     WriteLnToConsole(msgOK);
 
-{$IFDEF SDL2}
     //SDL_StartTextInput();
-{$ELSE}
-    SDL_EnableUNICODE(1);
-{$ENDIF}
     SDL_ShowCursor(0);
 
     WriteToConsole('Init SDL_ttf... ');

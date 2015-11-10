@@ -15,7 +15,6 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 option(NOSERVER "Disable gameServer build (off)]" OFF)
 option(NOPNG "Disable screenshoot compression (off)" OFF)
 option(NOVIDEOREC "Disable video recording (off)" OFF)
-option(NOSDL2 "Disable SDL2+ and use SDL 1.2 (off)" OFF)
 
 #libraries are built shared unless explicitly added as a static
 option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)

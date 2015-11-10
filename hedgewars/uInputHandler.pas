@@ -205,7 +205,6 @@ if CurrentBinds[code][0] <> #0 then
     end
 end;
 
-{$IFDEF SDL2}
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
@@ -213,15 +212,6 @@ begin
     //writelntoconsole('[KEY] '+inttostr(code)+ ' -> ''' +KeyNames[code] + ''', type = '+inttostr(event.type_));
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
-{$ELSE}
-procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
-var code: LongInt;
-begin
-    code:= event.keysym.sym;
-    //MaskModifier(code, event.keysym.modifier);
-    ProcessKey(code, event.type_ = SDL_KEYDOWN);
-end;
-{$ENDIF}
 
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 begin
@@ -311,7 +301,6 @@ begin
 end;
 
 
-{$IFDEF SDL2}
 procedure InitKbdKeyTable;
 var i, j, k, t: LongInt;
     s: string[15];
@@ -362,63 +351,6 @@ begin
 
         InitDefaultBinds
 end;
-{$ELSE}
-procedure InitKbdKeyTable;
-var i, j, k, t: LongInt;
-    s: string[15];
-begin
-//TODO in sdl13 this overrides some values (A and B) change indices to some other values at the back perhaps?
-KeyNames[1]:= 'mousel';
-KeyNames[2]:= 'mousem';
-KeyNames[3]:= 'mouser';
-KeyNames[4]:= 'wheelup';
-KeyNames[5]:= 'wheeldown';
-
-for i:= 6 to cKeyMaxIndex do
-    begin
-    s:= shortstring(sdl_getkeyname(i));
-    //AddFileLog('uInputHandler - ' + IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
-    if s = 'unknown key' then KeyNames[i]:= ''
-    else 
-        begin
-        for t:= 1 to Length(s) do
-            if s[t] = ' ' then
-                s[t]:= '_';
-        KeyNames[i]:= LowerCase(s)
-        end;
-    end;
-
-
-// get the size of keyboard array
-SDL_GetKeyState(@k);
-
-// Controller(s)
-for j:= 0 to Pred(ControllerNumControllers) do
-    begin
-    for i:= 0 to Pred(ControllerNumAxes[j]) do
-        begin
-        keynames[k + 0]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'u';
-        keynames[k + 1]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'd';
-        inc(k, 2);
-        end;
-    for i:= 0 to Pred(ControllerNumHats[j]) do
-        begin
-        keynames[k + 0]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'u';
-        keynames[k + 1]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'r';
-        keynames[k + 2]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'd';
-        keynames[k + 3]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'l';
-        inc(k, 4);
-        end;
-    for i:= 0 to Pred(ControllerNumButtons[j]) do
-        begin
-        keynames[k]:= 'j' + IntToStr(j) + 'b' + IntToStr(i);
-        inc(k, 1);
-        end;
-    end;
-
-    InitDefaultBinds
-end;
-{$ENDIF}
 
 
 

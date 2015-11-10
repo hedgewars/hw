@@ -60,10 +60,6 @@
     {$ENDIF}
 {$ENDIF}
 
-{$IFDEF USE_TOUCH_INTERFACE}
-    {$DEFINE SDL2}
-{$ENDIF}
-
 
 //TODO: cruft to be removed
 {$DEFINE _S:=}

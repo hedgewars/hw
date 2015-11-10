@@ -2,10 +2,10 @@ To compile and install you need:
  - CMake >= 2.6.0
  - FreePascal >= 2.2.0
  - Qt >= 4.5.0
- - SDL >= 1.2.5
- - SDL_net >= 1.2.5
- - SDL_mixer >= 1.2
- - SDL_image >= 1.2
+ - SDL >= 2.0
+ - SDL_net >= 2.0
+ - SDL_mixer >= 2.0
+ - SDL_image >= 2.0
  - SDL_ttf >= 2.0
  - Lua >= 5.1.0
  - Physfs >= 2.1.0

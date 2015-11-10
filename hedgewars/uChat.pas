@@ -31,12 +31,8 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure SendHogSpeech(s: shortstring);
 
-{$IFDEF SDL2}
 procedure KeyPressChat(Sym: Longword);
 procedure TextInput(var event: TSDL_TextInputEvent);
-{$ELSE}
-procedure KeyPressChat(Key, Sym: Longword);
-{$ENDIF}
 
 implementation
 uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
@@ -316,16 +312,11 @@ procedure CleanupInput;
 begin
     FreezeEnterKey;
     history:= 0;
-{$IFDEF SDL2}
     SDL_StopTextInput();
-{$ELSE}
-    SDL_EnableKeyRepeat(0,0);
-{$ENDIF}
     GameState:= gsGame;
     ResetKbd;
 end;
 
-{$IFDEF SDL2}
 procedure TextInput(var event: TSDL_TextInputEvent);
 var s: shortstring;
     l: byte;
@@ -345,9 +336,6 @@ begin
 end;
 
 procedure KeyPressChat(Sym: Longword);
-{$ELSE}
-procedure KeyPressChat(Key, Sym: Longword);
-{$ENDIF}
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
     utf8: shortstring;
@@ -397,35 +385,6 @@ begin
             action:= false;
         end;
 
-{$IFNDEF SDL2}
-    if not action and (Key <> 0) then
-        begin
-        if (Key < $80) then
-            btw:= 1
-        else if (Key < $800) then
-            btw:= 2
-        else if (Key < $10000) then
-            btw:= 3
-        else
-            btw:= 4;
-
-        utf8:= '';
-
-        for i:= btw downto 2 do
-            begin
-            utf8:= char((Key or $80) and $BF) + utf8;
-            Key:= Key shr 6
-            end;
-
-        utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
-
-        if byte(InputStr.s[0]) + btw > 240 then
-            exit;
-
-        InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-        SetLine(InputStr, InputStr.s + utf8, true)
-        end
-{$ENDIF}
 end;
 
 procedure chChatMessage(var s: shortstring);
@@ -468,11 +427,7 @@ procedure chChat(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
-{$IFDEF SDL2}
     SDL_StartTextInput();
-{$ELSE}
-    SDL_EnableKeyRepeat(200,45);
-{$ENDIF}
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else
