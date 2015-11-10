@@ -521,9 +521,9 @@ end
 
 function KillEnemy()
   if enemyFled == "1" then
-    ParseCommand("teamgone " .. loc("Leaderbot"))
+    DismissTeam(loc("Leaderbot"))
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -675,7 +675,7 @@ function SetupAmmo()
   AddAmmo(natives[1], amBazooka, 0)
   AddAmmo(natives[1], amGrenade, 0)
   AddAmmo(natives[1], amShotgun, 0)
-  AddAmmo(natives[1], amAirStrike, 0)
+  AddAmmo(natives[1], amAirAttack, 0)
   AddAmmo(natives[1], amMolotov, 0)
 end
 
@@ -743,7 +743,7 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-  MapGen = 2
+  MapGen = mgDrawn
 	Theme = "Hell"
   SuddenDeathTurns = 20
 

@@ -44,78 +44,78 @@ import android.widget.Toast;
  * This activity is used to set up and start a local game.
  */
 public class LocalRoomActivity extends FragmentActivity implements RoomStateManager.Provider, TeamAddDialog.Listener {
-	private TabHost tabHost;
-	private RoomStateManager stateManager;
-	private Button startButton;
-	
+    private TabHost tabHost;
+    private RoomStateManager stateManager;
+    private Button startButton;
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         // TODO find a better central location / way to set up the default scheme and weaponset
         Netplay netplay = Netplay.getAppInstance(getApplicationContext());
         stateManager = new LocalRoomStateManager(netplay.defaultScheme, netplay.defaultWeaponset);
-        
+
         setContentView(R.layout.activity_localroom);
         startButton = (Button)findViewById(R.id.startGame);
-        
+
         startButton.setOnClickListener(startButtonClickListener);
-        
+
         // Set up a tabbed UI for medium and small screens
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
-	        tabHost.setup();
-	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
+            tabHost.setup();
+            tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("map").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_map, 0)).setContent(R.id.mapFragment));
-	        tabHost.addTab(tabHost.newTabSpec("settings").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_settings, 0)).setContent(R.id.settingsFragment));
-	        tabHost.addTab(tabHost.newTabSpec("teams").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_teams, 0)).setContent(R.id.teamlistContainer));
-	        
-	        if (icicle != null) {
-	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
-	        }
+            tabHost.addTab(tabHost.newTabSpec("map").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_map, 0)).setContent(R.id.mapFragment));
+            tabHost.addTab(tabHost.newTabSpec("settings").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_settings, 0)).setContent(R.id.settingsFragment));
+            tabHost.addTab(tabHost.newTabSpec("teams").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_teams, 0)).setContent(R.id.teamlistContainer));
+
+            if (icicle != null) {
+                tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
+            }
         }
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle icicle) {
         super.onSaveInstanceState(icicle);
         if(tabHost != null) {
-        	icicle.putString("currentTab", tabHost.getCurrentTabTag());
+            icicle.putString("currentTab", tabHost.getCurrentTabTag());
         }
     }
-    
-	public void onTeamAddDialogSubmitted(Team newTeam) {
-		stateManager.requestAddTeam(newTeam, TeamInGame.getUnusedOrRandomColorIndex(stateManager.getTeams().values()));
-	}
-	
-	public RoomStateManager getRoomStateManager() {
-		return stateManager;
-	}
 
-	private final OnClickListener startButtonClickListener = new OnClickListener() {
-		public void onClick(View v) {
-			Map<String, TeamInGame> teams = stateManager.getTeams();
-			Set<Integer> clanColors = new TreeSet<Integer>();
-			for(TeamInGame t : teams.values()) {
-				clanColors.add(t.ingameAttribs.colorIndex);
-			}
-			if(clanColors.size()<2) {
-				if(tabHost != null) {
-					tabHost.setCurrentTabByTag("teams");
-				}
-				int errortext = teams.size()<2 ? R.string.not_enough_teams : R.string.not_enough_clans;
-				Toast.makeText(getApplicationContext(), errortext, Toast.LENGTH_SHORT).show();
-				return;
-			}
-			
-			SDLActivity.startNetgame = false;
-			SDLActivity.startConfig = new GameConfig(
-					stateManager.getGameStyle(),
-					stateManager.getScheme(),
-					stateManager.getMapRecipe(),
-					new ArrayList<TeamInGame>(stateManager.getTeams().values()),
-					stateManager.getWeaponset());
-			startActivity(new Intent(LocalRoomActivity.this, SDLActivity.class));
-		}
-	};
+    public void onTeamAddDialogSubmitted(Team newTeam) {
+        stateManager.requestAddTeam(newTeam, TeamInGame.getUnusedOrRandomColorIndex(stateManager.getTeams().values()));
+    }
+
+    public RoomStateManager getRoomStateManager() {
+        return stateManager;
+    }
+
+    private final OnClickListener startButtonClickListener = new OnClickListener() {
+        public void onClick(View v) {
+            Map<String, TeamInGame> teams = stateManager.getTeams();
+            Set<Integer> clanColors = new TreeSet<Integer>();
+            for(TeamInGame t : teams.values()) {
+                clanColors.add(t.ingameAttribs.colorIndex);
+            }
+            if(clanColors.size()<2) {
+                if(tabHost != null) {
+                    tabHost.setCurrentTabByTag("teams");
+                }
+                int errortext = teams.size()<2 ? R.string.not_enough_teams : R.string.not_enough_clans;
+                Toast.makeText(getApplicationContext(), errortext, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SDLActivity.startNetgame = false;
+            SDLActivity.startConfig = new GameConfig(
+                    stateManager.getGameStyle(),
+                    stateManager.getScheme(),
+                    stateManager.getMapRecipe(),
+                    new ArrayList<TeamInGame>(stateManager.getTeams().values()),
+                    stateManager.getWeaponset());
+            startActivity(new Intent(LocalRoomActivity.this, SDLActivity.class));
+        }
+    };
 }

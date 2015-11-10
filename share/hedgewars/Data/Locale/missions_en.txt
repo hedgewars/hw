@@ -51,3 +51,33 @@ User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
 
 portal.name=Mission: Portal Mind Challenge
 portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"
+
+Target_Practice_-_Bazooka_easy.name=Target Practice: Bazooka (easy)
+Target_Practice_-_Bazooka_easy.desc="Alright, soldier, blow those targets up as fast as you can!"
+
+Target_Practice_-_Bazooka_hard.name=Target Practice: Bazooka (hard)
+Target_Practice_-_Bazooka_hard.desc="Can you hit the targets even when they are very far away?"
+
+Target_Practice_-_Cluster_Bomb.name=Target Practice: Cluster Bomb
+Target_Practice_-_Cluster_Bomb.desc="Someone needs hot shower!"
+
+Target_Practice_-_Shotgun.name=Target Practice: Shotgun
+Target_Practice_-_Shotgun.desc="Shoot first, ask questions later!"
+
+Target_Practice_-_Homing_Bee.name=Target Practice: Homing Bee
+Target_Practice_-_Homing_Bee.desc="Using the homing bee is trickier than it seems."
+
+Target_Practice_-_Grenade_easy.name=Target Practice: Grenade (easy)
+Target_Practice_-_Grenade_easy.desc="A warm-up training for the aspiring grenadier."
+
+Target_Practice_-_Grenade_hard.name=Target Practice: Grenade (hard)
+Target_Practice_-_Grenade_hard.desc="This is nothing for greenhorns! We will place the targets at some really tricky positions."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Challenge: Shoppa Love
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Show your love to rope and collect a few crates on a small map."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Challenge: Ropes and Crates
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Take your rope and collect all crates on this medium-sized map."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Challenge: The Customer is King
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Show you're worthy of a true king and collect all crates as fast as possible on this large map."

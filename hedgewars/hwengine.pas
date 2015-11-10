@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,13 +13,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
 
 {$IFDEF WIN32}
-{$R hwengine.rc}
+{$R res/hwengine.rc}
 {$ENDIF}
 
 {$IFDEF HWLIBRARY}
@@ -29,21 +29,21 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
+uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers, uTextures
+     , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers, uTextures, uRender
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      ;
 
 {$IFDEF HWLIBRARY}
+procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-procedure Game(argc: LongInt; argv: PPChar); cdecl; export;
-procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
 {$ELSE}
@@ -55,6 +55,7 @@ procedure freeEverything(complete:boolean); forward;
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
+    t: LongWord;
 begin
     DoTimer:= false;
     inc(RealTicks, Lag);
@@ -74,7 +75,9 @@ begin
             SetDefaultBinds;
             if HasBorder then
                 DisableSomeWeapons;
-            AddClouds;
+            // wave "clouds" on underwater theme look weird w/ weSea, esp the blended bottom portion
+            if (WorldEdge <> weSea) or (Theme <> 'Underwater') then
+                AddClouds;
             AddFlakes;
             SetRandomSeed(cSeed, false);
             AssignHHCoords;
@@ -86,13 +89,19 @@ begin
                 SetSound(false);
             FinishProgress;
             PlayMusic;
-            SetScale(zoom);
+            InitZoom(zoom);
             ScriptCall('onGameStart');
+            for t:= 0 to Pred(TeamsCount) do
+                with TeamsArray[t]^ do
+                    MaxTeamHealth:= TeamHealth;
+            RecountAllTeamsHealth;
             GameState:= gsGame;
             end;
         gsConfirm, gsGame, gsChat:
             begin
-            if not cOnlyStats then DrawWorld(Lag);
+            if not cOnlyStats then
+                // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+                DrawWorld(Lag);
             DoGameTick(Lag);
             if not cOnlyStats then ProcessVisualGears(Lag);
             end;
@@ -114,15 +123,23 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
-        s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        if flagDumpLand then
+             s:= '/Screenshots/mapdump_'
+        else s:= '/Screenshots/hw_';
+        {$IFDEF PAS2C}
+        s:= s + inttostr(GameTicks);
+        {$ELSE}
+        s:= s + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        {$ENDIF}
 
         // flash
         playSound(sndShutter);
         ScreenFade:= sfFromWhite;
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
-
-        if MakeScreenshot(s, 1) then
+        
+        if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or
+           (flagDumpLand and MakeScreenshot(s, 1, 1) and ((cReducedQuality and rqBlurryLand <> 0) or MakeScreenshot(s, 1, 2))) then
             WriteLnToConsole('Screenshot saved: ' + s)
         else
             begin
@@ -135,7 +152,7 @@ end;
 ///////////////////////////////////////////////////////////////////////////////
 procedure MainLoop;
 var event: TSDL_Event;
-    PrevTime, CurrTime: Longword;
+    PrevTime, CurrTime: LongWord;
     isTerminated: boolean;
     previousGameState: TGameState;
 begin
@@ -149,10 +166,13 @@ begin
         begin
             case event.type_ of
                 SDL_KEYDOWN:
-                    if (GameState = gsChat) then
-                        KeyPressChat(event.key.keysym.sym)
-                    else if (GameState >= gsGame) then
-                        ProcessKey(event.key);
+                    if GameState = gsChat then
+                        begin
+                    // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
+                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym, event.key.keysym.modifier);
+                        end
+                    else
+                        if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
                     if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
@@ -236,17 +256,19 @@ begin
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
+            InitZoom(zoomValue);
             SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
         CurrTime:= SDL_GetTicks();
         if PrevTime + longword(cTimerInterval) <= CurrTime then
         begin
-            isTerminated := isTerminated or DoTimer(CurrTime - PrevTime);
-            PrevTime:= CurrTime
+            isTerminated:= isTerminated or DoTimer(CurrTime - PrevTime);
+            PrevTime:= CurrTime;
         end
         else SDL_Delay(1);
         IPCCheckSock();
+
     end;
 end;
 
@@ -284,20 +306,16 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
+procedure Game;
 //var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
-{$IFDEF HWLIBRARY}
-    preInitEverything();
-    parseCommandLine(argc, argv);
-{$ENDIF}
     initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
-    AddFileLog('Prefix: "' + PathPrefix +'"');
-    AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
+    AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
+    AddFileLog('UserPrefix: "' + shortstring(UserPathPrefix) +'"');
 
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
@@ -309,9 +327,12 @@ begin
     //SDL_StartTextInput();
     SDL_ShowCursor(0);
 
-    WriteToConsole('Init SDL_ttf... ');
-    SDLTry(TTF_Init() <> -1, 'TTF_Init', true);
-    WriteLnToConsole(msgOK);
+    if not cOnlyStats then
+        begin
+        WriteToConsole('Init SDL_ttf... ');
+        SDLTry(TTF_Init() <> -1, 'TTF_Init', true);
+        WriteLnToConsole(msgOK);
+        end;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -344,13 +365,20 @@ begin
 
     WriteLnToConsole(msgGettingConfig);
 
-    if recordFileName = '' then
+    if cTestLua then
         begin
-        InitIPC;
-        SendIPCAndWaitReply(_S'C');        // ask for game config
+        ParseCommand('script ' + cScriptName, true);
         end
     else
-        LoadRecordFromFile(recordFileName);
+        begin
+        if recordFileName = '' then
+            begin
+            InitIPC;
+            SendIPCAndWaitReply(_S'C');        // ask for game config
+            end
+        else
+            LoadRecordFromFile(recordFileName);
+        end;
 
     ScriptOnGameInit;
     s:= 'eproto ' + inttostr(cNetProtoVersion);
@@ -370,11 +398,14 @@ begin
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
-        RecorderMainLoop()
-    else
+    begin
+        RecorderMainLoop();
+        freeEverything(true);
+        exit;
+    end;
 {$ENDIF}
-        MainLoop();
 
+    MainLoop;
     // clean up all the memory allocated
     freeEverything(true);
 end;
@@ -401,10 +432,11 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
+    uPhysFSLayer.initModule;
+    uScript.initModule;
 
     if complete then
     begin
-        uPhysFSLayer.initModule;
         uTextures.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
@@ -421,10 +453,10 @@ begin
         uInputHandler.initModule;
         uMisc.initModule;
         uLandTexture.initModule;    //stub
-        uScript.initModule;
         uSound.initModule;
         uStats.initModule;
         uStore.initModule;
+        uRender.initModule;
         uTeams.initModule;
         uVisualGears.initModule;
         uVisualGearsHandlers.initModule;
@@ -435,7 +467,7 @@ end;
 procedure freeEverything (complete:boolean);
 begin
     if complete then
-    begin
+        begin
         WriteLnToConsole('Freeing resources...');
         uAI.freeModule;             // AI things need to be freed first
         uAIMisc.freeModule;         //stub
@@ -447,20 +479,19 @@ begin
         uInputHandler.freeModule;
         uStats.freeModule;          //stub
         uSound.freeModule;
-        uScript.freeModule;
         uMisc.freeModule;
         uLandTexture.freeModule;
         uGears.freeModule;
         uCollisions.freeModule;     //stub
         uChat.freeModule;
         uAmmos.freeModule;
+        uRender.freeModule;
         uStore.freeModule;          // closes SDL
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
         uTextures.freeModule;
-        uPhysFSLayer.freeModule;
-    end;
+        end;
 
     uIO.freeModule;
     uLand.freeModule;
@@ -470,23 +501,30 @@ begin
     uCommands.freeModule;
     uVariables.freeModule;
     uUtils.freeModule;              // closes debug file
+    uPhysFSLayer.freeModule;
+    uScript.freeModule;
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
+procedure GenLandPreview;
+{$IFDEF MOBILE}
 var Preview: TPreview;
+{$ELSE}
+var Preview: TPreviewAlpha;
+{$ENDIF}
 begin
     initEverything(false);
-{$IFDEF HWLIBRARY}
-    WriteLnToConsole('Preview connecting on port ' + inttostr(port));
-    ipcPort:= port;
-    InitStepsFlags:= cifRandomize;
-{$ENDIF}
+
     InitIPC;
     IPCWaitPongEvent;
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
+    ScriptOnPreviewInit;
+{$IFDEF MOBILE}
     GenPreview(Preview);
+{$ELSE}
+    GenPreviewAlpha(Preview);
+{$ENDIF}
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
@@ -494,14 +532,24 @@ begin
     freeEverything(false);
 end;
 
-{$IFNDEF HWLIBRARY}
+{$IFDEF HWLIBRARY}
+procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+begin
+    operatingsystem_parameter_argc:= argc;
+    operatingsystem_parameter_argv:= argv;
+{$ELSE}
+begin
+{$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// m a i n ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-begin
+{$IFDEF PAS2C}
+    // workaround for pascal's ParamStr and ParamCount
+    init(argc, argv);
+{$ENDIF}
     preInitEverything();
-    cTagsMask:= htTeamName or htName or htHealth; // this one doesn't fit nicely w/ reset of other variables. suggestions welcome
+
     GetParams();
 
     if GameType = gmtLandPreview then
@@ -510,6 +558,34 @@ begin
         Game();
 
     // return 1 when engine is not called correctly
-    halt(LongInt(GameType = gmtSyntax));
+    if GameType = gmtSyntax then
+        {$IFDEF PAS2C}
+        exit(HaltUsageError);
+        {$ELSE}
+        halt(HaltUsageError);
+        {$ENDIF}
+
+    if cTestLua then
+        begin
+        WriteLnToConsole(errmsgLuaTestTerm);
+        {$IFDEF PAS2C}
+        exit(HaltTestUnexpected);
+        {$ELSE}
+        halt(HaltTestUnexpected);
+        {$ENDIF}
+        end;
+
+    {$IFDEF PAS2C}
+        exit(HaltNoError);
+    {$ELSE}
+        {$IFDEF IPHONEOS}
+            exit;
+        {$ELSE}
+            halt(HaltNoError);
+        {$ENDIF}
+    {$ENDIF}
+{$IFDEF HWLIBRARY}
+end;
 {$ENDIF}
+
 end.

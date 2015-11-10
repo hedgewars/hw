@@ -1,30 +1,15 @@
-ObjectList = {}
-PointsBuffer = ''  -- A string to accumulate points in
+HedgewarsScriptLoad("/Scripts/Params.lua")
+
+local ObjectList = {}
 
 -- Overall padding for roping freedom
-Padding = 430
+local Padding = 430
 
-function AddPoint(x, y, width, erase)
- PointsBuffer = PointsBuffer .. string.char(band(x,0xff00) / 256 , band(x,0xff) , band(y,0xff00) / 256 , band(y,0xff))
- if width then
-     width = bor(width,0x80)
-     if erase then
-         width = bor(width,0x40)
-     end
-     PointsBuffer = PointsBuffer .. string.char(width)
- else
-     PointsBuffer = PointsBuffer .. string.char(0)
- end
- if #PointsBuffer > 245 then
-     ParseCommand('draw '..PointsBuffer)
-     PointsBuffer = ''
- end
-end
-function FlushPoints()
- if #PointsBuffer > 0 then
-     ParseCommand('draw '..PointsBuffer)
-     PointsBuffer = ''
- end
+function onParameters()
+    parseParams()
+    if params["pad"] ~= nil then
+        Padding = params["pad"]
+    end
 end
 
 -- This could probably use less points and more precision
@@ -352,8 +337,12 @@ function dbg()
     end
 end
 
+function onPreviewInit()
+onGameInit()
+end
+
 function onGameInit()
-    MapGen = 2
+    MapGen = mgDrawn
     TemplateFilter = 0
     local TotGen = 0
     local Tries = 0
@@ -363,8 +352,8 @@ function onGameInit()
     local y = 0
     local w = 0
     local h = 0 
-    GameFlags = bor(GameFlags, gfShoppaBorder)
-    if band(GameFlags,gfBottomBorder) == 0 and GetRandom(2) == 0 then
+    if GetGameFlag(gfSolidLand) then EnableGameFlags(gfShoppaBorder) end
+    if not GetGameFlag(gfBottomBorder) and GetRandom(2) == 0 then
         AddPoint(-50,2010,7)
         AddPoint(4150,2010)
         for i = 0,GetRandom(3) do
@@ -401,8 +390,8 @@ function onGameInit()
         end
     end
     if GetRandom(2)==0 then
-        x = GetRandom(3300)+350
-        y = GetRandom(1300)+350
+        x = GetRandom(3300)+382
+        y = GetRandom(1300)+382
         if DrawStar(x,y, 1, 1+GetRandom(2)*-2) then
             TotGen = TotGen+1
         end
@@ -434,8 +423,8 @@ function onGameInit()
         else
             if Tries > 500 then d = GetRandom(2)+3
             else d = GetRandom(3)+2 end
-            x = GetRandom(4000-div(700,d))+div(700,d*2)
-            y = GetRandom(1300-div(700,d))+div(700,d*2)
+            x = GetRandom(4000-div(764,d))+div(764,d*2)
+            y = GetRandom(1300-div(764,d))+div(764,d*2)
             if DrawStar(x,y, d, 1+GetRandom(2)*-2) then
                 TotGen = TotGen+1
             end

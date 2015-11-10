@@ -67,11 +67,19 @@
 
 -- remove hogs from racing area as per request
 
+-------
+-- 0.7
+-------
+
+-- switch to first available weapon if starting race with no weapon selected
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 ------------------
 -- Got Variables?
@@ -95,6 +103,8 @@ local currCount = 0
 local specialPointsX = {}
 local specialPointsY = {}
 local specialPointsCount = 0
+
+local TeamRope = false
 
 --------------------------
 -- hog and team tracking variales
@@ -135,6 +145,8 @@ local wpRad = 450 --75
 local wpCount = 0
 local wpLimit = 8
 
+local usedWeapons = {}
+
 local roundN
 local lastRound
 local RoundHasChanged
@@ -142,6 +154,13 @@ local RoundHasChanged
 -------------------
 -- general methods
 -------------------
+
+function onParameters()
+    parseParams()
+    if params["teamrope"] ~= nil then
+        TeamRope = true
+    end
+end
 
 function RebuildTeamInfo()
 
@@ -358,7 +377,7 @@ function onNewRound()
                                         loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
 
         -- end game if its at round limit
-        if roundNumber == roundLimit then
+        if roundNumber >= roundLimit then
                 for i = 0, (numhhs-1) do
                         if GetHogClan(hhs[i]) ~= bestClan then
                                 SetEffect(hhs[i], heResurrectable, 0)
@@ -480,7 +499,7 @@ end
 ----------------------------------
 
 function onGameInit()
-        GameFlags = bor(GameFlags,gfInfAttack + gfInvulnerable)
+        EnableGameFlags(gfInfAttack, gfInvulnerable)
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
@@ -514,22 +533,21 @@ function onGameStart()
 end
 
 function PlaceWayPoint(x,y)
+    if not racerActive then
+        if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
-        if (wpCount < wpLimit) then -- seems to not work with a hedgehog nil chek
+            wpX[wpCount] = x
+            wpY[wpCount] = y
+            wpCol[wpCount] = 0xffffffff
+            wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
+                                                                                                                                            
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
 
-                wpX[wpCount] = x
-                wpY[wpCount] = y
-                wpCol[wpCount] = 0xffffffff
-                wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-                                                                                                                                                --100
-                SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+            wpCount = wpCount + 1
 
-                wpCount = wpCount + 1
-
-                AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
-
+            AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
         end
-
+    end
 end
 
 function onSpecialPoint(x,y,flag)
@@ -572,7 +590,7 @@ function onNewTurn()
                         loc("NOT ENOUGH WAYPOINTS"),
                         loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-            ParseCommand("setweap " .. string.char(amAirAttack))
+                        SetWeapon(amAirAttack)
                 end
         end
 
@@ -594,26 +612,26 @@ function onGameTick20()
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
                 x,y = GetGearPosition(cGear)
-        if x > -9000 then
-            x,y = GetGearTarget(cGear)
+                if x > -9000 then
+                        x,y = GetGearTarget(cGear)
 
 
-            if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
-                PlaySound(sndDenied)
-            elseif (y > WaterLine-50) then
-                AddCaption(loc("Please place the way-point further from the waterline."))
-                PlaySound(sndDenied)
-            else
-                PlaceWayPoint(x, y)
-                if wpCount == wpLimit then
-                    AddCaption(loc("Race complexity limit reached."))
-                    DisableTumbler()
+                        if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
+                                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                                PlaySound(sndDenied)
+                        elseif (y > WaterLine-50) then
+                                AddCaption(loc("Please place the way-point further from the waterline."))
+                                PlaySound(sndDenied)
+                        else
+                                PlaceWayPoint(x, y)
+                                if wpCount == wpLimit then
+                                        AddCaption(loc("Race complexity limit reached."))
+                                        DisableTumbler()
+                                end
+                        end
+                else
+                        DeleteGear(cGear)
                 end
-            end
-        else
-            DeleteGear(cGear)
-        end
         SetGearPosition(cGear, -10000, 0)
         end
 
@@ -636,13 +654,16 @@ function onGameTick20()
 
                                 HideMission()
 
+                                -- don't start empty-handed
+                                if (GetCurAmmoType() == amNothing) then
+                                        SetNextWeapon()
+                                end
                         else
                                 -- still in placement mode
                         end
 
                 end
         end
-
 
 
         -- has the player started his tumbling spree?
@@ -670,7 +691,6 @@ function onGameTick20()
 
                                 if (CheckWaypoints() == true) then
                                         AdjustScores()
-                                        racerActive = false
                                         DisableTumbler()
                                 end
 
@@ -703,12 +723,14 @@ function onGearAdd(gear)
                 hhs[numhhs] = gear
                 numhhs = numhhs + 1
                 SetEffect(gear, heResurrectable, 1)
-        end
-
-        if GetGearType(gear) == gtAirAttack then
+        elseif GetGearType(gear) == gtAirAttack then
                 cGear = gear
+        elseif GetGearType(gear) == gtRope and TeamRope then
+            SetTag(gear,1)
+            SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
+        elseif GetGearType(gear) == gtAirMine then
+            DeleteGear(gear)
         end
-
 end
 
 function onGearDelete(gear)
@@ -717,4 +739,47 @@ function onGearDelete(gear)
                 cGear = nil
         end
 
+end
+
+function onAttack()
+    at = GetCurAmmoType()
+    
+    usedWeapons[at] = 0
+end
+
+function onAchievementsDeclaration()
+    usedWeapons[amSkip] = nil
+    
+    usedRope = usedWeapons[amRope] ~= nil
+    usedPortal = usedWeapons[amPortalGun] ~= nil
+    usedSaucer = usedWeapons[amJetpack] ~= nil
+    
+    usedWeapons[amNothing] = nil
+    usedWeapons[amRope] = nil
+    usedWeapons[amPortalGun] = nil
+    usedWeapons[amJetpack] = nil
+
+    usedOther = next(usedWeapons) ~= nil
+
+    if usedOther then -- smth besides nothing, skip, rope, portal or saucer used
+        raceType = "unknown race"
+    elseif usedRope and not usedPortal and not usedSaucer then
+        raceType = "rope race"
+    elseif not usedRope and usedPortal and not usedSaucer then
+        raceType = "portal race"
+    elseif not usedRope and not usedPortal and usedSaucer then
+        raceType = "saucer race"
+    elseif (usedRope or usedPortal or usedSaucer or usedOther) == false then -- no weapons used at all?
+        raceType = "no tools race"
+    else -- at least two of rope, portal and saucer used
+        raceType = "mixed race"
+    end
+
+    map = detectMap()
+    
+    for i = 0, (numTeams-1) do
+        if teamScore[i] < 100000 then
+            DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+        end
+    end
 end

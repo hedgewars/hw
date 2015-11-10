@@ -2,7 +2,6 @@ unit Adler32;
 
 {ZLib - Adler32 checksum function}
 
-
 interface
 
 (*************************************************************************
@@ -66,7 +65,7 @@ That means no btypes, file loading, and the assembly version disabled.
 Also, the structure was removed to simplify C conversion
 *)
 
-function Adler32Update ( var adler     :longint; Msg     :pointer; Len     :longint ) : longint;
+function Adler32Update (var adler : longint; Msg     :Pointer; Len     :longint ) : longint;
 
 implementation
 
@@ -124,17 +123,19 @@ begin
 end;
 *)
 
-function Adler32Update(var adler: longint; Msg: pointer; Len :longint) : longint;
+function Adler32Update(var adler:longint; Msg: Pointer; Len :longint) : longint;
     {-update Adler32 with Msg data}
     const
         BASE = 65521; {max. prime < 65536 }
         NMAX = 3854; {max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^31}
     var
-        s1, s2: longint;
-        i, n: integer;
+        s1, s2 : longint;
+        i, n   : integer;
+       m       : PByte;
     begin
-        s1 := adler and $FFFF;
-        s2 := adler shr 16;
+        m  := PByte(Msg);
+        s1 := Longword(adler) and $FFFF;
+        s2 := Longword(adler) shr 16;
         while Len>0 do
             begin
             if Len<NMAX then
@@ -144,8 +145,8 @@ function Adler32Update(var adler: longint; Msg: pointer; Len :longint) : longint
 
             for i := 1 to n do
                 begin
-                inc(s1, pByte(Msg)^);
-                inc(Msg);
+                inc(s1, m^);
+                inc(m);
                 inc(s2, s1);
                 end;
             s1 := s1 mod BASE;

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -21,7 +21,7 @@
 
 
 @implementation HogHatViewController
-@synthesize teamDictionary, hatArray, normalHogSprite, lastIndexPath, selectedHog;
+@synthesize teamDictionary, hatArray, normalHogSprite, selectedHog;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -77,8 +77,7 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-    NSString *hat = [hatArray objectAtIndex:[indexPath row]];
+    NSString *hat = [self.hatArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [hat stringByDeletingPathExtension];
 
     NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
@@ -87,9 +86,9 @@
     cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
     [hatSprite release];
 
-    if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
+    NSDictionary *hog = (self.selectedHog != -1) ? [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog] : nil;
+    if ([[hat stringByDeletingPathExtension] isEqualToString:[hog objectForKey:@"hat"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.lastIndexPath = indexPath;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
@@ -100,45 +99,53 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-
-    if (newRow != oldRow) {
-        // if the two selected rows differ update data on the hog dictionary and reload table content
-        // TODO: maybe this section could be cleaned up
-        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-
-        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-        [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
-        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
-        [newHog release];
-
-        // tell our boss to write this new stuff on disk
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-
-        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
-        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
-        self.lastIndexPath = indexPath;
-        [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger selectedRow = [indexPath row];
+    NSString *newHat = [[self.hatArray objectAtIndex:selectedRow] stringByDeletingPathExtension];
+    
+    // update data on the hogs dictionary
+    if (self.selectedHog != -1)
+    {
+        // update only selected hog with new hat
+        [self updateTeamDictionaryWithNewHat:newHat forStartHogIndex:self.selectedHog toEndHogIndex:self.selectedHog];
     }
-    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+    else
+    {
+        // update all hogs with new hat
+        NSInteger startIndex = 0;
+        NSInteger endIndex = [[self.teamDictionary objectForKey:@"hedgehogs"] count] - 1;
+        [self updateTeamDictionaryWithNewHat:newHat forStartHogIndex:startIndex toEndHogIndex:endIndex];
+    }
+
+    // tell our boss to write this new stuff on disk
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)updateTeamDictionaryWithNewHat:(NSString *)newHat forStartHogIndex:(NSInteger)startIndex toEndHogIndex:(NSInteger)endIndex
+{
+    NSMutableArray *hogsArray = [self.teamDictionary objectForKey:@"hedgehogs"];
+    
+    for (NSInteger i=startIndex; i <= endIndex; i++)
+    {
+        NSDictionary *oldHog = [hogsArray objectAtIndex:i];
+        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary:oldHog];
+        [newHog setObject:newHat forKey:@"hat"];
+        [hogsArray replaceObjectAtIndex:i withObject:newHog];
+        [newHog release];
+    }
+}
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    self.lastIndexPath = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    self.lastIndexPath = nil;
     self.normalHogSprite = nil;
     self.teamDictionary = nil;
     self.hatArray = nil;
@@ -150,7 +157,6 @@
     releaseAndNil(hatArray);
     releaseAndNil(teamDictionary);
     releaseAndNil(normalHogSprite);
-    releaseAndNil(lastIndexPath);
     [super dealloc];
 }
 

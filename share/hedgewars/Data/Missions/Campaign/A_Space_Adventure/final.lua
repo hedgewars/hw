@@ -63,14 +63,14 @@ function onGameStart()
 	x = 400
 	while x < 815 do
 		local gear = AddGear(x, 500, gtExplosives, 0, 0, 0, 0)
-		x = x + math.random(15,40)
+		x = x + GetRandom(26) + 15
 		table.insert(explosives, gear)
 	end
 	-- mines
 	local x = 360
 	while x < 815 do
 		AddGear(x, 480, gtMine, 0, 0, 0, 0)
-		x = x + math.random(5,20)
+		x = x + GetRandom(16) + 5
 	end
 	-- health crate
 	SpawnHealthCrate(910, 5)
@@ -150,6 +150,7 @@ function heroDeath(gear)
 end
 
 function heroWin(gear)
+	saveCompletedStatus(7)
 	SendStat(siGameResult, loc("Congratulations, you have saved Hogera!"))
 	SendStat(siCustomAchievement, loc("Hogera is safe!"))
 	SendStat(siPlayerKills,'1',teamA.name)

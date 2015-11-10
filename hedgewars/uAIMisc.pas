@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -53,7 +53,18 @@ TBonus = record
     X, Y: LongInt;
     Radius: LongInt;
     Score: LongInt;
-    end;
+     end;
+
+TBonuses = record
+          activity: boolean;
+          Count : Longword;
+          ar    : array[0..Pred(MAXBONUS)] of TBonus;
+       end;
+
+Twalkbonuses =  record
+        Count: Longword;
+        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
+        end;
 
 procedure initModule;
 procedure freeModule;
@@ -82,22 +93,16 @@ function  AIrndSign(num: LongInt): LongInt;
 var ThinkingHH: PGear;
     Targets: TTargets;
 
-    bonuses: record
-        Count: Longword;
-        ar: array[0..Pred(MAXBONUS)] of TBonus;
-        end;
+    bonuses: TBonuses;
 
-    walkbonuses: record
-        Count: Longword;
-        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
-        end;
+    walkbonuses: Twalkbonuses;
 
 const KillScore = 200;
 var friendlyfactor: LongInt = 300;
 var dmgMod: real = 1.0;
 
 implementation
-uses uCollisions, uVariables, uUtils, uLandTexture, uGearsUtils;
+uses uCollisions, uVariables, uUtils, uGearsUtils;
 
 var
     KnownExplosion: record
@@ -127,13 +132,13 @@ while Gear <> nil do
     if  (((Gear^.Kind = gtHedgehog) and
             (Gear <> ThinkingHH) and
             (Gear^.Health > Gear^.Damage) and
-            not(Gear^.Hedgehog^.Team^.hasgone)) or
+            (not Gear^.Hedgehog^.Team^.hasgone)) or
         ((Gear^.Kind = gtExplosives) and
             (Gear^.Health > Gear^.Damage)) or
         ((Gear^.Kind = gtMine) and
             (Gear^.Health = 0) and
              (Gear^.Damage < 35))
-             )  and 
+             )  and
         (Targets.Count < 256) then
         begin
         with Targets.ar[Targets.Count] do
@@ -155,7 +160,7 @@ while Gear <> nil do
                     Score:= Gear^.Damage - Gear^.Health;
                     inc(f)
                     end
-                else 
+                else
                     begin
                     Score:= Gear^.Health - Gear^.Damage;
                     inc(e)
@@ -163,7 +168,7 @@ while Gear <> nil do
                 end
             else if Gear^.Kind = gtExplosives then
                 Score:= Gear^.Health - Gear^.Damage
-            else if Gear^.Kind = gtMine then 
+            else if Gear^.Kind = gtMine then
                 Score:= max(0,35-Gear^.Damage);
             end;
         inc(Targets.Count)
@@ -205,36 +210,70 @@ var Gear: PGear;
     i: Longint;
 begin
 bonuses.Count:= 0;
+bonuses.activity:= false;
 MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin
         case Gear^.Kind of
+            gtGrenade
+            , gtClusterBomb
+            , gtGasBomb
+            , gtShell
+            , gtAirAttack
+            , gtMortar
+            , gtWatermelon
+            , gtDrill
+            , gtAirBomb
+            , gtCluster
+            , gtMelonPiece
+            , gtMolotov: bonuses.activity:= true;
             gtCase:
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
 // avoid mines unless they are very likely to be duds, or are duds. also avoid if they are about to blow
-            gtMine:
+            gtMine: begin
+                if (Gear^.State and gstMoving) <> 0 then bonuses.activity:= true;
+
                 if ((Gear^.State and gstAttacking) = 0) and (((cMineDudPercent < 90) and (Gear^.Health <> 0))
                 or (isAfterAttack and (Gear^.Health = 0) and (Gear^.Damage > 30))) then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
                 else if (Gear^.State and gstAttacking) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
+                end;
 
             gtExplosives:
-            if isAfterAttack then
-                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60 + Gear^.Health);
+                begin
+                //if (Gear^.State and gstMoving) <> 0 then bonuses.activity:= true;
 
-            gtSMine:
+                if isAfterAttack then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60 + Gear^.Health);
+                end;
+
+            gtSMine: begin
+                if (Gear^.State and (gstMoving or gstAttacking)) <> 0 then bonuses.activity:= true;
+
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -30);
+                end;
 
             gtDynamite:
+                begin
+                bonuses.activity:= true;
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
+                end;
 
             gtHedgehog:
                 begin
+                if (ThinkingHH <> Gear)
+                    and (((Gear^.State and (gstMoving or gstDrowning or gstHHDeath)) <> 0)
+                        or (Gear^.Health = 0)
+                        or (Gear^.Damage >= Gear^.Health))
+                    then begin
+                    bonuses.activity:= true;
+                    end;
+
                 if Gear^.Damage >= Gear^.Health then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                 else
@@ -249,6 +288,7 @@ while Gear <> nil do
             end;
     Gear:= Gear^.NextGear
     end;
+
 if isAfterAttack and (KnownExplosion.Radius > 0) then
     with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);
@@ -384,20 +424,20 @@ begin
                     dmg := 1 + trunc((dY - 0.4) * 70);
                     exit(dmg)
                     end
-                else 
+                else
                     begin
                     dxdy:= abs(dX)+abs(dY);
-                    if ((Kind = gtMine) and (dxdy > 0.35)) or 
-                       ((Kind = gtExplosives) and 
+                    if ((Kind = gtMine) and (dxdy > 0.35)) or
+                       ((Kind = gtExplosives) and
                             (((State and gstTmpFlag <> 0) and (dxdy > 0.35)) or
-                             ((State and gstTmpFlag = 0) and 
-                                ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
+                             ((State and gstTmpFlag = 0) and
+                                ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
                         dmg := trunc(dxdy * 25);
                         exit(dmg)
                         end
-                    else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
+                    else if (Kind = gtExplosives) and (not(abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
                         begin
                         dmg := trunc(dy * 70);
                         exit(dmg)
@@ -405,7 +445,7 @@ begin
                     end;
             exit(0)
             end;
-        if (y > cWaterLine) or (x > rightX) or (x < leftX) then exit(-1)
+        if CheckCoordInWater(round(x), round(y)) then exit(-1)
         end
 end;
 
@@ -436,20 +476,20 @@ begin
                     dmg := trunc((dY - 0.4) * 70);
                     exit(dmg);
                     end
-                else 
+                else
                     begin
                     dxdy:= abs(dX)+abs(dY);
-                    if ((Kind = gtMine) and (dxdy > 0.4)) or 
-                       ((Kind = gtExplosives) and 
+                    if ((Kind = gtMine) and (dxdy > 0.4)) or
+                       ((Kind = gtExplosives) and
                             (((State and gstTmpFlag <> 0) and (dxdy > 0.4)) or
-                             ((State and gstTmpFlag = 0) and 
-                                ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
+                             ((State and gstTmpFlag = 0) and
+                                ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
                         dmg := trunc(dxdy * 50);
                         exit(dmg)
                         end
-                    else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
+                    else if (Kind = gtExplosives) and (not(abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
                         begin
                         dmg := trunc(dy * 70);
                         exit(dmg)
@@ -457,7 +497,7 @@ begin
                     end;
             exit(0)
         end;
-        if (y > cWaterLine) or (x > rightX) or (x < leftX) then
+        if CheckCoordInWater(round(x), round(y)) then
             // returning -1 for drowning so it can be considered in the Rate routine
             exit(-1)
     end;
@@ -516,12 +556,13 @@ for i:= 0 to Targets.Count do
                 pX:= Point.x;
                 pY:= Point.y;
                 fallDmg:= 0;
+                dX:= 0;
                 if (Flags and afTrackFall <> 0) and (Score > 0) and (dmg < Score) then
                     begin
                     dX:= (0.005 * dmg + 0.01) / Density;
                     dY:= dX;
-                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
-                       (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
+                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and
+                       (((abs(dY) >= 0.15) and (abs(dX) < 0.02)) or
                         ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
                         dX:= 0;
 
@@ -606,8 +647,8 @@ for i:= 0 to Pred(Targets.Count) do
                 pY:= Point.y-2;
                 fallDmg:= 0;
                 if (Flags and afSetSkip <> 0) then skip:= true;
-                if not(dead) and (Flags and afTrackFall <> 0) and (Score > 0) and (power < Score) then
-                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
+                if (not dead) and (Flags and afTrackFall <> 0) and (Score > 0) and (power < Score) then
+                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and
                        (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
                         ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
                         fallDmg:= trunc(TraceShoveFall(pX, pY, 0, dY, Targets.ar[i]) * dmgMod)
@@ -701,17 +742,18 @@ for i:= 0 to Targets.Count do
                 end;
             if dmg > 0 then
                 begin
-                if not(dead) and (Score > 0) and (dmg < Score) then
+                fallDmg:= 0;
+                pX:= Point.x;
+                pY:= Point.y;
+                if (not dead) and (Score > 0) and (dmg < Score) then
                     begin
-                    pX:= Point.x;
-                    pY:= Point.y;
                     dX:= gdX * dmg / Density;
                     dY:= gdY * dmg / Density;
                     if dX < 0 then dX:= dX - 0.01
                     else dX:= dX + 0.01;
-                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
+                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and
                        (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
-                        ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then 
+                        ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
                        dX:= 0;
                     if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
                        (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
@@ -836,7 +878,7 @@ repeat
             UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
             end;}
 
-    if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
+    if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius) then
         exit(false);
     if (Gear^.State and gstMoving) <> 0 then
     begin
@@ -901,7 +943,7 @@ repeat
 
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
-    if pY + cHHRadius >= cWaterLine then
+    if CheckCoordInWater(pX, pY + cHHRadius) then
         begin
         if AltGear^.Hedgehog^.BotLevel < 4 then
             AddWalkBonus(pX, tY, 250, -40);

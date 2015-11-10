@@ -10,6 +10,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
@@ -24,7 +25,8 @@ local checkPointReached = 1 -- 1 is normal spawn
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!").."|"..
+			loc("Most of the destructible terrain in marked with blue color"), 1, 4500},
 }
 -- crates
 local btorch1Y = 60
@@ -190,22 +192,22 @@ function onGameStart()
 	local x = 800
 	while x < 1630 do
 		AddGear(x, 900, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 	x = 1890
 	while x < 2988 do
 		AddGear(x, 760, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 	x = 2500
 	while x < 3300 do
 		AddGear(x, 1450, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 	x = 1570
 	while x < 2900 do
 		AddGear(x, 470, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 
 	if checkPointReached == 1 then
@@ -333,7 +335,8 @@ end
 
 function onHeroFleeFirstBattle(gear)
 	if GetHealth(hero.gear) and GetHealth(smuggler1.gear) and heroIsInBattle
-			and distance(hero.gear, smuggler1.gear) > 1400 and StoppedGear(hero.gear) then
+			and not gearIsInCircle(smuggler1.gear, GetX(hero.gear), GetY(hero.gear), 1400, false)
+			and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -486,7 +489,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("I have heard that the local tribes say that many years ago some PAotH scientists were dumping their waste here"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("H confirmed that there isn't such a PAotH activity logged"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("So, I believe that it's a good place to start"), SAY_SAY, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Beware though! Many smugglers come often to explore these tunnels and scavage whatever valuable items they can find"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Beware though! Many smugglers come often to explore these tunnels and scavenge whatever valuable items they can find"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("They won't hesitate to attack you in order to rob you!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("OK, I'll be extra careful!"), SAY_SAY, 4000}})
@@ -523,7 +526,7 @@ function saveCheckPointLocal(cpoint)
 	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal - rcplane
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
 			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..
+			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amGirder)..
 			GetAmmoCount(hero.gear, amPortalGun)..GetAmmoCount(hero.gear, amRCPlane))
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
 end
@@ -539,7 +542,7 @@ function loadHeroAmmo()
 	AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
 	-- weird, if 0 bazooka isn't displayed in the weapons menu
 	if tonumber(ammo:sub(7,7)) > 0 then
-		AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
+		AddAmmo(hero.gear, amGirder, tonumber(ammo:sub(7,7)))
 	end
 	AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
 	AddAmmo(hero.gear, amRCPlane, tonumber(ammo:sub(9,9)))

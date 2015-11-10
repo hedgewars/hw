@@ -22,7 +22,7 @@
 
 /**
  *  @file SDL_active.h
- *  Include file for SDL application focus event handling 
+ *  Include file for SDL application focus event handling
  */
 
 #ifndef _SDL_active_h
@@ -39,13 +39,13 @@ extern "C" {
 
 /** @name The available application states */
 /*@{*/
-#define SDL_APPMOUSEFOCUS	0x01		/**< The app has mouse coverage */
-#define SDL_APPINPUTFOCUS	0x02		/**< The app has input focus */
-#define SDL_APPACTIVE		0x04		/**< The application is active */
+#define SDL_APPMOUSEFOCUS   0x01        /**< The app has mouse coverage */
+#define SDL_APPINPUTFOCUS   0x02        /**< The app has input focus */
+#define SDL_APPACTIVE       0x04        /**< The application is active */
 /*@}*/
 
 /* Function prototypes */
-/** 
+/**
  * This function returns the current state of the application, which is a
  * bitwise combination of SDL_APPMOUSEFOCUS, SDL_APPINPUTFOCUS, and
  * SDL_APPACTIVE.  If SDL_APPACTIVE is set, then the user is able to

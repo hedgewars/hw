@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-/** 
+/**
  *  @name Public functions
  */
 /*@{*/
@@ -50,15 +50,15 @@ extern DECLSPEC void SDLCALL SDL_ClearError(void);
  *  @internal Private error message function - used internally
  */
 /*@{*/
-#define SDL_OutOfMemory()	SDL_Error(SDL_ENOMEM)
-#define SDL_Unsupported()	SDL_Error(SDL_UNSUPPORTED)
+#define SDL_OutOfMemory()   SDL_Error(SDL_ENOMEM)
+#define SDL_Unsupported()   SDL_Error(SDL_UNSUPPORTED)
 typedef enum {
-	SDL_ENOMEM,
-	SDL_EFREAD,
-	SDL_EFWRITE,
-	SDL_EFSEEK,
-	SDL_UNSUPPORTED,
-	SDL_LASTERROR
+    SDL_ENOMEM,
+    SDL_EFREAD,
+    SDL_EFWRITE,
+    SDL_EFSEEK,
+    SDL_UNSUPPORTED,
+    SDL_LASTERROR
 } SDL_errorcode;
 extern DECLSPEC void SDLCALL SDL_Error(SDL_errorcode code);
 /*@}*/

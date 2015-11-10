@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -27,12 +27,12 @@ procedure DoGameTick(Lag: LongInt);
     implementation
 ////////////////////
 uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
-     uTypes, uVariables, uCommands, uConsts, uVisualGearsList
+     uTypes, uVariables, uCommands, uConsts, uVisualGearsList, uUtils
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;
-    s: shortstring;
+    s: ansistring;
 begin
 if isPaused then
     exit;
@@ -64,6 +64,10 @@ if GameType <> gmtRecord then
         else if cOnlyStats then
             Lag:= High(LongInt)
     end;
+
+if cTestLua then
+    Lag:= High(LongInt);
+
 inc(SoundTimerTicks, Lag);
 if SoundTimerTicks >= 50 then
     begin
@@ -76,8 +80,8 @@ if SoundTimerTicks >= 50 then
             AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
         else if not isAudioMuted then
             begin
-            str(i, s);
-            AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
+            s:= ansistring(inttostr(i));
+            AddCaption(FormatA(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
             end
         end;
     end;
@@ -98,11 +102,13 @@ while (GameState <> gsExit) and (i <= Lag) do
         if isInLag then
             case GameType of
                 gmtNet: begin
-                        // just update the health bars
+                        // update health bars and the wind indicator
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
+                        AddVisualGear(0, 0, vgtSmoothWindBar);
                         break;
                         end;
                 gmtDemo, gmtRecord: begin
+                        AddFileLog('End of input, halting now');
                         GameState:= gsExit;
                         exit
                         end;
@@ -116,9 +122,11 @@ while (GameState <> gsExit) and (i <= Lag) do
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         AddVisualGear(0, 0, vgtSmoothWindBar);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
+                        {$IFNDEF PAS2C}
                         with mobileRecord do
                             if SaveLoadingEnded <> nil then
                                 SaveLoadingEnded();
+                        {$ENDIF}
                         end;
                 end
         else ProcessGears

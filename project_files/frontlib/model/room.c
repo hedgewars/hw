@@ -23,12 +23,12 @@
 #include <stdlib.h>
 
 void flib_room_destroy(flib_room *room) {
-	if(room) {
-		free(room->map);
-		free(room->name);
-		free(room->owner);
-		free(room->scheme);
-		free(room->weapons);
-		free(room);
-	}
+    if(room) {
+        free(room->map);
+        free(room->name);
+        free(room->owner);
+        free(room->scheme);
+        free(room->weapons);
+        free(room);
+    }
 }

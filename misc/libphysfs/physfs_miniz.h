@@ -12,7 +12,7 @@ typedef PHYSFS_uint8 mz_uint8;
 typedef PHYSFS_sint16 mz_int16;
 typedef PHYSFS_uint16 mz_uint16;
 typedef PHYSFS_uint32 mz_uint32;
-typedef unsigned int mz_uint; 
+typedef unsigned int mz_uint;
 typedef PHYSFS_uint64 mz_uint64;
 
 /* For more compatibility with zlib, miniz.c uses unsigned long for some parameters/struct members. */
@@ -670,7 +670,7 @@ static int mz_inflateEnd(mz_streamp pStream)
 
 #endif /* #ifndef TINFL_HEADER_FILE_ONLY */
 
-/* 
+/*
   This is free and unencumbered software released into the public domain.
 
   Anyone is free to copy, modify, publish, use, compile, sell, or

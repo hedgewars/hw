@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -40,7 +40,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
 
-    self.navigationItem.title = @"List of weapons";
+    self.navigationItem.title = NSLocalizedString(@"List of weapons", nil);
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -131,42 +131,42 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (childController == nil) {
-        childController = [[SingleWeaponViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    }
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    SingleWeaponViewController *singleWeaponViewController = [[SingleWeaponViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
     NSInteger row = [indexPath row];
     NSString *selectedWeaponFile = [self.listOfWeapons objectAtIndex:row];
 
     // this must be set so childController can load the correct plist
-    childController.weaponName = [selectedWeaponFile stringByDeletingPathExtension];
-    [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+    singleWeaponViewController.weaponName = [selectedWeaponFile stringByDeletingPathExtension];
+    [singleWeaponViewController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
-    [self.navigationController pushViewController:childController animated:YES];
+    [self.navigationController pushViewController:singleWeaponViewController animated:YES];
+    [singleWeaponViewController release];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
--(void)didReceiveMemoryWarning {
+-(void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    if (childController.view.superview == nil )
-        childController = nil;
 }
 
--(void) viewDidUnload {
+-(void) viewDidUnload
+{
     self.listOfWeapons = nil;
-    childController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 
--(void) dealloc {
+-(void) dealloc
+{
     releaseAndNil(listOfWeapons);
-    releaseAndNil(childController);
     [super dealloc];
 }
 

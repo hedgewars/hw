@@ -9,7 +9,7 @@
 00:06=Hyppää yli
 00:07=Köysi
 00:08=Miina
-00:09=DEagle
+00:09=Pistooli
 00:10=Dynamiitti
 00:11=Pesäpallomaila
 00:12=Shoryuken
@@ -43,13 +43,21 @@
 00:40=Polttopullo
 00:41=Lintu
 00:42=Siirrettävä portaalilaite
-00:43=Piano-isku
+00:43=Pianoisku
 00:44=Vanha Limburger-juusto
-00:45=Sini-aaltopyssy
+00:45=Siniaaltopyssy
 00:46=Liekinheitin
 00:47=Tarttuva pommi
 00:48=Vasara
 00:49=Henkiinherättäjä
+00:50=Poraisku
+00:51=Mutapallo
+00:52=Ei asetta valittuna
+00:53=Aikakoppi
+00:54=Maasuihke
+00:55=Jäädytin
+00:56=Jättiveitsi
+00:57=Kuminauha
 
 01:00=Taistelu alkakoon!
 01:01=Tasapeli
@@ -66,16 +74,25 @@
 01:12=Viimeinen kierros ennen äkkikuolemaa!
 01:13=%1 kierrosta jäljellä äkkikuolemaan!
 01:14=Valmistaudu, %1!
-
+01:15=Mitätön
+01:16=Heikko
+01:17=Normaali
+01:18=Voimakas
+01:19=Huima
+01:20=%1 pomppu
+01:21=Äänet hiljennetty
+01:22=Poissa näppäimistöltä
+01:23=Passiivinen kamera
+01:24=Aktiivinen kamera
 
 ; Event messages
 ; Hog (%1) died
 02:00=%1 potkaisi tyhjää!
-02:00=%1 näki valon!
+02:00=%1 koki valaistumisen!
 02:00=%1 ei osannut odottaa tuota!
 02:00=%1 heiluttaa näkemiin!
 02:00=%1 on mennyt parempaan paikkaan
-02:00=%1 tapaa luojansa!
+02:00=%1 tapaa Luojansa!
 02:00=%1 ei jaksa enää!
 02:00=%1 on tehnyt tehtävänsä!
 02:00=%1 tekee tärkeän uhrautumisen!
@@ -100,15 +117,15 @@
 02:00=%1 ei vain osaa
 02:00=Voi %1 parkaa...
 02:00=%1 pitää enemmän Warmuxista
-02:00=%1 on pysäyttänyt luoteja kasvoillaan
+02:00=%1 pysäytti luoteja naamallaan
 02:00=%1 on sankari ih...siilien joukossa
 02:00=%1 löytää paikkansa Valhallasta
 02:00=%1 on poistnut rakennuksesta
 02:00=%1 seuraa dinosaurusten jalanjälkiä
-02:00=%1 tuo siilet askelta lähemmäksi sukupuuttoa
+02:00=%1 vie siilet askelta lähemmäksi sukupuuttoa
 02:00=%1 tuo kyyneleen silmääni
 02:00=%1 on ex-siili
-02:00=%1 työntää kukkia esiin
+02:00=%1:stä nauttii enää rikkaheinät
 02:00=%1 on lakannut olemasta
 02:00=Sano näkemiin %1:lle
 02:00=%1:llä ei ole enää toivoa
@@ -137,7 +154,7 @@
 02:01=%1 unohti surffilautansa kotiin
 02:01=%1 unohti pelastusliivinsä
 02:01=%1:stä kuuluu splish splash splish
-02:01=%1 nukkuu kalojen kanssa
+02:01=%1 lepää kalojen kanssa
 02:01=%1:n mielestä veden fysiikka on ihan tyhmä tässä pelissä
 02:01=%1 näyttää janoiselta
 02:01=meri ottaa %1:n haltuunsa.
@@ -161,7 +178,7 @@
 02:01=%1 löysi Atlantiksen kadonneen kaupungin
 02:01=%1:n olisi pitänyt ottaa vesiskootteri mukaan
 02:01=%1 ei pidä vesiurheilusta
-02:01=%1 puhaltaa ikuisesti kuplia
+02:01=%1 puhaltelee ikuisesti kuplia
 02:01=%1 tarvitsee lautan
 02:01=%1:n mielestä suolavesi on hyväksi iholle
 02:01=%1 saa suolavettä haavoihinsa
@@ -226,17 +243,17 @@
 
 ; New health crate
 02:05=Apua tulossa!
-02:05=Lääkäri!
+02:05=Lääkintämies!
 02:05=Ensiapua taivaasta!
 02:05=Terveyspaketti sinulle
 02:05=Hyvää terveyttä laatikkomuodossa!
-02:05=Tohtori soittaa
+02:05=Tohtori kilauttaa
 02:05=Tuoreita siteitä!
 02:05=Tämä saa sinut tuntemaan itsesi terveemmäksi
 02:05=Hi-Potion! Eiku väärä peli
-02:05=Hae se!
+02:05=Nappaa se!
 02:05=Terveellinen välipala
-02:05=Helpotus kipuun
+02:05=Helpotusta kipuun
 02:05=Oikea annostus: Niin monta kuin löydät!
 02:05=Kiireellinen lähetys
 02:05=Varusteita!
@@ -286,7 +303,7 @@
 02:08=%1 on ajattelematon
 02:08=%1 antoi periksi
 02:08=Torkkumalla häviät, %1
-02:08=%1 häpeilemättömästi jättää vuoron välistä
+02:08=%1 häpeilemättömästi jättää vuoronsa välistä
 02:08=%1 on todella laiska
 02:08=%1 tarvitsee lisää motivaatiota
 02:08=%1 on pasifisti
@@ -294,21 +311,21 @@
 02:08=%1 pitää tauon
 02:08=%1 ottaa rennosti
 02:08=%1 ei usko kykyihinsä
-02:08=%1 päättää olla tekemättä mitään
+02:08=%1 päättää olla tekemättä yhtään mitään
 02:08=%1 antaa vihollisen tuhota itsensä
-02:08=%1 olisi todella huono juhlissa
+02:08=%1 olisi huonoa seuraa bileissä
 02:08=%1 piiloutuu
 02:08=%1 jättää mahdollisuuden käyttämättä
-02:08=%1 päättää että paras asia minkä hän voi tehdä on...ei mitään
+02:08=%1 toteaa että paras asia minkä hän voi tehdä on...ei mitään
 02:08=%1 on pelkuri
-02:08=Kot kot kot, %1 on pelkurikana
+02:08=Kot kot kot, %1 on pelkurikana!
 02:08=%1 kellertää
 02:08=%1 on pelkuri!
 02:08=%1 odottaa äkkikuolemaa
 02:08=%1 ei ole taistelijatyyppiä
-02:08=%1 harkitsee huudelleen elämänsä tarkoitusta
-02:08=%1 eikoskaan osannut tähdätä muutenkaan
-02:08=%1 ei olisi alunperinkään halunnutm ennä armeijaan
+02:08=%1 harkitsee uudelleen elämänsä tarkoitusta
+02:08=%1 ei koskaan oppinut tähtäämään muutenkaan
+02:08=%1 ei olisi alunperinkään halunnut mennä armeijaan
 02:08=Lakkaa haaskaamasta meidän aikaa, %1
 02:08=Olen pettynyt sinuun, %1
 02:08=Pystyt kyllä parempaankin, %1
@@ -336,7 +353,7 @@
 02:09=%1 siirtyy askeleen lähemmäksi itsemurhaa
 02:09=%1 auttaa vihollista
 02:09=Tuo oli tyhmää, %1
-02:09=%1 elää mantran "ei kipua, ei voittoa" mukaan
+02:09=%1 elää mantran "ei kipua, ei hyötyä" mukaan
 02:09=%1 on hämmentynyt
 02:09=%1 satuttaa itseään hämmennyksessään
 02:09=%1 tykkää nolata itseään
@@ -353,8 +370,8 @@
 02:09=%1:n ase on selvästi epäkunnossa
 
 ; Hog shot an home run (using the bat and another hog)
-02:10=Kotijuoksu!
-02:10=Lintu, eiku lentokone, eiku...
+02:10=Kunnari!
+02:10=Onko se lintu, vai lentokone, eiku...
 02:10=Se lensi pitkälle!
 
 ; Weapon Categories
@@ -402,13 +419,21 @@
 03:41=Kääkkyvä kaveri
 03:42=I'm making a note here...
 ; the misspelled "Beethoven" is intentional (-> to beat)
-03:43=Soittaa Beathovenin tappavan soneetin
+03:43=Soittaa Beathovenin tappavan sonaatin
 03:44=Parasta ennen: 1923
 03:45=Tieteen voima
 03:46=Kuuma kuuma kuuma!
 03:47=Kiinnitä nämä hyödylliseen paikkaan!
 03:48=Vasarointiaika.
 03:49=Tekee sitä mitä luulet sen tekevän.
+03:50=Myyrien suosikki
+03:51=Löytyi maasta
+03:52=UNUSED
+03:53=Mallia 40
+03:54=Työkalu
+03:55=Tätä coolimpaa asetta ei ole!
+03:56=Käytä tai väärinkäytä
+03:57=Työkalu
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Hyökkää yksinkertaisella kranaatilla.|Se räjähtää kun ajastimesta loppuu aika.|1-5: Säädä kranaatin ajastin|Hyökkää: Pidä pohjassa lisätäksesi heittovoimaa
@@ -459,8 +484,16 @@
 04:45=Istuminen kaikilla niillä fysiikan tunneilla|kannatti viimein, laukaise tuhoisa|sini-aalto vihollisiasi päin.|Varo, tämä ase potkaisee aika kovaa.|Hyökkää: Ammu
 04:46=Peitä vastustajasi sähisevällä liekehtivällä nesteellä.|Sydäntä lämmittävää!|Hyökkää: Aktivoi|Ylös/Alas: Jatka tähtäystä|Vasen/Oikea: Muuta sylkyvoimaa.
 04:47=Kaksinkertaista hauskuus kahdella piikikkäällä,|petollisella, tarttuvalla miinalla.|Viritä ketjureaktio tai puolusta itseäsi (tai molempia!)|Hyökkää: Pidä pohjassa ampuaksesi kovemmalla voimalla (kahdesti)
-04:48=Miksi vain myyrät saa kaiken pahoinpitelyn?|Siilien hakkaaminen voi olla ihan yhtä kivaa!|Sopiva isku tällä vasaralla iskee pois kolmanneksen|siilin terveydestä ja lyö ne maan alle.|Hyökkää: Aktivoi
+04:48=Miksi vain myyrät saa kaiken pahoinpitelyn?|Siilien hakkaaminen voi olla ihan yhtä kivaa!|Sopiva isku tällä vasaralla iskee pois kolmanneksen|siilin terveydestä ja lyö ne maan alle.|Hyökkää: Ammu kohteen vierellä.
 04:49=Herätä ystäväsi henkiin!|Mutta varo, tämä herättää myös vihollisesi henkiin.|Hyökkää: Pidä hyökkäysnappia pohjassa herättääksesi henkiin hitaasti.|Ylös: Kiihdytä henkiin herätystä
+04:50=Piilotteleeko joku maan alla?|Kaiva heidät ulos poraiskulla!|Poraraketit räjähtävät ajastimen loputtua.|1-5: Säädä ajastin|Vasen/Oikea: Valitse hyökkäyssuunta|Osoitin: Valitse kohdealue
+04:51=Heitä mutapallo, joka ei maksa siirtoasi.|Sysää siilet liikkeelle.|Hyökkää: Pidä pohjassa ampuaksesi kovemmalla voimalla
+04:52=UNUSED
+04:53=Lähde matkalle ajassa ja tilassa, jättäen| muut toverit taistelemaan yksin.|Valmistaudu palautumaan koska tahansa, |äkkikuolemassa tai kun muut joukkueesi siilet on tuhottu.|Ei toimi äkkikuolemassa, jos joukkueessa on enää yksi siili tai kuninkaalla.|Hyökkää: Aktivoi.
+04:54=Suihkuttaa tahmeita hiutaleita, muodostaen maata.|Tuki reittejä, siiliä tai luo silta!|Ole tarkkana, ettet suihkuta itseesi.|Hyökkää: Aktivoi.|Ylös/Alas: Muuta tähtäystä|Vasen/Oikea: Muuta sylkyvoimaa
+04:55=Palauta jääkausi!|Pakasta siilet usean vuoron ajaksi, tai jäädytä maata ja vettä.|Hyökkää: Aktivoi
+04:56=Voit heittää kaksi veitseä vihollista kohti,|tukkia käytäviä tai vaikkapa tehdä niistä portaat!|Ole kuitenkin varovainen, teräaseilla leikkiminen on vaarallista!|Hyökkää: Aktivoi
+04:57=Rakenna elastinen kumiseinä, josta siilet |ja aseet kimpoavat vahingoittumatta.|Vasen/Oikea: Käännä kumea|Hiiri: Sijoita kumi
 
 ; Game goal strings
 05:00=Pelimoodit
@@ -479,3 +512,9 @@
 05:13=Miinojen ajastimet: Miinat räjähtävät välittömästi
 05:14=Miinojen ajastimet: Miinat räjähtävät 0 - 3 sekunnin kuluttua
 05:15=Vahinkokerroin: Kaikki aseet tekevät %1% vahinkopistettä
+05:16=Siilien terveys palautetaan vuoron vaihtuessa
+05:17=Tekoälysiilet uudelleensyntyvät kuollessa
+05:18=Rajattomat hyökkäykset
+05:19=Aseet korvataan vuoron vaihtuessa
+05:20=Aseita ei jaeta joukkueen kesken
+05:21=Jaettu aika: Vuoron aika jaetaan tasan klaanin sisällä

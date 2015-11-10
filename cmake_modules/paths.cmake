@@ -14,14 +14,14 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
 #resource paths
 if(UNIX AND NOT APPLE)
-    set(target_binary_install_dir "bin")
-    set(target_library_install_dir "lib")
+    set(target_binary_install_dir "bin" CACHE PATH "install dest for binaries")
+    set(target_library_install_dir "lib${LIB_SUFFIX}" CACHE PATH "install dest for libs")
 
     string(SUBSTRING "${DATA_INSTALL_DIR}" 0 1 sharepath_start)
-    if (NOT (${sharepath_start} MATCHES "/"))
-        set(HEDGEWARS_DATADIR "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/")
-    else()
+    if(${sharepath_start} MATCHES "/")
         set(HEDGEWARS_DATADIR "${DATA_INSTALL_DIR}/")
+    else()
+        set(HEDGEWARS_DATADIR "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/")
     endif()
     set(HEDGEWARS_FULL_DATADIR "${HEDGEWARS_DATADIR}")
 else()
@@ -55,14 +55,17 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 #which point to directories outside the build tree to the install RPATH
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
-#paths where to find libraries (final slash not optional):
-# - the first is relative to the executable
-# - the second is the same directory of the executable (so it runs in bin/)
-# - the third one is the full path of the system dir
-#source http://www.cmake.org/pipermail/cmake/2008-January/019290.html
-set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
-
-
-#install_name_tool magic for OS X
-set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
-
+if(APPLE)
+    #@rpath mangling
+    set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+    #install_name_tool for libraries
+    set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
+else(APPLE AND NOT (${CMAKE_INSTALL_PREFIX} MATCHES "/usr"))
+    #paths where to find libraries (final slash not optional):
+    # - the first is relative to the executable
+    # - the second is the same directory of the executable (so it runs in bin/)
+    # - the third one is the full path of the system dir
+    #source http://www.cmake.org/pipermail/cmake/2008-January/019290.html
+    #skip this if the install prefix is the standard one
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
+endif(APPLE)

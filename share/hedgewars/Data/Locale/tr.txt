@@ -451,8 +451,10 @@
 03:51=Zeminde bulunan
 03:52=KULLANILMIYOR
 03:53=Tür 40
-03:54=Bir şey inşa et
-03:55=Yardımcı
+; 03:54=Bir şey inşa et
+03:54=Yardımcı
+03:55=Bundan daha iyi olamazdı!
+03:56=Lütfen yanlış veya doğru, kullanın
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Düşmanlarına basit el bombası ile saldır.|Zamanlayıcı sıfır olduğunda patlayacak.|1-5: Bomba süresini ayarla|Saldır: Daha fazla güçte atmak için basılı tut
@@ -511,6 +513,7 @@
 04:53=Arkadaşlarını savaşta yalnız bırakarak|zaman ve uzaya seyahat et.|Herhangi bir an, Ani Ölüm veya tümü|ölmüşse geri gelmeye hazır ol.|Yadsıma: Ani Ölüm kipinde, tek isen veya|Kralsan çalışmaz.
 04:54=TAM DEĞİL
 04:55=Yapışkan tanecikler püskürt.|Köprü yap, düşmanı göm, tünelleri kapat.|Dikkatli ol sana gelmesin!
+04:56=İki satırı düşmanına atabilir, geçişleri|ve tünelleri kapatabilir,|hatta tırmanmak için bile|kullanabilirsin!|Dikkatli ol! Bıçakla oynamak tehlikeli!|Saldır: Daha yüksek hızda atmak için basılı tut (iki kez)
 
 ; Game goal strings
 05:00=Oyun Kipleri

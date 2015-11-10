@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,14 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
 
 unit uGearsHedgehog;
 interface
-uses uTypes, uGearsHandlersMess; 
+uses uTypes, uGearsHandlersMess;
 
 procedure doStepHedgehog(Gear: PGear);
 procedure AfterAttack;
@@ -118,15 +118,8 @@ with HHGear^.Hedgehog^ do
         end;
         if ammoidx >= 0 then
             CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
-    if (prevAmmo <> CurAmmoType) then
-        begin
-        if CurAmmoType = amKnife then
-            LoadHedgehogHat(HHGear^.Hedgehog^, 'Reserved/chef')
-        else if prevAmmo = amKnife then
-            LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
-        end;
     // Try again in the next slot
-    if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then 
+    if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then
         begin
         inc(slot);
         HHGear^.MsgParam:= slot;
@@ -220,6 +213,7 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
     speech: PVisualGear;
     newGear:  PGear;
     CurWeapon: PAmmo;
+    usedAmmoType: TAmmoType;
     altUse: boolean;
     elastic: hwFloat;
 begin
@@ -229,7 +223,8 @@ CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^,
     Gear^.Hedgehog^ do
         begin
-        if ((State and gstHHDriven) <> 0) and ((State and (gstAttacked or gstHHChooseTarget)) = 0) and (((State and gstMoving) = 0)
+        usedAmmoType:= CurAmmoType;
+        if ((State and gstHHDriven) <> 0) and ((State and (gstAttacked or gstChooseTarget)) = 0) and (((State and gstMoving) = 0)
         or (Power > 0)
         or (CurAmmoType = amTeleport)
         or
@@ -297,6 +292,7 @@ with Gear^,
 
             case CurAmmoType of
                       amGrenade: newGear:= AddGear(hwRound(lx), hwRound(ly), gtGrenade,         0, newDx, newDy, CurWeapon^.Timer);
+                      amAirMine: newGear:= AddGear(hwRound(lx), hwRound(ly), gtAirMine,         0, newDx, newDy, 0);
                       amMolotov: newGear:= AddGear(hwRound(lx), hwRound(ly), gtMolotov,      0, newDx, newDy, 0);
                   amClusterBomb: newGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, newDx, newDy, CurWeapon^.Timer);
                       amGasBomb: newGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,      0, newDx, newDy, CurWeapon^.Timer);
@@ -310,7 +306,7 @@ with Gear^,
                    amPickHammer: newGear:= AddGear(hwRound(lx), hwRound(ly) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: ParseCommand('/skip', true);
                          amRope: newGear:= AddGear(hwRound(lx), hwRound(ly), gtRope, 0, xx, yy, 0);
-                         amMine: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
+                         amMine: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 0);
                         amSMine: newGear:= AddGear(hwRound(lx), hwRound(ly), gtSMine,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                         amKnife: begin
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtKnife,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
@@ -416,14 +412,14 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 0);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
             end;
-            if altUse and (newGear <> nil) and 
+            if altUse and (newGear <> nil) and
                ((CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack) or (Gear^.Message and gmPrecise = 0)) then
                begin
                newGear^.dX:= newDx / newGear^.Density;
                newGear^.dY:= newDY / newGear^.Density
                end;
             if (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack) and
-               (Gear^.Message and gmPrecise <> 0) and (hwRound(Y) > cWaterLine) then
+               (Gear^.Message and gmPrecise <> 0) and CheckCoordInWater(hwRound(X), hwRound(Y)) then
                 newGear^.State:= newGear^.State or gstSubmersible;
 
             case CurAmmoType of
@@ -432,7 +428,8 @@ with Gear^,
                      amBazooka, amSnowball,
                          amBee, amSMine,
                       amMortar, amWatermelon,
-                 amHellishBomb, amDrill: FollowGear:= newGear;
+                 amHellishBomb, amDrill,
+                     amAirMine: FollowGear:= newGear;
 
                      amShotgun, amPickHammer,
                         amRope, amDEagle,
@@ -450,9 +447,11 @@ with Gear^,
                       amTardis, amPiano,
                       amIceGun, amRubber: CurAmmoGear:= newGear;
             end;
+            if CurAmmoType = amCake then FollowGear:= newGear;
+            if CurAmmoType = amAirMine then newGear^.Hedgehog:= nil;
 
-            if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
-                newGear^.FlightTime:= GameTicks + 1000
+            if ((CurAmmoType = amMine) or (CurAmmoType = amSMine) or (CurAmmoType = amAirMine)) and (GameFlags and gfInfAttack <> 0) then
+                newGear^.FlightTime:= GameTicks + min(TurnTimeLeft,1000)
             else if CurAmmoType = amDrill then
                 newGear^.FlightTime:= GameTicks + 250;
             if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
@@ -470,15 +469,15 @@ with Gear^,
                 begin
                 elastic:=  int2hwfloat(CurWeapon^.Bounciness) / _1000;
 
-                if elastic < _1 then
-                    newGear^.Elasticity:= newGear^.Elasticity * elastic
-                else if elastic > _1 then
-                    newGear^.Elasticity:= _1 - ((_1-newGear^.Elasticity) / elastic);
-    (* Experimented with friction modifier. Didn't seem helpful
-                fric:= int2hwfloat(CurWeapon^.Bounciness) / _250;
-                if fric < _1 then newGear^.Friction:= newGear^.Friction * fric
-                else if fric > _1 then newGear^.Friction:= _1 - ((_1-newGear^.Friction) / fric)*)
-                end;
+            if elastic < _1 then
+                newGear^.Elasticity:= newGear^.Elasticity * elastic
+            else if elastic > _1 then
+                newGear^.Elasticity:= _1 - ((_1-newGear^.Elasticity) / elastic);
+(* Experimented with friction modifier. Didn't seem helpful
+            fric:= int2hwfloat(CurWeapon^.Bounciness) / _250;
+            if fric < _1 then newGear^.Friction:= newGear^.Friction * fric
+            else if fric > _1 then newGear^.Friction:= _1 - ((_1-newGear^.Friction) / fric)*)
+            end;
 
 
             uStats.AmmoUsed(CurAmmoType);
@@ -496,29 +495,30 @@ with Gear^,
                 end;
 
             Power:= 0;
-            if (CurAmmoGear <> nil)
-                and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
+            if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
                 begin
-                if CurAmmoType in [amRope,amResurrector] then Message:= Message or gmAttack;
+                if CurAmmoType in [amRope,amResurrector] then
+                    Message:= Message or gmAttack;
                 CurAmmoGear^.Message:= Message
                 end
             else
                 begin
-                if not CurrentTeam^.ExtDriven
-                and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
+                if (not CurrentTeam^.ExtDriven) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
                     SendIPC(_S'a');
                 AfterAttack;
                 end
             end
         else
             Message:= Message and (not gmAttack);
-    end;
+
+    ScriptCall('onHogAttack', ord(usedAmmoType));
+    end; // of with Gear^, Gear^.Hedgehog^ do
+
     TargetPoint.X := NoPointX;
-    ScriptCall('onHogAttack');
 end;
 
 procedure AfterAttack;
-var s: shortstring;
+var s: ansistring;
     a: TAmmoType;
     HHGear: PGear;
 begin
@@ -533,8 +533,8 @@ with CurrentHedgehog^ do
 
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) then
             begin
-            s:= inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1);
-            AddCaption(format(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
+            s:= ansistring(inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1));
+            AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
             end;
 
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks)
@@ -549,7 +549,7 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and (hwRound(CurAmmoGear^.Y) > cWaterLine) then
+                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
                      TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
                 else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
                 end;
@@ -572,6 +572,7 @@ end;
 procedure doStepHedgehogDead(Gear: PGear);
 const frametime = 200;
       timertime = frametime * 6;
+var grave:  PGear;
 begin
 if Gear^.Hedgehog^.Unplaced then
     exit;
@@ -587,7 +588,10 @@ else if Gear^.Timer = 1 then
     Gear^.Hedgehog^.Effects[heFrozen]:= 0;
     Gear^.State:= Gear^.State or gstNoDamage;
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+    grave:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0);
+    grave^.Hedgehog:= Gear^.Hedgehog;
+    grave^.Pos:= Gear^.uid;
+    
     DeleteGear(Gear);
     SetAllToActive
     end
@@ -607,6 +611,7 @@ end;
 procedure doStepHedgehogGone(Gear: PGear);
 const frametime = 65;
       timertime = frametime * 11;
+var i: LongInt;
 begin
 if Gear^.Hedgehog^.Unplaced then
     exit;
@@ -629,15 +634,27 @@ else // Gear^.Timer = 0
     Gear^.Z:= cCurrHHZ;
     RemoveGearFromList(Gear);
     InsertGearToList(Gear);
-    PlaySoundV(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
-    PlaySound(sndWarp);
+    // only play sound for one alive hedgehog
+    with Gear^.Hedgehog^.Team^ do
+        for i:= 0 to cMaxHHIndex do
+            begin
+            if (Hedgehogs[i].Gear <> nil) then
+                begin
+                if (Hedgehogs[i].Gear = Gear) then
+                    begin
+                    PlaySoundV(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
+                    PlaySound(sndWarp);
+                    end;
+                break;
+                end;
+            end;
     Gear^.Pos:= 0;
     Gear^.Timer:= timertime
     end
 end;
 
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
-var s: shortstring;
+var s: ansistring;
     vga: PVisualGear;
 begin
     if cnt <> 0 then AddAmmo(HH, ammo, cnt)
@@ -649,9 +666,9 @@ begin
     or (GameType = gmtDemo)  then
         begin
         if cnt <> 0 then
-            s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(cnt) + ')'
+            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(cnt) + ')')
         else
-            s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')';
+            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
         AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
 
         // show ammo icon
@@ -715,7 +732,7 @@ case Gear^.Pos of
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     str(Gear^.Health, s);
                     s:= '+' + s;
-                    AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    AddCaption(ansistring(s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
 
@@ -738,6 +755,7 @@ end;
 procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;
+    portals: PGearArrayS;
 begin
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
@@ -800,6 +818,12 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         exit
         end;
 
+    if (Gear^.Message and (gmLeft or gmRight) <> 0) and (Gear^.State and gstMoving = 0) then
+        begin
+        // slightly inefficient since it doesn't halt after one portal, maybe could add a param to GearsNear for number desired.
+        portals:= GearsNear(Gear^.X, Gear^.Y, gtPortal, 26);
+        if portals.size = 0 then Gear^.PortalCounter:= 0
+        end;
     PrevdX:= hwSign(Gear^.dX);
     if (Gear^.Message and gmLeft  )<>0 then
         Gear^.dX:= -cLittle else
@@ -819,7 +843,9 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 
     Gear^.Hedgehog^.visStepPos:= (Gear^.Hedgehog^.visStepPos + 1) and 7;
 
-    if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) then
+    if (not cArtillery or
+           ((CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch))) and
+       ((Gear^.Message and gmPrecise) = 0) then
         MakeHedgehogsStep(Gear);
 
     SetAllHHToActive(false);
@@ -831,7 +857,7 @@ procedure HedgehogChAngle(HHGear: PGear);
 var da: LongWord;
 begin
 with HHGear^.Hedgehog^ do
-    if (((CurAmmoType = amRope) or ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope))) and 
+    if (((CurAmmoType = amRope) or ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope))) and
             ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving))
     or ((CurAmmoType = amPortalGun) and ((HHGear^.State and gstMoving) <> 0)) then
         da:= 2
@@ -851,13 +877,6 @@ procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
 begin
-land:= 0;
-isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
-if Gear^.dX.QWordValue > 8160437862 then
-    Gear^.dX.QWordValue:= 8160437862;
-if Gear^.dY.QWordValue > 8160437862 then
-    Gear^.dY.QWordValue:= 8160437862;
-
 if Gear^.Hedgehog^.Unplaced then
     begin
     Gear^.dY:= _0;
@@ -865,6 +884,14 @@ if Gear^.Hedgehog^.Unplaced then
     Gear^.State:= Gear^.State and (not gstMoving);
     exit
     end;
+
+land:= 0;
+isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
+if Gear^.dX.QWordValue > 8160437862 then
+    Gear^.dX.QWordValue:= 8160437862;
+if Gear^.dY.QWordValue > 8160437862 then
+    Gear^.dY.QWordValue:= 8160437862;
+
 isFalling:= (Gear^.dY.isNegative) or (TestCollisionYKick(Gear, 1) = 0);
 if isFalling then
     begin
@@ -874,14 +901,16 @@ if isFalling then
         if land and lfBouncy <> 0 then
             begin
             doStepFallingGear(Gear);
+            Gear^.AdvBounce:= 1;
             Gear^.dX:= Gear^.dX * _0_8
             end;
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
             Gear^.dY:= _0;
-        Gear^.State:= Gear^.State and not gstCollision 
+        Gear^.State:= Gear^.State and (not gstCollision)
         end;
     Gear^.State:= Gear^.State or gstMoving;
-    if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstHHDriven <> 0) and
+    if (Gear^.State and gstHHDriven <> 0) and
+       (FollowGear <> nil) and
        (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
         begin
         // TODO: why so aggressive at setting FollowGear when falling?
@@ -904,8 +933,8 @@ if isFalling then
 else
     begin
     land:= TestCollisionYwithGear(Gear, 1);
-    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0) 
-    and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) 
+    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
+    and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0))
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
@@ -914,6 +943,7 @@ else
         if land and lfBouncy <> 0 then
             begin
             doStepFallingGear(Gear);
+            Gear^.AdvBounce:= 1;
             // hogs for some reason have very low friction. slippery little buggers
             Gear^.dX:= Gear^.dX * _0_8
             end;
@@ -933,7 +963,7 @@ else
             if (land and lfBouncy = 0) or (Gear^.dX.QWordValue < _0_02.QWordValue) then
                 Gear^.dY:= _0
             end;
-        Gear^.State:= Gear^.State and not gstCollision 
+        Gear^.State:= Gear^.State and (not gstCollision)
         end
     else
         Gear^.dY:= Gear^.dY + cGravity;
@@ -949,7 +979,7 @@ else
         end
     end;
 
-if (Gear^.State <> 0) then
+if (Gear^.State and (gstMoving or gstHHJumping or gstHHHJump)) <> 0 then
     DeleteCI(Gear);
 
 if isUnderwater then
@@ -1029,7 +1059,7 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) and (Gear <> nil) do
+    while (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
         Gear^.Y:= Gear^.Y + _1;
 
     // could become nil in CheckGearDrowning if ai's hog fails to respawn in ai survival
@@ -1051,6 +1081,7 @@ if (Gear^.State and gstMoving) <> 0 then
         land:= TestCollisionYwithXYShift(Gear, 0, 1, 1);
         if land and lfBouncy <> 0 then
             doStepFallingGear(Gear);
+            Gear^.AdvBounce:= 1;
 
         if (land <> 0) and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) then
             begin
@@ -1058,10 +1089,9 @@ if (Gear^.State and gstMoving) <> 0 then
             Gear^.dY:= _0;
             Gear^.Y:= Gear^.Y + _1
             end;
-        Gear^.State:= Gear^.State and not gstCollision 
+        Gear^.State:= Gear^.State and (not gstCollision)
         end;
 
-    CheckGearDrowning(Gear);
     // could become nil if ai's hog fails to respawn in ai survival
     if Gear = nil then exit;
     // hide target cursor if current hog is drowning
@@ -1097,6 +1127,11 @@ if not isInMultiShoot then
     AllInactive:= false
 else if Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle] then
     HHGear^.Message:= 0;
+
+if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then
+    AllInactive:= true
+else if not isInMultiShoot then
+    AllInactive:= false;
 
 if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     begin
@@ -1231,6 +1266,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
 var prevState: Longword;
+    s: ansistring;
 begin
 prevState:= Gear^.State;
 
@@ -1265,7 +1301,8 @@ if (Gear^.Health = 0) then
                 Gear^.State:= (Gear^.State or gstHHDeath) and (not gstAnimation);
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
-                AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+                s:= ansistring(Gear^.Hedgehog^.Name);
+                AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
                 end;
             end
         else
@@ -1274,7 +1311,8 @@ if (Gear^.Health = 0) then
             Gear^.doStep:= @doStepHedgehogGone;
 
             // Gone message
-            AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+            s:= ansistring(Gear^.Hedgehog^.Name);
+            AddCaption(FormatA(GetEventString(eidGone), s), cWhiteColor, capgrpMessage);
             end
         end;
     exit
@@ -1290,7 +1328,7 @@ else
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget));
+        Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstChooseTarget));
         if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
         AddCI(Gear);
         exit
@@ -1340,16 +1378,20 @@ end;
 procedure doStepHedgehog(Gear: PGear);
 var tX: hwFloat;
 begin
+// it might make sense to skip more than just drowning check here
+if (not Gear^.Hedgehog^.Unplaced) then
+    CheckGearDrowning(Gear);
+if Gear = nil then exit;
 tX:= Gear^.X;
 if WorldWrap(Gear) then
     begin
-    if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and 
+    if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and
        (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) and (CurAmmoGear^.Elasticity <> _0) then
        CurAmmoGear^.PortalCounter:= 1;
     if (WorldEdge = weWrap) and ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
         Gear^.X:= tX;
-        Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)
+        Gear^.dX.isNegative:= (hwRound(tX) > LongInt(leftX) + Gear^.Radius * 2)
         end
     end;
 

@@ -2,7 +2,7 @@
 --
 -- This is the first stop of hero's journey.
 -- Here he'll get fuels to continue traveling.
--- However, the PAoTH allies of the hero have
+-- However, the PAotH allies of the hero have
 -- been taken hostages by professor Hogevil.
 -- So hero has to get whatever available equipement
 -- there is and rescue them.
@@ -84,7 +84,7 @@ minion2.y = 1900
 minion3.name = loc("Minion")
 minion3.x = 3500
 minion3.y = 1750
-teamA.name = loc("PAoTH")
+teamA.name = loc("PAotH")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Minions")
 teamB.color = tonumber("0033FF",16) -- blue
@@ -114,7 +114,7 @@ function onGameInit()
 		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	end
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	-- PAoTH
+	-- PAotH
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
@@ -360,7 +360,7 @@ function professorDeath(gear)
 	elseif GetHealth(minion3.gear) then
 		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
 	end
-	ParseCommand("teamgone " .. teamB.name)
+	DismissTeam(teamB.name)
 	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
 	AnimWait(hero.gear,5000)
 
@@ -377,7 +377,7 @@ end
 function minionsDeath(gear)
 	-- do staffs here
 	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
-	ParseCommand("teamgone " .. teamC.name)
+	DismissTeam(teamC.name)
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	AnimWait(hero.gear,5000)
 

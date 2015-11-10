@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QDesktopServices>
@@ -179,8 +179,13 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     this->gameSettings = NULL;
     this->notify = notify;
 
+    m_usersModel = NULL;
+
     m_isAdmin = false;
     m_autoKickEnabled = false;
+
+    m_scrollToBottom = false;
+    m_scrollBarPos = 0;
 
     QStringList vpList =
          QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
@@ -406,24 +411,25 @@ void HWChatWidget::onChatMessage(const QString & nick, const QString & message)
 void HWChatWidget::printChatString(
     const QString & nick, const QString & str, const QString & cssClassPart, bool highlight)
 {
-    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
-    if(!playersSortFilterModel)
-        return;
-
-    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
-
-    if(!players)
+    if(!m_usersModel)
         return;
 
     // don't show chat lines that are from ignored nicks
-    if (players->isFlagSet(nick, PlayersListModel::Ignore))
+    if (m_usersModel->isFlagSet(nick, PlayersListModel::Ignore))
         return;
 
-    bool isFriend = (!nick.isEmpty()) && players->isFlagSet(nick, PlayersListModel::Friend);
+    bool isFriend = (!nick.isEmpty()) && m_usersModel->isFlagSet(nick, PlayersListModel::Friend);
 
     QString cssClass = (isFriend ? "msg_Friend" : "msg_User") + cssClassPart;
 
     addLine(cssClass, str, highlight);
+}
+
+bool HWChatWidget::isInGame() {
+    if (!m_usersModel)
+        return false;
+
+    return m_usersModel->isFlagSet(m_userNick, PlayersListModel::InGame);
 }
 
 void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighlight)
@@ -449,7 +455,8 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     {
         line = QString("<span class=\"highlight\">%1</span>").arg(line);
         SDLInteraction::instance().playSoundFile(m_hilightSound);
-        HWApplication::alert(this, 800);
+        if (!isInGame())
+            HWApplication::alert(this, 800);
     }
 
     chatStrings.append(line);
@@ -544,7 +551,8 @@ void HWChatWidget::clear()
     QString hlRegExp("^(.* )?%1[^-a-z0-9_]*( .*)?$");
     QRegExp whitespace("\\s");
 
-    m_highlights.append(QRegExp(hlRegExp.arg(m_userNick.toLower())));
+    if (!m_userNick.isEmpty())
+        m_highlights.append(QRegExp(hlRegExp.arg(QRegExp::escape(m_userNick.toLower()))));
 
     QFile file(cfgdir->absolutePath() + "/" + m_userNick.toLower() + "_highlight.txt");
 
@@ -589,9 +597,10 @@ void HWChatWidget::onPlayerInfo(
 {
     addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
         .arg(linkedNick(nick))
-        .arg(ip)
-        .arg(version)
-        .arg(roomInfo));
+        .arg(Qt::escape(ip == "[]"?"":ip))
+        .arg(Qt::escape(version))
+        .arg(Qt::escape(roomInfo))
+    );
 }
 
 void HWChatWidget::onKick()
@@ -717,14 +726,14 @@ void HWChatWidget::chatNickDoubleClicked(const QModelIndex &index)
 void HWChatWidget::adminAccess(bool b)
 {
     chatNicks->removeAction(acKick);
-    chatNicks->removeAction(acBan);
+    //chatNicks->removeAction(acBan);
 
     m_isAdmin = b;
 
     if(b)
     {
         chatNicks->insertAction(0, acKick);
-        chatNicks->insertAction(0, acBan);
+        //chatNicks->insertAction(0, acBan);
     }
 }
 
@@ -848,6 +857,12 @@ void HWChatWidget::setUsersModel(QAbstractItemModel *model)
 
     chatNicks->setModel(model);
     chatNicks->setModelColumn(0);
+
+    QSortFilterProxyModel * sfpModel = qobject_cast<QSortFilterProxyModel *>(model);
+    if (sfpModel)
+        m_usersModel = qobject_cast<PlayersListModel*>(sfpModel->sourceModel());
+    else
+        m_usersModel = qobject_cast<PlayersListModel*>(model);
 }
 
 void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)

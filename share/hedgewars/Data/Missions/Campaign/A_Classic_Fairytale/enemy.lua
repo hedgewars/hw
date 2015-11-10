@@ -385,9 +385,9 @@ function FailedMission()
 end
 
 function LoseMission()
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("Cannibals"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("Natives"))
+  DismissTeam(loc("Cannibals"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -403,7 +403,7 @@ function WinMission()
   if progress and progress<9 then
     SaveCampaignVar("Progress", "9")
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 -----------------------------Misc--------------------------------------

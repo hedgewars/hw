@@ -83,7 +83,7 @@ static char *getUserDirByUID(void)
             } /* if */
         } /* if */
     } /* if */
-    
+
     return retval;
 } /* getUserDirByUID */
 

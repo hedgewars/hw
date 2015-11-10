@@ -48,23 +48,23 @@ extern "C" {
  *    high 9 bits of the character are 0, then this maps to the equivalent
  *    ASCII character:
  *      @code
- *	char ch;
- *	if ( (keysym.unicode & 0xFF80) == 0 ) {
- *		ch = keysym.unicode & 0x7F;
- *	} else {
- *		An international character..
- *	}
+ *  char ch;
+ *  if ( (keysym.unicode & 0xFF80) == 0 ) {
+ *      ch = keysym.unicode & 0x7F;
+ *  } else {
+ *      An international character..
+ *  }
  *      @endcode
  */
 typedef struct SDL_keysym {
-	Uint8 scancode;			/**< hardware specific scancode */
-	SDLKey sym;			/**< SDL virtual keysym */
-	SDLMod mod;			/**< current key modifiers */
-	Uint16 unicode;			/**< translated character */
+    Uint8 scancode;         /**< hardware specific scancode */
+    SDLKey sym;         /**< SDL virtual keysym */
+    SDLMod mod;         /**< current key modifiers */
+    Uint16 unicode;         /**< translated character */
 } SDL_keysym;
 
 /** This is the mask which refers to all hotkey bindings */
-#define SDL_ALL_HOTKEYS		0xFFFFFFFF
+#define SDL_ALL_HOTKEYS     0xFFFFFFFF
 
 /* Function prototypes */
 /**
@@ -81,8 +81,8 @@ typedef struct SDL_keysym {
  */
 extern DECLSPEC int SDLCALL SDL_EnableUNICODE(int enable);
 
-#define SDL_DEFAULT_REPEAT_DELAY	500
-#define SDL_DEFAULT_REPEAT_INTERVAL	30
+#define SDL_DEFAULT_REPEAT_DELAY    500
+#define SDL_DEFAULT_REPEAT_INTERVAL 30
 /**
  * Enable/Disable keyboard repeat.  Keyboard repeat defaults to off.
  *
@@ -102,10 +102,10 @@ extern DECLSPEC void SDLCALL SDL_GetKeyRepeat(int *delay, int *interval);
  * Get a snapshot of the current state of the keyboard.
  * Returns an array of keystates, indexed by the SDLK_* syms.
  * Usage:
- *	@code
- * 	Uint8 *keystate = SDL_GetKeyState(NULL);
- *	if ( keystate[SDLK_RETURN] ) //... \<RETURN> is pressed.
- *	@endcode
+ *  @code
+ *  Uint8 *keystate = SDL_GetKeyState(NULL);
+ *  if ( keystate[SDLK_RETURN] ) //... \<RETURN> is pressed.
+ *  @endcode
  */
 extern DECLSPEC Uint8 * SDLCALL SDL_GetKeyState(int *numkeys);
 

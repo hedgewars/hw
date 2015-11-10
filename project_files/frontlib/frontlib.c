@@ -22,16 +22,16 @@
 #include <SDL_net.h>
 
 int flib_init() {
-	flib_log_d("Initializing frontlib");
-	if(SDLNet_Init()==-1) {
-		flib_log_e("Error in SDLNet_Init: %s", SDLNet_GetError());
-		return -1;
-	}
+    flib_log_d("Initializing frontlib");
+    if(SDLNet_Init()==-1) {
+        flib_log_e("Error in SDLNet_Init: %s", SDLNet_GetError());
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 void flib_quit() {
-	flib_log_d("Shutting down frontlib");
-	SDLNet_Quit();
+    flib_log_d("Shutting down frontlib");
+    SDLNet_Quit();
 }

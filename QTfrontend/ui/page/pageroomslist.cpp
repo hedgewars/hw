@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QVBoxLayout>
@@ -53,6 +53,8 @@ void RoomTableView::moveUp()
 
 QLayout * PageRoomsList::bodyLayoutDefinition()
 {
+    // TODO move stylesheet stuff into css/qt.css
+
     QVBoxLayout * pageLayout = new QVBoxLayout();
     pageLayout->setSpacing(0);
 
@@ -60,10 +62,37 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     topLayout->setSpacing(0);
     pageLayout->addLayout(topLayout, 0);
 
+    // State button
+
+    QPushButton * btnState = new QPushButton(tr("Room state"));
+    btnState->setStyleSheet("QPushButton { background-color: #F6CB1C; border-color: #F6CB1C; color: #130F2A; padding: 1px 3px 3px 3px; margin: 0px; border-bottom: none; border-radius: 0px; border-top-left-radius: 10px; } QPushButton:hover { background-color: #FFEB3C; border-color: #F6CB1C; color: #000000 } QPushButton:pressed { background-color: #FFEB3C; border-color: #F6CB1C; color: #000000; }");
+    btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+
+    // State menu
+
+    QMenu * stateMenu = new QMenu(btnState);
+    showGamesInLobby = new QAction(QAction::tr("Show games in lobby"), stateMenu);
+    showGamesInLobby->setCheckable(true);
+    showGamesInLobby->setChecked(true);
+    showGamesInProgress = new QAction(QAction::tr("Show games in-progress"), stateMenu);
+    showGamesInProgress->setCheckable(true);
+    showGamesInProgress->setChecked(true);
+    showPassword = new QAction(QAction::tr("Show password protected"), stateMenu);
+    showPassword->setCheckable(true);
+    showPassword->setChecked(true);
+    showJoinRestricted = new QAction(QAction::tr("Show join restricted"), stateMenu);
+    showJoinRestricted->setCheckable(true);
+    showJoinRestricted->setChecked(true);
+    stateMenu->addAction(showGamesInLobby);
+    stateMenu->addAction(showGamesInProgress);
+    stateMenu->addAction(showPassword);
+    stateMenu->addAction(showJoinRestricted);
+    btnState->setMenu(stateMenu);
+
     // Help/prompt message at top
     QLabel * lblDesc = new QLabel(tr("Search for a room:"));
     lblDesc->setObjectName("lblDesc");
-    lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}");
+    lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; padding: 5px 10px 3px 6px;}");
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     lblDesc->setFixedHeight(24);
     lblDesc->setMinimumWidth(0);
@@ -97,16 +126,17 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     BtnJoin->setEnabled(false);
 
     // Add widgets to top layout
-    topLayout->addWidget(lblDesc, 1, 0);
-    topLayout->addWidget(searchContainer, 1, 1);
-    topLayout->addWidget(corner, 1, 2, Qt::AlignBottom);
-    topLayout->addWidget(BtnCreate, 0, 4, 2, 1);
-    topLayout->addWidget(BtnJoin, 0, 5, 2, 1);
+    topLayout->addWidget(btnState, 1, 0);
+    topLayout->addWidget(lblDesc, 1, 1);
+    topLayout->addWidget(searchContainer, 1, 2);
+    topLayout->addWidget(corner, 1, 3, Qt::AlignBottom);
+    topLayout->addWidget(BtnCreate, 0, 5, 2, 1);
+    topLayout->addWidget(BtnJoin, 0, 6, 2, 1);
 
     // Top layout stretch
     topLayout->setRowStretch(0, 1);
     topLayout->setRowStretch(1, 0);
-    topLayout->setColumnStretch(3, 1);
+    topLayout->setColumnStretch(4, 1);
 
     // Rooms list and chat with splitter
     m_splitter = new QSplitter();
@@ -131,43 +161,6 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     roomsList->setStyleSheet("QTableView { border-top-left-radius: 0px; }");
     roomsList->setFocusPolicy(Qt::NoFocus);
     roomsLayout->addWidget(roomsList, 200);
-
-    // Room filters container
-
-    QWidget * filtersContainer = new QWidget();
-    filtersContainer->setMaximumWidth(800);
-    filtersContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    roomsLayout->addSpacing(7);
-    roomsLayout->addWidget(filtersContainer, 0, Qt::AlignHCenter);
-    roomsLayout->addSpacing(7);
-    
-    QHBoxLayout * filterLayout = new QHBoxLayout(filtersContainer);
-    filterLayout->setSpacing(0);
-    filterLayout->setMargin(0);
-
-    const int filterSpacing = 20;
-
-    // State button
-
-    QPushButton * btnState = new QPushButton(tr("Room state"));
-    btnState->setStyleSheet("QPushButton { padding: 2px 4px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }");
-    btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    filterLayout->addWidget(btnState);
-    filterLayout->addSpacing(filterSpacing);
-
-    // State menu
-
-    QMenu * stateMenu = new QMenu(btnState);
-    showGamesInLobby = new QAction(QAction::tr("Show games in lobby"), stateMenu);
-    showGamesInLobby->setCheckable(true);
-    showGamesInLobby->setChecked(true);
-    showGamesInProgress = new QAction(QAction::tr("Show games in-progress"), stateMenu);
-    showGamesInProgress->setCheckable(true);
-    showGamesInProgress->setChecked(true);
-    stateMenu->addAction(showGamesInLobby);
-    stateMenu->addAction(showGamesInProgress);
-    btnState->setMenu(stateMenu);
 
     // Lobby chat
 
@@ -201,6 +194,8 @@ void PageRoomsList::connectSignals()
     connect(roomsList, SIGNAL(clicked (const QModelIndex &)), searchText, SLOT(setFocus()));
     connect(showGamesInLobby, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(showGamesInProgress, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
+    connect(showPassword, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
+    connect(showJoinRestricted, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
@@ -645,13 +640,29 @@ void PageRoomsList::onFilterChanged()
 
     bool stateLobby = showGamesInLobby->isChecked();
     bool stateProgress = showGamesInProgress->isChecked();
+    bool statePassword = showPassword->isChecked();
+    bool stateJoinRestricted = showJoinRestricted->isChecked();
 
-    if (stateLobby && stateProgress)
-        stateFilteredModel->setFilterFixedString(QString()); // "any"
-    else if (stateLobby != stateProgress)
-        stateFilteredModel->setFilterFixedString(QString(stateProgress));
+    QString filter;
+    if (!stateLobby && !stateProgress)
+        filter = "O_o";
+    else if (stateLobby && stateProgress && statePassword && stateJoinRestricted)
+        filter = "";
     else
-        stateFilteredModel->setFilterFixedString(QString("none")); // Basically, none.
+    {
+        QString exclude = "[^";
+        if (!stateProgress) exclude += "g";
+        if (!statePassword) exclude += "p";
+        if (!stateJoinRestricted) exclude += "j";
+        exclude += "]*";
+        if (stateProgress && statePassword && stateJoinRestricted) exclude = ".*";
+        filter = "^" + exclude;
+        if (!stateLobby) filter += "g" + exclude;
+        filter += "$";
+    }
+    //qDebug() << filter;
+
+    stateFilteredModel->setFilterRegExp(filter);
 }
 
 void PageRoomsList::setSettings(QSettings *settings)

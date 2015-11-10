@@ -112,7 +112,7 @@ function AfterFinalAnim()
   if progress and progress<4 then
     SaveCampaignVar("Progress", "4")
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 -----------------------------Animations--------------------------------

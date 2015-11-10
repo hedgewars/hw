@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -31,8 +31,8 @@ interface
 uses uFloat;
 
 procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean); // Sets the seed that should be used for generating pseudo-random values.
-function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
-function  GetRandom(m: LongWord): LongWord; overload; inline; // Returns a positive pseudo-random integer smaller than m.
+function  GetRandomf: hwFloat; // Returns a pseudo-random hwFloat.
+function  GetRandom(m: LongWord): LongWord; inline; // Returns a positive pseudo-random integer smaller than m.
 procedure AddRandomness(r: LongWord); inline;
 function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
 
@@ -45,10 +45,11 @@ var cirbuf: array[0..63] of Longword;
 procedure AddRandomness(r: LongWord); inline;
 begin
 n:= (n + 1) and $3F;
-cirbuf[n]:= cirbuf[n] xor r
+   cirbuf[n]:= cirbuf[n] xor r;
 end;
 
 function GetNext: Longword; inline;
+var s : string;
 begin
 n:= (n + 1) and $3F;
 cirbuf[n]:=
@@ -56,7 +57,8 @@ cirbuf[n]:=
             cirbuf[(n +  9) and $3F])            {n - 55 mod 64}
             and $7FFFFFFF;                       {mod 2^31}
 
-GetNext:= cirbuf[n]
+   GetNext:= cirbuf[n];
+   str(GetNext, s);
 end;
 
 procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean);
@@ -80,7 +82,7 @@ for i:= t to 54 do
     cirbuf[i]:= $A98765 + 68; // odd number
 
 for i:= 0 to 1023 do
-    GetNext
+   GetNext;
 end;
 
 function GetRandomf: hwFloat;

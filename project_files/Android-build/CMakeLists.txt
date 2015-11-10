@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ###################################################################################
 
 find_program(ANT ant DOC "Path to the java package creator: ant")
@@ -26,8 +26,8 @@ if(NOT ANDROID_NDK)
 endif()
 
 if(IS_DIRECTORY "${ANDROID_NDK}")
-    message(STATUS "Detected the android NDK directory at: " ${ANDROID_NDK}) 
-else ()
+    message(STATUS "Detected the android NDK directory at: " ${ANDROID_NDK})
+else()
     message(FATAL_ERROR "Couldn't detect the Android NDK directory")
 endif()
 
@@ -39,35 +39,35 @@ if(NOT ANDROID_NDK_TOOLCHAINDIR)
 endif()
 
 if(IS_DIRECTORY "${ANDROID_NDK_TOOLCHAINDIR}")
-    message(STATUS "Detected the Android NDK toolchain at: ${ANDROID_NDK_TOOLCHAINDIR}") 
-else ()
+    message(STATUS "Detected the Android NDK toolchain at: ${ANDROID_NDK_TOOLCHAINDIR}")
+else()
     message(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory: ${ANDROID_NDK_TOOLCHAINDIR}")
 endif()
 
-if(NOT ANDROID_SDK)#Check if its defined at the cmdline
+if(NOT ANDROID_SDK) #Check if its defined at the cmdline
     find_program(ANDROID_SDK adb) #assume they've added platform-tools to their path
     get_filename_component(ANDROID_SDK "${ANDROID_SDK}" PATH)
     get_filename_component(ANDROID_SDK "${ANDROID_SDK}" PATH)
     set(ANDROID_SDK "${ANDROID_SDK}" CACHE PATH "Path to the android sdk" FORCE)
 endif()
 
-if( IS_DIRECTORY "${ANDROID_SDK}")
-    message(STATUS "Detected the android SDK directory at: " ${ANDROID_SDK}) 
-else ()
+if(IS_DIRECTORY "${ANDROID_SDK}")
+    message(STATUS "Detected the android SDK directory at: " ${ANDROID_SDK})
+else()
     message(FATAL_ERROR "Couldn't detect the Android SDK directory")
 endif()
 
-if( NOT FPC_DIR)
+if(NOT FPC_DIR)
     find_program(FPC_DIR ppcrossarm)
     get_filename_component(FPC_DIR "${FPC_DIR}" PATH)
-    if(IS_DIRECTORY "${FPC_DIR}") 
-    	set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
+    if(IS_DIRECTORY "${FPC_DIR}")
+        set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
     endif()
 endif()
 
-if( IS_DIRECTORY "${FPC_DIR}")
-    message(STATUS "Detected the FreePascal directory at: " "${FPC_DIR}") 
-else ()
+if(IS_DIRECTORY "${FPC_DIR}")
+    message(STATUS "Detected the FreePascal directory at: ${FPC_DIR}")
+else()
     message(FATAL_ERROR "Couldn't detect the FreePascal directory")
 endif()
 

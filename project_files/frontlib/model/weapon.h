@@ -30,16 +30,16 @@
  * For the other setting, 9 is invalid.
  */
 typedef struct {
-	char loadout[WEAPONS_COUNT+1];
-	char crateprob[WEAPONS_COUNT+1];
-	char crateammo[WEAPONS_COUNT+1];
-	char delay[WEAPONS_COUNT+1];
-	char *name;
+    char loadout[WEAPONS_COUNT+1];
+    char crateprob[WEAPONS_COUNT+1];
+    char crateammo[WEAPONS_COUNT+1];
+    char delay[WEAPONS_COUNT+1];
+    char *name;
 } flib_weaponset;
 
 typedef struct {
-	int weaponsetCount;
-	flib_weaponset **weaponsets;
+    int weaponsetCount;
+    flib_weaponset **weaponsets;
 } flib_weaponsetlist;
 
 /**

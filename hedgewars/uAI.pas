@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -108,9 +108,11 @@ var BotLevel: Byte;
     ap: TAttackParams;
     Score, i, t, n, dAngle: LongInt;
     a, aa: TAmmoType;
+    useThisActions: boolean;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 windSpeed:= hwFloat2Float(cWindSpeed);
+useThisActions:= false;
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
@@ -128,12 +130,39 @@ for i:= 0 to Pred(Targets.Count) do
 {$HINTS OFF}
             Score:= AmmoTests[a].proc(Me, Targets.ar[i], BotLevel, ap);
 {$HINTS ON}
-            if Actions.Score + Score > BestActions.Score then
+            if (Score > BadTurn) and (Actions.Score + Score > BestActions.Score) then
                 if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + Byte(BotLevel - 1) * 2048) then
                     begin
-                    BestActions:= Actions;
-                    inc(BestActions.Score, Score);
-                    BestActions.isWalkingToABetterPlace:= false;
+                    if useThisActions then
+                        begin
+                        BestActions.Count:= Actions.Count
+                        end
+                    else
+                        begin
+                        BestActions:= Actions;
+                        BestActions.isWalkingToABetterPlace:= false;
+                        useThisActions:= true
+                        end;
+
+                    BestActions.Score:= Actions.Score + Score;
+
+                    // if not between shots, activate invulnerability/vampirism if available
+                    if CurrentHedgehog^.MultiShootAttacks = 0 then
+                        begin
+                        if HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0 then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
+
+                        if HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0 then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
+                        end;
 
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
 
@@ -251,7 +280,7 @@ if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 th
     AddAction(Actions, aia_Weapon, Longword(amSkip), 100 + random(200), 0, 0);
 
 if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoMoveAfter) = 0))
-    and (GameFlags and gfArtillery = 0) then
+    and (GameFlags and gfArtillery = 0) and (cGravityf <> 0) then
     begin
     tmp:= random(2) + 1;
     Push(0, Actions, Me^, tmp);
@@ -359,6 +388,10 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
 
             if GoInfo.FallPix >= FallPixForBranching then
                 Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
+
+            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
+                SDL_Delay(1000);
+
             end {while};
 
         if BestRate > BaseRate then
@@ -370,12 +403,13 @@ end;
 function Think(Me: PGear): LongInt; cdecl; export;
 var BackMe, WalkMe: TGear;
     switchCount: LongInt;
-    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
+    currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
     switchImmediatelyAvailable: boolean;
     Actions: TActions;
 begin
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 StartTicks:= GameTicks;
+
 currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
 itHedgehog:= currHedgehogIndex;
 switchesNum:= 0;
@@ -385,7 +419,7 @@ if Me^.Hedgehog^.BotLevel <> 5 then
     switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
 else switchCount:= 0;
 
-if ((Me^.State and gstAttacked) = 0) or isInMultiShoot then
+if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
     if Targets.Count > 0 then
         begin
         // iterate over current team hedgehogs
@@ -397,7 +431,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot then
             Actions.Score:= 0;
             if switchesNum > 0 then
                 begin
-                if not switchImmediatelyAvailable  then
+                if (not switchImmediatelyAvailable)  then
                     begin
                     // when AI has to use switcher, make it cost smth unless they have a lot of switches
                     if (switchCount < 10) then Actions.Score:= (-27+switchCount*3)*4000;
@@ -421,34 +455,40 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot then
             or (itHedgehog = currHedgehogIndex)
             or BestActions.isWalkingToABetterPlace;
 
-        if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-            SDL_Delay(1000);
+            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
+                SDL_Delay(700);
 
         if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
             begin
             BestActions.Count:= 0;
-            AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+
+            FillBonuses(false);
+
+            if not bonuses.activity then
+                AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;
 
         end else SDL_Delay(100)
 else
     begin
     BackMe:= Me^;
-    i:= 12;
+    i:= 4;
     while (not StopThinking) and (BestActions.Count = 0) and (i > 0) do
         begin
+
 (*
         // Maybe this would get a bit of movement out of them? Hopefully not *toward* water. Need to check how often he'd choose that strategy
         if SuddenDeathDmg and ((hwRound(BackMe.Y)+cWaterRise*2) > cWaterLine) then
             AddBonus(hwRound(BackMe.X), hwRound(BackMe.Y), 250, -40);
 *)
+
         FillBonuses(true);
         WalkMe:= BackMe;
         Actions.Count:= 0;
         Actions.Pos:= 0;
         Actions.Score:= 0;
         Walk(@WalkMe, Actions);
-        dec(i);
+        if not bonuses.activity then dec(i);
         if not StopThinking then
             SDL_Delay(100)
         end

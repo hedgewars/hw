@@ -36,60 +36,60 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class StartNetgameDialog extends DialogFragment {
-	private static final String PREF_PLAYERNAME = "playerName";
-	
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		SharedPreferences prefs = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
-		final String playerName = prefs.getString(PREF_PLAYERNAME, "Player");
-		final EditText editText = new EditText(getActivity());
-		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		
-		editText.setText(playerName);
-		editText.setHint(R.string.start_netgame_dialog_playername_hint);
-		editText.setId(android.R.id.text1);
-		editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-		editText.setSingleLine();
+    private static final String PREF_PLAYERNAME = "playerName";
 
-		builder.setTitle(R.string.start_netgame_dialog_title);
-		builder.setMessage(R.string.start_netgame_dialog_message);
-		builder.setView(editText);
-		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				editText.setText(playerName);
-			}
-		});
-		
-		editText.setOnEditorActionListener(new OnEditorActionListener() {
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				boolean handled = false;
-				if(actionId == EditorInfo.IME_ACTION_DONE) {
-					startConnection(v.getText().toString());
-					handled = true;
-				}
-				return handled;
-			}
-		});
-		
-		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				startConnection(editText.getText().toString());
-			}
-		});
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        SharedPreferences prefs = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        final String playerName = prefs.getString(PREF_PLAYERNAME, "Player");
+        final EditText editText = new EditText(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-		return builder.create();
-	}
-	
-	private void startConnection(String username) {
-		if(username.length() > 0) {
-			SharedPreferences prefs = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
-			Editor edit = prefs.edit();
-			edit.putString(PREF_PLAYERNAME, username);
-			edit.commit();
-			
-			Netplay.getAppInstance(getActivity().getApplicationContext()).connectToDefaultServer(username);
-			getDialog().dismiss();
-			((MainActivity)getActivity()).onNetConnectingStarted();
-		}
-	}
+        editText.setText(playerName);
+        editText.setHint(R.string.start_netgame_dialog_playername_hint);
+        editText.setId(android.R.id.text1);
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setSingleLine();
+
+        builder.setTitle(R.string.start_netgame_dialog_title);
+        builder.setMessage(R.string.start_netgame_dialog_message);
+        builder.setView(editText);
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                editText.setText(playerName);
+            }
+        });
+
+        editText.setOnEditorActionListener(new OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    startConnection(v.getText().toString());
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                startConnection(editText.getText().toString());
+            }
+        });
+
+        return builder.create();
+    }
+
+    private void startConnection(String username) {
+        if(username.length() > 0) {
+            SharedPreferences prefs = getActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+            Editor edit = prefs.edit();
+            edit.putString(PREF_PLAYERNAME, username);
+            edit.commit();
+
+            Netplay.getAppInstance(getActivity().getApplicationContext()).connectToDefaultServer(username);
+            getDialog().dismiss();
+            ((MainActivity)getActivity()).onNetConnectingStarted();
+        }
+    }
 }

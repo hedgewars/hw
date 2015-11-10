@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -23,7 +23,6 @@
 
 
 @implementation MissionTrainingViewController
-@synthesize listOfMissions, listOfDescriptions, previewImage, tableView, descriptionLabel, missionName;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -31,7 +30,10 @@
 
 #pragma mark -
 #pragma mark View management
--(void) viewDidLoad {
+-(void) viewDidLoad
+{
+    [super viewDidLoad];
+    
     self.previewImage.layer.borderColor = [[UIColor darkYellowColor] CGColor];
     self.previewImage.layer.borderWidth = 3.8f;
     self.previewImage.layer.cornerRadius = 14;
@@ -50,12 +52,11 @@
     self.tableView.separatorColor = [UIColor whiteColor];
 
     self.descriptionLabel.textColor = [UIColor lightYellowColor];
-    [super viewDidLoad];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:random()%[self.listOfMissions count] inSection:0];
-    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:arc4random_uniform((int)[self.listOfMissionIDs count]) inSection:0];
+    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     [super viewWillAppear:animated];
 }
@@ -65,43 +66,136 @@
 
     if (button.tag == 0) {
         [[AudioManagerController mainManager] playBackSound];
-        [[self parentViewController] dismissModalViewControllerAnimated:YES];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     } else {
         [GameInterfaceBridge registerCallingController:self];
         [GameInterfaceBridge startMissionGame:self.missionName];
     }
 }
 
-#pragma mark -
-#pragma mark override setters/getters for better memory handling
--(NSArray *)listOfMissions {
-    if (listOfMissions == nil)
-        self.listOfMissions = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TRAININGS_DIRECTORY() error:NULL];
-    return listOfMissions;
+#pragma mark - Missions dictionaries methods
+
+- (NSDictionary *)newLocalizedMissionsDictionary
+{
+    NSString *languageID = [HWUtils languageID];
+    
+    NSString *missionsDescLocation = [[NSString alloc] initWithFormat:@"%@/missions_en.txt",LOCALE_DIRECTORY()];
+    NSString *localizedMissionsDescLocation = [[NSString alloc] initWithFormat:@"%@/missions_%@.txt", LOCALE_DIRECTORY(), languageID];
+    
+    if (![languageID isEqualToString:@"en"] && [[NSFileManager defaultManager] fileExistsAtPath:localizedMissionsDescLocation])
+    {
+        NSDictionary *missionsDict = [self newMissionsDictionaryFromMissionsFile:missionsDescLocation];
+        NSDictionary *localizedMissionsDict = [self newMissionsDictionaryFromMissionsFile:localizedMissionsDescLocation];
+        
+        [missionsDescLocation release];
+        [localizedMissionsDescLocation release];
+        
+        NSMutableDictionary *tempMissionsDict = [[NSMutableDictionary alloc] init];
+        
+        for (NSString *key in [missionsDict allKeys])
+        {
+            if ([localizedMissionsDict objectForKey:key])
+            {
+                [tempMissionsDict setObject:[localizedMissionsDict objectForKey:key] forKey:key];
+            }
+            else
+            {
+                [tempMissionsDict setObject:[missionsDict objectForKey:key] forKey:key];
+            }
+        }
+        
+        [missionsDict release];
+        [localizedMissionsDict release];
+        
+        return tempMissionsDict;
+    }
+    else
+    {
+        NSDictionary *missionsDict = [self newMissionsDictionaryFromMissionsFile:missionsDescLocation];
+        
+        [missionsDescLocation release];
+        [localizedMissionsDescLocation release];
+        
+        return missionsDict;
+    }
 }
 
--(NSArray *)listOfDescriptions {
-    if (listOfDescriptions == nil) {
-        NSString *descLocation = [[NSString alloc] initWithFormat:@"%@/missions_en.txt",LOCALE_DIRECTORY()];
-        NSString *descComplete = [[NSString alloc] initWithContentsOfFile:descLocation encoding:NSUTF8StringEncoding error:NULL];
-        [descLocation release];
-        NSArray *descArray = [descComplete componentsSeparatedByString:@"\n"];
-        NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[descArray count]/3];
-        [descComplete release];
-        // sanity check to avoid having missions and descriptions conflicts
-        for (NSUInteger i = 0; i < [self.listOfMissions count]; i++) {
-            NSString *desc = [[self.listOfMissions objectAtIndex:i] stringByDeletingPathExtension];
-            for (NSString *str in descArray)
-                if ([str hasPrefix:desc] && [str hasSuffix:@"\""]) {
-                    NSArray *descriptionText = [str componentsSeparatedByString:@"\""];
-                    [filteredArray insertObject:[descriptionText objectAtIndex:1] atIndex:i];
-                    break;
-                }
+- (NSDictionary *)newMissionsDictionaryFromMissionsFile:(NSString *)filePath
+{
+    NSMutableDictionary *missionsDict = [[NSMutableDictionary alloc] init];
+    
+    NSString *missionsFileContents = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    NSArray *missionsLines = [missionsFileContents componentsSeparatedByString:@"\n"];
+    [missionsFileContents release];
+    
+    for (NSString *line in missionsLines)
+    {
+        if ([line length] > 0)
+        {
+            NSUInteger firstDotLocation = [line rangeOfString:@"."].location;
+            
+            NSString *missionID = [line substringToIndex:firstDotLocation];
+            
+            NSString *missionFullPath = [NSString stringWithFormat:@"%@%@.lua", TRAININGS_DIRECTORY(), missionID];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:missionFullPath])
+            {
+                continue;
+            }
+            
+            NSString *nameOrDesc = [line substringFromIndex:firstDotLocation+1];
+            
+            NSString *missionParsedName = ([nameOrDesc hasPrefix:@"name="]) ? [nameOrDesc stringByReplacingOccurrencesOfString:@"name=" withString:@""] : nil;
+            NSString *missionParsedDesc = ([nameOrDesc hasPrefix:@"desc="]) ? [nameOrDesc stringByReplacingOccurrencesOfString:@"desc=" withString:@""] : nil;
+            
+            if (![missionsDict objectForKey:missionID])
+            {
+                NSMutableDictionary *missionDict = [[NSMutableDictionary alloc] init];
+                [missionsDict setObject:missionDict forKey:missionID];
+                [missionDict release];
+            }
+            
+            NSMutableDictionary *missionDict = [missionsDict objectForKey:missionID];
+            
+            if (missionParsedName)
+            {
+                [missionDict setObject:missionParsedName forKey:@"name"];
+            }
+            
+            if (missionParsedDesc)
+            {
+                missionParsedDesc = [missionParsedDesc stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                [missionDict setObject:missionParsedDesc forKey:@"desc"];
+            }
+            
+            [missionsDict setObject:missionDict forKey:missionID];
         }
-        self.listOfDescriptions = filteredArray;
-        [filteredArray release];
     }
-    return listOfDescriptions;
+    
+    return missionsDict;
+}
+
+#pragma mark -
+#pragma mark override setters/getters for better memory handling
+
+-(NSArray *)listOfMissionIDs
+{
+    if (!_listOfMissionIDs)
+    {
+        NSArray *sortedKeys = [[self.dictOfMissions allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        _listOfMissionIDs = [[NSArray alloc] initWithArray:sortedKeys];
+    }
+    
+    return _listOfMissionIDs;
+}
+
+- (NSDictionary *)dictOfMissions
+{
+    if (!_dictOfMissions)
+    {
+        _dictOfMissions = [self newLocalizedMissionsDictionary];
+    }
+    
+    return _dictOfMissions;
 }
 
 #pragma mark -
@@ -111,7 +205,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.listOfMissions count];
+    return [self.listOfMissionIDs count];
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -126,21 +220,28 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:(IS_IPAD()) ? UITableViewCellStyleDefault : UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
-
-    cell.textLabel.text = [[[self.listOfMissions objectAtIndex:row] stringByDeletingPathExtension]
-                           stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    
+    NSString *missionID = [self.listOfMissionIDs objectAtIndex:row];
+    cell.textLabel.text = self.dictOfMissions[missionID][@"name"];
+    
     cell.textLabel.textColor = [UIColor lightYellowColor];
     //cell.textLabel.font = [UIFont fontWithName:@"Bradley Hand Bold" size:[UIFont labelFontSize]];
     cell.textLabel.textAlignment = (IS_IPAD()) ? UITextAlignmentCenter : UITextAlignmentLeft;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.detailTextLabel.text = (IS_IPAD()) ? nil : [self.listOfDescriptions objectAtIndex:row];
+    cell.detailTextLabel.text = (IS_IPAD()) ? nil : self.dictOfMissions[missionID][@"desc"];
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
     cell.detailTextLabel.numberOfLines = ([cell.detailTextLabel.text length] % 40);
     cell.detailTextLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor colorWithRed:(85.0/255.0) green:(15.0/255.0) blue:(106.0/255.0) alpha:1.0];
+    bgColorView.layer.masksToBounds = YES;
+    cell.selectedBackgroundView = bgColorView;
+    [bgColorView release];
+    
     cell.backgroundColor = [UIColor blackColorTransparent];
     return cell;
 }
@@ -150,7 +251,7 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
 
-    self.missionName = [[self.listOfMissions objectAtIndex:row] stringByDeletingPathExtension];
+    self.missionName = [self.listOfMissionIDs objectAtIndex:row];
     NSString *size = IS_IPAD() ? @"@2x" : @"";
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@%@.png",GRAPHICS_DIRECTORY(),self.missionName,size];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:filePath];
@@ -158,24 +259,27 @@
     [self.previewImage setImage:img];
     [img release];
 
-    self.descriptionLabel.text = [self.listOfDescriptions objectAtIndex:row];
+    self.descriptionLabel.text = self.dictOfMissions[self.missionName][@"desc"];
 }
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+-(void) didReceiveMemoryWarning
+{
     self.previewImage = nil;
     self.missionName = nil;
-    self.listOfMissions = nil;
-    self.listOfDescriptions = nil;
+    self.listOfMissionIDs = nil;
+    self.dictOfMissions = nil;
     // if you nil this one it won't get updated anymore
     //self.previewImage = nil;
     [super didReceiveMemoryWarning];
 }
 
--(void) viewDidUnload {
-    self.listOfMissions = nil;
-    self.listOfDescriptions = nil;
+-(void) viewDidUnload
+{
+    self.listOfMissionIDs = nil;
+    self.dictOfMissions = nil;
     self.previewImage = nil;
     self.tableView = nil;
     self.descriptionLabel = nil;
@@ -185,13 +289,14 @@
 }
 
 
--(void) dealloc {
-    releaseAndNil(listOfMissions);
-    releaseAndNil(listOfDescriptions);
-    releaseAndNil(previewImage);
-    releaseAndNil(tableView);
-    releaseAndNil(descriptionLabel);
-    releaseAndNil(missionName);
+-(void) dealloc
+{
+    releaseAndNil(_listOfMissionIDs);
+    releaseAndNil(_dictOfMissions);
+    releaseAndNil(_previewImage);
+    releaseAndNil(_tableView);
+    releaseAndNil(_descriptionLabel);
+    releaseAndNil(_missionName);
     [super dealloc];
 }
 

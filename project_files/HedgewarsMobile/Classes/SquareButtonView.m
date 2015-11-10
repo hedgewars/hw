@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -61,7 +61,7 @@
 -(void) selectColor:(NSUInteger) color {
     if (color != self.selectedColor) {
         self.selectedColor = color;
-        self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
+        self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInteger:color]];
 
         self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
                                                green:((color & 0x0000FF00) >> 8)/255.0f

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,23 +13,44 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
- 
+
 {$INCLUDE "options.inc"}
 
 unit ArgParsers;
 interface
 
-{$IFNDEF HWLIBRARY}
 procedure GetParams;
-{$ELSE}
-procedure parseCommandLine(argc: LongInt; argv: PPChar);
+{$IFDEF HWLIBRARY}
+var operatingsystem_parameter_argc: LongInt = 0; export;
+    operatingsystem_parameter_argv: pointer = nil; export;
+    operatingsystem_parameter_envp: pointer = nil; export;
+
+function ParamCount: LongInt;
+function ParamStr(i: LongInt): shortstring;
 {$ENDIF}
 
 implementation
 uses uVariables, uTypes, uUtils, uSound, uConsts;
-var isInternal: Boolean {$IFDEF HWLIBRARY} = true{$ENDIF};
+var isInternal: Boolean;
+
+{$IFDEF HWLIBRARY}
+
+type PCharArray = array[0..255] of PChar;
+     PPCharArray = ^PCharArray;
+
+function ParamCount: LongInt;
+begin
+    ParamCount:= operatingsystem_parameter_argc - 1
+end;
+
+function ParamStr(i: LongInt): shortstring;
+begin
+    ParamStr:= StrPas(PPCharArray(operatingsystem_parameter_argv)^[i])
+end;
+
+{$ENDIF}
 
 procedure GciEasterEgg;
 begin
@@ -45,7 +66,6 @@ begin
     WriteLn(stdout, '          \/////////////          \/////////  \///////////      ');
     WriteLn(stdout, '                                                                ');
     WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
-    WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
     WriteLn(stdout, '                                                                ');
 end;
 
@@ -112,7 +132,7 @@ begin
         end
 end;
 
-function parseNick(nick: String): String;
+function parseNick(nick: shortstring): shortstring;
 begin
     if isInternal then
         parseNick:= DecodeBase64(nick)
@@ -147,6 +167,7 @@ begin
     // Silence the hint that appears when USE_VIDEO_RECORDING is not defined
     paramIndex:= paramIndex;
 {$IFDEF USE_VIDEO_RECORDING}
+{$IFNDEF HWLIBRARY}
     GameType:= gmtRecord;
     inc(paramIndex);
     cVideoFramerateNum:= StrToInt(ParamStr(paramIndex)); inc(paramIndex);
@@ -157,44 +178,50 @@ begin
     cVideoQuality:= StrToInt(ParamStr(paramIndex));      inc(paramIndex);
     cAudioCodec:= ParamStr(paramIndex);                  inc(paramIndex);
 {$ENDIF}
+{$ENDIF}
 end;
 
-function getLongIntParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
+function getLongIntParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
 var tmpInt, c: LongInt;
 begin
     inc(paramIndex);
+{$IFDEF PAS2C OR HWLIBRARY}
+    val(str, tmpInt);
+{$ELSE}
     val(str, tmpInt, c);
     wrongParameter:= c <> 0;
     if wrongParameter then
         WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"');
+{$ENDIF}
     getLongIntParameter:= tmpInt;
 end;
 
-function getStringParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): String;
+function getstringParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): shortstring;
 begin
     inc(paramIndex);
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
+    {$IFNDEF HWLIBRARY}
     if wrongParameter then
-         WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
-    getStringParameter:= str;
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
+    {$ENDIF}
+    getstringParameter:= str;
 end;
 
+procedure parseClassicParameter(cmdarray: array of string; size:LongInt; var paramIndex:LongInt); forward;
 
-procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt); Forward;
-
-function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
-      audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
-      otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
-      mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray: Array [1..18] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..34] of shortstring = (
+function parseParameter(cmd:string; arg:string; var paramIndex:LongInt): Boolean;
+const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
+      audioarray: array [0..2] of string = ('--volume','--nomusic','--nosound');
+      otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
+      mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allarray: array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+      reallyAll: array[0..35] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -205,9 +232,9 @@ begin
 
     while (cmdIndex <= High(reallyAll)) and (cmd <> reallyAll[cmdIndex]) do inc(cmdIndex);
     case cmdIndex of
-        {--prefix}               0 : PathPrefix        := getStringParameter (arg, paramIndex, parseParameter);
-        {--user-prefix}          1 : UserPathPrefix    := getStringParameter (arg, paramIndex, parseParameter);
-        {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
+        {--prefix}               0 : PathPrefix        := getstringParameter (arg, paramIndex, parseParameter);
+        {--user-prefix}          1 : UserPathPrefix    := getstringParameter (arg, paramIndex, parseParameter);
+        {--locale}               2 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
         {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
         {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
@@ -222,14 +249,14 @@ begin
         {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
         {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
         {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}                17 : UserNick          := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
+        {--nick}                17 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
         {--depth}               18 : setDepth(paramIndex);
-        {--set-video}           19 : parseClassicParameter(videoArray,5,paramIndex);
-        {--set-audio}           20 : parseClassicParameter(audioArray,3,paramIndex);
-        {--set-other}           21 : parseClassicParameter(otherArray,3,paramIndex);
-        {--set-multimedia}      22 : parseClassicParameter(mediaArray,10,paramIndex);
-        {--set-everything}      23 : parseClassicParameter(allArray,14,paramIndex);
+        {--set-video}           19 : parseClassicParameter(videoarray,5,paramIndex);
+        {--set-audio}           20 : parseClassicParameter(audioarray,3,paramIndex);
+        {--set-other}           21 : parseClassicParameter(otherarray,3,paramIndex);
+        {--set-multimedia}      22 : parseClassicParameter(mediaarray,10,paramIndex);
+        {--set-everything}      23 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
         {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
         {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
@@ -239,13 +266,14 @@ begin
         {--stats-only}          28 : statsOnlyGame();
         {--gci}                 29 : GciEasterEgg();
         {--help}                30 : DisplayUsage();
-        {--no-teamtag}          31 : cTagsMask := cTagsMask and not htTeamName;
-        {--no-hogtag}           32 : cTagsMask := cTagsMask and not htName;
-        {--no-healthtag}        33 : cTagsMask := cTagsMask and not htHealth;
-        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent 
+        {--no-teamtag}          31 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           32 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        33 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            35 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
-        //Asusme the first "non parameter" is the replay file, anything else is invalid
+        //Assume the first "non parameter" is the replay file, anything else is invalid
         if (recordFileName = '') and (Copy(cmd,1,2) <> '--') then
             recordFileName := cmd
         else
@@ -257,10 +285,10 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt);
+procedure parseClassicParameter(cmdarray: array of string; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
-    cmd, arg, newSyntax: String;
+    cmd, arg, newSyntax: string;
 begin
     WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
@@ -273,8 +301,8 @@ begin
         begin
         newSyntax:= '';
         inc(paramIndex);
-        cmd:= cmdArray[index];
-        arg:= ParamStr(paramIndex);
+        cmd:= cmdarray[index];
+        arg:= cmdarray[paramIndex];
         isValid:= (cmd<>'--depth');
 
         // check if the parameter is a boolean one
@@ -287,9 +315,9 @@ begin
         if isValid then
             begin
             parseParameter(cmd, arg, tmpInt);
-            newSyntax := newSyntax + cmd + ' ';
+            newSyntax:= newSyntax + cmd + ' ';
             if not isBool then
-                newSyntax := newSyntax + arg + ' ';
+                newSyntax:= newSyntax + arg + ' ';
             end;
         inc(index);
         end;
@@ -299,15 +327,16 @@ begin
     WriteLn(stdout, '');
 end;
 
-procedure parseCommandLine{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar){$ENDIF};
+procedure parseCommandLine;
 var paramIndex: LongInt;
     paramTotal: LongInt;
     index, nextIndex: LongInt;
     wrongParameter: boolean;
 //var tmpInt: LongInt;
 begin
+
     paramIndex:= {$IFDEF HWLIBRARY}0{$ELSE}1{$ENDIF};
-    paramTotal:= {$IFDEF HWLIBRARY}argc-1{$ELSE}ParamCount{$ENDIF}; //-1 because pascal enumeration is inclusive
+    paramTotal:= ParamCount; //-1 because pascal enumeration is inclusive
     (*
     WriteLn(stdout, 'total parameters: ' + inttostr(paramTotal));
     tmpInt:= 0;
@@ -324,23 +353,18 @@ begin
         index:= paramIndex;
         if index = paramTotal then nextIndex:= index
         else nextIndex:= index+1;
-        {$IFDEF HWLIBRARY}
-        wrongParameter:= parseParameter( argv[index], argv[nextIndex], paramIndex);
-        {$ELSE}
         wrongParameter:= parseParameter( ParamStr(index), ParamStr(nextIndex), paramIndex);
-        {$ENDIF}
         inc(paramIndex);
         end;
     if wrongParameter = true then
         GameType:= gmtSyntax;
 end;
 
-{$IFNDEF HWLIBRARY}
 procedure GetParams;
 begin
     isInternal:= (ParamStr(1) = '--internal');
 
-    UserPathPrefix := '.';
+    UserPathPrefix := _S'.';
     PathPrefix     := cDefaultPathPrefix;
     recordFileName := '';
     parseCommandLine();
@@ -351,7 +375,7 @@ begin
         GameType := gmtSyntax;
         end;
 
-    if (not isInternal) and (recordFileName = '') then
+    if (not cTestLua) and (not isInternal) and (recordFileName = '') then
         begin
         WriteLn(stderr, 'You must specify a replay file');
         GameType := gmtSyntax;
@@ -367,7 +391,6 @@ begin
     WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
     *)
 end;
-{$ENDIF}
 
 end.
 

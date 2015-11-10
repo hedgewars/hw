@@ -35,7 +35,7 @@ function getCompletedStatus()
 			status.moon01 = true
 		end
 		if allStatus:sub(2,2) == "1" then
-			status.fuit01 = true
+			status.fruit01 = true
 		end
 		if allStatus:sub(3,3) == "1" then
 			status.fruit02 = true
@@ -117,10 +117,4 @@ function split(s, delimiter)
 		table.insert(res, tonumber(first))
 	end
 	return res
-end
-
--- returns the distance of 2 gears
-function distance(gear1, gear2)
-	local dist = math.sqrt(math.pow((GetX(gear1) - GetX(gear2)),2) + math.pow((GetY(gear1) - GetY(gear2)),2))
-	return dist
 end

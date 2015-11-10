@@ -36,109 +36,109 @@
 #include <stddef.h>
 
 struct _flib_netconn {
-	flib_netbase *netBase;
-	char *playerName;
-	char *dataDirPath;
+    flib_netbase *netBase;
+    char *playerName;
+    char *dataDirPath;
 
-	int netconnState;			//!< One of the NETCONN_STATE constants
+    int netconnState;           //!< One of the NETCONN_STATE constants
 
-	bool isChief;				//!< Player can modify the current room
-	flib_map *map;
-	flib_teamlist pendingTeamlist;
-	flib_teamlist teamlist;
-	flib_scheme *scheme;
-	char *style;
-	flib_weaponset *weaponset;
+    bool isChief;               //!< Player can modify the current room
+    flib_map *map;
+    flib_teamlist pendingTeamlist;
+    flib_teamlist teamlist;
+    flib_scheme *scheme;
+    char *style;
+    flib_weaponset *weaponset;
 
-	void (*onMessageCb)(void *context, int msgtype, const char *msg);
-	void *onMessageCtx;
+    void (*onMessageCb)(void *context, int msgtype, const char *msg);
+    void *onMessageCtx;
 
-	void (*onConnectedCb)(void *context);
-	void *onConnectedCtx;
+    void (*onConnectedCb)(void *context);
+    void *onConnectedCtx;
 
-	void (*onDisconnectedCb)(void *context, int reason, const char *message);
-	void *onDisconnectedCtx;
+    void (*onDisconnectedCb)(void *context, int reason, const char *message);
+    void *onDisconnectedCtx;
 
-	void (*onRoomlistCb)(void *context, const flib_room **rooms, int roomCount);
-	void *onRoomlistCtx;
+    void (*onRoomlistCb)(void *context, const flib_room **rooms, int roomCount);
+    void *onRoomlistCtx;
 
-	void (*onRoomAddCb)(void *context, const flib_room *room);
-	void *onRoomAddCtx;
+    void (*onRoomAddCb)(void *context, const flib_room *room);
+    void *onRoomAddCtx;
 
-	void (*onRoomDeleteCb)(void *context, const char *name);
-	void *onRoomDeleteCtx;
+    void (*onRoomDeleteCb)(void *context, const char *name);
+    void *onRoomDeleteCtx;
 
-	void (*onRoomUpdateCb)(void *context, const char *oldName, const flib_room *room);
-	void *onRoomUpdateCtx;
+    void (*onRoomUpdateCb)(void *context, const char *oldName, const flib_room *room);
+    void *onRoomUpdateCtx;
 
-	void (*onClientFlagsCb)(void *context, const char *nick, const char *flags, bool newFlagState);
-	void *onClientFlagsCtx;
+    void (*onClientFlagsCb)(void *context, const char *nick, const char *flags, bool newFlagState);
+    void *onClientFlagsCtx;
 
-	void (*onChatCb)(void *context, const char *nick, const char *msg);
-	void *onChatCtx;
+    void (*onChatCb)(void *context, const char *nick, const char *msg);
+    void *onChatCtx;
 
-	void (*onLobbyJoinCb)(void *context, const char *nick);
-	void *onLobbyJoinCtx;
+    void (*onLobbyJoinCb)(void *context, const char *nick);
+    void *onLobbyJoinCtx;
 
-	void (*onLobbyLeaveCb)(void *context, const char *nick, const char *partMessage);
-	void *onLobbyLeaveCtx;
+    void (*onLobbyLeaveCb)(void *context, const char *nick, const char *partMessage);
+    void *onLobbyLeaveCtx;
 
-	void (*onRoomJoinCb)(void *context, const char *nick);
-	void *onRoomJoinCtx;
+    void (*onRoomJoinCb)(void *context, const char *nick);
+    void *onRoomJoinCtx;
 
-	void (*onRoomLeaveCb)(void *context, const char *nick, const char *partMessage);
-	void *onRoomLeaveCtx;
+    void (*onRoomLeaveCb)(void *context, const char *nick, const char *partMessage);
+    void *onRoomLeaveCtx;
 
-	void (*onNickTakenCb)(void *context, const char *nick);
-	void *onNickTakenCtx;
+    void (*onNickTakenCb)(void *context, const char *nick);
+    void *onNickTakenCtx;
 
-	void (*onPasswordRequestCb)(void *context, const char *nick);
-	void *onPasswordRequestCtx;
+    void (*onPasswordRequestCb)(void *context, const char *nick);
+    void *onPasswordRequestCtx;
 
-	void (*onEnterRoomCb)(void *context, bool chief);
-	void *onEnterRoomCtx;
+    void (*onEnterRoomCb)(void *context, bool chief);
+    void *onEnterRoomCtx;
 
-	void (*onLeaveRoomCb)(void *context, int reason, const char *message);
-	void *onLeaveRoomCtx;
+    void (*onLeaveRoomCb)(void *context, int reason, const char *message);
+    void *onLeaveRoomCtx;
 
-	void (*onTeamAddCb)(void *context, const flib_team *team);
-	void *onTeamAddCtx;
+    void (*onTeamAddCb)(void *context, const flib_team *team);
+    void *onTeamAddCtx;
 
-	void (*onTeamDeleteCb)(void *context, const char *teamname);
-	void *onTeamDeleteCtx;
+    void (*onTeamDeleteCb)(void *context, const char *teamname);
+    void *onTeamDeleteCtx;
 
-	void (*onRunGameCb)(void *context);
-	void *onRunGameCtx;
+    void (*onRunGameCb)(void *context);
+    void *onRunGameCtx;
 
-	void (*onTeamAcceptedCb)(void *context, const char *teamName);
-	void *onTeamAcceptedCtx;
+    void (*onTeamAcceptedCb)(void *context, const char *teamName);
+    void *onTeamAcceptedCtx;
 
-	void (*onHogCountChangedCb)(void *context, const char *teamName, int hogs);
-	void *onHogCountChangedCtx;
+    void (*onHogCountChangedCb)(void *context, const char *teamName, int hogs);
+    void *onHogCountChangedCtx;
 
-	void (*onTeamColorChangedCb)(void *context, const char *teamName, int colorIndex);
-	void *onTeamColorChangedCtx;
+    void (*onTeamColorChangedCb)(void *context, const char *teamName, int colorIndex);
+    void *onTeamColorChangedCtx;
 
-	void (*onEngineMessageCb)(void *context, const uint8_t *message, size_t size);
-	void *onEngineMessageCtx;
+    void (*onEngineMessageCb)(void *context, const uint8_t *message, size_t size);
+    void *onEngineMessageCtx;
 
-	void (*onSchemeChangedCb)(void *context, const flib_scheme *scheme);
-	void *onSchemeChangedCtx;
+    void (*onSchemeChangedCb)(void *context, const flib_scheme *scheme);
+    void *onSchemeChangedCtx;
 
-	void (*onMapChangedCb)(void *context, const flib_map *map, int changetype);
-	void *onMapChangedCtx;
+    void (*onMapChangedCb)(void *context, const flib_map *map, int changetype);
+    void *onMapChangedCtx;
 
-	void (*onScriptChangedCb)(void *context, const char *script);
-	void *onScriptChangedCtx;
+    void (*onScriptChangedCb)(void *context, const char *script);
+    void *onScriptChangedCtx;
 
-	void (*onWeaponsetChangedCb)(void *context, const flib_weaponset *weaponset);
-	void *onWeaponsetChangedCtx;
+    void (*onWeaponsetChangedCb)(void *context, const flib_weaponset *weaponset);
+    void *onWeaponsetChangedCtx;
 
-	void (*onServerVarCb)(void *context, const char *name, const char *value);
-	void *onServerVarCtx;
+    void (*onServerVarCb)(void *context, const char *name, const char *value);
+    void *onServerVarCtx;
 
-	bool running;
-	bool destroyRequested;
+    bool running;
+    bool destroyRequested;
 };
 
 void netconn_clearCallbacks(flib_netconn *conn);

@@ -13,35 +13,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import <UIKit/UIKit.h>
 
-
-@class GameConfigViewController;
-@class SettingsContainerViewController;
-@class AboutViewController;
-@class SavedGamesViewController;
-@class RestoreViewController;
-@class MissionTrainingViewController;
-
-@interface MainMenuViewController : UIViewController <UIAlertViewDelegate> {
-    GameConfigViewController *gameConfigViewController;
-    SettingsContainerViewController *settingsViewController;
-    AboutViewController *aboutViewController;
-    SavedGamesViewController *savedGamesViewController;
-    RestoreViewController *restoreViewController;
-    MissionTrainingViewController *missionsViewController;
-}
-
-@property (nonatomic,retain) GameConfigViewController *gameConfigViewController;
-@property (nonatomic,retain) SettingsContainerViewController *settingsViewController;
-@property (nonatomic,retain) AboutViewController *aboutViewController;
-@property (nonatomic,retain) SavedGamesViewController *savedGamesViewController;
-@property (nonatomic,retain) RestoreViewController *restoreViewController;
-@property (nonatomic,retain) MissionTrainingViewController *missionsViewController;
+@interface MainMenuViewController : UIViewController <UIAlertViewDelegate>
 
 -(IBAction) switchViews:(id)sender;
 

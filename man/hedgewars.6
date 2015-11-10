@@ -20,19 +20,29 @@ Hedgewars \- a free turn based strategy game
 .SH "SYNOPSIS"
 .
 .B hedgewars
-[\fIOPTIONS\fR]
+[\fIOPTION\fR...]
+[\fICONNECTSTRING\fR]
 .
 .SH "DESCRIPTION"
 Each player controls a team of several hedgehogs. During the course of the game, players take turns with one of their hedgehogs. They then use whatever tools and weapons are available to attack and kill the opponents' hedgehogs, thereby winning the game. Hedgehogs may move around the terrain in a variety of ways, normally by walking and jumping but also by using particular tools such as the "Rope" or "Parachute", to move to otherwise inaccessible areas. Each turn is time\-limited to ensure that players do not hold up the game with excessive thinking or moving.
 .SH "OPTIONS"
 .
 .TP 
-.BI \-style \ name
-sets Qt GUI Style (qtconfig names). Example: \-style Oxygen
+\fB\-\-help\fR
+Displays help and exits
+.TP
+\fB\-\-config-dir=PATH\fR
+Custom path for configuration data and user data
+.TP
+\fB\-\-data-dir=PATH\fR
+Custom path to the game data folder
+.SH "CONNECTSTRING"
+.
+If a CONNECTSTRING (e.g. "hwplay://netserver.hedgewars.org") is supplied, then hedgewars will try to connect to the specified destination on start.
 .
 .SH "COPYRIGHT"
 .
-Copyright \(co 2004\-2008 Andrey Korotaev, Igor Ulyanov
+Copyright \(co 2004\-2015 Andrey Korotaev, Igor Ulyanov
 .br 
 This is Free Software; this software is licensed under the GPL version 2, as published by the Free Software Foundation.
 There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef _TCPBASE_INCLUDED
@@ -27,7 +27,10 @@
 #include <QString>
 #include <QDir>
 #include <QProcess>
+#include <QThread>
 #include <QPointer>
+#include <QVector>
+#include <QList>
 
 #include <QImage>
 
@@ -42,6 +45,9 @@ class TCPBase : public QObject
         virtual ~TCPBase();
 
         virtual bool couldBeRemoved();
+        virtual bool simultaneousRun();
+        bool isConnected();
+        bool hasStarted();
 
     signals:
         void isReadyNow();
@@ -67,8 +73,13 @@ class TCPBase : public QObject
 
     private:
         static QPointer<QTcpServer> IPCServer;
-
+#ifdef HWLIBRARY
+        QThread * thread;
+#else
+        QProcess * process;
+#endif
         bool m_isDemoMode;
+        bool m_connected;
         void RealStart();
         QPointer<QTcpSocket> IPCSocket;
 
@@ -77,6 +88,7 @@ class TCPBase : public QObject
         void ClientDisconnect();
         void ClientRead();
         void StartProcessError(QProcess::ProcessError error);
+        void onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus);
 
         void tcpServerReady();
 };
@@ -89,12 +101,17 @@ public:
     EngineInstance(QObject *parent = 0);
     ~EngineInstance();
 
-    int port;
+    void setArguments(const QStringList & arguments);
+
 public slots:
-    void start(void);
+    void start();
+
 signals:
-    void finished(void);
+    void finished();
+
 private:
+    QList<QByteArray> m_arguments;
+    QVector<char *> m_argv;
 };
 #endif
 

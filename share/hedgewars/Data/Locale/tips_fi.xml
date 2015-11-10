@@ -1,0 +1,47 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Valitse sama väri kaverisi kanssa pelataksesi samassa joukkueessa. Kumpikin ohjaa omia siilejään, mutta voitatte ja häviätte yhdessä.</tip>
+    <tip>Jotkut aseet tekevät vain vähän vahinkoa, mutta voivat olla tuhoisampia oikeassa tilanteessa. Kokeile ampua useampi siili veteen Desert Eaglella.</tip>
+    <tip>Jos et tiedä mitä tehdä etkä halua tuhlata ammuksia, jätä vuoro väliin. Mutta älä anna ajan kulua liikaa koska Äkkikuolema koittaa ennemmin tai myöhemmin!</tip>
+    <tip>Jos haluat estää muita käyttämästä nimimerkkiäsi virallisella palvelimella, rekisteröi tunnus osoitteessa http://www.hedgewars.org/.</tip>
+    <tip>Kyllästyttääkö normaali peli? Kokeila tehtäviä - Ne tarjoaa erilaisia pelitapoja riippuen valinnasta.</tip>
+    <tip>Oletuksena viimeisin peli nauhoitetaan demoksi. Valitse 'Demot' vasemmasta alakulmasta katsoaksesi ja hallitaksesi niitä.</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jos sinulla on ongelmia, kysy keskustelualueilta apua, mutta älä odota 24/7-tukea!</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jos pidät siitä, voit auttaa meitä pienellä lahjoituksella tai omaa työllä!</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jaa sitä perheesi ja ystäviesi kesken miten haluat!</tip>
+    <tip>Toisinaan järjestetään virallisia turnauksia. Tulevista tapahtumista tiedotetaan osoitteessa http://www.hedgewars.org/ muutama päivä etukäteen.</tip>
+    <tip>Hedgewars on saatavilla monilla kielillä. Jos oman kielinen käännös puuttuu tai on vanhentunut, ota yhteyttä!</tip>
+    <tip>Hedgewars toimii useilla eri käyttöjärjestelmillä, kuten Microsoft Windowsissa, Mac OS X:ssä ja Linuxissa.</tip>
+    <tip>Muista että voit aina luoda oman pelisi paikallisesti ja verkkopelissä. Et ole rajoitettu yksinkertaiseen peliin.</tip>
+    <tip>Pelatessa sinun pitäisi pitää lyhyt tauko vähintään kerran tunnissa.</tip>
+    <tip>Jos näytönohjaimesi ei tarjoa laitteistokiihdytettä OpenGL:ää, kokeile heikennetyn laadun tilaa parantaaksesi suorituskykyä.</tip>
+    <tip>Me olemme avoimia ehdotuksille ja rakentavalle palautteelle. Jos et pidä jostain tai sinulla on loistava idea, kerro meille!</tip>
+    <tip>Erityisesti verkossa pelattaessa ole kohtelias ja muista että alaikäisiä saattaa myös olla pelaamassa.</tip>
+    <tip>Erityispelimoodit kuten 'Vampyrismi' ja 'Karma' mahdollistavat kokonaan uusien taktiikoiden kehittämisen. Kokeile niitä muokatussa pelissä!</tip>
+    <tip>Sinun ei ikinä tulisi asentaa Hedgewarsia tietokoneille joita et omista (koulu, yliopisto, työpaikka jne.). Ole hvä ja pyydä vastuuhenkilöä tekemään se!</tip>
+    <tip>Hedgewars voi olla täydellinen peli tauoille. Mutta varmista ettet lisää liian montaa siiltä ta käytä liian suurta karttaa. Ajan ja terveyden vähentäminen voi myös auttaa.</tip>
+    <tip>Yhtään siiliä ei vahingoitettu tämän pelin tekemisen aikana.</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jos joku myi sinulle tämän pelin, koita saada rahasi takaisin!</tip>
+    <tip>Yhdistä yksi tai useampi peliohjain ennen pelin käynnistämistä liittääksesi niiden kontrollit omaan joukkueeseesi.</tip>
+    <tip>Luo käyttäjätili osoitteessa %1 estääksesi muita käyttämästä suosikkinimimerkkiäsi pelatessasi virallisella palvelimella.</tip>
+    <tip>Jos näytönohjaimesi ei tue laitteistokiihdytettyä OpenGL:ää, kokeile päivittää ajurit.</tip>
+    <tip>Hyppyjä on saatavilla kolmea erilaista. Napauta [korkea hyppy]-nappai kahdesti tehdäksesi todella korkean/taaksepäin hypyn.</tip>
+    <tip>Pelkäätkö että putoat kielekkeeltä? Pidä [tarkkuus]-näppäintä pohjassa kääntyäksesi [vasemmalle] ja [oikealle] liikkumatta.</tip>
+    <tip>Jotkut aseet vaativat erityisstrategiaa tai todella paljon harjoittelua, joten älä anna periksi vaikka et kerran osuisikaan.</tip>
+    <tip></tip>
+    <tip>Vanha Limburger-juusto aiheuttaa vain pienen räjähdyksen, mutta tuulen vaikuttama hajupilvi voi myrkyttää suuren määrän siiliä kerralla.</tip>
+    <tip>Pianoisku on vahingollisin ilmaisku. Menetät siilen joka sen esittää, joten sillä on myös suuri huono puoli.</tip>
+    <tip>Tarttuvat miinat ovat täydellinen työkalu luomaan pieniä ketjureaktioita jotka vie vihollissiilit kauheisiin tilanteisiin...tai veteen.</tip>
+    <tip>Vasara on tehokkaimmillaan silloilla ja palkeilla. Lyödyt siilit iskeytyvät maan läpi.</tip>
+    <tip>Jos olet jumissa vihollissiilin takana, käytä vasaraa vapauttaaksesi itsesi ilman että vahingoidut räjädyksen voimasta.</tip>
+    <tip>Kakun pisin mahdollinen kulkumatka riippuu maastosta. Käytä [hyökkäystä] räjäyttääksesi sen aikaisemmin.</tip>
+    <tip>Liekinheitin on ase mutta sitä voi käyttää myös tunneleiden kaivamiseen.</tip>
+    <tip>Haluatko tietää ketkä ovat pelin takana? Klikkaa Hedgewars-logoa päävalikossa nähdäksesi tekijäluettelon.</tip>
+    <tip>Piirrä vapaasti omia hautoja, hattuja, lippuja ja jopa karttoja ja teemoja! Mutta huomaa että sinun pitää jakaa ne jossain käyttääksesi niitä verkossa.</tip>
+    <tip>Haluatko todella pitää tiettyä hattua? Lahjoita meille niin saat yksinoikeudella vapaavalintaisen hatun!</tip>
+    <tip>Pidä näytönohjaimesi ajurit ajantasall välttääksesi ongelmat pelin pelaamisessa.</tip>
+    <tip>Löydät Hedgewars-asetustiedostot hakemistosta "Omat tiedostot\Hedgewars". Ota varmuuskopio tai ota ne mukaasi, mutta älä muokkaa niitä käsin.</tip>
+</tips>

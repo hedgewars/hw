@@ -22,7 +22,7 @@ type android_LogPriority=integer;
 function __android_log_write(prio:longint;tag,text:pchar):longint; cdecl; external libname name '__android_log_write';
 
 //function __android_log_print(prio:longint;tag,print:pchar;params:array of pchar):longint; cdecl; external libname name '__android_log_print';
-  
+
 implementation
 
 end.

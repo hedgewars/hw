@@ -1,7 +1,7 @@
 /*
  * WAD support routines for PhysicsFS.
  *
- * This driver handles DOOM engine archives ("wads"). 
+ * This driver handles DOOM engine archives ("wads").
  * This format (but not this driver) was designed by id Software for use
  *  with the DOOM engine.
  * The specs of the format are from the unofficial doom specs v1.666
@@ -28,7 +28,7 @@
  *    (c) an 8-byte ASCII string, the name of the lump, padded with zeros.
  *        For example, the "DEMO1" entry in hexadecimal would be
  *        (44 45 4D 4F 31 00 00 00)
- * 
+ *
  * Note that there is no way to tell if an opened WAD archive is a
  *  IWAD or PWAD with this archiver.
  * I couldn't think of a way to provide that information, without being too

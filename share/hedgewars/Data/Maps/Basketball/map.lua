@@ -14,6 +14,7 @@ function onGameInit()
 	Explosives = 0
 	Delay = 500
 	SuddenDeathTurns = 99999 -- "disable" sudden death
+    Map = 'BasketballField'
 end
 
 function onGameStart()
@@ -52,4 +53,8 @@ function onGearDelete(gear)
 			ShowMission(loc("Hedgewars-Basketball"), loc("Not So Friendly Match"), s, -amBaseballBat, 0)
 		end
 	end
+end
+
+function onNewTurn()
+    SetWeapon(amBaseballBat)
 end

@@ -142,7 +142,7 @@ function onGameInit()
 	-- the rest of the Yellow Watermelons
 	local yellowHats = { "fr_apple", "fr_banana", "fr_lemon", "fr_orange" }
 	for i=1,7 do
-		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, yellowArmy[i].health, yellowHats[math.random(1,4)])
+		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, yellowArmy[i].health, yellowHats[GetRandom(4)+1])
 		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
 	end
 
@@ -456,7 +456,7 @@ function gameLost()
 		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
 		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there"))
 		SendStat(siCustomAchievement, loc("You will play every 3 turns"))
-		SendStat(siCustomAchievement, loc("Green hogs won't intenionally hurt you"))
+		SendStat(siCustomAchievement, loc("Green hogs won't intentionally hurt you"))
 	end
 	SendStat(siPlayerKills,'1',teamC.name)
 	SendStat(siPlayerKills,'0',teamA.name)

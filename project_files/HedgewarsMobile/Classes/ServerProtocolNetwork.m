@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -69,20 +69,21 @@ static ServerProtocolNetwork *serverConnection;
 #pragma mark Communication layer
 -(int) sendToServer:(NSString *)command {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
-    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     [message release];
     return result;
 }
 
 -(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
-    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
     [message release];
     return result;
 }
 
 -(void) serverProtocol {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     IPaddress ip;
     BOOL clientQuit = NO;
     char *buffer = (char *)malloc(sizeof(char)*BUFFER_SIZE);
@@ -206,7 +207,7 @@ static ServerProtocolNetwork *serverConnection;
     SDLNet_TCP_Close(self.ssd);
     SDLNet_Quit();
 
-    [pool release];
+    }
 }
 
 @end

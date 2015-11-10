@@ -1,4 +1,22 @@
-{-# LANGUAGE ScopedTypeVariables #-}
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 module OfficialServer.GameReplayStore where
 
 import Data.Time
@@ -12,6 +30,7 @@ import Control.Monad
 import Data.List
 import qualified Data.ByteString as B
 import System.Directory
+import Control.DeepSeq
 ---------------
 import CoreTypes
 import EngineInteraction
@@ -19,13 +38,13 @@ import EngineInteraction
 
 pickReplayFile :: Int -> [String] -> IO String
 pickReplayFile p blackList = do
-    files <- liftM (filter (\f -> sameProto f && notBlacklisted f)) $ getDirectoryContents "replays"
+    files <- liftM (filter (\f -> sameProto f && notBlacklisted ("replays/" ++ f))) $ getDirectoryContents "replays"
     if (not $ null files) then
         return $ "replays/" ++ head files
         else
         return ""
     where
-        sameProto = (isSuffixOf ('.' : show p))
+        sameProto = isSuffixOf ('.' : show p)
         notBlacklisted = flip notElem blackList
 
 saveReplay :: RoomInfo -> IO ()
@@ -51,11 +70,12 @@ loadReplay p blackList = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "
     where
         loadFile :: String -> IO (Maybe CheckInfo, [B.ByteString])
         loadFile fileName = E.handle (\(e :: SomeException) ->
-                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Nothing, [])) $ do
+                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Just $ CheckInfo fileName [] Nothing, [])) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
-            return $ (
-                Just (CheckInfo fileName teams)
-                , replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs)
+            let d = replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs)
+            d `deepseq` return $ (
+                Just (CheckInfo fileName teams (fst d))
+                , snd d
                 )
 
 moveFailedRecord :: String -> IO ()

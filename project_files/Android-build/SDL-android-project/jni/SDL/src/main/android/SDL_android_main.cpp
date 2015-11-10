@@ -27,19 +27,19 @@ extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeInit(JNIEnv* env,
     char *argv[argc];
     jstring jstringArgv[argc];
     for(int i = 0; i < argc; i++){
-		jstringArgv[i] = (jstring)env->GetObjectArrayElement(strArray, i);  //get the element
-		argv[i] = (char*)malloc(env->GetStringUTFLength(jstringArgv[i]) + 1);
-		const char *str = env->GetStringUTFChars(jstringArgv[i], NULL);
-		strcpy(argv[i], str); //copy it to a mutable location
-        env->ReleaseStringUTFChars(jstringArgv[i], str);           
+        jstringArgv[i] = (jstring)env->GetObjectArrayElement(strArray, i);  //get the element
+        argv[i] = (char*)malloc(env->GetStringUTFLength(jstringArgv[i]) + 1);
+        const char *str = env->GetStringUTFChars(jstringArgv[i], NULL);
+        strcpy(argv[i], str); //copy it to a mutable location
+        env->ReleaseStringUTFChars(jstringArgv[i], str);
     }
-    
+
     /* Run the application code! */
     int status = SDL_main(argc, argv);
 
     //Clean up argv
     for(int i = 0; i < argc; i++){
-		free(argv[i]);
+        free(argv[i]);
     }
 }
 

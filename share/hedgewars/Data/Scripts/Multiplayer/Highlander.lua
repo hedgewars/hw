@@ -89,29 +89,34 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
-local airWeapons = 	{amAirAttack, amMineStrike, amNapalm, amDrillStrike --[[,amPiano]]}
-
-local atkArray = 	{
-					amBazooka, amBee, amMortar, amDrill, --[[amSnowball,]]
-					amGrenade, amClusterBomb, amMolotov, amWatermelon, amHellishBomb, amGasBomb,
-					amShotgun, amDEagle, amFlamethrower, amSniperRifle, amSineGun, amIceGun,
-					amFirePunch, amWhip, amBaseballBat, --[[amKamikaze,]] amSeduction, --[[amHammer,]]
-					amMine, amDynamite, amCake, amBallgun, amRCPlane, amSMine,
-					amRCPlane, amSMine,
-					amBirdy
+-- These define weps allowed by the script. At present Tardis and Resurrection is banned for example
+-- These were arbitrarily defined out-of-order in initial script, so that was preserved here, resulting 
+-- in a moderately odd syntax.
+local atkWeps = 	{
+					[amBazooka]=true, [amBee]=true, [amMortar]=true, [amDrill]=true, [amSnowball]=true,
+                    [amGrenade]=true, [amClusterBomb]=true, [amMolotov]=true, [amWatermelon]=true,
+                    [amHellishBomb]=true, [amGasBomb]=true, [amShotgun]=true, [amDEagle]=true,
+                    [amFlamethrower]=true, [amSniperRifle]=true, [amSineGun]=true, 
+					[amFirePunch]=true, [amWhip]=true, [amBaseballBat]=true, [amKamikaze]=true,
+                    [amSeduction]=true, [amHammer]=true, [amMine]=true, [amDynamite]=true, [amCake]=true,
+                    [amBallgun]=true, [amSMine]=true, [amRCPlane]=true, [amBirdy]=true, [amKnife]=true,
+                    [amAirAttack]=true, [amMineStrike]=true, [amNapalm]=true, [amDrillStrike]=true, [amPiano]=true, [amAirMine] = true,
 					}
 
-local utilArray = 	{
-					amBlowTorch, amPickHammer, amGirder, amPortalGun,
-					amRope, amParachute, amTeleport, amJetpack,
-					amInvulnerable, amLaserSight, --[[amVampiric,]]
-					amLowGravity, amExtraDamage, --[[amExtraTime,]]
-					amLandGun
-					--[[,amTardis, amResurrector, amSwitch]]
+local utilWeps =  {
+					[amBlowTorch]=true, [amPickHammer]=true, [amGirder]=true, [amPortalGun]=true,
+					[amRope]=true, [amParachute]=true, [amTeleport]=true, [amJetpack]=true,
+					[amInvulnerable]=true, [amLaserSight]=true, [amVampiric]=true,
+					[amLowGravity]=true, [amExtraDamage]=true, [amExtraTime]=true,
+					[amLandGun]=true, [amRubber]=true, [amIceGun]=true,
 					}
 
-local wepArray = 	{}
+local wepArray = {}
+
+local atkChoices = {}
+local utilChoices = {}
 
 local currHog
 local lastHog
@@ -120,6 +125,20 @@ local switchStage = 0
 
 local lastWep = amNothing
 local shotsFired = 0
+
+local probability = {1,2,5,10,20,50,200,500,1000000};
+local atktot = 0
+local utiltot = 0
+local maxWep = 57 -- game crashes if you exceed supported #
+
+local someHog = nil -- just for looking up the weps
+
+local mode = nil
+
+function onParameters()
+    parseParams()
+    mode = params["mode"]
+end
 
 function CheckForWeaponSwap()
 	if GetCurAmmoType() ~= lastWep then
@@ -142,20 +161,40 @@ function onHogAttack()
 end
 
 function StartingSetUp(gear)
-
-	for i = 1, #wepArray do
-		setGearValue(gear,wepArray[i],0)
+    for i = 1,maxWep do
+        setGearValue(gear,i,0)
+    end
+    for w,c in pairs(wepArray) do
+        if c == 9 and (atkWeps[w] or utilWeps[w])  then
+            setGearValue(gear,w,1)
+        end
 	end
 
-	setGearValue(gear,amKamikaze,100)
 	setGearValue(gear,amSkip,100)
-
-	i = 1 + GetRandom(#atkArray)
-	setGearValue(gear,atkArray[i],1)
-
-	i = 1 + GetRandom(#utilArray)
-	setGearValue(gear,utilArray[i],1)
-
+   
+    local r = 0
+    if atktot > 0 then
+        r = GetRandom(atktot)+1
+        for i = 1,maxWep do
+        --for w,c in pairs(atkChoices) do
+            --WriteLnToConsole('     c: '..c..' w:'..w..' r:'..r)
+            if atkChoices[i] >= r then
+                setGearValue(gear,i,1)
+                break
+            end
+        end
+    end
+    if utiltot > 0 then
+        r = GetRandom(utiltot)+1
+        for i = 1,maxWep do
+       -- for w,c in pairs(utilChoices) do
+            --WriteLnToConsole('util c: '..c..' w:'..w..' r:'..r)
+            if utilChoices[i] >= r then
+                setGearValue(gear,i,1)
+                break
+            end
+        end
+    end
 end
 
 --[[function SaveWeapons(gear)
@@ -169,11 +208,9 @@ end
 end]]
 
 function ConvertValues(gear)
-
-	for i = 1, #wepArray do
-		AddAmmo(gear, wepArray[i], getGearValue(gear,wepArray[i]) )
-	end
-
+    for w,c in pairs(wepArray) do
+		AddAmmo(gear, w, getGearValue(gear,w) )
+    end
 end
 
 -- this is called when a hog dies
@@ -181,18 +218,17 @@ function TransferWeps(gear)
 
 	if CurrentHedgehog ~= nil then
 
-		for i = 1, #wepArray do
-			val = getGearValue(gear,wepArray[i])
-			if val ~= 0 then
-
-				setGearValue(CurrentHedgehog, wepArray[i], val)
+        for w,c in pairs(wepArray) do
+			val = getGearValue(gear,w)
+			if val ~= 0 and (mode == "orig" or (wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0))  then
+				setGearValue(CurrentHedgehog, w, val)
 
 				-- if you are using multi-shot weapon, gimme one more
-				if (GetCurAmmoType()  == wepArray[i]) and (shotsFired ~= 0) then
-					AddAmmo(CurrentHedgehog, wepArray[i], val+1)
+				if (GetCurAmmoType() == w) and (shotsFired ~= 0) then
+					AddAmmo(CurrentHedgehog, w, val+1)
 				-- assign ammo as per normal
 				else
-					AddAmmo(CurrentHedgehog, wepArray[i], val)
+					AddAmmo(CurrentHedgehog, w, val)
 				end
 
 			end
@@ -203,12 +239,38 @@ function TransferWeps(gear)
 end
 
 function onGameInit()
-	GameFlags = bor(GameFlags,gfInfAttack + gfRandomOrder + gfPerHogAmmo)
+	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
+	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
 end
 
 function onGameStart()
+    utilChoices[amSkip] = 0
+    local c = 0
+    for i = 1,maxWep do
+        atkChoices[i] = 0
+        utilChoices[i] = 0
+        if i ~= 7 then
+            wepArray[i] = 0
+            c = GetAmmoCount(someHog, i)
+            if c > 8 then c = 9 end
+            wepArray[i] = c
+            if c < 9 and c > 0 then
+                if atkWeps[i] then
+                    --WriteLnToConsole('a    c: '..c..' w:'..i)
+                    atktot = atktot + probability[c]
+                    atkChoices[i] = atktot
+                elseif utilWeps[i] then
+                    --WriteLnToConsole('u    c: '..c..' w:'..i)
+                    utiltot = utiltot + probability[c]
+                    utilChoices[i] = utiltot
+                end
+            end
+        end
+    end
 
+    --WriteLnToConsole('utiltot:'..utiltot..' atktot:'..atktot)
+        
 	ShowMission	(
 				loc("HIGHLANDER"),
 				loc("Not all hogs are born equal."),
@@ -220,27 +282,8 @@ function onGameStart()
 				"", 4, 4000
 				)
 
-	if MapHasBorder() == false then
-       	for i, w in pairs(airWeapons) do
-            table.insert(atkArray, w)
-        end
-	end
-
-	for i, w in pairs(atkArray) do
-        table.insert(wepArray, w)
-	end
-
-	for i, w in pairs(utilArray) do
-        table.insert(wepArray, w)
-	end
-
-	table.insert(wepArray, amSkip)
-	table.insert(wepArray, amKamikaze)
-
 	runOnGears(StartingSetUp)
 	runOnGears(ConvertValues)
-
-
 end
 
 function CheckForHogSwitch()
@@ -296,6 +339,7 @@ function onGearAdd(gear)
 
 	if (GetGearType(gear) == gtHedgehog) then
 		trackGear(gear)
+        if someHog == nil then someHog = gear end
 	end
 
 end
@@ -308,8 +352,3 @@ function onGearDelete(gear)
 	end
 
 end
-
-function onAmmoStoreInit()
-	-- no, you can't set your own ammo scheme
-end
-

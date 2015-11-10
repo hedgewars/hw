@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -27,17 +27,18 @@
 
 -(CGFloat) safeScale {
     CGFloat theScale = 1.0f;
-    if ([self respondsToSelector:@selector(scale)])
-         theScale = [self scale];
+//    if ([self respondsToSelector:@selector(scale)])
+//         theScale = [self scale];
     return theScale;
 }
 
 -(CGRect) safeBounds {
-    CGRect original = [self bounds];
-    if (IS_ON_PORTRAIT())
-        return original;
-    else
-        return CGRectMake(original.origin.x, original.origin.y, original.size.height, original.size.width);
+    return [self bounds];
+//    CGRect original = [self bounds];
+//    if (IS_ON_PORTRAIT())
+//        return original;
+//    else
+//        return CGRectMake(original.origin.x, original.origin.y, original.size.height, original.size.width);
 }
 
 @end
@@ -99,17 +100,35 @@
 -(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title {
     [self initWithFrame:frame];
     [self setTitle:title forState:UIControlStateNormal];
+    [self applyBlackQuickStyle];
+
+    return self;
+}
+
+- (void)applyBlackQuickStyle
+{
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
     self.backgroundColor = [UIColor blackColorTransparent];
-
-    [self.layer setBorderWidth:1];
+    
+    [self.layer setBorderWidth:1.0f];
     [self.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
     [self.layer setCornerRadius:9.0f];
     [self.layer setMasksToBounds:YES];
+}
 
-    return self;
+- (void)applyDarkBlueQuickStyle
+{
+    [self setTitleColor:[UIColor darkYellowColor] forState:UIControlStateNormal];
+    [self setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    self.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+    self.backgroundColor = [UIColor darkBlueColorTransparent];
+    
+    [self.layer setBorderWidth:2.0f];
+    [self.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
+    [self.layer setCornerRadius:9.0f];
+    [self.layer setMasksToBounds:YES];
 }
 
 @end

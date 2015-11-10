@@ -13,12 +13,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import "SingleWeaponViewController.h"
 
+@interface SingleWeaponViewController ()
+@property (nonatomic, retain) NSString *trPath;
+@property (nonatomic, retain) NSString *trFileName;
+@end
 
 @implementation SingleWeaponViewController
 @synthesize weaponName, description, ammoStoreImage;
@@ -32,9 +36,10 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
-    NSString *trFilePath = [NSString stringWithFormat:@"%@/%@.txt",LOCALE_DIRECTORY(),[[NSLocale preferredLanguages] objectAtIndex:0]];
+    self.trPath = [NSString stringWithFormat:@"%@", LOCALE_DIRECTORY()];
+    self.trFileName = [NSString stringWithFormat:@"%@.txt", [HWUtils languageID]];
     // fill the data structure that we are going to read
-    LoadLocaleWrapper([trFilePath UTF8String]);
+    LoadLocaleWrapper([self.trPath UTF8String], [self.trFileName UTF8String]);
 
     quantity = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
     probability = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
@@ -261,6 +266,9 @@
 
 
 -(void) dealloc {
+    releaseAndNil(_trPath);
+    releaseAndNil(_trFileName);
+    
     releaseAndNil(weaponName);
     releaseAndNil(description);
     releaseAndNil(ammoStoreImage);

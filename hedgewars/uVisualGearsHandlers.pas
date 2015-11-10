@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 (*
@@ -24,15 +24,15 @@
  * => The usage of safe functions or data types (e.g. GetRandom() or hwFloat)
  * is usually not necessary and therefore undesirable.
  *)
- 
-{$INCLUDE "options.inc"} 
- 
+
+{$INCLUDE "options.inc"}
+
 unit uVisualGearsHandlers;
 
 interface
-uses uTypes;
+uses uTypes, uGears;
 
-var doStepHandlers: array[TVisualGearType] of TVGearStepProcedure;
+var doStepVGHandlers: array[TVisualGearType] of TVGearStepProcedure;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 procedure doStepBeeTrace(Gear: PVisualGear; Steps: Longword);
@@ -75,48 +75,57 @@ function isSorterActive: boolean; inline;
 procedure initModule;
 
 implementation
-uses uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
+uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
     moved: boolean;
+    vfc, vft: LongWord;
 begin
 if vobCount = 0 then exit;
 
 sign:= 1;
 with Gear^ do
     begin
-    inc(FrameTicks, Steps);
-    if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
-        begin
-        dec(FrameTicks, vobFrameTicks);
-        inc(Frame);
-        if Frame = vobFramesCount then
-            Frame:= 0
-        end
-    else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
-        begin
-        dec(FrameTicks, vobSDFrameTicks);
-        inc(Frame);
-        if Frame = vobSDFramesCount then
-            Frame:= 0
-        end;
+
     X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps * Gear^.Scale;
+
     if SuddenDeathDmg then
-        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale
+        begin
+        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale;
+        vfc:= vobSDFramesCount;
+        vft:= vobSDFrameTicks;
+        end
     else
+        begin
         Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps * Gear^.Scale;
+        vfc:= vobFramesCount;
+        vft:= vobFrameTicks;
+        end;
+
+    if vft > 0 then
+        begin
+        inc(FrameTicks, Steps);
+        if FrameTicks > vft then
+            begin
+            dec(FrameTicks, vft);
+            inc(Frame);
+            if Frame = vfc then
+                Frame:= 0
+            end;
+        end;
+
     Angle:= Angle + dAngle * Steps;
     if Angle > 360 then
         Angle:= Angle - 360
     else
         if Angle < - 360 then
             Angle:= Angle + 360;
-    
-  
+
+
     if (round(X) >= cLeftScreenBorder)
     and (round(X) <= cRightScreenBorder)
-    and (round(Y) - 75 <= LAND_HEIGHT)
+    and (round(Y) - 250 <= LAND_HEIGHT)
     and (Timer > 0) and (Timer-Steps > 0) then
         begin
         if tdX > 0 then
@@ -143,23 +152,31 @@ with Gear^ do
             X:= X + cScreenSpace;
             moved:= true
             end
-        else
-            if round(X) > cRightScreenBorder then
-                begin
-                X:= X - cScreenSpace;
-                moved:= true
-                end;
+        else if round(X) > cRightScreenBorder then
+            begin
+            X:= X - cScreenSpace;
+            moved:= true
+            end;
             // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
-        if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then
+        if (Gear^.Layer = 2) and (round(Y) - 400 > LAND_HEIGHT) and (cGravityf >= 0) then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y - (1024 + 250 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
+            Y:= Y-(1024 + 400 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
             moved:= true
             end
-        else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then
+        else if (Gear^.Layer <> 2) and (round(Y) - 150 > LAND_HEIGHT) and (cGravityf >= 0) then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y - (1024 + random(25));
+            Y:= Y-(1024 + 200 + random(50));
+            moved:= true
+            end
+        else if (round(Y) < LAND_HEIGHT-1200) and (cGravityf < 0) then // gravity can make flakes move upwards
+            begin
+            X:= cLeftScreenBorder + random(cScreenSpace);
+            if Gear^.Layer = 2 then
+                Y:= Y+(1024 + 150 + random(100))
+            else
+                Y:= Y+(1024 + random(50));
             moved:= true
             end;
         if moved then
@@ -249,7 +266,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepLineTrail(Gear: PVisualGear; Steps: Longword);
 begin
+{$IFNDEF PAS2C}
 Steps := Steps;
+{$ENDIF}
 if Gear^.Timer <= Steps then
     DeleteVisualGear(Gear)
 else
@@ -343,7 +362,7 @@ Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 Gear^.dX := Gear^.dX / (1.001 * Steps);
 Gear^.dY := Gear^.dY / (1.001 * Steps);
 
-if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
+if (Gear^.FrameTicks <= Steps) or (not CheckCoordInWater(round(Gear^.X), round(Gear^.Y))) then
     DeleteVisualGear(Gear)
 else
     dec(Gear^.FrameTicks, Steps)
@@ -352,7 +371,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
 begin
-Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
+if ((cWindSpeedf > 0) and ( leftX > Gear^.X))
+or ((cWindSpeedf < 0) and (rightX < Gear^.X)) then
+    Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 
 if Gear^.FrameTicks <= Steps then
@@ -494,7 +515,8 @@ end;
 procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
 var i, t, h: LongInt;
 begin
-for t:= 1 to min(Steps, Gear^.Timer) do
+if currsorter = Gear then
+  for t:= 1 to min(Steps, Gear^.Timer) do
     begin
     dec(Gear^.Timer);
     if (Gear^.Timer and 15) = 0 then
@@ -528,7 +550,9 @@ var i: Longword;
     b: boolean;
     t, h: LongInt;
 begin
+{$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
+{$ENDIF}
 
 for t:= 0 to Pred(TeamsCount) do
     with thexchar[t] do
@@ -583,43 +607,60 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
+var realgear: PGear;
 begin
 if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
-
-if (Gear^.Hedgehog^.Gear <> nil) then
+realgear:= nil;
+if Gear^.Frame <> 0 then  // use a non-hedgehog gear - a lua trick that hopefully won't be overused
+    begin
+    realgear:= GearByUID(Gear^.Frame);
+    if realgear <> nil then
+        begin
+        Gear^.X:= hwFloat2Float(realgear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
+        Gear^.Y:= hwFloat2Float(realgear^.Y) - (realgear^.Radius + Gear^.Tex^.h);
+        end
+    end
+else if Gear^.Hedgehog^.Gear <> nil then
     begin
     Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
-    Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (16 + Gear^.Tex^.h);
+    Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (cHHRadius + Gear^.Tex^.h);
     end;
 
-if Gear^.Timer = 0 then
+if (Gear^.Timer = 0) or ((realgear = nil) and (Gear^.Frame <> 0))  then
     begin
-    if Gear^.Hedgehog^.SpeechGear = Gear then
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.SpeechGear = Gear) then
         Gear^.Hedgehog^.SpeechGear:= nil;
     DeleteVisualGear(Gear)
     end;
 end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
+var realgear: PGear;
 begin
+
+{$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
+{$ENDIF}
+if Gear^.Frame <> 0 then
+    realgear:= GearByUID(Gear^.FrameTicks)
+else
+    begin
+    with Gear^.Hedgehog^ do
+        if SpeechGear <> nil then
+            SpeechGear^.Timer:= 0;
+    realgear:= Gear^.Hedgehog^.Gear;
+    Gear^.Hedgehog^.SpeechGear:= Gear;
+    end;
 
-with Gear^.Hedgehog^ do
-    if SpeechGear <> nil then
-        SpeechGear^.Timer:= 0;
-
-Gear^.Hedgehog^.SpeechGear:= Gear;
+if realgear <> nil then
+    case Gear^.FrameTicks of
+        1: Gear^.Tag:= SpritesData[sprSpeechTail].Width-37+realgear^.Radius;
+        2: Gear^.Tag:= SpritesData[sprThoughtTail].Width-29+realgear^.Radius;
+        3: Gear^.Tag:= SpritesData[sprShoutTail].Width-19+realgear^.Radius;
+        end;
 
 Gear^.Timer:= max(LongInt(Length(Gear^.Text)) * 150, 3000);
-
-Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
-
-// FrameTicks cannot hold negative values
-case Gear^.FrameTicks of
-    1: Gear^.Tag:= SpritesData[sprSpeechTail].Width-28;
-    2: Gear^.Tag:= SpritesData[sprThoughtTail].Width-20;
-    3: Gear^.Tag:= SpritesData[sprShoutTail].Width-10;
-    end;
+Gear^.Tex:= RenderSpeechBubbleTex(ansistring(Gear^.Text), Gear^.FrameTicks, fnt16);
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
 
@@ -655,9 +696,9 @@ s:= '';
 
 str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
-    Gear^.Tex:= RenderStringTex(s, Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
+    Gear^.Tex:= RenderStringTex(ansistring(s), Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else
-    Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
+    Gear^.Tex:= RenderStringTex(ansistring(s), cWhiteColor, fnt16);
 
 Gear^.doStep:= @doStepHealthTagWork;
 
@@ -708,10 +749,10 @@ var i: LongWord;
 begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
-for i:= 0 to 31 do 
+for i:= 0 to 31 do
     begin
     vg:= AddVisualGear(gX, gY, vgtFire);
-    if vg <> nil then 
+    if vg <> nil then
         begin
         vg^.State:= gstTmpFlag;
         inc(vg^.FrameTicks, vg^.FrameTicks)
@@ -752,10 +793,10 @@ begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);
-for i:= 0 to 46 do 
+for i:= 0 to 46 do
     begin
     vg:= AddVisualGear(gX, gY, vgtFire);
-    if vg <> nil then 
+    if vg <> nil then
         begin
         vg^.State:= gstTmpFlag;
         inc(vg^.FrameTicks, vg^.FrameTicks)
@@ -768,9 +809,12 @@ for i:= 0 to 15 do
 Gear^.doStep:= @doStepBigExplosionWork;
 if Steps > 1 then
     Gear^.doStep(Gear, Steps-1);
+
+{$IFNDEF PAS2C}
 with mobileRecord do
     if (performRumble <> nil) and (not fastUntilLag) then
         performRumble(kSystemSoundID_Vibrate);
+{$ENDIF}
 end;
 
 procedure doStepChunk(Gear: PVisualGear; Steps: Longword);
@@ -829,31 +873,47 @@ with Gear^ do
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+var
+    currwindbar: PVisualGear = nil;
+
+procedure doStepSmoothWindBarWork(Gear: PVisualGear; Steps: Longword);
+begin
+    if currwindbar = Gear then
+    begin
+    inc(Gear^.Timer, Steps);
+
+    while Gear^.Timer >= 10 do
+        begin
+        dec(Gear^.Timer, 10);
+        if WindBarWidth < Gear^.Tag then
+            inc(WindBarWidth)
+        else if WindBarWidth > Gear^.Tag then
+            dec(WindBarWidth);
+        end;
+    if cWindspeedf > Gear^.dAngle then
+        begin
+        cWindspeedf := cWindspeedf - Gear^.Angle*Steps;
+        if cWindspeedf < Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+        end
+    else if cWindspeedf < Gear^.dAngle then
+        begin
+        cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
+        if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+        end;
+    end;
+
+    if ((WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
+    begin
+        if currwindbar = Gear then currwindbar:= nil;
+        DeleteVisualGear(Gear)
+    end
+end;
+
 procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 begin
-inc(Gear^.Timer, Steps);
-    
-while Gear^.Timer >= 10 do
-    begin
-    dec(Gear^.Timer, 10);
-    if WindBarWidth < Gear^.Tag then
-        inc(WindBarWidth)
-    else if WindBarWidth > Gear^.Tag then
-        dec(WindBarWidth);
-    end;
-if cWindspeedf > Gear^.dAngle then
-    begin
-    cWindspeedf := cWindspeedf - Gear^.Angle*Steps;
-    if cWindspeedf < Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
-    end
-else if cWindspeedf < Gear^.dAngle then
-    begin
-    cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
-    if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
-    end;
-        
-if (WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)  then 
-    DeleteVisualGear(Gear)
+    currwindbar:= Gear;
+    Gear^.doStep:= @doStepSmoothWindBarWork;
+    doStepSmoothWindBarWork(Gear, Steps)
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepStraightShot(Gear: PVisualGear; Steps: Longword);
@@ -861,16 +921,38 @@ begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 Gear^.Y:= Gear^.Y - Gear^.dY * Steps;
 
+Gear^.dY:= Gear^.dY + Gear^.tdY * Steps;
+Gear^.dX:= Gear^.dX + Gear^.tdX * Steps;
+
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)
 else
     begin
     dec(Gear^.FrameTicks, Steps);
-    if (Gear^.FrameTicks < 501) and (Gear^.FrameTicks mod 5 = 0) then 
+    if (Gear^.FrameTicks < 501) and (Gear^.FrameTicks mod 5 = 0) then
         Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or (((Gear^.Tint and $000000FF) * Gear^.FrameTicks) div 500)
     end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepNoPlaceWarn(Gear: PVisualGear; Steps: Longword);
+begin
+
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    begin
+    // age
+    dec(Gear^.FrameTicks, Steps);
+    // toggle between orange and red every few ticks
+    if (Gear^.FrameTicks div 256) mod 2 = 0 then
+        Gear^.Tint:= $FF400000
+    else
+        Gear^.Tint:= $FF000000;
+    // fade out alpha
+    Gear^.Tint:= (Gear^.Tint and (not $FF)) or (255 * Gear^.FrameTicks div 3000);
+    end
+end;
 
 const handlers: array[TVisualGearType] of TVGearStepProcedure =
         (
@@ -906,12 +988,13 @@ const handlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepBulletHit,
             @doStepCircle,
             @doStepSmoothWindBar,
-            @doStepStraightShot
+            @doStepStraightShot,
+            @doStepNoPlaceWarn
         );
 
 procedure initModule;
 begin
-    doStepHandlers:= handlers
+    doStepVGHandlers:= handlers
 end;
 
 end.

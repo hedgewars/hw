@@ -488,7 +488,7 @@ static PHYSFS_sint64 zip_find_end_of_central_dir(PHYSFS_Io *io, PHYSFS_sint64 *l
                 (buf[i + 3] == 0x06) )
             {
                 found = 1;  /* that's the signature! */
-                break;  
+                break;
             } /* if */
         } /* for */
 
@@ -552,7 +552,7 @@ static void zip_free_entries(ZIPentry *entries, PHYSFS_uint64 max)
 
 /*
  * This will find the ZIPentry associated with a path in platform-independent
- *  notation. Directories don't have ZIPentries associated with them, but 
+ *  notation. Directories don't have ZIPentries associated with them, but
  *  (*isDir) will be set to non-zero if a dir was hit.
  */
 static ZIPentry *zip_find_entry(const ZIPinfo *info, const char *path,
@@ -724,7 +724,7 @@ static int zip_resolve_symlink(PHYSFS_Io *io, ZIPinfo *info, ZIPentry *entry)
 
     path = (char *) __PHYSFS_smallAlloc(size + 1);
     BAIL_IF_MACRO(!path, PHYSFS_ERR_OUT_OF_MEMORY, 0);
-    
+
     if (entry->compression_method == COMPMETH_NONE)
         rc = __PHYSFS_readAll(io, path, size);
 
@@ -1445,7 +1445,7 @@ static PHYSFS_sint64 zip_find_start_of_dir(ZIPinfo *info, const char *path,
                 rc = -1;
             else if ('/' > ch)
                 rc = 1;
-            else 
+            else
             {
                 if (stop_on_first_find) /* Just checking dir's existance? */
                     return middle;

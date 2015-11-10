@@ -21,7 +21,7 @@ function onGameInit()
 	SuddenDeathTurns = 99999
 
 	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default")
-	player = AddHog("Ikeda", 0, 10, "StrawHat")
+	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
 			
 	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")

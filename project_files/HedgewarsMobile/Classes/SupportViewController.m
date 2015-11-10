@@ -13,12 +13,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import "SupportViewController.h"
-
+#import "Appirater.h"
 
 @implementation SupportViewController
 @synthesize waysToSupport;
@@ -95,6 +95,7 @@
                 DLog(@"No way");
                 break;
         }
+        cell.accessoryView = nil;
     }
 
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",[[NSBundle mainBundle] resourcePath],imgName];
@@ -113,12 +114,17 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *urlString = nil;
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if ([indexPath section] == 0)
-        urlString = @"http://itunes.apple.com/us/app/hedgewars/id391234866?affC=QQABAAAAHgAFasEiWjVwUGZOc3k1VGctQkRJazlacXhUclpBTVpiU2xteVdfUQ%3D%3D#&mt=8";
+    {
+        [Appirater rateApp];
+    }
     else
-        switch ([indexPath row]) {
+    {
+        NSString *urlString = nil;
+        switch ([indexPath row])
+        {
             case 0:
                 urlString = @"http://www.facebook.com/Hedgewars";
                 break;
@@ -135,7 +141,8 @@
                 DLog(@"No way");
                 break;
         }
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+    }
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
@@ -154,7 +161,7 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         label.textAlignment = UITextAlignmentCenter;
-        label.text = @" ♥ THANK YOU ♥ ";
+        label.text = NSLocalizedString(@" ♥ THANK YOU ♥ ", nil);
         label.backgroundColor = [UIColor clearColor];
         label.center = CGPointMake(self.tableView.frame.size.width/2, 250);
         [footer addSubview:label];
@@ -167,7 +174,7 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     // image height + label height
-    return 265;
+    return (section == 1) ? 265 : 20;
 }
 
 #pragma mark -

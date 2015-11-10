@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef _HWMAP_CONTAINER_INCLUDED
 #define _HWMAP_CONTAINER_INCLUDED
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QComboBox>
-#include <QLabel>
 #include <QByteArray>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
 #include <QLineEdit>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include "DataManager.h"
 
@@ -59,6 +60,7 @@ class HWMapContainer : public QWidget
         QString getCurrentScheme() const;
         QString getCurrentWeapons() const;
         quint32 getTemplateFilter() const;
+        quint32 getFeatureSize() const;
         MapGenerator get_mapgen(void) const;
         int getMazeSize(void) const;
         bool getCurrentIsMission() const;
@@ -71,13 +73,15 @@ class HWMapContainer : public QWidget
     public slots:
         void askForGeneratedPreview();
         void setSeed(const QString & seed);
+        void setScript(const QString & script, const QString & scriptparam);
         void setMap(const QString & map);
         void setTheme(const QString & theme);
         void setTemplateFilter(int);
         void setMapgen(MapGenerator m);
         void setMazeSize(int size);
+        void setFeatureSize(int size);
         void setDrawnMapData(const QByteArray & ar);
-        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl, int featureSize);
         void updateModelViews();
         void onPreviewMapDestroyed(QObject * map);
         void setMaster(bool master);
@@ -89,16 +93,17 @@ class HWMapContainer : public QWidget
         void newTemplateFilter(int filter);
         void mapgenChanged(MapGenerator m);
         void mazeSizeChanged(int s);
+        void mapFeatureSizeChanged(int s);
         void drawMapRequested();
         void drawnMapChanged(const QByteArray & data);
 
     private slots:
-        void setImage(const QImage newImage);
+        void setImage(const QPixmap & newImage);
         void setHHLimit(int hhLimit);
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void addInfoToPreview(QPixmap image);
+        void addInfoToPreview(const QPixmap & image);
         void setNewSeed(const QString & newSeed);
         void mapTypeChanged(int);
         void showThemePrompt();
@@ -116,6 +121,7 @@ class HWMapContainer : public QWidget
     private:
         QVBoxLayout mainLayout;
         QPushButton* mapPreview;
+        QSlider* mapFeatureSize;
         QComboBox* chooseMap;
         MapModel * m_staticMapModel;
         MapModel * m_missionMapModel;
@@ -124,6 +130,8 @@ class HWMapContainer : public QWidget
         ThemeModel * m_themeModel;
         HWMap* pMap;
         QString m_seed;
+        QString m_script;
+        QString m_scriptparam;
         QPushButton* seedSet;
         QLabel* seedLabel;
         int hhLimit;
@@ -159,6 +167,7 @@ class HWMapContainer : public QWidget
         void intSetMapgen(MapGenerator m);
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
+        void intSetFeatureSize(int size);
         void intSetIconlessTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
         void setMapInfo(MapModel::MapInfo mapInfo);
@@ -170,6 +179,8 @@ class HWMapContainer : public QWidget
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;
+        int m_prevMapFeatureSize;
+        int m_mapFeatureSize;
         QString m_theme;
         QString m_curMap;
 

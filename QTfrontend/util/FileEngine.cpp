@@ -2,8 +2,8 @@
  * TODO: add copyright header, determine license
  */
 
-#include "hwpacksmounter.h"
 #include "FileEngine.h"
+#include "hwpacksmounter.h"
 
 
 const QString FileEngineHandler::scheme = "physfs:/";

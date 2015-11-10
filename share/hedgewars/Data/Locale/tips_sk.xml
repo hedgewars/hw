@@ -1,0 +1,57 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Ak chcete hrať s priateľom ako tím, jednoducho si zvoľte tú istú farbu. I naďalej budete ovládať svojich vlastných ježkov, ale víťazstvá či prehry budú spoločné.</tip>
+    <tip>Niektoré zbrane môžu spôsobovať málo škody, ale dokážu byť oveľa účinnejšie v tej správnej situácii. Skúste použiť Desert Eagle na zostrelenie viacerých ježkov do vody.</tip>
+    <tip>Ak neviete, čo robiť a nechcete mrhať muníciou, preskočte ťah. Ale nerobte tak príliš často, pretože príde Náhla smrť!</tip>
+    <tip>Ak nechcete, aby niekto iný používal vašu prezývku na oficiálnom serveri, registrujte si účet na http://www.hedgewars.org/.</tip>
+    <tip>Nudí vás štandardná hra? Vyskúšajte si jednu z misii - ponúkajú iný herný zážitok v závislosti na tom, akú si vyberiete.</tip>
+    <tip>Vo východzom nastavení sa posledná hra automaticky ukladá ako demo. Vyberte 'Miestna hra' a kliknite na tlačidlo 'Demá' v pravom dolnom rohu, ak si chcete demo uložiť alebo prehrať.</tip>
+    <tip>Hedgewars je Open Source a Freeware, ktorý vytvárame vo voľnom čase. Ak máte problém, spýtajte sa na fóre, ale nečakajte podporu 24 hodín v týždni!</tip>
+    <tip>Hedgewars je Open Source a Freeware, ktorý vytvárame vo voľnom čase. Ak chcete pomôcť, môžete nám zaslať malú finančnú výpomoc alebo prispieť vlastnou prácou!</tip>
+    <tip>Hedgewars je Open Source a Freeware, ktorý vytvárame vo voľnom čase. Podeľte sa oň so svojou rodinou a priateľmi!</tip>
+    <tip>Z času na čas bývajú usporiadavané oficiálne turnaje. Najbližšie akcie sú vždy uverejnené na http://www.hedgewars.org/ pár dní dopredu.</tip>
+    <tip>Hedgewars je dostupný v mnohých jazykoch. Ak preklad do vašej reči chýba alebo nie je aktuálny, prosím, kontaktujte nás!</tip>
+    <tip>Hedgewars beží na množstve rozličných operačných systémov vrátane Microsoft Windows, Mac OS X a Linuxu.</tip>
+    <tip>Nezabudnite, že si vždy môžete vytvoriť vlastnú lokálnu alebo sieťovú/online hru. Nie ste obmedzený len na voľbu 'Jednoduchá hra'.</tip>
+    <tip>Mali by ste si dopriať krátky odpočinok po každej hodine hry.</tip>
+    <tip>Ak vaša grafická karta nie je schopná poskytnúť hardvérovo akcelerované OpenGL, skúste povoliť režim nízkej kvality, aby ste dosiahli požadovaný výkon.</tip>
+    <tip>Sme otvorení novým nápadom a konštruktívnej kritike. Ak sa vám niečo nepáči alebo máte skvelý nápad, dajte nám vedieť!</tip>
+    <tip>Obzvlášť pri hre online buďte slušný a pamätajte, že s vami alebo proti vám môžu hrať tiež neplnoletí!</tip>
+    <tip>Špeciálne herné režimy ako 'Vampírizmus' alebo 'Karma' vám umožnia vyvinúť úplne novú taktiku. Vyskúšajte ich vo vlastnej hre!</tip>
+    <tip>Nikdy by ste nemali inštalovať Hedgewars na cudzí počítač (v škole, na univerzite, v práci, atď). Prosím, radšej požiadajte zodpovednú osobu!</tip>
+    <tip>Hedgewars môže byť výborná hra, ak máte krátku chvíľku počas prestávky. Iba sa uistite, že nepoužijete príliš veľa ježkov alebo príliš veľkú mapu. Rovnako môže pomocť zníženie času a zdravia.</tip>
+    <tip>Počas tvorby tejto hry nebolo ublížené žiadnemu ježkovi.</tip>
+    <tip>Hedgewars je Open Source a Freeware, ktorý vytvárame vo voľnom čase. Ak vám niekto túto hru predal, skúste žiadať o refundáciu!</tip>
+    <tip>Ak chcete pre hru použiť jeden alebo viacero gamepadov, pripojte ich pred spustením hry.</tip>
+    <tip>Vytvorte si účet na %1, aby ste tak zabránili ostatným používať vašu obľúbenú prezývku počas hrania na oficiálnom serveri.</tip>
+    <tip>Ak vaša grafická karta nie je schopná poskytnúť hardvérovo akcelerované OpenGL, skúste aktualizovať príslušné ovládače.</tip>
+    <tip>Dostupné sú tri rôzne výskoky. Dvakrát stlačte [vysoký skok] pre veľmi vysoký skok vzad.</tip>
+    <tip>Bojíte sa pádu z útesu? Podržte [presné mierenie] a stlačte [doľava] alebo [doprava] pre otočenie na mieste.</tip>
+    <tip>Niektoré zbrane vyžaduju osobitnú stratégiu alebo len veľa tréningu, takže to s vybranou zbraňou nevzdávajte, ak sa vám nepodarí trafiť nepriateľa.</tip>
+    <tip>Väčšina zbraní prestane fungovať pri kontakte s vodou. Navádzané včela a Torta sú výnimkami z tohto pravidla.</tip>
+    <tip>Starý cheeseburger spôsobí len malú explóziu. Obláčik smradu, ktorý je ovplyvňovaný vetrom, však dokáže otráviť množstvo ježkov.</tip>
+    <tip>Klavírový útok je najničivejší vzdušný útok. Pri jeho použití prídete o ježka, čo je jeho veľké mínus.</tip>
+    <tip>Lepkavé míny sú perfektným nástrojom na vytvorenie malých reťazových reakcii, vďaka ktorým postavíte ježkov do krajných situácii ... alebo vody.</tip>
+    <tip>Kladivo je najefektívnejšie pri použití na mostoch alebo trámoch. Zasiahnutí ježkovia prerazia zem.</tip>
+    <tip>Ak ste zaseknutý za nepriateľským ježkom, použite kladivo, aby ste sa oslobodili bez toho, aby vám ublížila explózia.</tip>
+    <tip>Maximálna prejdená vzdialenosť torty zavisí na zemi, ktorou musí prejsť. Použitie [útok], ak chcete spustiť detonáciu skôr.</tip>
+    <tip>Plameňomet je zbraň, no rovnako môže byť použitý na kopanie tunelov.</tip>
+    <tip>Chcete vedieť, kto stojí za hrou? Kliknite na logo Hedgewars v hlavnom menu pre zobrazenie zásluh.</tip>
+    <tip>Ak máte chuť, môžte si nakresliť vlastné hrobčeky, klobúky, vlajky alebo dokonca mapy a témy! Pamätajte však, že ak ich budete chcieť použiť v hre online, budete ich musieť zdieľať s ostatnými.</tip>
+    <tip>Chcete nosiť špecifický klobúk? Prispejte nám a ako odmenu získate exkluzívny klobúk podľa vášho výberu!</tip>
+    <tip>Aby ste sa vyhli problémom pri hre, udržujte ovládače vašej grafickej karty vždy aktuálne.</tip>
+    <tip>Konfiguračné súbory Hedgewars nájdete v "Moje Dokumenty\Hedgewars". Vytvárajte si zálohy alebo prenášajte si tieto súbory medzi počítačmi, ale needitujte ich ručne.</tip>
+    <tip>Chcete ušetriť lano? Kým ste vo vzduchu, uvoľnite ho a opäť vystreľte. Kým sa nedotknete zeme, môžete to isté lano znovu použiť bez toho, aby sa vám míňali jeho zásoby!</tip>
+    <tip>Páčia sa vám Hedgewars? Staňte sa fanúšikom na %1 alebo sa pripojte k našej skupine na %2. Môžte nás tiež nasledovať na %3!</tip>
+    <tip>Môžte priradiť súbory patriace Hedgewars (uložené hry a nahrávky záznamov) ku hre, čím sa vám budú otvárať priamo z vášho obľubeného prehliadača súborov alebo internetu.</tip>
+    <tip>Konfiguračné súbory Hedgewars nájdete v "Library/Application Support/Hedgewars" vo vašom domovskom adresári. Vytvárajte si zálohy alebo prenášajte si tieto súbory medzi počítačmi, ale needitujte ich ručne.</tip>
+    <tip>Konfiguračné súbory Hedgewars nájdete v ".hedgewars" vo vašom domovskom adresári. Vytvárajte si zálohy alebo prenášajte si tieto súbory medzi počítačmi, ale needitujte ich ručne.</tip>
+    <tip>Použite Molotovov koktejl alebo plameňomet na dočasné zabránenie ježkom prejsť terénom ako sú tunely alebo plošiny.</tip>
+    <tip>Navádzaná včela je trošku zložitejšia na použitie. Jej polomer otočenia závisí na jej rýchlosti, takže ju radšej nepoužívajte pri plnej sile.</tip>
+    <windows-only>
+        <tip>Hedgewars vo verzii pre Windows podporujú Xfire. Pridajte si Hedgewars do vášho zoznamu hier tak, aby vás vaši priatelia videli hrať.</tip>
+    </windows-only>
+</tips>

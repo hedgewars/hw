@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -27,7 +27,10 @@
     return rotationManager(interfaceOrientation);
 }
 
--(void) viewDidLoad {
+-(void) viewDidLoad
+{
+    [super viewDidLoad];
+    
     [self.tableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     self.tableView.allowsSelection = NO;
 
@@ -48,12 +51,23 @@
     [self.view insertSubview:background atIndex:0];
     [background release];
 
-    [super viewDidLoad];
+    [self localizeSegmentedControl];
 }
 
 -(IBAction) buttonPressed:(id) sender {
     [[AudioManagerController mainManager] playBackSound];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Segmented Control
+
+- (void)localizeSegmentedControl
+{
+    for (NSUInteger i = 0; i < self.segmentedControl.numberOfSegments; i++)
+    {
+        NSString *oldTitle = [self.segmentedControl titleForSegmentAtIndex:i];
+        [self.segmentedControl setTitle:NSLocalizedStringFromTable(oldTitle, @"About", nil) forSegmentAtIndex:i];
+    }
 }
 
 -(IBAction) segmentedControlChanged:(id) sender {
@@ -83,7 +97,8 @@
     cell.textLabel.text = [[self.people objectAtIndex:self.segmentedControl.selectedSegmentIndex] objectAtIndex:[indexPath row]];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 8;
-    cell.detailTextLabel.text = [[self.people objectAtIndex:(self.segmentedControl.selectedSegmentIndex + 5)] objectAtIndex:[indexPath row]];
+    NSString *detailsKey = [[self.people objectAtIndex:(self.segmentedControl.selectedSegmentIndex + 5)] objectAtIndex:[indexPath row]];
+    cell.detailTextLabel.text = NSLocalizedStringFromTable(detailsKey, @"About", nil);
 
     return cell;
 }
@@ -118,6 +133,7 @@
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;
     label.text = footerString;
+    [footerString release];
 
     label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];

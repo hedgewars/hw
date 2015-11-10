@@ -136,7 +136,7 @@
 02:01=%1 fait splish splash splosh !
 02:01=%1 va dormir avec les poissons !
 02:01=%1 pense que la physique de l'eau est nulle dans ce jeu !
-02:01=%1 a l'air assoiffé ! 
+02:01=%1 a l'air assoiffé !
 02:01=La mer réclame %1 !
 02:01=Un hérisson à la mer !
 02:01=%1 aurait dû prendre son masque et son tuba !
@@ -256,7 +256,7 @@
 02:06=Prends-la ou explose-la, le choix est tien !
 02:06=Mmmmh, Munitions !
 02:06=Une boîte de pouvoir destructif !
-02:06=Courrier aérien ! 
+02:06=Courrier aérien !
 02:06=Quelque soit ce qu'il y a dans cette boîte, ce n'est pas une pizza !
 02:06=Prends-la !
 02:06=Lâcher d'armes en approche !
@@ -270,7 +270,7 @@
 ; New utility crate
 02:07=Boite à outils !
 02:07=Ça peut être pratique...
-02:07=Utilisez cette boîte ! 
+02:07=Utilisez cette boîte !
 02:07=Regardez en-dessous !
 02:07=Des outils pour toi !
 02:07=Ça devrait être bien !

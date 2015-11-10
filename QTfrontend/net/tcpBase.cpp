@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,51 +14,62 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
-#include "tcpBase.h"
 
 #include <QList>
 #include <QImage>
 #include <QThread>
+#include <QApplication>
 
+#include "tcpBase.h"
 #include "hwconsts.h"
 #include "MessageDialog.h"
 
 #ifdef HWLIBRARY
-extern "C" void Game(char**arguments);
-extern "C" void GenLandPreview(int port);
+extern "C" {
+    void RunEngine(int argc, char ** argv);
+
+    int operatingsystem_parameter_argc;
+    char ** operatingsystem_parameter_argv;
+}
 
 
 EngineInstance::EngineInstance(QObject *parent)
     : QObject(parent)
 {
-    port = 0;
+
 }
 
 EngineInstance::~EngineInstance()
 {
+    qDebug() << "EngineInstance delete" << QThread::currentThreadId();
+}
+
+void EngineInstance::setArguments(const QStringList & arguments)
+{
+    m_arguments.clear();
+    m_arguments << qApp->arguments().at(0).toUtf8();
+
+    m_argv.resize(arguments.size() + 1);
+    m_argv[0] = m_arguments.last().data();
+
+    int i = 1;
+    foreach(const QString & s, arguments)
+    {
+        m_arguments << s.toUtf8();
+        m_argv[i] = m_arguments.last().data();
+        ++i;
+    }
 }
 
 void EngineInstance::start()
 {
-#if 0
-    char *args[11];
-    args[0] = "65000";  //ipcPort
-    args[1] = "1024";   //cScreenWidth
-    args[2] = "768";    //cScreenHeight
-    args[3] = "0";      //cReducedQuality
-    args[4] = "en.txt"; //cLocaleFName
-    args[5] = "koda";   //UserNick
-    args[6] = "1";      //SetSound
-    args[7] = "1";      //SetMusic
-    args[8] = "0";      //cAltDamage
-    args[9]= datadir->absolutePath().toAscii().data(); //cPathPrefix
-    args[10]= NULL;     //recordFileName
-    Game(args);
-#endif
-    GenLandPreview(port);
+    qDebug() << "EngineInstance start" << QThread::currentThreadId();
+
+    RunEngine(m_argv.size(), m_argv.data());
+
+    emit finished();
 }
 
 #endif
@@ -68,6 +79,23 @@ QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::~TCPBase()
 {
+    if(m_hasStarted)
+    {
+        if(IPCSocket)
+            IPCSocket->close();
+
+        if(m_connected)
+        {
+#ifdef HWLIBRARY
+            if(!thread)
+                qDebug("WTF");
+            thread->quit();
+            thread->wait();
+#else
+            process->waitForFinished(1000);
+#endif
+        }
+    }
     // make sure this object is not in the server list anymore
     srvsList.removeOne(this);
 
@@ -80,8 +108,11 @@ TCPBase::TCPBase(bool demoMode, QObject *parent) :
     QObject(parent),
     m_hasStarted(false),
     m_isDemoMode(demoMode),
+    m_connected(false),
     IPCSocket(0)
 {
+    process = 0;
+
     if(!IPCServer)
     {
         IPCServer = new QTcpServer(0);
@@ -103,12 +134,23 @@ void TCPBase::NewConnection()
         // connection should be already finished
         return;
     }
+
     disconnect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
     IPCSocket = IPCServer->nextPendingConnection();
+
     if(!IPCSocket) return;
+
+    m_connected = true;
+
     connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
     connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     SendToClientFirst();
+
+    if(simultaneousRun())
+    {
+        srvsList.removeOne(this);
+        emit isReadyNow();
+    }
 }
 
 void TCPBase::RealStart()
@@ -117,9 +159,9 @@ void TCPBase::RealStart()
     IPCSocket = 0;
 
 #ifdef HWLIBRARY
-    QThread *thread = new QThread;
-    EngineInstance *instance = new EngineInstance;
-    instance->port = IPCServer->serverPort();
+    thread = new QThread(this);
+    EngineInstance *instance = new EngineInstance();
+    instance->setArguments(getArguments());
 
     instance->moveToThread(thread);
 
@@ -129,10 +171,12 @@ void TCPBase::RealStart()
     connect(instance, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
 #else
-    QProcess * process;
-    process = new QProcess();
-    connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
-    QStringList arguments=getArguments();
+    process = new QProcess(this);
+    connect(process, SIGNAL(error(QProcess::ProcessError)),
+        this, SLOT(StartProcessError(QProcess::ProcessError)));
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),
+        this, SLOT(onEngineDeath(int, QProcess::ExitStatus)));
+    QStringList arguments = getArguments();
 
 #ifdef QT_DEBUG
     // redirect everything written on stdout/stderr
@@ -149,17 +193,26 @@ void TCPBase::ClientDisconnect()
     disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
-    emit isReadyNow();
+    if(!simultaneousRun())
+    {
+#ifdef HWLIBRARY
+        thread->quit();
+        thread->wait();
+#endif
+        emit isReadyNow();
+    }
+
     IPCSocket->deleteLater();
+    IPCSocket = NULL;
 
     deleteLater();
 }
 
 void TCPBase::ClientRead()
 {
-    QByteArray readed=IPCSocket->readAll();
-    if(readed.isEmpty()) return;
-    readbuffer.append(readed);
+    QByteArray read = IPCSocket->readAll();
+    if(read.isEmpty()) return;
+    readbuffer.append(read);
     onClientRead();
 }
 
@@ -167,6 +220,38 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
 {
     MessageDialog::ShowFatalMessage(tr("Unable to run engine at %1\nError code: %2").arg(bindir->absolutePath() + "/hwengine").arg(error));
     ClientDisconnect();
+}
+
+void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitStatus);
+
+    ClientDisconnect();
+
+    // show error message if there was an error that was not an engine's
+    // fatal error - because that one already sent a info via IPC
+    if ((exitCode != 0) && (exitCode != 2))
+    {
+        // inform user that something bad happened
+        MessageDialog::ShowFatalMessage(
+            tr("The game engine died unexpectedly!\n"
+            "(exit code %1)\n\n"
+            "We are very sorry for the inconvenience :(\n\n"
+            "If this keeps happening, please click the '%2' button in the main menu!")
+            .arg(exitCode)
+            .arg("Feedback"));
+
+    }
+
+    // cleanup up
+    if (IPCSocket)
+    {
+        IPCSocket->close();
+        IPCSocket->deleteLater();
+    }
+
+    // plot suicide
+    deleteLater();
 }
 
 void TCPBase::tcpServerReady()
@@ -188,14 +273,15 @@ void TCPBase::Start(bool couldCancelPreviousRequest)
         TCPBase * last = srvsList.last();
         if(couldCancelPreviousRequest
             && last->couldBeRemoved()
+            && (last->isConnected() || !last->hasStarted())
             && (last->parent() == parent()))
         {
             srvsList.removeLast();
-            last->deleteLater();
+            delete last;
             Start(couldCancelPreviousRequest);
         } else
         {
-            connect(srvsList.last(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+            connect(last, SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
             srvsList.push_back(this);
         }
     }
@@ -245,4 +331,19 @@ void TCPBase::RawSendIPC(const QByteArray & buf)
 bool TCPBase::couldBeRemoved()
 {
     return false;
+}
+
+bool TCPBase::isConnected()
+{
+    return m_connected;
+}
+
+bool TCPBase::simultaneousRun()
+{
+    return false;
+}
+
+bool TCPBase::hasStarted()
+{
+    return m_hasStarted;
 }

@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 module ServerCore where
 
 import Control.Concurrent
@@ -6,14 +24,11 @@ import System.Log.Logger
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 import Data.Set as Set
-import qualified Data.ByteString.Char8 as B
-import Control.DeepSeq
 import Data.Unique
 import Data.Maybe
 --------------------------------------
 import CoreTypes
 import NetRoutines
-import HWProtoCore
 import Actions
 import OfficialServer.DBInteraction
 import ServerState
@@ -22,13 +37,6 @@ import ServerState
 timerLoop :: Int -> Chan CoreMessage -> IO ()
 timerLoop tick messagesChan = threadDelay 30000000 >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
-
-reactCmd :: [B.ByteString] -> StateT ServerState IO ()
-reactCmd cmd = do
-    (Just ci) <- gets clientIndex
-    rnc <- gets roomsClients
-    actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
-    forM_ (actions `deepseq` actions) processAction
 
 mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do
@@ -46,7 +54,7 @@ mainLoop = forever $ do
             removed <- gets removedClients
             unless (ci `Set.member` removed) $ do
                 modify (\s -> s{clientIndex = Just ci})
-                reactCmd cmd
+                processAction $ ReactCmd cmd
 
         Remove ci ->
             processAction (DeleteClient ci)
@@ -62,7 +70,10 @@ mainLoop = forever $ do
 
         TimerAction tick ->
                 mapM_ processAction $
-                    PingAll : [StatsAction | even tick]
+                    PingAll
+                    : CheckVotes
+                    : [StatsAction | even tick]
+                    ++ [Cleanup | tick `mod` 100 == 0]
 
 
 startServer :: ServerInfo -> IO ()
@@ -79,5 +90,6 @@ startServer si = do
     startDBConnection si
 
     rnc <- newRoomsAndClients newRoom
+    jm <- newJoinMonitor
 
-    evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
+    evalStateT mainLoop (ServerState Nothing si Set.empty rnc jm)

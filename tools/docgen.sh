@@ -25,10 +25,13 @@ if [ $(which hg) ]; then
 branch=$(hg identify -b)
 rev=$(hg identify -rdefault -i)
 
-branchurl="<a href=http://code.google.com/p/hedgewars/source/list?name=${branch}>${branch}</a>"
-revurl="<a href=http://code.google.com/p/hedgewars/source/detail?r=${rev}>${rev}</a>"
+#branchurl="<a href=http://code.google.com/p/hedgewars/source/list?name=${branch}>${branch}</a>"
+#revurl="<a href=http://code.google.com/p/hedgewars/source/detail?r=${rev}>${rev}</a>"
 
-export PROJECT_NUMBER="${branchurl} as of ${revurl}"
+branchurl="$branch"
+revurl="$rev"
+
+export PROJECT_NUMBER="${branchurl} branch, ${revurl}"
 export OUTPUT_DIRECTORY
 
 fi

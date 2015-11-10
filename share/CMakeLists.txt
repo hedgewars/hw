@@ -8,19 +8,22 @@ if(APPLE)
     #CFBundleShortVersionString is HEDGEWARS_VERSION
 
     #libav/ffmpeg always brings in VideoDecoderAcceleration, avaible only from 10.6.3
-    if(${FFMPEG_FOUND} AND ${minimum_macosx_version} VERSION_EQUAL "10.6")
+    if(LIBAV_FOUND AND ${minimum_macosx_version} VERSION_EQUAL "10.6")
         set(minimum_macosx_version "10.6.3")
     endif()
 
-    configure_file(${hedgewars_SOURCE_DIR}/share/Info.plist.in
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
                    ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
     #path here should be Hedgewars.app/Contents/MacOS
     install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/Info.plist"
             DESTINATION ../)
-    install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/Icon.icns"
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/Icon.icns"
             DESTINATION ../Resources/)
-    install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/hwico.icns"
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/hwico.icns"
             DESTINATION ../Resources/)
-    install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/dsa_pub.pem"
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/dsa_pub.pem"
             DESTINATION ../Resources/)
-endif(APPLE)
+elseif(UNIX)
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.appdata.xml"
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/appdata/)
+endif()

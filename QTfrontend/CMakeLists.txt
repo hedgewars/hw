@@ -1,5 +1,5 @@
 # Configure for Qt4
-set(QT_MIN_VERSION "4.5.0")
+set(QT_MIN_VERSION "4.7.0")
 include(CheckLibraryExists)
 
 set(QT_USE_QTCORE TRUE)
@@ -13,10 +13,11 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
+# https://bugreports.qt-project.org/browse/QTBUG-17333
 if(APPLE AND
    ${QTVERSION} VERSION_GREATER "4.7.0" AND
    ${QTVERSION} VERSION_LESS "4.7.4")
-    message(FATAL_ERROR "This version of QT is known *not* to work, please update or use a lower version")
+   message(FATAL_ERROR "This version of Qt is known *not* to work, please update or use a lower version")
 endif()
 
 find_package(SDL2 REQUIRED)
@@ -24,10 +25,10 @@ find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SDL2MIXER_INCLUDE_DIR})
 
-if(${FFMPEG_FOUND})
+if(LIBAV_FOUND)
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
-    include_directories(${FFMPEG_INCLUDE_DIR})
-    list(APPEND HW_LINK_LIBS ${FFMPEG_LIBRARIES})
+    include_directories(${LIBAV_INCLUDE_DIR})
+    list(APPEND HW_LINK_LIBS ${LIBAV_LIBRARIES})
 endif()
 
 # server messages localization
@@ -61,9 +62,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
-include_directories(${PHYSFS_INCLUDE_DIR})
-include_directories(${PHYSLAYER_INCLUDE_DIR})
-
+include_directories(BEFORE ${PHYSFS_INCLUDE_DIR})
+include_directories(BEFORE ${PHYSLAYER_INCLUDE_DIR})
+include_directories(${LUA_INCLUDE_DIR}) #brought by physlayer hwpacksmounter.h
 
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
@@ -152,10 +153,15 @@ set(hwfr_hdrs
 
 set(hwfr_rez hedgewars.qrc)
 
-if(${BUILD_ENGINE_LIBRARY})
+if(BUILD_ENGINE_LIBRARY)
     add_definitions(-DHWLIBRARY=1)
     set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     list(APPEND HW_LINK_LIBS ${hwlibname})
+
+    if(LIBAV_FOUND)
+#        add_subdirectory(avwrapper)
+        list(APPEND HW_LINK_LIBS avwrapper)
+    endif()
 endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
@@ -184,9 +190,9 @@ endif()
 
 #when debugging, always prompt a console to see fronted messages
 #TODO: check it doesn't interfere on UNIX
-if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+if(CMAKE_BUILD_TYPE MATCHES "RELEASE" OR CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
     set(console_access "WIN32")
-endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+endif(CMAKE_BUILD_TYPE MATCHES "RELEASE" OR CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
 
 add_executable(hedgewars ${console_access}
     ${hwfr_src}
@@ -204,7 +210,7 @@ list(APPEND HW_LINK_LIBS
     ${SDL2_LIBRARY}
     ${SDL2MIXER_LIBRARY}
     )
-
+    
 if(WIN32 AND NOT UNIX)
     if(NOT SDL_LIBRARY)
         list(APPEND HW_LINK_LIBS SDL)
@@ -216,6 +222,10 @@ if(WIN32 AND NOT UNIX)
         winspool
         uuid
         )
+endif()
+
+if(CMAKE_CXX_COMPILER MATCHES "clang*")
+    list(APPEND HW_LINK_LIBS stdc++ m)
 endif()
 
 target_link_libraries(hedgewars ${HW_LINK_LIBS})

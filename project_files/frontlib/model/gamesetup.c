@@ -23,33 +23,33 @@
 #include <stdlib.h>
 
 void flib_gamesetup_destroy(flib_gamesetup *gamesetup) {
-	if(gamesetup) {
-		free(gamesetup->style);
-		flib_scheme_destroy(gamesetup->gamescheme);
-		flib_map_destroy(gamesetup->map);
-		flib_teamlist_destroy(gamesetup->teamlist);
-		free(gamesetup);
-	}
+    if(gamesetup) {
+        free(gamesetup->style);
+        flib_scheme_destroy(gamesetup->gamescheme);
+        flib_map_destroy(gamesetup->map);
+        flib_teamlist_destroy(gamesetup->teamlist);
+        free(gamesetup);
+    }
 }
 
 flib_gamesetup *flib_gamesetup_copy(const flib_gamesetup *setup) {
-	if(!setup) {
-		return NULL;
-	}
+    if(!setup) {
+        return NULL;
+    }
 
-	flib_gamesetup *result = flib_calloc(1, sizeof(flib_gamesetup));
-	if(result) {
-		result->style = flib_strdupnull(setup->style);
-		result->gamescheme = flib_scheme_copy(setup->gamescheme);
-		result->map = flib_map_copy(setup->map);
-		result->teamlist = flib_teamlist_copy(setup->teamlist);
-		if((setup->style && !result->style)
-				|| (setup->gamescheme && !result->gamescheme)
-				|| (setup->map && !result->map)
-				|| (setup->teamlist && !result->teamlist)) {
-			flib_gamesetup_destroy(result);
-			result = NULL;
-		}
-	}
-	return result;
+    flib_gamesetup *result = flib_calloc(1, sizeof(flib_gamesetup));
+    if(result) {
+        result->style = flib_strdupnull(setup->style);
+        result->gamescheme = flib_scheme_copy(setup->gamescheme);
+        result->map = flib_map_copy(setup->map);
+        result->teamlist = flib_teamlist_copy(setup->teamlist);
+        if((setup->style && !result->style)
+                || (setup->gamescheme && !result->gamescheme)
+                || (setup->map && !result->map)
+                || (setup->teamlist && !result->teamlist)) {
+            flib_gamesetup_destroy(result);
+            result = NULL;
+        }
+    }
+    return result;
 }

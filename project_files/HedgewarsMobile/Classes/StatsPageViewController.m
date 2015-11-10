@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -29,6 +29,7 @@
 
 -(void) viewDidLoad {
     UITableView *aTableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
 
     NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
@@ -44,11 +45,27 @@
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     aTableView.delegate = self;
     aTableView.dataSource = self;
-
+    
+    aTableView.rowHeight = 44;
+    
     [self.view addSubview:aTableView];
     [aTableView release];
 
     [super viewDidLoad];
+}
+
+#pragma mark - Helpers
+
+- (NSString *)teamNameFromInfo: (NSArray *)info
+{
+    NSString *teamName = [NSString stringWithString:[info objectAtIndex:2]];
+    
+    for (int i=3; i < [info count]; i++)
+    {
+        teamName = [teamName stringByAppendingFormat:@" %@", [info objectAtIndex:i]];
+    }
+    
+    return teamName;
 }
 
 #pragma mark -
@@ -90,7 +107,7 @@
                                                    green:((color >> 8) & 0xFF)/255.0f
                                                     blue:(color & 0xFF)/255.0f
                                                    alpha:1.0f];
-        cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ kills)", row+1, [info objectAtIndex:2], [info objectAtIndex:1]];
+        cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ %@)", row+1, [self teamNameFromInfo:info], [info objectAtIndex:1], NSLocalizedString(@"kills", nil)];
         imgName = [NSString stringWithFormat:@"StatsMedal%d",row+1];
     } else if (section == 2) {  // general info
         imgName = @"iconDamage";
@@ -116,7 +133,7 @@
 }
 
 -(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
-    return 160;
+    return (section == 0) ? 160 : 40;
 }
 
 -(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
@@ -162,7 +179,7 @@
 #pragma mark button delegate
 -(void) dismissView {
     [[AudioManagerController mainManager] playClickSound];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -

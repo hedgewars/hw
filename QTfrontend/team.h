@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef TEAM_H
@@ -39,6 +39,8 @@ struct HWHog
     QString Name;
     QString Hat;
     int Rounds, Kills, Deaths, Suicides;
+
+    HWHog() : Rounds(0), Kills(0), Deaths(0), Suicides(0){}
 };
 
 // class representing a team
@@ -87,6 +89,7 @@ class HWTeam : public QObject
         void setName(const QString & name);
         void setNumHedgehogs(unsigned char num);
         void setVoicepack(const QString & voicepack);
+        void setNetTeam(bool isNetTeam);
 
         // increments for statistical info
         void incRounds();

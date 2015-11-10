@@ -30,6 +30,8 @@ local game_lost = false
 local player = nil
 -- This variable will grab the time left at the end of the round
 local time_goal = 0
+-- This variable stores the number of bazooka shots
+local shots = 0
 
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
@@ -99,6 +101,8 @@ end
 -- it spawns the first target that has to be destroyed.
 -- In addition it shows the scenario goal(s).
 function onGameStart()
+	-- Disable the graph in the stats screen, we don't need it
+	SendHealthStatsOff()
 	-- Spawn the first target.
 	spawnTarget()
 	
@@ -112,7 +116,7 @@ function onGameStart()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amBazooka))
+	SetWeapon(amBazooka)
 end
 
 -- This function is called every game tick.
@@ -123,7 +127,7 @@ function onGameTick20()
 	-- If time's up, set the game to be lost.
 	-- We actually check the time to be "1 ms" as it
 	-- will be at "0 ms" right at the start of the game.
-	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal then
+	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal and not game_lost then
 		game_lost = true
 		-- ... and show a short message.
 		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
@@ -132,12 +136,40 @@ function onGameTick20()
 		-- Just to be sure set the goal time to 1 ms
 		time_goal = 1
 	end
+
+	if band(GetState(player), gstDrowning) == gstDrowning and game_lost == false and score < score_goal then
+		game_lost = true
+		time_goal = 1
+		AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
+		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
+	end
+
 	-- If the goal is reached or we've lost ...
 	if score == score_goal or game_lost then
 		-- ... check to see if the time we'd like to
 		-- wait has passed and then ...
 		if end_timer == 0 then
-			-- ... end the game ...
+			-- Let’s create some stats for the stats screen!
+			-- We will expose the number of hit targets hit, launched bazooka and the accuracy
+
+			SendStat(siPointType, loc("hits"))
+			SendStat(siPlayerKills, tostring(score), loc("'Zooka Team"))
+			SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets."), score, score_goal))
+			SendStat(siCustomAchievement, string.format(loc("You have launched %d bazookas."), shots))
+
+			-- We must avoid a division by zero
+			if(shots > 0) then
+				SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%%."), (score/shots)*100))
+			end
+			if score == score_goal then
+				SendStat(siGameResult, loc("You have finished the bazooka training!"))
+				SendStat(siCustomAchievement, string.format(loc("%.1f seconds were remaining."), (time_goal/1000), math.ceil(time_goal/12)))
+			end
+			if game_lost then
+				SendStat(siGameResult, loc("You lose!"))
+			end
+
+			-- Finally we end the game ...
 			EndGame()
 		else
 			-- ... or just lower the timer by 20ms.
@@ -182,5 +214,29 @@ function onGearDelete(gear)
 			time_goal = TurnTimeLeft
 			end
 		end
+	end
+end
+
+-- This function is called when a gear has been damaged.
+-- We only use it to determine wheather our hog took damage in order to abort the mission.
+function onGearDamage(gear, damage)
+	if GetGearType(gear) == gtHedgehog then
+		if not game_lost then
+			game_lost = true
+			AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
+			ShowMission(loc("Bazooka Training") , loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
+
+			time_goal = 1
+		end
+	end
+end
+
+
+-- This function is called after a gear is added.
+-- We use it to count the number of bazooka shots.
+function onGearAdd(gear)
+	-- Count the number of bazooka shots for our stats
+	if GetGearType(gear) == gtShell then
+		shots = shots + 1
 	end
 end

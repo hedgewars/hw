@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "HWApplication.h"
@@ -125,6 +125,28 @@ void closeResources(void)
     }
 }
 
+QString getUsage()
+{
+    return QString(
+"%1: hedgewars [%2...] [%3]\n"
+"\n"
+"%4:\n"
+"  --help              %5\n"
+"  --config-dir=PATH   %6\n"
+"  --data-dir=PATH     %7\n"
+"\n"
+"%8"
+"\n"
+).arg(HWApplication::tr("Usage", "command-line"))
+.arg(HWApplication::tr("OPTION", "command-line"))
+.arg(HWApplication::tr("CONNECTSTRING", "command-line"))
+.arg(HWApplication::tr("Options", "command-line"))
+.arg(HWApplication::tr("Display this help", "command-line"))
+.arg(HWApplication::tr("Custom path for configuration data and user data", "command-line"))
+.arg(HWApplication::tr("Custom path to the game data folder", "command-line"))
+.arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
+}
+
 int main(int argc, char *argv[])
 {
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
@@ -137,23 +159,13 @@ int main(int argc, char *argv[])
     SDLInteraction::instance();
 
     HWApplication app(argc, argv);
-
-    QLabel *splash = NULL;
-#if defined Q_OS_WIN
-    QPixmap pixmap(":res/splash.png");
-    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-    splash->setAttribute(Qt::WA_TranslucentBackground);
-    const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
-    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
-                                  (deskSize.height() - pixmap.height())/2 );
-    splash->move(splashCenter);
-    splash->setPixmap(pixmap);
-    splash->show();
-#endif
-
-    engine = new FileEngineHandler(argv[0]);
-
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
+
+    // file engine and splash. to be initialized later
+    engine = NULL;
+    QLabel *splash = NULL;
+
+    // parse arguments
 
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
@@ -163,6 +175,7 @@ int main(int argc, char *argv[])
         {
             QString arg = *i;
 
+
             QRegExp opt("--(\\S+)=(.+)");
             if(opt.exactMatch(arg))
             {
@@ -171,6 +184,21 @@ int main(int argc, char *argv[])
             }
             else
             {
+                if(arg.startsWith("--")) {
+                    if(arg == "--help")
+                    {
+                        printf("%s", getUsage().toUtf8().constData());
+                        return 0;
+                    }
+                    // argument is something wrong
+                    fprintf(stderr, "%s\n\n%s",
+                        HWApplication::tr("Malformed option argument: %1", "command-line").arg(arg).toUtf8().constData(),
+                        getUsage().toUtf8().constData());
+                    return 1;
+                }
+
+                // if not starting with --, then always skip
+                // (because we can't determine if executable path/call or not - on windows)
                 ++i;
             }
         }
@@ -179,6 +207,7 @@ int main(int argc, char *argv[])
     if(parsedArgs.contains("data-dir"))
     {
         QFileInfo f(parsedArgs["data-dir"]);
+        parsedArgs.remove("data-dir");
         if(!f.exists())
         {
             qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
@@ -190,6 +219,7 @@ int main(int argc, char *argv[])
     if(parsedArgs.contains("config-dir"))
     {
         QFileInfo f(parsedArgs["config-dir"]);
+        parsedArgs.remove("config-dir");
         cfgdir->setPath(f.absoluteFilePath());
         custom_config = true;
     }
@@ -199,6 +229,28 @@ int main(int argc, char *argv[])
         custom_config = false;
     }
 
+    if (!parsedArgs.isEmpty()) {
+        foreach (const QString & key, parsedArgs.keys())
+        {
+            fprintf(stderr, "%s\n", HWApplication::tr("Unknown option argument: %1", "command-line").arg(QString("--") + key).toUtf8().constData());
+        }
+        fprintf(stderr, "\n%s", getUsage().toUtf8().constData());
+        return 1;
+    }
+
+    // end of parameter parsing
+
+#if defined Q_OS_WIN
+    QPixmap pixmap(":res/splash.png");
+    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    splash->setAttribute(Qt::WA_TranslucentBackground);
+    const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
+    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
+                                  (deskSize.height() - pixmap.height())/2 );
+    splash->move(splashCenter);
+    splash->setPixmap(pixmap);
+    splash->show();
+#endif
     app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
@@ -259,6 +311,7 @@ int main(int argc, char *argv[])
     }
 
     // setup PhysFS
+    engine = new FileEngineHandler(argv[0]);
     engine->mount(datadir->absolutePath());
     engine->mount(cfgdir->absolutePath() + "/Data");
     engine->mount(cfgdir->absolutePath());
@@ -284,6 +337,7 @@ int main(int argc, char *argv[])
         if (!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
             qWarning("Failed to install translation (%s)", qPrintable(cc));
         app.installTranslator(&Translator);
+        app.setLayoutDirection(QLocale(cc).textDirection());
     }
 
 #ifdef _WIN32

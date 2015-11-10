@@ -13,13 +13,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import "HedgewarsAppDelegate.h"
 #import "MainMenuViewController.h"
-
+#import "Appirater.h"
 
 @implementation SDLUIKitDelegate (customDelegate)
 
@@ -50,7 +50,18 @@
 }
 
 // override the direct execution of SDL_main to allow us to implement our own frontend
--(void) postFinishLaunch {
+-(void) postFinishLaunch
+{
+    // Setup Appirater
+    [Appirater setAppId:@"391234866"];
+    [Appirater setDaysUntilPrompt:3];
+    [Appirater setUsesUntilPrompt:5];
+    [Appirater setSignificantEventsUntilPrompt:-1];
+    [Appirater setTimeBeforeReminding:1];
+    //[Appirater setDebug:YES];
+    
+    [self performSelector:@selector(hideLaunchScreen) withObject:nil afterDelay:0.0];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -58,7 +69,7 @@
 
     NSString *controllerName = (IS_IPAD() ? @"MainMenuViewController-iPad" : @"MainMenuViewController-iPhone");
     self.mainViewController = [[MainMenuViewController alloc] initWithNibName:controllerName bundle:nil];
-    [self.uiwindow addSubview:self.mainViewController.view];
+    self.uiwindow.rootViewController = self.mainViewController;
     [self.mainViewController release];
 
     [self.uiwindow makeKeyAndVisible];

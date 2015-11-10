@@ -726,12 +726,12 @@ void __PHYSFS_platformDestroyMutex(void *mutex);
 /*
  * Grab possession of a platform-specific mutex. Mutexes should be recursive;
  *  that is, the same thread should be able to call this function multiple
- *  times in a row without causing a deadlock. This function should block 
+ *  times in a row without causing a deadlock. This function should block
  *  until a thread can gain possession of the mutex.
  *
- * Return non-zero if the mutex was grabbed, zero if there was an 
- *  unrecoverable problem grabbing it (this should not be a matter of 
- *  timing out! We're talking major system errors; block until the mutex 
+ * Return non-zero if the mutex was grabbed, zero if there was an
+ *  unrecoverable problem grabbing it (this should not be a matter of
+ *  timing out! We're talking major system errors; block until the mutex
  *  is available otherwise.)
  *
  * _DO NOT_ call __PHYSFS_setError() in here! Since setError calls this
@@ -741,7 +741,7 @@ void __PHYSFS_platformDestroyMutex(void *mutex);
 int __PHYSFS_platformGrabMutex(void *mutex);
 
 /*
- * Relinquish possession of the mutex when this method has been called 
+ * Relinquish possession of the mutex when this method has been called
  *  once for each time that platformGrabMutex was called. Once possession has
  *  been released, the next thread in line to grab the mutex (if any) may
  *  proceed.

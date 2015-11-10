@@ -35,80 +35,80 @@ import android.util.Log;
  * state.
  */
 public class LocalRoomStateManager extends BasicRoomState {
-	private static final String TAG = LocalRoomStateManager.class.getSimpleName(); 
+    private static final String TAG = LocalRoomStateManager.class.getSimpleName();
 
-	public LocalRoomStateManager(Scheme defaultScheme, Weaponset defaultWeaponset) {
-		setChief(true);
-		setGameStyle(GameConfig.DEFAULT_STYLE);
-		setMapRecipe(MapRecipe.makeRandomMap(0, MapRecipe.makeRandomSeed(), GameConfig.DEFAULT_THEME));
-		setScheme(defaultScheme);
-		setWeaponset(defaultWeaponset);
-	}
-	
-	public void changeMapRecipe(MapRecipe map) {
-		setMapRecipe(map);
-	}
+    public LocalRoomStateManager(Scheme defaultScheme, Weaponset defaultWeaponset) {
+        setChief(true);
+        setGameStyle(GameConfig.DEFAULT_STYLE);
+        setMapRecipe(MapRecipe.makeRandomMap(0, MapRecipe.makeRandomSeed(), GameConfig.DEFAULT_THEME));
+        setScheme(defaultScheme);
+        setWeaponset(defaultWeaponset);
+    }
 
-	public void changeMapTheme(String theme) {
-		setMapRecipe(getMapRecipe().withTheme(theme));
-	}
+    public void changeMapRecipe(MapRecipe map) {
+        setMapRecipe(map);
+    }
 
-	public void changeMapNameAndGenerator(String mapName) {
-		int newGenerator = MapRecipe.generatorForMapname(mapName);
-		setMapRecipe(getMapRecipe().withName(mapName).withMapgen(newGenerator));
-	}
+    public void changeMapTheme(String theme) {
+        setMapRecipe(getMapRecipe().withTheme(theme));
+    }
 
-	public void changeMapTemplate(int template) {
-		setMapRecipe(getMapRecipe().withTemplateFilter(template));
-	}
+    public void changeMapNameAndGenerator(String mapName) {
+        int newGenerator = MapRecipe.generatorForMapname(mapName);
+        setMapRecipe(getMapRecipe().withName(mapName).withMapgen(newGenerator));
+    }
 
-	public void changeMazeSize(int mazeSize) {
-		setMapRecipe(getMapRecipe().withMazeSize(mazeSize));
-	}
+    public void changeMapTemplate(int template) {
+        setMapRecipe(getMapRecipe().withTemplateFilter(template));
+    }
 
-	public void changeMapSeed(String seed) {
-		setMapRecipe(getMapRecipe().withSeed(seed));
-	}
+    public void changeMazeSize(int mazeSize) {
+        setMapRecipe(getMapRecipe().withMazeSize(mazeSize));
+    }
 
-	public void changeMapDrawdata(byte[] drawdata) {
-		setMapRecipe(getMapRecipe().withDrawData(drawdata));
-	}
+    public void changeMapSeed(String seed) {
+        setMapRecipe(getMapRecipe().withSeed(seed));
+    }
 
-	public void changeScheme(Scheme scheme) {
-		setScheme(scheme);
-	}
+    public void changeMapDrawdata(byte[] drawdata) {
+        setMapRecipe(getMapRecipe().withDrawData(drawdata));
+    }
 
-	public void changeGameStyle(String style) {
-		setGameStyle(style);
-	}
+    public void changeScheme(Scheme scheme) {
+        setScheme(scheme);
+    }
 
-	public void changeWeaponset(Weaponset weaponset) {
-		setWeaponset(weaponset);
-	}
+    public void changeGameStyle(String style) {
+        setGameStyle(style);
+    }
 
-	public void requestAddTeam(Team team, int colorIndex) {
-		putTeam(new TeamInGame(team, new TeamIngameAttributes("Player", colorIndex, TeamIngameAttributes.DEFAULT_HOG_COUNT, false)));
-	}
+    public void changeWeaponset(Weaponset weaponset) {
+        setWeaponset(weaponset);
+    }
 
-	public void requestRemoveTeam(String teamname) {
-		removeTeam(teamname);
-	}
+    public void requestAddTeam(Team team, int colorIndex) {
+        putTeam(new TeamInGame(team, new TeamIngameAttributes("Player", colorIndex, TeamIngameAttributes.DEFAULT_HOG_COUNT, false)));
+    }
 
-	public void changeTeamColorIndex(String teamname, int colorIndex) {
-		TeamInGame oldTeam = getTeams().get(teamname);
-		if(oldTeam != null) {
-			putTeam(oldTeam.withAttribs(oldTeam.ingameAttribs.withColorIndex(colorIndex)));
-		} else {
-			Log.e(TAG, "Requested color change for unknown team "+ teamname);
-		}
-	}
+    public void requestRemoveTeam(String teamname) {
+        removeTeam(teamname);
+    }
 
-	public void changeTeamHogCount(String teamname, int hogcount) {
-		TeamInGame oldTeam = getTeams().get(teamname);
-		if(oldTeam != null) {
-			putTeam(oldTeam.withAttribs(oldTeam.ingameAttribs.withHogCount(hogcount)));
-		} else {
-			Log.e(TAG, "Requested hog count change for unknown team "+ teamname);
-		}
-	}
+    public void changeTeamColorIndex(String teamname, int colorIndex) {
+        TeamInGame oldTeam = getTeams().get(teamname);
+        if(oldTeam != null) {
+            putTeam(oldTeam.withAttribs(oldTeam.ingameAttribs.withColorIndex(colorIndex)));
+        } else {
+            Log.e(TAG, "Requested color change for unknown team "+ teamname);
+        }
+    }
+
+    public void changeTeamHogCount(String teamname, int hogcount) {
+        TeamInGame oldTeam = getTeams().get(teamname);
+        if(oldTeam != null) {
+            putTeam(oldTeam.withAttribs(oldTeam.ingameAttribs.withHogCount(hogcount)));
+        } else {
+            Log.e(TAG, "Requested hog count change for unknown team "+ teamname);
+        }
+    }
 }

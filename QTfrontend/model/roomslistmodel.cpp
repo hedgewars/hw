@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /**
@@ -108,22 +108,38 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DecorationRole)
     {
         const QIcon roomBusyIcon(":/res/iconDamage.png");
+        const QIcon roomBusyIconGreen(":/res/iconDamageLockG.png");
+        const QIcon roomBusyIconRed(":/res/iconDamageLockR.png");
         const QIcon roomWaitingIcon(":/res/iconTime.png");
+        const QIcon roomWaitingIconGreen(":/res/iconTimeLockG.png");
+        const QIcon roomWaitingIconRed(":/res/iconTimeLockR.png");
 
-        if (m_data.at(row).at(0).isEmpty())
-            return QVariant(roomWaitingIcon);
+        QString flags = m_data.at(row).at(StateColumn);
+
+        if (flags.contains("g"))
+        {
+            if (flags.contains("j"))
+                return QVariant(roomBusyIconRed);
+            else if (flags.contains("p"))
+                return QVariant(roomBusyIconGreen);
+            else
+                return QVariant(roomBusyIcon);
+        }
         else
-            return QVariant(roomBusyIcon);
+        {
+            if (flags.contains("j"))
+                return QVariant(roomWaitingIconRed);
+            else if (flags.contains("p"))
+                return QVariant(roomWaitingIconGreen);
+            else
+                return QVariant(roomWaitingIcon);
+        }
     }
 
     QString content = m_data.at(row).at(column);
 
     if (role == Qt::DisplayRole)
     {
-        // supply in progress flag as bool
-        if (column == 0)
-            return QVariant(QString(!content.isEmpty()));
-
         // display room names
         if (column == 5)
         {
@@ -132,6 +148,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             {
                 if (content == "+rnd+") return tr("Random Map");
                 if (content == "+maze+") return tr("Random Maze");
+                if (content == "+perlin+") return tr("Random Perlin");
                 if (content == "+drawn+") return tr("Hand-drawn");
             }
 
@@ -149,6 +166,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     {
         if (content == "+rnd+" ||
             content == "+maze+" ||
+            content == "+perlin+" ||
             content == "+drawn+" ||
             m_staticMapModel->mapExists(content) ||
             m_missionMapModel->mapExists(content))
@@ -188,7 +206,7 @@ void RoomsListModel::setRoomsList(const QStringList & rooms)
             l.append(rooms[i + t]);
         }
 
-        m_data.append(roomInfo2RoomRecord(l));
+        m_data.append(l);
     }
 
     endResetModel();
@@ -199,7 +217,7 @@ void RoomsListModel::addRoom(const QStringList & info)
 {
     beginInsertRows(QModelIndex(), 0, 0);
 
-    m_data.prepend(roomInfo2RoomRecord(info));
+    m_data.prepend(info);
 
     endInsertRows();
 }
@@ -248,24 +266,7 @@ void RoomsListModel::updateRoom(const QString & name, const QStringList & info)
     if (i < 0)
         return;
 
-    m_data[i] = roomInfo2RoomRecord(info);
+    m_data[i] = info;
 
     emit dataChanged(index(i, 0), index(i, columnCount(QModelIndex()) - 1));
-}
-
-
-QStringList RoomsListModel::roomInfo2RoomRecord(const QStringList & info)
-{
-    QStringList result;
-
-    result = info;
-
-    // for matters of less memory usage and quicker access store
-    // the boolean string as either "t" or empty
-    if (info[StateColumn].toLower() == "true")
-        result[StateColumn] = "t";
-    else
-        result[StateColumn] = QString();
-
-    return result;
 }

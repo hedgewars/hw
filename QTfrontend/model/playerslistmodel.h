@@ -23,6 +23,8 @@ public:
         InGame      = Qt::UserRole + 6,
         InRoom      = Qt::UserRole + 7,
         Contributor = Qt::UserRole + 8
+        // if you add a role that will affect the player icon,
+        // then also add it to the flags Qlist in updateIcon()!
     };
 
     enum SpecialRoles {

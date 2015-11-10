@@ -72,7 +72,7 @@ guard1.keepTurning = true
 guard2.name = loc("Sam")
 guard2.x = 3400
 guard2.y = 1800
-teamA.name = loc("PAoTH")
+teamA.name = loc("PAotH")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Guards")
 teamB.color = tonumber("0033FF",16) -- blue
@@ -96,8 +96,8 @@ function onGameInit()
 		Map = "cosmos_map" -- custom map included in file
 	end
 	Theme = "Nature"
-	-- I had originally hero in PAoTH team and changed it, may reconsider though
-	-- PAoTH
+	-- I had originally hero in PAotH team and changed it, may reconsider though
+	-- PAotH
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
@@ -224,6 +224,10 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+end
+
+function onGameTick20()
+	setFoundDeviceVisual()
 end
 
 function onPrecise()
@@ -471,6 +475,34 @@ function heroDeath(gear)
 	sendStatsOnRetry()
 end
 
+function setFoundDeviceVisual()
+	--WriteLnToConsole("status: "..status.fruit01.." - "..status.fruit02)
+	if status.moon01 then
+		vgear = AddVisualGear(1116, 848, vgtBeeTrace, 0, false)
+
+	end
+	if status.ice01 then
+		vgear = AddVisualGear(1512, 120, vgtBeeTrace, 0, false)
+
+	end
+	if status.desert01 then
+		vgear = AddVisualGear(4015, 316, vgtBeeTrace, 0, false)
+
+	end
+	if status.fruit01 and status.fruit02 then
+		vgear = AddVisualGear(2390, 384, vgtBeeTrace, 0, false)
+
+	end
+	if status.death01 then
+		vgear = AddVisualGear(444, 400, vgtBeeTrace, 0, false)
+
+	end
+	if status.final then
+		vgear = AddVisualGear(3070, 810, vgtBeeTrace, 0, false)
+
+	end
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
@@ -562,6 +594,7 @@ function sendStats(planet)
 	SendStat(siGameResult, loc("Hog Solo arrived at "..planet))
 	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button"))
 	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission"))
+	SendStat(siCustomAchievement, loc("Planets with completed main missions will be marked with a flower"))
 	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end

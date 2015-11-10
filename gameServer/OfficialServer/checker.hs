@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE CPP, ScopedTypeVariables, OverloadedStrings #-}
 module Main where
 
@@ -12,7 +30,7 @@ import Control.Concurrent.Chan
 import Control.Concurrent
 import Network
 import Network.BSD
-import Network.Socket hiding (recv)
+import Network.Socket hiding (recv, sClose)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
@@ -28,7 +46,7 @@ readInt_ :: (Num a) => B.ByteString -> a
 readInt_ str =
   case B.readInt str of
        Just (i, t) | B.null t -> fromIntegral i
-       _                      -> 0 
+       _                      -> 0
 
 data Message = Packet [B.ByteString]
              | CheckFailed B.ByteString
@@ -36,7 +54,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "45"
+protocolNumber = "49"
 
 getLines :: Handle -> IO [B.ByteString]
 getLines h = g
@@ -69,18 +87,18 @@ engineListener coreChan h fileName = do
             "ACHIEVEMENT" : typ : teamname : location : value : ps bs
         ps _ = []
 
-checkReplay :: Chan Message -> [B.ByteString] -> IO ()
-checkReplay coreChan msgs = do
+checkReplay :: String -> String -> String -> Chan Message -> [B.ByteString] -> IO ()
+checkReplay home exe prefix coreChan msgs = do
     tempDir <- getTemporaryDirectory
     (fileName, h) <- openBinaryTempFile tempDir "checker-demo"
     B.hPut h . BW.pack . concat . map (fromMaybe [] . Base64.decode . B.unpack) $ msgs
     hFlush h
     hClose h
 
-    (_, _, Just hOut, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/bin/hwengine"
+    (_, _, Just hOut, _) <- createProcess (proc exe
                 [fileName
-                , "--user-prefix", "/usr/home/unC0Rr/.hedgewars"
-                , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/share/hedgewars/Data"
+                , "--user-prefix", home
+                , "--prefix", prefix
                 , "--nomusic"
                 , "--nosound"
                 , "--stats-only"
@@ -121,8 +139,8 @@ recvLoop s chan =
         sendPacket packet = writeChan chan $ Packet packet
 
 
-session :: B.ByteString -> B.ByteString -> Socket -> IO ()
-session l p s = do
+session :: B.ByteString -> B.ByteString -> String -> String -> String -> Socket -> IO ()
+session l p home exe prefix s = do
     noticeM "Core" "Connected"
     coreChan <- newChan
     forkIO $ recvLoop s coreChan
@@ -148,10 +166,10 @@ session l p s = do
     onPacket :: Chan Message -> [B.ByteString] -> IO ()
     onPacket _ ("CONNECTED":_) = do
         answer ["CHECKER", protocolNumber, l, p]
-        answer ["READY"]
     onPacket _ ["PING"] = answer ["PONG"]
+    onPacket _ ["LOGONPASSED"] = answer ["READY"]
     onPacket chan ("REPLAY":msgs) = do
-        checkReplay chan msgs
+        checkReplay home exe prefix chan msgs
         warningM "Check" "Started check"
     onPacket _ ("BYE" : xs) = error $ show xs
     onPacket _ _ = return ()
@@ -169,18 +187,24 @@ main = withSocketsDo $ do
     updateGlobalLogger "Check" (setLevel DEBUG)
     updateGlobalLogger "Engine" (setLevel DEBUG)
 
+    d <- getHomeDirectory
     Right (login, password) <- runErrorT $ do
-        d <- liftIO $ getHomeDirectory
         conf <- join . liftIO . CF.readfile CF.emptyCP $ d ++ "/.hedgewars/settings.ini"
         l <- CF.get conf "net" "nick"
         p <- CF.get conf "net" "passwordhash"
         return (B.pack l, B.pack p)
 
+    Right (exeFullname, dataPrefix) <- runErrorT $ do
+        conf <- join . liftIO . CF.readfile CF.emptyCP $ d ++ "/.hedgewars/checker.ini"
+        l <- CF.get conf "engine" "exe"
+        p <- CF.get conf "engine" "prefix"
+        return (l, p)
+
 
     Exception.bracket
         setupConnection
         (\s -> noticeM "Core" "Shutting down" >> sClose s)
-        (session login password)
+        (session login password (d ++ "/.hedgewars") exeFullname dataPrefix)
     where
         setupConnection = do
             noticeM "Core" "Connecting to the server..."

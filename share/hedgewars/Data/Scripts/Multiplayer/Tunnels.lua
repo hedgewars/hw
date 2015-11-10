@@ -1,30 +1,10 @@
- PointsBuffer = ''  -- A string to accumulate points in
- function AddPoint(x, y, width, erase)
-     PointsBuffer = PointsBuffer .. string.char(band(x,0xff00) / 256 , band(x,0xff) , band(y,0xff00) / 256 , band(y,0xff))
-     if width then
-         width = bor(width,0x80)
-         if erase then
-             width = bor(width,0x40)
-         end
-         PointsBuffer = PointsBuffer .. string.char(width)
-     else
-         PointsBuffer = PointsBuffer .. string.char(0)
-     end
-     if #PointsBuffer > 245 then
-         ParseCommand('draw '..PointsBuffer)
-         PointsBuffer = ''
-     end
- end
- function FlushPoints()
-     if #PointsBuffer > 0 then
-         ParseCommand('draw '..PointsBuffer)
-         PointsBuffer = ''
-     end
- end
 
+function onPreviewInit()
+onGameInit()
+end
 
 function onGameInit()
-    MapGen = 2
+    MapGen = mgDrawn
     TemplateFilter = 0
     for i = 200,2000,600 do
         AddPoint(1,i,63)
@@ -32,7 +12,7 @@ function onGameInit()
     end
 
     side = 0
-    for i = 0,GetRandom(15)+25 do
+    for i = 0,1+MapFeatureSize*2 do
         if side > 3 then 
             size = GetRandom(4)+4
         else

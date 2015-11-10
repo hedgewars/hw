@@ -66,7 +66,7 @@ teamA.name = loc("Hog Solo and GB")
 teamA.color = tonumber("38D61C",16) -- green
 teamB.name = loc("Captain Lime")
 teamB.color = tonumber("38D61D",16) -- greenish
-teamC.name = loc("Fruit Assasins")
+teamC.name = loc("Fruit Assassins")
 teamC.color = tonumber("FF0000",16) -- red
 
 function onGameInit()
@@ -108,11 +108,11 @@ function onGameInit()
 	green1.bot = AddHog(green1.name, 1, 100, "war_desertofficer")
 	AnimSetGearPosition(green1.bot, green1.x, green1.y)
 	green1.gear = green1.human
-	-- Fruit Assasins
+	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(redHedgehogs) do
-		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[math.random(1,3)])
+		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
 		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
 	end
 
@@ -138,7 +138,7 @@ function onGameStart()
 	AddAmmo(green1.bot, amGrenade, 6)
 	AddAmmo(green1.bot, amDEagle, 2)
 	HideHog(green1.bot)
-	-- Assasins weapons
+	-- Assassins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
 	AddAmmo(redHedgehogs[1].gear, amGrenade, 6)
 	AddAmmo(redHedgehogs[1].bot, amDEagle, 6)
@@ -467,7 +467,7 @@ function redTeamDeath(gear)
 	saveCompletedStatus(3)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You retrieved the lost part"))
-	SendStat(siCustomAchievement, loc("You defended yourself against Strawberry Assasins"))
+	SendStat(siCustomAchievement, loc("You defended yourself against Strawberry Assassins"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
@@ -532,7 +532,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! When he returns I'll shoot him and keep that device for myself!"), SAY_THINK, 4000}})
 	table.insert(dialog03, {func = goToThesurface, args = {hero.gear}})
-	-- DIALOG04 - At crates, hero learns about the assasins ambush
+	-- DIALOG04 - At crates, hero learns about the Assassins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
 	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 4000}})
 	table.insert(dialog04, {func = FollowGear, args = {hero.gear}})
@@ -549,7 +549,7 @@ function goToThesurface()
 end
 
 function wind()
-	SetWind(math.random(-100,100))
+	SetWind(GetRandom(201)-100)
 end
 
 function saveHogsPositions()

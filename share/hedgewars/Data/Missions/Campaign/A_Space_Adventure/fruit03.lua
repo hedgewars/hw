@@ -1,6 +1,6 @@
 ------------------- ABOUT ----------------------
 --
--- Hero has get into an Red Strawberies ambush
+-- Hero has get into an Red Strawberries ambush
 -- He has to eliminate the enemies by using limited
 -- ammo of sniper rifle and watermelon
 
@@ -89,12 +89,12 @@ function onGameInit()
 					"fr_pumpkin", "Gasmask", "NinjaFull", "NinjaStraight", "NinjaTriangle" }
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(enemiesEven) do
-		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[math.random(1,table.getn(hats))])
+		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
 	end
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(enemiesOdd) do
-		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[math.random(1,table.getn(hats))])
+		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)
 	end
 
@@ -233,7 +233,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Fruit Planet Hog Solo got lost..."), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...and got ambushed by the Red Strawberies"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...and got ambushed by the Red Strawberries"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use your available weapons in order to eliminate the enemies"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the Sniper Rifle or the Watermelon bomb"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only 2 watermelon bombs during the game"), 5000}})

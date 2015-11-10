@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef _NEW_NETCLIENT_INCLUDED
@@ -36,7 +36,7 @@ class PlayersListModel;
 class QSortFilterProxyModel;
 class QAbstractItemModel;
 
-extern char delimeter;
+extern char delimiter;
 
 class HWNewNet : public QObject
 {
@@ -77,6 +77,10 @@ class HWNewNet : public QObject
         QSortFilterProxyModel * m_lobbyPlayersModel;
         QSortFilterProxyModel * m_roomPlayersModel;
         QString m_lastRoom;
+        QString m_passwordHash;
+        QString m_serverSalt;
+        QString m_clientSalt;
+        QString m_serverHash;
 
         QStringList cmdbuf;
 
@@ -85,7 +89,8 @@ class HWNewNet : public QObject
         void ParseCmd(const QStringList & lst);
         void handleNotice(int n);
 
-        int loginStep;
+        void maybeSendPassword();
+
         ClientState netClientState;
 
     signals:
@@ -106,7 +111,7 @@ class HWNewNet : public QObject
         void roomNameUpdated(const QString & name);
         void askForRoomPassword();
 
-        void netSchemeConfig(QStringList &);
+        void netSchemeConfig(QStringList);
         void paramChanged(const QString & param, const QStringList & value);
         void configAsked();
 

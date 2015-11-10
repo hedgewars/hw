@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QDir>
@@ -164,14 +164,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageVideos->init(config);
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && defined(SPARKLE_ENABLED)
     if (config->isAutoUpdateEnabled())
     {
         AutoUpdater* updater = NULL;
 
-#ifdef SPARKLE_ENABLED
         updater = new SparkleAutoUpdater();
-#endif
         if (updater)
         {
             updater->checkForUpdates();
@@ -1675,7 +1673,7 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
     connect(game, SIGNAL(CampStateChanged(int)), this, SLOT(UpdateCampaignPageProgress(int)));
     connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
     connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
-    connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
+    connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowFatalErrorMessage(const QString &)), Qt::QueuedConnection);
     connect(game, SIGNAL(HaveRecord(RecordType, const QByteArray &)), this, SLOT(GetRecord(RecordType, const QByteArray &)));
     m_lastDemo = QByteArray();
 }
@@ -1753,6 +1751,7 @@ void HWForm::CreateNetGame()
 
     connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
     connect(game, SIGNAL(SendChat(const QString &)), hwnet, SLOT(chatLineToNet(const QString &)));
+    connect(game, SIGNAL(SendConsoleCommand(const QString&)), hwnet, SLOT(consoleCommand(const QString&)));
     connect(game, SIGNAL(SendTeamMessage(const QString &)), hwnet, SLOT(SendTeamMessage(const QString &)));
     connect(hwnet, SIGNAL(chatStringFromNet(const QString &)), game, SLOT(FromNetChat(const QString &)), Qt::QueuedConnection);
 
@@ -1831,14 +1830,14 @@ void HWForm::NetGameSlave()
     if (hwnet)
     {
         NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);
-        connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)), netAmmo, SLOT(setNetSchemeConfig(QStringList &)));
+        connect(hwnet, SIGNAL(netSchemeConfig(QStringList)), netAmmo, SLOT(setNetSchemeConfig(QStringList)));
 
         ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
 
         ui.pageNetGame->pGameCFG->GameSchemes->view()->disconnect(hwnet);
-        connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)),
+        connect(hwnet, SIGNAL(netSchemeConfig(QStringList)),
                 this, SLOT(selectFirstNetScheme()));
     }
 
@@ -1903,15 +1902,15 @@ void HWForm::UpdateCampaignPage(int index)
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
-    QString tName = team.name();    
-    
-    campaignMissionInfo = getCampMissionList(campaignName,tName);    
-	ui.pageCampaign->CBMission->clear();
-	
+    QString tName = team.name();
+
+    campaignMissionInfo = getCampMissionList(campaignName,tName);
+    ui.pageCampaign->CBMission->clear();
+
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
-	}
+    }
 }
 
 void HWForm::UpdateCampaignPageMission(int index)
@@ -1923,7 +1922,7 @@ void HWForm::UpdateCampaignPageMission(int index)
     if(index > -1 && index < campaignMissionInfo.count()) {
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
         ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
-		ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
+        ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
     }
 }
 
@@ -1935,12 +1934,12 @@ void HWForm::UpdateCampaignPageProgress(int index)
     UpdateCampaignPage(0);
     for(int i=0;i<ui.pageCampaign->CBMission->count();i++)
     {
-		if (ui.pageCampaign->CBMission->itemText(i)==missionTitle)
-		{
-			ui.pageCampaign->CBMission->setCurrentIndex(i);
-			break;
-		}
-	}
+        if (ui.pageCampaign->CBMission->itemText(i)==missionTitle)
+        {
+            ui.pageCampaign->CBMission->setCurrentIndex(i);
+            break;
+        }
+    }
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
@@ -2094,9 +2093,9 @@ void HWForm::restartGame()
     }
 }
 
-void HWForm::ShowErrorMessage(const QString & msg)
+void HWForm::ShowFatalErrorMessage(const QString & msg)
 {
-    MessageDialog::ShowErrorMessage(msg, this);
+    MessageDialog::ShowFatalMessage(msg, this);
 }
 
 void HWForm::showFeedbackDialog()

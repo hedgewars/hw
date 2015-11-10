@@ -287,7 +287,7 @@ function DoPrincessFreed()
   if progress and progress<7 then
     SaveCampaignVar("Progress", "7")
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -339,8 +339,8 @@ end
 function EndMission()
   RemoveEventFunc(CheckPrincessFreed)
   AddCaption("So the princess was never heard of again...")
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("Natives"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -417,7 +417,7 @@ function SetupAmmo()
   AddAmmo(cyborgs[1], amBaseballBat, 100)
   AddAmmo(cyborgs[1], amMolotov, 100)
   AddAmmo(cyborgs[1], amWatermelon, 1)
-  AddAmmo(cyborgs[1], amAirStrike, 2)
+  AddAmmo(cyborgs[1], amAirAttack, 2)
   AddAmmo(cyborgs[1], amDrillStrike, 1)
 end
 
@@ -480,7 +480,7 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-  MapGen = 2
+  MapGen = mgDrawn
 	Theme = "Hell"
   SuddenDeathTurns = 35
 

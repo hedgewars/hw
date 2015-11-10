@@ -51,14 +51,14 @@
  * at the struct for details.
  */
 typedef struct {
-	int mapgen;				//!< Always one of the MAPGEN_ constants
-	char *name;				//!< The name of the map for MAPGEN_NAMED (e.g. "Cogs"), otherwise one of "+rnd+", "+maze+" or "+drawn+".
-	char *seed;				//!< Used for all maps. This is a random seed for all (non-AI) entropy in the round. Typically a random UUID, but can be any string.
-	char *theme;			//!< Used for all maps. This is the name of a directory in Data/Themes (e.g. "Beach")
-	uint8_t *drawData;		//!< Used for MAPGEN_DRAWN
-	size_t drawDataSize;	//!< Used for MAPGEN_DRAWN
-	int templateFilter;		//!< Used for MAPGEN_REGULAR. One of the TEMPLATEFILTER_xxx constants.
-	int mazeSize;			//!< Used for MAPGEN_MAZE. One of the MAZE_SIZE_xxx constants.
+    int mapgen;             //!< Always one of the MAPGEN_ constants
+    char *name;             //!< The name of the map for MAPGEN_NAMED (e.g. "Cogs"), otherwise one of "+rnd+", "+maze+" or "+drawn+".
+    char *seed;             //!< Used for all maps. This is a random seed for all (non-AI) entropy in the round. Typically a random UUID, but can be any string.
+    char *theme;            //!< Used for all maps. This is the name of a directory in Data/Themes (e.g. "Beach")
+    uint8_t *drawData;      //!< Used for MAPGEN_DRAWN
+    size_t drawDataSize;    //!< Used for MAPGEN_DRAWN
+    int templateFilter;     //!< Used for MAPGEN_REGULAR. One of the TEMPLATEFILTER_xxx constants.
+    int mazeSize;           //!< Used for MAPGEN_MAZE. One of the MAZE_SIZE_xxx constants.
 } flib_map;
 
 /**

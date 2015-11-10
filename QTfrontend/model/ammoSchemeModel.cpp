@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QDebug>
@@ -58,13 +58,15 @@ QList<QVariant> defaultScheme = QList<QVariant>()
                                 << QVariant(4)             // mines number   32
                                 << QVariant(0)             // mine dud pct   33
                                 << QVariant(2)             // explosives     34
-                                << QVariant(35)            // health case pct 35
-                                << QVariant(25)            // health case amt 36
-                                << QVariant(47)            // water rise amt 37
-                                << QVariant(5)             // health dec amt 38
-                                << QVariant(100)           // rope modfier   39
-                                << QVariant(100)           // get away time  40
-                                << QVariant(0)             // world edge     41
+                                << QVariant(0)             // air mines      35
+                                << QVariant(35)            // health case pct 36
+                                << QVariant(25)            // health case amt 37
+                                << QVariant(47)            // water rise amt 38
+                                << QVariant(5)             // health dec amt 39
+                                << QVariant(100)           // rope modfier   40
+                                << QVariant(100)           // get away time  41
+                                << QVariant(0)             // world edge     42
+                                << QVariant()              // scriptparam    43
                                 ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -83,6 +85,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
                          << "Timeless"
                          << "Thinking with Portals"
                          << "King Mode"
+						 << "Construction Mode"
                          ;
 
     numberOfDefaultSchemes = predefSchemesNames.size();
@@ -123,13 +126,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
               << "minesnum"            // 32
               << "minedudpct"          // 33
               << "explosives"          // 34
-              << "healthprobability"   // 35
-              << "healthcaseamount"    // 36
-              << "waterrise"           // 37
-              << "healthdecrease"      // 38
-              << "ropepct"             // 39
-              << "getawaytime"         // 40
-              << "worldedge"           // 41
+              << "airmines"            // 35
+              << "healthprobability"   // 36
+              << "healthcaseamount"    // 37
+              << "waterrise"           // 38
+              << "healthdecrease"      // 39
+              << "ropepct"             // 40
+              << "getawaytime"         // 41
+              << "worldedge"           // 42
+              << "scriptparam"         // scriptparam    43
               ;
 
     QList<QVariant> proMode;
@@ -169,13 +174,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> shoppa;
@@ -211,17 +218,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // init health    28
             << QVariant(50)            // sudden death   29
             << QVariant(1)             // case prob      30
-            << QVariant(3)             // mines time     31
+            << QVariant(0)             // mines time     31
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
-            << QVariant(0)             // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(8)             // air mines      35
+            << QVariant(0)             // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> cleanslate;
@@ -261,13 +270,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(4)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> minefield;
@@ -304,16 +315,18 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(15)            // sudden death   29
             << QVariant(0)             // case prob      30
             << QVariant(0)             // mines time     31
-            << QVariant(80)            // mines number   32
+            << QVariant(200)           // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> barrelmayhem;
@@ -352,14 +365,16 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // mines time     31
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
-            << QVariant(80)            // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(200)           // explosives     34
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> tunnelhogs;
@@ -399,13 +414,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(10)            // mines number   32
             << QVariant(10)            // mine dud pct   33
             << QVariant(10)            // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(4)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> forts;
@@ -445,13 +462,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> timeless;
@@ -491,13 +510,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(5)             // mines number   32
             << QVariant(10)            // mine dud pct   33
             << QVariant(2)             // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(30)            // health case amt 36
-            << QVariant(0)             // water rise amt 37
-            << QVariant(0)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(30)            // health case amt 37
+            << QVariant(0)             // water rise amt 38
+            << QVariant(0)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> thinkingportals;
@@ -537,13 +558,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(5)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(5)             // explosives     34
-            << QVariant(25)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(4)             // air mines      35
+            << QVariant(25)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
     QList<QVariant> kingmode;
@@ -583,16 +606,65 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(4)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
-            << QVariant(35)            // health case pct 35
-            << QVariant(25)            // health case amt 36
-            << QVariant(47)            // water rise amt 37
-            << QVariant(5)             // health dec amt 38
-            << QVariant(100)           // rope modfier   39
-            << QVariant(100)           // get away time  40
-            << QVariant(0)             // world edge     41
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
             ;
 
-
+	QList<QVariant> construction;
+    construction
+            << predefSchemesNames[11]  // name           0
+            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // team divide    2
+            << QVariant(false)         // solid land     3
+            << QVariant(false)         // border         4
+            << QVariant(false)         // low gravity    5
+            << QVariant(false)         // laser sight    6
+            << QVariant(false)         // invulnerable   7
+            << QVariant(false)         // reset health   8
+            << QVariant(false)         // vampiric       9
+            << QVariant(false)         // karma          10
+            << QVariant(false)         // artillery      11
+            << QVariant(true)          // random order   12
+            << QVariant(false)          // king           13
+            << QVariant(false)         // place hog      14
+            << QVariant(false)         // shared ammo    15
+            << QVariant(true)         // disable girders 16
+            << QVariant(true)         // disable land objects 17
+            << QVariant(false)         // AI survival    18
+            << QVariant(true)         // inf. attack    19
+            << QVariant(false)         // reset weps     20
+            << QVariant(true)         // per hog ammo   21
+            << QVariant(false)         // no wind        22
+            << QVariant(false)         // more wind      23
+            << QVariant(false)         // tag team       24
+            << QVariant(false)         // bottom border  25
+            << QVariant(100)           // damage modfier 26
+            << QVariant(45)            // turn time      27
+            << QVariant(100)           // init health    28
+            << QVariant(15)            // sudden death   29
+            << QVariant(5)             // case prob      30
+            << QVariant(3)             // mines time     31
+            << QVariant(0)             // mines number   32
+            << QVariant(0)             // mine dud pct   33
+            << QVariant(0)             // explosives     34
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
+            ;
+			
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
@@ -604,6 +676,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     schemes.append(timeless);
     schemes.append(thinkingportals);
     schemes.append(kingmode);
+	schemes.append(construction);
 
 
     int size = fileConfig.beginReadArray("schemes");
@@ -688,7 +761,7 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     else
     {
         QList<QVariant> newScheme = schemes[row];
-        newScheme[0] = QVariant(tr("copy of") + " " + newScheme[0].toString());
+        newScheme[0] = QVariant(tr("copy of %1").arg(newScheme[0].toString()));
         schemes.insert(schemes.size(), newScheme);
     }
 
@@ -785,13 +858,15 @@ QVariant NetAmmoSchemeModel::data(const QModelIndex &index, int role) const
     return netScheme[index.column()];
 }
 
-void NetAmmoSchemeModel::setNetSchemeConfig(QStringList & cfg)
+void NetAmmoSchemeModel::setNetSchemeConfig(QStringList cfg)
 {
     if(cfg.size() != netScheme.size())
     {
         qWarning("Incorrect scheme cfg size");
         return;
     }
+
+    cfg[cfg.size()-1] = cfg[cfg.size()-1].mid(1);
 
     for(int i = 0; i < cfg.size(); ++i)
         netScheme[i] = QVariant(cfg[i]);

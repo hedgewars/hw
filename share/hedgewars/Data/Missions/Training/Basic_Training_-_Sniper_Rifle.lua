@@ -17,6 +17,8 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- This variable will hold the number of destroyed targets.
 local score = 0
+-- This variable will hold the number of shots from the sniper rifle
+local shots = 0
 -- This variable represents the number of targets to destroy.
 local score_goal = 31
 -- This variable controls how many milliseconds/ticks we'd
@@ -51,7 +53,7 @@ function blowUp(x, y)
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amSniperRifle))
+	SetWeapon(amSniperRifle)
 end
 
 -- This function is called before the game loads its
@@ -83,7 +85,7 @@ function onGameInit()
 	-- The map to be played
 	Map = "Ropes"
 	-- The theme to be used
-	Theme = "City"
+	Theme = "Golf"
 
 	-- Create the player team
 	AddTeam(loc("Sniperz"), 14483456, "Simple", "Island", "Default")
@@ -96,9 +98,11 @@ end
 -- it spawns the first target that has to be destroyed.
 -- In addition it shows the scenario goal(s).
 function onGameStart()
+	-- Disable graph in stats screen
+	SendHealthStatsOff()
 	-- Spawn the first target.
 	spawnTarget(860,1020)
-	
+
 	-- Show some nice mission goals.
 	-- Parameters are: caption, sub caption, description,
 	-- extra text, icon and time to show.
@@ -127,12 +131,14 @@ function onGameTick20()
 	-- If time's up, set the game to be lost.
 	-- We actually check the time to be "1 ms" as it
 	-- will be at "0 ms" right at the start of the game.
-	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal then
+	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal and game_lost == false then
 		game_lost = true
 		-- ... and show a short message.
+		AddCaption(loc("Time's up!"))
 		ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
-		-- How about killing our poor hog due to his poor performance?
-		SetHealth(player, 0)
+		-- and generate the stats and go to the stats screen
+		generateStats()
+		EndGame()
 		-- Just to be sure set the goal time to 1 ms
 		time_goal = 1
 	end
@@ -142,6 +148,7 @@ function onGameTick20()
 		-- wait has passed and then ...
 		if end_timer == 0 then
 			-- ... end the game ...
+			generateStats()
 			EndGame()
 		else
 			-- ... or just lower the timer by 1.
@@ -160,20 +167,23 @@ function onAmmoStoreInit()
 end
 
 -- This function is called when a new gear is added.
--- We don't need it for this training, so we can
--- keep it empty.
--- function onGearAdd(gear)
--- end
+-- We use it to count the number of shots, which we
+-- in turn use to calculate the final score and stats
+function onGearAdd(gear)
+	if GetGearType(gear) == gtSniperRifleShot then
+		shots = shots + 1
+	end
+end
 
 -- This function is called before a gear is destroyed.
 -- We use it to count the number of targets destroyed.
 function onGearDelete(gear)
-    
+
 	if GetGearType(gear) == gtCase then
 		game_lost = true
 		return
 	end
-	
+
 	if (GetGearType(gear) == gtTarget) then
 		-- remember when the target was hit for adjusting the camera
 		last_hit_time = TurnTimeLeft
@@ -309,4 +319,31 @@ function onGearDelete(gear)
 			end
 		end
 	end
+end
+
+-- This function calculates the final score of the player and provides some texts and
+-- data for the final stats screen
+function generateStats()
+	local accuracy = (score/shots)*100
+	local end_score_targets = (score * 200)
+	local end_score_overall
+	if not game_lost then
+		local end_score_time = math.ceil(time_goal/5)
+		local end_score_accuracy = math.ceil(accuracy * 100)
+		end_score_overall = end_score_time + end_score_targets + end_score_accuracy
+
+		SendStat(siGameResult, loc("You have successfully finished the sniper rifle training!"))
+		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
+		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
+		SendStat(siCustomAchievement, string.format(loc("Accuracy bonus: +%d points"), end_score_accuracy))
+		SendStat(siCustomAchievement, string.format(loc("You had %.2fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
+	else
+		SendStat(siGameResult, loc("You lose!"))
+
+		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
+		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
+		end_score_overall = end_score_targets
+	end
+	SendStat(siPlayerKills, tostring(end_score_overall), loc("Sniperz"))
+	SendStat(siPointType, loc("points"))
 end

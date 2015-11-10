@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -30,9 +30,11 @@ procedure ResetLand;
 procedure SetLandTexture;
 
 implementation
-uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
+uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender, uUtils;
 
 const TEXSIZE = 128;
+      // in avoid tile borders stretch the blurry texture by 1 pixel more
+      BLURRYLANDOVERLAP: real = 1 / TEXSIZE / 2.0; // 1 pixel divided by texsize and blurry land scale factor
 
 type TLandRecord = record
             shouldUpdate, landAdded: boolean;
@@ -65,6 +67,7 @@ end;
 
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt; landAdded: boolean);
 var tx, ty: Longword;
+    tSize : LongInt;
 begin
     if cOnlyStats then exit;
     if (Width <= 0) or (Height <= 0) then
@@ -74,23 +77,25 @@ begin
     TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
     TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
 
-    if (cReducedQuality and rqBlurryLand) = 0 then
-        for ty:= Y div TEXSIZE to (Y + Height - 1) div TEXSIZE do
-            for tx:= X div TEXSIZE to (X + Width - 1) div TEXSIZE do
+    tSize:= TEXSIZE;
+
+    // land textures have half the size/resolution in blurry mode
+    if (cReducedQuality and rqBlurryLand) <> 0 then
+        tSize:= tSize * 2;
+
+    for ty:= Y div tSize to (Y + Height - 1) div tSize do
+        for tx:= X div tSize to (X + Width - 1) div tSize do
+            begin
+            if not LandTextures[tx, ty].shouldUpdate then
                 begin
                 LandTextures[tx, ty].shouldUpdate:= true;
-                LandTextures[tx, ty].landAdded:= landAdded
-                end
-    else
-        for ty:= (Y div TEXSIZE) div 2 to ((Y + Height - 1) div TEXSIZE) div 2 do
-            for tx:= (X div TEXSIZE) div 2 to ((X + Width - 1) div TEXSIZE) div 2 do
-                begin
-                LandTextures[tx, ty].shouldUpdate:= true;
-                LandTextures[tx, ty].landAdded:= landAdded
-                end
+                inc(dirtyLandTexCount);
+                end;
+            LandTextures[tx, ty].landAdded:= landAdded
+            end;
 end;
 
-procedure RealLandTexUpdate;
+procedure RealLandTexUpdate(x1, x2, y1, y2: LongInt);
 var x, y, ty, tx, lx, ly : LongWord;
     isEmpty: boolean;
 begin
@@ -107,12 +112,13 @@ if LandTextures[0, 0].tex = nil then
                 end
 else
 *)
-    for x:= 0 to LANDTEXARW -1 do
-        for y:= 0 to LANDTEXARH - 1 do
+    for x:= x1 to x2 do
+        for y:= y1 to y2 do
             with LandTextures[x, y] do
                 if shouldUpdate then
                     begin
                     shouldUpdate:= false;
+                    dec(dirtyLandTexCount);
                     isEmpty:= not landAdded;
                     landAdded:= false;
                     ty:= 0;
@@ -123,13 +129,13 @@ else
                     while isEmpty and (ty < TEXSIZE) do
                         begin
                         isEmpty:= LandPixels[ly + ty, lx] and AMask = 0;
-                        if isEmpty then isEmpty:= LandPixels[ly + ty, lx + TEXSIZE-1] and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixels[ly + ty, Pred(lx + TEXSIZE)] and AMask = 0;
                         inc(ty)
                         end;
                     while isEmpty and (tx < TEXSIZE-1) do
                         begin
                         isEmpty:= LandPixels[ly, lx + tx] and AMask = 0;
-                        if isEmpty then isEmpty:= LandPixels[ly + TEXSIZE-1, lx + tx] and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixels[Pred(ly + TEXSIZE), lx + tx] and AMask = 0;
                         inc(tx)
                         end;
                     // then search every other remaining. does this sort of stuff defeat compiler opts?
@@ -163,27 +169,90 @@ else
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y));
                         end
                     else if tex <> nil then
-                        begin
-                        FreeTexture(tex);
-                        tex:= nil
-                        end;
+                        FreeAndNilTexture(tex);
+
+                    // nothing else to do
+                    if dirtyLandTexCount < 1 then
+                        exit;
                     end
 end;
 
 procedure DrawLand(dX, dY: LongInt);
-var x, y: LongInt;
+var x, y, tX, ty, tSize, fx, lx, fy, ly: LongInt;
+    tScale: GLfloat;
+    overlap: boolean;
 begin
-RealLandTexUpdate;
+// init values based on quality settings
+if (cReducedQuality and rqBlurryLand) <> 0 then
+    begin
+    tSize:= TEXSIZE * 2;
+    tScale:= 2.0;
+    overlap:= (cReducedQuality and rqClampLess) <> 0;
+    end
+else
+    begin
+    tSize:= TEXSIZE;
+    tScale:= 1.0;
+    overlap:= false;
+    end;
 
-for x:= 0 to LANDTEXARW -1 do
-    for y:= 0 to LANDTEXARH - 1 do
+// figure out visible area
+// first column
+tx:= ViewLeftX - dx;
+fx:= tx div tSize;
+if tx < 0 then dec(fx);
+fx:= max(0, fx);
+
+// last column
+tx:= ViewRightX - dx;
+lx:= tx div tSize;
+if tx < 0 then dec(lx);
+lx:= min(LANDTEXARW -1, lx);
+
+// all offscreen
+if (fx > lx) then
+    exit;
+
+// first row
+ty:= ViewTopY - dy;
+fy:= ty div tSize;
+if ty < 0 then dec(fy);
+fy:= max(0, fy);
+
+// last row
+ty:= ViewBottomY - dy;
+ly:= ty div tSize;
+if ty < 0 then dec(ly);
+ly:= min(LANDTEXARH -1, ly);
+
+// all offscreen
+if (fy > ly) then
+    exit;
+
+// update visible areas of landtex before drawing
+if dirtyLandTexCount > 0 then
+    RealLandTexUpdate(fx, lx, fy, ly);
+
+tX:= dX + tsize * fx;
+
+// loop through columns
+for x:= fx to lx do
+    begin
+    // loop through textures in this column
+    for y:= fy to ly do
         with LandTextures[x, y] do
             if tex <> nil then
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                    DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
+                begin
+                ty:= dY + y * tSize;
+                if overlap then
+                    DrawTexture2(tX, ty, tex, tScale, BLURRYLANDOVERLAP)
                 else
-                    DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
+                    DrawTexture(tX, ty, tex, tScale);
+                end;
 
+    // increment tX
+    inc(tX, tSize);
+    end;
 end;
 
 procedure SetLandTexture;
@@ -212,13 +281,7 @@ begin
     for x:= 0 to LANDTEXARW - 1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
-                begin
-                if tex <> nil then
-                    begin
-                    FreeTexture(tex);
-                    tex:= nil
-                    end
-                end;
+                FreeAndNilTexture(tex);
 end;
 
 procedure freeModule;

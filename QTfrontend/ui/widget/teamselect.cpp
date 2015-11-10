@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <algorithm>
@@ -121,26 +121,22 @@ void TeamSelWidget::changeTeamColor(const HWTeam& team)
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
 {
     //qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
-    for(;;)
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    if(itPlay==curPlayingTeams.end())
     {
-        QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-        if(itPlay==curPlayingTeams.end())
-        {
-            qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.name());
-            break;
-        }
-        if(itPlay->isNetTeam())
-        {
-            QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
-            framePlaying->removeTeam(team);
-            curPlayingTeams.erase(itPlay);
-            break;
-        }
-        else
-        {
-            qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
-            break;
-        }
+        qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.name());
+        return;
+    }
+
+    if(itPlay->isNetTeam())
+    {
+        QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
+        framePlaying->removeTeam(team);
+        curPlayingTeams.erase(itPlay);
+    }
+    else
+    {
+        qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
     }
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }

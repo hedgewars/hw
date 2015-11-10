@@ -1,0 +1,57 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Bare vælg samme farve som en ven for at spille sammen som et hold. Hver af jer vil stadig kontrollere sine egne pindsvin, men vil vinde eller tabe sammen.</tip>
+    <tip>Nogle våben giver måske ikke særlig meget skade, men de kan være meget mere farlige i de rigtige situationer. Prøv at bruge Desert Eagle-pistolen til at skubbe flere pindsvin i vandet.</tip>
+    <tip>Hvis du er usikker på hvad du skal gøre og ikke vil spilde ammunition, kan du springe en runde over. Men lad der ikke gå alt for meget tid, for ellers indtræffer Pludselig Død!</tip>
+    <tip>Hvis du ikke vil have at andre anvender dit foretrukne brugernavn på den officielle server, kan du registrere en bruger på http://www.hedgewars.org/.</tip>
+    <tip>Er du træt af den almindelige måde at spille på? Prøv en af missionerne - de tilbyder forskellige måder at spille på afhængigt af hvilken en du vælger.</tip>
+    <tip>Som standard optager spillet altid det sidste spil du har spillet som en demo. Tryk på 'Lokalt spil' og vælg 'Demoer'-knappen i nederste højre hjørne for at afspille eller administrere dem.</tip>
+    <tip>Hedgewars er Open Source og et gratis spil vi laver i vores fritid. Hvis du har problemer er du velkommen til at spørge på forummet, men forvent ikke at få hjælp 24 timer i døgnet!</tip>
+    <tip>Hedgewars er Open Source og et gratis spil vi laver i vores fritid. Hvis du holder af det, kan du hjælpe os med en lille donation eller ved at indsende dine egne modifikationer!</tip>
+    <tip>Hedgewars er Open Source og et gratis spil vi laver i vores fritid. Del det med dine venner og din familie som du ønsker!</tip>
+    <tip>Fra tid til anden er der officielle turneringer. Kommende begivenheder vil blive annonceret på http://www.hedgewars.org/ et par dage i forvejen.</tip>
+    <tip>Hedgewars er tilgængeligt på mange sprog. Hvis oversættelsen på dit sprog mangler noget eller er uddateret, skal du være velkommen til at kontakte os!</tip>
+    <tip>Hedgewars kan køre på mange forskellige operativsystemer, herunder Microsoft Windows, Mac OS X og Linux.</tip>
+    <tip>Husk altid at du kan sætte dine egne spil op under lokale-, netværks- og online-spil. Du er ikke begrænset til kun at bruge 'Simpelt spil'-muligheden.</tip>
+    <tip>Mens du spiller bør du tage en kort pause mindst en gang i timen.</tip>
+    <tip>Hvis dit grafikkort ikke understøtter hardware-accelereret OpenGL, kan du prøve at slå indstillingen 'Reduceret kvalitet' til for at forbedre ydelsen.</tip>
+    <tip>Vi er åbne over for foreslag og konstruktive tilbagemeldinger. Fortæl os det hvis der er noget du ikke kan lide eller hvis du har en god idé!</tip>
+    <tip>Specielt når du spiller online bør du være venlig og altid huske at du måske også spiller med eller mod børn!</tip>
+    <tip>Specielle måder at spille på som f.eks. 'Varmpyr' eller 'Karma' tillader dig at udvikle helt nye taktikker. Prøv dem i et brugerdefineret spil!</tip>
+    <tip>Du bør aldrig installere Hedgewars på computere du ikke ejer (skole, universitet, arbejde,e.l.). Spørg venligst den ansvarlige person i stedet!</tip>
+    <tip>Hedgewars er perfekt til korte spil under pauser. Bare par på du ikke tilføjer for mange pindsvin eller bruger en kæmpe bane. Det kan også hjælpe at reducere tid og liv.</tip>
+    <tip>Ingen pindsvin kom til skade under produktionen af dette spil.</tip>
+    <tip>Hedgewars er Open Source og et gratis spil vi laver i vores fritid. Hvis nogen solgte dig spiller skal du bede om at få pengene tilbage!</tip>
+    <tip>Tilslut en eller flere gamepads før du starter spiller for at kunne tildele dem til dit hold.</tip>
+    <tip>Opret en bruger på %1 hvis du ikke vil have at andre anvender dit foretrukne brugernavn på den officielle server.</tip>
+    <tip>Hvis du ikke er i stand til at slå hardware-accelereret OpenGL til, bør du prøve at opdatere dine grafikkort-drivere.</tip>
+    <tip>Der er tre forskellige typer hop tilgængelige. Tryk hurtigt på [hight jump] to gange i træk for at lave et højt, baglæns hop.</tip>
+    <tip>Er du bange for at falde ned fra en skrænt? Hold [precise] nede for at vende dig mod [left] eller [right] uden at bevæge dig.</tip>
+    <tip>Nogle våben kræver specielle strategier eller bare masser af træning, så undlad ikke at bruge et bestemt våben bare fordi du rammer ved siden af én gang.</tip>
+    <tip>De fleste våben virker ikke så snart de har rørt vandet. Den Målsøgende Bi og Kagen er de eneste undtagelser.</tip>
+    <tip>Gamle Ole laver kun en lille eksplosion. Til gengæld kan den stænkende sky den udsender føres rundt af vinden og ramme mange pindsvin på én gang.</tip>
+    <tip>Klaveranslaget er det luftvåben der giver allermest skade. Til gengæld mister du det pindsvin som bruger angrebet, så der er også en bagside af medaljen.</tip>
+    <tip>Klæbrige Miner er det perfekte værktøj til at lave små kædereaktioner og smide pindsvin ud i faretruende situationer... eller bare direkte i vandet.</tip>
+    <tip>Hammeren er mest effektiv når den bruges enten på broer eller bærebjælker. Sigter du mod pindsvin med den, laver du bare huller i jorden.</tip>
+    <tip>Hvis du sidder fast bag en af modstanderens pindsvin, kan du bruge Hammeren til at slå dig fri uden at tage skade under en eksplosion.</tip>
+    <tip>Kagen kan gå kortere eller længere, afhængig af hvad den skal over på vejen. Du kan brrug [attack] til at detonere den før den når sin destination.</tip>
+    <tip>Flammekasteren er et våben, men den kan også bruges til hurtigt at grave tunneler.</tip>
+    <tip>Vil du vide hvem der står bag spillet? Klik på Hedgewars-logoet i hovedmenuen for at se rulleteksterne.</tip>
+    <tip>Er du glad for Hedgewars? Bliv fan på %1 eller følge vores opdateringer på %2!</tip>
+    <tip>Du skal være velkommen til at tegne dine egne gravsten, hatte, flag eller endda baner og temaer! Men læg mærke til at du bliver nød til at dele dem med andre hvis du vil spille med dem online.</tip>
+    <tip>Vil du virkelig gerne have en specifik hat? Send os en donation, så kvitterer vi med en eksklusiv hat efter eget valg!</tip>
+    <tip>Hold dine grafikkortdrivere opdaterede for at undgå problemmer i spillet.</tip>
+    <tip>Du kan finde konfigurationsfilerne til Hedgewars under mappen "(Mine) Dokumenter\Hedgewars". Opret gerne en back-up eller tag filerne med dig, men lad være med selv at ændre i dem.</tip>
+    <tip>Du kan indstille Hedgewars-filer (gemte spil og demooptagelser) til automatisk at åbne når du trykker på dem eller åbner dem i din internet-browser.</tip>
+    <tip>Vil du gerne spare på dine reb? Slip rebet midt i luften og skyd straks igen. Så længe du ikke rører jorden bruger du ikke noget ammunition!</tip>
+    <tip>Du kan finde konfigurationsfilerne til Hedgewars under mappen "Bibliotek/Application Support/Hedgewars" i din hjemmemappe. Opret gerne en back-up eller tag filerne med dig, men lad være med selv at ændre i dem.</tip>
+    <tip>Du kan finde konfigurationsfilerne til Hedgewars under mappen ".hedgewars" i din hjemmemappe. Opret gerne en back-up eller tag filerne med dig, men lad være med selv at ændre i dem.</tip>
+    <tip>Brug en Molotovcocktail eller Flammekasteren til midlertidigt at forhindre pindsvin i at passere et område, f.eks. en tunnel eller platform.</tip>
+    <tip>Den Målsøgende Bi kan være svær at bruge. Den vender lettere hvis den ikke flyver alt for hurtigt, så prøv at spare på kraften når du affyrer den.</tip>
+    <windows-only>
+        <tip>Windows-versionen af Hedgewars understøtter integrering med Xfire. Husk at tilføje Hedgewars til din liste med spil så dine venner kan se hvornår du spiller.</tip>
+    </windows-only>
+</tips>

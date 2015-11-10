@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -29,17 +29,21 @@ function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; C
 procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
 
-const 
+const
     cExplFrameTicks = 110;
 
 var VGCounter: LongWord;
     VisualGearLayers: array[0..6] of PVisualGear;
 
 implementation
-uses uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
+uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
 
 function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 begin
+    // adjust some visual gear types if underwater
+    if CheckCoordInWater(X, Y) and ((Kind = vgtBeeTrace) or (Kind = vgtSmokeTrace) or (Kind = vgtEvilTrace)) then
+        Kind:= vgtBubble;
+
     AddVisualGear:= AddVisualGear(X, Y, Kind, 0, false, -1);
 end;
 
@@ -74,8 +78,9 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtSmokeTrace,
     vgtEvilTrace,
     vgtNote,
+    vgtFeather,
     vgtSmoothWindBar])) then
-    
+
         exit;
 
 inc(VGCounter);
@@ -84,11 +89,9 @@ FillChar(gear^, sizeof(TVisualGear), 0);
 gear^.X:= real(X);
 gear^.Y:= real(Y);
 gear^.Kind := Kind;
-gear^.doStep:= doStepHandlers[Kind];
-gear^.State:= 0;
+gear^.doStep:= doStepVGHandlers[Kind];
 gear^.Tint:= $FFFFFFFF;
 gear^.uid:= VGCounter;
-gear^.Layer:= 0;
 
 with gear^ do
     case Kind of
@@ -100,12 +103,14 @@ with gear^ do
                 Scale:= 1.0;
                 if SuddenDeathDmg then
                     begin
-                    FrameTicks:= random(vobSDFrameTicks);
+                    if vobSDFrameTicks > 0 then
+                        FrameTicks:= random(vobSDFrameTicks);
                     Frame:= random(vobSDFramesCount);
                     end
                 else
                     begin
-                    FrameTicks:= random(vobFrameTicks);
+                    if vobFrameTicks > 0 then
+                        FrameTicks:= random(vobFrameTicks);
                     Frame:= random(vobFramesCount);
                     end;
                 Angle:= random(360);
@@ -289,7 +294,7 @@ vgtBigExplosion:
                 if random(2) = 0 then
                     dx := -dx;
                 end;
-      vgtNote: 
+      vgtNote:
                 begin
                 dx:= 0.005 * (random(15) + 10);
                 dy:= -0.001 * (random(40) + 20);
@@ -306,7 +311,7 @@ vgtBigExplosion:
                 Frame:= 7;
                 Angle:= 0;
                 end;
-vgtSmoothWindBar: 
+vgtSmoothWindBar:
                 begin
                 Angle:= hwFloat2Float(cMaxWindSpeed)*2 / 1440; // seems rate below is supposed to change wind bar at 1px per 10ms. Max time, 1440ms. This tries to match the rate of change
                 Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
@@ -324,6 +329,12 @@ vgtSmoothWindBar:
                 FrameTicks:= random(750) + 1250;
                 State:= ord(sprSnowDust);
                 end;
+  vgtNoPlaceWarn:
+                begin
+                FrameTicks:= 2000;
+                Tint:= $FF0000FF;
+                Scale:= 1.0;
+                end;
         end;
 
 if State <> 0 then
@@ -332,7 +343,7 @@ if State <> 0 then
 case Gear^.Kind of
     vgtFlake: if cFlattenFlakes then
         gear^.Layer:= 0
-              else if random(3) = 0 then 
+              else if random(3) = 0 then
                   begin
                   gear^.Scale:= 0.5;
                   gear^.Layer:= 0   // 33% - far back
@@ -365,6 +376,7 @@ case Gear^.Kind of
                   gear^.Scale:= 0.4;
                   gear^.Layer:= 4
                   end;
+    vgtNoPlaceWarn: gear^.Layer:= 6;
 
     // 0: this layer is very distant in the background when in stereo
     vgtTeamHealthSorter,
@@ -388,6 +400,7 @@ case Gear^.Kind of
     vgtSmallDamageTag,
     vgtHealthTag,
     vgtStraightShot,
+    vgtFeather,
     vgtChunk: gear^.Layer:= 3;
 
     // 2: this layer is outside the screen when stereo
@@ -398,7 +411,6 @@ case Gear^.Kind of
     vgtSteam,
     vgtAmmo,
     vgtShell,
-    vgtFeather,
     vgtEgg,
     vgtBeeTrace,
     vgtSmokeRing,
@@ -421,8 +433,7 @@ end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
-    FreeTexture(Gear^.Tex);
-    Gear^.Tex:= nil;
+    FreeAndNilTexture(Gear^.Tex);
 
     if Gear^.NextGear <> nil then
         Gear^.NextGear^.PrevGear:= Gear^.PrevGear;

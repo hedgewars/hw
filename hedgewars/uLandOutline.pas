@@ -9,8 +9,8 @@ type TPixAr = record
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
 
-procedure DrawEdge(var pa: TPixAr; Color: Longword);
-procedure FillLand(x, y: LongInt);
+procedure DrawEdge(var pa: TPixAr; value: Word);
+procedure FillLand(x, y: LongInt; border, value: Word);
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
 procedure RandomizePoints(var pa: TPixAr);
 
@@ -27,8 +27,6 @@ var Stack: record
                                      end
            end;
 
-const
-    cMaxEdgePoints = 16384;
 
 procedure Push(_xl, _xr, _y, _dir: LongInt);
 begin
@@ -58,7 +56,7 @@ begin
         end
 end;
 
-procedure FillLand(x, y: LongInt);
+procedure FillLand(x, y: LongInt; border, value: Word);
 var xl, xr, dir: LongInt;
 begin
     Stack.Count:= 0;
@@ -70,18 +68,18 @@ begin
     while Stack.Count > 0 do
         begin
         Pop(xl, xr, y, dir);
-        while (xl > 0) and (Land[y, xl] <> 0) do
+        while (xl > 0) and (Land[y, xl] <> border) and (Land[y, xl] <> value) do
             dec(xl);
-        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> 0) do
+        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> border) and (Land[y, xr] <> value) do
             inc(xr);
         while (xl < xr) do
             begin
-            while (xl <= xr) and (Land[y, xl] = 0) do
+            while (xl <= xr) and ((Land[y, xl] = border) or (Land[y, xl] = value)) do
                 inc(xl);
             x:= xl;
-            while (xl <= xr) and (Land[y, xl] <> 0) do
+            while (xl <= xr) and (Land[y, xl] <> border) and (Land[y, xl] <> value) do
                 begin
-                Land[y, xl]:= 0;
+                Land[y, xl]:= value;
                 inc(xl)
                 end;
             if x < xl then
@@ -93,17 +91,17 @@ begin
         end;
 end;
 
-procedure DrawEdge(var pa: TPixAr; Color: Longword);
+procedure DrawEdge(var pa: TPixAr; value: Word);
 var i: LongInt;
 begin
     i:= 0;
     with pa do
         while i < LongInt(Count) - 1 do
-            if (ar[i + 1].X = NTPX) then 
+            if (ar[i + 1].X = NTPX) then
                 inc(i, 2)
-            else 
+            else
                 begin
-                DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, Color);
+                DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, value);
                 inc(i)
                 end
 end;
@@ -115,30 +113,27 @@ begin
     Vx:= int2hwFloat(p1.X - p3.X);
     Vy:= int2hwFloat(p1.Y - p3.Y);
 
-    d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
-    d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
     d2:= Distance(Vx, Vy);
-
-    if d1 < d then
-        d:= d1;
-    if d2 < d then
-        d:= d2;
-
-    d:= d * _1div3;
 
     if d2.QWordValue = 0 then
         begin
         Vx:= _0;
         Vy:= _0
-        end 
+        end
     else
         begin
-        d2:= _1 / d2;
-        Vx:= Vx * d2;
-        Vy:= Vy * d2;
+        d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
+        d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
 
-        Vx:= Vx * d;
-        Vy:= Vy * d
+        if d1 < d then
+            d:= d1;
+        if d2 < d then
+            d:= d2;
+
+        d2:= d * _1div3 / d2;
+
+        Vx:= Vx * d2;
+        Vy:= Vy * d2
         end
 end;
 
@@ -149,54 +144,57 @@ var i, pi, ni: LongInt;
     tsq, tcb, t, r1, r2, r3, cx1, cx2, cy1, cy2: hwFloat;
     X, Y: LongInt;
 begin
-pi:= EndI;
-i:= StartI;
-ni:= Succ(StartI);
-{$HINTS OFF}
-Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
-{$HINTS ON}
-repeat
-    inc(pi);
-    if pi > EndI then
-        pi:= StartI;
-    inc(i);
-    if i > EndI then
-        i:= StartI;
-    inc(ni);
-    if ni > EndI then
-        ni:= StartI;
-    PVx:= NVx;
-    PVy:= NVy;
-    Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
-
-    x1:= opa.ar[pi].x;
-    y1:= opa.ar[pi].y;
-    x2:= opa.ar[i].x;
-    y2:= opa.ar[i].y;
-    cx1:= int2hwFloat(x1) - PVx;
-    cy1:= int2hwFloat(y1) - PVy;
-    cx2:= int2hwFloat(x2) + NVx;
-    cy2:= int2hwFloat(y2) + NVy;
-    t:= _0;
-    while t.Round = 0 do
+    if pa.Count < cMaxEdgePoints - 2 then
         begin
-        tsq:= t * t;
-        tcb:= tsq * t;
-        r1:= (_1 - t*3 + tsq*3 - tcb);
-        r2:= (     t*3 - tsq*6 + tcb*3);
-        r3:= (           tsq*3 - tcb*3);
-        X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
-        Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
-        t:= t + Delta;
-        pa.ar[pa.Count].x:= X;
-        pa.ar[pa.Count].y:= Y;
-        inc(pa.Count);
-        TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+        pi:= EndI;
+        i:= StartI;
+        ni:= Succ(StartI);
+        {$HINTS OFF}
+        Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+        {$HINTS ON}
+        repeat
+            i:= ni;
+            inc(pi);
+            if pi > EndI then
+                pi:= StartI;
+            inc(ni);
+            if ni > EndI then
+                ni:= StartI;
+            PVx:= NVx;
+            PVy:= NVy;
+            Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+
+            x1:= opa.ar[pi].x;
+            y1:= opa.ar[pi].y;
+            x2:= opa.ar[i].x;
+            y2:= opa.ar[i].y;
+
+            cx1:= int2hwFloat(x1) - PVx;
+            cy1:= int2hwFloat(y1) - PVy;
+            cx2:= int2hwFloat(x2) + NVx;
+            cy2:= int2hwFloat(y2) + NVy;
+            t:= _0;
+            while (t.Round = 0) and (pa.Count < cMaxEdgePoints-2) do
+                begin
+                tsq:= t * t;
+                tcb:= tsq * t;
+                r1:= (_1 - t*3 + tsq*3 - tcb);
+                r2:= (     t*3 - tsq*6 + tcb*3);
+                r3:= (           tsq*3 - tcb*3);
+                X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
+                Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
+                t:= t + Delta;
+                pa.ar[pa.Count].x:= X;
+                pa.ar[pa.Count].y:= Y;
+                inc(pa.Count);
+                //TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+                end;
+        until i = StartI;
         end;
-until i = StartI;
-pa.ar[pa.Count].x:= opa.ar[StartI].X;
-pa.ar[pa.Count].y:= opa.ar[StartI].Y;
-inc(pa.Count)
+
+    pa.ar[pa.Count].x:= opa.ar[StartI].X;
+    pa.ar[pa.Count].y:= opa.ar[StartI].Y;
+    inc(pa.Count)
 end;
 
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
@@ -207,7 +205,7 @@ opa:= pa;
 pa.Count:= 0;
 i:= 0;
 StartLoop:= 0;
-while i < LongInt(opa.Count) do
+while (i < LongInt(opa.Count)) and (pa.Count < cMaxEdgePoints-1) do
     if (opa.ar[i + 1].X = NTPX) then
         begin
         AddLoopPoints(pa, opa, StartLoop, i, Delta);
@@ -237,7 +235,7 @@ begin
             CheckIntersect:= false
         else if (c2 < 0) or (c2 > dm) then
             CheckIntersect:= false;
-    end 
+    end
     else
     begin
         if (c1 > 0) or (c1 < dm) then
@@ -255,7 +253,7 @@ function CheckSelfIntersect(var pa: TPixAr; ind: Longword): boolean;
 var i: Longword;
 begin
     CheckSelfIntersect:= false;
-    if (ind <= 0) or (ind >= Pred(pa.Count)) then
+    if (ind <= 0) or (LongInt(ind) >= Pred(pa.Count)) then
         exit;
 
     CheckSelfIntersect:= true;

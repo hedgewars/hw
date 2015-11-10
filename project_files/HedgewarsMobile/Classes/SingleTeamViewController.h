@@ -13,19 +13,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import <UIKit/UIKit.h>
-
-
-@class HogHatViewController;
-@class GravesViewController;
-@class VoicesViewController;
-@class FortsViewController;
-@class FlagsViewController;
-@class LevelViewController;
 
 @interface SingleTeamViewController : UITableViewController <EditableCellViewDelegate> {
     NSMutableDictionary *teamDictionary;
@@ -36,13 +28,6 @@
     NSArray *secondaryItems;
     NSArray *moreSecondaryItems;
     BOOL isWriteNeeded;
-
-    HogHatViewController *hogHatViewController;
-    GravesViewController *gravesViewController;
-    VoicesViewController *voicesViewController;
-    FortsViewController *fortsViewController;
-    FlagsViewController *flagsViewController;
-    LevelViewController *levelViewController;
 }
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;

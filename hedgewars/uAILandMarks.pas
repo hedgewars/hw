@@ -1,7 +1,7 @@
 unit uAILandMarks;
 
 interface
-const 
+const
     markWalkedHere = $01;
     markHJumped    = $02;
     markLJumped    = $04;
@@ -35,13 +35,13 @@ end;
 
 function  checkMark(X, Y: LongInt; mark: byte) : boolean;
 begin
-    checkMark:= ((X and LAND_WIDTH_MASK) = 0) 
-        and ((Y and LAND_HEIGHT_MASK) = 0) 
+    checkMark:= ((X and LAND_WIDTH_MASK) = 0)
+        and ((Y and LAND_HEIGHT_MASK) = 0)
         and ((marks[Y shr gr, X shr gr] and mark) <> 0)
 end;
 
 procedure clearAllMarks;
-var 
+var
     Y, X: Longword;
 begin
     for Y:= 0 to Pred(HEIGHT) do
@@ -50,7 +50,7 @@ begin
 end;
 
 procedure clearMarks(mark: byte);
-var 
+var
     Y, X: Longword;
 begin
     for Y:= 0 to Pred(HEIGHT) do
@@ -62,7 +62,7 @@ procedure setAILandMarks;
 begin
     WIDTH:= LAND_WIDTH shr gr;
     HEIGHT:= LAND_HEIGHT shr gr;
-    
+
     SetLength(marks, HEIGHT, WIDTH);
 end;
 

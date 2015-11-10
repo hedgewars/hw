@@ -25,8 +25,8 @@
 #define MAPCFG_H_
 
 typedef struct {
-	char theme[256];
-	int hogLimit;
+    char theme[256];
+    int hogLimit;
 } flib_mapcfg;
 
 /**

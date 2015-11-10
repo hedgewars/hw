@@ -75,8 +75,8 @@
 #endif
 
 /** The number of elements in an array */
-#define SDL_arraysize(array)	(sizeof(array)/sizeof(array[0]))
-#define SDL_TABLESIZE(table)	SDL_arraysize(table)
+#define SDL_arraysize(array)    (sizeof(array)/sizeof(array[0]))
+#define SDL_TABLESIZE(table)    SDL_arraysize(table)
 
 /* Use proper C++ casts when compiled as C++ to be compatible with the option
  -Wold-style-cast of GCC (and -Werror=old-style-cast in GCC 4.2 and above. */
@@ -91,27 +91,27 @@
 /** @name Basic data types */
 /*@{*/
 typedef enum {
-	SDL_FALSE = 0,
-	SDL_TRUE  = 1
+    SDL_FALSE = 0,
+    SDL_TRUE  = 1
 } SDL_bool;
 
-typedef int8_t		Sint8;
-typedef uint8_t		Uint8;
-typedef int16_t		Sint16;
-typedef uint16_t	Uint16;
-typedef int32_t		Sint32;
-typedef uint32_t	Uint32;
+typedef int8_t      Sint8;
+typedef uint8_t     Uint8;
+typedef int16_t     Sint16;
+typedef uint16_t    Uint16;
+typedef int32_t     Sint32;
+typedef uint32_t    Uint32;
 
 #ifdef SDL_HAS_64BIT_TYPE
-typedef int64_t		Sint64;
+typedef int64_t     Sint64;
 #ifndef SYMBIAN32_GCCE
-typedef uint64_t	Uint64;
+typedef uint64_t    Uint64;
 #endif
 #else
 /* This is really just a hack to prevent the compiler from complaining */
 typedef struct {
-	Uint32 hi;
-	Uint32 lo;
+    Uint32 hi;
+    Uint32 lo;
 } Uint64, Sint64;
 #endif
 
@@ -144,7 +144,7 @@ SDL_COMPILE_TIME_ASSERT(sint64, sizeof(Sint64) == 8);
 #endif
 
 typedef enum {
-	DUMMY_ENUM_VALUE
+    DUMMY_ENUM_VALUE
 } SDL_DUMMY_ENUM;
 
 #ifndef __NDS__
@@ -159,25 +159,25 @@ extern "C" {
 #endif
 
 #ifdef HAVE_MALLOC
-#define SDL_malloc	malloc
+#define SDL_malloc  malloc
 #else
 extern DECLSPEC void * SDLCALL SDL_malloc(size_t size);
 #endif
 
 #ifdef HAVE_CALLOC
-#define SDL_calloc	calloc
+#define SDL_calloc  calloc
 #else
 extern DECLSPEC void * SDLCALL SDL_calloc(size_t nmemb, size_t size);
 #endif
 
 #ifdef HAVE_REALLOC
-#define SDL_realloc	realloc
+#define SDL_realloc realloc
 #else
 extern DECLSPEC void * SDLCALL SDL_realloc(void *mem, size_t size);
 #endif
 
 #ifdef HAVE_FREE
-#define SDL_free	free
+#define SDL_free    free
 #else
 extern DECLSPEC void SDLCALL SDL_free(void *mem);
 #endif
@@ -213,32 +213,32 @@ extern DECLSPEC void SDLCALL SDL_free(void *mem);
 #endif
 
 #ifdef HAVE_GETENV
-#define SDL_getenv	getenv
+#define SDL_getenv  getenv
 #else
 extern DECLSPEC char * SDLCALL SDL_getenv(const char *name);
 #endif
 
 #ifdef HAVE_PUTENV
-#define SDL_putenv	putenv
+#define SDL_putenv  putenv
 #else
 extern DECLSPEC int SDLCALL SDL_putenv(const char *variable);
 #endif
 
 #ifdef HAVE_QSORT
-#define SDL_qsort	qsort
+#define SDL_qsort   qsort
 #else
 extern DECLSPEC void SDLCALL SDL_qsort(void *base, size_t nmemb, size_t size,
            int (*compare)(const void *, const void *));
 #endif
 
 #ifdef HAVE_ABS
-#define SDL_abs		abs
+#define SDL_abs     abs
 #else
-#define SDL_abs(X)	((X) < 0 ? -(X) : (X))
+#define SDL_abs(X)  ((X) < 0 ? -(X) : (X))
 #endif
 
-#define SDL_min(x, y)	(((x) < (y)) ? (x) : (y))
-#define SDL_max(x, y)	(((x) > (y)) ? (x) : (y))
+#define SDL_min(x, y)   (((x) < (y)) ? (x) : (y))
+#define SDL_max(x, y)   (((x) > (y)) ? (x) : (y))
 
 #ifdef HAVE_CTYPE_H
 #define SDL_isdigit(X)  isdigit(X)
@@ -259,32 +259,32 @@ extern DECLSPEC void * SDLCALL SDL_memset(void *dst, int c, size_t len);
 #endif
 
 #if defined(__GNUC__) && defined(i386)
-#define SDL_memset4(dst, val, len)				\
-do {								\
-	int u0, u1, u2;						\
-	__asm__ __volatile__ (					\
-		"cld\n\t"					\
-		"rep ; stosl\n\t"				\
-		: "=&D" (u0), "=&a" (u1), "=&c" (u2)		\
-		: "0" (dst), "1" (val), "2" (SDL_static_cast(Uint32, len))	\
-		: "memory" );					\
+#define SDL_memset4(dst, val, len)              \
+do {                                \
+    int u0, u1, u2;                     \
+    __asm__ __volatile__ (                  \
+        "cld\n\t"                   \
+        "rep ; stosl\n\t"               \
+        : "=&D" (u0), "=&a" (u1), "=&c" (u2)        \
+        : "0" (dst), "1" (val), "2" (SDL_static_cast(Uint32, len))  \
+        : "memory" );                   \
 } while(0)
 #endif
 #ifndef SDL_memset4
-#define SDL_memset4(dst, val, len)		\
-do {						\
-	unsigned _count = (len);		\
-	unsigned _n = (_count + 3) / 4;		\
-	Uint32 *_p = SDL_static_cast(Uint32 *, dst);	\
-	Uint32 _val = (val);			\
-	if (len == 0) break;			\
-        switch (_count % 4) {			\
-        case 0: do {    *_p++ = _val;		\
-        case 3:         *_p++ = _val;		\
-        case 2:         *_p++ = _val;		\
-        case 1:         *_p++ = _val;		\
-		} while ( --_n );		\
-	}					\
+#define SDL_memset4(dst, val, len)      \
+do {                        \
+    unsigned _count = (len);        \
+    unsigned _n = (_count + 3) / 4;     \
+    Uint32 *_p = SDL_static_cast(Uint32 *, dst);    \
+    Uint32 _val = (val);            \
+    if (len == 0) break;            \
+        switch (_count % 4) {           \
+        case 0: do {    *_p++ = _val;       \
+        case 3:         *_p++ = _val;       \
+        case 2:         *_p++ = _val;       \
+        case 1:         *_p++ = _val;       \
+        } while ( --_n );       \
+    }                   \
 } while(0)
 #endif
 
@@ -292,29 +292,29 @@ do {						\
 #if defined(__MACH__) && defined(__APPLE__)
 #define SDL_memcpy(dst, src, len) memcpy(dst, src, len)
 #elif defined(__GNUC__) && defined(i386)
-#define SDL_memcpy(dst, src, len)					  \
-do {									  \
-	int u0, u1, u2;						  	  \
-	__asm__ __volatile__ (						  \
-		"cld\n\t"						  \
-		"rep ; movsl\n\t"					  \
-		"testb $2,%b4\n\t"					  \
-		"je 1f\n\t"						  \
-		"movsw\n"						  \
-		"1:\ttestb $1,%b4\n\t"					  \
-		"je 2f\n\t"						  \
-		"movsb\n"						  \
-		"2:"							  \
-		: "=&c" (u0), "=&D" (u1), "=&S" (u2)			  \
-		: "0" (SDL_static_cast(unsigned, len)/4), "q" (len), "1" (dst),"2" (src) \
-		: "memory" );						  \
+#define SDL_memcpy(dst, src, len)                     \
+do {                                      \
+    int u0, u1, u2;                           \
+    __asm__ __volatile__ (                        \
+        "cld\n\t"                         \
+        "rep ; movsl\n\t"                     \
+        "testb $2,%b4\n\t"                    \
+        "je 1f\n\t"                       \
+        "movsw\n"                         \
+        "1:\ttestb $1,%b4\n\t"                    \
+        "je 2f\n\t"                       \
+        "movsb\n"                         \
+        "2:"                              \
+        : "=&c" (u0), "=&D" (u1), "=&S" (u2)              \
+        : "0" (SDL_static_cast(unsigned, len)/4), "q" (len), "1" (dst),"2" (src) \
+        : "memory" );                         \
 } while(0)
 #endif
 #ifndef SDL_memcpy
 #ifdef HAVE_MEMCPY
 #define SDL_memcpy      memcpy
 #elif defined(HAVE_BCOPY)
-#define SDL_memcpy(d, s, n)	bcopy((s), (d), (n))
+#define SDL_memcpy(d, s, n) bcopy((s), (d), (n))
 #else
 extern DECLSPEC void * SDLCALL SDL_memcpy(void *dst, const void *src, size_t len);
 #endif
@@ -324,46 +324,46 @@ extern DECLSPEC void * SDLCALL SDL_memcpy(void *dst, const void *src, size_t len
 #if defined(__MACH__) && defined(__APPLE__)
 #define SDL_memcpy4(dst, src, len) memcpy(dst, src, (len)*4)
 #elif defined(__GNUC__) && defined(i386)
-#define SDL_memcpy4(dst, src, len)				\
-do {								\
-	int ecx, edi, esi;					\
-	__asm__ __volatile__ (					\
-		"cld\n\t"					\
-		"rep ; movsl"					\
-		: "=&c" (ecx), "=&D" (edi), "=&S" (esi)		\
-		: "0" (SDL_static_cast(unsigned, len)), "1" (dst), "2" (src)	\
-		: "memory" );					\
+#define SDL_memcpy4(dst, src, len)              \
+do {                                \
+    int ecx, edi, esi;                  \
+    __asm__ __volatile__ (                  \
+        "cld\n\t"                   \
+        "rep ; movsl"                   \
+        : "=&c" (ecx), "=&D" (edi), "=&S" (esi)     \
+        : "0" (SDL_static_cast(unsigned, len)), "1" (dst), "2" (src)    \
+        : "memory" );                   \
 } while(0)
 #endif
 #ifndef SDL_memcpy4
-#define SDL_memcpy4(dst, src, len)	SDL_memcpy(dst, src, (len) << 2)
+#define SDL_memcpy4(dst, src, len)  SDL_memcpy(dst, src, (len) << 2)
 #endif
 
 #if defined(__GNUC__) && defined(i386)
-#define SDL_revcpy(dst, src, len)			\
-do {							\
-	int u0, u1, u2;					\
-	char *dstp = SDL_static_cast(char *, dst);	\
-	char *srcp = SDL_static_cast(char *, src);	\
-	int n = (len);					\
-	if ( n >= 4 ) {					\
-	__asm__ __volatile__ (				\
-		"std\n\t"				\
-		"rep ; movsl\n\t"			\
-		"cld\n\t"				\
-		: "=&c" (u0), "=&D" (u1), "=&S" (u2)	\
-		: "0" (n >> 2),				\
-		  "1" (dstp+(n-4)), "2" (srcp+(n-4))	\
-		: "memory" );				\
-	}						\
-	switch (n & 3) {				\
-		case 3: dstp[2] = srcp[2];		\
-		case 2: dstp[1] = srcp[1];		\
-		case 1: dstp[0] = srcp[0];		\
-			break;				\
-		default:				\
-			break;				\
-	}						\
+#define SDL_revcpy(dst, src, len)           \
+do {                            \
+    int u0, u1, u2;                 \
+    char *dstp = SDL_static_cast(char *, dst);  \
+    char *srcp = SDL_static_cast(char *, src);  \
+    int n = (len);                  \
+    if ( n >= 4 ) {                 \
+    __asm__ __volatile__ (              \
+        "std\n\t"               \
+        "rep ; movsl\n\t"           \
+        "cld\n\t"               \
+        : "=&c" (u0), "=&D" (u1), "=&S" (u2)    \
+        : "0" (n >> 2),             \
+          "1" (dstp+(n-4)), "2" (srcp+(n-4))    \
+        : "memory" );               \
+    }                       \
+    switch (n & 3) {                \
+        case 3: dstp[2] = srcp[2];      \
+        case 2: dstp[1] = srcp[1];      \
+        case 1: dstp[0] = srcp[0];      \
+            break;              \
+        default:                \
+            break;              \
+    }                       \
 } while(0)
 #endif
 #ifndef SDL_revcpy
@@ -373,15 +373,15 @@ extern DECLSPEC void * SDLCALL SDL_revcpy(void *dst, const void *src, size_t len
 #ifdef HAVE_MEMMOVE
 #define SDL_memmove     memmove
 #elif defined(HAVE_BCOPY)
-#define SDL_memmove(d, s, n)	bcopy((s), (d), (n))
+#define SDL_memmove(d, s, n)    bcopy((s), (d), (n))
 #else
-#define SDL_memmove(dst, src, len)			\
-do {							\
-	if ( dst < src ) {				\
-		SDL_memcpy(dst, src, len);		\
-	} else {					\
-		SDL_revcpy(dst, src, len);		\
-	}						\
+#define SDL_memmove(dst, src, len)          \
+do {                            \
+    if ( dst < src ) {              \
+        SDL_memcpy(dst, src, len);      \
+    } else {                    \
+        SDL_revcpy(dst, src, len);      \
+    }                       \
 } while(0)
 #endif
 
@@ -458,7 +458,7 @@ extern DECLSPEC char * SDLCALL SDL_strstr(const char *haystack, const char *need
 #ifdef HAVE_ITOA
 #define SDL_itoa        itoa
 #else
-#define SDL_itoa(value, string, radix)	SDL_ltoa((long)value, string, radix)
+#define SDL_itoa(value, string, radix)  SDL_ltoa((long)value, string, radix)
 #endif
 
 #ifdef HAVE__LTOA
@@ -470,7 +470,7 @@ extern DECLSPEC char * SDLCALL SDL_ltoa(long value, char *string, int radix);
 #ifdef HAVE__UITOA
 #define SDL_uitoa       _uitoa
 #else
-#define SDL_uitoa(value, string, radix)	SDL_ultoa((long)value, string, radix)
+#define SDL_uitoa(value, string, radix) SDL_ultoa((long)value, string, radix)
 #endif
 
 #ifdef HAVE__ULTOA
@@ -584,13 +584,13 @@ extern DECLSPEC int SDLCALL SDL_vsnprintf(char *text, size_t maxlen, const char 
 #endif
 
 /** @name SDL_ICONV Error Codes
- *  The SDL implementation of iconv() returns these error codes 
+ *  The SDL implementation of iconv() returns these error codes
  */
 /*@{*/
-#define SDL_ICONV_ERROR		(size_t)-1
-#define SDL_ICONV_E2BIG		(size_t)-2
-#define SDL_ICONV_EILSEQ	(size_t)-3
-#define SDL_ICONV_EINVAL	(size_t)-4
+#define SDL_ICONV_ERROR     (size_t)-1
+#define SDL_ICONV_E2BIG     (size_t)-2
+#define SDL_ICONV_EILSEQ    (size_t)-3
+#define SDL_ICONV_EINVAL    (size_t)-4
 /*@}*/
 
 #if defined(HAVE_ICONV) && defined(HAVE_ICONV_H)
@@ -607,9 +607,9 @@ extern DECLSPEC size_t SDLCALL SDL_iconv(SDL_iconv_t cd, const char **inbuf, siz
  *  string that must be freed with SDL_free() or NULL on error.
  */
 extern DECLSPEC char * SDLCALL SDL_iconv_string(const char *tocode, const char *fromcode, const char *inbuf, size_t inbytesleft);
-#define SDL_iconv_utf8_locale(S)	SDL_iconv_string("", "UTF-8", S, SDL_strlen(S)+1)
-#define SDL_iconv_utf8_ucs2(S)		(Uint16 *)SDL_iconv_string("UCS-2", "UTF-8", S, SDL_strlen(S)+1)
-#define SDL_iconv_utf8_ucs4(S)		(Uint32 *)SDL_iconv_string("UCS-4", "UTF-8", S, SDL_strlen(S)+1)
+#define SDL_iconv_utf8_locale(S)    SDL_iconv_string("", "UTF-8", S, SDL_strlen(S)+1)
+#define SDL_iconv_utf8_ucs2(S)      (Uint16 *)SDL_iconv_string("UCS-2", "UTF-8", S, SDL_strlen(S)+1)
+#define SDL_iconv_utf8_ucs4(S)      (Uint32 *)SDL_iconv_string("UCS-4", "UTF-8", S, SDL_strlen(S)+1)
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

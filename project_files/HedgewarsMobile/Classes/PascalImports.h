@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -28,9 +28,8 @@ extern "C" {
      * that you want to use in your non-Pascal code
      */
 
-    void Game(const int argc, const char *argv[]);
-    void GenLandPreview(void);
-    void LoadLocaleWrapper(const char *filename);
+    void RunEngine(const int argc, const char *argv[]);
+    void LoadLocaleWrapper(const char *filepath, const char *filename);
 
     void HW_versionInfo(int *protoNum, char **versionStr);
     void *HW_getSDLWindow(void);

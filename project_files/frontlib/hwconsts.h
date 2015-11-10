@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  * Copyright (c) 2012 Simeon Maxein <smaxein@googlemail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /**
@@ -89,26 +89,26 @@ int flib_get_weapons_count();
  * order of settings/mods).
  */
 typedef struct {
-    const char *name;				//!< A name identifying this setting (used as key in the schemes file)
-    const char *engineCommand;		//!< The command needed to send the setting to the engine. May be null if the setting is not sent to the engine (for the "health" setting)
-    const bool maxMeansInfinity;	//!< If true, send a very high number to the engine if the setting is equal to its maximum
-    const bool times1000;			//!< If true (for time-based settings), multiply the setting by 1000 before sending it to the engine.
-    const int min;					//!< The smallest allowed value
-    const int max;					//!< The highest allowed value
-    const int def;					//!< The default value
+    const char *name;               //!< A name identifying this setting (used as key in the schemes file)
+    const char *engineCommand;      //!< The command needed to send the setting to the engine. May be null if the setting is not sent to the engine (for the "health" setting)
+    const bool maxMeansInfinity;    //!< If true, send a very high number to the engine if the setting is equal to its maximum
+    const bool times1000;           //!< If true (for time-based settings), multiply the setting by 1000 before sending it to the engine.
+    const int min;                  //!< The smallest allowed value
+    const int max;                  //!< The highest allowed value
+    const int def;                  //!< The default value
 } flib_metascheme_setting;
 
 typedef struct {
-    const char *name;				//!< A name identifying this mod (used as key in the schemes file)
-    const int bitmaskIndex;			//!< Mods are sent to the engine in a single integer, this field describes which bit of that integer is used
-    								//! for this particular mod.
+    const char *name;               //!< A name identifying this mod (used as key in the schemes file)
+    const int bitmaskIndex;         //!< Mods are sent to the engine in a single integer, this field describes which bit of that integer is used
+                                    //! for this particular mod.
 } flib_metascheme_mod;
 
 typedef struct {
-	const int settingCount;
-	const int modCount;
-	const flib_metascheme_setting *settings;
-	const flib_metascheme_mod *mods;
+    const int settingCount;
+    const int modCount;
+    const flib_metascheme_setting *settings;
+    const flib_metascheme_mod *mods;
 } flib_metascheme;
 
 extern const flib_metascheme flib_meta;

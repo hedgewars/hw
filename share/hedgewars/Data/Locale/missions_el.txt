@@ -1,0 +1,53 @@
+Basic_Training_-_Bazooka.name=Βασική Εκπαίδευση Μπαζούκα
+Basic_Training_-_Bazooka.desc="Το κλειδί είναι να χρησιμοποιήσεις τον άνεμο προς όφελός σου!"
+
+Basic_Training_-_Grenade.name=Βασική Εκπαίδευση Χειροβομβίδας
+Basic_Training_-_Grenade.desc="Θυμίσου, τραβάς την περόνη ΚΑΙ πετάς!"
+
+Basic_Training_-_Cluster_Bomb.name=Βασική Εκπαίδευση Βόμβας Θραυσμάτων
+Basic_Training_-_Cluster_Bomb.desc="Κάποιος χρειάζεται ένα καυτό ντουζ!"
+
+Basic_Training_-_Shotgun.name=Βασική Εκπαίδευση Καραμπίνας
+Basic_Training_-_Shotgun.desc="Πυροβόλα πρώτα, ρώτα μετά!"
+
+Basic_Training_-_Sniper_Rifle.name=Βασική Εκπαίδευση Ελεύθερου Σκοπευτή
+Basic_Training_-_Sniper_Rifle.desc="Μπαμ, χτύπημα στο κεφάλι!"
+
+Basic_Training_-_Rope.name=Βασική Εκπαίδευση Σκοινιού
+Basic_Training_-_Rope.desc="Τράβα εκεί έξω και κουνίσου!"
+
+User_Mission_-_Dangerous_Ducklings.name=Αποστολή: Επικίνδυνα Παπιά
+User_Mission_-_Dangerous_Ducklings.desc="Λοιπόν, στραβάδι! Καιρός να θέσουμε ό,τι μάθαμε στη Βασική Εκπαίδευση σε εφαρμογή!"
+
+User_Mission_-_Diver.name=Αποστολή: Δύτης
+User_Mission_-_Diver.desc="Αυτή η 'αμφίβια εισβολή' είναι πιο δύσκολη απ'ότι φαίνεται..."
+
+User_Mission_-_Teamwork.name=Αποστολή: Ομαδική Δουλειά
+User_Mission_-_Teamwork.desc="Μερικές φορές, η αγάπη πονάει."
+
+User_Mission_-_Spooky_Tree.name=Αποστολή: Τρομακτικό Δέντρο
+User_Mission_-_Spooky_Tree.desc="Πολλά κιβώτια εκεί έξω. Ελπίζω αυτό το πτηνό να μην αισθάνεται πεινασμένο."
+
+User_Mission_-_Bamboo_Thicket.name=Αποστολή: Θάμνος από Bamboo
+User_Mission_-_Bamboo_Thicket.desc="Ο θάνατος έρχεται από κάτω."
+
+User_Mission_-_That_Sinking_Feeling.name=Αποστολή: Αυτό το Αίσθημα ότι Βουλιάζεις
+User_Mission_-_That_Sinking_Feeling.desc="Η στάθμη του νερού ανεβαίνει απότομα και ο χρόνος είναι περιορισμένος. Πολλοί προσπάθησαν και απέτυχαν. Μπορείς να τους σώσεις όλους;"
+
+User_Mission_-_Newton_and_the_Hammock.name=Αποστολή: ο Νεύτωνας και η Αιώρα
+User_Mission_-_Newton_and_the_Hammock.desc="Θυμηθείτε σκαντζοχοίρια: Η ταχύτητα ενός σώματος παραμένει σταθερή εκτός εάν ασκηθεί στο σώμα κάποια εξωτερική δύναμη!"
+
+User_Mission_-_The_Great_Escape.name=Αποστολή: Η Μεγάλη Απόδραση
+User_Mission_-_The_Great_Escape.desc="Νομίζεις ότι μπορείς να με φυλακίσεις!;"
+
+User_Mission_-_Rope_Knock_Challenge.name=Πρόκληση: Χτύπημα με Σκοινί
+User_Mission_-_Rope_Knock_Challenge.desc="Κοίτα πίσω σου!"
+
+User_Mission_-_Nobody_Laugh.name=Αποστολή: Μη Γελάσει Κανείς
+User_Mission_-_Nobody_Laugh.desc="Αυτό δεν είναι αστείο."
+
+User_Mission_-_RCPlane_Challenge.name=Πρόκληση: Τηλεκατευθυνόμενο Αεροπλάνο
+User_Mission_-_RCPlane_Challenge.desc="Νοιώθεις πολύ σίγουρος, ε, πιλότε;"
+
+portal.name=Αποστολή: Σπαζοκεφαλιά με Πύλες(Portals)
+portal.desc="Χρησιμοποίησε την πύλη για να μετακινηθείς γρήγορα και μακριά, χρησιμοποιησέ την για να σκοτώσεις, χρησιμοποιησέ την με προσοχή!"

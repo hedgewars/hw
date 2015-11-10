@@ -5,6 +5,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
@@ -115,7 +116,7 @@ function onNewTurn()
 	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
 		heroLost()
 	elseif not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
-		ParseCommand("setweap " .. string.char(amJetpack))
+		SetWeapon(amJetpack)
 	end
 end
 
@@ -188,7 +189,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet flying saucer stadium..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the olympic stadium of saucer flying..."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic stadium of saucer flying..."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream to come here one day in order to compete with the best!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best..."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass through the rings..."), 5000}})
@@ -249,9 +250,8 @@ end
 function checkIfHeroInWaypoint()
 	if not hero.dead then
 		local wp = waypoints[currentWaypoint-1]
-		local distance = math.sqrt((GetX(hero.gear)-wp.x)^2 + (GetY(hero.gear)-wp.y)^2)
-		if distance <= radius+4 then
-			SetWind(math.random(-100,100))
+		if gearIsInCircle(hero.gear, wp.x, wp.y, radius+4, false) then
+			SetWind(GetRandom(201)-100)
 			return true
 		end
 	end

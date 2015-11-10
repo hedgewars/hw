@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -51,8 +51,7 @@ type PCmd = ^TCmd;
             loTime: Word;
             case byte of
             1: (len: byte;
-                cmd: Char;
-                X, Y: LongInt);
+                cmd: Char);
             2: (str: shortstring);
             end;
 
@@ -77,7 +76,7 @@ new(command);
 FillChar(command^, sizeof(TCmd), 0);
 command^.loTime:= Time;
 command^.str:= str;
-if command^.cmd <> 'F' then dec(command^.len, 2); // cut timestamp
+if (command^.cmd <> 'F') and (command^.cmd <> 'G') then dec(command^.len, 2); // cut timestamp
 if headcmd = nil then
     begin
     headcmd:= command;
@@ -119,9 +118,23 @@ begin
     WriteLnToConsole(msgOK)
 end;
 
+procedure ParseChatCommand(command: shortstring; message: shortstring;
+                           messageStartIndex: Byte);
+var
+    text: shortstring;
+begin
+    text:= copy(message, messageStartIndex,
+                Length(message) - messageStartIndex + 1);
+    ParseCommand(command + text, true);
+    WriteLnToConsole(text)
+end;
+
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
+    isProcessed: boolean;
 begin
+isProcessed := true;
+
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
      '?': SendIPC(_S'!');
@@ -140,12 +153,27 @@ case s[1] of
      'V': begin
               if s[2] = '.' then
                   ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
-          end
+          end;
+     'I': ParseCommand('pause server', true);
+     's': if gameType = gmtNet then
+             ParseChatCommand('chatmsg ', s, 2)
+          else
+             isProcessed:= false;
+     'b': if gameType = gmtNet then
+             ParseChatCommand('chatmsg ' + #4, s, 2)
+          else
+             isProcessed:= false;
+     'Y': ChatPasteBuffer:= copy(s, 2, Length(s) - 1);
      else
-     loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
-     AddCmd(loTicks, s);
-     AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
-     end
+        isProcessed:= false;
+     end;
+
+    if (not isProcessed) then
+    begin
+        loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
+        AddCmd(loTicks, s);
+        AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
+    end
 end;
 
 procedure IPCCheckSock;
@@ -177,10 +205,10 @@ begin
 end;
 
 procedure LoadRecordFromFile(fileName: shortstring);
-var f: file;
-    ss: shortstring = '';
-    i: LongInt;
-    s: shortstring;
+var f  : File;
+    ss : shortstring = '';
+    i  : LongInt;
+    s  : shortstring;
 begin
 
 // set RDNLY on file open
@@ -188,7 +216,6 @@ filemode:= 0;
 {$I-}
 assign(f, fileName);
 reset(f, 1);
-
 tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
 
 i:= 0; // avoid compiler hints
@@ -202,7 +229,7 @@ repeat
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
             begin
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-            Delete(ss, 1, Succ(byte(ss[1])))
+            Delete(ss, 1, Succ(byte(ss[1])));
             end
         end
 until i = 0;
@@ -221,7 +248,15 @@ end;
 
 function isSyncedCommand(c: char): boolean;
 begin
-    isSyncedCommand:= (c in ['+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 'N', 'p', 'P', 'w', 't', '1', '2', '3', '4', '5']) or ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+    case c of
+    '+', '#', 'L', 'l', 'R', 'r', 'U'
+    , 'u', 'D', 'd', 'Z', 'z', 'A', 'a'
+    , 'S', 'j', 'J', ',', 'c', 'N', 'p'
+    , 'P', 'w', 't', '1', '2', '3', '4'
+    , '5', 'f', 'g': isSyncedCommand:= true;
+    else
+        isSyncedCommand:= ((byte(c) >= 128) and (byte(c) <= 128 + cMaxSlotIndex))
+    end
 end;
 
 procedure flushBuffer();
@@ -240,20 +275,20 @@ if IPCSock <> nil then
     begin
     if s[0] > #251 then
         s[0]:= #251;
-        
+
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-    
+
     AddFileLog('[IPC out] '+ sanitizeCharForLog(s[1]));
     inc(s[0], 2);
-    
+
     if isSyncedCommand(s[1]) then
         begin
         if sendBuffer.count + byte(s[0]) >= cSendBufferSize then
             flushBuffer();
-            
+
         Move(s, sendBuffer.buf[sendBuffer.count], byte(s[0]) + 1);
         inc(sendBuffer.count, byte(s[0]) + 1);
-        
+
         if (s[1] = 'N') or (s[1] = '#') then
             flushBuffer();
         end else
@@ -302,8 +337,8 @@ if (flushDelayTicks >= cSendEmptyPacketTime) then
     begin
     if sendBuffer.count = 0 then
         SendIPC(_S'+');
-        
-     flushBuffer()    
+
+     flushBuffer()
     end
 end;
 
@@ -316,12 +351,13 @@ tmpflag:= true;
 
 while (headcmd <> nil)
     and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
-    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
+    and ((GameTicks = LongWord(hiTicks shl 16 + headcmd^.loTime))
         or (headcmd^.cmd = 's') // for these commands time is not specified
         or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
         or (headcmd^.cmd = '#') // must be synced for saves to work
         or (headcmd^.cmd = 'b')
-        or (headcmd^.cmd = 'F')) do
+        or (headcmd^.cmd = 'F')
+        or (headcmd^.cmd = 'G')) do
     begin
     case headcmd^.cmd of
         '+': ; // do nothing - it is just an empty packet
@@ -349,26 +385,20 @@ while (headcmd <> nil)
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
              end;
-        's': begin
-            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg ' + s, true);
-            WriteLnToConsole(s)
-             end;
-        'b': begin
-            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg ' + #4 + s, true);
-            WriteLnToConsole(s)
-             end;
-// TODO: deprecate 'F'
-        'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        's': ParseChatCommand('chatmsg ', headcmd^.str, 2);
+        'b': ParseChatCommand('chatmsg ' + #4, headcmd^.str, 2);
+        'F': ParseCommand('teamgone u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'G': ParseCommand('teamback u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'g': ParseCommand('teamback s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
             lastTurnChecksum:= SDLNet_Read32(@headcmd^.str[2]);
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
              end;
         'p': begin
-            x32:= SDLNet_Read32(@(headcmd^.X));
-            y32:= SDLNet_Read32(@(headcmd^.Y));
+            x32:= SDLNet_Read32(@(headcmd^.str[2]));
+            y32:= SDLNet_Read32(@(headcmd^.str[6]));
             doPut(x32, y32, false)
              end;
         'P': begin
@@ -377,8 +407,8 @@ while (headcmd <> nil)
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
             if CurrentTeam^.ExtDriven then
                begin
-               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
-               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy;
+               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.str[2]))) + WorldDx;
+               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.str[6]))) - WorldDy;
                if not bShowAmmoMenu and autoCameraOn then
                     CursorPoint:= TargetCursorPoint
                end
@@ -388,7 +418,7 @@ while (headcmd <> nil)
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
         else
-            if (headcmd^.cmd >= #128) and (headcmd^.cmd <= char(128 + cMaxSlotIndex)) then
+            if (byte(headcmd^.cmd) >= 128) and (byte(headcmd^.cmd) <= 128 + cMaxSlotIndex) then
                 ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
                 else
                 OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
@@ -397,7 +427,7 @@ while (headcmd <> nil)
     end;
 
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
-    TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
+    TryDo(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
             ' (' + IntToStr(GameTicks) + ' > ' +
             IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',
@@ -405,7 +435,11 @@ if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 
-if isInLag then fastUntilLag:= false
+if isInLag and fastUntilLag then 
+begin
+    ParseCommand('spectate 0', true);
+    fastUntilLag:= false
+end;
 end;
 
 procedure chFatalError(var s: shortstring);
@@ -413,7 +447,11 @@ begin
     SendIPC('E' + s);
     // TODO: should we try to clean more stuff here?
     SDL_Quit;
-    halt(2)
+
+    if IPCSock <> nil then
+        halt(HaltFatalError)
+    else
+        halt(HaltFatalErrorNoIPC);
 end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
@@ -421,7 +459,7 @@ begin
 if CheckNoTeamOrHH or isPaused then
     exit;
 bShowFinger:= false;
-if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
+if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
     begin
     bSelected:= true;
     exit
@@ -429,7 +467,7 @@ if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
 
 with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
-    if (State and gstHHChooseTarget) <> 0 then
+    if (State and gstChooseTarget) <> 0 then
         begin
         isCursorVisible:= false;
         if not CurrentTeam^.ExtDriven then
@@ -452,7 +490,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.Y:= putY
             end;
         AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
-        State:= State and (not gstHHChooseTarget);
+        State:= State and (not gstChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end
@@ -471,7 +509,7 @@ begin
     lastcmd:= nil;
     isPonged:= false;
     SocketString:= '';
-    
+
     hiTicks:= 0;
     flushDelayTicks:= 0;
     sendBuffer.count:= 0;
@@ -483,6 +521,7 @@ begin
     SDLNet_FreeSocketSet(fds);
     SDLNet_TCP_Close(IPCSock);
     SDLNet_Quit();
+
 end;
 
 end.

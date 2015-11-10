@@ -46,7 +46,8 @@ end
 
 function onGameInit()
     -- Limit flags that can be set, but allow game schemes to be used
-    GameFlags = band(bor(GameFlags, gfResetWeps), bnot(gfInfAttack))
+    DisableGameFlags(gfInfAttack)
+    EnableGameFlags(gfResetWeps)
     -- Set a custom game goal that will show together with the scheme ones
     Goals = loc("Each turn you get one random weapon")
 end

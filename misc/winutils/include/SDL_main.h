@@ -35,7 +35,7 @@
     defined(__SYMBIAN32__) || defined(QWS)
 
 #ifdef __cplusplus
-#define C_LINKAGE	"C"
+#define C_LINKAGE   "C"
 #else
 #define C_LINKAGE
 #endif /* __cplusplus */
@@ -46,12 +46,12 @@
  *      #ifdef __cplusplus
  *      extern "C"
  *      #endif
- *	int main(int argc, char *argv[])
- *	{
- *	}
+ *  int main(int argc, char *argv[])
+ *  {
+ *  }
  *      @endcode
  */
-#define main	SDL_main
+#define main    SDL_main
 
 /** The prototype for the application's main() function */
 extern C_LINKAGE int SDL_main(int argc, char *argv[]);

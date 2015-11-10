@@ -2,6 +2,7 @@ foreach(dir
     Bamboo
     BambooPlinko
     Basketball
+    BasketballField
     Bath
     Battlefield
     Blizzard
@@ -11,6 +12,7 @@ foreach(dir
     Castle
     Cave
     Cheese
+    ClimbHome
     Cogs
     Control
     CrazyMission

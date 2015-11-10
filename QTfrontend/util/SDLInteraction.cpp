@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /**
@@ -54,6 +54,7 @@ SDLInteraction::SDLInteraction()
     m_music = NULL;
     m_musicTrack = "";
     m_isPlayingMusic = false;
+    lastchannel = 0;
     if(SDL_NumJoysticks())
         addGameControllerKeys();
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -174,6 +175,9 @@ void SDLInteraction::addGameControllerKeys() const
         SDL_JoystickClose(joy);
     }
 
+    if(i >= 1024)
+        i = 1023;
+
     // Terminate the list
     sdlkeys[i][0][0] = '\0';
     sdlkeys[i][1][0] = '\0';   
@@ -241,7 +245,7 @@ void SDLInteraction::startMusic()
     if (m_music == NULL)
         m_music = Mix_LoadMUS_RW(PHYSFSRWOPS_openRead(m_musicTrack.toLocal8Bit().constData()), 0);
 
-    Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
+    Mix_VolumeMusic(MIX_MAX_VOLUME/4);
     Mix_FadeInMusic(m_music, -1, 1750);
 }
 

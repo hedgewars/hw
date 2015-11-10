@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -43,8 +43,9 @@ type
 
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
-            ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath, ptButtons);
+            ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts, ptLocale,
+            ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps,
+            ptSuddenDeath, ptButtons, ptShaders);
 
     // Available sprites for displaying stuff
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
@@ -60,6 +61,7 @@ type
 {$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
             sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton, sprTargetButton,
+            sprSwitchButton,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
@@ -86,22 +88,24 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun, sprFrozenHog, sprAmRubber, sprBoing
+            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
+            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprAirMine, sprHandAirMine
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = ({-->}gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives, // <-- these are gears which should be avoided when searching a spawn place
-            gtGrenade, gtShell, gtGrave, gtBee, // 8
-            gtShotgunShot, gtPickHammer, gtRope,  // 11
-            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 16
-            gtFirePunch, gtATStartGame, // 18
-            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 23
-            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 28
-            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
-            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
+    // first row of gears (<gtExplosives) should be avoided when searching a spawn place
+    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtAirMine, gtExplosives, 
+            gtGrenade, gtShell, gtGrave, gtBee, // 9
+            gtShotgunShot, gtPickHammer, gtRope,  // 12
+            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 17
+            gtFirePunch, gtATStartGame, // 19
+            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 24
+            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 29
+            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 35
+            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 41
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 45
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
             gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
 
@@ -112,7 +116,7 @@ type
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
-            vgtSmoothWindBar, vgtStraightShot);
+            vgtSmoothWindBar, vgtStraightShot, vgtNoPlaceWarn);
 
     // Damage can be caused by different sources
     TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
@@ -138,9 +142,10 @@ type
             sndHellishImpact1, sndHellishImpact2, sndHellishImpact3, sndHellishImpact4,
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
-            sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
-            sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact, sndIceBeam, sndHogFreeze
+            sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7,
+            sndPiano8, sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
+            sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
+            sndIceBeam, sndHogFreeze
             );
 
     // Available ammo types to be used by hedgehogs
@@ -152,7 +157,8 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, amIceGun, amKnife, amRubber); // 56
+            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
+            amIceGun, amKnife, amRubber, amAirMine); // 57
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -167,13 +173,15 @@ type
             siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle,
             siPointType);
 
-    // Various "emote" animations a hedgehog can do
+    // Various 'emote' animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
     TUIDisplay = (uiAll, uiNoTeams, uiNone);
+    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn);
+
 
     THHFont = record
             Handle: PTTF_Font;
@@ -186,8 +194,8 @@ type
     TAmmo = record
             Propz: LongWord;
             Count: LongWord;
-(* Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
-For example, say, a mode where the weaponset is reset each turn, or on sudden death *)
+// Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
+// For example, say, a mode where the weaponset is reset each turn, or on sudden death
             NumPerTurn: LongWord;
             Timer: LongWord;
             Pos: LongWord;
@@ -203,6 +211,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TVertex2i = record
             X, Y: GLint;
             end;
+
+    TMatrix4x4f = array[0..3, 0..3] of GLfloat;
 
     PTexture = ^TTexture;
     TTexture = record
@@ -224,10 +234,10 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     PClan     = ^TClan;
 
     TGearStepProcedure = procedure (Gear: PGear);
-// So, you're here looking for variables you can (ab)use to store some gear state?
+// So, you are here looking for variables you can (ab)use to store some gear state?
 // Not all members of this structure are created equal. Comments below are my take on what can be used for what in the gear structure.
     TGear = record
-// Don't ever override these.
+// Do *not* ever override these.
             NextGear, PrevGear: PGear;  // Linked list
             Z: Longword;                // Z index. For rendering. Sets order in list
             Active: Boolean;            // Is gear Active (running step code)
@@ -241,6 +251,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             CollisionIndex: LongInt;    // Position in collision array
             Message: LongWord;          // Game messages are stored here. See gm bitmasks in uConsts
             uid: Longword;              // Lua use this to reference gears
+            Hedgehog: PHedgehog;        // set to CurrentHedgehog on gear creation.  uStats damage code appears to assume it will never be nil and never be changed.  If you override it, make sure it is set to a non-nil PHedgehog before dealing damage.
 // Strongly recommended not to override these.  Will mess up generic operations like portaling
             X : hwFloat;              // X/Y/dX/dY are position/velocity. People count on these having semi-normal values
             Y : hwFloat;
@@ -251,7 +262,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 // Don't use these if you're using generic movement like doStepFallingGear and explosion shoves. Generally recommended not to use.
             Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
             CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
-            AdvBounce: Longword; // Triggers 45° bounces. Is a counter to avoid edge cases
+            AdvBounce: Longword; // Triggers 45 bounces. Is a counter to avoid edge cases
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Density   : hwFloat; // Density is kind of a mix of size and density. Impacts distance thrown, wind.
@@ -259,20 +270,21 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             nImpactSounds: Word; // count of ImpactSounds.
 // Don't use these if you want to take damage normally, otherwise health/damage are commonly used for other purposes
             Health, Damage, Karma: LongInt;
-// DirAngle is a "real" - if you don't need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
+// DirAngle is a 'real' - if you do not need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
 // These are frequently overridden to serve some other purpose
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
             Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
-            Timer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
+            Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
             Tag: LongInt;            // Quite generic. Variety of uses.
             FlightTime: Longword;    // Initially added for batting of hogs to determine homerun. Used for some firing delays
             MsgParam: LongWord;      // Initially stored a set of messages. So usually gm values like Message. Frequently overriden
 // These are not used generically, but should probably be used for purpose intended. Definitely shouldn't override pointer type
             Tex: PTexture;          // A texture created by the gear. Shouldn't use for anything but textures
+            Tint: LongWord;         // Used to colour a texture
             LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
-            Hedgehog: PHedgehog;    // set to CurrentHedgehog on gear creation
             SoundChannel: LongInt;  // Used to track a sound the gear started
+            Data: Pointer; // pointer to gear type specific data structure (if any)
             end;
     TPGearArray = array of PGear;
     PGearArrayS = record
@@ -381,7 +393,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
             CurrHedgehog: LongWord;
             NameTagTex,
-            OwnerTex: PTexture;
+            OwnerTex,
             GraveTex,
             AIKillsTex,
             FlagTex: PTexture;
@@ -394,10 +406,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             DrawHealthY: LongInt;
             AttackBar: LongWord;
             HedgehogsNumber: Longword;
-            hasGone: boolean;
             voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
             stats: TTeamStats;
+            hasGone: boolean;
+            skippedTurns: Longword;
+            isGoneFlagPendingToBeSet, isGoneFlagPendingToBeUnset: boolean;
             end;
 
     TClan = record
@@ -415,6 +429,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
      cdeclPtr = procedure; cdecl;
      cdeclIntPtr = procedure(num: LongInt); cdecl;
+     funcDoublePtr = function: Double;
 
      TMobileRecord = record
                      PerformRumble: cdeclIntPtr;
@@ -435,13 +450,13 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber);
+            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
-            sidMute, sidAFK);
+            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
@@ -454,10 +469,13 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,
             gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
 
+
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
-    TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
+
+    TPreview  = packed array[0..127, 0..31] of byte;
+    TPreviewAlpha  = packed array[0..127, 0..255] of byte;
 
     PWidgetMovement = ^TWidgetMovement;
     TWidgetMovement = record
@@ -487,6 +505,31 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         timeSinceDown            : Longword;
         pressedWidget            : POnScreenWidget;
         end;
+
+    PSpriteData = ^TSpriteData;
+    TSpriteData = record
+            FileName: string[15];
+            Path, AltPath: TPathType;
+            Texture: PTexture;
+            Surface: PSDL_Surface;
+            Width, Height, imageWidth, imageHeight: LongInt;
+            saveSurf: boolean;
+            priority: GLfloat;
+            getDimensions, getImageDimensions: boolean;
+            end;
+
+    // gear data types
+
+    const cakeh =   27;
+
+    type TCakeData = record
+        CakeI: integer;
+        CakePoints: array[0..Pred(cakeh)] of record
+            x, y: hwFloat;
+        end;
+    end;
+
+    PCakeData = ^TCakeData;
 
 implementation
 

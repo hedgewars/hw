@@ -37,83 +37,83 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Listener {
-	private TeamlistAdapter adapter;
-	private Button addTeamButton;
-	private RoomStateManager stateManager;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		try {
-			stateManager = ((RoomStateManager.Provider)getActivity()).getRoomStateManager();
-		} catch(ClassCastException e) {
-			throw new RuntimeException("Hosting activity must implement RoomStateManager.Provider.", e);
-		}
-		adapter = new TeamlistAdapter();
-		adapter.updateTeamlist(stateManager.getTeams().values());
-		adapter.setColorHogcountEnabled(stateManager.getChiefStatus());
-		adapter.setListener(this);
-		setListAdapter(adapter);
-		stateManager.addListener(roomStateChangeListener);
-	}
+    private TeamlistAdapter adapter;
+    private Button addTeamButton;
+    private RoomStateManager stateManager;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_teamlist, container, false);
-		addTeamButton = (Button)v.findViewById(R.id.addTeamButton);
-		addTeamButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				new TeamAddDialog(getCurrentTeamNames()).show(getFragmentManager(), "team_add_dialog");
-			}
-		});
-		
-		addTeamButton.setEnabled(stateManager.getTeams().size() < Team.maxNumberOfTeams);
-		
-		return v;
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		adapter.setListener(null);
-		stateManager.removeListener(roomStateChangeListener);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        try {
+            stateManager = ((RoomStateManager.Provider)getActivity()).getRoomStateManager();
+        } catch(ClassCastException e) {
+            throw new RuntimeException("Hosting activity must implement RoomStateManager.Provider.", e);
+        }
+        adapter = new TeamlistAdapter();
+        adapter.updateTeamlist(stateManager.getTeams().values());
+        adapter.setColorHogcountEnabled(stateManager.getChiefStatus());
+        adapter.setListener(this);
+        setListAdapter(adapter);
+        stateManager.addListener(roomStateChangeListener);
+    }
 
-	private Collection<String> getCurrentTeamNames() {
-		List<String> names = new ArrayList<String>();
-		for(TeamInGame team : stateManager.getTeams().values()) {
-			names.add(team.team.name);
-		}
-		return names;
-	}
-	
-	public void onColorClicked(TeamInGame team) {
-		stateManager.changeTeamColorIndex(team.team.name, (team.ingameAttribs.colorIndex+1)%TeamIngameAttributes.TEAM_COLORS.length);
-	}
-	
-	public void onHogcountClicked(TeamInGame team) {
-		int newHogCount = team.ingameAttribs.hogCount+1;
-		if(newHogCount>Team.HEDGEHOGS_PER_TEAM) {
-			newHogCount = 1;
-		}
-		stateManager.changeTeamHogCount(team.team.name, newHogCount);
-	}
-	
-	public void onTeamClicked(TeamInGame team) {
-		stateManager.requestRemoveTeam(team.team.name);
-	}
-	
-	private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.ListenerAdapter() {
-		@Override
-		public void onChiefStatusChanged(boolean isChief) {
-			adapter.setColorHogcountEnabled(isChief);
-		};
-		
-		@Override
-		public void onTeamsChanged(Map<String, TeamInGame> teams) {
-			adapter.updateTeamlist(teams.values());
-			addTeamButton.setEnabled(teams.size() < Team.maxNumberOfTeams);
-		};
-	};
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_teamlist, container, false);
+        addTeamButton = (Button)v.findViewById(R.id.addTeamButton);
+        addTeamButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                new TeamAddDialog(getCurrentTeamNames()).show(getFragmentManager(), "team_add_dialog");
+            }
+        });
+
+        addTeamButton.setEnabled(stateManager.getTeams().size() < Team.maxNumberOfTeams);
+
+        return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.setListener(null);
+        stateManager.removeListener(roomStateChangeListener);
+    }
+
+    private Collection<String> getCurrentTeamNames() {
+        List<String> names = new ArrayList<String>();
+        for(TeamInGame team : stateManager.getTeams().values()) {
+            names.add(team.team.name);
+        }
+        return names;
+    }
+
+    public void onColorClicked(TeamInGame team) {
+        stateManager.changeTeamColorIndex(team.team.name, (team.ingameAttribs.colorIndex+1)%TeamIngameAttributes.TEAM_COLORS.length);
+    }
+
+    public void onHogcountClicked(TeamInGame team) {
+        int newHogCount = team.ingameAttribs.hogCount+1;
+        if(newHogCount>Team.HEDGEHOGS_PER_TEAM) {
+            newHogCount = 1;
+        }
+        stateManager.changeTeamHogCount(team.team.name, newHogCount);
+    }
+
+    public void onTeamClicked(TeamInGame team) {
+        stateManager.requestRemoveTeam(team.team.name);
+    }
+
+    private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.ListenerAdapter() {
+        @Override
+        public void onChiefStatusChanged(boolean isChief) {
+            adapter.setColorHogcountEnabled(isChief);
+        };
+
+        @Override
+        public void onTeamsChanged(Map<String, TeamInGame> teams) {
+            adapter.updateTeamlist(teams.values());
+            addTeamButton.setEnabled(teams.size() < Team.maxNumberOfTeams);
+        };
+    };
 }

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -235,11 +235,13 @@ const
     KMOD_MODE   = $4000;
 
     {* SDL_mixer *}
-    MIX_MAX_VOLUME = 128;
-    MIX_INIT_FLAC  = $00000001;
-    MIX_INIT_MOD   = $00000002;
-    MIX_INIT_MP3   = $00000004;
-    MIX_INIT_OGG   = $00000008;
+    MIX_MAX_VOLUME      = 128;
+    MIX_INIT_FLAC       = $00000001;
+    MIX_INIT_MOD        = $00000002;
+    MIX_INIT_MODPLUG    = $00000004;
+    MIX_INIT_MP3        = $00000008;
+    MIX_INIT_OGG        = $00000010;
+    MIX_INIT_FLUIDSYNTH = $00000020; 
 
     {* SDL_TTF *}
     TTF_STYLE_NORMAL = 0;
@@ -266,8 +268,12 @@ const
     SDLK_BACKSPACE = 8;
     SDLK_RETURN    = 13;
     SDLK_ESCAPE    = 27;
+    SDLK_a         = 97;
+    SDLK_c         = 99;
     SDLK_q         = 113;
+    SDLK_v         = 118;
     SDLK_w         = 119;
+    SDLK_x         = 120;
     SDLK_DELETE    = 127;
     SDLK_KP_ENTER  = 271;
     SDLK_UP        = 273;
@@ -337,12 +343,23 @@ type
         w, h  : LongInt;
         pitch : LongInt;
         pixels: Pointer;
-        userdata: Pointer;
-        locked: LongInt;
-        lock_data: Pointer;
+{$IFDEF PAS2C}
+        hwdata   : Pointer;
         clip_rect: TSDL_Rect;
-        map: Pointer;
-        refcount: LongInt;
+        unsed1   : LongWord;
+        locked   : LongWord;
+        map      : Pointer;
+        format_version: Longword;
+        refcount : LongInt;
+        offset   : LongInt;
+{$ELSE}
+        userdata  : Pointer;
+        locked    : LongInt;
+        lock_data : Pointer;
+        clip_rect : TSDL_Rect;
+        map       : Pointer;
+        refcount  : LongInt;
+{$ENDIF}
         end;
 
 
@@ -650,6 +667,7 @@ type
 
     TByteArray = array[0..65535] of Byte;
     PByteArray = ^TByteArray;
+
     TLongWordArray = array[0..16383] of LongWord;
     PLongWordArray = ^TLongWordArray;
 
@@ -906,6 +924,7 @@ function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL
 
 function  TTF_OpenFontRW(src: PSDL_RWops; freesrc: LongBool; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
+procedure TTF_CloseFont(font: PTTF_Font); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
 function  Mix_Init(flags: LongInt): LongInt; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName{$ELSE}inline{$ENDIF};

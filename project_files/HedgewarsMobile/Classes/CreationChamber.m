@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -57,7 +57,7 @@
         [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
     NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
                             @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
-                            @"Thinking with Portals",@"King Mode",nil];
+                            @"Thinking with Portals",@"King Mode",@"Construction Mode",nil];
     index = 0;
     for (NSString *name in schemeNames)
         [self createSchemeNamed:name ofType:index++];
@@ -65,7 +65,7 @@
 
     // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
     NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Thinking with Portals",nil];
+                            @"Minefield",@"Thinking with Portals",@"One of Everything",@"Highlander",@"Construction Mode",@"Shoppa Pro",nil];
     index = 0;
     for (NSString *name in weaponNames)
         [self createWeaponNamed:name ofType:index++];
@@ -241,6 +241,30 @@
             delay = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
             crate = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
+        case 7:  //one of everything
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
+            break;
+        case 8:  //highlander
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_HIGHLANDER_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_HIGHLANDER_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_HIGHLANDER_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_HIGHLANDER_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
+            break;
+        case 9:  //construction mode
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
+            break;
+        case 10:  //shoppa pro
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
+            break;
     }
 
     NSDictionary *theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys: qt,@"ammostore_initialqt",
@@ -303,6 +327,7 @@
             [basicArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithInt:25]];
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:8]];
             [gamemodArray replaceObjectAtIndex:1 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
@@ -342,6 +367,7 @@
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:10]];
             [basicArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithInt:10]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:10]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:4]];
             [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
@@ -373,12 +399,22 @@
             [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:4]];
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:5]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:5]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:4]];
             [gamemodArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             break;
         case 10: // king mode
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 11: // construction mode
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:16 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:18 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:20 withObject:[NSNumber numberWithBool:YES]];
             break;
     }
 

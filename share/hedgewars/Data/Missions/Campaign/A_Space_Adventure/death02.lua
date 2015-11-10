@@ -14,7 +14,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 	loc("Each time you play this missions enemy hogs will play in a random order").."|"..
 	loc("At the start of the game each enemy hog has only the weapon that he is named after").."|"..
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates").."|"..
-	loc("If you kill a hedgehog with the respective weapon your healh points will be set to 100").."|"..
+	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100").."|"..
 	loc("If you injure a hedgehog you'll get 35% of the damage dealt").."|"..
 	loc("Every time you kill an enemy hog your ammo will get reset").."|"..
 	loc("Rope won't get reset")
@@ -120,9 +120,9 @@ function onGearDelete(gear)
 		elseif deadHog.weapon == amGrenade then
 			hero.grenadeAmmo = 0
 		end
-		local randomHog = math.random(1,table.getn(enemies))
+		local randomHog = GetRandom(table.getn(enemies))+1
 		while not GetHealth(enemies[randomHog].gear) do
-			randomHog = math.random(1,table.getn(enemies))
+			randomHog = GetRandom(table.getn(enemies))+1
 		end
 		table.insert(enemies[randomHog].additionalWeapons, deadHog.weapon)
 		for i=1,table.getn(deadHog.additionalWeapons) do
@@ -211,7 +211,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named after"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your healh points will be set to 100"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your health points will be set to 100"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hedgehog you'll get 35% of the damage dealt"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reset"), 2000}})
@@ -229,7 +229,7 @@ end
 function shuffleHogs(hogs)
     local hogsNumber = table.getn(hogs)
     for i=1,hogsNumber do
-		local randomHog = math.random(hogsNumber)
+		local randomHog = GetRandom(hogsNumber) + 1
 		hogs[i], hogs[randomHog] = hogs[randomHog], hogs[i]
     end
 end

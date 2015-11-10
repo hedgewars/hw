@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -52,9 +52,11 @@ function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongIn
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): Word; inline;
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
 
-function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
+function  TestRectangleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
-// returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45° = _0_5)
+function  CheckCoordInWater(X, Y: LongInt): boolean; inline;
+
+// returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45 = _0_5)
 function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
@@ -73,9 +75,9 @@ var Count: Longword;
     ga: TGearArray;
 
 procedure AddCI(Gear: PGear);
-var t: PGear;
 begin
-if Gear^.CollisionIndex >= 0 then
+if (Gear^.CollisionIndex >= 0) or 
+    ((Count > MAXRECTSINDEX-200) and ((Gear^.Kind = gtMine) or (Gear^.Kind = gtSMine) or (Gear^.Kind = gtKnife))) then
     exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
@@ -88,15 +90,6 @@ with cinfos[Count] do
     end;
 Gear^.CollisionIndex:= Count;
 inc(Count);
-// mines are the easiest way to overflow collision
-if (Count > (MAXRECTSINDEX-20)) then
-    begin
-    t:= GearsList;
-    while (t <> nil) and (t^.Kind <> gtMine) do 
-        t:= t^.NextGear;
-    if (t <> nil) then
-        t^.State:= t^.State or gmDelete
-    end;
 end;
 
 procedure DeleteCI(Gear: PGear);
@@ -104,12 +97,18 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false, (Gear = CurrentHedgehog^.Gear) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
+        ChangeRoundInLand(X, Y, Radius - 1, false, ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;
     dec(Count)
     end;
+end;
+
+function CheckCoordInWater(X, Y: LongInt): boolean; inline;
+begin
+    CheckCoordInWater:= (Y > cWaterLine)
+        or ((WorldEdge = weSea) and ((X < LongInt(leftX)) or (X > LongInt(rightX))));
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
@@ -212,10 +211,15 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] and Gear^.CollisionMask > 255 then
-                exit(Land[y, x] and Gear^.CollisionMask)
-            else if Land[y, x] and Gear^.CollisionMask <> 0 then
-                pixel:= Land[y, x] and Gear^.CollisionMask;
+            begin
+            if Land[y, x] and Gear^.CollisionMask <> 0 then
+                begin
+                if Land[y, x] and Gear^.CollisionMask > 255 then
+                    exit(Land[y, x] and Gear^.CollisionMask)
+                else
+                    pixel:= Land[y, x] and Gear^.CollisionMask;
+                end;
+            end;
     inc(y)
     until (y > i);
     end;
@@ -234,7 +238,7 @@ if pixel <> 0 then
 
     for i:= 0 to Pred(Count) do
         with cinfos[i] do
-            if  (Gear <> cGear) and 
+            if  (Gear <> cGear) and
                 ((mx > x) xor (Dir > 0)) and
                 (
                   ((cGear^.Kind in [gtHedgehog, gtMine, gtKnife]) and ((Gear^.State and gstNotKickable) = 0)) or
@@ -275,10 +279,12 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
+            begin
             if Land[y, x] and Gear^.CollisionMask > 255 then
                 exit(Land[y, x] and Gear^.CollisionMask)
-            else if Land[y, x] <> 0 then
+            else // if Land[y, x] <> 0 then
                 pixel:= Land[y, x] and Gear^.CollisionMask;
+            end;
     inc(x)
     until (x > i);
     end;
@@ -300,7 +306,7 @@ if pixel <> 0 then
             if (Gear <> cGear) and
                ((myr > y) xor (Dir > 0)) and
                (Gear^.State and gstNotKickable = 0) and
-               (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and 
+               (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and
                (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) then
                     begin
                     with cGear^ do
@@ -327,7 +333,7 @@ function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-if withGear then 
+if withGear then
     TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir)
 else TestCollisionXwithXYShift:= TestCollisionX(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
@@ -394,16 +400,16 @@ if withGear then
   TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir)
 else
   TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
-  
+
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
-function TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
+function TestRectangleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 var x, y: LongInt;
     TestWord: LongWord;
 begin
-TestRectancleForObstacle:= true;
+TestRectangleForObstacle:= true;
 
 if landOnly then
     TestWord:= 255
@@ -432,7 +438,7 @@ for y := y1 to y2 do
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > TestWord) then
             exit;
 
-TestRectancleForObstacle:= false
+TestRectangleForObstacle:= false
 end;
 
 function CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
@@ -583,7 +589,7 @@ var dx, dy: hwFloat;
     isColl, bSucc: Boolean;
 begin
 
-if dirY <> 0 then 
+if dirY <> 0 then
     begin
     y:= hwRound(Gear^.Y) + Gear^.Radius * dirY;
     gx:= hwRound(Gear^.X);

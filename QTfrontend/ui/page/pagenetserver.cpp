@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QGridLayout>
@@ -124,7 +124,7 @@ void PageNetServer::setDefaultPort()
 
 // This function assumes that the user wants to share his server while connected to
 // the Internet and that he/she is using direct access (eg no NATs). To determine the
-// IP we briefly connect to Hedgewars website and fallback to user intervention 
+// IP we briefly connect to Hedgewars website and fallback to user intervention
 // after 4 seconds of timeout.
 void PageNetServer::copyUrl()
 {

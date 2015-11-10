@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings, Rank2Types #-}
 module ClientIO where
 
@@ -37,6 +55,7 @@ listenLoop sock chan ci = receiveWithBufferLoop B.empty
             unless (B.null recvBS) $ do
                 let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
                 forM_ packets sendPacket
+                when (B.length newrecvBuf > 128 * 1024) $ sendPacket ["QUIT", "Protocol violation"]
                 receiveWithBufferLoop $ B.copy newrecvBuf
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)

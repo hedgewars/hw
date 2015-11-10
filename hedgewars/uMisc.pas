@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -28,7 +28,7 @@ procedure freeModule;
 
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-function  MakeScreenshot(filename: shortstring; k: LongInt): boolean;
+function MakeScreenshot(filename: shortstring; k: LongInt; dump: LongWord): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
 function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
 
@@ -44,7 +44,7 @@ type PScreenshot = ^TScreenshot;
          size: QWord;
          end;
 
-var conversionFormat: PSDL_PixelFormat;
+var conversionFormat : PSDL_PixelFormat;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -63,7 +63,7 @@ function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var i: LongInt;
     png_ptr: ^png_struct;
     info_ptr: ^png_info;
-    f: file;
+    f: File;
     image: PScreenshot;
 begin
 image:= PScreenshot(screenshot);
@@ -136,6 +136,7 @@ var f: file;
     );
     image: PScreenshot;
     size: QWord;
+    writeResult:LongInt;
 begin
 image:= PScreenshot(screenshot);
 
@@ -163,8 +164,8 @@ Assign(f, image^.filename);
 Rewrite(f, 1);
 if IOResult = 0 then
     begin
-    BlockWrite(f, head, sizeof(head));
-    BlockWrite(f, image^.buffer^, size);
+    BlockWrite(f, head, sizeof(head), writeResult);
+    BlockWrite(f, image^.buffer^, size, writeResult);
     Close(f);
     end
 else
@@ -216,12 +217,13 @@ end;
 
 // captures and saves the screen. returns true on success.
 // saved image will be k times smaller than original (useful for saving thumbnails).
-function MakeScreenshot(filename: shortstring; k: LongInt): Boolean;
+function MakeScreenshot(filename: shortstring; k: LongInt; dump: LongWord): boolean;
 var p: Pointer;
     size: QWord;
     image: PScreenshot;
     format: GLenum;
     ext: string[4];
+    x,y: LongWord;
 begin
 {$IFDEF PNG_SCREENSHOTS}
 format:= GL_RGBA;
@@ -231,7 +233,9 @@ format:= GL_BGRA;
 ext:= '.bmp';
 {$ENDIF}
 
-size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 4;
+if dump > 0 then
+     size:= LAND_WIDTH*LAND_HEIGHT*4
+else size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 4;
 p:= GetMem(size); // will be freed in SaveScreenshot()
 
 // memory could not be allocated
@@ -242,18 +246,56 @@ begin
     exit;
 end;
 
+// read pixels from land array
+if dump > 0 then
+    begin
+    for y:= 0 to LAND_HEIGHT-1 do
+        for x:= 0 to LAND_WIDTH-1 do
+            if dump = 2 then
+                PLongWordArray(p)^[y*LAND_WIDTH+x]:= LandPixels[LAND_HEIGHT-1-y, x]
+            else
+                begin
+                if Land[LAND_HEIGHT-1-y, x] and lfIndestructible = lfIndestructible then
+                    PLongWordArray(p)^[y*LAND_WIDTH+x]:= (AMask or RMask)
+                else if Land[LAND_HEIGHT-1-y, x] and lfIce = lfIce then
+                    PLongWordArray(p)^[y*LAND_WIDTH+x]:= (AMask or BMask)
+                else if Land[LAND_HEIGHT-1-y, x] and lfBouncy = lfBouncy then
+                    PLongWordArray(p)^[y*LAND_WIDTH+x]:= (AMask or GMask)
+                else if Land[LAND_HEIGHT-1-y, x] and lfObject = lfObject then
+                    PLongWordArray(p)^[y*LAND_WIDTH+x]:= $FFFFFFFF
+                else if Land[LAND_HEIGHT-1-y, x] and lfBasic = lfBasic then
+                    PLongWordArray(p)^[y*LAND_WIDTH+x]:= AMask
+                else
+                    PLongWordArray(p)^[y*LAND_WIDTH+x]:= 0
+                end
+    end
+else
 // read pixels from the front buffer
-glReadPixels(0, 0, cScreenWidth, cScreenHeight, format, GL_UNSIGNED_BYTE, p);
-
+    begin
+    glReadPixels(0, 0, cScreenWidth, cScreenHeight, format, GL_UNSIGNED_BYTE, p);
 {$IFDEF USE_VIDEO_RECORDING}
-ReduceImage(p, cScreenWidth, cScreenHeight, k);
+    ReduceImage(p, cScreenWidth, cScreenHeight, k)
 {$ENDIF}
+    end;
 
 // allocate and fill structure that will be passed to new thread
 New(image); // will be disposed in SaveScreenshot()
-image^.filename:= UserPathPrefix + filename + ext;
-image^.width:= cScreenWidth div k;
-image^.height:= cScreenHeight div k;
+if dump = 2 then
+     image^.filename:= shortstring(UserPathPrefix) + filename + '_landpixels' + ext
+else if dump = 1 then
+     image^.filename:= shortstring(UserPathPrefix) + filename + '_land' + ext
+else image^.filename:= shortstring(UserPathPrefix) + filename + ext;
+
+if dump <> 0 then
+    begin
+    image^.width:= LAND_WIDTH;
+    image^.height:= LAND_HEIGHT
+    end
+else
+    begin
+    image^.width:= cScreenWidth div k;
+    image^.height:= cScreenHeight div k
+    end;
 image^.size:= size;
 image^.buffer:= p;
 
@@ -284,7 +326,7 @@ begin
 end;
 
 function GetTeamStatString(p: PTeam): shortstring;
-var s: ansistring;
+var s: shortstring;
 begin
     s:= p^.TeamName + ':' + IntToStr(p^.TeamHealth) + ':';
     GetTeamStatString:= s;

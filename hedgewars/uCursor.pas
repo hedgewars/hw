@@ -25,7 +25,7 @@ procedure updatePosition;
 var x, y: LongInt;
 begin
     SDL_GetMouseState(@x, @y);
-    
+
     if(x <> cScreenWidth div 2) or (y <> cScreenHeight div 2) then
     begin
         handlePositionUpdate(x - cScreenWidth div 2, y - cScreenHeight div 2);

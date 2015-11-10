@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "binds.h"
@@ -46,7 +46,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"timer 5",   "5",          QT_TRANSLATE_NOOP("binds", "timer 5 sec"),     NULL, NULL},
     {"+attack",   "space",      QT_TRANSLATE_NOOP("binds", "attack"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Fire your selected weapon or trigger an utility item:")},
     {"put",       "mousel",     QT_TRANSLATE_NOOP("binds", "put"),             NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pick a weapon or a target location under the cursor:")},
-    {"findhh",    "h",          QT_TRANSLATE_NOOP("binds", "find hedgehog"),   QT_TRANSLATE_NOOP("binds (categories)", "Camera"), QT_TRANSLATE_NOOP("binds (descriptions)", "Move the camera to the active hog:")},
+    {"findhh",    "h",          QT_TRANSLATE_NOOP("binds", "autocam / find hedgehog"),QT_TRANSLATE_NOOP("binds (categories)", "Camera"), QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle automatic camera / refocus on active hedgehog:")},
     {"+cur_u",    "[8]",        QT_TRANSLATE_NOOP("binds", "up"),              NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Move the cursor or camera without using the mouse:")},
     {"+cur_l",    "[4]",        QT_TRANSLATE_NOOP("binds", "left"),            NULL, NULL},
     {"+cur_r",    "[6]",        QT_TRANSLATE_NOOP("binds", "right"),           NULL, NULL},
@@ -65,6 +65,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"mute",      "8",          QT_TRANSLATE_NOOP("binds", "mute audio"),      NULL, NULL},
     {"fullscr",   "f12",        QT_TRANSLATE_NOOP("binds", "change mode"),     NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle fullscreen mode:")},
     {"capture",   "c",          QT_TRANSLATE_NOOP("binds", "capture"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Take a screenshot:")},
+    {"+speedup",  "s",          QT_TRANSLATE_NOOP("binds", "speed up replay"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Demo replay:")},
     {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "hedgehog info"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")},
 #ifdef VIDEOREC
     {"record",    "r",          QT_TRANSLATE_NOOP("binds", "record"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}

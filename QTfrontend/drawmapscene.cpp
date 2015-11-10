@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QGraphicsSceneMouseEvent>
@@ -304,6 +304,8 @@ QByteArray DrawMapScene::encode()
 
 void DrawMapScene::decode(QByteArray data)
 {
+    hideCursor();
+
     bool erasing = m_isErasing;
 
     oldItems.clear();
@@ -324,7 +326,7 @@ void DrawMapScene::decode(QByteArray data)
         data.remove(0, 2);
         quint8 flags = *(quint8 *)data.data();
         data.remove(0, 1);
-        qDebug() << px << py;
+        //qDebug() << px << py;
         if(flags & 0x80)
         {
             isSpecial = false;
@@ -386,7 +388,7 @@ void DrawMapScene::simplifyLast()
     int i = 1;
     while(i < points.size())
     {
-        if( (i != points.size() - 1)
+        if( ((i != points.size() - 1) || (prevPoint == points[i]))
                 && (sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
           )
             points.removeAt(i);
@@ -459,7 +461,7 @@ QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &c
         l.append(center);
     } else
     {
-        qreal angleDelta = qMax(0.1, qMin(0.7, 120 / r));
+        qreal angleDelta = qMax(static_cast<qreal> (0.1), qMin(static_cast<qreal> (0.7), 120 / r));
         for(qreal angle = 0.0; angle < 2*M_PI; angle += angleDelta)
             l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
         l.append(l.first());
@@ -484,4 +486,52 @@ QPointF DrawMapScene::putSomeConstraints(const QPointF &initialPoint, const QPoi
     }
 
     return point;
+}
+
+void DrawMapScene::optimize()
+{
+    if(!paths.size()) return;
+
+    // break paths into segments
+    Paths pth;
+
+    foreach(const PathParams & pp, paths)
+    {
+        int l = pp.points.size();
+
+        if(l == 1)
+        {
+            pth.prepend(pp);
+        } else
+        {
+            for(int i = l - 2; i >= 0; --i)
+            {
+                PathParams p = pp;
+                p.points = QList<QPoint>() << p.points[i] << p.points[i + 1];
+                pth.prepend(pp);
+            }
+        }
+    }
+
+    // clear the scene
+    oldItems.clear();
+    oldPaths.clear();
+    clear();
+    paths.clear();
+    m_specialPoints.clear();
+
+    // render the result
+    foreach(const PathParams & p, pth)
+    {
+        if(p.erasing)
+            m_pen.setBrush(m_eraser);
+        else
+            m_pen.setBrush(m_brush);
+
+        m_pen.setWidth(deserializePenWidth(p.width));
+
+        addPath(pointsToPath(p.points), m_pen);
+    }
+
+    emit pathChanged();
 }

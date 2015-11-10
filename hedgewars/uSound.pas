@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -70,7 +70,7 @@ procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 // Returns sound channel of the looped sound.
 function  LoopSound(snd: TSound): LongInt;
 function  LoopSound(snd: TSound; fadems: LongInt): LongInt;
-function  LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
+function  LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt;
 function  LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 
 // Stops the normal/looped sound of the given type/in the given channel
@@ -104,6 +104,8 @@ function  ChangeVolume(voldelta: LongInt): LongInt;
 // Returns a pointer to the voicepack with the given name.
 function  AskForVoicepack(name: shortstring): Pointer;
 
+var MusicFN: shortstring; // music file name
+    SDMusicFN: shortstring; // SD music file name
 
 var Volume: LongInt;
     SoundTimerTicks: Longword;
@@ -117,7 +119,6 @@ var cInitVolume: LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
     defVoicepack: PVoicepack;
     Mus: PMixMusic; // music pointer
-    MusicFN: shortstring; // music file name
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
     isSEBackup: boolean;
@@ -260,8 +261,9 @@ function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
     locName, path: shortstring;
 begin
-i:= 0;
-    // First, attempt to locate a localised version of the voice
+    i:= 0;
+
+    // Adjust voicepack name if there's a localised version version of the voice
     if cLocale <> 'en' then
         begin
         locName:= name+'_'+cLocale;
@@ -278,7 +280,16 @@ i:= 0;
                 end
         end;
 
-    // If that fails, use the unmodified one
+    path:= cPathz[ptVoices] + '/' + name;
+
+    // Fallback to Default if voicepack can't be found at all
+    if (name <> 'Default') and (not pfsExists(path)) then
+        begin
+        path:= cPathz[ptVoices] + '/Default';
+        if pfsExists(path) then
+            exit(AskForVoicepack('Default'));
+        end;
+
     while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
         begin
         inc(i);
@@ -290,7 +301,7 @@ i:= 0;
 end;
 
 procedure InitSound;
-const channels: LongInt = {$IFDEF MOBILE}1{$ELSE}2{$ENDIF};
+const channels: LongInt = 2;
 var success: boolean;
 begin
     if not (isSoundEnabled or isMusicEnabled) then
@@ -315,7 +326,7 @@ begin
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
-    ChangeVolume(cInitVolume);	
+    ChangeVolume(cInitVolume);
 end;
 
 procedure ResetSound;
@@ -434,14 +445,17 @@ begin
         end;
 
     i:= 0;
-    while (i<8) and (VoiceList[i].snd <> sndNone) do
+    while (i <= High(VoiceList)) and (VoiceList[i].snd <> sndNone) do
         inc(i);
 
     // skip playing same sound for same hog twice
     if (i>0) and (VoiceList[i-1].snd = snd) and (VoiceList[i-1].voicepack = voicepack) then
         exit;
-    VoiceList[i].snd:= snd;
-    VoiceList[i].voicepack:= voicepack;
+    if(i <= High(VoiceList)) then
+        begin
+        VoiceList[i].snd:= snd;
+        VoiceList[i].voicepack:= voicepack;
+        end
 end;
 
 procedure PlayNextVoice;
@@ -452,7 +466,7 @@ begin
     i:= 0;
     while (i<High(VoiceList)) and (VoiceList[i].snd = sndNone) do
         inc(i);
-    
+
     if (VoiceList[i].snd <> sndNone) then
         begin
         LastVoice.snd:= VoiceList[i].snd;
@@ -554,8 +568,9 @@ var s: shortstring;
 begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
-
-    s:= '/Music/' + MusicFN;
+    if SuddenDeath and (SDMusicFN <> '') then
+         s:= '/Music/' + SDMusicFN
+    else s:= '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
@@ -712,6 +727,7 @@ begin
     RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
+    SDMusicFN:= 'sdmusic.ogg';
     Mus:= nil;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;

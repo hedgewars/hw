@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -99,7 +99,9 @@ static UIViewController *callingController;
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale preferredLanguages] objectAtIndex:0]];
+    
+    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [HWUtils languageID]];
+    
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     CGRect screenBounds = [[UIScreen mainScreen] safeBounds];
@@ -176,7 +178,7 @@ static UIViewController *callingController;
     [gameParameters release];
 
     // this is the pascal function that starts the game
-    Game(argc, argv);
+    RunEngine(argc, argv);
 
     // cleanup
     for (int i = 0; i < argc; i++)
@@ -201,7 +203,7 @@ static UIViewController *callingController;
         statsPage.statsArray = stats;
         statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
-        [callingController presentModalViewController:statsPage animated:YES];
+        [callingController presentViewController:statsPage animated:YES completion:nil];
         [statsPage release];
     }
 }
@@ -248,8 +250,6 @@ static UIViewController *callingController;
 }
 
 +(void) startSimpleGame {
-    srand(time(0));
-
     // generate a seed
     CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
     NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
@@ -259,7 +259,7 @@ static UIViewController *callingController;
 
     // pick a random static map
     NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-    NSString *mapName = [listOfMaps objectAtIndex:random()%[listOfMaps count]];
+    NSString *mapName = [listOfMaps objectAtIndex:arc4random_uniform((int)[listOfMaps count])];
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",MAPS_DIRECTORY(),mapName];
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
     [fileCfg release];
@@ -272,8 +272,8 @@ static UIViewController *callingController;
     NSArray *colorArray = [HWUtils teamColors];
     NSInteger firstColorIndex, secondColorIndex;
     do {
-        firstColorIndex = random()%[colorArray count];
-        secondColorIndex = random()%[colorArray count];
+        firstColorIndex = arc4random_uniform((int)[colorArray count]);
+        secondColorIndex = arc4random_uniform((int)[colorArray count]);
     } while (firstColorIndex == secondColorIndex);
     unsigned int firstColor = [[colorArray objectAtIndex:firstColorIndex] intValue];
     unsigned int secondColor = [[colorArray objectAtIndex:secondColorIndex] intValue];

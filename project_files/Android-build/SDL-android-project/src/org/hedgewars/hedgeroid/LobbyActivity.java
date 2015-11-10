@@ -38,103 +38,103 @@ import android.widget.TabHost;
 /**
  * Activity for the server lobby of a hedgewars server. Allows you to chat, join
  * and create rooms and interact with a list of players.
- * 
+ *
  * Most of the functionality is handled by various fragments.
  */
 public class LobbyActivity extends FragmentActivity implements TextInputDialogListener, NetplayStateListener {
-	private static final int DIALOG_CREATE_ROOM = 0;
-	
+    private static final int DIALOG_CREATE_ROOM = 0;
+
     private TabHost tabHost;
     private Netplay netplay;
-    
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        
+
         setContentView(R.layout.activity_lobby);
         ChatFragment chatFragment = (ChatFragment)getSupportFragmentManager().findFragmentById(R.id.chatFragment);
         chatFragment.setInRoom(false);
-        
+
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.add(new NetplayStateFragment(), "netplayFragment");
         trans.commit();
-        
+
         netplay = Netplay.getAppInstance(getApplicationContext());
-        
+
         // Set up a tabbed UI for medium and small screens
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
-	        tabHost.setup();
-	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
+            tabHost.setup();
+            tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_rooms, R.drawable.roomlist_ingame)).setContent(R.id.roomListFragment));
-	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_chat, R.drawable.edit)).setContent(R.id.chatFragment));
-	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_players, R.drawable.human)).setContent(R.id.playerListFragment));
-	
-	        if (icicle != null) {
-	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
-	        }
+            tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_rooms, R.drawable.roomlist_ingame)).setContent(R.id.roomListFragment));
+            tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_chat, R.drawable.edit)).setContent(R.id.chatFragment));
+            tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_players, R.drawable.human)).setContent(R.id.playerListFragment));
+
+            if (icicle != null) {
+                tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
+            }
         }
     }
-    
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.lobby_options, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-		case R.id.room_create:
-	        TextInputDialog dialog = new TextInputDialog(DIALOG_CREATE_ROOM, R.string.dialog_create_room_title, 0, R.string.dialog_create_room_hint);
-	        dialog.show(getSupportFragmentManager(), "create_room_dialog");
-			return true;
-		case R.id.disconnect:
-			netplay.disconnect();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-	
-	@Override
-	public void onBackPressed() {
-		netplay.disconnect();
-	}
-	
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.lobby_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+        case R.id.room_create:
+            TextInputDialog dialog = new TextInputDialog(DIALOG_CREATE_ROOM, R.string.dialog_create_room_title, 0, R.string.dialog_create_room_hint);
+            dialog.show(getSupportFragmentManager(), "create_room_dialog");
+            return true;
+        case R.id.disconnect:
+            netplay.disconnect();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        netplay.disconnect();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle icicle) {
         super.onSaveInstanceState(icicle);
         if(tabHost != null) {
-        	icicle.putString("currentTab", tabHost.getCurrentTabTag());
+            icicle.putString("currentTab", tabHost.getCurrentTabTag());
         }
     }
-    
+
     public void onTextInputDialogSubmitted(int dialogId, String text) {
-    	if(text != null && text.length()>0) {
-    		netplay.sendCreateRoom(text);
-    	}
+        if(text != null && text.length()>0) {
+            netplay.sendCreateRoom(text);
+        }
     }
-    
+
     public void onTextInputDialogCancelled(int dialogId) {
     }
-    
+
     public void onNetplayStateChanged(State newState) {
-    	switch(newState) {
-    	case CONNECTING:
-    	case NOT_CONNECTED:
-    		finish();
-    		break;
-    	case ROOM:
-    		startActivity(new Intent(getApplicationContext(), NetRoomActivity.class));
-    		break;
-    	case LOBBY:
-    		// Do nothing
-    		break;
-		default:
-			throw new IllegalStateException("Unknown connection state: "+newState);
-    	}
+        switch(newState) {
+        case CONNECTING:
+        case NOT_CONNECTED:
+            finish();
+            break;
+        case ROOM:
+            startActivity(new Intent(getApplicationContext(), NetRoomActivity.class));
+            break;
+        case LOBBY:
+            // Do nothing
+            break;
+        default:
+            throw new IllegalStateException("Unknown connection state: "+newState);
+        }
     }
 }

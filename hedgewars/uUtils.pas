@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -25,7 +25,7 @@ uses uTypes, uFloat;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
-procedure SplitByChar(var a, b: ansistring; c: char);
+procedure SplitByCharA(var a, b: ansistring; c: char);
 
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
@@ -34,8 +34,11 @@ function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : TStatInfoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
+function  EnumToStr(const en : TSprite) : shortstring; overload;
+function  EnumToStr(const en : TMapGen) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
+function  MinD(a, b: double) : double; inline;
 function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
@@ -67,8 +70,12 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
+{$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
+function StrLength(s: PChar): Longword;
+procedure SetLengthA(var s: ansistring; len: Longword);
+{$ENDIF}
 
 function  isPhone: Boolean; inline;
 
@@ -88,15 +95,15 @@ procedure freeModule;
 
 
 implementation
-uses typinfo, Math, uConsts, uVariables, SysUtils;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
-var f: textfile;
+var logFile: textfile;
 {$IFDEF USE_VIDEO_RECORDING}
     logMutex: TRTLCriticalSection; // mutex for debug file
 {$ENDIF}
 {$ENDIF}
-var CharArray: array[byte] of Char;
+var CharArray: array[0..255] of Char;
 
 procedure SplitBySpace(var a,b: shortstring);
 begin
@@ -115,21 +122,31 @@ if i > 0 then
             Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
     a[0]:= char(Pred(i))
+    {$IFDEF PAS2C}
+       a[i] := 0;
+    {$ENDIF}
     end
 else
     b:= '';
 end;
 
-procedure SplitByChar(var a, b: ansistring; c: char);
+{$IFNDEF PAS2C}
+procedure SetLengthA(var s: ansistring; len: Longword);
+begin
+    SetLength(s, len)
+end;
+{$ENDIF}
+
+procedure SplitByCharA(var a, b: ansistring; c: char);
 var i: LongInt;
 begin
 i:= Pos(c, a);
 if i > 0 then
     begin
     b:= copy(a, i + 1, Length(a) - i);
-    setlength(a, Pred(i));
+    SetLengthA(a, Pred(i));
     end else b:= '';
-end;
+end; { SplitByCharA }
 
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
@@ -166,6 +183,16 @@ begin
 EnumToStr := GetEnumName(TypeInfo(TCapGroup), ord(en))
 end;
 
+function EnumToStr(const en: TSprite) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TSprite), ord(en))
+end;
+
+function EnumToStr(const en: TMapGen) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TMapGen), ord(en))
+end;
+
 
 function Min(a, b: LongInt): LongInt;
 begin
@@ -173,6 +200,14 @@ if a < b then
     Min:= a
 else
     Min:= b
+end;
+
+function MinD(a, b: double): double;
+begin
+if a < b then
+    MinD:= a
+else
+    MinD:= b
 end;
 
 function Max(a, b: LongInt): LongInt;
@@ -189,13 +224,17 @@ begin
 str(n, IntToStr)
 end;
 
-function  StrToInt(s: shortstring): LongInt;
+function StrToInt(s: shortstring): LongInt;
 var c: LongInt;
 begin
+{$IFDEF PAS2C}
+val(s, StrToInt);
+{$ELSE}
 val(s, StrToInt, c);
 {$IFDEF DEBUGFILE}
 if c <> 0 then
-    writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+    writeln(logFile, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+{$ENDIF}
 {$ENDIF}
 end;
 
@@ -257,7 +296,7 @@ end;
 
 function DecodeBase64(s: shortstring): shortstring;
 const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-var i, t, c: Longword;
+var i, t, c: LongInt;
 begin
 c:= 0;
 for i:= 1 to Length(s) do
@@ -290,10 +329,14 @@ end;
 
 
 function Str2PChar(const s: shortstring): PChar;
+var i :Integer ;
 begin
-CharArray:= s;
-CharArray[Length(s)]:= #0;
-Str2PChar:= @CharArray
+   for i:= 1 to Length(s) do
+      begin
+      CharArray[i - 1] := s[i];
+      end;
+   CharArray[Length(s)]:= #0;
+   Str2PChar:= @(CharArray[0]);
 end;
 
 
@@ -312,30 +355,35 @@ end;
 
 procedure AddFileLog(s: shortstring);
 begin
-s:= s;
+// s:= s;
 {$IFDEF DEBUGFILE}
+
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-writeln(f, inttostr(GameTicks)  + ': ' + s);
-flush(f);
+writeln(logFile, inttostr(GameTicks)  + ': ' + s);
+flush(logFile);
+
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
 {$ENDIF}
+
 {$ENDIF}
 end;
 
 procedure AddFileLogRaw(s: pchar); cdecl;
 begin
 s:= s;
+{$IFNDEF PAS2C}
 {$IFDEF DEBUGFILE}
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-write(f, s);
-flush(f);
+write(logFile, s);
+flush(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
+{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 end;
@@ -353,7 +401,7 @@ if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}
     exit;
 
-l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
+l:= Utf8ToUnicode(PWideChar(@tmpstr), PChar(s), min(length(tmpstr), length(s)))-1;
 i:= 0;
 
 while i < l do
@@ -370,7 +418,7 @@ while i < l do
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F))  or // CJK Compatibility Forms
        ((#$FF66  <= u) and (u <= #$FF9D)))    // halfwidth katakana
-       then 
+       then
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
             exit;
@@ -408,6 +456,7 @@ begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
+{$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 begin
 system.write(f, s)
@@ -418,6 +467,11 @@ begin
 system.writeln(f, s)
 end;
 
+function StrLength(s: PChar): Longword;
+begin
+    StrLength:= length(s)
+end;
+{$ENDIF}
 
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
@@ -444,7 +498,7 @@ begin
             r[i]:= '?'
             else
             r[i]:= s[i];
-            
+
     sanitizeForLog:= r
 end;
 
@@ -454,8 +508,12 @@ begin
     if (c < #32) or (c > #127) then
         r:= '#' + inttostr(byte(c))
         else
-        r:= c;
-            
+        begin
+        // some magic for pas2c
+        r[0]:= #1;
+        r[1]:= c;
+        end;
+
     sanitizeCharForLog:= r
 end;
 
@@ -463,6 +521,7 @@ procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
     i: LongInt;
+    rwfailed: boolean;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -471,32 +530,49 @@ begin
         if GameType = gmtRecord then
             logfileBase:= 'rec'
         else
-            logfileBase:= 'game';
+        {$IFDEF PAS2C}
+        logfileBase:= 'game_pas2c';
+        {$ELSE}
+        logfileBase:= 'game';
+        {$ENDIF}
     end
     else
+        {$IFDEF PAS2C}
+        logfileBase:= 'preview_pas2c';
+        {$ELSE}
         logfileBase:= 'preview';
+        {$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
-    f:= stderr; // if everything fails, write to stderr
-    if (UserPathPrefix <> '') then
+    rwfailed:= false;
+    if (length(UserPathPrefix) > 0) then
         begin
+        {$IFNDEF PAS2C}
         // create directory if it doesn't exist
         if not FileExists(UserPathPrefix + '/Logs/') then
             CreateDir(UserPathPrefix + '/Logs/');
-
+        {$ENDIF}
         // if log is locked, write to the next one
         i:= 0;
         while(i < 7) do
             begin
-            assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
-            if IOResult = 0 then
+            assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            Rewrite(logFile);
+            // note: IOResult is a function in pascal and a variable in pas2c
+            rwfailed:= (IOResult <> 0);
+            if (not rwfailed) then
                 break;
             inc(i)
             end;
         end;
-    Rewrite(f);
+
+{$IFNDEF PAS2C}
+    // if everything fails, write to stderr
+    if (length(UserPathPrefix) = 0) or (rwfailed) then
+        logFile:= stderr;
+{$ENDIF}
 {$I+}
 {$ENDIF}
 
@@ -518,9 +594,9 @@ end;
 procedure freeModule;
 begin
 {$IFDEF DEBUGFILE}
-    writeln(f, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
-    flush(f);
-    close(f);
+    writeln(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
+    flush(logFile);
+    close(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
     DoneCriticalSection(logMutex);
 {$ENDIF}

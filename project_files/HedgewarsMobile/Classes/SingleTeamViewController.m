@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -146,7 +146,7 @@
             rows = 1;
             break;
         case 1: // team members
-            rows = HW_getMaxNumberOfHogs();
+            rows = HW_getMaxNumberOfHogs() + 1; // one for 'Select one hat for all hogs' cell
             break;
         case 2: // team details
             rows = [self.secondaryItems count];
@@ -180,6 +180,7 @@
     static NSString *CellIdentifier0 = @"Cell0";
     static NSString *CellIdentifier1 = @"Cell1";
     static NSString *CellIdentifier2 = @"Cell2";
+    static NSString *CellIdentifierDefault = @"CellDefault";
 
     NSArray *hogArray;
     UITableViewCell *cell = nil;
@@ -204,13 +205,28 @@
             cell = editableCell;
             break;
         case 1:
+            if ([indexPath row] == HW_getMaxNumberOfHogs())
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierDefault];
+                if (cell == nil)
+                {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                   reuseIdentifier:CellIdentifierDefault] autorelease];
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                }
+                
+                cell.textLabel.text = NSLocalizedString(@"Select one hat for all hogs", nil);
+                
+                break;
+            }
+            
             editableCell = (EditableCellView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
             if (editableCell == nil) {
                 editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:CellIdentifier1] autorelease];
                 editableCell.delegate = self;
-                editableCell.tag = [indexPath row];
             }
+            editableCell.tag = [indexPath row];
 
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
 
@@ -290,120 +306,118 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
 
-    if (2 == section) {
-        switch (row) {
+    if (2 == section)
+    {
+        switch (row)
+        {
             case 0: // grave
-                if (nil == gravesViewController)
-                    gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                GravesViewController *gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [gravesViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:gravesViewController animated:YES];
+                [gravesViewController release];
                 break;
+            }
             case 1: // voice
-                if (nil == voicesViewController)
-                    voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                VoicesViewController *voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [voicesViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:voicesViewController animated:YES];
+                [voicesViewController release];
                 break;
+            }
             case 2: // fort
-                if (nil == fortsViewController)
-                    fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                FortsViewController *fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [fortsViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:fortsViewController animated:YES];
+                [fortsViewController release];
                 break;
+            }
             case 3: // flag
-                if (nil == flagsViewController)
-                    flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                FlagsViewController *flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [flagsViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:flagsViewController animated:YES];
+                [flagsViewController release];
                 break;
+            }
             case 4: // level
-                if (nil == levelViewController)
-                    levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                LevelViewController *levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [levelViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:levelViewController animated:YES];
+                [levelViewController release];
                 break;
+            }
             default:
                 DLog(@"Nope");
                 break;
         }
     } else {
-        EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
-        [cell replyKeyboard];
-        [aTableView deselectRowAtIndexPath:indexPath animated:NO];
+        if (section == 1 && row == HW_getMaxNumberOfHogs()) {
+            // 'Select one hat for all hogs' selected
+            [self showHogHatViewControllerForHogIndex:-1];
+        } else {
+            EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
+            [cell replyKeyboard];
+            [aTableView deselectRowAtIndexPath:indexPath animated:NO];
+        }
     }
 
 }
 
 // action to perform when you want to change a hog hat
 -(void) tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    if (nil == hogHatViewController)
-        hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-    // cache the dictionary file of the team, so that other controllers can modify it
-    hogHatViewController.teamDictionary = self.teamDictionary;
-    hogHatViewController.selectedHog = [indexPath row];
-
     // if we are editing the field undo any change before proceeding
     EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
     [cell cancel:nil];
-
-    [self.navigationController pushViewController:hogHatViewController animated:YES];
+    
+    [self showHogHatViewControllerForHogIndex:[indexPath row]];
 }
 
+- (void)showHogHatViewControllerForHogIndex:(NSInteger)hogIndex
+{
+    HogHatViewController *hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    
+    // cache the dictionary file of the team, so that other controllers can modify it
+    hogHatViewController.teamDictionary = self.teamDictionary;
+    hogHatViewController.selectedHog = hogIndex;
+    
+    [self.navigationController pushViewController:hogHatViewController animated:YES];
+    [hogHatViewController release];
+}
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    if (hogHatViewController.view.superview == nil)
-        hogHatViewController = nil;
-    if (gravesViewController.view.superview == nil)
-        gravesViewController = nil;
-    if (voicesViewController.view.superview == nil)
-        voicesViewController = nil;
-    if (fortsViewController.view.superview == nil)
-        fortsViewController = nil;
-    if (flagsViewController.view.superview == nil)
-        flagsViewController = nil;
-    if (levelViewController.view.superview == nil)
-        levelViewController = nil;
     MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.teamDictionary = nil;
     self.teamName = nil;
     self.normalHogSprite = nil;
     self.secondaryItems = nil;
     self.moreSecondaryItems = nil;
-    hogHatViewController = nil;
-    gravesViewController = nil;
-    voicesViewController = nil;
-    flagsViewController = nil;
-    fortsViewController = nil;
-    levelViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
--(void) dealloc {
+-(void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     releaseAndNil(teamDictionary);
     releaseAndNil(teamName);
     releaseAndNil(normalHogSprite);
     releaseAndNil(secondaryItems);
     releaseAndNil(moreSecondaryItems);
-    releaseAndNil(hogHatViewController);
-    releaseAndNil(gravesViewController);
-    releaseAndNil(fortsViewController);
-    releaseAndNil(voicesViewController);
-    releaseAndNil(flagsViewController);
-    releaseAndNil(levelViewController);
     [super dealloc];
 }
 

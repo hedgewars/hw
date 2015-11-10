@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -26,7 +26,8 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
+    , uVisualGearsList
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
@@ -52,14 +53,12 @@ begin
         begin
         prevGState:= GameState;
         GameState:= gsConfirm;
-        SDL_ShowCursor(1)
         end
     else
         if GameState = gsConfirm then
-            begin
             GameState:= prevGState;
-            SDL_ShowCursor(ord(isPaused))
-            end
+
+    updateCursorVisibility;
 end;
 
 procedure chForceQuit(var s: shortstring);
@@ -119,6 +118,12 @@ cScriptName:= s;
 ScriptLoad(s)
 end;
 
+procedure chScriptParam(var s: shortstring);
+begin
+    ScriptSetString('ScriptParam', s);
+    ScriptCall('onParameters');
+end;
+
 procedure chCurU_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
@@ -170,7 +175,7 @@ end;
 procedure chLeft_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'L');
@@ -195,7 +200,7 @@ end;
 procedure chRight_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'R');
@@ -220,7 +225,7 @@ end;
 procedure chUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'U');
@@ -245,7 +250,7 @@ end;
 procedure chDown_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'D');
@@ -270,7 +275,7 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'Z');
@@ -295,7 +300,7 @@ end;
 procedure chLJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'j');
@@ -308,7 +313,7 @@ end;
 procedure chHJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'J');
@@ -319,9 +324,10 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chAttack_p(var s: shortstring);
+var inbtwnTrgtAttks: Boolean;
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -329,11 +335,13 @@ with CurrentHedgehog^.Gear^ do
     AddFileLog('/+attack: hedgehog''s Gear^.State = '+inttostr(State));
     if ((State and gstHHDriven) <> 0) then
         begin
-        FollowGear:= CurrentHedgehog^.Gear;
+        inbtwnTrgtAttks:= ((GameFlags and gfInfAttack) <> 0) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0);
+        if (not inbtwnTrgtAttks) then
+            FollowGear:= CurrentHedgehog^.Gear;
         if not isExternalSource then
             SendIPC(_S'A');
         Message:= Message or (gmAttack and InputMask);
-        ScriptCall('onAttack');
+        ScriptCall('onAttack'); // so if I fire airstrike, it doesn't count as attack? fine, fine
         end
     end
 end;
@@ -356,7 +364,7 @@ end;
 procedure chSwitch(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'S');
@@ -483,7 +491,8 @@ end;
 procedure chCapture(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-flagMakeCapture:= true
+flagMakeCapture:= true;
+flagDumpLand:= (LocalMessage and gmPrecise  <> 0);
 end;
 
 procedure chRecord(var s: shortstring);
@@ -535,7 +544,7 @@ procedure chAmmoMenu(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
-    bShowAmmoMenu:= true
+    bShowAmmoMenu:= (not bShowAmmoMenu)
 else
     begin
     with CurrentTeam^ do
@@ -570,18 +579,18 @@ end;
 procedure chFindhh(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 
 if autoCameraOn then
     begin
     FollowGear:= nil;
-    AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOff], $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
 else
     begin
-    AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOn], $CCCCCC, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then
         FollowGear:= CurrentHedgehog^.Gear;
@@ -591,8 +600,7 @@ end;
 
 procedure chPause(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-if gameType <> gmtNet then
+if (gameType <> gmtNet) or (s = 'server') then
     isPaused:= not isPaused
     else
     if (CurrentTeam^.ExtDriven) or (CurrentHedgehog^.BotLevel > 0) then
@@ -600,10 +608,7 @@ if gameType <> gmtNet then
     else
         isAFK:= false; // for real ninjas
 
-if isPaused or isAFK then
-    SDL_ShowCursor(1)
-    else
-    SDL_ShowCursor(ord(GameState = gsConfirm))
+updateCursorVisibility;
 end;
 
 procedure chRotateMask(var s: shortstring);
@@ -666,12 +671,17 @@ end;
 
 procedure chMapGen(var s: shortstring);
 begin
-cMapGen:= StrToInt(s)
+cMapGen:= TMapGen(StrToInt(s))
 end;
 
 procedure chTemplateFilter(var s: shortstring);
 begin
 cTemplateFilter:= StrToInt(s)
+end;
+
+procedure chFeatureSize(var s: shortstring);
+begin
+cFeatureSize:= StrToInt(s)
 end;
 
 procedure chInactDelay(var s: shortstring);
@@ -739,6 +749,11 @@ begin
 cLandMines:= StrToInt(s)
 end;
 
+procedure chAirMines(var s: shortstring);
+begin
+cAirMines:= StrToInt(s)
+end;
+
 procedure chExplosives(var s: shortstring);
 begin
 cExplosives:= StrToInt(s)
@@ -762,7 +777,14 @@ end;
 
 procedure chFastUntilLag(var s: shortstring);
 begin
-fastUntilLag:= StrToInt(s) <> 0
+    fastUntilLag:= StrToInt(s) <> 0;
+
+    if not fastUntilLag then
+    begin
+        // update health bars and the wind indicator
+        AddVisualGear(0, 0, vgtTeamHealthSorter);
+        AddVisualGear(0, 0, vgtSmoothWindBar)
+    end
 end;
 
 procedure chCampVar(var s:shortstring);
@@ -773,6 +795,12 @@ end;
 procedure chWorldEdge(var s: shortstring);
 begin
 WorldEdge:= TWorldEdge(StrToInt(s))
+end;
+
+procedure chAdvancedMapGenMode(var s:shortstring);
+begin
+  s:= s; // avoid compiler hint
+  cAdvancedMapGenMode:= true;
 end;
 
 procedure initModule;
@@ -796,6 +824,7 @@ begin
 //////// End top by freq analysis
     RegisterVariable('gencmd'  , @chGenCmd       , false);
     RegisterVariable('script'  , @chScript       , false);
+    RegisterVariable('scriptparam', @chScriptParam, false);
     RegisterVariable('proto'   , @chCheckProto   , true );
     RegisterVariable('spectate', @chFastUntilLag   , false);
     RegisterVariable('capture' , @chCapture      , true );
@@ -807,6 +836,7 @@ begin
     RegisterVariable('template_filter', @chTemplateFilter, false);
     RegisterVariable('mapgen'  , @chMapGen        , false);
     RegisterVariable('maze_size',@chTemplateFilter, false);
+    RegisterVariable('feature_size',@chFeatureSize, false);
     RegisterVariable('delay'   , @chInactDelay    , false);
     RegisterVariable('ready'   , @chReadyDelay    , false);
     RegisterVariable('casefreq', @chCaseFactor    , false);
@@ -820,6 +850,7 @@ begin
     RegisterVariable('getawaytime' , @chGetAwayTime , false);
     RegisterVariable('minedudpct',@chMineDudPercent, false);
     RegisterVariable('minesnum', @chLandMines     , false);
+    RegisterVariable('airmines', @chAirMines      , false);
     RegisterVariable('explosives',@chExplosives    , false);
     RegisterVariable('gmflags' , @chGameFlags      , false);
     RegisterVariable('turntime', @chHedgehogTurnTime, false);
@@ -857,6 +888,7 @@ begin
     RegisterVariable('campvar' , @chCampVar      , true );
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
+    RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
 end;
 
 procedure freeModule;

@@ -107,7 +107,7 @@ function onGameStart()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amGrenade))
+	SetWeapon(amGrenade)
 end
 
 -- This function is called every game tick.
@@ -134,14 +134,14 @@ function onGameTick20()
 		if end_timer == 0 then
 			-- Override the 'Draw' message with the appropriate message.
 			if game_lost then
-				AddCaption("Mission lost!", 0xffba00ff,capgrpGameState)
+				AddCaption(loc("Mission lost!"), 0xffba00ff,capgrpGameState)
 			else
-				AddCaption("Mission won!", 0xffba00ff,capgrpGameState)
+				AddCaption(loc("Mission won!"), 0xffba00ff,capgrpGameState)
 			end
 			-- Remove the team to end the game. Only do this once.
 			if team_death == false then
 				team_death = true
-				ParseCommand("teamgone " .. "Grenadiers")
+				DismissTeam(loc("Grenadiers"))
 			end
 		else
 			-- ... or just lower the timer by 1.

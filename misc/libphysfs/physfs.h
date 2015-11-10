@@ -128,9 +128,9 @@
  *
  * PhysicsFS is mostly thread safe. The error messages returned by
  *  PHYSFS_getLastError() are unique by thread, and library-state-setting
- *  functions are mutex'd. For efficiency, individual file accesses are 
- *  not locked, so you can not safely read/write/seek/close/etc the same 
- *  file from two threads at the same time. Other race conditions are bugs 
+ *  functions are mutex'd. For efficiency, individual file accesses are
+ *  not locked, so you can not safely read/write/seek/close/etc the same
+ *  file from two threads at the same time. Other race conditions are bugs
  *  that should be reported/patched.
  *
  * While you CAN use stdio/syscall file access in a program that has PHYSFS_*
@@ -2604,10 +2604,10 @@ PHYSFS_DECL const PHYSFS_Allocator *PHYSFS_getAllocator(void);
  */
 typedef enum PHYSFS_FileType
 {
-	PHYSFS_FILETYPE_REGULAR, /**< a normal file */
-	PHYSFS_FILETYPE_DIRECTORY, /**< a directory */
-	PHYSFS_FILETYPE_SYMLINK, /**< a symlink */
-	PHYSFS_FILETYPE_OTHER /**< something completely different like a device */
+    PHYSFS_FILETYPE_REGULAR, /**< a normal file */
+    PHYSFS_FILETYPE_DIRECTORY, /**< a directory */
+    PHYSFS_FILETYPE_SYMLINK, /**< a symlink */
+    PHYSFS_FILETYPE_OTHER /**< something completely different like a device */
 } PHYSFS_FileType;
 
 /**
@@ -2628,12 +2628,12 @@ typedef enum PHYSFS_FileType
  */
 typedef struct PHYSFS_Stat
 {
-	PHYSFS_sint64 filesize; /**< size in bytes, -1 for non-files and unknown */
-	PHYSFS_sint64 modtime;  /**< last modification time */
-	PHYSFS_sint64 createtime; /**< like modtime, but for file creation time */
-	PHYSFS_sint64 accesstime; /**< like modtime, but for file access time */
-	PHYSFS_FileType filetype; /**< File? Directory? Symlink? */
-	int readonly; /**< non-zero if read only, zero if writable. */
+    PHYSFS_sint64 filesize; /**< size in bytes, -1 for non-files and unknown */
+    PHYSFS_sint64 modtime;  /**< last modification time */
+    PHYSFS_sint64 createtime; /**< like modtime, but for file creation time */
+    PHYSFS_sint64 accesstime; /**< like modtime, but for file access time */
+    PHYSFS_FileType filetype; /**< File? Directory? Symlink? */
+    int readonly; /**< non-zero if read only, zero if writable. */
 } PHYSFS_Stat;
 
 /**

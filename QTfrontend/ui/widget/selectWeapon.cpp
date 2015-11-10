@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "selectWeapon.h"
@@ -93,7 +93,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     for(int i = 0; i < keys.size(); i++)
     {
         if (wconf->value(keys[i]).toString().size() != cDefaultAmmoStore->size())
-            wconf->remove(keys[i]);
+            wconf->setValue(keys[i], fixWeaponSet(wconf->value(keys[i]).toString()));
     }
 
     QString currentState = *cDefaultAmmoStore;
@@ -322,14 +322,33 @@ void SelWeaponWidget::copy()
     if(wconf->contains(curWeaponsName))
     {
         QString ammo = getWeaponsString(curWeaponsName);
-        QString newName = tr("copy of") + " " + curWeaponsName;
+        QString newName = tr("copy of %1").arg(curWeaponsName);
         if(wconf->contains(newName))
         {
             //name already used -> look for an appropriate name:
             int i=2;
-            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++))) ;
+            while(wconf->contains(newName = tr("copy of %1").arg(curWeaponsName+QString::number(i++))));
         }
         setWeaponsName(newName);
         setWeapons(ammo);
     }
+}
+
+QString SelWeaponWidget::fixWeaponSet(const QString &s)
+{
+    int neededLength = cDefaultAmmoStore->size() / 4;
+    int thisSetLength = s.size() / 4;
+
+    QStringList sl;
+    sl
+            << s.left(thisSetLength)
+            << s.mid(thisSetLength, thisSetLength)
+            << s.mid(thisSetLength * 2, thisSetLength)
+            << s.right(thisSetLength)
+               ;
+
+    for(int i = sl.length() - 1; i >= 0; --i)
+        sl[i] = sl[i].leftJustified(neededLength, '0', true);
+
+    return sl.join(QString());
 }

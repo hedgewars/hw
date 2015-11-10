@@ -39,60 +39,60 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
  * over the context menu.
  */
 public class LobbyPlayerlistFragment extends ListFragment {
-	private Netplay netplay;
-	private LobbyPlayerlistAdapter adapter;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
-		adapter = new LobbyPlayerlistAdapter();
-		adapter.setSource(netplay.lobbyPlayerlist);
-		setListAdapter(adapter);
-	}
+    private Netplay netplay;
+    private LobbyPlayerlistAdapter adapter;
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		adapter.invalidate();
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		registerForContextMenu(getListView());
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
+        adapter = new LobbyPlayerlistAdapter();
+        adapter.setSource(netplay.lobbyPlayerlist);
+        setListAdapter(adapter);
+    }
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
-		MenuInflater inflater = getActivity().getMenuInflater();
-		inflater.inflate(R.menu.lobby_playerlist_context, menu);
-		menu.setHeaderIcon(R.drawable.human);
-		menu.setHeaderTitle(adapter.getItem(info.position).name);
-	}
-	
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
-		Player player = adapter.getItem(info.position);
-		switch(item.getItemId()) {
-		case R.id.player_info:
-			netplay.sendPlayerInfoQuery(player.name);
-			return true;
-		case R.id.player_follow:
-			netplay.sendFollowPlayer(player.name);
-			return true;
-		default:
-			return super.onContextItemSelected(item);
-		}
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_playerlist, container, false);
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.invalidate();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        registerForContextMenu(getListView());
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.lobby_playerlist_context, menu);
+        menu.setHeaderIcon(R.drawable.human);
+        menu.setHeaderTitle(adapter.getItem(info.position).name);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+        Player player = adapter.getItem(info.position);
+        switch(item.getItemId()) {
+        case R.id.player_info:
+            netplay.sendPlayerInfoQuery(player.name);
+            return true;
+        case R.id.player_follow:
+            netplay.sendFollowPlayer(player.name);
+            return true;
+        default:
+            return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_playerlist, container, false);
+    }
 }

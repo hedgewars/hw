@@ -45,7 +45,7 @@
 
 /* Functions to read/write Win32 API file pointers */
 /* Will not use it on WinCE because stdio is buffered, it means
-   faster, and all stdio functions anyway are embedded in coredll.dll - 
+   faster, and all stdio functions anyway are embedded in coredll.dll -
    the main wince dll*/
 
 #include "../core/windows/SDL_windows.h"
@@ -54,7 +54,7 @@
 #define INVALID_SET_FILE_POINTER 0xFFFFFFFF
 #endif
 
-#define READAHEAD_BUFFER_SIZE	1024
+#define READAHEAD_BUFFER_SIZE   1024
 
 static int SDLCALL
 windows_file_open(SDL_RWops * context, const char *filename, const char *mode)
@@ -473,12 +473,12 @@ SDL_RWFromFile(const char *file, const char *mode)
     rwops->close = windows_file_close;
 
 #elif HAVE_STDIO_H
-	#ifdef __APPLE__
-	fp = SDL_OpenFPFromBundleOrFallback(file, mode);
+    #ifdef __APPLE__
+    fp = SDL_OpenFPFromBundleOrFallback(file, mode);
     #else
-	fp = fopen(file, mode);
-	#endif
-	if (fp == NULL) {
+    fp = fopen(file, mode);
+    #endif
+    if (fp == NULL) {
         SDL_SetError("Couldn't open %s", file);
     } else {
         rwops = SDL_RWFromFP(fp, 1);

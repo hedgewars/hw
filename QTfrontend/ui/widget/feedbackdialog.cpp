@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QHBoxLayout>
@@ -268,7 +268,7 @@ void FeedbackDialog::GenerateSpecs()
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
     quint32 pages = sysconf(_SC_PHYS_PAGES);
     quint32 page_size = sysconf(_SC_PAGE_SIZE);
-    quint32 total = pages * page_size / 1024 / 1024;
+    quint64 total = (quint64)pages * page_size / 1024 / 1024;
     total_ram += QString::number(total) + " MB\n";
     os_version += "GNU/Linux or BSD\n";
 #endif

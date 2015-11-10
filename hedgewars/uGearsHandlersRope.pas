@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -28,18 +28,29 @@ implementation
 uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
     uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender;
 
+const
+    IsNilHHFatal = false;
+
 procedure doStepRopeAfterAttack(Gear: PGear);
-var 
+var
     HHGear: PGear;
     tX:     hwFloat;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        OutError('ERROR: doStepRopeAfterAttack called while HHGear = nil', IsNilHHFatal);
+        DeleteGear(Gear);
+        exit()
+        end
+    else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
+
     tX:= HHGear^.X;
-    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
         begin
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= (hwRound(tX) > leftX+HHGear^.Radius*2)
+        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2
         end;
 
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
@@ -70,7 +81,7 @@ begin
     HHGear^.X := HHGear^.X + HHGear^.dX;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     HHGear^.dY := HHGear^.dY + cGravity;
-    
+
     if (GameFlags and gfMoreWind) <> 0 then
         HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
 
@@ -113,7 +124,7 @@ begin
 end;
 
 procedure doStepRopeWork(Gear: PGear);
-var 
+var
     HHGear: PGear;
     len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
     lx, ly, cd: LongInt;
@@ -121,22 +132,15 @@ var
     haveDivided: boolean;
     wrongSide: boolean;
 begin
-    if GameTicks mod 4 <> 0 then exit;
-
     HHGear := Gear^.Hedgehog^.Gear;
-
-    tX:= HHGear^.X;
-    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
-       ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
+    if HHGear = nil then
         begin
-        PlaySound(sndRopeRelease);
-        RopeDeleteMe(Gear, HHGear);
-        HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= (hwRound(tX) > leftX+HHGear^.Radius*2);
-        exit
-        end;
+        OutError('ERROR: doStepRopeWork called while HHGear = nil', IsNilHHFatal);
+        DeleteGear(Gear);
+        exit()
+        end
+    else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
 
-    tX:= HHGear^.X;
     if ((HHGear^.State and gstHHDriven) = 0) or
         (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
@@ -145,6 +149,20 @@ begin
         exit
         end;
 
+    if GameTicks mod 4 <> 0 then exit;
+
+    tX:= HHGear^.X;
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and
+       ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
+        begin
+        PlaySound(sndRopeRelease);
+        RopeDeleteMe(Gear, HHGear);
+        HHGear^.X:= tX;
+        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2;
+        exit
+        end;
+
+    tX:= HHGear^.X;
     HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 2;
     HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 2;
     if (Gear^.Message and gmLeft  <> 0) and (TestCollisionXwithGear(HHGear, -1) = 0) then
@@ -405,15 +423,24 @@ begin
 end;
 
 procedure doStepRopeAttach(Gear: PGear);
-var 
+var
     HHGear: PGear;
     tx, ty, tt: hwFloat;
 begin
+    
     Gear^.X := Gear^.X - Gear^.dX;
     Gear^.Y := Gear^.Y - Gear^.dY;
     Gear^.Elasticity := Gear^.Elasticity + _1;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        OutError('ERROR: doStepRopeAttach called while HHGear = nil', IsNilHHFatal);
+        DeleteGear(Gear);
+        exit()
+        end
+    else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
+
     DeleteCI(HHGear);
 
     if (HHGear^.State and gstMoving) <> 0 then

@@ -13,25 +13,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import <UIKit/UIKit.h>
 
 
-@interface MissionTrainingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-    NSArray *listOfMissions;
-    NSArray *listOfDescriptions;
-    NSString *missionName;
-    UIImageView *previewImage;
-    UITableView *tableView;
-    UILabel *descriptionLabel;
-}
+@interface MissionTrainingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) NSArray *listOfMissions;
-@property (nonatomic, retain) NSArray *listOfDescriptions;
+@property (nonatomic, retain) NSArray *listOfMissionIDs;
+@property (nonatomic, retain) NSDictionary *dictOfMissions;
 @property (nonatomic, retain) NSString *missionName;
+
 @property (nonatomic, retain) IBOutlet UIImageView *previewImage;
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, retain) IBOutlet UILabel *descriptionLabel;

@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoCore where
 
@@ -6,7 +24,6 @@ import Data.Maybe
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
-import Actions
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState
@@ -33,12 +50,25 @@ handleCmd ["PONG"] = do
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
-handleCmd ["CMD", parameters] = do
-        let (cmd, plist) = B.break (== ' ') parameters
-        let param = B.dropWhile (== ' ') plist
-        h (upperCase cmd) param
+handleCmd cmd = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+    if logonPassed cl then
+        if isChecker cl then
+            handleCmd_checker cmd
+            else
+            handleCmd_loggedin cmd
+        else
+        handleCmd_NotEntered cmd
+
+
+handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
         h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
+        h "SAVEROOM" n | not $ B.null n = handleCmd ["SAVEROOM", n]
+        h "LOADROOM" n | not $ B.null n = handleCmd ["LOADROOM", n]
+        h "SAVE" n | not $ B.null n = handleCmd ["SAVE", n]
+        h "DELETE" n | not $ B.null n = handleCmd ["DELETE", n]
         h "STATS" _ = handleCmd ["STATS"]
         h "PART" m | not $ B.null m = handleCmd ["PART", m]
                    | otherwise = handleCmd ["PART"]
@@ -53,20 +83,18 @@ handleCmd ["CMD", parameters] = do
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
-        h "GREETING" msg = handleCmd ["GREETING", msg]
-        h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
+        h "GREETING" msg | not $ B.null msg = handleCmd ["GREETING", msg]
+        h "CALLVOTE" msg | B.null msg = handleCmd ["CALLVOTE"]
+                         | otherwise = let (c, p) = extractParameters msg in
+                                           if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
+        h "VOTE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg]
+        h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
+        h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
+        h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
+        h "RESTART_SERVER" "YES" = handleCmd ["RESTART_SERVER"]
+        h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
 
-handleCmd cmd = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
-    if logonPassed cl then
-        if isChecker cl then
-            handleCmd_checker cmd
-            else
-            handleCmd_loggedin cmd
-        else
-        handleCmd_NotEntered cmd
-
+        extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
 
 handleCmd_loggedin ["INFO", asknick] = do
     (_, rnc) <- ask
@@ -84,7 +112,7 @@ handleCmd_loggedin ["INFO", asknick] = do
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else
             ""
-    let hostStr = if isAdminAsking then host cl else cutHost $ host cl
+    let hostStr = if isAdminAsking then host cl else B.empty
     if noSuchClient then
         return []
         else

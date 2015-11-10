@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+ <id type="desktop">hedgewars.desktop</id>
+ <metadata_license>GFDL</metadata_license>
+ <name>Hedgewars</name>
+ <summary>Funny turn-based artillery game, featuring fighting Hedgehogs!</summary>
+ <description>
+  <p>
+   Hedgewars is a turn based strategy, artillery, action and comedy game, featuring the antics of pink hedgehogs with attitude as they battle from the depths of hell to the depths of space.
+  </p>
+  <p>
+    As commander, it's your job to assemble your crack team of hedgehog soldiers and bring the war to your enemy.
+  </p>
+  <p>Game Features:</p>
+  <ul>
+   <li>Hilarious and strategic turn based combat for up to 8 players</li>
+   <li>Both local and network multiplayer, with optional AI opponentsBattle on an infinite number of randomly generated maps, with over 22 environments</li>
+   <li>Utilise 47 (and counting) devastating weapons!</li>
+   <li>Including the piano strike and explosive robotic cake</li>
+   <li>Play the game your way, with 18 different game modifiers, tweak almost every aspect of the match</li>
+   <li>Customize your team, with over 120 costumes, 30 graves, 12 forts, 100s of flags and unique voice packs</li>
+   <li>Huge battles with up to 48 hogs</li>
+   <li>Play both singleplayer and multiplayer minigames</li>
+   <li>Plugin your own custom maps, costumes, and other artwork</li>
+  </ul>
+ </description>
+ <screenshots>
+  <screenshot type="default" width="1024" height="600">http://www.hedgewars.org/files/9rzprpb.png</screenshot>
+ </screenshots>
+ <url type="homepage">http://hedgewars.org/</url>
+ <updatecontact>hedgewars-dev@gna.org</updatecontact>
+</application>

@@ -38,7 +38,7 @@
    doesn't work; once a symbol is marked as hidden, it stays that way.  */
 
 void __eprintf (const char *string, const char *expression,
-	        unsigned int line, const char *filename)
+            unsigned int line, const char *filename)
 {
     fprintf(stderr, string, expression, line, filename);
     fflush(stderr);
@@ -144,7 +144,7 @@ static int darwinIsWholeMedia(io_service_t service)
 
     if (!IOObjectConformsTo(service, kIOMediaClass))
         return 0;
-        
+
     wholeMedia = IORegistryEntryCreateCFProperty(service,
                                                  CFSTR(kIOMediaWholeKey),
                                                  cfallocator, 0);
@@ -180,7 +180,7 @@ static int darwinIsMountedDisc(char *bsdName, mach_port_t masterPort)
 
     rc = IORegistryEntryCreateIterator(service, kIOServicePlane,
              kIORegistryIterateRecursively | kIORegistryIterateParents, &iter);
-    
+
     if (!iter)
         return 0;
 
@@ -204,7 +204,7 @@ static int darwinIsMountedDisc(char *bsdName, mach_port_t masterPort)
         } /* if */
         IOObjectRelease(service);
     } while ((service = IOIteratorNext(iter)) && (!retval));
-                
+
     IOObjectRelease(iter);
     IOObjectRelease(service);
 

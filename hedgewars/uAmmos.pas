@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -43,14 +43,14 @@ procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 procedure ResetWeapons;
-function  GetAmmoByNum(num: Longword): PHHAmmo;
+function  GetAmmoByNum(num: LongInt): PHHAmmo;
 function  GetCurAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 
-var StoreCnt: Longword;
+var StoreCnt: LongInt;
 
 implementation
-uses uLocale, uVariables, uCommands, uUtils, uCaptions, uDebug;
+uses uVariables, uCommands, uUtils, uCaptions, uDebug;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
      TAmmoArray = array[TAmmoType] of TAmmo;
@@ -132,26 +132,26 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             inc(Ammoz[a].SkipTurns,10000);
     if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
         ammos[a]:= AMMO_INFINITE
-        end 
-        
+        end
+
     else
         ammos[a]:= AMMO_INFINITE;
-    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
         InitialCounts[Pred(StoreCnt)][a]:= cnt
     else
         InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-    
+
     for a:= Low(TAmmoType) to High(TAmmoType) do
         begin
         newAmmos[a]:= Ammoz[a].Ammo;
         newAmmos[a].Count:= ammos[a]
         end;
-        
+
 FillAmmoStore(StoresList[Pred(StoreCnt)], newAmmos)
 end;
 
-function GetAmmoByNum(num: Longword): PHHAmmo;
+function GetAmmoByNum(num: LongInt): PHHAmmo;
 begin
     TryDo(num < StoreCnt, 'Invalid store number', true);
     GetAmmoByNum:= StoresList[num]
@@ -272,7 +272,7 @@ begin
             Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
             Ammo^[Slot, ami + 1].Count:= 0
             end;
-    until not b;
+    until (not b);
 AmmoMenuInvalidated:= true;
 end;
 
@@ -311,7 +311,7 @@ begin
             if (AmmoType = Ammo) then
                 if Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns then
                     exit(Count)
-                else 
+                else
                     exit(0);
         inc(ami)
     end;
@@ -366,12 +366,11 @@ with Hedgehog do
         end;
     TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
     CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
-    if CurAmmoType = amKnife then LoadHedgehogHat(Hedgehog, 'Reserved/chef')
     end
 end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
-var s: shortstring;
+var s: ansistring;
     CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
@@ -395,18 +394,18 @@ with Hedgehog do
         begin
         s:= trammo[Ammoz[AmmoType].NameId];
         if (Count <> AMMO_INFINITE) and (not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0))) then
-            s:= s + ' (' + IntToStr(Count) + ')';
+            s:= s + ansistring(' (' + IntToStr(Count) + ')');
         if (Propz and ammoprop_Timerable) <> 0 then
-            s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
+            s:= s + ansistring(', ' + IntToStr(Timer div 1000) + ' ') + trammo[sidSeconds];
         AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0 then
             begin
-            if Gear <> nil then Gear^.State:= Gear^.State or      gstHHChooseTarget;
+            if Gear <> nil then Gear^.State:= Gear^.State or      gstChooseTarget;
             isCursorVisible:= true
             end
         else
             begin
-            if Gear <> nil then Gear^.State:= Gear^.State and (not gstHHChooseTarget);
+            if Gear <> nil then Gear^.State:= Gear^.State and (not gstChooseTarget);
             isCursorVisible:= false
             end;
         end
@@ -482,7 +481,7 @@ for t:= 0 to Pred(TeamsCount) do
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     newAmmos[a]:= Ammoz[a].Ammo;
-    
+
 for i:= 0 to Pred(StoreCnt) do
     begin
     for a:= Low(TAmmoType) to High(TAmmoType) do
@@ -499,8 +498,8 @@ end;
 
 procedure chAddAmmoStore(var descr: shortstring);
 begin
-descr:= ''; // avoid compiler hint
-AddAmmoStore
+    descr:= ''; // avoid compiler hint
+    AddAmmoStore
 end;
 
 procedure initModule;

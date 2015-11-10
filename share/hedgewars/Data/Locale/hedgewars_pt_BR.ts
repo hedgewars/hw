@@ -23,7 +23,11 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation>cópia de</translation>
+        <translation type="obsolete">cópia de</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -213,6 +217,56 @@ Please check your installation!</source>
 %1
 
 Por favor, confira sua instalação!</translation>
+    </message>
+    <message>
+        <source>Usage</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OPTION</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CONNECTSTRING</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display this help</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path for configuration data and user data</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path to the game data folder</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Malformed option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -413,6 +467,17 @@ Please, enter the password:</source>
         <source>Cannot open demofile %1</source>
         <translation>Falha ao abrir o arquivo de demonstração %1</translation>
     </message>
+    <message>
+        <source>A Fatal ERROR occured! - The game engine had to stop.
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%1&apos; button in the main menu!
+
+Last two engine messages:
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -541,6 +606,14 @@ Please, enter the password:</source>
         <source>Theme: %1</source>
         <translation>Tema: %1</translation>
     </message>
+    <message>
+        <source>Random perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -606,6 +679,10 @@ Please, enter the password:</source>
     <message>
         <source>The server is too old. Disconnecting now.</source>
         <translation>O servidor está muito velho. Desconectando agora.</translation>
+    </message>
+    <message>
+        <source>Server authentication error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -803,6 +880,10 @@ informe apenas seu apelido. </translation>
         <source>This page requires an internet connection.</source>
         <translation>Esta página exige uma conexão à Internet.</translation>
     </message>
+    <message>
+        <source>Open packages directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageDrawMap</name>
@@ -852,6 +933,10 @@ informe apenas seu apelido. </translation>
     </message>
     <message>
         <source>Ellipse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optimize</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -912,9 +997,12 @@ informe apenas seu apelido. </translation>
         <source>Ranking</source>
         <translation>Colocação</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>O prêmio de melhor atirador foi para &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.</translation>
+        <translation type="unfinished">
+            <numerusform>O prêmio de melhor atirador foi para &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
@@ -2150,6 +2238,10 @@ Você deseja mesmo sair?</translation>
         <source>World Edge</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Script parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2600,6 +2692,10 @@ Nem todos os jogadores estão prontos.</translation>
         <source>Script</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Random Perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -2644,7 +2740,11 @@ Nem todos os jogadores estão prontos.</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation>cópia de</translation>
+        <translation type="obsolete">cópia de</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2658,6 +2758,15 @@ Nem todos os jogadores estão prontos.</translation>
 Error code: %2</source>
         <translation>Não foi capaz de executar o motor em %1
 Código de erro: %2</translation>
+    </message>
+    <message>
+        <source>The game engine died unexpectedly!
+(exit code %1)
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2721,7 +2830,7 @@ Código de erro: %2</translation>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>encontrar ouriço</translation>
+        <translation type="obsolete">encontrar ouriço</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -2859,6 +2968,14 @@ Código de erro: %2</translation>
         <source>hedgehog info</source>
         <translation>informações do ouriço</translation>
     </message>
+    <message>
+        <source>autocam / find hedgehog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>speed up replay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2907,7 +3024,7 @@ Código de erro: %2</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>Mover a câmera para o ouriço ativo:</translation>
+        <translation type="obsolete">Mover a câmera para o ouriço ativo:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -2948,6 +3065,14 @@ Código de erro: %2</translation>
     <message>
         <source>Hedgehog movement</source>
         <translation>Movimento do ouriço</translation>
+    </message>
+    <message>
+        <source>Toggle automatic camera / refocus on active hedgehog:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo replay:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3391,6 +3516,62 @@ Código de erro: %2</translation>
     </message>
     <message>
         <source>Empty config entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You already have voted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New voting started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting expired</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pause</source>
+        <translation type="unfinished">pausa</translation>
+    </message>
+    <message>
+        <source>Reconnected too fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Chat flood protection activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Excess flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Joins flood protection activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

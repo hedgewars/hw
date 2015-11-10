@@ -1,4 +1,4 @@
-if (NOT APPLE)
+if(NOT APPLE)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
                    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
                     IMMEDIATE @ONLY)
@@ -6,27 +6,20 @@ if (NOT APPLE)
     add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 endif()
 
-if (APPLE)
+if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt4 REQUIRED QUIET)
-    if(${NOSDL2})
-        find_package(SDL REQUIRED)
-        find_package(SDL_image REQUIRED)
-        find_package(SDL_net REQUIRED)
-        find_package(SDL_ttf REQUIRED)
-        find_package(SDL_mixer REQUIRED)
-        find_package(OggVorbis REQUIRED)
-    else(${NOSDL2})
-        find_package(SDL2 REQUIRED)
-        find_package(SDL2_image REQUIRED)
-        find_package(SDL2_net REQUIRED)
-        find_package(SDL2_ttf REQUIRED)
-        find_package(SDL2_mixer REQUIRED)
-    endif(${NOSDL2})
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_image REQUIRED)
+    find_package(SDL2_net REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+    find_package(SDL2_mixer REQUIRED)
+
+    find_package(PNG REQUIRED)
 
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle) #needed for SPARKLE_FOUND variable
         #needed because the 'if' clause in the script prints silly policy warnings
-        if(${SPARKLE_FOUND})
+        if(SPARKLE_FOUND)
             set(SPARKLE_FOUND 1)
         else()
             set(SPARKLE_FOUND 0)
@@ -38,12 +31,12 @@ if (APPLE)
 
     #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
     string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
+    #remove the "libSDLmain.a" from the SDL_LIBRARY variable
+    string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
-    if(NOT NOPNG)
-        #get the neme of the library (harmelss if it is static)
-        string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
-        string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
-    endif()
+    #get the neme of the library (harmelss if it is static)
+    string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
+    string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
 
     set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
     if(${BUILD_ENGINE_LIBRARY})
@@ -66,7 +59,7 @@ if (APPLE)
 
     #create the .dmg for deployment
     #first make sure .app exists, then remove any old .dmg with same name, finally run the script
-    add_custom_target(dmg COMMAND if [ ! -a Hedgewars.app ]; then make install\; fi;
+    add_custom_target(dmg COMMAND make install
                           COMMAND rm -f ${CMAKE_BINARY_DIR}/Hedgewars-${HEDGEWARS_VERSION}.dmg
                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/create-dmg.sh
                                   --volname "Hedgewars ${HEDGEWARS_VERSION}"

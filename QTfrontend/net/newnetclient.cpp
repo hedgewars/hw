@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QDebug>
 #include <QInputDialog>
 #include <QCryptographicHash>
 #include <QSortFilterProxyModel>
+#include <QUuid>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
@@ -31,14 +32,16 @@
 #include "servermessages.h"
 #include "HWApplication.h"
 
-char delimeter='\n';
+char delimiter='\n';
 
 HWNewNet::HWNewNet() :
     isChief(false),
     m_game_connected(false),
-    loginStep(0),
     netClientState(Disconnected)
 {
+    m_private_game = false;
+    m_nick_registered = false;
+
     m_roomsListModel = new RoomsListModel(this);
 
     m_playersModel = new PlayersListModel(this);
@@ -71,7 +74,7 @@ HWNewNet::~HWNewNet()
 {
     if (m_game_connected)
     {
-        RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
+        RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("User quit"));
         emit disconnected(tr("User quit"));
     }
     NetSocket.flush();
@@ -88,7 +91,7 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 void HWNewNet::Disconnect()
 {
     if (m_game_connected)
-        RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
+        RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("User quit"));
     m_game_connected = false;
 
     NetSocket.disconnectFromHost();
@@ -105,9 +108,9 @@ void HWNewNet::CreateRoom(const QString & room, const QString & password)
     myroom = room;
 
     if(password.isEmpty())
-        RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
+        RawSendNet(QString("CREATE_ROOM%1%2").arg(delimiter).arg(room));
     else
-        RawSendNet(QString("CREATE_ROOM%1%2%1%3").arg(delimeter).arg(room).arg(password));
+        RawSendNet(QString("CREATE_ROOM%1%2%1%3").arg(delimiter).arg(room).arg(password));
 
     isChief = true;
 }
@@ -123,29 +126,29 @@ void HWNewNet::JoinRoom(const QString & room, const QString &password)
     myroom = room;
 
     if(password.isEmpty())
-        RawSendNet(QString("JOIN_ROOM%1%2").arg(delimeter).arg(room));
+        RawSendNet(QString("JOIN_ROOM%1%2").arg(delimiter).arg(room));
     else
-        RawSendNet(QString("JOIN_ROOM%1%2%1%3").arg(delimeter).arg(room).arg(password));
+        RawSendNet(QString("JOIN_ROOM%1%2%1%3").arg(delimiter).arg(room).arg(password));
 
     isChief = false;
 }
 
 void HWNewNet::AddTeam(const HWTeam & team)
 {
-    QString cmd = QString("ADD_TEAM") + delimeter +
-                  team.name() + delimeter +
-                  QString::number(team.color()) + delimeter +
-                  team.grave() + delimeter +
-                  team.fort() + delimeter +
-                  team.voicepack() + delimeter +
-                  team.flag() + delimeter +
+    QString cmd = QString("ADD_TEAM") + delimiter +
+                  team.name() + delimiter +
+                  QString::number(team.color()) + delimiter +
+                  team.grave() + delimiter +
+                  team.fort() + delimiter +
+                  team.voicepack() + delimiter +
+                  team.flag() + delimiter +
                   QString::number(team.difficulty());
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; ++i)
     {
-        cmd.append(delimeter);
+        cmd.append(delimiter);
         cmd.append(team.hedgehog(i).Name);
-        cmd.append(delimeter);
+        cmd.append(delimiter);
         cmd.append(team.hedgehog(i).Hat);
     }
     RawSendNet(cmd);
@@ -153,12 +156,12 @@ void HWNewNet::AddTeam(const HWTeam & team)
 
 void HWNewNet::RemoveTeam(const HWTeam & team)
 {
-    RawSendNet(QString("REMOVE_TEAM") + delimeter + team.name());
+    RawSendNet(QString("REMOVE_TEAM") + delimiter + team.name());
 }
 
 void HWNewNet::NewNick(const QString & nick)
 {
-    RawSendNet(QString("NICK%1%2").arg(delimeter).arg(nick));
+    RawSendNet(QString("NICK%1%2").arg(delimiter).arg(nick));
 }
 
 void HWNewNet::ToggleReady()
@@ -170,7 +173,7 @@ void HWNewNet::SendNet(const QByteArray & buf)
 {
     QString msg = QString(buf.toBase64());
 
-    RawSendNet(QString("EM%1%2").arg(delimeter).arg(msg));
+    RawSendNet(QString("EM%1%2").arg(delimiter).arg(msg));
 }
 
 void HWNewNet::RawSendNet(const QString & str)
@@ -238,7 +241,10 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::SendPasswordHash(const QString & hash)
 {
-    RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
+    // don't send it immediately, only store and check if server asked us for a password
+    m_passwordHash = hash.toAscii();
+
+    maybeSendPassword();
 }
 
 void HWNewNet::ParseCmd(const QStringList & lst)
@@ -286,24 +292,46 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             // TODO: Warn user, disconnect
             qWarning() << "Server too old";
-            RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("Server too old"));
+            RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("Server too old"));
             Disconnect();
             emit disconnected(tr("The server is too old. Disconnecting now."));
             return;
         }
 
-        RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
-        RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
+        RawSendNet(QString("NICK%1%2").arg(delimiter).arg(mynick));
+        RawSendNet(QString("PROTO%1%2").arg(delimiter).arg(*cProtoVer));
         netClientState = Connected;
         m_game_connected = true;
         emit adminAccess(false);
         return;
     }
 
+    if (lst[0] == "SERVER_AUTH")
+    {
+        if(lst.size() < 2)
+        {
+            qWarning("Net: Malformed SERVER_AUTH message");
+            return;
+        }
+
+        if(lst[1] != m_serverHash)
+        {
+            Error("Server authentication error");
+            Disconnect();
+        } else
+        {
+            // empty m_serverHash variable means no authentication was performed
+            // or server passed authentication
+            m_serverHash.clear();
+        }
+
+        return;
+    }
+
     if (lst[0] == "PING")
     {
         if (lst.size() > 1)
-            RawSendNet(QString("PONG%1%2").arg(delimeter).arg(lst[1]));
+            RawSendNet(QString("PONG%1%2").arg(delimiter).arg(lst[1]));
         else
             RawSendNet(QString("PONG"));
         return;
@@ -450,7 +478,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 // flag indicating if a player is contributor
                 case 'c':
                         foreach(const QString & nick, nicks)
-                            m_playersModel->setFlag(nick, PlayersListModel::InRoom, setFlag);
+                            m_playersModel->setFlag(nick, PlayersListModel::Contributor, setFlag);
                         break;
                 // flag indicating if a player has engine running
                 case 'g':
@@ -515,6 +543,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             if (lst[i] == mynick)
             {
+                // check if server is authenticated or no authentication was performed at all
+                if(!m_serverHash.isEmpty())
+                {
+                    Error(tr("Server authentication error"));
+
+                    Disconnect();
+                }
+
                 netClientState = InLobby;
                 RawSendNet(QString("LIST"));
                 emit connected();
@@ -545,7 +581,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         m_roomsListModel->updateRoom(roomName, tmp);
 
         // keep track of room name so correct name is displayed
-        if(myroom == roomName)
+        if(myroom == roomName && myroom != tmp[1])
         {
             myroom = tmp[1];
             emit roomNameUpdated(myroom);
@@ -578,8 +614,24 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ASKPASSWORD")
     {
+        // server should send us salt of at least 16 characters
+
+        if(lst.size() < 2 || lst[1].size() < 16)
+        {
+            qWarning("Net: Bad ASKPASSWORD message");
+            return;
+        }
+
         emit NickRegistered(mynick);
         m_nick_registered = true;
+
+        // store server salt
+        // when this variable is set, it is assumed that server asked us for a password
+        m_serverSalt = lst[1];
+        m_clientSalt = QUuid::createUuid().toString();
+
+        maybeSendPassword();
+
         return;
     }
 
@@ -696,7 +748,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             }
             QStringList tmp = lst;
             tmp.removeFirst();
-            emit AddNetTeam(tmp);
+            HWTeam team(tmp);
+            emit AddNetTeam(team);
             return;
         }
 
@@ -820,7 +873,7 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
     if (isChief)
         RawSendNet(QString("HH_NUM%1%2%1%3")
-                   .arg(delimeter)
+                   .arg(delimiter)
                    .arg(team.name())
                    .arg(team.numHedgehogs()));
 }
@@ -829,7 +882,7 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
     if (isChief)
         RawSendNet(QString("TEAM_COLOR%1%2%1%3")
-                   .arg(delimeter)
+                   .arg(delimiter)
                    .arg(team.name())
                    .arg(team.color()));
 }
@@ -839,9 +892,9 @@ void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
     if (isChief)
         RawSendNet(
             QString("CFG%1%2%1%3")
-            .arg(delimeter)
+            .arg(delimiter)
             .arg(param)
-            .arg(value.join(QString(delimeter)))
+            .arg(value.join(QString(delimiter)))
         );
 }
 
@@ -858,7 +911,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 {
     if(str != "")
     {
-        RawSendNet(QString("CHAT") + delimeter + str);
+        RawSendNet(QString("CHAT") + delimiter + str);
         QString action = HWProto::chatStringToAction(str);
         if (action != NULL)
             emit(roomChatAction(mynick, action));
@@ -871,7 +924,7 @@ void HWNewNet::chatLineToLobby(const QString& str)
 {
     if(str != "")
     {
-        RawSendNet(QString("CHAT") + delimeter + str);
+        RawSendNet(QString("CHAT") + delimiter + str);
         QString action = HWProto::chatStringToAction(str);
         if (action != NULL)
             emit(lobbyChatAction(mynick, action));
@@ -882,7 +935,7 @@ void HWNewNet::chatLineToLobby(const QString& str)
 
 void HWNewNet::SendTeamMessage(const QString& str)
 {
-    RawSendNet(QString("TEAMCHAT") + delimeter + str);
+    RawSendNet(QString("TEAMCHAT") + delimiter + str);
 }
 
 void HWNewNet::askRoomsList()
@@ -925,23 +978,23 @@ void HWNewNet::gameFinished(bool correctly)
     if (netClientState == InGame)
     {
         netClientState = InRoom;
-        RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
+        RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimiter).arg(correctly ? "1" : "0"));
     }
 }
 
 void HWNewNet::banPlayer(const QString & nick)
 {
-    RawSendNet(QString("BAN%1%2").arg(delimeter).arg(nick));
+    RawSendNet(QString("BAN%1%2").arg(delimiter).arg(nick));
 }
 
 void HWNewNet::banIP(const QString & ip, const QString & reason, int seconds)
 {
-    RawSendNet(QString("BANIP%1%2%1%3%1%4").arg(delimeter).arg(ip).arg(reason).arg(seconds));
+    RawSendNet(QString("BANIP%1%2%1%3%1%4").arg(delimiter).arg(ip).arg(reason).arg(seconds));
 }
 
 void HWNewNet::banNick(const QString & nick, const QString & reason, int seconds)
 {
-    RawSendNet(QString("BANNICK%1%2%1%3%1%4").arg(delimeter).arg(nick).arg(reason).arg(seconds));
+    RawSendNet(QString("BANNICK%1%2%1%3%1%4").arg(delimiter).arg(nick).arg(reason).arg(seconds));
 }
 
 void HWNewNet::getBanList()
@@ -951,31 +1004,31 @@ void HWNewNet::getBanList()
 
 void HWNewNet::removeBan(const QString & b)
 {
-    RawSendNet(QString("UNBAN%1%2").arg(delimeter).arg(b));
+    RawSendNet(QString("UNBAN%1%2").arg(delimiter).arg(b));
 }
 
 void HWNewNet::kickPlayer(const QString & nick)
 {
-    RawSendNet(QString("KICK%1%2").arg(delimeter).arg(nick));
+    RawSendNet(QString("KICK%1%2").arg(delimiter).arg(nick));
 }
 
 void HWNewNet::infoPlayer(const QString & nick)
 {
-    RawSendNet(QString("INFO%1%2").arg(delimeter).arg(nick));
+    RawSendNet(QString("INFO%1%2").arg(delimiter).arg(nick));
 }
 
 void HWNewNet::followPlayer(const QString & nick)
 {
     if (!isInRoom())
     {
-        RawSendNet(QString("FOLLOW%1%2").arg(delimeter).arg(nick));
+        RawSendNet(QString("FOLLOW%1%2").arg(delimiter).arg(nick));
         isChief = false;
     }
 }
 
 void HWNewNet::consoleCommand(const QString & cmd)
 {
-    RawSendNet(QString("CMD%1%2").arg(delimeter).arg(cmd));
+    RawSendNet(QString("CMD%1%2").arg(delimiter).arg(cmd));
 }
 
 bool HWNewNet::allPlayersReady()
@@ -994,7 +1047,7 @@ void HWNewNet::startGame()
 
 void HWNewNet::updateRoomName(const QString & name)
 {
-    RawSendNet(QString("ROOM_NAME%1%2").arg(delimeter).arg(name));
+    RawSendNet(QString("ROOM_NAME%1%2").arg(delimiter).arg(name));
 }
 
 
@@ -1032,17 +1085,17 @@ bool HWNewNet::isInRoom()
 
 void HWNewNet::setServerMessageNew(const QString & msg)
 {
-    RawSendNet(QString("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimeter).arg(msg));
+    RawSendNet(QString("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimiter).arg(msg));
 }
 
 void HWNewNet::setServerMessageOld(const QString & msg)
 {
-    RawSendNet(QString("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimeter).arg(msg));
+    RawSendNet(QString("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimiter).arg(msg));
 }
 
 void HWNewNet::setLatestProtocolVar(int proto)
 {
-    RawSendNet(QString("SET_SERVER_VAR%1LATEST_PROTO%1%2").arg(delimeter).arg(proto));
+    RawSendNet(QString("SET_SERVER_VAR%1LATEST_PROTO%1%2").arg(delimiter).arg(proto));
 }
 
 void HWNewNet::askServerVars()
@@ -1082,4 +1135,35 @@ void HWNewNet::roomPasswordEntered(const QString &password)
 {
     if(!myroom.isEmpty())
         JoinRoom(myroom, password);
+}
+
+void HWNewNet::maybeSendPassword()
+{
+/* When we got password hash, and server asked us for a password, perform mutual authentication:
+ * at this point we have salt chosen by server
+ * client sends client salt and hash of secret (password hash) salted with client salt, server salt,
+ * and static salt (predefined string + protocol number)
+ * server should respond with hash of the same set in different order.
+ */
+
+    if(m_passwordHash.isEmpty() || m_serverSalt.isEmpty())
+        return;
+
+    QString hash = QCryptographicHash::hash(
+                m_clientSalt.toAscii()
+                .append(m_serverSalt.toAscii())
+                .append(m_passwordHash)
+                .append(cProtoVer->toAscii())
+                .append("!hedgewars")
+                , QCryptographicHash::Sha1).toHex();
+
+    m_serverHash = QCryptographicHash::hash(
+                m_serverSalt.toAscii()
+                .append(m_clientSalt.toAscii())
+                .append(m_passwordHash)
+                .append(cProtoVer->toAscii())
+                .append("!hedgewars")
+                , QCryptographicHash::Sha1).toHex();
+
+    RawSendNet(QString("PASSWORD%1%2%1%3").arg(delimiter).arg(hash).arg(m_clientSalt));
 }

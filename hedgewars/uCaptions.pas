@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
- 
+
 {$INCLUDE "options.inc"}
 
 unit uCaptions;
@@ -23,7 +23,7 @@ unit uCaptions;
 interface
 uses uTypes;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: ansistring; Color: Longword; Group: TCapGroup);
 procedure DrawCaptions;
 procedure ReloadCaptions(unload: boolean);
 
@@ -36,21 +36,20 @@ uses uTextures, uRenderUtils, uVariables, uRender;
 type TCaptionStr = record
     Tex: PTexture;
     EndTime: LongWord;
-    Text: shortstring;
+    Text: ansistring;
     Color: Longword
     end;
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: ansistring; Color: Longword; Group: TCapGroup);
 begin
     if cOnlyStats then exit;
+    if Length(s) = 0 then
+        exit;
     if Captions[Group].Text <> s then
-        begin
-        FreeTexture(Captions[Group].Tex);
-        Captions[Group].Tex:= nil
-        end;
-    
+        FreeAndNilTexture(Captions[Group].Tex);
+
     if Captions[Group].Tex = nil then
         begin
         Captions[Group].Color:= Color;
@@ -71,8 +70,8 @@ var Group: TCapGroup;
 begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
     if unload then
-        FreeTexture(Captions[Group].Tex)
-    else if Captions[Group].Text <> '' then
+        FreeAndNilTexture(Captions[Group].Tex)
+    else if length(Captions[Group].Text) > 0 then
         Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
 end;
 
@@ -95,9 +94,8 @@ begin
                 inc(offset, Tex^.h + 2);
                 if EndTime <= RealTicks then
                     begin
-                    FreeTexture(Tex);
-                    Tex:= nil;
-                    Text:= '';
+                    FreeAndNilTexture(Tex);
+                    Text:= ansistring('');
                     EndTime:= 0
                     end;
                 end;
@@ -112,10 +110,7 @@ procedure freeModule;
 var group: TCapGroup;
 begin
     for group:= Low(TCapGroup) to High(TCapGroup) do
-        begin
-        FreeTexture(Captions[group].Tex);
-        Captions[group].Tex:= nil
-        end
+        FreeAndNilTexture(Captions[group].Tex);
 end;
 
 end.

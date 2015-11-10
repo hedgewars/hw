@@ -21,28 +21,28 @@
 package org.hedgewars.hedgeroid.EngineProtocol;
 
 public class PascalExports {
-	public static Object engineMutex = new Object();
+    public static Object engineMutex = new Object();
 
-	static{
-		System.loadLibrary("SDL");
-		System.loadLibrary("SDL_image");
-		System.loadLibrary("mikmod");
-		System.loadLibrary("SDL_net");
-		System.loadLibrary("SDL_mixer");
-		System.loadLibrary("SDL_ttf");
-		System.loadLibrary("lua5.1");
-		System.loadLibrary("physfs");
-		System.loadLibrary("physlayer");
-		System.loadLibrary("hwengine");
-	}
-	
-	public static native int HWgetMaxNumberOfTeams();
+    static{
+        System.loadLibrary("SDL");
+        System.loadLibrary("SDL_image");
+        System.loadLibrary("mikmod");
+        System.loadLibrary("SDL_net");
+        System.loadLibrary("SDL_mixer");
+        System.loadLibrary("SDL_ttf");
+        System.loadLibrary("lua5.1");
+        System.loadLibrary("physfs");
+        System.loadLibrary("physlayer");
+        System.loadLibrary("hwengine");
+    }
+
+    public static native int HWgetMaxNumberOfTeams();
     private static native void HWGenLandPreview(int port);
 
     public static void synchronizedGenLandPreview(int port) {
-    	synchronized(engineMutex) {
-    		HWGenLandPreview(port);
-    	}
+        synchronized(engineMutex) {
+            HWGenLandPreview(port);
+        }
     }
-    
+
 }

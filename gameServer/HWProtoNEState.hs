@@ -1,13 +1,33 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE OverloadedStrings, CPP #-}
 module HWProtoNEState where
 
 import Control.Monad.Reader
+import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Char8 as B
+import Data.Digest.Pure.SHA
 --------------------------------------
 import CoreTypes
-import Actions
 import Utils
 import RoomsAndClients
+import HandlerUtils
 
 handleCmd_NotEntered :: CmdHandler
 
@@ -42,11 +62,28 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
 
-    if passwd == webPassword cl then
+    if clientProto cl < 48 && passwd == webPassword cl then
         return $ JoinLobby : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
         else
         return [ByeClient "Authentication failed"]
 
+
+handleCmd_NotEntered ["PASSWORD", passwd, clientSalt] = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+
+    let clientHash = h [clientSalt, serverSalt cl, webPassword cl, showB $ clientProto cl, "!hedgewars"]
+    let serverHash = h [serverSalt cl, clientSalt, webPassword cl, showB $ clientProto cl, "!hedgewars"]
+
+    if passwd == clientHash then
+        return [
+            AnswerClients [sendChan cl] ["SERVER_AUTH", serverHash] 
+            , JoinLobby
+            ]
+        else
+        return [ByeClient "Authentication failed"]
+    where
+        h = B.pack . showDigest . sha1 . BL.fromChunks
 
 #if defined(OFFICIAL_SERVER)
 handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do

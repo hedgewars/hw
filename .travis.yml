@@ -1,0 +1,31 @@
+language: c
+branches:
+  except:
+    gh-pages
+compiler:
+  - gcc
+  - clang
+env:
+  - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
+  - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
+  - BUILD_ARGS="-DNOSERVER=1 -DBUILD_ENGINE_C=1"
+  - BUILD_ARGS="-DNOSERVER=1 -DNOVIDEOREC=1 -DNOPNG=1"
+  - BUILD_ARGS="-DNOSERVER=1 -DLUA_SYSTEM=0 -DPHYSFS_SYSTEM=0"
+matrix:
+  allow_failures:
+    # Failures we expect here
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install debhelper cmake dpkg-dev libqt4-dev qt4-qmake libphysfs-dev libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-net1.2-dev bzip2 ghc libghc-mtl-dev libghc-parsec3-dev libghc-bytestring-show-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-stm-dev libghc-network-dev libghc-dataenc-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev liblua5.1-0-dev imagemagick fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev freeglut3-dev libglew1.6-dev
+script: 
+  - mkdir build && cd build && cmake $BUILD_ARGS .. && make VERBOSE=1 && make test_verbose
+notifications:
+  email: false
+  irc:
+    channels:
+      - "chat.freenode.net#hedgewars"
+    template:
+      - "hw-build #%{build_number} (%{commit} by %{author}): %{message}"
+      - "See details at %{build_url}"
+    on_success: change
+    on_failure: always

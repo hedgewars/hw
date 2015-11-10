@@ -32,31 +32,31 @@ import android.os.Message;
  * information change.
  */
 public final class CalmDownHandler extends Handler {
-	int runningMessagesCounter = 0;
-	final Runnable inactivityRunnable;
-	final long inactivityMs;
-	boolean stopped;
+    int runningMessagesCounter = 0;
+    final Runnable inactivityRunnable;
+    final long inactivityMs;
+    boolean stopped;
 
-	public CalmDownHandler(Looper looper, Runnable runnable, long inactivityMs) {
-		super(looper);
-		this.inactivityRunnable = runnable;
-		this.inactivityMs = inactivityMs;
-	}
-	
-	public void activity() {
-		runningMessagesCounter++;
-		sendMessageDelayed(obtainMessage(), inactivityMs);
-	}
-	
-	@Override
-	public void handleMessage(Message msg) {
-		runningMessagesCounter--;
-		if(runningMessagesCounter==0 && !stopped) {
-			inactivityRunnable.run();
-		}
-	}
-	
-	public void stop() {
-		stopped = true;
-	}
+    public CalmDownHandler(Looper looper, Runnable runnable, long inactivityMs) {
+        super(looper);
+        this.inactivityRunnable = runnable;
+        this.inactivityMs = inactivityMs;
+    }
+
+    public void activity() {
+        runningMessagesCounter++;
+        sendMessageDelayed(obtainMessage(), inactivityMs);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        runningMessagesCounter--;
+        if(runningMessagesCounter==0 && !stopped) {
+            inactivityRunnable.run();
+        }
+    }
+
+    public void stop() {
+        stopped = true;
+    }
 }

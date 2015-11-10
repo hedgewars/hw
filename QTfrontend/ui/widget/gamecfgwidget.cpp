@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QResizeEvent>
@@ -163,6 +163,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
     connect(pMapContainer, SIGNAL(mazeSizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
+    connect(pMapContainer, SIGNAL(mapFeatureSizeChanged(int)), this, SLOT(slMapFeatureSizeChanged(int)));
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
@@ -315,21 +316,25 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$minesnum %1").arg(schemeData(32).toInt()).toUtf8();
     bcfg << QString("e$minedudpct %1").arg(schemeData(33).toInt()).toUtf8();
     bcfg << QString("e$explosives %1").arg(schemeData(34).toInt()).toUtf8();
-    bcfg << QString("e$healthprob %1").arg(schemeData(35).toInt()).toUtf8();
-    bcfg << QString("e$hcaseamount %1").arg(schemeData(36).toInt()).toUtf8();
-    bcfg << QString("e$waterrise %1").arg(schemeData(37).toInt()).toUtf8();
-    bcfg << QString("e$healthdec %1").arg(schemeData(38).toInt()).toUtf8();
-    bcfg << QString("e$ropepct %1").arg(schemeData(39).toInt()).toUtf8();
-    bcfg << QString("e$getawaytime %1").arg(schemeData(40).toInt()).toUtf8();
-    bcfg << QString("e$worldedge %1").arg(schemeData(41).toInt()).toUtf8();
+    bcfg << QString("e$airmines %1").arg(schemeData(35).toInt()).toUtf8();
+    bcfg << QString("e$healthprob %1").arg(schemeData(36).toInt()).toUtf8();
+    bcfg << QString("e$hcaseamount %1").arg(schemeData(37).toInt()).toUtf8();
+    bcfg << QString("e$waterrise %1").arg(schemeData(38).toInt()).toUtf8();
+    bcfg << QString("e$healthdec %1").arg(schemeData(39).toInt()).toUtf8();
+    bcfg << QString("e$ropepct %1").arg(schemeData(40).toInt()).toUtf8();
+    bcfg << QString("e$getawaytime %1").arg(schemeData(41).toInt()).toUtf8();
+    bcfg << QString("e$worldedge %1").arg(schemeData(42).toInt()).toUtf8();
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
+    bcfg << QString("e$feature_size %1").arg(pMapContainer->getFeatureSize()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
-
+    if(!schemeData(43).isNull())
+        bcfg << QString("e$scriptparam %1").arg(schemeData(43).toString()).toUtf8();
 
 
     switch (mapgen)
     {
         case MAPGEN_MAZE:
+        case MAPGEN_PERLIN:
             bcfg << QString("e$maze_size %1").arg(pMapContainer->getMazeSize()).toUtf8();
             break;
 
@@ -400,6 +405,10 @@ void GameCFGWidget::fullNetConfig()
 
     mapgenChanged(pMapContainer->get_mapgen());
     maze_sizeChanged(pMapContainer->getMazeSize());
+    slMapFeatureSizeChanged(pMapContainer->getFeatureSize());
+
+    if(pMapContainer->get_mapgen() == 2)
+        onDrawnMapChanged(pMapContainer->getDrawnMapData());
 
     // map must be the last
     QString map = pMapContainer->getCurrentMap();
@@ -437,6 +446,11 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
             pMapContainer->setMapgen((MapGenerator)value.toUInt());
             return;
         }
+        if (param == "FEATURE_SIZE")
+        {
+            pMapContainer->setFeatureSize(value.toUInt());
+            return;
+        }
         if (param == "MAZE_SIZE")
         {
             pMapContainer->setMazeSize(value.toUInt());
@@ -445,6 +459,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         if (param == "SCRIPT")
         {
             Scripts->setCurrentIndex(Scripts->findText(value));
+            pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
             return;
         }
         if (param == "DRAWNMAP")
@@ -463,18 +478,19 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
     }
 
-    if (slValue.size() == 5)
+    if (slValue.size() == 6)
     {
         if (param == "FULLMAPCONFIG")
         {
-            QString seed = slValue[3];
+            QString seed = slValue[4];
 
             pMapContainer->setAllMapParameters(
-                slValue[0],
-                (MapGenerator)slValue[1].toUInt(),
-                slValue[2].toUInt(),
+                slValue[1],
+                (MapGenerator)slValue[2].toUInt(),
+                slValue[3].toUInt(),
                 seed,
-                slValue[4].toUInt()
+                slValue[5].toUInt(),
+                slValue[0].toUInt()
             );
             return;
         }
@@ -512,8 +528,8 @@ void GameCFGWidget::mapChanged(const QString & value)
             int num = GameSchemes->findText(pMapContainer->getCurrentScheme());
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
-            else
-                GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+            //else
+            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
 
         if (pMapContainer->getCurrentWeapons() == "locked")
@@ -527,8 +543,8 @@ void GameCFGWidget::mapChanged(const QString & value)
             int num = WeaponsName->findText(pMapContainer->getCurrentWeapons());
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
-            else
-                WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+            //else
+            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
 
         if (pMapContainer->getCurrentScheme() != "locked" && pMapContainer->getCurrentWeapons() != "locked")
@@ -569,7 +585,11 @@ void GameCFGWidget::schemeChanged(int index)
     for(int i = 0; i < size; ++i)
         sl << schemeData(i).toString();
 
-    if (sl.size()!=1) emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
+    if (sl.size() >= 42)
+    {
+        sl[sl.size()-1].prepend('!');
+        emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
+    }
 
     if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked())
     {
@@ -586,6 +606,7 @@ void GameCFGWidget::schemeChanged(int index)
             }
         }
     }
+    pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
 }
 
 void GameCFGWidget::scriptChanged(int index)
@@ -609,8 +630,8 @@ void GameCFGWidget::scriptChanged(int index)
             int num = GameSchemes->findText(scheme);
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
-            else
-                GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+            //else
+            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
 
         if (weapons == "locked")
@@ -624,8 +645,8 @@ void GameCFGWidget::scriptChanged(int index)
             int num = WeaponsName->findText(weapons);
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
-            else
-                WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+            //else
+            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
 
         if (scheme != "locked" && weapons != "locked")
@@ -639,6 +660,14 @@ void GameCFGWidget::scriptChanged(int index)
         WeaponsName->setEnabled(true);
         bindEntries->setEnabled(true);
     }
+    if (!index)
+    {
+        pMapContainer->setScript(QString(""), QString(""));
+    }
+    else
+    {
+        pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
+    }
     emit paramChanged("SCRIPT", QStringList(name));
 }
 
@@ -650,6 +679,11 @@ void GameCFGWidget::mapgenChanged(MapGenerator m)
 void GameCFGWidget::maze_sizeChanged(int s)
 {
     emit paramChanged("MAZE_SIZE", QStringList(QString::number(s)));
+}
+
+void GameCFGWidget::slMapFeatureSizeChanged(int s)
+{
+    emit paramChanged("FEATURE_SIZE", QStringList(QString::number(s)));
 }
 
 void GameCFGWidget::resendSchemeData()

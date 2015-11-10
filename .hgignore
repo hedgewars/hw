@@ -26,7 +26,7 @@ glob:*.orig
 glob:*.diff
 glob:vittorio.*
 glob:project_files/HedgewarsMobile/Data/
-glob:project_files/HedgewarsMobile/build/
+glob:project_files/HedgewarsMobile/Build/
 glob:gameServer/dist/
 glob:misc/liblua/Xcode/build/
 glob:misc/libphysfs/Xcode/build/
@@ -40,6 +40,8 @@ glob:*.patch
 glob:*.orig
 glob:*.bak
 glob:*.rej
+glob:project_files/hwc/*.c
+glob:project_files/hwc/*.h
 glob:project_files/Android-build/SDL-android-project/jni/**
 glob:project_files/Android-build/SDL-android-project/obj
 glob:project_files/Android-build/SDL-android-project/libs/armeabi*
@@ -63,3 +65,18 @@ glob:version_info.txt
 glob:*.tar.*
 glob:*.or
 glob:*.res
+glob:Hedgewars.app/*
+glob:tools/CreateMacBundle.cmake
+glob:share/Info.plist
+glob:CTestTestfile.cmake
+glob:arch.c
+glob:*.swp
+glob:*~.nib
+glob:*.pbxuser
+glob:*.perspective
+glob:*.perspectivev3
+glob:*.project.xcworkspace
+glob:*.xcuserdata
+glob:xcuserdata
+glob:*.mode1v3
+glob:*.mode2v3

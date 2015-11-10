@@ -3,7 +3,16 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 local player = nil
 local RCGear = nil
 local planesUsed = 0
+local planeTimer = 0
+local planeUhOh = false
 local cratesLeft = 0
+local crateStreak = 0
+local longestCrateStreak = 0
+local commentTimer = 0
+local missiles = 0
+local totalMissiles = 0
+local missileScanTimer = 0
+local nextComment = sndNone
 
 function onGameInit()
 
@@ -28,6 +37,8 @@ end
 
 
 function onGameStart()
+
+	SendHealthStatsOff()
 
 	ShowMission     (
                                 loc("RC PLANE TRAINING"),
@@ -283,6 +294,30 @@ end
 
 --end
 
+function onGameTick20()
+	if RCGear ~= nil then
+		if(GetTimer(RCGear) < 3000 and planeUhOh == false) then
+			PlaySound(sndUhOh, player)
+			planeUhOh = true
+		end
+		planeTimer = planeTimer + 20
+	end
+	if commentTimer > 0 then
+		commentTimer = commentTimer - 20
+	elseif(nextComment ~= sndNone) then
+		PlaySound(nextComment, player)
+		nextComment = sndNone
+	end
+	if missileScanTimer > 0 then
+		missileScanTimer = missileScanTimer - 20
+	else
+		if crateStreak == 0 and missiles == 3 then
+			PlaySound(sndMissed, player)
+			missiles = 4
+		end
+	end
+end
+
 function onNewTurn()
 	TurnTimeLeft = -1
 end
@@ -292,12 +327,17 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtRCPlane then
 		RCGear = gear
 		planesUsed = planesUsed + 1
+		planeTimer = 0
+		missiles = 0
 	end
 
 	if GetGearType(gear) == gtCase then
 		cratesLeft = cratesLeft + 1
 	end
 
+	if GetGearType(gear) == gtAirBomb then
+		totalMissiles = totalMissiles + 1
+	end
 end
 
 function onGearDelete(gear)
@@ -305,34 +345,142 @@ function onGearDelete(gear)
 	if GetGearType(gear) == gtRCPlane then
 
 		RCGear = nil
-		AddCaption(loc("Planes Used:") .. " " .. planesUsed)
+		planeUhOh = false
+		missiles = 0
+		AddCaption(string.format(loc("Planes used: %d"), planesUsed))
+
+		if(planeTimer < 2000 and crateStreak == 0) then
+			nextComment = sndStupid
+			commentTimer = math.min(2000-planeTimer, 800)
+		elseif(planeTimer < 5000 and crateStreak == 0) then
+			PlaySound(sndOops, player)
+		elseif(planesUsed == 72) then
+			PlaySound(sndStupid, player)
+		elseif(planesUsed == 50) then
+			PlaySound(sndNutter, player)
+		elseif(planesUsed == 30) then
+			PlaySound(sndOops, player)
+		end
+
+		crateStreak = 0
+
+	elseif GetGearType(gear) == gtAirBomb then
+		missiles = missiles + 1
+		missileScanTimer = 500
 
 	elseif GetGearType(gear) == gtCase then
 
-		AddCaption(loc("Crates Left:") .. " " .. cratesLeft)
 		cratesLeft = cratesLeft - 1
+		crateStreak = crateStreak + 1
+		if(crateStreak > longestCrateStreak) then
+			longestCrateStreak = crateStreak
+		end
+
+		AddCaption(string.format(loc("Crates left: %d"), cratesLeft))
 
 		if cratesLeft == 0 then
 
+			local rank = "unknown"
+			local color = 0xFFFFFFFF
+			local sound = sndVictory
+			if planesUsed >= 156 then
+				rank = loc("Destroyer of planes")	
+				color = 0xD06700FF
+				sound = sndLaugh
+			elseif planesUsed >= 98 then
+				rank = loc("Hopeless case")
+				color = 0xFF0000FF
+			elseif planesUsed >= 72 then
+				rank = loc("Drunk greenhorn")
+				color = 0xFF0040FF
+			elseif planesUsed >= 50 then
+				rank = loc("Greenhorn") -- a.k.a. "absolute beginner"
+				color = 0xFF0080FF
+			elseif planesUsed >= 39 then
+				rank = loc("Beginner")
+				color = 0xFF00BFFF
+			elseif planesUsed >= 30 then
+				rank = loc("Experienced beginner")
+				color = 0xFF00CCFF
+			elseif planesUsed >= 21 then
+				rank = loc("Below-average pilot")
+				color = 0xFF00FFFF
+			elseif planesUsed >= 17 then
+				rank = loc("Average pilot")				
+				color = 0xBF00FFFF
+			elseif planesUsed >= 13 then
+				rank = loc("Above-average pilot")
+				color = 0x8000FFFF
+			elseif planesUsed >= 8 then
+				rank = loc("Professional pilot")
+				color = 0x4000FFFF
+			elseif planesUsed >= 5 then
+				rank = loc("Professional stunt pilot")
+				color = 0x0000FFFF
+			elseif planesUsed >= 3 then
+				rank = loc("Elite pilot")
+				color = 0x0040FFFF
+			elseif planesUsed == 2 then
+				rank = loc("Upper-class elite pilot")
+				color = 0x0080FFFF
+			elseif planesUsed == 1 then
+				rank = loc("Top-class elite pilot")
+				color = 0x00FFFFFF
+				sound = sndFlawless
+			else
+				rank = loc("Cheater")
+				color = 0xFF0000FF
+				sound = sndCoward
+			end
+			AddCaption(string.format(loc("Rank: %s"), rank), color, capgrpMessage2)
+			SendStat(siCustomAchievement, string.format(loc("Your rank: %s"), rank))
 			if planesUsed == 1 then
-				AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Prestigious Pilot"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Flawless victory!"))
+				SendStat(siGameResult, loc("You have perfectly beaten the challenge!"))
+				SendStat(siCustomAchievement, loc("You have used only 1 RC plane. Outstanding!"))
+			else
+				AddCaption(loc("Victory!"))
+				SendStat(siGameResult, loc("You have finished the challenge!"))
+				SendStat(siCustomAchievement, string.format(loc("You have used %d RC planes."), planesUsed))
+			end
+		
+			if(totalMissiles > 1) then
+				SendStat(siCustomAchievement, string.format(loc("You have dropped %d missiles."), totalMissiles))
+			end
+
+			if(longestCrateStreak > 5) then
+				if(planesUsed == 1) then
+					SendStat(siCustomAchievement, string.format(loc("In your best (and only) flight you took out %d crates with one RC plane!"), longestCrateStreak))
+				else
+					SendStat(siCustomAchievement, string.format(loc("In your best flight you took out %d crates with one RC plane."), longestCrateStreak))
+				end
+			end
+
+			if(planesUsed == 2) then
+				SendStat(siCustomAchievement, loc("This was an awesome performance! But this challenge can be finished with even just one RC plane. Can you figure out how?"))
+			end
+			if(planesUsed == 1) then
+				SendStat(siCustomAchievement, loc("Congratulations! You have truly mastered this challenge! Don't forget to save the demo."))
+				SendStat(siCustomAchievement, string.format(loc("You have gained an achievement: %s"), loc("Prestigious Pilot")))
 			end
 
 			ShowMission     (
                                 loc("CHALLENGE COMPLETE"),
                                 loc("Congratulations!"),
-                                loc("Planes Used") .. ": " .. planesUsed .. "|" ..
+                                string.format(loc("Planes used: %d"), planesUsed) .. "|" ..
                                 "", 0, 0
                                 )
+			SetState(player, gstWinner)
+			PlaySound(sound, player)
 
 
-			ParseCommand("teamgone Wannabe Flyboys")
+			DismissTeam(loc("Wannabe Flyboys"))
+			EndGame()
 		end
 
 		if RCGear ~= nil then
 			SetTimer(RCGear, GetTimer(RCGear) + 10000)
 		end
-
 	end
 
 end

@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE OverloadedStrings #-}
 module Utils where
 
@@ -56,9 +74,10 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
             t : replaceTeam tm ts
 
 illegalName :: B.ByteString -> Bool
-illegalName s = B.null s || B.length s > 40 || B.all isSpace s || isSpace (B.head s) || isSpace (B.last s) || B.any isIllegalChar s
+illegalName b = B.null b || length s > 40 || all isSpace s || isSpace (head s) || isSpace (last s) || any isIllegalChar s
     where
-        isIllegalChar c = c `List.elem` "$()*+?[]^{|}"
+        s = UTF8.toString b
+        isIllegalChar c = c `List.elem` ("$()*+?[]^{|}\x7F" ++ ['\x00'..'\x1F'])
 
 protoNumber2ver :: Word16 -> B.ByteString
 protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
@@ -92,6 +111,12 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (44, "0.9.19-dev")
             , (45, "0.9.19")
             , (46, "0.9.20-dev")
+            , (47, "0.9.20")
+            , (48, "0.9.21-dev")
+            , (49, "0.9.21")
+            , (50, "0.9.22-dev")
+            , (51, "0.9.22")
+            , (52, "0.9.23-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
@@ -114,7 +139,7 @@ readInt_ :: (Num a) => B.ByteString -> a
 readInt_ str =
   case B.readInt str of
        Just (i, t) | B.null t -> fromIntegral i
-       _                      -> 0 
+       _                      -> 0
 
 cutHost :: B.ByteString -> B.ByteString
 cutHost = B.intercalate "." .  flip (++) ["*","*"] . List.take 2 . B.split '.'
@@ -126,7 +151,7 @@ upperCase :: B.ByteString -> B.ByteString
 upperCase = UTF8.fromString . map Char.toUpper . UTF8.toString
 
 roomInfo :: Word16 -> B.ByteString -> RoomInfo -> [B.ByteString]
-roomInfo p n r 
+roomInfo p n r
     | p < 46 = [
         showB $ isJust $ gameInfo r,
         name r,
@@ -137,7 +162,7 @@ roomInfo p n r
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
-    | otherwise = [
+    | p < 48 = [
         showB $ isJust $ gameInfo r,
         name r,
         showB $ playersIn r,
@@ -148,6 +173,25 @@ roomInfo p n r
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
+    | otherwise = [
+        B.pack roomFlags,
+        name r,
+        showB $ playersIn r,
+        showB $ length $ teams r,
+        n,
+        Map.findWithDefault "+rnd+" "MAP" (mapParams r),
+        head (Map.findWithDefault ["Normal"] "SCRIPT" (params r)),
+        head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        ]
+    where
+        roomFlags = concat [
+            "-"
+            , ['g' | isJust $ gameInfo r]
+            , ['p' | not . B.null $ password r]
+            , ['j' | isRestrictedJoins  r]
+            , ['r' | isRegisteredOnly  r]
+            ]
 
 answerFullConfigParams ::
             ClientInfo
@@ -159,6 +203,11 @@ answerFullConfigParams cl mpr pr
                 (reverse . map (\(a, b) -> (a, [b])) $ Map.toList mpr)
                 ++ (("SCHEME", pr Map.! "SCHEME")
                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
+
+        | clientProto cl < 48 = map (toAnswer cl) $
+                ("FULLMAPCONFIG", let l = Map.elems mpr in if length l > 5 then tail l else l)
+                : ("SCHEME", pr Map.! "SCHEME")
+                : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
 
         | otherwise = map (toAnswer cl) $
                 ("FULLMAPCONFIG", Map.elems mpr)
@@ -182,4 +231,13 @@ loc :: B.ByteString -> B.ByteString
 loc = id
 
 maybeNick :: Maybe ClientInfo -> B.ByteString
-maybeNick = fromMaybe "[empty]" . liftM nick
+maybeNick = fromMaybe "[]" . liftM nick
+
+-- borrowed from Data.List, just more general in types
+deleteBy2                :: (a -> b -> Bool) -> a -> [b] -> [b]
+deleteBy2 _  _ []        = []
+deleteBy2 eq x (y:ys)    = if x `eq` y then ys else y : deleteBy2 eq x ys
+
+deleteFirstsBy2          :: (a -> b -> Bool) -> [a] -> [b] -> [a]
+deleteFirstsBy2 eq       =  foldl (flip (deleteBy2 (flip eq)))
+

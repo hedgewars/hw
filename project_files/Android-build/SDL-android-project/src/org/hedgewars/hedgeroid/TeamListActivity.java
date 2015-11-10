@@ -43,87 +43,87 @@ import android.widget.ImageButton;
 import android.widget.SimpleAdapter;
 
 public class TeamListActivity extends ListActivity implements OnItemClickListener {
-	private List<Team> teams;
-	private ImageButton addButton;
+    private List<Team> teams;
+    private ImageButton addButton;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_teamlist);
-		addButton = (ImageButton)findViewById(R.id.btnAdd);
-		addButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				editTeam(null);
-			}
-		});
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateList();
-		getListView().setOnItemClickListener(this);
-		registerForContextMenu(getListView());
-	}
-	
-	public void onItemClick(AdapterView<?> adapterView, View v, int position, long arg3) {
-		editTeam(teams.get(position).name);
-	}
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
-		menu.add(ContextMenu.NONE, 0, ContextMenu.NONE, R.string.edit);
-		menu.add(ContextMenu.NONE, 1, ContextMenu.NONE, R.string.delete);
-	}
-	
-	@Override
-	public boolean onContextItemSelected(MenuItem item){
-		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		int position = menuInfo.position;
-		Team team = teams.get(position);
-		switch(item.getItemId()){
-		case 0:
-			editTeam(team.name);
-			return true;
-		case 1:
-			Team.getTeamfileByName(getApplicationContext(), team.name).delete();
-			updateList();
-			return true;
-		}
-		return false;
-	}
-	
-	private void updateList() {
-		teams = FrontendDataUtils.getTeams(getApplicationContext());
-		Collections.sort(teams, Team.NAME_ORDER);
-		SimpleAdapter adapter = new SimpleAdapter(this, teamsToMaps(teams), R.layout.team_selection_entry_simple, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
-		setListAdapter(adapter);
-	}
-	
-	private void editTeam(String teamName) {
-		Intent i = new Intent(this, TeamCreatorActivity.class);
-		i.putExtra(TeamCreatorActivity.PARAMETER_EXISTING_TEAMNAME, teamName);
-		startActivity(i);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_teamlist);
+        addButton = (ImageButton)findViewById(R.id.btnAdd);
+        addButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                editTeam(null);
+            }
+        });
+    }
 
-	private static final int[] botlevelDrawables = new int[] {
-		R.drawable.human, R.drawable.bot5, R.drawable.bot4, R.drawable.bot3, R.drawable.bot2, R.drawable.bot1
-	};
-	
-	private List<Map<String, ?>> teamsToMaps(List<Team> teams) {
-		List<Map<String, ?>> result = new ArrayList<Map<String,?>>();
-		for(Team t : teams) {
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("team", t);
-			map.put("txt", t.name);
-			int botlevel = t.hogs.get(0).level;
-			if(botlevel<0 || botlevel>=botlevelDrawables.length) {
-				map.put("img", R.drawable.bot1);
-			} else {
-				map.put("img", botlevelDrawables[botlevel]);
-			}
-			result.add(map);
-		}
-		return result;
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
+        getListView().setOnItemClickListener(this);
+        registerForContextMenu(getListView());
+    }
+
+    public void onItemClick(AdapterView<?> adapterView, View v, int position, long arg3) {
+        editTeam(teams.get(position).name);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
+        menu.add(ContextMenu.NONE, 0, ContextMenu.NONE, R.string.edit);
+        menu.add(ContextMenu.NONE, 1, ContextMenu.NONE, R.string.delete);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+        int position = menuInfo.position;
+        Team team = teams.get(position);
+        switch(item.getItemId()){
+        case 0:
+            editTeam(team.name);
+            return true;
+        case 1:
+            Team.getTeamfileByName(getApplicationContext(), team.name).delete();
+            updateList();
+            return true;
+        }
+        return false;
+    }
+
+    private void updateList() {
+        teams = FrontendDataUtils.getTeams(getApplicationContext());
+        Collections.sort(teams, Team.NAME_ORDER);
+        SimpleAdapter adapter = new SimpleAdapter(this, teamsToMaps(teams), R.layout.team_selection_entry_simple, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
+        setListAdapter(adapter);
+    }
+
+    private void editTeam(String teamName) {
+        Intent i = new Intent(this, TeamCreatorActivity.class);
+        i.putExtra(TeamCreatorActivity.PARAMETER_EXISTING_TEAMNAME, teamName);
+        startActivity(i);
+    }
+
+    private static final int[] botlevelDrawables = new int[] {
+        R.drawable.human, R.drawable.bot5, R.drawable.bot4, R.drawable.bot3, R.drawable.bot2, R.drawable.bot1
+    };
+
+    private List<Map<String, ?>> teamsToMaps(List<Team> teams) {
+        List<Map<String, ?>> result = new ArrayList<Map<String,?>>();
+        for(Team t : teams) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("team", t);
+            map.put("txt", t.name);
+            int botlevel = t.hogs.get(0).level;
+            if(botlevel<0 || botlevel>=botlevelDrawables.length) {
+                map.put("img", R.drawable.bot1);
+            } else {
+                map.put("img", botlevelDrawables[botlevel]);
+            }
+            result.add(map);
+        }
+        return result;
+    }
 }

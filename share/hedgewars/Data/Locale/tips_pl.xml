@@ -1,0 +1,57 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>By grać ze swoim przyjacielem w tej samej drużynie po prostu wybierzcie taki sam kolor obydwu zespołów. Każdy z was będzie sterować swoimi własnymi jeżami ale wygracie bądź przegracie jako jedna drużyna.</tip>
+    <tip>Niektóre z broni zadają mało punktów obrażeń jednak użyte w odpowiednim momencie mogą pokazać pazur. Na przykład spróbuj użyć pistoletu by strącić swoich przeciwników do wody.</tip>
+    <tip>Jeśli nie jesteś pewien co zrobić w danej turze i nie chcesz tracić amunicji możesz pominąć turę. Nie rób tak jednak zbyt często gdyż nagła śmierć jest nieuchronna!</tip>
+    <tip>Jeśli chciałbyś zapobiec używania własnego nicka przez kogoś innego, zarejestruj go na http://www.hedgewars.org .</tip>
+    <tip>Znudzony domyślnymi ustawieniami gry? Spróbuj zagrać w którąś z misji. - oferują one zmienione zasady gry w zależności od tej którą wybrałeś.</tip>
+    <tip>Gra zawsze będzie zapisywała ostatnią rozgrywkę jako Demo. Wybierz "Grę Lokalną" i kliknij w przycisk "Dema" który znajduje się w prawym dolnym rogu ekranu by je odtworzyć i zarządzać nimi.</tip>
+    <tip>Hedgewars jest darmową grą o otwartym kodzie, którą tworzymy w naszym wolnym czasie. Jeśli masz jakiś problem, zapytaj na forum ale nie spodziewaj się wsparcia 24 godziny na dobę!</tip>
+    <tip>Hedgewars jest darmową grą o otwartym kodzie, którą tworzymy w naszym wolnym czasie. Jeśli ją lubisz, wspomóż nas małą wpłatą lub stwórz własną czapkę bądź mapę!</tip>
+    <tip>Hedgewars jest darmową grą o otwartym kodzie, którą tworzymy w naszym wolnym czasie. Jeśli tylko chcesz, rozdaj ją swojej rodzinie i kolegom!</tip>
+    <tip>Od czasu do czasu będą organizowane mistrzostwa. Będą one ogłaszane z wyprzedzeniem na http://www.hedgewars.org/ .</tip>
+    <tip>Hedgewars jest dostępne w wielu językach. Jeśli brakuje tłumaczenia w twoim języku bądź jest ono niekompletne, nie bój się z nami skontaktować!</tip>
+    <tip>Hedgewars może być uruchomione na różnych systemach operacyjnych takich jak Microsoft Windows, MacOS X, FreeBSD oraz Linux.</tip>
+    <tip>Zawsze możesz zmieniać ustawienia gry w opcjach gry lokalnej lub sieciowej. Nie musisz ciągle używać tzw. "Szybkiej gry".</tip>
+    <tip>Zawsze pamiętaj o robieniu krótkich przerw co godzinę kiedy grasz na komputerze.</tip>
+    <tip>Jeśli twoja karta graficzna nie ma sprzętowego przyspieszania OpenGL, spróbuj włączyć tryb obniżonej jakości by zwiększyć płynność gry.</tip>
+    <tip>Jesteśmy otwarci na sugestie oraz konstruktywną krytykę. Jeśli coś Ci się nie podoba bądź masz jakiś pomysł, daj nam znać!</tip>
+    <tip>Bądź kulturalny grając przez internet. Pamiętaj o tym, że w Hedgewars mogą grać także młodsze osoby!</tip>
+    <tip>Specjalne tryby gry takie jak "Karma" bądź "Wampiryzm" pozwalają na stworzenie nowej taktyki!</tip>
+    <tip>Nie powinieneś instalować Hedgewars na komputerach których nie posiadasz (w szkole, na studiach, w pracy itp.). Zapytaj osoby odpowiedzialnej za te komputery!</tip>
+    <tip>Hedgewars jest idealny do gry w czasie przerw.Upewnij się, że nie dałeś zbyt dużej ilości jeży, bądź zbyt dużej mapy. Pomóc może także zmniejszenie długości tury lub obniżenie ilości życia.</tip>
+    <tip>Żaden jeż nie został ranny w czasie tworzenia tej gry.</tip>
+    <tip>Hedgewars jest darmową grą o otwartym kodzie źródłowym którą tworzymy w naszym wolnym czasie. Jeśli ktokolwiek sprzedał Tobie tę grę powinieneś upomnieć się o swoje pieniądze!</tip>
+    <tip>Jeśli podłączysz jeden lub więcej gamepadów przed włączeniem gry będziesz miał możliwość przypisania klawiszy by sterować swoimi jeżami.</tip>
+    <tip>Stwórz konto na %1 by zapobiec używania twojego ulubionego nicku przez innych na oficjalnym serwerze.</tip>
+    <tip>Jeśli twoja karta nie wspiera sprzętowego przyspieszania OpenGL spróbuj uaktualnić swoje sterowniki.</tip>
+    <tip>Są trzy różne rodzaje skoku możliwe do wykonania. Naciśnij [wysoki skok] dwa razy by zrobić bardzo wysoki skok w tył.</tip>
+    <tip>Boisz się upadku z krawędzi terenu? Przytrzymaj klawisz [precyzyjnego celowania] by obrócić się w [lewo] lub [prawo] bez ruszenia się z miejsca.</tip>
+    <tip>Niektóre z broni wymagają specjalnej strategii lub dużo treningu by je popranie używać. Nie poddawaj się gdy nie wychodzi ci za pierwszym razem.</tip>
+    <tip>Większość uzbrojenia nie działa pod wodą. Pszczoła i Ciasto są wyjątkami od tej reguły.</tip>
+    <tip>Cuchnący ser nie powoduje wielkiego wybuchu. Jednakże pod wpływem wiatru chmura śmierdzącego gazu może bardzo daleko zawędrować i otruć wiele jeży naraz.</tip>
+    <tip>Zrzut pianina jest najbardziej morderczym atakiem powietrznym. Pamiętaj, że tracisz jeża którym wykonujesz ten atak więc dobrze zaplanuj swój ruch.</tip>
+    <tip>Miny samoprzylepne są idealnym narzędziem by tworzyć małe reakcje łańcuchowe bądź do zmuszenia przeciwnika by popadł w tarapaty lub wpadł do wody.</tip>
+    <tip>Młotek jest najbardziej skuteczny na mostach bądź kładkach. Uderzone jeże przelecą przez nie na sam dół.</tip>
+    <tip>Jeśli utknąłeś za jeżem przeciwnika, użyj młotka by wbić go w ziemię. Unikniesz wtedy eksplozji która z pewnością zabrałaby Tobie punkty życia.</tip>
+    <tip>Dystans który Ciasto może przebyć zależy od terenu który ma do przebycia. Użyj [ataku] by zdetonować je wcześniej.</tip>
+    <tip>Miotacz ognia jest śmiercionośną bronią ale może być użyty również jako narzędzie do kopania tuneli.</tip>
+    <tip>Chcesz wiedzieć kto tworzy tę grę? Kliknij logo w głównym menu by zobaczyć autorów.</tip>
+    <tip>Lubisz Hedgewars? Zostań fanem na %1 lub dołącz do grupy na %2!</tip>
+    <tip>Możesz rysować własne nagrobki, czapki, flagi lub nawet mapy albo tematy! Miej na uwadze to by udostępnić je każdemu który będzie grał z Tobą przez sieć.</tip>
+    <tip>Chcesz nosić wymarzoną czapkę? Wspomóż nas pieniężnie a my zrobimy specjalną czapkę tylko dla Ciebie!</tip>
+    <tip>Pamiętaj o aktualizowaniu sterowników by zapobiec problemom z grami.</tip>
+    <tip>Swoje zespoły i konfigurację gry znajdziesz w folderze "Moje Dokumenty\Hedgewars". Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</tip>
+    <tip>Możesz powiązać typy plików związane z Hedgewars (zapisy gier i dema) by móc je uruchamiać bezpośrednio z ulubionego menedżera plików bądź przeglądarki internetowej.</tip>
+    <tip>Chcesz zaoszczędzić liny? Odłącz ją będąc w powietrzu, a potem wypuść ją ponownie. Dopóki nie dotkniesz ziemi, będziesz używał pojedynczego naboju!</tip>
+    <tip>Swoje zespoły i konfigurację gry znajdziesz w folderze "Library/Application Support/Hedgewars" w twoim katalogu domowym. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</tip>
+    <tip>Swoje zespoły i konfigurację gry znajdziesz w folderze ".hedgewars" w twoim katalogu domowym. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</tip>
+    <tip>Użyj koktajlu Mołotowa lub Miotacza ognia by powstrzymać przeciwnika przed przedostaniem się przez tunele lub platformy.</tip>
+    <tip>Pszczoła potrafi być ciężka w użyciu. Jej promień skrętu zależy od prędkości lotu, więc nie staraj się nie używać pełnej mocy podczas strzału.</tip>
+    <windows-only>
+        <tip>Wersja Hedgewars dla systemu Windows wspiera Xfire. Upewnij się, że dodałeś Hedgewars do listy gier by Twoi znajomi mogli zobaczyć Ciebie w czasie gry.</tip>
+    </windows-only>
+</tips>

@@ -13,35 +13,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import <UIKit/UIKit.h>
-
-
-@class GeneralSettingsViewController;
-@class TeamSettingsViewController;
-@class WeaponSettingsViewController;
-@class SchemeSettingsViewController;
-@class SupportViewController;
 
 @interface SettingsBaseViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate> {
     UIViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
     UITabBarController *tabController;
-    GeneralSettingsViewController *generalSettingsViewController;
-    TeamSettingsViewController *teamSettingsViewController;
-    WeaponSettingsViewController *weaponSettingsViewController;
-    SchemeSettingsViewController *schemeSettingsViewController;
-    SupportViewController *supportViewController;
 }
 
 @property (nonatomic, retain) UIViewController *targetController;
 @property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
-@property (nonatomic, retain) UITabBarController *tabController;
 
 -(void) dismissSplitView;
 

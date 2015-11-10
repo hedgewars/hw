@@ -43,11 +43,11 @@ import android.widget.TabHost;
  * This activity is used to set up and start a game on the server.
  */
 public class NetRoomActivity extends FragmentActivity implements NetplayStateListener, TeamAddDialog.Listener, RoomStateManager.Provider, RunGameListener {
-	private TabHost tabHost;
-	private Netplay netplay;
-	private RoomStateManager stateManager;
-	private Button startButton;
-	
+    private TabHost tabHost;
+    private Netplay netplay;
+    private RoomStateManager stateManager;
+    private Button startButton;
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -55,97 +55,97 @@ public class NetRoomActivity extends FragmentActivity implements NetplayStateLis
         netplay.registerRunGameListener(this);
         stateManager = netplay.getRoomStateManager();
         stateManager.addListener(roomStateChangeListener);
-        
+
         setContentView(R.layout.activity_netroom);
         startButton = (Button)findViewById(R.id.startGame);
-        
+
         ChatFragment chatFragment = (ChatFragment)getSupportFragmentManager().findFragmentById(R.id.chatFragment);
         chatFragment.setInRoom(true);
-        
+
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.add(new NetplayStateFragment(), "netplayFragment");
         trans.commit();
-        
+
         startButton.setVisibility(netplay.isChief() ? View.VISIBLE : View.GONE);
         startButton.setOnClickListener(startButtonClickListener);
-        
+
         // Set up a tabbed UI for medium and small screens
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
-	        tabHost.setup();
-	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
+            tabHost.setup();
+            tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("map").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_map, 0)).setContent(R.id.mapFragment));
-	        tabHost.addTab(tabHost.newTabSpec("settings").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_settings, 0)).setContent(R.id.settingsFragment));
-	        tabHost.addTab(tabHost.newTabSpec("teams").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_teams, 0)).setContent(R.id.teamlistFragment));
-	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_chat, 0)).setContent(R.id.chatFragment));
-	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_players, 0)).setContent(R.id.playerListContainer));
-	        
-	        if (icicle != null) {
-	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
-	        }
+            tabHost.addTab(tabHost.newTabSpec("map").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_map, 0)).setContent(R.id.mapFragment));
+            tabHost.addTab(tabHost.newTabSpec("settings").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_settings, 0)).setContent(R.id.settingsFragment));
+            tabHost.addTab(tabHost.newTabSpec("teams").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_teams, 0)).setContent(R.id.teamlistFragment));
+            tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_chat, 0)).setContent(R.id.chatFragment));
+            tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_players, 0)).setContent(R.id.playerListContainer));
+
+            if (icicle != null) {
+                tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
-    	super.onDestroy();
-    	stateManager.removeListener(roomStateChangeListener);
-    	netplay.unregisterRunGameListener(this);
+        super.onDestroy();
+        stateManager.removeListener(roomStateChangeListener);
+        netplay.unregisterRunGameListener(this);
     }
-    
-	@Override
-	public void onBackPressed() {
-		netplay.sendLeaveRoom(null);
-	}
-    
+
+    @Override
+    public void onBackPressed() {
+        netplay.sendLeaveRoom(null);
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle icicle) {
         super.onSaveInstanceState(icicle);
         if(tabHost != null) {
-        	icicle.putString("currentTab", tabHost.getCurrentTabTag());
+            icicle.putString("currentTab", tabHost.getCurrentTabTag());
         }
     }
-    
-    public void onNetplayStateChanged(State newState) {
-    	switch(newState) {
-    	case NOT_CONNECTED:
-    	case CONNECTING:
-    	case LOBBY:
-    		finish();
-    		break;
-    	case ROOM:
-    		// Do nothing
-    		break;
-		default:
-			throw new IllegalStateException("Unknown connection state: "+newState);
-    	}
-    }
-    
-	public void onTeamAddDialogSubmitted(Team newTeam) {
-		stateManager.requestAddTeam(newTeam, TeamInGame.getUnusedOrRandomColorIndex(stateManager.getTeams().values()));
-	}
-	
-	public RoomStateManager getRoomStateManager() {
-		return stateManager;
-	}
 
-	private final OnClickListener startButtonClickListener = new OnClickListener() {
-		public void onClick(View v) {
-			netplay.sendStartGame();
-		}
-	};
-	
-	private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.ListenerAdapter() {
-		@Override
-		public void onChiefStatusChanged(boolean isChief) {
-			startButton.setVisibility(isChief ? View.VISIBLE : View.GONE);
-		}
-	};
-	
-	public void runGame(GameConfig config) {
-		SDLActivity.startConfig = config;
-		SDLActivity.startNetgame = true;
-		startActivity(new Intent(this, SDLActivity.class));
-	}
+    public void onNetplayStateChanged(State newState) {
+        switch(newState) {
+        case NOT_CONNECTED:
+        case CONNECTING:
+        case LOBBY:
+            finish();
+            break;
+        case ROOM:
+            // Do nothing
+            break;
+        default:
+            throw new IllegalStateException("Unknown connection state: "+newState);
+        }
+    }
+
+    public void onTeamAddDialogSubmitted(Team newTeam) {
+        stateManager.requestAddTeam(newTeam, TeamInGame.getUnusedOrRandomColorIndex(stateManager.getTeams().values()));
+    }
+
+    public RoomStateManager getRoomStateManager() {
+        return stateManager;
+    }
+
+    private final OnClickListener startButtonClickListener = new OnClickListener() {
+        public void onClick(View v) {
+            netplay.sendStartGame();
+        }
+    };
+
+    private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.ListenerAdapter() {
+        @Override
+        public void onChiefStatusChanged(boolean isChief) {
+            startButton.setVisibility(isChief ? View.VISIBLE : View.GONE);
+        }
+    };
+
+    public void runGame(GameConfig config) {
+        SDLActivity.startConfig = config;
+        SDLActivity.startNetgame = true;
+        startActivity(new Intent(this, SDLActivity.class));
+    }
 }

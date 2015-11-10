@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -30,7 +30,7 @@
 #pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
-    self.navigationItem.title = @"Edit game options";
+    self.navigationItem.title = NSLocalizedString(@"Edit game options", nil);
     [super viewDidLoad];
 }
 
@@ -179,7 +179,7 @@
 
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"from the settings table");
+                cell.textLabel.text = NSLocalizedString(@"Sound", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {

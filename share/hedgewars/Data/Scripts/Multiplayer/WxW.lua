@@ -77,8 +77,6 @@ local wTouched = {}
 --local margin
 local wallsLeft = 0
 
-local highestY = 0
-local surferTimer = 0
 local hasSurfed = false
 local allWallsHit = false
 
@@ -160,9 +158,9 @@ local MapList =
 
 function BoolToCfgTxt(p)
 	if p == false then
-		return("Disabled")
+		return loc("Disabled")
 	else
-		return("Enabled")
+		return loc("Enabled")
 	end
 end
 
@@ -356,23 +354,12 @@ function CheckCrateConditions()
 
 end
 
-function CheckSurfer()
-
-	if GetY(CurrentHedgehog) > highestY then
-		highestY = GetY(CurrentHedgehog)
+function onGearWaterSkip(gear)
+	if gear == CurrentHedgehog then
+		hasSurfed = true
+		AddCaption(loc("Surfer!"),0xffba00ff,capgrpMessage2)
 	end
-
-	if (highestY == (WaterLine-8)) and (hasSurfed == false)  then
-
-		surferTimer = surferTimer +1
-		if (surferTimer == 40) then
-			hasSurfed = true
-			AddCaption(loc("Surfer!"),0xffba00ff,capgrpMessage2)
-		end
-	end
-
 end
-
 
 
 function WallHit(id, zXMin,zYMin, zWidth, zHeight)
@@ -521,7 +508,8 @@ end
 
 function onGameInit()
 
-	GameFlags = gfRandomOrder + gfBorder + gfSolidLand --+ gfInfAttack
+	ClearGameFlags()
+	EnableGameFlags(gfRandomOrder, gfBorder, gfSolidLand) --, gfInfAttack
 	HealthCaseProb = 0
 	CaseFreq = 0
 
@@ -587,10 +575,8 @@ function onNewTurn()
 
 	allowCrate = true
 
-	surferTimer = 0
 	hasSurfed = false
 	allWallsHit = false
-	highestY = 0
 
 	crateG = nil
 
@@ -648,8 +634,6 @@ function onGameTick()
 
 		--AddCaption(Map)
 		--AddCaption(RightX ..";" .. GetX(CurrentHedgehog))
-
-		CheckSurfer()
 
 		gTimer = gTimer + 1
 		if gTimer == 25 then

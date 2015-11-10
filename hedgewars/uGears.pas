@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses uConsts, uFloat, uTypes, uChat;
+uses uConsts, uFloat, uTypes, uChat, uCollisions;
 
 procedure initModule;
 procedure freeModule;
@@ -51,7 +51,7 @@ implementation
 uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
-    uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
+    uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
     , uVisualGearsList, uGearsHandlersMess, uAI;
 
@@ -127,7 +127,7 @@ begin
             tmp:= 0;
             if Gear^.Hedgehog^.Effects[hePoisoned] <> 0 then
                 begin
-                inc(tmp, ModifyDamage(5, Gear));
+                inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
@@ -166,7 +166,7 @@ end;
 procedure ProcessGears;
 var t: PGear;
     i, AliveCount: LongInt;
-    s: shortstring;
+    s: ansistring;
     prevtime: LongWord;
 begin
 prevtime:= TurnTimeLeft;
@@ -215,8 +215,8 @@ while t <> nil do
             begin
             if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
                 begin
-                FreeTexture(curHandledGear^.Tex);
-                curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
+                FreeAndNilTexture(curHandledGear^.Tex);
+                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
                 end;
             curHandledGear^.doStep(curHandledGear);
             // might be useful later
@@ -320,20 +320,21 @@ case step of
                     Ammoz[amTardis].Probability:= 0;
                     end;
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+                ScriptCall('onSuddenDeath');
                 playSound(sndSuddenDeath);
-                StopMusic //No SDMusic for now
-                    //ChangeMusic(SDMusic)
-                    end
-                else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
-                    begin
-                    i:= cSuddenDTurns - TotalRounds;
-                    s:= inttostr(i);
-                    if i = 1 then
-                        AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
-                    else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                        AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
-                    end;
+                StopMusic;
+                if SDMusicFN <> '' then PlayMusic
+                end
+            else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
+                begin
+                i:= cSuddenDTurns - TotalRounds;
+                s:= ansistring(inttostr(i));
+                if i = 1 then
+                    AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
+                else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
+                    AddCaption(FormatA(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
                 end;
+            end;
             if bBetweenTurns
             or isInMultiShoot
             or (TotalRounds = -1) then
@@ -394,7 +395,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0)
             and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
                 begin
-                CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstHHChooseTarget;
+                CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstChooseTarget;
                 isCursorVisible := true
                 end;
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstAttacked);
@@ -425,7 +426,7 @@ if TurnTimeLeft > 0 then
     if CurrentHedgehog^.Gear <> nil then
         if (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
             or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0))
-            and not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)) then
+            and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0))) then
             //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
                 begin
                 if (TurnTimeLeft = 5000)
@@ -462,7 +463,10 @@ if ((GameTicks and $FFFF) = $FFFF) then
         end;
 
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
+        begin
+        AddFileLog('hiTicks increment (current team is local or gone)');
         inc(hiTicks) // we do not recieve a message for this
+        end
     end;
 AddRandomness(CheckSum);
 TurnClockActive:= prevtime <> TurnTimeLeft;
@@ -548,6 +552,9 @@ while Gear <> nil do
         end;
     Gear:= Gear^.NextGear
     end;
+
+if SpeechHogNumber > 0 then
+    DrawHHOrder();
 end;
 
 procedure FreeGearsList;
@@ -564,29 +571,106 @@ begin
 end;
 
 procedure AddMiscGears;
-var p,i,j,rx, ry: Longword;
+var p,i,j,t,h,unplaced: Longword;
+    rx, ry: LongInt;
     rdx, rdy: hwFloat;
     Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
 i:= 0;
-Gear:= PGear(1);
-while (i < cLandMines) {and (Gear <> nil)} do // disable this check until better solution found
+unplaced:= 0;
+while (i < cLandMines) and (unplaced < 4) do
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+
+    if Gear = nil then
+        inc(unplaced)
+    else
+        unplaced:= 0;
+
     inc(i)
     end;
 
 i:= 0;
-Gear:= PGear(1);
-while (i < cExplosives){ and (Gear <> nil)} do
+unplaced:= 0;
+while (i < cExplosives) and (unplaced < 4) do
     begin
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+
+    if Gear = nil then
+        inc(unplaced)
+    else
+        unplaced:= 0;
+
     inc(i)
     end;
+
+i:= 0;
+j:= 0;
+p:= 0; // 0 searching, 1 bad position, 2 added.
+unplaced:= 0;
+if cAirMines > 0 then
+    Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0);
+while (i < cAirMines) and (j < 1000*cAirMines) do
+    begin
+    p:= 0;
+    if hasBorder then
+        begin
+        rx:= leftX+GetRandom(rightX-leftX-16)+8;
+        ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
+        end
+    else
+        begin
+        rx:= leftX+GetRandom(rightX-leftX+400)-200;
+        ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
+        end;
+    Gear^.X:= int2hwFloat(rx);
+    Gear^.Y:= int2hwFloat(ry);
+    if CheckLandValue(rx, ry, $FFFF) and
+       (TestCollisionYwithGear(Gear,-1) = 0) and
+       (TestCollisionXwithGear(Gear, 1) = 0) and
+       (TestCollisionXwithGear(Gear,-1) = 0) and
+       (TestCollisionYwithGear(Gear, 1) = 0) then
+        begin
+        t:= 0;
+        while (t < TeamsCount) and (p = 0) do
+            begin
+            h:= 0;
+            with TeamsArray[t]^ do
+                while (h < cMaxHHIndex) and (p = 0) do
+                    begin
+                    if (Hedgehogs[h].Gear <> nil) then
+                        begin
+                        rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
+                        rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
+                        if (Gear^.Angle < $FFFFFFFF) and
+                            ((rdx.Round+rdy.Round < Gear^.Angle) and
+                            (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
+                            begin
+// Debug line. Remove later
+// AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+
+                            p:= 1
+                            end
+                        end;
+                    inc(h)
+                    end;
+            inc(t)
+            end;
+        if p = 0 then
+            begin
+            inc(i);
+            AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+            if i < cAirMines then
+                Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+            end
+        end;
+    inc(j)
+    end;
+if p <> 0 then DeleteGear(Gear);
 
 if (GameFlags and gfLowGravity) <> 0 then
     begin
@@ -626,7 +710,11 @@ snowLeft:= -(snowRight-LAND_WIDTH);
 
 if (not hasBorder) and cSnow then
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
-        AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LAND_HEIGHT + LongInt(GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
+        begin
+        rx:=GetRandom(snowRight - snowLeft);
+        ry:=GetRandom(750);
+        AddGear(rx + snowLeft, LongInt(LAND_HEIGHT) + ry - 1300, gtFlake, 0, _0, _0, 0)
+        end
 end;
 
 procedure AssignHHCoords;
@@ -636,7 +724,7 @@ var i, t, p, j: LongInt;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
-if (GameFlags and gfDivideTeams) <> 0 then
+if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
     TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
@@ -729,6 +817,8 @@ begin
         HealthCrate:
             begin
             FollowGear^.Pos := posCaseHealth;
+            // health crate is smaller than the other crates
+            FollowGear^.Radius := cCaseHealthRadius;
             FollowGear^.Health := content;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
@@ -767,6 +857,8 @@ begin
         HealthCrate:
             begin
             FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
+            // health crate is smaller than the other crates
+            FollowGear^.Radius := cCaseHealthRadius;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
         AmmoCrate:
@@ -837,6 +929,8 @@ begin
         t:= byte(s[2]);  // team
         if Length(s) > 2 then
             h:= byte(s[3])  // target hog
+        else
+            h:= 0
         end;
     // allow targetting a hog by specifying a number as the first portion of the text
     if (x < 4) and (h > byte('0')) and (h < byte('9')) then
@@ -846,6 +940,8 @@ begin
     else if x < 4 then
         text:= copy(s, 3, Length(s) - 1)
     else text:= copy(s, 2, Length(s) - 1);
+
+    if text = '' then text:= '...';
 
     (*
     if CheckNoTeamOrHH then
@@ -886,7 +982,7 @@ begin
                 Gear^.FrameTicks:= x
                 end;
             //ParseCommand('/say [' + hh^.Name + '] '+text, true)
-            AddChatString(#1+'[' + HH^.Name + '] '+text);
+            AddChatString(#9+'[' + HH^.Name + '] '+text);
             end
         end
     else if (x >= 4) then
@@ -902,6 +998,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepHedgehog,
             @doStepMine,
             @doStepCase,
+            @doStepAirMine,
             @doStepCase,
             @doStepBomb,
             @doStepShell,

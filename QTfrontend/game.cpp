@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,8 +13,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#include <QApplication>
+#include <QClipboard>
 
 #include <QString>
 #include <QCheckBox>
@@ -60,6 +63,9 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
     lastGameCfg = gamecfg;
     lastGameAmmo = ammo;
     lastGameTeamSel = pTeamSelWidget;
+
+    gameState = gsNotStarted;
+    gameType = gtNone;
 }
 
 HWGame::~HWGame()
@@ -142,6 +148,7 @@ void HWGame::SendQuickConfig()
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
+    HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%18+4));
 
     HWTeam team1;
     team1.setDifficulty(0);
@@ -245,8 +252,26 @@ void HWGame::ParseMessage(const QByteArray & msg)
         case 'E':
         {
             int size = msg.size();
-            emit ErrorMessage(QString("Last two engine messages:\n") + QString().append(msg.mid(2)).left(size - 4));
+            emit ErrorMessage(
+                tr("A Fatal ERROR occured! - The game engine had to stop.\n\n"
+                "We are very sorry for the inconvenience :(\n\n"
+                "If this keeps happening, please click the '%1' button in the main menu!\n\n"
+                "Last two engine messages:\n%2")
+                .arg("Feedback")
+                .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
             return;
+        }
+        case 'y':
+        {
+            // copy string to clipboard
+            QApplication::clipboard()->setText(QString::fromUtf8(msg.mid(2)));
+            break;
+        }
+        case 'Y':
+        {
+            // paste clipboard to game
+            SendIPC(QString("Y").toAscii() + QApplication::clipboard()->text().toUtf8().left(250).replace('\n', ' '));
+            break;
         }
         case 'i':
         {
@@ -301,6 +326,13 @@ void HWGame::ParseMessage(const QByteArray & msg)
             QStringList wh = newResolution.split('x');
             config->Form->ui.pageOptions->windowWidthEdit->setValue(wh[0].toInt());
             config->Form->ui.pageOptions->windowHeightEdit->setValue(wh[1].toInt());
+            break;
+        }
+        case '~':
+        {
+            int size = msg.size();
+            QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
+            emit SendConsoleCommand(msgbody);
             break;
         }
         default:

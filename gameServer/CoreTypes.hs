@@ -1,4 +1,22 @@
-{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable #-}
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
+{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
 module CoreTypes where
 
 import Control.Concurrent
@@ -16,12 +34,11 @@ import Control.DeepSeq
 -----------------------
 import RoomsAndClients
 
-
 #if __GLASGOW_HASKELL__ < 706
 instance NFData B.ByteString
 #endif
 
-instance NFData (Chan a)
+instance NFData (Chan a) where rnf a  = a `seq` ()
 
 instance NFData Action where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
@@ -78,6 +95,23 @@ data Action =
     | Random [ClientChan] [B.ByteString]
     | QueryReplay B.ByteString
     | ShowReplay B.ByteString
+    | Cleanup
+    | RegisterEvent Event
+    | SaveRoom B.ByteString
+    | LoadRoom B.ByteString
+    | ReactCmd [B.ByteString]
+    | CheckVotes
+    | SetRandomSeed
+
+
+data Event = LobbyChatMessage
+           | EngineMessage
+           | RoomJoin
+
+type EventsInfo = [(Int, UTCTime)]
+
+newEventsInfo :: EventsInfo
+newEventsInfo = []
 
 type ClientChan = Chan [B.ByteString]
 
@@ -85,7 +119,8 @@ data CheckInfo =
     CheckInfo
     {
         recordFileName :: String,
-        recordTeams :: [TeamInfo]
+        recordTeams :: [TeamInfo],
+        details :: Maybe GameDetails
     }
 
 data ClientInfo =
@@ -98,6 +133,7 @@ data ClientInfo =
         connectTime :: UTCTime,
         nick :: B.ByteString,
         webPassword :: B.ByteString,
+        serverSalt :: B.ByteString,
         logonPassed :: Bool,
         isVisible :: Bool,
         clientProto :: !Word16,
@@ -112,6 +148,9 @@ data ClientInfo =
         isJoinedMidGame :: Bool,
         clientClan :: !(Maybe B.ByteString),
         checkInfo :: Maybe CheckInfo,
+        eiLobbyChat,
+        eiEM,
+        eiJoin :: EventsInfo,
         teamsInGame :: Word
     }
 
@@ -125,7 +164,6 @@ data HedgehogInfo =
 data TeamInfo =
     TeamInfo
     {
-        teamownerId :: ClientIndex,
         teamowner :: B.ByteString,
         teamname :: B.ByteString,
         teamcolor :: B.ByteString,
@@ -133,6 +171,7 @@ data TeamInfo =
         teamfort :: B.ByteString,
         teamvoicepack :: B.ByteString,
         teamflag :: B.ByteString,
+        isOwnerRegistered :: Bool,
         difficulty :: Int,
         hhnum :: Int,
         hedgehogs :: [HedgehogInfo]
@@ -148,11 +187,13 @@ data GameInfo =
         roundMsgs :: [B.ByteString],
         lastFilteredTimedMsg :: Maybe B.ByteString,
         leftTeams :: [B.ByteString],
+        rejoinedTeams :: [B.ByteString], -- for 0.9.21 frontend workaround
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
         allPlayersHaveRegisteredAccounts :: !Bool,
         giMapParams :: Map.Map B.ByteString B.ByteString,
-        giParams :: Map.Map B.ByteString [B.ByteString]
+        giParams :: Map.Map B.ByteString [B.ByteString],
+        isPaused :: Bool
     } deriving (Show, Read)
 
 newGameInfo :: [TeamInfo]
@@ -160,12 +201,15 @@ newGameInfo :: [TeamInfo]
                 -> Bool
                 -> Map.Map ByteString ByteString
                 -> Map.Map ByteString [ByteString]
+                -> Bool
                 -> GameInfo
 newGameInfo =
     GameInfo
         []
         Nothing
         []
+        []
+
 
 data RoomInfo =
     RoomInfo
@@ -182,10 +226,14 @@ data RoomInfo =
         isRestrictedTeams :: Bool,
         isRegisteredOnly :: Bool,
         isSpecial :: Bool,
+        defaultHedgehogsNumber :: Int,
+        teamsNumberLimit :: Int,
         greeting :: B.ByteString,
+        voting :: Maybe Voting,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
-        params :: Map.Map B.ByteString [B.ByteString]
+        params :: Map.Map B.ByteString [B.ByteString],
+        roomSaves :: Map.Map B.ByteString (Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString])
     }
 
 newRoom :: RoomInfo
@@ -203,18 +251,22 @@ newRoom =
         False
         False
         False
+        4
+        8
         ""
+        Nothing
         []
         (
             Map.fromList $ Prelude.zip
-                ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
-                ["+rnd+", "0", "0", "seed", "0"]
+                ["FEATURE_SIZE", "MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
+                ["12", "+rnd+", "0", "0", "seed", "0"]
         )
         (
             Map.fromList $ Prelude.zip
-                ["SCHEME", "SCRIPT"]
-                [["Default"], ["Normal"]]
+                ["AMMO", "SCHEME", "SCRIPT", "THEME"]
+                [["Default"], ["Default"], ["Normal"], ["avematan"]]
         )
+        Map.empty
 
 
 data StatisticsInfo =
@@ -252,8 +304,8 @@ newServerInfo =
     ServerInfo
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.19 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        45 -- latestReleaseVersion
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.22 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
+        51 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""
@@ -263,6 +315,25 @@ newServerInfo =
         []
         False
         []
+
+data Voting = Voting {
+        voteTTL :: Int,
+        entitledToVote :: [Unique],
+        votes :: [(Unique, Bool)],
+        voteType :: VoteType
+    }
+
+
+data VoteType = VoteKick B.ByteString
+              | VoteMap B.ByteString
+              | VotePause
+              | VoteNewSeed
+              | VoteHedgehogsPerTeam Int
+
+
+newVoting :: VoteType -> Voting
+newVoting = Voting 2 [] []
+
 
 data AccountInfo =
     HasAccount B.ByteString Bool Bool
@@ -275,9 +346,20 @@ data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
-    | StoreAchievements B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
+    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] GameDetails [B.ByteString]
     | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
+
+data GameDetails =
+    GameDetails {
+        gameScript :: B.ByteString
+        , infRope
+        , isVamp
+        , infAttacks :: Bool
+    } deriving (Show, Read)
+
+instance NFData GameDetails where
+    rnf (GameDetails a b c d) = a `deepseq` b `deepseq` c `deepseq` d `deepseq` ()
 
 data CoreMessage =
     Accept ClientInfo

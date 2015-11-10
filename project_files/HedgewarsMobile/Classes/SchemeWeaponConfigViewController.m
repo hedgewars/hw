@@ -13,13 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import "SchemeWeaponConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define DISABLED_GAME_STYLES @[@"Frenzy.lua", @"Gravity.lua", @"HedgeEditor.lua", @"Continental_supplies.lua", @"Space_Invasion.lua", @"Tumbler.lua"]
 
 #define LABEL_TAG 57423
 #define TABLE_TAG 45657
@@ -48,7 +49,7 @@
 
 -(NSString *)selectedScript {
     if (selectedScript == nil)
-        self.selectedScript = @"Normal.plist";
+        self.selectedScript = @"";
     return selectedScript;
 }
 
@@ -73,7 +74,7 @@
 -(NSArray *)listOfScripts {
     if (listOfScripts == nil)
         self.listOfScripts = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL]
-                              filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.lua'"]];
+                              filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.lua' AND NOT (SELF IN %@)", DISABLED_GAME_STYLES]];
     return listOfScripts;
 }
 
@@ -125,6 +126,8 @@
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        background.contentMode = UIViewContentModeScaleAspectFill;
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [backgroundImage release];
         [self.view addSubview:background];
         [background release];
@@ -164,7 +167,7 @@
     else if (self.topControl.selectedSegmentIndex == 1)
         return [self.listOfWeapons count];
     else
-        return [self.listOfScripts count];
+        return [self.listOfScripts count] + 1; // +1 for fake 'Normal'
 }
 
 // Customize the appearance of table view cells.
@@ -203,14 +206,31 @@
             self.lastIndexPath_we = indexPath;
         }
     } else {
-        cell.textLabel.text = [[[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension]
-                               stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-        //cell.detailTextLabel.text = ;
-        if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
-            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
-            cell.accessoryView = checkbox;
-            [checkbox release];
-            self.lastIndexPath_lu = indexPath;
+        if (row == 0)
+        {
+            cell.textLabel.text = @"Normal";
+            
+            if ([self.selectedScript isEqualToString:@""])
+            {
+                UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+                cell.accessoryView = checkbox;
+                [checkbox release];
+                self.lastIndexPath_lu = indexPath;
+            }
+        }
+        else
+        {
+            row--;
+            
+            cell.textLabel.text = [[[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension]
+                                   stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            //cell.detailTextLabel.text = ;
+            if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
+                UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+                cell.accessoryView = checkbox;
+                [checkbox release];
+                self.lastIndexPath_lu = indexPath;
+            }
         }
     }
 
@@ -276,8 +296,8 @@
     else
         lastIndexPath = self.lastIndexPath_lu;
 
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    NSInteger newRow = [indexPath row];
+    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
         //TODO: this code works only for a single section table
@@ -297,7 +317,7 @@
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
-                        int row = [self.listOfSchemes indexOfObject:str];
+                        NSInteger row = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
                         self.lastIndexPath_we = [NSIndexPath indexPathForRow:row inSection:1];
                         break;
@@ -309,32 +329,63 @@
             self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
         } else {
             self.lastIndexPath_lu = indexPath;
-            self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
-
-            // some styles disable or force the choice of a particular scheme/weaponset
-            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
-            NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
-            [path release];
-            NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
-            [configFile release];
-
-            self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
-            NSString *scheme = [scriptOptions objectAtIndex:0];
-            if ([scheme isEqualToString:@"locked"]) {
+            
+            if (newRow == 0)
+            {
+                self.selectedScript = nil;
+                self.scriptCommand = nil;
+                
                 self.selectedScheme = @"Default.plist";
-                [self.topControl setEnabled:NO forSegmentAtIndex:0];
-            } else {
-                self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
-            }
-
-            NSString *weapon = [scriptOptions objectAtIndex:1];
-            if ([weapon isEqualToString:@"locked"]) {
+                
                 self.selectedWeapon = @"Default.plist";
-                [self.topControl setEnabled:NO forSegmentAtIndex:1];
-            } else {
-                self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
                 [self.topControl setEnabled:YES forSegmentAtIndex:1];
+            }
+            else
+            {
+                newRow--;
+                
+                self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
+                
+                // some styles disable or force the choice of a particular scheme/weaponset
+                NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
+                NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
+                [path release];
+                NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
+                [configFile release];
+                
+                self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
+                NSString *scheme = [scriptOptions objectAtIndex:0];
+                if ([scheme isEqualToString:@"locked"])
+                {
+                    self.selectedScheme = @"Default.plist";
+                    [self.topControl setEnabled:NO forSegmentAtIndex:0];
+                }
+                else
+                {
+                    if (scheme && ![scheme isEqualToString:@"*"])
+                    {
+                        NSString *correctScheme = [scheme stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                        self.selectedScheme = [NSString stringWithFormat:@"%@.plist", correctScheme];
+                    }
+                    [self.topControl setEnabled:YES forSegmentAtIndex:0];
+                }
+                
+                NSString *weapon = [scriptOptions objectAtIndex:1];
+                if ([weapon isEqualToString:@"locked"])
+                {
+                    self.selectedWeapon = @"Default.plist";
+                    [self.topControl setEnabled:NO forSegmentAtIndex:1];
+                }
+                else
+                {
+                    if (weapon && ![weapon isEqualToString:@"*"])
+                    {
+                        NSString *correctWeapon = [weapon stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                        self.selectedWeapon = [NSString stringWithFormat:@"%@.plist", correctWeapon];
+                    }
+                    [self.topControl setEnabled:YES forSegmentAtIndex:1];
+                }
             }
         }
 
@@ -382,16 +433,6 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if ([HWUtils isGameLaunched]) {
-        self.lastIndexPath_sc = nil;
-        self.lastIndexPath_we = nil;
-        self.lastIndexPath_lu = nil;
-        self.selectedScheme = nil;
-        self.selectedWeapon = nil;
-        self.selectedScript = nil;
-        self.scriptCommand = nil;
-        self.topControl = nil;
-    }
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -400,7 +441,6 @@
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -416,7 +456,9 @@
     [super viewDidUnload];
 }
 
--(void) dealloc {
+-(void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
     releaseAndNil(listOfScripts);

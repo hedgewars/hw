@@ -290,7 +290,6 @@ local chainCounter = 0
 local chainLength = 0
 local shotsFired = 0
 local shotsHit = 0
-local SurfTime = 0
 local sniperHits = 0
 local pointBlankHits = 0
 ---------------------
@@ -1001,7 +1000,8 @@ end
 --------------------------
 
 function onGameInit()
-	GameFlags = 0 + gfRandomOrder
+	ClearGameFlags()
+	EnableGameFlags(gfRandomOrder)
 	Theme = "EarthRise"
 	CaseFreq = 0
 	HealthCaseProb = 0
@@ -1104,7 +1104,6 @@ function onNewTurn()
 	pointBlankHits = 0
 	chainLength = 0
 	chainCounter = 0
-	SurfTime = 12
 
 	-------------------------
 	-- gaudy racer
@@ -1159,6 +1158,19 @@ function ThingsToBeRunOnGears(gear)
 
 end
 
+function onGearWaterSkip(gear)
+	if gear == CurrentHedgehog then
+
+		for i = 0,(TeamsCount-1) do
+			if teamClan[i] == GetHogClan(CurrentHedgehog) and (teamSurfer[i] == false) then
+				teamSurfer[i] = true
+				AddCaption(loc("Surfer! +15 points!"),0xffba00ff,capgrpVolume)
+				AwardPoints(15)
+			end
+		end
+
+	end
+end
 
 function onGameTick()
 
@@ -1326,30 +1338,6 @@ function onGameTick()
 				end
 				--------------
 				--------------
-
-				------------------------
-				-- surfer achievement
-				------------------------
-
-				if (WaterLine - GetY(CurrentHedgehog)) < 15 then
-					SurfTime = SurfTime -1
-				end
-
-				if SurfTime ~= 12 then
-
-					SurfTime = SurfTime - 1
-					if SurfTime <= 0 then
-						for i = 0,(TeamsCount-1) do
-							if teamClan[i] == GetHogClan(CurrentHedgehog) and (teamSurfer[i] == false) then
-								teamSurfer[i] = true
-								SurfTime = 12
-								AddCaption(loc("Surfer! +15 points!"),0xffba00ff,capgrpVolume)
-								AwardPoints(15)
-							end
-						end
-					end
-				end
-
 
 				dx, dy = GetGearVelocity(CurrentHedgehog)
 

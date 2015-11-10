@@ -617,9 +617,9 @@ end
 
 function DoDeployedDead()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), 0, 6000)
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("Tribe"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("Natives"))
+  DismissTeam(loc("Tribe"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -662,8 +662,8 @@ end
 
 function DoKilledOther()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("Tribe"))
+  DismissTeam(loc("Natives"))
+  DismissTeam(loc("Tribe"))
   TurnTimeLeft = 0
 end
 
@@ -770,10 +770,10 @@ function AfterWave3DeadAnim()
     end
   end
 
-  ParseCommand("teamgone " .. loc("Tribe"))
-  ParseCommand("teamgone " .. loc("Assault Team"))
-  ParseCommand("teamgone " .. loc("Reinforcements"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("Tribe"))
+  DismissTeam(loc("Assault Team"))
+  DismissTeam(loc("Reinforcements"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 

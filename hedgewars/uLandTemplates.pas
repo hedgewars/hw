@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -65,7 +65,7 @@ const Template0Points: array[0..18] of TSDL_Rect =
       );
       Template0FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template1Points: array[0..15] of TSDL_Rect =
@@ -89,7 +89,7 @@ const Template1Points: array[0..15] of TSDL_Rect =
       );
       Template1FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template2Points: array[0..21] of TSDL_Rect =
@@ -119,7 +119,7 @@ const Template2Points: array[0..21] of TSDL_Rect =
       );
       Template2FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template3Points: array[0..16] of TSDL_Rect =
@@ -144,7 +144,7 @@ const Template3Points: array[0..16] of TSDL_Rect =
       );
       Template3FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template4Points: array[0..22] of TSDL_Rect =
@@ -164,7 +164,7 @@ const Template4Points: array[0..22] of TSDL_Rect =
        (x:  550; y:  568; w:  134; h:   78),
        (x: 1102; y:  560; w:  132; h:   84),
        (x: 1102; y:  708; w:  230; h:   36),
-       (x: 1120; y:  808; w:  166; h:   96),
+       (x: 1120; y:  848; w:  166; h:   96),
        (x: NTPX; y:    0; w:    1; h:    1),
        (x: 2102; y:  834; w:  202; h:   42),
        (x: 1652; y:  788; w:  134; h:   98),
@@ -175,7 +175,7 @@ const Template4Points: array[0..22] of TSDL_Rect =
       );
       Template4FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template5Points: array[0..15] of TSDL_Rect =
@@ -199,7 +199,7 @@ const Template5Points: array[0..15] of TSDL_Rect =
        );
       Template5FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template6Points: array[0..13] of TSDL_Rect =
@@ -221,7 +221,7 @@ const Template6Points: array[0..13] of TSDL_Rect =
        );
       Template6FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template7Points: array[0..5] of TSDL_Rect =
@@ -235,7 +235,7 @@ const Template7Points: array[0..5] of TSDL_Rect =
       );
       Template7FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 
@@ -264,7 +264,7 @@ const Template8Points: array[0..19] of TSDL_Rect =
       );
       Template8FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template9Points: array[0..31] of TSDL_Rect =
@@ -304,7 +304,7 @@ const Template9Points: array[0..31] of TSDL_Rect =
       );
       Template9FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template10Points: array[0..13] of TSDL_Rect =
@@ -326,7 +326,7 @@ const Template10Points: array[0..13] of TSDL_Rect =
       );
       Template10FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template11Points: array[0..9] of TSDL_Rect =
@@ -344,7 +344,7 @@ const Template11Points: array[0..9] of TSDL_Rect =
       );
       Template11FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template12Points: array[0..13] of TSDL_Rect =
@@ -366,7 +366,7 @@ const Template12Points: array[0..13] of TSDL_Rect =
       );
       Template12FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template13Points: array[0..15] of TSDL_Rect =
@@ -390,7 +390,7 @@ const Template13Points: array[0..15] of TSDL_Rect =
       );
       Template13FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template14Points: array[0..13] of TSDL_Rect =
@@ -412,7 +412,7 @@ const Template14Points: array[0..13] of TSDL_Rect =
       );
       Template14FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template15Points: array[0..23] of TSDL_Rect =
@@ -444,7 +444,7 @@ const Template15Points: array[0..23] of TSDL_Rect =
       );
       Template15FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template16Points: array[0..28] of TSDL_Rect =
@@ -481,7 +481,7 @@ const Template16Points: array[0..28] of TSDL_Rect =
       );
       Template16FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template17Points: array[0..13] of TSDL_Rect =
@@ -503,7 +503,7 @@ const Template17Points: array[0..13] of TSDL_Rect =
       );
       Template17FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 //////////////////// MIXING AND MATCHING ORIGINAL //////////////////////////////////////
 const Template18Points: array[0..32] of TSDL_Rect =
@@ -544,7 +544,7 @@ const Template18Points: array[0..32] of TSDL_Rect =
       );
       Template18FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template19Points: array[0..44] of TSDL_Rect =
@@ -597,7 +597,7 @@ const Template19Points: array[0..44] of TSDL_Rect =
       );
       Template19FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template20Points: array[0..45] of TSDL_Rect =
@@ -651,7 +651,7 @@ const Template20Points: array[0..45] of TSDL_Rect =
       );
       Template20FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template21Points: array[0..30] of TSDL_Rect =
@@ -690,7 +690,7 @@ const Template21Points: array[0..30] of TSDL_Rect =
       );
       Template21FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template22Points: array[0..38] of TSDL_Rect =
@@ -737,7 +737,7 @@ const Template22Points: array[0..38] of TSDL_Rect =
       );
       Template22FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template23Points: array[0..29] of TSDL_Rect =
@@ -775,7 +775,7 @@ const Template23Points: array[0..29] of TSDL_Rect =
        );
       Template23FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template24Points: array[0..23] of TSDL_Rect =
@@ -807,7 +807,7 @@ const Template24Points: array[0..23] of TSDL_Rect =
        );
       Template24FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template25Points: array[0..19] of TSDL_Rect =
@@ -835,7 +835,7 @@ const Template25Points: array[0..19] of TSDL_Rect =
       );
       Template25FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 
@@ -896,7 +896,7 @@ const Template26Points: array[0..51] of TSDL_Rect =
       );
       Template26FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template27Points: array[0..42] of TSDL_Rect =
@@ -947,7 +947,7 @@ const Template27Points: array[0..42] of TSDL_Rect =
       );
       Template27FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template28Points: array[0..29] of TSDL_Rect =
@@ -985,7 +985,7 @@ const Template28Points: array[0..29] of TSDL_Rect =
       );
       Template28FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template29Points: array[0..37] of TSDL_Rect =
@@ -1031,7 +1031,7 @@ const Template29Points: array[0..37] of TSDL_Rect =
       );
       Template29FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template30Points: array[0..30] of TSDL_Rect =
@@ -1070,7 +1070,7 @@ const Template30Points: array[0..30] of TSDL_Rect =
       );
       Template30FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template31Points: array[0..32] of TSDL_Rect =
@@ -1111,7 +1111,7 @@ const Template31Points: array[0..32] of TSDL_Rect =
       );
       Template31FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template32Points: array[0..29] of TSDL_Rect =
@@ -1149,7 +1149,7 @@ const Template32Points: array[0..29] of TSDL_Rect =
       );
       Template32FPoints: array[0..0] of TPoint =
       (
-         (X: 2047; Y:    0)
+         (x: 2047; y:    0)
       );
 
 const Template33Points: array[0..45] of TSDL_Rect =
@@ -1203,7 +1203,7 @@ const Template33Points: array[0..45] of TSDL_Rect =
       );
       Template33FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template34Points: array[0..25] of TSDL_Rect =
@@ -1237,7 +1237,7 @@ const Template34Points: array[0..25] of TSDL_Rect =
       );
       Template34FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template35Points: array[0..48] of TSDL_Rect =
@@ -1294,7 +1294,7 @@ const Template35Points: array[0..48] of TSDL_Rect =
       );
       Template35FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 ///////////////////////// CAVERNS ///////////////////////////////////
@@ -1322,7 +1322,7 @@ const Template36Points: array[0..18] of TSDL_Rect =
       );
       Template36FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 ////////////////////////////// ... Silly ...  ////////////////////////////////
 /// Ok. Tiy does not care for these.  Perhaps they could be saved.
@@ -1332,63 +1332,64 @@ const Template36Points: array[0..18] of TSDL_Rect =
 // maybe Tiy would be ok with this if it was smoother/more climable and a bit shorter?
 const Template37Points: array[0..27] of TSDL_Rect =
       (
-       (x:  700; y: 2100; w: 20; h: 75),
-       (x:  800; y: 1200; w: 20; h: 75),
-       (x:  900; y:  400; w: 20; h: 50),
-       (x: 1100; y:  600; w: 20; h: 50),
-       (x: 1300; y:  900; w: 20; h: 50),
-       (x: 1000; y: 1000; w: 20; h: 50),
-       (x: 1700; y: 1850; w: 20; h: 75),
-       (x: 2048; y: 2100; w: 20; h: 75),
-       (x: NTPX; y:    0; w:  1; h:  1),
-       (x: 2048; y: 2100; w: 20; h: 50),
-       (x: 2400; y: 1850; w: 20; h: 50),
-       (x: 2600; y: 1000; w: 20; h: 75),
-       (x: 2800; y:  900; w: 20; h: 50),
-       (x: 3000; y:  600; w: 20; h: 50),
-       (x: 3200; y:  400; w: 20; h: 50),
-       (x: 3300; y: 1200; w: 20; h: 50),
-       (x: 3400; y: 2100; w: 20; h: 75),
-       (x: NTPX; y:    0; w:  1; h:  1),
-       (x: 1450; y:  700; w: 25; h: 25),
-       (x: 1850; y:  650; w: 25; h: 25),
-       (x: 2250; y:  800; w: 25; h: 25),
-       (x: 2500; y:  700; w: 25; h: 25),
-       (x: NTPX; y:    0; w:  1; h:  1),
-       (x: 1550; y: 1500; w: 25; h: 25),
-       (x: 1830; y: 1150; w: 25; h: 25),
-       (x: 2260; y: 1000; w: 25; h: 25),
-       (x: 2250; y: 1200; w: 25; h: 25),
-       (x: NTPX; y:    0; w:  1; h:  1)
+       (x:  700; y: 2100; w: 120; h: 175),
+       (x:  800; y: 1200; w: 120; h: 175),
+       (x:  900; y:  400; w: 120; h: 150),
+       (x: 1100; y:  600; w: 120; h: 150),
+       (x: 1300; y:  900; w: 120; h: 150),
+       (x: 1000; y: 1000; w: 120; h: 150),
+       (x: 1700; y: 1850; w: 120; h: 175),
+       (x: 2048; y: 2100; w: 120; h: 175),
+       (x: NTPX; y:    0; w:   1; h:   1),
+       (x: 2048; y: 2100; w: 120; h: 150),
+       (x: 2400; y: 1850; w: 120; h: 150),
+       (x: 2600; y: 1000; w: 120; h: 175),
+       (x: 2800; y:  900; w: 120; h: 150),
+       (x: 3000; y:  600; w: 120; h: 150),
+       (x: 3200; y:  400; w: 120; h: 150),
+       (x: 3300; y: 1200; w: 120; h: 150),
+       (x: 3400; y: 2100; w: 120; h: 175),
+       (x: NTPX; y:    0; w:   1; h:   1),
+       (x: 1450; y:  700; w: 125; h: 125),
+       (x: 1850; y:  500; w: 125; h: 125),
+       (x: 2250; y:  500; w: 125; h: 125),
+       (x: 2500; y:  700; w: 125; h: 125),
+       (x: NTPX; y:    0; w:   1; h:   1),
+       (x: 1550; y: 1500; w: 125; h: 125),
+       (x: 1830; y: 1150; w: 125; h: 125),
+       (x: 2260; y: 1000; w: 125; h: 125),
+       (x: 2250; y: 1400; w: 125; h: 125),
+       (x: NTPX; y:    0; w:   1; h:   1)
       );
       Template37FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 // attempt to make a series of moderate hills/valleys - was before I really figured out the whole probabilities thing
+// fixed much much later by unC0Rr during tempaltes review for new generator
 const Template38Points: array[0..16] of TSDL_Rect =
       (
        (x:  100; y: 2100; w:   1; h:    1),
-       (x:  100; y: 1600; w: 300; h:  500),
-       (x:  400; y:  600; w: 300; h: 1500),
-       (x:  700; y: 1600; w: 300; h:  600),
-       (x: 1000; y: 1800; w: 300; h:  300),
-       (x: 1300; y:  500; w: 300; h: 1600),
-       (x: 1600; y: 1700; w: 300; h:  400),
-       (x: 1600; y: 1600; w: 300; h:  500),
-       (x: 1600; y: 1400; w: 300; h:  700),
-       (x: 2200; y:  300; w: 300; h: 1800),
-       (x: 2500; y: 1500; w: 300; h:  600),
-       (x: 2800; y: 1900; w: 300; h:  200),
-       (x: 3100; y: 1600; w: 300; h:  500),
-       (x: 3400; y:  600; w: 300; h: 1500),
-       (x: 3700; y: 1800; w: 200; h:  300),
+       (x:  100; y: 1600; w: 250; h:  500),
+       (x:  400; y:  600; w: 250; h: 1500),
+       (x:  700; y: 1600; w: 250; h:  600),
+       (x: 1000; y: 1800; w: 250; h:  300),
+       (x: 1300; y:  500; w: 250; h: 1600),
+       (x: 1600; y: 1700; w: 150; h:  400),
+       (x: 1800; y: 1600; w: 150; h:  500),
+       (x: 2000; y: 1400; w: 150; h:  700),
+       (x: 2200; y:  300; w: 250; h: 1800),
+       (x: 2500; y: 1500; w: 250; h:  600),
+       (x: 2800; y: 1900; w: 250; h:  200),
+       (x: 3100; y: 1600; w: 250; h:  500),
+       (x: 3400; y:  600; w: 250; h: 1500),
+       (x: 3700; y: 1800; w: 150; h:  300),
        (x: 3700; y: 2100; w:   1; h:    1),
        (x: NTPX; y:    0; w:   1; h:    1)
       );
       Template38FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 // 8 tiny islands
@@ -1437,7 +1438,7 @@ const Template39Points: array[0..39] of TSDL_Rect =
       );
       Template39FPoints: array[0..0] of TPoint =
       (
-       (X: 512; Y:    0)
+       (x: 512; y:    0)
       );
 const Template40Points: array[0..7] of TSDL_Rect =
       (
@@ -1452,10 +1453,10 @@ const Template40Points: array[0..7] of TSDL_Rect =
       );
       Template40FPoints: array[0..0] of TPoint =
       (
-       (X: 512; Y:    0)
+       (x: 512; y:    0)
       );
 // Many islands
-const Template41Points: array[0..86] of TSDL_Rect =
+const Template41Points: array[0..85] of TSDL_Rect =
       (
        (x:   95; y: 500; w:  26; h:  26),
        (x:  100; y: 275; w:  50; h: 125),
@@ -1472,31 +1473,31 @@ const Template41Points: array[0..86] of TSDL_Rect =
        (x: 1350; y: 300; w:  50; h:  75),
        (x: 1400; y: 575; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
-       (x:  525; y:1050; w:  75; h:  75),
+       (x:  725; y:1050; w:  75; h:  75),
        (x:  700; y: 800; w: 125; h: 175),
-       (x:  950; y: 900; w: 125; h: 175),
-       (x: 1100; y:1100; w:  75; h:  75),
+       (x:  950; y: 800; w: 125; h: 175),
+       (x: 1000; y:1100; w:  75; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x:  175; y:1500; w:  26; h:  26),
-       (x:  210; y:1400; w:  30; h:  50),
-       (x:  240; y:1400; w:  30; h:  50),
+       (x:  180; y:1400; w:  30; h:  50),
+       (x:  250; y:1400; w:  30; h:  50),
        (x:  275; y:1510; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
-       (x:  450; y:1800; w: 125; h: 125),
-       (x:  600; y:1750; w: 125; h: 125),
-       (x:  750; y:1750; w: 125; h: 125),
+       (x:  500; y:1800; w: 125; h: 125),
+       (x:  600; y:1650; w: 125; h: 125),
+       (x:  750; y:1650; w: 125; h: 125),
        (x:  950; y:1850; w: 125; h: 125),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 1075; y:1450; w:  26; h:  26),
-       (x: 1110; y:1300; w:  30; h:  50),
-       (x: 1140; y:1300; w:  30; h:  50),
+       (x: 1100; y:1300; w:  30; h:  50),
+       (x: 1150; y:1300; w:  30; h:  50),
        (x: 1175; y:1430; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 1600; y:1250; w:  50; h: 125),
-       (x: 1700; y:1150; w:  50; h: 125),
+       (x: 1700; y: 950; w:  50; h: 125),
        (x: 1850; y: 500; w:  75; h: 125),
        (x: 1950; y: 550; w:  75; h: 175),
-       (x: 2250; y:1150; w:  50; h: 125),
+       (x: 2250; y: 950; w:  50; h: 125),
        (x: 2350; y:1250; w:  50; h: 125),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 1750; y:2010; w:  26; h:  26),
@@ -1510,27 +1511,27 @@ const Template41Points: array[0..86] of TSDL_Rect =
        (x: 2700; y:1690; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 2000; y: 125; w:  26; h:  26),
-       (x: 2050; y:  50; w:  50; h:  50),
+       (x: 2000; y:  50; w:  50; h:  50),
        (x: 2100; y:  50; w:  50; h:  50),
        (x: 2150; y: 150; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
-       (x: 2600; y: 250; w:  50; h: 125),
-       (x: 2750; y: 400; w:  75; h:  75),
-       (x: 2900; y: 525; w:  75; h:  75),
-       (x: 3150; y: 550; w:  75; h: 125),
+       (x: 2600; y: 350; w:  50; h: 125),
+       (x: 2750; y: 250; w:  75; h:  75),
+       (x: 3200; y: 525; w:  75; h:  75),
+       (x: 2750; y: 550; w:  75; h: 125),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 2800; y:1150; w:  26; h:  26),
-       (x: 2840; y: 950; w:  50; h:  50),
+       (x: 2770; y: 950; w:  50; h:  50),
        (x: 2880; y: 950; w:  50; h:  50),
        (x: 2900; y:1150; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 3075; y:1985; w:  26; h:  26),
-       (x: 3325; y:1700; w:  75; h: 125),
+       (x: 3255; y:1700; w:  75; h: 125),
        (x: 3475; y:1700; w:  75; h: 125),
        (x: 3625; y:1985; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 3200; y:1450; w:  26; h:  26),
-       (x: 3240; y:1350; w:  50; h:  50),
+       (x: 3140; y:1350; w:  50; h:  50),
        (x: 3280; y:1350; w:  50; h:  50),
        (x: 3300; y:1450; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
@@ -1540,14 +1541,13 @@ const Template41Points: array[0..86] of TSDL_Rect =
        (x: 3900; y:1000; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 3800; y: 200; w:  50; h:  75),
-       (x: 3875; y: 100; w:  75; h:  75),
-       (x: 3925; y:  50; w:  75; h:  50),
-       (x: 4050; y: 125; w:  50; h:  75),
+       (x: 3975; y:  50; w:  75; h:  50),
+       (x: 4010; y: 225; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1)
-      );
+       );
       Template41FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 // 2 tiny islands
 const Template42Points: array[0..13] of TSDL_Rect =
@@ -1569,10 +1569,10 @@ const Template42Points: array[0..13] of TSDL_Rect =
       );
       Template42FPoints: array[0..0] of TPoint =
       (
-       (X: 512; Y:    0)
+       (x: 512; y:    0)
       );
 // Many islands
-const Template43Points: array[0..173] of TSDL_Rect =
+const Template43Points: array[0..172] of TSDL_Rect =
       (
        (x:   95; y: 500; w:  26; h:  26),
        (x:  100; y: 275; w:  50; h: 125),
@@ -1589,31 +1589,31 @@ const Template43Points: array[0..173] of TSDL_Rect =
        (x: 1350; y: 300; w:  50; h:  75),
        (x: 1400; y: 575; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
-       (x:  525; y:1050; w:  75; h:  75),
+       (x:  725; y:1050; w:  75; h:  75),
        (x:  700; y: 800; w: 125; h: 175),
-       (x:  950; y: 900; w: 125; h: 175),
-       (x: 1100; y:1100; w:  75; h:  75),
+       (x:  950; y: 800; w: 125; h: 175),
+       (x: 1000; y:1100; w:  75; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x:  175; y:1500; w:  26; h:  26),
-       (x:  210; y:1400; w:  30; h:  50),
-       (x:  240; y:1400; w:  30; h:  50),
+       (x:  180; y:1400; w:  30; h:  50),
+       (x:  250; y:1400; w:  30; h:  50),
        (x:  275; y:1510; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
-       (x:  450; y:1800; w: 125; h: 125),
-       (x:  600; y:1750; w: 125; h: 125),
-       (x:  750; y:1750; w: 125; h: 125),
+       (x:  500; y:1800; w: 125; h: 125),
+       (x:  600; y:1650; w: 125; h: 125),
+       (x:  750; y:1650; w: 125; h: 125),
        (x:  950; y:1850; w: 125; h: 125),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 1075; y:1450; w:  26; h:  26),
-       (x: 1110; y:1300; w:  30; h:  50),
-       (x: 1140; y:1300; w:  30; h:  50),
+       (x: 1100; y:1300; w:  30; h:  50),
+       (x: 1150; y:1300; w:  30; h:  50),
        (x: 1175; y:1430; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 1600; y:1250; w:  50; h: 125),
-       (x: 1700; y:1150; w:  50; h: 125),
+       (x: 1700; y: 950; w:  50; h: 125),
        (x: 1850; y: 500; w:  75; h: 125),
        (x: 1950; y: 550; w:  75; h: 175),
-       (x: 2250; y:1150; w:  50; h: 125),
+       (x: 2250; y: 950; w:  50; h: 125),
        (x: 2350; y:1250; w:  50; h: 125),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 1750; y:2010; w:  26; h:  26),
@@ -1627,27 +1627,27 @@ const Template43Points: array[0..173] of TSDL_Rect =
        (x: 2700; y:1690; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 2000; y: 125; w:  26; h:  26),
-       (x: 2050; y:  50; w:  50; h:  50),
+       (x: 2000; y:  50; w:  50; h:  50),
        (x: 2100; y:  50; w:  50; h:  50),
        (x: 2150; y: 150; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
-       (x: 2600; y: 250; w:  50; h: 125),
-       (x: 2750; y: 400; w:  75; h:  75),
-       (x: 2900; y: 525; w:  75; h:  75),
-       (x: 3150; y: 550; w:  75; h: 125),
+       (x: 2600; y: 350; w:  50; h: 125),
+       (x: 2750; y: 250; w:  75; h:  75),
+       (x: 3200; y: 525; w:  75; h:  75),
+       (x: 2750; y: 550; w:  75; h: 125),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 2800; y:1150; w:  26; h:  26),
-       (x: 2840; y: 950; w:  50; h:  50),
+       (x: 2770; y: 950; w:  50; h:  50),
        (x: 2880; y: 950; w:  50; h:  50),
        (x: 2900; y:1150; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 3075; y:1985; w:  26; h:  26),
-       (x: 3325; y:1700; w:  75; h: 125),
+       (x: 3255; y:1700; w:  75; h: 125),
        (x: 3475; y:1700; w:  75; h: 125),
        (x: 3625; y:1985; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 3200; y:1450; w:  26; h:  26),
-       (x: 3240; y:1350; w:  50; h:  50),
+       (x: 3140; y:1350; w:  50; h:  50),
        (x: 3280; y:1350; w:  50; h:  50),
        (x: 3300; y:1450; w:  26; h:  26),
        (x: NTPX; y:   0; w:   1; h:   1),
@@ -1657,9 +1657,8 @@ const Template43Points: array[0..173] of TSDL_Rect =
        (x: 3900; y:1000; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x: 3800; y: 200; w:  50; h:  75),
-       (x: 3875; y: 100; w:  75; h:  75),
-       (x: 3925; y:  50; w:  75; h:  50),
-       (x: 4050; y: 125; w:  50; h:  75),
+       (x: 3975; y:  50; w:  75; h:  50),
+       (x: 4010; y: 225; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1),
        (x:   95; y:2548; w:  26; h:  26),
        (x:  100; y:2323; w:  50; h: 125),
@@ -1751,7 +1750,7 @@ const Template43Points: array[0..173] of TSDL_Rect =
       );
       Template43FPoints: array[0..0] of TPoint =
       (
-       (X: 4095; Y:    0)
+       (x: 4095; y:    0)
       );
 
 // 3 large caverns
@@ -1775,12 +1774,12 @@ const Template44Points: array[0..14] of TSDL_Rect =
       );
       Template44FPoints: array[0..5] of TSDL_Rect =
       (
-       (X:   1; Y:  90; w:   0; h:   0),
-       (X:   1; Y: 500; w:   0; h:   0),
-       (X:4095; Y: 500; w:   0; h:   0),
-       (X:   1; Y:1200; w:   0; h:   0),
-       (X:4095; Y:1200; w:   0; h:   0),
-       (X:   1; Y:2010; w:   0; h:   0)
+       (x:   1; y:  90; w:   0; h:   0),
+       (x:   1; y: 500; w:   0; h:   0),
+       (x:4095; y: 500; w:   0; h:   0),
+       (x:   1; y:1200; w:   0; h:   0),
+       (x:4095; y:1200; w:   0; h:   0),
+       (x:   1; y:2010; w:   0; h:   0)
       );
 
 // large caverns with an island
@@ -1801,17 +1800,47 @@ const Template45Points: array[0..11] of TSDL_Rect =
       );
       Template45FPoints: array[0..2] of TSDL_Rect =
       (
-       (X:   1; Y:   1; w:   0; h:   0),
-       (X:   1; Y:2047; w:   0; h:   0),
-       (X:1005; Y: 805; w:   0; h:   0)
+       (x:   1; y:   1; w:   0; h:   0),
+       (x:   1; y:2047; w:   0; h:   0),
+       (x:1005; y: 805; w:   0; h:   0)
       );
 
-////////////////////////////////////////////////////////////////////////
-var EdgeTemplates: array[0..45] of TEdgeTemplate =
+      
+const Template46Points: array[0..19] of TSDL_Rect =
       (
-       (BasePoints: @Template0Points;
+       (x:  800; y: 1424; w:    1; h:    1),
+       (x:  800; y: 1224; w:    1; h:    1),
+       (x: 2200; y: 1224; w:    1; h:    1),
+       (x: 2200; y: 1424; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  800; y: 1024; w:    1; h:    1),
+       (x:  800; y:  844; w:    1; h:    1),
+       (x: 2200; y:  844; w:    1; h:    1),
+       (x: 2200; y: 1024; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  800; y:  664; w:    1; h:    1),
+       (x:  800; y:  484; w:    1; h:    1),
+       (x: 2200; y:  484; w:    1; h:    1),
+       (x: 2200; y:  664; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  800; y:  304; w:    1; h:    1),
+       (x:  800; y:  104; w:    1; h:    1),
+       (x: 2200; y:  104; w:    1; h:    1),
+       (x: 2200; y:  304; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1)
+
+      );
+      Template46FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+      
+////////////////////////////////////////////////////////////////////////
+var EdgeTemplates: array[0..46] of TEdgeTemplate =
+      (
+       (BasePoints: PPointArray(@Template0Points);
         BasePointsCount: Succ(High(Template0Points));
-        FillPoints: @Template0FPoints;
+        FillPoints: PPointArray(@Template0FPoints);
         FillPointsCount: Succ(High(Template0FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -1820,9 +1849,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template1Points;
+       (BasePoints: PPointArray(@Template1Points);
         BasePointsCount: Succ(High(Template1Points));
-        FillPoints: @Template1FPoints;
+        FillPoints: PPointArray(@Template1FPoints);
         FillPointsCount: Succ(High(Template1FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -1831,9 +1860,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template2Points;
+       (BasePoints: PPointArray(@Template2Points);
         BasePointsCount: Succ(High(Template2Points));
-        FillPoints: @Template2FPoints;
+        FillPoints: PPointArray(@Template2FPoints);
         FillPointsCount: Succ(High(Template2FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1842,9 +1871,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template3Points;
+       (BasePoints: PPointArray(@Template3Points);
         BasePointsCount: Succ(High(Template3Points));
-        FillPoints: @Template3FPoints;
+        FillPoints: PPointArray(@Template3FPoints);
         FillPointsCount: Succ(High(Template3FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -1853,9 +1882,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template4Points;
+       (BasePoints: PPointArray(@Template4Points);
         BasePointsCount: Succ(High(Template4Points));
-        FillPoints: @Template4FPoints;
+        FillPoints: PPointArray(@Template4FPoints);
         FillPointsCount: Succ(High(Template4FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -1864,9 +1893,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template5Points;
+       (BasePoints: PPointArray(@Template5Points);
         BasePointsCount: Succ(High(Template5Points));
-        FillPoints: @Template5FPoints;
+        FillPoints: PPointArray(@Template5FPoints);
         FillPointsCount: Succ(High(Template5FPoints));
         BezierizeCount: 2;
         RandPassesCount: 8;
@@ -1875,9 +1904,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template6Points;
+       (BasePoints: PPointArray(@Template6Points);
         BasePointsCount: Succ(High(Template6Points));
-        FillPoints: @Template6FPoints;
+        FillPoints: PPointArray(@Template6FPoints);
         FillPointsCount: Succ(High(Template6FPoints));
         BezierizeCount: 2;
         RandPassesCount: 5;
@@ -1886,9 +1915,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template7Points;
+       (BasePoints: PPointArray(@Template7Points);
         BasePointsCount: Succ(High(Template7Points));
-        FillPoints: @Template7FPoints;
+        FillPoints: PPointArray(@Template7FPoints);
         FillPointsCount: Succ(High(Template7FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
@@ -1897,9 +1926,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template8Points;
+       (BasePoints: PPointArray(@Template8Points);
         BasePointsCount: Succ(High(Template8Points));
-        FillPoints: @Template8FPoints;
+        FillPoints: PPointArray(@Template8FPoints);
         FillPointsCount: Succ(High(Template8FPoints));
         BezierizeCount: 2;
         RandPassesCount: 7;
@@ -1908,9 +1937,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template9Points;
+       (BasePoints: PPointArray(@Template9Points);
         BasePointsCount: Succ(High(Template9Points));
-        FillPoints: @Template9FPoints;
+        FillPoints: PPointArray(@Template9FPoints);
         FillPointsCount: Succ(High(Template9FPoints));
         BezierizeCount: 1;
         RandPassesCount: 5;
@@ -1919,9 +1948,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template10Points;
+       (BasePoints: PPointArray(@Template10Points);
         BasePointsCount: Succ(High(Template10Points));
-        FillPoints: @Template10FPoints;
+        FillPoints: PPointArray(@Template10FPoints);
         FillPointsCount: Succ(High(Template10FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1930,9 +1959,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template11Points;
+       (BasePoints: PPointArray(@Template11Points);
         BasePointsCount: Succ(High(Template11Points));
-        FillPoints: @Template11FPoints;
+        FillPoints: PPointArray(@Template11FPoints);
         FillPointsCount: Succ(High(Template11FPoints));
         BezierizeCount: 1;
         RandPassesCount: 8;
@@ -1941,9 +1970,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template12Points;
+       (BasePoints: PPointArray(@Template12Points);
         BasePointsCount: Succ(High(Template12Points));
-        FillPoints: @Template12FPoints;
+        FillPoints: PPointArray(@Template12FPoints);
         FillPointsCount: Succ(High(Template12FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -1952,9 +1981,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template13Points;
+       (BasePoints: PPointArray(@Template13Points);
         BasePointsCount: Succ(High(Template13Points));
-        FillPoints: @Template13FPoints;
+        FillPoints: PPointArray(@Template13FPoints);
         FillPointsCount: Succ(High(Template13FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
@@ -1963,9 +1992,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template14Points;
+       (BasePoints: PPointArray(@Template14Points);
         BasePointsCount: Succ(High(Template14Points));
-        FillPoints: @Template14FPoints;
+        FillPoints: PPointArray(@Template14FPoints);
         FillPointsCount: Succ(High(Template14FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -1974,9 +2003,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template15Points;
+       (BasePoints: PPointArray(@Template15Points);
         BasePointsCount: Succ(High(Template15Points));
-        FillPoints: @Template15FPoints;
+        FillPoints: PPointArray(@Template15FPoints);
         FillPointsCount: Succ(High(Template15FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1985,9 +2014,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template16Points;
+       (BasePoints: PPointArray(@Template16Points);
         BasePointsCount: Succ(High(Template16Points));
-        FillPoints: @Template16FPoints;
+        FillPoints: PPointArray(@Template16FPoints);
         FillPointsCount: Succ(High(Template16FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1996,9 +2025,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template17Points;
+       (BasePoints: PPointArray(@Template17Points);
         BasePointsCount: Succ(High(Template17Points));
-        FillPoints: @Template17FPoints;
+        FillPoints: PPointArray(@Template17FPoints);
         FillPointsCount: Succ(High(Template17FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2007,9 +2036,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template18Points;
+       (BasePoints: PPointArray(@Template18Points);
         BasePointsCount: Succ(High(Template18Points));
-        FillPoints: @Template18FPoints;
+        FillPoints: PPointArray(@Template18FPoints);
         FillPointsCount: Succ(High(Template18FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -2018,9 +2047,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template19Points;
+       (BasePoints: PPointArray(@Template19Points);
         BasePointsCount: Succ(High(Template19Points));
-        FillPoints: @Template19FPoints;
+        FillPoints: PPointArray(@Template19FPoints);
         FillPointsCount: Succ(High(Template19FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2029,9 +2058,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template20Points;
+       (BasePoints: PPointArray(@Template20Points);
         BasePointsCount: Succ(High(Template20Points));
-        FillPoints: @Template20FPoints;
+        FillPoints: PPointArray(@Template20FPoints);
         FillPointsCount: Succ(High(Template20FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2040,9 +2069,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template21Points;
+       (BasePoints: PPointArray(@Template21Points);
         BasePointsCount: Succ(High(Template21Points));
-        FillPoints: @Template21FPoints;
+        FillPoints: PPointArray(@Template21FPoints);
         FillPointsCount: Succ(High(Template21FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -2051,9 +2080,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template22Points;
+       (BasePoints: PPointArray(@Template22Points);
         BasePointsCount: Succ(High(Template22Points));
-        FillPoints: @Template22FPoints;
+        FillPoints: PPointArray(@Template22FPoints);
         FillPointsCount: Succ(High(Template22FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -2062,9 +2091,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template23Points;
+       (BasePoints: PPointArray(@Template23Points);
         BasePointsCount: Succ(High(Template23Points));
-        FillPoints: @Template23FPoints;
+        FillPoints: PPointArray(@Template23FPoints);
         FillPointsCount: Succ(High(Template23FPoints));
         BezierizeCount: 2;
         RandPassesCount: 8;
@@ -2073,9 +2102,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template24Points;
+       (BasePoints: PPointArray(@Template24Points);
         BasePointsCount: Succ(High(Template24Points));
-        FillPoints: @Template24FPoints;
+        FillPoints: PPointArray(@Template24FPoints);
         FillPointsCount: Succ(High(Template24FPoints));
         BezierizeCount: 2;
         RandPassesCount: 5;
@@ -2084,9 +2113,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template25Points;
+       (BasePoints: PPointArray(@Template25Points);
         BasePointsCount: Succ(High(Template25Points));
-        FillPoints: @Template25FPoints;
+        FillPoints: PPointArray(@Template25FPoints);
         FillPointsCount: Succ(High(Template25FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
@@ -2095,9 +2124,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template26Points;
+       (BasePoints: PPointArray(@Template26Points);
         BasePointsCount: Succ(High(Template26Points));
-        FillPoints: @Template26FPoints;
+        FillPoints: PPointArray(@Template26FPoints);
         FillPointsCount: Succ(High(Template26FPoints));
         BezierizeCount: 2;
         RandPassesCount: 7;
@@ -2106,9 +2135,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template27Points;
+       (BasePoints: PPointArray(@Template27Points);
         BasePointsCount: Succ(High(Template27Points));
-        FillPoints: @Template27FPoints;
+        FillPoints: PPointArray(@Template27FPoints);
         FillPointsCount: Succ(High(Template27FPoints));
         BezierizeCount: 1;
         RandPassesCount: 5;
@@ -2117,9 +2146,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template28Points;
+       (BasePoints: PPointArray(@Template28Points);
         BasePointsCount: Succ(High(Template28Points));
-        FillPoints: @Template28FPoints;
+        FillPoints: PPointArray(@Template28FPoints);
         FillPointsCount: Succ(High(Template28FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2128,9 +2157,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template29Points;
+       (BasePoints: PPointArray(@Template29Points);
         BasePointsCount: Succ(High(Template29Points));
-        FillPoints: @Template29FPoints;
+        FillPoints: PPointArray(@Template29FPoints);
         FillPointsCount: Succ(High(Template29FPoints));
         BezierizeCount: 1;
         RandPassesCount: 8;
@@ -2139,9 +2168,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template30Points;
+       (BasePoints: PPointArray(@Template30Points);
         BasePointsCount: Succ(High(Template30Points));
-        FillPoints: @Template30FPoints;
+        FillPoints: PPointArray(@Template30FPoints);
         FillPointsCount: Succ(High(Template30FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -2150,9 +2179,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template31Points;
+       (BasePoints: PPointArray(@Template31Points);
         BasePointsCount: Succ(High(Template31Points));
-        FillPoints: @Template31FPoints;
+        FillPoints: PPointArray(@Template31FPoints);
         FillPointsCount: Succ(High(Template31FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
@@ -2161,9 +2190,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template32Points;
+       (BasePoints: PPointArray(@Template32Points);
         BasePointsCount: Succ(High(Template32Points));
-        FillPoints: @Template32FPoints;
+        FillPoints: PPointArray(@Template32FPoints);
         FillPointsCount: Succ(High(Template32FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2172,9 +2201,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template33Points;
+       (BasePoints: PPointArray(@Template33Points);
         BasePointsCount: Succ(High(Template33Points));
-        FillPoints: @Template33FPoints;
+        FillPoints: PPointArray(@Template33FPoints);
         FillPointsCount: Succ(High(Template33FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2183,9 +2212,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template34Points;
+       (BasePoints: PPointArray(@Template34Points);
         BasePointsCount: Succ(High(Template34Points));
-        FillPoints: @Template34FPoints;
+        FillPoints: PPointArray(@Template34FPoints);
         FillPointsCount: Succ(High(Template34FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2194,9 +2223,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template35Points;
+       (BasePoints: PPointArray(@Template35Points);
         BasePointsCount: Succ(High(Template35Points));
-        FillPoints: @Template35FPoints;
+        FillPoints: PPointArray(@Template35FPoints);
         FillPointsCount: Succ(High(Template35FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2205,9 +2234,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template36Points;
+       (BasePoints: PPointArray(@Template36Points);
         BasePointsCount: Succ(High(Template36Points));
-        FillPoints: @Template36FPoints;
+        FillPoints: PPointArray(@Template36FPoints);
         FillPointsCount: Succ(High(Template36FPoints));
         BezierizeCount: 4;
         RandPassesCount: 12;
@@ -2216,9 +2245,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 32;
        ),
-       (BasePoints: @Template37Points;
+       (BasePoints: PPointArray(@Template37Points);
         BasePointsCount: Succ(High(Template37Points));
-        FillPoints: @Template37FPoints;
+        FillPoints: PPointArray(@Template37FPoints);
         FillPointsCount: Succ(High(Template37FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2227,9 +2256,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template38Points;
+       (BasePoints: PPointArray(@Template38Points);
         BasePointsCount: Succ(High(Template38Points));
-        FillPoints: @Template38FPoints;
+        FillPoints: PPointArray(@Template38FPoints);
         FillPointsCount: Succ(High(Template38FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
@@ -2238,9 +2267,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template39Points;
+       (BasePoints: PPointArray(@Template39Points);
         BasePointsCount: Succ(High(Template39Points));
-        FillPoints: @Template39FPoints;
+        FillPoints: PPointArray(@Template39FPoints);
         FillPointsCount: Succ(High(Template39FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2249,9 +2278,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 8;
        ),
-       (BasePoints: @Template40Points;
+       (BasePoints: PPointArray(@Template40Points);
         BasePointsCount: Succ(High(Template40Points));
-        FillPoints: @Template40FPoints;
+        FillPoints: PPointArray(@Template40FPoints);
         FillPointsCount: Succ(High(Template40FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2260,9 +2289,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 8;
        ),
-       (BasePoints: @Template41Points;
+       (BasePoints: PPointArray(@Template41Points);
         BasePointsCount: Succ(High(Template41Points));
-        FillPoints: @Template41FPoints;
+        FillPoints: PPointArray(@Template41FPoints);
         FillPointsCount: Succ(High(Template41FPoints));
         BezierizeCount: 2;
         RandPassesCount: 9;
@@ -2271,9 +2300,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template42Points;
+       (BasePoints: PPointArray(@Template42Points);
         BasePointsCount: Succ(High(Template42Points));
-        FillPoints: @Template42FPoints;
+        FillPoints: PPointArray(@Template42FPoints);
         FillPointsCount: Succ(High(Template42FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2282,9 +2311,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 8;
        ),
-       (BasePoints: @Template43Points;
+       (BasePoints: PPointArray(@Template43Points);
         BasePointsCount: Succ(High(Template43Points));
-        FillPoints: @Template43FPoints;
+        FillPoints: PPointArray(@Template43FPoints);
         FillPointsCount: Succ(High(Template43FPoints));
         BezierizeCount: 2;
         RandPassesCount: 9;
@@ -2293,9 +2322,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template44Points;
+       (BasePoints: PPointArray(@Template44Points);
         BasePointsCount: Succ(High(Template44Points));
-        FillPoints: @Template44FPoints;
+        FillPoints: PPointArray(@Template44FPoints);
         FillPointsCount: Succ(High(Template44FPoints));
         BezierizeCount: 5;
         RandPassesCount: 3;
@@ -2304,9 +2333,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template45Points;
+       (BasePoints: PPointArray(@Template45Points);
         BasePointsCount: Succ(High(Template45Points));
-        FillPoints: @Template45FPoints;
+        FillPoints: PPointArray(@Template45FPoints);
         FillPointsCount: Succ(High(Template45FPoints));
         BezierizeCount: 5;
         RandPassesCount: 7;
@@ -2314,11 +2343,22 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         canMirror: false; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
         MaxHedgeHogs: 48;
+       ),
+       (BasePoints: PPointArray(@Template46Points);
+        BasePointsCount: Succ(High(Template46Points));
+        FillPoints: PPointArray(@Template46FPoints);
+        FillPointsCount: Succ(High(Template46FPoints));
+        BezierizeCount: 2;
+        RandPassesCount: 8;
+        TemplateHeight: 1424; TemplateWidth: 3072;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
+        hasGirders: true;
+        MaxHedgeHogs: 18;
        )
       );
 const SmallTemplates: array[0..2] of Longword = ( 39, 40, 42 );
-const MediumTemplates: array[0..17] of Longword =
-      ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 );
+const MediumTemplates: array[0..18] of Longword =
+      ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 46 );
 const LargeTemplates: array[0..20] of Longword =
       (
         18, 19, 20, 21, 22, 23, 24, 25, 26, 27,

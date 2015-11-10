@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -122,7 +122,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
             (proc: nil;              flags: 0), // amKnife
-            (proc: nil;              flags: 0)  // amGirder
+            (proc: nil;              flags: 0), // amRubber
+            (proc: nil;              flags: 0)  // amAirMine
             );
 
 implementation
@@ -211,6 +212,7 @@ begin
     rTime:= 350;
     ap.ExplR:= 0;
     valueResult:= BadTurn;
+    timer:= 0;
     repeat
         rTime:= rTime + 300 + Level * 50 + random(300);
         Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
@@ -247,13 +249,13 @@ begin
                     or (y < 0)
                     or (trunc(x) > LAND_WIDTH)
                     or (trunc(y) > LAND_HEIGHT)
-                    or not TestCollExcludingObjects(trunc(x), trunc(y), 5)
+                    or (not TestCollExcludingObjects(trunc(x), trunc(y), 5))
                     or (timer = 0)
                 end;
             EX:= trunc(x);
             EY:= trunc(y);
             // Try to prevent AI from thinking firing into water will cause a drowning
-            if (EY < cWaterLine-5) and (Timer > 0) and (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) > 21) then exit(BadTurn);
+            if (EY < cWaterLine-5) and (timer > 0) and (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) > 21) then exit(BadTurn);
             if Level = 1 then
                 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
             else value:= RateExplosion(Me, EX, EY, 101);
@@ -684,7 +686,7 @@ end;
 function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t: real;
     d: Longword;
-    {fallDmg, }valueResult: LongInt;
+    ix, iy, valueResult: LongInt;
 begin
 if (Level > 4) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
@@ -704,20 +706,25 @@ Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 d:= 0;
 
-repeat
-    x:= x + vX;
-    y:= y + vY;
-    if ((trunc(x) and LAND_WIDTH_MASK) = 0)and((trunc(y) and LAND_HEIGHT_MASK) = 0)
-    and (Land[trunc(y), trunc(x)] <> 0) then
-        inc(d);
-until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5)
-    or (x < 0)
-    or (y < 0)
-    or (trunc(x) > LAND_WIDTH)
-    or (trunc(y) > LAND_HEIGHT)
-    or (d > 48);
+ix:= trunc(x);
+iy:= trunc(y);
 
-if Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5 then
+if ((ix and LAND_WIDTH_MASK) = 0) and ((iy and LAND_HEIGHT_MASK) = 0) then
+    repeat
+        if Land[iy, ix] <> 0 then
+            inc(d);
+        x:= x + vX;
+        y:= y + vY;
+        ix:= trunc(x);
+        iy:= trunc(y);
+    until (Abs(Targ.Point.X - ix) + Abs(Targ.Point.Y - iy) < 5)
+        or (x < 0)
+        or (y < 0)
+        or (ix >= LAND_WIDTH)
+        or (iy >= LAND_HEIGHT)
+        or (d > 48);
+
+if Abs(Targ.Point.X - ix) + Abs(Targ.Point.Y - iy) < 5 then
     begin
     ap.AttacksNum:= 1 + (d + 8) div 12;
     valueResult:= RateShove(Me, Targ.Point.X, Targ.Point.Y, 1, 7, 20, vX*0.125, vY*0.125, afTrackFall) - ap.AttacksNum
@@ -779,7 +786,7 @@ begin
     Targ:= Targ; // avoid compiler hint
 
     if Level < 3 then trackFall:= afTrackFall
-    else trackFall:= 0;
+        else trackFall:= 0;
 
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -1047,7 +1054,7 @@ var bombsSpeed, X, Y, dY: real;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
-if (Level > 3) then
+if (Level > 3) or (cGravityf = 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1241,7 +1248,7 @@ repeat
     x:= x + dx;
     dy:= dy + cGravityf;
     y:= y + dy;
-    
+
     if TestColl(trunc(x), trunc(y), 3) then
         t:= 0;
 until t = 0;
@@ -1251,7 +1258,7 @@ EY:= trunc(y);
 
 if Level = 1 then
     valueResult:= RateExplosion(Me, EX, EY, 76, afTrackFall or afErasesLand)
-else 
+else
     valueResult:= RateExplosion(Me, EX, EY, 76);
 
 if (valueResult > 0) then

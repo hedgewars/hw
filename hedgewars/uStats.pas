@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -25,7 +25,7 @@ uses uConsts, uTypes;
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
     SendHealthStatsOn : boolean = true;
-    
+
 procedure initModule;
 procedure freeModule;
 
@@ -97,12 +97,14 @@ end;
 
 procedure TurnReaction;
 var i, t: LongInt;
+    s: ansistring;
 begin
 TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
 inc(FinishedTurnsTotal);
 if FinishedTurnsTotal <> 0 then
     begin
+    s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
 
     if (CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (DamageTotal > 0) then
@@ -111,8 +113,8 @@ if FinishedTurnsTotal <> 0 then
     else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
-        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then 
-            AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
+            AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
     else if DamageClan <> 0 then
@@ -140,7 +142,7 @@ if FinishedTurnsTotal <> 0 then
     else if isTurnSkipped then
         begin
         AddVoice(sndBoring, PreviousTeam^.voicepack);
-        AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+        AddCaption(FormatA(GetEventString(eidTurnSkipped), s), cWhiteColor, capgrpMessage);
         end
     else if not PlacingHogs then
         AddVoice(sndCoward, PreviousTeam^.voicepack);
@@ -164,7 +166,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDamageRecv:= 0;
                 StepDamageGiven:= 0
                 end;
-                
+
 if SendHealthStatsOn then
     for t:= 0 to Pred(ClansCount) do
         with ClansArray[t]^ do
@@ -298,7 +300,7 @@ if SendHealthStatsOn then
         SendStat(siKilledHHs, IntToStr(KilledHHs));
 
     // now to console
-    if winnersClan <> nil then 
+    if winnersClan <> nil then
         begin
         WriteLnToConsole('WINNERS');
         WriteLnToConsole(inttostr(winnersClan^.TeamsNumber));
@@ -307,12 +309,12 @@ if SendHealthStatsOn then
         end
     else
         WriteLnToConsole('DRAW');
-        
+
     ScriptCall('onAchievementsDeclaration');
 end;
 
 procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
-begin 
+begin
 if (length(id) = 0) or (length(teamname) = 0) or (length(location) = 0) then exit;
     WriteLnToConsole('ACHIEVEMENT');
     WriteLnToConsole(id);

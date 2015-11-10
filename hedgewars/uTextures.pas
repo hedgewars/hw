@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -25,7 +25,8 @@ uses SDLh, uTypes;
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
-procedure FreeTexture(tex: PTexture);
+procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
+procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
 procedure FreeAndNilTexture(var tex: PTexture);
 
 procedure initModule;
@@ -107,20 +108,102 @@ begin
 fromP4:= Surf^.pixels;
 for y:= 0 to Pred(Surf^.h) do
     begin
-    for x:= 0 to Pred(Surf^.w) do 
+    for x:= 0 to Pred(Surf^.w) do
         begin
         tw:= fromP4^[x];
-        tw:= round((tw shr RShift and $FF) * RGB_LUMINANCE_RED +  
-              (tw shr GShift and $FF) * RGB_LUMINANCE_GREEN + 
+        tw:= round((tw shr RShift and $FF) * RGB_LUMINANCE_RED +
+              (tw shr GShift and $FF) * RGB_LUMINANCE_GREEN +
               (tw shr BShift and $FF) * RGB_LUMINANCE_BLUE);
         if tw > 255 then tw:= 255;
         tw:= (tw and $FF shl RShift) or (tw and $FF shl BShift) or (tw and $FF shl GShift) or (fromP4^[x] and AMask);
         fromP4^[x]:= tw;
         end;
-    fromP4:= @(fromP4^[Surf^.pitch div 4])
+    fromP4:= PLongWordArray(@(fromP4^[Surf^.pitch div 4]))
     end;
 end;
 
+{ this will make invisible pixels that have a visible neighbor have the
+  same color as their visible neighbor, so that bilinear filtering won't
+  display a "wrongly" colored border when zoomed in }
+procedure PrettifyAlpha(row1, row2: PLongwordArray; firsti, lasti, ioffset: LongWord);
+var
+    i: Longword;
+    lpi, cpi, bpi: boolean; // was last/current/bottom neighbor pixel invisible?
+begin
+    // suppress incorrect warning
+    lpi:= true;
+    for i:=firsti to lasti do
+        begin
+        // use first pixel in row1 as starting point
+        if i = firsti then
+            cpi:= ((row1^[i] and AMask) = 0)
+        else
+            begin
+            cpi:= ((row1^[i] and AMask) = 0);
+            if cpi <> lpi then
+                begin
+                // invisible pixels get colors from visible neighbors
+                if cpi then
+                    begin
+                    row1^[i]:= row1^[i-1] and (not AMask);
+                    // as this pixel is invisible and already colored correctly now, no point in further comparing it
+                    lpi:= cpi;
+                    continue;
+                    end
+                else
+                    row1^[i-1]:= row1^[i] and (not AMask);
+                end;
+            end;
+        lpi:= cpi;
+        // also check bottom neighbor
+        if row2 <> nil then
+            begin
+            bpi:= ((row2^[i+ioffset] and AMask) = 0);
+            if cpi <> bpi then
+                begin
+                if cpi then
+                    row1^[i]:= row2^[i+ioffset] and (not AMask)
+                else
+                    row2^[i+ioffset]:= row1^[i] and (not AMask);
+                end;
+            end;
+        end;
+end;
+
+procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
+var
+    // current row index, second last row index of array, width and first/last i of row
+    r, slr, w, si, li: LongWord;
+begin
+    w:= surf^.w;
+    slr:= surf^.h - 2;
+    si:= 0;
+    li:= w - 1;
+    for r:= 0 to slr do
+        begin
+        PrettifyAlpha(pixels, pixels, si, li, w);
+        // move indices to next row
+        si:= si + w;
+        li:= li + w;
+        end;
+    // don't forget last row
+    PrettifyAlpha(pixels, nil, si, li, w);
+end;
+
+procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
+var
+    // current y; last x, second last y of array;
+    y, lx, sly: LongWord;
+begin
+    sly:= height - 2;
+    lx:= width - 1;
+    for y:= 0 to sly do
+        begin
+        PrettifyAlpha(PLongWordArray(pixels[y]), PLongWordArray(pixels[y+1]), 0, lx, 0);
+        end;
+    // don't forget last row
+    PrettifyAlpha(PLongWordArray(pixels[sly+1]), nil, 0, lx, 0);
+end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
@@ -148,7 +231,6 @@ if (surf^.format^.BytesPerPixel <> 4) then
     exit
     end;
 
-
 glGenTextures(1, @Surface2Tex^.id);
 
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
@@ -160,6 +242,8 @@ fromP4:= Surf^.pixels;
 
 if GrayScale then
     Surface2GrayScale(Surf);
+
+PrettifySurfaceAlpha(surf, fromP4);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
     begin
@@ -179,16 +263,16 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
         for x:= 0 to Pred(Surf^.w) do
             toP4^[x]:= fromP4^[x];
         for x:= Surf^.w to Pred(tw) do
-            toP4^[x]:= 0;
-        toP4:= @(toP4^[tw]);
-        fromP4:= @(fromP4^[Surf^.pitch div 4])
+            toP4^[x]:= fromP4^[0];
+        toP4:= PLongWordArray(@(toP4^[tw]));
+        fromP4:= PLongWordArray(@(fromP4^[Surf^.pitch div 4]))
         end;
 
     for y:= Surf^.h to Pred(th) do
         begin
         for x:= 0 to Pred(tw) do
             toP4^[x]:= 0;
-        toP4:= @(toP4^[tw])
+        toP4:= PLongWordArray(@(toP4^[tw]))
         end;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);
@@ -212,25 +296,20 @@ end;
 
 // deletes texture and frees the memory allocated for it.
 // if nil is passed nothing is done
-procedure FreeTexture(tex: PTexture);
-begin
-if tex <> nil then
-    begin
-    if tex^.NextTexture <> nil then
-        tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
-    if tex^.PrevTexture <> nil then
-        tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-    else
-        TextureList:= tex^.NextTexture;
-    glDeleteTextures(1, @tex^.id);
-    Dispose(tex);
-    end
-end;
-
 procedure FreeAndNilTexture(var tex: PTexture);
 begin
-    FreeTexture(tex);
-    tex:= nil
+    if tex <> nil then
+        begin
+        if tex^.NextTexture <> nil then
+            tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
+        if tex^.PrevTexture <> nil then
+            tex^.PrevTexture^.NextTexture:= tex^.NextTexture
+        else
+            TextureList:= tex^.NextTexture;
+        glDeleteTextures(1, @tex^.id);
+        Dispose(tex);
+        tex:= nil;
+        end;
 end;
 
 procedure initModule;
@@ -239,13 +318,15 @@ TextureList:= nil;
 end;
 
 procedure freeModule;
+var tex: PTexture;
 begin
 if TextureList <> nil then
     WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
-    while TextureList <> nil do 
+    while TextureList <> nil do
         begin
-        AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
-        FreeTexture(TextureList);
+        tex:= TextureList;
+        AddFileLog('Texture not freed: width='+inttostr(LongInt(tex^.w))+' height='+inttostr(LongInt(tex^.h))+' priority='+inttostr(round(tex^.priority*1000)));
+        FreeAndNilTexture(tex);
         end
 end;
 

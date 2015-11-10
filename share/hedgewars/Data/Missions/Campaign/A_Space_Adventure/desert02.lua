@@ -100,7 +100,7 @@ function onGameStart()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amRope))
+	SetWeapon(amRope)
 end
 
 function onGameTick()

@@ -44,83 +44,83 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class WeaponsetListActivity extends ListActivity implements OnItemClickListener {
-	private List<Weaponset> userWeaponsets;
-	private Button addButton;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_weaponsetlist);
-		addButton = (Button)findViewById(R.id.addButton);
-		addButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				editWeaponset(null);
-			}
-		});
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateList();
-		getListView().setOnItemClickListener(this);
-		registerForContextMenu(getListView());
-	}
-	
-	private List<Map<String, ?>> weaponsetsToMap(List<Weaponset> weaponsets) {
-		List<Map<String, ?>> result = new ArrayList<Map<String, ?>>();
-		for(Weaponset weaponset : weaponsets) {
-			result.add(Collections.singletonMap("txt", weaponset.name));
-		}
-		return result;
-	}
-	
-	public void onItemClick(AdapterView<?> adapterView, View v, int position, long arg3) {
-		editWeaponset(userWeaponsets.get(position).name);
-	}
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
-		menu.add(ContextMenu.NONE, 0, ContextMenu.NONE, R.string.edit);
-		menu.add(ContextMenu.NONE, 1, ContextMenu.NONE, R.string.delete);
-	}
-	
-	@Override
-	public boolean onContextItemSelected(MenuItem item){
-		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		int position = menuInfo.position;
-		Weaponset weaponset = userWeaponsets.get(position);
-		switch(item.getItemId()){
-		case 0:
-			editWeaponset(weaponset.name);
-			return true;
-		case 1:
-			try {
-				Weaponsets.deleteUserWeaponset(this, weaponset.name);
-			} catch (IOException e) {
-				Toast.makeText(this.getApplicationContext(), R.string.error_missing_sdcard_or_files, Toast.LENGTH_SHORT).show();
-			}
-			updateList();
-			return true;
-		}
-		return false;
-	}
-	
-	private void updateList() {
-		try {
-			userWeaponsets = Weaponsets.loadUserWeaponsets(this);
-		} catch (IOException e) {
-			Toast.makeText(this, R.string.error_missing_sdcard_or_files, Toast.LENGTH_LONG).show();
-			finish();
-		}
-		Collections.sort(userWeaponsets, Weaponset.NAME_ORDER);
-		ListAdapter adapter = new SimpleAdapter(this, weaponsetsToMap(userWeaponsets), android.R.layout.simple_list_item_1, new String[]{"txt"}, new int[]{android.R.id.text1});
-		setListAdapter(adapter);
-	}
-	
-	private void editWeaponset(String weaponsetName) {
-		Intent i = new Intent(this, WeaponsetCreatorActivity.class);
-		i.putExtra(WeaponsetCreatorActivity.PARAMETER_EXISTING_WEAPONSETNAME, weaponsetName);
-		startActivity(i);
-	}
+    private List<Weaponset> userWeaponsets;
+    private Button addButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_weaponsetlist);
+        addButton = (Button)findViewById(R.id.addButton);
+        addButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                editWeaponset(null);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
+        getListView().setOnItemClickListener(this);
+        registerForContextMenu(getListView());
+    }
+
+    private List<Map<String, ?>> weaponsetsToMap(List<Weaponset> weaponsets) {
+        List<Map<String, ?>> result = new ArrayList<Map<String, ?>>();
+        for(Weaponset weaponset : weaponsets) {
+            result.add(Collections.singletonMap("txt", weaponset.name));
+        }
+        return result;
+    }
+
+    public void onItemClick(AdapterView<?> adapterView, View v, int position, long arg3) {
+        editWeaponset(userWeaponsets.get(position).name);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
+        menu.add(ContextMenu.NONE, 0, ContextMenu.NONE, R.string.edit);
+        menu.add(ContextMenu.NONE, 1, ContextMenu.NONE, R.string.delete);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+        int position = menuInfo.position;
+        Weaponset weaponset = userWeaponsets.get(position);
+        switch(item.getItemId()){
+        case 0:
+            editWeaponset(weaponset.name);
+            return true;
+        case 1:
+            try {
+                Weaponsets.deleteUserWeaponset(this, weaponset.name);
+            } catch (IOException e) {
+                Toast.makeText(this.getApplicationContext(), R.string.error_missing_sdcard_or_files, Toast.LENGTH_SHORT).show();
+            }
+            updateList();
+            return true;
+        }
+        return false;
+    }
+
+    private void updateList() {
+        try {
+            userWeaponsets = Weaponsets.loadUserWeaponsets(this);
+        } catch (IOException e) {
+            Toast.makeText(this, R.string.error_missing_sdcard_or_files, Toast.LENGTH_LONG).show();
+            finish();
+        }
+        Collections.sort(userWeaponsets, Weaponset.NAME_ORDER);
+        ListAdapter adapter = new SimpleAdapter(this, weaponsetsToMap(userWeaponsets), android.R.layout.simple_list_item_1, new String[]{"txt"}, new int[]{android.R.id.text1});
+        setListAdapter(adapter);
+    }
+
+    private void editWeaponset(String weaponsetName) {
+        Intent i = new Intent(this, WeaponsetCreatorActivity.class);
+        i.putExtra(WeaponsetCreatorActivity.PARAMETER_EXISTING_WEAPONSETNAME, weaponsetName);
+        startActivity(i);
+    }
 }

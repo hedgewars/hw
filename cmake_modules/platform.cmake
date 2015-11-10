@@ -31,30 +31,15 @@ if(APPLE)
         set(minimum_macosx_version ${current_macosx_version})
     endif()
 
-    #lower systems don't have enough processing power anyway
-    if (minimum_macosx_version VERSION_LESS "10.4")
-        message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
-    endif()
-
-    #gcc is EOL on these systems
-    if (current_macosx_version VERSION_GREATER "10.8")
-        set(CMAKE_C_COMPILER clang)
-        set(CMAKE_CXX_COMPILER clang++)
-    endif()
-
-    #workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-    if(current_macosx_version VERSION_EQUAL "10.4")
-        find_package(SDL_mixer REQUIRED)
-        set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
-        set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
-        add_flag_append(CMAKE_C_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
-        add_flag_append(CMAKE_CXX_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
-        add_flag_append(CMAKE_Pascal_FLAGS "-k${DYLIB_SMPEG} -k${DYLIB_MIKMOD}")
+    #10.3 systems don't have enough processing power anyway
+    #10.4 does not have @rpath support (which SDL uses)
+    if(minimum_macosx_version VERSION_LESS "10.5")
+        message(FATAL_ERROR "Hedgewars is not supported on your version of Mac OS X")
     endif()
 
     if(NOT CMAKE_OSX_ARCHITECTURES)
         if(current_macosx_version VERSION_LESS "10.6")
-            #SDL is only 32 bit on lower OS
+            #SDL is only 32 bit on older OS version
             if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
                 set(CMAKE_OSX_ARCHITECTURES "ppc7400")
             else()
@@ -79,7 +64,7 @@ if(APPLE)
         endif()
         list(LENGTH CMAKE_OSX_ARCHITECTURES num_of_archs)
         if(num_of_archs GREATER 1)
-            message(${WARNING} "Only one architecture in CMAKE_OSX_ARCHITECTURES is currently supported, picking the first one")
+            message("*** Only one architecture in CMAKE_OSX_ARCHITECTURES is supported, picking the first one ***")
         endif()
     elseif(CMAKE_SIZEOF_VOID_P MATCHES "8")
         #if that variable is not set check if we are on x86_64 and if so force it, else use default
@@ -88,24 +73,36 @@ if(APPLE)
 
     #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
     #we need to provide the correct one when host and target differ
-    if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
-        if(minimum_macosx_version VERSION_EQUAL "10.4")
-            set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-            set(CMAKE_C_COMPILER "/Developer/usr/bin/gcc-4.0")
-            set(CMAKE_CXX_COMPILER "/Developer/usr/bin/g++-4.0")
+    if(NOT CMAKE_OSX_SYSROOT AND
+       NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
+        find_program(xcrun xcrun)
+        if(xcrun)
+            execute_process(COMMAND ${xcrun} "--show-sdk-path"
+                            OUTPUT_VARIABLE current_sdk_path
+                            OUTPUT_STRIP_TRAILING_WHITESPACE)
+            string(REPLACE "${current_macosx_version}"
+                           "${minimum_macosx_version}"
+                           CMAKE_OSX_SYSROOT
+                           "${current_sdk_path}")
         else()
-            string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
-            set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
+            message("*** xcrun not found! Build will work on ${current_macosx_version} only ***")
         endif()
+    endif()
+    if(CMAKE_OSX_SYSROOT)
         add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
         add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-L${LIBRARY_OUTPUT_PATH} -Fl${LIBRARY_OUTPUT_PATH}")
     endif()
 
     #add user framework directory
     add_flag_append(CMAKE_Pascal_FLAGS "-Ff~/Library/Frameworks")
 
-    #workaround most of the -Fl settings getting lost
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${LIBRARY_OUTPUT_PATH}")
+    #workaround older cmake versions
+    if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
+        add_flag_append(CMAKE_C_LINK_FLAGS "-Wl,-rpath -Wl,${CMAKE_INSTALL_RPATH}")
+        add_flag_append(CMAKE_CXX_LINK_FLAGS "-Wl,-rpath -Wl,${CMAKE_INSTALL_RPATH}")
+        add_flag_append(CMAKE_Pascal_LINK_FLAGS "-k-rpath -k${CMAKE_INSTALL_RPATH}")
+    endif()
 endif(APPLE)
 
 if(MINGW)
@@ -123,5 +120,4 @@ endif(WIN32)
 if(UNIX)
     add_flag_append(CMAKE_C_FLAGS "-fPIC")
     add_flag_append(CMAKE_CXX_FLAGS "-fPIC")
-    add_flag_append(CMAKE_Pascal_FLAGS "-fPIC")
 endif(UNIX)

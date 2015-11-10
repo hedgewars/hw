@@ -33,6 +33,7 @@ local reached = false
 local worsthog = nil
 
 local besthog = nil
+local besthogname = ''
 
 -- best time
 local besttime = maxtime + 1
@@ -78,7 +79,8 @@ function killHog()
         SetHealth(CurrentHedgehog, 0)
         SetEffect(CurrentHedgehog, heInvulnerable, 0)
         x, y = GetGearPosition(CurrentHedgehog)
-        AddGear(x, y, gtShell, 0, 0, 0, 0)
+        AddGear(x, y-2, gtGrenade, 0, 0, 0, 2)
+        SetGearVelocity(CurrentHedgehog, 0, 0)
         worsttime = 99999
         worsthog = nil
         lasthog = nil
@@ -101,7 +103,7 @@ function onNewTurn()
     if CurrentHedgehog ~= nil then
         SetGearVelocity(CurrentHedgehog, 1, 0)
         SetGearPosition(CurrentHedgehog, start_area[1] + start_area[3] / 2, start_area[2] + start_area[4] / 2)
-        ParseCommand("setweap " .. string.char(amRope))
+        SetWeapon(amRope)
         lasthog = CurrentHedgehog
     end
 end
@@ -141,6 +143,7 @@ function onGameTick()
             if ttime < besttime then
                 besttime = ttime
                 besthog = CurrentHedgehog
+                besthogname = GetHogName(besthog)
                 hscore = hscore .. loc("NEW fastest lap: ")
             else
                 hscore = hscore .. loc("Fastest lap: ")
@@ -149,7 +152,7 @@ function onGameTick()
                 worsttime = ttime
                 worsthog = CurrentHedgehog
             end
-            hscore = hscore .. GetHogName(besthog) .. " - " .. (besttime / 1000) .. " s | |" .. loc("Best laps per team: ")
+            hscore = hscore .. besthogname .. " - " .. (besttime / 1000) .. " s | |" .. loc("Best laps per team: ")
             
             if clan == ClansCount -1 then
                 -- Time for elimination - worst hog is out and the worst hog vars are reset.

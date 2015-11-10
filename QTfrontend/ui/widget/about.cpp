@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QGridLayout>
@@ -35,7 +35,9 @@
 #ifdef VIDEOREC
 extern "C"
 {
-#include "libavutil/avutil.h"
+    #include "libavcodec/version.h"
+    #include "libavformat/version.h"
+    #include "libavutil/avutil.h" // version.h only from 51.36.0
 }
 #endif
 
@@ -166,7 +168,15 @@ About::About(QWidget * parent) :
     libinfo.append(QString("<a href=\"http://qt-project.org/\">Qt</a> version: %1<br>").arg(QT_VERSION_STR));
 
 #ifdef VIDEOREC
-    libinfo.append(QString("<a href=\"http://libav.org\">Libav</a> version: %1.%2.%3<br>")
+    libinfo.append(QString("<a href=\"http://libav.org\">libavcodec</a> version: %1.%2.%3<br>")
+        .arg(LIBAVCODEC_VERSION_MAJOR)
+        .arg(LIBAVCODEC_VERSION_MINOR)
+        .arg(LIBAVCODEC_VERSION_MICRO));
+    libinfo.append(QString("<a href=\"http://libav.org\">libavformat</a> version: %1.%2.%3<br>")
+        .arg(LIBAVFORMAT_VERSION_MAJOR)
+        .arg(LIBAVFORMAT_VERSION_MINOR)
+        .arg(LIBAVFORMAT_VERSION_MICRO));
+    libinfo.append(QString("<a href=\"http://libav.org\">libavutil</a> version: %1.%2.%3<br>")
         .arg(LIBAVUTIL_VERSION_MAJOR)
         .arg(LIBAVUTIL_VERSION_MINOR)
         .arg(LIBAVUTIL_VERSION_MICRO));

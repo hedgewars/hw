@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
@@ -23,7 +23,7 @@
 @class SchemeWeaponConfigViewController;
 @class TeamConfigViewController;
 @class MapConfigViewController;
-//@class HelpPageLobbyViewController;
+@class HelpPageLobbyViewController;
 
 @interface GameConfigViewController : UIViewController {
     UIView *imgContainer;
@@ -33,16 +33,17 @@
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
     TeamConfigViewController *teamConfigViewController;
     MapConfigViewController *mapConfigViewController;
-    //HelpPageLobbyViewController *helpPage;
+    HelpPageLobbyViewController *helpPage;
 }
 
-@property (retain) UIView *imgContainer;
+@property (atomic) BOOL isDrawingNiceHogs;
+@property (nonatomic,retain) UIView *imgContainer;
 @property (nonatomic,retain) UILabel * sliderBackground;
 @property (nonatomic,retain) IBOutlet UIImageView *titleImage;
 @property (nonatomic,retain) IBOutlet SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
 @property (nonatomic,retain) IBOutlet TeamConfigViewController *teamConfigViewController;
 @property (nonatomic,retain) IBOutlet MapConfigViewController *mapConfigViewController;
-//@property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
+@property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;

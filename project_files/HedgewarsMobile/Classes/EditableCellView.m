@@ -13,12 +13,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
 
 #import "EditableCellView.h"
-
+#import "UITableViewCell+FindTable.h"
 
 @implementation EditableCellView
 @synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, respectEditing, oldValue;
@@ -103,13 +103,13 @@
 -(BOOL) textFieldShouldBeginEditing:(UITextField *)aTextField {
     return (delegate != nil) &&
            [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)] &&
-           (respectEditing) ? ((UITableView*)[self superview]).editing : YES;
+           (respectEditing) ? [self findTable].editing : YES;
 }
 
 // the textfield is being modified, update the navigation controller
 -(void) textFieldDidBeginEditing:(UITextField *)aTextField{
     // don't interact with table below
-    ((UITableView*)[self superview]).scrollEnabled = NO;
+    [self findTable].scrollEnabled = NO;
 
     self.oldValue = self.textField.text;
 
@@ -147,9 +147,9 @@
         [self save:aTextField];
 
     // restores default behaviour on caller
-    ((UITableView*)[self superview]).scrollEnabled = YES;
-    [(UITableViewController *)delegate navigationItem].rightBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
-    [(UITableViewController *)delegate navigationItem].leftBarButtonItem = nil;
+    [self findTable].scrollEnabled = YES;
+    [(UITableViewController *)delegate navigationItem].leftBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
+    [(UITableViewController *)delegate navigationItem].rightBarButtonItem = nil;
 }
 
 #pragma mark -

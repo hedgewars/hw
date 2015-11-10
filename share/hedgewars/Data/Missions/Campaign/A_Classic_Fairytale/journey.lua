@@ -80,7 +80,7 @@ winAnimAD = {}
 
 --/////////////////////////Animation Functions///////////////////////
 function AfterMidFailAnim()
-  ParseCommand("teamgone " .. loc("Natives"))
+  DismissTeam(loc("Natives"))
   TurnTimeLeft = 0
 end
 
@@ -268,7 +268,7 @@ function RestoreCyborgOnly(x, y)
 end
 
 function TargetPrincess()
-  ParseCommand("setweap " .. string.char(amDEagle))
+  SetWeapon(amDEagle)
   SetGearMessage(cyborg, gmUp)
   return true
 end
@@ -568,7 +568,7 @@ function SetupAnimRefusedLived()
 end
 
 function KillPrincess()
-  ParseCommand("teamgone " .. loc("Cannibal Sentry"))
+  DismissTeam(loc("Cannibal Sentry"))
   TurnTimeLeft = 0
 end
 --/////////////////////////////Misc Functions////////////////////////
@@ -804,7 +804,7 @@ end
 
 function DoLeaksDead()
   AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-  ParseCommand("teamgone " .. loc("Natives"))
+  DismissTeam(loc("Natives"))
 end
 
 function CheckDenseDead()
@@ -813,7 +813,7 @@ end
 
 function DoDenseDead()
   AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-  ParseCommand("teamgone " .. loc("Natives"))
+  DismissTeam(loc("Natives"))
 end
 
 function CheckTookBlowTorch()
@@ -895,7 +895,7 @@ end
 
 function DoLost()
   AddAnim(endFailAnim)
-  AddFunction({func = ParseCommand, args = {'teamgone ' .. loc('Natives')}})
+  AddFunction({func = DismissTeam, args = {loc('Natives')}})
 end
 
 function CheckWon()
@@ -912,8 +912,8 @@ end
 
 function FinishWon()
   SwitchHog(leaks)
-  ParseCommand("teamgone " .. loc("Cannibal Sentry"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("Cannibal Sentry"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 

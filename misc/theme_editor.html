@@ -7,113 +7,113 @@
             var skyColor, waterTopColor, waterBottomColor;
             var elements = 7;
             var landArray;
-            
+
             function landFunction(x){
                 return 384 - 192 * Math.sin(x * Math.PI/512);
             }
-            
+
             function tryToDraw(){
                 if (--elements <= 0) {
                     draw();
                 }
             }
-        
+
             function load(){
                     var canvas = document.getElementById('preview');
                     if (canvas.getContext){
                         var ctx = canvas.getContext('2d');
-                    
+
                         ctx.fillStyle = '#0b294b';
                         ctx.fillRect(0, 0, 512, 384);
-                        
+
                         ctx.font = "40pt Arial";
                         ctx.fillStyle = '#2b7bd5';
                         ctx.fillText('Loading Images...', 32, 212);
                     }
-                    
+
                     sky = new Image();
                     sky.onload = tryToDraw;
                     sky.src = 'http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/Sky.png';
-          
+
                     clouds = new Image();
                     clouds.onload = tryToDraw;
                     clouds.src = 'http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Clouds.png';
-          
+
                     horizont = new Image();
                     horizont.onload = tryToDraw;
                     horizont.src = 'http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/horizont.png';
-          
+
                     land = new Image();
                     land.onload = tryToDraw;
                     land.src = 'http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/LandTex.png';
-          
+
                     border = new Image();
                     border.onload = tryToDraw;
                     border.src = 'http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/Border.png';
-          
+
                     water = new Image();
                     water.onload = tryToDraw;
                     water.src = 'http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/BlueWater.png';
-                    
+
                     landArray = new Array(512);
                     for (var x = 0; x < landArray.length; x++)
                         landArray[x] = landFunction(x);
-                    
+
                     skyColor = '#131252';
                     document.getElementById('skyColor').value = skyColor;
-                    
+
                     waterTopColor = '#555C9D';
                     document.getElementById('waterTopColor').value = waterTopColor;
-                    
+
                     waterBottomColor = '#343C7D';
                     document.getElementById('waterBottomColor').value = waterBottomColor;
-                    
+
                     tryToDraw();
             }
-            
+
             function draw(){
                 var canvas = document.getElementById('preview');
                 if (canvas.getContext){
                     var ctx = canvas.getContext('2d');
-                    
+
                     ctx.fillStyle = skyColor;
                     ctx.fillRect(0, 0, 512, 384);
-                    
+
                     ctx.drawImage(sky, 0, 64, 512, 256);
-          
+
                     for (var i = 0; i < 4; i++)
                         ctx.drawImage(clouds, 0, i * 128, 256, 128, i * 128, 64, 128, 64);
-          
+
                     ctx.drawImage(horizont, 0, 192, 512, 128);
-                    
+
                     ctx.save();
-                    
+
                     ctx.beginPath();
                     ctx.moveTo(0, 384);
                     for (var x = 0; x < landArray.length; x++)
                         ctx.lineTo(x, landArray[x]);
                     ctx.clip();
-                    
+
                     for (var i = 0; i < 2; i++)
-                    	for (var k = 0; k < 2; k++)
-                    		ctx.drawImage(land, i * 320, k * 240, 320, 240);
-                    
+                        for (var k = 0; k < 2; k++)
+                            ctx.drawImage(land, i * 320, k * 240, 320, 240);
+
                     ctx.restore();
-                    
+
                     var k = 0;
                     for (var x = 0; x < landArray.length; x++) {
                         if (++k == 64)
                             k = 0;
                         ctx.drawImage(border, k, 0, 2, 16, x, landArray[x] - 4, 1, 8);
                     }
-                        
-                    
+
+
                     var gradient = ctx.createLinearGradient(0, 320, 0, 384);
                     gradient.addColorStop(0, waterTopColor);
                     gradient.addColorStop(1, waterBottomColor);
                     ctx.fillStyle = gradient;
                     ctx.fillRect(0, 320, 512, 384);
-          
+
                     for (var i = 0; i < 8; i++)
                         ctx.drawImage(water, i * 64, 308, 64, 24);
                 }

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *)
 
 {$INCLUDE "options.inc"}
@@ -26,7 +26,8 @@ procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
@@ -92,12 +93,17 @@ end;
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
 begin
-    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
+    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0, false);
 end;
-    
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
+
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
+begin
+    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, LandFlags, false);
+end;
+
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
 var p: PLongwordArray;
-    x, y: Longword;
+    px, x, y: Longword;
     bpp: LongInt;
 begin
 WriteToConsole('Generating collision info... ');
@@ -115,22 +121,30 @@ p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Width) do
-        if (p^[x] and AMask) <> 0 then
+        begin
+        // map image pixels per line backwards if in flip mode
+        if Flip then
+            px:= Pred(Image^.w) - x
+        else
+            px:= x;
+
+        if (p^[px] and AMask) <> 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
                 begin
                 if (LandPixels[cpY + y, cpX + x] = 0)
-                or (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
-                    LandPixels[cpY + y, cpX + x]:= p^[x];
+                or (((p^[px] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
+                    LandPixels[cpY + y, cpX + x]:= p^[px];
                 end
             else
-                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
-                    LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
+                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
+                    LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[px];
 
-            if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[x] and AMask) <> 0) then
+            if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[px] and AMask) <> 0) then
                 Land[cpY + y, cpX + x]:= lfObject or LandFlags
             end;
-    p:= @(p^[Image^.pitch shr 2])
+        end;
+    p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
     end;
 
 if SDL_MustLock(Image) then
@@ -164,14 +178,14 @@ for y:= 0 to Pred(Image^.h) do
                 LandPixels[cpY + y, cpX + x]:= p^[x];
             end
         else
-            if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
+            if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
                 LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
         if (Land[cpY + y, cpX + x] <= lfAllObjMask) or (Land[cpY + y, cpX + x] and lfObject <> 0)  then
             SetLand(Land[cpY + y, cpX + x], mp^[x]);
         end;
-    p:= @(p^[Image^.pitch shr 2]);
-    mp:= @(mp^[Mask^.pitch shr 2])
+    p:= PLongwordArray(@(p^[Image^.pitch shr 2]));
+    mp:= PLongwordArray(@(mp^[Mask^.pitch shr 2]))
     end;
 
 if SDL_MustLock(Image) then
@@ -219,50 +233,54 @@ CheckIntersect:= res;
 end;
 
 
-function CountNonZeroz(x, y: LongInt): Longword;
+function CountNonZeroz(x, y, h: LongInt): Longword;
 var i: LongInt;
     lRes: Longword;
 begin
     lRes:= 0;
-    for i:= y to y + 15 do
+    for i:= y to Pred(y + h) do
         if Land[i, x] <> 0 then
             inc(lRes);
     CountNonZeroz:= lRes;
 end;
 
-function AddGirder(gX: LongInt): boolean;
-var tmpsurf: PSDL_Surface;
-    x1, x2, y, k, i: LongInt;
+function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
+var x1, x2, y, k, i, girderHeight: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
 begin
+if girSurf = nil then
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+
+girderHeight:= girSurf^.h;
+
 y:= topY+150;
 repeat
     inc(y, 24);
     x1:= gX;
     x2:= gX;
 
-    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do
+    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y, girderHeight) = 0) do
         dec(x1, 2);
 
     i:= x1 - 12;
     repeat
-        dec(x1, 2);
-        k:= CountNonZeroz(x1, y)
-    until (x1 < Longint(leftX)+150) or (k = 0) or (k = 16) or (x1 < i);
+        k:= CountNonZeroz(x1, y, girderHeight);
+        dec(x1, 2)
+    until (x1 < Longint(leftX) + 100) or (k = 0) or (k = girderHeight) or (x1 < i);
 
     inc(x1, 2);
-    if k = 16 then
+    if k = girderHeight then
         begin
-        while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do
+        while (x2 < (LongInt(rightX) - 100)) and (CountNonZeroz(x2, y, girderHeight) = 0) do
             inc(x2, 2);
         i:= x2 + 12;
         repeat
         inc(x2, 2);
-        k:= CountNonZeroz(x2, y)
-        until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
-        
-        if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
+        k:= CountNonZeroz(x2, y, girderHeight)
+        until (x2 >= (LongInt(rightX)-150)) or (k = 0) or (k = girderHeight) or (x2 > i) or (x2 - x1 >= 900);
+
+        if (x2 < (LongInt(rightX) - 100)) and (k = girderHeight) and (x2 - x1 > 200) and (x2 - x1 < 900)
         and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
                 break;
         end;
@@ -272,18 +290,16 @@ until y > (LAND_HEIGHT-125);
 if x1 > 0 then
 begin
     bRes:= true;
-    tmpsurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
     rr.x:= x1;
     while rr.x < x2 do
         begin
-        if cIce then 
-            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
+        if cIce then
+            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, girSurf^.w), girSurf, lfIce)
         else
-            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
-        inc(rr.x, tmpsurf^.w);
+            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, girSurf^.w), girSurf);
+        inc(rr.x, girSurf^.w);
         end;
-    SDL_FreeSurface(tmpsurf);
 
     AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
 end
@@ -372,8 +388,8 @@ with Obj do
                 ar[cnt].y:= y;
                 if cnt >= MaxPointsIndex then // buffer is full, do not check the rest land
                     begin
-                    y:= $FF000000;
-                    x:= $FF000000;
+                    y:= LAND_HEIGHT;
+                    x:= LAND_WIDTH;
                     end
                     else inc(cnt);
                 end;
@@ -455,9 +471,9 @@ end;
 
 procedure CheckRect(Width, Height, x, y, w, h: LongWord);
 begin
-    if (x + w > Width) then 
+    if (x + w > Width) then
         OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
-    if (y + h > Height) then 
+    if (y + h > Height) then
         OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
 end;
 
@@ -473,7 +489,7 @@ AddProgress;
 // Set default water greyscale values
 if GrayScale then
     begin
-    for i:= 0 to 3 do
+    for i:= Low(SDWaterColorArray) to High(SDWaterColorArray) do
         begin
         t:= round(SDWaterColorArray[i].r * RGB_LUMINANCE_RED + SDWaterColorArray[i].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[i].b * RGB_LUMINANCE_BLUE);
         if t > 255 then
@@ -482,7 +498,7 @@ if GrayScale then
         SDWaterColorArray[i].g:= t;
         SDWaterColorArray[i].b:= t
         end;
-    for i:= 0 to 1 do
+    for i:= Low(WaterColorArray) to High(WaterColorArray) do
         begin
         t:= round(WaterColorArray[i].r * RGB_LUMINANCE_RED + WaterColorArray[i].g * RGB_LUMINANCE_GREEN + WaterColorArray[i].b * RGB_LUMINANCE_BLUE);
         if t > 255 then
@@ -555,9 +571,37 @@ while not pfsEOF(f) do
             c2.g:= t;
             c2.b:= t
             end;
-        ExplosionBorderColor:= (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift) or AMask; 
+        ExplosionBorderColorR:= c2.r;
+        ExplosionBorderColorG:= c2.g;
+        ExplosionBorderColorB:= c2.b;
+        ExplosionBorderColorNoA:=
+            (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift);
+        ExplosionBorderColor:= ExplosionBorderColorNoA or AMask;
         end
     else if key = 'water-top' then
+        begin
+        i:= Pos(',', s);
+        WaterColorArray[1].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        WaterColorArray[1].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        WaterColorArray[1].b:= StrToInt(Trim(s));
+        WaterColorArray[1].a := 255;
+        if GrayScale then
+            begin
+            t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            WaterColorArray[1].r:= t;
+            WaterColorArray[1].g:= t;
+            WaterColorArray[1].b:= t
+            end;
+        WaterColorArray[3]:= WaterColorArray[1];
+        WaterColorArray[5]:= WaterColorArray[1];
+        WaterColorArray[7]:= WaterColorArray[1];
+        end
+    else if key = 'water-bottom' then
         begin
         i:= Pos(',', s);
         WaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
@@ -569,35 +613,16 @@ while not pfsEOF(f) do
         WaterColorArray[0].a := 255;
         if GrayScale then
             begin
-            t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
                 t:= 255;
             WaterColorArray[0].r:= t;
             WaterColorArray[0].g:= t;
             WaterColorArray[0].b:= t
             end;
-        WaterColorArray[1]:= WaterColorArray[0];
-        end
-    else if key = 'water-bottom' then
-        begin
-        i:= Pos(',', s);
-        WaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        i:= Pos(',', s);
-        WaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        WaterColorArray[2].b:= StrToInt(Trim(s));
-        WaterColorArray[2].a := 255;
-        if GrayScale then
-            begin
-            t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then
-                t:= 255;
-            WaterColorArray[2].r:= t;
-            WaterColorArray[2].g:= t;
-            WaterColorArray[2].b:= t
-            end;
-        WaterColorArray[3]:= WaterColorArray[2];
+        WaterColorArray[2]:= WaterColorArray[0];
+        WaterColorArray[4]:= WaterColorArray[0];
+        WaterColorArray[6]:= WaterColorArray[0];
         end
     else if key = 'water-opacity' then
         begin
@@ -605,7 +630,9 @@ while not pfsEOF(f) do
         SDWaterOpacity:= WaterOpacity
         end
     else if key = 'music' then
-        SetMusicName(Trim(s))
+        MusicFN:= Trim(s)
+    else if key = 'sd-music' then
+        SDMusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div 4096;
@@ -713,6 +740,29 @@ while not pfsEOF(f) do
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);
+        SDWaterColorArray[1].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDWaterColorArray[1].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        SDWaterColorArray[1].b:= StrToInt(Trim(s));
+        SDWaterColorArray[1].a := 255;
+        if GrayScale then
+            begin
+            t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            SDWaterColorArray[1].r:= t;
+            SDWaterColorArray[1].g:= t;
+            SDWaterColorArray[1].b:= t
+            end;
+        SDWaterColorArray[3]:= SDWaterColorArray[1];
+        SDWaterColorArray[5]:= SDWaterColorArray[1];
+        SDWaterColorArray[7]:= SDWaterColorArray[1];
+        end
+    else if key = 'sd-water-bottom' then
+        begin
+        i:= Pos(',', s);
         SDWaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
@@ -722,35 +772,16 @@ while not pfsEOF(f) do
         SDWaterColorArray[0].a := 255;
         if GrayScale then
             begin
-            t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
                 t:= 255;
             SDWaterColorArray[0].r:= t;
             SDWaterColorArray[0].g:= t;
             SDWaterColorArray[0].b:= t
             end;
-        SDWaterColorArray[1]:= SDWaterColorArray[0];
-        end
-    else if key = 'sd-water-bottom' then
-        begin
-        i:= Pos(',', s);
-        SDWaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        i:= Pos(',', s);
-        SDWaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        SDWaterColorArray[2].b:= StrToInt(Trim(s));
-        SDWaterColorArray[2].a := 255;
-        if GrayScale then
-            begin
-            t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then
-                t:= 255;
-            SDWaterColorArray[2].r:= t;
-            SDWaterColorArray[2].g:= t;
-            SDWaterColorArray[2].b:= t
-            end;
-        SDWaterColorArray[3]:= SDWaterColorArray[2];
+        SDWaterColorArray[2]:= SDWaterColorArray[0];
+        SDWaterColorArray[4]:= SDWaterColorArray[0];
+        SDWaterColorArray[6]:= SDWaterColorArray[0];
         end
     else if key = 'sd-water-opacity' then
         SDWaterOpacity:= StrToInt(Trim(s))
@@ -856,17 +887,25 @@ begin
 end;
 
 procedure AddObjects();
-var i, g: Longword;
+var girSurf: PSDL_Surface;
+    i, g: Longword;
 begin
 InitRects;
 if hasGirders then
     begin
     g:= max(playWidth div 8, 256);
     i:= leftX + g;
+    girSurf:= nil;
     repeat
-        AddGirder(i);
+        AddGirder(i, girSurf);
         i:=i + g;
     until (i > rightX - g);
+    // free girder surface
+    if girSurf <> nil then
+        begin
+        SDL_FreeSurface(girSurf);
+        girSurf:= nil;
+        end;
     end;
 if (GameFlags and gfDisableLandObjects) = 0 then
     AddThemeObjects(ThemeObjects);

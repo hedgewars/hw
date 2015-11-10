@@ -58,6 +58,7 @@
 00:54=Miotacz błota
 00:55=Zamrażarka
 00:56=Tasak
+00:57=Guma
 
 01:00=Walczmy!
 01:01=Remis
@@ -81,6 +82,9 @@
 01:19=Ekstremalne
 01:20=%1 odbicie
 01:21=Dźwięk wyciszony
+01:22=Tryb AFK
+01:23=Automatyczne wyłączanie kamery
+01:24=Automatyczne włączanie kamery
 
 ; Event messages
 ; Hog (%1) died
@@ -544,6 +548,7 @@
 03:54=Narzędzie
 03:55=Przełammy lody!
 03:56=Nie przytnij sobie igieł!
+03:57=Narzędzie
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -604,6 +609,7 @@
 04:54=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, zatykaj tunele.|Uważaj by nie zasypać samego siebie!
 04:55=Epoka lodowcowa powraca!!|Zamroź jeże, uczyń podłoże śliskim lub zapobiegnij|utonięciu zamrażając wodę.|Atak: Strzał
 04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)
+04:57=Budowanie elastyczny pasek wykonany z gumy,|z których jeże i inne rzeczy|odbijają się bez obrażeń upadku.|Lewo/Prawo: Zmiana orientacji pasek gumy|Kursor: Umieść pasek gumy w aktualnej pozycji
 
 ; Game goal strings
 05:00=Ustawienia gry

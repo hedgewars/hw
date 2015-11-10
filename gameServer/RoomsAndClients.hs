@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE BangPatterns, GeneralizedNewtypeDeriving #-}
 
 module RoomsAndClients(
@@ -22,6 +40,7 @@ module RoomsAndClients(
     client'sM,
     room'sM,
     allClientsM,
+    allRoomsM,
     clientsM,
     roomsM,
     roomClientsM,
@@ -157,6 +176,9 @@ room'sM (MRoomsAndClients (rooms, _)) f (RoomIndex ri) = liftM (f . room') (room
 
 allClientsM :: MRoomsAndClients r c -> IO [ClientIndex]
 allClientsM (MRoomsAndClients (_, clients)) = liftM (map ClientIndex) $ indicesM clients
+
+allRoomsM :: MRoomsAndClients r c -> IO [RoomIndex]
+allRoomsM (MRoomsAndClients (rooms, _)) = liftM (map RoomIndex) $ indicesM rooms
 
 clientsM :: MRoomsAndClients r c -> IO [c]
 clientsM (MRoomsAndClients (_, clients)) = indicesM clients >>= mapM (liftM client' . readElem clients)

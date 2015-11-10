@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef _HWMAP_INCLUDED
@@ -22,16 +22,17 @@
 
 #include <QByteArray>
 #include <QString>
-#include <QImage>
+#include <QPixmap>
 
 #include "tcpBase.h"
 
 enum MapGenerator
 {
-    MAPGEN_REGULAR,
-    MAPGEN_MAZE,
-    MAPGEN_DRAWN,
-    MAPGEN_MAP
+    MAPGEN_REGULAR = 0,
+    MAPGEN_MAZE = 1,
+    MAPGEN_PERLIN = 2,
+    MAPGEN_DRAWN = 3,
+    MAPGEN_MAP = 4
 };
 
 class HWMap : public TCPBase
@@ -41,7 +42,7 @@ class HWMap : public TCPBase
     public:
         HWMap(QObject *parent = 0);
         virtual ~HWMap();
-        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData);
+        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script, QString & scriptparam, int feature_size);
         bool couldBeRemoved();
 
     protected:
@@ -50,14 +51,17 @@ class HWMap : public TCPBase
         virtual void SendToClientFirst();
 
     signals:
-        void ImageReceived(const QImage newImage);
+        void ImageReceived(const QPixmap & newImage);
         void HHLimitReceived(int hhLimit);
 
     private:
         QString m_seed;
+        QString m_script;
+        QString m_scriptparam;
         int templateFilter;
         MapGenerator m_mapgen;
-        int m_maze_size;
+        int m_maze_size;  // going to try and deprecate this one
+        int m_feature_size;
         QByteArray m_drawMapData;
 
     private slots:

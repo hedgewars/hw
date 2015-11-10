@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include <QStandardItemModel>
@@ -37,7 +37,7 @@ bool custom_config = false;
 bool custom_data = false;
 
 int cMaxTeams = 8;
-int cMinServerVersion = 1;
+int cMinServerVersion = 3;
 
 QString * cDefaultAmmoStore = new QString( AMMOLINE_DEFAULT_QT AMMOLINE_DEFAULT_PROB
                                            AMMOLINE_DEFAULT_DELAY AMMOLINE_DEFAULT_CRATE );
@@ -67,6 +67,15 @@ QList< QPair<QString, QString> > cDefaultAmmos =
         << qMakePair(QString("One of Everything"), QString(
             AMMOLINE_ONEEVERY_QT AMMOLINE_ONEEVERY_PROB
             AMMOLINE_ONEEVERY_DELAY AMMOLINE_ONEEVERY_CRATE ))
+        << qMakePair(QString("Highlander"), QString(
+            AMMOLINE_HIGHLANDER_QT AMMOLINE_HIGHLANDER_PROB
+            AMMOLINE_HIGHLANDER_DELAY AMMOLINE_HIGHLANDER_CRATE ))
+		<< qMakePair(QString("Construction Mode"),   QString(
+            AMMOLINE_CONSTRUCTION_QT AMMOLINE_CONSTRUCTION_PROB
+            AMMOLINE_CONSTRUCTION_DELAY AMMOLINE_CONSTRUCTION_CRATE ))
+		<< qMakePair(QString("Shoppa Pro"), QString(
+            AMMOLINE_SHOPPAPRO_QT AMMOLINE_SHOPPAPRO_PROB
+            AMMOLINE_SHOPPAPRO_DELAY AMMOLINE_SHOPPAPRO_CRATE ))
         ;
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;

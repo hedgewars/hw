@@ -1,0 +1,44 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Choisissez la même couleur qu'un ami pour jouer dans la même équipe. Chacun de vous continuera à contrôler son ou ses hérissons mais ils gagneront ou perdront ensembles.</tip>
+    <tip>Certaines armes peuvent occasionner seulement de faibles dommages mais être beaucoup plus dévastatrices dans la situation adéquate. Essayez le Révolver pour envoyer plusieurs hérissons à l'eau.</tip>
+    <tip>Si vous ne savez pas quoi faire et ne voulez pas gaspiller de munitions, passez un tour. Mais ne laissez pas trop filer le temps ou ce sera la Mort Subite !</tip>
+    <tip>Si vous voulez empêcher les autres d'utiliser votre pseudo sur le serveur officiel, créez un compte sur http://www.hedgewars.org/.</tip>
+    <tip>Assez du mode par défaut ? Essayez une des missions - elles offrent différents types de jeu suivant votre choix.</tip>
+    <tip>Par défaut le jeu enregistre la dernière partie jouée comme une démonstration. Sélectionnez « Jeu en local » puis « Démonstrations » en bas à droite pour les visionner ou les gérer.</tip>
+    <tip>Hedgewars est un jeu libre et gratuit créé sur notre temps libre. Si vous avez des problèmes, demandez sur nos forums mais n'attendez pas de support 24h/24.</tip>
+    <tip>Hedgewars est un jeu libre et gratuit créé sur notre temps libre. Si vous l'aimez, aidez-nous avec un petit don ou contribuez par votre travail !</tip>
+    <tip>Hedgewars est un jeu libre et gratuit créé sur notre temps libre. Partagez-le avec votre famille et vos amis comme vous le voulez !</tip>
+    <tip>De temps en temps il y aura des tournois officiels. Les évènements à venir seront annoncés sur http://www.hedgewars.org/ quelques jours à l'avance.</tip>
+    <tip>Hedgewars est disponible dans de nombreuses langues. Si la traduction dans votre langue est partielle ou obsolète, contactez-nous !</tip>
+    <tip>Hedgewars peux être exécuté sur de nombreux systèmes d'exploitation différents, incluant Microsoft Windows, Mac OS X et Linux. </tip>
+    <tip>Souvenez-vous que vous pouvez créer votre propres parties en local et en ligne. Vous n'est pas limités aux options de jeu par défaut.</tip>
+    <tip>Vous devriez faire une petite pause au moins une fois par heure.</tip>
+    <tip>Si votre carte graphique ne peut pas fournir d'accélération matérielle pour OpenGL, essayez le mode de faible qualité pour améliorer les performances.</tip>
+    <tip>Nous sommes ouverts aux suggestions et au critiques constructives. Si vous n'aimez pas quelque chose ou avez une grande idée, contactez-nous !</tip>
+    <tip>Particulièrement quand vous jouez en ligne soyez polis et n'oubliez pas que certains joueurs peuvent être mineurs.</tip>
+    <tip>Les modes de jeu spéciaux comme « Vampirisme » ou « Karma » vous permettent de développer de nouvelles tactiques. Essayez-les en parties personnalisées !</tip>
+    <tip>Vous ne devriez jamais installer Hedgewars sur des ordinateurs ne vous appartenant pas (école, université, travail, etc...). Demandez au responsable !</tip>
+    <tip>Hedgewars peut être parfait pour des parties courtes pendant une pause. Assurez-vous juste de ne pas avoir mis trop de hérissons ou de ne pas utiliser une carte énorme. Réduire le temps ou la santé peuvent aider également.</tip>
+    <tip>Aucun hérisson n'a été blessé durant la conception de ce jeu.</tip>
+    <tip>Hedgewars est un jeu libre et gratuit créé sur notre temps libre. Si quelqu'un vous l'a vendu, vous devriez vous faire rembourser !</tip>
+    <tip>Branchez une ou plusieurs manettes avant de lancer le jeu pour pouvoir contrôler vos équipes avec.</tip>
+    <tip>Créer un compte sur %1 vous permet d'empêcher les autres d'utiliser votre pseudo favori sur le serveur officiel.</tip>
+    <tip>Si votre carte graphique ne peut pas fournir d'accélération matérielle pour OpenGL, essayez d'installer les drivers associés.</tip>
+    <tip>Certaines armes demandent de la stratégie ou juste beaucoup d'entrainement, alors ne laissez pas tomber une arme si vous avez raté une fois un ennemi.</tip>
+    <tip>La plupart des armes ne fonctionnent pas une fois qu'elles ont touché l'eau. L'Abeille Missile ou le Gâteau sont des exceptions.</tip>
+    <tip>La distance maximale que le Gâteau peux parcourir dépend du terrain qu'il doit franchir. Utiliser [attack] pour le faire exploser avant.</tip>
+    <tip>Vous voulez savoir qui est derrière le jeu ? Cliquez sur le logo Hedgewars dans le menu principal pour voir les crédits.</tip>
+    <tip>Soyez libre de dessiner vos propres tombes, chapeaux, drapeaux ou même cartes et thèmes ! Mais pour les utiliser en ligne vous devrez les partager quelque part.</tip>
+    <tip>Vous voulez vraiment un chapeau spécifique ? Faites un don et recevez un chapeau exclusif de votre choix.</tip>
+    <tip>Conservez les pilotes de votre carte graphique à jour pour éviter les problèmes en jouant.</tip>
+    <tip>Vous pouvez trouver vos fichiers de configuration Hedgewars sous « Mes Documents\Hedgewars ». Créez des sauvegardes ou prenez les fichiers avec vous, mais ne les modifiez pas à la main !</tip>
+    <tip>Vous pouvez associer les fichiers relatifs à Hedgewars (parties enregistrées ou démonstrations) au jeu pour les lancer depuis votre navigateur de fichiers ou internet.</tip>
+    <tip>Vous aimez Hedgewars ? Devenez un fan sur %1 ou suivez-nous sur %2 !</tip>
+    <tip>Envie d'économiser des Cordes Ninja ? Relâchez la Corde Ninja en l'air et tirez à nouveau. Du moment que vous ne touchez pas le sol, vous réutiliserez votre Corde Ninja sans gaspiller de munitions.</tip>
+    <tip>Vous pouvez trouver vos fichiers de configuration Hedgewars sous « Library/Application Support/Hedgewars » dans votre répertoire personnel. Créez des sauvegardes ou prenez les fichiers avec vous, mais ne les modifiez pas à la main !</tip>
+    <tip>Vous pouvez trouver vos fichiers de configuration Hedgewars sous « .hedgewars » dans votre répertoire personnel. Créez des sauvegardes ou prenez les fichiers avec vous, mais ne les modifiez pas à la main !</tip>
+</tips>
