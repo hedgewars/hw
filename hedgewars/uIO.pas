@@ -163,7 +163,6 @@ case s[1] of
              ParseChatCommand('chatmsg ' + #4, s, 2)
           else
              isProcessed:= false;
-     'Y': ChatPasteBuffer:= copy(s, 2, Length(s) - 1);
      else
         isProcessed:= false;
      end;

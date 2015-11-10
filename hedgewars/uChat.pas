@@ -270,8 +270,6 @@ SetLine(Strs[lastStr], s, false);
 inc(visibleCount)
 end;
 
-procedure CheckPasteBuffer(); forward;
-
 procedure UpdateInputLinePrefix();
 begin
 if liveLua then
@@ -305,7 +303,6 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 // draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
-    CheckPasteBuffer();
 
     if InputLinePrefix.Tex = nil then
         RenderChatLineTex(InputLinePrefix, InputLinePrefix.s);
@@ -802,16 +799,18 @@ begin
 end;
 
 procedure PasteFromClipboard();
+var clip: PChar;
 begin
-    SendIPC(_S'Y');
-end;
-
-procedure CheckPasteBuffer();
-begin
-    if Length(ChatPasteBuffer) > 0 then
+    // use SDL2 clipboard functions
+    if SDL_HasClipboardText() then
         begin
-        InsertIntoInputStr(ChatPasteBuffer);
-        ChatPasteBuffer:= '';
+        clip:= SDL_GetClipboardText();
+        // returns NULL if not enough memory for a copy of clipboard content 
+        if clip <> nil then
+            begin
+            InsertIntoInputStr(shortstring(clip));
+            SDL_free(Pointer(clip));
+            end;
         end;
 end;
 
@@ -825,8 +824,6 @@ var i, btw, index: integer;
 begin
     LastKeyPressTick:= RealTicks;
     action:= true;
-
-    CheckPasteBuffer();
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;

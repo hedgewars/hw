@@ -267,12 +267,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
             QApplication::clipboard()->setText(QString::fromUtf8(msg.mid(2)));
             break;
         }
-        case 'Y':
-        {
-            // paste clipboard to game
-            SendIPC(QString("Y").toAscii() + QApplication::clipboard()->text().toUtf8().left(250).replace('\n', ' '));
-            break;
-        }
         case 'i':
         {
             emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));

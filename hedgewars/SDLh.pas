@@ -780,6 +780,8 @@ function  SDL_Init(flags: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_InitSubSystem(flags: LongWord): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
+procedure SDL_free(mem: Pointer); cdecl; external SDLLibName;
+
 procedure SDL_Delay(msec: LongWord); cdecl; external SDLLibName;
 function  SDL_GetTicks: LongWord; cdecl; external SDLLibName;
 
@@ -986,6 +988,9 @@ procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_Net
 function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
 function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
+// SDL 2 clipboard functions
+function SDL_HasClipboardText(): Boolean; cdecl; external SDLLibName;
+function SDL_GetClipboardText(): PChar; cdecl; external SDLLibName;
 
 procedure SDLNet_Write16(value: Word; buf: Pointer);
 procedure SDLNet_Write32(value: LongWord; buf: Pointer);
@@ -1059,6 +1064,7 @@ begin
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
 end;
+
 
 end.
 
