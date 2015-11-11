@@ -210,7 +210,8 @@ end;
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
-    code:= event.keysym.scancode;
+    // TODO
+    code:= LongInt(event.keysym.scancode);
     //writelntoconsole('[KEY] '+inttostr(code)+ ' -> ''' +KeyNames[code] + ''', type = '+inttostr(event.type_));
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
@@ -315,7 +316,7 @@ begin
 
     for i:= 0 to cKeyMaxIndex - 5 do
         begin
-        s:= shortstring(SDL_GetScancodeName(i));
+        s:= shortstring(SDL_GetScancodeName(TSDL_Scancode(i)));
 
         for t:= 1 to Length(s) do
             if s[t] = ' ' then
