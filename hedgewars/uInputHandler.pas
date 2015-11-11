@@ -326,7 +326,7 @@ begin
 
 
     // get the size of keyboard array
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
 
     // Controller(s)
     for j:= 0 to Pred(ControllerNumControllers) do
@@ -462,7 +462,7 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 var
     k: LongInt;
 begin
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
     k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
     ProcessKey(k +  axis*2, value > 20000);
     ProcessKey(k + (axis*2)+1, value < -20000);
@@ -472,7 +472,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 var
     k: LongInt;
 begin
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
     k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
     ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 0, (value and SDL_HAT_UP)   <> 0);
     ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 1, (value and SDL_HAT_RIGHT)<> 0);
@@ -484,7 +484,7 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 var
     k: LongInt;
 begin
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
     k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
     ProcessKey(k +  ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + button, pressed);
 end;

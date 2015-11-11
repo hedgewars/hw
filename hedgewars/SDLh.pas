@@ -1115,7 +1115,7 @@ procedure SDL_SetEventFilter(filter: TSDL_EventFilter); cdecl; external SDLLibNa
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); inline;
 
-function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName  name 'SDL_GetKeyboardState';
+function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : Byte); cdecl; external SDLLibName;
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
