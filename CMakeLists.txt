@@ -8,6 +8,12 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
     endif()
 endforeach()
 
+foreach(hwpolicy CMP0026)
+    if(POLICY ${hwpolicy})
+        cmake_policy(SET ${hwpolicy} OLD)
+    endif()
+endforeach()
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
