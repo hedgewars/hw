@@ -299,7 +299,7 @@ else
 image^.size:= size;
 image^.buffer:= p;
 
-SDL_CreateThread(@SaveScreenshot, 'snapshot', image);
+SDL_CreateThread(@SaveScreenshot, PChar('snapshot'), image);
 MakeScreenshot:= true; // possibly it is not true but we will not wait for thread to terminate
 end;
 

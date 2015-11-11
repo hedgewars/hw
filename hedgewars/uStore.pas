@@ -984,7 +984,7 @@ end;
 procedure InitOffscreenOpenGL;
 begin
     // create hidden window
-    SDLwindow:= SDL_CreateWindow('hedgewars video rendering (SDL2 hidden window)',
+    SDLwindow:= SDL_CreateWindow(PChar('hedgewars video rendering (SDL2 hidden window)'),
                                  SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
                                  cScreenWidth, cScreenHeight,
                                  SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
@@ -1081,7 +1081,7 @@ begin
         flags:= flags or SDL_WINDOW_FULLSCREEN;
 
     if SDLwindow = nil then
-        SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+        SDLwindow:= SDL_CreateWindow(PChar('Hedgewars'), x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
 
     SetupOpenGL();
