@@ -16,7 +16,7 @@ matrix:
     # Failures we expect here
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install debhelper cmake dpkg-dev libqt4-dev qt4-qmake libphysfs-dev libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-net1.2-dev bzip2 ghc libghc-mtl-dev libghc-parsec3-dev libghc-bytestring-show-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-stm-dev libghc-network-dev libghc-dataenc-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev liblua5.1-0-dev imagemagick fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev freeglut3-dev libglew1.6-dev
+  - sudo apt-get install debhelper cmake dpkg-dev libqt4-dev qt4-qmake libphysfs-dev libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-net-dev bzip2 ghc libghc-mtl-dev libghc-parsec3-dev libghc-bytestring-show-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-stm-dev libghc-network-dev libghc-dataenc-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev liblua5.1-0-dev imagemagick fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev freeglut3-dev libglew1.6-dev
 script: 
   - mkdir build && cd build && cmake $BUILD_ARGS .. && make VERBOSE=1 && make test_verbose
 notifications:
