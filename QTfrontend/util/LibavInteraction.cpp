@@ -33,8 +33,11 @@ extern "C"
 #include "HWApplication.h"
 
 // compatibility section
-#if LIBAVCODEC_VERSION_MAJOR < 55
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(54, 8, 0)
 #define av_codec_is_encoder(x)          x->encode
+#endif
+
+#if LIBAVCODEC_VERSION_MAJOR < 55
 #define AVCodecID                       CodecID
 #endif
 
