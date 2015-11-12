@@ -1,6 +1,8 @@
 Hedgewars - a turn based strategy game.
 =======================================
 
+[![Build Status](https://travis-ci.org/hedgewars/hw.svg)](https://travis-ci.org/hedgewars/hw)
+
 Copyright 2004-2015 Andrey Korotaev <unC0Rr@gmail.com> and others.
 See QTfrontend/res/html/about.html and CREDITS for a complete list of authors.
 
