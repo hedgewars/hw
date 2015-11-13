@@ -1084,6 +1084,15 @@ begin
         SDLwindow:= SDL_CreateWindow(PChar('Hedgewars'), x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
 
+    // load engine ico
+    {$IFNDEF DARWIN}
+    ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
+    if ico <> nil then
+        begin
+        SDL_SetWindowIcon(SDLwindow, ico);
+        SDL_FreeSurface(ico);
+        end;
+    {$ENDIF}
     SetupOpenGL();
 
     if reinit then
