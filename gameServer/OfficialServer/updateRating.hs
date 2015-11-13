@@ -24,10 +24,11 @@ data GameData = GameData {
 g_φ :: Double -> Double
 g_φ φ = 1 / sqrt (1 + 3 * φ^2 / pi^2)
 
-calcE :: GameData -> (Double, Double)
+calcE :: GameData -> (Double, Double, Double)
 calcE (GameData oldRating oppRating s) = (
     1 / (1 + exp (g_φᵢ * (μᵢ - μ)))
     , g_φᵢ
+    , s
     )
     where
         μ = (ratingValue oldRating - 1500) / 173.7178
@@ -39,13 +40,14 @@ calcE (GameData oldRating oppRating s) = (
 
 calcNewRating :: [GameData] -> RatingData
 calcNewRating [] = undefined
-calcNewRating games@(GameData oldRating _ _ : _) = undefined
+calcNewRating games@(GameData oldRating _ _ : _) = RatingData (173.7178 * μ' + 1500) (173.7178 * sqrt φ'sqr) σ'
     where
         _Es = map calcE games
         υ = 1 / sum (map υ_p _Es)
-        υ_p (_Eᵢ, g_φᵢ) = g_φᵢ ^ 2 * _Eᵢ * (1 - _Eᵢ)
-        _Δ = υ * sum (map _Δ_p $ zip _Es (map gameScore games))
-        _Δ_p ((_Eᵢ, g_φᵢ), sᵢ) = g_φᵢ * (sᵢ - _Eᵢ)
+        υ_p (_Eᵢ, g_φᵢ, _) = g_φᵢ ^ 2 * _Eᵢ * (1 - _Eᵢ)
+        _Δ = υ * part1
+        part1 = sum (map _Δ_p _Es)
+        _Δ_p (_Eᵢ, g_φᵢ, sᵢ) = g_φᵢ * (sᵢ - _Eᵢ)
 
         μ = (ratingValue oldRating - 1500) / 173.7178
         φ = rD oldRating / 173.7178
@@ -63,5 +65,7 @@ calcNewRating games@(GameData oldRating _ _ : _) = undefined
         step5 (_A, fA, _B, fB) = let _C = _A + (_A - _B) * fA / (fB - fA); fC = f _C in
                                      if fC * fB < 0 then (_B, fB, _C, fC) else (_A, fA / 2, _C, fC)
 
+        φ'sqr = 1 / (1 / (φ ^ 2 + σ' ^ 2) + 1 / υ)
+        μ' = μ + φ'sqr * part1
 
 main = undefined
