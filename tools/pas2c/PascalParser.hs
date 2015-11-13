@@ -198,7 +198,7 @@ typeDecl = choice [
         char' ';'
         comments
         return u
-    sequenceDecl = (parens pas) $ (commaSep pas) (iD >>= \i -> optional (spaces >> string' ":=" >> spaces >> integer pas) >> return i)
+    sequenceDecl = (parens pas) $ (commaSep pas) (iD >>= \i -> optional (spaces >> char' '=' >> spaces >> integer pas) >> return i)
     functionType = do
         fp <- try (string "function") <|> try (string "procedure")
         comments
