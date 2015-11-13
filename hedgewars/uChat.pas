@@ -797,22 +797,17 @@ begin
 end;
 
 procedure KeyPressChat(keysym: TSDL_Keysym);
-const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
-      nonStateMask = (not (KMOD_NUM or KMOD_CAPS));
-var i, btw, index: integer;
-    utf8: shortstring;
-    action, selMode, ctrl, ctrlonly: boolean;
+const nonStateMask = (not (KMOD_NUM or KMOD_CAPS));
+var i, index: integer;
+    selMode, ctrl, ctrlonly: boolean;
     skip: TCharSkip;
     Scancode: TSDL_Scancode;
-    Sym: TSDL_Keycode;
     Modifier: Word;
 begin
     Scancode:= keysym.scancode;
-    Sym:= keysym.sym;
     Modifier:= keysym.modifier;
 
     LastKeyPressTick:= RealTicks;
-    action:= true;
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
@@ -985,16 +980,12 @@ begin
                 cursorPos:= Length(InputStr.s);
                 UpdateCursorCoords();
                 end
-            else
-                action:= false;
             end;
         SDL_SCANCODE_c:
             begin
             // copy
             if ctrlonly then
                 CopySelectionToClipboard()
-            else
-                action:= false;
             end;
         SDL_SCANCODE_v:
             begin
@@ -1004,8 +995,6 @@ begin
                 DeleteSelected();
                 PasteFromClipboard();
                 end
-            else
-                action:= false;
             end;
         SDL_SCANCODE_x:
             begin
@@ -1015,51 +1004,8 @@ begin
                 CopySelectionToClipboard();
                 DeleteSelected();
                 end
-            else
-                action:= false;
             end;
-        else
-            action:= false;
         end;
-    (*
-    if (not action) and (Sym <> SDLK_UNKNOWN) and ((Sym and SDLK_SCANCODE_MASK) = 0) then
-        begin
-        DeleteSelected();
-
-        if (Sym < $80) then
-            btw:= 1
-        else if (Sym < $800) then
-            btw:= 2
-        else if (Sym < $10000) then
-            btw:= 3
-        else
-            btw:= 4;
-
-        utf8:= '';
-
-        for i:= btw downto 2 do
-            begin
-            utf8:= char((Sym or $80) and $BF) + utf8;
-            Sym:= Sym shr 6
-            end;
-
-        utf8:= char(Sym or firstByteMark[Pred(btw)]) + utf8;
-
-        if Length(InputStr.s) + btw > MaxInputStrLen then
-            exit;
-
-        // if speech bubble quotes are used as first input, add the closing quote and place cursor inbetween
-        if (Length(InputStr.s) = 0) and (Length(utf8) = 1) and (charIsForHogSpeech(utf8[1])) then
-            begin
-            InsertIntoInputStr(utf8);
-            InsertIntoInputStr(utf8);
-            cursorPos:= 1;
-            UpdateCursorCoords();
-            end
-        else
-            InsertIntoInputStr(utf8);
-        end
-        *)
 end;
 
 procedure TextInput(var event: TSDL_TextInputEvent);
