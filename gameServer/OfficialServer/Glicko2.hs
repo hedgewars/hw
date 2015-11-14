@@ -36,7 +36,11 @@ calcE oldRating (GameData oppRating s) = (
 
 
 calcNewRating :: RatingData -> [GameData] -> RatingData
-calcNewRating oldRating [] = oldRating
+calcNewRating oldRating [] = RatingData (ratingValue oldRating) (173.7178 * sqrt (φ ^ 2 + σ ^ 2)) σ
+    where
+        φ = rD oldRating / 173.7178
+        σ = volatility oldRating
+
 calcNewRating oldRating games = RatingData (173.7178 * μ' + 1500) (173.7178 * sqrt φ'sqr) σ'
     where
         _Es = map (calcE oldRating) games

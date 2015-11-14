@@ -11,6 +11,7 @@ import Control.Monad
 import Control.Exception
 import System.IO
 import qualified  Data.Map as Map
+import Data.Time.Clock
 ------
 import OfficialServer.Glicko2
 
@@ -21,8 +22,6 @@ queryGameResults =
         "SELECT \
         \     p.userid \
         \     , p.place \
-        \     , o.userid \
-        \     , o.place \
         \     , COALESCE(vp.rating, 1500) \
         \     , COALESCE(vp.rd, 350) \
         \     , COALESCE(vp.volatility, 0.06) \
@@ -38,15 +37,36 @@ queryGameResults =
         \     LEFT OUTER JOIN rating_values as vo ON (vo.epoch = e.epoch AND vo.userid = o.userid) \
         \ GROUP BY p.userid, p.gameid, p.place \
         \ ORDER BY p.userid"
+insertNewRatings = "INSERT INTO rating_values (userid, epoch, rating, rd, volatility) VALUES (?, ?, ?, ?, ?)"
+insertNewEpoch = "INSERT INTO rating_epochs (epoch, todatetime) VALUES (?, ?)"
 
---Map Int (RatingData, [GameData])
-calculateRatings dbConn = do
-    initRatingData <- (Map.fromList . map fromDBrating) `fmap` query_ dbConn queryPreviousRatings
-    return ()
-
+mergeRatingData :: Map.Map Int (RatingData, [GameData]) -> [(Int, (RatingData, [GameData]))] -> Map.Map Int (RatingData, [GameData])
+mergeRatingData m s = foldr (unc0rry (Map.insertWith mf)) m s
     where
-        fromDBrating (a, b, c, d) = (a, (RatingData b c d, []))
+        mf (rd, gds) (_, gds2) = (rd, gds ++ gds2)
+        unc0rry f (a, b) c = f a b c
 
+calculateRatings dbConn = do
+    [(epochNum :: Int, fromDate :: UTCTime, toDate :: UTCTime)] <- query_ dbConn queryEpochDates
+    initRatingData <- (Map.fromList . map fromDBrating) `fmap` query_ dbConn queryPreviousRatings
+    gameData <- map fromGameResult `fmap` query_ dbConn queryGameResults
+    let mData = map getNewRating . Map.toList $ mergeRatingData initRatingData gameData
+    executeMany dbConn insertNewRatings $ map (toInsert epochNum) mData
+    execute dbConn insertNewEpoch (epochNum + 1, toDate)
+    return ()
+    where
+        toInsert e (i, RatingData r rd v) = (i, e + 1, r, rd, v)
+        getNewRating (a, d) = (a, uncurry calcNewRating d)
+        convPlace :: Int -> Double
+        convPlace 0 = 0.5
+        convPlace 1 = 1.0
+        convPlace 2 = 0.0
+        convPlace _ = error "Incorrect place value"
+        fromDBrating (a, b, c, d) = (a, (RatingData b c d, []))
+        fromGameResult (pid, place, prating, pRD, pvol, orating, oRD, ovol) =
+            (pid,
+                (RatingData prating pRD pvol
+                , [GameData (RatingData orating oRD ovol) $ convPlace place]))
 
 
 data DBConnectInfo = DBConnectInfo {
