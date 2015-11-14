@@ -53,16 +53,6 @@ interface
     type PLongInt = ^LongInt;
 {$ENDIF}
 
-{$IFDEF DARWIN}
-    {$IFNDEF HWLIBRARY}
-        {$linkframework SDL2}
-        {$linkframework SDL2_net}
-        {$linkframework SDL2_image}
-        {$linkframework SDL2_ttf}
-        {$linkframework SDL2_mixer}
-    {$ENDIF}
-{$ENDIF}
-
 
 (*  SDL  *)
 const
