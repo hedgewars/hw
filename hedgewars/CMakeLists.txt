@@ -124,12 +124,6 @@ add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH}")
 
 #DEPENDECIES AND EXECUTABLES SECTION
 if(APPLE AND (NOT BUILD_ENGINE_LIBRARY))
-    #on OSX we need to provide the SDL_main() function when building as
-    #executable and the entry point too
-    add_subdirectory(sdlmain)
-    list(APPEND HW_LINK_LIBS SDLmain)
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdlmain")
-    add_flag_append(CMAKE_Pascal_FLAGS "-XMSDL_main")
     #OpenGL deps
     add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kCocoa")
     add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kOpenGL")
