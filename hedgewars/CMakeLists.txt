@@ -178,18 +178,6 @@ endif()
 list(APPEND HW_LINK_LIBS physlayer)
 
 
-#Mix_Init/Mix_Quit from SDL_mixer 1.2.10
-check_library_exists(${SDL2MIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
-if(HAVE_MIXINIT)
-    add_definitions(-dSDL_MIXER_NEWER)
-endif(HAVE_MIXINIT)
-
-#IMG_Init/IMG_Quit from SDL_image 1.2.8
-check_library_exists(${SDL2IMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
-if(HAVE_IMGINIT)
-    add_definitions(-dSDL_IMAGE_NEWER)
-endif(HAVE_IMGINIT)
-
 #opengl 2
 IF(GL2)
     add_definitions(-dGL2)
