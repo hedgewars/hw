@@ -3537,7 +3537,7 @@ var
 begin
     AllInactive := false;
 
-    if (Gear^.State and gsttmpFlag) = 0 then
+    if (Gear^.State and gsttmpFlag = 0) and (GameFlags and gfMoreWind = 0) then
         Gear^.dX := Gear^.dX + cWindSpeed;
 
     oldDx := Gear^.dX;
