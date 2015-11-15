@@ -15,7 +15,7 @@ data GameData = GameData {
     }
 
 τ, ε :: Double
-τ = 0.3
+τ = 0.2
 ε = 0.000001
 
 g_φ :: Double -> Double
@@ -35,13 +35,13 @@ calcE oldRating (GameData oppRating s) = (
         g_φᵢ = g_φ φᵢ
 
 
-calcNewRating :: RatingData -> [GameData] -> RatingData
-calcNewRating oldRating [] = RatingData (ratingValue oldRating) (173.7178 * sqrt (φ ^ 2 + σ ^ 2)) σ
+calcNewRating :: RatingData -> [GameData] -> (Int, RatingData)
+calcNewRating oldRating [] = (0, RatingData (ratingValue oldRating) (173.7178 * sqrt (φ ^ 2 + σ ^ 2)) σ)
     where
         φ = rD oldRating / 173.7178
         σ = volatility oldRating
 
-calcNewRating oldRating games = RatingData (173.7178 * μ' + 1500) (173.7178 * sqrt φ'sqr) σ'
+calcNewRating oldRating games = (length games, RatingData (173.7178 * μ' + 1500) (173.7178 * sqrt φ'sqr) σ')
     where
         _Es = map (calcE oldRating) games
         υ = 1 / sum (map υ_p _Es)

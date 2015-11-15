@@ -37,14 +37,13 @@ queryGameResults =
         \     LEFT OUTER JOIN rating_values as vo ON (vo.epoch = e.epoch AND vo.userid = o.userid) \
         \ GROUP BY p.userid, p.gameid, p.place \
         \ ORDER BY p.userid"
-insertNewRatings = "INSERT INTO rating_values (userid, epoch, rating, rd, volatility) VALUES (?, ?, ?, ?, ?)"
+insertNewRatings = "INSERT INTO rating_values (userid, epoch, rating, rd, volatility, games) VALUES (?, ?, ?, ?, ?, ?)"
 insertNewEpoch = "INSERT INTO rating_epochs (epoch, todatetime) VALUES (?, ?)"
 
 mergeRatingData :: Map.Map Int (RatingData, [GameData]) -> [(Int, (RatingData, [GameData]))] -> Map.Map Int (RatingData, [GameData])
-mergeRatingData m s = foldr (unc0rry (Map.insertWith mf)) m s
+mergeRatingData m s = foldr (uncurry (Map.insertWith mf)) m s
     where
         mf (rd, gds) (_, gds2) = (rd, gds ++ gds2)
-        unc0rry f (a, b) c = f a b c
 
 calculateRatings dbConn = do
     [(epochNum :: Int, fromDate :: UTCTime, toDate :: UTCTime)] <- query_ dbConn queryEpochDates
@@ -55,7 +54,7 @@ calculateRatings dbConn = do
     execute dbConn insertNewEpoch (epochNum + 1, toDate)
     return ()
     where
-        toInsert e (i, RatingData r rd v) = (i, e + 1, r, rd, v)
+        toInsert e (i, (g, RatingData r rd v)) = (i, e + 1, r, rd, v, g)
         getNewRating (a, d) = (a, uncurry calcNewRating d)
         convPlace :: Int -> Double
         convPlace 0 = 0.5
