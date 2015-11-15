@@ -24,7 +24,7 @@ interface
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
-procedure SDLTry(Assert: boolean; isFatal: boolean);
+procedure SDLTry(Assert: boolean; Msg: shortstring; isFatal: boolean);
 
 implementation
 uses SDLh, uConsole, uCommands, uConsts;
@@ -47,13 +47,13 @@ if not Assert then
     OutError(Msg, isFatal)
 end;
 
-procedure SDLTry(Assert: boolean; isFatal: boolean);
+procedure SDLTry(Assert: boolean; Msg: shortstring; isFatal: boolean);
 var s: shortstring;
 begin
 if not Assert then
     begin
     s:= SDL_GetError();
-    OutError(s, isFatal)
+    OutError(Msg + ': ' + s, isFatal)
     end
 end;
 

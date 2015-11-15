@@ -126,10 +126,10 @@ replayToDemo ti mParams prms msgs = if not sane then (Nothing, []) else (Just $ 
             && Set.null (keys2 Set.\\ Map.keysSet prms)
             && (not . null . drop 41 $ scheme)
             && (not . null . tail $ prms Map.! "AMMO")
-            && ((B.length . head $ prms Map.! "AMMO") > 200)
+            && ((B.length . head . tail $ prms Map.! "AMMO") > 200)
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+", "+perlin+"]
         scriptName = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms
-        maybeScript = let s = scriptName in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
+        maybeScript = let s = scriptName in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", spaces2Underlining s, ".lua"]]
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
@@ -166,6 +166,7 @@ replayToDemo ti mParams prms msgs = if not sane then (Nothing, []) else (Just $ 
         infRopes = ammoStr `B.index` 7  == '9'
         vamp = gameFlags .&. 0x00000200 /= 0
         infattacks = gameFlags .&. 0x00100000 /= 0
+        spaces2Underlining = B.map (\c -> if c == ' ' then '_' else c)
 
 drawnMapData :: B.ByteString -> [B.ByteString]
 drawnMapData =
@@ -195,6 +196,7 @@ schemeParams = [
     , ("e$minesnum", 1)
     , ("e$minedudpct", 1)
     , ("e$explosives", 1)
+    , ("e$airmines", 1)
     , ("e$healthprob", 1)
     , ("e$hcaseamount", 1)
     , ("e$waterrise", 1)

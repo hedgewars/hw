@@ -716,7 +716,7 @@ row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, 'TryPlaceOnLand', true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
@@ -835,7 +835,7 @@ row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, 'EraseLand', true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
@@ -918,7 +918,7 @@ row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
@@ -930,7 +930,7 @@ finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask
 TryDo(finalSurface <> nil, 'GetPlaceCollisionTex: fail to create surface', true);
 
 if SDL_MustLock(finalSurface) then
-    SDLTry(SDL_LockSurface(finalSurface) >= 0, true);
+    SDLTry(SDL_LockSurface(finalSurface) >= 0, 'GetPlaceCollisionTex', true);
 
 p:= PLongWordArray(@(PLongWordArray(Image^.pixels)^[ (Image^.pitch div 4) * row * h + col * w ]));
 pt:= PLongWordArray(finalSurface^.pixels);

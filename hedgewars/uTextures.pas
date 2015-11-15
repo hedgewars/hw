@@ -236,7 +236,7 @@ glGenTextures(1, @Surface2Tex^.id);
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 
 if SDL_MustLock(surf) then
-    SDLTry(SDL_LockSurface(surf) >= 0, true);
+    SDLTry(SDL_LockSurface(surf) >= 0, 'Lock surface', true);
 
 fromP4:= Surf^.pixels;
 

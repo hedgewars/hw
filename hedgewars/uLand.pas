@@ -263,7 +263,7 @@ begin
 TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
 
 if SDL_MustLock(Surface) then
-    SDLTry(SDL_LockSurface(Surface) >= 0, true);
+    SDLTry(SDL_LockSurface(Surface) >= 0, 'SDL_LockSurface', true);
 
 p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
@@ -451,7 +451,7 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
     cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
     cpY:= LAND_HEIGHT - tmpsurf^.h;
     if SDL_MustLock(tmpsurf) then
-        SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
+        SDLTry(SDL_LockSurface(tmpsurf) >= 0, 'SDL_LockSurface', true);
 
         p:= tmpsurf^.pixels;
         for y:= 0 to Pred(tmpsurf^.h) do

@@ -105,16 +105,16 @@ procedure InitIPC;
 var ipaddr: TIPAddress;
 begin
     WriteToConsole('Init SDL_Net... ');
-    SDLTry(SDLNet_Init = 0, true);
+    SDLTry(SDLNet_Init = 0, 'SDLNet_Init', true);
     fds:= SDLNet_AllocSocketSet(1);
-    SDLTry(fds <> nil, true);
+    SDLTry(fds <> nil, 'SDLNet_AllocSocketSet', true);
     WriteLnToConsole(msgOK);
     WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
-    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, true);
+    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, 'SDLNet_ResolveHost', true);
     {$HINTS ON}
     IPCSock:= SDLNet_TCP_Open(ipaddr);
-    SDLTry(IPCSock <> nil, true);
+    SDLTry(IPCSock <> nil, 'SDLNet_TCP_Open', true);
     WriteLnToConsole(msgOK)
 end;
 
@@ -163,7 +163,6 @@ case s[1] of
              ParseChatCommand('chatmsg ' + #4, s, 2)
           else
              isProcessed:= false;
-     'Y': ChatPasteBuffer:= copy(s, 2, Length(s) - 1);
      else
         isProcessed:= false;
      end;

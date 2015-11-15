@@ -244,8 +244,6 @@ var
 
     MaxTextureSize: LongInt;
 
-    ChatPasteBuffer: shortstring;
-
 /////////////////////////////////////
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -2738,8 +2736,6 @@ begin
     cStereoDepth:= 0;
     cViewLimitsDebug:= false;
     AprilOne := false;
-
-    ChatPasteBuffer:= '';
 
     // initialize pointers to nil
     // (don't rely on implicit init of fpc, because that one only happens ONCE when used as lib)

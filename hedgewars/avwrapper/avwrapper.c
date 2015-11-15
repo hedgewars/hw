@@ -66,6 +66,17 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 #if LIBAVCODEC_VERSION_MAJOR < 56
 #define av_frame_alloc                      avcodec_alloc_frame
 #define av_frame_free                       av_freep
+#define av_packet_rescale_ts                rescale_ts
+
+static void rescale_ts(AVPacket *pkt, AVRational ctb, AVRational stb)
+{
+    if (pkt->pts != AV_NOPTS_VALUE)
+        pkt->pts = av_rescale_q(pkt->pts, ctb, stb);
+    if (pkt->dts != AV_NOPTS_VALUE)
+        pkt->dts = av_rescale_q(pkt->dts, ctb, stb);
+    if (pkt->duration > 0)
+        pkt->duration = av_rescale_q(pkt->duration, ctb, stb);
+}
 #endif
 
 #if LIBAVCODEC_VERSION_MAJOR < 57
@@ -149,6 +160,10 @@ static void AddAudioStream()
     g_pAudio->sample_rate = g_Frequency;
     g_pAudio->channels = g_Channels;
 
+    // set time base as invers of sample rate
+    g_pAudio->time_base.den = g_pAStream->time_base.den = g_Frequency;
+    g_pAudio->time_base.num = g_pAStream->time_base.num = 1;
+
     // set quality
     g_pAudio->bit_rate = 160000;
 
@@ -192,6 +207,8 @@ static int WriteAudioFrame()
 
     AVPacket Packet;
     av_init_packet(&Packet);
+    Packet.data = NULL;
+    Packet.size = 0;
 
     int NumSamples = fread(g_pSamples, 2*g_Channels, g_NumSamples, g_pSoundFile);
 
@@ -210,6 +227,8 @@ static int WriteAudioFrame()
         return FatalError("avcodec_encode_audio2 failed");
     if (!got_packet)
         return 0;
+
+    av_packet_rescale_ts(&Packet, g_pAudio->time_base, g_pAStream->time_base);
 #else
     if (NumSamples == 0)
         return 0;
@@ -252,9 +271,9 @@ static int AddVideoStream()
        of which frame timestamps are represented. for fixed-fps content,
        timebase should be 1/framerate and timestamp increments should be
        identically 1. */
-    g_pVideo->time_base.den = g_Framerate.num;
-    g_pVideo->time_base.num = g_Framerate.den;
-    //g_pVideo->gop_size = 12; /* emit one intra frame every twelve frames at most */
+    g_pVideo->time_base.den = g_pVStream->time_base.den = g_Framerate.num;
+    g_pVideo->time_base.num = g_pVStream->time_base.num = g_Framerate.den;
+
     g_pVideo->pix_fmt = AV_PIX_FMT_YUV420P;
 
     // set quality
@@ -309,6 +328,9 @@ static int AddVideoStream()
     if (!g_pVFrame)
         return FatalError("Could not allocate frame");
 
+    g_pVFrame->width = g_Width;
+    g_pVFrame->height = g_Height;
+    g_pVFrame->format = AV_PIX_FMT_YUV420P;
     g_pVFrame->linesize[0] = g_Width;
     g_pVFrame->linesize[1] = g_Width/2;
     g_pVFrame->linesize[2] = g_Width/2;
@@ -343,6 +365,7 @@ static int WriteFrame(AVFrame* pFrame)
     Packet.size = 0;
 
     g_pVFrame->pts++;
+#if LIBAVCODEC_VERSION_MAJOR < 58
     if (g_pFormat->flags & AVFMT_RAWPICTURE)
     {
         /* raw video case. The API will change slightly in the near
@@ -357,6 +380,7 @@ static int WriteFrame(AVFrame* pFrame)
         return 0;
     }
     else
+#endif
     {
 #if LIBAVCODEC_VERSION_MAJOR >= 54
         int got_packet;
@@ -365,10 +389,7 @@ static int WriteFrame(AVFrame* pFrame)
         if (!got_packet)
             return 0;
 
-        if (Packet.pts != AV_NOPTS_VALUE)
-            Packet.pts = av_rescale_q(Packet.pts, g_pVideo->time_base, g_pVStream->time_base);
-        if (Packet.dts != AV_NOPTS_VALUE)
-            Packet.dts = av_rescale_q(Packet.dts, g_pVideo->time_base, g_pVStream->time_base);
+        av_packet_rescale_ts(&Packet, g_pVideo->time_base, g_pVStream->time_base);
 #else
         Packet.size = avcodec_encode_video(g_pVideo, g_OutBuffer, OUTBUFFER_SIZE, pFrame);
         if (Packet.size < 0)
@@ -506,7 +527,7 @@ AVWRAP_DECL int AVWrapper_Close()
     {
         do
             ret = WriteFrame(NULL);
-        while (ret >= 0);
+        while (ret > 0);
         if (ret < 0)
             return ret;
     }
@@ -515,7 +536,7 @@ AVWRAP_DECL int AVWrapper_Close()
     {
         ret = WriteAudioFrame();
     }
-    while(ret >= 0);
+    while(ret > 0);
     if (ret < 0)
         return ret;
 

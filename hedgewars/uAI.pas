@@ -530,7 +530,7 @@ if Targets.Count = 0 then
 FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot));
 
 SDL_LockMutex(ThreadLock);
-ThinkThread:= SDL_CreateThread(@Think{$IFDEF SDL2}, 'think'{$ENDIF}, Me);
+ThinkThread:= SDL_CreateThread(@Think, PChar('think'), Me);
 SDL_UnlockMutex(ThreadLock);
 end;
 

@@ -5,6 +5,7 @@
  * Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed bee not being affected by wrap world edge while still being thrown
  * Fixed turn not ending when sticky mine was trapped on rubberband
+ * Various other fixes
 
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)

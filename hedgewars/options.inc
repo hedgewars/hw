@@ -60,10 +60,6 @@
     {$ENDIF}
 {$ENDIF}
 
-{$IFDEF USE_TOUCH_INTERFACE}
-    {$DEFINE SDL2}
-{$ENDIF}
-
 {$DEFINE _S:=}
 {$DEFINE _P:=}
 

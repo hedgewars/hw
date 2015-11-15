@@ -57,25 +57,17 @@ interface
 (*  SDL  *)
 const
 {$IFDEF WIN32}
-    SDLLibName = 'SDL.dll';
-    SDL_TTFLibName = 'SDL_ttf.dll';
-    SDL_MixerLibName = 'SDL_mixer.dll';
-    SDL_ImageLibName = 'SDL_image.dll';
-    SDL_NetLibName = 'SDL_net.dll';
+    SDLLibName = 'SDL2.dll';
+    SDL_TTFLibName = 'SDL2_ttf.dll';
+    SDL_MixerLibName = 'SDL2_mixer.dll';
+    SDL_ImageLibName = 'SDL2_image.dll';
+    SDL_NetLibName = 'SDL2_net.dll';
 {$ELSE}
-    {$IFDEF SDL2}
-        SDLLibName = 'libSDL2';
-        SDL_TTFLibName = 'libSDL2_ttf';
-        SDL_MixerLibName = 'libSDL2_mixer';
-        SDL_ImageLibName = 'libSDL2_image';
-        SDL_NetLibName = 'libSDL2_net';
-    {$ELSE}
-        SDLLibName = 'libSDL';
-        SDL_TTFLibName = 'libSDL_ttf';
-        SDL_MixerLibName = 'libSDL_mixer';
-        SDL_ImageLibName = 'libSDL_image';
-        SDL_NetLibName = 'libSDL_net';
-    {$ENDIF}
+    SDLLibName = 'libSDL2';
+    SDL_TTFLibName = 'libSDL2_ttf';
+    SDL_MixerLibName = 'libSDL2_mixer';
+    SDL_ImageLibName = 'libSDL2_image';
+    SDL_NetLibName = 'libSDL2_net';
 {$ENDIF}
 
 /////////////////////////////////////////////////////////////////
@@ -87,14 +79,9 @@ const
     SDL_INIT_AUDIO          = $00000010;
     SDL_INIT_VIDEO          = $00000020; // implies SDL_INIT_EVENTS (sdl2)
     SDL_INIT_JOYSTICK       = $00000200; // implies SDL_INIT_EVENTS (sdl2)
-{$IFDEF SDL2}
     SDL_INIT_HAPTIC         = $00001000;
     SDL_INIT_GAMECONTROLLER = $00002000; // implies SDL_INIT_JOYSTICK
     SDL_INIT_EVENTS         = $00004000;
-{$ELSE}
-    SDL_INIT_CDROM          = $00000100;
-    SDL_INIT_EVENTTHREAD    = $01000000;
-{$ENDIF}
     SDL_INIT_NOPARACHUTE    = $00100000;
     //SDL_INIT_EVERYTHING                // unsafe, init subsystems one at a time
 
@@ -108,7 +95,9 @@ const
     SDL_BUTTON_WHEELDOWN = 5;
 
 
-{$IFDEF SDL2}
+    SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
+    SDL_TEXTINPUTEVENT_TEXT_SIZE   = 32;
+
     // SDL_Event types
     // pascal does not support unions as is, so we list here every possible event
     // and later associate a struct type each
@@ -201,39 +190,6 @@ const
     SDL_WINDOWEVENT_FOCUS_GAINED = 12;   //*< Window has gained keyboard focus
     SDL_WINDOWEVENT_FOCUS_LOST   = 13;   //*< Window has lost keyboard focus
     SDL_WINDOWEVENT_CLOSE        = 14;   //*< The window manager requests that the window be closed */
-{$ELSE}
-    // SDL_Event types
-    SDL_NOEVENT         = 0;
-    SDL_ACTIVEEVENT     = 1;
-    SDL_KEYDOWN         = 2;
-    SDL_KEYUP           = 3;
-    SDL_MOUSEMOTION     = 4;
-    SDL_MOUSEBUTTONDOWN = 5;
-    SDL_MOUSEBUTTONUP   = 6;
-    SDL_JOYAXISMOTION   = 7;
-    SDL_JOYBALLMOTION   = 8;
-    SDL_JOYHATMOTION    = 9;
-    SDL_JOYBUTTONDOWN   = 10;
-    SDL_JOYBUTTONUP     = 11;
-    SDL_QUITEV          = 12;
-    SDL_VIDEORESIZE     = 16;
-
-    // SDL_Surface flags
-    SDL_SWSURFACE   = $00000000;
-    SDL_HWSURFACE   = $00000001;
-    SDL_OPENGL      = $00000002;
-    SDL_ASYNCBLIT   = $00000004;
-    SDL_RESIZABLE   = $00000010;
-    SDL_NOFRAME     = $00000020;
-    SDL_HWACCEL     = $00000100;
-    SDL_SRCCOLORKEY = $00001000;
-    SDL_RLEACCEL    = $00004000;
-    SDL_SRCALPHA    = $00010000;
-    SDL_ANYFORMAT   = $00100000;
-    SDL_HWPALETTE   = $20000000;
-    SDL_DOUBLEBUF   = $40000000;
-    SDL_FULLSCREEN  = $80000000;
-{$ENDIF}
 
 {$IFDEF ENDIAN_LITTLE}
     RMask = $000000FF;
@@ -269,11 +225,13 @@ const
     KMOD_MODE   = $4000;
 
     {* SDL_mixer *}
-    MIX_MAX_VOLUME = 128;
-    MIX_INIT_FLAC  = $00000001;
-    MIX_INIT_MOD   = $00000002;
-    MIX_INIT_MP3   = $00000004;
-    MIX_INIT_OGG   = $00000008;
+    MIX_MAX_VOLUME      = 128;
+    MIX_INIT_FLAC       = $00000001;
+    MIX_INIT_MOD        = $00000002;
+    MIX_INIT_MODPLUG    = $00000004;
+    MIX_INIT_MP3        = $00000008;
+    MIX_INIT_OGG        = $00000010;
+    MIX_INIT_FLUIDSYNTH = $00000020;
 
     {* SDL_TTF *}
     TTF_STYLE_NORMAL = 0;
@@ -296,7 +254,8 @@ const
     IMG_INIT_PNG = $00000002;
     IMG_INIT_TIF = $00000004;
 
-    {* SDL_keysym *}
+    {* SDL_keycode *}
+    SDLK_UNKNOWN = 0;
     SDLK_BACKSPACE = 8;
     SDLK_RETURN    = 13;
     SDLK_ESCAPE    = 27;
@@ -317,6 +276,250 @@ const
     SDLK_PAGEUP    = 280;
     SDLK_PAGEDOWN  = 281;
 
+    // special keycodes (for modifier keys etc. will have this bit set)
+    SDLK_SCANCODE_MASK = (1 shl 30);
+
+    SDL_SCANCODE_UNKNOWN = 0;
+    SDL_SCANCODE_A = 4;
+    SDL_SCANCODE_B = 5;
+    SDL_SCANCODE_C = 6;
+    SDL_SCANCODE_D = 7;
+    SDL_SCANCODE_E = 8;
+    SDL_SCANCODE_F = 9;
+    SDL_SCANCODE_G = 10;
+    SDL_SCANCODE_H = 11;
+    SDL_SCANCODE_I = 12;
+    SDL_SCANCODE_J = 13;
+    SDL_SCANCODE_K = 14;
+    SDL_SCANCODE_L = 15;
+    SDL_SCANCODE_M = 16;
+    SDL_SCANCODE_N = 17;
+    SDL_SCANCODE_O = 18;
+    SDL_SCANCODE_P = 19;
+    SDL_SCANCODE_Q = 20;
+    SDL_SCANCODE_R = 21;
+    SDL_SCANCODE_S = 22;
+    SDL_SCANCODE_T = 23;
+    SDL_SCANCODE_U = 24;
+    SDL_SCANCODE_V = 25;
+    SDL_SCANCODE_W = 26;
+    SDL_SCANCODE_X = 27;
+    SDL_SCANCODE_Y = 28;
+    SDL_SCANCODE_Z = 29;
+    SDL_SCANCODE_1 = 30;
+    SDL_SCANCODE_2 = 31;
+    SDL_SCANCODE_3 = 32;
+    SDL_SCANCODE_4 = 33;
+    SDL_SCANCODE_5 = 34;
+    SDL_SCANCODE_6 = 35;
+    SDL_SCANCODE_7 = 36;
+    SDL_SCANCODE_8 = 37;
+    SDL_SCANCODE_9 = 38;
+    SDL_SCANCODE_0 = 39;
+    SDL_SCANCODE_RETURN = 40;
+    SDL_SCANCODE_ESCAPE = 41;
+    SDL_SCANCODE_BACKSPACE = 42;
+    SDL_SCANCODE_TAB = 43;
+    SDL_SCANCODE_SPACE = 44;
+    SDL_SCANCODE_MINUS = 45;
+    SDL_SCANCODE_EQUALS = 46;
+    SDL_SCANCODE_LEFTBRACKET = 47;
+    SDL_SCANCODE_RIGHTBRACKET = 48;
+    SDL_SCANCODE_BACKSLASH = 49;
+    SDL_SCANCODE_NONUSHASH = 50;
+    SDL_SCANCODE_SEMICOLON = 51;
+    SDL_SCANCODE_APOSTROPHE = 52;
+    SDL_SCANCODE_GRAVE = 53;
+    SDL_SCANCODE_COMMA = 54;
+    SDL_SCANCODE_PERIOD = 55;
+    SDL_SCANCODE_SLASH = 56;
+    SDL_SCANCODE_CAPSLOCK = 57;
+    SDL_SCANCODE_F1 = 58;
+    SDL_SCANCODE_F2 = 59;
+    SDL_SCANCODE_F3 = 60;
+    SDL_SCANCODE_F4 = 61;
+    SDL_SCANCODE_F5 = 62;
+    SDL_SCANCODE_F6 = 63;
+    SDL_SCANCODE_F7 = 64;
+    SDL_SCANCODE_F8 = 65;
+    SDL_SCANCODE_F9 = 66;
+    SDL_SCANCODE_F10 = 67;
+    SDL_SCANCODE_F11 = 68;
+    SDL_SCANCODE_F12 = 69;
+    SDL_SCANCODE_PRINTSCREEN = 70;
+    SDL_SCANCODE_SCROLLLOCK = 71;
+    SDL_SCANCODE_PAUSE = 72;
+    SDL_SCANCODE_INSERT = 73;
+    SDL_SCANCODE_HOME = 74;
+    SDL_SCANCODE_PAGEUP = 75;
+    SDL_SCANCODE_DELETE = 76;
+    SDL_SCANCODE_END = 77;
+    SDL_SCANCODE_PAGEDOWN = 78;
+    SDL_SCANCODE_RIGHT = 79;
+    SDL_SCANCODE_LEFT = 80;
+    SDL_SCANCODE_DOWN = 81;
+    SDL_SCANCODE_UP = 82;
+    SDL_SCANCODE_NUMLOCKCLEAR = 83;
+    SDL_SCANCODE_KP_DIVIDE = 84;
+    SDL_SCANCODE_KP_MULTIPLY = 85;
+    SDL_SCANCODE_KP_MINUS = 86;
+    SDL_SCANCODE_KP_PLUS = 87;
+    SDL_SCANCODE_KP_ENTER = 88;
+    SDL_SCANCODE_KP_1 = 89;
+    SDL_SCANCODE_KP_2 = 90;
+    SDL_SCANCODE_KP_3 = 91;
+    SDL_SCANCODE_KP_4 = 92;
+    SDL_SCANCODE_KP_5 = 93;
+    SDL_SCANCODE_KP_6 = 94;
+    SDL_SCANCODE_KP_7 = 95;
+    SDL_SCANCODE_KP_8 = 96;
+    SDL_SCANCODE_KP_9 = 97;
+    SDL_SCANCODE_KP_0 = 98;
+    SDL_SCANCODE_KP_PERIOD = 99;
+    SDL_SCANCODE_NONUSBACKSLASH = 100;
+    SDL_SCANCODE_APPLICATION = 101;
+    SDL_SCANCODE_POWER = 102;
+    SDL_SCANCODE_KP_EQUALS = 103;
+    SDL_SCANCODE_F13 = 104;
+    SDL_SCANCODE_F14 = 105;
+    SDL_SCANCODE_F15 = 106;
+    SDL_SCANCODE_F16 = 107;
+    SDL_SCANCODE_F17 = 108;
+    SDL_SCANCODE_F18 = 109;
+    SDL_SCANCODE_F19 = 110;
+    SDL_SCANCODE_F20 = 111;
+    SDL_SCANCODE_F21 = 112;
+    SDL_SCANCODE_F22 = 113;
+    SDL_SCANCODE_F23 = 114;
+    SDL_SCANCODE_F24 = 115;
+    SDL_SCANCODE_EXECUTE = 116;
+    SDL_SCANCODE_HELP = 117;
+    SDL_SCANCODE_MENU = 118;
+    SDL_SCANCODE_SELECT = 119;
+    SDL_SCANCODE_STOP = 120;
+    SDL_SCANCODE_AGAIN = 121;
+    SDL_SCANCODE_UNDO = 122;
+    SDL_SCANCODE_CUT = 123;
+    SDL_SCANCODE_COPY = 124;
+    SDL_SCANCODE_PASTE = 125;
+    SDL_SCANCODE_FIND = 126;
+    SDL_SCANCODE_MUTE = 127;
+    SDL_SCANCODE_VOLUMEUP = 128;
+    SDL_SCANCODE_VOLUMEDOWN = 129;
+    SDL_SCANCODE_KP_COMMA = 133;
+    SDL_SCANCODE_KP_EQUALSAS400 = 134;
+    SDL_SCANCODE_INTERNATIONAL1 = 135;
+    SDL_SCANCODE_INTERNATIONAL2 = 136;
+    SDL_SCANCODE_INTERNATIONAL3 = 137;
+    SDL_SCANCODE_INTERNATIONAL4 = 138;
+    SDL_SCANCODE_INTERNATIONAL5 = 139;
+    SDL_SCANCODE_INTERNATIONAL6 = 140;
+    SDL_SCANCODE_INTERNATIONAL7 = 141;
+    SDL_SCANCODE_INTERNATIONAL8 = 142;
+    SDL_SCANCODE_INTERNATIONAL9 = 143;
+    SDL_SCANCODE_LANG1 = 144; (*< Hangul/English toggle *)
+    SDL_SCANCODE_LANG2 = 145; (*< Hanja conversion *)
+    SDL_SCANCODE_LANG3 = 146; (*< Katakana *)
+    SDL_SCANCODE_LANG4 = 147; (*< Hiragana *)
+    SDL_SCANCODE_LANG5 = 148; (*< Zenkaku/Hankaku *)
+    SDL_SCANCODE_LANG6 = 149; (*< reserved *)
+    SDL_SCANCODE_LANG7 = 150; (*< reserved *)
+    SDL_SCANCODE_LANG8 = 151; (*< reserved *)
+    SDL_SCANCODE_LANG9 = 152; (*< reserved *)
+    SDL_SCANCODE_ALTERASE = 153;
+    SDL_SCANCODE_SYSREQ = 154;
+    SDL_SCANCODE_CANCEL = 155;
+    SDL_SCANCODE_CLEAR = 156;
+    SDL_SCANCODE_PRIOR = 157;
+    SDL_SCANCODE_RETURN2 = 158;
+    SDL_SCANCODE_SEPARATOR = 159;
+    SDL_SCANCODE_OUT = 160;
+    SDL_SCANCODE_OPER = 161;
+    SDL_SCANCODE_CLEARAGAIN = 162;
+    SDL_SCANCODE_CRSEL = 163;
+    SDL_SCANCODE_EXSEL = 164;
+    SDL_SCANCODE_KP_00 = 176;
+    SDL_SCANCODE_KP_000 = 177;
+    SDL_SCANCODE_THOUSANDSSEPARATOR = 178;
+    SDL_SCANCODE_DECIMALSEPARATOR = 179;
+    SDL_SCANCODE_CURRENCYUNIT = 180;
+    SDL_SCANCODE_CURRENCYSUBUNIT = 181;
+    SDL_SCANCODE_KP_LEFTPAREN = 182;
+    SDL_SCANCODE_KP_RIGHTPAREN = 183;
+    SDL_SCANCODE_KP_LEFTBRACE = 184;
+    SDL_SCANCODE_KP_RIGHTBRACE = 185;
+    SDL_SCANCODE_KP_TAB = 186;
+    SDL_SCANCODE_KP_BACKSPACE = 187;
+    SDL_SCANCODE_KP_A = 188;
+    SDL_SCANCODE_KP_B = 189;
+    SDL_SCANCODE_KP_C = 190;
+    SDL_SCANCODE_KP_D = 191;
+    SDL_SCANCODE_KP_E = 192;
+    SDL_SCANCODE_KP_F = 193;
+    SDL_SCANCODE_KP_XOR = 194;
+    SDL_SCANCODE_KP_POWER = 195;
+    SDL_SCANCODE_KP_PERCENT = 196;
+    SDL_SCANCODE_KP_LESS = 197;
+    SDL_SCANCODE_KP_GREATER = 198;
+    SDL_SCANCODE_KP_AMPERSAND = 199;
+    SDL_SCANCODE_KP_DBLAMPERSAND = 200;
+    SDL_SCANCODE_KP_VERTICALBAR = 201;
+    SDL_SCANCODE_KP_DBLVERTICALBAR = 202;
+    SDL_SCANCODE_KP_COLON = 203;
+    SDL_SCANCODE_KP_HASH = 204;
+    SDL_SCANCODE_KP_SPACE = 205;
+    SDL_SCANCODE_KP_AT = 206;
+    SDL_SCANCODE_KP_EXCLAM = 207;
+    SDL_SCANCODE_KP_MEMSTORE = 208;
+    SDL_SCANCODE_KP_MEMRECALL = 209;
+    SDL_SCANCODE_KP_MEMCLEAR = 210;
+    SDL_SCANCODE_KP_MEMADD = 211;
+    SDL_SCANCODE_KP_MEMSUBTRACT = 212;
+    SDL_SCANCODE_KP_MEMMULTIPLY = 213;
+    SDL_SCANCODE_KP_MEMDIVIDE = 214;
+    SDL_SCANCODE_KP_PLUSMINUS = 215;
+    SDL_SCANCODE_KP_CLEAR = 216;
+    SDL_SCANCODE_KP_CLEARENTRY = 217;
+    SDL_SCANCODE_KP_BINARY = 218;
+    SDL_SCANCODE_KP_OCTAL = 219;
+    SDL_SCANCODE_KP_DECIMAL = 220;
+    SDL_SCANCODE_KP_HEXADECIMAL = 221;
+    SDL_SCANCODE_LCTRL = 224;
+    SDL_SCANCODE_LSHIFT = 225;
+    SDL_SCANCODE_LALT = 226;
+    SDL_SCANCODE_LGUI = 227;
+    SDL_SCANCODE_RCTRL = 228;
+    SDL_SCANCODE_RSHIFT = 229;
+    SDL_SCANCODE_RALT = 230;
+    SDL_SCANCODE_RGUI = 231;
+    SDL_SCANCODE_MODE = 257;
+    SDL_SCANCODE_AUDIONEXT = 258;
+    SDL_SCANCODE_AUDIOPREV = 259;
+    SDL_SCANCODE_AUDIOSTOP = 260;
+    SDL_SCANCODE_AUDIOPLAY = 261;
+    SDL_SCANCODE_AUDIOMUTE = 262;
+    SDL_SCANCODE_MEDIASELECT = 263;
+    SDL_SCANCODE_WWW = 264;
+    SDL_SCANCODE_MAIL = 265;
+    SDL_SCANCODE_CALCULATOR = 266;
+    SDL_SCANCODE_COMPUTER = 267;
+    SDL_SCANCODE_AC_SEARCH = 268;
+    SDL_SCANCODE_AC_HOME = 269;
+    SDL_SCANCODE_AC_BACK = 270;
+    SDL_SCANCODE_AC_FORWARD = 271;
+    SDL_SCANCODE_AC_STOP = 272;
+    SDL_SCANCODE_AC_REFRESH = 273;
+    SDL_SCANCODE_AC_BOOKMARKS = 274;
+    SDL_SCANCODE_BRIGHTNESSDOWN = 275;
+    SDL_SCANCODE_BRIGHTNESSUP = 276;
+    SDL_SCANCODE_DISPLAYSWITCH = 277;
+    SDL_SCANCODE_KBDILLUMTOGGLE = 278;
+    SDL_SCANCODE_KBDILLUMDOWN = 279;
+    SDL_SCANCODE_KBDILLUMUP = 280;
+    SDL_SCANCODE_EJECT = 281;
+    SDL_SCANCODE_SLEEP = 282;
+    SDL_SCANCODE_APP1 = 283;
+    SDL_SCANCODE_APP2 = 284;
 
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
@@ -327,25 +530,20 @@ const
 // http://www.freepascal.org/docs-html/prog/progsu144.html
 
 type
-{$IFDEF SDL2}
     PSDL_Window   = Pointer;
     PSDL_Renderer = Pointer;
     PSDL_Texture  = Pointer;
     PSDL_GLContext= Pointer;
     TSDL_TouchId  = Int64;
-{$ENDIF}
     TSDL_FingerId = Int64;
+    TSDL_Keycode = LongInt;
+    TSDL_Scancode = LongInt;
 
     TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
 
     PSDL_Rect = ^TSDL_Rect;
     TSDL_Rect = record
-{$IFDEF SDL2}
         x, y, w, h: LongInt;
-{$ELSE}
-        x, y: SmallInt;
-        w, h: Word;
-{$ENDIF}
         end;
 
     TPoint = record
@@ -354,7 +552,6 @@ type
 
     PSDL_PixelFormat = ^TSDL_PixelFormat;
     TSDL_PixelFormat = record
-{$IFDEF SDL2}
         format: LongWord;
         palette: Pointer;
         BitsPerPixel : Byte;
@@ -374,25 +571,6 @@ type
         Ashift: Byte;
         refcount: LongInt;
         next: PSDL_PixelFormat;
-{$ELSE}
-        palette: Pointer;
-        BitsPerPixel : Byte;
-        BytesPerPixel: Byte;
-        Rloss : Byte;
-        Gloss : Byte;
-        Bloss : Byte;
-        Aloss : Byte;
-        Rshift: Byte;
-        Gshift: Byte;
-        Bshift: Byte;
-        Ashift: Byte;
-        RMask : LongWord;
-        GMask : LongWord;
-        BMask : LongWord;
-        AMask : LongWord;
-        colorkey: LongWord;
-        alpha: Byte;
-{$ENDIF}
         end;
 
     PSDL_Surface = ^TSDL_Surface;
@@ -400,7 +578,7 @@ type
         flags : LongWord;
         format: PSDL_PixelFormat;
         w, h  : LongInt;
-        pitch : {$IFDEF SDL2}LongInt{$ELSE}Word{$ENDIF};
+        pitch : LongInt;
         pixels: Pointer;
 {$IFDEF PAS2C}
         hwdata   : Pointer;
@@ -412,16 +590,12 @@ type
         refcount : LongInt;
         offset   : LongInt;
 {$ELSE}
-{$IFDEF SDL2}
         userdata  : Pointer;
         locked    : LongInt;
         lock_data : Pointer;
         clip_rect : TSDL_Rect;
         map       : Pointer;
         refcount  : LongInt;
-{$ELSE}
-        offset : LongInt;
-{$ENDIF}
 {$ENDIF}
         end;
 
@@ -437,18 +611,14 @@ type
 
     (* SDL_RWops and friends *)
     PSDL_RWops = ^TSDL_RWops;
-{$IFDEF SDL2}
     TSize  = function( context: PSDL_RWops): Int64; cdecl;
     TSeek  = function( context: PSDL_RWops; offset: Int64; whence: LongInt ): Int64; cdecl;
-{$ELSE}
-    TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
-{$ENDIF}
     TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
     TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
     TClose = function( context: PSDL_RWops ): LongInt; cdecl;
 
     TStdio = record
-        autoclose: {$IFDEF SDL2}Boolean{$ELSE}LongInt{$ENDIF};
+        autoclose: Boolean;
         fp: Pointer;
         end;
 
@@ -460,9 +630,7 @@ type
 
     TUnknown = record
         data1: Pointer;
-{$IFDEF SDL2}
         data2: Pointer;
-{$ENDIF}
         end;
 
 {$IFDEF ANDROID}
@@ -479,7 +647,7 @@ type
         size, left: LongInt;
         end;
     TWindowsio = record
-        append : {$IFDEF SDL2}Boolean{$ELSE}LongInt{$ENDIF};
+        append : Boolean;
         h : Pointer;
         buffer : TWinbuffer;
         end;
@@ -487,9 +655,7 @@ type
 {$ENDIF}
 
     TSDL_RWops = record
-{$IFDEF SDL2}
         size: TSize;
-{$ENDIF}
         seek: TSeek;
         read: TRead;
         write: TWrite;
@@ -511,10 +677,9 @@ type
 
 {* SDL_Event type definition *}
 
-{$IFDEF SDL2}
     TSDL_Keysym = record
-        scancode: LongInt;
-        sym: LongInt;
+        scancode: TSDL_Scancode;
+        sym: TSDL_Keycode;
         modifier: Word;
         unused: LongWord;
         end;
@@ -528,21 +693,20 @@ type
         data1, data2: LongInt;
         end;
 
-    // available in sdl12 but not exposed
     TSDL_TextEditingEvent = record
-        type_: LongWord;
-        timestamp: LongWord;
-        windowID: LongWord;
-        text: array[0..31] of Byte;
-        start, lenght: LongInt;
+        type_: Longword;
+        timestamp: Longword;
+        windowID: Longword;
+        text: array [0..SDL_TEXTEDITINGEVENT_TEXT_SIZE - 1] of char;
+        start: LongInt;
+        length: LongInt;
         end;
 
-    // available in sdl12 but not exposed
     TSDL_TextInputEvent = record
-        type_: LongWord;
-        timestamp: LongWord;
-        windowID: LongWord;
-        text: array[0..31] of Byte;
+        type_: Longword;
+        timestamp: Longword;
+        windowID: Longword;
+        text: array [0..SDL_TEXTINPUTEVENT_TEXT_SIZE - 1] of char;
         end;
 
     TSDL_TouchFingerEvent = record
@@ -613,167 +777,92 @@ type
         end;
 
     TSDL_OSEvent = TSDL_CommonEvent;
-{$ELSE}
-    TSDL_KeySym = record
-        scancode: Byte;
-        sym: LongWord;
-        modifier: LongWord;
-        unicode: Word;
-        end;
-
-    TSDL_ActiveEvent = record
-        type_: Byte;
-        gain: Byte;
-        state: Byte;
-        end;
-
-    TSDL_ResizeEvent = record
-        type_: Byte;
-        w, h: LongInt;
-        end;
-{$ENDIF}
 
     TSDL_KeyboardEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         windowID: LongWord;
         state, repeat_, padding2, padding3: Byte;
-{$ELSE}
-        type_, which, state: Byte;
-{$ENDIF}
         keysym: TSDL_Keysym;
         end;
 
     TSDL_MouseMotionEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         windowID: LongWord;
         which, state: LongWord;
         x, y, xrel, yrel: LongInt;
-{$ELSE}
-        type_, which, state: Byte;
-        x, y, xrel, yrel: Word;
-{$ENDIF}
         end;
 
     TSDL_MouseButtonEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         windowID: LongWord;
         which: LongWord;
         button, state, padding1, padding2: Byte;
         x, y: LongInt;
-{$ELSE}
-        type_, which, button, state: Byte;
-        x, y: Word;
-{$ENDIF}
         end;
 
     TSDL_MouseWheelEvent = record
         type_: LongWord;
-{$IFDEF SDL2}
         timestamp: LongWord;
         windowID: LongWord;
         which: LongWord;
-{$ELSE}
-        which: Byte;
-{$ENDIF}
         x, y: LongInt;
         end;
 
     TSDL_JoyAxisEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         which: LongWord;
-{$ELSE}
-        type_: Byte;
-        which: Byte;
-{$ENDIF}
         axis: Byte;
-{$IFDEF SDL2}
         padding1, padding2, padding3: Byte;
         value: LongInt;
         padding4: Word;
-{$ELSE}
-        value: SmallInt;
-{$ENDIF}
         end;
 
     TSDL_JoyBallEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         which: LongWord;
-{$ELSE}
-        type_: Byte;
-        which: Byte;
-{$ENDIF}
         ball: Byte;
-{$IFDEF SDL2}
         padding1, padding2, padding3: Byte;
-{$ENDIF}
         xrel, yrel: SmallInt;
         end;
 
     TSDL_JoyHatEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         which: LongWord;
-{$ELSE}
-        type_: Byte;
-        which: Byte;
-{$ENDIF}
         hat: Byte;
         value: Byte;
-{$IFDEF SDL2}
         padding1, padding2: Byte;
-{$ENDIF}
         end;
 
     TSDL_JoyButtonEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
         which: Byte;
         button: Byte;
         state: Byte;
-{$IFDEF SDL2}
         padding1: Byte;
-{$ENDIF}
         end;
 
     TSDL_QuitEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
         end;
 
     TSDL_UserEvent = record
-{$IFDEF SDL2}
         type_: LongWord;
         timestamp: LongWord;
         windowID: LongWord;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
         code: LongInt;
         data1, data2: Pointer;
         end;
 
     PSDL_Event = ^TSDL_Event;
     TSDL_Event = record
-{$IFDEF SDL2}
         case LongInt of
             SDL_FIRSTEVENT: (type_: LongWord);
             SDL_COMMONDEVENT: (common: TSDL_CommonEvent);
@@ -781,7 +870,7 @@ type
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
             SDL_TEXTEDITING: (edit: TSDL_TextEditingEvent);
-            SDL_TEXTINPUT: (tedit: TSDL_TextInputEvent);
+            SDL_TEXTINPUT: (text: TSDL_TextInputEvent);
             SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
             SDL_MOUSEBUTTONDOWN,
             SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
@@ -809,25 +898,6 @@ type
             SDL_DOLLARGESTURE: (dgesture: TSDL_DollarGestureEvent);
             SDL_DROPFILE: (drop: TSDL_DropEvent);
             SDL_ALLEVENTS: (foo: shortstring);
-{$ELSE}
-        case Byte of
-            SDL_NOEVENT: (type_: Byte);
-            SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
-            SDL_KEYDOWN,
-            SDL_KEYUP: (key: TSDL_KeyboardEvent);
-            SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
-            SDL_MOUSEBUTTONDOWN,
-            SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
-            SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
-            SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
-            SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
-            SDL_JOYBUTTONDOWN,
-            SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-            SDL_QUITEV: (quit: TSDL_QuitEvent);
-            //SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
-            SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
-            SDL_ALLEVENTS: (foo: shortstring);
-{$ENDIF}
         end;
 
     TSDL_EventFilter = function( event : PSDL_Event ): Integer; cdecl;
@@ -858,7 +928,6 @@ type
         SDL_GL_MULTISAMPLEBUFFERS,
         SDL_GL_MULTISAMPLESAMPLES,
         SDL_GL_ACCELERATED_VISUAL,
-{$IFDEF SDL2}
         SDL_GL_RETAINED_BACKING,
         SDL_GL_CONTEXT_MAJOR_VERSION,
         SDL_GL_CONTEXT_MINOR_VERSION,
@@ -866,12 +935,8 @@ type
         SDL_GL_CONTEXT_FLAGS,
         SDL_GL_CONTEXT_PROFILE_MASK,
         SDL_GL_SHARE_WITH_CURRENT_CONTEXT
-{$ELSE}
-        SDL_GL_SWAP_CONTROL
-{$ENDIF}
         );
 
-{$IFDEF SDL2}
     TSDL_ArrayByteOrder = (  // array component order, low Byte -> high Byte
         SDL_ARRAYORDER_NONE,
         SDL_ARRAYORDER_RGB,
@@ -881,7 +946,6 @@ type
         SDL_ARRAYORDER_BGRA,
         SDL_ARRAYORDER_ABGR
         );
-{$ENDIF}
 
     // Joystick/Controller support
     PSDL_Joystick = ^TSDL_Joystick;
@@ -953,6 +1017,8 @@ function  SDL_Init(flags: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_InitSubSystem(flags: LongWord): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
+procedure SDL_free(mem: Pointer); cdecl; external SDLLibName;
+
 procedure SDL_Delay(msec: LongWord); cdecl; external SDLLibName;
 function  SDL_GetTicks: LongWord; cdecl; external SDLLibName;
 
@@ -986,8 +1052,9 @@ function  SDL_DisplayFormatAlpha(Surface: PSDL_Surface): PSDL_Surface; cdecl; ex
 function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDLLibName;
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
-{$IFDEF SDL2}
 function  SDL_CreateWindow(title: PChar; x,y,w,h: LongInt; flags: LongWord): PSDL_Window; cdecl; external SDLLibName;
+procedure SDL_SetWindowIcon(window: PSDL_Window; icon: PSDL_Surface); cdecl; external SDLLibName;
+
 function  SDL_CreateRenderer(window: PSDL_Window; index: LongInt; flags: LongWord): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
@@ -996,7 +1063,7 @@ function  SDL_GetCurrentVideoDriver:Pchar; cdecl; external SDLLibName;
 
 function  SDL_GL_CreateContext(window: PSDL_Window): PSDL_GLContext; cdecl; external SDLLibName;
 procedure SDL_GL_DeleteContext(context: PSDL_GLContext); cdecl; external SDLLibName;
-function  SDL_GL_SwapWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+procedure SDL_GL_SwapWindow(window: PSDL_Window); cdecl; external SDLLibName;
 function  SDL_GL_SetSwapInterval(interval: LongInt): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_VideoQuit; cdecl; external SDLLibName;
@@ -1017,25 +1084,19 @@ function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt;
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
 function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
+procedure SDL_StopTextInput; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 
 function  SDL_AllocFormat(format: LongWord): PSDL_PixelFormat; cdecl; external SDLLibName;
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); cdecl; external SDLLibName;
-{$ELSE}
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
-
-function  SDL_EnableUNICODE(enable: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_EnableKeyRepeat(timedelay, interval: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_VideoDriverName(namebuf: PChar; maxlen: LongInt): PChar; cdecl; external SDLLibName;
-{$ENDIF}
 
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
-function  SDL_GetKeyName(key: LongWord): PChar; cdecl; external SDLLibName;
-function  SDL_GetScancodeName(key: LongWord): PChar; cdecl; external SDLLibName;
-function  SDL_GetKeyFromScancode(key: LongWord): LongInt; cdecl; external SDLLibName;
-
+function  SDL_GetKeyName(key: TSDL_Keycode): PChar; cdecl; external SDLLibName;
+function  SDL_GetScancodeName(key: TSDL_Scancode): PChar; cdecl; external SDLLibName;
+function  SDL_GetKeyFromScancode(key: TSDL_Scancode): TSDL_Keycode; cdecl; external SDLLibName;
+// SDL2 functions has some additional functions (not listed here) for keycode/scancode translation
 
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
@@ -1043,8 +1104,9 @@ function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 procedure SDL_SetEventFilter(filter: TSDL_EventFilter); cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
-procedure SDL_WarpMouse(x, y: Word); {$IFDEF SDL2}inline{$ELSE}cdecl; external SDLLibName{$ENDIF};
-function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL2} name 'SDL_GetKeyboardState'{$ENDIF};
+procedure SDL_WarpMouse(x, y: Word); inline;
+
+function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : Byte); cdecl; external SDLLibName;
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
@@ -1053,14 +1115,14 @@ function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; extern
 
 (* remember to mark the threaded functions as 'cdecl; export;'
    (or have fun debugging nil arguments) *)
-function  SDL_CreateThread(fn: Pointer; {$IFDEF SDL2}name: PChar;{$ENDIF} data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
 procedure SDL_KillThread(thread: PSDL_Thread); cdecl; external SDLLibName;
 
 function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
-function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName {$IFNDEF SDL2}name 'SDL_mutexP'{$ENDIF};
-function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName {$IFNDEF SDL2}name 'SDL_mutexV'{$ENDIF};
+function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName;
+function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName;
 
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers; cdecl; external SDLLibName;
@@ -1165,6 +1227,12 @@ procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_Net
 function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
 function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
+// SDL 2 clipboard functions
+function SDL_HasClipboardText(): Boolean; cdecl; external SDLLibName;
+// returns nil if memory for clipboard contents copy couldn't be allocated
+function SDL_GetClipboardText(): PChar; cdecl; external SDLLibName;
+// returns 0 on success or negative error number on failure
+function SDL_SetClipboardText(const text: PChar): LongInt; cdecl; external SDLLibName;
 
 procedure SDLNet_Write16(value: Word; buf: Pointer);
 procedure SDLNet_Write32(value: LongWord; buf: Pointer);
@@ -1172,7 +1240,6 @@ function  SDLNet_Read16(buf: Pointer): Word;
 function  SDLNet_Read32(buf: Pointer): LongWord;
 
 implementation
-{$IFDEF SDL2}
 uses uStore;
 
 // for sdl1.2 we directly call SDL_WarpMouse()
@@ -1183,16 +1250,11 @@ procedure SDL_WarpMouse(x, y: Word); inline;
 begin
     WarpMouse(x, y);
 end;
-{$ENDIF}
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
     SDL_MustLock:=
-{$IFDEF SDL2}
         ((surface^.flags and SDL_RLEACCEL) <> 0)
-{$ELSE}
-        ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
-{$ENDIF}
 end;
 
 {$IFNDEF SDL_MIXER_NEWER}
@@ -1244,6 +1306,7 @@ begin
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
 end;
+
 
 end.
 

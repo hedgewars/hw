@@ -1,11 +1,11 @@
 #the usual set of dependencies
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
-find_package(SDL_net REQUIRED)
-find_package(SDL_image REQUIRED)
-find_package(SDL_ttf REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_net REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 #compile our rtl implementation
 include_directories(${GLEW_INCLUDE_DIR})
@@ -13,7 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rtl)
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${PHYSLAYER_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})
-include_directories(${SDL_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIR})
 add_subdirectory(rtl)
 
 # convert list into pascal array
@@ -83,11 +83,11 @@ add_executable(hwengine WIN32 ${engine_sources})
 target_link_libraries(hwengine  fpcrtl
                                 ${LUA_LIBRARY}
                                 ${OPENGL_LIBRARY}
-                                ${SDL_LIBRARY}
-                                ${SDLMIXER_LIBRARY}
-                                ${SDLNET_LIBRARY}
-                                ${SDLIMAGE_LIBRARY}
-                                ${SDLTTF_LIBRARY}
+                                ${SDL2_LIBRARY}
+                                ${SDL2_MIXER_LIBRARY}
+                                ${SDL2_NET_LIBRARY}
+                                ${SDL2_IMAGE_LIBRARY}
+                                ${SDL2_TTF_LIBRARY}
                                 ${GLEW_LIBRARY}
                                 physfs
                                 physlayer
