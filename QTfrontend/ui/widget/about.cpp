@@ -101,7 +101,14 @@ About::About(QWidget * parent) :
     libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
 #endif
 
-    const SDL_version *sdl_ver = SDL_Linked_Version();
+    const SDL_version *sdl_ver;
+    SDL_version sdl_version;
+#if SDL_MAJOR_VERSION == 2
+    SDL_GetVersion(&sdl_version);
+    sdl_ver = &sdl_version;
+#else
+    sdl_ver = SDL_Linked_Version();
+#endif
     libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL</a> version: %1.%2.%3<br>")
         .arg(sdl_ver->major)
         .arg(sdl_ver->minor)

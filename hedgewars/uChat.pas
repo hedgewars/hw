@@ -21,6 +21,7 @@
 unit uChat;
 
 interface
+uses SDLh;
 
 procedure initModule;
 procedure freeModule;
@@ -28,12 +29,13 @@ procedure ReloadLines;
 procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
-procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
+procedure KeyPressChat(keysym: TSDL_Keysym);
 procedure SendHogSpeech(s: shortstring);
 procedure CopyToClipboard(var newContent: shortstring);
+procedure TextInput(var event: TSDL_TextInputEvent);
 
 implementation
-uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
+uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
 
 const MaxStrIndex = 27;
       MaxInputStrLen = 200;
@@ -267,8 +269,6 @@ SetLine(Strs[lastStr], s, false);
 inc(visibleCount)
 end;
 
-procedure CheckPasteBuffer(); forward;
-
 procedure UpdateInputLinePrefix();
 begin
 if liveLua then
@@ -302,7 +302,6 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 // draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
-    CheckPasteBuffer();
 
     if InputLinePrefix.Tex = nil then
         RenderChatLineTex(InputLinePrefix, InputLinePrefix.s);
@@ -571,9 +570,8 @@ procedure CleanupInput;
 begin
     FreezeEnterKey;
     history:= 0;
-{$IFNDEF SDL2}
-    SDL_EnableKeyRepeat(0,0);
-{$ENDIF}
+    SDL_StopTextInput();
+    //SDL_EnableKeyRepeat(0,0);
     GameState:= gsGame;
     ResetKbd;
 end;
@@ -728,7 +726,8 @@ end;
 
 procedure CopyToClipboard(var newContent: shortstring);
 begin
-    SendIPC(_S'y' + copy(newContent, 1, 253) + #0);
+    // SDL2 clipboard
+    SDL_SetClipboardText(Str2PChar(newContent));
 end;
 
 procedure CopySelectionToClipboard();
@@ -782,39 +781,41 @@ begin
 end;
 
 procedure PasteFromClipboard();
+var clip: PChar;
 begin
-    SendIPC(_S'Y');
-end;
-
-procedure CheckPasteBuffer();
-begin
-    if Length(ChatPasteBuffer) > 0 then
+    // use SDL2 clipboard functions
+    if SDL_HasClipboardText() then
         begin
-        InsertIntoInputStr(ChatPasteBuffer);
-        ChatPasteBuffer:= '';
+        clip:= SDL_GetClipboardText();
+        // returns NULL if not enough memory for a copy of clipboard content 
+        if clip <> nil then
+            begin
+            InsertIntoInputStr(shortstring(clip));
+            SDL_free(Pointer(clip));
+            end;
         end;
 end;
 
-procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
-const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
-      nonStateMask = (not (KMOD_NUM or KMOD_CAPS));
-var i, btw, index: integer;
-    utf8: shortstring;
-    action, selMode, ctrl, ctrlonly: boolean;
+procedure KeyPressChat(keysym: TSDL_Keysym);
+const nonStateMask = (not (KMOD_NUM or KMOD_CAPS));
+var i, index: integer;
+    selMode, ctrl, ctrlonly: boolean;
     skip: TCharSkip;
+    Scancode: TSDL_Scancode;
+    Modifier: Word;
 begin
-    LastKeyPressTick:= RealTicks;
-    action:= true;
+    Scancode:= keysym.scancode;
+    Modifier:= keysym.modifier;
 
-    CheckPasteBuffer();
+    LastKeyPressTick:= RealTicks;
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
     ctrlonly:= ctrl and ((modifier and nonStateMask and (not (KMOD_LCTRL or KMOD_RCTRL))) = 0);
     skip:= none;
 
-    case Sym of
-        SDLK_BACKSPACE:
+    case Scancode of
+        SDL_SCANCODE_BACKSPACE:
             begin
             if selectedPos < 0 then
                 begin
@@ -831,7 +832,7 @@ begin
             DeleteSelected();
             UpdateCursorCoords();
             end;
-        SDLK_DELETE:
+        SDL_SCANCODE_DELETE:
             begin
             if selectedPos < 0 then
                 begin
@@ -848,7 +849,7 @@ begin
             DeleteSelected();
             UpdateCursorCoords();
             end;
-        SDLK_ESCAPE:
+        SDL_SCANCODE_ESCAPE:
             begin
             if Length(InputStr.s) > 0 then
                 begin
@@ -857,7 +858,7 @@ begin
                 end
             else CleanupInput
             end;
-        SDLK_RETURN, SDLK_KP_ENTER:
+        SDL_SCANCODE_RETURN, SDL_SCANCODE_KP_ENTER:
             begin
             if Length(InputStr.s) > 0 then
                 begin
@@ -867,10 +868,10 @@ begin
                 end;
             CleanupInput
             end;
-        SDLK_UP, SDLK_DOWN:
+        SDL_SCANCODE_UP, SDL_SCANCODE_DOWN:
             begin
-            if (Sym = SDLK_UP) and (history < localLastStr) then inc(history);
-            if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
+            if (Scancode = SDL_SCANCODE_UP) and (history < localLastStr) then inc(history);
+            if (Scancode = SDL_SCANCODE_DOWN) and (history > 0) then dec(history);
             index:= localLastStr - history + 1;
             if (index > localLastStr) then
                 begin
@@ -884,7 +885,7 @@ begin
             ResetSelection();
             UpdateCursorCoords();
             end;
-        SDLK_HOME:
+        SDL_SCANCODE_HOME:
             begin
             if cursorPos > 0 then
                 begin
@@ -896,7 +897,7 @@ begin
 
             UpdateCursorCoords();
             end;
-        SDLK_END:
+        SDL_SCANCODE_END:
             begin
             i:= Length(InputStr.s);
             if cursorPos < i then
@@ -909,7 +910,7 @@ begin
 
             UpdateCursorCoords();
             end;
-        SDLK_LEFT:
+        SDL_SCANCODE_LEFT:
             begin
             if cursorPos > 0 then
                 begin
@@ -938,7 +939,7 @@ begin
 
             UpdateCursorCoords();
             end;
-        SDLK_RIGHT:
+        SDL_SCANCODE_RIGHT:
             begin
             if cursorPos < Length(InputStr.s) then
                 begin
@@ -963,11 +964,12 @@ begin
 
             UpdateCursorCoords();
             end;
-        SDLK_PAGEUP, SDLK_PAGEDOWN:
+        SDL_SCANCODE_PAGEUP, SDL_SCANCODE_PAGEDOWN:
             begin
             // ignore me!!!
             end;
-        SDLK_a:
+        // TODO: figure out how to determine those keys better
+        SDL_SCANCODE_a:
             begin
             // select all
             if ctrlonly then
@@ -978,18 +980,14 @@ begin
                 cursorPos:= Length(InputStr.s);
                 UpdateCursorCoords();
                 end
-            else
-                action:= false;
             end;
-        SDLK_c:
+        SDL_SCANCODE_c:
             begin
             // copy
             if ctrlonly then
                 CopySelectionToClipboard()
-            else
-                action:= false;
             end;
-        SDLK_v:
+        SDL_SCANCODE_v:
             begin
             // paste
             if ctrlonly then
@@ -997,10 +995,8 @@ begin
                 DeleteSelected();
                 PasteFromClipboard();
                 end
-            else
-                action:= false;
             end;
-        SDLK_x:
+        SDL_SCANCODE_x:
             begin
             // cut
             if ctrlonly then
@@ -1008,50 +1004,31 @@ begin
                 CopySelectionToClipboard();
                 DeleteSelected();
                 end
-            else
-                action:= false;
             end;
-        else
-            action:= false;
         end;
-    if not action and (Key <> 0) then
+end;
+
+procedure TextInput(var event: TSDL_TextInputEvent);
+var s: shortstring;
+    l: byte;
+begin
+    DeleteSelected();
+
+    l:= 0;
+    while event.text[l] <> #0 do
         begin
-        DeleteSelected();
+        s[l + 1]:= event.text[l];
+        inc(l)
+        end;
 
-        if (Key < $80) then
-            btw:= 1
-        else if (Key < $800) then
-            btw:= 2
-        else if (Key < $10000) then
-            btw:= 3
-        else
-            btw:= 4;
-
-        utf8:= '';
-
-        for i:= btw downto 2 do
-            begin
-            utf8:= char((Key or $80) and $BF) + utf8;
-            Key:= Key shr 6
-            end;
-
-        utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
-
-        if Length(InputStr.s) + btw > MaxInputStrLen then
-            exit;
-
-        // if speech bubble quotes are used as first input, add the closing quote and place cursor inbetween
-        if (Length(InputStr.s) = 0) and (Length(utf8) = 1) and (charIsForHogSpeech(utf8[1])) then
-            begin
-            InsertIntoInputStr(utf8);
-            InsertIntoInputStr(utf8);
-            cursorPos:= 1;
-            UpdateCursorCoords();
-            end
-        else
-            InsertIntoInputStr(utf8);
+    if l > 0 then
+        begin
+        if byte(InputStr.s[0]) + l > 240 then exit;
+        s[0]:= char(l);
+        InsertIntoInputStr(s);
         end
 end;
+
 
 procedure chChatMessage(var s: shortstring);
 begin
@@ -1098,9 +1075,9 @@ procedure chChat(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
-{$IFNDEF SDL2}
-    SDL_EnableKeyRepeat(200,45);
-{$ENDIF}
+    SDL_StopTextInput();
+    SDL_StartTextInput();
+    //SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else
@@ -1140,6 +1117,7 @@ begin
 
     LastKeyPressTick:= 0;
     ResetCursor();
+    SDL_StopTextInput();
 end;
 
 procedure freeModule;

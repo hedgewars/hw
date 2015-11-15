@@ -86,10 +86,11 @@ void GameUIConfig::reloadValues(void)
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
 
     // Default the windowed resolution to 5/6 of the screen size
-    int screenWidth = SDL_GetVideoInfo()->current_w * 5 / 6;
-    int screenHeight = SDL_GetVideoInfo()->current_h * 5 / 6;
-    QString widthStr; widthStr.setNum(screenWidth);
-    QString heightStr; heightStr.setNum(screenHeight);
+    QSize screenSize = SDLInteraction::instance().getCurrentResolution();
+    screenSize *= 5.0 / 6;
+
+    QString widthStr = QString::number(screenSize.width());
+    QString heightStr = QString::number(screenSize.height());
     QString wWidth = value("video/windowedWidth", widthStr).toString();
     QString wHeight = value("video/windowedHeight", heightStr).toString();
     // If left blank reset the resolution to the default

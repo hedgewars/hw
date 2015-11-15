@@ -37,6 +37,8 @@
 #include "FileEngine.h"
 #include "MessageDialog.h"
 
+#include "SDLInteraction.h"
+
 #ifdef _WIN32
 #include <Shlobj.h>
 #elif defined __APPLE__
@@ -153,6 +155,8 @@ int main(int argc, char *argv[])
 #ifdef __APPLE__
     cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
 #endif
+
+    SDLInteraction::instance();
 
     HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
