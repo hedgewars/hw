@@ -19,14 +19,6 @@
 
 #import <UIKit/UIKit.h>
 
-
-@class HogHatViewController;
-@class GravesViewController;
-@class VoicesViewController;
-@class FortsViewController;
-@class FlagsViewController;
-@class LevelViewController;
-
 @interface SingleTeamViewController : UITableViewController <EditableCellViewDelegate> {
     NSMutableDictionary *teamDictionary;
 
@@ -36,13 +28,6 @@
     NSArray *secondaryItems;
     NSArray *moreSecondaryItems;
     BOOL isWriteNeeded;
-
-    HogHatViewController *hogHatViewController;
-    GravesViewController *gravesViewController;
-    VoicesViewController *voicesViewController;
-    FortsViewController *fortsViewController;
-    FlagsViewController *flagsViewController;
-    LevelViewController *levelViewController;
 }
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;

@@ -266,5 +266,41 @@
 		<key>title</key>
 		<string>Get Away Time (%)</string>
 	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
+		<false/>
+		<key>command</key>
+		<string>e$airmines</string>
+		<key>default</key>
+		<integer>0</integer>
+		<key>image</key>
+		<string>Mine</string>
+		<key>max</key>
+		<integer>80</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Air Mines</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
+		<false/>
+		<key>command</key>
+		<string>e$worldedge</string>
+		<key>default</key>
+		<integer>0</integer>
+		<key>image</key>
+		<string>Earth</string>
+		<key>max</key>
+		<integer>3</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>World Edge</string>
+	</dict>
 </array>
 </plist>

@@ -8,6 +8,12 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
     endif()
 endforeach()
 
+foreach(hwpolicy CMP0026)
+    if(POLICY ${hwpolicy})
+        cmake_policy(SET ${hwpolicy} OLD)
+    endif()
+endforeach()
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
@@ -52,13 +58,15 @@ set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 22)
-set(HEDGEWARS_PROTO_VER 50)
+set(CPACK_PACKAGE_VERSION_PATCH 23)
+set(HEDGEWARS_PROTO_VER 52)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
+#io library paths
+include(${CMAKE_MODULE_PATH}/paths.cmake)
 #general utilities
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 #paths initialization
@@ -110,18 +118,18 @@ if(GHFLAGS)
     endif()
 endif()
 
-list(APPEND haskell_flags ${ghflags_parsed} "-O2")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
-                              "-dcore-lint" # internal sanity check
                               "-fno-warn-unused-do-bind"
+                              "-O0"
                               )
 else()
     list(APPEND haskell_flags "-w" # no warnings
+                              "-O2"
                               )
 endif()
 

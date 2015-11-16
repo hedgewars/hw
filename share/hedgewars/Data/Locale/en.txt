@@ -86,6 +86,7 @@
 01:22=AFK mode
 01:23=Auto Camera Off
 01:24=Auto Camera On
+01:25=Press the target button to mark the target
 
 ; Event messages
 ; Hog (%1) died
@@ -103,7 +104,6 @@
 02:00=%1 has timed out!
 02:00=%1 says peace out!
 02:00=%1 will be fondly remembered!
-02:00=%1 has an aneurysm!
 02:00=%1 leaves behind a wife and child
 02:00=%1 has launched his last bazooka
 02:00=%1 has tossed his last grenade

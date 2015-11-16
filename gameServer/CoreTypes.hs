@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable #-}
+{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable, GeneralizedNewtypeDeriving #-}
 module CoreTypes where
 
 import Control.Concurrent
@@ -119,7 +119,8 @@ data CheckInfo =
     CheckInfo
     {
         recordFileName :: String,
-        recordTeams :: [TeamInfo]
+        recordTeams :: [TeamInfo],
+        details :: Maybe GameDetails
     }
 
 data ClientInfo =
@@ -303,8 +304,8 @@ newServerInfo =
     ServerInfo
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.19 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        47 -- latestReleaseVersion
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.22 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
+        51 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""
@@ -345,9 +346,20 @@ data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
-    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
+    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] GameDetails [B.ByteString]
     | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
+
+data GameDetails =
+    GameDetails {
+        gameScript :: B.ByteString
+        , infRope
+        , isVamp
+        , infAttacks :: Bool
+    } deriving (Show, Read)
+
+instance NFData GameDetails where
+    rnf (GameDetails a b c d) = a `deepseq` b `deepseq` c `deepseq` d `deepseq` ()
 
 data CoreMessage =
     Accept ClientInfo

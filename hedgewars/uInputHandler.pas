@@ -30,6 +30,7 @@ function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseWheel(x, y: LongInt);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 
@@ -82,8 +83,8 @@ function KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 var code: LongInt;
 begin
     name:= LowerCase(name);
-    code:= cKeyMaxIndex;
-    while (code > 0) and (KeyNames[code] <> name) do dec(code);
+    code:= 0;
+    while (code <= cKeyMaxIndex) and (KeyNames[code] <> name) do inc(code);
 
     MaskModifier(Modifier, code);
     KeyNameToCode:= code;
@@ -168,7 +169,13 @@ if(KeyDown and (code = SDLK_w)) then
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) then bShowAmmoMenu:= false;
+    if (code < cKeyMaxIndex - 2) // means not mouse buttons
+        and KeyDown
+        and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) 
+        and (CurrentTeam <> nil) 
+        and (not CurrentTeam^.ExtDriven) 
+        then bShowAmmoMenu:= false;
+
     if KeyDown then
         begin
         Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
@@ -203,25 +210,36 @@ end;
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
-    code:= event.keysym.sym;
-    //MaskModifier(code, event.keysym.modifier);
+    // TODO
+    code:= LongInt(event.keysym.scancode);
+    //writelntoconsole('[KEY] '+inttostr(code)+ ' -> ''' +KeyNames[code] + ''', type = '+inttostr(event.type_));
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 begin
-case event.button of
-    SDL_BUTTON_LEFT:
-        ProcessKey(KeyNameToCode('mousel'), ButtonDown);
-    SDL_BUTTON_MIDDLE:
-        ProcessKey(KeyNameToCode('mousem'), ButtonDown);
-    SDL_BUTTON_RIGHT:
-        ProcessKey(KeyNameToCode('mouser'), ButtonDown);
-    SDL_BUTTON_WHEELDOWN:
-        ProcessKey(KeyNameToCode('wheeldown'), ButtonDown);
-    SDL_BUTTON_WHEELUP:
-        ProcessKey(KeyNameToCode('wheelup'), ButtonDown);
-    end;
+    //writelntoconsole('[MOUSE] '+inttostr(event.button));
+    case event.button of
+        SDL_BUTTON_LEFT:
+            ProcessKey(KeyNameToCode('mousel'), ButtonDown);
+        SDL_BUTTON_MIDDLE:
+            ProcessKey(KeyNameToCode('mousem'), ButtonDown);
+        SDL_BUTTON_RIGHT:
+            ProcessKey(KeyNameToCode('mouser'), ButtonDown);
+        SDL_BUTTON_WHEELDOWN:
+            ProcessKey(KeyNameToCode('wheeldown'), ButtonDown);
+        SDL_BUTTON_WHEELUP:
+            ProcessKey(KeyNameToCode('wheelup'), ButtonDown);
+        end;
+end;
+
+procedure ProcessMouseWheel(x, y: LongInt);
+begin
+    //writelntoconsole('[MOUSEWHEEL] '+inttostr(x)+', '+inttostr(y));
+    if y > 0 then
+        ProcessKey(KeyNameToCode('wheelup'), true)
+    else if y < 0 then
+        ProcessKey(KeyNameToCode('wheeldown'), true);
 end;
 
 procedure ResetKbd;
@@ -232,125 +250,131 @@ for t:= 0 to cKbdMaxIndex do
         ProcessKey(t, False);
 end;
 
+
+procedure InitDefaultBinds;
+var i: Longword;
+begin
+    DefaultBinds[KeyNameToCode('escape')]:= 'quit';
+    DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
+    DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
+
+    //numpad
+    //DefaultBinds[265]:= '+volup';
+    //DefaultBinds[256]:= '+voldown';
+
+    DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
+    DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
+    DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
+    DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
+    DefaultBinds[KeyNameToCode(_S'r')]:= 'record';
+    DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
+    DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
+    DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
+    DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
+    DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
+
+    DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
+    DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
+    DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
+
+    DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
+
+
+    DefaultBinds[KeyNameToCode('mousel')]:= '/put';
+    DefaultBinds[KeyNameToCode('mouser')]:= 'ammomenu';
+    DefaultBinds[KeyNameToCode('backspace')]:= 'hjump';
+    DefaultBinds[KeyNameToCode('tab')]:= 'switch';
+    DefaultBinds[KeyNameToCode('return')]:= 'ljump';
+    DefaultBinds[KeyNameToCode('space')]:= '+attack';
+    DefaultBinds[KeyNameToCode('up')]:= '+up';
+    DefaultBinds[KeyNameToCode('down')]:= '+down';
+    DefaultBinds[KeyNameToCode('left')]:= '+left';
+    DefaultBinds[KeyNameToCode('right')]:= '+right';
+    DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
+
+
+    DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
+    DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
+    DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
+    DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
+    for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
+    for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
+
+    loadBinds('dbind', cPathz[ptData] + '/settings.ini');
+end;
+
+
 procedure InitKbdKeyTable;
 var i, j, k, t: LongInt;
     s: string[15];
 begin
-//TODO in sdl13 this overrides some values (A and B) change indices to some other values at the back perhaps?
-KeyNames[1]:= 'mousel';
-KeyNames[2]:= 'mousem';
-KeyNames[3]:= 'mouser';
-KeyNames[4]:= 'wheelup';
-KeyNames[5]:= 'wheeldown';
+    KeyNames[cKeyMaxIndex    ]:= 'mousel';
+    KeyNames[cKeyMaxIndex - 1]:= 'mousem';
+    KeyNames[cKeyMaxIndex - 2]:= 'mouser';
+    KeyNames[cKeyMaxIndex - 3]:= 'wheelup';
+    KeyNames[cKeyMaxIndex - 4]:= 'wheeldown';
 
-for i:= 6 to cKeyMaxIndex do
-    begin
-    s:= shortstring(sdl_getkeyname(i));
-    //WriteLnToConsole('uInputHandler - ' + IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
-    if s = 'unknown key' then KeyNames[i]:= ''
-    else
+    for i:= 0 to cKeyMaxIndex - 5 do
         begin
+        s:= shortstring(SDL_GetScancodeName(TSDL_Scancode(i)));
+
         for t:= 1 to Length(s) do
             if s[t] = ' ' then
                 s[t]:= '_';
         KeyNames[i]:= LowerCase(s)
         end;
-    end;
 
 
-// get the size of keyboard array
-SDL_GetKeyState(@k);
+    // get the size of keyboard array
+    SDL_GetKeyboardState(@k);
 
-// Controller(s)
-for j:= 0 to Pred(ControllerNumControllers) do
-    begin
-    for i:= 0 to Pred(ControllerNumAxes[j]) do
+    // Controller(s)
+    for j:= 0 to Pred(ControllerNumControllers) do
         begin
-        keynames[k + 0]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'u';
-        keynames[k + 1]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'd';
-        inc(k, 2);
+        for i:= 0 to Pred(ControllerNumAxes[j]) do
+            begin
+            KeyNames[k + 0]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'u';
+            KeyNames[k + 1]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'd';
+            inc(k, 2);
+            end;
+        for i:= 0 to Pred(ControllerNumHats[j]) do
+            begin
+            KeyNames[k + 0]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'u';
+            KeyNames[k + 1]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'r';
+            KeyNames[k + 2]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'd';
+            KeyNames[k + 3]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'l';
+            inc(k, 4);
+            end;
+        for i:= 0 to Pred(ControllerNumButtons[j]) do
+            begin
+            KeyNames[k]:= 'j' + IntToStr(j) + 'b' + IntToStr(i);
+            inc(k, 1);
+            end;
         end;
-    for i:= 0 to Pred(ControllerNumHats[j]) do
-        begin
-        keynames[k + 0]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'u';
-        keynames[k + 1]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'r';
-        keynames[k + 2]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'd';
-        keynames[k + 3]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'l';
-        inc(k, 4);
-        end;
-    for i:= 0 to Pred(ControllerNumButtons[j]) do
-        begin
-        keynames[k]:= 'j' + IntToStr(j) + 'b' + IntToStr(i);
-        inc(k, 1);
-        end;
-    end;
 
-DefaultBinds[KeyNameToCode('escape')]:= 'quit';
-DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
-DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
-
-//numpad
-//DefaultBinds[265]:= '+volup';
-//DefaultBinds[256]:= '+voldown';
-
-DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
-DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
-DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
-DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
-DefaultBinds[KeyNameToCode(_S'r')]:= 'record';
-DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
-DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
-DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
-DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
-DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
-
-DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
-DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
-DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
-
-DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
-
-
-DefaultBinds[KeyNameToCode('mousel')]:= '/put';
-DefaultBinds[KeyNameToCode('mouser')]:= 'ammomenu';
-DefaultBinds[KeyNameToCode('backspace')]:= 'hjump';
-DefaultBinds[KeyNameToCode('tab')]:= 'switch';
-DefaultBinds[KeyNameToCode('return')]:= 'ljump';
-DefaultBinds[KeyNameToCode('space')]:= '+attack';
-DefaultBinds[KeyNameToCode('up')]:= '+up';
-DefaultBinds[KeyNameToCode('down')]:= '+down';
-DefaultBinds[KeyNameToCode('left')]:= '+left';
-DefaultBinds[KeyNameToCode('right')]:= '+right';
-DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
-
-
-DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
-DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
-DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
-DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
-for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+char(i+48);
-for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
-
-loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
+        InitDefaultBinds
 end;
 
-procedure SetBinds(var binds: TBinds);
+
+
 {$IFNDEF MOBILE}
+procedure SetBinds(var binds: TBinds);
 var
     t: LongInt;
-{$ENDIF}
 begin
-{$IFDEF MOBILE}
-    binds:= binds; // avoid hint
-    CurrentBinds:= DefaultBinds;
-{$ELSE}
     for t:= 0 to cKbdMaxIndex do
         if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
             ProcessKey(t, False);
 
     CurrentBinds:= binds;
-{$ENDIF}
 end;
+{$ELSE}
+procedure SetBinds(var binds: TBinds);
+begin
+    binds:= binds; // avoid hint
+    CurrentBinds:= DefaultBinds;
+end;
+{$ENDIF}
 
 procedure SetDefaultBinds;
 begin
@@ -438,7 +462,7 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 var
     k: LongInt;
 begin
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
     k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
     ProcessKey(k +  axis*2, value > 20000);
     ProcessKey(k + (axis*2)+1, value < -20000);
@@ -448,7 +472,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 var
     k: LongInt;
 begin
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
     k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
     ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 0, (value and SDL_HAT_UP)   <> 0);
     ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 1, (value and SDL_HAT_RIGHT)<> 0);
@@ -460,7 +484,7 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 var
     k: LongInt;
 begin
-    SDL_GetKeyState(@k);
+    SDL_GetKeyboardState(@k);
     k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
     ProcessKey(k +  ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + button, pressed);
 end;

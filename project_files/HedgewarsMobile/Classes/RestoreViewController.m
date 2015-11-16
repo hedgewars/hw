@@ -20,6 +20,11 @@
 #import "RestoreViewController.h"
 #import "GameInterfaceBridge.h"
 
+@interface RestoreViewController ()
+@property (retain, nonatomic) IBOutlet UIButton *restoreButton;
+@property (retain, nonatomic) IBOutlet UIButton *dismissButton;
+@end
+
 @implementation RestoreViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -32,18 +37,31 @@
 
     if (theButton.tag != 0) {
         [[AudioManagerController mainManager] playClickSound];
-        [GameInterfaceBridge registerCallingController:self.parentViewController];
-        [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
+        [GameInterfaceBridge registerCallingController:self.presentingViewController];
+        
+        // Since iOS 8, the file system layout of app containers has changed.
+        // So, we must rely now on saved game filename, not full path.
+        NSString *oldSavedGamePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"];
+        NSString *savedGameFile = [oldSavedGamePath lastPathComponent];
+        NSString *newSavedGamePath = [NSString stringWithFormat:@"%@%@", SAVES_DIRECTORY(), savedGameFile];
+        
+        [GameInterfaceBridge startSaveGame:newSavedGamePath];
     } else {
         [[AudioManagerController mainManager] playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
     }
-    [self.parentViewController dismissModalViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self.restoreButton setTitle:NSLocalizedString(@"Restore", nil) forState:UIControlStateNormal];
+    [self.dismissButton setTitle:NSLocalizedString(@"Dismiss", nil) forState:UIControlStateNormal];
+    
+    [self.restoreButton applyDarkBlueQuickStyle];
+    [self.dismissButton applyDarkBlueQuickStyle];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -55,6 +73,8 @@
 }
 
 -(void) dealloc {
+    [_restoreButton release];
+    [_dismissButton release];
     [super dealloc];
 }
 

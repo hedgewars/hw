@@ -829,7 +829,7 @@ end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 var x: LongInt;
-    y, sy: LongInt;
+    y, sy, dir: LongInt;
     ar: array[0..1023] of TPoint;
     ar2: array[0..2047] of TPoint;
     temp: TPoint;
@@ -850,9 +850,10 @@ while tryAgain do
     delta:= LAND_WIDTH div 16;
     cnt2:= 0;
     repeat
-        x:= Left + max(LAND_WIDTH div 2048, LongInt(GetRandom(Delta)));
+        if GetRandom(2) = 0 then dir:= -1 else dir:= 1;
+        x:= max(LAND_WIDTH div 2048, LongInt(GetRandom(Delta)));
+        if dir = 1 then x:= Left + x else x:= Right - x; 
         repeat
-            inc(x, Delta);
             cnt:= 0;
             y:= min(1024, topY) - Gear^.Radius shl 1;
             while y < cWaterLine do
@@ -901,9 +902,10 @@ while tryAgain do
                     ar2[cnt2].x:= x;
                     ar2[cnt2].y:= y;
                     inc(cnt2)
-                    end
-                end
-        until (x + Delta > Right);
+                    end;
+                end;
+            inc(x, Delta*dir)
+        until ((dir = 1) and (x > Right)) or ((dir = -1) and (x < Left));
 
         dec(Delta, 60)
     until (cnt2 > 0) or (Delta < 70);

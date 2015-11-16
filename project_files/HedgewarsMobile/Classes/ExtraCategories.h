@@ -50,6 +50,9 @@
 
 -(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title;
 
+- (void)applyBlackQuickStyle;
+- (void)applyDarkBlueQuickStyle;
+
 @end
 
 

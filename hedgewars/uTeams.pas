@@ -604,7 +604,6 @@ if isDeveloperMode then
     SplitBySpace(s, cs);
     SplitBySpace(cs, ts);
     Color:= StrToInt(cs);
-    TryDo(Color <> 0, 'Error: black team color', true);
 
     // color is always little endian so the mask must be constant also in big endian archs
     Color:= Color or $FF000000;

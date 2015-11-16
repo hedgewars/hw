@@ -63,6 +63,7 @@ implementation
 
 const
     clickTime = 200;
+    nilFingerId = High(TSDL_FingerId);
     baseRectSize = 96;
 
 var
@@ -295,7 +296,7 @@ if (buttonsDown > 0) and (widget <> nil) then
     end;
 
 if targetting then
-    AddCaption('Press the target button to mark the target', cWhiteColor, capgrpAmmoInfo);
+    AddCaption(trmsg[sidPressTarget], cWhiteColor, capgrpAmmoInfo);
 
 deleteFinger(pointerId);
 end;

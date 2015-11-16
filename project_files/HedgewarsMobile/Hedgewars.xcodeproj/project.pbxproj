@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -74,9 +74,9 @@
 		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
 		615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */ = {isa = PBXBuildFile; fileRef = 615BE3D3155C5DDF003CA34D /* uInputHandler.pas */; };
 		615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */; };
-		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; };
-		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; };
-		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; };
+		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */; };
 		615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */; };
 		616065A8159A71FD00CFAEF4 /* hwclassic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */; };
@@ -96,7 +96,6 @@
 		6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */; };
 		6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */; };
 		6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920111CA9BA200D6E256 /* SingleTeamViewController.m */; };
-		6165921E11CA9BA200D6E256 /* SettingsContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */; };
 		6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920511CA9BA200D6E256 /* TeamConfigViewController.m */; };
 		6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920711CA9BA200D6E256 /* TeamSettingsViewController.m */; };
 		6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920911CA9BA200D6E256 /* VoicesViewController.m */; };
@@ -208,7 +207,6 @@
 		61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		61A976B3136F668500DD9878 /* uCursor.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A976B2136F668500DD9878 /* uCursor.pas */; };
-		61AC067412B2E32D000B52A2 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AC067312B2E32D000B52A2 /* Appirater.m */; };
 		61B37A1F17837C78009F283D /* ArgParsers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A1D17837C78009F283D /* ArgParsers.pas */; };
 		61B37A2017837C78009F283D /* uVisualGearsList.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A1E17837C78009F283D /* uVisualGearsList.pas */; };
 		61B37A80178381DB009F283D /* uGearsHandlersMess.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */; };
@@ -244,6 +242,51 @@
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
+		F60D04771BD137B5003ACB00 /* bullet_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04631BD137B5003ACB00 /* bullet_filled.png */; };
+		F60D04781BD137B5003ACB00 /* bullet_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */; };
+		F60D04791BD137B5003ACB00 /* bullet.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04651BD137B5003ACB00 /* bullet.png */; };
+		F60D047A1BD137B5003ACB00 /* bullet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04661BD137B5003ACB00 /* bullet@2x.png */; };
+		F60D047B1BD137B5003ACB00 /* flower_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04671BD137B5003ACB00 /* flower_filled.png */; };
+		F60D047C1BD137B5003ACB00 /* flower_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04681BD137B5003ACB00 /* flower_filled@2x.png */; };
+		F60D047D1BD137B5003ACB00 /* flower.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04691BD137B5003ACB00 /* flower.png */; };
+		F60D047E1BD137B5003ACB00 /* flower@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D046A1BD137B5003ACB00 /* flower@2x.png */; };
+		F60D047F1BD137B5003ACB00 /* heart_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D046B1BD137B5003ACB00 /* heart_filled.png */; };
+		F60D04801BD137B5003ACB00 /* heart_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D046C1BD137B5003ACB00 /* heart_filled@2x.png */; };
+		F60D04811BD137B5003ACB00 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D046D1BD137B5003ACB00 /* heart.png */; };
+		F60D04821BD137B5003ACB00 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D046E1BD137B5003ACB00 /* heart@2x.png */; };
+		F60D04831BD137B5003ACB00 /* target_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D046F1BD137B5003ACB00 /* target_filled.png */; };
+		F60D04841BD137B5003ACB00 /* target_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04701BD137B5003ACB00 /* target_filled@2x.png */; };
+		F60D04851BD137B5003ACB00 /* target.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04711BD137B5003ACB00 /* target.png */; };
+		F60D04861BD137B5003ACB00 /* target@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04721BD137B5003ACB00 /* target@2x.png */; };
+		F60D04871BD137B5003ACB00 /* teams_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04731BD137B5003ACB00 /* teams_filled.png */; };
+		F60D04881BD137B5003ACB00 /* teams_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04741BD137B5003ACB00 /* teams_filled@2x.png */; };
+		F60D04891BD137B5003ACB00 /* teams.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04751BD137B5003ACB00 /* teams.png */; };
+		F60D048A1BD137B5003ACB00 /* teams@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04761BD137B5003ACB00 /* teams@2x.png */; };
+		F6448CE31BD2E00500C31C8C /* TableViewControllerWithDoneButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */; };
+		F65724FD1B7E784700A86262 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724F81B7E784700A86262 /* helpabove.png */; };
+		F65724FE1B7E784700A86262 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724F91B7E784700A86262 /* helpbottom.png */; };
+		F65724FF1B7E784700A86262 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FA1B7E784700A86262 /* helpleft.png */; };
+		F65725001B7E784700A86262 /* helpplain.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FB1B7E784700A86262 /* helpplain.png */; };
+		F65725011B7E784700A86262 /* helpright.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FC1B7E784700A86262 /* helpright.png */; };
+		F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */; };
+		F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBD1B9B95A400A78ADF /* Icon-76.png */; };
+		F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */; };
+		F6756D801BD8550500B6AB6B /* LabelWithIBLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */; };
+		F67FC8121BEC06E700A9DC75 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F67FC8101BEC06E700A9DC75 /* Appirater.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F67FC8141BEC072B00A9DC75 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F67FC8131BEC072B00A9DC75 /* StoreKit.framework */; };
+		F67FC8161BEC17AC00A9DC75 /* Appirater.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */; };
+		F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BA38451BA7A834005D16EA /* GameLogViewController.m */; };
+		F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */; };
+		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
+		F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */; };
+		F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */; };
+		F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D7E0C51B769819004F3BCF /* CoreMotion.framework */; };
+		F6D7E0C81B7698BF004F3BCF /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D7E0C71B7698BE004F3BCF /* libstdc++.dylib */; };
+		F6F07BDE1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6F07BDA1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib */; };
+		F6F07BDF1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6F07BDB1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib */; };
+		F6F07BE01B7E72D40010E48F /* HelpPageLobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6F07BDD1B7E72D40010E48F /* HelpPageLobbyViewController.m */; };
+		F6F7DA8F1BE18F5700432EA7 /* UITableViewCell+FindTable.m in Sources */ = {isa = PBXBuildFile; fileRef = F6F7DA8E1BE18F5700432EA7 /* UITableViewCell+FindTable.m */; };
+		F6FF25A21BB8AEE300124053 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6FF25A11BB8AEE300124053 /* GameController.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -416,9 +459,6 @@
 		61177BA7148A658900686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61177BA9148A660C00686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61177BAA148A661600686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/About.strings; sourceTree = "<group>"; };
-		61177BAC148A671600686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/About.strings; sourceTree = "<group>"; };
-		61177BAD148A672000686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/Localizable.strings; sourceTree = "<group>"; };
-		61177BAE148A672C00686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61177BE4148B881C00686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/About.strings; sourceTree = "<group>"; };
 		61177BF0148B882500686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61177BF1148B882F00686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/Scheme.strings; sourceTree = "<group>"; };
@@ -493,8 +533,6 @@
 		616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleSchemeViewController.m; sourceTree = "<group>"; };
 		6165920011CA9BA200D6E256 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamViewController.h; sourceTree = "<group>"; };
 		6165920111CA9BA200D6E256 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamViewController.m; sourceTree = "<group>"; };
-		6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsContainerViewController.h; sourceTree = "<group>"; };
-		6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsContainerViewController.m; sourceTree = "<group>"; };
 		6165920411CA9BA200D6E256 /* TeamConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamConfigViewController.h; sourceTree = "<group>"; };
 		6165920511CA9BA200D6E256 /* TeamConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamConfigViewController.m; sourceTree = "<group>"; };
 		6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamSettingsViewController.h; sourceTree = "<group>"; };
@@ -638,8 +676,6 @@
 		61A4A39312A5CCC2004D81E6 /* uVariables.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVariables.pas; path = ../../hedgewars/uVariables.pas; sourceTree = SOURCE_ROOT; };
 		61A4A3A112A5CD56004D81E6 /* uCaptions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCaptions.pas; path = ../../hedgewars/uCaptions.pas; sourceTree = SOURCE_ROOT; };
 		61A976B2136F668500DD9878 /* uCursor.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCursor.pas; path = ../../hedgewars/uCursor.pas; sourceTree = SOURCE_ROOT; };
-		61AC067212B2E32D000B52A2 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Appirater.h; path = Classes/Appirater.h; sourceTree = "<group>"; };
-		61AC067312B2E32D000B52A2 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appirater.m; path = Classes/Appirater.m; sourceTree = "<group>"; };
 		61B37A1D17837C78009F283D /* ArgParsers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = ArgParsers.pas; path = ../../hedgewars/ArgParsers.pas; sourceTree = SOURCE_ROOT; };
 		61B37A1E17837C78009F283D /* uVisualGearsList.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGearsList.pas; path = ../../hedgewars/uVisualGearsList.pas; sourceTree = SOURCE_ROOT; };
 		61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlersMess.pas; path = ../../hedgewars/uGearsHandlersMess.pas; sourceTree = SOURCE_ROOT; };
@@ -695,6 +731,64 @@
 		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeaponCellView.m; path = Classes/WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F60D04631BD137B5003ACB00 /* bullet_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_filled.png; path = Resources/Icons/bullet_filled.png; sourceTree = "<group>"; };
+		F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bullet_filled@2x.png"; path = "Resources/Icons/bullet_filled@2x.png"; sourceTree = "<group>"; };
+		F60D04651BD137B5003ACB00 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet.png; path = Resources/Icons/bullet.png; sourceTree = "<group>"; };
+		F60D04661BD137B5003ACB00 /* bullet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bullet@2x.png"; path = "Resources/Icons/bullet@2x.png"; sourceTree = "<group>"; };
+		F60D04671BD137B5003ACB00 /* flower_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flower_filled.png; path = Resources/Icons/flower_filled.png; sourceTree = "<group>"; };
+		F60D04681BD137B5003ACB00 /* flower_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "flower_filled@2x.png"; path = "Resources/Icons/flower_filled@2x.png"; sourceTree = "<group>"; };
+		F60D04691BD137B5003ACB00 /* flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flower.png; path = Resources/Icons/flower.png; sourceTree = "<group>"; };
+		F60D046A1BD137B5003ACB00 /* flower@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "flower@2x.png"; path = "Resources/Icons/flower@2x.png"; sourceTree = "<group>"; };
+		F60D046B1BD137B5003ACB00 /* heart_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = heart_filled.png; path = Resources/Icons/heart_filled.png; sourceTree = "<group>"; };
+		F60D046C1BD137B5003ACB00 /* heart_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "heart_filled@2x.png"; path = "Resources/Icons/heart_filled@2x.png"; sourceTree = "<group>"; };
+		F60D046D1BD137B5003ACB00 /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = heart.png; path = Resources/Icons/heart.png; sourceTree = "<group>"; };
+		F60D046E1BD137B5003ACB00 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "heart@2x.png"; path = "Resources/Icons/heart@2x.png"; sourceTree = "<group>"; };
+		F60D046F1BD137B5003ACB00 /* target_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = target_filled.png; path = Resources/Icons/target_filled.png; sourceTree = "<group>"; };
+		F60D04701BD137B5003ACB00 /* target_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "target_filled@2x.png"; path = "Resources/Icons/target_filled@2x.png"; sourceTree = "<group>"; };
+		F60D04711BD137B5003ACB00 /* target.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = target.png; path = Resources/Icons/target.png; sourceTree = "<group>"; };
+		F60D04721BD137B5003ACB00 /* target@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "target@2x.png"; path = "Resources/Icons/target@2x.png"; sourceTree = "<group>"; };
+		F60D04731BD137B5003ACB00 /* teams_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = teams_filled.png; path = Resources/Icons/teams_filled.png; sourceTree = "<group>"; };
+		F60D04741BD137B5003ACB00 /* teams_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "teams_filled@2x.png"; path = "Resources/Icons/teams_filled@2x.png"; sourceTree = "<group>"; };
+		F60D04751BD137B5003ACB00 /* teams.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = teams.png; path = Resources/Icons/teams.png; sourceTree = "<group>"; };
+		F60D04761BD137B5003ACB00 /* teams@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "teams@2x.png"; path = "Resources/Icons/teams@2x.png"; sourceTree = "<group>"; };
+		F6448CE11BD2E00500C31C8C /* TableViewControllerWithDoneButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerWithDoneButton.h; sourceTree = "<group>"; };
+		F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerWithDoneButton.m; sourceTree = "<group>"; };
+		F65724F81B7E784700A86262 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpabove.png; sourceTree = "<group>"; };
+		F65724F91B7E784700A86262 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpbottom.png; sourceTree = "<group>"; };
+		F65724FA1B7E784700A86262 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpleft.png; sourceTree = "<group>"; };
+		F65724FB1B7E784700A86262 /* helpplain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpplain.png; sourceTree = "<group>"; };
+		F65724FC1B7E784700A86262 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpright.png; sourceTree = "<group>"; };
+		F65725291B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/About.strings; sourceTree = "<group>"; };
+		F657252A1B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F657252B1B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/Scheme.strings; sourceTree = "<group>"; };
+		F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@2x.png"; path = "Resources/Icons/Icon-60@2x.png"; sourceTree = "<group>"; };
+		F65E1DBD1B9B95A400A78ADF /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Resources/Icons/Icon-76.png"; sourceTree = "<group>"; };
+		F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Resources/Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
+		F6756D7E1BD8550500B6AB6B /* LabelWithIBLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelWithIBLocalization.h; sourceTree = "<group>"; };
+		F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelWithIBLocalization.m; sourceTree = "<group>"; };
+		F67FC80F1BEC06E700A9DC75 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		F67FC8101BEC06E700A9DC75 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		F67FC8111BEC06E700A9DC75 /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
+		F67FC8131BEC072B00A9DC75 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Appirater.bundle; sourceTree = "<group>"; };
+		F67FC81F1BEC280D00A9DC75 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Locale/tr.lproj/About.strings; sourceTree = "<group>"; };
+		F67FC8201BEC280D00A9DC75 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Locale/tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F67FC8211BEC280D00A9DC75 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Locale/tr.lproj/Scheme.strings; sourceTree = "<group>"; };
+		F6BA38441BA7A834005D16EA /* GameLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLogViewController.h; sourceTree = "<group>"; };
+		F6BA38451BA7A834005D16EA /* GameLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLogViewController.m; sourceTree = "<group>"; };
+		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenPerlin.pas; path = ../../hedgewars/uLandGenPerlin.pas; sourceTree = "<group>"; };
+		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
+		F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandUtils.pas; path = ../../hedgewars/uLandUtils.pas; sourceTree = "<group>"; };
+		F6D7E0C51B769819004F3BCF /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		F6D7E0C71B7698BE004F3BCF /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		F6F07BDA1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPad.xib"; sourceTree = "<group>"; };
+		F6F07BDB1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
+		F6F07BDC1B7E72D40010E48F /* HelpPageLobbyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageLobbyViewController.h; sourceTree = "<group>"; };
+		F6F07BDD1B7E72D40010E48F /* HelpPageLobbyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageLobbyViewController.m; sourceTree = "<group>"; };
+		F6F7DA8D1BE18F5700432EA7 /* UITableViewCell+FindTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+FindTable.h"; path = "Classes/UITableViewCell+FindTable.h"; sourceTree = "<group>"; };
+		F6F7DA8E1BE18F5700432EA7 /* UITableViewCell+FindTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+FindTable.m"; path = "Classes/UITableViewCell+FindTable.m"; sourceTree = "<group>"; };
+		F6FF25A11BB8AEE300124053 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -702,6 +796,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F67FC8141BEC072B00A9DC75 /* StoreKit.framework in Frameworks */,
+				F6FF25A21BB8AEE300124053 /* GameController.framework in Frameworks */,
+				F6D7E0C81B7698BF004F3BCF /* libstdc++.dylib in Frameworks */,
+				F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */,
 				617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */,
 				617D795716D9345F0091D4D6 /* libPhyslayer.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
@@ -779,8 +877,7 @@
 				61F8535314578999002CA294 /* Helpers */,
 				61641FE21437CD8F006E049C /* Headers */,
 				61DE91561258B76800B80214 /* Custom UIs */,
-				61AC067212B2E32D000B52A2 /* Appirater.h */,
-				61AC067312B2E32D000B52A2 /* Appirater.m */,
+				F67FC80E1BEC06E700A9DC75 /* Appirater */,
 				61006F93128DE31F00EBA7F7 /* CreationChamber.h */,
 				61006F94128DE31F00EBA7F7 /* CreationChamber.m */,
 				6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */,
@@ -794,6 +891,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */,
 				6129B9F611EFB04D0017E305 /* denied.png */,
 				6167C88B14294738003DD50F /* denied@2x.png */,
 				6199E86C12464A8E00DADF8C /* surprise.png */,
@@ -814,6 +912,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F67FC8131BEC072B00A9DC75 /* StoreKit.framework */,
+				F6FF25A11BB8AEE300124053 /* GameController.framework */,
 				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
@@ -822,6 +922,7 @@
 				61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */,
 				61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */,
 				61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */,
+				F6D7E0C71B7698BE004F3BCF /* libstdc++.dylib */,
 				61798934114AB25F00BA94A9 /* AudioToolbox.framework */,
 				612CABAA1391CE68005E9596 /* AVFoundation.framework */,
 				61A117FE1168322700359010 /* CoreGraphics.framework */,
@@ -833,6 +934,7 @@
 				61272338117DF778005B90CF /* MobileCoreServices.framework */,
 				6199E81512463EA800DADF8C /* CFNetwork.framework */,
 				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
+				F6D7E0C51B769819004F3BCF /* CoreMotion.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -853,6 +955,8 @@
 				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
 				61F2E7CC1205EDE0005734F7 /* AboutViewController.m */,
 				61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */,
+				F6BA38441BA7A834005D16EA /* GameLogViewController.h */,
+				F6BA38451BA7A834005D16EA /* GameLogViewController.m */,
 				6167A6731391514600AA6D07 /* RestoreViewController.h */,
 				6167A6741391514600AA6D07 /* RestoreViewController.m */,
 				6167A6751391514600AA6D07 /* RestoreViewController-iPhone.xib */,
@@ -898,8 +1002,6 @@
 		6163EE4C11CC2478001C0453 /* Settings Page */ = {
 			isa = PBXGroup;
 			children = (
-				6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */,
-				6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */,
 				616591F411CA9BA200D6E256 /* SettingsBaseViewController.h */,
 				616591F511CA9BA200D6E256 /* SettingsBaseViewController.m */,
 				6163EE4E11CC248D001C0453 /* First Level */,
@@ -924,6 +1026,12 @@
 				616591F311CA9BA200D6E256 /* MapConfigViewController.m */,
 				6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */,
 				6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */,
+				F6F07BDC1B7E72D40010E48F /* HelpPageLobbyViewController.h */,
+				F6F07BDD1B7E72D40010E48F /* HelpPageLobbyViewController.m */,
+				F6F07BDA1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib */,
+				F6F07BDB1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib */,
+				F6756D7E1BD8550500B6AB6B /* LabelWithIBLocalization.h */,
+				F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */,
 			);
 			name = "Game Configuration";
 			sourceTree = "<group>";
@@ -931,6 +1039,8 @@
 		6163EE4E11CC248D001C0453 /* First Level */ = {
 			isa = PBXGroup;
 			children = (
+				F6448CE11BD2E00500C31C8C /* TableViewControllerWithDoneButton.h */,
+				F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */,
 				616591E811CA9BA200D6E256 /* GeneralSettingsViewController.h */,
 				616591E911CA9BA200D6E256 /* GeneralSettingsViewController.m */,
 				6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */,
@@ -1069,6 +1179,8 @@
 				619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */,
 				619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */,
 				61F544C512AF1748007FD913 /* HoldTableViewCell.h */,
+				F6F7DA8D1BE18F5700432EA7 /* UITableViewCell+FindTable.h */,
+				F6F7DA8E1BE18F5700432EA7 /* UITableViewCell+FindTable.m */,
 				61F544C612AF1748007FD913 /* HoldTableViewCell.m */,
 				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
 				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
@@ -1083,6 +1195,7 @@
 		61F7A42811E2905C0040BA66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				F60D04611BD1378F003ACB00 /* Tabbar */,
 				61F2E7EB12060E31005734F7 /* checkbox.png */,
 				615FEAD912A2A4C10098EE92 /* checkbox@2x.png */,
 				61D3D2A41290E03A003CE7C3 /* irc.png */,
@@ -1120,6 +1233,9 @@
 				61F7A43411E290650040BA66 /* Icon-Small@2x.png */,
 				61F7A43511E290650040BA66 /* Icon.png */,
 				61F7A43611E290650040BA66 /* Icon@2x.png */,
+				F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */,
+				F65E1DBD1B9B95A400A78ADF /* Icon-76.png */,
+				F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */,
 				61F7A43711E290650040BA66 /* iTunesArtwork.png */,
 			);
 			name = Icons;
@@ -1172,6 +1288,7 @@
 				6172FEEC1298D25D00D73365 /* smallerBackground@2x~iphone.png */,
 				6172FEEE1298D25D00D73365 /* smallerBackground~iphone.png */,
 				6172FEED1298D25D00D73365 /* smallerBackground~ipad.png */,
+				F65724F71B7E784700A86262 /* Help Bubbles */,
 			);
 			name = Frontend;
 			sourceTree = "<group>";
@@ -1229,10 +1346,13 @@
 				617987FC114AA34C00BA94A9 /* uGears.pas */,
 				617987FD114AA34C00BA94A9 /* uIO.pas */,
 				617987FF114AA34C00BA94A9 /* uLand.pas */,
+				F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */,
+				F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */,
 				61798800114AA34C00BA94A9 /* uLandGraphics.pas */,
 				61798801114AA34C00BA94A9 /* uLandObjects.pas */,
 				61798802114AA34C00BA94A9 /* uLandTemplates.pas */,
 				61798803114AA34C00BA94A9 /* uLandTexture.pas */,
+				F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */,
 				61798804114AA34C00BA94A9 /* uLocale.pas */,
 				61798805114AA34C00BA94A9 /* uMisc.pas */,
 				61798806114AA34C00BA94A9 /* uRandom.pas */,
@@ -1245,6 +1365,58 @@
 				6179880F114AA34C00BA94A9 /* uWorld.pas */,
 			);
 			name = "Pascal Sources";
+			sourceTree = "<group>";
+		};
+		F60D04611BD1378F003ACB00 /* Tabbar */ = {
+			isa = PBXGroup;
+			children = (
+				F60D04631BD137B5003ACB00 /* bullet_filled.png */,
+				F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */,
+				F60D04651BD137B5003ACB00 /* bullet.png */,
+				F60D04661BD137B5003ACB00 /* bullet@2x.png */,
+				F60D04671BD137B5003ACB00 /* flower_filled.png */,
+				F60D04681BD137B5003ACB00 /* flower_filled@2x.png */,
+				F60D04691BD137B5003ACB00 /* flower.png */,
+				F60D046A1BD137B5003ACB00 /* flower@2x.png */,
+				F60D046B1BD137B5003ACB00 /* heart_filled.png */,
+				F60D046C1BD137B5003ACB00 /* heart_filled@2x.png */,
+				F60D046D1BD137B5003ACB00 /* heart.png */,
+				F60D046E1BD137B5003ACB00 /* heart@2x.png */,
+				F60D046F1BD137B5003ACB00 /* target_filled.png */,
+				F60D04701BD137B5003ACB00 /* target_filled@2x.png */,
+				F60D04711BD137B5003ACB00 /* target.png */,
+				F60D04721BD137B5003ACB00 /* target@2x.png */,
+				F60D04731BD137B5003ACB00 /* teams_filled.png */,
+				F60D04741BD137B5003ACB00 /* teams_filled@2x.png */,
+				F60D04751BD137B5003ACB00 /* teams.png */,
+				F60D04761BD137B5003ACB00 /* teams@2x.png */,
+			);
+			name = Tabbar;
+			sourceTree = "<group>";
+		};
+		F65724F71B7E784700A86262 /* Help Bubbles */ = {
+			isa = PBXGroup;
+			children = (
+				F65724F81B7E784700A86262 /* helpabove.png */,
+				F65724F91B7E784700A86262 /* helpbottom.png */,
+				F65724FA1B7E784700A86262 /* helpleft.png */,
+				F65724FB1B7E784700A86262 /* helpplain.png */,
+				F65724FC1B7E784700A86262 /* helpright.png */,
+			);
+			name = "Help Bubbles";
+			path = "Resources/Frontend/Help Bubbles";
+			sourceTree = "<group>";
+		};
+		F67FC80E1BEC06E700A9DC75 /* Appirater */ = {
+			isa = PBXGroup;
+			children = (
+				F67FC80F1BEC06E700A9DC75 /* Appirater.h */,
+				F67FC8101BEC06E700A9DC75 /* Appirater.m */,
+				F67FC8111BEC06E700A9DC75 /* AppiraterDelegate.h */,
+				F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */,
+			);
+			name = Appirater;
+			path = Classes/Appirater;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1301,9 +1473,10 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0710;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Hedgewars" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -1319,6 +1492,8 @@
 				Bulgarian,
 				Portuguese,
 				Romanian,
+				ru,
+				tr,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1434,27 +1609,42 @@
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
 				6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */,
 				6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */,
+				F60D04791BD137B5003ACB00 /* bullet.png in Resources */,
 				61F9040911DF58B00068B24D /* settingsButton.png in Resources */,
 				61F9040B11DF59370068B24D /* background.png in Resources */,
 				61EBA62A11DFF2BC0048B68A /* title~iphone.png in Resources */,
 				61F7A43811E290650040BA66 /* Icon-72.png in Resources */,
+				F60D04781BD137B5003ACB00 /* bullet_filled@2x.png in Resources */,
 				61F7A43911E290650040BA66 /* Icon-Small-50.png in Resources */,
+				F60D04871BD137B5003ACB00 /* teams_filled.png in Resources */,
 				61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */,
 				61F7A43C11E290650040BA66 /* Icon.png in Resources */,
+				F65724FE1B7E784700A86262 /* helpbottom.png in Resources */,
 				61F7A43E11E290650040BA66 /* iTunesArtwork.png in Resources */,
+				F60D04811BD137B5003ACB00 /* heart.png in Resources */,
+				F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */,
 				6129B9F711EFB04D0017E305 /* denied.png in Resources */,
 				61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */,
+				F60D047C1BD137B5003ACB00 /* flower_filled@2x.png in Resources */,
 				61F2E7EC12060E31005734F7 /* checkbox.png in Resources */,
+				F60D04821BD137B5003ACB00 /* heart@2x.png in Resources */,
 				615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */,
+				F60D048A1BD137B5003ACB00 /* teams@2x.png in Resources */,
+				F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */,
+				F60D047E1BD137B5003ACB00 /* flower@2x.png in Resources */,
+				F60D04841BD137B5003ACB00 /* target_filled@2x.png in Resources */,
 				615AD9E9120764CA00F2FF04 /* backButton.png in Resources */,
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
+				F60D04891BD137B5003ACB00 /* teams.png in Resources */,
 				611EE974122A9C4100DF6938 /* clickSound.caf in Resources */,
 				611EE9DA122AA10A00DF6938 /* selSound.caf in Resources */,
 				6199E86D12464A8E00DADF8C /* surprise.png in Resources */,
 				611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */,
 				6147DAD31253DCDE0010357E /* savesButton.png in Resources */,
 				610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */,
+				F6F07BDF1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib in Resources */,
 				610D5FB31270E26C0033333A /* Icon@2x.png in Resources */,
+				F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */,
 				61A670C012747D9B00B06CE7 /* Default.png in Resources */,
 				61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */,
 				61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */,
@@ -1464,15 +1654,24 @@
 				61D3D2A51290E03A003CE7C3 /* irc.png in Resources */,
 				6172FED91298CF9800D73365 /* background~iphone.png in Resources */,
 				6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */,
+				F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */,
 				6172FEF11298D25D00D73365 /* smallerBackground~ipad.png in Resources */,
+				F60D047A1BD137B5003ACB00 /* bullet@2x.png in Resources */,
+				F60D04861BD137B5003ACB00 /* target@2x.png in Resources */,
 				6172FEF21298D25D00D73365 /* smallerBackground~iphone.png in Resources */,
 				61889985129995B500D55FD6 /* title~ipad.png in Resources */,
+				F60D047D1BD137B5003ACB00 /* flower.png in Resources */,
+				F60D04801BD137B5003ACB00 /* heart_filled@2x.png in Resources */,
 				615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */,
 				615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */,
+				F65725001B7E784700A86262 /* helpplain.png in Resources */,
 				61188BF712A6FE5A0026C5DA /* backButton@2x.png in Resources */,
 				61188BF812A6FE5C0026C5DA /* background@2x~iphone.png in Resources */,
 				61188BF912A6FE5D0026C5DA /* checkbox@2x.png in Resources */,
 				61188BFB12A6FE610026C5DA /* Default-ipad-Landscape.png in Resources */,
+				F60D047B1BD137B5003ACB00 /* flower_filled.png in Resources */,
+				F60D04771BD137B5003ACB00 /* bullet_filled.png in Resources */,
+				F60D04881BD137B5003ACB00 /* teams_filled@2x.png in Resources */,
 				61188BFC12A6FE630026C5DA /* Default@2x.png in Resources */,
 				61188BFD12A6FE730026C5DA /* fb@2x.png in Resources */,
 				61188BFE12A6FE7C0026C5DA /* irc@2x.png in Resources */,
@@ -1481,10 +1680,15 @@
 				61188C0412A6FE880026C5DA /* savesButton@2x.png in Resources */,
 				61188C0512A6FE8F0026C5DA /* Data in Resources */,
 				61188C0612A6FE950026C5DA /* smallerBackground@2x~iphone.png in Resources */,
+				F67FC8161BEC17AC00A9DC75 /* Appirater.bundle in Resources */,
+				F65724FD1B7E784700A86262 /* helpabove.png in Resources */,
+				F6F07BDE1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib in Resources */,
 				61188C0712A6FE960026C5DA /* settingsButton@2x.png in Resources */,
 				61188C0812A6FE9A0026C5DA /* title@2x~iphone.png in Resources */,
+				F65724FF1B7E784700A86262 /* helpleft.png in Resources */,
 				61188C0912A6FE9C0026C5DA /* tw@2x.png in Resources */,
 				6174F7C812CD62E300205D6F /* smallerTitle.png in Resources */,
+				F65725011B7E784700A86262 /* helpright.png in Resources */,
 				6174F7C912CD62E300205D6F /* smallerTitle@2x.png in Resources */,
 				6167A6771391514600AA6D07 /* RestoreViewController-iPhone.xib in Resources */,
 				6167A72D13919E6800AA6D07 /* RestoreViewController-iPad.xib in Resources */,
@@ -1496,12 +1700,15 @@
 				6167C8F81429502C003DD50F /* robotBadge@2x.png in Resources */,
 				6167C8F91429502C003DD50F /* star.png in Resources */,
 				6167C8FA1429502C003DD50F /* star@2x.png in Resources */,
+				F60D047F1BD137B5003ACB00 /* heart_filled.png in Resources */,
+				F60D04831BD137B5003ACB00 /* target_filled.png in Resources */,
 				6167CA37142A6ED7003DD50F /* bot0.png in Resources */,
 				6167CA38142A6ED7003DD50F /* bot0@2x.png in Resources */,
 				6167CA39142A6ED7003DD50F /* bot1.png in Resources */,
 				6167CA3A142A6ED7003DD50F /* bot1@2x.png in Resources */,
 				6167CA3B142A6ED7003DD50F /* bot2.png in Resources */,
 				6167CA3C142A6ED7003DD50F /* bot2@2x.png in Resources */,
+				F60D04851BD137B5003ACB00 /* target.png in Resources */,
 				6167CA3D142A6ED7003DD50F /* bot3.png in Resources */,
 				6167CA3E142A6ED7003DD50F /* bot3@2x.png in Resources */,
 				6167CA3F142A6ED7003DD50F /* bot4.png in Resources */,
@@ -1553,7 +1760,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SOURCE_DIR=${PROJECT_DIR}/../../\n\n#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\necho \"Copying Data...\"\ncp -R ${SOURCE_DIR}/share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some other files\necho \"Fetching additional graphics...\"\nmkdir -p ${PROJECT_DIR}/Data/Graphics/Icons\ncp    ${SOURCE_DIR}/QTfrontend/res/{btn*,icon*,StatsMedal*,ammopic*}.png ${PROJECT_DIR}/Data/Graphics/Icons/\ncp -R ${SOURCE_DIR}/project_files/Android-build/SDL-android-project/assets/Data/Graphics/Buttons ${PROJECT_DIR}/Data/Graphics/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg* -delete\nfind ${PROJECT_DIR}/Data -name *.psd -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\nfind ${PROJECT_DIR}/Data -name *.ts -delete\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/test*\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete all names, reserved hats and unused fonts\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\necho \"Handling audio files...\"\n#copy mono audio\ncp -R ${SOURCE_DIR}/project_files/AudioMono/* ${PROJECT_DIR}/Data/\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nfor i in `ls ${PROJECT_DIR}/Data/Maps/`;\ndo \n    if [[ `ls -f ${PROJECT_DIR}/Data/Maps/$i/map.lua 2> /dev/null` != '' ]];\n    then\n        mv ${PROJECT_DIR}/Data/Maps/$i ${PROJECT_DIR}/Data/Missions/Maps/;\n    fi;\ndone;\n\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n\n#reduce the number of flakes for City\nsed -i -e 's/1500/50/' ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
+			shellScript = "SOURCE_DIR=${PROJECT_DIR}/../../\n\n#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\necho \"Copying Data...\"\ncp -R ${SOURCE_DIR}/share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some other files\necho \"Fetching additional graphics...\"\nmkdir -p ${PROJECT_DIR}/Data/Graphics/Icons\ncp    ${SOURCE_DIR}/QTfrontend/res/{btn*,icon*,StatsMedal*,ammopic*}.png ${PROJECT_DIR}/Data/Graphics/Icons/\ncp -R ${SOURCE_DIR}/project_files/Android-build/SDL-android-project/assets/Data/Graphics/Buttons ${PROJECT_DIR}/Data/Graphics/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg* -delete\nfind ${PROJECT_DIR}/Data -name *.psd -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\nfind ${PROJECT_DIR}/Data -name *.ts -delete\n\n#delete all CMake generated files\nfind ${PROJECT_DIR}/Data -name CMakeFiles -type d -exec rm -r {} +\nfind ${PROJECT_DIR}/Data -name Makefile -delete\nfind ${PROJECT_DIR}/Data -name *.cmake -delete\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/test*\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{FlightJoust,ClimbHome}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete all names, reserved hats and unused fonts\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\necho \"Handling audio files...\"\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nfor i in `ls ${PROJECT_DIR}/Data/Maps/`;\ndo \n    if [[ `ls -f ${PROJECT_DIR}/Data/Maps/$i/map.lua 2> /dev/null` != '' ]];\n    then\n        mv ${PROJECT_DIR}/Data/Maps/$i ${PROJECT_DIR}/Data/Missions/Maps/;\n    fi;\ndone;\n\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n\n#reduce the number of flakes for City\nsed -i -e 's/1500/50/' ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
 		};
 		61806B78170B83EA00C601BC /* config.inc */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1568,7 +1775,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "HG=/usr/local/bin/hg\nSOURCE_DIR=${PROJECT_DIR}/../../\n\n#create config.inc\necho \"Updating config file...\"\nPRON=`grep HEDGEWARS_PROTO_VER ${SOURCE_DIR}/CMakeLists.txt | grep -o -E [0-9]+`\nMAJN=`grep CPACK_PACKAGE_VERSION_MAJOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nMINN=`grep CPACK_PACKAGE_VERSION_MINOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nPATN=`grep CPACK_PACKAGE_VERSION_PATCH ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nREVN=`$HG id -n ${SOURCE_DIR}`\nHASH=`$HG id -i ${SOURCE_DIR}`\n\necho \"{Do not change this file, use the project target to regenerate}\" > ${PROJECT_DIR}/config.inc\necho \"const cNetProtoVersion = $PRON;\" >> ${PROJECT_DIR}/config.inc\necho \"const cVersionString = '$MAJN.$MINN.$PATN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cRevisionString = '$REVN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cHashString = '$HASH';\" >> ${PROJECT_DIR}/config.inc\n";
+			shellScript = "HG=/usr/local/bin/hg\nSOURCE_DIR=${PROJECT_DIR}/../../\n\n#create config.inc\necho \"Updating config file...\"\nPRON=`grep HEDGEWARS_PROTO_VER ${SOURCE_DIR}/CMakeLists.txt | grep -o -E [0-9]+`\nMAJN=`grep CPACK_PACKAGE_VERSION_MAJOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nMINN=`grep CPACK_PACKAGE_VERSION_MINOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nPATN=`grep CPACK_PACKAGE_VERSION_PATCH ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nREVN=`$HG id -n ${SOURCE_DIR}`\nHASH=`$HG id -i ${SOURCE_DIR}`\n\necho \"{Do not change this file, use the project target to regenerate}\" > ${PROJECT_DIR}/config.inc\necho \"const cNetProtoVersion = $PRON;\" >> ${PROJECT_DIR}/config.inc\necho \"const cVersionString = '$MAJN.$MINN.$PATN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cRevisionString = '$REVN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cHashString = '$HASH';\" >> ${PROJECT_DIR}/config.inc\necho \"const cDefaultPathPrefix = '';\" >> ${PROJECT_DIR}/config.inc\n";
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1584,7 +1791,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Build libfpc.a\n# 9 July 2006 (Jonas Maebe)\n#   * original version\n# 15 September 2006 (Erling Johansen)\n#   * simplified\n# 26 April 2007 (Jonas Maebe)\n#  * added support for ppc64/x86_64 (future proofing)\n# 4 August 2007 (Jonas Maebe)\n#  * call ranlib after ar so the toc of the library is up-to-date\n# 3 January 2009 (Jonas Maebe)\n#  * support for ARM\n# 24 October 2009 (Jonas Maebe)\n#  * don't hardcode version 2.3.1 anymore under certain circumstances\n#  * use the FPC_RTL_UNITS_BASE setting\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nrm -f \"$TARGET_TEMP_DIR\"/*.a\nnarch=\n\ntemparchs=`echo $ARCHS|sed -e 's/arm[^\\w]*/arm\\\n/'|sort -u`\nfor arch in $temparchs\ndo\n\ttargetos=darwin;\n\tcase $arch in\n\t\tppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n\t\ti386) fpc_arch=386; fpc_rtl=i386; targetos=iphonesim ;;\n\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t*) continue\n\tesac\n\tif test -e \"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch}\n\tthen\n\t\tupath=\"$FPC_RTL_UNITS_BASE\"/`\"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch} -iV`/units/${fpc_rtl}-${targetos}\n\t\tar -q \"$TARGET_TEMP_DIR\"/libfpc${narch}.a `ls \"$upath\"/*/*.o | grep -v 'darwin/fv/'`\n\t\tranlib \"$TARGET_TEMP_DIR\"/libfpc${narch}.a\n\t\tnarch=${narch}x\n\telse\n\t\techo error: can\\'t build libfpc.a for $arch \\(${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch} not found, derived from FPC_COMPILER_BINARY_DIR project setting\\)\n\tfi\ndone\n\nif test ${#narch} -gt 1\nthen\n\tlipo -create \"$TARGET_TEMP_DIR\"/libfpc*.a -output \"$TARGET_BUILD_DIR\"/libfpc.a\n\trm -f \"$TARGET_TEMP_DIR\"/*.a\nelse\n\tmv \"$TARGET_TEMP_DIR\"/libfpc.a \"$TARGET_BUILD_DIR\"\nfi\n";
+			shellScript = "# Build libfpc.a\n# 9 July 2006 (Jonas Maebe)\n#   * original version\n# 15 September 2006 (Erling Johansen)\n#   * simplified\n# 26 April 2007 (Jonas Maebe)\n#  * added support for ppc64/x86_64 (future proofing)\n# 4 August 2007 (Jonas Maebe)\n#  * call ranlib after ar so the toc of the library is up-to-date\n# 3 January 2009 (Jonas Maebe)\n#  * support for ARM\n# 24 October 2009 (Jonas Maebe)\n#  * don't hardcode version 2.3.1 anymore under certain circumstances\n#  * use the FPC_RTL_UNITS_BASE setting\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nrm -f \"$TARGET_TEMP_DIR\"/*.a\nnarch=\n\n#temparchs=`echo $ARCHS|sed -e 's/arm[^\\w]*/arm\\\n#/'|sort -u`\ntemparchs=`echo $ARCHS|sort -u`\necho $temparchs\nfor arch in $temparchs\ndo\n\ttargetos=darwin;\n\tcase $arch in\n        arm64) fpc_arch=rossa64; fpc_rtl=aarch64 ;;\n        armv7) fpc_arch=rossarm; fpc_rtl=arm ;;\n        x86_64) fpc_arch=x64; fpc_rtl=x86_64; targetos=iphonesim ;;\n#       ppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n#\t\ti386) fpc_arch=386; fpc_rtl=i386; targetos=iphonesim ;;\n#\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n#\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n#\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t*) continue\n\tesac\n\tif test -e \"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch}\n\tthen\n\t\tupath=\"$FPC_RTL_UNITS_BASE\"/`\"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch} -iV`/units/${fpc_rtl}-${targetos}\n\t\tar -q \"$TARGET_TEMP_DIR\"/libfpc${narch}.a `ls \"$upath\"/*/*.o | grep -v 'darwin/fv/'`\n\t\tranlib \"$TARGET_TEMP_DIR\"/libfpc${narch}.a\n\t\tnarch=${narch}x\n\telse\n\t\techo error: can\\'t build libfpc.a for $arch \\(${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch} not found, derived from FPC_COMPILER_BINARY_DIR project setting\\)\n\tfi\ndone\n           \nif test ${#narch} -gt 1\nthen\n\tlipo -create \"$TARGET_TEMP_DIR\"/libfpc*.a -output \"$TARGET_BUILD_DIR\"/libfpc.a\n\trm -f \"$TARGET_TEMP_DIR\"/*.a\nelse\n\tmv \"$TARGET_TEMP_DIR\"/libfpc.a \"$TARGET_BUILD_DIR\"\nfi\n";
 		};
 		928301560F10E04C00CC5A3C /* Compile Pascal Sources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1599,7 +1806,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Compile Pascal Sources\n# 15sep06,ejo  written.\n# 26 April 2007 - Jonas Maebe\n#  * support for ppc64 and x86_64\n#  * don't run when cleaning (in case running scripts when cleaning is ever fixed by Apple)\n#  * split the options in FPC_COMMON_FLAGS (common to all configurations) and FPC_CFG_SPECIFIC_FLAGS (per configuration)\n# 4 January 2009 - Jonas Maebe\n#  * support for ARM\n# 24 October 2009 - Jonas Maebe\n#  * don't hardcode 2.3.1 in some cases anymore\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nif [ x\"$ACTION\" != \"xbuild\" ]; then\n  # in case running scripts during cleaning gets fixed\n  exit 0\nfi\n\nif test ! -e \"$FPC_MAIN_FILE\"\nthen\n\techo error: FPC_MAIN_FILE not found \\($FPC_MAIN_FILE\\)\n\texit 2\nfi\n\nfor variant in $BUILD_VARIANTS\ndo\n\tfor arch in $ARCHS\n\tdo\n\t\ttargetos=darwin;\n\t\tcase $arch in\n\t\t\tppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n\t\t\ti386) fpc_arch=386; fpc_rtl=i386; targetos=iphonesim ;;\n\t\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n\t\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n\t\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t\t*) continue\n\t\tesac\n\n\t\tapp_target_temp_dir=$CONFIGURATION_TEMP_DIR/`basename \"$PROJECT_TEMP_DIR\"`\n\t\tout_dir=$app_target_temp_dir/`basename \"$DERIVED_SOURCES_DIR\"`-$variant/$arch\n\t\tfpccompiler=\"${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch}\"\n\t\tif test -e \"$fpccompiler\"\n\t\tthen\n\t\t\tfpcversion=`\"$fpccompiler\" -iV`\n\t\t\tmainunitdir=\"$FPC_RTL_UNITS_BASE/$fpcversion/units/${fpc_rtl}-${targetos}/\"\n\t\t\tmkdir -p \"$out_dir\"\n\t\t\tcd \"$out_dir\"\n\t\t\techo \"Compiling to $out_dir\"\n\t\t\trm -f compilefailed\n\t\n\t\t\t# delete any ppu files for which the \".s\" file was somehow deleted (Xcode does that sometimes in case of errors),\n\t\t\t# so that FPC will recompile the unit\n\t\t\tfor file in *.ppu\n\t\t\tdo\n\t\t\t\tasmname=`basename \"$file\" ppu`s\n\t\t\t\tif [ ! -f \"$asmname\" ]; then\n\t\t\t\t\t# can fail in case there are no .ppu files, since then it will try to erase the file with name '*.ppu'\n\t\t\t\t\t# -> use -f so it won't give an error message\n\t\t\t\t\trm -f \"$file\"\n\t\t\t\tfi\n\t\t\tdone\n\n\t\t\techo $fpccompiler -n -l -viwn -a -s -vbr -FE. $FPC_COMMON_OPTIONS $FPC_SPECIFIC_OPTIONS '\\' >ppccmd.sh\n\t\t\techo -Fi\\\"`dirname \"$FPC_MAIN_FILE\"`\\\" '\\' >>ppccmd.sh\n\t\t\techo -Fu\"$mainunitdir/*\" -Fu\"$mainunitdir/rtl\" '\\' >>ppccmd.sh\n\t\t\t# allow FPC_UNIT_PATHS to override default search directory\n\t\t\techo $FPC_UNIT_PATHS '\\' >>ppccmd.sh\n\t\t\techo \\\"$FPC_MAIN_FILE\\\" >>ppccmd.sh\n\t\t\t# cat ppccmd.sh\n\n\t\t\t/bin/sh ppccmd.sh\n\t\t\tif [ $? != 0 ]; then\n\t\t\t\ttouch \"$out_dir\"/compilefailed\n\t\t\t\texit 1\n\t\t\tfi\n\t\telse\n\t\t\ttouch \"$out_dir\"/compilefailed\n\t\t\techo $FPC_MAIN_FILE:1: error: 1: can\\'t compile for $arch \\(ppc${fpc_arch} not found\\)\n\t\t\texit 2\n\t\tfi\n\tdone\ndone\n";
+			shellScript = "# Compile Pascal Sources\n# 15sep06,ejo  written.\n# 26 April 2007 - Jonas Maebe\n#  * support for ppc64 and x86_64\n#  * don't run when cleaning (in case running scripts when cleaning is ever fixed by Apple) (removed)\n#  * split the options in FPC_COMMON_FLAGS (common to all configurations) and FPC_CFG_SPECIFIC_FLAGS (per configuration)\n# 4 January 2009 - Jonas Maebe\n#  * support for ARM\n# 24 October 2009 - Jonas Maebe\n#  * don't hardcode 2.3.1 in some cases anymore\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nif test ! -e \"$FPC_MAIN_FILE\"\nthen\n\techo error: FPC_MAIN_FILE not found \\($FPC_MAIN_FILE\\)\n\texit 2\nfi\n\nfor variant in $BUILD_VARIANTS\ndo\n\tfor arch in $ARCHS\n\tdo\n\t\ttargetos=darwin;\n\t\tcase $arch in\n            arm64) fpc_arch=rossa64; fpc_rtl=aarch64 ;;\n            armv7) fpc_arch=rossarm; fpc_rtl=arm ;;\n            x86_64) fpc_arch=x64; fpc_rtl=x86_64; targetos=iphonesim ;;\n#\t\t\tppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n#\t\t\ti386) fpc_arch=386; fpc_rtl=i386; targetos=iphonesim ;;\n#\t\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n#\t\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n#\t\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t\t*) continue\n\t\tesac\n\n\t\tapp_target_temp_dir=$CONFIGURATION_TEMP_DIR/`basename \"$PROJECT_TEMP_DIR\"`\n\t\tout_dir=$app_target_temp_dir/`basename \"$DERIVED_SOURCES_DIR\"`-$variant/$arch\n\t\tfpccompiler=\"${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch}\"\n\t\tif test -e \"$fpccompiler\"\n\t\tthen\n\t\t\tfpcversion=`\"$fpccompiler\" -iV`\n\t\t\tmainunitdir=\"$FPC_RTL_UNITS_BASE/$fpcversion/units/${fpc_rtl}-${targetos}/\"\n\t\t\tmkdir -p \"$out_dir\"\n\t\t\tcd \"$out_dir\"\n\t\t\techo \"Compiling to $out_dir\"\n\t\t\trm -f compilefailed\n\t\n\t\t\t# delete any ppu files for which the \".s\" file was somehow deleted (Xcode does that sometimes in case of errors),\n\t\t\t# so that FPC will recompile the unit\n\t\t\tfor file in *.ppu\n\t\t\tdo\n\t\t\t\tasmname=`basename \"$file\" ppu`s\n\t\t\t\tif [ ! -f \"$asmname\" ]; then\n\t\t\t\t\t# can fail in case there are no .ppu files, since then it will try to erase the file with name '*.ppu'\n\t\t\t\t\t# -> use -f so it won't give an error message\n\t\t\t\t\trm -f \"$file\"\n\t\t\t\tfi\n\t\t\tdone\n\n\t\t\techo $fpccompiler -n -l -viwn -a -s -vbr -FE. $FPC_COMMON_OPTIONS $FPC_SPECIFIC_OPTIONS '\\' >ppccmd.sh\n\t\t\techo -Fi\\\"`dirname \"$FPC_MAIN_FILE\"`\\\" '\\' >>ppccmd.sh\n\t\t\techo -Fu\"$mainunitdir/*\" -Fu\"$mainunitdir/rtl\" '\\' >>ppccmd.sh\n\t\t\t# allow FPC_UNIT_PATHS to override default search directory\n\t\t\techo $FPC_UNIT_PATHS '\\' >>ppccmd.sh\n\t\t\techo \\\"$FPC_MAIN_FILE\\\" >>ppccmd.sh\n\t\t\t# cat ppccmd.sh\n\n\t\t\t/bin/sh ppccmd.sh\n\t\t\tif [ $? != 0 ]; then\n\t\t\t\ttouch \"$out_dir\"/compilefailed\n\t\t\t\texit 1\n\t\t\tfi\n\t\telse\n\t\t\ttouch \"$out_dir\"/compilefailed\n\t\t\techo $FPC_MAIN_FILE:1: error: 1: can\\'t compile for $arch \\(ppc${fpc_arch} not found\\)\n\t\t\texit 2\n\t\tfi\n\tdone\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1615,6 +1822,7 @@
 				61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */,
 				61798821114AA34C00BA94A9 /* uAIAmmoTests.pas in Sources */,
 				61798822114AA34C00BA94A9 /* uAIMisc.pas in Sources */,
+				F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */,
 				61798823114AA34C00BA94A9 /* uAmmos.pas in Sources */,
 				61798824114AA34C00BA94A9 /* uChat.pas in Sources */,
 				61798825114AA34C00BA94A9 /* uCollisions.pas in Sources */,
@@ -1627,7 +1835,9 @@
 				6179882D114AA34C00BA94A9 /* uLand.pas in Sources */,
 				6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */,
 				6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */,
+				F6756D801BD8550500B6AB6B /* LabelWithIBLocalization.m in Sources */,
 				61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */,
+				F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */,
 				61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */,
 				61798832114AA34C00BA94A9 /* uLocale.pas in Sources */,
 				61798833114AA34C00BA94A9 /* uMisc.pas in Sources */,
@@ -1654,7 +1864,6 @@
 				6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */,
 				6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */,
 				6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */,
-				6165921E11CA9BA200D6E256 /* SettingsContainerViewController.m in Sources */,
 				6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */,
 				6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */,
 				6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */,
@@ -1677,10 +1886,12 @@
 				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,
 				61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */,
 				61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */,
+				F6448CE31BD2E00500C31C8C /* TableViewControllerWithDoneButton.m in Sources */,
 				61A4A39612A5CCC2004D81E6 /* uDebug.pas in Sources */,
 				61A4A39712A5CCC2004D81E6 /* uGearsRender.pas in Sources */,
 				61A4A39812A5CCC2004D81E6 /* uRender.pas in Sources */,
 				61A4A39912A5CCC2004D81E6 /* uRenderUtils.pas in Sources */,
+				F6F7DA8F1BE18F5700432EA7 /* UITableViewCell+FindTable.m in Sources */,
 				61A4A39A12A5CCC2004D81E6 /* uSinTable.pas in Sources */,
 				61A4A39B12A5CCC2004D81E6 /* uTextures.pas in Sources */,
 				61A4A39C12A5CCC2004D81E6 /* uTypes.pas in Sources */,
@@ -1689,11 +1900,12 @@
 				61A4A3A212A5CD56004D81E6 /* uCaptions.pas in Sources */,
 				61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */,
 				61F544C712AF1748007FD913 /* HoldTableViewCell.m in Sources */,
-				61AC067412B2E32D000B52A2 /* Appirater.m in Sources */,
 				61E2E12E12BAAEE30051B659 /* ServerProtocolNetwork.m in Sources */,
 				61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */,
+				F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */,
 				61EDB5B0135B3F97009B29A6 /* GameInterfaceBridge.m in Sources */,
 				61A976B3136F668500DD9878 /* uCursor.pas in Sources */,
+				F67FC8121BEC06E700A9DC75 /* Appirater.m in Sources */,
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
 				61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */,
 				611D7A50142FDCD3006E0798 /* uTouch.pas in Sources */,
@@ -1709,11 +1921,13 @@
 				615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */,
 				615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */,
 				615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */,
+				F6F07BE01B7E72D40010E48F /* HelpPageLobbyViewController.m in Sources */,
 				615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */,
 				619349C8160BAF3E00A08518 /* uAILandMarks.pas in Sources */,
 				619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */,
 				619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */,
 				610FB7C81661390E002FB2A7 /* uPhysFSLayer.pas in Sources */,
+				F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */,
 				61B37A1F17837C78009F283D /* ArgParsers.pas in Sources */,
 				61B37A2017837C78009F283D /* uVisualGearsList.pas in Sources */,
 				61B37A80178381DB009F283D /* uGearsHandlersMess.pas in Sources */,
@@ -1780,13 +1994,14 @@
 				6115652D147F4C52006729A9 /* French */,
 				61156530147F4D10006729A9 /* Polish */,
 				61177BAA148A661600686905 /* German */,
-				61177BAC148A671600686905 /* Turkish */,
 				61177BE4148B881C00686905 /* Danish */,
 				617BC22D1490210E00E1C294 /* Italian */,
 				619BCEC41495615700C1C409 /* Bulgarian */,
 				61D08D8714AEA9670007C078 /* Japanese */,
 				61C6783F14B3DD020087425A /* Portuguese */,
 				6154A53114C37E4A00F6EEF6 /* Romanian */,
+				F65725291B7EB9CC00A86262 /* ru */,
+				F67FC81F1BEC280D00A9DC75 /* tr */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1799,13 +2014,14 @@
 				6115652C147F4C4C006729A9 /* French */,
 				61156531147F4D17006729A9 /* Polish */,
 				61177BA7148A658900686905 /* German */,
-				61177BAD148A672000686905 /* Turkish */,
 				61177BF0148B882500686905 /* Danish */,
 				617BC2391490211500E1C294 /* Italian */,
 				619BCED01495615F00C1C409 /* Bulgarian */,
 				61D08D8814AEA9700007C078 /* Japanese */,
 				61C6784B14B3DD0B0087425A /* Portuguese */,
 				6154A53E14C37E5400F6EEF6 /* Romanian */,
+				F657252A1B7EB9CC00A86262 /* ru */,
+				F67FC8201BEC280D00A9DC75 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1818,13 +2034,14 @@
 				6115652B147F4C45006729A9 /* French */,
 				61156532147F4D1E006729A9 /* Polish */,
 				61177BA9148A660C00686905 /* German */,
-				61177BAE148A672C00686905 /* Turkish */,
 				61177BF1148B882F00686905 /* Danish */,
 				617BC23A1490211F00E1C294 /* Italian */,
 				619BCED11495616700C1C409 /* Bulgarian */,
 				61D08D8914AEA9780007C078 /* Japanese */,
 				61C6784C14B3DD140087425A /* Portuguese */,
 				6154A54014C37EB100F6EEF6 /* Romanian */,
+				F657252B1B7EB9CC00A86262 /* ru */,
+				F67FC8211BEC280D00A9DC75 /* tr */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
@@ -1835,24 +2052,32 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = org.hedgewars.mobile;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = org.hedgewars.mobile;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -1861,23 +2086,32 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLY_RULES_IN_COPY_FILES = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs  -Cfvfpv3 -dNOCONSOLE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O2 -Xs -dNOCONSOLE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_STRICT_ALIASING = YES;
-				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
@@ -1892,6 +2126,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -1902,21 +2137,18 @@
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "";
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-Wl,-no_order_inits",
-				);
+				OTHER_LDFLAGS = "-lz";
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 x86_64 arm64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
@@ -1929,11 +2161,15 @@
 		61022D7D12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = org.hedgewars.mobile;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = "Distro AppStore";
 		};
@@ -1945,6 +2181,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = fpc;
+				SKIP_INSTALL = YES;
 				ZERO_LINK = NO;
 			};
 			name = "Distro AppStore";
@@ -1965,24 +2202,33 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLY_RULES_IN_COPY_FILES = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs- -Cfvfpv3";
+				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs-";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
-				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
@@ -1997,6 +2243,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -2007,11 +2254,12 @@
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
-					"-Wl,-no_order_inits",
+					"-framework",
+					MessageUI,
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
@@ -2019,7 +2267,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 x86_64 arm64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
@@ -2032,11 +2280,15 @@
 		6137064C117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = org.hedgewars.mobile;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = "Distro Adhoc";
 		};
@@ -2048,6 +2300,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = fpc;
+				SKIP_INSTALL = YES;
 				ZERO_LINK = NO;
 			};
 			name = "Distro Adhoc";
@@ -2092,6 +2345,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PREBINDING = NO;
 				PRODUCT_NAME = fpc;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -2103,6 +2357,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = fpc;
+				SKIP_INSTALL = YES;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -2112,12 +2367,21 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLY_RULES_IN_COPY_FILES = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.6.0;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
 				FPC_SPECIFIC_OPTIONS = "-Tiphonesim -dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs-";
@@ -2126,10 +2390,10 @@
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
-				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
@@ -2144,6 +2408,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -2154,11 +2419,12 @@
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
-					"-Wl,-no_order_inits",
+					"-framework",
+					MessageUI,
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
@@ -2166,7 +2432,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 x86_64 arm64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
@@ -2181,24 +2447,33 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLY_RULES_IN_COPY_FILES = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.6.0;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs  -Cfvfpv3 -dDEBUGFILE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O2 -Xs -dDEBUGFILE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
-				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
-				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
@@ -2213,6 +2488,7 @@
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
@@ -2223,12 +2499,13 @@
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
-					"-Wl,-no_order_inits",
+					"-framework",
+					MessageUI,
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
@@ -2236,7 +2513,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 x86_64 arm64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",

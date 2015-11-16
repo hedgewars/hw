@@ -14,9 +14,6 @@
 #include "pmath.h"
 
 #ifndef EMSCRIPTEN
-#if __APPLE__
-#define main SDL_main
-#endif
 #include "GL/glew.h"
 #endif
 
@@ -110,6 +107,7 @@
 #define sdlh_Mix_VolumeMusic                stub_Mix_VolumeMusic
 #endif
 
+#define sdlh_SDL_free                       SDL_free
 #define sdlh_SDL_ConvertSurface             SDL_ConvertSurface
 #define sdlh_SDL_CreateRGBSurface           SDL_CreateRGBSurface
 #define sdlh_SDL_CreateThread               SDL_CreateThread
@@ -120,7 +118,7 @@
 #define sdlh_SDL_FreeSurface                SDL_FreeSurface
 #define sdlh_SDL_GetError                   SDL_GetError
 #define sdlh_SDL_GetKeyName                 SDL_GetKeyName
-#define sdlh_SDL_GetKeyState                SDL_GetKeyState
+#define sdlh_SDL_GetKeyboardState           SDL_GetKeyboardState
 #define sdlh_SDL_GetMouseState              SDL_GetMouseState
 #define sdlh_SDL_GetRGBA                    SDL_GetRGBA
 #define sdlh_SDL_GetTicks                   SDL_GetTicks
@@ -148,8 +146,8 @@
 #define sdlh_SDL_WaitThread                 SDL_WaitThread
 #define sdlh_SDL_CreateMutex                SDL_CreateMutex
 #define sdlh_SDL_DestroyMutex               SDL_DestroyMutex
-#define SDL_LockMutex                       SDL_mutexP
-#define SDL_UnlockMutex                     SDL_mutexV
+#define sdlh_SDL_LockMutex                  SDL_LockMutex
+#define sdlh_SDL_UnlockMutex                SDL_UnlockMutex
 #ifndef EMSCRIPTEN
 #define sdlh_SDL_ShowCursor                 SDL_ShowCursor
 #else

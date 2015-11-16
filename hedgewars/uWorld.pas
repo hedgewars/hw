@@ -1148,7 +1148,7 @@ var preShiftWorldDx: LongInt;
 procedure ShiftWorld(Dir: LongInt); inline;
 begin
     preShiftWorldDx:= WorldDx;
-    WorldDx:= WorldDx + Dir * LongInt(playWidth);
+    WorldDx:= WorldDx + LongInt(Dir * LongInt(playWidth));
 
 end;
 
@@ -1737,7 +1737,7 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
                     CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
                 end;
 
-        if isPhone() or (cScreenHeight < 600) or ((FollowGear^.dY * z).Round < 10) then
+        if isPhone() or (cScreenHeight < 600) or (hwFloat(FollowGear^.dY * z).Round < 10) then
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8
         else
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + hwSign(FollowGear^.dY) * z + WorldDy)) div 8;
@@ -1930,7 +1930,7 @@ if(ammoType = amNothing)then
     ammoType:= CurrentHedgehog^.CurAmmoType;
 
 if(CurrentHedgehog <> nil)then
-    if (Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0 then
+    if ((Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0) and (ammoType <> amDrillStrike) then
         begin
         utilityWidget.sprite:= sprTimerButton;
         animateWidget(@utilityWidget, true, true);
@@ -1942,7 +1942,7 @@ if(CurrentHedgehog <> nil)then
         end
     else if ammoType = amSwitch then
         begin
-        utilityWidget.sprite:= sprTargetButton;
+        utilityWidget.sprite:= sprSwitchButton;
         animateWidget(@utilityWidget, true, true);
         end
     else if utilityWidget.show then

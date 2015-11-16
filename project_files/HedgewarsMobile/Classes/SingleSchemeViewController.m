@@ -25,18 +25,6 @@
 #define SLIDER_TAG 54321
 #define SWITCH_TAG 67890
 
-#define checkValueString(detailString,labelSting,sliderRef); \
-    if ([labelSting isEqualToString:@"Turn Time"] && (NSInteger) sliderRef.value == 100) \
-        detailString = @"∞"; \
-    else if ([labelSting isEqualToString:@"Water Rise Amount"] && (NSInteger) sliderRef.value == 100) \
-        detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
-    else if ([labelSting isEqualToString:@"Crate Drop Turns"] && (NSInteger) sliderRef.value == 0) \
-        detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
-    else if ([labelSting isEqualToString:@"Mines Time"] && (NSInteger) sliderRef.value == -1) \
-        detailString = NSLocalizedString(@"Rnd",@"Short for 'Random'"); \
-    else \
-        detailString = [NSString stringWithFormat:@"%d",(NSInteger) sliderRef.value];
-
 
 @implementation SingleSchemeViewController
 @synthesize schemeName, schemeDictionary, basicSettingList, gameModifierArray;
@@ -190,7 +178,8 @@
             [img release];
 
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
-            cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            NSString *basicSettingTitleKey = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            cellLabel.text = NSLocalizedStringFromTable(basicSettingTitleKey, @"Scheme", nil);
             cellLabel.adjustsFontSizeToFitWidth = YES;
 
             // can't use the viewWithTag method because row is dynamic
@@ -220,8 +209,7 @@
             }
             cellSlider.frame = CGRectMake(hOffset, vOffset, sliderLength, 23);
 
-            NSString *prestring = nil;
-            checkValueString(prestring,cellLabel.text,cellSlider);
+            NSString *prestring = [self localizedValueStringForKey:basicSettingTitleKey andSlider:cellSlider];
 
             // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
             while ([prestring length] <= 4)
@@ -251,8 +239,10 @@
             [image release];
             cell.imageView.layer.cornerRadius = 6.0f;
             cell.imageView.layer.masksToBounds = YES;
-            cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
-            cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
+            NSString *gameModTitleKey = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
+            cell.textLabel.text = NSLocalizedStringFromTable(gameModTitleKey, @"Scheme", nil);
+            NSString *gameModDescKey = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
+            cell.detailTextLabel.text = NSLocalizedStringFromTable(gameModDescKey, @"Scheme", nil);
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             cell.detailTextLabel.minimumFontSize = 6;
 
@@ -277,14 +267,14 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     // grab the associated labels
     UILabel *detailLabel = (UILabel *)cell.detailTextLabel;
-    UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     // modify it
 
-    checkValueString(detailLabel.text,cellLabel.text,theSlider);
+    NSString *basicSettingTitleKey = [[self.basicSettingList objectAtIndex:[indexPath row]] objectForKey:@"title"];
+    detailLabel.text = [self localizedValueStringForKey:basicSettingTitleKey andSlider:theSlider];
 
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
-    [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInt:(NSInteger) theSlider.value]];
+    [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInteger:theSlider.value]];
 }
 
 #pragma mark -
@@ -343,6 +333,42 @@
         return IS_ON_PORTRAIT() ? 72 : aTableView.rowHeight;
     else
         return 56;
+}
+
+#pragma mark - Helper methods
+
+- (NSString *)localizedValueStringForKey:(NSString *)keyString andSlider:(UISlider *)slider
+{
+    NSInteger sliderValue = (NSInteger)slider.value;
+    
+    if ([keyString isEqualToString:@"Turn Time"] && sliderValue == 100)
+        return @"∞";
+    else if ([keyString isEqualToString:@"Water Rise Amount"] && sliderValue == 100)
+        return NSLocalizedString(@"Nvr", @"Short for 'Never'");
+    else if ([keyString isEqualToString:@"Crate Drop Turns"] && sliderValue == 0)
+        return NSLocalizedString(@"Nvr", @"Short for 'Never'");
+    else if ([keyString isEqualToString:@"Mines Time"] && sliderValue == -1)
+        return NSLocalizedString(@"Rnd", @"Short for 'Random'");
+    else if ([keyString isEqualToString:@"World Edge"])
+        switch (sliderValue)
+        {
+            case 0:
+                return NSLocalizedString(@"None", nil);
+            
+            case 1:
+                return NSLocalizedString(@"Wrap", nil);
+                
+            case 2:
+                return NSLocalizedString(@"Bounce", nil);
+                
+            case 3:
+                return NSLocalizedString(@"Sea", nil);
+                
+            default:
+                return @"";
+        }
+    else
+        return [NSString stringWithFormat:@"%ld", (long)sliderValue];
 }
 
 #pragma mark -

@@ -27,8 +27,6 @@ if not exist %CD%\misc\winutils\bin\SDL_ttf.dll cscript %CD%\tools\w32DownloadUn
 
 ::for video recording
 if not exist %CD%\misc\winutils\bin\avformat-54.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://hedgewars.googlecode.com/files/libav-win32-20121022-dll.zip %CD%\misc\winutils\bin
-if not exist %CD%\misc\winutils\bin\glut32.dll cscript %CD%\tools\w32DownloadUnzip.vbs https://user.xmission.com/~nate/glut/glut-3.7.6-bin.zip %CD%\misc\winutils\bin
-copy /y %CD%\misc\winutils\bin\glut-3.7.6-bin\glut32.dll %CD%\misc\winutils\bin\glut32.dll
 
 ::this is needed because fpc png unit hardcodes libpng-1.2.12
 if not exist %CD%\misc\winutils\bin\libpng13.dll copy /y %CD%\misc\winutils\bin\libpng15-15.dll %CD%\misc\winutils\bin\libpng13.dll

@@ -192,14 +192,14 @@ procedure registerIPCCallback(p: pointer; f: TIPCCallback);
 begin
     callbackPointerF:= p;
     callbackFunctionF:= f;
-    callbackListenerThreadF:= SDL_CreateThread(@engineListener{$IFDEF SDL2}, 'engineListener'{$ENDIF}, nil);
+    callbackListenerThreadF:= SDL_CreateThread(@engineListener, 'engineListener', nil);
 end;
 
 procedure registerNetCallback(p: pointer; f: TIPCCallback);
 begin
     callbackPointerN:= p;
     callbackFunctionN:= f;
-    callbackListenerThreadN:= SDL_CreateThread(@netListener{$IFDEF SDL2}, 'netListener'{$ENDIF}, nil);
+    callbackListenerThreadN:= SDL_CreateThread(@netListener, 'netListener', nil);
 end;
 
 procedure initIPC;
@@ -224,8 +224,8 @@ end;
 
 procedure freeIPC;
 begin
-    SDL_KillThread(callbackListenerThreadF);
-    SDL_KillThread(callbackListenerThreadN);
+    //FIXME SDL_KillThread(callbackListenerThreadF);
+    //FIXME SDL_KillThread(callbackListenerThreadN);
     SDL_DestroyMutex(mutFrontend);
     SDL_DestroyMutex(mutEngine);
     SDL_DestroyMutex(mutNet);

@@ -8,13 +8,14 @@ endif()
 
 if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt4 REQUIRED QUIET)
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_image REQUIRED)
+    find_package(SDL2_net REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+    find_package(SDL2_mixer REQUIRED)
+
     find_package(PNG REQUIRED)
-    find_package(SDL REQUIRED)
-    find_package(SDL_image REQUIRED)
-    find_package(SDL_net REQUIRED)
-    find_package(SDL_ttf REQUIRED)
-    find_package(SDL_mixer REQUIRED)
-    find_package(OggVorbis REQUIRED)
+
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle) #needed for SPARKLE_FOUND variable
         #needed because the 'if' clause in the script prints silly policy warnings
@@ -58,7 +59,7 @@ if(APPLE AND NOT SKIPBUNDLE)
 
     #create the .dmg for deployment
     #first make sure .app exists, then remove any old .dmg with same name, finally run the script
-    add_custom_target(dmg COMMAND "if [ ! -a Hedgewars.app ]; then make install\; fi;"
+    add_custom_target(dmg COMMAND make install
                           COMMAND rm -f ${CMAKE_BINARY_DIR}/Hedgewars-${HEDGEWARS_VERSION}.dmg
                           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/create-dmg.sh
                                   --volname "Hedgewars ${HEDGEWARS_VERSION}"

@@ -25,7 +25,7 @@
 unit hwengine;
 interface
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
+uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers, uTextures, uRender
@@ -143,11 +143,7 @@ procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: LongWord;
     isTerminated: boolean;
-{$IFDEF SDL2}
     previousGameState: TGameState;
-{$ELSE}
-    prevFocusState: boolean;
-{$ENDIF}
 begin
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
@@ -155,21 +151,34 @@ begin
     begin
         SDL_PumpEvents();
 
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL2}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
         begin
             case event.type_ of
-{$IFDEF SDL2}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym, event.key.keysym.modifier);
+                        KeyPressChat(event.key.keysym);
                         end
                     else
                         if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
                     if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
+
+                SDL_MOUSEBUTTONDOWN:
+                    if GameState = gsConfirm then
+                        ParseCommand('quit', true)
+                    else
+                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
+
+                SDL_MOUSEBUTTONUP:
+                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
+
+                SDL_MOUSEWHEEL:
+                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
+
+                SDL_TEXTINPUT: uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
@@ -205,45 +214,6 @@ begin
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-{$ENDIF}
-{$ELSE}
-                SDL_KEYDOWN:
-                    if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym, event.key.keysym.modifier)
-                    else
-                        if GameState >= gsGame then ProcessKey(event.key);
-                SDL_KEYUP:
-                    if (GameState <> gsChat) and (GameState >= gsGame) then
-                        ProcessKey(event.key);
-
-                SDL_MOUSEBUTTONDOWN:
-                    if GameState = gsConfirm then
-                        ParseCommand('quit', true)
-                    else
-                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
-
-                SDL_MOUSEBUTTONUP:
-                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
-
-                SDL_ACTIVEEVENT:
-                    if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
-                    begin
-                        prevFocusState:= cHasFocus;
-                        cHasFocus:= event.active.gain = 1;
-                        if prevFocusState xor cHasFocus then
-                            onFocusStateChanged()
-                    end;
-
-                SDL_VIDEORESIZE:
-                begin
-                    // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
-                    // Change by sheepluva:
-                    // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
-                    // Maybe just fixes the symptom not the actual cause(?), I'm too tired to find out :P
-                    cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
-                    cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
-                    cScreenResizeDelay:= RealTicks+500;
-                end;
 {$ENDIF}
                 SDL_JOYAXISMOTION:
                     ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
@@ -340,20 +310,16 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     WriteToConsole('Init SDL... ');
-    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
+    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
     WriteLnToConsole(msgOK);
 
-{$IFDEF SDL2}
-    SDL_StartTextInput();
-{$ELSE}
-    SDL_EnableUNICODE(1);
-{$ENDIF}
+    //SDL_StartTextInput();
     SDL_ShowCursor(0);
 
     if not cOnlyStats then
         begin
         WriteToConsole('Init SDL_ttf... ');
-        SDLTry(TTF_Init() <> -1, true);
+        SDLTry(TTF_Init() <> -1, 'TTF_Init', true);
         WriteLnToConsole(msgOK);
         end;
 
@@ -527,7 +493,11 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure GenLandPreview;
+{$IFDEF MOBILE}
+var Preview: TPreview;
+{$ELSE}
 var Preview: TPreviewAlpha;
+{$ENDIF}
 begin
     initEverything(false);
 
@@ -535,7 +505,11 @@ begin
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
     ScriptOnPreviewInit;
+{$IFDEF MOBILE}
+    GenPreview(Preview);
+{$ELSE}
     GenPreviewAlpha(Preview);
+{$ENDIF}
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
@@ -570,7 +544,7 @@ begin
         RunEngine:= HaltUsageError
     else
     begin
-        SDL_CreateThread(@EngineThread{$IFDEF SDL2}, 'engine'{$ENDIF}, nil);
+        SDL_CreateThread(@EngineThread, 'engine', nil);
         RunEngine:= 0
     end
 end;

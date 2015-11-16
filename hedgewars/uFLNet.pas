@@ -218,7 +218,7 @@ begin
     if SDLNet_ResolveHost(ipaddr, PChar('netserver.hedgewars.org'), 46631) = 0 then
         sock:= SDLNet_TCP_Open(ipaddr);
 
-    SDL_CreateThread(@netWriter{$IFDEF SDL2}, 'netWriter'{$ENDIF}, sock);
+    SDL_CreateThread(@netWriter, 'netWriter', sock);
 
     repeat
         c:= getNextChar;
@@ -276,7 +276,7 @@ begin
     state.l:= 0;
     state.netState:= netConnecting;
 
-    netReaderThread:= SDL_CreateThread(@netReader{$IFDEF SDL2}, 'netReader'{$ENDIF}, nil);
+    netReaderThread:= SDL_CreateThread(@netReader, 'netReader', nil);
 end;
 
 procedure initModule;

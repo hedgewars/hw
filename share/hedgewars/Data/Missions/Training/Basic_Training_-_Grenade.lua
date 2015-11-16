@@ -134,9 +134,9 @@ function onGameTick20()
 		if end_timer == 0 then
 			-- Override the 'Draw' message with the appropriate message.
 			if game_lost then
-				AddCaption("Mission lost!", 0xffba00ff,capgrpGameState)
+				AddCaption(loc("Mission lost!"), 0xffba00ff,capgrpGameState)
 			else
-				AddCaption("Mission won!", 0xffba00ff,capgrpGameState)
+				AddCaption(loc("Mission won!"), 0xffba00ff,capgrpGameState)
 			end
 			-- Remove the team to end the game. Only do this once.
 			if team_death == false then

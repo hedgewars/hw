@@ -62,7 +62,7 @@
     [seed release];
 
     // perform as if user clicked on an entry
-    NSIndexPath *theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
+    NSIndexPath *theIndex = [NSIndexPath indexPathForRow:arc4random_uniform((int)[source count]) inSection:0];
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
     if (IS_NOT_POWERFUL([HWUtils modelType]) == NO)
         [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
@@ -179,8 +179,8 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    NSInteger newRow = [indexPath row];
+    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
         NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
@@ -352,6 +352,15 @@
     oldPage = newPage;
 }
 
+- (void)localizeSegmentedControl
+{
+    for (NSUInteger i = 0; i < self.segmentedControl.numberOfSegments; i++)
+    {
+        NSString *oldTitle = [self.segmentedControl titleForSegmentAtIndex:i];
+        [self.segmentedControl setTitle:NSLocalizedString(oldTitle, nil) forSegmentAtIndex:i];
+    }
+}
+
 #pragma mark -
 #pragma mark view management
 -(NSArray *) dataSourceArray {
@@ -403,8 +412,9 @@
 
 -(void) viewDidLoad {
     [super viewDidLoad];
-    srandom(time(NULL));
-
+    
+    [self localizeSegmentedControl];
+    
     // initialize some "default" values
     self.slider.value = 0.05f;
     self.slider.enabled = NO;

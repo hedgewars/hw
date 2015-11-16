@@ -45,6 +45,8 @@
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        background.contentMode = UIViewContentModeScaleAspectFill;
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [backgroundImage release];
         [self.view addSubview:background];
         [background release];
@@ -245,7 +247,7 @@
         SquareButtonView *squareButton = (SquareButtonView *)cell.accessoryView;
 
         NSInteger increaseNumber = [[selectedRow objectForKey:@"number"] intValue] + 1;
-        NSNumber *newNumber = [NSNumber numberWithInt:[self filterNumberOfHogs:increaseNumber]];
+        NSNumber *newNumber = [NSNumber numberWithInteger:[self filterNumberOfHogs:increaseNumber]];
         [squareButton setTitle:[newNumber stringValue] forState:UIControlStateNormal];
         [selectedRow setObject:newNumber forKey:@"number"];
 

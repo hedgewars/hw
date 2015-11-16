@@ -358,25 +358,29 @@ end;
 {$ENDIF}
 
 function glLoadExtension(extension : shortstring) : boolean;
+var logmsg: shortstring;
 begin
-//TODO: pas2c does not handle {$IF (GLunit = gles11) OR DEFINED(PAS2C)}
-{$IFNDEF PAS2C}
-{$IF GLunit = gles11}
-    // FreePascal doesnt come with OpenGL ES 1.1 Extension headers
     extension:= extension; // avoid hint
     glLoadExtension:= false;
-    AddFileLog('OpenGL - "' + extension + '" skipped')
-{$ELSE}
-    glLoadExtension:= glext_LoadExtension(extension);
-    if glLoadExtension then
-        AddFileLog('OpenGL - "' + extension + '" loaded')
-    else
-        AddFileLog('OpenGL - "' + extension + '" failed to load');
-{$ENDIF}
+    logmsg:= 'OpenGL - "' + extension + '" skipped';
 
-{$ELSE} // pas2c part
-    glLoadExtension:= false;
+{$IFNDEF IPHONEOS}
+//TODO: pas2c does not handle
+{$IFNDEF PAS2C}
+// FreePascal doesnt come with OpenGL ES 1.1 Extension headers
+{$IF GLunit <> gles11}
+
+    glLoadExtension:= glext_LoadExtension(extension);
+
+    if glLoadExtension then
+        logmsg:= 'OpenGL - "' + extension + '" loaded'
+    else
+        logmsg:= 'OpenGL - "' + extension + '" failed to load';
+
 {$ENDIF}
+{$ENDIF}
+{$ENDIF}
+    AddFileLog(logmsg);
 end;
 
 {$IFDEF USE_S3D_RENDERING OR USE_VIDEO_RECORDING}
@@ -427,17 +431,6 @@ var AuxBufNum: LongInt = 0;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
-{$IFDEF MOBILE}
-    // TODO: this function creates an opengles1.1 context
-    // un-comment below and add proper logic to support opengles2.0
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    if SDLGLcontext = nil then
-        SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, true);
-    SDL_GL_SetSwapInterval(1);
-{$ENDIF}
-
     // suppress hint/warning
     AuxBufNum:= AuxBufNum;
 

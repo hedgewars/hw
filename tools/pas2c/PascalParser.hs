@@ -239,10 +239,10 @@ rangeDecl = choice [
     ] <?> "range declaration"
     where
     rangeft = do
-    e1 <- initExpression
-    string' ".."
-    e2 <- initExpression
-    return $ RangeFromTo e1 e2
+        e1 <- initExpression
+        string' ".."
+        e2 <- initExpression
+        return $ RangeFromTo e1 e2
 
 typeVarDeclaration :: Bool -> Parsec String u [TypeVarDeclaration]
 typeVarDeclaration isImpl = (liftM concat . many . choice) [

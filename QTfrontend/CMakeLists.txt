@@ -20,8 +20,10 @@ if(APPLE AND
    message(FATAL_ERROR "This version of Qt is known *not* to work, please update or use a lower version")
 endif()
 
-find_package(SDL1or2)            #video in SDLInteraction
-find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
+find_package(SDL2 REQUIRED)
+find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
+include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2MIXER_INCLUDE_DIR})
 
 if(LIBAV_FOUND)
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
@@ -60,8 +62,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
-include_directories(${SDL_INCLUDE_DIR})
-include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(BEFORE ${PHYSFS_INCLUDE_DIR})
 include_directories(BEFORE ${PHYSLAYER_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR}) #brought by physlayer hwpacksmounter.h
@@ -204,13 +204,16 @@ add_executable(hedgewars ${console_access}
 list(APPEND HW_LINK_LIBS
     physfs physlayer
     ${QT_LIBRARIES}
-    ${SDL_LIBRARY}
-    ${SDLMIXER_LIBRARY}
+    )
+
+list(APPEND HW_LINK_LIBS
+    ${SDL2_LIBRARY}
+    ${SDL2MIXER_LIBRARY}
     )
     
 if(WIN32 AND NOT UNIX)
-    if(NOT SDL_LIBRARY)
-        list(APPEND HW_LINK_LIBS SDL)
+    if(NOT SDL2_LIBRARY)
+        list(APPEND HW_LINK_LIBS SDL2)
     endif()
 
     list(APPEND HW_LINK_LIBS

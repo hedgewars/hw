@@ -54,7 +54,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "49"
+protocolNumber = "51"
 
 getLines :: Handle -> IO [B.ByteString]
 getLines h = g
