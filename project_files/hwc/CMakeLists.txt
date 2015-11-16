@@ -94,9 +94,5 @@ target_link_libraries(hwengine  fpcrtl
                                 m
                                 #TODO: add other libraries
                             )
-if(APPLE)
-    target_link_libraries(hwengine SDLmain)
-endif()
-
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
 
