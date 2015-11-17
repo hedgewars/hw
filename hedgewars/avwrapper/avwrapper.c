@@ -79,10 +79,16 @@ static void rescale_ts(AVPacket *pkt, AVRational ctb, AVRational stb)
 }
 #endif
 
-#if LIBAVCODEC_VERSION_MAJOR < 57
+#ifndef AV_CODEC_CAP_DELAY
 #define AV_CODEC_CAP_DELAY                  CODEC_CAP_DELAY
+#endif
+#ifndef AV_CODEC_CAP_VARIABLE_FRAME_SIZE
 #define AV_CODEC_CAP_VARIABLE_FRAME_SIZE    CODEC_CAP_VARIABLE_FRAME_SIZE
+#endif
+#ifndef AV_CODEC_FLAG_GLOBAL_HEADER
 #define AV_CODEC_FLAG_GLOBAL_HEADER         CODEC_FLAG_GLOBAL_HEADER
+#endif
+#ifndef AV_CODEC_FLAG_QSCALE
 #define AV_CODEC_FLAG_QSCALE                CODEC_FLAG_QSCALE
 #endif
 

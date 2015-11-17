@@ -343,7 +343,7 @@ begin
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
     if (gX < min(LAND_WIDTH div -2, -2048))
     or (gX > max(LAND_WIDTH * 3 div 2, 6144)) then
-        Gear^.State := Gear^.State or gstCollision;
+        Gear^.Message := Gear^.Message or gmDestroy;
 
     if Gear^.dY.isNegative then
         begin
@@ -464,11 +464,12 @@ begin
     if Gear^.AdvBounce > 1 then
         dec(Gear^.AdvBounce);
 
-    if isFalling then
+    if isFalling and (Gear^.State and gstNoGravity = 0) then
         begin
-        if Gear^.State and gstNoGravity = 0 then
-            Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then
+        Gear^.dY := Gear^.dY + cGravity;
+        if (GameFlags and gfMoreWind <> 0) and 
+           ((xland or land) = 0) and
+           ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
 
@@ -482,10 +483,7 @@ begin
         Gear^.State := Gear^.State or gstMoving;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
-        begin
         Gear^.State := Gear^.State or gstCollision;
-        AddFileLog('no more bounce for you!');
-        end;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
@@ -3539,7 +3537,7 @@ var
 begin
     AllInactive := false;
 
-    if (Gear^.State and gsttmpFlag) = 0 then
+    if (Gear^.State and gsttmpFlag = 0) and (GameFlags and gfMoreWind = 0) then
         Gear^.dX := Gear^.dX + cWindSpeed;
 
     oldDx := Gear^.dX;

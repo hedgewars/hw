@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE FlexibleContexts #-}
 module Pas2C where
 
 import Text.PrettyPrint.HughesPJ

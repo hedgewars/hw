@@ -1168,8 +1168,8 @@ procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL
 procedure TTF_CloseFont(font: PTTF_Font); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
-function  Mix_Init(flags: LongInt): LongInt; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName{$ELSE}inline{$ENDIF};
-procedure Mix_Quit; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName{$ELSE}inline{$ENDIF};
+function  Mix_Init(flags: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+procedure Mix_Quit; cdecl; external SDL_MixerLibName;
 
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
@@ -1204,8 +1204,8 @@ function  Mix_FadeOutChannel(channel: LongInt; fadems: LongInt): LongInt; cdecl;
 procedure Mix_SetPostMix( mix_func: TPostMix; arg: Pointer); cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
-function  IMG_Init(flags: LongInt): LongInt; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName{$ELSE}inline{$ENDIF};
-procedure IMG_Quit; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName{$ELSE}inline{$ENDIF};
+function  IMG_Init(flags: LongInt): LongInt; cdecl; external SDL_ImageLibName;
+procedure IMG_Quit; cdecl; external SDL_ImageLibName;
 
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongBool): PSDL_Surface; cdecl; external SDL_ImageLibName;
@@ -1256,28 +1256,6 @@ begin
     SDL_MustLock:=
         ((surface^.flags and SDL_RLEACCEL) <> 0)
 end;
-
-{$IFNDEF SDL_MIXER_NEWER}
-function  Mix_Init(flags: LongInt): LongInt; inline;
-begin
-    Mix_Init:= flags;
-end;
-
-procedure Mix_Quit; inline;
-begin
-end;
-{$ENDIF}
-
-{$IFNDEF SDL_IMAGE_NEWER}
-function  IMG_Init(flags: LongInt): LongInt; inline;
-begin
-    IMG_Init:= flags;
-end;
-
-procedure IMG_Quit; inline;
-begin
-end;
-{$ENDIF}
 
 procedure SDLNet_Write16(value: Word; buf: Pointer);
 begin

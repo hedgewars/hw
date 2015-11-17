@@ -118,18 +118,18 @@ if(GHFLAGS)
     endif()
 endif()
 
-list(APPEND haskell_flags ${ghflags_parsed} "-O2")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
-                              "-dcore-lint" # internal sanity check
                               "-fno-warn-unused-do-bind"
+                              "-O0"
                               )
 else()
     list(APPEND haskell_flags "-w" # no warnings
+                              "-O2"
                               )
 endif()
 
