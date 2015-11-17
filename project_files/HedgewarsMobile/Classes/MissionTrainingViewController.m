@@ -267,7 +267,6 @@
 
 -(void) didReceiveMemoryWarning
 {
-    self.previewImage = nil;
     self.missionName = nil;
     self.listOfMissionIDs = nil;
     self.dictOfMissions = nil;

@@ -268,14 +268,14 @@
     footer.backgroundColor = [UIColor clearColor];
     footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*90/100, height)];
     label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
     label.textAlignment = UITextAlignmentCenter;
     label.font = [UIFont italicSystemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
     label.backgroundColor = [UIColor clearColor];
-    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 
     label.text = NSLocalizedString(@"Setting a Style might force a particular Scheme or Weapon configuration.",@"");
 

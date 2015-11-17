@@ -194,23 +194,23 @@
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return IS_IPAD() ? 40 : 20;
+    return IS_IPAD() ? 40 : 30;
 }
 
 -(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
-    NSInteger height = IS_IPAD() ? 40 : 20;
+    NSInteger height = IS_IPAD() ? 40 : 30;
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
     footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*90/100, height)];
     label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
     label.textAlignment = UITextAlignmentCenter;
     label.font = [UIFont italicSystemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
     label.backgroundColor = [UIColor clearColor];
-    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 
     if (section == 0)
         label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove a team.",@"");
