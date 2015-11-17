@@ -745,7 +745,11 @@ begin
     if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
     SDLTry(SDLGLcontext <> nil, 'SDLGLcontext', true);
+ {$IFNDEF MOBILE}
     SDLTry(SDL_GL_SetSwapInterval(1) = 0, 'SDL_GL_SetSwapInterval', true);
+ {$ELSE}
+    SDL_GL_SetSwapInterval(1);
+ {$ENDIF}
 
     RendererSetup();
 
