@@ -30,8 +30,12 @@
 
 Lua-API:
  + New map parameter: MapFeatureSize -- numeric representation of detail slider below map preview; use within onGameInit()/onPreviewInit()
- + New function: SetMaxBuildDistance([ distInPx ]) -- specify how many pixels away a hedgehog can still place girders/etc. set to 0 for no limit; call with no param to reset to default
+ + New functions: SetMaxBuildDistance([ distInPx ]) -- specify how many pixels away a hedgehog can still place girders/etc. set to 0 for no limit; call with no param to reset to default, 
  + New hook: onSuddenDeath() -- called by engine when sudden death begins
+ + Parameters are now optional for the generic gear setters.  i.e. - SetVisualGearValues(gear, x, y).  nil values are skipped and not set.
+ + PlaceSprite can now set land type (bouncy, indestructible, ice etc), colour the sprite, flip the sprite, and place the sprite behind existing land.
+ + EraseSprite.  Can flip and selectively erase based on land flags.
+ + More of the gear structure values are now accessible in the generic gear getter/setter.
  * Previously missing gear states are now available (gstSubmersible, gstFrozen and gstNoGravity)
  * Fixed OnHogAttack giving the incorrect AmmoType (amNothing) under certain conditions
 
