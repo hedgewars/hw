@@ -96,7 +96,12 @@ commandsDescription = [
         , cmd "ROUND_FINISHED" []
     ]
 
-unknowncmd = PTPrefix "$" [PTCommand "$" $ Command "__UNKNOWN__" [Many [SS]]]
+hasMany = any isMany
+isMany (Many _) = True
+isMany _ = False
+
+unknown = Command "__UNKNOWN__" [Many [SS]]
+unknowncmd = PTPrefix "$" [PTCommand "$" $ unknown]
 
 fixName = map fixChar
 fixChar c | isLetter c = c
@@ -135,7 +140,7 @@ pas2 = buildSwitch $ buildParseTree commandsDescription
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
 
-renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, {-bodies, -}c, structs, realHandlers, realHandlersArray]
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
     where
         maybeQuotes "$" = text "#0"
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
@@ -145,27 +150,29 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds,
             <> parens (hsep . punctuate comma $ map text commands) <> semi
         c = text "const handlers: array[0.." <> (int $ length fixedNames - 1) <> text "] of PHandler = "
             <> parens (hsep . punctuate comma $ map (text . (:) '@') handlerTypes) <> semi
-        handlerTypes = map cmdParams2handlerType sortedCmdDescriptions
-        sortedCmdDescriptions = reverse $ sort commandsDescription
+        grr = text "const net2cmd: array[0.." <> (int $ length fixedNames - 1) <> text "] of TCmdType = "
+            <> parens (hsep . punctuate comma $ map (text . (++) "cmd_") $ reverse fixedNames) <> semi
+        handlerTypes = map cmdParams2handlerType $ reverse sortedCmdDescriptions
+        sortedCmdDescriptions = sort commandsDescription
         fixedNames = map fixName handlers
-        bodies = vcat $ punctuate (char '\n') $ map handlerBody fixedNames
-        handlerBody n = text "procedure handler_" <> text n <> semi
+        bodies = vcat $ punctuate (char '\n') $ map handlerBody $ nub $ sort handlerTypes
+        handlerBody n = text "procedure " <> text n <> semi
             $+$ text "begin" 
             $+$ text "end" <> semi
-        cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) $ reverse fixedNames) <> semi
+        cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ concatMap (rhentry "cmd_") $ sortedCmdDescriptions) <> semi
         structs = vcat (map text . Set.toList . Set.fromList $ map cmdParams2record commandsDescription)
-        realHandlers = vcat $ punctuate (char '\n') $ map rh sortedCmdDescriptions
+        realHandlers = vcat $ punctuate (char '\n') $ map rh $ sortedCmdDescriptions
         realHandlersArray = text "const handlers: array[TCmdType] of PHandler = "
-            <> parens (hsep . punctuate comma . (:) (text "@handler__UNKNOWN_") $ map (text . (++) "@handler_" . fixName . cmdName) sortedCmdDescriptions) <> semi
+            <> parens (hsep . punctuate comma . concatMap (rhentry "@handler_") $ sortedCmdDescriptions) <> semi
 
 rh cmd@(Command n p) = text "procedure handler_" <> text (fixName n) <> parens (text "var p: " <> text (cmdParams2str cmd)) <> semi
-    $+$ emptyBody $+$ if hasMany then vcat [space, text "procedure handler_" <> text (fixName n) <> text "_s" <> parens (text "var s: shortstring") <> semi
+    $+$ emptyBody $+$ if hasMany p then vcat [space, text "procedure handler_" <> text (fixName n) <> text "_s" <> parens (text "var s: TCmdParamS") <> semi
     , emptyBody] else empty
     where
-        hasMany = any isMany p
-        isMany (Many _) = True
-        isMany _ = False
         emptyBody = text "begin"  $+$ text "end" <> semi
+
+rhentry prefix cmd@(Command n p) = map ((<>) (text "PHandler") . parens) $ (text . (++) prefix . fixName . cmdName $ cmd)
+    : if hasMany p then [text . flip (++) "_s" . (++) prefix . fixName . cmdName $ cmd] else []
 
 pas = renderArrays $ buildTables $ buildParseTree commandsDescription
     where

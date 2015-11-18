@@ -5,15 +5,15 @@ procedure connectOfficialServer;
 
 procedure initModule;
 procedure freeModule;
+procedure sendNet(s: shortstring);
 
 implementation
-uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes;
+uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes, uFLUtils;
 
 const endCmd: string = #10 + #10;
 
 function getNextChar: char; forward;
 function getCurrChar: char; forward;
-procedure sendNet(s: shortstring); forward;
 
 type
     TNetState = (netDisconnected, netConnecting, netLoggedIn);
@@ -28,132 +28,123 @@ type
 
 var state: TParserState;
 
+procedure handleTail; forward;
+function getShortString: shortstring; forward;
+
 // generated stuff here
-const letters: array[0..206] of char = ('A', 'S', 'K', 'P', 'A', 'S', 'S', 'W', 'O', 'R', 'D', #10, 'B', 'A', 'N', 'L', 'I', 'S', 'T', #10, 'Y', 'E', #10, 'C', 'H', 'A', 'T', #10, 'L', 'I', 'E', 'N', 'T', '_', 'F', 'L', 'A', 'G', 'S', #10, 'O', 'N', 'N', 'E', 'C', 'T', 'E', 'D', #10, 'E', 'M', #10, 'H', 'H', '_', 'N', 'U', 'M', #10, 'I', 'N', 'F', 'O', #10, 'J', 'O', 'I', 'N', 'E', 'D', #10, 'I', 'N', 'G', #10, 'K', 'I', 'C', 'K', 'E', 'D', #10, 'L', 'E', 'F', 'T', #10, 'O', 'B', 'B', 'Y', ':', 'J', 'O', 'I', 'N', 'E', 'D', #10, 'L', 'E', 'F', 'T', #10, 'N', 'I', 'C', 'K', #10, 'O', 'T', 'I', 'C', 'E', #10, 'P', 'I', 'N', 'G', #10, 'R', 'O', 'T', 'O', #10, 'R', 'O', 'O', 'M', 'S', #10, 'U', 'N', 'D', '_', 'F', 'I', 'N', 'I', 'S', 'H', 'E', 'D', #10, 'U', 'N', '_', 'G', 'A', 'M', 'E', #10, 'S', 'E', 'R', 'V', 'E', 'R', '_', 'A', 'U', 'T', 'H', #10, 'M', 'E', 'S', 'S', 'A', 'G', 'E', #10, 'V', 'A', 'R', 'S', #10, 'T', 'E', 'A', 'M', '_', 'A', 'C', 'C', 'E', 'P', 'T', 'E', 'D', #10, 'C', 'O', 'L', 'O', 'R', #10, 'W', 'A', 'R', 'N', 'I', 'N', 'G', #10, #0, #10);
+const letters: array[0..211] of char = ('A', 'S', 'K', 'P', 'A', 'S', 'S', 'W',
+    'O', 'R', 'D', #10, 'B', 'A', 'N', 'L', 'I', 'S', 'T', #10, 'Y', 'E', #10, 'C',
+    'H', 'A', 'T', #10, 'L', 'I', 'E', 'N', 'T', '_', 'F', 'L', 'A', 'G', 'S', #10,
+    'O', 'N', 'N', 'E', 'C', 'T', 'E', 'D', #10, 'E', 'M', #10, 'R', 'R', 'O', 'R',
+    #10, 'H', 'H', '_', 'N', 'U', 'M', #10, 'I', 'N', 'F', 'O', #10, 'J', 'O', 'I',
+    'N', 'E', 'D', #10, 'I', 'N', 'G', #10, 'K', 'I', 'C', 'K', 'E', 'D', #10, 'L',
+    'E', 'F', 'T', #10, 'O', 'B', 'B', 'Y', ':', 'J', 'O', 'I', 'N', 'E', 'D', #10,
+    'L', 'E', 'F', 'T', #10, 'N', 'I', 'C', 'K', #10, 'O', 'T', 'I', 'C', 'E', #10,
+    'P', 'I', 'N', 'G', #10, 'R', 'O', 'T', 'O', #10, 'R', 'O', 'O', 'M', 'S', #10,
+    'U', 'N', 'D', '_', 'F', 'I', 'N', 'I', 'S', 'H', 'E', 'D', #10, 'U', 'N', '_',
+    'G', 'A', 'M', 'E', #10, 'S', 'E', 'R', 'V', 'E', 'R', '_', 'A', 'U', 'T', 'H',
+    #10, 'M', 'E', 'S', 'S', 'A', 'G', 'E', #10, 'V', 'A', 'R', 'S', #10, 'T', 'E',
+    'A', 'M', '_', 'A', 'C', 'C', 'E', 'P', 'T', 'E', 'D', #10, 'C', 'O', 'L', 'O',
+    'R', #10, 'W', 'A', 'R', 'N', 'I', 'N', 'G', #10, #0, #10);
+const commands: array[0..211] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    -39, 11, 7, 0, 0, 0, 0, 0, -38, 0, 0, -37, 26, 4, 0, 0, -36, 12, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, -35, 0, 0, 0, 0, 0, 0, 0, 0, -34, 8, 2, -33, 0, 0, 0, 0, -32, 7,
+    0, 0, 0, 0, 0, -31, 5, 0, 0, 0, -30, 11, 0, 0, 0, 3, 0, -29, 0, 0, 0, -28, 7, 0,
+    0, 0, 0, 0, -27, 22, 4, 0, 0, -26, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, -25, 0, 0,
+    0, 0, -24, 11, 4, 0, 0, -23, 0, 0, 0, 0, 0, -22, 10, 4, 0, 0, -21, 0, 0, 0, 0,
+    -20, 27, 18, 4, 0, 0, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0, 0,
+    0, 0, 0, -17, 25, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, -16, 8, 0, 0, 0, 0, 0, 0, -15,
+    0, 0, 0, 0, -14, 20, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0, 0,
+    -12, 8, 0, 0, 0, 0, 0, 0, -11, 0, -10);
 
-const commands: array[0..206] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -38, 11, 7, 0, 0, 0, 0, 0, -37, 0, 0, -36, 26, 4, 0, 0, -35, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -34, 0, 0, 0, 0, 0, 0, 0, 0, -33, 3, 0, -32, 7, 0, 0, 0, 0, 0, -31, 5, 0, 0, 0, -30, 11, 0, 0, 0, 3, 0, -29, 0, 0, 0, -28, 7, 0, 0, 0, 0, 0, -27, 22, 4, 0, 0, -26, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, -25, 0, 0, 0, 0, -24, 11, 4, 0, 0, -23, 0, 0, 0, 0, 0, -22, 10, 4, 0, 0, -21, 0, 0, 0, 0, -20, 27, 18, 4, 0, 0, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0, 0, 0, 0, 0, -17, 25, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, -16, 8, 0, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, -14, 20, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0, 0, -12, 8, 0, 0, 0, 0, 0, 0, -11, 0, -10);
-
-procedure handler_ASKPASSWORD;
+procedure handler_;
 begin
+    sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
+    writeln('handler_');
+    handleTail()
 end;
 
-procedure handler_BANLIST;
+procedure handler_L;
 begin
+    writeln('handler_L');
+    handleTail()
 end;
 
-procedure handler_BYE;
+procedure handler_ML;
 begin
+    writeln('handler_ML');
+    handleTail()
 end;
 
-procedure handler_CHAT;
+procedure handler_MS;
+var cmd: TCmdParamS;
+    f: boolean;
 begin
+    sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
+    writeln('handler_MS');
+    cmd.cmd:= Succ(state.cmd);
+
+    repeat
+        cmd.str1:= getShortString;
+        f:= cmd.str1[0] <> #0;
+        if f then
+            sendUI(mtNetData, @cmd, sizeof(cmd));
+    until not f
 end;
 
-procedure handler_CLIENT_FLAGS;
+procedure handler_S;
 begin
+    writeln('handler_S');
+    handleTail()
 end;
 
-procedure handler_CONNECTED;
-var data: TCmdConnectedData;
+procedure handler_SL;
 begin
-    sendUI(mtNetData, nil, 0);
+    writeln('handler_SL');
+    handleTail()
 end;
 
-procedure handler_EM;
+procedure handler_SMS;
 begin
+    writeln('handler_SMS');
+    handleTail()
 end;
 
-procedure handler_HH_NUM;
+procedure handler__i;
+var cmd: TCmdParami;
 begin
+    writeln('handler__i');
+    getShortString;
+    cmd.cmd:= state.cmd;
+    cmd.param1:= strToInt(getShortString);
+    sendUI(mtNetData, @cmd, sizeof(cmd));
+    handleTail()
 end;
 
-procedure handler_INFO;
+procedure handler_i;
 begin
+    writeln('handler_i');
+    handleTail()
 end;
 
-procedure handler_JOINED;
-begin
-end;
-
-procedure handler_JOINING;
-begin
-end;
-
-procedure handler_KICKED;
-begin
-end;
-
-procedure handler_LEFT;
-begin
-end;
-
-procedure handler_LOBBY_JOINED;
-begin
-end;
-
-procedure handler_LOBBY_LEFT;
-begin
-end;
-
-procedure handler_NICK;
-begin
-end;
-
-procedure handler_NOTICE;
-begin
-end;
-
-procedure handler_PING;
-begin
-    sendNet('PONG')
-end;
-
-procedure handler_PROTO;
-begin
-end;
-
-procedure handler_ROOMS;
-begin
-end;
-
-procedure handler_ROUND_FINISHED;
-begin
-end;
-
-procedure handler_RUN_GAME;
-begin
-end;
-
-procedure handler_SERVER_AUTH;
-begin
-end;
-
-procedure handler_SERVER_MESSAGE;
-begin
-end;
-
-procedure handler_SERVER_VARS;
-begin
-end;
-
-procedure handler_TEAM_ACCEPTED;
-begin
-end;
-
-procedure handler_TEAM_COLOR;
-begin
-end;
-
-procedure handler_WARNING;
-begin
-end;
-
-procedure handler___UNKNOWN__;
+procedure handler__UNKNOWN_;
 begin
     writeln('[NET] Unknown cmd');
 end;
 
-const handlers: array[0..28] of PHandler = (@handler___UNKNOWN__, @handler_WARNING, @handler_TEAM_COLOR, @handler_TEAM_ACCEPTED, @handler_SERVER_VARS, @handler_SERVER_MESSAGE, @handler_SERVER_AUTH, @handler_RUN_GAME, @handler_ROUND_FINISHED, @handler_ROOMS, @handler_PROTO, @handler_PING, @handler_NOTICE, @handler_NICK, @handler_LOBBY_LEFT, @handler_LOBBY_JOINED, @handler_LEFT, @handler_KICKED, @handler_JOINING, @handler_JOINED, @handler_INFO, @handler_HH_NUM, @handler_EM, @handler_CONNECTED, @handler_CLIENT_FLAGS, @handler_CHAT, @handler_BYE, @handler_BANLIST, @handler_ASKPASSWORD);
+const handlers: array[0..29] of PHandler = (@handler__UNKNOWN_, @handler_L, @handler_MS, @handler_S,
+    @handler_SL, @handler_L, @handler_S, @handler_, @handler_, @handler_MS,
+    @handler_i, @handler_MS, @handler_L, @handler_S, @handler_SL, @handler_MS,
+    @handler_SMS, @handler_, @handler_S, @handler_MS, @handler_MS, @handler_MS,
+    @handler_L, @handler_ML, @handler__i, @handler_SMS, @handler_SL, @handler_SL,
+    @handler_MS, @handler_S);
+const net2cmd: array[0..29] of TCmdType = (cmd_WARNING, cmd_WARNING,
+    cmd_TEAM_COLOR, cmd_TEAM_ACCEPTED, cmd_SERVER_VARS, cmd_SERVER_MESSAGE,
+    cmd_SERVER_AUTH, cmd_RUN_GAME, cmd_ROUND_FINISHED, cmd_ROOMS, cmd_PROTO,
+    cmd_PING, cmd_NOTICE, cmd_NICK, cmd_LOBBY_LEFT, cmd_LOBBY_JOINED, cmd_LEFT,
+    cmd_KICKED, cmd_JOINING, cmd_JOINED, cmd_INFO, cmd_HH_NUM, cmd_ERROR, cmd_EM,
+    cmd_CONNECTED, cmd_CLIENT_FLAGS, cmd_CHAT, cmd_BYE, cmd_BANLIST,
+    cmd_ASKPASSWORD);
 
 
 // end of generated stuff
@@ -233,16 +224,15 @@ begin
             if c = letters[state.l] then
                 if commands[state.l] < 0 then
                 begin
-                    state.cmd:= TCmdType(-10 - commands[state.l]);
+                    state.cmd:= net2cmd[-10 - commands[state.l]];
                     writeln('[NET] ', state.cmd);
                     handlers[-10 - commands[state.l]]();
-                    handleTail()
                 end
                 else
                     inc(state.l)
             else
             begin
-                handler___UNKNOWN__();
+                handler__UNKNOWN_();
                 handleTail()
             end
         end
@@ -257,6 +247,25 @@ procedure sendNet(s: shortstring);
 begin
     writeln('[NET] Send: ', s);
     ipcToNet(s + endCmd);
+end;
+
+function getShortString: shortstring;
+var s: shortstring;
+    c: char;
+begin
+    s[0]:= #0;
+
+    repeat
+        inc(s[0]);
+        s[byte(s[0])]:= getNextChar
+    until (s[0] = #255) or (s[byte(s[0])] = #10) or (s[byte(s[0])] = #0);
+
+    if s[byte(s[0])] = #10 then
+        dec(s[0])
+    else
+        repeat c:= getNextChar until (c = #0) or (c = #10);
+
+    getShortString:= s
 end;
 
 procedure netSendCallback(p: pointer; msg: PChar; len: Longword);
