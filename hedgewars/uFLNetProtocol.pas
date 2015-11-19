@@ -23,10 +23,14 @@ end;
 
 procedure handler_BYE(var p: TCmdParamSL);
 begin
+    sendUI(mtDisconnected, @p.str2[1], length(p.str2));
 end;
 
 procedure handler_CHAT(var p: TCmdParamSL);
+var s: string;
 begin
+    s:= p.str1 + #10 + p.str2;
+    sendUI(mtLobbyChatLine, @s[1], length(s));
 end;
 
 procedure handler_CLIENT_FLAGS(var p: TCmdParamS);
@@ -39,7 +43,9 @@ end;
 
 procedure handler_CONNECTED(var p: TCmdParami);
 begin
-    writeln('Connected!!!!! ', p.param1)
+    sendUI(mtConnected, nil, 0);
+    sendNet('PROTO' + #10 + '51');
+    sendNet('NICK' + #10 + 'qmlfrontend');
 end;
 
 procedure handler_EM(var p: TCmdParam);
@@ -100,6 +106,7 @@ end;
  
 procedure handler_LOBBY_JOINED_s(var s: TCmdParamS);
 begin
+    sendUI(mtAddLobbyClient, @s.str1[1], length(s.str1));
 end;
 
 procedure handler_LOBBY_LEFT(var p: TCmdParamSL);

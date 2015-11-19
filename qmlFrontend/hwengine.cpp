@@ -135,7 +135,7 @@ void HWEngine::guiMessagesCallback(void *context, MessageType mt, const char * m
     HWEngine * obj = (HWEngine *)context;
     QByteArray b = QByteArray(msg, len);
 
-    qDebug() << "FLIPC in" << b.size() << b;
+    //qDebug() << "FLIPC in" << b.size() << b;
 
     QMetaObject::invokeMethod(obj, "engineMessageHandler", Qt::QueuedConnection, Q_ARG(MessageType, mt), Q_ARG(QByteArray, b));
 }
@@ -156,15 +156,15 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         break;
     }
     case MSG_REMOVEPLAYINGTEAM: {
-        emit playingTeamRemoved(msg);
+        emit playingTeamRemoved(QString::fromUtf8(msg));
         break;
     }
     case MSG_ADDTEAM: {
-        emit localTeamAdded(msg, 0);
+        emit localTeamAdded(QString::fromUtf8(msg), 0);
         break;
     }
     case MSG_REMOVETEAM: {
-        emit localTeamRemoved(msg);
+        emit localTeamRemoved(QString::fromUtf8(msg));
         break;
     }
     case MSG_TEAMCOLOR: {
@@ -174,6 +174,28 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_NETDATA: {
         flibPassNetData(msg.constData());
+        break;
+    }
+    case MSG_CONNECTED: {
+        emit netConnected();
+        break;
+    }
+    case MSG_DISCONNECTED: {
+        emit netDisconnected(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_ADDLOBBYCLIENT: {
+        emit lobbyClientAdded(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_REMOVELOBBYCLIENT: {
+        emit lobbyClientRemoved(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_LOBBYCHATLINE: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit lobbyChatLine(l[0], l[1]);
+        break;
     }
     }
 }

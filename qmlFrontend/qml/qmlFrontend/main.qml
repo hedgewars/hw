@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import Hedgewars.Engine 1.0
 
 Rectangle {
     id: pages
@@ -10,6 +11,7 @@ Rectangle {
         , "LocalGame"
         , "GameConfig"
         , "Connect"
+        , "LobbyPage"
     ];
 
     property string  currentPage : "First";
@@ -32,5 +34,11 @@ Rectangle {
                     active = true;
             }
         }
+    }
+
+    Connections {
+        target: HWEngine
+        onNetConnected: currentPage = "LobbyPage";
+        onNetDisconnected: currentPage = "First";
     }
 }

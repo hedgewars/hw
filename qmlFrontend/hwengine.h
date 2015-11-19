@@ -46,6 +46,13 @@ signals:
 
     void teamColorChanged(const QString & teamName, const QString & colorValue);
 
+    void netConnected();
+    void netDisconnected(const QString & message);
+
+    void lobbyClientAdded(const QString & clientName);
+    void lobbyClientRemoved(const QString & clientName);
+    void lobbyChatLine(const QString & nickname, const QString & line);
+
 public slots:
 
 private:

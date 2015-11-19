@@ -6,6 +6,7 @@ procedure connectOfficialServer;
 procedure initModule;
 procedure freeModule;
 procedure sendNet(s: shortstring);
+procedure sendNetLn(s: shortstring);
 
 implementation
 uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes, uFLUtils;
@@ -81,7 +82,6 @@ var cmd: TCmdParamS;
     f: boolean;
 begin
     sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
-    writeln('handler_MS');
     cmd.cmd:= Succ(state.cmd);
 
     repeat
@@ -99,8 +99,12 @@ begin
 end;
 
 procedure handler_SL;
+var cmd: TCmdParamSL;
 begin
-    writeln('handler_SL');
+    cmd.cmd:= state.cmd;
+    cmd.str1:= getShortString;
+    cmd.str2:= getShortString; // FIXME should be long string
+    sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
 
@@ -195,11 +199,6 @@ begin
     getNextChar:= state.buf[state.bufpos];
 end;
 
-function netWriter(sock: PTCPSocket): LongInt; cdecl; export;
-begin
-    netWriter:= 0;
-end;
-
 function netReader(data: pointer): LongInt; cdecl; export;
 var c: char;
     ipaddr: TIPAddress;
@@ -208,8 +207,6 @@ begin
 
     if SDLNet_ResolveHost(ipaddr, PChar('netserver.hedgewars.org'), 46631) = 0 then
         sock:= SDLNet_TCP_Open(ipaddr);
-
-    SDL_CreateThread(@netWriter, 'netWriter', sock);
 
     repeat
         c:= getNextChar;
@@ -238,6 +235,7 @@ begin
         end
     until state.netState = netDisconnected;
 
+    SDLNet_TCP_Close(sock);
     sock:= nil;
 
     writeln('[NET] netReader: disconnected');
@@ -247,6 +245,12 @@ procedure sendNet(s: shortstring);
 begin
     writeln('[NET] Send: ', s);
     ipcToNet(s + endCmd);
+end;
+
+procedure sendNetLn(s: shortstring);
+begin
+    writeln('[NET] Send: ', s);
+    ipcToNet(s + #10);
 end;
 
 function getShortString: shortstring;
@@ -286,6 +290,7 @@ begin
     state.netState:= netConnecting;
 
     netReaderThread:= SDL_CreateThread(@netReader, 'netReader', nil);
+    SDL_DetachThread(netReaderThread)
 end;
 
 procedure initModule;

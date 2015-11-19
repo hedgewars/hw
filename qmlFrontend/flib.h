@@ -15,6 +15,11 @@ enum MessageType {
     , MSG_REMOVETEAM
     , MSG_TEAMCOLOR
     , MSG_NETDATA
+    , MSG_CONNECTED
+    , MSG_DISCONNECTED
+    , MSG_ADDLOBBYCLIENT
+    , MSG_REMOVELOBBYCLIENT
+    , MSG_LOBBYCHATLINE
 };
 
 typedef union string255_
