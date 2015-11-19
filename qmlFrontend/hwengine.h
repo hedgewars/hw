@@ -36,6 +36,8 @@ public:
 
     Q_INVOKABLE void connect(const QString & host, quint16 port);
 
+    Q_INVOKABLE void sendChatMessage(const QString & msg);
+
 signals:
     void previewImageChanged();
     void localTeamAdded(const QString & teamName, int aiLevel);

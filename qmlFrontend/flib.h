@@ -48,6 +48,7 @@ typedef void setAmmo_t(const char * ammoName);
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
 typedef void passNetData_t(const char * data);
+typedef void sendChatLine_t(const char * msg);
 
 typedef char **getThemesList_t();
 typedef void freeThemesList_t(char **list);

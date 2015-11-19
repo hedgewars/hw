@@ -14,7 +14,7 @@ Rectangle {
         x: 0
         y: 0
         width: parent.width - clientsList.width
-        height: parent.height
+        height: parent.height - input.height
         focus: true
         clip: true
         highlightFollowsCurrentItem: true
@@ -55,14 +55,31 @@ Rectangle {
 
         }
 
+        function addLine(nickname, line) {
+            chatLinesModel.append({"nick" : nickname, "name": line})
+            if(chatLinesModel.count > 200)
+                chatLinesModel.remove(0)
+            chatLines.currentIndex = chatLinesModel.count - 1
+        }
+
         Connections {
             target: HWEngine
-            onLobbyChatLine: {
-                chatLinesModel.append({"nick" : nickname, "name": line})
-                if(chatLinesModel.count > 200)
-                    chatLinesModel.remove(0)
-                chatLines.currentIndex = chatLinesModel.count - 1
-            }
+            onLobbyChatLine: chatLines.addLine(nickname, line)
+        }
+    }
+
+    TextInput {
+        id: input
+        x: 0
+        y: chatLines.height
+        width: chatLines.width
+        height: 24
+        color: "#eccd2f"
+
+        onAccepted: {
+            HWEngine.sendChatMessage(text)
+            chatLines.addLine("me", text)
+            text = ""
         }
     }
 
@@ -101,9 +118,7 @@ Rectangle {
 
         Connections {
             target: HWEngine
-            onLobbyClientAdded: {
-                chatClientsModel.append({"isAdmin": false, "name": clientName})
-            }
+            onLobbyClientAdded: chatClientsModel.append({"isAdmin": false, "name": clientName})
             onLobbyClientRemoved: {
                 var i = chatClientsModel.count - 1;
                 while ((i >= 0) && (chatClientsModel.get(i).name !== clientName)) --i;

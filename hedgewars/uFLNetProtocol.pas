@@ -3,6 +3,8 @@ interface
 
 procedure passNetData(p: pointer); cdecl;
 
+procedure sendChatLine(msg: PChar); cdecl;
+
 implementation
 uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet;
 
@@ -200,6 +202,12 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ASKPASSWORD),
 procedure passNetData(p: pointer); cdecl;
 begin
     handlers[TCmdData(p^).cmd.cmd](TCmdData(p^))
+end;
+
+procedure sendChatLine(msg: PChar); cdecl;
+begin
+    sendNetLn('CHAT');
+    sendNet(msg);
 end;
 
 end.

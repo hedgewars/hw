@@ -180,6 +180,7 @@ exports
     // network
     connectOfficialServer,
     passNetData,
+    sendChatLine,
 
     // dunno what these are
     RunEngine,

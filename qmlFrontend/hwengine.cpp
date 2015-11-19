@@ -36,6 +36,7 @@ extern "C" {
 
     connectOfficialServer_t * flibConnectOfficialServer;
     passNetData_t * flibPassNetData;
+    sendChatLine_t * flibSendChatLine;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -82,6 +83,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibConnectOfficialServer = (connectOfficialServer_t*) hwlib.resolve("connectOfficialServer");
     flibPassNetData = (passNetData_t*) hwlib.resolve("passNetData");
+    flibSendChatLine = (sendChatLine_t*) hwlib.resolve("sendChatLine");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
@@ -271,6 +273,11 @@ void HWEngine::changeTeamColor(const QString &teamName, int dir)
 void HWEngine::connect(const QString &host, quint16 port)
 {
     flibConnectOfficialServer();
+}
+
+void HWEngine::sendChatMessage(const QString &msg)
+{
+    flibSendChatLine(msg.toUtf8().constData());
 }
 
 void HWEngine::setTheme(const QString &theme)
