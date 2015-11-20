@@ -120,10 +120,14 @@ bpt cmds = if not . null $ fst emptyNamed then cmdLeaf emptyNamed else subtree
         emptyNamed = partition (\(_, (PTCommand n _:_)) -> null n) assocs
         assocs = groupByFirstChar cmds
         subtree = map buildsub assocs
+        buildsub :: (Char, [ParseTree]) -> ParseTree
         buildsub (c, cmds) = let st = bpt cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
         maybeMerge c cmd@[PTCommand {}] = PTPrefix [c] cmd
         maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
-        cmdLeaf ([(c, (hwc:assocs1))], assocs2) = (PTPrefix [c] [hwc]) : (bpt assocs1 ++ map buildsub assocs2)
+        maybeMerge c [] = PTPrefix [c] []
+        cmdLeaf ([(c, hwc:assocs1)], assocs2)
+            | null assocs1 = PTPrefix [c] [hwc] : map buildsub assocs2
+            | otherwise = [buildsub (c, assocs1)] ++ [PTPrefix [] [hwc]] ++ map buildsub assocs2
 
 dumpTree = vcat . map dt
     where

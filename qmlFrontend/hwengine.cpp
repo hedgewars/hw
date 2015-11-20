@@ -208,6 +208,7 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         break;
     }
     case MSG_REMOVEROOM: {
+        emit roomRemoved(QString::fromUtf8(msg));
         break;
     }
     }

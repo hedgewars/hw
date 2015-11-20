@@ -65,6 +65,12 @@ Rectangle {
                                , "scheme": scheme
                                , "weapons": weapons
                            })
+            onRoomRemoved: {
+                var i = roomsListModel.count - 1;
+                while ((i >= 0) && (roomsListModel.get(i).name !== name)) --i
+
+                if(i >= 0) roomsListModel.remove(i, 1)
+            }
         }
     }
 

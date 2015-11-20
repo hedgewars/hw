@@ -108,6 +108,8 @@ end;
 
 procedure handler_LOBBY_JOINED_s(var s: TCmdParamS);
 begin
+    if s.str1 = 'qmlfrontend' then sendNet('LIST');
+
     sendUI(mtAddLobbyClient, @s.str1[1], length(s.str1));
 end;
 
@@ -169,7 +171,7 @@ begin
 
         if roomLinesCount = raRoomInfoLength[roomAction] then
         begin
-            sendUI(raRoomAction[roomAction], @roomInfo[1], length(roomInfo));
+            sendUI(raRoomAction[roomAction], @roomInfo[1], length(roomInfo) - 1);
             roomLinesCount:= 0;
             roomInfo:= ''
         end;

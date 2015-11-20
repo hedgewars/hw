@@ -64,6 +64,7 @@ signals:
                    , const QString & script
                    , const QString & scheme
                    , const QString & weapons);
+    void roomRemoved(const QString & name);
 
 public slots:
 
