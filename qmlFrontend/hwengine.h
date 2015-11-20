@@ -55,6 +55,16 @@ signals:
     void lobbyClientRemoved(const QString & clientName);
     void lobbyChatLine(const QString & nickname, const QString & line);
 
+    void roomAdded(quint32 flags
+                   , const QString & name
+                   , int players
+                   , int teams
+                   , const QString & host
+                   , const QString & map
+                   , const QString & script
+                   , const QString & scheme
+                   , const QString & weapons);
+
 public slots:
 
 private:

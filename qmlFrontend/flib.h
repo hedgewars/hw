@@ -20,6 +20,9 @@ enum MessageType {
     , MSG_ADDLOBBYCLIENT
     , MSG_REMOVELOBBYCLIENT
     , MSG_LOBBYCHATLINE
+    , MSG_ADDROOM
+    , MSG_UPDATEROOM
+    , MSG_REMOVEROOM
 };
 
 typedef union string255_

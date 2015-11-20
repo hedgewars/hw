@@ -199,6 +199,17 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit lobbyChatLine(l[0], l[1]);
         break;
     }
+    case MSG_ADDROOM: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit roomAdded(0, l[1], l[2].toInt(), l[3].toInt(), l[4], l[5], l[6], l[7], l[8]);
+        break;
+    }
+    case MSG_UPDATEROOM: {
+        break;
+    }
+    case MSG_REMOVEROOM: {
+        break;
+    }
     }
 }
 

@@ -53,7 +53,8 @@ begin
     while (msg.str[0] = #0) and (msg.buf = nil) do
         SDL_CondWait(cond, mut);
 
-    if msg.buf <> nil then
+    if msg.buf <> nil then 
+// FIXME is this copying really needed, the buffer is in another thread already anyway?
     begin
         tmp:= msg.buf;
         msg.buf:= GetMem(msg.len);

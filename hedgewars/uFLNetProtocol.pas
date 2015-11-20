@@ -18,7 +18,7 @@ end;
 procedure handler_BANLIST(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_BANLIST_s(var s: TCmdParamS);
 begin
 end;
@@ -38,7 +38,7 @@ end;
 procedure handler_CLIENT_FLAGS(var p: TCmdParamS);
 begin
 end;
- 
+
 procedure handler_CLIENT_FLAGS_s(var s: TCmdParamS);
 begin
 end;
@@ -53,7 +53,7 @@ end;
 procedure handler_EM(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_EM_s(var s: TCmdParamS);
 begin
 end;
@@ -65,7 +65,7 @@ end;
 procedure handler_HH_NUM(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_HH_NUM_s(var s: TCmdParamS);
 begin
 end;
@@ -73,7 +73,7 @@ end;
 procedure handler_INFO(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_INFO_s(var s: TCmdParamS);
 begin
 end;
@@ -81,7 +81,7 @@ end;
 procedure handler_JOINED(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_JOINED_s(var s: TCmdParamS);
 begin
 end;
@@ -97,7 +97,7 @@ end;
 procedure handler_LEFT(var p: TCmdParamS);
 begin
 end;
- 
+
 procedure handler_LEFT_s(var s: TCmdParamS);
 begin
 end;
@@ -105,7 +105,7 @@ end;
 procedure handler_LOBBY_JOINED(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_LOBBY_JOINED_s(var s: TCmdParamS);
 begin
     sendUI(mtAddLobbyClient, @s.str1[1], length(s.str1));
@@ -127,7 +127,7 @@ procedure handler_PING(var p: TCmdParam);
 begin
     sendNet('PONG')
 end;
- 
+
 procedure handler_PING_s(var s: TCmdParamS);
 begin
 end;
@@ -136,12 +136,62 @@ procedure handler_PROTO(var p: TCmdParami);
 begin
 end;
 
+type TRoomAction = (raUnknown, raAdd, raUpdate, raRemove);
+const raRoomInfoLength: array[TRoomAction] of integer = (1, 9, 10, 1);
+const raRoomAction: array[TRoomAction] of TMessageType = (mtAddRoom, mtAddRoom, mtUpdateRoom, mtRemoveRoom);
+var roomInfo: string;
+    roomLinesCount: integer;
+    roomAction: TRoomAction;
+
+procedure handler_ROOM(var p: TCmdParam);
+begin
+    roomInfo:= '';
+    roomLinesCount:= 0;
+    roomAction:= raUnknown
+end;
+
+procedure handler_ROOM_s(var s: TCmdParamS);
+begin
+    if roomAction = raUnknown then
+    begin
+        if s.str1 = 'ADD' then
+            roomAction:= raAdd
+        else
+            if s.str1 = 'UPD' then
+                roomAction:= raUpdate
+            else
+                if s.str1 = 'DEL' then
+                    roomAction:= raRemove
+    end
+    else begin
+        roomInfo:= roomInfo + s.str1 + #10;
+        inc(roomLinesCount);
+
+        if roomLinesCount = raRoomInfoLength[roomAction] then
+        begin
+            sendUI(raRoomAction[roomAction], @roomInfo[1], length(roomInfo));
+            roomLinesCount:= 0;
+            roomInfo:= ''
+        end;
+    end;
+end;
+
 procedure handler_ROOMS(var p: TCmdParam);
 begin
+    roomInfo:= '';
+    roomLinesCount:= 0
 end;
- 
+
 procedure handler_ROOMS_s(var s: TCmdParamS);
 begin
+    roomInfo:= roomInfo + s.str1 + #10;
+
+    if roomLinesCount = 8 then
+    begin
+        sendUI(mtAddRoom, @roomInfo[1], length(roomInfo));
+        roomLinesCount:= 0;
+        roomInfo:= ''
+    end else inc(roomLinesCount);
 end;
 
 procedure handler_ROUND_FINISHED(var p: TCmdParam);
@@ -171,7 +221,7 @@ end;
 procedure handler_TEAM_COLOR(var p: TCmdParam);
 begin
 end;
- 
+
 procedure handler_TEAM_COLOR_s(var s: TCmdParamS);
 begin
 end;
@@ -192,12 +242,13 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ASKPASSWORD),
     PHandler(@handler_LEFT_s), PHandler(@handler_LOBBY_JOINED),
     PHandler(@handler_LOBBY_JOINED_s), PHandler(@handler_LOBBY_LEFT),
     PHandler(@handler_NICK), PHandler(@handler_NOTICE), PHandler(@handler_PING),
-    PHandler(@handler_PING_s), PHandler(@handler_PROTO), PHandler(@handler_ROOMS),
-    PHandler(@handler_ROOMS_s), PHandler(@handler_ROUND_FINISHED),
-    PHandler(@handler_RUN_GAME), PHandler(@handler_SERVER_AUTH),
-    PHandler(@handler_SERVER_MESSAGE), PHandler(@handler_SERVER_VARS),
-    PHandler(@handler_TEAM_ACCEPTED), PHandler(@handler_TEAM_COLOR),
-    PHandler(@handler_TEAM_COLOR_s), PHandler(@handler_WARNING));
+    PHandler(@handler_PING_s), PHandler(@handler_PROTO), PHandler(@handler_ROOM),
+    PHandler(@handler_ROOM_s), PHandler(@handler_ROOMS), PHandler(@handler_ROOMS_s),
+    PHandler(@handler_ROUND_FINISHED), PHandler(@handler_RUN_GAME),
+    PHandler(@handler_SERVER_AUTH), PHandler(@handler_SERVER_MESSAGE),
+    PHandler(@handler_SERVER_VARS), PHandler(@handler_TEAM_ACCEPTED),
+    PHandler(@handler_TEAM_COLOR), PHandler(@handler_TEAM_COLOR_s),
+    PHandler(@handler_WARNING));
 
 procedure passNetData(p: pointer); cdecl;
 begin
