@@ -8,6 +8,7 @@ import Data.Char
 import qualified Data.Set as Set
 
 data HWProtocol = Command String [CmdParam]
+    deriving Show
 
 instance Ord HWProtocol where
     (Command a _) `compare` (Command b _) = a `compare` b    
@@ -19,13 +20,11 @@ data CmdParam = Skip
               | LS
               | IntP
               | Many [CmdParam]
-data ClientStates = NotConnected
-                  | JustConnected
-                  | ServerAuth
-                  | Lobby
+    deriving Show
 
 data ParseTree = PTPrefix String [ParseTree]
                | PTCommand String HWProtocol
+    deriving Show
 
 cmd = Command
 cmd1 s p = Command s [p]
@@ -90,6 +89,7 @@ commandsDescription = [
         , cmd2 "SERVER_VARS" SS LS
         , cmd2 "BYE" SS LS
         , cmd1 "INFO" $ Many [SS]
+        , cmd1 "ROOM" $ Many [SS]
         , cmd1 "ROOMS" $ Many [SS]
         , cmd "KICKED" []
         , cmd "RUN_GAME" []
@@ -123,22 +123,12 @@ bpt cmds = if not . null $ fst emptyNamed then cmdLeaf emptyNamed else subtree
         buildsub (c, cmds) = let st = bpt cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
         maybeMerge c cmd@[PTCommand {}] = PTPrefix [c] cmd
         maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
-        cmdLeaf ([(c, (hwc:_))], assocs2) = (PTPrefix [c] [hwc]) : map buildsub assocs2
+        cmdLeaf ([(c, (hwc:assocs1))], assocs2) = (PTPrefix [c] [hwc]) : (bpt assocs1 ++ map buildsub assocs2)
 
 dumpTree = vcat . map dt
     where
     dt (PTPrefix s st) = text s $$ (nest 1 $ vcat $ map dt st)
     dt _ = empty
-
-pas2 = buildSwitch $ buildParseTree commandsDescription
-    where
-        buildSwitch cmds = text "case getNextChar of" $$ (nest 4 . vcat $ map buildCase cmds) $$ elsePart
-        buildCase (PTCommand {}) = text "#10: <call cmd handler>;"
-        buildCase (PTPrefix (s:ss) cmds) = quotes (char s) <> text ": " <> consumePrefix ss (buildSwitch cmds)
-        consumePrefix "" = id
-        consumePrefix str = (text "consume" <> (parens . quotes $ text str) <> semi $$)
-        zeroChar = text "#0: state:= pstDisconnected;"
-        elsePart = text "else <unknown cmd> end;"
 
 renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
     where
