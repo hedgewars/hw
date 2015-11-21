@@ -63,6 +63,7 @@ HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
     connect(pbDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
 
     this->setWindowModality(Qt::WindowModal);
+    this->setWindowTitle(tr("Connect to server"));
 }
 
 void HWHostPortDialog::setDefaultPort()
