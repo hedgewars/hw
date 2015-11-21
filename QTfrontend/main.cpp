@@ -28,6 +28,7 @@
 #include <QDate>
 #include <QDesktopWidget>
 #include <QLabel>
+#include <QLibraryInfo>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -318,7 +319,8 @@ int main(int argc, char *argv[])
     engine->setWriteDir(cfgdir->absolutePath());
     engine->mountPacks();
 
-    QTranslator Translator;
+    QTranslator TranslatorHedgewars;
+    QTranslator TranslatorQt;
     {
         QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
         settings.setIniCodec("UTF-8");
@@ -333,10 +335,13 @@ int main(int argc, char *argv[])
                 cc = HWApplication::keyboardInputLocale().name();
         }
 
-        // load locale file into translator
-        if (!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
-            qWarning("Failed to install translation (%s)", qPrintable(cc));
-        app.installTranslator(&Translator);
+        // Load locale files into translators
+        if (!TranslatorHedgewars.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+            qWarning("Failed to install Hedgewars translation (%s)", qPrintable(cc));
+        if (!TranslatorQt.load(QString("%1/qt_%2").arg(QLibraryInfo::location(QLibraryInfo::TranslationsPath), cc)))
+            qWarning("Failed to install Qt translation (%s)", qPrintable(cc));
+        app.installTranslator(&TranslatorHedgewars);
+        app.installTranslator(&TranslatorQt);
         app.setLayoutDirection(QLocale(cc).textDirection());
     }
 
