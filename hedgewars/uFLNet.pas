@@ -53,7 +53,7 @@ const commands: array[0..212] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, -32, 5, 0, 0, 0, -31, 11, 0, 0, 0, 3, 0, -30, 0, 0, 0, -29, 7, 0,
     0, 0, 0, 0, -28, 22, 4, 0, 0, -27, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, -26, 0, 0,
     0, 0, -25, 11, 4, 0, 0, -24, 0, 0, 0, 0, 0, -23, 10, 4, 0, 0, -22, 0, 0, 0, 0,
-    -21, 28, 19, 5, 3, 1, -20, -19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0,
+    -21, 28, 19, 5, 3, 1, -19, -20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0,
     0, 0, 0, 0, -17, 25, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, -16, 8, 0, 0, 0, 0, 0, 0,
     -15, 0, 0, 0, 0, -14, 20, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0,
     0, -12, 8, 0, 0, 0, 0, 0, 0, -11, 0, -10);
@@ -103,7 +103,9 @@ var cmd: TCmdParamSL;
 begin
     cmd.cmd:= state.cmd;
     cmd.str1:= getShortString;
+    if cmd.str1[0] = #0 then exit;
     cmd.str2:= getShortString; // FIXME should be long string
+    if cmd.str2[0] = #0 then exit;
     sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
@@ -116,11 +118,15 @@ end;
 
 procedure handler__i;
 var cmd: TCmdParami;
+    s: shortstring;
 begin
     writeln('handler__i');
-    getShortString;
+    s:= getShortString();
+    if s[0] = #0 then exit;
     cmd.cmd:= state.cmd;
-    cmd.param1:= strToInt(getShortString);
+    s:= getShortString();
+    if s[0] = #0 then exit;
+    cmd.param1:= strToInt(s);
     sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
@@ -158,8 +164,6 @@ procedure handleTail;
 var cnt: Longint;
     c: char;
 begin
-    state.l:= 0;
-
     c:= getCurrChar;
     repeat
         if c = #10 then cnt:= 0 else cnt:= 1;
@@ -226,6 +230,7 @@ begin
                     state.cmd:= net2cmd[-10 - commands[state.l]];
                     writeln('[NET] ', state.cmd);
                     handlers[-10 - commands[state.l]]();
+                    state.l:= 0
                 end
                 else
                     inc(state.l)

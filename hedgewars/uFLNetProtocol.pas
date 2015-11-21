@@ -190,7 +190,7 @@ begin
 
     if roomLinesCount = 8 then
     begin
-        sendUI(mtAddRoom, @roomInfo[1], length(roomInfo));
+        sendUI(mtAddRoom, @roomInfo[1], length(roomInfo) - 1);
         roomLinesCount:= 0;
         roomInfo:= ''
     end else inc(roomLinesCount);
