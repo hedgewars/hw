@@ -7,7 +7,8 @@
         <file>qml/qmlFrontend/LocalGame.qml</file>
         <file>qml/qmlFrontend/main.qml</file>
         <file>qml/qmlFrontend/Connect.qml</file>
-        <file>qml/qmlFrontend/LobbyPage.qml</file>
         <file>qml/qmlFrontend/Chat.qml</file>
+        <file>qml/qmlFrontend/Room.qml</file>
+        <file>qml/qmlFrontend/Lobby.qml</file>
     </qresource>
 </RCC>

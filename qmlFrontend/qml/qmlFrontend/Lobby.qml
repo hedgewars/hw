@@ -97,6 +97,13 @@ Rectangle {
         y: 300;
         width: parent.width;
         height: parent.height - y;
+
+        Connections {
+            target: HWEngine
+            onLobbyChatLine: lobbyChat.addChatLine(nickname, line)
+            onLobbyClientAdded: lobbyChat.addClient(clientName)
+            onLobbyClientRemoved: lobbyChat.removeClient(clientName, reason)
+        }
     }
 }
 

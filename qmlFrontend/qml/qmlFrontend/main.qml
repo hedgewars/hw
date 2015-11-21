@@ -6,22 +6,28 @@ Rectangle {
     width: 800
     height: 600
 
-    property variant pagesList  : [
+    property variant pagesList : [
         "First"
         , "LocalGame"
         , "GameConfig"
         , "Connect"
-        , "LobbyPage"
+        , "Lobby"
+        , "Room"
     ];
 
     property string  currentPage : "First";
 
     Repeater {
-        model: pagesList;
+        id: pagesView
+        model: pagesList
+
+        function loadPage(page) {
+            // somehow load the page (when Loader has asynchronous == true)
+        }
 
         delegate: Loader {
             active: false
-            asynchronous: true
+            asynchronous: false
             anchors.fill: parent
             visible: (currentPage === modelData)
             source: "%1.qml".arg(modelData)
@@ -72,7 +78,12 @@ Rectangle {
 
     Connections {
         target: HWEngine
-        onNetConnected: currentPage = "LobbyPage";
+        onNetConnected: {
+            pagesView.loadPage("Lobby");
+            pagesView.loadPage("Room");
+        }
+        onMovedToLobby: currentPage = "Lobby";
+        onMovedToRoom: currentPage = "Room";
         onNetDisconnected: currentPage = "First";
         onWarningMessage: warningsBox.showMessage(message);
         onErrorMessage: warningsBox.showMessage(message);

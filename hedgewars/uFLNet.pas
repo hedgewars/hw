@@ -17,7 +17,7 @@ function getNextChar: char; forward;
 function getCurrChar: char; forward;
 
 type
-    TNetState = (netDisconnected, netConnecting, netLoggedIn);
+    TNetState = (netDisconnected, netConnecting);
     TParserState = record
                        cmd: TCmdType;
                        l: LongInt;
@@ -128,9 +128,21 @@ begin
 end;
 
 procedure handler_SMS;
+var cmd: TCmdParamS;
+    f: boolean;
 begin
-    writeln('handler_SMS');
-    handleTail()
+    cmd.cmd:= state.cmd;
+    cmd.str1:= getShortString;
+    if cmd.str1[0] = #0 then exit;
+    sendUI(mtNetData, @cmd, sizeof(cmd));
+
+    cmd.cmd:= Succ(state.cmd);
+    repeat
+        cmd.str1:= getShortString;
+        f:= cmd.str1[0] <> #0;
+        if f then
+            sendUI(mtNetData, @cmd, sizeof(cmd));
+    until not f
 end;
 
 procedure handler__i;

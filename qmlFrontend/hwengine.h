@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void sendChatMessage(const QString & msg);
 
     Q_INVOKABLE void joinRoom(const QString & roomName);
+    Q_INVOKABLE void partRoom(const QString & message);
 
 signals:
     void errorMessage(const QString & message);
@@ -59,6 +60,13 @@ signals:
     void lobbyClientAdded(const QString & clientName);
     void lobbyClientRemoved(const QString & clientName, const QString & reason);
     void lobbyChatLine(const QString & nickname, const QString & line);
+
+    void roomClientAdded(const QString & clientName);
+    void roomClientRemoved(const QString & clientName, const QString & reason);
+    void roomChatLine(const QString & nickname, const QString & line);
+
+    void movedToLobby();
+    void movedToRoom();
 
     void roomAdded(quint32 flags
                    , const QString & name

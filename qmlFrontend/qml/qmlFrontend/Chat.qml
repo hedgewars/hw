@@ -2,19 +2,17 @@ import QtQuick 2.0
 import Hedgewars.Engine 1.0
 
 Rectangle {
-    id: chat
     color: "#15193a"
     radius: 8
     border.width: 4
-    opacity: 1
     border.color: "#ea761d"
 
     ListView {
         id: chatLines
         x: 0
-        y: 0
         width: parent.width - clientsList.width
-        height: parent.height - input.height
+        anchors.top: parent.top
+        anchors.bottom: input.top
         focus: true
         clip: true
         highlightFollowsCurrentItem: true
@@ -61,19 +59,14 @@ Rectangle {
                 chatLinesModel.remove(0)
             chatLines.currentIndex = chatLinesModel.count - 1
         }
-
-        Connections {
-            target: HWEngine
-            onLobbyChatLine: chatLines.addLine(nickname, line)
-        }
     }
 
     TextInput {
         id: input
         x: 0
-        y: chatLines.height
         width: chatLines.width
         height: 24
+        anchors.bottom: parent.bottom
         color: "#eccd2f"
 
         onAccepted: {
@@ -115,22 +108,24 @@ Rectangle {
             }
 
         }
+    }
 
-        Connections {
-            target: HWEngine
-            onLobbyClientAdded: {
-                chatClientsModel.append({"isAdmin": false, "name": clientName})
-                chatLines.addLine("***", qsTr("%1 joined").arg(clientName))
-            }
-            onLobbyClientRemoved: {
-                var i = chatClientsModel.count - 1;
-                while ((i >= 0) && (chatClientsModel.get(i).name !== clientName)) --i;
+    function addChatLine(nickname, line) {
+        chatLines.addLine(nickname, line)
+    }
 
-                if(i >= 0) {
-                    chatClientsModel.remove(i, 1);
-                    chatLines.addLine("***", qsTr("%1 quit (%2)").arg(clientName).arg(reason))
-                }
-            }
+    function addClient(clientName) {
+        chatClientsModel.append({"isAdmin": false, "name": clientName})
+        chatLines.addLine("***", qsTr("%1 joined").arg(clientName))
+    }
+
+    function removeClient(clientName, reason) {
+        var i = chatClientsModel.count - 1;
+        while ((i >= 0) && (chatClientsModel.get(i).name !== clientName)) --i;
+
+        if(i >= 0) {
+            chatClientsModel.remove(i, 1);
+            chatLines.addLine("***", qsTr("%1 quit (%2)").arg(clientName).arg(reason))
         }
     }
 }

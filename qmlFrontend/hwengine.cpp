@@ -38,9 +38,10 @@ extern "C" {
     passNetData_t * flibPassNetData;
     sendChatLine_t * flibSendChatLine;
     joinRoom_t * flibJoinRoom;
+    partRoom_t * flibPartRoom;
 }
 
-Q_DECLARE_METATYPE(MessageType);
+Q_DECLARE_METATYPE(MessageType)
 
 HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     QObject(parent),
@@ -86,6 +87,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibPassNetData = (passNetData_t*) hwlib.resolve("passNetData");
     flibSendChatLine = (sendChatLine_t*) hwlib.resolve("sendChatLine");
     flibJoinRoom = (joinRoom_t*) hwlib.resolve("joinRoom");
+    flibPartRoom = (partRoom_t*) hwlib.resolve("partRoom");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
@@ -202,6 +204,20 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit lobbyChatLine(l[0], l[1]);
         break;
     }
+    case MSG_ADDROOMCLIENT: {
+        emit roomClientAdded(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_REMOVEROOMCLIENT: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit roomClientRemoved(l[0], l[1]);
+        break;
+    }
+    case MSG_ROOMCHATLINE: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit roomChatLine(l[0], l[1]);
+        break;
+    }
     case MSG_ADDROOM: {
         QStringList l = QString::fromUtf8(msg).split('\n');
         emit roomAdded(0, l[1], l[2].toInt(), l[3].toInt(), l[4], l[5], l[6], l[7], l[8]);
@@ -222,6 +238,14 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_WARNING: {
         emit warningMessage(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_MOVETOLOBBY: {
+        emit movedToLobby();
+        break;
+    }
+    case MSG_MOVETOROOM: {
+        emit movedToRoom();
         break;
     }
     }
@@ -308,6 +332,11 @@ void HWEngine::sendChatMessage(const QString &msg)
 void HWEngine::joinRoom(const QString &roomName)
 {
     flibJoinRoom(roomName.toUtf8().constData());
+}
+
+void HWEngine::partRoom(const QString &message)
+{
+    flibPartRoom(message.toUtf8().constData());
 }
 
 void HWEngine::setTheme(const QString &theme)

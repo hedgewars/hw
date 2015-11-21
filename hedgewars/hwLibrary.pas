@@ -182,6 +182,7 @@ exports
     passNetData,
     sendChatLine,
     joinRoom,
+    partRoom,
 
     // dunno what these are
     RunEngine,

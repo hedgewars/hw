@@ -4,8 +4,9 @@ interface
 type
     TMessageType = (mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam
                     , mtTeamColor, mtNetData, mtConnected, mtDisconnected, mtAddLobbyClient
-                    , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoom, mtUpdateRoom
-                    , mtRemoveRoom, mtError, mtWarning);
+                    , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoomClient
+                    , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom
+                    , mtRemoveRoom, mtError, mtWarning, mtMoveToLobby, mtMoveToRoom);
 
     TIPCMessage = record
                    str: shortstring;

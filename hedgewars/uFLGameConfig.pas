@@ -160,7 +160,7 @@ begin
         teams[0].color:= 0;
         teams[1]:= createRandomTeam;
         teams[1].color:= 1;
-        teams[1].botLevel:= 1;
+        teams[1].botLevel:= 3;
 
         queueExecution;
     end;

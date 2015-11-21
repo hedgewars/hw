@@ -20,11 +20,16 @@ enum MessageType {
     , MSG_ADDLOBBYCLIENT
     , MSG_REMOVELOBBYCLIENT
     , MSG_LOBBYCHATLINE
+    , MSG_ADDROOMCLIENT
+    , MSG_REMOVEROOMCLIENT
+    , MSG_ROOMCHATLINE
     , MSG_ADDROOM
     , MSG_UPDATEROOM
     , MSG_REMOVEROOM
     , MSG_ERROR
     , MSG_WARNING
+    , MSG_MOVETOLOBBY
+    , MSG_MOVETOROOM
 };
 
 typedef union string255_
@@ -55,6 +60,7 @@ typedef void flibFree_t();
 typedef void passNetData_t(const char * data);
 typedef void sendChatLine_t(const char * msg);
 typedef void joinRoom_t(const char * roomName);
+typedef void partRoom_t(const char * message);
 
 typedef char **getThemesList_t();
 typedef void freeThemesList_t(char **list);

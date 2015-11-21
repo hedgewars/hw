@@ -5,12 +5,17 @@ procedure passNetData(p: pointer); cdecl;
 
 procedure sendChatLine(msg: PChar); cdecl;
 procedure joinRoom(roomName: PChar); cdecl;
+procedure partRoom(msg: PChar); cdecl;
+
+procedure ResetNetState;
 
 implementation
 uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet;
 
 type
     PHandler = procedure (var t: TCmdData);
+
+var isInRoom: boolean;
 
 procedure handler_ASKPASSWORD(var p: TCmdParamS);
 begin
@@ -33,7 +38,10 @@ procedure handler_CHAT(var p: TCmdParamSL);
 var s: string;
 begin
     s:= p.str1 + #10 + p.str2;
-    sendUI(mtLobbyChatLine, @s[1], length(s));
+    if isInRoom then
+        sendUI(mtRoomChatLine, @s[1], length(s))
+    else
+        sendUI(mtLobbyChatLine, @s[1], length(s));
 end;
 
 procedure handler_CLIENT_FLAGS(var p: TCmdParamS);
@@ -87,7 +95,12 @@ end;
 procedure handler_JOINED_s(var s: TCmdParamS);
 begin
     if s.str1 = 'qmlfrontend' then // we joined a room
-        sendNet('LIST');
+    begin
+        isInRoom:= true;
+        sendUI(mtMoveToRoom, nil, 0);
+    end;
+
+    sendUI(mtAddRoomClient, @s.str1[1], length(s.str1));
 end;
 
 procedure handler_JOINING(var p: TCmdParamS);
@@ -96,10 +109,13 @@ end;
 
 procedure handler_KICKED(var p: TCmdParam);
 begin
+    isInRoom:= false;
+    sendUI(mtMoveToLobby, nil, 0);
 end;
 
 procedure handler_LEFT(var p: TCmdParamS);
 begin
+    sendUI(mtRemoveLobbyClient, @p.str1[1], length(p.str1));
 end;
 
 procedure handler_LEFT_s(var s: TCmdParamS);
@@ -112,7 +128,11 @@ end;
 
 procedure handler_LOBBY_JOINED_s(var s: TCmdParamS);
 begin
-    if s.str1 = 'qmlfrontend' then sendNet('LIST');
+    if s.str1 = 'qmlfrontend' then 
+    begin
+        sendUI(mtMoveToLobby, nil, 0);
+        sendNet('LIST');
+    end;
 
     sendUI(mtAddLobbyClient, @s.str1[1], length(s.str1));
 end;
@@ -274,6 +294,26 @@ procedure joinRoom(roomName: PChar); cdecl;
 begin
     sendNetLn('JOIN_ROOM');
     sendNet(roomName);
+end;
+
+procedure partRoom(msg: PChar); cdecl;
+var s: string;
+begin
+    if isInRoom then
+    begin
+        isInRoom:= false;
+        s:= 'PART';
+        if length(msg) > 0 then 
+            s:= s + #10 + msg;
+        sendNet(s);
+        sendUI(mtMoveToLobby, nil, 0);
+    end
+end;
+
+
+procedure ResetNetState;
+begin
+    isInRoom:= false;
 end;
 
 end.
