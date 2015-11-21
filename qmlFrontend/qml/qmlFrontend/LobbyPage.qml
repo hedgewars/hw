@@ -65,6 +65,23 @@ Rectangle {
                                , "scheme": scheme
                                , "weapons": weapons
                            })
+            onRoomUpdated: {
+                var i = roomsListModel.count - 1;
+                while ((i >= 0) && (roomsListModel.get(i).name !== name)) --i
+
+                if(i >= 0) {
+                    roomsListModel.set(i, {
+                                           "name" : newName
+                                           , "players": players
+                                           , "teams": teams
+                                           , "host": host
+                                           , "map": map
+                                           , "script": script
+                                           , "scheme": scheme
+                                           , "weapons": weapons
+                                       })
+                }
+            }
             onRoomRemoved: {
                 var i = roomsListModel.count - 1;
                 while ((i >= 0) && (roomsListModel.get(i).name !== name)) --i
@@ -77,7 +94,7 @@ Rectangle {
     Chat {
         id: lobbyChat;
         x: 0;
-        y: 100;
+        y: 300;
         width: parent.width;
         height: parent.height - y;
     }

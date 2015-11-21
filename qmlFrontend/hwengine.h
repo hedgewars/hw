@@ -64,6 +64,16 @@ signals:
                    , const QString & script
                    , const QString & scheme
                    , const QString & weapons);
+    void roomUpdated(const QString & name
+                   , quint32 flags
+                   , const QString & newName
+                   , int players
+                   , int teams
+                   , const QString & host
+                   , const QString & map
+                   , const QString & script
+                   , const QString & scheme
+                   , const QString & weapons);
     void roomRemoved(const QString & name);
 
 public slots:

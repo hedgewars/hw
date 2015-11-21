@@ -205,6 +205,8 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         break;
     }
     case MSG_UPDATEROOM: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit roomUpdated(l[0], 0, l[2], l[3].toInt(), l[4].toInt(), l[5], l[6], l[7], l[8], l[9]);
         break;
     }
     case MSG_REMOVEROOM: {
