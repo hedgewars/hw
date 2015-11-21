@@ -61,20 +61,33 @@ const commands: array[0..212] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 procedure handler_;
 begin
     sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
-    writeln('handler_');
     handleTail()
 end;
 
 procedure handler_L;
+var cmd: TCmdParamL;
 begin
-    writeln('handler_L');
+    cmd.cmd:= state.cmd;
+    cmd.str1:= getShortString; // FIXME long line
+    if cmd.str1[0] = #0 then exit;
+    sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
 
 procedure handler_ML;
+var cmd: TCmdParamL;
+    f: boolean;
 begin
     writeln('handler_ML');
-    handleTail()
+    sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
+    cmd.cmd:= Succ(state.cmd);
+
+    repeat
+        cmd.str1:= getShortString; // FIXME long line
+        f:= cmd.str1[0] <> #0;
+        if f then
+            sendUI(mtNetData, @cmd, sizeof(cmd));
+    until not f
 end;
 
 procedure handler_MS;
@@ -93,8 +106,12 @@ begin
 end;
 
 procedure handler_S;
+var cmd: TCmdParamS;
 begin
-    writeln('handler_S');
+    cmd.cmd:= state.cmd;
+    cmd.str1:= getShortString;
+    if cmd.str1[0] = #0 then exit;
+    sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
 

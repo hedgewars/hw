@@ -36,9 +36,45 @@ Rectangle {
         }
     }
 
+    Rectangle {
+        id: warningsBox
+        y: parent.height - height
+        width: parent.width - 120
+        height: 80
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: "#7e3232"
+        border.color: "#d3ec2d"
+        visible: false
+        z: 2
+
+        function showMessage(message) {
+            msgBox.text = message
+            visible = true
+        }
+
+        Text {
+            id: msgBox
+            x: 0
+            y: 0
+            height: parent.height
+            font.pixelSize: 12
+            wrapMode: Text.Wrap
+        }
+        HWButton {
+            id: closeButton
+            x: parent.width - width
+            y: 0
+            width: 40
+            height: 40
+            onClicked: warningsBox.visible = false
+        }
+    }
+
     Connections {
         target: HWEngine
         onNetConnected: currentPage = "LobbyPage";
         onNetDisconnected: currentPage = "First";
+        onWarningMessage: warningsBox.showMessage(message);
+        onErrorMessage: warningsBox.showMessage(message);
     }
 }

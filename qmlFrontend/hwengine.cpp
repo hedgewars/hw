@@ -37,6 +37,7 @@ extern "C" {
     connectOfficialServer_t * flibConnectOfficialServer;
     passNetData_t * flibPassNetData;
     sendChatLine_t * flibSendChatLine;
+    joinRoom_t * flibJoinRoom;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -84,6 +85,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibConnectOfficialServer = (connectOfficialServer_t*) hwlib.resolve("connectOfficialServer");
     flibPassNetData = (passNetData_t*) hwlib.resolve("passNetData");
     flibSendChatLine = (sendChatLine_t*) hwlib.resolve("sendChatLine");
+    flibJoinRoom = (joinRoom_t*) hwlib.resolve("joinRoom");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
@@ -191,7 +193,8 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         break;
     }
     case MSG_REMOVELOBBYCLIENT: {
-        emit lobbyClientRemoved(QString::fromUtf8(msg));
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit lobbyClientRemoved(l[0], l[1]);
         break;
     }
     case MSG_LOBBYCHATLINE: {
@@ -211,6 +214,14 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_REMOVEROOM: {
         emit roomRemoved(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_ERROR: {
+        emit errorMessage(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_WARNING: {
+        emit warningMessage(QString::fromUtf8(msg));
         break;
     }
     }
@@ -292,6 +303,11 @@ void HWEngine::connect(const QString &host, quint16 port)
 void HWEngine::sendChatMessage(const QString &msg)
 {
     flibSendChatLine(msg.toUtf8().constData());
+}
+
+void HWEngine::joinRoom(const QString &roomName)
+{
+    flibJoinRoom(roomName.toUtf8().constData());
 }
 
 void HWEngine::setTheme(const QString &theme)

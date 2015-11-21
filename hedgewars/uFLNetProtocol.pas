@@ -4,6 +4,7 @@ interface
 procedure passNetData(p: pointer); cdecl;
 
 procedure sendChatLine(msg: PChar); cdecl;
+procedure joinRoom(roomName: PChar); cdecl;
 
 implementation
 uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet;
@@ -60,6 +61,7 @@ end;
 
 procedure handler_ERROR(var p: TCmdParamL);
 begin
+    sendUI(mtError, @p.str1[1], length(p.str1));
 end;
 
 procedure handler_HH_NUM(var p: TCmdParam);
@@ -84,6 +86,8 @@ end;
 
 procedure handler_JOINED_s(var s: TCmdParamS);
 begin
+    if s.str1 = 'qmlfrontend' then // we joined a room
+        sendNet('LIST');
 end;
 
 procedure handler_JOINING(var p: TCmdParamS);
@@ -115,6 +119,8 @@ end;
 
 procedure handler_LOBBY_LEFT(var p: TCmdParamSL);
 begin
+    p.str2:= p.str1 + #10 + p.str2;
+    sendUI(mtRemoveLobbyClient, @p.str2[1], length(p.str2));
 end;
 
 procedure handler_NICK(var p: TCmdParamS);
@@ -230,6 +236,7 @@ end;
 
 procedure handler_WARNING(var p: TCmdParamL);
 begin
+    sendUI(mtWarning, @p.str1[1], length(p.str1));
 end;
 
 const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ASKPASSWORD),
@@ -261,6 +268,12 @@ procedure sendChatLine(msg: PChar); cdecl;
 begin
     sendNetLn('CHAT');
     sendNet(msg);
+end;
+
+procedure joinRoom(roomName: PChar); cdecl;
+begin
+    sendNetLn('JOIN_ROOM');
+    sendNet(roomName);
 end;
 
 end.

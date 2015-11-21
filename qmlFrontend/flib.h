@@ -23,6 +23,8 @@ enum MessageType {
     , MSG_ADDROOM
     , MSG_UPDATEROOM
     , MSG_REMOVEROOM
+    , MSG_ERROR
+    , MSG_WARNING
 };
 
 typedef union string255_
@@ -52,6 +54,7 @@ typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
 typedef void passNetData_t(const char * data);
 typedef void sendChatLine_t(const char * msg);
+typedef void joinRoom_t(const char * roomName);
 
 typedef char **getThemesList_t();
 typedef void freeThemesList_t(char **list);

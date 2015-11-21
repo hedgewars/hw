@@ -5,7 +5,7 @@ type
     TMessageType = (mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam
                     , mtTeamColor, mtNetData, mtConnected, mtDisconnected, mtAddLobbyClient
                     , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoom, mtUpdateRoom
-                    , mtRemoveRoom);
+                    , mtRemoveRoom, mtError, mtWarning);
 
     TIPCMessage = record
                    str: shortstring;

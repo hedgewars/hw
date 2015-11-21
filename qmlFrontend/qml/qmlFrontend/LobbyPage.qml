@@ -49,7 +49,7 @@ Rectangle {
             MouseArea {
                  z: 1
                  anchors.fill: parent
-                 onClicked: ;
+                 onDoubleClicked: HWEngine.joinRoom(name);
             }
         }
 

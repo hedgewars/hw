@@ -38,7 +38,12 @@ public:
 
     Q_INVOKABLE void sendChatMessage(const QString & msg);
 
+    Q_INVOKABLE void joinRoom(const QString & roomName);
+
 signals:
+    void errorMessage(const QString & message);
+    void warningMessage(const QString & message);
+
     void previewImageChanged();
     void localTeamAdded(const QString & teamName, int aiLevel);
     void localTeamRemoved(const QString & teamName);
@@ -52,7 +57,7 @@ signals:
     void netDisconnected(const QString & message);
 
     void lobbyClientAdded(const QString & clientName);
-    void lobbyClientRemoved(const QString & clientName);
+    void lobbyClientRemoved(const QString & clientName, const QString & reason);
     void lobbyChatLine(const QString & nickname, const QString & line);
 
     void roomAdded(quint32 flags

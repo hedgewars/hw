@@ -181,6 +181,7 @@ exports
     connectOfficialServer,
     passNetData,
     sendChatLine,
+    joinRoom,
 
     // dunno what these are
     RunEngine,

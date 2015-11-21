@@ -43,7 +43,7 @@ Rectangle {
                 }
                 Text {
                     color: "#ffffff"
-                    text: name
+                    text: line
 
                     MouseArea {
                          z: 1
@@ -56,7 +56,7 @@ Rectangle {
         }
 
         function addLine(nickname, line) {
-            chatLinesModel.append({"nick" : nickname, "name": line})
+            chatLinesModel.append({"nick" : nickname, "line": line})
             if(chatLinesModel.count > 200)
                 chatLinesModel.remove(0)
             chatLines.currentIndex = chatLinesModel.count - 1
@@ -118,12 +118,18 @@ Rectangle {
 
         Connections {
             target: HWEngine
-            onLobbyClientAdded: chatClientsModel.append({"isAdmin": false, "name": clientName})
+            onLobbyClientAdded: {
+                chatClientsModel.append({"isAdmin": false, "name": clientName})
+                chatLines.addLine("***", qsTr("%1 joined").arg(clientName))
+            }
             onLobbyClientRemoved: {
                 var i = chatClientsModel.count - 1;
                 while ((i >= 0) && (chatClientsModel.get(i).name !== clientName)) --i;
 
-                if(i >= 0) chatClientsModel.remove(i, 1);
+                if(i >= 0) {
+                    chatClientsModel.remove(i, 1);
+                    chatLines.addLine("***", qsTr("%1 quit (%2)").arg(clientName).arg(reason))
+                }
             }
         }
     }
