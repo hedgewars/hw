@@ -12,6 +12,14 @@ Rectangle {
         onClicked: HWEngine.partRoom("")
     }
 
+    GameConfig {
+        id: gameConfig
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: roomChat.top
+    }
+
     Chat {
         id: roomChat;
         x: 0;

@@ -3,10 +3,11 @@ import Hedgewars.Engine 1.0
 
 
 Rectangle {
+    Column {
+        spacing: 8
+
     HWButton {
         id: btnPreview
-        x: 50
-        y: 16
         width: 256
         height: 128
 
@@ -27,20 +28,8 @@ Rectangle {
         }
     }
 
-    HWButton {
-        id: btnRunGame
-        x: 600
-        y: 440
-        width: 32
-        height: 32
-
-        onClicked: HWEngine.runLocalGame()
-    }
-
     HWComboBox {
         id: cbTheme
-        x: 50
-        y: 160
         width: 256
         height: 64
 
@@ -71,10 +60,8 @@ Rectangle {
 
     HWComboBox {
         id: cbScript
-        x: 50
-        y: 256
         width: 256
-        height: 64
+        height: 32
 
         model: scriptsModel
         delegate: Rectangle {
@@ -103,10 +90,8 @@ Rectangle {
 
     HWComboBox {
         id: cbScheme
-        x: 50
-        y: 336
         width: 256
-        height: 64
+        height: 32
 
         model: schemesModel
         delegate: Rectangle {
@@ -136,10 +121,8 @@ Rectangle {
 
     HWComboBox {
         id: cbAmmo
-        x: 50
-        y: 416
         width: 256
-        height: 64
+        height: 32
 
         model: ammosModel
         delegate: Rectangle {
@@ -164,6 +147,7 @@ Rectangle {
                  }
             }
         }
+    }
     }
 
     ListView {

@@ -9,7 +9,7 @@ Rectangle {
     property variant pagesList : [
         "First"
         , "LocalGame"
-        , "GameConfig"
+        , "Multiplayer"
         , "Connect"
         , "Lobby"
         , "Room"

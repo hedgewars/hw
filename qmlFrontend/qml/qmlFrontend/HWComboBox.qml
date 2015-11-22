@@ -50,6 +50,7 @@ HWButton {
         Text {
             id: cbText
             height: parent.height
+            color: "#f3e520"
         }
     }
 

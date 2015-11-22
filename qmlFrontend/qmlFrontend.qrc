@@ -10,5 +10,6 @@
         <file>qml/qmlFrontend/Chat.qml</file>
         <file>qml/qmlFrontend/Room.qml</file>
         <file>qml/qmlFrontend/Lobby.qml</file>
+        <file>qml/qmlFrontend/Multiplayer.qml</file>
     </qresource>
 </RCC>

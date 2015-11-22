@@ -19,6 +19,16 @@ Rectangle {
         width: 150
         height: 150
 
-        onClicked: pages.currentPage = "GameConfig"
+        onClicked: pages.currentPage = "Multiplayer"
+    }
+
+    HWButton {
+        id: btnBack
+        width: 40
+        height: 40
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+
+        onClicked: pages.currentPage = "First"
     }
 }
