@@ -6,10 +6,10 @@ type TCmdType = (cmd_ASKPASSWORD, cmd_BANLIST, cmd_BANLIST_s, cmd_BYE, cmd_CHAT,
     cmd_ERROR, cmd_HH_NUM, cmd_HH_NUM_s, cmd_INFO, cmd_INFO_s, cmd_JOINED,
     cmd_JOINED_s, cmd_JOINING, cmd_KICKED, cmd_LEFT, cmd_LEFT_s, cmd_LOBBY_JOINED,
     cmd_LOBBY_JOINED_s, cmd_LOBBY_LEFT, cmd_NICK, cmd_NOTICE, cmd_PING, cmd_PING_s,
-    cmd_PROTO, cmd_ROOM, cmd_ROOM_s, cmd_ROOMS, cmd_ROOMS_s, cmd_ROUND_FINISHED,
-    cmd_RUN_GAME, cmd_SERVER_AUTH, cmd_SERVER_MESSAGE, cmd_SERVER_VARS,
-    cmd_TEAM_ACCEPTED, cmd_TEAM_COLOR, cmd_TEAM_COLOR_s, cmd_WARNING);
-
+    cmd_PROTO, cmd_ROOMS, cmd_ROOMS_s, cmd_ROOM_ADD, cmd_ROOM_ADD_s, cmd_ROOM_DEL,
+    cmd_ROOM_UPD, cmd_ROOM_UPD_s, cmd_ROUND_FINISHED, cmd_RUN_GAME, cmd_SERVER_AUTH,
+    cmd_SERVER_MESSAGE, cmd_SERVER_VARS, cmd_TEAM_ACCEPTED, cmd_TEAM_COLOR,
+    cmd_TEAM_COLOR_s, cmd_WARNING);
 
     type TCmdParam = packed record
         cmd: TCmdType;

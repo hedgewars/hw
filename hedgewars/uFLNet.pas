@@ -32,8 +32,7 @@ var state: TParserState;
 procedure handleTail; forward;
 function getShortString: shortstring; forward;
 
-// generated stuff here
-const letters: array[0..212] of char = ('A', 'S', 'K', 'P', 'A', 'S', 'S', 'W',
+const letters: array[0..224] of char = ('A', 'S', 'K', 'P', 'A', 'S', 'S', 'W',
     'O', 'R', 'D', #10, 'B', 'A', 'N', 'L', 'I', 'S', 'T', #10, 'Y', 'E', #10, 'C',
     'H', 'A', 'T', #10, 'L', 'I', 'E', 'N', 'T', '_', 'F', 'L', 'A', 'G', 'S', #10,
     'O', 'N', 'N', 'E', 'C', 'T', 'E', 'D', #10, 'E', 'M', #10, 'R', 'R', 'O', 'R',
@@ -42,21 +41,24 @@ const letters: array[0..212] of char = ('A', 'S', 'K', 'P', 'A', 'S', 'S', 'W',
     'E', 'F', 'T', #10, 'O', 'B', 'B', 'Y', ':', 'J', 'O', 'I', 'N', 'E', 'D', #10,
     'L', 'E', 'F', 'T', #10, 'N', 'I', 'C', 'K', #10, 'O', 'T', 'I', 'C', 'E', #10,
     'P', 'I', 'N', 'G', #10, 'R', 'O', 'T', 'O', #10, 'R', 'O', 'O', 'M', 'S', #10,
-    #10, 'U', 'N', 'D', '_', 'F', 'I', 'N', 'I', 'S', 'H', 'E', 'D', #10, 'U', 'N',
-    '_', 'G', 'A', 'M', 'E', #10, 'S', 'E', 'R', 'V', 'E', 'R', '_', 'A', 'U', 'T',
-    'H', #10, 'M', 'E', 'S', 'S', 'A', 'G', 'E', #10, 'V', 'A', 'R', 'S', #10, 'T',
-    'E', 'A', 'M', '_', 'A', 'C', 'C', 'E', 'P', 'T', 'E', 'D', #10, 'C', 'O', 'L',
-    'O', 'R', #10, 'W', 'A', 'R', 'N', 'I', 'N', 'G', #10, #0, #10);
-const commands: array[0..212] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    -40, 11, 7, 0, 0, 0, 0, 0, -39, 0, 0, -38, 26, 4, 0, 0, -37, 12, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, -36, 0, 0, 0, 0, 0, 0, 0, 0, -35, 8, 2, -34, 0, 0, 0, 0, -33, 7,
-    0, 0, 0, 0, 0, -32, 5, 0, 0, 0, -31, 11, 0, 0, 0, 3, 0, -30, 0, 0, 0, -29, 7, 0,
-    0, 0, 0, 0, -28, 22, 4, 0, 0, -27, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, -26, 0, 0,
-    0, 0, -25, 11, 4, 0, 0, -24, 0, 0, 0, 0, 0, -23, 10, 4, 0, 0, -22, 0, 0, 0, 0,
-    -21, 28, 19, 5, 3, 2, -19, -20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0,
-    0, 0, 0, 0, -17, 25, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, -16, 8, 0, 0, 0, 0, 0, 0,
-    -15, 0, 0, 0, 0, -14, 20, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0,
-    0, -12, 8, 0, 0, 0, 0, 0, 0, -11, 0, -10);
+    #10, 'A', 'D', 'D', #10, 'D', 'E', 'L', #10, 'U', 'P', 'D', #10, 'U', 'N', 'D',
+    '_', 'F', 'I', 'N', 'I', 'S', 'H', 'E', 'D', #10, 'U', 'N', '_', 'G', 'A', 'M',
+    'E', #10, 'S', 'E', 'R', 'V', 'E', 'R', '_', 'A', 'U', 'T', 'H', #10, 'M', 'E',
+    'S', 'S', 'A', 'G', 'E', #10, 'V', 'A', 'R', 'S', #10, 'T', 'E', 'A', 'M', '_',
+    'A', 'C', 'C', 'E', 'P', 'T', 'E', 'D', #10, 'C', 'O', 'L', 'O', 'R', #10, 'W',
+    'A', 'R', 'N', 'I', 'N', 'G', #10, #0, #10);
+const commands: array[0..224] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    -42, 11, 7, 0, 0, 0, 0, 0, -41, 0, 0, -40, 26, 4, 0, 0, -39, 12, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, -38, 0, 0, 0, 0, 0, 0, 0, 0, -37, 8, 2, -36, 0, 0, 0, 0, -35, 7,
+    0, 0, 0, 0, 0, -34, 5, 0, 0, 0, -33, 11, 0, 0, 0, 3, 0, -32, 0, 0, 0, -31, 7, 0,
+    0, 0, 0, 0, -30, 22, 4, 0, 0, -29, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, -28, 0, 0,
+    0, 0, -27, 11, 4, 0, 0, -26, 0, 0, 0, 0, 0, -25, 10, 4, 0, 0, -24, 0, 0, 0, 0,
+    -23, 40, 31, 17, 0, 2, -22, 0, 4, 0, 0, -21, 4, 0, 0, -20, 0, 0, 0, -19, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -18, 0, 0, 0, 0, 0, 0, 0, -17, 25, 0, 0, 0, 0, 0,
+    0, 5, 0, 0, 0, -16, 8, 0, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, -14, 20, 0, 0, 0, 0,
+    9, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0, 0, -12, 8, 0, 0, 0, 0, 0, 0, -11, 0,
+    -10);
+
 
 procedure handler_;
 begin
@@ -172,21 +174,20 @@ begin
     handleTail()
 end;
 
-const handlers: array[0..30] of PHandler = (@handler__UNKNOWN_, @handler_L, @handler_MS, @handler_S,
-    @handler_SL, @handler_L, @handler_S, @handler_, @handler_, @handler_MS,
-    @handler_MS, @handler_i, @handler_MS, @handler_L, @handler_S, @handler_SL,
-    @handler_MS, @handler_SMS, @handler_, @handler_S, @handler_MS, @handler_MS,
-    @handler_MS, @handler_L, @handler_ML, @handler__i, @handler_SMS, @handler_SL,
-    @handler_SL, @handler_MS, @handler_S);
-const net2cmd: array[0..30] of TCmdType = (cmd_WARNING, cmd_WARNING,
+const handlers: array[0..32] of PHandler = (@handler__UNKNOWN_, @handler_L,
+    @handler_MS, @handler_S, @handler_SL, @handler_L, @handler_S, @handler_,
+    @handler_, @handler_MS, @handler_S, @handler_MS, @handler_MS, @handler_i,
+    @handler_MS, @handler_L, @handler_S, @handler_SL, @handler_MS, @handler_SMS,
+    @handler_, @handler_S, @handler_MS, @handler_MS, @handler_MS, @handler_L,
+    @handler_ML, @handler__i, @handler_SMS, @handler_SL, @handler_SL, @handler_MS,
+    @handler_S);
+const net2cmd: array[0..32] of TCmdType = (cmd_WARNING, cmd_WARNING,
     cmd_TEAM_COLOR, cmd_TEAM_ACCEPTED, cmd_SERVER_VARS, cmd_SERVER_MESSAGE,
-    cmd_SERVER_AUTH, cmd_RUN_GAME, cmd_ROUND_FINISHED, cmd_ROOMS, cmd_ROOM,
-    cmd_PROTO, cmd_PING, cmd_NOTICE, cmd_NICK, cmd_LOBBY_LEFT, cmd_LOBBY_JOINED,
-    cmd_LEFT, cmd_KICKED, cmd_JOINING, cmd_JOINED, cmd_INFO, cmd_HH_NUM, cmd_ERROR,
-    cmd_EM, cmd_CONNECTED, cmd_CLIENT_FLAGS, cmd_CHAT, cmd_BYE, cmd_BANLIST,
-    cmd_ASKPASSWORD);
-
-
+    cmd_SERVER_AUTH, cmd_RUN_GAME, cmd_ROUND_FINISHED, cmd_ROOM_UPD, cmd_ROOM_DEL,
+    cmd_ROOM_ADD, cmd_ROOMS, cmd_PROTO, cmd_PING, cmd_NOTICE, cmd_NICK,
+    cmd_LOBBY_LEFT, cmd_LOBBY_JOINED, cmd_LEFT, cmd_KICKED, cmd_JOINING, cmd_JOINED,
+    cmd_INFO, cmd_HH_NUM, cmd_ERROR, cmd_EM, cmd_CONNECTED, cmd_CLIENT_FLAGS,
+    cmd_CHAT, cmd_BYE, cmd_BANLIST, cmd_ASKPASSWORD);
 
 // end of generated stuff
 procedure handleTail;

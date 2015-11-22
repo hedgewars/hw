@@ -128,7 +128,7 @@ end;
 
 procedure handler_LOBBY_JOINED_s(var s: TCmdParamS);
 begin
-    if s.str1 = 'qmlfrontend' then 
+    if s.str1 = 'qmlfrontend' then
     begin
         sendUI(mtMoveToLobby, nil, 0);
         sendNet('LIST');
@@ -164,44 +164,46 @@ procedure handler_PROTO(var p: TCmdParami);
 begin
 end;
 
-type TRoomAction = (raUnknown, raAdd, raUpdate, raRemove);
-const raRoomInfoLength: array[TRoomAction] of integer = (1, 9, 10, 1);
-const raRoomAction: array[TRoomAction] of TMessageType = (mtAddRoom, mtAddRoom, mtUpdateRoom, mtRemoveRoom);
 var roomInfo: string;
     roomLinesCount: integer;
-    roomAction: TRoomAction;
 
-procedure handler_ROOM(var p: TCmdParam);
+procedure handler_ROOM_ADD(var p: TCmdParam);
 begin
     roomInfo:= '';
-    roomLinesCount:= 0;
-    roomAction:= raUnknown
+    roomLinesCount:= 0
 end;
 
-procedure handler_ROOM_s(var s: TCmdParamS);
+procedure handler_ROOM_ADD_s(var s: TCmdParamS);
 begin
-    if roomAction = raUnknown then
-    begin
-        if s.str1 = 'ADD' then
-            roomAction:= raAdd
-        else
-            if s.str1 = 'UPD' then
-                roomAction:= raUpdate
-            else
-                if s.str1 = 'DEL' then
-                    roomAction:= raRemove
-    end
-    else begin
-        roomInfo:= roomInfo + s.str1 + #10;
-        inc(roomLinesCount);
+    roomInfo:= roomInfo + s.str1 + #10;
+    inc(roomLinesCount);
 
-        if roomLinesCount = raRoomInfoLength[roomAction] then
-        begin
-            sendUI(raRoomAction[roomAction], @roomInfo[1], length(roomInfo) - 1);
-            roomLinesCount:= 0;
-            roomInfo:= ''
-        end;
+    if roomLinesCount = 9 then
+    begin
+        sendUI(mtAddRoom, @roomInfo[1], length(roomInfo) - 1);
+        roomInfo:= '';
+        roomLinesCount:= 0
     end;
+end;
+
+procedure handler_ROOM_DEL(var p: TCmdParamS);
+begin
+    sendUI(mtRemoveRoom, @p.str1[1], length(p.str1));
+end;
+
+procedure handler_ROOM_UPD(var p: TCmdParam);
+begin
+    roomInfo:= '';
+    roomLinesCount:= 0
+end;
+
+procedure handler_ROOM_UPD_s(var s: TCmdParamS);
+begin
+    roomInfo:= roomInfo + s.str1 + #10;
+    inc(roomLinesCount);
+
+    if roomLinesCount = 10 then
+        sendUI(mtUpdateRoom, @roomInfo[1], length(roomInfo) - 1);
 end;
 
 procedure handler_ROOMS(var p: TCmdParam);
@@ -271,8 +273,10 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ASKPASSWORD),
     PHandler(@handler_LEFT_s), PHandler(@handler_LOBBY_JOINED),
     PHandler(@handler_LOBBY_JOINED_s), PHandler(@handler_LOBBY_LEFT),
     PHandler(@handler_NICK), PHandler(@handler_NOTICE), PHandler(@handler_PING),
-    PHandler(@handler_PING_s), PHandler(@handler_PROTO), PHandler(@handler_ROOM),
-    PHandler(@handler_ROOM_s), PHandler(@handler_ROOMS), PHandler(@handler_ROOMS_s),
+    PHandler(@handler_PING_s), PHandler(@handler_PROTO), PHandler(@handler_ROOMS),
+    PHandler(@handler_ROOMS_s), PHandler(@handler_ROOM_ADD),
+    PHandler(@handler_ROOM_ADD_s), PHandler(@handler_ROOM_DEL),
+    PHandler(@handler_ROOM_UPD), PHandler(@handler_ROOM_UPD_s),
     PHandler(@handler_ROUND_FINISHED), PHandler(@handler_RUN_GAME),
     PHandler(@handler_SERVER_AUTH), PHandler(@handler_SERVER_MESSAGE),
     PHandler(@handler_SERVER_VARS), PHandler(@handler_TEAM_ACCEPTED),
@@ -303,7 +307,7 @@ begin
     begin
         isInRoom:= false;
         s:= 'PART';
-        if length(msg) > 0 then 
+        if length(msg) > 0 then
             s:= s + #10 + msg;
         sendNet(s);
         sendUI(mtMoveToLobby, nil, 0);

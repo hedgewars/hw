@@ -89,7 +89,9 @@ commandsDescription = [
         , cmd2 "SERVER_VARS" SS LS
         , cmd2 "BYE" SS LS
         , cmd1 "INFO" $ Many [SS]
-        , cmd1 "ROOM" $ Many [SS]
+        , cmd1 "ROOM~ADD" $ Many [SS]
+        , cmd1 "ROOM~UPD" $ Many [SS]
+        , cmd1 "ROOM~DEL" SS
         , cmd1 "ROOMS" $ Many [SS]
         , cmd "KICKED" []
         , cmd "RUN_GAME" []
@@ -127,7 +129,7 @@ bpt cmds = if not . null $ fst emptyNamed then cmdLeaf emptyNamed else subtree
         maybeMerge c [] = PTPrefix [c] []
         cmdLeaf ([(c, hwc:assocs1)], assocs2)
             | null assocs1 = PTPrefix [c] [hwc] : map buildsub assocs2
-            | otherwise = [buildsub (c, assocs1)] ++ [PTPrefix [] [hwc]] ++ map buildsub assocs2
+            | otherwise = error "not supported" --[buildsub (c, assocs1)] ++ [PTPrefix [] [hwc]] ++ map buildsub assocs2
 
 dumpTree = vcat . map dt
     where
@@ -137,6 +139,7 @@ dumpTree = vcat . map dt
 renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
     where
         maybeQuotes "$" = text "#0"
+        maybeQuotes "~" = text "#10"
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
         l = text "const letters: array[0.." <> (int $ length letters - 1) <> text "] of char = "
             <> parens (hsep . punctuate comma $ map maybeQuotes letters) <> semi
