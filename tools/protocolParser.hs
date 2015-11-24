@@ -96,6 +96,19 @@ commandsDescription = [
         , cmd "KICKED" []
         , cmd "RUN_GAME" []
         , cmd "ROUND_FINISHED" []
+        , cmd1 "ADD_TEAM" $ Many [SS]
+        , cmd1 "REMOVE_TEAM" SS
+        , cmd1 "CFG~MAP" SS
+        , cmd1 "CFG~SEED" SS
+        , cmd1 "CFG~THEME" SS
+        , cmd1 "CFG~TEMPLATE" IntP
+        , cmd1 "CFG~MAPGEN" IntP
+        , cmd1 "CFG~FEATURE_SIZE" IntP
+        , cmd1 "CFG~MAZE_SIZE" IntP
+        , cmd1 "CFG~SCRIPT" SS
+        , cmd1 "CFG~DRAWNMAP" LS
+        , cmd2 "CFG~AMMO" SS LS
+        , cmd1 "FULLMAPCONFIG" $ Many [LS]
     ]
 
 hasMany = any isMany
@@ -129,14 +142,14 @@ bpt cmds = if not . null $ fst emptyNamed then cmdLeaf emptyNamed else subtree
         maybeMerge c [] = PTPrefix [c] []
         cmdLeaf ([(c, hwc:assocs1)], assocs2)
             | null assocs1 = PTPrefix [c] [hwc] : map buildsub assocs2
-            | otherwise = error "not supported" --[buildsub (c, assocs1)] ++ [PTPrefix [] [hwc]] ++ map buildsub assocs2
+            | otherwise = [buildsub (c, assocs1)] ++ [PTPrefix [] [hwc]] ++ map buildsub assocs2
 
 dumpTree = vcat . map dt
     where
     dt (PTPrefix s st) = text s $$ (nest 1 $ vcat $ map dt st)
     dt _ = empty
 
-renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [l, s]--[grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
     where
         maybeQuotes "$" = text "#0"
         maybeQuotes "~" = text "#10"
@@ -154,13 +167,13 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, 
         fixedNames = map fixName handlers
         bodies = vcat $ punctuate (char '\n') $ map handlerBody $ nub $ sort handlerTypes
         handlerBody n = text "procedure " <> text n <> semi
-            $+$ text "begin" 
+            $+$ text "begin"
             $+$ text "end" <> semi
         cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ concatMap (rhentry "cmd_") $ sortedCmdDescriptions) <> semi
         structs = vcat (map text . Set.toList . Set.fromList $ map cmdParams2record commandsDescription)
         realHandlers = vcat $ punctuate (char '\n') $ map rh $ sortedCmdDescriptions
         realHandlersArray = text "const handlers: array[TCmdType] of PHandler = "
-            <> parens (hsep . punctuate comma . concatMap (rhentry "@handler_") $ sortedCmdDescriptions) <> semi
+            <> parens (hsep . punctuate comma . concatMap (map ((<>) (text "PHandler") . parens) . rhentry "@handler_") $ sortedCmdDescriptions) <> semi
 
 rh cmd@(Command n p) = text "procedure handler_" <> text (fixName n) <> parens (text "var p: " <> text (cmdParams2str cmd)) <> semi
     $+$ emptyBody $+$ if hasMany p then vcat [space, text "procedure handler_" <> text (fixName n) <> text "_s" <> parens (text "var s: TCmdParamS") <> semi
@@ -168,7 +181,7 @@ rh cmd@(Command n p) = text "procedure handler_" <> text (fixName n) <> parens (
     where
         emptyBody = text "begin"  $+$ text "end" <> semi
 
-rhentry prefix cmd@(Command n p) = map ((<>) (text "PHandler") . parens) $ (text . (++) prefix . fixName . cmdName $ cmd)
+rhentry prefix cmd@(Command n p) = (text . (++) prefix . fixName . cmdName $ cmd)
     : if hasMany p then [text . flip (++) "_s" . (++) prefix . fixName . cmdName $ cmd] else []
 
 pas = renderArrays $ buildTables $ buildParseTree commandsDescription
