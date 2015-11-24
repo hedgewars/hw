@@ -130,26 +130,29 @@ groupByFirstChar = MM.assocs . MM.fromList . map breakCmd
 makePT cmd@(Command n p) = PTCommand n cmd
 
 buildParseTree cmds = [PTPrefix "!" $ (bpt $ map makePT cmds) ++ [unknowncmd]]
-bpt cmds = if not . null $ fst emptyNamed then cmdLeaf emptyNamed else subtree
+
+bpt :: [ParseTree] -> [ParseTree]
+bpt cmds = cmdLeaf emptyNamed
     where
-        emptyNamed = partition (\(_, (PTCommand n _:_)) -> null n) assocs
-        assocs = groupByFirstChar cmds
-        subtree = map buildsub assocs
-        buildsub :: (Char, [ParseTree]) -> ParseTree
-        buildsub (c, cmds) = let st = bpt cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
+        emptyNamed = partition (\(_, (PTCommand n _:_)) -> null n) $ groupByFirstChar cmds
+        buildsub :: (Char, [ParseTree]) -> [ParseTree] -> ParseTree
+        buildsub (c, cmds) pc = let st = (bpt cmds) ++ pc in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
+        buildsub' = flip buildsub []
+        cmdLeaf ([], assocs) = map buildsub' assocs
+        cmdLeaf ([(c, hwc:assocs1)], assocs2)
+            | null assocs1 = PTPrefix [c] [hwc] : map buildsub' assocs2
+            | otherwise = (buildsub (c, assocs1) [hwc]) : map buildsub' assocs2
+
         maybeMerge c cmd@[PTCommand {}] = PTPrefix [c] cmd
         maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
         maybeMerge c [] = PTPrefix [c] []
-        cmdLeaf ([(c, hwc:assocs1)], assocs2)
-            | null assocs1 = PTPrefix [c] [hwc] : map buildsub assocs2
-            | otherwise = [buildsub (c, assocs1)] ++ [PTPrefix [] [hwc]] ++ map buildsub assocs2
-
+        
 dumpTree = vcat . map dt
     where
-    dt (PTPrefix s st) = text s $$ (nest 1 $ vcat $ map dt st)
-    dt _ = empty
+    dt (PTPrefix s st) = text s $$ (nest (length s) $ vcat $ map dt st)
+    dt _ = char '$'
 
-renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [l, s]--[grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
     where
         maybeQuotes "$" = text "#0"
         maybeQuotes "~" = text "#10"
@@ -194,6 +197,6 @@ pas = renderArrays $ buildTables $ buildParseTree commandsDescription
         lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2, t31:t32:tbl3) = (lc, s1+s2:sh, pc, tbl1, (if null t32 then "0" else show s1):tbl2, (t31 ++ t32):tbl3)
         fpf c (lc, s:sh, pc, tbl1, tbl2, tbl3) = (lc + 1, s+1:sh, pc, [c]:tbl1, "0":tbl2, tbl3)
 
-main =
-    putStrLn $ renderStyle style{lineLength = 80} $ pas
+main = do
+    putStrLn $ renderStyle style{mode = ZigZagMode, lineLength = 80} $ pas
     --putStrLn $ renderStyle style{lineLength = 80} $ dumpTree $ buildParseTree commandsDescription
