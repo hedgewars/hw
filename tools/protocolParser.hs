@@ -100,6 +100,7 @@ commandsDescription = [
         , cmd1 "REMOVE_TEAM" SS
         , cmd1 "CFG~MAP" SS
         , cmd1 "CFG~SEED" SS
+        , cmd1 "CFG~SCHEME" $ Many [SS]
         , cmd1 "CFG~THEME" SS
         , cmd1 "CFG~TEMPLATE" IntP
         , cmd1 "CFG~MAPGEN" IntP
@@ -108,7 +109,7 @@ commandsDescription = [
         , cmd1 "CFG~SCRIPT" SS
         , cmd1 "CFG~DRAWNMAP" LS
         , cmd2 "CFG~AMMO" SS LS
-        , cmd1 "FULLMAPCONFIG" $ Many [LS]
+        , cmd1 "CFG~FULLMAPCONFIG" $ Many [LS]
     ]
 
 hasMany = any isMany
@@ -152,7 +153,7 @@ dumpTree = vcat . map dt
     dt (PTPrefix s st) = text s $$ (nest (length s) $ vcat $ map dt st)
     dt _ = char '$'
 
-renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, cmds, l, s, c, bodies, structs, realHandlers, realHandlersArray]
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, l, s, c, bodies, structs, realHandlers, realHandlersArray, cmds]
     where
         maybeQuotes "$" = text "#0"
         maybeQuotes "~" = text "#10"
@@ -165,7 +166,7 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [grr, 
             <> parens (hsep . punctuate comma $ map (text . (:) '@') handlerTypes) <> semi
         grr = text "const net2cmd: array[0.." <> (int $ length fixedNames - 1) <> text "] of TCmdType = "
             <> parens (hsep . punctuate comma $ map (text . (++) "cmd_") $ reverse fixedNames) <> semi
-        handlerTypes = map cmdParams2handlerType $ reverse sortedCmdDescriptions
+        handlerTypes = "handler__UNKNOWN_" : (map cmdParams2handlerType $ reverse sortedCmdDescriptions)
         sortedCmdDescriptions = sort commandsDescription
         fixedNames = map fixName handlers
         bodies = vcat $ punctuate (char '\n') $ map handlerBody $ nub $ sort handlerTypes

@@ -17,6 +17,14 @@ type
 
 var isInRoom: boolean;
 
+    procedure handler_ADD_TEAM(var p: TCmdParam);
+begin
+end;
+
+procedure handler_ADD_TEAM_s(var s: TCmdParamS);
+begin
+end;
+
 procedure handler_ASKPASSWORD(var p: TCmdParamS);
 begin
 end;
@@ -32,6 +40,62 @@ end;
 procedure handler_BYE(var p: TCmdParamSL);
 begin
     sendUI(mtDisconnected, @p.str2[1], length(p.str2));
+end;
+
+procedure handler_CFG_AMMO(var p: TCmdParamSL);
+begin
+end;
+
+procedure handler_CFG_DRAWNMAP(var p: TCmdParamL);
+begin
+end;
+
+procedure handler_CFG_FEATURE_SIZE(var p: TCmdParami);
+begin
+end;
+
+procedure handler_CFG_FULLMAPCONFIG(var p: TCmdParam);
+begin
+end;
+
+procedure handler_CFG_FULLMAPCONFIG_s(var s: TCmdParamS);
+begin
+end;
+
+procedure handler_CFG_MAP(var p: TCmdParamS);
+begin
+end;
+
+procedure handler_CFG_MAPGEN(var p: TCmdParami);
+begin
+end;
+
+procedure handler_CFG_MAZE_SIZE(var p: TCmdParami);
+begin
+end;
+
+procedure handler_CFG_SCHEME(var p: TCmdParam);
+begin
+end;
+
+procedure handler_CFG_SCHEME_s(var s: TCmdParamS);
+begin
+end;
+
+procedure handler_CFG_SCRIPT(var p: TCmdParamS);
+begin
+end;
+
+procedure handler_CFG_SEED(var p: TCmdParamS);
+begin
+end;
+
+procedure handler_CFG_TEMPLATE(var p: TCmdParami);
+begin
+end;
+
+procedure handler_CFG_THEME(var p: TCmdParamS);
+begin
 end;
 
 procedure handler_CHAT(var p: TCmdParamSL);
@@ -164,8 +228,30 @@ procedure handler_PROTO(var p: TCmdParami);
 begin
 end;
 
+procedure handler_REMOVE_TEAM(var p: TCmdParamS);
+begin
+end;
+
 var roomInfo: string;
     roomLinesCount: integer;
+
+procedure handler_ROOMS(var p: TCmdParam);
+begin
+    roomInfo:= '';
+    roomLinesCount:= 0
+end;
+
+procedure handler_ROOMS_s(var s: TCmdParamS);
+begin
+    roomInfo:= roomInfo + s.str1 + #10;
+
+    if roomLinesCount = 8 then
+    begin
+        sendUI(mtAddRoom, @roomInfo[1], length(roomInfo) - 1);
+        roomLinesCount:= 0;
+        roomInfo:= ''
+    end else inc(roomLinesCount);
+end;
 
 procedure handler_ROOM_ADD(var p: TCmdParam);
 begin
@@ -206,24 +292,6 @@ begin
         sendUI(mtUpdateRoom, @roomInfo[1], length(roomInfo) - 1);
 end;
 
-procedure handler_ROOMS(var p: TCmdParam);
-begin
-    roomInfo:= '';
-    roomLinesCount:= 0
-end;
-
-procedure handler_ROOMS_s(var s: TCmdParamS);
-begin
-    roomInfo:= roomInfo + s.str1 + #10;
-
-    if roomLinesCount = 8 then
-    begin
-        sendUI(mtAddRoom, @roomInfo[1], length(roomInfo) - 1);
-        roomLinesCount:= 0;
-        roomInfo:= ''
-    end else inc(roomLinesCount);
-end;
-
 procedure handler_ROUND_FINISHED(var p: TCmdParam);
 begin
 end;
@@ -261,9 +329,17 @@ begin
     sendUI(mtWarning, @p.str1[1], length(p.str1));
 end;
 
-const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ASKPASSWORD),
+const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ADD_TEAM),
+    PHandler(@handler_ADD_TEAM_s), PHandler(@handler_ASKPASSWORD),
     PHandler(@handler_BANLIST), PHandler(@handler_BANLIST_s),
-    PHandler(@handler_BYE), PHandler(@handler_CHAT),
+    PHandler(@handler_BYE), PHandler(@handler_CFG_AMMO),
+    PHandler(@handler_CFG_DRAWNMAP), PHandler(@handler_CFG_FEATURE_SIZE),
+    PHandler(@handler_CFG_FULLMAPCONFIG), PHandler(@handler_CFG_FULLMAPCONFIG_s),
+    PHandler(@handler_CFG_MAP), PHandler(@handler_CFG_MAPGEN),
+    PHandler(@handler_CFG_MAZE_SIZE), PHandler(@handler_CFG_SCHEME),
+    PHandler(@handler_CFG_SCHEME_s), PHandler(@handler_CFG_SCRIPT),
+    PHandler(@handler_CFG_SEED), PHandler(@handler_CFG_TEMPLATE),
+    PHandler(@handler_CFG_THEME), PHandler(@handler_CHAT),
     PHandler(@handler_CLIENT_FLAGS), PHandler(@handler_CLIENT_FLAGS_s),
     PHandler(@handler_CONNECTED), PHandler(@handler_EM), PHandler(@handler_EM_s),
     PHandler(@handler_ERROR), PHandler(@handler_HH_NUM),
@@ -273,7 +349,8 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ASKPASSWORD),
     PHandler(@handler_LEFT_s), PHandler(@handler_LOBBY_JOINED),
     PHandler(@handler_LOBBY_JOINED_s), PHandler(@handler_LOBBY_LEFT),
     PHandler(@handler_NICK), PHandler(@handler_NOTICE), PHandler(@handler_PING),
-    PHandler(@handler_PING_s), PHandler(@handler_PROTO), PHandler(@handler_ROOMS),
+    PHandler(@handler_PING_s), PHandler(@handler_PROTO),
+    PHandler(@handler_REMOVE_TEAM), PHandler(@handler_ROOMS),
     PHandler(@handler_ROOMS_s), PHandler(@handler_ROOM_ADD),
     PHandler(@handler_ROOM_ADD_s), PHandler(@handler_ROOM_DEL),
     PHandler(@handler_ROOM_UPD), PHandler(@handler_ROOM_UPD_s),
