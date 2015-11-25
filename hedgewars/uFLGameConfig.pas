@@ -18,6 +18,10 @@ procedure tryAddTeam(teamName: PChar); cdecl;
 procedure tryRemoveTeam(teamName: PChar); cdecl;
 procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 
+procedure netSetSeed(seed: shortstring);
+procedure netSetTheme(themeName: shortstring);
+procedure netSetScript(scriptName: shortstring);
+
 implementation
 uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo, uFLUICallback;
 
@@ -44,6 +48,10 @@ type
 var
     currentConfig: TGameConfig;
 
+function getScriptPath(scriptName: shortstring): shortstring;
+begin
+    getScriptPath:= '/Scripts/Multiplayer/' + scriptName + '.lua'
+end;
 
 procedure sendConfig(config: PGameConfig);
 var i: Longword;
@@ -52,14 +60,14 @@ with config^ do
 begin
     case gameType of
     gtPreview: begin
-            if script <> '' then
-                ipcToEngine('escript ' + script);
+            if script <> 'Normal' then
+                ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
         end;
     gtLocal: begin
-            if script <> '' then
-                ipcToEngine('escript ' + script);
+            if script <> 'Normal' then
+                ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
             ipcToEngine('e$theme ' + theme);
@@ -108,6 +116,8 @@ var i: Longword;
 begin
     with currentConfig do
     begin
+        script:= 'Normal';
+
         for i:= 0 to 7 do
             teams[i].hogsNumber:= 0
     end
@@ -115,9 +125,9 @@ end;
 
 procedure setSeed(seed: PChar); cdecl;
 begin
+    sendUI(mtSeed, @seed[1], length(seed));
     currentConfig.seed:= seed
 end;
-
 
 function getSeed: PChar; cdecl;
 begin
@@ -300,10 +310,7 @@ end;
 
 procedure setScript(scriptName: PChar); cdecl;
 begin
-    if scriptName <> 'Normal' then
-        currentConfig.script:= '/Scripts/Multiplayer/' + scriptName + '.lua'
-    else
-        currentConfig.script:= ''
+    currentConfig.script:= scriptName
 end;
 
 procedure setScheme(schemeName: PChar); cdecl;
@@ -322,6 +329,33 @@ begin
 
     if ammo <> nil then
         currentConfig.ammo:= ammo^
+end;
+
+procedure netSetSeed(seed: shortstring);
+begin
+    if seed <> currentConfig.seed then
+    begin
+        currentConfig.seed:= seed;
+        sendUI(mtSeed, @seed[1], length(seed))
+    end
+end;
+
+procedure netSetTheme(themeName: shortstring);
+begin
+    if themeName <> currentConfig.theme then
+    begin
+        currentConfig.theme:= themeName;
+        sendUI(mtTheme, @themeName[1], length(themeName))
+    end
+end;
+
+procedure netSetScript(scriptName: shortstring);
+begin
+    if scriptName <> currentConfig.script then
+    begin
+        currentConfig.script:= scriptName;
+        sendUI(mtScript, @scriptName[1], length(scriptName))
+    end
 end;
 
 end.

@@ -70,6 +70,10 @@ signals:
     void movedToLobby();
     void movedToRoom();
 
+    void seedChanged(const QString & seed);
+    void themeChanged(const QString & theme);
+    void scriptChanged(const QString & script);
+
     void roomAdded(quint32 flags
                    , const QString & name
                    , int players

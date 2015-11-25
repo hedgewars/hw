@@ -7,7 +7,7 @@ type
                     , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoomClient
                     , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom
                     , mtRemoveRoom, mtError, mtWarning, mtMoveToLobby, mtMoveToRoom
-                    , mtNickname);
+                    , mtNickname, mtSeed, mtTheme, mtScript);
 
     TIPCMessage = record
                    str: shortstring;

@@ -31,6 +31,9 @@ enum MessageType {
     , MSG_MOVETOLOBBY
     , MSG_MOVETOROOM
     , MSG_NICKNAME
+    , MSG_SEED
+    , MSG_THEME
+    , MSG_SCRIPT
 };
 
 typedef union string255_

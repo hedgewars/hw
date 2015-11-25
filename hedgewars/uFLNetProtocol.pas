@@ -10,7 +10,7 @@ procedure partRoom(msg: PChar); cdecl;
 procedure ResetNetState;
 
 implementation
-uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet;
+uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet, uFLGameConfig;
 
 type
     PHandler = procedure (var t: TCmdData);
@@ -85,10 +85,14 @@ end;
 
 procedure handler_CFG_SCRIPT(var p: TCmdParamS);
 begin
+    if isInRoom then
+        netSetScript(p.str1)
 end;
 
 procedure handler_CFG_SEED(var p: TCmdParamS);
 begin
+    if isInRoom then
+        netSetSeed(p.str1)
 end;
 
 procedure handler_CFG_TEMPLATE(var p: TCmdParami);
@@ -97,6 +101,8 @@ end;
 
 procedure handler_CFG_THEME(var p: TCmdParamS);
 begin
+    if isInRoom then
+        netSetTheme(p.str1)
 end;
 
 procedure handler_CHAT(var p: TCmdParamSL);
@@ -393,7 +399,6 @@ begin
         sendUI(mtMoveToLobby, nil, 0);
     end
 end;
-
 
 procedure ResetNetState;
 begin

@@ -252,6 +252,18 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         m_myNickname = QString::fromUtf8(msg);
         break;
     }
+    case MSG_SEED: {
+        emit seedChanged(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_THEME: {
+        emit themeChanged(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_SCRIPT: {
+        emit scriptChanged(QString::fromUtf8(msg));
+        break;
+    }
     }
 }
 
