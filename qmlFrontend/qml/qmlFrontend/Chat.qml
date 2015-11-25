@@ -71,7 +71,7 @@ Rectangle {
 
         onAccepted: {
             HWEngine.sendChatMessage(text)
-            chatLines.addLine("me", text)
+            chatLines.addLine(HWEngine.myNickname(), text)
             text = ""
         }
     }

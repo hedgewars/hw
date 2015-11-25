@@ -16,8 +16,9 @@ type
     PHandler = procedure (var t: TCmdData);
 
 var isInRoom: boolean;
+    myNickname: shortstring;
 
-    procedure handler_ADD_TEAM(var p: TCmdParam);
+procedure handler_ADD_TEAM(var p: TCmdParam);
 begin
 end;
 
@@ -158,7 +159,7 @@ end;
 
 procedure handler_JOINED_s(var s: TCmdParamS);
 begin
-    if s.str1 = 'qmlfrontend' then // we joined a room
+    if s.str1 = myNickname then // we joined a room
     begin
         isInRoom:= true;
         sendUI(mtMoveToRoom, nil, 0);
@@ -192,7 +193,7 @@ end;
 
 procedure handler_LOBBY_JOINED_s(var s: TCmdParamS);
 begin
-    if s.str1 = 'qmlfrontend' then
+    if s.str1 = myNickname then
     begin
         sendUI(mtMoveToLobby, nil, 0);
         sendNet('LIST');
@@ -209,6 +210,8 @@ end;
 
 procedure handler_NICK(var p: TCmdParamS);
 begin
+    myNickname:= p.str1;
+    sendUI(mtNickname, @p.str1[1], length(p.str1));
 end;
 
 procedure handler_NOTICE(var p: TCmdParamL);

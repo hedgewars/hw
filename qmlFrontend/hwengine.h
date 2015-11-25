@@ -41,6 +41,8 @@ public:
     Q_INVOKABLE void joinRoom(const QString & roomName);
     Q_INVOKABLE void partRoom(const QString & message);
 
+    Q_INVOKABLE QString myNickname();
+
 signals:
     void errorMessage(const QString & message);
     void warningMessage(const QString & message);
@@ -93,6 +95,7 @@ public slots:
 
 private:
     QQmlEngine * m_engine;
+    QString m_myNickname;
 
     static void guiMessagesCallback(void * context, MessageType mt, const char * msg, uint32_t len);
     void fillModels();

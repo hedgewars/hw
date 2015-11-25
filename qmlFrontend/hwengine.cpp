@@ -248,6 +248,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit movedToRoom();
         break;
     }
+    case MSG_NICKNAME: {
+        m_myNickname = QString::fromUtf8(msg);
+        break;
+    }
     }
 }
 
@@ -337,6 +341,11 @@ void HWEngine::joinRoom(const QString &roomName)
 void HWEngine::partRoom(const QString &message)
 {
     flibPartRoom(message.toUtf8().constData());
+}
+
+QString HWEngine::myNickname()
+{
+    return m_myNickname;
 }
 
 void HWEngine::setTheme(const QString &theme)
