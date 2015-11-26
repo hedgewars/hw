@@ -336,7 +336,9 @@ begin
     if seed <> currentConfig.seed then
     begin
         currentConfig.seed:= seed;
-        sendUI(mtSeed, @seed[1], length(seed))
+        sendUI(mtSeed, @seed[1], length(seed));
+
+        getPreview()
     end
 end;
 

@@ -54,5 +54,10 @@ HWButton {
         }
     }
 
+    function showItem(item) {
+        cbIcon.source = item.iconSource
+        cbText.text = item.text
+    }
+
     onClicked: selection.visibility = Window.Windowed
 }

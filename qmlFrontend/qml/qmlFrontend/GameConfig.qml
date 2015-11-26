@@ -55,6 +55,11 @@ Rectangle {
                      HWEngine.setTheme(themeName.text)
                  }
             }
+
+            Connections {
+                target: HWEngine
+                onThemeChanged: cbTheme.showItem({"iconSource" : "image://theme/" + theme, "text" : theme});
+            }
         }
     }
 
@@ -84,6 +89,10 @@ Rectangle {
                      cbScript.currentIndex = index
                      HWEngine.setScript(scriptName.text)
                  }
+            }
+            Connections {
+                target: HWEngine
+                onScriptChanged: scriptsModel.showItem({"iconSource" : "", "text" : script});
             }
         }
     }
