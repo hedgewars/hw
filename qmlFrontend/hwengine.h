@@ -73,6 +73,11 @@ signals:
     void seedChanged(const QString & seed);
     void themeChanged(const QString & theme);
     void scriptChanged(const QString & script);
+    void featureSizeChanged(int featureSize);
+    void mapGenChanged(int mapgen);
+    void mapChanged(const QString & map);
+    void mazeSizeChanged(int mazeSize);
+    void templateChanged(int templ);
 
     void roomAdded(quint32 flags
                    , const QString & name

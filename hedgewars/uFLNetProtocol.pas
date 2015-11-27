@@ -10,7 +10,7 @@ procedure partRoom(msg: PChar); cdecl;
 procedure ResetNetState;
 
 implementation
-uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet, uFLGameConfig;
+uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet, uFLGameConfig, uFLUtils;
 
 type
     PHandler = procedure (var t: TCmdData);
@@ -53,26 +53,60 @@ end;
 
 procedure handler_CFG_FEATURE_SIZE(var p: TCmdParami);
 begin
+    if isInRoom then
+    begin
+        netSetFeatureSize(p.param1);
+        updatePreviewIfNeeded
+    end;
 end;
+
+var fmcfgIndex: integer;
 
 procedure handler_CFG_FULLMAPCONFIG(var p: TCmdParam);
 begin
+    fmcfgIndex:= 0;
 end;
 
 procedure handler_CFG_FULLMAPCONFIG_s(var s: TCmdParamS);
 begin
+    if not isInRoom then exit;
+
+    inc(fmcfgIndex);
+    case fmcfgIndex of
+        1: if s.str1[0] <> '+' then netSetMap(s.str1);
+        2: netSetMapGen(strToInt(s.str1));
+        3: netSetMazeSize(strToInt(s.str1));
+        4: netSetTheme(s.str1);
+        5: netSetTemplate(strToInt(s.str1));
+        6: begin
+                netSetFeatureSize(strToInt(s.str1));
+                updatePreviewIfNeeded;
+           end;
+    end;
 end;
 
 procedure handler_CFG_MAP(var p: TCmdParamS);
 begin
+    if isInRoom then
+        netSetMap(p.str1);
 end;
 
 procedure handler_CFG_MAPGEN(var p: TCmdParami);
 begin
+    if isInRoom then
+    begin
+        netSetMapGen(p.param1);
+        updatePreviewIfNeeded
+    end
 end;
 
 procedure handler_CFG_MAZE_SIZE(var p: TCmdParami);
 begin
+    if isInRoom then
+    begin
+        netSetMazeSize(p.param1);
+        updatePreviewIfNeeded
+    end
 end;
 
 procedure handler_CFG_SCHEME(var p: TCmdParam);
@@ -97,6 +131,11 @@ end;
 
 procedure handler_CFG_TEMPLATE(var p: TCmdParami);
 begin
+    if isInRoom then
+    begin
+        netSetTemplate(p.param1);
+        updatePreviewIfNeeded
+    end
 end;
 
 procedure handler_CFG_THEME(var p: TCmdParamS);

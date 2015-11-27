@@ -21,6 +21,12 @@ procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 procedure netSetSeed(seed: shortstring);
 procedure netSetTheme(themeName: shortstring);
 procedure netSetScript(scriptName: shortstring);
+procedure netSetFeatureSize(fsize: LongInt);
+procedure netSetMapGen(mapgen: LongInt);
+procedure netSetMap(map: shortstring);
+procedure netSetMazeSize(mazesize: LongInt);
+procedure netSetTemplate(template: LongInt);
+procedure updatePreviewIfNeeded;
 
 implementation
 uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo, uFLUICallback;
@@ -34,9 +40,13 @@ type
             seed: shortstring;
             theme: shortstring;
             script: shortstring;
+            map: shortstring;
             scheme: TScheme;
             ammo: TAmmo;
-            mapgen: Longint;
+            mapgen: LongInt;
+            featureSize: LongInt;
+            mazesize: LongInt;
+            template: LongInt;
             gameType: TGameType;
             teams: array[0..7] of TTeam;
             arguments: array[0..Pred(MAXARGS)] of shortstring;
@@ -47,6 +57,7 @@ type
 
 var
     currentConfig: TGameConfig;
+    previewNeedsUpdate: boolean;
 
 function getScriptPath(scriptName: shortstring): shortstring;
 begin
@@ -179,6 +190,8 @@ end;
 
 procedure getPreview; cdecl;
 begin
+    previewNeedsUpdate:= false;
+
     with currentConfig do
     begin
         gameType:= gtPreview;
@@ -355,9 +368,69 @@ procedure netSetScript(scriptName: shortstring);
 begin
     if scriptName <> currentConfig.script then
     begin
+        previewNeedsUpdate:= true;
         currentConfig.script:= scriptName;
         sendUI(mtScript, @scriptName[1], length(scriptName))
     end
+end;
+
+procedure netSetFeatureSize(fsize: LongInt);
+var s: shortstring;
+begin
+    if fsize <> currentConfig.featureSize then
+    begin
+        previewNeedsUpdate:= true;
+        currentConfig.featureSize:= fsize;
+        s:= IntToStr(fsize);
+        sendUI(mtFeatureSize, @s[1], length(s))
+    end
+end;
+
+procedure netSetMapGen(mapgen: LongInt);
+var s: shortstring;
+begin
+    if mapgen <> currentConfig.mapgen then
+    begin
+        previewNeedsUpdate:= true;
+        currentConfig.mapgen:= mapgen;
+        s:= IntToStr(mapgen);
+        sendUI(mtMapGen, @s[1], length(s))
+    end
+end;
+
+procedure netSetMap(map: shortstring);
+begin
+    sendUI(mtMap, @map[1], length(map))
+end;
+
+procedure netSetMazeSize(mazesize: LongInt);
+var s: shortstring;
+begin
+    if mazesize <> currentConfig.mazesize then
+    begin
+        previewNeedsUpdate:= true;
+        currentConfig.mazesize:= mazesize;
+        s:= IntToStr(mazesize);
+        sendUI(mtMazeSize, @s[1], length(s))
+    end
+end;
+
+procedure netSetTemplate(template: LongInt);
+var s: shortstring;
+begin
+    if template <> currentConfig.template then
+    begin
+        previewNeedsUpdate:= true;
+        currentConfig.template:= template;
+        s:= IntToStr(template);
+        sendUI(mtTemplate, @s[1], length(s))
+    end
+end;
+
+procedure updatePreviewIfNeeded;
+begin
+    if previewNeedsUpdate then
+        getPreview
 end;
 
 end.

@@ -34,6 +34,11 @@ enum MessageType {
     , MSG_SEED
     , MSG_THEME
     , MSG_SCRIPT
+    , MSG_FEATURESIZE
+    , MSG_MAPGEN
+    , MSG_MAP
+    , MSG_MAZESIZE
+    , MSG_TEMPLATE
 };
 
 typedef union string255_

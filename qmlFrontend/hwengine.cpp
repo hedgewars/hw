@@ -264,6 +264,26 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit scriptChanged(QString::fromUtf8(msg));
         break;
     }
+    case MSG_FEATURESIZE: {
+        emit featureSizeChanged(msg.toInt());
+        break;
+    }
+    case MSG_MAPGEN: {
+        emit mapGenChanged(msg.toInt());
+        break;
+    }
+    case MSG_MAP: {
+        emit mapChanged(QString::fromUtf8(msg));
+        break;
+    }
+    case MSG_MAZESIZE: {
+        emit mazeSizeChanged(msg.toInt());
+        break;
+    }
+    case MSG_TEMPLATE: {
+        emit templateChanged(msg.toInt());
+        break;
+    }
     }
 }
 

@@ -92,7 +92,7 @@ Rectangle {
             }
             Connections {
                 target: HWEngine
-                onScriptChanged: scriptsModel.showItem({"iconSource" : "", "text" : script});
+                onScriptChanged: cbScript.showItem({"iconSource" : "", "text" : script});
             }
         }
     }
