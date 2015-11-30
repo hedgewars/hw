@@ -220,6 +220,8 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_REMOVEROOMCLIENT: {
         QStringList l = QString::fromUtf8(msg).split('\n');
+        if(l.size() < 2)
+            l.append("");
         emit roomClientRemoved(l[0], l[1]);
         break;
     }
