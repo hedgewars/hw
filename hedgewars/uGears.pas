@@ -117,8 +117,10 @@ var Gear: PGear;
     i: LongWord;
     flag: Boolean;
     tmp: LongWord;
+    poisonPlayed: Boolean;
 begin
     Gear:= GearsList;
+    poisonPlayed:= false;
 
     while Gear <> nil do
     begin
@@ -155,7 +157,11 @@ begin
             if tmp > 0 then
                 begin
                 inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
-                HHHurt(Gear^.Hedgehog, dsPoison);
+                if not poisonPlayed then
+                    begin
+                    HHHurt(Gear^.Hedgehog, dsPoison);
+                    poisonPlayed:= true;
+                    end
                 end
             end;
 
