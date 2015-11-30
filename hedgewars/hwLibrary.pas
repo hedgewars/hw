@@ -50,6 +50,7 @@ uses hwengine
     , uFLNet
     , uFLNetProtocol
     , uFLUICallback
+    , uFLRunQueue
     ;
 
 {$INCLUDE "config.inc"}
@@ -180,6 +181,7 @@ exports
     // network
     connectOfficialServer,
     passNetData,
+    passFlibEvent,
     sendChatLine,
     joinRoom,
     partRoom,

@@ -29,6 +29,7 @@ Rectangle {
 
         Connections {
             target: HWEngine
+            onMovedToRoom: roomChat.clear()
             onRoomChatLine: roomChat.addChatLine(nickname, line)
             onRoomClientAdded: roomChat.addClient(clientName)
             onRoomClientRemoved: roomChat.removeClient(clientName, reason)

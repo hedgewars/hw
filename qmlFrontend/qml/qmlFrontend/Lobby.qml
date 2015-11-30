@@ -100,6 +100,7 @@ Rectangle {
 
         Connections {
             target: HWEngine
+            onNetConnected: lobbyChat.clear()
             onLobbyChatLine: lobbyChat.addChatLine(nickname, line)
             onLobbyClientAdded: lobbyChat.addClient(clientName)
             onLobbyClientRemoved: lobbyChat.removeClient(clientName, reason)

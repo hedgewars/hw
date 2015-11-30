@@ -36,6 +36,7 @@ extern "C" {
 
     connectOfficialServer_t * flibConnectOfficialServer;
     passNetData_t * flibPassNetData;
+    passFlibEvent_t * flibPassFlibEvent;
     sendChatLine_t * flibSendChatLine;
     joinRoom_t * flibJoinRoom;
     partRoom_t * flibPartRoom;
@@ -85,6 +86,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibConnectOfficialServer = (connectOfficialServer_t*) hwlib.resolve("connectOfficialServer");
     flibPassNetData = (passNetData_t*) hwlib.resolve("passNetData");
+    flibPassFlibEvent = (passFlibEvent_t*) hwlib.resolve("passFlibEvent");
     flibSendChatLine = (sendChatLine_t*) hwlib.resolve("sendChatLine");
     flibJoinRoom = (joinRoom_t*) hwlib.resolve("joinRoom");
     flibPartRoom = (partRoom_t*) hwlib.resolve("partRoom");
@@ -141,7 +143,7 @@ void HWEngine::guiMessagesCallback(void *context, MessageType mt, const char * m
     HWEngine * obj = (HWEngine *)context;
     QByteArray b = QByteArray(msg, len);
 
-    //qDebug() << "FLIPC in" << b.size() << b;
+    //qDebug() << "FLIPC in" << mt << " size = " << b.size();
 
     QMetaObject::invokeMethod(obj, "engineMessageHandler", Qt::QueuedConnection, Q_ARG(MessageType, mt), Q_ARG(QByteArray, b));
 }
@@ -150,6 +152,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
 {
     switch(mt)
     {
+    case MSG_RENDERINGPREVIEW: {
+        emit previewIsRendering();
+        break;
+    }
     case MSG_PREVIEW: {
         PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
         preview->setPixmap(msg);
@@ -180,6 +186,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_NETDATA: {
         flibPassNetData(msg.constData());
+        break;
+    }
+    case MSG_FLIBEVENT: {
+        flibPassFlibEvent(msg.constData());
         break;
     }
     case MSG_CONNECTED: {

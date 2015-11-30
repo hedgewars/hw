@@ -113,6 +113,7 @@ set(engine_sources
     uFLNet.pas
     uFLNetProtocol.pas
     uFLNetTypes.pas
+    uFLRunQueue.pas
     uFLScripts.pas
     uFLSchemes.pas
     uFLTeams.pas

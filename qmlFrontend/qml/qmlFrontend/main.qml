@@ -84,7 +84,10 @@ Rectangle {
         }
         onMovedToLobby: currentPage = "Lobby";
         onMovedToRoom: currentPage = "Room";
-        onNetDisconnected: currentPage = "First";
+        onNetDisconnected: {
+            currentPage = "First";
+            warningsBox.showMessage(message);
+        }
         onWarningMessage: warningsBox.showMessage(message);
         onErrorMessage: warningsBox.showMessage(message);
     }

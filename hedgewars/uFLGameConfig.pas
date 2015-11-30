@@ -28,32 +28,10 @@ procedure netSetMazeSize(mazesize: LongInt);
 procedure netSetTemplate(template: LongInt);
 procedure updatePreviewIfNeeded;
 
+procedure sendConfig(config: PGameConfig);
+
 implementation
-uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo, uFLUICallback;
-
-const
-    MAXCONFIGS = 5;
-    MAXARGS = 32;
-
-type
-    TGameConfig = record
-            seed: shortstring;
-            theme: shortstring;
-            script: shortstring;
-            map: shortstring;
-            scheme: TScheme;
-            ammo: TAmmo;
-            mapgen: LongInt;
-            featureSize: LongInt;
-            mazesize: LongInt;
-            template: LongInt;
-            gameType: TGameType;
-            teams: array[0..7] of TTeam;
-            arguments: array[0..Pred(MAXARGS)] of shortstring;
-            argv: array[0..Pred(MAXARGS)] of PChar;
-            argumentsNumber: Longword;
-            end;
-    PGameConfig = ^TGameConfig;
+uses uFLIPC, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue;
 
 var
     currentConfig: TGameConfig;
@@ -75,12 +53,16 @@ begin
                 ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
+            ipcToEngine('e$template_filter ' + intToStr(template));
+            ipcToEngine('e$feature_size ' + intToStr(featureSize));
         end;
     gtLocal: begin
             if script <> 'Normal' then
                 ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
+            ipcToEngine('e$template_filter ' + intToStr(template));
+            ipcToEngine('e$feature_size ' + intToStr(featureSize));
             ipcToEngine('e$theme ' + theme);
 
             sendSchemeConfig(scheme);
@@ -98,28 +80,6 @@ begin
 
     ipcToEngine('!');
 end;
-end;
-
-procedure queueExecution;
-var pConfig: PGameConfig;
-    i: Longword;
-begin
-    new(pConfig);
-    pConfig^:= currentConfig;
-
-    with pConfig^ do
-        for i:= 0 to Pred(MAXARGS) do
-        begin
-            if arguments[i][0] = #255 then 
-                arguments[i][255]:= #0
-            else
-                arguments[i][byte(arguments[i][0]) + 1]:= #0;
-            argv[i]:= @arguments[i][1]
-        end;
-
-    RunEngine(pConfig^.argumentsNumber, @pConfig^.argv);
-
-    sendConfig(pConfig)
 end;
 
 procedure resetGameConfig; cdecl;
@@ -183,7 +143,7 @@ begin
         teams[1].color:= 1;
         teams[1].botLevel:= 3;
 
-        queueExecution;
+        queueExecution(currentConfig);
     end;
 end;
 
@@ -200,7 +160,7 @@ begin
         arguments[2]:= '--landpreview';
         argumentsNumber:= 3;
 
-        queueExecution;
+        queueExecution(currentConfig);
     end;
 end;
 
@@ -214,7 +174,7 @@ begin
         arguments[2]:= '--nomusic';
         argumentsNumber:= 3;
 
-        queueExecution;
+        queueExecution(currentConfig);
     end;
 end;
 

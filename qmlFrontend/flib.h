@@ -8,13 +8,15 @@ extern "C" {
 #endif
 
 enum MessageType {
-    MSG_PREVIEW
+    MSG_RENDERINGPREVIEW
+    , MSG_PREVIEW
     , MSG_ADDPLAYINGTEAM
     , MSG_REMOVEPLAYINGTEAM
     , MSG_ADDTEAM
     , MSG_REMOVETEAM
     , MSG_TEAMCOLOR
     , MSG_NETDATA
+    , MSG_FLIBEVENT
     , MSG_CONNECTED
     , MSG_DISCONNECTED
     , MSG_ADDLOBBYCLIENT
@@ -67,6 +69,7 @@ typedef void setAmmo_t(const char * ammoName);
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
 typedef void passNetData_t(const char * data);
+typedef void passFlibEvent_t(const char * data);
 typedef void sendChatLine_t(const char * msg);
 typedef void joinRoom_t(const char * roomName);
 typedef void partRoom_t(const char * message);

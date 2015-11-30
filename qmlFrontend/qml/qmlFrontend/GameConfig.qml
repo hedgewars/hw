@@ -15,7 +15,8 @@ Rectangle {
 
         Connections {
             target: HWEngine
-            onPreviewImageChanged: previewImage.source = "image://preview/" + HWEngine.currentSeed()
+            onPreviewImageChanged: previewImage.source = "image://preview/image"
+            onPreviewIsRendering: previewImage.source = "qrc:/res/iconTime.png"
         }
 
         Image {
@@ -25,6 +26,7 @@ Rectangle {
             width: 256
             height: 128
             cache: false
+            source: "qrc:/res/iconTime.png"
         }
     }
 

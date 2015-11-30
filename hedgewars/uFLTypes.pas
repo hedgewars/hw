@@ -1,14 +1,19 @@
 unit uFLTypes;
 interface
 
+const
+    MAXARGS = 32;
+
 type
-    TMessageType = (mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam
-                    , mtTeamColor, mtNetData, mtConnected, mtDisconnected, mtAddLobbyClient
+    TMessageType = (mtRenderingPreview, mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam
+                    , mtTeamColor, mtNetData, mtFlibEvent, mtConnected, mtDisconnected, mtAddLobbyClient
                     , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoomClient
                     , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom
                     , mtRemoveRoom, mtError, mtWarning, mtMoveToLobby, mtMoveToRoom
                     , mtNickname, mtSeed, mtTheme, mtScript, mtFeatureSize, mtMapGen
                     , mtMap, mtMazeSize, mtTemplate);
+
+    TFLIBEvent = (flibGameFinished);
 
     TIPCMessage = record
                    str: shortstring;
@@ -85,6 +90,26 @@ type
             a, b, c, d: shortstring;
         end;
     PAmmo = ^TAmmo;
+
+    PGameConfig = ^TGameConfig;
+    TGameConfig = record
+            seed: shortstring;
+            theme: shortstring;
+            script: shortstring;
+            map: shortstring;
+            scheme: TScheme;
+            ammo: TAmmo;
+            mapgen: LongInt;
+            featureSize: LongInt;
+            mazesize: LongInt;
+            template: LongInt;
+            gameType: TGameType;
+            teams: array[0..7] of TTeam;
+            arguments: array[0..Pred(MAXARGS)] of shortstring;
+            argv: array[0..Pred(MAXARGS)] of PChar;
+            argumentsNumber: Longword;
+            nextConfig: PGameConfig;
+            end;
 
 implementation
 

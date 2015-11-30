@@ -40,6 +40,7 @@ procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 
 implementation
+uses uFLUICallback, uFLTypes;
 
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
@@ -518,16 +519,20 @@ begin
 end;
 
 function EngineThread(p: pointer): Longint; cdecl; export;
+var e: TFLIBEvent;
 begin
     if GameType = gmtLandPreview then
         GenLandPreview()
     else Game();
 
+    e:= flibGameFinished;
+    sendUI(mtFlibEvent, @e, sizeof(e));
     EngineThread:= 0
 end;
 
 
 function RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
+var t: PSDL_Thread;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
@@ -545,6 +550,7 @@ begin
     else
     begin
         SDL_CreateThread(@EngineThread, 'engine', nil);
+        SDL_DetachThread(t);
         RunEngine:= 0
     end
 end;

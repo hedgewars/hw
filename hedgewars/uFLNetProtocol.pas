@@ -165,6 +165,7 @@ end;
 procedure handler_CONNECTED(var p: TCmdParami);
 begin
     sendUI(mtConnected, nil, 0);
+    writeln('Server features version ', p.param1);
     sendNet('PROTO' + #10 + '51');
     sendNet('NICK' + #10 + 'qmlfrontend');
 end;
@@ -274,6 +275,7 @@ end;
 
 procedure handler_PROTO(var p: TCmdParami);
 begin
+    writeln('Protocol ', p.param1)
 end;
 
 procedure handler_REMOVE_TEAM(var p: TCmdParamS);

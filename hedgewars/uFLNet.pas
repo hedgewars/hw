@@ -126,7 +126,6 @@ procedure handler__i;
 var cmd: TCmdParami;
     s: shortstring;
 begin
-    writeln('handler__i');
     s:= getShortString();
     if s[0] = #0 then exit;
     cmd.cmd:= state.cmd;
@@ -138,8 +137,14 @@ begin
 end;
 
 procedure handler_i;
+var cmd: TCmdParami;
+    s: shortstring;
 begin
-    writeln('handler_i');
+    s:= getShortString();
+    if s[0] = #0 then exit;
+    cmd.cmd:= state.cmd;
+    cmd.param1:= strToInt(s);
+    sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
 

@@ -106,7 +106,6 @@ Rectangle {
                     }
                 }
             }
-
         }
     }
 
@@ -127,6 +126,11 @@ Rectangle {
             chatClientsModel.remove(i, 1);
             chatLines.addLine("***", qsTr("%1 quit (%2)").arg(clientName).arg(reason))
         }
+    }
+
+    function clear() {
+        chatClientsModel.clear()
+        chatLinesModel.clear()
     }
 }
 

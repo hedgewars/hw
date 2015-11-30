@@ -47,6 +47,7 @@ signals:
     void errorMessage(const QString & message);
     void warningMessage(const QString & message);
 
+    void previewIsRendering();
     void previewImageChanged();
     void localTeamAdded(const QString & teamName, int aiLevel);
     void localTeamRemoved(const QString & teamName);
