@@ -73,15 +73,15 @@ begin
 
     inc(fmcfgIndex);
     case fmcfgIndex of
-        1: if s.str1[0] <> '+' then netSetMap(s.str1);
-        2: netSetMapGen(strToInt(s.str1));
-        3: netSetMazeSize(strToInt(s.str1));
-        4: netSetTheme(s.str1);
-        5: netSetTemplate(strToInt(s.str1));
+        1: netSetFeatureSize(strToInt(s.str1));
+        2: if s.str1[0] <> '+' then netSetMap(s.str1);
+        3: netSetMapGen(strToInt(s.str1));
+        4: netSetMazeSize(strToInt(s.str1));
+        5: netSetSeed(s.str1);
         6: begin
-                netSetFeatureSize(strToInt(s.str1));
+                netSetTemplate(strToInt(s.str1));
                 updatePreviewIfNeeded;
-           end;
+            end;
     end;
 end;
 
