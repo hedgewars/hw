@@ -30,6 +30,7 @@ procedure AddBounceEffectForGear(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
 procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
+procedure Cough(Team: PTeam);
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 procedure CheckHHDamage(Gear: PGear);
 procedure CalcRotationDirAngle(Gear: PGear);
@@ -340,6 +341,16 @@ if (tag <> nil) then
 AllInactive:= false;
 HHGear^.Active:= true;
 end;
+
+procedure Cough(Team: PTeam);
+begin
+
+case random(2) of
+    0: PlaySoundV(sndPoisonCough, Team^.voicepack);
+    1: PlaySoundV(sndPoisonMoan, Team^.voicepack);
+end
+end;
+
 
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 begin
