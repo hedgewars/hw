@@ -11,7 +11,7 @@ type
                     , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom
                     , mtRemoveRoom, mtError, mtWarning, mtMoveToLobby, mtMoveToRoom
                     , mtNickname, mtSeed, mtTheme, mtScript, mtFeatureSize, mtMapGen
-                    , mtMap, mtMazeSize, mtTemplate);
+                    , mtMap, mtMazeSize, mtTemplate, mtAmmo);
 
     TFLIBEvent = (flibGameFinished);
 

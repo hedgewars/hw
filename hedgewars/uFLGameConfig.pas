@@ -26,6 +26,7 @@ procedure netSetMapGen(mapgen: LongInt);
 procedure netSetMap(map: shortstring);
 procedure netSetMazeSize(mazesize: LongInt);
 procedure netSetTemplate(template: LongInt);
+procedure netSetAmmo(name: shortstring; definition: ansistring);
 procedure updatePreviewIfNeeded;
 
 procedure sendConfig(config: PGameConfig);
@@ -70,9 +71,8 @@ begin
             i:= 0;
             while (i < 8) and (teams[i].hogsNumber > 0) do
                 begin
-                    sendAmmoConfig(config^.ammo);
-                    ipcToEngine('eammstore');
                     sendTeamConfig(teams[i]);
+                    sendAmmoConfig(config^.ammo);
                     inc(i)
                 end;
         end;
@@ -257,7 +257,7 @@ end;
 procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 var i, dc: Longword;
     tn: shortstring;
-    msg: ansistring;
+    msg:  ansistring;
 begin
     with currentConfig do
     begin
@@ -391,6 +391,21 @@ procedure updatePreviewIfNeeded;
 begin
     if previewNeedsUpdate then
         getPreview
+end;
+
+procedure netSetAmmo(name: shortstring; definition: ansistring);
+var ammo: TAmmo;
+    i: LongInt;
+begin
+    ammo.ammoName:= name;
+    i:= length(definition) div 4;
+    ammo.a:= copy(definition, 1, i);
+    ammo.b:= copy(definition, i + 1, i);
+    ammo.c:= copy(definition, i * 2 + 1, i);
+    ammo.d:= copy(definition, i * 3 + 1, i);
+
+    currentConfig.ammo:= ammo;
+    sendUI(mtAmmo, @name[1], length(name))
 end;
 
 end.

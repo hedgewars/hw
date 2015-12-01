@@ -86,7 +86,7 @@ begin
                 team.flag:= midStr(l, 6)
         end;
         // TODO: load hedgehogs and other stuff
-        team.botLevel:= 1
+        team.botLevel:= 0
     end;
 
     pfsClose(f)

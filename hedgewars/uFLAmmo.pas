@@ -129,6 +129,7 @@ begin
         ipcToEngine('eammprob '  + ammo.b);
         ipcToEngine('eammdelay ' + ammo.c);
         ipcToEngine('eammreinf ' + ammo.d);
+        ipcToEngine('eammstore');
     end
 end;
 

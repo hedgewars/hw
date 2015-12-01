@@ -45,6 +45,7 @@ end;
 
 procedure handler_CFG_AMMO(var p: TCmdParamSL);
 begin
+    netSetAmmo(p.str1, p.str2)
 end;
 
 procedure handler_CFG_DRAWNMAP(var p: TCmdParamL);

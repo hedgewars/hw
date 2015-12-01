@@ -79,6 +79,7 @@ signals:
     void mapChanged(const QString & map);
     void mazeSizeChanged(int mazeSize);
     void templateChanged(int templ);
+    void ammoChanged(const QString & ammo);
 
     void roomAdded(quint32 flags
                    , const QString & name

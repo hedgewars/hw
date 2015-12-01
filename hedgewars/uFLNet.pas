@@ -11,7 +11,7 @@ procedure sendNetLn(s: shortstring);
 implementation
 uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes, uFLUtils;
 
-const endCmd: string = #10 + #10;
+const endCmd: shortstring = #10 + #10;
 
 function getNextChar: char; forward;
 function getCurrChar: char; forward;
@@ -31,6 +31,7 @@ var state: TParserState;
 
 procedure handleTail; forward;
 function getShortString: shortstring; forward;
+function getLongString: ansistring; forward;
 
 procedure handler_;
 begin
@@ -42,8 +43,8 @@ procedure handler_L;
 var cmd: TCmdParamL;
 begin
     cmd.cmd:= state.cmd;
-    cmd.str1:= getShortString; // FIXME long line
-    if cmd.str1[0] = #0 then exit;
+    cmd.str1:= getLongString;
+    if length(cmd.str1) = 0 then exit;
     sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
@@ -57,7 +58,7 @@ begin
     cmd.cmd:= Succ(state.cmd);
 
     repeat
-        cmd.str1:= getShortString; // FIXME long line
+        cmd.str1:= getLongString;
         f:= cmd.str1[0] <> #0;
         if f then
             sendUI(mtNetData, @cmd, sizeof(cmd));
@@ -97,7 +98,7 @@ begin
     cmd.cmd:= state.cmd;
     cmd.str1:= getShortString;
     if cmd.str1[0] = #0 then exit;
-    cmd.str2:= getShortString; // FIXME should be long string
+    cmd.str2:= getLongString;
     if cmd.str2[0] = #0 then exit;
     sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
@@ -329,6 +330,30 @@ begin
         repeat c:= getNextChar until (c = #0) or (c = #10);
 
     getShortString:= s
+end;
+
+function getLongString: ansistring;
+var s: shortstring;
+    l: ansistring;
+    c: char;
+begin
+    l:= '';
+
+    repeat
+        s[0]:= #0;
+            repeat
+                inc(s[0]);
+                c:= getNextChar;
+                s[byte(s[0])]:= c
+            until (s[0] = #255) or (c = #10) or (c = #0);
+
+        if s[byte(s[0])] = #10 then
+            dec(s[0]);
+
+        l:= l + s
+    until (c = #10) or (c = #0);
+
+    getLongString:= l
 end;
 
 procedure netSendCallback(p: pointer; msg: PChar; len: Longword);

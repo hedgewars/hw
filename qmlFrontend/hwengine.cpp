@@ -206,6 +206,8 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_REMOVELOBBYCLIENT: {
         QStringList l = QString::fromUtf8(msg).split('\n');
+        if(l.size() < 2)
+            l.append("");
         emit lobbyClientRemoved(l[0], l[1]);
         break;
     }
@@ -294,6 +296,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_TEMPLATE: {
         emit templateChanged(msg.toInt());
+        break;
+    }
+    case MSG_AMMO: {
+        emit ammoChanged(QString::fromUtf8(msg));
         break;
     }
     }

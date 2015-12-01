@@ -57,11 +57,11 @@ Rectangle {
                      HWEngine.setTheme(themeName.text)
                  }
             }
+        }
 
-            Connections {
-                target: HWEngine
-                onThemeChanged: cbTheme.showItem({"iconSource" : "image://theme/" + theme, "text" : theme});
-            }
+        Connections {
+            target: HWEngine
+            onThemeChanged: cbTheme.showItem({"iconSource" : "image://theme/" + theme, "text" : theme});
         }
     }
 
@@ -92,10 +92,10 @@ Rectangle {
                      HWEngine.setScript(scriptName.text)
                  }
             }
-            Connections {
-                target: HWEngine
-                onScriptChanged: cbScript.showItem({"iconSource" : "", "text" : script});
-            }
+        }
+        Connections {
+            target: HWEngine
+            onScriptChanged: cbScript.showItem({"iconSource" : "", "text" : script});
         }
     }
 
@@ -157,6 +157,10 @@ Rectangle {
                      HWEngine.setAmmo(ammoName.text)
                  }
             }
+        }
+        Connections {
+            target: HWEngine
+            onAmmoChanged: cbAmmo.showItem({"iconSource" : "", "text" : ammo});
         }
     }
     }
