@@ -32,7 +32,7 @@ procedure updatePreviewIfNeeded;
 procedure sendConfig(config: PGameConfig);
 
 implementation
-uses uFLIPC, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue;
+uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue;
 
 var
     currentConfig: TGameConfig;

@@ -42,7 +42,7 @@ uses hwengine
     , uFLGameConfig
     , uFLIPC
     , uPhysFSLayer
-    , uFLData
+    , uFLThemes
     , uFLTeams
     , uFLScripts
     , uFLSchemes

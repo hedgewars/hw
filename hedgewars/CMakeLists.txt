@@ -107,7 +107,6 @@ set(engine_sources
     uTeams.pas
 
     uFLAmmo.pas
-    uFLData.pas
     uFLGameConfig.pas
     uFLIPC.pas
     uFLNet.pas
@@ -117,6 +116,7 @@ set(engine_sources
     uFLScripts.pas
     uFLSchemes.pas
     uFLTeams.pas
+    uFLThemes.pas
     uFLTypes.pas
     uFLUICallback.pas
     uFLUtils.pas
