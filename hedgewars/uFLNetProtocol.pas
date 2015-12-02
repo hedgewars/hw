@@ -292,13 +292,10 @@ begin
     sendUI(mtMoveToLobby, nil, 0);
 end;
 
-procedure handler_LEFT(var p: TCmdParamS);
+procedure handler_LEFT(var p: TCmdParamSL);
 begin
-    sendUI(mtRemoveLobbyClient, @p.str1[1], length(p.str1));
-end;
-
-procedure handler_LEFT_s(var s: TCmdParamS);
-begin
+    p.str2:= p.str1 + #10 + p.str2;
+    sendUI(mtRemoveRoomClient, @p.str2[1], length(p.str2));
 end;
 
 procedure handler_LOBBY_JOINED(var p: TCmdParam);
@@ -464,19 +461,18 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ADD_TEAM),
     PHandler(@handler_HH_NUM_s), PHandler(@handler_INFO), PHandler(@handler_INFO_s),
     PHandler(@handler_JOINED), PHandler(@handler_JOINED_s),
     PHandler(@handler_JOINING), PHandler(@handler_KICKED), PHandler(@handler_LEFT),
-    PHandler(@handler_LEFT_s), PHandler(@handler_LOBBY_JOINED),
-    PHandler(@handler_LOBBY_JOINED_s), PHandler(@handler_LOBBY_LEFT),
-    PHandler(@handler_NICK), PHandler(@handler_NOTICE), PHandler(@handler_PING),
-    PHandler(@handler_PING_s), PHandler(@handler_PROTO),
-    PHandler(@handler_REMOVE_TEAM), PHandler(@handler_ROOMS),
-    PHandler(@handler_ROOMS_s), PHandler(@handler_ROOM_ADD),
-    PHandler(@handler_ROOM_ADD_s), PHandler(@handler_ROOM_DEL),
-    PHandler(@handler_ROOM_UPD), PHandler(@handler_ROOM_UPD_s),
-    PHandler(@handler_ROUND_FINISHED), PHandler(@handler_RUN_GAME),
-    PHandler(@handler_SERVER_AUTH), PHandler(@handler_SERVER_MESSAGE),
-    PHandler(@handler_SERVER_VARS), PHandler(@handler_TEAM_ACCEPTED),
-    PHandler(@handler_TEAM_COLOR), PHandler(@handler_TEAM_COLOR_s),
-    PHandler(@handler_WARNING));
+    PHandler(@handler_LOBBY_JOINED), PHandler(@handler_LOBBY_JOINED_s),
+    PHandler(@handler_LOBBY_LEFT), PHandler(@handler_NICK),
+    PHandler(@handler_NOTICE), PHandler(@handler_PING), PHandler(@handler_PING_s),
+    PHandler(@handler_PROTO), PHandler(@handler_REMOVE_TEAM),
+    PHandler(@handler_ROOMS), PHandler(@handler_ROOMS_s),
+    PHandler(@handler_ROOM_ADD), PHandler(@handler_ROOM_ADD_s),
+    PHandler(@handler_ROOM_DEL), PHandler(@handler_ROOM_UPD),
+    PHandler(@handler_ROOM_UPD_s), PHandler(@handler_ROUND_FINISHED),
+    PHandler(@handler_RUN_GAME), PHandler(@handler_SERVER_AUTH),
+    PHandler(@handler_SERVER_MESSAGE), PHandler(@handler_SERVER_VARS),
+    PHandler(@handler_TEAM_ACCEPTED), PHandler(@handler_TEAM_COLOR),
+    PHandler(@handler_TEAM_COLOR_s), PHandler(@handler_WARNING));
 
 procedure passNetData(p: pointer); cdecl;
 begin

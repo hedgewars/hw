@@ -78,7 +78,7 @@ commandsDescription = [
         , cmd1 "LOBBY:JOINED" $ Many [SS]
         , cmd2 "LOBBY:LEFT" SS LS
         , cmd2 "CLIENT_FLAGS" SS $ Many [SS]
-        , cmd2 "LEFT" SS $ Many [SS]
+        , cmd2 "LEFT" SS LS
         , cmd1 "SERVER_MESSAGE" LS
         , cmd1 "ERROR" LS
         , cmd1 "NOTICE" LS
