@@ -80,6 +80,7 @@ signals:
     void mazeSizeChanged(int mazeSize);
     void templateChanged(int templ);
     void ammoChanged(const QString & ammo);
+    void schemeChanged(const QString & scheme);
 
     void roomAdded(quint32 flags
                    , const QString & name

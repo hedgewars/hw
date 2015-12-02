@@ -127,6 +127,10 @@ Rectangle {
                  }
             }
         }
+        Connections {
+            target: HWEngine
+            onSchemeChanged: cbScheme.showItem({"iconSource" : "", "text" : scheme});
+        }
     }
 
 

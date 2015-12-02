@@ -11,7 +11,7 @@ type
                     , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom
                     , mtRemoveRoom, mtError, mtWarning, mtMoveToLobby, mtMoveToRoom
                     , mtNickname, mtSeed, mtTheme, mtScript, mtFeatureSize, mtMapGen
-                    , mtMap, mtMazeSize, mtTemplate, mtAmmo);
+                    , mtMap, mtMazeSize, mtTemplate, mtAmmo, mtScheme);
 
     TFLIBEvent = (flibGameFinished);
 
@@ -65,6 +65,12 @@ type
             , disablewind
             , morewind
             , tagteam
+            , resethealth
+            , disablelandobjects
+            , aisurvival
+            , infattack
+            , resetweps
+            , perhogammo
             , bottomborder: boolean;
             damagefactor
             , turntime
@@ -82,6 +88,7 @@ type
             , healthdecrease
             , ropepct
             , getawaytime
+            , airmines
             , worldedge: LongInt
         end;
     PScheme = ^TScheme;

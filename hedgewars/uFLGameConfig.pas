@@ -27,6 +27,7 @@ procedure netSetMap(map: shortstring);
 procedure netSetMazeSize(mazesize: LongInt);
 procedure netSetTemplate(template: LongInt);
 procedure netSetAmmo(name: shortstring; definition: ansistring);
+procedure netSetScheme(scheme: TScheme);
 procedure updatePreviewIfNeeded;
 
 procedure sendConfig(config: PGameConfig);
@@ -406,6 +407,12 @@ begin
 
     currentConfig.ammo:= ammo;
     sendUI(mtAmmo, @name[1], length(name))
+end;
+
+procedure netSetScheme(scheme: TScheme);
+begin
+    currentConfig.scheme:= scheme;
+    sendUI(mtScheme, @scheme.schemeName[1], length(scheme.schemeName))
 end;
 
 end.

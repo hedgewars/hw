@@ -21,7 +21,7 @@ var
     listOfSchemeNames: array[0..MAX_SCHEME_NAMES] of PChar;
     tmpScheme: TScheme;
 
-const ints: array[0 .. 16] of record
+const ints: array[0 .. 17] of record
             name: shortstring;
             param: ^LongInt;
         end = (
@@ -42,8 +42,9 @@ const ints: array[0 .. 16] of record
             , (name: 'ropepct'; param: @tmpScheme.ropepct)
             , (name: 'getawaytime'; param: @tmpScheme.getawaytime)
             , (name: 'worldedge'; param: @tmpScheme.worldedge)
+            , (name: 'airmines'; param: @tmpScheme.airmines)
               );
-const bools: array[0 .. 19] of record
+const bools: array[0 .. 25] of record
             name: shortstring;
             param: ^boolean;
         end = (
@@ -67,6 +68,12 @@ const bools: array[0 .. 19] of record
             , (name: 'morewind'; param: @tmpScheme.morewind)
             , (name: 'tagteam'; param: @tmpScheme.tagteam)
             , (name: 'bottomborder'; param: @tmpScheme.bottomborder)
+            , (name: 'resethealth'; param: @tmpScheme.resethealth)
+            , (name: 'disablelandobjects'; param: @tmpScheme.disablelandobjects)
+            , (name: 'aisurvival'; param: @tmpScheme.aisurvival)
+            , (name: 'infattack'; param: @tmpScheme.infattack)
+            , (name: 'resetweps'; param: @tmpScheme.resetweps)
+            , (name: 'perhogammo'; param: @tmpScheme.perhogammo)
               );
 
 

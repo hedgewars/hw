@@ -110,12 +110,79 @@ begin
     end
 end;
 
+var schemeIndex: LongInt;
+    tmpScheme: TScheme;
+
 procedure handler_CFG_SCHEME(var p: TCmdParam);
 begin
+    schemeIndex:= 0
 end;
+
+const schemeFields: array[0..43] of pointer = (
+      @tmpScheme.schemeName          //  0
+    , @tmpScheme.fortsmode           //  1
+    , @tmpScheme.divteams            //  2
+    , @tmpScheme.solidland           //  3
+    , @tmpScheme.border              //  4
+    , @tmpScheme.lowgrav             //  5
+    , @tmpScheme.laser               //  6
+    , @tmpScheme.invulnerability     //  7
+    , @tmpScheme.resethealth         //  8
+    , @tmpScheme.vampiric            //  9
+    , @tmpScheme.karma               // 10
+    , @tmpScheme.artillery           // 11
+    , @tmpScheme.randomorder         // 12
+    , @tmpScheme.king                // 13
+    , @tmpScheme.placehog            // 14
+    , @tmpScheme.sharedammo          // 15
+    , @tmpScheme.disablegirders      // 16
+    , @tmpScheme.disablelandobjects  // 17
+    , @tmpScheme.aisurvival          // 18
+    , @tmpScheme.infattack           // 19
+    , @tmpScheme.resetweps           // 20
+    , @tmpScheme.perhogammo          // 21
+    , @tmpScheme.disablewind         // 22
+    , @tmpScheme.morewind            // 23
+    , @tmpScheme.tagteam             // 24
+    , @tmpScheme.bottomborder        // 25
+    , @tmpScheme.damagefactor        // 26
+    , @tmpScheme.turntime            // 27
+    , @tmpScheme.health              // 28
+    , @tmpScheme.suddendeath         // 29
+    , @tmpScheme.caseprobability     // 30
+    , @tmpScheme.minestime           // 31
+    , @tmpScheme.minesnum            // 32
+    , @tmpScheme.minedudpct          // 33
+    , @tmpScheme.explosives          // 34
+    , @tmpScheme.airmines            // 35
+    , @tmpScheme.healthprobability   // 36
+    , @tmpScheme.healthcaseamount    // 37
+    , @tmpScheme.waterrise           // 38
+    , @tmpScheme.healthdecrease      // 39
+    , @tmpScheme.ropepct             // 40
+    , @tmpScheme.getawaytime         // 41
+    , @tmpScheme.worldedge           // 42
+    , @tmpScheme.scriptparam         // 43
+   );
 
 procedure handler_CFG_SCHEME_s(var s: TCmdParamS);
 begin
+    if(schemeIndex = 0) then
+        tmpScheme.schemeName:= s.str1
+    else
+    if(schemeIndex = 43) then
+        tmpScheme.scriptparam:= copy(s.str1, 2, length(s.str1) - 1)
+    else
+    if(schemeIndex < 26) then
+        PBoolean(schemeFields[schemeIndex])^:= s.str1[1] = 't'
+    else
+    if(schemeIndex < 43) then
+        PLongInt(schemeFields[schemeIndex])^:= strToInt(s.str1);
+
+    if(schemeIndex = 43) then
+        netSetScheme(tmpScheme);
+
+    inc(schemeIndex);
 end;
 
 procedure handler_CFG_SCRIPT(var p: TCmdParamS);

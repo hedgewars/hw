@@ -306,6 +306,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit ammoChanged(QString::fromUtf8(msg));
         break;
     }
+    case MSG_SCHEME: {
+        emit schemeChanged(QString::fromUtf8(msg));
+        break;
+    }
     }
 }
 
