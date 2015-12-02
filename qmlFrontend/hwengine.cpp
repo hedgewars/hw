@@ -50,7 +50,11 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 {
     qRegisterMetaType<MessageType>("MessageType");
 
+#ifdef Q_OS_WIN    
+    QLibrary hwlib("./libhwengine.dll");
+#else
     QLibrary hwlib("./libhwengine.so");
+#endif
 
     if(!hwlib.load())
         qWarning() << "Engine library not found" << hwlib.errorString();

@@ -24,3 +24,4 @@ add_executable(hedgewars WIN32
 include_directories(${OPENGL_INCLUDE_DIR})
 
 target_link_libraries(hedgewars Qt5::Core Qt5::Gui Qt5::Quick Qt5::Qml)
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
