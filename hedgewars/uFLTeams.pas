@@ -79,9 +79,9 @@ begin
             if copy(l, 1, 5) = 'Name=' then
                 team.teamName:= midStr(l, 6)
             else if copy(l, 1, 6) = 'Grave=' then
-                team.graveName:= midStr(l, 7)
+                team.grave:= midStr(l, 7)
             else if copy(l, 1, 5) = 'Fort=' then
-                team.fortName:= midStr(l, 6)
+                team.fort:= midStr(l, 6)
             else if copy(l, 1, 5) = 'Flag=' then
                 team.flag:= midStr(l, 6)
         end;

@@ -71,8 +71,8 @@ commandsDescription = [
         , cmd1 "SERVER_AUTH" SS
         , cmd1 "JOINING" SS
         , cmd1 "TEAM_ACCEPTED" SS
-        , cmd1 "HH_NUM" $ Many [SS]
-        , cmd1 "TEAM_COLOR" $ Many [SS]
+        , cmd2 "HH_NUM" SS SS
+        , cmd2 "TEAM_COLOR" SS SS
         , cmd1 "BANLIST" $ Many [SS]
         , cmd1 "JOINED" $ Many [SS]
         , cmd1 "LOBBY:JOINED" $ Many [SS]

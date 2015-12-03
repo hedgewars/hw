@@ -30,11 +30,12 @@ type
             hat: shortstring;
             end;
     TTeam = record
-            teamName: shortstring;
-            flag: shortstring;
-            graveName: shortstring;
-            fortName: shortstring;
-            owner: shortstring;
+            teamName
+            , flag
+            , grave
+            , fort
+            , voice
+            , owner: shortstring;
             color: Longword;
             extDriven: boolean;
             botLevel: Longword;

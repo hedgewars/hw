@@ -18,12 +18,52 @@ type
 var isInRoom: boolean;
     myNickname: shortstring;
 
+var teamIndex: LongInt;
+    tmpTeam: TTeam;
+
+const teamFields: array[0..22] of PShortstring = (
+    @tmpTeam.teamName
+    , @tmpTeam.grave
+    , @tmpTeam.fort
+    , @tmpTeam.voice
+    , @tmpTeam.flag
+    , @tmpTeam.owner
+    , nil
+    , @tmpTeam.hedgehogs[0].name
+    , @tmpTeam.hedgehogs[0].hat
+    , @tmpTeam.hedgehogs[1].name
+    , @tmpTeam.hedgehogs[1].hat
+    , @tmpTeam.hedgehogs[2].name
+    , @tmpTeam.hedgehogs[2].hat
+    , @tmpTeam.hedgehogs[3].name
+    , @tmpTeam.hedgehogs[3].hat
+    , @tmpTeam.hedgehogs[4].name
+    , @tmpTeam.hedgehogs[4].hat
+    , @tmpTeam.hedgehogs[5].name
+    , @tmpTeam.hedgehogs[5].hat
+    , @tmpTeam.hedgehogs[6].name
+    , @tmpTeam.hedgehogs[6].hat
+    , @tmpTeam.hedgehogs[7].name
+    , @tmpTeam.hedgehogs[7].hat
+    );
 procedure handler_ADD_TEAM(var p: TCmdParam);
 begin
+    teamIndex:= 0;
+    tmpTeam.extDriven:= true;
+    tmpTeam.color:= 0
 end;
 
 procedure handler_ADD_TEAM_s(var s: TCmdParamS);
 begin
+    if teamIndex = 6 then
+        tmpTeam.botLevel:= strToInt(s.str1)
+    else if teamIndex < 23 then
+        teamFields[teamIndex]^:= s.str1;
+
+    if teamIndex = 22 then
+        netAddTeam(tmpTeam);
+
+    inc(teamIndex);
 end;
 
 procedure handler_ASKPASSWORD(var p: TCmdParamS);
@@ -251,11 +291,7 @@ begin
     sendUI(mtError, @p.str1[1], length(p.str1));
 end;
 
-procedure handler_HH_NUM(var p: TCmdParam);
-begin
-end;
-
-procedure handler_HH_NUM_s(var s: TCmdParamS);
+procedure handler_HH_NUM(var p: TCmdParamSS);
 begin
 end;
 
@@ -431,12 +467,9 @@ procedure handler_TEAM_ACCEPTED(var p: TCmdParamS);
 begin
 end;
 
-procedure handler_TEAM_COLOR(var p: TCmdParam);
+procedure handler_TEAM_COLOR(var p: TCmdParamSS);
 begin
-end;
-
-procedure handler_TEAM_COLOR_s(var s: TCmdParamS);
-begin
+    netSetTeamColor(p.str1, StrToInt(p.str2));
 end;
 
 procedure handler_WARNING(var p: TCmdParamL);
@@ -457,10 +490,10 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ADD_TEAM),
     PHandler(@handler_CFG_THEME), PHandler(@handler_CHAT),
     PHandler(@handler_CLIENT_FLAGS), PHandler(@handler_CLIENT_FLAGS_s),
     PHandler(@handler_CONNECTED), PHandler(@handler_EM), PHandler(@handler_EM_s),
-    PHandler(@handler_ERROR), PHandler(@handler_HH_NUM),
-    PHandler(@handler_HH_NUM_s), PHandler(@handler_INFO), PHandler(@handler_INFO_s),
-    PHandler(@handler_JOINED), PHandler(@handler_JOINED_s),
-    PHandler(@handler_JOINING), PHandler(@handler_KICKED), PHandler(@handler_LEFT),
+    PHandler(@handler_ERROR), PHandler(@handler_HH_NUM), PHandler(@handler_INFO),
+    PHandler(@handler_INFO_s), PHandler(@handler_JOINED),
+    PHandler(@handler_JOINED_s), PHandler(@handler_JOINING),
+    PHandler(@handler_KICKED), PHandler(@handler_LEFT),
     PHandler(@handler_LOBBY_JOINED), PHandler(@handler_LOBBY_JOINED_s),
     PHandler(@handler_LOBBY_LEFT), PHandler(@handler_NICK),
     PHandler(@handler_NOTICE), PHandler(@handler_PING), PHandler(@handler_PING_s),
@@ -472,7 +505,7 @@ const handlers: array[TCmdType] of PHandler = (PHandler(@handler_ADD_TEAM),
     PHandler(@handler_RUN_GAME), PHandler(@handler_SERVER_AUTH),
     PHandler(@handler_SERVER_MESSAGE), PHandler(@handler_SERVER_VARS),
     PHandler(@handler_TEAM_ACCEPTED), PHandler(@handler_TEAM_COLOR),
-    PHandler(@handler_TEAM_COLOR_s), PHandler(@handler_WARNING));
+    PHandler(@handler_WARNING));
 
 procedure passNetData(p: pointer); cdecl;
 begin

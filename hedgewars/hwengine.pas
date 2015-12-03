@@ -549,7 +549,7 @@ begin
         RunEngine:= HaltUsageError
     else
     begin
-        SDL_CreateThread(@EngineThread, 'engine', nil);
+        t:= SDL_CreateThread(@EngineThread, 'engine', nil);
         SDL_DetachThread(t);
         RunEngine:= 0
     end

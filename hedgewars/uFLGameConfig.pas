@@ -28,6 +28,8 @@ procedure netSetMazeSize(mazesize: LongInt);
 procedure netSetTemplate(template: LongInt);
 procedure netSetAmmo(name: shortstring; definition: ansistring);
 procedure netSetScheme(scheme: TScheme);
+procedure netAddTeam(team: TTeam);
+procedure netSetTeamColor(team: shortstring; color: Longword);
 procedure updatePreviewIfNeeded;
 
 procedure sendConfig(config: PGameConfig);
@@ -57,6 +59,7 @@ begin
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
             ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
+            ipcToEngine('e$maze_size ' + intToStr(mazeSize));
         end;
     gtLocal: begin
             if script <> 'Normal' then
@@ -66,6 +69,7 @@ begin
             ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
             ipcToEngine('e$theme ' + theme);
+            ipcToEngine('e$maze_size ' + intToStr(mazeSize));
 
             sendSchemeConfig(scheme);
 
@@ -413,6 +417,63 @@ procedure netSetScheme(scheme: TScheme);
 begin
     currentConfig.scheme:= scheme;
     sendUI(mtScheme, @scheme.schemeName[1], length(scheme.schemeName))
+end;
+
+procedure netAddTeam(team: TTeam);
+var msg: ansistring;
+    i, hn, hedgehogsNumber: Longword;
+    c: Longword;
+begin
+    with currentConfig do
+    begin
+        hedgehogsNumber:= 0;
+        i:= 0;
+
+        while (i < 8) and (teams[i].hogsNumber > 0) do
+        begin
+            inc(i);
+            inc(hedgehogsNumber, teams[i].hogsNumber)
+        end;
+
+        // no free space for a team - server bug???
+        if (i > 7) or (hedgehogsNumber >= 48) then exit;
+
+        c:= getUnusedColor;
+
+        teams[i]:= team;
+
+        if i = 0 then hn:= 4 else hn:= teams[i - 1].hogsNumber;
+        if hn > 48 - hedgehogsNumber then hn:= 48 - hedgehogsNumber;
+        teams[i].hogsNumber:= hn;
+
+        teams[i].color:= c;
+
+        msg:= '0' + #10 + team.teamName;
+        sendUI(mtAddPlayingTeam, @msg[1], length(msg));
+
+        msg:= team.teamName + #10 + colorsSet[teams[i].color];
+        sendUI(mtTeamColor, @msg[1], length(msg));
+    end
+end;
+
+procedure netSetTeamColor(team: shortstring; color: Longword);
+var i: Longword;
+    msg:  ansistring;
+begin
+    with currentConfig do
+    begin
+        i:= 0;
+
+        while (i < 8) and (teams[i].teamName <> team) do
+            inc(i);
+        // team not found???
+        if (i > 7) then exit;
+
+        teams[i].color:= color mod 9;
+
+        msg:= team + #10 + colorsSet[teams[i].color];
+        sendUI(mtTeamColor, @msg[1], length(msg))
+    end
 end;
 
 end.

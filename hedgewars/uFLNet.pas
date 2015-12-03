@@ -123,6 +123,18 @@ begin
     state.l:= 0
 end;
 
+procedure handler_SS;
+var cmd: TCmdParamSS;
+begin
+    cmd.cmd:= state.cmd;
+    cmd.str1:= getShortString;
+    if cmd.str1[0] = #0 then exit;
+    cmd.str2:= getShortString;
+    if cmd.str2[0] = #0 then exit;
+    sendUI(mtNetData, @cmd, sizeof(cmd));
+    handleTail()
+end;
+
 procedure handler__i;
 var cmd: TCmdParami;
     s: shortstring;
@@ -204,10 +216,10 @@ const commands: array[0..332] of integer = (20, 8, 0, 0, 0, 0, 0, 0, -56, 0, 0,
     -15, 0, 0, 0, 0, -14, 20, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0,
     0, -12, 8, 0, 0, 0, 0, 0, 0, -11, 0, -10);
 const handlers: array[0..46] of PHandler = (@handler__UNKNOWN_, @handler_L,
-    @handler_MS, @handler_S, @handler_SL, @handler_L, @handler_S, @handler_,
+    @handler_SS, @handler_S, @handler_SL, @handler_L, @handler_S, @handler_,
     @handler_, @handler_MS, @handler_S, @handler_MS, @handler_MS, @handler_S,
     @handler_i, @handler_MS, @handler_L, @handler_S, @handler_SL, @handler_MS,
-    @handler_SL, @handler_, @handler_S, @handler_MS, @handler_MS, @handler_MS,
+    @handler_SL, @handler_, @handler_S, @handler_MS, @handler_MS, @handler_SS,
     @handler_L, @handler_ML, @handler__i, @handler_SMS, @handler_SL, @handler_S,
     @handler_i, @handler_S, @handler_S, @handler_MS, @handler_i, @handler_i,
     @handler_S, @handler_ML, @handler_i, @handler_L, @handler_SL, @handler_SL,
