@@ -188,6 +188,11 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit teamColorChanged(l[0], QColor::fromRgba(l[1].toInt()).name());
         break;
     }
+    case MSG_HEDGEHOGSNUMBER: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit hedgehogsNumberChanged(l[0], l[1].toInt());
+        break;
+    }
     case MSG_NETDATA: {
         flibPassNetData(msg.constData());
         break;

@@ -18,6 +18,13 @@ type
 var isInRoom: boolean;
     myNickname: shortstring;
 
+procedure onRoomLeaving();
+begin
+    isInRoom:= false;
+    sendUI(mtMoveToLobby, nil, 0);
+    netResetTeams
+end;
+
 var teamIndex: LongInt;
     tmpTeam: TTeam;
 
@@ -293,6 +300,7 @@ end;
 
 procedure handler_HH_NUM(var p: TCmdParamSS);
 begin
+    netSetHedgehogsNumber(p.str1, StrToInt(p.str2))
 end;
 
 procedure handler_INFO(var p: TCmdParam);
@@ -324,8 +332,7 @@ end;
 
 procedure handler_KICKED(var p: TCmdParam);
 begin
-    isInRoom:= false;
-    sendUI(mtMoveToLobby, nil, 0);
+    onRoomLeaving()
 end;
 
 procedure handler_LEFT(var p: TCmdParamSL);
@@ -381,6 +388,7 @@ end;
 
 procedure handler_REMOVE_TEAM(var p: TCmdParamS);
 begin
+    netRemoveTeam(p.str1)
 end;
 
 var roomInfo: string;
@@ -529,12 +537,12 @@ var s: string;
 begin
     if isInRoom then
     begin
-        isInRoom:= false;
         s:= 'PART';
         if length(msg) > 0 then
             s:= s + #10 + msg;
         sendNet(s);
-        sendUI(mtMoveToLobby, nil, 0);
+
+        onRoomLeaving()
     end
 end;
 

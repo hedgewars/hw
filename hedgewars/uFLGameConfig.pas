@@ -30,6 +30,9 @@ procedure netSetAmmo(name: shortstring; definition: ansistring);
 procedure netSetScheme(scheme: TScheme);
 procedure netAddTeam(team: TTeam);
 procedure netSetTeamColor(team: shortstring; color: Longword);
+procedure netSetHedgehogsNumber(team: shortstring; hogsNumber: Longword);
+procedure netRemoveTeam(teamName: shortstring);
+procedure netResetTeams();
 procedure updatePreviewIfNeeded;
 
 procedure sendConfig(config: PGameConfig);
@@ -222,6 +225,9 @@ begin
         msg:= teamName + #10 + colorsSet[teams[i].color];
         sendUI(mtTeamColor, @msg[1], length(msg));
 
+        msg:= teamName + #10 + IntToStr(hn);
+        sendUI(mtHedgehogsNumber, @msg[1], length(msg));
+
         msg:= teamName;
         sendUI(mtRemoveTeam, @msg[1], length(msg))
     end
@@ -229,7 +235,7 @@ end;
 
 
 procedure tryRemoveTeam(teamName: PChar); cdecl;
-var msg: ansistring;
+var msg: shortstring;
     i: Longword;
     tn: shortstring;
 begin
@@ -262,7 +268,7 @@ end;
 procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 var i, dc: Longword;
     tn: shortstring;
-    msg:  ansistring;
+    msg: ansistring;
 begin
     with currentConfig do
     begin
@@ -456,9 +462,43 @@ begin
     end
 end;
 
+procedure netRemoveTeam(teamName: shortstring);
+var msg: shortstring;
+    i: Longword;
+    tn: shortstring;
+    isLocal: boolean;
+begin
+    with currentConfig do
+    begin
+        i:= 0;
+        tn:= teamName;
+        while (i < 8) and (teams[i].teamName <> tn) do
+            inc(i);
+
+        // team not found???
+        if (i > 7) then exit;
+
+        isLocal:= not teams[i].extDriven;
+
+        while (i < 7) and (teams[i + 1].hogsNumber > 0) do
+        begin
+            teams[i]:= teams[i + 1];
+            inc(i)
+        end;
+
+        teams[i].hogsNumber:= 0
+    end;
+
+    msg:= teamName;
+
+    sendUI(mtRemovePlayingTeam, @msg[1], length(msg));
+    if isLocal then
+        sendUI(mtAddTeam, @msg[1], length(msg))
+end;
+
 procedure netSetTeamColor(team: shortstring; color: Longword);
 var i: Longword;
-    msg:  ansistring;
+    msg: ansistring;
 begin
     with currentConfig do
     begin
@@ -474,6 +514,51 @@ begin
         msg:= team + #10 + colorsSet[teams[i].color];
         sendUI(mtTeamColor, @msg[1], length(msg))
     end
+end;
+
+procedure netSetHedgehogsNumber(team: shortstring; hogsNumber: Longword);
+var i: Longword;
+    msg: ansistring;
+begin
+    if hogsNumber > 8 then exit;
+
+    with currentConfig do
+    begin
+        i:= 0;
+
+        while (i < 8) and (teams[i].teamName <> team) do
+            inc(i);
+        // team not found???
+        if (i > 7) then exit;
+
+        teams[i].hogsNumber:= hogsNumber;
+
+        msg:= team + #10 + IntToStr(hogsNumber);
+        sendUI(mtHedgehogsNumber, @msg[1], length(msg))
+    end
+end;
+
+procedure netResetTeams();
+var msg: shortstring;
+    i: Longword;
+begin
+    with currentConfig do
+    begin
+        i:= 0;
+
+        while (i < 8) and (teams[i].hogsNumber > 0) do
+        begin
+            msg:= teams[i].teamName;
+
+            sendUI(mtRemovePlayingTeam, @msg[1], length(msg));
+            if not teams[i].extDriven then 
+                sendUI(mtAddTeam, @msg[1], length(msg));
+
+            teams[i].hogsNumber:= 0;
+            inc(i)
+        end;
+
+    end;
 end;
 
 end.

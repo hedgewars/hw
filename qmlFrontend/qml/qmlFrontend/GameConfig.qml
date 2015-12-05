@@ -213,12 +213,17 @@ Rectangle {
                    }
                 }
 
-                Text { text: name
+                Text {
+                    text: name
                     MouseArea {
                         z: 1
                         anchors.fill: parent
                         onClicked: HWEngine.tryRemoveTeam(name)
                    }
+                }
+
+                Text {
+                    text: hedgehogsNumber
                 }
             }
 
@@ -231,6 +236,7 @@ Rectangle {
                                                              "aiLevel": aiLevel
                                                              , "name": teamName
                                                              , "local": isLocal
+                                                             , "hedgehogsNumber" : 4
                                                              , "teamColor": "#000000"
                                                          })
             onPlayingTeamRemoved: {
@@ -244,6 +250,12 @@ Rectangle {
                 while ((i >= 0) && (playingTeamsModel.get(i).name !== teamName)) --i
 
                 if(i >= 0) playingTeamsModel.setProperty(i, "teamColor", colorValue)
+            }
+            onHedgehogsNumberChanged: {
+                var i = playingTeamsModel.count - 1;
+                while ((i >= 0) && (playingTeamsModel.get(i).name !== teamName)) --i
+
+                if(i >= 0) playingTeamsModel.setProperty(i, "hedgehogsNumber", hedgehogsNumber)
             }
         }
     }

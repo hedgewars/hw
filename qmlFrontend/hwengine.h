@@ -56,6 +56,7 @@ signals:
     void playingTeamRemoved(const QString & teamName);
 
     void teamColorChanged(const QString & teamName, const QString & colorValue);
+    void hedgehogsNumberChanged(const QString & teamName, int hedgehogsNumber);
 
     void netConnected();
     void netDisconnected(const QString & message);
