@@ -11,6 +11,7 @@ procedure freeTeamsList;
 function teamByName(s: shortstring): PTeam;
 
 procedure sendTeam(var team: TTeam);
+procedure removeTeam(teamName: shortstring);
 
 implementation
 uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData, uFLNet;
@@ -209,6 +210,12 @@ begin
         end;
         sendNetLn('')
     end;
+end;
+
+procedure removeTeam(teamName: shortstring);
+begin
+    sendNetLn('REMOVE_TEAM');
+    sendNet(teamName)
 end;
 
 end.

@@ -163,7 +163,7 @@ end;
 
 procedure handler__UNKNOWN_;
 begin
-    writeln('[NET] Unknown cmd');
+    //writeln('[NET] Unknown cmd');
     handleTail();
     state.l:= 0
 end;
@@ -294,7 +294,7 @@ begin
                 if commands[state.l] < 0 then
                 begin
                     state.cmd:= net2cmd[-10 - commands[state.l]];
-                    writeln('[NET] ', state.cmd);
+                    //writeln('[NET] ', state.cmd);
                     handlers[-10 - commands[state.l]]();
                     state.l:= 0
                 end

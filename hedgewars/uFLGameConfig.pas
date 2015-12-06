@@ -239,9 +239,9 @@ end;
 
 
 procedure tryRemoveTeam(teamName: PChar); cdecl;
-var msg: shortstring;
-    i: Longword;
+var i: Longword;
     tn: shortstring;
+    isLocal: boolean;
 begin
     with currentConfig do
     begin
@@ -253,6 +253,11 @@ begin
         // team not found???
         if (i > 7) then exit;
 
+        isLocal:= not teams[i].extDriven;
+
+        if isConnected and not isLocal then
+            exit; // we cannot remove this team
+
         while (i < 7) and (teams[i + 1].hogsNumber > 0) do
         begin
             teams[i]:= teams[i + 1];
@@ -262,10 +267,11 @@ begin
         teams[i].hogsNumber:= 0
     end;
 
-    msg:= teamName;
-
-    sendUI(mtRemovePlayingTeam, @msg[1], length(msg));
-    sendUI(mtAddTeam, @msg[1], length(msg))
+    sendUI(mtRemovePlayingTeam, @tn[1], length(tn));
+    if isConnected then
+        removeTeam(tn);
+    if isLocal then
+        sendUI(mtAddTeam, @tn[1], length(tn))
 end;
 
 
