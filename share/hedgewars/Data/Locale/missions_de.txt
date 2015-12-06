@@ -16,6 +16,9 @@ Basic_Training_-_Cluster_Bomb.desc="Jemand braucht eine heiße Dusche!"
 Basic_Training_-_Rope.name=Grundlagentraining: Seil
 Basic_Training_-_Rope.desc="Raus da und schwing!"
 
+Basic_Training_-_Flying_Saucer.name=Grundlagentraining: Fliegende Untertasse
+Basic_Training_-_Flying_Saucer.desc="Du willst also ausgerechnet Astronaut werden, wie? Dann lern erstmal fliegen!"
+
 User_Mission_-_Dangerous_Ducklings.name=Mission: Gefährliche Entchen
 User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das im Grundlagentraining Gelernte in die Tag umsetzt!"
 
