@@ -73,10 +73,10 @@ begin
 
         if l = '' then
         else if l = '[Team]' then 
-            section:= 0
-        else if l[1] = '[' then
-            section:= -1
-        else if section = 0 then
+            section:= -2
+        else if copy(l, 1, 9) = '[Hedgehog' then
+            section:= StrToInt(copy(l, 10, 1))
+        else if section = -2 then
         begin // [Team]
             if copy(l, 1, 5) = 'Name=' then
                 team.teamName:= midStr(l, 6)
@@ -86,9 +86,17 @@ begin
                 team.fort:= midStr(l, 6)
             else if copy(l, 1, 5) = 'Flag=' then
                 team.flag:= midStr(l, 6)
+            else if copy(l, 1, 10) = 'Voicepack=' then
+                team.voice:= midStr(l, 11)
+            else if copy(l, 1, 11) = 'Difficulty=' then
+                team.botLevel:= StrToInt(midStr(l, 12))
+        end else if (section >= 0) and (section <= 7) then
+        begin // [Hedgehog*]
+            if copy(l, 1, 5) = 'Name=' then
+                team.hedgehogs[section].name:= midStr(l, 6)
+            else if copy(l, 1, 4) = 'Hat=' then
+                team.hedgehogs[section].hat:= midStr(l, 5)
         end;
-        // TODO: load hedgehogs and other stuff
-        team.botLevel:= 0
     end;
 
     pfsClose(f)
