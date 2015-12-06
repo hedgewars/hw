@@ -61,19 +61,23 @@ begin
                 ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
-            ipcToEngine('e$template_filter ' + intToStr(template));
+            if (mapgen = 1) or (mapgen = 2) then
+                ipcToEngine('e$maze_size ' + intToStr(mazeSize));
+            else
+                ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
-            ipcToEngine('e$maze_size ' + intToStr(mazeSize));
         end;
     gtLocal: begin
             if script <> 'Normal' then
                 ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
-            ipcToEngine('e$template_filter ' + intToStr(template));
+            if (mapgen = 1) or (mapgen = 2) then
+                ipcToEngine('e$maze_size ' + intToStr(mazeSize));
+            else
+                ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
             ipcToEngine('e$theme ' + theme);
-            ipcToEngine('e$maze_size ' + intToStr(mazeSize));
 
             sendSchemeConfig(scheme);
 
