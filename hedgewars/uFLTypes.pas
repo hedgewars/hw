@@ -16,6 +16,8 @@ type
 
     TFLIBEvent = (flibGameFinished);
 
+    TClientFlag = (cfReady, cfRegistered, cfInRoom, cfContributor, cfInGame, cfRoomAdmin, cfServerAdmin);
+
     TIPCMessage = record
                    str: shortstring;
                    len: Longword;

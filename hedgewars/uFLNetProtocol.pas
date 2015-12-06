@@ -269,18 +269,46 @@ begin
         sendUI(mtLobbyChatLine, @s[1], length(s));
 end;
 
+var flags: array[TClientFlag] of LongInt;
+    isFlagsLine: boolean;
 procedure handler_CLIENT_FLAGS(var p: TCmdParamS);
+var f: TClientFlag;
 begin
+    for f:= Low(TClientFlag) to High(TClientFlag) do
+        flags[f]:= 0;
+
+    isFlagsLine:= true;
 end;
 
 procedure handler_CLIENT_FLAGS_s(var s: TCmdParamS);
+var isRemoval: boolean;
+    flagValue, i: LongInt;
 begin
+    if isFlagsLine then
+    begin
+        if s.str[1] = '+' then flagValue:= 1 else flagValue:= -1;
+        for i:= 2 to Length(s.str1) do
+            case s.str[1] of
+                'r': flags[cfReady]:= flagValue;
+                'u': flags[cfRegistered]:= flagValue;
+                'i': flags[cfInRoom]:= flagValue;
+                'c': flags[cfContributor]:= flagValue;
+                'g': flags[cfInGame]:= flagValue;
+                'h': flags[cfRoomAdmin]:= flagValue;
+                'a': flags[cfServerAdmin]:= flagValue;
+            end;
+
+        isFlagsLine:= false;
+    end else
+    begin
+
+    end
 end;
 
 procedure handler_CONNECTED(var p: TCmdParami);
 begin
     sendUI(mtConnected, nil, 0);
-    writeln('Server features version ', p.param1);
+    //writeln('Server features version ', p.param1);
     sendNet('PROTO' + #10 + '51');
     sendNet('NICK' + #10 + 'qmlfrontend');
 end;
