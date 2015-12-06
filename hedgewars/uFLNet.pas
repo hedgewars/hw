@@ -8,6 +8,8 @@ procedure freeModule;
 procedure sendNet(s: shortstring);
 procedure sendNetLn(s: shortstring);
 
+var isConnected: boolean = false;
+
 implementation
 uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes, uFLUtils;
 
@@ -17,11 +19,9 @@ function getNextChar: char; forward;
 function getCurrChar: char; forward;
 
 type
-    TNetState = (netDisconnected, netConnecting);
     TParserState = record
                        cmd: TCmdType;
                        l: LongInt;
-                       netState: TNetState;
                        buf: shortstring;
                        bufpos: byte;
                    end;
@@ -284,7 +284,7 @@ begin
         c:= getNextChar;
         //writeln('>>>>> ', c, ' [', letters[state.l], '] ', commands[state.l], ' ', state.l);
         if c = #0 then
-            state.netState:= netDisconnected
+            isConnected:= false
         else
         begin
             while (letters[state.l] <> c) and (commands[state.l] > 0) do
@@ -305,7 +305,7 @@ begin
                 handler__UNKNOWN_()
             end
         end
-    until state.netState = netDisconnected;
+    until not isConnected;
 
     SDLNet_TCP_Close(sock);
     sock:= nil;
@@ -383,7 +383,7 @@ begin
     state.buf:= '';
 
     state.l:= 0;
-    state.netState:= netConnecting;
+    isConnected:= true;
 
     netReaderThread:= SDL_CreateThread(@netReader, 'netReader', nil);
     SDL_DetachThread(netReaderThread)
@@ -392,6 +392,7 @@ end;
 procedure initModule;
 begin
     sock:= nil;
+    isConnected:= false;
 
     SDLNet_Init;
 

@@ -29,6 +29,7 @@ procedure netSetTemplate(template: LongInt);
 procedure netSetAmmo(name: shortstring; definition: ansistring);
 procedure netSetScheme(scheme: TScheme);
 procedure netAddTeam(team: TTeam);
+procedure netAcceptedTeam(teamName: shortstring);
 procedure netSetTeamColor(team: shortstring; color: Longword);
 procedure netSetHedgehogsNumber(team: shortstring; hogsNumber: Longword);
 procedure netRemoveTeam(teamName: shortstring);
@@ -38,7 +39,7 @@ procedure updatePreviewIfNeeded;
 procedure sendConfig(config: PGameConfig);
 
 implementation
-uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue;
+uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue, uFLNet;
 
 var
     currentConfig: TGameConfig;
@@ -192,6 +193,12 @@ var msg: ansistring;
     team: PTeam;
     c: Longword;
 begin
+    team:= teamByName(teamName);
+    if team = nil then exit;
+
+    if isConnected then
+        sendTeam(team^)
+    else
     with currentConfig do
     begin
         hedgehogsNumber:= 0;
@@ -205,9 +212,6 @@ begin
 
         // no free space for a team or reached hogs number maximum
         if (i > 7) or (hedgehogsNumber >= 48) then exit;
-
-        team:= teamByName(teamName);
-        if team = nil then exit;
 
         c:= getUnusedColor;
 
@@ -447,6 +451,7 @@ begin
         c:= getUnusedColor;
 
         teams[i]:= team;
+        teams[i].extDriven:= true;
 
         if i = 0 then hn:= 4 else hn:= teams[i - 1].hogsNumber;
         if hn > 48 - hedgehogsNumber then hn:= 48 - hedgehogsNumber;
@@ -459,6 +464,52 @@ begin
 
         msg:= team.teamName + #10 + colorsSet[teams[i].color];
         sendUI(mtTeamColor, @msg[1], length(msg));
+    end
+end;
+
+procedure netAcceptedTeam(teamName: shortstring);
+var msg: ansistring;
+    i, hn, hedgehogsNumber: Longword;
+    c: Longword;
+    team: PTeam;
+begin
+    with currentConfig do
+    begin
+        team:= teamByName(teamName);
+        // no such team???
+        if team = nil then exit;
+
+        hedgehogsNumber:= 0;
+        i:= 0;
+
+        while (i < 8) and (teams[i].hogsNumber > 0) do
+        begin
+            inc(i);
+            inc(hedgehogsNumber, teams[i].hogsNumber)
+        end;
+
+        // no free space for a team - server bug???
+        if (i > 7) or (hedgehogsNumber >= 48) then exit;
+
+        c:= getUnusedColor;
+
+        teams[i]:= team^;
+        teams[i].extDriven:= false;
+
+        if i = 0 then hn:= 4 else hn:= teams[i - 1].hogsNumber;
+        if hn > 48 - hedgehogsNumber then hn:= 48 - hedgehogsNumber;
+        teams[i].hogsNumber:= hn;
+
+        teams[i].color:= c;
+
+        msg:= '0' + #10 + teamName;
+        sendUI(mtAddPlayingTeam, @msg[1], length(msg));
+
+        msg:= teamName + #10 + colorsSet[teams[i].color];
+        sendUI(mtTeamColor, @msg[1], length(msg));
+
+        msg:= teamName;
+        sendUI(mtRemoveTeam, @msg[1], length(msg))        
     end
 end;
 

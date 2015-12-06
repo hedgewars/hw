@@ -10,8 +10,10 @@ procedure freeTeamsList;
 
 function teamByName(s: shortstring): PTeam;
 
+procedure sendTeam(var team: TTeam);
+
 implementation
-uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
+uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData, uFLNet;
 
 const MAX_TEAM_NAMES = 128;
 var
@@ -177,6 +179,28 @@ procedure freeTeamsList;
 begin
     if teamsList <> nil then
         FreeMem(teamsList, sizeof(teamsList^) * teamsNumber)
+end;
+
+procedure sendTeam(var team: TTeam);
+var i: Longword;
+begin
+    with team do
+    begin
+        sendNetLn('ADD_TEAM');
+        sendNetLn(teamName);
+        sendNetLn(IntToStr(color));
+        sendNetLn(grave);
+        sendNetLn(fort);
+        sendNetLn(voice);
+        sendNetLn(flag);
+        sendNetLn(IntToStr(botLevel));
+        for i := 0 to 7 do
+        begin
+            sendNetLn(hedgehogs[i].name);
+            sendNetLn(hedgehogs[i].hat);
+        end;
+        sendNetLn('')
+    end;
 end;
 
 end.

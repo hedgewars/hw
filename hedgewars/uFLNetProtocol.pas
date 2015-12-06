@@ -473,6 +473,7 @@ end;
 
 procedure handler_TEAM_ACCEPTED(var p: TCmdParamS);
 begin
+    netAcceptedTeam(p.str1)
 end;
 
 procedure handler_TEAM_COLOR(var p: TCmdParamSS);
