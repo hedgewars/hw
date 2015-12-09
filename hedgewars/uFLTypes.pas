@@ -1,5 +1,6 @@
 unit uFLTypes;
 interface
+uses SDLh;
 
 const
     MAXARGS = 32;
@@ -18,10 +19,19 @@ type
 
     TClientFlag = (cfReady, cfRegistered, cfInRoom, cfContributor, cfInGame, cfRoomAdmin, cfServerAdmin);
 
+    PIPCMessage = ^TIPCMessage;
     TIPCMessage = record
                    str: shortstring;
                    len: Longword;
-                   buf: Pointer
+                   buf: Pointer;
+                   next: PIPCMessage;
+               end;
+    PIPCQueue = ^TIPCQueue;
+    TIPCQueue = record
+                   msg: TIPCMessage;
+                   mut: PSDL_Mutex;
+                   cond: PSDL_Cond;
+                   last: PIPCMessage;
                end;
 
     TIPCCallback = procedure (p: pointer; msg: PChar; len: Longword);

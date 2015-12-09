@@ -62,7 +62,7 @@ begin
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
             if (mapgen = 1) or (mapgen = 2) then
-                ipcToEngine('e$maze_size ' + intToStr(mazeSize));
+                ipcToEngine('e$maze_size ' + intToStr(mazeSize))
             else
                 ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
@@ -73,7 +73,7 @@ begin
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
             if (mapgen = 1) or (mapgen = 2) then
-                ipcToEngine('e$maze_size ' + intToStr(mazeSize));
+                ipcToEngine('e$maze_size ' + intToStr(mazeSize))
             else
                 ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));

@@ -2,10 +2,6 @@ unit uFLIPC;
 interface
 uses SDLh, uFLTypes;
 
-var msgFrontend, msgEngine, msgNet: TIPCMessage;
-    mutFrontend, mutEngine, mutNet: PSDL_mutex;
-    condFrontend, condEngine, condNet: PSDL_cond;
-
 procedure initIPC;
 procedure freeIPC;
 
@@ -33,49 +29,58 @@ var callbackPointerF: pointer;
     callbackPointerN: pointer;
     callbackFunctionN: TIPCCallback;
     callbackListenerThreadN: PSDL_Thread;
+    queueFrontend, queueEngine, queueNet: PIPCQueue;
 
-procedure ipcSend(var s: TIPCMessage; var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond);
+procedure ipcSend(var s: TIPCMessage; queue: PIPCQueue);
+var pmsg: PIPCMessage;
 begin
-    SDL_LockMutex(mut);
+    SDL_LockMutex(queue^.mut);
 
-    while (msg.str[0] > #0) or (msg.buf <> nil) do
-        SDL_CondWait(cond, mut);
+    s.next:= nil;
 
-    msg:= s;
-    SDL_CondSignal(cond);
-    SDL_UnlockMutex(mut);
-end;
-
-function ipcRead(var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond): TIPCMessage;
-var tmp: pointer;
-begin
-    SDL_LockMutex(mut);
-    while (msg.str[0] = #0) and (msg.buf = nil) do
-        SDL_CondWait(cond, mut);
-
-    if msg.buf <> nil then 
-// FIXME is this copying really needed, the buffer is in another thread already anyway?
+    if (queue^.msg.next = nil) and (queue^.msg.str[0] = #0) and (queue^.msg.buf = nil) then
     begin
-        tmp:= msg.buf;
-        msg.buf:= GetMem(msg.len);
-        Move(tmp^, msg.buf^, msg.len);
-        FreeMem(tmp, msg.len)
+        queue^.msg:= s;
+    end else
+    begin
+        new(pmsg);
+        pmsg^:= s;
+        queue^.last^.next:= pmsg;
+        queue^.last:= pmsg;
     end;
-
-    ipcRead:= msg;
-
-    msg.str[0]:= #0;
-    msg.buf:= nil;
-
-    SDL_CondSignal(cond);
-    SDL_UnlockMutex(mut)
+    SDL_CondSignal(queue^.cond);
+    SDL_UnlockMutex(queue^.mut);
 end;
 
-function ipcCheck(var msg: TIPCMessage; mut: PSDL_mutex): boolean;
+function ipcRead(queue: PIPCQueue): TIPCMessage;
+var pmsg: PIPCMessage;
 begin
-    SDL_LockMutex(mut);
-    ipcCheck:= (msg.str[0] > #0) or (msg.buf <> nil);
-    SDL_UnlockMutex(mut)
+    SDL_LockMutex(queue^.mut);
+    while (queue^.msg.str[0] = #0) and (queue^.msg.buf = nil) and (queue^.msg.next = nil) do
+        SDL_CondWait(queue^.cond, queue^.mut);
+
+    if (queue^.msg.str[0] <> #0) or (queue^.msg.buf <> nil) then
+        begin
+            ipcRead:= queue^.msg;
+            queue^.msg.str[0]:= #0;
+            queue^.msg.buf:= nil;
+        end else
+        begin
+            pmsg:= queue^.msg.next;
+            ipcRead:= pmsg^;
+            queue^.msg.next:= pmsg^.next;
+            if queue^.msg.next = nil then queue^.last:= @queue^.msg;
+            dispose(pmsg)
+        end;
+
+    SDL_UnlockMutex(queue^.mut)
+end;
+
+function ipcCheck(queue: PIPCQueue): boolean;
+begin
+    SDL_LockMutex(queue^.mut);
+    ipcCheck:= (queue^.msg.str[0] > #0) or (queue^.msg.buf <> nil) or (queue^.msg.next <> nil);
+    SDL_UnlockMutex(queue^.mut)
 end;
 
 procedure ipcToEngine(s: shortstring);
@@ -83,7 +88,7 @@ var msg: TIPCMessage;
 begin
     msg.str:= s;
     msg.buf:= nil;
-    ipcSend(msg, msgEngine, mutEngine, condEngine)
+    ipcSend(msg, queueEngine)
 end;
 
 procedure ipcToFrontend(s: shortstring);
@@ -91,7 +96,7 @@ var msg: TIPCMessage;
 begin
     msg.str:= s;
     msg.buf:= nil;
-    ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
+    ipcSend(msg, queueFrontend)
 end;
 
 procedure ipcToNet(s: shortstring);
@@ -99,7 +104,7 @@ var msg: TIPCMessage;
 begin
     msg.str:= s;
     msg.buf:= nil;
-    ipcSend(msg, msgNet, mutNet, condNet)
+    ipcSend(msg, queueNet)
 end;
 
 procedure ipcToEngineRaw(p: pointer; len: Longword);
@@ -109,7 +114,7 @@ begin
     msg.len:= len;
     msg.buf:= GetMem(len);
     Move(p^, msg.buf^, len);
-    ipcSend(msg, msgEngine, mutEngine, condEngine)
+    ipcSend(msg, queueEngine)
 end;
 
 procedure ipcToFrontendRaw(p: pointer; len: Longword);
@@ -119,7 +124,7 @@ begin
     msg.len:= len;
     msg.buf:= GetMem(len);
     Move(p^, msg.buf^, len);
-    ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
+    ipcSend(msg, queueFrontend)
 end;
 
 procedure ipcToNetRaw(p: pointer; len: Longword);
@@ -129,32 +134,32 @@ begin
     msg.len:= len;
     msg.buf:= GetMem(len);
     Move(p^, msg.buf^, len);
-    ipcSend(msg, msgNet, mutNet, condNet)
+    ipcSend(msg, queueNet)
 end;
 
 function ipcReadFromEngine: TIPCMessage;
 begin
-    ipcReadFromEngine:= ipcRead(msgFrontend, mutFrontend, condFrontend)
+    ipcReadFromEngine:= ipcRead(queueFrontend)
 end;
 
 function ipcReadFromFrontend: shortstring;
 begin
-    ipcReadFromFrontend:= ipcRead(msgEngine, mutEngine, condEngine).str
+    ipcReadFromFrontend:= ipcRead(queueEngine).str
 end;
 
 function ipcReadToNet: TIPCMessage;
 begin
-    ipcReadToNet:= ipcRead(msgNet, mutNet, condNet)
+    ipcReadToNet:= ipcRead(queueNet)
 end;
 
 function ipcCheckFromEngine: boolean;
 begin
-    ipcCheckFromEngine:= ipcCheck(msgFrontend, mutFrontend)
+    ipcCheckFromEngine:= ipcCheck(queueFrontend)
 end;
 
 function ipcCheckFromFrontend: boolean;
 begin
-    ipcCheckFromFrontend:= ipcCheck(msgEngine, mutEngine)
+    ipcCheckFromFrontend:= ipcCheck(queueEngine)
 end;
 
 function  engineListener(p: pointer): Longint; cdecl; export;
@@ -203,36 +208,43 @@ begin
     callbackListenerThreadN:= SDL_CreateThread(@netListener, 'netListener', nil);
 end;
 
+function createQueue: PIPCQueue;
+var q: PIPCQueue;
+begin
+    new(q);
+    q^.msg.str:= '';
+    q^.msg.buf:= nil;
+    q^.mut:= SDL_CreateMutex;
+    q^.cond:= SDL_CreateCond;
+    q^.msg.next:= nil;
+    q^.last:= @q^.msg;
+    createQueue:= q
+end;
+
+procedure destroyQueue(queue: PIPCQueue);
+begin
+    SDL_DestroyCond(queue^.cond);
+    SDL_DestroyMutex(queue^.mut);
+    dispose(queue);
+end;
+
 procedure initIPC;
 begin
-    msgFrontend.str:= '';
-    msgFrontend.buf:= nil;
-    msgEngine.str:= '';
-    msgEngine.buf:= nil;
-    msgNet.str:= '';
-    msgNet.buf:= nil;
+    queueFrontend:= createQueue;
+    queueEngine:= createQueue;
+    queueNet:= createQueue;
 
     callbackPointerF:= nil;
     callbackListenerThreadF:= nil;
-
-    mutFrontend:= SDL_CreateMutex;
-    mutEngine:= SDL_CreateMutex;
-    mutNet:= SDL_CreateMutex;
-    condFrontend:= SDL_CreateCond;
-    condEngine:= SDL_CreateCond;
-    condNet:= SDL_CreateCond;
 end;
 
 procedure freeIPC;
 begin
     //FIXME SDL_KillThread(callbackListenerThreadF);
     //FIXME SDL_KillThread(callbackListenerThreadN);
-    SDL_DestroyMutex(mutFrontend);
-    SDL_DestroyMutex(mutEngine);
-    SDL_DestroyMutex(mutNet);
-    SDL_DestroyCond(condFrontend);
-    SDL_DestroyCond(condEngine);
-    SDL_DestroyCond(condNet);
+    destroyQueue(queueFrontend);
+    destroyQueue(queueEngine);
+    destroyQueue(queueNet);
 end;
 
 end.

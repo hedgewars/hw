@@ -286,9 +286,9 @@ var isRemoval: boolean;
 begin
     if isFlagsLine then
     begin
-        if s.str[1] = '+' then flagValue:= 1 else flagValue:= -1;
+        if s.str1[1] = '+' then flagValue:= 1 else flagValue:= -1;
         for i:= 2 to Length(s.str1) do
-            case s.str[1] of
+            case s.str1[1] of
                 'r': flags[cfReady]:= flagValue;
                 'u': flags[cfRegistered]:= flagValue;
                 'i': flags[cfInRoom]:= flagValue;
