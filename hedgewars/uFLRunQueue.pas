@@ -6,7 +6,7 @@ procedure queueExecution(var config: TGameConfig);
 procedure passFlibEvent(p: pointer); cdecl;
 
 implementation
-uses uFLGameConfig, hwengine, uFLData, uFLUICallback;
+uses uFLGameConfig, hwengine, uFLData, uFLUICallback, uFLIPC;
 
 var runQueue: PGameConfig = nil;
 
@@ -17,6 +17,7 @@ begin
         if runQueue^.gameType = gtPreview then
             sendUI(mtRenderingPreview, nil, 0);
 
+        ipcCleanEngineQueue();
         RunEngine(runQueue^.argumentsNumber, @runQueue^.argv);
 
         sendConfig(runQueue)
@@ -82,7 +83,10 @@ begin
         flibGameFinished: begin
                 cleanupConfig;
                 nextRun
-                end;
+            end;
+        flibRunNetGame: begin
+                runNetGame
+            end;
     end;
 end;
 

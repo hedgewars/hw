@@ -53,7 +53,6 @@ procedure handler_ML;
 var cmd: TCmdParamL;
     f: boolean;
 begin
-    writeln('handler_ML');
     sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
     cmd.cmd:= Succ(state.cmd);
 

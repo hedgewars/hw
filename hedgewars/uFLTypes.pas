@@ -15,7 +15,7 @@ type
                     , mtNickname, mtSeed, mtTheme, mtScript, mtFeatureSize, mtMapGen
                     , mtMap, mtMazeSize, mtTemplate, mtAmmo, mtScheme);
 
-    TFLIBEvent = (flibGameFinished);
+    TFLIBEvent = (flibGameFinished, flibRunNetGame);
 
     TClientFlag = (cfReady, cfRegistered, cfInRoom, cfContributor, cfInGame, cfRoomAdmin, cfServerAdmin);
 
@@ -37,7 +37,7 @@ type
     TIPCCallback = procedure (p: pointer; msg: PChar; len: Longword);
     TUICallback = procedure (p: pointer; msgType: TMessageType; msg: PChar; len: Longword); cdecl;
 
-    TGameType = (gtPreview, gtLocal);
+    TGameType = (gtPreview, gtLocal, gtNet);
     THedgehog = record
             name: shortstring;
             hat: shortstring;

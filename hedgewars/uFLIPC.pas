@@ -7,6 +7,7 @@ procedure freeIPC;
 
 procedure ipcToEngine(s: shortstring);
 procedure ipcToEngineRaw(p: pointer; len: Longword);
+procedure ipcCleanEngineQueue();
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
@@ -97,6 +98,36 @@ begin
     msg.str:= s;
     msg.buf:= nil;
     ipcSend(msg, queueFrontend)
+end;
+
+procedure ipcCleanEngineQueue();
+var pmsg, t: PIPCMessage;
+    q: PIPCQueue;
+begin
+    q:= queueEngine;
+
+    SDL_LockMutex(q^.mut);
+
+    pmsg:= @q^.msg;
+    q^.last:= pmsg;
+
+    while pmsg <> nil do
+    begin
+        t:= pmsg^.next;
+
+        if pmsg^.buf <> nil then
+            FreeMem(pmsg^.buf, pmsg^.len);
+
+        if pmsg <> @q^.msg then
+            dispose(pmsg);
+        pmsg:= t
+    end;
+
+    q^.msg.next:= nil;
+    q^.msg.str[0]:= #0;
+    q^.msg.buf:= nil;
+
+    SDL_UnlockMutex(q^.mut);
 end;
 
 procedure ipcToNet(s: shortstring);

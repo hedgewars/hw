@@ -484,7 +484,10 @@ begin
 end;
 
 procedure handler_RUN_GAME(var p: TCmdParam);
+var e: TFLIBEvent;
 begin
+    e:= flibRunNetGame;
+    sendUI(mtFlibEvent, @e, sizeof(e));
 end;
 
 procedure handler_SERVER_AUTH(var p: TCmdParamS);

@@ -37,6 +37,7 @@ procedure netResetTeams();
 procedure updatePreviewIfNeeded;
 
 procedure sendConfig(config: PGameConfig);
+procedure runNetGame();
 
 implementation
 uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue, uFLNet;
@@ -182,6 +183,20 @@ begin
     with currentConfig do
     begin
         gameType:= gtLocal;
+        arguments[0]:= '';
+        arguments[1]:= '--internal';
+        arguments[2]:= '--nomusic';
+        argumentsNumber:= 3;
+
+        queueExecution(currentConfig);
+    end;
+end;
+
+procedure runNetGame();
+begin
+    with currentConfig do
+    begin
+        gameType:= gtNet;
         arguments[0]:= '';
         arguments[1]:= '--internal';
         arguments[2]:= '--nomusic';
