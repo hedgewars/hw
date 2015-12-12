@@ -24,6 +24,7 @@ type
                    str: shortstring;
                    len: Longword;
                    buf: Pointer;
+                   barrier: Longword;
                    next: PIPCMessage;
                end;
     PIPCQueue = ^TIPCQueue;

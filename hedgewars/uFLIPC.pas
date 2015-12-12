@@ -7,7 +7,8 @@ procedure freeIPC;
 
 procedure ipcToEngine(s: shortstring);
 procedure ipcToEngineRaw(p: pointer; len: Longword);
-procedure ipcCleanEngineQueue();
+procedure ipcSetEngineBarrier();
+procedure ipcRemoveBarrierFromEngineQueue();
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
@@ -38,6 +39,7 @@ begin
     SDL_LockMutex(queue^.mut);
 
     s.next:= nil;
+    s.barrier:= 0;
 
     if (queue^.msg.next = nil) and (queue^.msg.str[0] = #0) and (queue^.msg.buf = nil) then
     begin
@@ -57,7 +59,8 @@ function ipcRead(queue: PIPCQueue): TIPCMessage;
 var pmsg: PIPCMessage;
 begin
     SDL_LockMutex(queue^.mut);
-    while (queue^.msg.str[0] = #0) and (queue^.msg.buf = nil) and (queue^.msg.next = nil) do
+    while ((queue^.msg.str[0] = #0) and (queue^.msg.buf = nil))
+            and ((queue^.msg.barrier > 0) or (queue^.msg.next = nil) or ((queue^.msg.next^.barrier > 0) and (queue^.msg.next^.str[0] = #0) and (queue^.msg.next^.buf = nil))) do
         SDL_CondWait(queue^.cond, queue^.mut);
 
     if (queue^.msg.str[0] <> #0) or (queue^.msg.buf <> nil) then
@@ -69,9 +72,16 @@ begin
         begin
             pmsg:= queue^.msg.next;
             ipcRead:= pmsg^;
-            queue^.msg.next:= pmsg^.next;
-            if queue^.msg.next = nil then queue^.last:= @queue^.msg;
-            dispose(pmsg)
+            if pmsg^.barrier > 0 then
+            begin
+                pmsg^.str[0]:= #0;
+                pmsg^.buf:= nil
+            end else
+            begin
+                queue^.msg.next:= pmsg^.next;
+                if queue^.msg.next = nil then queue^.last:= @queue^.msg;
+                dispose(pmsg)
+            end
         end;
 
     SDL_UnlockMutex(queue^.mut)
@@ -80,7 +90,8 @@ end;
 function ipcCheck(queue: PIPCQueue): boolean;
 begin
     SDL_LockMutex(queue^.mut);
-    ipcCheck:= (queue^.msg.str[0] > #0) or (queue^.msg.buf <> nil) or (queue^.msg.next <> nil);
+    ipcCheck:= (queue^.msg.str[0] > #0) or (queue^.msg.buf <> nil) or
+               ((queue^.msg.barrier = 0) and (queue^.msg.next <> nil) and ((queue^.msg.next^.barrier = 0) or (queue^.msg.next^.str[0] <> #0) or (queue^.msg.next^.buf <> nil)));
     SDL_UnlockMutex(queue^.mut)
 end;
 
@@ -100,7 +111,16 @@ begin
     ipcSend(msg, queueFrontend)
 end;
 
-procedure ipcCleanEngineQueue();
+procedure ipcSetEngineBarrier();
+begin
+    SDL_LockMutex(queueEngine^.mut);
+
+    inc(queueEngine^.last^.barrier);
+
+    SDL_UnlockMutex(queueEngine^.mut);
+end;
+
+procedure ipcRemoveBarrierFromEngineQueue();
 var pmsg, t: PIPCMessage;
     q: PIPCQueue;
 begin
@@ -109,21 +129,40 @@ begin
     SDL_LockMutex(q^.mut);
 
     pmsg:= @q^.msg;
-    q^.last:= pmsg;
+    q^.last:= @q^.msg;
 
     while pmsg <> nil do
     begin
         t:= pmsg^.next;
+        q^.msg.next:= t;
 
         if pmsg^.buf <> nil then
             FreeMem(pmsg^.buf, pmsg^.len);
 
         if pmsg <> @q^.msg then
-            dispose(pmsg);
+            if pmsg^.barrier = 0 then
+                dispose(pmsg)
+            else
+            if pmsg^.barrier = 1 then
+            begin
+                dispose(pmsg);
+                t:= nil
+            end else
+            begin
+                dec(pmsg^.barrier);
+                q^.msg.next:= pmsg;
+                t:= nil
+            end
+        else
+            if pmsg^.barrier > 0 then 
+            begin
+                dec(pmsg^.barrier);
+                t:= nil
+            end;
+
         pmsg:= t
     end;
 
-    q^.msg.next:= nil;
     q^.msg.str[0]:= #0;
     q^.msg.buf:= nil;
 

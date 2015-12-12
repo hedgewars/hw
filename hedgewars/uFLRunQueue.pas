@@ -17,7 +17,7 @@ begin
         if runQueue^.gameType = gtPreview then
             sendUI(mtRenderingPreview, nil, 0);
 
-        ipcCleanEngineQueue();
+        ipcRemoveBarrierFromEngineQueue();
         RunEngine(runQueue^.argumentsNumber, @runQueue^.argv);
 
         sendConfig(runQueue)
@@ -36,6 +36,8 @@ procedure queueExecution(var config: TGameConfig);
 var pConfig, t, tt: PGameConfig;
     i: Longword;
 begin
+    ipcSetEngineBarrier();
+
     new(pConfig);
     pConfig^:= config;
 
