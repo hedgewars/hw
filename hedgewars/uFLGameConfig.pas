@@ -68,7 +68,7 @@ begin
                 ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
         end;
-    gtLocal: begin
+    gtLocal, gtNet: begin
             if script <> 'Normal' then
                 ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
