@@ -17,7 +17,7 @@ procedure ipcToNetRaw(p: pointer; len: Longword);
 
 procedure ipcToFrontend(s: shortstring);
 procedure ipcToFrontendRaw(p: pointer; len: Longword);
-function ipcReadFromFrontend: shortstring;
+function ipcReadFromFrontend: TIPCMessage;
 function ipcCheckFromFrontend: boolean;
 
 procedure registerIPCCallback(p: pointer; f: TIPCCallback);
@@ -212,9 +212,9 @@ begin
     ipcReadFromEngine:= ipcRead(queueFrontend)
 end;
 
-function ipcReadFromFrontend: shortstring;
+function ipcReadFromFrontend: TIPCMessage;
 begin
-    ipcReadFromFrontend:= ipcRead(queueEngine).str
+    ipcReadFromFrontend:= ipcRead(queueEngine)
 end;
 
 function ipcReadToNet: TIPCMessage;

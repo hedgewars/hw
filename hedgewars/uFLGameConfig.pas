@@ -68,7 +68,9 @@ begin
                 ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
         end;
-    gtLocal, gtNet: begin
+gtLocal, gtNet: begin
+            if gameType = gtNet then
+                ipcToEngine('TN');
             if script <> 'Normal' then
                 ipcToEngine('escript ' + getScriptPath(script));
             ipcToEngine('eseed ' + seed);
@@ -235,6 +237,7 @@ begin
         c:= getUnusedColor;
 
         teams[i]:= team^;
+        teams[i].extDriven:= false;
 
         if i = 0 then hn:= 4 else hn:= teams[i - 1].hogsNumber;
         if hn > 48 - hedgehogsNumber then hn:= 48 - hedgehogsNumber;

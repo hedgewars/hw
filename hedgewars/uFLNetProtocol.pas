@@ -10,7 +10,7 @@ procedure partRoom(msg: PChar); cdecl;
 procedure ResetNetState;
 
 implementation
-uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet, uFLGameConfig, uFLUtils;
+uses uFLNetTypes, uFLTypes, uFLUICallback, uFLNet, uFLGameConfig, uFLUtils, uFLIPC, uUtils;
 
 type
     PHandler = procedure (var t: TCmdData);
@@ -53,10 +53,10 @@ const teamFields: array[0..22] of PShortstring = (
     , @tmpTeam.hedgehogs[7].name
     , @tmpTeam.hedgehogs[7].hat
     );
+
 procedure handler_ADD_TEAM(var p: TCmdParam);
 begin
     teamIndex:= 0;
-    tmpTeam.extDriven:= true;
     tmpTeam.color:= 0
 end;
 
@@ -317,8 +317,19 @@ procedure handler_EM(var p: TCmdParam);
 begin
 end;
 
-procedure handler_EM_s(var s: TCmdParamS);
+procedure handler_EM_s(var p: TCmdParamL);
+var i, l: Longword;
+    s: shortstring;
 begin
+    i:= 1;
+    l:= length(p.str1);
+
+    while i < l do
+    begin
+        s:= DecodeBase64(copy(p.str1, i, 240));
+        ipcToEngineRaw(@s[0], byte(s[0]));
+        inc(i, 160)
+    end;
 end;
 
 procedure handler_ERROR(var p: TCmdParamL);
@@ -411,7 +422,7 @@ end;
 
 procedure handler_PROTO(var p: TCmdParami);
 begin
-    writeln('Protocol ', p.param1)
+    //writeln('Protocol ', p.param1)
 end;
 
 procedure handler_REMOVE_TEAM(var p: TCmdParamS);

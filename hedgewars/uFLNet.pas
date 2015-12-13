@@ -221,7 +221,7 @@ const handlers: array[0..46] of PHandler = (@handler__UNKNOWN_, @handler_L,
     @handler_SL, @handler_, @handler_S, @handler_MS, @handler_MS, @handler_SS,
     @handler_L, @handler_ML, @handler__i, @handler_SMS, @handler_SL, @handler_S,
     @handler_i, @handler_S, @handler_S, @handler_MS, @handler_i, @handler_i,
-    @handler_S, @handler_ML, @handler_i, @handler_L, @handler_SL, @handler_SL,
+    @handler_S, @handler_MS, @handler_i, @handler_L, @handler_SL, @handler_SL,
     @handler_MS, @handler_S, @handler_MS);
 
 procedure handleTail;

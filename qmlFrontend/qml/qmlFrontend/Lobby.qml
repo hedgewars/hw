@@ -4,10 +4,10 @@ import Hedgewars.Engine 1.0
 Rectangle {
     ListView {
         id: roomsList
-        x: 20
-        y: 0
-        width: parent.width
-        height: parent.height - x
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: lobbyChat.top
         focus: true
         clip: true
 
@@ -93,10 +93,11 @@ Rectangle {
 
     Chat {
         id: lobbyChat;
-        x: 0;
-        y: 300;
-        width: parent.width;
-        height: parent.height - y;
+        height: 300
+        anchors.top: undefined
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
         Connections {
             target: HWEngine

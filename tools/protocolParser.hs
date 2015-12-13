@@ -109,7 +109,7 @@ commandsDescription = [
         , cmd1 "CFG~SCRIPT" SS
         , cmd1 "CFG~DRAWNMAP" LS
         , cmd2 "CFG~AMMO" SS LS
-        , cmd1 "CFG~FULLMAPCONFIG" $ Many [LS]
+        , cmd1 "CFG~FULLMAPCONFIG" $ Many [SS]
     ]
 
 hasMany = any isMany

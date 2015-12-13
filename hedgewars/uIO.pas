@@ -38,7 +38,7 @@ procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uFLIPC;
+uses uFLIPC, uFLTypes, uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
 
 const
     cSendEmptyPacketTime = 1000;
@@ -56,11 +56,12 @@ type PCmd = ^TCmd;
 
 var
     isPonged: boolean;
-    
+
     headcmd: PCmd;
     lastcmd: PCmd;
 
     flushDelayTicks: LongWord;
+    SocketString: shortstring;
     sendBuffer: record
                 buf: array[0..Pred(cSendBufferSize)] of byte;
                 count: Word;
@@ -156,9 +157,37 @@ case s[1] of
 end;
 
 procedure IPCCheckSock;
+var i, t: LongInt;
+    msg: TIPCMessage;
 begin
     while ipcCheckFromFrontend() do
-        ParseIPCCommand(ipcReadFromFrontend())
+    begin
+        msg:= ipcReadFromFrontend();
+        if msg.str[0] > #0 then
+            ParseIPCCommand(msg.str)
+        else begin
+            i:= 0;
+            while (i < msg.len) do
+            begin
+                if LongInt(SocketString[0]) + msg.len - i > 255 then
+                    t:= 255 - byte(SocketString[0])
+                else
+                    t:= msg.len - i;
+
+                Move(PByteArray(msg.buf)^[i], SocketString[byte(SocketString[0]) + 1], t);
+                inc(byte(SocketString[0]), t);
+                inc(i, t);
+
+                while byte(SocketString[0]) > byte(SocketString[1]) do
+                begin
+                    ParseIPCCommand(copy(SocketString, 2, byte(SocketString[1])));
+                    Delete(SocketString, 1, Succ(byte(SocketString[1])))
+                end;
+            end;
+
+            FreeMem(msg.buf, msg.len)
+        end
+    end
 end;
 
 procedure LoadRecordFromFile(fileName: shortstring);
@@ -441,6 +470,7 @@ begin
     headcmd:= nil;
     lastcmd:= nil;
     isPonged:= false;
+    SocketString:= '';
 
     hiTicks:= 0;
     flushDelayTicks:= 0;
