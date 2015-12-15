@@ -51,8 +51,10 @@ begin
     with team do
     begin
         ipcToEngine('eaddteam <hash> ' + colorsSet[color] + ' ' + teamName);
+
         if extDriven then
-            ipcToEngine('rdriven');
+            ipcToEngine('erdriven');
+
         for i:= 0 to Pred(hogsNumber) do
         begin
             ipcToEngine('eaddhh ' + inttostr(botLevel) + ' 100 ' + hedgehogs[i].name);
