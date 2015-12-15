@@ -44,42 +44,40 @@ const ints: array[0 .. 17] of record
             , (name: 'worldedge'; param: @tmpScheme.worldedge)
             , (name: 'airmines'; param: @tmpScheme.airmines)
               );
-const bools: array[0 .. 25] of record
+const bools: array[0 .. 24] of record
             name: shortstring;
             param: ^boolean;
+            flag: Longword;
         end = (
-              (name: 'fortsmode'; param: @tmpScheme.fortsmode)
-            , (name: 'divteams'; param: @tmpScheme.divteams)
-            , (name: 'solidland'; param: @tmpScheme.solidland)
-            , (name: 'border'; param: @tmpScheme.border)
-            , (name: 'lowgrav'; param: @tmpScheme.lowgrav)
-            , (name: 'laser'; param: @tmpScheme.laser)
-            , (name: 'invulnerability'; param: @tmpScheme.invulnerability)
-            , (name: 'mines'; param: @tmpScheme.mines)
-            , (name: 'vampiric'; param: @tmpScheme.vampiric)
-            , (name: 'karma'; param: @tmpScheme.karma)
-            , (name: 'artillery'; param: @tmpScheme.artillery)
-            , (name: 'randomorder'; param: @tmpScheme.randomorder)
-            , (name: 'king'; param: @tmpScheme.king)
-            , (name: 'placehog'; param: @tmpScheme.placehog)
-            , (name: 'sharedammo'; param: @tmpScheme.sharedammo)
-            , (name: 'disablegirders'; param: @tmpScheme.disablegirders)
-            , (name: 'disablewind'; param: @tmpScheme.disablewind)
-            , (name: 'morewind'; param: @tmpScheme.morewind)
-            , (name: 'tagteam'; param: @tmpScheme.tagteam)
-            , (name: 'bottomborder'; param: @tmpScheme.bottomborder)
-            , (name: 'resethealth'; param: @tmpScheme.resethealth)
-            , (name: 'disablelandobjects'; param: @tmpScheme.disablelandobjects)
-            , (name: 'aisurvival'; param: @tmpScheme.aisurvival)
-            , (name: 'infattack'; param: @tmpScheme.infattack)
-            , (name: 'resetweps'; param: @tmpScheme.resetweps)
-            , (name: 'perhogammo'; param: @tmpScheme.perhogammo)
+              (name: 'fortsmode'; param: @tmpScheme.fortsmode; flag: $00001000)
+            , (name: 'divteams'; param: @tmpScheme.divteams; flag: $00000010)
+            , (name: 'solidland'; param: @tmpScheme.solidland; flag: $00000004)
+            , (name: 'border'; param: @tmpScheme.border; flag: $00000008)
+            , (name: 'lowgrav'; param: @tmpScheme.lowgrav; flag: $00000020)
+            , (name: 'laser'; param: @tmpScheme.laser; flag: $00000040)
+            , (name: 'invulnerability'; param: @tmpScheme.invulnerability; flag: $00000080)
+            , (name: 'resethealth'; param: @tmpScheme.resethealth; flag: $00000100)
+            , (name: 'vampiric'; param: @tmpScheme.vampiric; flag: $00000200)
+            , (name: 'karma'; param: @tmpScheme.karma; flag: $00000400)
+            , (name: 'artillery'; param: @tmpScheme.artillery; flag: $00000800)
+            , (name: 'randomorder'; param: @tmpScheme.randomorder; flag: $00002000)
+            , (name: 'king'; param: @tmpScheme.king; flag: $00004000)
+            , (name: 'placehog'; param: @tmpScheme.placehog; flag: $00008000)
+            , (name: 'sharedammo'; param: @tmpScheme.sharedammo; flag: $00010000)
+            , (name: 'disablegirders'; param: @tmpScheme.disablegirders; flag: $00020000)
+            , (name: 'disablewind'; param: @tmpScheme.disablewind; flag: $00800000)
+            , (name: 'morewind'; param: @tmpScheme.morewind; flag: $01000000)
+            , (name: 'tagteam'; param: @tmpScheme.tagteam; flag: $02000000)
+            , (name: 'bottomborder'; param: @tmpScheme.bottomborder; flag: $04000000)
+            , (name: 'disablelandobjects'; param: @tmpScheme.disablelandobjects; flag: $00040000)
+            , (name: 'aisurvival'; param: @tmpScheme.aisurvival; flag: $00080000)
+            , (name: 'infattack'; param: @tmpScheme.infattack; flag: $00100000)
+            , (name: 'resetweps'; param: @tmpScheme.resetweps; flag: $00200000)
+            , (name: 'perhogammo'; param: @tmpScheme.perhogammo; flag: $00400000)
               );
-
 
 procedure loadSchemes;
 var f: PFSFile;
-    scheme: PScheme;
     schemes: PSchemeArray;
     s: shortstring;
     l, i, ii: Longword;
@@ -196,13 +194,52 @@ end;
 
 procedure sendSchemeConfig(var scheme: TScheme);
 var i: Longword;
+    gf: Longword;
 begin
     with scheme do
     begin
-        if scheme.turntime <> 45 then
-            ipcToEngine('e$turntime ' + inttostr(scheme.turntime * 1000));
-        if scheme.minesnum <> 4 then
-            ipcToEngine('e$minesnum ' + inttostr(scheme.minesnum));
+        if turntime <> 45 then
+            ipcToEngine('e$turntime ' + inttostr(turntime * 1000));
+        if minesnum <> 4 then
+            ipcToEngine('e$minesnum ' + inttostr(minesnum));
+        if damagefactor <> 100 then
+            ipcToEngine('e$damagepct ' + inttostr(damagefactor));
+        if worldedge > 0 then
+            ipcToEngine('e$worldedge ' + inttostr(worldedge));
+        if length(scriptparam) > 0 then
+            ipcToEngine('e$scriptparam ' + scriptparam);
+        if suddendeath <> 15 then
+            ipcToEngine('e$sd_turns ' + inttostr(suddendeath));
+        if waterrise <> 47 then
+            ipcToEngine('e$waterrise ' + inttostr(waterrise));
+        if ropepct <> 100 then
+            ipcToEngine('e$ropepct ' + inttostr(ropepct));
+        if getawaytime <> 100 then
+            ipcToEngine('e$getawaytime ' + inttostr(getawaytime));
+        if caseprobability <> 5 then
+            ipcToEngine('e$casefreq ' + inttostr(caseprobability));
+        if healthprobability <> 35 then
+            ipcToEngine('e$healthprob ' + inttostr(healthprobability));
+        if minestime <> 3 then
+            ipcToEngine('e$minestime ' + inttostr(minestime * 1000));
+        if minedudpct <> 0 then
+            ipcToEngine('e$minedudpct ' + inttostr(minedudpct));
+        if explosives <> 2 then
+            ipcToEngine('e$explosives ' + inttostr(explosives));
+        if airmines <> 0 then
+            ipcToEngine('e$airmines ' + inttostr(airmines));
+        if healthcaseamount <> 25 then
+            ipcToEngine('e$hcaseamount ' + inttostr(healthcaseamount));
+        if healthdecrease <> 5 then
+            ipcToEngine('e$healthdec ' + inttostr(healthdecrease));
+
+        gf:= 0;
+
+        for i:= Low(bools) to High(bools) do
+            if PBoolean(bools[i].param - @tmpScheme + @scheme)^ then
+                gf:= gf or bools[i].flag;
+
+        ipcToEngine('e$gmflags ' + inttostr(gf));
     end
 end;
 

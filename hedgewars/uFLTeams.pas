@@ -3,7 +3,7 @@ interface
 uses uFLTypes;
 
 function createRandomTeam: TTeam;
-procedure sendTeamConfig(var team: TTeam);
+procedure sendTeamConfig(hp: LongInt; var team: TTeam);
 
 function getTeamsList: PPChar; cdecl;
 procedure freeTeamsList;
@@ -45,7 +45,7 @@ begin
 end;
 
 
-procedure sendTeamConfig(var team: TTeam);
+procedure sendTeamConfig(hp: LongInt; var team: TTeam);
 var i: Longword;
 begin
     with team do
@@ -57,7 +57,7 @@ begin
 
         for i:= 0 to Pred(hogsNumber) do
         begin
-            ipcToEngine('eaddhh ' + inttostr(botLevel) + ' 100 ' + hedgehogs[i].name);
+            ipcToEngine('eaddhh ' + IntToStr(botLevel) + ' ' + IntToStr(hp) + ' ' + hedgehogs[i].name);
             ipcToEngine('ehat ' + hedgehogs[i].hat);
         end;
     end

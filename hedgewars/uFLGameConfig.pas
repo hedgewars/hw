@@ -87,7 +87,7 @@ gtLocal, gtNet: begin
             i:= 0;
             while (i < 8) and (teams[i].hogsNumber > 0) do
                 begin
-                    sendTeamConfig(teams[i]);
+                    sendTeamConfig(config^.scheme.health, teams[i]);
                     sendAmmoConfig(config^.ammo);
                     inc(i)
                 end;

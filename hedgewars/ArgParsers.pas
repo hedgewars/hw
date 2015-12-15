@@ -23,9 +23,15 @@ interface
 
 procedure GetParams;
 {$IFDEF HWLIBRARY}
+{$IFNDEF BSD}
 var operatingsystem_parameter_argc: NativeInt; external;
     operatingsystem_parameter_argv: pointer; external;
     operatingsystem_parameter_envp: pointer; external;
+{$ELSE}
+var operatingsystem_parameter_argc: LongInt; export;
+    operatingsystem_parameter_argv: pointer; export;
+    operatingsystem_parameter_envp: pointer; export;
+{$ENDIF}
 function ParamCount: LongInt;
 function ParamStr(i: LongInt): shortstring;
 {$ENDIF}
