@@ -14,7 +14,7 @@ procedure sendTeam(var team: TTeam);
 procedure removeTeam(teamName: shortstring);
 
 implementation
-uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData, uFLNet;
+uses uFLUtils, uFLIPC, uPhysFSLayer, uFLThemes, uFLNet;
 
 const MAX_TEAM_NAMES = 128;
 var

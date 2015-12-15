@@ -6,7 +6,7 @@ procedure queueExecution(var config: TGameConfig);
 procedure passFlibEvent(p: pointer); cdecl;
 
 implementation
-uses uFLGameConfig, hwengine, uFLData, uFLUICallback, uFLIPC;
+uses uFLGameConfig, hwengine, uFLThemes, uFLUICallback, uFLIPC;
 
 var runQueue: PGameConfig = nil;
 

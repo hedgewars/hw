@@ -6,7 +6,7 @@ function getScriptsList: PPChar; cdecl;
 procedure freeScriptsList;
 
 implementation
-uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
+uses uFLUtils, uFLIPC, uPhysFSLayer, uFLThemes;
 
 const MAX_SCRIPT_NAMES = 64;
 type

@@ -9,7 +9,7 @@ function ammoByName(s: shortstring): PAmmo;
 procedure sendAmmoConfig(var ammo: TAmmo);
 
 implementation
-uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
+uses uFLUtils, uFLIPC, uPhysFSLayer, uFLThemes;
 
 const MAX_AMMO_NAMES = 64;
 type

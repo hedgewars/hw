@@ -9,7 +9,7 @@ function schemeByName(s: shortstring): PScheme;
 procedure sendSchemeConfig(var scheme: TScheme);
 
 implementation
-uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
+uses uFLUtils, uFLIPC, uPhysFSLayer, uFLThemes;
 
 const MAX_SCHEME_NAMES = 64;
 type
