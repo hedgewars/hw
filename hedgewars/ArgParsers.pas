@@ -23,15 +23,9 @@ interface
 
 procedure GetParams;
 {$IFDEF HWLIBRARY}
-{$IFDEF WIN32} // FIXME: what is the correct condition?
-var operatingsystem_parameter_argc: LongInt; external;
+var operatingsystem_parameter_argc: NativeInt; external;
     operatingsystem_parameter_argv: pointer; external;
     operatingsystem_parameter_envp: pointer; external;
-{$ELSE}
-var operatingsystem_parameter_argc: LongInt = 0; export;
-    operatingsystem_parameter_argv: pointer = nil; export;
-    operatingsystem_parameter_envp: pointer = nil; export;
-{$ENDIF}
 function ParamCount: LongInt;
 function ParamStr(i: LongInt): shortstring;
 {$ENDIF}
