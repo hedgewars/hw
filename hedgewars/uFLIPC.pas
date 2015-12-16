@@ -41,7 +41,7 @@ begin
     s.next:= nil;
     s.barrier:= 0;
 
-    if (queue^.msg.next = nil) and (queue^.msg.str[0] = #0) and (queue^.msg.buf = nil) then
+    if (queue^.msg.next = nil) and (queue^.msg.str[0] = #0) and (queue^.msg.buf = nil) and (queue^.msg.barrier = 0) then
     begin
         queue^.msg:= s;
     end else
@@ -129,15 +129,19 @@ begin
     SDL_LockMutex(q^.mut);
 
     pmsg:= @q^.msg;
-    q^.last:= @q^.msg;
-
+write('    ipcRemoveBarrierFromEngineQueue: ');
     while pmsg <> nil do
     begin
+        write('.');
         t:= pmsg^.next;
         q^.msg.next:= t;
 
+        pmsg^.str[0]:= #0;
         if pmsg^.buf <> nil then
+        begin
             FreeMem(pmsg^.buf, pmsg^.len);
+            pmsg^.buf:= nil
+        end;
 
         if pmsg <> @q^.msg then
             if pmsg^.barrier = 0 then
@@ -162,6 +166,8 @@ begin
 
         pmsg:= t
     end;
+writeln;
+    if q^.msg.next = nil then q^.last:= @q^.msg;
 
     q^.msg.str[0]:= #0;
     q^.msg.buf:= nil;

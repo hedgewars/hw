@@ -14,13 +14,12 @@ procedure nextRun;
 begin
     if runQueue <> nil then
     begin
+    writeln('RUNNING ', runQueue^.gameType);
         if runQueue^.gameType = gtPreview then
             sendUI(mtRenderingPreview, nil, 0);
 
         ipcRemoveBarrierFromEngineQueue();
         RunEngine(runQueue^.argumentsNumber, @runQueue^.argv);
-
-        sendConfig(runQueue)
     end
 end;
 
@@ -36,8 +35,7 @@ procedure queueExecution(var config: TGameConfig);
 var pConfig, t, tt: PGameConfig;
     i: Longword;
 begin
-    ipcSetEngineBarrier();
-
+    writeln('QUEUE EXECUTION ', config.gameType);
     new(pConfig);
     pConfig^:= config;
 
@@ -59,13 +57,15 @@ begin
     begin
         runQueue:= pConfig;
 
+        ipcSetEngineBarrier();
+        sendConfig(pConfig);
         nextRun
     end else
     begin
         t:= runQueue;
         while t^.nextConfig <> nil do 
         begin
-            if (pConfig^.gameType = gtPreview) and (t^.nextConfig^.gameType = gtPreview) then
+            if false and (pConfig^.gameType = gtPreview) and (t^.nextConfig^.gameType = gtPreview) and (t <> runQueue) then
             begin
                 tt:= t^.nextConfig;
                 pConfig^.nextConfig:= tt^.nextConfig;
@@ -75,6 +75,9 @@ begin
             end;
             t:= t^.nextConfig;
         end;
+
+        ipcSetEngineBarrier();
+        sendConfig(pConfig);
         t^.nextConfig:= pConfig
     end;
 end;
