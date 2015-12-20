@@ -51,6 +51,7 @@ begin
         queue^.last^.next:= pmsg;
         queue^.last:= pmsg;
     end;
+
     SDL_CondSignal(queue^.cond);
     SDL_UnlockMutex(queue^.mut);
 end;
@@ -129,10 +130,8 @@ begin
     SDL_LockMutex(q^.mut);
 
     pmsg:= @q^.msg;
-write('    ipcRemoveBarrierFromEngineQueue: ');
     while pmsg <> nil do
     begin
-        write('.');
         t:= pmsg^.next;
         q^.msg.next:= t;
 
@@ -166,7 +165,7 @@ write('    ipcRemoveBarrierFromEngineQueue: ');
 
         pmsg:= t
     end;
-writeln;
+
     if q^.msg.next = nil then q^.last:= @q^.msg;
 
     q^.msg.str[0]:= #0;
@@ -290,6 +289,7 @@ begin
     new(q);
     q^.msg.str:= '';
     q^.msg.buf:= nil;
+    q^.msg.barrier:= 0;
     q^.mut:= SDL_CreateMutex;
     q^.cond:= SDL_CreateCond;
     q^.msg.next:= nil;

@@ -15,7 +15,7 @@ type
                     , mtNickname, mtSeed, mtTheme, mtScript, mtFeatureSize, mtMapGen
                     , mtMap, mtMazeSize, mtTemplate, mtAmmo, mtScheme);
 
-    TFLIBEvent = (flibGameFinished, flibRunNetGame);
+    TFLIBEvent = (flibGameFinished);
 
     TClientFlag = (cfReady, cfRegistered, cfInRoom, cfContributor, cfInGame, cfRoomAdmin, cfServerAdmin);
 

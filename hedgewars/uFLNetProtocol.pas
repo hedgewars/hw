@@ -327,7 +327,7 @@ begin
     while i < l do
     begin
         s:= DecodeBase64(copy(p.str1, i, 240));
-        ipcToEngineRaw(@s[0], byte(s[0]));
+        ipcToEngineRaw(@s[1], byte(s[0]));
         inc(i, 160)
     end;
 end;
@@ -495,10 +495,8 @@ begin
 end;
 
 procedure handler_RUN_GAME(var p: TCmdParam);
-var e: TFLIBEvent;
 begin
-    e:= flibRunNetGame;
-    sendUI(mtFlibEvent, @e, sizeof(e));
+    runNetGame
 end;
 
 procedure handler_SERVER_AUTH(var p: TCmdParamS);

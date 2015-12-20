@@ -14,7 +14,6 @@ procedure nextRun;
 begin
     if runQueue <> nil then
     begin
-    writeln('RUNNING ', runQueue^.gameType);
         if runQueue^.gameType = gtPreview then
             sendUI(mtRenderingPreview, nil, 0);
 
@@ -35,7 +34,6 @@ procedure queueExecution(var config: TGameConfig);
 var pConfig, t, tt: PGameConfig;
     i: Longword;
 begin
-    writeln('QUEUE EXECUTION ', config.gameType);
     new(pConfig);
     pConfig^:= config;
 
@@ -86,12 +84,9 @@ procedure passFlibEvent(p: pointer); cdecl;
 begin
     case TFLIBEvent(p^) of
         flibGameFinished: begin
-                cleanupConfig;
-                nextRun
-            end;
-        flibRunNetGame: begin
-                runNetGame
-            end;
+            cleanupConfig;
+            nextRun
+        end;
     end;
 end;
 
