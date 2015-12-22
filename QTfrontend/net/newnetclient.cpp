@@ -183,7 +183,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-    qDebug() << "Client: " << QString(buf).split("\n");
+    qDebug() << "Client: " << QString(QString::fromUtf8(buf)).split("\n");
     NetSocket.write(buf);
     NetSocket.write("\n\n", 2);
 }
