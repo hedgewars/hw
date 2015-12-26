@@ -20,7 +20,8 @@ type TCmdType = (cmd_ADD_TEAM, cmd_ADD_TEAM_s, cmd_ASKPASSWORD, cmd_BANLIST,
         end;
     type TCmdParamL = packed record
         cmd: TCmdType;
-        str1: string;
+        str1len: Longword;
+        str1: array[word] of char;
         end;
     type TCmdParamS = packed record
         cmd: TCmdType;
@@ -29,7 +30,8 @@ type TCmdType = (cmd_ADD_TEAM, cmd_ADD_TEAM_s, cmd_ASKPASSWORD, cmd_BANLIST,
     type TCmdParamSL = packed record
         cmd: TCmdType;
         str1: shortstring;
-        str2: string;
+        str2len: Longword;
+        str2: array[word] of char;
         end;
     type TCmdParamSS = packed record
         cmd: TCmdType;

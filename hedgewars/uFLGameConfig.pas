@@ -33,6 +33,7 @@ procedure netAcceptedTeam(teamName: shortstring);
 procedure netSetTeamColor(team: shortstring; color: Longword);
 procedure netSetHedgehogsNumber(team: shortstring; hogsNumber: Longword);
 procedure netRemoveTeam(teamName: shortstring);
+procedure netDrawnData(data: ansistring);
 procedure netResetTeams();
 procedure updatePreviewIfNeeded;
 
@@ -40,7 +41,8 @@ procedure sendConfig(config: PGameConfig);
 procedure runNetGame();
 
 implementation
-uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo, uFLUICallback, uFLRunQueue, uFLNet;
+uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo
+    , uFLUICallback, uFLRunQueue, uFLNet, uUtils;
 
 var
     currentConfig: TGameConfig;
@@ -49,6 +51,24 @@ var
 function getScriptPath(scriptName: shortstring): shortstring;
 begin
     getScriptPath:= '/Scripts/Multiplayer/' + scriptName + '.lua'
+end;
+
+procedure sendDrawnMap(config: PGameConfig);
+var i: Longword;
+    s: shortstring;
+begin
+    i:= 1;
+
+    while i < config^.drawnDataSize do
+    begin
+        if config^.drawnDataSize - i > 240 then
+            s:= copy(config^.drawnData, i, 240)
+        else
+            s:= copy(config^.drawnData, i, config^.drawnDataSize - i);
+        system.writeln('[DRAWN MAP] ', s);
+        ipcToEngine('edraw ' + DecodeBase64(s));
+        inc(i, 240)
+    end;
 end;
 
 procedure sendConfig(config: PGameConfig);
@@ -67,6 +87,8 @@ begin
             else
                 ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
+            if mapgen = 3 then
+                sendDrawnMap(config);
         end;
 gtLocal, gtNet: begin
             if gameType = gtNet then
@@ -81,6 +103,8 @@ gtLocal, gtNet: begin
                 ipcToEngine('e$template_filter ' + intToStr(template));
             ipcToEngine('e$feature_size ' + intToStr(featureSize));
             ipcToEngine('e$theme ' + theme);
+            if mapgen = 3 then
+                sendDrawnMap(config);
 
             sendSchemeConfig(scheme);
 
@@ -638,6 +662,14 @@ begin
         end;
 
     end;
+end;
+
+procedure netDrawnData(data: ansistring);
+begin
+    currentConfig.drawnDataSize:= length(data);
+    currentConfig.drawnData:= data;
+
+    getPreview
 end;
 
 end.

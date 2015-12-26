@@ -97,6 +97,7 @@ end;
 
 procedure handler_CFG_DRAWNMAP(var p: TCmdParamL);
 begin
+    netDrawnData(copy(ansistring(p.str1), 1, p.str1len))
 end;
 
 procedure handler_CFG_FEATURE_SIZE(var p: TCmdParami);
@@ -262,7 +263,7 @@ end;
 procedure handler_CHAT(var p: TCmdParamSL);
 var s: string;
 begin
-    s:= p.str1 + #10 + p.str2;
+    s:= p.str1 + #10 + copy(p.str2, 0, p.str2len);
     if isInRoom then
         sendUI(mtRoomChatLine, @s[1], length(s))
     else
@@ -375,9 +376,10 @@ begin
 end;
 
 procedure handler_LEFT(var p: TCmdParamSL);
+var s: string;
 begin
-    p.str2:= p.str1 + #10 + p.str2;
-    sendUI(mtRemoveRoomClient, @p.str2[1], length(p.str2));
+    s:= p.str1 + #10 + copy(p.str2, 0, p.str2len);
+    sendUI(mtRemoveRoomClient, @s[1], length(s));
 end;
 
 procedure handler_LOBBY_JOINED(var p: TCmdParam);
@@ -396,9 +398,10 @@ begin
 end;
 
 procedure handler_LOBBY_LEFT(var p: TCmdParamSL);
+var s: string;
 begin
-    p.str2:= p.str1 + #10 + p.str2;
-    sendUI(mtRemoveLobbyClient, @p.str2[1], length(p.str2));
+    s:= p.str1 + #10 + copy(p.str2, 0, p.str2len);
+    sendUI(mtRemoveLobbyClient, @s[1], length(s));
 end;
 
 procedure handler_NICK(var p: TCmdParamS);

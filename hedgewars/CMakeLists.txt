@@ -107,6 +107,7 @@ set(engine_sources
     uTeams.pas
 
     uFLAmmo.pas
+    uFLDrawnMap.pas
     uFLGameConfig.pas
     uFLIPC.pas
     uFLNet.pas

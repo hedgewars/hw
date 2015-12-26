@@ -119,6 +119,8 @@ type
             theme: shortstring;
             script: shortstring;
             map: shortstring;
+            drawnData: array[word] of char;
+            drawnDataSize: LongWord;
             scheme: TScheme;
             ammo: TAmmo;
             mapgen: LongInt;

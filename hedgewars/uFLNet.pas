@@ -41,10 +41,13 @@ end;
 
 procedure handler_L;
 var cmd: TCmdParamL;
+    s: ansistring;
 begin
     cmd.cmd:= state.cmd;
-    cmd.str1:= getLongString;
-    if length(cmd.str1) = 0 then exit;
+    s:= getLongString;
+    cmd.str1len:= length(s);
+    if cmd.str1len = 0 then exit;
+    cmd.str1:= s;
     sendUI(mtNetData, @cmd, sizeof(cmd));
     handleTail()
 end;
@@ -52,15 +55,21 @@ end;
 procedure handler_ML;
 var cmd: TCmdParamL;
     f: boolean;
+    s: ansistring;
 begin
     sendUI(mtNetData, @state.cmd, sizeof(state.cmd));
     cmd.cmd:= Succ(state.cmd);
 
     repeat
-        cmd.str1:= getLongString;
-        f:= cmd.str1[0] <> #0;
+        s:= getLongString;
+        cmd.str1len:= length(s);
+        f:= cmd.str1len <> 0;
+
         if f then
+            begin
+            cmd.str1:= s;
             sendUI(mtNetData, @cmd, sizeof(cmd));
+            end
     until not f;
     state.l:= 0
 end;
