@@ -126,32 +126,33 @@ data CheckInfo =
 data ClientInfo =
     ClientInfo
     {
-        clUID :: Unique,
-        sendChan :: ClientChan,
-        clientSocket :: Socket,
-        host :: B.ByteString,
-        connectTime :: UTCTime,
-        nick :: B.ByteString,
-        webPassword :: B.ByteString,
-        serverSalt :: B.ByteString,
-        logonPassed :: Bool,
-        isVisible :: Bool,
+        clUID :: !Unique,
+        sendChan :: !ClientChan,
+        clientSocket :: !Socket,
+        host :: !B.ByteString,
+        connectTime :: !UTCTime,
+        nick :: !B.ByteString,
+        webPassword :: !B.ByteString,
+        serverSalt :: !B.ByteString,
+        logonPassed :: !Bool,
+        isVisible :: !Bool,
         clientProto :: !Word16,
         pingsQueue :: !Word,
-        isMaster :: Bool,
+        isMaster :: !Bool,
         isReady :: !Bool,
-        isInGame :: Bool,
-        isAdministrator :: Bool,
-        isChecker :: Bool,
-        isContributor :: Bool,
-        isKickedFromServer :: Bool,
-        isJoinedMidGame :: Bool,
+        isInGame :: !Bool,
+        isAdministrator :: !Bool,
+        isChecker :: !Bool,
+        isContributor :: !Bool,
+        isKickedFromServer :: !Bool,
+        isJoinedMidGame :: !Bool,
+        hasAskedList :: !Bool,
         clientClan :: !(Maybe B.ByteString),
-        checkInfo :: Maybe CheckInfo,
+        checkInfo :: !(Maybe CheckInfo),
         eiLobbyChat,
         eiEM,
-        eiJoin :: EventsInfo,
-        teamsInGame :: Word
+        eiJoin :: !EventsInfo,
+        teamsInGame :: !Word
     }
 
 instance Eq ClientInfo where
@@ -164,17 +165,17 @@ data HedgehogInfo =
 data TeamInfo =
     TeamInfo
     {
-        teamowner :: B.ByteString,
-        teamname :: B.ByteString,
-        teamcolor :: B.ByteString,
-        teamgrave :: B.ByteString,
-        teamfort :: B.ByteString,
-        teamvoicepack :: B.ByteString,
-        teamflag :: B.ByteString,
-        isOwnerRegistered :: Bool,
-        difficulty :: Int,
-        hhnum :: Int,
-        hedgehogs :: [HedgehogInfo]
+        teamowner :: !B.ByteString,
+        teamname :: !B.ByteString,
+        teamcolor :: !B.ByteString,
+        teamgrave :: !B.ByteString,
+        teamfort :: !B.ByteString,
+        teamvoicepack :: !B.ByteString,
+        teamflag :: !B.ByteString,
+        isOwnerRegistered :: !Bool,
+        difficulty :: !Int,
+        hhnum :: !Int,
+        hedgehogs :: ![HedgehogInfo]
     }
     deriving (Show, Read)
 
@@ -214,26 +215,26 @@ newGameInfo =
 data RoomInfo =
     RoomInfo
     {
-        masterID :: Maybe ClientIndex,
-        name :: B.ByteString,
-        password :: B.ByteString,
-        roomProto :: Word16,
-        teams :: [TeamInfo],
-        gameInfo :: Maybe GameInfo,
+        masterID :: !(Maybe ClientIndex),
+        name :: !B.ByteString,
+        password :: !B.ByteString,
+        roomProto :: !Word16,
+        teams :: ![TeamInfo],
+        gameInfo :: !(Maybe GameInfo),
         playersIn :: !Int,
         readyPlayers :: !Int,
-        isRestrictedJoins :: Bool,
-        isRestrictedTeams :: Bool,
-        isRegisteredOnly :: Bool,
-        isSpecial :: Bool,
-        defaultHedgehogsNumber :: Int,
-        teamsNumberLimit :: Int,
-        greeting :: B.ByteString,
-        voting :: Maybe Voting,
+        isRestrictedJoins :: !Bool,
+        isRestrictedTeams :: !Bool,
+        isRegisteredOnly :: !Bool,
+        isSpecial :: !Bool,
+        defaultHedgehogsNumber :: !Int,
+        teamsNumberLimit :: !Int,
+        greeting :: !B.ByteString,
+        voting :: !(Maybe Voting),
         roomBansList :: ![B.ByteString],
-        mapParams :: Map.Map B.ByteString B.ByteString,
-        params :: Map.Map B.ByteString [B.ByteString],
-        roomSaves :: Map.Map B.ByteString (Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString])
+        mapParams :: !(Map.Map B.ByteString B.ByteString),
+        params :: !(Map.Map B.ByteString [B.ByteString]),
+        roomSaves :: !(Map.Map B.ByteString (Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString]))
     }
 
 newRoom :: RoomInfo
