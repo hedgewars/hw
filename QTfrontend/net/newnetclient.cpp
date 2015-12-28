@@ -552,7 +552,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 }
 
                 netClientState = InLobby;
-                RawSendNet(QString("LIST"));
+                //RawSendNet(QString("LIST")); //deprecated
                 emit connected();
             }
 
@@ -945,7 +945,7 @@ void HWNewNet::askRoomsList()
         qWarning("Illegal try to get rooms list!");
         return;
     }
-    RawSendNet(QString("LIST"));
+    //RawSendNet(QString("LIST")); //deprecated
 }
 
 HWNewNet::ClientState HWNewNet::clientState()

@@ -34,12 +34,7 @@ import EngineInteraction
 handleCmd_lobby :: CmdHandler
 
 
-handleCmd_lobby ["LIST"] = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
-    rooms <- allRoomInfos
-    let roomsInfoList = concatMap (\r -> roomInfo (clientProto cl) (maybeNick . liftM (client irnc) $ masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
-    return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
+handleCmd_lobby ["LIST"] = return []
 
 handleCmd_lobby ["CHAT", msg] = do
     n <- clientNick
