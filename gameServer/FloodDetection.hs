@@ -49,7 +49,7 @@ registerEvent e = do
     chat1 = [Warning $ loc "Warning! Chat flood protection activated"]
     chat2 = [ByeClient $ loc "Excess flood"]
     em1 = [Warning $ loc "Game messages flood detected - 1"]
-    em2 = [Warning $ loc "Game messages flood detected - 2"]
+    em2 = [ByeClient $ loc "Excess flood"]
     join1 = [Warning $ loc "Warning! Joins flood protection activated"]
     join2 = [ByeClient $ loc "Excess flood"]
 
@@ -69,7 +69,9 @@ registerEvent e = do
                     else
                     []
 
-        return $ (ModifyClient . transformField e . const $ (numPerEntry, curTime) : nei) : actions
+        return $ [ModifyClient . transformField e . const $ (numPerEntry, curTime) : nei
+                , ModifyClient (\c -> c{pendingActions = actions}) -- append? prepend? just replacing for now
+            ]
 
     updateInfo = return [
         ModifyClient $ transformField e

@@ -152,7 +152,8 @@ data ClientInfo =
         eiLobbyChat,
         eiEM,
         eiJoin :: !EventsInfo,
-        teamsInGame :: !Word
+        teamsInGame :: !Word,
+        pendingActions :: ![Action]
     }
 
 instance Eq ClientInfo where
