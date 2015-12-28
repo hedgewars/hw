@@ -142,6 +142,7 @@ data ClientInfo =
         isReady :: !Bool,
         isInGame :: !Bool,
         isAdministrator :: !Bool,
+        hasSuperPower :: !Bool,
         isChecker :: !Bool,
         isContributor :: !Bool,
         isKickedFromServer :: !Bool,

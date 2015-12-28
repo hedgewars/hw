@@ -75,11 +75,10 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "QUIT" m | not $ B.null m = handleCmd ["QUIT", m]
                    | otherwise = handleCmd ["QUIT"]
         h "RND" p = handleCmd ("RND" : B.words p)
-        h "GLOBAL" p = do
-            cl <- thisClient
+        h "GLOBAL" p = serverAdminOnly $ do
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
-            return [AnswerClients chans ["CHAT", "[global notice]", p] | isAdministrator cl]
+            return [AnswerClients chans ["CHAT", "[global notice]", p]]
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
@@ -92,14 +91,13 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
         h "RESTART_SERVER" "YES" = handleCmd ["RESTART_SERVER"]
-        h "REGISTERED_ONLY" _ = do
+        h "REGISTERED_ONLY" _ = serverAdminOnly $ do
             cl <- thisClient
-            return $ if isAdministrator cl then 
+            return
                 [ModifyServerInfo(\s -> s{isRegisteredUsersOnly = not $ isRegisteredUsersOnly s})
                 , AnswerClients [sendChan cl] ["CHAT", "[server]", "'Registered only' state toggled"]
                 ]
-                else
-                []
+        h "SUPER_POWER" _ = serverAdminOnly $ return [ModifyClient (\c -> c{hasSuperPower = True})]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)

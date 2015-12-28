@@ -93,13 +93,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning $ loc "No such room"]
             else if (not sameProto) && (not $ isAdministrator cl) then
             [Warning $ loc "Room version incompatible to your hedgewars version"]
-            else if isRestrictedJoins jRoom then
+            else if isRestrictedJoins jRoom && not (hasSuperPower cl) then
             [Warning $ loc "Joining restricted"]
             else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) && not (isAdministrator cl) then
             [Warning $ loc "Registered users only"]
             else if isBanned then
             [Warning $ loc "You are banned in this room"]
-            else if roomPassword /= password jRoom then
+            else if roomPassword /= password jRoom  && not (hasSuperPower cl) then
             [NoticeMessage WrongPassword]
             else
             (
