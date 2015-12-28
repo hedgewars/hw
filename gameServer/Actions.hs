@@ -466,12 +466,15 @@ processAction ClearAccountsCache = do
 
 
 processAction (ProcessAccountInfo info) = do
+    si <- gets serverInfo
     case info of
         HasAccount passwd isAdmin isContr -> do
             b <- isBanned
             c <- client's isChecker
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
-        Guest -> do
+        Guest | isRegisteredUsersOnly si -> do
+            processAction $ ByeClient "Registered users only"
+            | otherwise -> do
             b <- isBanned
             c <- client's isChecker
             when (not b) $

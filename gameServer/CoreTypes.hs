@@ -281,6 +281,7 @@ data ServerInfo =
     ServerInfo
     {
         isDedicated :: Bool,
+        isRegisteredUsersOnly :: Bool,
         serverMessage :: B.ByteString,
         serverMessageForOldVersions :: B.ByteString,
         latestReleaseVersion :: Word16,
@@ -304,6 +305,7 @@ newServerInfo :: Chan CoreMessage -> Chan DBQuery -> Maybe Socket -> Maybe Conf 
 newServerInfo =
     ServerInfo
         True
+        False
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
         "<font color=yellow><h3 align=center>Hedgewars 0.9.22 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
         51 -- latestReleaseVersion
