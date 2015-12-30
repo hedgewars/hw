@@ -168,7 +168,9 @@ var t: PGear;
     i, AliveCount: LongInt;
     s: ansistring;
     prevtime: LongWord;
+    stirFallers: boolean;
 begin
+stirFallers:= false;
 prevtime:= TurnTimeLeft;
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
@@ -199,6 +201,8 @@ while t <> nil do
     begin
     curHandledGear:= t;
     t:= curHandledGear^.NextGear;
+    if (GameTicks and $1FFF = 0) and (curHandledGear^.Kind = gtCase) and (curHandledGear^.Pos <> posCaseHealth) then
+        stirFallers := true; 
 
     if curHandledGear^.Message and gmDelete <> 0 then
         DeleteGear(curHandledGear)
@@ -224,6 +228,23 @@ while t <> nil do
             end
         end
     end;
+if stirFallers then
+    begin
+    t := GearsList;
+    while t <> nil do
+        begin
+        if t^.Kind = gtGenericFaller then
+            begin
+            t^.Active:= true;
+            t^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
+            t^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+            t^.dX:= _90-(GetRandomf*_360);
+            t^.dY:= _90-(GetRandomf*_360)
+            end;
+        t := t^.NextGear
+        end
+    end;
+
 curHandledGear:= nil;
 
 if AllInactive then

@@ -2169,23 +2169,6 @@ begin
         end
     else
         begin
-        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $1FFF = 0) then // stir 'em up periodically
-            begin
-            gi := GearsList;
-            while gi <> nil do
-                begin
-                if gi^.Kind = gtGenericFaller then
-                    begin
-                    gi^.Active:= true;
-                    gi^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
-                    gi^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
-                    gi^.dX:= _90-(GetRandomf*_360);
-                    gi^.dY:= _90-(GetRandomf*_360)
-                    end;
-                gi := gi^.NextGear
-                end
-            end;
-
         if Gear^.Timer = 500 then
             begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
