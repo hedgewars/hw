@@ -196,7 +196,7 @@ SDL_FillRect(resSurface, @dstrect, shadowint);
 // create and blit text
 strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color);
 //SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
-if strSurface <> nil then copyTOXY(strSurface, resSurface, Padding, Padding);
+if strSurface <> nil then copyToXY(strSurface, resSurface, Padding, Padding);
 SDL_FreeSurface(strSurface);
 
 cl.Tex:= Surface2Tex(resSurface, false);

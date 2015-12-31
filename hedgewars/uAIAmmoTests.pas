@@ -177,7 +177,9 @@ repeat
             value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else value:= RateExplosion(Me, EX, EY, 101);
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
-            value:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64;
+            if GameFlags and gfSolidLand = 0 then
+                 value := 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64
+            else value := BadTurn;
         if valueResult <= value then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
@@ -776,7 +778,11 @@ repeat
         valueResult:= RateShotgun(Me, vX, vY, rx, ry);
 
         if (valueResult = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
-            valueResult:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, rx, ry) div 64
+            begin
+            if GameFlags and gfSolidLand = 0 then
+                 valueResult:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, rx, ry) div 64
+            else valueResult := BadTurn
+            end
         else
             dec(valueResult, Level * 4000);
         // 27/20 is reuse bonus
