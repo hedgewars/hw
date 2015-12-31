@@ -36,6 +36,7 @@ type TAttackParams = record
         end;
 
 function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -68,7 +69,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: 0), // amGrenade
             (proc: @TestClusterBomb; flags: 0), // amClusterBomb
             (proc: @TestBazooka;     flags: 0), // amBazooka
-            (proc: nil;              flags: 0), // amBee
+            (proc: @TestBee;         flags: amtest_Rare), // amBee
             (proc: @TestShotgun;     flags: 0), // amShotgun
             (proc: nil;              flags: 0), // amPickHammer
             (proc: nil;              flags: 0), // amSkip
@@ -192,6 +193,112 @@ until rTime > 5050 - Level * 800;
 TestBazooka:= valueResult
 end;
 
+function calcBeeFlight(Me: PGear; x, y, dx, dy, tX, tY: real; var eX, eY: LongInt): LongInt;
+var t: Longword;
+    f: boolean;
+    speed, d: real;
+begin
+        addfilelog('002');
+
+    speed:= sqrt(sqr(dx) + sqr(dy));
+    // parabola flight before activation
+    t:= 500;
+    repeat
+        x:= x + dx;
+        y:= y + dy;
+        dy:= dy + cGravityf;
+        f:= ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
+           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5));
+        dec(t)
+    until (t = 0) or (y >= cWaterLine) or f;
+
+    if f then
+    begin
+        eX:= trunc(x);
+        eY:= trunc(y);
+        exit(RateExplosion(Me, eX, eY, 101, afTrackFall or afErasesLand));
+    end;
+        
+    // activated
+    t:= 5000;
+    
+    repeat
+        if (t and $F) = 0 then
+        begin
+            dx:= 0.9 * (dx + 0.000064 * (tX - x));
+            dy:= 0.9 * (dy + 0.000064 * (tY - y));
+            d := speed / sqrt(sqr(dx) + sqr(dy));
+            dx:= dx * d;
+            dy:= dy * d;
+            end;
+
+        x:= x + dx;
+        y:= y + dy;
+        f:= ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
+           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5));
+        dec(t)
+    until (t = 0) or f;
+
+    if f then
+    begin
+        eX:= trunc(x);
+        eY:= trunc(y);
+        exit(RateExplosion(Me, eX, eY, 101, afTrackFall or afErasesLand));
+    end
+    else
+        calcBeeFlight:= BadTurn
+end;
+
+function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+var i, j: LongInt;
+    valueResult, v: LongInt;
+    mX, mY, dX: real;
+    eX, eY: LongInt;
+begin
+    if Level > 1 then 
+        exit(BadTurn);
+    addfilelog('001');
+    eX:= 0;
+    eY:= 0;
+    mX:= hwFloat2Float(Me^.X);
+    mY:= hwFloat2Float(Me^.Y);
+    valueResult:= BadTurn;
+    for i:= 0 to 8 do
+        for j:= 0 to 1 do
+            begin
+            ap.Angle:= i * 120;
+            ap.Power:= random(1700) + 300;
+            dx:= sin(ap.Angle / 2048);
+            if j = 0 then 
+                begin
+                ap.Angle:= -ap.Angle;
+                dx:= -dx;
+                end;
+            
+            v:= calcBeeFlight(Me
+                    , mX
+                    , mY
+                    , sin(ap.Angle / 2048) * ap.Power / cMaxPower
+                    , cos(ap.Angle / 2048) * ap.Power / cMaxPower
+                    , Targ.Point.X
+                    , Targ.Point.Y
+                    , eX
+                    , eY);
+                    
+            if v > valueResult then
+                begin
+                ap.ExplR:= 100;
+                ap.ExplX:= eX;
+                ap.ExplY:= eY;
+                valueResult:= v
+                end
+            end;
+
+    ap.AttackPutX:= Targ.Point.X;
+    ap.AttackPutY:= Targ.Point.Y;
+
+    TestBee:= valueResult
+end;
 
 function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r, mX, mY: real;
