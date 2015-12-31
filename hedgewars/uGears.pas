@@ -808,6 +808,15 @@ for p:= 0 to Pred(TeamsCount) do
                 if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
                     begin
                     DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50);
+                    AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    end;
+// place flowers after in case holes overlap (we shrink search distance if we are failing to place)
+for p:= 0 to Pred(TeamsCount) do
+    with TeamsArray[p]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
+                    begin
                     ForcePlaceOnLand(hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2, 
                                      hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
                                      sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
