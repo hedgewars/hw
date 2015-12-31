@@ -1028,13 +1028,13 @@ begin
         end
     else
         begin
-        if (GameTicks and $F) = 0 then
+        if (Gear^.Timer and $F) = 0 then
             begin
-            if (GameTicks and $30) = 0 then
+            if (Gear^.Timer and $3F) = 0 then
                 AddVisualGear(gX, gY, vgtBeeTrace);
 
-            Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
-            Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
+            Gear^.dX := Gear^.dX + _0_000064 * (Gear^.Target.X - gX);
+            Gear^.dY := Gear^.dY + _0_000064 * (Gear^.Target.Y - gY);
             // make sure new speed isn't higher than original one (which we stored in Friction variable)
             t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
             Gear^.dX := Gear^.dX * t;

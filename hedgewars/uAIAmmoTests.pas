@@ -198,9 +198,6 @@ var t: Longword;
     f: boolean;
     speed, d: real;
 begin
-        addfilelog('002');
-
-    speed:= sqrt(sqr(dx) + sqr(dy));
     // parabola flight before activation
     t:= 500;
     repeat
@@ -218,19 +215,21 @@ begin
         eY:= trunc(y);
         exit(RateExplosion(Me, eX, eY, 101, afTrackFall or afErasesLand));
     end;
-        
+
+
     // activated
     t:= 5000;
-    
+    speed:= sqrt(sqr(dx) + sqr(dy));
+
     repeat
         if (t and $F) = 0 then
         begin
-            dx:= 0.9 * (dx + 0.000064 * (tX - x));
-            dy:= 0.9 * (dy + 0.000064 * (tY - y));
+            dx:= dx + 0.000064 * (tX - x);
+            dy:= dy + 0.000064 * (tY - y);
             d := speed / sqrt(sqr(dx) + sqr(dy));
             dx:= dx * d;
             dy:= dy * d;
-            end;
+        end;
 
         x:= x + dx;
         y:= y + dy;
@@ -251,13 +250,13 @@ end;
 
 function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, j: LongInt;
-    valueResult, v: LongInt;
+    valueResult, v, a, p: LongInt;
     mX, mY, dX: real;
     eX, eY: LongInt;
 begin
-    if Level > 1 then 
+    if Level > 1 then
         exit(BadTurn);
-    addfilelog('001');
+
     eX:= 0;
     eY:= 0;
     mX:= hwFloat2Float(Me^.X);
@@ -266,30 +265,29 @@ begin
     for i:= 0 to 8 do
         for j:= 0 to 1 do
             begin
-            ap.Angle:= i * 120;
-            ap.Power:= random(1700) + 300;
-            dx:= sin(ap.Angle / 2048);
-            if j = 0 then 
-                begin
-                ap.Angle:= -ap.Angle;
-                dx:= -dx;
-                end;
-            
+            a:= i * 120;
+            p:= random(cMaxPower - 200) + 180;
+
+            if j = 0 then
+                a:= -a;
+
             v:= calcBeeFlight(Me
                     , mX
                     , mY
-                    , sin(ap.Angle / 2048) * ap.Power / cMaxPower
-                    , cos(ap.Angle / 2048) * ap.Power / cMaxPower
+                    , sin(a * pi / 2048) * p / cPowerDivisor
+                    , -cos(a * pi / 2048) * p / cPowerDivisor
                     , Targ.Point.X
                     , Targ.Point.Y
                     , eX
                     , eY);
-                    
+
             if v > valueResult then
                 begin
                 ap.ExplR:= 100;
                 ap.ExplX:= eX;
                 ap.ExplY:= eY;
+                ap.Angle:= a;
+                ap.Power:= p;
                 valueResult:= v
                 end
             end;
@@ -297,7 +295,10 @@ begin
     ap.AttackPutX:= Targ.Point.X;
     ap.AttackPutY:= Targ.Point.Y;
 
-    TestBee:= valueResult
+    if valueResult > 0 then
+        TestBee:= valueResult - 5000
+    else
+        TestBee:= BadTurn // no digging
 end;
 
 function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;

@@ -166,6 +166,11 @@ for i:= 0 to Pred(Targets.Count) do
 
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
 
+                    if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+                        begin
+                        AddAction(BestActions, aia_Put, 0, 8, ap.AttackPutX, ap.AttackPutY)
+                        end;
+
                     if (ap.Angle > 0) then
                         AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
                     else if (ap.Angle < 0) then
@@ -187,11 +192,6 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_Down, aim_push, 300 + random(250), 0, 0);
                             AddAction(BestActions, aia_Down, aim_release, -dAngle, 0, 0)
                             end
-                        end;
-
-                    if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
-                        begin
-                        AddAction(BestActions, aia_Put, 0, 1, ap.AttackPutX, ap.AttackPutY)
                         end;
 
                     if (Ammoz[a].Ammo.Propz and ammoprop_OscAim) <> 0 then
