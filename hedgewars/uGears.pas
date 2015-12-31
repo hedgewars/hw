@@ -770,7 +770,8 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
                                 end;
         t:= LAND_WIDTH div 2
         end
-    end else // mix hedgehogs
+    end 
+else // mix hedgehogs
     begin
     Count:= 0;
     for p:= 0 to Pred(TeamsCount) do
@@ -799,7 +800,21 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
         ar[i]:= ar[Count - 1];
         dec(Count)
         end
-    end
+    end;
+for p:= 0 to Pred(TeamsCount) do
+    with TeamsArray[p]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
+                    begin
+                    DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50);
+                    ForcePlaceOnLand(hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2, 
+                                     hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
+                                     sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
+                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    Gear^.State:= Gear^.State and not gsttmpFlag;
+                    AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    end
 end;
 
 

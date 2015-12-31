@@ -80,9 +80,9 @@ begin
                 AddClouds;
             AddFlakes;
             SetRandomSeed(cSeed, false);
+            StoreLoad(false);
             AssignHHCoords;
             AddMiscGears;
-            StoreLoad(false);
             InitWorld;
             ResetKbd;
             if GameType = gmtSave then
