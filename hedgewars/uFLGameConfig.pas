@@ -42,7 +42,8 @@ procedure runNetGame();
 
 implementation
 uses uFLIPC, uFLUtils, uFLTeams, uFLThemes, uFLSChemes, uFLAmmo
-    , uFLUICallback, uFLRunQueue, uFLNet, uUtils;
+    , uFLUICallback, uFLRunQueue, uFLNet, uUtils, uFLDrawnMap
+    , SDLh;
 
 var
     currentConfig: TGameConfig;
@@ -55,20 +56,32 @@ end;
 
 procedure sendDrawnMap(config: PGameConfig);
 var i: Longword;
+    data: PByteArray;
+    dataLen: Longword;
     s: shortstring;
 begin
-    i:= 1;
+    decodeDrawnMap(config^.drawnData, config^.drawnDataSize, data, dataLen);
 
-    while i < config^.drawnDataSize do
+    i:= 0;
+
+    s[0]:= #240;
+    while i < dataLen do
     begin
-        if config^.drawnDataSize - i > 240 then
-            s:= copy(config^.drawnData, i, 240)
-        else
-            s:= copy(config^.drawnData, i, config^.drawnDataSize - i);
-        system.writeln('[DRAWN MAP] ', s);
-        ipcToEngine('edraw ' + DecodeBase64(s));
+        if dataLen - i > 240 then
+        begin
+            Move(data^[i], s[1], 240)
+        end else
+        begin
+            Move(data^[i], s[1], dataLen - i);
+            s[0]:= char(dataLen - i)
+        end;
+
+        ipcToEngine('edraw ' + s);
         inc(i, 240)
     end;
+
+    if dataLen > 0 then
+        FreeMem(data, dataLen);
 end;
 
 procedure sendConfig(config: PGameConfig);
