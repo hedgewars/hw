@@ -940,7 +940,7 @@ else
                 begin
                 inc(cnt);
                 x:= leftX+GetRandom(rightX-leftX-32)+16;
-                y:= topY+GetRandom(LAND_HEIGHT-topY-32)+16;
+                y:= topY+GetRandom(LAND_HEIGHT-topY-64)+48;
                 if NoGearsToAvoid(x, y, 100 div max(1,cnt div 100), 100 div max(1,cnt div 100)) then
                     begin
                     Gear^.State:= Gear^.State or gsttmpFlag;
