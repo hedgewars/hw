@@ -215,6 +215,54 @@ if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
+case Kind of
+          gtFlame: Gear^.Boom := 2;  // some additional expl in there are x3, x4 this
+       gtHedgehog: Gear^.Boom := 30;
+           gtMine: Gear^.Boom := 50;
+           gtCase: Gear^.Boom := 25;
+        gtAirMine: Gear^.Boom := 25;
+     gtExplosives: Gear^.Boom := 75;
+        gtGrenade: Gear^.Boom := 50;
+          gtShell: Gear^.Boom := 50;
+            gtBee: Gear^.Boom := 50;
+    gtShotgunShot: Gear^.Boom := 25;
+     gtPickHammer: Gear^.Boom := 6;
+//           gtRope: Gear^.Boom := 2; could be funny to have rope attaching to hog deal small amount of dmg?
+     gtDEagleShot: Gear^.Boom := 7;
+       gtDynamite: Gear^.Boom := 75;
+    gtClusterBomb: Gear^.Boom := 20;
+     gtMelonPiece,
+        gtCluster: Gear^.Boom := Timer;
+         gtShover: Gear^.Boom := 30;
+      gtFirePunch: Gear^.Boom := 30;
+        gtAirBomb: Gear^.Boom := 30;
+      gtBlowTorch: Gear^.Boom := 2;
+         gtMortar: Gear^.Boom := 20;
+           gtWhip: Gear^.Boom := 30;
+       gtKamikaze: Gear^.Boom := 30; // both shove and explosion
+           gtCake: Gear^.Boom := cakeDmg; // why is cake damage a global constant
+     gtWatermelon: Gear^.Boom := 75;
+    gtHellishBomb: Gear^.Boom := 90;
+          gtDrill: if Gear^.State and gsttmpFlag = 0 then
+                        Gear^.Boom := 50
+                   else Gear^.Boom := 30;
+           gtBall: Gear^.Boom := 40;
+        gtRCPlane: Gear^.Boom := 25;
+// sniper rifle is distance linked, this Boom is just an arbitrary scaling factor applied to timer-based-damage
+// because, eh, why not..
+gtSniperRifleShot: Gear^.Boom := 100000;
+            gtEgg: Gear^.Boom := 10;
+          gtPiano: Gear^.Boom := 80;
+        gtGasBomb: Gear^.Boom := 20;
+    gtSineGunShot: Gear^.Boom := 35;
+          gtSMine: Gear^.Boom := 30;
+    gtSnowball: Gear^.Boom := 200000; // arbitrary scaling for the shove
+         gtHammer: if cDamageModifier > _1 then // scale it based on cDamageModifier?
+                         Gear^.Boom := 2
+                    else Gear^.Boom := 3;
+    gtPoisonCloud: Gear^.Boom := 20;
+          gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
+    end;
 
 case Kind of
      gtGrenade,

@@ -168,7 +168,9 @@ var t: PGear;
     i, AliveCount: LongInt;
     s: ansistring;
     prevtime: LongWord;
+    stirFallers: boolean;
 begin
+stirFallers:= false;
 prevtime:= TurnTimeLeft;
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
@@ -199,6 +201,8 @@ while t <> nil do
     begin
     curHandledGear:= t;
     t:= curHandledGear^.NextGear;
+    if (GameTicks and $1FFF = 0) and (curHandledGear^.Kind = gtCase) and (curHandledGear^.Pos <> posCaseHealth) then
+        stirFallers := true; 
 
     if curHandledGear^.Message and gmDelete <> 0 then
         DeleteGear(curHandledGear)
@@ -224,6 +228,23 @@ while t <> nil do
             end
         end
     end;
+if stirFallers then
+    begin
+    t := GearsList;
+    while t <> nil do
+        begin
+        if t^.Kind = gtGenericFaller then
+            begin
+            t^.Active:= true;
+            t^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
+            t^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+            t^.dX:= _90-(GetRandomf*_360);
+            t^.dY:= _90-(GetRandomf*_360)
+            end;
+        t := t^.NextGear
+        end
+    end;
+
 curHandledGear:= nil;
 
 if AllInactive then
@@ -749,7 +770,8 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
                                 end;
         t:= LAND_WIDTH div 2
         end
-    end else // mix hedgehogs
+    end 
+else // mix hedgehogs
     begin
     Count:= 0;
     for p:= 0 to Pred(TeamsCount) do
@@ -778,7 +800,30 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
         ar[i]:= ar[Count - 1];
         dec(Count)
         end
-    end
+    end;
+for p:= 0 to Pred(TeamsCount) do
+    with TeamsArray[p]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
+                    begin
+                    DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50);
+                    AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    end;
+// place flowers after in case holes overlap (we shrink search distance if we are failing to place)
+for p:= 0 to Pred(TeamsCount) do
+    with TeamsArray[p]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
+                    begin
+                    ForcePlaceOnLand(hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2, 
+                                     hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
+                                     sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
+                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    Gear^.State:= Gear^.State and not gsttmpFlag;
+                    AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    end
 end;
 
 

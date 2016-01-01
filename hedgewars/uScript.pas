@@ -921,29 +921,30 @@ begin
             lua_pushinteger(L, Integer(gear^.ImpactSound));
             lua_pushinteger(L, gear^.nImpactSounds);
             lua_pushinteger(L, gear^.Tint);
-            lua_pushinteger(L, gear^.Damage)
+            lua_pushinteger(L, gear^.Damage);
+            lua_pushinteger(L, gear^.Boom)
             end
         else
             begin
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-            lua_pushnil(L); lua_pushnil(L)
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
             end
         end
     else
         begin
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-        lua_pushnil(L); lua_pushnil(L)
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
         end;
-    lc_getgearvalues:= 12
+    lc_getgearvalues:= 13
 end;
 
 function lc_setgearvalues(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-// Currently allows 1-13 params
-//    if CheckLuaParamCount(L, 13, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage') then
+// Currently allows 1-14 params
+//    if CheckLuaParamCount(L, 14, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage, Boom') then
 //        begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -972,6 +973,8 @@ begin
                 gear^.Tint := lua_tointeger(L, 12);
             if not lua_isnoneornil(L, 13) then
                 gear^.Damage := lua_tointeger(L, 13);
+            if not lua_isnoneornil(L, 14) then
+                gear^.Boom := lua_tointeger(L, 14);
             end;
 //        end
 //    else

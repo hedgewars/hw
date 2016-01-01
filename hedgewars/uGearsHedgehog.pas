@@ -587,7 +587,7 @@ else if Gear^.Timer = 1 then
     begin
     Gear^.Hedgehog^.Effects[heFrozen]:= 0;
     Gear^.State:= Gear^.State or gstNoDamage;
-    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
+    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, CurrentHedgehog, EXPLAutoSound);
     grave:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0);
     grave^.Hedgehog:= Gear^.Hedgehog;
     grave^.Pos:= Gear^.uid;

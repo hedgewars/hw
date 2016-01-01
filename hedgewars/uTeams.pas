@@ -127,7 +127,7 @@ with CurrentHedgehog^ do
         if Gear <> nil then
            begin
            DeleteCI(Gear);
-           FindPlace(Gear, false, 0, LAND_WIDTH);
+           FindPlace(Gear, false, 0, LAND_WIDTH, true);
            if Gear <> nil then
                AddCI(Gear)
            end

@@ -271,9 +271,9 @@ for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
     if Land[y, x] <> 0 then
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[y, x]:= p^[x] or AMask
+            LandPixels[y, x]:= p^[x]// or AMask
         else
-            LandPixels[y div 2, x div 2]:= p^[x] or AMask;
+            LandPixels[y div 2, x div 2]:= p^[x];// or AMask;
 
     p:= PLongwordArray(@(p^[Surface^.pitch div 4]));
     end;
@@ -289,7 +289,7 @@ var tmpsurf: PSDL_Surface;
 begin
     AddProgress();
 
-    tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
+    tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, AMask);
 
     TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
     ColorizeLand(tmpsurf);

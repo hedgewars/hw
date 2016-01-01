@@ -36,6 +36,7 @@ type TAttackParams = record
         end;
 
 function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -68,7 +69,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: 0), // amGrenade
             (proc: @TestClusterBomb; flags: 0), // amClusterBomb
             (proc: @TestBazooka;     flags: 0), // amBazooka
-            (proc: nil;              flags: 0), // amBee
+            (proc: @TestBee;         flags: amtest_Rare), // amBee
             (proc: @TestShotgun;     flags: 0), // amShotgun
             (proc: nil;              flags: 0), // amPickHammer
             (proc: nil;              flags: 0), // amSkip
@@ -176,7 +177,9 @@ repeat
             value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else value:= RateExplosion(Me, EX, EY, 101);
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
-            value:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64;
+            if GameFlags and gfSolidLand = 0 then
+                 value := 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64
+            else value := BadTurn;
         if valueResult <= value then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
@@ -192,6 +195,113 @@ until rTime > 5050 - Level * 800;
 TestBazooka:= valueResult
 end;
 
+function calcBeeFlight(Me: PGear; x, y, dx, dy, tX, tY: real; var eX, eY: LongInt): LongInt;
+var t: Longword;
+    f: boolean;
+    speed, d: real;
+begin
+    // parabola flight before activation
+    t:= 500;
+    repeat
+        x:= x + dx;
+        y:= y + dy;
+        dy:= dy + cGravityf;
+        f:= ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
+           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5));
+        dec(t)
+    until (t = 0) or (y >= cWaterLine) or f;
+
+    if f then
+    begin
+        eX:= trunc(x);
+        eY:= trunc(y);
+        exit(RateExplosion(Me, eX, eY, 101, afTrackFall or afErasesLand));
+    end;
+
+
+    // activated
+    t:= 5000;
+    speed:= sqrt(sqr(dx) + sqr(dy));
+
+    repeat
+        if (t and $F) = 0 then
+        begin
+            dx:= dx + 0.000064 * (tX - x);
+            dy:= dy + 0.000064 * (tY - y);
+            d := speed / sqrt(sqr(dx) + sqr(dy));
+            dx:= dx * d;
+            dy:= dy * d;
+        end;
+
+        x:= x + dx;
+        y:= y + dy;
+        f:= ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
+           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5));
+        dec(t)
+    until (t = 0) or f;
+
+    if f then
+    begin
+        eX:= trunc(x);
+        eY:= trunc(y);
+        exit(RateExplosion(Me, eX, eY, 101, afTrackFall or afErasesLand));
+    end
+    else
+        calcBeeFlight:= BadTurn
+end;
+
+function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+var i, j: LongInt;
+    valueResult, v, a, p: LongInt;
+    mX, mY, dX: real;
+    eX, eY: LongInt;
+begin
+    if Level > 1 then
+        exit(BadTurn);
+
+    eX:= 0;
+    eY:= 0;
+    mX:= hwFloat2Float(Me^.X);
+    mY:= hwFloat2Float(Me^.Y);
+    valueResult:= BadTurn;
+    for i:= 0 to 8 do
+        for j:= 0 to 1 do
+            begin
+            a:= i * 120;
+            p:= random(cMaxPower - 200) + 180;
+
+            if j = 0 then
+                a:= -a;
+
+            v:= calcBeeFlight(Me
+                    , mX
+                    , mY
+                    , sin(a * pi / 2048) * p / cPowerDivisor
+                    , -cos(a * pi / 2048) * p / cPowerDivisor
+                    , Targ.Point.X
+                    , Targ.Point.Y
+                    , eX
+                    , eY);
+
+            if v > valueResult then
+                begin
+                ap.ExplR:= 100;
+                ap.ExplX:= eX;
+                ap.ExplY:= eY;
+                ap.Angle:= a;
+                ap.Power:= p;
+                valueResult:= v
+                end
+            end;
+
+    ap.AttackPutX:= Targ.Point.X;
+    ap.AttackPutY:= Targ.Point.Y;
+
+    if valueResult > 0 then
+        TestBee:= valueResult - 5000
+    else
+        TestBee:= BadTurn // no digging
+end;
 
 function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r, mX, mY: real;
@@ -668,7 +778,11 @@ repeat
         valueResult:= RateShotgun(Me, vX, vY, rx, ry);
 
         if (valueResult = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
-            valueResult:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, rx, ry) div 64
+            begin
+            if GameFlags and gfSolidLand = 0 then
+                 valueResult:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, rx, ry) div 64
+            else valueResult := BadTurn
+            end
         else
             dec(valueResult, Level * 4000);
         // 27/20 is reuse bonus

@@ -273,6 +273,7 @@ type
 // DirAngle is a 'real' - if you do not need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
 // These are frequently overridden to serve some other purpose
+	    Boom: Longword;          // amount of damage caused by the gear
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
             Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
             Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...

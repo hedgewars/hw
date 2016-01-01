@@ -927,13 +927,42 @@ if cnt2 > 0 then
         AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
         end
     end
-    else
+else
     begin
     OutError('Can''t find place for Gear', false);
     if Gear^.Kind = gtHedgehog then
-        Gear^.Hedgehog^.Effects[heResurrectable] := 0;
-    DeleteGear(Gear);
-    Gear:= nil
+        begin
+        cnt:= 0;
+        if GameTicks = 0 then
+            begin
+            //AddFileLog('Trying to make a hole');
+            while (cnt < 1000) do
+                begin
+                inc(cnt);
+                x:= leftX+GetRandom(rightX-leftX-32)+16;
+                y:= topY+GetRandom(LAND_HEIGHT-topY-64)+48;
+                if NoGearsToAvoid(x, y, 100 div max(1,cnt div 100), 100 div max(1,cnt div 100)) then
+                    begin
+                    Gear^.State:= Gear^.State or gsttmpFlag;
+                    Gear^.X:= int2hwFloat(x);
+                    Gear^.Y:= int2hwFloat(y);
+                    AddFileLog('Picked a spot for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')');
+                    cnt:= 2000
+                    end
+                end;
+            end;
+        if cnt < 2000 then
+            begin
+            Gear^.Hedgehog^.Effects[heResurrectable] := 0;
+            DeleteGear(Gear);
+            Gear:= nil
+            end
+        end
+    else
+        begin
+        DeleteGear(Gear);
+        Gear:= nil
+        end
     end
 end;
 
@@ -1074,7 +1103,7 @@ while t <> nil do
                     if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
-                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        dmg:= ModifyDamage(min(r - dist, Gear^.Boom), t);
                         end;
                     if dmg > 0 then
                         begin
@@ -1102,7 +1131,7 @@ while t <> nil do
                     if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
-                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        dmg:= ModifyDamage(min(r - dist, Gear^.Boom), t);
                         end;
                     if dmg > 0 then
                         begin

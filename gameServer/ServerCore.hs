@@ -23,7 +23,7 @@ import Control.Monad
 import System.Log.Logger
 import Control.Monad.Reader
 import Control.Monad.State.Strict
-import Data.Set as Set
+import Data.Set as Set hiding (null)
 import Data.Unique
 import Data.Maybe
 --------------------------------------
@@ -55,6 +55,10 @@ mainLoop = forever $ do
             unless (ci `Set.member` removed) $ do
                 modify (\s -> s{clientIndex = Just ci})
                 processAction $ ReactCmd cmd
+                pa <- client's pendingActions
+                when (not $ null pa) $ do
+                    mapM_ processAction pa
+                    processAction $ ModifyClient $ \c -> c{pendingActions = []}
 
         Remove ci ->
             processAction (DeleteClient ci)
