@@ -4,13 +4,25 @@ local ObjectList = {}
 
 -- Overall padding for roping freedom
 local Padding = 430
+local TeamRope = false
 
 function onParameters()
     parseParams()
     if params["pad"] ~= nil then
         Padding = params["pad"]
     end
+    if params["teamrope"] ~= nil then
+        TeamRope = true
+    end
 end
+
+function onGearAdd(gear)
+    if GetGearType(gear) == gtRope and TeamRope then
+        SetTag(gear,1)
+        SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
+    end
+end
+
 
 -- This could probably use less points and more precision
 -- 700x700 for object space
