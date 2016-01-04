@@ -72,22 +72,31 @@ var IPCSock: PTCPSocket;
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
 begin
-new(command);
-FillChar(command^, sizeof(TCmd), 0);
-command^.loTime:= Time;
-command^.str:= str;
-if (command^.cmd <> 'F') and (command^.cmd <> 'G') then dec(command^.len, 2); // cut timestamp
-if headcmd = nil then
+    if (lastcmd <> nil) and (lastcmd^.cmd = '+') then
     begin
-    headcmd:= command;
-    lastcmd:= command
-    end
-else
+        command:= lastcmd;
+    end else
     begin
-    lastcmd^.Next:= command;
-    lastcmd:= command
+        new(command);
+
+        if headcmd = nil then
+            begin
+            headcmd:= command;
+            lastcmd:= command
+            end
+        else
+            begin
+            lastcmd^.Next:= command;
+            lastcmd:= command
+            end;
     end;
-AddCmd:= command;
+
+    FillChar(command^, sizeof(TCmd), 0);
+    command^.loTime:= Time;
+    command^.str:= str;
+    if (command^.cmd <> 'F') and (command^.cmd <> 'G') then dec(command^.len, 2); // cut timestamp
+
+    AddCmd:= command;
 end;
 
 procedure RemoveCmd;
