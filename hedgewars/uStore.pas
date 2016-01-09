@@ -112,15 +112,19 @@ clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
-SDLTry(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true);
+if tmpsurf = nil then exit;
 tmpsurf:= doSurfaceConversion(tmpsurf);
-SDLTry(tmpsurf <> nil, 'TTF_RenderUTF8_Blended, doSurfaceConversion', true);
-SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
-SDL_FreeSurface(tmpsurf);
-finalRect.x:= X;
-finalRect.y:= Y;
-finalRect.w:= w + cFontBorder * 2 + 4;
-finalRect.h:= h + cFontBorder * 2;
+
+if tmpsurf <> nil then
+begin
+    SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
+    SDL_FreeSurface(tmpsurf);
+    finalRect.x:= X;
+    finalRect.y:= Y;
+    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.h:= h + cFontBorder * 2;
+end;
+
 WriteInRect:= finalRect
 end;
 
@@ -356,7 +360,7 @@ if (not reload) and (not cOnlyStats) then
             s:= cPathz[ptFonts] + '/' + Name;
             WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
             Handle:= TTF_OpenFontRW(rwopsOpenRead(s), true, Height);
-            SDLTry(Handle <> nil, 'TTF_OpenFontRW', true);
+            if SDLCheck(Handle <> nil, 'TTF_OpenFontRW', true) then exit;
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
             end;
@@ -605,7 +609,7 @@ begin
             // anounce that loading failed
             OutError(msgFailed, false);
 
-            SDLTry(false, 'LoadImage', (imageFlags and ifCritical) <> 0);
+            if SDLCheck(false, 'LoadImage', (imageFlags and ifCritical) <> 0) then exit;
             // rwops was already freed by IMG_Load_RW
             rwops:= nil;
             end else
@@ -734,7 +738,6 @@ begin
 end;
 
 procedure SetupOpenGL;
-var buf: array[byte] of char;
 begin
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_GetCurrentVideoDriver()) + ')');
 
@@ -744,7 +747,7 @@ begin
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, 'SDLGLcontext', true);
+    if SDLCheck(SDLGLcontext <> nil, 'SDLGLcontext', true) then exit;
     SDL_GL_SetSwapInterval(1);
 
     RendererSetup();
@@ -988,7 +991,7 @@ begin
                                  SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
                                  cScreenWidth, cScreenHeight,
                                  SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
-    SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
+    if SDLCheck(SDLwindow <> nil, 'SDL_CreateWindow', true) then exit;
     SetupOpenGL();
 end;
 {$ENDIF} // USE_VIDEO_RECORDING
@@ -1024,7 +1027,7 @@ begin
         begin
         // set window title
         WriteToConsole('Init SDL_image... ');
-        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, 'IMG_Init', true);
+        if SDLCheck(IMG_Init(IMG_INIT_PNG) <> 0, 'IMG_Init', true) then exit;
         WriteLnToConsole(msgOK);
         end
     else
@@ -1082,7 +1085,7 @@ begin
 
     if SDLwindow = nil then
         SDLwindow:= SDL_CreateWindow(PChar('Hedgewars'), x, y, cScreenWidth, cScreenHeight, flags);
-    SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
+    if SDLCheck(SDLwindow <> nil, 'SDL_CreateWindow', true) then exit;
 
     // load engine ico
     {$IFNDEF DARWIN}

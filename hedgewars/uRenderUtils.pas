@@ -99,7 +99,8 @@ begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
     finalRect.x:= X + cFontBorder + 2;
     finalRect.y:= Y + cFontBorder;
-    SDLTry(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true);
+    if SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
+        exit;
     SDL_UpperBlit(tmpsurf, @textRect, Surface, @finalRect);
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;
@@ -522,9 +523,11 @@ begin
         rect.x:= edgeHeight + 1 + ((i - w) div 2);
         // trying to more evenly position the text, vertically
         rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
-        SDLTry(tmpsurf <> nil, 'TTF_Init', true);
-        SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
-        SDL_FreeSurface(tmpsurf);
+        if not SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
+        begin
+            SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
+            SDL_FreeSurface(tmpsurf);
+        end;
         inc(line);
         end;
 

@@ -342,18 +342,23 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     WriteToConsole('Init SDL... ');
-    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
+    if not cOnlyStats then SDLCheck(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
     WriteLnToConsole(msgOK);
-
-    //SDL_StartTextInput();
-    SDL_ShowCursor(0);
-
     if not cOnlyStats then
         begin
         WriteToConsole('Init SDL_ttf... ');
-        SDLTry(TTF_Init() <> -1, 'TTF_Init', true);
+        SDLCheck(TTF_Init() <> -1, 'TTF_Init', true);
         WriteLnToConsole(msgOK);
         end;
+
+    if not allOK then
+    begin
+        freeEverything(true);
+        exit
+    end;
+    //SDL_StartTextInput();
+    SDL_ShowCursor(0);
+
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -401,32 +406,35 @@ begin
             LoadRecordFromFile(recordFileName);
         end;
 
-    ScriptOnGameInit;
-    s:= 'eproto ' + inttostr(cNetProtoVersion);
-    SendIPCRaw(@s[0], Length(s) + 1); // send proto version
-
-    InitTeams();
-    AssignStores();
-
-    if GameType = gmtRecord then
-        SetSound(false);
-
-    InitSound();
-
-    isDeveloperMode:= false;
-    TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-    //ParseCommand('rotmask', true);
-
-{$IFDEF USE_VIDEO_RECORDING}
-    if GameType = gmtRecord then
+    if allOK then
     begin
-        RecorderMainLoop();
-        freeEverything(true);
-        exit;
-    end;
-{$ENDIF}
+        ScriptOnGameInit;
+        s:= 'eproto ' + inttostr(cNetProtoVersion);
+        SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 
-    MainLoop;
+        InitTeams();
+        AssignStores();
+
+        if GameType = gmtRecord then
+            SetSound(false);
+
+        InitSound();
+
+        isDeveloperMode:= false;
+        TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+        //ParseCommand('rotmask', true);
+
+    {$IFDEF USE_VIDEO_RECORDING}
+        if GameType = gmtRecord then
+        begin
+            RecorderMainLoop();
+            freeEverything(true);
+            exit;
+        end;
+    {$ENDIF}
+
+        MainLoop;
+    end;
     // clean up all the memory allocated
     freeEverything(true);
 end;
@@ -437,6 +445,7 @@ end;
 // freeEverything - free above. Pay attention to the init/free order!
 procedure preInitEverything;
 begin
+    allOK:= true;
     Randomize();
 
     uVariables.preInitModule;
@@ -537,19 +546,23 @@ begin
     initEverything(false);
 
     InitIPC;
-    IPCWaitPongEvent;
-    TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+    if allOK then
+    begin
+        IPCWaitPongEvent;
+        TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
-    ScriptOnPreviewInit;
-{$IFDEF MOBILE}
-    GenPreview(Preview);
-{$ELSE}
-    GenPreviewAlpha(Preview);
-{$ENDIF}
-    WriteLnToConsole('Sending preview...');
-    SendIPCRaw(@Preview, sizeof(Preview));
-    SendIPCRaw(@MaxHedgehogs, sizeof(byte));
-    WriteLnToConsole('Preview sent, disconnect');
+        ScriptOnPreviewInit;
+    {$IFDEF MOBILE}
+        GenPreview(Preview);
+    {$ELSE}
+        GenPreviewAlpha(Preview);
+    {$ENDIF}
+        WriteLnToConsole('Sending preview...');
+        SendIPCRaw(@Preview, sizeof(Preview));
+        SendIPCRaw(@MaxHedgehogs, sizeof(byte));
+        WriteLnToConsole('Preview sent, disconnect');
+    end;
+
     freeEverything(false);
 end;
 

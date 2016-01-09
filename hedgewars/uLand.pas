@@ -263,7 +263,7 @@ begin
 TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
 
 if SDL_MustLock(Surface) then
-    SDLTry(SDL_LockSurface(Surface) >= 0, 'SDL_LockSurface', true);
+    if SDLCheck(SDL_LockSurface(Surface) >= 0, 'SDL_LockSurface', true) then exit;
 
 p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
@@ -451,8 +451,10 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
     cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
     cpY:= LAND_HEIGHT - tmpsurf^.h;
     if SDL_MustLock(tmpsurf) then
-        SDLTry(SDL_LockSurface(tmpsurf) >= 0, 'SDL_LockSurface', true);
+        SDLCheck(SDL_LockSurface(tmpsurf) >= 0, 'SDL_LockSurface', true);
 
+    if allOK then
+    begin
         p:= tmpsurf^.pixels;
         for y:= 0 to Pred(tmpsurf^.h) do
             begin
@@ -461,15 +463,16 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
             p:= PLongwordArray(@(p^[tmpsurf^.pitch div 4]));
             end;
 
-    if SDL_MustLock(tmpsurf) then
-        SDL_UnlockSurface(tmpsurf);
-    if not disableLandBack then
-        begin
-        // freed in freeModule() below
-        LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
-        if (LandBackSurface <> nil) and GrayScale then
-            Surface2GrayScale(LandBackSurface)
-        end;
+        if SDL_MustLock(tmpsurf) then
+            SDL_UnlockSurface(tmpsurf);
+        if not disableLandBack then
+            begin
+            // freed in freeModule() below
+            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+            if (LandBackSurface <> nil) and GrayScale then
+                Surface2GrayScale(LandBackSurface)
+            end;
+    end;
 end;
 if (tmpsurf <> nil) then
     SDL_FreeSurface(tmpsurf);

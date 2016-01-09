@@ -114,16 +114,16 @@ procedure InitIPC;
 var ipaddr: TIPAddress;
 begin
     WriteToConsole('Init SDL_Net... ');
-    SDLTry(SDLNet_Init = 0, 'SDLNet_Init', true);
+    SDLCheck(SDLNet_Init = 0, 'SDLNet_Init', true);
     fds:= SDLNet_AllocSocketSet(1);
-    SDLTry(fds <> nil, 'SDLNet_AllocSocketSet', true);
+    SDLCheck(fds <> nil, 'SDLNet_AllocSocketSet', true);
     WriteLnToConsole(msgOK);
     WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
-    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, 'SDLNet_ResolveHost', true);
+    SDLCheck(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, 'SDLNet_ResolveHost', true);
     {$HINTS ON}
     IPCSock:= SDLNet_TCP_Open(ipaddr);
-    SDLTry(IPCSock <> nil, 'SDLNet_TCP_Open', true);
+    SDLCheck(IPCSock <> nil, 'SDLNet_TCP_Open', true);
     WriteLnToConsole(msgOK)
 end;
 
@@ -512,6 +512,7 @@ begin
     RegisterVariable('fatal', @chFatalError, true );
 
     IPCSock:= nil;
+    fds:= nil;
 
     headcmd:= nil;
     lastcmd:= nil;
