@@ -35,6 +35,7 @@ procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 
 procedure ResetKbd;
+procedure ResetMouseWheel;
 procedure FreezeEnterKey;
 procedure InitKbdKeyTable;
 
@@ -226,20 +227,40 @@ begin
             ProcessKey(KeyNameToCode('mousem'), ButtonDown);
         SDL_BUTTON_RIGHT:
             ProcessKey(KeyNameToCode('mouser'), ButtonDown);
-        SDL_BUTTON_WHEELDOWN:
-            ProcessKey(KeyNameToCode('wheeldown'), ButtonDown);
-        SDL_BUTTON_WHEELUP:
-            ProcessKey(KeyNameToCode('wheelup'), ButtonDown);
         end;
 end;
+
+var mwheelupCode, mwheeldownCode: Integer;
 
 procedure ProcessMouseWheel(x, y: LongInt);
 begin
     //writelntoconsole('[MOUSEWHEEL] '+inttostr(x)+', '+inttostr(y));
     if y > 0 then
-        ProcessKey(KeyNameToCode('wheelup'), true)
+        begin
+        // reset other direction
+        if tkbd[mwheeldownCode] then
+            ProcessKey(mwheeldownCode, false);
+        // trigger "button down" event
+        if (not tkbd[mwheelupCode]) then
+            ProcessKey(mwheelupCode, true);
+        end
     else if y < 0 then
-        ProcessKey(KeyNameToCode('wheeldown'), true);
+        begin
+        // reset other direction
+        if tkbd[mwheelupCode] then
+            ProcessKey(mwheelupCode, false);
+        // trigger "button down" event
+        if (not tkbd[mwheeldownCode]) then
+            ProcessKey(mwheeldownCode, true);
+        end;
+end;
+
+procedure ResetMouseWheel();
+begin
+    if tkbd[mwheelupCode] then
+        ProcessKey(mwheelupCode, false);
+    if tkbd[mwheeldownCode] then
+        ProcessKey(mwheeldownCode, false);
 end;
 
 procedure ResetKbd;
@@ -311,8 +332,10 @@ begin
     KeyNames[cKeyMaxIndex    ]:= 'mousel';
     KeyNames[cKeyMaxIndex - 1]:= 'mousem';
     KeyNames[cKeyMaxIndex - 2]:= 'mouser';
-    KeyNames[cKeyMaxIndex - 3]:= 'wheelup';
-    KeyNames[cKeyMaxIndex - 4]:= 'wheeldown';
+    mwheelupCode:= cKeyMaxIndex - 3;
+    KeyNames[mwheelupCode]:= 'wheelup';
+    mwheeldownCode:= cKeyMaxIndex - 4;
+    KeyNames[mwheeldownCode]:= 'wheeldown';
 
     for i:= 0 to cKeyMaxIndex - 5 do
         begin
@@ -596,6 +619,10 @@ end;
 
 procedure initModule;
 begin
+    // assign 0 until InitKbdKeyTable is called
+    mwheelupCode:= 0;
+    mwheeldownCode:= 0;
+
     RegisterVariable('dbind', @chDefaultBind, true );
 end;
 

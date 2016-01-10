@@ -155,11 +155,13 @@ var event: TSDL_Event;
     PrevTime, CurrTime: LongWord;
     isTerminated: boolean;
     previousGameState: TGameState;
+    wheelEvent: boolean;
 begin
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
+        wheelEvent:= false;
         SDL_PumpEvents();
 
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
@@ -187,7 +189,10 @@ begin
                     if (GameState >= gsGame) then ProcessMouse(event.button, false);
 
                 SDL_MOUSEWHEEL:
+                    begin
+                    wheelEvent:= true;
                     ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    end;
 
                 SDL_TEXTINPUT: uChat.TextInput(event.text);
 
@@ -238,6 +243,9 @@ begin
                     isTerminated:= true
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
+
+        if (not wheelEvent) then
+            ResetMouseWheel();
 
         if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
             handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
