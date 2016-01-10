@@ -60,6 +60,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     setModal(true);
     setWindowFlags(Qt::Sheet);
     setWindowModality(Qt::WindowModal);
+    setWindowTitle(tr("Feedback"));
     setMinimumSize(700, 460);
     resize(700, 460);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

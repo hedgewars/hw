@@ -32,6 +32,7 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
     setModal(true);
     setWindowFlags(Qt::Sheet);
     setWindowModality(Qt::WindowModal);
+    setWindowTitle(tr("Create room"));
     setMinimumSize(360, 130);
     resize(360, 180);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);

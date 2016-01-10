@@ -31,6 +31,7 @@ SeedPrompt::SeedPrompt(QWidget* parent, const QString & seed, bool editable) : Q
     setModal(true);
     setWindowFlags(Qt::Sheet);
     setWindowModality(Qt::WindowModal);
+    setWindowTitle(tr("Seed"));
     setMinimumSize(360, 160);
     resize(360, 160);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
