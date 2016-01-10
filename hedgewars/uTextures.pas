@@ -176,6 +176,9 @@ var
     r, slr, w, si, li: LongWord;
 begin
     w:= surf^.w;
+    // just a single pixel, nothing to do here
+    if (w < 2) and (surf^.h < 2) then
+        exit;
     slr:= surf^.h - 2;
     si:= 0;
     li:= w - 1;
