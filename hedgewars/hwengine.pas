@@ -99,6 +99,9 @@ begin
             end;
         gsConfirm, gsGame, gsChat:
             begin
+            // disable screenshot flash effect when about to make another screenshot
+            if flagMakeCapture and (ScreenFade = sfFromWhite) then
+                ScreenFade:= sfNone;
             if not cOnlyStats then
                 // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 DrawWorld(Lag);
