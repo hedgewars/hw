@@ -821,7 +821,7 @@ for p:= 0 to Pred(TeamsCount) do
                                      hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
                                      sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
                     Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
-                    Gear^.State:= Gear^.State and not gsttmpFlag;
+                    Gear^.State:= Gear^.State and (not gsttmpFlag);
                     AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
                     end
 end;
