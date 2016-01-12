@@ -310,7 +310,7 @@ begin
     success:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
     if success then
-        success:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
+        success:= Mix_OpenAudio(44100, AUDIO_S16LSB, channels, 1024) = 0;
 
     if success then
         WriteLnToConsole(msgOK)
@@ -326,6 +326,7 @@ begin
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
+    previousVolume:= cInitVolume;
     ChangeVolume(cInitVolume);
 end;
 
