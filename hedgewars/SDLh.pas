@@ -88,8 +88,13 @@ const
     SDL_ALLEVENTS        = $FFFFFFFF;    // dummy event type to prevent stack corruption
     SDL_APPINPUTFOCUS    = $02;
 
-    // audio formats
+    // (some) audio formats from SDL_audio.h
     AUDIO_S16LSB         = $8010; // Signed 16-bit samples, in little-endian byte order
+    AUDIO_S16MSB         = $9010; // Signed 16-bit samples, in big-endian byte order
+    AUDIO_S16SYS         = {$IFDEF ENDIAN_LITTLE}AUDIO_S16LSB{$ELSE}AUDIO_S16MSB{$ENDIF};
+
+    // default audio format from SDL_mixer.h
+    MIX_DEFAULT_FORMAT   = AUDIO_S16SYS;
 
     SDL_BUTTON_LEFT      = 1;
     SDL_BUTTON_MIDDLE    = 2;
