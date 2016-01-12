@@ -197,7 +197,7 @@ begin
                     ProcessMouseWheel(event.wheel.x, event.wheel.y);
                     end;
 
-                SDL_TEXTINPUT: uChat.TextInput(event.text);
+                SDL_TEXTINPUT: if GameState = gsChat then uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
                     begin
