@@ -200,30 +200,40 @@ begin
                 SDL_TEXTINPUT: uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
-                    if event.window.event = SDL_WINDOWEVENT_SHOWN then
                     begin
-                        cHasFocus:= true;
-                        onFocusStateChanged()
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
-                    begin
-                        previousGameState:= GameState;
-                        GameState:= gsSuspend;
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_RESTORED then
-                    begin
-                        GameState:= previousGameState;
+                    case event.window.event of
+                        SDL_WINDOWEVENT_FOCUS_GAINED:
+                                begin
+                                cHasFocus:= true;
+                                onFocusStateChanged();
+                                end;
+                        SDL_WINDOWEVENT_FOCUS_LOST:
+                                begin
+                                cHasFocus:= false;
+                                onFocusStateChanged();
+                                end;
+                        SDL_WINDOWEVENT_MINIMIZED:
+                                begin
+                                previousGameState:= GameState;
+                                GameState:= gsSuspend;
+                                end;
+                        SDL_WINDOWEVENT_RESTORED:
+                                begin
+                                GameState:= previousGameState;
 {$IFDEF ANDROID}
-                        //This call is used to reinitialize the glcontext and reload the textures
-                        ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+                                //This call is used to reinitialize the glcontext and reload the textures
+                                ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
 {$ENDIF}
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_RESIZED then
-                    begin
-                        cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
-                        cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
-                        cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
+                                end;
+                        SDL_WINDOWEVENT_RESIZED:
+                                begin
+                                cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
+                                cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
+                                cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
+                                end;
+                        end; // case closed
                     end;
+
 {$IFDEF USE_TOUCH_INTERFACE}
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
