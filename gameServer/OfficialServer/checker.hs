@@ -153,10 +153,12 @@ session l p home exe prefix s = do
             CheckFailed msg -> do
                 warningM "Check" "Check failed"
                 answer ["CHECKED", "FAIL", msg]
+                threadDelay 1500000
                 answer ["READY"]
             CheckSuccess msgs -> do
                 warningM "Check" "Check succeeded"
                 answer ("CHECKED" : "OK" : msgs)
+                threadDelay 1500000
                 answer ["READY"]
     where
     answer :: [B.ByteString] -> IO ()
@@ -176,7 +178,7 @@ session l p home exe prefix s = do
 
 
 main :: IO ()
-main = withSocketsDo $ do
+main = withSocketsDo . forever $ do
 #if !defined(mingw32_HOST_OS)
     installHandler sigPIPE Ignore Nothing
     installHandler sigCHLD Ignore Nothing
