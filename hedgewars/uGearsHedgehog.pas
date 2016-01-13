@@ -936,6 +936,7 @@ else
     land:= TestCollisionYwithGear(Gear, 1);
     if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
     and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0))
+    and (Gear^.Damage = 0)
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
