@@ -342,6 +342,7 @@ handleCmd_inRoom ["KICK", kickNick] = roomAdminOnly $ do
             isJust maybeClientId
             && (kickId /= thisClientId)
             && sameRoom
+            && (not $ hasSuperPower kickCl)
             && ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)
         ]
 
