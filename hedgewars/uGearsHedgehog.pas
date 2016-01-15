@@ -873,6 +873,55 @@ end;
 
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure moveHedgehogOutOfWall(Gear: PGear);
+var
+    hx: hwFloat;
+    colly, collxl, collxr: boolean;
+begin
+colly:= (TestCollisionYwithGear(Gear, 1) <> 0);
+
+while colly do
+    begin
+    // don't use TestCollisionXwithXYShift, because we don't gears
+    // save real x-position
+    hx:= Gear^.X;
+
+    Gear^.X:= hx + _1;
+    collxl:= (TestCollisionX(Gear, -1) <> 0);
+
+    Gear^.X:= hx - _1;
+    collxr:= (TestCollisionX(Gear,  1) <> 0);
+
+    // restore original value
+    Gear^.X:= hx;
+
+    // do nothing if trapped between 2 walls
+    if collxl = collxr then
+        break;
+
+    // if we in a wall - fix that
+    if collxl then
+        begin
+        // check for obstacle
+        if (TestCollisionX(Gear,  1) <> 0) then
+            break;
+        Gear^.X:= Gear^.X + _1;
+        end
+    else
+        begin
+        // check for obstacle
+        if (TestCollisionX(Gear, -1) <> 0) then
+            break;
+        Gear^.X:= Gear^.X - _1;
+        end;
+
+        colly:= (TestCollisionYwithGear(Gear, 1) <> 0);
+        end;
+
+
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
@@ -893,7 +942,15 @@ if Gear^.dX.QWordValue > 8160437862 then
 if Gear^.dY.QWordValue > 8160437862 then
     Gear^.dY.QWordValue:= 8160437862;
 
-isFalling:= (Gear^.dY.isNegative) or (TestCollisionYKick(Gear, 1) = 0);
+isFalling:= (Gear^.dY.isNegative);
+if (not isFalling) then
+    begin
+    // make sure we're not just stuck in wall
+    moveHedgehogOutOfWall(Gear);
+    // test for floor/obstacle below
+    isFalling:= (TestCollisionYKick(Gear, 1) = 0);
+    end;
+
 if isFalling then
     begin
     land:= TestCollisionYKick(Gear, -1);
