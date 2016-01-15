@@ -882,7 +882,7 @@ colly:= (TestCollisionYwithGear(Gear, 1) <> 0);
 
 while colly do
     begin
-    // don't use TestCollisionXwithXYShift, because we don't gears
+    // don't use TestCollisionXwithXYShift, because it checks for gears
     // save real x-position
     hx:= Gear^.X;
 
