@@ -45,6 +45,11 @@ while [ ! -z "$1" ]; do
     echo
     result=$(hg log -R "$HW_HG" -u "$author" -d "$date" -v -l1)
     if [ -z "$result" ]; then
+        echo 'No match with this author'\''s name. It might differ, so let'\''s try using date only ...'
+        echo
+        result=$(hg log -R "$HW_HG" -d "$date" -v)
+    fi
+    if [ -z "$result" ]; then
         echo 'No match :('
         shift
         continue
