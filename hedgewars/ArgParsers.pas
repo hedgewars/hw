@@ -100,7 +100,7 @@ begin
     WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
     WriteLn(stdout, 'For more detailed help and examples go to:');
-    WriteLn(stdout, 'http://code.google.com/p/hedgewars/wiki/CommandLineOptions');
+    WriteLn(stdout, 'http://hedgewars.org/kb/CommandLineOptions');
     GameType:= gmtSyntax;
 end;
 

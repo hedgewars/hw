@@ -28,7 +28,7 @@ at https://github.com/hedgewars/hw
 Contribute:
 -----------
 If you see a bug or have any suggestion please use the official bug tracker at
-http://code.google.com/p/hedgewars/issues/list or the integrated feedback
+http://hedgewars.org/bugs or the integrated feedback
 button.
 
 If you want to help or get to know the sources better you can do that with some

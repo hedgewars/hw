@@ -85,7 +85,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
         "</style>"
         "<div align=\"center\"><h1>%1</h1>"
         "<h3>%2<h3>"
-        "<h4>%3 <a href=\"http://code.google.com/p/hedgewars/wiki/KnownBugs\">known bugs</a><h4>"
+        "<h4>%3 <a href=\"http://hedgewars.org/kb/KnownBugs\">known bugs</a><h4>"
         "<h4>%4<h4>"
         "</div>")
         .arg(tr("Send us feedback!"))
