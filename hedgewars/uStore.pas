@@ -1066,25 +1066,47 @@ begin
  *)
     SetupOpenGLAttributes();
 {$ENDIF}
+
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
     y:= SDL_WINDOWPOS_CENTERED_MASK;
-    // SDL_WINDOW_RESIZABLE makes the window resizable and
-    //  respond to rotation events on mobile devices
-    flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE;
-
-    {$IFDEF MOBILE}
-    if isPhone() then
-        SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
-    // no need for borders on mobile devices
-    flags:= flags or SDL_WINDOW_BORDERLESS;
-    {$ENDIF}
-
-    if cFullScreen then
-        flags:= flags or SDL_WINDOW_FULLSCREEN;
 
     if SDLwindow = nil then
+        begin
+
+        // SDL_WINDOW_RESIZABLE makes the window resizable and
+        //  respond to rotation events on mobile devices
+        flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE;
+
+        {$IFDEF MOBILE}
+        if isPhone() then
+            SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
+        // no need for borders on mobile devices
+        flags:= flags or SDL_WINDOW_BORDERLESS;
+        {$ENDIF}
+
+        if cFullScreen then
+            flags:= flags or SDL_WINDOW_FULLSCREEN;
+
         SDLwindow:= SDL_CreateWindow(PChar('Hedgewars'), x, y, cScreenWidth, cScreenHeight, flags);
+        end
+    // we're toggling
+    else if Length(s) = 0 then
+        begin
+        if cFullScreen then
+            begin
+            SDL_SetWindowSize(SDLwindow, cScreenWidth, cScreenHeight);
+            SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN);
+            end
+        else
+            begin
+            SDL_SetWindowFullscreen(SDLwindow, 0);
+            SDL_SetWindowSize(SDLwindow, cScreenWidth, cScreenHeight);
+            SDL_SetWindowPosition(SDLwindow, x, y);
+            end;
+        updateViewLimits();
+        end;
+
     if SDLCheck(SDLwindow <> nil, 'SDL_CreateWindow', true) then exit;
 
     // load engine ico
