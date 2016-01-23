@@ -1387,15 +1387,20 @@ if CinematicScript or (InCinematicMode
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
     or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo))) then
     begin
-    inc(CinematicSteps, Lag);
-    if CinematicSteps > 300 then
+    if CinematicSteps < 300 then
+        begin
+        inc(CinematicSteps, Lag);
+        if CinematicSteps > 300 then
         CinematicSteps:= 300;
+        CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
+        end;
     end
 else if CinematicSteps > 0 then
     begin
     dec(CinematicSteps, Lag);
     if CinematicSteps < 0 then
         CinematicSteps:= 0;
+    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
     end;
 
 // render black bars
@@ -1404,7 +1409,6 @@ if CinematicSteps > 0 then
     r.x:= ViewLeftX;
     r.w:= ViewWidth;
     r.y:= ViewTopY;
-    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
     r.h:= CinematicBarH;
     DrawRect(r, 0, 0, 0, $FF, true);
     r.y:= ViewBottomY - r.h;
