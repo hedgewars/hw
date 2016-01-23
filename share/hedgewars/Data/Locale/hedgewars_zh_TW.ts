@@ -76,6 +76,10 @@
         <source>permanent</source>
         <translation>永久</translation>
     </message>
+    <message>
+        <source>Ban player</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DataManager</name>
@@ -113,6 +117,10 @@
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
         <translation>如果希望我們回覆你, 請留下你的電子郵件地址。</translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished">信息反饋</translation>
     </message>
 </context>
 <context>
@@ -469,6 +477,13 @@ Last two engine messages:
     </message>
 </context>
 <context>
+    <name>HWHostPortDialog</name>
+    <message>
+        <source>Connect to server</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWMapContainer</name>
     <message>
         <source>All</source>
@@ -697,6 +712,10 @@ just enter your nickname.</source>
         <source>Password:</source>
         <translation>密碼：</translation>
     </message>
+    <message>
+        <source>New Account</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWUploadVideoDialog</name>
@@ -729,6 +748,10 @@ just enter your nickname.</source>
     <message>
         <source>Search for a hat:</source>
         <translation>搜索一頂帽子：</translation>
+    </message>
+    <message>
+        <source>Choose a hat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1677,6 +1700,14 @@ just enter your nickname.</source>
         <source>Show games in-progress</source>
         <translation>顯示正在進行的遊戲</translation>
     </message>
+    <message>
+        <source>Show password protected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show join restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
@@ -2165,6 +2196,10 @@ Do you really want to quit?</source>
         <source>Script parameter</source>
         <translation type="unfinished">腳本參數</translation>
     </message>
+    <message>
+        <source>Air Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2633,6 +2668,10 @@ Not all players are ready.</source>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished">種子</translation>
+    </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
@@ -2708,6 +2747,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Use selected theme</source>
         <translation type="unfinished">使用選定的主題</translation>
+    </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3474,7 +3517,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
-        <translation type="unfinished">已經偵測到遊戲訊息氾濫 - 2</translation>
+        <translation type="obsolete">已經偵測到遊戲訊息氾濫 - 2</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
@@ -3483,6 +3526,50 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>There&apos;s no voting going on</source>
         <translation type="unfinished">沒有正在進行的投票</translation>
+    </message>
+    <message>
+        <source>Your vote counted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause toggled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>number of hedgehogs in team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/maxteams: specify number from 2 to 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote kick: specify nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote kick: no such user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote map: no such map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote pause: no game in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote hedgehogs: specify number from 1 to 8</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

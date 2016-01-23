@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="fi">
-
-<!-- Finnish translation updated by Janne Uusitupa <ju@cockli> on 2014/11/23. -->
-<!-- Based on the older translation. -->
-
 <context>
     <name>About</name>
     <message>
         <source>Unknown Compiler</source>
-	<translation>Tuntematon kääntäjä</translation>
+        <translation>Tuntematon kääntäjä</translation>
     </message>
 </context>
 <context>
@@ -27,7 +23,7 @@
     </message>
     <message>
         <source>copy of %1</source>
-	<translation>%1 kopio</translation>
+        <translation>%1 kopio</translation>
     </message>
 </context>
 <context>
@@ -42,7 +38,7 @@
     </message>
     <message>
         <source>IP/Nick</source>
-	<translation>IP/Nimi</translation>
+        <translation>IP/Nimi</translation>
     </message>
     <message>
         <source>Reason</source>
@@ -70,7 +66,7 @@
     </message>
     <message>
         <source>Please, specify %1</source>
-	<translation>Tarkenna: %1</translation>
+        <translation>Tarkenna: %1</translation>
     </message>
     <message>
         <source>nickname</source>
@@ -79,6 +75,10 @@
     <message>
         <source>permanent</source>
         <translation>ikuinen</translation>
+    </message>
+    <message>
+        <source>Ban player</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -117,6 +117,10 @@
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
         <translation>Sähköposti on valinnainen, jos et halua meidän ottavan yhteyttä.</translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished">Palaute</translation>
     </message>
 </context>
 <context>
@@ -202,7 +206,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-	<translation>Säännöille &apos;%1&apos; ei ole tukea</translation>
+        <translation>Säännöille &apos;%1&apos; ei ole tukea</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -213,7 +217,7 @@
 %1
 
 Please check your installation!</source>
-	<translation>Hakemiston avaaminen epäonnistui:
+        <translation>Hakemiston avaaminen epäonnistui:
 %1
 
 Tarkista, että peli on asennettu oikein!</translation>
@@ -374,7 +378,7 @@ Tarkista, että peli on asennettu oikein!</translation>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-	<translation>Nimimerkkisi %1 on jo käytössä.
+        <translation>Nimimerkkisi %1 on jo käytössä.
 Valiste jokin muu:</translation>
     </message>
     <message>
@@ -391,7 +395,7 @@ Valiste jokin muu:</translation>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-	<translation>Tämä nimimerkki on rekisteröity, etkä antanut salasanaa.
+        <translation>Tämä nimimerkki on rekisteröity, etkä antanut salasanaa.
 
 Jos tämä ei ole nimesi, rekisteröi omasi osoitteessa hedgewars.org
 
@@ -401,7 +405,7 @@ Salasana: </translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-	<translation>Nimimerkkiäsi ei ole rekisteröity.
+        <translation>Nimimerkkiäsi ei ole rekisteröity.
 Estääksesi muita käyttämästä sitä,
 voit rekisteröidä sen osoitteessa hedgewars.org</translation>
     </message>
@@ -409,7 +413,7 @@ voit rekisteröidä sen osoitteessa hedgewars.org</translation>
         <source>
 
 Your password wasn&apos;t saved either.</source>
-	<translation>
+        <translation>
 
 Salasanaasi ei tallennettu.</translation>
     </message>
@@ -436,7 +440,7 @@ Salasanaasi ei tallennettu.</translation>
     <message>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
-	<translation>Yhdistit uudelleen liian pian.
+        <translation>Yhdistit uudelleen liian pian.
 Odota hetki ja yritä uudelleen.</translation>
     </message>
     <message>
@@ -454,7 +458,7 @@ Odota hetki ja yritä uudelleen.</translation>
     <message>
         <source>The room is protected with password.
 Please, enter the password:</source>
-	<translation>Huoneeseen pääsee vain salasanalla.
+        <translation>Huoneeseen pääsee vain salasanalla.
 Salasana:</translation>
     </message>
 </context>
@@ -477,7 +481,7 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-	<translation>Vakava virhe tapahtui, ja pelimoottori kaatui!
+        <translation>Vakava virhe tapahtui, ja pelimoottori kaatui!
 
 Olemme pahoillamme, että näin pääsi käymään :(
 
@@ -485,6 +489,13 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon %1-napista!
 
 Kaksi viimeistä pelimoottorin viestiä:
 %2</translation>
+    </message>
+</context>
+<context>
+    <name>HWHostPortDialog</name>
+    <message>
+        <source>Connect to server</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -703,7 +714,7 @@ Kaksi viimeistä pelimoottorin viestiä:
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-	<translation>Kirjaudu yhdistääksesi palvelimelle.
+        <translation>Kirjaudu yhdistääksesi palvelimelle.
 
 Jos et ole rekisteröitynyt,
 pelkkä nimimerkki riittää.</translation>
@@ -718,7 +729,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>New Account</source>
-       <translation>Rekisteröidy</translation>
+        <translation>Rekisteröidy</translation>
     </message>
 </context>
 <context>
@@ -752,6 +763,10 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Search for a hat:</source>
         <translation>Etsi hattua:</translation>
+    </message>
+    <message>
+        <source>Choose a hat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -788,7 +803,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>%1 fps</source>
-	<translation>%1 kuvaa/s</translation>
+        <translation>%1 kuvaa/s</translation>
     </message>
 </context>
 <context>
@@ -838,7 +853,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-	<translation>IP/Nimim</translation>
+        <translation>IP/Nimim</translation>
     </message>
     <message>
         <source>Expiration</source>
@@ -1106,7 +1121,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Manage videos recorded from game</source>
-	<translation>Hallinnoi peleistä nauhoitettuja videoita</translation>
+        <translation>Hallinnoi peleistä nauhoitettuja videoita</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
@@ -1604,7 +1619,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
-	<translation>Avaa tallennettu peli</translation>
+        <translation>Avaa tallennettu peli</translation>
     </message>
 </context>
 <context>
@@ -1721,6 +1736,14 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Show games in-progress</source>
         <translation>Näytä alkaneet pelit</translation>
+    </message>
+    <message>
+        <source>Show password protected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show join restricted</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1866,27 +1889,27 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-	<translation>Punainen/Syaani</translation>
+        <translation>Punainen/Syaani</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-	<translation>Syaani/Punainen</translation>
+        <translation>Syaani/Punainen</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-	<translation>Punainen/Sininen</translation>
+        <translation>Punainen/Sininen</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-	<translation>Sininen/Punainen</translation>
+        <translation>Sininen/Punainen</translation>
     </message>
     <message>
         <source>Red/Green</source>
-	<translation>Punainen/Vihreä</translation>
+        <translation>Punainen/Vihreä</translation>
     </message>
     <message>
         <source>Green/Red</source>
-	<translation>Vihreä/Punainen</translation>
+        <translation>Vihreä/Punainen</translation>
     </message>
     <message>
         <source>Side-by-side</source>
@@ -1898,27 +1921,27 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-	<translation>Punainen/Syaani harmaasävy</translation>
+        <translation>Punainen/Syaani harmaasävy</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-	<translation>Syaani/Punainen harmaasävy</translation>
+        <translation>Syaani/Punainen harmaasävy</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-	<translation>Punainen/Sininen harmaasävy</translation>
+        <translation>Punainen/Sininen harmaasävy</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-	<translation>Sininen/Punainen harmaasävy</translation>
+        <translation>Sininen/Punainen harmaasävy</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-	<translation>Punainen/Vihreä harmaasävy</translation>
+        <translation>Punainen/Vihreä harmaasävy</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-	<translation>Vihreä/Punainen harmaasävy</translation>
+        <translation>Vihreä/Punainen harmaasävy</translation>
     </message>
 </context>
 <context>
@@ -2110,7 +2133,7 @@ pelkkä nimimerkki riittää.</translation>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
 Do you really want to quit?</source>
-	<translation>Videoiden prosessointi on käynnissä.
+        <translation>Videoiden prosessointi on käynnissä.
 Sulkeminen keskeyttää tämän.
 Haluatko varmasti lopettaa?</translation>
     </message>
@@ -2136,7 +2159,7 @@ Haluatko varmasti lopettaa?</translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-	<translation>Hakusanat (pilkulla eroteltuna): </translation>
+        <translation>Hakusanat (pilkulla eroteltuna): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2196,7 +2219,7 @@ Haluatko varmasti lopettaa?</translation>
     </message>
     <message>
         <source>Type the security code:</source>
-	<translation>Todista, että olet ihminen:</translation>
+        <translation>Todista, että olet ihminen:</translation>
     </message>
     <message>
         <source>Revision</source>
@@ -2225,6 +2248,10 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <source>Script parameter</source>
         <translation>Skriptin parametri</translation>
+    </message>
+    <message>
+        <source>Air Mines</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2266,7 +2293,7 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-	<translation>Virhe kirjautuessa google.comiin:
+        <translation>Virhe kirjautuessa google.comiin:
 </translation>
     </message>
     <message>
@@ -2276,7 +2303,7 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-	<translation>Virhe lähetettäessä oheistietoja youtube.comiin:
+        <translation>Virhe lähetettäessä oheistietoja youtube.comiin:
 </translation>
     </message>
     <message>
@@ -2410,7 +2437,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-	<translation>Ei voi avata &apos;%1&apos; lukua varten</translation>
+        <translation>Ei voi avata &apos;%1&apos; lukua varten</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
@@ -2471,7 +2498,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-	<translation>Haluatko varmasti aloittaa pelin?
+        <translation>Haluatko varmasti aloittaa pelin?
 Kaikki pelaajat eivät ole valmiita.</translation>
     </message>
 </context>
@@ -2697,6 +2724,10 @@ Kaikki pelaajat eivät ole valmiita.</translation>
         <source>Close</source>
         <translation>Sulje</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished">Siemen</translation>
+    </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
@@ -2734,7 +2765,7 @@ Kaikki pelaajat eivät ole valmiita.</translation>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-	<translation>Pelimoottorin käynnistäminen %1:ssä epäonnistui
+        <translation>Pelimoottorin käynnistäminen %1:ssä epäonnistui
 Vikakoodi: %2</translation>
     </message>
     <message>
@@ -2744,7 +2775,7 @@ Vikakoodi: %2</translation>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-	<translation>Pelimoottori kaatui yllättäen!
+        <translation>Pelimoottori kaatui yllättäen!
 (Vikakoodi: %1)
 
 Olemme pahoillamme tapahtuneesta :(
@@ -2773,6 +2804,10 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
         <source>Use selected theme</source>
         <translation>Käytä valittua teemaa</translation>
     </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds</name>
@@ -2794,7 +2829,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>attack</source>
-	<translation>hyökkäys</translation>
+        <translation>hyökkäys</translation>
     </message>
     <message>
         <source>precise aim</source>
@@ -2946,7 +2981,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>autocam / find hedgehog</source>
-	<translation>automaattikamera / etsi siili</translation>
+        <translation>automaattikamera / etsi siili</translation>
     </message>
     <message>
         <source>speed up replay</source>
@@ -3450,7 +3485,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Authentication failed</source>
-	<translation>Tunnistautuminen epäonnistui</translation>
+        <translation>Tunnistautuminen epäonnistui</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
@@ -3514,7 +3549,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>map</source>
-	<translation>kartta</translation>
+        <translation>kartta</translation>
     </message>
     <message>
         <source>pause</source>
@@ -3538,7 +3573,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
-        <translation>Peliviestien tulva havaittu - 2</translation>
+        <translation type="obsolete">Peliviestien tulva havaittu - 2</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
@@ -3547,6 +3582,50 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <message>
         <source>There&apos;s no voting going on</source>
         <translation>Äänestyksiä ei ole meneillään</translation>
+    </message>
+    <message>
+        <source>Your vote counted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause toggled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>number of hedgehogs in team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/maxteams: specify number from 2 to 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote kick: specify nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote kick: no such user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote map: no such map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote pause: no game in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote hedgehogs: specify number from 1 to 8</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

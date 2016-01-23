@@ -80,6 +80,10 @@
         <source>permanent</source>
         <translation>Permanent</translation>
     </message>
+    <message>
+        <source>Ban player</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DataManager</name>
@@ -129,6 +133,10 @@
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
         <translation>L&apos;adresse email est optionnelle, mais nécessaire si vous voulez que l&apos;on vous recontacte.</translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished">Contact</translation>
     </message>
 </context>
 <context>
@@ -492,6 +500,13 @@ Last two engine messages:
     </message>
 </context>
 <context>
+    <name>HWHostPortDialog</name>
+    <message>
+        <source>Connect to server</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWMapContainer</name>
     <message>
         <source>All</source>
@@ -724,6 +739,10 @@ entrez seulement votre pseudo.</translation>
         <source>Password:</source>
         <translation>Mot de passe:</translation>
     </message>
+    <message>
+        <source>New Account</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWUploadVideoDialog</name>
@@ -756,6 +775,10 @@ entrez seulement votre pseudo.</translation>
     <message>
         <source>Search for a hat:</source>
         <translation>Chercher un chapeau:</translation>
+    </message>
+    <message>
+        <source>Choose a hat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1754,6 +1777,14 @@ entrez seulement votre pseudo.</translation>
         <source>Show games in-progress</source>
         <translation>Parties en cours</translation>
     </message>
+    <message>
+        <source>Show password protected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show join restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
@@ -2258,6 +2289,10 @@ Voulez-vous vraiment quitter?</translation>
         <source>Script parameter</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Air Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2733,6 +2768,10 @@ Les joueurs ne sont pas tous prêts.</translation>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished">Graine</translation>
+    </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
@@ -2814,6 +2853,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Use selected theme</source>
         <translation>Utiliser le thème séléctionné</translation>
+    </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3580,15 +3623,55 @@ zoom</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Game messages flood detected - 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Warning! Joins flood protection activated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your vote counted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause toggled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>number of hedgehogs in team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/maxteams: specify number from 2 to 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote kick: specify nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote kick: no such user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote map: no such map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote pause: no game in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callvote hedgehogs: specify number from 1 to 8</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
