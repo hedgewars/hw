@@ -5,6 +5,7 @@
  + Improved hedgehog spawns on maps that lack land mass or free space
  + Highlander mode displays game scheme specifics (mines timer, etc.) in ESC info
  + AI hedgehogs know how to use Bee now
+ + Small visual effects enhancements
  * Video recording functionality is restored
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed bee not being affected by wrap world edge while still being thrown
@@ -12,6 +13,7 @@
  * Fixed screenshots being too bright if taken in quick succession
  * Fixed hog-speech missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
  * Various other fixes
+
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
 

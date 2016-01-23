@@ -3227,7 +3227,7 @@ begin
             end;
 //////////////////////////////////////////////////////////////////////
         Gear^.doStep := @doStepCakeExpl;
-        if partyEpicness > 6 then
+        if (partyEpicness > 6) and (abs(90 - abs(trunc(Gear^.DirAngle))) < 20) then
             begin
             for i := 0 to (2 * partyEpicness) do
                 begin
