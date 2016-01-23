@@ -1268,7 +1268,29 @@ begin
                     else
                         DrawSpriteRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle)
                     end;
-        gtDynamite: DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+        gtDynamite: begin
+                    DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+                    if (random(3) = 0) then
+                        begin
+                        vg:= AddVisualGear(hwRound(Gear^.X)+12-(Gear^.Tag shr 1), hwRound(Gear^.Y)-16, vgtStraightShot);
+                        if vg <> nil then
+                            with vg^ do
+                                begin
+                                Tint:= $FFCC00FF;
+                                Angle:= random(360);
+                                dx:= 0.0005 * (random(200));
+                                dy:= 0.0005 * (random(200));
+                                if random(2) = 0 then
+                                    dx := -dx;
+                                if random(2) = 0 then
+                                    dy := -dy;
+                                FrameTicks:= 100+random(300);
+                                Scale:= 0.1+1/(random(3)+3);
+                                State:= ord(sprStar)
+                                end
+                        end;
+
+                    end;
      gtClusterBomb: DrawSpriteRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, x - 8, y - 8, 0);
            gtFlame: if Gear^.Tag and 1 = 0 then

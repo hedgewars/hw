@@ -2008,27 +2008,6 @@ begin
     doStepFallingGear(Gear);
     AllInactive := false;
 
-    if (GameTicks and $F = 0) and (random(3) = 0) then
-        begin
-        VGear:= AddVisualGear(hwRound(Gear^.X)+12-(Gear^.Tag shr 1), hwRound(Gear^.Y)-16, vgtStraightShot);
-        if VGear <> nil then
-            with VGear^ do
-                begin
-                Tint:= $FFCC00FF;
-                Angle:= random(360);
-                dx:= 0.0005 * (random(200));
-                dy:= 0.0005 * (random(200));
-                if random(2) = 0 then
-                    dx := -dx;
-                if random(2) = 0 then
-                    dy := -dy;
-                FrameTicks:= 100+random(300);
-                Scale:= 0.1+1/(random(3)+3);
-                State:= ord(sprStar)
-                end
-        end;
-
-
     if Gear^.Timer mod 166 = 0 then
         inc(Gear^.Tag);
     if Gear^.Timer = 1000 then // might need better timing
