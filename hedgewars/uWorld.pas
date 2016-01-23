@@ -1382,6 +1382,36 @@ RenderWorldEdge();
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
 
+// cinematic effects
+if InCinematicMode
+    and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
+    or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo)) then
+    begin
+    inc(CinematicSteps, Lag);
+    if CinematicSteps > 300 then
+        CinematicSteps:= 300;
+    end
+else if CinematicSteps > 0 then
+    begin
+    dec(CinematicSteps, Lag);
+    if CinematicSteps < 0 then
+        CinematicSteps:= 0;
+    end;
+
+// render black bars
+if CinematicSteps > 0 then
+    begin
+    r.x:= ViewLeftX;
+    r.w:= ViewWidth;
+    r.y:= ViewTopY;
+    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
+    r.h:= CinematicBarH;
+    DrawRect(r, 0, 0, 0, $FF, true);
+    r.y:= ViewBottomY - r.h;
+    DrawRect(r, 0, 0, 0, $FF, true);
+    end;
+
+
 // Turn time
 if UIDisplay <> uiNone then
     begin
@@ -1751,7 +1781,7 @@ if (WorldEdge = weWrap) then
             WorldDx:= WorldDx + LongInt(rightX) - leftX;
     end;
 
-wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
+wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + CinematicBarH);
 if WorldDy < wdy then
     WorldDy:= wdy;
 

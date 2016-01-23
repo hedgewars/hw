@@ -3718,6 +3718,7 @@ begin
         Gear^.State := Gear^.State or gsttmpFlag;
         PauseMusic;
         playSound(sndRideOfTheValkyries);
+        inCinematicMode:= true;
         end;
 
     // pickup bonuses
@@ -3729,6 +3730,7 @@ begin
 
     if ((Gear^.State and gstCollision) <> 0) or CheckGearDrowning(Gear) then
         begin
+        inCinematicMode:= false;
         StopSoundChan(Gear^.SoundChannel);
         StopSound(sndRideOfTheValkyries);
         ResumeMusic;
