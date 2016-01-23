@@ -1383,9 +1383,9 @@ RenderWorldEdge();
 SetScale(cDefaultZoomLevel);
 
 // cinematic effects
-if InCinematicMode
+if CinematicScript or (InCinematicMode
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
-    or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo)) then
+    or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo))) then
     begin
     inc(CinematicSteps, Lag);
     if CinematicSteps > 300 then

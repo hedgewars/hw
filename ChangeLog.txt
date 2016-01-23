@@ -12,6 +12,8 @@
  * Fixed screenshots being too bright if taken in quick succession
  * Fixed hog-speech missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
  * Various other fixes
+Lua-API:
+ + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
 
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
