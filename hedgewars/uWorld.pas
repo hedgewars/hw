@@ -1383,7 +1383,7 @@ RenderWorldEdge();
 SetScale(cDefaultZoomLevel);
 
 // cinematic effects
-if CinematicScript or (InCinematicMode
+if CinematicScript or (InCinematicMode and autoCameraOn
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
     or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo))) then
     begin
@@ -1785,7 +1785,7 @@ if (WorldEdge = weWrap) then
             WorldDx:= WorldDx + LongInt(rightX) - leftX;
     end;
 
-wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + CinematicBarH);
+wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));
 if WorldDy < wdy then
     WorldDy:= wdy;
 
