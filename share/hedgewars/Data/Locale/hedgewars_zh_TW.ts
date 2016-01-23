@@ -244,7 +244,7 @@ Please check your installation!</source>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線</translation>
+        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線。</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
@@ -966,7 +966,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished">生命圖</translation>
+        <translation type="unfinished">生命走勢</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -975,7 +975,7 @@ just enter your nickname.</source>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1%n&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1347,10 +1347,6 @@ just enter your nickname.</source>
         <source>Room Name:</source>
         <translation type="obsolete">房間名：</translation>
     </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">清除</translation>
-    </message>
     <message numerus="yes">
         <source>%1 players online</source>
         <translation type="unfinished">
@@ -1381,34 +1377,6 @@ just enter your nickname.</source>
 <context>
     <name>PageScheme</name>
     <message>
-        <source>New</source>
-        <translation type="unfinished">新增</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>刪除</translation>
-    </message>
-    <message>
-        <source>Gain 80% of the damage you do back in health</source>
-        <translation type="unfinished">傷害的80%成為自身生命</translation>
-    </message>
-    <message>
-        <source>Share your opponents pain, share their damage</source>
-        <translation>分擔你的對手的疼痛</translation>
-    </message>
-    <message>
-        <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation>你的刺蝟不能移動，檢驗你射擊技巧的時候到了</translation>
-    </message>
-    <message>
-        <source>Random</source>
-        <translation>隨機</translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation>秒鐘</translation>
-    </message>
-    <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
         <translation type="unfinished">保衛你的堡壘，破壞對手的，努力吧！</translation>
     </message>
@@ -1431,6 +1399,34 @@ just enter your nickname.</source>
     <message>
         <source>All hogs have a personal forcefield</source>
         <translation>每個刺蝟都有一個力場</translation>
+    </message>
+    <message>
+        <source>Gain 80% of the damage you do back in health</source>
+        <translation type="unfinished">傷害的80%成為自身生命</translation>
+    </message>
+    <message>
+        <source>Share your opponents pain, share their damage</source>
+        <translation>分擔你的對手的疼痛</translation>
+    </message>
+    <message>
+        <source>Your hogs are unable to move, put your artillery skills to the test</source>
+        <translation>你的刺蝟不能移動，檢驗你射擊技巧的時候到了</translation>
+    </message>
+    <message>
+        <source>Random</source>
+        <translation>隨機</translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation>秒鐘</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">新增</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>刪除</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
@@ -1490,7 +1486,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished">同一顏色的每個隊伍採取連續輪流分享他們的回合時間。</translation>
+        <translation type="unfinished">同樣顏色的任意一隊伍每回合都可動作,但回合時間需共享。</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1681,6 +1677,10 @@ just enter your nickname.</source>
 <context>
     <name>QCheckBox</name>
     <message>
+        <source>Check for updates at startup</source>
+        <translation>啟動時檢查更新</translation>
+    </message>
+    <message>
         <source>Fullscreen</source>
         <translation>全螢幕</translation>
     </message>
@@ -1695,10 +1695,6 @@ just enter your nickname.</source>
     <message>
         <source>Append date and time to record file name</source>
         <translation type="unfinished">記錄檔名中包含具體時間日期</translation>
-    </message>
-    <message>
-        <source>Check for updates at startup</source>
-        <translation>啟動時檢查更新</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
@@ -1875,12 +1871,12 @@ just enter your nickname.</source>
         <translation>堡壘</translation>
     </message>
     <message>
-        <source>Playing teams</source>
-        <translation type="unfinished">玩家隊伍</translation>
-    </message>
-    <message>
         <source>Net game</source>
         <translation>網路遊戲</translation>
+    </message>
+    <message>
+        <source>Playing teams</source>
+        <translation type="unfinished">玩家隊伍</translation>
     </message>
     <message>
         <source>Game Modifiers</source>
@@ -1906,6 +1902,30 @@ just enter your nickname.</source>
 <context>
     <name>QLabel</name>
     <message>
+        <source>Mines Time</source>
+        <translation type="unfinished">地雷爆炸緩衝</translation>
+    </message>
+    <message>
+        <source>Mines</source>
+        <translation>地雷</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="obsolete">版本</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation>武器</translation>
+    </message>
+    <message>
+        <source>Host:</source>
+        <translation>主機:</translation>
+    </message>
+    <message>
+        <source>Port:</source>
+        <translation>端口:</translation>
+    </message>
+    <message>
         <source>Resolution</source>
         <translation>解析度</translation>
     </message>
@@ -1920,22 +1940,6 @@ just enter your nickname.</source>
     <message>
         <source>Server port:</source>
         <translation>伺服器端口:</translation>
-    </message>
-    <message>
-        <source>Host:</source>
-        <translation>主機:</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation>端口:</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>武器</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">版本</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -1964,14 +1968,6 @@ just enter your nickname.</source>
     <message>
         <source>Crate Drops</source>
         <translation>箱子降落</translation>
-    </message>
-    <message>
-        <source>Mines Time</source>
-        <translation type="unfinished">地雷爆炸緩衝</translation>
-    </message>
-    <message>
-        <source>Mines</source>
-        <translation>地雷</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
@@ -2191,12 +2187,12 @@ Do you really want to quit?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <source>Error</source>
-        <translation>錯誤</translation>
-    </message>
-    <message>
         <source>Connection to server is lost</source>
         <translation>伺服器連接丟失</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>錯誤</translation>
     </message>
     <message>
         <source>File association failed.</source>
@@ -2421,44 +2417,8 @@ Not all players are ready.</source>
 <context>
     <name>QPushButton</name>
     <message>
-        <source>Play demo</source>
-        <translation type="unfinished">播放演示</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation>連接</translation>
-    </message>
-    <message>
-        <source>Go!</source>
-        <translation>出場！</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>開始</translation>
-    </message>
-    <message>
-        <source>Start server</source>
-        <translation type="unfinished">啟動伺服器</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation>更新</translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation>讀取</translation>
-    </message>
-    <message>
-        <source>Specify</source>
-        <translation>指定</translation>
-    </message>
-    <message>
         <source>default</source>
         <translation>預設值</translation>
-    </message>
-    <message>
-        <source>Rename</source>
-        <translation type="unfinished">更名</translation>
     </message>
     <message>
         <source>OK</source>
@@ -2469,8 +2429,44 @@ Not all players are ready.</source>
         <translation>取消</translation>
     </message>
     <message>
+        <source>Start server</source>
+        <translation type="unfinished">啟動伺服器</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>連接</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <source>Specify</source>
+        <translation>指定</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>開始</translation>
+    </message>
+    <message>
+        <source>Go!</source>
+        <translation>出場！</translation>
+    </message>
+    <message>
+        <source>Play demo</source>
+        <translation type="unfinished">播放演示</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation type="unfinished">更名</translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation>刪除</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation>讀取</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
@@ -2733,12 +2729,24 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>攻擊</translation>
     </message>
     <message>
+        <source>precise aim</source>
+        <translation>精細瞄準</translation>
+    </message>
+    <message>
         <source>put</source>
         <translation>放</translation>
     </message>
     <message>
         <source>switch</source>
         <translation>切換</translation>
+    </message>
+    <message>
+        <source>find hedgehog</source>
+        <translation type="obsolete">尋找刺蝟</translation>
+    </message>
+    <message>
+        <source>ammo menu</source>
+        <translation>彈藥菜單</translation>
     </message>
     <message>
         <source>slot 1</source>
@@ -2773,6 +2781,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished">第8類</translation>
     </message>
     <message>
+        <source>slot 9</source>
+        <translation type="unfinished">第9類</translation>
+    </message>
+    <message>
         <source>timer 1 sec</source>
         <translation>定時1秒</translation>
     </message>
@@ -2793,20 +2805,20 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>定時5秒</translation>
     </message>
     <message>
-        <source>capture</source>
-        <translation>抓取</translation>
+        <source>chat</source>
+        <translation>聊天</translation>
     </message>
     <message>
-        <source>quit</source>
-        <translation>退出</translation>
+        <source>chat history</source>
+        <translation>聊天記錄</translation>
     </message>
     <message>
-        <source>find hedgehog</source>
-        <translation type="obsolete">尋找刺蝟</translation>
+        <source>pause</source>
+        <translation>暫停</translation>
     </message>
     <message>
-        <source>ammo menu</source>
-        <translation>彈藥菜單</translation>
+        <source>confirmation</source>
+        <translation>確認</translation>
     </message>
     <message>
         <source>volume down</source>
@@ -2821,28 +2833,12 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>改變模式</translation>
     </message>
     <message>
-        <source>pause</source>
-        <translation>暫停</translation>
+        <source>capture</source>
+        <translation>抓取</translation>
     </message>
     <message>
-        <source>slot 9</source>
-        <translation type="unfinished">第9類</translation>
-    </message>
-    <message>
-        <source>precise aim</source>
-        <translation>精細瞄準</translation>
-    </message>
-    <message>
-        <source>chat</source>
-        <translation>聊天</translation>
-    </message>
-    <message>
-        <source>chat history</source>
-        <translation>聊天記錄</translation>
-    </message>
-    <message>
-        <source>confirmation</source>
-        <translation>確認</translation>
+        <source>quit</source>
+        <translation>退出</translation>
     </message>
     <message>
         <source>zoom in</source>
@@ -3022,6 +3018,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>鍵盤</translation>
     </message>
     <message>
+        <source>Delete</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Mouse: Left button</source>
         <translation>滑鼠：左鍵</translation>
     </message>
@@ -3068,10 +3068,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Space</source>
         <translation>空白鍵</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation></translation>
     </message>
     <message>
         <source>Numpad 0</source>
