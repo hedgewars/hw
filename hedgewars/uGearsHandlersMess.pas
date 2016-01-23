@@ -3163,6 +3163,7 @@ begin
     if Gear^.Tag < 2250 then
         exit;
 
+    InCinematicMode:= false;
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
     AfterAttack;
     DeleteGear(Gear)
@@ -3171,8 +3172,9 @@ end;
 procedure doStepCakeDown(Gear: PGear);
 var
     gi: PGear;
-    dmg, dmgBase: LongInt;
+    dmg, dmgBase, partyEpicness, i: LongInt;
     fX, fY, tdX, tdY: hwFloat;
+    sparkles: PVisualGear;
 begin
     AllInactive := false;
 
@@ -3191,6 +3193,7 @@ begin
         fX:= int2hwFloat(hwRound(Gear^.X));
         fY:= int2hwFloat(hwRound(Gear^.Y));
         dmgBase:= cakeDmg shl 1 + cHHRadius div 2;
+        partyEpicness:= 0;
         gi := GearsList;
         while gi <> nil do
             begin
@@ -3204,14 +3207,39 @@ begin
                 if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, cakeDmg), gi);
                 if (dmg > 1) then
                     if (CurrentHedgehog^.Gear = gi) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) then
-                        gi^.State := gi^.State or gstLoser
+                        begin
+                        gi^.State := gi^.State or gstLoser;
+                        // probably not too epic if hitting self too...
+                        dec(partyEpicness, 45);
+                        end
                     else
+                        begin
                         gi^.State := gi^.State or gstWinner;
+                        if CurrentHedgehog^.Gear = gi then
+                            dec(partyEpicness, 45)
+                        else
+                            inc(partyEpicness);
+                        end;
                 end;
             gi := gi^.NextGear
             end;
 //////////////////////////////////////////////////////////////////////
         Gear^.doStep := @doStepCakeExpl;
+        if partyEpicness > 6 then
+            begin
+            for i := 0 to (2 * partyEpicness) do
+                begin
+                sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg, 1);
+                if sparkles <> nil then
+                    begin
+                    sparkles^.dX:= 0.008 * (random(100) - 50);
+                    sparkles^.dY:= -0.3 + 0.002 * (random(100) - 50);
+                    sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+                    sparkles^.Angle:= random(360);
+                    end
+                end;
+            InCinematicMode:= true;
+            end;
         PlaySound(sndCake)
         end
     else dec(Gear^.Pos)
