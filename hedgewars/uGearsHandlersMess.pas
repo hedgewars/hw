@@ -86,7 +86,7 @@ procedure doStepKamikazeIdle(Gear: PGear);
 procedure doStepKamikaze(Gear: PGear);
 procedure doStepCakeExpl(Gear: PGear);
 procedure doStepCakeDown(Gear: PGear);
-procedure doStepCakeWork(Gear: PGear);
+procedure doStepCakeWalk(Gear: PGear);
 procedure doStepCakeUp(Gear: PGear);
 procedure doStepCakeFall(Gear: PGear);
 procedure doStepCake(Gear: PGear);
@@ -3248,7 +3248,7 @@ begin
 end;
 
 
-procedure doStepCakeWork(Gear: PGear);
+procedure doStepCakeWalk(Gear: PGear);
 var
     tdx, tdy: hwFloat;
     cakeData: PCakeData;
@@ -3315,7 +3315,7 @@ begin
                 end;
             CakeI := 0;
             end;
-        Gear^.doStep := @doStepCakeWork
+        Gear^.doStep := @doStepCakeWalk
         end
     else
         inc(Gear^.Pos)
