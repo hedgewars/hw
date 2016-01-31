@@ -270,7 +270,7 @@ begin
             Gear^.X := Gear^.X + nx * len;
             Gear^.Y := Gear^.Y + ny * len;
             inc(RopePoints.Count);
-            TryDo(RopePoints.Count <= MAXROPEPOINTS, 'Rope points overflow', true);
+            if checkFails(RopePoints.Count <= MAXROPEPOINTS, 'Rope points overflow', true) then exit;
             Gear^.Elasticity := Gear^.Elasticity - len;
             Gear^.Friction := Gear^.Friction - len;
             haveDivided := true;

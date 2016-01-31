@@ -30,7 +30,7 @@ var Stack: record
 
 procedure Push(_xl, _xr, _y, _dir: LongInt);
 begin
-    TryDo(Stack.Count <= 8192, 'FillLand: stack overflow', true);
+    if checkFails(Stack.Count <= 8192, 'FillLand: stack overflow', true) then exit;
     _y:= _y + _dir;
     if (_y < 0) or (_y >= LAND_HEIGHT) then
         exit;

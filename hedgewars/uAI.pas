@@ -552,7 +552,7 @@ with CurrentHedgehog^ do
                 if Gear^.Message <> 0 then
                     begin
                     StopMessages(Gear^.Message);
-                    TryDo((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true);
+                    if checkFails((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true) then exit;
                     end;
 
                 if Gear^.Message <> 0 then

@@ -748,7 +748,7 @@ if (GameFlags and gfPlaceHog) <> 0 then
 if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
-    TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
+    if checkFails(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true) then exit;
     for p:= 0 to 1 do
         begin
         with ClansArray[p]^ do

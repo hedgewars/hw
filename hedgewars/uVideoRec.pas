@@ -109,7 +109,7 @@ begin
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix;
     soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
 
-    TryDo(AVWrapper_Init(@AddFileLogRaw
+    if checkFails(AVWrapper_Init(@AddFileLogRaw
         , PChar(ansistring(filename))
         , PChar(ansistring(desc))
         , PChar(ansistring(soundFilePath))
@@ -118,7 +118,7 @@ begin
         , PChar(ansistring(cAudioCodec))
         , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality) >= 0,
         'AVWrapper_Init failed',
-        true);
+        true) then exit(false);
 
     numPixels:= cScreenWidth*cScreenHeight;
     YCbCr_Planes[0]:= GetMem(numPixels);

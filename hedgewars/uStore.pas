@@ -149,8 +149,10 @@ begin
     rr.h:= h;
 
     texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
-    TryDo(texsurf <> nil, errmsgCreateSurface, true);
-    TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+    if not checkFails(texsurf <> nil, errmsgCreateSurface, true) then
+        checkFails(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+    if not allOK then exit(nil);
 
     DrawRoundRect(@rr, cWhiteColor, cNearBlackColor, texsurf, true);
 
@@ -196,8 +198,9 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 32;
         r.h:= 32;
         texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-        TryDo(texsurf <> nil, errmsgCreateSurface, true);
-        TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        if not checkFails(texsurf <> nil, errmsgCreateSurface, true) then
+            checkFails(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        if not allOK then exit;
 
         r.w:= 26;
         r.h:= 19;
@@ -229,20 +232,20 @@ for t:= 0 to Pred(TeamsCount) do
                 Flag:= 'hedgewars';
 
         flagsurf:= LoadDataImageAltFile(ptFlags, Flag, 'hedgewars', ifNone);
-        TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
+        if not checkFails(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true) then
+        begin
+            case maxLevel of
+                1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0);
+                2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2);
+                3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5);
+                4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9);
+                5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
+                end;
 
-        case maxLevel of
-            1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0);
-            2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2);
-            3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5);
-            4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9);
-            5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
-            end;
-
-        copyToXY(flagsurf, texsurf, 2, 2);
-        SDL_FreeSurface(flagsurf);
-        flagsurf:= nil;
-
+            copyToXY(flagsurf, texsurf, 2, 2);
+            SDL_FreeSurface(flagsurf);
+            flagsurf:= nil;
+        end;
 
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
@@ -254,6 +257,8 @@ for t:= 0 to Pred(TeamsCount) do
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
         texsurf:= nil;
+
+        if not allOK then exit;
 
         AIKillsTex := RenderStringTex(ansistring(inttostr(stats.AIKills)), Clan^.Color, fnt16);
 
@@ -475,9 +480,9 @@ if not cOnlyStats then
     for ai:= Low(TAmmoType) to High(TAmmoType) do
         with Ammoz[ai] do
             begin
-            TryDo(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
+            if checkFails(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true) then exit;
             tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, PChar(trAmmo[NameId]), cWhiteColorChannels);
-            TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
+            if checkFails(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true) then exit;
             tmpsurf:= doSurfaceConversion(tmpsurf);
             FreeAndNilTexture(NameTex);
             NameTex:= Surface2Tex(tmpsurf, false);
@@ -629,7 +634,7 @@ begin
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
     if (imageFlags and ifTransparent) <> 0 then
-        TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        if checkFails(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true) then exit;
 
     WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
 
@@ -778,7 +783,7 @@ begin
         {$ENDIF}
         end;
 
-    TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
+    if checkFails(ProgrTex <> nil, 'Error - Progress Texure is nil!', true) then exit;
 
     RenderClear();
     if Step < numsquares then
@@ -879,7 +884,7 @@ inc(w, wa);
 inc(h, ha + 8);
 
 tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
-TryDo(tmpsurf <> nil, 'RenderHelpWindow: fail to create surface', true);
+if checkFails(tmpsurf <> nil, 'RenderHelpWindow: fail to create surface', true) then exit(nil);
 
 // render border and background
 r.x:= 0;

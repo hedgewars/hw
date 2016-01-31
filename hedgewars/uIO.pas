@@ -102,7 +102,6 @@ end;
 procedure RemoveCmd;
 var tmp: PCmd;
 begin
-TryDo(headcmd <> nil, 'Engine bug: headcmd = nil', true);
 tmp:= headcmd;
 headcmd:= headcmd^.Next;
 if headcmd = nil then
@@ -224,7 +223,8 @@ filemode:= 0;
 {$I-}
 assign(f, fileName);
 reset(f, 1);
-tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
+if checkFails(IOResult = 0, 'Error opening file ' + fileName, true) then
+    exit;
 
 i:= 0; // avoid compiler hints
 s[0]:= #0;
@@ -435,7 +435,7 @@ while (headcmd <> nil)
     end;
 
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
-    TryDo(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
+    checkFails(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
             ' (' + IntToStr(GameTicks) + ' > ' +
             IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',

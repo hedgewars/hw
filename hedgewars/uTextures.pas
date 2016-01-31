@@ -229,7 +229,7 @@ Surface2Tex^.h:= surf^.h;
 
 if (surf^.format^.BytesPerPixel <> 4) then
     begin
-    TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
+    checkFails(false, 'Surface2Tex failed, expecting 32 bit surface', true);
     Surface2Tex^.id:= 0;
     exit
     end;

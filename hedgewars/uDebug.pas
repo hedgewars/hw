@@ -23,7 +23,8 @@ unit uDebug;
 interface
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
-procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
+//procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
+function checkFails(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
 function SDLCheck(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
 
 var
@@ -48,6 +49,15 @@ procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
 begin
 if not Assert then
     OutError(Msg, isFatal)
+end;
+
+function checkFails(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
+begin
+    if not Assert then
+        OutError(Msg, false);
+
+    allOK:= allOK and (Assert or (not isFatal));
+    checkFails:= (not Assert) and isFatal
 end;
 
 function SDLCheck(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;

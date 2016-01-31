@@ -72,10 +72,11 @@ begin
     if cOnlyStats then exit;
     if (Width <= 0) or (Height <= 0) then
         exit;
-    TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
-    TryDo(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
-    TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
-    TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
+    checkFails((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
+    checkFails(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
+    checkFails((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
+    checkFails(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
+    if not allOK then exit;
 
     tSize:= TEXSIZE;
 

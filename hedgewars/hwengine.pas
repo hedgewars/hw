@@ -140,7 +140,7 @@ begin
         ScreenFade:= sfFromWhite;
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
-        
+
         if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or
            (flagDumpLand and MakeScreenshot(s, 1, 1) and ((cReducedQuality and rqBlurryLand <> 0) or MakeScreenshot(s, 1, 2))) then
             WriteLnToConsole('Screenshot saved: ' + s)
@@ -162,7 +162,7 @@ var event: TSDL_Event;
 begin
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
-    while isTerminated = false do
+    while (not isTerminated) and allOK do
     begin
         wheelEvent:= false;
         SDL_PumpEvents();
@@ -327,12 +327,11 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game;
+procedure GameRoutine;
 //var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
-    initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
@@ -351,11 +350,7 @@ begin
         WriteLnToConsole(msgOK);
         end;
 
-    if not allOK then
-    begin
-        freeEverything(true);
-        exit
-    end;
+    if not allOK then exit;
     //SDL_StartTextInput();
     SDL_ShowCursor(0);
 
@@ -376,6 +371,7 @@ begin
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
     AddProgress();
+    if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
@@ -389,6 +385,7 @@ begin
         end
     else cLocale := 'en';
 
+    if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);
 
     if cTestLua then
@@ -406,39 +403,43 @@ begin
             LoadRecordFromFile(recordFileName);
         end;
 
-    if allOK then
+    if not allOK then exit;
+    ScriptOnGameInit;
+    s:= 'eproto ' + inttostr(cNetProtoVersion);
+    SendIPCRaw(@s[0], Length(s) + 1); // send proto version
+
+    InitTeams();
+    AssignStores();
+
+    if GameType = gmtRecord then
+        SetSound(false);
+
+    InitSound();
+
+    isDeveloperMode:= false;
+    if checkFails(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
+    //ParseCommand('rotmask', true);
+    if not allOK then exit;
+
+{$IFDEF USE_VIDEO_RECORDING}
+    if GameType = gmtRecord then
     begin
-        ScriptOnGameInit;
-        s:= 'eproto ' + inttostr(cNetProtoVersion);
-        SendIPCRaw(@s[0], Length(s) + 1); // send proto version
-
-        InitTeams();
-        AssignStores();
-
-        if GameType = gmtRecord then
-            SetSound(false);
-
-        InitSound();
-
-        isDeveloperMode:= false;
-        TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-        //ParseCommand('rotmask', true);
-
-    {$IFDEF USE_VIDEO_RECORDING}
-        if GameType = gmtRecord then
-        begin
-            RecorderMainLoop();
-            freeEverything(true);
-            exit;
-        end;
-    {$ENDIF}
-
-        MainLoop;
+        RecorderMainLoop();
+        freeEverything(true);
+        exit;
     end;
+{$ENDIF}
+
+    MainLoop;
+end;
+
+procedure Game;
+begin
+    initEverything(true);
+    GameRoutine;
     // clean up all the memory allocated
     freeEverything(true);
 end;
-
 ///////////////////////////////////////////////////////////////////////////////
 // preInitEverything - init variables that are going to be ovewritten by arguments
 // initEverything - init variables only. Should be coupled by below
@@ -549,7 +550,7 @@ begin
     if allOK then
     begin
         IPCWaitPongEvent;
-        TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+        if checkFails(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
 
         ScriptOnPreviewInit;
     {$IFDEF MOBILE}

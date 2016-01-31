@@ -290,10 +290,10 @@ begin
             exit(AskForVoicepack('Default'));
         end;
 
-    while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
+    while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') and (i < cMaxTeams) do
         begin
         inc(i);
-        TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
+        //TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
         end;
 
     voicepacks[i].name:= name;

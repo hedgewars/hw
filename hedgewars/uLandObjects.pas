@@ -112,7 +112,11 @@ if SDL_MustLock(Image) then
     if SDLCheck(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true) then exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'Land object should be 32bit', true);
+if checkFails(bpp = 4, 'Land object should be 32bit', true) then
+begin
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+end;
 
 if Width = 0 then
     Width:= Image^.w;
@@ -163,7 +167,11 @@ if SDL_MustLock(Image) then
     if SDLCheck(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true) then exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'Land object should be 32bit', true);
+if checkFails(bpp = 4, 'Land object should be 32bit', true) then
+begin
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+end;
 
 p:= Image^.pixels;
 mp:= Mask^.pixels;
@@ -203,7 +211,7 @@ with Rects^[RectCount] do
     h:= h1
     end;
 inc(RectCount);
-TryDo(RectCount < MaxRects, 'AddRect: overflow', true)
+checkFails(RectCount < MaxRects, 'AddRect: overflow', true)
 end;
 
 procedure InitRects;
@@ -512,7 +520,7 @@ if GrayScale then
 s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 f:= pfsOpenRead(s);
-TryDo(f <> nil, 'Bad data or cannot access file ' + s, true);
+if checkFails(f <> nil, 'Bad data or cannot access file ' + s, true) then exit;
 
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;

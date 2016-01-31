@@ -705,7 +705,7 @@ numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
 if outOfMap then doPlace:= false; // just using for a check
 
-TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+if checkFails(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true) then exit;
 
 Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
@@ -719,7 +719,12 @@ if SDL_MustLock(Image) then
     if SDLCheck(SDL_LockSurface(Image) >= 0, 'TryPlaceOnLand', true) then exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+if checkFails(bpp = 4, 'It should be 32 bpp sprite', true) then
+begin
+    if SDL_MustLock(Image) then
+        SDL_UnlockSurface(Image);
+    exit
+end;
 // Check that sprite fits free space
 p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
 case bpp of
@@ -824,7 +829,7 @@ var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
 begin
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
-TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+if checkFails(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true) then exit;
 
 Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
@@ -838,11 +843,16 @@ if SDL_MustLock(Image) then
     if SDLCheck(SDL_LockSurface(Image) >= 0, 'EraseLand', true) then exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+if checkFails(bpp = 4, 'It should be 32 bpp sprite', true) then
+begin
+    if SDL_MustLock(Image) then
+        SDL_UnlockSurface(Image);
+    exit
+end;
 // Check that sprite fits free space
 p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
-case bpp of
-    4: for y:= 0 to Pred(h) do
+
+    for y:= 0 to Pred(h) do
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
@@ -854,13 +864,11 @@ case bpp of
                    exit
                    end;
         p:= PByteArray(@(p^[Image^.pitch]))
-        end
-    end;
+        end;
 
 // Checked, now place
 p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
-case bpp of
-    4: for y:= 0 to Pred(h) do
+    for y:= 0 to Pred(h) do
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
@@ -875,7 +883,7 @@ case bpp of
                     gX:= (cpX + x) div 2;
                     gY:= (cpY + y) div 2;
                     end;
-		        if (not eraseOnLFMatch or (Land[cpY + y, cpX + x] and LandFlags <> 0)) and
+                if (not eraseOnLFMatch or (Land[cpY + y, cpX + x] and LandFlags <> 0)) and
                     ((PLongword(@(p^[x * 4]))^) and AMask <> 0) then
                     begin
                     if not onlyEraseLF then
@@ -888,7 +896,6 @@ case bpp of
                 end;
         p:= PByteArray(@(p^[Image^.pitch]));
         end;
-    end;
 if SDL_MustLock(Image) then
     SDL_UnlockSurface(Image);
 
@@ -910,7 +917,7 @@ begin
 GetPlaceCollisionTex:= nil;
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
-TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+checkFails(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
 Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
 h:= SpritesData[Obj].Height;
@@ -922,17 +929,28 @@ if SDL_MustLock(Image) then
         exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+checkFails(bpp = 4, 'It should be 32 bpp sprite', true);
 
 
 
 finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
 
-TryDo(finalSurface <> nil, 'GetPlaceCollisionTex: fail to create surface', true);
+checkFails(finalSurface <> nil, 'GetPlaceCollisionTex: fail to create surface', true);
 
 if SDL_MustLock(finalSurface) then
-    if SDLCheck(SDL_LockSurface(finalSurface) >= 0, 'GetPlaceCollisionTex', true) then
-        exit;
+    SDLCheck(SDL_LockSurface(finalSurface) >= 0, 'GetPlaceCollisionTex', true);
+
+if not allOK then
+    begin
+    if SDL_MustLock(Image) then
+        SDL_UnlockSurface(Image);
+
+    if SDL_MustLock(finalSurface) then
+        SDL_UnlockSurface(finalSurface);
+
+    if finalSurface <> nil then
+        SDL_FreeSurface(finalSurface);
+    end;
 
 p:= PLongWordArray(@(PLongWordArray(Image^.pixels)^[ (Image^.pitch div 4) * row * h + col * w ]));
 pt:= PLongWordArray(finalSurface^.pixels);

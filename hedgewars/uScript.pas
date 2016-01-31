@@ -442,7 +442,6 @@ end;
 
 // enable/disable cinematic effects
 function lc_setcinematicmode(L : Plua_State) : LongInt; Cdecl;
-var at: LongInt;
 const
     call = 'SetCinematicMode';
     params = 'enable';
@@ -3111,7 +3110,7 @@ var at : TGearType;
 begin
 // initialize lua
 luaState:= lua_open;
-TryDo(luaState <> nil, 'lua_open failed', true);
+if checkFails(luaState <> nil, 'lua_open failed', true) then exit;
 
 // open internal libraries
 luaopen_base(luaState);
