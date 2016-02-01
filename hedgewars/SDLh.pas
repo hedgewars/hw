@@ -1014,6 +1014,17 @@ type
                         sockets: PTCPSocket;
                         end;
 
+{$IFDEF WIN32}
+     TThreadFunction = function (p: pointer): Longword; stdcall;
+     pfnSDL_CurrentBeginThread = function (
+        _Security: pointer; 
+        _StackSize: LongWord;
+        _StartAddress: TThreadFunction;
+        _ArgList: pointer;
+        _InitFlag: Longword;
+        _ThrdAddr: PLongword): PtrUInt; cdecl;
+    pfnSDL_CurrentEndThread = procedure (_Retval: LongInt); cdecl;
+{$ENDIF} 
 
 /////////////////////////////////////////////////////////////////
 /////////////////////  FUNCTION DEFINITIONS /////////////////////
@@ -1125,7 +1136,13 @@ function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; extern
 
 (* remember to mark the threaded functions as 'cdecl; export;'
    (or have fun debugging nil arguments) *)
+{$IFDEF WIN32}
+// SDL uses wrapper in windows
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer; bt: pfnSDL_CurrentBeginThread; et: pfnSDL_CurrentEndThread): PSDL_Thread; cdecl; external SDLLibName;
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; overload;
+{$ELSE}
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
+{$ENDIF}
 procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
 procedure SDL_KillThread(thread: PSDL_Thread); cdecl; external SDLLibName;
 
@@ -1295,6 +1312,12 @@ begin
                   (PByteArray(buf)^[0] shl 24)
 end;
 
+{$IFDEF WIN32}
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl;
+begin
+    SDL_CreateThread:= SDL_CreateThread(fn, name, data, nil, nil)
+end;  
+{$ENDIF}
 
 end.
 
