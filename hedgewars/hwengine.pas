@@ -81,6 +81,7 @@ begin
             AddFlakes;
             SetRandomSeed(cSeed, false);
             StoreLoad(false);
+            if not allOK then exit;
             AssignHHCoords;
             AddMiscGears;
             InitWorld;

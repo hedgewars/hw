@@ -90,8 +90,8 @@ begin
                   , true)
     then exit;
 
+if checkFails(StoreCnt < cMaxHHs, 'Ammo stores overflow', true) then exit;
 inc(StoreCnt);
-if checkFails(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true) then exit;
 
 new(StoresList[Pred(StoreCnt)]);
 
