@@ -78,7 +78,7 @@
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>封鎖玩家</translation>
     </message>
 </context>
 <context>
@@ -252,7 +252,7 @@ Please check your installation!</source>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線</translation>
+        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線。</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
@@ -480,7 +480,7 @@ Last two engine messages:
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">連線到伺服器</translation>
     </message>
 </context>
 <context>
@@ -701,7 +701,7 @@ If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
         <translation>要連接到伺服器，請登錄。
 
-如果你在www.hedgewars.org沒有一個的帳號，
+如果你在www.hedgewars.org沒有一個的帳戶，
 只需輸入你的暱稱。</translation>
     </message>
     <message>
@@ -714,7 +714,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>New Account</source>
-        <translation type="unfinished"></translation>
+        <translation>新帳戶</translation>
     </message>
 </context>
 <context>
@@ -751,7 +751,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation type="unfinished"></translation>
+        <translation>選擇一頂帽子</translation>
     </message>
 </context>
 <context>
@@ -989,7 +989,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished">生命圖</translation>
+        <translation type="unfinished">生命走勢</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -998,7 +998,7 @@ just enter your nickname.</source>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1%n&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1513,7 +1513,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished">同一顏色的每個隊伍採取連續輪流分享他們的回合時間。</translation>
+        <translation type="unfinished">同樣顏色的任意一隊伍每回合都可動作,但回合時間需共享。</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1702,11 +1702,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示有密碼保護的</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示有加入限制的</translation>
     </message>
 </context>
 <context>
@@ -2198,7 +2198,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Air Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>浮空雷</translation>
     </message>
 </context>
 <context>
@@ -2750,7 +2750,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">選擇一個主題</translation>
     </message>
 </context>
 <context>
