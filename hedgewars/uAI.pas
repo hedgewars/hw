@@ -52,10 +52,11 @@ begin
     ThinkThread:= nil;
     SDL_UnlockMutex(ThreadLock);
 
-    with CurrentHedgehog^ do
-        if Gear <> nil then
-            if BotLevel <> 0 then
-                StopMessages(Gear^.Message);
+    if CurrentHedgehog <> nil then
+        with CurrentHedgehog^ do
+            if Gear <> nil then
+                if BotLevel <> 0 then
+                    StopMessages(Gear^.Message);
 
     BestActions.Count:= 0;
     BestActions.Pos:= 0
