@@ -88,7 +88,7 @@ if SoundTimerTicks >= 50 then
     end;
 PlayNextVoice;
 i:= 1;
-while (GameState <> gsExit) and (i <= Lag) do
+while (GameState <> gsExit) and (i <= Lag) and allOK do
     begin
     if not CurrentTeam^.ExtDriven then
         begin

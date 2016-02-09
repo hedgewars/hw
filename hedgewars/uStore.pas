@@ -396,6 +396,7 @@ for ii:= Low(TSprite) to High(TSprite) do
            and ((cCloudsNumber > 0) or (ii <> sprCloud))
            and ((vobCount > 0) or (ii <> sprFlake))
            and (savesurf or (not cOnlyStats)) // in stats-only only load those which are needed later
+           and allOK
             then
             begin
             if reload then
@@ -454,7 +455,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
-if not cOnlyStats then
+if (not cOnlyStats) and allOK then
     begin
     WriteNames(fnt16);
 

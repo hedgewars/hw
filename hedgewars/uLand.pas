@@ -668,6 +668,8 @@ else
 
 FreeLandObjects;
 
+if not allOK then exit;
+
 if GrayScale then
     begin
     if (cReducedQuality and rqBlurryLand) = 0 then

@@ -234,13 +234,13 @@ repeat
         begin
         s[0]:= char(i);
         ss:= ss + s;
-        while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
+        while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) and allOK do
             begin
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
             Delete(ss, 1, Succ(byte(ss[1])));
             end
         end
-until i = 0;
+until (i = 0) or (not allOK);
 
 close(f)
 {$I+}
@@ -328,7 +328,7 @@ isPonged:= false;
 repeat
     IPCCheckSock;
     SDL_Delay(1)
-until isPonged
+until isPonged or (not allOK)
 end;
 
 procedure SendIPCAndWaitReply(s: shortstring);

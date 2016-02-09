@@ -525,7 +525,7 @@ if checkFails(f <> nil, 'Bad data or cannot access file ' + s, true) then exit;
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
 
-while not pfsEOF(f) do
+while (not pfsEOF(f)) and allOK do
     begin
     pfsReadLn(f, s);
     if Length(s) = 0 then

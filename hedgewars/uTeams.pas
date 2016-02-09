@@ -608,14 +608,18 @@ if isDeveloperMode then
     // color is always little endian so the mask must be constant also in big endian archs
     Color:= Color or $FF000000;
     AddTeam(Color);
-    CurrentTeam^.TeamName:= ts;
-    CurrentTeam^.PlayerHash:= s;
-    loadTeamBinds(ts);
+    
+    if CurrentTeam <> nil then
+        begin
+        CurrentTeam^.TeamName:= ts;
+        CurrentTeam^.PlayerHash:= s;
+        loadTeamBinds(ts);
 
-    if GameType in [gmtDemo, gmtSave, gmtRecord] then
-        CurrentTeam^.ExtDriven:= true;
+        if GameType in [gmtDemo, gmtSave, gmtRecord] then
+            CurrentTeam^.ExtDriven:= true;
 
-    CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
     end
 end;
 
