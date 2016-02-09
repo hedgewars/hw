@@ -376,6 +376,7 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_6;
+                gear^.Z:= 1;
                 end;
          gtBee: begin
                 gear^.Radius:= 5;
