@@ -2646,7 +2646,7 @@ begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
 
-    if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
+    if (Gear^.Health > 0) and (not (Gear^.X < Gear^.dX)) and (Gear^.X < Gear^.dX + cAirPlaneSpeed) then
         begin
         dec(Gear^.Health);
             case Gear^.State of
@@ -2690,7 +2690,7 @@ begin
         end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * Gear^.Health * Gear^.Damage) / 2;
+    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * (Gear^.Health-1) * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
