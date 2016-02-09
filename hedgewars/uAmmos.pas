@@ -70,7 +70,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if newAmmo[a].Count > 0 then
         begin
-        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
+        if checkFails(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true) then exit;
         Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= newAmmo[a];
         inc(mi[Ammoz[a].Slot])
         end
@@ -85,10 +85,13 @@ var cnt: Longword;
     ammos: TAmmoCounts;
     newAmmos: TAmmoArray;
 begin
-TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType)))), 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)', true);
+    if checkFails((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType))))
+                  , 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)'
+                  , true)
+    then exit;
 
+if checkFails(StoreCnt < cMaxHHs, 'Ammo stores overflow', true) then exit;
 inc(StoreCnt);
-TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
 
 new(StoresList[Pred(StoreCnt)]);
 
@@ -153,8 +156,10 @@ end;
 
 function GetAmmoByNum(num: LongInt): PHHAmmo;
 begin
-    TryDo(num < StoreCnt, 'Invalid store number', true);
-    GetAmmoByNum:= StoresList[num]
+    if checkFails(num < StoreCnt, 'Invalid store number', true) then
+        GetAmmoByNum:= nil
+    else
+        GetAmmoByNum:= StoresList[num]
 end;
 
 function GetCurAmmoEntry(var Hedgehog: THedgehog): PAmmo;
@@ -364,7 +369,7 @@ with Hedgehog do
             inc(slot)
             end
         end;
-    TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
+    if checkFails(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true) then exit;
     CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
     end
 end;

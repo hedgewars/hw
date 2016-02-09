@@ -52,10 +52,11 @@ begin
     ThinkThread:= nil;
     SDL_UnlockMutex(ThreadLock);
 
-    with CurrentHedgehog^ do
-        if Gear <> nil then
-            if BotLevel <> 0 then
-                StopMessages(Gear^.Message);
+    if CurrentHedgehog <> nil then
+        with CurrentHedgehog^ do
+            if Gear <> nil then
+                if BotLevel <> 0 then
+                    StopMessages(Gear^.Message);
 
     BestActions.Count:= 0;
     BestActions.Pos:= 0
@@ -552,7 +553,7 @@ with CurrentHedgehog^ do
                 if Gear^.Message <> 0 then
                     begin
                     StopMessages(Gear^.Message);
-                    TryDo((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true);
+                    if checkFails((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true) then exit;
                     end;
 
                 if Gear^.Message <> 0 then

@@ -26,7 +26,7 @@ while [ ! -z "$1" ]; do
     echo "Checking $url ..."
     echo
     page=$(wget -q -O- "$url")
-    author=$(echo "$page" | sed -rn 's/^.*"author-name">(<[^>]*>)*([^ <]*).*/\2/ p')
+    author=$(echo "$page" | sed -rn '1,/"user-mention"/{s/^.*"user-mention"( *[^>]*)?> *([^ <]*).*$/\2/ p}')
     if [ -z "$author" ]; then
         echo 'Couldn'\''t find author! Skipping '"$1"' ...' >&2
         shift
@@ -45,13 +45,18 @@ while [ ! -z "$1" ]; do
     echo
     result=$(hg log -R "$HW_HG" -u "$author" -d "$date" -v -l1)
     if [ -z "$result" ]; then
+        echo 'No match with this author'\''s name. It might differ, so let'\''s try using date only ...'
+        echo
+        result=$(hg log -R "$HW_HG" -d "$date" -v)
+    fi
+    if [ -z "$result" ]; then
         echo 'No match :('
         shift
         continue
     fi
     rev=$(echo "$result" | sed 's/^.*://;q')
     echo 'Found match: r'"$rev"
-    echo 'Link:        https://code.google.com/p/hedgewars/source/detail?r='"$rev"
+    echo 'Link:        http://hg.hedgewars.org/hedgewars/rev/'"$rev"
     echo
     echo "$result"
     # proceed to next parameter

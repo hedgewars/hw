@@ -150,7 +150,8 @@ if (Gear <> GearsList) and (Gear <> nil) and (Gear^.NextGear = nil) and (Gear^.P
     AddFileLog('Attempted to remove Gear #'+inttostr(Gear^.uid)+' from the list twice.');
     exit
     end;
-TryDo((Gear = nil) or (curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
+    
+checkFails((Gear = nil) or (curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
 
 if Gear^.NextGear <> nil then
     Gear^.NextGear^.PrevGear:= Gear^.PrevGear;

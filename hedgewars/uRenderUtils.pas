@@ -99,7 +99,8 @@ begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
     finalRect.x:= X + cFontBorder + 2;
     finalRect.y:= Y + cFontBorder;
-    SDLTry(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true);
+    if SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
+        exit;
     SDL_UpperBlit(tmpsurf, @textRect, Surface, @finalRect);
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;
@@ -114,7 +115,8 @@ var y, x, i, j: LongInt;
     tmpPixel: Longword;
     pixels: PLongWordArray;
 begin
-    TryDo(Surface^.format^.BytesPerPixel = 4, 'flipSurface failed, expecting 32 bit surface', true);
+    if checkFails(Surface^.format^.BytesPerPixel = 4, 'flipSurface failed, expecting 32 bit surface', true) then
+        exit;
     SDL_LockSurface(Surface);
     pixels:= Surface^.pixels;
     if Vertical then
@@ -129,7 +131,7 @@ begin
             end
     else
     for x := 0 to (Surface^.w div 2) - 1 do
-        for y := 0 to Surface^.h -1 do
+        for y := 0 to Surface^.h - 1 do
             begin
             i:= y*Surface^.w + x;
             j:= y*Surface^.w + (Surface^.w - x - 1);
@@ -245,8 +247,9 @@ procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary sinc
 var y, x, i, j: LongInt;
     srcPixels, destPixels: PLongWordArray;
 begin
-    TryDo(src^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
-    TryDo(dest^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
+    checkFails(src^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
+    checkFails(dest^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
+    if not allOK then exit;
 
     SDL_LockSurface(src);
     SDL_LockSurface(dest);
@@ -292,11 +295,12 @@ begin
         finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
                 32, RMask, GMask, BMask, AMask);
 
-        TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
+        if checkFails(finalSurface <> nil, 'RenderString: fail to create surface', true) then
+            exit(nil);
 
         WriteInRoundRect(finalSurface, 0, 0, Color, font, s, maxLength);
 
-        TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        checkFails(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, false);
 
         RenderStringTexLim:= Surface2Tex(finalSurface, false);
 
@@ -443,7 +447,8 @@ begin
 
     finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
 
-    TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
+    if checkFails(finalSurface <> nil, 'RenderString: fail to create surface', true) then
+        exit(nil);
 
     //////////////////////////////// CORNERS ///////////////////////////////
     copyToXY(SpritesData[corner].Surface, finalSurface, 0, 0); /////////////////// NW
@@ -522,9 +527,11 @@ begin
         rect.x:= edgeHeight + 1 + ((i - w) div 2);
         // trying to more evenly position the text, vertically
         rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
-        SDLTry(tmpsurf <> nil, 'TTF_Init', true);
-        SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
-        SDL_FreeSurface(tmpsurf);
+        if not SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
+        begin
+            SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
+            SDL_FreeSurface(tmpsurf);
+        end;
         inc(line);
         end;
 

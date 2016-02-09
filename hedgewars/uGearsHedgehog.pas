@@ -873,9 +873,59 @@ end;
 
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure moveHedgehogOutOfWall(Gear: PGear);
+var
+    hx: hwFloat;
+    colly, collxl, collxr: boolean;
+begin
+colly:= (TestCollisionYwithGear(Gear, 1) <> 0);
+
+while colly do
+    begin
+    // don't use TestCollisionXwithXYShift, because it checks for gears
+    // save real x-position
+    hx:= Gear^.X;
+
+    Gear^.X:= hx + _1;
+    collxl:= (TestCollisionX(Gear, -1) <> 0);
+
+    Gear^.X:= hx - _1;
+    collxr:= (TestCollisionX(Gear,  1) <> 0);
+
+    // restore original value
+    Gear^.X:= hx;
+
+    // do nothing if trapped between 2 walls
+    if collxl = collxr then
+        break;
+
+    // if we in a wall - fix that
+    if collxl then
+        begin
+        // check for obstacle
+        if (TestCollisionX(Gear,  1) <> 0) then
+            break;
+        Gear^.X:= Gear^.X + _1;
+        end
+    else
+        begin
+        // check for obstacle
+        if (TestCollisionX(Gear, -1) <> 0) then
+            break;
+        Gear^.X:= Gear^.X - _1;
+        end;
+
+        colly:= (TestCollisionYwithGear(Gear, 1) <> 0);
+        end;
+
+
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
+    cnt: LongWord;
 begin
 if Gear^.Hedgehog^.Unplaced then
     begin
@@ -892,7 +942,15 @@ if Gear^.dX.QWordValue > 8160437862 then
 if Gear^.dY.QWordValue > 8160437862 then
     Gear^.dY.QWordValue:= 8160437862;
 
-isFalling:= (Gear^.dY.isNegative) or (TestCollisionYKick(Gear, 1) = 0);
+isFalling:= (Gear^.dY.isNegative);
+if (not isFalling) then
+    begin
+    // make sure we're not just stuck in wall
+    moveHedgehogOutOfWall(Gear);
+    // test for floor/obstacle below
+    isFalling:= (TestCollisionYKick(Gear, 1) = 0);
+    end;
+
 if isFalling then
     begin
     land:= TestCollisionYKick(Gear, -1);
@@ -935,6 +993,7 @@ else
     land:= TestCollisionYwithGear(Gear, 1);
     if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
     and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0))
+    and (Gear^.Damage = 0)
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
@@ -1037,15 +1096,24 @@ if (Gear^.State and gstMoving) <> 0 then
                         else
                             begin
                             Gear^.State:= Gear^.State and (not gstMoving);
-                            while TestCollisionYWithGear(Gear,1) = 0 do
-                                Gear^.Y:= Gear^.Y+_1;
+                            cnt:= 0;
+                            while (cnt < 6) and (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
+                                begin
+                                Gear^.Y:= Gear^.Y + _1;
+                                inc(cnt)
+                                end;
+
                             SetLittle(Gear^.dX)
                             end
             else
                 begin
                 Gear^.State:= Gear^.State and (not gstMoving);
-                while TestCollisionYWithGear(Gear,1) = 0 do
-                    Gear^.Y:= Gear^.Y+_1;
+                cnt:= 0;
+                while (cnt < 6) and (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
+                    begin
+                    Gear^.Y:= Gear^.Y + _1;
+                    inc(cnt)
+                    end;
                 SetLittle(Gear^.dX)
                 end
         else if (hwAbs(Gear^.dX) > cLittle)
@@ -1059,8 +1127,12 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
+    cnt:= 0;
+    while (cnt < 6) and (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
+        begin
         Gear^.Y:= Gear^.Y + _1;
+        inc(cnt)
+        end;
 
     // could become nil in CheckGearDrowning if ai's hog fails to respawn in ai survival
     if Gear = nil then exit;

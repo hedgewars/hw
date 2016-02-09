@@ -846,6 +846,7 @@ begin
 
     end else // not gstHHDriven
         begin
+        // check if hedgehog is sliding/rolling
         if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
             begin
@@ -855,6 +856,23 @@ begin
                     2,
                     1,
                     Gear^.DirAngle);
+
+            // dust effect
+            // TODO fix: this gives different results based on framerate
+            if (sx mod 8) = 0 then
+                begin
+                if Gear^.dX.isNegative then
+                    tx := hwRound(Gear^.X) + cHHRadius
+                else
+                    tx := hwRound(Gear^.X) - cHHRadius;
+                ty:= hwRound(Gear^.Y) + cHHRadius + 2;
+                if ((tx and LAND_WIDTH_MASK) = 0) and
+                    ((ty and LAND_HEIGHT_MASK) = 0) and
+                        (Land[ty, tx] <> 0) then
+                            AddVisualGear(tx - 2 + Random(4), ty - 8, vgtDust);
+                end;
+
+            // draw april's fool hat
             if AprilOne and (curhat <> nil) then
                 DrawTextureRotatedF(curhat, 1.0, -1.0, 0, sx, sy, 18, sign, 32, 32,
                     sign*Gear^.DirAngle)
@@ -1250,7 +1268,29 @@ begin
                     else
                         DrawSpriteRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle)
                     end;
-        gtDynamite: DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+        gtDynamite: begin
+                    DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+                    if (random(3) = 0) then
+                        begin
+                        vg:= AddVisualGear(hwRound(Gear^.X)+12-(Gear^.Tag shr 1), hwRound(Gear^.Y)-16, vgtStraightShot);
+                        if vg <> nil then
+                            with vg^ do
+                                begin
+                                Tint:= $FFCC00FF;
+                                Angle:= random(360);
+                                dx:= 0.0005 * (random(200));
+                                dy:= 0.0005 * (random(200));
+                                if random(2) = 0 then
+                                    dx := -dx;
+                                if random(2) = 0 then
+                                    dy := -dy;
+                                FrameTicks:= 100+random(300);
+                                Scale:= 0.1+1/(random(3)+3);
+                                State:= ord(sprStar)
+                                end
+                        end;
+
+                    end;
      gtClusterBomb: DrawSpriteRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, x - 8, y - 8, 0);
            gtFlame: if Gear^.Tag and 1 = 0 then

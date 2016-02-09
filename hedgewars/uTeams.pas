@@ -119,7 +119,7 @@ var c, i, t: LongWord;
     PrevHH, PrevTeam : LongWord;
 begin
 TargetPoint.X:= NoPointX;
-TryDo(CurrentTeam <> nil, 'nil Team', true);
+if checkFails(CurrentTeam <> nil, 'nil Team', true) then exit;
 with CurrentHedgehog^ do
     if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
         begin
@@ -355,9 +355,9 @@ function AddTeam(TeamColor: Longword): PTeam;
 var team: PTeam;
     c, t: LongInt;
 begin
-TryDo(TeamsCount < cMaxTeams, 'Too many teams', true);
+if checkFails(TeamsCount < cMaxTeams, 'Too many teams', true) then exit(nil);
 New(team);
-TryDo(team <> nil, 'AddTeam: team = nil', true);
+if checkFails(team <> nil, 'AddTeam: team = nil', true) then exit(nil);
 FillChar(team^, sizeof(TTeam), 0);
 team^.AttackBar:= 2;
 team^.CurrHedgehog:= 0;
@@ -551,10 +551,10 @@ begin
 s:= '';
 if (not isDeveloperMode) then
     exit;
-TryDo((CurrentTeam <> nil), 'Can''t add hedgehogs yet, add a team first!', true);
+if checkFails((CurrentTeam <> nil), 'Can''t add hedgehogs yet, add a team first!', true) then exit;
 with CurrentTeam^ do
     begin
-    TryDo(HedgehogsNumber<=cMaxHHIndex, 'Can''t add hedgehog to "' + TeamName + '"! (already ' + intToStr(HedgehogsNumber) + ' hogs)', true);
+    if checkFails(HedgehogsNumber<=cMaxHHIndex, 'Can''t add hedgehog to "' + TeamName + '"! (already ' + intToStr(HedgehogsNumber) + ' hogs)', true) then exit;
     SplitBySpace(id, s);
     SwitchCurrentHedgehog(@Hedgehogs[HedgehogsNumber]);
     CurrentHedgehog^.BotLevel:= StrToInt(id);
@@ -562,7 +562,7 @@ with CurrentTeam^ do
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
     Gear^.Health:= StrToInt(s);
-    TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
+    if checkFails(Gear^.Health > 0, 'Invalid hedgehog health', true) then exit;
     if (GameFlags and gfSharedAmmo) <> 0 then
         CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
     else if (GameFlags and gfPerHogAmmo) <> 0 then
@@ -608,14 +608,18 @@ if isDeveloperMode then
     // color is always little endian so the mask must be constant also in big endian archs
     Color:= Color or $FF000000;
     AddTeam(Color);
-    CurrentTeam^.TeamName:= ts;
-    CurrentTeam^.PlayerHash:= s;
-    loadTeamBinds(ts);
+    
+    if CurrentTeam <> nil then
+        begin
+        CurrentTeam^.TeamName:= ts;
+        CurrentTeam^.PlayerHash:= s;
+        loadTeamBinds(ts);
 
-    if GameType in [gmtDemo, gmtSave, gmtRecord] then
-        CurrentTeam^.ExtDriven:= true;
+        if GameType in [gmtDemo, gmtSave, gmtRecord] then
+            CurrentTeam^.ExtDriven:= true;
 
-    CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
     end
 end;
 

@@ -290,10 +290,10 @@ begin
             exit(AskForVoicepack('Default'));
         end;
 
-    while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
+    while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') and (i < cMaxTeams) do
         begin
         inc(i);
-        TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
+        //TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
         end;
 
     voicepacks[i].name:= name;
@@ -310,7 +310,7 @@ begin
     success:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
     if success then
-        success:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
+        success:= Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, channels, 1024) = 0;
 
     if success then
         WriteLnToConsole(msgOK)
@@ -322,10 +322,11 @@ begin
     end;
 
     WriteToConsole('Init SDL_mixer... ');
-    SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true);
+    if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
+    previousVolume:= cInitVolume;
     ChangeVolume(cInitVolume);
 end;
 
@@ -424,7 +425,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            SDLTry(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true);
+            if not SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
             end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
@@ -523,7 +524,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            SDLTry(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true);
+            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
             end;
         if fadems > 0 then
@@ -574,10 +575,10 @@ begin
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
-    SDLTry(Mus <> nil, 'Mix_LoadMUS_RW', false);
+    SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
     WriteLnToConsole(msgOK);
 
-    SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
+    SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;
 
 procedure SetVolume(vol: LongInt);

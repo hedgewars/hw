@@ -176,6 +176,9 @@ var
     r, slr, w, si, li: LongWord;
 begin
     w:= surf^.w;
+    // just a single pixel, nothing to do here
+    if (w < 2) and (surf^.h < 2) then
+        exit;
     slr:= surf^.h - 2;
     si:= 0;
     li:= w - 1;
@@ -226,7 +229,7 @@ Surface2Tex^.h:= surf^.h;
 
 if (surf^.format^.BytesPerPixel <> 4) then
     begin
-    TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
+    checkFails(false, 'Surface2Tex failed, expecting 32 bit surface', true);
     Surface2Tex^.id:= 0;
     exit
     end;
@@ -236,7 +239,8 @@ glGenTextures(1, @Surface2Tex^.id);
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 
 if SDL_MustLock(surf) then
-    SDLTry(SDL_LockSurface(surf) >= 0, 'Lock surface', true);
+    if SDLCheck(SDL_LockSurface(surf) >= 0, 'Lock surface', true) then
+        exit(nil);
 
 fromP4:= Surf^.pixels;
 

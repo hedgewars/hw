@@ -242,6 +242,8 @@ function onGameInit()
 	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
 	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
+	Goals = loc("Highlander: Eliminate enemy hogs and take their weapons.") .."|" ..
+	loc("Weapons are reset on end of turn.")
 end
 
 function onGameStart()
@@ -271,16 +273,6 @@ function onGameStart()
 
     --WriteLnToConsole('utiltot:'..utiltot..' atktot:'..atktot)
         
-	ShowMission	(
-				loc("HIGHLANDER"),
-				loc("Not all hogs are born equal."),
-
-				"- " .. loc("Eliminate enemy hogs and take their weapons.") .. "|" ..
-				"- " .. loc("Per-Hog Ammo") .. "|" ..
-				"- " .. loc("Weapons reset.") .. "|" ..
-				"- " .. loc("Unlimited Attacks") .. "|" ..
-				"", 4, 4000
-				)
 
 	runOnGears(StartingSetUp)
 	runOnGears(ConvertValues)

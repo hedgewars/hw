@@ -23,7 +23,7 @@ unit uScript;
  * This unit defines, implements and registers functions and
  * variables/constants bindings for usage in Lua scripts.
  *
- * Please keep http://code.google.com/p/hedgewars/wiki/LuaAPI up to date!
+ * Please keep http://hedgewars.org/kb/LuaAPI up to date!
  *
  * Note: If you add a new function, make sure to test if _all_ parameters
  *       work as intended! (Especially conversions errors can sneak in
@@ -438,6 +438,19 @@ begin
             ParseCommand('setweap ' + char(at), true, true);
         end;
     lc_setweapon:= 0;
+end;
+
+// enable/disable cinematic effects
+function lc_setcinematicmode(L : Plua_State) : LongInt; Cdecl;
+const
+    call = 'SetCinematicMode';
+    params = 'enable';
+begin
+    if (CheckLuaParamCount(L, 1, call, params)) then
+        begin
+        CinematicScript:= lua_toboolean(L, 1);
+        end;
+    lc_setcinematicmode:= 0;
 end;
 
 // no parameter means reset to default (and 0 means unlimited)
@@ -3097,7 +3110,7 @@ var at : TGearType;
 begin
 // initialize lua
 luaState:= lua_open;
-TryDo(luaState <> nil, 'lua_open failed', true);
+if checkFails(luaState <> nil, 'lua_open failed', true) then exit;
 
 // open internal libraries
 luaopen_base(luaState);
@@ -3340,6 +3353,7 @@ lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
+lua_register(luaState, _P'SetCinematicMode', @lc_setcinematicmode);
 lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);

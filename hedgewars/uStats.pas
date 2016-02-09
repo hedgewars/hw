@@ -38,7 +38,7 @@ procedure hedgehogFlight(Gear: PGear; time: Longword);
 procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
 
 implementation
-uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc, uConsole, uScript;
+uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScript;
 
 var DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
@@ -99,7 +99,7 @@ procedure TurnReaction;
 var i, t: LongInt;
     s: ansistring;
 begin
-TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
+//TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
 inc(FinishedTurnsTotal);
 if FinishedTurnsTotal <> 0 then

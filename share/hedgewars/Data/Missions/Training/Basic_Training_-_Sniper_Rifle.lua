@@ -36,6 +36,9 @@ local time_goal = 0
 local target = nil
 
 local last_hit_time = 0
+
+local cinematic = false
+
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
 -- You may define as many custom functions as you
@@ -48,6 +51,10 @@ function spawnTarget(x, y)
 end
 
 function blowUp(x, y)
+    if cinematic == false then
+        cinematic = true
+        SetCinematicMode(true)
+    end
 	-- adds some TNT
 	gear = AddGear(x, y, gtDynamite, 0, 0, 0, 0)
 end
@@ -178,13 +185,20 @@ end
 -- This function is called before a gear is destroyed.
 -- We use it to count the number of targets destroyed.
 function onGearDelete(gear)
+	local gt = GetGearType(gear)
 
-	if GetGearType(gear) == gtCase then
+	if gt == gtCase then
 		game_lost = true
 		return
 	end
 
-	if (GetGearType(gear) == gtTarget) then
+	if (gt == gtDynamite) and cinematic then
+		cinematic = false
+		SetCinematicMode(false)
+		return
+	end
+
+	if gt == gtTarget then
 		-- remember when the target was hit for adjusting the camera
 		last_hit_time = TurnTimeLeft
 		-- Add one point to our score/counter

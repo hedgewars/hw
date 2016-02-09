@@ -260,10 +260,10 @@ procedure LandSurface2LandPixels(Surface: PSDL_Surface);
 var x, y: LongInt;
     p: PLongwordArray;
 begin
-TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
+if checkFails(Surface <> nil, 'Assert (LandSurface <> nil) failed', true) then exit;
 
 if SDL_MustLock(Surface) then
-    SDLTry(SDL_LockSurface(Surface) >= 0, 'SDL_LockSurface', true);
+    if SDLCheck(SDL_LockSurface(Surface) >= 0, 'SDL_LockSurface', true) then exit;
 
 p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
@@ -291,7 +291,7 @@ begin
 
     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, AMask);
 
-    TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
+    if checkFails(tmpsurf <> nil, 'Error creating pre-land surface', true) then exit;
     ColorizeLand(tmpsurf);
     if gameFlags and gfShoppaBorder = 0 then DrawBorderFromImage(tmpsurf);
     AddOnLandObjects(tmpsurf);
@@ -451,8 +451,10 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
     cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
     cpY:= LAND_HEIGHT - tmpsurf^.h;
     if SDL_MustLock(tmpsurf) then
-        SDLTry(SDL_LockSurface(tmpsurf) >= 0, 'SDL_LockSurface', true);
+        SDLCheck(SDL_LockSurface(tmpsurf) >= 0, 'SDL_LockSurface', true);
 
+    if allOK then
+    begin
         p:= tmpsurf^.pixels;
         for y:= 0 to Pred(tmpsurf^.h) do
             begin
@@ -461,15 +463,16 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
             p:= PLongwordArray(@(p^[tmpsurf^.pitch div 4]));
             end;
 
-    if SDL_MustLock(tmpsurf) then
-        SDL_UnlockSurface(tmpsurf);
-    if not disableLandBack then
-        begin
-        // freed in freeModule() below
-        LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
-        if (LandBackSurface <> nil) and GrayScale then
-            Surface2GrayScale(LandBackSurface)
-        end;
+        if SDL_MustLock(tmpsurf) then
+            SDL_UnlockSurface(tmpsurf);
+        if not disableLandBack then
+            begin
+            // freed in freeModule() below
+            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+            if (LandBackSurface <> nil) and GrayScale then
+                Surface2GrayScale(LandBackSurface)
+            end;
+    end;
 end;
 if (tmpsurf <> nil) then
     SDL_FreeSurface(tmpsurf);
@@ -487,9 +490,11 @@ if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(cPathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    if not allOK then exit;
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
-TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (QWord(tmpsurf^.w) * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
+if checkFails((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (QWord(tmpsurf^.w) * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true)
+        then exit;
 
 ResizeLand(tmpsurf^.w, tmpsurf^.h);
 LoadMapConfig;
@@ -500,16 +505,16 @@ leftX:= (LAND_WIDTH - playWidth) div 2;
 rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
 
-TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
+if not checkFails(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true) then
+    BlitImageAndGenerateCollisionInfo(
+        (LAND_WIDTH - tmpsurf^.w) div 2,
+        LAND_HEIGHT - tmpsurf^.h,
+        tmpsurf^.w,
+        tmpsurf);
 
-BlitImageAndGenerateCollisionInfo(
-    (LAND_WIDTH - tmpsurf^.w) div 2,
-    LAND_HEIGHT - tmpsurf^.h,
-    tmpsurf^.w,
-    tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-LoadMask;
+if allOK then LoadMask;
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
@@ -663,6 +668,8 @@ else
 
 FreeLandObjects;
 
+if not allOK then exit;
+
 if GrayScale then
     begin
     if (cReducedQuality and rqBlurryLand) = 0 then
@@ -794,7 +801,7 @@ begin
     if digest = '' then
         digest:= s
     else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
+        checkFails(s = digest, 'Different maps generated, sorry', true);
 end;
 
 procedure chSendLandDigest(var s: shortstring);
@@ -808,7 +815,7 @@ begin
     ScriptSetString('LandDigest', s);
 
     chLandCheck(s);
-    SendIPCRaw(@s[0], Length(s) + 1)
+    if allOK then SendIPCRaw(@s[0], Length(s) + 1)
 end;
 
 procedure initModule;

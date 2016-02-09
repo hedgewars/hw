@@ -184,7 +184,8 @@ end
 ------------- other functions ---------------
 
 function isHeroNextToRunner()
-	if GetHealth(hero.gear) and math.abs(GetX(hero.gear) - GetX(runner.gear)) < 75 and
+	if GetGearType(hero.gear) == gtHedgehog and GetGearType(runner.gear) == gtHedgehog and
+			math.abs(GetX(hero.gear) - GetX(runner.gear)) < 75 and
 			math.abs(GetY(hero.gear) - GetY(runner.gear)) < 75 and StoppedGear(hero.gear) then
 		return true
 	end

@@ -748,7 +748,7 @@ if (GameFlags and gfPlaceHog) <> 0 then
 if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
-    TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
+    if checkFails(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true) then exit;
     for p:= 0 to 1 do
         begin
         with ClansArray[p]^ do
@@ -821,7 +821,7 @@ for p:= 0 to Pred(TeamsCount) do
                                      hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
                                      sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
                     Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
-                    Gear^.State:= Gear^.State and not gsttmpFlag;
+                    Gear^.State:= Gear^.State and (not gsttmpFlag);
                     AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
                     end
 end;

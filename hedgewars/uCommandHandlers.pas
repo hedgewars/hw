@@ -93,8 +93,8 @@ begin
     if isDeveloperMode then
         begin
         i:= StrToInt(s);
-        TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
-        TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
+        checkFails(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
+        checkFails(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         end
 end;
 
@@ -379,7 +379,7 @@ var gi: PGear;
 begin
     s:= s; // avoid compiler hint
 
-    TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
+    if checkFails(AllInactive, '/nextturn called when not all gears are inactive', true) then exit;
 
     CheckSum:= CheckSum xor GameTicks;
     gi := GearsList;
@@ -398,7 +398,7 @@ begin
         SendIPC(s)
         end
     else
-        TryDo(CurrentTeam^.hasGone or (CheckSum = lastTurnChecksum), 'Desync detected', true);
+        checkFails(CurrentTeam^.hasGone or (CheckSum = lastTurnChecksum), 'Desync detected', true);
 
     AddFileLog('Next turn: time '+inttostr(GameTicks));
 end;
@@ -408,7 +408,7 @@ begin
 if CheckNoTeamOrHH then
     exit;
 
-TryDo((s[0] = #1) and (s[1] >= '1') and (s[1] <= '5'), 'Malformed /timer', true);
+if checkFails((s[0] = #1) and (s[1] >= '1') and (s[1] <= '5'), 'Malformed /timer', true) then exit;
 
 if not isExternalSource then
     SendIPC(s);
@@ -450,7 +450,7 @@ begin
     if CheckNoTeamOrHH then
         exit;
 
-    TryDo((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true);
+    if checkFails((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true) then exit;
 
     if not isExternalSource then
         SendIPC('w' + s);

@@ -727,7 +727,7 @@ end
 --============================================================================
 
 --for custom made continent, follows the same standards as the globalism one. You can make your continent with <Name>~<Information>~<Weapons>. Take the weapons generated from globalism, if you want a GUI :P
---weapons=<ammo><types>, ammo = ascii[116(1 ammo) to 125(inf ammo)] types = ascii[36(Grenade), 37(Clusterbomb) to 90(knife)] see https://code.google.com/p/hedgewars/wiki/AmmoTypes
+--weapons=<ammo><types>, ammo = ascii[116(1 ammo) to 125(inf ammo)] types = ascii[36(Grenade), 37(Clusterbomb) to 90(knife)] see http://hedgewars.org/kb/AmmoTypes
 --ex "Own continent~this continent rocks!~tZ}$" will get 1 knife and inf grenades
 function onParameters()
 

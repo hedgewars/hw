@@ -71,6 +71,7 @@ begin
             AddFlakes;
             SetRandomSeed(cSeed, false);
             StoreLoad(false);
+            if not allOK then exit;
             AssignHHCoords;
             AddMiscGears;
             InitWorld;
@@ -89,6 +90,9 @@ begin
             end;
         gsConfirm, gsGame, gsChat:
             begin
+            // disable screenshot flash effect when about to make another screenshot
+            if flagMakeCapture and (ScreenFade = sfFromWhite) then
+                ScreenFade:= sfNone;
             if not cOnlyStats then
                 // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 DrawWorld(Lag);
@@ -127,7 +131,7 @@ begin
         ScreenFade:= sfFromWhite;
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
-        
+
         if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or
            (flagDumpLand and MakeScreenshot(s, 1, 1) and ((cReducedQuality and rqBlurryLand <> 0) or MakeScreenshot(s, 1, 2))) then
             WriteLnToConsole('Screenshot saved: ' + s)
@@ -145,11 +149,13 @@ var event: TSDL_Event;
     PrevTime, CurrTime: LongWord;
     isTerminated: boolean;
     previousGameState: TGameState;
+    wheelEvent: boolean;
 begin
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
-    while isTerminated = false do
+    while (not isTerminated) and allOK do
     begin
+        wheelEvent:= false;
         SDL_PumpEvents();
 
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
@@ -177,35 +183,48 @@ begin
                     if (GameState >= gsGame) then ProcessMouse(event.button, false);
 
                 SDL_MOUSEWHEEL:
+                    begin
+                    wheelEvent:= true;
                     ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    end;
 
-                SDL_TEXTINPUT: uChat.TextInput(event.text);
+                SDL_TEXTINPUT: if GameState = gsChat then uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
-                    if event.window.event = SDL_WINDOWEVENT_SHOWN then
                     begin
-                        cHasFocus:= true;
-                        onFocusStateChanged()
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
-                    begin
-                        previousGameState:= GameState;
-                        GameState:= gsSuspend;
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_RESTORED then
-                    begin
-                        GameState:= previousGameState;
+                    case event.window.event of
+                        SDL_WINDOWEVENT_FOCUS_GAINED:
+                                begin
+                                cHasFocus:= true;
+                                onFocusStateChanged();
+                                end;
+                        SDL_WINDOWEVENT_FOCUS_LOST:
+                                begin
+                                cHasFocus:= false;
+                                onFocusStateChanged();
+                                end;
+                        SDL_WINDOWEVENT_MINIMIZED:
+                                begin
+                                previousGameState:= GameState;
+                                GameState:= gsSuspend;
+                                end;
+                        SDL_WINDOWEVENT_RESTORED:
+                                begin
+                                GameState:= previousGameState;
 {$IFDEF ANDROID}
-                        //This call is used to reinitialize the glcontext and reload the textures
-                        ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+                                //This call is used to reinitialize the glcontext and reload the textures
+                                ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
 {$ENDIF}
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_RESIZED then
-                    begin
-                        cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
-                        cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
-                        cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
+                                end;
+                        SDL_WINDOWEVENT_RESIZED:
+                                begin
+                                cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
+                                cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
+                                cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
+                                end;
+                        end; // case closed
                     end;
+
 {$IFDEF USE_TOUCH_INTERFACE}
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
@@ -228,6 +247,9 @@ begin
                     isTerminated:= true
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
+
+        if (not wheelEvent) then
+            ResetMouseWheel();
 
         if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
             handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
@@ -296,12 +318,11 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game;
+procedure GameRoutine;
 //var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
-    initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     //AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
@@ -311,18 +332,19 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     WriteToConsole('Init SDL... ');
-    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
+    if not cOnlyStats then SDLCheck(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
     WriteLnToConsole(msgOK);
-
-    //SDL_StartTextInput();
-    SDL_ShowCursor(0);
-
     if not cOnlyStats then
         begin
         WriteToConsole('Init SDL_ttf... ');
-        SDLTry(TTF_Init() <> -1, 'TTF_Init', true);
+        SDLCheck(TTF_Init() <> -1, 'TTF_Init', true);
         WriteLnToConsole(msgOK);
         end;
+
+    if not allOK then exit;
+    //SDL_StartTextInput();
+    SDL_ShowCursor(0);
+
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -340,6 +362,7 @@ begin
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
     AddProgress();
+    if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
@@ -353,6 +376,7 @@ begin
         end
     else cLocale := 'en';
 
+    if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);
 
     if cTestLua then
@@ -369,6 +393,7 @@ begin
             LoadRecordFromFile(recordFileName);
         end;
 
+    if not allOK then exit;
     ScriptOnGameInit;
     s:= 'eproto ' + inttostr(cNetProtoVersion);
     SendIPCRaw(@s[0], Length(s) + 1); // send proto version
@@ -382,8 +407,9 @@ begin
     InitSound();
 
     isDeveloperMode:= false;
-    TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+    if checkFails(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
     //ParseCommand('rotmask', true);
+    if not allOK then exit;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -395,16 +421,22 @@ begin
 {$ENDIF}
 
     MainLoop;
+end;
+
+procedure Game;
+begin
+    initEverything(true);
+    GameRoutine;
     // clean up all the memory allocated
     freeEverything(true);
 end;
-
 ///////////////////////////////////////////////////////////////////////////////
 // preInitEverything - init variables that are going to be ovewritten by arguments
 // initEverything - init variables only. Should be coupled by below
 // freeEverything - free above. Pay attention to the init/free order!
 procedure preInitEverything;
 begin
+    allOK:= true;
     Randomize();
 
     uVariables.preInitModule;
@@ -502,19 +534,23 @@ var Preview: TPreviewAlpha;
 begin
     initEverything(false);
 
-    IPCWaitPongEvent;
-    TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+    if allOK then
+    begin
+        IPCWaitPongEvent;
+        if checkFails(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
 
-    ScriptOnPreviewInit;
-{$IFDEF MOBILE}
-    GenPreview(Preview);
-{$ELSE}
-    GenPreviewAlpha(Preview);
-{$ENDIF}
-    WriteLnToConsole('Sending preview...');
-    SendIPCRaw(@Preview, sizeof(Preview));
-    SendIPCRaw(@MaxHedgehogs, sizeof(byte));
-    WriteLnToConsole('Preview sent, disconnect');
+        ScriptOnPreviewInit;
+    {$IFDEF MOBILE}
+        GenPreview(Preview);
+    {$ELSE}
+        GenPreviewAlpha(Preview);
+    {$ENDIF}
+        WriteLnToConsole('Sending preview...');
+        SendIPCRaw(@Preview, sizeof(Preview));
+        SendIPCRaw(@MaxHedgehogs, sizeof(byte));
+        WriteLnToConsole('Preview sent, disconnect');
+    end;
+
     freeEverything(false);
 end;
 

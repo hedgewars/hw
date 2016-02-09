@@ -23,8 +23,12 @@ unit uDebug;
 interface
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
-procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
-procedure SDLTry(Assert: boolean; Msg: shortstring; isFatal: boolean);
+//procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
+function checkFails(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
+function SDLCheck(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
+
+var
+    allOK: boolean;
 
 implementation
 uses SDLh, uConsole, uCommands, uConsts;
@@ -42,14 +46,26 @@ if not Assert then
     OutError(Msg, isFatal)
 end;
 
-procedure SDLTry(Assert: boolean; Msg: shortstring; isFatal: boolean);
+function checkFails(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
+begin
+    if not Assert then
+        OutError(Msg, false);
+
+    allOK:= allOK and (Assert or (not isFatal));
+    checkFails:= (not Assert) and isFatal
+end;
+
+function SDLCheck(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
 var s: shortstring;
 begin
-if not Assert then
+    if not Assert then
     begin
-    s:= SDL_GetError();
-    OutError(Msg + ': ' + s, isFatal)
-    end
+        s:= SDL_GetError();
+        OutError(Msg + ': ' + s, false)
+    end;
+
+    allOK:= allOK and (Assert or (not isFatal));
+    SDLCheck:= (not Assert) and isFatal
 end;
 
 end.

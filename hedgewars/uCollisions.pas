@@ -62,7 +62,7 @@ function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, uDebug;
+uses uConsts, uLandGraphics, uVariables;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
@@ -76,10 +76,10 @@ var Count: Longword;
 
 procedure AddCI(Gear: PGear);
 begin
-if (Gear^.CollisionIndex >= 0) or 
+if (Gear^.CollisionIndex >= 0) or (Count > MAXRECTSINDEX) or
     ((Count > MAXRECTSINDEX-200) and ((Gear^.Kind = gtMine) or (Gear^.Kind = gtSMine) or (Gear^.Kind = gtKnife))) then
     exit;
-TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
+
 with cinfos[Count] do
     begin
     X:= hwRound(Gear^.X);

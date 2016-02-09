@@ -209,6 +209,10 @@ var
     ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
+    InCinematicMode : boolean;
+    CinematicSteps  : LongInt;
+    CinematicBarH   : LongInt;
+    CinematicScript : boolean;
 
     UIDisplay       : TUIDisplay;
     LocalMessage    : LongWord;
@@ -2680,6 +2684,10 @@ begin
 
     disableLandBack := false;
     ScreenFade      := sfNone;
+    InCinematicMode := false;
+    CinematicSteps  := 0;
+    CinematicBarH   := 0;
+    CinematicScript := false;
 
     // those values still are not perfect
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);

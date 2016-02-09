@@ -373,7 +373,7 @@ QString HWChatWidget::linkedNick(const QString & nickname)
     return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
 }
 
-const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
 
 bool HWChatWidget::containsHighlight(const QString & sender, const QString & message)
 {

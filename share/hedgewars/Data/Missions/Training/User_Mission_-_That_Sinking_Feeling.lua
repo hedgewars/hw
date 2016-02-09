@@ -12,6 +12,7 @@ local waterCounter = 0
 local waterPix = 0
 local frig = 0
 local watGear = nil
+local cinematic = false
 
 -- allow skipping of the intro via hitting precise key
 function onPrecise()
@@ -68,6 +69,8 @@ end
 
 
 function onGameStart()
+    cinematic = true
+    SetCinematicMode(true)
 	SendHealthStatsOff()
 
 	ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hapless hogs as possible!"), 4, 1)
@@ -206,6 +209,11 @@ function onGameTick()
 
 	-- start the water rising when the intro is finished
 	if introStage == 110 then
+
+        if cinematic then
+            SetCinematicMode(false)
+            cinematic = false
+        end
 
 		waterCounter = waterCounter + 1
 		if (waterCounter == 100) and (waterPix < 1615) then

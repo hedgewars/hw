@@ -88,11 +88,19 @@ const
     SDL_ALLEVENTS        = $FFFFFFFF;    // dummy event type to prevent stack corruption
     SDL_APPINPUTFOCUS    = $02;
 
+    // (some) audio formats from SDL_audio.h
+    AUDIO_S16LSB         = $8010; // Signed 16-bit samples, in little-endian byte order
+    AUDIO_S16MSB         = $9010; // Signed 16-bit samples, in big-endian byte order
+    AUDIO_S16SYS         = {$IFDEF ENDIAN_LITTLE}AUDIO_S16LSB{$ELSE}AUDIO_S16MSB{$ENDIF};
+
+    // default audio format from SDL_mixer.h
+    MIX_DEFAULT_FORMAT   = AUDIO_S16SYS;
+
     SDL_BUTTON_LEFT      = 1;
     SDL_BUTTON_MIDDLE    = 2;
     SDL_BUTTON_RIGHT     = 3;
-    SDL_BUTTON_WHEELUP   = 4;
-    SDL_BUTTON_WHEELDOWN = 5;
+    SDL_BUTTON_X1        = 4;
+    SDL_BUTTON_X2        = 5;
 
 
     SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
@@ -1008,6 +1016,17 @@ type
                         sockets: PTCPSocket;
                         end;
 
+{$IFDEF WIN32}
+     TThreadFunction = function (p: pointer): Longword; stdcall;
+     pfnSDL_CurrentBeginThread = function (
+        _Security: pointer; 
+        _StackSize: LongWord;
+        _StartAddress: TThreadFunction;
+        _ArgList: pointer;
+        _InitFlag: Longword;
+        _ThrdAddr: PLongword): PtrUInt; cdecl;
+    pfnSDL_CurrentEndThread = procedure (_Retval: LongInt); cdecl;
+{$ENDIF} 
 
 /////////////////////////////////////////////////////////////////
 /////////////////////  FUNCTION DEFINITIONS /////////////////////
@@ -1060,7 +1079,9 @@ procedure SDL_SetWindowIcon(window: PSDL_Window; icon: PSDL_Surface); cdecl; ext
 function  SDL_CreateRenderer(window: PSDL_Window; index: LongInt; flags: LongWord): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
+procedure SDL_SetWindowPosition(window: PSDL_Window; w, h: LongInt); cdecl; external SDLLibName;
 procedure SDL_SetWindowSize(window: PSDL_Window; w, h: LongInt); cdecl; external SDLLibName;
+procedure SDL_SetWindowFullscreen(window: PSDL_Window; flags: LongWord); cdecl; external SDLLibName;
 function  SDL_GetCurrentVideoDriver:Pchar; cdecl; external SDLLibName;
 
 function  SDL_GL_CreateContext(window: PSDL_Window): PSDL_GLContext; cdecl; external SDLLibName;
@@ -1117,7 +1138,13 @@ function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; extern
 
 (* remember to mark the threaded functions as 'cdecl; export;'
    (or have fun debugging nil arguments) *)
+{$IFDEF WIN32}
+// SDL uses wrapper in windows
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer; bt: pfnSDL_CurrentBeginThread; et: pfnSDL_CurrentEndThread): PSDL_Thread; cdecl; external SDLLibName;
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; overload;
+{$ELSE}
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
+{$ENDIF}
 procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
 procedure SDL_DetachThread(thread: PSDL_Thread); cdecl; external SDLLibName;
 
@@ -1304,6 +1331,12 @@ begin
                   (PByteArray(buf)^[0] shl 24)
 end;
 
+{$IFDEF WIN32}
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl;
+begin
+    SDL_CreateThread:= SDL_CreateThread(fn, name, data, nil, nil)
+end;  
+{$ENDIF}
 
 end.
 
