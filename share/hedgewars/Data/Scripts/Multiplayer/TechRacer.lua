@@ -724,6 +724,9 @@ function limitHogs(gear)
 end
 
 function onSpecialPoint(x,y,flag)
+    addHashData(x)
+    addHashData(y)
+    addHashData(flag)
     specialPointsX[specialPointsCount] = x
     specialPointsY[specialPointsCount] = y
 	specialPointsFlag[specialPointsCount] = flag
@@ -1270,7 +1273,7 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMap()
+    map = detectMapWithDigest()
 
     for i = 0, (numTeams-1) do
         if teamScore[i] < 100000 then

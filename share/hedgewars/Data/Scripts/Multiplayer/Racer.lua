@@ -551,6 +551,9 @@ function PlaceWayPoint(x,y)
 end
 
 function onSpecialPoint(x,y,flag)
+    addHashData(x)
+    addHashData(y)
+    addHashData(flag)
     specialPointsX[specialPointsCount] = x
     specialPointsY[specialPointsCount] = y
     specialPointsCount = specialPointsCount + 1
