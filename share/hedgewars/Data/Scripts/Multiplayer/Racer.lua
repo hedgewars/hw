@@ -778,7 +778,7 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMap()
+    map = detectMapWithDigest()
     
     for i = 0, (numTeams-1) do
         if teamScore[i] < 100000 then
