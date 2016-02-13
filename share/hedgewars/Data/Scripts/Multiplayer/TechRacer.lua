@@ -692,8 +692,9 @@ end
 function onGameInit()
     if mapID == nil then
         mapID = 2 + GetRandom(7)
-        addHashData(mapID)
     end
+
+    addHashData(mapID)
 
 		Theme = "Cave"
 
