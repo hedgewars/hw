@@ -144,7 +144,7 @@ replayToDemo ti mParams prms msgs = if not sane then (Nothing, []) else (Just $ 
         schemeFlags = map (\(v, (n, m)) -> eml [n, " ", showB $ (readInt_ v) * m])
             $ filter (\(_, (n, _)) -> not $ B.null n)
             $ zip (drop (length gameFlagConsts) scheme) schemeParams
-        schemeAdditional = let scriptParam = B.tail $ scheme !! 41 in [eml ["e$scriptparam ", scriptParam] | not $ B.null scriptParam]
+        schemeAdditional = let scriptParam = B.tail $ scheme !! 42 in [eml ["e$scriptparam ", scriptParam] | not $ B.null scriptParam]
         ammoStr :: B.ByteString
         ammoStr = head . tail $ prms Map.! "AMMO"
         ammo = let l = B.length ammoStr `div` 4; ((a, b), (c, d)) = (B.splitAt l . fst &&& B.splitAt l . snd) . B.splitAt (l * 2) $ ammoStr in
