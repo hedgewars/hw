@@ -81,27 +81,27 @@
         initialLab = [[UILabel alloc] init];
         initialLab.backgroundColor = [UIColor clearColor];
         initialLab.textColor = [UIColor grayColor];
-        initialLab.textAlignment = UITextAlignmentCenter;
+        initialLab.textAlignment = NSTextAlignmentCenter;
 
         probabilityLab = [[UILabel alloc] init];
         probabilityLab.backgroundColor = [UIColor clearColor];
         probabilityLab.textColor = [UIColor grayColor];
-        probabilityLab.textAlignment = UITextAlignmentCenter;
+        probabilityLab.textAlignment = NSTextAlignmentCenter;
 
         delayLab = [[UILabel alloc] init];
         delayLab.backgroundColor = [UIColor clearColor];
         delayLab.textColor = [UIColor grayColor];
-        delayLab.textAlignment = UITextAlignmentCenter;
+        delayLab.textAlignment = NSTextAlignmentCenter;
 
         crateLab = [[UILabel alloc] init];
         crateLab.backgroundColor = [UIColor clearColor];
         crateLab.textColor = [UIColor grayColor];
-        crateLab.textAlignment = UITextAlignmentCenter;
+        crateLab.textAlignment = NSTextAlignmentCenter;
 
         helpLabel = [[UILabel alloc] init];
         helpLabel.backgroundColor = [UIColor clearColor];
         helpLabel.textColor = [UIColor darkGrayColor];
-        helpLabel.textAlignment = UITextAlignmentRight;
+        helpLabel.textAlignment = NSTextAlignmentRight;
         helpLabel.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
         helpLabel.adjustsFontSizeToFitWidth = YES;
 
