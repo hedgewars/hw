@@ -1337,6 +1337,11 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
+    Gear^.Data:= nil;
+    // remember who fired this
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
+
     PlaySound(sndGun);
     // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
     Gear^.X := Gear^.X + Gear^.dX * 3;
@@ -1349,6 +1354,7 @@ var
     HHGear: PGear;
     shell: PVisualGear;
 begin
+
     cArtillery := true;
     HHGear := Gear^.Hedgehog^.Gear;
 
@@ -1357,6 +1363,9 @@ begin
         DeleteGear(gear);
         exit
         end;
+
+    // remember who fired this
+    Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
     HHGear^.State := HHGear^.State or gstNotKickable;
     HedgehogChAngle(HHGear);
@@ -4357,9 +4366,13 @@ begin
                 continue;
             end;
 
-        // draw bullet trail
         if isbullet then
+            begin
+            // draw bullet trail
             spawnBulletTrail(iterator);
+            // the bullet can now hurt the hog that fired it
+            iterator^.Data:= nil;
+            end;
 
         // calc gear offset in portal vector direction
         ox := (iterator^.X - Gear^.X);
