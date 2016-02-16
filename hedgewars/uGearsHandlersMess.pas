@@ -1344,8 +1344,8 @@ begin
 
     PlaySound(sndGun);
     // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
-    Gear^.X := Gear^.X + Gear^.dX * 3;
-    Gear^.Y := Gear^.Y + Gear^.dY * 3;
+    Gear^.X := Gear^.X + Gear^.dX * 2;
+    Gear^.Y := Gear^.Y + Gear^.dY * 2;
     Gear^.doStep := @doStepBulletWork
 end;
 
