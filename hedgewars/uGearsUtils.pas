@@ -1170,7 +1170,7 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
-    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]) and (PGear(Ammo^.Data) = Gear) then
+    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot]) and (PGear(Ammo^.Data) = Gear) then
         continue;
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
        (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
@@ -1513,7 +1513,7 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
    (hwRound(Gear^.X) > LongInt(rightX)) then
     begin
     // bullets can now hurt the hog that fired them
-    if (WorldEdge <> weSea) and (Gear^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]) then
+    if (WorldEdge <> weSea) and (Gear^.Kind in [gtDEagleShot, gtSniperRifleShot]) then
         Gear^.Data:= nil;
     if WorldEdge = weWrap then
         begin

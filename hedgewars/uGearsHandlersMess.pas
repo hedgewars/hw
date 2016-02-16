@@ -4366,7 +4366,7 @@ begin
                 continue;
             end;
 
-        if isbullet then
+        if (iterator^.Kind = gtDEagleShot) or (iterator^.Kind = gtSniperRifleShot) then
             begin
             // draw bullet trail
             spawnBulletTrail(iterator);
@@ -5019,15 +5019,18 @@ var
 begin
     PlaySound(sndSineGun);
 
-    // push the shooting Hedgehog back
-    HHGear := CurrentHedgehog^.Gear;
-    Gear^.dX.isNegative := not Gear^.dX.isNegative;
-    Gear^.dY.isNegative := not Gear^.dY.isNegative;
-    HHGear^.dX := Gear^.dX;
-    HHGear^.dY := Gear^.dY;
-    AmmoShove(Gear, 0, 80);
-    Gear^.dX.isNegative := not Gear^.dX.isNegative;
-    Gear^.dY.isNegative := not Gear^.dY.isNegative;
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        begin
+        HHGear := Gear^.Hedgehog^.Gear;
+        // push the shooting Hedgehog back
+        Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        Gear^.dY.isNegative := not Gear^.dY.isNegative;
+        HHGear^.dX := Gear^.dX;
+        HHGear^.dY := Gear^.dY;
+        AmmoShove(Gear, 0, 80);
+        Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        Gear^.dY.isNegative := not Gear^.dY.isNegative;
+        end;
 
     Gear^.doStep := @doStepSineGunShotWork;
     {$IFNDEF PAS2C}
