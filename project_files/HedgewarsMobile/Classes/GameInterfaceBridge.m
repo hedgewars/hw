@@ -251,9 +251,7 @@ static UIViewController *callingController;
 
 +(void) startSimpleGame {
     // generate a seed
-    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
-    CFRelease(uuid);
+    NSString *seed = [HWUtils seed];
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
     [seed release];
 

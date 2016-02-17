@@ -43,6 +43,7 @@ typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 +(BOOL) isNetworkReachable;
 +(NSString *) languageID;
 //+(UIView *)mainSDLViewInstance;
++(NSString *) seed;
 
 @end
 
