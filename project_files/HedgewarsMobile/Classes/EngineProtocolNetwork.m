@@ -273,13 +273,14 @@
                 NSString *script = [gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
-                // missions/tranings only need the script configuration set
-                if ([gameConfig count] == 1)
-                    break;
-
+                
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
 
+                // missions/tranings only need the script configuration set and seed
+                if ([HWUtils gameType] == gtMission)
+                    break;
+                
                 // dimension of the map
                 [self sendToEngine:[gameConfig objectForKey:@"templatefilter_command"]];
                 [self sendToEngine:[gameConfig objectForKey:@"mapgen_command"]];

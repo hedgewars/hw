@@ -241,12 +241,18 @@ static UIViewController *callingController;
 }
 
 +(void) startMissionGame:(NSString *)withScript {
+    // generate a seed
+    NSString *seed = [HWUtils seed];
+    NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
+    [seed release];
+    
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
-    NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
+    
+    NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", nil];
     [missionPath release];
 
-    [self startGame:gtMission atPath:nil withOptions:missionLine];
-    [missionLine release];
+    [self startGame:gtMission atPath:nil withOptions:missionDict];
+    [missionDict release];
 }
 
 +(void) startSimpleGame {
