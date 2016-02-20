@@ -81,6 +81,7 @@ acceptLoop servSock chan = E.bracket openHandle closeHandle (forever . f)
                     newEventsInfo
                     0
                     []
+                    []
                     )
 
         writeChan chan $ Accept newClient

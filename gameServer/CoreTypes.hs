@@ -154,6 +154,7 @@ data ClientInfo =
         eiEM,
         eiJoin :: !EventsInfo,
         teamsInGame :: !Word,
+        teamIndexes :: ![Word8],
         pendingActions :: ![Action]
     }
 

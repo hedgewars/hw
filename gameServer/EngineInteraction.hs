@@ -78,14 +78,14 @@ splitMessages :: B.ByteString -> [B.ByteString]
 splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt (1 + fromIntegral (BW.head b)) b)
 
 
-checkNetCmd :: B.ByteString -> (B.ByteString, B.ByteString, Maybe (Maybe B.ByteString))
-checkNetCmd msg = check decoded
+checkNetCmd :: [Word8] -> B.ByteString -> (B.ByteString, B.ByteString, Maybe (Maybe B.ByteString))
+checkNetCmd teamsIndexes msg = check decoded
     where
         decoded = liftM (splitMessages . BW.pack) $ Base64.decode $ B.unpack msg
         check Nothing = (B.empty, B.empty, Nothing)
         check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b, lft a)
         encode = B.pack . Base64.encode . BW.unpack . B.concat
-        isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m)
+        isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m) && not (isMalformed (B.head m) (B.tail m))
         lft = foldr l Nothing
         l m n = let m' = B.head $ B.tail m; tst = flip Set.member in
                       if not $ tst timedMessages m' then n
@@ -94,6 +94,9 @@ checkNetCmd msg = check decoded
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtgfhbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
         timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgfc12345" ++ slotMessages
+        isMalformed 'h' m | B.length m >= 3 = let hognum = m `B.index` 1; teamnum = m `BW.index` 2 in hognum < '1' || hognum > '8' || teamnum `L.notElem` teamsIndexes
+                          | otherwise = True
+        isMalformed _ _ = False
 
 #if defined(OFFICIAL_SERVER)
 replayToDemo :: [TeamInfo]
