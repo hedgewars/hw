@@ -54,7 +54,7 @@ startGame = do
                 , AnswerClients chans ["RUN_GAME"]
                 , SendUpdateOnThisRoom
                 , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
-                , ModifyRoomClients (\c -> c{isInGame = True, teamIndexes = map snd . filter (\(t, _) -> teamowner t == nick cl) $ zip (teams rm) [0..]})
+                , ModifyRoomClients (\c -> c{isInGame = True, teamIndexes = map snd . filter (\(t, _) -> teamowner t == nick c) $ zip (teams rm) [0..]})
                 ]
             else
             return [Warning $ loc "Less than two clans!"]
