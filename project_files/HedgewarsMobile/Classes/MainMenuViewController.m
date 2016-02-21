@@ -44,6 +44,7 @@
 @interface MainMenuViewController ()
 @property (retain, nonatomic) IBOutlet UIButton *simpleGameButton;
 @property (retain, nonatomic) IBOutlet UIButton *missionsButton;
+@property (retain, nonatomic) IBOutlet UIButton *campaignButton;
 @end
 
 @implementation MainMenuViewController
@@ -59,9 +60,11 @@
     
     [self.simpleGameButton setTitle:NSLocalizedString(@"Simple", nil) forState:UIControlStateNormal];
     [self.missionsButton setTitle:NSLocalizedString(@"Missions", nil) forState:UIControlStateNormal];
+    [self.campaignButton setTitle:NSLocalizedString(@"Campaign", nil) forState:UIControlStateNormal];
     
     [self.simpleGameButton applyDarkBlueQuickStyle];
     [self.missionsButton applyDarkBlueQuickStyle];
+    [self.campaignButton applyDarkBlueQuickStyle];
     
     // get the app's version
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
@@ -286,6 +289,7 @@
 -(void) dealloc {
     [_simpleGameButton release];
     [_missionsButton release];
+    [_campaignButton release];
     [super dealloc];
 }
 
