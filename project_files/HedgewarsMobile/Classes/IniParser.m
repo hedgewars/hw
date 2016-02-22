@@ -51,6 +51,7 @@
             [self parseLine:line];
         }
     }];
+    [self addLastParsedSectionToSections];
     
     return [self copyParsedSections];
 }
@@ -99,6 +100,10 @@
         NSString *value = components[1];
         [self.currentSection setObject:value forKey:key];
     }
+}
+
+- (void)addLastParsedSectionToSections {
+    [self addPreviousSectionToSectionsIfNecessary];
 }
 
 - (NSArray *)copyParsedSections {
