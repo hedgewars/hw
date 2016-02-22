@@ -17,6 +17,7 @@
  */
 
 #import "CampaignsViewController.h"
+#import "CampaignViewController.h"
 
 @interface CampaignsViewController ()
 @property (nonatomic, retain) NSArray *campaigns;
@@ -57,7 +58,7 @@
     [super viewDidLoad];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismiss)];
-    self.navigationItem.leftBarButtonItem = doneButton;
+    self.navigationItem.rightBarButtonItem = doneButton;
     [doneButton release];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"campaignCell"];
@@ -90,21 +91,17 @@
     return cell;
 }
 
-/*
 #pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
+    NSString *xib = IS_IPAD() ? @"CampaignViewController-iPad" : @"CampaignViewController-iPhone";
+    CampaignViewController *campaign = [[CampaignViewController alloc] initWithNibName:xib bundle:nil];
     
-    // Pass the selected object to the new view controller.
+    campaign.campaignName = self.campaigns[indexPath.row];
     
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    [self.navigationController pushViewController:campaign animated:YES];
+    [campaign release];
 }
-*/
 
 #pragma mark - Dealloc
 
