@@ -94,7 +94,7 @@ local fastX = {}
 local fastY = {}
 local fastCount = 0
 local fastIndex = 0
-local fastColour
+local fastColour = 0x0a0a0a
 
 local currX = {}
 local currY = {}
@@ -540,7 +540,7 @@ function PlaceWayPoint(x,y)
             wpY[wpCount] = y
             wpCol[wpCount] = 0xffffffff
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-                                                                                                                                            
+
             SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
 
             wpCount = wpCount + 1
@@ -551,12 +551,18 @@ function PlaceWayPoint(x,y)
 end
 
 function onSpecialPoint(x,y,flag)
-    addHashData(x)
-    addHashData(y)
-    addHashData(flag)
-    specialPointsX[specialPointsCount] = x
-    specialPointsY[specialPointsCount] = y
-    specialPointsCount = specialPointsCount + 1
+    if flag == 99 then
+        fastX[fastCount] = x
+        fastY[fastCount] = y
+        fastCount = fastCount + 1
+    else
+        addHashData(x)
+        addHashData(y)
+        addHashData(flag)
+        specialPointsX[specialPointsCount] = x
+        specialPointsY[specialPointsCount] = y
+        specialPointsCount = specialPointsCount + 1
+    end
 end
 
 function onNewTurn()
@@ -746,17 +752,18 @@ end
 
 function onAttack()
     at = GetCurAmmoType()
-    
+
     usedWeapons[at] = 0
 end
 
 function onAchievementsDeclaration()
     usedWeapons[amSkip] = nil
-    
+    usedWeapons[amExtraTime] = nil
+
     usedRope = usedWeapons[amRope] ~= nil
     usedPortal = usedWeapons[amPortalGun] ~= nil
     usedSaucer = usedWeapons[amJetpack] ~= nil
-    
+
     usedWeapons[amNothing] = nil
     usedWeapons[amRope] = nil
     usedWeapons[amPortalGun] = nil
@@ -779,7 +786,7 @@ function onAchievementsDeclaration()
     end
 
     map = detectMapWithDigest()
-    
+
     for i = 0, (numTeams-1) do
         if teamScore[i] < 100000 then
             DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])

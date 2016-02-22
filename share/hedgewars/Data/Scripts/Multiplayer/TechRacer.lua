@@ -173,7 +173,7 @@ local fastX = {}
 local fastY = {}
 local fastCount = 0
 local fastIndex = 0
-local fastColour
+local fastColour = 0x0a0a0a
 
 local currX = {}
 local currY = {}
@@ -725,13 +725,19 @@ function limitHogs(gear)
 end
 
 function onSpecialPoint(x,y,flag)
-    addHashData(x)
-    addHashData(y)
-    addHashData(flag)
-    specialPointsX[specialPointsCount] = x
-    specialPointsY[specialPointsCount] = y
-	specialPointsFlag[specialPointsCount] = flag
-    specialPointsCount = specialPointsCount + 1
+    if flag == 99 then
+        fastX[fastCount] = x
+        fastY[fastCount] = y
+        fastCount = fastCount + 1
+    else
+        addHashData(x)
+        addHashData(y)
+        addHashData(flag)
+        specialPointsX[specialPointsCount] = x
+        specialPointsY[specialPointsCount] = y
+        specialPointsFlag[specialPointsCount] = flag
+        specialPointsCount = specialPointsCount + 1
+    end
 end
 
 function InterpretPoints()
@@ -1249,6 +1255,7 @@ end
 
 function onAchievementsDeclaration()
     usedWeapons[amSkip] = nil
+    usedWeapons[amExtraTime] = nil
 
     usedRope = usedWeapons[amRope] ~= nil
     usedPortal = usedWeapons[amPortalGun] ~= nil
