@@ -242,6 +242,7 @@
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
+		F60ACBB71C7BC08B00385701 /* IniParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F60ACBB61C7BC08B00385701 /* IniParser.m */; };
 		F60D04771BD137B5003ACB00 /* bullet_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04631BD137B5003ACB00 /* bullet_filled.png */; };
 		F60D04781BD137B5003ACB00 /* bullet_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */; };
 		F60D04791BD137B5003ACB00 /* bullet.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04651BD137B5003ACB00 /* bullet.png */; };
@@ -737,6 +738,8 @@
 		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeaponCellView.m; path = Classes/WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F60ACBB51C7BC08B00385701 /* IniParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IniParser.h; path = Classes/IniParser.h; sourceTree = "<group>"; };
+		F60ACBB61C7BC08B00385701 /* IniParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IniParser.m; path = Classes/IniParser.m; sourceTree = "<group>"; };
 		F60D04631BD137B5003ACB00 /* bullet_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_filled.png; path = Resources/Icons/bullet_filled.png; sourceTree = "<group>"; };
 		F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bullet_filled@2x.png"; path = "Resources/Icons/bullet_filled@2x.png"; sourceTree = "<group>"; };
 		F60D04651BD137B5003ACB00 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet.png; path = Resources/Icons/bullet.png; sourceTree = "<group>"; };
@@ -1271,6 +1274,8 @@
 				6165922611CA9BD500D6E256 /* HWUtils.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
+				F60ACBB51C7BC08B00385701 /* IniParser.h */,
+				F60ACBB61C7BC08B00385701 /* IniParser.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1900,6 +1905,7 @@
 				6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */,
 				6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */,
 				6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */,
+				F60ACBB71C7BC08B00385701 /* IniParser.m in Sources */,
 				6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */,
 				6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */,
 				6165922211CA9BA200D6E256 /* WeaponSettingsViewController.m in Sources */,
