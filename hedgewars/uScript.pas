@@ -2211,24 +2211,6 @@ begin
     lc_setwind:= 0
 end;
 
-function lc_getdatapath(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 0, 'GetDataPath', '') then
-        lua_pushstring(L, str2pchar(cPathz[ptData]))
-    else
-        lua_pushnil(L);
-    lc_getdatapath:= 1
-end;
-
-function lc_getuserdatapath(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 0, 'GetUserDataPath', '') then
-        lua_pushstring(L, str2pchar(cPathz[ptData]))
-    else
-        lua_pushnil(L);
-    lc_getuserdatapath:= 1
-end;
-
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'MapHasBorder', '') then
@@ -3338,8 +3320,6 @@ lua_register(luaState, _P'GetGearCollisionMask', @lc_getgearcollisionmask);
 lua_register(luaState, _P'SetGearCollisionMask', @lc_setgearcollisionmask);
 lua_register(luaState, _P'GetRandom', @lc_getrandom);
 lua_register(luaState, _P'SetWind', @lc_setwind);
-lua_register(luaState, _P'GetDataPath', @lc_getdatapath);
-lua_register(luaState, _P'GetUserDataPath', @lc_getuserdatapath);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
