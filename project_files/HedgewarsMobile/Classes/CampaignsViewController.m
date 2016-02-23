@@ -29,12 +29,12 @@
 
 - (NSArray *)campaigns {
     if (!_campaigns) {
-        _campaigns = [self listOfCampaigns];
+        _campaigns = [self newListOfCampaigns];
     }
     return _campaigns;
 }
 
-- (NSArray *)listOfCampaigns {
+- (NSArray *)newListOfCampaigns {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *contents = [fileManager contentsOfDirectoryAtPath:CAMPAIGNS_DIRECTORY() error:nil];
     
