@@ -36,6 +36,8 @@ procedure TurnReaction;
 procedure SendStats;
 procedure hedgehogFlight(Gear: PGear; time: Longword);
 procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
+procedure startGhostPoints(n: LongInt);
+procedure dumpPoint(x, y: LongInt);
 
 implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScript;
@@ -323,8 +325,32 @@ if (length(id) = 0) or (length(teamname) = 0) or (length(location) = 0) then exi
     WriteLnToConsole(inttostr(value));
 end;
 
+procedure startGhostPoints(n: LongInt);
+begin
+    WriteLnToConsole('GHOST_POINTS');
+    WriteLnToConsole(inttostr(n));
+end;
+
+procedure dumpPoint(x, y: LongInt);
+begin
+    WriteLnToConsole(inttostr(x));
+    WriteLnToConsole(inttostr(y));
+end;
+
 procedure initModule;
 begin
+    DamageClan  := 0;
+    DamageTotal := 0;
+    DamageTurn  := 0;
+    KillsClan   := 0;
+    Kills       := 0;
+    KillsTotal  := 0;
+    AmmoUsedCount := 0;
+    AmmoDamagingUsed := false;
+    SkippedTurns:= 0;
+    isTurnSkipped:= false;
+    vpHurtSameClan:= nil;
+    vpHurtEnemy:= nil;
     TotalRounds:= -1;
     FinishedTurnsTotal:= -1;
 end;
