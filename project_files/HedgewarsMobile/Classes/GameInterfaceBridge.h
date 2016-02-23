@@ -34,6 +34,7 @@
 +(void) startLocalGame:(NSDictionary *)withOptions;
 +(void) startSaveGame:(NSString *)atPath;
 +(void) startMissionGame:(NSString *)withScript;
++(void) startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName;
 +(void) startSimpleGame;
 
 +(void) registerCallingController:(UIViewController *)controller;

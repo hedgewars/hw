@@ -277,8 +277,9 @@
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
 
-                // missions/tranings only need the script configuration set and seed
-                if ([HWUtils gameType] == gtMission)
+                // missions/tranings/campaign only need the script configuration set and seed
+                TGameType currentGameType = [HWUtils gameType];
+                if (currentGameType == gtMission || currentGameType == gtCampaign)
                     break;
                 
                 // dimension of the map

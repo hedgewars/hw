@@ -18,6 +18,7 @@
 
 #import "CampaignViewController.h"
 #import "IniParser.h"
+#import "GameInterfaceBridge.h"
 
 @interface CampaignViewController ()
 @property (nonatomic, retain) NSArray *campaignMissions;
@@ -78,27 +79,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"campaignMissionCell" forIndexPath:indexPath];
     
-    // Configure the cell...
     cell.textLabel.text = self.campaignMissions[indexPath.row][@"Name"];
     
     return cell;
 }
 
-/*
 #pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
+    NSString *campaignMissionScript = self.campaignMissions[indexPath.row][@"Script"];
     
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    [GameInterfaceBridge registerCallingController:self];
+    [GameInterfaceBridge startCampaignMissionGameWithScript:campaignMissionScript forCampaign:self.campaignName];
 }
-*/
 
 #pragma mark - Dealloc
 

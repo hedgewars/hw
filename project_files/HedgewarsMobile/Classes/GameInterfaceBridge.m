@@ -259,6 +259,17 @@ static UIViewController *callingController;
     return seedCmd;
 }
 
++(void) startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName {
+    NSString *seedCmd = [self seedCommand];
+    NSString *campaignMissionPath = [[NSString alloc] initWithFormat:@"escript Missions/Campaign/%@/%@", campaignName, missionScriptName];
+    NSDictionary *campaignMissionDict = [[NSDictionary alloc] initWithObjectsAndKeys:campaignMissionPath, @"mission_command", seedCmd, @"seed_command", nil];
+    [campaignMissionPath release];
+    [seedCmd release];
+    
+    [self startGame:gtCampaign atPath:nil withOptions:campaignMissionDict];
+    [campaignMissionDict release];
+}
+
 +(void) startSimpleGame {
     NSString *seedCmd = [self seedCommand];
 
