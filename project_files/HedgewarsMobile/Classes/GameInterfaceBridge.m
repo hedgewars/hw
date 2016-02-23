@@ -241,25 +241,26 @@ static UIViewController *callingController;
 }
 
 +(void) startMissionGame:(NSString *)withScript {
-    // generate a seed
-    NSString *seed = [HWUtils seed];
-    NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
-    [seed release];
-    
+    NSString *seedCmd = [self seedCommand];
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
-    
     NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", nil];
     [missionPath release];
+    [seedCmd release];
 
     [self startGame:gtMission atPath:nil withOptions:missionDict];
     [missionDict release];
 }
 
-+(void) startSimpleGame {
++(NSString *) seedCommand {
     // generate a seed
     NSString *seed = [HWUtils seed];
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
     [seed release];
+    return seedCmd;
+}
+
++(void) startSimpleGame {
+    NSString *seedCmd = [self seedCommand];
 
     // pick a random static map
     NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
