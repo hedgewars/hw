@@ -2528,6 +2528,20 @@ begin
     lc_declareachievement:= 0
 end;
 
+function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
+        startGhostPoints(lua_tointeger(L, 1));
+    lc_startghostpoints:= 0
+end;
+
+function lc_dumppoint(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 2, 'DumpPoint', 'x, y') then
+        dumpPoint(lua_tointeger(L, 1), lua_tointeger(L, 2));
+    lc_dumppoint:= 0
+end;
+
 
 procedure ScriptFlushPoints();
 begin
@@ -3345,6 +3359,8 @@ lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 lua_register(luaState, _P'SetGearAIHints', @lc_setgearaihints);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
+lua_register(luaState, _P'StartGhostPoints', @lc_startghostpoints);
+lua_register(luaState, _P'DumpPoint', @lc_dumppoint);
 
 ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
 ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);

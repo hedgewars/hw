@@ -782,4 +782,12 @@ function onAchievementsDeclaration()
             DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
         end
     end
+
+    if fastCount > 0 then
+        StartGhostPoints(fastCount)
+
+        for i = 0, (fastCount - 1) do
+            DumpPoint(fastX[i], fastY[i])
+        end
+    end
 end
