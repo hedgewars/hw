@@ -241,3 +241,8 @@ deleteBy2 eq x (y:ys)    = if x `eq` y then ys else y : deleteBy2 eq x ys
 deleteFirstsBy2          :: (a -> b -> Bool) -> [a] -> [b] -> [a]
 deleteFirstsBy2 eq       =  foldl (flip (deleteBy2 (flip eq)))
 
+sanitizeName :: B.ByteString -> B.ByteString
+sanitizeName = B.map sc
+    where
+        sc c | isAlphaNum c = c
+             | otherwise = '_'

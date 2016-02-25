@@ -492,8 +492,8 @@ handleCmd_inRoom ("VOTE" : m : p) = do
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
 
 
-handleCmd_inRoom ["SAVE", stateName] = serverAdminOnly $ do
-    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (mapParams r, params r) (roomSaves r)}]
+handleCmd_inRoom ["SAVE", stateName, location] = serverAdminOnly $ do
+    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (location, mapParams r, params r) (roomSaves r)}]
 
 handleCmd_inRoom ["DELETE", stateName] = serverAdminOnly $ do
     return [ModifyRoom $ \r -> r{roomSaves = Map.delete stateName (roomSaves r)}]

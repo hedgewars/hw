@@ -140,13 +140,13 @@ parseStats dbConn p fileName teams (GameDetails script infRopes vamp infAttacks)
         ps bs
     ps ("GHOST_POINTS" : n : bs) = do
         let pointsNum = readInt_ n
-        (loc, time) <- get
-        res <- io $ query dbConn dbQueryBestTime $ Only loc
+        (location, time) <- get
+        res <- io $ query dbConn dbQueryBestTime $ Only location
         let bestTime = case res of
                 [Only a] -> a
                 _ -> maxBound :: Int
         when (time < bestTime) $ do
-            -- store it
+            io $ writeFile (B.unpack $ "ghosts/" `B.append` sanitizeName location) $ show (map readInt_ $ take (2 * pointsNum) bs)
             return ()
         ps (drop (2 * pointsNum) bs)
     ps (b:bs) = ps bs
