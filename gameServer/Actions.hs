@@ -732,13 +732,14 @@ processAction (LoadGhost location) = do
     ri <- clientRoomA
     rnc <- gets roomsClients
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    rm <- io $ room'sM rnc id ri
 #if defined(OFFICIAL_SERVER)
+    rm <- io $ room'sM rnc id ri
     points <- io $ loadFile (B.unpack $ "ghosts/" `B.append` sanitizeName location)
     when (roomProto rm > 51) $ do
         processAction $ ModifyRoom $ \r -> r{params = Map.insert "DRAWNMAP" [prependGhostPoints (toP points) $ head $ (params r) Map.! "DRAWNMAP"] (params r)}
 #endif
     cl <- client's id
+    rm <- io $ room'sM rnc id ri
     mapM_ processAction $ map (replaceChans thisRoomChans) $ answerFullConfigParams cl (mapParams rm) (params rm)
     where
     loadFile :: String -> IO [Int]

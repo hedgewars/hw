@@ -94,7 +94,7 @@ local fastX = {}
 local fastY = {}
 local fastCount = 0
 local fastIndex = 0
-local fastColour = 0x0a0a0a
+local fastColour = 0xffffffff
 
 local currX = {}
 local currY = {}
