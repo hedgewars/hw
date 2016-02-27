@@ -733,11 +733,12 @@ processAction (LoadGhost location) = do
     ri <- clientRoomA
     rnc <- gets roomsClients
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    -- inject ghost points into map
     rm <- io $ room'sM rnc id ri
+    when (roomProto rm > 51) $ do
+        processAction $ ModifyRoom $ \r -> r{params = Map.insert "DRAWNMAP" [prependGhostPoints (toP points) $ head $ (params r) Map.! "DRAWNMAP"] (params r)}
+    -- inject ghost points into map
     cl <- client's id
-    mapM processAction $ map (replaceChans thisRoomChans) $ answerFullConfigParams cl (mapParams rm) (params rm)
-    return ()
+    mapM_ processAction $ map (replaceChans thisRoomChans) $ answerFullConfigParams cl (mapParams rm) (params rm)
     where
     loadFile :: String -> IO [Int]
     loadFile fileName = E.handle (\(e :: SomeException) -> return []) $ do
@@ -745,6 +746,8 @@ processAction (LoadGhost location) = do
         return (points `deepseq` points)
     replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
     replaceChans _ a = a
+    toP [] = []
+    toP (p1:p2:ps) = (fromIntegral p1, fromIntegral p2) : toP ps
 {-
         let a = map (replaceChans chans) $ answerFullConfigParams cl mp p
 -}

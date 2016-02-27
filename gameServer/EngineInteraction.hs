@@ -19,7 +19,7 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 
 #if defined(OFFICIAL_SERVER)
-module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData) where
+module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData, prependGhostPoints) where
 #else
 module EngineInteraction(checkNetCmd, toEngineMsg) where
 #endif
@@ -33,9 +33,12 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.Map as Map
 import qualified Data.List as L
 import Data.Word
+import Data.Int
 import Data.Bits
 import Control.Arrow
 import Data.Maybe
+import Data.Binary
+import Data.Binary.Put
 -------------
 import CoreTypes
 import Utils
@@ -45,12 +48,13 @@ import Utils
     this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
     because standard 'catch' doesn't seem to catch decompression errors for some reason
 -}
-import qualified Codec.Compression.Zlib.Internal as Z
+import qualified Codec.Compression.Zlib.Internal as ZI
+import qualified Codec.Compression.Zlib as Z
 
 decompressWithoutExceptions :: BL.ByteString -> Either String BL.ByteString
 decompressWithoutExceptions = finalise
-                            . Z.foldDecompressStream cons nil err
-                            . Z.decompressWithErrors Z.zlibFormat Z.defaultDecompressParams
+                            . ZI.foldDecompressStream cons nil err
+                            . ZI.decompressWithErrors ZI.zlibFormat ZI.defaultDecompressParams
   where err _ msg = Left msg
         nil = Right []
         cons chunk = right (chunk :)
@@ -176,17 +180,35 @@ drawnMapData =
           L.map (\m -> eml ["edraw ", BW.pack m])
         . L.unfoldr by200
         . BL.unpack
-        . either (const BL.empty) id
+        . unpackDrawnMap
+    where
+        by200 :: [a] -> Maybe ([a], [a])
+        by200 [] = Nothing
+        by200 m = Just $ L.splitAt 200 m
+
+unpackDrawnMap :: B.ByteString -> BL.ByteString
+unpackDrawnMap = either (const BL.empty) id
         . decompressWithoutExceptions
         . BL.pack
         . L.drop 4
         . fromMaybe []
         . Base64.decode
         . B.unpack
-    where
-        by200 :: [a] -> Maybe ([a], [a])
-        by200 [] = Nothing
-        by200 m = Just $ L.splitAt 200 m
+
+compressWithLength :: BL.ByteString -> BL.ByteString
+compressWithLength b = BL.drop 8 . encode . runPut $ do
+    put $ ((fromIntegral $ BL.length b)::Word32)
+    mapM_ putWord8 $ BW.unpack $ BL.toStrict $ Z.compress b
+
+packDrawnMap :: BL.ByteString -> B.ByteString
+packDrawnMap = B.pack
+    . Base64.encode
+    . BW.unpack
+    . BL.toStrict
+    . compressWithLength
+
+prependGhostPoints :: [(Int16, Int16)] -> B.ByteString -> B.ByteString
+prependGhostPoints pts dm = packDrawnMap $ (runPut $ forM_ pts $ \(x, y) -> put x >> put y >> putWord8 99) `BL.append` unpackDrawnMap dm
 
 schemeParams :: [(B.ByteString, Int)]
 schemeParams = [
