@@ -83,6 +83,7 @@ engineListener coreChan h fileName = do
         start = flip L.elem ["WINNERS", "DRAW"]
         ps ("DRAW" : bs) = "DRAW" : ps bs
         ps ("WINNERS" : n : bs) = let c = readInt_ n in "WINNERS" : n : take c bs ++ (ps $ drop c bs)
+        ps ("GHOST_POINTS" : n : bs) = let c = 2 * (readInt_ n) in "GHOST_POINTS" : n : take c bs ++ (ps $ drop c bs)
         ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
             "ACHIEVEMENT" : typ : teamname : location : value : ps bs
         ps _ = []
