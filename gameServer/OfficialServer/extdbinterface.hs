@@ -64,7 +64,7 @@ dbQueryGamesHistoryPlaces = "INSERT INTO rating_players (userid, gameid, place) 
 
 dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
 
-dbQueryBestTime = "SELECT MIN(value) FROM achievements WHERE location = ?"
+dbQueryBestTime = "SELECT MIN(value) FROM achievements WHERE location = ? AND id <> (SELECT MAX(id) FROM achievements)"
 
 dbInteractionLoop dbConn = forever $ do
     q <- liftM read getLine
