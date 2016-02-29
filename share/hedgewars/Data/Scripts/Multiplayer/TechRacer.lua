@@ -729,6 +729,9 @@ function onSpecialPoint(x,y,flag)
         fastX[fastCount] = x
         fastY[fastCount] = y
         fastCount = fastCount + 1
+    else if flag == 0 then
+        techX[techCount], techY[techCount] = x, y
+        techCount = techCount + 1
     else
         addHashData(x)
         addHashData(y)
