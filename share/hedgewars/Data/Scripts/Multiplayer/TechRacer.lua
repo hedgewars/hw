@@ -1292,7 +1292,7 @@ function onAchievementsDeclaration()
         end
     end
 
-    if fastCount > 0 then
+    if map ~= nil and fastCount > 0 then
         StartGhostPoints(fastCount)
 
         for i = 0, (fastCount - 1) do
