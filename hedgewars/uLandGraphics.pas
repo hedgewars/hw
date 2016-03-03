@@ -23,7 +23,7 @@ interface
 uses uFloat, uConsts, uTypes, Math, uRenderUtils;
 
 type
-    fillType = (nullPixel, backgroundPixel, ebcPixel, icePixel, setNotCurrentMask, changePixelSetNotCurrent, setCurrentHog, changePixelNotSetNotCurrent);
+    fillType = (nullPixel, backgroundPixel, ebcPixel, icePixel, addNotHHObj, removeNotHHObj, addHH, removeHH, setCurrentHog, removeCurrentHog);
 
 type TRangeArray = array[0..31] of record
                                    Left, Right: LongInt;
@@ -41,7 +41,7 @@ procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt;
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 function FillRoundInLand(X, Y, Radius: LongInt; Value: Longword): Longword;
 function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword;
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent, isHH: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 function  DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
@@ -209,15 +209,28 @@ begin
             calculatePixelsCoordinates(i, y, px, py);
             DrawPixelIce(i, y, px, py);
             end;
-    setNotCurrentMask:
+    addNotHHObj:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
+            if Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift < lfNotHHObjSize then
+                Land[y, i]:= (Land[y, i] and not lfNotHHObjMask) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift + 1) shl lfNotHHObjShift);
             end;
-    changePixelSetNotCurrent:
+    removeNotHHObj:
         for i:= fromPix to toPix do
             begin
-            if Land[y, i] and lfObjMask > 0 then
+            if Land[y, i] and lfNotHHObjMask <> 0 then
+                Land[y, i]:= (Land[y, i] and not lfNotHHObjMask) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift - 1) shl lfNotHHObjShift);
+            end;
+    addHH:
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfHHMask < lfHHMask then
+                Land[y, i]:= Land[y, i] + 1
+            end;
+    removeHH:
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfHHMask > 0 then
                 Land[y, i]:= Land[y, i] - 1;
             end;
     setCurrentHog:
@@ -225,11 +238,10 @@ begin
             begin
             Land[y, i]:= Land[y, i] or lfCurrentHog
             end;
-    changePixelNotSetNotCurrent:
+    removeCurrentHog:
         for i:= fromPix to toPix do
             begin
-            if Land[y, i] and lfObjMask < lfObjMask then
-                Land[y, i]:= Land[y, i] + 1
+            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
             end;
     end;
 end;
@@ -360,16 +372,20 @@ if (dx = dy) then
     inc(FillRoundInLand, FillCircleLines(x, y, dx, dy, Value));
 end;
 
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent, isHH: boolean);
 begin
 if not doSet and isCurrent then
-    FillRoundInLandFT(X, Y, Radius, setNotCurrentMask)
-else if not doSet and (not IsCurrent) then
-    FillRoundInLandFT(X, Y, Radius, changePixelSetNotCurrent)
+    FillRoundInLandFT(X, Y, Radius, removeCurrentHog)
+else if (not doSet) and (not IsCurrent) and isHH then
+    FillRoundInLandFT(X, Y, Radius, removeHH)
+else if (not doSet) and (not IsCurrent) and (not isHH) then
+    FillRoundInLandFT(X, Y, Radius, removeNotHHObj)
 else if doSet and IsCurrent then
     FillRoundInLandFT(X, Y, Radius, setCurrentHog)
-else if doSet and (not IsCurrent) then
-    FillRoundInLandFT(X, Y, Radius, changePixelNotSetNotCurrent);
+else if doSet and (not IsCurrent) and isHH then
+    FillRoundInLandFT(X, Y, Radius, addHH)
+else if doSet and (not IsCurrent) and (not isHH) then
+    FillRoundInLandFT(X, Y, Radius, addNotHHObj);
 end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);

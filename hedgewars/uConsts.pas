@@ -115,11 +115,22 @@ const
 
     lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this does not impact play
     lfNotCurrentMask = $FF7F;  // inverse of above. frequently used
-    lfObjMask        = $007F;  // lower 7 bits used for hogs
+    lfObjMask        = $007F;  // lower 7 bits used for hogs and explosives and mines 
     lfNotObjMask     = $FF80;  // inverse of above.
+
+// breaking up hogs would makes it easier to differentiate 
+// colliding with a hog from colliding with other things
+// if overlapping hogs are less common than objects, the division can be altered.
+// 3 bits for objects, 4 for hogs, that is, overlap 7 barrels/mines before possible dents, and 15 hogs.
+    lfHHMask         = $000F;  // lower 4 bits used only for hogs
+    lfNotHHObjMask   = $0070;  // next 3 bits used for non-hog things
+    lfNotHHObjShift  = 4;
+    lfNotHHObjSize   = lfNotHHObjMask shr lfNotHHObjShift;  
+
     // lower byte is for objects.
     // consists of 0-127 counted for object checkins and $80 as a bit flag for current hog.
     lfAllObjMask     = $00FF;  // lfCurrentHog or lfObjMask
+
 
 
     cMaxPower     = 1500;
