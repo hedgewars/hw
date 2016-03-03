@@ -693,7 +693,6 @@ function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandF
 begin
     ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, false, true, behind, flipHoriz, flipVert, LandFlags, Tint)
 end;
-
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
@@ -765,7 +764,7 @@ case bpp of
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                   begin
+                begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
                     gX:= cpX + x;
@@ -776,15 +775,15 @@ case bpp of
                     gX:= (cpX + x) div 2;
                     gY:= (cpY + y) div 2;
                     end;
-		if not behind or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
+                if not behind or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
                     begin
                     if (LandFlags and lfBasic <> 0) or 
-                       (((LandPixels[gY, gX] and AMask) shr AShift = 255) and  // This test assumes lfBasic and lfObject differ only graphically
-                         (LandFlags or lfObject = 0)) then
+                       ((LandPixels[gY, gX] and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
+                         (LandFlags and lfObject = 0)) then
                          Land[cpY + y, cpX + x]:= lfBasic or LandFlags
                     else Land[cpY + y, cpX + x]:= lfObject or LandFlags
                     end;
-		if not behind or (LandPixels[gY, gX] = 0) then
+                if not behind or (LandPixels[gY, gX] = 0) then
                     begin
                     if tint = $FFFFFFFF then
                         LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
@@ -998,7 +997,7 @@ begin
         yy:= Y div 2;
     end;
 
-    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and ((LandPixels[yy, xx] and AMASK) <> 0);
+    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and ((LandPixels[yy, xx] and AMask) <> 0);
     if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
         c:= 0;
