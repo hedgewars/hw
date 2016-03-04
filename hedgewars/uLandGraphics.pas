@@ -213,13 +213,13 @@ begin
         for i:= fromPix to toPix do
             begin
             if Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift < lfNotHHObjSize then
-                Land[y, i]:= (Land[y, i] and not lfNotHHObjMask) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift + 1) shl lfNotHHObjShift);
+                Land[y, i]:= (Land[y, i] and (not lfNotHHObjMask)) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift + 1) shl lfNotHHObjShift);
             end;
     removeNotHHObj:
         for i:= fromPix to toPix do
             begin
             if Land[y, i] and lfNotHHObjMask <> 0 then
-                Land[y, i]:= (Land[y, i] and not lfNotHHObjMask) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift - 1) shl lfNotHHObjShift);
+                Land[y, i]:= (Land[y, i] and (not lfNotHHObjMask)) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift - 1) shl lfNotHHObjShift);
             end;
     addHH:
         for i:= fromPix to toPix do
@@ -791,7 +791,7 @@ case bpp of
                     gX:= (cpX + x) div 2;
                     gY:= (cpY + y) div 2;
                     end;
-                if not behind or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
+                if (not behind) or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
                     begin
                     if (LandFlags and lfBasic <> 0) or 
                        ((LandPixels[gY, gX] and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
@@ -799,7 +799,7 @@ case bpp of
                          Land[cpY + y, cpX + x]:= lfBasic or LandFlags
                     else Land[cpY + y, cpX + x]:= lfObject or LandFlags
                     end;
-                if not behind or (LandPixels[gY, gX] = 0) then
+                if (not behind) or (LandPixels[gY, gX] = 0) then
                     begin
                     if tint = $FFFFFFFF then
                         LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
