@@ -246,7 +246,7 @@ function RebuildTeamInfo()
                 teamNameArr[i] = " " -- = i
                 teamSize[i] = 0
                 teamIndex[i] = 0
-                teamScore[i] = 100000
+                teamScore[i] = 1000000
         end
         numTeams = 0
 
@@ -350,7 +350,7 @@ end
 function AdjustScores()
 
         if bestTime == nil then
-                bestTime = 100000
+                bestTime = 1000000
                 bestClan = 10
                 bestTimeComment = "N/A"
         end
@@ -380,7 +380,7 @@ function AdjustScores()
                 end
         end
 
-        if bestTime ~= 100000 then
+        if bestTime ~= 1000000 then
                 bestTimeComment = (bestTime/1000) ..loc("s")
         end
 
@@ -1287,7 +1287,7 @@ function onAchievementsDeclaration()
     map = detectMapWithDigest()
 
     for i = 0, (numTeams-1) do
-        if teamScore[i] < 100000 then
+        if teamScore[i] < 1000000 then
             DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
         end
     end
