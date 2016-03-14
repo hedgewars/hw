@@ -54,7 +54,7 @@ startGame = do
                 , AnswerClients chans ["RUN_GAME"]
                 , SendUpdateOnThisRoom
                 , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
-                , ModifyRoomClients (\c -> c{isInGame = True})
+                , ModifyRoomClients (\c -> c{isInGame = True, teamIndexes = map snd . filter (\(t, _) -> teamowner t == nick c) $ zip (teams rm) [0..]})
                 ]
             else
             return [Warning $ loc "Less than two clans!"]
@@ -260,6 +260,8 @@ handleCmd_inRoom ["EM", msg] = do
     rm <- thisRoom
     chans <- roomOthersChans
 
+    let (legalMsgs, nonEmptyMsgs, lastFTMsg) = checkNetCmd (teamIndexes cl) msg
+
     if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
         return $ AnswerClients chans ["EM", legalMsgs]
             : [ModifyRoom (\r -> r{gameInfo = liftM
@@ -269,8 +271,6 @@ handleCmd_inRoom ["EM", msg] = do
                 $ gameInfo r}), RegisterEvent EngineMessage]
         else
         return []
-    where
-        (legalMsgs, nonEmptyMsgs, lastFTMsg) = checkNetCmd msg
 
 
 handleCmd_inRoom ["ROUNDFINISHED", _] = do
@@ -492,8 +492,8 @@ handleCmd_inRoom ("VOTE" : m : p) = do
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
 
 
-handleCmd_inRoom ["SAVE", stateName] = serverAdminOnly $ do
-    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (mapParams r, params r) (roomSaves r)}]
+handleCmd_inRoom ["SAVE", stateName, location] = serverAdminOnly $ do
+    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (location, mapParams r, params r) (roomSaves r)}]
 
 handleCmd_inRoom ["DELETE", stateName] = serverAdminOnly $ do
     return [ModifyRoom $ \r -> r{roomSaves = Map.delete stateName (roomSaves r)}]

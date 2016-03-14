@@ -45,9 +45,7 @@
         return;
 
     // generate a seed
-    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
-    CFRelease(uuid);
+    NSString *seed = [HWUtils seed];
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
     self.seedCommand = seedCmd;
     [seedCmd release];

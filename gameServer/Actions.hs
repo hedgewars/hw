@@ -728,6 +728,31 @@ processAction (Random chans items) = do
     processAction $ AnswerClients chans ["CHAT", "[random]", i !! n]
 
 
+processAction (LoadGhost location) = do
+    ri <- clientRoomA
+    rnc <- gets roomsClients
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+#if defined(OFFICIAL_SERVER)
+    rm <- io $ room'sM rnc id ri
+    points <- io $ loadFile (B.unpack $ "ghosts/" `B.append` sanitizeName location)
+    when (roomProto rm > 51) $ do
+        processAction $ ModifyRoom $ \r -> r{params = Map.insert "DRAWNMAP" [prependGhostPoints (toP points) $ head $ (params r) Map.! "DRAWNMAP"] (params r)}
+#endif
+    cl <- client's id
+    rm <- io $ room'sM rnc id ri
+    mapM_ processAction $ map (replaceChans thisRoomChans) $ answerFullConfigParams cl (mapParams rm) (params rm)
+    where
+    loadFile :: String -> IO [Int]
+    loadFile fileName = E.handle (\(e :: SomeException) -> return []) $ do
+        points <- liftM read $ readFile fileName
+        return (points `deepseq` points)
+    replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
+    replaceChans _ a = a
+    toP [] = []
+    toP (p1:p2:ps) = (fromIntegral p1, fromIntegral p2) : toP ps
+{-
+        let a = map (replaceChans chans) $ answerFullConfigParams cl mp p
+-}
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
     ri <- clientRoomA

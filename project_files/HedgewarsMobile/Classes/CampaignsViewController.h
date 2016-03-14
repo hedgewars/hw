@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2015-2016 Anton Malmygin <antonc27@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,34 +16,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
+#import <UIKit/UIKit.h>
 
-#import <Foundation/Foundation.h>
-
-
-typedef enum {gtNone, gtLocal, gtSave, gtMission, gtCampaign, gtNet} TGameType;
-typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
-
-@interface HWUtils : NSObject {
-
-}
-
-+(TGameType) gameType;
-+(void) setGameType:(TGameType) type;
-+(TGameStatus) gameStatus;
-+(void) setGameStatus:(TGameStatus) status;
-+(BOOL) isGameLaunched;
-+(BOOL) isGameRunning;
-
-+(NSString *)modelType;
-+(NSArray *)teamColors;
-+(void) releaseCache;
-
-+(NSInteger) randomPort;
-+(void) freePort:(NSInteger) port;
-+(BOOL) isNetworkReachable;
-+(NSString *) languageID;
-//+(UIView *)mainSDLViewInstance;
-+(NSString *) seed;
+@interface CampaignsViewController : UITableViewController
 
 @end
-

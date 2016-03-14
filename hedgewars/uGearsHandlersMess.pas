@@ -1337,10 +1337,15 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
+    Gear^.Data:= nil;
+    // remember who fired this
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
+
     PlaySound(sndGun);
-    // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
-    Gear^.X := Gear^.X + Gear^.dX * 3;
-    Gear^.Y := Gear^.Y + Gear^.dY * 3;
+    // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
+    Gear^.X := Gear^.X + Gear^.dX * 2;
+    Gear^.Y := Gear^.Y + Gear^.dY * 2;
     Gear^.doStep := @doStepBulletWork
 end;
 
@@ -1349,6 +1354,7 @@ var
     HHGear: PGear;
     shell: PVisualGear;
 begin
+
     cArtillery := true;
     HHGear := Gear^.Hedgehog^.Gear;
 
@@ -1357,6 +1363,9 @@ begin
         DeleteGear(gear);
         exit
         end;
+
+    // remember who fired this
+    Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
     HHGear^.State := HHGear^.State or gstNotKickable;
     HedgehogChAngle(HHGear);
@@ -1382,9 +1391,9 @@ begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
         PlaySound(sndGun);
-        // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
-        Gear^.X := Gear^.X + Gear^.dX * 3;
-        Gear^.Y := Gear^.Y + Gear^.dY * 3;
+        // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
+        Gear^.X := Gear^.X + Gear^.dX * 2;
+        Gear^.Y := Gear^.Y + Gear^.dY * 2;
         Gear^.doStep := @doStepBulletWork;
         end
     else
@@ -2646,7 +2655,7 @@ begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
 
-    if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
+    if (Gear^.Health > 0) and (not (Gear^.X < Gear^.dX)) and (Gear^.X < Gear^.dX + cAirPlaneSpeed) then
         begin
         dec(Gear^.Health);
             case Gear^.State of
@@ -2690,7 +2699,7 @@ begin
         end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * Gear^.Health * Gear^.Damage) / 2;
+    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * (Gear^.Health-1) * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
@@ -4357,9 +4366,13 @@ begin
                 continue;
             end;
 
-        // draw bullet trail
-        if isbullet then
+        if (iterator^.Kind = gtDEagleShot) or (iterator^.Kind = gtSniperRifleShot) then
+            begin
+            // draw bullet trail
             spawnBulletTrail(iterator);
+            // the bullet can now hurt the hog that fired it
+            iterator^.Data:= nil;
+            end;
 
         // calc gear offset in portal vector direction
         ox := (iterator^.X - Gear^.X);
@@ -5006,15 +5019,18 @@ var
 begin
     PlaySound(sndSineGun);
 
-    // push the shooting Hedgehog back
-    HHGear := CurrentHedgehog^.Gear;
-    Gear^.dX.isNegative := not Gear^.dX.isNegative;
-    Gear^.dY.isNegative := not Gear^.dY.isNegative;
-    HHGear^.dX := Gear^.dX;
-    HHGear^.dY := Gear^.dY;
-    AmmoShove(Gear, 0, 80);
-    Gear^.dX.isNegative := not Gear^.dX.isNegative;
-    Gear^.dY.isNegative := not Gear^.dY.isNegative;
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        begin
+        HHGear := Gear^.Hedgehog^.Gear;
+        // push the shooting Hedgehog back
+        Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        Gear^.dY.isNegative := not Gear^.dY.isNegative;
+        HHGear^.dX := Gear^.dX;
+        HHGear^.dY := Gear^.dY;
+        AmmoShove(Gear, 0, 80);
+        Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        Gear^.dY.isNegative := not Gear^.dY.isNegative;
+        end;
 
     Gear^.doStep := @doStepSineGunShotWork;
     {$IFNDEF PAS2C}

@@ -26,6 +26,7 @@
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
 #import "MissionTrainingViewController.h"
+#import "CampaignsViewController.h"
 #import "Appirater.h"
 #import "ServerProtocolNetwork.h"
 #import "GameInterfaceBridge.h"
@@ -44,6 +45,7 @@
 @interface MainMenuViewController ()
 @property (retain, nonatomic) IBOutlet UIButton *simpleGameButton;
 @property (retain, nonatomic) IBOutlet UIButton *missionsButton;
+@property (retain, nonatomic) IBOutlet UIButton *campaignButton;
 @end
 
 @implementation MainMenuViewController
@@ -59,9 +61,11 @@
     
     [self.simpleGameButton setTitle:NSLocalizedString(@"Simple", nil) forState:UIControlStateNormal];
     [self.missionsButton setTitle:NSLocalizedString(@"Missions", nil) forState:UIControlStateNormal];
+    [self.campaignButton setTitle:NSLocalizedString(@"Campaign", nil) forState:UIControlStateNormal];
     
     [self.simpleGameButton applyDarkBlueQuickStyle];
     [self.missionsButton applyDarkBlueQuickStyle];
+    [self.campaignButton applyDarkBlueQuickStyle];
     
     // get the app's version
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
@@ -86,8 +90,7 @@
     {
         NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
         RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
-        if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
-            restored.modalPresentationStyle = UIModalPresentationFormSheet;
+        restored.modalPresentationStyle = UIModalPresentationFormSheet;
 
         [self performSelector:@selector(presentViewController:) withObject:restored afterDelay:0.25];
     }
@@ -216,8 +219,7 @@
             {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                if ([about respondsToSelector:@selector(setModalPresentationStyle:)])
-                     about.modalPresentationStyle = UIModalPresentationFormSheet;
+                about.modalPresentationStyle = UIModalPresentationFormSheet;
                 
                 [self presentViewController:about animated:YES completion:nil];
                 [about release];
@@ -228,8 +230,7 @@
             {
                 SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
                 savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                if ([savedgames respondsToSelector:@selector(setModalPresentationStyle:)])
-                    savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
+                savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
                 
                 [self presentViewController:savedgames animated:YES completion:nil];
                 [savedgames release];
@@ -240,8 +241,7 @@
                 xib = IS_IPAD() ? @"MissionTrainingViewController-iPad" : @"MissionTrainingViewController-iPhone";
                 MissionTrainingViewController *missions = [[MissionTrainingViewController alloc] initWithNibName:xib bundle:nil];
                 missions.modalTransitionStyle = IS_IPAD() ? UIModalTransitionStyleCoverVertical : UIModalTransitionStyleCrossDissolve;
-                if ([missions respondsToSelector:@selector(setModalPresentationStyle:)])
-                    missions.modalPresentationStyle = UIModalPresentationPageSheet;
+                missions.modalPresentationStyle = UIModalPresentationPageSheet;
                 
                 [self presentViewController:missions animated:YES completion:nil];
                 [missions release];
@@ -250,6 +250,20 @@
         case 6:
             [GameInterfaceBridge registerCallingController:self];
             [GameInterfaceBridge startSimpleGame];
+            break;
+        case 7:
+            {
+                xib = IS_IPAD() ? @"CampaignsViewController-iPad" : @"CampaignsViewController-iPhone";
+                CampaignsViewController *campaigns = [[CampaignsViewController alloc] initWithNibName:xib bundle:nil];
+                UINavigationController *campaignNavigationController = [[UINavigationController alloc] initWithRootViewController:campaigns];
+                [campaigns release];
+                
+                campaignNavigationController.modalTransitionStyle = IS_IPAD() ? UIModalTransitionStyleCoverVertical : UIModalTransitionStyleCrossDissolve;
+                campaignNavigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+                
+                [self presentViewController:campaignNavigationController animated:YES completion:nil];
+                [campaignNavigationController release];
+            }
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
@@ -286,6 +300,7 @@
 -(void) dealloc {
     [_simpleGameButton release];
     [_missionsButton release];
+    [_campaignButton release];
     [super dealloc];
 }
 

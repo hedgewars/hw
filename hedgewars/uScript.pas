@@ -2211,24 +2211,6 @@ begin
     lc_setwind:= 0
 end;
 
-function lc_getdatapath(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 0, 'GetDataPath', '') then
-        lua_pushstring(L, str2pchar(cPathz[ptData]))
-    else
-        lua_pushnil(L);
-    lc_getdatapath:= 1
-end;
-
-function lc_getuserdatapath(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 0, 'GetUserDataPath', '') then
-        lua_pushstring(L, str2pchar(cPathz[ptData]))
-    else
-        lua_pushnil(L);
-    lc_getuserdatapath:= 1
-end;
-
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'MapHasBorder', '') then
@@ -2542,6 +2524,20 @@ begin
     if CheckLuaParamCount(L, 4, 'DeclareAchievement', 'achievementId, teamname, location, value') then
         declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4));
     lc_declareachievement:= 0
+end;
+
+function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
+        startGhostPoints(lua_tointeger(L, 1));
+    lc_startghostpoints:= 0
+end;
+
+function lc_dumppoint(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 2, 'DumpPoint', 'x, y') then
+        dumpPoint(lua_tointeger(L, 1), lua_tointeger(L, 2));
+    lc_dumppoint:= 0
 end;
 
 
@@ -3338,8 +3334,6 @@ lua_register(luaState, _P'GetGearCollisionMask', @lc_getgearcollisionmask);
 lua_register(luaState, _P'SetGearCollisionMask', @lc_setgearcollisionmask);
 lua_register(luaState, _P'GetRandom', @lc_getrandom);
 lua_register(luaState, _P'SetWind', @lc_setwind);
-lua_register(luaState, _P'GetDataPath', @lc_getdatapath);
-lua_register(luaState, _P'GetUserDataPath', @lc_getuserdatapath);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
@@ -3362,6 +3356,8 @@ lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 lua_register(luaState, _P'SetGearAIHints', @lc_setgearaihints);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
+lua_register(luaState, _P'StartGhostPoints', @lc_startghostpoints);
+lua_register(luaState, _P'DumpPoint', @lc_dumppoint);
 
 ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
 ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);

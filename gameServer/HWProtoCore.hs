@@ -67,7 +67,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
         h "SAVEROOM" n | not $ B.null n = handleCmd ["SAVEROOM", n]
         h "LOADROOM" n | not $ B.null n = handleCmd ["LOADROOM", n]
-        h "SAVE" n | not $ B.null n = handleCmd ["SAVE", n]
+        h "SAVE" n | not $ B.null n = let (sn, ln) = B.break (== ' ') n in if B.null ln then return [] else handleCmd ["SAVE", sn, B.tail ln]
         h "DELETE" n | not $ B.null n = handleCmd ["DELETE", n]
         h "STATS" _ = handleCmd ["STATS"]
         h "PART" m | not $ B.null m = handleCmd ["PART", m]

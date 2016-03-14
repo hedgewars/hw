@@ -1170,6 +1170,8 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
+    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot]) and (PGear(Ammo^.Data) = Gear) then
+        continue;
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
        (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
         Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
@@ -1510,6 +1512,9 @@ if WorldEdge = weNone then exit(false);
 if (hwRound(Gear^.X) < LongInt(leftX)) or
    (hwRound(Gear^.X) > LongInt(rightX)) then
     begin
+    // bullets can now hurt the hog that fired them
+    if (WorldEdge <> weSea) and (Gear^.Kind in [gtDEagleShot, gtSniperRifleShot]) then
+        Gear^.Data:= nil;
     if WorldEdge = weWrap then
         begin
         if (hwRound(Gear^.X) < LongInt(leftX)) then

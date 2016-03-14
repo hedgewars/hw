@@ -518,11 +518,10 @@ AVWRAP_DECL int AVWrapper_Init(
             return FatalError("Could not open output file (%s)", g_pContainer->filename);
     }
 
-    // write the stream header, if any
-    avformat_write_header(g_pContainer, NULL);
-
     g_pVFrame->pts = -1;
-    return 0;
+
+    // write the stream header, if any
+    return avformat_write_header(g_pContainer, NULL);
 }
 
 AVWRAP_DECL int AVWrapper_Close()

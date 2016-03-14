@@ -31,6 +31,7 @@ uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF}, uDebug;
 
 procedure DoGameTick(Lag: LongInt);
+const maxCheckedGameDuration = 3*60*60*1000;
 var i,j : LongInt;
     s: ansistring;
 begin
@@ -63,7 +64,15 @@ if GameType <> gmtRecord then
             else Lag:= Lag*80;
             end
         else if cOnlyStats then
-            Lag:= High(LongInt)
+            begin
+                if GameTicks >= maxCheckedGameDuration then
+                begin
+                    gameState:= gsExit;
+                    exit;
+                end;
+
+            Lag:= maxCheckedGameDuration + 60000;
+            end;
     end;
 
 if cTestLua then

@@ -124,7 +124,7 @@
     cell.accessoryView = imgView;
     [imgView release];
 
-    cell.textLabel.textAlignment = UITextAlignmentCenter;
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.backgroundColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

@@ -349,7 +349,7 @@
                                            withBorderWidth:2.0f];
         maxLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
         maxLabel.textColor = [UIColor whiteColor];
-        maxLabel.textAlignment = UITextAlignmentCenter;
+        maxLabel.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:maxLabel];
         self.mapConfigViewController.maxLabel = maxLabel;
         [maxLabel release];

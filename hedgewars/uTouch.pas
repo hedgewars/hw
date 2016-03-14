@@ -423,6 +423,7 @@ begin
                 fingers[index].historicalX := fingers[pointerCount].historicalX;
                 fingers[index].historicalY := fingers[pointerCount].historicalY;
                 fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
+                fingers[index].pressedWidget := fingers[pointerCount].pressedWidget;
 
                 fingers[pointerCount].id := 0;
             end

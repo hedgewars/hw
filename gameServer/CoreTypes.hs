@@ -93,6 +93,7 @@ data Action =
     | CheckFailed B.ByteString
     | CheckSuccess [B.ByteString]
     | Random [ClientChan] [B.ByteString]
+    | LoadGhost B.ByteString
     | QueryReplay B.ByteString
     | ShowReplay B.ByteString
     | Cleanup
@@ -154,6 +155,7 @@ data ClientInfo =
         eiEM,
         eiJoin :: !EventsInfo,
         teamsInGame :: !Word,
+        teamIndexes :: ![Word8],
         pendingActions :: ![Action]
     }
 
@@ -236,7 +238,7 @@ data RoomInfo =
         roomBansList :: ![B.ByteString],
         mapParams :: !(Map.Map B.ByteString B.ByteString),
         params :: !(Map.Map B.ByteString [B.ByteString]),
-        roomSaves :: !(Map.Map B.ByteString (Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString]))
+        roomSaves :: !(Map.Map B.ByteString (B.ByteString, Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString]))
     }
 
 newRoom :: RoomInfo

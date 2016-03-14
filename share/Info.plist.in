@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>LSApplicationCategoryType</key>
@@ -9,7 +9,7 @@
     <key>CFBundleExecutable</key>
     <string>hedgewars</string>
     <key>CFBundleGetInfoString</key>
-    <string>http://www.hedgewars.org</string>
+    <string>https://www.hedgewars.org</string>
     <key>CFBundleIconFile</key>
     <string>Icon.icns</string>
     <key>CFBundleIdentifier</key>
@@ -50,7 +50,7 @@
     <key>SUPublicDSAKeyFile</key>
     <string>dsa_pub.pem</string>
     <key>SUFeedURL</key>
-    <string>http://www.hedgewars.org/download/appcast.xml</string>
+    <string>https://www.hedgewars.org/download/appcast.xml</string>
     <key>CFBundleLocalizations</key>
     <array>
         <string>ar</string>
@@ -88,7 +88,7 @@
             <key>UTTypeIdentifier</key>
             <string>org.hedgewars.desktop.hws</string>
             <key>UTTypeReferenceURL</key>
-            <string>http://www.hedgewars.org/demos/</string>
+            <string>https://www.hedgewars.org/demos/</string>
             <key>UTTypeDescription</key>
             <string>Hedgewars Save Game</string>
             <key>UTTypeIconFile</key>
@@ -111,7 +111,7 @@
             <key>UTTypeIdentifier</key>
             <string>org.hedgewars.desktop.hwd</string>
             <key>UTTypeReferenceURL</key>
-            <string>http://www.hedgewars.org/demos/</string>
+            <string>https://www.hedgewars.org/demos/</string>
             <key>UTTypeIconFile</key>
             <string>public.text.icns</string>
             <key>UTTypeDescription</key>

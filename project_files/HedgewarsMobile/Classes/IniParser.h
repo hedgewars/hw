@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2015-2016 Anton Malmygin <antonc27@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,27 +16,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
-
 #import <Foundation/Foundation.h>
-#import "EngineProtocolNetwork.h"
 
+@interface IniParser : NSObject
 
-@interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
-    UIView *blackView;
-    NSString *savePath;
-    NSInteger port;
-}
+- (instancetype)initWithIniFilePath:(NSString *)iniFilePath;
 
-@property (nonatomic,retain) UIView *blackView;
-@property (nonatomic,retain) NSString *savePath;
-@property (assign) NSInteger port;
-
-+(void) startLocalGame:(NSDictionary *)withOptions;
-+(void) startSaveGame:(NSString *)atPath;
-+(void) startMissionGame:(NSString *)withScript;
-+(void) startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName;
-+(void) startSimpleGame;
-
-+(void) registerCallingController:(UIViewController *)controller;
+- (NSArray *)newParsedSections;
 
 @end

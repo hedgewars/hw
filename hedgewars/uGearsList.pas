@@ -376,6 +376,7 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_6;
+                gear^.Z:= 1;
                 end;
          gtBee: begin
                 gear^.Radius:= 5;
@@ -406,6 +407,7 @@ case Kind of
                 RopePoints.Count:= 0;
                 gear^.Tint:= $D8D8D8FF;
                 gear^.Tag:= 0; // normal rope render
+                gear^.CollisionMask:= lfNotObjMask or lfNotHHObjMask;
                 end;
         gtMine: begin
                 gear^.ImpactSound:= sndMineImpact;

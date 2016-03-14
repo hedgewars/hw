@@ -161,7 +161,7 @@
     if (title != nil) {
         theLabel.text = title;
         theLabel.textColor = [UIColor lightYellowColor];
-        theLabel.textAlignment = UITextAlignmentCenter;
+        theLabel.textAlignment = NSTextAlignmentCenter;
         theLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]*80/100];
     }
 

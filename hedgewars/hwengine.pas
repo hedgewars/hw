@@ -173,21 +173,6 @@ begin
                     if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
-                SDL_MOUSEBUTTONDOWN:
-                    if GameState = gsConfirm then
-                        ParseCommand('quit', true)
-                    else
-                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
-
-                SDL_MOUSEBUTTONUP:
-                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
-
-                SDL_MOUSEWHEEL:
-                    begin
-                    wheelEvent:= true;
-                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
-                    end;
-
                 SDL_TEXTINPUT: if GameState = gsChat then uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
@@ -234,7 +219,23 @@ begin
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+{$ELSE}
+                SDL_MOUSEBUTTONDOWN:
+                    if GameState = gsConfirm then
+                        ParseCommand('quit', true)
+                    else
+                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
+
+                SDL_MOUSEBUTTONUP:
+                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
+
+                SDL_MOUSEWHEEL:
+                    begin
+                    wheelEvent:= true;
+                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    end;
 {$ENDIF}
+
                 SDL_JOYAXISMOTION:
                     ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION:

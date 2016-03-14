@@ -74,10 +74,10 @@
 
     if (section == 0) {
         imgName = @"star";
-        cell.textLabel.textAlignment = UITextAlignmentCenter;
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
         cell.imageView.image = nil;
     } else {
-        cell.textLabel.textAlignment = UITextAlignmentLeft;
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
         switch (row) {
             case 0:
                 imgName = @"fb";
@@ -160,7 +160,7 @@
 
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.text = NSLocalizedString(@" ♥ THANK YOU ♥ ", nil);
         label.backgroundColor = [UIColor clearColor];
         label.center = CGPointMake(self.tableView.frame.size.width/2, 250);
