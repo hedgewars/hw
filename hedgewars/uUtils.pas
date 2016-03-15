@@ -95,10 +95,10 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils, uPhysFSLayer;
 
 {$IFDEF DEBUGFILE}
-var logFile: textfile;
+var logFile: PFSFile;
 {$IFDEF USE_VIDEO_RECORDING}
     logMutex: TRTLCriticalSection; // mutex for debug file
 {$ENDIF}
@@ -225,17 +225,8 @@ str(n, IntToStr)
 end;
 
 function StrToInt(s: shortstring): LongInt;
-var c: LongInt;
 begin
-{$IFDEF PAS2C}
 val(s, StrToInt);
-{$ELSE}
-val(s, StrToInt, c);
-{$IFDEF DEBUGFILE}
-if c <> 0 then
-    writeln(logFile, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
-{$ENDIF}
-{$ENDIF}
 end;
 
 function FloatToStr(n: hwFloat): shortstring;
@@ -361,8 +352,7 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-writeln(logFile, inttostr(GameTicks)  + ': ' + s);
-flush(logFile);
+pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s);
 
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
@@ -379,8 +369,9 @@ s:= s;
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-write(logFile, s);
-flush(logFile);
+// TODO: uncomment next two lines
+// write(logFile, s);
+// flush(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
 {$ENDIF}
@@ -521,7 +512,6 @@ procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
     i: LongInt;
-    rwfailed: boolean;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -545,35 +535,15 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
-{$I-}
-    rwfailed:= false;
-    if (length(UserPathPrefix) > 0) then
-        begin
-        {$IFNDEF PAS2C}
-        // create directory if it doesn't exist
-        if not FileExists(UserPathPrefix + '/Logs/') then
-            CreateDir(UserPathPrefix + '/Logs/');
-        {$ENDIF}
-        // if log is locked, write to the next one
-        i:= 0;
-        while(i < 7) do
-            begin
-            assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
-            Rewrite(logFile);
-            // note: IOResult is a function in pascal and a variable in pas2c
-            rwfailed:= (IOResult <> 0);
-            if (not rwfailed) then
-                break;
-            inc(i)
-            end;
-        end;
-
-{$IFNDEF PAS2C}
-    // if everything fails, write to stderr
-    if (length(UserPathPrefix) = 0) or (rwfailed) then
-        logFile:= stderr;
-{$ENDIF}
-{$I+}
+    // if log is locked, write to the next one
+    i:= 0;
+    while(i < 7) do
+    begin
+        logFile:= pfsOpenWrite('/Logs/' + logfileBase + inttostr(i) + '.log');
+        if logFile <> nil then
+            break;
+        inc(i)
+    end;
 {$ENDIF}
 
     //mobile stuff
@@ -594,9 +564,9 @@ end;
 procedure freeModule;
 begin
 {$IFDEF DEBUGFILE}
-    writeln(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
-    flush(logFile);
-    close(logFile);
+    pfsWriteLn(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
+    pfsFlush(logFile);
+    pfsClose(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
     DoneCriticalSection(logMutex);
 {$ENDIF}

@@ -22,14 +22,18 @@ function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 function rwopsOpenWrite(fname: shortstring): PSDL_RWops;
 
 function pfsOpenRead(fname: shortstring): PFSFile;
+function pfsOpenWrite(fname: shortstring): PFSFile;
+function pfsFlush(f: PFSFile): boolean;
 function pfsClose(f: PFSFile): boolean;
 
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
 procedure pfsReadLnA(f: PFSFile; var s: ansistring);
+procedure pfsWriteLn(f: PFSFile; s: shortstring);
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
+function pfsMakeDir(path: shortstring): boolean;
 
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
@@ -46,11 +50,19 @@ function PHYSFS_init(argv0: PChar): LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit(): LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
+function PHYSFS_openWrite(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
+function PHYSFS_setWriteDir(path: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external PhysfsLibName;
+function PHYSFS_writeBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external PhysfsLibName;
+function PHYSFS_seek(f: PFSFile; pos: QWord): LongBool; cdecl; external PhysfsLibName;
+function PHYSFS_flush(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
+function PHYSFS_mkdir(path: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_getLastError(): PChar; cdecl; external PhysfsLibName;
+function PHYSFS_enumerateFiles(dir: PChar): PPChar; cdecl; external PhysfsLibName;
+procedure PHYSFS_freeList(list: PPChar); cdecl; external PhysfsLibName;
 {$ELSE}
 function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64;
 begin
@@ -73,9 +85,19 @@ begin
     exit(PHYSFS_openRead(Str2PChar(fname)));
 end;
 
+function pfsOpenWrite(fname: shortstring): PFSFile;
+begin
+    exit(PHYSFS_openWrite(Str2PChar(fname)));
+end;
+
 function pfsEOF(f: PFSFile): boolean;
 begin
     exit(PHYSFS_eof(f))
+end;
+
+function pfsFlush(f: PFSFile): boolean;
+begin
+    exit(PHYSFS_flush(f))
 end;
 
 function pfsClose(f: PFSFile): boolean;
@@ -88,6 +110,20 @@ begin
     exit(PHYSFS_exists(Str2PChar(fname)))
 end;
 
+function pfsMakeDir(path: shortstring): boolean;
+begin
+    exit(PHYSFS_mkdir(Str2PChar(path)))
+end;
+
+function pfsEnumerateFiles(dir: shortstring): PPChar;
+begin
+    exit(PHYSFS_enumerateFiles(Str2PChar(dir)))
+end;
+
+procedure pfsFreeList(list: PPChar);
+begin
+    PHYSFS_freeList(list)
+end;
 
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
 var c: char;
@@ -122,6 +158,14 @@ while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
         end;
 
 s:= s + ansistring(b)
+end;
+
+procedure pfsWriteLn(f: PFSFile; s: shortstring);
+var c: char;
+begin
+    c:= #10;
+    PHYSFS_writeBytes(f, @s[1], byte(s[0]));
+    PHYSFS_writeBytes(f, @c, 1);
 end;
 
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
@@ -176,7 +220,11 @@ begin
 {$ENDIF}
 
     pfsMountAtRoot(localPrefix);
+    pfsMount(userPrefix, PChar('/Config'));
+    pfsMakeDir('/Config/Data');
+    pfsMakeDir('/Config/Logs');
     pfsMountAtRoot(userPrefix + ansistring('/Data'));
+    PHYSFS_setWriteDir(userPrefix);
 
     hedgewarsMountPackages;
 
