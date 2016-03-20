@@ -13,7 +13,7 @@ if(APPLE AND NOT SKIPBUNDLE)
     find_package(SDL2_net REQUIRED)
     find_package(SDL2_ttf REQUIRED)
     find_package(SDL2_mixer REQUIRED)
-
+    find_package(OggVorbis REQUIRED)
     find_package(PNG REQUIRED)
 
     if(NOT NOAUTOUPDATE)
