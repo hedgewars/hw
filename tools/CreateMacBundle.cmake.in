@@ -1,24 +1,27 @@
-
-execute_process(COMMAND stat ${frameworks_dir}/SDL.framework RESULT_VARIABLE doBundle OUTPUT_QUIET ERROR_QUIET)
+# check for a well known-framework
+execute_process(COMMAND stat ${frameworks_dir}/QtCore.framework RESULT_VARIABLE doBundle OUTPUT_QUIET ERROR_QUIET)
+# prepare Frameworks directory
 execute_process(COMMAND mkdir -p ${frameworks_dir})
 # macdeployqt will convert safely any absolute path library for 'hedgewars'
 execute_process(COMMAND ${macdeployqt_executable} ${CMAKE_BINARY_DIR}/Hedgewars.app OUTPUT_QUIET ERROR_QUIET)
 
-if(NOT ${NOVIDEOREC})
-    # but macdeployqt will not work for 'hwengine'; luckily the dylibs were already updated before
-    execute_process(COMMAND install_name_tool -change ${LIBAVCODEC_LIBRARY} @executable_path/../Frameworks/libavcodec.dylib ${engine_full_path})
-    execute_process(COMMAND install_name_tool -change ${LIBAVFORMAT_LIBRARY} @executable_path/../Frameworks/libavformat.dylib ${engine_full_path})
-    execute_process(COMMAND install_name_tool -change ${LIBAVUTIL_LIBRARY} @executable_path/../Frameworks/libavutil.dylib ${engine_full_path})
-endif()
-
-if(NOT ${NOPNG})
-    #same here, for libpng and hwengine, let's assume the version pulled by macdeployqt is the same
-    #(yes libpng is pulled by macdeployqt even when NOVIDEOREC is active)
-    execute_process(COMMAND install_name_tool -change ${PNG_LIBRARY} @executable_path/../Frameworks/${PNG_LIBNAME} ${engine_full_path})
-    execute_process(COMMAND install_name_tool -change ${ZLIB_LIBRARY} @executable_path/../Frameworks/${ZLIB_LIBNAME} ${engine_full_path})
-endif()
-
 if(doBundle EQUAL 1)
+    if(NOT ${NOVIDEOREC})
+        # but macdeployqt will not work for 'hwengine'
+        # luckily most the dylibs are already updated before
+        execute_process(COMMAND install_name_tool -change ${LIBAVCODEC_LIBRARY} @executable_path/../Frameworks/libavcodec.dylib ${engine_full_path})
+        execute_process(COMMAND install_name_tool -change ${LIBAVFORMAT_LIBRARY} @executable_path/../Frameworks/libavformat.dylib ${engine_full_path})
+        execute_process(COMMAND install_name_tool -change ${LIBAVUTIL_LIBRARY} @executable_path/../Frameworks/libavutil.dylib ${engine_full_path})
+    endif()
+
+    if(NOT ${NOPNG})
+        # same here, for libpng and hwengine, let's assume the version pulled
+        # by macdeployqt matches (yes, libpng is pulled in by macdeployqt even
+        # when NOVIDEOREC is ON)
+        execute_process(COMMAND install_name_tool -change ${PNG_LIBRARY} @executable_path/../Frameworks/${PNG_LIBNAME} ${engine_full_path})
+        execute_process(COMMAND install_name_tool -change ${ZLIB_LIBRARY} @executable_path/../Frameworks/${ZLIB_LIBNAME} ${engine_full_path})
+    endif()
+
     execute_process(COMMAND cp ${PNG_LIBRARY} ${frameworks_dir})
 
     execute_process(COMMAND cp -pPR ${sdl_library_only}  ${frameworks_dir})
