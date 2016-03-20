@@ -29,9 +29,9 @@ if(APPLE AND NOT SKIPBUNDLE)
     #use the associated tool from the libraries we've selected
     string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
 
-    #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
-    #remove the "libSDLmain.a" from the SDL_LIBRARY variable
+    #remove the ";-framework Cocoa" from the SDL2_LIBRARY variable
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL2_LIBRARY}")
+    #remove the "libSDLmain.a" from the SDL2_LIBRARY variable
     string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
     #get the neme of the library (harmelss if it is static)
