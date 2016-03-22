@@ -63,6 +63,10 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 #define avcodec_open2(x, y, z)              avcodec_open(x, y)
 #endif
 
+#if LIBAVCODEC_VERSION_MAJOR < 55
+#define avcodec_default_get_buffer2(x, y ,z) avcodec_default_get_buffer(x, y)
+#endif
+
 #if LIBAVCODEC_VERSION_MAJOR < 56
 #define av_frame_alloc                      avcodec_alloc_frame
 #define av_frame_free                       av_freep
