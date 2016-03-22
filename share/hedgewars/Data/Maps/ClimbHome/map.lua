@@ -61,7 +61,7 @@ function onParameters()
     if params["delaytime"] ~= nil then
         delayTime = params["delaytime"]
     end
-    if params["delaytime"] ~= nil then
+    if params["delayheight"] ~= nil then
         delayHeight = 32768-params["delayheight"]
     end
     if params["nocake"] ~= nil then addCake = false end
