@@ -678,3 +678,9 @@ end
 function getActualHeight(height)
     return 32640-height
 end
+
+function onAchievementsDeclaration()
+    for teamname, score in pairs(teamBests) do
+        DeclareAchievement("height reached", teamname, "ClimbHome", score)
+    end
+end
