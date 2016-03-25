@@ -65,7 +65,7 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 
 #if LIBAVCODEC_VERSION_MAJOR < 56
 #define av_frame_alloc                      avcodec_alloc_frame
-#define av_frame_free                       av_freep
+#define av_frame_free                       avcodec_free_frame
 #define av_packet_rescale_ts                rescale_ts
 
 static void rescale_ts(AVPacket *pkt, AVRational ctb, AVRational stb)
