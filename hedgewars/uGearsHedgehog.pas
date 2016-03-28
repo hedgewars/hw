@@ -685,6 +685,8 @@ var s: shortstring;
     vga: PVisualGear;
     ag, gi: PGear;
 begin
+if Gear^.State and gstFrozen <> 0 then exit;
+
 Gear^.Message:= gmDestroy;
 if (Gear^.Pos and posCaseExplode) <> 0 then
     if (Gear^.Pos and posCasePoison) <> 0 then
@@ -1253,7 +1255,7 @@ or (CurAmmoGear <> nil) then // we are moving
             HHGear^.Message:= HHGear^.Message or gmAttack;
     // check for case with ammo
     t:= CheckGearNear(HHGear, gtCase, 36, 36);
-    if (t <> nil) and (t^.State and gstFrozen = 0) then
+    if (t <> nil) then
         PickUp(HHGear, t)
     end;
 
