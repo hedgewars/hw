@@ -163,6 +163,12 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
+                        if HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0 then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amVampiric), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
                         end;
 
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);

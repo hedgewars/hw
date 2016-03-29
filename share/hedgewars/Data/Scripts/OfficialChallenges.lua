@@ -18,6 +18,7 @@ local maps = {
     , ["60906776802,M-1389184823Scripts/Multiplayer/Racer.lua"] = "Racer Challenge #17"
     , ["Border,70774747774,M-534640804Scripts/Multiplayer/Racer.lua"] = "Racer Challenge #18"
     , ["Border,50512019610,M-1839546856Scripts/Multiplayer/Racer.lua"] = "Racer Challenge #19"
+    , ["60715683005,M-281312897Scripts/Multiplayer/Racer.lua"] = "Racer Challenge #20"
 -- tech racer
     , ["Border,19661006772,M-975391975Scripts/Multiplayer/TechRacer.lua"] = "Tech Racer #1"
     , ["Border,19661306766,M-975391975Scripts/Multiplayer/TechRacer.lua"] = "Tech Racer #2"

@@ -219,7 +219,7 @@ begin
         begin
             fp := cFontsPaths[i];
             if fp <> nil then
-                pfsMount(ansistring(fp), PChar('/Fonts'));
+                pfsMount(ansistring(fp), _P'/Fonts');
         end;
 {$ENDIF}
 

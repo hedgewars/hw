@@ -2603,7 +2603,7 @@ begin
 
         case lua_tointeger(L, 1) of
             HaltTestSuccess : rstring:= 'Success';
-            HaltTestLuaError: rstring:= 'FAILED';
+            HaltTestFailed: rstring:= 'FAILED';
         else
             begin
             LuaCallError('Parameter must be either ' + params, call, params);

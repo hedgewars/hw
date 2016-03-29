@@ -85,7 +85,7 @@ void PageDataDownload::request(const QUrl &url)
 {
     QUrl finalUrl;
     if(url.host().isEmpty())
-        finalUrl = QUrl("http://www.hedgewars.org" + url.path());
+        finalUrl = QUrl("https://www.hedgewars.org" + url.path());
     else
         finalUrl = url;
 
@@ -195,7 +195,7 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 
 void PageDataDownload::fetchList()
 {
-    request(QUrl("http://hedgewars.org/content.html"));
+    request(QUrl("https://hedgewars.org/content.html"));
 }
 
 

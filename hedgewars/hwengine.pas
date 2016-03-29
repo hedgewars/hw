@@ -454,6 +454,7 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
+
     uScript.initModule;
     uTeams.initModule;              // clear CurrentTeam variable
 

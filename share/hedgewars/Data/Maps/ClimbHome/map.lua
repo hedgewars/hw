@@ -61,7 +61,7 @@ function onParameters()
     if params["delaytime"] ~= nil then
         delayTime = params["delaytime"]
     end
-    if params["delaytime"] ~= nil then
+    if params["delayheight"] ~= nil then
         delayHeight = 32768-params["delayheight"]
     end
     if params["nocake"] ~= nil then addCake = false end
@@ -390,6 +390,7 @@ function onGameTick20()
                     SendStat(siPlayerKills, tostring(roundedFinishTime), loc(GetHogTeamName(CurrentHedgehog)))
 
                     EndGame()
+                    onAchievementsDeclaration()
                     YouWon = true
                 end
             elseif distanceFromWater < 0 and not YouLost then
@@ -399,6 +400,7 @@ function onGameTick20()
                 if deadHedgehogs >= totalHedgehogs then
                     makeFinalMultiPlayerStats()
                     EndGame()
+                    onAchievementsDeclaration()
                 end
             end
 
@@ -550,6 +552,7 @@ function onGearDamage(gear, damage)
             if deadHedgehogs >= totalHedgehogs then
                 makeFinalMultiPlayerStats()
                 EndGame()
+                onAchievementsDeclaration()
             end
             makeMultiPlayerLoserStat(gear)
         end
@@ -598,6 +601,7 @@ function makeSinglePlayerLoserStats()
     SendStat(siPointType, loc("points"))
     SendStat(siPlayerKills, actualHeight, loc(GetHogTeamName(CurrentHedgehog)))
     EndGame()
+    onAchievementsDeclaration()
 end
 
 function makeMultiPlayerLoserStat(gear)
@@ -677,4 +681,10 @@ end
 
 function getActualHeight(height)
     return 32640-height
+end
+
+function onAchievementsDeclaration()
+    for teamname, score in pairs(teamBests) do
+        DeclareAchievement("height reached", teamname, "ClimbHome", -score)
+    end
 end

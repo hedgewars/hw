@@ -535,7 +535,6 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
-{$I-}
     // if log is locked, write to the next one
     i:= 0;
     while(i < 7) do
@@ -545,7 +544,6 @@ begin
             break;
         inc(i)
     end;
-{$I+}
 {$ENDIF}
 
     //mobile stuff
