@@ -256,7 +256,7 @@ end;
 
 procedure flushBuffer();
 begin
-
+    flushDelayTicks:= 0;
 end;
 
 procedure SendIPC(s: shortstring);
