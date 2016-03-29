@@ -85,7 +85,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
         "</style>"
         "<div align=\"center\"><h1>%1</h1>"
         "<h3>%2<h3>"
-        "<h4>%3 <a href=\"http://hedgewars.org/kb/KnownBugs\">known bugs</a><h4>"
+        "<h4>%3 <a href=\"https://hedgewars.org/kb/KnownBugs\">known bugs</a><h4>"
         "<h4>%4<h4>"
         "</div>")
         .arg(tr("Send us feedback!"))
@@ -387,7 +387,7 @@ void FeedbackDialog::NetReply(QNetworkReply *reply)
             return;
         }
 
-        QString url = "http://hedgewars.org/feedback/?captcha&id=";
+        QString url = "https://hedgewars.org/feedback/?captcha&id=";
         url += QString::number(captchaID);
 
         QNetworkAccessManager *netManager = GetNetManager();
@@ -423,7 +423,7 @@ QNetworkAccessManager * FeedbackDialog::GetNetManager()
 void FeedbackDialog::LoadCaptchaImage()
 {
         QNetworkAccessManager *netManager = GetNetManager();
-        QUrl captchaURL("http://hedgewars.org/feedback/?gencaptcha");
+        QUrl captchaURL("https://hedgewars.org/feedback/?gencaptcha");
         QNetworkRequest req(captchaURL);
         genCaptchaRequest = netManager->get(req);
 }
@@ -493,7 +493,7 @@ void FeedbackDialog::SendFeedback()
     connect(nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(finishedSlot(QNetworkReply*)));
 
-    QNetworkRequest header(QUrl("http://hedgewars.org/feedback/?submit"));
+    QNetworkRequest header(QUrl("https://hedgewars.org/feedback/?submit"));
     header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
     header.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
