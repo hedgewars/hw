@@ -13,7 +13,7 @@ const PhyslayerLibName = 'libphyslayer';
     {$linklib physlayer}
 {$ENDIF}
 
-procedure initModule;
+procedure initModule(localPrefix, userPrefix: PChar);
 procedure freeModule;
 
 type PFSFile = pointer;
@@ -138,9 +138,9 @@ end;
 procedure pfsMount(path: ansistring; mountpoint: PChar);
 begin
     if PHYSFS_mount(PChar(path), mountpoint, false) then
-        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
+        //AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
     else
-        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
+        //AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
 end;
 
 procedure pfsMountAtRoot(path: ansistring);
@@ -148,7 +148,7 @@ begin
     pfsMount(path, PChar(_S'/'));
 end;
 
-procedure initModule;
+procedure initModule(localPrefix, userPrefix: PChar);
 var i: LongInt;
     cPhysfsId: shortstring;
 {$IFNDEF MOBILE}
@@ -171,17 +171,17 @@ begin
         begin
             fp := cFontsPaths[i];
             if fp <> nil then
-                pfsMount(ansistring(fp), PChar('/Fonts'));
+                pfsMount(ansistring(fp), _P'/Fonts');
         end;
 {$ENDIF}
 
-    pfsMountAtRoot(PathPrefix);
-    pfsMountAtRoot(UserPathPrefix + ansistring('/Data'));
+    pfsMountAtRoot(localPrefix);
+    pfsMountAtRoot(userPrefix + ansistring('/Data'));
 
     hedgewarsMountPackages;
 
     // need access to teams and frontend configs (for bindings)
-    pfsMountAtRoot(UserPathPrefix);
+    pfsMountAtRoot(userPrefix);
 
     if cTestLua then
         begin
