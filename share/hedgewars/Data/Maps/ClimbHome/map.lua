@@ -685,6 +685,6 @@ end
 
 function onAchievementsDeclaration()
     for teamname, score in pairs(teamBests) do
-        DeclareAchievement("height reached", teamname, "ClimbHome", score)
+        DeclareAchievement("height reached", teamname, "ClimbHome", -score)
     end
 end
