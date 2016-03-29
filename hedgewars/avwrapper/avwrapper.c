@@ -65,7 +65,7 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 
 #if LIBAVCODEC_VERSION_MAJOR < 56
 #if LIBAVCODEC_VERSION_MAJOR < 55
-#define av_frame_free                       avfreep
+#define av_frame_free                       av_freep
 #else
 #define av_frame_free                       avcodec_free_frame
 #endif
