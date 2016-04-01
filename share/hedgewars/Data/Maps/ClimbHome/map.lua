@@ -19,6 +19,7 @@ local currTeam = ''
 local teams = {}
 local teamScoreStats = {}
 local teamBests = {}
+local teamTimes = {}
 local MrMine -- in honour of sparkle's first arrival in the cabin
 local YouWon = false
 local YouLost = false
@@ -447,8 +448,15 @@ function onGameTick20()
             end
 
             if (y > 286) or (y < 286 and MaxHeight > 286) then
+                if MaxHeight > 286 and y <= 286 then
+                    -- wow, reached top
+                    local teamName = GetHogTeamName(CurrentHedgehog)
+                    if teamTimes[teamName] == nil or teamTimes[teamName] > GameTime - startTime then 
+                        teamTimes[teamName] = GameTime - startTime 
+                    end
+                    MaxHeight = 286
+                end
                 if y < MaxHeight and y > 286 then MaxHeight = y end
-                if y < 286 then MaxHeight = 286 end
                 if MaxHeight < hTagHeight then
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
@@ -686,5 +694,8 @@ end
 function onAchievementsDeclaration()
     for teamname, score in pairs(teamBests) do
         DeclareAchievement("height reached", teamname, "ClimbHome", -score)
+    end
+    for teamname, score in pairs(teamTimes) do
+        DeclareAchievement("rope race", teamname, "ClimbHome", score)
     end
 end
