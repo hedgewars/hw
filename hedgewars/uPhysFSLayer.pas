@@ -181,10 +181,7 @@ end;
 
 procedure pfsMount(path: PChar; mountpoint: PChar);
 begin
-    if PHYSFS_mount(path, mountpoint, false) then
-        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
-    else
-        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
+    PHYSFS_mount(path, mountpoint, false)
 end;
 
 procedure pfsMountAtRoot(path: PChar);
@@ -207,7 +204,7 @@ begin
 {$ENDIF}
 
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
-    AddFileLog('[PhysFS] init: ' + inttostr(i));
+    //AddFileLog('[PhysFS] init: ' + inttostr(i));
 
 {$IFNDEF MOBILE}
     // mount system fonts paths first

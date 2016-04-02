@@ -457,6 +457,12 @@ end;
 
 procedure initEverything (complete:boolean);
 begin
+    PathPrefix:= PathPrefix + #0;
+    UserPathPrefix:= UserPathPrefix + #0;
+    uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
+    PathPrefix:= copy(PathPrefix, 1, length(PathPrefix) - 1);
+    UserPathPrefix:= copy(UserPathPrefix, 1, length(UserPathPrefix) - 1);
+
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
     uCommands.initModule;           // helps below
@@ -465,12 +471,6 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
-
-    PathPrefix:= PathPrefix + #0;
-    UserPathPrefix:= UserPathPrefix + #0;
-    uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
-    PathPrefix:= copy(PathPrefix, 1, length(PathPrefix) - 1);
-    UserPathPrefix:= copy(UserPathPrefix, 1, length(UserPathPrefix) - 1);
 
     uScript.initModule;
 
