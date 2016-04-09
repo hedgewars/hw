@@ -2458,22 +2458,8 @@ function updateHelp()
 
 	if (GetCurAmmoType() ~= amGirder) and (GetCurAmmoType() ~= amRubber) and (GetCurAmmoType() ~= amAirAttack) then
 
-		ShowMission	(
-				loc("HEDGE EDITOR"),
-				loc("(well... kind of...)"),
-				loc("Place Girder: Girder") .. "|" ..
-				loc("Place Rubber: Rubber") .. "|" ..
-				loc("Place Gear: Air Attack") .. "|" ..
-				loc("Change Selection: [Up], [Down], [Left], [Right]") .. "|" ..
-				loc("Toggle Help: Precise+1 (While a tool is selected)") .. "|" ..
-				" " .. "|" ..
-				loc("COMMANDS: (Use while no weapon is selected)") .. "|" ..
-				loc("Save Level: Precise+4") .. "|" ..
-				loc("Toggle Editing Weapons and Tools: Precise+2") .. "|" ..
-				" " .. "|" ..
-				"", 4, 5000
-				)
-						--4
+		showHedgeEditorMissionPanel()
+
 	elseif cat[cIndex] == loc("Girder Placement Mode") then
 
 		ShowMission	(
@@ -3147,6 +3133,26 @@ function onGameInit()
 
 end
 
+function showHedgeEditorMissionPanel()
+	ShowMission	(
+		loc("HEDGEEDITOR"),
+		loc("An experimental (and buggy!) editing tool for missions and more"),
+		loc("Manual: https://hedgewars.org/hedgeeditor") .. "|" ..
+		" " .. "|" ..
+		loc("Place Girder: Girder") .. "|" ..
+		loc("Place Rubber: Rubber") .. "|" ..
+		loc("Place Gears (and more): Air Attack") .. "|" ..
+		loc("Change Selection: [Up], [Down], [Left], [Right]") .. "|" ..
+		loc("Toggle Help: Precise+1 (While a tool is selected)") .. "|" ..
+		" " .. "|" ..
+		loc("COMMANDS: (Use while no weapon is selected)") .. "|" ..
+		loc("Save Level: Precise+4") .. "|" ..
+		loc("Toggle Editing Weapons and Tools: Precise+2") .. "|" ..
+		" " .. "|" ..
+		"", 4, 5000
+		)
+end
+
 function onGameStart()
 
 	trackTeams()
@@ -3155,22 +3161,7 @@ function onGameStart()
 	InterpretPoints()
 	LoadLevelData()
 
-	ShowMission	(
-				loc("HEDGE EDITOR"),
-				loc("(well... kind of...)"),
-				loc("Place Girder: Girder") .. "|" ..
-				loc("Place Rubber: Rubber") .. "|" ..
-				loc("Place Gear: Air Attack") .. "|" ..
-				loc("Change Selection: [Up], [Down], [Left], [Right]") .. "|" ..
-				loc("Toggle Help: Precise+1 (While a tool is selected)") .. "|" ..
-				" " .. "|" ..
-				loc("COMMANDS: (Use while no weapon is selected)") .. "|" ..
-				loc("Save Level: Precise+4") .. "|" ..
-				loc("Toggle Editing Weapons and Tools: Precise+2") .. "|" ..
-				" " .. "|" ..
-				"", 4, 5000
-				)
-
+	showHedgeEditorMissionPanel()
 
 	sCirc = AddVisualGear(0,0,vgtCircle,0,true)
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xffba00ff)
