@@ -1602,6 +1602,7 @@ function PlaceObject(x,y)
 		SetTimer(gear, pMode[pIndex])
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
 		gear = AddGear(x, y, gtSMine, 0, 0, 0, 0)
+		SetTimer(gear, pMode[pIndex])
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
 		gear = AddGear(x, y, gtAirMine, 0, 0, 0, 0)
 		SetTimer(gear, pMode[pIndex])
@@ -1782,7 +1783,7 @@ function RedefineSubset()
 		pMode = {1,1000,2000,3000,4000,5000,0}
 		-- 0 is dud right, or is that nil?
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
-		pMode = {loc("Normal Sticky Mine")}
+		pMode = {500,750,1000,1250,1500,2000,3000,0,250}
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
 		pMode = {1,1000,2000,3000,4000,5000,0}
 	elseif cat[cIndex] == loc("Advanced Repositioning Mode") then
@@ -3029,6 +3030,7 @@ function updateHelp()
 				loc("STiCKY MINE PLACEMENT MODE"),
 				loc("Use this mode to place sticky mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
+				loc("Change Timer (in milliseconds): [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
