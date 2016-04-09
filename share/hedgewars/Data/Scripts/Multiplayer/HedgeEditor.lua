@@ -582,20 +582,23 @@ local gameFlagList =	{
 			}
 
  local reducedSpriteIDArray = {
-  sprAmRubber, sprAmGirder, sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMCorners, sprHHTelepMask, sprTurnsLeft,
-  sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail, sprShoutCorner,
-  sprShoutEdge, sprShoutTail, sprBotlevels, sprIceTexture, sprCustom1, sprCustom2, }
+  sprAmRubber, sprAmGirder, sprTargetBee, sprIceTexture, sprHHTelepMask,
+  sprAMAmmos, sprAMAmmosBW, sprAMSlot, sprAMCorners, sprTurnsLeft, sprBotlevels,
+  sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
+  sprShoutCorner, sprShoutEdge, sprShoutTail, sprCustom1, sprCustom2, }
 
  local reducedSpriteIDArrayFrames = {
-  4, 8, 3, 57, 57, 4, 1, 8,
-  1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1,
+  4, 8, 1, 1, 1,
+  57, 57, 3, 4, 8, 1,
+  1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1,
  }
 
  local reducedSpriteTextArray = {
-  "sprAmRubber", "sprAmGirder", "sprAMSlot", "sprAMAmmos", "sprAMAmmosBW", "sprAMCorners", "sprHHTelepMask", "sprTurnsLeft",
-  "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail", "sprShoutCorner",
-  "sprShoutEdge", "sprShoutTail", "sprBotlevels", "sprIceTexture", "sprCustom1", "sprCustom2", }
+  "sprAmRubber", "sprAmGirder", "sprTargetBee", "sprIceTexture", "sprHHTelepMask",
+  "sprAMAmmos", "sprAMAmmosBW", "sprAMSlot",  "sprAMCorners", "sprTurnsLeft", "sprBotlevels",
+  "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail",
+  "sprShoutCorner", "sprShoutEdge", "sprShoutTail", "sprCustom1", "sprCustom2", }
 
 ----------------------------
 -- placement shite
