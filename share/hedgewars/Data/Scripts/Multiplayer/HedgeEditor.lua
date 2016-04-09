@@ -162,14 +162,14 @@
 
 			napalm =		arrow sprite (selection/modification/deletion mode)
 							"Repositioning Mode",  -- also include a delete
-							"Goal Mode",
+							"Goal Editing Mode",
 							"Hog Identity Mode",
 							"Team Identity Mode",
 							"Health Modification Mode",
 							"Sprite Testing Mode",
 							"Sprite Modification Mode",
 							"Sprite Placement Mode",
-							"Waypoint Mode"
+							"Waypoint Editing Mode"
 							}]]
 
 -- [low]	improve support for ShoppaBalance and ConstructionMode, see ranking)
@@ -638,14 +638,13 @@ local cat = 	{
 				loc("Target Placement Mode"),
 				loc("Cleaver Placement Mode"),
 				loc("Repositioning Mode"),
-				loc("Goal Mode"),
+				loc("Goal Definition Mode"),
 				loc("Hog Identity Mode"),
 				loc("Team Identity Mode"),
 				loc("Health Modification Mode"),
-				--loc("Sprite Testing Mode"),
 				loc("Sprite Placement Mode"),
 				loc("Sprite Modification Mode"),
-				loc("Waypoint Mode")
+				loc("Waypoint Editing Mode")
 				}
 
 
@@ -919,7 +918,7 @@ function PlaceWaypoint(x,y)
 
 	placedX[placedCount] = x
 	placedY[placedCount] = y
-	placedType[placedCount] = loc("Waypoint Mode")
+	placedType[placedCount] = loc("Waypoint Editing Mode")
 	placedLandFlags[placedCount] = nil -- use this to specify waypoint type maybe
 	placedHWMapFlag[placedCount] = 0
 
@@ -1068,7 +1067,7 @@ function EraseClosestWaypoint()
 	closestSpriteID = nil -- just in case
 
 	for i = 0, (placedCount-1) do
-		if (placedType[i] == loc("Waypoint Mode")) then
+		if (placedType[i] == loc("Waypoint Editing Mode")) then
 				q = placedX[i] - placedX[placedCount]
 				w = placedY[i] - placedY[placedCount]
 				d = ( (q*q) + (w*w) )
@@ -1278,7 +1277,7 @@ function PlaceObject(x,y)
 		end
 
 
-	elseif cat[cIndex] == loc("Goal Mode") then
+	elseif cat[cIndex] == loc("Goal Definition Mode") then
 
 		sGear = GetClosestGear()
 		if sGear ~= nil then  -- used to be closestGear
@@ -1323,7 +1322,7 @@ function PlaceObject(x,y)
 			EraseClosestSprite()
 		end
 
-	elseif cat[cIndex] == loc("Waypoint Mode") then
+	elseif cat[cIndex] == loc("Waypoint Editing Mode") then
 
 
 		if pMode[pIndex] == loc("Delete Waypoint") then
@@ -1384,7 +1383,7 @@ function RedefineSubset()
 		pMode = {750,1000,1250,0,250,500}
 	elseif cat[cIndex] == loc("Repositioning Mode") then
 		pMode = {loc("Selection Mode"),loc("Placement Mode"), loc("Deletion Mode")}
-	elseif cat[cIndex] == loc("Goal Mode") then
+	elseif cat[cIndex] == loc("Goal Definition Mode") then
 		pMode = {loc("Victory Condition: Destroy"),loc("Losing Condition: Destroy"),loc("Victory Condition: Collect")}
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
 		pMode = {loc("Soldier"),loc("Grenadier"),loc("Sniper"),loc("Pyro"),loc("Ninja"),loc("Commander"),loc("Chef"),loc("Engineer"),loc("Physicist"),loc("Trapper"),loc("Saint"),loc("Clown")}
@@ -1401,7 +1400,7 @@ function RedefineSubset()
 		for i = 1, #reducedSpriteTextArray do
 			pMode[i] = reducedSpriteTextArray[i]
 		end
-	elseif cat[cIndex] == loc("Waypoint Mode") then
+	elseif cat[cIndex] == loc("Waypoint Editing Mode") then
 		pMode = {loc("Place Waypoint"), loc("Delete Waypoint")}
 	end
 
@@ -2063,7 +2062,7 @@ function SaveLevelData()
 	WriteLnToConsole("")
 
 	for i = 0, (placedCount-1) do
-		if placedType[i] == loc("Waypoint Mode") then
+		if placedType[i] == loc("Waypoint Editing Mode") then
 			table.insert(waypointList,
 			"	AddWayPoint(" ..
 				placedX[i] ..", " ..
@@ -2425,7 +2424,7 @@ function UpdateTagCircles(gear)
 
 	if getGearValue(gear,"tag") ~= nil then
 
-		if cat[cIndex] == loc("Goal Mode") then
+		if cat[cIndex] == loc("Goal Definition Mode") then
 
 			-- generate circs for tagged gears that don't have a circ yet (new)
 			if getGearValue(gear,"tCirc") == nil then
@@ -2561,7 +2560,7 @@ function updateHelp(curAmmoType)
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
 
 		ShowMission	(
-				loc("CLEAVER MINE PLACEMENT MODE"),
+				loc("CLEAVER PLACEMENT MODE"),
 				loc("Use this mode to place cleavers"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				" " .. "|" ..
@@ -2574,7 +2573,7 @@ function updateHelp(curAmmoType)
 	elseif cat[cIndex] == loc("Target Placement Mode") then
 
 		ShowMission	(
-				loc("TARGET MINE PLACEMENT MODE"),
+				loc("TARGET PLACEMENT MODE"),
 				loc("Use this mode to place targets"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				" " .. "|" ..
@@ -2584,10 +2583,10 @@ function updateHelp(curAmmoType)
 				)
 		hedgeEditorMissionPanelShown = false
 
-	elseif cat[cIndex] == loc("Waypoint Mode") then
+	elseif cat[cIndex] == loc("Waypoint Editing Mode") then
 
 		ShowMission	(
-				loc("WAYPOINT MODE"),
+				loc("WAYPOINT EDITING MODE"),
 				loc("Use this mode to place or delete waypoints"),
 				loc("Place/Delete Waypoint: [Left Click]") .. "|" ..
 				loc("Toggle Placement/Deletion: [Left], [Right]") .. "|" ..
@@ -2629,7 +2628,7 @@ function updateHelp(curAmmoType)
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
 
 		ShowMission	(
-				loc("STiCKY MINE PLACEMENT MODE"),
+				loc("STICKY MINE PLACEMENT MODE"),
 				loc("Use this mode to place sticky mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Timer (in milliseconds): [Left], [Right]") .. "|" ..
@@ -2750,10 +2749,10 @@ function updateHelp(curAmmoType)
 				)
 		hedgeEditorMissionPanelShown = false
 
-	elseif cat[cIndex] == loc("Goal Mode") then
+	elseif cat[cIndex] == loc("Goal Definition Mode") then
 
 		ShowMission	(
-				loc("GOAL MODE"),
+				loc("GOAL DEFINITION MODE"),
 				loc("Use this mode to mark gears for win/lose conditions."),
 				loc("Mark/unmark gear: [Left Click]") .. "|" ..
 				loc("Select win/lose condition: [Left], [Right]") .. "|" ..
@@ -2983,7 +2982,7 @@ function HandleHedgeEditor()
 		SetVisualGearValues(sCirc, GetX(sGear), GetY(sGear), 100, 255, 1, 10, 0, 300, 3, 0xff00ffff)
 	elseif (cat[cIndex] == loc("Sprite Modification Mode")) and (sSprite ~= nil) then
 		SetVisualGearValues(sSprite, nil, nil, 0, 0, nil, nil, 10000, nil, 10000)
-	elseif (cat[cIndex] == loc("Goal Mode")) then
+	elseif (cat[cIndex] == loc("Goal Definition Mode")) then
 		if (sGear ~= nil) or (closestGear ~= nil) then
 			closestGear = nil
 			sGear = nil
