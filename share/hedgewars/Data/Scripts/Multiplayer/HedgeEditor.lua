@@ -1436,12 +1436,10 @@ function SelectClosestSprite()
 				if d < closestDist then
 					closestDist = d
 					closestSpriteID = i
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(sSprite)
 
-					--newTint = placedTint[i]
 					newTint = 0xFF00FFFF
 
-					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, g5, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
+					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
 
 				end
 		end
@@ -1486,12 +1484,10 @@ function EraseClosestWaypoint()
 				if d < closestDist then
 					closestDist = d
 					closestSpriteID = i
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(sSprite)
 
 					--newTint = placedTint[i]
-					newTint = 0xFF00FFFF
 
-					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, g5, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
+					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
 
 				end
 		end
@@ -1708,15 +1704,6 @@ function PlaceObject(x,y)
 
 
 		end
-
-
-	--elseif cat[cIndex] == loc("Sprite Testing Mode") then
-
-	--	frameID = 0
-	--	visualSprite = reducedSpriteIDArray[pIndex]
-	--	tempE = AddVisualGear(x, y, vgtStraightShot, 0, true,1)
-	--	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-	--	SetVisualGearValues(tempE, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
 
 
 	elseif cat[cIndex] == loc("Sprite Placement Mode") then
@@ -2836,8 +2823,7 @@ end
 ----------------------------------
 function SmokePuff(x,y,c)
 	tempE = AddVisualGear(x, y, vgtSmoke, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-	SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, c )
+	SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, 1, nil, c )
 end
 
 function HandleGearBasedRankingEffects(gear)
@@ -2898,8 +2884,7 @@ function PortalEffects(gear)
 
 		if (tag == 0) or (tag == 2) then -- i.e ball form
 			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, col )
+			SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, 1, nil, col )
 
 			remLife = getGearValue(gear,"life")
 			remLife = remLife - 1
@@ -2908,20 +2893,16 @@ function PortalEffects(gear)
 			if remLife == 0 then
 
 				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 
 				PlaySound(sndVaporize)
@@ -3314,7 +3295,6 @@ function HandleHedgeEditor()
 			if CG == nil then
 				CG = AddVisualGear(CursorX, CursorY, vgtStraightShot,0,true,3)
 			end
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(CG)
 			SetVisualGearValues(CG, CursorX, CursorY, 0, 0, dAngle, dFrame, 1000, dSprite, 1000, dCol)
 
 
@@ -3403,9 +3383,7 @@ function HandleHedgeEditor()
 
 
 			if sSprite ~= nil then
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(sSprite)
-				SetVisualGearValues(sSprite, g1, g2, 0, 0, g5, g6, 10000, g8, 10000, g10 )
-				--AddCaption(g7)
+				SetVisualGearValues(sSprite, nil, nil, 0, 0, nil, nil, 10000, nil, 10000 )
 			end
 
 		end
@@ -3425,8 +3403,7 @@ function HandleHedgeEditor()
 	if (cat[cIndex] == loc("Advanced Repositioning Mode")) and (sGear ~= nil) then
 		SetVisualGearValues(sCirc, GetX(sGear), GetY(sGear), 100, 255, 1, 10, 0, 300, 3, 0xff00ffff)
 	elseif (cat[cIndex] == loc("Sprite Modification Mode")) and (sSprite ~= nil) then
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(sSprite)
-		SetVisualGearValues(sSprite, g1, g2, 0, 0, g5, g6, 10000, g8, 10000, g10 )
+		SetVisualGearValues(sSprite, nil, nil, 0, 0, nil, nil, 10000, nil, 10000)
 	elseif (cat[cIndex] == loc("Tagging Mode")) then
 		if (sGear ~= nil) or (closestGear ~= nil) then
 			--recently disabled
