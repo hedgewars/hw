@@ -2960,7 +2960,11 @@ function onTimer(s)
 	elseif (preciseOn == true) and (s == 1) then
 		if (GetCurAmmoType() == amGirder) or  (GetCurAmmoType() == amRubber) or  (GetCurAmmoType() == amAirAttack) then
 			helpDisabled = not(helpDisabled)
-			AddCaption("Help Disabled: " .. BoolToString(helpDisabled),0xffba00ff,capgrpVolume)
+			if helpDisabled then
+				AddCaption(loc("Help Disabled"),0xffba00ff,capgrpVolume)
+			else
+				AddCaption(loc("Help Enabled"),0xffba00ff,capgrpVolume)
+			end
 			updateHelp()
 		end
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
