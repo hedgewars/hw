@@ -978,9 +978,10 @@ function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 
 	placedSprite[placedCount] = pSprite
 
-	PlaceSprite(pX, pY, pSprite, pFrame, pTint,	nil, nil, nil, pLandFlags)
-
-	placedCount = placedCount + 1
+	local success = PlaceSprite(pX, pY, pSprite, pFrame, pTint, nil, nil, nil, pLandFlags)
+	if succcess then
+		placedCount = placedCount + 1
+	end
 
 end
 
@@ -1001,7 +1002,7 @@ function CallPlaceSprite(pID)
 		placedTint[pID] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
 	end
 
-	PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], placedFrame[pID],
+	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], placedFrame[pID],
 		placedTint[pID],
 		nil, -- overrite existing land
 		nil, nil, -- this stuff specifies flipping
@@ -1108,6 +1109,7 @@ function PlaceObject(x,y)
 	placedLandFlags[placedCount] = nil
 	placedSprite[placedCount] = nil
 	placedHWMapFlag[placedCount] = nil
+	placementSucceeded = true		-- We assume success unless the placement logic said otherwise
 
 	if cat[cIndex] == loc("Girder Placement Mode") then
 
@@ -1115,13 +1117,15 @@ function PlaceObject(x,y)
 			--lfObject and lfBasic
 			placedFrame[placedCount] = CGR
 			placedSprite[placedCount] = sprAmGirder
-			CallPlaceSprite(placedCount)
+			placementSucceeded = CallPlaceSprite(placedCount)
 
-			if landType == lfIndestructible then	specialMod = 1
-			elseif landType == lfIce then	specialMod = 2
-			else specialMod = 0
+			if placementSucceeded then
+				if landType == lfIndestructible then	specialMod = 1
+				elseif landType == lfIce then	specialMod = 2
+				else specialMod = 0
+				end
+				placedHWMapFlag[placedCount] = CGR+100+(8*specialMod)
 			end
-			placedHWMapFlag[placedCount] = CGR+100+(8*specialMod)
 		else
 			placedType[placedCount] = "bogus" -- we need this so we don't think we've placed a new girder and are trying to erase the things we just placed??
 			SelectClosestSprite()
@@ -1137,16 +1141,18 @@ function PlaceObject(x,y)
 			--new ermagerd
 			placedLandFlags[placedCount] = "lfBouncy"
 			placedTint[placedCount] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
-			PlaceSprite(placedX[placedCount], placedY[placedCount], placedSprite[placedCount], placedFrame[placedCount],
+			placementSucceeded = PlaceSprite(placedX[placedCount], placedY[placedCount], placedSprite[placedCount], placedFrame[placedCount],
 				placedTint[placedCount],
 				nil,
 				nil, nil,
 				landType)
 
-			if CGR == 0 then placedHWMapFlag[placedCount] = 124
-			elseif CGR == 1 then placedHWMapFlag[placedCount] = 125
-			elseif CGR == 2 then placedHWMapFlag[placedCount] = 126
-			elseif CGR == 3 then placedHWMapFlag[placedCount] = 127
+			if placementSucceeded then
+				if CGR == 0 then placedHWMapFlag[placedCount] = 124
+				elseif CGR == 1 then placedHWMapFlag[placedCount] = 125
+				elseif CGR == 2 then placedHWMapFlag[placedCount] = 126
+				elseif CGR == 3 then placedHWMapFlag[placedCount] = 127
+				end
 			end
 		else
 			placedType[placedCount] = "bogus"
@@ -1253,9 +1259,11 @@ function PlaceObject(x,y)
 		if closestSpriteID ~= nil then
 			if pMode[pIndex] == loc("LandFlag Modification Mode") then
 				EraseSprite(placedX[closestSpriteID], placedY[closestSpriteID], placedSprite[closestSpriteID], placedFrame[closestSpriteID], nil, nil, nil, nil, placedLandFlags[closestSpriteID])
-				CallPlaceSprite(closestSpriteID)
-				closestSpriteID = nil
-				SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+				placementSucceeded = CallPlaceSprite(closestSpriteID)
+				if placementSucceeded then
+					closestSpriteID = nil
+					SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+				end
 			elseif pMode[pIndex] == loc("Sprite Erasure Mode") then
 
 				EraseClosestSprite()
@@ -1302,7 +1310,7 @@ function PlaceObject(x,y)
 		if superDelete == false then
 			placedFrame[placedCount] = 1
 			placedSprite[placedCount] = reducedSpriteIDArray[pIndex]
-			CallPlaceSprite(placedCount)
+			placementSucceeded = CallPlaceSprite(placedCount)
 		else
 			placedType[placedCount] = "bogus"
 			SelectClosestSprite()
@@ -1321,7 +1329,9 @@ function PlaceObject(x,y)
 
 	end
 
-	placedCount = placedCount + 1
+	if placementSucceeded then
+		placedCount = placedCount + 1
+	end
 
 end
 
