@@ -318,6 +318,8 @@ local shoppaPX = {}
 local shoppaPY = {}
 local shoppaPR = {}
 
+local hedgeEditorMissionPanelShown = false
+
 ---------------------------------
 -- crates are made of this stuff
 ---------------------------------
@@ -2480,7 +2482,9 @@ function updateHelp()
 
 	if (GetCurAmmoType() ~= amGirder) and (GetCurAmmoType() ~= amRubber) and (GetCurAmmoType() ~= amAirAttack) then
 
-		showHedgeEditorMissionPanel()
+		if not hedgeEditorMissionPanelShown then
+			showHedgeEditorMissionPanel()
+		end
 
 	elseif cat[cIndex] == loc("Girder Placement Mode") then
 
@@ -2500,6 +2504,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amGirder, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Rubber Placement Mode") then
 
@@ -2514,6 +2519,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amRubber, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
 
@@ -2527,6 +2533,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 8, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
 
@@ -2539,6 +2546,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amKnife, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Target Placement Mode") then
 
@@ -2551,6 +2559,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 1, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Waypoint Mode") then
 
@@ -2564,6 +2573,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amAirAttack, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
 
@@ -2577,6 +2587,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amMine, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Dud Mine Placement Mode") then
 
@@ -2590,6 +2601,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amMine, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
 
@@ -2603,6 +2615,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amSMine, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
 
@@ -2616,6 +2629,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amAirMine, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 
@@ -2629,6 +2643,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 7, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
 
@@ -2642,6 +2657,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 5, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
 
@@ -2655,6 +2671,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 6, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Repositioning Mode") then
 
@@ -2668,6 +2685,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amAirAttack, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
 
@@ -2687,6 +2705,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", -amAirAttack, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Sprite Placement Mode") then
 
@@ -2705,6 +2724,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 2, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Goal Mode") then
 
@@ -2718,6 +2738,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 3, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
 
 		ShowMission	(
@@ -2730,6 +2751,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 3, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Team Identity Mode") then
 
@@ -2743,6 +2765,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 3, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	elseif cat[cIndex] == loc("Health Modification Mode") then
 
@@ -2756,6 +2779,7 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 3, 60000
 				)
+		hedgeEditorMissionPanelShown = false
 
 	end
 
@@ -3177,6 +3201,7 @@ function showHedgeEditorMissionPanel()
 		" " .. "|" ..
 		"", 4, 5000
 		)
+	hedgeEditorMissionPanelShown = true
 end
 
 function onGameStart()
