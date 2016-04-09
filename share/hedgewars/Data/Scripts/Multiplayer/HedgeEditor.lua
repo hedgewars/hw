@@ -1456,8 +1456,8 @@ function GetDataForSavingHogs(gear)
 
 		table.insert(tempDataList, "")
 		table.insert	(tempDataList,
-						"	AddTeam(\"" ..
-						GetHogTeamName(gear) .."\"" ..
+						"	AddTeam(loc(\"" ..
+						GetHogTeamName(gear) .. "\")" ..
 						", " .. tColor ..
 						", " .. "\"" .. tGrave .. "\"" ..
 						", " .. "\"" .. tFort .. "\"" ..
@@ -1470,8 +1470,8 @@ function GetDataForSavingHogs(gear)
 
 	table.insert(hhs, gear)
 
-	table.insert	(tempDataList,	"	hhs[" .. #hhs .."] = AddHog(\"" ..
-					GetHogName(gear) .. "\", " ..
+	table.insert	(tempDataList,	"	hhs[" .. #hhs .."] = AddHog(loc(\"" ..
+					GetHogName(gear) .. "\"), " ..
 					GetHogLevel(gear) .. ", " ..
 					GetHealth(gear) .. ", \"" ..
 					GetHogHat(gear) .. "\"" ..
@@ -2227,33 +2227,33 @@ function SaveLevelData()
 	WriteLnToConsole("")
 	WriteLnToConsole("	if victoryObj > 0 then ")
 	WriteLnToConsole("		if victoryObj == 1 then ")
-	WriteLnToConsole("			vComment = loc(\"Destroy the red target\")")
+	WriteLnToConsole("			vComment = loc(\"- Destroy the red target\") .. \"|\"")
 	WriteLnToConsole("		else ")
-	WriteLnToConsole("			vComment = loc(\"Destroy the red targets\")")
+	WriteLnToConsole("			vComment = loc(\"- Destroy the red targets\") .. \"|\"")
 	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if collectObj > 0 then ")
 	WriteLnToConsole("		if collectObj == 1 then ")
-	WriteLnToConsole("			collectComment = loc(\"Collect the blue target\")")
+	WriteLnToConsole("			collectComment = loc(\"- Collect the blue crate\") .. \"|\"")
 	WriteLnToConsole("		else ")
-	WriteLnToConsole("			collectComment = loc(\"Collect all the blue targets\")")
+	WriteLnToConsole("			collectComment = loc(\"- Collect all the blue crates\") .. \"|\"")
 	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if (collectObj == 0) and (victoryObj == 0) then")
-	WriteLnToConsole("		vComment = loc(\"Destroy the enemy.\")")
+	WriteLnToConsole("		vComment = loc(\"- Destroy the enemy\") .. \"|\"")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if failObj > 0 then ")
 	WriteLnToConsole("		if failObj == 1 then ")
-	WriteLnToConsole("			fComment = loc(\"The green target must survive\")")
+	WriteLnToConsole("			fComment = loc(\"- The green target must survive\") .. \"|\"")
 	WriteLnToConsole("		else ")
-	WriteLnToConsole("			fComment = loc(\"The green targets must survive\")")
+	WriteLnToConsole("			fComment = loc(\"- The green targets must survive\") .. \"|\"")
 	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
-	WriteLnToConsole("	ShowMission(loc(\"User Challenge\"), loc(\"Mission Goals\") .. \":\", collectComment .. \"|\" .. vComment .. \"|\" .. fComment, 0, 0)")
+	WriteLnToConsole("	ShowMission(loc(\"User Mission\"), loc(\"Mission\"), collectComment .. vComment .. fComment, 1, 0)")
 	WriteLnToConsole("")
 	WriteLnToConsole("end")
 
@@ -2304,10 +2304,12 @@ function SaveLevelData()
 	WriteLnToConsole("")
 	WriteLnToConsole("			if (c ==  \"victory\") and (GetHogLevel(hhs[i]) ~= 0) then")
 	WriteLnToConsole("				DismissTeam(GetHogTeamName(hhs[i]))")
-	WriteLnToConsole("				ShowMission(loc(\"User Challenge\"), loc(\"MISSION SUCCESSFUL\"), loc(\"Congratulations!\"), 0, 0)")
+	WriteLnToConsole("				AddCaption(loc(\"Victory!\"), 0xFFFFFFFF, capgrpGameState)")
+	WriteLnToConsole("				ShowMission(loc(\"User Mission\"), loc(\"Mission\"), loc(\"Mission succeeded!\"), 0, 0)")
 	WriteLnToConsole("			elseif (c ==  \"failure\") and (GetHogLevel(hhs[i]) == 0) then")
 	WriteLnToConsole("				DismissTeam(GetHogTeamName(hhs[i]))")
-	WriteLnToConsole("				ShowMission(loc(\"User Challenge\"), loc(\"MISSION FAILED\"), loc(\"Oh no! Just try again!\"), -amSkip, 0)")
+	WriteLnToConsole("				AddCaption(loc(\"Defeat!\"), 0xFFFFFFFF, capgrpGameState)")
+	WriteLnToConsole("				ShowMission(loc(\"User Mission\"), loc(\"Mission\"), loc(\"Mission failed!\"), -amSkip, 0)")
 	WriteLnToConsole("			elseif (c ==  \"victory\") and (GetHogLevel(hhs[i]) == 0) then")
 	WriteLnToConsole("				PlaySound(sndVictory,hhs[i]) -- check if we actually need this")
 	WriteLnToConsole("			end")
@@ -3210,9 +3212,8 @@ function showHedgeEditorMissionPanel()
 		" " .. "|" ..
 		loc("COMMANDS: (Use while no weapon is selected)") .. "|" ..
 		loc("Save Level: Precise+4") .. "|" ..
-		loc("Toggle Editing Weapons and Tools: Precise+2") .. "|" ..
-		" " .. "|" ..
-		"", 4, 5000
+		loc("Toggle Editing Weapons and Tools: Precise+2")
+		, 4, 5000
 		)
 	hedgeEditorMissionPanelShown = true
 end
