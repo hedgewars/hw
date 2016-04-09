@@ -1849,7 +1849,7 @@ function GetDataForSavingHogs(gear)
 
 	--this is a quick hack so that the human team(s) will always be
 	--given the first move ahead of the AI
-	tempDataList = {}
+	local tempDataList = {}
 	if GetHogLevel(gear) == 0 then
 		tempDataList = hogDataList
 	else
@@ -1865,7 +1865,7 @@ function GetDataForSavingHogs(gear)
 
 		-- try match team colour to the colours recorded in the colour array
 
-		tColor = 0x00000000
+		local tColor = 0x00000000
 		for i = 1, #colorArray do
 			if GetClanColor(GetHogClan(gear)) == colorArray[i][1] then
 				tColor = colorArray[i][2]
@@ -1955,6 +1955,13 @@ end
 
 -- output hog and team data to the console
 function SaveHogData()
+
+	teamCounter = 0
+	lastRecordedTeam = ""
+	hhs = {}
+	shoppaPointList = {}
+	hogDataList = {}
+	AIHogDataList = {}
 
 	runOnHogs(GetDataForSavingHogs)
 
@@ -2058,9 +2065,9 @@ end
 -- distinction betweeen the need to track victory/win conditions or not
 function GetDataForGearSaving(gear)
 
-	temp = nil
-	specialFlag = nil
-	arrayList = nil
+	local temp = nil
+	local specialFlag = nil
+	local arrayList = nil
 
 	if GetGearType(gear) == gtMine then
 
