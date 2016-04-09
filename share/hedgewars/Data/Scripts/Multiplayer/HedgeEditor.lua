@@ -1127,6 +1127,8 @@ function PlaceObject(x,y)
 				else specialMod = 0
 				end
 				placedHWMapFlag[placedCount] = CGR+100+(8*specialMod)
+			else
+				placedType[placedCount] = "bogus"
 			end
 		else
 			placedType[placedCount] = "bogus" -- we need this so we don't think we've placed a new girder and are trying to erase the things we just placed??
@@ -1155,6 +1157,8 @@ function PlaceObject(x,y)
 				elseif CGR == 2 then placedHWMapFlag[placedCount] = 126
 				elseif CGR == 3 then placedHWMapFlag[placedCount] = 127
 				end
+			else
+				placedType[placedCount] = "bogus"
 			end
 		else
 			placedType[placedCount] = "bogus"
@@ -1323,6 +1327,7 @@ function PlaceObject(x,y)
 
 
 		if pMode[pIndex] == loc("Delete Waypoint") then
+			placedType[placedCount] = "bogus"
 			EraseClosestWaypoint()
 		else
 			PlaceWaypoint(x,y)
@@ -1331,10 +1336,7 @@ function PlaceObject(x,y)
 
 	end
 
-	if placementSucceeded then
-		placedCount = placedCount + 1
-	end
-
+	placedCount = placedCount + 1
 end
 
 -- called when user changes primary selection
@@ -1531,9 +1533,6 @@ function SaveHogData()
 	teamCounter = 0
 	lastRecordedTeam = ""
 	hhs = {}
-	shoppaPointList = {}
-	hogDataList = {}
-	AIHogDataList = {}
 
 	runOnHogs(GetDataForSavingHogs)
 
@@ -1961,6 +1960,25 @@ end
 -- saving process starts here
 -- saves all level data to logs/game0.log and generates a simple script template
 function SaveLevelData()
+
+	waypointList = {}
+	girderList = {}
+	rubberList = {}
+	spriteList = {}
+	mineList = {}
+	sMineList = {}
+	airMineList = {}
+	targetList = {}
+	knifeList = {}
+	explosivesList = {}
+	healthCrateList = {}
+	wepCrateList = {}
+	utilCrateList = {}
+	hFlagList = {}
+	previewDataList = {}
+	shoppaPointList = {}
+	hogDataList = {}
+	AIHogDataList = {}
 
 	WriteLnToConsole("------ BEGIN SCRIPT ------")
 	WriteLnToConsole("-- Copy and Paste this text into an empty text file, and save it as")
