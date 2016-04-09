@@ -528,25 +528,6 @@ local preMadeTeam = 	{
 				"F","cm_birdy","Default","Grave","Castle"
 				},
 
-				--{
-				--"Sci-Fi",
-				--{"scif_2001O","scif_2001Y","scif_BrainSlug","scif_BrainSlug2","scif_Geordi","scif_SparkssHelmet","scif_cosmonaut","scif_cyberpunk","scif_swDarthvader","scif_swStormtrooper"},
-				--{},
-				--"R","cm_birdy","Default","Grave","Castle"
-				--},
-
-
-
-
-				--
-
-				--{
-				--,
-				--{},
-				--{},
-				--"R","cm_birdy","Default","Grave","Castle"
-				--},
-
 				-- don't forget new additions need to be added to:
 				--pMode = {"Clowns","Street Fighters","Cybernetic Empire","Color Squad","Fruit","The Police","The Ninja-Samurai Alliance","Pokemon","The Zoo","The Devs","The Hospital"}
 				-- but maybe we can just get the size of this array and automatically generate a list instead
@@ -561,106 +542,8 @@ local preMadeTeam = 	{
 
 				}
 
-
---local menuArray =	{
---			"Initialisation Menu", "Team Menu"
---			}
-
---local hatArray = 	{hahahaha, you're joking, right?}
---[[well, here are most of them as vaguely ordered by theme, there may be some duplicates
-NoHat,
-NinjaFull,NinjaStraight,NinjaTriangle,Samurai,StrawHat,StrawHatEyes,StrawHatFacial,naruto
-sm_daisy,sm_luigi,sm_mario,sm_peach,sm_toad,sm_wario,
-ShortHair_Black,ShortHair_Brown,ShortHair_Grey,ShortHair_Red,ShortHair_Yellow
-hair_blue,hair_green,hair_red,hair_yellow,hair_purple,hair_grey,hair_orange,hair_pink
-Skull,Jason,ShaggyYeti,Zombi,cyclops,Mummy,hogpharoah,vampirichog
-cap_blue,cap_red,cap_green,cap_junior,cap_yellow,cap_thinking
-WhySoSerious,clown-copper,clown-crossed,clown,Joker
-bobby,bobby2v,policecap,policegirl,royalguard,
-spcartman,spstan,spkenny,spkyle,
-sf_balrog,sf_blanka,sf_blankatoothless,sf_chunli,sf_guile,sf_honda,sf_ken,sf_ryu,sf_vega
-Glasses,lambda,SunGlasses,Terminator_Glasses,Moustache_glasses
-Laminaria,Dragon,
-cyborg1,cyborg2,
-dish_Ladle,dish_SauceBoatSilver,dish_Teacup,dish_Teapot
-laurel,flag_french,flag_germany,flag_italy,flag_usa
-fr_apple,fr_banana,fr_lemon,fr_orange,fr_pumpkin,fr_tomato
-doctor,nurse,war_britmedic,war_desertmedic,war_germanww2medic,
-poke_ash,poke_charmander,poke_chikorita,poke_jigglypuff,
-poke_lugia,poke_mudkip,poke_pikachu,poke_slowpoke,poke_squirtle,poke_voltorb
-zoo_Bat,zoo_Beaver,zoo_Bunny,zoo_Deer,zoo_Hedgehog,zoo_Moose,zoo_Pig,zoo_Porkey,zoo_Sheep
-zoo_chicken,zoo_elephant,zoo_fish,zoo_frog,zoo_snail,zoo_turtle
-bushhider,cratehider,Disguise,
-tf_demoman,tf_scout,Sniper,
-Bandit,thug,anzac,Cowboy
-pirate_jack,pirate_jack_bandana,
-tiara,crown,royalguard
-punkman,Einstein,
-sth_Amy,sth_AmyClassic,sth_Eggman,sth_Knux,sth_Metal,sth_Shadow,sth_Sonic,sth_SonicClassic,sth_Super,sth_Tails
-vc_gakupo,vc_gumi,vc_kaito,vc_len,vc_luka,vc_meiko,vc_miku,vc_rin
-touhou_chen,touhou_marisa,touhou_patchouli,touhou_remelia,touhou_suwako,touhou_yukari,
-TeamHeadband,TeamSoldier,TeamTopHat,TeamWheatley,cap_team,hair_team,
-bb_bob,bb_bub,bb_cororon,bb_kululun,bubble,
-Viking,spartan,swordsmensquire,knight,dwarf,
-WizardHat,tophats,pinksunhat,ushanka,mexicansunbrero,HogInTheHat,
-4gsuif,
-AkuAku,
-noface,
-Coonskin3,
-Dan,
-Dauber,
-Eva_00b,Eva_00y,
-Evil,InfernalHorns,angel,
-Gasmask,
-IndianChief,Cowboy,
-MegaHogX,
-Meteorhelmet,
-Moustache,
-OldMan,
-Pantsu,
-Plunger,
-RSR,
-Rain,stormcloud,DayAndNight,
-chuckl,Rambo,RobinHood,
-Santa,snowhog,ShaggyYeti,eastertop,
-Sleepwalker,
-SparkleSuperFun,
-SunWukong,
-android,
-beefeater,
-car,
-chef,
-constructor,
-footballhelmet,
-judo,
-lamp,
-mechanicaltoy,
-mickey_ears,
-snorkel,
-quotecap,
-rasta,
-
-metalband,
-kiss_criss,kiss_frehley,kiss_simmons,kiss_stanley,mp3,Elvis
-mv_Spidey,mv_Venom,
-ntd_Falcon,ntd_Kirby,ntd_Link,ntd_Samus,
-scif_2001O,scif_2001Y,scif_BrainSlug,scif_BrainSlug2,scif_Geordi,scif_SparkssHelmet,
-scif_cosmonaut,scif_cyberpunk,scif_swDarthvader,scif_swStormtrooper,
-war_UNPeacekeeper01,war_UNPeacekeeper02,
-war_airwarden02,war_airwarden03,
-war_americanww2helmet,
-war_britmedic,war_britpthhelmet,war_britsapper,
-war_desertgrenadier1,war_desertgrenadier2,war_desertgrenadier4,war_desertgrenadier5,war_desertmedic,
-war_desertofficer,war_desertsapper1,war_desertsapper2,
-war_frenchww1gasmask,war_frenchww1helmet,
-war_germanww1helmet2,war_germanww1tankhelm,war_germanww2medic,war_germanww2pith,
-war_grenadier1,war_trenchgrenadier1,war_trenchgrenadier2,war_trenchgrenadier3,
-war_plainpith,
-war_sovietcomrade1,war_sovietcomrade2,
-war_trenchfrench01,war_trenchfrench02,]]
-
 local colorArray = 	{
-					--{0xff0000ff, "0xff0000ff", "Red"}, -- look up hw red
+					{0xff0204ff, "0xff0204ff", "Red"},
 					{0xff4980c1, "0xff4980c1", "Blue"},
 					{0xff1de6ba, "0xff1de6ba", "Teal"},
 					{0xffb541ef, "0xffb541ef", "Purple"},
@@ -671,32 +554,10 @@ local colorArray = 	{
 					{0xffffff01, "0xffffff01", "Yellow"}
 					}
 
-local graveArray = 	{
-					"Badger", "Bone", "bp2", "bubble", "Cherry",
-					"chest", "coffin", "deadhog", "dragonball", "Duck2",
-					"Earth", "Egg", "eyecross", "Flower", "Ghost",
-					"Grave", "heart", "money", "mouton1", "octopus",
-					"plant2", "plant3", "Plinko", "pokeball", "pyramid",
-					"ring", "Rip", "Rubberduck", "Simple", "skull",
-					"star", "Status"
-					}
-
-local voiceArray = 	{
-					"British","Classic","Default","Default_es","Default_uk",
-					"HillBilly","Mobster","Pirate","Robot","Russian","Singer",
-					"Surfer"
-					}
-
 local fortArray =	{
 					"Cake", "Castle", "Earth", "EvilChicken", "Flowerhog",
-					"Hydrant", "Lego", "Plane", "Statue", "Tank",
+					"Hydrant", "Lego", "Plane", "Statue", "SteelTower", "Tank",
 					"UFO", "Wood"
-					}
-
--- non-exhaustive list of flags, feel free to choose others
-local flagArray = 	{
-					"cm_binary", "cm_birdy", "cm_earth", "cm_pirate", "cm_star",
-					"cm_hurrah", "cm_hax0r", "cm_balrog", "cm_spider", "cm_eyeofhorus"
 					}
 
 local gameFlagList =	{
@@ -728,104 +589,6 @@ local gameFlagList =	{
 			{"gfMoreWind", false, gfMoreWind},
 			{"gfTagTeam", false, gfTagTeam}
 			}
-
-local themeList = 	{"Art", "Bamboo", "Bath", --[["Blox",]] "Brick", "Cake", "Castle", "Cave", "Cheese",
-		"Christmas", "City", "Compost", --[["CrazyMission", "Deepspace",]] "Desert", "Earthrise",
-		--[["Eyes",]] "Freeway", "Golf", "Halloween", "Hell", --[["HogggyWood",]] "Island", "Jungle", "Nature",
-		"Olympics", "Planes", "Sheep", "Snow", "Stage", "Underwater"
-		}
-
-local mapList = 	{
-		"Bamboo", "BambooPlinko", "Basketball", "Bath", "Blizzard", "Blox", "Bubbleflow",
-		"Battlefield", "Cake", "Castle", "Cave", "Cheese", "Cogs", "Control", "Earthrise",
-		"Eyes", "Hammock", "Hedgelove", "Hedgewars", "Hogville", "Hydrant", "Islands",
-		"Knockball", "Lonely_Island", "Mushrooms", "Octorama", "PirateFlag",
-		"Plane", "Ropes", "Ruler", "Sheep", "ShoppaKing", "Sticks", "Trash", "Tree",
-		"TrophyRace"
-		}
-
---local spriteArray = {
---					{sprBigDigit,			"sprBigDigit",			0}
---					}
-
-local spriteIDArray = {sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
-sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
-sprClusterBomb, sprClusterParticle, sprFlame,
-sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR,
-sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMSlotKeys, sprAMCorners,
-sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
-sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
-sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
-
-sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
-sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton, sprTargetButton,
-
-sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
-sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
-sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
-sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
-sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
-sprHurrah, sprLemonade, sprShrug, sprJuggle, sprExplPart, sprExplPart2,
-sprCakeWalk, sprCakeDown, sprWatermelon,
-sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
-sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
-sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder,
-sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
-sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
-sprShoutCorner, sprShoutEdge, sprShoutTail,
-sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-sprSmoke, sprSmokeWhite, sprShell, sprDust, sprSnowDust, sprExplosives, sprExplosivesRoll,
-sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
-sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
-sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
-sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
-sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
-sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
-sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
-sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun, sprFrozenHog, sprAmRubber, sprBoing}
-
-
-local spriteTextArray = {"sprWater", "sprCloud", "sprBomb", "sprBigDigit", "sprFrame",
-"sprLag", "sprArrow", "sprBazookaShell", "sprTargetP", "sprBee",
-"sprSmokeTrace", "sprRopeHook", "sprExplosion50", "sprMineOff",
-"sprMineOn", "sprMineDead", "sprCase", "sprFAid", "sprDynamite", "sprPower",
-"sprClusterBomb", "sprClusterParticle", "sprFlame", "sprHorizont",
-"sprHorizontL", "sprHorizontR", "sprSky", "sprSkyL", "sprSkyR", "sprAMSlot",
-"sprAMAmmos", "sprAMAmmosBW", "sprAMSlotKeys", "sprAMCorners", "sprFinger",
-"sprAirBomb", "sprAirplane", "sprAmAirplane", "sprAmGirder", "sprHHTelepMask",
- "sprSwitch", "sprParachute", "sprTarget", "sprRopeNode", "sprQuestion",
- "sprPowerBar", "sprWindBar", "sprWindL", "sprWindR", "sprFireButton",
- "sprArrowUp", "sprArrowDown", "sprArrowLeft", "sprArrowRight", "sprJumpWidget",
- "sprAMWidget", "sprPauseButton", "sprTimerButton", "sprTargetButton",
- "sprFlake", "sprHandRope", "sprHandBazooka", "sprHandShotgun",
- "sprHandDEagle", "sprHandAirAttack", "sprHandBaseball", "sprPHammer",
- "sprHandBlowTorch", "sprBlowTorch", "sprTeleport", "sprHHDeath", "sprShotgun",
- "sprDEagle", "sprHHIdle", "sprMortar", "sprTurnsLeft", "sprKamikaze", "sprWhip",
- "sprKowtow", "sprSad", "sprWave", "sprHurrah", "sprLemonade", "sprShrug",
- "sprJuggle", "sprExplPart", "sprExplPart2", "sprCakeWalk", "sprCakeDown",
- "sprWatermelon", "sprEvilTrace", "sprHellishBomb", "sprSeduction", "sprDress",
- "sprCensored", "sprDrill", "sprHandDrill", "sprHandBallgun", "sprBalls", "sprPlane",
- "sprHandPlane", "sprUtility", "sprInvulnerable", "sprVampiric", "sprGirder",
- "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner",
- "sprThoughtEdge", "sprThoughtTail", "sprShoutCorner", "sprShoutEdge",
- "sprShoutTail", "sprSniperRifle", "sprBubbles", "sprJetpack", "sprHealth",
- "sprHandMolotov", "sprMolotov", "sprSmoke", "sprSmokeWhite", "sprShell", "sprDust",
- "sprSnowDust", "sprExplosives", "sprExplosivesRoll", "sprAmTeleport", "sprSplash",
- "sprDroplet", "sprBirdy", "sprHandCake", "sprHandConstruction", "sprHandGrenade",
- "sprHandMelon", "sprHandMortar", "sprHandSkip", "sprHandCluster", "sprHandDynamite",
- "sprHandHellish", "sprHandMine", "sprHandSeduction", "sprHandVamp", "sprBigExplosion",
- "sprSmokeRing", "sprBeeTrace", "sprEgg", "sprTargetBee", "sprHandBee", "sprFeather",
- "sprPiano", "sprHandSineGun", "sprPortalGun", "sprPortal", "sprCheese", "sprHandCheese",
- "sprHandFlamethrower", "sprChunk", "sprNote", "sprSMineOff", "sprSMineOn", "sprHandSMine",
- "sprHammer", "sprHandResurrector", "sprCross", "sprAirDrill", "sprNapalmBomb", "sprBulletHit",
- "sprSnowball", "sprHandSnowball", "sprSnow", "sprSDFlake", "sprSDWater", "sprSDCloud",
- "sprSDSplash", "sprSDDroplet", "sprTardis", "sprSlider", "sprBotlevels", "sprHandKnife",
- "sprKnife", "sprStar", "sprIceTexture", "sprIceGun", "sprFrozenHog", "sprAmRubber", "sprBoing"}
 
  local reducedSpriteIDArray = {
   sprAmRubber, sprAmGirder, sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMCorners, sprHHTelepMask, sprTurnsLeft,
@@ -895,7 +658,6 @@ local CGR = 1 -- current girder rotation, we actually need this as HW remembers 
 local placedX = {} -- x coord of placed object
 local placedY = {} -- y coord of placed object
 local placedSpec = {} -- this is different depending on what was placed, for mines it is their time, for crates it is their content, (for girders/rubbers it used to be their rotation, and for sprites, their name, but this has been moved to different variables to allow more complex / smooth editing)
---local placedSuperSpec = {} -- used to be used by girders/rubbers/sprites for their landFlag
 local placedType = {} -- what kind of object was placed: mine, crate, girder, rubber, barrel, etc.
 
 local placedTint = {} -- only girders/rubbers/sprites use this, it is their tint / colouration
@@ -911,22 +673,6 @@ local sGear = nil
 local closestDist
 local closestGear = nil
 local closestSpriteID = nil
-
-------------------------
--- menu shite (more or less unused currently)
-------------------------
---local menuEnabled = false
---local menuIndex = 1
---local menu = {}
---local subMenu = {}
---local sMI = 1 -- sub menu index
---local preMenuCfg
---local postMenuCfg
---local initMenu	=	{
---					{"Selected Menu",	"Initialisation Menu"},
---					{"List of Gameflags",	""},
---					{"List of Gameflags",	""}
---					}
 
 ------------------------
 -- SOME GENERAL METHODS
@@ -969,19 +715,6 @@ end
 -- you know you could probably add multiple layers to this to get more points
 -- after the first set is expended have the last 1 be 127
 -- and then increment some other counter so like
-
--- bobCounter = 1
--- specialPoint(5)
--- specialPoint(127)
--- specialPoint(5)
-
--- if BobCounter = 1 then
--- 		if specialPointsFlag == 5 then createMine
---		if specialPointFlag == 127 then bobCounter = 2
--- elseif bobCounter == 2 then
--- 		if specialPointsFlag == 5 then createExlosives
--- end
---
 
 -- this function interprets special points that have been embedded into an HWPMAP
 function InterpretPoints()
@@ -1059,24 +792,6 @@ function InterpretPoints()
 		--89,88,87,86 and 85,84,83,82 (reserved for the 2 custom sprites and their landflags)
 
 		--90-99 reserved for scripted structures
-		--[[elseif specialPointsFlag[i] == 90 then
-			--PlaceStruc("generator")
-		elseif specialPointsFlag[i] == 91 then
-			--PlaceStruc("healingstation")
-		elseif specialPointsFlag[i] == 92 then
-			--PlaceStruc("respawner")
-		elseif specialPointsFlag[i] == 93 then
-			--PlaceStruc("teleportationnode")
-		elseif specialPointsFlag[i] == 94 then
-			--PlaceStruc("biofilter")
-		elseif specialPointsFlag[i] == 95 then
-			--PlaceStruc("supportstation")
-		elseif specialPointsFlag[i] == 96 then
-			--PlaceStruc("constructionstation")
-		elseif specialPointsFlag[i] == 97 then
-			--PlaceStruc("reflectorshield")
-		elseif specialPointsFlag[i] == 98 then
-			--PlaceStruc("weaponfilter")]]
 
 		elseif specialPointsFlag[i] == 98 then
 			portalDistance = div(specialPointsX[i],5)
@@ -1155,128 +870,6 @@ function InterpretPoints()
 
 end
 
-----------------------------
--- just fucking around
-----------------------------
--- ancient stuff that no longer has any relevance
---[[
-function BoostVeloctiy(gear)
-
-	if (GetGearType(gear) == gtSMine) or
-		(GetGearType(gear) == gtMine) or
-		(GetGearType(gear) == gtHedgehog) then
-
-			dx,dy = GetGearVelocity(gear)
-			SetGearVelocity(gear,dx*1.5,dy*1.5)
-		end
-
-end
-
--- use this stuff when you want to get some idea of land and/or blow up /everything/
-function CheckGrenades(gear)
-
-	if GetGearType(gear) == gtGrenade then
-		dx, dy = GetGearVelocity(gear)
-		if (dy == 0) then
-
-		else
-			DeleteGear(gear)
-		end
-	end
-
-end
-
-function BlowShitUpPartTwo()
-
-	destroyMap = false
-	runOnGears(CheckGrenades)
-
-end
-
-function BlowShitUp()
-
-	destroyMap = true
-
-	mapWidth = 4096
-	mapHeight = 2048
-	blockSize = 50
-
-	mY = 0
-
-	while (mY < WaterLine) do
-
-		mX = 0
-		mY = mY + 1*blockSize
-		while (mX < mapWidth) do
-
-			mX = mX + (1*blockSize)
-			gear = AddGear(mX, mY, gtGrenade, 0, 0, 0, 5000)
-			SetState(gear, bor(GetState(gear),gstInvisible) )
-
-		end
-
-	end
-
-end]]
-
-
--- you know, using this it might be possible to have a self destructing track,
--- or a moving one.
--- edit: this was from the gold old days before it was possible to erase sprites)
---[[function BoomGirder(x,y,rot)
-	girTime = 1
-	if rot < 4 then
-				AddGear(x, y, gtGrenade, 0, 0, 0, girTime)
-	elseif rot == 4 then
-				g = AddGear(x-45, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-				g = AddGear(x-30, y, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-				g = AddGear(x+30, y, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x+45, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-	elseif rot == 5 then ------- diag
-				g = AddGear(x+45, y+45, gtGrenade, 0, 0, 0, girTime) --n
-				g = AddGear(x+30, y+30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-				g = AddGear(x-30, y-30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x-45, y-45, gtGrenade, 0, 0, 0, girTime) --n
-	elseif rot == 6 then
-				g = AddGear(x, y-45, gtGrenade, 0, 0, 0, girTime) -- needed?
-				g = AddGear(x, y+30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-				g = AddGear(x, y-30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x, y+45, gtGrenade, 0, 0, 0, girTime) -- needed?
-	elseif rot == 7 then -------
-				g = AddGear(x+45, y-45, gtGrenade, 0, 0, 0, girTime) --n
-				g = AddGear(x+30, y-30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-				g = AddGear(x-30, y+30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x-45, y+45, gtGrenade, 0, 0, 0, girTime) --n
-	end
-end]]
-
---[[function SpecialGirderPlacement(x,y,rot)
-
-	PlaceGirder(x, y, rot)
-	girTime = 10000
-
-	if rot < 4 then
-				AddGear(x, y, gtGrenade, 0, 0, 0, girTime)
-	elseif rot == 4 then
-				g = AddGear(x-30, y, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x+30, y, gtGrenade, 0, 0, 0, girTime)
-	elseif rot == 5 then -------
-				g = AddGear(x+30, y+30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x-30, y-30, gtGrenade, 0, 0, 0, girTime)
-	elseif rot == 6 then
-				g = AddGear(x, y+30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x, y-30, gtGrenade, 0, 0, 0, girTime)
-	elseif rot == 7 then -------
-				g = AddGear(x+30, y-30, gtGrenade, 0, 0, 0, girTime)
-				g = AddGear(x-30, y+30, gtGrenade, 0, 0, 0, girTime)
-	end
-
-end]]
-
 --shoppabalance crap
 function AddShoppaPoint(x,y,c)
 	table.insert(shoppaPX, x)
@@ -1305,7 +898,6 @@ end
 function GetClosestGear()
 	closestDist = 999999999
 	closestGear = nil
-	--sGear = nil
 	runOnGears(SelectGear)
 	return(closestGear)
 end
@@ -1371,7 +963,6 @@ function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 		placedType[placedCount] = loc("Sprite Placement Mode")
 	end
 
-	--placedLandFlags[placedCount] = pLandFlags
 	if pLandFlags == lfIce then
 		placedLandFlags[placedCount] = "lfIce"
 	elseif pLandFlags == lfIndestructible then
@@ -1381,8 +972,6 @@ function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 	else
 		placedLandFlags[placedCount] = "lfNormal"
 	end
-
-	--placedSuperSpec[placedCount] = nil
 
 	placedTint[placedCount] = pTint
 	placedFrame[placedCount] = pFrame
@@ -1459,7 +1048,6 @@ function EraseClosestSprite()
 		placedX[closestSpriteID] = nil
 		placedY[closestSpriteID] = nil
 		placedSpec[closestSpriteID] = nil
-		--placedSuperSpec[closestSpriteID] = nil
 		placedType[closestSpriteID] = nil
 		placedTint[closestSpriteID] = nil
 		placedSprite[closestSpriteID] = nil
@@ -1485,8 +1073,6 @@ function EraseClosestWaypoint()
 					closestDist = d
 					closestSpriteID = i
 
-					--newTint = placedTint[i]
-
 					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
 
 				end
@@ -1498,7 +1084,6 @@ function EraseClosestWaypoint()
 		placedX[closestSpriteID] = nil
 		placedY[closestSpriteID] = nil
 		placedSpec[closestSpriteID] = nil
-		--placedSuperSpec[closestSpriteID] = nil
 		placedType[closestSpriteID] = nil
 		placedTint[closestSpriteID] = nil
 		placedSprite[closestSpriteID] = nil
@@ -1518,7 +1103,6 @@ function PlaceObject(x,y)
 	placedY[placedCount] = y
 	placedType[placedCount] = cat[cIndex]
 	placedSpec[placedCount] = pMode[pIndex]
-	--placedSuperSpec[placedCount] = nil
 	placedTint[placedCount] = nil
 	placedFrame[placedCount] = nil
 	placedLandFlags[placedCount] = nil
@@ -1550,7 +1134,6 @@ function PlaceObject(x,y)
 			placedFrame[placedCount] = CGR
 			placedSprite[placedCount] = sprAmRubber
 
-			--CallPlaceSprite(placedCount)
 			--new ermagerd
 			placedLandFlags[placedCount] = "lfBouncy"
 			placedTint[placedCount] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
@@ -1656,10 +1239,6 @@ function PlaceObject(x,y)
 		SelectClosestSprite()
 
 		if closestSpriteID ~= nil then
-			-- we have a sprite selected somewhere
-			--if pMode[pIndex] == "Sprite Selection Mode" then
-				-- sprite is now selected, good job
-			--elseif pMode[pIndex] == "LandFlag Modification Mode" then
 			if pMode[pIndex] == loc("LandFlag Modification Mode") then
 				EraseSprite(placedX[closestSpriteID], placedY[closestSpriteID], placedSprite[closestSpriteID], placedFrame[closestSpriteID], nil, nil, nil, nil, placedLandFlags[closestSpriteID])
 				CallPlaceSprite(closestSpriteID)
@@ -1747,12 +1326,10 @@ function RedefineSubset()
 	if cat[cIndex] == loc("Girder Placement Mode") then
 		pIndex = CGR
 		pMode = {loc("Girder")}
-	--	pCount = 1
 	elseif cat[cIndex] == loc("Rubber Placement Mode") then
 		pIndex = CGR
 		pMode = {loc("Rubber")}
 		landType = lfBouncy -- for now, let's not allow anything else (-- fairly new addition)
-	--	pCount = 1???
 	elseif cat[cIndex] == loc("Target Placement Mode") then
 		pMode = {loc("Standard Target")}
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
@@ -1763,11 +1340,11 @@ function RedefineSubset()
 		pMode = {25,30,40,50,75,100,150,200,5,10,15,20}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		for i = 1, #atkArray do
-			pMode[i] = atkArray[i][4] --pMode[i] = atkArray[i][2]
+			pMode[i] = atkArray[i][4]
 		end
 	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
 		for i = 1, #utilArray do
-			pMode[i] = utilArray[i][4] --pMode[i] = utilArray[i][2]
+			pMode[i] = utilArray[i][4]
 		end
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
 		pMode = {3000,4000,5000,0,1000,2000}
@@ -1793,12 +1370,8 @@ function RedefineSubset()
 			{1, "set"}, {10, "set"}, {15, "set"}, {20, "set"}, {25, "set"}, {30, "set"}, {40, "set"}, {50, "set"}, {75, "set"}, 
 } 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
-		--pMode = {"Sprite Selection Mode","LandFlag Modification Mode","Sprite Erasure Mode"}
 		pMode = {loc("LandFlag Modification Mode"),loc("Sprite Erasure Mode")}
 	elseif cat[cIndex] == loc("Sprite Testing Mode") or cat[cIndex] == loc("Sprite Placement Mode") then
-		--for i = 1, #spriteTextArray do
-		--	pMode[i] = spriteTextArray[i]
-		--end
 		for i = 1, #reducedSpriteTextArray do
 			pMode[i] = reducedSpriteTextArray[i]
 		end
@@ -1831,9 +1404,6 @@ end
 -- generates the AddTeam and AddHog function calls for onGameInit()
 function GetDataForSavingHogs(gear)
 
-	--AddTeam(teamname, color, grave, fort, voicepack, flag)
-	--AddHog(hogname, botlevel, health, hat)
-
 	--this is a quick hack so that the human team(s) will always be
 	--given the first move ahead of the AI
 	local tempDataList = {}
@@ -1864,19 +1434,11 @@ function GetDataForSavingHogs(gear)
 			tColor = colorArray[teamCounter][2]
 		end
 
-
-		-- there is used to be no way to read this data, so
-		-- I was assigning teams a random grave, fort, flag and voice
-		-- but now we should be able to get the real thing
-		-- so let's do it if they haven't used one of the preset teams
 		if getGearValue(gear,"grave") == nil then
 			tFort = fortArray[1+GetRandom(#fortArray)]
 			tGrave = GetHogGrave(gear)
 			tFlag = GetHogFlag(gear)
 			tVoice = GetHogVoicepack(gear)
-			--tGrave = graveArray[1+GetRandom(#graveArray)]
-			--tFlag = flagArray[1+GetRandom(#flagArray)]
-			--tVoice = voiceArray[1+GetRandom(#voiceArray)]
 		else
 			tGrave = getGearValue(gear,"grave")
 			tFort = getGearValue(gear,"fort")
@@ -1891,7 +1453,6 @@ function GetDataForSavingHogs(gear)
 						"	AddTeam(\"" ..
 						GetHogTeamName(gear) .."\"" ..
 						", " .. "\"" ..tColor .. "\"" ..
-						--		--", " .. colorArray[teamCounter][2] ..
 						", " .. "\"" .. tGrave .. "\"" ..
 						", " .. "\"" .. tFort .. "\"" ..
 						", " .. "\"" .. tVoice .. "\"" ..
@@ -2388,7 +1949,6 @@ function SaveLevelData()
 
 	WriteLnToConsole("")
 	WriteLnToConsole("local hhs = {}")
-	--WriteLnToConsole("local ufoGear = nil")
 	WriteLnToConsole("")
 
 	WriteLnToConsole("local wepArray = {")
@@ -2480,7 +2040,7 @@ function SaveLevelData()
 				placedY[i] ..", sprAmGirder, " ..
 				placedFrame[i] ..			-- the rotation/frame
 				", " ..
-				placedTint[i] ..", " .. -- "nil, " .. -- color
+				placedTint[i] ..", " .. -- color
 				"nil, nil, nil, " ..
 				placedLandFlags[i] .. ")" --the landType
 				)
@@ -2497,9 +2057,9 @@ function SaveLevelData()
 				placedY[i] ..", sprAmRubber, " ..
 				placedFrame[i] ..
 				", " ..
-				placedTint[i] ..", " .. -- "nil, " .. -- color
+				placedTint[i] ..", " .. -- color
 				"nil, nil, nil, " ..
-				"lfBouncy)" --placedLandFlags[i] .. ")" --the landType
+				"lfBouncy)" --the landType
 				)
 			table.insert(hFlagList, "	" .. placedX[i] .. " " .. placedY[i] .. " " .. placedHWMapFlag[i])
 			table.insert(previewDataList, "	PreviewRubber(" .. placedX[i] ..", " ..	placedY[i] .. ", " .. placedFrame[i] .. ")")
@@ -2514,7 +2074,7 @@ function SaveLevelData()
 				placedY[i] ..", " .. placedSprite[i] .. ", " ..
 				placedFrame[i] .. -- I think this is the frame, can't remember
 				", " ..
-				placedTint[i] ..", " .. -- "nil, " .. -- color
+				placedTint[i] ..", " .. -- color
 				"nil, nil, nil, " ..
 				placedLandFlags[i] .. ")" --the landType
 				)
@@ -2649,8 +2209,6 @@ function SaveLevelData()
 	WriteLnToConsole("		else ")
 	WriteLnToConsole("			vComment = loc(\"Destroy the red targets\")")
 	WriteLnToConsole("		end")
---	WriteLnToConsole("	else")
---	WriteLnToConsole("		vComment = loc(\"Destroy the enemy.\")")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if collectObj > 0 then ")
@@ -2699,18 +2257,9 @@ function SaveLevelData()
 	WriteLnToConsole("")
 	WriteLnToConsole("function onGearAdd(gear)")
 
-	--WriteLnToConsole("	if GetGearType(gear) == gtJetpack then")
-	--WriteLnToConsole("		ufoGear = gear")
-	--WriteLnToConsole("		if (ufoFuel ~= 0) then")
-	--WriteLnToConsole("			SetHealth(ufoGear, ufoFuel)")
-	--WriteLnToConsole("		end")
-	--WriteLnToConsole("	end")
 
 	WriteLnToConsole("	if isATrackedGear(gear) then")
 	WriteLnToConsole("		trackGear(gear)")
-	--WriteLnToConsole("		if GetGearType(gear) == gtPortal then")
-	--WriteLnToConsole("			setGearValue(gear,\"life\",portalDistance)")
-	--WriteLnToConsole("		end")
 
 	WriteLnToConsole("	end")
 	WriteLnToConsole("end")
@@ -2752,9 +2301,6 @@ function SaveLevelData()
 	WriteLnToConsole("function onGearDelete(gear)")
 	WriteLnToConsole("")
 	WriteLnToConsole("	--insert code according to taste")
-	--WriteLnToConsole("	if GetGearType(gear) == gtJetpack then")
-	--WriteLnToConsole("		ufoGear = nil")
-	--WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if isATrackedGear(gear) then")
 	WriteLnToConsole("")
@@ -2762,11 +2308,6 @@ function SaveLevelData()
 	WriteLnToConsole("			CheckForConclusion(gear)")
 	WriteLnToConsole("		end")
 
-	--WriteLnToConsole("		if getGearValue(gear,\"tag\") == \"failure\" then")
-	--WriteLnToConsole("			EndGameIn(\"failure\")")
-	--WriteLnToConsole("		elseif getGearValue(gear,\"tag\") == \"victory\" then")
-	--WriteLnToConsole("			EndGameIn(\"victory\")")
-	--WriteLnToConsole("		end")
 	WriteLnToConsole("")
 	WriteLnToConsole("		if getGearValue(gear, \"tCirc\") ~= nil then")
 	WriteLnToConsole("			DeleteVisualGear(getGearValue(gear, \"tCirc\"))")
@@ -2788,9 +2329,6 @@ function SaveLevelData()
 	WriteLnToConsole("		SetAmmo(wepArray[i], 0, 0, 0, 1)")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
-	--WriteLnToConsole("	SetAmmo(amBazooka, 2, 0, 0, 0)")
-	--WriteLnToConsole("	SetAmmo(amGrenade, 1, 0, 0, 0)")
-	--WriteLnToConsole("	SetAmmo(amRope, 9, 0, 0, 0)")
 	WriteLnToConsole("	SetAmmo(amSkip, 9, 0, 0, 0)")
 	WriteLnToConsole("")
 	WriteLnToConsole("end")
@@ -2933,7 +2471,6 @@ function updateHelp()
 				loc("Save Level: Precise+4") .. "|" ..
 				loc("Toggle Editing Weapons and Tools: Precise+2") .. "|" ..
 				" " .. "|" ..
-				--" " .. "|" ..
 				"", 4, 5000
 				)
 						--4
@@ -2963,11 +2500,7 @@ function updateHelp()
 				loc("Use this mode to place rubberbands"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Rotation: [Left], [Right]") .. "|" ..
-				--"Change LandFlag: [1], [2], [3]" .. "|" ..
-				--" " .. "|" ..
 				loc("1 - Normal Rubber") .. "|" ..
-				--"2 - Indestructible Rubber" .. "|" ..
-				--"3 - Icy Rubber" .. "|" ..
 				" " .. "|" ..
 				loc("Deletion Mode: [5]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -3133,7 +2666,6 @@ function updateHelp()
 				"Use this mode to select, modify, or delete existing girders," .. "|" ..
 				"rubbers, or sprites." .. "|" ..
 				"[Left], [Right]: Change between land-flag" .. "|" ..
-				--"[Left], [Right]: Change between selection, land-flag" .. "|" ..
 				"modification, and deletion modes." .. "|" ..
 				"While in modification mode, you can " .. "|" ..
 				"change land-flag by clicking on an object." .. "|" ..
@@ -3166,19 +2698,6 @@ function updateHelp()
 				loc("Toggle Help: Precise+1") .. "|" ..
 				"", 2, 60000
 				)
-
-	--elseif cat[cIndex] == loc("Sprite Testing Mode") then
-
-	--	ShowMission	(
-	--			"SPRITE TESTING MODE",
-	--			"Use this mode to test sprites before you place them.",
-	--			"Place Temporary Visual Test: [Left Click]" .. "|" ..
-	--			"[Left], [Right]: Change between sprites." .. "|" ..
-	--			" " .. "|" ..
-	--			loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-	--			loc("Toggle Help: Precise+1") .. "|" ..
-	--			"", 3, 60000
-	--			)
 
 	elseif cat[cIndex] == loc("Tagging Mode") then
 
@@ -3336,10 +2855,6 @@ function HandleHedgeEditor()
 
 			genTimer = 0
 
-			--if destroyMap == true then
-			--	BlowShitUpPartTwo()
-			--end
-
 			curWep = GetCurAmmoType()
 
 			HandleRankingEffects()
@@ -3358,12 +2873,9 @@ function HandleHedgeEditor()
 			elseif (cIndex == 1) and (curWep ~= amGirder) then
 				cIndex = 3 -- was 2
 				RedefineSubset()
-				--updateHelp()
 			elseif (cIndex == 2) and (curWep ~= amRubber) then
 				cIndex = 3 --new
 				RedefineSubset()
-				--updateHelp()
-
 			end
 
 			-- update display selection criteria
@@ -3406,8 +2918,6 @@ function HandleHedgeEditor()
 		SetVisualGearValues(sSprite, nil, nil, 0, 0, nil, nil, 10000, nil, 10000)
 	elseif (cat[cIndex] == loc("Tagging Mode")) then
 		if (sGear ~= nil) or (closestGear ~= nil) then
-			--recently disabled
-			--SetVisualGearValues(sCirc, GetX(sGear), GetY(sGear), 0, 1, 1, 10, 0, 1, 1, 0x00000000)
 			closestGear = nil
 			sGear = nil
 		end
@@ -3430,32 +2940,7 @@ function HandleHedgeEditor()
 			CGR = GetState(cGear)
 
 			-- improve rectangle test based on CGR when you can be bothered
-			--if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-			--	AddCaption(loc("Invalid Girder Placement"),0xffba00ff,capgrpVolume)
-			--else
-				PlaceObject(x, y)
-			--end
-
-			-- this allows the girder tool to be used like a mining laser
-
-		--[[
-
-			if CGR < 4 then
-				AddGear(x, y, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 4 then
-				g = AddGear(x-30, y, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x+30, y, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 5 then -------
-				g = AddGear(x+30, y+30, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x-30, y-30, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 6 then
-				g = AddGear(x, y+30, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x, y-30, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 7 then -------
-				g = AddGear(x+30, y-30, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x-30, y+30, gtGrenade, 0, 0, 0, 1)
-			end
-]]
+			PlaceObject(x, y)
 		end
 
 	end
@@ -3507,14 +2992,11 @@ function onTimer(s)
 		elseif s == 3 then
 			landType = lfIce
 			AddCaption(loc("Icy Land"),0xffba00ff,capgrpAmmoinfo)
-		elseif (s == 4) then --and (cat[cIndex] == "Sprite Placement Mode") then
+		elseif (s == 4) then
 			landType = lfBouncy
 			AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
 		elseif (s == 5) and (cat[cIndex] ~= loc("Sprite Modification Mode")) then
 			superDelete = true
-			-- this and the above should probably be shown in another place where the other
-			-- two add captions are displayed for this kinda thing
-			--AddCaption(loc("Warning: Deletition Mode Active"),0xffba00ff,capgrpAmmoinfo)
 		end
 	elseif pMode[pIndex] == loc("Selection Mode") then
 		setGearValue(sGear, "ranking", s)
@@ -3526,117 +3008,11 @@ function onPrecise()
 
 	preciseOn = true
 
-	--ParseCommand("voicepack " .. "Surfer")
-	--AddCaption(GetHogGrave(CurrentHedgehog))
-
-	--if (pMode[pIndex] == "Selection Mode") and (closestGear ~= nil) then
-	--	menuEnabled = not(menuEnabled)
-		--showmenu
-	--end
-
-	--BlowShitUp()
-
---[[
-	frameID = 1
-	visualSprite = sprAmGirder--reducedSpriteIDArray[pIndex]
-	--visualSprite = spriteIDArray[pIndex]
-	tempE = AddVisualGear(1, 1, vgtStraightShot, 0, true,1)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-	SetVisualGearValues(tempE, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
-
-]]
-
 end
 
 function onPreciseUp()
 	preciseOn = false
 end
-
---[[function onLJump()
-end
-
-function onHJump()
-end]]
-
---[[function UpdateMenu()
-
-	preMenuCfg = loc("Use the arrow keys to navigate this menu") .. "|"
-	postMenuCfg = loc("Press [Fire] to accept this configuration.")
-
-	menu = 	{
-			loc("Walls Required") .. ": " .. #wTouched .. "|",
-			loc("Surf Before Crate") .. ": " .. BoolToCfgTxt(requireSurfer) .. "|",
-			loc("Attack From Rope") .. ": " .. BoolToCfgTxt(AFR) .. "|",
-			loc("Super Weapons") .. ": " .. BoolToCfgTxt(allowCrazyWeps) .. "|"
-			}
-end
-
-function HandleStartingStage()
-
-	temp = menu[menuIndex]
-	menu[menuIndex] = "--> " .. menu[menuIndex]
-
-	missionComment = ""
-	for i = 1, #menu do
-		missionComment = missionComment .. menu[i]
-	end
-
-	ShowMission	(
-				loc("HEDGE EDITOR") .. " 0.4",
-				loc("Edit gear properties"),
-				preMenuCfg..
-				missionComment ..
-				postMenuCfg ..
-				--" " .. "|" ..
-				"", 4, 300000
-				)
-
-	menu[menuIndex] = temp
-
-end
-
-function UpdateMenuCategoryOrSomething()
-	temp = menu[1]
-	menu = {}
-	if temp == "Initialisation Menu" then
-		for i = 1, #initMenuArray do
-			menu[i] = initMenuArray[i] .. ": " .. initMenuArray[2]
-		end
-	elseif temp == "GameFlag Menu" then
-		for i = 1, #gameFlagList do
-			menu[i] = gameFlagList[1] .. ": " .. BoolToStr(gameFlagList[2])
-		end
-	elseif temp == "Ammo Menu" then
-		for i  = 1, #atkArray do	--except, this should be per hog, not overall :(
-			--menu[i] = atkArray[i][2] .. ": " .. atkArray[i][3]
-			menu[i] = atkArray[i][2] .. ": " .. getGearValue(sGear,atkArray[i][1])
-		end
-		-- you should run through all the hogs and assign them ammo values based on the
-		-- ammo set, yea, let's write that function in 5th
-		for i = #menu, #utilArray do
-		end
-	end
-end
-
-function doMenuShit(d)
-
-	if d == "up" then
-		menuIndex = menuIndex -1
-		if 	menuIndex == 0 then
-			menuIndex = #menu
-		end
-	elseif d == "down" then
-		menuIndex = menuIndex +1
-		if menuIndex > #menu then
-			menuIndex = 1
-		end
-	elseif d == "left" then
-
-	elseif d == "right" then
-
-	end
-
-end]]
 
 ---------------------------------------------------------------
 -- Cycle through selection subsets (by changing pIndex, pMode)
@@ -3649,21 +3025,14 @@ function onLeft()
 	leftHeld = true
 	rightHeld = false
 
-	--if menuEnabled == true then
-		--doMenuShit("left")
+	pIndex = pIndex - 1
+	if pIndex == 0 then
+		pIndex = #pMode
+	end
 
-	--else -- normal case
-
-		pIndex = pIndex - 1
-		if pIndex == 0 then
-			pIndex = #pMode
-		end
-
-		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
-		end
-
-	--end
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+		AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+	end
 
 end
 
@@ -3672,21 +3041,14 @@ function onRight()
 	leftHeld = false
 	rightHeld = true
 
-	--if menuEnabled == true then
-		--doMenuShit("right")
+	pIndex = pIndex + 1
+	if pIndex > #pMode then
+		pIndex = 1
+	end
 
-	--else -- normal case
-
-		pIndex = pIndex + 1
-		if pIndex > #pMode then
-			pIndex = 1
-		end
-
-		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
-		end
-
-	--end
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+		AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+	end
 
 end
 
@@ -3697,12 +3059,7 @@ end
 ---------------------------------------------------------
 function onUp()
 
-	--if menuEnabled == true then
-		--doMenuShit("up")
-
-	--elseif (curWep ~= amGirder) then
 	if (curWep ~= amGirder) then
-		--AddCaption(cIndex)
 		cIndex = cIndex - 1
 		if (cIndex == 1) or (cIndex == 2) then --1	--we no longer hit girder by normal means
 			cIndex = #cat
@@ -3717,10 +3074,6 @@ end
 
 function onDown()
 
-	--if menuEnabled == true then
-		--doMenuShit("down")
-
-	--elseif (curWep ~= amGirder) then
 	if (curWep ~= amGirder) then
 		cIndex = cIndex + 1
 		if cIndex > #cat then
@@ -3789,7 +3142,6 @@ function onGameInit()
 	Explosives = 0
 	MinesNum = 0
 
-	--GameFlags = GameFlags + gfInfAttack
 	EnableGameFlags(gfInfAttack, gfDisableWind)
 
 	RedefineSubset()
@@ -3817,7 +3169,6 @@ function onGameStart()
 				loc("Save Level: Precise+4") .. "|" ..
 				loc("Toggle Editing Weapons and Tools: Precise+2") .. "|" ..
 				" " .. "|" ..
-				--" " .. "|" ..
 				"", 4, 5000
 				)
 
@@ -3834,9 +3185,6 @@ function onGameStart()
 	SetAmmoDelay(amAirAttack,0)
 	SetAmmoDelay(amGirder,0)
 	SetAmmoDelay(amRubber,0)
-	--SetAmmoDelay(amNapalm,0)
-	--SetAmmoDelay(amDrillStrike,0)
-	--SetAmmoDelay(amMineStrike,0)
 
 end
 
@@ -3845,12 +3193,9 @@ function SetEditingWeps(ammoCount)
 	AddAmmo(CurrentHedgehog, amAirAttack, ammoCount)
 	AddAmmo(CurrentHedgehog, amGirder, ammoCount)
 	AddAmmo(CurrentHedgehog, amRubber, ammoCount)
-	--AddAmmo(CurrentHedgehog, amPortalGun, ammoCount)
 	AddAmmo(CurrentHedgehog, amTeleport, ammoCount)
 	AddAmmo(CurrentHedgehog, amRope, ammoCount)
-	--AddAmmo(CurrentHedgehog, amJetpack, ammoCount)
-	--AddAmmo(CurrentHedgehog, amParachute, ammoCount)
-	AddAmmo(CurrentHedgehog, amSwitch, 100) --ammoCount
+	AddAmmo(CurrentHedgehog, amSwitch, 100)
 	AddAmmo(CurrentHedgehog, amSkip, 100)
 
 end
@@ -3879,7 +3224,6 @@ function SetTeamIdentity(gear)
 		table.insert(nArr,preMadeTeam[pIndex][3][i])
 	end
 	SetHogTeamName(gear, tName)
-	--runOnHogsInTeam(AssignTeam(gear),tName)
 	runOnHogs(AssignTeam)
 end
 
@@ -3962,8 +3306,7 @@ function SetHogProfile(gear, pro)
 	elseif pro == loc("Soldier") then
 
 		SetHogName(gear,loc("Soldier"))
-		--SetHogHat(gear, "war_americanww2helmet")
-		SetHogHat(gear, "TeamSoldier")
+		SetHogHat(gear, "war_americanww2helmet")
 		SetHealth(gear, 100)
 		AddAmmo(gear, amBazooka, 100)
 		AddAmmo(gear, amShotgun, 100)
@@ -3986,7 +3329,6 @@ function SetHogProfile(gear, pro)
 		AddAmmo(gear, amGasBomb, 100)
 		AddAmmo(gear, amKnife, 100)
 		AddAmmo(gear, amCake, 1)
-		--AddAmmo(gear, amWatermelon, 1)
 
 	elseif pro == loc("Ninja") then
 
@@ -4059,7 +3401,6 @@ function SetHogProfile(gear, pro)
 		AddAmmo(gear, amGasBomb, 100)
 		AddAmmo(gear, amBallgun, 1)
 		AddAmmo(gear, amKamikaze, 1)
-		--AddAmmo(gear, amPiano, 1)
 
 	-- some other ideas/roles
 	-- relocator: portal, teleport, tardis, extra time, lasersite
@@ -4121,9 +3462,7 @@ function onGearAdd(gear)
 		end
 	end
 
-	if GetGearType(gear) == gtHedgehog then
-		--table.insert(hhs, gear)
-	elseif (GetGearType(gear) == gtAirAttack) or (GetGearType(gear) == gtGirder) then
+	if (GetGearType(gear) == gtAirAttack) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
 	end
 
