@@ -459,7 +459,7 @@ local preMadeTeam = 	{
 				},
 
 				{
-				"Pokemon",
+				"Pokémon",
 				{"poke_ash","poke_charmander","poke_chikorita","poke_jigglypuff","poke_lugia","poke_mudkip","poke_pikachu","poke_slowpoke","poke_squirtle","poke_voltorb"},
 				{"Ash","Charmander","Chikorita","Jigglypuff","Lugia","Mudkip","Pikachu","Slowpoke","Squirtle","Voltorb"},
 				"FR","cm_pokemon","Default","pokeball","Castle"
@@ -529,11 +529,6 @@ local preMadeTeam = 	{
 				{"Brigadier Briggs","Lt. Luke","Sgt. Smith","Corporal Calvin","Frank","Joe","Sam","Donald"},
 				"F","cm_birdy","Default","Grave","Castle"
 				},
-
-				-- don't forget new additions need to be added to:
-				--pMode = {"Clowns","Street Fighters","Cybernetic Empire","Color Squad","Fruit","The Police","The Ninja-Samurai Alliance","Pokemon","The Zoo","The Devs","The Hospital"}
-				-- but maybe we can just get the size of this array and automatically generate a list instead
-
 
 				{
 				"The Hospital",
@@ -1388,7 +1383,7 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
 		pMode = {loc("Soldier"),loc("Grenadier"),loc("Sniper"),loc("Pyro"),loc("Ninja"),loc("Commander"),loc("Chef"),loc("Engineer"),loc("Physicist"),loc("Trapper"),loc("Saint"),loc("Clown")}
 	elseif cat[cIndex] == loc("Team Identity Mode") then
-		pMode = {"Clowns","Street Fighters","Cybernetic Empire","Color Squad","Fruit","The Police","The Ninja-Samurai Alliance","Pokemon","The Zoo","The Devs","Mushroom Kingdom","Pirates","Gangsters","Twenty-Twenty","Monsters","The Iron Curtain","The Hospital"}
+		pMode = {loc("Clowns"),loc("Street Fighters"),loc("Cybernetic Empire"),loc("Color Squad"),loc("Fruit"),loc("The Police"),loc("The Ninja-Samurai Alliance"),loc("Pokémon"),loc("The Zoo"),loc("The Devs"),loc("Mushroom Kingdom"),loc("Pirates"),loc("Gangsters"),loc("Twenty-Twenty"),loc("Monsters"),loc("The Iron Curtain"),loc("Desert Storm"),loc("The Hospital")}
 	elseif cat[cIndex] == loc("Health Modification Mode") then
 		pMode = { {100, "set"}, {125, "set"}, {150, "set"}, {200, "set"}, {300, "set"}, {1000, "set"},
 			{"-100", "mod"}, {"-10", "mod"}, {"-1", "mod"}, {"+1", "mod"}, {"+10", "mod"}, {"+100", "mod"},
@@ -3377,7 +3372,7 @@ function SetHogProfile(gear, pro)
 
 	if pro == loc("Sniper") then
 
-		SetHogName(gear,"Sniper")
+		SetHogName(gear,loc("Sniper"))
 		SetHogHat(gear, "Sniper")
 		SetHealth(gear, 50)
 		AddAmmo(gear, amSniperRifle, 100)
