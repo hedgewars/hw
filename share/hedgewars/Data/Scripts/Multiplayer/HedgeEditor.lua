@@ -1400,6 +1400,7 @@ function RedefineSubset()
 		for i = 1, #reducedSpriteTextArray do
 			pMode[i] = reducedSpriteTextArray[i]
 		end
+		sFrame = 0
 	elseif cat[cIndex] == loc("Waypoint Editing Mode") then
 		pMode = {loc("Place Waypoint"), loc("Delete Waypoint")}
 	end
@@ -3107,7 +3108,9 @@ function onLeft()
 		if pIndex == 0 then
 			pIndex = #pMode
 		end
-		sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+		if cat[cIndex] == loc("Sprite Placement Mode") then
+			sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+		end
 
 		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
 			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
@@ -3133,7 +3136,9 @@ function onRight()
 		if pIndex > #pMode then
 			pIndex = 1
 		end
-		sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+		if cat[cIndex] == loc("Sprite Placement Mode") then
+			sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+		end
 	
 		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
 			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
