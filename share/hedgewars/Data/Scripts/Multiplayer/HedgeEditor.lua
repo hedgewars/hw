@@ -1768,9 +1768,9 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
 		pMode = {loc("Standard Cleaver")}
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
-		pMode = {1,50,60,75,100,120}
+		pMode = {60,80,100,120,160,200,240,1,10,20,30,40,50}
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
-		pMode = {25,50,75,100}
+		pMode = {25,30,40,50,75,100,150,200,5,10,15,20}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		for i = 1, #atkArray do
 			pMode[i] = atkArray[i][4] --pMode[i] = atkArray[i][2]
@@ -1780,12 +1780,12 @@ function RedefineSubset()
 			pMode[i] = utilArray[i][4] --pMode[i] = utilArray[i][2]
 		end
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
-		pMode = {1,1000,2000,3000,4000,5000,0}
+		pMode = {3000,4000,5000,0,1000,2000}
 		-- 0 is dud right, or is that nil?
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
-		pMode = {500,750,1000,1250,1500,2000,3000,0,250}
+		pMode = {500,1000,1500,2000,2500,0}
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
-		pMode = {1,1000,2000,3000,4000,5000,0}
+		pMode = {750,1000,1250,0,250,500}
 	elseif cat[cIndex] == loc("Advanced Repositioning Mode") then
 		pMode = {loc("Selection Mode"),loc("Placement Mode"), loc("Deletion Mode")}
 	elseif cat[cIndex] == loc("Tagging Mode") then
@@ -1795,8 +1795,10 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Team Identity Mode") then
 		pMode = {"Clowns","Street Fighters","Cybernetic Empire","Color Squad","Fruit","The Police","The Ninja-Samurai Alliance","Pokemon","The Zoo","The Devs","Mushroom Kingdom","Pirates","Gangsters","Twenty-Twenty","Monsters","The Iron Curtain","The Hospital"}
 	elseif cat[cIndex] == loc("Health Modification Mode") then
-		pMode = { {1, "set"}, {25, "set"}, {30, "set"}, {50, "set"}, {75, "set"}, {100, "set"}, {120, "set"}, {150, "set"}, {200, "set"}, {1000, "set"},
-			{"+1", "mod"}, {"+10", "mod"}, {"+100", "mod"}, {"-1", "mod"}, {"-10", "mod"}, {"-100", "mod"} } 
+		pMode = { {100, "set"}, {125, "set"}, {150, "set"}, {200, "set"}, {300, "set"}, {1000, "set"},
+			{"-100", "mod"}, {"-10", "mod"}, {"-1", "mod"}, {"+1", "mod"}, {"+10", "mod"}, {"+100", "mod"},
+			{1, "set"}, {10, "set"}, {15, "set"}, {20, "set"}, {25, "set"}, {30, "set"}, {40, "set"}, {50, "set"}, {75, "set"}, 
+} 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
 		--pMode = {"Sprite Selection Mode","LandFlag Modification Mode","Sprite Erasure Mode"}
 		pMode = {loc("LandFlag Modification Mode"),loc("Sprite Erasure Mode")}
