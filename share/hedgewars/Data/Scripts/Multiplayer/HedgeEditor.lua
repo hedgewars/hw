@@ -169,7 +169,7 @@
 							"Sprite Testing Mode",
 							"Sprite Modification Mode",
 							"Sprite Placement Mode",
-							"Waypoint Placement Mode"
+							"Waypoint Mode"
 							}]]
 
 -- [low]	improve support for ShoppaBalance and ConstructionMode, see ranking)
@@ -644,7 +644,7 @@ local cat = 	{
 				--loc("Sprite Testing Mode"),
 				loc("Sprite Placement Mode"),
 				loc("Sprite Modification Mode"),
-				loc("Waypoint Placement Mode")
+				loc("Waypoint Mode")
 				}
 
 
@@ -917,7 +917,7 @@ function PlaceWaypoint(x,y)
 
 	placedX[placedCount] = x
 	placedY[placedCount] = y
-	placedType[placedCount] = loc("Waypoint Placement Mode")
+	placedType[placedCount] = loc("Waypoint Mode")
 	placedLandFlags[placedCount] = nil -- use this to specify waypoint type maybe
 	placedHWMapFlag[placedCount] = 0
 
@@ -1065,7 +1065,7 @@ function EraseClosestWaypoint()
 	closestSpriteID = nil -- just in case
 
 	for i = 0, (placedCount-1) do
-		if (placedType[i] == loc("Waypoint Placement Mode")) then
+		if (placedType[i] == loc("Waypoint Mode")) then
 				q = placedX[i] - placedX[placedCount]
 				w = placedY[i] - placedY[placedCount]
 				d = ( (q*q) + (w*w) )
@@ -1297,10 +1297,10 @@ function PlaceObject(x,y)
 			EraseClosestSprite()
 		end
 
-	elseif cat[cIndex] == loc("Waypoint Placement Mode") then
+	elseif cat[cIndex] == loc("Waypoint Mode") then
 
 
-		if pMode[pIndex] == loc("Waypoint Deletion Mode") then
+		if pMode[pIndex] == loc("Delete Waypoint") then
 			EraseClosestWaypoint()
 		else
 			PlaceWaypoint(x,y)
@@ -1375,8 +1375,8 @@ function RedefineSubset()
 		for i = 1, #reducedSpriteTextArray do
 			pMode[i] = reducedSpriteTextArray[i]
 		end
-	elseif cat[cIndex] == loc("Waypoint Placement Mode") then
-		pMode = {loc("Standard Waypoint"), loc("Waypoint Deletion Mode")}
+	elseif cat[cIndex] == loc("Waypoint Mode") then
+		pMode = {loc("Place Waypoint"), loc("Delete Waypoint")}
 	end
 
 end
@@ -2021,7 +2021,7 @@ function SaveLevelData()
 	WriteLnToConsole("")
 
 	for i = 0, (placedCount-1) do
-		if placedType[i] == loc("Waypoint Placement Mode") then
+		if placedType[i] == loc("Waypoint Mode") then
 			table.insert(waypointList,
 			"	AddWayPoint(" ..
 				placedX[i] ..", " ..
@@ -2544,12 +2544,13 @@ function updateHelp()
 				"", 1, 60000
 				)
 
-	elseif cat[cIndex] == loc("Waypoint Placement Mode") then
+	elseif cat[cIndex] == loc("Waypoint Mode") then
 
 		ShowMission	(
-				loc("WAYPOINT PLACEMENT MODE"),
-				loc("Use this mode to waypoints"),
-				loc("Place Waypoint: [Left Click]") .. "|" ..
+				loc("WAYPOINT MODE"),
+				loc("Use this mode to place or delete waypoints"),
+				loc("Place/Delete Waypoint: [Left Click]") .. "|" ..
+				loc("Toggle Placement/Deletion: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -2601,6 +2602,7 @@ function updateHelp()
 				loc("AIR MINE PLACEMENT MODE"),
 				loc("Use this mode to place air mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
+				loc("Change Timer (in milliseconds): [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -2650,8 +2652,9 @@ function updateHelp()
 
 		ShowMission	(
 				loc("REPOSITIONING MODE"),
-				loc("Use this mode to select and reposition gears"),
-				loc("[Left], [Right]: Change between selection and placement mode.") .. "|" ..
+				loc("Use this mode to select, reposition and delete gears"),
+				loc("Select/Place/Delete Gear: [Left Click]") .. "|" ..
+				loc("Choose Selection/Placement/Deletion: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -2705,7 +2708,7 @@ function updateHelp()
 				loc("GOAL MODE"),
 				loc("Use this mode to mark gears for win/lose conditions."),
 				loc("Mark/unmark gear: [Left Click]") .. "|" ..
-				loc("[Left], [Right]: Change between win/lose conditions.") .. "|" ..
+				loc("Select win/lose condition: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
