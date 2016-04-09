@@ -123,8 +123,6 @@
 
 -- [high] 	waypoints don't reload yet
 
--- [high] 	look into placing dud/random mines (probably needs a nil value)
-
 -- [high] 	add missing weps/utils/gears as they appear
 --			some gameflags and settings are probably missing, too (diff border types etc)
 --			some themes are also probably missing: cake, hoggywood?
@@ -866,6 +864,7 @@ local cat = 	{
 				loc("Girder Placement Mode"),
 				loc("Rubber Placement Mode"),
 				loc("Mine Placement Mode"),
+				loc("Dud Mine Placement Mode"),
 				loc("Sticky Mine Placement Mode"),
 				loc("Air Mine Placement Mode"),
 				loc("Barrel Placement Mode"),
@@ -1600,6 +1599,10 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
 		gear = AddGear(x, y, gtMine, 0, 0, 0, 0)
 		SetTimer(gear, pMode[pIndex])
+	elseif cat[cIndex] == loc("Dud Mine Placement Mode") then
+		gear = AddGear(x, y, gtMine, 0, 0, 0, 0)
+		SetHealth(gear, 0)
+		SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 36 - pMode[pIndex])
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
 		gear = AddGear(x, y, gtSMine, 0, 0, 0, 0)
 		SetTimer(gear, pMode[pIndex])
@@ -1781,7 +1784,10 @@ function RedefineSubset()
 		end
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
 		pMode = {3000,4000,5000,0,1000,2000}
-		-- 0 is dud right, or is that nil?
+	elseif cat[cIndex] == loc("Dud Mine Placement Mode") then
+		pMode = {36,48,60,72,96,1,6,12,18,24}
+	elseif cat[cIndex] == loc("Mine Placement Mode") then
+		pMode = {3000,4000,5000,0,1000,2000}
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
 		pMode = {500,1000,1500,2000,2500,0}
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
@@ -2064,18 +2070,33 @@ function GetDataForGearSaving(gear)
 				GetY(gear) .. ", gtMine, 0, 0, 0, 0)"
 			table.insert(mineList, temp)
 			table.insert(mineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
+			if (GetHealth(gear) == 0) then
+				table.insert(mineList, "	SetHealth(tempG, 0)")
+				local _, damage
+				_,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(gear)
+				if damage ~= 0 then
+					table.insert(mineList, "	SetGearValues(tempG, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "..damage..")")
+				end
+			end
 			table.insert(mineList, "	setGearValue(tempG, \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
 		else
 
-			temp = 	"	SetTimer(" .. "AddGear(" ..
+			temp = 	"	tempG = AddGear(" ..
 				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtMine, 0, 0, 0, 0)" .. ", " ..
-				GetTimer(gear) ..")"
+				GetY(gear) .. ", gtMine, 0, 0, 0, "..GetTimer(gear) .. ")"
 			table.insert(mineList, temp)
+			if (GetHealth(gear) == 0) then
+				table.insert(mineList, "	SetHealth(tempG, 0)")
+				local _, damage
+				_,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(gear)
+				if damage ~= 0 then
+					table.insert(mineList, "	SetGearValues(tempG, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "..damage..")")
+				end
+			end
 
 		end
 
-		if 		GetTimer(gear) == 1 then specialFlag = 1
+		if 		GetTimer(gear) == 0 then specialFlag = 1
 		elseif	GetTimer(gear) == 1000 then specialFlag = 2
 		elseif	GetTimer(gear) == 2000 then specialFlag = 3
 		elseif	GetTimer(gear) == 3000 then specialFlag = 4
@@ -2088,7 +2109,8 @@ function GetDataForGearSaving(gear)
 		arrayList = sMineList
 		temp = 	"	tempG = AddGear(" ..
 				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtSMine, 0, 0, 0, 0)"
+				GetY(gear) .. ", gtSMine, 0, 0, 0, " ..
+				GetTimer(gear) ..")"
 		table.insert(sMineList, temp)
 		specialFlag = 7
 
@@ -3026,6 +3048,19 @@ function updateHelp()
 				"", -amMine, 60000
 				)
 
+	elseif cat[cIndex] == loc("Dud Mine Placement Mode") then
+
+		ShowMission	(
+				loc("DUD MINE PLACEMENT MODE"),
+				loc("Use this mode to place dud mines"),
+				loc("Place Object: [Left Click]") .. "|" ..
+				loc("Change Health: [Left], [Right]") .. "|" ..
+				" " .. "|" ..
+				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
+				loc("Toggle Help: Precise+1") .. "|" ..
+				"", -amMine, 60000
+				)
+
 	elseif cat[cIndex] == loc("Sticky Mine Placement Mode") then
 
 		ShowMission	(
@@ -3237,6 +3272,10 @@ function HandleHedgeEditor()
 			dFrame = 0
 			dAngle = 0
 			if (cat[cIndex] == loc("Mine Placement Mode")) then
+				dSprite = sprBotlevels--sprMineOff
+				dFrame = 1
+			elseif (cat[cIndex] == loc("Dud Mine Placement Mode")) then
+				-- TODO: Use dud mine sprite instead of sprite of normal mine
 				dSprite = sprBotlevels--sprMineOff
 				dFrame = 1
 			elseif (cat[cIndex] == loc("Sticky Mine Placement Mode")) then
