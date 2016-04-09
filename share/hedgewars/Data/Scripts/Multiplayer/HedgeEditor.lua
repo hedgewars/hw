@@ -3852,8 +3852,7 @@ function onGameStart()
 	frameID = 1
 	visualSprite = sprAmGirder
 	sSprite = AddVisualGear(0, 0, vgtStraightShot, 0, true,1)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(sSprite)
-	SetVisualGearValues(sSprite, 1, 1, 0, 0, g5, frameID, 20000, visualSprite, 20000, g10 )
+	SetVisualGearValues(sSprite, 1, 1, 0, 0, nil, frameID, 20000, visualSprite, 20000, 0 )
 
 	SetAmmoDelay(amAirAttack,0)
 	SetAmmoDelay(amGirder,0)
