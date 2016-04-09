@@ -2996,7 +2996,7 @@ function onTimer(s)
 		elseif (s == 4) then
 			landType = lfBouncy
 			AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
-		elseif (s == 5) and (cat[cIndex] ~= loc("Sprite Modification Mode")) then
+		elseif (s == 5) and (cat[cIndex] ~= loc("Sprite Modification Mode")) and (cat[cIndex] ~= loc("Sprite Placement Mode")) then
 			superDelete = true
 		end
 	elseif pMode[pIndex] == loc("Selection Mode") then
