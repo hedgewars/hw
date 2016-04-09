@@ -3176,6 +3176,9 @@ function onGameStart()
 	sCirc = AddVisualGear(0,0,vgtCircle,0,true)
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xffba00ff)
 
+	--[[ This is a small hack to disable Hedgewars' girder placement since we do it on our own;
+	this will remove the "girder circle" and gets rid of the placement failure animation ]]
+	SetMaxBuildDistance(1)
 
 	frameID = 1
 	visualSprite = sprAmGirder
