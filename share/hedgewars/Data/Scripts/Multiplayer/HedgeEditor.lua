@@ -2612,7 +2612,7 @@ function updateHelp()
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 
 		ShowMission	(
-				"WEAPON CRATE PLACEMENT MODE",
+				loc("WEAPON CRATE PLACEMENT MODE"),
 				loc("Use this mode to place weapon crates"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Content: [Left], [Right]") .. "|" ..
@@ -2665,13 +2665,9 @@ function updateHelp()
 
 		ShowMission	(
 				loc("SPRITE MODIFICATION MODE"),
-				"",
-				"Use this mode to select, modify, or delete existing girders," .. "|" ..
-				"rubbers, or sprites." .. "|" ..
-				"[Left], [Right]: Change between land-flag" .. "|" ..
-				"modification, and deletion modes." .. "|" ..
-				"While in modification mode, you can " .. "|" ..
-				"change land-flag by clicking on an object." .. "|" ..
+				loc("Use to select, modify, or delete girders, rubbers, or sprites."),
+				loc("Change modification mode: [Left], [Right]") .."|"..
+				loc("While in modification mode, you can change|the LandFlag by clicking on an object.") .. "|" ..
 				loc("Set LandFlag: [1], [2], [3], [4]") .. "|" ..
 				" " .. "|" ..
 				loc("1 - Normal Land") .. "|" ..
@@ -2689,7 +2685,7 @@ function updateHelp()
 		ShowMission	(
 				loc("SPRITE PLACEMENT MODE"),
 				loc("Use this mode to place custom sprites."),
-				loc("[Left], [Right]: Change sprite selection") .. "|" ..
+				loc("Change sprite: [Left], [Right]") .. "|" ..
 				loc("Set LandFlag: [1], [2], [3], [4]") .. "|" ..
 				" " .. "|" ..
 				loc("1 - Normal Land") .. "|" ..
