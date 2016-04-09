@@ -1230,8 +1230,20 @@ function PlaceObject(x,y)
 				local newHealth = math.max(1, GetHealth(sGear) + tonumber(pMode[pIndex][1]))
 				SetHealth(sGear, newHealth)
 			end
+		elseif gt == gtMine and GetHealth(sGear) == 0 then
+			local newHealth 
+			if pMode[pIndex][2] == "set" then
+				newHealth =  pMode[pIndex][1]
+			elseif pMode[pIndex][2] == "mod" then
+				local _, oldHealth
+				_,_,_,_,_,_,_,_,_,_,_, oldHealth = GetGearValues(sGear)
+				local newHealth = math.max(1, oldHealth + tonumber(pMode[pIndex][1]))
+			end
+			if newHealth ~= nil then
+				SetGearValues(sGear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 36 - newHealth)
+			end
 		else
-			AddCaption(loc("Please click on a hedgehog, barrel or health crate."),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Please click on a hedgehog, barrel, health crate or dud mine."),0xffba00ff,capgrpVolume)
 		end
 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
@@ -2726,7 +2738,7 @@ function updateHelp()
 
 		ShowMission	(
 				loc("HEALTH MODIFICATION MODE"),
-				loc("Use this mode to set the health of hogs, health crates and barrels."),
+				loc("Use this mode to set the health of hogs, health crates, barrels and duds."),
 				loc("Set Health: [Left Click]") .. "|" ..
 				loc("[Left], [Right]: Change health value.") .. "|" ..
 				" " .. "|" ..
