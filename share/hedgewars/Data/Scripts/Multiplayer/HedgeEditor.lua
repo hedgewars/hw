@@ -161,8 +161,8 @@
 
 
 			napalm =		arrow sprite (selection/modification/deletion mode)
-							"Advanced Repositioning Mode",  -- also include a delete
-							"Tagging Mode",
+							"Repositioning Mode",  -- also include a delete
+							"Goal Mode",
 							"Hog Identity Mode",
 							"Team Identity Mode",
 							"Health Modification Mode",
@@ -636,8 +636,8 @@ local cat = 	{
 				loc("Utility Crate Placement Mode"),
 				loc("Target Placement Mode"),
 				loc("Cleaver Placement Mode"),
-				loc("Advanced Repositioning Mode"),
-				loc("Tagging Mode"),
+				loc("Repositioning Mode"),
+				loc("Goal Mode"),
 				loc("Hog Identity Mode"),
 				loc("Team Identity Mode"),
 				loc("Health Modification Mode"),
@@ -1188,7 +1188,7 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
 		gear = AddGear(x, y, gtAirMine, 0, 0, 0, 0)
 		SetTimer(gear, pMode[pIndex])
-	elseif cat[cIndex] == loc("Advanced Repositioning Mode") then
+	elseif cat[cIndex] == loc("Repositioning Mode") then
 
 		if pMode[pIndex] == loc("Selection Mode") then
 			sGear = GetClosestGear()
@@ -1252,23 +1252,23 @@ function PlaceObject(x,y)
 		end
 
 
-	elseif cat[cIndex] == loc("Tagging Mode") then
+	elseif cat[cIndex] == loc("Goal Mode") then
 
 		sGear = GetClosestGear()
 		if sGear ~= nil then  -- used to be closestGear
 
 			if getGearValue(sGear,"tag") == nil then
 
-				if pMode[pIndex] == loc("Tag Collection Mode") then
+				if pMode[pIndex] == loc("Victory Condition: Collect") then
 					if GetGearType(sGear) == gtCase then
 						setGearValue(sGear, "tag","collection")
 					else
 						AddCaption(loc("Please click on a crate."),0xffba00ff,capgrpVolume)
 					end
 				else
-					if pMode[pIndex] == loc("Tag Victory Mode") then
+					if pMode[pIndex] == loc("Victory Condition: Destroy") then
 						setGearValue(sGear, "tag","victory")
-					elseif pMode[pIndex] == loc("Tag Failure Mode") then
+					elseif pMode[pIndex] == loc("Losing Condition: Destroy") then
 						setGearValue(sGear, "tag","failure")
 					end
 				end
@@ -1356,10 +1356,10 @@ function RedefineSubset()
 		pMode = {500,1000,1500,2000,2500,0}
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
 		pMode = {750,1000,1250,0,250,500}
-	elseif cat[cIndex] == loc("Advanced Repositioning Mode") then
+	elseif cat[cIndex] == loc("Repositioning Mode") then
 		pMode = {loc("Selection Mode"),loc("Placement Mode"), loc("Deletion Mode")}
-	elseif cat[cIndex] == loc("Tagging Mode") then
-		pMode = {loc("Tag Victory Mode"),loc("Tag Failure Mode"),loc("Tag Collection Mode")}
+	elseif cat[cIndex] == loc("Goal Mode") then
+		pMode = {loc("Victory Condition: Destroy"),loc("Losing Condition: Destroy"),loc("Victory Condition: Collect")}
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
 		pMode = {loc("Soldier"),loc("Grenadier"),loc("Sniper"),loc("Pyro"),loc("Ninja"),loc("Commander"),loc("Chef"),loc("Engineer"),loc("Physicist"),loc("Trapper"),loc("Saint"),loc("Clown")}
 	elseif cat[cIndex] == loc("Team Identity Mode") then
@@ -2381,7 +2381,7 @@ function UpdateTagCircles(gear)
 
 	if getGearValue(gear,"tag") ~= nil then
 
-		if cat[cIndex] == loc("Tagging Mode") then
+		if cat[cIndex] == loc("Goal Mode") then
 
 			-- generate circs for tagged gears that don't have a circ yet (new)
 			if getGearValue(gear,"tCirc") == nil then
@@ -2646,10 +2646,10 @@ function updateHelp()
 				"", 6, 60000
 				)
 
-	elseif cat[cIndex] == loc("Advanced Repositioning Mode") then
+	elseif cat[cIndex] == loc("Repositioning Mode") then
 
 		ShowMission	(
-				loc("ADVANCED REPOSITIONING MODE"),
+				loc("REPOSITIONING MODE"),
 				loc("Use this mode to select and reposition gears"),
 				loc("[Left], [Right]: Change between selection and placement mode.") .. "|" ..
 				" " .. "|" ..
@@ -2699,13 +2699,13 @@ function updateHelp()
 				"", 2, 60000
 				)
 
-	elseif cat[cIndex] == loc("Tagging Mode") then
+	elseif cat[cIndex] == loc("Goal Mode") then
 
 		ShowMission	(
-				loc("TAGGING MODE"),
-				loc("Use this mode to tag gears for win/lose conditions."),
-				loc("Tag Gear: [Left Click]") .. "|" ..
-				loc("[Left], [Right]: Change between tagging modes.") .. "|" ..
+				loc("GOAL MODE"),
+				loc("Use this mode to mark gears for win/lose conditions."),
+				loc("Mark/unmark gear: [Left Click]") .. "|" ..
+				loc("[Left], [Right]: Change between win/lose conditions.") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -2912,11 +2912,11 @@ function HandleHedgeEditor()
 	-- kinda lazy, but at least we don't have to do elaborate tacking elsewhere
 	SetVisualGearValues(sCirc, 0, 0, 0, 1, 1, 10, 0, 1, 1, 0x00000000)
 	--update selected gear display
-	if (cat[cIndex] == loc("Advanced Repositioning Mode")) and (sGear ~= nil) then
+	if (cat[cIndex] == loc("Repositioning Mode")) and (sGear ~= nil) then
 		SetVisualGearValues(sCirc, GetX(sGear), GetY(sGear), 100, 255, 1, 10, 0, 300, 3, 0xff00ffff)
 	elseif (cat[cIndex] == loc("Sprite Modification Mode")) and (sSprite ~= nil) then
 		SetVisualGearValues(sSprite, nil, nil, 0, 0, nil, nil, 10000, nil, 10000)
-	elseif (cat[cIndex] == loc("Tagging Mode")) then
+	elseif (cat[cIndex] == loc("Goal Mode")) then
 		if (sGear ~= nil) or (closestGear ~= nil) then
 			closestGear = nil
 			sGear = nil
