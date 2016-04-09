@@ -2496,9 +2496,12 @@ function PortalEffects(gear)
 
 end
 
-function updateHelp()
+function updateHelp(curAmmoType)
+	if curAmmoType == nil then
+		curAmmoType = GetCurAmmoType()
+	end
 
-	if (GetCurAmmoType() ~= amGirder) and (GetCurAmmoType() ~= amRubber) and (GetCurAmmoType() ~= amAirAttack) then
+	if (curAmmoType ~= amGirder) and (curAmmoType ~= amRubber) and (curAmmoType ~= amAirAttack) then
 
 		if not hedgeEditorMissionPanelShown then
 			showHedgeEditorMissionPanel()
@@ -2808,6 +2811,16 @@ function updateHelp()
 
 end
 
+function onSetWeapon(ammoType)
+	curWep = ammoType
+	updateHelp(ammoType)
+end
+
+function onSlot()
+	curWep = GetCurAmmoType()
+	updateHelp(ammoType)
+end
+
 -- called in onGameTick()
 function HandleHedgeEditor()
 
@@ -2946,6 +2959,8 @@ function HandleHedgeEditor()
 			if sSprite ~= nil then
 				SetVisualGearValues(sSprite, nil, nil, 0, 0, nil, nil, 10000, nil, 10000 )
 			end
+
+			updateHelp()
 
 		end
 
