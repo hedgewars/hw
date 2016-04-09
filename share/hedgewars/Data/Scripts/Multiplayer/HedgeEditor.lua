@@ -410,135 +410,141 @@ local utilArray =
 local preMadeTeam = 	{
 
 				{
-				"Clowns",
+				loc_noop("Clowns"),
 				{"WhySoSerious","clown-copper","clown-crossed","clown","Joker"},
-				{"Baggy","Bingo","Bobo","Bozo","Buster","Chester","Copper","Heckles","Giggles","Jingo","Molly","Loopy","Patches","Tatters"},
+				{loc_noop("Baggy"),loc_noop("Bingo"),loc_noop("Bobo"),loc_noop("Bozo"),loc_noop("Buster"),loc_noop("Chester"),loc_noop("Copper"),loc_noop("Heckles"),loc_noop("Giggles"),loc_noop("Jingo"),loc_noop("Molly"),loc_noop("Loopy"),loc_noop("Patches"),loc_noop("Tatters")},
 				"R","cm_birdy","Mobster","Rubberduck","Castle"
 				},
 
 				{
-				"Street Fighters",
+				loc_noop("Street Fighters"),
 				{"sf_balrog","sf_blanka","sf_chunli","sf_guile","sf_honda","sf_ken","sf_ryu","sf_vega"},
-				{"Balrog","Blanka","Chunli","Guile","Honda","Ken","Ryu","Vega"},
+				{loc_noop("Balrog"),loc_noop("Blanka"),loc_noop("Chunli"),loc_noop("Guile"),loc_noop("Honda"),loc_noop("Ken"),loc_noop("Ryu"),loc_noop("Vega")},
 				"F","cm_balrog","Surfer","dragonball","Castle"
 				},
 
 				{
-				"Cybernetic Empire",
+				loc_noop("Cybernetic Empire"),
 				{"cyborg1","cyborg2"},
-				{"Unit 189","Unit 234","Unit 333","Unit 485","Unit 527","Unit 638","Unit 709","Unit 883"},
+				{loc_noop("Unit 189"),loc_noop("Unit 234"),loc_noop("Unit 333"),loc_noop("Unit 485"),loc_noop("Unit 527"),loc_noop("Unit 638"),loc_noop("Unit 709"),loc_noop("Unit 883")},
 				"R","cm_binary","Robot","Grave","Castle"
 				},
 
 				{
-				"Color Squad",
+				loc_noop("Color Squad"),
 				{"hair_blue","hair_green","hair_red","hair_yellow","hair_purple","hair_grey","hair_orange","hair_pink"},
-				{"Blue","Green","Red","Yellow","Purple","Grey","Orange","Pink"},
+				{loc_noop("Blue"),loc_noop("Green"),loc_noop("Red"),loc_noop("Yellow"),loc_noop("Purple"),loc_noop("Grey"),loc_noop("Orange"),loc_noop("Pink")},
 				"F","cm_birdy","Singer","Grave","Castle"
 				},
 
 				{
-				"Fruit",
+				loc_noop("Fruit"),
 				{"fr_apple","fr_banana","fr_lemon","fr_orange","fr_pumpkin","fr_tomato"},
-				{"Juicy","Squishy","Sweet","Sour","Bitter","Ripe","Rotten","Fruity"},
+				{loc_noop("Juicy"),loc_noop("Squishy"),loc_noop("Sweet"),loc_noop("Sour"),loc_noop("Bitter"),loc_noop("Ripe"),loc_noop("Rotten"),loc_noop("Fruity")},
 				"R","cm_mog","Default","Cherry","Castle"
 				},
 
 				{
-				"The Police",
+				loc_noop("The Police"),
 				{"bobby","bobby2v","policecap","policegirl","royalguard"},
-				{"Hightower","Lassard","Callahan","Jones","Harris","Thompson","Mahoney","Hooks","Tackleberry"},
+				{loc_noop("Hightower"),loc_noop("Lassard"),loc_noop("Callahan"),loc_noop("Jones"),loc_noop("Harris"),loc_noop("Thompson"),loc_noop("Mahoney"),loc_noop("Hooks"),loc_noop("Tackleberry")},
 				"R","cm_star","British","Statue","Castle"
 				},
 
 				{
-				"The Ninja-Samurai Alliance",
+				loc_noop("The Ninja-Samurai Alliance"),
 				{"NinjaFull","NinjaStraight","NinjaTriangle","Samurai","StrawHat","StrawHatEyes","StrawHatFacial","naruto"},
-				{"Bushi","Tatsujin","Itami","Arashi","Shinobi","Ukemi","Godai","Kenshi","Ninpo"},
+				{loc_noop("Bushi"),loc_noop("Tatsujin"),loc_noop("Itami"),loc_noop("Arashi"),loc_noop("Shinobi"),loc_noop("Ukemi"),loc_noop("Godai"),loc_noop("Kenshi"),loc_noop("Ninpo")},
 				"R","japan","Default","octopus","Castle"
 				},
 
 				{
-				"Pokémon",
+				loc_noop("Pokémon"),
 				{"poke_ash","poke_charmander","poke_chikorita","poke_jigglypuff","poke_lugia","poke_mudkip","poke_pikachu","poke_slowpoke","poke_squirtle","poke_voltorb"},
-				{"Ash","Charmander","Chikorita","Jigglypuff","Lugia","Mudkip","Pikachu","Slowpoke","Squirtle","Voltorb"},
+				{loc_noop("Ash"),loc_noop("Charmander"),loc_noop("Chikorita"),loc_noop("Jigglypuff"),loc_noop("Lugia"),loc_noop("Mudkip"),loc_noop("Pikachu"),loc_noop("Slowpoke"),loc_noop("Squirtle"),loc_noop("Voltorb")},
 				"FR","cm_pokemon","Default","pokeball","Castle"
 				},
 
 				{
-				"The Zoo",
+				loc_noop("The Zoo"),
 				{"zoo_Bat","zoo_Beaver","zoo_Bunny","zoo_Deer","zoo_Hedgehog","zoo_Moose","zoo_Pig","zoo_Porkey","zoo_Sheep","zoo_chicken","zoo_elephant","zoo_fish","zoo_frog","zoo_snail","zoo_turtle"},
-				{"Batty","Tails","Bunny","Deer","Spikes","Horns","Bacon","Porkey","Sheepy","Chicken","Trunks","Fishy","Legs","Slimer","Roshi"},
+				{loc_noop("Batty"),loc_noop("Tails"),loc_noop("Bunny"),loc_noop("Deer"),loc_noop("Spikes"),loc_noop("Horns"),loc_noop("Bacon"),loc_noop("Porkey"),loc_noop("Sheepy"),loc_noop("Chicken"),loc_noop("Trunks"),loc_noop("Fishy"),loc_noop("Legs"),loc_noop("Slimer"),loc_noop("Roshi")},
 				"FR","cm_hurrah","Default","Bone","Castle"
 				},
 
 				{
-				"The Devs",
+				loc_noop("The Devs"),
 				{"ushanka","zoo_Sheep","bb_bob","Skull","poke_mudkip","lambda","WizardHat","sf_ryu","android","fr_lemon","mp3"},
-				{"unC0Rr", "sheepluva", "nemo", "mikade", "koda", "burp","HeneK","Tiyuri","Xeli","Displacer","szczur"},
+				{loc_noop("unC0Rr"), loc_noop("sheepluva"), loc_noop("nemo"), loc_noop("mikade"), loc_noop("koda"), loc_noop("burp"),loc_noop("HeneK"),loc_noop("Tiyuri"),loc_noop("Xeli"),loc_noop("Displacer"),loc_noop("szczur")},
 				"FR","hedgewars","Classic","Statue","Castle"
 				},
 
 				{
-				"Mushroom Kingdom",
+				loc_noop("Mushroom Kingdom"),
 				{"sm_daisy","sm_luigi","sm_mario","sm_peach","sm_toad","sm_wario"},
-				{"Daisy","Luigi","Mario","Princess Peach","Toad","Wario"},
+				{loc_noop("Daisy"),loc_noop("Luigi"),loc_noop("Mario"),loc_noop("Princess Peach"),loc_noop("Toad"),loc_noop("Wario")},
 				"FR","cm_birdy","Default","Badger","Castle"
 				},
 
 				{
-				"Pirates",
+				loc_noop("Pirates"),
 				{"pirate_jack","pirate_jack_bandana"},
-				{"Rusted Diego","Fuzzy Beard","Al.Kaholic","Morris","Yumme Gunpowder","Cutlass Cain","Jim Morgan","Silver","Dubloon Devil","Ugly Mug","Fair Wind","Scallywag","Salty Dog","Bearded Beast","Timbers","Both Barrels","Jolly Roger"},
+				{loc_noop("Rusted Diego"),loc_noop("Fuzzy Beard"),loc_noop("Al.Kaholic"),loc_noop("Morris"),loc_noop("Yumme Gunpowder"),loc_noop("Cutlass Cain"),loc_noop("Jim Morgan"),loc_noop("Silver"),loc_noop("Dubloon Devil"),loc_noop("Ugly Mug"),loc_noop("Fair Wind"),loc_noop("Scallywag"),loc_noop("Salty Dog"),loc_noop("Bearded Beast"),loc_noop("Timbers"),loc_noop("Both Barrels"),loc_noop("Jolly Roger")},
 				"R","cm_pirate","Pirate","chest","Castle"
 				},
 
 				{
-				"Gangsters",
+				loc_noop("Gangsters"),
 				{"Moustache","Cowboy","anzac","Bandit","thug","Jason","NinjaFull","chef"},
-				{"The Boss","Jimmy","Frankie","Morris","Mooney","Knives","Tony","Meals"},
+				{loc_noop("The Boss"),loc_noop("Jimmy"),loc_noop("Frankie"),loc_noop("Morris"),loc_noop("Mooney"),loc_noop("Knives"),loc_noop("Tony"),loc_noop("Meals")},
 				"F","cm_anarchy","Mobster","deadhog","Castle"
 				},
 
 
 				{
-				"Twenty-Twenty",
+				loc_noop("Twenty-Twenty"),
 				{"Glasses","lambda","SunGlasses","Sniper","Terminator_Glasses","Moustache_glasses","doctor","punkman","rasta"},
-				{"Specs","Speckles","Spectator","Glasses","Glassy","Harry Potter","Goggles","Clark Kent","Goggs","Lightbender","Specs Appeal","Four Eyes"},
+				{loc_noop("Specs"),loc_noop("Speckles"),loc_noop("Spectator"),loc_noop("Glasses"),loc_noop("Glassy"),loc_noop("Harry Potter"),loc_noop("Goggles"),loc_noop("Clark Kent"),loc_noop("Goggs"),loc_noop("Lightbender"),loc_noop("Specs Appeal"),loc_noop("Four Eyes")},
 				"R","cm_face","Default","eyecross","Castle"
 				},
 
 
 				{
-				"Monsters",
+				loc_noop("Monsters"),
 				{"Skull","Jason","ShaggyYeti","Zombi","cyclops","Mummy","hogpharoah","vampirichog"},
-				{"Bones","Jason","Yeti","Zombie","Old One Eye","Ramesses","Xerxes","Count Hogula"},
+				{loc_noop("Bones"),loc_noop("Jason"),loc_noop("Yeti"),loc_noop("Zombie"),loc_noop("Old One Eye"),loc_noop("Ramesses"),loc_noop("Xerxes"),loc_noop("Count Hogula")},
 				"FR","cm_vampire","Default","octopus","Castle"
 				},
 
 				{
-				"The Iron Curtain",
+				loc_noop("The Iron Curtain"),
 				{"ushanka","war_sovietcomrade1","war_sovietcomrade1","ushanka"},
-				{"Alex","Sergey","Vladimir","Andrey","Dimitry","Ivan","Oleg","Kostya","Anton","Eugene"},
+				{loc_noop("Alex"),loc_noop("Sergey"),loc_noop("Vladimir"),loc_noop("Andrey"),loc_noop("Dimitry"),loc_noop("Ivan"),loc_noop("Oleg"),loc_noop("Kostya"),loc_noop("Anton"),loc_noop("Eugene")},
 				"R","cm_soviet","Russian","skull","Castle"
 				},
 
 				{
-				"Desert Storm",
+				loc_noop("Desert Storm"),
 				{"war_desertofficer","war_desertgrenadier1","war_desertmedic","war_desertsapper1","war_desertgrenadier2","war_desertgrenadier4","war_desertsapper2","war_desertgrenadier5"},
-				{"Brigadier Briggs","Lt. Luke","Sgt. Smith","Corporal Calvin","Frank","Joe","Sam","Donald"},
+				{loc_noop("Brigadier Briggs"),loc_noop("Lt. Luke"),loc_noop("Sgt. Smith"),loc_noop("Corporal Calvin"),loc_noop("Frank"),loc_noop("Joe"),loc_noop("Sam"),loc_noop("Donald")},
 				"F","cm_birdy","Default","Grave","Castle"
 				},
 
 				{
-				"The Hospital",
+				loc_noop("The Hospital"),
 				{"doctor","nurse","war_britmedic","war_desertmedic","war_germanww2medic"},
-				{"Dr. Blackwell","Dr. Drew","Dr. Harvey","Dr. Crushing","Dr. Jenner","Dr. Barnard","Dr. Parkinson","Dr. Banting","Dr. Horace","Dr. Hollows","Dr. Jung"},
+				{loc_noop("Dr. Blackwell"),loc_noop("Dr. Drew"),loc_noop("Dr. Harvey"),loc_noop("Dr. Crushing"),loc_noop("Dr. Jenner"),loc_noop("Dr. Barnard"),loc_noop("Dr. Parkinson"),loc_noop("Dr. Banting"),loc_noop("Dr. Horace"),loc_noop("Dr. Hollows"),loc_noop("Dr. Jung")},
 				"R","cm_birdy","Default","heart","Castle"
 				}
 
 				}
 
+local preMadeTeamNamesTranslated = {}
+local preMadeTeamNamesOriginal = {}
+for i=1, #preMadeTeam do
+	table.insert(preMadeTeamNamesOriginal, preMadeTeam[i][1])
+	table.insert(preMadeTeamNamesTranslated, loc(preMadeTeam[i][1]))
+end
 
 local fortArray =	{
 					"Cake", "Castle", "Earth", "EvilChicken", "Flowerhog",
@@ -1383,7 +1389,7 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
 		pMode = {loc("Soldier"),loc("Grenadier"),loc("Sniper"),loc("Pyro"),loc("Ninja"),loc("Commander"),loc("Chef"),loc("Engineer"),loc("Physicist"),loc("Trapper"),loc("Saint"),loc("Clown")}
 	elseif cat[cIndex] == loc("Team Identity Mode") then
-		pMode = {loc("Clowns"),loc("Street Fighters"),loc("Cybernetic Empire"),loc("Color Squad"),loc("Fruit"),loc("The Police"),loc("The Ninja-Samurai Alliance"),loc("Pokémon"),loc("The Zoo"),loc("The Devs"),loc("Mushroom Kingdom"),loc("Pirates"),loc("Gangsters"),loc("Twenty-Twenty"),loc("Monsters"),loc("The Iron Curtain"),loc("Desert Storm"),loc("The Hospital")}
+		pMode = preMadeTeamNamesTranslated
 	elseif cat[cIndex] == loc("Health Modification Mode") then
 		pMode = { {100, "set"}, {125, "set"}, {150, "set"}, {200, "set"}, {300, "set"}, {1000, "set"},
 			{"-100", "mod"}, {"-10", "mod"}, {"-1", "mod"}, {"+1", "mod"}, {"+10", "mod"}, {"+100", "mod"},
@@ -1460,9 +1466,14 @@ function GetDataForSavingHogs(gear)
 		lastRecordedTeam = GetHogTeamName(gear)
 
 		table.insert(tempDataList, "")
+
+		local oTeamName = getGearValue(gear, "originalTeamName")
+		if oTeamName == nil or oTeamName == "" then
+			oTeamName = GetHogTeamName(gear)
+		end
 		table.insert	(tempDataList,
 						"	AddTeam(loc(\"" ..
-						GetHogTeamName(gear) .. "\")" ..
+						oTeamName  .. "\")" ..
 						", " .. tColor ..
 						", " .. "\"" .. tGrave .. "\"" ..
 						", " .. "\"" .. tFort .. "\"" ..
@@ -1475,8 +1486,12 @@ function GetDataForSavingHogs(gear)
 
 	table.insert(hhs, gear)
 
+	local oName = getGearValue(gear, "originalName")
+	if oName == nil or oName == "" then
+		oName = GetHogName(gear)
+	end
 	table.insert	(tempDataList,	"	hhs[" .. #hhs .."] = AddHog(loc(\"" ..
-					GetHogName(gear) .. "\"), " ..
+					oName .. "\"), " ..
 					GetHogLevel(gear) .. ", " ..
 					GetHealth(gear) .. ", \"" ..
 					GetHogHat(gear) .. "\"" ..
@@ -3319,6 +3334,7 @@ function AssignTeam(gear)
 		setGearValue(gear,"voice",preMadeTeam[pIndex][6])
 		setGearValue(gear,"grave",preMadeTeam[pIndex][7])
 		setGearValue(gear,"fort",preMadeTeam[pIndex][8])
+		setGearValue(gear,"originalTeamName",preMadeTeamNamesOriginal[pIndex])
 
 		if preMadeTeam[pIndex][4] == "R" then -- random team
 
@@ -3335,14 +3351,14 @@ function AssignTeam(gear)
 
 			if #nArr > 0 then
 				i = 1+GetRandom(#nArr)
-				SetHogName(gear,nArr[i])
+				SetHogNameAndTranslate(gear, nArr[i])
 				table.remove(nArr,i)
 			else
-				SetHogName(gear,preMadeTeam[pIndex][3][1+GetRandom(#preMadeTeam[pIndex][3])])
+				SetHogNameAndTranslate(gear, preMadeTeam[pIndex][3][1+GetRandom(#preMadeTeam[pIndex][3])])
 			end
 
 		elseif preMadeTeam[pIndex][4] == "F" then -- fixed team w/ exactly 8 guys
-			SetHogName(gear,preMadeTeam[pIndex][3][hIndex])
+			SetHogNameAndTranslate(gear, preMadeTeam[pIndex][3][hIndex])
 			SetHogHat(gear,preMadeTeam[pIndex][2][hIndex])
 			hIndex = hIndex +1
 		else -- FR fixed random team with more or less than 8 guys
@@ -3350,12 +3366,12 @@ function AssignTeam(gear)
 			if #hArr > 0 then
 				i = 1+GetRandom(#hArr)
 				SetHogHat(gear,hArr[i])
-				SetHogName(gear,nArr[i])
+				SetHogNameAndTranslate(gear, nArr[i])
 				table.remove(hArr,i)
 				table.remove(nArr,i)
 			else
 				SetHogHat(gear,"NoHat")
-				SetHogName(gear,"Uninspiring hog")
+				SetHogNameAndTranslate(gear,loc_noop("Hedgehog"))
 			end
 
 		end
@@ -3372,7 +3388,7 @@ function SetHogProfile(gear, pro)
 
 	if pro == loc("Sniper") then
 
-		SetHogName(gear,loc("Sniper"))
+		SetHogNameAndTranslate(gear, "Sniper")
 		SetHogHat(gear, "Sniper")
 		SetHealth(gear, 50)
 		AddAmmo(gear, amSniperRifle, 100)
@@ -3380,7 +3396,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Pyro") then
 
-		SetHogName(gear,loc("Pyro"))
+		SetHogNameAndTranslate(gear, "Pyro")
 		SetHogHat(gear, "Gasmask")
 		SetHealth(gear, 80)
 		AddAmmo(gear, amFlamethrower, 100)
@@ -3389,7 +3405,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Soldier") then
 
-		SetHogName(gear,loc("Soldier"))
+		SetHogNameAndTranslate(gear, "Soldier")
 		SetHogHat(gear, "war_americanww2helmet")
 		SetHealth(gear, 100)
 		AddAmmo(gear, amBazooka, 100)
@@ -3398,7 +3414,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Grenadier") then
 
-		SetHogName(gear,loc("Grenadier"))
+		SetHogNameAndTranslate(gear, "Grenadier")
 		SetHogHat(gear, "war_desertgrenadier1")
 		SetHealth(gear, 100)
 		AddAmmo(gear, amGrenade, 100)
@@ -3407,7 +3423,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Chef") then
 
-		SetHogName(gear,loc("Chef"))
+		SetHogNameAndTranslate(gear, "Chef")
 		SetHogHat(gear, "chef")
 		SetHealth(gear, 65)
 		AddAmmo(gear, amGasBomb, 100)
@@ -3416,7 +3432,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Ninja") then
 
-		SetHogName(gear,loc("Ninja"))
+		SetHogNameAndTranslate(gear, "Ninja")
 		SetHogHat(gear, "NinjaFull")
 		SetHealth(gear, 80)
 		AddAmmo(gear, amRope, 100)
@@ -3425,7 +3441,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Commander") then
 
-		SetHogName(gear,loc("Commander"))
+		SetHogNameAndTranslate(gear, "Commander")
 		SetHogHat(gear, "sf_vega")
 		SetHealth(gear, 120)
 		AddAmmo(gear, amDEagle, 100)
@@ -3436,7 +3452,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Engineer") then
 
-		SetHogName(gear,loc("Engineer"))
+		SetHogNameAndTranslate(gear, "Engineer")
 		SetHogHat(gear, "Glasses")
 		SetHealth(gear, 45)
 		AddAmmo(gear, amGirder, 4)
@@ -3447,7 +3463,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Physicist") then
 
-		SetHogName(gear,loc("Physicist"))
+		SetHogNameAndTranslate(gear, "Physicist")
 		SetHogHat(gear, "lambda")
 		SetHealth(gear, 80)
 		AddAmmo(gear, amIceGun, 2)
@@ -3457,7 +3473,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Trapper") then
 
-		SetHogName(gear,loc("Trapper"))
+		SetHogNameAndTranslate(gear, "Trapper")
 		SetHogHat(gear, "Skull")
 		SetHealth(gear, 100)
 		AddAmmo(gear, amMine, 100)
@@ -3467,7 +3483,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Saint") then
 
-		SetHogName(gear,loc("Saint"))
+		SetHogNameAndTranslate(gear, "Saint")
 		SetHogHat(gear, "angel")
 		SetHealth(gear, 200)
 		AddAmmo(gear, amSeduction, 100)
@@ -3478,7 +3494,7 @@ function SetHogProfile(gear, pro)
 
 	elseif pro == loc("Clown") then
 
-		SetHogName(gear,loc("Clown"))
+		SetHogNameAndTranslate(gear, "Clown")
 		SetHogHat(gear, "clown-copper")
 		SetHealth(gear, 70)
 		AddAmmo(gear, amBaseballBat, 100)
@@ -3534,6 +3550,14 @@ function isATrackedGear(gear)
 	else
 		return(false)
 	end
+end
+
+function SetHogNameAndTranslate(gear, originalName)
+	SetHogName(gear, loc(originalName))
+	--[[ Store the original (usually English) hog name, since we need it for exporting.
+	This way, we can display the translated name in the editor and export the properly
+	loc()'ed original name afterwards ]]
+	setGearValue(gear, "originalName", originalName)
 end
 
 -- track hedgehogs and placement gears
