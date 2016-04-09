@@ -544,17 +544,6 @@ local preMadeTeam = 	{
 
 				}
 
-local colorArray = 	{
-					{0xff0204ff, "0xff0204ff", "Red"},
-					{0xff4980c1, "0xff4980c1", "Blue"},
-					{0xff1de6ba, "0xff1de6ba", "Teal"},
-					{0xffb541ef, "0xffb541ef", "Purple"},
-					{0xffe55bb0, "0xffe55bb0", "Pink"},
-					{0xff20bf00, "0xff20bf00", "Green"},
-					{0xfffe8b0e, "0xfffe8b0e", "Orange"},
-					{0xff5f3605, "0xff5f3605", "Brown"},
-					{0xffffff01, "0xffffff01", "Yellow"}
-					}
 
 local fortArray =	{
 					"Cake", "Castle", "Earth", "EvilChicken", "Flowerhog",
@@ -1446,19 +1435,10 @@ function GetDataForSavingHogs(gear)
 			teamCounter = 1
 		end
 
-		-- try match team colour to the colours recorded in the colour array
-
-		local tColor = 0x00000000
-		for i = 1, #colorArray do
-			if GetClanColor(GetHogClan(gear)) == colorArray[i][1] then
-				tColor = colorArray[i][2]
-			end
-		end
-
-		-- no match, just give him a default colour from the array, then
-		if tColor == 0x00000000 then
-			tColor = colorArray[teamCounter][2]
-		end
+		-- Convert color to string
+		local rgba = GetClanColor(GetHogClan(gear))
+		local rgb = div(band(rgba, 0xFFFFFF00), 0x100)
+		local tColor = string.format("0x%X", rgb)
 
 		if getGearValue(gear,"grave") == nil then
 			tFort = fortArray[1+GetRandom(#fortArray)]
@@ -1478,7 +1458,7 @@ function GetDataForSavingHogs(gear)
 		table.insert	(tempDataList,
 						"	AddTeam(\"" ..
 						GetHogTeamName(gear) .."\"" ..
-						", " .. "\"" ..tColor .. "\"" ..
+						", " .. tColor ..
 						", " .. "\"" .. tGrave .. "\"" ..
 						", " .. "\"" .. tFort .. "\"" ..
 						", " .. "\"" .. tVoice .. "\"" ..
