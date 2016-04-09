@@ -586,6 +586,12 @@ local gameFlagList =	{
   sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail, sprShoutCorner,
   sprShoutEdge, sprShoutTail, sprBotlevels, sprIceTexture, sprCustom1, sprCustom2, }
 
+ local reducedSpriteIDArrayFrames = {
+  4, 8, 3, 57, 57, 4, 1, 8,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+ }
+
  local reducedSpriteTextArray = {
   "sprAmRubber", "sprAmGirder", "sprAMSlot", "sprAMAmmos", "sprAMAmmosBW", "sprAMCorners", "sprHHTelepMask", "sprTurnsLeft",
   "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail", "sprShoutCorner",
@@ -641,6 +647,7 @@ local cat = 	{
 
 local pMode = {}	-- pMode contains custom subsets of the main categories
 local pIndex = 1
+local sFrame = 0	-- frame in sprite placement mode
 
 local genTimer = 0
 
@@ -1303,7 +1310,7 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Sprite Placement Mode") then
 
 		if superDelete == false then
-			placedFrame[placedCount] = 1
+			placedFrame[placedCount] = sFrame
 			placedSprite[placedCount] = reducedSpriteIDArray[pIndex]
 			placementSucceeded = CallPlaceSprite(placedCount)
 		else
@@ -2716,6 +2723,7 @@ function updateHelp(curAmmoType)
 				loc("SPRITE PLACEMENT MODE"),
 				loc("Use this mode to place custom sprites."),
 				loc("Change sprite: [Left], [Right]") .. "|" ..
+				loc("Change sprite frame: [Precise]+[Left], [Precise]+[Right]") .. "|" ..
 				loc("Set LandFlag: [1], [2], [3], [4]") .. "|" ..
 				" " .. "|" ..
 				loc("1 - Normal Land") .. "|" ..
@@ -2849,7 +2857,7 @@ function HandleHedgeEditor()
 				dSprite = sprKnife
 			elseif (cat[cIndex] == loc("Sprite Placement Mode")) then
 				dSprite = reducedSpriteIDArray[pIndex]
-				dFrame = 1
+				dFrame = sFrame
 			else
 				dCol = 0xFFFFFF00
 				dSprite = sprArrow
@@ -3075,13 +3083,23 @@ function onLeft()
 	leftHeld = true
 	rightHeld = false
 
-	pIndex = pIndex - 1
-	if pIndex == 0 then
-		pIndex = #pMode
-	end
+	if preciseOn then
+		if cat[cIndex] == loc("Sprite Placement Mode") then
+			sFrame = sFrame - 1
+			if sFrame < 0 then
+				sFrame = reducedSpriteIDArrayFrames[pIndex] - 1
+			end
+		end
+	else
+		pIndex = pIndex - 1
+		if pIndex == 0 then
+			pIndex = #pMode
+		end
+		sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
 
-	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-		AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+		end
 	end
 
 end
@@ -3091,13 +3109,23 @@ function onRight()
 	leftHeld = false
 	rightHeld = true
 
-	pIndex = pIndex + 1
-	if pIndex > #pMode then
-		pIndex = 1
-	end
-
-	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-		AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+	if preciseOn then
+		if cat[cIndex] == loc("Sprite Placement Mode") then
+			sFrame = sFrame + 1
+			if sFrame >= reducedSpriteIDArrayFrames[pIndex] then
+				sFrame = 0
+			end
+		end
+	else
+		pIndex = pIndex + 1
+		if pIndex > #pMode then
+			pIndex = 1
+		end
+		sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+	
+		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+		end
 	end
 
 end
