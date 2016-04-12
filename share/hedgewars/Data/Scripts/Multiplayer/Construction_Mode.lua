@@ -1719,7 +1719,7 @@ end
 ---------------------------------------------------------
 function onUp()
 
-	if ((curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) ) then
+	if ( (curWep == amNapalm) or (curWep == amDrillStrike) ) then
 		updatePlacementDisplay(-1)
 	end
 
@@ -1727,7 +1727,7 @@ end
 
 function onDown()
 
-	if ((curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) ) then
+	if ( (curWep == amNapalm) or (curWep == amDrillStrike) ) then
 		updatePlacementDisplay(1)
 	end
 
