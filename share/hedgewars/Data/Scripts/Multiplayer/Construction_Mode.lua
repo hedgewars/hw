@@ -22,6 +22,21 @@
 -- limit number of generators?
 
 ------------------------------------------------------------------------------
+-- SCRIPT PARAMETER
+------------------------------------------------------------------------------
+-- The script parameter can be used to configure the energy
+-- of the game. It is a comma-seperated list of key=value pairs, where each
+-- key is a word and each value is non-negative integer.
+--
+-- Possible keys:
+--- initialenergy: Amount of energy that each team starts with (default: 500)
+--- energyperround: Amount of energy that each team gets per round (default: 50)
+--- maxenergy: Maximum amount of energy each team can hold (default: 1000)
+
+-- Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
+-- and sets the maximum energy to 2000
+
+------------------------------------------------------------------------------
 --version history
 ------------------------------------------------------------------------------
 --v0.1
@@ -112,6 +127,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 ----------------------------------------------
 -- STRUC CRAP
@@ -168,6 +184,11 @@ vTag = {}
 lastWep = nil
 
 checkForSpecialWeaponsIn = -1
+
+-- Config variables (script parameter)
+conf_initialEnergy = 500
+conf_energyPerRound = 50
+conf_maxEnergy = 1000
 
 function HideTags()
 
@@ -821,8 +842,8 @@ function HandleStructures()
 					if getGearValue(strucGear[i],"power") == 10 then
 						setGearValue(strucGear[i],"power",0)
 						clanPower[z] = clanPower[z] + 1
-						if clanPower[z] > 1000 then
-							clanPower[z] = 1000
+						if clanPower[z] > conf_maxEnergy then
+							clanPower[z] = conf_maxEnergy
 						end
 					end
 
@@ -1475,6 +1496,25 @@ end
 -- standard event handlers
 ----------------------------
 
+-- Parses a positive integer
+function parseInt(str, default)
+	if str == nil then return default end
+	local s = string.match(str, "(%d*)")
+	if s ~= nil then
+		return math.max(0, tonumber(s))
+	else
+		return nil
+	end
+end
+
+-- Parse parameters
+function onParameters()
+	parseParams()
+	conf_initialEnergy = parseInt(params["initialenergy"], conf_initialEnergy)
+	conf_energyPerRound = parseInt(params["energyperround"], conf_energyPerRound)
+	conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy)
+end
+
 function onGameInit()
 
 	Explosives = 0
@@ -1531,7 +1571,7 @@ function onGameStart()
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x00000000)
 
 	for i = 0, ClansCount-1 do
-		clanPower[i] = 500
+		clanPower[i] = conf_initialEnergy
 		clanLWepIndex[i] = 1 -- for ease of use let's track this stuff
 		clanLUtilIndex[i] = 1
 		clanLGearIndex[i] = 1
@@ -1569,9 +1609,13 @@ end
 
 function onNewTurn()
 
-	clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] + 50
-	clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = false
-	clanCratesSpawned[GetHogClan(CurrentHedgehog)] = 0
+	local clan = GetHogClan(CurrentHedgehog)
+	clanPower[clan] = clanPower[clan] + conf_energyPerRound
+	if clanPower[clan] > conf_maxEnergy then
+		clanPower[clan] = conf_maxEnergy
+	end
+	clanUsedExtraTime[clan] = false
+	clanCratesSpawned[clan] = 0
 
 end
 
