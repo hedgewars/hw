@@ -1364,17 +1364,17 @@ function RedefineSubset()
 
 	if cat[cIndex] == "Girder Placement Mode" then
 		pIndex = CGR
-		pMode = {"Girder"}
+		pMode = {loc("Girder")}
 		--	pCount = 1
 	elseif cat[cIndex] == "Rubber Placement Mode" then
 		pIndex = CGR
-		pMode = {"Rubber"}
+		pMode = {loc("Rubber")}
 		placedExpense = 3
 	--	pCount = 1???
 	elseif cat[cIndex] == "Target Placement Mode" then
-		pMode = {"Standard Target"}
+		pMode = {loc("Target")}
 	elseif cat[cIndex] == "Cleaver Placement Mode" then
-		pMode = {"Standard Cleaver"}
+		pMode = {loc("Cleaver")}
 	elseif cat[cIndex] == "Barrel Placement Mode" then
 		--pMode = {1,50,75,100}
 		pMode = {50}
@@ -1399,7 +1399,7 @@ function RedefineSubset()
 		-- 0 is dud right, or is that nil?
 		placedExpense = 15
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
-		pMode = {"Normal Sticky Mine"}
+		pMode = {loc("Sticky Mine")}
 	--elseif cat[cIndex] == "Gear Repositioning Mode" then
 	--	for i = 1, #hhs do
 	--		pMode[i] = GetHogName(hhs[i])
