@@ -29,7 +29,7 @@
 -- key is a word and each value is non-negative integer.
 --
 -- Possible keys:
---- initialenergy: Amount of energy that each team starts with (default: 500)
+--- initialenergy: Amount of energy that each team starts with (default: 550)
 --- energyperround: Amount of energy that each team gets per round (default: 50)
 --- maxenergy: Maximum amount of energy each team can hold (default: 1000)
 
@@ -169,6 +169,7 @@ clanLUtilIndex = {}
 clanLGearIndex = {}
 clanUsedExtraTime = {}
 clanCratesSpawned = {}
+clanFirstTurn = {}
 
 effectTimer = 0
 
@@ -186,7 +187,7 @@ lastWep = nil
 checkForSpecialWeaponsIn = -1
 
 -- Config variables (script parameter)
-conf_initialEnergy = 500
+conf_initialEnergy = 550
 conf_energyPerRound = 50
 conf_maxEnergy = 1000
 
@@ -1577,7 +1578,7 @@ function onGameStart()
 		clanLGearIndex[i] = 1
 		clanUsedExtraTime[i] = false
 		clanCratesSpawned[i] = 0
-
+		clanFirstTurn[i] = true
 
 	end
 
@@ -1610,9 +1611,13 @@ end
 function onNewTurn()
 
 	local clan = GetHogClan(CurrentHedgehog)
-	clanPower[clan] = clanPower[clan] + conf_energyPerRound
-	if clanPower[clan] > conf_maxEnergy then
-		clanPower[clan] = conf_maxEnergy
+	if clanFirstTurn[clan] then
+		clanFirstTurn[clan] = false
+	else
+		clanPower[clan] = clanPower[clan] + conf_energyPerRound
+		if clanPower[clan] > conf_maxEnergy then
+			clanPower[clan] = conf_maxEnergy
+		end
 	end
 	clanUsedExtraTime[clan] = false
 	clanCratesSpawned[clan] = 0
