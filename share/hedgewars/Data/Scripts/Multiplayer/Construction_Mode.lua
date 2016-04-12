@@ -419,9 +419,6 @@ function AddStruc(pX,pY, pType, pClan)
 		table.insert(strucCircCol,0x0000FFFF)
 		table.insert(strucCircRadius,350)
 		frameID = 6
-	elseif pType == loc("Core") then
-		table.insert(strucCircCol,0xFFFFFFFF)
-		table.insert(strucCircRadius,350)
 	elseif pType == loc("Generator") then
 		table.insert(strucCircCol,0xFFFF00FF)
 		table.insert(strucCircRadius,75)
@@ -765,24 +762,6 @@ function CheckProximity(gear)
 
 				end
 			end
-
-		-- doesn't do shit
-		elseif strucType[tempID] == loc("Core") then
-
-			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[tempID] then
-
-				tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, g1+20, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[tempID]) )
-
-					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, g1-20, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[tempID]) )
-
-				end
-			end
-
 		end
 
 	end
@@ -832,11 +811,7 @@ function HandleStructures()
 			CheckProximity(CurrentHedgehog)
 		end
 
-		if strucType[i] == loc("Core") then
-			tempE = AddVisualGear(GetX(strucGear[i]), GetY(strucGear[i]), vgtSmoke, 0, true)
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[i]) )
-		elseif strucType[i] == loc("Reflector Shield") then
+		if strucType[i] == loc("Reflector Shield") then
 
 		elseif strucType[i] == loc("Generator") then
 
@@ -1009,18 +984,6 @@ placeholder = 20
 				}
 
 ----------------------------
--- hog and map editting junk
-----------------------------
-
- local reducedSpriteIDArray = {
-  sprBigDigit, sprKowtow, sprBee, sprExplosion50, sprGirder
-  }
-
-  local reducedSpriteTextArray = {
-  "sprBigDigit", "sprKowtow", "sprBee", "sprExplosion50", "sprGirder"
-  }
-
-----------------------------
 -- placement shite
 ----------------------------
 
@@ -1135,10 +1098,6 @@ function PlaceObject(x,y)
 		elseif cat[cIndex] == "Rubber Placement Mode" then
 			PlaceSprite(x,y, sprAmRubber, CGR, nil, nil, nil, nil, lfBouncy)
 			placedSpec[placedCount] = CGR
-		elseif cat[cIndex] == "Target Placement Mode" then
-			gear = AddGear(x, y, gtTarget, 0, 0, 0, 0)
-		elseif cat[cIndex] == "Cleaver Placement Mode" then
-			gear = AddGear(x, y, gtKnife, 0, 0, 0, 0)
 		elseif cat[cIndex] == "Health Crate Placement Mode" then
 			gear = SpawnHealthCrate(x,y)
 			SetHealth(gear, pMode[pIndex])
@@ -1167,83 +1126,6 @@ function PlaceObject(x,y)
 			SetTimer(gear, pMode[pIndex])
 		elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 			gear = AddGear(x, y, gtSMine, 0, 0, 0, 0)
-		elseif cat[cIndex] == "Advanced Repositioning Mode" then
-
-			if pMode[pIndex] == "Selection Mode" then
-				closestDist = 999999999
-				closestGear = nil -- just in case
-				sGear = nil
-				runOnGears(SelectGear)
-				sGear = closestGear
-				closestGear = nil
-			elseif pMode[pIndex] == "Placement Mode" then
-				if sGear ~= nil then
-					SetGearPosition(sGear, x, y)
-				end
-			end
-
-		elseif cat[cIndex] == "Tagging Mode" then
-
-			closestDist = 999999999
-			closestGear = nil
-			sGear = nil
-			runOnGears(SelectGear)
-
-
-			if closestGear ~= nil then
-
-				if getGearValue(closestGear,"tag") == nil then
-
-					--if there is no tag, add a victory/failure tag and circle
-					setGearValue(closestGear, "tCirc",AddVisualGear(0,0,vgtCircle,0,true))
-
-					if pMode[pIndex] == "Tag Victory Mode" then
-						setGearValue(closestGear, "tag","victory")
-						SetVisualGearValues(getGearValue(closestGear,"tCirc"), 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xff0000ff)
-					elseif pMode[pIndex] == "Tag Failure Mode" then
-						setGearValue(closestGear, "tag","failure")
-						SetVisualGearValues(getGearValue(closestGear,"tCirc"), 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x0000ffff)
-					end
-
-
-				else
-					-- remove tag and delete circ
-					setGearValue(closestGear, "tag", nil)
-					DeleteVisualGear(getGearValue(closestGear,"tCirc"))
-					setGearValue(closestGear, "tCirc", nil)
-				end
-
-			end
-
-
-		elseif cat[cIndex] == "Sprite Testing Mode" then
-
-			frameID = 1
-			visualSprite = reducedSpriteIDArray[pIndex]
-			tempE = AddVisualGear(x, y, vgtStraightShot, 0, true)
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
-	--sprHorizonLong crashes game, so does skyL, as does flake
-
-		-- reduced list of cool sprites
-		-- sprBigDigit, sprKnife, sprFrozenHog, sprKowtow, sprBee, sprExplosion50, sprPiano, sprChunk, sprHHTelepMask, sprSeduction, sprSwitch, sprGirder,
-		--sprAMAmmos, sprAMSlotKeys, sprTurnsLeft, sprExplosivesRoll + maybe some others like the health case, arrows, etc
-
-		elseif cat[cIndex] == "Sprite Placement Mode" then
-
-			PlaceSprite(x,y, reducedSpriteIDArray[pIndex], 1, nil, nil, nil, nil, landType)
-			placedSpec[placedCount] = reducedSpriteTextArray[pIndex]
-			placedSuperSpec[placedCount] = landType
-
-			if landType == lfIce then
-				placedSuperSpec[placedCount] = "lfIce"
-			elseif landType == lfIndestructible then
-				placedSuperSpec[placedCount] = "lfIndestructible"
-			elseif landType == lfBouncy then
-				placedSuperSpec[placedCount] = "lfBouncy"
-			else
-				placedSuperSpec[placedCount] = "lfNormal"
-			end
 
 		elseif cat[cIndex] == "Structure Placement Mode" then
 
@@ -1282,10 +1164,6 @@ function RedefineSubset()
 		pIndex = CGR
 		pMode = {loc("Rubber")}
 		placedExpense = 3
-	elseif cat[cIndex] == "Target Placement Mode" then
-		pMode = {loc("Target")}
-	elseif cat[cIndex] == "Cleaver Placement Mode" then
-		pMode = {loc("Cleaver")}
 	elseif cat[cIndex] == "Barrel Placement Mode" then
 		pMode = {60}
 		placedExpense = 10
@@ -1308,15 +1186,6 @@ function RedefineSubset()
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 		pMode = {loc("Sticky Mine")}
 		placedExpense = 20
-	elseif cat[cIndex] == "Advanced Repositioning Mode" then
-		pMode = {"Selection Mode","Placement Mode"}
-	elseif cat[cIndex] == "Tagging Mode" then
-		pMode = {"Tag Victory Mode","Tag Failure Mode"}
-	elseif cat[cIndex] == "Sprite Testing Mode" or cat[cIndex] == "Sprite Placement Mode" then
-		for i = 1, #reducedSpriteTextArray do
-			pMode[i] = reducedSpriteTextArray[i]
-		end
-		placedExpense = 100
 	elseif cat[cIndex] == "Structure Placement Mode" then
 		pMode = {loc("Healing Station"), loc("Bio-Filter"), loc("Weapon Filter"), loc("Reflector Shield"), loc("Respawner"),loc("Teleportation Node"),loc("Generator"),loc("Construction Station"),loc("Support Station")}
 	end
@@ -1427,17 +1296,6 @@ function HandleHedgeEditor()
 
 	end
 
-	--update selected gear display
-	if (cat[cIndex] == "Advanced Repositioning Mode") and (sGear ~= nil) then
-		SetVisualGearValues(sCirc, GetX(sGear), GetY(sGear), 100, 255, 1, 10, 0, 300, 3, 0xff00ffff)
-	elseif (cat[cIndex] == "Tagging Mode") then
-		if (sGear ~= nil) or (closestGear ~= nil) then
-			SetVisualGearValues(sCirc, GetX(sGear), GetY(sGear), 0, 1, 1, 10, 0, 1, 1, 0x00000000)
-			closestGear = nil
-			sGear = nil
-		end
-	end
-
 	-- some kind of target detected, tell me your story
 	if cGear ~= nil then
 
@@ -1489,8 +1347,6 @@ function updateCost()
 			placedExpense = 300
 	elseif pMode[pIndex] == loc("Reflector Shield") then
 			placedExpense = 200
-	elseif pMode[pIndex] == loc("Core") then
-		placedExpense = 1
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		placedExpense = atkArray[pIndex][5]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
