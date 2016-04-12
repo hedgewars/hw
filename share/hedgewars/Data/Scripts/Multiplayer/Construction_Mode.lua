@@ -1199,7 +1199,7 @@ function PlaceObject(x,y)
 	placedSpec[placedCount] = pMode[pIndex]
 
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
-		AddCaption(loc("You may only use 1 Extra Time per turn."),0xffba00ff,capgrpVolume)
+		AddCaption(loc("You may only buy 1 Extra Time per turn."),0xffba00ff,capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (clanCratesSpawned[GetHogClan(CurrentHedgehog)] > 4) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
 		AddCaption(loc("You may only spawn 5 crates per turn."),0xffba00ff,capgrpVolume)
