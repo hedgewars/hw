@@ -1635,6 +1635,7 @@ function onLeft()
 end
 
 function showModeMessage()
+	if CurrentHedgehog == nil then return end
 	local val = pMode[pIndex]
 	local str
 	if cat[cIndex] == "Mine Placement Mode" then
