@@ -1509,7 +1509,7 @@ function HandleHedgeEditor()
 
 
 				AddCaption(loc(cat[cIndex]),0xffba00ff,capgrpMessage)
-				AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+				showModeMessage()
 				wallsVisible = true
 			else
 				wallsVisible = false
@@ -1627,11 +1627,23 @@ function onLeft()
 	end
 
 	if (curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) then
-		AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+		showModeMessage()
 		updateCost()
 	end
 
 
+end
+
+function showModeMessage()
+	local val = pMode[pIndex]
+	local str
+	if cat[cIndex] == "Mine Placement Mode" then
+		-- timer in seconds
+		str = string.format(loc("%d sec"), div(val, 1000))
+	else
+		str = tostring(val)
+	end
+	AddCaption(str,0xffba00ff,capgrpMessage2)
 end
 
 function onRight()
@@ -1642,7 +1654,7 @@ function onRight()
 	end
 
 	if (curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) then
-		AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+		showModeMessage()
 		updateCost()
 	end
 
