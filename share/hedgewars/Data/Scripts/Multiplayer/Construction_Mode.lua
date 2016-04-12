@@ -186,7 +186,7 @@ function DrawTag(i)
 	if i == 0 then
 		yOffset = 40
 		tCol = 0xffba00ff
-		tValue = 30--TimeLeft
+		tValue = 30
 	elseif i == 1 then
 		zoomL = 1.1
 		xOffset = 45
@@ -198,7 +198,7 @@ function DrawTag(i)
 		xOffset = 60 + 35
 		yOffset = 70
 		tCol = 0xa800ffff
-		tValue = 10--shieldHealth - 80
+		tValue = 10
 	end
 
 	DeleteVisualGear(vTag[i])
@@ -266,7 +266,7 @@ end
 function HandleBorderEffects()
 
 	effectTimer = effectTimer + 1
-	if effectTimer > 15 then --25
+	if effectTimer > 15 then
 		effectTimer = 1
 		for i = 1, #wX do
 			BorderSpark(wX[i],wY[i],wWidth[i],wHeight[i], wCol[i])
@@ -282,16 +282,12 @@ end
 function gearCanBeDeflected(gear)
 
 	if 	(GetGearType(gear) == gtShell) or
-		--(GetGearType(gear) == gtBee) or
 		(GetGearType(gear) == gtGrenade) or
 		(GetGearType(gear) == gtAirBomb) or
-		--(GetGearType(gear) == gtRCPlane) or
-		--(GetGearType(gear) == gtRope) or
 		(GetGearType(gear) == gtClusterBomb) or
 		(GetGearType(gear) == gtCluster) or
 		(GetGearType(gear) == gtGasBomb) or
-		--(GetGearType(gear) == gtSeduction) or
-		(GetGearType(gear) == gtMine) or	-------
+		(GetGearType(gear) == gtMine) or
 		(GetGearType(gear) == gtMortar) or
 		(GetGearType(gear) == gtHellishBomb) or
 		(GetGearType(gear) == gtWatermelon) or
@@ -299,15 +295,11 @@ function gearCanBeDeflected(gear)
 		(GetGearType(gear) == gtEgg) or
 		(GetGearType(gear) == gtDrill) or
 		(GetGearType(gear) == gtBall) or
-		(GetGearType(gear) == gtExplosives) or	------
+		(GetGearType(gear) == gtExplosives) or
 			(GetGearType(gear) == gtFlame) or
 			(GetGearType(gear) == gtPortal) or
 			(GetGearType(gear) == gtDynamite) or
 			(GetGearType(gear) == gtSMine) or
-			--(GetGearType(gear) == gtKamikaze) or
-			--(GetGearType(gear) == gtRCPlane) or
-			--(GetGearType(gear) == gtCake) or
-			--(GetGearType(gear) == gtHedgehog) or ------
 		(GetGearType(gear) == gtKnife) or
 		(GetGearType(gear) == gtJetpack) or -- test this and birdy plz
 		(GetGearType(gear) == gtBirdy) or -- test this and birdy plz
@@ -348,10 +340,6 @@ function getThreatDamage(gear)
 	elseif (GetGearType(gear) == gtFlame) or
 			(GetGearType(gear) == gtPortal) or
 			(GetGearType(gear) == gtDynamite)
-			--(GetGearType(gear) == gtKamikaze) or
-			--(GetGearType(gear) == gtRCPlane) or
-
-			--(GetGearType(gear) == gtCake)
 	then
 		dmg = 0
 
@@ -372,10 +360,10 @@ function setGearReflectionValues(gear)
 	setGearValue(gear,"damage",dmg)
 	setGearValue(gear,"deflects",0)
 
-	if (CurrentHedgehog ~= nil) then --and (gameStarted == true) then
+	if (CurrentHedgehog ~= nil) then
 		setGearValue(gear,"owner",GetHogClan(CurrentHedgehog)) -- NEW NEEDS CHANGE?
 	else
-		setGearValue(gear,"owner",10) -- nil
+		setGearValue(gear,"owner",10)
 	end
 
 end
@@ -407,13 +395,8 @@ function AddStruc(pX,pY, pType, pClan)
 	if pType == loc("Reflector Shield") then
 		table.insert(strucHealth,255)
 
-		--SetVisualGearValues(madness, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
-		--SetState(tempG, bor(GetState(tempG),gstInvisible) )
-		--table.insert(strucAltDisplay, madness)
-
 	else
 		table.insert(strucHealth,1)
-		--table.insert(strucAltDisplay, 1)
 	end
 
 	table.insert(strucCirc,tempCirc)
@@ -425,12 +408,10 @@ function AddStruc(pX,pY, pType, pClan)
 		frameID = 7
 	elseif pType == loc("Healing Station") then
 		table.insert(strucCircCol,0xFF00FF00)
-		--table.insert(strucCircCol,colorGreen)
 		table.insert(strucCircRadius,500)
 		frameID = 3
 	elseif pType == loc("Respawner") then
 		table.insert(strucCircCol,0xFF00FF00)
-		--table.insert(strucCircCol,0xFF00FFFF)
 		table.insert(strucCircRadius,75)
 		runOnHogs(EnableHogResurrectionForThisClan)
 		frameID = 1
@@ -468,10 +449,6 @@ function AddStruc(pX,pY, pType, pClan)
 	SetVisualGearValues(madness, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
 	SetState(tempG, bor(GetState(tempG),gstInvisible) )
 	table.insert(strucAltDisplay, madness)
-
-	-- may be needed for non gear-based structures
-	--table.insert(strucX, GetX(tempG))
-	--table.insert(strucY, GetY(tempG))
 
 end
 
@@ -582,7 +559,6 @@ function CheckTeleport(gear, tX, tY)
 				NR = strucCircRadius[i]
 			else
 				NR = (48/100*strucCircRadius[i])/2
-				--NR = div((div(48,100) * strucCircRadius[tempID]),2)
 			end
 			if dist <= NR*NR then
 				teleportOriginSuccessful = true
@@ -593,7 +569,6 @@ function CheckTeleport(gear, tX, tY)
 				NR = strucCircRadius[i]
 			else
 				NR = (48/100*strucCircRadius[i])/2
-				--NR = div((div(48,100) * strucCircRadius[tempID]),2)
 			end
 			if dist <= NR*NR then
 				teleportDestinationSuccessful = true
@@ -614,222 +589,203 @@ end
 --Check for proximity of gears to structures, and make structures behave accordingly
 function CheckProximity(gear)
 
-	--if isAStructureEffectingGear(gear) then
+	dist = GetDistFromGearToXY(gear, GetX(strucGear[tempID]), GetY(strucGear[tempID]))
 
-		dist = GetDistFromGearToXY(gear, GetX(strucGear[tempID]), GetY(strucGear[tempID]))
+	-- calculate my real radius if I am an aura
+	if strucCircType[tempID] == 0 then
+		NR = strucCircRadius[tempID]
+	else
+		NR = (48/100*strucCircRadius[tempID])/2
+	end
 
-		-- calculate my real radius if I am an aura
-		if strucCircType[tempID] == 0 then
-			NR = strucCircRadius[tempID]
-		else
-			NR = (48/100*strucCircRadius[tempID])/2
-			--NR = div((div(48,100) * strucCircRadius[tempID]),2) -- doesn't work ffff
-				--NR = div((48/100*strucCircRadius[tempID]),2) -- still works
-
-		end
-
-		-- we're in business
-		if dist <= NR*NR then
+	-- we're in business
+	if dist <= NR*NR then
 
 
-			-- heal clan hogs
-			if strucType[tempID] == loc("Healing Station") then
+		-- heal clan hogs
+		if strucType[tempID] == loc("Healing Station") then
 
-				if GetGearType(gear) == gtHedgehog then
-					if GetHogClan(gear) == strucClan[tempID] then
+			if GetGearType(gear) == gtHedgehog then
+				if GetHogClan(gear) == strucClan[tempID] then
 
-						hogLife = GetHealth(gear) + 1
-						if hogLife > 150 then
-							hogLife = 150
-						end
-						SetHealth(gear, hogLife)
-
-						-- change this to the med kit sprite health ++++s later
-						tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-						g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-						SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, colorGreen )
-
-
+					hogLife = GetHealth(gear) + 1
+					if hogLife > 150 then
+						hogLife = 150
 					end
+					SetHealth(gear, hogLife)
+
+					-- change this to the med kit sprite health ++++s later
+					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+					SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, colorGreen )
+
 				end
+			end
 
-			-- explode enemy clan hogs
-			elseif strucType[tempID] == loc("Bio-Filter") then
+		-- explode enemy clan hogs
+		elseif strucType[tempID] == loc("Bio-Filter") then
 
-				--tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-				--g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				--SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, colorRed )
+			if GetGearType(gear) == gtHedgehog then
+				if (GetHogClan(gear) ~= strucClan[tempID]) and (GetHealth(gear) > 0) then
+					AddGear(GetX(gear), GetY(gear), gtGrenade, 0, 0, 0, 1)
+				end
+			end
 
-				if GetGearType(gear) == gtHedgehog then
-					if (GetHogClan(gear) ~= strucClan[tempID]) and (GetHealth(gear) > 0) then
-						AddGear(GetX(gear), GetY(gear), gtGrenade, 0, 0, 0, 1)
+		-- were those weapons in your pocket, or were you just happy to see me?
+		elseif strucType[tempID] == loc("Weapon Filter") then
+
+			if GetGearType(gear) == gtHedgehog then
+				if (GetHogClan(gear) ~= strucClan[tempID]) then
+
+					for wpnIndex = 1, #atkArray do
+						AddAmmo(gear, atkArray[wpnIndex][1], 0)
 					end
+
+					for wpnIndex = 1, #utilArray do
+						AddAmmo(gear, utilArray[wpnIndex][1], 0)
+					end
+
+					AddAmmo(gear, amAirAttack, 100)
+					AddAmmo(gear, amSwitch, 100)
+					AddAmmo(gear, amSkip, 100)
+
 				end
+			end
 
-			-- were those weapons in your pocket, or were you just happy to see me?
-			elseif strucType[tempID] == loc("Weapon Filter") then
+		-- BOUNCE! POGO! POGO! POGO! POGO!
+		elseif strucType[tempID] == loc("Reflector Shield") then
 
-				if GetGearType(gear) == gtHedgehog then
-					if (GetHogClan(gear) ~= strucClan[tempID]) then
+			-- add check for whose projectile it is
+			if gearCanBeDeflected(gear) == true then
 
-						for wpnIndex = 1, #atkArray do
-							AddAmmo(gear, atkArray[wpnIndex][1], 0)
+				gOwner = getGearValue(gear,"owner")
+				gDeflects = getGearValue(gear,"deflects")
+				gDmg = getGearValue(gear,"damage")
+
+				if gDeflects >= 3 then
+					DeleteGear(gear)
+					AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
+					PlaySound(sndVaporize)
+				elseif gOwner ~= strucClan[tempID] then
+					--whether to vaporize gears or bounce them
+					if gDmg ~= 0 then
+						dx, dy = GetGearVelocity(gear)
+
+						if (dx == 0) and (dy == 0) then
+							-- static mine, explosive, etc encountered
+							-- do nothing
+							else
+
+							--let's bounce something!
+
+							dx = dx*(-1)
+							dy = dy*(-1)
+							SetGearVelocity(gear,dx,dy)
+							setGearValue(gear,"deflects",(gDeflects+1))
+
+							AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
+							PlaySound(sndExplosion)
+
+							strucHealth[tempID] = strucHealth[tempID] - gDmg
+							strucCircCol[tempID] = strucCircCol[tempID] - gDmg
+
+							if strucHealth[tempID] <= 0 then
+								AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtExplosion, 0, false)
+								DeleteGear(strucGear[tempID])
+								PlaySound(sndExplosion)
+							end
+
 						end
 
-						for wpnIndex = 1, #utilArray do
-							AddAmmo(gear, utilArray[wpnIndex][1], 0)
-						end
-
-						AddAmmo(gear, amAirAttack, 100)
-						AddAmmo(gear, amSwitch, 100)
-						AddAmmo(gear, amSkip, 100)
-
-					end
-				end
-
-			-- BOUNCE! POGO! POGO! POGO! POGO!
-			elseif strucType[tempID] == loc("Reflector Shield") then
-
-				-- add check for whose projectile it is
-				if gearCanBeDeflected(gear) == true then
-
-					gOwner = getGearValue(gear,"owner")
-					gDeflects = getGearValue(gear,"deflects")
-					gDmg = getGearValue(gear,"damage")
-
-					if gDeflects >= 3 then
+					else
 						DeleteGear(gear)
 						AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
 						PlaySound(sndVaporize)
-					elseif gOwner ~= strucClan[tempID] then
-						--whether to vaporize gears or bounce them
-						if gDmg ~= 0 then
-							dx, dy = GetGearVelocity(gear)
+					end
+				end
+			end
 
-							if (dx == 0) and (dy == 0) then
-								-- static mine, explosive, etc encountered
-								-- do nothing
-							else
+		--mark as within range of a teleporter node
+		elseif strucType[tempID] == loc("Teleportation Node") then
 
-								--let's bounce something!
+			if GetGearType(gear) == gtHedgehog then
+				if GetHogClan(gear) == strucClan[tempID] then
 
-								--if dx == 0 then
-									-- bounce away eggs
-								--	dx = 0.5
-								--end
-
-								dx = dx*(-1)
-								dy = dy*(-1)
-								SetGearVelocity(gear,dx,dy)
-								setGearValue(gear,"deflects",(gDeflects+1))
-
-								AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
-								PlaySound(sndExplosion)
-
-								strucHealth[tempID] = strucHealth[tempID] - gDmg
-								strucCircCol[tempID] = strucCircCol[tempID] - gDmg
-
-								if strucHealth[tempID] <= 0 then
-									AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtExplosion, 0, false)
-									DeleteGear(strucGear[tempID])
-									PlaySound(sndExplosion)
-								end
-
-							end
-
-						else
-							DeleteGear(gear)
-							AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
-							PlaySound(sndVaporize)
+					for i = 1, #sProx do
+						if sProx[i][1] == loc("Teleportation Mode") then
+							sProx[i][2] = true
 						end
 					end
+
 				end
+			end
 
-			--mark as within range of a teleporter node
-			elseif strucType[tempID] == loc("Teleportation Node") then
+		-- mark as within range of construction station
+		-- and thus allow menu access to placement modes
+		-- for girders, mines, sticky mines and barrels
+		elseif strucType[tempID] == loc("Construction Station") then
 
-				if GetGearType(gear) == gtHedgehog then
-					if GetHogClan(gear) == strucClan[tempID] then
-						--tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+			if GetGearType(gear) == gtHedgehog then
+				if GetHogClan(gear) == strucClan[tempID] then
+					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
 
-						for i = 1, #sProx do
-							if sProx[i][1] == loc("Teleportation Mode") then
-								sProx[i][2] = true
-							end
+					for i = 1, #sProx do
+						if ((sProx[i][1] == loc("Girder Placement Mode"))
+						or (sProx[i][1] == loc("Rubber Placement Mode"))
+						or (sProx[i][1] == loc("Mine Placement Mode"))
+						or (sProx[i][1] == loc("Sticky Mine Placement Mode"))
+						or (sProx[i][1] == loc("Barrel Placement Mode")))
+						then
+							sProx[i][2] = true
 						end
-
 					end
+
+
 				end
+			end
 
-			-- mark as within range of construction station
-			-- and thus allow menu access to placement modes
-			-- for girders, mines, sticky mines and barrels
-			elseif strucType[tempID] == loc("Construction Station") then
+		-- mark as within stupport station range
+		-- and thus allow menu access to placement modes
+		-- for weapon, utility, and med crates
+		elseif strucType[tempID] == loc("Support Station") then
 
-				if GetGearType(gear) == gtHedgehog then
-					if GetHogClan(gear) == strucClan[tempID] then
-						tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+			if GetGearType(gear) == gtHedgehog then
+				if GetHogClan(gear) == strucClan[tempID] then
+					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
 
-						for i = 1, #sProx do
-							if ((sProx[i][1] == loc("Girder Placement Mode"))
-							or (sProx[i][1] == loc("Rubber Placement Mode"))
-							or (sProx[i][1] == loc("Mine Placement Mode"))
-							or (sProx[i][1] == loc("Sticky Mine Placement Mode"))
-							or (sProx[i][1] == loc("Barrel Placement Mode")))
-							then
-								sProx[i][2] = true
-							end
+					for i = 1, #sProx do
+						if ((sProx[i][1] == loc("Health Crate Placement Mode"))
+						or (sProx[i][1] == loc("Weapon Crate Placement Mode"))
+						or (sProx[i][1] == loc("Utility Crate Placement Mode")))
+						then
+							sProx[i][2] = true
 						end
-
-
 					end
+
+
 				end
+			end
 
-			-- mark as within stupport station range
-			-- and thus allow menu access to placement modes
-			-- for weapon, utility, and med crates
-			elseif strucType[tempID] == loc("Support Station") then
+		-- doesn't do shit
+		elseif strucType[tempID] == loc("Core") then
 
-				if GetGearType(gear) == gtHedgehog then
-					if GetHogClan(gear) == strucClan[tempID] then
-						tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+			if GetGearType(gear) == gtHedgehog then
+				if GetHogClan(gear) == strucClan[tempID] then
 
-						for i = 1, #sProx do
-							if ((sProx[i][1] == loc("Health Crate Placement Mode"))
-							or (sProx[i][1] == loc("Weapon Crate Placement Mode"))
-							or (sProx[i][1] == loc("Utility Crate Placement Mode")))
-							then
-								sProx[i][2] = true
-								--AddCaption("wahey in a support station")
-							end
-						end
+				tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+					SetVisualGearValues(tempE, g1+20, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[tempID]) )
 
+					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+					SetVisualGearValues(tempE, g1-20, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[tempID]) )
 
-					end
 				end
-
-			-- doesn't do shit
-			elseif strucType[tempID] == loc("Core") then
-
-				if GetGearType(gear) == gtHedgehog then
-					if GetHogClan(gear) == strucClan[tempID] then
-
-						tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-						g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-						SetVisualGearValues(tempE, g1+20, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[tempID]) )
-
-						tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-						g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-						SetVisualGearValues(tempE, g1-20, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[tempID]) )
-
-					end
-				end
-
 			end
 
 		end
 
-	--end
+	end
 
 end
 
@@ -882,25 +838,8 @@ function HandleStructures()
 			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(strucClan[i]) )
 		elseif strucType[i] == loc("Reflector Shield") then
 
-
-
-			--frameID = 1
-			--visualSprite = sprTarget
-			--g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(strucAltDisplay[i])			--frameID / g6
-			--SetVisualGearValues(strucAltDisplay[i], GetX(strucGear[i]), GetY(strucGear[i]), 0, 0, g5, g6, 8000, visualSprite, g9, g10 )
-
 		elseif strucType[i] == loc("Generator") then
 
-			--frameID = 1
-			--visualSprite = sprTarget
-																									--layer
-			--tempE = AddVisualGear(GetX(strucGear[i]), GetY(strucGear[i]), vgtStraightShot, 1, true,1)
-			--g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)	--g9
-			--SetVisualGearValues(tempE, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
-			--SetState(strucGear[i], bor(GetState(strucGear[i]),gstInvisible) )
-
-			--currently generate power for all clans.
-			-- or should power only be generated for current clan?
 			for z = 0, ClansCount-1 do
 				if z == strucClan[i] then
 					increaseGearValue(strucGear[i],"power")
@@ -957,14 +896,6 @@ function HandleStructures()
 		end
 
 	end
-
-	-- doesn't do shit atm, maybe later when we add cores we can use this
-	--if anyUIProx == true then --(and core is placed)
-	--	AddAmmo(CurrentHedgehog, amAirAttack, 100)
-	--else
-	--	AddAmmo(CurrentHedgehog, amAirAttack, 0)
-	--end
-
 
 end
 
@@ -1107,13 +1038,6 @@ local cat = 	{
 				"Health Crate Placement Mode",
 				"Weapon Crate Placement Mode",
 				"Utility Crate Placement Mode",
-				--"Target Placement Mode",
-				--"Cleaver Placement Mode",
-
-				--"Advanced Repositioning Mode",
-				--"Tagging Mode",
-				--"Sprite Testing Mode",
-				--"Sprite Placement Mode",
 				"Structure Placement Mode"
 				}
 
@@ -1127,13 +1051,6 @@ local cat = 	{
 				{loc("Health Crate Placement Mode"),false},
 				{loc("Weapon Crate Placement Mode"),false},
 				{loc("Utility Crate Placement Mode"),false},
-				--{loc("Target Placement Mode"),false},
-				--{loc("Cleaver Placement Mode"),false},
-
-				--{loc("Advanced Repositioning Mode"),false},
-				--{loc("Tagging Mode"),false},
-				--{loc("Sprite Testing Mode"),false},
-				--{loc("Sprite Placement Mode"),false},
 				{loc("Structure Placement Mode"),false},
 				{loc("Teleportation Mode"),false}
 				}
@@ -1217,7 +1134,6 @@ function PlaceObject(x,y)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Rubber Placement Mode" then
 			PlaceSprite(x,y, sprAmRubber, CGR, nil, nil, nil, nil, lfBouncy)
-			--PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Target Placement Mode" then
 			gear = AddGear(x, y, gtTarget, 0, 0, 0, 0)
@@ -1281,8 +1197,6 @@ function PlaceObject(x,y)
 					--if there is no tag, add a victory/failure tag and circle
 					setGearValue(closestGear, "tCirc",AddVisualGear(0,0,vgtCircle,0,true))
 
-					--AddCaption("circ added",0xffba00ff,capgrpVolume)
-
 					if pMode[pIndex] == "Tag Victory Mode" then
 						setGearValue(closestGear, "tag","victory")
 						SetVisualGearValues(getGearValue(closestGear,"tCirc"), 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xff0000ff)
@@ -1294,7 +1208,6 @@ function PlaceObject(x,y)
 
 				else
 					-- remove tag and delete circ
-					--AddCaption("circ removed",0xffba00ff,capgrpVolume)
 					setGearValue(closestGear, "tag", nil)
 					DeleteVisualGear(getGearValue(closestGear,"tCirc"))
 					setGearValue(closestGear, "tCirc", nil)
@@ -1307,7 +1220,6 @@ function PlaceObject(x,y)
 
 			frameID = 1
 			visualSprite = reducedSpriteIDArray[pIndex]
-			--visualSprite = spriteIDArray[pIndex]
 			tempE = AddVisualGear(x, y, vgtStraightShot, 0, true)
 			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
 			SetVisualGearValues(tempE, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
@@ -1320,7 +1232,6 @@ function PlaceObject(x,y)
 		elseif cat[cIndex] == "Sprite Placement Mode" then
 
 			PlaceSprite(x,y, reducedSpriteIDArray[pIndex], 1, nil, nil, nil, nil, landType)
-			--PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = reducedSpriteTextArray[pIndex]
 			placedSuperSpec[placedCount] = landType
 
@@ -1367,12 +1278,10 @@ function RedefineSubset()
 	if cat[cIndex] == "Girder Placement Mode" then
 		pIndex = CGR
 		pMode = {loc("Girder")}
-		--	pCount = 1
 	elseif cat[cIndex] == "Rubber Placement Mode" then
 		pIndex = CGR
 		pMode = {loc("Rubber")}
 		placedExpense = 3
-	--	pCount = 1???
 	elseif cat[cIndex] == "Target Placement Mode" then
 		pMode = {loc("Target")}
 	elseif cat[cIndex] == "Cleaver Placement Mode" then
@@ -1385,12 +1294,12 @@ function RedefineSubset()
 		placedExpense = 5
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
-			pMode[i] = atkArray[i][4] -- was [2]
+			pMode[i] = atkArray[i][4]
 		end
 		placedExpense = atkArray[pIndex][5]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		for i = 1, #utilArray do
-			pMode[i] = utilArray[i][4] -- was [2]
+			pMode[i] = utilArray[i][4]
 		end
 		placedExpense = utilArray[pIndex][5]
 	elseif cat[cIndex] == "Mine Placement Mode" then
@@ -1398,26 +1307,18 @@ function RedefineSubset()
 		placedExpense = 15
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 		pMode = {loc("Sticky Mine")}
-	--elseif cat[cIndex] == "Gear Repositioning Mode" then
-	--	for i = 1, #hhs do
-	--		pMode[i] = GetHogName(hhs[i])
-	--	end
 		placedExpense = 20
 	elseif cat[cIndex] == "Advanced Repositioning Mode" then
 		pMode = {"Selection Mode","Placement Mode"}
 	elseif cat[cIndex] == "Tagging Mode" then
 		pMode = {"Tag Victory Mode","Tag Failure Mode"}
 	elseif cat[cIndex] == "Sprite Testing Mode" or cat[cIndex] == "Sprite Placement Mode" then
-		--for i = 1, #spriteTextArray do
-		--	pMode[i] = spriteTextArray[i]
-		--end
 		for i = 1, #reducedSpriteTextArray do
 			pMode[i] = reducedSpriteTextArray[i]
 		end
 		placedExpense = 100
 	elseif cat[cIndex] == "Structure Placement Mode" then
-		pMode = {loc("Healing Station"), loc("Bio-Filter"), loc("Weapon Filter"), loc("Reflector Shield"), loc("Respawner"),loc("Teleportation Node"),--[[loc("Core"),]]loc("Generator"),loc("Construction Station"),loc("Support Station")}
-		--placedExpense = 100
+		pMode = {loc("Healing Station"), loc("Bio-Filter"), loc("Weapon Filter"), loc("Reflector Shield"), loc("Respawner"),loc("Teleportation Node"),loc("Generator"),loc("Construction Station"),loc("Support Station")}
 	end
 
 
@@ -1466,10 +1367,10 @@ function HandleHedgeEditor()
 				RedefineSubset()
 			-- change to generic mode if girder no longer selected
 			elseif (cIndex == 1) and (curWep ~= amGirder) then
-				cIndex = 3 -- was 2
+				cIndex = 3
 				RedefineSubset()
 			elseif (cIndex == 2) and (curWep ~= amRubber) then
-				cIndex = 3 --new
+				cIndex = 3
 				RedefineSubset()
 
 			end
@@ -1553,33 +1454,7 @@ function HandleHedgeEditor()
 
 			CGR = GetState(cGear)
 
-			-- improve rectangle test based on CGR when you can be bothered
-			--if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-			--	AddCaption("Invalid Girder Placement",0xffba00ff,capgrpVolume)
-			--else
-				PlaceObject(x, y)
-			--end
-
-			-- this allows the girder tool to be used like a mining laser
-
-		--[[
-
-			if CGR < 4 then
-				AddGear(x, y, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 4 then
-				g = AddGear(x-30, y, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x+30, y, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 5 then -------
-				g = AddGear(x+30, y+30, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x-30, y-30, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 6 then
-				g = AddGear(x, y+30, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x, y-30, gtGrenade, 0, 0, 0, 1)
-			elseif CGR == 7 then -------
-				g = AddGear(x+30, y-30, gtGrenade, 0, 0, 0, 1)
-				g = AddGear(x-30, y+30, gtGrenade, 0, 0, 0, 1)
-			end
-]]
+			PlaceObject(x, y)
 		end
 
 	end
@@ -1687,10 +1562,6 @@ function updatePlacementDisplay(pDir)
 			cIndex = 3	 -- 2 ----we no longer hit girder by normal means
 		end
 
-		-- new way of doing things
-		-- sProx[cIndex][2] == true just basically means we have ACCESS to something
-		-- but that doesn't neccessarily mean we are in the correct content menu, anymore
-		-- so we need to refine this a little
 		if sProx[cIndex][2] == true then
 			if (GetCurAmmoType() == amNapalm) then
 				if (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
@@ -1715,9 +1586,6 @@ function updatePlacementDisplay(pDir)
 
 
 		if foundMatch == true then
-		--if sProx[cIndex][2] == true then
-			-- normal case (scrolling through)
-			--foundMatch = true
 			RedefineSubset()
 			updateCost()
 		end
@@ -1783,11 +1651,9 @@ function onGameStart()
 				loc("a Hedgewars mini-game"),
 				" " .. "|" ..
 				loc("Build a fortress and destroy your enemy.") .. "|" ..
-				--loc("Defend your core from the enemy.") .. "|" ..
 				loc("There are a variety of structures available to aid you.") .. "|" ..
 				loc("Use the air-attack weapons and the arrow keys to select structures.") .. "|" ..
 				" " .. "|" ..
-				--loc("Core") .. ": " .. loc("Allows placement of structures.")  .. "|" ..
 				loc("Healing Station") .. ": " .. loc("Grants nearby hogs life-regeneration.")  .. "|" ..
 				loc("Bio-Filter") .. ": " .. loc("Aggressively removes enemy hedgehogs.")  .. "|" ..
 				loc("Weapon Filter") .. ": " .. loc("Dematerializes weapons and equipment carried by enemy hedgehogs.")  .. "|" ..
@@ -1801,7 +1667,6 @@ function onGameStart()
 
 
 				" " .. "|" ..
-				--" " .. "|" ..
 				"", 4, 5000
 				)
 
@@ -1873,7 +1738,6 @@ end
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-		--table.insert(hhs, gear)
 	elseif (GetGearType(gear) == gtAirAttack) or (GetGearType(gear) == gtTeleport) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
 
