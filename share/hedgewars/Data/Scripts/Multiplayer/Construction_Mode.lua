@@ -816,38 +816,36 @@ function HandleStructures()
 
 	for i = 1, #strucID do
 
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(strucCirc[i])
-		SetVisualGearValues(strucCirc[i], GetX(strucGear[i]), GetY(strucGear[i]), g3, g4, g5, g6, g7, strucCircRadius[i], g9, strucCircCol[i])
+		SetVisualGearValues(strucCirc[i], GetX(strucGear[i]), GetY(strucGear[i]), nil, nil, nil, nil, nil, strucCircRadius[i], nil, strucCircCol[i])
 
 		tempID = i
 
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(strucAltDisplay[i])				--8000
-		SetVisualGearValues(strucAltDisplay[i], GetX(strucGear[i]), GetY(strucGear[i]), 0, 0, g5, g6, 800000, sprTarget, g9, g10 )
+		SetVisualGearValues(strucAltDisplay[i], GetX(strucGear[i]), GetY(strucGear[i]), 0, 0, nil, nil, 800000, sprTarget)
 
+		if GameTime % 100 == 0 then
+			-- Check For proximity of stuff to our structures
+			if isAStructureThatAppliesToMultipleGears(i) then
+				runOnGears(CheckProximity)
+			else -- only check prox on CurrentHedgehog
+				if CurrentHedgehog ~= nil then
+					CheckProximity(CurrentHedgehog)
+				end
+			end
 
-
-		-- Check For proximity of stuff to our structures
-		if isAStructureThatAppliesToMultipleGears(i) then
-			runOnGears(CheckProximity)
-		else -- only check prox on CurrentHedgehog
-			CheckProximity(CurrentHedgehog)
-		end
-
-		if strucType[i] == loc("Reflector Shield") then
-
-		elseif strucType[i] == loc("Generator") then
-
-			for z = 0, ClansCount-1 do
-				if z == strucClan[i] then
-					increaseGearValue(strucGear[i],"power")
-					if getGearValue(strucGear[i],"power") == 10 then
-						setGearValue(strucGear[i],"power",0)
-						clanPower[z] = clanPower[z] + 1
-						if clanPower[z] > conf_maxEnergy then
-							clanPower[z] = conf_maxEnergy
+			if strucType[i] == loc("Generator") then
+	
+				for z = 0, ClansCount-1 do
+					if z == strucClan[i] then
+						increaseGearValue(strucGear[i],"power")
+						if getGearValue(strucGear[i],"power") == 10 then
+							setGearValue(strucGear[i],"power",0)
+							clanPower[z] = clanPower[z] + 1
+							if clanPower[z] > conf_maxEnergy then
+								clanPower[z] = conf_maxEnergy
+							end
 						end
+	
 					end
-
 				end
 			end
 
@@ -1220,6 +1218,8 @@ end
 -- called in onGameTick()
 function HandleHedgeEditor()
 
+	HandleStructures()
+
 	if CurrentHedgehog ~= nil then
 
 		if wallsVisible == true then
@@ -1244,8 +1244,6 @@ function HandleHedgeEditor()
 			genTimer = 0
 
 			DrawTag(1)
-
-			HandleStructures()
 
 			curWep = GetCurAmmoType()
 
