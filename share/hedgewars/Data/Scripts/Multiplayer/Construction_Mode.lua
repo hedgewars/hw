@@ -1389,15 +1389,13 @@ function RedefineSubset()
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
 			pMode[i] = atkArray[i][4] -- was [2]
-			--placedExpense = atkArray[5]
 		end
-		placedExpense = 30
+		placedExpense = atkArray[pIndex][5]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		for i = 1, #utilArray do
 			pMode[i] = utilArray[i][4] -- was [2]
-			--placedExpense = utilArray[5]
 		end
-		placedExpense = 20
+		placedExpense = utilArray[pIndex][5]
 	elseif cat[cIndex] == "Mine Placement Mode" then
 		--pMode = {1,1000,2000,3000,4000,5000,0}
 		pMode = {1,1000,2000,3000,4000,5000}
@@ -1631,9 +1629,9 @@ function updateCost()
 			placedExpense = 200
 	elseif pMode[pIndex] == loc("Core") then
 		placedExpense = 1
-	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
+	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		placedExpense = atkArray[pIndex][5]
-	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
+	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		placedExpense = utilArray[pIndex][5]
 	end
 
