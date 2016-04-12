@@ -1376,11 +1376,9 @@ function RedefineSubset()
 	elseif cat[cIndex] == "Cleaver Placement Mode" then
 		pMode = {loc("Cleaver")}
 	elseif cat[cIndex] == "Barrel Placement Mode" then
-		--pMode = {1,50,75,100}
-		pMode = {50}
+		pMode = {60}
 		placedExpense = 10
 	elseif cat[cIndex] == "Health Crate Placement Mode" then
-		--pMode = {25,50,75,100}
 		pMode = {25}
 		placedExpense = 5
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
@@ -1394,9 +1392,7 @@ function RedefineSubset()
 		end
 		placedExpense = utilArray[pIndex][5]
 	elseif cat[cIndex] == "Mine Placement Mode" then
-		--pMode = {1,1000,2000,3000,4000,5000,0}
-		pMode = {1,1000,2000,3000,4000,5000}
-		-- 0 is dud right, or is that nil?
+		pMode = {0,1000,2000,3000,4000,5000}
 		placedExpense = 15
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 		pMode = {loc("Sticky Mine")}
