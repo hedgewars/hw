@@ -167,6 +167,8 @@ margin = 20
 vTag = {}
 lastWep = nil
 
+checkForSpecialWeaponsIn = -1
+
 function HideTags()
 
 	for i = 0, 2 do
@@ -1435,6 +1437,11 @@ function HandleHedgeEditor()
 		if (CurrentHedgehog ~= nil) and (TurnTimeLeft ~= TurnTime) then
 			if (lastWep ~= GetCurAmmoType()) then
 				checkForSpecialWeapons()
+			elseif checkForSpecialWeaponsIn == 0 then
+				checkForSpecialWeapons()
+				checkForSpecialWeaponsIn = -1
+			else
+				checkForSpecialWeaponsIn = checkForSpecialWeaponsIn - 1
 			end
 		end
 
@@ -1616,6 +1623,12 @@ function updateCost()
 	end
 
 	AddCaption(loc("Cost") .. ": " .. placedExpense,0xffba00ff,capgrpAmmostate)
+
+end
+
+function onTimer(key)
+
+	checkForSpecialWeaponsIn = 1
 
 end
 
