@@ -145,7 +145,6 @@ clanBoundsEX = {}
 clanBoundsEY = {}
 
 clanPower = {}
-clanBoon = {}
 clanID = {}
 clanLStrucIndex = {}
 
@@ -164,8 +163,6 @@ wWidth = {}
 wHeight = {}
 wCol = {}
 margin = 20
-
-tauntString = ""
 
 vTag = {}
 lastWep = nil
@@ -1586,19 +1583,6 @@ function HandleHedgeEditor()
 
 end
 
---------------------------------------------------
--- EVENT HANDLERS
---------------------------------------------------
-
-function onTaunt(t)
-	tauntString = tauntString .. t
-	if (tauntString == "101") and (clanPower[GetHogClan(CurrentHedgehog)] < 300) and (clanBoon[GetHogClan(CurrentHedgehog)] == false) then
-		clanBoon[GetHogClan(CurrentHedgehog)] = true
-		clanPower[GetHogClan(CurrentHedgehog)] = 1000
-		AddCaption(loc("The Great Hog in the sky sees your sadness and grants you a boon."))
-	end
-end
-
 ---------------------------------------------------------------
 -- Cycle through selection subsets (by changing pIndex, pMode)
 -- i.e 	health of barrels, medikits,
@@ -1805,7 +1789,6 @@ function onGameStart()
 
 	for i = 0, ClansCount-1 do
 		clanPower[i] = 500
-		clanBoon[i] = false
 		clanLWepIndex[i] = 1 -- for ease of use let's track this stuff
 		clanLUtilIndex[i] = 1
 		clanLGearIndex[i] = 1
@@ -1843,7 +1826,6 @@ end
 
 function onNewTurn()
 
-	tauntString = ""
 	clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] + 50
 	clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = false
 	clanCratesSpawned[GetHogClan(CurrentHedgehog)] = 0
