@@ -169,6 +169,12 @@ function onParameters()
     if params["teamrope"] ~= nil then
         TeamRope = true
     end
+    if params["rounds"] ~= nil then
+        roundLimit = math.max(1, math.floor(tonumber(params["rounds"])))
+        if type(roundLimit) ~= "number" then
+             roundLimit = 3
+        end
+    end
 end
 
 function RebuildTeamInfo()
