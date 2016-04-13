@@ -49,7 +49,7 @@ end;
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
-    r, rr: TSDL_Rect;
+    //r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
     targetMask: Word;
 begin
@@ -79,25 +79,9 @@ begin
             while (yu < yd ) and ((Land[yu, x] and targetMask) =  0) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
-                begin
-                rr.x:= x;
-                rr.y:= yd - 15;
-                r.x:= x mod tmpsurf^.w;
-                r.y:= 16;
-                r.w:= 1;
-                r.h:= 16;
-                SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-                end;
+                copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 16, 1, 16, x, yd - 15);
             if (yu > 0) then
-                begin
-                rr.x:= x;
-                rr.y:= yu;
-                r.x:= x mod tmpsurf^.w;
-                r.y:= 0;
-                r.w:= 1;
-                r.h:= Min(16, yd - yu + 1);
-                SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-                end;
+                copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 0, 1, Min(16, yd - yu + 1), x, yu);
             yd:= yu - 1;
         until yd < 0;
     end;
