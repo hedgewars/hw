@@ -150,7 +150,8 @@ function CheckScore(teamID)
 			end
 		end
 		if CurrentHedgehog ~= nil then
-			ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
+			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)))
+			showMissionAndScorebar()
 		end
 	end
 
@@ -177,7 +178,8 @@ function DoFlagStuff(gear)
 		fIsMissing[bbq] = false
 		fNeedsRespawn[bbq] = true
 		fCaptures[wtf] = fCaptures[wtf] +1
-		ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
+		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)))
+		showMissionAndScorebar()
 		PlaySound(sndVictory)
 		fThief[bbq] = nil -- player no longer has the enemy flag
 		CheckScore(wtf)
@@ -453,11 +455,43 @@ function onGameInit()
 
 end
 
+function showMissionAndScorebar(instaHide)
+	local place = loc("Flag placement phase: Flags, and their home base will be placed|where each team ends their first turn.")
+
+	local rules = loc("Rules:") .. " |" ..
+		loc("- Return the enemy flag to your base to score") .."|"..
+		loc("- First team to score 3 captures wins") .."|"..
+		loc("- You may only score when your flag is in your base") .."|"..
+		loc("- Hogs will drop the flag when killed") .."|"..
+		loc("- Dropped flags may be returned or recaptured").."|"..
+		loc("- Hogs respawn when killed")
+
+	local mission
+
+	if gameTurns <= 2 then
+		mission = place
+	else
+		local scoreboard = ""
+
+		if gameStarted then
+			scoreboard = "|" .. loc("Scores: ") .. "|"
+			for i=0, 1 do
+				scoreboard = scoreboard .. string.format(loc("%s: %d"), teamNameArr[i], fCaptures[i])
+				if i~=1 then scoreboard = scoreboard .. "|" end
+			end
+		end
+		mission = rules .. scoreboard
+	end
+
+	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), mission, 0, 0)
+	if instaHide then
+		HideMission()
+	end
+end
 
 function onGameStart()
 
-	--ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
-	ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
+	showMissionAndScorebar()
 
 	RebuildTeamInfo()
 
@@ -496,12 +530,13 @@ function onNewTurn()
 		HandleRespawns()
 	--new method of placing starting flags
 	elseif gameTurns == 1 then
-		ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
+		showMissionAndScorebar()
 	elseif gameTurns == 2 then
 		fPlaced[0] = true
-		ShowMission(loc("CAPTURE THE FLAG"), loc("RULES OF THE GAME [Press ESC to view]"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
+		showMissionAndScorebar()
 	elseif gameTurns == 3 then
 		fPlaced[1] = true
+		showMissionAndScorebar()
 		StartTheGame()
 	end
 
