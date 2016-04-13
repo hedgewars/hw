@@ -1,6 +1,6 @@
 
 ------------------------------------------
--- RACER 0.6
+-- RACER 0.8
 -- map-independant racing script
 -- by mikade
 -----------------------------------------
@@ -72,6 +72,11 @@
 -------
 
 -- switch to first available weapon if starting race with no weapon selected
+
+-------
+-- 0.8
+-------
+-- allow different boost directions
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -151,6 +156,10 @@ local roundN
 local lastRound
 local RoundHasChanged
 
+local boostX = 0
+local boostY = 0
+local boostValue = 1
+
 -------------------
 -- general methods
 -------------------
@@ -223,6 +232,31 @@ end
 -----------------
 -- RACER METHODS
 -----------------
+
+function onLeft()
+	boostX = boostX +boostValue
+end
+function onLeftUp()
+	boostX = boostX -boostValue
+end
+function onRight()
+	boostX = boostX -boostValue
+end
+function onRightUp()
+	boostX = boostX +boostValue
+end
+function onUp()
+	boostY = boostY +boostValue
+end
+function onUpUp()
+	boostY = boostY -boostValue
+end
+function onDown()
+	boostY = boostY -boostValue
+end
+function onDownUp()
+	boostY = boostY +boostValue
+end
 
 function CheckWaypoints()
 
@@ -658,7 +692,7 @@ function onGameTick20()
                                 trackTime = 0
 
                                 SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
-                                AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
+                                AddGear(GetX(CurrentHedgehog)+boostX, GetY(CurrentHedgehog)+boostY, gtGrenade, 0, 0, 0, 1)
                                 FollowGear(CurrentHedgehog)
 
                                 HideMission()
