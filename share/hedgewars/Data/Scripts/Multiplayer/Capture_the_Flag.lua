@@ -3,6 +3,9 @@
 -- by mikade
 ---------------------------------------
 
+---- Script parameter
+-- With “captures=<number>” you can set your own capture limit, e.g. “captures=5” for 5 captures.
+
 -- Version History
 ---------
 -- 0.1
@@ -76,6 +79,7 @@
 
 -- enable awesome translaction support so we can use loc() wherever we want
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 ---------------------------------------------------------------
 ----------lots of bad variables and things
@@ -85,6 +89,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local gameStarted = false
 local gameTurns = 0
+local captureLimit = 3
 
 --------------------------
 -- hog and team tracking variales
@@ -140,7 +145,7 @@ function CheckScore(teamID)
 		alt = 0
 	end
 
-	if fCaptures[teamID] == 3 then
+	if fCaptures[teamID] == captureLimit then
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
 				if GetHogClan(hhs[i]) == alt then
@@ -444,6 +449,16 @@ end
 -- game methods
 ------------------------
 
+function onParameters()
+	parseParams()
+	if params["captures"] ~= nil then
+		local s = string.match(params["captures"], "(%d*)")
+		if s ~= nil then
+			captureLimit = math.max(1, tonumber(s))
+		end
+	end
+end
+
 function onGameInit()
 
 	DisableGameFlags(gfKing)
@@ -456,32 +471,32 @@ function onGameInit()
 end
 
 function showMissionAndScorebar(instaHide)
-	local place = loc("Flag placement phase: Flags, and their home base will be placed|where each team ends their first turn.")
+	local captures
+	if captureLimit == 1 then
+		captures = string.format(loc("- First team to capture the flag wins"), captureLimit)
+	else
+		captures = string.format(loc("- First team to score %d captures wins"), captureLimit)
+	end
 
 	local rules = loc("Rules:") .. " |" ..
+		loc("- Place your team flag at the end of your first turn") .. "|" ..
 		loc("- Return the enemy flag to your base to score") .."|"..
-		loc("- First team to score 3 captures wins") .."|"..
+		captures .. "|" ..
 		loc("- You may only score when your flag is in your base") .."|"..
 		loc("- Hogs will drop the flag when killed") .."|"..
 		loc("- Dropped flags may be returned or recaptured").."|"..
-		loc("- Hogs respawn when killed")
+		loc("- Hogs will be revived")
 
-	local mission
+	local scoreboard = ""
 
-	if gameTurns <= 2 then
-		mission = place
-	else
-		local scoreboard = ""
-
-		if gameStarted then
-			scoreboard = "|" .. loc("Scores: ") .. "|"
-			for i=0, 1 do
-				scoreboard = scoreboard .. string.format(loc("%s: %d"), teamNameArr[i], fCaptures[i])
-				if i~=1 then scoreboard = scoreboard .. "|" end
-			end
+	if gameStarted then
+		scoreboard = "|" .. loc("Scores: ") .. "|"
+		for i=0, 1 do
+			scoreboard = scoreboard .. string.format(loc("%s: %d"), teamNameArr[i], fCaptures[i])
+			if i~=1 then scoreboard = scoreboard .. "|" end
 		end
-		mission = rules .. scoreboard
 	end
+	local mission = rules .. scoreboard
 
 	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), mission, 0, 0)
 	if instaHide then
@@ -533,10 +548,8 @@ function onNewTurn()
 		showMissionAndScorebar()
 	elseif gameTurns == 2 then
 		fPlaced[0] = true
-		showMissionAndScorebar()
 	elseif gameTurns == 3 then
 		fPlaced[1] = true
-		showMissionAndScorebar()
 		StartTheGame()
 	end
 
