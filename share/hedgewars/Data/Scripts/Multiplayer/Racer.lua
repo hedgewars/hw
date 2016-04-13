@@ -613,17 +613,18 @@ function onNewTurn()
 
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
-                if wpCount >= 3 then
+                if wpCount >= 2 then
                         gameBegun = true
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
                         ShowMission(loc("Racer"),
                         loc("A Hedgewars mini-game"),
-                        loc("Complete the track as fast as you can!"), 2, 4000)
+                        loc("Touch all waypoints as fast as you can!"), 2, 4000)
                 else
                         ShowMission(loc("Racer"),
                         loc("Waypoint placement phase"),
-                        loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
+                        loc("Place 2-8 waypoints using the Air Attack weapon.") .. "|" ..
+			loc("Skip your turn when you are finished placing waypoints."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
                 end
