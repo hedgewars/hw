@@ -297,7 +297,13 @@ function CheckWaypoints()
                         end
 
                         if wpActive[i] == false then
-                                AddCaption(string.format(loc("Waypoints remaining: %d"), wpRem-1),0xffba00ff,capgrpGameState)
+                                local wpMessage = ""
+                                if wpRem-1 == 0 then
+                                         wpMessage = loc("Track completed!")
+                                else
+                                         wpMessage = string.format(loc("Waypoints remaining: %d"), wpRem-1)
+                                end
+                                AddCaption(wpMessage, 0xffba00ff, capgrpGameState)
                         end
                         wpActive[i] = true
 
