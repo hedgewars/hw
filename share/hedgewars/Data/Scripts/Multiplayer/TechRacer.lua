@@ -333,7 +333,7 @@ function CheckWaypoints()
                                 end
                         end
 
-                        AddCaption(loc("Way-Points Remaining") .. ": " .. wpRem,0xffba00ff,capgrpAmmoinfo)
+                        AddCaption(string.format(loc("Waypoints remaining: %d"), wpRem),0xffba00ff,capgrpAmmoinfo)
 
                 end
 
@@ -386,22 +386,22 @@ function AdjustScores()
 
         if newScore == true then
                 if trackTime == bestTime then -- best time of the race
-                        ShowMission(loc("RACER"),
-                        loc("TRACK COMPLETED"),
-                        loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                        loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
+                        ShowMission(loc("TechRacer"),
+                        loc("Track completed!"),
+                        string.format(loc("New race record: %.1fs"), (trackTime/1000)) .. "|" ..
+                        string.format(loc("Winning time: %s") .. bestTimeComment), 0, 4000)
                         PlaySound(sndHomerun)
                 else    -- best time for the clan
-                        ShowMission(loc("RACER"),
-                        loc("TRACK COMPLETED"),
-                        loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                        loc("WINNING TIME: ") .. bestTimeComment, 4, 4000)
+                        ShowMission(loc("TechRacer"),
+                        loc("Track completed!"),
+                        string.format(loc("New clan record: %.1fs"), (trackTime/1000)) .. "|" ..
+                        string.format(loc("Winning time: %s"), bestTimeComment), 4, 4000)
                 end
         else -- not any kind of new score
-                ShowMission(loc("RACER"),
-                loc("TRACK COMPLETED"),
-                loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
+                ShowMission(loc("TechRacer"),
+                loc("Track completed!"),
+                string.format(loc("Time: %.1fs"), (trackTime/1000)) .. "|" ..
+                string.format(loc("Winning time: %s"), bestTimeComment), -amSkip, 4000)
                 PlaySound(sndHellish)
         end
 
@@ -447,10 +447,10 @@ function onNewRound()
                         end
         end
 
-        ShowMission(    loc("RACER"),
-                                        loc("STATUS UPDATE"),
-                                        loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" ..
-                                        loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
+        ShowMission(    loc("TechRacer"),
+                                        loc("Status update"),
+                                        string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
+                                        loc("Best team times: ") .. "|" .. totalComment, 0, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
@@ -926,12 +926,12 @@ function onGameStart()
 		end
 
         ShowMission     (
-                                loc("RACER"),
-                                loc("a Hedgewars mini-game"),
+                                loc("TechRacer"),
+                                loc("A Hedgewars mini-game"),
 
-                                loc("Build a track and race.") .. "|" ..
-                                loc("Round Limit:") .. " " .. roundLimit .. "|" ..
-								loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
+                        	loc("Complete the track as fast as you can!") .. "|" ..
+                                loc("Round limit:") .. " " .. roundLimit .. "|" ..
+				loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
 								--loc("For example, the below line would play map 4, with infinite fuel for the flying saucer, and four rounds.") .. "|" ..
 								--"m=4, ufo=true, rounds=4" .. "|" ..
 
@@ -982,9 +982,6 @@ function onNewTurn()
 						--  --[[activationStage = 200]]
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
-                        ShowMission(loc("RACER"),
-                        loc("GAME BEGUN!!!"),
-                        loc("Complete the track as fast as you can!"), 2, 4000)
                 --else
                 --        ShowMission(loc("RACER"),
                 --        loc("NOT ENOUGH WAYPOINTS"),
@@ -1025,15 +1022,15 @@ function onGameTick20()
 
 
             if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                AddCaption(loc("Please place the waypoint in the air and within the map boundaries"))
                 PlaySound(sndDenied)
             elseif (y > WaterLine-50) then
-                AddCaption(loc("Please place the way-point further from the waterline."))
+                AddCaption(loc("Please place the waypoint further away from the waterline"))
                 PlaySound(sndDenied)
             else
                 CallBob(x, y)
                 if wpCount == wpLimit then
-                    AddCaption(loc("Race complexity limit reached."))
+                    AddCaption(loc("Race complexity limit reached"))
                     DisableTumbler()
                 end
             end
@@ -1104,11 +1101,7 @@ function onGameTick20()
 
                         if GameTime%100 == 0 then
 
-                if trackTime%1000 == 0 then
-                    AddCaption((trackTime/1000)..'.0',GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-                else
-                    AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-                end
+                		AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
                                 if (CheckWaypoints() == true) then
                                         AdjustScores()
@@ -1188,6 +1181,7 @@ function onGearResurrect(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
         if gear == CurrentHedgehog then
+                AddCaption(loc("Race failed!"), GetClanColor(GetHogClan(gear)), capgrpMessage2)
                 DisableTumbler()
         end
 
