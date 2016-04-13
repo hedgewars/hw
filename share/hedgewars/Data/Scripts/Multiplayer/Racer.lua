@@ -146,7 +146,7 @@ local wpX = {}
 local wpY = {}
 local wpCol = {}
 local wpActive = {}
-local wpRad = 450 --75
+local wpRad = 450
 local wpCount = 0
 local wpLimit = 8
 
@@ -164,6 +164,20 @@ local boostValue = 1
 -- general methods
 -------------------
 
+--[[
+Parameters syntax:
+
+teamrope=true
+--> The team will be colored in the color of the team.
+
+rounds=N
+--> The game will be played with N rounds (default: 3)
+
+waypointradius=N
+--> The waypoints have a radius of N pixels (default: 450)
+
+]]
+
 function onParameters()
     parseParams()
     if params["teamrope"] ~= nil then
@@ -173,6 +187,12 @@ function onParameters()
         roundLimit = math.max(1, math.floor(tonumber(params["rounds"])))
         if type(roundLimit) ~= "number" then
              roundLimit = 3
+        end
+    end
+    if params["waypointradius"] ~= nil then
+        wpRad = math.max(40, math.floor(tonumber(params["waypointradius"])))
+        if type(roundLimit) ~= "number" then
+             wpRad = 450
         end
     end
 end
