@@ -150,12 +150,7 @@ function TargetPracticeMission(params)
 	end
 
 	_G.onNewTurn = function()
-		-- TODO: Remove the else branch when 0.9.21 has been released
-		if SetWeapon ~= nil then
-			SetWeapon(params.ammoType)
-		else
-			ParseCommand("/setweap "..string.char(params.ammoType))
-		end
+		SetWeapon(params.ammoType)
 	end
 
 	_G.spawnTarget = function()
@@ -165,6 +160,8 @@ function TargetPracticeMission(params)
 		y = targets[scored+1].y
 
 		SetGearPosition(gear, x, y)
+
+		return gear
 	end
 
 	_G.onGameTick20 = function()
@@ -229,6 +226,18 @@ function TargetPracticeMission(params)
 		end
 	end
 
+	_G.onGearDelete = function(gear)
+		if GetGearType(gear) == gtTarget and band(GetState(gear), gstDrowning) ~= 0 then
+			AddCaption(loc("You lost your target, try again!", 0xFFFFFFFF, capgrpGameState))
+			local newTarget = spawnTarget()
+			local x, y = GetGearPosition(newTarget)
+			local success = PlaceSprite(x, y + 24, sprAmGirder, 0, 0xFFFFFFFF, false, false, false)
+			if not success then
+				WriteLnToConsole("ERROR: Failed to spawn girder under respawned target!")
+			end
+		end
+	end
+
 	_G.generateStats = function()
 		local accuracy = (scored/shots)*100
 		local end_score_targets = scored * math.ceil(6000/#targets)
@@ -254,7 +263,7 @@ function TargetPracticeMission(params)
 			end
 			end_score_overall = end_score_targets
 		end
+		SendStat(siPointType, loc("point(s)"))
 		SendStat(siPlayerKills, tostring(end_score_overall), loc(params.teamName))
-		SendStat(siPointType, loc("points"))
 	end
 end
