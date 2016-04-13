@@ -457,14 +457,46 @@ function onNewRound()
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
-                for i = 0, (numhhs-1) do
-                        if GetHogClan(hhs[i]) ~= bestClan then
-                                SetEffect(hhs[i], heResurrectable, 0)
-                                SetHealth(hhs[i],0)
+                gameOver = true
+                TurnTimeLeft = 10000000
+
+                -- Sort the scores for the ranking list
+                local unfinishedArray = {}
+                local sortedTeams = {}
+                local k = 1
+                for i = 0, TeamsCount-1 do
+                        if teamScore[i] ~= -1 and teamNameArr[i] ~= " " then
+                               sortedTeams[k] = {}
+                               sortedTeams[k].name = teamNameArr[i]
+                               sortedTeams[k].score = teamScore[i]
+                               k = k + 1
+                        else
+                               table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
                         end
                 end
-                gameOver = true
-                TurnTimeLeft = 1
+                table.sort(sortedTeams, function(team1, team2) return team1.score < team2.score end)
+
+                -- Write all the stats!
+
+                for i = 1, #sortedTeams do
+                        SendStat(siPointType, loc("milliseconds"))
+                        SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
+                end
+
+                if #sortedTeams >= 1 then
+                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+                        SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
+                        for i=1,#unfinishedArray do
+                                 SendStat(siCustomAchievement, unfinishedArray[i])
+                        end
+                else
+                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
+                        SendStat(siCustomAchievement, loc("Maybe you should try an easier TechRacer map."))
+                end
+
+                -- Game over
+                EndGame()
         end
 
 end
@@ -915,6 +947,7 @@ function InterpretPoints()
 end
 
 function onGameStart()
+	SendHealthStatsOff()
 
 		trackTeams()
 
