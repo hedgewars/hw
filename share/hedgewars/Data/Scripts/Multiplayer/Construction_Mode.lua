@@ -26,12 +26,12 @@
 ------------------------------------------------------------------------------
 -- The script parameter can be used to configure the energy
 -- of the game. It is a comma-seperated list of key=value pairs, where each
--- key is a word and each value is an negative integer between 0 and 4294967295.
+-- key is a word and each value is an integer between 0 and 4294967295.
 --
 -- Possible keys:
 --- initialenergy: Amount of energy that each team starts with (default: 550)
 --- energyperround: Amount of energy that each team gets per round (default: 50)
---- maxenergy: Maximum amount of energy each team can hold (default: 1000).
+--- maxenergy: Maximum amount of energy each team can hold (default: 1000)
 
 -- Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
 -- and sets the maximum energy to 2000
