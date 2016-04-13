@@ -700,6 +700,7 @@ function onGameInit()
     addHashData(mapID)
 
 		Theme = "Cave"
+		Map = ""
 
 		MapGen = mgDrawn
 		TemplateFilter = 0
