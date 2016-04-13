@@ -386,7 +386,7 @@ with Gear^,
                                  end;
                  amInvulnerable: Effects[heInvulnerable]:= 1;
                     amExtraTime: begin
-                                 PlaySound(sndSwitchHog);
+                                 PlaySound(sndExtraTime);
                                  TurnTimeLeft:= TurnTimeLeft + 30000
                                  end;
                    amLaserSight: cLaserSighting:= true;

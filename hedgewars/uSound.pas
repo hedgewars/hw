@@ -252,7 +252,10 @@ var cInitVolume: LongInt;
             (FileName:               'TARDIS.ogg'; Path: ptSounds),// sndTardis
             (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds),// sndFrozenHogImpact
             (FileName:             'ice_beam.ogg'; Path: ptSounds),// sndIceBeam
-            (FileName:           'hog_freeze.ogg'; Path: ptSounds) // sndHogFreeze
+            (FileName:           'hog_freeze.ogg'; Path: ptSounds),// sndHogFreeze
+            (FileName:       'airmine_impact.ogg'; Path: ptSounds),// sndAirMineImpact
+            (FileName:         'knife_impact.ogg'; Path: ptSounds),// sndKnifeImpact
+            (FileName:            'extratime.ogg'; Path: ptSounds) // sndExtraTime
             );
 
 
