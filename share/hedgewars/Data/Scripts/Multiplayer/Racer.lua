@@ -291,7 +291,7 @@ function CheckWaypoints()
                                 end
                         end
 
-                        AddCaption(loc("Way-Points Remaining") .. ": " .. wpRem,0xffba00ff,capgrpAmmoinfo)
+                        AddCaption(string.format(loc("Waypoints remaining: %d"), wpRem),0xffba00ff,capgrpAmmoinfo)
 
                 end
 
@@ -339,27 +339,27 @@ function AdjustScores()
         end
 
         if bestTime ~= 100000 then
-                bestTimeComment = (bestTime/1000) ..loc("s")
+                bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
         end
 
         if newScore == true then
                 if trackTime == bestTime then -- best time of the race
-                        ShowMission(loc("RACER"),
-                        loc("TRACK COMPLETED"),
-                        loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                        loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
+                        ShowMission(loc("Racer"),
+                        loc("Track completed!"),
+                        string.format(loc("New race record: %.1fs"), (trackTime/1000)) .. "|" ..
+                        string.format(loc("Winning time: %s"), bestTimeComment), 0, 4000)
                         PlaySound(sndHomerun)
                 else    -- best time for the clan
-                        ShowMission(loc("RACER"),
-                        loc("TRACK COMPLETED"),
-                        loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                        loc("WINNING TIME: ") .. bestTimeComment, 4, 4000)
+                        ShowMission(loc("Racer"),
+                        loc("Track completed!"),
+                        string.format(loc("New clan record: %.1fs"), (trackTime/1000)) .. "|" ..
+                        string.format(loc("Winning time: %s"), bestTimeComment), 4, 4000)
                 end
         else -- not any kind of new score
-                ShowMission(loc("RACER"),
-                loc("TRACK COMPLETED"),
-                loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
+                ShowMission(loc("Racer"),
+                loc("Track completed!"),
+                string.format(loc("Time: %.1fs"), (trackTime/1000)) .. "|" ..
+                string.format(loc("Winning time: %s"), bestTimeComment), -amSkip, 4000)
                 PlaySound(sndHellish)
         end
 
@@ -405,10 +405,10 @@ function onNewRound()
                         totalComment = totalComment .. teamComment[i]
         end
 
-        ShowMission(    loc("RACER"),
-                                        loc("STATUS UPDATE"),
-                                        string.format(loc("ROUNDS COMPLETE: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
-                                        loc("BEST TEAM TIMES: ") .. "|" .. totalComment, 0, 4000)
+        ShowMission(    loc("Racer"),
+                                        loc("Status update"),
+                                        string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
+                                        loc("Best team times: ") .. "|" .. totalComment, 0, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
@@ -448,7 +448,7 @@ function onNewRound()
                 else
                         SendStat(siGameResult, loc("Round draw"))
                         SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
-                        SendStat(siCustomAchievement, loc("Maybe you should try an easier TechRacer map."))
+                        SendStat(siCustomAchievement, loc("Maybe you should try easier waypoints next time."))
                 end
 
                 -- Game over
@@ -587,11 +587,11 @@ function onGameStart()
         RebuildTeamInfo()
 
         ShowMission     (
-                                loc("RACER"),
-                                loc("a Hedgewars mini-game"),
+                                loc("Racer"),
+                                loc("A Hedgewars mini-game"),
 
                                 loc("Build a track and race.") .. "|" ..
-                                loc("Round Limit:") .. " " .. roundLimit .. "|" ..
+                                string.format(loc("Round limit: %d"), roundLimit) .. "|" ..
 
                                 "", 4, 4000
                                 )
@@ -613,7 +613,7 @@ function PlaceWayPoint(x,y)
 
             wpCount = wpCount + 1
 
-            AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
+            AddCaption(string.format(loc("Waypoint placed. Available points remaining: %d"), wpLimit-wpCount))
         end
     end
 end
@@ -659,12 +659,12 @@ function onNewTurn()
                         gameBegun = true
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
-                        ShowMission(loc("RACER"),
-                        loc("GAME BEGUN!!!"),
+                        ShowMission(loc("Racer"),
+                        loc("A Hedgewars mini-game"),
                         loc("Complete the track as fast as you can!"), 2, 4000)
                 else
-                        ShowMission(loc("RACER"),
-                        loc("NOT ENOUGH WAYPOINTS"),
+                        ShowMission(loc("Racer"),
+                        loc("Waypoint placement phase"),
                         loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
@@ -694,15 +694,15 @@ function onGameTick20()
 
 
                         if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-                                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                                AddCaption(loc("Please place the waypoint in the air, within the map boundaries"))
                                 PlaySound(sndDenied)
                         elseif (y > WaterLine-50) then
-                                AddCaption(loc("Please place the way-point further from the waterline."))
+                                AddCaption(loc("Please place the waypoint further away from the waterline"))
                                 PlaySound(sndDenied)
                         else
                                 PlaceWayPoint(x, y)
                                 if wpCount == wpLimit then
-                                        AddCaption(loc("Race complexity limit reached."))
+                                        AddCaption(loc("Race complexity limit reached"))
                                         DisableTumbler()
                                 end
                         end
@@ -760,11 +760,7 @@ function onGameTick20()
 
                         if GameTime%100 == 0 then
 
-                if trackTime%1000 == 0 then
-                    AddCaption((trackTime/1000)..'.0',GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-                else
-                    AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-                end
+                                AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
                                 if (CheckWaypoints() == true) then
                                         AdjustScores()
