@@ -133,8 +133,8 @@ local teamScore = {}
 
 local cGear = nil
 
-local bestClan = nil
-local bestTime = nil
+local bestClan = 10
+local bestTime = 1000000
 
 local gameBegun = false
 local gameOver = false
@@ -205,7 +205,7 @@ function RebuildTeamInfo()
                 teamNameArr[i] = " "
                 teamSize[i] = 0
                 teamIndex[i] = 0
-                teamScore[i] = 100000
+                teamScore[i] = 1000000
         end
         numTeams = 0
 
@@ -334,12 +334,7 @@ function CheckWaypoints()
 end
 
 function AdjustScores()
-
-        if bestTime == nil then
-                bestTime = 100000
-                bestClan = 10
-                bestTimeComment = "N/A"
-        end
+	bestTimeComment = loc("Did not finish")
 
         newScore = false
 
@@ -363,7 +358,7 @@ function AdjustScores()
                 end
         end
 
-        if bestTime ~= 100000 then
+        if bestTime ~= 1000000 then
                 bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
         end
 
@@ -415,10 +410,10 @@ function onNewRound()
 
         totalComment = ""
         for i = 0, (TeamsCount-1) do
-                        if teamNameArr[i] ~= " " and teamScore[i] ~= -1 then
+                        if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
                                 teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
                         else
-                                teamComment[i] = string.format(loc("%s: N/A"), teamNameArr[i]) .. "|"
+                                teamComment[i] = string.format(loc("%s: Did not finish"), teamNameArr[i]) .. "|"
                         end
                         totalComment = totalComment .. teamComment[i]
         end
@@ -438,7 +433,7 @@ function onNewRound()
                 local sortedTeams = {}
                 local k = 1
                 for i = 0, TeamsCount-1 do
-                        if teamScore[i] ~= 100000 and teamNameArr[i] ~= " " then
+                        if teamScore[i] ~= 1000000 and teamNameArr[i] ~= " " then
                                sortedTeams[k] = {}
                                sortedTeams[k].name = teamNameArr[i]
                                sortedTeams[k].score = teamScore[i]
@@ -815,7 +810,7 @@ function onAchievementsDeclaration()
     map = detectMapWithDigest()
 
     for i = 0, (numTeams-1) do
-        if teamScore[i] < 100000 then
+        if teamScore[i] < 1000000 then
             DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
         end
     end
