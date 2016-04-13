@@ -185,7 +185,7 @@ function DoFlagStuff(gear)
 		fCaptures[wtf] = fCaptures[wtf] +1
 		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)))
 		showMissionAndScorebar()
-		PlaySound(sndVictory)
+		PlaySound(sndHomerun)
 		fThief[bbq] = nil -- player no longer has the enemy flag
 		CheckScore(wtf)
 
