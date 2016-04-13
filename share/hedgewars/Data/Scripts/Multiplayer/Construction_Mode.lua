@@ -1192,7 +1192,7 @@ function RedefineSubset()
 		pMode = {60}
 		placedExpense = 10
 	elseif cat[cIndex] == "Health Crate Placement Mode" then
-		pMode = {25}
+		pMode = {HealthCaseAmount}
 		placedExpense = 5
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
