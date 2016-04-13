@@ -860,7 +860,7 @@ function HandleStructures()
 	-- this is kinda messy and gross (even more than usual), fix it up at some point
 	-- it just assumes that if you have access to girders, it works for rubbers
 	-- as that is what the struc implemenation means due to construction station
-	if GameTime % 100 == 0 then
+	if GameTime % 100 == 0 and CurrentHedgehog ~= nil then
 		anyUIProx = false
 		for i = 1, #sProx do
 
@@ -1045,8 +1045,6 @@ local cat = 	{
 
 local pMode = {}	-- pMode contains custom subsets of the main categories
 local pIndex = 1
-
-local genTimer = 0
 
 local CGR = 1 -- current girder rotation, we actually need this as HW remembers what rotation you last used
 
@@ -1241,11 +1239,7 @@ function HandleHedgeEditor()
 			end
 		end
 
-		genTimer = genTimer + 1
-
-		if genTimer >= 100 then
-
-			genTimer = 0
+		if GameTime % 100 == 0 then
 
 			DrawTag(1)
 
