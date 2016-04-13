@@ -30,7 +30,7 @@ class PageTraining : public AbstractPage
 
 
     signals:
-        void startMission(const QString & scriptName);
+        void startMission(const QString & scriptName, const QString & subFolder);
 
 
     protected:
@@ -44,8 +44,12 @@ class PageTraining : public AbstractPage
         QPushButton * btnStart;
         QLabel * lblCaption;
         QLabel * lblDescription;
-        QListWidget * lstMissions;
+        QTabWidget * tbw;
+        QListWidget * lstTrainings;
+        QListWidget * lstChallenges;
+        QListWidget * lstScenarios;
         QSettings * m_info;
+        QString getSubFolderOfSelected();
 
 
     private slots:

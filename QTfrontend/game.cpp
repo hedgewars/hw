@@ -44,6 +44,7 @@
 // last game info
 QList<QVariant> lastGameStartArgs = QList<QVariant>();
 GameType lastGameType = gtNone;
+QString lastTrainingSubFolder = NULL;
 GameCFGWidget * lastGameCfg = NULL;
 QString lastGameAmmo = NULL;
 TeamSelWidget * lastGameTeamSel = NULL;
@@ -478,14 +479,16 @@ void HWGame::StartQuick()
     SetGameState(gsStarted);
 }
 
-void HWGame::StartTraining(const QString & file)
+void HWGame::StartTraining(const QString & file, const QString & subFolder)
 {
     lastGameStartArgs.clear();
     lastGameStartArgs.append(file);
     lastGameType = gtTraining;
+    lastTrainingSubFolder = subFolder;
 
     gameType = gtTraining;
-    training = "Missions/Training/" + file + ".lua";
+
+    training = "Missions/" + subFolder + "/" + file + ".lua";
     demo.clear();
     Start(false);
     SetGameState(gsStarted);

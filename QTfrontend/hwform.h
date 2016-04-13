@@ -95,7 +95,7 @@ class HWForm : public QMainWindow
         void DeleteWeaponSet();
         void SimpleGame();
         void PlayDemo();
-        void startTraining(const QString&);
+        void startTraining(const QString&, const QString&);
         void StartCampaign();
         void NetConnect();
         void NetConnectServer(const QString & host, quint16 port);

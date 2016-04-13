@@ -318,7 +318,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
 
-    connect(ui.pageTraining, SIGNAL(startMission(const QString&)), this, SLOT(startTraining(const QString&)));
+    connect(ui.pageTraining, SIGNAL(startMission(const QString&, const QString&)), this, SLOT(startTraining(const QString&, const QString&)));
 
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->btnPreview, SIGNAL(clicked()), this, SLOT(StartCampaign()));
@@ -1701,11 +1701,11 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
     ui.pageVideos->startEncoding(record);
 }
 
-void HWForm::startTraining(const QString & scriptName)
+void HWForm::startTraining(const QString & scriptName, const QString & subFolder)
 {
     CreateGame(0, 0, 0);
 
-    game->StartTraining(scriptName);
+    game->StartTraining(scriptName, subFolder);
 }
 
 void HWForm::StartCampaign()
@@ -2095,7 +2095,7 @@ void HWForm::restartGame()
 
     switch(lastGameType) {
     case gtTraining:
-        game->StartTraining(lastGameStartArgs.at(0).toString());
+        game->StartTraining(lastGameStartArgs.at(0).toString(), lastTrainingSubFolder);
         break;
     case gtQLocal:
         game->StartQuick();
