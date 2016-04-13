@@ -61,7 +61,7 @@ hero.y = 1550
 director.name = loc("H")
 director.x = 1350
 director.y = 1550
-doctor.name = loc("Dr.Cornelius")
+doctor.name = loc("Dr. Cornelius")
 doctor.x = 1300
 doctor.y = 1550
 guard1.name = loc("Bob")
@@ -362,10 +362,10 @@ function moonLanding(gear)
 	if checkPointReached == 1 then
 		-- player climbed the moon with rope
 		FollowGear(doctor.gear)
-		AnimSay(doctor.gear, loc("One cannot simply walk in moon with rope!"), SAY_SHOUT, 4000)
+		AnimSay(doctor.gear, loc("One does not simply rope to the moon!"), SAY_SHOUT, 4000)
 		SendStat(siGameResult, loc("This is the wrong way!"))
-		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer"))
-		SendStat(siCustomAchievement, loc("Fly to the moon"))
+		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer!"))
+		SendStat(siCustomAchievement, loc("Fly to the moon."))
 		SendStat(siPlayerKills,'0',teamC.name)
 		EndGame()
 	else
@@ -380,7 +380,7 @@ function moonLanding(gear)
 		SaveCampaignVar("Mission1", "2")
 		SaveCampaignVar("Mission2", "13")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("the moon"))
+		sendStats(loc("Hog Solo arrived at the moon!"))
 	end
 end
 
@@ -402,7 +402,7 @@ function fruitPlanetLanding(gear)
 			SaveCampaignVar("Mission2", "10")
 			SaveCampaignVar("Mission3", "1")
 		end
-		sendStats(loc("the Fruit Planet"))
+		sendStats(loc("Hog Solo arrived at the Fruit Planet!"))
 	end
 end
 
@@ -417,7 +417,7 @@ function desertPlanetLanding(gear)
 		SaveCampaignVar("Mission2", "7")
 		SaveCampaignVar("Mission3", "12")
 		SaveCampaignVar("Mission4", "1")
-		sendStats(loc("the Desert Planet"))
+		sendStats(loc("Hog Solo arrived at the Desert Planet!"))
 	end
 end
 
@@ -431,7 +431,7 @@ function icePlanetLanding(gear)
 		SaveCampaignVar("Mission1", "5")
 		SaveCampaignVar("Mission2", "6")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("the Ice Planet"))
+		sendStats(loc("Hog Solo arrived at the Ice Planet!"))
 	end
 end
 
@@ -447,7 +447,7 @@ function deathPlanetLanding(gear)
 		SaveCampaignVar("Mission1", "9")
 		SaveCampaignVar("Mission2", "11")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("the Planet of Death"))
+		sendStats(loc("Hog Solo arrived at the Planet of Death!"))
 	end
 end
 
@@ -463,7 +463,7 @@ function meteoriteLanding(gear)
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "14")
 		SaveCampaignVar("Mission2", "1")
-		sendStats(loc("the meteorite"))
+		sendStats(loc("Hog Solo arrived at the meteorite!"))
 	end
 end
 
@@ -522,23 +522,23 @@ function AnimationSetup()
 	-- DIALOG 01 - Start
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {doctor.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near secret base 17 of PAotH in the rural Hogland..."),  4000}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("So Hog Solo, here we are..."), SAY_SAY, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the east side there is secret base 17"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near Secret Base 17 of PAotH in the rural Hogland ..."),  4000}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("So Hog Solo, here we are ..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the east side there is Secret Base 17."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("You have to continue alone from now on."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Be careful, the future of Hogera is in your hands!"), SAY_SAY, 7200}})
-	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("We'll use our communicators to contact you"), SAY_SAY, 2600}})
-	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("In am also entrusting you with some rope"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("You may find it handy"), SAY_SAY, 2300}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you Dr.Cornelius"), SAY_SAY, 1600}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I'll make good use of it"), SAY_SAY, 4500}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("It would be wiser to steal the space ship while PAotH guards are taking a brake!"), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("We'll use our communicators to contact you."), SAY_SAY, 2600}})
+	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("In am also entrusting you with some rope."), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("You may find it handy."), SAY_SAY, 2300}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you, Dr. Cornelius."), SAY_SAY, 1600}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I'll make good use of it."), SAY_SAY, 4500}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("It would be wiser to steal the space ship while the PAotH guards are taking a brake!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Remember! Many will seek the anti-gravity device! Now go, hurry up!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - Hero got the saucer
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("CheckPoint reached!"),  4000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Checkpoint reached!"),  4000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Got the saucer!"), SAY_SHOUT, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Nice!"), SAY_SHOUT, 1000}})
 	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Now use it and go to the moon PAotH station to get more fuel!"), SAY_SHOUT, 5000}})
@@ -547,7 +547,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimWait, args = {guard1.gear, 4000}})
 	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to flee!"),  4000}})
-	table.insert(dialog03, {func = AnimSay, args = {guard1.gear, loc("Hey").." "..guard2.name.."! "..loc("Look, someone is stealing the saucer!"), SAY_SHOUT, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {guard1.gear, string.format(loc("Hey, %s! Look, someone is stealing the saucer!"), guard2.name), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {guard2.gear, loc("I'll get him!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = startCombat, args = {guard1.gear}})
 	-- DIALOG 04 - Hero out of sight
@@ -558,24 +558,24 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 05 - Hero returned from moon without fuels
 	AddSkipFunction(dialog05, Skipanim, {dialog05})
-	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("I guess I can't go far without fuels!"), SAY_THINK, 6000}})
-	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Go to go back"), SAY_THINK, 2000}})
+	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("I guess I can't go far without fuel!"), SAY_THINK, 6000}})
+	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Got to go back."), SAY_THINK, 2000}})
 	table.insert(dialog05, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
 	AddSkipFunction(dialog06, Skipanim, {dialog06})
 	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"),  5000}})
-	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm... Now I ran out of fuel..."), SAY_THINK, 3000}})
+	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm ... Now I ran out of fuel."), SAY_THINK, 3000}})
 	table.insert(dialog06, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 07 - Hero lands on Death Planet but isn't allowed yet to play this map
 	AddSkipFunction(dialog07, Skipanim, {dialog07})
 	table.insert(dialog07, {func = AnimCaption, args = {hero.gear, loc("This planet seems dangerous!"),  5000}})
-	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other device parts"), SAY_THINK, 4000}})
+	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other device parts."), SAY_THINK, 4000}})
 	-- DIALOG 08 - Hero wins death01
 	AddSkipFunction(dialog08, Skipanim, {dialog08})
-	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite shadow..."),  4000}})
-	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great Hog Solo! However we aren't out of danger yet!"), SAY_SHOUT, 4500}})
-	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now"), SAY_SHOUT, 5000}})
-	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts"), SAY_SHOUT, 3000}})
+	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorites shadow ..."),  4000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great, Hog Solo! However, we aren't out of danger yet!"), SAY_SHOUT, 4500}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now."), SAY_SHOUT, 5000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts."), SAY_SHOUT, 3000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("PAotH has sent explosives but unfortunately the trigger mechanism seems to be faulty!"), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need you to go there and detonate them yourself! Good luck!"), SAY_SHOUT, 500}})
 	table.insert(dialog08, {func = AnimWait, args = {doctor.gear, 3000}})
@@ -590,20 +590,20 @@ function startCombat()
 	TurnTimeLeft = 0
 end
 
-function sendStats(planet)
-	SendStat(siGameResult, loc("Hog Solo arrived at "..planet))
-	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button"))
-	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission"))
-	SendStat(siCustomAchievement, loc("Planets with completed main missions will be marked with a flower"))
+function sendStats(planetMsg)
+	SendStat(siGameResult, planetMsg)
+	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button."))
+	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission."))
+	SendStat(siCustomAchievement, loc("Planets with completed main missions will be marked with a flower."))
 	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end
 
 function sendStatsOnRetry()
 	SendStat(siGameResult, loc("You have to travel again"))
-	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel"))
-	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets"))
-	SendStat(siCustomAchievement, loc("You have to be careful and not die!"))
+	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
+	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
+	SendStat(siCustomAchievement, loc("You have to be careful and must not die!"))
 	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
