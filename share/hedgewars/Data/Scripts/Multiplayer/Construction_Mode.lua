@@ -1548,7 +1548,6 @@ function onGameStart()
 	ShowMission	(
 				loc("CONSTRUCTION MODE"),
 				loc("a Hedgewars mini-game"),
-				" " .. "|" ..
 				loc("Build a fortress and destroy your enemy.") .. "|" ..
 				loc("There are a variety of structures available to aid you.") .. "|" ..
 				loc("Use the air-attack weapons and the arrow keys to select structures.") .. "|" ..
@@ -1562,11 +1561,8 @@ function onGameStart()
 				loc("Respawner") .. ": " .. loc("Resurrects dead hedgehogs.")  .. "|" ..
 				loc("Teleportation Node") .. ": " .. loc("Allows free teleportation between other nodes.")  .. "|" ..
 				loc("Construction Station") .. ": " .. loc("Allows placement of girders, rubber-bands, mines, sticky mines and barrels.")  .. "|" ..
-				loc("Support Station") .. ": " .. loc("Allows the placement of weapons, utiliites, and health crates.")  .. "|" ..
-
-
-				" " .. "|" ..
-				"", 4, 5000
+				loc("Support Station") .. ": " .. loc("Allows the placement of weapons, utiliites, and health crates.")
+				, 4, 5000
 				)
 
 
