@@ -397,29 +397,62 @@ function onNewRound()
 
         totalComment = ""
         for i = 0, (TeamsCount-1) do
-                        if teamNameArr[i] ~= " " then                           -- teamScore[teamClan[i]]
-                                teamComment[i] = teamNameArr[i] .. ": " .. (teamScore[i]/1000) .. loc("s|")
-                                totalComment = totalComment .. teamComment[i]
-                        elseif teamNameArr[i] == " " then
-                                teamComment[i] = "|"
+                        if teamNameArr[i] ~= " " and teamScore[i] ~= -1 then
+                                teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
+                        else
+                                teamComment[i] = string.format(loc("%s: N/A"), teamNameArr[i]) .. "|"
                         end
+                        totalComment = totalComment .. teamComment[i]
         end
 
         ShowMission(    loc("RACER"),
                                         loc("STATUS UPDATE"),
-                                        loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" ..
-                                        loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
+                                        string.format(loc("ROUNDS COMPLETE: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
+                                        loc("BEST TEAM TIMES: ") .. "|" .. totalComment, 0, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
-                for i = 0, (numhhs-1) do
-                        if GetHogClan(hhs[i]) ~= bestClan then
-                                SetEffect(hhs[i], heResurrectable, 0)
-                                SetHealth(hhs[i],0)
+                gameOver = true
+                TurnTimeLeft = 10000000
+
+                -- Sort the scores for the ranking list
+                local unfinishedArray = {}
+                local sortedTeams = {}
+                local k = 1
+                for i = 0, TeamsCount-1 do
+                        if teamScore[i] ~= 100000 and teamNameArr[i] ~= " " then
+                               sortedTeams[k] = {}
+                               sortedTeams[k].name = teamNameArr[i]
+                               sortedTeams[k].score = teamScore[i]
+                               k = k + 1
+                        else
+                               table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
                         end
                 end
-                gameOver = true
-                TurnTimeLeft = 1
+                table.sort(sortedTeams, function(team1, team2) return team1.score < team2.score end)
+
+                -- Write all the stats!
+
+                for i = 1, #sortedTeams do
+                        SendStat(siPointType, loc("milliseconds"))
+                        SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
+                end
+
+                if #sortedTeams >= 1 then
+                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+                        SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
+                        for i=1,#unfinishedArray do
+                                 SendStat(siCustomAchievement, unfinishedArray[i])
+                        end
+                else
+                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
+                        SendStat(siCustomAchievement, loc("Maybe you should try an easier TechRacer map."))
+                end
+
+                -- Game over
+                EndGame()
         end
 
 end
@@ -541,6 +574,7 @@ end
 
 
 function onGameStart()
+        SendHealthStatsOff()
 
         roundN = 0
         lastRound = TotalRounds
