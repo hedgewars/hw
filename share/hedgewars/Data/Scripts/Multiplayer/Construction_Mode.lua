@@ -805,13 +805,15 @@ end
 
 function HandleStructures()
 
-	for i = 1, #sProx do
-		sProx[i][2] = false
+	if GameTime % 100 == 0 then
+		for i = 1, #sProx do
+			sProx[i][2] = false
 
-		if sProx[i][1] == loc("Structure Placement Mode") then
-			sProx[i][2] = true
+			if sProx[i][1] == loc("Structure Placement Mode") then
+				sProx[i][2] = true
+			end
+
 		end
-
 	end
 
 	for i = 1, #strucID do
@@ -858,38 +860,40 @@ function HandleStructures()
 	-- this is kinda messy and gross (even more than usual), fix it up at some point
 	-- it just assumes that if you have access to girders, it works for rubbers
 	-- as that is what the struc implemenation means due to construction station
-	anyUIProx = false
-	for i = 1, #sProx do
+	if GameTime % 100 == 0 then
+		anyUIProx = false
+		for i = 1, #sProx do
 
-		if sProx[i][1] == loc("Girder Placement Mode") then
-			if sProx[i][2] == true then
-				AddAmmo(CurrentHedgehog, amGirder, 100)
-				AddAmmo(CurrentHedgehog, amRubber, 100)
-				AddAmmo(CurrentHedgehog, amDrillStrike, 100)
-			else
-				AddAmmo(CurrentHedgehog, amGirder, 0)
-				AddAmmo(CurrentHedgehog, amRubber, 0)
-				AddAmmo(CurrentHedgehog, amDrillStrike, 0) -- new
+			if sProx[i][1] == loc("Girder Placement Mode") then
+				if sProx[i][2] == true then
+					AddAmmo(CurrentHedgehog, amGirder, 100)
+					AddAmmo(CurrentHedgehog, amRubber, 100)
+					AddAmmo(CurrentHedgehog, amDrillStrike, 100)
+				else
+					AddAmmo(CurrentHedgehog, amGirder, 0)
+					AddAmmo(CurrentHedgehog, amRubber, 0)
+					AddAmmo(CurrentHedgehog, amDrillStrike, 0) -- new
+				end
+			elseif sProx[i][1] == loc("Teleportation Mode") then
+				if sProx[i][2] == true then
+					AddAmmo(CurrentHedgehog, amTeleport, 100)
+				else
+					AddAmmo(CurrentHedgehog, amTeleport, 0)
+				end
+			elseif sProx[i][1] == loc("Weapon Crate Placement Mode") then
+				-- this is new stuff
+				if sProx[i][2] == true then
+					AddAmmo(CurrentHedgehog, amNapalm, 100)
+				else
+					AddAmmo(CurrentHedgehog, amNapalm, 0)
+				end
 			end
-		elseif sProx[i][1] == loc("Teleportation Mode") then
-			if sProx[i][2] == true then
-				AddAmmo(CurrentHedgehog, amTeleport, 100)
-			else
-				AddAmmo(CurrentHedgehog, amTeleport, 0)
+
+			if (sProx[i][2] == true) then
+				anyUIProx = true
 			end
-		elseif sProx[i][1] == loc("Weapon Crate Placement Mode") then
-			-- this is new stuff
-			if sProx[i][2] == true then
-				AddAmmo(CurrentHedgehog, amNapalm, 100)
-			else
-				AddAmmo(CurrentHedgehog, amNapalm, 0)
-			end
+
 		end
-
-		if (sProx[i][2] == true) then
-			anyUIProx = true
-		end
-
 	end
 
 end
