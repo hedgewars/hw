@@ -79,6 +79,8 @@ QLayout * PageTraining::bodyLayoutDefinition()
     // let's not make the tab widget use more space than needed
     tbw->setFixedWidth(400);
     pageLayout->setAlignment(tbw, Qt::AlignHCenter);
+    
+    tbw->setStyleSheet("QListWidget { border-style: none; padding-top: 6px; }");
 
     // training/challenge/scenario lists
     lstTrainings = new QListWidget(this);
