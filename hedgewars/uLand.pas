@@ -33,7 +33,7 @@ implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
-     uLandGenTemplateBased, uLandUtils;
+     uLandGenTemplateBased, uLandUtils, uRenderUtils;
 
 var digest: shortstring;
     maskOnly: boolean;
@@ -194,7 +194,8 @@ begin
         r.x:= 0;
         while r.x < LAND_WIDTH do
             begin
-            SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+            copyToXY(tmpsurf, Surface, r.x, r.y);
+            //SDL_UpperBlit(tmpsurf, nil, Surface, @r);
             inc(r.x, tmpsurf^.w)
             end;
         inc(y, tmpsurf^.h);
