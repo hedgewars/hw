@@ -322,7 +322,6 @@ function CheckWaypoints()
                 if dist < (NR*NR) then
                 --if dist < (wpRad*wpRad) then
                         --AddCaption("howdy")
-                        wpActive[i] = true
                         wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog)) -- new                             --GetClanColor(1)
                         SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
 
@@ -333,7 +332,11 @@ function CheckWaypoints()
                                 end
                         end
 
-                        AddCaption(string.format(loc("Waypoints remaining: %d"), wpRem),0xffba00ff,capgrpAmmoinfo)
+                        if not wpActive[i] then
+                                AddCaption(string.format(loc("Waypoints remaining: %d"), wpRem),0xffba00ff,capgrpGameState)
+                        end
+
+                        wpActive[i] = true
 
                 end
 
