@@ -26,12 +26,12 @@
 ------------------------------------------------------------------------------
 -- The script parameter can be used to configure the energy
 -- of the game. It is a comma-seperated list of key=value pairs, where each
--- key is a word and each value is non-negative integer.
+-- key is a word and each value is an negative integer between 0 and 4294967295.
 --
 -- Possible keys:
 --- initialenergy: Amount of energy that each team starts with (default: 550)
 --- energyperround: Amount of energy that each team gets per round (default: 50)
---- maxenergy: Maximum amount of energy each team can hold (default: 1000)
+--- maxenergy: Maximum amount of energy each team can hold (default: 1000).
 
 -- Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
 -- and sets the maximum energy to 2000
@@ -842,7 +842,7 @@ function HandleStructures()
 						if getGearValue(strucGear[i],"power") == 10 then
 							setGearValue(strucGear[i],"power",0)
 							clanPower[z] = clanPower[z] + 1
-							if clanPower[z] > conf_maxEnergy then
+							if conf_maxEnergy ~= "inf" and clanPower[z] > conf_maxEnergy then
 								clanPower[z] = conf_maxEnergy
 							end
 						end
@@ -1498,7 +1498,7 @@ function parseInt(str, default)
 	if str == nil then return default end
 	local s = string.match(str, "(%d*)")
 	if s ~= nil then
-		return math.max(0, tonumber(s))
+		return math.min(4294967295, math.max(0, tonumber(s)))
 	else
 		return nil
 	end
@@ -1509,7 +1509,11 @@ function onParameters()
 	parseParams()
 	conf_initialEnergy = parseInt(params["initialenergy"], conf_initialEnergy)
 	conf_energyPerRound = parseInt(params["energyperround"], conf_energyPerRound)
-	conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy)
+	if params["maxenergy"] == "inf" then
+		conf_maxEnergy = "inf"
+	else
+		conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy)
+	end
 end
 
 function onGameInit()
@@ -1607,7 +1611,7 @@ function onNewTurn()
 		clanFirstTurn[clan] = false
 	else
 		clanPower[clan] = clanPower[clan] + conf_energyPerRound
-		if clanPower[clan] > conf_maxEnergy then
+		if conf_maxEnergy ~= "inf" and clanPower[clan] > conf_maxEnergy then
 			clanPower[clan] = conf_maxEnergy
 		end
 	end
