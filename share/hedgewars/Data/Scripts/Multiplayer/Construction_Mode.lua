@@ -1396,19 +1396,6 @@ function onLeft()
 
 end
 
-function showModeMessage()
-	if CurrentHedgehog == nil then return end
-	local val = pMode[pIndex]
-	local str
-	if cat[cIndex] == "Mine Placement Mode" then
-		-- timer in seconds
-		str = string.format(loc("%d sec"), div(val, 1000))
-	else
-		str = tostring(val)
-	end
-	AddCaption(str,0xffba00ff,capgrpMessage2)
-end
-
 function onRight()
 
 	pIndex = pIndex + 1
@@ -1423,6 +1410,22 @@ function onRight()
 
 end
 
+function showModeMessage()
+	if CurrentHedgehog == nil then return end
+	local val = pMode[pIndex]
+	local str
+	if cat[cIndex] == "Mine Placement Mode" then
+		-- timer in seconds
+		str = string.format(loc("%d sec"), div(val, 1000))
+	elseif cat[cIndex] == "Girder Placement Mode" then
+		str = loc("Girder")
+	elseif cat[cIndex] == "Rubber Placement Mode" then
+		str = loc("Rubber")
+	else
+		str = tostring(val)
+	end
+	AddCaption(str,0xffba00ff,capgrpMessage2)
+end
 
 function updatePlacementDisplay(pDir)
 
