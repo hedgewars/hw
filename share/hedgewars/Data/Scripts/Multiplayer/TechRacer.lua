@@ -333,7 +333,13 @@ function CheckWaypoints()
                         end
 
                         if not wpActive[i] then
-                                AddCaption(string.format(loc("Waypoints remaining: %d"), wpRem),0xffba00ff,capgrpGameState)
+                                local wpMessage = ""
+                                if wpRem-1 == 0 then
+                                        wpMessage = loc("Track completed!")
+                                else
+                                        wpMessage = string.format(loc("Waypoints remaining: %d"), wpRem-1)
+                                end
+                                AddCaption(wpMessage, 0xffba00ff, capgrpGameState)
                         end
 
                         wpActive[i] = true
@@ -1218,7 +1224,6 @@ function onGearResurrect(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
         if gear == CurrentHedgehog then
-                AddCaption(loc("Race failed!"), GetClanColor(GetHogClan(gear)), capgrpMessage2)
                 DisableTumbler()
         end
 
