@@ -208,8 +208,8 @@ local teamScore = {}
 
 local cGear = nil
 
-local bestClan = nil
-local bestTime = nil
+local bestClan = 10
+local bestTime = 1000000
 
 local gameBegun = false
 local gameOver = false
@@ -358,11 +358,7 @@ end
 
 function AdjustScores()
 
-        if bestTime == nil then
-                bestTime = 1000000
-                bestClan = 10
-                bestTimeComment = "N/A"
-        end
+	local bestTimeComment = loc("Did not finish")
 
         newScore = false
 
@@ -378,9 +374,6 @@ function AdjustScores()
                 end
         end
 
-        --bestTime = 100000
-        --bestClan = 10
-
         -- find the best time out of those so far
         for i = 0, (numTeams-1) do
                 if teamScore[i] < bestTime then
@@ -390,7 +383,7 @@ function AdjustScores()
         end
 
         if bestTime ~= 1000000 then
-                bestTimeComment = (bestTime/1000) ..loc("s")
+                bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
         end
 
         if newScore == true then
@@ -398,7 +391,7 @@ function AdjustScores()
                         ShowMission(loc("TechRacer"),
                         loc("Track completed!"),
                         string.format(loc("New race record: %.1fs"), (trackTime/1000)) .. "|" ..
-                        string.format(loc("Winning time: %s") .. bestTimeComment), 0, 4000)
+                        string.format(loc("Winning time: %s"), bestTimeComment), 0, 4000)
                         PlaySound(sndHomerun)
                 else    -- best time for the clan
                         ShowMission(loc("TechRacer"),
@@ -449,7 +442,11 @@ function onNewRound()
         totalComment = ""
         for i = 0, (TeamsCount-1) do
                         if teamNameArr[i] ~= " " then                           -- teamScore[teamClan[i]]
-                                teamComment[i] = teamNameArr[i] .. ": " .. (teamScore[i]/1000) .. loc("s|")
+				if teamScore[i] ~= 1000000 then
+                                	teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
+				else
+                                	teamComment[i] = string.format(loc("%s: Did not finish"), teamNameArr[i]) .. "|"
+				end
                                 totalComment = totalComment .. teamComment[i]
                         elseif teamNameArr[i] == " " then
                                 teamComment[i] = "|"
@@ -471,7 +468,7 @@ function onNewRound()
                 local sortedTeams = {}
                 local k = 1
                 for i = 0, TeamsCount-1 do
-                        if teamScore[i] ~= -1 and teamNameArr[i] ~= " " then
+                        if teamScore[i] ~= 1000000 and teamNameArr[i] ~= " " then
                                sortedTeams[k] = {}
                                sortedTeams[k].name = teamNameArr[i]
                                sortedTeams[k].score = teamScore[i]
