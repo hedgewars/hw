@@ -3070,7 +3070,9 @@ function onTimer(s)
 			superDelete = true
 		end
 	elseif pMode[pIndex] == loc("Selection Mode") then
-		setGearValue(sGear, "ranking", s)
+		if sGear ~= nil and GetGearType(sGear) == gtHedgehog then
+			setGearValue(sGear, "ranking", s)
+		end
 	end
 
 end
