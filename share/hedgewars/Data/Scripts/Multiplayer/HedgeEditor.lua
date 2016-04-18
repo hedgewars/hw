@@ -2946,13 +2946,7 @@ function HandleHedgeEditor()
 			-- update display selection criteria
 			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
 				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
-				local caption2
-				if type(pMode[pIndex]) == "table" then
-					caption2 = tostring(pMode[pIndex][1])
-				else
-					caption2 = tostring(pMode[pIndex])
-				end
-				AddCaption(caption2,0xffba00ff,capgrpMessage2)
+				showSecondaryMessage()
 				if superDelete == true then
 					AddCaption(loc("Warning: Deletition Mode Active"),0xffba00ff,capgrpAmmoinfo)
 				end
@@ -3087,6 +3081,20 @@ function onPreciseUp()
 	preciseOn = false
 end
 
+function showSecondaryMessage()
+	local caption2
+	if type(pMode[pIndex]) == "table" then
+		caption2 = tostring(pMode[pIndex][1])
+	elseif curWep == amGirder then
+		caption2 = loc("Girder")
+	elseif curWep == amRubber then
+		caption2 = loc("Rubber")
+	else
+		caption2 = tostring(pMode[pIndex])
+	end
+	AddCaption(caption2, 0xffba00ff, capgrpMessage2)
+end
+
 ---------------------------------------------------------------
 -- Cycle through selection subsets (by changing pIndex, pMode)
 -- i.e 	health of barrels, medikits,
@@ -3115,7 +3123,7 @@ function onLeft()
 		end
 
 		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+			showSecondaryMessage()
 		end
 	end
 
@@ -3143,7 +3151,7 @@ function onRight()
 		end
 	
 		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-			AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+			showSecondaryMessage()
 		end
 	end
 
