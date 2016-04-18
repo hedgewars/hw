@@ -2533,7 +2533,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("RUBBER PLACEMENT MODE"),
-				loc("Use this mode to place rubberbands"),
+				loc("Use this mode to place rubber"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Rotation: [Left], [Right]") .. "|" ..
 				loc("1 - Normal Rubber") .. "|" ..
@@ -2686,7 +2686,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("HEALTH CRATE PLACEMENT MODE"),
-				loc("Use this mode to place utility crates"),
+				loc("Use this mode to place health crates"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Health Boost: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
