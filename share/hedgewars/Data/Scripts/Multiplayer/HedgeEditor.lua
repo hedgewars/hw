@@ -1320,6 +1320,9 @@ function PlaceObject(x,y)
 			placedFrame[placedCount] = sFrame
 			placedSprite[placedCount] = reducedSpriteIDArray[pIndex]
 			placementSucceeded = CallPlaceSprite(placedCount)
+			if placementSucceeded then
+				PlaySound(sndPlaced)
+			end
 		else
 			placedType[placedCount] = "bogus"
 			SelectClosestSprite()
@@ -1335,6 +1338,7 @@ function PlaceObject(x,y)
 		else
 			PlaceWaypoint(x,y)
 			placedCount = placedCount - 1
+			PlaySound(sndPlaced)
 		end
 
 	end
