@@ -177,23 +177,25 @@ function onGameTick()
 end
 	
 function onGearDelete(gear)
+	-- Check gear collection
+	if CurrentHedgehog == player and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
+		if gear == portalgun then
+			HogSay(player, loc("Great! Let’s kill all these enemies, using portals."), SAY_THINK)
+		end
 
-	if gear == portalgun then
-		HogSay(player, loc("Great! Let’s kill all these enemies, using portals."), SAY_THINK)
-	end
-
-	if gear == girder then 
-		HogSay(player, loc("This will be useful when I need a new platform or if I want to rise."), SAY_THINK)
-	end
+		if gear == girder then 
+			HogSay(player, loc("This will be useful when I need a new platform or if I want to rise."), SAY_THINK)
+		end
 	
-	if gear == parachute then
-		HogSay(player, loc("You can’t open a portal on the blue surface."), SAY_THINK)
+		if gear == parachute then
+			HogSay(player, loc("You can’t open a portal on the blue surface."), SAY_THINK)
+		end
+
+		if gear == extratime then
+			HogSay(player, loc("What?! For all this struggle I just win some ... time? Oh dear!"), SAY_SHOUT)
+		end
 	end
 
-	if gear == extratime then
-		HogSay(player, loc("What?! For all this struggle I just win some ... time? Oh dear!"), SAY_SHOUT)
-	end
-	
 	if gear == player then
 		player = nil
 	end
