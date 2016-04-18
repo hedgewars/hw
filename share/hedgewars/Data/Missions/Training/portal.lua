@@ -16,29 +16,27 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "portal" -- The map to be played
 	Theme = "Hell" -- The theme to be used
-	Goals = loc("Use the portal to move fast and far, use it to kill, use it with caution!")  --the goal ...
-	
 	
 ----AddTeam(teamname, color, grave, fort, voicepack, flag)--
-	AddTeam(loc("Subject"), 14483406, "Simple", "Island", "Default", "cm_star")
-	player = AddHog(loc("player"), 0, 10, "Terminator_Glasses")
+	AddTeam(loc("Subjects"), 0xFFFF01, "Simple", "Island", "Default", "cm_test")
+	player = AddHog(loc("Subject 1"), 0, 10, "Terminator_Glasses")
 
-	AddTeam(loc("Hell Army"), 1170801, "Simple", "Island", "Default", "cm_galaxy")
-	enemy1 = AddHog(loc("Lucifer"), 1, 200, "thinkingcap")
-	enemy2 = AddHog(loc("voldemort"), 1, 150, "WizardHat")
-	enemy3 = AddHog(loc("zombi"), 1, 100, "zombi")
-	enemy4 = AddHog(loc("Predator"), 1, 14, "predator")
-	enemy5 = AddHog(loc("oneye"), 1, 50, "cyclops")
-	enemy6 = AddHog(loc("razac"), 1, 50, "plaguemask")
+	AddTeam(loc("Hell Army"), 0xFF0402, "skull", "Island", "Default", "cm_hellish")
+	enemy1 = AddHog(loc("Lucifer"), 1, 200, "InfernalHorns")
+	enemy2 = AddHog(loc("Voldemort"), 1, 150, "WizardHat")
+	enemy3 = AddHog(loc("Zombi"), 1, 100, "Zombi")
+	enemy4 = AddHog(loc("Predator"), 1, 14, "anzac")
+	enemy5 = AddHog(loc("Oneye"), 1, 50, "cyclops")
+	enemy6 = AddHog(loc("Razac"), 1, 50, "Evil")
 	enemy7 = AddHog(loc("C-2"), 1, 50, "cyborg1")
 	enemy8 = AddHog(loc("Rider"), 1, 50, "scif_SparkssHelmet")
 
-	AddTeam(loc("badmad"), 1170801, "Simple", "Island", "Default", "cm_jupiter")
+	AddTeam(loc("Badmad"), 0xFF0402, "skull", "Island", "Default", "cm_pentagram")
 	enemy9 = AddHog(loc("C-1"), 1, 50, "cyborg2")
-	enemy10 = AddHog(loc("hiden"), 1, 40, "daftpunkguymanuel")
-	enemy11 = AddHog(loc("ronald"), 1, 70, "clown")
-	enemy12 = AddHog(loc("phosphatoglucidique"), 1, 50, "chef")
-	enemy13 = AddHog(loc("Lestat"), 1, 30, "draculakz")
+	enemy10 = AddHog(loc("Hidden"), 1, 40, "bushhider")
+	enemy11 = AddHog(loc("Ronald"), 1, 70, "clown")
+	enemy12 = AddHog(loc("Phosphat"), 1, 50, "chef")
+	enemy13 = AddHog(loc("Lestat"), 1, 30, "vampirichog")
 
 	SetGearPosition(player, 350, 1820)
     SetGearPosition(enemy1, 2037, 1313)
@@ -167,8 +165,10 @@ function onGameStart()
 	PlaceGirder(3363, 1323, 4)
 
 
-	ShowMission (loc("Portal mission"), loc("training"), "", -amPortalGun, 5000)
-	HogSay(player, loc("I should get myself a portal gun, maybe this crate has one"), SAY_THINK)
+	ShowMission (loc("Portal Mind Challenge"), loc("Mission"), 
+		loc("Defeat all enemies!") .. "|" .. loc("In this mission you have infinite time."),
+		-amPortalGun, 5000)
+	HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
 	
 
 
@@ -180,10 +180,10 @@ function onGameTick()
     if (player ~= nil)  then
 		if (gearIsInBox(player, 1650, 1907, 200, 60) and (adviceGiven == false)) then
 			adviceGiven = true
-				HogSay(player, loc("Hmmm, I'll have to find some way of moving him off this anti-portal surface..."), SAY_THINK)
+				HogSay(player, loc("Hmmm, I’ll have to find some way of moving him off this anti-portal surface."), SAY_THINK)
 		elseif (gearIsInBox(player, 2960, 790, 200, 60) and (adviceGiven2 == false)) then
 			adviceGiven2 = true
-				HogSay(player, loc("The anti-portal zone is all over the floor, and I have nothing to kill him...Droping something could hurt him enough to kill him..."), SAY_THINK)
+				HogSay(player, loc("The anti-portal surface is all over the floor, and I have nothing to kill him. Dropping something could hurt him enough to kill him."), SAY_THINK)
  end
  end
 	
@@ -204,24 +204,23 @@ function onGearDelete(gear)
 
 	if gear == portalgun then
 		--AddAmmo(player, amPortalGun, 10000)
-		HogSay(player, loc("GREAT ! Let's kill all this enemies, using portals"), SAY_THINK)
+		HogSay(player, loc("Great! Let’s kill all these enemies, using portals."), SAY_THINK)
 	end
 
 	if gear == girder then 
-		HogSay(player, loc("Will be useful if I need a new plateform or if I want to rise...."), SAY_THINK)
+		HogSay(player, loc("This will be useful when I need a new platform or if I want to rise."), SAY_THINK)
 	end
 	
 	if gear == parachute then
-		HogSay(player, loc("You can't fire a portal on the blue surface"), SAY_THINK)
+		HogSay(player, loc("You can’t open a portal on the blue surface."), SAY_THINK)
 	end
 --if you wanted to check for collection only
 --you could probably say
 --if (gear == myParachuteGear) and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
 
 	if gear == extratime then
-		HogSay(player, loc(" What !! For all of this struggle i just win some ... TIME o0"), SAY_SHOUT)
+		HogSay(player, loc("What?! For all this struggle I just win some ... time? Oh dear!"), SAY_SHOUT)
 	end
-
 	
 	if gear == player then
         player = nil
