@@ -1209,10 +1209,14 @@ function PlaceObject(x,y)
 			end
 		elseif pMode[pIndex] == loc("Deletion Mode") then
 			sGear = GetClosestGear()
-			if (sGear ~= nil) and (GetGearType(sGear) ~= gtHedgehog) then
+			if (sGear == nil) then
+				AddCaption(loc("Please click on a gear."),0xffba00ff,capgrpVolume)
+			elseif (GetGearType(sGear) == gtHedgehog) then
+				AddCaption(loc("Hedgehogs can not be deleted."),0xffba00ff,capgrpVolume)
+			else
 				DeleteGear(sGear)
-				sGear = nil
 			end
+			sGear = nil
 		end
 
 	elseif (cat[cIndex] == loc("Hog Identity Mode")) or (cat[cIndex] == loc("Team Identity Mode")) then
