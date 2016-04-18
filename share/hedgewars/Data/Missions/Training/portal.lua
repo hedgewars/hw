@@ -16,6 +16,9 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "portal" -- The map to be played
 	Theme = "Hell" -- The theme to be used
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	
 	AddTeam(loc("Subjects"), 0xFFFF01, "Simple", "Island", "Default", "cm_test")
 	player = AddHog(loc("Subject 1"), 0, 10, "Terminator_Glasses")
