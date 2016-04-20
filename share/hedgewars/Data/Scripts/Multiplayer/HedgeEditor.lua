@@ -2845,6 +2845,7 @@ function updateHelp(curAmmoType)
 
 	if helpDisabled == true then
 		HideMission()
+		hedgeEditorMissionPanelShown = false
 	end
 
 end
@@ -3182,23 +3183,19 @@ function onTimer(s)
 			AddCaption(loc("The editor weapons and tools have been added!"))
 		end
 	elseif (preciseOn == true) and (s == 1) then
-		if (GetCurAmmoType() == amGirder) or  (GetCurAmmoType() == amRubber) or  (GetCurAmmoType() == amAirAttack) then
-			helpDisabled = not(helpDisabled)
-			if helpDisabled then
-				AddCaption(loc("Help Disabled"),0xffba00ff,capgrpVolume)
-			else
-				AddCaption(loc("Help Enabled"),0xffba00ff,capgrpVolume)
-			end
-			updateHelp()
+		helpDisabled = not(helpDisabled)
+		if helpDisabled then
+			AddCaption(loc("Help Disabled"),0xffba00ff,capgrpVolume)
+		else
+			AddCaption(loc("Help Enabled"),0xffba00ff,capgrpVolume)
 		end
+		updateHelp()
 	elseif (preciseOn == true) and (s == 3) then
-		if (GetCurAmmoType() == amGirder) or  (GetCurAmmoType() == amRubber) or  (GetCurAmmoType() == amAirAttack) then
-			showGearTags = not(showGearTags)
-			if showGearTags then
-				AddCaption(loc("Gear information shown"),0xffba00ff,capgrpVolume)
-			else
-				AddCaption(loc("Gear information hidden"),0xffba00ff,capgrpVolume)
-			end
+		showGearTags = not(showGearTags)
+		if showGearTags then
+			AddCaption(loc("Gear information shown"),0xffba00ff,capgrpVolume)
+		else
+			AddCaption(loc("Gear information hidden"),0xffba00ff,capgrpVolume)
 		end
 
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
@@ -3442,10 +3439,10 @@ function showHedgeEditorMissionPanel()
 		loc("Place Girder: Girder") .. "|" ..
 		loc("Place Rubber: Rubber") .. "|" ..
 		loc("Place Gears (and more): Air Attack") .. "|" ..
-		loc("Change Selection: [Up], [Down], [Left], [Right]") .. "|" ..
-		loc("Toggle Help: [Precise]+[1] (While a tool is selected)") .. "|" ..
+		loc("Toggle Help: [Precise]+[1]") .. "|" ..
+		loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 		" " .. "|" ..
-		loc("COMMANDS: (Use while no weapon is selected)") .. "|" ..
+		loc("Editing Commands: (Use while no weapon is selected)") .. "|" ..
 		loc("Save Level: [Precise]+[4]") .. "|" ..
 		loc("Toggle Editing Weapons and Tools: [Precise]+[2]")
 		, 4, 5000
