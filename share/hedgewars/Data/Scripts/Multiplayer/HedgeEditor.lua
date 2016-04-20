@@ -3341,7 +3341,7 @@ end
 ---------------------------------------------------------
 function onUp()
 
-	if (curWep ~= amGirder) then
+	if (curWep == amAirAttack) then
 		cIndex = cIndex - 1
 		if (cIndex == 1) or (cIndex == 2) then --1	--we no longer hit girder by normal means
 			cIndex = #cat
@@ -3356,7 +3356,7 @@ end
 
 function onDown()
 
-	if (curWep ~= amGirder) then
+	if (curWep == amAirAttack) then
 		cIndex = cIndex + 1
 		if cIndex > #cat then
 			cIndex = 3	 -- 2 ----we no longer hit girder by normal means
