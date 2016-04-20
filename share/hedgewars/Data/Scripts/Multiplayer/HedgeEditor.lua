@@ -1245,7 +1245,9 @@ function PlaceObject(x,y)
 			if pMode[pIndex][2] == "set" then
 				SetHealth(sGear, pMode[pIndex][1])
 			elseif pMode[pIndex][2] == "mod" then
-				local newHealth = math.max(1, GetHealth(sGear) + tonumber(pMode[pIndex][1]))
+				local min
+				if gt == gtCase then min = 0 else min = 1 end
+				local newHealth = math.max(min, GetHealth(sGear) + tonumber(pMode[pIndex][1]))
 				SetHealth(sGear, newHealth)
 			end
 		elseif gt == gtMine and GetHealth(sGear) == 0 then
@@ -1373,7 +1375,7 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
 		pMode = {60,80,100,120,160,200,240,1,10,20,30,40,50}
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
-		pMode = {25,30,40,50,75,100,150,200,5,10,15,20}
+		pMode = {25,30,40,50,75,100,150,200,0,5,10,15,20}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		for i = 1, #atkArray do
 			pMode[i] = GetAmmoName(atkArray[i][1], false)
