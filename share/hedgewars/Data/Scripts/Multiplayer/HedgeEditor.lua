@@ -1258,7 +1258,8 @@ function PlaceObject(x,y)
 			elseif pMode[pIndex][2] == "mod" then
 				local _, oldHealth
 				_,_,_,_,_,_,_,_,_,_,_, oldHealth = GetGearValues(sGear)
-				local newHealth = math.max(1, oldHealth + tonumber(pMode[pIndex][1]))
+				oldHealth = 36 - oldHealth
+				newHealth = math.max(1, oldHealth + tonumber(pMode[pIndex][1]))
 			end
 			if newHealth ~= nil then
 				SetGearValues(sGear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 36 - newHealth)
