@@ -2746,6 +2746,7 @@ function updateHelp(curAmmoType)
 		ShowMission	(
 				loc("SPRITE MODIFICATION MODE"),
 				loc("Use to select, modify, or delete girders, rubbers, or sprites."),
+				loc("Modify Sprite under Cursor: [Left Click]") .. "|" ..
 				loc("Change modification mode: [Left], [Right]") .."|"..
 				loc("While in modification mode, you can change|the LandFlag by clicking on an object.") .. "|" ..
 				" " .. "|" ..
@@ -2766,8 +2767,9 @@ function updateHelp(curAmmoType)
 		ShowMission	(
 				loc("SPRITE PLACEMENT MODE"),
 				loc("Use this mode to place custom sprites."),
-				loc("Change sprite: [Left], [Right]") .. "|" ..
-				loc("Change sprite frame: [Precise]+[Left], [Precise]+[Right]") .. "|" ..
+				loc("Place Sprite: [Left Click]") .. "|" ..
+				loc("Change Sprite: [Left], [Right]") .. "|" ..
+				loc("Change Sprite Frame: [Precise]+[Left], [Precise]+[Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Normal Land: [1]") .. "|" ..
 				loc("Indestructible Land: [2]") .. "|" ..
