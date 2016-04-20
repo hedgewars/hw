@@ -2983,7 +2983,7 @@ function HandleHedgeEditor()
 				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
 				showSecondaryMessage()
 				if superDelete == true then
-					AddCaption(loc("Warning: Deletition Mode Active"),0xffba00ff,capgrpAmmoinfo)
+					AddCaption(loc("Deletition Mode"),0xffba00ff,capgrpAmmoinfo)
 				end
 			end
 
@@ -3203,9 +3203,13 @@ function onTimer(s)
 
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
 
-		if (cat[cIndex] == loc("Rubber Placement Mode")) and (s ~= 5) then
-			landType = lfBouncy
-			AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
+		if (cat[cIndex] == loc("Rubber Placement Mode")) then
+			if s == 1 then
+				landType = lfBouncy
+				AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
+			elseif s == 5 then
+				superDelete = true
+			end
 		elseif s == 1 then
 			landType = 0
 			AddCaption(loc("Normal Land"),0xffba00ff,capgrpAmmoinfo)
