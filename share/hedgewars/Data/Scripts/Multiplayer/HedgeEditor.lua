@@ -2623,7 +2623,7 @@ function updateHelp(curAmmoType)
 				loc("MINE PLACEMENT MODE"),
 				loc("Use this mode to place mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
-				loc("Change Timer (in milliseconds): [Left], [Right]") .. "|" ..
+				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -2653,7 +2653,7 @@ function updateHelp(curAmmoType)
 				loc("STICKY MINE PLACEMENT MODE"),
 				loc("Use this mode to place sticky mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
-				loc("Change Timer (in milliseconds): [Left], [Right]") .. "|" ..
+				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -2668,7 +2668,7 @@ function updateHelp(curAmmoType)
 				loc("AIR MINE PLACEMENT MODE"),
 				loc("Use this mode to place air mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
-				loc("Change Timer (in milliseconds): [Left], [Right]") .. "|" ..
+				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
@@ -3239,12 +3239,30 @@ end
 
 function showSecondaryMessage()
 	local caption2
-	if type(pMode[pIndex]) == "table" then
-		caption2 = tostring(pMode[pIndex][1])
-	elseif curWep == amGirder then
+	if curWep == amGirder then
 		caption2 = loc("Girder")
 	elseif curWep == amRubber then
 		caption2 = loc("Rubber")
+	elseif cat[cIndex] == loc("Mine Placement Mode") or cat[cIndex] == loc("Sticky Mine Placement Mode") or cat[cIndex] == loc("Air Mine Placement Mode") then
+		caption2 = string.format(loc("%d ms"), pMode[pIndex])
+	elseif cat[cIndex] == loc("Dud Mine Placement Mode") or cat[cIndex] == loc("Barrel Placement Mode") or cat[cIndex] == loc("Health Crate Placement Mode") then
+		caption2 = string.format(loc("Health: %d"), pMode[pIndex])
+	elseif cat[cIndex] == loc("Health Modification Mode") then
+		local health = tonumber(pMode[pIndex][1])
+		local mode = pMode[pIndex][2]
+		if mode == "set" then
+			caption2 = string.format(loc("Set to %d"), health)
+		elseif mode == "mod" then
+			if health < 0 then
+				caption2 = string.format(loc("Subtract %d"), math.abs(health))
+			else
+				caption2 = string.format(loc("Add %d"), health)
+			end
+		else
+			caption2 = "ERROR"
+		end
+	elseif type(pMode[pIndex]) == "table" then
+		caption2 = tostring(pMode[pIndex][1])
 	else
 		caption2 = tostring(pMode[pIndex])
 	end
