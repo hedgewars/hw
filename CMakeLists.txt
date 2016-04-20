@@ -41,6 +41,7 @@ option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 option(SKIPBUNDLE "Do not create relocate bundle (off)" OFF)
 
 option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
+option(BUILD_ENGINE_JS "Compile hwengine as javascript (off)" OFF)
 option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
@@ -225,6 +226,9 @@ if(BUILD_ENGINE_C)
 else()
     #main pascal engine
     add_subdirectory(hedgewars)
+    if(BUILD_ENGINE_JS)
+        message(FATAL_ERROR "This option needs BUILD_ENGINE_C to be set")
+    endif()
 endif()
 
 #Android related build scripts
