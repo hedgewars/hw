@@ -26,3 +26,7 @@ get_target_property(physlayer_fullpath physlayer LOCATION)
 set(PHYSLAYER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Physlayer include dir" FORCE)
 set(PHYSLAYER_LIBRARY ${physlayer_fullpath} CACHE STRING "Physlayer library" FORCE)
 
+if(BUILD_ENGINE_JS)
+    set_target_properties(physlayer PROPERTIES SUFFIX ".bc")
+endif()
+

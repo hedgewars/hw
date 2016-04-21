@@ -6,9 +6,6 @@ find_package(SDL2_mixer REQUIRED)
 find_package(SDL2_net REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
-if(BUILD_ENGINE_JS)
-    find_package(Emscripten REQUIRED)
-endif()
 
 #compile our rtl implementation
 include_directories(${GLEW_INCLUDE_DIR})
@@ -81,12 +78,11 @@ add_custom_target(engine_c DEPENDS ${engine_sources})
 add_definitions(-DPAS2C)
 add_definitions(-Werror=incompatible-pointer-types)
 
-if(BUILD_ENGINE_JS)
-    #hijack the c compiler with emscripten
-    set(CMAKE_C_COMPILER ${EMSCRIPTEN_EXECUTABLE})
-endif()
-
 add_executable(hwengine WIN32 ${engine_sources})
+
+if(BUILD_ENGINE_JS)
+    set_target_properties(hwengine PROPERTIES SUFFIX ".html")
+endif()
 
 target_link_libraries(hwengine  fpcrtl
                                 ${LUA_LIBRARY}
