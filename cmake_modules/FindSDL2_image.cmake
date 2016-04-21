@@ -74,6 +74,12 @@ endif()
 set(SDL2_IMAGE_LIBRARIES ${SDL2_IMAGE_LIBRARY})
 set(SDL2_IMAGE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIR})
 
+if(BUILD_ENGINE_JS)
+    set(SDL2_IMAGE_LIBRARY "sdl2_image_emscripten_internal")
+    set(SDL2_IMAGE_LIBRARIES "sdl2_image_emscripten_internal")
+    set(SDL2_IMAGE_INCLUDE_DIRS "${CMAKE_SYSTEM_INCLUDE_PATH}/SDL")
+endif()
+
 include(FindPackageHandleStandardArgs)
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2_image

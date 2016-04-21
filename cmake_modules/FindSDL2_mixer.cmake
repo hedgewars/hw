@@ -74,6 +74,12 @@ endif()
 set(SDL2_MIXER_LIBRARIES ${SDL2_MIXER_LIBRARY})
 set(SDL2_MIXER_INCLUDE_DIRS ${SDL2_MIXER_INCLUDE_DIR})
 
+if(BUILD_ENGINE_JS)
+    set(SDL2_MIXER_LIBRARY "sdl2_mixer_emscripten_internal")
+    set(SDL2_MIXER_LIBRARIES "sdl2_mixer_emscripten_internal")
+    set(SDL2_MIXER_INCLUDE_DIRS "${CMAKE_SYSTEM_INCLUDE_PATH}/SDL")
+endif()
+
 include(FindPackageHandleStandardArgs)
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2_mixer
