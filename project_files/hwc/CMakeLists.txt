@@ -57,15 +57,20 @@ list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas)
 list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas)
 
 
+set(pas2c_args -n hwengine
+               -i ${CMAKE_SOURCE_DIR}/hedgewars
+               -o ${CMAKE_CURRENT_BINARY_DIR}
+               -a ${CMAKE_CURRENT_BINARY_DIR}
+               -d ENDIAN_LITTLE
+               -d DEBUGFILE)
+if(BUILD_ENGINE_JS)
+    set(pas2c_args ${pas2c_args} -d WEBGL)
+endif()
+
 #invoke pas2c on main module, it will call all the others
 add_custom_command(OUTPUT ${engine_sources}
                    COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
-                   ARGS -n "hwengine"
-                        -i "${CMAKE_SOURCE_DIR}/hedgewars"
-                        -o "${CMAKE_CURRENT_BINARY_DIR}"
-                        -a "${CMAKE_CURRENT_BINARY_DIR}"
-                        -d "ENDIAN_LITTLE"
-                        -d "DEBUGFILE"
+                   ARGS ${pas2c_args}
                    DEPENDS pas2c                     #converter tool
                            ${engine_sources_pas}     #original pascal file
                   )
