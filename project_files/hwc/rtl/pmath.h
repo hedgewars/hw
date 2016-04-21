@@ -21,4 +21,17 @@ double      __attribute__((overloadable))   fpcrtl_abs(double x);
 int         __attribute__((overloadable))   fpcrtl_abs(int x);
 int64_t     __attribute__((overloadable))   fpcrtl_abs(int64_t x);
 
+/* emscripten cannot find math.h through our cmake */
+#ifdef EMSCRIPTEN
+double      exp(double);
+double      log(double);
+double      sin(double);
+double      cos(double);
+double      fabs(double);
+double      ceil(double);
+double      sqrt(double);
+double      atan(double);
+double      atan2(double, double);
+#endif
+
 #endif /* PMATH_H_ */
