@@ -338,7 +338,7 @@ begin
         LuaToMapGenOrd:= i;
 end;
 
-// wrapped calls //
+// wrapped calls
 
 // functions called from Lua:
 // function(L : Plua_State) : LongInt; Cdecl;
@@ -490,7 +490,7 @@ begin
             cs:= 0; // current slot
             fa:= 0; // first ammo item to check
 
-            // if something is selected, find it's successor
+            // if something is selected, find it is successor
             if curAmmoType <> amNothing then
                 begin
                 // get current slot index
@@ -499,7 +499,7 @@ begin
                 while (fa < cMaxSlotAmmoIndex)
                     and (Ammo^[cs, fa].AmmoType <> CurAmmoType) do
                         inc(fa);
-                // increase once more because we won't successor
+                // increase once more because we will not successor
                 inc(fa);
                 end;
 
@@ -913,7 +913,7 @@ begin
     lc_setvisualgearvalues:= 0
 end;
 
-// so. going to use this to get/set some of the more obscure gear values which weren't already exposed elsewhere
+// so. going to use this to get/set some of the more obscure gear values which were not already exposed elsewhere
 // can keep adding things in the future. isnoneornil makes it safe
 function lc_getgearvalues(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
@@ -1226,8 +1226,8 @@ var clan : PClan;
 begin
     if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
-	i:= lua_tointeger(L,1);
-	if i >= ClansCount then exit(0);
+        i:= lua_tointeger(L,1);
+        if i >= ClansCount then exit(0);
         clan := ClansArray[i];
         clan^.Color:= lua_tointeger(L, 2) shr 8;
 
@@ -1248,7 +1248,7 @@ begin
             team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
-	    FreeAndNilTexture(clan^.HealthTex);
+        FreeAndNilTexture(clan^.HealthTex);
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
 
@@ -2287,16 +2287,16 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         if not lua_isnoneornil(L, 5) then
-	        tint := lua_tointeger(L, 5)
+            tint := lua_tointeger(L, 5)
         else tint := $FFFFFFFF;
         if not lua_isnoneornil(L, 6) then
-	        behind := lua_toboolean(L, 6)
+            behind := lua_toboolean(L, 6)
         else behind := false;
         if not lua_isnoneornil(L, 7) then
-	        flipHoriz := lua_toboolean(L, 7)
+            flipHoriz := lua_toboolean(L, 7)
         else flipHoriz := false;
         if not lua_isnoneornil(L, 8) then
-	        flipVert := lua_toboolean(L, 8)
+            flipVert := lua_toboolean(L, 8)
         else flipVert := false;
         lf:= 0;
 
@@ -2334,16 +2334,16 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         if not lua_isnoneornil(L, 5) then
-	        eraseOnLFMatch := lua_toboolean(L, 5)
+            eraseOnLFMatch := lua_toboolean(L, 5)
         else eraseOnLFMatch := false;
         if not lua_isnoneornil(L, 6) then
-	        onlyEraseLF := lua_toboolean(L, 6)
+            onlyEraseLF := lua_toboolean(L, 6)
         else onlyEraseLF := false;
         if not lua_isnoneornil(L, 7) then
-	        flipHoriz := lua_toboolean(L, 7)
+            flipHoriz := lua_toboolean(L, 7)
         else flipHoriz := false;
         if not lua_isnoneornil(L, 8) then
-	        flipVert := lua_toboolean(L, 8)
+            flipVert := lua_toboolean(L, 8)
         else flipVert := false;
         lf:= 0;
 
@@ -2869,7 +2869,7 @@ ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if isCursorVisible and (not bShowAmmoMenu) then
     begin
-    if (prevCursorPoint.X <> CursorPoint.X) or 
+    if (prevCursorPoint.X <> CursorPoint.X) or
        (prevCursorPoint.Y <> CursorPoint.Y) then
         begin
         ScriptSetInteger('CursorX', CursorPoint.X - WorldDx);
@@ -3028,13 +3028,13 @@ end;
 
 procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte);
 begin
-// change loadout string if ammo store hasn't been initialized yet
+// change loadout string if ammo store has not been initialized yet
 if (StoreCnt = 0) then
 begin
     if (delay <= 9) then
         ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
 end
-// change "live" delay values
+// change 'live' delay values
 else if (CurrentTeam <> nil) then
         ammoz[ammo].SkipTurns:= CurrentTeam^.Clan^.TurnNumber + delay;
 end;
