@@ -443,6 +443,7 @@ QLayout * PageScheme::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     selectScheme = new QComboBox(this);
+    selectScheme->setMaxVisibleItems(50);
 
     bottomLayout->addWidget(selectScheme, 0);
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1);

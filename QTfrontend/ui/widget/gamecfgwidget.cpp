@@ -108,6 +108,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), this), 1, 0);
 
     Scripts = new QComboBox(this);
+    Scripts->setMaxVisibleItems(30);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
     Scripts->setModel(DataManager::instance().gameStyleModel());
@@ -121,6 +122,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->setMargin(0);
 
     GameSchemes = new QComboBox(SchemeWidget);
+    GameSchemes->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(GameSchemes, 0, 2);
     connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
@@ -139,6 +141,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Weapons"), SchemeWidget), 1, 0);
 
     WeaponsName = new QComboBox(SchemeWidget);
+    WeaponsName->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(WeaponsName, 1, 2);
 
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));

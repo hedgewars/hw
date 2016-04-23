@@ -40,6 +40,7 @@ QLayout * PageSelectWeapon::footerLayoutDefinition()
     QGridLayout * bottomLayout = new QGridLayout();
 
     selectWeaponSet = new QComboBox(this);
+    selectWeaponSet->setMaxVisibleItems(50);
     bottomLayout->addWidget(selectWeaponSet, 0, 0, 2, 1);
 
     // first row
