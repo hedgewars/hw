@@ -16,32 +16,32 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "portal" -- The map to be played
 	Theme = "Hell" -- The theme to be used
-	Goals = loc("Use the portal to move fast and far, use it to kill, use it with caution!")  --the goal ...
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	
-	
-----AddTeam(teamname, color, grave, fort, voicepack, flag)--
-	AddTeam(loc("Subject"), 14483406, "Simple", "Island", "Default", "cm_star")
-	player = AddHog(loc("player"), 0, 10, "Terminator_Glasses")
+	AddTeam(loc("Subjects"), 0xFFFF01, "Simple", "Island", "Default", "cm_test")
+	player = AddHog(loc("Subject 1"), 0, 10, "Terminator_Glasses")
 
-	AddTeam(loc("Hell Army"), 1170801, "Simple", "Island", "Default", "cm_galaxy")
-	enemy1 = AddHog(loc("Lucifer"), 1, 200, "thinkingcap")
-	enemy2 = AddHog(loc("voldemort"), 1, 150, "WizardHat")
-	enemy3 = AddHog(loc("zombi"), 1, 100, "zombi")
-	enemy4 = AddHog(loc("Predator"), 1, 14, "predator")
-	enemy5 = AddHog(loc("oneye"), 1, 50, "cyclops")
-	enemy6 = AddHog(loc("razac"), 1, 50, "plaguemask")
+	AddTeam(loc("Hell Army"), 0xFF0402, "skull", "Island", "Default", "cm_hellish")
+	enemy1 = AddHog(loc("Lucifer"), 1, 200, "InfernalHorns")
+	enemy2 = AddHog(loc("Voldemort"), 1, 150, "WizardHat")
+	enemy3 = AddHog(loc("Zombi"), 1, 100, "Zombi")
+	enemy4 = AddHog(loc("Predator"), 1, 14, "anzac")
+	enemy5 = AddHog(loc("Oneye"), 1, 50, "cyclops")
+	enemy6 = AddHog(loc("Razac"), 1, 50, "Evil")
 	enemy7 = AddHog(loc("C-2"), 1, 50, "cyborg1")
 	enemy8 = AddHog(loc("Rider"), 1, 50, "scif_SparkssHelmet")
 
-	AddTeam(loc("badmad"), 1170801, "Simple", "Island", "Default", "cm_jupiter")
+	AddTeam(loc("Badmad"), 0xFF0402, "skull", "Island", "Default", "cm_pentagram")
 	enemy9 = AddHog(loc("C-1"), 1, 50, "cyborg2")
-	enemy10 = AddHog(loc("hiden"), 1, 40, "daftpunkguymanuel")
-	enemy11 = AddHog(loc("ronald"), 1, 70, "clown")
-	enemy12 = AddHog(loc("phosphatoglucidique"), 1, 50, "chef")
-	enemy13 = AddHog(loc("Lestat"), 1, 30, "draculakz")
+	enemy10 = AddHog(loc("Hidden"), 1, 40, "bushhider")
+	enemy11 = AddHog(loc("Ronald"), 1, 70, "clown")
+	enemy12 = AddHog(loc("Phosphat"), 1, 50, "chef")
+	enemy13 = AddHog(loc("Lestat"), 1, 30, "vampirichog")
 
 	SetGearPosition(player, 350, 1820)
-    SetGearPosition(enemy1, 2037, 1313)
+	SetGearPosition(enemy1, 2037, 1313)
 	SetGearPosition(enemy2, 1369, 1605)
 	SetGearPosition(enemy3, 1750, 1937)
 	SetGearPosition(enemy4, 3125, 89)
@@ -54,8 +54,6 @@ function onGameInit()
 	SetGearPosition(enemy11, 4050, 1964)
 	SetGearPosition(enemy12, 2666, 950)
 	SetGearPosition(enemy13, 3306, 1205)
-
-
 
 end
 
@@ -80,11 +78,7 @@ end
 
 function onGameStart()
 
-	SetWind(100)-- SetWind(windSpeed) Sets the current wind in the range of -100 to 100. Use together with gfDisableWind for full control.
-                -- -100to0 is to the left, and 0to100 is to the right  (of course more its far from 0, more the speed is high
-				--  -100.............................0..................................+100
-				-- <<<<<<<<--<<--<<<<<<<<<<<<<--<<<<<|||-->>>>>>>>-->>>>>>>>>>>>>>>-->>>>>>          =  wind direction
-
+	SetWind(100)
 
 	MineArray[0] = AddGear(840, 1847, gtMine, 0, 0, 0, 0)
 	MineArray[1] = AddGear(900, 1847, gtMine, 0, 0, 0, 0)
@@ -124,16 +118,14 @@ function onGameStart()
 	MineArray[34] = AddGear(1311, 1785, gtMine, 0, 0, 0, 0)
 
 	MineArray[35] = AddGear(4029, 89, gtMine, 0, 0, 0, 120)
-	--MineArray[36] = AddGear(3376, 1947, gtMine, 0, 0, 0, 10)
 
-		for i = 0,#MineArray do
-			SetTimer(MineArray[i],050)
-			SetState(MineArray[i],544)
-		end
-				--needed this MineArray cause timer didn't work, its was always 3sec, i wanna instant mines
+	for i = 0,#MineArray do
+		SetTimer(MineArray[i],050)
+		SetState(MineArray[i],544)
+	end
+	--needed this MineArray cause timer didn't work, its was always 3sec, i wanna instant mines
 
-
-				--UTILITY CRATE--
+	--UTILITY CRATE--
 	parachute = SpawnUtilityCrate(1670, 1165, amParachute)
 	girder = SpawnUtilityCrate(2101, 1297, amGirder)
 	SpawnUtilityCrate(3965, 625, amBlowTorch)
@@ -146,7 +138,7 @@ function onGameStart()
 	SpawnUtilityCrate(4070,1840, amLaserSight)
 	
 	
-				--AMMO CRATE--
+	--AMMO CRATE--
 	portalgun = SpawnAmmoCrate(505, 1943, amPortalGun, 1000)
 	extratime = SpawnAmmoCrate(4020, 785, amExtraTime, 2)
 	SpawnAmmoCrate(425, 613, amSnowball)
@@ -159,77 +151,55 @@ function onGameStart()
 	SpawnAmmoCrate(2900, 1400, amRope)
 	SpawnAmmoCrate(4025, 1117, amFirePunch)
 
-	
-				--HEALTH CRATE--
+	--HEALTH CRATE--
 	SpawnHealthCrate(2000, 780)
 	
-				--GIRDER--
+	--GIRDER--
 	PlaceGirder(3363, 1323, 4)
 
-
-	ShowMission (loc("Portal mission"), loc("training"), "", -amPortalGun, 5000)
-	HogSay(player, loc("I should get myself a portal gun, maybe this crate has one"), SAY_THINK)
+	ShowMission (loc("Portal Mind Challenge"), loc("Mission"), 
+		loc("Defeat all enemies!") .. "|" .. loc("In this mission you have infinite time."),
+		-amPortalGun, 5000)
+	HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
 	
-
-
-
 end
 
 function onGameTick()
 
-    if (player ~= nil)  then
+	if (player ~= nil)  then
 		if (gearIsInBox(player, 1650, 1907, 200, 60) and (adviceGiven == false)) then
 			adviceGiven = true
-				HogSay(player, loc("Hmmm, I'll have to find some way of moving him off this anti-portal surface..."), SAY_THINK)
+			HogSay(player, loc("Hmmm, I’ll have to find some way of moving him off this anti-portal surface."), SAY_THINK)
 		elseif (gearIsInBox(player, 2960, 790, 200, 60) and (adviceGiven2 == false)) then
 			adviceGiven2 = true
-				HogSay(player, loc("The anti-portal zone is all over the floor, and I have nothing to kill him...Droping something could hurt him enough to kill him..."), SAY_THINK)
- end
- end
-	
+			HogSay(player, loc("The anti-portal surface is all over the floor, and I have nothing to kill him. Dropping something could hurt him enough to kill him."), SAY_THINK)
+		end
 	end
 	
-
-
-
-
-function onNewturn()
 end
-
-
-function onGearAdd(gear)
-end
-
+	
 function onGearDelete(gear)
+	-- Check gear collection
+	if CurrentHedgehog == player and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
+		if gear == portalgun then
+			HogSay(player, loc("Great! Let’s kill all these enemies, using portals."), SAY_THINK)
+		end
 
-	if gear == portalgun then
-		--AddAmmo(player, amPortalGun, 10000)
-		HogSay(player, loc("GREAT ! Let's kill all this enemies, using portals"), SAY_THINK)
-	end
-
-	if gear == girder then 
-		HogSay(player, loc("Will be useful if I need a new plateform or if I want to rise...."), SAY_THINK)
-	end
+		if gear == girder then 
+			HogSay(player, loc("This will be useful when I need a new platform or if I want to rise."), SAY_THINK)
+		end
 	
-	if gear == parachute then
-		HogSay(player, loc("You can't fire a portal on the blue surface"), SAY_THINK)
-	end
---if you wanted to check for collection only
---you could probably say
---if (gear == myParachuteGear) and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
+		if gear == parachute then
+			HogSay(player, loc("You can’t open a portal on the blue surface."), SAY_THINK)
+		end
 
-	if gear == extratime then
-		HogSay(player, loc(" What !! For all of this struggle i just win some ... TIME o0"), SAY_SHOUT)
+		if gear == extratime then
+			HogSay(player, loc("What?! For all this struggle I just win some ... time? Oh dear!"), SAY_SHOUT)
+		end
 	end
 
-	
 	if gear == player then
-        player = nil
-    end
+		player = nil
+	end
 end
-
-
-
-
-
 
