@@ -79,6 +79,10 @@ add_custom_command(OUTPUT ${engine_sources}
 add_custom_target(engine_c DEPENDS ${engine_sources})
 
 
+if(BUILD_ENGINE_JS)
+    add_flag_append(CMAKE_C_FLAGS "-s ABORTING_MALLOC=0")
+endif()
+
 #compile the c files
 add_definitions(-DPAS2C)
 add_definitions(-Werror=incompatible-pointer-types)
