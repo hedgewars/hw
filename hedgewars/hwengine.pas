@@ -39,7 +39,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      ;
 
 {$IFDEF HWLIBRARY}
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
@@ -576,7 +576,7 @@ begin
 end;
 
 {$IFDEF HWLIBRARY}
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
@@ -622,7 +622,7 @@ begin
         exit(HaltNoError);
     {$ELSE}
         {$IFDEF IPHONEOS}
-            exit;
+            exit(HaltNoError);
         {$ELSE}
             halt(HaltNoError);
         {$ENDIF}
