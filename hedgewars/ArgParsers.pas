@@ -23,9 +23,9 @@ interface
 
 procedure GetParams;
 {$IFDEF HWLIBRARY}
-var operatingsystem_parameter_argc: LongInt = 0; export;
-    operatingsystem_parameter_argv: pointer = nil; export;
-    operatingsystem_parameter_envp: pointer = nil; export;
+var operatingsystem_parameter_argc: LongInt = 0; {$IFNDEF PAS2C}cdecl; export;{$ENDIF}
+    operatingsystem_parameter_argv: pointer = nil; {$IFNDEF PAS2C}cdecl; export;{$ENDIF}
+    operatingsystem_parameter_envp: pointer = nil; {$IFNDEF PAS2C}cdecl; export;{$ENDIF}
 
 function ParamCount: LongInt;
 function ParamStr(i: LongInt): shortstring;
