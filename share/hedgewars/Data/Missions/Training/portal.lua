@@ -2,13 +2,13 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 local MineArray = {}
-local player 
+local player
 local adviceGiven = false
 local adviceGiven2 = false
 
 function onGameInit()
 	Seed = 0 -- The base number for the random number generator
-	GameFlags = gfInfAttack +gfBorder +gfDisableWind +gfSolidLand 
+	GameFlags = gfInfAttack +gfBorder +gfDisableWind +gfSolidLand
 	TurnTime = 1500000 -- The time the player has to move each round (in ms)
 	CaseFreq = 0 -- The frequency of crate drops
 	MinesNum = 0 -- The number of mines being placed
@@ -19,7 +19,7 @@ function onGameInit()
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
-	
+
 	AddTeam(loc("Subjects"), 0xFFFF01, "Simple", "Island", "Default", "cm_test")
 	player = AddHog(loc("Subject 1"), 0, 10, "Terminator_Glasses")
 
@@ -136,8 +136,8 @@ function onGameStart()
 	SpawnUtilityCrate(130, 600, amPickHammer)
 	SpawnUtilityCrate(1660,1820, amLaserSight)
 	SpawnUtilityCrate(4070,1840, amLaserSight)
-	
-	
+
+
 	--AMMO CRATE--
 	portalgun = SpawnAmmoCrate(505, 1943, amPortalGun, 1000)
 	extratime = SpawnAmmoCrate(4020, 785, amExtraTime, 2)
@@ -153,15 +153,15 @@ function onGameStart()
 
 	--HEALTH CRATE--
 	SpawnHealthCrate(2000, 780)
-	
+
 	--GIRDER--
 	PlaceGirder(3363, 1323, 4)
 
-	ShowMission (loc("Portal Mind Challenge"), loc("Mission"), 
+	ShowMission (loc("Portal Mind Challenge"), loc("Mission"),
 		loc("Defeat all enemies!") .. "|" .. loc("In this mission you have infinite time."),
 		-amPortalGun, 5000)
 	HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
-	
+
 end
 
 function onGameTick()
@@ -175,9 +175,9 @@ function onGameTick()
 			HogSay(player, loc("The anti-portal surface is all over the floor, and I have nothing to kill him. Dropping something could hurt him enough to kill him."), SAY_THINK)
 		end
 	end
-	
+
 end
-	
+
 function onGearDelete(gear)
 	-- Check gear collection
 	if CurrentHedgehog == player and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
@@ -185,10 +185,10 @@ function onGearDelete(gear)
 			HogSay(player, loc("Great! Let’s kill all these enemies, using portals."), SAY_THINK)
 		end
 
-		if gear == girder then 
+		if gear == girder then
 			HogSay(player, loc("This will be useful when I need a new platform or if I want to rise."), SAY_THINK)
 		end
-	
+
 		if gear == parachute then
 			HogSay(player, loc("You can’t open a portal on the blue surface."), SAY_THINK)
 		end
