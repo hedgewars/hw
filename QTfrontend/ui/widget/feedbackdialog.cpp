@@ -61,7 +61,6 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     setWindowFlags(Qt::Sheet);
     setWindowModality(Qt::WindowModal);
     setWindowTitle(tr("Feedback"));
-    setMinimumSize(700, 460);
     resize(700, 460);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
@@ -71,11 +70,9 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     /* Top layout */
 
     QVBoxLayout * pageLayout = new QVBoxLayout();
-    QHBoxLayout * summaryLayout = new QHBoxLayout();
-    QHBoxLayout * emailLayout = new QHBoxLayout();
-    QHBoxLayout * descriptionLayout = new QHBoxLayout();
-    QHBoxLayout * combinedTopLayout = new QHBoxLayout();
-    QHBoxLayout * systemLayout = new QHBoxLayout();
+    QGridLayout * feedbackLayout = new QGridLayout();
+
+    setStyleSheet("QPushButton { padding: 5px }");
 
     info = new QLabel();
     info->setText(QString(
@@ -96,64 +93,44 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     info->setOpenExternalLinks(true);
     pageLayout->addWidget(info);
 
-    QVBoxLayout * summaryEmailLayout = new QVBoxLayout();
-
-    const int labelWidth = 90;
-
     label_email = new QLabel();
     label_email->setText(QLabel::tr("Your Email"));
-    label_email->setFixedWidth(labelWidth);
-    emailLayout->addWidget(label_email);
     email = new QLineEdit();
-    emailLayout->addWidget(email);
-    summaryEmailLayout->addLayout(emailLayout);
+    feedbackLayout->addWidget(label_email, 0, 0);
+    feedbackLayout->addWidget(email, 0, 1);
 
     label_summary = new QLabel();
     label_summary->setText(QLabel::tr("Summary"));
-    label_summary->setFixedWidth(labelWidth);
-    summaryLayout->addWidget(label_summary);
     summary = new QLineEdit();
-    summaryLayout->addWidget(summary);
-    summaryEmailLayout->addLayout(summaryLayout);
-
-    combinedTopLayout->addLayout(summaryEmailLayout);
+    feedbackLayout->addWidget(label_summary, 1, 0);
+    feedbackLayout->addWidget(summary, 1, 1);
 
     CheckSendSpecs = new QCheckBox();
     CheckSendSpecs->setText(QLabel::tr("Send system information"));
     CheckSendSpecs->setChecked(true);
-    systemLayout->addWidget(CheckSendSpecs);
     BtnViewInfo = new QPushButton(tr("View"));
-    systemLayout->addWidget(BtnViewInfo, 1);
-    BtnViewInfo->setFixedSize(60, 30);
+    BtnViewInfo->setFixedHeight(40);
+    feedbackLayout->addWidget(CheckSendSpecs, 0, 2, 2, 1);
+    feedbackLayout->addWidget(BtnViewInfo, 0, 3, 2, 1);
     connect(BtnViewInfo, SIGNAL(clicked()), this, SLOT(ShowSpecs()));
-    combinedTopLayout->addLayout(systemLayout);
 
-    combinedTopLayout->setStretch(0, 1);
-    combinedTopLayout->insertSpacing(1, 20);
-
-    pageLayout->addLayout(combinedTopLayout);
 
     label_description = new QLabel();
     label_description->setText(QLabel::tr("Description"));
-    label_description->setFixedWidth(labelWidth);
-    descriptionLayout->addWidget(label_description, 0, Qt::AlignTop);
     description = new QTextBrowser();
     description->setReadOnly(false);
-    descriptionLayout->addWidget(description);
-    pageLayout->addLayout(descriptionLayout);
+    feedbackLayout->addWidget(label_description, 2, 0);
+    feedbackLayout->addWidget(description, 2, 1, 1, 3);
 
     /* Bottom layout */
 
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
     QHBoxLayout * captchaLayout = new QHBoxLayout();
     QVBoxLayout * captchaInputLayout = new QVBoxLayout();
 
     QPushButton * BtnCancel = new QPushButton(tr("Cancel"));
-    bottomLayout->addWidget(BtnCancel, 0);
-    BtnCancel->setFixedSize(100, 40);
+    feedbackLayout->addWidget(BtnCancel, 3, 0);
+    BtnCancel->setFixedHeight(40);
     connect(BtnCancel, SIGNAL(clicked()), this, SLOT(reject()));
-
-    bottomLayout->insertStretch(1);
 
     label_captcha = new QLabel();
     label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
@@ -166,27 +143,27 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     captchaInputLayout->addWidget(label_captcha_input);
     captchaInputLayout->setAlignment(label_captcha, Qt::AlignBottom);
     captcha_code = new QLineEdit();
-    captcha_code->setFixedSize(165, 30);
+    captcha_code->setFixedHeight(30);
     captchaInputLayout->addWidget(captcha_code);
     captchaInputLayout->setAlignment(captcha_code, Qt::AlignTop);
     captchaLayout->addLayout(captchaInputLayout);
     captchaLayout->setAlignment(captchaInputLayout, Qt::AlignLeft);
 
-    bottomLayout->addLayout(captchaLayout);
-    bottomLayout->addSpacing(40);
+    QWidget * captchaLayoutWidget = new QWidget();
+    captchaLayoutWidget->setContentsMargins(0, 0, 0, 0);
+    captchaLayoutWidget->setLayout(captchaLayout);
+    feedbackLayout->addWidget(captchaLayoutWidget, 3, 1, 1, 2);
 
     // TODO: Set green arrow icon for send button (:/res/Start.png)
     BtnSend = new QPushButton(tr("Send Feedback"));
-    bottomLayout->addWidget(BtnSend, 0);
-    BtnSend->setFixedSize(120, 40);
+    feedbackLayout->addWidget(BtnSend, 3, 3);
+    BtnSend->setFixedHeight(40);
     connect(BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));
 
-    bottomLayout->setStretchFactor(captchaLayout, 0);
-    bottomLayout->setStretchFactor(BtnSend, 1);
+    pageLayout->addLayout(feedbackLayout);
 
     QVBoxLayout * dialogLayout = new QVBoxLayout(this);
     dialogLayout->addLayout(pageLayout, 1);
-    dialogLayout->addLayout(bottomLayout);
 
     LoadCaptchaImage();
 }
