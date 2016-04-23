@@ -56,7 +56,6 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-{$IFDEF USE_LUA_SCRIPT}
 
 uses LuaPas,
     uConsole,
@@ -104,6 +103,7 @@ var luaState : Plua_State;
     PointsBuffer: shortstring;
     prevCursorPoint: TPoint;  // why is tpoint still in sdlh...
 
+{$IFDEF USE_LUA_SCRIPT}
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte); forward;
@@ -3449,6 +3449,22 @@ end;
 *)
 
 procedure ScriptOnScreenResize;
+begin
+end;
+
+procedure ScriptOnPreviewInit;
+begin
+end;
+
+procedure ScriptSetInteger(name : shortstring; value : LongInt);
+begin
+end;
+
+procedure ScriptSetString(name : shortstring; value : shortstring);
+begin
+end;
+
+procedure LuaParseString(s : ShortString);
 begin
 end;
 
