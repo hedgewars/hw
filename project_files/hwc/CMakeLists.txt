@@ -64,7 +64,7 @@ set(pas2c_args -n hwengine
                -d ENDIAN_LITTLE
                -d DEBUGFILE)
 if(BUILD_ENGINE_JS)
-    set(pas2c_args ${pas2c_args} -d WEBGL)
+    set(pas2c_args ${pas2c_args} -d WEBGL -d HWLIBRARY)
 endif()
 
 #invoke pas2c on main module, it will call all the others
