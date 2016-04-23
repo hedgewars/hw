@@ -140,7 +140,12 @@ begin
  
     uUtils.initModule(false);
     uVariables.initModule;
-    uPhysFSLayer.initModule;
+
+    PathPrefix:= PathPrefix + #0;
+    UserPathPrefix:= UserPathPrefix + #0;
+    uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
+    PathPrefix:= copy(PathPrefix, 1, length(PathPrefix) - 1);
+    UserPathPrefix:= copy(UserPathPrefix, 1, length(UserPathPrefix) - 1);
  
     LoadLocale(Strpas(filename));
  
