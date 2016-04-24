@@ -218,7 +218,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,3,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
+    l->setPixmap(QPixmap(":/res/iconSuddenDeathTime.png"));
     glBSLayout->addWidget(l,3,1,1,1);
     SB_SuddenDeath = new QSpinBox(gbBasicSettings);
     SB_SuddenDeath->setRange(0, 50);
@@ -232,7 +232,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,4,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconSuddenDeathWater.png"));
     glBSLayout->addWidget(l,4,1,1,1);
     SB_WaterRise = new QSpinBox(gbBasicSettings);
     SB_WaterRise->setRange(0, 100);
@@ -246,7 +246,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,5,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
     glBSLayout->addWidget(l,5,1,1,1);
     SB_HealthDecrease = new QSpinBox(gbBasicSettings);
     SB_HealthDecrease->setRange(0, 100);
@@ -287,7 +287,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,8,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconHealthPercent.png"));
     glBSLayout->addWidget(l,8,1,1,1);
     SB_HealthCrates = new QSpinBox(gbBasicSettings);
     SB_HealthCrates->setRange(0, 100);
@@ -301,7 +301,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,9,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconHealth.png"));
     glBSLayout->addWidget(l,9,1,1,1);
     SB_CrateHealth = new QSpinBox(gbBasicSettings);
     SB_CrateHealth->setRange(0, 200);
@@ -315,7 +315,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,10,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconMineTime.png"));
     glBSLayout->addWidget(l,10,1,1,1);
     SB_MinesTime = new QSpinBox(gbBasicSettings);
     SB_MinesTime->setRange(-1, 5);
@@ -331,7 +331,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,11,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconMine.png"));
     glBSLayout->addWidget(l,11,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
     SB_Mines->setRange(0, 200);
@@ -359,7 +359,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,13,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconDamage.png"));
+    l->setPixmap(QPixmap(":/res/iconExplosive.png"));
     glBSLayout->addWidget(l,13,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
     SB_Explosives->setRange(0, 200);
@@ -373,7 +373,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,14,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconAirMine.png"));
     glBSLayout->addWidget(l,14,1,1,1);
     SB_AirMines = new QSpinBox(gbBasicSettings);
     SB_AirMines->setRange(0, 200);
@@ -419,7 +419,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,17,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    l->setPixmap(QPixmap(":/res/iconScript.png"));
     glBSLayout->addWidget(l,17,1,1,1);
 
     LE_ScriptParam = new QLineEdit(gbBasicSettings);
