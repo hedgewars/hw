@@ -1026,6 +1026,15 @@ begin
         if byte(InputStr.s[0]) + l > 240 then exit;
         s[0]:= char(l);
         InsertIntoInputStr(s);
+
+        // add closing hog speech quotation marks automatically
+        if (l = 1) and (Length(InputStr.s) = 1) and charIsForHogSpeech(s[1]) then
+            begin
+            InsertIntoInputStr(s);
+            MoveCursorToPreviousChar();
+            UpdateCursorCoords();
+            end;
+
         end
 end;
 
