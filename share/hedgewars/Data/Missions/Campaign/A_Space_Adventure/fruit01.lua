@@ -32,9 +32,9 @@ local dialog02 = {}
 local dialog03 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 4000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight! Lead the Green Bananas to battle and eliminate all the enemies"), 1, 4000},
-	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee... Unfortunately the only place where you can launch your saucer is the left-most place on the map"), 1, 4000},
+	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer."), 1, 4000},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight! Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 4000},
+	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee ... Unfortunately, the only place where you can launch your saucer is the left-most place on the map."), 1, 4000},
 }
 -- crates
 local crateWMX = 2170
@@ -387,42 +387,42 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, Captain Lime talks explains to Hog Solo
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Fruits a terrible war is about to begin..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Fruits a terrible war is about to begin ..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I was told that as the leader of the king's guard, no one knows this world better than you!"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {green1.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You couldn't have come to a worse time Hog Solo!"), SAY_SAY, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("The clan of the Red Strawberry wants to take over the dominion and overthrone king Pineapple."), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the kingdom of Sand to help to the annual dusting of the king's palace."), SAY_SAY, 8000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However the army of Yellow Watermelons is about to attack any moment now."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You couldn't have come to a worse time, Hog Solo!"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("The clan of the Red Strawberry wants to take over the dominion and overthrow King Pineapple."), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the Kingdom of Sand to help with the annual dusting of the king's palace."), SAY_SAY, 8000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However, the army of Yellow Watermelons is about to attack any moment now."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I would gladly help you if we won this battle but under these circumstances I'll only help you if you fight for our side."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = ShowMission, args = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 7000}})
+	table.insert(dialog01, {func = ShowMission, args = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer."), 1, 7000}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - Hero selects to fight
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 3000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You choose well Hog Solo!"), SAY_SAY, 3000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets"), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As you are more experienced, I want you to lead them to the battle"), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I of course will observe the battle and intervene if necessary"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You choose well, Hog Solo!"), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets."), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As you are more experienced, I want you to lead them to battle."), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Of course, I will observe the battle and intervene if necessary."), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 4500}})
-	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("No problem Captain!"), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("No problem, Captain!"), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("The enemies aren't many anyway, it is going to be easy!"), SAY_SAY, 1}})
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 9000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be foolish son, there will be more"), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be foolish, son, there will be more."), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Try to be smart and eliminate them quickly. This way you might scare off the rest!"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
 	-- DIALOG 03 - Hero selects to flee
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 3000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Too bad... Then you should really leave!"), SAY_SAY, 3000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Things are going to get messy around here"), SAY_SAY, 3000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place where you can fly is the left-most part of this area"), SAY_SAY, 5000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our flight-inhibiting weapons"), SAY_SAY, 4000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Now go and don't waste more of my time you coward..."), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Too bad! Then you should really leave!"), SAY_SAY, 3000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Things are going to get messy around here."), SAY_SAY, 3000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place where you can fly is the left-most part of this area."), SAY_SAY, 5000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our flight-inhibiting weapons."), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Now go and don't waste more of my time, you coward!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog03, {func = startBattle, args = {hero.gear}})
 end
@@ -447,16 +447,16 @@ end
 function gameLost()
 	if chooseToBattle then
 		SendStat(siGameResult, loc("The Green Bananas lost, try again!"))
-		SendStat(siCustomAchievement, loc("You have to eliminate all the visible enemies"))
-		SendStat(siCustomAchievement, loc("5 additional enemies will be spawned during the game"))
-		SendStat(siCustomAchievement, loc("You are in control of all the active ally units"))
-		SendStat(siCustomAchievement, loc("The ally units share their ammo"))
-		SendStat(siCustomAchievement, loc("Try to keep as many allies alive as possible"))
+		SendStat(siCustomAchievement, loc("You have to eliminate all the visible enemies."))
+		SendStat(siCustomAchievement, loc("5 additional enemies will be spawned during the game."))
+		SendStat(siCustomAchievement, loc("You are in control of all the active ally units."))
+		SendStat(siCustomAchievement, loc("The ally units share their ammo."))
+		SendStat(siCustomAchievement, loc("Try to keep as many allies alive as possible."))
 	else
 		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
-		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there"))
-		SendStat(siCustomAchievement, loc("You will play every 3 turns"))
-		SendStat(siCustomAchievement, loc("Green hogs won't intentionally hurt you"))
+		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there."))
+		SendStat(siCustomAchievement, loc("You will play every 3 turns."))
+		SendStat(siCustomAchievement, loc("Green hogs won't intentionally hurt you."))
 	end
 	SendStat(siPlayerKills,'1',teamC.name)
 	SendStat(siPlayerKills,'0',teamA.name)

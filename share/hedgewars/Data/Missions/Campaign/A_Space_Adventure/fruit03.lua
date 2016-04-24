@@ -13,19 +13,19 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 local missionName = loc("Precise shooting")
 local timeLeft = 10000
 local lastWeaponUsed = amSniperRifle
-local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
-	loc("You can only use the Sniper Rifle or the Watermelon bomb").."|"..
-	loc("You'll have only 2 watermelon bombs during the game").."|"..
-	loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles").."|"..
-	loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports").."|"..
-	loc("The first turn will last 25 sec and every other turn 15 sec").."|"..
-	loc("If you skip a turn then the turn time left will be added to your next turn").."|"..
-	loc("Some parts of the land are indestructible")
+local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
+	loc("You can only use the sniper rifle or the watermelon bomb.").."|"..
+	loc("You'll have only 2 watermelon bombs during the game.").."|"..
+	loc("You'll get an extra sniper rifle every time you kill an enemy hog with a limit of max 4 rifles.").."|"..
+	loc("You'll get an extra teleport every time you kill an enemy hog with a limit of max 2 teleports.").."|"..
+	loc("The first turn will last 25 sec and every other turn 15 sec.").."|"..
+	loc("If you skip a turn then the turn time left will be added to your next turn.").."|"..
+	loc("Some parts of the land are indestructible.")
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
 }
 -- hogs
 local hero = {
@@ -107,7 +107,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -203,8 +203,8 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
+	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
+	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
@@ -213,8 +213,8 @@ end
 function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))
-	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission"))
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission."))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
@@ -232,13 +232,13 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, game instructions
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Fruit Planet Hog Solo got lost..."), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...and got ambushed by the Red Strawberries"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Fruit Planet Hog Solo got lost ..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("... and got ambushed by the Red Strawberries"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use your available weapons in order to eliminate the enemies"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the Sniper Rifle or the Watermelon bomb"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the sniper rifle or the watermelon bomb"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only 2 watermelon bombs during the game"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra sniper rifle every time you kill an enemy hog with a limit of max 4 rifles"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra teleport every time you kill an enemy hog with a limit of max 2 teleports"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("The first turn will last 25 sec and every other turn 15 sec"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you skip the game your time left will be added to your next turn"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Some parts of the land are indestructible"), 5000}})

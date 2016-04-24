@@ -10,19 +10,19 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local missionName = loc("Killing the specialists")
-local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
-	loc("Each time you play this missions enemy hogs will play in a random order").."|"..
-	loc("At the start of the game each enemy hog has only the weapon that he is named after").."|"..
-	loc("A random hedgehog will inherit the weapons of his deceased team-mates").."|"..
-	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100").."|"..
-	loc("If you injure a hedgehog you'll get 35% of the damage dealt").."|"..
-	loc("Every time you kill an enemy hog your ammo will get reset").."|"..
-	loc("Rope won't get reset")
+local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
+	loc("Each time you play this missions enemy hogs will play in a random order.").."|"..
+	loc("At the start of the game each enemy hog has only the weapon that he is named after.").."|"..
+	loc("A random hedgehog will inherit the weapons of his deceased team-mates.").."|"..
+	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100.").."|"..
+	loc("If you injure a hedgehog you'll get 35% of the damage dealt.").."|"..
+	loc("Every time you kill an enemy hog your ammo will get reset.").."|"..
+	loc("The rope won't get reset.")
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
 }
 -- hogs
 local hero = {
@@ -48,7 +48,7 @@ local teamA = {
 	color = tonumber("38D61C",16) -- green
 }
 local teamB = {
-	name = loc("5 deadly hogs"),
+	name = loc("5 Deadly Hogs"),
 	color = tonumber("FF0000",16) -- red
 }
 
@@ -177,8 +177,8 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
+	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
+	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
@@ -187,8 +187,8 @@ end
 function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))
-	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a Laser Sight"))
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
@@ -206,8 +206,8 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, game instructions
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Planet of Death..."), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...Hog Solo fights for his life"), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Death ..."), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("... Hog Solo fights for his life"), 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named after"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
