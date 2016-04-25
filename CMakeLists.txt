@@ -54,7 +54,7 @@ option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if so
 
 if(BUILD_ENGINE_JS)
     if(NOT CMAKE_TOOLCHAIN_FILE)
-        message(FATAL_ERROR "Missing emscripten toolchain file\nRerun cmake with -DCMAKE_TOOLCHAIN_FILE=${CMAKE_SOURCE_DIR}/cmake_modules/Platform/Emscripten.cmake")
+        message(FATAL_ERROR "Missing emscripten toolchain file\nClean your cache and rerun cmake with -DCMAKE_TOOLCHAIN_FILE=${CMAKE_SOURCE_DIR}/cmake_modules/Platform/Emscripten.cmake")
     endif()
 
     set(BUILD_ENGINE_C ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
