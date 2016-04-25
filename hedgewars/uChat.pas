@@ -1011,10 +1011,12 @@ end;
 procedure TextInput(var event: TSDL_TextInputEvent);
 var s: shortstring;
     l: byte;
+    isl: integer;
 begin
     DeleteSelected();
 
     l:= 0;
+    // fetch all bytes of character/input
     while event.text[l] <> #0 do
         begin
         s[l + 1]:= event.text[l];
@@ -1023,9 +1025,30 @@ begin
 
     if l > 0 then
         begin
-        if byte(InputStr.s[0]) + l > 240 then exit;
-        s[0]:= char(l);
-        InsertIntoInputStr(s);
+        isl:= Length(InputStr.s);
+        // check if user is typing a redundant closing hog-speech quotation mark
+        if (l = 1) and (isl >= 2) and (cursorPos = isl - 1) and charIsForHogSpeech(s[1])
+          and (s[1] = InputStr.s[1]) and (s[1] = InputStr.s[isl]) then
+            begin
+            MoveCursorToNextChar();
+            UpdateCursorCoords();
+            end
+        else
+            begin
+            // don't add input that doesn't fit
+            if isl + l > MaxInputStrLen then exit;
+            s[0]:= char(l);
+            InsertIntoInputStr(s);
+
+            // add closing hog speech quotation marks automagically
+            if (l = 1) and (Length(InputStr.s) = 1) and charIsForHogSpeech(s[1]) then
+                begin
+                InsertIntoInputStr(s);
+                MoveCursorToPreviousChar();
+                UpdateCursorCoords();
+                end;
+            end;
+
         end
 end;
 

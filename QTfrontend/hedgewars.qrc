@@ -122,7 +122,10 @@
         <file>res/btnBottomBorder@2x.png</file>
         <file>res/iconBox.png</file>
         <file>res/iconHealth.png</file>
+        <file>res/iconHealthPercent.png</file>
         <file>res/iconSuddenDeath.png</file>
+        <file>res/iconSuddenDeathTime.png</file>
+        <file>res/iconSuddenDeathWater.png</file>
         <file>res/iconDamage.png</file>
         <file>res/iconDamageLockG.png</file>
         <file>res/iconDamageLockR.png</file>
@@ -130,9 +133,13 @@
         <file>res/iconTimeLockG.png</file>
         <file>res/iconTimeLockR.png</file>
         <file>res/iconMine.png</file>
+        <file>res/iconMineTime.png</file>
         <file>res/iconDud.png</file>
+        <file>res/iconExplosive.png</file>
+        <file>res/iconAirMine.png</file>
         <file>res/iconRope.png</file>
         <file>res/iconEarth.png</file>
+        <file>res/iconScript.png</file>
         <file>res/dice.png</file>
         <file>res/Star.png</file>
         <file>res/inverse-corner-bl.png</file>

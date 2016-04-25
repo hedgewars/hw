@@ -113,4 +113,5 @@ var
 
     Load_GL_VERSION_2_0 : procedure;
 
+    GetCurrentDir : function : PChar;
 

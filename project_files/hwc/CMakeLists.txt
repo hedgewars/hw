@@ -57,15 +57,20 @@ list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas)
 list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas)
 
 
+set(pas2c_args -n hwengine
+               -i ${CMAKE_SOURCE_DIR}/hedgewars
+               -o ${CMAKE_CURRENT_BINARY_DIR}
+               -a ${CMAKE_CURRENT_BINARY_DIR}
+               -d ENDIAN_LITTLE
+               -d DEBUGFILE)
+if(BUILD_ENGINE_JS)
+    set(pas2c_args ${pas2c_args} -d WEBGL -d HWLIBRARY)
+endif()
+
 #invoke pas2c on main module, it will call all the others
 add_custom_command(OUTPUT ${engine_sources}
                    COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
-                   ARGS -n "hwengine"
-                        -i "${CMAKE_SOURCE_DIR}/hedgewars"
-                        -o "${CMAKE_CURRENT_BINARY_DIR}"
-                        -a "${CMAKE_CURRENT_BINARY_DIR}"
-                        -d "ENDIAN_LITTLE"
-                        -d "DEBUGFILE"
+                   ARGS ${pas2c_args}
                    DEPENDS pas2c                     #converter tool
                            ${engine_sources_pas}     #original pascal file
                   )
@@ -74,11 +79,19 @@ add_custom_command(OUTPUT ${engine_sources}
 add_custom_target(engine_c DEPENDS ${engine_sources})
 
 
+if(BUILD_ENGINE_JS)
+    add_flag_append(CMAKE_C_FLAGS "-s ABORTING_MALLOC=0")
+endif()
+
 #compile the c files
 add_definitions(-DPAS2C)
 add_definitions(-Werror=incompatible-pointer-types)
 
 add_executable(hwengine WIN32 ${engine_sources})
+
+if(BUILD_ENGINE_JS)
+    set_target_properties(hwengine PROPERTIES SUFFIX ".html")
+endif()
 
 target_link_libraries(hwengine  fpcrtl
                                 ${LUA_LIBRARY}

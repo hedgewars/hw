@@ -18,7 +18,7 @@ local currentTarget = 1
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
 }
 -- hogs
 local hero = {
@@ -81,7 +81,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onLose, {hero.gear}, lose, {hero.gear}, 0)
@@ -159,7 +159,7 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, game instructions
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Desert Planet, Hog Solo found some time to play with his RC plane..."), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Desert Planet, Hog Solo found some time to play with his RC plane"), 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy all the targets on your current level you'll get teleported to the next level"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only one RC plane at the start of the mission"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("During the game you can get new RC planes by collecting the weapon crates"), 5000}})
@@ -209,18 +209,18 @@ end
 function win()
 	saveBonus(1, 1)
 	SendStat(siGameResult, loc("Congratulations, you are the best!"))
-	SendStat(siCustomAchievement, loc("You have destroyed all the targets"))
-	SendStat(siCustomAchievement, loc("You are indeed the best PAotH pilot"))
-	SendStat(siCustomAchievement, loc("Next time you play \"Searching in the dust\" you'll have an RC plane available"))
+	SendStat(siCustomAchievement, loc("You have destroyed all the targets."))
+	SendStat(siCustomAchievement, loc("You are indeed the best PAotH pilot."))
+	SendStat(siCustomAchievement, loc("Next time you play \"Searching in the dust\" you'll have an RC plane available."))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
 
 function gameOver()
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to destroy all the targets"))
-	SendStat(siCustomAchievement, loc("You will fail if you run out of ammo and there are still targets available"))
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
+	SendStat(siCustomAchievement, loc("You have to destroy all the targets."))
+	SendStat(siCustomAchievement, loc("You will fail if you run out of ammo and there are still targets available."))
+	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end

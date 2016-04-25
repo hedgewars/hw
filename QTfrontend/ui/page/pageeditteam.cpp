@@ -129,16 +129,19 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
     CBGrave = new QComboBox(GBoxTeam);
     CBGrave->setMaxCount(65535);
+    CBGrave->setMaxVisibleItems(20);
     CBGrave->setIconSize(QSize(32, 32));
     GBTLayout->addWidget(CBGrave, 2, 1);
 
     CBFlag = new QComboBox(GBoxTeam);
     CBFlag->setMaxCount(65535);
+    CBFlag->setMaxVisibleItems(50);
     CBFlag->setIconSize(QSize(22, 15));
     GBTLayout->addWidget(CBFlag, 3, 1);
 
     QHBoxLayout * hbox = new QHBoxLayout();
     CBVoicepack = new QComboBox(GBoxTeam);
+    CBVoicepack->setMaxVisibleItems(50);
 
     hbox->addWidget(CBVoicepack, 100);
     btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);

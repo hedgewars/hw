@@ -4,6 +4,7 @@ local hhs = {}
 local missionWon = nil
 local endTimer = 1000
 local hogsKilled = 0
+local finishTime
 
 local HogData =	{
 					{"Bufon", 			"ShaggyYeti",false},
@@ -57,21 +58,33 @@ local HogData =	{
 				}
 
 function GenericEnd()
-	DismissTeam(loc("Wannabe Shoppsta"))
-	DismissTeam(loc("Unsuspecting Louts"))
-	DismissTeam(loc("Unlucky Sods"))
+	EndGame()
 end
 
 function GameOverMan()
 	missionWon = false
-	ShowMission(loc("ROPE-KNOCKING"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge over!"), loc("Oh no! Just try again!"), -amSkip, 0)
+	SendStat(siGameResult, loc("Challenge over!"))
+	local score = math.ceil((hogsKilled / 16)*6000)
+	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, score))
+	SendStat(siPointType, "points")
+	SendStat(siPlayerKills, tostring(score), loc("Wannabe Shoppsta"))
 	PlaySound(sndHellish)
 end
 
 function GG()
 	missionWon = true
-	ShowMission(loc("ROPE-KNOCKING"), loc("MISSION SUCCESS"), loc("Congratulations!") .. "|" .. loc("COMPLETION TIME") .. ": " .. (TurnTime - TurnTimeLeft) / 1000, 0, 0)
+	local completeTime = (TurnTime - finishTime) / 1000
+	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge completed!"), loc("Congratulations!") .. "|" .. string.format(loc("Completion time: %.2fs"), completeTime), 0, 0)
 	PlaySound(sndHomerun)
+	SendStat(siGameResult, loc("Challenge completed!"))
+	local hogScore = math.ceil((hogsKilled / 16)*6000)
+	local timeScore = math.ceil((finishTime/TurnTime)*6000)
+	local score = hogScore + timeScore
+	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, hogScore))
+	SendStat(siCustomAchievement, string.format(loc("You have completed this challenge in %.2f s (+%d points)."), completeTime, timeScore))
+	SendStat(siPointType, "points")
+	SendStat(siPlayerKills, tostring(score), loc("Wannabe Shoppsta"))
 end
 
 function AssignCharacter(p)
@@ -114,16 +127,16 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(loc("Wannabe Shoppsta"), 1175851, "Simple", "Island", "Default", "Hedgewars")
+	AddTeam(loc("Wannabe Shoppsta"), 0x11F12B, "Simple", "Island", "Default", "cm_shoppa")
 	hhs[0] = AddHog(loc("Ace"), 0, 1, "Gasmask")
 	SetGearPosition(player, 1380, 1500)
 
-	AddTeam(loc("Unsuspecting Louts"), 14483456, "Simple", "Island", "Default", "Hedgewars")
+	AddTeam(loc("Unsuspecting Louts"), 0xDD0000, "Simple", "Island", "Default", "cm_face")
 	for i = 1, 8 do
 		hhs[i] = AddHog("generic", 0, 1, "NoHat")
 	end
 
-	AddTeam(loc("Unlucky Sods"), 14483456, "Simple", "Island", "Default", "Hedgewars")
+	AddTeam(loc("Unlucky Sods"), 0xDD0000, "Simple", "Island", "Default", "cm_balrog")
 	for i = 9, 16 do
 		hhs[i] = AddHog("generic", 0, 1, "NoHat")
 	end
@@ -133,14 +146,16 @@ end
 
 
 function onGameStart()
+	SendHealthStatsOff()
 
 	ShowMission     (
-                        loc("ROPE-KNOCKING"),
-                        loc("a Hedgewars challenge"),
+                        loc("Rope-knocking Challenge"),
+                        loc("Challenge"),
                         loc("Use the rope to knock your enemies to their doom.") .. "|" ..
+                        loc("Finish this challenge as fast as possible to earn bonus points."),
+                        -amRope, 4000)
 
-						"", -amRope, 4000
-					)
+	PlaceGirder(46,1783, 0)
 
 	SetGearPosition(hhs[0], 2419, 1769)
 	SetGearPosition(hhs[1], 3350, 570)
@@ -180,9 +195,9 @@ function onGameTick()
 		end
 
 		if missionWon == true then
-			AddCaption(loc("GG!"), 0xffba00ff,capgrpGameState)
+			AddCaption(loc("Victory!"), 0xFFFFFFFF,capgrpGameState)
 		else
-			AddCaption(loc("Ouch!"), 0xffba00ff,capgrpGameState)
+			AddCaption(loc("Challenge over!"), 0xFFFFFFFF,capgrpGameState)
 		end
 
 	end
@@ -191,21 +206,54 @@ end
 
 function onGearDamage(gear, damage)
 
-	if gear ~= hhs[0] then
+	if gear ~= hhs[0] and GetGearType(gear) == gtHedgehog then
 
 		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		DeleteGear(gear)
 		PlaySound(sndExplosion)
+		AddCaption(string.format(knockTaunt(), GetHogName(gear)), 0xFFFFFFFF, capgrpMessage)
 
 		hogsKilled = hogsKilled +1
 		if hogsKilled == 15 then
 			PlaySound(sndRideOfTheValkyries)
 		elseif hogsKilled == 16 then
+			finishTime = TurnTimeLeft
 			GG()
 		end
 
 	end
 
+end
+
+function knockTaunt()
+	local r = math.random(0,23)
+	local taunt
+	if r == 0 then taunt =		loc("%s has been knocked out.")
+	elseif r == 1 then taunt =	loc("%s hit the ground.")
+	elseif r == 2 then taunt =	loc("%s splatted.")
+	elseif r == 3 then taunt =	loc("%s was smashed.")
+	elseif r == 4 then taunt =	loc("%s felt unstable.")
+	elseif r == 5 then taunt =	loc("%s exploded.")
+	elseif r == 6 then taunt =	loc("%s fell from a high cliff.")
+	elseif r == 7 then taunt =	loc("%s goes the way of the lemming.")
+	elseif r == 8 then taunt =	loc("%s was knocked away.")
+	elseif r == 9 then taunt =	loc("%s was really unlucky.")
+	elseif r == 10 then taunt =	loc("%s felt victim to rope-knocking.")
+	elseif r == 11 then taunt =	loc("%s had no chance.")
+	elseif r == 12 then taunt =	loc("%s was a good target.")
+	elseif r == 13 then taunt =	loc("%s spawned at a really bad position.")
+	elseif r == 14 then taunt =	loc("%s was doomed from the beginning.")
+	elseif r == 15 then taunt =	loc("%s has fallen victim to gravity.")
+	elseif r == 16 then taunt =	loc("%s hates Newton.")		-- Isaac Newton
+	elseif r == 17 then taunt =	loc("%s had it coming.")
+	elseif r == 18 then taunt =	loc("%s is eliminated!")
+	elseif r == 19 then taunt =	loc("%s fell too fast.")
+	elseif r == 20 then taunt =	loc("%s flew like a rock.")
+	elseif r == 21 then taunt =	loc("%s stumpled.")
+	elseif r == 22 then taunt =	loc("%s was shoved away.")
+	elseif r == 23 then taunt =	loc("%s didn't expect that.")
+	end
+	return taunt
 end
 
 function onGearDelete(gear)
@@ -218,4 +266,8 @@ end
 
 function onAmmoStoreInit()
 	SetAmmo(amRope, 9, 0, 0, 0)
+end
+
+function onNewTurn()
+ 	SetWeapon(amRope)
 end

@@ -22,7 +22,6 @@ unit ArgParsers;
 interface
 
 procedure GetParams;
-{$IFDEF HWLIBRARY}
 {$IFNDEF BSD}
 var operatingsystem_parameter_argc: NativeInt; external;
     operatingsystem_parameter_argv: pointer; external;
@@ -32,15 +31,13 @@ var operatingsystem_parameter_argc: LongInt; export;
     operatingsystem_parameter_argv: pointer; export;
     operatingsystem_parameter_envp: pointer; export;
 {$ENDIF}
+
 function ParamCount: LongInt;
 function ParamStr(i: LongInt): shortstring;
-{$ENDIF}
 
 implementation
 uses uVariables, uTypes, uUtils, uSound, uConsts;
 var isInternal: Boolean;
-
-{$IFDEF HWLIBRARY}
 
 type PCharArray = array[0..255] of PChar;
      PPCharArray = ^PCharArray;
@@ -54,8 +51,6 @@ function ParamStr(i: LongInt): shortstring;
 begin
     ParamStr:= StrPas(PPCharArray(operatingsystem_parameter_argv)^[i])
 end;
-
-{$ENDIF}
 
 procedure GciEasterEgg;
 begin

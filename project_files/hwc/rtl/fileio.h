@@ -75,4 +75,7 @@ bool        fpcrtl_directoryExists(string255 dir);
 bool        fpcrtl_fileExists(string255 filename);
 #define     fpcrtl_FileExists                           fpcrtl_fileExists
 
+char *      fpcrtl_getCurrentDir(void);
+#define     fpcrtl_GetCurrentDir                        fpcrtl_getCurrentDir
+
 #endif /* FILEIO_H_ */

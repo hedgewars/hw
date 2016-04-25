@@ -3413,7 +3413,7 @@ begin
         Gear^.Timer := 0;
         inc(Gear^.Pos);
         if Gear^.Pos = 5 then
-            PlaySoundV(sndYoohoo, Gear^.Hedgehog^.Team^.voicepack)
+            PlaySound(sndYoohoo);
         end;
 
     if (Gear^.Pos = 14) and (RealTicks and $3 = 0) then

@@ -74,6 +74,12 @@ endif()
 set(SDL2_NET_LIBRARIES ${SDL2_NET_LIBRARY})
 set(SDL2_NET_INCLUDE_DIRS ${SDL2_NET_INCLUDE_DIR})
 
+if(BUILD_ENGINE_JS)
+    set(SDL2_NET_LIBRARY "sdl2_net_emscripten_internal")
+    set(SDL2_NET_LIBRARIES "sdl2_net_emscripten_internal")
+    set(SDL2_NET_INCLUDE_DIRS "${CMAKE_SYSTEM_INCLUDE_PATH}/SDL")
+endif()
+
 include(FindPackageHandleStandardArgs)
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2_net

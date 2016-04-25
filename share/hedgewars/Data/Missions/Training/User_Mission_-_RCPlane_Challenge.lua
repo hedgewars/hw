@@ -488,3 +488,7 @@ end
 function onAmmoStoreInit()
 	SetAmmo(amRCPlane, 9, 0, 0, 0)
 end
+
+function onNewTurn()
+ 	SetWeapon(amRCPlane)
+end

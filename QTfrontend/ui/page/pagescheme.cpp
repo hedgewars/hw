@@ -71,102 +71,101 @@ QLayout * PageScheme::bodyLayoutDefinition()
     TBW_mode_Forts->setWhatsThis(tr("Defend your fort and destroy the opponents, two team colours max!"));
     glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
 
-    TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide@2x.png");
-    TBW_teamsDivide->setWhatsThis(tr("Teams will start on opposite sides of the terrain, two team colours max!"));
-    glGMLayout->addWidget(TBW_teamsDivide,0,1,1,1);
+    TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders@2x.png");
+    TBW_disablegirders->setWhatsThis(tr("Disable girders when generating random maps."));
+    glGMLayout->addWidget(TBW_disablegirders,0,1,1,1);
 
-    TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
-    TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
-    glGMLayout->addWidget(TBW_solid,0,2,1,1);
+    TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects@2x.png");
+    TBW_disablelandobjects->setWhatsThis(tr("Disable land objects when generating random maps."));
+    glGMLayout->addWidget(TBW_disablelandobjects,0,2,1,1);
 
     TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder@2x.png");
     TBW_border->setWhatsThis(tr("Add an indestructible border around the terrain"));
     glGMLayout->addWidget(TBW_border,0,3,1,1);
 
+    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
+    TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
+    glGMLayout->addWidget(TBW_bottomborder,0,4,1,1);
+
+    TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
+    TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
+    glGMLayout->addWidget(TBW_solid,1,0,1,1);
+
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity@2x.png");
     TBW_lowGravity->setWhatsThis(tr("Lower gravity"));
-    glGMLayout->addWidget(TBW_lowGravity,0,4,1,1);
+    glGMLayout->addWidget(TBW_lowGravity,1,1,1,1);
 
-    TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight@2x.png");
-    TBW_laserSight->setWhatsThis(tr("Assisted aiming with laser sight"));
-    glGMLayout->addWidget(TBW_laserSight,1,0,1,1);
+    TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind@2x.png");
+    TBW_nowind->setWhatsThis(tr("You will not have to worry about wind anymore."));
+    glGMLayout->addWidget(TBW_nowind,1,2,1,1);
 
-    TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable@2x.png");
-    TBW_invulnerable->setWhatsThis(tr("All hogs have a personal forcefield"));
-    glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
-
-    TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth@2x.png");
-    TBW_resethealth->setWhatsThis(tr("All (living) hedgehogs are fully restored at the end of turn"));
-    glGMLayout->addWidget(TBW_resethealth,1,2,1,1);
-
-    TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric@2x.png");
-    TBW_vampiric->setWhatsThis(tr("Gain 80% of the damage you do back in health"));
-    glGMLayout->addWidget(TBW_vampiric,1,3,1,1);
-
-    TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma@2x.png");
-    TBW_karma->setWhatsThis(tr("Share your opponents pain, share their damage"));
-    glGMLayout->addWidget(TBW_karma,1,4,1,1);
+    TBW_morewind = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind@2x.png");
+    TBW_morewind->setWhatsThis(tr("Wind will affect almost everything."));
+    glGMLayout->addWidget(TBW_morewind,1,3,1,1);
 
     TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery@2x.png");
     TBW_artillery->setWhatsThis(tr("Your hogs are unable to move, put your artillery skills to the test"));
-    glGMLayout->addWidget(TBW_artillery,2,0,1,1);
+    glGMLayout->addWidget(TBW_artillery,1,4,1,1);
 
-    TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder@2x.png");
-    TBW_randomorder->setWhatsThis(tr("Order of play is random instead of in room order."));
-    glGMLayout->addWidget(TBW_randomorder,2,1,1,1);
+    TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric@2x.png");
+    TBW_vampiric->setWhatsThis(tr("Gain 80% of the damage you do back in health"));
+    glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
 
-    TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing@2x.png");
-    TBW_king->setWhatsThis(tr("Play with a King. If he dies, your side dies."));
-    glGMLayout->addWidget(TBW_king,2,2,1,1);
+    TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma@2x.png");
+    TBW_karma->setWhatsThis(tr("Share your opponents pain, share their damage"));
+    glGMLayout->addWidget(TBW_karma,2,1,1,1);
 
-    TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog@2x.png");
-    TBW_placehog->setWhatsThis(tr("Take turns placing your hedgehogs before the start of play."));
-    glGMLayout->addWidget(TBW_placehog,2,3,1,1);
-
-    TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo@2x.png");
-    TBW_sharedammo->setWhatsThis(tr("Ammo is shared between all teams that share a colour."));
-    glGMLayout->addWidget(TBW_sharedammo,2,4,1,1);
-
-    TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders@2x.png");
-    TBW_disablegirders->setWhatsThis(tr("Disable girders when generating random maps."));
-    glGMLayout->addWidget(TBW_disablegirders,3,0,1,1);
-
-    TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects@2x.png");
-    TBW_disablelandobjects->setWhatsThis(tr("Disable land objects when generating random maps."));
-    glGMLayout->addWidget(TBW_disablelandobjects,3,1,1,1);
+    TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth@2x.png");
+    TBW_resethealth->setWhatsThis(tr("All (living) hedgehogs are fully restored at the end of turn"));
+    glGMLayout->addWidget(TBW_resethealth,2,2,1,1);
 
     TBW_aisurvival = new ToggleButtonWidget(gbGameModes, ":/res/btnAISurvival@2x.png");
     TBW_aisurvival->setWhatsThis(tr("AI respawns on death."));
-    glGMLayout->addWidget(TBW_aisurvival,3,2,1,1);
+    glGMLayout->addWidget(TBW_aisurvival,2,3,1,1);
+
+    TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable@2x.png");
+    TBW_invulnerable->setWhatsThis(tr("All hogs have a personal forcefield"));
+    glGMLayout->addWidget(TBW_invulnerable,2,4,1,1);
+
+    TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo@2x.png");
+    TBW_perhogammo->setWhatsThis(tr("Each hedgehog has its own ammo. It does not share with the team."));
+    glGMLayout->addWidget(TBW_perhogammo,3,0,1,1);
+
+    TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo@2x.png");
+    TBW_sharedammo->setWhatsThis(tr("Ammo is shared between all teams that share a colour."));
+    glGMLayout->addWidget(TBW_sharedammo,3,1,1,1);
+
+    TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps@2x.png");
+    TBW_resetweps->setWhatsThis(tr("Weapons are reset to starting values each turn."));
+    glGMLayout->addWidget(TBW_resetweps,3,2,1,1);
 
     TBW_infattack = new ToggleButtonWidget(gbGameModes, ":/res/btnInfAttack@2x.png");
     TBW_infattack->setWhatsThis(tr("Attacking does not end your turn."));
     glGMLayout->addWidget(TBW_infattack,3,3,1,1);
 
-    TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps@2x.png");
-    TBW_resetweps->setWhatsThis(tr("Weapons are reset to starting values each turn."));
-    glGMLayout->addWidget(TBW_resetweps,3,4,1,1);
+    TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight@2x.png");
+    TBW_laserSight->setWhatsThis(tr("Assisted aiming with laser sight"));
+    glGMLayout->addWidget(TBW_laserSight,3,4,1,1);
 
-    TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo@2x.png");
-    TBW_perhogammo->setWhatsThis(tr("Each hedgehog has its own ammo. It does not share with the team."));
-    glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
+    TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder@2x.png");
+    TBW_randomorder->setWhatsThis(tr("Order of play is random instead of in room order."));
+    glGMLayout->addWidget(TBW_randomorder,4,0,1,1);
 
-    TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind@2x.png");
-    TBW_nowind->setWhatsThis(tr("You will not have to worry about wind anymore."));
-    glGMLayout->addWidget(TBW_nowind,4,1,1,1);
+    TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog@2x.png");
+    TBW_placehog->setWhatsThis(tr("Take turns placing your hedgehogs before the start of play."));
+    glGMLayout->addWidget(TBW_placehog,4,1,1,1);
 
-    TBW_morewind = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind@2x.png");
-    TBW_morewind->setWhatsThis(tr("Wind will affect almost everything."));
-    glGMLayout->addWidget(TBW_morewind,4,2,1,1);
+    TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide@2x.png");
+    TBW_teamsDivide->setWhatsThis(tr("Teams will start on opposite sides of the terrain, two team colours max!"));
+    glGMLayout->addWidget(TBW_teamsDivide,4,2,1,1);
 
     TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam@2x.png");
     TBW_tagteam->setWhatsThis(tr("Teams in each clan take successive turns sharing their turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
 
-    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
-    TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
-    glGMLayout->addWidget(TBW_bottomborder,4,4,1,1);
-
+    TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing@2x.png");
+    TBW_king->setWhatsThis(tr("Play with a King. If he dies, your side dies."));
+    glGMLayout->addWidget(TBW_king,4,4,1,1);
 
     // Right
     QLabel * l;
@@ -219,7 +218,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,3,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
+    l->setPixmap(QPixmap(":/res/iconSuddenDeathTime.png"));
     glBSLayout->addWidget(l,3,1,1,1);
     SB_SuddenDeath = new QSpinBox(gbBasicSettings);
     SB_SuddenDeath->setRange(0, 50);
@@ -233,7 +232,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,4,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconSuddenDeathWater.png"));
     glBSLayout->addWidget(l,4,1,1,1);
     SB_WaterRise = new QSpinBox(gbBasicSettings);
     SB_WaterRise->setRange(0, 100);
@@ -247,7 +246,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,5,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
     glBSLayout->addWidget(l,5,1,1,1);
     SB_HealthDecrease = new QSpinBox(gbBasicSettings);
     SB_HealthDecrease->setRange(0, 100);
@@ -288,7 +287,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,8,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconHealthPercent.png"));
     glBSLayout->addWidget(l,8,1,1,1);
     SB_HealthCrates = new QSpinBox(gbBasicSettings);
     SB_HealthCrates->setRange(0, 100);
@@ -302,7 +301,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,9,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconHealth.png"));
     glBSLayout->addWidget(l,9,1,1,1);
     SB_CrateHealth = new QSpinBox(gbBasicSettings);
     SB_CrateHealth->setRange(0, 200);
@@ -316,7 +315,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,10,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconMineTime.png"));
     glBSLayout->addWidget(l,10,1,1,1);
     SB_MinesTime = new QSpinBox(gbBasicSettings);
     SB_MinesTime->setRange(-1, 5);
@@ -332,7 +331,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,11,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconMine.png"));
     glBSLayout->addWidget(l,11,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
     SB_Mines->setRange(0, 200);
@@ -360,7 +359,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,13,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconDamage.png"));
+    l->setPixmap(QPixmap(":/res/iconExplosive.png"));
     glBSLayout->addWidget(l,13,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
     SB_Explosives->setRange(0, 200);
@@ -374,7 +373,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,14,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconAirMine.png"));
     glBSLayout->addWidget(l,14,1,1,1);
     SB_AirMines = new QSpinBox(gbBasicSettings);
     SB_AirMines->setRange(0, 200);
@@ -420,7 +419,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,17,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    l->setPixmap(QPixmap(":/res/iconScript.png"));
     glBSLayout->addWidget(l,17,1,1,1);
 
     LE_ScriptParam = new QLineEdit(gbBasicSettings);
@@ -443,6 +442,7 @@ QLayout * PageScheme::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     selectScheme = new QComboBox(this);
+    selectScheme->setMaxVisibleItems(50);
 
     bottomLayout->addWidget(selectScheme, 0);
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1);

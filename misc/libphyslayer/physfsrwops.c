@@ -180,7 +180,7 @@ static SDL_RWops *create_rwops(PHYSFS_File *handle)
         retval = SDL_AllocRW();
         if (retval != NULL)
         {
-#if TARGET_SDL13
+#if TARGET_SDL13 && !defined(EMSCRIPTEN)
             retval->size  = physfsrwops_size;
 #endif
             retval->seek  = physfsrwops_seek;

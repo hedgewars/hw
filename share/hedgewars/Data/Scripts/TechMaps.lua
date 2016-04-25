@@ -88,6 +88,9 @@ function PreviewPlacedGear(x, y)
 end
 
 function onPreviewInit()
+	if HedgeEditor == true then
+		return
+	end
 
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)

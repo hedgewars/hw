@@ -279,6 +279,9 @@ WEP AND UTIL CRATE MENU
 -- HEDGE EDITOR, SCRIPT BEGINS (Hey yo, it's about time)
 ---------------------------------------------------------
 
+-- Tell other scripts that we exist
+HedgeEditor = true
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
@@ -830,12 +833,14 @@ local spriteTextArray = {"sprWater", "sprCloud", "sprBomb", "sprBigDigit", "sprF
  "sprKnife", "sprStar", "sprIceTexture", "sprIceGun", "sprFrozenHog", "sprAmRubber", "sprBoing"}
 
  local reducedSpriteIDArray = {
-  sprBigDigit, sprTarget, sprKowtow, sprBee, sprAmGirder, sprExplosion50, sprGirder,sprCustom1,sprCustom2
-  }
+  sprAmRubber, sprAmGirder, sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMCorners, sprHHTelepMask, sprTurnsLeft,
+  sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail, sprShoutCorner,
+  sprShoutEdge, sprShoutTail, sprBotlevels, sprIceTexture, sprCustom1, sprCustom2, }
 
-  local reducedSpriteTextArray = {
-  "sprBigDigit", "sprTarget", "sprKowtow", "sprBee", "sprAmGirder", "sprExplosion50", "sprGirder","sprCustom1","sprCustom2"
-  }
+ local reducedSpriteTextArray = {
+  "sprAmRubber", "sprAmGirder", "sprAMSlot", "sprAMAmmos", "sprAMAmmosBW", "sprAMCorners", "sprHHTelepMask", "sprTurnsLeft",
+  "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail", "sprShoutCorner",
+  "sprShoutEdge", "sprShoutTail", "sprBotlevels", "sprIceTexture", "sprCustom1", "sprCustom2", }
 
 ----------------------------
 -- placement shite
@@ -1637,10 +1642,16 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Health Modification Mode") then
 
 		sGear = GetClosestGear()
-		if (sGear ~= nil) and (GetGearType(sGear) == gtHedgehog) then
-			SetHealth(sGear, pMode[pIndex])
+		local gt = GetGearType(sGear)
+		if gt == gtHedgehog or gt == gtExplosives or (gt == gtCase and GetGearPos(sGear) == 0x2) then
+			if pMode[pIndex][2] == "set" then
+				SetHealth(sGear, pMode[pIndex][1])
+			elseif pMode[pIndex][2] == "mod" then
+				local newHealth = math.max(1, GetHealth(sGear) + tonumber(pMode[pIndex][1]))
+				SetHealth(sGear, newHealth)
+			end
 		else
-			AddCaption(loc("Please click on a hedgehog."),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Please click on a hedgehog, barrel or health crate."),0xffba00ff,capgrpVolume)
 		end
 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
@@ -1759,7 +1770,7 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
 		pMode = {loc("Standard Cleaver")}
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
-		pMode = {1,50,75,100}
+		pMode = {1,50,60,75,100,120}
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
 		pMode = {25,50,75,100}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
@@ -1786,7 +1797,8 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Team Identity Mode") then
 		pMode = {"Clowns","Street Fighters","Cybernetic Empire","Color Squad","Fruit","The Police","The Ninja-Samurai Alliance","Pokemon","The Zoo","The Devs","Mushroom Kingdom","Pirates","Gangsters","Twenty-Twenty","Monsters","The Iron Curtain","The Hospital"}
 	elseif cat[cIndex] == loc("Health Modification Mode") then
-		pMode = {1, 25, 30, 50, 75, 100, 120, 150, 200, 1000}
+		pMode = { {1, "set"}, {25, "set"}, {30, "set"}, {50, "set"}, {75, "set"}, {100, "set"}, {120, "set"}, {150, "set"}, {200, "set"}, {1000, "set"},
+			{"+1", "mod"}, {"+10", "mod"}, {"+100", "mod"}, {"-1", "mod"}, {"-10", "mod"}, {"-100", "mod"} } 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
 		--pMode = {"Sprite Selection Mode","LandFlag Modification Mode","Sprite Erasure Mode"}
 		pMode = {loc("LandFlag Modification Mode"),loc("Sprite Erasure Mode")}
@@ -3180,7 +3192,7 @@ function updateHelp()
 
 		ShowMission	(
 				loc("HEALTH MODIFICATION MODE"),
-				loc("Use this mode to set the health of hogs."),
+				loc("Use this mode to set the health of hogs, health crates and barrels."),
 				loc("Set Health: [Left Click]") .. "|" ..
 				loc("[Left], [Right]: Change health value.") .. "|" ..
 				" " .. "|" ..
@@ -3324,7 +3336,13 @@ function HandleHedgeEditor()
 			-- update display selection criteria
 			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
 				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
-				AddCaption(pMode[pIndex],0xffba00ff,capgrpMessage2)
+				local caption2
+				if type(pMode[pIndex]) == "table" then
+					caption2 = tostring(pMode[pIndex][1])
+				else
+					caption2 = tostring(pMode[pIndex])
+				end
+				AddCaption(caption2,0xffba00ff,capgrpMessage2)
 				if superDelete == true then
 					AddCaption(loc("Warning: Deletition Mode Active"),0xffba00ff,capgrpAmmoinfo)
 				end

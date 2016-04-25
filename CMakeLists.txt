@@ -41,6 +41,7 @@ option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 option(SKIPBUNDLE "Do not create relocate bundle (off)" OFF)
 
 option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
+option(BUILD_ENGINE_JS "Compile hwengine as javascript (off)" OFF)
 option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
@@ -49,6 +50,22 @@ if(UNIX AND NOT APPLE)
 endif()
 
 option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if source is in a git/repo that is NOT the hedgewars repo" OFF)
+
+
+if(BUILD_ENGINE_JS)
+    if(NOT CMAKE_TOOLCHAIN_FILE)
+        message(FATAL_ERROR "Missing emscripten toolchain file\nRerun cmake with -DCMAKE_TOOLCHAIN_FILE=${CMAKE_SOURCE_DIR}/cmake_modules/Platform/Emscripten.cmake")
+    endif()
+
+    set(BUILD_ENGINE_C ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(NOAUTOUPDATE ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(PHYSFS_SYSTEM OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(LUA_SYSTEM OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(NOVIDEOREC ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(NOSERVER ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(GL2 ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(BUILD_SHARED_LIBS OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+endif()
 
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
 #subdirectories will NOT be searched.
@@ -90,7 +107,10 @@ endif(CMAKE_BUILD_TYPE)
 
 
 #perform safe check that enable/disable compilation features
-include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
+#skip when crosscompiling to javascript
+if(NOT BUILD_ENGINE_JS)
+    include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
+endif()
 
 #set default compiler flags
 add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
@@ -135,7 +155,7 @@ endif()
 
 
 #build engine without freepascal
-if(BUILD_ENGINE_C)
+if(BUILD_ENGINE_C AND NOT BUILD_ENGINE_JS)
     find_package(Clang REQUIRED)
 
     if(${CLANG_VERSION} VERSION_LESS "3.0")
@@ -232,9 +252,13 @@ endif()
 if(ANDROID)
     add_subdirectory(project_files/Android-build)
 else(ANDROID)
+    #skip frontend for javascript
+    if(NOT BUILD_ENGINE_JS)
+        add_subdirectory(qmlFrontend)
+        add_subdirectory(share)
+    endif()
+
     add_subdirectory(bin)
-    add_subdirectory(qmlFrontend)
-    add_subdirectory(share)
     add_subdirectory(tools)
 endif(ANDROID)
 

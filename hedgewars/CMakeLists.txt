@@ -11,7 +11,7 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 
 enable_language(Pascal)
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000 -B")
 add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
 add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Xs")
 if(UNIX)

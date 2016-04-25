@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include "pmath.h"
 
 #ifndef M_PI
 // some math.h do not have M_PI macros

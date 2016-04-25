@@ -187,15 +187,12 @@ begin
         pfsBlockRead:= r
 end;
 
-procedure pfsMount(path: ansistring; mountpoint: PChar);
+procedure pfsMount(path: PChar; mountpoint: PChar);
 begin
-    if PHYSFS_mount(PChar(path), mountpoint, false) then
-        //AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
-    else
-        //AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
+    PHYSFS_mount(path, mountpoint, false)
 end;
 
-procedure pfsMountAtRoot(path: ansistring);
+procedure pfsMountAtRoot(path: PChar);
 begin
     pfsMount(path, PChar(_S'/'));
 end;
@@ -208,7 +205,7 @@ var i: LongInt;
 {$ENDIF}
 begin
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
-    cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
+    cPhysfsId:= shortstring(GetCurrentDir()) + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
 
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     //AddFileLog('[PhysFS] init: ' + inttostr(i));
@@ -219,7 +216,7 @@ begin
         begin
             fp := cFontsPaths[i];
             if fp <> nil then
-                pfsMount(ansistring(fp), _P'/Fonts');
+                pfsMount(fp, _P'/Fonts');
         end;
 {$ENDIF}
 
@@ -227,14 +224,14 @@ begin
     pfsMount(userPrefix, PChar('/Config'));
     pfsMakeDir('/Config/Data');
     pfsMakeDir('/Config/Logs');
-    pfsMountAtRoot(userPrefix + ansistring('/Data'));
+    pfsMountAtRoot(Str2PChar(shortstring(userPrefix) + '/Data'));
     PHYSFS_setWriteDir(userPrefix);
 
     hedgewarsMountPackages;
 
     if cTestLua then
         begin
-            pfsMountAtRoot(ansistring(ExtractFileDir(cScriptName)));
+            pfsMountAtRoot(Str2PChar(ExtractFileDir(cScriptName)));
             cScriptName := ExtractFileName(cScriptName);
         end;
 end;
