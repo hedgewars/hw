@@ -745,11 +745,11 @@ var i, t, p, j: LongInt;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
-if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
+// in divided-teams mode, slice map into vertical stripes of identical length and spawn one clan in each slice
+if {((ClansCount = 2) or ((GameFlags and gfForts) <> 0)) and} ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
-    if checkFails(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true) then exit;
-    for p:= 0 to 1 do
+    for p:= 0 to (ClansCount - 1) do
         begin
         with ClansArray[p]^ do
             for j:= 0 to Pred(TeamsNumber) do
@@ -761,14 +761,18 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
                                 if PlacingHogs then
                                     Unplaced:= true
                                 else
-                                    FindPlace(Gear, false, t, t + LAND_WIDTH div 2, true);// could make Gear == nil;
+                                    FindPlace(Gear, false, t, t + LAND_WIDTH div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
                                     Gear^.Pos:= GetRandom(49);
-                                    Gear^.dX.isNegative:= p = 1;
+                                    // unless the world is wrapping, make outter teams face to map center
+                                    if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
+                                        Gear^.dX.isNegative:= (p <> 0)
+                                    else
+                                        Gear^.dX.isNegative:= (GetRandom(2) = 1);
                                     end
                                 end;
-        t:= LAND_WIDTH div 2
+        inc(t, LAND_WIDTH div ClansCount);
         end
     end 
 else // mix hedgehogs
