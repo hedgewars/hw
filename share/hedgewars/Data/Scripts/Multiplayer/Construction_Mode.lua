@@ -1021,9 +1021,9 @@ local cat = 	{
 				"Mine Placement Mode",
 				"Sticky Mine Placement Mode",
 				"Barrel Placement Mode",
-				"Health Crate Placement Mode",
 				"Weapon Crate Placement Mode",
 				"Utility Crate Placement Mode",
+				"Health Crate Placement Mode",
 				"Structure Placement Mode"
 				}
 
@@ -1034,9 +1034,9 @@ local cat = 	{
 				{loc("Mine Placement Mode"),false},
 				{loc("Sticky Mine Placement Mode"),false},
 				{loc("Barrel Placement Mode"),false},
-				{loc("Health Crate Placement Mode"),false},
 				{loc("Weapon Crate Placement Mode"),false},
 				{loc("Utility Crate Placement Mode"),false},
+				{loc("Health Crate Placement Mode"),false},
 				{loc("Structure Placement Mode"),false},
 				{loc("Teleportation Mode"),false}
 				}
