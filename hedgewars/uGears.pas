@@ -829,7 +829,7 @@ if divide and (not sectionDivide) then
 // in section-divide mode, divide the map into equal-width sections and put each clan in one of them
 if sectionDivide then
     begin
-    t:= 0;
+    t:= leftX;
     for p:= 0 to (ClansCount - 1) do
         begin
         with ClansArray[p]^ do
@@ -842,7 +842,7 @@ if sectionDivide then
                                 if PlacingHogs then
                                     Unplaced:= true
                                 else
-                                    FindPlace(Gear, false, t, t + LAND_WIDTH div ClansCount, true);// could make Gear == nil;
+                                    FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
                                     Gear^.Pos:= GetRandom(49);
@@ -853,7 +853,7 @@ if sectionDivide then
                                         Gear^.dX.isNegative:= (GetRandom(2) = 1);
                                     end
                                 end;
-        inc(t, LAND_WIDTH div ClansCount);
+        inc(t, playWidth div ClansCount);
         end
     end 
 else // mix hedgehogs
@@ -876,10 +876,10 @@ else // mix hedgehogs
         if PlacingHogs then
             ar[i]^.Unplaced:= true
         else
-            FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH, true);
+            FindPlace(ar[i]^.Gear, false, leftX, playWidth, true);
         if ar[i]^.Gear <> nil then
             begin
-            ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > LAND_WIDTH div 2;
+            ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
             ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
         ar[i]:= ar[Count - 1];

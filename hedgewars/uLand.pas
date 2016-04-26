@@ -350,33 +350,57 @@ end;
 
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
+    i: integer;
+    mirror: boolean;
+const sectionWidth = 1024 + 300;
 begin
-ResizeLand(4096,2048);
-MaxHedgehogs:= 32;
+// figure out how much space we need
+playWidth:= sectionWidth * ClansCount;
+
+// note: LAND_WIDTH might be bigger than specified below (rounded to next power of 2)
+ResizeLand(playWidth, 2048);
+
 // For now, defining a fort is playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it will give a bit more maneuvering room.
 playHeight:= 1200;
-playWidth:= 2560;
-leftX:= (LAND_WIDTH - playWidth) div 2;
+
+// center playable area in land array
+leftX:= ((LAND_WIDTH - playWidth) div 2);
 rightX:= ((playWidth + (LAND_WIDTH - playWidth) div 2) - 1);
 topY:= LAND_HEIGHT - playHeight;
 
 WriteLnToConsole('Generating forts land...');
 
-tmpsurf:= LoadDataImage(ptForts, ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-// not critical because if no R we can fallback to mirrored L
-tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
-// fallback
-if tmpsurf = nil then
+for i := 0 to ClansCount - 1 do
     begin
-    tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-    BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
-    end
-else
-    BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
-SDL_FreeSurface(tmpsurf);
+
+    // face in random direction
+    mirror:= (GetRandom(2) = 0);
+    // make first/last fort face inwards
+    if WorldEdge <> weWrap then
+        mirror:= (i <> 0) and (mirror or (i = ClansCount));
+
+    if mirror then
+        begin
+        // not critical because if no R we can fallback to mirrored L
+        tmpsurf:= LoadDataImage(ptForts, ClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+        // fallback
+        if tmpsurf = nil then
+            begin
+            tmpsurf:= LoadDataImage(ptForts, ClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+            BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
+            end
+        else
+            BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+        SDL_FreeSurface(tmpsurf);
+        end
+    else
+        begin
+        tmpsurf:= LoadDataImage(ptForts, ClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+        BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+        SDL_FreeSurface(tmpsurf);
+        end;
+
+    end;
 end;
 
 procedure LoadMapConfig;
