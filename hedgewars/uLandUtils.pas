@@ -30,6 +30,7 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= cMaxZoomLevel/2;
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel
     end;
+initScreenSpaceVars();
 end;
 
 procedure InitWorldEdges();

@@ -23,6 +23,8 @@ interface
 
 uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils{$IFDEF GL2}, uMatrix{$ENDIF};
 
+procedure initScreenSpaceVars();
+
 var
 /////// init flags ///////
     cMinScreenWidth    : LongInt;
@@ -2514,6 +2516,14 @@ begin
     cTagsMask:= htTeamName or htName or htHealth;
 end;
 
+procedure initScreenSpaceVars();
+begin
+    // those values still are not perfect
+    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
+    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
+    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
+end;
+
 procedure initModule;
 var s: shortstring;
     i: integer;
@@ -2694,10 +2704,7 @@ begin
     CinematicBarH   := 0;
     CinematicScript := false;
 
-    // those values still are not perfect
-    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
-    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
-    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
+    initScreenSpaceVars();
 
     dirtyLandTexCount:= 0;
 
