@@ -377,7 +377,7 @@ for i := 0 to ClansCount - 1 do
     mirror:= (GetRandom(2) = 0);
     // make first/last fort face inwards
     if WorldEdge <> weWrap then
-        mirror:= (i <> 0) and (mirror or (i = ClansCount));
+        mirror:= (i <> 0) and (mirror or (i = ClansCount - 1));
 
     if mirror then
         begin
