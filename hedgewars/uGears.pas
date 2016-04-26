@@ -738,6 +738,75 @@ if (not hasBorder) and cSnow then
         end
 end;
 
+// sort clans horizontally (bubble-sort, because why not)
+procedure SortHHsByColor();
+var n, newn, i, j, k, p: LongInt;
+    ar, clar: array[0..Pred(cMaxHHs)] of PHedgehog;
+    Count, clCount: Longword;
+    tmpX, tmpY: hwFloat;
+    hh1, hh2: PHedgehog;
+begin
+Count:= 0;
+// add hedgehogs to the array in clan order
+for p:= 0 to (ClansCount - 1) do
+    with ClansArray[p]^ do
+        begin
+        // count hogs in this clan
+        clCount:= 0;
+        for j:= 0 to Pred(TeamsNumber) do
+            with Teams[j]^ do
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].Gear <> nil then
+                        begin
+                        clar[clCount]:= @Hedgehogs[i];
+                        inc(clCount);
+                        end;
+
+        // shuffle all hogs of this clan
+        for i:= 0 to clCount - 1 do
+            begin
+            j:= GetRandom(clCount);
+            k:= GetRandom(clCount);
+            if clar[j] <> clar[k] then
+                begin
+                hh1:= clar[j];
+                clar[j]:= clar[k];
+                clar[k]:= hh1;
+                end;
+            end;
+
+        // add clan's hog to sorting array
+        for i:= 0 to clCount - 1 do
+            begin
+            ar[Count]:= clar[i];
+            inc(Count);
+            end;
+        end;
+
+n:= Count - 1;
+
+repeat
+    newn:= 0;
+    for i:= 1 to n do
+        begin
+        hh1:= ar[i-1];
+        hh2:= ar[i];
+        if hwRound(hh1^.Gear^.X) > hwRound(hh2^.Gear^.X) then
+            begin
+            tmpX:= hh1^.Gear^.X;
+            tmpY:= hh1^.Gear^.Y;
+            hh1^.Gear^.X:= hh2^.Gear^.X;
+            hh1^.Gear^.Y:= hh2^.Gear^.Y;
+            hh2^.Gear^.X:= tmpX;
+            hh2^.Gear^.Y:= tmpY;
+            newn:= i;
+            end;
+        end;
+    n:= newn;
+until n = 0;
+
+end;
+
 procedure AssignHHCoords;
 var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
@@ -746,7 +815,8 @@ begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
 // in divided-teams mode, slice map into vertical stripes of identical length and spawn one clan in each slice
-if {((ClansCount = 2) or ((GameFlags and gfForts) <> 0)) and} ((GameFlags and gfDivideTeams) <> 0) then
+// this code is only for 2-clans and fort-mode games
+if ((ClansCount = 2) or ((GameFlags and gfForts) <> 0)) and ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
     for p:= 0 to (ClansCount - 1) do
@@ -827,7 +897,14 @@ for p:= 0 to Pred(TeamsCount) do
                     Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
                     Gear^.State:= Gear^.State and (not gsttmpFlag);
                     AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
-                    end
+                    end;
+
+
+// divided teams: in non-fort-modes with more than 2 clans, sort the hedgehogs from left to right by color
+if (ClansCount > 2) and ((GameFlags and gfForts) = 0) and ((GameFlags and gfDivideTeams) <> 0) then
+    begin
+    SortHHsByColor();
+    end;
 end;
 
 
