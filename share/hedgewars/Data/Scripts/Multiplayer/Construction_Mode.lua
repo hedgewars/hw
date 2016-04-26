@@ -1262,7 +1262,8 @@ function HandleHedgeEditor()
 			end
 
 			-- update display selection criteria
-			if (curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) or (curWep == amRubber) then
+			if ((curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) or (curWep == amRubber))
+				and (CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
 
 				---------------hooolllllyyyy fucking shit this
 				-- code is a broken mess now
@@ -1346,6 +1347,8 @@ end
 
 function updateCost()
 
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then return end
+
 	if pMode[pIndex] == loc("Healing Station") then
 		placedExpense = 50
 	elseif pMode[pIndex] == loc("Weapon Filter") then
@@ -1410,7 +1413,7 @@ function onRight()
 end
 
 function showModeMessage()
-	if CurrentHedgehog == nil then return end
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then return end
 	local val = pMode[pIndex]
 	local str
 	if cat[cIndex] == "Mine Placement Mode" then
@@ -1478,7 +1481,9 @@ end
 function onUp()
 
 	if ( (curWep == amNapalm) or (curWep == amDrillStrike) ) then
-		updatePlacementDisplay(-1)
+		if CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+			updatePlacementDisplay(-1)
+		end
 	end
 
 end
@@ -1486,7 +1491,9 @@ end
 function onDown()
 
 	if ( (curWep == amNapalm) or (curWep == amDrillStrike) ) then
-		updatePlacementDisplay(1)
+		if CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+			updatePlacementDisplay(1)
+		end
 	end
 
 end
