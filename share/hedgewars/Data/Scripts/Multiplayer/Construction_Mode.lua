@@ -1,5 +1,5 @@
 ---------------------------------------------------------
---- LE CONSTRUCTION MODE 0.7 (badly adapted from Hedge Editor 0.5)
+--- LE CONSTRUCTION MODE 0.8 (badly adapted from Hedge Editor 0.5)
 ---------------------------------------------------------
 -- a hedgewars gameplay mode by mikade
 -- special thanks to all who helped test and offered suggestions
@@ -73,9 +73,16 @@
 --v0.6 (dev)
 -- added magic dance
 
---v.07 (pushed to repo)
+--v0.7 (pushed to repo)
 -- added a cfg file
 -- removed another 903 lines of code we weren't using (lol)
+
+--v0.8 (merged in repo)
+-- applied Wuzzy's patches:
+--   script parameters: initialenergy, energyperround, maxenergy
+--   fix crate costs
+--   various minor tweaks and fixes
+--   (see commits in official repo)
 
 --------------------------------
 -- STRUCTURES LIST / IDEAS
@@ -835,7 +842,7 @@ function HandleStructures()
 			end
 
 			if strucType[i] == loc("Generator") then
-	
+
 				for z = 0, ClansCount-1 do
 					if z == strucClan[i] then
 						increaseGearValue(strucGear[i],"power")
@@ -846,7 +853,7 @@ function HandleStructures()
 								clanPower[z] = conf_maxEnergy
 							end
 						end
-	
+
 					end
 				end
 			end
