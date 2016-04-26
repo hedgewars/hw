@@ -2748,7 +2748,7 @@ ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetInteger('GetAwayTime', cGetAwayTime);
 ScriptSetString('Map', cMapName);
-ScriptSetString('Theme', '');
+ScriptSetString('Theme', Theme);
 ScriptSetString('Goals', '');
 
 ScriptCall('onGameInit');
