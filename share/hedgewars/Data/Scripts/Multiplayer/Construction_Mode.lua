@@ -952,7 +952,6 @@ placeholder = 20
 				{amSniperRifle,	"amSniperRifle",	0, loc("Sniper Rifle"), 	3*placeholder},
 				--{amSineGun, 	"amSineGun",		0, loc("Sine Gun"), 			6*placeholder},
 				{amIceGun, 		"amIceGun",			0, loc("Freezer"), 			15*placeholder},
-				{amLandGun,		"amLandGun",		0, loc("Land Spray"), 	5*placeholder},
 
 				{amFirePunch, 	"amFirePunch",		0, loc("Shoryuken"), 		3*placeholder},
 				{amWhip,		"amWhip",			0, loc("Whip"), 			1*placeholder},
@@ -985,6 +984,7 @@ placeholder = 20
 				{amBlowTorch, 		"amBlowTorch",		0, loc("Blow Torch"), 		4*placeholder},
 				{amPickHammer,		"amPickHammer",		0, loc("Pick Hammer"), 		2*placeholder},
 				--{amGirder, 			"amGirder",			0, loc("Girder"), 		4*placeholder},
+				{amLandGun,		"amLandGun",		0, loc("Land Spray"), 	5*placeholder},
 				--{amRubber, 			"amRubber",			0, loc("Rubber"), 	5*placeholder},
 				{amPortalGun,		"amPortalGun",		0, loc("Portable Portal Device"), 15*placeholder},
 
