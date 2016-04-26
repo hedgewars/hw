@@ -941,16 +941,16 @@ placeholder = 20
 
 				{amGrenade,		"amGrenade",		0, loc("Grenade"), 			2*placeholder},
 				{amClusterBomb,	"amClusterBomb",	0, loc("Cluster Bomb"), 	3*placeholder},
-				{amMolotov, 	"amMolotov",		0, loc("Molotov Cocktail"), 3*placeholder},
 				{amWatermelon, 	"amWatermelon",		0, loc("Watermelon Bomb"), 25*placeholder},
 				{amHellishBomb,	"amHellishBomb",	0, loc("Hellish hand-grenade"), 25*placeholder},
+				{amMolotov, 	"amMolotov",		0, loc("Molotov Cocktail"), 3*placeholder},
 				{amGasBomb, 	"amGasBomb",		0, loc("Old Limburger"), 		3*placeholder},
 
 				{amShotgun,		"amShotgun",		0, loc("Shotgun"), 			2*placeholder},
 				{amDEagle,		"amDEagle",			0, loc("Desert Eagle"), 	2*placeholder},
-				{amFlamethrower,"amFlamethrower",	0, loc("Flamethrower"), 	4*placeholder},
 				{amSniperRifle,	"amSniperRifle",	0, loc("Sniper Rifle"), 	3*placeholder},
 				--{amSineGun, 	"amSineGun",		0, loc("Sine Gun"), 			6*placeholder},
+				{amFlamethrower,"amFlamethrower",	0, loc("Flamethrower"), 	4*placeholder},
 				{amIceGun, 		"amIceGun",			0, loc("Freezer"), 			15*placeholder},
 
 				{amFirePunch, 	"amFirePunch",		0, loc("Shoryuken"), 		3*placeholder},
@@ -969,9 +969,9 @@ placeholder = 20
 
 				--{amAirAttack,	"amAirAttack",		0, loc("Air Attack"), 		10*placeholder},
 				--{amMineStrike,	"amMineStrike",		0, loc("Mine Strike"), 		15*placeholder},
-				--{amDrillStrike,	"amDrillStrike",	0, loc("Drill Strike"), 15*placeholder},
 				--{amNapalm, 		"amNapalm",			0, loc("Napalm"), 		15*placeholder},
 				--{amPiano,		"amPiano",			0, loc("Piano Strike"), 	40*placeholder},
+				--{amDrillStrike,	"amDrillStrike",	0, loc("Drill Strike"), 15*placeholder},
 
 				{amKnife,		"amKnife",			0, loc("Cleaver"), 			2*placeholder},
 
@@ -981,30 +981,29 @@ placeholder = 20
 
  utilArray =
 				{
-				{amBlowTorch, 		"amBlowTorch",		0, loc("Blow Torch"), 		4*placeholder},
 				{amPickHammer,		"amPickHammer",		0, loc("Pick Hammer"), 		2*placeholder},
+				{amBlowTorch, 		"amBlowTorch",		0, loc("Blow Torch"), 		4*placeholder},
 				--{amGirder, 			"amGirder",			0, loc("Girder"), 		4*placeholder},
 				{amLandGun,		"amLandGun",		0, loc("Land Spray"), 	5*placeholder},
 				--{amRubber, 			"amRubber",			0, loc("Rubber"), 	5*placeholder},
-				{amPortalGun,		"amPortalGun",		0, loc("Portable Portal Device"), 15*placeholder},
 
 				{amRope, 			"amRope",			0, loc("Rope"), 			7*placeholder},
 				{amParachute, 		"amParachute",		0, loc("Parachute"), 		2*placeholder},
 				--{amTeleport,		"amTeleport",		0, loc("Teleport"), 		6*placeholder},
 				{amJetpack,			"amJetpack",		0, loc("Flying Saucer"), 	8*placeholder},
+				{amPortalGun,		"amPortalGun",		0, loc("Portable Portal Device"), 15*placeholder},
 
 				{amInvulnerable,	"amInvulnerable",	0, loc("Invulnerable"), 	5*placeholder},
 				{amLaserSight,		"amLaserSight",		0, loc("Laser Sight"), 		2*placeholder},
 				{amVampiric,		"amVampiric",		0, loc("Vampirism"), 		6*placeholder},
-
-				{amLowGravity, 		"amLowGravity",		0, loc("Low Gravity"), 		4*placeholder},
-				{amExtraDamage, 	"amExtraDamage",	0, loc("Extra Damage"), 	6*placeholder},
-				{amExtraTime,		"amExtraTime",		0, loc("Extra Time"), 		8*placeholder}
-
 				--{amResurrector, 	"amResurrector",	0, loc("Resurrector"), 		8*placeholder},
 				--{amTardis, 			"amTardis",			0, loc("Time Box"), 			2*placeholder},
 
 				--{amSwitch,			"amSwitch",			0, loc("Switch Hog"), 		4*placeholder}
+				{amLowGravity, 		"amLowGravity",		0, loc("Low Gravity"), 		4*placeholder},
+				{amExtraDamage, 	"amExtraDamage",	0, loc("Extra Damage"), 	6*placeholder},
+				{amExtraTime,		"amExtraTime",		0, loc("Extra Time"), 		8*placeholder}
+
 				}
 
 ----------------------------
