@@ -82,7 +82,12 @@ var sign: real;
     moved: boolean;
     vfc, vft: LongWord;
 begin
-if vobCount = 0 then exit;
+if SuddenDeathDmg then
+    begin
+    if (vobSDCount = 0) then exit;
+    end
+else
+    if (vobCount = 0) then exit;
 
 sign:= 1;
 with Gear^ do
