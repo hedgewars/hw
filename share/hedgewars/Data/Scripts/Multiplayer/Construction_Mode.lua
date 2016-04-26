@@ -1,5 +1,5 @@
 ---------------------------------------------------------
---- LE CONSTRUCTION MODE 0.8 (badly adapted from Hedge Editor 0.5)
+--- LE CONSTRUCTION MODE 0.7+ (badly adapted from Hedge Editor 0.5)
 ---------------------------------------------------------
 -- a hedgewars gameplay mode by mikade
 -- special thanks to all who helped test and offered suggestions
@@ -77,12 +77,13 @@
 -- added a cfg file
 -- removed another 903 lines of code we weren't using (lol)
 
---v0.8 (merged in repo)
+--v0.7+ (merged in repo)
 -- applied Wuzzy's patches:
 --   script parameters: initialenergy, energyperround, maxenergy
 --   fix crate costs
 --   various minor tweaks and fixes
 --   (see commits in official repo)
+-- make Construction Mode play well together with fort mode (clan order = fort order)
 
 --------------------------------
 -- STRUCTURES LIST / IDEAS
@@ -152,6 +153,8 @@ strucCircCol = {}
 strucCircRadius = {}
 strucCircType = {}
 strucAltDisplay = {}
+
+fortMode = false
 
 placedExpense = 0
 
@@ -1533,6 +1536,12 @@ function onGameInit()
 
 	EnableGameFlags(gfInfAttack)
 
+	fortMode = GetGameFlag(gfForts)
+
+	-- if there are forts, let engine place the hogs on them
+	if fortMode then
+		EnableGameFlags(gfDivideTeams)
+	end
 
 	RedefineSubset()
 
@@ -1540,7 +1549,10 @@ end
 
 function initialSetup(gear)
 
-	FindPlace(gear, false, clanBoundsSX[GetHogClan(gear)], clanBoundsEX[GetHogClan(gear)],true)
+	-- engine already placed hogs in fort mode
+	if not fortMode then
+		FindPlace(gear, false, clanBoundsSX[GetHogClan(gear)], clanBoundsEX[GetHogClan(gear)],true)
+	end
 
 	-- for now, everyone should have this stuff
 	AddAmmo(gear, amAirAttack, 100)
@@ -1592,20 +1604,30 @@ function onGameStart()
 	tMapHeight = WaterLine - TopY
 	clanInterval = div(tMapWidth,ClansCount)
 
-	for i = 1, ClansCount do
+	-- define construction areas for each clan
+	-- if there are forts-based spawn locations, adjust areas around them
+	for i = 0, ClansCount-1 do
+		local slot
+		if fortMode then
+			slot = div(GetX(getFirstHogOfClan(i))-LeftX,clanInterval)
+		else
+			slot = i
+		end
 
-		clanBoundsSX[i-1] = LeftX+(clanInterval*i)-clanInterval+20
-		clanBoundsSY[i-1] = TopY
-		clanBoundsEX[i-1] = LeftX+(clanInterval*i)-20
-		clanBoundsEY[i-1] = WaterLine
+		local color = GetClanColor(i)
+
+		clanBoundsSX[i] = LeftX+(clanInterval*slot)+20
+		clanBoundsSY[i] = TopY
+		clanBoundsEX[i] = LeftX+(clanInterval*slot)+clanInterval-20
+		clanBoundsEY[i] = WaterLine
 
 		--top and bottom
-		AddWall(LeftX+(clanInterval*i)-clanInterval,TopY,clanInterval,margin,GetClanColor(i-1))
-		AddWall(LeftX+(clanInterval*i)-clanInterval,WaterLine-25,clanInterval,margin,GetClanColor(i-1))
+		AddWall(LeftX+(clanInterval*slot),TopY,clanInterval,margin,color)
+		AddWall(LeftX+(clanInterval*slot),WaterLine-25,clanInterval,margin,color)
 
 		--add a wall to the left and right
-		AddWall(LeftX+(clanInterval*i)-clanInterval+20,TopY,margin,WaterLine,GetClanColor(i-1))
-		AddWall(LeftX+(clanInterval*i)-20,TopY,margin,WaterLine,GetClanColor(i-1))
+		AddWall(LeftX+(clanInterval*slot)+20,TopY,margin,WaterLine,color)
+		AddWall(LeftX+(clanInterval*slot)+clanInterval-20,TopY,margin,WaterLine,color)
 
 	end
 
