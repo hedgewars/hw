@@ -749,7 +749,7 @@ begin
 Count:= 0;
 // add hedgehogs to the array in clan order
 for p:= 0 to (ClansCount - 1) do
-    with ClansArray[p]^ do
+    with SpawnClansArray[p]^ do
         begin
         // count hogs in this clan
         clCount:= 0;
@@ -832,7 +832,7 @@ if sectionDivide then
     t:= leftX;
     for p:= 0 to (ClansCount - 1) do
         begin
-        with ClansArray[p]^ do
+        with SpawnClansArray[p]^ do
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
                     for i:= 0 to cMaxHHIndex do

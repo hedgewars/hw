@@ -532,6 +532,8 @@ type
 
     PCakeData = ^TCakeData;
 
+    TClansArray = array[0..Pred(cMaxTeams)] of PClan;
+
 implementation
 
 end.

@@ -2392,7 +2392,7 @@ var
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword;
-    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
+    ClansArray, SpawnClansArray: TClansArray;
     ClansCount: Longword;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
@@ -2777,6 +2777,8 @@ begin
         begin
         ClansArray[i]:= nil;
         end;
+
+    SpawnClansArray:= ClansArray;
 
     for i:= Low(TeamsArray) to High(TeamsArray) do
         begin

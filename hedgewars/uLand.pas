@@ -350,10 +350,28 @@ end;
 
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
-    i: integer;
+    i, t, p: integer;
     mirror: boolean;
+    pc: PClan;
 const sectionWidth = 1024 + 300;
 begin
+
+// mix up spawn/fort order of clans
+if ((GameFlags and gfForts) <> 0) then
+    begin
+    for i:= 0 to ClansCount - 1 do
+        begin
+        t:= GetRandom(ClansCount);
+        p:= GetRandom(ClansCount);
+        if t <> p then
+            begin
+            pc:= SpawnClansArray[t];
+            SpawnClansArray[t]:= SpawnClansArray[p];
+            SpawnClansArray[p]:= pc;
+            end;
+        end;
+    end;
+
 // figure out how much space we need
 playWidth:= sectionWidth * ClansCount;
 
@@ -382,11 +400,11 @@ for i := 0 to ClansCount - 1 do
     if mirror then
         begin
         // not critical because if no R we can fallback to mirrored L
-        tmpsurf:= LoadDataImage(ptForts, ClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
         // fallback
         if tmpsurf = nil then
             begin
-            tmpsurf:= LoadDataImage(ptForts, ClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+            tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
             BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
             end
         else
@@ -395,7 +413,7 @@ for i := 0 to ClansCount - 1 do
         end
     else
         begin
-        tmpsurf:= LoadDataImage(ptForts, ClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
         BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
         SDL_FreeSurface(tmpsurf);
         end;
