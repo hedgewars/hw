@@ -739,7 +739,7 @@ if (not hasBorder) and cSnow then
 end;
 
 // sort clans horizontally (bubble-sort, because why not)
-procedure SortHHsByColor();
+procedure SortHHsByClan();
 var n, newn, i, j, k, p: LongInt;
     ar, clar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count, clCount: Longword;
@@ -783,6 +783,8 @@ for p:= 0 to (ClansCount - 1) do
             end;
         end;
 
+
+// bubble-sort hog array
 n:= Count - 1;
 
 repeat
@@ -811,12 +813,21 @@ procedure AssignHHCoords;
 var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
+    divide, sectionDivide: boolean;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
-// in divided-teams mode, slice map into vertical stripes of identical length and spawn one clan in each slice
-// this code is only for 2-clans and fort-mode games
-if ((ClansCount = 2) or ((GameFlags and gfForts) <> 0)) and ((GameFlags and gfDivideTeams) <> 0) then
+
+divide:= ((GameFlags and gfDivideTeams) <> 0);
+sectionDivide:= divide and ((GameFlags and gfForts) <> 0);
+
+// TODO: there might be a smarter way to decide if dividing clans into equal-width map sections makes sense
+// e.g. by checking if there is enough spawn area in each section
+if divide and (not sectionDivide) then
+    sectionDivide:= (ClansCount = 2);
+
+// in section-divide mode, divide the map into equal-width sections and put each clan in one of them
+if sectionDivide then
     begin
     t:= 0;
     for p:= 0 to (ClansCount - 1) do
@@ -900,11 +911,10 @@ for p:= 0 to Pred(TeamsCount) do
                     end;
 
 
-// divided teams: in non-fort-modes with more than 2 clans, sort the hedgehogs from left to right by color
-if (ClansCount > 2) and ((GameFlags and gfForts) = 0) and ((GameFlags and gfDivideTeams) <> 0) then
-    begin
-    SortHHsByColor();
-    end;
+// divided teams: sort the hedgehogs from left to right by clan and shuffle clan members
+// let's do this even after a possible section-divide, because some hogs may have spawned randomly on flowers
+if divide then
+    SortHHsByClan();
 end;
 
 
