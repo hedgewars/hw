@@ -1210,9 +1210,24 @@ begin
 end;
 
 function lc_getclancolor(L : Plua_State) : LongInt; Cdecl;
+var idx: integer;
 begin
-    if CheckLuaParamCount(L, 1, 'GetClanColor', 'clan') then
-        lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color shl 8 or $FF)
+    if CheckLuaParamCount(L, 1, 'GetClanColor', 'clanIdx') then
+        begin
+        idx:= lua_tointeger(L, 1);
+        if (not lua_isnumber(L, 1)) then
+            begin
+            LuaError('Argument ''clanIdx'' must be a number!');
+            lua_pushnil(L);
+            end
+        else if (idx < 0) or (idx >= ClansCount) then
+            begin
+            LuaError('Argument ''clanIdx'' out of range! (There are currently ' + IntToStr(ClansCount) + ' clans, so valid range is: 0-' + IntToStr(ClansCount-1) + ')');
+            lua_pushnil(L);
+            end
+        else
+            lua_pushinteger(L, ClansArray[idx]^.Color shl 8 or $FF);
+        end
     else
         lua_pushnil(L); // return value on stack (nil)
     lc_getclancolor:= 1
