@@ -169,6 +169,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             content == "+maze+" ||
             content == "+perlin+" ||
             content == "+drawn+" ||
+            content == "+forts+" ||
             m_staticMapModel->mapExists(content) ||
             m_missionMapModel->mapExists(content))
             return QVariant();
