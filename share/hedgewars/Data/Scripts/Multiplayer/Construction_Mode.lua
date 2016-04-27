@@ -1536,7 +1536,7 @@ function onGameInit()
 
 	EnableGameFlags(gfInfAttack)
 
-	fortMode = GetGameFlag(gfForts)
+	fortMode = (MapGen == mgForts) or GetGameFlag(gfForts)
 
 	-- if there are forts, let engine place the hogs on them
 	if fortMode then
