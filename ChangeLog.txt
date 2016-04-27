@@ -14,6 +14,7 @@
  * Fixed turn not ending when sticky mine was trapped on rubberband
  * Fixed screenshots being too bright if taken in quick succession
  * Fixed hog-speech missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
+ * Fixed SD-flakes of themes not working if regular flakes were disabled
  * Various other fixes
 
 Lua-API:
