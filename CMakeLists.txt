@@ -65,6 +65,9 @@ if(BUILD_ENGINE_JS)
     set(NOSERVER ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(GL2 ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(BUILD_SHARED_LIBS OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+
+    set(target_binary_install_dir "bin" CACHE PATH "install dest for binaries")
+    set(target_library_install_dir "lib" CACHE PATH "install dest for libs")
 endif()
 
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
