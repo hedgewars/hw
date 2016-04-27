@@ -939,7 +939,7 @@ else
             while (cnt < 1000) do
                 begin
                 inc(cnt);
-                x:= leftX+GetRandom(rightX-leftX-32)+16;
+                x:= left+GetRandom(right-left-2*cHHRadius)+cHHRadius;
                 y:= topY+GetRandom(LAND_HEIGHT-topY-64)+48;
                 if NoGearsToAvoid(x, y, 100 div max(1,cnt div 100), 100 div max(1,cnt div 100)) then
                     begin

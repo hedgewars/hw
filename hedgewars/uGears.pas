@@ -912,8 +912,7 @@ for p:= 0 to Pred(TeamsCount) do
 
 
 // divided teams: sort the hedgehogs from left to right by clan and shuffle clan members
-// let's do this even after a possible section-divide, because some hogs may have spawned randomly on flowers
-if divide then
+if divide and (not sectionDivide) then
     SortHHsByClan();
 end;
 
