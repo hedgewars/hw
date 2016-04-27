@@ -348,27 +348,70 @@ begin
     AddProgress();
 end;
 
+procedure MakeFortsPreview;
+var gap, offset, h1, h2, w1, w2, x, y: LongInt;
+const fortHeight = 960;
+      fortWidth  = 720;
+begin
+ResizeLand(4096,2048);
+
+gap:= (1024 - fortWidth) + 60 + 20 * cFeatureSize;
+offset:= fortWidth + gap;
+
+h2:= LAND_HEIGHT-1;
+h1:= h2 - fortHeight;
+w2:= (LAND_WIDTH - gap) div 2;
+w1:= w2 - fortWidth;
+
+// generate 2 forts in center
+for y:= h1 to h2 do
+    for x:= w1 to w2 do
+        begin
+        Land[y,x]:= lfBasic;
+        Land[y,x+offset]:= lfBasic;
+        end;
+
+w2:= w1 - gap;
+w1:= w2 - fortWidth;
+offset:= offset + 2 * (fortWidth + gap);
+if w1 < 0 then
+    begin
+    offset:= LAND_WIDTH - 1 - (fortWidth+w1);
+    w1:= 0;
+    end;
+
+for y:= h1 to h2 do
+    for x:= w1 to w2 do
+        if ((x - y) mod 2) = 0 then
+            begin
+            Land[y,x]:= lfBasic;
+            Land[y,x+offset]:= lfBasic;
+            end;
+end;
+
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
-    i, t, p: integer;
+    sectionWidth, i, t, p: integer;
     mirror: boolean;
     pc: PClan;
-const sectionWidth = 1024 + 300;
 begin
 
+// make the gaps between forts adjustable if fort map was selected
+if cMapGen = mgForts then
+    sectionWidth:= 1024 + 60 + 20 * cFeatureSize
+else
+    sectionWidth:= 1024 * 300;
+
 // mix up spawn/fort order of clans
-if ((GameFlags and gfForts) <> 0) then
+for i:= 0 to ClansCount - 1 do
     begin
-    for i:= 0 to ClansCount - 1 do
+    t:= GetRandom(ClansCount);
+    p:= GetRandom(ClansCount);
+    if t <> p then
         begin
-        t:= GetRandom(ClansCount);
-        p:= GetRandom(ClansCount);
-        if t <> p then
-            begin
-            pc:= SpawnClansArray[t];
-            SpawnClansArray[t]:= SpawnClansArray[p];
-            SpawnClansArray[p]:= pc;
-            end;
+        pc:= SpawnClansArray[t];
+        SpawnClansArray[t]:= SpawnClansArray[p];
+        SpawnClansArray[p]:= pc;
         end;
     end;
 
@@ -597,10 +640,12 @@ begin
                 mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
                 mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
                 mgDrawn : GenDrawnMap;
+                mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
             else
                 OutError('Unknown mapgen', true);
             end;
-            GenLandSurface
+            if cMapGen <> mgForts then
+                GenLandSurface
             end
     else
         MakeFortsMap;
@@ -740,6 +785,7 @@ begin
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: GenDrawnMap;
+        mgForts: MakeFortsPreview();
     else
         OutError('Unknown mapgen', true);
     end;
@@ -788,6 +834,7 @@ begin
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: GenDrawnMap;
+        mgForts: MakeFortsPreview;
     else
         OutError('Unknown mapgen', true);
     end;

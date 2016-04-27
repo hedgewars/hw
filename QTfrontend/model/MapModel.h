@@ -52,7 +52,8 @@ class MapModel : public QStandardItemModel
             GeneratedPerlin,
             HandDrawnMap,
             MissionMap,
-            StaticMap
+            StaticMap,
+            FortsMap
         };
 
         /// a struct for holding the attributes of a map.
@@ -99,7 +100,7 @@ class MapModel : public QStandardItemModel
         QStandardItem * getMap(const QString & map);
 
         // Static MapInfos for drawn and generated maps
-        static MapInfo MapInfoRandom, MapInfoMaze, MapInfoPerlin, MapInfoDrawn;
+        static MapInfo MapInfoRandom, MapInfoMaze, MapInfoPerlin, MapInfoDrawn, MapInfoForts;
 
         /// Loads the maps
         bool loadMaps();

@@ -8,6 +8,7 @@
  + Small visual effects enhancements
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
+ + Added "Forts" to map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
  * Video recording functionality is restored
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed bee not being affected by wrap world edge while still being thrown

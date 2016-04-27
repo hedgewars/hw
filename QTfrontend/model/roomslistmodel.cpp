@@ -150,6 +150,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
                 if (content == "+maze+") return tr("Random Maze");
                 if (content == "+perlin+") return tr("Random Perlin");
                 if (content == "+drawn+") return tr("Hand-drawn");
+                if (content == "+forts+") return tr("Forts");
             }
 
             // prefix ? if map not available

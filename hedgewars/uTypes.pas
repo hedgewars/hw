@@ -180,7 +180,7 @@ type
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
     TUIDisplay = (uiAll, uiNoTeams, uiNone);
-    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn);
+    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn, mgForts);
 
 
     THHFont = record

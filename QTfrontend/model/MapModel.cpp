@@ -32,7 +32,7 @@ MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", ""
 MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", "", false};
 MapModel::MapInfo MapModel::MapInfoPerlin = {MapModel::GeneratedMaze, "+perlin+", "", 0, "", "", "", false};
 MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", "", false};
-
+MapModel::MapInfo MapModel::MapInfoForts = {MapModel::FortsMap, "+forts+", "", 0, "", "", "", false};
 
 MapModel::MapModel(MapType maptype, QObject *parent) : QStandardItemModel(parent)
 {
