@@ -372,10 +372,13 @@ wbm:= h1 + bmHeight;
 for y:= h1 to h2 do
     for x:= w1 to w2 do
         begin
-        if (y <= wbm) and ((x - w1) mod (bmWidth * 2) >= bmWidth) then
-            continue;
-        Land[y,x]:= lfBasic;
-        Land[y,lastX-x]:= lfBasic;
+        if x mod 4 <> 0 then
+            begin
+            if (y <= wbm) and ((x - w1) mod (bmWidth * 2) >= bmWidth) then
+                continue;
+            Land[y,x]:= lfBasic;
+            Land[y,lastX-x]:= lfBasic;
+            end;
         end;
 
 w2:= w1 - gap;
@@ -386,7 +389,7 @@ bmref:= w2 + bmWidth;
 for y:= h1 to h2 do
     for x:= w1 to w2 do
         begin
-        if ((x - y) mod 2) = 0 then
+        if ((y - x) mod 2) = 0 then
             begin
             // align battlement on inner edge, because real outer edge could be offscreen
             if (y <= wbm) and ((LAND_WIDTH + x - bmref) mod (bmWidth * 2) >= bmWidth) then
