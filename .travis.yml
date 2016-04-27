@@ -15,12 +15,19 @@ compiler:
 env:
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
-  - BUILD_ARGS="-DNOSERVER=1 -DBUILD_ENGINE_C=1"
   - BUILD_ARGS="-DNOSERVER=1 -DNOVIDEOREC=1 -DNOPNG=1"
   - BUILD_ARGS="-DNOSERVER=1 -DLUA_SYSTEM=0 -DPHYSFS_SYSTEM=0"
 
 matrix:
   include:
+  - language: c
+    os: linux
+    compiler: clang
+    env: BUILD_ARGS="-DNOSERVER=1 -DBUILD_ENGINE_C=1"
+  - language: c
+    os: osx
+    compiler: clang
+    env: BUILD_ARGS="-DNOSERVER=1 -DBUILD_ENGINE_C=1"
   - language: objective-c
     sudo: required
     os: osx
