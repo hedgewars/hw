@@ -352,7 +352,10 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s);
+if logFile <> nil then
+    pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s)
+else
+    WriteLn(stdout, inttostr(GameTicks)  + ': ' + s);
 
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
@@ -544,6 +547,9 @@ begin
             break;
         inc(i)
     end;
+
+    if logFile = nil then
+        WriteLn(stdout, '[WARNING] Could not open log file for writing. Log will be written to stdout!');
 {$ENDIF}
 
     //mobile stuff
