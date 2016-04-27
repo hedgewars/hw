@@ -349,44 +349,52 @@ begin
 end;
 
 procedure MakeFortsPreview;
-var gap, offset, h1, h2, w1, w2, x, y: LongInt;
+var gap: LongInt;
+    h1, h2, w1, w2, x, y, lastX, wbm, bmref: LongWord;
 const fortHeight = 960;
-      fortWidth  = 720;
+      fortWidth  = 704;
+      bmHeight = 53;
+      bmWidth = 64;
 begin
 ResizeLand(4096,2048);
 
+lastX:= LAND_WIDTH-1;
+
 gap:= (1024 - fortWidth) + 60 + 20 * cFeatureSize;
-offset:= fortWidth + gap;
 
 h2:= LAND_HEIGHT-1;
 h1:= h2 - fortHeight;
 w2:= (LAND_WIDTH - gap) div 2;
 w1:= w2 - fortWidth;
+wbm:= h1 + bmHeight;
 
 // generate 2 forts in center
 for y:= h1 to h2 do
     for x:= w1 to w2 do
         begin
+        if (y <= wbm) and ((x - w1) mod (bmWidth * 2) >= bmWidth) then
+            continue;
         Land[y,x]:= lfBasic;
-        Land[y,x+offset]:= lfBasic;
+        Land[y,lastX-x]:= lfBasic;
         end;
 
 w2:= w1 - gap;
-w1:= w2 - fortWidth;
-offset:= offset + 2 * (fortWidth + gap);
-if w1 < 0 then
-    begin
-    offset:= LAND_WIDTH - 1 - (fortWidth+w1);
-    w1:= 0;
-    end;
+w1:= max(0, w2 - fortWidth);
+wbm:= h1 + bmHeight;
+bmref:= w2 + bmWidth;
 
 for y:= h1 to h2 do
     for x:= w1 to w2 do
+        begin
         if ((x - y) mod 2) = 0 then
             begin
+            // align battlement on inner edge, because real outer edge could be offscreen
+            if (y <= wbm) and ((LAND_WIDTH + x - bmref) mod (bmWidth * 2) >= bmWidth) then
+                continue;
             Land[y,x]:= lfBasic;
-            Land[y,x+offset]:= lfBasic;
+            Land[y,lastX-x]:= lfBasic;
             end;
+        end;
 end;
 
 procedure MakeFortsMap;
