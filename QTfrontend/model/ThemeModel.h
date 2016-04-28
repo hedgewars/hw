@@ -25,6 +25,7 @@
 #define HEDGEWARS_THEMEMODEL_H
 
 #include <QAbstractListModel>
+#include <QSortFilterProxyModel>
 #include <QStringList>
 #include <QMap>
 #include <QIcon>
@@ -44,10 +45,12 @@ class ThemeModel : public QAbstractListModel
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
+        QSortFilterProxyModel * withoutDLC();
 
     private:
         mutable QList<QMap<int, QVariant> > m_data;
         mutable bool m_themesLoaded;
+        mutable QSortFilterProxyModel * m_filteredNoDLC;
 
         void loadThemes() const;
 };

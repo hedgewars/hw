@@ -527,9 +527,10 @@ void HWMapContainer::setRandomSeed()
 
 void HWMapContainer::setRandomTheme()
 {
-    if(!m_themeModel->rowCount()) return;
-    quint32 themeNum = rand() % m_themeModel->rowCount();
-    updateTheme(m_themeModel->index(themeNum));
+    QAbstractItemModel * tmodel = m_themeModel->withoutDLC();
+    if(!tmodel->rowCount()) return;
+    quint32 themeNum = rand() % tmodel->rowCount();
+    updateTheme(tmodel->index(themeNum,0));
     emit themeChanged(m_theme);
 }
 
