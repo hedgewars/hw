@@ -39,7 +39,7 @@
 #include "GameStyleModel.h"
 #include "themeprompt.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent) :
+GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     QGroupBox(parent)
     , mainLayout(this)
     , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
@@ -80,6 +80,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     // Map options
 
     pMapContainer = new HWMapContainer(mapContainerFree);
+    pMapContainer->setRandomWithoutDLC(randomWithoutDLC);
     stackLayout->addWidget(mapContainerFree, 0, Qt::AlignHCenter);
     pMapContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     pMapContainer->setFixedSize(width() - 14, 278);

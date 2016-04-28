@@ -63,6 +63,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_script = QString();
     m_prevMapFeatureSize = 12;
     m_mapFeatureSize = 12;
+    m_withoutDLC = false;
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -500,6 +501,9 @@ void HWMapContainer::setRandomMap()
     if (!m_master) return;
 
     setRandomSeed();
+
+    QSortFilterProxyModel * mmodel = NULL;
+
     switch(m_mapInfo.type)
     {
         case MapModel::GeneratedMap:
@@ -509,10 +513,22 @@ void HWMapContainer::setRandomMap()
             setRandomTheme();
             break;
         case MapModel::MissionMap:
-            missionMapChanged(m_missionMapModel->index(rand() % m_missionMapModel->rowCount(), 0));
+            if (m_withoutDLC)
+            {
+                mmodel = m_missionMapModel->withoutDLC();
+                missionMapChanged(mmodel->mapToSource(mmodel->index(rand() % mmodel->rowCount(),0)));
+            }
+            else
+                missionMapChanged(m_missionMapModel->index(rand() % m_missionMapModel->rowCount(),0));
             break;
         case MapModel::StaticMap:
-            staticMapChanged(m_staticMapModel->index(rand() % m_staticMapModel->rowCount(), 0));
+            if (m_withoutDLC)
+            {
+                mmodel = m_staticMapModel->withoutDLC();
+                staticMapChanged(mmodel->mapToSource(mmodel->index(rand() % mmodel->rowCount(),0)));
+            }
+            else
+                staticMapChanged(m_staticMapModel->index(rand() % m_staticMapModel->rowCount(),0));
             break;
         default:
             break;
@@ -525,11 +541,23 @@ void HWMapContainer::setRandomSeed()
     emit seedChanged(m_seed);
 }
 
+void HWMapContainer::setRandomWithoutDLC(bool withoutDLC)
+{
+    m_withoutDLC = withoutDLC;
+}
+
 void HWMapContainer::setRandomTheme()
 {
-    if(!m_themeModel->rowCount()) return;
-    quint32 themeNum = rand() % m_themeModel->rowCount();
-    updateTheme(m_themeModel->index(themeNum));
+    QAbstractItemModel * tmodel;
+
+    if (m_withoutDLC)
+        tmodel = m_themeModel->withoutDLC();
+    else
+        tmodel = m_themeModel;
+
+    if(!tmodel->rowCount()) return;
+    quint32 themeNum = rand() % tmodel->rowCount();
+    updateTheme(tmodel->index(themeNum,0));
     emit themeChanged(m_theme);
 }
 

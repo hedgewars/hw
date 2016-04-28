@@ -86,7 +86,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 
     // Game config
 
-    pGameCFG = new GameCFGWidget(this);
+    pGameCFG = new GameCFGWidget(this, true);
     pageLayout->addWidget(pGameCFG, 1, 0);
 
     // Teams

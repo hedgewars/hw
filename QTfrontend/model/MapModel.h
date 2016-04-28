@@ -25,6 +25,7 @@
 #define HEDGEWARS_MAPMODEL_H
 
 #include <QStandardItemModel>
+#include <QSortFilterProxyModel>
 #include <QStringList>
 #include <QTextStream>
 #include <QHash>
@@ -105,6 +106,8 @@ class MapModel : public QStandardItemModel
         /// Loads the maps
         bool loadMaps();
 
+        /// returns this model but excluding DLC themes
+        QSortFilterProxyModel * withoutDLC();
 
     private:
         /// map index lookup table. QPair<int, int> contains: <column, index>
@@ -112,6 +115,7 @@ class MapModel : public QStandardItemModel
         QHash<QString, int> m_mapIndexes;
         MapType m_maptype;
         bool m_loaded;
+        QSortFilterProxyModel * m_filteredNoDLC;
 
         /**
          * @brief Creates a QStandardItem, that holds the map info and item appearance.

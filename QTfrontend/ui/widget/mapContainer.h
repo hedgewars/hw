@@ -85,6 +85,7 @@ class HWMapContainer : public QWidget
         void updateModelViews();
         void onPreviewMapDestroyed(QObject * map);
         void setMaster(bool master);
+        void setRandomWithoutDLC(bool withoutDLC);
 
     signals:
         void seedChanged(const QString & seed);
@@ -161,6 +162,7 @@ class HWMapContainer : public QWidget
         bool m_previewEnabled;
         bool m_missionsViewSetup;
         bool m_staticViewSetup;
+        bool m_withoutDLC;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
