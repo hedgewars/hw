@@ -308,7 +308,7 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
     }
     else
     {
-        setWeapons(*cDefaultAmmoStore);
+        setWeapons(*cEmptyAmmoStore);
     }
 }
 
