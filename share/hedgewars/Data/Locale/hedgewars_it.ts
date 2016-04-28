@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it">
+<TS version="2.1" language="it">
 <context>
     <name>About</name>
     <message>
@@ -631,6 +631,10 @@ Ultimi due messaggi del motore:
     <message>
         <source>Style:</source>
         <translation>Stile:</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1430,7 +1434,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Le squadre inizieranno in lati opposti del terreno, due colori di squadra al massimo!</translation>
+        <translation type="vanished">Le squadre inizieranno in lati opposti del terreno, due colori di squadra al massimo!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1531,6 +1535,10 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Sea (Edges connect to sea)</source>
         <translation>Mare (i bordi si connettono al mare)</translation>
+    </message>
+    <message>
+        <source>Each clan starts in its own part of the terrain.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2627,6 +2635,10 @@ Non tutti i giocatori sono pronti.</translation>
     <message>
         <source>Random Perlin</source>
         <translation>Rumore casuale</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

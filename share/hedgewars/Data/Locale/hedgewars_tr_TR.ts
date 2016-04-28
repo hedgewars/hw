@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="tr_TR">
+<TS version="2.1" language="tr_TR">
 <context>
     <name>About</name>
     <message>
@@ -639,6 +639,10 @@ Last two engine messages:
     </message>
     <message>
         <source>Theme: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1451,7 +1455,7 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Takımlar bölgenin farklı taraflarında başlarlar, en fazla iki takım rengi!</translation>
+        <translation type="vanished">Takımlar bölgenin farklı taraflarında başlarlar, en fazla iki takım rengi!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1579,6 +1583,10 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Sea (Edges connect to sea)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each clan starts in its own part of the terrain.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2745,6 +2753,10 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Random Perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

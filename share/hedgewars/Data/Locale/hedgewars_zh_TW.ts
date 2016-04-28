@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="zh_TW">
+<TS version="2.1" language="zh_TW">
 <context>
     <name>About</name>
     <message>
@@ -616,6 +616,10 @@ Last two engine messages:
     <message>
         <source>Style:</source>
         <translation>風格：</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1437,7 +1441,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>隊伍開始在對手的地盤，努力！</translation>
+        <translation type="vanished">隊伍開始在對手的地盤，努力！</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1538,6 +1542,10 @@ just enter your nickname.</source>
     <message>
         <source>Sea (Edges connect to sea)</source>
         <translation>海水（邊緣連接到海）</translation>
+    </message>
+    <message>
+        <source>Each clan starts in its own part of the terrain.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2647,6 +2655,10 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Random Perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
