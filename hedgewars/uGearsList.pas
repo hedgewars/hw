@@ -427,7 +427,7 @@ case Kind of
                     end
                 end;
      gtAirMine: begin
-                gear^.ImpactSound:= sndDenied;
+                gear^.ImpactSound:= sndAirMineImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
                 gear^.State:= gear^.State or gstMoving or gstNoGravity or gstSubmersible;
@@ -459,6 +459,7 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 500;
                 end;
        gtKnife: begin
+                gear^.ImpactSound:= sndKnifeImpact;
                 gear^.AdvBounce:= 1;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
