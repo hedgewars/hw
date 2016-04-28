@@ -31,21 +31,6 @@ ThemeModel::ThemeModel(QObject *parent) :
     m_data = QList<QMap<int, QVariant> >();
 
     m_themesLoaded = false;
-
-    m_filteredNoDLC = NULL;
-}
-
-QSortFilterProxyModel * ThemeModel::withoutDLC()
-{
-    if (m_filteredNoDLC == NULL)
-    {
-        m_filteredNoDLC = new QSortFilterProxyModel(this);
-        m_filteredNoDLC->setSourceModel(this);
-        // filtering based on IsDlcRole would be nicer
-        // but seems this model can only do string-based filtering :|
-        m_filteredNoDLC->setFilterRegExp(QRegExp("^[^*]"));
-    }
-    return m_filteredNoDLC;
 }
 
 int ThemeModel::rowCount(const QModelIndex &parent) const
