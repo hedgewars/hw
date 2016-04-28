@@ -156,7 +156,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glGMLayout->addWidget(TBW_placehog,4,1,1,1);
 
     TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide@2x.png");
-    TBW_teamsDivide->setWhatsThis(tr("Teams will start on opposite sides of the terrain, two team colours max!"));
+    TBW_teamsDivide->setWhatsThis(tr("Each clan starts in its own part of the terrain."));
     glGMLayout->addWidget(TBW_teamsDivide,4,2,1,1);
 
     TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam@2x.png");
