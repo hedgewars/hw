@@ -52,6 +52,39 @@ procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
+function read1stLn(filePath: shortstring): shortstring;
+var f: pfsFile;
+begin
+    read1stLn:= '';
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+        if (not pfsEOF(f)) and allOK then
+            pfsReadLn(f, read1stLn);
+        pfsClose(f);
+        f:= nil;
+        end;
+end;
+
+// TODO localization support
+procedure ShowCredits();
+var themeCredits, mapCredits: shortstring;
+begin
+    if Length(cMapName) > 0 then
+        begin
+        mapCredits:= read1stLn(cPathz[ptMapCurrent] + '/credits.txt');
+        if Length(mapCredits) > 0 then
+            AddChatString(char(6) + '© Map: ' + mapCredits);
+        end;
+
+        themeCredits:= read1stLn(cPathz[ptCurrTheme] + '/credits.txt');
+        if Length(themeCredits) > 0 then
+            AddChatString(char(8) + '© Theme: ' + themeCredits);
+
+        //AddChatString(char(9) + '© Hats : TODO');
+        //AddChatString(char(2) + '© Music : TODO');
+end;
+
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
@@ -96,6 +129,7 @@ begin
                 with TeamsArray[t]^ do
                     MaxTeamHealth:= TeamHealth;
             RecountAllTeamsHealth;
+            ShowCredits;
             GameState:= gsGame;
             end;
         gsConfirm, gsGame, gsChat:
