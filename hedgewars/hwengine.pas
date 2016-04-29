@@ -66,9 +66,6 @@ begin
         themeCredits:= read1stLn(cPathz[ptCurrTheme] + '/credits.txt');
         if Length(themeCredits) > 0 then
             AddChatString(char(8) + '© Theme: ' + themeCredits);
-
-        //AddChatString(char(9) + '© Hats : TODO');
-        //AddChatString(char(2) + '© Music : TODO');
 end;
 
 ///////////////////////////////////////////////////////////////////////////////

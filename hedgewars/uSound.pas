@@ -110,7 +110,7 @@ var MusicFN: shortstring; // music file name
 var Volume: LongInt;
     SoundTimerTicks: Longword;
 implementation
-uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
+uses uVariables, uConsole, uCommands, uChat, uUtils, uDebug, uPhysFSLayer;
 
 const chanTPU = 32;
 var cInitVolume: LongInt;
@@ -580,6 +580,11 @@ begin
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
     SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
     WriteLnToConsole(msgOK);
+
+    // display music credits
+    s:= read1stLn(s + '_credits.txt');
+    if Length(s) > 0 then
+        AddChatString(char(2) + '© Music: ' + s);
 
     SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;
