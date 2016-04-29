@@ -358,48 +358,48 @@ function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
 var
     xCursor, yCursor, index : LongInt;
 begin
-    //Check array sizes
-    while Length(fingers) <= pointerCount do
-        begin
-        setLength(fingers, Length(fingers)*2);
-        for index := Length(fingers) div 2 to (Length(fingers)-1) do
-            fingers[index].id := nilFingerId;
-        end;
+//Check array sizes
+while Length(fingers) <= pointerCount do
+    begin
+    setLength(fingers, Length(fingers)*2);
+    for index := Length(fingers) div 2 to (Length(fingers)-1) do
+        fingers[index].id := nilFingerId;
+    end;
 
-    xCursor := convertToCursorX(x);
-    yCursor := convertToCursorY(y);
+xCursor := convertToCursorX(x);
+yCursor := convertToCursorY(y);
 
-    //on removing fingers, all fingers are moved to the left
-    //with dynamic arrays being zero based, the new position of the finger is the old pointerCount
-    fingers[pointerCount].id := id;
-    fingers[pointerCount].historicalX := xCursor;
-    fingers[pointerCount].historicalY := yCursor;
-    fingers[pointerCount].x := xCursor;
-    fingers[pointerCount].y := yCursor;
-    fingers[pointerCount].dx := 0;
-    fingers[pointerCount].dy := 0;
-    fingers[pointerCount].timeSinceDown:= RealTicks;
-    fingers[pointerCount].pressedWidget:= nil;
+//on removing fingers, all fingers are moved to the left
+//with dynamic arrays being zero based, the new position of the finger is the old pointerCount
+fingers[pointerCount].id := id;
+fingers[pointerCount].historicalX := xCursor;
+fingers[pointerCount].historicalY := yCursor;
+fingers[pointerCount].x := xCursor;
+fingers[pointerCount].y := yCursor;
+fingers[pointerCount].dx := 0;
+fingers[pointerCount].dy := 0;
+fingers[pointerCount].timeSinceDown:= RealTicks;
+fingers[pointerCount].pressedWidget:= nil;
 
-    addFinger:= @fingers[pointerCount];
-    inc(pointerCount);
+addFinger:= @fingers[pointerCount];
+inc(pointerCount);
 end;
 
 function updateFinger(x, y, dx, dy: Longword; id: TSDL_FingerId): PTouch_Data;
 var finger : PTouch_Data;
 begin
-    finger:= findFinger(id);
+finger:= findFinger(id);
 
-    if finger <> nil then
-        begin
-        finger^.x:= convertToCursorX(x);
-        finger^.y:= convertToCursorY(y);
-        finger^.dx:= dx;
-        finger^.dy:= dy;
-        end
-    else
-        WriteLnToConsole('finger ' + inttostr(id) + ' not found');
-    updateFinger:= finger
+if finger <> nil then
+    begin
+    finger^.x:= convertToCursorX(x);
+    finger^.y:= convertToCursorY(y);
+    finger^.dx:= dx;
+    finger^.dy:= dy;
+    end
+else
+    WriteLnToConsole('finger ' + inttostr(id) + ' not found');
+updateFinger:= finger
 end;
 
 procedure deleteFinger(id: TSDL_FingerId);
@@ -407,28 +407,28 @@ var
     index : Longword;
 begin
 
-    dec(pointerCount);
-    for index := 0 to pointerCount do
+dec(pointerCount);
+for index := 0 to pointerCount do
     begin
-        if fingers[index].id = id then
+    if fingers[index].id = id then
         begin
+        //put the last finger into the spot of the finger to be removed,
+        //so that all fingers are packed to the far left
+        if pointerCount <> index then
+            begin
+            fingers[index].id := fingers[pointerCount].id;
+            fingers[index].x := fingers[pointerCount].x;
+            fingers[index].y := fingers[pointerCount].y;
+            fingers[index].historicalX := fingers[pointerCount].historicalX;
+            fingers[index].historicalY := fingers[pointerCount].historicalY;
+            fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
+            fingers[index].pressedWidget := fingers[pointerCount].pressedWidget;
 
-            //put the last finger into the spot of the finger to be removed,
-            //so that all fingers are packed to the far left
-            if  pointerCount <> index then
-                begin
-                fingers[index].id := fingers[pointerCount].id;
-                fingers[index].x := fingers[pointerCount].x;
-                fingers[index].y := fingers[pointerCount].y;
-                fingers[index].historicalX := fingers[pointerCount].historicalX;
-                fingers[index].historicalY := fingers[pointerCount].historicalY;
-                fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
-                fingers[index].pressedWidget := fingers[pointerCount].pressedWidget;
-
-                fingers[pointerCount].id := nilFingerId;
+            fingers[pointerCount].id := nilFingerId;
             end
-        else fingers[index].id := nilFingerId;
-            break;
+        else
+            fingers[index].id := nilFingerId;
+        break;
         end;
     end;
 
