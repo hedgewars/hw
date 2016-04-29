@@ -642,7 +642,7 @@ begin
 
     setLength(fingers, 4);
     for index := 0 to (Length(fingers)-1) do
-        fingers[index].id := 0;
+        fingers[index].id := nilFingerId;
 
     rectSize:= baseRectSize;
     halfRectSize:= baseRectSize shr 1;
