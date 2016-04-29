@@ -425,9 +425,9 @@ begin
                 fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
                 fingers[index].pressedWidget := fingers[pointerCount].pressedWidget;
 
-                fingers[pointerCount].id := 0;
+                fingers[pointerCount].id := nilFingerId;
             end
-        else fingers[index].id := 0;
+        else fingers[index].id := nilFingerId;
             break;
         end;
     end;
