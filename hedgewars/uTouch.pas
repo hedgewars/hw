@@ -359,12 +359,12 @@ var
     xCursor, yCursor, index : LongInt;
 begin
     //Check array sizes
-    if length(fingers) < pointerCount then
-    begin
-        setLength(fingers, length(fingers)*2);
-        for index := length(fingers) div 2 to length(fingers) do
+    while Length(fingers) <= pointerCount do
+        begin
+        setLength(fingers, Length(fingers)*2);
+        for index := Length(fingers) div 2 to (Length(fingers)-1) do
             fingers[index].id := nilFingerId;
-    end;
+        end;
 
     xCursor := convertToCursorX(x);
     yCursor := convertToCursorY(y);
@@ -513,7 +513,7 @@ function findFinger(id: TSDL_FingerId): PTouch_Data;
 var
     index: LongWord;
 begin
-    for index:= 0 to length(fingers) do
+    for index:= 0 to (Length(fingers)-1) do
         if fingers[index].id = id then
             begin
             findFinger:= @fingers[index];
@@ -641,7 +641,7 @@ begin
     pointerCount:= 0;
 
     setLength(fingers, 4);
-    for index := 0 to length(fingers) do
+    for index := 0 to (Length(fingers)-1) do
         fingers[index].id := 0;
 
     rectSize:= baseRectSize;
