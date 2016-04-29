@@ -1,7 +1,7 @@
 file(GLOB BaseMusic *.ogg)
-file(GLOB MusicCredits *_credits.txt)
 
 install(FILES
     ${BaseMusic}
     ${MusicCredits}
+    credits.txt
     DESTINATION ${SHAREPATH}Data/Music)

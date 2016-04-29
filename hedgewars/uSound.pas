@@ -582,7 +582,16 @@ begin
     WriteLnToConsole(msgOK);
 
     // display music credits
-    s:= read1stLn(s + '_credits.txt');
+    s:= s + '_credits.txt';
+
+    // if per-file credits not found check general music credits file
+    if pfsExists(s) then
+        s:= read1stLn(s)
+    else if SuddenDeath and (SDMusicFN <> '') then
+        s:= readValueFromINI(SDMusicFN, '/Music/credits.txt')
+    else
+        s:= readValueFromINI(MusicFN, '/Music/credits.txt');
+
     if Length(s) > 0 then
         AddChatString(char(2) + '© Music: ' + s);
 

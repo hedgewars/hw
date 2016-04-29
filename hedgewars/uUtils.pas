@@ -71,6 +71,7 @@ function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 function read1stLn(filePath: shortstring): shortstring;
+function readValueFromINI(key, filePath: shortstring): shortstring;
 
 {$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
@@ -522,6 +523,37 @@ begin
         f:= pfsOpenRead(filePath);
         if (not pfsEOF(f)) and allOK then
             pfsReadLn(f, read1stLn);
+        pfsClose(f);
+        f:= nil;
+        end;
+end;
+
+function readValueFromINI(key, filePath: shortstring): shortstring;
+var f: pfsFile;
+	s: shortstring;
+	i: LongInt;
+begin
+    s:= '';
+	readValueFromINI:= '';
+
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+
+        while (not pfsEOF(f)) and allOK do
+			begin pfsReadLn(f, s);
+			if Length(s) = 0 then
+				continue;
+			if s[1] = ';' then
+				continue;
+
+			i:= Pos('=', s);
+			if Trim(Copy(s, 1, Pred(i))) = key then
+				begin
+				Delete(s, 1, i);
+				readValueFromINI:= s;
+				end;
+			end;
         pfsClose(f);
         f:= nil;
         end;
