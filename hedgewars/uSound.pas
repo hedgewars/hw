@@ -593,7 +593,7 @@ begin
         s:= readValueFromINI(MusicFN, '/Music/credits.txt');
 
     if Length(s) > 0 then
-        AddChatString(char(2) + '© Music: ' + s);
+        AddChatString(char(#10) + '© Music: ' + s);
 
     SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;

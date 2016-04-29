@@ -60,12 +60,12 @@ begin
         begin
         mapCredits:= read1stLn(cPathz[ptMapCurrent] + '/credits.txt');
         if Length(mapCredits) > 0 then
-            AddChatString(char(6) + '© Map: ' + mapCredits);
+            AddChatString(char(#11) + '© Map: ' + mapCredits);
         end;
 
         themeCredits:= read1stLn(cPathz[ptCurrTheme] + '/credits.txt');
         if Length(themeCredits) > 0 then
-            AddChatString(char(8) + '© Theme: ' + themeCredits);
+            AddChatString(char(#12) + '© Theme: ' + themeCredits);
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
