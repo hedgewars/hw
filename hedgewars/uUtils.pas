@@ -70,6 +70,8 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
+function read1stLn(filePath: shortstring): shortstring;
+
 {$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
@@ -95,7 +97,7 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils, uPhysFSLayer;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils, uPhysFSLayer, uDebug;
 
 {$IFDEF DEBUGFILE}
 var logFile: PFSFile;
@@ -509,6 +511,20 @@ begin
         end;
 
     sanitizeCharForLog:= r
+end;
+
+function read1stLn(filePath: shortstring): shortstring;
+var f: pfsFile;
+begin
+    read1stLn:= '';
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+        if (not pfsEOF(f)) and allOK then
+            pfsReadLn(f, read1stLn);
+        pfsClose(f);
+        f:= nil;
+        end;
 end;
 
 procedure initModule(isNotPreview: boolean);

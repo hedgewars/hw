@@ -52,20 +52,6 @@ procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
-function read1stLn(filePath: shortstring): shortstring;
-var f: pfsFile;
-begin
-    read1stLn:= '';
-    if pfsExists(filePath) then
-        begin
-        f:= pfsOpenRead(filePath);
-        if (not pfsEOF(f)) and allOK then
-            pfsReadLn(f, read1stLn);
-        pfsClose(f);
-        f:= nil;
-        end;
-end;
-
 // TODO localization support
 procedure ShowCredits();
 var themeCredits, mapCredits: shortstring;
