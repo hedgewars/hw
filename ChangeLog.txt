@@ -2,7 +2,7 @@
 * bugfixes
 
 0.9.22 -> 0.9.23
- + The menu screens received some new icons and other improvements, such as larger dropdown lists for easier access.
+ + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
  + Improved hedgehog spawns on maps that lack land mass or free space
  + Highlander mode displays game scheme specifics (mines timer, etc.) in ESC info
  + AI hedgehogs know how to use Bee now
@@ -11,7 +11,9 @@
  + Fort Mode will now work with more than 2 teams
  + Added "Forts" to map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
  + Basic Flying Saucer Training
- * Construction mode received many fixes and tweaks.
+ + Render graves behind everything else, so that they can't hide mines etc.
+ * Fixed air-strikes drops being off-center
+ * Construction mode received many fixes and tweaks
  * Video recording functionality is restored
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed bee not being affected by wrap world edge while still being thrown
