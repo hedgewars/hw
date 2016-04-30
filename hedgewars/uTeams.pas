@@ -320,6 +320,7 @@ else
     TagTurnTimeLeft:= 0;
     NextClan:= false;
     end;
+IsGetAwayTime:= false;
 
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin

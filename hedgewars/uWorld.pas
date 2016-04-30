@@ -1444,6 +1444,8 @@ if UIDisplay <> uiNone then
             dec(t, 32);
             if (ReadyTimeLeft <> 0) then
                 spr := sprBigDigitGreen
+            else if IsGetAwayTime then
+                spr := sprBigDigitRed
             else
                 spr := sprBigDigit;
             DrawSprite(spr, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);

@@ -96,6 +96,7 @@ var
     TurnClockActive : boolean;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
+    IsGetAwayTime   : boolean;
     cSuddenDTurns   : LongInt;
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
@@ -2652,6 +2653,7 @@ begin
     LeftImpactTimer     := 0;
     RightImpactTimer    := 0;
     TurnTimeLeft        := 0;
+    IsGetAwayTime       := false;
     TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
