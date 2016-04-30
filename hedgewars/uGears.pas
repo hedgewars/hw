@@ -46,6 +46,7 @@ procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
 function  GearByUID(uid : Longword) : PGear;
+function  IsClockRunning() : boolean;
 
 implementation
 uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
@@ -444,36 +445,32 @@ else if ((GameFlags and gfInfAttack) <> 0) then
     end;
 
 if TurnTimeLeft > 0 then
-    if CurrentHedgehog^.Gear <> nil then
-        if (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
-            or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0)
-            or ((GameFlags and gfInfAttack) <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode <> 0))
-            and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0))) then
-            //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
-                begin
-                if (cHedgehogTurnTime >= 10000)
-                and (not PlacingHogs)
-                and (CurrentHedgehog^.Gear <> nil)
-                and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                    if TurnTimeLeft = 5000 then
-                        PlaySoundV(sndHurry, CurrentTeam^.voicepack)
-                    else if TurnTimeLeft = 4000 then
-                        PlaySound(sndCountdown4)
-                    else if TurnTimeLeft = 3000 then
-                        PlaySound(sndCountdown3)
-                    else if TurnTimeLeft = 2000 then
-                        PlaySound(sndCountdown2)
-                    else if TurnTimeLeft = 1000 then
-                        PlaySound(sndCountdown1);
-            if ReadyTimeLeft > 0 then
-                begin
-                if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
-                    AddVoice(sndComeonthen, CurrentTeam^.voicepack);
-                dec(ReadyTimeLeft)
-                end
-            else
-                dec(TurnTimeLeft)
-            end;
+    if IsClockRunning() then
+        //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
+        begin
+        if (cHedgehogTurnTime >= 10000)
+        and (not PlacingHogs)
+        and (CurrentHedgehog^.Gear <> nil)
+        and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
+            if TurnTimeLeft = 5000 then
+                PlaySoundV(sndHurry, CurrentTeam^.voicepack)
+            else if TurnTimeLeft = 4000 then
+                PlaySound(sndCountdown4)
+            else if TurnTimeLeft = 3000 then
+                PlaySound(sndCountdown3)
+            else if TurnTimeLeft = 2000 then
+                PlaySound(sndCountdown2)
+            else if TurnTimeLeft = 1000 then
+                PlaySound(sndCountdown1);
+        if ReadyTimeLeft > 0 then
+            begin
+            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
+                AddVoice(sndComeonthen, CurrentTeam^.voicepack);
+            dec(ReadyTimeLeft)
+            end
+        else
+            dec(TurnTimeLeft)
+        end;
 
 if skipFlag then
     begin
@@ -1057,6 +1054,16 @@ while gear <> nil do
         end;
     gear:= gear^.NextGear
     end
+end;
+
+function IsClockRunning() : boolean;
+begin
+    IsClockRunning :=
+    (CurrentHedgehog^.Gear <> nil)
+    and (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
+    or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0)
+    or ((GameFlags and gfInfAttack) <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode <> 0))
+    and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)));
 end;
 
 

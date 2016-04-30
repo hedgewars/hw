@@ -1442,7 +1442,9 @@ if UIDisplay <> uiNone then
         while i > 0 do
             begin
             dec(t, 32);
-            if (ReadyTimeLeft <> 0) then
+            if isPaused or (not IsClockRunning()) then
+                spr := sprBigDigitGray
+            else if (ReadyTimeLeft <> 0) then
                 spr := sprBigDigitGreen
             else if IsGetAwayTime then
                 spr := sprBigDigitRed
