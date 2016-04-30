@@ -945,7 +945,8 @@ const
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_NoCrosshair or
-                          ammoprop_DontHold;
+                          ammoprop_DontHold or
+                          ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1267,7 +1268,8 @@ const
             Probability: 100;
             NumberInCase: 2;
             Ammo: (Propz: ammoprop_ForwMsgs or
-                          ammoprop_NeedUpDown;
+                          ammoprop_NeedUpDown or
+                          ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;

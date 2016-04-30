@@ -299,6 +299,8 @@ const
     ammoprop_Track        = $00040000;
     ammoprop_DoesntStopTimerInMultiShoot
                           = $00080000;
+    ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode
+                          = $00100000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
