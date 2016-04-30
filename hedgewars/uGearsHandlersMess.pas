@@ -1407,9 +1407,7 @@ begin
         if (HHGear^.Angle >= 1) then
             dec(HHGear^.Angle);
 
-    if (TurnTimeLeft > 0) then
-        dec(TurnTimeLeft)
-    else
+    if (TurnTimeLeft = 0) then
         begin
         HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
