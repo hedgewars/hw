@@ -1425,7 +1425,7 @@ if UIDisplay <> uiNone then
     offsetX:= 48;
 {$ENDIF}
     offsetY:= cOffsetY;
-    if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
+    if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 999000)) or (ReadyTimeLeft <> 0) then
         begin
         if ReadyTimeLeft <> 0 then
             i:= Succ(Pred(ReadyTimeLeft) div 1000)
