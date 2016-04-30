@@ -48,8 +48,8 @@ type
             ptSuddenDeath, ptButtons, ptShaders);
 
     // Available sprites for displaying stuff
-    TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-            sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
+    TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprBigDigitGray, sprBigDigitGreen,
+            sprBigDigitRed, sprFrame, sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame,

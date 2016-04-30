@@ -1025,7 +1025,7 @@ end;
 
 
 procedure RenderTeamsHealth;
-var t, i, h, smallScreenOffset, TeamHealthBarWidth : LongInt;
+var t, i,  h, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
     htex: PTexture;
@@ -1159,6 +1159,7 @@ end;
 
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
+    spr: TSprite;
     r: TSDL_Rect;
     tdx, tdy: Double;
     s: shortstring;
@@ -1441,7 +1442,11 @@ if UIDisplay <> uiNone then
         while i > 0 do
             begin
             dec(t, 32);
-            DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
+            if (ReadyTimeLeft <> 0) then
+                spr := sprBigDigitGreen
+            else
+                spr := sprBigDigit;
+            DrawSprite(spr, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
             i:= i div 10
             end;
         DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
