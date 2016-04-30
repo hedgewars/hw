@@ -2,6 +2,7 @@
 * bugfixes
 
 0.9.22 -> 0.9.23
+ + The menu screens received some new icons and other improvements, such as larger dropdown lists for easier access.
  + Improved hedgehog spawns on maps that lack land mass or free space
  + Highlander mode displays game scheme specifics (mines timer, etc.) in ESC info
  + AI hedgehogs know how to use Bee now
@@ -9,12 +10,14 @@
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
  + Added "Forts" to map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
+ + Basic Flying Saucer Training
+ * Construction mode received many fixes and tweaks.
  * Video recording functionality is restored
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed bee not being affected by wrap world edge while still being thrown
  * Fixed turn not ending when sticky mine was trapped on rubberband
  * Fixed screenshots being too bright if taken in quick succession
- * Fixed hog-speech missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
+ * Fixed hedgehog-voices missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
  * Fixed SD-flakes of themes not working if regular flakes were disabled
  * Various other fixes
 
