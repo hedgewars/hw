@@ -37,9 +37,9 @@ var prevGState: TGameState = gsConfirm;
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-    'R': if ReadyTimeLeft > 1 then
+    'R': if ReadyTimeLeft > 0 then
         begin
-        ReadyTimeLeft:= 1;
+        ReadyTimeLeft:= 0;
         if not isExternalSource then
             SendIPC('c'+s);
         end
