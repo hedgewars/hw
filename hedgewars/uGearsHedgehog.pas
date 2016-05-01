@@ -1219,7 +1219,7 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
         TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
     if ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) then
-        PlaySoundV(sndBoring, Hedgehog^.Team^.voicepack);
+        AddVoice(sndBoring, Hedgehog^.Team^.voicepack);
     isCursorVisible:= false;
     HHGear^.State:= HHGear^.State and (not (gstHHDriven or gstAnimation or gstAttacking));
     AttackBar:= 0;
