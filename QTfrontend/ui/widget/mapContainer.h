@@ -155,6 +155,7 @@ class HWMapContainer : public QWidget
         QPushButton * btnLoadMap;
         QPushButton * btnEditMap;
         QPushButton * btnRandomize;
+        QPushButton * btnRandTheme;
         QString selectedTheme;
         QPushButton * btnSeed;
         bool m_master;

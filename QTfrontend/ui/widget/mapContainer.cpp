@@ -127,6 +127,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnRandomize->setFlat(true);
     btnRandomize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(btnRandomize, SIGNAL(clicked()), this, SLOT(setRandomMap()));
+
     m_childWidgets << btnRandomize;
     btnRandomize->setStyleSheet("padding: 5px;");
     btnRandomize->setFixedHeight(cType->height());
@@ -251,14 +252,27 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     bottomLeftLayout->addStretch(1);
 
     /* Theme chooser */
+    QHBoxLayout * themeHBox = new QHBoxLayout(this);
+
+    btnRandTheme = new QPushButton();
+    btnRandTheme->setIcon(lp);
+    btnRandTheme->setIconSize(QSize(24, 24));
+    btnRandTheme->setFixedHeight(30);
+    btnRandTheme->setFixedWidth(30);
+    connect(btnRandTheme, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
+    m_childWidgets << btnTheme;
+    themeHBox->addWidget(btnRandTheme, 0);
 
     btnTheme = new QPushButton(this);
     btnTheme->setFlat(true);
     btnTheme->setIconSize(QSize(30, 30));
     btnTheme->setFixedHeight(30);
+    btnTheme->setMaximumWidth(222);
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
-    bottomLeftLayout->addWidget(btnTheme, 0);
+    themeHBox->addWidget(btnTheme, 1);
+
+    bottomLeftLayout->addLayout(themeHBox);
 
     /* Add everything to main layout */
 
@@ -895,12 +909,16 @@ void HWMapContainer::updateThemeButtonSize()
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);
+        btnRandTheme->setFixedHeight(30);
+        btnRandTheme->setIconSize(QSize(24, 24));
     }
     else
     {
         QSize iconSize = btnTheme->icon().actualSize(QSize(65535, 65535));
+        btnRandTheme->setFixedHeight(64);
         btnTheme->setFixedHeight(64);
         btnTheme->setIconSize(iconSize);
+        btnRandTheme->setIconSize(QSize(32, 32));
     }
 
     repaint();
