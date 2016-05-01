@@ -36,7 +36,7 @@ Rectangle {
 
             PropertyChanges {
                 target: hwbutton
-                border.color: "#ea761d"
+                border.color: "#ffcc00"
             }
     }]
 }

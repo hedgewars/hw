@@ -13,5 +13,6 @@
         <file>qml/qmlFrontend/Multiplayer.qml</file>
         <file>res/iconTime.png</file>
         <file>res/prevBg.png</file>
+        <file>res/hogCntBg.png</file>
     </qresource>
 </RCC>

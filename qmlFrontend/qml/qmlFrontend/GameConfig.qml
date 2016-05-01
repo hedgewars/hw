@@ -57,6 +57,27 @@ Rectangle {
             cache: true
             source: "qrc:/res/iconTime.png"
         }
+
+        Image {
+            id: hogCountBackground
+            x: 216
+            y: 6
+            width: 41
+            height: 21
+            cache: true
+            source: "qrc:/res/hogCntBg.png"
+        }
+
+        Text {
+            id: hogCount
+            x: 230
+            y: 10
+            text: "?"
+            horizontalAlignment: Text.AlignHRight
+            font.family: "MS Shell Dlg"
+            font.pixelSize: 12
+            color: "#ffcc00"
+        }
     }
 
     HWComboBox {
