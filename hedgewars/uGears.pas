@@ -449,7 +449,6 @@ if TurnTimeLeft > 0 then
         //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
         begin
         if (cHedgehogTurnTime >= 10000)
-        and (not PlacingHogs)
         and (CurrentHedgehog^.Gear <> nil)
         and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
             if TurnTimeLeft = 5000 then
@@ -464,7 +463,7 @@ if TurnTimeLeft > 0 then
                 PlaySound(sndCountdown1);
         if ReadyTimeLeft > 0 then
             begin
-            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
+            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) and (not PlacingHogs) then
                 AddVoice(sndComeonthen, CurrentTeam^.voicepack);
             dec(ReadyTimeLeft)
             end
