@@ -12,5 +12,6 @@
         <file>qml/qmlFrontend/Lobby.qml</file>
         <file>qml/qmlFrontend/Multiplayer.qml</file>
         <file>res/iconTime.png</file>
+        <file>res/prevBg.png</file>
     </qresource>
 </RCC>

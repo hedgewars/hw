@@ -8,24 +8,53 @@ Rectangle {
 
     HWButton {
         id: btnPreview
-        width: 256
-        height: 128
+        // this, as well as the positions of images, seems to have the border thickness (3px) into account
+        width: 262
+        height: 134
 
         onClicked: HWEngine.getPreview()
 
         Connections {
             target: HWEngine
-            onPreviewImageChanged: previewImage.source = "image://preview/image"
-            onPreviewIsRendering: previewImage.source = "qrc:/res/iconTime.png"
+            onPreviewImageChanged: {
+                previewImage.visible = true
+                previewImage.source = "image://preview/image"
+                previewWaitImage.visible = false
+            }
+            onPreviewIsRendering: {
+                previewImage.source = ""
+                previewImage.visible = false
+                previewWaitImage.visible = true
+            }
+        }
+
+        Image {
+            id: previewBackground
+            x: 3
+            y: 3
+            width: 256
+            height: 128
+            cache: true
+            source: "qrc:/res/prevBg.png"
         }
 
         Image {
             id: previewImage
-            x: 0
-            y: 0
+            x: 3
+            y: 3
             width: 256
             height: 128
             cache: false
+            source: ""
+        }
+
+        Image {
+            id: previewWaitImage
+            x: 117
+            y: 53
+            width: 26
+            height: 26
+            cache: true
             source: "qrc:/res/iconTime.png"
         }
     }
