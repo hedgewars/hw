@@ -2,26 +2,52 @@
 * bugfixes
 
 0.9.22 -> 0.9.23
- + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
+Content:
+ + New hat: "tf_scout" (this time for real)
+
+Game engine:
  + Improved hedgehog spawns on maps that lack land mass or free space
  + Highlander mode displays game scheme specifics (mines timer, etc.) in ESC info
- + AI hedgehogs know how to use Bee now
- + Small visual effects enhancements
+ + AI hedgehogs can now use Bee and Vampirism
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
  + Added "Forts" to map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
- + Basic Flying Saucer Training
  + Render graves behind everything else, so that they can't hide mines etc.
+ + Several new sound effects for weapons and utilities
+ + Small visual effects enhancements
+ + Briefly show theme and music authors in chat at start of game
  * Fixed air-strikes drops being off-center
- * Construction mode received many fixes and tweaks
- * Video recording functionality is restored
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
+ * Fixed screenshots being too bright if taken in quick succession
+ * Video recording functionality is restored
  * Fixed bee not being affected by wrap world edge while still being thrown
  * Fixed turn not ending when sticky mine was trapped on rubberband
- * Fixed screenshots being too bright if taken in quick succession
  * Fixed hedgehog-voices missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
  * Fixed SD-flakes of themes not working if regular flakes were disabled
+ * Fixed RC planes being able to collect frozen crates
+ * Fixed Seduction's "Yoohoo!" sound not playing
+ * Fixed Target Practice missions getting stuck when a target dropped into water
+ * Fixed Hedgehogs getting hurt while firing deagle / sniper rifle bullet in certains situations
  * Various other fixes
+
+Construction Mode:
+ + Added script parameter support:
+  + initialenergy: Amount of energy at start
+  + energyperround: New energy per round
+  + maxenergy: Maximum allowed
+ * Costs for weapon and utility crates were all equal
+ * Many other fixes and tweaks
+
+Missions and Game Styles:
+ + Added Basic Flying Saucer Training
+ + Rope-Knocking Challenge was improved (now awards score based on kills and time; taunts for knocking out hedgehogs)
+ * Portal Mind Challenge was cleaned up and reworked (especially less awful wording)
+ * Fixed TechRacer not recording finish if time was >= 100s
+ * Fixed mistakes and bad wording of strings in several missions, scripts and campaigns
+
+Frontend:
+ + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
+ + Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
@@ -121,6 +147,7 @@ Lua API:
       onHogAttack() can now be hooked with new parameter: onHogAttack(ammoType) - to conveniently find out which ammo/weapon is being used
  * Fixes:
       gfResetHealth is now a available like the other GameFlags
+
 0.9.19 -> 0.9.20:
  + New campaign, A Space Adventure!
  + Password protected rooms
