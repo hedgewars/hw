@@ -30,7 +30,7 @@ function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 {$IFDEF HWLIBRARY}
-procedure LoadLocaleWrapper(path: pchar; filename: pchar); cdecl; export;
+procedure LoadLocaleWrapper(path: pchar; userpath: pchar; filename: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
@@ -134,13 +134,14 @@ else
 end;
 
 {$IFDEF HWLIBRARY}
-procedure LoadLocaleWrapper(path: pchar; filename: pchar); cdecl; export;
+procedure LoadLocaleWrapper(path: pchar; userpath: pchar; filename: pchar); cdecl; export;
 begin
     PathPrefix := Strpas(path);
+    UserPathPrefix := Strpas(userpath);
  
-    uUtils.initModule(false);
-    uVariables.initModule;
-
+    //normally this var set in preInit of engine
+    allOK := true;
+    
     PathPrefix:= PathPrefix + #0;
     UserPathPrefix:= UserPathPrefix + #0;
     uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
@@ -150,8 +151,6 @@ begin
     LoadLocale(Strpas(filename));
  
     uPhysFSLayer.freeModule;
-    uVariables.freeModule;
-    uUtils.freeModule;
 end;
 {$ENDIF}
 
