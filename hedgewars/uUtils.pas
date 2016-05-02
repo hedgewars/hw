@@ -586,6 +586,8 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
+    if not pfsExists('/Logs') then
+        pfsMakeDir('/Logs');
     // if log is locked, write to the next one
     i:= 0;
     while(i < 7) do
