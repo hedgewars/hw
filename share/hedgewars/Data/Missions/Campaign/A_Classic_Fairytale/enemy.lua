@@ -403,6 +403,7 @@ function WinMission()
   if progress and progress<9 then
     SaveCampaignVar("Progress", "9")
   end
+  SaveCampaignVar("Won", "true")
   DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
