@@ -104,7 +104,7 @@ procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
 
 implementation
 uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uVariables, uUtils, uConsts
-     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF};
+     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}, uPhysFSLayer, uDebug;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const
@@ -256,7 +256,7 @@ end;
 function CompileShader(shaderFile: string; shaderType: GLenum): GLuint;
 var
     shader: GLuint;
-    f: Textfile;
+    f: PFSFile;
     source, line: AnsiString;
     sourceA: Pchar;
     lengthA: GLint;
@@ -264,23 +264,17 @@ var
     logLength: GLint;
     log: PChar;
 begin
-    Assign(f, PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
-    filemode:= 0; // readonly
-    Reset(f);
-    if IOResult <> 0 then
-    begin
-        AddFileLog('Unable to load ' + shaderFile);
-        halt(HaltStartupError);
-    end;
+    f:= pfsOpenRead(cPathz[ptShaders] + '/' + shaderFile);
+    checkFails(f <> nil, 'Unable to load ' + shaderFile, true);
 
     source:='';
-    while not eof(f) do
+    while not pfsEof(f) do
     begin
-        ReadLn(f, line);
+        pfsReadLnA(f, line);
         source:= source + line + #10;
     end;
 
-    Close(f);
+    pfsClose(f);
 
     WriteLnToConsole('Compiling shader: ' + PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
 
