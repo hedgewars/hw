@@ -508,8 +508,7 @@ begin
 {$IFDEF GL2}
 
 {$IFDEF PAS2C}
-    err := glewInit();
-    if err <> GLEW_OK then
+    if glewInit() <> GLEW_OK then
         begin
         WriteLnToConsole('Failed to initialize GLEW.');
         halt(HaltStartupError);
