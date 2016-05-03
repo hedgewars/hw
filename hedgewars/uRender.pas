@@ -257,7 +257,7 @@ function CompileShader(shaderFile: string; shaderType: GLenum): GLuint;
 var
     shader: GLuint;
     f: PFSFile;
-    source, line: AnsiString;
+    source, line: ansistring;
     sourceA: Pchar;
     lengthA: GLint;
     compileResult: GLint;
@@ -276,7 +276,7 @@ begin
 
     pfsClose(f);
 
-    WriteLnToConsole('Compiling shader: ' + PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
+    WriteLnToConsole('Compiling shader: ' + cPathz[ptShaders] + '/' + shaderFile);
 
     sourceA:=PChar(source);
     lengthA:=Length(source);

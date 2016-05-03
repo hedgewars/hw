@@ -14,6 +14,7 @@ type
     Int64 = integer;
     QWord = uinteger;
     GLint = integer;
+    GLsizei = integer;
     GLuint = integer;
     GLenum = integer;
 
