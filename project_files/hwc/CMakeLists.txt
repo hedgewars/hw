@@ -86,7 +86,7 @@ add_custom_target(engine_c DEPENDS ${engine_sources})
 
 
 if(BUILD_ENGINE_JS)
-    add_flag_append(CMAKE_C_FLAGS "-s ABORTING_MALLOC=0")
+    add_flag_append(CMAKE_C_FLAGS "--memory-init-file 0 -O0 --js-opts 0 -g4 --use-preload-plugins -s ASSERTIONS=2 -s USE_SDL=2 -s USE_SDL_IMAGE=1 -s USE_LIBPNG=1 -s USE_SDL_TTF=2 -s USE_VORBIS=1 -s USE_OGG=1 -s TOTAL_MEMORY=100000000 -s GL_UNSAFE_OPTS=0 -s EXPORTED_FUNCTIONS=\"['_hwengine_RunEngine', '_hwengine_MainLoop']\" --post-js ${CMAKE_SOURCE_DIR}/project_files/web/post.js --pre-js ${CMAKE_SOURCE_DIR}/project_files/web/pre.js")
 endif()
 
 #compile the c files
