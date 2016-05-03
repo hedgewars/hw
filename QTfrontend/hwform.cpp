@@ -1855,9 +1855,18 @@ void HWForm::InitCampaignPage()
                               );
 
     unsigned int n = entries.count();
+
+    QIcon finishedIcon;
+    finishedIcon.addFile(":/res/missionFinished.png", QSize(), QIcon::Normal, QIcon::On);
+    finishedIcon.addFile(":/res/missionFinishedSelected.png", QSize(), QIcon::Selected, QIcon::On);
     for(unsigned int i = 0; i < n; i++)
     {
-        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]).replace(QString("_"),QString(" ")), QString(entries[i]).replace(QString("_"),QString(" ")));
+        QString campaignNameUnderscores= QString(entries[i]).replace(QString(" "),QString("_"));
+        QString campaignNameSpaces = QString(entries[i]).replace(QString("_"),QString(" "));
+        QString tName = team.name();
+        ui.pageCampaign->CBCampaign->addItem(campaignNameSpaces, campaignNameSpaces);
+        if(isCampWon(campaignNameUnderscores, tName))
+            ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
     }
 }
 

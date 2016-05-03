@@ -23,30 +23,43 @@
 #include <QObject>
 #include <QLocale>
 
-QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName)
+QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
 {
-    QList<MissionInfo> missionInfoList;
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
-    teamfile.setIniCodec("UTF-8");
-
+    QSettings* teamfile = new QSettings(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
+    teamfile->setIniCodec("UTF-8");
     // if entry not found check if there is written without _
     // if then is found rename it to use _
     QString spaceCampName = campaignName;
     spaceCampName = spaceCampName.replace(QString("_"),QString(" "));
-    if (!teamfile.childGroups().contains("Campaign " + campaignName) and
-            teamfile.childGroups().contains("Campaign " + spaceCampName)){
-        teamfile.beginGroup("Campaign " + spaceCampName);
-        QStringList keys = teamfile.childKeys();
-        teamfile.endGroup();
+    if (!teamfile->childGroups().contains("Campaign " + campaignName) and
+            teamfile->childGroups().contains("Campaign " + spaceCampName)){
+        teamfile->beginGroup("Campaign " + spaceCampName);
+        QStringList keys = teamfile->childKeys();
+        teamfile->endGroup();
         for (int i=0;i<keys.size();i++) {
-            QVariant value = teamfile.value("Campaign " + spaceCampName + "/" + keys[i]);
-            teamfile.setValue("Campaign " + campaignName + "/" + keys[i], value);
+            QVariant value = teamfile->value("Campaign " + spaceCampName + "/" + keys[i]);
+            teamfile->setValue("Campaign " + campaignName + "/" + keys[i], value);
         }
-        teamfile.remove("Campaign " + spaceCampName);
+        teamfile->remove("Campaign " + spaceCampName);
     }
 
-    int progress = teamfile.value("Campaign " + campaignName + "/Progress", 0).toInt();
-    int unlockedMissions = teamfile.value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
+    return teamfile;
+}
+
+bool isCampWon(QString & campaignName, QString & teamName)
+{
+    QSettings* teamfile = getCampTeamFile(campaignName, teamName);
+    bool won = teamfile->value("Campaign " + campaignName + "/Won", false).toBool();
+    return won;
+}
+
+QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName)
+{
+    QList<MissionInfo> missionInfoList;
+    QSettings* teamfile = getCampTeamFile(campaignName, teamName);
+
+    int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
+    int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
 
     QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
@@ -92,7 +105,7 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
         for(int i=1;i<=unlockedMissions;i++)
         {
             QString missionNum = QString("%1").arg(i);
-            int missionNumber = teamfile.value("Campaign " + campaignName + "/Mission"+missionNum, -1).toInt();
+            int missionNumber = teamfile->value("Campaign " + campaignName + "/Mission"+missionNum, -1).toInt();
             MissionInfo missionInfo;
             missionInfo.name = campfile.value(QString("Mission %1/Name").arg(missionNumber)).toString();
             QString script = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString();

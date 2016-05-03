@@ -20,6 +20,7 @@
 #define CAMPAIGN_H
 
 #include <QString>
+#include <QSettings>
 
 class MissionInfo
 {
@@ -30,6 +31,9 @@ class MissionInfo
         QString image;
 };
 
+
+QSettings* getCampTeamFile(QString & campaignName, QString & teamName);
+bool isCampWon(QString & campaignName, QString & teamName);
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName);
 
 #endif

@@ -85,6 +85,8 @@
         <file>res/delete.png</file>
         <file>res/checked.png</file>
         <file>res/unchecked.png</file>
+        <file>res/missionFinished.png</file>
+        <file>res/missionFinishedSelected.png</file>
         <file>res/graphicsicon.png</file>
         <file>res/miscicon.png</file>
         <file>res/Load.png</file>
