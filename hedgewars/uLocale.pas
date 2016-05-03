@@ -142,6 +142,8 @@ begin
     //normally this var set in preInit of engine
     allOK := true;
     
+    uVariables.initModule;
+ 
     PathPrefix:= PathPrefix + #0;
     UserPathPrefix:= UserPathPrefix + #0;
     uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
@@ -151,6 +153,7 @@ begin
     LoadLocale(Strpas(filename));
  
     uPhysFSLayer.freeModule;
+    uVariables.freeModule;
 end;
 {$ENDIF}
 
