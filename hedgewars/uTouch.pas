@@ -358,8 +358,10 @@ function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
 var
     xCursor, yCursor, index : LongInt;
 begin
-//Check array sizes
-while Length(fingers) <= pointerCount do
+// check array size
+// note: pointerCount will be incremented later,
+// so at this point it's the index of the new entry
+if Length(fingers) <= pointerCount then
     begin
     setLength(fingers, Length(fingers)*2);
     for index := Length(fingers) div 2 to (Length(fingers)-1) do
