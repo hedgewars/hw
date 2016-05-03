@@ -130,6 +130,7 @@
 bool frontendEffects = true;
 QString playerHash;
 
+QIcon finishedIcon;
 GameUIConfig* HWForm::config = NULL;
 
 HWForm::HWForm(QWidget *parent, QString styleSheet)
@@ -166,6 +167,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     config = new GameUIConfig(this, DataManager::instance().settingsFileName());
     frontendEffects = config->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8(), QCryptographicHash::Md5).toHex());
+
+    finishedIcon.addFile(":/res/missionFinished.png", QSize(), QIcon::Normal, QIcon::On);
+    finishedIcon.addFile(":/res/missionFinishedSelected.png", QSize(), QIcon::Selected, QIcon::On);
 
     ui.pageRoomsList->setSettings(config);
     ui.pageNetGame->setSettings(config);
@@ -208,6 +212,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     UpdateTeamsLists();
     InitCampaignPage();
     UpdateCampaignPage(0);
+    UpdateCampaignPageTeam(0);
     UpdateCampaignPageMission(0);
     UpdateWeapons();
 
@@ -318,6 +323,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->btnPreview, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
+    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageTeam(int)));
     connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
 
@@ -1856,17 +1862,11 @@ void HWForm::InitCampaignPage()
 
     unsigned int n = entries.count();
 
-    QIcon finishedIcon;
-    finishedIcon.addFile(":/res/missionFinished.png", QSize(), QIcon::Normal, QIcon::On);
-    finishedIcon.addFile(":/res/missionFinishedSelected.png", QSize(), QIcon::Selected, QIcon::On);
     for(unsigned int i = 0; i < n; i++)
     {
-        QString campaignNameUnderscores= QString(entries[i]).replace(QString(" "),QString("_"));
-        QString campaignNameSpaces = QString(entries[i]).replace(QString("_"),QString(" "));
+        QString campaignName = QString(entries[i]).replace(QString("_"),QString(" "));
         QString tName = team.name();
-        ui.pageCampaign->CBCampaign->addItem(campaignNameSpaces, campaignNameSpaces);
-        if(isCampWon(campaignNameUnderscores, tName))
-            ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
+        ui.pageCampaign->CBCampaign->addItem(campaignName, campaignName);
     }
 }
 
@@ -1883,6 +1883,30 @@ void HWForm::UpdateCampaignPage(int index)
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
+    }
+}
+
+void HWForm::UpdateCampaignPageTeam(int index)
+{
+    Q_UNUSED(index);
+    HWTeam team(ui.pageCampaign->CBTeam->currentText());
+    QString tName = team.name();
+
+    QStringList entries = DataManager::instance().entryList(
+                                  "Missions/Campaign",
+                                  QDir::Dirs,
+                                  QStringList("[^\\.]*")
+                              );
+
+    unsigned int n = entries.count();
+
+    for(unsigned int i = 0; i < n; i++)
+    {
+        QString campaignName = QString(entries[i]).replace(QString(" "),QString("_"));
+        if(isCampWon(campaignName, tName))
+            ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
+        else
+            ui.pageCampaign->CBCampaign->setItemIcon(i, QIcon());
     }
 }
 

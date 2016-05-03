@@ -127,6 +127,7 @@ class HWForm : public QMainWindow
         void onFrontendEffects(bool value);
         void Music(bool checked);
         void UpdateCampaignPage(int index);
+        void UpdateCampaignPageTeam(int index);
         void UpdateCampaignPageProgress(int index);
         void UpdateCampaignPageMission(int index);
         void InitCampaignPage();
