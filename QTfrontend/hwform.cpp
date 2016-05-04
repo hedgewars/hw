@@ -103,7 +103,9 @@
 #include "AutoUpdater.h"
 
 #ifdef Q_OS_WIN
+#ifndef WINVER
 #define WINVER 0x0500
+#endif
 #include <windows.h>
 #else
 #include <unistd.h>
