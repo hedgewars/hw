@@ -466,7 +466,16 @@ void HWForm::UpdateTeamsLists()
     ui.pageOptions->CBTeamName->clear();
     ui.pageOptions->CBTeamName->addItems(teamslist);
     ui.pageCampaign->CBTeam->clear();
-    ui.pageCampaign->CBTeam->addItems(teamslist);
+    /* Only show human teams in campaign page */
+    for(int i=0; i<teamslist.length(); i++)
+    {
+        HWTeam testTeam = HWTeam(teamslist[i]);
+        testTeam.loadFromFile();
+        if(testTeam.difficulty() == 0)
+        {
+            ui.pageCampaign->CBTeam->addItem(teamslist[i]);
+        }
+    }
 }
 
 void HWForm::GoToSelectNewWeapon()
