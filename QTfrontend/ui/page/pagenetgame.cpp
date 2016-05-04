@@ -125,8 +125,8 @@ QLayout * PageNetGame::footerLayoutDefinition()
     // Ready button
 
     BtnGo = new QPushButton(this);
-    BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
     BtnGo->setIconSize(QSize(25, 34));
+    setReadyStatus(false);
     BtnGo->setMinimumWidth(50);
     BtnGo->setMinimumHeight(50);
 
@@ -217,9 +217,15 @@ void PageNetGame::displayWarning(const QString & message)
 void PageNetGame::setReadyStatus(bool isReady)
 {
     if(isReady)
+    {
         BtnGo->setIcon(QIcon(":/res/lightbulb_on.png"));
+        BtnGo->setWhatsThis(tr("You are ready for action! Click on the lightbulb if you are not ready."));
+    }
     else
+    {
         BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
+        BtnGo->setWhatsThis(tr("You're not ready for action yet. Turn on the lightbulb when you're ready so other players will know this."));
+    }
 }
 
 void PageNetGame::onRoomNameEdited()
