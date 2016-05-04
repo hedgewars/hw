@@ -1702,7 +1702,7 @@ void HWForm::startTraining(const QString & scriptName)
 void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
-    QString camp = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
+    QString camp = ui.pageCampaign->CBCampaign->itemData(ui.pageCampaign->CBCampaign->currentIndex()).toString();
     QString miss = campaignMissionInfo[ui.pageCampaign->CBMission->currentIndex()].script;
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
     game->StartCampaign(camp, miss, campTeam);
@@ -1864,9 +1864,9 @@ void HWForm::InitCampaignPage()
 
     for(unsigned int i = 0; i < n; i++)
     {
-        QString campaignName = QString(entries[i]).replace(QString("_"),QString(" "));
+        QString campaignName = QString(entries[i]);
         QString tName = team.name();
-        ui.pageCampaign->CBCampaign->addItem(campaignName, campaignName);
+        ui.pageCampaign->CBCampaign->addItem(getRealCampName(campaignName), campaignName);
     }
 }
 
@@ -1874,7 +1874,7 @@ void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
+    QString campaignName = ui.pageCampaign->CBCampaign->itemData(ui.pageCampaign->CBCampaign->currentIndex()).toString();
     QString tName = team.name();
 
     campaignMissionInfo = getCampMissionList(campaignName,tName);
@@ -1917,7 +1917,7 @@ void HWForm::UpdateCampaignPageTeam(int index)
 void HWForm::UpdateCampaignPageMission(int index)
 {
     // update thumbnail and description
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
+    QString campaignName = ui.pageCampaign->CBCampaign->itemData(ui.pageCampaign->CBCampaign->currentIndex()).toString();
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
     // this will cause segfault. This check prevents illegal memory reads
     if(index > -1 && index < campaignMissionInfo.count()) {
@@ -1942,7 +1942,7 @@ void HWForm::UpdateCampaignPageProgress(int index)
         }
     }
     int i = ui.pageCampaign->CBCampaign->currentIndex();
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
+    QString campaignName = ui.pageCampaign->CBCampaign->itemData(i).toString();
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     QString tName = team.name();
     if(isCampWon(campaignName, tName))

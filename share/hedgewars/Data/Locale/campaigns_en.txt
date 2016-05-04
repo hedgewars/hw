@@ -1,3 +1,5 @@
+A_Classic_Fairytale.name="A Classic Fairytale"
+
 A_Classic_Fairytale-first_blood.desc="Help Leaks a lot to complete his training and become a proper hedgehog warrior. You will be trained in the art of rope, parachute, shoryuken and desert eagle."
 
 A_Classic_Fairytale-shadow.desc="Leaks a lot and Dense Cloud are going for hunting. Be prepared for the dangers awaiting you at the forest. Remember, make your choices wisely."
@@ -18,6 +20,7 @@ A_Classic_Fairytale-enemy.desc="What a great twist! Leaks a lot has to fight sid
 
 A_Classic_Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings."
 
+A_Space_Adventure.name="A Space Adventure"
 A_Space_Adventure-cosmos.desc="Hogera, the planet of hogs is about to be hit by a gigantic meteorite. In this race for survival you have to lead PAotH's best pilot, Hog Solo, in a space trip around the neighbor planets to collect all the 4 pieces of the long lost anti gravity device!"
 A_Space_Adventure-moon01.desc="Hog Solo has landed on the moon to refuel his saucer but professor Hogevil has gone there first and set an ambush! Rescue the captured PAotH researchers and drive Professor Hogevil away!"
 A_Space_Adventure-moon02.desc="Hog Solo visits an hermit, old PAotH veteran, who lives on the moon in order to gather some intel about Prof. Hogevil. However, he has to beat the hermit, Soneek the Crazy Runner, in a chase game first!"

@@ -82,6 +82,40 @@ bool isCampWon(QString & campaignName, QString & teamName)
     return won;
 }
 
+QSettings* getCampMetaInfo()
+{
+    DataManager & dataMgr = DataManager::instance();
+    // get locale
+    QSettings settings(dataMgr.settingsFileName(),
+    QSettings::IniFormat);
+    QString loc = settings.value("misc/locale", "").toString();
+    if (loc.isEmpty())
+        loc = QLocale::system().name();
+    QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
+    // if file is non-existant try with language only
+    if (!QFile::exists(campaignDescFile))
+    campaignDescFile = QString("physfs://Locale/campaigns_" + loc.remove(QRegExp("_.*$")) + ".txt");
+
+    // fallback if file for current locale is non-existant
+    if (!QFile::exists(campaignDescFile))
+        campaignDescFile = QString("physfs://Locale/campaigns_en.txt");
+
+    QSettings* m_info = new QSettings(campaignDescFile, QSettings::IniFormat, 0);
+    m_info->setIniCodec("UTF-8");
+
+    return m_info;
+}
+
+/** Returns the localized campaign name */
+QString getRealCampName(QString & campaignName)
+{
+    QSettings* m_info = getCampMetaInfo();
+    if(m_info->contains(campaignName+".name"))
+       return m_info->value(campaignName+".name").toString();
+    else
+       return campaignName.replace(QString("_"), QString(" "));
+}
+
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName)
 {
     QList<MissionInfo> missionInfoList;
@@ -93,24 +127,7 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
     QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
 
-    DataManager & dataMgr = DataManager::instance();
-        // get locale
-        QSettings settings(dataMgr.settingsFileName(),
-                           QSettings::IniFormat);
-        QString loc = settings.value("misc/locale", "").toString();
-        if (loc.isEmpty())
-            loc = QLocale::system().name();
-        QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
-        // if file is non-existant try with language only
-        if (!QFile::exists(campaignDescFile))
-            campaignDescFile = QString("physfs://Locale/campaigns_" + loc.remove(QRegExp("_.*$")) + ".txt");
-
-        // fallback if file for current locale is non-existant
-        if (!QFile::exists(campaignDescFile))
-            campaignDescFile = QString("physfs://Locale/campaigns_en.txt");
-
-        QSettings m_info(campaignDescFile, QSettings::IniFormat, 0);
-        m_info.setIniCodec("UTF-8");
+    QSettings* m_info = getCampMetaInfo();
 
     if(progress>=0 and unlockedMissions==0)
     {
@@ -121,7 +138,7 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
             if(!script.isNull()) {
                 missionInfo.name = campfile.value(QString("Mission %1/Name").arg(i)).toString();
                 missionInfo.script = script;
-                missionInfo.description = m_info.value(campaignName+"-"+ script.replace(QString(".lua"),QString("")) + ".desc",
+                missionInfo.description = m_info->value(campaignName+"-"+ script.replace(QString(".lua"),QString("")) + ".desc",
                                             QObject::tr("No description available")).toString();
                 QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
                 missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
@@ -141,7 +158,7 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
             missionInfo.name = campfile.value(QString("Mission %1/Name").arg(missionNumber)).toString();
             QString script = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString();
             missionInfo.script = script;
-            missionInfo.description = m_info.value(campaignName+"-"+ script.replace(QString(".lua"),QString("")) + ".desc",
+            missionInfo.description = m_info->value(campaignName+"-"+ script.replace(QString(".lua"),QString("")) + ".desc",
                                             QObject::tr("No description available")).toString();
             QString image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString(".png"));
             missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;

@@ -1,3 +1,5 @@
+A_Classic_Fairytale.name="Ein klassisches Märchen"
+
 A_Classic_Fairytale-first_blood.desc="Hilf Undichte Stelle dabei, sein Training zu absolvieren und zu einem richtigen Igelkrieger zu werden. Du wirst in der Kunst des Seils, Fallschirms, Shoryukens und der Desert Eagle trainiert."
 
 A_Classic_Fairytale-shadow.desc="Undichte Stelle und Dichte Wolke gehen für die Jagd raus. Sei auf Gefahren im Wald gefasst. Denk dran, bedenke deine Entscheidungen gut."
@@ -17,6 +19,8 @@ A_Classic_Fairytale-queen.desc="Undichte Stelle muss noch einmal kämpfen. Um zu
 A_Classic_Fairytale-enemy.desc="Was für eine umwerfende Wendung! Undichte Stelle muss mit den … »Kannibalen« gegen den gemeinsamen Feind – die bösen Cyborgs – kämpfen!"
 
 A_Classic_Fairytale-epil.desc="Gratulation! Undichte Stelle kann endlich in Frieden gehen und von seinen neuen Freunden und seinem Stamm angepriesen werden. Sei stolz auf das, was du erreicht hast! Du kannst vorherige Missionen wieder spielen und andere mögliche Enden sehen."
+
+A_Space_Adventure.name="Ein Weltraumabenteuer"
 
 A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteroid getroffen. In diesem Wettlauf ums Überleben musst du PAdIs besten Piloten, Igel Einsam, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teil des lang verschollenem Antigravitationsgeräts zu finden!"
 
