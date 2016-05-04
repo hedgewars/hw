@@ -1941,6 +1941,14 @@ void HWForm::UpdateCampaignPageProgress(int index)
             break;
         }
     }
+    int i = ui.pageCampaign->CBCampaign->currentIndex();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
+    HWTeam team(ui.pageCampaign->CBTeam->currentText());
+    QString tName = team.name();
+    if(isCampWon(campaignName, tName))
+        ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
+    else
+        ui.pageCampaign->CBCampaign->setItemIcon(i, QIcon());
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]

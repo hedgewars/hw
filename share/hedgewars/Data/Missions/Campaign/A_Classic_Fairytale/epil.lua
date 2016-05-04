@@ -83,6 +83,7 @@ function AfterStartAnim()
   AddNewEvent(CheckCrateTaken, {}, DoCrateTaken, {}, 1)
   TurnTimeLeft = 0
   ShowMission("Epilogue", "That's all folks!", "You have successfully finished the campaign!|If you wish to replay, there are other possible endings, too!|You can practice moving around and using utilities in this mission.|However, it will never end!", 1, 0)
+  SaveCampaignVar("Progress", "10")
   SaveCampaignVar("Won", "true")
 end
 
