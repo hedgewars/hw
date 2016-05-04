@@ -55,12 +55,14 @@ QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
 bool isMissionWon(QString & campaignName, int missionInList, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
-    int won = teamfile->value("Campaign " + campaignName + "/Won", false).toBool();
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
     if(progress>0 and unlockedMissions==0)
     {
-        return (progress > (progress - missionInList)) || won;
+        QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
+        campfile.setIniCodec("UTF-8");
+        int totalMissions = campfile.value("MissionNum", 1).toInt();
+        return (progress > (progress - missionInList)) || (progress >= totalMissions);
     }
     else if(unlockedMissions>0)
     {
