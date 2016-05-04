@@ -46,6 +46,32 @@ QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
     return teamfile;
 }
 
+/**
+    Returns true if the specified mission has been completed
+    campaignName: Name of the campaign in question
+    missionInList: QComboBox index of the mission as selected in the mission widget
+    teamName: Name of the playing team
+*/
+bool isMissionWon(QString & campaignName, int missionInList, QString & teamName)
+{
+    QSettings* teamfile = getCampTeamFile(campaignName, teamName);
+    int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
+    int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
+    if(progress>0 and unlockedMissions==0)
+    {
+        return progress > (progress - missionInList);
+    }
+    else if(unlockedMissions>0)
+    {
+        int fileMissionId = missionInList + 1;
+        int actualMissionId = teamfile->value(QString("Campaign %1/Mission%2").arg(campaignName, QString::number(fileMissionId)), false).toInt();
+        return teamfile->value(QString("Campaign %1/Mission%2Won").arg(campaignName, QString::number(actualMissionId)), false).toBool();
+    }
+    else
+        return false;
+}
+
+/** Returns true if the campaign has been won by the team */
 bool isCampWon(QString & campaignName, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);

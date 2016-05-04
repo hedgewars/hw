@@ -34,6 +34,7 @@ class MissionInfo
 
 QSettings* getCampTeamFile(QString & campaignName, QString & teamName);
 bool isCampWon(QString & campaignName, QString & teamName);
+bool isMissionWon(QString & campaignName, int missionInList, QString & teamName);
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName);
 
 #endif

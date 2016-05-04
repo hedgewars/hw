@@ -1883,6 +1883,10 @@ void HWForm::UpdateCampaignPage(int index)
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
+        if(isMissionWon(campaignName, i, tName))
+            ui.pageCampaign->CBMission->setItemIcon(i, finishedIcon);
+        else
+            ui.pageCampaign->CBMission->setItemIcon(i, QIcon());
     }
 }
 
