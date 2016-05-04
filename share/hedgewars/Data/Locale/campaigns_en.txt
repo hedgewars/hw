@@ -1,37 +1,61 @@
 A_Classic_Fairytale.name="A Classic Fairytale"
 
+A_Classic_Fairytale-first_blood.name="Mission 1: First Blood"
 A_Classic_Fairytale-first_blood.desc="Help Leaks a lot to complete his training and become a proper hedgehog warrior. You will be trained in the art of rope, parachute, shoryuken and desert eagle."
 
+A_Classic_Fairytale-shadow.name="Mission 2: The Shadow Falls"
 A_Classic_Fairytale-shadow.desc="Leaks a lot and Dense Cloud are going for hunting. Be prepared for the dangers awaiting you at the forest. Remember, make your choices wisely."
 
+A_Classic_Fairytale-journey.name="Mission 3: The Journey Back"
 A_Classic_Fairytale-journey.desc="Leaks a lot has to go to the other side of the island. Be fast and cautious."
 
+A_Classic_Fairytale-united.name="Mission 4: United We Stand"
 A_Classic_Fairytale-united.desc="After his long journey Leaks a lot is finally back to the village. However, there isn't time to rest. You have to defend the village from the rage of the cannibals."
 
+A_Classic_Fairytale-backstab.name="Mission 5: Backstab"
 A_Classic_Fairytale-backstab.desc="The monstrous cannibals are hunting Leaks a lot and his friends. Defeat them once again and protect your allies. Use your resources accordingly to defeat the incoming enemies!"
 
+A_Classic_Fairytale-dragon.name="Mission 6: Dragon's Lair"
 A_Classic_Fairytale-dragon.desc="Leaks a lot has to get to the other side of the lake. Become a rope master and avoid get hit by the enemy shots."
 
+A_Classic_Fairytale-family.name="Mission 7: Family Reunion"
 A_Classic_Fairytale-family.desc="Leaks a lot has to save once more his allies. Eliminate the enemy hogs and free your comrades. Use your resources carefully as they are limited. Drill some holes in the right spot and go close to the princess."
 
+A_Classic_Fairytale-queen.name="Mission 8: Long Live The Queen"
 A_Classic_Fairytale-queen.desc="Leaks a lot has to fight once again. In order to win he'll have to fight the traitor and use all the resources available. Defeat the enemy!"
 
+A_Classic_Fairytale-enemy.name="Mission 9: The Enemy Of My Enemy"
 A_Classic_Fairytale-enemy.desc="What a great twist! Leaks a lot has to fight side by side with the… “cannibals” against the common enemy. The evil cyborgs!"
 
+A_Classic_Fairytale-epil.name="Mission 10: Epilogue"
 A_Classic_Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings."
 
 A_Space_Adventure.name="A Space Adventure"
+A_Space_Adventure-cosmos.name="Menu: Spacetrip"
 A_Space_Adventure-cosmos.desc="Hogera, the planet of hogs is about to be hit by a gigantic meteorite. In this race for survival you have to lead PAotH's best pilot, Hog Solo, in a space trip around the neighbor planets to collect all the 4 pieces of the long lost anti gravity device!"
+A_Space_Adventure-moon01.name="Main Mission: The first stop"
 A_Space_Adventure-moon01.desc="Hog Solo has landed on the moon to refuel his saucer but professor Hogevil has gone there first and set an ambush! Rescue the captured PAotH researchers and drive Professor Hogevil away!"
+A_Space_Adventure-moon02.name="Side Mission: Chasing the blue hog"
 A_Space_Adventure-moon02.desc="Hog Solo visits an hermit, old PAotH veteran, who lives on the moon in order to gather some intel about Prof. Hogevil. However, he has to beat the hermit, Soneek the Crazy Runner, in a chase game first!"
+A_Space_Adventure-ice01.name="Main Mission: A frozen adventure"
 A_Space_Adventure-ice01.desc="Welcome to the planet of ice. Here, it's so cold that most of Hog Solo's weapons won't work. You have to get the lost part from the bandit leader Thanta using the weapons that you'll find there!"
+A_Space_Adventure-ice02.name="Side Mission: Hard flying"
 A_Space_Adventure-ice02.desc="Hog Solo couldn't just visit the Ice Planet without visiting the Olympic Stadium of Saucer Flying! In this mission you can prove your flying skills and claim your place among the best!"
+A_Space_Adventure-desert01.name="Main Mission: Searching in the dust"
 A_Space_Adventure-desert01.desc="You have landed to the planet of sand! Hog Solo has to find the missing part in the underground tunnels. Be careful as vicious smugglers await to attack and rob you!"
+A_Space_Adventure-desert02.name="Side Mission: Running for survival"
 A_Space_Adventure-desert02.desc="Hog Solo was searching for the part in this tunnel when it unexpectedly start getting flooded! Get to the surface as soon as possible and be careful not to trigger a mine."
+A_Space_Adventure-desert03.name="Side Mission: Precise flying"
 A_Space_Adventure-desert03.desc="Hog Solo has some time to fly his RC plane and have some fun. Fly the RC plane and hit all the targets!"
+A_Space_Adventure-fruit01.name="Main Mission: Bad timing"
 A_Space_Adventure-fruit01.desc="In the fruit planet things aren't going so well. Hogs aren't collecting fruits but they are preparing for battle. You'll have to choose if you'll fight or if you'll flee."
+A_Space_Adventure-fruit02.name="Main Mission: Getting to the device"
 A_Space_Adventure-fruit02.desc="Hog Solo gets closer to the lost part on the Fruit Planet. Will Captain Lime help him acquire the part or not?"
+A_Space_Adventure-fruit03.name="Main Mission: Precise shooting"
 A_Space_Adventure-fruit03.desc="Hog Solo got lost and got ambushed by the Red Strawberries. Help him eliminate them and win some extra ammo for the mission “Getting to the device”."
+A_Space_Adventure-death01.name="Main Mission: The last encounter"
 A_Space_Adventure-death01.desc="On the Death Planet, the most infertile planet around, Hog Solo is very close to get the last part of the device! However, an unpleasant surprise awaits him ..."
+A_Space_Adventure-death02.name="Side Mission: Killing the specialists"
 A_Space_Adventure-death02.desc="Again Hog Solo has got himself in a difficult situation. Help him defeat the “5 Deadly Hogs“ in their own game!"
+A_Space_Adventure-final.name="Main Mission: The big bang"
 A_Space_Adventure-final.desc="Hog Solo has to detonate some explosives that have been placed on the meteorite. Help him complete his mission without getting hurt!"

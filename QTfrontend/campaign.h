@@ -26,6 +26,7 @@ class MissionInfo
 {
     public:
         QString name;
+        QString realName;
         QString description;
         QString script;
         QString image;

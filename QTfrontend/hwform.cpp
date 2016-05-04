@@ -1882,7 +1882,7 @@ void HWForm::UpdateCampaignPage(int index)
 
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
-        ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
+        ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].realName), QString(campaignMissionInfo[i].name));
         if(isMissionWon(campaignName, i, tName))
             ui.pageCampaign->CBMission->setItemIcon(i, finishedIcon);
         else
@@ -1935,7 +1935,7 @@ void HWForm::UpdateCampaignPageProgress(int index)
     UpdateCampaignPage(0);
     for(int i=0;i<ui.pageCampaign->CBMission->count();i++)
     {
-        if (ui.pageCampaign->CBMission->itemText(i)==missionTitle)
+        if (ui.pageCampaign->CBMission->itemData(i)==missionTitle)
         {
             ui.pageCampaign->CBMission->setCurrentIndex(i);
             break;
