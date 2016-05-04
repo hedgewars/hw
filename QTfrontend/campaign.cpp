@@ -55,11 +55,12 @@ QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
 bool isMissionWon(QString & campaignName, int missionInList, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
+    int won = teamfile->value("Campaign " + campaignName + "/Won", false).toBool();
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
     if(progress>0 and unlockedMissions==0)
     {
-        return progress > (progress - missionInList);
+        return (progress > (progress - missionInList)) || won;
     }
     else if(unlockedMissions>0)
     {
@@ -114,16 +115,18 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
         for(unsigned int i=progress+1;i>0;i--)
         {
             MissionInfo missionInfo;
-            missionInfo.name = campfile.value(QString("Mission %1/Name").arg(i)).toString();
             QString script = campfile.value(QString("Mission %1/Script").arg(i)).toString();
-            missionInfo.script = script;
-            missionInfo.description = m_info.value(campaignName+"-"+ script.replace(QString(".lua"),QString("")) + ".desc",
+            if(!script.isNull()) {
+                missionInfo.name = campfile.value(QString("Mission %1/Name").arg(i)).toString();
+                missionInfo.script = script;
+                missionInfo.description = m_info.value(campaignName+"-"+ script.replace(QString(".lua"),QString("")) + ".desc",
                                             QObject::tr("No description available")).toString();
-            QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
-            missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
-            if (!QFile::exists(missionInfo.image))
-                missionInfo.image = ":/res/CampaignDefault.png";
-            missionInfoList.append(missionInfo);
+                QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
+                missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+                if (!QFile::exists(missionInfo.image))
+                    missionInfo.image = ":/res/CampaignDefault.png";
+                missionInfoList.append(missionInfo);
+            }
         }
     }
     else if(unlockedMissions>0)
