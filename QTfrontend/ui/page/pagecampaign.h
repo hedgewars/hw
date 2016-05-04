@@ -38,6 +38,9 @@ class PageCampaign : public AbstractPage
 
     protected:
         QLayout * bodyLayoutDefinition();
+
+    private:
+        QLayout * footerLayoutDefinition();
 };
 
 #endif
