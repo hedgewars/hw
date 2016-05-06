@@ -60,6 +60,7 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStartMPGame = new QPushButton();
     BtnStartMPGame->setText(tr("Start"));
+    BtnStartMPGame->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
     BtnStartMPGame->setMinimumWidth(sz.width() + 60);
     BtnStartMPGame->setIcon(lp);
     BtnStartMPGame->setFixedHeight(50);

@@ -49,6 +49,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     roomConfigLayout->setSpacing(0);
 
     leRoomName = new HistoryLineEdit(this, 10);
+    leRoomName->setWhatsThis(tr("Room name"));
     leRoomName->setMaxLength(60);
     leRoomName->setMinimumWidth(400);
     leRoomName->setMaximumWidth(600);
@@ -58,6 +59,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     roomConfigLayout->addWidget(leRoomName, 100);
 
     BtnUpdate = new QPushButton();
+    BtnUpdate->setWhatsThis(tr("Update the room name"));
     BtnUpdate->setEnabled(false);
     BtnUpdate->setText(tr("Update"));
     BtnUpdate->setFixedHeight(leRoomName->height() - 0);
@@ -126,7 +128,7 @@ QLayout * PageNetGame::footerLayoutDefinition()
 
     BtnGo = new QPushButton(this);
     BtnGo->setIconSize(QSize(25, 34));
-    BtnGo->setWhatsThis(tr("Turn on the lightbulb to show the other players when you're ready to fight."));
+    BtnGo->setWhatsThis(tr("Turn on the lightbulb to show the other players when you're ready to fight"));
     setReadyStatus(false);
     BtnGo->setMinimumWidth(50);
     BtnGo->setMinimumHeight(50);
@@ -140,6 +142,7 @@ QLayout * PageNetGame::footerLayoutDefinition()
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStart = new QPushButton();
     BtnStart->setText(tr("Start"));
+    BtnStart->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
     BtnStart->setMinimumWidth(sz.width() + 60);
     BtnStart->setIcon(lp);
     BtnStart->setFixedHeight(50);
