@@ -876,7 +876,7 @@ else // mix hedgehogs
         if PlacingHogs then
             ar[i]^.Unplaced:= true
         else
-            FindPlace(ar[i]^.Gear, false, leftX, playWidth, true);
+            FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
         if ar[i]^.Gear <> nil then
             begin
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
