@@ -755,13 +755,13 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     if (row == -1)
     {
         QList<QVariant> newScheme = defaultScheme;
-        newScheme[0] = QVariant(tr("new"));
+        newScheme[0] = QVariant(tr("New"));
         schemes.insert(schemes.size(), newScheme);
     }
     else
     {
         QList<QVariant> newScheme = schemes[row];
-        newScheme[0] = QVariant(tr("copy of %1").arg(newScheme[0].toString()));
+        newScheme[0] = QVariant(tr("Copy of %1").arg(newScheme[0].toString()));
         schemes.insert(schemes.size(), newScheme);
     }
 
