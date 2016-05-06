@@ -804,9 +804,8 @@ void HWMapContainer::updateHelpTexts(MapModel::MapType type)
     QString randomSeed = tr("Randomize the seed");
     QString randomAllPrev = tr("Click to randomize the map, theme and seed");
     QString randomNoMapPrev = tr("Click to randomize the theme and seed");
-    QString mfsComplex = QString(tr("Complexity of the generated map (current: %1)")).arg(mapFeatureSize->value());
-    int fortDistance = cBaseFortDistance + mapFeatureSize->value() * cFortDistanceUnit;
-    QString mfsFortsDistance = QString(tr("Distance between forts (current: %1)")).arg(fortDistance);
+    QString mfsComplex = QString(tr("Adjust the complexity of the generated map"));
+    QString mfsFortsDistance = QString(tr("Adjust the distance between forts"));
     switch (type)
     {
         case MapModel::GeneratedMap:
