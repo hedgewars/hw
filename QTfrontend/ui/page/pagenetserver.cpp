@@ -98,10 +98,10 @@ QLayout * PageNetServer::footerLayoutDefinition()
 
     BtnStart = formattedButton(QPushButton::tr("Start"));
     BtnStart->setWhatsThis(QPushButton::tr("Start private server"));
-    BtnStart->setMinimumWidth(180);
+    BtnStart->setMinimumSize(180, 50);
 
     bottomLayout->addStretch();
-    bottomLayout->addWidget(BtnStart);
+    bottomLayout->addWidget(BtnStart, 0, Qt::AlignBottom);
 
     return bottomLayout;
 }

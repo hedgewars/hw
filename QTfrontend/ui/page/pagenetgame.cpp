@@ -113,6 +113,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 QLayout * PageNetGame::footerLayoutLeftDefinition()
 {
     QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
+    bottomLeftLayout->setContentsMargins(0,0,0,0);
 
     btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true, Qt::AlignBottom);
     btnSetup->setWhatsThis(tr("Edit game preferences"));
@@ -134,7 +135,7 @@ QLayout * PageNetGame::footerLayoutDefinition()
     BtnGo->setMinimumHeight(50);
 
     bottomLayout->addStretch();
-    bottomLayout->addWidget(BtnGo);
+    bottomLayout->addWidget(BtnGo, 0, Qt::AlignBottom);
 
     // Start button
 
@@ -149,7 +150,7 @@ QLayout * PageNetGame::footerLayoutDefinition()
     BtnStart->setIconSize(sz);
     BtnStart->setFlat(true);
     BtnStart->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    bottomLayout->addWidget(BtnStart);
+    bottomLayout->addWidget(BtnStart, 0, Qt::AlignBottom);
 
     return bottomLayout;
 }

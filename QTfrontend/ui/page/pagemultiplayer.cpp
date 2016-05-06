@@ -69,7 +69,7 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
     BtnStartMPGame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     footerLayout->addStretch();
-    footerLayout->addWidget(BtnStartMPGame);
+    footerLayout->addWidget(BtnStartMPGame, 0, Qt::AlignBottom);
 
     return footerLayout;
 }
