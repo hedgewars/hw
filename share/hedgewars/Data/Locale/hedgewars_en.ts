@@ -138,6 +138,20 @@
     </message>
 </context>
 <context>
+    <name>MinesTimeSpinBox</name>
+    <message>
+        <source>Random</source>
+        <translation>Random</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 seconds</source>
+        <translation>
+            <numerusform>%1 second</numerusform>
+            <numerusform>%1 seconds</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
@@ -1438,14 +1452,6 @@ just enter your nickname.</source>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
         <translation>Your hogs are unable to move, put your artillery skills to the test</translation>
-    </message>
-    <message>
-        <source>Random</source>
-        <translation>Random</translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation>Seconds</translation>
     </message>
     <message>
         <source>New</source>

@@ -30,6 +30,7 @@
 #include "ammoSchemeModel.h"
 #include "pagescheme.h"
 #include "FreqSpinBox.h"
+#include "MinesTimeSpinBox.h"
 
 
 QLayout * PageScheme::bodyLayoutDefinition()
@@ -368,13 +369,11 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconMineTime.png"));
     glBSLayout->addWidget(l,10,1,1,1);
-    SB_MinesTime = new QSpinBox(gbBasicSettings);
+    SB_MinesTime = new MinesTimeSpinBox(gbBasicSettings);
     SB_MinesTime->setWhatsThis(wtMinesTime);
     SB_MinesTime->setRange(-1, 5);
     SB_MinesTime->setValue(3);
     SB_MinesTime->setSingleStep(1);
-    SB_MinesTime->setSpecialValueText(tr("Random"));
-    SB_MinesTime->setSuffix(" "+ tr("Seconds"));
     glBSLayout->addWidget(SB_MinesTime,10,2,1,1);
 
     l = new QLabel(gbBasicSettings);
