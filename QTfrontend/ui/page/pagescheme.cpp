@@ -171,7 +171,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     // Right
     QLabel * l;
 
-    QString wtDamageModifier = tr("Overall damage and knockback");
+    QString wtDamageModifier = tr("Overall damage and knockback in percent");
     QString wtTurnTime = tr("Turn time in seconds");
     QString wtInitHealth = tr("Initial health of hedgehogs");
     QString wtSuddenDeath = tr("How many rounds have to be played before Sudden Death begins");
