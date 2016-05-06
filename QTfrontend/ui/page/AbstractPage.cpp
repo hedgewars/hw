@@ -45,7 +45,7 @@ void AbstractPage::initPage()
 
     // stretch grid space for body and footer
     pageLayout->setColumnStretch(0,1);
-    pageLayout->setColumnStretch(1,2);
+    pageLayout->setColumnStretch(1,8);
     pageLayout->setColumnStretch(2,1);
     pageLayout->setRowStretch(0,1);
     pageLayout->setRowStretch(1,0);
