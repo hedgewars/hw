@@ -397,7 +397,10 @@ with Hedgehog do
 
     with CurWeapon^ do
         begin
-        s:= trammo[Ammoz[AmmoType].NameId];
+        if length(trluaammo[Ammoz[AmmoType].NameId]) > 0 then
+            s:= trluaammo[Ammoz[AmmoType].NameId]
+        else
+            s:= trammo[Ammoz[AmmoType].NameId];
         if (Count <> AMMO_INFINITE) and (not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0))) then
             s:= s + ansistring(' (' + IntToStr(Count) + ')');
         if (Propz and ammoprop_Timerable) <> 0 then

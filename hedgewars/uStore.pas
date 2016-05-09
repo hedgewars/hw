@@ -938,6 +938,9 @@ end;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 var r: TSDL_Rect;
     i: LongInt;
+    ammoname: ansistring;
+    ammocap: ansistring;
+    ammodesc: ansistring;
     extra: ansistring;
     extracolor: LongInt;
 begin
@@ -978,8 +981,23 @@ else
     extracolor:= 0;
     end;
 
+if length(trluaammo[Ammoz[atype].NameId]) > 0  then
+    ammoname := trluaammo[Ammoz[atype].NameId]
+else
+    ammoname := trammo[Ammoz[atype].NameId];
+
+if length(trluaammoc[Ammoz[atype].NameId]) > 0 then
+    ammocap := trluaammoc[Ammoz[atype].NameId]
+else
+    ammocap := trammoc[Ammoz[atype].NameId];
+
+if length(trluaammod[Ammoz[atype].NameId]) > 0 then
+    ammodesc := trluaammod[Ammoz[atype].NameId]
+else
+    ammodesc := trammod[Ammoz[atype].NameId];
+
 // render window and return the texture
-WeaponTooltipTex:= RenderHelpWindow(trammo[Ammoz[atype].NameId], trammoc[Ammoz[atype].NameId], trammod[Ammoz[atype].NameId], extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
+WeaponTooltipTex:= RenderHelpWindow(ammoname, ammocap, ammodesc, extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
 end;
 
 procedure ShowWeaponTooltip(x, y: LongInt);

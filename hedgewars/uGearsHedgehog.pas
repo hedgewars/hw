@@ -663,6 +663,7 @@ end;
 
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 var s: ansistring;
+    name: ansistring;
     vga: PVisualGear;
 begin
     if cnt <> 0 then AddAmmo(HH, ammo, cnt)
@@ -670,10 +671,14 @@ begin
 
     if IsHogLocal(@HH) then
         begin
-        if cnt <> 0 then
-            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(cnt) + ')')
+        if length(trluaammo[Ammoz[ammo].NameId]) > 0 then
+            name:= trluaammo[Ammoz[ammo].NameId]
         else
-            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
+            name:= trammo[Ammoz[ammo].NameId];
+        if cnt <> 0 then
+            s:= name + ansistring(' (+' + IntToStr(cnt) + ')')
+        else
+            s:= name + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
         AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
 
         // show ammo icon
