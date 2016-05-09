@@ -2474,6 +2474,7 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trluaammo: array[TAmmoStrId] of ansistring; // name of the weapon (Lua overwrite)
     trluaammoc: array[TAmmoStrId] of ansistring; // caption of the weapon (Lua overwrite)
     trluaammod: array[TAmmoStrId] of ansistring;  // description of the weapon (Lua overwrite)
+    trluaammoa: array[TAmmoStrId] of ansistring; // description appendix of the weapon (Lua only)
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
     cTestLua : Boolean;

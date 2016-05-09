@@ -560,6 +560,23 @@ begin
     lc_setammotexts:= 0;
 end;
 
+function lc_setammodescriptionappendix(L : Plua_State) : LongInt; Cdecl;
+const
+    call = 'SetAmmoDescriptionAppendix';
+    params = 'ammoType, descAppend';
+var
+    ammoType: TAmmoType;
+    descAppend: ansistring;
+begin
+    if CheckLuaParamCount(L, 2, call, params) then
+        begin
+        ammoType := TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params));
+        descAppend := lua_tostringA(L, 2);
+        trluaammoa[Ammoz[ammoType].NameId] := descAppend;
+        end;
+    lc_setammodescriptionappendix := 0;
+end;
+
 function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i, n : integer;
 begin
@@ -3360,6 +3377,7 @@ lua_register(luaState, _P'ParseCommand', @lc_parsecommand);
 lua_register(luaState, _P'ShowMission', @lc_showmission);
 lua_register(luaState, _P'HideMission', @lc_hidemission);
 lua_register(luaState, _P'SetAmmoTexts', @lc_setammotexts);
+lua_register(luaState, _P'SetAmmoDescriptionAppendix', @lc_setammodescriptionappendix);
 lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);

@@ -996,6 +996,9 @@ if length(trluaammod[Ammoz[atype].NameId]) > 0 then
 else
     ammodesc := trammod[Ammoz[atype].NameId];
 
+if length(trluaammoa[Ammoz[atype].NameId]) > 0 then
+    ammodesc := ammodesc + '|' + trluaammoa[Ammoz[atype].NameId];
+
 // render window and return the texture
 WeaponTooltipTex:= RenderHelpWindow(ammoname, ammocap, ammodesc, extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
 end;
