@@ -61,6 +61,7 @@ uses
     , uCursor
     , uCommands
     , uTeams
+    , uDebug
 {$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
 {$ENDIF}
@@ -1952,9 +1953,26 @@ end;
 procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
 var
     ammoStrId: TAmmoStrId;
+    ammoStr: ansistring;
+    tmpsurf: PSDL_Surface;
 begin
     ammoStrId := Ammoz[ammoType].NameId;
+
     trluaammo[ammoStrId] := name;
+    if length(trluaammo[ammoStrId]) > 0 then
+        ammoStr:= trluaammo[ammoStrId]
+    else
+        ammoStr:= trammo[ammoStrId];
+
+    if checkFails(length(ammoStr) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ammoType)) + '!',true) then exit;
+        
+    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(ammoStr,fnt16)].Handle, PChar(ammoStr), cWhiteColorChannels);
+    if checkFails(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ammoType)) + ' failed!',true) then exit;
+    tmpsurf:= doSurfaceConversion(tmpsurf);
+    FreeAndNilTexture(Ammoz[ammoType].NameTex);
+    Ammoz[ammoType].NameTex:= Surface2Tex(tmpsurf, false);
+    SDL_FreeSurface(tmpsurf);
+
     trluaammoc[ammoStrId] := caption;
     trluaammod[ammoStrId] := description;
 end;
