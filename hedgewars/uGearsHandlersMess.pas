@@ -6434,6 +6434,12 @@ begin
         exit;
         end;
 
+    // Update timer stuff
+    if Gear^.Timer < 6000 then
+        Gear^.RenderTimer:= true
+    else
+        Gear^.RenderTimer:= false;
+
     dec(Gear^.Timer);
 end;
 
