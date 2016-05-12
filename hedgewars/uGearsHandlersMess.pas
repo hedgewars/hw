@@ -6376,15 +6376,29 @@ begin
 
     (* Check if duck is near water surface
            (Karma is distance from water) *)
-    if (Gear^.Pos in [0, 5, 6]) and (cWaterLine <= hwRound(Gear^.Y) + Gear^.Karma) then
+    if (not (Gear^.Pos in [1, 2])) and (cWaterLine <= hwRound(Gear^.Y) + Gear^.Karma) then
         begin
         if cWaterLine = hwRound(Gear^.Y) + Gear^.Karma then
             begin
-            PlaySound(sndDroplet2);
-            if Gear^.dY > _0_4 then
+            // Let's make that duck swim!
+            // Does the duck come FROM the Sea edge? (left or right)
+            if ((Gear^.Pos in [3, 7]) and (cWindSpeed > _0)) or ((Gear^.Pos in [4, 8]) and (cWindSpeed < _0)) then
+                begin
                 PlaySound(sndDuckWater);
-            Gear^.Pos:= 1;
-            Gear^.dY:= _0;
+                Gear^.Angle:= 0;
+                Gear^.Pos:= 1;
+                Gear^.dY:= _0;
+                end;
+
+            // Duck comes either falling (usual case) or was rising from below
+            if Gear^.Pos in [0, 5, 6] then
+                begin
+                PlaySound(sndDroplet2);
+                if Gear^.dY > _0_4 then
+                    PlaySound(sndDuckWater);
+                Gear^.Pos:= 1;
+                Gear^.dY:= _0;
+                end;
             end
         else if Gear^.Pos = 0 then
             Gear^.Pos:= 5;
@@ -6440,8 +6454,8 @@ begin
     
     // Rotate duck and change direction when reaching Sea world edge (Pos 3 or 4)
     if (WorldEdge = weSea) and (not (Gear^.Pos in [3,4])) then
-        // Left edge
-        if (LeftX >= hwRound(Gear^.X) - Gear^.Karma) then
+        // Swimming TOWARDS left edge
+        if (LeftX >= hwRound(Gear^.X) - Gear^.Karma) and ((cWindSpeed < _0) or (Gear^.Pos in [0, 7])) then
             begin
             // Turn duck when reaching edge the first time
             if not (Gear^.Pos in [3,7]) then
@@ -6466,8 +6480,8 @@ begin
 
             end
 
-        // Right edge (similar to left edge)
-        else if (RightX <= hwRound(Gear^.X) + Gear^.Karma) then
+        // Swimming TOWARDS right edge (similar to left edge)
+        else if (RightX <= hwRound(Gear^.X) + Gear^.Karma) and ((cWindSpeed > _0) or (Gear^.Pos in [0, 8])) then
             begin
             if not (Gear^.Pos in [4,8]) then
                 begin
