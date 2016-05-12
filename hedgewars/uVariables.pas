@@ -2396,7 +2396,7 @@ const
                           ammoprop_AltUse;
                 Count: 2;
                 NumPerTurn: 0;
-                Timer: 9000;
+                Timer: 15000;
                 Pos: 0;
                 AmmoType: amDuck;
                 AttackVoice: sndNone;

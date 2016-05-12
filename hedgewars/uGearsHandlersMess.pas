@@ -4395,6 +4395,9 @@ begin
             if not ((Gear^.dX*ox + Gear^.dY*oy).isNegative) then
                 continue;
 
+        if iterator^.Kind = gtDuck then
+            iterator^.Pos:= 0;
+
         isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]);
 
         r:= int2hwFloat(iterator^.Radius);
@@ -6374,9 +6377,7 @@ begin
             if Gear^.dY > _0_4 then
                 PlaySound(sndDuckWater);
             Gear^.Pos:= 1;
-            Gear^.Timer:= Gear^.WDTimer;
             Gear^.dY:= _0;
-            Gear^.State:= Gear^.State or gstNoGravity;
             end;
         end
 

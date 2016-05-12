@@ -723,8 +723,7 @@ gtFlamethrower: begin
                 gear^.Pos:= 0;               // 0: falling/in air, 1-4: on water
                 gear^.Tag:= 1;               // 1: facing right, -1: facing left
                 if gear^.Timer = 0 then      
-                    gear^.Timer:= 9000;      // Explosion timer to avoid duck existing forever
-                gear^.WDTimer:= gear^.Timer; // For restoring the timer, timer is reset when hitting water
+                    gear^.Timer:= 15000;      // Explosion timer to avoid duck existing forever
                 gear^.Radius:= 9;            // Collision radius (with landscape)
                 gear^.Karma:= 24;            // Distance from water when swimming
                 gear^.Elasticity:= _0_6;
