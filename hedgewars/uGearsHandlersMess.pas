@@ -4396,6 +4396,7 @@ begin
                 continue;
 
         if iterator^.Kind = gtDuck then
+            // Make duck go into “falling” mode again
             iterator^.Pos:= 0;
 
         isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]);
@@ -6388,11 +6389,11 @@ begin
         Gear^.Y:= Gear^.Y + Gear^.dY;
         end;
 
-    // Mirrored duck
-    // Pos 1 or 2: Duck is on water (not Sea world edge)
+    // Handle speed
     if Gear^.Pos = 1 then
         Gear^.dX:= cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 2 then
+        // Mirrored duck (after bounce edge bounce)
         Gear^.dX:= -cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 3 then
         Gear^.dY:= cWindSpeed * Gear^.Damage
@@ -6431,8 +6432,8 @@ begin
     if Gear^.Pos <> 0 then
         // Manual collision check required because we don't use onStepFallingGear in this case
         CheckCollision(Gear);
-    // Explode duck
     if (Gear^.Timer = 0) or ((Gear^.State and gstCollision) <> 0) then
+        // Explode duck
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         PlaySound(sndDuckDie);
