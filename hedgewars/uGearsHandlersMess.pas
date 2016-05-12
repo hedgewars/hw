@@ -6361,73 +6361,133 @@ begin
         if Gear^.Pos = 2 then
             Gear^.Pos:= 1
         else if Gear^.Pos = 1 then
-            Gear^.Pos:= 2;
+            Gear^.Pos:= 2
+        else if Gear^.Pos = 5 then
+            Gear^.Pos:= 6
+        else if Gear^.Pos = 5 then
+            Gear^.Pos:= 5;
         end;
 
     AllInactive := false;
 
     // Duck falls (Pos = 0)
     if Gear^.Pos = 0 then
-        begin
         doStepFallingGear(Gear);
-        (* Check if duck is near water surface
+
+    (* Check if duck is near water surface
            (Karma is distance from water) *)
-        if cWaterLine <= hwRound(Gear^.Y) + Gear^.Karma then
+    if (Gear^.Pos in [0, 5, 6]) and (cWaterLine <= hwRound(Gear^.Y) + Gear^.Karma) then
+        begin
+        if cWaterLine = hwRound(Gear^.Y) + Gear^.Karma then
             begin
             PlaySound(sndDroplet2);
             if Gear^.dY > _0_4 then
                 PlaySound(sndDuckWater);
             Gear^.Pos:= 1;
             Gear^.dY:= _0;
-            end;
-        end
+            end
+        else if Gear^.Pos = 0 then
+            Gear^.Pos:= 5;
+        end;
 
-    // Manual speed handling when duck is on water (Pos <> 0)
-    else
+    // Manual speed handling when duck is on water
+    if Gear^.Pos <> 0 then
         begin
         Gear^.X:= Gear^.X + Gear^.dX;
         Gear^.Y:= Gear^.Y + Gear^.dY;
         end;
 
     // Handle speed
+    // 1-4: On water: Let's swim!
     if Gear^.Pos = 1 then
+        // On water (normal)
         Gear^.dX:= cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 2 then
-        // Mirrored duck (after bounce edge bounce)
+        // On water, mirrored (after bounce edge bounce)
         Gear^.dX:= -cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 3 then
+        // On left Sea edge
         Gear^.dY:= cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 4 then
-        Gear^.dY:= -cWindSpeed * Gear^.Damage;
+        // On right Sea edge
+        Gear^.dY:= -cWindSpeed * Gear^.Damage
+    // 5-8: Underwater: Slowly rise to the surface and slightly follow wind
+    else if Gear^.Pos = 5 then
+        // Underwater (normal)
+        begin
+        Gear^.dX:= (cWindSpeed / 4) * Gear^.Damage;
+        Gear^.dY:= -_0_07;
+        end
+    else if Gear^.Pos = 6 then
+        // Underwater, mirrored duck (after bounce edge bounce)
+        begin
+        Gear^.dX:= -(cWindSpeed / 4) * Gear^.Damage;
+        Gear^.dY:= -_0_07;
+        end
+    else if Gear^.Pos = 7 then
+        // Inside left Sea edge
+        begin
+        Gear^.dX:= _0_07;
+        Gear^.dY:= (cWindSpeed / 4) * Gear^.Damage;
+        end
+    else if Gear^.Pos = 8 then
+        // Inside right Sea edge
+        begin
+        Gear^.dX:= -_0_07;
+        Gear^.dY:= -(cWindSpeed / 4) * Gear^.Damage;
+        end;
+ 
     
     // Rotate duck and change direction when reaching Sea world edge (Pos 3 or 4)
-    if WorldEdge = weSea then
-        begin
+    if (WorldEdge = weSea) and (not (Gear^.Pos in [3,4])) then
         // Left edge
-        if (LeftX >= hwRound(Gear^.X) - Gear^.Karma) and (Gear^.Pos < 3) then
+        if (LeftX >= hwRound(Gear^.X) - Gear^.Karma) then
             begin
-            PlaySound(sndDuckWater);
-            Gear^.Pos:= 3;
-            if Gear^.Tag = 1 then
-                Gear^.Angle:= 90 
-            else
-                Gear^.Angle:= 270;
-            Gear^.dY:= cWindSpeed * Gear^.Damage;
-            Gear^.dX:= _0;
+            // Turn duck when reaching edge the first time
+            if not (Gear^.Pos in [3,7]) then
+                begin
+                if Gear^.Tag = 1 then
+                    Gear^.Angle:= 90 
+                else
+                    Gear^.Angle:= 270;
+                end;
+
+            // Reaching the edge surface
+            if (LeftX = hwRound(Gear^.X) - Gear^.Karma) and (Gear^.Pos <> 3) then
+                // We are coming from the horizontal side
+                begin
+                PlaySound(sndDuckWater);
+                Gear^.dX:= _0;
+                Gear^.Pos:= 3;
+                end
+            else 
+                // We are coming from inside the Sea, go into “surfacing” mode
+                Gear^.Pos:= 7;
+
             end
-        // Right edge
-        else if (RightX <= hwRound(Gear^.X) + Gear^.Karma) and (Gear^.Pos < 3) then
+
+        // Right edge (similar to left edge)
+        else if (RightX <= hwRound(Gear^.X) + Gear^.Karma) then
             begin
-            PlaySound(sndDuckWater);
-            Gear^.Pos:= 4;
-            if Gear^.Tag = 1 then
-                Gear^.Angle:= 270
-            else
-                Gear^.Angle:= 90;
-            Gear^.dY:= -cWindspeed * Gear^.Damage;
-            Gear^.dX:= _0;
+            if not (Gear^.Pos in [4,8]) then
+                begin
+                if Gear^.Tag = 1 then
+                    Gear^.Angle:= 270 
+                else
+                    Gear^.Angle:= 90;
+                end;
+
+            if (RightX = hwRound(Gear^.X) + Gear^.Karma) and (Gear^.Pos <> 4) then
+                begin
+                PlaySound(sndDuckWater);
+                Gear^.dX:= _0;
+                Gear^.Pos:= 4;
+                end
+            else 
+                Gear^.Pos:= 8;
+
             end;
-        end;
+
 
     if Gear^.Pos <> 0 then
         // Manual collision check required because we don't use onStepFallingGear in this case
