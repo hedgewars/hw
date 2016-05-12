@@ -6391,13 +6391,13 @@ begin
     // Mirrored duck
     // Pos 1 or 2: Duck is on water (not Sea world edge)
     if Gear^.Pos = 1 then
-        Gear^.dX:= cWindSpeed * 500
+        Gear^.dX:= cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 2 then
-        Gear^.dX:= -cWindSpeed * 500
+        Gear^.dX:= -cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 3 then
-        Gear^.dY:= cWindSpeed * 500
+        Gear^.dY:= cWindSpeed * Gear^.Damage
     else if Gear^.Pos = 4 then
-        Gear^.dY:= -cWindSpeed * 500;
+        Gear^.dY:= -cWindSpeed * Gear^.Damage;
     
     // Rotate duck and change direction when reaching Sea world edge (Pos 3 or 4)
     if WorldEdge = weSea then
@@ -6411,7 +6411,7 @@ begin
                 Gear^.Angle:= 90 
             else
                 Gear^.Angle:= 270;
-            Gear^.dY:= cWindSpeed * 500;
+            Gear^.dY:= cWindSpeed * Gear^.Damage;
             Gear^.dX:= _0;
             end
         // Right edge
@@ -6423,7 +6423,7 @@ begin
                 Gear^.Angle:= 270
             else
                 Gear^.Angle:= 90;
-            Gear^.dY:= -cWindspeed * 500;
+            Gear^.dY:= -cWindspeed * Gear^.Damage;
             Gear^.dX:= _0;
             end;
         end;

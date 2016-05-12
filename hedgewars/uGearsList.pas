@@ -726,6 +726,7 @@ gtFlamethrower: begin
                     gear^.Timer:= 15000;      // Explosion timer to avoid duck existing forever
                 gear^.Radius:= 9;            // Collision radius (with landscape)
                 gear^.Karma:= 24;            // Distance from water when swimming
+                gear^.Damage:= 500;          // Speed factor when swimming on water (multiplied with wind speed)
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_8;
                 gear^.Density:= _0_5;
