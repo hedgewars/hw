@@ -6424,8 +6424,10 @@ begin
             end;
         end;
 
+    if Gear^.Pos <> 0 then
+        // Manual collision check required because we don't use onStepFallingGear in this case
+        CheckCollision(Gear);
     // Explode duck
-    CheckCollision(Gear);
     if (Gear^.Timer = 0) or ((Gear^.State and gstCollision) <> 0) then
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
