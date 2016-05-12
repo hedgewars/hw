@@ -326,7 +326,12 @@ with Gear^,
                                  end;
                      amDynamite: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
                          amDuck: begin
-                                 PlaySound(sndDuckDrop);
+                                 // Does duck spawn inside water?
+                                 if (LeftX > hwRound(Gear^.X) - Gear^.Karma) or (RightX < hwRound(Gear^.X) + Gear^.Karma) or (cWaterLine < hwRound(Gear^.Y) + Gear^.Karma) then
+                                     PlaySound(sndDroplet2)
+                                 else
+                                     // Duck spawned in air, normal drop sound
+                                     PlaySound(sndDuckDrop);
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtDuck, 0, _0, _0, 0);
                                  if not ((not dX.isNegative) xor ((State and gstHHHJump) <> 0)) then
                                      newGear^.Tag:= -1
