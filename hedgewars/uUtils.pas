@@ -536,22 +536,18 @@ end;
 
 function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 begin
-GetLaunchX:= 0
-(*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
         GetLaunchX:= sign(dir) * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
     else
-        GetLaunchX:= 0 *)
+        GetLaunchX:= 0
 end;
 
 function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 begin
-GetLaunchY:= 0
-(*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
         GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
     else
-        GetLaunchY:= 0*)
+        GetLaunchY:= 0
 end;
 
 function CheckNoTeamOrHH: boolean;

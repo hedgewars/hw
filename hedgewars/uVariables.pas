@@ -895,7 +895,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -6),
+            ejectY: 0), //-6;
 
 // Bee
             (NameId: sidBee;
@@ -948,7 +948,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //26;
-            ejectY: -6),
+            ejectY: 0), //-6;
 
 // PickHammer
             (NameId: sidPickHammer;
@@ -1084,7 +1084,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //23;
-            ejectY: -6),
+            ejectY: 0), //-6;
 
 // Dynamite
             (NameId: sidDynamite;
@@ -1408,7 +1408,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -6),
+            ejectY: 0), //-6;
 
 // Kamikaze
             (NameId: sidKamikaze;
@@ -1595,7 +1595,7 @@ const
             PosCount: 1;
             PosSprite: sprDrill;
             ejectX: 0; //20;
-            ejectY: -6),
+            ejectY: 0), //-6;
 
 // Ballgun
             (NameId: sidBallgun;
@@ -1621,7 +1621,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3),
+            ejectY: 0), //-3;
 
 // RC-Plane
             (NameId: sidRCPlane;
@@ -1850,7 +1850,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //40;
-            ejectY: -5),
+            ejectY: 0), //-5;
 
 // Jetpack ("Flying Saucer")
             (NameId: sidJetpack;
@@ -1960,8 +1960,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: -5; //29;
-            ejectY: -7),
+            ejectX: 0; //-5, 29;
+            ejectY: 0), //-7
 
 // Piano
             (NameId: sidPiano;
@@ -2068,7 +2068,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3),
+            ejectY: 0), //-3;
 
 // Sticky Mine
             (NameId: sidSMine;
@@ -2282,7 +2282,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3),
+            ejectY: 0), //-3;
 // Freezer
             (NameId: sidIceGun;
             NameTex: nil;
@@ -2307,7 +2307,7 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3),
+            ejectY: 0), //-3;
 // Knife
             (NameId: sidKnife;
             NameTex: nil;
