@@ -6393,7 +6393,11 @@ begin
     if Gear^.Pos = 1 then
         Gear^.dX:= cWindSpeed * 500
     else if Gear^.Pos = 2 then
-        Gear^.dX:= -cWindSpeed * 500;
+        Gear^.dX:= -cWindSpeed * 500
+    else if Gear^.Pos = 3 then
+        Gear^.dY:= cWindSpeed * 500
+    else if Gear^.Pos = 4 then
+        Gear^.dY:= -cWindSpeed * 500;
     
     // Rotate duck and change direction when reaching Sea world edge (Pos 3 or 4)
     if WorldEdge = weSea then
@@ -6407,7 +6411,7 @@ begin
                 Gear^.Angle:= 90 
             else
                 Gear^.Angle:= 270;
-            Gear^.dY:= Gear^.dX;
+            Gear^.dY:= cWindSpeed * 500;
             Gear^.dX:= _0;
             end
         // Right edge
@@ -6419,7 +6423,7 @@ begin
                 Gear^.Angle:= 270
             else
                 Gear^.Angle:= 90;
-            Gear^.dY:= -Gear^.dX;
+            Gear^.dY:= -cWindspeed * 500;
             Gear^.dX:= _0;
             end;
         end;
