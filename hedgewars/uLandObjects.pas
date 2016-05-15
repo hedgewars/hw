@@ -34,7 +34,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
-     , uTypes, uVariables, uUtils, uDebug, SysUtils
+     , uTypes, uVariables, uDebug, SysUtils, uUtils
      , uPhysFSLayer;
 
 const MaxRects = 512;
