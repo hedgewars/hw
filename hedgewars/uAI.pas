@@ -30,7 +30,7 @@ procedure FreeActionsList;
 
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
-    uAmmos, SysUtils, uTypes,
+    uAmmos, uTypes,
     uVariables, uCommands, uUtils, uDebug, uAILandMarks;
 
 var BestActions: TActions;
