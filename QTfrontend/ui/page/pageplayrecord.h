@@ -52,6 +52,7 @@ class PagePlayDemo : public AbstractPage
 
     private:
         QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
         void connectSignals();
 
         RecordType recType;

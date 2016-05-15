@@ -175,6 +175,7 @@ class HWMapContainer : public QWidget
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
         void setMapInfo(MapModel::MapInfo mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
+        void updateHelpTexts(MapModel::MapType type);
         void updatePreview();
         void updateThemeButtonSize();
         void setupMissionMapsView();
