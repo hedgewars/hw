@@ -732,8 +732,7 @@ case Gear^.Pos of
                     PlaySound(sndShotgunReload);
                     inc(HH^.Health, Gear^.Health);
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
-                    str(Gear^.Health, s);
-                    s:= '+' + s;
+                    s:= '+' + IntToStr(Gear^.Health);
                     AddCaption(ansistring(s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);

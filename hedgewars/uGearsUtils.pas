@@ -274,8 +274,7 @@ begin
                     // was considering pulsing on attack, Tiy thinks it should be permanent while in play
                     //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-                    str(vampDmg, s);
-                    s:= '+' + s;
+                    s:= '+' + IntToStr(vampDmg);
                     AddCaption(ansistring(s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
