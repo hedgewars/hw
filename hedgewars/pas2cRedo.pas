@@ -71,7 +71,7 @@ var
     trunc, round, ceil : function : integer;
     abs, sqr : function : integer;
 
-    StrPas, FormatDateTime, copy, str, PosS, trim, LowerCase : function : shortstring;
+    StrPas, FormatDateTime, copy, str, PosS, LowerCase : function : shortstring;
     pos : function : integer;
     StrToInt : function : integer;
     SetLength, SetLengthA, val, StrDispose, StrCopy : procedure;

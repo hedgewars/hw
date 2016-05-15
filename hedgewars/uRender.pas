@@ -463,7 +463,7 @@ begin
         // print up to 3 extentions per row
         // ExtractWord will return empty string if index out of range
         //AddFileLog(TrimRight(
-        AddFileLog((
+        AddFileLog(Trim(
             ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
             ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
             ExtractWord(tmpint+2, tmpstr, [' '])

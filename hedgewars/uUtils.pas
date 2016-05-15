@@ -23,6 +23,9 @@ unit uUtils;
 interface
 uses uTypes, uFloat;
 
+// returns s with whitespaces (chars <= #32) removed form both ends
+function Trim(s: shortstring) : shortstring;
+
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
@@ -98,7 +101,7 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils, uPhysFSLayer, uDebug;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
 
 {$IFDEF DEBUGFILE}
 var logFile: PFSFile;
@@ -107,6 +110,45 @@ var logFile: PFSFile;
 {$ENDIF}
 {$ENDIF}
 var CharArray: array[0..255] of Char;
+
+// All leading/tailing characters with ordinal values less than or equal to 32 (a space) are stripped.
+function Trim(s: shortstring) : shortstring;
+var len, left, right: integer;
+begin
+
+len:= Length(s);
+
+if len = 0 then
+    exit(s);
+
+// find first non-whitespace
+left:= 1;
+while left <= len do
+    begin
+    if s[left] > #32 then
+        break;
+    inc(left);
+    end;
+
+// find last non-whitespace
+right:= len;
+while right >= 1 do
+    begin
+    if s[right] > #32 then
+        break;
+    dec(right);
+    end;
+
+// string is whitespace only
+if left > right then
+    exit('');
+
+// get string without surrounding whitespace
+len:= right - left + 1;
+
+Trim:= copy(s, left, len);
+
+end;
 
 procedure SplitBySpace(var a,b: shortstring);
 begin
