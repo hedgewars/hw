@@ -33,7 +33,7 @@ unit uSound;
  *                   The channel id can be used to stop a specific sound loop.
  *)
 interface
-uses SDLh, uConsts, uTypes, SysUtils;
+uses SDLh, uConsts, uTypes;
 
 procedure preInitModule;
 procedure initModule;

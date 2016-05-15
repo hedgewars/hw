@@ -103,7 +103,7 @@ procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
 
 
 implementation
-uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uVariables, uUtils, uConsts
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}uVariables, uUtils, uConsts
      {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}, uPhysFSLayer, uDebug;
 
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -462,7 +462,8 @@ begin
         begin
         // print up to 3 extentions per row
         // ExtractWord will return empty string if index out of range
-        AddFileLog(TrimRight(
+        //AddFileLog(TrimRight(
+        AddFileLog((
             ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
             ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
             ExtractWord(tmpint+2, tmpstr, [' '])
