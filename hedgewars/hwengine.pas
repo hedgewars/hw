@@ -427,6 +427,7 @@ end;
 procedure Game;
 begin
     initEverything(true);
+    SendIPC('TG');
     GameRoutine;
     // clean up all the memory allocated
     freeEverything(true);
@@ -548,6 +549,7 @@ begin
         GenPreviewAlpha(Preview);
     {$ENDIF}
         WriteLnToConsole('Sending preview...');
+        SendIPC('TP');
         SendIPCRaw(@Preview, sizeof(Preview));
         SendIPCRaw(@MaxHedgehogs, sizeof(byte));
         WriteLnToConsole('Preview sent, disconnect');

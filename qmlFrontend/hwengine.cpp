@@ -166,6 +166,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit previewImageChanged();
         break;
     }
+    case MSG_PREVIEWHOGCOUNT: {
+        emit previewHogCountChanged((quint8)msg.data()[0]);
+        break;
+    }
     case MSG_ADDPLAYINGTEAM: {
         QStringList l = QString::fromUtf8(msg).split('\n');
         emit playingTeamAdded(l[1], l[0].toInt(), true);

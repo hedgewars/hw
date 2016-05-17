@@ -10,10 +10,26 @@ uses uFLIPC;
 
 var uiCallbackPointer: pointer;
     uiCallbackFunction: TUICallback;
+    isGame: boolean;
 
 procedure engineMessageCallback(p: pointer; msg: PChar; len: Longword);
 begin
-    if len = 128 * 256 then uiCallbackFunction(uiCallbackPointer, mtPreview, msg, len)
+    if msg^ = 'T' then
+    begin
+        inc(msg);
+        isGame:= msg^ = 'G';
+        exit;
+    end;
+
+    if isGame then
+    begin
+    end
+    else begin
+        if len = 128 * 256 then
+            uiCallbackFunction(uiCallbackPointer, mtPreview, msg, len)
+        else if len = 1 then
+            uiCallbackFunction(uiCallbackPointer, mtPreviewHogCount, msg, len)
+    end;
 end;
 
 procedure registerUIMessagesCallback(p: pointer; f: TUICallback); cdecl;

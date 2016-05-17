@@ -6,8 +6,10 @@ const
     MAXARGS = 32;
 
 type
-    TMessageType = (mtRenderingPreview, mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam
-                    , mtAddTeam, mtRemoveTeam, mtTeamColor, mtHedgehogsNumber, mtNetData
+    TMessageType = (mtRenderingPreview, mtPreview, mtPreviewHogCount
+                    , mtAddPlayingTeam, mtRemovePlayingTeam
+                    , mtAddTeam, mtRemoveTeam, mtTeamColor, mtHedgehogsNumber
+                    , mtNetData
                     , mtFlibEvent, mtConnected, mtDisconnected, mtAddLobbyClient
                     , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoomClient
                     , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom

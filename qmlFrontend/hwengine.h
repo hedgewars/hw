@@ -49,6 +49,7 @@ signals:
 
     void previewIsRendering();
     void previewImageChanged();
+    void previewHogCountChanged(int count);
     void localTeamAdded(const QString & teamName, int aiLevel);
     void localTeamRemoved(const QString & teamName);
 

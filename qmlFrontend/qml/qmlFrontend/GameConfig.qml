@@ -26,6 +26,9 @@ Rectangle {
                 previewImage.visible = false
                 previewWaitImage.visible = true
             }
+            onPreviewHogCountChanged: {
+                hogCount.text = count
+            }
         }
 
         Image {
