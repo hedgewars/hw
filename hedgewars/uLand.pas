@@ -30,7 +30,7 @@ procedure GenPreview(out Preview: TPreview);
 procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 
 implementation
-uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
      uLandGenTemplateBased, uLandUtils, uRenderUtils;

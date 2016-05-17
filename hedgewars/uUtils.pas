@@ -30,6 +30,9 @@ procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
 
+function ExtractFileDir(s: shortstring) : shortstring;
+function ExtractFileName(s: shortstring) : shortstring;
+
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
@@ -148,6 +151,61 @@ len:= right - left + 1;
 
 Trim:= copy(s, left, len);
 
+end;
+
+function GetLastSlashPos(var s: shortString) : integer;
+var lslash: integer;
+    c: char;
+begin
+
+// find last slash
+lslash:= Length(s);
+while lslash >= 1 do
+    begin
+    c:= s[lslash];
+    if (c = #47) or (c = #92) then
+        break;
+    dec(lslash); end;
+
+GetLastSlashPos:= lslash;
+end;
+
+function ExtractFileDir(s: shortstring) : shortstring;
+var lslash: byte;
+begin
+
+if Length(s) = 0 then
+    exit(s);
+
+lslash:= GetLastSlashPos(s);
+
+if lslash <= 1 then
+    exit('');
+
+s[0]:= char(lslash - 1);
+
+ExtractFileDir:= s;
+end;
+
+function ExtractFileName(s: shortstring) : shortstring;
+var lslash, len: byte;
+begin
+
+len:= Length(s);
+
+if len = 0 then
+    exit(s);
+
+lslash:= GetLastSlashPos(s);
+
+if lslash < 1 then
+    exit(s);
+
+if lslash = len then
+    exit('');
+
+len:= len - lslash;
+ExtractFilename:= copy(s, lslash + 1, len);
 end;
 
 procedure SplitBySpace(var a,b: shortstring);
