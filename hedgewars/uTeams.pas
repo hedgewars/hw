@@ -396,6 +396,9 @@ with team^.Clan^ do
     inc(TeamsNumber)
     end;
 
+// mirror changes into array for clans to spawn
+SpawnClansArray:= ClansArray;
+
 CurrentTeam:= team;
 AddTeam:= team;
 end;

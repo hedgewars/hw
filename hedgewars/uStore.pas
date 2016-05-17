@@ -578,7 +578,7 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-str(Hedgehog.Gear^.Health, s);
+s:= IntToStr(Hedgehog.Gear^.Health);
 FreeAndNilTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(ansistring(s), Hedgehog.Team^.Clan^.Color, fnt16)
 end;

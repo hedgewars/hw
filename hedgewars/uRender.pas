@@ -103,8 +103,8 @@ procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
 
 
 implementation
-uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uVariables, uUtils, uConsts
-     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF};
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}uVariables, uUtils, uConsts
+     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}, uPhysFSLayer, uDebug;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const
@@ -256,33 +256,27 @@ end;
 function CompileShader(shaderFile: string; shaderType: GLenum): GLuint;
 var
     shader: GLuint;
-    f: Textfile;
-    source, line: AnsiString;
+    f: PFSFile;
+    source, line: ansistring;
     sourceA: Pchar;
     lengthA: GLint;
     compileResult: GLint;
     logLength: GLint;
     log: PChar;
 begin
-    Assign(f, PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
-    filemode:= 0; // readonly
-    Reset(f);
-    if IOResult <> 0 then
-    begin
-        AddFileLog('Unable to load ' + shaderFile);
-        halt(HaltStartupError);
-    end;
+    f:= pfsOpenRead(cPathz[ptShaders] + '/' + shaderFile);
+    checkFails(f <> nil, 'Unable to load ' + shaderFile, true);
 
     source:='';
-    while not eof(f) do
+    while not pfsEof(f) do
     begin
-        ReadLn(f, line);
+        pfsReadLnA(f, line);
         source:= source + line + #10;
     end;
 
-    Close(f);
+    pfsClose(f);
 
-    WriteLnToConsole('Compiling shader: ' + PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
+    WriteLnToConsole('Compiling shader: ' + cPathz[ptShaders] + '/' + shaderFile);
 
     sourceA:=PChar(source);
     lengthA:=Length(source);
@@ -468,7 +462,8 @@ begin
         begin
         // print up to 3 extentions per row
         // ExtractWord will return empty string if index out of range
-        AddFileLog(TrimRight(
+        //AddFileLog(TrimRight(
+        AddFileLog(Trim(
             ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
             ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
             ExtractWord(tmpint+2, tmpstr, [' '])
@@ -508,8 +503,7 @@ begin
 {$IFDEF GL2}
 
 {$IFDEF PAS2C}
-    err := glewInit();
-    if err <> GLEW_OK then
+    if glewInit() <> GLEW_OK then
         begin
         WriteLnToConsole('Failed to initialize GLEW.');
         halt(HaltStartupError);

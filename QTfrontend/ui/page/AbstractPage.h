@@ -185,10 +185,11 @@ class AbstractPage : public QWidget
          * @param rowSpan how many layout rows the button will span.
          * @param columnSpan how many layout columns the button will span.
          * @param hasIcon set to true if this is a picture button.
+         * @param alignment alignment of the button in the layout.
          *
          * @return the button.
          */
-        QPushButtonWithSound * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false);
+        QPushButtonWithSound * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false, Qt::Alignment alignment = 0);
 
         /**
          * @brief Creates a default formatted button and adds it to a
@@ -198,11 +199,12 @@ class AbstractPage : public QWidget
          * @param box pointer of the box layout in which to insert the button.
          * @param where layout ndex in which to insert the button.
          * @param hasIcon set to true if this is a picture button.
+         * @param alignment alignment of the button in the layout.
          *
          * @return the button.
          */
-        QPushButtonWithSound * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
-        QPushButton* addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
+        QPushButtonWithSound * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false, Qt::Alignment alignment = 0);
+        QPushButton* addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false, Qt::Alignment alignment = 0);
 
         /**
          * @brief Changes visibility of the back-button.

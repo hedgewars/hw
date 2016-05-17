@@ -54,10 +54,11 @@ option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if so
 
 if(BUILD_ENGINE_JS)
     if(NOT CMAKE_TOOLCHAIN_FILE)
-        message(FATAL_ERROR "Missing emscripten toolchain file\nRerun cmake with -DCMAKE_TOOLCHAIN_FILE=${CMAKE_SOURCE_DIR}/cmake_modules/Platform/Emscripten.cmake")
+        message(FATAL_ERROR "Missing emscripten toolchain file\nClean your cache and rerun cmake with -DCMAKE_TOOLCHAIN_FILE=${CMAKE_SOURCE_DIR}/cmake_modules/Platform/Emscripten.cmake")
     endif()
 
     set(BUILD_ENGINE_C ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(BUILD_ENGINE_LIBRARY ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(NOAUTOUPDATE ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(PHYSFS_SYSTEM OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(LUA_SYSTEM OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
@@ -65,6 +66,9 @@ if(BUILD_ENGINE_JS)
     set(NOSERVER ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(GL2 ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     set(BUILD_SHARED_LIBS OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+
+    set(target_binary_install_dir "bin" CACHE PATH "install dest for binaries")
+    set(target_library_install_dir "lib" CACHE PATH "install dest for libs")
 endif()
 
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
@@ -86,8 +90,6 @@ message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWAR
 include(${CMAKE_MODULE_PATH}/paths.cmake)
 #general utilities
 include(${CMAKE_MODULE_PATH}/utils.cmake)
-#paths initialization
-include(${CMAKE_MODULE_PATH}/paths.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
 

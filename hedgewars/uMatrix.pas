@@ -260,7 +260,7 @@ begin
             write(Result[i, j]);
           writeln;
         end;
-        TryDo(false, 'error in matrix multiplication?!', true);
+        checkFails(false, 'error in matrix multiplication?!', true);
     end;
     {$ENDIF}
 

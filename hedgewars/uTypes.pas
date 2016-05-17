@@ -145,7 +145,7 @@ type
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7,
             sndPiano8, sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
             sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
-            sndIceBeam, sndHogFreeze
+            sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime
             );
 
     // Available ammo types to be used by hedgehogs
@@ -180,7 +180,7 @@ type
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
     TUIDisplay = (uiAll, uiNoTeams, uiNone);
-    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn);
+    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn, mgForts);
 
 
     THHFont = record
@@ -531,6 +531,8 @@ type
     end;
 
     PCakeData = ^TCakeData;
+
+    TClansArray = array[0..Pred(cMaxTeams)] of PClan;
 
 implementation
 

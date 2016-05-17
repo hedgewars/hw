@@ -71,7 +71,7 @@ var
     trunc, round, ceil : function : integer;
     abs, sqr : function : integer;
 
-    StrPas, FormatDateTime, copy, str, PosS, trim, LowerCase : function : shortstring;
+    StrPas, FormatDateTime, copy, str, PosS, LowerCase : function : shortstring;
     pos : function : integer;
     StrToInt : function : integer;
     SetLength, SetLengthA, val, StrDispose, StrCopy : procedure;
@@ -84,8 +84,6 @@ var
      min, max:function:integer;
     assign, rewrite, rewrite_2, reset, reset_2, flush, BlockWrite, BlockRead, close : procedure;
     FileExists, DirectoryExists, eof : function : boolean;
-    ExtractFileDir : function : string;
-    ExtractFileName : function : string;
 
     ParamCount : function : integer;
     ParamStr : function : string;

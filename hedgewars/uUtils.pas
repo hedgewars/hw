@@ -23,9 +23,15 @@ unit uUtils;
 interface
 uses uTypes, uFloat;
 
+// returns s with whitespaces (chars <= #32) removed form both ends
+function Trim(s: shortstring) : shortstring;
+
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
+
+function ExtractFileDir(s: shortstring) : shortstring;
+function ExtractFileName(s: shortstring) : shortstring;
 
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
@@ -70,6 +76,9 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
+function read1stLn(filePath: shortstring): shortstring;
+function readValueFromINI(key, filePath: shortstring): shortstring;
+
 {$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
@@ -95,7 +104,7 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils, uPhysFSLayer;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
 
 {$IFDEF DEBUGFILE}
 var logFile: PFSFile;
@@ -104,6 +113,100 @@ var logFile: PFSFile;
 {$ENDIF}
 {$ENDIF}
 var CharArray: array[0..255] of Char;
+
+// All leading/tailing characters with ordinal values less than or equal to 32 (a space) are stripped.
+function Trim(s: shortstring) : shortstring;
+var len, left, right: integer;
+begin
+
+len:= Length(s);
+
+if len = 0 then
+    exit(s);
+
+// find first non-whitespace
+left:= 1;
+while left <= len do
+    begin
+    if s[left] > #32 then
+        break;
+    inc(left);
+    end;
+
+// find last non-whitespace
+right:= len;
+while right >= 1 do
+    begin
+    if s[right] > #32 then
+        break;
+    dec(right);
+    end;
+
+// string is whitespace only
+if left > right then
+    exit('');
+
+// get string without surrounding whitespace
+len:= right - left + 1;
+
+Trim:= copy(s, left, len);
+
+end;
+
+function GetLastSlashPos(var s: shortString) : integer;
+var lslash: integer;
+    c: char;
+begin
+
+// find last slash
+lslash:= Length(s);
+while lslash >= 1 do
+    begin
+    c:= s[lslash];
+    if (c = #47) or (c = #92) then
+        break;
+    dec(lslash); end;
+
+GetLastSlashPos:= lslash;
+end;
+
+function ExtractFileDir(s: shortstring) : shortstring;
+var lslash: byte;
+begin
+
+if Length(s) = 0 then
+    exit(s);
+
+lslash:= GetLastSlashPos(s);
+
+if lslash <= 1 then
+    exit('');
+
+s[0]:= char(lslash - 1);
+
+ExtractFileDir:= s;
+end;
+
+function ExtractFileName(s: shortstring) : shortstring;
+var lslash, len: byte;
+begin
+
+len:= Length(s);
+
+if len = 0 then
+    exit(s);
+
+lslash:= GetLastSlashPos(s);
+
+if lslash < 1 then
+    exit(s);
+
+if lslash = len then
+    exit('');
+
+len:= len - lslash;
+ExtractFilename:= copy(s, lslash + 1, len);
+end;
 
 procedure SplitBySpace(var a,b: shortstring);
 begin
@@ -352,7 +455,10 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s);
+if logFile <> nil then
+    pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s)
+else
+    WriteLn(stdout, inttostr(GameTicks)  + ': ' + s);
 
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
@@ -508,6 +614,51 @@ begin
     sanitizeCharForLog:= r
 end;
 
+function read1stLn(filePath: shortstring): shortstring;
+var f: pfsFile;
+begin
+    read1stLn:= '';
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+        if (not pfsEOF(f)) and allOK then
+            pfsReadLn(f, read1stLn);
+        pfsClose(f);
+        f:= nil;
+        end;
+end;
+
+function readValueFromINI(key, filePath: shortstring): shortstring;
+var f: pfsFile;
+	s: shortstring;
+	i: LongInt;
+begin
+    s:= '';
+	readValueFromINI:= '';
+
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+
+        while (not pfsEOF(f)) and allOK do
+			begin pfsReadLn(f, s);
+			if Length(s) = 0 then
+				continue;
+			if s[1] = ';' then
+				continue;
+
+			i:= Pos('=', s);
+			if Trim(Copy(s, 1, Pred(i))) = key then
+				begin
+				Delete(s, 1, i);
+				readValueFromINI:= s;
+				end;
+			end;
+        pfsClose(f);
+        f:= nil;
+        end;
+end;
+
 procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
@@ -535,6 +686,8 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
+    if not pfsExists('/Logs') then
+        pfsMakeDir('/Logs');
     // if log is locked, write to the next one
     i:= 0;
     while(i < 7) do
@@ -544,6 +697,9 @@ begin
             break;
         inc(i)
     end;
+
+    if logFile = nil then
+        WriteLn(stdout, '[WARNING] Could not open log file for writing. Log will be written to stdout!');
 {$ENDIF}
 
     //mobile stuff

@@ -33,7 +33,7 @@ unit uSound;
  *                   The channel id can be used to stop a specific sound loop.
  *)
 interface
-uses SDLh, uConsts, uTypes, SysUtils;
+uses SDLh, uConsts, uTypes;
 
 procedure preInitModule;
 procedure initModule;
@@ -110,7 +110,7 @@ var MusicFN: shortstring; // music file name
 var Volume: LongInt;
     SoundTimerTicks: Longword;
 implementation
-uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
+uses uVariables, uConsole, uCommands, uChat, uUtils, uDebug, uPhysFSLayer;
 
 const chanTPU = 32;
 var cInitVolume: LongInt;
@@ -252,7 +252,10 @@ var cInitVolume: LongInt;
             (FileName:               'TARDIS.ogg'; Path: ptSounds),// sndTardis
             (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds),// sndFrozenHogImpact
             (FileName:             'ice_beam.ogg'; Path: ptSounds),// sndIceBeam
-            (FileName:           'hog_freeze.ogg'; Path: ptSounds) // sndHogFreeze
+            (FileName:           'hog_freeze.ogg'; Path: ptSounds),// sndHogFreeze
+            (FileName:       'airmine_impact.ogg'; Path: ptSounds),// sndAirMineImpact
+            (FileName:         'knife_impact.ogg'; Path: ptSounds),// sndKnifeImpact
+            (FileName:            'extratime.ogg'; Path: ptSounds) // sndExtraTime
             );
 
 
@@ -577,6 +580,20 @@ begin
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
     SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
     WriteLnToConsole(msgOK);
+
+    // display music credits
+    s:= s + '_credits.txt';
+
+    // if per-file credits not found check general music credits file
+    if pfsExists(s) then
+        s:= read1stLn(s)
+    else if SuddenDeath and (SDMusicFN <> '') then
+        s:= readValueFromINI(SDMusicFN, '/Music/credits.txt')
+    else
+        s:= readValueFromINI(MusicFN, '/Music/credits.txt');
+
+    if Length(s) > 0 then
+        AddChatString(char(#10) + '© Music: ' + s);
 
     SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;

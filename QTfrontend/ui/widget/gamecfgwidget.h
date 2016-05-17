@@ -40,7 +40,7 @@ class GameCFGWidget : public QGroupBox
         Q_PROPERTY(bool master READ isMaster WRITE setMaster)
 
     public:
-        GameCFGWidget(QWidget* parent);
+        GameCFGWidget(QWidget* parent, bool randomWithoutDLC = false);
         quint32 getGameFlags() const;
         quint32 getInitHealth() const;
         QByteArray getFullConfig() const;

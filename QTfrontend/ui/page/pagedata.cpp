@@ -54,7 +54,8 @@ QLayout * PageDataDownload::footerLayoutDefinition()
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     bottomLayout->setStretch(0, 1);
 
-    pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 1, false);
+    pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 1, false, Qt::AlignBottom);
+    pbOpenDir->setMinimumHeight(50);
 
     bottomLayout->setStretch(2, 1);
 

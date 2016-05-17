@@ -70,7 +70,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 
 const
-    colors: array[#0..#9] of TSDL_Color = (
+    colors: array[#0..#12] of TSDL_Color = (
             (r:$FF; g:$FF; b:$FF; a:$FF), // #0 unused, feel free to take it for anything
             (r:$FF; g:$FF; b:$FF; a:$FF), // #1 chat message [White]
             (r:$FF; g:$00; b:$FF; a:$FF), // #2 action message [Purple]
@@ -80,7 +80,10 @@ const
             (r:$00; g:$FF; b:$FF; a:$FF), // #6 input line [Light Blue]
             (r:$FF; g:$80; b:$80; a:$FF), // #7 team gone [Light Red]
             (r:$FF; g:$D0; b:$80; a:$FF), // #8 team back [Light Orange]
-            (r:$DF; g:$DF; b:$DF; a:$FF)  // #9 hog speech [Light Gray]
+            (r:$DF; g:$DF; b:$DF; a:$FF), // #9 hog speech [Light Gray]
+            (r:$FF; g:$00; b:$FF; a:$AF), // #10 music credits [Purple]
+            (r:$00; g:$FF; b:$FF; a:$AF), // #11 map credits [Light Blue]
+            (r:$FF; g:$D0; b:$80; a:$AF)  // #12 theme credits [Light Orange]
             );
     ChatCommandz: array [TChatCmd] of record
             ChatCmd: string[31];
@@ -205,10 +208,13 @@ SDL_FreeSurface(resSurface)
 end;
 
 const ClDisplayDuration = 12500;
+      CreditsDisplayDur =  2500;
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var color  : TSDL_Color;
+    credits: boolean;
 begin
+credits:= false;
 if isInput then
     begin
     cl.s:= str;
@@ -220,6 +226,7 @@ else
     if str[1] <= High(colors) then
         begin
         color:= colors[str[1]];
+        credits:= (str[1] >= #10) and (str[1] <= #12);
         delete(str, 1, 1);
         end
     // fallback if invalid color
@@ -234,7 +241,10 @@ cl.color:= color;
 // set texture, note: variables cl.s and str will be different here if isInput
 RenderChatLineTex(cl, str);
 
-cl.Time:= RealTicks + ClDisplayDuration;
+if credits then
+    cl.Time:= RealTicks + CreditsDisplayDur
+else
+    cl.Time:= RealTicks + ClDisplayDuration;
 end;
 
 // For uStore texture recreation

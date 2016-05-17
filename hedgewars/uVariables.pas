@@ -23,6 +23,8 @@ interface
 
 uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils{$IFDEF GL2}, uMatrix{$ENDIF};
 
+procedure initScreenSpaceVars();
+
 var
 /////// init flags ///////
     cMinScreenWidth    : LongInt;
@@ -2388,7 +2390,7 @@ var
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword;
-    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
+    ClansArray, SpawnClansArray: TClansArray;
     ClansCount: Longword;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
@@ -2507,6 +2509,14 @@ begin
 {$ENDIF}
 
     cTagsMask:= htTeamName or htName or htHealth;
+end;
+
+procedure initScreenSpaceVars();
+begin
+    // those values still are not perfect
+    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
+    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
+    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
 end;
 
 procedure initModule;
@@ -2689,10 +2699,7 @@ begin
     CinematicBarH   := 0;
     CinematicScript := false;
 
-    // those values still are not perfect
-    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
-    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
-    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
+    initScreenSpaceVars();
 
     dirtyLandTexCount:= 0;
 
@@ -2765,6 +2772,8 @@ begin
         begin
         ClansArray[i]:= nil;
         end;
+
+    SpawnClansArray:= ClansArray;
 
     for i:= Low(TeamsArray) to High(TeamsArray) do
         begin

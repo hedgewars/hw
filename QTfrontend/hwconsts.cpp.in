@@ -41,6 +41,8 @@ int cMinServerVersion = 3;
 
 QString * cDefaultAmmoStore = new QString( AMMOLINE_DEFAULT_QT AMMOLINE_DEFAULT_PROB
                                            AMMOLINE_DEFAULT_DELAY AMMOLINE_DEFAULT_CRATE );
+QString * cEmptyAmmoStore =   new QString( AMMOLINE_EMPTY_QT AMMOLINE_EMPTY_PROB
+                                           AMMOLINE_EMPTY_DELAY AMMOLINE_EMPTY_CRATE );
 int cAmmoNumber = cDefaultAmmoStore->size() / 4;
 
 QList< QPair<QString, QString> > cDefaultAmmos =

@@ -5,4 +5,5 @@ install(FILES
     mask.png
     preview.png
     desc.txt
+    credits.txt
     DESTINATION ${SHAREPATH}Data/Maps/TrophyRace)

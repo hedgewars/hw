@@ -58,7 +58,7 @@ endif()
 
 # Abort if not found.
 if("${EMSCRIPTEN_ROOT_PATH}" STREQUAL "")
-    message(FATAL_ERROR "Could not locate the Emscripten compiler toolchain directory! Either set the EMSCRIPTEN environment variable, or pass -DEMSCRIPTEN_ROOT_PATH=xxx to CMake to explicitly specify the location of the compiler! This usually matches EMSCRIPTEN_ROOT from your ~/.emscripten file.")
+    message(FATAL_ERROR "Could not locate the Emscripten compiler toolchain directory! Set the EMSCRIPTEN environment variable to explicitly specify the location of the compiler! This usually matches EMSCRIPTEN_ROOT from your ~/.emscripten file.")
 endif()
 
 # Normalize, convert Windows backslashes to forward slashes or CMake will crash.

@@ -22,6 +22,7 @@ unit ArgParsers;
 interface
 
 procedure GetParams;
+
 {$IFNDEF BSD}
 var operatingsystem_parameter_argc: NativeInt; external;
     operatingsystem_parameter_argv: pointer; external;

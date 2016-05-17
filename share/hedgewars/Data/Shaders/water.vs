@@ -1,4 +1,4 @@
-
+precision mediump float;
 
 attribute vec2 vertex;
 attribute vec4 color;

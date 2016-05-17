@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fi">
+<TS version="2.1" language="fi">
 <context>
     <name>About</name>
     <message>
@@ -631,6 +631,10 @@ Kaksi viimeistä pelimoottorin viestiä:
     <message>
         <source>Style:</source>
         <translation>Tyyli:</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1445,7 +1449,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Joukkueet aloittavat kartan vastakkaisista päistä, maksimissaan kaksi joukkueväriä!</translation>
+        <translation type="vanished">Joukkueet aloittavat kartan vastakkaisista päistä, maksimissaan kaksi joukkueväriä!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1574,6 +1578,10 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Sea (Edges connect to sea)</source>
         <translation>Meri (seinät ovat merta)</translation>
+    </message>
+    <message>
+        <source>Each clan starts in its own part of the terrain.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2704,6 +2712,10 @@ Kaikki pelaajat eivät ole valmiita.</translation>
     <message>
         <source>Random Perlin</source>
         <translation>Satunnainen Perlin</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -75,14 +75,19 @@ function isSorterActive: boolean; inline;
 procedure initModule;
 
 implementation
-uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
+uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld, uUtils;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
     moved: boolean;
     vfc, vft: LongWord;
 begin
-if vobCount = 0 then exit;
+if SuddenDeathDmg then
+    begin
+    if (vobSDCount = 0) then exit;
+    end
+else
+    if (vobCount = 0) then exit;
 
 sign:= 1;
 with Gear^ do
@@ -692,9 +697,8 @@ end;
 procedure doStepHealthTag(Gear: PVisualGear; Steps: Longword);
 var s: shortstring;
 begin
-s:= '';
+s:= IntToStr(Gear^.State);
 
-str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
     Gear^.Tex:= RenderStringTex(ansistring(s), Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else

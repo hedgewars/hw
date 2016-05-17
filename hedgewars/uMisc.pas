@@ -33,7 +33,7 @@ function  GetTeamStatString(p: PTeam): shortstring;
 function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
 
 implementation
-uses SysUtils, uVariables, uUtils
+uses uVariables, uUtils
      {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF};
 
 type PScreenshot = ^TScreenshot;

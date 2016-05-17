@@ -447,11 +447,11 @@ AVWRAP_DECL int AVWrapper_WriteFrame(uint8_t *buf)
 
             if (!(x & 1) && !(y & 1)) {
                 int r = (buf[x * 4 + 0]          + buf[(x + 1) * 4 + 0] +
-                         buf[x * 4 + 0 + stride] + buf[(x + 1) * 4 + 0 + stride]) / 4;
+                         buf[x * 4 + 0 - stride] + buf[(x + 1) * 4 + 0 - stride]) / 4;
                 int g = (buf[x * 4 + 1]          + buf[(x + 1) * 4 + 1] +
-                         buf[x * 4 + 1 + stride] + buf[(x + 1) * 4 + 1 + stride]) / 4;
+                         buf[x * 4 + 1 - stride] + buf[(x + 1) * 4 + 1 - stride]) / 4;
                 int b = (buf[x * 4 + 2]          + buf[(x + 1) * 4 + 2] +
-                         buf[x * 4 + 2 + stride] + buf[(x + 1) * 4 + 2 + stride]) / 4;
+                         buf[x * 4 + 2 - stride] + buf[(x + 1) * 4 + 2 - stride]) / 4;
 
                 int cr = (int)(-0.14713f * r - 0.28886f * g + 0.436f   * b);
                 int cb = (int)( 0.615f   * r - 0.51499f * g - 0.10001f * b);

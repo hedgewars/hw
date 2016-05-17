@@ -424,7 +424,7 @@
 03:22=Call me Indiana!
 03:23=(Really) Martial Arts
 03:24=The cake is NOT a lie!
-03:25=Costume kit
+03:25=Attractive weapon
 03:26=Juicy grenade
 03:27=Fiery grenade
 03:28=Ballistic weapon
@@ -487,7 +487,7 @@
 04:22=Not just for Indiana Jones! The whip is a|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
 04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
 04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
-04:25=Use this disguise kit to get your enemies to jump|towards your hog (and into some gap or hole).|Attack: Use the kit and try to seduce another hog
+04:25=With this costume kit your hog becomes irresistibly|attractive and makes nearby hogs jump in blind love|towards it (and into some gap or hole). The seduction is|so heartwarming, it even breaks the ice of frozen hogs.|Attack: Use the irresistable seduction
 04:26=Throw this juicy (and bouncy) watermelon at|your enemies. Once the timer expires, it will|split into several explosive pieces.|1-5: Set watermelon's timer|Attack: Hold to shoot with more power
 04:27=Let hellfire rain onto your opponents by using|this fiendish explosive. Don't get too close to|the explosion as smaller fires might last longer.|Attack: Hold to shoot with more power
 04:28=Short time after launching this rocket, it will|start drilling through solid ground and explode|once its fuse is triggered or it resurfaces again.|Attack: Hold to shoot with more power

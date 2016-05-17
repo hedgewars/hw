@@ -210,6 +210,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     // Chat view
 
     chatText = new QTextBrowser(this);
+    chatText->setWhatsThis(tr("Chat log"));
     chatText->document()->setDefaultStyleSheet(styleSheet());
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
@@ -226,6 +227,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     // Hover:   rgb(13, 5, 68)
 
     chatEditLine = new SmartLineEdit();
+    chatEditLine->setWhatsThis(tr("Enter chat messages here and send them with [Enter]"));
     chatEditLine->setMaxLength(300);
     chatEditLine->setStyleSheet("SmartLineEdit { background-color: rgb(23, 11, 54); padding: 2px 8px; border-width: 0px; border-radius: 7px; } SmartLineEdit:hover, SmartLineEdit:focus { background-color: rgb(13, 5, 68); }");
     chatEditLine->setFixedHeight(24);
@@ -237,6 +239,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     // Nickname list
 
     chatNicks = new QListView(this);
+    chatNicks->setWhatsThis(tr("List of players"));
     chatNicks->setIconSize(QSize(24, 16));
     chatNicks->setSelectionMode(QAbstractItemView::SingleSelection);
     chatNicks->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -538,7 +541,9 @@ void HWChatWidget::clear()
 
     // add default commands
     QStringList cmds;
-    cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
+    // /saveStyleSheet is(/was?) broken because of Physfs or something
+    // cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
+    cmds << "/me" << "/info" << "/quit" << "/clear" << "/discardStyleSheet";
     chatEditLine->addCommands(cmds);
 
     chatText->clear();
@@ -828,7 +833,10 @@ bool HWChatWidget::parseCommand(const QString & line)
         QString tline = line.trimmed();
         if (tline.startsWith("/me"))
             return false; // not a real command
-
+        else if (tline == "/clear") {
+            chatStrings.clear();
+            chatText->clear();
+        }
         else if (tline == "/discardStyleSheet")
             discardStyleSheet();
         else if (tline == "/saveStyleSheet")

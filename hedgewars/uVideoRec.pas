@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO, uMisc, uTypes, uDebug;
+uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';

@@ -43,7 +43,7 @@ procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 implementation
-uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}, sysutils{$ELSE}, physfs{$ENDIF};
+uses uConsts, uUtils, uVariables{$IFDEF PAS2C}, physfs{$ENDIF};
 
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
@@ -205,7 +205,7 @@ var i: LongInt;
 {$ENDIF}
 begin
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
-    cPhysfsId:= shortstring(GetCurrentDir()) + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
+    cPhysfsId:= {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
 
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     //AddFileLog('[PhysFS] init: ' + inttostr(i));

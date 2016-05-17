@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en">
+<TS version="2.1" language="en">
 <context>
     <name>About</name>
     <message>
@@ -134,6 +134,20 @@
         <translation>
             <numerusform>Each turn</numerusform>
             <numerusform>Every %1 turns</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>MinesTimeSpinBox</name>
+    <message>
+        <source>Random</source>
+        <translation>Random</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 seconds</source>
+        <translation>
+            <numerusform>%1 second</numerusform>
+            <numerusform>%1 seconds</numerusform>
         </translation>
     </message>
 </context>
@@ -609,6 +623,10 @@ Last two engine messages:
     </message>
     <message>
         <source>Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1405,7 +1423,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Teams will start on opposite sides of the terrain, two team colours max!</translation>
+        <translation type="vanished">Teams will start on opposite sides of the terrain, two team colours max!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1434,14 +1452,6 @@ just enter your nickname.</source>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
         <translation>Your hogs are unable to move, put your artillery skills to the test</translation>
-    </message>
-    <message>
-        <source>Random</source>
-        <translation>Random</translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation>Seconds</translation>
     </message>
     <message>
         <source>New</source>
@@ -1533,6 +1543,10 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Sea (Edges connect to sea)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each clan starts in its own part of the terrain.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2642,6 +2656,10 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Random Perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
