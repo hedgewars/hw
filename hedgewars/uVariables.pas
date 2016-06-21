@@ -298,28 +298,28 @@ var
 const
     FontzInit: array[THWFont] of THHFont = (
             (Handle: nil;
-            Height: 12;
+            Height: 12*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf'),
             (Handle: nil;
-            Height: 24;
+            Height: 24*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf'),
             (Handle: nil;
-            Height: 10;
+            Height: 10*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf')
             {$IFNDEF MOBILE}, // remove chinese fonts for now
             (Handle: nil;
-            Height: 12;
+            Height: 12*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc'),
             (Handle: nil;
-            Height: 24;
+            Height: 24*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc'),
             (Handle: nil;
-            Height: 10;
+            Height: 10*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc')
             {$ENDIF}
