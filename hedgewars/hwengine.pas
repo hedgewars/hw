@@ -52,22 +52,6 @@ procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
-// TODO localization support
-procedure ShowCredits();
-var themeCredits, mapCredits: shortstring;
-begin
-    if Length(cMapName) > 0 then
-        begin
-        mapCredits:= read1stLn(cPathz[ptMapCurrent] + '/credits.txt');
-        if Length(mapCredits) > 0 then
-            AddChatString(char(#11) + '© Map: ' + mapCredits);
-        end;
-
-        themeCredits:= read1stLn(cPathz[ptCurrTheme] + '/credits.txt');
-        if Length(themeCredits) > 0 then
-            AddChatString(char(#12) + '© Theme: ' + themeCredits);
-end;
-
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
@@ -112,7 +96,6 @@ begin
                 with TeamsArray[t]^ do
                     MaxTeamHealth:= TeamHealth;
             RecountAllTeamsHealth;
-            //if not cOnlyStats then ShowCredits;
             GameState:= gsGame;
             end;
         gsConfirm, gsGame, gsChat:
