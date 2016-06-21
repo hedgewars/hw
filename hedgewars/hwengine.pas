@@ -112,7 +112,7 @@ begin
                 with TeamsArray[t]^ do
                     MaxTeamHealth:= TeamHealth;
             RecountAllTeamsHealth;
-            if not cOnlyStats then ShowCredits;
+            //if not cOnlyStats then ShowCredits;
             GameState:= gsGame;
             end;
         gsConfirm, gsGame, gsChat:
