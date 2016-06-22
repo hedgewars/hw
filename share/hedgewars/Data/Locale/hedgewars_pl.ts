@@ -26,6 +26,10 @@
         <translation type="obsolete">kopia</translation>
     </message>
     <message>
+        <source>copy of %1</source>
+        <translation type="obsolete">kopia %1</translation>
+    </message>
+    <message>
         <source>New</source>
         <translation type="unfinished">Nowy</translation>
     </message>
@@ -86,7 +90,7 @@
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>Banuj gracza</translation>
     </message>
 </context>
 <context>
@@ -128,7 +132,7 @@
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished">Twoja opinia</translation>
+        <translation>Twoja opinia</translation>
     </message>
 </context>
 <context>
@@ -162,7 +166,7 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation type="unfinished">Schemat gry automatycznie wybierze uzbrojenie</translation>
+        <translation>Schemat gry automatycznie wybierze uzbrojenie</translation>
     </message>
     <message>
         <source>Map</source>
@@ -483,12 +487,13 @@ Poczekaj kilka sekund i spróbuj ponownie.</translation>
     </message>
     <message>
         <source>Room password</source>
-        <translation type="unfinished"></translation>
+        <translation>Hasło do pokoju</translation>
     </message>
     <message>
         <source>The room is protected with password.
 Please, enter the password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten pokój jest chroniony hasłem
+Podaj hasło:</translation>
     </message>
 </context>
 <context>
@@ -517,7 +522,7 @@ Last two engine messages:
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz z serwerem</translation>
     </message>
 </context>
 <context>
@@ -564,7 +569,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Image map</source>
-        <translation type="unfinished">Mapa z obrazka</translation>
+        <translation>Mapa z obrazka</translation>
     </message>
     <message>
         <source>Mission map</source>
@@ -652,11 +657,11 @@ Last two engine messages:
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Styl:</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Forty</translation>
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
@@ -668,7 +673,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wybierz motyw</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
@@ -799,7 +804,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>New Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowe konto</translation>
     </message>
 </context>
 <context>
@@ -836,7 +841,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz nakrycie głowy</translation>
     </message>
 </context>
 <context>
@@ -878,7 +883,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Duration: %1m %2s</source>
-        <translation type="unfinished"></translation>
+        <translation>Czas trwania: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
@@ -978,7 +983,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz katalog z dodatkami</translation>
     </message>
 </context>
 <context>
@@ -1021,15 +1026,15 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>Linia</translation>
     </message>
     <message>
         <source>Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Prostokąt</translation>
     </message>
     <message>
         <source>Ellipse</source>
-        <translation type="unfinished"></translation>
+        <translation>Elipsa</translation>
     </message>
     <message>
         <source>Optimize</source>
@@ -1087,7 +1092,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation>Wykres</translation>
+        <translation>Wykres punktów życia</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -1095,7 +1100,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Największe obrażenia (&lt;b&gt;%2&lt;/b&gt; pkt.) zadał &lt;b&gt;%1&lt;/b&gt;.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -1388,7 +1393,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
-        <translation type="unfinished">Wybierz czynność by przypisać do niej klawisz</translation>
+        <translation>Wybierz czynność by przypisać do niej klawisz</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -1689,23 +1694,23 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>None (Default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak (Domyślne)</translation>
     </message>
     <message>
         <source>Wrap (World wraps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapętlona (zapętla mapę)</translation>
     </message>
     <message>
         <source>Bounce (Edges reflect)</source>
-        <translation type="unfinished"></translation>
+        <translation>Odbijająca (Krawędzie odbijają)</translation>
     </message>
     <message>
         <source>Sea (Edges connect to sea)</source>
-        <translation type="unfinished"></translation>
+        <translation>Woda (Krawędzie łączą się z wodą)</translation>
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation type="unfinished"></translation>
+        <translation>Każda drużyna zaczyna na swojej części planszy</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
@@ -1887,11 +1892,11 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Date: %1</source>
-        <translation type="unfinished">Data: %1 {1?}</translation>
+        <translation>Data: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation type="unfinished">Rozmiar: %1 {1?}</translation>
+        <translation>Rozmiar: %1</translation>
     </message>
 </context>
 <context>
@@ -1954,11 +1959,11 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż chronione hasłem</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż bez możliwości dołączenia</translation>
     </message>
 </context>
 <context>
@@ -2005,7 +2010,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Use game resolution</source>
-        <translation>Użyj rozdzielczości z gry</translation>
+        <translation>Rodzielczość gry</translation>
     </message>
     <message>
         <source>Visual effects</source>
@@ -2037,35 +2042,35 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Drużyna</translation>
     </message>
     <message>
         <source>Enable team tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetlanie informacji o drużynie do której należą jeże</translation>
     </message>
     <message>
         <source>Hog</source>
-        <translation type="unfinished"></translation>
+        <translation>Imiona</translation>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetlanie imion jeży</translation>
     </message>
     <message>
         <source>Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Życie</translation>
     </message>
     <message>
         <source>Enable health tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyświetlanie punktów życia jeży</translation>
     </message>
     <message>
         <source>Translucent</source>
-        <translation type="unfinished"></translation>
+        <translation>Przezroczystość</translation>
     </message>
     <message>
         <source>Enable translucent tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Przezroczystość informacji nad jeżami</translation>
     </message>
 </context>
 <context>
@@ -2206,7 +2211,7 @@ po prostu wpisz swój nick.</translation>
     <name>QLabel</name>
     <message>
         <source>Weapons</source>
-        <translation>Uzbrojenie</translation>
+        <translation type="unfinished">Uzbrojenie</translation>
     </message>
     <message>
         <source>Host:</source>
@@ -2274,7 +2279,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation>% niewybuchów</translation>
+        <translation>% niewypałów</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2454,7 +2459,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
-        <translation>Ustawienia zadziałają po restarcie gry.</translation>
+        <translation>Ustawienia zadziałają po restarcie gry</translation>
     </message>
     <message>
         <source>Tip: %1</source>
@@ -2462,11 +2467,11 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Informacje nad jeżami i przezroczystość</translation>
     </message>
     <message>
         <source>World Edge</source>
-        <translation type="unfinished"></translation>
+        <translation>Krawędź mapy</translation>
     </message>
     <message>
         <source>Script parameter</source>
@@ -2474,7 +2479,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Air Mines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Miny powietrzne</translation>
     </message>
     <message>
         <source>Player</source>
@@ -2971,7 +2976,7 @@ Nie wszyscy gracze są gotowi.</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forty</translation>
     </message>
 </context>
 <context>
@@ -3092,7 +3097,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz motyw</translation>
     </message>
 </context>
 <context>
@@ -3271,7 +3276,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>speed up replay</source>
-        <translation type="unfinished"></translation>
+        <translation>przyśpiesz powtórkę</translation>
     </message>
 </context>
 <context>
