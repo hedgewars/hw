@@ -1,5 +1,4 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE FlexibleContexts #-}
 module Pas2C where
 
 import Text.PrettyPrint.HughesPJ
@@ -298,6 +297,7 @@ uses2C uses@(Uses unitIds) = do
     mapM_ (id2C IOInsert . setBaseType BTUnit) unitIds
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
+    injectNamespace :: Identifier -> State RenderState ()
     injectNamespace (Identifier i _) = do
         getNS <- gets (flip Map.lookup . namespaces)
         modify (\s -> s{currentScope = Map.unionWith (++) (fromMaybe Map.empty (getNS i)) $ currentScope s})
