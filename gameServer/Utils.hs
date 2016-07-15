@@ -29,7 +29,6 @@ import System.IO
 import qualified Data.List as List
 import Control.Monad
 import qualified Data.ByteString.Lazy as BL
-import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
 import Data.Maybe
@@ -132,8 +131,8 @@ unfoldrE f b  =
         Right (a, new_b) -> let (a', b') = unfoldrE f new_b in (a : a', b')
         Left new_b       -> ([], new_b)
 
-showB :: (BS.Show a) => a -> B.ByteString
-showB = B.concat . BL.toChunks . BS.show
+showB :: (Show a) => a -> B.ByteString
+showB = B.pack . show
 
 readInt_ :: (Num a) => B.ByteString -> a
 readInt_ str =

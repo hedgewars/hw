@@ -4,14 +4,20 @@ Basic_Training_-_Bazooka.desc="Pamiętaj o tym, że wiatr może działać na two
 Basic_Training_-_Grenade.name=Podstawy rzucania granatami
 Basic_Training_-_Grenade.desc="Najpierw wyciągasz zawleczkę, POTEM rzucasz!"
 
-Basic_Training_-_Cluster_Bomb.name=Podstawy rzucania bomb kasetowych
-Basic_Training_-_Cluster_Bomb.desc="Ktoś tutaj czeka na gorący prysznic..."
+Basic_Training_-_Cluster_Bomb.name=Podstawy rzucania granatami odłamkowymi
+Basic_Training_-_Cluster_Bomb.desc="Komuś przydałby się gorący prysznic..."
 
 Basic_Training_-_Shotgun.name=Podstawy strzelania ze strzelby
 Basic_Training_-_Shotgun.desc="Wpierw strzelaj. Pytania zadasz później."
 
 Basic_Training_-_Sniper_Rifle.name=Podstawy strzelania ze snajperki
 Basic_Training_-_Sniper_Rifle.desc="Jeden strzał i kolejny jeż pójdzie do piachu."
+
+Basic_Training_-_Rope.name=Podstawy korzystania z liny
+Basic_Training_-_Rope.desc="Bierz linę i do dzieła!"
+
+Basic_Training_-_Flying_Saucer.name=Podstawy korzystania z latającego talerza
+Basic_Training_-_Flying_Saucer.desc="Więc chcesz być astonautą, co? Najpierw naucz się latać!"
 
 User_Mission_-_Dangerous_Ducklings.name=Kryptonim: Niebezpieczne Kaczki
 User_Mission_-_Dangerous_Ducklings.desc="Dobra Żółtodziobie! Zobaczymy czego się nauczyłeś na treningu!!!"
@@ -23,13 +29,58 @@ User_Mission_-_Teamwork.name=Kryptonim: Praca zespołowa
 User_Mission_-_Teamwork.desc="Miłość potrafi czasem zranić."
 
 User_Mission_-_Spooky_Tree.name=Kryptonim: Straszne drzewo
-User_Mission_-_Spooky_Tree.desc="Na tym drzewie rośnie bardzo dużo skrzynek. Mam tylko nadzieję, że ten ptak nie jest głodny"
+User_Mission_-_Spooky_Tree.desc="Na tym drzewie jest dużo skrzynek. Mam tylko nadzieję, że ten ptak nie jest głodny"
 
 User_Mission_-_Bamboo_Thicket.name=Kryptonim: Bambusowy bór
 User_Mission_-_Bamboo_Thicket.desc="Śmierć nadchodzi z góry."
 
 User_Mission_-_That_Sinking_Feeling.name=Kryptonim: Cisza na morzu
-User_Mission_-_That_Sinking_Feeling.desc="Morze jest wzburzone, a czas szybko upływa. Wielu próbowało, ale nikomu nie udało się wszystkich uratować. Czy ty będziesz pierwszy?"
+User_Mission_-_That_Sinking_Feeling.desc="Woda podnosi się, a czas upływa. Wielu próbowało, ale nikomu nie udało się wszystkich uratować. Czy ty będziesz pierwszy?"
 
 User_Mission_-_Newton_and_the_Hammock.name=Kryptonim: Newton i jego hamak
 User_Mission_-_Newton_and_the_Hammock.desc="Zapamiętajcie jeżyki: Prędkość ciała nie zmienia się, chyba że działa na nie inna siła!"
+
+User_Mission_-_The_Great_Escape.name=Kryptonim: Wielka ucieczka
+User_Mission_-_The_Great_Escape.desc="Myślisz, że uda ci się mnie uwięzić!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Wyzwanie: Spychanie liną
+User_Mission_-_Rope_Knock_Challenge.desc="Spójrz za siebie!"
+
+User_Mission_-_Nobody_Laugh.name=Kryptonim: Nikt się nie śmieje
+User_Mission_-_Nobody_Laugh.desc="To nie jest żaden żart"
+
+User_Mission_-_RCPlane_Challenge.name=Wyzwanie: Radiowy samolocik
+User_Mission_-_RCPlane_Challenge.desc="Czujesz się całkiem pewnie, co, pilociku?"
+
+portal.name=Kryptonim: Łamigłówka z portalami
+portal.desc="Wykorzystaj portrale dojść daleko w krótkim czasie. Naucz się zabijać z ich pomocą, ale zachowaj ostrożność!"
+
+Target_Practice_-_Bazooka_easy.name=Ćwiczenia z celem: Bazooka (łatwy)
+Target_Practice_-_Bazooka_easy.desc="W porządku żołnierzu, zniszcz cele najszybciej jak potrafisz!"
+
+Target_Practice_-_Bazooka_hard.name=Ćwiczenia z celem: Bazooka (trudny)
+Target_Practice_-_Bazooka_hard.desc="Czy potrafisz nie chybić nawet jeśli cel znajduje się daleko?"
+
+Target_Practice_-_Cluster_Bomb.name=Ćwiczenia z celem: Granat odłamkowy
+Target_Practice_-_Cluster_Bomb.desc="Komuś przydałby się gorący prysznic..."
+
+Target_Practice_-_Shotgun.name=Ćwiczenia z celem: Strzelba
+Target_Practice_-_Shotgun.desc="Wpierw strzelaj. Pytania zadasz później."
+
+Target_Practice_-_Homing_Bee.name=Ćwiczenia z celem: Pszczoła
+Target_Practice_-_Homing_Bee.desc="Korzystanie z pszczoły jest bardziej złożone niż się wydaje."
+
+Target_Practice_-_Grenade_easy.name=Ćwiczenia z celem: Granat (łatwy)
+Target_Practice_-_Grenade_easy.desc="Rozgrzewka dla ambitnego grenadiera."
+
+Target_Practice_-_Grenade_hard.name=Ćwiczenia z celem: Granat (trudny)
+Target_Practice_-_Grenade_hard.desc="Z pewnością nie dla żółtodziobów! Umieścimy cele w kilku naprawdę trudnych miejscach."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Wyzwanie: Kochamy Shoppa!
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Pokaż, że uwielbiasz linę zbierając kilka skrzynek na niewielkiej mapie."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Wyzwanie: Liny i skrzynki
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Bierz linę i zbierz wszystkie skrzynki na średniej wielkości mapie."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Wyzwanie: Klient nasz Pan
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Pokaż, że to ty tu rządzisz! Zbierz wszystkie skrzynki najszybciej jak potrafisz na rozległej mapie."

@@ -26,6 +26,7 @@ uses    SDLh, uFloat, GLunit;
 {$INCLUDE "config.inc"}
 
 const
+    HDPIScaleFactor     =  1;
     HaltNoError         =  0;
     HaltUsageError      =  1;
     HaltFatalError      =  2;
@@ -180,7 +181,8 @@ const
     cKeyMaxIndex = 1600;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
 
-    cFontBorder = 2;
+    cFontBorder = 2 * HDPIScaleFactor;
+    cFontPadding = 2 * HDPIScaleFactor;
 
     cDefaultBuildMaxDist = 256;
 

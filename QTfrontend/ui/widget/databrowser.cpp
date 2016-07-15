@@ -52,7 +52,7 @@ QVariant DataBrowser::loadResource(int type, const QUrl & name)
             qDebug() << "Requesting resource" << name.toString();
             requestedResources.insert(name.toString());
 
-            QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + name.toString()));
+            QNetworkRequest newRequest(QUrl("https://www.hedgewars.org" + name.toString()));
             newRequest.setAttribute(typeAttribute, type);
             newRequest.setAttribute(urlAttribute, name);
 

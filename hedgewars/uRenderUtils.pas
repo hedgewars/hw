@@ -51,23 +51,23 @@ begin
     BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
     FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
 
-    r.y:= rect^.y + 1;
-    r.h:= rect^.h - 2;
+    r.y:= rect^.y + cFontBorder div 2;
+    r.h:= rect^.h - cFontBorder;
     SDL_FillRect(Surface, @r, BorderColor);
-    r.x:= rect^.x + 1;
-    r.w:= rect^.w - 2;
+    r.x:= rect^.x + cFontBorder div 2;
+    r.w:= rect^.w - cFontBorder;
     r.y:= rect^.y;
     r.h:= rect^.h;
     SDL_FillRect(Surface, @r, BorderColor);
-    r.x:= rect^.x + 2;
-    r.y:= rect^.y + 1;
-    r.w:= rect^.w - 4;
-    r.h:= rect^.h - 2;
+    r.x:= rect^.x + cFontBorder;
+    r.y:= rect^.y + cFontBorder div 2;
+    r.w:= rect^.w - cFontBorder * 2;
+    r.h:= rect^.h - cFontBorder;
     SDL_FillRect(Surface, @r, FillColor);
-    r.x:= rect^.x + 1;
-    r.y:= rect^.y + 2;
-    r.w:= rect^.w - 2;
-    r.h:= rect^.h - 4;
+    r.x:= rect^.x + cFontBorder div 2;
+    r.y:= rect^.y + cFontBorder;
+    r.w:= rect^.w - cFontBorder;
+    r.h:= rect^.h - cFontBorder * 2;
     SDL_FillRect(Surface, @r, FillColor);
 end;
 (*
@@ -83,10 +83,10 @@ var w, h: Longword;
     finalRect, textRect: TSDL_Rect;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), @w, @h);
-    if (maxLength > 0) and (w > maxLength) then w := maxLength;
+    if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
     finalRect.x:= X;
     finalRect.y:= Y;
-    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.w:= w + cFontBorder * 2 + cFontPadding * 2;
     finalRect.h:= h + cFontBorder * 2;
     textRect.x:= X;
     textRect.y:= Y;
@@ -97,7 +97,7 @@ begin
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
-    finalRect.x:= X + cFontBorder + 2;
+    finalRect.x:= X + cFontBorder + cFontPadding;
     finalRect.y:= Y + cFontBorder;
     if SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
         exit;
@@ -105,7 +105,7 @@ begin
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;
     finalRect.y:= Y;
-    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.w:= w + cFontBorder * 2 + cFontPadding * 2;
     finalRect.h:= h + cFontBorder * 2;
     WriteInRoundRect:= finalRect;
 end;
@@ -290,9 +290,9 @@ begin
         font:= CheckCJKFont(s, font);
         w:= 0; h:= 0; // avoid compiler hints
         TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
-        if (maxLength > 0) and (w > maxLength) then w := maxLength;
+        if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
 
-        finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
+        finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder*2 + cFontPadding*2, h + cFontBorder * 2,
                 32, RMask, GMask, BMask, AMask);
 
         if checkFails(finalSurface <> nil, 'RenderString: fail to create surface', true) then

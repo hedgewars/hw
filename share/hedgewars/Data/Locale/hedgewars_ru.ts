@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<TS version="2.0" language="ru">
 <context>
     <name>About</name>
     <message>
@@ -19,7 +19,7 @@
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
-        <translation>новый</translation>
+        <translation type="obsolete">новый</translation>
     </message>
     <message>
         <source>copy of</source>
@@ -27,7 +27,15 @@
     </message>
     <message>
         <source>copy of %1</source>
-        <translation>копия %1</translation>
+        <translation type="obsolete">копия %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Новая</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -348,6 +356,18 @@ Please check your installation!</source>
         <source>%1 has left (%2)</source>
         <translation>%1 вышел (%2)</translation>
     </message>
+    <message>
+        <source>Chat log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter chat messages here and send them with [Enter]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of players</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -639,6 +659,50 @@ Last two engine messages:
     </message>
     <message>
         <source>Forts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View and edit the seed, the source of randomness in the game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the map, theme and seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the theme and seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to randomize the map, theme and seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to randomize the theme and seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the complexity of the generated map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the distance between forts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to edit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1188,6 +1252,10 @@ just enter your nickname.</source>
         <source>Edit game preferences</source>
         <translation>Редактировать настройки игры</translation>
     </message>
+    <message>
+        <source>Start fighting (requires at least 2 teams)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageNetGame</name>
@@ -1210,6 +1278,22 @@ just enter your nickname.</source>
     <message>
         <source>Room controls</source>
         <translation>Управление комнатой</translation>
+    </message>
+    <message>
+        <source>Room name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update the room name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting (requires at least 2 teams)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1404,6 +1488,18 @@ just enter your nickname.</source>
         <source>Enter new file name:</source>
         <translation>Введите новое имя файла:</translation>
     </message>
+    <message>
+        <source>Play demo</source>
+        <translation type="unfinished">Играть демку</translation>
+    </message>
+    <message>
+        <source>Play the selected demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load the selected game</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageRoomsList</name>
@@ -1488,11 +1584,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Random</source>
-        <translation>Случайно</translation>
+        <translation type="obsolete">Случайно</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation>Секунды</translation>
+        <translation type="obsolete">Секунды</translation>
     </message>
     <message>
         <source>New</source>
@@ -1508,7 +1604,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="vanished">Команды располагаются в противоположных сторонах карты, два цвета команды на карте!</translation>
+        <translation type="obsolete">Команды располагаются в противоположных сторонах карты, два цвета команды на карте!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1612,6 +1708,78 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overall damage and knockback in percent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turn time in seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial health of hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How many rounds have to be played before Sudden Death begins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum rope length in percent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Likelihood of a crate dropping before a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health bonus for collecting a health crate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Affects the left and right boundaries of the map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time you get after an attack</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1911,7 +2079,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Level</source>
-        <translation>Уровень</translation>
+        <translation type="obsolete">Уровень</translation>
     </message>
     <message>
         <source>(System default)</source>
@@ -1991,6 +2159,10 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Green/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer (Level %1)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2113,7 +2285,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="obsolete">Тип</translation>
     </message>
     <message>
         <source>Grave</source>
@@ -2133,7 +2305,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Explosives</source>
-        <translation>Взрывчатка</translation>
+        <translation type="obsolete">Взрывчатка</translation>
     </message>
     <message>
         <source>Tip: </source>
@@ -2177,7 +2349,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation>% времени ухода</translation>
+        <translation type="obsolete">% времени ухода</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
@@ -2305,6 +2477,18 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Air Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Retreat Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2806,7 +2990,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>new</source>
-        <translation>новый</translation>
+        <translation type="obsolete">новый</translation>
     </message>
     <message>
         <source>copy of</source>
@@ -2814,7 +2998,23 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>copy of %1</source>
-        <translation>копия %1</translation>
+        <translation type="obsolete">копия %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Новая</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

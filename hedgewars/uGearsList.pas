@@ -407,7 +407,7 @@ case Kind of
                 RopePoints.Count:= 0;
                 gear^.Tint:= $D8D8D8FF;
                 gear^.Tag:= 0; // normal rope render
-                gear^.CollisionMask:= lfNotObjMask or lfNotHHObjMask;
+                gear^.CollisionMask:= lfNotCurrentMask //lfNotObjMask or lfNotHHObjMask;
                 end;
         gtMine: begin
                 gear^.ImpactSound:= sndMineImpact;

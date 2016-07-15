@@ -2038,7 +2038,7 @@ void HWForm::AssociateFiles()
 
 void HWForm::openRegistrationPage()
 {
-    QDesktopServices::openUrl(QUrl("http://www.hedgewars.org/user/register"));
+    QDesktopServices::openUrl(QUrl("https://www.hedgewars.org/user/register"));
 }
 
 void HWForm::saveDemoWithCustomName()
@@ -2102,7 +2102,7 @@ void HWForm::ShowFatalErrorMessage(const QString & msg)
 
 void HWForm::showFeedbackDialog()
 {
-    QNetworkRequest newRequest(QUrl("http://www.hedgewars.org"));
+    QNetworkRequest newRequest(QUrl("https://www.hedgewars.org"));
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkReply *reply = manager->get(newRequest);

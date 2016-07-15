@@ -581,20 +581,6 @@ begin
     SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
     WriteLnToConsole(msgOK);
 
-    // display music credits
-    s:= s + '_credits.txt';
-
-    // if per-file credits not found check general music credits file
-    if pfsExists(s) then
-        s:= read1stLn(s)
-    else if SuddenDeath and (SDMusicFN <> '') then
-        s:= readValueFromINI(SDMusicFN, '/Music/credits.txt')
-    else
-        s:= readValueFromINI(MusicFN, '/Music/credits.txt');
-
-    if Length(s) > 0 then
-        AddChatString(char(#10) + '© Music: ' + s);
-
     SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;
 

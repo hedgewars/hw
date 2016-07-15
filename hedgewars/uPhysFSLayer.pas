@@ -43,7 +43,7 @@ procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 implementation
-uses uConsts, uUtils, uVariables{$IFDEF PAS2C}, physfs{$ENDIF};
+uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}{$IFDEF HWLIBRARY}, sysutils{$ENDIF}{$ELSE}, physfs{$ENDIF};
 
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
