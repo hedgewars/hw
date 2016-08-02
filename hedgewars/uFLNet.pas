@@ -1,5 +1,6 @@
 unit uFLNet;
 interface
+uses SDLh;
 
 procedure connectOfficialServer;
 
@@ -7,11 +8,12 @@ procedure initModule;
 procedure freeModule;
 procedure sendNet(s: shortstring);
 procedure sendNetLn(s: shortstring);
+procedure passToNet(data: PByteArray; len: Longword);
 
 var isConnected: boolean = false;
 
 implementation
-uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes, uFLUtils;
+uses uFLIPC, uFLUICallback, uFLNetTypes, uFLUtils, uFLTypes;
 
 const endCmd: shortstring = #10 + #10;
 
@@ -378,7 +380,7 @@ end;
 
 procedure netSendCallback(p: pointer; msg: PChar; len: Longword);
 begin
-    // W A R N I N G: totally thread-unsafe due to use of sock variable
+    // FIXME W A R N I N G: totally thread-unsafe due to use of sock variable
     SDLNet_TCP_Send(sock, msg, len);
 end;
 
@@ -395,6 +397,24 @@ begin
 
     netReaderThread:= SDL_CreateThread(@netReader, 'netReader', nil);
     SDL_DetachThread(netReaderThread)
+end;
+
+
+procedure passToNet(data: PByteArray; len: Longword);
+var i: Longword;
+begin
+    i:= 0;
+
+    while(i < len) do
+    begin
+        if data^[i + 1] = ord('s') then
+        begin
+            sendUI(mtRoomChatLine, @(data^[i + 2]), data^[i]);
+            //sendChatLine()
+        end;
+
+        inc(i, data^[i] + 1);
+    end;
 end;
 
 procedure initModule;

@@ -36,6 +36,7 @@ extern "C" {
 
     connectOfficialServer_t * flibConnectOfficialServer;
     passNetData_t * flibPassNetData;
+    passToNet_t * flibPassToNet;
     passFlibEvent_t * flibPassFlibEvent;
     sendChatLine_t * flibSendChatLine;
     joinRoom_t * flibJoinRoom;
@@ -90,6 +91,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibConnectOfficialServer = (connectOfficialServer_t*) hwlib.resolve("connectOfficialServer");
     flibPassNetData = (passNetData_t*) hwlib.resolve("passNetData");
+    flibPassToNet = (passToNet_t*) hwlib.resolve("passToNet");
     flibPassFlibEvent = (passFlibEvent_t*) hwlib.resolve("passFlibEvent");
     flibSendChatLine = (sendChatLine_t*) hwlib.resolve("sendChatLine");
     flibJoinRoom = (joinRoom_t*) hwlib.resolve("joinRoom");
@@ -199,6 +201,10 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
     }
     case MSG_NETDATA: {
         flibPassNetData(msg.constData());
+        break;
+    }
+    case MSG_TONET: {
+        flibPassToNet(msg.constData(), msg.size());
         break;
     }
     case MSG_FLIBEVENT: {

@@ -9,7 +9,7 @@ type
     TMessageType = (mtRenderingPreview, mtPreview, mtPreviewHogCount
                     , mtAddPlayingTeam, mtRemovePlayingTeam
                     , mtAddTeam, mtRemoveTeam, mtTeamColor, mtHedgehogsNumber
-                    , mtNetData
+                    , mtNetData, mtToNet
                     , mtFlibEvent, mtConnected, mtDisconnected, mtAddLobbyClient
                     , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoomClient
                     , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom

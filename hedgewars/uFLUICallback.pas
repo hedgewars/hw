@@ -23,6 +23,7 @@ begin
 
     if isGame then
     begin
+        uiCallbackFunction(uiCallbackPointer, mtToNet, msg, len)
     end
     else begin
         if len = 128 * 256 then
