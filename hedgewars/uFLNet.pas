@@ -11,6 +11,7 @@ procedure sendNetLn(s: shortstring);
 procedure passToNet(data: PByteArray; len: Longword);
 
 var isConnected: boolean = false;
+    myNickname: shortstring = 'qmlfrontend';
 
 implementation
 uses uFLIPC, uFLUICallback, uFLNetTypes, uFLUtils, uFLTypes;
@@ -402,6 +403,8 @@ end;
 
 procedure passToNet(data: PByteArray; len: Longword);
 var i: Longword;
+    l: ansistring;
+    s: shortstring;
 begin
     i:= 0;
 
@@ -409,8 +412,15 @@ begin
     begin
         if data^[i + 1] = ord('s') then
         begin
-            sendUI(mtRoomChatLine, @(data^[i + 2]), data^[i]);
-            //sendChatLine()
+            s[0]:= char(data^[i] - 1);
+            Move(data^[i + 2], s[1], data^[i] - 1);
+
+            l:= myNickname + #10;
+            l:= l + s;
+
+            sendUI(mtRoomChatLine, @l[1], length(l));
+            sendNetLn('CHAT');
+            sendNet(s);
         end;
 
         inc(i, data^[i] + 1);

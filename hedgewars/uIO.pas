@@ -256,7 +256,9 @@ end;
 
 procedure flushBuffer();
 begin
+    ipcToFrontendRaw(@sendBuffer.buf, sendBuffer.count);
     flushDelayTicks:= 0;
+    sendBuffer.count:= 0;
 end;
 
 procedure SendIPC(s: shortstring);
@@ -269,7 +271,20 @@ begin
     AddFileLog('[IPC out] '+ sanitizeCharForLog(s[1]));
     inc(s[0], 2);
 
-    ipcToFrontend(s)
+    if isSyncedCommand(s[1]) then
+        begin
+        if sendBuffer.count + byte(s[0]) >= cSendBufferSize then
+            flushBuffer();
+
+        Move(s, sendBuffer.buf[sendBuffer.count], byte(s[0]) + 1);
+        inc(sendBuffer.count, byte(s[0]) + 1);
+
+        if (s[1] = 'N') or (s[1] = '#') then
+            flushBuffer();
+        end
+    else
+        ipcToFrontendRaw(@s, Succ(byte(s[0])))
+
 end;
 
 procedure SendIPCRaw(p: pointer; len: Longword);

@@ -16,7 +16,6 @@ type
     PHandler = procedure (var t: TCmdData);
 
 var isInRoom: boolean;
-    myNickname: shortstring;
 
 procedure onRoomLeaving();
 begin
@@ -310,8 +309,8 @@ procedure handler_CONNECTED(var p: TCmdParami);
 begin
     sendUI(mtConnected, nil, 0);
     //writeln('Server features version ', p.param1);
-    sendNet('PROTO' + #10 + '51');
-    sendNet('NICK' + #10 + 'qmlfrontend');
+    sendNet('PROTO' + #10 + '52');
+    sendNet('NICK' + #10 + myNickname);
 end;
 
 procedure handler_EM(var p: TCmdParam);

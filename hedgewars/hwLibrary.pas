@@ -181,6 +181,7 @@ exports
     // network
     connectOfficialServer,
     passNetData,
+    passToNet,
     passFlibEvent,
     sendChatLine,
     joinRoom,

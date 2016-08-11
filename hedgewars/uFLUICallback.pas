@@ -14,10 +14,9 @@ var uiCallbackPointer: pointer;
 
 procedure engineMessageCallback(p: pointer; msg: PChar; len: Longword);
 begin
-    if msg^ = 'T' then
+    if (len >= 3) and (msg[1] = 'T') then
     begin
-        inc(msg);
-        isGame:= msg^ = 'G';
+        isGame:= msg[2] = 'G';
         exit;
     end;
 
