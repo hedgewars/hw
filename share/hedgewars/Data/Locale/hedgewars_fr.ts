@@ -3772,7 +3772,7 @@ zoom</translation>
     </message>
     <message>
         <source>Restricted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Limité</translation>
     </message>
     <message>
         <source>No checker rights</source>
@@ -3780,51 +3780,51 @@ zoom</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La version de la room est incompatible avec votre version du jeu</translation>
     </message>
     <message>
         <source>You already have voted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vous avez déjà voté</translation>
     </message>
     <message>
         <source>Voting closed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote terminé</translation>
     </message>
     <message>
         <source>New voting started</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nouveau vote ouvert</translation>
     </message>
     <message>
         <source>Voting expired</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote expiré</translation>
     </message>
     <message>
         <source>kick</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Expulsé</translation>
     </message>
     <message>
         <source>map</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Carte</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation type="unfinished">pause</translation>
+        <translation type="unfinished">Pause</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Reconnecté trop vite</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Attention! La protection anti-flood du chat est activé</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trop de spam</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spam des messages du jeu détecté</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
@@ -3832,15 +3832,15 @@ zoom</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Il n'y a pas de vote en ce moment</translation>
     </message>
     <message>
         <source>Your vote counted</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Votre vote est enregistré</translation>
     </message>
     <message>
         <source>Pause toggled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En pause</translation>
     </message>
     <message>
         <source>new seed</source>
@@ -3848,7 +3848,7 @@ zoom</translation>
     </message>
     <message>
         <source>number of hedgehogs in team</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nombre de hedgehogs dans la team</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
@@ -3860,23 +3860,23 @@ zoom</translation>
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote d'expulsion: spécifié le pseudo</translation>
     </message>
     <message>
         <source>callvote kick: no such user</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote d'expulsion: pas d'autres utilisateurs</translation>
     </message>
     <message>
         <source>callvote map: no such map</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote de carte: pas d'autres cartes</translation>
     </message>
     <message>
         <source>callvote pause: no game in progress</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote de pause: pas de partie en cours</translation>
     </message>
     <message>
         <source>callvote hedgehogs: specify number from 1 to 8</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vote d'hedgehogs: spécifié un chiffre entre 1 et 8</translation>
     </message>
 </context>
 </TS>
