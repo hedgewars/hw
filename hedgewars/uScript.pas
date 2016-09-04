@@ -291,7 +291,7 @@ begin
     else i:= lua_tointeger(L, i);
     if (i < ord(Low(THogEffect))) or (i > ord(High(THogEffect))) then
         begin
-        LuaCallError('Invalid gear type!', call, paramsyntax);
+        LuaCallError('Invalid effect type!', call, paramsyntax);
         LuaToHogEffectOrd:= -1;
         end
     else
