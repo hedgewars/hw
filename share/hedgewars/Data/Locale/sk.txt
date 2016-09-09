@@ -31,7 +31,7 @@
 00:28=Raketová vŕtačka
 00:29=Loptičkový guľomet
 00:30=Napalm
-00:31=Bezpilotný bombardér
+00:31=Dron
 00:32=Nízka gravitácia
 00:33=Silnejší útok
 00:34=Nesmrteľnosť
@@ -58,6 +58,8 @@
 00:54=Postrek zeme
 00:55=Zmrazovač
 00:56=Sekáčik
+00:57=Gumička
+00:58=Vzdušná mína
 
 01:00=Do boja!
 01:01=Remíza
@@ -81,6 +83,10 @@
 01:19=Extrémny
 01:20=%1 odskok
 01:21=Vypnutý zvuk
+01:22=Režim SOMPREČ
+01:23=Automatická kamera vypnutá
+01:24=Automatická kamera zapnutá
+01:25=Stlač cieľové tlačidlo na označenie cieľa
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel
@@ -271,6 +277,10 @@
 03:53=Typ 40
 ;03:54=Postavte niečo
 03:54=Pomôcka
+03:55=Kúlovejšie už to byť nemôže!
+03:56=Použite alebo zneužite
+03:57=Pomôcka
+03:58=Vznášajúca sa bomba
 
 ; Popis zbraní (ako oddeľovač riadkov použite |)
 04:00=Zaútočte na vašich nepriateľov obyčajným granátom.|Vybuchne vtedy, keď vyprší časomiera.|1‐5: Nastavenie časovača granátu|Útok: Držanie tlačidla zvyšuje silu hodu|
@@ -329,6 +339,10 @@
 04:53=Vyberte sa na cestu časom a priestorom|a nechajte vašich priateľov bojovať bez vás.|Buďte pripravený vrátiť sa kedykoľvek,|buď pri Náhlej smrti alebo keď sú všetci porazení.|Poznámka: Nefunguje počas Náhlej smrti,|ak ste sám alebo ak ste kráľom.
 ;04:54=NEKOMPLETNÉ
 04:54=Rozprášte prúd lepkavej hliny.|Postavte mosty, pochovajte nepriateľov,|zapečaťte tunely. Buďte|však opatrný a nezašpinte sa|od nej aj vy.
+04:55=Vráťme sa do doby ľadovej!|Zamrazte ježkov, urobte podlahu šmykľavú alebo|sa poistite pred utopením zmrazením vody.|Útok: Aktivuje/Deaktivuje ľadový lúč|Hore/Dole: Pokračuj v mierení
+04:56=Po nepriateľovi môžete hodiť dva sekáčiky,|zablokovať priechody a tunely a dokonca ich použiť pri šplhaní!|Buďte opatrný! Nože nie su na hranie.|Útok: Podržte pre hod väčšou silou (dvakrát)
+04:57=Použi VEĽMI elastickú gumičku, z ktorej|môžu ježkovia a ďalšie veci skákať|bez ujmy pri dopade.|Vľavo/Vpravo: Mení orientáciu gumičky|Kurzor: Umiestni gumičku na platnú pozíciu
+04:58=Táto bomba so senzorom|priblíženia sa sama udrží|vo vzduchu a prenasleduje ježkov,|ktorý sa k nej nechtiac priblížia.|Jej explózia je slabšia ako|explózia bežnej míny.|Útok: Držaním vystrelíte väčšou silou
 
 
 ; Reťazce pre ciele hry
