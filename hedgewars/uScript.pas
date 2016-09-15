@@ -2540,6 +2540,22 @@ begin
     lc_declareachievement:= 0
 end;
 
+function lc_getammoname(L : Plua_state) : LongInt; Cdecl;
+var at: LongInt;
+const call = 'GetAmmoName';
+      params = 'ammoType';
+begin
+    if CheckLuaParamCount(L, 1, call, params) then
+        begin
+        at:= LuaToAmmoTypeOrd(L, 1, call, params);                                                                                                   
+        if at >= 0 then   
+            lua_pushstring(L, Str2PChar(trammo[Ammoz[TAmmoType(at)].NameId]));
+        end
+    else
+        lua_pushnil(L);
+    lc_getammoname:= 1;
+end;
+
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
@@ -3363,6 +3379,7 @@ lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
 lua_register(luaState, _P'SetCinematicMode', @lc_setcinematicmode);
 lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
+lua_register(luaState, _P'GetAmmoName', @lc_getammoname);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
