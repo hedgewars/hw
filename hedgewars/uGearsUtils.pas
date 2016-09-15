@@ -57,6 +57,7 @@ function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
 
 function WorldWrap(var Gear: PGear): boolean;
 
+function IsHogLocal(HH: PHedgehog): boolean;
 
 
 function MakeHedgehogsStep(Gear: PGear) : boolean;
@@ -1587,6 +1588,11 @@ begin
             State:= ord(sprBoing)
             end;
     PlaySound(sndMelonImpact, true)
+end;
+
+function IsHogLocal(HH: PHedgehog): boolean;
+begin
+    IsHogLocal:= (not (HH^.Team^.ExtDriven or (HH^.BotLevel > 0))) or (HH^.Team^.Clan^.ClanIndex = LocalClan);
 end;
 
 end.
