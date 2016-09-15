@@ -2568,7 +2568,7 @@ begin
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);                                                                                                   
         if at >= 0 then   
-            lua_pushstring(L, Str2PChar(trammo[Ammoz[TAmmoType(at)].NameId]));
+            lua_pushstring(L, PChar(trammo[Ammoz[TAmmoType(at)].NameId]));
         end
     else
         lua_pushnil(L);
