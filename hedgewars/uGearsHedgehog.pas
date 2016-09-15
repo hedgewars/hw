@@ -660,7 +660,7 @@ begin
     if cnt <> 0 then AddAmmo(HH, ammo, cnt)
     else AddAmmo(HH, ammo);
 
-    if IsHogLocal(@HH) or (GameType = gmtDemo)  then
+    if IsHogLocal(@HH) then
         begin
         if cnt <> 0 then
             s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(cnt) + ')')

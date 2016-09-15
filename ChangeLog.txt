@@ -8,6 +8,7 @@ Content:
 Game engine:
  + Improved hedgehog spawns on maps that lack land mass or free space
  + Highlander mode displays game scheme specifics (mines timer, etc.) in ESC info
+ + Highlander mode gives visual and acustic feedback when weapons are collected from a kill, similar to collecting a crate
  + AI hedgehogs can now use Bee and Vampirism
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
@@ -51,6 +52,7 @@ Frontend:
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
+ + New call: GetAmmoName(ammoType) -- returns the localized name for the specified ammoType
 
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)

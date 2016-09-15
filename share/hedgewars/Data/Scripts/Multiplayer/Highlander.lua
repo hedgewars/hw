@@ -1,6 +1,6 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.4b
+-- version 0.4b+
 -- by mikade
 --------------------------------
 
@@ -216,7 +216,18 @@ end
 -- this is called when a hog dies
 function TransferWeps(gear)
 
-	if CurrentHedgehog ~= nil then
+	if CurrentHedgehog ~= nil and CurrentHedgehog ~= gear then
+
+        local x,y,color
+        local vgear
+        local vgtX, vgtY, vgtdX, vgtdY, vgtAngle, vgtFrame, vgtFrameTicks, vgtState, vgtTimer, vgtTint
+        local dspl = IsHogLocal(CurrentHedgehog)
+        local ammolist = ''
+
+        if dspl then
+            x,y = GetGearPosition(CurrentHedgehog)
+            color = GetClanColor(GetHogClan(CurrentHedgehog))
+        end
 
         for w,c in pairs(wepArray) do
 			val = getGearValue(gear,w)
@@ -230,10 +241,29 @@ function TransferWeps(gear)
 				else
 					AddAmmo(CurrentHedgehog, w, val)
 				end
+                if dspl then
+                    if ammolist == '' then
+                        ammolist = GetAmmoName(w)
+                    else
+                        ammolist = ammolist .. ' • ' .. GetAmmoName(w)
+                    end
+                    x = x + 2
+                    y = y + 32
+                    vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
+                    if vgear ~= nil then
+                        vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint = GetVisualGearValues(vgear)
+                        vgtFrame = w
+                        SetVisualGearValues(vgear,vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint)
+                    end
+                end
 
 			end
 		end
 
+        PlaySound(sndShotgunReload);
+        if dspl and ammolist ~= '' then
+            AddCaption(ammolist, color, capgrpAmmoinfo)
+        end
 	end
 
 end
