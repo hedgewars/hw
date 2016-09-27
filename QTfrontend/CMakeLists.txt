@@ -103,11 +103,6 @@ list(APPEND hwfr_src
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     )
 
-#xfire integration
-if(WIN32)
-    list(APPEND hwfr_src util/platform/xfire.cpp util/platform/xfiregameclient.cpp)
-endif(WIN32)
-
 if(MINGW)
     # resource compilation for mingw
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o

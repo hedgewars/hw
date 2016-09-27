@@ -62,7 +62,6 @@ class HWForm : public QMainWindow
         HWForm(QWidget *parent = 0, QString styleSheet = "");
         Ui_HWForm ui;
         static GameUIConfig * config;
-        void updateXfire();
         void exit();
         void setButtonDescription(QString desc);
         void backDescription();

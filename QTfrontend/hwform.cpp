@@ -90,7 +90,6 @@
 #include "input_password.h"
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
-#include "xfire.h"
 #include "drawmapwidget.h"
 #include "mouseoverfilter.h"
 #include "roomslistmodel.h"
@@ -142,9 +141,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     // set music track
     SDLInteraction::instance().setMusicTrack("/Music/main_theme.ogg");
 
-#ifdef USE_XFIRE
-    xfire_init();
-#endif
     this->setStyleSheet(styleSheet);
     ui.setupUi(this);
     setMinimumSize(760, 580);
@@ -359,49 +355,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     GoBack();
 }
 
-#ifdef USE_XFIRE
-void HWForm::updateXfire(void)
-{
-    if(hwnet && (hwnet->clientState() != HWNewNet::Disconnected))
-    {
-        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare(QString("%1:%2").arg(NETGAME_DEFAULT_SERVER).arg(NETGAME_DEFAULT_PORT)) ? "Official server" : hwnet->getHost().toAscii());
-        switch(hwnet->clientState())
-        {
-            case HWNewNet::Connecting: // Connecting
-            case HWNewNet::Connected:
-                xfire_setvalue(XFIRE_STATUS, "Connecting");
-                xfire_setvalue(XFIRE_NICKNAME, "-");
-                xfire_setvalue(XFIRE_ROOM, "-");
-            case HWNewNet::InLobby: // In lobby
-                xfire_setvalue(XFIRE_STATUS, "Online");
-                xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
-                xfire_setvalue(XFIRE_ROOM, "In game lobby");
-                break;
-            case HWNewNet::InRoom: // In room
-                xfire_setvalue(XFIRE_STATUS, "Online");
-                xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
-                xfire_setvalue(XFIRE_ROOM, (hwnet->getRoom() + " (waiting for players)").toAscii());
-                break;
-            case HWNewNet::InGame: // In game
-                xfire_setvalue(XFIRE_STATUS, "Online");
-                xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
-                xfire_setvalue(XFIRE_ROOM, (hwnet->getRoom() + " (playing or spectating)").toAscii());
-                break;
-            default:
-                break;
-        }
-    }
-    else
-    {
-        xfire_setvalue(XFIRE_STATUS, "Offline");
-        xfire_setvalue(XFIRE_NICKNAME, "-");
-        xfire_setvalue(XFIRE_ROOM, "-");
-        xfire_setvalue(XFIRE_SERVER, "-");
-    }
-    xfire_update();
-}
-#endif
-
 void HWForm::onFrontendFullscreen(bool value)
 {
     if (value)
@@ -594,10 +547,6 @@ QString HWForm::stringifyPageId(quint32 id)
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
-#ifdef USE_XFIRE
-    updateXfire();
-#endif
-
 #ifdef QT_DEBUG
     qDebug("Leaving %s, entering %s", qPrintable(stringifyPageId(lastid)), qPrintable(stringifyPageId(id)));
 #endif
@@ -1762,11 +1711,8 @@ void HWForm::CreateNetGame()
 
 void HWForm::closeEvent(QCloseEvent *event)
 {
-#ifdef USE_XFIRE
-    xfire_free();
-#endif
     config->SaveOptions();
-#if VIDEOREC
+if VIDEOREC
     config->SaveVideosOptions();
 #endif
     event->accept();

@@ -271,7 +271,6 @@ macx {
 
 win32 {
     RC_FILE = ../QTfrontend/hedgewars.rc
-    SOURCES += ../QTfrontend/util/platform/xfire.cpp ../QTfrontend/util/platform/xfiregameclient.cpp
     LIBS += -L../misc/winutils/lib
     INCLUDEPATH += ../misc/winutils/include
 }

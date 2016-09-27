@@ -45,7 +45,4 @@
     <tip>Můžeš si asociovat Hedgewars soubory (uložené hry a nahrávky) tak, abys je mohl ihned spouštět z internetového prohlížeče nebo prúzkumníka souborů.</tip>
     <tip>Chceš ušetřit lana? Uvolni ho ve vzduchu a vystřel znovu. Dokud se nedotkneš země, využíváš ho bez plýtvání munice!</tip>
     <tip>Použij Molotov nebo plamenomet, abys dočasně zamezil ježkům v přechodu terénu jako jsou tunely nebo plošiny.</tip>
-    <windows-only>
-        <tip>Windows verze Hedgewars podporuje Xfire. Přidej si Hedgewars do jeho seznamu her, abys viděl přátele, kteří ho hrají.</tip>
-    </windows-only>
 </tips>

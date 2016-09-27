@@ -51,7 +51,4 @@
     <tip>Swoje zespoły i konfigurację gry znajdziesz w folderze ".hedgewars" w twoim katalogu domowym. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</tip>
     <tip>Użyj koktajlu Mołotowa lub Miotacza ognia by powstrzymać przeciwnika przed przedostaniem się przez tunele lub platformy.</tip>
     <tip>Pszczoła potrafi być ciężka w użyciu. Jej promień skrętu zależy od prędkości lotu, więc nie staraj się nie używać pełnej mocy podczas strzału.</tip>
-    <windows-only>
-        <tip>Wersja Hedgewars dla systemu Windows wspiera Xfire. Upewnij się, że dodałeś Hedgewars do listy gier by Twoi znajomi mogli zobaczyć Ciebie w czasie gry.</tip>
-    </windows-only>
 </tips>

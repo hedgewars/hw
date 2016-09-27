@@ -346,7 +346,8 @@ int main(int argc, char *argv[])
     }
 
 #ifdef _WIN32
-    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
+    // Win32 registry setup (used for external software detection etc.
+    // don't set it if running in "portable" mode with a custom config dir)
     if(!custom_config)
     {
         QSettings registry_hklm("HKEY_LOCAL_MACHINE", QSettings::NativeFormat);

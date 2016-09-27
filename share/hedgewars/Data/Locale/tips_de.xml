@@ -67,7 +67,6 @@
     <tip>Sei vorsichtig in den Ländern des Schnees und der Weihnacht, weil die Träger aus rutschigem Eis bestehen.</tip>
     <tip>Die Rückzugszeit hängt ab von der Waffe, die du benutzt hast. Sei vorsichtig, einige Waffen haben keine Rückzugszeit und beenden deinen Zug sofort!</tip>
     <windows-only>
-        <tip>Diese Hedgewars-Version unterstützt <a href="http://www.xfire.com/">Xfire</a>. Stell sicher, Hedgewars dessen Spielliste hinzuzufügen, damit deine Freunde dich beim Spielen sehen können.</tip>
         <tip>Du kannst deine Hedgewars-Einstellungsdateien unter »Eigene Dokumente\Hedgewars« finden. Erstelle Backups oder nimm die Dateien mit, aber bitte bearbeite sie nicht von Hand.</tip>
     </windows-only>
     <mac-only>
