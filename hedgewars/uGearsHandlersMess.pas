@@ -3418,7 +3418,7 @@ begin
 
 
     // note: use GameTicks, not RealTicks, otherwise amount can vary greatly
-    if (Gear^.Pos = 14) and (GameTicks and $3 = 0) then
+    if (Gear^.Pos = 14) and (GameTicks and $1 = 0) then
         begin
         heart:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
         if heart <> nil then
