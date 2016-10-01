@@ -48,7 +48,9 @@ Missions and Game Styles:
 
 Frontend:
  + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
- + Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
+ + Additional button for just randomizing theme that will not change your selected map
+ + Randomizing map/theme in online-mode will not include DLC-content
+ * Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
