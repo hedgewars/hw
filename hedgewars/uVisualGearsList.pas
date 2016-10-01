@@ -230,8 +230,16 @@ with gear^ do
                 end;
     vgtDroplet:
                 begin
-                dx:= 0.001 * (random(180) - 90);
-                dy:= -0.001 * (random(160) + 40);
+                // old dx & dy calcs
+                // dx:= 0.001 * (random(180) - 90);
+                // dy:= -0.001 * (random(160) + 40);
+                // => min speed ~ 0.098, max speed ~ 0.218, speed range ~ 0.120
+                // => min angle(4096) ~ 129, max angle ~ 1919, angle range ~ 1790
+                dx:= 0.001 * (98 + random(121)); // speed
+                Frame:= 129 + random(1791); // angle
+                dy:= -dx * hwFloat2Float(AngleSin(Frame));
+                // divide by 2 to create an eliptic shape
+                dx:=  dx * hwFloat2Float(AngleCos(Frame)) / 2;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
