@@ -3416,18 +3416,47 @@ begin
             PlaySound(sndYoohoo);
         end;
 
-    if (Gear^.Pos = 14) and (RealTicks and $3 = 0) then
+
+    // note: use GameTicks, not RealTicks, otherwise amount can vary greatly
+    if (Gear^.Pos = 14) and (GameTicks and $3 = 0) then
         begin
         heart:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
         if heart <> nil then
             with heart^ do
                 begin
+                { // old calcs
                 dx:= 0.001 * (random(200));
                 dy:= 0.001 * (random(200));
                 if random(2) = 0 then
                     dx := -dx;
                 if random(2) = 0 then
                     dy := -dy;
+                }
+
+                // randomize speed in both directions
+                dx:= 0.001 * (random(201));
+                dy:= 0.001 * (random(201));
+
+                // half of hearts go down
+                if random(2) = 0 then
+                    begin
+                    // create a pointy shape
+                    if 0.2 < dx + dy then
+                        begin
+                        dy:= 0.2 - dy;
+                        dx:= 0.2 - dx;
+                        end;
+                    // sin bulge it out a little to avoid corners on the side
+                    dx:= dx + (dx/0.2) * ((0.2 * sin(pi * ((0.2 - dy) / 0.4))) - (0.2 - dy));
+                    // change sign
+                    dy:= -dy;
+                    end
+                else // shape hearts on top into 2 arcs
+                    dy:= dy * (0.3 + 0.7 * sin(pi * dx / 0.2));
+
+                // half of the hearts go left
+                if random(2) = 0 then
+                    dx := -dx;
                 FrameTicks:= random(750) + 1000;
                 State:= ord(sprSeduction)
                 end;
