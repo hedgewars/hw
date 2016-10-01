@@ -205,7 +205,8 @@ begin
                                 end;
                         SDL_WINDOWEVENT_RESTORED:
                                 begin
-                                GameState:= previousGameState;
+                                if GameState = gsSuspend then
+                                    GameState:= previousGameState;
 {$IFDEF ANDROID}
                                 //This call is used to reinitialize the glcontext and reload the textures
                                 ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
