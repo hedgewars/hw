@@ -40,6 +40,9 @@ import System.Process
 import Network.Socket
 import System.Random
 import qualified Data.Traversable as DT
+import Text.Regex.Base
+import qualified Text.Regex.TDFA as TDFA
+import qualified Text.Regex.TDFA.ByteString as TDFAB
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -658,9 +661,13 @@ processAction (CheckBanned byIP) = do
     where
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
-        checkBan True ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
-        checkBan False _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
+        checkBan True ip _ (BanByIP bip _ _) = isMatch bip ip
+        checkBan False _ n (BanByNick bn _ _) = isMatch bn n
         checkBan _ _ _ _ = False
+        isMatch :: B.ByteString -> B.ByteString -> Bool
+        isMatch rexp src = (==) (Just True) $ mrexp rexp >>= flip matchM src
+        mrexp :: B.ByteString -> Maybe TDFAB.Regex
+        mrexp = makeRegexOptsM TDFA.defaultCompOpt{TDFA.caseSensitive = False} TDFA.defaultExecOpt
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
 

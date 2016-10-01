@@ -5,7 +5,7 @@ Description:         hedgewars server
 Homepage:            http://www.hedgewars.org/
 License:             GPL-2
 Author:              unC0Rr
-Maintainer:          unC0Rr@hedgewars.org
+Maintainer:          a.korotaev@hedgewars.org
 Category:            Game
 Build-type:          Simple
 Cabal-version:       >=1.10
@@ -32,7 +32,8 @@ Executable hedgewars-server
     utf8-string,
     SHA,
     entropy,
-    zlib >= 0.5.3 && < 0.6
+    zlib >= 0.5.3 && < 0.6,
+    regex-tdfa
 
   if !os(windows)
     build-depends: unix

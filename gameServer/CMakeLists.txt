@@ -20,6 +20,7 @@ check_haskell_module_exists("Data.Digest.Pure.SHA" sha1 1 SHA)
 check_haskell_module_exists("System.Entropy" openHandle 0 entropy)
 check_haskell_module_exists("Codec.Compression.Zlib" decompress 1 zlib)
 check_haskell_module_exists("System.Random" getStdGen 0 random)
+check_haskell_module_exists("Text.Regex.TDFA.ByteString" execute 2 regex-tdfa)
 
 # this one needs type signatures to work
 # check_haskell_module_exists("Control.DeepSeq" deepseq 2 deepseq)
