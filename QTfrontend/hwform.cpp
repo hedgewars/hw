@@ -1712,7 +1712,7 @@ void HWForm::CreateNetGame()
 void HWForm::closeEvent(QCloseEvent *event)
 {
     config->SaveOptions();
-if VIDEOREC
+#ifdef VIDEOREC
     config->SaveVideosOptions();
 #endif
     event->accept();

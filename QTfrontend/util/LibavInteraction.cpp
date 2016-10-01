@@ -18,7 +18,7 @@
 
 #include "LibavInteraction.h"
 
-#if VIDEOREC
+#ifdef VIDEOREC
 extern "C"
 {
 #include "libavcodec/avcodec.h"
