@@ -28,6 +28,9 @@ macro(CHECK_HASKELL_MODULE_EXISTS MODULE FUNCTION PARAMCOUNT LIBRARY)
                     "-DMODULE=${MODULE}"
                     "-DFUNCTION=${FUNCTION}"
                     "-DPARAMETERS=${PARAMETERS}"
+                    -hide-all-packages
+                    -package ${LIBRARY}
+                    -package base
                     -cpp
                     -c "${CMAKE_MODULE_PATH}/checkModule.hs"
                     RESULT_VARIABLE COMMAND_RESULT

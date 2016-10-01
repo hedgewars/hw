@@ -25,11 +25,8 @@ import Data.Time
 import Control.Monad
 import Data.Unique
 import qualified Codec.Binary.Base64 as Base64
-import qualified Data.ByteString as BW
-import qualified Data.ByteString.Char8 as B
 import qualified Control.Exception as E
 import System.Entropy
-import Data.Either
 -----------------------------
 import CoreTypes
 import Utils
@@ -48,7 +45,7 @@ acceptLoop servSock chan = E.bracket openHandle closeHandle (forever . f)
         sendChan' <- newChan
 
         uid <- newUnique
-        salt <- liftM (B.pack . Base64.encode . BW.unpack) $ hGetEntropy ch 18
+        salt <- liftM Base64.encode $ hGetEntropy ch 18
 
         let newClient =
                 (ClientInfo
