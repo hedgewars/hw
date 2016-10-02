@@ -11,8 +11,9 @@ To compile and install you need:
  - Physfs >= 2.0.0
 For server:
  - Glasgow Haskell Compiler >= 6.10
- - dataenc package
+ - sandi package
  - hslogger package
+ - regex-tdfa package
 For videorecording:
  - FFmpeg or LibAV
 For compressed screenshots:
