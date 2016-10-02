@@ -651,7 +651,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">選擇一個主題</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
@@ -1883,6 +1883,10 @@ just enter your nickname.</source>
     <message>
         <source>Show join restricted</source>
         <translation>顯示有加入限制的</translation>
+    </message>
+    <message>
+        <source>Delegate room control</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1957,6 +1957,10 @@ entrez seulement votre pseudo.</translation>
         <source>Show join restricted</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Delegate room control</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
@@ -3832,7 +3836,7 @@ zoom</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
-        <translation type="unfinished">Il n'y a pas de vote en ce moment</translation>
+        <translation type="unfinished">Il n&apos;y a pas de vote en ce moment</translation>
     </message>
     <message>
         <source>Your vote counted</source>
@@ -3860,15 +3864,15 @@ zoom</translation>
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
-        <translation type="unfinished">Vote d'expulsion: spécifié le pseudo</translation>
+        <translation type="unfinished">Vote d&apos;expulsion: spécifié le pseudo</translation>
     </message>
     <message>
         <source>callvote kick: no such user</source>
-        <translation type="unfinished">Vote d'expulsion: pas d'autres utilisateurs</translation>
+        <translation type="unfinished">Vote d&apos;expulsion: pas d&apos;autres utilisateurs</translation>
     </message>
     <message>
         <source>callvote map: no such map</source>
-        <translation type="unfinished">Vote de carte: pas d'autres cartes</translation>
+        <translation type="unfinished">Vote de carte: pas d&apos;autres cartes</translation>
     </message>
     <message>
         <source>callvote pause: no game in progress</source>
@@ -3876,7 +3880,7 @@ zoom</translation>
     </message>
     <message>
         <source>callvote hedgehogs: specify number from 1 to 8</source>
-        <translation type="unfinished">Vote d'hedgehogs: spécifié un chiffre entre 1 et 8</translation>
+        <translation type="unfinished">Vote d&apos;hedgehogs: spécifié un chiffre entre 1 et 8</translation>
     </message>
 </context>
 </TS>

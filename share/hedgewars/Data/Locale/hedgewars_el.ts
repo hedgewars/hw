@@ -1895,6 +1895,10 @@ just enter your nickname.</source>
         <source>Show join restricted</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Delegate room control</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>

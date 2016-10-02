@@ -1965,6 +1965,10 @@ po prostu wpisz swój nick.</translation>
         <source>Show join restricted</source>
         <translation>Pokaż bez możliwości dołączenia</translation>
     </message>
+    <message>
+        <source>Delegate room control</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
