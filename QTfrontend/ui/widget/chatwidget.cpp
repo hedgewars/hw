@@ -270,6 +270,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     acBan->setIcon(QIcon(":/res/ban.png"));
     acBan->setData(QVariant(true));
     connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
+    acDelegate = new QAction(QAction::tr("Delegate room control"), chatNicks);
+    acDelegate->setIcon(QIcon(":/res/chat/roomadmin.png"));
+    acDelegate->setData(QVariant(true));
+    connect(acDelegate, SIGNAL(triggered(bool)), this, SLOT(onDelegate()));
     acFollow = new QAction(QAction::tr("Follow"), chatNicks);
     acFollow->setIcon(QIcon(":/res/follow.png"));
     acFollow->setData(QVariant(false));
@@ -624,6 +628,14 @@ void HWChatWidget::onBan()
         emit ban(mil[0].data().toString());
 }
 
+void HWChatWidget::onDelegate()
+{
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit delegate(mil[0].data().toString());
+}
+
 void HWChatWidget::onInfo()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
@@ -732,6 +744,7 @@ void HWChatWidget::adminAccess(bool b)
 {
     chatNicks->removeAction(acKick);
     //chatNicks->removeAction(acBan);
+    chatNicks->removeAction(acDelegate);
 
     m_isAdmin = b;
 
@@ -739,6 +752,7 @@ void HWChatWidget::adminAccess(bool b)
     {
         chatNicks->insertAction(0, acKick);
         //chatNicks->insertAction(0, acBan);
+        chatNicks->insertAction(acFriend, acDelegate);
     }
 }
 
@@ -931,6 +945,7 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
     {
         acKick->setVisible(!isSelf && isOnline);
         acBan->setVisible(!isSelf);
+        acDelegate->setVisible(!isSelf && players->isFlagSet(m_userNick, PlayersListModel::InRoom));
     }
 
     m_nicksMenu->clear();

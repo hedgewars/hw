@@ -1263,6 +1263,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 // chat widget actions
     connect(ui.pageNetGame->chatWidget, SIGNAL(kick(const QString&)),
             hwnet, SLOT(kickPlayer(const QString&)));
+    connect(ui.pageNetGame->chatWidget, SIGNAL(delegate(const QString&)),
+            hwnet, SLOT(delegateToPlayer(const QString&)));
     connect(ui.pageNetGame->chatWidget, SIGNAL(ban(const QString&)),
             hwnet, SLOT(banPlayer(const QString&)));
     connect(ui.pageNetGame->chatWidget, SIGNAL(info(const QString&)),

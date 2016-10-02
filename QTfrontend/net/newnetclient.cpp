@@ -1012,6 +1012,11 @@ void HWNewNet::kickPlayer(const QString & nick)
     RawSendNet(QString("KICK%1%2").arg(delimiter).arg(nick));
 }
 
+void HWNewNet::delegateToPlayer(const QString & nick)
+{
+    RawSendNet(QString("DELEGATE%1%2").arg(delimiter).arg(nick));
+}
+
 void HWNewNet::infoPlayer(const QString & nick)
 {
     RawSendNet(QString("INFO%1%2").arg(delimiter).arg(nick));
