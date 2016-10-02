@@ -46,6 +46,8 @@
 #include <QPropertyAnimation>
 #include <QSettings>
 #include <QSortFilterProxyModel>
+#include <QIcon>
+#include <QImage>
 
 #if (QT_VERSION >= 0x040600)
 #include <QGraphicsEffect>
@@ -142,6 +144,18 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     SDLInteraction::instance().setMusicTrack("/Music/main_theme.ogg");
 
     this->setStyleSheet(styleSheet);
+
+
+    QIcon * hwIcon = new QIcon();
+    hwIcon->addFile(":/res/hh_small.png");
+    //hwIcon->addFile(":/res/hh25x25.png");
+    // crop-workaround for the fact that hh25x25.png is actually 25x35
+    QPixmap pm(":/res/hh25x25.png");
+    hwIcon->addPixmap(pm.copy(0,(pm.height()-25)/2,25,25));
+    hwIcon->addFile(":/res/teamicon.png");
+    hwIcon->addFile(":/res/teamicon2.png");
+
+    this->setWindowIcon(*hwIcon);
     ui.setupUi(this);
     setMinimumSize(760, 580);
     //setFocusPolicy(Qt::StrongFocus);
