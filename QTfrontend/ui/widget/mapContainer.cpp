@@ -262,7 +262,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnRandTheme->setFixedHeight(30);
     btnRandTheme->setFixedWidth(30);
     connect(btnRandTheme, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
-    m_childWidgets << btnTheme;
+    m_childWidgets << btnRandTheme;
     themeHBox->addWidget(btnRandTheme, 0);
 
     btnTheme = new QPushButton(this);
