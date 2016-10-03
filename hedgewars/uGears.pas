@@ -125,7 +125,7 @@ begin
         if Gear^.Kind = gtHedgehog then
             begin
             tmp:= 0;
-            if Gear^.Hedgehog^.Effects[hePoisoned] <> 0 then
+            if (Gear^.Hedgehog^.Effects[hePoisoned] <> 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) then
                 begin
                 inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then

@@ -175,7 +175,9 @@ while Gear <> nil do
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
-                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.State and gstHHDeath = 0) then
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and
+                                (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) and
+                                (Gear^.State and gstHHDeath = 0) then
                                 Gear^.Hedgehog^.Effects[hePoisoned] := 5;
                             end;
 
