@@ -17,6 +17,7 @@ Game engine:
  + Several new sound effects for weapons and utilities
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
+ + Themes can now use flakes with negative falling speed (rising flakes)
  * Fixed air-strikes drops being off-center
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed screenshots being too bright if taken in quick succession
