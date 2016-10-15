@@ -55,6 +55,7 @@ Frontend:
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
  + Themes can now use flakes with negative falling speed (rising flakes)
+ + Themes can now contain custom sound files: splash.ogg Droplet1.ogg Droplet2.ogg Droplet3.ogg skip.ogg
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
