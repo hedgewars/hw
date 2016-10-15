@@ -46,9 +46,10 @@ type TRectsArray = array[0..MaxRects] of TSDL_Rect;
      PRectArray = ^TRectsArray;
      TThemeObject = record
                      Surf, Mask: PSDL_Surface;
-                     inland: TSDL_Rect;
+                     inland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                      outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                      rectcnt: Longword;
+                     rectcnt2: Longword;
                      Width, Height: Longword;
                      Maxcnt: Longword;
                      end;
@@ -355,22 +356,27 @@ function CheckCanPlace(x, y: Longword; var Obj: TThemeObject): boolean;
 var i: Longword;
     bRes: boolean;
 begin
-with Obj do
-    if CheckLand(inland, x, y, lfBasic) then
-        begin
+    with Obj do begin
         bRes:= true;
+        i:= 1;
+        while bRes and (i <= rectcnt2) do
+            begin
+            bRes:= CheckLand(inland[i], x, y, lfBasic);
+            inc(i)
+            end;
+
         i:= 1;
         while bRes and (i <= rectcnt) do
             begin
             bRes:= CheckLand(outland[i], x, y, 0);
             inc(i)
             end;
+
         if bRes then
-            bRes:= not CheckIntersect(x, y, Width, Height)
-        end
-    else
-        bRes:= false;
-CheckCanPlace:= bRes;
+            bRes:= not CheckIntersect(x, y, Width, Height);
+
+        CheckCanPlace:= bRes;
+    end
 end;
 
 function TryPut(var Obj: TThemeObject): boolean;
@@ -662,22 +668,37 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            with inland do
-                begin
-                i:= Pos(',', s);
-                x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                CheckRect(Width, Height, x, y, w, h)
-                end;
+        rectcnt2 := 0;
+            for ii := 1 to Length(S) do
+              if S[ii] = ',' then
+                inc(rectcnt2);
+
+            if rectcnt2 mod 2 = 0 then
+              rectcnt2 := 1
+            else begin
+              i:= Pos(',', s);
+              rectcnt2:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+              Delete(s, 1, i);
+            end;
+
+            for ii:= 1 to rectcnt2 do
+            with inland[ii] do
+            begin
+            i:= Pos(',', s);
+            x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            CheckRect(Width, Height, x, y, w, h)
+        end;
+
             i:= Pos(',', s);
             rectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
