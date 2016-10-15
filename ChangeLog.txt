@@ -17,7 +17,6 @@ Game engine:
  + Several new sound effects for weapons and utilities
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
- + Themes can now use flakes with negative falling speed (rising flakes)
  * Fixed air-strikes drops being off-center
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed screenshots being too bright if taken in quick succession
@@ -52,6 +51,10 @@ Frontend:
  + Additional button for just randomizing theme that will not change your selected map
  + Randomizing map/theme in online-mode will not include DLC-content
  * Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
+
+Content Creation:
+ + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
+ + Themes can now use flakes with negative falling speed (rising flakes)
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
