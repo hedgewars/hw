@@ -414,7 +414,7 @@ begin
                 s:= cPathz[Soundz[sndFirePunch1].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             rwops := rwopsOpenRead(s);
-            
+
             if rwops = nil then
                 begin
                 s:= cPathz[Soundz[snd].AltPath] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
@@ -437,14 +437,14 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             rwops := rwopsOpenRead(s);
-            
+
             if rwops = nil then
                 begin
                 s:= cPathz[Soundz[snd].AltPath] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 WriteToConsole(msgLoading + s + ' ... ');
                 rwops := rwopsOpenRead(s);
                 end;
-            
+
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwops, 1);
             if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
@@ -532,15 +532,15 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             rwops:=rwopsOpenRead(s);
-            
+
             if rwops = nil then
                 begin
                 s:= cPathz[Soundz[snd].AltPath] + '/' + Soundz[snd].FileName;
                 WriteToConsole(msgLoading + s + ' ... ');
                 rwops:=rwopsOpenRead(s);
                 end;
-                
-            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwops, 1);
+
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwops, 1);
             if voicepack^.chunks[snd] = nil then
                 WriteLnToConsole(msgFailed)
             else
