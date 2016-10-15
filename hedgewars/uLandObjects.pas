@@ -48,8 +48,8 @@ type TRectsArray = array[0..MaxRects] of TSDL_Rect;
                      Surf, Mask: PSDL_Surface;
                      inland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                      outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
-                     rectcnt: Longword;
-                     rectcnt2: Longword;
+                     inrectcnt: Longword;
+                     outrectcnt: Longword;
                      Width, Height: Longword;
                      Maxcnt: Longword;
                      end;
@@ -359,14 +359,14 @@ begin
     with Obj do begin
         bRes:= true;
         i:= 1;
-        while bRes and (i <= rectcnt2) do
+        while bRes and (i <= inrectcnt) do
             begin
             bRes:= CheckLand(inland[i], x, y, lfBasic);
             inc(i)
             end;
 
         i:= 1;
-        while bRes and (i <= rectcnt) do
+        while bRes and (i <= outrectcnt) do
             begin
             bRes:= CheckLand(outland[i], x, y, 0);
             inc(i)
@@ -668,41 +668,43 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-        rectcnt2 := 0;
+
+            inrectcnt := 0;
+
             for ii := 1 to Length(S) do
               if S[ii] = ',' then
-                inc(rectcnt2);
+                inc(inrectcnt);
 
-            if rectcnt2 mod 2 = 0 then
-              rectcnt2 := 1
+            if inrectcnt mod 2 = 0 then
+              inrectcnt := 1
             else begin
               i:= Pos(',', s);
-              rectcnt2:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+              inrectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
               Delete(s, 1, i);
             end;
 
-            for ii:= 1 to rectcnt2 do
-            with inland[ii] do
-            begin
-            i:= Pos(',', s);
-            x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-            Delete(s, 1, i);
-            i:= Pos(',', s);
-            y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-            Delete(s, 1, i);
-            i:= Pos(',', s);
-            w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-            Delete(s, 1, i);
-            i:= Pos(',', s);
-            h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-            Delete(s, 1, i);
-            CheckRect(Width, Height, x, y, w, h)
-        end;
+            for ii:= 1 to inrectcnt do
+                with inland[ii] do
+                    begin
+                    i:= Pos(',', s);
+                    x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    CheckRect(Width, Height, x, y, w, h)
+                    end;
 
             i:= Pos(',', s);
-            rectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            outrectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
-            for ii:= 1 to rectcnt do
+            for ii:= 1 to outrectcnt do
                 with outland[ii] do
                     begin
                     i:= Pos(',', s);
@@ -714,7 +716,7 @@ while (not pfsEOF(f)) and allOK do
                     i:= Pos(',', s);
                     w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                     Delete(s, 1, i);
-                    if ii = rectcnt then
+                    if ii = outrectcnt then
                         h:= StrToInt(Trim(s))
                     else
                         begin
@@ -724,6 +726,7 @@ while (not pfsEOF(f)) and allOK do
                         end;
                     CheckRect(Width, Height, x, y, w, h)
                     end;
+
             end;
         end
     else if key = 'spray' then
