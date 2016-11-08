@@ -1,6 +1,6 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.4b
+-- version 0.4c
 -- by mikade
 --------------------------------
 
@@ -67,6 +67,12 @@
 --0.4b
 -----------
 -- as per request, add ice-gun
+
+
+-----------
+--0.4c / terror
+-----------
+-- Information about collected weapons
 
 -------------------------
 -- ideas for the future
@@ -213,8 +219,63 @@ function ConvertValues(gear)
     end
 end
 
+local function getWeaponName(s)
+    if s == 1 then s = "CLUSTER"
+    elseif s == 2 then s = "GRENADE"  -- 
+    elseif s == 3 then s = "BAZOOKA" -- 
+    elseif s == 4 then s = "BEE" -- 
+    elseif s == 5 then s = "SHOTGUN" -- 
+    elseif s == 6 then s = "PNEUMATIC" -- 
+    elseif s == 8 then s = "ROPE" -- 
+    elseif s == 9 then s = "MINE" -- 
+    elseif s == 10 then s = "DEAGLE" -- 
+    elseif s == 11 then s = "DYNAMITE" -- 
+    elseif s == 12 then s = "PUNCH" -- 
+    elseif s == 13 then s = "WHIP" --  
+    elseif s == 14 then s = "BASEBALL" -- 
+    elseif s == 15 then s = "PARACHUTE" -- 
+    elseif s == 16 then s = "AIRSTRIKE" -- 
+    elseif s == 17 then s = "AIRMINESTRIKE" -- 
+    elseif s == 18 then s = "TORCH" -- 
+    elseif s == 19 then s = "GIRDER"  -- 
+    elseif s == 20 then s = "TELEPORT" -- 
+    elseif s == 22 then s = "MORTAR" --  
+    elseif s == 24 then s = "CAKE" -- 
+    elseif s == 25 then s = "SEDUCTION" -- 
+    elseif s == 26 then s = "MELON" -- 
+    elseif s == 27 then s = "666" -- 
+    elseif s == 28 then s = "NAPALM" -- 
+    elseif s == 29 then s = "DRILL ROCKET" -- 
+    elseif s == 30 then s = "BALLGUN" -- 
+    elseif s == 31 then s = "RCP" --
+    elseif s == 32 then s = "GRAVITY" -- 
+    elseif s == 33 then s = "DAMAGE" -- 
+    elseif s == 34 then s = "IMMORTAL?" -- 
+    elseif s == 36 then s = "LASER" -- 
+    elseif s == 38 then s = "SNIPER" -- 
+    elseif s == 39 then s = "UFO" -- 
+    elseif s == 40 then s = "MOLOTOV" -- 
+    elseif s == 41 then s = "BIRD" -- 
+    elseif s == 42 then s = "PORTAL" -- 
+    elseif s == 43 then s = "???" -- 
+    elseif s == 44 then s = "CHEESE" -- 
+    elseif s == 45 then s = "SINEGUN" -- 
+    elseif s == 46 then s = "FLAME" -- 
+    elseif s == 47 then s = "STICKY" -- 
+    elseif s == 48 then s = "HAMMER" -- 
+    elseif s == 50 then s = "AIRDRILL" -- 
+    elseif s == 53 then s = "LANDSPR" -- 
+    elseif s == 54 then s = "ICEGUN" -- 
+    elseif s == 55 then s = "HAMMER?" -- 
+    elseif s == 56 then s = "RUBBER" -- 
+   	elseif s == 57 then s = "AIRMINE"
+    end
+    return tostring(s)
+end
+
 -- this is called when a hog dies
 function TransferWeps(gear)
+	local wep = "";
 
 	if CurrentHedgehog ~= nil then
 
@@ -229,6 +290,7 @@ function TransferWeps(gear)
 				-- assign ammo as per normal
 				else
 					AddAmmo(CurrentHedgehog, w, val)
+					wep = wep .. getWeaponName(w) .. ", "
 				end
 
 			end
@@ -236,6 +298,7 @@ function TransferWeps(gear)
 
 	end
 
+	AddCaption("Weapons: " .. showWeapon(wep),0xffba00ff,capgrpAmmoinfo)
 end
 
 function onGameInit()
