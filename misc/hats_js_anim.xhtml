@@ -8,7 +8,7 @@
 * {padding: 0; margin: 0; }
 body 
 {
-    background: url('http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
+    background: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
     -moz-background-size: 200%;
     background-size: 100% 100%;
     font-family: sans-serif;
@@ -22,14 +22,14 @@ a
     height: 32px;
     width: 32px;
     color: transparent;
-    background-image: url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
+    background-image: url("//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
 }
 .girder
 {
     width: 100%;
     height: 30px;
     clear: left;
-    background-image: url('http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/Girder.png');
+    background-image: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Girder.png');
     background-repeat: repeat-x;
 }
 .hide { visibility: hidden; }
@@ -82,7 +82,7 @@ var animationInterval;
 window.onload = function()
 {
     var xml=new XMLHttpRequest();
-    xml.open("GET", "/hg/share/hedgewars/Data/Graphics/Hats/", false);
+    xml.open("GET", "/hedgewars/file/tip/share/hedgewars/Data/Graphics/Hats/", false);
     xml.send(null);
     /*var resp = xml.responseXML; unfortunately not served as XHTML
     var a = resp.getElementsByTagName("a");
@@ -126,7 +126,7 @@ window.onload = function()
     for (var i=0;i<masks.length;i++)
     {
         var h = document.body.appendChild(a.cloneNode(true));
-        h.href = "http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
+        h.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
         h.lastChild.style.backgroundImage = 'url("'+h.href+'")';
         h.lastChild.lastChild.data = masks[i];
         h.title = masks[i];
@@ -173,11 +173,11 @@ function hideGirders()
 
 function switchTheme()
 {
-    document.body.style.backgroundImage='url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/'+this.value+'/Sky.png")';
+    document.body.style.backgroundImage='url("//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/'+this.value+'/Sky.png")';
     if (themes[this.value])
-        girder.style.backgroundImage='url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/'+this.value+'/Girder.png")';
+        girder.style.backgroundImage='url("//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/'+this.value+'/Girder.png")';
     else
-        girder.style.backgroundImage='url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Girder.png")';
+        girder.style.backgroundImage='url("//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Girder.png")';
 }
 //]]>
     </script>
