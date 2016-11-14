@@ -843,6 +843,23 @@ begin
     lc_deletevisualgear:= 1
 end;
 
+function lc_getvisualgeartype(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetVisualGearType', 'vgUid') then
+        begin
+        vg := VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then
+            lua_pushinteger(L, ord(vg^.Kind))
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_getvisualgeartype:= 1
+end;
+
+
 function lc_getvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
 var vg: PVisualGear;
 begin
@@ -3306,6 +3323,7 @@ lua_register(luaState, _P'GetGameFlag', @lc_getgameflag);
 lua_register(luaState, _P'DeleteGear', @lc_deletegear);
 lua_register(luaState, _P'AddVisualGear', @lc_addvisualgear);
 lua_register(luaState, _P'DeleteVisualGear', @lc_deletevisualgear);
+lua_register(luaState, _P'GetVisualGearType', @lc_getvisualgeartype);
 lua_register(luaState, _P'GetVisualGearValues', @lc_getvisualgearvalues);
 lua_register(luaState, _P'SetVisualGearValues', @lc_setvisualgearvalues);
 lua_register(luaState, _P'GetGearValues', @lc_getgearvalues);

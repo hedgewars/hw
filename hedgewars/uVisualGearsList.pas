@@ -36,7 +36,7 @@ var VGCounter: LongWord;
     VisualGearLayers: array[0..6] of PVisualGear;
 
 implementation
-uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
+uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers, uScript;
 
 function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 begin
@@ -437,10 +437,12 @@ if VisualGearLayers[gear^.Layer] <> nil then
 VisualGearLayers[gear^.Layer]:= gear;
 
 AddVisualGear:= gear;
+ScriptCall('onVisualGearAdd', gear^.uid);
 end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
+    ScriptCall('onVisualGearDelete', Gear^.uid);
     FreeAndNilTexture(Gear^.Tex);
 
     if Gear^.NextGear <> nil then
