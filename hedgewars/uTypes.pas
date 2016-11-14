@@ -468,7 +468,7 @@ type
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
             gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer,
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,
-            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
+            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam, gidMoreWind);
 
 
     TLandArray = packed array of array of LongWord;

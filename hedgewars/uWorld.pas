@@ -191,6 +191,7 @@ g:= AddGoal(g, gfAISurvival, gidAISurvival);
 g:= AddGoal(g, gfInfAttack, gidInfAttack);
 g:= AddGoal(g, gfResetWeps, gidResetWeps);
 g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
+g:= AddGoal(g, gfMoreWind, gidMoreWind);
 
 // modified damage modificator?
 if cDamagePercent <> 100 then

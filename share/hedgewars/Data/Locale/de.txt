@@ -673,3 +673,4 @@
 05:19=Waffen werden am Ende jedes Zuges zurückgesetzt
 05:20=Igel teilen Waffen nicht untereinander
 05:21=Tag Team: Teams gleicher Farbe kommen nacheinander dran und teilen sich ihre Zugzeit.
+05:22=Starker Wind: Wind beeinflusst fast alles

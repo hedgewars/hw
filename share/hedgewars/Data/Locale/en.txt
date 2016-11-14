@@ -545,3 +545,4 @@
 05:19=Weapons are reset on end of turn
 05:20=Weapons are not shared between hogs
 05:21=Tag Team: Teams in a clan takes successive turns|Shared Time: Teams within a clan share turn time
+05:22=Heavy Wind: Wind affects almost everything
