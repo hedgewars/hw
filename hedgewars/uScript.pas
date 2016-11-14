@@ -2758,6 +2758,7 @@ ScriptSetInteger('CursorX', CursorPoint.X);
 ScriptSetInteger('CursorY', CursorPoint.Y);
 ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
+ScriptSetInteger('WorldEdge', ord(WorldEdge));
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
@@ -2794,6 +2795,7 @@ LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
 cFeatureSize     := ScriptGetInteger('MapFeatureSize');
 GameFlags        := ScriptGetInteger('GameFlags');
+WorldEdge        := TWorldEdge(ScriptGetInteger('WorldEdge'));
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
 cCaseFactor      := ScriptGetInteger('CaseFreq');
 cHealthCaseProb  := ScriptGetInteger('HealthCaseProb');
@@ -3152,6 +3154,7 @@ var at : TGearType;
     cg : TCapGroup;
     spr: TSprite;
     mg : TMapGen;
+    we : TWorldEdge;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -3246,6 +3249,9 @@ for spr:= Low(TSprite) to High(TSprite) do
 
 for mg:= Low(TMapGen) to High(TMapGen) do
     ScriptSetInteger(EnumToStr(mg), ord(mg));
+
+for we:= Low(TWorldEdge) to High(TWorldEdge) do
+    ScriptSetInteger(EnumToStr(we), ord(we));
 
 ScriptSetInteger('gstDrowning'      , gstDrowning);
 ScriptSetInteger('gstHHDriven'      , gstHHDriven);

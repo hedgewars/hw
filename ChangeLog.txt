@@ -60,6 +60,7 @@ Content Creation:
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
  + New call: GetAmmoName(ammoType) -- returns the localized name for the specified ammoType
+ + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
 
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
