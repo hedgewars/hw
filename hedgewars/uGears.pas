@@ -505,7 +505,8 @@ begin
     if (GameFlags and gfLowGravity) = 0 then
         begin
         cGravity:= cMaxWindSpeed * 2;
-        cGravityf:= 0.00025 * 2
+        cGravityf:= 0.00025 * 2;
+        cLowGravity:= false
         end;
 
     if (GameFlags and gfVampiric) = 0 then
@@ -696,7 +697,8 @@ if p <> 0 then DeleteGear(Gear);
 if (GameFlags and gfLowGravity) <> 0 then
     begin
     cGravity:= cMaxWindSpeed;
-    cGravityf:= 0.00025
+    cGravityf:= 0.00025;
+    cLowGravity:= true
     end;
 
 if (GameFlags and gfVampiric) <> 0 then

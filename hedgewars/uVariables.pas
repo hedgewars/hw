@@ -181,6 +181,7 @@ var
     cElastic        : hwFloat;
     cGravity        : hwFloat;
     cGravityf       : real;
+    cLowGravity     : boolean;
     cBuildMaxDist   : LongInt;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
@@ -2611,6 +2612,7 @@ begin
     cElastic                := _0_9;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
+    cLowGravity             := false;
     cBuildMaxDist           := cDefaultBuildMaxDist;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;

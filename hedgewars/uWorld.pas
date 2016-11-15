@@ -1506,6 +1506,28 @@ if UIDisplay <> uiNone then
         end
     end;
 
+{$IFNDEF USE_TOUCH_INTERFACE}
+// Indicators for global effects (extra damage, low gravity)
+// TODO: Add support for touch interface (need to find out correct offset)
+if UIDisplay <> uiNone then
+    begin
+    offsetX:= 45;
+    offsetY:= 51;
+
+    if cDamageModifier = _1_5 then
+        begin
+            DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
+            DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amExtraDamage) - 1, 1, 32, 32);
+            offsetX := offsetX + 33
+        end;
+    if (cLowGravity) or ((GameFlags and gfLowGravity) <> 0) then
+        begin
+            DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
+            DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLowGravity) - 1, 1, 32, 32);
+        end;
+    end;
+{$ENDIF}
+
 // AmmoMenu
 if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
     begin

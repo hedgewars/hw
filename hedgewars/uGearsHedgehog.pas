@@ -378,7 +378,8 @@ with Gear^,
                    amLowGravity: begin
                                  PlaySound(sndLowGravity);
                                  cGravity:= cMaxWindSpeed;
-                                 cGravityf:= 0.00025
+                                 cGravityf:= 0.00025;
+                                 cLowGravity := true
                                  end;
                   amExtraDamage: begin
                                  PlaySound(sndHellishImpact4);
