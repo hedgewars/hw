@@ -5,24 +5,42 @@
  <project_license>GPL-2.0</project_license>
  <name>Hedgewars</name>
  <summary>Funny turn-based artillery game, featuring fighting Hedgehogs!</summary>
+ <summary xml:lang="de">Lustiges zugbasiertes Artilleriespiel mit kämpfenden Igeln!</summary>
  <description>
   <p>
    Hedgewars is a turn based strategy, artillery, action and comedy game, featuring the antics of pink hedgehogs with attitude as they battle from the depths of hell to the depths of space.
   </p>
+  <p xml:lang="de">
+   Hedgewars ist ein lustiges zugbasiertes Strategie- und Artilleriespiel mit grotesken und launischen rosa Igeln, die sich von den Untiefen der Hölle bis zu den Tiefen des Weltraums gegenseitig bekämpfen.</p>
   <p>
     As commander, it's your job to assemble your crack team of hedgehog soldiers and bring the war to your enemy.
   </p>
+  <p xml:lang="de">
+    Als Kommandant ist es deine Aufgabe, deine Topmannschaft aus Igelsoldaten aufzustellen und in den Krieg gegen deinen Feind zu führen.
+  </p>
   <p>Game features:</p>
+  <p xml:lang="de">Spiel-Features:</p>
   <ul>
    <li>Hilarious and strategic turn based combat for up to 8 players</li>
-   <li>Both local and network multiplayer, with optional AI opponentsBattle on an infinite number of randomly generated maps, with over 22 environments</li>
+   <li xml:lang="de">Absurder und strategischer zugbasierter Kampf mit bis zu 8 Spielern</li>
+   <li>Both local and network multiplayer, with optional AI opponents</li>
+   <li xml:lang="de">Mehrspielermodus sowohl lokal als auch über das Netzwerk, mit optionalen KI-Gegnern</li>
+   <li>Battle on an infinite number of randomly generated maps, with over 22 environments</li>
+   <li xml:lang="de">Kämpfe auf einer unendlichen Anzahl auf zufällig erstellten Landschaften mit über 22 Szenerien</li>
    <li>Utilise 47 (and counting) devastating weapons!</li>
+   <li xml:lang="de">Benutze 47 zerstörerische Waffen – und es werden ständig mehr</li>
    <li>Including the piano strike and explosive robotic cake</li>
+   <li xml:lang="de">Darunter auch der Pianoangriff und ein explosiver robotischer Kuchen</li>
    <li>Play the game your way, with 18 different game modifiers, tweak almost every aspect of the match</li>
+   <li xml:lang="de">Spiel das Spiel wie du magst, mit 18 verschiedenen Spielmodifikatoren; du kannst fast jeden Aspekt des Spiels anpassen</li>
    <li>Customize your team, with over 120 costumes, 30 graves, 12 forts, 100s of flags and unique voice packs</li>
+   <li xml:lang="de">Gestalte dein Team mit über 120 Kostümen, 30 Gräbern, 12 Festungen, hunderten Flaggen und einzigartigen Stimmen</li>
    <li>Huge battles with up to 48 hogs</li>
+   <li xml:lang="de">Riesige Schlachten mit bis zu 48 Igeln</li>
    <li>Play both singleplayer and multiplayer minigames</li>
+   <li xml:lang="de">Spiele Minispiele im Einzel- und Mehrspielermodus</li>
    <li>Plugin your own custom maps, costumes, and other artwork</li>
+   <li xml:lang="de">Baue benutzerestellte Karten, Kostüme und andere Werke ein</li>
   </ul>
  </description>
  <provides>
@@ -33,30 +51,37 @@
  <screenshots>
   <screenshot type="default">
     <caption>A classic Hedgewars match</caption>
+    <caption xml:lang="de">Eine klassische Runde Hedgewars</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Snow_Dynamite.png</image>
   </screenshot>
   <screenshot>
     <caption>Throwing the dangerous hellish hand-grenade</caption>
+    <caption xml:lang="de">Die gefährliche höllische Handgranate wird geworfen</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Hell_HellishHandgrenade.png</image>
   </screenshot>
   <screenshot>
     <caption>The awesome shoryuken attack</caption>
+    <caption xml:lang="de">Der großartige Shoryuken-Angriff</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Trash_Shoryuken.png</image>
   </screenshot>
   <screenshot>
     <caption>Kamikaze attack</caption>
+    <caption xml:lang="de">Kamikaze-Angriff</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Fruit_Kamikaze.png</image>
   </screenshot>
   <screenshot>
     <caption>Hedgehog using a sniper rifle</caption>
+    <caption xml:lang="de">Igel, der ein Scharfschützengewehr benutzt</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-EarthRise_Sniper.png</image>
   </screenshot>
   <screenshot>
     <caption>2nd mission in the campaign “A Classic Fairytale”</caption>
+    <caption xml:lang="de">2. Mission in der Kampagne „A Classic Fairytale”</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-AFT02.png</image>
   </screenshot>
   <screenshot>
     <caption>9th mission in the campaign “A Classic Fairytale”</caption>
+    <caption xml:lang="de">9. Mission in der Kampagne „A Classic Fairytale”</caption>
     <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-AFT09.png</image>
   </screenshot>
  </screenshots>
