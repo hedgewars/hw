@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
- <id type="desktop">hedgewars.desktop</id>
- <metadata_license>GFDL</metadata_license>
+<component type="desktop">
+ <id>hedgewars.desktop</id>
+ <metadata_license>GFDL-1.2</metadata_license>
+ <project_license>GPL-2.0</project_license>
  <name>Hedgewars</name>
  <summary>Funny turn-based artillery game, featuring fighting Hedgehogs!</summary>
  <description>
@@ -11,7 +12,7 @@
   <p>
     As commander, it's your job to assemble your crack team of hedgehog soldiers and bring the war to your enemy.
   </p>
-  <p>Game Features:</p>
+  <p>Game features:</p>
   <ul>
    <li>Hilarious and strategic turn based combat for up to 8 players</li>
    <li>Both local and network multiplayer, with optional AI opponentsBattle on an infinite number of randomly generated maps, with over 22 environments</li>
@@ -24,9 +25,44 @@
    <li>Plugin your own custom maps, costumes, and other artwork</li>
   </ul>
  </description>
+ <provides>
+  <binary>hedgewars</binary>
+  <binary>hedgewars-server</binary>
+  <binary>hwengine</binary>
+ </provides>
  <screenshots>
-  <screenshot type="default" width="1024" height="600">http://www.hedgewars.org/files/9rzprpb.png</screenshot>
+  <screenshot type="default">
+    <caption>A classic Hedgewars match</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Snow_Dynamite.png</image>
+  </screenshot>
+  <screenshot>
+    <caption>Throwing the dangerous hellish hand-grenade</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Hell_HellishHandgrenade.png</image>
+  </screenshot>
+  <screenshot>
+    <caption>The awesome shoryuken attack</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Trash_Shoryuken.png</image>
+  </screenshot>
+  <screenshot>
+    <caption>Kamikaze attack</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Fruit_Kamikaze.png</image>
+  </screenshot>
+  <screenshot>
+    <caption>Hedgehog using a sniper rifle</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-EarthRise_Sniper.png</image>
+  </screenshot>
+  <screenshot>
+    <caption>2nd mission in the campaign “A Classic Fairytale”</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-AFT02.png</image>
+  </screenshot>
+  <screenshot>
+    <caption>9th mission in the campaign “A Classic Fairytale”</caption>
+    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-AFT09.png</image>
+  </screenshot>
  </screenshots>
  <url type="homepage">http://hedgewars.org/</url>
- <updatecontact>hedgewars-dev@gna.org</updatecontact>
-</application>
+ <url type="bugtracker">http://hedgewars.org/bugs</url>
+ <url type="faq">http://hedgewars.org/faq</url>
+ <url type="help">http://hedgewars.org/wiki.html</url>
+ <developer_name>Hedgewars Project</developer_name>
+</component>
