@@ -232,7 +232,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,2,1,1,1);
     SB_InitHealth = new QSpinBox(gbBasicSettings);
     SB_InitHealth->setWhatsThis(wtInitHealth);
-    SB_InitHealth->setRange(50, 200);
+    SB_InitHealth->setRange(1, 1000);
     SB_InitHealth->setValue(100);
     SB_InitHealth->setSingleStep(25);
     glBSLayout->addWidget(SB_InitHealth,2,2,1,1);
@@ -283,7 +283,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,5,1,1,1);
     SB_HealthDecrease = new QSpinBox(gbBasicSettings);
     SB_HealthDecrease->setWhatsThis(wtHealthDecrease);
-    SB_HealthDecrease->setRange(0, 100);
+    SB_HealthDecrease->setRange(0, 1000);
     SB_HealthDecrease->setValue(5);
     SB_HealthDecrease->setSingleStep(1);
     glBSLayout->addWidget(SB_HealthDecrease,5,2,1,1);
@@ -350,7 +350,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,9,1,1,1);
     SB_CrateHealth = new QSpinBox(gbBasicSettings);
     SB_CrateHealth->setWhatsThis(wtCrateHealth);
-    SB_CrateHealth->setRange(0, 200);
+    SB_CrateHealth->setRange(0, 1000);
     SB_CrateHealth->setValue(25);
     SB_CrateHealth->setSingleStep(5);
     glBSLayout->addWidget(SB_CrateHealth,9,2,1,1);
