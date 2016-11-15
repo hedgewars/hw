@@ -800,7 +800,7 @@ function onAmmoStoreInit()
   SetAmmo(amSwitch, 9, 0, 0, 0)
   SetAmmo(amBazooka, 9, 0, 0, 0)
   SetAmmo(amGrenade, 9, 0, 0, 0)
-  SetAmmo(amAirStrike, 1, 0, 0, 0)
+  SetAmmo(amAirAttack, 1, 0, 0, 0)
   SetAmmo(amMolotov, 5, 0, 0, 0)
   SetAmmo(amShotgun, 9, 0, 0, 0)
 end
