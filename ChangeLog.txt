@@ -15,6 +15,7 @@ Game engine:
  + Added "Forts" to map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
  + Render graves behind everything else, so that they can't hide mines etc.
  + Several new sound effects for weapons and utilities
+ * Simplified hat format for unanimated hats; a single 32×32 image is enough. For clan hats, use size 64×32, with the color overlay at the right
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
  * Fixed air-strikes drops being off-center

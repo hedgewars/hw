@@ -916,26 +916,66 @@ begin
         and (HatVisibility > 0) then
             if DefaultPos then
                 begin
-                DrawTextureF(curhat,
-                    HatVisibility,
-                    sx,
-                    sy - 5,
-                    (RealTicks div 128 + Gear^.Pos) mod 19,
-                    sign,
-                    32,
-                    32);
-                if curhat^.w > 64 then
+                // Simple hat with automatic offset
+                if (curhat^.h = 32) and ((curhat^.w = 32) or (curhat^.w = 64)) then
                     begin
-                    Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+                    // Frame
+                    tx := (RealTicks div 128 + Gear^.Pos) mod 19;
+                    // Hat offset
+                    ty := 0;
+                    if (tx = 2) or (tx = 7) or (tx = 12) then
+                        ty := 1
+                    else if tx = 16 then
+                        ty := -1;
+                    // First frame: No tint
+                    DrawTextureF(curhat,
+                        HatVisibility,
+                        sx,
+                        sy - 5 + ty,
+                        0,
+                        sign,
+                        32,
+                        32);
+                    // Second frame: Clan tint (if present)
+                    if (curhat^.w = 64) then
+                        begin
+                        Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+                        DrawTextureF(curhat,
+                            HatVisibility,
+                            sx,
+                            sy - 5 + ty,
+                            1,
+                            sign,
+                            32,
+                            32);
+                        untint
+                        end
+                    end
+                else
+                    // Classic animated hat (all frames drawn manually)
+                    begin
                     DrawTextureF(curhat,
                         HatVisibility,
                         sx,
                         sy - 5,
-                        (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
+                        (RealTicks div 128 + Gear^.Pos) mod 19,
                         sign,
                         32,
                         32);
-                    untint
+                    // Apply clan tint
+                    if curhat^.w > 64 then
+                        begin
+                        Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+                        DrawTextureF(curhat,
+                            HatVisibility,
+                            sx,
+                            sy - 5,
+                            (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
+                            sign,
+                            32,
+                            32);
+                        untint
+                        end
                     end;
                 if HH^.Team^.hasGone then untint
                 end
@@ -949,14 +989,18 @@ begin
                     sign*m,
                     32,
                     32);
-                if curhat^.w > 64 then
+                if (curhat^.w > 64) or ((curhat^.w = 64) and (curhat^.h = 32)) then
                     begin
+                    if ((curhat^.w = 64) and (curhat^.h = 32)) then
+                        tx := 1
+                    else
+                        tx := 32;
                     Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                     DrawTextureF(curhat,
                         HatVisibility,
                         sx,
                         sy - 5,
-                        32,
+                        tx,
                         sign*m,
                         32,
                         32);
