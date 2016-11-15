@@ -813,21 +813,15 @@ procedure AssignHHCoords;
 var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
-    divide, sectionDivide: boolean;
+    divide: boolean;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
 
 divide:= ((GameFlags and gfDivideTeams) <> 0);
-sectionDivide:= divide and ((GameFlags and gfForts) <> 0);
-
-// TODO: there might be a smarter way to decide if dividing clans into equal-width map sections makes sense
-// e.g. by checking if there is enough spawn area in each section
-if divide and (not sectionDivide) then
-    sectionDivide:= (ClansCount = 2);
 
 // in section-divide mode, divide the map into equal-width sections and put each clan in one of them
-if sectionDivide then
+if divide then
     begin
     t:= leftX;
     for p:= 0 to (ClansCount - 1) do
@@ -912,7 +906,7 @@ for p:= 0 to Pred(TeamsCount) do
 
 
 // divided teams: sort the hedgehogs from left to right by clan and shuffle clan members
-if divide and (not sectionDivide) then
+if divide then
     SortHHsByClan();
 end;
 

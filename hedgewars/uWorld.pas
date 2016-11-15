@@ -177,7 +177,6 @@ g:= AddGoal(g, gfKing, gidKing); // king?
 g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 
 // other important flags
-g:= AddGoal(g, gfForts, gidForts); // forts?
 g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
 g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
 g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?

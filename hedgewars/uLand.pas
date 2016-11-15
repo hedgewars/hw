@@ -630,36 +630,33 @@ begin
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
 
-    if (GameFlags and gfForts) = 0 then
-        if cPathz[ptMapCurrent] <> '' then
+    if cPathz[ptMapCurrent] <> '' then
+        begin
+        map:= cPathz[ptMapCurrent] + '/map.png';
+        mask:= cPathz[ptMapCurrent] + '/mask.png';
+        if (not(pfsExists(map)) and pfsExists(mask)) then
             begin
-            map:= cPathz[ptMapCurrent] + '/map.png';
-            mask:= cPathz[ptMapCurrent] + '/mask.png';
-            if (not(pfsExists(map)) and pfsExists(mask)) then
-                begin
-                maskOnly:= true;
-                LoadMask;
-                GenLandSurface
-                end
-            else LoadMap;
+            maskOnly:= true;
+            LoadMask;
+            GenLandSurface
             end
-        else
-            begin
-            WriteLnToConsole('Generating land...');
-            case cMapGen of
-                mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
-                mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
-                mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-                mgDrawn : GenDrawnMap;
-                mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
-            else
-                OutError('Unknown mapgen', true);
-            end;
-            if cMapGen <> mgForts then
-                GenLandSurface
-            end
+        else LoadMap;
+        end
     else
-        MakeFortsMap;
+        begin
+        WriteLnToConsole('Generating land...');
+        case cMapGen of
+            mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+            mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
+            mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
+            mgDrawn : GenDrawnMap;
+            mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
+        else
+            OutError('Unknown mapgen', true);
+        end;
+        if cMapGen <> mgForts then
+            GenLandSurface
+        end;
 
     AddProgress;
 

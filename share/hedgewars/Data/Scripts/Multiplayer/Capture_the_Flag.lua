@@ -444,7 +444,7 @@ end
 
 function onGameInit()
 
-	DisableGameFlags(gfKing, gfForts)
+	DisableGameFlags(gfKing)
 	EnableGameFlags(gfDivideTeams)
 
 	--SuddenDeathTurns = 999 -- suddendeath is off, effectively

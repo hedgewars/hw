@@ -525,7 +525,7 @@
 ; Game goal strings
 05:00=Game Modes
 05:01=The following rules apply
-05:02=Forts: Defend your fortress; vanquish your enemies!
+05:02=UNUSED
 05:03=Low Gravity: Watch your step
 05:04=Invulnerability: Hogs are (almost) invulnerable
 05:05=Vampirism: Hogs will be healed for 80% of the damage dealt

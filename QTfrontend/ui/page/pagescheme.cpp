@@ -68,25 +68,21 @@ QLayout * PageScheme::bodyLayoutDefinition()
     gbBasicSettings->setLayout(glBSLayout);
     // Left
 
-    TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts@2x.png");
-    TBW_mode_Forts->setWhatsThis(tr("Defend your fort and destroy the opponents, two team colours max!"));
-    glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
-
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders@2x.png");
     TBW_disablegirders->setWhatsThis(tr("Disable girders when generating random maps."));
-    glGMLayout->addWidget(TBW_disablegirders,0,1,1,1);
+    glGMLayout->addWidget(TBW_disablegirders,0,0,1,1);
 
     TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects@2x.png");
     TBW_disablelandobjects->setWhatsThis(tr("Disable land objects when generating random maps."));
-    glGMLayout->addWidget(TBW_disablelandobjects,0,2,1,1);
+    glGMLayout->addWidget(TBW_disablelandobjects,0,1,1,1);
 
     TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder@2x.png");
     TBW_border->setWhatsThis(tr("Add an indestructible border around the terrain"));
-    glGMLayout->addWidget(TBW_border,0,3,1,1);
+    glGMLayout->addWidget(TBW_border,0,2,1,1);
 
     TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
     TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
-    glGMLayout->addWidget(TBW_bottomborder,0,4,1,1);
+    glGMLayout->addWidget(TBW_bottomborder,0,3,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
     TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
@@ -550,7 +546,6 @@ void PageScheme::setModel(QAbstractItemModel * model)
     selectScheme->setModel(model);
 
     mapper->addMapping(LE_name, 0);
-    mapper->addMapping(TBW_mode_Forts, 1);
     mapper->addMapping(TBW_teamsDivide, 2);
     mapper->addMapping(TBW_solid, 3);
     mapper->addMapping(TBW_border, 4);

@@ -51,7 +51,6 @@ class PageScheme : public AbstractPage
 
     private:
         QDataWidgetMapper * mapper;
-        ToggleButtonWidget * TBW_mode_Forts;
         ToggleButtonWidget * TBW_teamsDivide;
         ToggleButtonWidget * TBW_solid;
         ToggleButtonWidget * TBW_border;

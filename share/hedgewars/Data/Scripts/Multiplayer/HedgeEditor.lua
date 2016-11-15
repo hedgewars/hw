@@ -704,7 +704,6 @@ local flagArray = 	{
 					}
 
 local gameFlagList =	{
-			{"gfForts", false, gfForts},
 			{"gfMultiWeapon", false, gfMultiWeapon},
 			{"gfBorder", false, gfBorder},
 			{"gfSolidLand", false, gfSolidLand},
