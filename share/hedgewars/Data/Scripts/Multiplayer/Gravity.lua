@@ -18,7 +18,7 @@ local lowGravityUsed = false
 
 local script2_onNewTurn
 local script2_onGameTick20
-local script2_onGameStart
+local script2_onGameInit
 local script2_onHogAttack
 
 
@@ -88,7 +88,7 @@ end
 function onParameters()
     parseParams()
 
-    gravity = tonumber(params["g"]) or 100
+    gravity = tonumber(params["g"]) or gravity
 
     mingravity_normal = gravity
     if mingravity_normal > 0 then
@@ -146,7 +146,7 @@ function onParameters()
         
         script2_onNewTurn = onNewTurn
         script2_onGameTick20 = onGameTick20
-        script2_onGameStart = onGameStart
+        script2_onGameInit = onGameInit
         script2_onHogAttack = onHogAttack
                 
         if onParameters ~= nil then
@@ -156,30 +156,41 @@ function onParameters()
     
     onNewTurn = grav_onNewTurn
     onGameTick20 = grav_onGameTick20
-    onGameStart = grav_onGameStart
+    onGameInit = grav_onGameInit
     onHogAttack = grav_onHogAttack
 end
 
-function grav_onGameStart()
+function grav_onGameInit()
     DisableGameFlags(gfLowGravity)
 
-    if delta == nil then
-        v = string.format(loc("random in range from %i%% to %i%% with period of %i msec"), div(mingravity_normal, mln), div(maxgravity_normal, mln), period * 40)
-    elseif period ~= nil then
-        v = string.format(loc("changing range from %i%% to %i%% with period of %i msec"), div(mingravity_normal, mln), div(maxgravity_normal, mln), period * 40)
-    else
-        v = gravity .. "%"
+    local v, printperiod
+    if period ~= nil then
+        local period_ms = period * 40
+        if period_ms % 1000 == 0 then
+            printperiod = string.format(loc("%i s"), div(period_ms, 1000))
+        else
+            printperiod = string.format(loc("%i ms"), period_ms)
+        end
     end
+    if delta == nil then
+        v = string.format(loc("Crazy Gravity: Gravity randomly changes within a range from %i%% to %i%% with a period of %s"), div(mingravity_normal, mln), div(maxgravity_normal, mln), printperiod)
+    elseif period ~= nil then
+        v = string.format(loc("Oscillating Gravity: Gravity periodically changes within a range from %i%% to %i%% with a period of %s"), div(mingravity_normal, mln), div(maxgravity_normal, mln), printperiod)
+    elseif gravity > 100 then
+        v = string.format(loc("High Gravity: Gravity is %i%%"), gravity)
+    elseif gravity < 100 then
+        v = string.format(loc("Low Gravity: Gravity is %i%%"), gravity)
+    else
+        v = loc("Gravity: 100%") .. "|" ..
+            loc("Script parameter examples:") .. "|" ..
+            loc("“g=150”, where 150 is 150% of normal gravity.") .. "|" ..
+            loc("“g=50, g2=150, period=4000” for gravity changing|from 50 to 150 and back with period of 4000 ms.") .. "|" ..
+            loc("Set period to negative value for random gravity.") .. "| |"
+    end
+    Goals = v
 
-    ShowMission(loc("Gravity"),
-                loc("Current setting is ") .. v,
-                loc("Setup:|'g=150', where 150 is 150% of normal gravity") .. "|"
-                .. loc("or 'g=50, g2=150, period=4000' for gravity changing|from 50 to 150 and back with period of 4000 msec")
-                .. "||" .. loc("Set period to negative value for random gravity"),
-                0, 5000)
-                
-    if script2_onGameStart ~= nil then
-        script2_onGameStart()
+    if script2_onGameInit ~= nil then
+        script2_onGameInit()
     end
 end
 
