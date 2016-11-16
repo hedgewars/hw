@@ -15,6 +15,7 @@ local challengeObjectives = loc("Use the rope in order to catch the blue hedgeho
 local currentPosition = 1
 local previousTimeLeft = 0
 local startChallenge = false
+local winningTime = nil
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -199,6 +200,25 @@ function moveRunner()
 			HogTurnLeft(runner.gear, false)
 		end
 		AddAnim(dialog02)
+
+		-- Update time record
+		local baseTime = 0
+		for i=1, #runner.places do
+			baseTime = baseTime + runner.places[i].turnTime
+		end
+		winningTime = baseTime - TurnTimeLeft
+		SendStat(siCustomAchievement, string.format(loc("You have managed to catch the blue hedgehog in %.3f seconds."), winningTime/1000))
+		local record = tonumber(GetCampaignVar("FastestBlueHogCatch"))
+		if record ~= nil and winningTime >= record then
+			SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), record/1000))
+		end
+		if record == nil or winningTime < record then
+			SaveCampaignVar("FastestBlueHogCatch", tostring(winningTime))
+			if record ~= nil then
+				SendStat(siCustomAchievement, loc("This is a new personal best time, congratulations!"))
+			end
+		end
+
 		TurnTimeLeft = 0
 	elseif currentPosition < 4 then
 		if not startChallenge then
@@ -232,7 +252,7 @@ end
 
 function win()
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
-	SendStat(siCustomAchievement, loc("You have managed to catch the blue hedgehog in time."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	-- siCustomAchievements were added earlier
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
