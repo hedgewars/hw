@@ -35,8 +35,6 @@ local jokeAwardSpeed = nil
 local jokeAwardDamage = nil
 local recordBroken = false
 local ready = false
-local showWaterStats = false -- uses the AI team to draw water height.
-local scaleGraph = false
 local dummyHog = nil
 local dummySkip = 0
 local baseWaterSpeed = 2
@@ -80,18 +78,6 @@ function onGameInit()
     --EnableGameFlags(gfDisableLandObjects) 
     -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
     Seed = ClimbHome
-    if showWaterStats then
-        AddTeam(" ", 0x545C9D, "Simple", "Island", "Default")
-    elseif scaleGraph then
-        AddTeam(" ", 0x050505, "Simple", "Island", "Default")
-    end
-    if showWaterStats or scaleGraph then
-        dummyHog = AddHog(" ", 0, 1, "NoHat")
-        HH[dummyHog] = nil
-        totalHedgehogs = totalHedgehogs - 1
-        teams[GetHogTeamName(dummyHog)] = nil
-        SendStat(siClanHealth, tostring(32640), " ")
-    end
 end
 
 function onGearAdd(gear)
@@ -118,9 +104,6 @@ function onGearDelete(gear)
 end
 
 function onGameStart()
-    if showWaterStats or scaleGraph then
-        DeleteGear(dummyHog)
-    end
     --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
     ShowMission(loc("Climb Home"),
@@ -406,18 +389,16 @@ function onGameTick20()
             end
 
         if GameTime % 500 == 0 then
-            --if isSinglePlayer and MaxHeight < 32000 and WaterRise == nil then
-            --    WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
-            --end
-            if showWaterStats == true then
-	        SendStat(siClanHealth, tostring(getActualHeight(WaterLine)), " ")
-            end
-	    for t,i in pairs(teams) do
-                if currTeam == t then
-                    SendStat(siClanHealth, tostring(getActualHeight(y)), t)
-                else
-                    SendStat(siClanHealth, '0', t)
+            if not isSinglePlayer then
+	        for t,i in pairs(teams) do
+                    if currTeam == t then
+                        SendStat(siClanHealth, tostring(getActualHeight(y)), t)
+                    else
+                        SendStat(siClanHealth, '0', t)
+                    end
                 end
+            elseif CurrentHedgehog ~= nil then
+                SendStat(siClanHealth, tostring(getActualHeight(y)), GetHogTeamName(CurrentHedgehog))
             end
     
             -- play taunts
@@ -639,7 +620,7 @@ function makeFinalMultiPlayerStats()
     local winner = ranking[#ranking]
     local loser = ranking[1]
     SendStat(siGameResult, string.format(loc("%s wins!"), winner.name))
-    SendStat(siGraphTitle, string.format(loc("Team’s best heights per round")))
+    SendStat(siGraphTitle, string.format(loc("Height over time")))
     
     if winner.score < 1500 then
         SendStat(siCustomAchievement, string.format(loc("This round’s award for ultimate disappointment goes to: Everyone!")))
