@@ -45,6 +45,8 @@ class HWNamegen
 
         static QString getRandomGrave();
         static QString getRandomFort();
+        static QString getRandomFlag();
+        static QString getRandomVoice();
         static void teamRandomName(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
 };
 

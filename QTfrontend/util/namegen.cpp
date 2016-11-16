@@ -56,7 +56,8 @@ void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
 
         team.setGrave(getRandomGrave());
         team.setFort(getRandomFort());
-        team.setVoicepack("Default");
+        team.setFlag(getRandomFlag());
+        team.setVoicepack(getRandomVoice());
     }
 
     QStringList dicts;
@@ -255,6 +256,31 @@ QString HWNamegen::getRandomGrave()
     return Graves[rand()%(Graves.size())];
 }
 
+QString HWNamegen::getRandomFlag()
+{
+    QStringList Flags;
+
+    //list all available flags
+    Flags.append(DataManager::instance().entryList(
+                      "Graphics/Flags",
+                      QDir::Files,
+                      QStringList("*.png")
+                  ).replaceInStrings(QRegExp("\\.png$"), "")
+                 );
+    //remove internal flags
+    Flags.removeAll("cpu");
+    Flags.removeAll("cpu_plain");
+
+    if(Flags.size()==0)
+    {
+        // TODO do some serious error handling
+        return "Error";
+    }
+
+    //pick a random flag
+    return Flags[rand()%(Flags.size())];
+}
+
 QString HWNamegen::getRandomFort()
 {
     QStringList Forts;
@@ -275,4 +301,24 @@ QString HWNamegen::getRandomFort()
 
     //pick a random fort
     return Forts[rand()%(Forts.size())];
+}
+
+QString HWNamegen::getRandomVoice()
+{
+    QStringList Voices;
+
+    //list all available voices 
+    Voices.append(DataManager::instance().entryList(
+                     "Sounds/voices",
+                     QDir::Dirs | QDir::NoDotAndDotDot,
+                     QStringList("*")));
+
+    if(Voices.size()==0)
+    {
+        // TODO do some serious error handling
+        return "Error";
+    }
+
+    //pick a random voice
+    return Voices[rand()%(Voices.size())];
 }

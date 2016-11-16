@@ -154,6 +154,7 @@ void HWGame::SendQuickConfig()
     team1.setColor(0);
     team1.setNumHedgehogs(4);
     HWNamegen::teamRandomNames(team1,true);
+    team1.setVoicepack("Default");
     HWProto::addStringListToBuffer(teamscfg,
                                    team1.teamGameConfig(100));
 
@@ -164,6 +165,7 @@ void HWGame::SendQuickConfig()
     do
         HWNamegen::teamRandomNames(team2,true);
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
+    team2.setVoicepack("Default");
     HWProto::addStringListToBuffer(teamscfg,
                                    team2.teamGameConfig(100));
 
