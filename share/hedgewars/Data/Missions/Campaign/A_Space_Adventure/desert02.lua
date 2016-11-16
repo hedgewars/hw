@@ -155,7 +155,17 @@ function heroSafe(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You have escaped successfully."))
 	SendStat(siCustomAchievement, string.format(loc("Your escape took you %d turns."), TotalRounds))
-	SendStat(siPlayerKills,'1',teamA.name)
+	local record = tonumber(GetCampaignVar("FastestMineEscape"))
+	if record ~= nil and TotalRounds >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest escape so far: %d turns"), record))
+	end
+	if record == nil or TotalRounds < record then
+		SaveCampaignVar("FastestMineEscape", tostring(TotalRounds))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 

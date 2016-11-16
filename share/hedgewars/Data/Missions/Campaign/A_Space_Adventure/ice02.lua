@@ -135,14 +135,30 @@ function onGameTick20()
 			gameEnded = true
 			-- GAME OVER, WIN!
 			totalTime = totalTime - TurnTimeLeft
-			totalTime = totalTime / 1000
+			local totalTimePrinted  = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
 			SendStat(siGameResult, loc("Hooray! You are a champion!"))
-			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds.", totalTime)))
-			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers.", saucersUsed)))
-			SendStat(siCustomAchievement, string.format(loc("You had %d additional flying saucers left"), saucersLeft))
-			SendStat(siPlayerKills,'1',teamA.name)
+			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds."), totalTimePrinted))
+			local record = tonumber(GetCampaignVar("IceStadiumBestTime"))
+			if record ~= nil and totalTime >= record then
+				SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), record/1000))
+			end
+			if record == nil or totalTime < record then
+				SaveCampaignVar("IceStadiumBestTime", tostring(totalTime))
+				if record ~= nil then
+					SendStat(siCustomAchievement, loc("This is a new personal best time, congratulations!"))
+				end
+			end
+			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers."), saucersUsed))
+			SendStat(siCustomAchievement, string.format(loc("You had %d additional flying saucers left."), saucersLeft))
+
+			record = tonumber(GetCampaignVar("IceStadiumLeastSaucersUsed"))
+			if record == nil or saucersUsed < record then
+				SaveCampaignVar("IceStadiumLeastSaucersUsed", tostring(saucersUsed))
+			end
+
+			SendStat(siPlayerKills,'0',teamA.name)
 			EndGame()
 		end
 	end
