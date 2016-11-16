@@ -4,19 +4,35 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 local gravity = 100
 local mingravity
 local maxgravity
+local mingravity_normal
+local maxgravity_normal
+local mingravity_low
+local maxgravity_low
 local delta = 0
 local period
 local periodtimer = 0
 local wdGameTicks = 0
 local wdTTL = 0
 local mln = 1000000
+local lowGravityUsed = false
 
 local script2_onNewTurn
 local script2_onGameTick20
 local script2_onGameStart
+local script2_onHogAttack
 
 
 function grav_onNewTurn()
+    lowGravityUsed = false
+    if maxgravity_normal == nil then
+        gravity = mingravity_normal
+    else
+        mingravity = mingravity_normal
+        maxgravity = maxgravity_normal
+        if period > 0 then
+           delta = div(maxgravity_normal - mingravity_normal, period)
+        end
+    end
     if delta ~= nil and period == nil then 
       SetGravity(gravity)
     else
@@ -72,13 +88,27 @@ end
 function onParameters()
     parseParams()
 
-    gravity = params["g"]
+    gravity = tonumber(params["g"]) or 100
 
-    mingravity = gravity
-    maxgravity = params["g2"]
+    mingravity_normal = gravity
+    if mingravity_normal > 0 then
+        mingravity_low = div(mingravity_normal, 2)
+    else
+        mingravity_low = mingravity_normal * 2
+    end
+    mingravity = mingravity_normal
+    if type(tonumber(params["g2"])) == "number" then
+        maxgravity_normal = tonumber(params["g2"])
+        if maxgravity_normal > 0 then
+            maxgravity_low = div(maxgravity_normal, 2)
+        else
+            maxgravity_low = maxgravity_normal * 2
+        end
+        maxgravity = maxgravity_normal
+    end
     period = params["period"]
 
-    if mingravity ~= nil and maxgravity ~= nil then
+    if type(mingravity) == "number" and type(maxgravity) == "number" then
         if period ~= nil then
             period = div(period, 40)
         else
@@ -86,25 +116,26 @@ function onParameters()
         end
 
         mingravity = mingravity * mln
+        mingravity_normal = mingravity_normal * mln
+        mingravity_low = mingravity_low * mln
         maxgravity = maxgravity * mln
+        maxgravity_normal = maxgravity_normal * mln
+        maxgravity_low = maxgravity_low * mln
 
-        -- note: mingravity and maxgravity MUST NOT be strings at this point
         if mingravity > maxgravity then
             mingravity, maxgravity = maxgravity, mingravity
+            mingravity_normal, maxgravity_normal = maxgravity_normal, mingravity_normal
+            mingravity_low, maxgravity_low = maxgravity_low, mingravity_low
         end
 
         gravity = mingravity
 
         if period > 0 then
-            delta = div(maxgravity - mingravity, period)
+            delta = div(maxgravity_normal - mingravity_normal, period)
         else
             period = -period
             delta = nil
         end
-    end
-
-    if gravity == nil then
-        gravity = 100
     end
     
     secondScript = params["script2"]
@@ -116,6 +147,7 @@ function onParameters()
         script2_onNewTurn = onNewTurn
         script2_onGameTick20 = onGameTick20
         script2_onGameStart = onGameStart
+        script2_onHogAttack = onHogAttack
                 
         if onParameters ~= nil then
             onParameters()
@@ -125,13 +157,16 @@ function onParameters()
     onNewTurn = grav_onNewTurn
     onGameTick20 = grav_onGameTick20
     onGameStart = grav_onGameStart
+    onHogAttack = grav_onHogAttack
 end
 
 function grav_onGameStart()
+    DisableGameFlags(gfLowGravity)
+
     if delta == nil then
-        v = string.format(loc("random in range from %i%% to %i%% with period of %i msec"), div(mingravity, mln), div(maxgravity, mln), period * 40)
+        v = string.format(loc("random in range from %i%% to %i%% with period of %i msec"), div(mingravity_normal, mln), div(maxgravity_normal, mln), period * 40)
     elseif period ~= nil then
-        v = string.format(loc("changing range from %i%% to %i%% with period of %i msec"), div(mingravity, mln), div(maxgravity, mln), period * 40)
+        v = string.format(loc("changing range from %i%% to %i%% with period of %i msec"), div(mingravity_normal, mln), div(maxgravity_normal, mln), period * 40)
     else
         v = gravity .. "%"
     end
@@ -148,4 +183,20 @@ function grav_onGameStart()
     end
 end
 
-
+function grav_onHogAttack(ammoType)
+    if ammoType == amLowGravity then
+        lowGravityUsed = true
+        if maxgravity_normal == nil then
+            gravity = mingravity_low
+        else
+            mingravity = mingravity_low
+            maxgravity = maxgravity_low
+            if period > 0 then
+                delta = div(maxgravity_low - mingravity_low, period)
+            end
+        end
+    end
+    if script2_onHogAttack ~= nil then
+        script2_onHogAttack()
+    end
+end
