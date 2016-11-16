@@ -815,15 +815,31 @@ procedure AssignHHCoords;
 var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
-    divide: boolean;
+    divide, sectionDivide: boolean;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
 
 divide:= ((GameFlags and gfDivideTeams) <> 0);
 
-// in section-divide mode, divide the map into equal-width sections and put each clan in one of them
-if divide then
+(* sectionDivide will determine the mode of hog distribution
+ *
+ * On generated maps or maps not designed with divided mode in mind,
+ * using spawning sections can be problematic, because some sections may
+ * contain too little land surface for sensible spawning.
+ *
+ * if sectionDivide is true, the map will be sliced into equal-width sections
+ * and one team spawned in each
+ * if false, the hogs will be spawned normally and sorted by teams after
+ *
+ *)
+
+// TODO: there might be a smarter way to decide if dividing clans into equal-width map sections makes sense
+// e.g. by checking if there is enough spawn area in each section
+sectionDivide:= divide and ((cMapGen = mgForts) or (ClansCount = 2));
+
+// divide the map into equal-width sections and put each clan in one of them
+if sectionDivide then
     begin
     t:= leftX;
     for p:= 0 to (ClansCount - 1) do
@@ -908,7 +924,7 @@ for p:= 0 to Pred(TeamsCount) do
 
 
 // divided teams: sort the hedgehogs from left to right by clan and shuffle clan members
-if divide then
+if divide and (not sectionDivide) then
     SortHHsByClan();
 end;
 
