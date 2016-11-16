@@ -1131,7 +1131,7 @@ begin
         // clean the window from any previous content
         RenderClear();
         if SuddenDeathDmg then
-            SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255)
+            SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255)
         else if ((cReducedQuality and rqNoBackground) = 0) then
             SetSkyColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255)
         else

@@ -206,7 +206,6 @@ var
 
     WaterColorArray : array[0..7] of HwColor4f;
     SDWaterColorArray : array[0..7] of HwColor4f;
-    SDTint          : LongInt;
 
     TargetCursorPoint     : TPoint;
     CursorPoint           : TPoint;
@@ -2407,7 +2406,7 @@ var
     bShowFinger: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
-    SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
+    SDTint, SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
     SkyOffset: LongInt;
 {$IFDEF COUNTTICKS}
     cntTicks: LongWord;
@@ -2592,7 +2591,11 @@ begin
 
     SDWaterOpacity:= $80;
 
-    SDTint:= $80;
+    SDTint.r := $80;
+    SDTint.g := $80;
+    SDTint.b := $80;
+    SDTint.a := $FF;
+
     ExplosionBorderColorR:= 80;
     ExplosionBorderColorG:= 80;
     ExplosionBorderColorB:= 80;

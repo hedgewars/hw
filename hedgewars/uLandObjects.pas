@@ -567,6 +567,26 @@ while (not pfsEOF(f)) and allOK do
         SDSkyColor.g:= SkyColor.g;
         SDSkyColor.b:= SkyColor.b;
         end
+    else if key = 'sd-tint' then
+        begin
+        i:= Pos(',', s);
+        SDTint.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDTint.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        SDTint.b:= StrToInt(Trim(s));
+        if GrayScale
+            then
+            begin
+            t:= round(SDTint.r * RGB_LUMINANCE_RED + SDTint.g * RGB_LUMINANCE_GREEN + SDTint.b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            SDTint.r:= t;
+            SDTint.g:= t;
+            SDTint.b:= t
+            end;
+        end
     else if key = 'border' then
         begin
         i:= Pos(',', s);
