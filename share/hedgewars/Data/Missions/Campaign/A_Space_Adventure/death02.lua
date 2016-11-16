@@ -188,6 +188,16 @@ function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	local record = tonumber(GetCampaignVar("FastestSpecialistsKill"))
+	if record ~= nil and TotalRounds >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
+	end
+	if record == nil or TotalRounds < record then
+		SaveCampaignVar("FastestSpecialistsKill", tostring(TotalRounds))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
 	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()

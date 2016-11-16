@@ -214,6 +214,16 @@ function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	local record = tonumber(GetCampaignVar("FastestPreciseShooting"))
+	if record ~= nil and TotalRounds >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
+	end
+	if record == nil or TotalRounds < record then
+		SaveCampaignVar("FastestPreciseShooting", tostring(TotalRounds))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
 	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission."))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
