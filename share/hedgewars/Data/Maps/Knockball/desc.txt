@@ -1,2 +1,2 @@
-en_US=Knock your opponents off the platforms using only a bat!
-de_DE=Schubs deine Gegner von den Plattformen nur mit einem Baseball-Schlaeger!
+en=Knock your opponents off the platforms using only a bat!
+de=Schubs deine Gegner von den Plattformen nur mit einem Baseball-Schlaeger!

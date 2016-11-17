@@ -119,7 +119,12 @@ bool MapModel::loadMaps()
             // load description (if applicable)
             if (isMission)
             {
-                QString locale = HWApplication::keyboardInputLocale().name();
+                // get locale
+                DataManager & dataMgr = DataManager::instance();
+                QSettings settings(dataMgr.settingsFileName(), QSettings::IniFormat);
+                QString locale = settings.value("misc/locale", "").toString();
+                if (locale.isEmpty())
+                    locale = QLocale::system().name();
 
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
                 desc = descSettings.value(locale, QString()).toString().replace("|", "\n").replace("\\,", ",");

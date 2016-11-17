@@ -1,2 +1,2 @@
-en_US=Bat your opponents through the hoops.
-de_DE=Schlag deine Gegner durch die Koerbe.
+en=Bat your opponents through the hoops.
+de=Schlag deine Gegner durch die Koerbe.

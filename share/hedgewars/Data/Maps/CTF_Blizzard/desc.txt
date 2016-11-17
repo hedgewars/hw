@@ -1,2 +1,2 @@
-en_US=Capture the enemy flag and bring it to your own.
-de_DE=Klau die feindliche Flagge und bring sie zu deiner eigenen.
+en=Capture the enemy flag and bring it to your own.
+de=Klau die feindliche Flagge und bring sie zu deiner eigenen.
