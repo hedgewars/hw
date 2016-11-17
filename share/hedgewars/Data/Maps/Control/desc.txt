@@ -1,1 +1,2 @@
 en_US=Stand on the pillars as long as you can.
+de_DE=Steh auf den Saeulen so lange du kannst.
