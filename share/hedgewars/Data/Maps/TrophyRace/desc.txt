@@ -1,1 +1,1 @@
-en_US=Ready\, set\, go! Who is going to be the first in this crazy race?
+en_US=Use your rope to reach the finish line faster than anyone else!

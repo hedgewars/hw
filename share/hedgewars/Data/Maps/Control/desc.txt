@@ -1,1 +1,1 @@
-en_US=Islands scattered everywhere\, full set of weapons.
+en_US=Stand on the pillars as long as you can.

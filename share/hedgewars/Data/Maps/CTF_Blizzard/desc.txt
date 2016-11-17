@@ -1,1 +1,1 @@
-en_US=Capture the Flag\, blizzard style!
+en_US=Capture the enemy flag and bring it to your own.
