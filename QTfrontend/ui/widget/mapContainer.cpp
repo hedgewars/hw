@@ -253,7 +253,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     bottomLeftLayout->addStretch(1);
 
     /* Theme chooser */
-    QHBoxLayout * themeHBox = new QHBoxLayout(this);
+    QHBoxLayout * themeHBox = new QHBoxLayout();
 
     btnRandTheme = new QPushButton();
     btnRandTheme->setWhatsThis(tr("Randomize the theme"));
