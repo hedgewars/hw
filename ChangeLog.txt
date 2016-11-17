@@ -44,6 +44,7 @@ Missions and Game Styles:
  + Rope-Knocking Challenge was improved (now awards score based on kills and time; taunts for knocking out hedgehogs)
  + A few campaign missions now save your personal best successes (e.g. fastest finish in Hard Flying) which get shown after you finish them agin
  + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
+ * Mutant script shows now appropriate ranking and graph in stats screen
  * Portal Mind Challenge was cleaned up and reworked (especially less awful wording)
  * Fixed TechRacer not recording finish if time was >= 100s
  * Fixed Target Practice missions getting stuck when a target dropped into water
