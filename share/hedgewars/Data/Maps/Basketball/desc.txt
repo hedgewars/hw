@@ -1,2 +1,2 @@
 en=Bat your opponents through the hoops.
-de=Schlag deine Gegner durch die Koerbe.
+de=Schlag deine Gegner durch die Körbe.

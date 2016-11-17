@@ -1,2 +1,2 @@
 en=Stand on the pillars as long as you can.
-de=Steh auf den Saeulen so lange du kannst.
+de=Steh auf den Säulen so lange du kannst.

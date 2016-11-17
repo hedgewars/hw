@@ -120,13 +120,13 @@ bool MapModel::loadMaps()
             if (isMission)
             {
                 // get locale
-                DataManager & dataMgr = DataManager::instance();
-                QSettings settings(dataMgr.settingsFileName(), QSettings::IniFormat);
+                QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
                 QString locale = settings.value("misc/locale", "").toString();
                 if (locale.isEmpty())
                     locale = QLocale::system().name();
 
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
+                descSettings.setIniCodec("UTF-8");
                 desc = descSettings.value(locale, QString()).toString().replace("|", "\n").replace("\\,", ",");
             }
 
