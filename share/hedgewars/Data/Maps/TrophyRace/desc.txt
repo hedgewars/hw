@@ -1,2 +1,2 @@
 en=Use your rope to reach the finish line faster than anyone else!
-de=Benutze dein Seil\, um die Ziellinie schneller als alle anderen zu erreichen!
+de=Benutze dein Seil_c um die Ziellinie schneller als alle anderen zu erreichen!

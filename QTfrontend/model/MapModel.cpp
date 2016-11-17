@@ -127,13 +127,14 @@ bool MapModel::loadMaps()
 
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
                 descSettings.setIniCodec("UTF-8");
-                desc = descSettings.value(locale, QString()).toString().replace("|", "\n").replace("\\,", ",");
+                desc = descSettings.value(locale, QString()).toString();
                 // If not found, try with lanague-only code
                 if (desc.isEmpty())
                 {
                     QString localeSimple = locale.remove(QRegExp("_.*$"));
-                    desc = descSettings.value(localeSimple, QString()).toString().replace("|", "\n").replace("\\,", ",");
+                    desc = descSettings.value(localeSimple, QString()).toString();
                 }
+                desc = desc.replace("_n", "\n").replace("_c", ",").replace("__", "_");
             }
 
             // detect if map is dlc
