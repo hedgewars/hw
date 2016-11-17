@@ -544,8 +544,10 @@ function onGameTick()
 			i = 1
 		end
 
-		fSpawnX[i] = GetX(CurrentHedgehog)
-		fSpawnY[i] = GetY(CurrentHedgehog)
+		if TurnTimeLeft == 0 then
+			fSpawnX[i] = GetX(CurrentHedgehog)
+			fSpawnY[i] = GetY(CurrentHedgehog)
+		end
 
 	end
 
