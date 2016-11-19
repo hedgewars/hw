@@ -226,6 +226,7 @@ function heroWin(gear)
 	end
 	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission."))
 	SendStat(siPlayerKills,'1',teamA.name)
+	SaveCampaignVar("Mission10Won", "true")
 	EndGame()
 end
 

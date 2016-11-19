@@ -254,5 +254,6 @@ function win()
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
 	-- siCustomAchievements were added earlier
 	SendStat(siPlayerKills,'0',teamA.name)
+	SaveCampaignVar("Mission13Won", "true")
 	EndGame()
 end

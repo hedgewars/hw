@@ -213,6 +213,7 @@ function win()
 	SendStat(siCustomAchievement, loc("You are indeed the best PAotH pilot."))
 	SendStat(siCustomAchievement, loc("Next time you play \"Searching in the dust\" you'll have an RC plane available."))
 	SendStat(siPlayerKills,'1',teamA.name)
+	SaveCampaignVar("Mission12Won", "true")
 	EndGame()
 end
 

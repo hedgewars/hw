@@ -6,6 +6,21 @@ function saveCompletedStatus(planetNum)
 		status = GetCampaignVar("MainMissionsStatus")
 	end
 
+	local planetToLevelMapping = {
+		[1] = 2,
+		[2] = 3,
+		[3] = 8,
+		[4] = 5,
+		[5] = 4,
+		[6] = 9,
+		[7] = 14
+	}
+
+	local level = planetToLevelMapping[planetNum]
+	if level ~= nil then
+		SaveCampaignVar("Mission"..level.."Won", "true")
+	end
+
 	if planetNum == 1 then
 		status = "1"..status:sub(2)
 	elseif planetNum == status:len() then
