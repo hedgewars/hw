@@ -182,7 +182,7 @@ function RebuildTeamInfo()
 
         -- make a list of individual team names
         for i = 0, (TeamsCount-1) do
-                teamNameArr[i] = " " -- = i
+                teamNameArr[i] = " "
                 teamSize[i] = 0
                 teamIndex[i] = 0
                 teamScore[i] = 100000
@@ -277,16 +277,10 @@ function CheckWaypoints()
                 g1Y = g1Y - g2Y
                 dist = (g1X*g1X) + (g1Y*g1Y)
 
-                --if i == 0 then
-                --      AddCaption(dist .. "/" .. (wpRad*wpRad) )
-                --end
-
                 NR = (48/100*wpRad)/2
 
                 if dist < (NR*NR) then
-                --if dist < (wpRad*wpRad) then
-                        --AddCaption("howdy")
-                        wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog)) -- new                             --GetClanColor(1)
+                        wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog))
                         SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
 
                         wpRem = 0
@@ -341,9 +335,6 @@ function AdjustScores()
                 end
         end
 
-        --bestTime = 100000
-        --bestClan = 10
-
         -- find the best time out of those so far
         for i = 0, (numTeams-1) do
                 if teamScore[i] < bestTime then
@@ -378,12 +369,7 @@ function AdjustScores()
         end
 
 
-        --------
-        --new
-        --------
-
         if bestTime == trackTime then
-                --AddCaption("wooooooooooooooooooooooooooooo")
 
                 fastColour = GetClanColor(GetHogClan(CurrentHedgehog))
 
@@ -394,8 +380,6 @@ function AdjustScores()
 
                 fastCount = currCount
                 fastIndex = 0
-
-                --currCount = 0 -- is this needed?
 
         else
                 currCount = 0
@@ -473,53 +457,6 @@ end
 
 function CheckForNewRound()
 
-        -------------
-        ------ new
-        -------------
-
-        --[[turnN = turnN + 1
-        if gameBegun == false then
-                if turnN == 2 then
-                        for i = 0, (numhhs-1) do
-                                if hhs[i] ~= nil then
-                                        SetEffect(hhs[i], heResurrectable, 0)
-                                        SetHealth(hhs[i],0)
-                                end
-                        end
-                        gameOver = true
-                        TurnTimeLeft = 1
-                end
-        else
-
-
-        end]]
-
-        --[[if roundBegun == true then
-
-                if RoundHasChanged == true then
-                        roundN = roundN + 1
-                        RoundHasChanged = false
-                        onNewRound()
-                end
-
-                if lastRound ~= TotalRounds then -- new round, but not really
-
-                        if RoundHasChanged == false then
-                                RoundHasChanged = true
-                        end
-
-                end
-
-                AddCaption("RoundN:" .. roundN .. "; " .. "TR: " .. TotalRounds)
-
-                lastRound = TotalRounds
-
-        end]]
-
-        ------------
-        ----- old
-        ------------
-
         if GetHogClan(CurrentHedgehog) == firstClan then
                 onNewRound()
         end
@@ -549,15 +486,7 @@ function HandleGhost()
                 g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
                 SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, fastColour )
 
-                --AddCaption("fC: " .. fastIndex .. " / " .. fastCount)
-
-        else
-
-                --AddCaption("excep fC: " .. fastIndex .. " / " .. fastCount)
-
         end
-
-
 
 end
 
@@ -592,7 +521,7 @@ function onGameStart()
 
         roundN = 0
         lastRound = TotalRounds
-        RoundHasChanged = false -- true
+        RoundHasChanged = false
 
         for i = 0, (specialPointsCount-1) do
                 PlaceWayPoint(specialPointsX[i], specialPointsY[i])
