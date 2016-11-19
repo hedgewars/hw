@@ -38,6 +38,8 @@ Construction Mode:
   + initialenergy: Amount of energy at start
   + energyperround: New energy per round
   + maxenergy: Maximum allowed
+ + Completely reworked all in-game texts and descriptions
+ * Special tools like structure placer now have their own proper descriptions (instead of Air Attack description, etc.)
  * Costs for weapon and utility crates were all equal
  * Many other fixes and tweaks
 
@@ -77,6 +79,8 @@ Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
  + New call: GetAmmoName(ammoType) -- returns the localized name for the specified ammoType
  + New call: GetVisualGearType(vgUid) -- returns the visual gear type
+ + New call: SetAmmoTexts(ammoType, name, caption, description) -- Overwrite displayed name and description of an ammo type
+ + New call: SetAmmoDescriptionAppendix(ammoType, descAppend) -- Append a custom text to the description of an ammo type without overwriting it
  + New hook: onVisualGearAdd(vgUid) -- called when a visual gear is added
  + New hook: onVisualGearDelete(vgUid) -- called when a visual gear is deleted
  + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
