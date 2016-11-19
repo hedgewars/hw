@@ -528,6 +528,7 @@ function onGameInit()
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
+
 end
 
 
@@ -553,6 +554,16 @@ function onGameStart()
 
                                 "", 4, 4000
                                 )
+
+        SetAmmoTexts(amAirAttack, loc("Place waypoint"), loc("Racer tool"),
+                loc("Build an awesome race track by placing|waypoints which the hedgehogs have to|touch in any order to finish a round.") .. "|" ..
+		loc("Hedgehogs will start in the first waypoint.") .. "|" ..
+ 		loc("Cursor: Place waypoint"))
+
+        SetAmmoTexts(amSkip, loc("Finish waypoint placement"), loc("Racer tool"),
+                loc("Happy with your race track?|Then stop building and start racing!") .. "|" ..
+                loc("Or let the next player place waypoints|if less than 2 waypoints have been placed.") .. "|" ..
+                loc("Attack: Activate"))
 
         TryRepositionHogs()
 
@@ -620,11 +631,12 @@ function onNewTurn()
                         ShowMission(loc("Racer"),
                         loc("A Hedgewars mini-game"),
                         loc("Touch all waypoints as fast as you can!"), 2, 4000)
+
+                        SetAmmoTexts(amSkip, nil, nil, nil)
                 else
                         ShowMission(loc("Racer"),
                         loc("Waypoint placement phase"),
-                        loc("Place 2-8 waypoints using the Air Attack weapon.") .. "|" ..
-			loc("Skip your turn when you are finished placing waypoints."), 2, 4000)
+                        loc("Place 2-8 waypoints using the available tools."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
                 end
