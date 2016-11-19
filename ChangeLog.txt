@@ -62,9 +62,12 @@ Missions and Game Styles:
  * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
 
 Frontend:
+ + Campaign screen shows which campaigns and missions you've completed so far
  + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
  + Additional button for just randomizing theme that will not change your selected map
  + Randomizing map/theme in online-mode will not include DLC-content
+ * Campaign screen does no longer show AI-controlled teams
+ * Campaign names and campaign mission names can now be translated
  * Creating randomized teams now randomizes (almost) every aspect
  * Fixed mostly broken descriptions for multiplayer mission maps
  * Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
