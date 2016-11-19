@@ -2604,15 +2604,19 @@ begin
 end;
 
 function lc_getammoname(L : Plua_state) : LongInt; Cdecl;
-var at: LongInt;
+var np, at: LongInt;
+    ignoreOverwrite: Boolean;
 const call = 'GetAmmoName';
-      params = 'ammoType';
+      params = 'ammoType [, ignoreOverwrite ]';
 begin
-    if CheckLuaParamCount(L, 1, call, params) then
+    if CheckAndFetchParamCountRange(L, 1, 2, call, params, np) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);                                                                                                   
+        ignoreOverwrite := false;
+        if np > 1 then
+            ignoreOverwrite := lua_toboolean(L, 2);
         if at >= 0 then   
-            if length(trluaammo[Ammoz[TAmmoType(at)].NameId]) > 0 then
+            if (not ignoreOverwrite) and (length(trluaammo[Ammoz[TAmmoType(at)].NameId]) > 0) then
                 lua_pushstring(L, PChar(trluaammo[Ammoz[TAmmoType(at)].NameId]))
             else
                 lua_pushstring(L, PChar(trammo[Ammoz[TAmmoType(at)].NameId]));
