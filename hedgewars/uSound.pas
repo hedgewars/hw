@@ -255,7 +255,15 @@ var cInitVolume: LongInt;
             (FileName:           'hog_freeze.ogg'; Path: ptSounds; AltPath: ptNone), // sndHogFreeze
             (FileName:       'airmine_impact.ogg'; Path: ptSounds; AltPath: ptNone),// sndAirMineImpact
             (FileName:         'knife_impact.ogg'; Path: ptSounds; AltPath: ptNone),// sndKnifeImpact
-            (FileName:            'extratime.ogg'; Path: ptSounds; AltPath: ptNone) // sndExtraTime
+            (FileName:            'extratime.ogg'; Path: ptSounds; AltPath: ptNone),// sndExtraTime
+            (FileName:           'lasersight.ogg'; Path: ptSounds; AltPath: ptNone),// sndLaserSight
+            (FileName:         'invulnerable.ogg'; Path: ptSounds; AltPath: ptNone),// sndInvulnerable
+            (FileName:                  'ufo.ogg'; Path: ptSounds; AltPath: ptNone),// sndJetpackLaunch
+            (FileName:         'jetpackboost.ogg'; Path: ptSounds; AltPath: ptNone),// sndJetpackBoost
+            (FileName:           'portalshot.ogg'; Path: ptSounds; AltPath: ptNone),// sndPortalShot
+            (FileName:         'portalswitch.ogg'; Path: ptSounds; AltPath: ptNone),// sndPortalSwitch
+            (FileName:           'portalopen.ogg'; Path: ptSounds; AltPath: ptNone),// sndPortalOpen
+            (FileName:            'blowtorch.ogg'; Path: ptSounds; AltPath: ptNone) // sndBlowTorch
             );
 
 

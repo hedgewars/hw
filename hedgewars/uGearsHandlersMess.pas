@@ -1594,6 +1594,7 @@ begin
 
     if Gear^.Hedgehog^.Gear = nil then
         begin
+        StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
         exit
@@ -1671,6 +1672,7 @@ begin
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0)
     or ((HHGear^.Message and gmAttack) <> 0) then
         begin
+        StopSoundChan(Gear^.SoundChannel);
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
@@ -1695,6 +1697,7 @@ begin
         cHHStepTicks, cHHRadius * 2 + 7);
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
+    Gear^.SoundChannel := LoopSound(sndBlowTorch);
     Gear^.doStep := @doStepBlowTorchWork
 end;
 
@@ -3888,7 +3891,11 @@ begin
                             bubble^.dY:= random(20)/10+0.1;
                         end
                     end
-                else HHGear^.dY := HHGear^.dY - move;
+                else
+                    begin
+                    PlaySound(sndJetpackBoost);
+                    HHGear^.dY := HHGear^.dY - move;
+                    end
                 end;
             dec(Gear^.Health, fuel);
             Gear^.MsgParam := Gear^.MsgParam or gmUp;
@@ -3914,7 +3921,8 @@ begin
                         else bubble^.X := bubble^.X - 28;
                         end;
                     end
-                end;
+                end
+            else PlaySound(sndJetpackBoost);
             dec(Gear^.Health, fuel div 5);
             Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
             Gear^.Timer := GameTicks
@@ -3995,6 +4003,8 @@ begin
     Gear^.doStep := @doStepJetpackWork;
 
     HHGear := Gear^.Hedgehog^.Gear;
+
+    PlaySound(sndJetpackLaunch);
     FollowGear := HHGear;
     AfterAttack;
     with HHGear^ do
@@ -4254,6 +4264,7 @@ begin
             with CurrentHedgehog^ do
                 if (CurAmmoType = amPortalGun) then
                     begin
+                    PlaySound(sndPortalSwitch);
                     CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and (not gmSwitch);
 
                     CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
@@ -4665,6 +4676,7 @@ begin
         if ((Gear^.LinkedGear = nil)
         or (hwRound(Distance(Gear^.X - Gear^.LinkedGear^.X,Gear^.Y-Gear^.LinkedGear^.Y)) >=Gear^.Radius*2)) then
             begin
+            PlaySound(sndPortalOpen);
             loadNewPortalBall(Gear, false);
             inc(Gear^.Tag);
             Gear^.doStep := @doStepPortal;
@@ -4706,6 +4718,8 @@ begin
     newPortal^.dY := newPortal^.dY * s;
 
     newPortal^.LinkedGear := nil;
+
+    PlaySound(sndPortalShot);
 
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do

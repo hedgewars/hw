@@ -385,12 +385,18 @@ with Gear^,
                                  PlaySound(sndHellishImpact4);
                                  cDamageModifier:= _1_5
                                  end;
-                 amInvulnerable: Effects[heInvulnerable]:= 1;
+                 amInvulnerable: begin
+                                 PlaySound(sndInvulnerable);
+                                 Effects[heInvulnerable]:= 1
+                                 end;
                     amExtraTime: begin
                                  PlaySound(sndExtraTime);
                                  TurnTimeLeft:= TurnTimeLeft + 30000
                                  end;
-                   amLaserSight: cLaserSighting:= true;
+                   amLaserSight: begin
+                                 PlaySound(sndLaserSight);
+                                 cLaserSighting:= true
+                                 end;
                      amVampiric: begin
                                  PlaySoundV(sndOw1, Team^.voicepack);
                                  cVampiric:= true;
