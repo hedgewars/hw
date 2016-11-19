@@ -263,7 +263,11 @@ var cInitVolume: LongInt;
             (FileName:           'portalshot.ogg'; Path: ptSounds; AltPath: ptNone),// sndPortalShot
             (FileName:         'portalswitch.ogg'; Path: ptSounds; AltPath: ptNone),// sndPortalSwitch
             (FileName:           'portalopen.ogg'; Path: ptSounds; AltPath: ptNone),// sndPortalOpen
-            (FileName:            'blowtorch.ogg'; Path: ptSounds; AltPath: ptNone) // sndBlowTorch
+            (FileName:            'blowtorch.ogg'; Path: ptSounds; AltPath: ptNone),// sndBlowTorch
+            (FileName:           'countdown1.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown1
+            (FileName:           'countdown2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown2
+            (FileName:           'countdown3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown3
+            (FileName:           'countdown4.ogg'; Path: ptSounds; AltPath: ptNone) // sndCountdown4
             );
 
 

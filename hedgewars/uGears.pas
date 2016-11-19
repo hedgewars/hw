@@ -450,12 +450,20 @@ if TurnTimeLeft > 0 then
             and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0))) then
             //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
                 begin
-                if (TurnTimeLeft = 5000)
-                and (cHedgehogTurnTime >= 10000)
+                if (cHedgehogTurnTime >= 10000)
                 and (not PlacingHogs)
                 and (CurrentHedgehog^.Gear <> nil)
                 and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                    PlaySoundV(sndHurry, CurrentTeam^.voicepack);
+                    if TurnTimeLeft = 5000 then
+                        PlaySoundV(sndHurry, CurrentTeam^.voicepack)
+                    else if TurnTimeLeft = 4000 then
+                        PlaySound(sndCountdown4)
+                    else if TurnTimeLeft = 3000 then
+                        PlaySound(sndCountdown3)
+                    else if TurnTimeLeft = 2000 then
+                        PlaySound(sndCountdown2)
+                    else if TurnTimeLeft = 1000 then
+                        PlaySound(sndCountdown1);
             if ReadyTimeLeft > 0 then
                 begin
                 if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then

@@ -141,13 +141,11 @@ if FinishedTurnsTotal <> 0 then
         AddVoice(sndMissed, PreviousTeam^.voicepack)
     else if (AmmoUsedCount > 0) and (not isTurnSkipped) then
         begin end// nothing ?
-    else if isTurnSkipped then
+    else if isTurnSkipped and not PlacingHogs then
         begin
-        AddVoice(sndBoring, PreviousTeam^.voicepack);
+        AddVoice(sndCoward, PreviousTeam^.voicepack);
         AddCaption(FormatA(GetEventString(eidTurnSkipped), s), cWhiteColor, capgrpMessage);
         end
-    else if not PlacingHogs then
-        AddVoice(sndCoward, PreviousTeam^.voicepack);
     end;
 
 
