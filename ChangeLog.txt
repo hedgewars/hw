@@ -15,6 +15,8 @@ Game engine:
  + Replaced the Fort Mode game modifier by adding "Forts" to the map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
  + Render graves behind everything else, so that they can't hide mines etc.
  + Show indicator symbols at bottom right while extra damage or low gravity are active
+ + Color coding for the turn timer: green = ready timer, yellow = turn in progress, red = retreat timer, gray = timer paused
+ + Play countdown sounds at 1-4 seconds turn time
  + Several new sound effects for weapons and utilities
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
