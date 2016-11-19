@@ -911,14 +911,8 @@ end
 
 function checkForSpecialWeapons()
 
-
-
-	if (GetCurAmmoType() == amAirAttack) then
-		AddCaption(loc("Structure Placement Tool"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
-	elseif (GetCurAmmoType() == amDrillStrike) then
-		AddCaption(loc("Object Placement Tool"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
-	elseif (GetCurAmmoType() == amNapalm) then
-		AddCaption(loc("Crate Placement Tool"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
+	if (GetCurAmmoType() == amDrillStrike) then
+		AddCaption(loc("Object Placer"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
 	end
 
 	lastWep = GetCurAmmoType()
@@ -1576,21 +1570,25 @@ function onGameStart()
 				loc("a Hedgewars mini-game"),
 				loc("Build a fortress and destroy your enemy.") .. "|" ..
 				loc("There are a variety of structures available to aid you.") .. "|" ..
-				loc("Use the air-attack weapons and the arrow keys to select structures.") .. "|" ..
-				" " .. "|" ..
-				loc("Healing Station") .. ": " .. loc("Grants nearby hogs life-regeneration.")  .. "|" ..
-				loc("Bio-Filter") .. ": " .. loc("Aggressively removes enemy hedgehogs.")  .. "|" ..
-				loc("Weapon Filter") .. ": " .. loc("Dematerializes weapons and equipment carried by enemy hedgehogs.")  .. "|" ..
-				loc("Reflector Shield") .. ": " .. loc("Reflects enemy projectiles.")  .. "|" ..
-
-				loc("Generator") .. ": " .. loc("Generates power.")  .. "|" ..
-				loc("Respawner") .. ": " .. loc("Resurrects dead hedgehogs.")  .. "|" ..
-				loc("Teleportation Node") .. ": " .. loc("Allows free teleportation between other nodes.")  .. "|" ..
-				loc("Construction Station") .. ": " .. loc("Allows placement of girders, rubber-bands, mines, sticky mines and barrels.")  .. "|" ..
-				loc("Support Station") .. ": " .. loc("Allows the placement of weapons, utiliites, and health crates.")
+				loc("Use the structure placer to place structures.")
 				, 4, 5000
 				)
 
+	SetAmmoTexts(amAirAttack, loc("Structure Placer"), loc("Construction Mode tool"), loc("Build one of multiple different structures|to aid you in victory, at the cost of energy.") .. "| |" ..
+	loc("Healing Station: Heals nearby hogs.")  .. "|" ..
+	loc("Bio-Filter: Aggressively removes enemies.")  .. "|" ..
+	loc("Weapon Filter: Dematerializes all ammo|    carried by enemies entering it.")  .. "|" ..
+	loc("Reflector Shield: Reflects enemy projectiles.")  .. "|" ..
+	loc("Generator: Generates energy.")  .. "|" ..
+	loc("Respawner: Resurrects dead hogs.")  .. "|" ..
+	loc("Teleportation Node: Allows teleportation|    between other nodes.")  .. "|" ..
+	loc("Construction Station: Allows placement of|    girders, rubber, mines, sticky mines|    and barrels.")  .. "|" ..
+	loc("Support Station: Allows placement of crates.") .. "| |" ..
+
+	loc("Left/right: Choose structure type|Cursor: Build structure"))
+
+	SetAmmoTexts(amNapalm, loc("Crate Placer"), loc("Construction Mode tool"), loc("This allows you to create a crate anywhere|within your clan's area of influence,|at the cost of energy.|Up/down: Choose crate type|Left/right: Choose crate contents|Cursor: Place crate"))
+	SetAmmoTexts(amDrillStrike, loc("Object Placer"), loc("Construction Mode tool"), loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.|Up/down: Choose object type|Left/right: Choose timer (for mines)|Cursor: Place object"))
 
 	sCirc = AddVisualGear(0,0,vgtCircle,0,true)
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x00000000)
