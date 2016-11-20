@@ -4,14 +4,8 @@ Basic_Training_-_Bazooka.desc="Nutze den Wind zu deinem Vorteil aus!"
 Basic_Training_-_Grenade.name=Grundlagentraining: Granate
 Basic_Training_-_Grenade.desc="Vergiss nicht: Stift ziehen UND werfen!"
 
-Basic_Training_-_Shotgun.name=Grundlagentraining: Schrotflinte
-Basic_Training_-_Shotgun.desc="Zuerst schießen, dann fragen!"
-
-Basic_Training_-_Sniper_Rifle.name=Grundlagentraining: Scharfschützengewehr
+Basic_Training_-_Sniper_Rifle.name=Zielübung: Scharfschützengewehr
 Basic_Training_-_Sniper_Rifle.desc="Peng, Kopfschuss!"
-
-Basic_Training_-_Cluster_Bomb.name=Grundlagentraining: Splittergranate
-Basic_Training_-_Cluster_Bomb.desc="Jemand braucht eine heiße Dusche!"
 
 Basic_Training_-_Rope.name=Grundlagentraining: Seil
 Basic_Training_-_Rope.desc="Raus da und schwing!"
@@ -19,40 +13,40 @@ Basic_Training_-_Rope.desc="Raus da und schwing!"
 Basic_Training_-_Flying_Saucer.name=Grundlagentraining: Fliegende Untertasse
 Basic_Training_-_Flying_Saucer.desc="Du willst also ausgerechnet Astronaut werden, wie? Dann lern erstmal fliegen!"
 
-User_Mission_-_Dangerous_Ducklings.name=Mission: Gefährliche Entchen
+User_Mission_-_Dangerous_Ducklings.name=Gefährliche Entchen
 User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das im Grundlagentraining Gelernte in die Tag umsetzt!"
 
-User_Mission_-_Diver.name=Mission: Taucher
+User_Mission_-_Diver.name=Taucher
 User_Mission_-_Diver.desc="Diese amphibische Angriffstrategie ist schwieriger, als sie aussieht."
 
-User_Mission_-_Teamwork.name=Mission: Teamwork
+User_Mission_-_Teamwork.name=Teamwork
 User_Mission_-_Teamwork.desc="Ab und zu … tut Liebe weh."
 
-User_Mission_-_Spooky_Tree.name=Mission: Spukiger Baum
+User_Mission_-_Spooky_Tree.name=Spukiger Baum
 User_Mission_-_Spooky_Tree.desc="Viele Kisten hier draußen. Ich hoffe jedenfalls, dass dieser Vogel hier nicht hungrig wird."
 
-User_Mission_-_Bamboo_Thicket.name=Mission: Bambusdickicht
+User_Mission_-_Bamboo_Thicket.name=Bambusdickicht
 User_Mission_-_Bamboo_Thicket.desc="Tod von oben."
 
-User_Mission_-_That_Sinking_Feeling.name=Mission: Land unter
+User_Mission_-_That_Sinking_Feeling.name=Land unter
 User_Mission_-_That_Sinking_Feeling.desc="Hier steht einen das Wasser ganz schön schnell bis zum Halse. Viele sind hieran gescheitert. Kannst du alle Igel retten?"
 
-User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton und die Hängematte
+User_Mission_-_Newton_and_the_Hammock.name=Newton und die Hängematte
 User_Mission_-_Newton_and_the_Hammock.desc="Nicht vergessen, Igelinge: Die Geschwindigkeit eines Körpers bleibt konstant, es sei denn, es wirkt eine äußere Kraft auf ihn ein!"
 
-User_Mission_-_The_Great_Escape.name=Mission: Gesprengte Ketten
+User_Mission_-_The_Great_Escape.name=Gesprengte Ketten
 User_Mission_-_The_Great_Escape.desc="Glaubst du, dass du mich einsperren könnest?"
 
-User_Mission_-_Rope_Knock_Challenge.name=Herausforderung: Seilschubsen
+User_Mission_-_Rope_Knock_Challenge.name=Seilschubsen
 User_Mission_-_Rope_Knock_Challenge.desc="Sieh! Hinter dir!"
 
-User_Mission_-_Nobody_Laugh.name=Mission: Niemand darf lachen
+User_Mission_-_Nobody_Laugh.name=Niemand darf lachen
 User_Mission_-_Nobody_Laugh.desc="Das ist kein Witz!"
 
-User_Mission_-_RCPlane_Challenge.name=Herausforderung: Funkflugzeug
+User_Mission_-_RCPlane_Challenge.name=Funkflugzeugsherausforderung
 User_Mission_-_RCPlane_Challenge.desc="Bist wohl ziemlich eingebildet, was, Flieger?"
 
-portal.name=Mission: Knifflige Portalherausforderung
+portal.name=Knifflige Portalherausforderung
 portal.desc="Benutze das Portalgerät, um dich schnell und weit zu bewegen; benutze es zum Töten; benutze es mit Vorsicht!"
 
 Target_Practice_-_Bazooka_easy.name=Zielübung: Bazooka (einfach)
@@ -76,15 +70,15 @@ Target_Practice_-_Grenade_easy.desc="Eine Aufwärmübung für den aufstrebenden 
 Target_Practice_-_Grenade_hard.name=Zielübung: Granate (schwer)
 Target_Practice_-_Grenade_hard.desc="Das ist nichts für Grünschnäbel! Wir werden die Zielscheiben an ein paar wirklich knifflige Stellen platzieren."
 
-ClimbHome.name=Herausforderung: Nach Hause klettern
+ClimbHome.name=Nach Hause klettern
 ClimbHome.desc="Du bist weit von Zuhause weg und das Wasser steigt ständig. Klettere so hoch, wie du kannst!"
 
-Challenge_-_Speed_Shoppa_-_Hedgelove.name=Herausforderung: Seilliebe
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Zeitrennen: Seilliebe
 Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Zeig deine Liebe zum Seilschwingen, sammle ein paar wenige Kisten auf dieser kleinen Karte ein."
 
-Challenge_-_Speed_Shoppa_-_Ropes.name=Herausforderung: Seile und Kisten
+Challenge_-_Speed_Shoppa_-_Ropes.name=Zeitrennen: Seile und Kisten
 Challenge_-_Speed_Shoppa_-_Ropes.desc="Nimm dein Seil, und sammle alle Kisten auf dieser mittelgroßen Karte ein."
 
-Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Herausforderung: Der Kunde ist König
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Zeitrennen: Der Kunde ist König
 Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Zeig, dass du dem Titel eines Königs würdig bist und sammle alle Kisten so schnell wie möglich mit deinem Seil auf dieser großen Karte ein."
 

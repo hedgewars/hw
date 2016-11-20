@@ -4,12 +4,6 @@ Basic_Training_-_Bazooka.desc="Using the wind to your advantage is key!"
 Basic_Training_-_Grenade.name=Basic Grenade Training
 Basic_Training_-_Grenade.desc="Remember, you pull the pin out AND throw!"
 
-Basic_Training_-_Cluster_Bomb.name=Basic Cluster Bomb Training
-Basic_Training_-_Cluster_Bomb.desc="Someone needs hot shower!"
-
-Basic_Training_-_Shotgun.name=Basic Shotgun Training
-Basic_Training_-_Shotgun.desc="Shoot first, ask questions later!"
-
 Basic_Training_-_Rope.name=Basic Rope Training
 Basic_Training_-_Rope.desc="Get out there and swing!"
 
