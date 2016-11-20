@@ -6,7 +6,7 @@ A_Classic_Fairytale-first_blood.desc="Hilf Undichte Stelle dabei, sein Training 
 A_Classic_Fairytale-shadow.name="2. Mission: Die Schattenfälle"
 A_Classic_Fairytale-shadow.desc="Undichte Stelle und Dichte Wolke gehen für die Jagd raus. Sei auf Gefahren im Wald gefasst. Denk dran, bedenke deine Entscheidungen gut."
 
-A_Classic_Fairytale-journey.name="3. Mission: Dir Rückreise"
+A_Classic_Fairytale-journey.name="3. Mission: Die Rückreise"
 A_Classic_Fairytale-journey.desc="Undichte Stelle muss zur anderen Seite der Insel gehen. Sei schnell und vorsichtig."
 
 A_Classic_Fairytale-united.name="4. Mission: Gemeinsam sind wir stark"
