@@ -86,6 +86,7 @@ Lua-API:
  + New call: SetAmmoDescriptionAppendix(ammoType, descAppend) -- Append a custom text to the description of an ammo type without overwriting it
  + New hook: onVisualGearAdd(vgUid) -- called when a visual gear is added
  + New hook: onVisualGearDelete(vgUid) -- called when a visual gear is deleted
+ + New variable: AirMinesNum -- Number of air mines being placed on a medium-sized map
  + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
 
 0.9.21 -> 0.9.22
