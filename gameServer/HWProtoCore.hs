@@ -40,7 +40,7 @@ handleCmd ["PING"] = answerClient ["PONG"]
 
 handleCmd ("QUIT" : xs) = return [ByeClient msg]
     where
-        msg = if not $ null xs then head xs else loc "bye"
+        msg = if not $ null xs then "User quit: " `B.append` (head xs) else loc "bye"
 
 
 handleCmd ["PONG"] = do
