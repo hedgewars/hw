@@ -606,6 +606,9 @@ function sendStats(planetMsg)
 	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission."))
 	SendStat(siCustomAchievement, loc("Planets with completed main missions will be marked with a flower."))
 	SendStat(siCustomAchievement, loc("Planets with all missions completed will be marked with two flowers."))
+	if GetCampaignVar("Won") == "true" and GetCampaignVar("Mission1Won") ~= "true" then
+		SendStat(siCustomAchievement, loc("Complete all main and side missions to complete the spacetrip mission."))
+	end
 	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end

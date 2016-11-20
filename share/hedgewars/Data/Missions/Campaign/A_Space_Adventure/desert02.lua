@@ -167,6 +167,7 @@ function heroSafe(gear)
 	end
 	SendStat(siPlayerKills,'0',teamA.name)
 	SaveCampaignVar("Mission7Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end
 

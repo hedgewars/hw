@@ -201,6 +201,7 @@ function heroWin(gear)
 	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
 	SendStat(siPlayerKills,'1',teamA.name)
 	SaveCampaignVar("Mission11Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end
 

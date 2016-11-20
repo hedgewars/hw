@@ -160,6 +160,7 @@ function onGameTick20()
 
 			SendStat(siPlayerKills,'0',teamA.name)
 			SaveCampaignVar("Mission6Won", "true")
+			checkAllMissionsCompleted()
 			EndGame()
 		end
 	end

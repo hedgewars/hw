@@ -1,3 +1,5 @@
+local missionsNum = 14
+
 function saveCompletedStatus(planetNum)
 	--        1       2        3        4      5         6        7
 	-- order: moon01, fruit01, fruit02, ice01, desert01, death01, final
@@ -29,6 +31,21 @@ function saveCompletedStatus(planetNum)
 		status = status:sub(1,planetNum-1).."1"..status:sub(planetNum+1)
 	end
 	SaveCampaignVar("MainMissionsStatus",status)
+
+	checkAllMissionsCompleted()
+end
+
+function checkAllMissionsCompleted()
+	local allMissions = true
+	for i=2, missionsNum do
+		if GetCampaignVar("Mission"..i.."Won") ~= "true" then
+			allMissions = false
+			break
+		end
+	end
+	if allMissions then
+		SaveCampaignVar("Mission1Won", "true")
+	end
 end
 
 function getCompletedStatus()

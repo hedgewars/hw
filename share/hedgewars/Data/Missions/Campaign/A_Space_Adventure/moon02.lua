@@ -255,5 +255,6 @@ function win()
 	-- siCustomAchievements were added earlier
 	SendStat(siPlayerKills,'0',teamA.name)
 	SaveCampaignVar("Mission13Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end

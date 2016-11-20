@@ -151,8 +151,8 @@ end
 
 function heroWin(gear)
 	saveCompletedStatus(7)
-	SaveCampaignVar("Mission1Won", "true")
 	SaveCampaignVar("Won", "true")
+	checkAllMissionsCompleted()
 	SendStat(siGameResult, loc("Congratulations, you have saved Hogera!"))
 	SendStat(siCustomAchievement, loc("Hogera is safe!"))
 	SendStat(siPlayerKills,'1',teamA.name)
