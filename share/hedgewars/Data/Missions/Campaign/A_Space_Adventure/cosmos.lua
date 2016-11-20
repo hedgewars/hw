@@ -479,27 +479,37 @@ function setFoundDeviceVisual()
 	--WriteLnToConsole("status: "..status.fruit01.." - "..status.fruit02)
 	if status.moon01 then
 		vgear = AddVisualGear(1116, 848, vgtBeeTrace, 0, false)
-
+		if status.moon02 then
+			vgear = AddVisualGear(1116, 828, vgtBeeTrace, 0, false)
+		end
 	end
 	if status.ice01 then
 		vgear = AddVisualGear(1512, 120, vgtBeeTrace, 0, false)
-
+		if status.ice02 then
+			vgear = AddVisualGear(1512, 100, vgtBeeTrace, 0, false)
+		end
 	end
 	if status.desert01 then
 		vgear = AddVisualGear(4015, 316, vgtBeeTrace, 0, false)
-
+		if status.desert02 and status.desert03 then
+			vgear = AddVisualGear(4015, 296, vgtBeeTrace, 0, false)
+		end
 	end
 	if status.fruit01 and status.fruit02 then
 		vgear = AddVisualGear(2390, 384, vgtBeeTrace, 0, false)
-
+		if status.fruit03 then
+			vgear = AddVisualGear(2390, 364, vgtBeeTrace, 0, false)
+		end
 	end
 	if status.death01 then
 		vgear = AddVisualGear(444, 400, vgtBeeTrace, 0, false)
-
+		if status.death02 then
+			vgear = AddVisualGear(444, 380, vgtBeeTrace, 0, false)
+		end
 	end
 	if status.final then
 		vgear = AddVisualGear(3070, 810, vgtBeeTrace, 0, false)
-
+		vgear = AddVisualGear(3070, 790, vgtBeeTrace, 0, false)
 	end
 end
 
@@ -595,6 +605,7 @@ function sendStats(planetMsg)
 	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button."))
 	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission."))
 	SendStat(siCustomAchievement, loc("Planets with completed main missions will be marked with a flower."))
+	SendStat(siCustomAchievement, loc("Planets with all missions completed will be marked with two flowers."))
 	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end

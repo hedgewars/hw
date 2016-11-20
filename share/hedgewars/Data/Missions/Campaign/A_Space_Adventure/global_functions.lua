@@ -38,11 +38,17 @@ function getCompletedStatus()
 	end
 	local status = {
 		moon01 = false,
+		moon02 = false,
 		fruit01 = false,
 		fruit02 = false,
+		fruit03 = false,
 		ice01 = false,
+		ice02 = false,
 		desert01 = false,
+		desert02 = false,
+		desert03 = false,
 		death01 = false,
+		death02 = false,
 		final = false
 	}
 	if allStatus ~= "" then
@@ -67,6 +73,25 @@ function getCompletedStatus()
 		if allStatus:sub(7,7) == "1" then
 			status.final = true
 		end
+	end
+	-- Bonus missions
+	if GetCampaignVar("Mission13Won") == "true" then
+		status.moon02 = true
+	end
+	if GetCampaignVar("Mission6Won") == "true" then
+		status.ice02 = true
+	end
+	if GetCampaignVar("Mission7Won") == "true" then
+		status.desert02 = true
+	end
+	if GetCampaignVar("Mission10Won") == "true" then
+		status.fruit03 = true
+	end
+	if GetCampaignVar("Mission11Won") == "true" then
+		status.death02 = true
+	end
+	if GetCampaignVar("Mission12Won") == "true" then
+		status.desert03 = true
 	end
 	return status
 end
