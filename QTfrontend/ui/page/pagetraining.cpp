@@ -104,9 +104,17 @@ QLayout * PageTraining::footerLayoutDefinition()
 {
     QBoxLayout * bottomLayout = new QVBoxLayout();
 
-    btnStart = formattedButton(QPushButton::tr("Go!"));
+    const QIcon& lp = QIcon(":/res/Start.png");
+    QSize sz = lp.actualSize(QSize(65535, 65535));
+    btnStart = new QPushButton();
+    btnStart->setText(QPushButton::tr("Start"));
     btnStart->setWhatsThis(tr("Start fighting"));
-    btnStart->setFixedWidth(140);
+    btnStart->setMinimumWidth(sz.width() + 60);
+    btnStart->setIcon(lp);
+    btnStart->setFixedHeight(50);
+    btnStart->setIconSize(sz);
+    btnStart->setFlat(true);
+    btnStart->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     bottomLayout->addWidget(btnStart);
 
