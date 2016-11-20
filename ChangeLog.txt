@@ -64,6 +64,7 @@ Missions and Game Styles:
 
 Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far
+ + Training screen now has 3 mission categories: Training (tutorials), Challenge (get a high score), Scenario (complete a task)
  + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
  + Additional button for just randomizing theme that will not change your selected map
  + Randomizing map/theme in online-mode will not include DLC-content
