@@ -61,6 +61,7 @@ Missions and Game Styles:
  * Fixed Lua error message in A Classic Fairytale mission 8
  * Fixed Lua error messages and broken stats screen in Climb Home singleplayer mission
  * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
+ * Disable Sudden Death for good in Shoppa game scheme
 
 Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far

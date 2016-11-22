@@ -224,8 +224,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(8)             // air mines      35
             << QVariant(0)             // health case pct 36
             << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
+            << QVariant(0)             // water rise amt 38
+            << QVariant(0)             // health dec amt 39
             << QVariant(100)           // rope modfier   40
             << QVariant(100)           // get away time  41
             << QVariant(0)             // world edge     42
