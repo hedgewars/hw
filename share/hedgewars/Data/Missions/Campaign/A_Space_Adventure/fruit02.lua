@@ -298,6 +298,7 @@ function onAmmoStoreInit()
 	SetAmmo(amDEagle, 0, 0, 0, 6)
 	SetAmmo(amGirder, 0, 0, 0, 2)
 	SetAmmo(amRope, 0, 0, 0, 1)
+	SetAmmo(amSkip, 9, 0, 0, 1)
 	if tonumber(getBonus(2)) == 1 then
 		SetAmmo(amWatermelon, 0, 0, 0, 2)
 		SetAmmo(amSniperRifle, 0, 0, 0, 2)

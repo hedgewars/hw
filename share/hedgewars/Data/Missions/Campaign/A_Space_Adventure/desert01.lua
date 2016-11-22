@@ -272,6 +272,7 @@ function onAmmoStoreInit()
 	SetAmmo(amRope, 0, 0, 0, 1)
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 3)
+	SetAmmo(amSkip, 9, 0, 0, 1)
 end
 
 function onGearAdd(gear)

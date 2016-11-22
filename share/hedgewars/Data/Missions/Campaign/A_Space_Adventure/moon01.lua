@@ -219,6 +219,7 @@ function onAmmoStoreInit()
 	SetAmmo(amParachute, 0, 0, 0, 1)
 	SetAmmo(amGrenade, 0, 0, 0, 6)
 	SetAmmo(amDEagle, 0, 0, 0, 4)
+	SetAmmo(amSkip, 9, 0, 0, 1)
 end
 
 function onGameTick()
