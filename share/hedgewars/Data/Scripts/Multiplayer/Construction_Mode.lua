@@ -30,6 +30,7 @@
 --
 -- Possible keys:
 --- initialenergy: Amount of energy that each team starts with (default: 550)
+---                Note: Must be smaller than or equal to maxenergy
 --- energyperround: Amount of energy that each team gets per round (default: 50)
 --- maxenergy: Maximum amount of energy each team can hold (default: 1000)
 
@@ -1594,7 +1595,7 @@ function onGameStart()
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x00000000)
 
 	for i = 0, ClansCount-1 do
-		clanPower[i] = conf_initialEnergy
+		clanPower[i] = math.min(conf_initialEnergy, conf_maxEnergy)
 		clanLWepIndex[i] = 1 -- for ease of use let's track this stuff
 		clanLUtilIndex[i] = 1
 		clanLGearIndex[i] = 1
