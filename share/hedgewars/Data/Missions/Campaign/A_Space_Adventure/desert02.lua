@@ -93,7 +93,7 @@ function onGameStart()
 	SpawnHealthCrate(healthX, health1Y)
 	SpawnHealthCrate(healthX, health2Y)
 
-	AddAmmo(hero.gear, amRope, 99)
+	AddAmmo(hero.gear, amRope, 100)
 
 	SendHealthStatsOff()
 	AddAnim(dialog01)
