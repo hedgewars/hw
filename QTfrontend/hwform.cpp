@@ -131,6 +131,7 @@ bool frontendEffects = true;
 QString playerHash;
 
 QIcon finishedIcon;
+QIcon notFinishedIcon;
 GameUIConfig* HWForm::config = NULL;
 
 HWForm::HWForm(QWidget *parent, QString styleSheet)
@@ -168,8 +169,14 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     frontendEffects = config->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
+    // Icons for finished missions
     finishedIcon.addFile(":/res/missionFinished.png", QSize(), QIcon::Normal, QIcon::On);
     finishedIcon.addFile(":/res/missionFinishedSelected.png", QSize(), QIcon::Selected, QIcon::On);
+
+    // A transparent icon, used to nicely align the unfinished missions with the finished ones
+    QPixmap emptySpace = QPixmap(15, 15);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    notFinishedIcon = QIcon(emptySpace);
 
     ui.pageRoomsList->setSettings(config);
     ui.pageNetGame->setSettings(config);
@@ -1895,7 +1902,7 @@ void HWForm::UpdateCampaignPage(int index)
         if(isMissionWon(campaignName, i, tName))
             ui.pageCampaign->CBMission->setItemIcon(i, finishedIcon);
         else
-            ui.pageCampaign->CBMission->setItemIcon(i, QIcon());
+            ui.pageCampaign->CBMission->setItemIcon(i, notFinishedIcon);
     }
 }
 
@@ -1919,7 +1926,7 @@ void HWForm::UpdateCampaignPageTeam(int index)
         if(isCampWon(campaignName, tName))
             ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
         else
-            ui.pageCampaign->CBCampaign->setItemIcon(i, QIcon());
+            ui.pageCampaign->CBCampaign->setItemIcon(i, notFinishedIcon);
     }
 }
 
@@ -1957,7 +1964,7 @@ void HWForm::UpdateCampaignPageProgress(int index)
     if(isCampWon(campaignName, tName))
         ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
     else
-        ui.pageCampaign->CBCampaign->setItemIcon(i, QIcon());
+        ui.pageCampaign->CBCampaign->setItemIcon(i, notFinishedIcon);
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
