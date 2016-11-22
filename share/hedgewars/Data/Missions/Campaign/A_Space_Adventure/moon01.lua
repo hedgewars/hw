@@ -19,6 +19,7 @@ local weaponsAcquired = false
 local battleZoneReached = false
 local checkPointReached = 1 -- 1 is start of the game
 local afterDialog02 = false
+local gameOver = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -353,6 +354,7 @@ function professorHit(gear)
 end
 
 function professorDeath(gear)
+	if gameOver then return end
 	if GetHealth(minion1.gear) then
 		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
 	elseif GetHealth(minion2.gear) then
@@ -371,10 +373,12 @@ function professorDeath(gear)
 	SendStat(siPlayerKills,'1',teamD.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
+	gameOver = true
 	EndGame()
 end
 
 function minionsDeath(gear)
+	if gameOver then return end
 	-- do staffs here
 	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
 	DismissTeam(teamC.name)
@@ -388,6 +392,7 @@ function minionsDeath(gear)
 	SendStat(siPlayerKills,'1',teamD.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
+	gameOver = true
 	EndGame()
 end
 
