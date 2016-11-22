@@ -53,9 +53,9 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     lbltitle = new QLabel();
     lbltitle->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 
-    QLabel* lblteam = new QLabel(tr("Team:"));
-    QLabel* lblcampaign = new QLabel(tr("Campaign:"));
-    QLabel* lblmission = new QLabel(tr("Mission:"));
+    QLabel* lblteam = new QLabel(tr("Team"));
+    QLabel* lblcampaign = new QLabel(tr("Campaign"));
+    QLabel* lblmission = new QLabel(tr("Mission"));
 
     CBTeam = new QComboBox(this);
     CBMission = new QComboBox(this);
