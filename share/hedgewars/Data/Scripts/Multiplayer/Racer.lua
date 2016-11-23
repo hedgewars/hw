@@ -576,7 +576,11 @@ function PlaceWayPoint(x,y)
 
             wpX[wpCount] = x
             wpY[wpCount] = y
-            wpCol[wpCount] = 0xffffffff
+            if wpCount == 0 then
+                wpCol[wpCount] = 0x80ff80ff
+            else
+                wpCol[wpCount] = 0xffffffff
+            end
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
 
             SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
