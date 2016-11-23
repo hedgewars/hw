@@ -748,7 +748,7 @@ case Gear^.Pos of
                     RecountTeamHealth(HH^.Hedgehog^.Team);
 
                     i:= 0;
-                    while i < Gear^.Health do
+                    while (i < Gear^.Health) and (i <= 1000) do
                         begin
                         vga:= AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtStraightShot);
                         if vga <> nil then

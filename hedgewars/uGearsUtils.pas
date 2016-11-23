@@ -282,7 +282,7 @@ begin
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
                     i:= 0;
-                    while i < vampDmg do
+                    while (i < vampDmg) and (i < 1000) do
                         begin
                         vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
                         if vg <> nil then
