@@ -191,7 +191,7 @@ function onParameters()
     end
     if params["waypointradius"] ~= nil then
         wpRad = math.max(40, math.floor(tonumber(params["waypointradius"])))
-        if type(roundLimit) ~= "number" then
+        if type(wpRad) ~= "number" then
              wpRad = 450
         end
     end
