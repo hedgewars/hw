@@ -1193,6 +1193,7 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Air Mine Placement Mode") then
 		gear = AddGear(x, y, gtAirMine, 0, 0, 0, 0)
 		SetTimer(gear, pMode[pIndex])
+		SetGearValues(gear, nil, nil, pMode[pIndex])
 	elseif cat[cIndex] == loc("Repositioning Mode") then
 
 		if pMode[pIndex] == loc("Selection Mode") then
@@ -1706,6 +1707,7 @@ function GetDataForGearSaving(gear)
 				GetY(gear) .. ", gtAirMine, 0, 0, 0, 0)"
 			table.insert(airMineList, temp)
 			table.insert(airMineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
+			table.insert(airMineList, "	SetGearValues(tempG, nil, nil, " .. GetTimer(gear) .. ")")
 			table.insert(airMineList, "	setGearValue(tempG, \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
 		else
 
@@ -1714,6 +1716,7 @@ function GetDataForGearSaving(gear)
 				GetY(gear) .. ", gtAirMine, 0, 0, 0, 0)" .. ", " ..
 				GetTimer(gear) ..")"
 			table.insert(airMineList, temp)
+			table.insert(airMineList, "	SetGearValues(tempG, nil, nil, " .. GetTimer(gear) .. ")")
 
 		end
 
