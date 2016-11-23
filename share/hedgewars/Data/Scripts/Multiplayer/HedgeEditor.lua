@@ -1649,36 +1649,21 @@ function GetDataForGearSaving(gear)
 
 	if GetGearType(gear) == gtMine then
 
+		temp = 	"	tempG = AddGear(" ..
+			GetX(gear) .. ", " ..
+			GetY(gear) .. ", gtMine, 0, 0, 0, 0)"
+		table.insert(mineList, temp)
+		table.insert(mineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
+		if (GetHealth(gear) == 0) then
+			table.insert(mineList, "	SetHealth(tempG, 0)")
+			local _, damage
+			_,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(gear)
+			if damage ~= 0 then
+				table.insert(mineList, "	SetGearValues(tempG, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "..damage..")")
+			end
+		end
 		if (getGearValue(gear, "tag") ~= nil) then
-			temp = 	"	tempG = AddGear(" ..
-				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtMine, 0, 0, 0, 0)"
-			table.insert(mineList, temp)
-			table.insert(mineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
-			if (GetHealth(gear) == 0) then
-				table.insert(mineList, "	SetHealth(tempG, 0)")
-				local _, damage
-				_,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(gear)
-				if damage ~= 0 then
-					table.insert(mineList, "	SetGearValues(tempG, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "..damage..")")
-				end
-			end
 			table.insert(mineList, "	setGearValue(tempG, \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
-		else
-
-			temp = 	"	tempG = AddGear(" ..
-				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtMine, 0, 0, 0, "..GetTimer(gear) .. ")"
-			table.insert(mineList, temp)
-			if (GetHealth(gear) == 0) then
-				table.insert(mineList, "	SetHealth(tempG, 0)")
-				local _, damage
-				_,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(gear)
-				if damage ~= 0 then
-					table.insert(mineList, "	SetGearValues(tempG, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, "..damage..")")
-				end
-			end
-
 		end
 
 		if 		GetTimer(gear) == 0 then specialFlag = 1
@@ -1694,30 +1679,21 @@ function GetDataForGearSaving(gear)
 		arrayList = sMineList
 		temp = 	"	tempG = AddGear(" ..
 				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtSMine, 0, 0, 0, " ..
-				GetTimer(gear) ..")"
+				GetY(gear) .. ", gtSMine, 0, 0, 0, 0)"
 		table.insert(sMineList, temp)
+		table.insert(sMineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
 		specialFlag = 7
 
 	elseif GetGearType(gear) == gtAirMine then
 
+		temp = 	"	tempG = AddGear(" ..
+			GetX(gear) .. ", " ..
+			GetY(gear) .. ", gtAirMine, 0, 0, 0, 0)"
+		table.insert(airMineList, temp)
+		table.insert(airMineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
+		table.insert(airMineList, "	SetGearValues(tempG, nil, nil, " .. GetTimer(gear) .. ")")
 		if (getGearValue(gear, "tag") ~= nil) then
-			temp = 	"	tempG = AddGear(" ..
-				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtAirMine, 0, 0, 0, 0)"
-			table.insert(airMineList, temp)
-			table.insert(airMineList, "	SetTimer(tempG, " .. GetTimer(gear) .. ")")
-			table.insert(airMineList, "	SetGearValues(tempG, nil, nil, " .. GetTimer(gear) .. ")")
 			table.insert(airMineList, "	setGearValue(tempG, \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
-		else
-
-			temp = 	"	SetTimer(" .. "AddGear(" ..
-				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtAirMine, 0, 0, 0, 0)" .. ", " ..
-				GetTimer(gear) ..")"
-			table.insert(airMineList, temp)
-			table.insert(airMineList, "	SetGearValues(tempG, nil, nil, " .. GetTimer(gear) .. ")")
-
 		end
 
 		table.insert(previewDataList, "	PreviewPlacedGear(" .. GetX(gear) ..", " ..	GetY(gear) .. ")")
@@ -1725,21 +1701,13 @@ function GetDataForGearSaving(gear)
 
 	elseif GetGearType(gear) == gtExplosives then
 
+		temp = 	"	tempG = AddGear(" ..
+			GetX(gear) .. ", " ..
+			GetY(gear) .. ", gtExplosives, 0, 0, 0, 0)"
+		table.insert(explosivesList, temp)
+		table.insert(explosivesList, "	SetHealth(tempG, " .. GetHealth(gear) .. ")")
 		if (getGearValue(gear, "tag") ~= nil) then
-			temp = 	"	tempG = AddGear(" ..
-				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtExplosives, 0, 0, 0, 0)"
-			table.insert(explosivesList, temp)
-			table.insert(explosivesList, "	SetHealth(tempG, " .. GetHealth(gear) .. ")")
 			table.insert(explosivesList, "	setGearValue(tempG, \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
-		else
-
-			temp = 	"	SetHealth(" .. "AddGear(" ..
-				GetX(gear) .. ", " ..
-				GetY(gear) .. ", gtExplosives, 0, 0, 0, 0)" .. ", " ..
-				GetHealth(gear) ..")"
-			table.insert(explosivesList, temp)
-
 		end
 
 		table.insert(previewDataList, "	PreviewPlacedGear(" .. GetX(gear) ..", " ..	GetY(gear) .. ")")
@@ -1773,23 +1741,15 @@ function GetDataForGearSaving(gear)
 
 		table.insert(previewDataList, "	PreviewPlacedGear(" .. GetX(gear) ..", " ..	GetY(gear) .. ")")
 
-		if (GetHealth(gear) ~= nil) and (GetHealth(gear) ~= 0) then
+		if (GetHealth(gear) ~= nil) then
 
+			temp = 	"	tempG = SpawnHealthCrate(" ..
+				GetX(gear) ..", " ..
+				GetY(gear) ..", " ..
+				GetHealth(gear) .. ")"
+			table.insert(healthCrateList, temp)
 			if (getGearValue(gear, "tag") ~= nil) then
-				temp = 	"	tempG = SpawnHealthCrate(" ..
-					GetX(gear) ..", " ..
-					GetY(gear) ..
-					")"
-				table.insert(healthCrateList, temp)
-				table.insert(healthCrateList, "	SetHealth(tempG, " .. GetHealth(gear) .. ")")
 				table.insert(healthCrateList, "	setGearValue(tempG, \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
-			else
-				temp = 	"	SetHealth(SpawnHealthCrate(" ..
-					GetX(gear) ..", " ..
-					GetY(gear) ..
-					"), " ..
-					GetHealth(gear) ..")"
-				table.insert(healthCrateList, temp)
 			end
 
 			if 		GetHealth(gear) == 25 then specialFlag = 9
