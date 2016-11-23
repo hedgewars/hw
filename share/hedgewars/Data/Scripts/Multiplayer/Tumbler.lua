@@ -410,9 +410,9 @@ function shotsRemainingMessage()
 		shotsMsg = loc("Out of ammo!")
 	else
 		if wepIndex == 2 then
-			shotsMsg = loc("%d fuel remaining")
+			shotsMsg = loc("Fuel: %d")
 		else
-			shotsMsg = loc("%d shots remaining")
+			shotsMsg = loc("Ammo: %d")
 		end
 	end
 	AddCaption(string.format(shotsMsg, wepAmmo[wepIndex]), wepCol[wepIndex],capgrpMessage2)
