@@ -1380,11 +1380,11 @@ function RedefineSubset()
 		pMode = {25,30,40,50,75,100,150,200,0,5,10,15,20}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		for i = 1, #atkArray do
-			pMode[i] = GetAmmoName(atkArray[i][1], false)
+			pMode[i] = GetAmmoName(atkArray[i][1], true)
 		end
 	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
 		for i = 1, #utilArray do
-			pMode[i] = GetAmmoName(utilArray[i][1], false)
+			pMode[i] = GetAmmoName(utilArray[i][1], true)
 		end
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
 		pMode = {3000,4000,5000,0,1000,2000}
@@ -3440,7 +3440,7 @@ function showHedgeEditorMissionPanel()
 		" " .. "|" ..
 		loc("Place Girder: Girder") .. "|" ..
 		loc("Place Rubber: Rubber") .. "|" ..
-		loc("Place Gears (and more): Air Attack") .. "|" ..
+		loc("Place Gears (and more): Gear Placement Tool") .. "|" ..
 		loc("Toggle Help: [Precise]+[1]") .. "|" ..
 		loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 		" " .. "|" ..
@@ -3449,6 +3449,15 @@ function showHedgeEditorMissionPanel()
 		loc("Toggle Editing Weapons and Tools: [Precise]+[2]")
 		, 4, 5000
 		)
+
+	SetAmmoTexts(amAirAttack,
+		loc("Gear Placement Tool"),
+		loc("HedgeEditor tool"),
+		loc("Place, modify and delete gears (e.g. objects)|and waypoints, edit hedgehog settings, values,|victory conditions, and more.") .. "|" ..
+		loc("Select a placement mode and read the infos|in the mission panel to learn how to use it.") .. "|" ..
+		loc("Up/Down: Change placement mode") .. "|" ..
+		loc("Cursor: Mode action"))
+
 	hedgeEditorMissionPanelShown = true
 end
 
