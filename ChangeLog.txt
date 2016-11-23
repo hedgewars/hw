@@ -43,26 +43,33 @@ Construction Mode:
  * Costs for weapon and utility crates were all equal
  * Many other fixes and tweaks
 
-Missions and Game Styles:
+Racer and TechRacer:
+ + Allow to only place 2 waypoints in Racer
+ + Allow to remove Racer waypoints with precise key
+ + New script parameters for Racer:
+  + rounds: Number of rounds to play
+  + waypointradius: Size of waypoints
+  + maxwaypoints: Maximum allowed number of waypoints
+ + Show correct ranking and times in stats screen of Racer and TechRacer
+ * Fixed waypoint message in TechRacer and Racer overwriting current weapon selection message
+ * Fixed TechRacer not recording finish if time was >= 100s
+
+Other Game Styles:
+ + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
+ * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
+ * Mutant script shows now appropriate ranking and graph in stats screen
+ * Disable Sudden Death for good in Shoppa game scheme
+
+Missions:
  + Added Basic Flying Saucer Training
  + Rope-Knocking Challenge was improved (now awards score based on kills and time; taunts for knocking out hedgehogs)
  + A few campaign missions now save your personal best successes (e.g. fastest finish in Hard Flying) which get shown after you finish them agin
  + A Space Adventure shows 2 flowers over fully completed planets (with side missions)
- + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
- + Show correct ranking and times in stats screen of Racer and TechRacer
- + Allow to only place 2 waypoints in Racer
- + Allow to remove Racer waypoints with precise key
- + New script parameter “waypointradius=<number>” for Racer set the size of waypoints
- * Fixed waypoint message in TechRacer and Racer overwriting current weapon selection message
- * Fixed TechRacer not recording finish if time was >= 100s
- * Mutant script shows now appropriate ranking and graph in stats screen
  * Portal Mind Challenge was cleaned up and reworked (especially less awful wording)
  * Fixed Target Practice missions getting stuck when a target dropped into water
  * Fixed mistakes and bad wording of strings in several missions, scripts and campaigns
  * Fixed Lua error message in A Classic Fairytale mission 8
  * Fixed Lua error messages and broken stats screen in Climb Home singleplayer mission
- * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
- * Disable Sudden Death for good in Shoppa game scheme
 
 Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far
