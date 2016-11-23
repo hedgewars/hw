@@ -330,78 +330,78 @@ local showGearTags = true
 local atkArray =
 				{
 				{amBazooka, 	"amBazooka",		2},
-				{amBee, 		"amBee",			3},
-				{amMortar, 		"amMortar",			21},
-				{amDrill, 		"amDrill",			28},
+				{amBee, 	"amBee",		3},
+				{amMortar, 	"amMortar",		21},
+				{amDrill, 	"amDrill",		28},
 				{amSnowball, 	"amSnowball",		50},
 
-				{amGrenade,		"amGrenade",		0},
+				{amGrenade,	"amGrenade",		0},
 				{amClusterBomb,	"amClusterBomb",	1},
 				{amMolotov, 	"amMolotov",		39},
 				{amWatermelon, 	"amWatermelon",		25},
 				{amHellishBomb,	"amHellishBomb",	26},
 				{amGasBomb, 	"amGasBomb",		43},
 
-				{amShotgun,		"amShotgun",		4},
-				{amDEagle,		"amDEagle",			9},
+				{amShotgun,	"amShotgun",		4},
+				{amDEagle,	"amDEagle",		9},
 				{amFlamethrower,"amFlamethrower",	45},
 				{amSniperRifle,	"amSniperRifle",	37},
 				{amSineGun, 	"amSineGun",		44},
-				{amIceGun, 		"amIceGun",			53},
-				{amLandGun,		"amLandGun",		52},
+				{amIceGun, 	"amIceGun",		53},
+				{amLandGun,	"amLandGun",		52},
 
 				{amFirePunch, 	"amFirePunch",		11},
-				{amWhip,		"amWhip",			12},
+				{amWhip,	"amWhip",		12},
 				{amBaseballBat, "amBaseballBat",	13},
 				{amKamikaze, 	"amKamikaze",		22},
 				{amSeduction, 	"amSeduction",		24},
-				{amHammer,		"amHammer",			47},
+				{amHammer,	"amHammer",		47},
 
-				{amMine, 		"amMine",			8},
+				{amMine, 	"amMine",		8},
 				{amDynamite, 	"amDynamite",		10},
-				{amCake, 		"amCake",			23},
+				{amCake, 	"amCake",		23},
 				{amBallgun, 	"amBallgun",		29},
-				{amRCPlane,		"amRCPlane",		30},
-				{amSMine,		"amSMine",			46},
+				{amRCPlane,	"amRCPlane",		30},
+				{amSMine,	"amSMine",		46},
 
 				{amAirAttack,	"amAirAttack",		15},
 				{amMineStrike,	"amMineStrike",		16},
 				{amDrillStrike,	"amDrillStrike",	49},
-				{amAirMine,		"amAirMine",		56},
-				{amNapalm, 		"amNapalm",			27},
-				{amPiano,		"amPiano",			42},
+				{amAirMine,	"amAirMine",		56},
+				{amNapalm, 	"amNapalm",		27},
+				{amPiano,	"amPiano",		42},
 
-				{amKnife,		"amKnife",			54},
+				{amKnife,	"amKnife",		54},
 
-				{amBirdy,		"amBirdy",			40},
+				{amBirdy,	"amBirdy",		40},
 
 				}
 
 local utilArray =
 				{
-				{amBlowTorch, 		"amBlowTorch",		17},
-				{amPickHammer,		"amPickHammer",		5},
-				{amGirder, 			"amGirder",			18},
-				{amRubber, 			"amRubber",			55},
-				{amPortalGun,		"amPortalGun",		41},
+				{amBlowTorch, 	"amBlowTorch",		17},
+				{amPickHammer,	"amPickHammer",		5},
+				{amGirder, 	"amGirder",		18},
+				{amRubber, 	"amRubber",		55},
+				{amPortalGun,	"amPortalGun",		41},
 
-				{amRope, 			"amRope",			7},
-				{amParachute, 		"amParachute",		14},
-				{amTeleport,		"amTeleport",		19},
-				{amJetpack,			"amJetpack",		38},
+				{amRope, 	"amRope",		7},
+				{amParachute, 	"amParachute",		14},
+				{amTeleport,	"amTeleport",		19},
+				{amJetpack,	"amJetpack",		38},
 
-				{amInvulnerable,	"amInvulnerable",	33},
-				{amLaserSight,		"amLaserSight",		35},
-				{amVampiric,		"amVampiric",		36},
+				{amInvulnerable,"amInvulnerable",	33},
+				{amLaserSight,	"amLaserSight",		35},
+				{amVampiric,	"amVampiric",		36},
 
-				{amLowGravity, 		"amLowGravity",		31},
-				{amExtraDamage, 	"amExtraDamage",	32},
-				{amExtraTime,		"amExtraTime",		34},
+				{amLowGravity, 	"amLowGravity",		31},
+				{amExtraDamage, "amExtraDamage",	32},
+				{amExtraTime,	"amExtraTime",		34},
 
-				{amResurrector, 	"amResurrector",	48},
-				{amTardis, 			"amTardis",			51},
+				{amResurrector, "amResurrector",	48},
+				{amTardis, 	"amTardis",		51},
 
-				{amSwitch,			"amSwitch",			20},
+				{amSwitch,	"amSwitch",		20},
 				}
 
 				--skiphog is 6
