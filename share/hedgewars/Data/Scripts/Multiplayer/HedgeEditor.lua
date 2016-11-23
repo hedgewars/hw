@@ -115,8 +115,6 @@
 
 -- check if we lose a mission when the enemy collects our crate (we should)
 
--- try and find out why we can't save the Theme, that feels really dumb
-
 -- How about a weapons profile tool that is used with team ammo
 -- and then hog identity tool would only be available if gfPerHogAmmo is set
 
@@ -1990,7 +1988,12 @@ function SaveConfigData()
 	WriteLnToConsole(temp .. ")")
 
 	WriteLnToConsole("	Map = \"" .. Map .. "\"")
-	WriteLnToConsole("	Theme = \"" .. "Nature" .. "\"")
+	WriteLnToConsole("	Seed = \"" .. Seed .. "\"")
+	WriteLnToConsole("	Theme = " .. Theme .. "\"")
+	WriteLnToConsole("	MapGen = " .. MapGen)
+	WriteLnToConsole("	MapFeatureSize = " .. MapFeatureSize)
+	WriteLnToConsole("	TemplateFilter = " .. TemplateFilter)
+	WriteLnToConsole("	TemplateNumber = " .. TemplateNumber)
 	WriteLnToConsole("	TurnTime = " .. TurnTime)
 	WriteLnToConsole("	Explosives = " .. Explosives)
 	WriteLnToConsole("	MinesNum = " .. MinesNum)
@@ -2000,16 +2003,17 @@ function SaveConfigData()
 	WriteLnToConsole("	HealthCaseProb = " .. HealthCaseProb)
 	WriteLnToConsole("	HealthCaseAmount = " .. HealthCaseAmount)
 	WriteLnToConsole("	DamagePercent = " .. DamagePercent)
+	WriteLnToConsole("	RopePercent = " .. RopePercent)
 	WriteLnToConsole("	MinesTime = " .. MinesTime)
 	WriteLnToConsole("	MineDudPercent  = " .. MineDudPercent)
 	WriteLnToConsole("	SuddenDeathTurns = " .. SuddenDeathTurns)
 	WriteLnToConsole("	WaterRise = " .. WaterRise)
 	WriteLnToConsole("	HealthDecrease = " .. HealthDecrease)
 
-	--WriteLnToConsole("	Ready = " .. Ready)
-	--WriteLnToConsole("	AirMinesNum = " .. AirMinesNum)
+	WriteLnToConsole("	Ready = " .. Ready)
+	WriteLnToConsole("	AirMinesNum = " .. AirMinesNum)
 	--WriteLnToConsole("	ScriptParam = " .. ScriptParam)
-	--WriteLnToConsole("	GetAwayTime = " .. GetAwayTime)
+	WriteLnToConsole("	GetAwayTime = " .. GetAwayTime)
 
 	WriteLnToConsole("")
 
