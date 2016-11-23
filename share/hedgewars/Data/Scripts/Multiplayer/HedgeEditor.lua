@@ -326,79 +326,79 @@ local hedgeEditorMissionPanelShown = false
 
 local atkArray =
 				{
-				{amBazooka, 	"amBazooka",		2, 	loc("Bazooka")},
-				{amBee, 		"amBee",			3, 	loc("Homing Bee")},
-				{amMortar, 		"amMortar",			21, loc("Mortar")},
-				{amDrill, 		"amDrill",			28, loc("Drill Rocket")},
-				{amSnowball, 	"amSnowball",		50, loc("Mudball")},
+				{amBazooka, 	"amBazooka",		2},
+				{amBee, 		"amBee",			3},
+				{amMortar, 		"amMortar",			21},
+				{amDrill, 		"amDrill",			28},
+				{amSnowball, 	"amSnowball",		50},
 
-				{amGrenade,		"amGrenade",		0, 	loc("Grenade")},
-				{amClusterBomb,	"amClusterBomb",	1, 	loc("Cluster Bomb")},
-				{amMolotov, 	"amMolotov",		39, loc("Molotov Cocktail")},
-				{amWatermelon, 	"amWatermelon",		25, loc("Watermelon Bomb")},
-				{amHellishBomb,	"amHellishBomb",	26, loc("Hellish Handgrenade")},
-				{amGasBomb, 	"amGasBomb",		43, loc("Limburger")},
+				{amGrenade,		"amGrenade",		0},
+				{amClusterBomb,	"amClusterBomb",	1},
+				{amMolotov, 	"amMolotov",		39},
+				{amWatermelon, 	"amWatermelon",		25},
+				{amHellishBomb,	"amHellishBomb",	26},
+				{amGasBomb, 	"amGasBomb",		43},
 
-				{amShotgun,		"amShotgun",		4, 	loc("Shotgun")},
-				{amDEagle,		"amDEagle",			9, 	loc("Desert Eagle")},
-				{amFlamethrower,"amFlamethrower",	45, loc("Flamethrower")},
-				{amSniperRifle,	"amSniperRifle",	37, loc("Sniper Rifle")},
-				{amSineGun, 	"amSineGun",		44, loc("SineGun")},
-				{amIceGun, 		"amIceGun",			53, loc("Freezer")},
-				{amLandGun,		"amLandGun",		52, loc("Land Spray")},
+				{amShotgun,		"amShotgun",		4},
+				{amDEagle,		"amDEagle",			9},
+				{amFlamethrower,"amFlamethrower",	45},
+				{amSniperRifle,	"amSniperRifle",	37},
+				{amSineGun, 	"amSineGun",		44},
+				{amIceGun, 		"amIceGun",			53},
+				{amLandGun,		"amLandGun",		52},
 
-				{amFirePunch, 	"amFirePunch",		11, loc("Shoryuken")},
-				{amWhip,		"amWhip",			12, loc("Whip")},
-				{amBaseballBat, "amBaseballBat",	13, loc("Baseball Bat")},
-				{amKamikaze, 	"amKamikaze",		22, loc("Kamikaze")},
-				{amSeduction, 	"amSeduction",		24, loc("Seduction")},
-				{amHammer,		"amHammer",			47, loc("Hammer")},
+				{amFirePunch, 	"amFirePunch",		11},
+				{amWhip,		"amWhip",			12},
+				{amBaseballBat, "amBaseballBat",	13},
+				{amKamikaze, 	"amKamikaze",		22},
+				{amSeduction, 	"amSeduction",		24},
+				{amHammer,		"amHammer",			47},
 
-				{amMine, 		"amMine",			8, 	loc("Mine")},
-				{amDynamite, 	"amDynamite",		10, loc("Dynamite")},
-				{amCake, 		"amCake",			23, loc("Cake")},
-				{amBallgun, 	"amBallgun",		29, loc("Ballgun")},
-				{amRCPlane,		"amRCPlane",		30, loc("RC Plane")},
-				{amSMine,		"amSMine",			46, loc("Sticky Mine")},
+				{amMine, 		"amMine",			8},
+				{amDynamite, 	"amDynamite",		10},
+				{amCake, 		"amCake",			23},
+				{amBallgun, 	"amBallgun",		29},
+				{amRCPlane,		"amRCPlane",		30},
+				{amSMine,		"amSMine",			46},
 
-				{amAirAttack,	"amAirAttack",		15, loc("Air Attack")},
-				{amMineStrike,	"amMineStrike",		16, loc("Mine Strike")},
-				{amDrillStrike,	"amDrillStrike",	49, loc("Drill Strike")},
-				{amAirMine,		"amAirMine",		56, loc("Air Mine")},
-				{amNapalm, 		"amNapalm",			27, loc("Napalm")},
-				{amPiano,		"amPiano",			42, loc("Piano Strike")},
+				{amAirAttack,	"amAirAttack",		15},
+				{amMineStrike,	"amMineStrike",		16},
+				{amDrillStrike,	"amDrillStrike",	49},
+				{amAirMine,		"amAirMine",		56},
+				{amNapalm, 		"amNapalm",			27},
+				{amPiano,		"amPiano",			42},
 
-				{amKnife,		"amKnife",			54, loc("Cleaver")},
+				{amKnife,		"amKnife",			54},
 
-				{amBirdy,		"amBirdy",			40, loc("Birdy")}
+				{amBirdy,		"amBirdy",			40},
 
 				}
 
 local utilArray =
 				{
-				{amBlowTorch, 		"amBlowTorch",		17, loc("BlowTorch")},
-				{amPickHammer,		"amPickHammer",		5, 	loc("PickHammer")},
-				{amGirder, 			"amGirder",			18, loc("Girder")},
-				{amRubber, 			"amRubber",			55, loc("Rubber")},
-				{amPortalGun,		"amPortalGun",		41, loc("Personal Portal Device")},
+				{amBlowTorch, 		"amBlowTorch",		17},
+				{amPickHammer,		"amPickHammer",		5},
+				{amGirder, 			"amGirder",			18},
+				{amRubber, 			"amRubber",			55},
+				{amPortalGun,		"amPortalGun",		41},
 
-				{amRope, 			"amRope",			7, 	loc("Rope")},
-				{amParachute, 		"amParachute",		14, loc("Parachute")},
-				{amTeleport,		"amTeleport",		19, loc("Teleport")},
-				{amJetpack,			"amJetpack",		38, loc("Flying Saucer")},
+				{amRope, 			"amRope",			7},
+				{amParachute, 		"amParachute",		14},
+				{amTeleport,		"amTeleport",		19},
+				{amJetpack,			"amJetpack",		38},
 
-				{amInvulnerable,	"amInvulnerable",	33, loc("Invulnerable")},
-				{amLaserSight,		"amLaserSight",		35, loc("Laser Sight")},
-				{amVampiric,		"amVampiric",		36, loc("Vampirism")},
+				{amInvulnerable,	"amInvulnerable",	33},
+				{amLaserSight,		"amLaserSight",		35},
+				{amVampiric,		"amVampiric",		36},
 
-				{amLowGravity, 		"amLowGravity",		31, loc("Low Gravity")},
-				{amExtraDamage, 	"amExtraDamage",	32, loc("Extra Damage")},
-				{amExtraTime,		"amExtraTime",		34, loc("Extra Time")},
+				{amLowGravity, 		"amLowGravity",		31},
+				{amExtraDamage, 	"amExtraDamage",	32},
+				{amExtraTime,		"amExtraTime",		34},
 
-				{amResurrector, 	"amResurrector",	48, loc("Resurrector")},
-				{amTardis, 			"amTardis",			51, loc("Tardis")},
+				{amResurrector, 	"amResurrector",	48},
+				{amTardis, 			"amTardis",			51},
 
-				{amSwitch,			"amSwitch",			20, loc("Switch Hog")}
+				{amSwitch,			"amSwitch",			20},
 				}
 
 				--skiphog is 6
@@ -1365,11 +1365,11 @@ function RedefineSubset()
 		pMode = {25,30,40,50,75,100,150,200,5,10,15,20}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		for i = 1, #atkArray do
-			pMode[i] = atkArray[i][4]
+			pMode[i] = GetAmmoName(atkArray[i][1], false)
 		end
 	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
 		for i = 1, #utilArray do
-			pMode[i] = utilArray[i][4]
+			pMode[i] = GetAmmoName(utilArray[i][1], false)
 		end
 	elseif cat[cIndex] == loc("Mine Placement Mode") then
 		pMode = {3000,4000,5000,0,1000,2000}
