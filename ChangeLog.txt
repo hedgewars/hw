@@ -121,6 +121,7 @@ Lua-API:
  + New call: GetVisualGearType(vgUid) -- returns the visual gear type
  + New call: SetAmmoTexts(ammoType, name, caption, description) -- Overwrite displayed name and description of an ammo type
  + New call: SetAmmoDescriptionAppendix(ammoType, descAppend) -- Append a custom text to the description of an ammo type without overwriting it
+ + New call: GetHogFort(gearUid) -- Returns the name of the fort of the hog's team
  + New hook: onVisualGearAdd(vgUid) -- called when a visual gear is added
  + New hook: onVisualGearDelete(vgUid) -- called when a visual gear is deleted
  + New variable: AirMinesNum -- Number of air mines being placed on a medium-sized map

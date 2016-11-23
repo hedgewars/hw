@@ -1362,6 +1362,23 @@ begin
     lc_gethogflag:= 1
 end;
 
+function lc_gethogfort(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetHogFort', 'gearUid') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        // TODO error messages
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.FortName))
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_gethogfort:= 1
+end;
+
 function lc_ishoglocal(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -3405,6 +3422,7 @@ lua_register(luaState, _P'GetClanColor', @lc_getclancolor);
 lua_register(luaState, _P'SetClanColor', @lc_setclancolor);
 lua_register(luaState, _P'GetHogVoicepack', @lc_gethogvoicepack);
 lua_register(luaState, _P'GetHogFlag', @lc_gethogflag);
+lua_register(luaState, _P'GetHogFort', @lc_gethogfort);
 lua_register(luaState, _P'GetHogGrave', @lc_gethoggrave);
 lua_register(luaState, _P'IsHogLocal', @lc_ishoglocal);
 lua_register(luaState, _P'GetHogTeamName', @lc_gethogteamname);
