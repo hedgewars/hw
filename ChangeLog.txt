@@ -54,6 +54,24 @@ Racer and TechRacer:
  * Fixed waypoint message in TechRacer and Racer overwriting current weapon selection message
  * Fixed TechRacer not recording finish if time was >= 100s
 
+Tumbler:
+ + Script parameter support:
+  + spawnbarrels: New barrels per turn
+  + spawnmines: New mines per turn
+  + ammoflamer: Initial Flamer fuel
+  + ammobarrel: Initial Barrel Launcher ammo
+  + ammomine: Initial Mine Deployer ammo
+  + minetimerplaced: Mine timer (ms) of mines dropped from Mine Deployer
+  + bonustime: Bonus time (s) in utility crates
+  + bonusflames: Bonus Flamer fuel in ammo crates
+  + chanceammo: Per-turn % chance of an ammo crate drop
+  + chancetime: Per-turn % chance of an utility crate (extra time) drop
+ + Alternative weapon selection with slot keys (F1, F2, F3)
+ + Add mine/barrel launch sounds
+ + Rewrote mission description and captions
+ + Sound and message when trying to fire empty weapon
+ * Permanently disable some game modifiers which won't work together with this
+
 HedgeEditor:
  + Dud mine placement mode
  + Allow to select frames in sprite placement mode
