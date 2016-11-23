@@ -139,8 +139,6 @@
 -- [med]	improve ammo handling (if possible, take more scheme settings into account)
 -- 			also be sure to generate wep data so crates don't have 0 in them (done?)
 
--- [low] 	match the user picked color to the color array
-
 -- [low] 	break up the division of labor of the tools into airstrike, minestrike, napalm, etc.
 			--[[
 			girder =		"Girder Placement Mode",
@@ -183,8 +181,6 @@
 -- [low] 	some kind of support for single team training missions
 -- 			we could possibly add gfOneClanMode and kill the other team we're playing with?
 
--- [never?]	set all actors to heresurrectible (why did I want this?)
-
 -- [never?] more detailed goal tagging and multi-stage triggers
 
 -- [never?]	theoretically might be possible to create forts (and other grouped objects)
@@ -194,8 +190,6 @@
 --			kind of like the invaders in SpaceInvader (currently they are just displayed as purple)
 
 -- [never?] add the thing that would be useful for this editor, but that others might use to cheat
-
--- [never?]	improve "illegal" placement detection (pretty sure should just let people do what they want)
 
 -- [never?]	add GUIs for editing ammo, init settings, additional gear attributes
 -- 			perhaps using precise with timer to enable/disable certain features
