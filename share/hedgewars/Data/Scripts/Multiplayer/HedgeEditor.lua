@@ -1371,9 +1371,9 @@ function RedefineSubset()
 		pMode = {loc("Rubber")}
 		landType = lfBouncy -- for now, let's not allow anything else (-- fairly new addition)
 	elseif cat[cIndex] == loc("Target Placement Mode") then
-		pMode = {loc("Standard Target")}
+		pMode = {loc("Target")}
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
-		pMode = {loc("Standard Cleaver")}
+		pMode = {loc("Cleaver")}
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
 		pMode = {60,80,100,120,160,200,240,1,10,20,30,40,50}
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
