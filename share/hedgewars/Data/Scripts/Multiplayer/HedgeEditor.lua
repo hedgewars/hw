@@ -2528,7 +2528,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("GIRDER PLACEMENT MODE"),
-				loc("Use this mode to place girders"),
+				loc("Place girders"),
 				loc("Place Girder: [Left Click]") .. "|" ..
 				loc("Change Rotation: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2549,7 +2549,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("RUBBER PLACEMENT MODE"),
-				loc("Use this mode to place rubber"),
+				loc("Place rubber"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Rotation: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2567,7 +2567,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("BARREL PLACEMENT MODE"),
-				loc("Use this mode to place barrels"),
+				loc("Place barrels"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Health: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2582,7 +2582,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("CLEAVER PLACEMENT MODE"),
-				loc("Use this mode to place cleavers"),
+				loc("Place cleavers"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
@@ -2596,7 +2596,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("TARGET PLACEMENT MODE"),
-				loc("Use this mode to place targets"),
+				loc("Place targets"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
@@ -2610,7 +2610,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("WAYPOINT EDITING MODE"),
-				loc("Use this mode to place or delete waypoints"),
+				loc("Place or delete waypoints"),
 				loc("Place/Delete Waypoint: [Left Click]") .. "|" ..
 				loc("Toggle Placement/Deletion: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2625,7 +2625,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("MINE PLACEMENT MODE"),
-				loc("Use this mode to place mines"),
+				loc("Place mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2640,7 +2640,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("DUD MINE PLACEMENT MODE"),
-				loc("Use this mode to place dud mines"),
+				loc("Place dud mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Health: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2655,7 +2655,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("STICKY MINE PLACEMENT MODE"),
-				loc("Use this mode to place sticky mines"),
+				loc("Place sticky mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2670,7 +2670,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("AIR MINE PLACEMENT MODE"),
-				loc("Use this mode to place air mines"),
+				loc("Place air mines"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2685,7 +2685,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("WEAPON CRATE PLACEMENT MODE"),
-				loc("Use this mode to place weapon crates"),
+				loc("Place weapon crates"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Content: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2700,7 +2700,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("UTILITY CRATE PLACEMENT MODE"),
-				loc("Use this mode to place utility crates"),
+				loc("Place utility crates"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Content: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2715,7 +2715,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("HEALTH CRATE PLACEMENT MODE"),
-				loc("Use this mode to place health crates"),
+				loc("Place health crates"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Health Boost: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2730,7 +2730,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("REPOSITIONING MODE"),
-				loc("Use this mode to select, reposition and delete gears"),
+				loc("Select, reposition and delete gears"),
 				loc("Select/Place/Delete Gear: [Left Click]") .. "|" ..
 				loc("Choose Selection/Placement/Deletion: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2745,7 +2745,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("SPRITE MODIFICATION MODE"),
-				loc("Use to select, modify, or delete girders, rubbers, or sprites."),
+				loc("Select, modify, or delete girders, rubbers and sprites"),
 				loc("Modify Sprite under Cursor: [Left Click]") .. "|" ..
 				loc("Change modification mode: [Left], [Right]") .."|"..
 				loc("While in modification mode, you can change|the LandFlag by clicking on an object.") .. "|" ..
@@ -2766,7 +2766,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("SPRITE PLACEMENT MODE"),
-				loc("Use this mode to place custom sprites."),
+				loc("Place sprites to build land"),
 				loc("Place Sprite: [Left Click]") .. "|" ..
 				loc("Change Sprite: [Left], [Right]") .. "|" ..
 				loc("Change Sprite Frame: [Precise]+[Left], [Precise]+[Right]") .. "|" ..
@@ -2787,7 +2787,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("GOAL DEFINITION MODE"),
-				loc("Use this mode to mark gears for win/lose conditions."),
+				loc("Mark gears for win/lose conditions"),
 				loc("Mark/unmark gear: [Left Click]") .. "|" ..
 				loc("Select win/lose condition: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
@@ -2801,7 +2801,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("HOG IDENTITY MODE"),
-				loc("Use this mode to give a hog a preset identity and weapons."),
+				loc("Give a hog a preset identity and weapons"),
 				loc("Set Identity: [Left Click]") .. "|" ..
 				loc("[Left], [Right]: Change between identities.") .. "|" ..
 				" " .. "|" ..
@@ -2816,7 +2816,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("TEAM IDENTITY MODE"),
-				loc("Use this mode to give an entire team themed hats and names."),
+				loc("Give an entire team themed hats and names"),
 				loc("Set Identity: [Left Click]") .. "|" ..
 				loc("[Left], [Right]: Change between identities.") .. "|" ..
 				" " .. "|" ..
@@ -2831,7 +2831,7 @@ function updateHelp(curAmmoType)
 
 		ShowMission	(
 				loc("HEALTH MODIFICATION MODE"),
-				loc("Use this mode to set the health of hogs, health crates, barrels and duds."),
+				loc("Set the health of hogs, health crates, barrels and duds"),
 				loc("Set Health: [Left Click]") .. "|" ..
 				loc("[Left], [Right]: Change health value.") .. "|" ..
 				" " .. "|" ..
