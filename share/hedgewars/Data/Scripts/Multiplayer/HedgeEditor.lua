@@ -125,13 +125,9 @@
 
 -- [high] 	add missing weps/utils/gears as they appear
 --			some gameflags and settings are probably missing, too (diff border types etc)
---			some themes are also probably missing: cake, hoggywood?
--- 			the ongameinit stuff is probaably missing something akin to numAirMines
---			and also probably scriptParam and gravity etc.
+--			and also ScriptParam
 
 -- [med] 	add a limited form of save/load within level before mass-output
-
--- [med] 	rework gameflag handling to use the newer API methods (done?)
 
 -- [med]	maybe incorporate portal effects / ufo tracking into the template generated script if
 -- 			you want the missions to use it
@@ -1585,7 +1581,7 @@ function SaveConfigData()
 
 	WriteLnToConsole("	Map = \"" .. Map .. "\"")
 	WriteLnToConsole("	Seed = \"" .. Seed .. "\"")
-	WriteLnToConsole("	Theme = " .. Theme .. "\"")
+	WriteLnToConsole("	Theme = \"" .. Theme .. "\"")
 	WriteLnToConsole("	MapGen = " .. MapGen)
 	WriteLnToConsole("	MapFeatureSize = " .. MapFeatureSize)
 	WriteLnToConsole("	TemplateFilter = " .. TemplateFilter)
@@ -1610,6 +1606,7 @@ function SaveConfigData()
 	WriteLnToConsole("	AirMinesNum = " .. AirMinesNum)
 	--WriteLnToConsole("	ScriptParam = " .. ScriptParam)
 	WriteLnToConsole("	GetAwayTime = " .. GetAwayTime)
+	WriteLnToConsole("	WorldEdge = " .. WorldEdge)
 
 	WriteLnToConsole("")
 
@@ -3398,11 +3395,6 @@ end
 function onGameInit()
 
 	-- perhaps we can get some of this better info in parsecommandoverride
-	--Map = "Islands"
-	--Theme = "Deepspace"
-	--Seed = "{bacb2f87-f316-4691-a333-3bcfc4fb3d88}"
-	--MapGen = 0 -- 0:generated map, 1:generated maze, 2:hand drawn map
-	--TemplateFilter = 5	-- small=1,med=2,large=3,cavern=4,wacky=5
 
 	if mapID == nil then
 		mapID = 1
