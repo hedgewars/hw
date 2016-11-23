@@ -558,7 +558,8 @@ function onGameStart()
         SetAmmoTexts(amAirAttack, loc("Place waypoint"), loc("Racer tool"),
                 loc("Build an awesome race track by placing|waypoints which the hedgehogs have to|touch in any order to finish a round.") .. "|" ..
 		loc("Hedgehogs will start in the first waypoint.") .. "|" ..
- 		loc("Cursor: Place waypoint"))
+ 		loc("Cursor: Place waypoint") .. "|" ..
+ 		loc("Precise: Remove previous waypoint"))
 
         SetAmmoTexts(amSkip, loc("Finish waypoint placement"), loc("Racer tool"),
                 loc("Happy with your race track?|Then stop building and start racing!") .. "|" ..
@@ -584,6 +585,27 @@ function PlaceWayPoint(x,y)
 
             AddCaption(string.format(loc("Waypoint placed. Available points remaining: %d"), wpLimit-wpCount))
         end
+    end
+end
+
+function onPrecise()
+    if not racerActive and CurrentHedgehog ~= nil and GetCurAmmoType() == amAirAttack then
+        DeletePreviousWayPoint()
+    end
+end
+
+function DeletePreviousWayPoint()
+    if wpCount > 0 then
+        wpCount = wpCount - 1
+        wpX[wpCount] = nil
+        wpY[wpCount] = nil
+        wpCol[wpCount] = nil
+        DeleteVisualGear(wpCirc[wpCount])
+        wpCirc[wpCount] = nil
+        AddCaption(string.format(loc("Waypoint removed. Available points: %d"), wpLimit-wpCount))
+    else
+        PlaySound(sndDenied)
+        AddCaption(loc("No waypoint to be removed!"))
     end
 end
 

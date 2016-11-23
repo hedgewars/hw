@@ -51,6 +51,7 @@ Missions and Game Styles:
  + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
  + Show correct ranking and times in stats screen of Racer and TechRacer
  + Allow to only place 2 waypoints in Racer
+ + Allow to remove Racer waypoints with precise key
  + New script parameter “waypointradius=<number>” for Racer set the size of waypoints
  * Fixed waypoint message in TechRacer and Racer overwriting current weapon selection message
  * Fixed TechRacer not recording finish if time was >= 100s
