@@ -329,6 +329,7 @@ local showGearTags = true
 
 local atkArray =
 				{
+
 				{amBazooka, 	"amBazooka",		2},
 				{amBee, 	"amBee",		3},
 				{amMortar, 	"amMortar",		21},
@@ -337,18 +338,17 @@ local atkArray =
 
 				{amGrenade,	"amGrenade",		0},
 				{amClusterBomb,	"amClusterBomb",	1},
-				{amMolotov, 	"amMolotov",		39},
 				{amWatermelon, 	"amWatermelon",		25},
 				{amHellishBomb,	"amHellishBomb",	26},
+				{amMolotov, 	"amMolotov",		39},
 				{amGasBomb, 	"amGasBomb",		43},
 
 				{amShotgun,	"amShotgun",		4},
 				{amDEagle,	"amDEagle",		9},
-				{amFlamethrower,"amFlamethrower",	45},
 				{amSniperRifle,	"amSniperRifle",	37},
 				{amSineGun, 	"amSineGun",		44},
+				{amFlamethrower,"amFlamethrower",	45},
 				{amIceGun, 	"amIceGun",		53},
-				{amLandGun,	"amLandGun",		52},
 
 				{amFirePunch, 	"amFirePunch",		11},
 				{amWhip,	"amWhip",		12},
@@ -366,10 +366,10 @@ local atkArray =
 
 				{amAirAttack,	"amAirAttack",		15},
 				{amMineStrike,	"amMineStrike",		16},
-				{amDrillStrike,	"amDrillStrike",	49},
-				{amAirMine,	"amAirMine",		56},
 				{amNapalm, 	"amNapalm",		27},
 				{amPiano,	"amPiano",		42},
+				{amDrillStrike,	"amDrillStrike",	49},
+				{amAirMine,	"amAirMine",		56},
 
 				{amKnife,	"amKnife",		54},
 
@@ -379,29 +379,30 @@ local atkArray =
 
 local utilArray =
 				{
-				{amBlowTorch, 	"amBlowTorch",		17},
+
 				{amPickHammer,	"amPickHammer",		5},
+				{amBlowTorch, 	"amBlowTorch",		17},
 				{amGirder, 	"amGirder",		18},
+				{amLandGun,	"amLandGun",		52},
 				{amRubber, 	"amRubber",		55},
-				{amPortalGun,	"amPortalGun",		41},
 
 				{amRope, 	"amRope",		7},
 				{amParachute, 	"amParachute",		14},
 				{amTeleport,	"amTeleport",		19},
 				{amJetpack,	"amJetpack",		38},
+				{amPortalGun,	"amPortalGun",		41},
 
 				{amInvulnerable,"amInvulnerable",	33},
 				{amLaserSight,	"amLaserSight",		35},
 				{amVampiric,	"amVampiric",		36},
-
-				{amLowGravity, 	"amLowGravity",		31},
-				{amExtraDamage, "amExtraDamage",	32},
-				{amExtraTime,	"amExtraTime",		34},
-
 				{amResurrector, "amResurrector",	48},
 				{amTardis, 	"amTardis",		51},
 
 				{amSwitch,	"amSwitch",		20},
+				{amLowGravity, 	"amLowGravity",		31},
+				{amExtraDamage, "amExtraDamage",	32},
+				{amExtraTime,	"amExtraTime",		34},
+
 				}
 
 				--skiphog is 6
