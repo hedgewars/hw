@@ -2536,6 +2536,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Deletion Mode: [5]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amGirder, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2551,6 +2552,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Deletion Mode: [5]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amRubber, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2565,6 +2567,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 8, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2578,6 +2581,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amKnife, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2591,6 +2595,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 1, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2605,6 +2610,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2619,6 +2625,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2633,6 +2640,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2647,6 +2655,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amSMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2661,6 +2670,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amAirMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2675,6 +2685,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 7, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2689,6 +2700,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 5, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2703,6 +2715,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 6, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2717,6 +2730,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2737,6 +2751,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2757,6 +2772,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 2, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2771,6 +2787,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2784,6 +2801,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2798,6 +2816,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2812,6 +2831,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: Precise+1") .. "|" ..
+				loc("Toggle Gear Information: Precise+3") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -3018,7 +3038,7 @@ function HandleHedgeEditor()
 	end
 
 	-- Barrel health tags, mine timer tags and health crate health tags
-	if showGearTags then
+	do
 		local actualValue	-- internal value
 		local printedValue	-- value exposed to HUD
 		for g, v in pairs(tagGears) do
@@ -3099,7 +3119,10 @@ function HandleHedgeEditor()
 					offset_y = (WaterLine - GetY(g))
 				end
 				local tint
-				if(gt == gtCase) then
+				if(not showGearTags) then
+					-- Hide the tags
+					tint = 0x00000000
+				elseif(gt == gtCase) then
 					tint = 0x80FF80FF
 				elseif(gt == gtExplosives or (gt == gtMine and GetHealth(g) == 0)) then
 					tint = 0x808080FF
@@ -3164,6 +3187,16 @@ function onTimer(s)
 			end
 			updateHelp()
 		end
+	elseif (preciseOn == true) and (s == 3) then
+		if (GetCurAmmoType() == amGirder) or  (GetCurAmmoType() == amRubber) or  (GetCurAmmoType() == amAirAttack) then
+			showGearTags = not(showGearTags)
+			if showGearTags then
+				AddCaption(loc("Gear information shown"),0xffba00ff,capgrpVolume)
+			else
+				AddCaption(loc("Gear information hidden"),0xffba00ff,capgrpVolume)
+			end
+		end
+
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
 
 		if (cat[cIndex] == loc("Rubber Placement Mode")) and (s ~= 5) then
@@ -3709,30 +3742,34 @@ function onGearAdd(gear)
 		cGear = gear
 	end
 
+	local tagTint
 	if showGearTags then
-		if ((GetGearType(gear) == gtMine and GetHealth(gear) ~= 0) or GetGearType(gear) == gtSMine) then
-			local v = AddVisualGear(0, 0, vgtHealthTag, GetTimer(gear), true)
-			SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0xFFFFFFFF)
-			tagGears[gear] = v
-		elseif ((GetGearType(gear) == gtMine and GetHealth(gear) == 0)) then
-			local _, dmg
-			_, _, _, _, _, _, _, _, _, _, dmg = GetGearValues(gear)
-			local v = AddVisualGear(0, 0, vgtHealthTag, 36 - dmg, true)
-			SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0xFFFFFFFF)
-			tagGears[gear] = v
-		elseif (GetGearType(gear) == gtAirMine) then
-			local _, wdTimer
-			_, _, wdTimer = GetGearValues(gear)
-			local v = AddVisualGear(0, 0, vgtHealthTag, wdTimer, true)
-			SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0xFFFFFFFF)
-			tagGears[gear] = v
-		elseif (GetGearType(gear) == gtCase) then
-			tagGears[gear] = -1
-		elseif (GetGearType(gear) == gtExplosives) then 
-			local v = AddVisualGear(0, 0, vgtHealthTag, GetHealth(gear), true)
-			SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0xFFFFFFFF)
-			tagGears[gear] = v
-		end
+		tagTint = 0xFFFFFFFF
+	else
+		tagTint = 0x00000000
+	end
+	if ((GetGearType(gear) == gtMine and GetHealth(gear) ~= 0) or GetGearType(gear) == gtSMine) then
+		local v = AddVisualGear(0, 0, vgtHealthTag, GetTimer(gear), true)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		tagGears[gear] = v
+	elseif ((GetGearType(gear) == gtMine and GetHealth(gear) == 0)) then
+		local _, dmg
+		_, _, _, _, _, _, _, _, _, _, dmg = GetGearValues(gear)
+		local v = AddVisualGear(0, 0, vgtHealthTag, 36 - dmg, true)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		tagGears[gear] = v
+	elseif (GetGearType(gear) == gtAirMine) then
+		local _, wdTimer
+		_, _, wdTimer = GetGearValues(gear)
+		local v = AddVisualGear(0, 0, vgtHealthTag, wdTimer, true)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		tagGears[gear] = v
+	elseif (GetGearType(gear) == gtCase) then
+		tagGears[gear] = -1
+	elseif (GetGearType(gear) == gtExplosives) then 
+		local v = AddVisualGear(0, 0, vgtHealthTag, GetHealth(gear), true)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		tagGears[gear] = v
 	end
 
 	if isATrackedGear(gear) then
@@ -3757,7 +3794,7 @@ function onGearDelete(gear)
 		cGear = nil
 	end
 
-	if (showGearTags and (gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtExplosives or gt == gtCase)) then 
+	if (gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtExplosives or gt == gtCase) then 
 		if(tagGears[gear] ~= -1) then
 			DeleteVisualGear(tagGears[gear])
 		end
