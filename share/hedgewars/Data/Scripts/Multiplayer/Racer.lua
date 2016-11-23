@@ -176,6 +176,9 @@ rounds=N
 waypointradius=N
 --> The waypoints have a radius of N pixels (default: 450)
 
+maxwaypoints=N
+--> The maximum number of waypoints to be placed (default: 8)
+
 ]]
 
 function onParameters()
@@ -193,6 +196,12 @@ function onParameters()
         wpRad = math.max(40, math.floor(tonumber(params["waypointradius"])))
         if type(wpRad) ~= "number" then
              wpRad = 450
+        end
+    end
+    if params["maxwaypoints"] ~= nil then
+        wpLimit = math.max(2, math.floor(tonumber(params["maxwaypoints"])))
+        if type(wpLimit) ~= "number" then
+             wpLimit = 8
         end
     end
 end
@@ -660,9 +669,14 @@ function onNewTurn()
 
                         SetAmmoTexts(amSkip, nil, nil, nil)
                 else
+                        local infoString
+                        if wpLimit > 2 then
+                                infoString = string.format(loc("Place 2-%d waypoints using the waypoint placement tool."), wpLimit)
+                        else
+                                infoString = loc("Place 2 waypoints using the waypoint placement tool.")
+                        end
                         ShowMission(loc("Racer"),
-                        loc("Waypoint placement phase"),
-                        loc("Place 2-8 waypoints using the available tools."), 2, 4000)
+                        loc("Waypoint placement phase"), infoString, 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
                 end
