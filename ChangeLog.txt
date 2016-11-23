@@ -54,6 +54,32 @@ Racer and TechRacer:
  * Fixed waypoint message in TechRacer and Racer overwriting current weapon selection message
  * Fixed TechRacer not recording finish if time was >= 100s
 
+HedgeEditor:
+ + Dud mine placement mode
+ + Allow to select frames in sprite placement mode
+ + New placable sprite: sprTargetBee
+ + Complete rewrite of all help texts
+ + Allow to add and subtract health
+ + Add more convenient start values (e.g. for health)
+ + Allow to set timer of sticky mines
+ + Health crates can now have 0 health
+ + Hog and team names (from identity modes) are now translatable
+ + Show health/timer above health crates, barrels, mines, sticky mines and air mines
+ + Allow to toggle health/timer display with Precise+3
+ + Allow to toggle main help at any time with Precise+1
+ * Add proper description and name for the gear placement tool (no more fake air attack)
+ * Fix many issues with exported files
+ * Fix placement mode being changable when gear placement tool is not selected
+ * Make land gun spawn in utility crates instead of weapon crates
+ * Stop aggressively showing the mission panel after any button press
+ * Fix placement modes sometimes showing “nil” in caption
+ * Fix girder sprite being displayed at top left for no reason
+ * Ammo names are not hardcoded anymore (no more double work for translators)
+ * Fix many missing or poor-quality texts for translation
+ * Fix error when trying to set ShoppaBalance rank without anything selected
+ * Don't show misleading circle when placing girder/rubber
+ * Disable timer keys 2-4 in rubber placement mode
+
 Other Game Styles:
  + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
  * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
@@ -99,6 +125,7 @@ Lua-API:
  + New hook: onVisualGearDelete(vgUid) -- called when a visual gear is deleted
  + New variable: AirMinesNum -- Number of air mines being placed on a medium-sized map
  + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
+ + Locale library: loc_noop -- Mark string for translation but don't translate it
 
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
