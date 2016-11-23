@@ -2531,16 +2531,16 @@ function updateHelp(curAmmoType)
 				loc("Use this mode to place girders"),
 				loc("Place Girder: [Left Click]") .. "|" ..
 				loc("Change Rotation: [Left], [Right]") .. "|" ..
-				loc("Change LandFlag: [1], [2], [3], [4]") .. "|" ..
 				" " .. "|" ..
-				loc("1 - Normal Girder") .. "|" ..
-				loc("2 - Indestructible Girder") .. "|" ..
-				loc("3 - Icy Girder") .. "|" ..
-				loc("4 - Bouncy Girder") .. "|" ..
+				loc("Normal Girder: [1]") .. "|" ..
+				loc("Indestructible Girder: [2]") .. "|" ..
+				loc("Icy Girder: [3]") .. "|" ..
+				loc("Bouncy Girder: [4]") .. "|" ..
 				" " .. "|" ..
 				loc("Deletion Mode: [5]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				" " .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amGirder, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2552,11 +2552,13 @@ function updateHelp(curAmmoType)
 				loc("Use this mode to place rubber"),
 				loc("Place Object: [Left Click]") .. "|" ..
 				loc("Change Rotation: [Left], [Right]") .. "|" ..
-				loc("1 - Normal Rubber") .. "|" ..
+				" " .. "|" ..
+				loc("Normal Rubber: [1]") .. "|" ..
 				" " .. "|" ..
 				loc("Deletion Mode: [5]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				" " .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amRubber, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2570,8 +2572,8 @@ function updateHelp(curAmmoType)
 				loc("Change Health: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 8, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2584,8 +2586,8 @@ function updateHelp(curAmmoType)
 				loc("Place Object: [Left Click]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amKnife, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2598,8 +2600,8 @@ function updateHelp(curAmmoType)
 				loc("Place Object: [Left Click]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 1, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2613,8 +2615,8 @@ function updateHelp(curAmmoType)
 				loc("Toggle Placement/Deletion: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2628,8 +2630,8 @@ function updateHelp(curAmmoType)
 				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2643,8 +2645,8 @@ function updateHelp(curAmmoType)
 				loc("Change Health: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2658,8 +2660,8 @@ function updateHelp(curAmmoType)
 				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amSMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2673,8 +2675,8 @@ function updateHelp(curAmmoType)
 				loc("Change Timer: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amAirMine, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2688,8 +2690,8 @@ function updateHelp(curAmmoType)
 				loc("Change Content: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 7, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2703,8 +2705,8 @@ function updateHelp(curAmmoType)
 				loc("Change Content: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 5, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2718,8 +2720,8 @@ function updateHelp(curAmmoType)
 				loc("Change Health Boost: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 6, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2733,8 +2735,8 @@ function updateHelp(curAmmoType)
 				loc("Choose Selection/Placement/Deletion: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2746,16 +2748,15 @@ function updateHelp(curAmmoType)
 				loc("Use to select, modify, or delete girders, rubbers, or sprites."),
 				loc("Change modification mode: [Left], [Right]") .."|"..
 				loc("While in modification mode, you can change|the LandFlag by clicking on an object.") .. "|" ..
-				loc("Set LandFlag: [1], [2], [3], [4]") .. "|" ..
 				" " .. "|" ..
-				loc("1 - Normal Land") .. "|" ..
-				loc("2 - Indestructible Land") .. "|" ..
-				loc("3 - Icy Land") .. "|" ..
-				loc("4 - Bouncy Land") .. "|" ..
+				loc("Normal Land: [1]") .. "|" ..
+				loc("Indestructible Land: [2]") .. "|" ..
+				loc("Icy Land: [3]") .. "|" ..
+				loc("Bouncy Land: [4]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2767,16 +2768,15 @@ function updateHelp(curAmmoType)
 				loc("Use this mode to place custom sprites."),
 				loc("Change sprite: [Left], [Right]") .. "|" ..
 				loc("Change sprite frame: [Precise]+[Left], [Precise]+[Right]") .. "|" ..
-				loc("Set LandFlag: [1], [2], [3], [4]") .. "|" ..
 				" " .. "|" ..
-				loc("1 - Normal Land") .. "|" ..
-				loc("2 - Indestructible Land") .. "|" ..
-				loc("3 - Icy Land") .. "|" ..
-				loc("4 - Bouncy Land") .. "|" ..
+				loc("Normal Land: [1]") .. "|" ..
+				loc("Indestructible Land: [2]") .. "|" ..
+				loc("Icy Land: [3]") .. "|" ..
+				loc("Bouncy Land: [4]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 2, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2790,8 +2790,8 @@ function updateHelp(curAmmoType)
 				loc("Select win/lose condition: [Left], [Right]") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2804,8 +2804,8 @@ function updateHelp(curAmmoType)
 				loc("[Left], [Right]: Change between identities.") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2819,8 +2819,8 @@ function updateHelp(curAmmoType)
 				loc("[Left], [Right]: Change between identities.") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -2834,8 +2834,8 @@ function updateHelp(curAmmoType)
 				loc("[Left], [Right]: Change health value.") .. "|" ..
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
-				loc("Toggle Help: Precise+1") .. "|" ..
-				loc("Toggle Gear Information: Precise+3") .. "|" ..
+				loc("Toggle Help: [Precise]+[1]") .. "|" ..
+				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 				"", 3, 60000
 				)
 		hedgeEditorMissionPanelShown = false
@@ -3439,11 +3439,11 @@ function showHedgeEditorMissionPanel()
 		loc("Place Rubber: Rubber") .. "|" ..
 		loc("Place Gears (and more): Air Attack") .. "|" ..
 		loc("Change Selection: [Up], [Down], [Left], [Right]") .. "|" ..
-		loc("Toggle Help: Precise+1 (While a tool is selected)") .. "|" ..
+		loc("Toggle Help: [Precise]+[1] (While a tool is selected)") .. "|" ..
 		" " .. "|" ..
 		loc("COMMANDS: (Use while no weapon is selected)") .. "|" ..
-		loc("Save Level: Precise+4") .. "|" ..
-		loc("Toggle Editing Weapons and Tools: Precise+2")
+		loc("Save Level: [Precise]+[4]") .. "|" ..
+		loc("Toggle Editing Weapons and Tools: [Precise]+[2]")
 		, 4, 5000
 		)
 	hedgeEditorMissionPanelShown = true
