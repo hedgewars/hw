@@ -16,10 +16,10 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(loc("Hero Team"), 14483456, "Simple", "Island", "Default", "Hedgewars")
+	AddTeam(loc("Hero Team"), 14483456, "Simple", "Island", "Default", "cm_swordshield")
 	player = AddHog(loc("Good Dude"), 0, 80, "NoHat") --NoHat
 
-	AddTeam(loc("Bad Team"), 	1175851, "Simple", "Island", "Default", "Hedgewars")
+	AddTeam(loc("Bad Team"), 	1175851, "Simple", "Island", "Default", "cm_dragonrb")
 	enemy = AddHog(loc("Bad Guy"), 1, 40, "NoHat")
 
 end

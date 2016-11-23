@@ -28,10 +28,10 @@ function onGameInit()
 	Theme = "Halloween" -- The theme to be used
 	SuddenDeathTurns = 99999
 
-	AddTeam(loc("Bloody Rookies"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Bloody Rookies"), 14483456, "Simple", "Island", "Default", "cm_eyes")
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 			--852718
-	AddTeam(loc("Toxic Team"), 	1175851, "Simple", "Island", "Default")
+	AddTeam(loc("Toxic Team"), 	1175851, "Simple", "Island", "Default", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 10, "Skull")
 
 	SetGearPosition(player,970,23)

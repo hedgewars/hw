@@ -916,7 +916,7 @@ function AddHogs()
     cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do

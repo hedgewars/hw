@@ -20,10 +20,10 @@ function onGameInit()
 	Theme = "Bamboo"
 	SuddenDeathTurns = 99999
 
-	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default", "cm_yinyang")
 	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
 			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default")
+	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default", "cm_cyborg")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
 	SetGearPosition(player,142,656)

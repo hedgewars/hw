@@ -11,6 +11,7 @@ local params = {
 	hog_y = 324,
 	hogHat = "NoHat",
 	hogGrave = "Bones",
+	teamFlag = "cm_crosshair",
 	targets = {
 		{ x = 495, y = 501 },
 		{ x = 227, y = 530 },

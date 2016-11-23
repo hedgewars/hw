@@ -96,6 +96,7 @@ The argument “params” is a table containing fields which describe the traini
 	- hogName:	name of the hedgehog (default: "Trainee")
 	- teamName:	name of the hedgehog’s team (default: "Training Team")
 	- teamGrave:	name of the hedgehog’s grave
+	- teamFlag:	name of the team’s flag (default: "cm_crosshair")
 	- clanColor:	color of the (only) clan (default: 0xFF0204, which is a red tone)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
@@ -110,6 +111,7 @@ function TargetPracticeMission(params)
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
 	if params.clanColor == nil then params.clanColor = 0xFF0204 end
 	if params.teamGrave == nil then params.teamGrave= "Statue" end
+	if params.teamFlag == nil then params.teamFlag = "cm_crosshair" end
 	if params.wind == nil then params.wind = 0 end
 
 	local solid, artillery
@@ -137,7 +139,7 @@ function TargetPracticeMission(params)
 
 		SetWind(params.wind)
 
-		AddTeam(loc(params.teamName), params.clanColor, params.teamGrave, "Island", "Default", "Flowerhog")
+		AddTeam(loc(params.teamName), params.clanColor, params.teamGrave, "Flowerhog", "Default", params.teamFlag)
 
 		player = AddHog(loc(params.hogName), 0, 1, params.hogHat)
 		SetGearPosition(player, params.hog_x, params.hog_y)

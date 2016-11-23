@@ -65,12 +65,12 @@ function onGameInit()
 	Theme = "Hell"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	shuffleHogs(enemies)
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_skull")
 	for i=1,table.getn(enemies) do
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)

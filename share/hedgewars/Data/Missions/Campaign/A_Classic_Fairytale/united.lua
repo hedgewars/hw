@@ -318,7 +318,7 @@ function AddHogs()
     cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(leaks,   unpack(leaksPos))

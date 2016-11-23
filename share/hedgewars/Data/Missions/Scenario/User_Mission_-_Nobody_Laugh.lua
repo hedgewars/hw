@@ -20,13 +20,13 @@ function onGameInit()
 	Map = "Bath"
 	Theme = "Nature"
 
-	AddTeam(loc("Nameless Heroes"), 14483456, "eyecross", "Wood", "HillBilly", "cm_birdy")
+	AddTeam(loc("Nameless Heroes"), 14483456, "eyecross", "Wood", "HillBilly", "cm_crossedswords")
 	hhs[1] = AddHog(loc( "Hunter" ), 0, 1, "Skull")
 	SetGearPosition(hhs[1], 1267, 451)
 	hhs[2] = AddHog(loc("Drowner"), 0, 31, "mp3")
 	SetGearPosition(hhs[2], 1332, 451)
 
-	AddTeam(loc("Clowns"), 1175851, "Duck2", "Tank", "Mobster", "cm_spider")
+	AddTeam(loc("Clowns"), 1175851, "Duck2", "Tank", "Mobster", "cm_face")
 	hhs[3] = AddHog(loc("Poison"), 5, 100, "WhySoSerious")
 	SetGearPosition(hhs[3], 1133, 446)
 	hhs[4] = AddHog(loc("Bobo"), 5, 100, "clown")

@@ -108,7 +108,7 @@ function onGameInit()
 	Map = "moon01_map"
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
 	-- Hog Solo
-	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "hedgewars")
 	if tonumber(GetCampaignVar("HeroHealth")) then
 		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
 	else
@@ -116,7 +116,7 @@ function onGameInit()
 	end
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_galaxy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -130,12 +130,12 @@ function onGameInit()
 	AnimSetGearPosition(paoth4.gear, paoth4.x, paoth4.y)
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_sine")
 	professor.gear = AddHog(professor.name, 0, 120, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_sine")
 	minion1.gear = AddHog(minion1.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion1.gear, minion1.x, minion1.y)
 	HogTurnLeft(minion1.gear, true)

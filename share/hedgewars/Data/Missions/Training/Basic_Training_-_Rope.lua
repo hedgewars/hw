@@ -108,7 +108,7 @@ function onGameInit() -- Called when the game loads
 	Map = "Ropes" -- Map name
 	Theme = "Nature" -- Map theme
 
-	AddTeam( loc( "Rope Team" ), 14483456, "Simple", "Island", "Default" ) -- Lets make the team
+	AddTeam( loc( "Rope Team" ), 14483456, "Simple", "Island", "Default", "cm_shoppa" ) -- Lets make the team
 	Player = AddHog( loc( "Hunter" ), 0, 1, "StrawHat" ) -- Add a hog for it, and name it "Hunter"
 	SetGearPosition( Player, 420, 1750 ) -- Set player position
 

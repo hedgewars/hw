@@ -407,7 +407,7 @@ local preMadeTeam = 	{
 				loc_noop("Clowns"),
 				{"WhySoSerious","clown-copper","clown-crossed","clown","Joker"},
 				{loc_noop("Baggy"),loc_noop("Bingo"),loc_noop("Bobo"),loc_noop("Bozo"),loc_noop("Buster"),loc_noop("Chester"),loc_noop("Copper"),loc_noop("Heckles"),loc_noop("Giggles"),loc_noop("Jingo"),loc_noop("Molly"),loc_noop("Loopy"),loc_noop("Patches"),loc_noop("Tatters")},
-				"R","cm_birdy","Mobster","Rubberduck","Castle"
+				"R","cm_balls","Mobster","Rubberduck","Castle"
 				},
 
 				{
@@ -428,7 +428,7 @@ local preMadeTeam = 	{
 				loc_noop("Color Squad"),
 				{"hair_blue","hair_green","hair_red","hair_yellow","hair_purple","hair_grey","hair_orange","hair_pink"},
 				{loc_noop("Blue"),loc_noop("Green"),loc_noop("Red"),loc_noop("Yellow"),loc_noop("Purple"),loc_noop("Grey"),loc_noop("Orange"),loc_noop("Pink")},
-				"F","cm_birdy","Singer","Grave","Castle"
+				"F","mauritius","Singer","Grave","Castle"
 				},
 
 				{
@@ -463,21 +463,21 @@ local preMadeTeam = 	{
 				loc_noop("The Zoo"),
 				{"zoo_Bat","zoo_Beaver","zoo_Bunny","zoo_Deer","zoo_Hedgehog","zoo_Moose","zoo_Pig","zoo_Porkey","zoo_Sheep","zoo_chicken","zoo_elephant","zoo_fish","zoo_frog","zoo_snail","zoo_turtle"},
 				{loc_noop("Batty"),loc_noop("Tails"),loc_noop("Bunny"),loc_noop("Deer"),loc_noop("Spikes"),loc_noop("Horns"),loc_noop("Bacon"),loc_noop("Porkey"),loc_noop("Sheepy"),loc_noop("Chicken"),loc_noop("Trunks"),loc_noop("Fishy"),loc_noop("Legs"),loc_noop("Slimer"),loc_noop("Roshi")},
-				"FR","cm_hurrah","Default","Bone","Castle"
+				"FR","cm_birdy","Default","Bone","Castle"
 				},
 
 				{
 				loc_noop("The Devs"),
 				{"ushanka","zoo_Sheep","bb_bob","Skull","poke_mudkip","lambda","WizardHat","sf_ryu","android","fr_lemon","mp3"},
 				{loc_noop("unC0Rr"), loc_noop("sheepluva"), loc_noop("nemo"), loc_noop("mikade"), loc_noop("koda"), loc_noop("burp"),loc_noop("HeneK"),loc_noop("Tiyuri"),loc_noop("Xeli"),loc_noop("Displacer"),loc_noop("szczur")},
-				"FR","hedgewars","Classic","Statue","Castle"
+				"FR","cm_hw","Classic","Statue","Castle"
 				},
 
 				{
 				loc_noop("Mushroom Kingdom"),
 				{"sm_daisy","sm_luigi","sm_mario","sm_peach","sm_toad","sm_wario"},
 				{loc_noop("Daisy"),loc_noop("Luigi"),loc_noop("Mario"),loc_noop("Princess Peach"),loc_noop("Toad"),loc_noop("Wario")},
-				"FR","cm_birdy","Default","Badger","Castle"
+				"FR","comoros","Default","Badger","Castle"
 				},
 
 				{
@@ -521,14 +521,14 @@ local preMadeTeam = 	{
 				loc_noop("Desert Storm"),
 				{"war_desertofficer","war_desertgrenadier1","war_desertmedic","war_desertsapper1","war_desertgrenadier2","war_desertgrenadier4","war_desertsapper2","war_desertgrenadier5"},
 				{loc_noop("Brigadier Briggs"),loc_noop("Lt. Luke"),loc_noop("Sgt. Smith"),loc_noop("Corporal Calvin"),loc_noop("Frank"),loc_noop("Joe"),loc_noop("Sam"),loc_noop("Donald")},
-				"F","cm_birdy","Default","Grave","Castle"
+				"F","bhutan","Default","Grave","Castle"
 				},
 
 				{
 				loc_noop("The Hospital"),
 				{"doctor","nurse","war_britmedic","war_desertmedic","war_germanww2medic"},
 				{loc_noop("Dr. Blackwell"),loc_noop("Dr. Drew"),loc_noop("Dr. Harvey"),loc_noop("Dr. Crushing"),loc_noop("Dr. Jenner"),loc_noop("Dr. Barnard"),loc_noop("Dr. Parkinson"),loc_noop("Dr. Banting"),loc_noop("Dr. Horace"),loc_noop("Dr. Hollows"),loc_noop("Dr. Jung")},
-				"R","cm_birdy","Default","heart","Castle"
+				"R","cm_firstaid","Default","heart","Castle"
 				}
 
 				}

@@ -21,10 +21,10 @@ function onGameInit()
 	Map = "Hammock" 
 	Theme = "Nature"
 
-	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default", "cm_duckhead")
 	player = AddHog(loc("Ikeda"), 0, 48, "StrawHat")
 			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default")
+	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default", "cm_cyborg")
 	enemy = AddHog(loc("Unit") .. " 811", 1, 100, "cyborg1")
 
 	SetGearPosition(player,430,1540)

@@ -84,7 +84,7 @@ function onGameInit()
 	Theme = "Castle"
 
 	-- Create the player team
-	AddTeam(loc("Grenadiers"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Grenadiers"), 14483456, "Simple", "Island", "Default", "cm_grenade")
 	-- And add a hog to it
 	player = AddHog(loc("Nade Boy"), 0, 1, "war_grenadier1")
 	SetGearPosition(player, 506, 76)

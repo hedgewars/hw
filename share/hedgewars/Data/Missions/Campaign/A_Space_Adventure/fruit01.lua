@@ -110,19 +110,19 @@ function onGameInit()
 	Theme = "Fruit"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Captain Lime
-	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "congo-brazzaville")
 	green1.bot = AddHog(green1.name, 1, 200, "war_desertofficer")
 	AnimSetGearPosition(green1.bot, green1.x, green1.y)
 	green1.human =  AddHog(green1.name, 0, 200, "war_desertofficer")
 	AnimSetGearPosition(green1.human, green1.x, green1.y)
 	green1.gear = green1.human
 	-- Green Bananas
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "congo-brazzaville")
 	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
 	HogTurnLeft(green2.gear, true)
@@ -136,7 +136,7 @@ function onGameInit()
 	AnimSetGearPosition(green5.gear, green5.x, green5.y)
 	HogTurnLeft(green5.gear, true)
 	-- Yellow Watermelons
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_mog")
 	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier2")
 	AnimSetGearPosition(yellow1.gear, yellow1.x, yellow1.y)
 	-- the rest of the Yellow Watermelons

@@ -281,7 +281,7 @@ function AddHogs()
   end
 
   if m8Scene == denseScene or m8Scene == waterScene then
-    AddTeam(loc("Traitors"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+    AddTeam(loc("Traitors"), 29439, "Bone", "Island", "HillBilly", "cm_bloodyblade")
     if m8Scene == denseScene then
       DeleteGear(natives[2])
       natives[2] = AddHog(nativeNames[2], 0, 100, nativeHats[2])

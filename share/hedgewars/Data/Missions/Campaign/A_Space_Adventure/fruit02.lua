@@ -91,7 +91,7 @@ function onGameInit()
 	end
 
 	-- Hog Solo and Green Bananas
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgehog")
 	hero.gear = AddHog(hero.name, 0, health, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
@@ -102,7 +102,7 @@ function onGameInit()
 	AnimSetGearPosition(green3.gear, green3.x, green3.y)
 	HogTurnLeft(green3.gear, true)
 	-- Captain Lime
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "congo-brazzaville")
 	green1.human = AddHog(green1.name, 0, 100, "war_desertofficer")
 	AnimSetGearPosition(green1.human, green1.x, green1.y)
 	green1.bot = AddHog(green1.name, 1, 100, "war_desertofficer")
@@ -110,7 +110,7 @@ function onGameInit()
 	green1.gear = green1.human
 	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_scout")
 	for i=1,table.getn(redHedgehogs) do
 		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
 		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)

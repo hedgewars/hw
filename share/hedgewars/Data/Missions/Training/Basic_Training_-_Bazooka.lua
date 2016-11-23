@@ -91,7 +91,7 @@ function onGameInit()
 	Theme = "Bamboo"
 
 	-- Create the player team
-	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default", "cm_crosshair")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 	SetGearPosition(player, 936, 136)

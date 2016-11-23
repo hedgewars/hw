@@ -22,12 +22,12 @@ function onGameInit()
 	Theme = "Nature" -- The theme to be used
 	SuddenDeathTurns = 99999
 
-	AddTeam(loc("Feeble Resistance"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Feeble Resistance"), 14483456, "Simple", "Island", "Default", "cm_kiwi")
 	player = AddHog(string.format(loc("Pathetic Hog #%d"), 1), 0, 50, "NoHat")
 	p2 = AddHog(string.format(loc("Pathetic Hog #%d"), 2), 0, 20, "NoHat")
 
 	--AddTeam("Toxic Team", 	1175851, "Simple", "Island", "Robot","cm_binary")
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_binary")
+	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_cyborg")
 	enemy = AddHog(loc("Unit 3378"), 5, 30, "cyborg1")
 
 	SetGearPosition(player,1403,235)

@@ -95,7 +95,7 @@ function onGameInit()
 	Theme = "Golf"
 
 	-- Create the player team
-	AddTeam(loc("Sniperz"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Sniperz"), 14483456, "Simple", "Island", "Default", "cm_crosshair")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "Sniper")
 	SetGearPosition(player, 602, 1465)

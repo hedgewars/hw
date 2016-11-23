@@ -62,11 +62,11 @@ function onGameInit()
 	Theme = "Cheese"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Crazy Runner
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_sonic")
 	runner.gear = AddHog(runner.name, 0, 100, "sth_Sonic")
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)

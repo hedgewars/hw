@@ -485,7 +485,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
@@ -513,13 +513,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_star")
+    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then

@@ -962,7 +962,7 @@ function onGameInit()
     AnimSetGearPosition(cannibals[i], 0, 0)
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 

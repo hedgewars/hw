@@ -689,21 +689,21 @@ function AddHogs()
   origNatives[4] = natives[4]
   nativesLeft = nativesNum
 
-  AddTeam(loc("Beep Loopers"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("Beep Loopers"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsTeamNum[1] do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
 
-  AddTeam(loc("Corporationals"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("Corporationals"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
   for i = cyborgsTeamNum[1] + 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
   cyborgsLeft = cyborgsTeamNum[1] + cyborgsTeamNum[2]
 
-  AddTeam(loc("Leaderbot"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("Leaderbot"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
   enemy = AddHog(loc("Name"), 2, 200, "cyborg1")
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   SetGearPosition(cyborg, 0, 0)

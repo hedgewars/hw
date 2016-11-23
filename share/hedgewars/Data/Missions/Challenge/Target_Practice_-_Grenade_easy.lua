@@ -13,6 +13,7 @@ local params = {
 	hogName = loc("Grenadier"),
 	hogHat = "war_desertgrenadier2",
 	teamName = loc("Grenade Group"),
+	teamFlag = "cm_grenade",
 	targets = {
 		{ x = 1834, y = 747 },
 		{ x = 2308, y = 729 },

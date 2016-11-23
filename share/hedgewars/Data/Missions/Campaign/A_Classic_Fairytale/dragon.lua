@@ -515,11 +515,11 @@ function AddHogs()
     gearDead[natives[i]] = false
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("011101000"), 14483455, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101000"), 14483455, "ring", "UFO", "Robot", "cm_binary")
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false

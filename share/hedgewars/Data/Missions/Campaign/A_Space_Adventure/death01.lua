@@ -101,11 +101,11 @@ function onGameInit()
 	Theme = "Hell"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_galaxy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -113,11 +113,11 @@ function onGameInit()
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
 	-- Professor and Thugs
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_sine")
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
 	HogTurnLeft(professor.human, true)
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
 	HogTurnLeft(professor.bot, true)
