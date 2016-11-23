@@ -540,12 +540,6 @@ for i=1, #preMadeTeam do
 	table.insert(preMadeTeamNamesTranslated, loc(preMadeTeam[i][1]))
 end
 
-local fortArray =	{
-					"Cake", "Castle", "Earth", "EvilChicken", "Flowerhog",
-					"Hydrant", "Lego", "Plane", "Statue", "SteelTower", "Tank",
-					"UFO", "Wood"
-					}
-
 local gameFlagList =	{
 			{"gfMultiWeapon", false, gfMultiWeapon},
 			{"gfBorder", false, gfBorder},
@@ -1458,7 +1452,7 @@ function GetDataForSavingHogs(gear)
 		local tColor = string.format("0x%X", rgb)
 
 		if getGearValue(gear,"grave") == nil then
-			tFort = fortArray[1+GetRandom(#fortArray)]
+			tFort = GetHogFort(gear)
 			tGrave = GetHogGrave(gear)
 			tFlag = GetHogFlag(gear)
 			tVoice = GetHogVoicepack(gear)
