@@ -54,6 +54,29 @@ Racer and TechRacer:
  * Fixed waypoint message in TechRacer and Racer overwriting current weapon selection message
  * Fixed TechRacer not recording finish if time was >= 100s
 
+WxW:
+ + Support for multiple sets of walls per map
+ + Add optional “Crate Before Attack” rule
+ + Add optional “All But Last” rule
+ + Add optional “Kill The Leader” rule
+ + Script parameter support (see Lua file comment for documentation)
+ + Possible to set max. number of weapons in game (script parameter only)
+ + Menu can be disabled (with script parameter “menu=false”) for insant game start
+ + Possible to set number of crates per turn
+ + Ropes, ShoppaKing, ShoppaHell and ShoppaNeon can now be played with the classic left and right walls
+ + Allows almost all game modifiers to be changed, the only exception is crate probabilities
+ + New wall sets for Ropes, ShoppaNeon, ShoppaDesert, ShoppaWild, ShoppaKing and ShoppaHell.
+ + Basic support for a bunch of Shoppa maps
+ + Fully functional even without a map border
+ + More sound effects
+ + More helpful mission display after configuration has been accepted
+ + Hide “Surf Before Crate” setting if surfing is disabled for this map, or the bottom is active and water never rises
+ + Hide walls setting if script does not provide walls for map yet
+ + Freeze crates at turn start if Walls Before Crate or Surf Before Crate is enabled (they unfreeze if you met requirements)
+ + Allow toggling the radar with Switch Hog key while roping or rope selected
+ * No smoke when hog is near near a WxW wall but walls need not to be touched
+ * Fix other player being able to change the menu config in the short period before the first turn
+
 Tumbler:
  + Script parameter support:
   + spawnbarrels: New barrels per turn
