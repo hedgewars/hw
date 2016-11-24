@@ -1476,6 +1476,7 @@ function onGameTick()
 				rightOn = false
 				SetMyCircles(false)
 				rAlpha = 255
+				FailGraphics()
 				--nw WriteLnToConsole("Player is out of luck")
 
 				if shieldMiser == true then
@@ -2043,10 +2044,18 @@ function WellHeAintGonnaJumpNoMore(x,y,explode)
 
 	playerIsFine = false
 	AddCaption(loc("GOTCHA!"))
+	FailGraphics()
 	PlaySound(sndHellish)
 
 	targetHit = true
 
+end
+
+-- Turn all circles white to indicate they can't be hit anymore
+function FailGraphics()
+	for i = 0,(vCCount-1) do
+		vCircCol[i] = 0xffffffff
+	end
 end
 
 --- collision detection for weapons fire
