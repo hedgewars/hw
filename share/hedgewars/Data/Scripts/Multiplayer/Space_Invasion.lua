@@ -1089,7 +1089,7 @@ function onPrecise()
 
 			if wepAmmo[wepIndex] == 0 then
 				PlaySound(sndSuddenDeath)
-				AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
+				AddCaption(loc("Ammo depleted!"),0xff0000ff,capgrpMessage)
 			else
 				PlaySound(sndThrowRelease)
 			end
@@ -1103,7 +1103,7 @@ function onPrecise()
 
 	elseif (wepAmmo[wepIndex] == 0) and (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
 		PlaySound(sndDenied)
-		AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
+		AddCaption(loc("Ammo depleted!"),0xff0000ff,capgrpMessage)
 	end
 
 	preciseOn = true
@@ -1119,17 +1119,17 @@ function onLJump()
 	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
 		shieldMiser = false
 		if shieldHealth == 80 then
-			AddCaption(loc("Shield Depleted"),0xff0000ff,capgrpMessage)
+			AddCaption(loc("Shield depleted"),0xff0000ff,capgrpMessage)
 			PlaySound(sndDenied)
 		elseif (beam == false) and (shieldHealth > 80) then
 			beam = true
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, 300, 1, 0xa800ffff)
-			AddCaption( loc("Shield ON:") .. " " .. shieldHealth - 80 .. " " .. loc("Power Remaining") )
+			AddCaption( string.format(loc("Shield ON: %d power remaining"), shieldHealth - 80))
 			PlaySound(sndWarp)
 		else
 			beam = false
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 0, 0, 1, 10, 0, 0, 0, 0xa800ffff)
-			AddCaption(loc("Shield OFF:") .. " " .. shieldHealth - 80 .. " " .. loc("Power Remaining") )
+			AddCaption( string.format(loc("Shield ON: %d power remaining"), shieldHealth - 80))
 		end
 	end
 end
@@ -1142,7 +1142,7 @@ function onHJump()
 			rPingTimer = 0
 			rAlpha = 0
 			radShotsLeft = radShotsLeft -1
-			AddCaption(loc("Pings left:") .. " " .. radShotsLeft,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage)
+			AddCaption(string.format(loc("Pings left: %d"), radShotsLeft),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage)
 			-- Play sonar sound
 			PlaySound(sndJetpackLaunch)
 
@@ -1275,22 +1275,22 @@ function onGameStart()
 	SendHealthStatsOff()
 
 	ShowMission	(
-				"SPACE INVASION",
-				loc("a Hedgewars mini-game"),
+				loc("SPACE INVASION"),
+				loc("A Hedgewars mini-game"),
 
 				loc("Destroy invaders to score points.") .. "|" ..
 				" " .. "|" ..
 
-				loc("Round Limit") .. ": " .. roundLimit .. "|" ..
-				loc("Turn Time") .. ": " .. (TurnTime/1000) .. loc("sec") .. "|" ..
+				string.format(loc("Round Limit: %d"), roundLimit) .. "|" ..
+				string.format(loc("Turn Time: %dsec"), (TurnTime/1000)) .. "|" ..
 				" " .. "|" ..
 
 				loc("Movement: [Up], [Down], [Left], [Right]") .. "|" ..
-				loc("Fire") .. ": " .. loc("[Left Shift]") .. "|" ..
-				loc("Toggle Shield") .. ": " .. loc("[Enter]") .. "|" ..
-				loc("Radar Ping") .. ": " .. loc("[Backspace]") .. "|" ..
+				loc("Fire: [Precise]") .. "|" ..
+				loc("Toggle Shield: [Long jump]") .. "|" ..
+				loc("Radar Ping: [High jump]") .. "|" ..
 
-				"", 4, 4000
+				"", 4, 5000
 				)
 
 	CreateMeSomeCircles()
@@ -1421,7 +1421,7 @@ function onGameTick()
 			if shieldHealth < 80 then -- <= 80
 				shieldHealth = 80
 				beam = false
-				AddCaption(loc("Shield Depleted"),0xff0000ff,capgrpMessage)
+				AddCaption(loc("Shield depleted"),0xff0000ff,capgrpMessage)
 				PlaySound(sndMineTick)
 				PlaySound(sndSwitchHog)
 			end
@@ -1518,13 +1518,13 @@ function onGameTick()
 
 					p = (roundKills*3.5) - ((roundKills*3.5)%1) + 2
 
-					AddCaption(loc("Shield Miser!") .." +" .. p .." ".. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
+					AddCaption(string.format(loc("Shield Miser! +%d points!"), p),0xffba00ff,capgrpAmmoinfo)
 					AwardPoints(p)
 				end
 
 				local accuracy = (shotsHit / shotsFired) * 100
 				if (accuracy >= 80) and (shotsFired > 4) then
-					AddCaption(loc("Accuracy Bonus!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpVolume)
+					AddCaption(loc("Accuracy Bonus! +15 points"),0xffba00ff,capgrpVolume)
 					AwardPoints(15)
 
 
@@ -1656,7 +1656,7 @@ function onGearDamage(gear, damage)
 	if GetGearType(gear) == gtHedgehog then
 		if (fierceComp == false) and (damage >= 60) and (GetHogClan(gear) ~= GetHogClan(CurrentHedgehog)) then
 			fierceComp = true
-			AddCaption(loc("Fierce Competition!") .. " +8 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+			AddCaption(loc("Fierce Competition! +8 points!"),0xffba00ff,capgrpGameState)
 			AwardPoints(8)
 		end
 	end
@@ -1868,7 +1868,7 @@ function CircleDamaged(i)
 		if (vType[i] == "drone") then
 			PlaySound(sndHellishImpact4)
 			TimeLeft = TimeLeft + timeBonus
-			AddCaption(loc("Time Extended!") .. "+" .. timeBonus .. loc("sec"), 0xff0000ff,capgrpMessage )
+			AddCaption(string.format(loc("Time Extended! +%dsec"), timeBonus), 0xff0000ff,capgrpMessage )
 			DrawTag(0)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
@@ -1877,7 +1877,7 @@ function CircleDamaged(i)
 			RK = RK + 1
 			if RK == 5 then
 				RK = 0
-				AddCaption(loc("Drone Hunter!") .. " +10 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Drone Hunter! +10 points!"),0xffba00ff,capgrpMessage2)
 				AwardPoints(10)
 			end
 
@@ -1892,7 +1892,7 @@ function CircleDamaged(i)
 			GK = GK + 1
 			if GK == 3 then
 				GK = 0
-				AddCaption(loc("Ammo Maniac!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Ammo Maniac! +5 points!"),0xffba00ff,capgrpMessage2)
 				AwardPoints(5)
 			end
 
@@ -1921,13 +1921,13 @@ function CircleDamaged(i)
 			OK = OK + 1
 			if OK == 3 then
 				OK = 0
-				AddCaption(loc("Shield Seeker!") .. " + 10 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Shield Seeker! +10 points!"),0xffba00ff,capgrpMessage2)
 				AwardPoints(10)
 			end
 
 		elseif (vType[i] == "blueboss") then
 			PlaySound(sndHellishImpact3)
-			AddCaption(loc("Boss defeated!") .. " +30 " .. loc("points") .. "!", 0x0050ffff,capgrpMessage)
+			AddCaption(loc("Boss defeated! +30 points!"), 0x0050ffff,capgrpMessage)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
@@ -1935,7 +1935,7 @@ function CircleDamaged(i)
 			BK = BK + 1
 			if BK == 2 then
 				BK = 0
-				AddCaption(loc("Boss Slayer!") .. " +25 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
 				AwardPoints(25)
 			end
 
@@ -1949,7 +1949,7 @@ function CircleDamaged(i)
 		chainCounter = 3000
 		chainLength = chainLength + 1
 		if chainLength > 1 then
-			AddCaption( chainLength .. "-" .. loc("Hit Combo!") .. " +" .. chainLength*2 .. " " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
+			AddCaption( string.format(loc("%d-Hit Combo! +%d points!"), chainLength, chainLength*2),0xffba00ff,capgrpAmmostate)
 			AwardPoints(chainLength*2)
 		end
 
@@ -2121,18 +2121,18 @@ function CheckVarious(gear)
 				--AddCaption(loc("Dist: ") .. dist .. "!",0xffba00ff,capgrpGameState)
 				if dist >= 1000000 then
 					sniperHits = sniperHits +1
-					AddCaption(loc("Sniper!") .. " +8 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+					AddCaption(loc("Sniper! +8 points!"),0xffba00ff,capgrpGameState)
 					AwardPoints(8)
 					if sniperHits == 3 then
 						sniperHits = 0
-						AddCaption(loc("They Call Me Bullseye!") .. " +16 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+						AddCaption(loc("They Call Me Bullseye! +16 points!"),0xffba00ff,capgrpGameState)
 						AwardPoints(16)
 					end
 				elseif dist <= 6000 then
 					pointBlankHits = pointBlankHits +1
 					if pointBlankHits == 3 then
 						pointBlankHits = 0
-						AddCaption(loc("Point Blank Combo!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+						AddCaption(loc("Point Blank Combo! +5 points!"),0xffba00ff,capgrpGameState)
 						AwardPoints(5)
 					end
 				end
@@ -2147,7 +2147,7 @@ function CheckVarious(gear)
 
 				circsHit = circsHit + 1
 				if circsHit > 1 then
-					AddCaption(loc("Multi-shot!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
+					AddCaption(loc("Multi-shot! +15 points!"),0xffba00ff,capgrpAmmostate)
 					AwardPoints(15)
 						circsHit = 0
 				end
@@ -2175,7 +2175,7 @@ function CheckVarious(gear)
 				SK = SK + 1
 				if SK == 5 then
 					SK = 0
-					AddCaption(loc("Shield Master!") .. " +10 " .. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
+					AddCaption(loc("Shield Master! +10 points!"),0xffba00ff,capgrpAmmoinfo)
 					AwardPoints(10)
 				end
 			end
@@ -2242,15 +2242,15 @@ function CheckDistances()
 				if ss == "fatal" then
 
 					if (wepAmmo[0] == 0) and (TimeLeft <= 9) then
-						AddCaption(loc("Kamikaze Expert!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
+						AddCaption(loc("Kamikaze Expert! +15 points!"),0xffba00ff,capgrpMessage)
 						AwardPoints(15)
 						PlaySound(sndKamikaze, CurrentHedgehog)
 					elseif (wepAmmo[0] == 0) then
-						AddCaption(loc("Depleted Kamikaze!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
+						AddCaption(loc("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
 						AwardPoints(5)
 						PlaySound(sndKamikaze, CurrentHedgehog)
 					elseif TimeLeft <= 9 then
-						AddCaption(loc("Timed Kamikaze!") .. " +10 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
+						AddCaption(loc("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
 						AwardPoints(10)
 						PlaySound(sndKamikaze, CurrentHedgehog)
 					end
