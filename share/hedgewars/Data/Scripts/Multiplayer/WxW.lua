@@ -341,7 +341,7 @@ local MapList =
 	{"red vs blue - Castle",     		true, 	false, true},
 	{"red vs blue - castle2",     		true, 	false, true},
 	{"red vs blue - True Shoppa Sky",	true,	false, true},
-	{"Ropes",       			false, 	false, true},
+	{"Ropes",       			false, 	true, true},
 	{"RopeLikeAKingInHellWithNeon",		false, 	true,  true},
 	{"Ropes Flipped",      			false, 	false, true},
 	{"Ropes Rearranged",      		false, 	false, true},
@@ -522,21 +522,20 @@ function MapsInit()
 	right = {RightX-10-margin,TopY+10,margin,WaterLine}
 	roof = {LeftX+10,TopY+10,RightX-LeftX-20,margin}
 
-	local border = MapHasBorder()
+	local border = MapHasBorder() == true
+	local leftRight = (WorldEdge == weBounce) or (WorldEdge == weNone and border)
 
 	if mapID ~= nil then
-		if border then
-			if MapList[mapID][3] == true then
-				NewWallSet({roof, desc=loc("Roof")}, "roof")
-				wallSetID = #wallSets
-			end
-			if MapList[mapID][4] == true then
-				NewWallSet({left, right, desc=loc("Left and right")}, "leftright")
-				wallSetID = #wallSets
-			end
-			if MapList[mapID][3] == true and MapList[mapID][4] == true then
-				NewWallSet({left, right, roof, desc=loc("Left, right and roof")}, "leftrightroof")
-			end
+		if border and MapList[mapID][3] == true then
+			NewWallSet({roof, desc=loc("Roof")}, "roof")
+			wallSetID = #wallSets
+		end
+		if leftRight and MapList[mapID][4] == true then
+			NewWallSet({left, right, desc=loc("Left and right")}, "leftright")
+			wallSetID = #wallSets
+		end
+		if leftRight and border and MapList[mapID][3] == true and MapList[mapID][4] == true then
+			NewWallSet({left, right, roof, desc=loc("Left, right and roof")}, "leftrightroof")
 		end
 
 		-- add map specific walls
@@ -576,30 +575,28 @@ function MapsInit()
 					end
 				end
 				local newwallset = {}
-				if border then
-					if walls.add == "all" then
+				if border and leftRight and walls.add == "all" then
+					table.insert(newwallset, roof)
+					table.insert(newwallset, left)
+					table.insert(newwallset, right)
+				elseif walls.add == "default" then
+					if border and MapList[mapID][3] == true then
 						table.insert(newwallset, roof)
-						table.insert(newwallset, left)
-						table.insert(newwallset, right)
-					elseif walls.add == "default" then
-						if MapList[mapID][3] == true then
-							table.insert(newwallset, roof)
-						end
-						if MapList[mapID][4] == true then
-							table.insert(newwallset, left)
-							table.insert(newwallset, right)
-						end
-					elseif walls.add == "roof" then
-						table.insert(newwallset, roof)
-					elseif walls.add == "leftright" then
+					end
+					if leftRight and MapList[mapID][4] == true then
 						table.insert(newwallset, left)
 						table.insert(newwallset, right)
 					end
+				elseif border and walls.add == "roof" then
+					table.insert(newwallset, roof)
+				elseif leftRight and walls.add == "leftright" then
+					table.insert(newwallset, left)
+					table.insert(newwallset, right)
 				end
 				for w=1,#walls do
 					table.insert(newwallset, walls[w])
 				end
-				if border and ((walls.add ~= "none" and walls.add ~= nil) or walls.needsborder ~= false) then
+				if border and leftRight and ((walls.add ~= "none" and walls.add ~= nil) or walls.needsborder ~= false) then
 					mixedID, previousMixed = newInsideOrMixed(newwallset, previousMixed, mixedID, loc("Mixed"), loc("Mixed %d"))
 					newwallset.custom = true
 					NewWallSet(newwallset, "mixed")
@@ -613,9 +610,14 @@ function MapsInit()
 	else
 		if border then
 			NewWallSet({roof, desc=loc("Roof")}, "roof")
+			wallSetID = #wallSets
+		end
+		if leftRight then
 			NewWallSet({left, right, desc=loc("Left and right")}, "leftright")
+			wallSetID = #wallSets
+		end
+		if leftRight and border then
 			NewWallSet({left, right, roof, desc=loc("Left, right and roof")}, "leftrightroof")
-			wallSetID = 2
 		end
 	end
 
