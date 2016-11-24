@@ -1484,8 +1484,12 @@ function onGameTick()
 
 		end
 
-		if (TimeLeftCounter % 1000) == 0 and TimeLeft == 5 then
-			PlaySound(sndHurry, CurrentHedgehog)
+		if (TimeLeftCounter % 1000) == 0 then
+			if TimeLeft == 5 then
+				PlaySound(sndHurry, CurrentHedgehog)
+			elseif TimeLeft <= 4 and TimeLeft >= 1 then
+				PlaySound(_G["sndCountdown"..TimeLeft])
+			end
 		end
 
 		--WriteLnToConsole("Finished timeleft calculations")
