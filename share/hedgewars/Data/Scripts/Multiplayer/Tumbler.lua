@@ -289,7 +289,7 @@ function DrawTag(i)
 
 	if i == 0 then
 		yOffset = 40
-		tCol = 0xffba00ff --0xffed09ff --0xffba00ff
+		tCol = 0xffee00ff
 		tValue = TimeLeft
 	elseif i == 1 then
 		zoomL = 1.1
@@ -386,7 +386,7 @@ function CheckProximity(gear)
 
 		if band(GetGearPos(gear), 0x4) ~= 0 then
 
-			AddCaption(string.format(loc("+%d seconds!"), bonusTime), 0xffba00ff, capgrpMessage2 )
+			AddCaption(string.format(loc("+%d seconds!"), bonusTime), 0xffee00ff, capgrpMessage2 )
 
 			TimeLeft = TimeLeft + bonusTime
 			DrawTag(0)

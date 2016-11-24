@@ -530,7 +530,7 @@ function DrawTag(i)
 
 	if i == 0 then
 		yOffset = 40
-		tCol = 0xffba00ff
+		tCol = 0xffee00ff
 		tValue = TimeLeft
 	elseif i == 1 then
 		zoomL = 1.1
