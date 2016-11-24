@@ -708,9 +708,11 @@ function CommentOnScore()
 		local comment
 		if teamStats[i].name ~= " " then
 			local comment = teamStats[i].name .. " |" ..
-			string.format(loc("Score: %d points"), teamStats[i].score) .. "|" ..
-			string.format(loc("Kills: %d invaders destroyed"), teamStats[i].kills) .. "|" ..
-			" " .. "|"
+			string.format(loc("Score: %d"), teamStats[i].score) .. "|" ..
+			string.format(loc("Kills: %d"), teamStats[i].kills)
+			if i < TeamsCount then	
+				comment = comment .. "| |"
+			end
 			table.insert(teamComment, comment)
 
 			SendStat(siClanHealth, tostring(teamStats[i].score), teamStats[i].name)
@@ -1230,7 +1232,13 @@ function onGameStart()
 				loc("SPACE INVASION"),
 				loc("A Hedgewars mini-game"),
 
-				loc("Destroy invaders to score points.") .. "|" ..
+				loc("Fly into space to fight off the invaders with barrels!") .."|"..
+				loc("Destroy invaders and collect bonuses to score points.") .. "|" ..
+				loc("Get the highest score to win.") .. "|" ..
+				" " .. "|" ..
+				loc("Avoid bazookas, red and blue invaders.") .. "|" ..
+				loc("Collect the green and purple invaders.") .. "|" ..
+				loc("Use the shield to protect yourself from bazookas.") .. "|" ..
 				" " .. "|" ..
 
 				string.format(loc("Round Limit: %d"), roundLimit) .. "|" ..
@@ -1821,7 +1829,7 @@ function CircleDamaged(i)
 		if (vType[i] == "drone") then
 			PlaySound(sndHellishImpact4)
 			TimeLeft = TimeLeft + timeBonus
-			AddCaption(string.format(loc("Time Extended! +%dsec"), timeBonus), 0xff0000ff,capgrpMessage )
+			AddCaption(string.format(loc("Time extended! +%dsec"), timeBonus), 0xff0000ff,capgrpMessage )
 			DrawTag(0)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
