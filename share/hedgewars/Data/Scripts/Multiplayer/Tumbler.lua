@@ -766,6 +766,13 @@ function onGameTick()
 			TimeLeftCounter = 0
 			TimeLeft = TimeLeft - 1
 
+			-- Countdown sounds
+			if TimeLeft == 5 then
+				PlaySound(sndHurry, CurrentHedgehog)
+			elseif TimeLeft <= 4 and TimeLeft >= 1 then
+				PlaySound(_G["sndCountdown"..TimeLeft])
+			end
+
 			if TimeLeft >= 0 then
 				DrawTag(0)
 			end

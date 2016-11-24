@@ -68,6 +68,7 @@ Tumbler:
   + chancetime: Per-turn % chance of an utility crate (extra time) drop
  + Alternative weapon selection with slot keys (F1, F2, F3)
  + Add mine/barrel launch sounds
+ + Add countdown sounds
  + Rewrote mission description and captions
  + Sound and message when trying to fire empty weapon
  * Permanently disable some game modifiers which won't work together with this
