@@ -73,6 +73,27 @@ Tumbler:
  + Sound and message when trying to fire empty weapon
  * Permanently disable some game modifiers which won't work together with this
 
+Space Invasion:
+ + Show actual scores in stats screen, and a proper graph
+ + Show a couple of “awards” (snarky comments) in stats screen
+ + Remove bonuses “Boom!”, “BOOM!” and “BOOM!! BOOM!! BOOM!!” for balancing reasons
+ + Script parameter support:
+  + rounds: Number of rounds
+  + shield: Initial shield
+  + barrels: Initial barrel ammo
+  + pings: Available radar pings
+  + timebonus: Time bonus for red drones
+  + barrelbonus: Ammo bonus for green invaders
+  + shieldbonus: Shield bonus for purple invaders
+  + forcetheme: Set to “true” to use the selected theme instead of EarthRise
+ + Complete rewrite of almost all messages and the mission panel
+ + More event messages
+ + Show current score in HUD (white number)
+ + Stop overwriting most game scheme’s parameters
+ + Disable weapon scheme
+ + More sounds: Empty ammo, countdown, throw, kamikaze, radar ping, explosion
+ * Fix explosion being drawn twice when colliding with invader
+
 HedgeEditor:
  + Dud mine placement mode
  + Allow to select frames in sprite placement mode
