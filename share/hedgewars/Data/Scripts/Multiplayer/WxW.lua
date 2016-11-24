@@ -926,13 +926,18 @@ end
 
 function BorderSpark(zXMin,zYMin, zWidth, zHeight, bCol)
 
-	eX = zXMin + GetRandom(zWidth+10)
-	eY = zYMin + GetRandom(zHeight+10)
+	local size = zWidth * zHeight
+	-- Add multiple sparks for very large walls
+	sparkRuns = math.min(10, math.max(1, div(size, 10240)))
+	for i=1, sparkRuns do
+		local eX = zXMin + GetRandom(zWidth+10)
+		local eY = zYMin + GetRandom(zHeight+10)
 
-	tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
-	if tempE ~= 0 then
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-		SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, 1, g9, bCol )
+		local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
+		if tempE ~= 0 then
+			local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+			SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, 1, g9, bCol )
+		end
 	end
 
 end
