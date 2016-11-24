@@ -517,13 +517,28 @@ function MapsInit()
 		end
 	end
 
-	local left, right, roof
-	left = {LeftX+10,TopY+10,margin,WaterLine}
-	right = {RightX-10-margin,TopY+10,margin,WaterLine}
-	roof = {LeftX+10,TopY+10,RightX-LeftX-20,margin}
-
+	-- Border conditions
+	-- Just a wrapper for MapHasBorder()
 	local border = MapHasBorder() == true
+	-- Left and right walls are available
 	local leftRight = (WorldEdge == weBounce) or (WorldEdge == weNone and border)
+
+	local left, right, roof
+
+	local startY, height
+	if (not border) and (WorldEdge == weBounce) then
+		-- Higher left/right walls for bouncy world edge without roof
+		local h = math.max(1024, LAND_HEIGHT)
+		height = h * 2
+		startY = TopY - h
+	else
+		-- Standard left/right wall height
+		height = WaterLine
+		startY = TopY + 10
+	end
+	left = {LeftX+10, startY, margin, height}
+	right = {RightX-10-margin, startY, margin, height}
+	roof = {LeftX+10, TopY+10, RightX-LeftX-20, margin}
 
 	if mapID ~= nil then
 		if border and MapList[mapID][3] == true then
