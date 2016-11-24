@@ -33,14 +33,13 @@ Those options are also possible, but have no real gameplay effect:
 
 You CANNOT use any other of the on/off options in the game scheme. Those settings are simply discarded by the script.
 
-You also can change the following settings in the game scheme
+You also can change the following settings in the game scheme:
 - time per round (very important)
 - script parameters, see below
-- terrain edge other than none (they kinda work, but they aren’t well supported by the script either)
 
 The other settings are technically possible, but their effect is limited:
 - damage percentage
-- mines (they don’t harm the active hedgehog, however)
+- mines/air mines (they don’t harm the active hedgehog, however)
 - number of barrels
 
 All other variables are discarded, the script forces its own settings.
@@ -246,6 +245,8 @@ shield=0, barrels=3, pings=0
 -- TODO list: notes for later
 --------------------------
 -- imitate winning animation at end instead of just ending the game
+
+-- add support for other world edges (they are currently disabled)
 
 -- maybe add a check for a tie, IMPOSSIBRU THERE ARE NO TIES
 -- more achievements?
@@ -1206,6 +1207,7 @@ function onGameInit()
 	SuddenDeathTurns = 50
 	WaterRise = 0
 	HealthDecrease = 0
+	WorldEdge = weNone
 
 	for i = 0, 4 do
 		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
