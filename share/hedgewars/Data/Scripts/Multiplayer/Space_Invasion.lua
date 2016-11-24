@@ -336,7 +336,6 @@ AddCaption(LOC_NOT("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
 -- so I herd u liek wariables
 ----------------------------------
 
---local fMod = 1	-- for use in .15 single player only, otherwise desync
 local fMod = 1000000 -- use this for dev and .16+ games
 
 -- some console stuff
@@ -389,10 +388,6 @@ local teamCircsKilled = {}
 local teamSurfer = {}
 
 -- stats variables
---local teamRed = {}
---local teamBlue = {}
---local teamOrange = {}
---local teamGreen = {}
 local roundKills = 0
 local roundScore = 0
 local RK = 0
@@ -414,15 +409,6 @@ local pointBlankHits = 0
 ---------------------
 -- global awards
 local awardTotalKills=0	-- overall killed invaders (min. 30)
-
--- TODO: team awards (currently unused)
-local awardBoss 	-- most boss kills (min. 3)
-local awardKamikaze	-- most kamikaze bonuses (min. 3)
-local awardSniper	-- most sniper shots (min. 3)
-local awardAbsorber	-- most absorbed (with shield) projectiles (min. 20)
-local awardFierceComps	-- most fierce competition achievements
-local awardNoShield	-- no shield used in entire game (if there are multiple teams, award goes to team with most kills)
-local awardCollector	-- most ammo and shield invaders collected
 
 -- hog awards
 local awardRoundScore	-- hog with most score in 1 round (min. 50)
@@ -665,27 +651,6 @@ function AwardKills(t)
 			teamCircsKilled[i] = teamCircsKilled[i] + 1
 			awardTotalKills = awardTotalKills + 1
 
---[[
-TODO: Check if I actually want to remove this
-			if teamCircsKilled[i] == 10 then
-				AddCaption(loc("Boom!") .. " +25 " .. loc("points").."!",0xffba00ff,capgrpVolume)
-				AwardPoints(25)
-			elseif teamCircsKilled[i] == 25 then
-				AddCaption(loc("BOOM!") .. " +50 " .. loc("points") .. "!",0xffba00ff,capgrpVolume)
-				AwardPoints(50)
-			elseif teamCircsKilled[i] == 50 then
-				AddCaption(loc("BOOM!") .. loc("BOOM!") .. loc("BOOM!") .. " +100 " .. loc("points") .. "!",0xffba00ff,capgrpVolume)
-				AwardPoints(100)
-			end
-]]
-
-			--[[
-			if t == "R" then
-				redCircsKilled[i] = redCircsKilled[i] + 1
-			end
-			--etc
-			--etc
-			]]
 		end
 	end
 
@@ -941,34 +906,6 @@ end
 -- gaudy racer
 function CheckForNewRound()
 
-	----------
-	-- new
-	----------
-
-	--[[if gameBegun == true then
-
-		if RoundHasChanged == true then
-			roundN = roundN + 1
-			RoundHasChanged = false
-			onNewRound()
-		end
-
-		if lastRound ~= TotalRounds then -- new round, but not really
-
-			if RoundHasChanged == false then
-				RoundHasChanged = true
-			end
-
-		end
-
-		--AddCaption("RoundN:" .. roundN .. "; " .. "TR: " .. TotalRounds)
-		lastRound = TotalRounds
-
-	end]]
-
-	----------
-	-- old
-	----------
 	if GetHogClan(CurrentHedgehog) == firstClan then
 		onNewRound()
 	end
@@ -983,7 +920,7 @@ end
 function isATrackedGear(gear)
 	if 	(GetGearType(gear) == gtExplosives) or
 		(GetGearType(gear) == gtShell) or
-		(GetGearType(gear) == gtFlame) or-- new -- gtBall
+		(GetGearType(gear) == gtFlame) or
 		(GetGearType(gear) == gtBall)
 	then
 		return(true)
@@ -1033,17 +970,12 @@ function HandleLifeSpan(gear)
 		if GetGearType(gear) == gtShell then
 			AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 
-			--AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 			WriteLnToConsole("about to delete a shell due to lifespan == 0")
-		--elseif GetGearType(gear) == gtBall then
-		--	AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, true)
 		elseif GetGearType(gear) == gtExplosives then
 			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 			PlaySound(sndExplosion)
-			--nw WriteLnToConsole("about to delete a explosive due to lifespan == 0")
 		elseif GetGearType(gear) == gtFlame then
 			AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
-			--WriteLnToConsole("about to delete flame due to lifespan == 0")
 		end
 
 		DeleteGear(gear)
@@ -1062,7 +994,6 @@ function DeleteFarFlungBarrel(gear)
 		then
 			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 			DeleteGear(gear)
-			--SetHealth(gear, 0)
 			--WriteLnToConsole("I'm setting barrel ID " .. getGearValue(gear,"ID") .. " to 0 health because it's been flung too close to the map edges. at Game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
 		end
 
@@ -1095,10 +1026,10 @@ function HandleFlameThrower()
 			)
 			DrawTag(3)
 
-			dx, dy = GetGearVelocity(CurrentHedgehog)					--gtFlame -- gtSnowball -- gtAirBomb
+			dx, dy = GetGearVelocity(CurrentHedgehog)
 			shell = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtFlame, 0, 0, 0, 0)
 
-			xdev = 1 + GetRandom(35)	--25
+			xdev = 1 + GetRandom(35)
 			xdev = xdev / 100
 
 			r = GetRandom(2)
@@ -1106,7 +1037,7 @@ function HandleFlameThrower()
 				xdev = xdev*-1
 			end
 
-			ydev = 1 + GetRandom(35)	--25
+			ydev = 1 + GetRandom(35)
 			ydev = ydev / 100
 
 			r = GetRandom(2)
@@ -1114,8 +1045,7 @@ function HandleFlameThrower()
 				ydev = ydev*-1
 			end
 
-								--4.5	or 2.5 nonflames				--4.5
-			SetGearVelocity(shell, (dx*4.5)+(xdev*fMod), (dy*4.5)+(ydev*fMod))	--10
+			SetGearVelocity(shell, (dx*4.5)+(xdev*fMod), (dy*4.5)+(ydev*fMod))
 
 		end
 
@@ -1140,72 +1070,12 @@ function ChangeWeapon()
 
 end
 
---function onTimer()
-
-	-- experimental wep
-	--[[SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, 300, 1, 0xff33ffff)
-	AddCaption("boom")
-	PlaySound(sndWarp)
-	shockwaveHealth = 100
-	shockwaveRad = 100]]
-
-
-	--change wep
-	--ChangeWeapon()
-
-	-- booster
-	--[[if boosterOn == false then
-		boosterOn = true
-	else
-		boosterOn = false
-	end]]
-
---end
-
--- o rite dis wan iz liek synched n stuff hope full lee
--- old method
---[[function onPrecise()
-
-
-	-- Fire Barrel
-	if (primShotsLeft > 0) and (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
-
-		shotsFired = shotsFired +1
-
-		morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
-
-		primShotsLeft = primShotsLeft - 1
-
-		if primShotsLeft == 0 then
-			PlaySound(sndSuddenDeath)
-			AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
-		else
-			AddCaption(loc("Ammo") .. ": " .. primShotsLeft)
-		end
-		DrawTag(1)
-
-		CopyPV(CurrentHedgehog, morte) -- new addition
-		x,y = GetGearVelocity(morte)
-
-		x = x*2
-		y = y*2
-		SetGearVelocity(morte, x, y)
-
-
-	elseif (primShotsLeft == 0) and (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
-		AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
-	end
-
-
-end]]
-
 -- derp tumbler
 function onPrecise()
 
 	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) and (wepAmmo[wepIndex] > 0) then
 
 		wepAmmo[wepIndex] = wepAmmo[wepIndex] - 1
-		--AddCaption(wepAmmo[wepIndex] .. " " .. loc("shots remaining."), wepCol[wepIndex],capgrpMessage2)
 
 		if wep[wepIndex] == loc("Barrel Launcher") then
 			shotsFired = shotsFired +1
@@ -1221,7 +1091,6 @@ function onPrecise()
 				PlaySound(sndSuddenDeath)
 				AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
 			else
-				--AddCaption(loc("Ammo") .. ": " .. wepAmmo[wepIndex])
 				PlaySound(sndThrowRelease)
 			end
 			DrawTag(1)
@@ -1421,14 +1290,6 @@ function onGameStart()
 				loc("Toggle Shield") .. ": " .. loc("[Enter]") .. "|" ..
 				loc("Radar Ping") .. ": " .. loc("[Backspace]") .. "|" ..
 
-				--" " .. "|" ..
-				--LOC_NOT("Invaders List: ") .. "|" ..
-				--LOC_NOT("Blue Jabberwock: (50 points)") .. "|" ..
-				--LOC_NOT("Red Warbler: (10 points)") .. "|" ..
-				--LOC_NOT("Orange Gob: (5 points)") .. "|" ..
-				--LOC_NOT("Green Wrangler: (3 points)") .. "|" ..
-
-
 				"", 4, 4000
 				)
 
@@ -1452,7 +1313,6 @@ end
 
 function onNewTurn()
 
-	--primShotsLeft = primShotsMax
 	radShotsLeft = startRadShots
 	stopMovement = false
 	tumbleStarted = false
@@ -1552,13 +1412,6 @@ function onGameTick()
 
 	HandleCircles()
 
-	-- derp
-	--if shockwaveHealth > 0 then
-	--	shockwaveHealth = shockwaveHealth - 1
-	--	shockwaveRad = shockwaveRad + 5
-	--end
-
-
 	Timer100 = Timer100 + 1
 	if Timer100 >= 100 then
 		Timer100 = 0
@@ -1582,13 +1435,8 @@ function onGameTick()
 
 		--nw WriteLnToConsole("Finished ThingsToBeRunOnGears()")
 
-		--runOnGears(HandleLifeSpan)
-		--runOnGears(DeleteFarFlungBarrel)
-
 		if CirclesAreGo == true then
 			CheckDistances()
-			--runOnGears(CheckVarious)	-- used to be in handletracking for some bizarre reason
-			--runOnGears(ProjectileTrack)
 		end
 
 		-- white smoke trail as player falls from the sky
@@ -1607,9 +1455,8 @@ function onGameTick()
 	-- start the player tumbling with a boom once their turn has actually begun
 	if (tumbleStarted == false) and (gameOver == false) then
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
-			--AddCaption(LOC_NOT("Good to go!"))
 			tumbleStarted = true
-			TimeLeft = (TurnTime/1000)	--45
+			TimeLeft = (TurnTime/1000)
 			FadeAlpha = 0
 			rAlpha = 255
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
@@ -1625,8 +1472,6 @@ function onGameTick()
 
 	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
 
-		--AddCaption(GetX(CurrentHedgehog) .. ";" .. GetY(CurrentHedgehog) )
-
 		-- Calculate and display turn time
 		TimeLeftCounter = TimeLeftCounter + 1
 		if TimeLeftCounter == 1000 then
@@ -1634,7 +1479,6 @@ function onGameTick()
 			TimeLeft = TimeLeft - 1
 
 			if TimeLeft >= 0 then
-				--AddCaption(LOC_NOT("Time Left: ") .. TimeLeft)
 				DrawTag(0)
 			end
 
@@ -1837,10 +1681,6 @@ function onGearAdd(gear)
 		setNewGearValues(gear)
 	end
 
-	--if GetGearType(gear) == gtBall then
-	--	SetTimer(gear, 5000)
-	--end
-
 	if GetGearType(gear) == gtHedgehog then
 		SetEffect(gear, heResurrectable, 1)
 
@@ -1854,25 +1694,6 @@ function onGearAdd(gear)
 end
 
 function onGearDelete(gear)
-
-
-	--[[if GetGearType(gear) == gtShell then
-		--nw WriteLnToConsole("on GearDelete call. Shell ID: " .. getGearValue(gear,"ID"))
-		--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-
-		--if CurrentHedgehog ~= nil then
-		--	WriteLnToConsole("As it happens, player is at: " .. GetX(CurrentHedgehog) .. "; " .. GetY(CurrentHedgehog))
-		--end
-	elseif GetGearType(gear) == gtExplosives then
-		--nw WriteLnToConsole("on GearDelete call. Explosives ID: " .. getGearValue(gear,"ID"))
-		--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-
-		--if CurrentHedgehog ~= nil then
-		--	WriteLnToConsole("As it happens, player is at: " .. GetX(CurrentHedgehog) .. "; " .. GetY(CurrentHedgehog))
-		--end
-	elseif GetGearType(gear) == gtFlame then
-		--WriteLnToConsole("on GearDelete flame")
-	end]]
 
 	if isATrackedGear(gear) then
 		trackDeletion(gear)
@@ -1957,22 +1778,6 @@ function GetDistFromGearToGear(gear, gear2)
 	q = g1X - g2X
 	w = g1Y - g2Y
 
-
-	--[[
-	WriteLnToConsole("I just got the position of two gears and calculated the distance betwen them")
-	if gear == CurrentHedgehog then
-		WriteLnToConsole("Gear 1 is CurrentHedgehog.")
-	end
-	if gear2 == CurrentHedgehog then
-		WriteLnToConsole("Gear 2 is CurrentHedgehog.")
-	end
-	WriteLnToConsole("G1X: " .. g1X .. "; G1Y: " .. g1Y)
-	WriteLnToConsole("G2X: " .. g2X .. "; G2Y: " .. g2Y)
-	WriteLnToConsole("Their distance is " .. (q*q) + (w*w) )
-	WriteLnToConsole("The above events occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-]]
-
-
 	return ( (q*q) + (w*w) )
 
 end
@@ -1983,21 +1788,7 @@ function GetDistFromGearToXY(gear, g2X, g2Y)
 	q = g1X - g2X
 	w = g1Y - g2Y
 
-
-	--[[WriteLnToConsole("I just got the position of a gear and calculated the distance betwen it and another xy")
-	if gear == CurrentHedgehog then
-		WriteLnToConsole("Gear 1 is CurrentHedgehog.")
-	end
-
-	WriteLnToConsole("G1X: " .. g1X .. "; G1Y: " .. g1Y)
-	WriteLnToConsole("Other X: " .. g2X .. "; Other Y: " .. g2Y)
-	WriteLnToConsole("Their distance is " .. (q*q) + (w*w) )
-	WriteLnToConsole("The above events occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-]]
-
-
 	return ( (q*q) + (w*w) )
-
 
 end
 
@@ -2020,13 +1811,13 @@ function CreateMeSomeCircles()
 		vCircScore[i] = 0
 		vCircHealth[i] = 1
 
-		vCircMinA[i] = 80	--80 --20
+		vCircMinA[i] = 80
 		vCircMaxA[i] = 255
-		vCircType[i] = 1	--1
+		vCircType[i] = 1
 		vCircPulse[i] = 10
 		vCircFuckAll[i] = 0
 		vCircRadius[i] = 0
-		vCircWidth[i] = 3 --5
+		vCircWidth[i] = 3
 
 		vCircRadMax[i] = 0
 		vCircRadMin[i] = 0
@@ -2044,8 +1835,6 @@ function CreateMeSomeCircles()
 	end
 
 	pShield = AddVisualGear(0,0,vgtCircle,0,true)
-	--SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 80, 200, 1, 10, 0, 200, 5, 0xff00ffff)
-
 
 	shockwave = AddVisualGear(0,0,vgtCircle,0,true)
 
@@ -2054,10 +1843,6 @@ end
 function IGotMeASafeXYValue(i)
 
 	acceptibleDistance = 800
-
-	-- put this in here to thwart attempts at repositioning and test sanity limit
-	--vCircX[i] = GetX(CurrentHedgehog)+250
-	--vCircY[i] = GetY(CurrentHedgehog)+250
 
 	vCircX[i] = GetRandom(5000)
 	vCircY[i] = GetRandom(2000)
@@ -2101,7 +1886,6 @@ function CircleDamaged(i)
 			PlaySound(sndExplosion)
 			PlaySound(sndShotgunReload)
 			wepAmmo[0] = wepAmmo[0] + barrelBonus
-			--primShotsLeft = primShotsLeft + 3
 			AddCaption(string.format("+%d Ammo", barrelBonus), 0x00ff00ff,capgrpMessage)
 			DrawTag(1)
 
@@ -2125,7 +1909,6 @@ function CircleDamaged(i)
 			AddVisualGear(vCircX[i], vCircY[i], vgtSmoke, 0, false)
 
 			PlaySound(sndVaporize)
-			--sndWarp sndMineTick --sndSwitchHog --sndSuddenDeath
 
 			shieldHealth = shieldHealth + shieldBonus
 			AddCaption(string.format(loc("Shield boosted! +%d power"),shieldBonus), 0xa800ffff,capgrpMessage)
@@ -2190,15 +1973,11 @@ function SetUpCircle(i)
 
 
 	r = GetRandom(10)
-	--r = 8
 	-- 80% of spawning either red/green
 	if r <= 7 then
 
-		--r = GetRandom(5)
 		r = GetRandom(2)
-		--r = 1
 		if r == 0 then
-		--if r <= 2 then
 			vCircCol[i] = 0xff0000ff -- red
 			vType[i] = "drone"
 			vCircRadMin[i] = 50	*5
@@ -2206,7 +1985,6 @@ function SetUpCircle(i)
 			vCounterLim[i] = 3000
 			vCircScore[i] = 10
 			vCircHealth[i] = 1
-		--else
 		elseif r == 1 then
 			vCircCol[i] = 0x00ff00ff -- green
 			vType[i] = "ammo"
@@ -2219,10 +1997,7 @@ function SetUpCircle(i)
 	-- 20% chance of spawning boss or bonus
 	else
 		r = GetRandom(5)
-		--r = GetRandom(2)
-		--r = 0
 		if r <= 1 then
-		--if r == 0 then
 			vCircCol[i] = 0x0050ffff -- sexy blue
 			vType[i] = "blueboss"
 			vCircRadMin[i] = 100*5
@@ -2232,8 +2007,6 @@ function SetUpCircle(i)
 			vCircScore[i] = 30
 			vCircHealth[i] = 3
 		else
-		--elseif r == 1 then
-			--vCircCol[i] = 0xffae00ff -- orange
 			vCircCol[i] = 0xa800ffff -- purp
 			vType[i] = "bonus"
 			vCircRadMin[i] = 20 *7
@@ -2246,28 +2019,24 @@ function SetUpCircle(i)
 
 	-- regenerate circle xy if too close to player or until sanity limit kicks in
 	reN = 0
-	--zzz = 0
 	while (reN < 10) do
 		if IGotMeASafeXYValue(i) == false then
 			reN = reN + 1
-			--zzz = zzz + 1
 		else
 			reN = 15
 		end
 	end
-	--AddCaption("Took me this many retries: " .. zzz) -- number of times it took to work
 
 	vCircRadius[i] = vCircRadMax[i] - GetRandom(vCircRadMin[i])
 
 	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
 	SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], vCircWidth[i], vCircCol[i]-0x000000ff)
-	-- - -0x000000ff
 
 	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(rCirc[i])
 	SetVisualGearValues(rCirc[i], 0, 0, g3, g4, g5, g6, g7, g8, g9, vCircCol[i]-0x000000ff)
 
 
-	vCircActive[i] = true -- new
+	vCircActive[i] = true
 
 	--nw WriteLnToConsole("CIRC " .. i .. ": X: " .. vCircX[i] .. "; Y: " .. vCircY[i])
 	--nw WriteLnToConsole("CIRC " .. i .. ": dX: " .. vCircDX[i] .. "; dY: " .. vCircDY[i])
@@ -2322,12 +2091,6 @@ end
 --- collision detection for weapons fire
 function CheckVarious(gear)
 
-	--if (GetGearType(gear) == gtExplosives) then
-		--nw WriteLnToConsole("Start of CheckVarious(): Exp ID: " .. getGearValue(gear,"ID"))
-	--elseif (GetGearType(gear) == gtShell) then
-		--nw WriteLnToConsole("Start of CheckVarious(): Shell ID: " .. getGearValue(gear,"ID"))
-	--end
-
 	targetHit = false
 
 	-- if circle is hit by player fire
@@ -2338,73 +2101,65 @@ function CheckVarious(gear)
 
 			--nw WriteLnToConsole("Is it neccessary to check for collision with circ " .. i)
 
-			--if (vCircActive[i] == true) and ( (vType[i] == "drone") ) then
+			--nw WriteLnToConsole("YES. about to calc distance between gtExplosives and circ " .. i)
 
-				--nw WriteLnToConsole("YES. about to calc distance between gtExplosives and circ " .. i)
+			dist = GetDistFromGearToXY(gear, vCircX[i], vCircY[i])
 
-				dist = GetDistFromGearToXY(gear, vCircX[i], vCircY[i])
+			-- calculate my real radius if I am an aura
+			if vCircType[i] == 0 then
+				NR = vCircRadius[i]
+			else
+				NR = (48/100*vCircRadius[i])/2
+			end
 
-				-- calculate my real radius if I am an aura
-				if vCircType[i] == 0 then
-					NR = vCircRadius[i]
-				else
-					NR = (48/100*vCircRadius[i])/2
+			if dist <= NR*NR then
+
+
+				--nw WriteLnToConsole("Collision confirmed. The gtExplosives is within the circ radius!")
+
+				dist = (GetDistFromXYtoXY(vCircX[i], vCircY[i], getGearValue(gear,"XP"), getGearValue(gear,"YP")) - (NR*NR))
+				--AddCaption(loc("Dist: ") .. dist .. "!",0xffba00ff,capgrpGameState)
+				if dist >= 1000000 then
+					sniperHits = sniperHits +1
+					AddCaption(loc("Sniper!") .. " +8 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+					AwardPoints(8)
+					if sniperHits == 3 then
+						sniperHits = 0
+						AddCaption(loc("They Call Me Bullseye!") .. " +16 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+						AwardPoints(16)
+					end
+				elseif dist <= 6000 then
+					pointBlankHits = pointBlankHits +1
+					if pointBlankHits == 3 then
+						pointBlankHits = 0
+						AddCaption(loc("Point Blank Combo!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
+						AwardPoints(5)
+					end
 				end
 
-				if dist <= NR*NR then
+				AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
+				targetHit = true
+				--WriteLnToConsole("set " .. "Exp ID: " .. getGearValue(gear,"ID") .. " health to 0")
+				--WriteLnToConsole("targetHit set to true, explosive is at distance " .. dist .. "(within range " .. NR*NR.. ") of circ" )
 
-					--nw WriteLnToConsole("Collision confirmed. The gtExplosives is within the circ radius!")
+				CircleDamaged(i)
 
-					dist = (GetDistFromXYtoXY(vCircX[i], vCircY[i], getGearValue(gear,"XP"), getGearValue(gear,"YP")) - (NR*NR))
-					--AddCaption(loc("Dist: ") .. dist .. "!",0xffba00ff,capgrpGameState)
-					if dist >= 1000000 then
-						sniperHits = sniperHits +1
-						AddCaption(loc("Sniper!") .. " +8 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
-						AwardPoints(8)
-						if sniperHits == 3 then
-							sniperHits = 0
-							AddCaption(loc("They Call Me Bullseye!") .. " +16 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
-							AwardPoints(16)
-						end
-					elseif dist <= 6000 then
-						pointBlankHits = pointBlankHits +1
-						if pointBlankHits == 3 then
-							pointBlankHits = 0
-							AddCaption(loc("Point Blank Combo!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpGameState)
-							AwardPoints(5)
-						end
-					end
-
-					AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
-
-					targetHit = true
-					--DeleteGear(gear)
-					--SetHealth(gear,0)
-						--WriteLnToConsole("set " .. "Exp ID: " .. getGearValue(gear,"ID") .. " health to 0")
-						--WriteLnToConsole("targetHit set to true, explosive is at distance " .. dist .. "(within range " .. NR*NR.. ") of circ" )
-
-					CircleDamaged(i)
-
-					circsHit = circsHit + 1
-					if circsHit > 1 then
-						AddCaption(loc("Multi-shot!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
-						AwardPoints(15)
+				circsHit = circsHit + 1
+				if circsHit > 1 then
+					AddCaption(loc("Multi-shot!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
+					AwardPoints(15)
 						circsHit = 0
-					end
-
-					shotsHit = shotsHit + 1
-
-
-
 				end
 
-			--end
+				shotsHit = shotsHit + 1
+
+			end
 
 		end
 
 	-- if player is hit by circle bazooka
-	elseif (GetGearType(gear) == gtShell) then --or (GetGearType(gear) == gtBall) then
+	elseif (GetGearType(gear) == gtShell) then
 
 		dist = GetDistFromGearToGear(gear, CurrentHedgehog)
 
@@ -2428,13 +2183,6 @@ function CheckVarious(gear)
 		elseif dist < 1600 then
 			WellHeAintGonnaJumpNoMore(GetX(gear), GetY(gear), true)
 		end
-
-		--[[if targetHit == true then
-			WriteLnToConsole("about to delete shell due to targetHit being set to true earlier")
-			DeleteGear(gear)
-			WriteLnToConsole("there, I deleted it")
-		end]]
-
 
 	end
 
@@ -2465,8 +2213,6 @@ function CheckDistances()
 		g1Y = g1Y - g2Y
 		dist = (g1X*g1X) + (g1Y*g1Y)
 
-		--DoHorribleThings(i, g1X, g1Y, g2X, g2Y, dist)
-
 		--nw WriteLnToConsole("Calcs done. Dist to CurrentHedgehog is " .. dist)
 
 		-- calculate my real radius if I am an aura
@@ -2496,7 +2242,6 @@ function CheckDistances()
 				if ss == "fatal" then
 
 					if (wepAmmo[0] == 0) and (TimeLeft <= 9) then
-					--if (primShotsLeft == 0) and (TimeLeft <= 9) then
 						AddCaption(loc("Kamikaze Expert!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
 						AwardPoints(15)
 						PlaySound(sndKamikaze, CurrentHedgehog)
@@ -2524,20 +2269,6 @@ end
 
 function HandleCircles()
 
-	--[[if CirclesAreGo == true then
-
-		--CheckDistances()
-		--runOnGears(CheckVarious)	-- used to be in handletracking for some bizarre reason
-
-		--pTimer = pTimer + 1
-		--if pTimer == 100 then
-		--	pTimer = 0
-		--	runOnGears(ProjectileTrack)
-		--end
-
-	end]]
-
-
 	if rAlpha ~= 255 then
 
 		rPingTimer = rPingTimer + 1
@@ -2554,11 +2285,7 @@ function HandleCircles()
 
 	for i = 0,(vCCount-1) do
 
-		--if (vCircActive[i] == true) then
-			SetVisualGearValues(rCirc[i], rCircX[i], rCircY[i], 100, 255, 1, 10, 0, 40, 3, vCircCol[i]-rAlpha)
-		--end
-
-
+		SetVisualGearValues(rCirc[i], rCircX[i], rCircY[i], 100, 255, 1, 10, 0, 40, 3, vCircCol[i]-rAlpha)
 
 		vCounter[i] = vCounter[i] + 1
 		if vCounter[i] >= vCounterLim[i] then
@@ -2569,14 +2296,6 @@ function HandleCircles()
 				(vCircActive[i] == true) then
 				AddGear(vCircX[i], vCircY[i], gtShell, 0, 0, 0, 1)
 
-				--WriteLnToConsole("Circle " .. i .. " just fired/added a gtShell")
-				--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-
-			--elseif (vType[i] == "bluebottle") and (vCircActive[i] == true) then
-			--	AddGear(vCircX[i], vCircY[i]-vCircRadius[i], gtBall, 0, 0, 0, 1)
-			--	AddGear(vCircX[i], vCircY[i]+vCircRadius[i], gtBall, 0, 0, 0, 1)
-			--	AddGear(vCircX[i]-vCircRadius[i], vCircY[i], gtBall, 0, 0, 0, 1)
-			--	AddGear(vCircX[i]+vCircRadius[i], vCircY[i], gtBall, 0, 0, 0, 1)
 			end
 
 		end
@@ -2613,15 +2332,13 @@ function HandleCircles()
 				if vType[i] == "ammo" then
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], vgtSmoke, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)	--0xff00ffff	--0x00ff00ff
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i], g3, g4, g5, g6, g7, g8, g9, vCircCol[i] )
-
-					--AddVisualGear(vCircX[i], vCircY[i], vgtDust, 0, true)
 
 				elseif vType[i] == "bonus" then
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], vgtDust, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)	--0xff00ffff	--0x00ff00ff --vCircCol[i]
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i], g3, g4, g5, g6, g7, 1, g9, 0xff00ffff )
 
 
@@ -2635,15 +2352,15 @@ function HandleCircles()
 					-- 0xae00ffff -- purp
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)	--0xff00ffff	--0x00ff00ff
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i]+k, g3, g4, g5, g6, g7, g8, g9, trailColour-75 )
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)	--0xff00ffff	--0x00ff00ff
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
 					SetVisualGearValues(tempE, vCircX[i]+k, vCircY[i]-k, g3, g4, g5, g6, g7, g8, g9, trailColour-75 )
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)	--0xff00ffff	--0x00ff00ff
+					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
 					SetVisualGearValues(tempE, vCircX[i]-k, vCircY[i]-k, g3, g4, g5, g6, g7, g8, g9, trailColour-75 )
 
 
@@ -2711,7 +2428,7 @@ function HandleCircles()
 			vCircY[i] = vCircY[i] + vCircDY[i]
 
 			if (CurrentHedgehog ~= nil) and (rAlpha ~= 255) then
-				DoHorribleThings(i)--(i, g1X, g1Y, g2X, g2Y, dist)
+				DoHorribleThings(i)
 			end
 
 		end
@@ -2723,15 +2440,6 @@ function HandleCircles()
 				FadeAlpha = 255
 			end
 
-			--new
-			--if FadeAlpha == 1 then
-			--	AddCaption("GOT IT")
-			--	for i = 0,(vCCount-1) do
-			--		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
-			--		vCircCol[i] = g10
-			--	end
-			--end
-
 		end
 
 
@@ -2739,24 +2447,19 @@ function HandleCircles()
 		if shockwaveHealth > 0 then
 			shockwaveHealth = shockwaveHealth - 1
 			shockwaveRad = shockwaveRad + 80
-
-			--mrm = ((48/100*shockwaveRad)/2)
-			--AddVisualGear(GetX(CurrentHedgehog)-mrm+GetRandom(mrm*2),GetY(CurrentHedgehog)-mrm+GetRandom(mrm*2), vgtSmoke, 0, false)
 		end
-
-
 
 	end
 
 	for i = 0,(vCCount-1) do
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])		-- vCircCol[i] g10
+		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], g9, g10)
 	end
 
 	if 	(TimeLeft == 0) or
 		((tumbleStarted == false)) then
 		for i = 0,(vCCount-1) do
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])		-- vCircCol[i] g10
+			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
 			SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], g9, (vCircCol[i]-FadeAlpha))
 		end
 	end
@@ -2765,7 +2468,6 @@ function HandleCircles()
 	if (CurrentHedgehog ~= nil) then
 		if beam == true then
 			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(pShield)
-			--SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 200, g9, g10 )
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 200, g9, 0xa800ffff-0x000000ff - -shieldHealth )
 			DrawTag(2)
 		else
@@ -2790,11 +2492,8 @@ function ProjectileTrack(gear)
 
 		--nw WriteLnToConsole("ProjectileTrack() for Shell ID: " .. getGearValue(gear,"ID"))
 
-		-- newnew
 		if (GetGearType(gear) == gtShell) then
 			turningSpeed = 0.1*fMod
-		--elseif (GetGearType(gear) == gtBall) then
-		--	turningSpeed = 0.2*fMod
 		end
 
 		dx, dy = GetGearVelocity(gear)
@@ -2804,24 +2503,21 @@ function ProjectileTrack(gear)
 		--WriteLnToConsole("CurrentHedgehog is at X: " .. GetX(CurrentHedgehog) .. "; Y: " .. GetY(CurrentHedgehog) )
 
 		if GetX(gear) > GetX(CurrentHedgehog) then
-			dx = dx - turningSpeed--0.1
+			dx = dx - turningSpeed
 		else
-			dx = dx + turningSpeed--0.1
+			dx = dx + turningSpeed
 		end
 
 		if GetY(gear) > GetY(CurrentHedgehog) then
-			dy = dy - turningSpeed--0.1
+			dy = dy - turningSpeed
 		else
-			dy = dy + turningSpeed--0.1
+			dy = dy + turningSpeed
 		end
 
 
 		if (GetGearType(gear) == gtShell) then
 			dxlimit = 0.4*fMod
 			dylimit = 0.4*fMod
-		--elseif (GetGearType(gear) == gtBall) then
-		--	dxlimit = 0.5	--  0.5 is about the same
-		--	dylimit = 0.5 -- 0.6 is faster than player
 		end
 
 		if dx > dxlimit then
