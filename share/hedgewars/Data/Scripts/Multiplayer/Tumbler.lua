@@ -640,7 +640,7 @@ function onGameStart()
 	end
 
 	ShowMission	(
-			"Tumbler",
+			loc("Tumbler"),
 			loc("A Hedgewars mini-game"),
 			loc("Fly around and hurl explosives to your enemies.") .."|"..
 			loc("Eliminate the enemy hogs to win.") .. "|" ..
