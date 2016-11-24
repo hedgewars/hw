@@ -1006,54 +1006,6 @@ end
 -- action keys
 -----------------------
 
-function HandleFlameThrower()
-
-	--
-	--flamer
-
-	fireTimer = fireTimer + 1
-	if fireTimer == 6 then	-- 6
-		fireTimer = 0
-
-		if (wep[wepIndex] == loc("Flamer") ) and (preciseOn == true) and (wepAmmo[wepIndex] > 0) and (stopMovement == false) and (tumbleStarted == true) then
-
-			wepAmmo[wepIndex] = wepAmmo[wepIndex] - 1
-			AddCaption(
-			loc("Flamer") .. ": " ..
-			(wepAmmo[wepIndex]/800*100) - (wepAmmo[wepIndex]/800*100)%2 .. "%",
-			wepCol[2],
-			capgrpMessage2
-			)
-			DrawTag(3)
-
-			dx, dy = GetGearVelocity(CurrentHedgehog)
-			shell = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtFlame, 0, 0, 0, 0)
-
-			xdev = 1 + GetRandom(35)
-			xdev = xdev / 100
-
-			r = GetRandom(2)
-			if r == 1 then
-				xdev = xdev*-1
-			end
-
-			ydev = 1 + GetRandom(35)
-			ydev = ydev / 100
-
-			r = GetRandom(2)
-			if r == 1 then
-				ydev = ydev*-1
-			end
-
-			SetGearVelocity(shell, (dx*4.5)+(xdev*fMod), (dy*4.5)+(ydev*fMod))
-
-		end
-
-	end
-
-
-end
-
 function ChangeWeapon()
 
 	wepIndex = wepIndex + 1
@@ -1511,7 +1463,7 @@ function onGameTick()
 				boosterOn = false
 				beam = false
 				upOn = false
-				down = false
+				downOn = false
 				leftOn = false
 				rightOn = false
 				SetMyCircles(false)
@@ -1643,9 +1595,6 @@ function onGameTick()
 				--nw WriteLnToConsole("End of Player MoveTimer")
 
 			end
-
-
-			HandleFlameThrower()
 
 
 		end -- new end I put here to check if he's still alive or not
