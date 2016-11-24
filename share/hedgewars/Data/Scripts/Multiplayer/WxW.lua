@@ -503,13 +503,6 @@ function MapsInit()
 	mapID = nil
 	margin = 20
 
-	-- 0.9.17
-	if Map == "CHANGE_ME" then
-		AddCaption(loc("For improved features/stability, play 0.9.18+"))
-		AddWall(10,10,margin,2025)
-		AddWall(4085-margin,10,margin,2025)
-	end
-
 	--0.9.18+
 	for i = 1, #MapList do
 		if Map == MapList[i][1] then
@@ -656,23 +649,10 @@ end
 
 function LoadConfig(p)
 	ClearWalls()
-	if mapID ~= nil then
-		if p > 0 then
-			local walls = wallSets[p]
-			for i=1,#walls do
-				AddWall(walls[i][1], walls[i][2], walls[i][3], walls[i][4])
-			end
-		end
-
-	-- if map is unrecognized, add two walls on the side borders
-	-- also, if version of hw is not 0.9.17 or lower
-	elseif Map ~= "CHANGE_ME" then
-		if p == 1 or p == 3 then
-			AddWall(LeftX+10,TopY+10,RightX-LeftX-20,margin)
-		end
-		if p == 2 or p == 3 then
-			AddWall(LeftX+10,TopY+10,margin,WaterLine)
-			AddWall(RightX-10-margin,TopY+10,margin,WaterLine)
+	if p > 0 then
+		local walls = wallSets[p]
+		for i=1,#walls do
+			AddWall(walls[i][1], walls[i][2], walls[i][3], walls[i][4])
 		end
 	end
 
