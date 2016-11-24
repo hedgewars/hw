@@ -1201,6 +1201,7 @@ function onGameInit()
 
 	HealthCaseProb = 0
 	CaseFreq = 0
+	SetAmmoDescriptionAppendix(amRope, loc("Switch: Toggle crate radar"))
 
 end
 
