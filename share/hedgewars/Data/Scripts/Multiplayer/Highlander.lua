@@ -272,8 +272,8 @@ function onGameInit()
 	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
 	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
-	Goals = loc("Highlander: Eliminate enemy hogs and take their weapons.") .."|" ..
-	loc("Weapons are reset on end of turn.")
+	Goals = loc("Highlander: Eliminate enemy hogs and take their weapons") .."|" ..
+	loc("Constant Weaponry: Weapons are reset on end of turn")
 end
 
 function onGameStart()
