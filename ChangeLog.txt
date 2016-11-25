@@ -33,6 +33,10 @@ Game engine:
  * Fixed Hedgehogs getting hurt while firing deagle / sniper rifle bullet in certains situations
  * Various other fixes
 
+Highlander:
+ + Show collected weapons after kill and play sound
+ + Mission panel now shows all game modifiers (e.g. mines time, vampirism, etc.)
+
 Construction Mode:
  + Added script parameter support:
   + initialenergy: Amount of energy at start
