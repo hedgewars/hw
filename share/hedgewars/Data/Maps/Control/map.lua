@@ -62,6 +62,10 @@ local TimeCounter = 0
 local gameWon = false
 local pointLimit = 300
 
+local missionName = loc("Control")
+local missionCaption = loc("Domination game")
+local missionHelp
+
 local vCirc = {}
 local vCircCount = 0
 
@@ -355,6 +359,9 @@ function onGameStart()
 	for i = 0, (numTeams-1) do
 		pointLimit = pointLimit - 25
 	end
+
+	missionHelp = loc("Control pillars to score points.") .. "|" ..
+		string.format(loc("Score goal: %d"), pointLimit)
 	
 	-- reposition hogs if they are on control points until they are not or sanity limit kicks in
 	reN = 0
@@ -370,11 +377,7 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
-	ShowMission(loc("Control"), 
-	loc("Domination game"), 
-	loc("Control pillars to score points.") .. "|" .. 
-	loc("Goal") .. ": " .. pointLimit .. " " .. loc("points"), 0, 0)
-
+	ShowMission(missionName, missionCaption, missionHelp, 0, 0)
 
 end
 
@@ -411,17 +414,18 @@ function onNewTurn()
 
 		totalComment = ""		
 		for i = 0,(TeamsCount-1) do
-				if teamNameArr[i] ~= " " then				-- i
-					teamComment[i] = teamNameArr[i] .. ": " .. teamScore[teamClan[i]] .. " " .. loc("points") .. "|"
+				if teamNameArr[i] ~= " " then
+					-- Team scores (“<team name>: <score>”)
+					teamComment[i] = string.format(loc("%s: %d"), teamNameArr[i], teamScore[teamClan[i]]) .. "|"
 					totalComment = totalComment .. teamComment[i]			
 				elseif teamNameArr[i] == " " then
 					teamComment[i] = "|"
 				end
 			end
 			
-			ShowMission(loc("Control"), 
-			loc("Domination game"),
-			loc("Team Scores") .. ":" .. "|" ..
+			ShowMission(missionName, missionCaption,
+			missionHelp .. "|" ..
+			loc("Team Scores:") .. "|" ..
 			totalComment, 0, 1600)
 	
 	end
