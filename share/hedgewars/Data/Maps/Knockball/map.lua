@@ -18,6 +18,7 @@ end
 
 function onGameStart()
 	ShowMission(loc("Knockball"), loc("Not So Friendly Match"), loc("Bat balls at your enemies and|push them into the sea!"), -amBaseballBat, 0)
+	SetAmmoTexts(amBaseballBat, loc("Baseball Bat with Ball"), loc("Knockball weapon"), loc("Throw a baseball at your foes|and send them flying!") .. "|" .. loc("Attack: Throw ball"))
 end
 
 function onGameTick()
