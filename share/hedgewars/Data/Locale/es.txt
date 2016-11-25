@@ -509,12 +509,12 @@
 ; Game goal strings
 05:00=Modos de juego
 05:01=Las siguientes reglas están activas:
-05:02=Fuertes: ¡defiende tu fortaleza, conquista la tus enemigos!
+05:02=Posicionar el rey: elige un buen cobijo para tu rey
 05:03=Baja gravedad: mira bien dónde pisas
 05:04=Invulnerabilidad: todos los erizos tienen un campo de fuerza personal que los protege
 05:05=Vampirismo: dañar a tus enemigos te curará a ti
 05:06=Karma: compartirás parte del daño que inflijas
-05:07=Rey: ¡no permitas que tu rey muera!|Posicionar el rey: elige un buen cobijo para tu rey
+05:07=Rey: ¡no permitas que tu rey muera!
 05:08=Posicionar erizos: los jugadores posicionan a mano su erizos por turnos antes de empezar a jugar
 05:09=Artillería: afina tu puntería, los erizos no pueden moverse
 05:10=Terreno indestructible: la mayoría de armas no pueden dañar el terreno de juego

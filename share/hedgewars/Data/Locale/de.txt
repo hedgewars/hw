@@ -653,12 +653,12 @@
 ; Game goal strings
 05:00=Spielmodifikationen
 05:01=Die folgenden Regeln gelten
-05:02=Festungen: Verteidige deine Festung; vertreibe deine Feinde!
-05:03=Niedrige Schwerkraft: Pass auf, wo du hintrittst
+05:02=König platzieren: Wähle einen sicheren Startpunkt für deinen König
+05:03=Niedrige Schwerkraft: Pass auf, wo du hintrittst!
 05:04=Unverwundbarkeit: Igel sind (so gut wie) unkaputtbar
 05:05=Vampirismus: Igel heilen sich um 80% von dem von ihnen verursachten Schaden
 05:06=Karma: Igel leiden an dem von ihnen verursachten Schaden
-05:07=Schützt den König: Lass deinen König nicht sterben!|König platzieren: Wähle einen sicheren Startpunkt für deinen König
+05:07=Schützt den König: Lass deinen König nicht sterben!
 05:08=Igel platzieren: Wähle vor dem Spielstart die Positionen deiner Igel
 05:09=Artillerie: Deine Igel können nicht laufen
 05:10=Unzerstörbares Terrain: Die meisten Waffen zerstören das Gelände nicht
@@ -667,10 +667,10 @@
 05:13=Minenzünder: Minen explodieren sofort
 05:14=Minenzünder: Minen explodieren nach 0–5 Sekunden
 05:15=Prozentualer Schaden: Alle Waffen verursachen %1 % Schaden
-05:16=Alle Igel werden am Ende der Zuges bis zum Anfangswert geheilt
-05:17=Computergesteuerte Igel erscheinen nach dem Tod wieder
-05:18=Unbegrenzte Attacken
-05:19=Waffen werden am Ende jedes Zuges zurückgesetzt
-05:20=Igel teilen Waffen nicht untereinander
-05:21=Tag Team: Teams gleicher Farbe kommen nacheinander dran und teilen sich ihre Zugzeit.
+05:16=Sanitäter: Alle Igel werden am Ende der Zuges bis zum Anfangswert geheilt
+05:17=KI-Wiederbelebung: Computergesteuerte Igel erscheinen nach dem Tod wieder
+05:18=Unbegrenzte Attacken: Angriffe beenden deinen Zug nicht
+05:19=Gleichbleibende Bewaffnung: Waffen werden am Ende jedes Zuges zurückgesetzt
+05:20=Igelwaffen: Igel teilen Waffen nicht untereinander
+05:21=Staffellauf: Teams gleicher Farbe kommen nacheinander dran|Gemeinsame Zeit: Teams gleicher Farbe teilen sich ihre Zugzeit
 05:22=Starker Wind: Wind beeinflusst fast alles

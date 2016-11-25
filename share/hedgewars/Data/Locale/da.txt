@@ -510,12 +510,12 @@
 ; Game goal strings
 05:00=Spilsystemer
 05:01=De følgende regler gælder
-05:02=Forter: Forsvar din fæstning; knus dine modstandere!
+05:02=Placer din Konge: Vælg et beskyttet sted din konge kan starte
 05:03=Svag Tyngdekraft: Gå forsigtigt
 05:04=Udødelighed: Pindsvin er (næsten) udødelige
 05:05=Vampyr: Pindsvin bliver helbredt når de giver skade
 05:06=Karma: Pindsvin tager skade når de giver skade
-05:07=Forsvar Kongen: Undgå at gå skakmat!|Placer din Konge: Vælg et beskyttet sted din konge kan starte
+05:07=Forsvar Kongen: Undgå at gå skakmat!
 05:08=Placer Pindsvin: Placer dine pindsvin før spillet starter
 05:09=Artilleri: Pindsvin kan ikke gå for at flytte sig rundt
 05:10=Uforgængeligt Terræn: De fleste våben kan ikke ændre på banen

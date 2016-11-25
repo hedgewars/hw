@@ -174,25 +174,24 @@ g:= ''; // no text/things to note yet
 if LuaGoals <> '' then
     g:= LuaGoals + '|';
 
-// check different game flags (goals/game modes first for now)
-g:= AddGoal(g, gfKing, gidKing); // king?
-g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
-
-// other important flags
-g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
-g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
-g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
-g:= AddGoal(g, gfKarma, gidKarma); // karma?
+// check different game flags
 g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
-g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
-g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+g:= AddGoal(g, gfKing, gidKing); // king?
+if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) then
+    g:= AddGoal(g, gfAny, gidPlaceKing);
+g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
-g:= AddGoal(g, gfResetHealth, gidResetHealth);
-g:= AddGoal(g, gfAISurvival, gidAISurvival);
+g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
+g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
+g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfInfAttack, gidInfAttack);
 g:= AddGoal(g, gfResetWeps, gidResetWeps);
-g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
-g:= AddGoal(g, gfMoreWind, gidMoreWind);
+g:= AddGoal(g, gfResetHealth, gidResetHealth);
+g:= AddGoal(g, gfKarma, gidKarma); // karma?
+g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
+g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
+g:= AddGoal(g, gfAISurvival, gidAISurvival);
 
 // modified damage modificator?
 if cDamagePercent <> 100 then

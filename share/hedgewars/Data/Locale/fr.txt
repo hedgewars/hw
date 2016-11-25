@@ -494,12 +494,12 @@
 ; Game goal strings
 05:00=Modes de jeu
 05:01=Les règles suivantes s'appliquent
-05:02=Forts : Défendez votre forteresse ; exterminez vos ennemis !
+05:02=Placez le roi : Choisissez un point de départ sécurisé pour le roi
 05:03=Faible gravité : Attention à vos mouvements
 05:04=Invulnérabilité : Les hérissons sont (presque) invulnérables
 05:05=Vampirisme : Les hérissons récupèrent des points de vie par les dégâts qu'ils infligent
 05:06=Karma: Les hérissons sont victimes des blessures qu'ils infligent
-05:07=Protégez le roi : Ne laissez pas mourir le roi !|Placez le roi : Choisissez un point de départ sécurisé pour le roi
+05:07=Protégez le roi : Ne laissez pas mourir le roi !
 05:08=Placez les hérissons : Placez vos hérissons avant le début de la partie
 05:09=Artillerie : Les hérissons ne peuvent pas se déplacer pour changer de place
 05:10=Terrain indestructible : La plupart des armes sont incapables de modifier le terrain

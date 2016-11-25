@@ -466,7 +466,7 @@ type
             eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped,
             eidHurtSelf, eidHomerun, eidGone);
 
-    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
+    TGoalStrId = (gidCaption, gidSubCaption, gidPlaceKing, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
             gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer,
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,

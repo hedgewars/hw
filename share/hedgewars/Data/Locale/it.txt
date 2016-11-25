@@ -519,12 +519,12 @@
 ; Game goal strings
 05:00=Modalità di Gioco
 05:01=Si applicano le seguenti regole
-05:02=Fortino: Difendi la tua fortezza; annienta i nemici!
+05:02=Piazza il Re: Scegli un punto di partenza protetto per il tuo Re
 05:03=Bassa Gravità: Guarda dove metti i piedi
 05:04=Invulnerabilità: I ricci sono (quasi) invulnerabili
 05:05=Vampirismo: I ricci verranno curati dell'equivalente del danno che provocano
 05:06=Karma: I ricci verranno danneggiati dell'equivalente del danno provocato
-05:07=Proteggi il Re: Non lasciar morire il tuo Re!|Piazza il Re: Scegli un punto di partenza protetto per il tuo Re
+05:07=Proteggi il Re: Non lasciar morire il tuo Re!
 05:08=Piazza Ricci: Piazza i tuoi ricci prima dell'inizio del gioco
 05:09=Artiglieria: I ricci non possono camminare per cambiare posizione
 05:10=Terreno Indistruttibile: La maggior parte delle armi non distruggono il terreno

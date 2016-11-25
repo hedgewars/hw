@@ -430,12 +430,12 @@
 ; Game goal strings
 05:00=Játék módok
 05:01=Az alábbi szabályok érvényesek:
-05:02=Erődök: Védd meg a sajátod, pusztítsd el az ellenfeledet!
+05:02=Király elhelyezése: Válassz egy védett helyet, ahova lerakod őfelségét
 05:03=Alacsony gravitáció: Vigyázz, hova lépsz!
 05:04=Sérthetetlenség: A sünök (majdnem) sérthetetlenek
 05:05=Vámpírizmus: A sünök visszagyógyulnak a sebzések arányában
 05:06=Karma: A sünök is sérülnek az általuk okozott sebek által
-05:07=Óvd Őfelségét: Ne hagyd a királyt meghalni!|Király elhelyezése: Válassz egy védett helyet, ahova lerakod őfelségét
+05:07=Óvd Őfelségét: Ne hagyd a királyt meghalni!
 05:08=Sünök Lerakása: A játék kezdete előtt te választod ki a kezdőhelyet
 05:09=Tüzérség: A sünök nem mozoghatnak
 05:10=Lebonthatatlan talaj:A legtöbb fegyver nem tudja szétrobbantani a földet

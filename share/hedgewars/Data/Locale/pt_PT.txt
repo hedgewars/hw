@@ -513,12 +513,12 @@
 ; Game goal strings
 05:00=Modos de Jogo
 05:01=Aplicam-se as seguintes regras
-05:02=Fortes: Defende a tua fortaleza; derrota os teus inimigos!
+05:02=Posiciona o Rei: Escolhe um local seguro para o Rei começar
 05:03=Baixa Gravidade: Cuidado onde pões os pés
 05:04=Invulnerabilidade: Os ouriços são (quase) invulneráveis
 05:05=Vampirismo: Os ouriços são curados em proporção ao dano causado
 05:06=Karma: Os ouriços recebem o dano que causam
-05:07=Protege o Rei: Não deixes o teu Rei morrer!|Posiciona o Rei: Escolhe um local seguro para o Rei começar
+05:07=Protege o Rei: Não deixes o teu Rei morrer!
 05:08=Posicionar Ouriços: Posiciona os teus ouriços antes do jogo começar
 05:09=Artilharia: Os ouriços não podem andar ou mudar de posição
 05:10=Terreno Indestrutível: A maioria das armas não destrói o terreno

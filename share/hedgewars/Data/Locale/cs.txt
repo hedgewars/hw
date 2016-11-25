@@ -511,12 +511,12 @@
 ; Game goal strings
 05:00=Herní módy
 05:01=Platí následující pravidla
-05:02=Pevnosti: Braň svou pevnost; znič nepřátele!
+05:02=Umísti krále: Umísti chráněný bod pro svého krále
 05:03=Nízká gravitace: Koukej, kam šlapeš
 05:04=Nesmrtelnost: Ježci jsou (skoro) nesmrtelní
 05:05=Vampyrismus: Ježci budou oživeni poškozením, které způsobí
 05:06=Karma: Ježci trpí stejně jako jejich oběť
-05:07=Chraň krále: Nenech svého krále zemřít.|Umísti krále: Umísti chráněný bod pro svého krále
+05:07=Chraň krále: Nenech svého krále zemřít.
 05:08=Umísti ježky: Umísti ježky před začátkem hry
 05:09=Dělostřelectvo: Ježci nemohou změnit polohu chůzí
 05:10=Nezničitelný terén: Většina zbraní neničí terén

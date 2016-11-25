@@ -498,12 +498,12 @@
 ; Game goal strings
 05:00=Pelimoodit
 05:01=Seuraavat säännöt ovat voimassa
-05:02=Linnoitukset: Puolusta linnoitustasi; kukista vastustajasi!
+05:02=Sijoita kunginas: Valitse suojattu aloituspiste kuninkaallesi
 05:03=Matala painovoima: Varo askeliasi
 05:04=Kuolemattomuus: Siilet ovat (melkein) vahingoittumattomia
 05:05=Vampyrismi: Siilet paranevat sen verran kuin ne vahingoittavat
 05:06=Karma: Siilet vahingoittuvat itse saman verran kuin tekevät vahinkoa
-05:07=Puolusta kunginasta: Älä anna kuninkaasi kuolla!|Sijoita kunginas: Valitse suojattu aloituspiste kuninkaallesi
+05:07=Puolusta kunginasta: Älä anna kuninkaasi kuolla!
 05:08=Sijoita siilet: Sijoita siilesi ennen pelin alkua
 05:09=Tykistö: Siilet eivät voi vaihtaa sijaintiaan
 05:10=Vahingoittumaton maasto: Useimmat aseet eivät tuhoa maastoa

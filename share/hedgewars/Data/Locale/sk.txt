@@ -348,12 +348,12 @@
 ; Reťazce pre ciele hry
 05:00=Herné režimy
 05:01=V platnosti budú nasledovné pravidlá
-05:02=Pevnosti: Ubráňte svoju pevnosť; porazte nepriateľov!
+05:02=Umiestnite kráľa: Vyberte dobre chránené štartovacie miesto pre vášho kráľa
 05:03=Nízka gravitácia: Dávajte pozor, kam šlapete
 05:04=Nesmrteľnosť: Ježkovia sú (takmer) nezraniteľní
 05:05=Režim vampíra: Ježkovia budú liečení zraneniami, ktoré spôsobia ostatným
 05:06=Karma: Ježkovia budú trpieť zraneniami, ktoré spôsobia ostatným
-05:07=Ochráňte kráľa: Nenechajte kráľa zomrieť!|Umiestnite kráľa: Vyberte dobre chránené štartovacie miesto pre vášho kráľa
+05:07=Ochráňte kráľa: Nenechajte kráľa zomrieť!
 05:08=Umiestnenie ježkov: Rozmiestnite vašich ježkov pred začatím hry
 05:09=Delostrelectvo: Ježkovia nedokážu chodiť
 05:10=Nezničiteľný terén: Väčšina zbraní nepoškodí terén

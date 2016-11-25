@@ -571,12 +571,12 @@
 ; Game goal strings
 05:00=Ustawienia gry
 05:01=Obowiązują następujące zasady:
-05:02=Forty: Broń swojej fortecy. Pokonaj przeciwników!
+05:02=Umieść Króla: Wybierz bezpieczną pozycję startową dla króla
 05:03=Niska grawitacja: Proszę uważać!
 05:04=Niezniszczalność: Jeże są (prawie) niezniszczalne
 05:05=Wampiryzm: Jeże dostają życie za zadane obrażenia (80%)
 05:06=Karma: Jeże doznają obrażeń za uszkodzenia zadane innym
-05:07=Broń Króla: Nie pozwól królowi umrzeć!|Umieść Króla: Wybierz bezpieczną pozycję startową dla króla
+05:07=Broń Króla: Nie pozwól królowi umrzeć!
 05:08=Umieść jeże: Umieść jeże przed rozpoczęciem gry.
 05:09=Artyleria: Jeże nie mogą się poruszać
 05:10=Niezniszczalny teren: Większość broni nie niszczy terenu.
