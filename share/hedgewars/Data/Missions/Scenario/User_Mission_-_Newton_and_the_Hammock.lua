@@ -92,7 +92,7 @@ function onGameStart()
         	SetGearPosition(hhs[1],561,1365)
 	end
 
-	ShowMission(loc("Newton and the Hammock"), loc("Scenario"), loc("Eliminate the enemy before the time runs out"), -amParachute, 0)
+	ShowMission(loc("Newton and the Hammock"), loc("Scenario"), loc("Eliminate the enemy."), -amParachute, 0)
 		
 end
 

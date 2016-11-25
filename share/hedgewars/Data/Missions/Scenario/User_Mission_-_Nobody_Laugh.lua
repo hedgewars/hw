@@ -52,7 +52,7 @@ function onGameStart()
 
 	ShowMission(	loc("Nobody Laugh"),
 					loc("Scenario"),
-					loc("Eliminate the enemy before the time runs out")
+					loc("Eliminate the enemy.")
 					, 0, 0
 				)
 

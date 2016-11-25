@@ -34,7 +34,7 @@ end
 
 function onGameStart()
 
-	ShowMission(loc("Bamboo Thicket"), loc("Scenario"), loc("Eliminate the enemy before the time runs out"), -amBazooka, 0)
+	ShowMission(loc("Bamboo Thicket"), loc("Scenario"), loc("Eliminate the enemy."), -amBazooka, 0)
 
 	--WEAPON CRATE LIST. WCRATES: 1
 	SpawnAmmoCrate(891,852,amBazooka)
