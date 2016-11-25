@@ -15,7 +15,9 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 	Delay = 500
-	SuddenDeathTurns = 99999 -- "disable" sudden death
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 end
 
 function onGameStart()

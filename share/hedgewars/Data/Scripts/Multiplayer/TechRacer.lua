@@ -745,6 +745,7 @@ function onGameInit()
 		CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
+        HealthDecrease = 0
 
 		for x = 1, 16 do
 			AddPoint(x*100,100,5)

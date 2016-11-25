@@ -309,6 +309,7 @@ function onGameInit()
 	
 	GameFlags = band(bor(GameFlags, gfInfAttack + gfSolidLand), bnot(gfKing + gfForts))
 	WaterRise = 0
+	HealthDecrease = 0
 
 end
 

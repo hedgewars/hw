@@ -464,8 +464,10 @@ function onGameInit()
 	DisableGameFlags(gfKing)
 	EnableGameFlags(gfDivideTeams)
 
-	--SuddenDeathTurns = 999 -- suddendeath is off, effectively
+	-- Disable Sudden Death
 	WaterRise = 0
+	HealthDecrease = 0
+
 	Delay = 10
 
 end

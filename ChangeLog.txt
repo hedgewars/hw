@@ -149,7 +149,7 @@ Other Game Styles:
  + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
  * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
  * Mutant script shows now appropriate ranking and graph in stats screen
- * Disable Sudden Death for good in Shoppa game scheme
+ * Disable Sudden Death for good in Shoppa game scheme, some game styles and mission maps
 
 Missions:
  + Added Basic Flying Saucer Training

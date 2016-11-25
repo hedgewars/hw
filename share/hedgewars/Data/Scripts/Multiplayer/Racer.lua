@@ -537,6 +537,7 @@ function onGameInit()
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
+        HealthDecrease = 0
 
 end
 

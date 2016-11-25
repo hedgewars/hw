@@ -573,8 +573,9 @@ function onGameInit()
 	MinesTime  = 2000
 	Explosives = 0 -- The number of explosives being placed
 	Delay = 10 -- The delay between each round
-	WaterRise = 0 -- I sure hope this works	
-	--SuddenDeathTurns = 99 -- suddendeath is off, effectively
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 	Map = "Blizzard" -- The map to be played
 	Theme = "Snow" -- The theme to be used "Nature"
 

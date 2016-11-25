@@ -78,6 +78,9 @@ function onGameInit()
     --EnableGameFlags(gfDisableLandObjects) 
     -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
     Seed = ClimbHome
+    -- Disable Sudden Death
+    WaterRise = 0
+    HealthDecrease = 0
 end
 
 function onGearAdd(gear)
