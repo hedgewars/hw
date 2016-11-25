@@ -8,12 +8,9 @@ Content:
 
 Game engine:
  + Improved hedgehog spawns on maps that lack land mass or free space
- + Highlander mode displays game scheme specifics (mines timer, etc.) in ESC info
- + Highlander mode gives visual and acoustic feedback when weapons are collected from a kill, similar to collecting a crate
  + AI hedgehogs can now use Bee and Vampirism
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
- + Replaced the Fort Mode game modifier by adding "Forts" to the map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
  + Render graves behind everything else, so that they can't hide mines etc.
  + Show indicator symbols at bottom right while extra damage or low gravity are active
  + Color coding for the turn timer: green = ready timer, yellow = turn in progress, red = retreat timer, gray = timer paused
@@ -169,6 +166,7 @@ Missions:
 Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far
  + Training screen now has 3 mission categories: Training (tutorials), Challenge (get a high score), Scenario (complete a task)
+ + Replaced the Fort Mode game modifier by adding "Forts" to the map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
  + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
  + Additional button for just randomizing theme that will not change your selected map
  + Randomizing map/theme in online-mode will not include DLC-content
