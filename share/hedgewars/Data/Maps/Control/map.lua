@@ -369,8 +369,8 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
-	ShowMission(loc("CONTROL"), 
-	"", 
+	ShowMission(loc("Control"), 
+	loc("Domination game"), 
 	loc("Control pillars to score points.") .. "|" .. 
 	loc("Goal") .. ": " .. pointLimit .. " " .. loc("points"), 0, 0)
 
@@ -418,8 +418,9 @@ function onNewTurn()
 				end
 			end
 			
-			ShowMission(loc("CONTROL"), 
-			loc("Team Scores") .. ":", 
+			ShowMission(loc("Control"), 
+			loc("Domination game"),
+			loc("Team Scores") .. ":" .. "|" ..
 			totalComment, 0, 1600)
 	
 	end

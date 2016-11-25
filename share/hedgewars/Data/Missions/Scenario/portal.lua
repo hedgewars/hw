@@ -157,7 +157,7 @@ function onGameStart()
 	--GIRDER--
 	PlaceGirder(3363, 1323, 4)
 
-	ShowMission (loc("Portal Mind Challenge"), loc("Mission"),
+	ShowMission (loc("Portal Mind Challenge"), loc("Scenario"),
 		loc("Defeat all enemies!") .. "|" .. loc("In this mission you have infinite time."),
 		-amPortalGun, 5000)
 	HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)

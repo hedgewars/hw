@@ -19,7 +19,7 @@ function onGameInit()
 end
 
 function onGameStart()
-	ShowMission(loc("Hedgewars-Knockball"), loc("Not So Friendly Match"), loc("Bat balls at your enemies and|push them into the sea!"), -amBaseballBat, 0)
+	ShowMission(loc("Knockball"), loc("Not So Friendly Match"), loc("Bat balls at your enemies and|push them into the sea!"), -amBaseballBat, 0)
 	started = true
 end
 
@@ -64,7 +64,7 @@ function onGearDelete(gear)
 			end
 			s = s .. " " .. score[0]
 			for i = 1, ClansCount - 1 do s = s .. " - " .. score[i] end
-			ShowMission(loc("Hedgewars-Knockball"), loc("Not So Friendly Match"), s, -amBaseballBat, 0)
+			ShowMission(loc("Knockball"), loc("Not So Friendly Match"), s, -amBaseballBat, 0)
 		end
 	end
 end

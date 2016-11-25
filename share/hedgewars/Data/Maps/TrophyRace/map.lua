@@ -57,7 +57,7 @@ function onGameInit()
 end
 
 function onGameStart()
-    ShowMission(loc("TrophyRace"), "", loc("Use your rope to get from start to finish as fast as you can!"), -amRope, 0)
+    ShowMission(loc("TrophyRace"), loc("Race"), loc("Use your rope to get from start to finish as fast as you can!"), -amRope, 0)
     started = true
     p=1820
     for i = 0, numhhs - 1 do
@@ -174,7 +174,7 @@ function onGameTick()
                 hscore = hscore .. "|" .. string.format(loc("Team %d: "), i+1) .. tt
             end
             
-            ShowMission(loc("TrophyRace"), "", loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
+            ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
             TurnTimeLeft = 0
         end
     end

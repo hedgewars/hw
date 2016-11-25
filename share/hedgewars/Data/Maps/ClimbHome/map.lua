@@ -107,7 +107,7 @@ function onGameStart()
     --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
     ShowMission(loc("Climb Home"),
-                loc("Rope to safety"),
+                loc("Challenge"),
                 loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height."),
                 -amRope, 0)
     local x = 1818

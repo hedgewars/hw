@@ -41,8 +41,8 @@ function onGameStart()
 	SendHealthStatsOff()
 
 	ShowMission     (
-                                loc("RC PLANE TRAINING"),
-                                loc("a Hedgewars challenge"),
+                                loc("RC Plane Challenge"),
+                                loc("Challenge"),
 
                                 loc("Collect or destroy all the health crates.") .. "|" ..
                                 loc("Compete to use as few planes as possible!") .. "|" ..

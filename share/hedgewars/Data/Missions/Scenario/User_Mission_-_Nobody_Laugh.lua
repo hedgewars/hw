@@ -51,7 +51,7 @@ function onGameStart()
 	AddAmmo(enemy, amAirAttack, 100)
 
 	ShowMission(	loc("Nobody Laugh"),
-					loc("User Challenge"),
+					loc("Scenario"),
 					loc("Eliminate the enemy before the time runs out")
 					, 0, 0
 				)

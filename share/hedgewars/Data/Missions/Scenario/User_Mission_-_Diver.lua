@@ -44,7 +44,7 @@ function onGameStart()
 
 	AddGear(579, 296, gtMine, 0, 0, 0, 0)
 
-	ShowMission(loc("Operation Diver"), "", loc("Eliminate Poison before the time runs out") .. loc("|- Mines Time:") .. " " .. 1 .. " " .. loc("sec"), -amFirePunch, 0);
+	ShowMission(loc("Operation Diver"), loc("Scenario"), loc("Eliminate Poison before the time runs out") .. loc("|- Mines Time:") .. " " .. 1 .. " " .. loc("sec"), -amFirePunch, 0);
 	--SetTag(AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1), -70)
 
 	SetWind(-100)

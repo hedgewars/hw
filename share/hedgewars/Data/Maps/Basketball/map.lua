@@ -18,7 +18,7 @@ function onGameInit()
 end
 
 function onGameStart()
-	ShowMission(loc("Hedgewars-Basketball"), loc("Not So Friendly Match"), loc("Bat your opponents through the|baskets and out of the map!"), -amBaseballBat, 0)
+	ShowMission(loc("Basketball"), loc("Not So Friendly Match"), loc("Bat your opponents through the|baskets and out of the map!"), -amBaseballBat, 0)
 	started = true
 end
 
@@ -50,7 +50,7 @@ function onGearDelete(gear)
 			end
 			s = s .. " " .. score[0]
 			for i = 1, ClansCount - 1 do s = s .. " - " .. score[i] end
-			ShowMission(loc("Hedgewars-Basketball"), loc("Not So Friendly Match"), s, -amBaseballBat, 0)
+			ShowMission(loc("Basketball"), loc("Not So Friendly Match"), s, -amBaseballBat, 0)
 		end
 	end
 end

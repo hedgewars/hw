@@ -53,7 +53,7 @@ function onGameStart()
 
 	FollowGear(player)
 
-	ShowMission(loc("Dangerous Ducklings"), "", loc("Eliminate the Blue Team"), -amRope, 5000);
+	ShowMission(loc("Dangerous Ducklings"), loc("Scenario"), loc("Eliminate the Blue Team"), -amRope, 5000);
 
 end
 

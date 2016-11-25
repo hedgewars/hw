@@ -26,7 +26,7 @@ end
 
 function onGameStart()
 
-ShowMission(loc("The Great Escape"), loc("Get out of there!"), loc("Elimate your captor."), -amGrenade, 0)
+ShowMission(loc("The Great Escape"), loc("Scenario"), loc("Elimate your captor."), -amGrenade, 0)
 
 ------ GIRDER LIST ------
 PlaceGirder(1042,564,0)
