@@ -288,6 +288,7 @@ end
 function Animate(steps)
   if skipping == true then
     animPos = 1
+    SetCinematicMode(false)
     SetInputMask(0xFFFFFFFF)
     SkipAnimation(steps)
     return true
@@ -299,6 +300,7 @@ function Animate(steps)
 
   if steps[animPos] == nil then
       animPos = 1
+      SetCinematicMode(false)
       SetInputMask(0xFFFFFFFF)
       return true
   end
@@ -309,6 +311,7 @@ function Animate(steps)
   end
 
   SetInputMask(bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon))
+  SetCinematicMode(true)
   retVal = steps[animPos].func(unpack(steps[animPos].args))
   if (retVal ~= false) then
     animPos = animPos + 1
