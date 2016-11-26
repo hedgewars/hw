@@ -235,15 +235,22 @@ function placeNextWaypoint()
 		wp.gear = AddVisualGear(1,1,vgtCircle,1,true)
 		-- add bonus time and "fuel"
 		if currentWaypoint % 2 == 0 then
-			PlaySound(sndBump) -- what's the crate sound?
+			PlaySound(sndShotgunReload)
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, RED)
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
 			totalSaucers = totalSaucers + 1
-			local message = loc("Got 1 more saucer")
+			local vgear = AddVisualGear(GetX(hero.gear), GetY(hero.gear), vgtAmmo, 0, true)
+			if vgear ~= nil then
+				SetVisualGearValues(vgear,nil,nil,nil,nil,nil,amJetpack)
+			end
+			local message 
 			if TurnTimeLeft <= 22000 then
 				TurnTimeLeft = TurnTimeLeft + 8000
 				totalTime = totalTime + 8000
-				message = message..loc(" and 8 more seconds added to the clock")
+				PlaySound(sndExtraTime)
+				message = loc("Got 1 more saucer and 8 more seconds added to the clock")
+			else
+				message = loc("Got 1 more saucer")
 			end
 			AnimCaption(hero.gear, message, 4000)
 		else
@@ -252,6 +259,7 @@ function placeNextWaypoint()
 				TurnTimeLeft = TurnTimeLeft + 6000
 				totalTime = totalTime + 6000
 				if currentWaypoint ~= 1 then
+					PlaySound(sndExtraTime)
 					AnimCaption(hero.gear, loc("6 more seconds added to the clock"), 4000)
 				end
 			end
@@ -261,6 +269,7 @@ function placeNextWaypoint()
 		return true
 	else
 		AnimCaption(hero.gear, loc("Congratulations, you won!"), 4000)
+		PlaySound(sndVictory, hero.gear)
 	end
 	return false
 end
