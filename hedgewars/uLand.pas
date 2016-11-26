@@ -599,26 +599,27 @@ if allOK then LoadMask;
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
-var x, w, c: Longword;
+var x, w, c, y: Longword;
 begin
 for w:= 0 to 23 do
     for x:= leftX to rightX do
         begin
-        Land[Longword(cWaterLine) - 1 - w, x]:= lfIndestructible;
-        if (x + w) mod 32 < 16 then
+        y:= Longword(cWaterLine) - 1 - w;
+        Land[y, x]:= lfIndestructible;
+        if (x + y) mod 32 < 16 then
             c:= AMask
         else
             c:= AMask or RMask or GMask; // FF00FFFF
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[Longword(cWaterLine) - 1 - w, x]:= c
+            LandPixels[y, x]:= c
         else
-            LandPixels[(Longword(cWaterLine) - 1 - w) div 2, x div 2]:= c
+            LandPixels[y div 2, x div 2]:= c
         end
 end;
 
 procedure GenMap;
-var x, y, w, c: Longword;
+var x, y, w, c, c2: Longword;
     map, mask: shortstring;
 begin
     hasBorder:= false;
@@ -701,20 +702,24 @@ if hasBorder then
                     begin
                     Land[y, leftX + w]:= lfIndestructible;
                     Land[y, rightX - w]:= lfIndestructible;
-                    if (y + w) mod 32 < 16 then
+                    if (y + leftX + w) mod 32 < 16 then
                         c:= AMask
                     else
                         c:= AMask or RMask or GMask; // FF00FFFF
+                    if (y + rightX - 5 + w) mod 32 < 16 then
+                        c2:= AMask
+                    else
+                        c2:= AMask or RMask or GMask; // FF00FFFF
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         begin
                         LandPixels[y, leftX + w]:= c;
-                        LandPixels[y, rightX - w]:= c;
+                        LandPixels[y, rightX - 5 + w]:= c2;
                         end
                     else
                         begin
                         LandPixels[y div 2, (leftX + w) div 2]:= c;
-                        LandPixels[y div 2, (rightX - w) div 2]:= c;
+                        LandPixels[y div 2, (rightX - 5 + w) div 2]:= c2;
                         end;
                     end;
 
