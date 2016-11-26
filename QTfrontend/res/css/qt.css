@@ -94,6 +94,7 @@ background-repeat: repeat-x;
 border-radius: 16px;
 background-color: rgba(13, 5, 68, 70%);
 padding: 6px;
+margin-top: 4px;
 }
 /*  Experimenting with PaintOnScreen and border-radius on IconedGroupBox children didn't work out well
 IconedGroupBox QComboBox, IconedGroupBox QPushButton, IconedGroupBox QLineEdit,
@@ -207,7 +208,6 @@ subcontrol-origin: margin;
 subcontrol-position: top left;
 text-align: left;
 left: 15px;
-top: -4px;
 }
 
 QCheckBox::indicator:checked{
