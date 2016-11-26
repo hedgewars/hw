@@ -706,7 +706,7 @@ if hasBorder then
                         c:= AMask
                     else
                         c:= AMask or RMask or GMask; // FF00FFFF
-                    if (y + rightX - 5 + w) mod 32 < 16 then
+                    if (y + rightX - w) mod 32 < 16 then
                         c2:= AMask
                     else
                         c2:= AMask or RMask or GMask; // FF00FFFF
@@ -714,12 +714,12 @@ if hasBorder then
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         begin
                         LandPixels[y, leftX + w]:= c;
-                        LandPixels[y, rightX - 5 + w]:= c2;
+                        LandPixels[y, rightX - w]:= c2;
                         end
                     else
                         begin
                         LandPixels[y div 2, (leftX + w) div 2]:= c;
-                        LandPixels[y div 2, (rightX - 5 + w) div 2]:= c2;
+                        LandPixels[y div 2, (rightX - w) div 2]:= c2;
                         end;
                     end;
 
