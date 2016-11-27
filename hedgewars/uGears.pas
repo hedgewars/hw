@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses uConsts, uFloat, uTypes, uChat, uCollisions;
+uses uConsts, uFloat, uTypes, uChat, uCollisions, Classes;
 
 procedure initModule;
 procedure freeModule;
@@ -117,8 +117,10 @@ var Gear: PGear;
     i: LongWord;
     flag: Boolean;
     tmp: LongWord;
+    poisoned: TFPList;
 begin
     Gear:= GearsList;
+    poisoned:= TFPList.Create;
 
     while Gear <> nil do
     begin
@@ -155,12 +157,18 @@ begin
             if tmp > 0 then
                 begin
                 inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
-                HHHurt(Gear^.Hedgehog, dsPoison);
+                team:= Gear^.Hedgehog^.Team;
+                if (Gear^.Hedgehog^.Effects[heFrozen] = 0) and (poisoned.IndexOf(team) = -1) then
+                    poisoned.Add(team)
                 end
             end;
 
         Gear:= Gear^.NextGear
     end;
+    for team in poisoned do
+        begin
+            Cough(team);
+        end
 end;
 
 procedure ProcessGears;
