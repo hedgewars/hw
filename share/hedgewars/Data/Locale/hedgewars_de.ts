@@ -108,7 +108,7 @@
     <message>
         <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="38"/>
         <source>permanent</source>
-        <translation>Spitzname</translation>
+        <translation>permanent</translation>
     </message>
 </context>
 <context>
