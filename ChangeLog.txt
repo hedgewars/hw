@@ -39,7 +39,8 @@ Construction Mode:
  + Added script parameter support:
   + initialenergy: Amount of energy at start
   + energyperround: New energy per round
-  + maxenergy: Maximum allowed
+  + maxenergy: Maximum allowed energy
+  + cratesperround: Maximum placable crates per round
  + Completely reworked all in-game texts and descriptions
  * Fix rubber being placable inside land
  * Fix invalid girder placement costing energy

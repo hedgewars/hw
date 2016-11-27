@@ -33,9 +33,13 @@
 ---                Note: Must be smaller than or equal to maxenergy
 --- energyperround: Amount of energy that each team gets per round (default: 50)
 --- maxenergy: Maximum amount of energy each team can hold (default: 1000)
+--- cratesperround: Maximum number of crates you can place per round (default: 5)
+
+-- For the previous 2 keys, you can use the value “inf” for an unlimited amount
 
 -- Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
--- and sets the maximum energy to 2000
+--          and sets the maximum energy to 2000.
+-- Example: “craterperround=inf” disables the crate placement limit.
 
 ------------------------------------------------------------------------------
 --version history
@@ -201,6 +205,7 @@ checkForSpecialWeaponsIn = -1
 conf_initialEnergy = 550
 conf_energyPerRound = 50
 conf_maxEnergy = 1000
+conf_cratesPerRound = 5
 
 function HideTags()
 
@@ -1107,10 +1112,10 @@ function PlaceObject(x,y)
 	placedSpec[placedCount] = pMode[pIndex]
 
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
-		AddCaption(loc("You may only spawn 1 Extra Time per turn."),0xffba00ff,capgrpVolume)
+		AddCaption(loc("You may only place 1 Extra Time crate per turn."),0xffba00ff,capgrpVolume)
 		PlaySound(sndDenied)
-	elseif (clanCratesSpawned[GetHogClan(CurrentHedgehog)] > 4) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
-		AddCaption(loc("You may only spawn 5 crates per turn."),0xffba00ff,capgrpVolume)
+	elseif (conf_cratesPerRound ~= "inf" and clanCratesSpawned[GetHogClan(CurrentHedgehog)] >= conf_cratesPerRound) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
+		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound),0xffba00ff,capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (XYisInRect(x,y, clanBoundsSX[GetHogClan(CurrentHedgehog)],clanBoundsSY[GetHogClan(CurrentHedgehog)],clanBoundsEX[GetHogClan(CurrentHedgehog)],clanBoundsEY[GetHogClan(CurrentHedgehog)]) == true)
 	and (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense)
@@ -1526,7 +1531,10 @@ end
 ----------------------------
 
 -- Parses a positive integer
-function parseInt(str, default)
+function parseInt(str, default, infinityPermitted)
+	if str == "inf" and infinityPermitted then
+		return "inf"
+	end
 	if str == nil then return default end
 	local s = string.match(str, "(%d*)")
 	if s ~= nil then
@@ -1541,11 +1549,8 @@ function onParameters()
 	parseParams()
 	conf_initialEnergy = parseInt(params["initialenergy"], conf_initialEnergy)
 	conf_energyPerRound = parseInt(params["energyperround"], conf_energyPerRound)
-	if params["maxenergy"] == "inf" then
-		conf_maxEnergy = "inf"
-	else
-		conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy)
-	end
+	conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy, true)
+	conf_cratesPerRound = parseInt(params["cratesperround"], conf_cratesPerRound, true)
 end
 
 function onGameInit()
@@ -1606,7 +1611,17 @@ function onGameStart()
 
 	loc("Left/right: Choose structure type|Cursor: Build structure"))
 
-	SetAmmoTexts(amNapalm, loc("Crate Placer"), loc("Construction Mode tool"), loc("This allows you to create a crate anywhere|within your clan's area of influence,|at the cost of energy.|Up/down: Choose crate type|Left/right: Choose crate contents|Cursor: Place crate"))
+	local txt_crateLimit = ""
+	if conf_cratesPerRound ~= "inf" then
+		txt_crateLimit = string.format(loc("You may only place %d crates per round."), conf_cratesPerRound) .. "|"
+	end
+
+	SetAmmoTexts(amNapalm, loc("Crate Placer"), loc("Construction Mode tool"),
+		loc("This allows you to create a crate anywhere|within your clan's area of influence,|at the cost of energy.") .. "|" ..
+		txt_crateLimit ..
+		loc("Up/down: Choose crate type") .. "|" .. 
+		loc("Left/right: Choose crate contents") .. "|" ..
+		loc("|Cursor: Place crate"))
 	SetAmmoTexts(amDrillStrike, loc("Object Placer"), loc("Construction Mode tool"), loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.|Up/down: Choose object type|Left/right: Choose timer (for mines)|Cursor: Place object"))
 
 	sCirc = AddVisualGear(0,0,vgtCircle,0,true)
