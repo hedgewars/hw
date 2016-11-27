@@ -2475,6 +2475,20 @@ begin
     lc_placegirder:= 1
 end;
 
+function lc_placerubber(L : Plua_State) : LongInt; Cdecl;
+var placed: boolean;
+begin
+    placed:= false;
+    if CheckLuaParamCount(L, 3, 'PlaceRubber', 'x, y, frameIdx') then
+        placed:= TryPlaceOnLand(
+            lua_tointeger(L, 1) - SpritesData[sprAmRubber].Width div 2,
+            lua_tointeger(L, 2) - SpritesData[sprAmRubber].Height div 2,
+            sprAmRubber, lua_tointeger(L, 3), true, lfBouncy);
+
+    lua_pushboolean(L, placed);
+    lc_placerubber:= 1
+end;
+
 function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
 begin
     if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 0, 'GetCurAmmoType', '')) then
@@ -3470,6 +3484,7 @@ lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
 lua_register(luaState, _P'EraseSprite', @lc_erasesprite);
 lua_register(luaState, _P'PlaceSprite', @lc_placesprite);
 lua_register(luaState, _P'PlaceGirder', @lc_placegirder);
+lua_register(luaState, _P'PlaceRubber', @lc_placerubber);
 lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 lua_register(luaState, _P'GetGravity', @lc_getgravity);
