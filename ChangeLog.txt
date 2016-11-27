@@ -41,6 +41,8 @@ Construction Mode:
   + energyperround: New energy per round
   + maxenergy: Maximum allowed
  + Completely reworked all in-game texts and descriptions
+ * Fix rubber being placable inside land
+ * Fix invalid girder placement costing energy
  * Special tools like structure placer now have their own proper descriptions (instead of Air Attack description, etc.)
  * Costs for weapon and utility crates were all equal
  * Many other fixes and tweaks

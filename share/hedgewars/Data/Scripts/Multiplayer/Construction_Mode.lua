@@ -1115,52 +1115,70 @@ function PlaceObject(x,y)
 	elseif (XYisInRect(x,y, clanBoundsSX[GetHogClan(CurrentHedgehog)],clanBoundsSY[GetHogClan(CurrentHedgehog)],clanBoundsEX[GetHogClan(CurrentHedgehog)],clanBoundsEY[GetHogClan(CurrentHedgehog)]) == true)
 	and (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense)
 	then
-
-
-
+		-- For checking if the actual placement succeeded
+		local placed = false
 		if cat[cIndex] == "Girder Placement Mode" then
-			PlaceGirder(x, y, CGR)
+			placed = PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Rubber Placement Mode" then
-			PlaceSprite(x,y, sprAmRubber, CGR, nil, nil, nil, nil, lfBouncy)
+			placed = PlaceRubber(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Health Crate Placement Mode" then
 			gear = SpawnHealthCrate(x,y)
-			SetHealth(gear, pMode[pIndex])
-			setGearValue(gear,"caseType","med")
-			clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			if gear ~= nil then
+				placed = true
+				SetHealth(gear, pMode[pIndex])
+				setGearValue(gear,"caseType","med")
+				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			end
 		elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 			gear = SpawnAmmoCrate(x, y, atkArray[pIndex][1])
-			placedSpec[placedCount] = atkArray[pIndex][2]
-			setGearValue(gear,"caseType","ammo")
-			setGearValue(gear,"contents",atkArray[pIndex][2])
-			clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			if gear ~= nil then
+				placed = true
+				placedSpec[placedCount] = atkArray[pIndex][2]
+				setGearValue(gear,"caseType","ammo")
+				setGearValue(gear,"contents",atkArray[pIndex][2])
+				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			end
 		elseif cat[cIndex] == "Utility Crate Placement Mode" then
 			gear = SpawnUtilityCrate(x, y, utilArray[pIndex][1])
-			placedSpec[placedCount] = utilArray[pIndex][2]
-			setGearValue(gear,"caseType","util")
-			setGearValue(gear,"contents",utilArray[pIndex][2])
-			if utilArray[pIndex][1] == amExtraTime then
-				clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = true
+			if gear ~= nil then
+				placed = true
+				placedSpec[placedCount] = utilArray[pIndex][2]
+				setGearValue(gear,"caseType","util")
+				setGearValue(gear,"contents",utilArray[pIndex][2])
+				if utilArray[pIndex][1] == amExtraTime then
+					clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = true
+				end
+				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
 			end
-			clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
 		elseif cat[cIndex] == "Barrel Placement Mode" then
 			gear = AddGear(x, y, gtExplosives, 0, 0, 0, 0)
-			SetHealth(gear, pMode[pIndex])
+			if gear ~= nil then
+				placed = true
+				SetHealth(gear, pMode[pIndex])
+			end
 		elseif cat[cIndex] == "Mine Placement Mode" then
 			gear = AddGear(x, y, gtMine, 0, 0, 0, 0)
-			SetTimer(gear, pMode[pIndex])
+			if gear ~= nil then
+				placed = true
+				SetTimer(gear, pMode[pIndex])
+			end
 		elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 			gear = AddGear(x, y, gtSMine, 0, 0, 0, 0)
-
+			placed = gear ~= nil
 		elseif cat[cIndex] == "Structure Placement Mode" then
-
 			AddStruc(x,y, pMode[pIndex],GetHogClan(CurrentHedgehog))
-
+			placed = true
 		end
 
-		clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
-		placedCount = placedCount + 1
+		if placed then
+			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
+			placedCount = placedCount + 1
+		else
+			AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+			PlaySound(sndDenied)
+		end
 
 	else
 	    if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
