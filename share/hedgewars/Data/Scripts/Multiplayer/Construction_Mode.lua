@@ -1559,6 +1559,8 @@ function onGameInit()
 	MinesNum = 0
 
 	EnableGameFlags(gfInfAttack)
+	-- This is a hack to make sure all girder/rubber placement is handled by Construction Mode to overwrite the default behaviour
+	SetMaxBuildDistance(1)
 
 	fortMode = MapGen == mgForts
 
