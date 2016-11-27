@@ -1752,6 +1752,14 @@ begin
         else // gstAttacking <> 0
             begin
             AllInactive := false;
+            // tag of 1 means this mine has a random timer
+            if (Gear^.Tag = 1) and (Gear^.Timer = 0) then
+                begin
+                if (GameTicks mod 2 = 0) then GetRandom(2);
+                if (GameTicks mod 3 = 0) then GetRandom(2);
+                Gear^.Timer:= GetRandom(51) * 100;
+                Gear^.Tag:= 0;
+                end;
             if (Gear^.Timer and $FF) = 0 then
                 PlaySound(sndMineTick);
             if Gear^.Timer = 0 then
