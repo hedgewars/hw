@@ -148,7 +148,7 @@ function onGameInit()
 
 	initCheckpoint("fruit01")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 

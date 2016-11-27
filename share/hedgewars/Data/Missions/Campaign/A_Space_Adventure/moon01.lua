@@ -159,7 +159,7 @@ function onGameInit()
 		end
 	end
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 

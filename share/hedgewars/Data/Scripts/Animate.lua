@@ -50,8 +50,17 @@ function ExecuteAfterAnimations()
   RemoveFunction()
 end
 
-function AnimInit()
-  animPos = 1
+local function startCinemaLock()
+     SetCinematicMode(true)
+     SetInputMask(bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon))
+end
+
+local function stopCinemaLock()
+     SetInputMask(0xFFFFFFFF)
+     SetCinematicMode(false)
+end
+
+function AnimInit(startAnimating)
   lastx = 0
   lasty = 0
   jumpTypes = {long = gmLJump, high = gmHJump, back = gmHJump}
@@ -72,6 +81,10 @@ function AnimInit()
   FunctionListNum = 0
   skipping = false
   skipFuncList = {}
+  animPos = 1
+  if startAnimating then
+     startCinemaLock()
+  end
 end
 
 function AnimSwitchHog(gear)
@@ -288,8 +301,7 @@ end
 function Animate(steps)
   if skipping == true then
     animPos = 1
-    SetCinematicMode(false)
-    SetInputMask(0xFFFFFFFF)
+    stopCinemaLock()
     SkipAnimation(steps)
     return true
   end
@@ -300,8 +312,7 @@ function Animate(steps)
 
   if steps[animPos] == nil then
       animPos = 1
-      SetCinematicMode(false)
-      SetInputMask(0xFFFFFFFF)
+      stopCinemaLock()
       return true
   end
   
@@ -310,8 +321,7 @@ function Animate(steps)
       AnimSwitchHog(steps[animPos].args[1])
   end
 
-  SetInputMask(bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon))
-  SetCinematicMode(true)
+  startCinemaLock()
   retVal = steps[animPos].func(unpack(steps[animPos].args))
   if (retVal ~= false) then
     animPos = animPos + 1

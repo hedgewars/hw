@@ -73,7 +73,7 @@ function onGameInit()
 
 	initCheckpoint("moon02")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 

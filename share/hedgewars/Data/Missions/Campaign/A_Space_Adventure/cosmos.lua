@@ -117,18 +117,25 @@ function onGameInit()
 	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
 		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
 	end
+	-- Whether to start with an animation
+	local startSequence
 	-- do checkpoint stuff needed before game starts
 	if checkPointReached == 1 then
 		-- Start of the game
+		startSequence = true
 	elseif checkPointReached == 2 then
 		-- Hero on the column, just took space ship unnoticed
+		startSequence = true
 		AnimSetGearPosition(hero.gear, saucerX, saucerY)
 	elseif checkPointReached == 3 then
 		-- Hero near column, without space ship unnoticed
+		startSequence = true
 	elseif checkPointReached == 4 then
 		-- Hero visited moon for fuels
+		startSequence = true
 		AnimSetGearPosition(hero.gear, 1110, 850)
 	elseif checkPointReached == 5 then
+		startSequence = false
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
 		if GetCampaignVar("Planet") == "moon" then
 			AnimSetGearPosition(hero.gear, 1110, 850)
@@ -144,8 +151,7 @@ function onGameInit()
 			AnimSetGearPosition(hero.gear, 3080, 850)
 		end
 	end
-
-	AnimInit()
+	AnimInit(startSequence)
 	AnimationSetup()
 end
 

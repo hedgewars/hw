@@ -116,7 +116,7 @@ function onGameInit()
 		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
 	end
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 

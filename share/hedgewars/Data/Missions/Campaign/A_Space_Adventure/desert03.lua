@@ -74,7 +74,7 @@ function onGameInit()
 
 	initCheckpoint("desert03")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 

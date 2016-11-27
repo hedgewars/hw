@@ -78,7 +78,7 @@ function onGameInit()
 
 	initCheckpoint("death02")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 
