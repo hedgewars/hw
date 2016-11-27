@@ -164,6 +164,7 @@ Missions and Campaigns:
  * Fixed mistakes and bad wording of strings in several missions, scripts and campaigns
  * Fixed Lua error message in A Classic Fairytale mission 8
  * Fixed Lua error messages and broken stats screen in Climb Home singleplayer mission
+ * Fixed Killing the Specialists giving you another free turn after killing Desert Eagle with a desert eagle with shot #1-3
 
 Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far

@@ -16,7 +16,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates.").."|"..
 	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100.").."|"..
 	loc("If you injure a hedgehog you'll get 35% of the damage dealt.").."|"..
-	loc("Every time you kill an enemy hog your ammo will get reset.").."|"..
+	loc("Every time you kill an enemy hog your ammo will get reset next turn.").."|"..
 	loc("The rope won't get reset.")
 -- dialogs
 local dialog01 = {}
@@ -51,6 +51,8 @@ local teamB = {
 	name = loc("5 Deadly Hogs"),
 	color = tonumber("FF0000",16) -- red
 }
+-- After hero killed an enemy, his weapons will be reset in the next round
+local heroWeaponResetPending = false
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -102,6 +104,8 @@ end
 function onNewTurn()
 	if CurrentHedgehog ~= hero.gear then
 		enemyWeapons()
+	elseif heroWeaponResetPending then
+		refreshHeroAmmo()
 	end
 end
 
@@ -128,7 +132,7 @@ function onGearDelete(gear)
 		for i=1,table.getn(deadHog.additionalWeapons) do
 			table.insert(enemies[randomHog].additionalWeapons, deadHog.additionalWeapons[i])
 		end
-		refreshHeroAmmo()
+		heroWeaponResetPending = true
 	end
 end
 
@@ -225,7 +229,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your health points will be set to 100"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hedgehog you'll get 35% of the damage dealt"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset next turn"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reset"), 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
@@ -256,6 +260,7 @@ function refreshHeroAmmo()
 	AddAmmo(hero.gear, amDEagle, hero.deagleAmmo + extraAmmo)
 	AddAmmo(hero.gear, amBazooka, hero.bazookaAmmo + extraAmmo)
 	AddAmmo(hero.gear, amGrenade, hero.grenadeAmmo + extraAmmo)
+	heroWeaponResetPending = false
 end
 
 function enemyWeapons()
