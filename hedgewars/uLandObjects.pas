@@ -575,7 +575,10 @@ while (not pfsEOF(f)) and allOK do
         i:= Pos(',', s);
         SDTint.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
-        SDTint.b:= StrToInt(Trim(s));
+        i:= Pos(',', s);
+        SDTint.b:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        SDTint.a:= StrToInt(Trim(s));
         if GrayScale
             then
             begin

@@ -1195,7 +1195,7 @@ if (cReducedQuality and rqNoBackground) = 0 then
         // background
         ChangeDepth(RM, cStereo_Sky);
         if SuddenDeathDmg then
-            Tint(SDTint.r, SDTint.g, SDTint.b, $FF);
+            Tint(SDTint.r, SDTint.g, SDTint.b, SDTint.a);
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
         ChangeDepth(RM, -cStereo_Horizon);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
