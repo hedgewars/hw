@@ -144,29 +144,35 @@ end;
 
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
 begin
+    // copy from complete src
     copyToXYFromRect(src, dest, 0, 0, src^.w, src^.h, destX, destY);
 end;
 
 procedure copyToXYFromRect(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
-var i, j, maxDest, maxSrc, iX, iY: LongInt;
+var i, j, iX, iY, dX, dY, lX, lY: LongInt;
     srcPixels, destPixels: PLongWordArray;
     r0, g0, b0, a0, r1, g1, b1, a1: Byte;
 begin
-    maxDest:= (dest^.pitch div 4) * dest^.h;
-    maxSrc:= (src^.pitch div 4) * src^.h;
-
     SDL_LockSurface(src);
     SDL_LockSurface(dest);
 
     srcPixels:= src^.pixels;
     destPixels:= dest^.pixels;
 
-    for iX:= 0 to srcW - 1 do
-    for iY:= 0 to srcH - 1 do
+    // what's the offset between src and dest coords?
+    dX:= destX - srcX;
+    dY:= destY - srcY;
+
+    // let's figure out where the rectangle we can actually copy ends
+    lX:= ( min( min(srcX + srcW, src^.w), min(destX + srcW + dx, dest^.w) - dx ) ) - 1;
+    lY:= ( min( min(srcY + srcH, src^.h), min(destY + srcH + dy, dest^.h) - dY ) ) - 1;
+
+    for iX:= srcX to lX do
+    for iY:= srcY to lY do
         begin
-        i:= (destY + iY) * (dest^.pitch div 4) + (destX + iX);
-        j:= (srcY  + iY) * (src^.pitch  div 4) + (srcX  + iX);
-        if (i < maxDest) and (j < maxSrc) and (srcPixels^[j] and AMask <> 0) then
+        i:= (iY + dY) * dest^.w + (iX + dX);
+        j:= iY * src^.w  + iX;
+        if srcPixels^[j] and AMask <> 0 then
             begin
             SDL_GetRGBA(destPixels^[i], dest^.format, @r0, @g0, @b0, @a0);
             SDL_GetRGBA(srcPixels^[j], src^.format, @r1, @g1, @b1, @a1);
