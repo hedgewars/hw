@@ -165,6 +165,94 @@ begin
                 end
 end;
 
+procedure ColorizeLandFast(Surface: PSDL_Surface);
+var ltsurf: PSDL_Surface;
+    x, y, ltw, lth, c, modc, lastfull: LongInt;
+    srcp, dstp: Pointer;
+begin
+    ltsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
+    ltw:= ltsurf^.w;
+    lth:= ltsurf^.h;
+
+    // pointer to ltturf pixels. will be moved from line to line
+    srcp:= ltsurf^.pixels;
+    // pointer to Surface pixels. will be moved forward with every move()
+    dstp:= Surface^.pixels;
+
+    // amount of pixels to write per move()
+    c:= ltsurf^.pitch;
+    // amount of pixels to write for line's remainer move()
+    modc:= Surface^.pitch mod c;
+
+    SDL_LockSurface(Surface);
+    SDL_LockSurface(ltsurf);
+
+    y:= 0;
+    // last x where a full line from src may be written to
+    lastfull:= Surface^.w - ltw;
+    // only copy in one row of landtex. do copies within Surface after
+    while (y < lth) and (y < Surface^.h) do
+        begin
+        x:= 0;
+        // fill dst line with src lines
+        while x <= lastfull do
+            begin
+            move(srcp^, dstp^, c);
+            inc(dstp, c);
+                inc(x, ltw);
+            end;
+
+        // if it didn't fit perfectly, copy remainder
+        if modc > 0 then
+            begin
+            move(srcp^, dstp^, modc);
+            inc(dstp, modc);
+            end;
+
+        // move to next line in src surface
+        inc(srcp, ltsurf^.pitch);
+        inc(y);
+        end;
+
+    // we don't need ltsurf anymore -> cleanup
+    srcp:= nil;
+    SDL_UnlockSurface(ltsurf);
+    SDL_FreeSurface(ltsurf);
+
+    // from now on only copy pixels within Surface
+
+    // start reading from position 0, but continue writing at dstp
+    srcp:= Surface^.pixels;
+    // copy all the already written lines at once for that get number of written bytes so far
+    c:= dstp - srcp; // effectively same as c:= lth * Surface^.pitch;
+    // also figure out the remainder again
+    modc:= (Surface^.h mod lth) * Surface^.pitch; // effectivle same as modc:= (Surface^.pitch * Surface^.h) mod c;
+
+    // last y where a full copy may be written to
+    lastfull:= Surface^.h - lth;
+
+    // copy filled area down
+    while y <= lastfull do
+        begin
+        move(srcp^, dstp^, c);
+        inc(srcp, c);
+        inc(dstp, c);
+        inc(y, lth);
+        end;
+
+    // if it didn't fit perfectly, copy remainder
+    if modc > 0 then
+        begin
+        move(srcp^, dstp^, modc);
+        end;
+
+    SDL_UnlockSurface(Surface);
+
+    // freed in freeModule() below
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+    if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
+end;
+
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
@@ -277,7 +365,7 @@ begin
     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, AMask);
 
     if checkFails(tmpsurf <> nil, 'Error creating pre-land surface', true) then exit;
-    ColorizeLand(tmpsurf);
+    ColorizeLandFast(tmpsurf);
     if gameFlags and gfShoppaBorder = 0 then DrawBorderFromImage(tmpsurf);
     AddOnLandObjects(tmpsurf);
 
