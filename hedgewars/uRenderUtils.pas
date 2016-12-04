@@ -210,7 +210,8 @@ begin
         bT:= (bD * (255 - aT) + bT * aT) div 255;
         aT:= aD + ((255 - LongInt(aD)) * aT div 255);
 
-        destPixels^[dpi]:= SDL_MapRGBA(dest^.format, rT, gT, bT, aT);
+        destPixels^[dpi]:= SDL_MapRGBA(dest^.format, rT, gT, bT, Byte(aT));
+
         end;
 
     SDL_UnlockSurface(src);

@@ -1052,7 +1052,7 @@ function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch:
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
-function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongInt): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: LongWord): LongInt; cdecl; external SDLLibName;

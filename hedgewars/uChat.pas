@@ -161,7 +161,7 @@ end;
  * It will use the color stored in cl and update width
  *)
 procedure RenderChatLineTex(var cl: TChatLine; var str: shortstring);
-var strSurface,
+var strSurface, tmpSurface,
     resSurface: PSDL_Surface;
     dstrect   : TSDL_Rect; // destination rectangle for blitting
     font      : THWFont;
@@ -194,10 +194,14 @@ dstrect.h:= ClHeight;
 SDL_FillRect(resSurface, @dstrect, shadowint);
 
 // create and blit text
+tmpSurface:= nil;
 strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color);
-//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
-if strSurface <> nil then copyToXY(strSurface, resSurface, Padding, Padding);
+// fix format
+if strSurface <> nil then tmpSurface:= SDL_ConvertSurface(strSurface, resSurface^.format, 0);
 SDL_FreeSurface(strSurface);
+//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+if tmpSurface <> nil then copyToXY(tmpSurface, resSurface, Padding, Padding);
+SDL_FreeSurface(tmpSurface);
 
 cl.Tex:= Surface2Tex(resSurface, false);
 
