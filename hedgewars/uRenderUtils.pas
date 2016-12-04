@@ -164,8 +164,10 @@ begin
     dY:= destY - srcY;
 
     // let's figure out where the rectangle we can actually copy ends
-    lX:= ( min( min(srcX + srcW, src^.w), min(destX + srcW, dest^.w) - dx ) ) - 1;
-    lY:= ( min( min(srcY + srcH, src^.h), min(destY + srcH, dest^.h) - dY ) ) - 1;
+    lX:= min(srcX + srcW, src^.w) - 1;
+    if lX + dx >= dest^.w then lX:= dest^.w - dx - 1;
+    lY:= min(srcY + srcH, src^.h) - 1;
+    if lY + dy >= dest^.h then lY:= dest^.h - dy - 1;
 
     for iX:= srcX to lX do
     for iY:= srcY to lY do
