@@ -7,6 +7,7 @@ type
     LongWord = uinteger;
     Cardinal = uinteger;
     PtrInt = integer;
+    SizeInt = PtrInt;
     Word = uinteger;
     Byte = integer;
     SmallInt = integer;

@@ -165,88 +165,90 @@ begin
                 end
 end;
 
-procedure ColorizeLandFast(Surface: PSDL_Surface);
-var ltsurf: PSDL_Surface;
-    x, y, ltw, lth, c, modc, lastfull: LongInt;
-    srcp, dstp: Pointer;
+procedure ColorizeLandFast(mapsurf: PSDL_Surface);
+var ltexsurf: PSDL_Surface;
+    i: LongInt;
+    ltlnp, srcp, dstp, stopp: Pointer;
+    c: SizeInt;
 begin
-    ltsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
-    ltw:= ltsurf^.w;
-    lth:= ltsurf^.h;
+    ltexsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
 
-    // pointer to ltturf pixels. will be moved from line to line
-    srcp:= ltsurf^.pixels;
-    // pointer to Surface pixels. will be moved forward with every move()
-    dstp:= Surface^.pixels;
+    // pointer to current line of ltexsurf pixels. will be moved from line to line
+    ltlnp:= ltexsurf^.pixels;
+    // pointer to mapsurf pixels. will jump forward after every move()
+    dstp:= mapsurf^.pixels;
 
-    // amount of pixels to write per move()
-    c:= ltsurf^.pitch;
-    // amount of pixels to write for line's remainer move()
-    modc:= Surface^.pitch mod c;
+    // time to get serious
+    SDL_LockSurface(mapsurf);
+    SDL_LockSurface(ltexsurf);
 
-    SDL_LockSurface(Surface);
-    SDL_LockSurface(ltsurf);
+    // for now only fill a row with the height of landtex. do vertical copies within mapsurf after
 
-    y:= 0;
-    // last x where a full line from src may be written to
-    lastfull:= Surface^.w - ltw;
-    // only copy in one row of landtex. do copies within Surface after
-    while (y < lth) and (y < Surface^.h) do
+    // do this loop for each line of ltexsurf (unless we run out of map height first)
+    for i:= 1 to min(ltexsurf^.h, mapsurf^.h) do
         begin
-        x:= 0;
-        // fill dst line with src lines
-        while x <= lastfull do
+        // amount of pixels to write in first move()
+        c:= ltexsurf^.pitch;
+
+        // protect from odd cases where landtex wider than map
+        if c > mapsurf^.pitch then
+            c:= mapsurf^.pitch;
+
+        // write line of landtex to mapsurf
+        move(ltlnp^, dstp^, c);
+
+        // fill the rest of the line by copying left-to-right until full
+
+        // new src is start of line that we've just written to
+        srcp:= dstp;
+        // set stop pointer to start of next pixel line of mapsurf
+        stopp:= dstp + mapsurf^.pitch;
+        // move dst pointer to after what we've just written
+        inc(dstp, c);
+
+        // loop until dstp went past end of line
+        while dstp < stopp do
             begin
+            // copy all from left of dstp to right of it (or just fill the gap if smaller)
+            c:= min(dstp-srcp, stopp-dstp);
             move(srcp^, dstp^, c);
             inc(dstp, c);
-                inc(x, ltw);
             end;
 
-        // if it didn't fit perfectly, copy remainder
-        if modc > 0 then
-            begin
-            move(srcp^, dstp^, modc);
-            inc(dstp, modc);
-            end;
-
-        // move to next line in src surface
-        inc(srcp, ltsurf^.pitch);
-        inc(y);
+        // move to next line in ltexsurf
+        inc(ltlnp, ltexsurf^.pitch);
         end;
 
-    // we don't need ltsurf anymore -> cleanup
-    srcp:= nil;
-    SDL_UnlockSurface(ltsurf);
-    SDL_FreeSurface(ltsurf);
+    // we don't need ltexsurf itself anymore -> cleanup
+    ltlnp:= nil;
+    SDL_UnlockSurface(ltexsurf);
+    SDL_FreeSurface(ltexsurf);
+    ltexsurf:= nil;
 
-    // from now on only copy pixels within Surface
+    // from now on only copy pixels within mapsurf
 
-    // start reading from position 0, but continue writing at dstp
-    srcp:= Surface^.pixels;
     // copy all the already written lines at once for that get number of written bytes so far
-    c:= dstp - srcp; // effectively same as c:= lth * Surface^.pitch;
-    // also figure out the remainder again
-    modc:= (Surface^.h mod lth) * Surface^.pitch; // effectivle same as modc:= (Surface^.pitch * Surface^.h) mod c;
+    // already written pixels are between start and current dstp
+    srcp:= mapsurf^.pixels;
 
-    // last y where a full copy may be written to
-    lastfull:= Surface^.h - lth;
+    // first byte after end of pixels
+    stopp:= srcp + (mapsurf^.pitch * mapsurf^.h);
 
-    // copy filled area down
-    while y <= lastfull do
+    while dstp < stopp do
         begin
+        // copy all from before dstp to after (or just fill the gap if smaller)
+        c:= min(dstp-srcp, stopp-dstp);
+        // worried about size of c with humongous maps? don't be:
+        //  the OS wouldn't have allowed allocation of object with size > max of SizeInt anyway
         move(srcp^, dstp^, c);
-        inc(srcp, c);
         inc(dstp, c);
-        inc(y, lth);
         end;
 
-    // if it didn't fit perfectly, copy remainder
-    if modc > 0 then
-        begin
-        move(srcp^, dstp^, modc);
-        end;
-
-    SDL_UnlockSurface(Surface);
+    // cleanup
+    srcp:= nil;
+    dstp:= nil;
+    stopp:= nil;
+    SDL_UnlockSurface(mapsurf);
 
     // freed in freeModule() below
     LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
