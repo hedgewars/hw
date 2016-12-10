@@ -23,7 +23,7 @@ unit uScript;
  * This unit defines, implements and registers functions and
  * variables/constants bindings for usage in Lua scripts.
  *
- * Please keep http://hedgewars.org/kb/LuaAPI up to date!
+ * Please keep https://hedgewars.org/kb/LuaAPI up to date!
  *
  * Note: If you add a new function, make sure to test if _all_ parameters
  *       work as intended! (Especially conversions errors can sneak in
@@ -3131,7 +3131,7 @@ if not ScriptLoaded then
     end;
 lua_getglobal(luaState, Str2PChar(fname));
 ScriptExists:= not lua_isnoneornil(luaState, -1);
-lua_pop(luaState, -1)
+lua_pop(luaState, 1)
 end;
 
 procedure ScriptPrepareAmmoStore;
