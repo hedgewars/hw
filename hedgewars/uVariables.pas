@@ -273,7 +273,8 @@ const
         '/Graphics',                     // ptGraphics
         '/Themes',                       // ptThemes
         '/Themes/Bamboo',                // ptCurrTheme
-        '/Teams',                        // ptTeams
+        '/Config',                       // ptConfig
+        '/Config/Teams',                 // ptTeams
         '/Maps',                         // ptMaps
         '',                              // ptMapCurrent
         '/Demos',                        // ptDemos

@@ -321,7 +321,7 @@ begin
     for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+char(48+i);
     for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
-    loadBinds('dbind', cPathz[ptData] + '/settings.ini');
+    loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
 end;
 
 
