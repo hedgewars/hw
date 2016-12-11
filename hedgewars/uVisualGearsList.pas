@@ -349,9 +349,8 @@ if State <> 0 then
     gear^.State:= State;
 
 case Gear^.Kind of
-    vgtFlake: if cFlattenFlakes then
-        gear^.Layer:= 0
-              else if random(3) = 0 then
+    vgtFlake: 
+              if random(3) = 0 then
                   begin
                   gear^.Scale:= 0.5;
                   gear^.Layer:= 0   // 33% - far back
@@ -363,13 +362,17 @@ case Gear^.Kind of
                   end
               else if random(3) <> 0 then
                   gear^.Layer:= 5  // 30% - just behind land
-              else if random(2) = 0 then
+              else if (not cFlattenFlakes) and (random(2) = 0) then
                   gear^.Layer:= 6   // 7% - just in front of land
-              else
+              else if not cFlattenFlakes then
                   begin
                   gear^.Scale:= 1.5;
-                  gear^.Layer:= 2;  // 7% - close up
-                  end;
+                  gear^.Layer:= 2  // 7% - close up
+                  end
+              else begin 
+                   gear^.Layer:= 0;
+                   gear^.Scale:= 0.5
+                   end;
 
     vgtCloud: if cFlattenClouds then gear^.Layer:= 5
               else if random(3) = 0 then
