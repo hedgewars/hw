@@ -44,22 +44,16 @@ import CoreTypes
 import Utils
 
 #if defined(OFFICIAL_SERVER)
-{-
-    this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
-    because standard 'catch' doesn't seem to catch decompression errors for some reason
--}
 import qualified Codec.Compression.Zlib.Internal as ZI
 import qualified Codec.Compression.Zlib as Z
 
-decompressWithoutExceptions :: BL.ByteString -> Either String BL.ByteString
-decompressWithoutExceptions = finalise
-                            . ZI.foldDecompressStream cons nil err
-                            . ZI.decompressWithErrors ZI.zlibFormat ZI.defaultDecompressParams
-  where err _ msg = Left msg
-        nil = Right []
-        cons chunk = right (chunk :)
-        finalise = right BL.fromChunks
-{- end snippet  -}
+decompressWithoutExceptions :: BL.ByteString -> BL.ByteString
+decompressWithoutExceptions = BL.fromChunks . ZI.foldDecompressStreamWithInput chunk end err decomp
+    where
+        decomp = ZI.decompressST ZI.zlibFormat ZI.defaultDecompressParams
+        chunk = (:)
+        end _ = []
+        err = const $ [BW.empty]
 #endif
 
 toEngineMsg :: B.ByteString -> B.ByteString
@@ -187,13 +181,10 @@ drawnMapData =
         by200 m = Just $ L.splitAt 200 m
 
 unpackDrawnMap :: B.ByteString -> BL.ByteString
-unpackDrawnMap = either (const BL.empty) id
-        . decompressWithoutExceptions
-        . BL.pack
-        . L.drop 4
-        . fromMaybe []
+unpackDrawnMap = either
+        (const BL.empty) 
+        (decompressWithoutExceptions . BL.pack . drop 4 . BW.unpack)
         . Base64.decode
-        . B.unpack
 
 compressWithLength :: BL.ByteString -> BL.ByteString
 compressWithLength b = BL.drop 8 . encode . runPut $ do
@@ -201,9 +192,8 @@ compressWithLength b = BL.drop 8 . encode . runPut $ do
     mapM_ putWord8 $ BW.unpack $ BL.toStrict $ Z.compress b
 
 packDrawnMap :: BL.ByteString -> B.ByteString
-packDrawnMap = B.pack
-    . Base64.encode
-    . BW.unpack
+packDrawnMap =
+      Base64.encode
     . BL.toStrict
     . compressWithLength
 

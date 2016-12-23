@@ -22,7 +22,7 @@ macro(CHECK_HASKELL_MODULE_EXISTS MODULE FUNCTION PARAMCOUNT LIBRARY)
         endforeach()
     endif()
 
-    set(PARAMETERS "")
+    #set(PARAMETERS "")
 
     execute_process(COMMAND ${GHC_EXECUTABLE}
                     "-DMODULE=${MODULE}"
