@@ -245,3 +245,6 @@ sanitizeName = B.map sc
     where
         sc c | isAlphaNum c = c
              | otherwise = '_'
+
+isRegistered :: ClientInfo -> Bool
+isRegistered = (<) 0 . B.length . webPassword

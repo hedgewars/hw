@@ -515,12 +515,12 @@ processAction JoinLobby = do
     rnc <- gets roomsClients
     clientNick <- client's nick
     clProto <- client's clientProto
-    isAuthenticated <- liftM (not . B.null) $ client's webPassword
+    isAuthenticated <- liftM isRegistered $ client's id
     isAdmin <- client's isAdministrator
     isContr <- client's isContributor
     loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
-    let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
+    let authenticatedNicks = L.map nick . L.filter isRegistered $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
     let contrNicks = L.map nick . L.filter isContributor $ loggedInClients
     inRoomNicks <- io $
