@@ -6,6 +6,7 @@ use std::io;
 use netbuf;
 
 use utils;
+use server::client::HWClient;
 
 type Slab<T> = slab::Slab<T, Token>;
 
@@ -37,9 +38,6 @@ impl HWServer {
         let token = self.clients.insert(client)
             .ok().expect("could not add connection to slab");
 
-        self.clients[token].send_raw_msg(
-            format!("CONNECTED\nHedgewars server http://www.hedgewars.org/\n{}\n\n"
-            , utils::PROTOCOL_VERSION).as_bytes());
         self.clients[token].register(poll, token);
 
         Ok(())
@@ -56,49 +54,6 @@ impl HWServer {
     }
 }
 
-
-struct HWClient {
-    sock: TcpStream,
-    buf_in: netbuf::Buf,
-    buf_out: netbuf::Buf
-}
-
-impl HWClient {
-    fn new(sock: TcpStream) -> HWClient {
-        HWClient {
-            sock: sock,
-            buf_in: netbuf::Buf::new(),
-            buf_out: netbuf::Buf::new(),
-        }
-    }
-
-    fn register(&self, poll: &Poll, token: Token) {
-        poll.register(&self.sock, token, Ready::readable(),
-                      PollOpt::edge())
-            .ok().expect("could not register socket with event loop");
-    }
-
-    fn send_raw_msg(&mut self, msg: &[u8]) {
-        self.buf_out.write(msg).unwrap();
-        self.flush();
-    }
-
-    fn flush(&mut self) {
-        self.buf_out.write_to(&mut self.sock).unwrap();
-        self.sock.flush();
-    }
-
-    fn readable(&mut self, poll: &Poll) -> io::Result<()> {
-        self.buf_in.read_from(&mut self.sock)?;
-        println!("Incoming buffer size: {}", self.buf_in.len());
-        Ok(())
-    }
-
-    fn writable(&mut self, poll: &Poll) -> io::Result<()> {
-        self.buf_out.write_to(&mut self.sock)?;
-        Ok(())
-    }
-}
 
 struct HWRoom {
     name: String

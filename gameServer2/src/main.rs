@@ -17,7 +17,7 @@ fn main() {
 
     let address = "0.0.0.0:46631".parse().unwrap();
     let listener = TcpListener::bind(&address).unwrap();
-    let mut server = server::HWServer::new(listener, 1024, 512);
+    let mut server = server::server::HWServer::new(listener, 1024, 512);
 
     let poll = Poll::new().unwrap();
     server.register(&poll).unwrap();
