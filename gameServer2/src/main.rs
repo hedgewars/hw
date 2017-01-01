@@ -1,6 +1,7 @@
 extern crate rand;
 extern crate mio;
 extern crate slab;
+extern crate netbuf;
 
 //use std::io::*;
 //use rand::Rng;
@@ -27,9 +28,17 @@ fn main() {
         poll.poll(&mut events, None).unwrap();
 
         for event in events.iter() {
-            match event.token() {
-                utils::SERVER => server.accept(&poll).unwrap(),
-                _ => unreachable!(),
+            if event.kind().is_readable() {
+                match event.token() {
+                    utils::SERVER => server.accept(&poll).unwrap(),
+                    tok => server.client_readable(&poll, tok).unwrap(),
+                }
+            }
+            if event.kind().is_writable() {
+                match event.token() {
+                    utils::SERVER => unreachable!(),
+                    tok => server.client_writable(&poll, tok).unwrap(),
+                }
             }
         }
     }

@@ -1,11 +1,13 @@
-use slab::*;
+use slab;
 use mio::tcp::*;
 use mio::*;
-use mio;
 use std::io::Write;
 use std::io;
+use netbuf;
 
 use utils;
+
+type Slab<T> = slab::Slab<T, Token>;
 
 pub struct HWServer {
     listener: TcpListener,
@@ -38,31 +40,63 @@ impl HWServer {
         self.clients[token].send_raw_msg(
             format!("CONNECTED\nHedgewars server http://www.hedgewars.org/\n{}\n\n"
             , utils::PROTOCOL_VERSION).as_bytes());
-
-        self.clients[token].uid = Some(token);
-        poll.register(&self.clients[token].sock, mio::Token(token), Ready::readable(),
-                      PollOpt::edge() | PollOpt::oneshot())
-            .ok().expect("could not register socket with event loop");
+        self.clients[token].register(poll, token);
 
         Ok(())
     }
+
+    pub fn client_readable(&mut self, poll: &Poll,
+                           token: Token) -> io::Result<()> {
+        self.clients[token].readable(poll)
+    }
+
+    pub fn client_writable(&mut self, poll: &Poll,
+                           token: Token) -> io::Result<()> {
+        self.clients[token].writable(poll)
+    }
 }
+
 
 struct HWClient {
     sock: TcpStream,
-    uid: Option<usize>
+    buf_in: netbuf::Buf,
+    buf_out: netbuf::Buf
 }
 
 impl HWClient {
     fn new(sock: TcpStream) -> HWClient {
         HWClient {
             sock: sock,
-            uid: None
+            buf_in: netbuf::Buf::new(),
+            buf_out: netbuf::Buf::new(),
         }
     }
 
+    fn register(&self, poll: &Poll, token: Token) {
+        poll.register(&self.sock, token, Ready::readable(),
+                      PollOpt::edge())
+            .ok().expect("could not register socket with event loop");
+    }
+
     fn send_raw_msg(&mut self, msg: &[u8]) {
-        self.sock.write_all(msg).unwrap();
+        self.buf_out.write(msg).unwrap();
+        self.flush();
+    }
+
+    fn flush(&mut self) {
+        self.buf_out.write_to(&mut self.sock).unwrap();
+        self.sock.flush();
+    }
+
+    fn readable(&mut self, poll: &Poll) -> io::Result<()> {
+        self.buf_in.read_from(&mut self.sock)?;
+        println!("Incoming buffer size: {}", self.buf_in.len());
+        Ok(())
+    }
+
+    fn writable(&mut self, poll: &Poll) -> io::Result<()> {
+        self.buf_out.write_to(&mut self.sock)?;
+        Ok(())
     }
 }
 
