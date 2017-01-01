@@ -7,4 +7,4 @@ authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
 [dependencies]
 rand = "0.3"
 mio = "0.6"
-
+slab = "0.3"

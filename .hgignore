@@ -78,3 +78,8 @@ glob:*.xcuserdata
 glob:xcuserdata
 glob:*.mode1v3
 glob:*.mode2v3
+glob:gameServer2/target
+glob:gameServer2/Cargo.lock
+glob:gameServer2/gameServer2.iml
+glob:.idea
+

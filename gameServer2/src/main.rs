@@ -1,27 +1,25 @@
 extern crate rand;
 extern crate mio;
+extern crate slab;
 
-use std::io::*;
+//use std::io::*;
 //use rand::Rng;
 //use std::cmp::Ordering;
 use mio::tcp::*;
 use mio::*;
 
 mod utils;
-
-const SERVER: mio::Token = mio::Token(0);
-
-
+mod server;
 
 fn main() {
     println!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
 
     let address = "0.0.0.0:46631".parse().unwrap();
-    let server = TcpListener::bind(&address).unwrap();
+    let listener = TcpListener::bind(&address).unwrap();
+    let mut server = server::HWServer::new(listener, 1024, 512);
 
     let poll = Poll::new().unwrap();
-    poll.register(&server, SERVER, Ready::readable(),
-               PollOpt::edge()).unwrap();
+    server.register(&poll).unwrap();
 
     let mut events = Events::with_capacity(1024);
 
@@ -30,17 +28,7 @@ fn main() {
 
         for event in events.iter() {
             match event.token() {
-                SERVER => match server.accept() {
-                    Ok((mut client_stream, addr)) => {
-                        println!("Connected: {}", addr);
-                        client_stream.write_all(
-                            format!("CONNECTED\nHedgewars server http://www.hedgewars.org/\n{}\n\n"
-                                    , utils::PROTOCOL_VERSION).as_bytes()
-                        );
-                    },
-                    _ => unreachable!()
-                },
-
+                utils::SERVER => server.accept(&poll).unwrap(),
                 _ => unreachable!(),
             }
         }
