@@ -6,10 +6,11 @@ use std::io;
 use netbuf;
 
 use utils;
+use protocol::FrameDecoder;
 
 pub struct HWClient {
     sock: TcpStream,
-    buf_in: netbuf::Buf,
+    decoder: FrameDecoder,
     buf_out: netbuf::Buf
 }
 
@@ -17,7 +18,7 @@ impl HWClient {
     pub fn new(sock: TcpStream) -> HWClient {
         HWClient {
             sock: sock,
-            buf_in: netbuf::Buf::new(),
+            decoder: FrameDecoder::new(),
             buf_out: netbuf::Buf::new(),
         }
     }
@@ -43,8 +44,9 @@ impl HWClient {
     }
 
     pub fn readable(&mut self, poll: &Poll) -> io::Result<()> {
-        self.buf_in.read_from(&mut self.sock)?;
-        println!("Incoming buffer size: {}", self.buf_in.len());
+        let v = self.decoder.read_from(&mut self.sock)?;
+        self.decoder.extract_messages();
+        println!("Read {} bytes", v);
         Ok(())
     }
 

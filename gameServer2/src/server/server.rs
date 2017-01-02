@@ -31,7 +31,7 @@ impl HWServer {
     }
 
     pub fn accept(&mut self, poll: &Poll) -> io::Result<()> {
-        let (sock, addr) = self.listener.accept().unwrap();
+        let (sock, addr) = self.listener.accept()?;
         println!("Connected: {}", addr);
 
         let client = HWClient::new(sock);

@@ -11,6 +11,7 @@ use mio::*;
 
 mod utils;
 mod server;
+mod protocol;
 
 fn main() {
     println!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
