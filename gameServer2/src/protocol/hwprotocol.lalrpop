@@ -1,17 +1,40 @@
-use std::str;
+use std::string;
+use std::str::FromStr;
 
 use super::messages::HWProtocolMessage::*;
-use super::messages::HWProtocolMessage;
+use super::messages::*;
 
 grammar;
 
-pub ProtocolMessage: HWProtocolMessage<'input> = {
-    "NICK" <s:Str> => Nick(s),
+pub ProtocolMessage: HWProtocolMessage = {
+    <SpecificMessage> "\n\n",
 };
 
-Str: &'input str = {
-    <s:r"[^\n]\n"> => s,
+SpecificMessage: HWProtocolMessage = {
+    "NICK" "\n" <ProtocolString> => Nick(<>),
+    "PONG" => Pong,
+    "PING" => Ping,
+    "PROTO" "\n" <Num32> => Proto(<>),
 };
 
+Num32: u32 =
+    <Digit*> => number(<>);
 
-//Num32: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+ProtocolString: String =
+    <ProtocolChar*> => <>.join("");
+
+ProtocolChar: &'input str =
+    r"[^\n]" => <>;
+
+Digit: u8 = {
+    "0" => 0,
+    "1" => 1,
+    "2" => 2,
+    "3" => 3,
+    "4" => 4,
+    "5" => 5,
+    "6" => 6,
+    "7" => 7,
+    "8" => 8,
+    "9" => 9,
+};

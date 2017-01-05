@@ -1,46 +1,49 @@
 use server::coretypes::{ServerVar, GameCfg, TeamInfo, HedgehogInfo};
+use std;
+use std::ops;
+use std::convert::From;
 
-
-pub enum HWProtocolMessage<'a> {
+#[derive(PartialEq, Debug)]
+pub enum HWProtocolMessage {
     // core
     Ping,
     Pong,
-    Quit(Option<&'a str>),
-    //Cmd(&'a str, Vec<&'a str>),
-    Global(&'a str),
-    Watch(&'a str),
+    Quit(Option<String>),
+    //Cmd(String, Vec<String>),
+    Global(String),
+    Watch(String),
     ToggleServerRegisteredOnly,
     SuperPower,
-    Info(&'a str),
+    Info(String),
     // not entered state
-    Nick(&'a str),
+    Nick(String),
     Proto(u32),
-    Password(&'a str, &'a str),
-    Checker(&'a str),
+    Password(String, String),
+    Checker(String),
     // lobby
     List,
-    Chat(&'a str),
-    CreateRoom(&'a str, Option<&'a str>),
-    Join(&'a str, Option<&'a str>),
-    Follow(&'a str),
-    Rnd(Vec<&'a str>),
-    Kick(&'a str),
-    Ban(&'a str, &'a str, u32),
-    BanIP(&'a str, &'a str, u32),
-    BanNick(&'a str, &'a str, u32),
+    Chat(String),
+    CreateRoom(String, Option<String>),
+    Join(String, Option<String>),
+    Follow(String),
+    Rnd(Vec<String>),
+    Kick(String),
+    Ban(String, String, u32),
+    BanIP(String, String, u32),
+    BanNick(String, String, u32),
     BanList,
-    Unban(&'a str),
+    Unban(String),
     SetServerVar(ServerVar),
     GetServerVar,
     RestartServer,
     Stats,
     // in room
-    Part(Option<&'a str>),
+    Part(Option<String>),
     Cfg(GameCfg),
     AddTeam(TeamInfo),
-    RemoveTeam(&'a str),
-    SetHedgehogsNumber(&'a str, u8),
-    SetTeamColor(&'a str, u8),
+    RemoveTeam(String),
+    SetHedgehogsNumber(String, u8),
+    SetTeamColor(String, u8),
     ToggleReady,
     StartGame,
     EngineMessage,
@@ -48,18 +51,31 @@ pub enum HWProtocolMessage<'a> {
     ToggleRestrictJoin,
     ToggleRestrictTeams,
     ToggleRegisteredOnly,
-    RoomName(&'a str),
-    Delegate(&'a str),
-    TeamChat(&'a str),
+    RoomName(String),
+    Delegate(String),
+    TeamChat(String),
     MaxTeams(u8),
     Fix,
     Unfix,
-    Greeting(&'a str),
-    CallVote(Option<(&'a str, Option<&'a str>)>),
-    Vote(&'a str),
-    ForceVote(&'a str),
-    Save(&'a str, &'a str),
-    Delete(&'a str, &'a str),
-    SaveRoom(&'a str),
-    LoadRoom(&'a str),
+    Greeting(String),
+    CallVote(Option<(String, Option<String>)>),
+    Vote(String),
+    ForceVote(String),
+    Save(String, String),
+    Delete(String, String),
+    SaveRoom(String),
+    LoadRoom(String),
+}
+
+pub fn number<T: From<u8>
+                + std::default::Default
+                + std::ops::MulAssign
+                + std::ops::AddAssign>
+    (digits: Vec<u8>) -> T {
+    let mut value: T = T::default();
+    for digit in digits {
+        value *= T::from(10);
+        value += T::from(digit);
+    }
+    value
 }

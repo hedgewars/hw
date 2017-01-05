@@ -4,6 +4,7 @@ use std::io::Result;
 
 mod messages;
 mod hwprotocol;
+mod lexer;
 
 pub struct FrameDecoder {
     buf: netbuf::Buf,
@@ -23,4 +24,10 @@ impl FrameDecoder {
     pub fn extract_messages(&mut self) -> &[u8] {
         &self.buf[..]
     }
+}
+
+#[test]
+fn testparser() {
+    assert_eq!(messages::HWProtocolMessage::Nick("hey".to_string()),
+               hwprotocol::parse_ProtocolMessage("NICK\nhey\n\n").unwrap());
 }
