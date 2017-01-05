@@ -2,6 +2,8 @@ use netbuf;
 use std::io::Read;
 use std::io::Result;
 
+mod messages;
+mod hwprotocol;
 
 pub struct FrameDecoder {
     buf: netbuf::Buf,

@@ -1,0 +1,17 @@
+use std::str;
+
+use super::messages::HWProtocolMessage::*;
+use super::messages::HWProtocolMessage;
+
+grammar;
+
+pub ProtocolMessage: HWProtocolMessage<'input> = {
+    "NICK" <s:Str> => Nick(s),
+};
+
+Str: &'input str = {
+    <s:r"[^\n]\n"> => s,
+};
+
+
+//Num32: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
