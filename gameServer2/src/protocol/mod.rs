@@ -3,6 +3,7 @@ use std::io::Read;
 use std::io::Result;
 
 mod messages;
+mod parser;
 
 pub struct FrameDecoder {
     buf: netbuf::Buf,

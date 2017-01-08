@@ -2,6 +2,8 @@ extern crate rand;
 extern crate mio;
 extern crate slab;
 extern crate netbuf;
+#[macro_use]
+extern crate nom;
 
 //use std::io::*;
 //use rand::Rng;
