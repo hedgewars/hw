@@ -7,8 +7,8 @@ use super::messages::HWProtocolMessage::*;
 
 named!(end_of_message, tag!("\n\n"));
 named!(a_line<&[u8], &str>, map_res!(not_line_ending, str::from_utf8));
-//fn number_line<T>(input: &[u8]) -> IResult<&[u8], T> {
-//}
+named!(opt_param<&[u8], Option<&str> >, opt!(flat_map!(preceded!(eol, a_line), non_empty)));
+
 named!(basic_message<&[u8], HWProtocolMessage>, alt!(
     do_parse!(tag!("PING") >> (Ping))
     | do_parse!(tag!("PONG") >> (Pong))
@@ -26,6 +26,7 @@ named!(basic_message<&[u8], HWProtocolMessage>, alt!(
 named!(one_param_message<&[u8], HWProtocolMessage>, alt!(
     do_parse!(tag!("NICK") >> eol >> n: a_line >> (Nick(n)))
     | do_parse!(tag!("PROTO") >> eol >> d: map_res!(a_line, FromStr::from_str) >> (Proto(d)))
+    | do_parse!(tag!("QUIT") >> msg: opt_param >> (Quit(msg)))
 ));
 
 named!(message<&[u8],HWProtocolMessage>, terminated!(alt!(
@@ -33,12 +34,13 @@ named!(message<&[u8],HWProtocolMessage>, terminated!(alt!(
     | one_param_message
 ), end_of_message));
 
-named!(messages<&[u8], Vec<HWProtocolMessage> >, many0!(message));
 
 #[test]
 fn parse_test() {
-    assert_eq!(message(b"PING\n\n"), IResult::Done(&b""[..], Ping));
-    assert_eq!(message(b"START_GAME\n\n"), IResult::Done(&b""[..], StartGame));
+    assert_eq!(message(b"PING\n\n"),          IResult::Done(&b""[..], Ping));
+    assert_eq!(message(b"START_GAME\n\n"),    IResult::Done(&b""[..], StartGame));
     assert_eq!(message(b"NICK\nit's me\n\n"), IResult::Done(&b""[..], Nick("it's me")));
-    assert_eq!(message(b"PROTO\n51\n\n"), IResult::Done(&b""[..], Proto(51)));
+    assert_eq!(message(b"PROTO\n51\n\n"),     IResult::Done(&b""[..], Proto(51)));
+    assert_eq!(message(b"QUIT\nbye-bye\n\n"), IResult::Done(&b""[..], Quit(Some("bye-bye"))));
+    assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
 }
