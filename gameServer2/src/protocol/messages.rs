@@ -19,7 +19,7 @@ pub enum HWProtocolMessage<'a> {
     Nick(&'a str),
     Proto(u32),
     Password(&'a str, &'a str),
-    Checker(&'a str),
+    Checker(u32, &'a str, &'a str),
     // lobby
     List,
     Chat(&'a str),
@@ -62,7 +62,7 @@ pub enum HWProtocolMessage<'a> {
     Vote(&'a str),
     ForceVote(&'a str),
     Save(&'a str, &'a str),
-    Delete(&'a str, &'a str),
+    Delete(&'a str),
     SaveRoom(&'a str),
     LoadRoom(&'a str),
 }
