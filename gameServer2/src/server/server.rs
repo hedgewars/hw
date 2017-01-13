@@ -3,7 +3,6 @@ use mio::tcp::*;
 use mio::*;
 use std::io::Write;
 use std::io;
-use netbuf;
 
 use utils;
 use server::client::HWClient;

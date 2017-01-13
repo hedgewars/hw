@@ -6,11 +6,13 @@ use std::io;
 use netbuf;
 
 use utils;
-use protocol::FrameDecoder;
+use protocol::ProtocolDecoder;
+use protocol::messages;
+use protocol::messages::HWProtocolMessage::*;
 
 pub struct HWClient {
     sock: TcpStream,
-    decoder: FrameDecoder,
+    decoder: ProtocolDecoder,
     buf_out: netbuf::Buf
 }
 
@@ -18,7 +20,7 @@ impl HWClient {
     pub fn new(sock: TcpStream) -> HWClient {
         HWClient {
             sock: sock,
-            decoder: FrameDecoder::new(),
+            decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
         }
     }
@@ -38,6 +40,10 @@ impl HWClient {
         self.flush();
     }
 
+    fn send_msg(&mut self, msg: messages::HWProtocolMessage) {
+        self.send_raw_msg(&msg.to_raw_protocol().into_bytes());
+    }
+
     fn flush(&mut self) {
         self.buf_out.write_to(&mut self.sock).unwrap();
         self.sock.flush();
@@ -45,8 +51,21 @@ impl HWClient {
 
     pub fn readable(&mut self, poll: &Poll) -> io::Result<()> {
         let v = self.decoder.read_from(&mut self.sock)?;
-        self.decoder.extract_messages();
         println!("Read {} bytes", v);
+        let mut response = Vec::new();
+        {
+            let msgs = self.decoder.extract_messages();
+            for msg in msgs {
+                match msg {
+                    Ping => response.push(Pong),
+                    _ => println!("Unknown message")
+                }
+            }
+        }
+        for r in response {
+            self.send_msg(r);
+        }
+        self.decoder.sweep();
         Ok(())
     }
 

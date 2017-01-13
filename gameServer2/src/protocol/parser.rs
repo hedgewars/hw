@@ -99,7 +99,7 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     (BanNick(n, r, t)))
 ));
 
-named!(message<&[u8],HWProtocolMessage>, terminated!(alt!(
+named!(message<&[u8], HWProtocolMessage>, terminated!(alt!(
       basic_message
     | one_param_message
     | cmd_message
@@ -107,6 +107,7 @@ named!(message<&[u8],HWProtocolMessage>, terminated!(alt!(
     ), end_of_message
 ));
 
+named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(message)));
 
 #[test]
 fn parse_test() {
@@ -118,4 +119,6 @@ fn parse_test() {
     assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
     assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo")));
     assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me", "bad", 77)));
+
+    assert_eq!(extract_messages(b"PING\n\nPING\n\nP"),   IResult::Done(&b"P"[..], vec![Ping, Ping]));
 }

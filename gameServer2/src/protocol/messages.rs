@@ -9,6 +9,8 @@ pub enum HWProtocolMessage<'a> {
     Ping,
     Pong,
     Quit(Option<&'a str>),
+    Bye(&'a str),
+    LobbyLeft(&'a str),
     //Cmd(&'a str, Vec<&'a str>),
     Global(&'a str),
     Watch(&'a str),
@@ -78,4 +80,32 @@ pub fn number<T: From<u8>
         value += T::from(digit);
     }
     value
+}
+
+fn construct_message(msg: & [&str]) -> String {
+    let mut m = String::with_capacity(64);
+
+    for s in msg {
+        m.push_str(s);
+        m.push('\n');
+    }
+    m.push('\n');
+
+    m
+}
+
+impl<'a> HWProtocolMessage<'a> {
+    pub fn to_raw_protocol(&self) -> String {
+        match self {
+            &HWProtocolMessage::Ping
+                => "PING\n\n".to_string(),
+            &HWProtocolMessage::Pong
+                => "PONG\n\n".to_string(),
+            &HWProtocolMessage::Bye(msg)
+                => construct_message(&["BYE", msg]),
+            &HWProtocolMessage::LobbyLeft(msg)
+                => construct_message(&["LOBBY_LEFT", msg]),
+            _ => String::new()
+        }
+    }
 }

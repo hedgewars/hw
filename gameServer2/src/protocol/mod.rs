@@ -1,18 +1,21 @@
 use netbuf;
 use std::io::Read;
 use std::io::Result;
+use nom::IResult;
 
-mod messages;
+pub mod messages;
 mod parser;
 
-pub struct FrameDecoder {
+pub struct ProtocolDecoder {
     buf: netbuf::Buf,
+    consumed: usize,
 }
 
-impl FrameDecoder {
-    pub fn new() -> FrameDecoder {
-        FrameDecoder {
-            buf: netbuf::Buf::new()
+impl ProtocolDecoder {
+    pub fn new() -> ProtocolDecoder {
+        ProtocolDecoder {
+            buf: netbuf::Buf::new(),
+            consumed: 0,
         }
     }
 
@@ -20,7 +23,20 @@ impl FrameDecoder {
         self.buf.read_from(stream)
     }
 
-    pub fn extract_messages(&mut self) -> &[u8] {
-        &self.buf[..]
+    pub fn extract_messages(&mut self) -> Vec<messages::HWProtocolMessage> {
+        let parse_result = parser::extract_messages(&self.buf[..]);
+        match parse_result {
+            IResult::Done(tail, msgs) => {
+                self.consumed = self.buf.len() - self.consumed - tail.len();
+                msgs
+            },
+            IResult::Incomplete(_) => unreachable!(),
+            IResult::Error(_) => unreachable!(),
+        }
+    }
+
+    pub fn sweep(&mut self) {
+        self.buf.consume(self.consumed);
+        self.consumed = 0;
     }
 }
