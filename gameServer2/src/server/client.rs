@@ -9,6 +9,8 @@ use utils;
 use protocol::ProtocolDecoder;
 use protocol::messages;
 use protocol::messages::HWProtocolMessage::*;
+use server::actions::Action::*;
+use server::actions::Action;
 use log;
 
 pub struct HWClient {
@@ -34,13 +36,17 @@ impl HWClient {
         self.send_msg(Connected(utils::PROTOCOL_VERSION));
     }
 
-    fn send_raw_msg(&mut self, msg: &[u8]) {
+    pub fn send_raw_msg(&mut self, msg: &[u8]) {
         self.buf_out.write(msg).unwrap();
         self.flush();
     }
 
-    fn send_msg(&mut self, msg: messages::HWProtocolMessage) {
-        self.send_raw_msg(&msg.to_raw_protocol().into_bytes());
+    pub fn send_string(&mut self, msg: &String) {
+        self.send_raw_msg(&msg.as_bytes());
+    }
+
+    pub fn send_msg(&mut self, msg: messages::HWProtocolMessage) {
+        self.send_string(&msg.to_raw_protocol());
     }
 
     fn flush(&mut self) {
@@ -48,26 +54,23 @@ impl HWClient {
         self.sock.flush();
     }
 
-    pub fn readable(&mut self, poll: &Poll) -> io::Result<()> {
-        let v = self.decoder.read_from(&mut self.sock)?;
+    pub fn readable(&mut self, poll: &Poll) -> Vec<Action> {
+        let v = self.decoder.read_from(&mut self.sock).unwrap();
         debug!("Read {} bytes", v);
         let mut response = Vec::new();
         {
             let msgs = self.decoder.extract_messages();
             for msg in msgs {
                 match msg {
-                    Ping => response.push(Pong),
+                    Ping => response.push(SendMe(Pong.to_raw_protocol())),
                     Malformed => warn!("Malformed/unknown message"),
                     Empty => warn!("Empty message"),
                     _ => unimplemented!(),
                 }
             }
         }
-        for r in response {
-            self.send_msg(r);
-        }
         self.decoder.sweep();
-        Ok(())
+        response
     }
 
     pub fn writable(&mut self, poll: &Poll) -> io::Result<()> {

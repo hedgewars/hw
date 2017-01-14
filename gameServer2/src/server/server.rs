@@ -6,6 +6,8 @@ use std::io;
 
 use utils;
 use server::client::HWClient;
+use server::actions::Action;
+use server::actions::Action::*;
 
 type Slab<T> = slab::Slab<T, Token>;
 
@@ -44,7 +46,15 @@ impl HWServer {
 
     pub fn client_readable(&mut self, poll: &Poll,
                            token: Token) -> io::Result<()> {
-        self.clients[token].readable(poll)
+        let actions;
+        {
+            actions = self.clients[token].readable(poll);
+        }
+
+        for action in actions {
+            self.react(token, action);
+        }
+        Ok(())
     }
 
     pub fn client_writable(&mut self, poll: &Poll,
@@ -55,6 +65,13 @@ impl HWServer {
     pub fn client_error(&mut self, poll: &Poll,
                            token: Token) -> io::Result<()> {
         self.clients[token].error(poll)
+    }
+
+    fn react(&mut self, token: Token, action: Action) {
+        match action {
+            SendMe(msg) => self.clients[token].send_string(&msg),
+            //_ => unimplemented!(),
+        }
     }
 }
 
