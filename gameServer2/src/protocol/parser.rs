@@ -99,13 +99,24 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     (BanNick(n, r, t)))
 ));
 
-named!(message<&[u8], HWProtocolMessage>, terminated!(alt!(
-      basic_message
-    | one_param_message
-    | cmd_message
-    | complex_message
-    ), end_of_message
-));
+named!(malformed_message<&[u8], HWProtocolMessage>,
+    do_parse!(separated_list!(eol, a_line) >> (Malformed)));
+
+named!(empty_message<&[u8], HWProtocolMessage>,
+    do_parse!(alt!(end_of_message | eol) >> (Empty)));
+
+named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
+    alt!(
+          basic_message
+        | one_param_message
+        | cmd_message
+        | complex_message
+        | malformed_message
+        ), end_of_message
+    )
+    | empty_message
+    )
+);
 
 named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(message)));
 
@@ -120,5 +131,8 @@ fn parse_test() {
     assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo")));
     assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me", "bad", 77)));
 
-    assert_eq!(extract_messages(b"PING\n\nPING\n\nP"),   IResult::Done(&b"P"[..], vec![Ping, Ping]));
+    assert_eq!(extract_messages(b"PING\n\nPING\n\nP"), IResult::Done(&b"P"[..], vec![Ping, Ping]));
+    assert_eq!(extract_messages(b"SING\n\nPING\n\n"),  IResult::Done(&b""[..],  vec![Malformed, Ping]));
+    assert_eq!(extract_messages(b"\n\n\n\nPING\n\n"),  IResult::Done(&b""[..],  vec![Empty, Empty, Ping]));
+    assert_eq!(extract_messages(b"\n\n\nPING\n\n"),    IResult::Done(&b""[..],  vec![Empty, Empty, Ping]));
 }

@@ -31,7 +31,7 @@ impl HWServer {
 
     pub fn accept(&mut self, poll: &Poll) -> io::Result<()> {
         let (sock, addr) = self.listener.accept()?;
-        println!("Connected: {}", addr);
+        info!("Connected: {}", addr);
 
         let client = HWClient::new(sock);
         let token = self.clients.insert(client)
@@ -50,6 +50,11 @@ impl HWServer {
     pub fn client_writable(&mut self, poll: &Poll,
                            token: Token) -> io::Result<()> {
         self.clients[token].writable(poll)
+    }
+
+    pub fn client_error(&mut self, poll: &Poll,
+                           token: Token) -> io::Result<()> {
+        self.clients[token].error(poll)
     }
 }
 

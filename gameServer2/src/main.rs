@@ -4,6 +4,9 @@ extern crate slab;
 extern crate netbuf;
 #[macro_use]
 extern crate nom;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 
 //use std::io::*;
 //use rand::Rng;
@@ -16,7 +19,9 @@ mod server;
 mod protocol;
 
 fn main() {
-    println!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
+    env_logger::init().unwrap();
+
+    info!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
 
     let address = "0.0.0.0:46631".parse().unwrap();
     let listener = TcpListener::bind(&address).unwrap();
@@ -41,6 +46,12 @@ fn main() {
                 match event.token() {
                     utils::SERVER => unreachable!(),
                     tok => server.client_writable(&poll, tok).unwrap(),
+                }
+            }
+            if event.kind().is_hup() || event.kind().is_error() {
+                match event.token() {
+                    utils::SERVER => unreachable!(),
+                    tok => server.client_error(&poll, tok).unwrap(),
                 }
             }
         }

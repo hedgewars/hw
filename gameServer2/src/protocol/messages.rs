@@ -67,6 +67,9 @@ pub enum HWProtocolMessage<'a> {
     Delete(&'a str),
     SaveRoom(&'a str),
     LoadRoom(&'a str),
+    Connected(u32),
+    Malformed,
+    Empty,
 }
 
 pub fn number<T: From<u8>
@@ -101,6 +104,12 @@ impl<'a> HWProtocolMessage<'a> {
                 => "PING\n\n".to_string(),
             &HWProtocolMessage::Pong
                 => "PONG\n\n".to_string(),
+            &HWProtocolMessage::Connected(protocol_version)
+                => construct_message(&[
+                    "CONNECTED",
+                    "Hedgewars server http://www.hedgewars.org/",
+                    &protocol_version.to_string()
+                ]),
             &HWProtocolMessage::Bye(msg)
                 => construct_message(&["BYE", msg]),
             &HWProtocolMessage::LobbyLeft(msg)

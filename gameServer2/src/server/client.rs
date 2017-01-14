@@ -9,6 +9,7 @@ use utils;
 use protocol::ProtocolDecoder;
 use protocol::messages;
 use protocol::messages::HWProtocolMessage::*;
+use log;
 
 pub struct HWClient {
     sock: TcpStream,
@@ -26,13 +27,11 @@ impl HWClient {
     }
 
     pub fn register(&mut self, poll: &Poll, token: Token) {
-        poll.register(&self.sock, token, Ready::readable(),
+        poll.register(&self.sock, token, Ready::all(),
                       PollOpt::edge())
             .ok().expect("could not register socket with event loop");
 
-        self.send_raw_msg(
-            format!("CONNECTED\nHedgewars server http://www.hedgewars.org/\n{}\n\n"
-                    , utils::PROTOCOL_VERSION).as_bytes());
+        self.send_msg(Connected(utils::PROTOCOL_VERSION));
     }
 
     fn send_raw_msg(&mut self, msg: &[u8]) {
@@ -51,14 +50,16 @@ impl HWClient {
 
     pub fn readable(&mut self, poll: &Poll) -> io::Result<()> {
         let v = self.decoder.read_from(&mut self.sock)?;
-        println!("Read {} bytes", v);
+        debug!("Read {} bytes", v);
         let mut response = Vec::new();
         {
             let msgs = self.decoder.extract_messages();
             for msg in msgs {
                 match msg {
                     Ping => response.push(Pong),
-                    _ => println!("Unknown message")
+                    Malformed => warn!("Malformed/unknown message"),
+                    Empty => warn!("Empty message"),
+                    _ => unimplemented!(),
                 }
             }
         }
@@ -71,6 +72,11 @@ impl HWClient {
 
     pub fn writable(&mut self, poll: &Poll) -> io::Result<()> {
         self.buf_out.write_to(&mut self.sock)?;
+        Ok(())
+    }
+
+    pub fn error(&mut self, poll: &Poll) -> io::Result<()> {
+        debug!("Client error");
         Ok(())
     }
 }
