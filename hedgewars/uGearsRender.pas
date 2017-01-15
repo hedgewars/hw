@@ -847,7 +847,7 @@ begin
             case amt of
                 amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
                         sx + 9 * sign,
-                        sy - 6, 0, sign, -8, 9, aangle);
+                        sy + 2, 0, sign, -8, 1, aangle);
             end;
 
             defaultPos:= false
@@ -1045,7 +1045,7 @@ begin
                             DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
                         DrawAltWeapon(Gear, sx, sy)
                         end;
-                gtShover: DrawSpritePivotedF(sprHandBaseball, sx + 9 * sign, sy - 6, CurAmmoGear^.Tag, sign, -8, 9, aangle);
+                gtShover: DrawSpritePivotedF(sprHandBaseball, sx + 9 * sign, sy + 2, CurAmmoGear^.Tag, sign, -8, 1, aangle);
                 end;
             end
         end;

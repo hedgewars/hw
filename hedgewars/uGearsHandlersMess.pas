@@ -2308,7 +2308,7 @@ begin
         Gear^.Timer := 100
         end;
 
-    if Gear^.Tag = 5 then
+    if Gear^.Tag = 4 then
         begin
         HHGear := Gear^.Hedgehog^.Gear;
         HHGear^.State := HHGear^.State or gstNoDamage;
