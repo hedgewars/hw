@@ -536,7 +536,6 @@ begin
                             end;
                     defaultPos:= false
                     end;
-                gtShover: DrawSpriteRotated(sprHandBaseball, hx, hy, sign, aangle + 180);
                 gtFirePunch:
                     begin
                     DrawHedgehog(sx, sy,
@@ -633,13 +632,18 @@ begin
             case CurAmmoGear^.Kind of
                 gtShotgunShot,
                 gtDEagleShot,
-                gtSniperRifleShot,
-                gtShover:
+                gtSniperRifleShot:
                     begin
                     DrawHedgehog(sx, sy, sign, 0, 4, 0);
                     defaultPos:= false;
                     HatVisible:= true
-                end
+                    end;
+                gtShover:
+                    begin
+                    DrawHedgehog(sx, sy, sign, 0, 5, 0);
+                    defaultPos:= false;
+                    HatVisible:= true
+                    end
             end
         end else
 
@@ -814,6 +818,11 @@ begin
                             0,
                             sign,
                             0);
+                amBaseballBat: DrawHedgehog(sx, sy,
+                            sign,
+                            0,
+                            5,
+                            0);
             else
                 DrawHedgehog(sx, sy,
                     sign,
@@ -836,9 +845,9 @@ begin
             end;
 
             case amt of
-                amBaseballBat: DrawSpriteRotated(sprHandBaseball,
-                        sx - 4 * sign,
-                        sy + 9, sign, aangle);
+                amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
+                        sx + 9 * sign,
+                        sy - 6, 0, sign, -8, 9, aangle);
             end;
 
             defaultPos:= false
@@ -1019,6 +1028,7 @@ begin
             end; *)
         if CurAmmoGear <> nil then
             begin
+            aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
             case CurAmmoGear^.Kind of
                 gtJetpack: begin
                         DrawSprite(sprJetpack, sx-32, sy-32, 0);
@@ -1035,6 +1045,7 @@ begin
                             DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
                         DrawAltWeapon(Gear, sx, sy)
                         end;
+                gtShover: DrawSpritePivotedF(sprHandBaseball, sx + 9 * sign, sy - 6, CurAmmoGear^.Tag, sign, -8, 9, aangle);
                 end;
             end
         end;

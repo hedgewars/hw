@@ -2301,15 +2301,25 @@ procedure doStepShover(Gear: PGear);
 var
     HHGear: PGear;
 begin
-    HHGear := Gear^.Hedgehog^.Gear;
-    HHGear^.State := HHGear^.State or gstNoDamage;
-    DeleteCI(HHGear);
+    dec(Gear^.Timer);
+    if Gear^.Timer = 0 then
+        begin
+        inc(Gear^.Tag);
+        Gear^.Timer := 100
+        end;
 
-    AmmoShove(Gear, Gear^.Boom, 115);
+    if Gear^.Tag = 5 then
+        begin
+        HHGear := Gear^.Hedgehog^.Gear;
+        HHGear^.State := HHGear^.State or gstNoDamage;
+        DeleteCI(HHGear);
 
-    HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
-    Gear^.Timer := 250;
-    Gear^.doStep := @doStepIdle
+        AmmoShove(Gear, Gear^.Boom, 115);
+
+        HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
+        Gear^.Timer := 250;
+        Gear^.doStep := @doStepIdle
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

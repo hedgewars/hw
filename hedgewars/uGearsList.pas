@@ -508,7 +508,11 @@ case Kind of
                 gear^.Density:= _1_5;
                 gear^.RenderTimer:= true
                 end;
-      gtShover: gear^.Radius:= 20;
+      gtShover: begin
+                gear^.Radius:= 20;
+                gear^.Tag:= 0;
+                gear^.Timer:= 100;
+                end;
        gtFlame: begin
                 gear^.Tag:= GetRandom(32);
                 gear^.Radius:= 1;

@@ -34,6 +34,7 @@ procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Po
 procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
+procedure DrawSpritePivotedF(Sprite: TSprite; X, Y, Frame, Dir, PivotX, PivotY: LongInt; Angle: real);
 
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
@@ -73,6 +74,7 @@ procedure setTintAdd            (f: boolean); inline;
 procedure FinishRender();
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
+function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; inline;
 
 // 0 => not offscreen, <0 => left/top of screen >0 => right/below of screen
 function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
@@ -145,6 +147,20 @@ procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin
     isAreaOffscreen:= (isDxAreaOffscreen(X, Width) <> 0) or (isDyAreaOffscreen(Y, Height) <> 0);
+end;
+
+function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; inline;
+var dRightX, dBottomY, dLeftX, dTopY: LongInt;
+begin
+    dRightX:= (X - ViewRightX);
+    dBottomY:= (Y - ViewBottomY);
+    dLeftX:= (ViewLeftX - X);
+    dTopY:= (ViewTopY - Y);
+    isCircleOffscreen:= 
+        ((dRightX > 0) and (sqr(dRightX) > RadiusSquared)) or
+        ((dBottomY > 0) and (sqr(dBottomY) > RadiusSquared)) or
+        ((dLeftX > 0) and (sqr(dLeftX) > RadiusSquared)) or
+        ((dTopY > 0) and (sqr(dTopY) > RadiusSquared))
 end;
 
 function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
@@ -1131,11 +1147,8 @@ begin
 
 if Angle <> 0  then
     begin
-    // sized doubled because the sprite might occupy up to 1.4 * of it's
-    // original size in each dimension, because it is rotated
-    if isDxAreaOffscreen(X - SpritesData[Sprite].Width, 2 * SpritesData[Sprite].Width) <> 0 then
-        exit;
-    if isDYAreaOffscreen(Y - SpritesData[Sprite].Height, 2 * SpritesData[Sprite].Height) <> 0 then
+    // Check the bounding circle 
+    if isCircleOffscreen(X, Y, sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) then
         exit;
     end
 else
@@ -1162,6 +1175,43 @@ DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height
 
 openglPopMatrix;
 
+end;
+
+procedure DrawSpritePivotedF(Sprite: TSprite; X, Y, Frame, Dir, PivotX, PivotY: LongInt; Angle: real);
+begin
+if Angle <> 0  then
+    begin
+    // Check the bounding circle 
+    // Assuming the pivot point is inside the sprite's rectangle, the farthest possible point is 3/2 of its diagonal away from the center
+    if isCircleOffscreen(X, Y, 9 * (sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) div 4) then
+        exit;
+    end
+else
+    begin
+    if isDxAreaOffscreen(X - SpritesData[Sprite].Width div 2, SpritesData[Sprite].Width) <> 0 then
+        exit;
+    if isDYAreaOffscreen(Y - SpritesData[Sprite].Height div 2 , SpritesData[Sprite].Height) <> 0 then
+        exit;
+    end;
+
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
+
+// mirror
+if Dir < 0 then
+    openglScalef(-1.0, 1.0, 1.0);
+
+// apply rotation around the pivot after (conditional) mirroring
+if Angle <> 0  then
+    begin
+    openglTranslatef(PivotX, PivotY, 0);
+    openglRotatef(Angle, 0, 0, 1);
+    openglTranslatef(-PivotX, -PivotY, 0);
+    end;
+
+DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
+
+openglPopMatrix;
 end;
 
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
