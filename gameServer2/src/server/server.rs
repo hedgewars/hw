@@ -8,6 +8,7 @@ use utils;
 use server::client::HWClient;
 use server::actions::Action;
 use server::actions::Action::*;
+use protocol::messages::HWProtocolMessage::*;
 
 type Slab<T> = slab::Slab<T, Token>;
 
@@ -51,26 +52,46 @@ impl HWServer {
             actions = self.clients[token].readable(poll);
         }
 
-        for action in actions {
-            self.react(token, action);
-        }
+        self.react(token, poll, actions);
+
         Ok(())
     }
 
     pub fn client_writable(&mut self, poll: &Poll,
                            token: Token) -> io::Result<()> {
-        self.clients[token].writable(poll)
+        self.clients[token].writable(poll)?;
+
+        Ok(())
     }
 
     pub fn client_error(&mut self, poll: &Poll,
                            token: Token) -> io::Result<()> {
-        self.clients[token].error(poll)
+        let actions;
+        {
+            actions = self.clients[token].error(poll);
+        }
+
+        self.react(token, poll, actions);
+
+        Ok(())
     }
 
-    fn react(&mut self, token: Token, action: Action) {
-        match action {
-            SendMe(msg) => self.clients[token].send_string(&msg),
-            //_ => unimplemented!(),
+    fn react(&mut self, token: Token, poll: &Poll, actions: Vec<Action>) {
+        for action in actions {
+            match action {
+                SendMe(msg) => self.clients[token].send_string(&msg),
+                ByeClient(msg) => {
+                    self.react(token, poll, vec![
+                        SendMe(Bye(&msg).to_raw_protocol()),
+                        RemoveClient,
+                    ]);
+                },
+                RemoveClient => {
+                    self.clients[token].deregister(poll);
+                    self.clients.remove(token);
+                },
+                //_ => unimplemented!(),
+            }
         }
     }
 }

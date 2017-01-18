@@ -36,6 +36,10 @@ impl HWClient {
         self.send_msg(Connected(utils::PROTOCOL_VERSION));
     }
 
+    pub fn deregister(&mut self, poll: &Poll) {
+        poll.deregister(&self.sock);
+    }
+
     pub fn send_raw_msg(&mut self, msg: &[u8]) {
         self.buf_out.write(msg).unwrap();
         self.flush();
@@ -63,6 +67,8 @@ impl HWClient {
             for msg in msgs {
                 match msg {
                     Ping => response.push(SendMe(Pong.to_raw_protocol())),
+                    Quit(Some(msg)) => response.push(ByeClient("User quit: ".to_string() + msg)),
+                    Quit(None) => response.push(ByeClient("User quit".to_string())),
                     Malformed => warn!("Malformed/unknown message"),
                     Empty => warn!("Empty message"),
                     _ => unimplemented!(),
@@ -75,11 +81,11 @@ impl HWClient {
 
     pub fn writable(&mut self, poll: &Poll) -> io::Result<()> {
         self.buf_out.write_to(&mut self.sock)?;
+
         Ok(())
     }
 
-    pub fn error(&mut self, poll: &Poll) -> io::Result<()> {
-        debug!("Client error");
-        Ok(())
+    pub fn error(&mut self, poll: &Poll) -> Vec<Action> {
+        return vec![ByeClient("Connection reset".to_string())]
     }
 }
