@@ -111,9 +111,9 @@ named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
         | one_param_message
         | cmd_message
         | complex_message
-        | malformed_message
         ), end_of_message
     )
+    | terminated!(malformed_message, end_of_message)
     | empty_message
     )
 );
@@ -130,6 +130,8 @@ fn parse_test() {
     assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
     assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo")));
     assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me", "bad", 77)));
+
+    assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    IResult::Done(&b""[..], vec![Malformed]));
 
     assert_eq!(extract_messages(b"PING\n\nPING\n\nP"), IResult::Done(&b"P"[..], vec![Ping, Ping]));
     assert_eq!(extract_messages(b"SING\n\nPING\n\n"),  IResult::Done(&b""[..],  vec![Malformed, Ping]));
