@@ -112,9 +112,11 @@ impl<'a> HWProtocolMessage<'a> {
                 ]),
             &HWProtocolMessage::Bye(msg)
                 => construct_message(&["BYE", msg]),
+            &HWProtocolMessage::Nick(nick)
+            => construct_message(&["NICK", nick]),
             &HWProtocolMessage::LobbyLeft(msg)
                 => construct_message(&["LOBBY_LEFT", msg]),
-            _ => String::new()
+            _ => construct_message(&["ERROR", "UNIMPLEMENTED"]),
         }
     }
 }

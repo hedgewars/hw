@@ -16,15 +16,19 @@ use log;
 pub struct HWClient {
     sock: TcpStream,
     decoder: ProtocolDecoder,
-    buf_out: netbuf::Buf
+    buf_out: netbuf::Buf,
+    pub nick: String,
+    roomId: Token,
 }
 
 impl HWClient {
-    pub fn new(sock: TcpStream) -> HWClient {
+    pub fn new(sock: TcpStream, roomId: &Token) -> HWClient {
         HWClient {
             sock: sock,
             decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
+            nick: String::new(),
+            roomId: roomId.clone(),
         }
     }
 
@@ -69,6 +73,9 @@ impl HWClient {
                     Ping => response.push(SendMe(Pong.to_raw_protocol())),
                     Quit(Some(msg)) => response.push(ByeClient("User quit: ".to_string() + msg)),
                     Quit(None) => response.push(ByeClient("User quit".to_string())),
+                    Nick(nick) => if self.nick.len() == 0 {
+                        response.push(SetNick(nick.to_string()));
+                    },
                     Malformed => warn!("Malformed/unknown message"),
                     Empty => warn!("Empty message"),
                     _ => unimplemented!(),

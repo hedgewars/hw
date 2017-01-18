@@ -15,15 +15,19 @@ type Slab<T> = slab::Slab<T, Token>;
 pub struct HWServer {
     listener: TcpListener,
     clients: Slab<HWClient>,
-    rooms: Slab<HWRoom>
+    rooms: Slab<HWRoom>,
+    lobbyId: Token,
 }
 
 impl HWServer {
     pub fn new(listener: TcpListener, clients_limit: usize, rooms_limit: usize) -> HWServer {
+        let mut rooms = Slab::with_capacity(rooms_limit);
+        let token = rooms.insert(HWRoom::new()).ok().expect("Cannot create lobby");
         HWServer {
             listener: listener,
             clients: Slab::with_capacity(clients_limit),
-            rooms: Slab::with_capacity(rooms_limit),
+            rooms: rooms,
+            lobbyId: token,
         }
     }
 
@@ -36,7 +40,7 @@ impl HWServer {
         let (sock, addr) = self.listener.accept()?;
         info!("Connected: {}", addr);
 
-        let client = HWClient::new(sock);
+        let client = HWClient::new(sock, &self.lobbyId);
         let token = self.clients.insert(client)
             .ok().expect("could not add connection to slab");
 
@@ -76,16 +80,24 @@ impl HWServer {
         Ok(())
     }
 
+    fn send(&mut self, token: Token, msg: &String) {
+        self.clients[token].send_string(msg);
+    }
+
     fn react(&mut self, token: Token, poll: &Poll, actions: Vec<Action>) {
         for action in actions {
             match action {
-                SendMe(msg) => self.clients[token].send_string(&msg),
+                SendMe(msg) => self.send(token, &msg),
                 ByeClient(msg) => {
                     self.react(token, poll, vec![
                         SendMe(Bye(&msg).to_raw_protocol()),
                         RemoveClient,
                     ]);
                 },
+                SetNick(nick) => {
+                    self.send(token, &Nick(&nick).to_raw_protocol());
+                    self.clients[token].nick = nick;
+                }
                 RemoveClient => {
                     self.clients[token].deregister(poll);
                     self.clients.remove(token);
@@ -99,4 +111,12 @@ impl HWServer {
 
 struct HWRoom {
     name: String
+}
+
+impl HWRoom {
+    pub fn new() -> HWRoom {
+        HWRoom {
+            name: String::new(),
+        }
+    }
 }
