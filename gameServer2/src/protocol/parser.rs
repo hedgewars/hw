@@ -6,10 +6,11 @@ use super::messages::HWProtocolMessage;
 use super::messages::HWProtocolMessage::*;
 
 named!(end_of_message, tag!("\n\n"));
-named!(a_line<&[u8], &str>, map_res!(not_line_ending, str::from_utf8));
-named!( u8_line<&[u8],  u8>, map_res!(a_line, FromStr::from_str));
-named!(u32_line<&[u8], u32>, map_res!(a_line, FromStr::from_str));
-named!(opt_param<&[u8], Option<&str> >, opt!(flat_map!(preceded!(eol, a_line), non_empty)));
+named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
+named!(  a_line<&[u8], String>, map!(str_line, String::from));
+named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
+named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
+named!(opt_param<&[u8], Option<String> >, opt!(map!(flat_map!(preceded!(eol, str_line), non_empty), String::from)));
 
 named!(basic_message<&[u8], HWProtocolMessage>, alt!(
       do_parse!(tag!("PING") >> (Ping))
@@ -124,12 +125,12 @@ named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(me
 fn parse_test() {
     assert_eq!(message(b"PING\n\n"),          IResult::Done(&b""[..], Ping));
     assert_eq!(message(b"START_GAME\n\n"),    IResult::Done(&b""[..], StartGame));
-    assert_eq!(message(b"NICK\nit's me\n\n"), IResult::Done(&b""[..], Nick("it's me")));
+    assert_eq!(message(b"NICK\nit's me\n\n"), IResult::Done(&b""[..], Nick("it's me".to_string())));
     assert_eq!(message(b"PROTO\n51\n\n"),     IResult::Done(&b""[..], Proto(51)));
-    assert_eq!(message(b"QUIT\nbye-bye\n\n"), IResult::Done(&b""[..], Quit(Some("bye-bye"))));
+    assert_eq!(message(b"QUIT\nbye-bye\n\n"), IResult::Done(&b""[..], Quit(Some("bye-bye".to_string()))));
     assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
-    assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo")));
-    assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me", "bad", 77)));
+    assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo".to_string())));
+    assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me".to_string(), "bad".to_string(), 77)));
 
     assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    IResult::Done(&b""[..], vec![Malformed]));
 

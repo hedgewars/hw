@@ -4,5 +4,5 @@ pub enum Action {
     SendMe(String),
     RemoveClient,
     ByeClient(String),
-    SetNick(String),
+    ReactProtocolMessage(HWProtocolMessage),
 }

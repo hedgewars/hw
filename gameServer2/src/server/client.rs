@@ -7,8 +7,7 @@ use netbuf;
 
 use utils;
 use protocol::ProtocolDecoder;
-use protocol::messages;
-use protocol::messages::HWProtocolMessage::*;
+use protocol::messages::*;
 use server::actions::Action::*;
 use server::actions::Action;
 use log;
@@ -37,7 +36,7 @@ impl HWClient {
                       PollOpt::edge())
             .ok().expect("could not register socket with event loop");
 
-        self.send_msg(Connected(utils::PROTOCOL_VERSION));
+        self.send_msg(HWServerMessage::Connected(utils::PROTOCOL_VERSION));
     }
 
     pub fn deregister(&mut self, poll: &Poll) {
@@ -53,7 +52,7 @@ impl HWClient {
         self.send_raw_msg(&msg.as_bytes());
     }
 
-    pub fn send_msg(&mut self, msg: messages::HWProtocolMessage) {
+    pub fn send_msg(&mut self, msg: HWServerMessage) {
         self.send_string(&msg.to_raw_protocol());
     }
 
@@ -67,11 +66,11 @@ impl HWClient {
         debug!("Read {} bytes", v);
         let mut response = Vec::new();
         {
-            let msgs = self.decoder.extract_messages();
-            for msg in msgs {
-                match msg {
+            for msg in self.decoder.extract_messages() {
+                response.push(ReactProtocolMessage(msg));
+/*                match msg {
                     Ping => response.push(SendMe(Pong.to_raw_protocol())),
-                    Quit(Some(msg)) => response.push(ByeClient("User quit: ".to_string() + msg)),
+                    Quit(Some(msg)) => response.push(ByeClient("User quit: ".to_string() + &msg)),
                     Quit(None) => response.push(ByeClient("User quit".to_string())),
                     Nick(nick) => if self.nick.len() == 0 {
                         response.push(SetNick(nick.to_string()));
@@ -79,7 +78,7 @@ impl HWClient {
                     Malformed => warn!("Malformed/unknown message"),
                     Empty => warn!("Empty message"),
                     _ => unimplemented!(),
-                }
+                }*/
             }
         }
         self.decoder.sweep();

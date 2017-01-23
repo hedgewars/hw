@@ -9,6 +9,7 @@ use server::client::HWClient;
 use server::actions::Action;
 use server::actions::Action::*;
 use protocol::messages::HWProtocolMessage::*;
+use protocol::messages::HWServerMessage;
 
 type Slab<T> = slab::Slab<T, Token>;
 
@@ -90,18 +91,26 @@ impl HWServer {
                 SendMe(msg) => self.send(token, &msg),
                 ByeClient(msg) => {
                     self.react(token, poll, vec![
-                        SendMe(Bye(&msg).to_raw_protocol()),
+                        SendMe(HWServerMessage::Bye(&msg).to_raw_protocol()),
                         RemoveClient,
                     ]);
                 },
-                SetNick(nick) => {
-                    self.send(token, &Nick(&nick).to_raw_protocol());
-                    self.clients[token].nick = nick;
-                }
                 RemoveClient => {
                     self.clients[token].deregister(poll);
                     self.clients.remove(token);
                 },
+                ReactProtocolMessage(msg) => match msg {
+                    Ping => self.react(token, poll, vec![SendMe(HWServerMessage::Pong.to_raw_protocol())]),
+                    Quit(Some(msg)) => self.react(token, poll, vec![ByeClient("User quit: ".to_string() + &msg)]),
+                    Quit(None) => self.react(token, poll, vec![ByeClient("User quit".to_string())]),
+                    Nick(nick) => if self.clients[token].nick.len() == 0 {
+                        self.send(token, &HWServerMessage::Nick(&nick).to_raw_protocol());
+                        self.clients[token].nick = nick;
+                    },
+                    Malformed => warn!("Malformed/unknown message"),
+                    Empty => warn!("Empty message"),
+                    _ => unimplemented!(),
+                }
                 //_ => unimplemented!(),
             }
         }
