@@ -1,4 +1,4 @@
-use protocol::messages::HWProtocolMessage;
+use protocol::messages::{HWProtocolMessage, HWServerMessage};
 
 pub enum Action {
     SendMe(String),

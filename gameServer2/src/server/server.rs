@@ -1,23 +1,20 @@
 use slab;
 use mio::tcp::*;
 use mio::*;
-use std::io::Write;
 use std::io;
 
 use utils;
 use server::client::HWClient;
 use server::actions::Action;
-use server::actions::Action::*;
-use protocol::messages::HWProtocolMessage::*;
-use protocol::messages::HWServerMessage;
+use super::handlers;
 
 type Slab<T> = slab::Slab<T, Token>;
 
 pub struct HWServer {
     listener: TcpListener,
-    clients: Slab<HWClient>,
-    rooms: Slab<HWRoom>,
-    lobbyId: Token,
+    pub clients: Slab<HWClient>,
+    pub rooms: Slab<HWRoom>,
+    pub lobby_id: Token,
 }
 
 impl HWServer {
@@ -28,7 +25,7 @@ impl HWServer {
             listener: listener,
             clients: Slab::with_capacity(clients_limit),
             rooms: rooms,
-            lobbyId: token,
+            lobby_id: token,
         }
     }
 
@@ -41,7 +38,7 @@ impl HWServer {
         let (sock, addr) = self.listener.accept()?;
         info!("Connected: {}", addr);
 
-        let client = HWClient::new(sock, &self.lobbyId);
+        let client = HWClient::new(sock, &self.lobby_id);
         let token = self.clients.insert(client)
             .ok().expect("could not add connection to slab");
 
@@ -81,45 +78,20 @@ impl HWServer {
         Ok(())
     }
 
-    fn send(&mut self, token: Token, msg: &String) {
+    pub fn send(&mut self, token: Token, msg: &String) {
         self.clients[token].send_string(msg);
     }
 
-    fn react(&mut self, token: Token, poll: &Poll, actions: Vec<Action>) {
+    pub fn react(&mut self, token: Token, poll: &Poll, actions: Vec<Action>) {
         for action in actions {
-            match action {
-                SendMe(msg) => self.send(token, &msg),
-                ByeClient(msg) => {
-                    self.react(token, poll, vec![
-                        SendMe(HWServerMessage::Bye(&msg).to_raw_protocol()),
-                        RemoveClient,
-                    ]);
-                },
-                RemoveClient => {
-                    self.clients[token].deregister(poll);
-                    self.clients.remove(token);
-                },
-                ReactProtocolMessage(msg) => match msg {
-                    Ping => self.react(token, poll, vec![SendMe(HWServerMessage::Pong.to_raw_protocol())]),
-                    Quit(Some(msg)) => self.react(token, poll, vec![ByeClient("User quit: ".to_string() + &msg)]),
-                    Quit(None) => self.react(token, poll, vec![ByeClient("User quit".to_string())]),
-                    Nick(nick) => if self.clients[token].nick.len() == 0 {
-                        self.send(token, &HWServerMessage::Nick(&nick).to_raw_protocol());
-                        self.clients[token].nick = nick;
-                    },
-                    Malformed => warn!("Malformed/unknown message"),
-                    Empty => warn!("Empty message"),
-                    _ => unimplemented!(),
-                }
-                //_ => unimplemented!(),
-            }
+            handlers::handle(self, token, poll, action);
         }
     }
 }
 
 
-struct HWRoom {
-    name: String
+pub struct HWRoom {
+    pub name: String,
 }
 
 impl HWRoom {

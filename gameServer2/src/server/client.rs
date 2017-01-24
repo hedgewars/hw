@@ -1,4 +1,3 @@
-use slab;
 use mio::tcp::*;
 use mio::*;
 use std::io::Write;
@@ -10,14 +9,13 @@ use protocol::ProtocolDecoder;
 use protocol::messages::*;
 use server::actions::Action::*;
 use server::actions::Action;
-use log;
 
 pub struct HWClient {
     sock: TcpStream,
     decoder: ProtocolDecoder,
     buf_out: netbuf::Buf,
     pub nick: String,
-    roomId: Token,
+    room_id: Token,
 }
 
 impl HWClient {
@@ -27,7 +25,7 @@ impl HWClient {
             decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
             nick: String::new(),
-            roomId: roomId.clone(),
+            room_id: roomId.clone(),
         }
     }
 
@@ -68,17 +66,6 @@ impl HWClient {
         {
             for msg in self.decoder.extract_messages() {
                 response.push(ReactProtocolMessage(msg));
-/*                match msg {
-                    Ping => response.push(SendMe(Pong.to_raw_protocol())),
-                    Quit(Some(msg)) => response.push(ByeClient("User quit: ".to_string() + &msg)),
-                    Quit(None) => response.push(ByeClient("User quit".to_string())),
-                    Nick(nick) => if self.nick.len() == 0 {
-                        response.push(SetNick(nick.to_string()));
-                    },
-                    Malformed => warn!("Malformed/unknown message"),
-                    Empty => warn!("Empty message"),
-                    _ => unimplemented!(),
-                }*/
             }
         }
         self.decoder.sweep();
