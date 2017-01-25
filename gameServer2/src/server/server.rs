@@ -4,9 +4,8 @@ use mio::*;
 use std::io;
 
 use utils;
-use server::client::HWClient;
-use server::actions::Action;
-use super::handlers;
+use super::client::HWClient;
+use super::actions;
 
 type Slab<T> = slab::Slab<T, Token>;
 
@@ -82,9 +81,9 @@ impl HWServer {
         self.clients[token].send_string(msg);
     }
 
-    pub fn react(&mut self, token: Token, poll: &Poll, actions: Vec<Action>) {
+    pub fn react(&mut self, token: Token, poll: &Poll, actions: Vec<actions::Action>) {
         for action in actions {
-            handlers::handle(self, token, poll, action);
+            actions::run_action(self, token, poll, action);
         }
     }
 }

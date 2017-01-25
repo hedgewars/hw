@@ -7,15 +7,17 @@ use netbuf;
 use utils;
 use protocol::ProtocolDecoder;
 use protocol::messages::*;
-use server::actions::Action::*;
-use server::actions::Action;
+use super::actions::Action::*;
+use super::actions::Action;
 
 pub struct HWClient {
     sock: TcpStream,
     decoder: ProtocolDecoder,
     buf_out: netbuf::Buf,
-    pub nick: String,
     room_id: Token,
+
+    pub nick: String,
+    pub protocolNumber: u32,
 }
 
 impl HWClient {
@@ -24,8 +26,10 @@ impl HWClient {
             sock: sock,
             decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
-            nick: String::new(),
             room_id: roomId.clone(),
+
+            nick: String::new(),
+            protocolNumber: 0,
         }
     }
 
