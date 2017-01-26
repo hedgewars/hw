@@ -75,6 +75,7 @@ pub enum HWServerMessage<'a> {
     Bye(&'a str),
     Nick(&'a str),
     LobbyLeft(&'a str),
+    LobbyJoined(&'a [&'a str]),
 
     Connected(u32),
     Unreachable,
@@ -111,6 +112,12 @@ impl<'a> HWServerMessage<'a> {
             => construct_message(&["NICK", &nick]),
             &HWServerMessage::LobbyLeft(msg)
                 => construct_message(&["LOBBY_LEFT", &msg]),
+            &HWServerMessage::LobbyJoined(msg)
+                => {
+                let mut v = vec!["LOBBY:JOINED"];
+                v.extend_from_slice(msg);
+                construct_message(&v)
+            },
             _ => construct_message(&["ERROR", "UNIMPLEMENTED"]),
         }
     }

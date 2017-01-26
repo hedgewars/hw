@@ -20,9 +20,13 @@ pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, messag
             if server.clients[token].nick.len() == 0 {
                 server.react(token, poll, vec![SendMe(Nick(&nick).to_raw_protocol())]);
                 server.clients[token].nick = nick;
+                server.react(token, poll, vec![CheckRegistered]);
             },
-        HWProtocolMessage::Proto(proto) =>
-                server.clients[token].protocolNumber = proto,
+        HWProtocolMessage::Proto(proto) => {
+                server.clients[token].protocolNumber = proto;
+                server.react(token, poll, vec![CheckRegistered]);
+        },
+        HWProtocolMessage::List => warn!("Deprecated LIST message received"),
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
         _ => unimplemented!(),
