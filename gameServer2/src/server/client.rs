@@ -14,22 +14,24 @@ pub struct HWClient {
     sock: TcpStream,
     decoder: ProtocolDecoder,
     buf_out: netbuf::Buf,
-    room_id: Token,
 
+    pub id: Token,
+    pub room_id: Option<Token>,
     pub nick: String,
-    pub protocolNumber: u32,
+    pub protocol_number: u32,
 }
 
 impl HWClient {
-    pub fn new(sock: TcpStream, roomId: &Token) -> HWClient {
+    pub fn new(sock: TcpStream) -> HWClient {
         HWClient {
             sock: sock,
             decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
-            room_id: roomId.clone(),
+            room_id: None,
+            id: Token(0),
 
             nick: String::new(),
-            protocolNumber: 0,
+            protocol_number: 0,
         }
     }
 

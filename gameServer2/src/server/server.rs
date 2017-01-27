@@ -37,10 +37,11 @@ impl HWServer {
         let (sock, addr) = self.listener.accept()?;
         info!("Connected: {}", addr);
 
-        let client = HWClient::new(sock, &self.lobby_id);
+        let client = HWClient::new(sock);
         let token = self.clients.insert(client)
             .ok().expect("could not add connection to slab");
 
+        self.clients[token].id = token;
         self.clients[token].register(poll, token);
 
         Ok(())

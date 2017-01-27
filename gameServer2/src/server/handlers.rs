@@ -17,13 +17,13 @@ pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, messag
         HWProtocolMessage::Quit(None) =>
             server.react(token, poll, vec![ByeClient("User quit".to_string())]),
         HWProtocolMessage::Nick(nick) =>
-            if server.clients[token].nick.len() == 0 {
+            if server.clients[token].room_id == None {
                 server.react(token, poll, vec![SendMe(Nick(&nick).to_raw_protocol())]);
                 server.clients[token].nick = nick;
                 server.react(token, poll, vec![CheckRegistered]);
             },
         HWProtocolMessage::Proto(proto) => {
-                server.clients[token].protocolNumber = proto;
+                server.clients[token].protocol_number = proto;
                 server.react(token, poll, vec![CheckRegistered]);
         },
         HWProtocolMessage::List => warn!("Deprecated LIST message received"),
