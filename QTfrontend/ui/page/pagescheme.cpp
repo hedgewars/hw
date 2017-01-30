@@ -499,7 +499,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
-    LE_name->setWhatsThis("Name of this scheme");
+    LE_name->setWhatsThis(tr("Name of this scheme"));
 
     gl->addWidget(LE_name,15,1,1,5);
     gl->addWidget(l,15,0,1,1);

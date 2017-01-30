@@ -673,39 +673,39 @@ Last two engine messages:
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished">Wybierz motyw</translation>
+        <translation>Wybierz motyw</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Losuje mapę, motyw i ziarno</translation>
     </message>
     <message>
         <source>Randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Losuje motyw i ziarno</translation>
     </message>
     <message>
         <source>Randomize the seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Losuje ziarno</translation>
     </message>
     <message>
         <source>Click to randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknij, aby wygenerować losową mapę, motyw i ziarno</translation>
     </message>
     <message>
         <source>Click to randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknij, aby wylosować motyw i ziarno</translation>
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostosuj poziom złożoności generowanych map</translation>
     </message>
     <message>
         <source>Adjust the distance between forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostosuj odległość pomiędzy forami</translation>
     </message>
     <message>
         <source>Click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknij aby edytować</translation>
     </message>
 </context>
 <context>
@@ -965,6 +965,21 @@ po prostu wpisz swój nick.</translation>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished">Drużyna</translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1082,6 +1097,10 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Random Team</source>
         <translation>Losowa Drużyna</translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1582,7 +1601,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Broń swojego fortu i zniszcz przeciwników. Maksymalnie dwa kolory drużyn!</translation>
+        <translation type="obsolete">Broń swojego fortu i zniszcz przeciwników. Maksymalnie dwa kolory drużyn!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1784,6 +1803,10 @@ po prostu wpisz swój nick.</translation>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1843,11 +1866,35 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Wybierz misje w którą chcesz zagrać</translation>
+        <translation type="obsolete">Wybierz misje w którą chcesz zagrać</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>Start</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2786,7 +2833,7 @@ Nie wszyscy gracze są gotowi.</translation>
     <name>QPushButton</name>
     <message>
         <source>Go!</source>
-        <translation>Start!</translation>
+        <translation type="obsolete">Start!</translation>
     </message>
     <message>
         <source>default</source>

@@ -147,7 +147,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
     hbox->addWidget(CBVoicepack, 100);
     btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);
-    btnTestSound->setWhatsThis("Play a random example of this voice");
+    btnTestSound->setWhatsThis(tr("Play a random example of this voice"));
     hbox->setStretchFactor(btnTestSound, 1);
 
     GBTLayout->addLayout(hbox, 4, 1);

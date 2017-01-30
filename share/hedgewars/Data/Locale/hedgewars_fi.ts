@@ -945,6 +945,21 @@ pelkkä nimimerkki riittää.</translation>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished">Joukkue</translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1062,6 +1077,10 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Random Team</source>
         <translation>Satunnainen joukkue</translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1541,7 +1560,7 @@ pelkkä nimimerkki riittää.</translation>
     <name>PageScheme</name>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Puolusta linnaasi ja tuhoa vastustajasi, enintään kaksi joukkueväriä!</translation>
+        <translation type="obsolete">Puolusta linnaasi ja tuhoa vastustajasi, enintään kaksi joukkueväriä!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1751,6 +1770,10 @@ pelkkä nimimerkki riittää.</translation>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1810,11 +1833,35 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Valitse tehtävä tai harjoitus luettelosta</translation>
+        <translation type="obsolete">Valitse tehtävä tai harjoitus luettelosta</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>Käynnistä harjoitus</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2741,7 +2788,7 @@ Kaikki pelaajat eivät ole valmiita.</translation>
     </message>
     <message>
         <source>Go!</source>
-        <translation>Aloita!</translation>
+        <translation type="obsolete">Aloita!</translation>
     </message>
     <message>
         <source>Play demo</source>

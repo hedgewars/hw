@@ -966,6 +966,21 @@ entrez seulement votre pseudo.</translation>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1083,6 +1098,10 @@ entrez seulement votre pseudo.</translation>
     <message>
         <source>Random Team</source>
         <translation>Équipes aléatoires</translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1594,7 +1613,7 @@ entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Défendez votre fort et détruisez vos adversaires, deux couleurs d&apos;équipe au maximum !</translation>
+        <translation type="obsolete">Défendez votre fort et détruisez vos adversaires, deux couleurs d&apos;équipe au maximum !</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1777,6 +1796,10 @@ entrez seulement votre pseudo.</translation>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1836,11 +1859,35 @@ entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Choisis une mission ou entraîne-toi à jouer</translation>
+        <translation type="obsolete">Choisis une mission ou entraîne-toi à jouer</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>Commencer le combat</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2757,7 +2804,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>Go!</source>
-        <translation>C&apos;est parti!</translation>
+        <translation type="obsolete">C&apos;est parti!</translation>
     </message>
     <message>
         <source>Start</source>

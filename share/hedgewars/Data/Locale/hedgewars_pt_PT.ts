@@ -959,6 +959,21 @@ simplesmente insere o teu nome de utilizador.</translation>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1076,6 +1091,10 @@ simplesmente insere o teu nome de utilizador.</translation>
     <message>
         <source>Random Team</source>
         <translation>Gerar Equipa Aleatória</translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1535,7 +1554,7 @@ simplesmente insere o teu nome de utilizador.</translation>
     <name>PageScheme</name>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Defende o teu forte e destrói os oponentes, duas cores de equipa no máximo!</translation>
+        <translation type="obsolete">Defende o teu forte e destrói os oponentes, duas cores de equipa no máximo!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1745,6 +1764,10 @@ simplesmente insere o teu nome de utilizador.</translation>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1804,11 +1827,35 @@ simplesmente insere o teu nome de utilizador.</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Seleciona uma missão ou treino para jogar</translation>
+        <translation type="obsolete">Seleciona uma missão ou treino para jogar</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>Começar a batalha</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2767,7 +2814,7 @@ Nem todos os jogadores estão prontos.</translation>
     </message>
     <message>
         <source>Go!</source>
-        <translation>Começar!</translation>
+        <translation type="obsolete">Começar!</translation>
     </message>
     <message>
         <source>Play demo</source>

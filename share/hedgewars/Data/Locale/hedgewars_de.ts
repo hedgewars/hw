@@ -32,12 +32,12 @@
         <translation type="obsolete">Kopie von %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="758"/>
+        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="708"/>
         <source>New</source>
         <translation type="unfinished">Neu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="764"/>
+        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="714"/>
         <source>Copy of %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,7 +137,7 @@
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="160"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="159"/>
         <source>Send Feedback</source>
         <translation>Feedback senden</translation>
     </message>
@@ -454,72 +454,72 @@ Bitte überprüfe deine Installation!</translation>
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1678"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2022"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1700"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2083"/>
         <source>Cannot save record to file %1</source>
         <translation>Datei %1 konnte nicht gespeichert werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="448"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="461"/>
         <source>DefaultTeam</source>
         <translation>Standard-Team</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1952"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2013"/>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
         <translation>Hedgewars-Wiederholungsdatei</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1953"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2014"/>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
         <translation>Hedgewars-Spielstandsdatei</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2014"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2075"/>
         <source>Demo name</source>
         <translation>Wiederholungsname</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2014"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2075"/>
         <source>Demo name:</source>
         <translation>Wiederholungsname:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="626"/>
         <source>Game aborted</source>
         <translation>Spiel abgebrochen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1089"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1111"/>
         <source>Nickname</source>
         <translation>Spitzname</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1094"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1417"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1116"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1439"/>
         <source>No nickname supplied.</source>
         <translation>Kein Spitznahme angegeben.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1089"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1111"/>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
         <translation>Dein Spitzname »%1« ist bereits in Verwendung. Bitte wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="452"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="465"/>
         <source>%1&apos;s Team</source>
         <translation>Team von %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1043"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1065"/>
         <source>Hedgewars - Nick registered</source>
         <translation>Hedgewars – Spitzname registriert</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1044"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1066"/>
         <source>This nick is registered, and you haven&apos;t specified a password.
 
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
@@ -532,7 +532,7 @@ Falls dieser Spitzname nicht deiner ist, dann registriere bitte deinen eigenen S
 Passwort:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1072"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1094"/>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
@@ -541,7 +541,7 @@ Um Andere von der Benutzung abzuhalten, registrier
 ihn bitte auf www.hedgewars.org</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1077"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1099"/>
         <source>
 
 Your password wasn&apos;t saved either.</source>
@@ -550,60 +550,60 @@ Your password wasn&apos;t saved either.</source>
 Außerdem wurde auch dein Passwort nicht gespeichert.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1094"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1417"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1116"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1439"/>
         <source>Hedgewars - Empty nickname</source>
         <translation>Hedgewars – leerer Spitzname</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1121"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1143"/>
         <source>Hedgewars - Wrong password</source>
         <translation>Hedgewars – falsches Passwort</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1121"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1143"/>
         <source>You entered a wrong password.</source>
         <translation>Du hast ein falsches Passwort eingegeben.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1149"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1171"/>
         <source>Try Again</source>
         <translation>noch einmal versuchen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1521"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1543"/>
         <source>Hedgewars - Connection error</source>
         <translation>Hedgewars – Verbindungsfehler</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1521"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1543"/>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
         <translation>Du hast dich zu früh erneut verbunden.
 Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="168"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="443"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1364"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1383"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="170"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="456"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1386"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1405"/>
         <source>Guest</source>
         <translation>Gast</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1133"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1155"/>
         <source>Room password</source>
         <translation>Raumkennwort</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1133"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1155"/>
         <source>The room is protected with password.
 Please, enter the password:</source>
         <translation>Der Raum wird durch ein Kennwort geschützt.
 Bitte Kennwort eingeben:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2082"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2143"/>
         <source>This page requires an internet connection.</source>
         <translation>Diese Seite benötigt eine Internetverbindung.</translation>
     </message>
@@ -611,18 +611,18 @@ Bitte Kennwort eingeben:</translation>
 <context>
     <name>HWGame</name>
     <message>
-        <location filename="../../../../QTfrontend/game.cpp" line="386"/>
+        <location filename="../../../../QTfrontend/game.cpp" line="389"/>
         <location filename="../../../../QTfrontend/net/recorder.cpp" line="113"/>
         <source>en.txt</source>
         <translation>de.txt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/game.cpp" line="436"/>
+        <location filename="../../../../QTfrontend/game.cpp" line="439"/>
         <source>Cannot open demofile %1</source>
         <translation>Wiederholungsdatei »%1« konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/game.cpp" line="255"/>
+        <location filename="../../../../QTfrontend/game.cpp" line="258"/>
         <source>A Fatal ERROR occured! - The game engine had to stop.
 
 We are very sorry for the inconvenience :(
@@ -915,7 +915,7 @@ Karte bearbeiten</translation>
         <translation>Verbindungsaufbau abgelehnt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1563"/>
         <source>Quit reason: </source>
         <translation>Gegangen wegen: </translation>
     </message>
@@ -1107,7 +1107,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
 <context>
     <name>MapModel</name>
     <message>
-        <location filename="../../../../QTfrontend/model/MapModel.cpp" line="226"/>
+        <location filename="../../../../QTfrontend/model/MapModel.cpp" line="238"/>
         <source>No description available.</source>
         <translation>Keine Beschreibung verfügbar.</translation>
     </message>
@@ -1188,6 +1188,24 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <location filename="../../../../QTfrontend/ui/page/pageadmin.cpp" line="110"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
+    </message>
+</context>
+<context>
+    <name>PageCampaign</name>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagecampaign.cpp" line="56"/>
+        <source>Team</source>
+        <translation type="unfinished">Team</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagecampaign.cpp" line="57"/>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagecampaign.cpp" line="58"/>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1337,6 +1355,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <location filename="../../../../QTfrontend/ui/page/pageeditteam.cpp" line="88"/>
         <source>Random Team</source>
         <translation>Zufallsteam</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageeditteam.cpp" line="150"/>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1917,27 +1940,27 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
 <context>
     <name>PageScheme</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="522"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="518"/>
         <source>New</source>
         <translation>Neu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="523"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="519"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="112"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="108"/>
         <source>Gain 80% of the damage you do back in health</source>
         <translation>80% des ausgeteilten Schadens werden dir als Gesundheitspunkte gutgeschrieben</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="116"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="112"/>
         <source>Share your opponents pain, share their damage</source>
         <translation>Teile den Schmerz deines Gegners, teile seinen verursachten Schaden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="108"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="104"/>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
         <translation>Deine Igel können sich nicht bewegen, gib Dein Bestes im Fernkampf</translation>
     </message>
@@ -1950,231 +1973,235 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation type="obsolete">Sekunden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="72"/>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Verteidige deine Festung und zerstöre die des Gegners, maximal zwei Teamfarben!</translation>
+        <translation type="obsolete">Verteidige deine Festung und zerstöre die des Gegners, maximal zwei Teamfarben!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
         <translation type="obsolete">Die Teams starten auf gegenüberliegenden Terrainseiten, maximal zwei Teamfarben!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="92"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="88"/>
         <source>Land can not be destroyed!</source>
         <translation>Die Landschaft ist nicht zerstörbar!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="96"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="92"/>
         <source>Lower gravity</source>
         <translation>Verringerte Schwerkraft</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="148"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="144"/>
         <source>Assisted aiming with laser sight</source>
         <translation>Zielfhilfe durch Laservisier</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="128"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="124"/>
         <source>All hogs have a personal forcefield</source>
         <translation>Alle Igel haben ein eigenes Schutzschild</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="152"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="148"/>
         <source>Order of play is random instead of in room order.</source>
         <translation>Gespielt wird in zufälliger Reihenfolge.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="168"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="164"/>
         <source>Play with a King. If he dies, your side dies.</source>
         <translation>Beschütze deinen König! Ohne ihn hast du verloren.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="156"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="152"/>
         <source>Take turns placing your hedgehogs before the start of play.</source>
         <translation>Platziere deine Igel selbständig vor Rundenbeginn.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="136"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="132"/>
         <source>Ammo is shared between all teams that share a colour.</source>
         <translation>Alle Teams mit gleicher Farbe teilen sich den gleichen Waffenvorrat.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="76"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="72"/>
         <source>Disable girders when generating random maps.</source>
         <translation>Keine Bauträger auf Zufallskarten platzieren.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="80"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="76"/>
         <source>Disable land objects when generating random maps.</source>
         <translation>Keine Landschaftsobjekte beim Generieren von Zufallskarten platzieren. </translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="124"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="120"/>
         <source>AI respawns on death.</source>
         <translation>KI wird wiederbelebt.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="120"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="116"/>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
         <translation>Alle (lebenden) Igel werden am Ende der Runde vollkommen geheilt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="144"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="140"/>
         <source>Attacking does not end your turn.</source>
         <translation>Angriffe beenden die Runde nicht.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="140"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="136"/>
         <source>Weapons are reset to starting values each turn.</source>
         <translation>Arsenal wird jede Runde zurückgesetzt.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="132"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="128"/>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Jeder Igel hat sein eigenes Arsenal. Es wird nicht mit dem Team geteilt.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="96"/>
         <source>You will not have to worry about wind anymore.</source>
         <translation>Du wirst dich nicht mehr um Wind kümmern müssen.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="104"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="100"/>
         <source>Wind will affect almost everything.</source>
         <translation>Wind beeinflusst fast alles.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="521"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="502"/>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="517"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="164"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="160"/>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
         <translation>Teams gleicher Farbe kommen nacheinander dran und teilen sich ihre Zugzeit.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="84"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="80"/>
         <source>Add an indestructible border around the terrain</source>
         <translation>Dem Spielfeld eine unzerstörbare Randbegrenzung hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="88"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="84"/>
         <source>Add an indestructible border along the bottom</source>
         <translation>Dem unteren Kartenrand eine unzerstörbare Randbegrenzung anfügen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="160"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="156"/>
         <source>Each clan starts in its own part of the terrain.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="174"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="170"/>
         <source>Overall damage and knockback in percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="175"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="171"/>
         <source>Turn time in seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="176"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="172"/>
         <source>Initial health of hedgehogs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="177"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="173"/>
         <source>How many rounds have to be played before Sudden Death begins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="178"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="174"/>
         <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="179"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="175"/>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="180"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="176"/>
         <source>Maximum rope length in percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="181"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="177"/>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="182"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="178"/>
         <source>Likelihood of a crate dropping before a turn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="183"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="179"/>
         <source>Health bonus for collecting a health crate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="184"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="180"/>
         <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="185"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="181"/>
         <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="186"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="182"/>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="187"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="183"/>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="188"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="184"/>
         <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="189"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="185"/>
         <source>Affects the left and right boundaries of the map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="190"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="186"/>
         <source>Time you get after an attack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="191"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="187"/>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="477"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="473"/>
         <source>None (Default)</source>
         <translation>Keine (Standard)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="478"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="474"/>
         <source>Wrap (World wraps)</source>
         <translation>Umbrechen (Welt wiederholt sich)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="479"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="475"/>
         <source>Bounce (Edges reflect)</source>
         <translation>Abprallen (Grenzen reflektieren)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="480"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="476"/>
         <source>Sea (Edges connect to sea)</source>
         <translation>Ozean (Grenzen sind mit dem Wasser verbunden)</translation>
     </message>
@@ -2238,22 +2265,51 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
 <context>
     <name>PageTraining</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="206"/>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="87"/>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="90"/>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="93"/>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="95"/>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="96"/>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="97"/>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="288"/>
         <source>No description available</source>
         <translation>Keine Beschreibung verfügbar</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="214"/>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="296"/>
         <source>Select a mission!</source>
         <translation>Wähle eine Mission!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="78"/>
         <source>Pick the mission or training to play</source>
-        <translation>Wähle eine Mission oder ein Training</translation>
+        <translation type="obsolete">Wähle eine Mission oder ein Training</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="93"/>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="111"/>
         <source>Start fighting</source>
         <translation>Auf in den Kampf!</translation>
     </message>
@@ -2261,17 +2317,17 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
 <context>
     <name>PageVideos</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="122"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="123"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="123"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="124"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="264"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="265"/>
         <source>%1 bytes</source>
         <translation>
             <numerusform>%1 Byte</numerusform>
@@ -2279,17 +2335,17 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="508"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="509"/>
         <source>(in progress...)</source>
         <translation>(in Bearbeitung …)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="732"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="733"/>
         <source>encoding</source>
         <translation>encoden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="734"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="735"/>
         <source>uploading</source>
         <translation>hochladen</translation>
     </message>
@@ -2304,12 +2360,12 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation type="obsolete">Größe: %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="512"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="513"/>
         <source>Date: %1</source>
         <translation>Datum: %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="513"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="514"/>
         <source>Size: %1</source>
         <translation>Größe: %1</translation>
     </message>
@@ -2691,12 +2747,12 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation>Teameinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="119"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="120"/>
         <source>Videos</source>
         <translation>Videos</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="155"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="156"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
@@ -2748,62 +2804,62 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation>Ausgangslautstärke</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="194"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="190"/>
         <source>Damage Modifier</source>
         <translation>Prozentualer Schaden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="211"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="207"/>
         <source>Turn Time</source>
         <translation>Rundenzeit</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="228"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="224"/>
         <source>Initial Health</source>
         <translation>Anfangslebenspunkte</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="245"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="241"/>
         <source>Sudden Death Timeout</source>
         <translation>Runden bis Sudden Death</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="363"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="359"/>
         <source>Mines Time</source>
         <translation>Minenzündzeit</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="380"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="376"/>
         <source>Mines</source>
         <translation>Minen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="414"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="410"/>
         <source>Barrels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="431"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="427"/>
         <source>Air Mines</source>
         <translation>Luftminen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="448"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="444"/>
         <source>% Retreat Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="503"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="499"/>
         <source>Scheme Name:</source>
         <translation>Spielprofil:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="313"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="309"/>
         <source>Crate Drops</source>
         <translation>Kistenabwurf</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="397"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="393"/>
         <source>% Dud Mines</source>
         <translation>% Blindgänger</translation>
     </message>
@@ -2855,27 +2911,27 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation>Qualität</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="329"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="325"/>
         <source>% Health Crates</source>
         <translation>% Erste-Hilfe-Koffer</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="346"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="342"/>
         <source>Health in Crates</source>
         <translation>Lebenspunkte in Erste-Hilfe-Koffern</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="262"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="258"/>
         <source>Sudden Death Water Rise</source>
         <translation>Steigen des Wassers</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="279"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="275"/>
         <source>Sudden Death Health Decrease</source>
         <translation>Schaden bei Sudden Death</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="296"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="292"/>
         <source>% Rope Length</source>
         <translation>% Seillänge</translation>
     </message>
@@ -3043,12 +3099,12 @@ Willst du wirklich verlassen?</translation>
         <translation>Diese Einstellung tritt ab nächstem Neustart in Kraft.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="465"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="461"/>
         <source>World Edge</source>
         <translation>Spielfeldgrenze</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="486"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="482"/>
         <source>Script parameter</source>
         <translation>Skriptparameter</translation>
     </message>
@@ -3056,7 +3112,7 @@ Willst du wirklich verlassen?</translation>
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="920"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="942"/>
         <source>unnamed</source>
         <translation>unbenannt</translation>
     </message>
@@ -3083,7 +3139,7 @@ Willst du wirklich verlassen?</translation>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1563"/>
         <source>Connection to server is lost</source>
         <translation>Verbindung zum Server wurde unterbrochen</translation>
     </message>
@@ -3093,7 +3149,7 @@ Willst du wirklich verlassen?</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1998"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2059"/>
         <source>File association failed.</source>
         <translation>Dateizuordnung fehlgeschlagen.</translation>
     </message>
@@ -3127,35 +3183,35 @@ Willst du wirklich verlassen?</translation>
         <translation>Willst du das Team »%1« wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="949"/>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="622"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="971"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="617"/>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
         <translation>Standard-Profil »%1« kann nicht gelöscht werden!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="975"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="997"/>
         <source>Please select a record from the list</source>
         <translation>Bitte wähle eine Aufnahme in der Liste aus</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1480"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1502"/>
         <source>Unable to start server</source>
         <translation>Server konnte nicht gestartet werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="329"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="330"/>
         <location filename="../../../../QTfrontend/util/MessageDialog.cpp" line="26"/>
         <source>Hedgewars - Error</source>
         <translation>Hedgewars – Fehler</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1992"/>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="416"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2053"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="417"/>
         <source>Hedgewars - Success</source>
         <translation>Hedgewars – Erfolg</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1993"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2054"/>
         <source>All file associations have been set</source>
         <translation>Alle Dateizuordnungen wurden gesetzt</translation>
     </message>
@@ -3262,34 +3318,34 @@ Do you still want to join the room?</source>
 Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="621"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="616"/>
         <source>Schemes - Warning</source>
         <translation>Spielprofile – Warnung</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="630"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="625"/>
         <source>Schemes - Are you sure?</source>
         <translation>Spielprofile – Bist du dir sicher?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="631"/>
+        <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="626"/>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
         <translation>Willst du das Spielprofil »%1« wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="616"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="645"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="870"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="617"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="646"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="871"/>
         <source>Videos - Are you sure?</source>
         <translation>Videos – Bist du dir sicher?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="617"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="618"/>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
         <translation>Willst du das Video »%1« wirklich löschen?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="646"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="647"/>
         <source>Do you really want to remove %1 file(s)?</source>
         <translation>
             <numerusform>Willst du wirklich %1 Datei entfernen?</numerusform>
@@ -3297,7 +3353,7 @@ Willst du trotzdem den Raum betreten?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="871"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="872"/>
         <source>Do you really want to cancel uploading %1?</source>
         <translation>Willst du das Hochladen von %1 wirklich abbrechen?</translation>
     </message>
@@ -3351,28 +3407,28 @@ Willst du trotzdem den Raum betreten?</translation>
         <translation>Willst du das Arsenal »%1« wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1070"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1092"/>
         <source>Hedgewars - Nick not registered</source>
         <translation>Hedgewars – Spitzname nicht registriert</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="339"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="340"/>
         <source>System Information Preview</source>
         <translation>Systeminformations-Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="354"/>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="365"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="355"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="366"/>
         <source>Failed to generate captcha</source>
         <translation>Captcha-Generierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="382"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="383"/>
         <source>Failed to download captcha</source>
         <translation>Captcha-Download fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="446"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="447"/>
         <source>Please fill out all fields. Email is optional.</source>
         <translation>Bitte füll alle Felder aus. Das Feld »E-Mail« ist optional.</translation>
     </message>
@@ -3387,12 +3443,12 @@ Willst du trotzdem den Raum betreten?</translation>
         <translation>Hedgewars – Information</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2089"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2150"/>
         <source>Not all players are ready</source>
         <translation>Es sind nicht alle Spieler bereit</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2090"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2151"/>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
         <translation>Bist du sicher, dass du diesees Spiel starten willst?
@@ -3402,8 +3458,8 @@ Es sind nicht alle Spieler bereit.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../../QTfrontend/campaign.cpp" line="82"/>
-        <location filename="../../../../QTfrontend/campaign.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/campaign.cpp" line="142"/>
+        <location filename="../../../../QTfrontend/campaign.cpp" line="164"/>
         <source>No description available</source>
         <translation>Keine Beschreibung verfügbar</translation>
     </message>
@@ -3411,10 +3467,8 @@ Es sind nicht alle Spieler bereit.</translation>
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagecampaign.cpp" line="73"/>
-        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="92"/>
         <source>Go!</source>
-        <translation>Los!</translation>
+        <translation type="obsolete">Los!</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/dialog/input_ip.cpp" line="49"/>
@@ -3428,7 +3482,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/dialog/input_ip.cpp" line="58"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="501"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="502"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -3453,7 +3507,9 @@ Es sind nicht alle Spieler bereit.</translation>
         <translation>Verbinden zu …</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/ui/page/pagecampaign.cpp" line="90"/>
         <location filename="../../../../QTfrontend/ui/page/pagenetserver.cpp" line="99"/>
+        <location filename="../../../../QTfrontend/ui/page/pagetraining.cpp" line="110"/>
         <source>Start</source>
         <translation>Starten</translation>
     </message>
@@ -3469,8 +3525,8 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pageplayrecord.cpp" line="48"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="191"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="501"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="192"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="502"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
@@ -3495,24 +3551,24 @@ Es sind nicht alle Spieler bereit.</translation>
         <translation>Auf Standardeinstellungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="141"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="142"/>
         <source>Open videos directory</source>
         <translation>Videoverzeichnis anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="187"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="188"/>
         <source>Play</source>
         <translation>Abspielen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="195"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="502"/>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="878"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="196"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="503"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="879"/>
         <source>Upload to YouTube</source>
         <translation>Auf YouTube hochladen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="502"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="503"/>
         <source>Cancel uploading</source>
         <translation>Hochladen abbrechen</translation>
     </message>
@@ -3522,22 +3578,22 @@ Es sind nicht alle Spieler bereit.</translation>
         <translation>Standard-Kodierungs-Einstellungen wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="142"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="143"/>
         <source>Open the video directory in your system</source>
         <translation>Das Videoverzeichnis deines Systems öffnen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="189"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="190"/>
         <source>Play this video</source>
         <translation>Dieses Video abspielen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="193"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="194"/>
         <source>Delete this video</source>
         <translation>Dieses Video löschen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="197"/>
+        <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="198"/>
         <source>Upload this video to your Youtube account</source>
         <translation>Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
     </message>
@@ -4570,27 +4626,27 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
 <context>
     <name>server</name>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="34"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="18"/>
         <source>Authentication failed</source>
         <translation>Authentifizierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="35"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="19"/>
         <source>60 seconds cooldown after kick</source>
         <translation>60 Sekunden Abkühlzeit nach Hinauswurf</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="36"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="20"/>
         <source>kicked</source>
         <translation>hinausgeworfen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="38"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="22"/>
         <source>Ping timeout</source>
         <translation>Ping-Timeout</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="55"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="7"/>
         <source>bye</source>
         <translation>tschüss</translation>
     </message>
@@ -4615,162 +4671,162 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
         <translation>Anzahl der Igel im Team</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="13"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="24"/>
         <source>Empty config entry</source>
         <translation>Leerer Konfigurations-Eintrag</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="16"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="27"/>
         <source>Corrupted hedgehogs info</source>
         <translation>Kaputte Igel-Info</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="17"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="28"/>
         <source>too many teams</source>
         <translation>zu viele Teams</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="18"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="29"/>
         <source>too many hedgehogs</source>
         <translation>zu viele Igel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="19"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="30"/>
         <source>There&apos;s already a team with same name in the list</source>
         <translation>Es gibt bereits ein Team mit dem selben Namen in der Liste</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="20"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="31"/>
         <source>round in progress</source>
         <translation>laufende Runde</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="21"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="32"/>
         <source>restricted</source>
         <translation>eingeschränkt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="22"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="33"/>
         <source>REMOVE_TEAM: no such team</source>
         <translation>REMOVE_TEAM: kein solches Team</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="23"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="34"/>
         <source>Not team owner!</source>
         <translation>Nicht Team-Besitzer*In!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="12"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="23"/>
         <source>Less than two clans!</source>
         <translation>Weniger als zwei Klans!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="24"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="35"/>
         <source>Room with such name already exists</source>
         <translation>ein Raum mit einem solchen Namen existiert bereits</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="25"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="36"/>
         <source>/maxteams: specify number from 2 to 8</source>
         <translation>/maxteams: Zahl zwischen 2 und 8 wählen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="26"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="37"/>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
         <translation>Verfügbare »callvote«-Befehle: kick &lt;Spitzname&gt;, map &lt;Name&gt;, pause, newseed, hedgehogs</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="27"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="38"/>
         <source>callvote kick: specify nickname</source>
         <translation>callvote kick: Spitznamen festlegen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="28"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="39"/>
         <source>callvote kick: no such user</source>
         <translation>callvote kick: Benutzer existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="29"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="40"/>
         <source>callvote map: no such map</source>
         <translation>callvote map: Karte existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="30"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="41"/>
         <source>callvote pause: no game in progress</source>
         <translation>callvote pause: es läuft kein Spiel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="31"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="42"/>
         <source>callvote hedgehogs: specify number from 1 to 8</source>
         <translation>callvote hedgehogs: Zahl zwischen 1 und 8 wählen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="6"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="55"/>
         <source>Illegal room name</source>
         <translation>Verbotener Raumname</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="7"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="2"/>
         <source>No such room</source>
         <translation>Ein solcher Raum existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="9"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="4"/>
         <source>Joining restricted</source>
         <translation>Zutritt verboten</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="10"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="5"/>
         <source>Registered users only</source>
         <translation>Nur für registrierte Benutzer</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="11"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="6"/>
         <source>You are banned in this room</source>
         <translation>Du wurdest aus diesem Raum verbannt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="2"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="12"/>
         <source>Nickname already chosen</source>
         <translation>Spitzname bereits gewählt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="3"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="13"/>
         <source>Illegal nickname</source>
         <translation>Verbotener Spitzname</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="4"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="14"/>
         <source>Protocol already known</source>
         <translation>Protokoll bereits bekannt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="5"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="15"/>
         <source>Bad number</source>
         <translation>Schlechte Zahl</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="32"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="16"/>
         <source>Nickname is already in use</source>
         <translation>Spitzname bereits in Benutzung</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="14"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="25"/>
         <source>Restricted</source>
         <translation>Eingeschränkt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="15"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="26"/>
         <source>Not room master</source>
         <translation>Nicht Gastgeber</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="33"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="17"/>
         <source>No checker rights</source>
         <translation>Keine Rechte zum Benutzen des Inspektionshilfsprogramms</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="8"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="3"/>
         <source>Room version incompatible to your hedgewars version</source>
         <translation>Die Raumversion ist inkompatibel zu deiner Hedgewars-Version</translation>
     </message>
@@ -4810,24 +4866,24 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
         <translation>pausieren</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="37"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="21"/>
         <source>Reconnected too fast</source>
         <translation>Zu schnell wieder verbunden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="39"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="8"/>
         <source>Warning! Chat flood protection activated</source>
         <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher ist die Übersetzung etwas ausführlicher.</translatorcomment>
         <translation>Achtung! Chat-Flood-Schutz ist aktiv. Bitte red etwas langsamer.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="40"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="9"/>
         <source>Excess flood</source>
         <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher wird es hier umschrieben.</translatorcomment>
         <translation>Zu viele Nachrichten in kurzer Zeit abgeschickt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="41"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="10"/>
         <source>Game messages flood detected - 1</source>
         <translation>Zu viele Spielnachrichten in kurzer Zeit ermittelt – 1</translation>
     </message>
@@ -4836,7 +4892,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
         <translation type="obsolete">Zu viele Spielnachrichten in kurzer Zeit ermittelt – 2</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="42"/>
+        <location filename="../../../../QTfrontend/servermessages.h" line="11"/>
         <source>Warning! Joins flood protection activated</source>
         <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher ist die Übersetzung etwas ausführlicher und umschreibend.</translatorcomment>
         <translation>Achtung! Der Server wird ein zu schnelles Beitreten in kurzer Zeit nicht akzeptieren</translation>

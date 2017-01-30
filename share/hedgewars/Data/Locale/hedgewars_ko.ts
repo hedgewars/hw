@@ -896,6 +896,21 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1012,6 +1027,10 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Random Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1450,10 +1469,6 @@ just enter your nickname.</source>
 <context>
     <name>PageScheme</name>
     <message>
-        <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Land can not be destroyed!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1649,6 +1664,10 @@ just enter your nickname.</source>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1707,11 +1726,31 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pick the mission or training to play</source>
+        <source>Start fighting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Start fighting</source>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2579,10 +2618,6 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Go!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

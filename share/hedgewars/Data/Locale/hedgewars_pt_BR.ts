@@ -951,6 +951,21 @@ informe apenas seu apelido. </translation>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1068,6 +1083,10 @@ informe apenas seu apelido. </translation>
     <message>
         <source>Random Team</source>
         <translation>Equipe aleatória</translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1579,7 +1598,7 @@ informe apenas seu apelido. </translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Proteja seu forte e destrua os oponentes, 2 cores de equipes no máximo!</translation>
+        <translation type="obsolete">Proteja seu forte e destrua os oponentes, 2 cores de equipes no máximo!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1761,6 +1780,10 @@ informe apenas seu apelido. </translation>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1820,11 +1843,35 @@ informe apenas seu apelido. </translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Escolha uma missão ou treino para jogar</translation>
+        <translation type="obsolete">Escolha uma missão ou treino para jogar</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>Começar a luta</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2731,7 +2778,7 @@ Nem todos os jogadores estão prontos.</translation>
     <name>QPushButton</name>
     <message>
         <source>Go!</source>
-        <translation>Avançar!</translation>
+        <translation type="obsolete">Avançar!</translation>
     </message>
     <message>
         <source>default</source>

@@ -934,6 +934,21 @@ inserisci solo il tuo soprannome.</translation>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished">Squadra</translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -1051,6 +1066,10 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Random Team</source>
         <translation>Squadra Casuale</translation>
+    </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1526,7 +1545,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Difendi il tuo fortino e distruggi i nemici, due colori di squadra al massimo!</translation>
+        <translation type="obsolete">Difendi il tuo fortino e distruggi i nemici, due colori di squadra al massimo!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1708,6 +1727,10 @@ inserisci solo il tuo soprannome.</translation>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1767,11 +1790,35 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Scegli la missione, sfida o addestramento da intraprendere</translation>
+        <translation type="obsolete">Scegli la missione, sfida o addestramento da intraprendere</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>Inizia combattimento</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2632,7 +2679,7 @@ Non tutti i giocatori sono pronti.</translation>
     <name>QPushButton</name>
     <message>
         <source>Go!</source>
-        <translation>Gioca!</translation>
+        <translation type="obsolete">Gioca!</translation>
     </message>
     <message>
         <source>default</source>
