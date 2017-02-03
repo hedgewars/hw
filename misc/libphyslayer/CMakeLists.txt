@@ -14,7 +14,9 @@ set(PHYSLAYER_SRCS
 
 #compiles and links actual library
 add_library (physlayer ${PHYSLAYER_SRCS})
-#TODO: find good VERSION and SOVERSION values
+set_target_properties(physlayer PROPERTIES
+                          VERSION 1.0
+                          SOVERSION 1.0)
 target_link_libraries(physlayer ${SDL2_LIBRARY} lua physfs)
 install(TARGETS physlayer RUNTIME DESTINATION ${target_binary_install_dir}
                           LIBRARY DESTINATION ${target_library_install_dir}
