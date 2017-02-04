@@ -76,7 +76,10 @@ pub enum HWServerMessage<'a> {
     Nick(&'a str),
     LobbyLeft(&'a str),
     LobbyJoined(&'a [&'a str]),
+    ChatMsg(&'a str, &'a str),
+    ClientFlags(&'a str, &'a [&'a str]),
 
+    Warning(&'a str),
     Connected(u32),
     Unreachable,
 }
@@ -109,15 +112,26 @@ impl<'a> HWServerMessage<'a> {
             &HWServerMessage::Bye(msg)
                 => construct_message(&["BYE", &msg]),
             &HWServerMessage::Nick(nick)
-            => construct_message(&["NICK", &nick]),
-            &HWServerMessage::LobbyLeft(msg)
-                => construct_message(&["LOBBY_LEFT", &msg]),
-            &HWServerMessage::LobbyJoined(msg)
+                => construct_message(&["NICK", &nick]),
+            &HWServerMessage::LobbyLeft(nick)
+                => construct_message(&["LOBBY_LEFT", &nick]),
+            &HWServerMessage::LobbyJoined(nicks)
                 => {
                 let mut v = vec!["LOBBY:JOINED"];
-                v.extend_from_slice(msg);
+                v.extend_from_slice(nicks);
                 construct_message(&v)
             },
+            &HWServerMessage::ClientFlags(flags, nicks)
+            => {
+                let mut v = vec!["CLIENT_FLAGS"];
+                v.push(flags);
+                v.extend_from_slice(nicks);
+                construct_message(&v)
+            },
+            &HWServerMessage::ChatMsg(nick, msg)
+                => construct_message(&["CHAT", &nick, &msg]),
+            &HWServerMessage::Warning(msg)
+                => construct_message(&["WARNING", &msg]),
             _ => construct_message(&["ERROR", "UNIMPLEMENTED"]),
         }
     }

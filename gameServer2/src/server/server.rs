@@ -91,13 +91,19 @@ impl HWServer {
 
 
 pub struct HWRoom {
+    pub id: Token,
     pub name: String,
+    pub password: Option<String>,
+    pub ready_players_number: u8,
 }
 
 impl HWRoom {
     pub fn new() -> HWRoom {
         HWRoom {
+            id: Token(0),
             name: String::new(),
+            password: None,
+            ready_players_number: 0,
         }
     }
 }

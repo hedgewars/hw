@@ -19,6 +19,9 @@ pub struct HWClient {
     pub room_id: Option<Token>,
     pub nick: String,
     pub protocol_number: u32,
+    pub is_master: bool,
+    pub is_ready: bool,
+    pub is_joined_mid_game: bool,
 }
 
 impl HWClient {
@@ -32,6 +35,9 @@ impl HWClient {
 
             nick: String::new(),
             protocol_number: 0,
+            is_master: false,
+            is_ready: false,
+            is_joined_mid_game: false,
         }
     }
 
@@ -44,7 +50,8 @@ impl HWClient {
     }
 
     pub fn deregister(&mut self, poll: &Poll) {
-        poll.deregister(&self.sock);
+        poll.deregister(&self.sock)
+            .ok().expect("could not deregister socket");
     }
 
     pub fn send_raw_msg(&mut self, msg: &[u8]) {

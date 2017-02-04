@@ -3,6 +3,7 @@ use std::io::Write;
 use std::io;
 
 use super::server::HWServer;
+use super::server::HWRoom;
 use protocol::messages::HWProtocolMessage;
 use protocol::messages::HWServerMessage::*;
 use super::handlers;
@@ -15,6 +16,8 @@ pub enum Action {
     ReactProtocolMessage(HWProtocolMessage),
     CheckRegistered,
     JoinLobby,
+    AddRoom(String, Option<String>),
+    Warn(String),
 }
 
 use self::Action::*;
@@ -49,6 +52,8 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
                     ]);
             },
         JoinLobby => {
+            server.clients[token].room_id = Some(server.lobby_id);
+
             let joined_msg;
             {
                 let mut lobby_nicks: Vec<&str> = Vec::new();
@@ -60,12 +65,23 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
                 joined_msg = LobbyJoined(&lobby_nicks).to_raw_protocol();
             }
             let everyone_msg = LobbyJoined(&[&server.clients[token].nick]).to_raw_protocol();
-            server.clients[token].room_id = Some(server.lobby_id);
             server.react(token, poll, vec![
                 SendAllButMe(everyone_msg),
                 SendMe(joined_msg),
                 ]);
         },
+        AddRoom(name, password) => {
+            let room_id = server.rooms.insert(HWRoom::new()).ok().expect("Cannot add room");
+            let r = &mut server.rooms[room_id];
+            r.name = name;
+            r.password = password;
+            r.id = room_id.clone();
+            r.ready_players_number = 1;
+            server.clients[token].room_id = Some(room_id);
+        },
+        Warn(msg) => {
+            run_action(server, token, poll, SendMe(Warning(&msg).to_raw_protocol()));
+        }
         //_ => unimplemented!(),
     }
 }
