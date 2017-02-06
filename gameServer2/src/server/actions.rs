@@ -72,12 +72,17 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
         },
         AddRoom(name, password) => {
             let room_id = server.rooms.insert(HWRoom::new()).ok().expect("Cannot add room");
-            let r = &mut server.rooms[room_id];
-            r.name = name;
-            r.password = password;
-            r.id = room_id.clone();
-            r.ready_players_number = 1;
-            server.clients[token].room_id = Some(room_id);
+            {
+                let r = &mut server.rooms[room_id];
+                let c = &mut server.clients[token];
+                r.name = name;
+                r.password = password;
+                r.id = room_id.clone();
+                r.ready_players_number = 1;
+                r.protocol_number = c.protocol_number;
+                c.room_id = Some(room_id);
+            }
+
         },
         Warn(msg) => {
             run_action(server, token, poll, SendMe(Warning(&msg).to_raw_protocol()));
