@@ -17,11 +17,15 @@
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
-        <translation>ùr</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>copy of %1</source>
-        <translation>lethbhreac de %1</translation>
+        <source>New</source>
+        <translation>Ùr</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Lethbhreac dhe %1</translation>
     </message>
 </context>
 <context>
@@ -74,6 +78,10 @@
         <source>permanent</source>
         <translation>buan</translation>
     </message>
+    <message>
+        <source>Ban player</source>
+        <translation>Toirmeasg an cluicheadair</translation>
+    </message>
 </context>
 <context>
     <name>DataManager</name>
@@ -111,6 +119,10 @@
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
         <translation>Cha leig thu leas seòladh puist-d a chur seachad ach ma tha thu airson freagairt fhaighinn.</translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation>Beachdan thugainn</translation>
     </message>
 </context>
 <context>
@@ -306,6 +318,18 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
         <source>%1 has left (%2)</source>
         <translation>Dh&apos;fhalbh %1 (%2)</translation>
     </message>
+    <message>
+        <source>Chat log</source>
+        <translation>Loga na cabadaich</translation>
+    </message>
+    <message>
+        <source>Enter chat messages here and send them with [Enter]</source>
+        <translation>Cuir teachdaireachdan na cabadaich a-steach an-seo agus cuir iad le [Enter]</translation>
+    </message>
+    <message>
+        <source>List of players</source>
+        <translation>Liosta dhe chluicheadairean</translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -464,6 +488,13 @@ An dà theachdaireachd mu dheireadh aig an inneal:
     </message>
 </context>
 <context>
+    <name>HWHostPortDialog</name>
+    <message>
+        <source>Connect to server</source>
+        <translation>Ceangail ris an fhrithealaiche</translation>
+    </message>
+</context>
+<context>
     <name>HWMapContainer</name>
     <message>
         <source>All</source>
@@ -597,6 +628,54 @@ An dà theachdaireachd mu dheireadh aig an inneal:
         <source>Style:</source>
         <translation>Stoidhle:</translation>
     </message>
+    <message>
+        <source>Forts</source>
+        <translation>Dùin</translation>
+    </message>
+    <message>
+        <source>View and edit the seed, the source of randomness in the game</source>
+        <translation>Seall is deasaich an sìol, seo tùs na tuaireamachd sa gheama</translation>
+    </message>
+    <message>
+        <source>Randomize the theme</source>
+        <translation>Tuaireamaich an t-ùrlar</translation>
+    </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation>Tagh ùrlar</translation>
+    </message>
+    <message>
+        <source>Randomize the map, theme and seed</source>
+        <translation>Tuaireamaich am mapa, an t-ùrlar &apos;s an sìol</translation>
+    </message>
+    <message>
+        <source>Randomize the theme and seed</source>
+        <translation>Tuaireamaich an t-ùrlar &apos;s an sìol</translation>
+    </message>
+    <message>
+        <source>Randomize the seed</source>
+        <translation>Tuaireamaich an sìol</translation>
+    </message>
+    <message>
+        <source>Click to randomize the map, theme and seed</source>
+        <translation>Briog gus am mapa, an t-ùrlar is an sìol a thuaireamachadh</translation>
+    </message>
+    <message>
+        <source>Click to randomize the theme and seed</source>
+        <translation>Briog gus an t-ùrlar is an sìol a thuaireamachadh</translation>
+    </message>
+    <message>
+        <source>Adjust the complexity of the generated map</source>
+        <translation>Gleus iom-fhillteachd a&apos; mhapa a thèid a ghintinn</translation>
+    </message>
+    <message>
+        <source>Adjust the distance between forts</source>
+        <translation>Gleus an t-astar eadar na dùin</translation>
+    </message>
+    <message>
+        <source>Click to edit</source>
+        <translation>Briog gus a dheasachadh</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -692,6 +771,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Password:</source>
         <translation>Facal-faire:</translation>
     </message>
+    <message>
+        <source>New Account</source>
+        <translation>Cunntas ùr</translation>
+    </message>
 </context>
 <context>
     <name>HWUploadVideoDialog</name>
@@ -724,6 +807,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Search for a hat:</source>
         <translation>Lorg ad:</translation>
+    </message>
+    <message>
+        <source>Choose a hat</source>
+        <translation>Tagh ad</translation>
     </message>
 </context>
 <context>
@@ -768,6 +855,20 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>No description available.</source>
         <translation>Chan eil tuairisgeul ri làimh.</translation>
+    </message>
+</context>
+<context>
+    <name>MinesTimeSpinBox</name>
+    <message>
+        <source>Random</source>
+        <translation type="unfinished"/>
+    </message>
+    <message numerus="yes">
+        <source>%1 seconds</source>
+        <translation type="obsolete">
+            <numerusform>%1 second</numerusform>
+            <numerusform>%1 seconds</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1042,7 +1143,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation>Fàg beachd an-seo mu dhuilgheadasan, molaidhean air feartan no innis dhuinn ciamar a tha Hedgewars a&apos; chòrdadh riut</translation>
+        <translation>Fàg beachd an-seo mu dhuilgheadasan, molaidhean air gleusanan no innis dhuinn ciamar a tha Hedgewars a&apos; chòrdadh riut</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
@@ -1091,6 +1192,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Edit game preferences</source>
         <translation>Deasaich roghainnean a&apos; gheama</translation>
     </message>
+    <message>
+        <source>Start fighting (requires at least 2 teams)</source>
+        <translation>Tòisich air sabaid (feum air co-dhiù 2 sgioba)</translation>
+    </message>
 </context>
 <context>
     <name>PageNetGame</name>
@@ -1113,6 +1218,22 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Room controls</source>
         <translation>Uidheaman-smachd an t-seòmair</translation>
+    </message>
+    <message>
+        <source>Room name</source>
+        <translation>Ainm an t-seòmair</translation>
+    </message>
+    <message>
+        <source>Update the room name</source>
+        <translation>Ùraich ainm an t-seòmair</translation>
+    </message>
+    <message>
+        <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
+        <translation>Cuir am bolgan air gus sealltainn dha na cluicheadairean eile nuair a bhios tu deiseil ri sabaid</translation>
+    </message>
+    <message>
+        <source>Start fighting (requires at least 2 teams)</source>
+        <translation>Tòisich air sabaid (feum air co-dhiù 2 sgioba)</translation>
     </message>
 </context>
 <context>
@@ -1307,6 +1428,18 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Enter new file name:</source>
         <translation>Cuir a-steach ainm an fhaidhle ùir:</translation>
     </message>
+    <message>
+        <source>Play demo</source>
+        <translation>Cluich demo</translation>
+    </message>
+    <message>
+        <source>Play the selected demo</source>
+        <translation>Cluich an demo a thagh thu</translation>
+    </message>
+    <message>
+        <source>Load the selected game</source>
+        <translation>Luchdaich an geama a thagh thu</translation>
+    </message>
 </context>
 <context>
     <name>PageRoomsList</name>
@@ -1320,7 +1453,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Admin features</source>
-        <translation>Feartan rianachd</translation>
+        <translation>Rianachd</translation>
     </message>
     <message>
         <source>Room Name:</source>
@@ -1359,7 +1492,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Tòisichidh na sgiobaidhean taobh thall o chàch a chèile, dà dhath sgioba air a char as motha!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1388,14 +1521,6 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
         <translation>Chan urrainn dha na gràineagan agad gluasad, cuir na sgilean làmhachais agad fo dheuchainn</translation>
-    </message>
-    <message>
-        <source>Random</source>
-        <translation>Air thuaiream</translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation>Diog(an)</translation>
     </message>
     <message>
         <source>New</source>
@@ -1489,6 +1614,82 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Sea (Edges connect to sea)</source>
         <translation>Muir (ceanglaidh na h-oirean ris a&apos; mhuir)</translation>
     </message>
+    <message>
+        <source>Each clan starts in its own part of the terrain.</source>
+        <translation>Tòisichidh gach cinneadh air sgìre dha fhèin.</translation>
+    </message>
+    <message>
+        <source>Overall damage and knockback in percent</source>
+        <translation>Dochainn coitcheann agus bualadh air ais ann an ceudad</translation>
+    </message>
+    <message>
+        <source>Turn time in seconds</source>
+        <translation>Ùine na cuairte ann an diogan</translation>
+    </message>
+    <message>
+        <source>Initial health of hedgehogs</source>
+        <translation>Slàinte tùsail nan gràineag</translation>
+    </message>
+    <message>
+        <source>How many rounds have to be played before Sudden Death begins</source>
+        <translation>An àireamh dhe chuairtean a thèid a chluich mus tòisich am bàs obann</translation>
+    </message>
+    <message>
+        <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
+        <translation>Dè cho fada a dh&apos;èireas an t-uisge gach cuairt ri linn a&apos; bhàis obainn. Suidhich seo agus lughdachadh slàinte rè a&apos; bhàis obainn air 0 gus am bàs obann a chur à comas.</translation>
+    </message>
+    <message>
+        <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
+        <translation>An uiread dhe shlàinte a chailleas na gràineagan gach cuairt ri linn a&apos; bhàis obainn, sìos gu ruige 1 shlàine. Suidhich seo agus èireadh an uisge rè a&apos; bhàis obainn air 0 gus am bàs obann a chur à comas.</translation>
+    </message>
+    <message>
+        <source>Maximum rope length in percent</source>
+        <translation>Faide as motha nan ròpannan ann an ceuded</translation>
+    </message>
+    <message>
+        <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
+        <translation>An coltachd gu bheil creat a thuiteas &apos;na chreat slàinte. Bidh gach creat eile &apos;na chreat airm no acainn.</translation>
+    </message>
+    <message>
+        <source>Likelihood of a crate dropping before a turn</source>
+        <translation>An coltachd gun tuit creat ro thoiseach cuairte</translation>
+    </message>
+    <message>
+        <source>Health bonus for collecting a health crate</source>
+        <translation>Buannachd slàinte a gheibhear le togail creat slàinte</translation>
+    </message>
+    <message>
+        <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
+        <translation>Tìmear spreadhaidh nam mèinnean. Tha an tìmear tuaireamach eadar 0 is 5 diogan. Bidh tìmear nam mèinnean adhair ceithir tursan nas luaithe na tìmear nam mèinnean coitcheann.</translation>
+    </message>
+    <message>
+        <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation>Cuibheas nam mèinnean a thèid a chur air mapa le eileanan meadhanach. Thèid an àireamh seo a sgèileadh airson nam mapaichean eile.</translation>
+    </message>
+    <message>
+        <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
+        <translation>An coltachd nach spreadh mèinn. Chan bhi bhuaidh aig seo air mèinnean a chuireas gràineagan.</translation>
+    </message>
+    <message>
+        <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation>Cuibheas nam baraillean a thèid a chur air mapa le eileanan meadhanach. Thèid an àireamh seo a sgèileadh airson nam mapaichean eile.</translation>
+    </message>
+    <message>
+        <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation>Cuibheas nam mèinnean adhair a thèid a chur air mapa le eileanan meadhanach. Thèid an àireamh seo a sgèileadh airson nam mapaichean eile.</translation>
+    </message>
+    <message>
+        <source>Affects the left and right boundaries of the map</source>
+        <translation>Bidh buaidh aig seo air crìochan clì is deas a&apos; mhapa</translation>
+    </message>
+    <message>
+        <source>Time you get after an attack</source>
+        <translation>An ùine a gheibh thu às dèidh ionnsaighe</translation>
+    </message>
+    <message>
+        <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
+        <translation>Paramadair a bharrachd gus stoidhlichean geama a rèiteachadh. Tha a chiall a-rèir na stoidhle a chleachdas tu, thoir sùil air an docamaideadh. Fàg seo bàn mur eil thu cinnteach.</translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1513,7 +1714,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <name>PageSinglePlayer</name>
     <message>
         <source>Play a quick game against the computer with random settings</source>
-        <translation>Cluich geama luath an aghaidh a&apos; hoimpiutair le roghainnean air thuaiream</translation>
+        <translation>Cluich geama luath an aghaidh a&apos; choimpiutair le roghainnean air thuaiream</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
@@ -1648,6 +1849,14 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Show games in-progress</source>
         <translation>Seall na geamannan a tha a&apos; dol</translation>
     </message>
+    <message>
+        <source>Show password protected</source>
+        <translation>Seall le dìon facail-fhaire</translation>
+    </message>
+    <message>
+        <source>Show join restricted</source>
+        <translation>Seall le tighinn a-steach cuingichte</translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
@@ -1764,7 +1973,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Level</source>
-        <translation>Leibheil</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>(System default)</source>
@@ -1833,6 +2042,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Green/Red grayscale</source>
         <translation>Liath-sgèile uaine/dearg</translation>
+    </message>
+    <message>
+        <source>Computer (Level %1)</source>
+        <translation>Coimpiutair (Leibheil %1)</translation>
     </message>
 </context>
 <context>
@@ -1934,7 +2147,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation>Bàs obann nuair a dh&apos;fhalbhas an ùine</translation>
+        <translation>Crìoch ùine a&apos; bhàis obainn</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
@@ -1954,7 +2167,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Seòrsa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Grave</source>
@@ -1974,7 +2187,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation>Stuth spreadhaidh</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Quality</source>
@@ -1990,11 +2203,11 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation>Bàs obann nuair a dh&apos;fhàsas an t-uisge</translation>
+        <translation>Èireadh an uisge rè a&apos; bhàis obainn</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation>Bàs obann le droch slàinte</translation>
+        <translation>Lughdachadh slàinte rè a&apos; bhàis obainn</translation>
     </message>
     <message>
         <source>% Rope Length</source>
@@ -2011,10 +2224,6 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Scheme</source>
         <translation>Sgeama</translation>
-    </message>
-    <message>
-        <source>% Get Away Time</source>
-        <translation>% a dh&apos;ùine gus teicheadh</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -2078,7 +2287,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>&apos;S e &quot;obair &apos;ga dhèanamh&quot; a tha san togail leasachaidh seo agus dh&apos;fhaoidte nach eil e co-chòrdail ri tionndaidhean eile a&apos; gheama agus gu bheil cuid a dh&apos;fheartan briste no neo-choileanta!</translation>
+        <translation>&apos;S e &quot;obair &apos;ga dhèanamh&quot; a tha san togail leasachaidh seo agus dh&apos;fhaoidte nach eil e co-chòrdail ri tionndaidhean eile a&apos; gheama agus gu bheil cuid a ghleusan briste no neo-choileanta!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -2135,6 +2344,22 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     <message>
         <source>Script parameter</source>
         <translation>Paramadair an sgriobt</translation>
+    </message>
+    <message>
+        <source>Air Mines</source>
+        <translation>Mèinnean adhair</translation>
+    </message>
+    <message>
+        <source>Player</source>
+        <translation>Cluicheadair</translation>
+    </message>
+    <message>
+        <source>Barrels</source>
+        <translation>Baraillean</translation>
+    </message>
+    <message>
+        <source>% Retreat Time</source>
+        <translation>% ùine cùlachaidh</translation>
     </message>
 </context>
 <context>
@@ -2585,6 +2810,10 @@ Chan eil a h-uile cluicheadair ullamh.</translation>
         <source>Random Perlin</source>
         <translation>Perlin tuaireamach</translation>
     </message>
+    <message>
+        <source>Forts</source>
+        <translation>Dùin</translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -2603,6 +2832,10 @@ Chan eil a h-uile cluicheadair ullamh.</translation>
     <message>
         <source>Close</source>
         <translation>Dùin</translation>
+    </message>
+    <message>
+        <source>Seed</source>
+        <translation>Sìol</translation>
     </message>
 </context>
 <context>
@@ -2625,11 +2858,23 @@ Chan eil a h-uile cluicheadair ullamh.</translation>
     </message>
     <message>
         <source>new</source>
-        <translation>ùr</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>copy of %1</source>
-        <translation>lethbhreac de %1</translation>
+        <source>New</source>
+        <translation>Ùr</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Ùr (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Lethbhreac dhe %1</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Lethbhreac dhe %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2679,6 +2924,10 @@ Ma thachras seo a-rithist &apos;s a-rithist, briog air a&apos; phutan &quot;%2&q
     <message>
         <source>Use selected theme</source>
         <translation>Cleachd an t-ùrlar a thagh thu</translation>
+    </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation>Tagh ùrlar:</translation>
     </message>
 </context>
 <context>
@@ -3444,16 +3693,56 @@ Ma thachras seo a-rithist &apos;s a-rithist, briog air a&apos; phutan &quot;%2&q
         <translation>Mhothaich sinn air tuile teachdaireachdan a&apos; gheama - 1</translation>
     </message>
     <message>
-        <source>Game messages flood detected - 2</source>
-        <translation>Mhothaich sinn air tuile teachdaireachdan a&apos; gheama - 2</translation>
-    </message>
-    <message>
         <source>Warning! Joins flood protection activated</source>
         <translation>Rabhadh! Chan fhaod torr dhaoine ùra tighinn dhan fhrithealaiche gu luath</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
         <translation>Chan eil bhòtadh a&apos; tachairt</translation>
+    </message>
+    <message>
+        <source>Your vote counted</source>
+        <translation>Chaidh do bhòt a chunntadh</translation>
+    </message>
+    <message>
+        <source>Pause toggled</source>
+        <translation>Chaidh cur &apos;na stad a thoglachadh</translation>
+    </message>
+    <message>
+        <source>new seed</source>
+        <translation>sìol ùr</translation>
+    </message>
+    <message>
+        <source>number of hedgehogs in team</source>
+        <translation>uiread a ghràineagan san sgioba</translation>
+    </message>
+    <message>
+        <source>/maxteams: specify number from 2 to 8</source>
+        <translation>/maxteams: sònraich àireamh eadar 2 is 8</translation>
+    </message>
+    <message>
+        <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
+        <translation>Àitheantan callvote a tha ri am faighinn: kick &lt;far-ainm&gt;, map &lt;ainm&gt;, pause, newseed, hedgehogs</translation>
+    </message>
+    <message>
+        <source>callvote kick: specify nickname</source>
+        <translation>callvote kick: sònraich far-ainm</translation>
+    </message>
+    <message>
+        <source>callvote kick: no such user</source>
+        <translation>callvote kick: chan eil an cleachdaiche seo ann</translation>
+    </message>
+    <message>
+        <source>callvote map: no such map</source>
+        <translation>callvote map: chan eil am mapa seo ann</translation>
+    </message>
+    <message>
+        <source>callvote pause: no game in progress</source>
+        <translation>callvote pause: chan eil geama &apos;ga chluich</translation>
+    </message>
+    <message>
+        <source>callvote hedgehogs: specify number from 1 to 8</source>
+        <translation>callvote hedgehogs: sònraich àireamh eadar 1 is 8</translation>
     </message>
 </context>
 </TS>

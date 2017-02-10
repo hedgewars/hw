@@ -1,0 +1,86 @@
+Basic_Training_-_Bazooka.name=Trèanadh bazooka bunasach
+Basic_Training_-_Bazooka.desc="Cleachd a' ghaoth gus do cuideachadh!"
+
+Basic_Training_-_Grenade.name=Trèanadh durcain-spreadhaidh bunasach
+Basic_Training_-_Grenade.desc="Cuimhnich gun tog thu a' phrìne agus 's ann gun tilg thu e!"
+
+Basic_Training_-_Cluster_Bomb.name=Trèanadh boma sgapaidh bunasach
+Basic_Training_-_Cluster_Bomb.desc="Tha fras teth a dhìth air cuideigin!"
+
+Basic_Training_-_Shotgun.name=Trèanadh gunna-froise bunasach
+Basic_Training_-_Shotgun.desc="Loisg an toiseach is faighnich ceistean an uairsin!"
+
+Basic_Training_-_Sniper_Rifle.name=Trèanadh isneach fàtha bunasach
+Basic_Training_-_Sniper_Rifle.desc="Air an ceann!"
+
+Basic_Training_-_Rope.name=Trèanadh ròpa bunasach
+Basic_Training_-_Rope.desc="Dìreach mar dhreallag!"
+
+Basic_Training_-_Flying_Saucer.name=Trèanadh soithich-itealaich bunasach
+Basic_Training_-_Flying_Saucer.desc="An ann gu bheil thu airson bhith 'nad speuradair? Bu chòir dhut itealaich ionnsachadh an toiseach!"
+
+User_Mission_-_Dangerous_Ducklings.name=Misean: Lachagan cunnartach
+User_Mission_-_Dangerous_Ducklings.desc="Nise, a' ghlas-laoich! Thàinig an t-àm gus na dh'ionnsaich thu san trèanadh bhunasach a chur gu feum!"
+
+User_Mission_-_Diver.name=Misean: Tumadh
+User_Mission_-_Diver.desc="Tha an ionnsaigh \"muir-thìreach\" seo nas doirbhe na bhios tu an dùil..."
+
+User_Mission_-_Teamwork.name=Misean: Obair còmhla
+User_Mission_-_Teamwork.desc="Nì gaol do leònadh aig amannan."
+
+User_Mission_-_Spooky_Tree.name=Misean: Craobh rògach
+User_Mission_-_Spooky_Tree.desc="Tha iomadh creat ann a sheo. Tha mi 'n dòchas nach eil an t-acras air an eun ud."
+
+User_Mission_-_Bamboo_Thicket.name=Missean: Badan bambù
+User_Mission_-_Bamboo_Thicket.desc="'s ann oirnne a thig a' bhàs."
+
+User_Mission_-_That_Sinking_Feeling.name=Misean: Fo uallach
+User_Mission_-_That_Sinking_Feeling.desc="Tha an t-uisge ag èirigh gu luath agus chan eil mòran ùine ann. Dh'fheuch mòran ris 's nach deach leotha. An sàbhail thu iad uile?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton and the Hammock
+User_Mission_-_Newton_and_the_Hammock.desc="Remember hoglets: The velocity of a body remains constant unless the body is acted upon by an external force!"
+
+User_Mission_-_The_Great_Escape.name=Mission: The Great Escape
+User_Mission_-_The_Great_Escape.desc="You think you can cage me!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Challenge: Rope Knocking
+User_Mission_-_Rope_Knock_Challenge.desc="Look behind you!"
+
+User_Mission_-_Nobody_Laugh.name=Mission: Nobody Laugh
+User_Mission_-_Nobody_Laugh.desc="This ain't no joke."
+
+User_Mission_-_RCPlane_Challenge.name=Challenge: RC Plane
+User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
+
+portal.name=Mission: Portal Mind Challenge
+portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"
+
+Target_Practice_-_Bazooka_easy.name=Target Practice: Bazooka (easy)
+Target_Practice_-_Bazooka_easy.desc="Alright, soldier, blow those targets up as fast as you can!"
+
+Target_Practice_-_Bazooka_hard.name=Target Practice: Bazooka (hard)
+Target_Practice_-_Bazooka_hard.desc="Can you hit the targets even when they are very far away?"
+
+Target_Practice_-_Cluster_Bomb.name=Target Practice: Cluster Bomb
+Target_Practice_-_Cluster_Bomb.desc="Someone needs hot shower!"
+
+Target_Practice_-_Shotgun.name=Target Practice: Shotgun
+Target_Practice_-_Shotgun.desc="Shoot first, ask questions later!"
+
+Target_Practice_-_Homing_Bee.name=Target Practice: Homing Bee
+Target_Practice_-_Homing_Bee.desc="Using the homing bee is trickier than it seems."
+
+Target_Practice_-_Grenade_easy.name=Target Practice: Grenade (easy)
+Target_Practice_-_Grenade_easy.desc="A warm-up training for the aspiring grenadier."
+
+Target_Practice_-_Grenade_hard.name=Target Practice: Grenade (hard)
+Target_Practice_-_Grenade_hard.desc="This is nothing for greenhorns! We will place the targets at some really tricky positions."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Challenge: Shoppa Love
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Show your love to rope and collect a few crates on a small map."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Challenge: Ropes and Crates
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Take your rope and collect all crates on this medium-sized map."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Challenge: The Customer is King
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Show you're worthy of a true king and collect all crates as fast as possible on this large map."
