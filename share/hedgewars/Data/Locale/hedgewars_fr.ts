@@ -112,15 +112,15 @@
     </message>
     <message>
         <source>Please give us feedback!</source>
-        <translation type="obsolete">Nous avons besoin de votre avis!</translation>
+        <translation type="obsolete">Nous avons besoin de votre avis !</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation>Toutes suggestions, idées ou rapport de bug sont les bienvenues.</translation>
+        <translation>Toutes suggestions, idées ou rapport de bug sont les bienvenus.</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation type="obsolete">Si vous trouvez un bug, vous pouvez vérifier si il est déjà connu ici (anglais): </translation>
+        <translation type="obsolete">Si vous trouvez un bug, vous pouvez vérifier s'il est déjà connu ici (anglais): </translation>
     </message>
     <message>
         <source>Your email address is optional, but we may want to contact you.</source>
@@ -128,7 +128,7 @@
     </message>
     <message>
         <source>Send us feedback!</source>
-        <translation>Envoyez-nous votre avis ressenti !</translation>
+        <translation>Envoyez-nous vos avis !</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
@@ -3692,7 +3692,7 @@ zoom</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished">Info hérisson corrompus</translation>
+        <translation type="unfinished">Info hérisson corrompu</translation>
     </message>
     <message>
         <source>too many teams</source>
@@ -3708,11 +3708,11 @@ zoom</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="unfinished">La partie est en cour</translation>
+        <translation type="unfinished">La partie est en cours</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="unfinished">Ajout interdis</translation>
+        <translation type="unfinished">Ajout interdit</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
@@ -3740,19 +3740,19 @@ zoom</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="unfinished">Accès interdis</translation>
+        <translation type="unfinished">Accès interdit</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation type="unfinished">Accès réservé aux utilisateurs enregistré</translation>
+        <translation type="unfinished">Accès réservé aux utilisateurs enregistrés</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="unfinished">Vous avez été bannis de cette room</translation>
+        <translation type="unfinished">Vous avez été banni de cette room</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="unfinished">Pseudo déjà choisis</translation>
+        <translation type="unfinished">Pseudo déjà choisi</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
