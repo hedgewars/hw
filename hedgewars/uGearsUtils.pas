@@ -477,7 +477,7 @@ else
         PlaySound(sndSplash)
     else if hwTmp > _0_5 then
         PlaySound(sndSkip)
-    else
+    else if hwTmp > _0_0002 then  // arbitrary sanity cutoff.  mostly for airmines
         PlaySound(sndDroplet2);
     end;
 
