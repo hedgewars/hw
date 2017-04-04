@@ -160,7 +160,7 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
             case Gear^.Kind of
               vgtCloud: begin
-			spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
+                        spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                         DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                         end;
                vgtFlake: begin
@@ -421,11 +421,11 @@ case Layer of
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                 vgtCloud: begin
-			sprite:= GetSpriteByWind(GetSprite(sprCloud, sprSDCloud), GetSprite(sprCloudL, sprSDCloudL));
+                        sprite:= GetSpriteByWind(GetSprite(sprCloud, sprSDCloud), GetSprite(sprCloudL, sprSDCloudL));
                           DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
                           end;
               vgtFlake: begin
-			sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                        sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
                         if speedlessFlakes then
                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else
