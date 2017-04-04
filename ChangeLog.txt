@@ -3,6 +3,7 @@
 
 0.9.22 -> 0.9.23
 Content:
+ + New theme: Beach
  + Completely new Cheese map; replaces the old one
  + New hat: "tf_scout" (this time for real)
 
