@@ -492,18 +492,18 @@
 02:09=%1 ist eine Gefahr für sich selbst
 02:09=%1 braucht keine Feinde mehr
 
-; Hog (%1) shot an home run (using the bat and another hog)
+; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=Ein Vogel, ein Flugzeug, …
 02:10=Der verleiht Flügel!
-02:10=%1 landet einen Home Run!
-02:10=%1 vor, noch ein Tor!
-02:10=Ausgezeichnet, %1!
-02:10=Bravo, %1!
-02:10=Sehr sportlich, %1!
+; 02:10=%1 landet einen Home Run!
+; 02:10=%1 vor, noch ein Tor!
+; 02:10=Ausgezeichnet, %1!
+; 02:10=Bravo, %1!
+; 02:10=Sehr sportlich, %1!
 02:10=Flieg, Iglein, flieg!
-02:10=%1 lässt Igel fliegen
-02:10=%1 ist Physikstudent
+; 02:10=%1 lässt Igel fliegen
+; 02:10=%1 ist Physikstudent
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 muss ins Bett!
