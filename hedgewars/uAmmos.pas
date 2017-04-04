@@ -50,7 +50,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 var StoreCnt: LongInt;
 
 implementation
-uses uVariables, uCommands, uUtils, uCaptions, uDebug;
+uses uVariables, uCommands, uUtils, uCaptions, uDebug, uScript;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
      TAmmoArray = array[TAmmoType] of TAmmo;
@@ -287,6 +287,8 @@ begin
 CurWeapon:= GetCurAmmoEntry(Hedgehog);
 with Hedgehog do
     begin
+    if CurAmmoType <> amNothing then
+        ScriptCall('onUsedAmmo', ord(CurAmmoType));
 
     MultiShootAttacks:= 0;
     with CurWeapon^ do
