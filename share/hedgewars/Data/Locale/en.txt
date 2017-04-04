@@ -145,6 +145,41 @@
 02:00=%1 had a low tolerance for being shot
 02:00=%1 could have used an extra life
 02:00=Is there a doctor in the house?
+02:00=%1 won't get up anymore
+02:00=%1 didn't make it
+02:00=%1 just pretends to be dead
+02:00=%1 has seen better days
+02:00=%1 sees dead hedgehogs
+02:00=%1 is worm fodder
+02:00=%1 has bit the dust
+02:00=Game over, %1!
+02:00=It's over for %1
+02:00=%1 will return
+02:00=%1 needs some rest
+02:00=%1 wasn't hardcore enough
+02:00=Good bye, %1!
+02:00=%1 is dead
+02:00=%1 goes to the Hedgehog Heaven
+02:00=%1 meets the Great White Hedgehog in the sky
+02:00=%1 has been eliminated
+02:00=You will be avenged, %1!
+02:00=%1 won't feel any pain
+02:00=%1 was just cannon fodder
+02:00=%1 waits for the resurrection
+02:00=%1 has an after-death experience
+02:00=%1 lost in the Game of Life
+02:00=%1 has been destroyed
+02:00=%1 goes into a very long hibernation
+02:00=No! Why did %1 have to die?
+02:00=Oh no, %1! You had your whole life ahead of you …
+02:00=%1 doesn't need to be afraid of death
+02:00=%1 has been freed from the horrors of war
+02:00=%1 assumes room temperature
+02:00=%1 comes to a sticky end
+02:00=%1 is dead as a dodo
+02:00=%1 is dead as a doornail
+02:00=%1 dropped dead
+02:00=%1 is six feet under
 
 ; Hog (%1) drowned
 02:01=%1 plays submarine!
@@ -195,6 +230,8 @@
 02:01=%1 is wet wet wet
 02:01=%1 gets his quills wet
 02:01=It's Davy Jones' locker for %1
+02:01=%1 explores the Sea
+02:01=Hedgehogs have quills, not gills, %1!
 
 ; Round starts
 02:02=Let's fight!
@@ -274,6 +311,21 @@
 02:05=Correct dosage: as many as you can find!
 02:05=Urgent delivery
 02:05=Supplies!
+02:05=A first aid kit!
+02:05=Hope incoming!
+02:05=Delivery from the fountain of youth
+02:05=Life in boxes
+02:05=Help in sight!
+02:05=This makes you feel well again
+02:05=Pitch up the sickbay!
+02:05=Finally there is help!
+02:05=Increase your life expectancy
+02:05=First aid!
+02:05=Health maker!
+02:05=Crate of life
+02:05=Increase your life energy
+02:05=Did someone say “Achoo!”?
+02:05=With this you will feel as fit as a fiddle
 
 ; New ammo crate
 02:06=More weapons!
@@ -299,6 +351,19 @@
 02:06=Don't let the enemy grab that!
 02:06=Shiny new toys!
 02:06=A mysterious box!
+02:06=The box of Pandora!
+02:06=Who wants to play with me?
+02:06=With this you'll give your enemies hell
+02:06=Let's get the party started!
+02:06=This looks like great fun
+02:06=It's like a children's birthday
+02:06=Guns, lots of guns
+02:06=You'll never get enough of these
+02:06=More weapons to make the game more exciting
+02:06=Not for wimps
+02:06=Warning: Higly explosive
+02:06=For those gun nuts
+02:06=This could be the match-winning weapon!
 
 ; New utility crate
 02:07=Tooltime!
@@ -312,6 +377,17 @@
 02:07=Use this wisely
 02:07=Ooo this box is heavy
 02:07=You might need this
+02:07=Is this something useful?
+02:07=I wonder what's in there
+02:07=More than just a crate
+02:07=More tools
+02:07=New toys, new toys!
+02:07=This looks useful
+02:07=Engineer's present
+02:07=Strategists rejoice!
+02:07=Increase your mobility
+02:07=Nuts and bolts!
+02:07=Delivery from Hedgecogs, Inc.
 
 ; Hog (%1) skips his turn
 02:08=%1 is sooo boring ...
@@ -345,11 +421,18 @@
 02:08=%1 didn't want to join the army in the first place
 02:08=Stop wasting our time, %1
 02:08=I'm dissapointed in you, %1
-02:08=Come on, you can do better than that %1
+02:08=Come on, you can do better than that, %1
 02:08=%1's will has broken
 02:08=%1 apparently has better things to do
 02:08=%1 is scared stiff
 02:08=%1 has fallen asleep
+02:08=%1 never wanted to be here
+02:08=%1 is observing the situation
+02:08=%1 is counting sheep
+02:08=%1 enjoys the silence
+02:08=%1 is tired
+02:08=%1 is the least interesting hedgehog in the world
+02:08=%1 looks at the beautiful landscape
 
 ; Hog (%1) hurts himself only
 02:09=%1 should practice aiming!
@@ -383,20 +466,46 @@
 02:09=%1 totally did that on purpose
 02:09=I won't tell anyone if you don't, %1
 02:09=How embarrassing!
-02:09=I'm sure nobody saw that %1
+02:09=I'm sure nobody saw that, %1
 02:09=%1 needs to review his field manual
 02:09=%1's weapon clearly malfunctioned
+02:09=%1 is still practicing
+02:09=%1's shot backfired
+02:09=Oops!
+02:09=%1 likes boomerangs and yo-yos
+02:09=%1 wants to win the Darwin Award
+02:09=%1 is unable to learn from mistakes
+02:09=%1 is a little weirdo
+02:09=%1 won't get a promotion anytime soon
+02:09=%1 commits self-mutilation
+02:09=%1 got out of the wrong side of the bed
+02:09=Ouch! That must have hurt
+02:09=%1 likes the pain
+02:09=%1 confuses the enemy
+02:09=Something is wrong with %1
+02:09=Better luck next time, %1!
+02:09=%1 is his worst enemy
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=A bird, a plane, ...
 02:10=That one is out!
+02:10=Whee!
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 has to go to bed!
 02:11=%1 seems too busy to play
 02:11=Beam him up, Scotty!
 02:11=%1 has to go
+02:11=%1 teleports into a parallel universe
+02:11=%1 vanishes into thin air
+02:11=%1 is gone
+02:11=%1 has better things to do
+02:11=%1 is taking out the trash
+02:11=%1 escapes
+02:11=%1 needs vacation
+02:11=%1 has to do some homework
+02:11=%1 walks away from the trouble
 
 ; Weapon Categories
 03:00=Timed grenade
