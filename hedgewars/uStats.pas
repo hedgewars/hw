@@ -109,9 +109,11 @@ if FinishedTurnsTotal <> 0 then
     s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
 
-    if (CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (DamageTotal > 0) then
+    // First blood (first damage or kill)
+    if ((DamageTotal > 0) or (KillsTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
+    // Hog hurts itself only
     else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
@@ -119,8 +121,9 @@ if FinishedTurnsTotal <> 0 then
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
-    else if DamageClan <> 0 then
-        if DamageTurn > DamageClan then
+    // Hog hurts own team/clan
+    else if (DamageClan <> 0) or (KillsClan <> 0) then
+        if (DamageTurn > DamageClan) or (Kills > KillsClan) then
             if random(2) = 0 then
                 AddVoice(sndNutter, CurrentTeam^.voicepack)
             else
@@ -131,16 +134,22 @@ if FinishedTurnsTotal <> 0 then
             else
                 AddVoice(sndTraitor, vpHurtSameClan)
 
-    else if CurrentHedgehog^.stats.StepDamageGiven <> 0 then
+    // Hog hurts or kills enemy
+    else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills <> 0) then
         if Kills > 0 then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         else
             AddVoice(sndRegret, vpHurtEnemy)
 
-    else if AmmoDamagingUsed then
+    // Missed shot
+    else if AmmoDamagingUsed and (Kills = 0) then
         AddVoice(sndMissed, PreviousTeam^.voicepack)
+
+    // Timeout
     else if (AmmoUsedCount > 0) and (not isTurnSkipped) then
         begin end// nothing ?
+
+    // Turn skipped
     else if isTurnSkipped and (not PlacingHogs) then
         begin
         AddVoice(sndCoward, PreviousTeam^.voicepack);
