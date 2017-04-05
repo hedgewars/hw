@@ -2592,6 +2592,25 @@ begin
         LAND_HEIGHT_MASK:= $FFFFF800
         end;
 
+    // default water
+    WaterColorArray[0].r := 52;
+    WaterColorArray[0].g := 60;
+    WaterColorArray[0].b := 125;
+    WaterColorArray[0].a := 255;
+    WaterColorArray[2]:= WaterColorArray[0];
+    WaterColorArray[4]:= WaterColorArray[0];
+    WaterColorArray[6]:= WaterColorArray[0];
+    // water surface
+    WaterColorArray[1].r := 84;
+    WaterColorArray[1].g := 92;
+    WaterColorArray[1].b := 157;
+    WaterColorArray[1].a := 255;
+    WaterColorArray[3]:= WaterColorArray[1];
+    WaterColorArray[5]:= WaterColorArray[1];
+    WaterColorArray[7]:= WaterColorArray[1];
+
+    WaterOpacity:= $80;
+
     // default sudden death water
 
     // deep water

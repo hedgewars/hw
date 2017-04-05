@@ -188,6 +188,7 @@ Content Creation:
  + Themes can now use flakes with negative falling speed (rising flakes)
  + Themes can now contain custom sound files: splash.ogg Droplet1.ogg Droplet2.ogg Droplet3.ogg skip.ogg
  + Simplified hat format for unanimated hats; a single 32×32 image is enough. For clan hats, use size 64×32, with the color overlay at the right
+ * Default water color was black instead of blue
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
