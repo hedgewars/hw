@@ -2261,18 +2261,6 @@ begin
     lc_setammodelay:= 0
 end;
 
-function lc_setammostore(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 4, 'SetAmmoStore', 'loadouts, probabilities, delays, reinforments') then
-        begin
-        ScriptAmmoLoadout:= lua_tostring(L, 1);
-        ScriptAmmoProbability:= lua_tostring(L, 2);
-        ScriptAmmoDelay:= lua_tostring(L, 3);
-        ScriptAmmoReinforcement:= lua_tostring(L, 4);
-        end;
-    lc_setammostore:= 0
-end;
-
 function lc_getrandom(L : Plua_State) : LongInt; Cdecl;
 var m : LongInt;
 begin
@@ -3421,7 +3409,6 @@ lua_register(luaState, _P'SetAmmoDescriptionAppendix', @lc_setammodescriptionapp
 lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
-lua_register(luaState, _P'SetAmmoStore', @lc_setammostore);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
 lua_register(luaState, _P'AddHog', @lc_addhog);
