@@ -19,6 +19,7 @@ Game engine:
  + Several new sound effects for weapons and utilities
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
+ + A few new funny ticker messages (English)
  * Fixed air-strikes drops being off-center
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed screenshots being too bright if taken in quick succession
@@ -30,6 +31,7 @@ Game engine:
  * Fixed RC planes being able to collect frozen crates
  * Fixed Seduction's "Yoohoo!" sound not playing
  * Fixed Hedgehogs getting hurt while firing deagle / sniper rifle bullet in certains situations
+ * Fixed hedgehogs saying “Missed” when drowning enemy without dealing damage
  * Various other fixes
 
 Highlander:
@@ -182,11 +184,13 @@ Frontend:
  * Creating randomized teams now randomizes (almost) every aspect
  * Fixed mostly broken descriptions for multiplayer mission maps
  * Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
+ * Fix language names in language list being always in English
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
  + Themes can now use flakes with negative falling speed (rising flakes)
  + Themes can now contain custom sound files: splash.ogg Droplet1.ogg Droplet2.ogg Droplet3.ogg skip.ogg
+ + Themes can now have mirrored clouds and flakes: CloudsL.png, SDCloudsL.png, FlakeL.png, SDFlakeL.png
  + Simplified hat format for unanimated hats; a single 32×32 image is enough. For clan hats, use size 64×32, with the color overlay at the right
  * Default water color was black instead of blue
 
@@ -200,10 +204,12 @@ Lua-API:
  + New call: PlaceRubber(x, y, frameIdx) -- Places a rubber
  + New hook: onVisualGearAdd(vgUid) -- called when a visual gear is added
  + New hook: onVisualGearDelete(vgUid) -- called when a visual gear is deleted
+ + New hook: onUsedAmmo(ammoType) -- called when ammo has been finished using (e.g. after both shotgun shots)
  + New variable: AirMinesNum -- Number of air mines being placed on a medium-sized map
  + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
  + Locale library: loc_noop -- Mark string for translation but don't translate it
  + Animate library: AnimInit([startAnimating]) -- New parameter startAnimating: if true, will start game in cinematic mode with most controls disabled. Must play an animation after that
+ * Removed call: SetAmmoStore -- Old undocumented function of questional use, has never been used
 
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
