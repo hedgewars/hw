@@ -626,12 +626,31 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBLanguage->setMaxVisibleItems(50);
             groupMisc->layout()->addWidget(CBLanguage, 0, 1);
             QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
+            QStringList langnames;
             CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
             for(int i = 0; i < locs.count(); i++)
             {
                 QString lname = locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1");
-                QLocale loc(lname);
-                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", lname);
+                QLocale loc = QLocale(lname);
+                QString entryName;
+                // If local identifier has underscore, it means the country has been specified
+                if(lname.contains("_"))
+                {
+                    // Append country name for disambiguation
+                    // FIXME: These brackets are hardcoded and can't be translated. Luckily, these are rarely used and work with most languages anyway
+                    entryName = loc.nativeLanguageName() + " (" + loc.nativeCountryName() + ")";
+                }
+                else
+                {
+                    // Usually, we just print the language name
+                    entryName = loc.nativeLanguageName();
+                }
+                // Fallback code: If language name is empty for some reason, print locale identifier. This should normally not happen
+                if(entryName.isEmpty())
+                {
+                    entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
+                }
+                CBLanguage->addItem(entryName, lname);
             }
 
             QLabel *restartNoticeLabel = new QLabel(groupMisc);
