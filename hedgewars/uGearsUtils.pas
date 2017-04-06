@@ -657,6 +657,8 @@ begin
                 begin
                 CheckGearDrowning := true;
                 Gear^.State := gstDrowning;
+                if Gear = CurrentHedgehog^.Gear then
+                    TurnTimeLeft := 0;
                 Gear^.RenderTimer := false;
                 if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot)
                 and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
