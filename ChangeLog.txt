@@ -188,6 +188,7 @@ Frontend:
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
+ + Theme objects can now be placed on water (by setting first in-land rectangle to 0,0,0,0)
  + Themes can now use flakes with negative falling speed (rising flakes)
  + Themes can now contain custom sound files: splash.ogg Droplet1.ogg Droplet2.ogg Droplet3.ogg skip.ogg
  + Themes can now have mirrored clouds and flakes: CloudsL.png, SDCloudsL.png, FlakeL.png, SDFlakeL.png

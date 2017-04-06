@@ -396,6 +396,10 @@ with Obj do
     repeat
         y:= topY+32; // leave room for a hedgie to teleport in
         repeat
+
+            if (inland[1].x = 0) and (inland[1].y = 0) and (inland[1].w = 0) and (inland[1].h = 0) then
+                y := LAND_HEIGHT - Height;
+
             if CheckCanPlace(x, y, Obj) then
                 begin
                 ar[cnt].x:= x;
