@@ -290,9 +290,56 @@
 
 ; Round ends and a team/clan (%1) wins
 02:03=%1 wins!
+02:03=%1 is the champion!
+02:03=%1 is the winner!
+02:03=%1 showed everyone how to win
+02:03=%1 is the best of the best
+02:03=%1 earned the title of “winner”
+02:03=%1 does the victory dance
+02:03=Victory for %1!
+02:03=And the winner is %1
+02:03=Congratulations, %1 wins!
+02:03=Bow down to %1
+02:03=%1 has mastered the game
+02:03=%1 is the master of the Universe
+02:03=%1 won the battle
+02:03=%1 made an amazing victory
+02:03=%1 is the number one!
+02:03=Bravo, bravo, %1!
+02:03=%1 is the best
+02:03=%1 knows what true mastery means
+02:03=Applause, applause, %1!
+02:03=What an exciting victory, %1!
+02:03=%1 destroyed the enemy
+02:03=%1 has conquered the enemy
+02:03=%1 has crushed the enemy
+02:03=%1 knows the art of victory
+02:03=Everyone cheers for %1
+02:03=%1 chose victory over death
+02:03=%1 gets a star on Victory Road
+02:03=Awesome victory for %1
+02:03=%1 drinks the victory juice
+02:03=Triumph for %1
+02:03=%1 takes a sip from the sweet victory sauce
+02:03=%1 deserves to be a winner
+02:03=%1 masterfully won this round
+02:03=%1 is the victor
+02:03=%1 wins with style
+02:03=Mission accomplished, %1 won
+02:03=%1 earns the victory medal
 
 ; Round ends in a draw
 02:04=Round draw
+02:04=It's a draw!
+02:04=Nobody wins! Round draw
+02:04=Unbelievable, the round ended in a draw
+02:04=Round draw, how boring
+02:04=Impossible! The round ends in a draw
+02:04=Round draw! Now we have to start again …
+02:04=Game over! Nobody's a winner today
+02:04=Round draw, so disappointing!
+02:04=Nobody wins, how boring!
+02:04=Everyone's a loser today
 
 ; New health crate
 02:05=Incoming aid!
