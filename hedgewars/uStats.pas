@@ -30,6 +30,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure AmmoUsed(am: TAmmoType);
+procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 procedure Skipped;
 procedure TurnReaction;
@@ -45,6 +46,9 @@ uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScri
 var DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
     DamageTurn  : Longword = 0;
+    PoisonTurn  : Longword = 0; // Poisoned enemies per turn
+    PoisonClan  : Longword = 0; // Poisoned own clan members in turn
+    PoisonTotal : Longword = 0; // Poisoned hogs in whole round
     KillsClan   : LongWord = 0;
     Kills       : LongWord = 0;
     KillsTotal  : LongWord = 0;
@@ -54,6 +58,21 @@ var DamageClan  : Longword = 0;
     isTurnSkipped: boolean = false;
     vpHurtSameClan: PVoicepack = nil;
     vpHurtEnemy: PVoicepack = nil;
+
+procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
+begin
+    if Attacker^.Team^.Clan = Gear^.HEdgehog^.Team^.Clan then
+        begin
+        vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack;
+        inc(PoisonClan)
+        end
+    else
+        begin
+        vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
+        inc(PoisonTurn)
+        end;
+    inc(PoisonTotal)
+end;
 
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 begin
@@ -109,8 +128,8 @@ if FinishedTurnsTotal <> 0 then
     s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
 
-    // First blood (first damage or kill)
-    if ((DamageTotal > 0) or (KillsTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal)) then
+    // First blood (first damage, poison or kill)
+    if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
     // Hog hurts itself only
@@ -121,8 +140,8 @@ if FinishedTurnsTotal <> 0 then
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
-    // Hog hurts own team/clan
-    else if (DamageClan <> 0) or (KillsClan <> 0) then
+    // Hog hurts, poisons or kills own team/clan member
+    else if (DamageClan <> 0) or (KillsClan <> 0) or (PoisonClan <> 0) then
         if (DamageTurn > DamageClan) or (Kills > KillsClan) then
             if random(2) = 0 then
                 AddVoice(sndNutter, CurrentTeam^.voicepack)
@@ -134,15 +153,15 @@ if FinishedTurnsTotal <> 0 then
             else
                 AddVoice(sndTraitor, vpHurtSameClan)
 
-    // Hog hurts or kills enemy
-    else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills <> 0) then
+    // Hog hurts, kills or poisons enemy
+    else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills <> 0) or (PoisonTurn <> 0) then
         if Kills > 0 then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         else
             AddVoice(sndRegret, vpHurtEnemy)
 
     // Missed shot
-    else if AmmoDamagingUsed and (Kills = 0) then
+    else if AmmoDamagingUsed and (Kills = 0) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) then
         AddVoice(sndMissed, PreviousTeam^.voicepack)
 
     // Timeout
@@ -187,6 +206,8 @@ Kills:= 0;
 KillsClan:= 0;
 DamageClan:= 0;
 DamageTurn:= 0;
+PoisonClan:= 0;
+PoisonTurn:= 0;
 AmmoUsedCount:= 0;
 AmmoDamagingUsed:= false;
 isTurnSkipped:= false
@@ -349,6 +370,8 @@ begin
     DamageClan  := 0;
     DamageTotal := 0;
     DamageTurn  := 0;
+    PoisonClan  := 0;
+    PoisonTurn  := 0;
     KillsClan   := 0;
     Kills       := 0;
     KillsTotal  := 0;

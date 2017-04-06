@@ -183,7 +183,8 @@ while Gear <> nil do
                                     if Gear^.Hedgehog^.Effects[hePoisoned] = 0 then
                                         begin
                                         s:= ansistring(Gear^.Hedgehog^.Name);
-                                        AddCaption(FormatA(GetEventString(eidPoisoned), s), cWhiteColor, capgrpMessage)
+                                        AddCaption(FormatA(GetEventString(eidPoisoned), s), cWhiteColor, capgrpMessage);
+                                        uStats.HedgehogPoisoned(Gear, AttackingHog)
                                         end;
                                     Gear^.Hedgehog^.Effects[hePoisoned] := 5;
                                     end
