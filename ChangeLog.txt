@@ -33,6 +33,7 @@ Game engine:
  * Fixed Seduction's "Yoohoo!" sound not playing
  * Fixed Hedgehogs getting hurt while firing deagle / sniper rifle bullet in certains situations
  * Fixed hedgehogs saying “Missed” when drowning enemy without dealing damage
+ * Fixed incorrect time box tooltip when in Sudden Death
  * Various other fixes
 
 Highlander:

@@ -967,7 +967,10 @@ extracolor:= 0;
 
 if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
     begin
-    extra:= trmsg[sidNotYetAvailable];
+    if (atype = amTardis) and (suddenDeathDmg) then
+        extra:= trmsg[sidNotAvailableInSD]
+    else
+        extra:= trmsg[sidNotYetAvailable];
     extracolor:= LongInt($ffc77070);
     end
 else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility will not end your turn

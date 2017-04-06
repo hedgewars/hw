@@ -87,6 +87,7 @@
 01:23=Auto Camera Off
 01:24=Auto Camera On
 01:25=Press the target button to mark the target
+01:26=The utility is unavailable in Sudden Death
 
 ; Event messages
 ; Normal hog (%1) died (0 health)
