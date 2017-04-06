@@ -251,11 +251,13 @@
 02:02=Na bhiodh an t-eagal ort!
 02:02=Bi dàna is ceannsaich
 
-; Round ends (win; unused atm)
-02:03=…
+; Round ends (team/clan %1 wins)
+; TODO: Translate the other messages from en.txt
+02:03=bhuannaich %1!
 
-; Round ends (draw; unused atm)
-02:04=…
+; Round ends (draw)
+; TODO: Translate the other messages from en.txt
+02:04=Cuairt co-ionnann
 
 ; New health crate
 02:05=Tha cobhair a’ tighinn!
