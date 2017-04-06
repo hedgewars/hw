@@ -234,11 +234,11 @@
 02:02=Preparatevi alla gloria!
 02:02=Forza e coraggio, che la vita è un passaggio!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 vince!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Round in parità
 
 ; New health crate
 02:05=Pronto soccorso in arrivo!

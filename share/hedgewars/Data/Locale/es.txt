@@ -239,11 +239,11 @@
 02:02=¡Dadles caña!
 02:02=¡No temáis!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=¡%1 venció!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Empate
 
 ; Botiquín
 02:05=¡Ayuda en camino!

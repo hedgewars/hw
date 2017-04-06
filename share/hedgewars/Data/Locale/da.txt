@@ -243,11 +243,11 @@
 02:02=Frygt intet!
 02:02=Vær modig og tapper
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 vinder!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Runde uafgjort
 
 ; New health crate
 02:05=Så er der hjælp at hente!

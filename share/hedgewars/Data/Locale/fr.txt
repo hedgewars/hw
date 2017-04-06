@@ -217,11 +217,11 @@
 02:02=Combattez jusqu'à la fin !
 02:02=Que la force soit avec vous !
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 gagne !
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Round ex-aequo
 
 ; New health crate
 02:05=Pharmacie !

@@ -288,11 +288,11 @@
 02:02=Have no fear!
 02:02=Be brave and conquer
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and a team/clan (%1) wins
+02:03=%1 wins!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Round draw
 
 ; New health crate
 02:05=Incoming aid!

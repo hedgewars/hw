@@ -246,11 +246,11 @@
 02:02=恐れを持っていません！
 02:02=勇気をだして征服される
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 勝った!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=ドロー！
 
 ; New health crate
 02:05=救援物資が入って来る！

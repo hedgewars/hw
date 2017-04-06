@@ -256,11 +256,11 @@
 02:02=Ooh, det börjar!
 02:02=Inga mesar tillåtna
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 vinner!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Oavgjort
 
 ; New health crate
 02:05=Inkommande bistånd!

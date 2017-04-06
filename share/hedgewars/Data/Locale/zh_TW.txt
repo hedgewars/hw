@@ -251,11 +251,11 @@
 02:02=勇敢前進！
 02:02=敢於征服！
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (%1 wins)
+02:03=%1 勝利！
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=平局
 
 ; New health crate
 02:05=醫療包！

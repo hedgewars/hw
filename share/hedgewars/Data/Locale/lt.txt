@@ -248,11 +248,11 @@
 02:02=Nebijok!
 02:02=Būk drąsus ir laimėk
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 Laimėjo!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Lygiosios
 
 ; New Health Crate
 02:05=Atskrenda pagalba!

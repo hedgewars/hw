@@ -202,11 +202,11 @@
 02:02=Sünik, előre!
 02:02=Szedd őket miszlikbe!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 nyert!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Döntetlen
 
 ; New health crate
 02:05=Egy kis segítség!

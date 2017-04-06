@@ -248,11 +248,11 @@
 02:02=Asla korkma!
 02:02=Cesur ol ve fethet
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 kazandı!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Beraberlik
 
 ; New health crate
 02:05=Yardım geliyor!

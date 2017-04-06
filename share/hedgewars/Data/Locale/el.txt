@@ -223,11 +223,11 @@
 02:02=Μην φοβάσαι, να είσαι ατρόμητος!
 02:02=Να είσαι γενναίος και να κατακτάς!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=Οι %1 Νικούν!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Ισόπαλος Γύρος
 
 ; New health crate
 02:05=Εισερχόμενη βοήθεια!

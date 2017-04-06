@@ -54,7 +54,7 @@ var GameOver: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
-    s, ts: ansistring;
+    s, ts, cap: ansistring;
     t, AliveCount, i, j: LongInt;
 begin
 CheckForWin:= false;
@@ -81,18 +81,25 @@ if not GameOver then
     begin
     if AliveCount = 0 then
         begin // draw
-        AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
+        AddCaption(GetEventString(eidRoundDraw), cWhiteColor, capgrpGameState);
         SendStat(siGameResult, shortstring(trmsg[sidDraw]));
-        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
         with AliveClan^ do
             begin
             ts:= ansistring(Teams[0]^.TeamName);
-            if TeamsNumber = 1 then
-                s:= FormatA(trmsg[sidWinner], ts)  // team wins
-            else
-                s:= FormatA(trmsg[sidWinner], ts); // clan wins
+            if TeamsNumber = 1 then // team wins
+                begin
+                s:= FormatA(trmsg[sidWinner], ts);
+                cap:= FormatA(GetEventString(eidRoundWin), ts);
+                end
+            else // clan wins
+                // FIXME: Clan needs a different message
+                begin
+                s:= FormatA(trmsg[sidWinner], ts);
+                cap:= FormatA(GetEventString(eidRoundWin), ts);
+                end;
 
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
@@ -105,7 +112,7 @@ if not GameOver then
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
 
-            AddCaption(s, cWhiteColor, capgrpGameState);
+            AddCaption(cap, cWhiteColor, capgrpGameState);
             SendStat(siGameResult, shortstring(s));
             AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;

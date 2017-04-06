@@ -149,10 +149,13 @@
 02:02=Dajme im na frak!
 02:02=Nikdy sa nevzdávaj
 02:02=Bojuj čestne!
-; Kolo končí (výhra, momentálne nepoužívané)
-02:03=...
-; Kolo končí (remíza, momentálne nepoužívané)
-02:04=...
+
+; Team %1 wins
+02:03=%1 vyhrali!
+
+; Round draw
+02:04=Remíza
+
 ; Nová krabica so zdravím
 02:05=Doktora!
 02:05=Prvá pomoc z nebies!

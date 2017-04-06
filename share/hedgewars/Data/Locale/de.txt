@@ -283,11 +283,11 @@
 02:02=Zeigt’s ihnen!
 02:02=Habt keine Angst!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 gewinnt!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Unentschieden
 
 ; New health crate
 02:05=Alles Gute kommt von oben!

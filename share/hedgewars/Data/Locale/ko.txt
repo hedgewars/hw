@@ -77,11 +77,11 @@
 ; Round starts
 02:02=시~작!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 승리!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=무승부
 
 ; New health crate
 02:05=구급상자!
