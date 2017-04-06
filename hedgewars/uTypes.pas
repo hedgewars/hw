@@ -456,6 +456,7 @@ type
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
             {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine);
 
+    // sidStartFight is unused and free to be replaced
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,

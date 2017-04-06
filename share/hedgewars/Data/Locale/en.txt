@@ -61,7 +61,7 @@
 00:57=Rubber
 00:58=Air Mine
 
-01:00=Let's fight!
+01:00=UNUSED
 01:01=Round draw
 01:02=%1 wins!
 01:03=Volume %1%

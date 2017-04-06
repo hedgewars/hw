@@ -1425,7 +1425,7 @@ case Gear^.Kind of
         AllInactive := false;
         if Gear^.Timer = 0 then
             begin
-            AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
+            AddCaption(GetEventString(eidRoundStart), cWhiteColor, capgrpGameState);
             end
         end;
     gtATFinishGame:
