@@ -645,10 +645,20 @@ QLayout * PageOptions::bodyLayoutDefinition()
                     // Usually, we just print the language name
                     entryName = loc.nativeLanguageName();
                 }
-                // Fallback code: If language name is empty for some reason, print locale identifier. This should normally not happen
+                // Fallback code, if language name is empty for some reason. This should normally not happen
                 if(entryName.isEmpty())
                 {
-                    entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
+                    if(lname == "gd")
+                    {
+                        /* Workaround for Qt4: nativeLanguageName does not return correct name for Scottish Gaelic (QTBUG-59929),
+                           so we have to add it ourselves :-/ */
+                        entryName = QString::fromUtf8("Gàidhlig");
+                    }
+                    else
+                    {
+                        // If all else fails, show error and the locale identifier
+                        entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
+                    }
                 }
                 CBLanguage->addItem(entryName, lname);
             }
