@@ -89,7 +89,7 @@
 01:25=Press the target button to mark the target
 
 ; Event messages
-; Hog (%1) died
+; Normal hog (%1) died (0 health)
 02:00=%1 has kicked the bucket!
 02:00=%1 has seen the light!
 02:00=%1 never saw that coming!
@@ -181,7 +181,7 @@
 02:00=%1 dropped dead
 02:00=%1 is six feet under
 
-; Hog (%1) drowned
+; Normal hog (%1) drowned
 02:01=%1 plays submarine!
 02:01=%1 mimics the Titanic!
 02:01=%1 swims like a stone!
@@ -506,6 +506,24 @@
 02:11=%1 needs vacation
 02:11=%1 has to do some homework
 02:11=%1 walks away from the trouble
+
+; Hog (%1) was poisoned
+02:12=%1 feels sick
+
+; Hog (%1) was resurrected
+02:13=%1 has been resurrected
+
+; Hog (%1) explodes after an kamikaze attack
+02:14=%1 dies in honor
+
+; Hog (%1) returned from time-travel with the time box
+02:15=%1 returns from time travel
+
+; Hog (%1) runs out of turn time (not shown in infinite attack mode)
+02:16=%1 was too slow
+
+; King (%1) has died
+02:17=%1 is dead! Long live %1!
 
 ; Weapon Categories
 03:00=Timed grenade

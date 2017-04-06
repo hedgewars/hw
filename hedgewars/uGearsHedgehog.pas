@@ -1204,6 +1204,7 @@ procedure doStepHedgehogDriven(HHGear: PGear);
 var t: PGear;
     wasJumping: boolean;
     Hedgehog: PHedgehog;
+    s: ansistring;
 begin
 Hedgehog:= HHGear^.Hedgehog;
 if not isInMultiShoot then
@@ -1224,7 +1225,14 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
         TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
     if ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) then
+        begin
         AddVoice(sndBoring, Hedgehog^.Team^.voicepack);
+        if (GameFlags and gfInfAttack = 0) then
+            begin
+            s:= Hedgehog^.Name;
+            AddCaption(FormatA(GetEventString(eidTimeout), s), cWhiteColor, capgrpMessage);
+            end;
+        end;
     isCursorVisible:= false;
     HHGear^.State:= HHGear^.State and (not (gstHHDriven or gstAnimation or gstAttacking));
     AttackBar:= 0;
@@ -1387,7 +1395,10 @@ if (Gear^.Health = 0) then
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
                 s:= ansistring(Gear^.Hedgehog^.Name);
-                AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
+                if Gear^.Hedgehog^.King then
+                    AddCaption(FormatA(GetEventString(eidKingDied), s), cWhiteColor, capgrpMessage)
+                else
+                    AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
                 end;
             end
         else

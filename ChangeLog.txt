@@ -17,6 +17,7 @@ Game engine:
  + Color coding for the turn timer: green = ready timer, yellow = turn in progress, red = retreat timer, gray = timer paused
  + Play countdown sounds at 1-4 seconds turn time
  + Several new sound effects for weapons and utilities
+ + More ticker messages: Hog gets sick, king died, hog was resurrected, hog time travels (and returns), timeout, kamikaze
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
  + A few new funny ticker messages (English)

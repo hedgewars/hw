@@ -84,6 +84,7 @@ var Gear: PGear;
     i, cnt: LongInt;
     wrap: boolean;
     bubble: PVisualGear;
+    s: ansistring;
 begin
 if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');
 if Radius > 25 then KickFlakes(Radius, X, Y);
@@ -178,7 +179,14 @@ while Gear <> nil do
                             if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and
                                 (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) and
                                 (Gear^.State and gstHHDeath = 0) then
-                                Gear^.Hedgehog^.Effects[hePoisoned] := 5;
+                                    begin
+                                    if Gear^.Hedgehog^.Effects[hePoisoned] = 0 then
+                                        begin
+                                        s:= ansistring(Gear^.Hedgehog^.Name);
+                                        AddCaption(FormatA(GetEventString(eidPoisoned), s), cWhiteColor, capgrpMessage)
+                                        end;
+                                    Gear^.Hedgehog^.Effects[hePoisoned] := 5;
+                                    end
                             end;
 
                         end;
@@ -664,7 +672,10 @@ begin
                             DrownGear(Gear);
                             Gear^.State := Gear^.State and (not gstHHDriven);
                             s:= ansistring(Gear^.Hedgehog^.Name);
-                            AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
+                            if Gear^.Hedgehog^.King then
+                                AddCaption(FormatA(GetEventString(eidKingDied), s), cWhiteColor, capgrpMessage)
+                            else
+                                AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
                             end
                         end
                     else
@@ -724,6 +735,7 @@ procedure ResurrectHedgehog(var gear: PGear);
 var tempTeam : PTeam;
     sparkles: PVisualGear;
     gX, gY: LongInt;
+    s: ansistring;
 begin
     if (Gear^.LastDamage <> nil) then
         uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
@@ -760,6 +772,8 @@ begin
         AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
         PlaySound(sndWarp);
         RenderHealth(gear^.Hedgehog^);
+        s:= ansistring(gear^.Hedgehog^.Name);
+        AddCaption(FormatA(GetEventString(eidResurrected), s), cWhiteColor, capgrpMessage);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
         end;

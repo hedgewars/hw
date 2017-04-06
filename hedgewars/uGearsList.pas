@@ -418,11 +418,10 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1;
-                gear^.Tag:= 0;
                 if gear^.Timer = 0 then
                     begin
                     if cMinesTime < 0 then
-                        gear^.Tag:= 1 // gear tag of 1 means mine timer will be random
+                        gear^.Timer:= getrandom(51)*100
                     else
                         gear^.Timer:= cMinesTime
                     end

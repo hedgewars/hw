@@ -147,7 +147,7 @@ implementation
 uses uConsts, uVariables, uVisualGearsList, uRandom, uCollisions, uGearsList, uUtils, uSound
     , SDLh, uScript, uGearsHedgehog, uGearsUtils, uIO, uCaptions, uLandGraphics
     , uGearsHandlers, uTextures, uRenderUtils, uAmmos, uTeams, uLandTexture, uCommands
-    , uStore, uAI, uStats;
+    , uStore, uAI, uStats, uLocale;
 
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
 var
@@ -1752,14 +1752,6 @@ begin
         else // gstAttacking <> 0
             begin
             AllInactive := false;
-            // tag of 1 means this mine has a random timer
-            if (Gear^.Tag = 1) and (Gear^.Timer = 0) then
-                begin
-                if (GameTicks mod 2 = 0) then GetRandom(2);
-                if (GameTicks mod 3 = 0) then GetRandom(2);
-                Gear^.Timer:= GetRandom(51) * 100;
-                Gear^.Tag:= 0;
-                end;
             if (Gear^.Timer and $FF) = 0 then
                 PlaySound(sndMineTick);
             if Gear^.Timer = 0 then
@@ -3040,6 +3032,7 @@ var
     HHGear: PGear;
     sparkles: PVisualGear;
     hasWishes: boolean;
+    s: ansistring;
 begin
     AllInactive := false;
     hasWishes:= ((Gear^.Message and (gmPrecise or gmSwitch)) = (gmPrecise or gmSwitch));
@@ -3137,6 +3130,8 @@ begin
                         FrameTicks:= random(400) + 250
                         end
                 end;
+        s:= ansistring(Gear^.Hedgehog^.Name);
+        AddCaption(FormatA(GetEventString(eidKamikaze), s), cWhiteColor, capgrpMessage);
         AfterAttack;
         HHGear^.Message:= HHGear^.Message or gmDestroy;
         DeleteGear(Gear);
@@ -5440,6 +5435,7 @@ var
     resgear: PGear;
     hh: PHedgehog;
     i: LongInt;
+    s: ansistring;
 begin
     if (TurnTimeLeft > 0) then
         dec(TurnTimeLeft);
@@ -5511,6 +5507,8 @@ begin
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
+                s:= ansistring(resgear^.Hedgehog^.Name);
+                AddCaption(FormatA(GetEventString(eidResurrected), s), cWhiteColor, capgrpMessage);
                 // only make hat-less hedgehogs look like zombies, preserve existing hats
 
                 if resgear^.Hedgehog^.Hat = 'NoHat' then
@@ -5714,6 +5712,7 @@ end;
 procedure doStepTardisWarp(Gear: PGear);
 var HH: PHedgehog;
     i,j,cnt: LongWord;
+    s: ansistring;
 begin
 HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
@@ -5731,7 +5730,11 @@ if Gear^.Pos = 2 then
             end
         //else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
         else if (HH^.GearHidden <> nil) then// and (HH^.Gear^.State and gstInvisible <> 0) then
-            RestoreHog(HH)
+            begin
+            RestoreHog(HH);
+            s:= ansistring(HH^.Name);
+            AddCaption(FormatA(GetEventString(eidTimeTravelEnd), s), cWhiteColor, capgrpMessage)
+            end
         end;
 
     inc(Gear^.Timer);
