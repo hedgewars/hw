@@ -534,11 +534,22 @@
 02:09=Better luck next time, %1!
 02:09=%1 is his worst enemy
 
-; Hog shot an home run (using the bat and another hog)
+; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=Home Run!
 02:10=A bird, a plane, ...
 02:10=That one is out!
 02:10=Whee!
+02:10=Up it goes!
+02:10=Who said hedgehogs can't fly?
+02:10=To infinity and beyond!
+02:10=Ouch! That must have hurt
+02:10=This is your applause, %1!
+02:10=Excellent shot!
+02:10=That's possibly record-breaking!
+02:10=%1 sends hogs flying!
+02:10=%1 takes physical education literally
+02:10=%1 is the master in Hedgehogball
+02:10=%1 took physics classes
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 has to go to bed!
