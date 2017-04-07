@@ -937,6 +937,7 @@ procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
     cnt: LongWord;
+    s: ansistring;
 begin
 if Gear^.Hedgehog^.Unplaced then
     begin
@@ -1188,7 +1189,8 @@ if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGr
     if (Gear^.FlightTime > 1500) and ((hwRound(Gear^.X) < LongInt(leftX)-250) or (hwRound(Gear^.X) > LongInt(rightX)+250))  then
         begin
         Gear^.FlightTime:= 0;
-        AddCaption(GetEventString(eidHomerun), cWhiteColor, capgrpMessage);
+        s:= ansistring(CurrentHedgehog^.Name);
+        AddCaption(FormatA(GetEventString(eidHomerun), s), cWhiteColor, capgrpMessage);
         PlaySound(sndHomerun)
         end;
     end
