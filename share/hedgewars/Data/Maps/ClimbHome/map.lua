@@ -292,7 +292,7 @@ function onGameTick20()
                 math.random(360),
                 0,
                 999999999, -- frameticks
-                171, -- star
+                sprStar, -- star
                 0, c)
                 --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
             Stars[s] = 1
