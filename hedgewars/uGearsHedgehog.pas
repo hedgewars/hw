@@ -325,6 +325,13 @@ with Gear^,
                                  newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
                                  end;
                      amDynamite: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
+                         amDuck: begin
+                                 newGear:= AddGear(hwRound(lx), hwRound(ly), gtDuck, 0, _0, _0, 0);
+                                 if not ((not dX.isNegative) xor ((State and gstHHHJump) <> 0)) then
+                                     newGear^.Tag:= -1
+                                 else
+                                     newGear^.Tag:= 1;
+                                 end;
                     amFirePunch: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtFirePunch, 0, xx, _0, 0);
                          amWhip: begin
                                  newGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);

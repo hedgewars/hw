@@ -90,7 +90,7 @@ type
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
             sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprAirMine, sprHandAirMine,
-            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck
+            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck
             );
 
     // Gears that interact with other Gears and/or Land
@@ -161,7 +161,7 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine); // 57
+            amIceGun, amKnife, amRubber, amAirMine, amDuck); // 58
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);

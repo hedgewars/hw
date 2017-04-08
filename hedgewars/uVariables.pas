@@ -748,7 +748,9 @@ const
             (FileName:     'SDCloudsL'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprSDCloudL
             (FileName:     'Duck'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprDuck
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprDuck
+            (FileName:    'amDuck'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandDuck
             );
 
 const
@@ -2382,7 +2384,35 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0;
-            ejectY: 0)
+            ejectY: 0),
+// Rubber duck
+            (NameId: sidDuck;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                          ammoprop_AttackInMove or
+                          ammoprop_DontHold or
+                          ammoprop_AltUse;
+                Count: 2;
+                NumPerTurn: 0;
+                Timer: 9000;
+                Pos: 0;
+                AmmoType: amDuck;
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
+            Slot: 8; // FIXME: Use slot 0. for some reason, hwengine does not like it
+                     // when we put it into slot 0.
+                     // Probably related to amNothing being in slot 0, too?
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 15;
+            ejectY: -7)
         );
 
 var

@@ -105,7 +105,7 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
-(*           gtDuck *) , amNothing // TODO: Add ammo type
+(*           gtDuck *) , amDuck
     );
 
 

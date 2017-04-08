@@ -729,6 +729,7 @@ begin
                 amSkip: DrawSpriteRotated(sprHandSkip, hx, hy, sign, aangle);
                 amClusterBomb: DrawSpriteRotated(sprHandCluster, hx, hy, sign, aangle);
                 amDynamite: DrawSpriteRotated(sprHandDynamite, hx, hy, sign, aangle);
+                amDuck: DrawSpriteRotatedF(sprHandDuck, hx, hy, 0, sign, aangle);
                 amHellishBomb: DrawSpriteRotated(sprHandHellish, hx, hy, sign, aangle);
                 amGasBomb: DrawSpriteRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
