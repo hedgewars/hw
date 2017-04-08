@@ -267,7 +267,10 @@ var cInitVolume: LongInt;
             (FileName:           'countdown1.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown1
             (FileName:           'countdown2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown2
             (FileName:           'countdown3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown3
-            (FileName:           'countdown4.ogg'; Path: ptSounds; AltPath: ptNone) // sndCountdown4
+            (FileName:           'countdown4.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown4
+            (FileName:      'rubberduck_drop.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDrop
+            (FileName:     'rubberduck_water.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckWater
+            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone) // sndDuckDie
             );
 
 

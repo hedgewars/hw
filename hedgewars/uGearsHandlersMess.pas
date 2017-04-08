@@ -6366,9 +6366,13 @@ begin
     if Gear^.Pos = 0 then
         begin
         doStepFallingGear(Gear);
-        // Karma is distance from water
+        (* Check if duck is near water surface
+           (Karma is distance from water) *)
         if cWaterLine <= hwRound(Gear^.Y) + Gear^.Karma then
             begin
+            PlaySound(sndDroplet2);
+            if Gear^.dY > _0_4 then
+                PlaySound(sndDuckWater);
             Gear^.Pos:= 1;
             Gear^.Timer:= Gear^.WDTimer;
             Gear^.dY:= _0;
@@ -6396,6 +6400,7 @@ begin
         // Left edge
         if (LeftX >= hwRound(Gear^.X) - Gear^.Karma) and (Gear^.Pos < 3) then
             begin
+            PlaySound(sndDuckWater);
             Gear^.Pos:= 3;
             if Gear^.Tag = 1 then
                 Gear^.Angle:= 90 
@@ -6407,8 +6412,9 @@ begin
         // Right edge
         else if (RightX <= hwRound(Gear^.X) + Gear^.Karma) and (Gear^.Pos < 3) then
             begin
+            PlaySound(sndDuckWater);
             Gear^.Pos:= 4;
-        if Gear^.Tag = 1 then
+            if Gear^.Tag = 1 then
                 Gear^.Angle:= 270
             else
                 Gear^.Angle:= 90;
@@ -6422,6 +6428,7 @@ begin
     if (Gear^.Timer = 0) or ((Gear^.State and gstCollision) <> 0) then
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+        PlaySound(sndDuckDie);
         DeleteGear(Gear);
         exit;
         end;

@@ -2399,7 +2399,7 @@ const
                 Timer: 9000;
                 Pos: 0;
                 AmmoType: amDuck;
-                AttackVoice: sndLaugh;
+                AttackVoice: sndNone;
                 Bounciness: 1000);
             Slot: 8; // FIXME: Use slot 0. for some reason, hwengine does not like it
                      // when we put it into slot 0.

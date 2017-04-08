@@ -148,8 +148,8 @@ type
             sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
             sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime, sndLaserSight,
             sndInvulnerable, sndJetpackLaunch, sndJetpackBoost, sndPortalShot, sndPortalSwitch,
-            sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4
-            );
+            sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4,
+            sndDuckDrop, sndDuckWater, sndDuckDie);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6

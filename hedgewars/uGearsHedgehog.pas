@@ -326,6 +326,7 @@ with Gear^,
                                  end;
                      amDynamite: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
                          amDuck: begin
+                                 PlaySound(sndDuckDrop);
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtDuck, 0, _0, _0, 0);
                                  if not ((not dX.isNegative) xor ((State and gstHHHJump) <> 0)) then
                                      newGear^.Tag:= -1
