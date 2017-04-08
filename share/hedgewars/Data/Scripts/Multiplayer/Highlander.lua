@@ -129,7 +129,7 @@ local shotsFired = 0
 local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
-local maxWep = 57 -- game crashes if you exceed supported #
+local maxWep = 58 -- game crashes if you exceed supported #
 
 local someHog = nil -- just for looking up the weps
 
