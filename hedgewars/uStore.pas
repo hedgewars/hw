@@ -430,10 +430,21 @@ for ii:= Low(TSprite) to High(TSprite) do
                     imageHeight:= tmpsurf^.h
                     end;
                 if getDimensions then
-                    begin
-                    Width:= tmpsurf^.w;
-                    Height:= tmpsurf^.h
-                    end;
+                    if Height = -1 then //BlueWater
+                        begin
+                        Width:= tmpsurf^.w;
+                        Height:= tmpsurf^.h div watFrames;
+                        end
+                    else if Height = -2 then //SDWater
+                        begin
+                        Width:= tmpsurf^.w;
+                        Height:= tmpsurf^.h div watSDFrames;
+                        end
+                    else
+                        begin
+                        Width:= tmpsurf^.w;
+                        Height:= tmpsurf^.h
+                        end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
                     begin
                     Texture:= Surface2Tex(tmpsurf, true);

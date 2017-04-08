@@ -1783,19 +1783,31 @@ glColor4ub($FF, $FF, $FF, $FF);
 end;
 
 procedure DrawWaves(Dir, dX, dY, oX: LongInt; tnt: Byte);
-var first, count, topy, lx, rx, spriteHeight, spriteWidth: LongInt;
-    lw, nWaves, shift: GLfloat;
+var first, count, topy, lx, rx, spriteHeight, spriteWidth, waterSpeed: LongInt;
+    waterFrames, waterFrameTicks, frame : LongWord;
+    lw, nWaves, shift, realHeight: GLfloat;
     sprite: TSprite;
 begin
 // note: spriteHeight is the Height of the wave sprite while
 //       cWaveHeight describes how many pixels of it will be above waterline
 
 if SuddenDeathDmg then
-    sprite:= sprSDWater
+    begin
+    sprite:= sprSDWater;
+    waterFrames:= watSDFrames;
+    waterFrameTicks:= watSDFrameTicks;
+    waterSpeed:= watSDMove;
+    end
 else
+    begin
     sprite:= sprWater;
-
+    waterFrames:= watFrames;
+    waterFrameTicks:= watFrameTicks;
+    waterSpeed:= watMove;
+    end;
+ 
 spriteHeight:= SpritesData[sprite].Height;
+realHeight:= SpritesData[sprite].Texture^.ry / waterFrames;
 
 // shift parameters by wave height
 // ( ox and dy are used to create different horizontal and vertical offsets
@@ -1856,14 +1868,19 @@ spriteWidth:= SpritesData[sprite].Width;
 nWaves:= lw / spriteWidth;
     shift:= - nWaves / 2;
 
-TextureBuffer[3].X:= shift + ((LongInt(RealTicks shr 6) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
-TextureBuffer[3].Y:= 0;
+if waterFrames > 1 then
+	frame:= RealTicks div waterFrameTicks mod waterFrames
+else
+	frame:= 0;
+
+TextureBuffer[3].X:= shift + ((LongInt(RealTicks shr (16 - waterSpeed)) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
+TextureBuffer[3].Y:= frame * realHeight;
 TextureBuffer[5].X:= TextureBuffer[3].X + nWaves;
-TextureBuffer[5].Y:= 0;
+TextureBuffer[5].Y:= frame * realHeight;
 TextureBuffer[4].X:= TextureBuffer[5].X;
-TextureBuffer[4].Y:= SpritesData[sprite].Texture^.ry;
+TextureBuffer[4].Y:= SpritesData[sprite].Texture^.ry / waterFrames + frame * realHeight;
 TextureBuffer[2].X:= TextureBuffer[3].X;
-TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
+TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry / waterFrames + frame * realHeight;
 
 if (WorldEdge = weSea) then
     begin

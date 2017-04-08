@@ -333,7 +333,7 @@ var
 const
     SpritesDataInit: array[TSprite] of TSpriteData = (
             (FileName:  'BlueWater'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprWater
+            Width:   0; Height:  -1; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprWater
             (FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprCloud
             (FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -702,7 +702,7 @@ const
             (FileName:    'SDFlake'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDFlake
             (FileName:    'SDWater'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
-            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprSDWater
+            Width:   0; Height:  -2; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprSDWater
             (FileName:   'SDClouds'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprSDCloud
             (FileName:   'SDSplash'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
@@ -2455,6 +2455,10 @@ var
     vobVelocity, vobFallSpeed: LongInt;
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
+    watFrames, watFrameTicks: Longword;
+    watMove: LongInt;
+    watSDFrames, watSDFrameTicks: Longword;
+    watSDMove: LongInt;
 
     DefaultBinds : TBinds;
 
@@ -2760,12 +2764,18 @@ begin
     vobCount:= 0;
     vobVelocity:= 10;
     vobFallSpeed:= 100;
+    watFrames:= 1;
+    watFrameTicks:= 0;
+    watMove:= 10;
 
     vobSDFrameTicks:= 0;
     vobSDFramesCount:= 4;
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
+    watSDFrames:= 1;
+    watSDFrameTicks:= 0;
+    watSDMove:= 10;
 
 {$IFDEF MOBILE}
     cMinScreenWidth  := min(cScreenWidth, 480);

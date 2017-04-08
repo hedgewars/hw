@@ -769,6 +769,26 @@ while (not pfsEOF(f)) and allOK do
             Maxcnt:= StrToInt(Trim(s));
             end;
         end
+    else if key = 'water-animation' then
+        begin
+        i:= Pos(',', s);
+        watFrames:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        watFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        watMove:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        end
+    else if key = 'sd-water-animation' then
+        begin
+        i:= Pos(',', s);
+        watSDFrames:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        watSDFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        watSDMove:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        end
     else if key = 'flakes' then
         begin
         i:= Pos(',', s);
