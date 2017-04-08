@@ -777,7 +777,7 @@ while (not pfsEOF(f)) and allOK do
         i:= Pos(',', s);
         watFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
-        watMove:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        watMove:= StrToInt(Trim(s));
         end
     else if key = 'sd-water-animation' then
         begin
@@ -787,7 +787,7 @@ while (not pfsEOF(f)) and allOK do
         i:= Pos(',', s);
         watSDFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
-        watSDMove:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        watSDMove:= StrToInt(Trim(s));
         end
     else if key = 'flakes' then
         begin

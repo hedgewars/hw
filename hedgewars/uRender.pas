@@ -1873,7 +1873,7 @@ if waterFrames > 1 then
 else
 	frame:= 0;
 
-TextureBuffer[3].X:= shift + ((LongInt(RealTicks shr (16 - waterSpeed)) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
+TextureBuffer[3].X:= shift + ((LongInt((RealTicks * waterSpeed) shr 6) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
 TextureBuffer[3].Y:= frame * realHeight;
 TextureBuffer[5].X:= TextureBuffer[3].X + nWaves;
 TextureBuffer[5].Y:= frame * realHeight;
