@@ -138,6 +138,7 @@ procedure doStepAddAmmo(Gear: PGear);
 procedure doStepGenericFaller(Gear: PGear);
 //procedure doStepCreeper(Gear: PGear);
 procedure doStepKnife(Gear: PGear);
+procedure doStepDuck(Gear: PGear);
 
 var
     upd: Longword;
@@ -6345,6 +6346,89 @@ begin
         and (TestCollisionYwithGear(Gear, 1) = 0) then Gear^.State:= Gear^.State and (not gstCollision) or gstMoving;
         end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepDuck(Gear: PGear);
+begin
+    // Mirror duck on bounce world edge, even turn around later
+    if WorldWrap(Gear) and (WorldEdge = weBounce) then
+        begin
+        Gear^.Tag:= Gear^.Tag * -1;
+        if Gear^.Pos = 2 then
+            Gear^.Pos:= 1
+        else if Gear^.Pos = 1 then
+            Gear^.Pos:= 2;
+        end;
+
+    AllInactive := false;
+
+    // Duck falls (Pos = 0)
+    if Gear^.Pos = 0 then
+        begin
+        doStepFallingGear(Gear);
+        // Karma is distance from water
+        if cWaterLine <= hwRound(Gear^.Y) + Gear^.Karma then
+            begin
+            Gear^.Pos:= 1;
+            Gear^.Timer:= Gear^.WDTimer;
+            Gear^.dY:= _0;
+            Gear^.State:= Gear^.State or gstNoGravity;
+            end;
+        end
+
+    // Manual speed handling when duck is on water (Pos <> 0)
+    else
+        begin
+        Gear^.X:= Gear^.X + Gear^.dX;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+        end;
+
+    // Mirrored duck
+    // Pos 1 or 2: Duck is on water (not Sea world edge)
+    if Gear^.Pos = 1 then
+        Gear^.dX:= cWindSpeed * 500
+    else if Gear^.Pos = 2 then
+        Gear^.dX:= -cWindSpeed * 500;
+    
+    // Rotate duck and change direction when reaching Sea world edge (Pos 3 or 4)
+    if WorldEdge = weSea then
+        begin
+        // Left edge
+        if (LeftX >= hwRound(Gear^.X) - Gear^.Karma) and (Gear^.Pos < 3) then
+            begin
+            Gear^.Pos:= 3;
+            if Gear^.Tag = 1 then
+                Gear^.Angle:= 90 
+            else
+                Gear^.Angle:= 270;
+            Gear^.dY:= Gear^.dX;
+            Gear^.dX:= _0;
+            end
+        // Right edge
+        else if (RightX <= hwRound(Gear^.X) + Gear^.Karma) and (Gear^.Pos < 3) then
+            begin
+            Gear^.Pos:= 4;
+        if Gear^.Tag = 1 then
+                Gear^.Angle:= 270
+            else
+                Gear^.Angle:= 90;
+            Gear^.dY:= -Gear^.dX;
+            Gear^.dX:= _0;
+            end;
+        end;
+
+    // Explode duck
+    CheckCollision(Gear);
+    if (Gear^.Timer = 0) or ((Gear^.State and gstCollision) <> 0) then
+        begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+        DeleteGear(Gear);
+        exit;
+        end;
+
+    dec(Gear^.Timer);
+end;
+
 (*
  This didn't end up getting used, but, who knows, might be reasonable for javellin or something
 // Make the knife initial angle based on the hog attack angle, or is that too hard?

@@ -105,6 +105,7 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
+(*           gtDuck *) , amNothing // TODO: Add ammo type
     );
 
 
@@ -263,6 +264,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
                     else Gear^.Boom := 3;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
+           gtDuck: Gear^.Boom := 40;
     end;
 
 case Kind of
@@ -716,6 +718,19 @@ gtFlamethrower: begin
       gtIceGun: begin
                 gear^.Health:= 1000;
                 gear^.Radius:= 8;
+                end;
+        gtDuck: begin
+                gear^.Pos:= 0;               // 0: falling/in air, 1-4: on water
+                gear^.Tag:= 1;               // 1: facing right, -1: facing left
+                if gear^.Timer = 0 then      
+                    gear^.Timer:= 9000;      // Explosion timer to avoid duck existing forever
+                gear^.WDTimer:= gear^.Timer; // For restoring the timer, timer is reset when hitting water
+                gear^.Radius:= 9;            // Collision radius (with landscape)
+                gear^.Karma:= 24;            // Distance from water when swimming
+                gear^.Elasticity:= _0_6;
+                gear^.Friction:= _0_03;
+                gear^.Density:= _0_5;
+                gear^.AdvBounce:= 1;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;

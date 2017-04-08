@@ -1325,7 +1325,7 @@ begin
                     end;
         gtDynamite: begin
                     DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
-                    if (random(3) = 0) and ((Gear^.State and gstDrowning) = 0) then
+                    if (random(3) = 0) then
                         begin
                         vg:= AddVisualGear(hwRound(Gear^.X)+12-(Gear^.Tag shr 1), hwRound(Gear^.Y)-16, vgtStraightShot);
                         if vg <> nil then
@@ -1528,6 +1528,7 @@ begin
                                 end
                           end
                       end;
+            gtDuck: DrawSpriteRotatedF(sprDuck, x, y, 1, Gear^.Tag, Gear^.Angle);
             gtGenericFaller: DrawCircle(x, y, 3, 3, $FF, $00, $00, $FF);  // debug
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then
