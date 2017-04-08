@@ -26,6 +26,7 @@ uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 procedure initModule;
 procedure freeModule;
 
+procedure LoadFonts();
 procedure StoreLoad(reload: boolean);
 procedure StoreRelease(reload: boolean);
 procedure RenderHealth(var Hedgehog: THedgehog);
@@ -72,6 +73,7 @@ var
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
+    LoadingText: PTexture;
 
     prevHat: shortstring;
     tmpHatSurf: PSDL_Surface;
@@ -348,17 +350,13 @@ for t:= 0 to Pred(TeamsCount) do
             end
 end;
 
-procedure StoreLoad(reload: boolean);
+procedure LoadFonts();
 var s: shortstring;
-    ii: TSprite;
     fi: THWFont;
-    ai: TAmmoType;
-    tmpsurf: PSDL_Surface;
-    i, imflags: LongInt;
 begin
-AddFileLog('StoreLoad()');
+AddFileLog('LoadFonts();');
 
-if (not reload) and (not cOnlyStats) then
+if (not cOnlyStats) then
     for fi:= Low(THWFont) to High(THWFont) do
         with Fontz[fi] do
             begin
@@ -369,6 +367,17 @@ if (not reload) and (not cOnlyStats) then
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
             end;
+end;
+
+procedure StoreLoad(reload: boolean);
+var s: shortstring;
+    ii: TSprite;
+    fi: THWFont;
+    ai: TAmmoType;
+    tmpsurf: PSDL_Surface;
+    i, imflags: LongInt;
+begin
+AddFileLog('StoreLoad()');
 
 if not cOnlyStats then
     begin
@@ -774,9 +783,12 @@ begin
 
         ProgrTex:= Surface2Tex(texsurf, false);
 
+        LoadingText:= RenderStringTex(trmsg[sidLoading], $FFF39EE8, fntBig);
+
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
+
         {$IFNDEF PAS2C}
         with mobileRecord do
             if GameLoading <> nil then
@@ -797,6 +809,7 @@ begin
     r.h:= squaresize;
 
     DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+    DrawTexture( -LoadingText^.w div 2, (cScreenHeight - LoadingText^.h) shr 1 - (squaresize div 2) - (LoadingText^.h div 2) - 8, LoadingText);
 
     SwapBuffers;
 
@@ -810,8 +823,9 @@ begin
         if GameLoaded <> nil then
             GameLoaded();
     {$ENDIF}
-    WriteLnToConsole('Freeing progress surface... ');
+    WriteLnToConsole('Freeing progress textures... ');
     FreeAndNilTexture(ProgrTex);
+    FreeAndNilTexture(LoadingText);
     Step:= 0
 end;
 

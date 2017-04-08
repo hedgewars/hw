@@ -373,7 +373,6 @@ begin
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
-    AddProgress();
     if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
@@ -390,6 +389,9 @@ begin
 
     if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);
+
+    LoadFonts();
+    AddProgress();
 
     if cTestLua then
         begin
