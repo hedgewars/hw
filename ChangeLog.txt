@@ -195,8 +195,17 @@ Content Creation:
  + Themes can now use flakes with negative falling speed (rising flakes)
  + Themes can now contain custom sound files: splash.ogg Droplet1.ogg Droplet2.ogg Droplet3.ogg skip.ogg
  + Themes can now have mirrored clouds and flakes: CloudsL.png, SDCloudsL.png, FlakeL.png, SDFlakeL.png
+ + Water in themes supports custom animation and flow speed with water-animation and sd-water-animation in theme.cfg
  + Simplified hat format for unanimated hats; a single 32×32 image is enough. For clan hats, use size 64×32, with the color overlay at the right
  * Default water color was black instead of blue
+
+Translations:
+ + Scottish Gaelic updates for: Engine, frontend, tips, missions
+ + Loading screen can now be translated
+ + A few window titles can be translated
+ * Built-in texts from Qt (e.g. “cut”, “paste”, “copy”) in frontend weren't translated
+ * Remove text from mission images to make them language-neutral
+ * Fix English-only language/country names in language selection
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
