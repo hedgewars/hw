@@ -58,7 +58,7 @@
 00:55=Congélateur
 00:56=Hachoir
 
-01:00=C'est parti !
+; 01:00=Loading …
 01:01=Round ex-aequo
 01:02=%1 gagne !
 01:03=Volume %1%

@@ -57,7 +57,7 @@
 ; 00:54=Structură
 00:54=Spray de teren
 
-01:00=Hai să ne batem!
+; 01:00=Loading …
 01:01=Remizăr
 01:02=%1 a câștigat!
 01:03=Volumul %1%

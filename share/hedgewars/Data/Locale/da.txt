@@ -57,7 +57,7 @@
 ; 00:54=Struktur
 00:54=Jordspray
 
-01:00=Kæmp!
+; 01:00=Loading …
 01:01=Runde uafgjort
 01:02=%1 vinder!
 01:03=Lydstyrke %1%

@@ -61,7 +61,7 @@
 00:57=Gumička
 00:58=Vzdušná mína
 
-01:00=Do boja!
+; 01:00=Loading …
 01:01=Remíza
 01:02=%1 vyhrali!
 01:03=Hlasitosť %1%

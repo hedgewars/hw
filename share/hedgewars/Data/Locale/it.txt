@@ -59,7 +59,7 @@
 00:55=Raggio congelatore
 00:56=Mannarino
 
-01:00=Combattiamo!
+; 01:00=Loading …
 01:01=Round in parità
 01:02=%1 vince!
 01:03=Volume %1%

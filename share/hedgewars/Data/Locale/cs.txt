@@ -57,7 +57,7 @@
 ; 00:54=Struktura
 00:54=Pozemek s rozprašovačem
 
-01:00=Do boje!
+; 01:00=Loading …
 01:01=Kolo nerozhodně
 01:02=%1 vyhráli!
 01:03=Hlasitost %1%

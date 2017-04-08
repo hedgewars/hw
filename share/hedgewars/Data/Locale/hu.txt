@@ -43,7 +43,7 @@
 00:40=Molotov koktél
 00:41=Madárka
 
-01:00=Mindent bele!
+; 01:00=Loading …
 01:01=Döntetlen
 01:02=%1 nyert!
 01:03=Hangerő %1%

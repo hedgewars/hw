@@ -59,7 +59,7 @@
 00:55=Dondurucu
 00:56=Satır
 
-01:00=Savaş başlasın!
+; 01:00=Loading …
 01:01=Beraberlik
 01:02=%1 kazandı!
 01:03=Bölüm %%1

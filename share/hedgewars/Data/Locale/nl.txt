@@ -52,7 +52,7 @@
 00:49=Resurrector
 00:50=Drill Strike
 
-01:00=Let's fight!
+; 01:00=Loading …
 01:01=Round draw
 01:02=%1 wins!
 01:03=Volume %1%

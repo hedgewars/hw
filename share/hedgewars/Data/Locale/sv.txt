@@ -57,7 +57,7 @@
 ; 00:54=Struktur
 00:54=Markspruta
 
-01:00=Nu kör vi!
+; 01:00=Loading …
 01:01=Oavgjort
 01:02=%1 vinner!
 01:03=Volym %1%

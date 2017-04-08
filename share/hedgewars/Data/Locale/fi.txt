@@ -59,7 +59,7 @@
 00:56=Jättiveitsi
 00:57=Kuminauha
 
-01:00=Taistelu alkakoon!
+; 01:00=Loading …
 01:01=Tasapeli
 01:02=%1 voitti!
 01:03=Äänenvoimakkuus %1%

@@ -61,7 +61,7 @@
 00:57=Bann rubair
 00:58=Mèinne adhair
 
-01:00=Gabh orm!
+; 01:00=Loading …
 01:01=Cuairt co-ionnann
 01:02=bhuannaich %1!
 01:03=Fuaim %1%

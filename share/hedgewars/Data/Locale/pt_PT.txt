@@ -59,7 +59,7 @@
 00:55=Congelador
 00:56=Cutelo
 
-01:00=Vamos lutar!
+; 01:00=Loading …
 01:01=Ronda empatada
 01:02=%1 venceu!
 01:03=Volume %1%

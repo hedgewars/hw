@@ -61,7 +61,7 @@
 00:57=Gummi
 00:58=Luftmine
 
-01:00=Auf in die Schlacht!
+01:00=Laden …
 01:01=Unentschieden
 01:02=%1 gewinnt!
 01:03=Lautstärke: %1 %

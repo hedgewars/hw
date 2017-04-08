@@ -42,7 +42,7 @@
 00:39=Disco volador
 00:40=Cóctel Molotov
 
-01:00=Á loita!
+; 01:00=Loading …
 01:01=Empate
 01:02=%1 gaña!
 01:03=Volume %1%

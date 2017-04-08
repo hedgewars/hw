@@ -58,7 +58,7 @@
 ; 00:54=Estructura
 00:54=Pistola de barro
 
-01:00=¡Luchad!
+; 01:00=Loading …
 01:01=Empate
 01:02=¡%1 venció!
 01:03=Volumen %1%

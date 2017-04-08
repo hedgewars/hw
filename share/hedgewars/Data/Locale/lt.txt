@@ -60,7 +60,7 @@
 00:56=Cleaver
 00:57=Trintukas
 
-01:00=Kaukimės!
+; 01:00=Loading …
 01:01=Lygiosios
 01:02=%1 Laimėjo!
 01:03=Garsas %1%
