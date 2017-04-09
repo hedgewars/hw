@@ -364,6 +364,7 @@ local atkArray =
 				{amKnife,	"amKnife",		54},
 
 				{amBirdy,	"amBirdy",		40},
+				{amDuck,	"amDuck",		57},
 
 				}
 

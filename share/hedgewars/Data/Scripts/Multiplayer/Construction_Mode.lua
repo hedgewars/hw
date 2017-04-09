@@ -987,6 +987,8 @@ placeholder = 20
 
 				{amBirdy,		"amBirdy",			0, 7*placeholder}
 
+				{amDuck,		"amDuck",			0, 1*placeholder}
+
 				}
 
  utilArray =
