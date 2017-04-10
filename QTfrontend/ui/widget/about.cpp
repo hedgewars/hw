@@ -75,11 +75,18 @@ About::About(QWidget * parent) :
         "a { color: #ffcc00; }"
 //            "a:hover { color: yellow; }"
         "</style>"
-        "<div align=\"center\"><h1>Hedgewars " + *cVersionString + "</h1>"
-        "<h3>" + QLabel::tr("Revision") + " " + *cRevisionString + " (" + *cHashString + ")</h3>"
-        "<p><a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a></p>" +
-        QLabel::tr("This program is distributed under the %1").arg("<a \
-        href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL v2</a>") +
+        //: %1 contains Hedgewars' version number
+        "<div align=\"center\"><h1>"+QString(tr("Hedgewars %1")).arg(*cVersionString) + "</h1>"
+        //: “Revision” stands for a revision in Mercurial, a distributed version control system. %1 is the revision, %2 is the hexadecimal hash.
+        "<h3>" + QString(tr("Revision %1 (%2)")).arg(*cRevisionString, *cHashString) + "</h3>"
+        //: %1 is replaced by the URL of Hedgewars.
+        "<p>" + QString(tr("Visit our homepage: %1"))
+        .arg("<a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a>") + "</p>" +
+        //: %1 is the name of a license
+        tr("This program is distributed under the %1.")
+	.arg("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">"+
+        //: Short for “GNU General Public License version 2”
+        tr("GNU GPL v2")+"</a>") +
         "</div>"
     );
     lbl1->setWordWrap(true);
@@ -94,6 +101,7 @@ About::About(QWidget * parent) :
     /* Library information */
 
     QString libinfo = "<style type=text/css>a:link { color: #FFFF6E; }</style>";
+    //: For the version numbers of Hedgewars' software dependencies
     libinfo.append(QString(tr("Dependency versions:") + QString("<br>")));
 
 #ifdef __GNUC__
