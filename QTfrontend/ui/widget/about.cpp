@@ -71,10 +71,6 @@ About::About(QWidget * parent) :
     QLabel *lbl1 = new QLabel(this);
     lbl1->setOpenExternalLinks(true);
     lbl1->setText(
-        "<style type=\"text/css\">"
-        "a { color: #ffcc00; }"
-//            "a:hover { color: yellow; }"
-        "</style>"
         //: %1 contains Hedgewars' version number
         "<div align=\"center\"><h1>"+QString(tr("Hedgewars %1")).arg(*cVersionString) + "</h1>"
         //: “Revision” stands for a revision in Mercurial, a distributed version control system. %1 is the revision, %2 is the hexadecimal hash.
@@ -100,9 +96,8 @@ About::About(QWidget * parent) :
 
     /* Library information */
 
-    QString libinfo = "<style type=text/css>a:link { color: #FFFF6E; }</style>";
     //: For the version numbers of Hedgewars' software dependencies
-    libinfo.append(QString(tr("Dependency versions:") + QString("<br>")));
+    QString libinfo = QString(tr("Dependency versions:") + QString("<br>"));
 
 #ifdef __GNUC__
     libinfo.append(QString(tr("<a href=\"http://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));

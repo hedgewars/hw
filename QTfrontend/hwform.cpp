@@ -411,6 +411,7 @@ void HWForm::keyReleaseEvent(QKeyEvent *event)
 
 void HWForm::CustomizePalettes()
 {
+    // Scroll bar widget palette
     QList<QScrollBar *> allSBars = findChildren<QScrollBar *>();
     QPalette pal = palette();
     pal.setColor(QPalette::WindowText, QColor(0xff, 0xcc, 0x00));
@@ -420,6 +421,11 @@ void HWForm::CustomizePalettes()
 
     for (int i = 0; i < allSBars.size(); ++i)
         allSBars.at(i)->setPalette(pal);
+
+    // Set default hyperlink color
+    QPalette appPal = qApp->palette();
+    appPal.setColor(QPalette::Link, QColor(0xff, 0xff, 0x6e));
+    qApp->setPalette(appPal);
 }
 
 void HWForm::UpdateWeapons()
