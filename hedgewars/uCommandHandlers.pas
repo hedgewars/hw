@@ -554,7 +554,7 @@ else
 
             if bShowAmmoMenu then
                 bShowAmmoMenu:= false
-            else if not(CurrentTeam^.Extdriven) and (((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
+            else if not(CurrentTeam^.Extdriven) and ((Gear = nil) or ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
             or ((Gear^.State and gstHHDriven) = 0)) then
                 begin
                 end
