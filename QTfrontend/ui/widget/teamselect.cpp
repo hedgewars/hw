@@ -310,6 +310,17 @@ QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
     return m_curNotPlayingTeams;
 }
 
+unsigned short TeamSelWidget::getNumHedgehogs() const
+{
+    unsigned short numHogs = 0;
+    QList<HWTeam>::const_iterator team;
+    for(team = curPlayingTeams.begin(); team != curPlayingTeams.end(); ++team)
+    {
+        numHogs += (*team).numHedgehogs();
+    }
+    return numHogs;
+}
+
 void TeamSelWidget::pre_changeTeamStatus(const HWTeam & team)
 {
     //team.setColor(framePlaying->getNextColor());

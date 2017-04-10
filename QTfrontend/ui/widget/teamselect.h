@@ -47,6 +47,7 @@ class TeamSelWidget : public QGroupBox
         bool isPlaying(const HWTeam &team) const;
         QList<HWTeam> getPlayingTeams() const;
         QList<HWTeam> getNotPlayingTeams() const;
+	unsigned short getNumHedgehogs() const;
         void setInteractivity(bool interactive);
 
     public slots:
