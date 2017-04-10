@@ -312,7 +312,8 @@ static int ZIP_seek(PHYSFS_Io *_io, PHYSFS_uint64 offset)
                 return 0;
 
             inflateEnd(&finfo->stream);
-            memcpy(&finfo->stream, &str, sizeof (z_stream));
+            inflateCopy(&finfo->stream, &str);
+            inflateEnd(&str);
             finfo->uncompressed_position = finfo->compressed_position = 0;
         } /* if */
 
