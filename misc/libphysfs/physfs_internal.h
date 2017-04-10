@@ -114,6 +114,9 @@ void __PHYSFS_smallFree(void *ptr);
 #ifndef PHYSFS_SUPPORTS_WAD
 #define PHYSFS_SUPPORTS_WAD 0
 #endif
+#ifndef PHYSFS_SUPPORTS_SLB
+#define PHYSFS_SUPPORTS_SLB 0
+#endif
 #ifndef PHYSFS_SUPPORTS_ISO9660
 #define PHYSFS_SUPPORTS_ISO9660 0
 #endif
@@ -121,162 +124,27 @@ void __PHYSFS_smallFree(void *ptr);
 /* The latest supported PHYSFS_Io::version value. */
 #define CURRENT_PHYSFS_IO_API_VERSION 0
 
-/* Opaque data for file and dir handlers... */
-typedef void PHYSFS_Dir;
+/* The latest supported PHYSFS_Archiver::version value. */
+#define CURRENT_PHYSFS_ARCHIVER_API_VERSION 0
 
-typedef struct
-{
-    /*
-     * Basic info about this archiver...
-     */
-    const PHYSFS_ArchiveInfo info;
-
-
-    /*
-     * DIRECTORY ROUTINES:
-     * These functions are for dir handles. Generate a handle with the
-     *  openArchive() method, then pass it as the "opaque" PHYSFS_Dir to the
-     *  others.
-     *
-     * Symlinks should always be followed (except in stat()); PhysicsFS will
-     *  use the stat() method to check for symlinks and make a judgement on
-     *  whether to continue to call other methods based on that.
-     */
-
-        /*
-         * Open a dirhandle for dir/archive data provided by (io).
-         *  (name) is a filename associated with (io), but doesn't necessarily
-         *  map to anything, let alone a real filename. This possibly-
-         *  meaningless name is in platform-dependent notation.
-         * (forWrite) is non-zero if this is to be used for
-         *  the write directory, and zero if this is to be used for an
-         *  element of the search path.
-         * Returns NULL on failure. We ignore any error code you set here.
-         *  Returns non-NULL on success. The pointer returned will be
-         *  passed as the "opaque" parameter for later calls.
-         */
-    PHYSFS_Dir *(*openArchive)(PHYSFS_Io *io, const char *name, int forWrite);
-
-        /*
-         * List all files in (dirname). Each file is passed to (cb),
-         *  where a copy is made if appropriate, so you should dispose of
-         *  it properly upon return from the callback.
-         * You should omit symlinks if (omitSymLinks) is non-zero.
-         * If you have a failure, report as much as you can.
-         *  (dirname) is in platform-independent notation.
-         */
-    void (*enumerateFiles)(PHYSFS_Dir *opaque, const char *dirname,
-                           int omitSymLinks, PHYSFS_EnumFilesCallback cb,
-                           const char *origdir, void *callbackdata);
-
-        /*
-         * Open file for reading.
-         *  This filename, (fnm), is in platform-independent notation.
-         * If you can't handle multiple opens of the same file,
-         *  you can opt to fail for the second call.
-         * Fail if the file does not exist.
-         * Returns NULL on failure, and calls __PHYSFS_setError().
-         *  Returns non-NULL on success. The pointer returned will be
-         *  passed as the "opaque" parameter for later file calls.
-         *
-         * Regardless of success or failure, please set *exists to
-         *  non-zero if the file existed (even if it's a broken symlink!),
-         *  zero if it did not.
-         */
-    PHYSFS_Io *(*openRead)(PHYSFS_Dir *opaque, const char *fnm, int *exists);
-
-        /*
-         * Open file for writing.
-         * If the file does not exist, it should be created. If it exists,
-         *  it should be truncated to zero bytes. The writing
-         *  offset should be the start of the file.
-         * This filename is in platform-independent notation.
-         * If you can't handle multiple opens of the same file,
-         *  you can opt to fail for the second call.
-         * Returns NULL on failure, and calls __PHYSFS_setError().
-         *  Returns non-NULL on success. The pointer returned will be
-         *  passed as the "opaque" parameter for later file calls.
-         */
-    PHYSFS_Io *(*openWrite)(PHYSFS_Dir *opaque, const char *filename);
-
-        /*
-         * Open file for appending.
-         * If the file does not exist, it should be created. The writing
-         *  offset should be the end of the file.
-         * This filename is in platform-independent notation.
-         * If you can't handle multiple opens of the same file,
-         *  you can opt to fail for the second call.
-         * Returns NULL on failure, and calls __PHYSFS_setError().
-         *  Returns non-NULL on success. The pointer returned will be
-         *  passed as the "opaque" parameter for later file calls.
-         */
-    PHYSFS_Io *(*openAppend)(PHYSFS_Dir *opaque, const char *filename);
-
-        /*
-         * Delete a file in the archive/directory.
-         *  Return non-zero on success, zero on failure.
-         *  This filename is in platform-independent notation.
-         *  This method may be NULL.
-         * On failure, call __PHYSFS_setError().
-         */
-    int (*remove)(PHYSFS_Dir *opaque, const char *filename);
-
-        /*
-         * Create a directory in the archive/directory.
-         *  If the application is trying to make multiple dirs, PhysicsFS
-         *  will split them up into multiple calls before passing them to
-         *  your driver.
-         *  Return non-zero on success, zero on failure.
-         *  This filename is in platform-independent notation.
-         *  This method may be NULL.
-         * On failure, call __PHYSFS_setError().
-         */
-    int (*mkdir)(PHYSFS_Dir *opaque, const char *filename);
-
-        /*
-         * Close directories/archives, and free any associated memory,
-         *  including the original PHYSFS_Io and (opaque) itself, if
-         *  applicable. Implementation can assume that it won't be called if
-         *  there are still files open from this archive.
-         */
-    void (*closeArchive)(PHYSFS_Dir *opaque);
-
-        /*
-         * Obtain basic file metadata.
-         *  Returns non-zero on success, zero on failure.
-         *  On failure, call __PHYSFS_setError().
-         */
-    int (*stat)(PHYSFS_Dir *opaque, const char *fn,
-                int *exists, PHYSFS_Stat *stat);
-} PHYSFS_Archiver;
-
-
-/*
- * Call this to set the message returned by PHYSFS_getLastError().
- *  Please only use the ERR_* constants above, or add new constants to the
- *  above group, but I want these all in one place.
- *
- * Calling this with a NULL argument is a safe no-op.
- */
-void __PHYSFS_setError(const PHYSFS_ErrorCode err);
-
-
-/* This byteorder stuff was lifted from SDL. http://www.libsdl.org/ */
+/* This byteorder stuff was lifted from SDL. https://www.libsdl.org/ */
 #define PHYSFS_LIL_ENDIAN  1234
 #define PHYSFS_BIG_ENDIAN  4321
 
-#if  defined(__i386__) || defined(__ia64__) || \
-     defined(_M_IX86) || defined(_M_IA64) || defined(_M_X64) || \
-    (defined(__alpha__) || defined(__alpha)) || \
-     defined(__arm__) || defined(ARM) || \
-    (defined(__mips__) && defined(__MIPSEL__)) || \
-     defined(__SYMBIAN32__) || \
-     defined(__x86_64__) || \
-     defined(__LITTLE_ENDIAN__)
-#define PHYSFS_BYTEORDER    PHYSFS_LIL_ENDIAN
+#ifdef __linux__
+#include <endian.h>
+#define PHYSFS_BYTEORDER  __BYTE_ORDER
+#else /* __linux__ */
+#if defined(__hppa__) || \
+    defined(__m68k__) || defined(mc68000) || defined(_M_M68K) || \
+    (defined(__MIPS__) && defined(__MISPEB__)) || \
+    defined(__ppc__) || defined(__POWERPC__) || defined(_M_PPC) || \
+    defined(__sparc__)
+#define PHYSFS_BYTEORDER   PHYSFS_BIG_ENDIAN
 #else
-#define PHYSFS_BYTEORDER    PHYSFS_BIG_ENDIAN
+#define PHYSFS_BYTEORDER   PHYSFS_LIL_ENDIAN
 #endif
+#endif /* __linux__ */
 
 
 /*
@@ -296,8 +164,6 @@ void __PHYSFS_setError(const PHYSFS_ErrorCode err);
  *  a QuickSort and BubbleSort internally.
  * (cmpfn) is used to determine ordering, and (swapfn) does the actual
  *  swapping of elements in the list.
- *
- *  See zip.c for an example.
  */
 void __PHYSFS_sort(void *entries, size_t max,
                    int (*cmpfn)(void *, size_t, size_t),
@@ -310,14 +176,14 @@ void __PHYSFS_sort(void *entries, size_t max,
 #define ERRPASS PHYSFS_ERR_OK
 
 /* These get used all over for lessening code clutter. */
-#define BAIL_MACRO(e, r) do { if (e) __PHYSFS_setError(e); return r; } while (0)
-#define BAIL_IF_MACRO(c, e, r) do { if (c) { if (e) __PHYSFS_setError(e); return r; } } while (0)
-#define BAIL_MACRO_MUTEX(e, m, r) do { if (e) __PHYSFS_setError(e); __PHYSFS_platformReleaseMutex(m); return r; } while (0)
-#define BAIL_IF_MACRO_MUTEX(c, e, m, r) do { if (c) { if (e) __PHYSFS_setError(e); __PHYSFS_platformReleaseMutex(m); return r; } } while (0)
-#define GOTO_MACRO(e, g) do { if (e) __PHYSFS_setError(e); goto g; } while (0)
-#define GOTO_IF_MACRO(c, e, g) do { if (c) { if (e) __PHYSFS_setError(e); goto g; } } while (0)
-#define GOTO_MACRO_MUTEX(e, m, g) do { if (e) __PHYSFS_setError(e); __PHYSFS_platformReleaseMutex(m); goto g; } while (0)
-#define GOTO_IF_MACRO_MUTEX(c, e, m, g) do { if (c) { if (e) __PHYSFS_setError(e); __PHYSFS_platformReleaseMutex(m); goto g; } } while (0)
+#define BAIL_MACRO(e, r) do { if (e) PHYSFS_setErrorCode(e); return r; } while (0)
+#define BAIL_IF_MACRO(c, e, r) do { if (c) { if (e) PHYSFS_setErrorCode(e); return r; } } while (0)
+#define BAIL_MACRO_MUTEX(e, m, r) do { if (e) PHYSFS_setErrorCode(e); __PHYSFS_platformReleaseMutex(m); return r; } while (0)
+#define BAIL_IF_MACRO_MUTEX(c, e, m, r) do { if (c) { if (e) PHYSFS_setErrorCode(e); __PHYSFS_platformReleaseMutex(m); return r; } } while (0)
+#define GOTO_MACRO(e, g) do { if (e) PHYSFS_setErrorCode(e); goto g; } while (0)
+#define GOTO_IF_MACRO(c, e, g) do { if (c) { if (e) PHYSFS_setErrorCode(e); goto g; } } while (0)
+#define GOTO_MACRO_MUTEX(e, m, g) do { if (e) PHYSFS_setErrorCode(e); __PHYSFS_platformReleaseMutex(m); goto g; } while (0)
+#define GOTO_IF_MACRO_MUTEX(c, e, m, g) do { if (c) { if (e) PHYSFS_setErrorCode(e); __PHYSFS_platformReleaseMutex(m); goto g; } } while (0)
 
 #define __PHYSFS_ARRAYLEN(x) ( (sizeof (x)) / (sizeof (x[0])) )
 
@@ -381,6 +247,16 @@ int __PHYSFS_stricmpASCII(const char *s1, const char *s2);
  */
 int __PHYSFS_strnicmpASCII(const char *s1, const char *s2, PHYSFS_uint32 l);
 
+/*
+ * Like strdup(), but uses the current PhysicsFS allocator.
+ */
+char *__PHYSFS_strdup(const char *str);
+
+/*
+ * Give a hash value for a C string (uses djb's xor hashing algorithm).
+ */
+PHYSFS_uint32 __PHYSFS_hashString(const char *str, size_t len);
+
 
 /*
  * The current allocator. Not valid before PHYSFS_init is called!
@@ -417,22 +293,22 @@ int __PHYSFS_readAll(PHYSFS_Io *io, void *buf, const PHYSFS_uint64 len);
 
 typedef struct
 {
-    char name[56];
+    char name[64];
     PHYSFS_uint32 startPos;
     PHYSFS_uint32 size;
 } UNPKentry;
 
-void UNPK_closeArchive(PHYSFS_Dir *opaque);
-PHYSFS_Dir *UNPK_openArchive(PHYSFS_Io *io,UNPKentry *e,const PHYSFS_uint32 n);
-void UNPK_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
-                         int omitSymLinks, PHYSFS_EnumFilesCallback cb,
+void UNPK_closeArchive(void *opaque);
+void *UNPK_openArchive(PHYSFS_Io *io,UNPKentry *e,const PHYSFS_uint32 n);
+void UNPK_enumerateFiles(void *opaque, const char *dname,
+                         PHYSFS_EnumFilesCallback cb,
                          const char *origdir, void *callbackdata);
-PHYSFS_Io *UNPK_openRead(PHYSFS_Dir *opaque, const char *fnm, int *fileExists);
-PHYSFS_Io *UNPK_openWrite(PHYSFS_Dir *opaque, const char *name);
-PHYSFS_Io *UNPK_openAppend(PHYSFS_Dir *opaque, const char *name);
-int UNPK_remove(PHYSFS_Dir *opaque, const char *name);
-int UNPK_mkdir(PHYSFS_Dir *opaque, const char *name);
-int UNPK_stat(PHYSFS_Dir *opaque, const char *fn, int *exist, PHYSFS_Stat *st);
+PHYSFS_Io *UNPK_openRead(void *opaque, const char *name);
+PHYSFS_Io *UNPK_openWrite(void *opaque, const char *name);
+PHYSFS_Io *UNPK_openAppend(void *opaque, const char *name);
+int UNPK_remove(void *opaque, const char *name);
+int UNPK_mkdir(void *opaque, const char *name);
+int UNPK_stat(void *opaque, const char *fn, PHYSFS_Stat *st);
 
 
 /*--------------------------------------------------------------------------*/
@@ -489,7 +365,7 @@ int __PHYSFS_platformDeinit(void);
  *  a unique file handle; this is frequently employed to prevent race
  *  conditions in the archivers.
  *
- * Call __PHYSFS_setError() and return (NULL) if the file can't be opened.
+ * Call PHYSFS_setErrorCode() and return (NULL) if the file can't be opened.
  */
 void *__PHYSFS_platformOpenRead(const char *filename);
 
@@ -506,7 +382,7 @@ void *__PHYSFS_platformOpenRead(const char *filename);
  *
  * Opening a file for write multiple times has undefined results.
  *
- * Call __PHYSFS_setError() and return (NULL) if the file can't be opened.
+ * Call PHYSFS_setErrorCode() and return (NULL) if the file can't be opened.
  */
 void *__PHYSFS_platformOpenWrite(const char *filename);
 
@@ -524,7 +400,7 @@ void *__PHYSFS_platformOpenWrite(const char *filename);
  *
  * Opening a file for append multiple times has undefined results.
  *
- * Call __PHYSFS_setError() and return (NULL) if the file can't be opened.
+ * Call PHYSFS_setErrorCode() and return (NULL) if the file can't be opened.
  */
 void *__PHYSFS_platformOpenAppend(const char *filename);
 
@@ -536,7 +412,7 @@ void *__PHYSFS_platformOpenAppend(const char *filename);
  *  immediately after those bytes.
  *  On success, return (len) and position the file pointer immediately past
  *  the end of the last read byte. Return (-1) if there is a catastrophic
- *  error, and call __PHYSFS_setError() to describe the problem; the file
+ *  error, and call PHYSFS_setErrorCode() to describe the problem; the file
  *  pointer should not move in such a case. A partial read is success; only
  *  return (-1) on total failure; presumably, the next read call after a
  *  partial read will fail as such.
@@ -549,7 +425,7 @@ PHYSFS_sint64 __PHYSFS_platformRead(void *opaque, void *buf, PHYSFS_uint64 len);
  *  8-bit bytes from the area pointed to by (buffer). If there is a problem,
  *  return the number of bytes written, and position the file pointer
  *  immediately after those bytes. Return (-1) if there is a catastrophic
- *  error, and call __PHYSFS_setError() to describe the problem; the file
+ *  error, and call PHYSFS_setErrorCode() to describe the problem; the file
  *  pointer should not move in such a case. A partial write is success; only
  *  return (-1) on total failure; presumably, the next write call after a
  *  partial write will fail as such.
@@ -565,7 +441,7 @@ PHYSFS_sint64 __PHYSFS_platformWrite(void *opaque, const void *buffer,
  *
  * Not all file types can seek; this is to be expected by the caller.
  *
- * On error, call __PHYSFS_setError() and return zero. On success, return
+ * On error, call PHYSFS_setErrorCode() and return zero. On success, return
  *  a non-zero value.
  */
 int __PHYSFS_platformSeek(void *opaque, PHYSFS_uint64 pos);
@@ -578,7 +454,7 @@ int __PHYSFS_platformSeek(void *opaque, PHYSFS_uint64 pos);
  *
  * Not all file types can "tell"; this is to be expected by the caller.
  *
- * On error, call __PHYSFS_setError() and return -1. On success, return >= 0.
+ * On error, call PHYSFS_setErrorCode() and return -1. On success, return >= 0.
  */
 PHYSFS_sint64 __PHYSFS_platformTell(void *opaque);
 
@@ -589,7 +465,7 @@ PHYSFS_sint64 __PHYSFS_platformTell(void *opaque);
  * The caller expects that this information may not be available for all
  *  file types on all platforms.
  *
- * Return -1 if you can't do it, and call __PHYSFS_setError(). Otherwise,
+ * Return -1 if you can't do it, and call PHYSFS_setErrorCode(). Otherwise,
  *  return the file length in 8-bit bytes.
  */
 PHYSFS_sint64 __PHYSFS_platformFileLength(void *handle);
@@ -598,7 +474,7 @@ PHYSFS_sint64 __PHYSFS_platformFileLength(void *handle);
 /*
  * !!! FIXME: comment me.
  */
-int __PHYSFS_platformStat(const char *fn, int *exists, PHYSFS_Stat *stat);
+int __PHYSFS_platformStat(const char *fn, PHYSFS_Stat *stat);
 
 /*
  * Flush any pending writes to disk. (opaque) should be cast to whatever data
@@ -672,14 +548,13 @@ void *__PHYSFS_platformGetThreadID(void);
 
 /*
  * Enumerate a directory of files. This follows the rules for the
- *  PHYSFS_Archiver->enumerateFiles() method (see above), except that the
+ *  PHYSFS_Archiver::enumerateFiles() method, except that the
  *  (dirName) that is passed to this function is converted to
  *  platform-DEPENDENT notation by the caller. The PHYSFS_Archiver version
  *  uses platform-independent notation. Note that ".", "..", and other
- *  metaentries should always be ignored.
+ *  meta-entries should always be ignored.
  */
 void __PHYSFS_platformEnumerateFiles(const char *dirname,
-                                     int omitSymLinks,
                                      PHYSFS_EnumFilesCallback callback,
                                      const char *origdir,
                                      void *callbackdata);
@@ -726,27 +601,27 @@ void __PHYSFS_platformDestroyMutex(void *mutex);
 /*
  * Grab possession of a platform-specific mutex. Mutexes should be recursive;
  *  that is, the same thread should be able to call this function multiple
- *  times in a row without causing a deadlock. This function should block
+ *  times in a row without causing a deadlock. This function should block 
  *  until a thread can gain possession of the mutex.
  *
- * Return non-zero if the mutex was grabbed, zero if there was an
- *  unrecoverable problem grabbing it (this should not be a matter of
- *  timing out! We're talking major system errors; block until the mutex
+ * Return non-zero if the mutex was grabbed, zero if there was an 
+ *  unrecoverable problem grabbing it (this should not be a matter of 
+ *  timing out! We're talking major system errors; block until the mutex 
  *  is available otherwise.)
  *
- * _DO NOT_ call __PHYSFS_setError() in here! Since setError calls this
+ * _DO NOT_ call PHYSFS_setErrorCode() in here! Since setErrorCode calls this
  *  function, you'll cause an infinite recursion. This means you can't
  *  use the BAIL_*MACRO* macros, either.
  */
 int __PHYSFS_platformGrabMutex(void *mutex);
 
 /*
- * Relinquish possession of the mutex when this method has been called
+ * Relinquish possession of the mutex when this method has been called 
  *  once for each time that platformGrabMutex was called. Once possession has
  *  been released, the next thread in line to grab the mutex (if any) may
  *  proceed.
  *
- * _DO NOT_ call __PHYSFS_setError() in here! Since setError calls this
+ * _DO NOT_ call PHYSFS_setErrorCode() in here! Since setErrorCode calls this
  *  function, you'll cause an infinite recursion. This means you can't
  *  use the BAIL_*MACRO* macros, either.
  */

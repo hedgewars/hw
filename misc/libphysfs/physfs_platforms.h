@@ -21,6 +21,10 @@
 #  define PHYSFS_PLATFORM_POSIX 1
 #elif (defined _WIN32_WCE) || (defined _WIN64_WCE)
 #  error PocketPC support was dropped from PhysicsFS 2.1. Sorry.
+#elif ((defined WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_APP)
+#   define PHYSFS_PLATFORM_WINRT 1
+#   define PHYSFS_NO_CDROM_SUPPORT 1
+#   define PHYSFS_PLATFORM_WINDOWS 1
 #elif (((defined _WIN32) || (defined _WIN64)) && (!defined __CYGWIN__))
 #  define PHYSFS_PLATFORM_WINDOWS 1
 #elif (defined OS2)
@@ -35,6 +39,11 @@
 #  define PHYSFS_PLATFORM_POSIX 1
 #elif defined(macintosh)
 #  error Classic Mac OS support was dropped from PhysicsFS 2.0. Move to OS X.
+#elif defined(ANDROID)
+#  define PHYSFS_PLATFORM_LINUX 1
+#  define PHYSFS_PLATFORM_UNIX 1
+#  define PHYSFS_PLATFORM_POSIX 1
+#  define PHYSFS_NO_CDROM_SUPPORT 1
 #elif defined(__linux)
 #  define PHYSFS_PLATFORM_LINUX 1
 #  define PHYSFS_PLATFORM_UNIX 1
@@ -43,7 +52,12 @@
 #  define PHYSFS_PLATFORM_SOLARIS 1
 #  define PHYSFS_PLATFORM_UNIX 1
 #  define PHYSFS_PLATFORM_POSIX 1
-#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
+#elif defined(__FreeBSD__) || defined(__DragonFly__)
+#  define PHYSFS_PLATFORM_FREEBSD 1
+#  define PHYSFS_PLATFORM_BSD 1
+#  define PHYSFS_PLATFORM_UNIX 1
+#  define PHYSFS_PLATFORM_POSIX 1
+#elif defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__)
 #  define PHYSFS_PLATFORM_BSD 1
 #  define PHYSFS_PLATFORM_UNIX 1
 #  define PHYSFS_PLATFORM_POSIX 1

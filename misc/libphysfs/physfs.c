@@ -46,48 +46,6 @@ typedef struct __PHYSFS_ERRSTATETYPE__
 } ErrState;
 
 
-/* The various i/o drivers...some of these may not be compiled in. */
-extern const PHYSFS_Archiver __PHYSFS_Archiver_ZIP;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_LZMA;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_GRP;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_QPAK;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_HOG;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_MVL;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_WAD;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_DIR;
-extern const PHYSFS_Archiver __PHYSFS_Archiver_ISO9660;
-
-static const PHYSFS_Archiver *staticArchivers[] =
-{
-#if PHYSFS_SUPPORTS_ZIP
-    &__PHYSFS_Archiver_ZIP,
-#endif
-#if PHYSFS_SUPPORTS_7Z
-    &__PHYSFS_Archiver_LZMA,
-#endif
-#if PHYSFS_SUPPORTS_GRP
-    &__PHYSFS_Archiver_GRP,
-#endif
-#if PHYSFS_SUPPORTS_QPAK
-    &__PHYSFS_Archiver_QPAK,
-#endif
-#if PHYSFS_SUPPORTS_HOG
-    &__PHYSFS_Archiver_HOG,
-#endif
-#if PHYSFS_SUPPORTS_MVL
-    &__PHYSFS_Archiver_MVL,
-#endif
-#if PHYSFS_SUPPORTS_WAD
-    &__PHYSFS_Archiver_WAD,
-#endif
-#if PHYSFS_SUPPORTS_ISO9660
-    &__PHYSFS_Archiver_ISO9660,
-#endif
-    NULL
-};
-
-
-
 /* General PhysicsFS state ... */
 static int initialized = 0;
 static ErrState *errorStates = NULL;
@@ -101,6 +59,7 @@ static char *prefDir = NULL;
 static int allowSymLinks = 0;
 static const PHYSFS_Archiver **archivers = NULL;
 static const PHYSFS_ArchiveInfo **archiveInfo = NULL;
+static volatile size_t numArchivers = 0;
 
 /* mutexes ... */
 static void *errorLock = NULL;     /* protects error message list.        */
@@ -486,7 +445,7 @@ static PHYSFS_Io *handleIo_duplicate(PHYSFS_Io *io)
     memcpy(retval, io, sizeof (PHYSFS_Io));
     retval->opaque = newfh;
     return retval;
-
+    
 handleIo_dupe_failed:
     if (newfh)
     {
@@ -580,7 +539,7 @@ static char **doEnumStringList(void (*func)(PHYSFS_StringCallback, void *))
 
     if (ecd.errcode)
     {
-        __PHYSFS_setError(ecd.errcode);
+        PHYSFS_setErrorCode(ecd.errcode);
         return NULL;
     } /* if */
 
@@ -655,7 +614,7 @@ void __PHYSFS_sort(void *entries, size_t max,
 {
     /*
      * Quicksort w/ Bubblesort fallback algorithm inspired by code from here:
-     *   http://www.cs.ubc.ca/spider/harrison/Java/sorting-demo.html
+     *   https://www.cs.ubc.ca/spider/harrison/Java/sorting-demo.html
      */
     if (max > 0)
         __PHYSFS_quick_sort(entries, 0, max - 1, cmpfn, swapfn);
@@ -692,35 +651,12 @@ static ErrState *findErrorForCurrentThread(void)
 } /* findErrorForCurrentThread */
 
 
-void __PHYSFS_setError(const PHYSFS_ErrorCode errcode)
+/* this doesn't reset the error state. */
+static inline PHYSFS_ErrorCode currentErrorCode(void)
 {
-    ErrState *err;
-
-    if (!errcode)
-        return;
-
-    err = findErrorForCurrentThread();
-    if (err == NULL)
-    {
-        err = (ErrState *) allocator.Malloc(sizeof (ErrState));
-        if (err == NULL)
-            return;   /* uhh...? */
-
-        memset(err, '\0', sizeof (ErrState));
-        err->tid = __PHYSFS_platformGetThreadID();
-
-        if (errorLock != NULL)
-            __PHYSFS_platformGrabMutex(errorLock);
-
-        err->next = errorStates;
-        errorStates = err;
-
-        if (errorLock != NULL)
-            __PHYSFS_platformReleaseMutex(errorLock);
-    } /* if */
-
-    err->code = errcode;
-} /* __PHYSFS_setError */
+    const ErrState *err = findErrorForCurrentThread();
+    return err ? err->code : PHYSFS_ERR_OK;
+} /* currentErrorCode */
 
 
 PHYSFS_ErrorCode PHYSFS_getLastErrorCode(void)
@@ -748,7 +684,7 @@ PHYSFS_DECL const char *PHYSFS_getErrorByCode(PHYSFS_ErrorCode code)
         case PHYSFS_ERR_FILES_STILL_OPEN: return "files still open";
         case PHYSFS_ERR_INVALID_ARGUMENT: return "invalid argument";
         case PHYSFS_ERR_NOT_MOUNTED: return "not mounted";
-        case PHYSFS_ERR_NO_SUCH_PATH: return "no such path";
+        case PHYSFS_ERR_NOT_FOUND: return "not found";
         case PHYSFS_ERR_SYMLINK_FORBIDDEN: return "symlinks are forbidden";
         case PHYSFS_ERR_NO_WRITE_DIR: return "write directory is not set";
         case PHYSFS_ERR_OPEN_FOR_READING: return "file open for reading";
@@ -764,15 +700,42 @@ PHYSFS_DECL const char *PHYSFS_getErrorByCode(PHYSFS_ErrorCode code)
         case PHYSFS_ERR_BUSY: return "tried to modify a file the OS needs";
         case PHYSFS_ERR_DIR_NOT_EMPTY: return "directory isn't empty";
         case PHYSFS_ERR_OS_ERROR: return "OS reported an error";
+        case PHYSFS_ERR_DUPLICATE: return "duplicate resource";
+        case PHYSFS_ERR_BAD_PASSWORD: return "bad password";
     } /* switch */
 
     return NULL;  /* don't know this error code. */
 } /* PHYSFS_getErrorByCode */
 
 
-void PHYSFS_setErrorCode(PHYSFS_ErrorCode code)
+void PHYSFS_setErrorCode(PHYSFS_ErrorCode errcode)
 {
-    __PHYSFS_setError(code);
+    ErrState *err;
+
+    if (!errcode)
+        return;
+
+    err = findErrorForCurrentThread();
+    if (err == NULL)
+    {
+        err = (ErrState *) allocator.Malloc(sizeof (ErrState));
+        if (err == NULL)
+            return;   /* uhh...? */
+
+        memset(err, '\0', sizeof (ErrState));
+        err->tid = __PHYSFS_platformGetThreadID();
+
+        if (errorLock != NULL)
+            __PHYSFS_platformGrabMutex(errorLock);
+
+        err->next = errorStates;
+        errorStates = err;
+
+        if (errorLock != NULL)
+            __PHYSFS_platformReleaseMutex(errorLock);
+    } /* if */
+
+    err->code = errcode;
 } /* PHYSFS_setErrorCode */
 
 
@@ -866,18 +829,21 @@ static DirHandle *openDirectory(PHYSFS_Io *io, const char *d, int forWriting)
     DirHandle *retval = NULL;
     const PHYSFS_Archiver **i;
     const char *ext;
+    int created_io = 0;
 
     assert((io != NULL) || (d != NULL));
 
     if (io == NULL)
     {
         /* DIR gets first shot (unlike the rest, it doesn't deal with files). */
+        extern const PHYSFS_Archiver __PHYSFS_Archiver_DIR;
         retval = tryOpenDir(io, &__PHYSFS_Archiver_DIR, d, forWriting);
         if (retval != NULL)
             return retval;
 
         io = __PHYSFS_createNativeIo(d, forWriting ? 'w' : 'r');
         BAIL_IF_MACRO(!io, ERRPASS, 0);
+        created_io = 1;
     } /* if */
 
     ext = find_filename_extension(d);
@@ -886,14 +852,14 @@ static DirHandle *openDirectory(PHYSFS_Io *io, const char *d, int forWriting)
         /* Look for archivers with matching file extensions first... */
         for (i = archivers; (*i != NULL) && (retval == NULL); i++)
         {
-            if (__PHYSFS_stricmpASCII(ext, (*i)->info.extension) == 0)
+            if (__PHYSFS_utf8stricmp(ext, (*i)->info.extension) == 0)
                 retval = tryOpenDir(io, *i, d, forWriting);
         } /* for */
 
         /* failing an exact file extension match, try all the others... */
         for (i = archivers; (*i != NULL) && (retval == NULL); i++)
         {
-            if (__PHYSFS_stricmpASCII(ext, (*i)->info.extension) != 0)
+            if (__PHYSFS_utf8stricmp(ext, (*i)->info.extension) != 0)
                 retval = tryOpenDir(io, *i, d, forWriting);
         } /* for */
     } /* if */
@@ -903,6 +869,9 @@ static DirHandle *openDirectory(PHYSFS_Io *io, const char *d, int forWriting)
         for (i = archivers; (*i != NULL) && (retval == NULL); i++)
             retval = tryOpenDir(io, *i, d, forWriting);
     } /* else */
+
+    if ((!retval) && (created_io))
+        io->destroy(io);
 
     BAIL_IF_MACRO(!retval, PHYSFS_ERR_UNSUPPORTED, NULL);
     return retval;
@@ -1121,32 +1090,52 @@ initializeMutexes_failed:
 } /* initializeMutexes */
 
 
-static void setDefaultAllocator(void);
+static int doRegisterArchiver(const PHYSFS_Archiver *_archiver);
 
 static int initStaticArchivers(void)
 {
-    const size_t numStaticArchivers = __PHYSFS_ARRAYLEN(staticArchivers);
-    const size_t len = numStaticArchivers * sizeof (void *);
-    size_t i;
+    #define REGISTER_STATIC_ARCHIVER(arc) { \
+        extern const PHYSFS_Archiver __PHYSFS_Archiver_##arc; \
+        if (!doRegisterArchiver(&__PHYSFS_Archiver_##arc)) { \
+            return 0; \
+        } \
+    }
 
-    assert(numStaticArchivers > 0);  /* seriously, none at all?! */
-    assert(staticArchivers[numStaticArchivers - 1] == NULL);
+    #if PHYSFS_SUPPORTS_ZIP
+        REGISTER_STATIC_ARCHIVER(ZIP);
+    #endif
+    #if PHYSFS_SUPPORTS_7Z
+        REGISTER_STATIC_ARCHIVER(LZMA);
+    #endif
+    #if PHYSFS_SUPPORTS_GRP
+        REGISTER_STATIC_ARCHIVER(GRP);
+    #endif
+    #if PHYSFS_SUPPORTS_QPAK
+        REGISTER_STATIC_ARCHIVER(QPAK);
+    #endif
+    #if PHYSFS_SUPPORTS_HOG
+        REGISTER_STATIC_ARCHIVER(HOG);
+    #endif
+    #if PHYSFS_SUPPORTS_MVL
+        REGISTER_STATIC_ARCHIVER(MVL);
+    #endif
+    #if PHYSFS_SUPPORTS_WAD
+        REGISTER_STATIC_ARCHIVER(WAD);
+    #endif
+    #if PHYSFS_SUPPORTS_SLB
+        REGISTER_STATIC_ARCHIVER(SLB);
+    #endif
+    #if PHYSFS_SUPPORTS_ISO9660
+        REGISTER_STATIC_ARCHIVER(ISO9660);
+    #endif
 
-    archiveInfo = (const PHYSFS_ArchiveInfo **) allocator.Malloc(len);
-    BAIL_IF_MACRO(!archiveInfo, PHYSFS_ERR_OUT_OF_MEMORY, 0);
-    archivers = (const PHYSFS_Archiver **) allocator.Malloc(len);
-    BAIL_IF_MACRO(!archivers, PHYSFS_ERR_OUT_OF_MEMORY, 0);
-
-    for (i = 0; i < numStaticArchivers - 1; i++)
-        archiveInfo[i] = &staticArchivers[i]->info;
-    archiveInfo[numStaticArchivers - 1] = NULL;
-
-    memcpy(archivers, staticArchivers, len);
+    #undef REGISTER_STATIC_ARCHIVER
 
     return 1;
 } /* initStaticArchivers */
 
 
+static void setDefaultAllocator(void);
 static int doDeinit(void);
 
 int PHYSFS_init(const char *argv0)
@@ -1183,7 +1172,7 @@ int PHYSFS_init(const char *argv0)
     initialized = 1;
 
     /* This makes sure that the error subsystem is initialized. */
-    __PHYSFS_setError(PHYSFS_getLastErrorCode());
+    PHYSFS_setErrorCode(PHYSFS_getLastErrorCode());
 
     return 1;
 
@@ -1204,7 +1193,7 @@ static int closeFileHandleList(FileHandle **list)
         PHYSFS_Io *io = i->io;
         next = i->next;
 
-        if (!io->flush(io))
+        if (io->flush && !io->flush(io))
         {
             *list = i;
             return 0;
@@ -1239,14 +1228,70 @@ static void freeSearchPath(void)
 } /* freeSearchPath */
 
 
+/* MAKE SURE you hold stateLock before calling this! */
+static int archiverInUse(const PHYSFS_Archiver *arc, const DirHandle *list)
+{
+    const DirHandle *i;
+    for (i = list; i != NULL; i = i->next)
+    {
+        if (i->funcs == arc)
+            return 1;
+    } /* for */
+
+    return 0;  /* not in use */
+} /* archiverInUse */
+
+
+/* MAKE SURE you hold stateLock before calling this! */
+static int doDeregisterArchiver(const size_t idx)
+{
+    const size_t len = (numArchivers - idx) * sizeof (void *);
+    const PHYSFS_ArchiveInfo *info = archiveInfo[idx];
+    const PHYSFS_Archiver *arc = archivers[idx];
+
+    /* make sure nothing is still using this archiver */
+    if (archiverInUse(arc, searchPath) || archiverInUse(arc, writeDir))
+        BAIL_MACRO(PHYSFS_ERR_FILES_STILL_OPEN, 0);
+
+    allocator.Free((void *) info->extension);
+    allocator.Free((void *) info->description);
+    allocator.Free((void *) info->author);
+    allocator.Free((void *) info->url);
+    allocator.Free((void *) arc);
+
+    memmove(&archiveInfo[idx], &archiveInfo[idx+1], len);
+    memmove(&archivers[idx], &archivers[idx+1], len);
+
+    assert(numArchivers > 0);
+    numArchivers--;
+
+    return 1;
+} /* doDeregisterArchiver */
+
+
+/* Does NOT hold the state lock; we're shutting down. */
+static void freeArchivers(void)
+{
+    while (numArchivers > 0)
+    {
+        if (!doDeregisterArchiver(numArchivers - 1))
+            assert(!"nothing should be mounted during shutdown.");
+    } /* while */
+
+    allocator.Free(archivers);
+    allocator.Free(archiveInfo);
+    archivers = NULL;
+    archiveInfo = NULL;
+} /* freeArchivers */
+
+
 static int doDeinit(void)
 {
-    BAIL_IF_MACRO(!__PHYSFS_platformDeinit(), ERRPASS, 0);
-
     closeFileHandleList(&openWriteList);
     BAIL_IF_MACRO(!PHYSFS_setWriteDir(NULL), PHYSFS_ERR_FILES_STILL_OPEN, 0);
 
     freeSearchPath();
+    freeArchivers();
     freeErrorStates();
 
     if (baseDir != NULL)
@@ -1289,6 +1334,10 @@ static int doDeinit(void)
         allocator.Deinit();
 
     errorLock = stateLock = NULL;
+
+    /* !!! FIXME: what on earth are you supposed to do if this fails? */
+    BAIL_IF_MACRO(!__PHYSFS_platformDeinit(), ERRPASS, 0);
+
     return 1;
 } /* doDeinit */
 
@@ -1304,6 +1353,143 @@ int PHYSFS_isInit(void)
 {
     return initialized;
 } /* PHYSFS_isInit */
+
+
+char *__PHYSFS_strdup(const char *str)
+{
+    char *retval = (char *) allocator.Malloc(strlen(str) + 1);
+    if (retval)
+        strcpy(retval, str);
+    return retval;
+} /* __PHYSFS_strdup */
+
+
+PHYSFS_uint32 __PHYSFS_hashString(const char *str, size_t len)
+{
+    PHYSFS_uint32 hash = 5381;
+    while (len--)
+        hash = ((hash << 5) + hash) ^ *(str++);
+    return hash;
+} /* __PHYSFS_hashString */
+
+
+/* MAKE SURE you hold stateLock before calling this! */
+static int doRegisterArchiver(const PHYSFS_Archiver *_archiver)
+{
+    const PHYSFS_uint32 maxver = CURRENT_PHYSFS_ARCHIVER_API_VERSION;
+    const size_t len = (numArchivers + 2) * sizeof (void *);
+    PHYSFS_Archiver *archiver = NULL;
+    PHYSFS_ArchiveInfo *info = NULL;
+    const char *ext = NULL;
+    void *ptr = NULL;
+    size_t i;
+
+    BAIL_IF_MACRO(!_archiver, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(_archiver->version > maxver, PHYSFS_ERR_UNSUPPORTED, 0);
+    BAIL_IF_MACRO(!_archiver->info.extension, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->info.description, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->info.author, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->info.url, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->openArchive, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->enumerateFiles, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->openRead, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->openWrite, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->openAppend, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->remove, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->mkdir, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->closeArchive, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!_archiver->stat, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+
+    ext = _archiver->info.extension;
+    for (i = 0; i < numArchivers; i++)
+    {
+        if (__PHYSFS_utf8stricmp(archiveInfo[i]->extension, ext) == 0)
+            BAIL_MACRO(PHYSFS_ERR_DUPLICATE, 0);  /* !!! FIXME: better error? ERR_IN_USE? */
+    } /* for */
+
+    /* make a copy of the data. */
+    archiver = (PHYSFS_Archiver *) allocator.Malloc(sizeof (*archiver));
+    GOTO_IF_MACRO(!archiver, PHYSFS_ERR_OUT_OF_MEMORY, regfailed);
+
+    /* Must copy sizeof (OLD_VERSION_OF_STRUCT) when version changes! */
+    memcpy(archiver, _archiver, sizeof (*archiver));
+
+    info = (PHYSFS_ArchiveInfo *) &archiver->info;
+    memset(info, '\0', sizeof (*info));  /* NULL in case an alloc fails. */
+    #define CPYSTR(item) \
+        info->item = __PHYSFS_strdup(_archiver->info.item); \
+        GOTO_IF_MACRO(!info->item, PHYSFS_ERR_OUT_OF_MEMORY, regfailed);
+    CPYSTR(extension);
+    CPYSTR(description);
+    CPYSTR(author);
+    CPYSTR(url);
+    info->supportsSymlinks = _archiver->info.supportsSymlinks;
+    #undef CPYSTR
+
+    ptr = allocator.Realloc(archiveInfo, len);
+    GOTO_IF_MACRO(!ptr, PHYSFS_ERR_OUT_OF_MEMORY, regfailed);
+    archiveInfo = (const PHYSFS_ArchiveInfo **) ptr;
+
+    ptr = allocator.Realloc(archivers, len);
+    GOTO_IF_MACRO(!ptr, PHYSFS_ERR_OUT_OF_MEMORY, regfailed);
+    archivers = (const PHYSFS_Archiver **) ptr;
+
+    archiveInfo[numArchivers] = info;
+    archiveInfo[numArchivers + 1] = NULL;
+
+    archivers[numArchivers] = archiver;
+    archivers[numArchivers + 1] = NULL;
+
+    numArchivers++;
+
+    return 1;
+
+regfailed:
+    if (info != NULL)
+    {
+        allocator.Free((void *) info->extension);
+        allocator.Free((void *) info->description);
+        allocator.Free((void *) info->author);
+        allocator.Free((void *) info->url);
+    } /* if */
+    allocator.Free(archiver);
+
+    return 0;
+} /* doRegisterArchiver */
+
+
+int PHYSFS_registerArchiver(const PHYSFS_Archiver *archiver)
+{
+    int retval;
+    BAIL_IF_MACRO(!initialized, PHYSFS_ERR_NOT_INITIALIZED, 0);
+    __PHYSFS_platformGrabMutex(stateLock);
+    retval = doRegisterArchiver(archiver);
+    __PHYSFS_platformReleaseMutex(stateLock);
+    return retval;
+} /* PHYSFS_registerArchiver */
+
+
+int PHYSFS_deregisterArchiver(const char *ext)
+{
+    size_t i;
+
+    BAIL_IF_MACRO(!initialized, PHYSFS_ERR_NOT_INITIALIZED, 0);
+    BAIL_IF_MACRO(!ext, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+
+    __PHYSFS_platformGrabMutex(stateLock);
+    for (i = 0; i < numArchivers; i++)
+    {
+        if (__PHYSFS_utf8stricmp(archiveInfo[i]->extension, ext) == 0)
+        {
+            const int retval = doDeregisterArchiver(i);
+            __PHYSFS_platformReleaseMutex(stateLock);
+            return retval;
+        } /* if */
+    } /* for */
+    __PHYSFS_platformReleaseMutex(stateLock);
+
+    BAIL_MACRO(PHYSFS_ERR_NOT_FOUND, 0);
+} /* PHYSFS_deregisterArchiver */
 
 
 const PHYSFS_ArchiveInfo **PHYSFS_supportedArchiveTypes(void)
@@ -1351,7 +1537,6 @@ const char *PHYSFS_getPrefDir(const char *org, const char *app)
     PHYSFS_Stat statbuf;
     char *ptr = NULL;
     char *endstr = NULL;
-    int exists = 0;
 
     BAIL_IF_MACRO(!initialized, PHYSFS_ERR_NOT_INITIALIZED, 0);
     BAIL_IF_MACRO(!org, PHYSFS_ERR_INVALID_ARGUMENT, NULL);
@@ -1368,7 +1553,7 @@ const char *PHYSFS_getPrefDir(const char *org, const char *app)
     assert(*endstr == dirsep);
     *endstr = '\0';  /* mask out the final dirsep for now. */
 
-    if (!__PHYSFS_platformStat(prefDir, &exists, &statbuf))
+    if (!__PHYSFS_platformStat(prefDir, &statbuf))
     {
         for (ptr = strchr(prefDir, dirsep); ptr; ptr = strchr(ptr+1, dirsep))
         {
@@ -1698,7 +1883,7 @@ int PHYSFS_setSaneConfig(const char *organization, const char *appName,
             if ((l > extlen) && ((*i)[l - extlen - 1] == '.'))
             {
                 ext = (*i) + (l - extlen);
-                if (__PHYSFS_stricmpASCII(ext, archiveExt) == 0)
+                if (__PHYSFS_utf8stricmp(ext, archiveExt) == 0)
                     setSaneCfgAddPath(*i, l, dirsep, archivesFirst);
             } /* if */
         } /* for */
@@ -1759,12 +1944,12 @@ static int verifyPath(DirHandle *h, char **_fname, int allowMissing)
         size_t len = strlen(fname);
         assert(mntpntlen > 1); /* root mount points should be NULL. */
         /* not under the mountpoint, so skip this archive. */
-        BAIL_IF_MACRO(len < mntpntlen-1, PHYSFS_ERR_NO_SUCH_PATH, 0);
+        BAIL_IF_MACRO(len < mntpntlen-1, PHYSFS_ERR_NOT_FOUND, 0);
         /* !!! FIXME: Case insensitive? */
         retval = strncmp(h->mountPoint, fname, mntpntlen-1);
-        BAIL_IF_MACRO(retval != 0, PHYSFS_ERR_NO_SUCH_PATH, 0);
+        BAIL_IF_MACRO(retval != 0, PHYSFS_ERR_NOT_FOUND, 0);
         if (len > mntpntlen-1)  /* corner case... */
-            BAIL_IF_MACRO(fname[mntpntlen-1]!='/', PHYSFS_ERR_NO_SUCH_PATH, 0);
+            BAIL_IF_MACRO(fname[mntpntlen-1]!='/', PHYSFS_ERR_NOT_FOUND, 0);
         fname += mntpntlen-1;  /* move to start of actual archive path. */
         if (*fname == '/')
             fname++;
@@ -1782,9 +1967,12 @@ static int verifyPath(DirHandle *h, char **_fname, int allowMissing)
             end = strchr(start, '/');
 
             if (end != NULL) *end = '\0';
-            rc = h->funcs->stat(h->opaque, fname, &retval, &statbuf);
+            rc = h->funcs->stat(h->opaque, fname, &statbuf);
             if (rc)
                 rc = (statbuf.filetype == PHYSFS_FILETYPE_SYMLINK);
+            else if (currentErrorCode() == PHYSFS_ERR_NOT_FOUND)
+                retval = 0;
+
             if (end != NULL) *end = '/';
 
             /* insecure path (has a disallowed symlink in it)? */
@@ -1840,7 +2028,9 @@ static int doMkdir(const char *_dname, char *dname)
         if (exists)
         {
             PHYSFS_Stat statbuf;
-            const int rc = h->funcs->stat(h->opaque, dname, &exists, &statbuf);
+            const int rc = h->funcs->stat(h->opaque, dname, &statbuf);
+            if ((!rc) && (currentErrorCode() == PHYSFS_ERR_NOT_FOUND))
+                exists = 0;
             retval = ((rc) && (statbuf.filetype == PHYSFS_FILETYPE_DIRECTORY));
         } /* if */
 
@@ -1937,11 +2127,9 @@ const char *PHYSFS_getRealDir(const char *_fname)
             else if (verifyPath(i, &arcfname, 0))
             {
                 PHYSFS_Stat statbuf;
-                int exists = 0;
-                if (i->funcs->stat(i->opaque, arcfname, &exists, &statbuf))
+                if (i->funcs->stat(i->opaque, arcfname, &statbuf))
                 {
-                    if (exists)
-                        retval = i->dirName;
+                    retval = i->dirName;
                     break;
                 } /* if */
             } /* if */
@@ -2060,6 +2248,40 @@ static void enumerateFromMountPoint(DirHandle *i, const char *arcfname,
 } /* enumerateFromMountPoint */
 
 
+typedef struct SymlinkFilterData
+{
+    PHYSFS_EnumFilesCallback callback;
+    void *callbackData;
+    DirHandle *dirhandle;
+} SymlinkFilterData;
+
+/* !!! FIXME: broken if in a virtual mountpoint (stat call fails). */
+static void enumCallbackFilterSymLinks(void *_data, const char *origdir,
+                                       const char *fname)
+{
+    const char *trimmedDir = (*origdir == '/') ? (origdir+1) : origdir;
+    const size_t slen = strlen(trimmedDir) + strlen(fname) + 2;
+    char *path = (char *) __PHYSFS_smallAlloc(slen);
+
+    if (path != NULL)
+    {
+        SymlinkFilterData *data = (SymlinkFilterData *) _data;
+        const DirHandle *dh = data->dirhandle;
+        PHYSFS_Stat statbuf;
+
+        sprintf(path, "%s%s%s", trimmedDir, *trimmedDir ? "/" : "", fname);
+        if (dh->funcs->stat(dh->opaque, path, &statbuf))
+        {
+            /* Pass it on to the application if it's not a symlink. */
+            if (statbuf.filetype != PHYSFS_FILETYPE_SYMLINK)
+                data->callback(data->callbackData, origdir, fname);
+        } /* if */
+
+        __PHYSFS_smallFree(path);
+    } /* if */
+} /* enumCallbackFilterSymLinks */
+
+
 /* !!! FIXME: this should report error conditions. */
 void PHYSFS_enumerateFilesCallback(const char *_fname,
                                    PHYSFS_EnumFilesCallback callback,
@@ -2078,10 +2300,17 @@ void PHYSFS_enumerateFilesCallback(const char *_fname,
     if (sanitizePlatformIndependentPath(_fname, fname))
     {
         DirHandle *i;
-        int noSyms;
+        SymlinkFilterData filterdata;
 
         __PHYSFS_platformGrabMutex(stateLock);
-        noSyms = !allowSymLinks;
+
+        if (!allowSymLinks)
+        {
+            memset(&filterdata, '\0', sizeof (filterdata));
+            filterdata.callback = callback;
+            filterdata.callbackData = data;
+        } /* if */
+
         for (i = searchPath; i != NULL; i = i->next)
         {
             char *arcfname = fname;
@@ -2090,8 +2319,18 @@ void PHYSFS_enumerateFilesCallback(const char *_fname,
 
             else if (verifyPath(i, &arcfname, 0))
             {
-                i->funcs->enumerateFiles(i->opaque, arcfname, noSyms,
-                                         callback, _fname, data);
+                if ((!allowSymLinks) && (i->funcs->info.supportsSymlinks))
+                {
+                    filterdata.dirhandle = i;
+                    i->funcs->enumerateFiles(i->opaque, arcfname,
+                                             enumCallbackFilterSymLinks,
+                                             _fname, &filterdata);
+                } /* if */
+                else
+                {
+                    i->funcs->enumerateFiles(i->opaque, arcfname,
+                                             callback, _fname, data);
+                } /* else */
             } /* else if */
         } /* for */
         __PHYSFS_platformReleaseMutex(stateLock);
@@ -2212,20 +2451,19 @@ PHYSFS_File *PHYSFS_openRead(const char *_fname)
 
     if (sanitizePlatformIndependentPath(_fname, fname))
     {
-        int fileExists = 0;
         DirHandle *i = NULL;
         PHYSFS_Io *io = NULL;
 
         __PHYSFS_platformGrabMutex(stateLock);
 
-        GOTO_IF_MACRO(!searchPath, PHYSFS_ERR_NO_SUCH_PATH, openReadEnd);
+        GOTO_IF_MACRO(!searchPath, PHYSFS_ERR_NOT_FOUND, openReadEnd);
 
-        for (i = searchPath; (i != NULL) && (!fileExists); i = i->next)
+        for (i = searchPath; i != NULL; i = i->next)
         {
             char *arcfname = fname;
             if (verifyPath(i, &arcfname, 0))
             {
-                io = i->funcs->openRead(i->opaque, arcfname, &fileExists);
+                io = i->funcs->openRead(i->opaque, arcfname);
                 if (io)
                     break;
             } /* if */
@@ -2330,19 +2568,20 @@ static PHYSFS_sint64 doBufferedRead(FileHandle *fh, void *buffer,
         memcpy(buffer, fh->buffer + fh->bufpos, (size_t) len);
         fh->bufpos += (PHYSFS_uint32) len;
         return (PHYSFS_sint64) len;
-    } /* else if */
+    } /* if */
 
-    if (buffered > 0) /* partially in the buffer... */
+    else if (buffered > 0) /* partially in the buffer... */
     {
         memcpy(buffer, fh->buffer + fh->bufpos, (size_t) buffered);
         buffer = ((PHYSFS_uint8 *) buffer) + buffered;
         len -= buffered;
         retval = buffered;
-        fh->buffill = fh->bufpos = 0;
     } /* if */
 
     /* if you got here, the buffer is drained and we still need bytes. */
     assert(len > 0);
+
+    fh->buffill = fh->bufpos = 0;
 
     io = fh->io;
     if (len >= fh->bufsize)  /* need more than the buffer takes. */
@@ -2582,7 +2821,7 @@ int PHYSFS_flush(PHYSFS_File *handle)
     rc = io->write(io, fh->buffer + fh->bufpos, fh->buffill - fh->bufpos);
     BAIL_IF_MACRO(rc <= 0, ERRPASS, 0);
     fh->bufpos = fh->buffill = 0;
-    return io->flush(io);
+    return io->flush ? io->flush(io) : 1;
 } /* PHYSFS_flush */
 
 
@@ -2592,11 +2831,11 @@ int PHYSFS_stat(const char *_fname, PHYSFS_Stat *stat)
     char *fname;
     size_t len;
 
-    BAIL_IF_MACRO(!_fname, PHYSFS_ERR_INVALID_ARGUMENT, -1);
-    BAIL_IF_MACRO(!stat, PHYSFS_ERR_INVALID_ARGUMENT, -1);
+    BAIL_IF_MACRO(!_fname, PHYSFS_ERR_INVALID_ARGUMENT, 0);
+    BAIL_IF_MACRO(!stat, PHYSFS_ERR_INVALID_ARGUMENT, 0);
     len = strlen(_fname) + 1;
     fname = (char *) __PHYSFS_smallAlloc(len);
-    BAIL_IF_MACRO(!fname, PHYSFS_ERR_OUT_OF_MEMORY, -1);
+    BAIL_IF_MACRO(!fname, PHYSFS_ERR_OUT_OF_MEMORY, 0);
 
     /* set some sane defaults... */
     stat->filesize = -1;
@@ -2634,7 +2873,9 @@ int PHYSFS_stat(const char *_fname, PHYSFS_Stat *stat)
                     /* !!! FIXME: this test is wrong and should be elsewhere. */
                     stat->readonly = !(writeDir &&
                                  (strcmp(writeDir->dirName, i->dirName) == 0));
-                    retval = i->funcs->stat(i->opaque, arcfname, &exists, stat);
+                    retval = i->funcs->stat(i->opaque, arcfname, stat);
+                    if ((retval) || (currentErrorCode() != PHYSFS_ERR_NOT_FOUND))
+                        exists = 1;
                 } /* else if */
             } /* for */
             __PHYSFS_platformReleaseMutex(stateLock);

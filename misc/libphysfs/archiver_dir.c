@@ -43,10 +43,9 @@ static void *DIR_openArchive(PHYSFS_Io *io, const char *name, int forWriting)
     char *retval = NULL;
     const size_t namelen = strlen(name);
     const size_t seplen = 1;
-    int exists = 0;
 
     assert(io == NULL);  /* shouldn't create an Io for these. */
-    BAIL_IF_MACRO(!__PHYSFS_platformStat(name, &exists, &st), ERRPASS, NULL);
+    BAIL_IF_MACRO(!__PHYSFS_platformStat(name, &st), ERRPASS, NULL);
     if (st.filetype != PHYSFS_FILETYPE_DIRECTORY)
         BAIL_MACRO(PHYSFS_ERR_UNSUPPORTED, NULL);
 
@@ -66,8 +65,8 @@ static void *DIR_openArchive(PHYSFS_Io *io, const char *name, int forWriting)
 } /* DIR_openArchive */
 
 
-static void DIR_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
-                               int omitSymLinks, PHYSFS_EnumFilesCallback cb,
+static void DIR_enumerateFiles(void *opaque, const char *dname,
+                               PHYSFS_EnumFilesCallback cb,
                                const char *origdir, void *callbackdata)
 {
     char *d;
@@ -75,38 +74,28 @@ static void DIR_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
     CVT_TO_DEPENDENT(d, opaque, dname);
     if (d != NULL)
     {
-        __PHYSFS_platformEnumerateFiles(d, omitSymLinks, cb,
-                                        origdir, callbackdata);
+        __PHYSFS_platformEnumerateFiles(d, cb, origdir, callbackdata);
         __PHYSFS_smallFree(d);
     } /* if */
 } /* DIR_enumerateFiles */
 
 
-static PHYSFS_Io *doOpen(PHYSFS_Dir *opaque, const char *name,
-                         const int mode, int *fileExists)
+static PHYSFS_Io *doOpen(void *opaque, const char *name, const int mode)
 {
-    char *f;
     PHYSFS_Io *io = NULL;
-    int existtmp = 0;
+    char *f = NULL;
 
     CVT_TO_DEPENDENT(f, opaque, name);
     BAIL_IF_MACRO(!f, ERRPASS, NULL);
-
-    if (fileExists == NULL)
-        fileExists = &existtmp;
 
     io = __PHYSFS_createNativeIo(f, mode);
     if (io == NULL)
     {
         const PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
         PHYSFS_Stat statbuf;
-        __PHYSFS_platformStat(f, fileExists, &statbuf);
-        __PHYSFS_setError(err);
+        __PHYSFS_platformStat(f, &statbuf);
+        PHYSFS_setErrorCode(err);
     } /* if */
-    else
-    {
-        *fileExists = 1;
-    } /* else */
 
     __PHYSFS_smallFree(f);
 
@@ -114,25 +103,25 @@ static PHYSFS_Io *doOpen(PHYSFS_Dir *opaque, const char *name,
 } /* doOpen */
 
 
-static PHYSFS_Io *DIR_openRead(PHYSFS_Dir *opaque, const char *fnm, int *exist)
+static PHYSFS_Io *DIR_openRead(void *opaque, const char *filename)
 {
-    return doOpen(opaque, fnm, 'r', exist);
+    return doOpen(opaque, filename, 'r');
 } /* DIR_openRead */
 
 
-static PHYSFS_Io *DIR_openWrite(PHYSFS_Dir *opaque, const char *filename)
+static PHYSFS_Io *DIR_openWrite(void *opaque, const char *filename)
 {
-    return doOpen(opaque, filename, 'w', NULL);
+    return doOpen(opaque, filename, 'w');
 } /* DIR_openWrite */
 
 
-static PHYSFS_Io *DIR_openAppend(PHYSFS_Dir *opaque, const char *filename)
+static PHYSFS_Io *DIR_openAppend(void *opaque, const char *filename)
 {
-    return doOpen(opaque, filename, 'a', NULL);
+    return doOpen(opaque, filename, 'a');
 } /* DIR_openAppend */
 
 
-static int DIR_remove(PHYSFS_Dir *opaque, const char *name)
+static int DIR_remove(void *opaque, const char *name)
 {
     int retval;
     char *f;
@@ -145,7 +134,7 @@ static int DIR_remove(PHYSFS_Dir *opaque, const char *name)
 } /* DIR_remove */
 
 
-static int DIR_mkdir(PHYSFS_Dir *opaque, const char *name)
+static int DIR_mkdir(void *opaque, const char *name)
 {
     int retval;
     char *f;
@@ -158,21 +147,20 @@ static int DIR_mkdir(PHYSFS_Dir *opaque, const char *name)
 } /* DIR_mkdir */
 
 
-static void DIR_closeArchive(PHYSFS_Dir *opaque)
+static void DIR_closeArchive(void *opaque)
 {
     allocator.Free(opaque);
 } /* DIR_closeArchive */
 
 
-static int DIR_stat(PHYSFS_Dir *opaque, const char *name,
-                    int *exists, PHYSFS_Stat *stat)
+static int DIR_stat(void *opaque, const char *name, PHYSFS_Stat *stat)
 {
     int retval = 0;
     char *d;
 
     CVT_TO_DEPENDENT(d, opaque, name);
     BAIL_IF_MACRO(!d, ERRPASS, 0);
-    retval = __PHYSFS_platformStat(d, exists, stat);
+    retval = __PHYSFS_platformStat(d, stat);
     __PHYSFS_smallFree(d);
     return retval;
 } /* DIR_stat */
@@ -180,22 +168,24 @@ static int DIR_stat(PHYSFS_Dir *opaque, const char *name,
 
 const PHYSFS_Archiver __PHYSFS_Archiver_DIR =
 {
+    CURRENT_PHYSFS_ARCHIVER_API_VERSION,
     {
         "",
         "Non-archive, direct filesystem I/O",
         "Ryan C. Gordon <icculus@icculus.org>",
-        "http://icculus.org/physfs/",
+        "https://icculus.org/physfs/",
+        1,  /* supportsSymlinks */
     },
-    DIR_openArchive,        /* openArchive() method    */
-    DIR_enumerateFiles,     /* enumerateFiles() method */
-    DIR_openRead,           /* openRead() method       */
-    DIR_openWrite,          /* openWrite() method      */
-    DIR_openAppend,         /* openAppend() method     */
-    DIR_remove,             /* remove() method         */
-    DIR_mkdir,              /* mkdir() method          */
-    DIR_closeArchive,       /* closeArchive() method   */
-    DIR_stat                /* stat() method           */
+    DIR_openArchive,
+    DIR_enumerateFiles,
+    DIR_openRead,
+    DIR_openWrite,
+    DIR_openAppend,
+    DIR_remove,
+    DIR_mkdir,
+    DIR_stat,
+    DIR_closeArchive
 };
 
-/* end of dir.c ... */
+/* end of archiver_dir.c ... */
 

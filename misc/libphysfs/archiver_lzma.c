@@ -124,7 +124,7 @@ SZ_RESULT SzFileReadImp(void *object, void **buffer, size_t maxReqSize,
 SZ_RESULT SzFileReadImp(void *object, void *buffer, size_t size,
                         size_t *processedSize)
 {
-    FileInputStream *s = (FileInputStream *)((unsigned long)object - offsetof(FileInputStream, inStream)); /* HACK! */
+    FileInputStream *s = (FileInputStream *)((size_t)object - offsetof(FileInputStream, inStream)); /* HACK! */
     const size_t processedSizeLoc = s->io->read(s->io, buffer, size);
     if (processedSize != NULL)
         *processedSize = processedSizeLoc;
@@ -139,7 +139,7 @@ SZ_RESULT SzFileReadImp(void *object, void *buffer, size_t size,
  */
 SZ_RESULT SzFileSeekImp(void *object, CFileSize pos)
 {
-    FileInputStream *s = (FileInputStream *)((unsigned long)object - offsetof(FileInputStream, inStream)); /* HACK! */
+    FileInputStream *s = (FileInputStream *)((size_t)object - offsetof(FileInputStream, inStream)); /* HACK! */
     if (s->io->seek(s->io, (PHYSFS_uint64) pos))
         return SZ_OK;
     return SZE_FAIL;
@@ -205,7 +205,7 @@ static LZMAfile * lzma_find_file(const LZMAarchive *archive, const char *name)
 {
     LZMAfile *file = bsearch(name, archive->files, archive->db.Database.NumFiles, sizeof(*archive->files), lzma_file_cmp_stdlib); /* FIXME: Should become __PHYSFS_search!!! */
 
-    BAIL_IF_MACRO(file == NULL, PHYSFS_ERR_NO_SUCH_PATH, NULL);
+    BAIL_IF_MACRO(file == NULL, PHYSFS_ERR_NOT_FOUND, NULL);
 
     return file;
 } /* lzma_find_file */
@@ -291,25 +291,25 @@ static int lzma_err(SZ_RESULT rc)
         case SZ_OK: /* Same as LZMA_RESULT_OK */
             break;
         case SZE_DATA_ERROR: /* Same as LZMA_RESULT_DATA_ERROR */
-            __PHYSFS_setError(PHYSFS_ERR_CORRUPT); /*!!!FIXME: was "PHYSFS_ERR_DATA_ERROR" */
+            PHYSFS_setErrorCode(PHYSFS_ERR_CORRUPT); /*!!!FIXME: was "PHYSFS_ERR_DATA_ERROR" */
             break;
         case SZE_OUTOFMEMORY:
-            __PHYSFS_setError(PHYSFS_ERR_OUT_OF_MEMORY);
+            PHYSFS_setErrorCode(PHYSFS_ERR_OUT_OF_MEMORY);
             break;
         case SZE_CRC_ERROR:
-            __PHYSFS_setError(PHYSFS_ERR_CORRUPT);
+            PHYSFS_setErrorCode(PHYSFS_ERR_CORRUPT);
             break;
         case SZE_NOTIMPL:
-            __PHYSFS_setError(PHYSFS_ERR_UNSUPPORTED);
+            PHYSFS_setErrorCode(PHYSFS_ERR_UNSUPPORTED);
             break;
         case SZE_FAIL:
-            __PHYSFS_setError(PHYSFS_ERR_OTHER_ERROR);  /* !!! FIXME: right? */
+            PHYSFS_setErrorCode(PHYSFS_ERR_OTHER_ERROR);  /* !!! FIXME: right? */
             break;
         case SZE_ARCHIVE_ERROR:
-            __PHYSFS_setError(PHYSFS_ERR_CORRUPT);  /* !!! FIXME: right? */
+            PHYSFS_setErrorCode(PHYSFS_ERR_CORRUPT);  /* !!! FIXME: right? */
             break;
         default:
-            __PHYSFS_setError(PHYSFS_ERR_OTHER_ERROR);
+            PHYSFS_setErrorCode(PHYSFS_ERR_OTHER_ERROR);
     } /* switch */
 
     return rc;
@@ -531,8 +531,8 @@ static void doEnumCallback(PHYSFS_EnumFilesCallback cb, void *callbackdata,
 } /* doEnumCallback */
 
 
-static void LZMA_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
-                                int omitSymLinks, PHYSFS_EnumFilesCallback cb,
+static void LZMA_enumerateFiles(void *opaque, const char *dname,
+                                PHYSFS_EnumFilesCallback cb,
                                 const char *origdir, void *callbackdata)
 {
     size_t dlen = strlen(dname),
@@ -551,7 +551,7 @@ static void LZMA_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
             file = archive->files;
         }
 
-    BAIL_IF_MACRO(file == NULL, PHYSFS_ERR_NO_SUCH_PATH, );
+    BAIL_IF_MACRO(file == NULL, PHYSFS_ERR_NOT_FOUND, );
 
     while (file < lastFile)
     {
@@ -575,15 +575,13 @@ static void LZMA_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
 } /* LZMA_enumerateFiles */
 
 
-static PHYSFS_Io *LZMA_openRead(PHYSFS_Dir *opaque, const char *name,
-                                int *fileExists)
+static PHYSFS_Io *LZMA_openRead(void *opaque, const char *name)
 {
     LZMAarchive *archive = (LZMAarchive *) opaque;
     LZMAfile *file = lzma_find_file(archive, name);
     PHYSFS_Io *io = NULL;
 
-    *fileExists = (file != NULL);
-    BAIL_IF_MACRO(file == NULL, PHYSFS_ERR_NO_SUCH_PATH, NULL);
+    BAIL_IF_MACRO(file == NULL, PHYSFS_ERR_NOT_FOUND, NULL);
     BAIL_IF_MACRO(file->folder == NULL, PHYSFS_ERR_NOT_A_FILE, NULL);
 
     file->position = 0;
@@ -598,19 +596,19 @@ static PHYSFS_Io *LZMA_openRead(PHYSFS_Dir *opaque, const char *name,
 } /* LZMA_openRead */
 
 
-static PHYSFS_Io *LZMA_openWrite(PHYSFS_Dir *opaque, const char *filename)
+static PHYSFS_Io *LZMA_openWrite(void *opaque, const char *filename)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, NULL);
 } /* LZMA_openWrite */
 
 
-static PHYSFS_Io *LZMA_openAppend(PHYSFS_Dir *opaque, const char *filename)
+static PHYSFS_Io *LZMA_openAppend(void *opaque, const char *filename)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, NULL);
 } /* LZMA_openAppend */
 
 
-static void LZMA_closeArchive(PHYSFS_Dir *opaque)
+static void LZMA_closeArchive(void *opaque)
 {
     LZMAarchive *archive = (LZMAarchive *) opaque;
 
@@ -628,24 +626,22 @@ static void LZMA_closeArchive(PHYSFS_Dir *opaque)
 } /* LZMA_closeArchive */
 
 
-static int LZMA_remove(PHYSFS_Dir *opaque, const char *name)
+static int LZMA_remove(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, 0);
 } /* LZMA_remove */
 
 
-static int LZMA_mkdir(PHYSFS_Dir *opaque, const char *name)
+static int LZMA_mkdir(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, 0);
 } /* LZMA_mkdir */
 
-static int LZMA_stat(PHYSFS_Dir *opaque, const char *filename,
-                     int *exists, PHYSFS_Stat *stat)
+static int LZMA_stat(void *opaque, const char *filename, PHYSFS_Stat *stat)
 {
     const LZMAarchive *archive = (const LZMAarchive *) opaque;
     const LZMAfile *file = lzma_find_file(archive, filename);
 
-    *exists = (file != 0);
     if (!file)
         return 0;
 
@@ -678,24 +674,26 @@ static int LZMA_stat(PHYSFS_Dir *opaque, const char *filename,
 
 const PHYSFS_Archiver __PHYSFS_Archiver_LZMA =
 {
+    CURRENT_PHYSFS_ARCHIVER_API_VERSION,
     {
         "7Z",
         "LZMA (7zip) format",
         "Dennis Schridde <devurandom@gmx.net>",
-        "http://icculus.org/physfs/",
+        "https://icculus.org/physfs/",
+        0,  /* supportsSymlinks */
     },
-    LZMA_openArchive,        /* openArchive() method    */
-    LZMA_enumerateFiles,     /* enumerateFiles() method */
-    LZMA_openRead,           /* openRead() method       */
-    LZMA_openWrite,          /* openWrite() method      */
-    LZMA_openAppend,         /* openAppend() method     */
-    LZMA_remove,             /* remove() method         */
-    LZMA_mkdir,              /* mkdir() method          */
-    LZMA_closeArchive,       /* closeArchive() method   */
-    LZMA_stat                /* stat() method           */
+    LZMA_openArchive,
+    LZMA_enumerateFiles,
+    LZMA_openRead,
+    LZMA_openWrite,
+    LZMA_openAppend,
+    LZMA_remove,
+    LZMA_mkdir,
+    LZMA_stat,
+    LZMA_closeArchive
 };
 
 #endif  /* defined PHYSFS_SUPPORTS_7Z */
 
-/* end of lzma.c ... */
+/* end of archiver_lzma.c ... */
 
