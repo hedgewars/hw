@@ -1606,7 +1606,10 @@ begin
             Scale:= hwFloat2Float(Gear^.Density * hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) / 1.5;
             State:= ord(sprBoing)
             end;
-    PlaySound(sndMelonImpact, true)
+    if Gear^.Kind = gtDuck then
+        PlaySound(sndDuckDrop, true);
+    else
+        PlaySound(sndMelonImpact, true)
 end;
 
 function IsHogLocal(HH: PHedgehog): boolean;
