@@ -1607,7 +1607,7 @@ begin
             State:= ord(sprBoing)
             end;
     if Gear^.Kind = gtDuck then
-        PlaySound(sndDuckDrop, true);
+        PlaySound(sndDuckDrop, true)
     else
         PlaySound(sndMelonImpact, true)
 end;
