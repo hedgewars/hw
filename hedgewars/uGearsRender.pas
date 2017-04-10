@@ -36,6 +36,7 @@ type
             rounded   : array[0..MAXROPEPOINTS + 2] of TVertex2f;
          end;
 procedure RenderGear(Gear: PGear; x, y: LongInt);
+procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
 procedure DrawHHOrder();
 
 var RopePoints: record
@@ -1532,9 +1533,13 @@ begin
             gtDuck: DrawSpriteRotatedF(sprDuck, x, y, 1, Gear^.Tag, Gear^.Angle);
             gtGenericFaller: DrawCircle(x, y, 3, 3, $FF, $00, $00, $FF);  // debug
          end;
-      if Gear^.RenderTimer and (Gear^.Tex <> nil) then
-          DrawTextureCentered(x + 8, y + 8, Gear^.Tex);
     if Gear^.State and gstFrozen <> 0 then untint
+end;
+
+procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
+begin
+if Gear^.RenderTimer and (Gear^.Tex <> nil) then
+    DrawTextureCentered(x + 8, y + 8, Gear^.Tex);
 end;
 
 end.
