@@ -47,7 +47,7 @@ begin
     if cOnlyStats then exit;
     if Length(s) = 0 then
         exit;
-    if Captions[Group].Text <> s then
+    if (Captions[Group].Text <> s) or (Captions[Group].Color <> Color) then
         FreeAndNilTexture(Captions[Group].Tex);
 
     if Captions[Group].Tex = nil then
