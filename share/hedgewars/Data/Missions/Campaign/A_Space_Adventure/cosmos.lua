@@ -184,7 +184,7 @@ function onGameStart()
 		AddAnim(dialog05)
 	elseif checkPointReached == 5 then
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
-		AddAmmo(hero.gear, amJetpack, 99)
+		AddAmmo(hero.gear, amJetpack, 100)
 	end
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
