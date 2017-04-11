@@ -46,6 +46,9 @@ User_Mission_-_Nobody_Laugh.desc="This ain't no joke."
 User_Mission_-_RCPlane_Challenge.name=RC Plane Challenge
 User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
 
+Big_Armory.name=Big Armory
+Big_Armory.desc="You are alone, have a full armory and must defeat 8 hedgehogs before the time runs out."
+
 ClimbHome.name=Climb Home
 ClimbHome.desc="You are far away from home and the water is rising. Climb as high as you can!"
 

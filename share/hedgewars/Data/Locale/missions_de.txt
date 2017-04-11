@@ -52,6 +52,9 @@ User_Mission_-_RCPlane_Challenge.desc="Bist wohl ziemlich eingebildet, was, Flie
 portal.name=Knifflige Portalherausforderung
 portal.desc="Benutze das Portalgerät, um dich schnell und weit zu bewegen; benutze es zum Töten; benutze es mit Vorsicht!"
 
+Big_Armory.name=Großes Arsenal
+Big_Armory.desc="Du bist alleine, hast ein volles Arsenal und musst 8 Igel besiegen, bevor die Zeit abläuft."
+
 Target_Practice_-_Bazooka_easy.name=Zielübung: Bazooka (einfach)
 Target_Practice_-_Bazooka_easy.desc="Nun gut, Soldat: Zerstör einfach die Zielscheiben so schnell, wie du kannst!"
 

@@ -162,6 +162,7 @@ Other Game Styles:
 
 Missions and Campaigns:
  + New scenario: Teamwork 2
+ + New scenario: Big Armory
  + New training: Basic Flying Saucer Training
  + Rope-Knocking Challenge was improved (now awards score based on kills and time; taunts for knocking out hedgehogs)
  + A few campaign missions now save your personal best successes (e.g. fastest finish in Hard Flying) which get shown after you finish them agin
