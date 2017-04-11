@@ -300,7 +300,7 @@ function AfterStartAnim()
                                                   loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
                                                   loc("If you wish to restart the course, hold [Precise] while your turn ends (e.g with Skip)!|") ..
                                                   loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
-                                                  loc("You have ") .. SuddenDeathTurns .. loc(" turns until Sudden Death! Better hurry!"), 1, 0)
+                                                  string.format(loc("You have %d turns until Sudden Death! Better hurry!"), SuddenDeathTurns), 1, 0)
 end
 
 function SkipKillAnim()

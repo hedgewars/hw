@@ -67,7 +67,7 @@ function onGameStart()
 	SpawnUtilityCrate(1543,744,amJetpack)
 	SpawnAmmoCrate(227,442,amDrill)
 
-	ShowMission(loc("Codename: Teamwork"), loc("Scenario"), loc("- Eliminate Unit 3378 |- Feeble Resistance must survive") .. loc("|- Mines Time:") .. " " .. 0 .. " " .. loc("sec"), 0, 0)
+	ShowMission(loc("Codename: Teamwork"), loc("Scenario"), loc("- Eliminate Unit 3378 |- Feeble Resistance must survive") .. loc("|- Mines time: 0 seconds"), 0, 0)
 
 end
 

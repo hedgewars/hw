@@ -13,8 +13,9 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("The big bang")
 local challengeObjectives = loc("Find a way to detonate all the explosives and stay alive!").."|"..
-							loc("Red areas are indestructible").."|"..
-							loc("Green areas are portal-proof")
+							loc("Red areas are indestructible.").."|"..
+							loc("Green areas are portal-proof.").."|"..
+							loc("Mines time: 0 seconds")
 local explosives = {}
 local currentHealth = 1
 local currentDamage = 0

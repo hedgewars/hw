@@ -26,7 +26,7 @@ local dialog01 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!").."|"..
-			loc("Most of the destructible terrain in marked with blue color"), 1, 4500},
+			loc("Most of the destructible terrain in marked with blue color").."|"..loc("Mines time: 0 seconds"), 1, 4500},
 }
 -- crates
 local btorch1Y = 60

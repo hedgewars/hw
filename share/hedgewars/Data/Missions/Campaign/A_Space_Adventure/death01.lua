@@ -16,7 +16,7 @@ local missionName = loc("The last encounter")
 local dialog01 = {}
 -- missions objectives
 local goals = {
-	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!"), 1, 4500},
+	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!") .. "|" .. loc("Mines time: 1.5 seconds"), 1, 4500},
 }
 -- crates
 local teleportCrate = {x = 1935, y = 1830}
