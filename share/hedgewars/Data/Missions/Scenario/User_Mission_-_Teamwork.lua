@@ -25,8 +25,8 @@ function onGameInit()
 	WaterRise = 0
 
 	AddTeam(loc("Feeble Resistance"), 14483456, "Simple", "Island", "Default", "cm_kiwi")
-	player = AddHog(string.format(loc("Pathetic Hog #%d"), 1), 0, 50, "NoHat")
-	p2 = AddHog(string.format(loc("Pathetic Hog #%d"), 2), 0, 20, "NoHat")
+	player = AddHog(loc("Greg"), 0, 50, "NoHat")
+	p2 = AddHog(loc("Mark"), 0, 20, "NoHat")
 
 	--AddTeam("Toxic Team", 	1175851, "Simple", "Island", "Robot","cm_binary")
 	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_cyborg")
@@ -67,7 +67,7 @@ function onGameStart()
 	SpawnUtilityCrate(1543,744,amJetpack)
 	SpawnAmmoCrate(227,442,amDrill)
 
-	ShowMission(loc("Codename: Teamwork"), loc("Scenario"), loc("- Eliminate Unit 3378 |- Feeble Resistance must survive") .. loc("|- Mines time: 0 seconds"), 0, 0)
+	ShowMission(loc("Teamwork"), loc("Scenario"), loc("Eliminate Unit 3378.") .. "|" .. loc("Both your hedgehogs must survive.") .. "|" .. loc("Mines time: 0 seconds"), 0, 0)
 
 end
 
@@ -109,10 +109,10 @@ function onGearDelete(gear)
 	end
 
 	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Codename: Teamwork"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
+		ShowMission(loc("Teamwork"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 		GameOver = true
 	elseif  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then
-		ShowMission(loc("Codename: Teamwork"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+		ShowMission(loc("Teamwork"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 		SetHealth(p2,0)
 		SetHealth(player,0)
