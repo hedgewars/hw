@@ -20,7 +20,9 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "Mushrooms" -- The map to be played
 	Theme = "Nature" -- The theme to be used
-	SuddenDeathTurns = 99999
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 
 	AddTeam(loc("Feeble Resistance"), 14483456, "Simple", "Island", "Default", "cm_kiwi")
 	player = AddHog(string.format(loc("Pathetic Hog #%d"), 1), 0, 50, "NoHat")

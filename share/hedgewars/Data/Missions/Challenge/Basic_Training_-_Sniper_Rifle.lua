@@ -93,6 +93,9 @@ function onGameInit()
 	Map = "Ropes"
 	-- The theme to be used
 	Theme = "Golf"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Create the player team
 	AddTeam(loc("Sniperz"), 14483456, "Simple", "Island", "Default", "cm_crosshair")

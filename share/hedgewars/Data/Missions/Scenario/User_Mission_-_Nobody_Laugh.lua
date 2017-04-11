@@ -12,7 +12,9 @@ function onGameInit()
 
 	Seed = 0
 	GameFlags = gfInfAttack + gfPerHogAmmo +gfDisableWind
-	SuddenDeathTurns = 9999
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	TurnTime = 180000
 	CaseFreq = 0
 	MinesNum = 0

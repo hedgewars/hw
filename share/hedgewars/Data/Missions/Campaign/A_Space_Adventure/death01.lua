@@ -96,7 +96,9 @@ function onGameInit()
 	Explosives = 2
 	Delay = 3
 	HealthCaseAmount = 50
-	SuddenDeathTurns = 100
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	Map = "death01_map"
 	Theme = "Hell"
 

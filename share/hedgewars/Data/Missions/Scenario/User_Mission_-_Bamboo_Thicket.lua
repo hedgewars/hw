@@ -18,7 +18,9 @@ function onGameInit()
 	Explosives = 0 
 	Map = "Bamboo" 
 	Theme = "Bamboo"
-	SuddenDeathTurns = 99999
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 
 	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default", "cm_yinyang")
 	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")

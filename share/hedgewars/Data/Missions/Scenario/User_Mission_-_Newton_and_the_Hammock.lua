@@ -14,7 +14,9 @@ function onGameInit()
 	TurnTime = 60000 
 	CaseFreq = 0
 	MinesTime  = 1000
-	SuddenDeathTurns = 999999
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	HealthCaseProb = 35
 	Explosives = 0
 	MinesNum = 0

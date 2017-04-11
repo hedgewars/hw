@@ -411,7 +411,9 @@ function onGameInit()
 	Delay = 10 
   Map = "Hogville"
 	Theme = "Nature"
-  SuddenDeathTurns = 3000
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 
   AddHogs()
   AnimInit()

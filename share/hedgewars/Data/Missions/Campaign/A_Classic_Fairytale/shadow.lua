@@ -847,7 +847,9 @@ function onGameInit()
 	Delay = 10 
 	Map = "A_Classic_Fairytale_shadow"
 	Theme = "Nature"
-    SuddenDeathTurns = 3000
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 
   AddHogs()
   PlaceHogs()

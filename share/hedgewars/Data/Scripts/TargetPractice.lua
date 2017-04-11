@@ -136,6 +136,9 @@ function TargetPracticeMission(params)
 		CaseFreq = 0
 		MinesNum = 0
 		Explosives = 0
+		-- Disable Sudden Death
+		WaterRise = 0
+		HealthDecrease = 0
 
 		SetWind(params.wind)
 

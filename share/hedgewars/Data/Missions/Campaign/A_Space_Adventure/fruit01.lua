@@ -104,7 +104,9 @@ function onGameInit()
 	MinesTime = 1
 	Explosives = 0
 	Delay = 3
-	SuddenDeathTurns = 100
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	HealthCaseAmount = 50
 	Map = "fruit01_map"
 	Theme = "Fruit"

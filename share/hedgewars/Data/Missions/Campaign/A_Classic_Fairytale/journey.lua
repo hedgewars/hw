@@ -944,7 +944,9 @@ function onGameInit()
     Map = "A_Classic_Fairytale_journey"
     Theme = "Nature"
 
-    SuddenDeathTurns = 3000
+    -- Disable Sudden Death
+    HealthDecrease = 0
+    WaterRise = 0
 
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")

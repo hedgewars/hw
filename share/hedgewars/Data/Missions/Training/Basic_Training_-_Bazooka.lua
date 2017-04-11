@@ -89,6 +89,9 @@ function onGameInit()
 	Map = "Bamboo"
 	-- The theme to be used
 	Theme = "Bamboo"
+	-- Setting these 2 values to 0 is the official way to disable Sudden Death cleanly
+	HealthDecrease = 0	-- Sudden Death damage
+	WaterRise = 0		-- Water rise in Sudden Death
 
 	-- Create the player team
 	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default", "cm_crosshair")

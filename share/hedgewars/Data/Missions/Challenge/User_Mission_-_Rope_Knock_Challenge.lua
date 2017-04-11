@@ -123,6 +123,10 @@ function onGameInit()
 	Map = "Ropes"
 	Theme = "Eyes"
 
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
+
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0

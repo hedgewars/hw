@@ -97,6 +97,9 @@ function SpeedShoppaMission(params)
 		Delay = 10 
 		Theme = params.theme
 		Map = params.map
+		-- Disable Sudden Death
+		WaterRise = 0
+		HealthDecrease = 0
 	
 		AddTeam(params.teamName, params.clanColor, params.teamGrave, "Castle", "Default", params.teamFlag)
 		playerHog = AddHog(params.hogName, 0, 1, params.hogHat)
