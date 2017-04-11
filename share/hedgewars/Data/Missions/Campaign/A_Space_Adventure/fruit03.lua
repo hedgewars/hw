@@ -11,8 +11,9 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local missionName = loc("Precise shooting")
-local timeLeft = 10000
-local lastWeaponUsed = amSniperRifle
+local timeLeft = 0
+local lastWeaponUsed = amNothing
+local firstTurn = true
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
 	loc("You can only use the sniper rifle or the watermelon bomb.").."|"..
 	loc("You'll have only 2 watermelon bombs during the game.").."|"..
@@ -132,9 +133,11 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog == hero.gear then
-		if GetAmmoCount(hero.gear, amSkip) == 0 then
+		if firstTurn then
+			TurnTimeLeft = 25000
+		end
+		if lastWeaponUsed == amSkip then
 			TurnTimeLeft = TurnTime + timeLeft
-			AddAmmo(hero.gear, amSkip, 1)
 		end
 		timeLeft = 0
 	end
@@ -287,8 +290,8 @@ function startBattle()
 	AnimSwitchHog(enemiesOdd[table.getn(enemiesOdd)].gear)
 	TurnTimeLeft = 0
 	-- these 2 are needed in order hero has 10 sec more in the first turn
-	timeLeft = 10000
-	AddAmmo(hero.gear, amSkip, 0)
+	timeLeft = 0
+	AddAmmo(hero.gear, amSkip, 100)
 end
 
 function isHog(gear)
