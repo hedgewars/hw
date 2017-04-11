@@ -19,7 +19,8 @@ function onGameInit()
 	Seed = 1
 	GameFlags = gfInfAttack + gfInvulnerable + gfOneClanMode + gfSolidLand
 
-	TurnTime = 90 * 1000
+	-- Basically unlimited turn time
+	TurnTime = 100000000
 
 	Map = "Ropes"
 	Theme = "Eyes"
