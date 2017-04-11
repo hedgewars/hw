@@ -39,11 +39,11 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 	
-	AddTeam(playerTeamName, 0xFF0000, "Bone", "Island", "Classic", "cm_scout")
+	AddTeam(playerTeamName, 0xFF0000, "Bone", "Island", "Default", "cm_scout")
 	playerHog = AddHog(loc("Ultrasoldier"), 0, 100, "Terminator_Glasses")
 	SetGearPosition(playerHog, 543, 1167)
 
-	AddTeam(enemyTeamName, 0xF5F808, "Earth", "Island", "Classic", "cm_galaxy")
+	AddTeam(enemyTeamName, 0xF5F808, "Earth", "Island", "Default", "cm_galaxy")
 	for i=1,8 do
 		local hogID = AddHog(enemyTeam1[i].name, 0, 100, "NoHat")
 		table.insert(enemyHogs, hogID)
@@ -155,15 +155,6 @@ function onGameTick20()
 			if toleranceTimer ~= nil then
 				if toleranceTimer % 1000 == 0 and toleranceTimer > 0 and toleranceTimer <= 5000 then
 					AddCaption(string.format(loc("Mission failure in %d s"), div(toleranceTimer, 1000)), 0xFFFFFFFF, capgrpGameState)
-				end
-				if toleranceTimer == 4000 then
-					PlaySound(sndCountdown4)
-				elseif toleranceTimer == 3000 then
-					PlaySound(sndCountdown3)
-				elseif toleranceTimer == 2000 then
-					PlaySound(sndCountdown2)
-				elseif toleranceTimer == 1000 then
-					PlaySound(sndCountdown1)
 				end
 				if waitGears <= 0 then
 					if toleranceTimer <= 0 then
