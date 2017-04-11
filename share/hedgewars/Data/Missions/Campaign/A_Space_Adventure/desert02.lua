@@ -15,7 +15,7 @@ local startChallenge = false
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!" .. "|" .. loc("Mines time: 1 second")), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!") .. "|" .. loc("Mines time: 1 second"), 1, 4500},
 }
 -- health crates
 healthX = 565

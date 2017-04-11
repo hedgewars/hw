@@ -23,7 +23,7 @@ local dialog01 = {}
 local dialog02 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta") .. loc("Mines time: 0 seconds"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta") .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
 	[dialog02] = {missionName, loc("Win"), loc("Congratulations, you collected the device part!"), 1, 3500},
 }
 -- crates
