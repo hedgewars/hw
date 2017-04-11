@@ -161,7 +161,8 @@ Other Game Styles:
  * Disable Sudden Death for good in Shoppa game scheme, some game styles and mission maps
 
 Missions and Campaigns:
- + Added Basic Flying Saucer Training
+ + New scenario: Teamwork 2
+ + New training: Basic Flying Saucer Training
  + Rope-Knocking Challenge was improved (now awards score based on kills and time; taunts for knocking out hedgehogs)
  + A few campaign missions now save your personal best successes (e.g. fastest finish in Hard Flying) which get shown after you finish them agin
  + A Space Adventure shows 2 flowers over fully completed planets (with side missions)

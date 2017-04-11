@@ -22,6 +22,9 @@ User_Mission_-_Diver.desc="Diese amphibische Angriffstrategie ist schwieriger, a
 User_Mission_-_Teamwork.name=Teamwork
 User_Mission_-_Teamwork.desc="Ab und zu … tut Liebe weh."
 
+User_Mission_-_Teamwork_2.name=Teamwork 2
+User_Mission_-_Teamwork_2.desc="Benutze deine Teamfähigkeiten, um den kybernetischen Feind erneut zu besiegen!"
+
 User_Mission_-_Spooky_Tree.name=Spukiger Baum
 User_Mission_-_Spooky_Tree.desc="Viele Kisten hier draußen. Ich hoffe jedenfalls, dass dieser Vogel hier nicht hungrig wird."
 

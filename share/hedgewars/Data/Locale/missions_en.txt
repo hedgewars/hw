@@ -19,6 +19,9 @@ User_Mission_-_Diver.desc="This 'amphibious assault' thing is harder than it loo
 User_Mission_-_Teamwork.name=Teamwork
 User_Mission_-_Teamwork.desc="Sometimes, love hurts."
 
+User_Mission_-_Teamwork_2.name=Teamwork 2
+User_Mission_-_Teamwork_2.desc="Use your teamwork skills to defeat the cybernetic enemy once again!"
+
 User_Mission_-_Spooky_Tree.name=Spooky Tree
 User_Mission_-_Spooky_Tree.desc="Lots of crates out here. I sure hope that bird ain't feeling hungry."
 
