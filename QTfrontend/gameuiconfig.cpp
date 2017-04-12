@@ -183,10 +183,9 @@ void GameUIConfig::reloadVideosValues(void)
     Form->ui.pageOptions->setDefaultOptions();
 
     // then load user configuration
-    Form->ui.pageOptions->framerateBox->setCurrentIndex(
-            Form->ui.pageOptions->framerateBox->findData(
-                        value("videorec/framerate", rec_Framerate()).toString() + " fps",
-                    Qt::MatchExactly) );
+    int framerateBoxIndex = Form->ui.pageOptions->framerateBox->findData(value("videorec/framerate", rec_Framerate()).toUInt());
+    if(framerateBoxIndex != -1)
+        Form->ui.pageOptions->framerateBox->setCurrentIndex(framerateBoxIndex);
     Form->ui.pageOptions->bitrateBox->setValue(value("videorec/bitrate", rec_Bitrate()).toUInt());
     bool useGameRes = value("videorec/usegameres",Form->ui.pageOptions->checkUseGameRes->isChecked()).toBool();
     if (useGameRes)
@@ -625,10 +624,7 @@ QRect GameUIConfig::rec_Resolution()
 
 int GameUIConfig::rec_Framerate()
 {
-    // remove the "fps" label
-    QString fpsText = Form->ui.pageOptions->framerateBox->currentText();
-    QStringList fpsList = fpsText.split(" ");
-    return fpsList.first().toInt();
+    return Form->ui.pageOptions->framerateBox->itemData(Form->ui.pageOptions->framerateBox->currentIndex()).toInt();
 }
 
 int GameUIConfig::rec_Bitrate()

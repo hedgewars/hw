@@ -818,11 +818,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
         groupVideoRec->layout()->addWidget(labelFramerate, 6, 0);
 
         framerateBox = new QComboBox(groupVideoRec);
-        framerateBox->addItem("24 fps", 24);
-        framerateBox->addItem("25 fps", 25);
-        framerateBox->addItem("30 fps", 30);
-        framerateBox->addItem("50 fps", 50);
-        framerateBox->addItem("60 fps", 60);
+        framerateBox->addItem(QComboBox::tr("24 FPS"), 24);
+        framerateBox->addItem(QComboBox::tr("25 FPS"), 25);
+        framerateBox->addItem(QComboBox::tr("30 FPS"), 30);
+        framerateBox->addItem(QComboBox::tr("50 FPS"), 50);
+        framerateBox->addItem(QComboBox::tr("60 FPS"), 60);
         groupVideoRec->layout()->addWidget(framerateBox, 6, 1);
 
         // label for Bitrate
