@@ -279,6 +279,8 @@ void PageTraining::updateInfo()
             else
                 btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
+            btnPreview->setWhatsThis(tr("Start fighting"));
+
             QString realName = list->currentItem()->data(
                                     Qt::UserRole).toString();
 

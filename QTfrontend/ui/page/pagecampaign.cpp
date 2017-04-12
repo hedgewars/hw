@@ -44,6 +44,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
 
     // set this as default image first time page is created, this will change in hwform.cpp
     btnPreview = formattedButton(":/res/campaign/A_Classic_Fairytale/first_blood.png", true);
+    btnPreview->setWhatsThis(tr("Start fighting"));
     infoLayout->setAlignment(btnPreview, Qt::AlignHCenter | Qt::AlignVCenter);
 
     lbldescription = new QLabel(this);
@@ -87,6 +88,7 @@ QLayout * PageCampaign::footerLayoutDefinition()
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStartCampaign = new QPushButton();
+    BtnStartCampaign->setWhatsThis(tr("Start fighting"));
     BtnStartCampaign->setStyleSheet("padding: 5px 10px");
     BtnStartCampaign->setText(QPushButton::tr("Start"));
     BtnStartCampaign->setMinimumWidth(sz.width() + 60);

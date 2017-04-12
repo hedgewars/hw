@@ -310,10 +310,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
             // Stereo spacing
 
             QLabel * lblStereo = new QLabel(groupGame);
-            lblStereo->setText(QLabel::tr("Stereo rendering"));
+            lblStereo->setText(QLabel::tr("Stereoscopy"));
             groupGame->layout()->addWidget(lblStereo, 4, 0);
 
             CBStereoMode = new QComboBox(groupGame);
+            CBStereoMode->setWhatsThis(QComboBox::tr("Stereoscopy creates an illusion of depth when you wear 3D glasses."));
             CBStereoMode->setMaxVisibleItems(50);
             CBStereoMode->addItem(QComboBox::tr("Disabled"));
             CBStereoMode->addItem(QComboBox::tr("Red/Cyan"));
@@ -419,6 +420,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBFrontendEffects = new QCheckBox(groupFrontend);
             CBFrontendEffects->setText(QCheckBox::tr("Visual effects"));
+            CBFrontendEffects->setWhatsThis(QCheckBox::tr("Enable visual effects such as animated menu transitions and falling stars"));
             groupFrontend->layout()->addWidget(CBFrontendEffects, 1, 0);
         }
 
@@ -676,6 +678,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBNameWithDate = new QCheckBox(groupMisc);
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+            CBNameWithDate->setWhatsThis(QCheckBox::tr("If enabled, Hedgewars adds the date and time in the form “YYYY-MM-DD_hh-mm” for automatically created demos."));
             groupMisc->layout()->addWidget(CBNameWithDate, 3, 0, 1, 2);
 
             // Associate file extensions
