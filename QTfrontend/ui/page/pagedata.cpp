@@ -57,7 +57,7 @@ QLayout * PageDataDownload::footerLayoutDefinition()
     pbHome = addButton(":/res/home.png", bottomLayout, 1, true, Qt::AlignBottom);
     pbHome->setMinimumHeight(50);
     pbHome->setMinimumWidth(50);
-    pbHome->setWhatsThis(tr("Return to the start page"));
+    pbHome->setWhatsThis(tr("Load the start page"));
 
     pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 2, false, Qt::AlignBottom);
     pbOpenDir->setStyleSheet("padding: 5px 10px");
