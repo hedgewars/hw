@@ -176,6 +176,7 @@ QLayout * PageRoomsList::footerLayoutDefinition()
 
     BtnAdmin = addButton(tr("Admin features"), bottomLayout, 0, false, Qt::AlignBottom);
     BtnAdmin->setMinimumSize(180, 50);
+    BtnAdmin->setStyleSheet("padding: 5px 10px");
     BtnAdmin->setWhatsThis(tr("Open server administration page"));
 
     return bottomLayout;

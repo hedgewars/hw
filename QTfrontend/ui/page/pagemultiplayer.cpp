@@ -59,14 +59,14 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStartMPGame = new QPushButton();
+    BtnStartMPGame->setStyleSheet("padding: 5px 10px");
     BtnStartMPGame->setText(tr("Start"));
     BtnStartMPGame->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
-    BtnStartMPGame->setMinimumWidth(sz.width() + 60);
     BtnStartMPGame->setIcon(lp);
     BtnStartMPGame->setFixedHeight(50);
     BtnStartMPGame->setIconSize(sz);
     BtnStartMPGame->setFlat(true);
-    BtnStartMPGame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    BtnStartMPGame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     footerLayout->addStretch();
     footerLayout->addWidget(BtnStartMPGame, 0, Qt::AlignBottom);

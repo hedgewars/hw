@@ -87,6 +87,7 @@ QLayout * PageCampaign::footerLayoutDefinition()
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStartCampaign = new QPushButton();
+    BtnStartCampaign->setStyleSheet("padding: 5px 10px");
     BtnStartCampaign->setText(QPushButton::tr("Start"));
     BtnStartCampaign->setMinimumWidth(sz.width() + 60);
     BtnStartCampaign->setIcon(lp);

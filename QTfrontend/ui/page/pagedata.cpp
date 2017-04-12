@@ -60,6 +60,7 @@ QLayout * PageDataDownload::footerLayoutDefinition()
     pbHome->setWhatsThis(tr("Return to the start page"));
 
     pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 2, false, Qt::AlignBottom);
+    pbOpenDir->setStyleSheet("padding: 5px 10px");
     pbOpenDir->setMinimumHeight(50);
 
     bottomLayout->setStretch(2, 1);

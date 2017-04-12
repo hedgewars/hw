@@ -62,7 +62,7 @@ QLayout * PagePlayDemo::footerLayoutDefinition()
     BtnPlayDemo = addButton(tr("Play demo"), bottomLayout, 0, false, Qt::AlignBottom);
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
-    BtnPlayDemo->setMinimumWidth(sz.width());
+    BtnPlayDemo->setStyleSheet("padding: 5px 10px");
     BtnPlayDemo->setIcon(lp);
     BtnPlayDemo->setFixedHeight(50);
     BtnPlayDemo->setIconSize(sz);

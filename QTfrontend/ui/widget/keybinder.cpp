@@ -60,6 +60,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     {
         QPushButton * btnResetAll = new QPushButton(resetButtonText);
         catListContainer->addWidget(btnResetAll);
+        btnResetAll->setStyleSheet("padding: 5px 10px");
         btnResetAll->setFixedHeight(40);
         catListContainer->setStretch(1, 0);
         catListContainer->setSpacing(10);

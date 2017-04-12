@@ -107,6 +107,7 @@ QLayout * PageTraining::footerLayoutDefinition()
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     btnStart = new QPushButton();
+    btnStart->setStyleSheet("padding: 5px 10px");
     btnStart->setText(QPushButton::tr("Start"));
     btnStart->setWhatsThis(tr("Start fighting"));
     btnStart->setMinimumWidth(sz.width() + 60);
