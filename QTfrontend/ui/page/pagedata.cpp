@@ -54,7 +54,12 @@ QLayout * PageDataDownload::footerLayoutDefinition()
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     bottomLayout->setStretch(0, 1);
 
-    pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 1, false, Qt::AlignBottom);
+    pbHome = addButton(":/res/home.png", bottomLayout, 1, true, Qt::AlignBottom);
+    pbHome->setMinimumHeight(50);
+    pbHome->setMinimumWidth(50);
+    pbHome->setWhatsThis(tr("Return to the start page"));
+
+    pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 2, false, Qt::AlignBottom);
     pbOpenDir->setMinimumHeight(50);
 
     bottomLayout->setStretch(2, 1);
@@ -67,6 +72,7 @@ void PageDataDownload::connectSignals()
     connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
     connect(this, SIGNAL(goBack()), this, SLOT(onPageLeave()));
     connect(pbOpenDir, SIGNAL(clicked()), this, SLOT(openPackagesDir()));
+    connect(pbHome, SIGNAL(clicked()), this, SLOT(fetchList()));
 }
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
@@ -85,7 +91,12 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 void PageDataDownload::request(const QUrl &url)
 {
     QUrl finalUrl;
-    if(url.host().isEmpty())
+    if(url.isEmpty())
+    {
+        qWarning() << "Empty URL requested";
+        return;
+    }
+    else if(url.host().isEmpty())
         finalUrl = QUrl("https://www.hedgewars.org" + url.path());
     else
         finalUrl = url;
@@ -198,7 +209,6 @@ void PageDataDownload::fetchList()
 {
     request(QUrl("https://hedgewars.org/content.html"));
 }
-
 
 void PageDataDownload::onPageLeave()
 {
