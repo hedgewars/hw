@@ -828,7 +828,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
         // label for Bitrate
 
         QLabel *labelBitrate = new QLabel(groupVideoRec);
-        labelBitrate->setText(QLabel::tr("Bitrate (Kbps)"));
+        //: “Kibit/s” is the symbol for 1024 bits per second
+        labelBitrate->setText(QLabel::tr("Bitrate (Kibit/s)"));
         groupVideoRec->layout()->addWidget(labelBitrate, 6, 2);
 
         // bitrate
@@ -836,6 +837,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         bitrateBox = new QSpinBox(groupVideoRec);
         bitrateBox->setRange(100, 5000);
         bitrateBox->setSingleStep(100);
+        bitrateBox->setWhatsThis(QSpinBox::tr("Specify the bitrate of recorded videos as a multiple of 1024 bits per second"));
         groupVideoRec->layout()->addWidget(bitrateBox, 6, 3);
 
         // button 'set default options'
