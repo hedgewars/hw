@@ -32,6 +32,7 @@
 #include <QSlider>
 #include <QSignalMapper>
 #include <QColorDialog>
+#include <QMessageBox>
 #include <QStandardItemModel>
 #include <QDebug>
 
@@ -985,7 +986,10 @@ void PageOptions::requestEditSelectedTeam()
 
 void PageOptions::requestDeleteSelectedTeam()
 {
-    emit deleteTeamRequested(CBTeamName->currentText());
+    if(CBTeamName->count() > 1)
+        emit deleteTeamRequested(CBTeamName->currentText());
+    else
+        QMessageBox::warning(this, tr("Can't delete last team"), tr("You can't delete the last team!"));
 }
 
 void PageOptions::setTeamOptionsEnabled(bool enabled)

@@ -462,9 +462,10 @@ void HWForm::UpdateTeamsLists()
         QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8();
         QString teamName;
 
+        // Default team
         if (currentNickName.isEmpty())
         {
-            teamName = tr("DefaultTeam");
+            teamName = tr("Team 1");
         }
         else
         {
@@ -474,6 +475,15 @@ void HWForm::UpdateTeamsLists()
         HWTeam defaultTeam(teamName);
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
+
+        // Team 2, Team 3, Team 4
+        for(int i=2; i<=4; i++)
+        {
+            teamName = tr("Team %1").arg(i);
+            HWTeam numberTeam(teamName);
+            numberTeam.saveToFile();
+            teamslist.push_back(teamName);
+        }
     }
 
     ui.pageOptions->CBTeamName->clear();
