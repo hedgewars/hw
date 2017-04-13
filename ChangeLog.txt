@@ -185,6 +185,8 @@ Frontend:
  + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
  + Additional button for just randomizing theme that will not change your selected map
  + Randomizing map/theme in online-mode will not include DLC-content
+ + New teams start with a random grave and fort
+ + Hedgewars creates 4 teams instead of 1 on its first launch
  * Campaign screen does no longer show AI-controlled teams
  * Campaign names and campaign mission names can now be translated
  * Creating randomized teams now randomizes (almost) every aspect
