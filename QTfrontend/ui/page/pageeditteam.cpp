@@ -77,17 +77,29 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         HHNameEdit[i]->setFixedHeight(36);
         HHNameEdit[i]->setWhatsThis(tr("This hedgehog's name"));
         HHNameEdit[i]->setStyleSheet("padding: 6px;");
-        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1);
+        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1, 1, 3);
 
-        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 3, 1, 1, true);
+        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 5, 1, 1, true);
         btnRandomHogName[i]->setFixedHeight(HHNameEdit[i]->height());
         btnRandomHogName[i]->setWhatsThis(tr("Randomize this hedgehog's name"));
     }
 
+    btnRandomHats = new QPushButton();
+    btnRandomHats->setText(tr("Random Hats"));
+    btnRandomHats->setStyleSheet("padding: 6px 10px;");
+    GBHLayout->addWidget(btnRandomHats, 9, 1, 1, 1, Qt::AlignCenter);
+    btnRandomHats->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    btnRandomNames = new QPushButton();
+    btnRandomNames->setText(tr("Random Names"));
+    btnRandomNames->setStyleSheet("padding: 6px 10px;");
+    GBHLayout->addWidget(btnRandomNames, 9, 2, 1, 1, Qt::AlignCenter);
+    btnRandomNames->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
     btnRandomTeam = new QPushButton();
     btnRandomTeam->setText(tr("Random Team"));
     btnRandomTeam->setStyleSheet("padding: 6px 10px;");
-    GBHLayout->addWidget(btnRandomTeam, 9, 0, 1, 4, Qt::AlignCenter);
+    GBHLayout->addWidget(btnRandomTeam, 9, 3, 1, 1, Qt::AlignCenter);
     btnRandomTeam->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     vbox1->addWidget(GBoxHedgehogs);
@@ -219,6 +231,9 @@ void PageEditTeam::connectSignals()
     }
 
     connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomTeam()));
+    connect(btnRandomNames, SIGNAL(clicked()), this, SLOT(setRandomHogNames()));
+    connect(btnRandomHats, SIGNAL(clicked()), this, SLOT(setRandomHats()));
+
     connect(btnRandomTeamName, SIGNAL(clicked()), this, SLOT(setRandomTeamName()));
     connect(btnRandomGrave, SIGNAL(clicked()), this, SLOT(setRandomGrave()));
     connect(btnRandomFlag, SIGNAL(clicked()), this, SLOT(setRandomFlag()));
@@ -407,7 +422,21 @@ void PageEditTeam::deleteTeam(const QString & name)
 void PageEditTeam::setRandomTeam()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomEverything(team, true);
+    HWNamegen::teamRandomEverything(team, HWNamegen::rtmEverything);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomHogNames()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomEverything(team, HWNamegen::rtmHogNames);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomHats()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomEverything(team, HWNamegen::rtmHats);
     loadTeam(team);
 }
 

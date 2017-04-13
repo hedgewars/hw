@@ -28,6 +28,12 @@ class HWTeam;
 class HWNamegen
 {
     public:
+        enum RandomTeamMode
+        {
+            rtmEverything = 0,
+            rtmHogNames = 1,
+            rtmHats = 2
+        };
 
         static void teamRandomTeamName(HWTeam & team);
         static void teamRandomGrave(HWTeam & team);
@@ -35,7 +41,8 @@ class HWNamegen
         static void teamRandomFlag(HWTeam & team);
         static void teamRandomVoice(HWTeam & team);
         static void teamRandomHogName(HWTeam & team, const int HedgehogNumber);
-        static void teamRandomEverything(HWTeam & team, const bool changeteamname);
+        static void teamRandomEverything(HWTeam & team, const enum RandomTeamMode mode);
+        static void teamRandomHats(HWTeam & team);
 
     private:
         HWNamegen();

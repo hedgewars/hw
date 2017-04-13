@@ -60,7 +60,7 @@ void HWNamegen::teamRandomFort(HWTeam & team)
     team.setFort(getRandomFort());
 }
 
-void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
+void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
 {
     // load types if not already loaded
     if (!typesAvailable)
@@ -75,7 +75,7 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
     int kind = (rand()%(TypesHatnames.size()));
 
     // pick team name based on hat
-    if (changeteamname)
+    if (mode == HWNamegen::rtmEverything)
     {
         team.setName(getRandomTeamName(kind));
         team.setGrave(getRandomGrave());
@@ -95,13 +95,12 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
-        if ((TypesHatnames[kind].size()) > 0)
+        if (((TypesHatnames[kind].size()) > 0) && (mode == HWNamegen::rtmEverything || mode == HWNamegen::rtmHats))
         {
             HWHog hh = team.hedgehog(i);
             hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
             team.setHedgehog(i,hh);
         }
-
         // there is a chance that this hog has the same hat as the previous one
         // let's reuse the hat-specific dict in this case
         if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
@@ -111,7 +110,8 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
         }
 
         // give each hedgehog a random name
-        HWNamegen::teamRandomHogName(team,i,dict);
+        if (mode == HWNamegen::rtmHogNames || mode == HWNamegen::rtmEverything)
+            HWNamegen::teamRandomHogName(team,i,dict);
     }
 
 }

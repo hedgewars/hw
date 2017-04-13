@@ -75,13 +75,16 @@ class PageEditTeam : public AbstractPage
         void loadTeam(const HWTeam & team);
 
         // page 1
+        QPushButton * btnRandomTeam;
+        QPushButton * btnRandomNames;
+        QPushButton * btnRandomHats;
+
         QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
         QPushButton * btnRandomTeamName;
         QPushButton * btnRandomGrave;
         QPushButton * btnRandomFlag;
         QPushButton * btnRandomVoice;
         QPushButton * btnRandomFort;
-        QPushButton * btnRandomTeam;
         QPushButton * btnTestSound;
 
         void lazyLoad();
@@ -89,6 +92,9 @@ class PageEditTeam : public AbstractPage
     private slots:
         void saveTeam();
         void setRandomTeam();
+        void setRandomHogNames();
+        void setRandomHats();
+
         void setRandomTeamName();
         void setRandomGrave();
         void setRandomFlag();
