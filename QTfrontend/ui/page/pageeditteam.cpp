@@ -150,12 +150,45 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     CBGrave->setFixedHeight(44);
     GBTLayout->addWidget(CBGrave, 2, 1, 1, 2);
 
+    // Player flags, combobox to select flag
     CBFlag = new QComboBox(GBoxTeam);
     CBFlag->setMaxCount(65535);
     CBFlag->setMaxVisibleItems(50);
     CBFlag->setIconSize(QSize(22, 15));
     CBFlag->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     GBTLayout->addWidget(CBFlag, 3, 1, 1, 2);
+
+    // CPU level flag. Static image, only displayed when computer player is selected
+    QImage imgBotlevels = QImage("physfs://Graphics/botlevels.png");
+
+    int botlevelOffsets[5]= { 19, 14, 10, 6, 0 };   
+
+    for(int i=0; i<5; i++) {
+        QImage imgCPU = QImage("physfs://Graphics/Flags/cpu.png");
+        QPainter painter(&imgCPU);
+        painter.drawImage(botlevelOffsets[i], 0, imgBotlevels, botlevelOffsets[i]);
+
+        pixCPU[i] = QPixmap::fromImage(imgCPU);
+    }
+
+    QHBoxLayout* hboxCPU = new QHBoxLayout();
+    hboxCPU->setContentsMargins(0, 0, 0, 0);
+
+    hboxCPUWidget = new QWidget();
+    hboxCPUWidget->setLayout(hboxCPU);
+
+    CPUFlag = new QLabel();
+    CPUFlag->setPixmap(pixCPU[0]);
+    CPUFlag->setFixedHeight(38);
+
+    hboxCPU->addWidget(CPUFlag);
+
+    CPUFlagLabel = new QLabel("CPU");
+    CPUFlagLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    hboxCPU->addWidget(CPUFlagLabel);
+
+    hboxCPUWidget->setHidden(true);
+    GBTLayout->addWidget(hboxCPUWidget, 3, 1, 1, 1);
 
     btnRandomTeamName = addButton(":/res/dice.png", GBTLayout, 0, 3, 1, 1, true);
     btnRandomTeamName->setWhatsThis(tr("Randomize the team name"));
@@ -233,6 +266,8 @@ void PageEditTeam::connectSignals()
     connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomTeam()));
     connect(btnRandomNames, SIGNAL(clicked()), this, SLOT(setRandomHogNames()));
     connect(btnRandomHats, SIGNAL(clicked()), this, SLOT(setRandomHats()));
+
+    connect(CBTeamLvl, SIGNAL(currentIndexChanged(const int)), this, SLOT(CBTeamLvl_activated(const int)));
 
     connect(btnRandomTeamName, SIGNAL(clicked()), this, SLOT(setRandomTeamName()));
     connect(btnRandomGrave, SIGNAL(clicked()), this, SLOT(setRandomGrave()));
@@ -358,6 +393,20 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 {
     QPixmap pix("physfs://Forts/" + fortname + "L.png");
     FortPreview->setPixmap(pix);
+}
+
+void PageEditTeam::CBTeamLvl_activated(const int index)
+{
+    CBFlag->setHidden(index != 0);
+    btnRandomFlag->setHidden(index != 0);
+
+    if(index > 0) 
+    {
+        int cpuLevel = 6 - index;
+        CPUFlag->setPixmap(pixCPU[cpuLevel - 1]);
+        CPUFlagLabel->setText(tr("CPU %1").arg(cpuLevel));
+    }
+    hboxCPUWidget->setHidden(index == 0);
 }
 
 void PageEditTeam::testSound()

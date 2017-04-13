@@ -43,6 +43,7 @@ class PageEditTeam : public AbstractPage
         void deleteTeam(const QString & name);
 
     public slots:
+        void CBTeamLvl_activated(const int index);
         void CBFort_activated(const QString & gravename);
 
     private:
@@ -56,6 +57,10 @@ class PageEditTeam : public AbstractPage
         SquareLabel *FortPreview;
         QComboBox *CBGrave;
         QComboBox *CBFlag;
+        QLabel *CPUFlag;
+        QLabel *CPUFlagLabel;
+        QWidget *hboxCPUWidget;
+        QPixmap pixCPU[5];
         QComboBox *CBTeamLvl;
         QComboBox *CBVoicepack;
         QGroupBox *GBoxBinds;

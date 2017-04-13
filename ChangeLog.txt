@@ -195,6 +195,7 @@ Frontend:
  * Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
  * Fix language names in language list being always in English
  * Prevent starting game with >48 hogs (because engine doesn't support it yet)
+ * Team editor Fix flag being selectable for computer players although it had no effect
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
