@@ -83,9 +83,9 @@ class PageEditTeam : public AbstractPage
 
     private slots:
         void saveTeam();
-        void setRandomNames();
+        void setRandomTeam();
 
-        void setRandomName(int hh_index);
+        void setRandomHogName(int hh_index);
 
         /// Plays a random voice sound of the currently edited team.
         void testSound();

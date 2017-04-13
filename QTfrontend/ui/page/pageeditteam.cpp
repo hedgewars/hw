@@ -187,7 +187,7 @@ void PageEditTeam::connectSignals()
     signalMapper2 = new QSignalMapper(this);
 
     connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
-    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomName(int)));
+    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomHogName(int)));
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
@@ -198,7 +198,7 @@ void PageEditTeam::connectSignals()
         signalMapper2->setMapping(btnRandomHogName[i], i);
     }
 
-    connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomNames()));
+    connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomTeam()));
 
     connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 
@@ -350,9 +350,9 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
     // Mostly create a default team, with 2 important exceptions:
     HWTeam newTeam(name);
     // Randomize grave to make it less likely that default teams have equal graves (important for resurrector)
-    newTeam.setGrave(HWNamegen::getRandomGrave());
+    HWNamegen::teamRandomGrave(newTeam);
     // Randomize fort for greater variety in fort mode with default teams
-    newTeam.setFort(HWNamegen::getRandomFort());
+    HWNamegen::teamRandomFort(newTeam);
     loadTeam(newTeam);
 }
 
@@ -379,17 +379,17 @@ void PageEditTeam::deleteTeam(const QString & name)
         HWTeam(name).deleteFile();
 }
 
-void PageEditTeam::setRandomNames()
+void PageEditTeam::setRandomTeam()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomNames(team, true);
+    HWNamegen::teamRandomEverything(team, true);
     loadTeam(team);
 }
 
-void PageEditTeam::setRandomName(int hh_index)
+void PageEditTeam::setRandomHogName(int hh_index)
 {
     HWTeam team = data();
-    HWNamegen::teamRandomName(team,hh_index);
+    HWNamegen::teamRandomHogName(team,hh_index);
     loadTeam(team);
 }
 

@@ -33,8 +33,27 @@ QList<QStringList> HWNamegen::TypesTeamnames;
 QList<QStringList> HWNamegen::TypesHatnames;
 bool HWNamegen::typesAvailable = false;
 
+void HWNamegen::teamRandomFlag(HWTeam & team)
+{
+    team.setFlag(getRandomFlag());
+}
 
-void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
+void HWNamegen::teamRandomVoice(HWTeam & team)
+{
+    team.setVoicepack(getRandomVoice());
+}
+
+void HWNamegen::teamRandomGrave(HWTeam & team)
+{
+    team.setGrave(getRandomGrave());
+}
+
+void HWNamegen::teamRandomFort(HWTeam & team)
+{
+    team.setFort(getRandomFort());
+}
+
+void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
 {
     // load types if not already loaded
     if (!typesAvailable)
@@ -87,21 +106,21 @@ void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
         }
 
         // give each hedgehog a random name
-        HWNamegen::teamRandomName(team,i,dict);
+        HWNamegen::teamRandomHogName(team,i,dict);
     }
 
 }
 
-void HWNamegen::teamRandomName(HWTeam & team, const int HedgehogNumber)
+void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber)
 {
     QStringList dicts = dictsForHat(team.hedgehog(HedgehogNumber).Hat);
 
     QStringList dict = dictContents(dicts[rand()%(dicts.size())]);
 
-    teamRandomName(team, HedgehogNumber, dict);
+    teamRandomHogName(team, HedgehogNumber, dict);
 }
 
-void HWNamegen::teamRandomName(HWTeam & team, const int HedgehogNumber, const QStringList & dict)
+void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber, const QStringList & dict)
 {
     QStringList namesDict = dict;
 

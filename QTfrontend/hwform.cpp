@@ -474,8 +474,8 @@ void HWForm::UpdateTeamsLists()
 
         HWTeam defaultTeam(teamName);
         // Randomize fort and grave for greater variety by default
-        defaultTeam.setGrave(HWNamegen::getRandomGrave());
-        defaultTeam.setFort(HWNamegen::getRandomFort());
+        HWNamegen::teamRandomGrave(defaultTeam);
+        HWNamegen::teamRandomFort(defaultTeam);
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
 
@@ -484,8 +484,8 @@ void HWForm::UpdateTeamsLists()
         {
             teamName = tr("Team %1").arg(i);
             HWTeam numberTeam(teamName);
-            numberTeam.setGrave(HWNamegen::getRandomGrave());
-            numberTeam.setFort(HWNamegen::getRandomFort());
+            HWNamegen::teamRandomGrave(numberTeam);
+            HWNamegen::teamRandomFort(numberTeam);
             numberTeam.saveToFile();
             teamslist.push_back(teamName);
         }
