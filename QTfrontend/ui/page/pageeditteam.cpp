@@ -77,7 +77,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         HHNameEdit[i]->setFixedHeight(36);
         HHNameEdit[i]->setWhatsThis(tr("This hedgehog's name"));
         HHNameEdit[i]->setStyleSheet("padding: 6px;");
-        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1, 1, 3);
+        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1, 1, 2);
 
         btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 5, 1, 1, true);
         btnRandomHogName[i]->setFixedHeight(HHNameEdit[i]->height());
@@ -96,13 +96,13 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBHLayout->addWidget(btnRandomNames, 9, 2, 1, 1, Qt::AlignCenter);
     btnRandomNames->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
+    vbox1->addWidget(GBoxHedgehogs);
+
     btnRandomTeam = new QPushButton();
     btnRandomTeam->setText(tr("Random Team"));
     btnRandomTeam->setStyleSheet("padding: 6px 10px;");
-    GBHLayout->addWidget(btnRandomTeam, 9, 3, 1, 1, Qt::AlignCenter);
     btnRandomTeam->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    vbox1->addWidget(GBoxHedgehogs);
+    vbox1->addWidget(btnRandomTeam, 0, Qt::AlignCenter);
 
     GBoxTeam = new QGroupBox(this);
     GBoxTeam->setTitle(QGroupBox::tr("Team Settings"));
