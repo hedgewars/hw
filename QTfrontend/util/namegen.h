@@ -29,6 +29,7 @@ class HWNamegen
 {
     public:
 
+        static void teamRandomTeamName(HWTeam & team);
         static void teamRandomGrave(HWTeam & team);
         static void teamRandomFort(HWTeam & team);
         static void teamRandomFlag(HWTeam & team);
@@ -39,6 +40,7 @@ class HWNamegen
     private:
         HWNamegen();
 
+        static QString getRandomTeamName();
         static QString getRandomGrave();
         static QString getRandomFort();
         static QString getRandomFlag();

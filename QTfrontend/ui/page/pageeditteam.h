@@ -76,6 +76,11 @@ class PageEditTeam : public AbstractPage
 
         // page 1
         QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
+        QPushButton * btnRandomTeamName;
+        QPushButton * btnRandomGrave;
+        QPushButton * btnRandomFlag;
+        QPushButton * btnRandomVoice;
+        QPushButton * btnRandomFort;
         QPushButton * btnRandomTeam;
         QPushButton * btnTestSound;
 
@@ -84,6 +89,11 @@ class PageEditTeam : public AbstractPage
     private slots:
         void saveTeam();
         void setRandomTeam();
+        void setRandomTeamName();
+        void setRandomGrave();
+        void setRandomFlag();
+        void setRandomVoice();
+        void setRandomFort();
 
         void setRandomHogName(int hh_index);
 

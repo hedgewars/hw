@@ -114,10 +114,12 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
     TeamNameEdit = new QLineEdit(GBoxTeam);
     TeamNameEdit->setMaxLength(64);
-    GBTLayout->addWidget(TeamNameEdit, 0, 1);
+    TeamNameEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    GBTLayout->addWidget(TeamNameEdit, 0, 1, 1, 2);
     vbox2->addWidget(GBoxTeam);
 
     CBTeamLvl = new QComboBox(GBoxTeam);
+    CBTeamLvl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     CBTeamLvl->setIconSize(QSize(32, 32));
     CBTeamLvl->addItem(QIcon(":/res/botlevels/small0.png"), QComboBox::tr("Human"));
     for(int i = 5; i > 0; i--)
@@ -126,46 +128,64 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
             QComboBox::tr("Computer (Level %1)").arg(i)
         );
     CBTeamLvl->setFixedHeight(38);
-    GBTLayout->addWidget(CBTeamLvl, 1, 1);
+    GBTLayout->addWidget(CBTeamLvl, 1, 1, 1, 2);
 
     CBGrave = new QComboBox(GBoxTeam);
+    CBGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     CBGrave->setMaxCount(65535);
     CBGrave->setMaxVisibleItems(20);
     CBGrave->setIconSize(QSize(32, 32));
     CBGrave->setFixedHeight(44);
-    GBTLayout->addWidget(CBGrave, 2, 1);
+    GBTLayout->addWidget(CBGrave, 2, 1, 1, 2);
 
     CBFlag = new QComboBox(GBoxTeam);
     CBFlag->setMaxCount(65535);
     CBFlag->setMaxVisibleItems(50);
     CBFlag->setIconSize(QSize(22, 15));
-    GBTLayout->addWidget(CBFlag, 3, 1);
+    CBFlag->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    GBTLayout->addWidget(CBFlag, 3, 1, 1, 2);
 
-    QHBoxLayout * hbox = new QHBoxLayout();
+    btnRandomTeamName = addButton(":/res/dice.png", GBTLayout, 0, 3, 1, 1, true);
+    btnRandomTeamName->setWhatsThis(tr("Randomize the team name"));
+
+    btnRandomGrave = addButton(":/res/dice.png", GBTLayout, 2, 3, 1, 1, true);
+    btnRandomGrave->setWhatsThis(tr("Randomize the grave"));
+
+    btnRandomFlag = addButton(":/res/dice.png", GBTLayout, 3, 3, 1, 1, true);
+    btnRandomFlag->setWhatsThis(tr("Randomize the flag"));
+
     CBVoicepack = new QComboBox(GBoxTeam);
     CBVoicepack->setMaxVisibleItems(50);
+    CBVoicepack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    hbox->addWidget(CBVoicepack, 100);
-    btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);
+    GBTLayout->addWidget(CBVoicepack, 4, 1, 1, 1);
+
+    btnTestSound = addSoundlessButton(":/res/PlaySound.png", GBTLayout, 4, 2, 1, 1, true);
     btnTestSound->setWhatsThis(tr("Play a random example of this voice"));
-    hbox->setStretchFactor(btnTestSound, 1);
 
-    GBTLayout->addLayout(hbox, 4, 1);
+    btnRandomVoice = addButton(":/res/dice.png", GBTLayout, 4, 3, 1, 1, true);
+    btnRandomVoice->setWhatsThis(tr("Randomize the voice"));
 
     GBoxFort = new QGroupBox(this);
     GBoxFort->setTitle(QGroupBox::tr("Fort"));
     QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
     CBFort = new QComboBox(GBoxFort);
+    CBFort->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     CBFort->setMaxVisibleItems(25);
     CBFort->setMaxCount(65535);
+
     GBFLayout->addWidget(CBFort, 0, 0);
+
+    btnRandomFort = addButton(":/res/dice.png", GBFLayout, 0, 2, 1, 1, true);
+    btnRandomFort->setWhatsThis(tr("Randomize the fort"));
+
     FortPreview = new SquareLabel(GBoxFort);
     FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     FortPreview->setMinimumSize(128, 128);
     FortPreview->setPixmap(QPixmap());
     // perhaps due to handling its own paintevents, SquareLabel doesn't play nice with the stars
     //FortPreview->setAttribute(Qt::WA_PaintOnScreen, true);
-    GBFLayout->addWidget(FortPreview, 1, 0);
+    GBFLayout->addWidget(FortPreview, 1, 0, 1, 2);
     vbox2->addWidget(GBoxFort);
 
     vbox1->addStretch();
@@ -199,6 +219,11 @@ void PageEditTeam::connectSignals()
     }
 
     connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomTeam()));
+    connect(btnRandomTeamName, SIGNAL(clicked()), this, SLOT(setRandomTeamName()));
+    connect(btnRandomGrave, SIGNAL(clicked()), this, SLOT(setRandomGrave()));
+    connect(btnRandomFlag, SIGNAL(clicked()), this, SLOT(setRandomFlag()));
+    connect(btnRandomVoice, SIGNAL(clicked()), this, SLOT(setRandomVoice()));
+    connect(btnRandomFort, SIGNAL(clicked()), this, SLOT(setRandomFort()));
 
     connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 
@@ -390,6 +415,41 @@ void PageEditTeam::setRandomHogName(int hh_index)
 {
     HWTeam team = data();
     HWNamegen::teamRandomHogName(team,hh_index);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomTeamName()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomTeamName(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomGrave()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomGrave(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomFlag()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomFlag(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomVoice()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomVoice(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomFort()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomFort(team);
     loadTeam(team);
 }
 

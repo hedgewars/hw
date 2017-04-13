@@ -33,6 +33,13 @@ QList<QStringList> HWNamegen::TypesTeamnames;
 QList<QStringList> HWNamegen::TypesHatnames;
 bool HWNamegen::typesAvailable = false;
 
+void HWNamegen::teamRandomTeamName(HWTeam & team)
+{
+    QString newName = getRandomTeamName();
+    if(!newName.isNull())
+        team.setName(newName);
+}
+
 void HWNamegen::teamRandomFlag(HWTeam & team)
 {
     team.setFlag(getRandomFlag());
@@ -70,9 +77,7 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
     // pick team name based on hat
     if (changeteamname)
     {
-        if (TypesTeamnames[kind].size() > 0)
-            team.setName(TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())]);
-
+        team.setName(getRandomTeamName());
         team.setGrave(getRandomGrave());
         team.setFort(getRandomFort());
         team.setFlag(getRandomFlag());
@@ -251,7 +256,23 @@ bool HWNamegen::loadTypes()
     return typesAvailable;
 }
 
+QString HWNamegen::getRandomTeamName()
+{
+    // load types if not already loaded
+    if (!typesAvailable)
+        if (!loadTypes())
+            return QString(); // abort if loading failed
 
+    // abort if there are no hat types
+    if (TypesHatnames.size() <= 0)
+        return QString();
+
+    int kind = (rand()%(TypesHatnames.size()));
+    if (TypesTeamnames[kind].size() > 0)
+        return TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
+    else
+        return QString();
+}
 
 QString HWNamegen::getRandomGrave()
 {

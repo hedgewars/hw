@@ -190,6 +190,7 @@ class AbstractPage : public QWidget
          * @return the button.
          */
         QPushButtonWithSound * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false, Qt::Alignment alignment = 0);
+        QPushButton * addSoundlessButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false, Qt::Alignment alignment = 0);
 
         /**
          * @brief Creates a default formatted button and adds it to a
