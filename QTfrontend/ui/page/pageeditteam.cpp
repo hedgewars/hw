@@ -347,7 +347,12 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
     m_playerHash = playerHash;
     lazyLoad();
 
+    // Mostly create a default team, with 2 important exceptions:
     HWTeam newTeam(name);
+    // Randomize grave to make it less likely that default teams have equal graves (important for resurrector)
+    newTeam.setGrave(HWNamegen::getRandomGrave());
+    // Randomize fort for greater variety in fort mode with default teams
+    newTeam.setFort(HWNamegen::getRandomFort());
     loadTeam(newTeam);
 }
 

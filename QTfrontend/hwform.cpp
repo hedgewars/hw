@@ -473,14 +473,19 @@ void HWForm::UpdateTeamsLists()
         }
 
         HWTeam defaultTeam(teamName);
+        // Randomize fort and grave for greater variety by default
+        defaultTeam.setGrave(HWNamegen::getRandomGrave());
+        defaultTeam.setFort(HWNamegen::getRandomFort());
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
 
-        // Team 2, Team 3, Team 4
+        // Add 3 additional teams to allow local multiplayer instantly
         for(int i=2; i<=4; i++)
         {
             teamName = tr("Team %1").arg(i);
             HWTeam numberTeam(teamName);
+            numberTeam.setGrave(HWNamegen::getRandomGrave());
+            numberTeam.setFort(HWNamegen::getRandomFort());
             numberTeam.saveToFile();
             teamslist.push_back(teamName);
         }
