@@ -35,7 +35,7 @@ bool HWNamegen::typesAvailable = false;
 
 void HWNamegen::teamRandomTeamName(HWTeam & team)
 {
-    QString newName = getRandomTeamName();
+    QString newName = getRandomTeamName(-1);
     if(!newName.isNull())
         team.setName(newName);
 }
@@ -77,7 +77,7 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const bool changeteamname)
     // pick team name based on hat
     if (changeteamname)
     {
-        team.setName(getRandomTeamName());
+        team.setName(getRandomTeamName(kind));
         team.setGrave(getRandomGrave());
         team.setFort(getRandomFort());
         team.setFlag(getRandomFlag());
@@ -256,7 +256,11 @@ bool HWNamegen::loadTypes()
     return typesAvailable;
 }
 
-QString HWNamegen::getRandomTeamName()
+/* Generates a random team name.
+kind: Use to select a team name out of a group (types.ini).
+Use a negative value if you don't care.
+This function may return a null QString on error(this should never happen). */
+QString HWNamegen::getRandomTeamName(int kind)
 {
     // load types if not already loaded
     if (!typesAvailable)
@@ -267,7 +271,9 @@ QString HWNamegen::getRandomTeamName()
     if (TypesHatnames.size() <= 0)
         return QString();
 
-    int kind = (rand()%(TypesHatnames.size()));
+    if(kind < 0)
+        kind = (rand()%(TypesHatnames.size()));
+
     if (TypesTeamnames[kind].size() > 0)
         return TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
     else

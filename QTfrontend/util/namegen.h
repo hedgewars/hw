@@ -40,7 +40,7 @@ class HWNamegen
     private:
         HWNamegen();
 
-        static QString getRandomTeamName();
+        static QString getRandomTeamName(int kind);
         static QString getRandomGrave();
         static QString getRandomFort();
         static QString getRandomFlag();
