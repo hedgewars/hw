@@ -426,7 +426,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: colors
-            OptionGroupBox * groupColors = new OptionGroupBox(":/res/lightbulb_on.png", tr("Custom colors"), this);
+            OptionGroupBox * groupColors = new OptionGroupBox(":/res/Palette.png", tr("Custom colors"), this);
             rightColumn->addWidget(groupColors);
 
             groupColors->layout()->setColumnStretch(0, 1);
