@@ -110,7 +110,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     QGridLayout * pPageLayout = new QGridLayout();
     pPageLayout->setColumnStretch(0, 1);
     pPageLayout->setColumnStretch(1, 2);
-    QString pathIcon = ":/res/graphicsicon.png";
+    QString pathIcon = ":/res/Videos.png";
 
     // list of videos
     {
