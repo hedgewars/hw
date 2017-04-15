@@ -182,6 +182,7 @@ if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) then
 g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
 g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
+g:= AddGoal(g, gfMoreWind, gidMoreWind);
 g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
