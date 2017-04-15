@@ -469,24 +469,24 @@ function SetupPlace()
   HideHedge(cyborg)
   jetCrate = SpawnUtilityCrate(3915, 1723, amJetpack)
 
-  SetTimer(AddGear(1071, 1913, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1098, 1919, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1136, 1923, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1170, 1930, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1203, 1924, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1228, 1939, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1264, 1931, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1309, 1938, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1352, 1936, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1386, 1939, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1432, 1942, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1483, 1950, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1530, 1954, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1579, 1959, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1000, 1903, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(957, 1903, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(909, 1910, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(889, 1917, gtMine, 0, 0, 0, 0), 5000)
+  AddGear(1071, 1913, gtMine, 0, 0, 0, 0)
+  AddGear(1098, 1919, gtMine, 0, 0, 0, 0)
+  AddGear(1136, 1923, gtMine, 0, 0, 0, 0)
+  AddGear(1170, 1930, gtMine, 0, 0, 0, 0)
+  AddGear(1203, 1924, gtMine, 0, 0, 0, 0)
+  AddGear(1228, 1939, gtMine, 0, 0, 0, 0)
+  AddGear(1264, 1931, gtMine, 0, 0, 0, 0)
+  AddGear(1309, 1938, gtMine, 0, 0, 0, 0)
+  AddGear(1352, 1936, gtMine, 0, 0, 0, 0)
+  AddGear(1386, 1939, gtMine, 0, 0, 0, 0)
+  AddGear(1432, 1942, gtMine, 0, 0, 0, 0)
+  AddGear(1483, 1950, gtMine, 0, 0, 0, 0)
+  AddGear(1530, 1954, gtMine, 0, 0, 0, 0)
+  AddGear(1579, 1959, gtMine, 0, 0, 0, 0)
+  AddGear(1000, 1903, gtMine, 0, 0, 0, 0)
+  AddGear(957, 1903, gtMine, 0, 0, 0, 0)
+  AddGear(909, 1910, gtMine, 0, 0, 0, 0)
+  AddGear(889, 1917, gtMine, 0, 0, 0, 0)
   ------ STICKY MINE LIST ------
   tempG = AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
   tempG = AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
@@ -503,7 +503,6 @@ end
 
 function SetupAmmo()
   AddAmmo(cyborgs[1], amBazooka, 100)
---  AddAmmo(cyborgs[1], amSniperRifle, 100)
   AddAmmo(cyborgs[1], amShotgun, 100)
   AddAmmo(cyborgs[1], amSwitch, 100)
 end
@@ -553,21 +552,21 @@ end
 -----------------------------Main Functions----------------------------
 
 function onGameInit()
-	Seed = 0
-	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
-	TurnTime = 60000 
-	CaseFreq = 0
-	MinesNum = 20
-	MinesTime = 3000
-	Explosives = 6
-	Delay = 10 
+  Seed = 0
+  GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
+  TurnTime = 60000 
+  CaseFreq = 0
+  MinesNum = 0
+  MinesTime = 5000
+  Explosives = 0
+  Delay = 10 
   MapGen = mgDrawn
-	Theme = "City"
+  Theme = "City"
   SuddenDeathTurns = 25
 
-	for i = 1, #map do
-		ParseCommand('draw ' .. map[i])
-	end
+  for i = 1, #map do
+     ParseCommand('draw ' .. map[i])
+  end
 
   AddHogs()
   AnimInit()
@@ -646,7 +645,4 @@ function onPrecise()
   end
   if AnimInProgress() == false then
   end
-end
-
-function onPreciseUp()
 end
