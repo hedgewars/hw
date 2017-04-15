@@ -331,17 +331,7 @@ IsGetAwayTime:= false;
 
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
-    if CurrentTeam^.ExtDriven then
-        begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
-        end
-    else
-        begin
-        GetRandom(2); // needed to avoid extdriven desync
-        AddVoice(sndYesSir, CurrentTeam^.voicepack);
-        end;
+    AddVoice(sndYesSir, CurrentTeam^.voicepack);
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
     s:= ansistring(CurrentTeam^.TeamName);
@@ -350,11 +340,7 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
 else
     begin
     if TurnTimeLeft > 0 then
-        begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
-        end;
+        AddVoice(sndYesSir, CurrentTeam^.voicepack);
     ReadyTimeLeft:= 0
     end;
 end;

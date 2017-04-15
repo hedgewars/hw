@@ -35,6 +35,7 @@ Game engine:
  * Fixed hedgehogs saying “Missed” when drowning enemy without dealing damage
  * Fixed enemy saying "Missed” when giving poison without direct damage
  * Fixed incorrect time box tooltip when in Sudden Death
+ * Foreign and computer hedgehogs oddly said revenge taunts instead of “Yes, Sir” on their start of turn
  * Various other fixes
 
 Highlander:
