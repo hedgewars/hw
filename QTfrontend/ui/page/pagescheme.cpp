@@ -228,7 +228,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtInitHealth);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png"));
+    l->setPixmap(QPixmap(":/res/iconInitHealth.png"));
     glBSLayout->addWidget(l,2,1,1,1);
     SB_InitHealth = new QSpinBox(gbBasicSettings);
     SB_InitHealth->setWhatsThis(wtInitHealth);

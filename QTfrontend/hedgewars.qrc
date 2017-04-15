@@ -129,6 +129,7 @@
         <file>res/btnTagTeam@2x.png</file>
         <file>res/btnBottomBorder@2x.png</file>
         <file>res/iconBox.png</file>
+        <file>res/iconInitHealth.png</file>
         <file>res/iconHealth.png</file>
         <file>res/iconHealthPercent.png</file>
         <file>res/iconSuddenDeath.png</file>
