@@ -193,7 +193,7 @@ function WonderAlive()
     AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("Do not laugh, inexperienced one, for he speaks the truth!"), SAY_SAY, 10000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Yeah, sure! I died. Hillarious!"), SAY_SAY, 6000}})
     AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY, 6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("???"), SAY_SAY, 2000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("Huh?"), SAY_SAY, 2000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Wow, what a dream!"), SAY_SAY, 3000}})
     if nativeDead[chiefNum] ~= true then
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
@@ -207,7 +207,7 @@ function WonderAlive()
     AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("It was not a dream, unwise one!"), SAY_SAY, 5000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Exactly, man! That was my dream."), SAY_SAY, 5000}})
     AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY,  6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("???"), SAY_SAY, 2000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("Huh?"), SAY_SAY, 2000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Dude, wow! I just had the weirdest high!"), SAY_SAY, 6000}})
     if nativeDead[chiefNum] ~= true then
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
@@ -256,7 +256,7 @@ function SpyDebate()
     AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You know what? I don't even regret anything!"), SAY_SAY, 7000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[girlNum], loc("In fact, you are the only one that's been acting strangely."), SAY_SAY, 8000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("Are you accusing me of something?"), SAY_SAY, 3500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Seems like every time you take a \"walk\", the enemy find us!"), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Seems like every time you take a \"walk\", the enemy finds us!"), SAY_SAY, 8000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You know...taking a stroll."), SAY_SAY, 3500}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Where have you been?!"), SAY_SAY, 3000}})
   end
@@ -504,12 +504,12 @@ function SetupHogDeadAnim(gear)
   if nativesNum == 0 then
     return
   end
-  local hogDeadStrings = {loc("They killed ") .. gear .. loc("! You bastards!"), 
-                          gear .. loc("! Why?!"), 
+  local hogDeadStrings = {string.format(loc("They killed %s! You bastards!"), gear),
+                          string.format(loc("%s! Why?!"), gear), 
                           loc("That was just mean!"), 
-                          loc("Oh no, not ") .. gear .. "!",
-                          loc("Why ") .. gear .. loc("? Why?"),
-                          loc("What has ") .. gear .. loc(" ever done to you?!")}
+                          string.format(loc("Oh no, not %s!"), gear),
+                          string.format(loc("Why %s? Why?"), gear),
+                          string.format(loc("What has %s ever done to you?"), gear)}
   table.insert(hogDeadAnim, {func = AnimSay, args = {CurrentHedgehog, hogDeadStrings[7 - nativesNum], SAY_SHOUT, 4000}})
 end
 
@@ -1054,7 +1054,7 @@ function onNewTurn()
   TurnsLeft = TurnsLeft - 1
   
   if stage == platformStage then
-    AddCaption(TurnsLeft .. " turns until arrival!")
+    AddCaption(string.format(loc("Turns until arrival: %d"), TurnsLeft))
   end
 
   if stage == spyKillStage then

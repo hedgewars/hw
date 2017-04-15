@@ -821,7 +821,7 @@ function CheckTookBlowTorch()
 end
 
 function DoTookBlowTorch()
-  ShowMission(loc("The Journey Back"), loc("The Tunnel Maker"), loc("Hint: Select the BlowTorch, aim and press [Fire]. Press [Fire] again to stop.|Don't blow up the crate."), 0, 6000)
+  ShowMission(loc("The Journey Back"), loc("The Tunnel Maker"), loc("Hint: Select the blowtorch, aim and press [Fire]. Press [Fire] again to stop.").."|"..loc("Don't blow up the crate."), 0, 6000)
 end
 
 function CheckTookLowGravity()
@@ -829,7 +829,7 @@ function CheckTookLowGravity()
 end
 
 function DoTookLowGravity()
-  ShowMission(loc("The Journey Back"), loc("The Moonwalk"), loc("Hint: Select the LowGravity and press [Fire]."), 0, 6000)
+  ShowMission(loc("The Journey Back"), loc("The Moonwalk"), loc("Hint: Select the low gravity and press [Fire]."), 0, 6000)
 end
 
 function CheckOnBridge()

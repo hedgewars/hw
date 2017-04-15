@@ -651,10 +651,10 @@ function onNewTurn()
     cyborgsDeadFresh = false
     WonMission()
   elseif nativesDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Cannibals") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
+    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, Natives!"), SAY_SHOUT, 0)
     nativesDeadFresh = false
   elseif cannibalsDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
+    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, Cannibals!"), SAY_SHOUT, 0)
     cannibalsDeadFresh = false
   end
 end

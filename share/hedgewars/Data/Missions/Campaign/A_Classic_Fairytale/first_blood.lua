@@ -473,7 +473,7 @@ function DoTimesUp()
   deleteCrate = true
   DeleteGear(crates[1])
   TurnTimeLeft = -1
-  AddCaption(loc("And so happenned that Leaks A Lot failed to complete the challenge! He landed, pressured by shame..."))
+  AddCaption(loc("And so happened that Leaks A Lot failed to complete the challenge! He landed, pressured by shame ..."))
   AddEvent(CheckChallengeFailed, {}, DoChallengeFailed, {}, 0)
 end
 

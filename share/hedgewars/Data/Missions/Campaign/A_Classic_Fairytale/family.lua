@@ -146,7 +146,7 @@ function AnimationSetup()
   table.insert(startAnim, {func = AnimTurn, args = {cyborg, "Left"}})
   table.insert(startAnim, {func = AnimTurn, args = {natives[2], "Left"}})
   table.insert(startAnim, {func = AnimTurn, args = {natives[3], "Left"}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("Hello again, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SAY, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, string.format(loc("Hello again, %s!"), nativeUnNames[m5DeployedNum]), SAY_SAY, 2500}})
   table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("I just found out that they have captured your princess!"), SAY_SAY, 7000}})
   if m5DeployedNum == girlNum then
     table.insert(startAnim, {func = AnimSay, args = {natives[1], loc("Of course I have to save her. What did I expect?!"), SAY_SAY, 7000}})
@@ -338,7 +338,7 @@ end
 
 function EndMission()
   RemoveEventFunc(CheckPrincessFreed)
-  AddCaption("So the princess was never heard of again...")
+  AddCaption(loc("So the princess was never heard of again ..."))
   DismissTeam(loc("Natives"))
   DismissTeam(loc("011101001"))
   TurnTimeLeft = 0

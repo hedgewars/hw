@@ -193,7 +193,7 @@ function AnimationSetup()
     table.insert(startAnim, {func = AnimOutOfNowhere, args = {cannibals[i], unpack(cannibalPos[i])}})
   end
   table.insert(startAnim, {func = AnimWait, args = {chief, 1500}})
-  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("HOW DO THEY KNOW WHERE WE ARE???"), SAY_SHOUT, 5000}})
+  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("HOW DO THEY KNOW WHERE WE ARE?"), SAY_SHOUT, 5000}})
   table.insert(startAnim, {func = AnimSay, args = {chief, loc("We have to protect the village!"), SAY_SAY, 5000}})
   table.insert(startAnim, {func = AnimSwitchHog, args = {leaks}})
   AddSkipFunction(startAnim, SkipStartAnim, {})
@@ -214,10 +214,10 @@ function SetupHogDeadAnim(gear)
   if nativesNum == 0 then
     return
   end
-  local hogDeadStrings = {loc("They killed ") .. gear ..loc("! You bastards!"), 
-                          gear .. loc("! Why?!"), 
+  local hogDeadStrings = {string.format(loc("They killed %s! You bastards!"), gear), 
+                          string.format(loc("%s! Why?!"), gear), 
                           loc("That was just mean!"), 
-                          loc("Oh no, not ") .. gear .. "!"}
+                          string.format(loc("Oh no, not %s!"), gear)}
   table.insert(hogDeadAnim, {func = AnimSay, args = {CurrentHedgehog, hogDeadStrings[nativesNum], SAY_SHOUT, 4000}})
 end
 
