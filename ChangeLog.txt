@@ -212,6 +212,7 @@ Translations:
  + Scottish Gaelic updates for: Engine, frontend, tips, missions
  + Loading screen can now be translated
  + A few window titles can be translated
+ + A Classic Fairitale, missions 8 and 10 can now be translated
  * Built-in texts from Qt (e.g. “cut”, “paste”, “copy”) in frontend weren't translated
  * Remove text from mission images to make them language-neutral
  * Fix English-only language/country names in language selection
