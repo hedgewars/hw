@@ -37,7 +37,7 @@ class QStandardItemModel;
 /**
  * @brief Offers access to the data files of hedgewars.
  *
- * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
  *
  * @author sheepluva
  * @since 0.9.17
@@ -50,7 +50,7 @@ class DataManager: public QObject
         /**
          * @brief Returns reference to the <i>singleton</i> instance of this class.
          *
-         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          *
          * @return reference to the instance.
          */
@@ -141,7 +141,7 @@ class DataManager: public QObject
          * Not to be used from outside the class,
          * use the static {@link DataManager::instance()} instead.
          *
-         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          */
         DataManager();
 

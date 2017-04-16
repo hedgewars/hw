@@ -80,7 +80,7 @@ About::About(QWidget * parent) :
         .arg("<a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a>") + "</p>" +
         //: %1 is the name of a license
         tr("This program is distributed under the %1.")
-	.arg("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">"+
+	.arg("<a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">"+
         //: Short for “GNU General Public License version 2”
         tr("GNU GPL v2")+"</a>") +
         "</div>"
@@ -100,7 +100,7 @@ About::About(QWidget * parent) :
     QString libinfo = QString(tr("Dependency versions:") + QString("<br>"));
 
 #ifdef __GNUC__
-    libinfo.append(QString(tr("<a href=\"http://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));
+    libinfo.append(QString(tr("<a href=\"https://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));
     libinfo.append(QString("<br>"));
 #else
     libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
@@ -110,14 +110,14 @@ About::About(QWidget * parent) :
     SDL_version sdl_version;
     SDL_GetVersion(&sdl_version);
     sdl_ver = &sdl_version;
-    libinfo.append(QString(tr("<a href=\"http://www.libsdl.org/\">SDL2</a>: %1.%2.%3"))
+    libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL2</a>: %1.%2.%3"))
         .arg(sdl_ver->major)
         .arg(sdl_ver->minor)
         .arg(sdl_ver->patch));
     libinfo.append(QString("<br>"));
 
     const SDL_version *sdlmixer_ver = Mix_Linked_Version();
-    libinfo.append(QString(tr("<a href=\"http://www.libsdl.org/\">SDL2_mixer</a>: %1.%2.%3"))
+    libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL2_mixer</a>: %1.%2.%3"))
         .arg(sdlmixer_ver->major)
         .arg(sdlmixer_ver->minor)
         .arg(sdlmixer_ver->patch));
@@ -131,7 +131,7 @@ About::About(QWidget * parent) :
         sdlnet_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlnet_handle, "SDLNet_Linked_Version");
         if (sdlnet_ver_get != NULL) {
             SDL_version *sdlnet_ver = sdlnet_ver_get();
-            libinfo.append(QString(tr("<a href=\"http://www.libsdl.org/\">SDL_net</a>: %1.%2.%3"))
+            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL_net</a>: %1.%2.%3"))
                 .arg(sdlnet_ver->major)
                 .arg(sdlnet_ver->minor)
                 .arg(sdlnet_ver->patch));
@@ -146,7 +146,7 @@ About::About(QWidget * parent) :
         sdlimage_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlimage_handle, "IMG_Linked_Version");
         if (sdlimage_ver_get != NULL) {
             SDL_version *sdlimage_ver = sdlimage_ver_get();
-            libinfo.append(QString(tr("<a href=\"http://www.libsdl.org/\">SDL_image</a>: %1.%2.%3"))
+            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL_image</a>: %1.%2.%3"))
                 .arg(sdlimage_ver->major)
                 .arg(sdlimage_ver->minor)
                 .arg(sdlimage_ver->patch));
@@ -161,7 +161,7 @@ About::About(QWidget * parent) :
         sdlttf_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlttf_handle, "TTF_Linked_Version");
         if (sdlttf_ver_get != NULL) {
             SDL_version *sdlttf_ver = sdlttf_ver_get();
-            libinfo.append(QString(tr("<a href=\"http://www.libsdl.org/\">SDL_ttf</a>: %1.%2.%3"))
+            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL_ttf</a>: %1.%2.%3"))
                 .arg(sdlttf_ver->major)
                 .arg(sdlttf_ver->minor)
                 .arg(sdlttf_ver->patch));
@@ -171,28 +171,28 @@ About::About(QWidget * parent) :
     }
 
 
-    libinfo.append(QString(tr("<a href=\"http://qt-project.org/\">Qt</a>: %1")).arg(QT_VERSION_STR));
+    libinfo.append(QString(tr("<a href=\"https://www.qt.io/developers/\">Qt</a>: %1")).arg(QT_VERSION_STR));
     libinfo.append(QString("<br>"));
 
 #ifdef VIDEOREC
-    libinfo.append(QString(tr("<a href=\"http://libav.org\">libavcodec</a>: %1.%2.%3"))
+    libinfo.append(QString(tr("<a href=\"https://libav.org\">libavcodec</a>: %1.%2.%3"))
         .arg(LIBAVCODEC_VERSION_MAJOR)
         .arg(LIBAVCODEC_VERSION_MINOR)
         .arg(LIBAVCODEC_VERSION_MICRO));
     libinfo.append(QString("<br>"));
-    libinfo.append(QString(tr("<a href=\"http://libav.org\">libavformat</a>: %1.%2.%3"))
+    libinfo.append(QString(tr("<a href=\"https://libav.org\">libavformat</a>: %1.%2.%3"))
         .arg(LIBAVFORMAT_VERSION_MAJOR)
         .arg(LIBAVFORMAT_VERSION_MINOR)
         .arg(LIBAVFORMAT_VERSION_MICRO));
     libinfo.append(QString("<br>"));
-    libinfo.append(QString(tr("<a href=\"http://libav.org\">libavutil</a>: %1.%2.%3"))
+    libinfo.append(QString(tr("<a href=\"https://libav.org\">libavutil</a>: %1.%2.%3"))
         .arg(LIBAVUTIL_VERSION_MAJOR)
         .arg(LIBAVUTIL_VERSION_MINOR)
         .arg(LIBAVUTIL_VERSION_MICRO));
     libinfo.append(QString("<br>"));
 #endif
 
-    libinfo.append(QString(tr("<a href=\"http://icculus.org/physfs/\">PhysFS</a>: %1.%2.%3"))
+    libinfo.append(QString(tr("<a href=\"https://icculus.org/physfs/\">PhysFS</a>: %1.%2.%3"))
         .arg(PHYSFS_VER_MAJOR)
         .arg(PHYSFS_VER_MINOR)
         .arg(PHYSFS_VER_PATCH));

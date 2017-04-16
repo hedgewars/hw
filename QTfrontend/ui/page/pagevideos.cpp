@@ -77,7 +77,7 @@ class VideoItem : public QTableWidgetItem
         QString name;
         QString prefix; // original filename without extension
         QString desc;   // description (duration, resolution, etc...)
-        QString uploadUrl; // http://youtu.be/???????
+        QString uploadUrl; // https://youtu.be/???????
         HWRecorder    * pRecorder; // non NULL if file is being encoded
         QNetworkReply * pUploading; // non NULL if file is being uploaded
         bool seen; // used when updating directory
@@ -824,7 +824,7 @@ void PageVideos::uploadFinished()
 
     if (!videoid.isEmpty())
     {
-        item->uploadUrl = "http://youtu.be/" + videoid;
+        item->uploadUrl = "https://youtu.be/" + videoid;
         updateDescription();
 
         // save url in file

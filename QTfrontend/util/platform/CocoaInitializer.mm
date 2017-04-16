@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-// see original example here http://el-tramo.be/blog/mixing-cocoa-and-qt
+// see original example here https://el-tramo.be/blog/mixing-cocoa-and-qt
 
 #include "CocoaInitializer.h"
 
