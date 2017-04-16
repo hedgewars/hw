@@ -299,7 +299,7 @@ function AfterStartAnim()
   ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to collect the crates first.|") ..
                                                   loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
                                                   loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
-                                                  string.format(loc("You have %d turns until Sudden Death! Better hurry!"), SuddenDeathTurns), 1, 0)
+                                                  loc("Mines time: 5 seconds"), 1, 0)
 end
 
 function SkipKillAnim()
@@ -312,7 +312,7 @@ function AfterKillAnim()
   PutWeaponCrates()
   TurnTimeLeft = TurnTime
   AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
-  ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!"), 1, 2000)
+  ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
 end
 
 function SkipKilledAnim()
@@ -330,7 +330,8 @@ function AfterKilledAnim()
   SpawnHealthCrate(secondPos[1][1] + 30, secondPos[1][2])
   ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
                                              loc("Portal hint: one goes to the destination, and one is the entrance.|")..
-                                             loc("Teleport hint: just use the mouse to select the destination!"), 1, 0)
+                                             loc("Teleport hint: just use the mouse to select the destination!").."|"..
+                                             loc("Mines time: 5 seconds"), 1, 0)
 end
 -----------------------------Events------------------------------------
 
