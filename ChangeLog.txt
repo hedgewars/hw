@@ -8,6 +8,7 @@ Content:
  + New hat: "tf_scout" (this time for real)
 
 Game engine:
+ + New weapon: rubber duck
  + Improved hedgehog spawns on maps that lack land mass or free space
  + AI hedgehogs can now use Bee and Vampirism
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
@@ -212,10 +213,12 @@ Translations:
  + Scottish Gaelic updates for: Engine, frontend, tips, missions
  + Loading screen can now be translated
  + A few window titles can be translated
- + A Classic Fairitale, missions 8 and 10 can now be translated
+ + Campaign names and campaign mission names can be translated
+ + A Classic Fairytale, missions 8 and 10 can now be translated
  * Built-in texts from Qt (e.g. “cut”, “paste”, “copy”) in frontend weren't translated
  * Remove text from mission images to make them language-neutral
  * Fix English-only language/country names in language selection
+ * Fix very, very broken mission map descriptions
 
 Lua-API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
