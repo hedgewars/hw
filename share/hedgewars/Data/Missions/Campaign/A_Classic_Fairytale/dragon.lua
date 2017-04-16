@@ -171,6 +171,10 @@ freshDead = nil
 crates = {}
 cratesNum = 0
 jetCrate = nil
+
+cyborgsKilledBeforeCrates = false
+cratesTaken = false
+doneCyborgsDead = false
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -258,12 +262,27 @@ function SetupKillAnim()
   table.insert(killAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
   table.insert(killAnim, {func = AnimSay, args = {cyborg, string.format(loc("You bear impressive skills, %s!"), nativeUnNames[m5DeployedNum]), SAY_SHOUT, 4000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on letting you go..."), SAY_SHOUT, 7000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I guess you'll have to kill them."), SAY_SHOUT, 4000}})
+  if CheckCyborgsDead() then
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I see you already took care of your enemies."), SAY_SHOUT, 7000}})
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("Those were scheduled for disposal anyway."), SAY_SHOUT, 4000}})
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("So you basically did the dirty work for us."), SAY_SHOUT, 4000}})
+    cyborgsKilledBeforeCrates = true
+  else
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on letting you go..."), SAY_SHOUT, 7000}})
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I guess you'll have to kill them."), SAY_SHOUT, 4000}})
+  end
   table.insert(killAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimSwitchHog, args = {native}})
   table.insert(killAnim, {func = AnimWait, args = {native, 1}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {native, HideHedge, {cyborg}}})
+
+  local function checkCyborgsAgain()
+     if CheckCyborgsDead() then
+        DoCyborgsDead()
+     end
+  end
+  table.insert(killAnim, {func = AnimCustomFunction, args = {native, checkCyborgsAgain, {}}})
+
   AddSkipFunction(killAnim, SkipKillAnim, {})
 end
 
@@ -272,7 +291,9 @@ function SetupKilledAnim()
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(secondPos[2])}})
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {native, unpack(secondPos[1])}})
   table.insert(killedAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
-  table.insert(killedAnim, {func = AnimSay, args = {cyborg, string.format(loc("Nice work, %s!"), nativeUnNames[m5DeployedNum]), SAY_SHOUT, 4000}})
+  if not cyborgsKilledBeforeCrates then
+    table.insert(killedAnim, {func = AnimSay, args = {cyborg, string.format(loc("Nice work, %s!"), nativeUnNames[m5DeployedNum]), SAY_SHOUT, 4000}})
+  end
   table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("As a reward for your performance, here's some new technology!"), SAY_SHOUT, 8000}})
   table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("Use it wisely!"), SAY_SHOUT, 3000}})
   table.insert(killedAnim, {func = AnimDisappear, args = {cyborg, unpack(secondPos[2])}})
@@ -355,12 +376,15 @@ function NullifyAmmo()
 end
 
 function DoCyborgsDead()
-  NullifyAmmo()
-  RestoreHedge(cyborg)
-  SetupKilledAnim()
-  SetGearMessage(CurrentHedgehog, 0)
-  AddAnim(killedAnim)
-  AddFunction({func = AfterKilledAnim, args = {}})
+  if cratesTaken and not doneCyborgsDead then
+    NullifyAmmo()
+    RestoreHedge(cyborg)
+    SetupKilledAnim()
+    SetGearMessage(CurrentHedgehog, 0)
+    AddAnim(killedAnim)
+    AddFunction({func = AfterKilledAnim, args = {}})
+    doneCyborgsDead = true
+  end
 end
 
 
@@ -373,6 +397,7 @@ function PutWeaponCrates()
 end
 
 function DoCratesTaken()
+  cratesTaken = true
   SetupKillAnim()
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(killAnim)
@@ -434,6 +459,9 @@ end
 function CyborgDeadReact()
   freshDead = nil
   if cyborgsLeft == 0 then
+    if not cratesTaken then
+       AnimSay(native, loc("I still have to collect the crates."), SAY_THINK, 8000)
+    end
     return
   end
   AnimSay(native, reactions[cyborgsLeft])

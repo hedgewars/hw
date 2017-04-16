@@ -168,6 +168,7 @@ Missions and Campaigns:
  + New scenario: Big Armory
  + New training: Basic Flying Saucer Training
  + Rope-Knocking Challenge was improved (now awards score based on kills and time; taunts for knocking out hedgehogs)
+ + A Classic Fairytale, mission 6: Add alternate dialogues when killing cyborgs before collecting the crates
  + A few campaign missions now save your personal best successes (e.g. fastest finish in Hard Flying) which get shown after you finish them agin
  + A Space Adventure shows 2 flowers over fully completed planets (with side missions)
  + Rewrote some help texts in basic rope training
