@@ -497,6 +497,13 @@ function SetupPlace()
   HideHedge(cyborg)
   jetCrate = SpawnUtilityCrate(3915, 1723, amJetpack)
 
+  --[[ Block the left entrance.
+       Otherwise the player could rope out of the map and
+       go all the way around to the final crate. ]]
+  PlaceGirder(90, 1709, 6)
+  PlaceGirder(90, 1875, 6)
+
+  -- Place mines on the ground floor
   AddGear(1071, 1913, gtMine, 0, 0, 0, 0)
   AddGear(1098, 1919, gtMine, 0, 0, 0, 0)
   AddGear(1136, 1923, gtMine, 0, 0, 0, 0)
