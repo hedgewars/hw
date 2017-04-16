@@ -556,9 +556,9 @@ function onGameInit()
   GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
   TurnTime = 60000 
   CaseFreq = 0
-  MinesNum = 0
+  MinesNum = 20
   MinesTime = 5000
-  Explosives = 0
+  Explosives = 6
   Delay = 10 
   MapGen = mgDrawn
   Theme = "City"
