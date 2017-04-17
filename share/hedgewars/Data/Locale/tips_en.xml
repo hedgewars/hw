@@ -65,8 +65,6 @@
     <tip>In the lands of Snow and Christmas, the snow piles up over time, unless the land is indestructible.</tip>
     <tip>Be aware in lands of Snow and Christmas, because girders are made of slippery ice.</tip>
     <tip>The retreat time depends on the weapon you used. Be careful, some weapons don’t have a retreat time and immediately end your turn!</tip>
-    <tip>Unless otherwise mentioned, mines have a timer of 3 seconds.</tip>
-    <tip>If you forgot the mission objective or the active game modifiers, press [Quit] or [Pause] to see the mission panel again.</tip>
     <windows-only>
         <tip>You can find your Hedgewars configuration files under “My Documents\Hedgewars”. Create backups or take the files with you, but don’t edit them by hand.</tip>
     </windows-only>
