@@ -834,7 +834,7 @@
 04:04=Attack your enemy using a shotgun with two shots.|Thanks to its spread you don't need direct hits|to harm your opponents.|Attack: Shoot (multiple times)
 04:05=Move underground! Use the pick hammer to drill|a hole into the ground and reach other areas.|Attack: Start or stop digging|Left/Right: Move while drilling
 04:06=Bored? No way to attack? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting
-04:07=Bridge huge distances using timed shots with the|rope. Use your momentum to slide into other hogs|or drop grenades and other weapons on them.|Attack: Shoot or release the rope|Up/Down: Retract/Extend rope|Long Jump: Drop grenades or similar weapons
+04:07=Bridge huge distances using timed shots with the|rope. Use your momentum to slide into other hogs|or drop grenades and other weapons on them.|Attack: Shoot or release the rope|Left/Right/Up/Down: Swing, retract or extend rope|Long Jump: Drop grenades or similar weapons
 04:08=Keep your enemies away by dropping a mine in|narrow passages or right below their feet. Be|sure to retreat before you trigger it yourself!|Attack: Drop mine next to your feet|Precise + 1-5: Set mine's bounce strength
 04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to four shots.|Attack: Shoot (multiple times)
 04:10=Brute force is always an option. Drop this classic|explosive next to your enemies and retreat.|Attack: Drop dynamite next to your feet
@@ -881,9 +881,9 @@
 04:51=Get in a free shot by hurling a ball of mud.|Deals no damage, but knocks hogs and|objects back.|Attack: Hold to shoot with more power
 04:52=UNUSED
 04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.|Attack: Activate
-04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
+04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate/Deactivate|Up/Down: Continue aiming|Left/Right: Modify spitting power
 04:55=Bring back the ice-age!|Freeze hedgehogs, make the floor slippery or|save yourself from drowning by freezing the water.|Attack: Activate/Deactivate freezeray|Up/Down: Continue aiming
-04:56=You can throw two cleavers at your enemy,|block passages and tunnels and even use them for climbing!|Be careful! Playing with knifes is dangerous.|Attack: Hold to shoot with more power (twice)
+04:56=You can throw two cleavers at your enemy, block|passages and tunnels and even use them for|climbing! Its damage increases with its speed.|But be careful! Playing with knives is dangerous.|Attack: Hold to shoot with more power (twice)
 04:57=Build a VERY elastic rubber band, from which|hedgehogs and other things bounce off|without taking fall damage.|Left/Right: Change rubber band orientation|Cursor: Place rubber band in a valid position
 04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enouogh to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power
 04:59=Send those dirty hogs swimming! This cute little squeaky|rubber duck is able to swim on water and will go with the|wind once swimming. It explodes when it hits land, so|make sure to drop it from a cliff or another safe spot.|Attack: Drop the rubber duck straight down
