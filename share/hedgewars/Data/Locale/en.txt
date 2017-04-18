@@ -234,6 +234,7 @@
 02:01=It's Davy Jones' locker for %1
 02:01=%1 explores the Sea
 02:01=Hedgehogs have quills, not gills, %1!
+02:01=%1 is swimming upside down
 
 ; Round starts
 02:02=Let's fight!
@@ -482,6 +483,8 @@
 02:08=%1 is tired
 02:08=%1 is the least interesting hedgehog in the world
 02:08=%1 looks at the beautiful landscape
+02:08=%1 lets the enemy continue
+02:08=Apparently the enemy is %1's best friend
 
 ; Hog (%1) hurts himself only
 02:09=%1 should practice aiming!
@@ -534,6 +537,9 @@
 02:09=Something is wrong with %1
 02:09=Better luck next time, %1!
 02:09=%1 is his worst enemy
+02:09=Let's call that a technical difficulty, %1?
+02:09=%1 is drunk
+02:09=%1 says “Ouchywawa!”
 
 ; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=Home Run!
