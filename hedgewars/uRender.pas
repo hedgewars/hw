@@ -1878,9 +1878,9 @@ TextureBuffer[3].Y:= frame * realHeight;
 TextureBuffer[5].X:= TextureBuffer[3].X + nWaves;
 TextureBuffer[5].Y:= frame * realHeight;
 TextureBuffer[4].X:= TextureBuffer[5].X;
-TextureBuffer[4].Y:= SpritesData[sprite].Texture^.ry / waterFrames + frame * realHeight;
+TextureBuffer[4].Y:= (frame+1) * realHeight;
 TextureBuffer[2].X:= TextureBuffer[3].X;
-TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry / waterFrames + frame * realHeight;
+TextureBuffer[2].Y:= (frame+1) * realHeight;
 
 if (WorldEdge = weSea) then
     begin
@@ -1888,15 +1888,15 @@ if (WorldEdge = weSea) then
 
     // left side
     TextureBuffer[1].X:= TextureBuffer[3].X - nWaves;
-    TextureBuffer[1].Y:= 0;
+    TextureBuffer[1].Y:= frame * realHeight;
     TextureBuffer[0].X:= TextureBuffer[1].X;
-    TextureBuffer[0].Y:= SpritesData[sprite].Texture^.ry;
+    TextureBuffer[0].Y:= (frame+1) * realHeight;
 
     // right side
     TextureBuffer[7].X:= TextureBuffer[5].X + nWaves;
-    TextureBuffer[7].Y:= 0;
+    TextureBuffer[7].Y:= frame * realHeight;
     TextureBuffer[6].X:= TextureBuffer[7].X;
-    TextureBuffer[6].Y:= SpritesData[sprite].Texture^.ry;
+    TextureBuffer[6].Y:= (frame+1) * realHeight;
     end;
 
 glBindTexture(GL_TEXTURE_2D, SpritesData[sprite].Texture^.id);
