@@ -540,6 +540,13 @@
 02:09=Let's call that a technical difficulty, %1?
 02:09=%1 is drunk
 02:09=%1 says “Ouchywawa!”
+02:09=%1 is doing it wrong
+02:09=%1 thought the safety was on
+02:09=%1 was trying to clean the weapon
+02:09=Somebody fetch a straitjacket!
+02:09=%1 is late for a meeting with the Reaper
+02:09=%1 tested the weapon—and it worked!
+02:09=%1 is close to self-destruction!
 
 ; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=Home Run!
@@ -733,6 +740,14 @@
 02:16=%1 forgot to bring a watch
 02:16=%1 should have bought some time
 02:16=%1 is a time-waster
+02:16=You snooze, you lose, %1!
+02:16=%1 missed the starting gun
+02:16=Knitting is a more suited occupation for %1
+02:16=%1 prefers Chess
+02:16=%1 was thinking about flowers
+02:16=%1 is easily distracted by pretty things
+02:16=Did we forget to check the time, %1?
+02:16=Nothing to see here, move along!
 
 ; King (%1) has died
 02:17=%1 is dead! Long live %1!
