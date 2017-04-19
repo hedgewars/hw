@@ -71,6 +71,7 @@ begin
         vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
         inc(PoisonTurn)
         end;
+    Gear^.Hedgehog^.stats.StepPoisoned:= true;
     inc(PoisonTotal)
 end;
 
@@ -132,8 +133,8 @@ if FinishedTurnsTotal <> 0 then
     if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
-    // Hog hurts itself only
-    else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
+    // Hog hurts or poisons itself
+    else if (CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
@@ -192,7 +193,8 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                     MaxStepKills:= StepKills;
                 StepKills:= 0;
                 StepDamageRecv:= 0;
-                StepDamageGiven:= 0
+                StepDamageGiven:= 0;
+                StepPoisoned:= false;
                 end;
 
 if SendHealthStatsOn then
