@@ -633,8 +633,8 @@ local curr_team = GetHogTeamName(CurrentHedgehog)
                     if curr_team ~=GetHogTeamName(gear) then
                         if CurrentHedgehog==mutant and getGearValue(mutant,"SelfDestruct")==false then
                             SetHealth(CurrentHedgehog, GetHealth(CurrentHedgehog)+kill_reward)
-                            AddCaption(loc("+1 point"), GetClanColor(GetHogClan(gear)), capgrpMessage)
-                            AddCaption(string.format(loc("+%d health"), kill_reward), GetClanColor(GetHogClan(gear)), capgrpMessage2)
+                            AddCaption(loc("+1 point"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage)
+                            AddCaption(string.format(loc("+%d health"), kill_reward), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
                             increaseTeamValue(curr_team,"Score")
                         end
                         if getGearValue(CurrentHedgehog,"Feeder") then
