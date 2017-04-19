@@ -1232,14 +1232,14 @@ if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) 
 else if not isInMultiShoot then
     AllInactive:= false;
 
-if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
+if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (LuaEndTurnRequested = true) then
     begin
     if (Hedgehog^.CurAmmoType = amKnife) then
        LoadHedgehogHat(Hedgehog^, Hedgehog^.Hat);
     if TagTurnTimeLeft = 0 then
         TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
-    if ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) then
+    if ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) and (LuaNoEndTurnTaunts = false) then
         begin
         AddVoice(sndBoring, Hedgehog^.Team^.voicepack);
         if (GameFlags and gfInfAttack = 0) then
@@ -1251,6 +1251,8 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     isCursorVisible:= false;
     HHGear^.State:= HHGear^.State and (not (gstHHDriven or gstAnimation or gstAttacking));
     AttackBar:= 0;
+    LuaEndTurnRequested:= false;
+    LuaNoEndTurnTaunts:= false;
     if HHGear^.Damage > 0 then
         HHGear^.State:= HHGear^.State and (not (gstHHJumping or gstHHHJump));
     exit

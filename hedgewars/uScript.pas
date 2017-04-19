@@ -1861,6 +1861,19 @@ begin
     lc_endgame:= 0
 end;
 
+function lc_endturn(L : Plua_State) : LongInt; Cdecl;
+var n: LongInt;
+const
+    call = 'EndTurn';
+    params = '[noTaunts]';
+begin
+    if CheckAndFetchParamCount(L, 0, 1, call, params, n) then
+        if n >= 1 then
+            LuaNoEndTurnTaunts:= lua_toboolean(L, 1);
+    LuaEndTurnRequested:= true;
+    lc_endturn:= 0
+end;
+
 function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
 var statInfo : TStatInfoType;
     i, n     : LongInt;
@@ -3392,6 +3405,7 @@ lua_register(luaState, _P'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
 lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
+lua_register(luaState, _P'EndTurn', @lc_endturn);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
 lua_register(luaState, _P'SendHealthStatsOff', @lc_sendhealthstatsoff);
 lua_register(luaState, _P'FindPlace', @lc_findplace);

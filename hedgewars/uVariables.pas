@@ -245,6 +245,10 @@ var
 
     LuaTemplateNumber : LongWord;
 
+    // for EndTurn Lua call
+    LuaEndTurnRequested: boolean;
+    LuaNoEndTurnTaunts: boolean;
+
     LastVoice : TVoice;
 
     mobileRecord: TMobileRecord;
@@ -2833,6 +2837,9 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
+
+    LuaEndTurnRequested:= false;
+    LuaNoEndTurnTaunts:= false;
 
     UIDisplay:= uiAll;
     LocalMessage:= 0;
