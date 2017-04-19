@@ -12,6 +12,11 @@ compiler:
   - gcc
   - clang
 
+matrix:
+  exclude:
+    - os: osx
+      compiler: gcc
+
 env:
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
