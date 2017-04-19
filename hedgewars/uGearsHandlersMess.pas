@@ -3141,6 +3141,7 @@ begin
                 end;
         s:= ansistring(Gear^.Hedgehog^.Name);
         AddCaption(FormatA(GetEventString(eidKamikaze), s), cWhiteColor, capgrpMessage);
+        uStats.HedgehogSacrificed(Gear^.Hedgehog);
         AfterAttack;
         HHGear^.Message:= HHGear^.Message or gmDestroy;
         DeleteGear(Gear);
@@ -4836,6 +4837,7 @@ begin
             begin
             Gear^.Y:= Gear^.Y + _50;
             OnUsedAmmo(CurrentHedgehog^);
+            uStats.HedgehogSacrificed(CurrentHedgehog);
             if CurrentHedgehog^.Gear <> nil then
                 begin
                 // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
@@ -4859,6 +4861,7 @@ begin
         begin
         Gear^.Y:= Gear^.Y + _50;
         OnUsedAmmo(CurrentHedgehog^);
+        uStats.HedgehogSacrificed(CurrentHedgehog);
         if CurrentHedgehog^.Gear <> nil then
             begin
             // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption

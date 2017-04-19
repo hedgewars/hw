@@ -31,6 +31,7 @@ procedure freeModule;
 
 procedure AmmoUsed(am: TAmmoType);
 procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
+procedure HedgehogSacrificed(Hedgehog: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 procedure Skipped;
 procedure TurnReaction;
@@ -73,6 +74,11 @@ begin
         end;
     Gear^.Hedgehog^.stats.StepPoisoned:= true;
     inc(PoisonTotal)
+end;
+
+procedure HedgehogSacrificed(Hedgehog: PHedgehog);
+begin
+    Hedgehog^.stats.Sacrificed:= true
 end;
 
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
@@ -119,6 +125,7 @@ end;
 
 procedure TurnReaction;
 var i, t: LongInt;
+    killsCheck: LongInt;
     s: ansistring;
 begin
 //TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
@@ -128,13 +135,18 @@ if FinishedTurnsTotal <> 0 then
     begin
     s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
+    // If the hog sacrificed (=kamikaze/piano) itself, this needs to be taken into accounts for the reactions later
+    if (CurrentHedgehog^.stats.Sacrificed) then
+        killsCheck:= 1
+    else
+        killsCheck:= 0;
 
     // First blood (first damage, poison or kill)
     if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
-    // Hog hurts, poisons or kills itself
-    else if (CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.Gear = nil) then
+    // Hog hurts, poisons or kills itself (except sacrifice)
+    else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.Gear = nil)) then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         // Message for hurting itself only (not drowning)
@@ -142,8 +154,8 @@ if FinishedTurnsTotal <> 0 then
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
-    // Hog hurts, poisons or kills own team/clan member
-    else if (DamageClan <> 0) or (KillsClan <> 0) or (PoisonClan <> 0) then
+    // Hog hurts, poisons or kills own team/clan member. Sacrifice is taken into account
+    else if (DamageClan <> 0) or (KillsClan > killsCheck) or (PoisonClan <> 0) then
         if (DamageTurn > DamageClan) or (Kills > KillsClan) then
             if random(2) = 0 then
                 AddVoice(sndNutter, CurrentTeam^.voicepack)
@@ -156,15 +168,22 @@ if FinishedTurnsTotal <> 0 then
                 AddVoice(sndTraitor, vpHurtSameClan)
 
     // Hog hurts, kills or poisons enemy
-    else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills <> 0) or (PoisonTurn <> 0) then
-        if Kills > 0 then
+    else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills > killsCheck) or (PoisonTurn <> 0) then
+        if Kills > killsCheck then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         else
             AddVoice(sndRegret, vpHurtEnemy)
 
     // Missed shot
-    else if AmmoDamagingUsed and (Kills = 0) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) then
-        AddVoice(sndMissed, PreviousTeam^.voicepack)
+    else if AmmoDamagingUsed and (Kills <= killsCheck) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) then
+        // Chance to call hedgehog stupid if sacrificed for nothing
+        if CurrentHedgehog^.stats.Sacrificed then
+            if random(2) = 0 then
+                AddVoice(sndMissed, PreviousTeam^.voicepack)
+            else
+                AddVoice(sndStupid, PreviousTeam^.voicepack)
+        else
+            AddVoice(sndMissed, PreviousTeam^.voicepack)
 
     // Timeout
     else if (AmmoUsedCount > 0) and (not isTurnSkipped) then

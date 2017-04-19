@@ -329,7 +329,8 @@ type
         StepDamageRecv,
         StepDamageGiven,
         StepKills: Longword;
-        StepPoisoned: boolean;
+        StepPoisoned,
+        Sacrificed: boolean;
         MaxStepDamageRecv,
         MaxStepDamageGiven,
         MaxStepKills: Longword;
