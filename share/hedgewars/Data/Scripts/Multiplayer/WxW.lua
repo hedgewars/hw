@@ -1328,8 +1328,8 @@ function onNewTurn()
 		-- Was the team violating the attackRule the last time?
 		if getTeamValue(teamName, "skipPenalty") then
 			-- Then take away this turn
-			AddCaption(string.format(loc("%s must skip this turn for rule violation ."), teamName), msgColorWarn, capgrpMessage)
-			TurnTimeLeft = 0
+			AddCaption(string.format(loc("%s must skip this turn for rule violation."), teamName), msgColorWarn, capgrpMessage)
+			EndTurn(true)
 			setTeamValue(teamName, "skipPenalty", false)
 		end
 

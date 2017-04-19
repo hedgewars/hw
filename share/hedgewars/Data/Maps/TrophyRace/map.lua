@@ -177,7 +177,7 @@ function onGameTick()
             end
             
             ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
-            TurnTimeLeft = 0
+            EndTurn(true)
         end
     end
 end

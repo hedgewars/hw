@@ -487,11 +487,16 @@ function CheckForNewRound()
 
 end
 
-function DisableTumbler()
-        currCount = 0
-        fastIndex = 0
-        TurnTimeLeft = 0
-        racerActive = false -- newadd
+function DisableTumbler(endTurn)
+        if endTurn == nil then endTurn = true end
+        if racerActive then
+                currCount = 0
+                fastIndex = 0
+                if endTurn then
+                        EndTurn(true)
+                end
+                racerActive = false -- newadd
+        end
 end
 
 function HandleGhost()
@@ -715,7 +720,7 @@ function onGameTick20()
                                 PlaceWayPoint(x, y)
                                 if wpCount == wpLimit then
                                         AddCaption(loc("Race complexity limit reached"))
-                                        DisableTumbler()
+                                        EndTurn(true)
                                 end
                         end
                 else
@@ -797,7 +802,7 @@ function onGearResurrect(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
         if gear == CurrentHedgehog then
-                DisableTumbler()
+                DisableTumbler(false)
         end
 
 end

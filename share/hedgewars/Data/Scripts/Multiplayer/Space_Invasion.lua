@@ -899,7 +899,7 @@ function onNewRound()
 		end
 
 		gameOver = true
-		TurnTimeLeft = 0	--1
+		EndTurn(true)
 		TimeLeft = 0
 		SendStat(siGraphTitle, "Score graph")
 		EndGame()

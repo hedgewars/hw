@@ -559,11 +559,16 @@ function CheckForNewRound()
 
 end
 
-function DisableTumbler()
-        currCount = 0
-        fastIndex = 0
-        TurnTimeLeft = 0
-        racerActive = false -- newadd
+function DisableTumbler(endTurn)
+        if endTurn == nil then endTurn = true end
+        if racerActive then
+                currCount = 0
+                fastIndex = 0
+                racerActive = false -- newadd
+                if endTurn then
+                         EndTurn(true)
+                end
+        end
 end
 
 function HandleGhost()
@@ -1151,11 +1156,11 @@ function onGameTick20()
 
                         end
 
-                end
+                        -- If hedgehog is not controlled anymore, stop racing mode
+                        if band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+                                DisableTumbler(false)
+                        end
 
-                -- if the player has expended his tunbling time, stop him tumbling
-                if TurnTimeLeft <= 20 then
-                        DisableTumbler()
                 end
 
         end
@@ -1222,7 +1227,7 @@ function onGearResurrect(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
         if gear == CurrentHedgehog then
-                DisableTumbler()
+               DisableTumbler(false)
         end
 
 end
