@@ -133,11 +133,12 @@ if FinishedTurnsTotal <> 0 then
     if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
-    // Hog hurts or poisons itself
-    else if (CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) then
+    // Hog hurts, poisons or kills itself
+    else if (CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.Gear = nil) then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
-        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
+        // Message for hurting itself only (not drowning)
+        if (CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
