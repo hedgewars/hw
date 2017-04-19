@@ -304,15 +304,16 @@ begin
                         end;
                     end
                 end;
-        if (GameFlags and gfKarma <> 0) and (GameFlags and gfInvulnerable = 0) and
-           (CurrentHedgehog^.Effects[heInvulnerable] = 0) then
-            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
-            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-            CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
-            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
+            if (GameFlags and gfKarma <> 0) and (GameFlags and gfInvulnerable = 0) and
+               (CurrentHedgehog^.Effects[heInvulnerable] = 0) then
+                begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
+                inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
+                CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
+                spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
+                end;
             end;
+
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);
-        end;
 
 	if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
 	    for i := 0 to random(min(Damage,20))+5 do
