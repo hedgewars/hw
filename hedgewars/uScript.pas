@@ -223,7 +223,7 @@ end;
 function LuaToGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TGearType))) or (i > ord(High(TGearType))) then
         begin
         LuaCallError('Invalid gearType!', call, paramsyntax);
@@ -236,7 +236,7 @@ end;
 function LuaToVisualGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TVisualGearType))) or (i > ord(High(TVisualGearType))) then
         begin
         LuaCallError('Invalid visualGearType!', call, paramsyntax);
@@ -249,7 +249,7 @@ end;
 function LuaToAmmoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TAmmoType))) or (i > ord(High(TAmmoType))) then
         begin
         LuaCallError('Invalid ammoType!', call, paramsyntax);
@@ -262,7 +262,7 @@ end;
 function LuaToStatInfoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TStatInfoType))) or (i > ord(High(TStatInfoType))) then
         begin
         LuaCallError('Invalid statInfoType!', call, paramsyntax);
@@ -275,7 +275,7 @@ end;
 function LuaToSoundOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TSound))) or (i > ord(High(TSound))) then
         begin
         LuaCallError('Invalid soundId!', call, paramsyntax);
@@ -288,7 +288,7 @@ end;
 function LuaToHogEffectOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(THogEffect))) or (i > ord(High(THogEffect))) then
         begin
         LuaCallError('Invalid effect type!', call, paramsyntax);
@@ -301,7 +301,7 @@ end;
 function LuaToCapGroupOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TCapGroup))) or (i > ord(High(TCapGroup))) then
         begin
         LuaCallError('Invalid capgroup type!', call, paramsyntax);
@@ -314,7 +314,7 @@ end;
 function LuaToSpriteOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TSprite))) or (i > ord(High(TSprite))) then
         begin
         LuaCallError('Invalid sprite id!', call, paramsyntax);
@@ -327,7 +327,7 @@ end;
 function LuaToMapGenOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
-    else i:= lua_tointeger(L, i);
+    else i:= Trunc(lua_tonumber(L, i));
     if (i < ord(Low(TMapGen))) or (i > ord(High(TMapGen))) then
         begin
         LuaCallError('Invalid mapgen id!', call, paramsyntax);
@@ -350,7 +350,7 @@ end;
 function lc_band(L: PLua_State): LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 2, 'band', 'value1, value2') then
-        lua_pushinteger(L, lua_tointeger(L, 2) and lua_tointeger(L, 1))
+        lua_pushnumber(L, Trunc(lua_tonumber(L, 2)) and Trunc(lua_tonumber(L, 1)))
     else
         lua_pushnil(L);
     lc_band := 1;
@@ -359,7 +359,7 @@ end;
 function lc_bor(L: PLua_State): LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 2, 'bor', 'value1, value2') then
-        lua_pushinteger(L, lua_tointeger(L, 2) or lua_tointeger(L, 1))
+        lua_pushnumber(L, Trunc(lua_tonumber(L, 2)) or Trunc(lua_tonumber(L, 1)))
     else
         lua_pushnil(L);
     lc_bor := 1;
@@ -368,7 +368,7 @@ end;
 function lc_bnot(L: PLua_State): LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'bnot', 'value') then
-        lua_pushinteger(L, (not lua_tointeger(L, 1)))
+        lua_pushnumber(L, (not Trunc(lua_tonumber(L, 1))))
     else
         lua_pushnil(L);
     lc_bnot := 1;
@@ -377,7 +377,7 @@ end;
 function lc_div(L: PLua_State): LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 2, 'div', 'dividend, divisor') then
-        lua_pushinteger(L, lua_tointeger(L, 1) div lua_tointeger(L, 2))
+        lua_pushnumber(L, Trunc(lua_tonumber(L, 1)) div Trunc(lua_tonumber(L, 2)))
     else
         lua_pushnil(L);
     lc_div := 1;
@@ -386,14 +386,14 @@ end;
 function lc_getinputmask(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'GetInputMask', '') then
-        lua_pushinteger(L, InputMask);
+        lua_pushnumber(L, InputMask);
     lc_getinputmask:= 1
 end;
 
 function lc_setinputmask(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'SetInputMask', 'mask') then
-        InputMask:= lua_tointeger(L, 1);
+        InputMask:= Trunc(lua_tonumber(L, 1));
     lc_setinputmask:= 0
 end;
 
@@ -467,7 +467,7 @@ begin
             cBuildMaxDist:= cDefaultBuildMaxDist;
             end
         else
-            CBuildMaxDist:= lua_tointeger(L, 1);
+            CBuildMaxDist:= Trunc(lua_tonumber(L, 1));
         end;
     lc_setmaxbuilddistance:= 0;
 end;
@@ -539,7 +539,7 @@ end;
 function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 5, 'ShowMission', 'caption, subcaption, text, icon, time') then
-        ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+        ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), Trunc(lua_tonumber(L, 4)), Trunc(lua_tonumber(L, 5)));
     lc_showmission:= 0;
 end;
 
@@ -584,7 +584,7 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 1, 'EnableGameFlags', 'gameFlag, ... ', n) then
         begin
         for i:= 1 to n do
-            GameFlags := GameFlags or LongWord(lua_tointeger(L, i));
+            GameFlags := GameFlags or LongWord(Trunc(lua_tonumber(L, i)));
         ScriptSetInteger('GameFlags', GameFlags);
         end;
     lc_enablegameflags:= 0;
@@ -597,7 +597,7 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 1, 'DisableGameFlags', 'gameFlag, ... ', n) then
         begin
         for i:= 1 to n do
-            GameFlags := GameFlags and (not LongWord(lua_tointeger(L, i)));
+            GameFlags := GameFlags and (not LongWord(Trunc(lua_tonumber(L, i))));
         ScriptSetInteger('GameFlags', GameFlags);
         end;
     lc_disablegameflags:= 0;
@@ -616,7 +616,7 @@ end;
 function lc_getgameflag(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'GetGameFlag', 'gameflag') then
-        lua_pushboolean(L, (GameFlags and LongWord(lua_tointeger(L, 1)) <> 0))
+        lua_pushboolean(L, (GameFlags and LongWord(Trunc(lua_tonumber(L, 1))) <> 0))
     else
         lua_pushnil(L);
     lc_getgameflag:= 1;
@@ -636,7 +636,7 @@ begin
             begin
             cg:= LuaToCapGroupOrd(L, 3, call, params);
             if cg >= 0 then
-                AddCaption(lua_tostringA(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(cg));
+                AddCaption(lua_tostringA(L, 1), Trunc(lua_tonumber(L, 2)) shr 8, TCapGroup(cg));
             end
         end;
     lc_addcaption:= 0;
@@ -665,10 +665,10 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 4,'SpawnFakeHealthCrate', 'x, y, explode, poison') then
         begin
-        gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+        gear := SpawnFakeCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)),
         HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         if gear <> nil then
-             lua_pushinteger(L, gear^.uid)
+             lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L)
         end
     else
@@ -681,10 +681,10 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 4,'SpawnFakeAmmoCrate', 'x, y, explode, poison') then
         begin
-        gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+        gear := SpawnFakeCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)),
         AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         if gear <> nil then
-             lua_pushinteger(L, gear^.uid)
+             lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L)
         end
     else
@@ -697,10 +697,10 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 4,'SpawnFakeUtilityCrate', 'x, y, explode, poison') then
         begin
-        gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+        gear := SpawnFakeCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)),
         UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         if gear <> nil then
-             lua_pushinteger(L, gear^.uid)
+             lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L)
         end
     else
@@ -715,12 +715,12 @@ begin
     if CheckAndFetchParamCount(L, 2, 3, 'SpawnHealthCrate', 'x, y [, health]', n) then
         begin
         if n = 3 then
-            health:= lua_tointeger(L, 3)
+            health:= Trunc(lua_tonumber(L, 3))
         else
             health:= cHealthCaseAmount;
-        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), HealthCrate, health, 0);
+        gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), HealthCrate, health, 0);
         if gear <> nil then
-             lua_pushinteger(L, gear^.uid)
+             lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L);
         end
     else
@@ -735,10 +735,10 @@ begin
     if CheckAndFetchParamCount(L, 3, 4, 'SpawnAmmoCrate', 'x, y, content [, amount]', n) then
         begin
         if n = 3 then
-             gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
-        else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
+             gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), AmmoCrate, Trunc(lua_tonumber(L, 3)), 0)
+        else gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), AmmoCrate, Trunc(lua_tonumber(L, 3)), Trunc(lua_tonumber(L, 4)));
         if gear <> nil then
-             lua_pushinteger(L, gear^.uid)
+             lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L);
         end
     else
@@ -753,10 +753,10 @@ begin
     if CheckAndFetchParamCount(L, 3, 4, 'SpawnUtilityCrate', 'x, y, content [, amount]', n) then
         begin
         if n = 3 then
-             gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), 0)
-        else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
+             gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), UtilityCrate, Trunc(lua_tonumber(L, 3)), 0)
+        else gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), UtilityCrate, Trunc(lua_tonumber(L, 3)), Trunc(lua_tonumber(L, 4)));
         if gear <> nil then
-             lua_pushinteger(L, gear^.uid)
+             lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L);
        end
     else
@@ -779,16 +779,16 @@ begin
         if t >= 0 then
             begin
             gt:= TGearType(t);
-            x:= lua_tointeger(L, 1);
-            y:= lua_tointeger(L, 2);
-            s:= lua_tointeger(L, 4);
-            dx:= int2hwFloat(lua_tointeger(L, 5)) / 1000000;
-            dy:= int2hwFloat(lua_tointeger(L, 6)) / 1000000;
-            t:= lua_tointeger(L, 7);
+            x:= Trunc(lua_tonumber(L, 1));
+            y:= Trunc(lua_tonumber(L, 2));
+            s:= Trunc(lua_tonumber(L, 4));
+            dx:= int2hwFloat(Trunc(lua_tonumber(L, 5))) / 1000000;
+            dy:= int2hwFloat(Trunc(lua_tonumber(L, 6))) / 1000000;
+            t:= Trunc(lua_tonumber(L, 7));
 
             gear:= AddGear(x, y, gt, s, dx, dy, t);
             lastGearByUID:= gear;
-            lua_pushinteger(L, gear^.uid)
+            lua_pushnumber(L, gear^.uid)
             end
         else
             lua_pushnil(L);
@@ -803,7 +803,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'DeleteGear', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             gear^.Message:= gear^.Message or gmDelete;
         end;
@@ -827,14 +827,14 @@ begin
         if s >= 0 then
             begin
             vgt:= TVisualGearType(s);
-            x:= lua_tointeger(L, 1);
-            y:= lua_tointeger(L, 2);
-            s:= lua_tointeger(L, 4);
+            x:= Trunc(lua_tonumber(L, 1));
+            y:= Trunc(lua_tonumber(L, 2));
+            s:= Trunc(lua_tonumber(L, 4));
             c:= lua_toboolean(L, 5);
 
             if n = 6 then
                 begin
-                layer:= lua_tointeger(L, 6);
+                layer:= Trunc(lua_tonumber(L, 6));
                 vg:= AddVisualGear(x, y, vgt, s, c, layer);
                 end
             else
@@ -844,7 +844,7 @@ begin
                 begin
                 lastVisualGearByUID:= vg;
                 uid:= vg^.uid;
-                lua_pushinteger(L, uid);
+                lua_pushnumber(L, uid);
                 end;
             end
             else
@@ -861,7 +861,7 @@ begin
     vg:= nil;
     if CheckLuaParamCount(L, 1, 'DeleteVisualGear', 'vgUid') then
         begin
-        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        vg:= VisualGearByUID(Trunc(lua_tonumber(L, 1)));
         if vg <> nil then
             DeleteVisualGear(vg);
         end;
@@ -875,9 +875,9 @@ var vg : PVisualGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetVisualGearType', 'vgUid') then
         begin
-        vg := VisualGearByUID(lua_tointeger(L, 1));
+        vg := VisualGearByUID(Trunc(lua_tonumber(L, 1)));
         if vg <> nil then
-            lua_pushinteger(L, ord(vg^.Kind))
+            lua_pushnumber(L, ord(vg^.Kind))
         else
             lua_pushnil(L);
         end
@@ -892,19 +892,19 @@ var vg: PVisualGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetVisualGearValues', 'vgUid') then
         begin
-        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        vg:= VisualGearByUID(Trunc(lua_tonumber(L, 1)));
         if vg <> nil then
             begin
-            lua_pushinteger(L, round(vg^.X));
-            lua_pushinteger(L, round(vg^.Y));
+            lua_pushnumber(L, round(vg^.X));
+            lua_pushnumber(L, round(vg^.Y));
             lua_pushnumber(L, vg^.dX);
             lua_pushnumber(L, vg^.dY);
             lua_pushnumber(L, vg^.Angle);
-            lua_pushinteger(L, vg^.Frame);
-            lua_pushinteger(L, vg^.FrameTicks);
-            lua_pushinteger(L, vg^.State);
-            lua_pushinteger(L, vg^.Timer);
-            lua_pushinteger(L, vg^.Tint);
+            lua_pushnumber(L, vg^.Frame);
+            lua_pushnumber(L, vg^.FrameTicks);
+            lua_pushnumber(L, vg^.State);
+            lua_pushnumber(L, vg^.Timer);
+            lua_pushnumber(L, vg^.Tint);
             end
         else
             begin
@@ -926,13 +926,13 @@ begin
 // Param count can be 1-11 at present
 //    if CheckLuaParamCount(L, 11, 'SetVisualGearValues', 'vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint') then
 //        begin
-        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        vg:= VisualGearByUID(Trunc(lua_tonumber(L, 1)));
         if vg <> nil then
             begin
             if not lua_isnoneornil(L, 2) then
-                vg^.X:= lua_tointeger(L, 2);
+                vg^.X:= Trunc(lua_tonumber(L, 2));
             if not lua_isnoneornil(L, 3) then
-                vg^.Y:= lua_tointeger(L, 3);
+                vg^.Y:= Trunc(lua_tonumber(L, 3));
             if not lua_isnoneornil(L, 4) then
                 vg^.dX:= lua_tonumber(L, 4);
             if not lua_isnoneornil(L, 5) then
@@ -940,15 +940,15 @@ begin
             if not lua_isnoneornil(L, 6) then
                 vg^.Angle:= lua_tonumber(L, 6);
             if not lua_isnoneornil(L, 7) then
-                vg^.Frame:= lua_tointeger(L, 7);
+                vg^.Frame:= Trunc(lua_tonumber(L, 7));
             if not lua_isnoneornil(L, 8) then
-                vg^.FrameTicks:= lua_tointeger(L, 8);
+                vg^.FrameTicks:= Trunc(lua_tonumber(L, 8));
             if not lua_isnoneornil(L, 9) then
-                vg^.State:= lua_tointeger(L, 9);
+                vg^.State:= Trunc(lua_tonumber(L, 9));
             if not lua_isnoneornil(L, 10) then
-                vg^.Timer:= lua_tointeger(L, 10);
+                vg^.Timer:= Trunc(lua_tonumber(L, 10));
             if not lua_isnoneornil(L, 11) then
-                vg^.Tint:= lua_tointeger(L, 11)
+                vg^.Tint:= Trunc(lua_tonumber(L, 11))
             end;
 //        end
 //    else
@@ -963,22 +963,22 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearValues', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            lua_pushinteger(L, gear^.Angle);
-            lua_pushinteger(L, gear^.Power);
-            lua_pushinteger(L, gear^.WDTimer);
-            lua_pushinteger(L, gear^.Radius);
-            lua_pushinteger(L, hwRound(gear^.Density * _10000));
-            lua_pushinteger(L, gear^.Karma);
+            lua_pushnumber(L, gear^.Angle);
+            lua_pushnumber(L, gear^.Power);
+            lua_pushnumber(L, gear^.WDTimer);
+            lua_pushnumber(L, gear^.Radius);
+            lua_pushnumber(L, hwRound(gear^.Density * _10000));
+            lua_pushnumber(L, gear^.Karma);
             lua_pushnumber(L,  gear^.DirAngle);
-            lua_pushinteger(L, gear^.AdvBounce);
-            lua_pushinteger(L, Integer(gear^.ImpactSound));
-            lua_pushinteger(L, gear^.nImpactSounds);
-            lua_pushinteger(L, gear^.Tint);
-            lua_pushinteger(L, gear^.Damage);
-            lua_pushinteger(L, gear^.Boom)
+            lua_pushnumber(L, gear^.AdvBounce);
+            lua_pushnumber(L, Integer(gear^.ImpactSound));
+            lua_pushnumber(L, gear^.nImpactSounds);
+            lua_pushnumber(L, gear^.Tint);
+            lua_pushnumber(L, gear^.Damage);
+            lua_pushnumber(L, gear^.Boom)
             end
         else
             begin
@@ -1002,35 +1002,35 @@ begin
 // Currently allows 1-14 params
 //    if CheckLuaParamCount(L, 14, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage, Boom') then
 //        begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
             if not lua_isnoneornil(L, 2) then
-                gear^.Angle := lua_tointeger(L, 2);
+                gear^.Angle := Trunc(lua_tonumber(L, 2));
             if not lua_isnoneornil(L, 3) then
-                gear^.Power := lua_tointeger(L, 3);
+                gear^.Power := Trunc(lua_tonumber(L, 3));
             if not lua_isnoneornil(L, 4) then
-                gear^.WDTimer := lua_tointeger(L, 4);
+                gear^.WDTimer := Trunc(lua_tonumber(L, 4));
             if not lua_isnoneornil(L, 5) then
-                gear^.Radius := lua_tointeger(L, 5);
+                gear^.Radius := Trunc(lua_tonumber(L, 5));
             if not lua_isnoneornil(L, 6) then
-                gear^.Density:= int2hwFloat(lua_tointeger(L, 6)) / 10000;
+                gear^.Density:= int2hwFloat(Trunc(lua_tonumber(L, 6))) / 10000;
             if not lua_isnoneornil(L, 7) then
-                gear^.Karma := lua_tointeger(L, 7);
+                gear^.Karma := Trunc(lua_tonumber(L, 7));
             if not lua_isnoneornil(L, 8) then
                 gear^.DirAngle:= lua_tonumber(L, 8);
             if not lua_isnoneornil(L, 9) then
-                gear^.AdvBounce := lua_tointeger(L, 9);
+                gear^.AdvBounce := Trunc(lua_tonumber(L, 9));
             if not lua_isnoneornil(L, 10) then
-                gear^.ImpactSound := TSound(lua_tointeger(L, 10));
+                gear^.ImpactSound := TSound(Trunc(lua_tonumber(L, 10)));
             if not lua_isnoneornil(L, 11) then
-                gear^.nImpactSounds := lua_tointeger(L, 11);
+                gear^.nImpactSounds := Trunc(lua_tonumber(L, 11));
             if not lua_isnoneornil(L, 12) then
-                gear^.Tint := lua_tointeger(L, 12);
+                gear^.Tint := Trunc(lua_tonumber(L, 12));
             if not lua_isnoneornil(L, 13) then
-                gear^.Damage := lua_tointeger(L, 13);
+                gear^.Damage := Trunc(lua_tonumber(L, 13));
             if not lua_isnoneornil(L, 14) then
-                gear^.Boom := lua_tointeger(L, 14);
+                gear^.Boom := Trunc(lua_tonumber(L, 14));
             end;
 //        end
 //    else
@@ -1045,7 +1045,7 @@ begin
         if FollowGear = nil then
             lua_pushnil(L)
         else
-            lua_pushinteger(L, FollowGear^.uid);
+            lua_pushnumber(L, FollowGear^.uid);
         end
     else
         lua_pushnil(L);
@@ -1057,9 +1057,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearType', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, ord(gear^.Kind))
+            lua_pushnumber(L, ord(gear^.Kind))
         else
             lua_pushnil(L);
         end
@@ -1073,9 +1073,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearMessage', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.message)
+            lua_pushnumber(L, gear^.message)
         else
             lua_pushnil(L);
         end
@@ -1089,9 +1089,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearElasticity', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, hwRound(gear^.elasticity * _10000))
+            lua_pushnumber(L, hwRound(gear^.elasticity * _10000))
         else
             lua_pushnil(L);
         end
@@ -1105,9 +1105,9 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetGearElasticity', 'gearUid, Elasticity') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.Elasticity:= int2hwFloat(lua_tointeger(L, 2)) / 10000
+            gear^.Elasticity:= int2hwFloat(Trunc(lua_tonumber(L, 2))) / 10000
         end;
     lc_setgearelasticity:= 0
 end;
@@ -1117,9 +1117,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearFriction', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, hwRound(gear^.friction * _10000))
+            lua_pushnumber(L, hwRound(gear^.friction * _10000))
         else
             lua_pushnil(L);
         end
@@ -1133,9 +1133,9 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetGearFriction', 'gearUid, Friction') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.Friction:= int2hwFloat(lua_tointeger(L, 2)) / 10000
+            gear^.Friction:= int2hwFloat(Trunc(lua_tonumber(L, 2))) / 10000
         end;
     lc_setgearfriction:= 0
 end;
@@ -1145,9 +1145,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetGearMessage', 'gearUid, message') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.message:= lua_tointeger(L, 2);
+            gear^.message:= Trunc(lua_tonumber(L, 2));
         end;
     lc_setgearmessage:= 0
 end;
@@ -1157,9 +1157,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearPos', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.Pos)
+            lua_pushnumber(L, gear^.Pos)
         else
             lua_pushnil(L);
         end
@@ -1173,9 +1173,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetGearPos', 'gearUid, value') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.Pos:= lua_tointeger(L, 2);
+            gear^.Pos:= Trunc(lua_tonumber(L, 2));
         end;
     lc_setgearpos:= 0
 end;
@@ -1185,9 +1185,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearCollisionMask', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.CollisionMask)
+            lua_pushnumber(L, gear^.CollisionMask)
         else
             lua_pushnil(L);
         end
@@ -1201,9 +1201,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetGearCollisionMask', 'gearUid, mask') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.CollisionMask:= lua_tointeger(L, 2);
+            gear^.CollisionMask:= Trunc(lua_tonumber(L, 2));
         end;
     lc_setgearcollisionmask:= 0
 end;
@@ -1213,9 +1213,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogLevel', 'gearUid') then
         begin
-        gear := GearByUID(lua_tointeger(L, 1));
+        gear := GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
-            lua_pushinteger(L, gear^.Hedgehog^.BotLevel)
+            lua_pushnumber(L, gear^.Hedgehog^.BotLevel)
         else
             lua_pushnil(L);
     end;
@@ -1227,9 +1227,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetHogLevel', 'gearUid, level') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            gear^.Hedgehog^.BotLevel:= lua_tointeger(L, 2);
+            gear^.Hedgehog^.BotLevel:= Trunc(lua_tonumber(L, 2));
         end;
     lc_sethoglevel:= 0
 end;
@@ -1239,10 +1239,10 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogClan', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushinteger(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
+            lua_pushnumber(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
             end
         else
             lua_pushnil(L);
@@ -1257,7 +1257,7 @@ var idx: integer;
 begin
     if CheckLuaParamCount(L, 1, 'GetClanColor', 'clanIdx') then
         begin
-        idx:= lua_tointeger(L, 1);
+        idx:= Trunc(lua_tonumber(L, 1));
         if (not lua_isnumber(L, 1)) then
             begin
             LuaError('Argument ''clanIdx'' must be a number!');
@@ -1269,7 +1269,7 @@ begin
             lua_pushnil(L);
             end
         else
-            lua_pushinteger(L, ClansArray[idx]^.Color shl 8 or $FF);
+            lua_pushnumber(L, ClansArray[idx]^.Color shl 8 or $FF);
         end
     else
         lua_pushnil(L); // return value on stack (nil)
@@ -1284,10 +1284,10 @@ var clan : PClan;
 begin
     if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
-        i:= lua_tointeger(L,1);
+        i:= Trunc(lua_tonumber(L,1));
         if i >= ClansCount then exit(0);
         clan := ClansArray[i];
-        clan^.Color:= lua_tointeger(L, 2) shr 8;
+        clan^.Color:= Trunc(lua_tonumber(L, 2)) shr 8;
 
         for i:= 0 to Pred(clan^.TeamsNumber) do
             begin
@@ -1318,7 +1318,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogVoicepack', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.Voicepack^.name))
         else
@@ -1334,7 +1334,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogGrave', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.GraveName))
         else
@@ -1350,7 +1350,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogFlag', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         // TODO error messages
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.Flag))
@@ -1367,7 +1367,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogFort', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         // TODO error messages
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.FortName))
@@ -1384,7 +1384,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'IsHogLocal', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         // TODO error messages
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             lua_pushboolean(L, IsHogLocal(gear^.Hedgehog))
@@ -1401,7 +1401,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogTeamName', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         // TODO error messages
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.TeamName))
@@ -1418,7 +1418,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetHogTeamName', 'gearUid, name') then
         begin
-        gear := GearByUID(lua_tointeger(L, 1));
+        gear := GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             gear^.Hedgehog^.Team^.TeamName := lua_tostring(L, 2);
@@ -1439,7 +1439,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogName', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Name))
@@ -1457,7 +1457,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetHogName', 'gearUid, name') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
             gear^.Hedgehog^.Name:= lua_tostring(L, 2);
@@ -1474,9 +1474,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetTimer', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.Timer)
+            lua_pushnumber(L, gear^.Timer)
         else
             lua_pushnil(L);
         end
@@ -1490,9 +1490,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetFlightTime', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.FlightTime)
+            lua_pushnumber(L, gear^.FlightTime)
         else
             lua_pushnil(L);
         end
@@ -1506,9 +1506,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHealth', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.Health)
+            lua_pushnumber(L, gear^.Health)
         else
             lua_pushnil(L);
         end
@@ -1522,9 +1522,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetX', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, hwRound(gear^.X))
+            lua_pushnumber(L, hwRound(gear^.X))
         else
             lua_pushnil(L);
         end
@@ -1538,9 +1538,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetY', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, hwRound(gear^.Y))
+            lua_pushnumber(L, hwRound(gear^.Y))
         else
             lua_pushnil(L);
         end
@@ -1554,8 +1554,8 @@ var gears, geard : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'CopyPV', 'fromGearUid, toGearUid') then
         begin
-        gears:= GearByUID(lua_tointeger(L, 1));
-        geard:= GearByUID(lua_tointeger(L, 2));
+        gears:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        geard:= GearByUID(Trunc(lua_tonumber(L, 2)));
         if (gears <> nil) and (geard <> nil) then
             begin
             geard^.X:= gears^.X;
@@ -1572,7 +1572,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'FollowGear', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then FollowGear:= gear
         end;
     lc_followgear:= 0
@@ -1586,12 +1586,12 @@ var gear : PGear;
 begin
     if CheckAndFetchParamCount(L, 3, 4, 'HogSay', 'gearUid, text, manner [, vgState]', n) then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
             // state defaults to 0 if state param is given
             if n = 4 then
-                s:= lua_tointeger(L, 4)
+                s:= Trunc(lua_tonumber(L, 4))
             else
                 s:= 0;
             vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
@@ -1605,10 +1605,10 @@ begin
                    end
                else vgear^.Frame:= gear^.uid;
 
-               vgear^.FrameTicks:= lua_tointeger(L, 3);
+               vgear^.FrameTicks:= Trunc(lua_tonumber(L, 3));
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then
                    vgear^.FrameTicks:= 1;
-               lua_pushinteger(L, vgear^.Uid);
+               lua_pushnumber(L, vgear^.Uid);
                end
             end
         else
@@ -1624,7 +1624,7 @@ var gear, prevgear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'SwitchHog', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
 // should we allow this when there is no current hedgehog? might do some odd(er) things to turn sequence.
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (CurrentHedgehog <> nil) then
             begin
@@ -1661,12 +1661,12 @@ begin
         at:= LuaToAmmoTypeOrd(L, 2, call, params);
         if at >= 0 then
             begin
-            gear:= GearByUID(lua_tointeger(L, 1));
+            gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
             if (gear <> nil) and (gear^.Hedgehog <> nil) then
                 if n = 2 then
                     AddAmmo(gear^.Hedgehog^, TAmmoType(at))
                 else
-                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), lua_tointeger(L, 3))
+                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), Trunc(lua_tonumber(L, 3)))
             end;
         end;
     lc_addammo:= 0
@@ -1682,7 +1682,7 @@ const
 begin
     if CheckLuaParamCount(L, 2, call, params) then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
             begin
             at:= LuaToAmmoTypeOrd(L, 2, call, params);
@@ -1690,12 +1690,12 @@ begin
                 begin
                 ammo:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(at));
                 if ammo^.AmmoType = amNothing then
-                    lua_pushinteger(L, 0)
+                    lua_pushnumber(L, 0)
                 else
-                    lua_pushinteger(L, ammo^.Count);
+                    lua_pushnumber(L, ammo^.Count);
                 end;
             end
-        else lua_pushinteger(L, 0);
+        else lua_pushnumber(L, 0);
         end
     else
         lua_pushnil(L);
@@ -1707,10 +1707,10 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetHealth', 'gearUid, health') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            gear^.Health:= lua_tointeger(L, 2);
+            gear^.Health:= Trunc(lua_tonumber(L, 2));
 
             if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
                 begin
@@ -1731,8 +1731,8 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetTimer', 'gearUid, timer') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
-        if gear <> nil then gear^.Timer:= lua_tointeger(L, 2)
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        if gear <> nil then gear^.Timer:= Trunc(lua_tonumber(L, 2))
         end;
     lc_settimer:= 0
 end;
@@ -1742,8 +1742,8 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetFlightTime', 'gearUid, flighttime') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
-        if gear <> nil then gear^.FlightTime:= lua_tointeger(L, 2)
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        if gear <> nil then gear^.FlightTime:= Trunc(lua_tonumber(L, 2))
         end;
     lc_setflighttime:= 0
 end;
@@ -1760,9 +1760,9 @@ begin
         t:= LuaToHogEffectOrd(L, 2, call, params);
         if t >= 0 then
             begin
-            gear := GearByUID(lua_tointeger(L, 1));
+            gear := GearByUID(Trunc(lua_tonumber(L, 1)));
             if (gear <> nil) and (gear^.Hedgehog <> nil) then
-                gear^.Hedgehog^.Effects[THogEffect(t)]:= lua_tointeger(L, 3);
+                gear^.Hedgehog^.Effects[THogEffect(t)]:= Trunc(lua_tonumber(L, 3));
             end;
         end;
     lc_seteffect := 0;
@@ -1780,15 +1780,15 @@ begin
         t:= LuaToHogEffectOrd(L, 2, call, params);
         if t >= 0 then
             begin
-            gear:= GearByUID(lua_tointeger(L, 1));
+            gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
             if (gear <> nil) and (gear^.Hedgehog <> nil) then
-                lua_pushinteger(L, gear^.Hedgehog^.Effects[THogEffect(t)])
+                lua_pushnumber(L, gear^.Hedgehog^.Effects[THogEffect(t)])
             else
-                lua_pushinteger(L, 0)
+                lua_pushnumber(L, 0)
             end;
         end
     else
-        lua_pushinteger(L, 0);
+        lua_pushnumber(L, 0);
     lc_geteffect:= 1
 end;
 
@@ -1797,10 +1797,10 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetState', 'gearUid, state') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            gear^.State:= lua_tointeger(L, 2);
+            gear^.State:= Trunc(lua_tonumber(L, 2));
             SetAllToActive;
             end
         end;
@@ -1812,9 +1812,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetState', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.State)
+            lua_pushnumber(L, gear^.State)
         else
             lua_pushnil(L)
         end
@@ -1828,9 +1828,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetTag', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.Tag)
+            lua_pushnumber(L, gear^.Tag)
         else
             lua_pushnil(L);
         end
@@ -1844,10 +1844,10 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetTag', 'gearUid, tag') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            gear^.Tag:= lua_tointeger(L, 2);
+            gear^.Tag:= Trunc(lua_tonumber(L, 2));
             SetAllToActive;
             end
         end;
@@ -1952,10 +1952,10 @@ var gear: PGear;
 begin
     if CheckAndFetchParamCount(L, 4, 5, 'FindPlace', 'gearUid, fall, left, right [, tryHarder]', n) then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         fall:= lua_toboolean(L, 2);
-        left:= lua_tointeger(L, 3);
-        right:= lua_tointeger(L, 4);
+        left:= Trunc(lua_tonumber(L, 3));
+        right:= Trunc(lua_tonumber(L, 4));
         if n = 5 then
             tryhard:= lua_toboolean(L, 5)
         else
@@ -1963,7 +1963,7 @@ begin
         if gear <> nil then
             FindPlace(gear, fall, left, right, tryhard);
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
+            lua_pushnumber(L, gear^.uid)
         else
             lua_pushnil(L);
         end
@@ -1989,7 +1989,7 @@ begin
                 PlaySound(TSound(s))
             else
                 begin
-                gear:= GearByUID(lua_tointeger(L, 2));
+                gear:= GearByUID(Trunc(lua_tonumber(L, 2)));
                 if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
                     AddVoice(TSound(s),gear^.Hedgehog^.Team^.Voicepack)
                 end;
@@ -2010,7 +2010,7 @@ begin
         if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true, true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
-        //lua_pushinteger(L, LongInt(CurrentTeam));
+        //lua_pushnumber(L, LongInt(CurrentTeam));
         end;
     //else
         //lua_pushnil(L)
@@ -2068,7 +2068,7 @@ begin
         temp:= lua_tostring(L, 4);
         ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true, true);
         ParseCommand('hat ' + temp, true, true);
-        lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
+        lua_pushnumber(L, CurrentHedgehog^.Gear^.uid);
         end
     else
         lua_pushnil(L);
@@ -2080,7 +2080,7 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 2, 'HogTurnLeft', 'gearUid, boolean') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             gear^.dX.isNegative:= lua_toboolean(L, 2);
         end;
@@ -2092,11 +2092,11 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearPosition', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            lua_pushinteger(L, hwRound(gear^.X));
-            lua_pushinteger(L, hwRound(gear^.Y))
+            lua_pushnumber(L, hwRound(gear^.X));
+            lua_pushnumber(L, hwRound(gear^.Y))
             end
         else
             begin
@@ -2119,12 +2119,12 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 3, 'SetGearPosition', 'gearUid, x, y') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
             col:= gear^.CollisionIndex >= 0;
-            x:= lua_tointeger(L, 2);
-            y:= lua_tointeger(L, 3);
+            x:= Trunc(lua_tonumber(L, 2));
+            y:= Trunc(lua_tonumber(L, 3));
             if col then
                 DeleteCI(gear);
             gear^.X:= int2hwfloat(x);
@@ -2142,11 +2142,11 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearTarget', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            lua_pushinteger(L, gear^.Target.X);
-            lua_pushinteger(L, gear^.Target.Y)
+            lua_pushnumber(L, gear^.Target.X);
+            lua_pushnumber(L, gear^.Target.Y)
             end
         else
             begin
@@ -2167,11 +2167,11 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 3, 'SetGearTarget', 'gearUid, x, y') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            gear^.Target.X:= lua_tointeger(L, 2);
-            gear^.Target.Y:= lua_tointeger(L, 3)
+            gear^.Target.X:= Trunc(lua_tonumber(L, 2));
+            gear^.Target.Y:= Trunc(lua_tonumber(L, 3))
             end
         end;
     lc_setgeartarget:= 0
@@ -2183,14 +2183,14 @@ var t: LongInt;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearVelocity', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
             t:= hwRound(gear^.dX * 1000000);
             // gear dX determines hog orientation
             if (gear^.dX.isNegative) and (t = 0) then t:= -1;
-            lua_pushinteger(L, t);
-            lua_pushinteger(L, hwRound(gear^.dY * 1000000))
+            lua_pushnumber(L, t);
+            lua_pushnumber(L, hwRound(gear^.dY * 1000000))
             end
         end
     else
@@ -2206,11 +2206,11 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 3, 'SetGearVelocity', 'gearUid, dx, dy') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
             begin
-            gear^.dX:= int2hwFloat(lua_tointeger(L, 2)) / 1000000;
-            gear^.dY:= int2hwFloat(lua_tointeger(L, 3)) / 1000000;
+            gear^.dX:= int2hwFloat(Trunc(lua_tonumber(L, 2))) / 1000000;
+            gear^.dY:= int2hwFloat(Trunc(lua_tonumber(L, 3))) / 1000000;
             SetAllToActive;
             end
         end;
@@ -2251,9 +2251,9 @@ begin
         if at >= 0 then
             begin
             if np = 4 then
-                ScriptSetAmmo(TAmmoType(at), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), 1)
+                ScriptSetAmmo(TAmmoType(at), Trunc(lua_tonumber(L, 2)), Trunc(lua_tonumber(L, 3)), Trunc(lua_tonumber(L, 4)), 1)
             else
-                ScriptSetAmmo(TAmmoType(at), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+                ScriptSetAmmo(TAmmoType(at), Trunc(lua_tonumber(L, 2)), Trunc(lua_tonumber(L, 3)), Trunc(lua_tonumber(L, 4)), Trunc(lua_tonumber(L, 5)));
             end;
         end;
     lc_setammo:= 0
@@ -2269,7 +2269,7 @@ begin
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
         if at >= 0 then
-            ScriptSetAmmoDelay(TAmmoType(at), lua_tointeger(L, 2));
+            ScriptSetAmmoDelay(TAmmoType(at), Trunc(lua_tonumber(L, 2)));
         end;
     lc_setammodelay:= 0
 end;
@@ -2279,9 +2279,9 @@ var m : LongInt;
 begin
     if CheckLuaParamCount(L, 1, 'GetRandom', 'number') then
         begin
-        m:= lua_tointeger(L, 1);
+        m:= Trunc(lua_tonumber(L, 1));
         if (m > 0) then
-            lua_pushinteger(L, GetRandom(m))
+            lua_pushnumber(L, GetRandom(m))
         else
             begin
             LuaError('Lua: Tried to pass 0 to GetRandom!');
@@ -2297,7 +2297,7 @@ function lc_setwind(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'SetWind', 'windSpeed') then
         begin
-        cWindSpeed:= int2hwfloat(lua_tointeger(L, 1)) / 100 * cMaxWindSpeed;
+        cWindSpeed:= int2hwfloat(Trunc(lua_tonumber(L, 1))) / 100 * cMaxWindSpeed;
         cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
         if cWindSpeed.isNegative then
             CWindSpeedf := -cWindSpeedf;
@@ -2320,9 +2320,9 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetGearRadius', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            lua_pushinteger(L, gear^.Radius)
+            lua_pushnumber(L, gear^.Radius)
         else
             lua_pushnil(L);
         end
@@ -2336,7 +2336,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 1, 'GetHogHat', 'gearUid') then
         begin
-        gear := GearByUID(lua_tointeger(L, 1));
+        gear := GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Hat))
         else
@@ -2353,7 +2353,7 @@ var gear : PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetHogHat', 'gearUid, hat') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
             hat:= lua_tostring(L, 2);
@@ -2382,7 +2382,7 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         if not lua_isnoneornil(L, 5) then
-            tint := lua_tointeger(L, 5)
+            tint := Trunc(lua_tonumber(L, 5))
         else tint := $FFFFFFFF;
         if not lua_isnoneornil(L, 6) then
             behind := lua_toboolean(L, 6)
@@ -2397,7 +2397,7 @@ begin
 
         // accept any amount of landflags, loop is never executed if n<9
         for i:= 9 to n do
-            lf:= lf or lua_tointeger(L, i);
+            lf:= lf or Trunc(lua_tonumber(L, i));
 
         n:= LuaToSpriteOrd(L, 3, call, params);
         if n >= 0 then
@@ -2407,9 +2407,9 @@ begin
                 LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
             else
                 placed:= ForcePlaceOnLand(
-                    lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
-                    lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
-                    spr, lua_tointeger(L, 4), lf, tint, behind, flipHoriz, flipVert);
+                    Trunc(lua_tonumber(L, 1)) - SpritesData[spr].Width div 2,
+                    Trunc(lua_tonumber(L, 2)) - SpritesData[spr].Height div 2,
+                    spr, Trunc(lua_tonumber(L, 4)), lf, tint, behind, flipHoriz, flipVert);
             end;
         end;
 
@@ -2444,7 +2444,7 @@ begin
 
         // accept any amount of landflags, loop is never executed if n<9
         for i:= 9 to n do
-            lf:= lf or lua_tointeger(L, i);
+            lf:= lf or Trunc(lua_tonumber(L, i));
 
         n:= LuaToSpriteOrd(L, 3, call, params);
         if n >= 0 then
@@ -2454,9 +2454,9 @@ begin
                 LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
             else
                 EraseLand(
-                    lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
-                    lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
-                    spr, lua_tointeger(L, 4), lf, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert);
+                    Trunc(lua_tonumber(L, 1)) - SpritesData[spr].Width div 2,
+                    Trunc(lua_tonumber(L, 2)) - SpritesData[spr].Height div 2,
+                    spr, Trunc(lua_tonumber(L, 4)), lf, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert);
             end;
         end;
     lc_erasesprite:= 0
@@ -2468,9 +2468,9 @@ begin
     placed:= false;
     if CheckLuaParamCount(L, 3, 'PlaceGirder', 'x, y, frameIdx') then
         placed:= TryPlaceOnLandSimple(
-            lua_tointeger(L, 1) - SpritesData[sprAmGirder].Width div 2,
-            lua_tointeger(L, 2) - SpritesData[sprAmGirder].Height div 2,
-            sprAmGirder, lua_tointeger(L, 3), true, false);
+            Trunc(lua_tonumber(L, 1)) - SpritesData[sprAmGirder].Width div 2,
+            Trunc(lua_tonumber(L, 2)) - SpritesData[sprAmGirder].Height div 2,
+            sprAmGirder, Trunc(lua_tonumber(L, 3)), true, false);
 
     lua_pushboolean(L, placed);
     lc_placegirder:= 1
@@ -2482,9 +2482,9 @@ begin
     placed:= false;
     if CheckLuaParamCount(L, 3, 'PlaceRubber', 'x, y, frameIdx') then
         placed:= TryPlaceOnLand(
-            lua_tointeger(L, 1) - SpritesData[sprAmRubber].Width div 2,
-            lua_tointeger(L, 2) - SpritesData[sprAmRubber].Height div 2,
-            sprAmRubber, lua_tointeger(L, 3), true, lfBouncy);
+            Trunc(lua_tonumber(L, 1)) - SpritesData[sprAmRubber].Width div 2,
+            Trunc(lua_tonumber(L, 2)) - SpritesData[sprAmRubber].Height div 2,
+            sprAmRubber, Trunc(lua_tonumber(L, 3)), true, lfBouncy);
 
     lua_pushboolean(L, placed);
     lc_placerubber:= 1
@@ -2493,9 +2493,9 @@ end;
 function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
 begin
     if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 0, 'GetCurAmmoType', '')) then
-        lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType))
+        lua_pushnumber(L, ord(CurrentHedgehog^.CurAmmoType))
     else
-        lua_pushinteger(L, ord(amNothing));
+        lua_pushnumber(L, ord(amNothing));
     lc_getcurammotype := 1;
 end;
 
@@ -2519,7 +2519,7 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 1, 'HideHog', 'gearUid') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         HideHog(gear^.hedgehog)
         end;
     lc_hidehog := 0;
@@ -2531,7 +2531,7 @@ var i, h: LongInt;
 begin
     if CheckLuaParamCount(L, 1, 'RestoreHog', 'gearUid') then
         begin
-        uid:= LongWord(lua_tointeger(L, 1));
+        uid:= LongWord(Trunc(lua_tonumber(L, 1)));
         if TeamsCount > 0 then
             for i:= 0 to Pred(TeamsCount) do
                 for h:= 0 to cMaxHHIndex do
@@ -2551,10 +2551,10 @@ begin
     if CheckLuaParamCount(L, 5, 'TestRectForObstacle', 'x1, y1, x2, y2, landOnly') then
         begin
         rtn:= TestRectangleForObstacle(
-                    lua_tointeger(L, 1),
-                    lua_tointeger(L, 2),
-                    lua_tointeger(L, 3),
-                    lua_tointeger(L, 4),
+                    Trunc(lua_tonumber(L, 1)),
+                    Trunc(lua_tonumber(L, 2)),
+                    Trunc(lua_tonumber(L, 3)),
+                    Trunc(lua_tonumber(L, 4)),
                     lua_toboolean(L, 5)
                     );
         lua_pushboolean(L, rtn);
@@ -2568,7 +2568,7 @@ end;
 function lc_getgravity(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'GetGravity', '') then
-        lua_pushinteger(L, hwRound(SignAs(_0_5, cGravity) + (cGravity * 50 / cMaxWindSpeed)));
+        lua_pushnumber(L, hwRound(SignAs(_0_5, cGravity) + (cGravity * 50 / cMaxWindSpeed)));
     lc_getgravity:= 1
 end;
 
@@ -2576,8 +2576,8 @@ function lc_setgravity(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'SetGravity', 'percent') then
         begin
-        cGravity:= _0_02 * lua_tointeger(L, 1) * cMaxWindSpeed;
-        cGravityf:= 0.00025 * lua_tointeger(L, 1) * 0.02
+        cGravity:= _0_02 * Trunc(lua_tonumber(L, 1)) * cMaxWindSpeed;
+        cGravityf:= 0.00025 * Trunc(lua_tonumber(L, 1)) * 0.02
         end;
     lc_setgravity:= 0
 end;
@@ -2587,7 +2587,7 @@ var iterator: PGear;
 begin
     if CheckLuaParamCount(L, 1, 'SetWaterLine', 'waterline') then
         begin
-        cWaterLine:= lua_tointeger(L,1);
+        cWaterLine:= Trunc(lua_tonumber(L,1));
         AllInactive:= false;
         iterator:= GearsList;
         while iterator <> nil do
@@ -2610,9 +2610,9 @@ var gear: PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.aihints:= lua_tointeger(L, 2);
+            gear^.aihints:= Trunc(lua_tonumber(L, 2));
         end;
     lc_setgearaihints:= 0
 end;
@@ -2631,7 +2631,7 @@ end;
 function lc_declareachievement(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 4, 'DeclareAchievement', 'achievementId, teamname, location, value') then
-        declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4));
+        declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), Trunc(lua_tonumber(L, 4)));
     lc_declareachievement:= 0
 end;
 
@@ -2661,14 +2661,14 @@ end;
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
-        startGhostPoints(lua_tointeger(L, 1));
+        startGhostPoints(Trunc(lua_tonumber(L, 1)));
     lc_startghostpoints:= 0
 end;
 
 function lc_dumppoint(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 2, 'DumpPoint', 'x, y') then
-        dumpPoint(lua_tointeger(L, 1), lua_tointeger(L, 2));
+        dumpPoint(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)));
     lc_dumppoint:= 0
 end;
 
@@ -2686,17 +2686,17 @@ begin
     if CheckAndFetchParamCountRange(L, 2, 4, 'AddPoint', 'x, y [, width [, erase] ]', np) then
         begin
         // x
-        param:= LongInt(lua_tointeger(L,1));
+        param:= LongInt(Trunc(lua_tonumber(L,1)));
         PointsBuffer:= PointsBuffer + char((param shr 8) and $FF);
         PointsBuffer:= PointsBuffer + char((param and $FF));
         // y
-        param:= LongInt(lua_tointeger(L,2));
+        param:= LongInt(Trunc(lua_tonumber(L,2)));
         PointsBuffer:= PointsBuffer + char((param shr 8) and $FF);
         PointsBuffer:= PointsBuffer + char((param and $FF));
         // width
         if np > 2 then
             begin
-            param:= lua_tointeger(L,3);
+            param:= Trunc(lua_tonumber(L,3));
             param:= (param or $80);
             // erase
             if (np > 3) and lua_toboolean(L, 4) then
@@ -2733,7 +2733,7 @@ begin
     if CheckLuaParamCount(L, 1, call, params) then
         begin
 
-        case lua_tointeger(L, 1) of
+        case Trunc(lua_tonumber(L, 1)) of
             HaltTestSuccess : rstring:= 'Success';
             HaltTestFailed: rstring:= 'FAILED';
         else
@@ -2746,7 +2746,7 @@ begin
         if cTestLua then
             begin
             WriteLnToConsole('Lua test finished, result: ' + rstring);
-            halt(lua_tointeger(L, 1));
+            halt(Trunc(lua_tonumber(L, 1)));
             end
         else LuaError('Not in lua test mode, engine will keep running. Reported test result: ' + rstring);
 
@@ -2783,7 +2783,7 @@ end;
 
 procedure ScriptSetInteger(name : shortstring; value : LongInt);
 begin
-    lua_pushinteger(luaState, value);
+    lua_pushnumber(luaState, value);
     lua_setglobal(luaState, Str2PChar(name));
 end;
 
@@ -2796,7 +2796,7 @@ end;
 function ScriptGetInteger(name : shortstring) : LongInt;
 begin
     lua_getglobal(luaState, Str2PChar(name));
-    ScriptGetInteger:= lua_tointeger(luaState, -1);
+    ScriptGetInteger:= Trunc(lua_tonumber(luaState, -1));
     lua_pop(luaState, 1);
 end;
 
@@ -3105,10 +3105,10 @@ if (not ScriptLoaded) or (not ScriptExists(fname)) then
     exit(0);
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
-lua_pushinteger(luaState, par1);
-lua_pushinteger(luaState, par2);
-lua_pushinteger(luaState, par3);
-lua_pushinteger(luaState, par4);
+lua_pushnumber(luaState, par1);
+lua_pushnumber(luaState, par2);
+lua_pushnumber(luaState, par3);
+lua_pushnumber(luaState, par4);
 ScriptCall:= 0;
 if lua_pcall(luaState, 4, 1, 0) <> 0 then
     begin
@@ -3117,7 +3117,7 @@ if lua_pcall(luaState, 4, 1, 0) <> 0 then
     end
 else
     begin
-    ScriptCall:= lua_tointeger(luaState, -1);
+    ScriptCall:= Trunc(lua_tonumber(luaState, -1));
     lua_pop(luaState, 1)
     end;
 GetGlobals;
