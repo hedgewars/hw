@@ -261,7 +261,7 @@ else
 end;
 
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
-var s: shortstring;
+var s: ansistring;
     vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
@@ -286,8 +286,8 @@ begin
                     // was considering pulsing on attack, Tiy thinks it should be permanent while in play
                     //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-                    s:= '+' + IntToStr(vampDmg);
-                    AddCaption(ansistring(s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    s:= IntToStr(vampDmg);
+                    AddCaption(FormatA(trmsg[sidHealthGain], s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
                     i:= 0;

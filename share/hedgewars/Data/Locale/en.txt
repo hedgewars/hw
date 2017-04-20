@@ -89,6 +89,8 @@
 01:24=Auto Camera On
 01:25=Press the target button to mark the target
 01:26=The utility is unavailable in Sudden Death
+; E.g. “+25” when gaining health from crate or vampirism
+01:27=+%1
 
 ; Event messages
 ; Normal hog (%1) died (0 health)

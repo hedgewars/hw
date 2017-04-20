@@ -703,7 +703,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
-var s: shortstring;
+var s: ansistring;
     i: LongInt;
     vga: PVisualGear;
     ag, gi: PGear;
@@ -755,8 +755,8 @@ case Gear^.Pos of
                     PlaySound(sndShotgunReload);
                     inc(HH^.Health, Gear^.Health);
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
-                    s:= '+' + IntToStr(Gear^.Health);
-                    AddCaption(ansistring(s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    s:= IntToStr(Gear^.Health);
+                    AddCaption(FormatA(trmsg[sidHealthGain], s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
 
