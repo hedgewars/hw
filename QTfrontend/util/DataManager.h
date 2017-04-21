@@ -66,7 +66,8 @@ class DataManager: public QObject
          */
         QStringList entryList(const QString & subDirectory,
                               QDir::Filters filters = QDir::NoFilter,
-                              const QStringList & nameFilters = QStringList("*")
+                              const QStringList & nameFilters = QStringList("*"),
+                              bool withDLC = true
                              ) const;
 
         /**

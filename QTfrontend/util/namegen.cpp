@@ -40,24 +40,24 @@ void HWNamegen::teamRandomTeamName(HWTeam & team)
         team.setName(newName);
 }
 
-void HWNamegen::teamRandomFlag(HWTeam & team)
+void HWNamegen::teamRandomFlag(HWTeam & team, bool withDLC)
 {
-    team.setFlag(getRandomFlag());
+    team.setFlag(getRandomFlag(withDLC));
 }
 
-void HWNamegen::teamRandomVoice(HWTeam & team)
+void HWNamegen::teamRandomVoice(HWTeam & team, bool withDLC)
 {
-    team.setVoicepack(getRandomVoice());
+    team.setVoicepack(getRandomVoice(withDLC));
 }
 
-void HWNamegen::teamRandomGrave(HWTeam & team)
+void HWNamegen::teamRandomGrave(HWTeam & team, bool withDLC)
 {
-    team.setGrave(getRandomGrave());
+    team.setGrave(getRandomGrave(withDLC));
 }
 
-void HWNamegen::teamRandomFort(HWTeam & team)
+void HWNamegen::teamRandomFort(HWTeam & team, bool withDLC)
 {
-    team.setFort(getRandomFort());
+    team.setFort(getRandomFort(withDLC));
 }
 
 void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
@@ -280,7 +280,7 @@ QString HWNamegen::getRandomTeamName(int kind)
         return QString();
 }
 
-QString HWNamegen::getRandomGrave()
+QString HWNamegen::getRandomGrave(bool withDLC)
 {
     QStringList Graves;
 
@@ -288,7 +288,8 @@ QString HWNamegen::getRandomGrave()
     Graves.append(DataManager::instance().entryList(
                       "Graphics/Graves",
                       QDir::Files,
-                      QStringList("*.png")
+                      QStringList("*.png"),
+                      withDLC
                   ).replaceInStrings(QRegExp("\\.png$"), "")
                  );
 
@@ -302,7 +303,7 @@ QString HWNamegen::getRandomGrave()
     return Graves[rand()%(Graves.size())];
 }
 
-QString HWNamegen::getRandomFlag()
+QString HWNamegen::getRandomFlag(bool withDLC)
 {
     QStringList Flags;
 
@@ -310,7 +311,8 @@ QString HWNamegen::getRandomFlag()
     Flags.append(DataManager::instance().entryList(
                       "Graphics/Flags",
                       QDir::Files,
-                      QStringList("*.png")
+                      QStringList("*.png"),
+                      withDLC
                   ).replaceInStrings(QRegExp("\\.png$"), "")
                  );
     //remove internal flags
@@ -327,7 +329,7 @@ QString HWNamegen::getRandomFlag()
     return Flags[rand()%(Flags.size())];
 }
 
-QString HWNamegen::getRandomFort()
+QString HWNamegen::getRandomFort(bool withDLC)
 {
     QStringList Forts;
 
@@ -335,7 +337,8 @@ QString HWNamegen::getRandomFort()
     Forts.append(DataManager::instance().entryList(
                      "Forts",
                      QDir::Files,
-                     QStringList("*L.png")
+                     QStringList("*L.png"),
+                     withDLC
                  ).replaceInStrings(QRegExp("L\\.png$"), "")
                 );
 
@@ -349,7 +352,7 @@ QString HWNamegen::getRandomFort()
     return Forts[rand()%(Forts.size())];
 }
 
-QString HWNamegen::getRandomVoice()
+QString HWNamegen::getRandomVoice(bool withDLC)
 {
     QStringList Voices;
 
@@ -357,7 +360,8 @@ QString HWNamegen::getRandomVoice()
     Voices.append(DataManager::instance().entryList(
                      "Sounds/voices",
                      QDir::Dirs | QDir::NoDotAndDotDot,
-                     QStringList("*")));
+                     QStringList("*"),
+                     withDLC));
 
     if(Voices.size()==0)
     {

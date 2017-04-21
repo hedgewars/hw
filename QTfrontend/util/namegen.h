@@ -36,10 +36,10 @@ class HWNamegen
         };
 
         static void teamRandomTeamName(HWTeam & team);
-        static void teamRandomGrave(HWTeam & team);
-        static void teamRandomFort(HWTeam & team);
-        static void teamRandomFlag(HWTeam & team);
-        static void teamRandomVoice(HWTeam & team);
+        static void teamRandomGrave(HWTeam & team, bool withDLC = true);
+        static void teamRandomFort(HWTeam & team, bool withDLC = true);
+        static void teamRandomFlag(HWTeam & team, bool withDLC = true);
+        static void teamRandomVoice(HWTeam & team, bool withDLC = true);
         static void teamRandomHogName(HWTeam & team, const int HedgehogNumber);
         static void teamRandomEverything(HWTeam & team, const enum RandomTeamMode mode);
         static void teamRandomHats(HWTeam & team);
@@ -48,10 +48,10 @@ class HWNamegen
         HWNamegen();
 
         static QString getRandomTeamName(int kind);
-        static QString getRandomGrave();
-        static QString getRandomFort();
-        static QString getRandomFlag();
-        static QString getRandomVoice();
+        static QString getRandomGrave(bool withDLC = true);
+        static QString getRandomFort(bool withDLC = true);
+        static QString getRandomFlag(bool withDLC = true);
+        static QString getRandomVoice(bool withDLC = true);
 
         static QList<QStringList> TypesTeamnames;
         static QList<QStringList> TypesHatnames;

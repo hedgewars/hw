@@ -31,6 +31,7 @@
 #include "hwconsts.h"
 #include "HWApplication.h"
 #include "sdlkeys.h"
+#include "physfs.h"
 
 #include "DataManager.h"
 
@@ -61,7 +62,8 @@ DataManager & DataManager::instance()
 QStringList DataManager::entryList(
     const QString & subDirectory,
     QDir::Filters filters,
-    const QStringList & nameFilters
+    const QStringList & nameFilters,
+    bool withDLC
 ) const
 {
     QDir tmpDir(QString("physfs://%1").arg(subDirectory));
@@ -69,9 +71,13 @@ QStringList DataManager::entryList(
 
     // sort case-insensitive
     QMap<QString, QString> sortedFileNames;
+    QString absolutePath = datadir->absolutePath().toLocal8Bit().data();
     foreach ( QString fn, result)
     {
-        sortedFileNames.insert(fn.toLower(), fn);
+        // Filter out DLC entries if desired
+        QString realDir = PHYSFS_getRealDir(QString(subDirectory + "/" + fn).toLocal8Bit().data());
+        if(withDLC || realDir == absolutePath)
+            sortedFileNames.insert(fn.toLower(), fn);
     }
     result = sortedFileNames.values();
 
