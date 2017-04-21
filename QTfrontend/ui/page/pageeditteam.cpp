@@ -439,9 +439,11 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
     // Mostly create a default team, with 2 important exceptions:
     HWTeam newTeam(name);
     // Randomize grave to make it less likely that default teams have equal graves (important for resurrector)
-    HWNamegen::teamRandomGrave(newTeam);
+    HWNamegen::teamRandomGrave(newTeam, false);
     // Randomize fort for greater variety in fort mode with default teams
-    HWNamegen::teamRandomFort(newTeam);
+    HWNamegen::teamRandomFort(newTeam, false);
+    // DLC forts and graves intentionally filtered out to prevent desyncs and missing grave error
+    // TODO: Remove DLC filter as soon it is not needed anymore
     loadTeam(newTeam);
 }
 

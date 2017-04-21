@@ -473,9 +473,11 @@ void HWForm::UpdateTeamsLists()
         }
 
         HWTeam defaultTeam(teamName);
-        // Randomize fort and grave for greater variety by default
-        HWNamegen::teamRandomGrave(defaultTeam);
-        HWNamegen::teamRandomFort(defaultTeam);
+        // Randomize fort and grave for greater variety by default.
+        // But we exclude DLC graves and forts to not have desyncing teams by default
+        // TODO: Remove DLC filtering when it isn't neccessary anymore
+        HWNamegen::teamRandomGrave(defaultTeam, false);
+        HWNamegen::teamRandomFort(defaultTeam, false);
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
 
@@ -484,8 +486,8 @@ void HWForm::UpdateTeamsLists()
         {
             teamName = tr("Team %1").arg(i);
             HWTeam numberTeam(teamName);
-            HWNamegen::teamRandomGrave(numberTeam);
-            HWNamegen::teamRandomFort(numberTeam);
+            HWNamegen::teamRandomGrave(numberTeam, false);
+            HWNamegen::teamRandomFort(numberTeam, false);
             numberTeam.saveToFile();
             teamslist.push_back(teamName);
         }
