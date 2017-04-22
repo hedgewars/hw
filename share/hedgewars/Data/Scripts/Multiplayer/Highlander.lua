@@ -128,6 +128,7 @@ local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
 
+local lastHog = nil
 local someHog = nil -- just for looking up the weps
 
 local mode = nil
@@ -310,14 +311,18 @@ function onGameStart()
 end
 
 function AssignHogAmmo()
-	-- Re-assign ammo to this guy, so that his entire ammo set will
-	-- be visible during another player's turn
-	if lastHog ~= nil then
-		ConvertValues(lastHog)
-	end
+	if (CurrentHedgehog ~= nil) then
+		-- Re-assign ammo to this guy, so that his entire ammo set will
+		-- be visible during another player's turn
+		if lastHog ~= nil then
+			ConvertValues(lastHog)
+		end
 
-	-- Give the new hog what he is supposed to have, too
-	ConvertValues(CurrentHedgehog)
+		-- Give the new hog what he is supposed to have, too
+		ConvertValues(CurrentHedgehog)
+
+		lastHog = CurrentHedgehog
+	end
 end
 
 function onNewTurn()
