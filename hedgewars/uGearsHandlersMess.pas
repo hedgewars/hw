@@ -1988,14 +1988,14 @@ begin
 
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         begin
-        if ((Gear^.State and gstAttacking) = 0) then
+        if ((Gear^.State and gstAttacking) = 0) and ((Gear^.State and gstFrozen) = 0) then
             begin
             if ((GameTicks and $1F) = 0) then
 // FIXME - values taken from mine.  use a gear val and set both to same
                if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then
                     Gear^.State := Gear^.State or gstAttacking
             end
-        else // gstAttacking <> 0
+        else if (Gear^.State and gstFrozen) = 0 then // gstAttacking <> 0
             begin
             AllInactive := false;
             if Gear^.Timer = 0 then
@@ -6038,7 +6038,7 @@ begin
                     while iter <> nil do
                         begin
                         if (iter^.State and gstFrozen = 0) and
-                           ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine)) and
+                           ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine) or (iter^.Kind = gtSMine)) and
                            (abs(LongInt(iter^.X.Round) - target.x) + abs(LongInt(iter^.Y.Round) - target.y) + 2 < 2 * iceRadius)
                            and (Distance(iter^.X - int2hwFloat(target.x), iter^.Y - int2hwFloat(target.y)) < int2hwFloat(iceRadius * 2)) then
                             begin
@@ -6064,6 +6064,15 @@ begin
                                 PlaySound(sndVaporize);
                                 iter^.Health := 0;
                                 iter^.Damage := 0;
+                                iter^.State := iter^.State and (not gstAttacking)
+                                end
+                            else if iter^.Kind = gtSMine then // disabe sticky mine
+                                begin
+                                iter^.State:= iter^.State or gstFrozen;
+                                vg:= AddVisualGear(hwRound(iter^.X) - 2  + Random(4), hwRound(iter^.Y) - 2 - Random(2), vgtSmoke);
+                                if vg <> nil then
+                                    vg^.Scale:= 0.4;
+                                PlaySound(sndVaporize);
                                 iter^.State := iter^.State and (not gstAttacking)
                                 end
                             else if iter^.Kind = gtCase then
