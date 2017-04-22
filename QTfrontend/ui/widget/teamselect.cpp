@@ -229,15 +229,17 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
-void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int fixedHeight)
+void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int minHeight, int maxHeight, bool setFrame)
 {
     VertScrArea* area = new VertScrArea(color);
     area->setWidget(pfteams);
-    mainLayout.addWidget(area, 30);
-    if (fixedHeight > 0)
+    mainLayout.addWidget(area);
+    if (minHeight > 0)
+        area->setMinimumHeight(minHeight);
+    if (maxHeight > 0)
+        area->setMaximumHeight(maxHeight);
+    if (setFrame)
     {
-        area->setMinimumHeight(fixedHeight);
-        area->setMaximumHeight(fixedHeight);
         area->setStyleSheet(
             "FrameTeams{"
             "border: solid;"
@@ -263,8 +265,8 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
     QPalette p;
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 150);
-    addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 161, 325, true);
+    addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 80, 0, false);
 
     this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     this->setMinimumWidth(200);

@@ -34,10 +34,12 @@ QLayout * PageMultiplayer::bodyLayoutDefinition()
     QHBoxLayout * pageLayout = new QHBoxLayout();
 
     gameCFG = new GameCFGWidget(this);
-    pageLayout->addWidget(gameCFG, 3, Qt::AlignTop);
+    pageLayout->addWidget(gameCFG);
+    pageLayout->setAlignment(gameCFG, Qt::AlignTop);
 
     teamsSelect = new TeamSelWidget(this);
-    pageLayout->addWidget(teamsSelect, 2, Qt::AlignTop);
+    pageLayout->addWidget(teamsSelect);
+    teamsSelect->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     return pageLayout;
 }

@@ -70,7 +70,7 @@ class TeamSelWidget : public QGroupBox
         void proxyTeamColorChanged(const HWTeam& team);
 
     private:
-        void addScrArea(FrameTeams* pfteams, QColor color, int maxHeight);
+        void addScrArea(FrameTeams* pfteams, QColor color, int minHeight, int maxHeight, bool setFrame);
         FrameTeams* frameDontPlaying;
         FrameTeams* framePlaying;
 
