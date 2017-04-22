@@ -107,11 +107,10 @@ QSettings* getCampMetaInfo()
 }
 
 /** Returns the localized campaign name */
-QString getRealCampName(QString & campaignName)
+QString getRealCampName(const QString & campaignName)
 {
-    QString campaignNameOrig = campaignName;
-    QString campaignNameSpaces = campaignName.replace(QString("_"), QString(" "));
-    return getCampMetaInfo()->value(campaignNameOrig+".name", campaignNameSpaces).toString();
+    QString campaignNameSpaces = QString(campaignName).replace(QString("_"), QString(" "));
+    return getCampMetaInfo()->value(campaignName+".name", campaignNameSpaces).toString();
 }
 
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName)

@@ -1911,7 +1911,7 @@ void HWForm::InitCampaignPage()
 
     for(unsigned int i = 0; i < n; i++)
     {
-        QString campaignName = QString(entries[i]);
+        const QString & campaignName = entries[i];
         QString tName = team.name();
         ui.pageCampaign->CBCampaign->addItem(getRealCampName(campaignName), campaignName);
     }
