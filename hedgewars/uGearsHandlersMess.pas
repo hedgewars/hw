@@ -6066,9 +6066,10 @@ begin
                                 iter^.Damage := 0;
                                 iter^.State := iter^.State and (not gstAttacking)
                                 end
-                            else if iter^.Kind = gtSMine then // disabe sticky mine
+                            else if iter^.Kind = gtSMine then // disabe sticky mine and drop it into the water
                                 begin
                                 iter^.State:= iter^.State or gstFrozen;
+                                iter^.CollisionMask:= 0;
                                 vg:= AddVisualGear(hwRound(iter^.X) - 2  + Random(4), hwRound(iter^.Y) - 2 - Random(2), vgtSmoke);
                                 if vg <> nil then
                                     vg^.Scale:= 0.4;
