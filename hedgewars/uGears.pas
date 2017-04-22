@@ -522,7 +522,10 @@ begin
     cDamageModifier:= _1;
 
     if (GameFlags and gfLaserSight) = 0 then
+        begin
         cLaserSighting:= false;
+        cLaserSightingSniper:= false
+        end;
 
     if (GameFlags and gfArtillery) = 0 then
         cArtillery:= false;

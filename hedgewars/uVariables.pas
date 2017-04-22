@@ -186,6 +186,7 @@ var
     cBuildMaxDist   : LongInt;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
+    cLaserSightingSniper : boolean;
     cVampiric       : boolean;
     cArtillery      : boolean;
     WeaponTooltipTex: PTexture;
@@ -2762,6 +2763,7 @@ begin
     ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
     cLaserSighting  := false;
+    cLaserSightingSniper := false;
     cVampiric       := false;
     cArtillery      := false;
     flagMakeCapture := false;

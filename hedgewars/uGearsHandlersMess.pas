@@ -1316,8 +1316,8 @@ begin
         or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
         or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
             begin
-            if (Gear^.Kind = gtSniperRifleShot) and ((GameFlags and gfLaserSight) = 0) then
-                cLaserSighting := false;
+            if (Gear^.Kind = gtSniperRifleShot) then
+                cLaserSightingSniper := false;
             if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and ((GameFlags and gfArtillery) = 0) then
                 cArtillery := false;
 
@@ -1370,10 +1370,10 @@ begin
 
     HHGear^.State := HHGear^.State or gstNotKickable;
     HedgehogChAngle(HHGear);
-    if not cLaserSighting then
-        // game does not have default laser sight. turn it on and give them a chance to aim
+    if cLaserSightingSniper = false then
+        // Turn sniper's laser sight on and give it a chance to aim
         begin
-        cLaserSighting := true;
+        cLaserSightingSniper := true;
         HHGear^.Message := 0;
         if (HHGear^.Angle >= 32) then
             dec(HHGear^.Angle,32)

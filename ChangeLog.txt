@@ -30,6 +30,7 @@ Game engine:
  * Video recording functionality is restored
  * Fixed bee not being affected by wrap world edge while still being thrown
  * Fixed turn not ending when sticky mine was trapped on rubberband
+ * Fixed sniper rifle disabling laser sight utility after using
  * Fixed hedgehog-voices missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
  * Fixed SD-flakes of themes not working if regular flakes were disabled
  * Fixed RC planes being able to collect frozen crates

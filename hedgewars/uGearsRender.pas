@@ -383,7 +383,7 @@ begin
     *)
             dx:= sign * m * Sin(Gear^.Angle * pi / cMaxAngle);
             dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
-            if cLaserSighting then
+            if cLaserSighting or cLaserSightingSniper then
                 begin
                 lx:= GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle);
                 ly:= GetLaunchY(HH^.CurAmmoType, Gear^.Angle);
