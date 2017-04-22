@@ -15,7 +15,6 @@ Game engine:
  + AI hedgehogs can now use Bee and Vampirism
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
- + Can press [Precise]+[Slot] to cycle through weapons in reverse order
  + Render graves behind everything else, so that they can't hide mines etc.
  + Show indicator symbols at bottom right while extra damage or low gravity are active
  + Color coding for the turn timer: green = ready timer, yellow = turn in progress, red = retreat timer, gray = timer paused
