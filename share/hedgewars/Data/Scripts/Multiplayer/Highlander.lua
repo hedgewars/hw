@@ -118,8 +118,6 @@ local wepArray = {}
 local atkChoices = {}
 local utilChoices = {}
 
-local currHog
-local lastHog
 local started = false
 local switchStage = 0
 
@@ -311,33 +309,19 @@ function onGameStart()
 	runOnGears(ConvertValues)
 end
 
-function CheckForHogSwitch()
-
-	if (CurrentHedgehog ~= nil) then
-
-		currHog = CurrentHedgehog
-
-		if currHog ~= lastHog then
-
-			-- re-assign ammo to this guy, so that his entire ammo set will
-			-- be visible during another player's turn
-			if lastHog ~= nil then
-				ConvertValues(lastHog)
-			end
-
-			-- give the new hog what he is supposed to have, too
-			ConvertValues(CurrentHedgehog)
-
-		end
-
-		lastHog = currHog
-
+function AssignHogAmmo()
+	-- Re-assign ammo to this guy, so that his entire ammo set will
+	-- be visible during another player's turn
+	if lastHog ~= nil then
+		ConvertValues(lastHog)
 	end
 
+	-- Give the new hog what he is supposed to have, too
+	ConvertValues(CurrentHedgehog)
 end
 
 function onNewTurn()
-	CheckForHogSwitch()
+	AssignHogAmmo()
 end
 
 --function onGameTick20()
