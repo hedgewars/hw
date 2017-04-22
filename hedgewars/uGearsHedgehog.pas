@@ -52,9 +52,10 @@ begin
 end;
 
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
-function ChangeAmmo(HHGear: PGear): boolean;
+function ChangeAmmo(HHGear: PGear; reverse: boolean): boolean;
 var slot, i: Longword;
-    ammoidx: LongInt;
+    ammoidx,
+    ammochangedir: LongInt;
     prevAmmo: TAmmoType;
 begin
 ChangeAmmo:= false;
@@ -65,13 +66,21 @@ with HHGear^.Hedgehog^ do
     HHGear^.Message:= HHGear^.Message and (not gmSlot);
     prevAmmo:= CurAmmoType;
     ammoidx:= 0;
+    if (reverse = true) then
+        ammochangedir:= -1
+    else
+        ammochangedir:= 1;
+
     if (((HHGear^.State and (gstAttacking or gstAttacked)) <> 0) and (GameFlags and gfInfAttack = 0))
     or ((HHGear^.State and gstHHDriven) = 0) then
         exit;
     ChangeAmmo:= true;
-
-    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do
-        inc(ammoidx);
+   
+    if CurAmmoType = amNothing then
+        ammoidx:= cMaxSlotAmmoIndex
+    else
+        while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do
+            inc(ammoidx);
 
     if (MultiShootAttacks > 0) then
         begin
@@ -88,12 +97,12 @@ with HHGear^.Hedgehog^ do
     MultiShootAttacks:= 0;
     HHGear^.Message:= HHGear^.Message and (not (gmLJump or gmHJump));
 
-    if Ammoz[CurAmmoType].Slot = slot then
+    if (Ammoz[CurAmmoType].Slot = slot) and (CurAmmoType <> amNothing) then
         begin
         i:= 0;
         repeat
-        inc(ammoidx);
-        if (ammoidx > cMaxSlotAmmoIndex) then
+        inc(ammoidx, ammochangedir);
+        if (ammoidx < 0) or (ammoidx > cMaxSlotAmmoIndex) then
             begin
             inc(i);
             CurAmmoType:= amNothing;
@@ -101,29 +110,33 @@ with HHGear^.Hedgehog^ do
             //TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
             end;
         until (i = 1) or ((Ammo^[slot, ammoidx].Count > 0)
+        and (Ammo^[slot, ammoidx].AmmoType <> amNothing)
         and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns))
 
         end
     else
         begin
-        i:= 0;
+        if reverse then
+            i:= cMaxSlotAmmoIndex
+        else
+            i:= 0;
         // check whether there is ammo in slot
-        while (i <= cMaxSlotAmmoIndex) and ((Ammo^[slot, i].Count = 0)
-        or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns))
-            do inc(i);
+        while (ammoidx >= 0) and (i <= cMaxSlotAmmoIndex) and
+        ((Ammo^[slot, i].Count = 0) or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns) or (Ammo^[slot, i].AmmoType = amNothing))
+            do inc(i, ammochangedir);
 
-        if i <= cMaxSlotAmmoIndex then
+        if (i >= 0) and (i <= cMaxSlotAmmoIndex) then
             ammoidx:= i
         else ammoidx:= -1
         end;
         if ammoidx >= 0 then
             CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
-    // Try again in the next slot
-    if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then
+    // Try again in the next or previous slot
+    if (CurAmmoType = prevAmmo) and (((reverse = false) and (slot < cMaxSlotIndex)) or ((reverse = true) and (slot > 0))) then
         begin
-        inc(slot);
+        inc(slot, ammochangedir);
         HHGear^.MsgParam:= slot;
-        ChangeAmmo(HHGear)
+        ChangeAmmo(HHGear, reverse)
         end
     end
 end;
@@ -154,7 +167,7 @@ newState:= prevState;
 with Hedgehog^ do
     while (CurAmmoType <> weap) and (t >= 0) do
         begin
-        s:= ChangeAmmo(HHGear);
+        s:= ChangeAmmo(HHGear, false);
         if HHGear^.State <> prevState then // so we can keep gstAttacked out of consideration when looping
             newState:= HHGear^.State;
         HHGear^.State:= prevState;
@@ -1313,8 +1326,18 @@ else
 if (CurAmmoGear = nil)
 or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)  then
     begin
+    // Press slot key to select weapon slot
     if ((HHGear^.Message and gmSlot) <> 0) then
-        if ChangeAmmo(HHGear) then ApplyAmmoChanges(Hedgehog^);
+        if ((HHGear^.Message and gmPrecise) <> 0) then
+            begin
+            // Reverse weapon selection by holding down the Precise key
+            HHGear^.Message := HHGear^.Message and (not gmPrecise);
+            if ChangeAmmo(HHGear, true) then ApplyAmmoChanges(Hedgehog^);
+            HHGear^.Message:= HHGear^.Message or gmPrecise
+            end
+        else
+            // Select next weapon
+            if ChangeAmmo(HHGear, false) then ApplyAmmoChanges(Hedgehog^);
 
     if ((HHGear^.Message and gmWeapon) <> 0) then
         HHSetWeapon(HHGear);
