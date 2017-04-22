@@ -125,7 +125,7 @@ with HHGear^.Hedgehog^ do
         ((Ammo^[slot, i].Count = 0) or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns) or (Ammo^[slot, i].AmmoType = amNothing))
             do inc(i, ammochangedir);
 
-        if (i >= 0) and (i <= cMaxSlotAmmoIndex) then
+        if (i <= cMaxSlotAmmoIndex) then
             ammoidx:= i
         else ammoidx:= -1
         end;
