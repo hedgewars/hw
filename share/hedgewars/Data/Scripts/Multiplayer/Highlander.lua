@@ -129,7 +129,6 @@ local shotsFired = 0
 local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
-local maxWep = 58 -- game crashes if you exceed supported #
 
 local someHog = nil -- just for looking up the weps
 
@@ -161,8 +160,10 @@ function onHogAttack()
 end
 
 function StartingSetUp(gear)
-    for i = 1,maxWep do
-        setGearValue(gear,i,0)
+    for i = 0, AmmoTypeMax do
+        if i ~= amNothing then
+            setGearValue(gear,i,0)
+        end
     end
     for w,c in pairs(wepArray) do
         if c == 9 and (atkWeps[w] or utilWeps[w])  then
@@ -175,23 +176,23 @@ function StartingSetUp(gear)
     local r = 0
     if atktot > 0 then
         r = GetRandom(atktot)+1
-        for i = 1,maxWep do
-        --for w,c in pairs(atkChoices) do
-            --WriteLnToConsole('     c: '..c..' w:'..w..' r:'..r)
-            if atkChoices[i] >= r then
-                setGearValue(gear,i,1)
-                break
+        for i = 0, AmmoTypeMax do
+            if i ~= amNothing then
+                if atkChoices[i] >= r then
+                    setGearValue(gear,i,1)
+                    break
+                end
             end
         end
     end
     if utiltot > 0 then
         r = GetRandom(utiltot)+1
-        for i = 1,maxWep do
-       -- for w,c in pairs(utilChoices) do
-            --WriteLnToConsole('util c: '..c..' w:'..w..' r:'..r)
-            if utilChoices[i] >= r then
-                setGearValue(gear,i,1)
-                break
+        for i = 0, AmmoTypeMax do
+            if i ~= amNothing then
+                if utilChoices[i] >= r then
+                    setGearValue(gear,i,1)
+                    break
+                end
             end
         end
     end
@@ -279,23 +280,25 @@ end
 function onGameStart()
     utilChoices[amSkip] = 0
     local c = 0
-    for i = 1,maxWep do
-        atkChoices[i] = 0
-        utilChoices[i] = 0
-        if i ~= 7 then
-            wepArray[i] = 0
-            c = GetAmmoCount(someHog, i)
-            if c > 8 then c = 9 end
-            wepArray[i] = c
-            if c < 9 and c > 0 then
-                if atkWeps[i] then
-                    --WriteLnToConsole('a    c: '..c..' w:'..i)
-                    atktot = atktot + probability[c]
-                    atkChoices[i] = atktot
-                elseif utilWeps[i] then
-                    --WriteLnToConsole('u    c: '..c..' w:'..i)
-                    utiltot = utiltot + probability[c]
-                    utilChoices[i] = utiltot
+    for i = 0, AmmoTypeMax do
+        if i ~= amNothing then
+            atkChoices[i] = 0
+            utilChoices[i] = 0
+            if i ~= 7 then
+                wepArray[i] = 0
+                c = GetAmmoCount(someHog, i)
+                if c > 8 then c = 9 end
+                wepArray[i] = c
+                if c < 9 and c > 0 then
+                    if atkWeps[i] then
+                        --WriteLnToConsole('a    c: '..c..' w:'..i)
+                        atktot = atktot + probability[c]
+                        atkChoices[i] = atktot
+                    elseif utilWeps[i] then
+                        --WriteLnToConsole('u    c: '..c..' w:'..i)
+                            utiltot = utiltot + probability[c]
+                        utilChoices[i] = utiltot
+                    end
                 end
             end
         end
