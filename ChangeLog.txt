@@ -238,6 +238,7 @@ Lua-API:
  + New hook: onUsedAmmo(ammoType) -- called when ammo has been finished using (e.g. after both shotgun shots)
  + New variable: AirMinesNum -- Number of air mines being placed on a medium-sized map
  + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
+ + New variable: AmmoTypeMax -- Maximum ammo type ID (useful to iterate through all ammo types, starting by 0)
  + Locale library: loc_noop -- Mark string for translation but don't translate it
  + Animate library: AnimInit([startAnimating]) -- New parameter startAnimating: if true, will start game in cinematic mode with most controls disabled. Must play an animation after that
  * Removed call: SetAmmoStore -- Old undocumented function of questional use, has never been used

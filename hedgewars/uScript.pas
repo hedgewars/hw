@@ -2866,6 +2866,7 @@ ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
 ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetInteger('GetAwayTime', cGetAwayTime);
+ScriptSetInteger('AmmoTypeMax', Ord(High(TAmmoType)));
 ScriptSetString('Map', cMapName);
 ScriptSetString('Theme', Theme);
 ScriptSetString('Goals', '');
