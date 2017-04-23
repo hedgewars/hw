@@ -577,12 +577,8 @@ local gameFlagList =	{
   sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
   sprShoutCorner, sprShoutEdge, sprShoutTail, sprCustom1, sprCustom2, }
 
- local reducedSpriteIDArrayFrames = {
-  4, 8, 1, 1, 1,
-  57, 57, 3, 4, 8, 1,
-  1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1,
- }
+ -- Set in onGameInit
+ local reducedSpriteIDArrayFrames
 
  local reducedSpriteTextArray = {
   "sprAmRubber", "sprAmGirder", "sprTargetBee", "sprIceTexture", "sprHHTelepMask",
@@ -3366,6 +3362,13 @@ function onGameInit()
 			gameFlagList[i][2] = false
 		end
 	end
+
+	reducedSpriteIDArrayFrames = {
+		4, 8, 1, 1, 1,
+		AmmoTypeMax, AmmoTypeMax, 3, 4, 8, 1,
+		1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1,
+	}
 
 	Explosives = 0
 	MinesNum = 0
