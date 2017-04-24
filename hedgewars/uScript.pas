@@ -2979,6 +2979,8 @@ f:= pfsOpenRead(s);
 if f = nil then
     exit;
 
+hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
+
 physfsReaderSetBuffer(@buf);
 ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
 pfsClose(f);
@@ -2995,7 +2997,6 @@ else
     lua_pcall(luaState, 0, 0, 0);
     ScriptLoaded:= true
     end;
-hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 end;
 
 procedure SetGlobals;
