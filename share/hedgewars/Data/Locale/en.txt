@@ -909,7 +909,7 @@
 04:56=You can throw two cleavers at your enemy, block|passages and tunnels and even use them for|climbing! Its damage increases with its speed.|But be careful! Playing with knives is dangerous.|Attack: Hold to shoot with more power (twice)
 04:57=Build a VERY elastic rubber band, from which|hedgehogs and other things bounce off|without taking fall damage.|Left/Right: Change rubber band orientation|Cursor: Place rubber band in a valid position
 04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enouogh to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power
-04:59=Send those dirty hogs swimming! This cute little squeaky|rubber duck is able to swim on water and will go with the|wind once swimming. It explodes when it hits land, so|make sure to drop it from a cliff or another safe spot.|Attack: Drop the rubber duck straight down
+04:59=Send those dirty hogs swimming! This cute little squeaky|rubber duck is able to swim on water and will go with the|wind once swimming. It explodes when it hits land, so|make sure to drop it from a cliff or another safe spot.|Attack: Drop the rubber duck
 
 ; Game goal strings
 05:00=Game Modes
