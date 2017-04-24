@@ -152,7 +152,7 @@ About::About(QWidget * parent) :
                 .arg(sdlimage_ver->patch));
             libinfo.append(QString("<br>"));
         }
-        SDL_UnloadObject(sdlnet_handle);
+        SDL_UnloadObject(sdlimage_handle);
     }
 
     void *sdlttf_handle = SDL_LoadObject(sopath("SDL_ttf"));
@@ -167,7 +167,7 @@ About::About(QWidget * parent) :
                 .arg(sdlttf_ver->patch));
             libinfo.append(QString("<br>"));
         }
-        SDL_UnloadObject(sdlnet_handle);
+        SDL_UnloadObject(sdlttf_handle);
     }
 
 
