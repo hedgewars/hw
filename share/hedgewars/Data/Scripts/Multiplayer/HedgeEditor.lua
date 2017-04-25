@@ -2592,7 +2592,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amMine, 60000
+				"", 9, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
