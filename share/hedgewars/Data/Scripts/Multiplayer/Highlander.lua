@@ -273,8 +273,8 @@ function onGameInit()
 	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
 	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
-	Goals = loc("Highlander: Eliminate enemy hogs and take their weapons") .."|" ..
-	loc("Constant Weaponry: Weapons are reset on end of turn")
+	Goals = loc("Highlander: Eliminate enemy hogs to take their weapons") .. "|" ..
+	loc("Replenishment: Weapons are restocked on turn start of a new hog")
 end
 
 function onGameStart()
@@ -312,6 +312,10 @@ function onGameStart()
 end
 
 function CheckForHogSwitch()
+
+	--[[ Restock the weapons of the hog on turn start, provided it is not the same hog as before.
+	This exception is done do avoid a single hog receiving tons of weapons when it is the only unfrozen
+	hog and takes consecutive turns. ]]
 
 	if (CurrentHedgehog ~= nil) then
 
