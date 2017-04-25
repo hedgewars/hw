@@ -1937,6 +1937,27 @@ begin
     lc_sendstat:= 0
 end;
 
+function lc_sendgameresultoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendGameResultOn := false;
+    lc_sendgameresultoff:= 0
+end;
+
+function lc_sendrankingstatsoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendRankingStatsOn := false;
+    lc_sendrankingstatsoff:= 0
+end;
+
+function lc_sendachievementsstatsoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendAchievementsStatsOn := false;
+    lc_sendachievementsstatsoff:= 0
+end;
+
 function lc_sendhealthstatsoff(L : Plua_State) : LongInt; Cdecl;
 begin
     L:= L; // avoid compiler hint
@@ -3409,6 +3430,9 @@ lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
+lua_register(luaState, _P'SendGameResultOff', @lc_sendgameresultoff);
+lua_register(luaState, _P'SendRankingStatsOff', @lc_sendrankingstatsoff);
+lua_register(luaState, _P'SendAchievementsStatsOff', @lc_sendachievementsstatsoff);
 lua_register(luaState, _P'SendHealthStatsOff', @lc_sendhealthstatsoff);
 lua_register(luaState, _P'FindPlace', @lc_findplace);
 lua_register(luaState, _P'SetGearPosition', @lc_setgearposition);

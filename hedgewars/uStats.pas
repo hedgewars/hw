@@ -24,6 +24,9 @@ uses uConsts, uTypes;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
+    SendGameResultOn : boolean = true;
+    SendRankingStatsOn : boolean = true;
+    SendAchievementsStatsOn : boolean = true;
     SendHealthStatsOn : boolean = true;
 
 procedure initModule;
@@ -276,7 +279,7 @@ if SendHealthStatsOn then
     for t:= 0 to Pred(TeamsCount) do
         with TeamsArray[t]^ do
         begin
-            if not ExtDriven then
+            if (not ExtDriven) and SendRankingStatsOn then
                 SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
             for i:= 0 to cMaxHHIndex do
                 begin
@@ -300,8 +303,9 @@ if SendHealthStatsOn then
             if Clan^.ClanHealth > 0 then
                 begin
                 winnersClan:= Clan;
-                SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                    IntToStr(stats.Kills) + ' ' + TeamName);
+                if SendRankingStatsOn then
+                    SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                        IntToStr(stats.Kills) + ' ' + TeamName);
             end;
 
             { determine maximum values of TeamKills, TurnSkips, TeamDamage }
@@ -324,32 +328,37 @@ if SendHealthStatsOn then
         end;
 
     { now send player stats for loser teams }
-    for t:= 0 to Pred(TeamsCount) do
-        begin
-        with TeamsArray[t]^ do
+    if SendRankingStatsOn then
+        for t:= 0 to Pred(TeamsCount) do
             begin
-            if Clan^.ClanHealth = 0 then
+            with TeamsArray[t]^ do
                 begin
-                SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                    IntToStr(stats.Kills) + ' ' + TeamName);
+                if Clan^.ClanHealth = 0 then
+                    begin
+                    SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                        IntToStr(stats.Kills) + ' ' + TeamName);
+                end;
             end;
         end;
-    end;
 
-    if msdhh <> nil then
-        SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
-    if mskcnt = 1 then
-        SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+    // “Achievements” / Details part of stats screen
+    if SendAchievementsStatsOn then
+        begin
+        if msdhh <> nil then
+            SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+        if mskcnt = 1 then
+            SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
-    if maxTeamKills > 1 then
-        SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
-    if maxTurnSkips > 2 then
-        SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
-    if maxTeamDamage > 30 then
-        SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
+        if maxTeamKills > 1 then
+            SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
+        if maxTurnSkips > 2 then
+            SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
+        if maxTeamDamage > 30 then
+            SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
-    if KilledHHs > 0 then
-        SendStat(siKilledHHs, IntToStr(KilledHHs));
+        if KilledHHs > 0 then
+            SendStat(siKilledHHs, IntToStr(KilledHHs));
+        end;
 
     // now to console
     if winnersClan <> nil then
