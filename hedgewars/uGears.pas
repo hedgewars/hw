@@ -439,6 +439,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
                 step:= stChDmg;
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
+                GameOver:= true;
                 TurnTimeLeft:= 0
                 end
             end

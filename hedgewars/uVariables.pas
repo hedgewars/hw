@@ -97,6 +97,7 @@ var
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
     IsGetAwayTime   : boolean;
+    GameOver        : boolean;
     cSuddenDTurns   : LongInt;
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
@@ -2729,6 +2730,7 @@ begin
     RightImpactTimer    := 0;
     TurnTimeLeft        := 0;
     IsGetAwayTime       := false;
+    GameOver            := false;
     TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;

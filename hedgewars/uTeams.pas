@@ -49,7 +49,7 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
     uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
-var GameOver: boolean;
+var TeamsGameOver: boolean;
     NextClan: boolean;
 
 function CheckForWin: boolean;
@@ -77,7 +77,7 @@ ReadyTimeLeft:= 0;
 if (not bBetweenTurns) and isInMultiShoot then
     TurnReaction();
 
-if not GameOver then
+if not TeamsGameOver then
     begin
     if AliveCount = 0 then
         begin // draw
@@ -118,6 +118,7 @@ if not GameOver then
             end;
     SendStats;
     end;
+TeamsGameOver:= true;
 GameOver:= true
 end;
 
