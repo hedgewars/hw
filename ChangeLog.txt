@@ -5,7 +5,7 @@
 Content:
  + New theme: Beach
  + Completely new Cheese map; replaces the old one
- + New forts: Lonely_Island, Olympic, Snail
+ + New forts: Lonely_Island, Octopus, Olympic, Snail
  + New hat: "tf_scout" (this time for real)
 
 Game engine:
