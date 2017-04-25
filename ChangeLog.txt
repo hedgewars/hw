@@ -45,7 +45,6 @@ Game engine:
 Highlander:
  + Show collected weapons after kill and play sound
  + Mission panel now shows all game modifiers (e.g. mines time, vampirism, etc.)
- * Fix hog not receiving new ammo when it takes two consecutive turns (happens when all enemy hogs are frozen)
 
 Construction Mode:
  + Added script parameter support:

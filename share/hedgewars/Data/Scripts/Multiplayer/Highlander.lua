@@ -118,6 +118,8 @@ local wepArray = {}
 local atkChoices = {}
 local utilChoices = {}
 
+local currHog
+local lastHog
 local started = false
 local switchStage = 0
 
@@ -128,7 +130,6 @@ local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
 
-local lastHog = nil
 local someHog = nil -- just for looking up the weps
 
 local mode = nil
@@ -310,23 +311,33 @@ function onGameStart()
 	runOnGears(ConvertValues)
 end
 
-function AssignHogAmmo()
+function CheckForHogSwitch()
+
 	if (CurrentHedgehog ~= nil) then
-		-- Re-assign ammo to this guy, so that his entire ammo set will
-		-- be visible during another player's turn
-		if lastHog ~= nil then
-			ConvertValues(lastHog)
+
+		currHog = CurrentHedgehog
+
+		if currHog ~= lastHog then
+
+			-- re-assign ammo to this guy, so that his entire ammo set will
+			-- be visible during another player's turn
+			if lastHog ~= nil then
+				ConvertValues(lastHog)
+			end
+
+			-- give the new hog what he is supposed to have, too
+			ConvertValues(CurrentHedgehog)
+
 		end
 
-		-- Give the new hog what he is supposed to have, too
-		ConvertValues(CurrentHedgehog)
+		lastHog = currHog
 
-		lastHog = CurrentHedgehog
 	end
+
 end
 
 function onNewTurn()
-	AssignHogAmmo()
+	CheckForHogSwitch()
 end
 
 --function onGameTick20()
