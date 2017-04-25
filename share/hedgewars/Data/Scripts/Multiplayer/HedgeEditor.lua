@@ -276,6 +276,9 @@ HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 -- experimental crap
 --local destroyMap = false
 
+-- Special frames in Ammos.png/Ammos_bw.png
+local ammoFrameAirAttack = 63
+
 -----------------------------------------
 -- tracking vars for save/load purposes
 -----------------------------------------
@@ -354,7 +357,7 @@ local atkArray =
 				{amRCPlane,	"amRCPlane"},
 				{amSMine,	"amSMine"},
 
-				{amAirAttack,	"amAirAttack", 63}, -- overwritten icon in Ammos.png
+				{amAirAttack,	"amAirAttack", ammoFrameAirAttack}, -- overwritten icon in Ammos.png
 				{amMineStrike,	"amMineStrike"},
 				{amNapalm, 	"amNapalm"},
 				{amPiano,	"amPiano"},
@@ -988,7 +991,13 @@ function CallPlaceSprite(pID)
 		placedTint[pID] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
 	end
 
-	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], placedFrame[pID],
+	-- Special case: Placing amAirAttack of the ammos sprite (since this one is overwritten)
+	local actualDisplayedImage = placedFrame[pID]
+	if (placedSprite[pID] == sprAMAmmos or placedSprite[pID] == sprAMAmmosBW) and (actualDisplayedImage == (amAirAttack - 1)) then
+		actualDisplayedImage = ammoFrameAirAttack
+	end
+
+	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], actualDisplayedImage,
 		placedTint[pID],
 		nil, -- overrite existing land
 		nil, nil, -- this stuff specifies flipping
@@ -2853,6 +2862,10 @@ function HandleHedgeEditor()
 			elseif (cat[cIndex] == loc("Sprite Placement Mode")) then
 				dSprite = reducedSpriteIDArray[pIndex]
 				dFrame = sFrame
+				if ((dSprite == sprAMAmmos) or (dSprite == sprAMAmmosBW)) and (dFrame == (amAirAttack - 1)) then
+					-- Special case: Air attack icon of ammos sprite needs to be fixed (since this icon is overwritten)
+					dFrame = ammoFrameAirAttack
+				end
 			else
 				dCol = 0xFFFFFF00
 				dSprite = sprArrow
