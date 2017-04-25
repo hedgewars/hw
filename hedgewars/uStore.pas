@@ -374,7 +374,7 @@ var s: shortstring;
     ii: TSprite;
     fi: THWFont;
     ai: TAmmoType;
-    tmpsurf: PSDL_Surface;
+    tmpsurf, tmpoverlay: PSDL_Surface;
     i, imflags: LongInt;
 begin
 AddFileLog('StoreLoad()');
@@ -445,6 +445,15 @@ for ii:= Low(TSprite) to High(TSprite) do
                         Width:= tmpsurf^.w;
                         Height:= tmpsurf^.h
                         end;
+                if (ii in [sprAMAmmos, sprAMAmmosBW]) then
+                    begin
+                    tmpoverlay := LoadDataImage(Path, copy(FileName, 1, length(FileName)-5), (imflags and not ifCritical));
+                    if tmpoverlay <> nil then
+                        begin
+                        copyToXY(tmpoverlay, tmpsurf, 0, 0);
+                        SDL_FreeSurface(tmpoverlay)
+                        end
+                    end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
                     begin
                     Texture:= Surface2Tex(tmpsurf, true);
