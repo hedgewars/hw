@@ -320,79 +320,79 @@ local showGearTags = true
 local atkArray =
 				{
 
-				{amBazooka, 	"amBazooka",		2},
-				{amBee, 	"amBee",		3},
-				{amMortar, 	"amMortar",		21},
-				{amDrill, 	"amDrill",		28},
-				{amSnowball, 	"amSnowball",		50},
+				{amBazooka, 	"amBazooka"},
+				{amBee, 	"amBee"},
+				{amMortar, 	"amMortar"},
+				{amDrill, 	"amDrill"},
+				{amSnowball, 	"amSnowball"},
 
-				{amGrenade,	"amGrenade",		0},
-				{amClusterBomb,	"amClusterBomb",	1},
-				{amWatermelon, 	"amWatermelon",		25},
-				{amHellishBomb,	"amHellishBomb",	26},
-				{amMolotov, 	"amMolotov",		39},
-				{amGasBomb, 	"amGasBomb",		43},
+				{amGrenade,	"amGrenade"},
+				{amClusterBomb,	"amClusterBomb"},
+				{amWatermelon, 	"amWatermelon"},
+				{amHellishBomb,	"amHellishBomb"},
+				{amMolotov, 	"amMolotov"},
+				{amGasBomb, 	"amGasBomb"},
 
-				{amShotgun,	"amShotgun",		4},
-				{amDEagle,	"amDEagle",		9},
-				{amSniperRifle,	"amSniperRifle",	37},
-				{amSineGun, 	"amSineGun",		44},
-				{amFlamethrower,"amFlamethrower",	45},
-				{amIceGun, 	"amIceGun",		53},
+				{amShotgun,	"amShotgun"},
+				{amDEagle,	"amDEagle"},
+				{amSniperRifle,	"amSniperRifle"},
+				{amSineGun, 	"amSineGun"},
+				{amFlamethrower,"amFlamethrower"},
+				{amIceGun, 	"amIceGun"},
 
-				{amFirePunch, 	"amFirePunch",		11},
-				{amWhip,	"amWhip",		12},
-				{amBaseballBat, "amBaseballBat",	13},
-				{amKamikaze, 	"amKamikaze",		22},
-				{amSeduction, 	"amSeduction",		24},
-				{amHammer,	"amHammer",		47},
+				{amFirePunch, 	"amFirePunch"},
+				{amWhip,	"amWhip"},
+				{amBaseballBat, "amBaseballBat"},
+				{amKamikaze, 	"amKamikaze"},
+				{amSeduction, 	"amSeduction"},
+				{amHammer,	"amHammer"},
 
-				{amMine, 	"amMine",		8},
-				{amDynamite, 	"amDynamite",		10},
-				{amCake, 	"amCake",		23},
-				{amBallgun, 	"amBallgun",		29},
-				{amRCPlane,	"amRCPlane",		30},
-				{amSMine,	"amSMine",		46},
+				{amMine, 	"amMine"},
+				{amDynamite, 	"amDynamite"},
+				{amCake, 	"amCake"},
+				{amBallgun, 	"amBallgun"},
+				{amRCPlane,	"amRCPlane"},
+				{amSMine,	"amSMine"},
 
-				{amAirAttack,	"amAirAttack",		15},
-				{amMineStrike,	"amMineStrike",		16},
-				{amNapalm, 	"amNapalm",		27},
-				{amPiano,	"amPiano",		42},
-				{amDrillStrike,	"amDrillStrike",	49},
-				{amAirMine,	"amAirMine",		56},
+				{amAirAttack,	"amAirAttack", 63}, -- overwritten icon in Ammos.png
+				{amMineStrike,	"amMineStrike"},
+				{amNapalm, 	"amNapalm"},
+				{amPiano,	"amPiano"},
+				{amDrillStrike,	"amDrillStrike"},
+				{amAirMine,	"amAirMine"},
 
-				{amKnife,	"amKnife",		54},
+				{amKnife,	"amKnife"},
 
-				{amBirdy,	"amBirdy",		40},
-				{amDuck,	"amDuck",		57},
+				{amBirdy,	"amBirdy"},
+				{amDuck,	"amDuck"},
 
 				}
 
 local utilArray =
 				{
 
-				{amPickHammer,	"amPickHammer",		5},
-				{amBlowTorch, 	"amBlowTorch",		17},
-				{amGirder, 	"amGirder",		18},
-				{amLandGun,	"amLandGun",		52},
-				{amRubber, 	"amRubber",		55},
+				{amPickHammer,	"amPickHammer"},
+				{amBlowTorch, 	"amBlowTorch"},
+				{amGirder, 	"amGirder"},
+				{amLandGun,	"amLandGun"},
+				{amRubber, 	"amRubber"},
 
-				{amRope, 	"amRope",		7},
-				{amParachute, 	"amParachute",		14},
-				{amTeleport,	"amTeleport",		19},
-				{amJetpack,	"amJetpack",		38},
-				{amPortalGun,	"amPortalGun",		41},
+				{amRope, 	"amRope"},
+				{amParachute, 	"amParachute"},
+				{amTeleport,	"amTeleport"},
+				{amJetpack,	"amJetpack"},
+				{amPortalGun,	"amPortalGun"},
 
-				{amInvulnerable,"amInvulnerable",	33},
-				{amLaserSight,	"amLaserSight",		35},
-				{amVampiric,	"amVampiric",		36},
-				{amResurrector, "amResurrector",	48},
-				{amTardis, 	"amTardis",		51},
+				{amInvulnerable,"amInvulnerable"},
+				{amLaserSight,	"amLaserSight"},
+				{amVampiric,	"amVampiric"},
+				{amResurrector, "amResurrector"},
+				{amTardis, 	"amTardis"},
 
-				{amSwitch,	"amSwitch",		20},
-				{amLowGravity, 	"amLowGravity",		31},
-				{amExtraDamage, "amExtraDamage",	32},
-				{amExtraTime,	"amExtraTime",		34},
+				{amSwitch,	"amSwitch"},
+				{amLowGravity, 	"amLowGravity"},
+				{amExtraDamage, "amExtraDamage"},
+				{amExtraTime,	"amExtraTime"},
 
 				}
 
@@ -2830,9 +2830,8 @@ function HandleHedgeEditor()
 				dSprite = sprBotlevels--sprMineOff
 				dFrame = 1
 			elseif (cat[cIndex] == loc("Dud Mine Placement Mode")) then
-				-- TODO: Use dud mine sprite instead of sprite of normal mine
-				dSprite = sprBotlevels--sprMineOff
-				dFrame = 1
+				dSprite = sprBotlevels--sprMineDead
+				dFrame = 3
 			elseif (cat[cIndex] == loc("Sticky Mine Placement Mode")) then
 				dSprite = sprBotlevels--sprSMineOff
 				dFrame = 2
@@ -2882,8 +2881,14 @@ function HandleHedgeEditor()
 				end
 
 				tSprCol = 0xFFFFFFFF
-				tempFrame = tArr[pIndex][3]
-
+				-- Get ammo icon
+				if tArr[pIndex][3] then
+					-- Overwritten ammo icon
+					tempFrame = tArr[pIndex][3]
+				else
+					-- Use default ammo icon
+					tempFrame = tArr[pIndex][1] - 1
+				end
 			end
 
 		else
@@ -2893,10 +2898,10 @@ function HandleHedgeEditor()
 		end
 
 		SetVisualGearValues(crateSprite, CursorX+xDisplacement, CursorY+yDisplacement, 0, 0, dAngle, tempFrame, 1000, sprAMAmmos, 1000, tSprCol)
-		SetVisualGearValues(tSpr[1], CursorX+xDisplacement-2, CursorY+yDisplacement-2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[2], CursorX+xDisplacement-2, CursorY+yDisplacement+2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[3], CursorX+xDisplacement+2, CursorY+yDisplacement-2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[4], CursorX+xDisplacement+2, CursorY+yDisplacement+2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[1], CursorX+xDisplacement-2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[2], CursorX+xDisplacement-2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[3], CursorX+xDisplacement+2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[4], CursorX+xDisplacement+2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
 
 
 		if genTimer >= 100 then

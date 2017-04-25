@@ -158,6 +158,7 @@ HedgeEditor:
  * Fix error when trying to set ShoppaBalance rank without anything selected
  * Don't show misleading circle when placing girder/rubber
  * Disable timer keys 2-4 in rubber placement mode
+ * Fix incorrect weapon crate preview of air attack, drill strike and napalm
 
 Other Game Styles:
  + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
