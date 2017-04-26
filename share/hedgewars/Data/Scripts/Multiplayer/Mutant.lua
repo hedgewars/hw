@@ -323,7 +323,7 @@ function onGameTick()
                         SetHealth(mutant,0)
                         mt_hurt= false
                         setGearValue(mutant,"SelfDestruct",true)
-                        TurnTimeLeft = 0
+                        EndTurn()
                     end
             end
     end
@@ -411,7 +411,7 @@ local only_low_score = true
     if gameOver then
         SendStat(siGraphTitle, loc("Score graph"))
 
-        TurnTimeLeft = 0
+        EndTurn(true)
 
         teamsSorted = {}
  
@@ -539,7 +539,7 @@ function setMutantStuff(gear)
 
     AddCaption(string.format(loc("%s has mutated! +2 points"), getGearValue(gear, "Name")), GetClanColor(GetHogClan(gear)), capgrpMessage)
 
-    TurnTimeLeft=0
+    EndTurn(true)
 
     AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
     AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
