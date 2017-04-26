@@ -259,7 +259,7 @@
 02:02=Losing is not an option
 02:02=Cry havoc! Let loose the hogs of war!
 02:02=Hedgewars, brought to you by Hedgewars.org
-02:02=GL HF
+02:02=Good luck, and have fun!
 02:02=Just count yourself lucky you're not up against Tiyuri
 02:02=Just count yourself lucky you're not up against unC0Rr
 02:02=Just count yourself lucky you're not up against Nemo
