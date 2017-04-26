@@ -128,19 +128,13 @@ function onGameStart()
 	--UTILITY CRATE--
 	parachute = SpawnUtilityCrate(1670, 1165, amParachute)
 	girder = SpawnUtilityCrate(2101, 1297, amGirder)
-	SpawnUtilityCrate(3965, 625, amBlowTorch)
-	SpawnUtilityCrate(2249, 93, amBlowTorch)
-	SpawnUtilityCrate(2181, 829, amBlowTorch)
-	SpawnUtilityCrate(1820, 567, amBlowTorch)
 	SpawnUtilityCrate(1375, 900, amTeleport)
-	SpawnUtilityCrate(130, 600, amPickHammer)
 	SpawnUtilityCrate(1660,1820, amLaserSight)
 	SpawnUtilityCrate(4070,1840, amLaserSight)
-
+	portalgun = SpawnUtilityCrate(505, 1943, amPortalGun, 1000)
+	extratime = SpawnUtilityCrate(4020, 785, amExtraTime, 2)
 
 	--AMMO CRATE--
-	portalgun = SpawnAmmoCrate(505, 1943, amPortalGun, 1000)
-	extratime = SpawnAmmoCrate(4020, 785, amExtraTime, 2)
 	SpawnAmmoCrate(425, 613, amSnowball)
 	SpawnAmmoCrate(861, 633, amHellishBomb)
 	SpawnAmmoCrate(2510, 623, amSnowball)
@@ -150,6 +144,11 @@ function onGameStart()
 	SpawnAmmoCrate(3000, 100, amDEagle)
 	SpawnAmmoCrate(2900, 1400, amRope)
 	SpawnAmmoCrate(4025, 1117, amFirePunch)
+	SpawnAmmoCrate(3965, 625, amBlowTorch)
+	SpawnAmmoCrate(2249, 93, amBlowTorch)
+	SpawnAmmoCrate(2181, 829, amBlowTorch)
+	SpawnAmmoCrate(1820, 567, amBlowTorch)
+	SpawnAmmoCrate(130, 600, amPickHammer)
 
 	--HEALTH CRATE--
 	SpawnHealthCrate(2000, 780)
