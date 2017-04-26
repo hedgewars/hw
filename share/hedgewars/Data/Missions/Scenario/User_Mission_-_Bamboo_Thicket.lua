@@ -80,7 +80,7 @@ function onGearDelete(gear)
 		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 		
 		if (turnNumber < 6) and (firedShell == false) then
-			AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Energetic Engineer"),0xffba00ff,capgrpMessage2)
+			AddCaption(string.format(loc("Achievement gotten: %s"), loc("Energetic Engineer")),0xffba00ff,capgrpMessage2)
 		end
 
 	elseif gear == player then

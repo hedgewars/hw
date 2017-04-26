@@ -136,7 +136,7 @@ function onGearDelete(gear)
 		elseif (gear == instructor) and (GetY(gear) > WaterLine) then
 			HogSay(player, loc("See ya!"), SAY_THINK)
 			TurnTimeLeft = 3000
-			AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Naughty Ninja"),0xffba00ff,capgrpMessage2)
+			AddCaption(string.format(loc("Achievement gotten: %s"), loc("Naughty Ninja")) ,0xffba00ff,capgrpMessage2)
 			DismissTeam(loc("Blue Team"))
 			gameWon = true
 		elseif gear == enemy then

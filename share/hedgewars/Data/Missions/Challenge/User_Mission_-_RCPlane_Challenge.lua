@@ -466,7 +466,7 @@ function onGearDelete(gear)
 			end
 			if(planesUsed == 1) then
 				SendStat(siCustomAchievement, loc("Congratulations! You have truly mastered this challenge! Don't forget to save the demo."))
-				SendStat(siCustomAchievement, string.format(loc("You have gained an achievement: %s"), loc("Prestigious Pilot")))
+				SendStat(siCustomAchievement, string.format(loc("Achievement gotten: %s"), loc("Prestigious Pilot")))
 			end
 
 			ShowMission     (
