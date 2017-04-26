@@ -434,9 +434,6 @@ function onNewRound()
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
-                gameOver = true
-                TurnTimeLeft = 10000000
-
                 -- Sort the scores for the ranking list
                 local unfinishedArray = {}
                 local sortedTeams = {}
@@ -473,8 +470,17 @@ function onNewRound()
                         SendStat(siCustomAchievement, loc("Maybe you should try easier waypoints next time."))
                 end
 
-                -- Game over
-                EndGame()
+		-- Kill all the losers
+		for i = 0, (numhhs-1) do
+			if GetHogClan(hhs[i]) ~= bestClan then
+				SetEffect(hhs[i], heResurrectable, 0)
+				SetHealth(hhs[i],0)
+			end
+		end
+
+		gameOver = true
+		EndTurn(true)
+
         end
 
 end
@@ -548,7 +554,10 @@ end
 
 
 function onGameStart()
+	SendGameResultOff()
+	SendRankingStatsOff()
         SendHealthStatsOff()
+	SendAchievementsStatsOff()
 
         roundN = 0
         lastRound = TotalRounds
