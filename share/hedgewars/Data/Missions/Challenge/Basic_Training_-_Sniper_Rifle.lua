@@ -361,6 +361,6 @@ function generateStats()
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
 		end_score_overall = end_score_targets
 	end
-	SendStat(siPlayerKills, tostring(end_score_overall), loc("Sniperz"))
 	SendStat(siPointType, loc("points"))
+	SendStat(siPlayerKills, tostring(end_score_overall), loc("Sniperz"))
 end

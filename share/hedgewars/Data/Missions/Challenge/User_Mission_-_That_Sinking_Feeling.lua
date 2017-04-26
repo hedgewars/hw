@@ -226,8 +226,8 @@ function onGameTick()
 				GameOver = true
 				AddCaption(loc("The flood has stopped! Challenge over."))
 				SendStat(siGameResult, loc("Challenge completed!"))
-				SendStat(siPlayerKills, tostring(hhCount), loc("Nameless Heroes"))
 				SendStat(siPointType, loc("rescues"))
+				SendStat(siPlayerKills, tostring(hhCount), loc("Nameless Heroes"))
 
 				-- Do not count drowning hedgehogs
 				local hhLeft = hhCount
@@ -290,8 +290,8 @@ function onGearDelete(gear)
 		else
 			SendStat(siCustomAchievement, loc("You haven't rescued anyone."))
 		end
-		SendStat(siPlayerKills, "0", loc("Nameless Heroes"))
 		SendStat(siPointType, loc("points"))
+		SendStat(siPlayerKills, "0", loc("Nameless Heroes"))
 
 		SendStat(siGameResult, loc("Disqualified!"))
 		GameOver = true
