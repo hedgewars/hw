@@ -2033,13 +2033,17 @@ function SaveLevelData()
 
 	for i = 0, (placedCount-1) do
 		if placedType[i] == loc("Waypoint Editing Mode") then
+			--[[ TODO/FIXME: Somehow incorporate the waypoints in an actual useful manner.
+			The functions AddWayPoint and PreviewWayPoint do not exist and will thus be commented-out
+			in the output code. They are added anyway so the user sees the coordinates
+			]]
 			table.insert(waypointList,
-			"	AddWayPoint(" ..
+			"--	AddWayPoint(" ..
 				placedX[i] ..", " ..
 				placedY[i] ..")"
 				)
 			table.insert(hFlagList, "	" .. placedX[i] .. " " .. placedY[i] .. " " .. "0")
-			table.insert(previewDataList, "	PreviewWayPoint(" .. placedX[i] ..", " ..	placedY[i] .. ")")
+			table.insert(previewDataList, "--	PreviewWayPoint(" .. placedX[i] ..", " ..	placedY[i] .. ")")
 		end
 	end
 
