@@ -618,7 +618,7 @@
 02:12=%1 feels the poison
 02:12=%1 feels weaker and weaker
 
-; Hog (%1) was resurrected. Remember that hogs can also be resurrected by the game style (e.g. AI Survival)
+; Hog (%1) was resurrected by the Resurrector utility
 02:13=%1 has been resurrected
 02:13=%1 has been brought back TO hell
 02:13=%1 gets a second chance
