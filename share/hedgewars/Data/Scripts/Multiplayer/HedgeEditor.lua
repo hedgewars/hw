@@ -575,7 +575,7 @@ local gameFlagList =	{
 			}
 
  local reducedSpriteIDArray = {
-  sprAmRubber, sprAmGirder, sprTargetBee, sprIceTexture, sprHHTelepMask,
+  sprTargetBee, sprAmGirder, sprAmRubber, sprIceTexture, sprHHTelepMask,
   sprAMAmmos, sprAMAmmosBW, sprAMSlot, sprAMCorners, sprTurnsLeft, sprBotlevels,
   sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
   sprShoutCorner, sprShoutEdge, sprShoutTail, sprCustom1, sprCustom2, }
@@ -584,7 +584,7 @@ local gameFlagList =	{
  local reducedSpriteIDArrayFrames
 
  local reducedSpriteTextArray = {
-  "sprAmRubber", "sprAmGirder", "sprTargetBee", "sprIceTexture", "sprHHTelepMask",
+  "sprTargetBee", "sprAmGirder", "sprAmRubber", "sprIceTexture", "sprHHTelepMask",
   "sprAMAmmos", "sprAMAmmosBW", "sprAMSlot",  "sprAMCorners", "sprTurnsLeft", "sprBotlevels",
   "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail",
   "sprShoutCorner", "sprShoutEdge", "sprShoutTail", "sprCustom1", "sprCustom2", }
@@ -3382,7 +3382,7 @@ function onGameInit()
 	end
 
 	reducedSpriteIDArrayFrames = {
-		4, 8, 1, 1, 1,
+		1, 8, 4, 1, 1,
 		AmmoTypeMax, AmmoTypeMax, 3, 4, 8, 1,
 		1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1,
