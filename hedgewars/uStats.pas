@@ -101,6 +101,7 @@ if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan,
 
 if killed then
     begin
+    Gear^.Hedgehog^.stats.StepDied:= true;
     inc(Attacker^.stats.StepKills);
     inc(Kills);
     inc(KillsTotal);
@@ -144,12 +145,13 @@ if FinishedTurnsTotal <> 0 then
     else
         killsCheck:= 0;
 
+    system.writeln(inttostr(CurrentHedgehog^.stats.StepDamageRecv));
     // First blood (first damage, poison or kill)
     if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
     // Hog hurts, poisons or kills itself (except sacrifice)
-    else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.Gear = nil)) then
+    else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.stats.StepDied)) then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         // Message for hurting itself only (not drowning)
@@ -218,6 +220,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDamageRecv:= 0;
                 StepDamageGiven:= 0;
                 StepPoisoned:= false;
+                StepDied:= false;
                 end;
 
 if SendHealthStatsOn then

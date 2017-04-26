@@ -330,6 +330,7 @@ type
         StepDamageGiven,
         StepKills: Longword;
         StepPoisoned,
+        StepDied,
         Sacrificed: boolean;
         MaxStepDamageRecv,
         MaxStepDamageGiven,
