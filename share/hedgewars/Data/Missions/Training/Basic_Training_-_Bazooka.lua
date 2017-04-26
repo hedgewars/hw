@@ -66,7 +66,7 @@ function onGameInit()
 	-- The base number for the random number generator
 	Seed = 1
 	-- Game settings and rules
-    EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand)
+    EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand, gfDisableWind)
     -- Uncommenting this wouldn't do anything
     --EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand)
     -- Neither this
@@ -108,6 +108,7 @@ function onGameStart()
 	SendHealthStatsOff()
 	-- Spawn the first target.
 	spawnTarget()
+	SetWind(-20)
 	
 	-- Show some nice mission goals.
 	-- Parameters are: caption, sub caption, description,
