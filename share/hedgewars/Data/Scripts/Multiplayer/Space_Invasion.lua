@@ -740,20 +740,21 @@ function CommentOnScore()
 		statusText = loc("Status Update")
 		scoreText = loc("Team scores:")
 	end
+	local displayTime
+	if roundNumber >= roundLimit then
+		displayTime = 20000
+	else
+		displayTime = 1
+	end
 	ShowMission(	loc("Space Invasion"),
 			statusText,
 			string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "| " .. "|" ..
-			scoreText .. " |" ..entireC, 4, 1)
+			scoreText .. " |" ..entireC, 4, displayTime)
 
 	if roundNumber >= roundLimit then
 		local winnerTeam = teamStats[1].name
-		local victorySoundPlayed = false
 		for i = 0, (numhhs-1) do
 			if GetHogTeamName(hhs[i]) == winnerTeam then
-				if not victorySoundPlayer then
-					PlaySound(sndVictory, hhs[i])
-					victorySoundPlayed = true
-				end
 				SetState(hhs[i], bor(GetState(hhs[i]), gstWinner))
 			end
 		end
@@ -898,11 +899,19 @@ function onNewRound()
 			end
 		end
 
+		-- Kill off all the losers
+		for i = 0, (numhhs-1) do
+			if GetHogClan(hhs[i]) ~= bestClan then
+				SetEffect(hhs[i], heResurrectable, 0)
+				SetHealth(hhs[i],0)
+			end
+		end
+
+		-- Game over
 		gameOver = true
 		EndTurn(true)
 		TimeLeft = 0
 		SendStat(siGraphTitle, "Score graph")
-		EndGame()
 	end
 end
 
@@ -1228,6 +1237,9 @@ function onGameInit()
 end
 
 function onGameStart()
+	SendGameResultOff()
+	SendRankingStatsOff()
+	SendAchievementsStatsOff()
 	SendHealthStatsOff()
 
 	ShowMission	(
