@@ -767,14 +767,12 @@ function InterpretPoints()
 		-- Weapon Crates
 		elseif (specialPointsFlag[i] >= 20) and (specialPointsFlag[i] < (#atkArray+20)) then
 			tempG = SpawnAmmoCrate(specialPointsX[i],specialPointsY[i],atkArray[specialPointsFlag[i]-19][1])
-			setGearValue(tempG,"caseType","ammo")
 			setGearValue(tempG,"contents",atkArray[specialPointsFlag[i]-19][2])
 
 
 		-- Utility Crates
 		elseif (specialPointsFlag[i] >= (#atkArray+20)) and (specialPointsFlag[i] < (#atkArray+20+#utilArray)) then
 			tempG = SpawnUtilityCrate(specialPointsX[i],specialPointsY[i],utilArray[specialPointsFlag[i]-19-#atkArray][1])
-			setGearValue(tempG,"caseType","util")
 			setGearValue(tempG,"contents",utilArray[specialPointsFlag[i]-19-#atkArray][2])
 
 		--79-82 (reserved for future wep crates)
@@ -1166,16 +1164,13 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
 		gear = SpawnHealthCrate(x,y)
 		SetHealth(gear, pMode[pIndex])
-		setGearValue(gear,"caseType","med")
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		gear = SpawnAmmoCrate(x, y, atkArray[pIndex][1])
 		placedSpec[placedCount] = atkArray[pIndex][2]
-		setGearValue(gear,"caseType","ammo")
 		setGearValue(gear,"contents",atkArray[pIndex][2])
 	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
 		gear = SpawnUtilityCrate(x, y, utilArray[pIndex][1])
 		placedSpec[placedCount] = utilArray[pIndex][2]
-		setGearValue(gear,"caseType","util")
 		setGearValue(gear,"contents",utilArray[pIndex][2])
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
 		gear = AddGear(x, y, gtExplosives, 0, 0, 0, 0)
@@ -1741,7 +1736,8 @@ function GetDataForGearSaving(gear)
 
 		table.insert(previewDataList, "	PreviewPlacedGear(" .. GetX(gear) ..", " ..	GetY(gear) .. ")")
 
-		if (GetHealth(gear) ~= nil) then
+		-- Health crate
+		if band(GetGearPos(gear), 0x2) ~= 0 then
 
 			temp = 	"	tempG = SpawnHealthCrate(" ..
 				GetX(gear) ..", " ..
@@ -1758,7 +1754,8 @@ function GetDataForGearSaving(gear)
 			elseif	GetHealth(gear) == 100 then specialFlag = 12
 			end
 
-		elseif getGearValue(gear,"caseType") == "ammo" then
+		-- Ammo crate
+		elseif band(GetGearPos(gear), 0x1) ~= 0 then
 
 			arrayList = wepCrateList
 			temp = 	"	tempG = SpawnAmmoCrate(" ..
@@ -1775,12 +1772,11 @@ function GetDataForGearSaving(gear)
 				end
 			end
 
-			--dammit, we probably need two more entries if we want to allow editing of existing maps
-			table.insert(wepCrateList, "	setGearValue(tempG, \"caseType\", \"" .. getGearValue(gear,"caseType") .. "\")")
+			--dammit, we probably need more entries if we want to allow editing of existing maps
 			table.insert(wepCrateList, "	setGearValue(tempG, \"contents\", \"" .. getGearValue(gear,"contents") .. "\")")
 
-
-		elseif getGearValue(gear,"caseType") == "util" then
+		-- Utility crate
+		elseif band(GetGearPos(gear), 0x4) ~= 0 then
 
 			arrayList = utilCrateList
 			temp = 	"	tempG = SpawnUtilityCrate(" ..
@@ -1797,8 +1793,7 @@ function GetDataForGearSaving(gear)
 				end
 			end
 
-			--dammit, we probably need two more entries if we want to allow editing of existing maps
-			table.insert(utilCrateList, "	setGearValue(tempG, \"caseType\", \"" .. getGearValue(gear,"caseType") .. "\")")
+			--dammit, we probably need more entries if we want to allow editing of existing maps
 			table.insert(utilCrateList, "	setGearValue(tempG, \"contents\", \"" .. getGearValue(gear,"contents") .. "\")")
 
 		end
