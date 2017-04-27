@@ -81,7 +81,7 @@ function AfterStartAnim()
   crate = SpawnHealthCrate(0, 0)
   SetGearMessage(CurrentHedgehog, 0)
   AddNewEvent(CheckCrateTaken, {}, DoCrateTaken, {}, 1)
-  TurnTimeLeft = 0
+  EndTurn(true)
   ShowMission(loc("Epilogue"), loc("That's all, folks!"),
     loc("You have successfully finished the campaign!").."|"..
     loc("If you wish to replay, there are other possible endings, too!").."|"..
@@ -427,7 +427,7 @@ function onNewTurn()
     return
   end
   if CurrentHedgehog == traitor then
-    TurnTimeLeft = 0
+    EndTurn(true)
   else
     TurnTimeLeft = -1
   end

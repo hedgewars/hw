@@ -286,7 +286,7 @@ function AfterStartAnim()
   ShowMission(loc("The Enemy Of My Enemy"), loc("The Union"), loc("Defeat the cyborgs!"), 1, 0)
   PutWeaponCrates()
   PutHealthCrates()
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function PutHealthCrates()
@@ -331,12 +331,12 @@ end
 
 function DoNativesDead()
   nativesDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCannibalsDead()
   cannibalsDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoPlayersDead()
@@ -344,14 +344,14 @@ function DoPlayersDead()
   RemoveEventFunc(CheckCannibalsDead)
   RemoveEventFunc(CheckCyborgsDead)
   playersDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCyborgsDead()
 --  RemoveEventFunc(CheckNativesDead)
 --  RemoveEventFunc(CheckCannibalsDead)
   cyborgsDeadFresh= true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckGearsDead(gearList)
@@ -388,7 +388,7 @@ function LoseMission()
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Cannibals"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function WonMission()
@@ -404,7 +404,7 @@ function WinMission()
     SaveCampaignVar("Progress", "9")
   end
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 -----------------------------Misc--------------------------------------
 function HideHedge(hedge)

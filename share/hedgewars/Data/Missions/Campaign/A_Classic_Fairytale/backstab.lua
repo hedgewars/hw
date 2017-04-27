@@ -581,7 +581,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
-  TurnTimeLeft = 0
+  EndTurn(true)
   ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines..."), 1, 12000)
 end
 
@@ -610,7 +610,7 @@ end
 
 function AfterStartAnim()
   AnimSwitchHog(natives[leaksNum])
-  TurnTimeLeft = 0
+  EndTurn(true)
   stage = spyKillStage
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
@@ -632,7 +632,7 @@ function DoDeployedDead()
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Tribe"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckChoice()
@@ -676,7 +676,7 @@ function DoKilledOther()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Tribe"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckWaveDead(index)
@@ -689,7 +689,7 @@ function CheckWaveDead(index)
 end
 
 function DoWaveDead(index)
-  TurnTimeLeft = 0
+  EndTurn(true)
   needToAct = index
 end
 
@@ -786,7 +786,7 @@ function AfterWave3DeadAnim()
   DismissTeam(loc("Assault Team"))
   DismissTeam(loc("Reinforcements"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 -----------------------------Misc--------------------------------------
@@ -1059,7 +1059,7 @@ function onNewTurn()
   end
 
   if GetHogTeamName(CurrentHedgehog) == loc("Tribe") then
-    TurnTimeLeft = 0
+    EndTurn(true)
     return
   end
   TurnsLeft = TurnsLeft - 1
@@ -1070,7 +1070,7 @@ function onNewTurn()
 
   if stage == spyKillStage then
     if CurrentHedgehog == spyHog or GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-      TurnTimeLeft = 0
+      EndTurn(true)
     else
       SetGearMessage(CurrentHedgehog, 0)
       --AnimSwitchHog(natives[leaksNum])
