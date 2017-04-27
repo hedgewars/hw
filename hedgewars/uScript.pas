@@ -2541,9 +2541,15 @@ begin
     if CheckLuaParamCount(L, 1, 'HideHog', 'gearUid') then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
-        HideHog(gear^.hedgehog)
+        if (gear <> nil) and (gear^.hedgehog <> nil) then
+            begin
+            HideHog(gear^.hedgehog);
+            lua_pushboolean(L, true);
+            end
+        else
+            lua_pushboolean(L, false);
         end;
-    lc_hidehog := 0;
+    lc_hidehog := 1;
 end;
 
 function lc_restorehog(L: Plua_State): LongInt; Cdecl;

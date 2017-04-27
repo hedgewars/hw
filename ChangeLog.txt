@@ -249,6 +249,7 @@ Lua-API:
  + New variable: AmmoTypeMax -- Maximum ammo type ID (useful to iterate through all ammo types, starting by 0)
  + Locale library: loc_noop -- Mark string for translation but don't translate it
  + Animate library: AnimInit([startAnimating]) -- New parameter startAnimating: if true, will start game in cinematic mode with most controls disabled. Must play an animation after that
+ * Fixed call: HideHog(gear) -- Fix crash when gear is invalid. Returns true on success or false otherwise
  * Removed call: SetAmmoStore -- Old undocumented function of questional use, has never been used
 
 0.9.21 -> 0.9.22
