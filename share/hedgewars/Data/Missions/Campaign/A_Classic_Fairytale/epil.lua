@@ -71,6 +71,7 @@ crate = nil
 startAnim = {}
 
 gearDead = {}
+hogDead = {}
 --------------------------Anim skip functions--------------------------
 function SkipStartAnim()
   SetGearMessage(CurrentHedgehog, 0)
@@ -380,8 +381,17 @@ function onGameTick()
   CheckEvents()
 end
 
+function onGearAdd(gear)
+  if GetGearType(gear) == gtHedgehog then
+    hogDead[gear] = false
+  end
+end
+
 function onGearDelete(gear)
   gearDead[gear] = true
+  if GetGearType(gear) == gtHedgehog then
+    hogDead[gear] = true
+  end
 end
 
 function onAmmoStoreInit()
@@ -421,12 +431,22 @@ function onAmmoStoreInit()
   SetAmmo(amWhip, 9, 0, 0, 0)
 end
 
+function IsEveryoneExceptTraitorDead()
+  for id, isDead in pairs(hogDead) do
+    if id ~= traitor and not isDead then
+      return false
+    end
+  end
+  return true
+end
+
 function onNewTurn()
   if AnimInProgress() then
     TurnTimeLeft = -1
     return
   end
-  if CurrentHedgehog == traitor then
+  -- Don't allow player to play with traitor, except when it is the final hog left
+  if CurrentHedgehog == traitor and not IsEveryoneExceptTraitorDead() then
     EndTurn(true)
   else
     TurnTimeLeft = -1
