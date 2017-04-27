@@ -107,11 +107,8 @@ function onGearDelete(gear)
 	if GetGearType(gear) == gtCase then
 		TurnTimeLeft = TurnTimeLeft + 5000
 	end
-
-	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Teamwork"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
-		GameOver = true
-	elseif  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then
+	-- Note: The victory sequence is done automatically by Hedgewars
+	if  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then
 		ShowMission(loc("Teamwork"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 		SetHealth(p2,0)

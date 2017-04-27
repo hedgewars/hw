@@ -107,10 +107,8 @@ function onGearDelete(gear)
 	if gear == Pack then
 		HogSay(CurrentHedgehog, loc("This will certianly come in handy."), SAY_THINK)
 	end
-	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Teamwork 2"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
-		GameOver = true
-	elseif ( ((gear == player) or (gear == hlayer)) and (GameOver == false)) then
+	-- Note: The victory sequence is done automatically by Hedgewars
+	if ( ((gear == player) or (gear == hlayer)) and (GameOver == false)) then
 		ShowMission(loc("Teamwork 2"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 		SetHealth(hlayer, 0)
