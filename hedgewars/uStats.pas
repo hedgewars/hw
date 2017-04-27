@@ -145,7 +145,6 @@ if FinishedTurnsTotal <> 0 then
     else
         killsCheck:= 0;
 
-    system.writeln(inttostr(CurrentHedgehog^.stats.StepDamageRecv));
     // First blood (first damage, poison or kill)
     if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
