@@ -364,6 +364,8 @@ local atkArray =
 				{amDrillStrike,	"amDrillStrike"},
 				{amAirMine,	"amAirMine"},
 
+				{amPickHammer,	"amPickHammer"},
+				{amBlowTorch, 	"amBlowTorch"},
 				{amKnife,	"amKnife"},
 
 				{amBirdy,	"amBirdy"},
@@ -373,9 +375,6 @@ local atkArray =
 
 local utilArray =
 				{
-
-				{amPickHammer,	"amPickHammer"},
-				{amBlowTorch, 	"amBlowTorch"},
 				{amGirder, 	"amGirder"},
 				{amLandGun,	"amLandGun"},
 				{amRubber, 	"amRubber"},
