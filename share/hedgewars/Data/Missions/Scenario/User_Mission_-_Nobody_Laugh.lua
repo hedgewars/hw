@@ -54,7 +54,9 @@ function onGameStart()
 
 	ShowMission(	loc("Nobody Laugh"),
 					loc("Scenario"),
-					loc("Eliminate the enemy.")
+					loc("Eliminate the enemy.") .. "|" ..
+					loc("Unlimited Attacks: Attacks don't end your turn") .. "|"..
+					loc("Per-hog Ammo: Weapons are not shared between hogs")
 					, 0, 0
 				)
 
