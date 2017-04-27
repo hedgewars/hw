@@ -9,7 +9,6 @@ local enemy = nil
 local Pack = nil
 local help = false
 local GameOver = false
-local skipTime = 0
 
 function onGameInit()
 	Seed = 0
@@ -70,6 +69,13 @@ function onGameStart()
 	AddGear(1668, 842, gtExplosives, 0, 0, 0, 0)
 	AddGear(1713, 969, gtExplosives, 0, 0, 0, 0)
 	SetWind(90)
+
+	-- The enemy has no weapons and can only skip
+	for i=0, AmmoTypeMax do
+		if i ~= amNothing and i ~= amSkip then
+			AddAmmo(enemy, i, 0)
+		end
+	end
 end
 
 function onGearAdd(gear)
@@ -87,20 +93,6 @@ function onAmmoStoreInit()
 	SetAmmo(amBlowTorch, 0, 0, 0, 2)
 	SetAmmo(amJetpack, 0, 0, 0, 1)
 	SetAmmo(amDynamite, 0, 0, 0, 1)
-end
-
---[[ This is some hackery to make the enemy hedgehog skip ]]
-function onNewTurn()
-	if CurrentHedgehog == enemy then
-		skipTime = GameTime + 1
-	end
-end
-
-function onGameTick20()
-	if CurrentHedgehog == enemy and skipTime ~= 0 and skipTime < GameTime then
-        	ParseCommand("/skip")
-		skipTime = 0
-	end
 end
 
 function onGearDelete(gear)
