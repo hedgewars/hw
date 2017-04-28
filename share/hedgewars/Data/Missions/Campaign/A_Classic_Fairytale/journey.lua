@@ -32,8 +32,6 @@ m2SpikyDead = 0
 TurnsLeft = 0
 stage = 0
 
---cyborgHidden = false
---princessHidden = false
 blowTaken = false
 fireTaken = false
 gravityTaken = false
@@ -103,7 +101,6 @@ function AfterMidAnimAlone()
   TurnTimeLeft = TurnTime
   ShowMission(loc("The Journey Back"), loc("Collateral Damage"), loc("Save the princess by collecting the crate in under 12 turns!"), 0, 6000)
   -----------------------///////////////------------
-  --AnimSetGearPosition(leaks, 417, 1800)
 end
 
 function SkipEndAnimAlone()
@@ -601,7 +598,6 @@ end
 
 function SetupPlaceAlone()
   ------ AMMO CRATE LIST ------
-  --SpawnAmmoCrate(3122, 994, amShotgun)
   SpawnAmmoCrate(3124, 952, amBaseballBat)
   SpawnAmmoCrate(2508, 1110, amFirePunch)
   ------ UTILITY CRATE LIST ------
@@ -627,7 +623,6 @@ function SetupPlaceAlone()
   SetTimer(AddGear(2239, 1295, gtMine, 0, 0, 0, 0), 3000)
 
   AnimSetGearPosition(leaks, 3781, 1583)
-  --AnimSetGearPosition(leaks, 1650, 1583)
   AddAmmo(cannibals[1], amShotgun, 100)
   AddAmmo(leaks, amSwitch, 0)
 end
@@ -1048,7 +1043,6 @@ function onAmmoStoreInit()
   SetAmmo(amSniperRifle, 0, 0, 0, 1)
   SetAmmo(amDynamite, 0, 0, 0, 1)
   SetAmmo(amPickHammer, 0, 0, 0, 1)
-  SetAmmo(amTeleport, 9, 0, 0, 1)
 end
 
 function onNewTurn()
@@ -1083,8 +1077,5 @@ function onPrecise()
     SetAnimSkip(true)
     return
   end
---  AddAmmo(leaks, amRope, 100)
---  RemoveEventFunc(CheckPastFlower)
---  DeleteGear(sniperCrate)
 end
 
