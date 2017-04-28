@@ -223,6 +223,7 @@ function AfterPastFlowerAnim()
   EndTurn(0)
   ShowMission(loc("The Journey Back"), loc("The Savior"), 
     loc("Get Dense Cloud out of the pit!") .. "|" ..
+    loc("Your hogs must survive!") .. "|" ..
     loc("Beware of mines: They explode after 5 seconds."), 1, 5000)
 end
 
@@ -244,6 +245,8 @@ function AfterOutPitAnim()
   EndTurn(true)
   ShowMission(loc("The Journey Back"), loc("They never learn"),
     loc("Free Dense Cloud and continue the mission!") .. "|" ..
+    loc("Collect the weapon crate at the left coast!") .. "|" ..
+    loc("Your hogs must survive!") .. "|" ..
     loc("Mines time: 5 seconds"), 1, 5000)
 end
 
@@ -831,7 +834,10 @@ function CheckTookBlowTorch()
 end
 
 function DoTookBlowTorch()
-  ShowMission(loc("The Journey Back"), loc("The Tunnel Maker"), loc("Hint: Select the blowtorch, aim and press [Fire]. Press [Fire] again to stop.").."|"..loc("Don't blow up the crate."), 0, 6000)
+  ShowMission(loc("The Journey Back"), loc("The Tunnel Maker"), 
+    loc("Get past the flower.").."|"..
+    loc("Hint: Select the blow torch, aim and press [Fire]. Press [Fire] again to stop.").."|"..
+    loc("Don't blow up the crate."), 0, 6000)
 end
 
 function CheckTookLowGravity()
@@ -840,6 +846,7 @@ end
 
 function DoTookLowGravity()
   ShowMission(loc("The Journey Back"), loc("The Moonwalk"),
+    loc("Hop on top of the next flower and advance to the left coast.").."|"..
     loc("Hint: Select the low gravity and press [Fire].") .. "|" ..
     loc("Beware of mines: They explode after 3 seconds."), 0, 6000)
 end
@@ -872,7 +879,9 @@ end
 
 function DoOnFirstGirder()
   PlaceCourseMines()
-  ShowMission(loc("The Journey Back"), loc("Slippery"), loc("You'd better watch your steps..."), 0, 4000)
+  ShowMission(loc("The Journey Back"), loc("Slippery"), 
+    loc("Collect the weapon crate at the left coast!") .. "|" ..
+    loc("You'd better watch your steps..."), 0, 4000)
 end
 
 function CheckTookSniper()
