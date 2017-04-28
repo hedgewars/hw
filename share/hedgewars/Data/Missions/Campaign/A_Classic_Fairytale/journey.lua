@@ -807,6 +807,7 @@ function CheckLeaksDead()
 end
 
 function DoLeaksDead()
+  EndTurn(true)
   AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
   DismissTeam(loc("Natives"))
 end
@@ -816,6 +817,7 @@ function CheckDenseDead()
 end
 
 function DoDenseDead()
+  EndTurn(true)
   AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
   DismissTeam(loc("Natives"))
 end
