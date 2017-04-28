@@ -72,7 +72,6 @@ endAnimAL = {}
 endAnimRL = {}
 
 endFailAnim = {}
-endFailAnimAD = {}
 
 winAnim = {}
 winAnimAD = {}
@@ -80,7 +79,7 @@ winAnimAD = {}
 --/////////////////////////Animation Functions///////////////////////
 function AfterMidFailAnim()
   DismissTeam(loc("Natives"))
-  EndTurn(0)
+  EndTurn(true)
 end
 
 function AfterMidAnimAlone()
@@ -437,7 +436,6 @@ function SetupAnimAcceptedDied()
   midAnim = midAnimAD
   failAnim = failAnimAD
   endAnim = endAnimAD
-  endFailAnim = endFailAnimAD
   winAnim = winAnimAD
 end
 
@@ -803,9 +801,11 @@ function CheckLeaksDead()
 end
 
 function DoLeaksDead()
-  EndTurn(true)
-  AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-  DismissTeam(loc("Natives"))
+  if not princessDead then
+    EndTurn(true)
+    AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
+    DismissTeam(loc("Natives"))
+  end
 end
 
 function CheckDenseDead()
@@ -813,9 +813,11 @@ function CheckDenseDead()
 end
 
 function DoDenseDead()
-  EndTurn(true)
-  AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-  DismissTeam(loc("Natives"))
+  if not princessDead then
+    EndTurn(true)
+    AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
+    DismissTeam(loc("Natives"))
+  end
 end
 
 function CheckTookBlowTorch()
@@ -896,8 +898,12 @@ function CheckLost()
 end
 
 function DoLost()
+  if not cyborgDead then
+    SwitchHog(cyborg)
+  end
   AddAnim(endFailAnim)
-  AddFunction({func = DismissTeam, args = {loc('Natives')}})
+  AddFunction({func = DismissTeam, args = {loc("Natives")}})
+  AddFunction({func = EndTurn, args = {true}})
 end
 
 function CheckWon()
