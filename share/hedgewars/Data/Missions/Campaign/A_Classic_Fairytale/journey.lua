@@ -770,7 +770,11 @@ function DoTookGirder2()
 end
 
 function CheckDensePit()
-  return GetY(dense) < 1250 and StoppedGear(dense)
+  if GetHealth(dense) ~= nil then
+    return GetY(dense) < 1250 and StoppedGear(dense)
+  else
+    return false
+  end
 end
 
 function DoDensePit()
