@@ -45,6 +45,7 @@ leaksDead = false
 denseDead = false
 princessDead = false
 cyborgDead = false
+victory = false
 cannibalDead = {}
 hedgeHidden = {}
 
@@ -81,7 +82,7 @@ winAnimAD = {}
 --/////////////////////////Animation Functions///////////////////////
 function AfterMidFailAnim()
   DismissTeam(loc("Natives"))
-  TurnTimeLeft = 0
+  EndTurn(0)
 end
 
 function AfterMidAnimAlone()
@@ -221,7 +222,7 @@ function AfterPastFlowerAnim()
   AddEvent(CheckTookGirder2, {}, DoTookGirder2, {}, 0)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  TurnTimeLeft = 0
+  EndTurn(0)
   ShowMission(loc("The Journey Back"), loc("The Savior"), loc("Get Dense Cloud out of the pit!"), 1, 5000)
 end
 
@@ -240,7 +241,7 @@ function AfterOutPitAnim()
   AddEvent(CheckTookFire, {}, DoTookFire, {}, 0)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  TurnTimeLeft = 0
+  EndTurn(true)
   ShowMission(loc("The Journey Back"), loc("They never learn"), loc("Free Dense Cloud and continue the mission!"), 1, 5000)
 end
 
@@ -569,7 +570,7 @@ end
 
 function KillPrincess()
   DismissTeam(loc("Cannibal Sentry"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 --/////////////////////////////Misc Functions////////////////////////
 
@@ -778,7 +779,7 @@ function CheckDensePit()
 end
 
 function DoDensePit()
-  TurnTimeLeft = 0
+  EndTurn(0)
   RestoreHedge(cyborg)
   AnimWait(cyborg, 1)
   AddFunction({func = AddAnim, args = {outPitAnim}})
@@ -794,7 +795,7 @@ function CheckPastFlower()
 end
 
 function DoPastFlower()
-  TurnTimeLeft = 0
+  EndTurn(true)
   RestoreHedge(cyborg)
   AnimWait(cyborg, 1)
   AddFunction({func = AddAnim, args = {pastFlowerAnim}})
@@ -843,7 +844,7 @@ function CheckOnBridge()
 end
 
 function DoOnBridge()
-  TurnTimeLeft = 0
+  EndTurn(true)
   RestoreHedge(cyborg)
   RestoreHedge(princess)
   AnimWait(cyborg, 1)
@@ -874,7 +875,7 @@ function CheckTookSniper()
 end
 
 function DoTookSniper()
-  TurnTimeLeft = 0
+  EndTurn(true)
   RestoreHedge(cyborg)
   RestoreHedge(princess)
   AnimWait(cyborg, 1)
@@ -887,7 +888,7 @@ function CheckTookSniper2()
 end
 
 function DoTookSniper2()
-  TurnTimeLeft = 0
+  EndTurn(true)
   RestoreHedge(cyborg)
   RestoreHedge(princess)
   AnimWait(cyborg, 1)
@@ -909,6 +910,7 @@ function CheckWon()
 end
 
 function DoWon()
+  victory = true
   if progress and progress<3 then
     SaveCampaignVar("Progress", "3")
   end
@@ -920,7 +922,7 @@ function FinishWon()
   SwitchHog(leaks)
   DismissTeam(loc("Cannibal Sentry"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckFailedCourse()
@@ -928,7 +930,7 @@ function CheckFailedCourse()
 end
 
 function DoFailedCourse()
-  TurnTimeLeft = 0
+  EndTurn(true)
   RestoreHedge(cyborg)
   RestoreHedge(princess)
   AnimWait(cyborg, 1)
@@ -1007,13 +1009,13 @@ function onGearDelete(gear)
     fireTaken = true
   elseif gear == gravityCrate then
     gravityTaken = true
-  elseif gear == leaks then
+  elseif gear == leaks and not victory then
     leaksDead = true
-  elseif gear == dense then
+  elseif gear == dense and not victory then
     denseDead = true
   elseif gear == cyborg then
     cyborgDead = true
-  elseif gear == princess then
+  elseif gear == princess and not victory then
     princessDead = true
   elseif gear == girderCrate then
     girderTaken = true
@@ -1046,11 +1048,14 @@ function onAmmoStoreInit()
   SetAmmo(amSniperRifle, 0, 0, 0, 1)
   SetAmmo(amDynamite, 0, 0, 0, 1)
   SetAmmo(amPickHammer, 0, 0, 0, 1)
+  SetAmmo(amTeleport, 9, 0, 0, 1)
 end
 
 function onNewTurn()
   if AnimInProgress() then
     TurnTimeLeft = -1
+  elseif victory then
+    EndTurn(true)
   elseif stage == endStage and CurrentHedgehog ~= leaks then
     AnimSwitchHog(leaks)
     SetGearMessage(leaks, 0)
