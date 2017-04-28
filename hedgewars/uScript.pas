@@ -1638,7 +1638,13 @@ begin
                 end;
 
             SwitchCurrentHedgehog(gear^.Hedgehog);
+            AmmoMenuInvalidated:= true;
             CurrentTeam:= CurrentHedgehog^.Team;
+
+            repeat
+                CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + 1) mod CurrentTeam^.HedgehogsNumber
+            until
+                CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = CurrentHedgehog^.Gear;
 
             gear^.State:= gear^.State or gstHHDriven;
             gear^.Active := true;
