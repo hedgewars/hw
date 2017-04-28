@@ -98,7 +98,9 @@ function AfterMidAnimAlone()
   SetGearMessage(leaks, 0)
   TurnsLeft = 12
   TurnTimeLeft = TurnTime
-  ShowMission(loc("The Journey Back"), loc("Collateral Damage"), loc("Save the princess by collecting the crate in under 12 turns!"), 0, 6000)
+  ShowMission(loc("The Journey Back"), loc("Collateral Damage"),
+    loc("Save the princess by collecting the crate in under 12 turns!") .. "|" ..
+    loc("Mines time: 3 seconds"), 0, 6000)
   -----------------------///////////////------------
 end
 
@@ -182,33 +184,33 @@ function PlaceCratesDuo()
 end
 
 function PlaceMinesDuo()
-  SetTimer(AddGear(2920, 1448, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2985, 1338, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(3005, 1302, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(3030, 1270, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(3046, 1257, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2954, 1400, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2967, 1385, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2849, 1449, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2811, 1436, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2773, 1411, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2732, 1390, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2700, 1362, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2642, 1321, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2172, 1417, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2190, 1363, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2219, 1332, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1201, 1207, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1247, 1205, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1295, 1212, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1356, 1209, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1416, 1201, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1466, 1201, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1678, 1198, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1738, 1198, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1796, 1198, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1637, 1217, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1519, 1213, gtMine, 0, 0, 0, 0), 5000)
+  AddGear(2920, 1448, gtMine, 0, 0, 0, 0)
+  AddGear(2985, 1338, gtMine, 0, 0, 0, 0)
+  AddGear(3005, 1302, gtMine, 0, 0, 0, 0)
+  AddGear(3030, 1270, gtMine, 0, 0, 0, 0)
+  AddGear(3046, 1257, gtMine, 0, 0, 0, 0)
+  AddGear(2954, 1400, gtMine, 0, 0, 0, 0)
+  AddGear(2967, 1385, gtMine, 0, 0, 0, 0)
+  AddGear(2849, 1449, gtMine, 0, 0, 0, 0)
+  AddGear(2811, 1436, gtMine, 0, 0, 0, 0)
+  AddGear(2773, 1411, gtMine, 0, 0, 0, 0)
+  AddGear(2732, 1390, gtMine, 0, 0, 0, 0)
+  AddGear(2700, 1362, gtMine, 0, 0, 0, 0)
+  AddGear(2642, 1321, gtMine, 0, 0, 0, 0)
+  AddGear(2172, 1417, gtMine, 0, 0, 0, 0)
+  AddGear(2190, 1363, gtMine, 0, 0, 0, 0)
+  AddGear(2219, 1332, gtMine, 0, 0, 0, 0)
+  AddGear(1201, 1207, gtMine, 0, 0, 0, 0)
+  AddGear(1247, 1205, gtMine, 0, 0, 0, 0)
+  AddGear(1295, 1212, gtMine, 0, 0, 0, 0)
+  AddGear(1356, 1209, gtMine, 0, 0, 0, 0)
+  AddGear(1416, 1201, gtMine, 0, 0, 0, 0)
+  AddGear(1466, 1201, gtMine, 0, 0, 0, 0)
+  AddGear(1678, 1198, gtMine, 0, 0, 0, 0)
+  AddGear(1738, 1198, gtMine, 0, 0, 0, 0)
+  AddGear(1796, 1198, gtMine, 0, 0, 0, 0)
+  AddGear(1637, 1217, gtMine, 0, 0, 0, 0)
+  AddGear(1519, 1213, gtMine, 0, 0, 0, 0)
 end
 
 function AfterPastFlowerAnim()
@@ -219,7 +221,9 @@ function AfterPastFlowerAnim()
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
   EndTurn(0)
-  ShowMission(loc("The Journey Back"), loc("The Savior"), loc("Get Dense Cloud out of the pit!"), 1, 5000)
+  ShowMission(loc("The Journey Back"), loc("The Savior"), 
+    loc("Get Dense Cloud out of the pit!") .. "|" ..
+    loc("Beware of mines: They explode after 5 seconds."), 1, 5000)
 end
 
 function SkipPastFlowerAnim()
@@ -238,7 +242,9 @@ function AfterOutPitAnim()
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
   EndTurn(true)
-  ShowMission(loc("The Journey Back"), loc("They never learn"), loc("Free Dense Cloud and continue the mission!"), 1, 5000)
+  ShowMission(loc("The Journey Back"), loc("They never learn"),
+    loc("Free Dense Cloud and continue the mission!") .. "|" ..
+    loc("Mines time: 5 seconds"), 1, 5000)
 end
 
 function SkipOutPitAnim()
@@ -310,40 +316,40 @@ function SetupCourseDuo()
 end
 
 function DumpMines()
-  SetTimer(AddGear(2261, 1835, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2280, 1831, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2272, 1809, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2290, 1815, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2278, 1815, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2307, 1811, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2286, 1820, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2309, 1813, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2303, 1822, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2317, 1827, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2312, 1816, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2316, 1812, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2307, 1802, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2276, 1818, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2284, 1816, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2292, 1811, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2295, 1814, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2306, 1811, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2292, 1815, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2314, 1815, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2286, 1813, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2275, 1813, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2269, 1814, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2273, 1812, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2300, 1808, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2322, 1812, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2323, 1813, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2311, 1811, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2303, 1809, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2287, 1808, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2282, 1808, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2277, 1809, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2296, 1809, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(2314, 1818, gtMine, 0, 0, 0, 0), 5000)
+  AddGear(2261, 1835, gtMine, 0, 0, 0, 0)
+  AddGear(2280, 1831, gtMine, 0, 0, 0, 0)
+  AddGear(2272, 1809, gtMine, 0, 0, 0, 0)
+  AddGear(2290, 1815, gtMine, 0, 0, 0, 0)
+  AddGear(2278, 1815, gtMine, 0, 0, 0, 0)
+  AddGear(2307, 1811, gtMine, 0, 0, 0, 0)
+  AddGear(2286, 1820, gtMine, 0, 0, 0, 0)
+  AddGear(2309, 1813, gtMine, 0, 0, 0, 0)
+  AddGear(2303, 1822, gtMine, 0, 0, 0, 0)
+  AddGear(2317, 1827, gtMine, 0, 0, 0, 0)
+  AddGear(2312, 1816, gtMine, 0, 0, 0, 0)
+  AddGear(2316, 1812, gtMine, 0, 0, 0, 0)
+  AddGear(2307, 1802, gtMine, 0, 0, 0, 0)
+  AddGear(2276, 1818, gtMine, 0, 0, 0, 0)
+  AddGear(2284, 1816, gtMine, 0, 0, 0, 0)
+  AddGear(2292, 1811, gtMine, 0, 0, 0, 0)
+  AddGear(2295, 1814, gtMine, 0, 0, 0, 0)
+  AddGear(2306, 1811, gtMine, 0, 0, 0, 0)
+  AddGear(2292, 1815, gtMine, 0, 0, 0, 0)
+  AddGear(2314, 1815, gtMine, 0, 0, 0, 0)
+  AddGear(2286, 1813, gtMine, 0, 0, 0, 0)
+  AddGear(2275, 1813, gtMine, 0, 0, 0, 0)
+  AddGear(2269, 1814, gtMine, 0, 0, 0, 0)
+  AddGear(2273, 1812, gtMine, 0, 0, 0, 0)
+  AddGear(2300, 1808, gtMine, 0, 0, 0, 0)
+  AddGear(2322, 1812, gtMine, 0, 0, 0, 0)
+  AddGear(2323, 1813, gtMine, 0, 0, 0, 0)
+  AddGear(2311, 1811, gtMine, 0, 0, 0, 0)
+  AddGear(2303, 1809, gtMine, 0, 0, 0, 0)
+  AddGear(2287, 1808, gtMine, 0, 0, 0, 0)
+  AddGear(2282, 1808, gtMine, 0, 0, 0, 0)
+  AddGear(2277, 1809, gtMine, 0, 0, 0, 0)
+  AddGear(2296, 1809, gtMine, 0, 0, 0, 0)
+  AddGear(2314, 1818, gtMine, 0, 0, 0, 0)
 end
 
 function SetupAnimRefusedDied()
@@ -605,20 +611,20 @@ function SetupPlaceAlone()
   SpawnUtilityCrate(3113, 911, amParachute)
   sniperCrate = SpawnAmmoCrate(784, 1715, amSniperRifle)
   ------ MINE LIST ------
-  SetTimer(AddGear(3328, 1399, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(3028, 1262, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2994, 1274, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2956, 1277, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2925, 1282, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2838, 1276, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2822, 1278, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2786, 1283, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2766, 1270, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2749, 1231, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2717, 1354, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2167, 1330, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2201, 1321, gtMine, 0, 0, 0, 0), 3000)
-  SetTimer(AddGear(2239, 1295, gtMine, 0, 0, 0, 0), 3000)
+  AddGear(3328, 1399, gtMine, 0, 0, 0, 0)
+  AddGear(3028, 1262, gtMine, 0, 0, 0, 0)
+  AddGear(2994, 1274, gtMine, 0, 0, 0, 0)
+  AddGear(2956, 1277, gtMine, 0, 0, 0, 0)
+  AddGear(2925, 1282, gtMine, 0, 0, 0, 0)
+  AddGear(2838, 1276, gtMine, 0, 0, 0, 0)
+  AddGear(2822, 1278, gtMine, 0, 0, 0, 0)
+  AddGear(2786, 1283, gtMine, 0, 0, 0, 0)
+  AddGear(2766, 1270, gtMine, 0, 0, 0, 0)
+  AddGear(2749, 1231, gtMine, 0, 0, 0, 0)
+  AddGear(2717, 1354, gtMine, 0, 0, 0, 0)
+  AddGear(2167, 1330, gtMine, 0, 0, 0, 0)
+  AddGear(2201, 1321, gtMine, 0, 0, 0, 0)
+  AddGear(2239, 1295, gtMine, 0, 0, 0, 0)
 
   AnimSetGearPosition(leaks, 3781, 1583)
   AddAmmo(cannibals[1], amShotgun, 100)
@@ -724,17 +730,17 @@ function SetupCourse()
 end
 
 function PlaceCourseMines()
-  SetTimer(AddGear(1215, 1193, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1259, 1199, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1310, 1198, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1346, 1196, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1383, 1192, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1436, 1196, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1487, 1199, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1651, 1209, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1708, 1209, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1759, 1190, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1815, 1184, gtMine, 0, 0, 0, 0), 5000)
+  AddGear(1215, 1193, gtMine, 0, 0, 0, 0)
+  AddGear(1259, 1199, gtMine, 0, 0, 0, 0)
+  AddGear(1310, 1198, gtMine, 0, 0, 0, 0)
+  AddGear(1346, 1196, gtMine, 0, 0, 0, 0)
+  AddGear(1383, 1192, gtMine, 0, 0, 0, 0)
+  AddGear(1436, 1196, gtMine, 0, 0, 0, 0)
+  AddGear(1487, 1199, gtMine, 0, 0, 0, 0)
+  AddGear(1651, 1209, gtMine, 0, 0, 0, 0)
+  AddGear(1708, 1209, gtMine, 0, 0, 0, 0)
+  AddGear(1759, 1190, gtMine, 0, 0, 0, 0)
+  AddGear(1815, 1184, gtMine, 0, 0, 0, 0)
 end
 
 
@@ -833,7 +839,9 @@ function CheckTookLowGravity()
 end
 
 function DoTookLowGravity()
-  ShowMission(loc("The Journey Back"), loc("The Moonwalk"), loc("Hint: Select the low gravity and press [Fire]."), 0, 6000)
+  ShowMission(loc("The Journey Back"), loc("The Moonwalk"),
+    loc("Hint: Select the low gravity and press [Fire].") .. "|" ..
+    loc("Beware of mines: They explode after 3 seconds."), 0, 6000)
 end
 
 function CheckOnBridge()
@@ -942,12 +950,23 @@ end
 --////////////////////////////Main Functions/////////////////////////
 
 function onGameInit()
+  progress = tonumber(GetCampaignVar("Progress"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
+  m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
+  m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))
+
 	Seed = 0
 	GameFlags = gfSolidLand + gfDisableWind
 	TurnTime = 40000 
 	CaseFreq = 0
 	MinesNum = 0
-	MinesTime = 3000
+
+	if m2DenseDead == 1 then
+		MinesTime = 3000
+	else
+		MinesTime = 5000
+	end
 	Explosives = 0
 	Delay = 5
     Map = "A_Classic_Fairytale_journey"
@@ -986,11 +1005,6 @@ function onGameInit()
 end
 
 function onGameStart()
-  progress = tonumber(GetCampaignVar("Progress"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
-  m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))
   StartMission()
 end
 
