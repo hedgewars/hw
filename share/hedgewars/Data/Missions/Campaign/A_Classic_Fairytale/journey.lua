@@ -1055,7 +1055,7 @@ function onNewTurn()
     TurnTimeLeft = -1
   elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
     for i = 1, 4 do
-      if cannibalDead[i] ~= true then
+      if cannibalDead[i] ~= true and leaksDead ~= true then
         if GetX(cannibals[i]) < GetX(leaks) then
           HogTurnLeft(cannibals[i], false)
         else
