@@ -261,8 +261,8 @@ function TransferWeps(gear)
 			end
 		end
 
-        PlaySound(sndShotgunReload);
         if dspl and ammolist ~= '' then
+            PlaySound(sndShotgunReload);
             AddCaption(ammolist, color, capgrpAmmoinfo)
         end
 	end

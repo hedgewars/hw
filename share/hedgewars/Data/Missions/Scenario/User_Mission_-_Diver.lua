@@ -47,7 +47,10 @@ function onGameStart()
 
 	AddGear(579, 296, gtMine, 0, 0, 0, 0)
 
-	ShowMission(loc("Operation Diver"), loc("Scenario"), loc("Eliminate the enemy before the time runs out.") .. "|" .. loc("Mines time: 1 second"), -amFirePunch, 0);
+	ShowMission(loc("Diver"), loc("Scenario"),
+		loc("Eliminate the enemy before the time runs out.") .. "|" .. 
+		loc("Unlimited Attacks: Attacks don't end your turn") .. "|" ..
+		loc("Mines time: 1 second"), -amFirePunch, 0);
 	--SetTag(AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1), -70)
 
 	SetWind(-100)
@@ -91,9 +94,9 @@ end
 function onGearDelete(gear)
 
 	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Operation Diver"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
+		ShowMission(loc("Diver"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 	elseif gear == player then
-		ShowMission(loc("Operation Diver"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
+		ShowMission(loc("Diver"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
 		GameOver = true
 	end
 

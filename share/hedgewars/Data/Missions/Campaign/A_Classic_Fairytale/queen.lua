@@ -488,7 +488,7 @@ function AfterLeaderDeadAnim()
   SetHealth(SpawnHealthCrate(2087, 50), 25)
   SetHealth(SpawnHealthCrate(2143, 54), 25)
   SetHealth(SpawnHealthCrate(70, 1308), 25)
-  ShowMission(loc("Long Live The Queen"), loc("Bullseye"), lob("Good job! Defeat the rest of the aliens!"), 1, 0)
+  ShowMission(loc("Long Live The Queen"), loc("Bullseye"), loc("Good job! Defeat the rest of the aliens!"), 1, 0)
   TurnTimeLeft = 0
 end
 -----------------------------Events------------------------------------

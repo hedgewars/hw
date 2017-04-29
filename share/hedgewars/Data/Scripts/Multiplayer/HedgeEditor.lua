@@ -276,6 +276,9 @@ HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 -- experimental crap
 --local destroyMap = false
 
+-- Special frames in Ammos.png/Ammos_bw.png
+local ammoFrameAirAttack = 63
+
 -----------------------------------------
 -- tracking vars for save/load purposes
 -----------------------------------------
@@ -320,79 +323,78 @@ local showGearTags = true
 local atkArray =
 				{
 
-				{amBazooka, 	"amBazooka",		2},
-				{amBee, 	"amBee",		3},
-				{amMortar, 	"amMortar",		21},
-				{amDrill, 	"amDrill",		28},
-				{amSnowball, 	"amSnowball",		50},
+				{amBazooka, 	"amBazooka"},
+				{amBee, 	"amBee"},
+				{amMortar, 	"amMortar"},
+				{amDrill, 	"amDrill"},
+				{amSnowball, 	"amSnowball"},
 
-				{amGrenade,	"amGrenade",		0},
-				{amClusterBomb,	"amClusterBomb",	1},
-				{amWatermelon, 	"amWatermelon",		25},
-				{amHellishBomb,	"amHellishBomb",	26},
-				{amMolotov, 	"amMolotov",		39},
-				{amGasBomb, 	"amGasBomb",		43},
+				{amGrenade,	"amGrenade"},
+				{amClusterBomb,	"amClusterBomb"},
+				{amWatermelon, 	"amWatermelon"},
+				{amHellishBomb,	"amHellishBomb"},
+				{amMolotov, 	"amMolotov"},
+				{amGasBomb, 	"amGasBomb"},
 
-				{amShotgun,	"amShotgun",		4},
-				{amDEagle,	"amDEagle",		9},
-				{amSniperRifle,	"amSniperRifle",	37},
-				{amSineGun, 	"amSineGun",		44},
-				{amFlamethrower,"amFlamethrower",	45},
-				{amIceGun, 	"amIceGun",		53},
+				{amShotgun,	"amShotgun"},
+				{amDEagle,	"amDEagle"},
+				{amSniperRifle,	"amSniperRifle"},
+				{amSineGun, 	"amSineGun"},
+				{amFlamethrower,"amFlamethrower"},
+				{amIceGun, 	"amIceGun"},
 
-				{amFirePunch, 	"amFirePunch",		11},
-				{amWhip,	"amWhip",		12},
-				{amBaseballBat, "amBaseballBat",	13},
-				{amKamikaze, 	"amKamikaze",		22},
-				{amSeduction, 	"amSeduction",		24},
-				{amHammer,	"amHammer",		47},
+				{amFirePunch, 	"amFirePunch"},
+				{amWhip,	"amWhip"},
+				{amBaseballBat, "amBaseballBat"},
+				{amKamikaze, 	"amKamikaze"},
+				{amSeduction, 	"amSeduction"},
+				{amHammer,	"amHammer"},
 
-				{amMine, 	"amMine",		8},
-				{amDynamite, 	"amDynamite",		10},
-				{amCake, 	"amCake",		23},
-				{amBallgun, 	"amBallgun",		29},
-				{amRCPlane,	"amRCPlane",		30},
-				{amSMine,	"amSMine",		46},
+				{amMine, 	"amMine"},
+				{amDynamite, 	"amDynamite"},
+				{amCake, 	"amCake"},
+				{amBallgun, 	"amBallgun"},
+				{amRCPlane,	"amRCPlane"},
+				{amSMine,	"amSMine"},
 
-				{amAirAttack,	"amAirAttack",		15},
-				{amMineStrike,	"amMineStrike",		16},
-				{amNapalm, 	"amNapalm",		27},
-				{amPiano,	"amPiano",		42},
-				{amDrillStrike,	"amDrillStrike",	49},
-				{amAirMine,	"amAirMine",		56},
+				{amAirAttack,	"amAirAttack", ammoFrameAirAttack}, -- overwritten icon in Ammos.png
+				{amMineStrike,	"amMineStrike"},
+				{amNapalm, 	"amNapalm"},
+				{amPiano,	"amPiano"},
+				{amDrillStrike,	"amDrillStrike"},
+				{amAirMine,	"amAirMine"},
 
-				{amKnife,	"amKnife",		54},
+				{amPickHammer,	"amPickHammer"},
+				{amBlowTorch, 	"amBlowTorch"},
+				{amKnife,	"amKnife"},
 
-				{amBirdy,	"amBirdy",		40},
-				{amDuck,	"amDuck",		57},
+				{amBirdy,	"amBirdy"},
+				{amDuck,	"amDuck"},
 
 				}
 
 local utilArray =
 				{
+				{amGirder, 	"amGirder"},
+				{amLandGun,	"amLandGun"},
+				{amRubber, 	"amRubber"},
 
-				{amPickHammer,	"amPickHammer",		5},
-				{amBlowTorch, 	"amBlowTorch",		17},
-				{amGirder, 	"amGirder",		18},
-				{amLandGun,	"amLandGun",		52},
-				{amRubber, 	"amRubber",		55},
+				{amRope, 	"amRope"},
+				{amParachute, 	"amParachute"},
+				{amTeleport,	"amTeleport"},
+				{amJetpack,	"amJetpack"},
+				{amPortalGun,	"amPortalGun"},
 
-				{amRope, 	"amRope",		7},
-				{amParachute, 	"amParachute",		14},
-				{amTeleport,	"amTeleport",		19},
-				{amJetpack,	"amJetpack",		38},
-				{amPortalGun,	"amPortalGun",		41},
+				{amInvulnerable,"amInvulnerable"},
+				{amLaserSight,	"amLaserSight"},
+				{amVampiric,	"amVampiric"},
+				{amResurrector, "amResurrector"},
+				{amTardis, 	"amTardis"},
 
-				{amInvulnerable,"amInvulnerable",	33},
-				{amLaserSight,	"amLaserSight",		35},
-				{amVampiric,	"amVampiric",		36},
-				{amResurrector, "amResurrector",	48},
-				{amTardis, 	"amTardis",		51},
-
-				{amSwitch,	"amSwitch",		20},
-				{amLowGravity, 	"amLowGravity",		31},
-				{amExtraDamage, "amExtraDamage",	32},
-				{amExtraTime,	"amExtraTime",		34},
+				{amSwitch,	"amSwitch"},
+				{amLowGravity, 	"amLowGravity"},
+				{amExtraDamage, "amExtraDamage"},
+				{amExtraTime,	"amExtraTime"},
 
 				}
 
@@ -572,7 +574,7 @@ local gameFlagList =	{
 			}
 
  local reducedSpriteIDArray = {
-  sprAmRubber, sprAmGirder, sprTargetBee, sprIceTexture, sprHHTelepMask,
+  sprTargetBee, sprAmGirder, sprAmRubber, sprIceTexture, sprHHTelepMask,
   sprAMAmmos, sprAMAmmosBW, sprAMSlot, sprAMCorners, sprTurnsLeft, sprBotlevels,
   sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
   sprShoutCorner, sprShoutEdge, sprShoutTail, sprCustom1, sprCustom2, }
@@ -581,7 +583,7 @@ local gameFlagList =	{
  local reducedSpriteIDArrayFrames
 
  local reducedSpriteTextArray = {
-  "sprAmRubber", "sprAmGirder", "sprTargetBee", "sprIceTexture", "sprHHTelepMask",
+  "sprTargetBee", "sprAmGirder", "sprAmRubber", "sprIceTexture", "sprHHTelepMask",
   "sprAMAmmos", "sprAMAmmosBW", "sprAMSlot",  "sprAMCorners", "sprTurnsLeft", "sprBotlevels",
   "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail",
   "sprShoutCorner", "sprShoutEdge", "sprShoutTail", "sprCustom1", "sprCustom2", }
@@ -764,14 +766,12 @@ function InterpretPoints()
 		-- Weapon Crates
 		elseif (specialPointsFlag[i] >= 20) and (specialPointsFlag[i] < (#atkArray+20)) then
 			tempG = SpawnAmmoCrate(specialPointsX[i],specialPointsY[i],atkArray[specialPointsFlag[i]-19][1])
-			setGearValue(tempG,"caseType","ammo")
 			setGearValue(tempG,"contents",atkArray[specialPointsFlag[i]-19][2])
 
 
 		-- Utility Crates
 		elseif (specialPointsFlag[i] >= (#atkArray+20)) and (specialPointsFlag[i] < (#atkArray+20+#utilArray)) then
 			tempG = SpawnUtilityCrate(specialPointsX[i],specialPointsY[i],utilArray[specialPointsFlag[i]-19-#atkArray][1])
-			setGearValue(tempG,"caseType","util")
 			setGearValue(tempG,"contents",utilArray[specialPointsFlag[i]-19-#atkArray][2])
 
 		--79-82 (reserved for future wep crates)
@@ -988,7 +988,13 @@ function CallPlaceSprite(pID)
 		placedTint[pID] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
 	end
 
-	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], placedFrame[pID],
+	-- Special case: Placing amAirAttack of the ammos sprite (since this one is overwritten)
+	local actualDisplayedImage = placedFrame[pID]
+	if (placedSprite[pID] == sprAMAmmos or placedSprite[pID] == sprAMAmmosBW) and (actualDisplayedImage == (amAirAttack - 1)) then
+		actualDisplayedImage = ammoFrameAirAttack
+	end
+
+	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], actualDisplayedImage,
 		placedTint[pID],
 		nil, -- overrite existing land
 		nil, nil, -- this stuff specifies flipping
@@ -1157,16 +1163,13 @@ function PlaceObject(x,y)
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
 		gear = SpawnHealthCrate(x,y)
 		SetHealth(gear, pMode[pIndex])
-		setGearValue(gear,"caseType","med")
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
 		gear = SpawnAmmoCrate(x, y, atkArray[pIndex][1])
 		placedSpec[placedCount] = atkArray[pIndex][2]
-		setGearValue(gear,"caseType","ammo")
 		setGearValue(gear,"contents",atkArray[pIndex][2])
 	elseif cat[cIndex] == loc("Utility Crate Placement Mode") then
 		gear = SpawnUtilityCrate(x, y, utilArray[pIndex][1])
 		placedSpec[placedCount] = utilArray[pIndex][2]
-		setGearValue(gear,"caseType","util")
 		setGearValue(gear,"contents",utilArray[pIndex][2])
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
 		gear = AddGear(x, y, gtExplosives, 0, 0, 0, 0)
@@ -1732,7 +1735,8 @@ function GetDataForGearSaving(gear)
 
 		table.insert(previewDataList, "	PreviewPlacedGear(" .. GetX(gear) ..", " ..	GetY(gear) .. ")")
 
-		if (GetHealth(gear) ~= nil) then
+		-- Health crate
+		if band(GetGearPos(gear), 0x2) ~= 0 then
 
 			temp = 	"	tempG = SpawnHealthCrate(" ..
 				GetX(gear) ..", " ..
@@ -1749,7 +1753,8 @@ function GetDataForGearSaving(gear)
 			elseif	GetHealth(gear) == 100 then specialFlag = 12
 			end
 
-		elseif getGearValue(gear,"caseType") == "ammo" then
+		-- Ammo crate
+		elseif band(GetGearPos(gear), 0x1) ~= 0 then
 
 			arrayList = wepCrateList
 			temp = 	"	tempG = SpawnAmmoCrate(" ..
@@ -1766,12 +1771,11 @@ function GetDataForGearSaving(gear)
 				end
 			end
 
-			--dammit, we probably need two more entries if we want to allow editing of existing maps
-			table.insert(wepCrateList, "	setGearValue(tempG, \"caseType\", \"" .. getGearValue(gear,"caseType") .. "\")")
+			--dammit, we probably need more entries if we want to allow editing of existing maps
 			table.insert(wepCrateList, "	setGearValue(tempG, \"contents\", \"" .. getGearValue(gear,"contents") .. "\")")
 
-
-		elseif getGearValue(gear,"caseType") == "util" then
+		-- Utility crate
+		elseif band(GetGearPos(gear), 0x4) ~= 0 then
 
 			arrayList = utilCrateList
 			temp = 	"	tempG = SpawnUtilityCrate(" ..
@@ -1788,8 +1792,7 @@ function GetDataForGearSaving(gear)
 				end
 			end
 
-			--dammit, we probably need two more entries if we want to allow editing of existing maps
-			table.insert(utilCrateList, "	setGearValue(tempG, \"caseType\", \"" .. getGearValue(gear,"caseType") .. "\")")
+			--dammit, we probably need more entries if we want to allow editing of existing maps
 			table.insert(utilCrateList, "	setGearValue(tempG, \"contents\", \"" .. getGearValue(gear,"contents") .. "\")")
 
 		end
@@ -1953,21 +1956,6 @@ function SaveLevelData()
 	WriteLnToConsole("local hhs = {}")
 	WriteLnToConsole("")
 
-	WriteLnToConsole("local wepArray = {")
-	WriteLnToConsole("		amBazooka, amBee, amMortar, amDrill, amSnowball,")
-	WriteLnToConsole("		amGrenade, amClusterBomb, amMolotov, amWatermelon, amHellishBomb, amGasBomb,")
-	WriteLnToConsole("		amShotgun, amDEagle, amSniperRifle, amSineGun, amLandGun, amIceGun,")
-	WriteLnToConsole("		amFirePunch, amWhip, amBaseballBat, amKamikaze, amSeduction, amHammer,")
-	WriteLnToConsole("		amMine, amDynamite, amCake, amBallgun, amRCPlane, amSMine, amAirMine,")
-	WriteLnToConsole("		amAirAttack, amMineStrike, amDrillStrike, amNapalm, amPiano, amBirdy,")
-	WriteLnToConsole("		amBlowTorch, amPickHammer, amGirder, amRubber, amPortalGun,")
-	WriteLnToConsole("		amRope, amParachute, amTeleport, amJetpack,")
-	WriteLnToConsole("		amInvulnerable, amLaserSight, amVampiric,")
-	WriteLnToConsole("		amLowGravity, amExtraDamage, amExtraTime, amResurrector, amTardis, amSwitch")
-	WriteLnToConsole("	}")
-	WriteLnToConsole("")
-
-
 	SaveConfigData()
 
 
@@ -2024,13 +2012,17 @@ function SaveLevelData()
 
 	for i = 0, (placedCount-1) do
 		if placedType[i] == loc("Waypoint Editing Mode") then
+			--[[ TODO/FIXME: Somehow incorporate the waypoints in an actual useful manner.
+			The functions AddWayPoint and PreviewWayPoint do not exist and will thus be commented-out
+			in the output code. They are added anyway so the user sees the coordinates
+			]]
 			table.insert(waypointList,
-			"	AddWayPoint(" ..
+			"--	AddWayPoint(" ..
 				placedX[i] ..", " ..
 				placedY[i] ..")"
 				)
 			table.insert(hFlagList, "	" .. placedX[i] .. " " .. placedY[i] .. " " .. "0")
-			table.insert(previewDataList, "	PreviewWayPoint(" .. placedX[i] ..", " ..	placedY[i] .. ")")
+			table.insert(previewDataList, "--	PreviewWayPoint(" .. placedX[i] ..", " ..	placedY[i] .. ")")
 		end
 	end
 
@@ -2329,8 +2321,10 @@ function SaveLevelData()
 	WriteLnToConsole("function onAmmoStoreInit()")
 	WriteLnToConsole("")
 
-	WriteLnToConsole("	for i = 1, #wepArray do")
-	WriteLnToConsole("		SetAmmo(wepArray[i], 0, 0, 0, 1)")
+	WriteLnToConsole("	for i = 0, AmmoTypeMax do")
+	WriteLnToConsole("		if i ~= amNothing then")
+	WriteLnToConsole("			SetAmmo(i, 0, 0, 0, 1)")
+	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	SetAmmo(amSkip, 9, 0, 0, 0)")
@@ -2592,7 +2586,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amMine, 60000
+				"", 9, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2830,9 +2824,8 @@ function HandleHedgeEditor()
 				dSprite = sprBotlevels--sprMineOff
 				dFrame = 1
 			elseif (cat[cIndex] == loc("Dud Mine Placement Mode")) then
-				-- TODO: Use dud mine sprite instead of sprite of normal mine
-				dSprite = sprBotlevels--sprMineOff
-				dFrame = 1
+				dSprite = sprBotlevels--sprMineDead
+				dFrame = 3
 			elseif (cat[cIndex] == loc("Sticky Mine Placement Mode")) then
 				dSprite = sprBotlevels--sprSMineOff
 				dFrame = 2
@@ -2854,6 +2847,10 @@ function HandleHedgeEditor()
 			elseif (cat[cIndex] == loc("Sprite Placement Mode")) then
 				dSprite = reducedSpriteIDArray[pIndex]
 				dFrame = sFrame
+				if ((dSprite == sprAMAmmos) or (dSprite == sprAMAmmosBW)) and (dFrame == (amAirAttack - 1)) then
+					-- Special case: Air attack icon of ammos sprite needs to be fixed (since this icon is overwritten)
+					dFrame = ammoFrameAirAttack
+				end
 			else
 				dCol = 0xFFFFFF00
 				dSprite = sprArrow
@@ -2882,8 +2879,14 @@ function HandleHedgeEditor()
 				end
 
 				tSprCol = 0xFFFFFFFF
-				tempFrame = tArr[pIndex][3]
-
+				-- Get ammo icon
+				if tArr[pIndex][3] then
+					-- Overwritten ammo icon
+					tempFrame = tArr[pIndex][3]
+				else
+					-- Use default ammo icon
+					tempFrame = tArr[pIndex][1] - 1
+				end
 			end
 
 		else
@@ -2893,10 +2896,10 @@ function HandleHedgeEditor()
 		end
 
 		SetVisualGearValues(crateSprite, CursorX+xDisplacement, CursorY+yDisplacement, 0, 0, dAngle, tempFrame, 1000, sprAMAmmos, 1000, tSprCol)
-		SetVisualGearValues(tSpr[1], CursorX+xDisplacement-2, CursorY+yDisplacement-2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[2], CursorX+xDisplacement-2, CursorY+yDisplacement+2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[3], CursorX+xDisplacement+2, CursorY+yDisplacement-2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[4], CursorX+xDisplacement+2, CursorY+yDisplacement+2, 0, 0, dAngle, 10, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[1], CursorX+xDisplacement-2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[2], CursorX+xDisplacement-2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[3], CursorX+xDisplacement+2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
+		SetVisualGearValues(tSpr[4], CursorX+xDisplacement+2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
 
 
 		if genTimer >= 100 then
@@ -3364,7 +3367,7 @@ function onGameInit()
 	end
 
 	reducedSpriteIDArrayFrames = {
-		4, 8, 1, 1, 1,
+		1, 8, 4, 1, 1,
 		AmmoTypeMax, AmmoTypeMax, 3, 4, 8, 1,
 		1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1,

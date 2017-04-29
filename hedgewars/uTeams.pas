@@ -82,7 +82,8 @@ if not TeamsGameOver then
     if AliveCount = 0 then
         begin // draw
         AddCaption(GetEventString(eidRoundDraw), cWhiteColor, capgrpGameState);
-        SendStat(siGameResult, shortstring(trmsg[sidDraw]));
+        if SendGameResultOn then
+            SendStat(siGameResult, shortstring(trmsg[sidDraw]));
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
@@ -113,7 +114,8 @@ if not TeamsGameOver then
                 AddVoice(sndVictory, Teams[0]^.voicepack);
 
             AddCaption(cap, cWhiteColor, capgrpGameState);
-            SendStat(siGameResult, shortstring(s));
+            if SendGameResultOn then
+                SendStat(siGameResult, shortstring(s));
             AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;
     SendStats;

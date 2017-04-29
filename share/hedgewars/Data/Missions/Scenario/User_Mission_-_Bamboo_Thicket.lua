@@ -25,7 +25,7 @@ function onGameInit()
 	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default", "cm_yinyang")
 	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
 			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default", "cm_cyborg")
+	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_cyborg")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
 	SetGearPosition(player,142,656)
@@ -80,7 +80,7 @@ function onGearDelete(gear)
 		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 		
 		if (turnNumber < 6) and (firedShell == false) then
-			AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Energetic Engineer"),0xffba00ff,capgrpMessage2)
+			AddCaption(string.format(loc("Achievement gotten: %s"), loc("Energetic Engineer")),0xffba00ff,capgrpMessage2)
 		end
 
 	elseif gear == player then

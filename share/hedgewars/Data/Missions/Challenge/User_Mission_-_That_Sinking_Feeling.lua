@@ -226,8 +226,8 @@ function onGameTick()
 				GameOver = true
 				AddCaption(loc("The flood has stopped! Challenge over."))
 				SendStat(siGameResult, loc("Challenge completed!"))
-				SendStat(siPlayerKills, tostring(hhCount), loc("Nameless Heroes"))
 				SendStat(siPointType, loc("rescues"))
+				SendStat(siPlayerKills, tostring(hhCount), loc("Nameless Heroes"))
 
 				-- Do not count drowning hedgehogs
 				local hhLeft = hhCount
@@ -241,7 +241,7 @@ function onGameTick()
 				SendStat(siCustomAchievement, string.format(loc("You saved %d of 8 Hapless Hogs."), hhLeft))
 
 				if hhLeft == 8 then
-					AddCaption(loc("Achievement obtained: Lively Lifeguard"),0xffba00ff,capgrpMessage2)
+					AddCaption(string.format(loc("Achievement gotten: %s"), loc("Lively Lifeguard")) ,0xffba00ff,capgrpMessage2)
 					SendStat(siCustomAchievement, loc("You have obtained an achievement: Lively Lifeguard"))
 				end
 				EndGame()
@@ -290,8 +290,8 @@ function onGearDelete(gear)
 		else
 			SendStat(siCustomAchievement, loc("You haven't rescued anyone."))
 		end
-		SendStat(siPlayerKills, "0", loc("Nameless Heroes"))
 		SendStat(siPointType, loc("points"))
+		SendStat(siPlayerKills, "0", loc("Nameless Heroes"))
 
 		SendStat(siGameResult, loc("Disqualified!"))
 		GameOver = true

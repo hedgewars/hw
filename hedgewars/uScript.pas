@@ -1638,7 +1638,13 @@ begin
                 end;
 
             SwitchCurrentHedgehog(gear^.Hedgehog);
+            AmmoMenuInvalidated:= true;
             CurrentTeam:= CurrentHedgehog^.Team;
+
+            repeat
+                CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + 1) mod CurrentTeam^.HedgehogsNumber
+            until
+                CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = CurrentHedgehog^.Gear;
 
             gear^.State:= gear^.State or gstHHDriven;
             gear^.Active := true;
@@ -1935,6 +1941,27 @@ begin
             end;
         end;
     lc_sendstat:= 0
+end;
+
+function lc_sendgameresultoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendGameResultOn := false;
+    lc_sendgameresultoff:= 0
+end;
+
+function lc_sendrankingstatsoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendRankingStatsOn := false;
+    lc_sendrankingstatsoff:= 0
+end;
+
+function lc_sendachievementsstatsoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendAchievementsStatsOn := false;
+    lc_sendachievementsstatsoff:= 0
 end;
 
 function lc_sendhealthstatsoff(L : Plua_State) : LongInt; Cdecl;
@@ -2520,9 +2547,15 @@ begin
     if CheckLuaParamCount(L, 1, 'HideHog', 'gearUid') then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
-        HideHog(gear^.hedgehog)
+        if (gear <> nil) and (gear^.hedgehog <> nil) then
+            begin
+            HideHog(gear^.hedgehog);
+            lua_pushboolean(L, true);
+            end
+        else
+            lua_pushboolean(L, false);
         end;
-    lc_hidehog := 0;
+    lc_hidehog := 1;
 end;
 
 function lc_restorehog(L: Plua_State): LongInt; Cdecl;
@@ -3409,6 +3442,9 @@ lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
+lua_register(luaState, _P'SendGameResultOff', @lc_sendgameresultoff);
+lua_register(luaState, _P'SendRankingStatsOff', @lc_sendrankingstatsoff);
+lua_register(luaState, _P'SendAchievementsStatsOff', @lc_sendachievementsstatsoff);
 lua_register(luaState, _P'SendHealthStatsOff', @lc_sendhealthstatsoff);
 lua_register(luaState, _P'FindPlace', @lc_findplace);
 lua_register(luaState, _P'SetGearPosition', @lc_setgearposition);

@@ -47,7 +47,7 @@ procedure doStepBeeWork(Gear: PGear);
 procedure doStepBee(Gear: PGear);
 procedure doStepShotIdle(Gear: PGear);
 procedure doStepShotgunShot(Gear: PGear);
-procedure spawnBulletTrail(Bullet: PGear);
+procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat);
 procedure doStepBulletWork(Gear: PGear);
 procedure doStepDEagleShot(Gear: PGear);
 procedure doStepSniperRifleShot(Gear: PGear);
@@ -1190,7 +1190,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure spawnBulletTrail(Bullet: PGear);
+procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat);
 var oX, oY: hwFloat;
     VGear: PVisualGear;
 begin
@@ -1212,14 +1212,14 @@ begin
             begin
             VGear^.X:= hwFloat2Float(ox);
             VGear^.Y:= hwFloat2Float(oy);
-            VGear^.dX:= hwFloat2Float(Bullet^.X);
-            VGear^.dY:= hwFloat2Float(Bullet^.Y);
+            VGear^.dX:= hwFloat2Float(bulletX);
+            VGear^.dY:= hwFloat2Float(bulletY);
 
             // reached edge of land. assume infinite beam. Extend it way out past camera
-            if (hwRound(Bullet^.X) and LAND_WIDTH_MASK <> 0)
-            or (hwRound(Bullet^.Y) and LAND_HEIGHT_MASK <> 0) then
+            if (hwRound(bulletX) and LAND_WIDTH_MASK <> 0)
+            or (hwRound(bulletY) and LAND_HEIGHT_MASK <> 0) then
                     // only extend if not under water
-                    if not CheckCoordInWater(hwRound(Bullet^.X), hwRound(Bullet^.Y)) then
+                    if not CheckCoordInWater(hwRound(bulletX), hwRound(bulletY)) then
                         begin
                         VGear^.dX := VGear^.dX + max(LAND_WIDTH,4096) * (VGear^.dX - VGear^.X);
                         VGear^.dY := VGear^.dY + max(LAND_WIDTH,4096) * (VGear^.dY - VGear^.Y);
@@ -1231,13 +1231,14 @@ end;
 
 procedure doStepBulletWork(Gear: PGear);
 var
-    i, x, y: LongWord;
-    oX, oY, tX, tY, cX, cY: hwFloat;
+    i, x, y, iInit: LongWord;
+    oX, oY, tX, tY, tDx, tDy: hwFloat;
     VGear: PVisualGear;
 begin
     AllInactive := false;
     inc(Gear^.Timer);
-    i := 80;
+    iInit := 80;
+    i := iInit;
     oX := Gear^.X;
     oY := Gear^.Y;
     repeat
@@ -1245,19 +1246,19 @@ begin
         Gear^.Y := Gear^.Y + Gear^.dY;
         tX:= Gear^.X;
         tY:= Gear^.Y;
+        tDx:= Gear^.dX;
+        tDy:= Gear^.dY;
         if (Gear^.PortalCounter < 30) and WorldWrap(Gear) then
             begin
-            cX:= Gear^.X;
-            cY:= Gear^.Y;
-            Gear^.X:= tX;
-            Gear^.Y:= tY;
-            SpawnBulletTrail(Gear);
-            Gear^.X:= cX;
-            Gear^.Y:= cY;
+            DrawTunnel(oX, oY, tDx, tDy, iInit + 2 - i, 1);
+            SpawnBulletTrail(Gear, tX, tY);
+            iInit:= i;
+            oX:= Gear^.X;
+            oY:= Gear^.Y;
             inc(Gear^.PortalCounter);
             Gear^.Elasticity:= Gear^.X;
             Gear^.Friction:= Gear^.Y;
-            SpawnBulletTrail(Gear);
+            SpawnBulletTrail(Gear, Gear^.X, Gear^.Y);
             end;
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
@@ -1290,7 +1291,7 @@ begin
 
     if Gear^.Damage > 0 then
         begin
-        DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 82 - i, 1);
+        DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, iInit + 2 - i, 1);
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0
         end;
@@ -1331,7 +1332,7 @@ begin
                     end;
                 end;
 
-            spawnBulletTrail(Gear);
+            spawnBulletTrail(Gear, Gear^.X, Gear^.Y);
             Gear^.doStep := @doStepShotIdle
             end;
 end;
@@ -4430,7 +4431,7 @@ begin
         if (iterator^.Kind = gtDEagleShot) or (iterator^.Kind = gtSniperRifleShot) then
             begin
             // draw bullet trail
-            spawnBulletTrail(iterator);
+            spawnBulletTrail(iterator, iterator^.X, iterator^.Y);
             // the bullet can now hurt the hog that fired it
             iterator^.Data:= nil;
             end;

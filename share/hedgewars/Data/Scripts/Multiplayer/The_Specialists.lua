@@ -97,6 +97,7 @@ function onNewAmmoStore(groupIndex, hogIndex)
 		SetAmmo(amSeduction, 9, 0, 0, 0)
 		SetAmmo(amResurrector, 1, 0, 0, 0)
 		SetAmmo(amInvulnerable, 1, 0, 0, 0)
+        SetAmmo(amLowGravity, 1, 0, 0, 0)
 	elseif hogIndex == 6 then
 		SetAmmo(amFlamethrower, 1, 0, 0, 0)
 		SetAmmo(amMolotov, 1, 0, 0, 0)

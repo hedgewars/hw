@@ -70,6 +70,9 @@ speakerHog = nil
 spyHog = nil
 deployedHog = nil
 deployedDead = false
+nativesTeleported = false
+nativesIsolated = false
+hogDeployed = false
 
 cyborgHidden = false
 needToAct = 0
@@ -395,28 +398,31 @@ function SetupWave2DeadAnim()
 end
 
 function IsolateNatives()
-  PlaceGirder(710, 299, 6)
-  PlaceGirder(690, 299, 6)
-  PlaceGirder(761, 209, 4)
-  PlaceGirder(921, 209, 4)
-  PlaceGirder(1081, 209, 4)
-  PlaceGirder(761, 189, 4)
-  PlaceGirder(921, 189, 4)
-  PlaceGirder(1081, 189, 4)
-  PlaceGirder(761, 169, 4)
-  PlaceGirder(921, 169, 4)
-  PlaceGirder(1081, 169, 4)
-  PlaceGirder(761, 149, 4)
-  PlaceGirder(921, 149, 4)
-  PlaceGirder(1081, 149, 4)
-  PlaceGirder(761, 129, 4)
-  PlaceGirder(921, 129, 4)
-  PlaceGirder(1081, 129, 4)
-  PlaceGirder(1120, 261, 2)
-  PlaceGirder(1140, 261, 2)
-  PlaceGirder(1160, 261, 2)
-  AddAmmo(deployedHog, amDEagle, 0)
-  AddAmmo(deployedHog, amFirePunch, 0)
+  if not nativesIsolated then
+    PlaceGirder(710, 299, 6)
+    PlaceGirder(690, 299, 6)
+    PlaceGirder(761, 209, 4)
+    PlaceGirder(921, 209, 4)
+    PlaceGirder(1081, 209, 4)
+    PlaceGirder(761, 189, 4)
+    PlaceGirder(921, 189, 4)
+    PlaceGirder(1081, 189, 4)
+    PlaceGirder(761, 169, 4)
+    PlaceGirder(921, 169, 4)
+    PlaceGirder(1081, 169, 4)
+    PlaceGirder(761, 149, 4)
+    PlaceGirder(921, 149, 4)
+    PlaceGirder(1081, 149, 4)
+    PlaceGirder(761, 129, 4)
+    PlaceGirder(921, 129, 4)
+    PlaceGirder(1081, 129, 4)
+    PlaceGirder(1120, 261, 2)
+    PlaceGirder(1140, 261, 2)
+    PlaceGirder(1160, 261, 2)
+    AddAmmo(deployedHog, amDEagle, 0)
+    AddAmmo(deployedHog, amFirePunch, 0)
+    nativesIsolated = true
+  end
 end
 
 function PutCGI()
@@ -443,11 +449,14 @@ function PutCGI()
 end
 
 function TeleportNatives()
-  nativePos[waterNum] = {1100, 288}
-  for i = 1, 7 do
-    if nativeDead[i] ~= true then 
-      AnimTeleportGear(natives[i], unpack(nativePos[i]))
-    end
+  if not nativesTeleported then
+     nativePos[waterNum] = {1100, 288}
+     for i = 1, 7 do
+       if nativeDead[i] ~= true then 
+         AnimTeleportGear(natives[i], unpack(nativePos[i]))
+       end
+     end
+     nativesTeleported = true
   end
 end
 
@@ -464,10 +473,13 @@ function TurnNatives(hog)
 end
 
 function DeployHog()
-  AnimSwitchHog(deployedHog)
-  AnimTeleportGear(deployedHog, unpack(deployedPos))
-  if deployedHog ~= natives[wiseNum] then
-    AnimSay(deployedHog, loc("Why me?!"), SAY_THINK, 2000)
+  if not hogDeployed then
+     AnimSwitchHog(deployedHog)
+     AnimTeleportGear(deployedHog, unpack(deployedPos))
+     if deployedHog ~= natives[wiseNum] then
+        AnimSay(deployedHog, loc("Why me?!"), SAY_THINK, 2000)
+     end
+     hogDeployed = true
   end
 end
 
@@ -546,10 +558,10 @@ end
 
 function SkipWave2DeadAnim()
   TeleportNatives()
-  IsolateNatives()
-  DeployHog()
-  HideCyborg()
   PutCircles()
+  DeployHog()
+  IsolateNatives()
+  HideCyborg()
 end
 
 function SpawnPlatformCrates()
@@ -569,7 +581,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
-  TurnTimeLeft = 0
+  EndTurn(true)
   ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines..."), 1, 12000)
 end
 
@@ -598,7 +610,7 @@ end
 
 function AfterStartAnim()
   AnimSwitchHog(natives[leaksNum])
-  TurnTimeLeft = 0
+  EndTurn(true)
   stage = spyKillStage
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
@@ -620,7 +632,7 @@ function DoDeployedDead()
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Tribe"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckChoice()
@@ -664,7 +676,7 @@ function DoKilledOther()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Tribe"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckWaveDead(index)
@@ -677,7 +689,7 @@ function CheckWaveDead(index)
 end
 
 function DoWaveDead(index)
-  TurnTimeLeft = 0
+  EndTurn(true)
   needToAct = index
 end
 
@@ -774,7 +786,7 @@ function AfterWave3DeadAnim()
   DismissTeam(loc("Assault Team"))
   DismissTeam(loc("Reinforcements"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 -----------------------------Misc--------------------------------------
@@ -842,8 +854,7 @@ end
 
 function SetupPlace()
   startNativesNum = nativesNum
-  HideHog(cyborg)
-  cyborgHidden = true
+  HideCyborg()
   for i = 1, 9 do
     HideHog(cannibals[i])
     cannibalHidden[i] = true
@@ -1048,7 +1059,7 @@ function onNewTurn()
   end
 
   if GetHogTeamName(CurrentHedgehog) == loc("Tribe") then
-    TurnTimeLeft = 0
+    EndTurn(true)
     return
   end
   TurnsLeft = TurnsLeft - 1
@@ -1059,7 +1070,7 @@ function onNewTurn()
 
   if stage == spyKillStage then
     if CurrentHedgehog == spyHog or GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-      TurnTimeLeft = 0
+      EndTurn(true)
     else
       SetGearMessage(CurrentHedgehog, 0)
       --AnimSwitchHog(natives[leaksNum])

@@ -777,7 +777,6 @@ begin
         PlaySound(sndWarp);
         RenderHealth(gear^.Hedgehog^);
         s:= ansistring(gear^.Hedgehog^.Name);
-        AddCaption(FormatA(GetEventString(eidResurrected), s), cWhiteColor, capgrpMessage);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
         end;

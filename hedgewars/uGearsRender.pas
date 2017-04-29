@@ -820,11 +820,15 @@ begin
                             0,
                             sign,
                             0);
-                amBaseballBat: DrawHedgehog(sx, sy,
+                amBaseballBat:
+                    begin
+                    HatVisible:= true;
+                    DrawHedgehog(sx, sy,
                             sign,
                             0,
                             5,
                             0);
+                    end
             else
                 DrawHedgehog(sx, sy,
                     sign,
@@ -1028,7 +1032,19 @@ begin
                 amJetpack: DrawSprite(sprJetpack, sx-32, sy-32, 0);
                 end
             end; *)
-        if CurAmmoGear <> nil then
+        if (CurAmmoGear = nil) then
+            begin
+            if ((Gear^.State and (gstAttacked or gstAnimation or gstHHJumping)) = 0)
+            and (Gear^.Message and (gmLeft or gmRight) = 0) then
+            begin
+                amt:= CurrentHedgehog^.CurAmmoType;
+                case amt of
+                    amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
+                        sx + 9 * sign, sy + 2, 0, sign, -8, 1, aangle);
+                end;
+            end;
+            end
+        else
             begin
             aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
             case CurAmmoGear^.Kind of

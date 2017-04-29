@@ -148,6 +148,7 @@ void PageGameStats::clear()
     labelGameStats->setText("");
     healthPoints.clear();
     labelGameRank->setText("");
+    labelGameWin->setText("");
     playerPosition = 0;
     lastColor = 0;
 }

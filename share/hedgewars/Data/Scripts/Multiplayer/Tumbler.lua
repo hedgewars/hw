@@ -356,7 +356,7 @@ function CheckProximityToExplosives(gear)
 
 			barrelsEaten = barrelsEaten + 1
 			if barrelsEaten == 5 then
-				AddCaption(loc("Achievement obtained: Barrel Eater!"),0xffba00ff,capgrpMessage2)
+				AddCaption(string.format(loc("Achievement gotten: %s"), loc("Barrel Eater")),0xffba00ff,capgrpMessage2)
 			end
 
 		elseif (GetGearType(gear) == gtMine) then
@@ -368,7 +368,7 @@ function CheckProximityToExplosives(gear)
 
 			minesEaten = minesEaten + 1
 			if minesEaten == 5 then
-				AddCaption(loc("Achievement obtained: Mine Eater!"),0xffba00ff,capgrpMessage2)
+				AddCaption(string.format(loc("Achievement gotten: %s"), loc("Mine Eater")),0xffba00ff,capgrpMessage2)
 			end
 
 		end

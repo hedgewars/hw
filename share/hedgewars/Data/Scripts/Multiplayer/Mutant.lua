@@ -152,6 +152,8 @@ end
 
 function onGameStart()
     SendHealthStatsOff()
+    SendRankingStatsOff()
+    SendAchievementsStatsOff()
     trackTeams()
     teamScan()
     runOnHogs(saveStuff)
@@ -321,7 +323,7 @@ function onGameTick()
                         SetHealth(mutant,0)
                         mt_hurt= false
                         setGearValue(mutant,"SelfDestruct",true)
-                        TurnTimeLeft = 0
+                        EndTurn()
                     end
             end
     end
@@ -409,7 +411,7 @@ local only_low_score = true
     if gameOver then
         SendStat(siGraphTitle, loc("Score graph"))
 
-        TurnTimeLeft = 0
+        EndTurn(true)
 
         teamsSorted = {}
  
@@ -464,9 +466,6 @@ local only_low_score = true
             SendStat(siPointType, loc("point(s)"))
             SendStat(siPlayerKills, getTeamValue(teamsSorted[i], "Score"), teamsSorted[i])
         end
-
-        AddCaption(string.format(loc("%s wins!"), winTeam), 0xFFFFFFFF, capgrpGameState )
-        SendStat(siGameResult, string.format("%s wins!", winTeam))
 
         ShowMission(    loc("Mutant"),
                         loc("Final result"),
@@ -540,7 +539,7 @@ function setMutantStuff(gear)
 
     AddCaption(string.format(loc("%s has mutated! +2 points"), getGearValue(gear, "Name")), GetClanColor(GetHogClan(gear)), capgrpMessage)
 
-    TurnTimeLeft=0
+    EndTurn(true)
 
     AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
     AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
@@ -751,11 +750,6 @@ function onGearDelete(gear)
         end
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
         trackDeletion(gear)
-
-        -- End game properly when only the winner remains
-        if gameOver and numhhs == 1 then
-            EndGame()
-        end
     elseif GetGearType(gear) == gtCase then
         -- Check if a crate has been collected
         if band(GetGearMessage(gear), gmDestroy) ~= 0 and CurrentHedgehog ~= nil then

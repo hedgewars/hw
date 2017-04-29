@@ -100,6 +100,8 @@ midAnim = {}
 freshDead = nil
 crates = {}
 cratesNum = 0
+
+princessFreed = false
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -185,7 +187,7 @@ function AfterMidAnim()
   SetupPlace3()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
-  TurnTimeLeft = 0
+  EndTurn(true)
   ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"), 1, 7000)
   vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
@@ -287,8 +289,9 @@ function DoPrincessFreed()
   if progress and progress<7 then
     SaveCampaignVar("Progress", "7")
   end
+  princessFreed = true
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckCyborgsDead()
@@ -337,11 +340,13 @@ function CheckGearDead(gear)
 end
 
 function EndMission()
-  RemoveEventFunc(CheckPrincessFreed)
-  AddCaption(loc("So the princess was never heard of again ..."))
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  if not princessFreed then
+    RemoveEventFunc(CheckPrincessFreed)
+    AddCaption(loc("So the princess was never heard of again ..."))
+    DismissTeam(loc("Natives"))
+    DismissTeam(loc("011101001"))
+    EndTurn(true)
+  end
 end
 
 function CheckOutOfCluster()
@@ -546,7 +551,7 @@ function onNewTurn()
         end
       end
     end
-    TurnTimeLeft = 0
+    EndTurn(true)
   else
     for i = 1, 3 do
       if gearDead[natives[i]] ~= true then
