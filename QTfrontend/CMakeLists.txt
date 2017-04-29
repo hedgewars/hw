@@ -21,9 +21,9 @@ if(APPLE AND
 endif()
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
+find_package(SDL2_mixer 2 REQUIRED) #audio in SDLInteraction
 include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2MIXER_INCLUDE_DIR})
+include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 
 if(LIBAV_FOUND)
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
@@ -203,7 +203,7 @@ list(APPEND HW_LINK_LIBS
 
 list(APPEND HW_LINK_LIBS
     ${SDL2_LIBRARY}
-    ${SDL2MIXER_LIBRARY}
+    ${SDL2_MIXER_LIBRARIES}
     )
     
 if(WIN32 AND NOT UNIX)
