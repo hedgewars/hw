@@ -125,13 +125,13 @@ About::About(QWidget * parent) :
 
     // the remaining sdl modules used only in engine, so instead of needlessly linking them here
     // we dynamically call the function returning the linked version
-    void *sdlnet_handle = SDL_LoadObject(sopath("SDL_net"));
+    void *sdlnet_handle = SDL_LoadObject(sopath("SDL2_net"));
     if (sdlnet_handle != NULL) {
         SDL_version *(*sdlnet_ver_get)(void) = NULL;
         sdlnet_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlnet_handle, "SDLNet_Linked_Version");
         if (sdlnet_ver_get != NULL) {
             SDL_version *sdlnet_ver = sdlnet_ver_get();
-            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL_net</a>: %1.%2.%3"))
+            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL2_net</a>: %1.%2.%3"))
                 .arg(sdlnet_ver->major)
                 .arg(sdlnet_ver->minor)
                 .arg(sdlnet_ver->patch));
@@ -140,13 +140,13 @@ About::About(QWidget * parent) :
         SDL_UnloadObject(sdlnet_handle);
     }
 
-    void *sdlimage_handle = SDL_LoadObject(sopath("SDL_image"));
+    void *sdlimage_handle = SDL_LoadObject(sopath("SDL2_image"));
     if (sdlimage_handle != NULL) {
         SDL_version *(*sdlimage_ver_get)(void) = NULL;
         sdlimage_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlimage_handle, "IMG_Linked_Version");
         if (sdlimage_ver_get != NULL) {
             SDL_version *sdlimage_ver = sdlimage_ver_get();
-            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL_image</a>: %1.%2.%3"))
+            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL2_image</a>: %1.%2.%3"))
                 .arg(sdlimage_ver->major)
                 .arg(sdlimage_ver->minor)
                 .arg(sdlimage_ver->patch));
@@ -155,13 +155,13 @@ About::About(QWidget * parent) :
         SDL_UnloadObject(sdlimage_handle);
     }
 
-    void *sdlttf_handle = SDL_LoadObject(sopath("SDL_ttf"));
+    void *sdlttf_handle = SDL_LoadObject(sopath("SDL2_ttf"));
     if (sdlttf_handle != NULL) {
         SDL_version *(*sdlttf_ver_get)(void) = NULL;
         sdlttf_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlttf_handle, "TTF_Linked_Version");
         if (sdlttf_ver_get != NULL) {
             SDL_version *sdlttf_ver = sdlttf_ver_get();
-            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL_ttf</a>: %1.%2.%3"))
+            libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL2_ttf</a>: %1.%2.%3"))
                 .arg(sdlttf_ver->major)
                 .arg(sdlttf_ver->minor)
                 .arg(sdlttf_ver->patch));
