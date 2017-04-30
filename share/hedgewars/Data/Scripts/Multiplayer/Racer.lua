@@ -5,6 +5,11 @@
 -- by mikade
 -----------------------------------------
 
+-- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+-- Be careful when editig this script, do not introduce changes lightly!
+-- This script is used for time records on the official Hedgewars server.
+-- Introducing breaking changes means we have to invalidate past time records!
+
 -----------------------------------
 --0.1: took all the code from crazy racer and scrapped most of it
 -----------------------------------

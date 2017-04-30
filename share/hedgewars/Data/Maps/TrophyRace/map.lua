@@ -1,5 +1,10 @@
 -- Hedgewars - Roperace for 2+ Players
 
+-- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+-- Be careful when editig this script, do not introduce changes lightly!
+-- This script is used for time records on the official Hedgewars server.
+-- Introducing breaking changes means we have to invalidate past time records!
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- store number of hedgehogs
