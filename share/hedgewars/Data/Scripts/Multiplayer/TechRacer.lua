@@ -173,7 +173,7 @@ local fastX = {}
 local fastY = {}
 local fastCount = 0
 local fastIndex = 0
-local fastColour
+local fastColour = 0xffffffff
 
 local currX = {}
 local currY = {}
@@ -246,7 +246,7 @@ function RebuildTeamInfo()
                 teamNameArr[i] = " " -- = i
                 teamSize[i] = 0
                 teamIndex[i] = 0
-                teamScore[i] = 100000
+                teamScore[i] = 1000000
         end
         numTeams = 0
 
@@ -350,7 +350,7 @@ end
 function AdjustScores()
 
         if bestTime == nil then
-                bestTime = 100000
+                bestTime = 1000000
                 bestClan = 10
                 bestTimeComment = "N/A"
         end
@@ -380,7 +380,7 @@ function AdjustScores()
                 end
         end
 
-        if bestTime ~= 100000 then
+        if bestTime ~= 1000000 then
                 bestTimeComment = (bestTime/1000) ..loc("s")
         end
 
@@ -690,10 +690,11 @@ function onParameters()
 end
 
 function onGameInit()
+    if mapID == nil then
+        mapID = 2 + GetRandom(7)
+    end
 
-		if mapID == nil then
-			mapID = 2 + GetRandom(7)
-		end
+    addHashData(mapID)
 
 		Theme = "Cave"
 
@@ -724,10 +725,22 @@ function limitHogs(gear)
 end
 
 function onSpecialPoint(x,y,flag)
-    specialPointsX[specialPointsCount] = x
-    specialPointsY[specialPointsCount] = y
-	specialPointsFlag[specialPointsCount] = flag
-    specialPointsCount = specialPointsCount + 1
+    if flag == 99 then
+        fastX[fastCount] = x
+        fastY[fastCount] = y
+        fastCount = fastCount + 1
+    elseif flag == 0 then
+        techX[techCount], techY[techCount] = x, y
+        techCount = techCount + 1
+    else
+        addHashData(x)
+        addHashData(y)
+        addHashData(flag)
+        specialPointsX[specialPointsCount] = x
+        specialPointsY[specialPointsCount] = y
+        specialPointsFlag[specialPointsCount] = flag
+        specialPointsCount = specialPointsCount + 1
+    end
 end
 
 function InterpretPoints()
@@ -1245,6 +1258,7 @@ end
 
 function onAchievementsDeclaration()
     usedWeapons[amSkip] = nil
+    usedWeapons[amExtraTime] = nil
 
     usedRope = usedWeapons[amRope] ~= nil
     usedPortal = usedWeapons[amPortalGun] ~= nil
@@ -1270,10 +1284,10 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMap()
+    map = detectMapWithDigest()
 
     for i = 0, (numTeams-1) do
-        if teamScore[i] < 100000 then
+        if teamScore[i] < 1000000 then
             DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
         end
     end
