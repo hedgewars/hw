@@ -702,6 +702,12 @@ function HandleFreshMapCreation()
 		activationStage = 200
 		--runOnHogs(RestoreHog)
 
+		if ufoFuel == 2000 then
+			SetAmmoDescriptionAppendix(amJetpack, loc("On this map you get infinite fuel."))
+		elseif ufoFuel ~= nil and ufoFuel ~= 0 then
+			SetAmmoDescriptionAppendix(amJetpack, string.format(loc("On this map you get %d%% fuel."), div(ufoFuel, 20)))
+		end
+
 	end
 
 end
