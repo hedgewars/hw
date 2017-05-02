@@ -6,6 +6,8 @@ local enemy = nil
 
 local GameOver = false
 
+local jetpackFuel = 1000
+
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
@@ -53,6 +55,8 @@ function onGameStart()
 		loc("Mines time: 1 second"), -amFirePunch, 0);
 	--SetTag(AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1), -70)
 
+	SetAmmoDescriptionAppendix(amJetpack, string.format(loc("In this mission you get %d%% fuel."), div(jetpackFuel, 20)))
+
 	SetWind(-100)
 
 end
@@ -86,7 +90,7 @@ end
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtJetpack then
-		SetHealth(gear,1000)
+		SetHealth(gear, jetpackFuel)
 	end
 
 end
