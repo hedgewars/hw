@@ -95,7 +95,7 @@ end
 
 function onGearDelete(gear)
     if gear == MrMine then
-        AddCaption("Once you set off the proximity trigger, Mr. Mine is not your friend",0xffffff,0)
+        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), 0xFFFFFFFF, capgrpMessage)
         MrMine = nil
     elseif gear == Cake then
         Cake = nil
