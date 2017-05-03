@@ -32,7 +32,7 @@
 00:29=Ballkanone
 00:30=Napalm-Luftangriff
 00:31=Funkflugzeug
-00:32=Schwerkraft verringern
+00:32=Niedrige Schwerkraft
 00:33=Zusatzschaden
 00:34=Unverwundbarkeit
 00:35=Zusatzzeit
@@ -60,6 +60,7 @@
 00:56=Hackebeil
 00:57=Gummi
 00:58=Luftmine
+00:59=Quietscheentchen
 
 01:00=Laden …
 01:01=Unentschieden
@@ -88,6 +89,9 @@
 01:22=Abwesenheitsmodus
 01:23=Autokamera aus
 01:24=Autokamera an
+01:25=Zieltaste drücken, um das Ziel zu markieren
+01:26=Werkzeug nicht verfügbar im Sudden Death
+01:27=+%1
 
 ; Event messages
 ; Hog (%1) died
@@ -96,9 +100,22 @@
 02:00=%1 hat’s nicht geschafft!
 02:00=%1 stellt sich tot!
 02:00=%1 hat schon bessere Tage gesehen!
+02:00=%1 ist nun an einem besseren Ort!
+02:00=%1 hat die Pflicht getan!
 02:00=%1 sieht tote Igel!
 02:00=%1 hat ins Gras gebissen!
 02:00=%1 ist Futter für die Würmer!
+02:00=Für %1 ist's vorbei
+02:00=%1 wird zurückkehren
+02:00=%1 braucht etwas Ruhe
+02:00=Und tschüss, %1!
+02:00=%1 trifft den Großen Weißen Igel im Himmel
+02:00=%1 wurde eleminiert
+02:00=Nein! Warum musste %1 nur sterben?
+02:00=Oh nein, %1! Du hattest noch dein ganzes Leben vor dir …
+02:00=%1 ist so tot wie die Dodos
+02:00=%1 ist tot umgefallen
+02:00=%1 ist tief begraben
 02:00=Das war’s wohl, %1!
 02:00=%1 hat’s hinter sich!
 02:00=%1 kann schon das Licht sehen!
@@ -143,6 +160,7 @@
 02:00=Ist ein Arzt im Haus?!
 02:00=%1 ist tot
 02:00=%1 ist hinüber
+02:00=%1 ist über dem Verfallsdatum
 02:00=%1 wurde in tausend Stücke zerfetzt
 02:00=Schade um %1
 02:00=Wir trauern um %1
@@ -157,7 +175,10 @@
 02:00=%1 war ohnehin nur Kanonenfutter
 02:00=Mir kommen die Tränen, %1!
 02:00=Man wird dich rächen, %1!
-02:00=%1 wartet auf die Wiederbelebung.
+02:00=Für %1 ist das Spiel vorbei
+02:00=%1 ruht für immer
+02:00=Lebewohl, %1!
+02:00=%1 wartet auf die Wiederbelebung
 02:00=%1 hat ein Nach-Tod-Erlebnis
 02:00=%1 hat im Spiel des Lebens verloren
 02:00=%1 wurde vernichtend geschlagen
@@ -166,7 +187,7 @@
 02:00=%1 schläft den ganz langen Winterschlaf
 02:00=Warum musstest du sterben, %1?
 02:00=Oh, nein, %1! Wir hatten noch so viel vor …
-02:00=Jetzt braucht sich %1 nicht mehr vor dem Tod zu fürchten.
+02:00=Jetzt braucht sich %1 nicht mehr vor dem Tod zu fürchten
 02:00=%1 wurde von den Schrecken des Krieges erlöst
 02:00=Klappe zu, %1 tot!
 
@@ -210,7 +231,7 @@
 02:01=%1 hat ein Leck
 02:01=Wie viele Igel wohl da unten liegen?
 02:01=%1 macht das Meer etwas höher
-02:01=%1 ist absolut nicht Marinetauglich
+02:01=%1 ist absolut nicht marinetauglich
 02:01=%1 hält sich für einen Fisch
 02:01=Wenigstens ging die Sache nicht ins Klo, %1!
 02:01=Sonic konnte nicht schwimmen, %1 auch nicht
@@ -228,14 +249,14 @@
 02:01=%1, Igel, der mit dem Blubb
 02:01=Nächster Halt: Meeresgrund
 02:01=%1 hätte den Schwimmkurs nicht schwänzen sollen
-02:01=Fischers Fritze fischt frische ... Igel?!
+02:01=Fischers Fritze fischt frische … Igel?!
 02:01=Grüß die Fische von uns, %1!
 02:01=%1 erkundet das Meer
 02:01=%1 folgt dem Ruf der Meere
 02:01=%1 ist jetzt ein Seeigel!
 02:01=Igel haben keine Kiemen, %1!
 02:01=%1 lässt sich diese  einmalige  Tauchgelegenheit nicht entgehen
-02:01=Und wir dachten %1 könnte nicht noch tiefer sinken …
+02:01=Und wir dachten, %1 könnte nicht noch tiefer sinken …
 02:01=%1 zieht eine Etage tiefer
 02:01=Seht, %1 kann schwimmen! Nein, doch nicht …
 
@@ -259,7 +280,12 @@
 02:02=Dem Sieger gehört die Beute
 02:02=Diese Schlacht muss gewonnen werden!
 02:02=Hedgewars, präsentiert von hedgewars.org
+02:02=Viel Glück und viel Spaß!
+02:02=Sei froh, wenn du nicht gegen Tiyuri kämpfst
+02:02=Sei froh, wenn du nicht gegen unC0Rr kämpfst
 02:02=Sei froh, wenn du nicht gegen Nemo kämpfst
+02:02=Sei froh, wenn du nicht gegen Smaxx kämpfst
+02:02=Sei froh, wenn du nicht gegen Jessor kämpfst
 02:02=Gib alles!
 02:02=Die Verlierer müssen putzen!
 02:02=Lassen Sie den Kampf des Jahrtausends beginnen
@@ -267,7 +293,7 @@
 02:02=Lassen Sie den Kampf des Jahrzehnts beginnen
 02:02=Lassen Sie den Kampf des Jahres beginnen
 02:02=Lassen Sie den Kampf des Monats beginnen
-02:02=Lassen Sie den Kampf in der Woche beginnen
+02:02=Lassen Sie den Kampf der Woche beginnen
 02:02=Lassen Sie den Kampf des Tages beginnen
 02:02=Lassen Sie den Kampf der Stunde beginnen
 02:02=Zerstört den Feind!
@@ -276,7 +302,7 @@
 02:02=Kampf im Schmutz
 02:02=Kampf mit Ehre
 02:02=Niemals aufgeben, niemals kapitulieren!
-02:02=Lassen Sie das Schlachtfest beginnen!
+02:02=Lasst das Schlachtfest beginnen!
 02:02=Ich hoffe, du bist bereit für einen Kampf!
 02:02=Los, los!
 02:02=Igel voraus!
@@ -285,17 +311,70 @@
 
 ; Round ends and team/clan (%1) wins
 02:03=%1 gewinnt!
+02:03=%1 ist der Champion
+02:03=%1 ist der Sieger!
+02:03=%1 ist der Gewinner!
+02:03=%1 zeigt, wie man gewinnt
+02:03=%1 ist der Beste der Besten
+02:03=%1 verdient sich den Siegertitel
+02:03=%1 tanzt den Siegestanz
+02:03=Sieg für %1!
+02:03=Und der Sieger ist %1
+02:03=Gratulation, %1 gewinnt!
+02:03=Verneigt euch vor %1
+02:03=%1 hat das Spiel gemeistert
+02:03=%1 ist der Meister des Universums
+02:03=%1 hat die Schlacht gewonnen
+02:03=%1 siegt auf großartige Weise
+02:03=%1 ist die Nummer eins!
+02:03=Bravo, bravo, %1!
+02:03=%1 ist der Beste
+02:03=Applaus, Applaus, %1!
+02:03=Was für ein aufregender Sieg von %1!
+02:03=%1 zerstörte den Feind
+02:03=%1 hat den Feind erobert
+02:03=%1 hat den Feind zertrampelt
+02:03=%1 kennt die Kunst des Sieges
+02:03=Alle jubeln für %1
+02:03=%1 wählte den Sieg statt den Tod
+02:03=%1 bekommt einen Stern auf der Siegesstraße
+02:03=Supersieg für %1
+02:03=%1 trinkt den Siegersaft
+02:03=%1 triumphiert
+02:03=%1 schlürft von der Siegersoße
+02:03=%1 verdient den Sieg
+02:03=%1 hat diese Runde meisterhaft gewonnen
+02:03=%1 ist der Gewinner
+02:03=%1 siegt mit Stil
+02:03=Mission erfolgreich, %1 gewinnt
+02:03=%1 verdient sich die Siegermedaillie
 
 ; Round ends in a draw
 02:04=Unentschieden
+02:04=Es ist unentschieden!
+02:04=Keiner gewinnt! Unentschieden
+02:04=Unglaublich, diese Runde endet unentschieden
+02:04=Unentschieden, wie langweilig
+02:04=Unmöglich! Es ist unentschieden
+02:04=Unentschieden! Jetzt müssen wir von vorne anfangen …
+02:04=Spiel vorbei! Es hat niemand gewonnen
+02:04=Unentschieden, was für eine Enttäuschung!
+02:04=Heute ist jeder ein Verlierer
+02:04=Ach nö, es steht Unentschieden!
 
 ; New health crate
+02:05=Hilfspaket gesichtet!
+02:05=Sanitäter!
+02:05=Erste Hilfe aus der Luft!
+02:05=Ein Gesundheitspaket für euch
+02:05=Gesundheit in Kistenform!
 02:05=Alles Gute kommt von oben!
 02:05=Linderung in Sicht!
 02:05=Das kommt gelegen!
 02:05=Jemand denkt an euch!
 02:05=Mit Liebe verpackt?
 02:05=Frisches Pflaster!
+02:05=Frische Bandagen!
 02:05=So werden Sie sich besser fühlen
 02:05=Ein Hallo-Trank! Upps, falsches Spiel
 02:05=Zugreifen!
@@ -322,14 +401,18 @@
 02:05=Damit fühlt sich der Igel wieder pudelwohl!
 
 ; New ammo crate
+02:06=Noch mehr Waffen!
 02:06=Nachschub!
 02:06=Zeit zum Nachladen!
+02:06=Ich frag mich, welche Waffe da drin ist
+02:06=Versorgungsgüter eingetroffen!
 02:06=Was wohl darin ist?
 02:06=Bringt das die Wende?
 02:06=Tod aus der Luft!
 02:06=Ein Geschenk!
-02:06=Spezielle Lieferung!
+02:06=Sonderlieferung!
 02:06=Es war ein Alptraum, diese Kiste durch den Zoll zu kriegen …
+02:06=Weihnachten wurde vorverlegt
 02:06=Destruktives Spielzeug aus dem Himmel
 02:06=Vorsicht! Inhalt leicht entzündlich
 02:06=Einsammeln oder sprengen, das ist die Frage
@@ -340,7 +423,8 @@
 02:06=Was auch immer da drin ist, es ist bestimmt nicht Pizza
 02:06=Einsammlen!
 02:06=Eine Waffenkiste!
-02:06=Lasse nicht zu, dass der Feind sie holt!
+02:06=Waffenkiste gesichtet!
+02:06=Lasst nicht zu, dass der Feind sie sich holt!
 02:06=Schönes neues Spielzeug!
 02:06=Eine geheimnisvolle Kiste!
 02:06=Ein eckiges Ü-Ei!
@@ -354,7 +438,7 @@
 02:06=Ob da eine Melonenbombe drin ist?
 02:06=Das ist wie ein Kindergeburtstag!
 02:06=Wir brauchen Waffen, viele Waffen!
-02:06=Davon kann man nie genug haben.
+02:06=Davon kann man nie genug haben
 02:06=Neue Waffen, um das Spiel etwas spannender zu machen
 02:06=Neue Waffen braucht das Land!
 02:06=Nichts für Weicheier!
@@ -364,18 +448,24 @@
 02:06=Damit schlägt das Herz jedes Waffennarren höher!
 02:06=Waffenkiste: Nur echt mit dem Fragezeichen
 02:06=Dies könnte die spielentscheidende Waffe sein!
+02:06=Nette Überraschung!
 
 ; New utility crate
 02:07=Nützliches?
+02:07=Das sieht praktisch aus
 02:07=Tooltime!
-02:07=Was wohl darin ist?
+02:07=Werkzeuge!
+02:07=Hilfsmittel!
+02:07=Aufgepasst, da unten!
 02:07=Lieferung frei Haus!
 02:07=Mehr als nur eine Kiste!
 02:07=Weitere Hilfsmittel!
 02:07=Extras für dich!
 02:07=Dies sollte gut sein!
 02:07=Verwende diese mit Bedacht
-02:07=Uff, diese Box ist schwer
+02:07=Uff, diese Kiste ist schwer
+02:07=Das könntest du gebrauchen
+02:07=Kann man das gebrauchen?
 02:07=Futter für Strategen
 02:07=Heimwerker atmen auf!
 02:07=Schaffe, schaffe, Häusle baue
@@ -392,14 +482,19 @@
 
 ; Hog (%1) skips his turn
 02:08=%1 ist so ein Langeweiler …
+02:08=%1 will nicht gestört werden
 02:08=%1 denkt weiter nach …
+02:08=%1 ist ein Faulpelz
+02:08=%1 ist planlos
+02:08=%1 überspringt den Zug und schämt sich nicht mal
+02:08=%1 ist stinkefaul
 02:08=%1 schmiedet einen Plan …
 02:08=Das war öde, %1!
 02:08=%1 führt etwas im Schilde!
-02:08=%1 setzt aus.
-02:08=%1 ist ein Drückeberger.
-02:08=%1 überdenkt die Situation.
-02:08=%1 kann sich nicht entscheiden.
+02:08=%1 setzt aus
+02:08=%1 ist ein Drückeberger
+02:08=%1 überdenkt die Situation
+02:08=%1 kann sich nicht entscheiden
 02:08=%1 ist unmotiviert
 02:08=%1 braucht etwas Motivation
 02:08=%1 ist ein Pazifist
@@ -412,7 +507,7 @@
 02:08=%1 versteckt sich
 02:08=%1 verpasst die Gelegenheit
 02:08=%1 verschenkt die Chance
-02:08=%1 meint Nichtstun sei der beste Plan …
+02:08=%1 meint, Nichtstun sei der beste Plan …
 02:08=%1 ist ein großes Weichei
 02:08=%1 hat Angst …
 02:08=%1 ist ein Feigling!
@@ -421,12 +516,13 @@
 02:08=%1 denkt über den Sinn des Lebens nach
 02:08=%1 war noch nie so Recht in Schuss
 02:08=%1 wollte eigentlich niemals zur Armee
-02:08=Die Zeit ist um, %1!
+02:08=Vergeud nicht unsere Zeit, %1!
 02:08=Ich bin von dir enttäuscht, %1
 02:08=Los, du kannst es besser, %1!
 02:08=%1 hat anscheinend Besseres zu tun
 02:08=%1 hat sich fast zu Tode erschrocken
 02:08=%1 ist eingeschlafen
+02:08=%1 ist starr vor Angst
 02:08=%1 ist wohl nur aus Versehen hier
 02:08=%1 steckt den Kopf in den Sand
 02:08=%1 spielt lieber Skat
@@ -437,6 +533,12 @@
 02:08=%1 lässt sich die Sonne auf den Bauch scheinen
 02:08=%1 genießt die Stille
 02:08=%1 fragt sich, ob es schon Zeit für den Winterschlaf ist
+02:08=%1 beobachtet die Situation
+02:08=%1 ist müde
+02:08=%1 ist der langweiligste Igel der Welt
+02:08=%1 schaut sich die schöne Landschaft an
+02:08=%1 lässt den Gegner fortfahren
+02:08=Der Feind ist wohl der beste Freund von %1
 
 ; Hog (%1) hurts himself only
 02:09=%1 sollte lieber zielen üben!
@@ -445,6 +547,7 @@
 02:09=%1 lebt gefährlich!
 02:09=%1 hat keinen Selbsterhaltungstrieb
 02:09=%1 ist durcheinander
+02:09=%1 ist nicht ganz richtig im Kopf
 02:09=%1 vermasselt’s
 02:09=Das hat wohl nicht ganz geklappt, %1
 02:09=%1 geht ein wenig zu sorglos mit gefährlichen Waffen um
@@ -461,12 +564,12 @@
 02:09=%1 zeigt dem Feind, wozu er fähig ist
 02:09=%1 ist nicht perfekt
 02:09=Mach dir keine Sorgen, %1, piemand ist nerfekt
-02:09=%1 hat das mit Absicht getan
+02:09=%1 hat das bestimmt mit Absicht getan
 02:09=Ich werd es auch niemandem verraten, mein Ehrenwort, %1!
 02:09=Wie peinlich!
 02:09=Ich hoffe, dass das niemand gesehen hat, %1
 02:09=%1 sollte dringend die Gebrauchsanweisung noch einmal durchlesen
-02:09=%1s Schuss ging nach hinten los!
+02:09=Der Schuss ging wohl nach hinten los, %1!
 02:09=%1 macht sich mit den Waffen vertraut
 02:09=%1 schießt ein Eigentor
 02:09=%1 kennt keinen Schmerz
@@ -491,6 +594,17 @@
 02:09=Keine Sorge, %1, nächstes Mal klappt’s bestimmt!
 02:09=%1 ist eine Gefahr für sich selbst
 02:09=%1 braucht keine Feinde mehr
+02:09=Irgendetwas stimmt nicht mit %1
+02:09=%1 hat technische Schwierigkeiten
+02:09=%1 ist betrunken
+02:09=%1 sagt „Autsch!“
+02:09=%1 macht's verkehrt
+02:09=%1 dachte, die Waffe wäre noch gesichert
+02:09=%1 wollte die Waffe reinigen
+02:09=Schnell! Holt die Zwangsjacke!
+02:09=%1 hat einen Termin mit dem Tod
+02:09=%1 testete die Waffe – und sie funktioniert!
+02:09=%1 steht kurz vor der Selbstzerstörung
 
 ; Hog (%1) shot an home run (using the bat and another hog)
 02:10=Home Run!
@@ -532,6 +646,211 @@
 02:11=%1 bringt den Müll raus
 02:11=%1 flieht
 02:11=%1 braucht Urlaub
+
+; Hog (%1) was poisoned
+02:12=%1 fühlt sich krank
+02:12=%1 sieht gar nicht gut aus
+02:12=%1 braucht einen Arzt
+02:12=%1 wurde übel vergiftet
+02:12=%1 fühlt sich schwindelig
+02:12=%1 fiel der chemischen Kriegsführung zum Opfer
+02:12=Die Haut von %1 Haut nimmt eine sehr ungesunde Färbung an
+02:12=%1 sollte die Vitamine geschluckt haben
+02:12=%1 hat Bauchschmerzen
+02:12=%1 sieht nicht gerade gesund aus
+02:12=%1 braucht ein Lazarett
+02:12=%1 stinkt fürchterlich
+02:12=Geht es dir gut, %1?
+02:12=%1 leidet unter der Gesundheitsverlustkrankheit
+02:12=%1 hat das Gegengift vergessen
+02:12=%1 hat Fieber
+02:12=%1 sollte nicht diesen üblen Gestank eingeatmet haben
+02:12=%1 hätte eine Gasmaske gebrauchen können
+02:12=%1 braucht Medizin
+02:12=%1 wurde infiziert
+02:12=%1 sieht fürchterlich aus
+02:12=%1 hat keine Krankenversicherung
+02:12=%1 muss ins Krankenhaus
+02:12=%1 wurde krank gemacht
+02:12=%1 braucht Hustensaft
+02:12=%1 versucht, die Krankheit mit Gedanken zu bekämpfen
+02:12=Das Gift fließt durch %1
+02:12=Das Gift schwächt %1
+02:12=%1 braucht erste Hilfe
+02:12=%1 braucht Hilfe, und zwar schnell
+02:12=Halt dich lieber von %1 fern
+02:12=%1 färbt sich ungesund grün
+02:12=%1 fühlt das Gift
+02:12=%1 fühlt sich schwächer und schwächer
+
+; Hog (%1) was resurrected by the Resurrector utility
+02:13=%1 wurde wiederbelebt
+02:13=%1 wurde zurück IN die Hölle gebracht
+02:13=%1 erhält eine zweite Chance
+02:13=%1 ist wieder lebendig
+02:13=%1 kehrt von den Toten zurück
+02:13=%1 ist unter den lebenden Toden
+02:13=%1 wurde wiedergeboren
+02:13=%1 fühlt sich lebendig wie noch nie
+02:13=%1 hat den Tod besiegt
+02:13=%1 lacht den Tod aus
+02:13=%1 bekommt einen neuen Lebensversuch
+02:13=%1 ist wieder quieklebendig
+02:13=%1 wurde ins Unleben gerufen
+02:13=%1 ist wieder unter uns
+02:13=%1 ist überrascht, wieder am Leben zu sein
+02:13=%1 fühlt sich sehr erholt
+02:13=%1 hatte gutes Karma
+02:13=%1 steht von den Toten auf, um dem Feind das Fürchten zu lehren
+02:13=%1 ist auferstanden von den Toten
+02:13=%1 klettert aus dem Grab
+02:13=Vergeude nicht deine zweite Chance, %1
+02:13=%1 wird noch gebraucht
+02:13=%1 war zu wichtig, um zu sterben
+02:13=%1 ist voller Leben
+02:13=%1 fühlt die Kraft des Lebens
+02:13=%1 wurde aus dem Himmel geworfen
+02:13=%1 ist der Auserwählte
+02:13=%1 wusste, dass die Religion der Wiedergeburt Recht hatte
+02:13=%1 wusste, dass dieser Tag kommen würde
+02:13=Vorsicht, %1 ist wieder da!
+02:13=%1 wird Probleme machen … und das schon wieder!
+02:13=%1 ist dein schlimmster Alptraum
+02:13=Und ihr dachtet, ihr könntet %1 so leicht besiegen?
+02:13=%1 ist stärker als der Tod
+02:13=Der Tod hat für %1 keine Bedeutung
+02:13=%1 wird nicht vergeben
+02:13=%1 lebt erneut
+02:13=%1 wurde von schwarzer Magie wiederbelebt
+02:13=%1 ist bereit, wieder zu dienen
+02:13=%1 erhält ein Extraleben
+02:13=%1 war noch nicht bereit zum Sterben
+02:13=%1 muss wieder dienen
+02:13=Die Zeit war noch nicht reif für %1
+
+; Hog (%1) explodes after an kamikaze attack
+02:14=%1 stirbt in Ehre
+02:14=%1 stirbt den Tod eines Mutigen
+02:14=Erinnert euch an %1
+02:14=Sag Lebewohl zum mutigen Krieger %1
+02:14=%1 kämpft mit Ehre
+02:14=%1 war ehrenvoll
+02:14=%1 war in Rage
+02:14=%1 explodierte aus Wut
+02:14=%1 löst die taktische Selbstzerstörung aus
+02:14=Wie mutig von %1!
+02:14=%1 ist ein wahrer Held
+02:14=%1, Soldat des Mutes
+02:14=Wir werden %1 nie vergessen
+02:14=%1 wird in unseren Herzen bleiben
+02:14=%1 war erfüllt von brennendem Zorn
+02:14=%1 stirbt als Kriegsheld
+02:14=%1 ist ein Fan von Independence Day
+02:14=%1 bringt das größte Opfer
+02:14=%1 hat eine Einmalwaffe benutzt
+02:14=Was für ein Stunt, %1!
+02:14=%1 macht aus dem Krieg eine Kunst
+02:14=Ihr solltet euch nicht mit %1 angelegt haben
+02:14=%1 spielt mit dem Feuer
+02:14=%1 schlägt für ein letzes Mal zu
+02:14=%1 schlägt mächtig zu
+02:14=%1 war ein fanatischer Anhänger des Todeskults
+02:14=%1 bringt Tod und Zerstörung
+02:14=%1 ist für immer fort
+02:14=%1 hatte keine Ängste
+02:14=%1 stirbt fürs Vaterland
+02:14=%1 ist ein Kamikazepilot
+02:14=%1 tat das nur, um auf die Titelseite zu kommen
+02:14=%1 wird weltberühmt
+02:14=%1 hatte nichts zu verlieren
+
+; Hog (%1) returned from time-travel with the time box
+; These texts are intentionally kept simple and clear to not confuse the player
+02:15=%1 kehrt von einer Zeitreise zurück
+02:15=Zeitreisender %1 kehrt zurück
+02:15=%1 verlässt den Zeitkasten
+02:15=Der Zeitkasten von %1 ist wieder da
+02:15=%1 ist wieder in unserer Zeit
+02:15=Willkommen zurück in unserer Zeit, %1!
+02:15=%1 kommt in der Gegenwart an
+
+; Hog (%1) runs out of turn time (not shown in infinite attack mode)
+02:16=%1 war zu langsam
+02:16=%1 hat vergessen, ein Auge auf die Zeit zu werfen
+02:16=Selbst Schnecken sind schneller als %1
+02:16=%1 ist eingeschlafen
+02:16=%1 hat den Angriff vergessen
+02:16=%1 war kurz davor, den perfekten Schuss abzugeben. Ich schwör!
+02:16=%1 hat kein Zeitgefühlt
+02:16=%1 spielt in Zeitlupe
+02:16=%1 brauchte mehr Zeit
+02:16=%1 hätte ein paar Extrasekunden gebrauchen können
+02:16=Die Zeit ist um, %1!
+02:16=%1 hat soeben eine großartige Gelegenheit vergeudet
+02:16=%1 erhält keine Bonuspunkte
+02:16=%1 erhält die Teilnehmerurkunde
+02:16=%1 würde keine Medaillie in der Olympiade gewinnen
+02:16=Denk schneler, %1!
+02:16=Du enttäuschst mich, %1!
+02:16=Für %1 ist Zeit relativ
+02:16=%1 glaubt nicht an das Konzept der Zeit
+02:16=Vergeude nicht unsere Zeit, %1!
+02:16=Der Nächste, bitte!
+02:16=%1 ist unerträglich langsam
+02:16=Jemand sollte %1 aufwecken
+02:16=%1 hat vergessen, den Wecker zu stellen
+02:16=Für %1 ist die Zeit abgelaufen
+02:16=%1 lebt das langsame Leben
+02:16=Sei beim nächsten Mal etwas schneller, %1!
+02:16=Dein Zug dauert nicht ewig, %1!
+02:16=%1 hatte keine Uhr dabei
+02:16=%1 sollte etwas Zeit mitgebracht haben
+02:16=%1 ist ein Zeitverschwender
+02:16=Wer schläft, der verliert, %1!
+02:16=%1 hat den Startschuss verpasst
+02:16=Stricken ist wohl eine passendere Betätigung für %1
+02:16=%1 spielt lieber Schach
+02:16=%1 dachte an Blumen
+02:16=%1 wird leicht von schönen Dingen abgelenkt
+02:16=Haben wir mal wieder die Zeit vergessen, %1?
+02:16=Weitergehen! Hier gibt es nichts zu sehen!
+
+; King (%1) has died
+02:17=%1 ist tot! Lang lebe %1!
+02:17=Königliche Tragödie: %1 tot aufgefunden
+02:17=%1 ist nicht mehr bei uns
+02:17=Unser geschätzer König %1 ist von uns gegangen
+02:17=%1 war eh nur ein Tyrann
+02:17=Endlich sind wir %1 los
+02:17=Die Tage von %1 als Führer sind gezählt
+02:17=Die königliche Tradition von %1 findet ein Ende
+02:17=%1 wurde gestürzt!
+02:17=Ohne die Führung von %1 ist das Team verloren
+02:17=Der großartige Führer %1 sieht auf einmal nicht mehr so großartig aus
+02:17=Das Königreich weint für %1
+02:17=%1 starb wie ein richtiger König
+02:17=%1 ist ein toter Anführer
+02:17=%1 ist ein Ex-König
+02:17=%1 wurde des Thrones beraubt
+02:17=Die Herrschaft von %1 ist vorüber
+02:17=%1 stirbt, und ein ganzes Königreich ebenso
+02:17=%1 war ein schwacher König
+02:17=Es gibt viel bessere Könige als %1
+02:17=Der Krieg verlangt %1 als Opfer
+02:17=%1 hat's verdient
+02:17=%1 hat's zerrissen
+02:17=%1 wurde entmachtet
+02:17=%1 stirbt aus königlichen Gründen
+02:17=%1 lebte ein gefährliches Leben
+02:17=%1 hat den Mob verärgert
+02:17=%1 hatte zu viele Feinde
+02:17=Und ihr habt %1 einen König genannt?
+02:17=%1 hat es nicht verdient, ein König zu sein
+02:17=Nieder mit %1!
+02:17=Und %1 schimpfte sich einen König?
+02:17=%1 war des Königstitels nicht würdig
+02:17=%1 spielt »Der sterbende Schwan«
+02:17=%1 stirbt auf dramatische Weise
 
 ; Weapon Categories
 03:00=Zeitzünder-Granate
@@ -595,6 +914,7 @@
 03:56=Bitte ge- oder missbrauchen
 03:57=Werkzeug
 03:58=Schwebende Annäherungsmine
+03:59=Schwimmende Bombe
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1–5: Zeitzünder einstellen|Genaues Zielen + 1-5: Sprungkraft einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -604,7 +924,7 @@
 04:04=Greife deine Feinde mit einer Schrotflinte und|zwei Schüssen an. Durch die Streuung musst du|nicht genau zielen, um trotzdem zu treffen.|Angriff: Feuern (mehrfach)
 04:05=Ab in den Untergrund! Benutze den Presslufthammer,|um einen Schacht nach unten zu graben und so|andere Gebiete zu erreichen.|Angriff: Presslufthammer ein- oder ausschalten|Links/Rechts: Schräg bohren
 04:06=Gelangweilt? Keine Optionen? Munition sparen?|Kein Problem! Passe einfach diese Runde, Feigling!|Angriff: Runde ohne Angriff aussetzen
-04:07=Überbrücke große Distanzen mit gezielt abgefeuerten|Seilschüssen. Benutze deine Bewegungsenergie, um|andere Igel zu schubsen oder wirf vom Seil aus Granaten|und ähnliche Waffen.|Angriff: Seil abfeuern oder lösen|Hoch/Runter: Seil verkürzen/verlängern|Weitsprung: Waffe benutzen
+04:07=Überbrücke große Distanzen mit gezielt abgefeuerten|Seilschüssen. Benutze deine Bewegungsenergie, um|andere Igel zu schubsen oder wirf vom Seil aus Granaten|und ähnliche Waffen.|Angriff: Seil abfeuern oder lösen|Links/Rechts/Hoch/Runter: Seil schwingen/verkürzen/verlängern|Weitsprung: Waffe benutzen
 04:08=Halte dir deine Feinde fern oder blockiere sie,|indem du ihnen Minen vor die Beine wirfst.|Sei aber schnell genug, damit du sie nicht noch|selbst auslöst!|Angriff: Mine legen|Genaues Zielen + 1-5: Sprungkraft einstellen
 04:09=Nicht so ganz zielsicher? Versuche es mit der|Desert Eagle, denn diese bietet dir vier Schuss.|Angriff: Feuern (mehrfach)
 04:10=Rohe Gewalt ist immer eine Lösung. Lege einfach|diesen klassischen Sprengsatz neben deinen Feinden|ab und mach dich aus dem Staub.|Angriff: Dynamitstange legen
@@ -622,7 +942,7 @@
 04:22=Nicht nur etwas für Indiana Jones! Die Peitsche|eignet sich besonders gut, um ungezogene Igel|eine Klippe hinunter zu treiben.|Angriff: Alles vor dem Igel schlagen
 04:23=Wenn man nichts mehr zu verlieren hat …|Opfere deinen Igel, indem du ihn in eine|festgelegte Richtung losstürmen lässt.|Er wird alles auf dem Weg treffen und am|Ende selbst explodieren.|Angriff: Tödlichen Angriff starten
 04:24=Alles Gute! Schick diesen Kuchen auf den Weg,|damit er deinen lieben Feinden eine explosive|Party beschert. Die Torte überwindet fast jedes|Terrain, verliert dabei aber an Laufzeit.|Angriff: Torte losschicken / explodieren lassen
-04:25=Benutze diese Verkleidung, um einen Feind blind|vor Liebe in deine Richtung (und damit in einen|Abgrund oder ähnliches) springen zu lassen.|Angriff: Verkleiden und verführen
+04:25=Mit dieser Verkleidung wird dein Igel umwiderstehlich|attraktiv und lässt Igel in der Nähe blind vor Liebe|zu ihm (und einem Abgrund) springen. Die Verführung ist|so herzerwärmend, dass sie sogar das Eis eingefrorener|Igel bricht.|Angriff: Die unwiderstehliche Verführung einsetzen
 04:26=Wirf diese saftige (und sprunghafte) Wassermelone auf|deine Feinde. Sobald die Zeit abgelaufen ist, wird|sie in einzelne und explosive Stücke zerspringen.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
 04:27=Entfessle das Höllenfeuer und umgebe deine|Widersacher damit, indem du diesen teuflischen|Sprengsatz gegen sie einsetzt. Komm ihm aber|nicht zu nahe, denn die Flammen könnten|länger bestehen bleiben.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:28=Kurz nach dem Start wird diese Rakete beginnen,|sich durch soliden Grund zu graben. Sobald sie|wieder austritt oder der Zeitzünder abläuft,|wird sie explodieren.|Angriff: Halten, um mit mehr Kraft zu feuern
@@ -651,15 +971,16 @@
 04:51=Wirf mit Dreck um dich! Der Schlammball|schubst Igel und andere Dinge weg,|aber richtet keinen Schaden an.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:52=NICHT IN VERWENDUNG
 04:53=Unternimm eine Reise durch Zeit und Raum,|während du deine Kameraden alleine am Schlachtfeld zurücklässt.|Sei darauf vorbereitet, jederzeit wieder zurückzukommen,|oder auf Sudden Death, oder wenn sie alle besiegt wurden.|Haftungsausschluss. Nicht funktionstüchtig, wenn in Sudden Death,|wenn du alleine bist – oder der König.|Angriff: Aktivieren
-04:54=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!|Angriff: Aktivieren|Hoch/Runter: Beim Feuern zielen|Links/Rechts: Schussweite einstellen
+04:54=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen|Links/Rechts: Schussweite einstellen
 04:55=Hol die Eiszeit zurück! Friere Igel ein,|mach den Boden rutschig oder|rette dich selbst vor dem Ertrinken,|indem du das Wasser einfrierst.|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen
-04:56=Du kannst zwei Hackebeile auf deinen Feind schleudern,|Passagen und Tunnel blockieren, und sie sogar zum Klettern benutzen!|Sei vorsichtig! Es ist gefährlich, mit Messern zu spielen.|Angriff: Gedrückt halten, um mit mehr Schwung zu werfen (zwei mal)
+04:56=Du kannst zwei Hackebeile auf deinen Feind schleudern,|Passagen und Tunnel blockieren, und sie sogar zum Klettern|benutzen! Der Schaden erhöht sich mit der Geschwindigkeit.|Aber sei vorsichtig! Es ist gefährlich, mit Messern zu spielen.|Angriff: Gedrückt halten, um mit mehr Schwung zu werfen (zwei mal)
 04:57=Bau einen SEHR elastischen Balken aus Gummi,|von dem Igel und andere Sachen abprallen,|ohne Fallschaden zu nehmen.|Links/Rechts: Ausrichtung des Gummis wählen|Cursor: Gummi platzieren
 04:58=Diese Annäherungsmine wird frei in der Luft schweben und|verfolgt törichte Igel, die dumm genug sind, ihr zu nahe zu|kommen. Allerdings ist ihre Explosion schwächer als|die der Landmine.|Angriff: Halten, um mit mehr Kraft zu werfen
+04:59=Gib diesen dreckigen Igeln ein Bad! Dieses süße|kleine Quietscheentchen kann auf Wasser schwimmen|und folgt dabei dem Wind. Sie explodiert bei Kollision|mit Land, also stell sicher, sie von einer Klippe oder|einem anderem sicheren Ort fallen zu lassen.|Angriff: Quietscheentschen fallen lassen
 
 ; Game goal strings
 05:00=Spielmodifikationen
-05:01=Die folgenden Regeln gelten
+05:01=Die folgenden Regeln gelten:
 05:02=König platzieren: Wähle einen sicheren Startpunkt für deinen König
 05:03=Niedrige Schwerkraft: Pass auf, wo du hintrittst!
 05:04=Unverwundbarkeit: Igel sind (so gut wie) unkaputtbar

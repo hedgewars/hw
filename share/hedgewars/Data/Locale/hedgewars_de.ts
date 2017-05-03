@@ -7,6 +7,89 @@
         <source>Unknown Compiler</source>
         <translation>Unbekannter Compiler</translation>
     </message>
+    <message>
+        <source>Hedgewars %1</source>
+        <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
+        <translation>Hedgewars %1</translation>
+    </message>
+    <message>
+        <source>Revision %1 (%2)</source>
+        <translation>Revision %1 (%2)</translation>
+    </message>
+    <message>
+        <source>Visit our homepage: %1</source>
+        <translation>Besuch unsere Homepage: %1</translation>
+    </message>
+    <message>
+        <source>This program is distributed under the %1.</source>
+        <translation>Dieses Programm wird unter der %1. veröffentlicht.</translation>
+    </message>
+    <message>
+        <source>GNU GPL v2</source>
+        <extracomment>Short for “GNU General Public License version 2”</extracomment>
+        <translation>GNU GPL v2</translation>
+    </message>
+    <message>
+        <source>Dependency versions:</source>
+        <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
+        <translation>Abhängigkeitsversionen:</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
+        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL_net&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="vanished">&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL_net&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL_image&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="vanished">&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL_image&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL_ttf&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="vanished">&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL_ttf&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
+        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
 </context>
 <context>
     <name>AbstractPage</name>
@@ -140,7 +223,7 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation>Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt is (auf Englisch):</translation>
+        <translation>Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt ist (auf Englisch):</translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
@@ -383,7 +466,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation>Standard-Team</translation>
+        <translation type="vanished">Standard-Team</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
@@ -499,6 +582,14 @@ Bitte Kennwort eingeben:</translation>
     <message>
         <source>This page requires an internet connection.</source>
         <translation>Diese Seite benötigt eine Internetverbindung.</translation>
+    </message>
+    <message>
+        <source>Team 1</source>
+        <translation>Team 1</translation>
+    </message>
+    <message>
+        <source>Team %1</source>
+        <translation>Team %1</translation>
     </message>
 </context>
 <context>
@@ -901,7 +992,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Duration: %1m %2s</source>
-        <translation>Dauer: %1m %2s</translation>
+        <translation type="vanished">Dauer: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
@@ -909,7 +1000,16 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>%1 fps</source>
-        <translation>%1 Hz</translation>
+        <translation type="vanished">%1 Hz</translation>
+    </message>
+    <message>
+        <source>Duration: %1min %2s</source>
+        <extracomment>Duration in minutes and seconds (SI units)</extracomment>
+        <translation>Dauer: %1min %2s</translation>
+    </message>
+    <message>
+        <source>%1 FPS</source>
+        <translation>%1 FPS</translation>
     </message>
 </context>
 <context>
@@ -1044,6 +1144,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Mission</source>
         <translation>Mission</translation>
     </message>
+    <message>
+        <source>Start fighting</source>
+        <translation>Auf in den Kampf!</translation>
+    </message>
 </context>
 <context>
     <name>PageConnecting</name>
@@ -1065,6 +1169,14 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Open packages directory</source>
         <translation>Paketeverzeichnis öffnen</translation>
+    </message>
+    <message>
+        <source>Load the start page</source>
+        <translation>Startseite laden</translation>
+    </message>
+    <message>
+        <source>Open the directory in which the downloaded files are stored in your system</source>
+        <translation>Verzeichnis, in dem sich die heruntergeladenen Dateien in deinem System befinden, öffnen</translation>
     </message>
 </context>
 <context>
@@ -1168,6 +1280,38 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Play a random example of this voice</source>
         <translation>Ein zufälliges Beispiel dieser Stimme abspielen</translation>
     </message>
+    <message>
+        <source>Random Hats</source>
+        <translation>Zufallshüte</translation>
+    </message>
+    <message>
+        <source>Random Names</source>
+        <translation>Zufallsnamen</translation>
+    </message>
+    <message>
+        <source>Randomize the team name</source>
+        <translation>Zufälligen Teamnamen generieren</translation>
+    </message>
+    <message>
+        <source>Randomize the grave</source>
+        <translation>Zufälliges Grab auswählen</translation>
+    </message>
+    <message>
+        <source>Randomize the flag</source>
+        <translation>Zufällige Flagge auswählen</translation>
+    </message>
+    <message>
+        <source>Randomize the voice</source>
+        <translation>Zufällige Stimme auswählen</translation>
+    </message>
+    <message>
+        <source>Randomize the fort</source>
+        <translation>Zufällige Festung auswählen</translation>
+    </message>
+    <message>
+        <source>CPU %1</source>
+        <translation>CPU %1</translation>
+    </message>
 </context>
 <context>
     <name>PageGameStats</name>
@@ -1186,8 +1330,8 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
-            <numerusform>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkt.</numerusform>
-            <numerusform>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkten.</numerusform>
+            <numerusform>Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkt.</numerusform>
+            <numerusform>Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkten.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1555,6 +1699,18 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Video recording options</source>
         <translation>Videoaufzeichnungseinstellungen</translation>
+    </message>
+    <message>
+        <source>MISSING LANGUAGE NAME [%1]</source>
+        <translation>FEHLENDER SPRACHNAME [%1]</translation>
+    </message>
+    <message>
+        <source>Can&apos;t delete last team</source>
+        <translation>Kann letztes Team nicht löchen</translation>
+    </message>
+    <message>
+        <source>You can&apos;t delete the last team!</source>
+        <translation>Du kannst das letzte Team nicht löschen!</translation>
     </message>
 </context>
 <context>
@@ -2179,6 +2335,14 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Enable translucent tags by default</source>
         <translation>Transluzente Beschriftungsschilder standardmäßig aktivieren</translation>
     </message>
+    <message>
+        <source>Enable visual effects such as animated menu transitions and falling stars</source>
+        <translation>Aktiviert visuelle Effekte, wie z.B. animierte Menüübergänge und fallende Sterne</translation>
+    </message>
+    <message>
+        <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
+        <translation>Falls aktiviert, wird Hedgewars das Datum und die Uhrzeit in der Form »YYYY-MM-DD_hh-mm« in die Dateinamen von automatisch erstellten Wiederholungen hinzufügen.</translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -2273,6 +2437,30 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Community</source>
         <translation>Community</translation>
+    </message>
+    <message>
+        <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
+        <translation>Stereoskopie erzeugt eine Tiefenillusion, wenn man eine 3D-Brille trägt.</translation>
+    </message>
+    <message>
+        <source>24 FPS</source>
+        <translation>24 FPS</translation>
+    </message>
+    <message>
+        <source>25 FPS</source>
+        <translation>25 FPS</translation>
+    </message>
+    <message>
+        <source>30 FPS</source>
+        <translation>30 FPS</translation>
+    </message>
+    <message>
+        <source>50 FPS</source>
+        <translation>50 FPS</translation>
+    </message>
+    <message>
+        <source>60 FPS</source>
+        <translation>60 FPS</translation>
     </message>
 </context>
 <context>
@@ -2462,7 +2650,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation>Stereo-Rendering</translation>
+        <translation type="vanished">Stereo-Rendering</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2538,7 +2726,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation>Bitrate (kB/s)</translation>
+        <translation type="vanished">Bitrate (kB/s)</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
@@ -2574,11 +2762,11 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Revision</source>
-        <translation>Revision</translation>
+        <translation type="vanished">Revision</translation>
     </message>
     <message>
         <source>This program is distributed under the %1</source>
-        <translation>Dieses Programm wird unter der %1 veröffentlicht</translation>
+        <translation type="vanished">Dieses Programm wird unter der %1 veröffentlicht</translation>
     </message>
     <message>
         <source>Tip: %1</source>
@@ -2599,6 +2787,15 @@ Willst du wirklich verlassen?</translation>
     <message>
         <source>Script parameter</source>
         <translation>Skriptparameter</translation>
+    </message>
+    <message>
+        <source>Stereoscopy</source>
+        <translation>Stereoskopie</translation>
+    </message>
+    <message>
+        <source>Bitrate (Kibit/s)</source>
+        <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
+        <translation>Bitrate (Kibit/s)</translation>
     </message>
 </context>
 <context>
@@ -2874,6 +3071,14 @@ Not all players are ready.</source>
         <translation>Bist du sicher, dass du diesees Spiel starten willst?
 Es sind nicht alle Spieler bereit.</translation>
     </message>
+    <message>
+        <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
+
+Current number of hedgehogs: %1</source>
+        <translation>Tschuldigung, Hedgewars kann nicht mit mehr als 48 Igeln gespielt werden. Bitte versuch es mit weniger Igeln erneut.
+
+Momentane Anzahl Igel: %1</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3007,6 +3212,13 @@ Es sind nicht alle Spieler bereit.</translation>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation>Klicke um deine Server-Adresse in die Zwischenablage zu kopieren. Sende diese als Link zu deinen Freunden, damit sie dir beitreten können.</translation>
+    </message>
+</context>
+<context>
+    <name>QSpinBox</name>
+    <message>
+        <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
+        <translation>Legt die Bitrate von aufgezeichneten Videos als ein Vielfaches von 1024 Bits pro Sekunde fest</translation>
     </message>
 </context>
 <context>
