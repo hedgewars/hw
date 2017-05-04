@@ -472,7 +472,11 @@ function onNewRound()
                 else
                         SendStat(siGameResult, loc("Round draw"))
                         SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
-                        SendStat(siCustomAchievement, loc("Maybe you should try easier waypoints next time."))
+                        if specialPointsCount > 0 then
+                                SendStat(siCustomAchievement, loc("Maybe you should try an easier map next time."))
+                        else
+                                SendStat(siCustomAchievement, loc("Maybe you should try easier waypoints next time."))
+                        end
                 end
 
 		-- Kill all the losers
@@ -557,6 +561,21 @@ function onGameInit()
 
 end
 
+function InstructionsBuild()
+        ShowMission(
+                loc("Racer"),
+                loc("A Hedgewars mini-game"),
+                loc("Build a track and race.") .. "|" ..
+                string.format(loc("Round limit: %d"), roundLimit),
+                4, 4000)
+end
+
+function InstructionsRace(time)
+        ShowMission(loc("Racer"),
+        	loc("A Hedgewars mini-game"),
+        	loc("Touch all waypoints as fast as you can!"),
+		2, time)
+end
 
 function onGameStart()
 	SendGameResultOff()
@@ -569,20 +588,16 @@ function onGameStart()
         RoundHasChanged = false
 
         for i = 0, (specialPointsCount-1) do
-                PlaceWayPoint(specialPointsX[i], specialPointsY[i])
+                PlaceWayPoint(specialPointsX[i], specialPointsY[i], false)
         end
 
         RebuildTeamInfo()
 
-        ShowMission     (
-                                loc("Racer"),
-                                loc("A Hedgewars mini-game"),
-
-                                loc("Build a track and race.") .. "|" ..
-                                string.format(loc("Round limit: %d"), roundLimit) .. "|" ..
-
-                                "", 4, 4000
-                                )
+        if specialPointsCount > 0 then
+                InstructionsRace()
+        else
+                InstructionsBuild()
+        end
 
         SetAmmoTexts(amAirAttack, loc("Place waypoint"), loc("Racer tool"),
                 loc("Build an awesome race track by placing|waypoints which the hedgehogs have to|touch in any order to finish a round.") .. "|" ..
@@ -599,7 +614,7 @@ function onGameStart()
 
 end
 
-function PlaceWayPoint(x,y)
+function PlaceWayPoint(x,y,placedByUser)
     if not racerActive then
         if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
@@ -616,7 +631,9 @@ function PlaceWayPoint(x,y)
 
             wpCount = wpCount + 1
 
-            AddCaption(string.format(loc("Waypoint placed. Available points remaining: %d"), wpLimit-wpCount))
+            if placedByUser then
+                AddCaption(string.format(loc("Waypoint placed. Available points remaining: %d"), wpLimit-wpCount))
+            end
         end
     end
 end
@@ -683,9 +700,9 @@ function onNewTurn()
                         gameBegun = true
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
-                        ShowMission(loc("Racer"),
-                        loc("A Hedgewars mini-game"),
-                        loc("Touch all waypoints as fast as you can!"), 2, 4000)
+                        if specialPointsCount == 0 then
+                                InstructionsRace()
+                        end
 
                         SetAmmoTexts(amSkip, nil, nil, nil)
                 else
@@ -731,7 +748,7 @@ function onGameTick20()
                                 AddCaption(loc("Please place the waypoint further away from the waterline"))
                                 PlaySound(sndDenied)
                         else
-                                PlaceWayPoint(x, y)
+                                PlaceWayPoint(x, y, true)
                                 if wpCount == wpLimit then
                                         AddCaption(loc("Race complexity limit reached"))
                                         EndTurn(true)
