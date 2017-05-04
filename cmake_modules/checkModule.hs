@@ -1,3 +1,4 @@
+{-# LANGUAGE ImpredicativeTypes #-}
 module Main where
 
 import qualified MODULE as M
