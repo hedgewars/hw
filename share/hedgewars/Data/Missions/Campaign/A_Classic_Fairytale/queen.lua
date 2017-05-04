@@ -650,14 +650,14 @@ function SetupPlace()
     end
   end
 
-  SpawnAmmoCrate(34, 395, amBee, 2)
+  SpawnAmmoCrate(34, 410, amBee, 2)
   SpawnAmmoCrate(33, 374, amRCPlane, 1)
-  SpawnAmmoCrate(74, 393, amAirAttack, 3)
+  SpawnAmmoCrate(74, 410, amAirAttack, 3)
   SpawnAmmoCrate(1313, 1481, amBazooka, 8)
   SpawnAmmoCrate(80, 360, amSniperRifle, 4)
-  SpawnAmmoCrate(1037, 1494, amShotgun, 7)
+  SpawnAmmoCrate(1037, 1508, amShotgun, 7)
   SpawnAmmoCrate(1037, 1472, amMolotov, 3)
-  SpawnAmmoCrate(1146, 1503, amMortar, 8)
+  SpawnAmmoCrate(1146, 1576, amMortar, 8)
 
   SpawnUtilityCrate(1147, 1431, amPortalGun, 2)
   SpawnUtilityCrate(1219, 1542, amRope, 5)
