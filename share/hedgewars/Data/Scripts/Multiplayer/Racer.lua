@@ -160,6 +160,7 @@ local usedWeapons = {}
 local roundN
 local lastRound
 local RoundHasChanged
+local turnSkipped = false
 
 local boostX = 0
 local boostY = 0
@@ -570,11 +571,11 @@ function InstructionsBuild()
                 4, 4000)
 end
 
-function InstructionsRace(time)
+function InstructionsRace()
         ShowMission(loc("Racer"),
         	loc("A Hedgewars mini-game"),
         	loc("Touch all waypoints as fast as you can!"),
-		2, time)
+		2, 4000)
 end
 
 function onGameStart()
@@ -680,6 +681,7 @@ function onNewTurn()
         TryRepositionHogs()
 
         racerActive = false
+        turnSkipped = false
 
         trackTime = 0
 
@@ -820,7 +822,7 @@ function onGameTick20()
                 end
 
                 -- if the player has expended his tunbling time, stop him tumbling
-                if TurnTimeLeft <= 20 then
+                if TurnTimeLeft <= 20 and not turnSkipped then
                         DisableTumbler()
                 end
 
@@ -866,6 +868,12 @@ function onAttack()
     at = GetCurAmmoType()
 
     usedWeapons[at] = 0
+end
+
+function onHogAttack(ammoType)
+    if ammoType == amSkip then
+        turnSkipped = true
+    end
 end
 
 function onAchievementsDeclaration()
