@@ -983,6 +983,8 @@ placeholder = 20
 				--{amPiano,		"amPiano",			0, loc("Piano Strike"), 	40*placeholder},
 				--{amDrillStrike,	"amDrillStrike",	0, loc("Drill Strike"), 15*placeholder},
 
+				{amPickHammer,		"amPickHammer",		0, 2*placeholder},
+				{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
 				{amKnife,		"amKnife",			0, 2*placeholder},
 
 				{amBirdy,		"amBirdy",			0, 7*placeholder},
@@ -993,8 +995,6 @@ placeholder = 20
 
  utilArray =
 				{
-				{amPickHammer,		"amPickHammer",		0, 2*placeholder},
-				{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
 				--{amGirder, 			"amGirder",			0, loc("Girder"), 		4*placeholder},
 				{amLandGun,		"amLandGun",		0, 5*placeholder},
 				--{amRubber, 			"amRubber",			0, loc("Rubber"), 	5*placeholder},
