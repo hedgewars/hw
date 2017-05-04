@@ -116,7 +116,7 @@ function onGameTick()
 				TurnTimeLeft = 1
 				DismissTeam(loc("Bloody Rookies"))
 			end
-			ShowMission(loc("MISSION FAILED"), loc(":("), loc("You've failed. Try again."), -amRope, 5000);
+			ShowMission(loc("Dangerous Ducklings"), loc("MISSION FAILED"), loc("You've failed. Try again."), -amRope, 5000);
 		end
 	end
 
