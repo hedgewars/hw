@@ -184,6 +184,7 @@
 02:00=%1 is dead as a doornail
 02:00=%1 dropped dead
 02:00=%1 is six feet under
+02:00=%1 lets natural selection take its course
 
 ; Normal hog (%1) drowned
 02:01=%1 plays submarine!
@@ -237,6 +238,8 @@
 02:01=%1 explores the Sea
 02:01=Hedgehogs have quills, not gills, %1!
 02:01=%1 is swimming upside down
+02:01=%1 needs a refreshing drink
+02:01=%1 retreats to the secret underwater base
 
 ; Round starts
 02:02=Let's fight!
@@ -487,6 +490,7 @@
 02:08=%1 looks at the beautiful landscape
 02:08=%1 lets the enemy continue
 02:08=Apparently the enemy is %1's best friend
+02:08=%1 needs time to forge the master plan
 
 ; Hog (%1) hurts himself only
 02:09=%1 should practice aiming!
@@ -617,6 +621,8 @@
 02:12=%1 assumes a sickly green color
 02:12=%1 feels the poison
 02:12=%1 feels weaker and weaker
+02:12=%1 should probably stay home from school today
+02:12=Looks like %1 never got vaccinated
 
 ; Hog (%1) was resurrected by the Resurrector utility
 02:13=%1 has been resurrected
@@ -661,6 +667,7 @@
 02:13=%1 was not ready to die just yet
 02:13=%1 serves again
 02:13=The time for %1 has not come yet
+02:13=%1 rose from the tomb
 
 ; Hog (%1) explodes after an kamikaze attack
 02:14=%1 dies in honor
