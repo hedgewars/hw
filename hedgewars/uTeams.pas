@@ -743,25 +743,6 @@ begin
 end;
 
 
-procedure chFinish(var s:shortstring);
-var t: LongInt;
-begin
-// avoid compiler hint
-s:= s;
-
-isPaused:= false;
-
-t:= 0;
-while t < TeamsCount do
-    begin
-    TeamsArray[t]^.hasGone:= true;
-    inc(t)
-    end;
-
-AddChatString(#7 + '* Good-bye!');
-RecountAllTeamsHealth();
-end;
-
 procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 var oldCI, newCI: boolean;
     oldHH: PHedgehog;
@@ -843,7 +824,6 @@ RegisterVariable('hhcoords', @chSetHHCoords, false);
 RegisterVariable('bind', @chBind, true );
 RegisterVariable('teamgone', @chTeamGone, true );
 RegisterVariable('teamback', @chTeamBack, true );
-RegisterVariable('finish', @chFinish, true ); // all teams gone
 RegisterVariable('fort'    , @chFort         , false);
 RegisterVariable('grave'   , @chGrave        , false);
 RegisterVariable('hat'     , @chSetHat       , false);

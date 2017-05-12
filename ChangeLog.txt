@@ -40,6 +40,7 @@ Game engine:
  * Fixed enemy saying "Missed” when giving poison without direct damage
  * Fixed hedgehogs not saying “Stupid” and not displaying announcer message for inflicting self-harm
  * Fixed incorrect time box tooltip when in Sudden Death
+ * Remove buggy /finish chat command
  * Various other fixes
 
 Highlander:

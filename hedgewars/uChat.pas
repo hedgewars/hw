@@ -47,7 +47,7 @@ type TChatLine = record
     s: shortstring;
     Color: TSDL_Color;
     end;
-    TChatCmd = (ccQuit, ccPause, ccFinish, ccShowHistory, ccFullScreen);
+    TChatCmd = (ccQuit, ccPause, ccShowHistory, ccFullScreen);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -88,7 +88,6 @@ const
             end = (
             (ChatCmd: '/quit'; ProcedureCallChatCmd: 'halt'),
             (ChatCmd: '/pause'; ProcedureCallChatCmd: 'pause'),
-            (ChatCmd: '/finish'; ProcedureCallChatCmd: 'finish'),
             (ChatCmd: '/history'; ProcedureCallChatCmd: 'history'),
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
