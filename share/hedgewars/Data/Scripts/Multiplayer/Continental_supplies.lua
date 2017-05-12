@@ -904,7 +904,7 @@ function onNewTurn()
 			then
 				AddAmmo(CurrentHedgehog,amSwitch,GetAmmoCount(CurrentHedgehog, amSwitch)+1)
 
-				ParseCommand("setweap " .. string.char(amSwitch))
+				SetWeapon(amSwitch)
 				GLOBAL_TEMP_VALUE=87
 			end
 		end
@@ -1228,7 +1228,7 @@ end
 function onSlot(slot)
 	if(GLOBAL_TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
 	then
-		ParseCommand("setweap " .. string.char(amSkip))
+		SetWeapon(amSkip)
 	end
 end
 
