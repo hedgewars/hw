@@ -47,6 +47,7 @@ Game engine:
 Highlander:
  + Show collected weapons after kill and play sound
  + Mission panel now shows all game modifiers (e.g. mines time, vampirism, etc.)
+ * Removed "Freezer"/IceGun from the default Highlander weaponset
 
 Construction Mode:
  + Added script parameter support:
