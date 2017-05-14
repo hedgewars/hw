@@ -1689,6 +1689,11 @@ function onGameStart()
     txt = txt .. string.format(loc("Highland: Hogs get %d random weapons from their pool"), highPickupSDCount) .. "|"
   end
 
+  SetAmmoDescriptionAppendix(amRCPlane, loc("The RC plane only carries 1 weak bomb."))
+  SetAmmoDescriptionAppendix(amAirAttack, loc("The air bombs are weaker than usual."))
+  SetAmmoDescriptionAppendix(amCake, loc("The explosion is weaker than usual."))
+  SetAmmoDescriptionAppendix(amDEagle, loc("Base damage has been modified to 12 per shot."))
+
   ShowMission(loc("Battalion"), loc("Less tools, more fun"), txt, icon, 0)
 end
 
