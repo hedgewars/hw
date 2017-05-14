@@ -1677,9 +1677,6 @@ function onGameStart()
   end
 
   ShowMission(loc("Battalion"), loc("Less tools, more fun"), txt, icon, 1000)
-
-  -- Tell the user about the amount of rounds until sudden death
-  AddCaption(string.format(loc("Rounds until Sudden Death: %d"), SuddenDeathTurns +2), 0xFFFFFFFF, capgrpGameState)
 end
 
 function onGameInit()
