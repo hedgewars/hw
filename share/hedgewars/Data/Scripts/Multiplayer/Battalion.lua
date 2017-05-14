@@ -8,7 +8,7 @@
 --[[
   
   Readme:
-  https://github.com/Anachron/hw-battalion
+  https://hedgewars.org/wiki/Battalion
 
   ########################################################################
 ]]--
