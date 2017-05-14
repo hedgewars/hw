@@ -1820,5 +1820,16 @@ locale = {
 ["Congratulations! You have destroyed all targets within the time."]="Gratulation! Du hast alle Ziele innerhalb der verfügbaren Zeit ausgeschaltet.",
 ["You have finished the target practice!"]="Du hast die Zielübung abgeschlossen!",
 ["Your accuracy was %.1f%% (+%d points)."]="Deine Treffgenauigkeit betrug %.1f%% (+%d Punkte).",
-["You had %.1fs remaining on the clock (+%d points)."]="Du hattest eine verbleibende Zeit von %.1fs (+%d Punkte)."
+["You had %.1fs remaining on the clock (+%d points)."]="Du hattest eine verbleibende Zeit von %.1fs (+%d Punkte).",
+["Rifleman"]="Schütze",
+["Scientist"]="Wissenschaftler",
+["Pyromancer"]="Feuermacher",
+["Air General"]="Luftkommandant",
+["Warrior"]="Krieger",
+["Builder"]="Baumeister",
+["King"]="König",
+["Athlete"]="Athlet",
+["Medic"]="Sanitäter",
+["Hunter"]="Jäger",
+["Knight"]="Ritter",
 }

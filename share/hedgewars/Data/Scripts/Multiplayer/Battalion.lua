@@ -54,6 +54,7 @@ local version = "0.33"
 
 varName = "Pyromancer"
 variants[varName] = {}
+variants[varName]["name"] = loc("Pyromancer")
 variants[varName]["chance"] = 7
 variants[varName]["hat"] = "Gasmask"
 variants[varName]["hp"] = 70
@@ -66,6 +67,7 @@ variants[varName]["special"] = false
 
 varName = "Builder"
 variants[varName] = {}
+variants[varName]["name"] = loc("Builder")
 variants[varName]["chance"] = 10
 variants[varName]["hat"] = "constructor"
 variants[varName]["hp"] = 100
@@ -78,6 +80,7 @@ variants[varName]["special"] = false
 
 varName = "Rifleman"
 variants[varName] = {}
+variants[varName]["name"] = loc("Rifleman")
 variants[varName]["chance"] = 7
 variants[varName]["hat"] = "Sniper"
 variants[varName]["hp"] = 70
@@ -90,6 +93,7 @@ variants[varName]["special"] = false
 
 varName = "Warrior"
 variants[varName] = {}
+variants[varName]["name"] = loc("Warrior")
 variants[varName]["chance"] = 12
 variants[varName]["hat"] = "spartan"
 variants[varName]["hp"] = 120
@@ -102,6 +106,7 @@ variants[varName]["special"] = false
 
 varName = "Chef"
 variants[varName] = {}
+variants[varName]["name"] = loc("Chef")
 variants[varName]["chance"] = 7
 variants[varName]["hat"] = "chef"
 variants[varName]["hp"] = 70
@@ -114,6 +119,7 @@ variants[varName]["special"] = false
 
 varName = "Medic"
 variants[varName] = {}
+variants[varName]["name"] = loc("Medic")
 variants[varName]["chance"] = 12
 variants[varName]["hat"] = "war_desertmedic"
 variants[varName]["hp"] = 120
@@ -126,6 +132,7 @@ variants[varName]["special"] = false
 
 varName = "Ninja"
 variants[varName] = {}
+variants[varName]["name"] = loc("Ninja")
 variants[varName]["chance"] = 8
 variants[varName]["hat"] = "NinjaTriangle"
 variants[varName]["hp"] = 80
@@ -138,6 +145,7 @@ variants[varName]["special"] = false
 
 varName = "Athlete"
 variants[varName] = {}
+variants[varName]["name"] = loc("Athlete")
 variants[varName]["chance"] = 8
 variants[varName]["hat"] = "footballhelmet"
 variants[varName]["hp"] = 80
@@ -150,6 +158,7 @@ variants[varName]["special"] = false
 
 varName = "Scientist"
 variants[varName] = {}
+variants[varName]["name"] = loc("Scientist")
 variants[varName]["chance"] = 7
 variants[varName]["hat"] = "doctor"
 variants[varName]["hp"] = 80
@@ -162,6 +171,7 @@ variants[varName]["special"] = false
 
 varName = "Air General"
 variants[varName] = {}
+variants[varName]["name"] = loc("Air General")
 variants[varName]["chance"] = 5
 variants[varName]["hat"] = "war_desertofficer"
 variants[varName]["hp"] = 50
@@ -174,6 +184,7 @@ variants[varName]["special"] = true
 
 varName = "Hunter"
 variants[varName] = {}
+variants[varName]["name"] = loc("Hunter")
 variants[varName]["chance"] = 10
 variants[varName]["hat"] = "Skull"
 variants[varName]["hp"] = 100
@@ -186,6 +197,7 @@ variants[varName]["special"] = false
 
 varName = "King"
 variants[varName] = {}
+variants[varName]["name"] = loc("King")
 variants[varName]["chance"] = 3
 variants[varName]["hat"] = "crown"
 variants[varName]["hp"] = 60
@@ -198,6 +210,7 @@ variants[varName]["special"] = true
 
 varName = "Knight"
 variants[varName] = {}
+variants[varName]["name"] = loc("Knight")
 variants[varName]["chance"] = 0
 variants[varName]["hat"] = "knight"
 variants[varName]["hp"] = 80
@@ -625,7 +638,7 @@ end
 function MutateHog(hog)
   local var = getHogInfo(hog, 'variant')
 
-  SetHogName(hog, var)
+  SetHogName(hog, variants[var]["name"])
   SetHogHat(hog, variants[var]["hat"])
 end
 
