@@ -725,8 +725,8 @@ end
 
 function getHogInfo(hog, info)
   if hog == nil then
-    AddCaption(loc("ERROR [getHogInfo]: Hog") .. hog .. " is nil!", 0xFFFFFFFF, capgrpMessage)
-    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog") .. hog .. " is nil!")
+    AddCaption(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
+    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
     return
   end
 
@@ -739,8 +739,8 @@ end
 
 function setHogInfo(hog)
   if hog == nil then
-    AddCaption(loc("ERROR [setHogInfo]: Hog") .. hog .. " is nil!", 0xFFFFFFFF, capgrpMessage)
-    WriteLnToConsole(loc("ERROR [setHogInfo]: Hog") .. hog .. " is nil!")
+    AddCaption(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
+    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
     return
   end
 
@@ -772,7 +772,7 @@ function onHealthCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("empty crate"), msgColor, capgrpMessage)
+    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 3
@@ -785,7 +785,7 @@ function onHealthCratePickup()
   -- Add extra 10% of hogs base hp to heal
   healHp = healHp + div(getHogInfo(CurHog, 'maxHp'), 10)
 
-  AddCaption(loc("+ ") .. healHp .. loc(" hp"), msgColor, capgrpMessage)
+  AddCaption(string.format(loc("+%d"), healHp), msgColor, capgrpMessage)
 
   SetEffect(CurHog, hePoisoned, 0)
   SetHealth(CurHog, hogHealth + healHp)
@@ -805,7 +805,7 @@ function onWeaponCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("empty crate"), msgColor, capgrpMessage)
+    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 2 * strength
@@ -831,7 +831,7 @@ function onWeaponCratePickup()
     randAmmo = possibleWeapons[randIndex]
   end
 
-  AddCaption(loc("+ ") .. factor .. loc(" ammo"), msgColor, capgrpMessage)
+  AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
 
   AddAmmo(CurHog, randAmmo, GetAmmoCount(CurHog, randAmmo) +factor)
   local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
@@ -849,7 +849,7 @@ function onUtilityCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("empty crate"), msgColor, capgrpMessage)
+    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 2 * strength
@@ -872,7 +872,7 @@ function onUtilityCratePickup()
     randUtility = possibleHelpers[randIndex]
   end
   
-  AddCaption(loc("+ ") .. factor .. loc(" ammo"), msgColor, capgrpMessage)
+  AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
 
   AddAmmo(CurHog, randUtility, GetAmmoCount(CurHog, randUtility) +factor)
   local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
@@ -1138,7 +1138,7 @@ function onKingDeath(KingHog)
   local team = getHogInfo(KingHog, 'team')
   local msgColor = getHogInfo(KingHog, 'clanColor')
 
-  AddCaption(team .. loc("s king died"), msgColor, capgrpGameState)
+  AddCaption(string.format(loc("The king of %s has died!"), team), 0xFFFFFFFF, capgrpGameState)
   PlaySound(sndByeBye)
   DismissTeam(team)
 
@@ -1403,7 +1403,7 @@ function onNewTurn()
   if suddenDeath == true then
     onSuddenDeathTurn()
   else
-    AddCaption(loc("Round #") .. (TotalRounds +1).. loc(" (SD on #") .. (SuddenDeathTurns +2) .. ")", getHogInfo(CurHog, 'clanColor'),  capgrpGameState)
+    AddCaption(string.format(loc("Round %d (Sudden Death in round %d)"), (TotalRounds +1), (SuddenDeathTurns +2)), getHogInfo(CurHog, 'clanColor'),  capgrpGameState)
   end
 
   -- Generate new weapons for last hog if it's still alive
@@ -1612,76 +1612,74 @@ function onGameStart()
   local icon = 0
 
   if mode ~= 'points' then
-    txt = txt .. loc("Variants: Hogs will be randomized from 12 different variants|")
-    txt = txt .. loc("Weapon: Hogs will get 1 out of 3 weapons randomly each turn|")
-    txt = txt .. loc("Helper: Hogs will get 1 out of 2 helpers randomly each turn|")
-    txt = txt .. loc("Crates: Crates spawn randomly with chance of being empty|")
-    txt = txt .. loc("Hogs: Less than 25% base hp gives +Kamikaze|")
-    txt = txt .. loc("Flags: Unlimited Ammo, Per Hog Ammo|")
+    txt = txt .. loc("Variants: Hogs will be randomized from 12 different variants") .. "|"
+    txt = txt .. loc("Weapons: Hogs will get 1 out of 3 weapons randomly each turn") .. "|"
+    txt = txt .. loc("Helpers: Hogs will get 1 out of 2 helpers randomly each turn") .. "|"
+    txt = txt .. loc("Crates: Crates drop randomly with chance of being empty") .. "|"
+    txt = txt .. loc("Last Resort: Having less than 25% base health gives kamikaze") .. "|"
+    txt = txt .. loc("Modifiers: Unlimited ammo, per-hog ammo") .. "|"
   else
-    txt = txt .. loc("Crates: Crates spawn randomly with chance of being empty|")
-    txt = txt .. loc("Flags: Unlimited Ammo, Shared Team Ammo|")
+    txt = txt .. loc("Crates: Crates drop randomly and may be empty") .. "|"
+    txt = txt .. loc("Modifiers: Unlimited ammo, shared clan ammo") .. "|"
   end
 
   if luck ~= 100 then
-    txt = txt .. loc("Luck: ") .. luck .. loc("% (modifier for crates)|")
+    txt = txt .. string.format(loc("Luck: %d%% (modifier for crates)"), luck) .. "|"
   end
 
   if strength > 1 then
-    txt = txt .. loc("Strength: ") .. strength .. loc(" (multiplier for ammo)|")
+    txt = txt .. string.format(loc("Strength: %d (multiplier for ammo)"), strength) .. "|"
   end
 
   if mode == 'highland' then
-    txt = txt .. loc(" |")
-    txt = txt .. loc("--- Highland --- |")
-    txt = txt .. loc("Enemy kills: Collect victims weapons and + ") .. highEnemyKillHPBonus .. loc(" % of its base health|")
-    txt = txt .. loc("Friendly kills: Clears killers pool and - ") .. highFriendlyKillHPBonus .. loc(" % of its base health|")
-    txt = txt .. loc("Turns: Hogs get ") .. highPickupCount .. loc(" random weapon(s) from their pool|")
-    txt = txt .. loc("Hint: Kills wont transfer a hogs pool to the killers pool|")
-    txt = txt .. loc("Specials: Kings and Air-General drop helpers, not weapons|")
+    txt = txt .. " |"
+    txt = txt .. loc("--- Highland ---").."|"
+    txt = txt .. string.format(loc("Enemy kills: Collect victim's weapons and +%d%% of its base health"), highEnemyKillHPBonus).."|"
+    txt = txt .. string.format(loc("Friendly kills: Clear killer's pool and -%d%% of its base health"), highFriendlyKillHPBonus).."|"
+    txt = txt .. string.format(loc("Turns: Hogs get %d random weapon(s) from their pool"), highPickupCount).."|"
+    txt = txt .. loc("Hint: Kills won't transfer a hog's pool to the killer's pool").."|"
+    txt = txt .. loc("Specials: Kings and air generals drop helpers, not weapons").."|"
     icon = 1 -- Target
   elseif mode == 'king' then
-    txt = txt .. loc(" |")
-    txt = txt .. loc("--- King --- |")
-    txt = txt .. loc("Variants: The last hog of each team will be a king|")
-    txt = txt .. loc("Turns: Kings health are set to ") .. kingLinkPerc .. loc("% of the team health|")
+    txt = txt .. " |"
+    txt = txt .. loc("--- King ---").."|"
+    txt = txt .. loc("Variants: The last hog of each team will be a king").."|"
+    txt = txt .. string.format(loc("Turns: King's health is set to %d%% of the team health"), kingLinkPerc).."|"
     icon = 0 -- Golen Crown
   elseif mode == 'points' then
-    txt = txt .. loc(" |")
-    txt = txt .. loc("--- Points --- |")
-    txt = txt .. loc("Variants: Disables King and Air-General|")
-    txt = txt .. loc("Weapons: Every team starts with ") .. pointsWepBase .. loc(" weapon points|")
-    txt = txt .. loc("Helpers: Every team starts with ") .. pointsHlpBase .. loc(" helper points|")
-    txt = txt .. loc("Turns: Refills ") .. pointsWepTurn .. loc(" weapon and ") .. pointsHlpTurn .. loc(" helper points|")
-    txt = txt .. loc(" and randomizes weapons and helpers based on team points|")
+    txt = txt .. " |"
+    txt = txt .. loc("--- Points ---").."|"
+    txt = txt .. loc("Variants: King and air general are disabled").."|"
+    txt = txt .. string.format(loc("Weapons: Each team starts with %d weapon points"), pointsWepBase).."|"
+    txt = txt .. string.format(loc("Helpers: Each team starts with %d helper points"), pointsHlpBase).."|"
+    txt = txt .. string.format(loc("Turns: Refill %d weapon and %d helper points|and randomize weapons and helpers based on team points"), pointsWepTurn, pointsHlpTurn).."|"
     icon = 4 -- Golden Star
   else
     icon = -amGrenade -- Grenade
   end
 
   --txt = txt .. "Switch: Max. 3 times a game per team, cooldown of 5 turns|"
-  txt = txt .. loc(" |")
-  txt = txt .. loc("--- Sudden Death --- |")
-  txt = txt .. loc("Weapons: +Kamikaze, +1 for nearly every hog variant|")
-  txt = txt .. loc("Crates: Crates spawn more frequently with higher chance of bonus|")
-  txt = txt .. loc("Water: Rises by 37 per Round|")
-  txt = txt .. loc("Hogs: Loose up to 7% base hp per turn|")
+  txt = txt .. " |"
+  txt = txt .. loc("--- Sudden Death ---").."|"
+  txt = txt .. loc("Weapons: Nearly every hog variant gets 1 kamikaze").."|"
+  txt = txt .. loc("Crates: Crates drop more often with a higher chance of bonus ammo").."|"
+  txt = txt .. loc("Water: Rises by 37 per turn").."|"
+  txt = txt .. loc("Health: Hogs lose up to 7% base health per turn").."|"
 
   if mode == 'default' then
-    txt = txt .. loc(' |')
-    txt = txt .. loc('--- Hint ---|')
-    txt = txt .. loc('Modes: Activate highland, king or points mode by putting mode=<name>|')
-    txt = txt .. loc(' into the script params|')
+    txt = txt .. " |"
+    txt = txt .. loc("--- Hint ---").."|"
+    txt = txt .. loc("Modes: Activate “highland”, “king” or “points” mode by putting mode=<name>|into the script parameter").."|"
   end
 
   if mode == 'highland' then
-    txt = txt .. loc("Highland: Hogs get ") .. highPickupSDCount .. loc(" random weapons from their pool|")
+    txt = txt .. string.format(loc("Highland: Hogs get %d random weapons from their pool"), highPickupSDCount) .. "|"
   end
 
-  ShowMission(loc("Battalion v") .. version, loc("Less tools, more fun.") .. " (by Anachron)", txt, icon, 1000)
+  ShowMission(loc("Battalion"), loc("Less tools, more fun"), txt, icon, 1000)
 
   -- Tell the user about the amount of rounds until sudden death
-  AddCaption(loc("SuddenDeathTurns set to ") .. (SuddenDeathTurns +2), 0x808080,  capgrpGameState)
+  AddCaption(string.format(loc("Rounds until Sudden Death: %d"), SuddenDeathTurns +2), 0xFFFFFFFF, capgrpGameState)
 end
 
 function onGameInit()
