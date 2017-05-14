@@ -1676,7 +1676,7 @@ function onGameStart()
     txt = txt .. string.format(loc("Highland: Hogs get %d random weapons from their pool"), highPickupSDCount) .. "|"
   end
 
-  ShowMission(loc("Battalion"), loc("Less tools, more fun"), txt, icon, 1000)
+  ShowMission(loc("Battalion"), loc("Less tools, more fun"), txt, icon, 0)
 end
 
 function onGameInit()
