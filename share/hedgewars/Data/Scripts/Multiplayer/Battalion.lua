@@ -160,7 +160,7 @@ variants[varName]["helperLimit"] = 1
 variants[varName]["helpers"] = {amTeleport, amJetpack}  
 variants[varName]["special"] = false
 
-varName = "Air-General"
+varName = "Air General"
 variants[varName] = {}
 variants[varName]["chance"] = 5
 variants[varName]["hat"] = "war_desertofficer"
@@ -1512,7 +1512,7 @@ function onGameStart()
   -- If we are not on points mode, we start randomizing everything
   if mode ~= 'points' then
     if GetGameFlag(gfBorder) or MapHasBorder() then
-      variants["Air-General"] = nil
+      variants["Air General"] = nil
       variants['Athlete'] = nil
     end
 
@@ -1537,8 +1537,8 @@ function onGameStart()
   -- We are in points mode, setup other weapons
   elseif mode == 'points' then
     --variants['King']['chance'] = 0
-    --if variants['Air-General'] ~= nil then
-    --  variants['Air-General']['chance'] = 0
+    --if variants['Air General'] ~= nil then
+    --  variants['Air General']['chance'] = 0
     --end
 
     -- Translate [ammo] -> points to [points] -> {ammo1, ammo2}
@@ -1649,7 +1649,7 @@ function onGameStart()
   elseif mode == 'points' then
     txt = txt .. " |"
     txt = txt .. loc("--- Points ---").."|"
-    txt = txt .. loc("Variants: King and air general are disabled").."|"
+    txt = txt .. loc("Variants: Kings and air generals are disabled").."|"
     txt = txt .. string.format(loc("Weapons: Each team starts with %d weapon points"), pointsWepBase).."|"
     txt = txt .. string.format(loc("Helpers: Each team starts with %d helper points"), pointsHlpBase).."|"
     txt = txt .. string.format(loc("Turns: Refill %d weapon and %d helper points|and randomize weapons and helpers based on team points"), pointsWepTurn, pointsHlpTurn).."|"
