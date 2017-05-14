@@ -1011,11 +1011,10 @@ function onGearAdd(gear)
   if gearType == gtHedgehog then
     trackGear(gear)
   elseif gearType == gtRCPlane then
-    -- Limit bombs to 1 until 0.9.23 is released
-    SetHealth(gear, 1)
+    SetHealth(gear, 2)
   elseif gearType == gtAirBomb then
     -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
-    SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 15)
+    SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 20)
   elseif gearType == gtCake then
     -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 50)
@@ -1689,7 +1688,7 @@ function onGameStart()
     txt = txt .. string.format(loc("Highland: Hogs get %d random weapons from their pool"), highPickupSDCount) .. "|"
   end
 
-  SetAmmoDescriptionAppendix(amRCPlane, loc("The RC plane only carries 1 weak bomb."))
+  SetAmmoDescriptionAppendix(amRCPlane, loc("The RC plane only carries 2 weak bombs."))
   SetAmmoDescriptionAppendix(amAirAttack, loc("The air bombs are weaker than usual."))
   SetAmmoDescriptionAppendix(amCake, loc("The explosion is weaker than usual."))
   SetAmmoDescriptionAppendix(amDEagle, loc("Base damage has been modified to 12 per shot."))
