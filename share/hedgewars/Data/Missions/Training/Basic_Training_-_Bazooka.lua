@@ -227,7 +227,7 @@ function onGearDamage(gear, damage)
 	if GetGearType(gear) == gtHedgehog then
 		if not game_lost then
 			game_lost = true
-			AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
+			AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
 			ShowMission(loc("Bazooka Training") , loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 			time_goal = 1

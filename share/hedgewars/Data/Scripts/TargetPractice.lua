@@ -233,7 +233,7 @@ function TargetPracticeMission(params)
 
 	_G.onGearDelete = function(gear)
 		if GetGearType(gear) == gtTarget and band(GetState(gear), gstDrowning) ~= 0 then
-			AddCaption(loc("You lost your target, try again!", 0xFFFFFFFF, capgrpGameState))
+			AddCaption(loc("You lost your target, try again!"), 0xFFFFFFFF, capgrpGameState)
 			local newTarget = spawnTarget()
 			local x, y = GetGearPosition(newTarget)
 			local success = PlaceSprite(x, y + 24, sprAmGirder, 0, 0xFFFFFFFF, false, false, false)

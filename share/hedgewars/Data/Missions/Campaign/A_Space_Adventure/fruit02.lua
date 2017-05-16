@@ -23,7 +23,7 @@ local dialog04 = {}
 -- mission objectives
 local minesTimeText = loc("Mines time: 0 seconds")
 local goals = {
-	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs ").."|"..loc("Hog Solo has to reach the last crates" .. "|" .. minesTimeText), 1, 4000},
+	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs ").."|"..loc("Hog Solo has to reach the last crates") .. "|" .. minesTimeText, 1, 4000},
 	[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hedgehogs and search for the device").."|"..loc("Hog Solo has to reach the last crates") .. "|" .. minesTimeText, 1, 4000},
 	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back").."|"..minesTimeText, 1, 4000},
 	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back").."|"..minesTimeText, 1, 4000},
