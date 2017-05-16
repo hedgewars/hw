@@ -758,8 +758,8 @@ function CommentOnScore()
 				SetState(hhs[i], bor(GetState(hhs[i]), gstWinner))
 			end
 		end
-		AddCaption(string.format("%s wins!", winnerTeam))
-		SendStat(siGameResult, string.format("%s wins!", winnerTeam))
+		AddCaption(string.format(loc("%s wins!"), winnerTeam))
+		SendStat(siGameResult, string.format(loc("%s wins!"), winnerTeam))
 
 		for i = 1, TeamsCount do
 			SendStat(siPointType, loc("points"))
@@ -814,7 +814,7 @@ and has no effect on the score or game outcome. ]]
 					text = loc("%s (%s) is Rambo in a hedgehog costume! He destroyed %d invaders in one round.")
 				end
 			elseif awardRoundKills.value >= 11 then
-				text = loc("%s (%s) is addicted to killing: %d invaders destoyed in one round.")
+				text = loc("%s (%s) is addicted to killing: %d invaders destroyed in one round.")
 			else
 				text = loc("%s (%s) destroyed %d invaders in one round.")
 			end
@@ -1526,7 +1526,7 @@ function onGameTick()
 		
 				end
 
-				AddCaption(loc(string.format("Round score: %d", roundScore)), 0xFFFFFFFF, capgrpMessage2)
+				AddCaption(loc(string.format(loc("Round score: %d"), roundScore)), 0xFFFFFFFF, capgrpMessage2)
 
 				-- other awards
 				awardRoundScore = UpdateSimpleAward(awardRoundScore, roundScore, 50)
@@ -1862,7 +1862,7 @@ function CircleDamaged(i)
 			PlaySound(sndExplosion)
 			PlaySound(sndShotgunReload)
 			wepAmmo[0] = wepAmmo[0] + barrelBonus
-			AddCaption(string.format("+%d Ammo", barrelBonus), 0x00ff00ff,capgrpMessage)
+			AddCaption(string.format(loc("+%d Ammo"), barrelBonus), 0x00ff00ff,capgrpMessage)
 			DrawTag(1)
 
 			GK = GK + 1
@@ -2102,7 +2102,6 @@ function CheckVarious(gear)
 				--nw WriteLnToConsole("Collision confirmed. The gtExplosives is within the circ radius!")
 
 				dist = (GetDistFromXYtoXY(vCircX[i], vCircY[i], getGearValue(gear,"XP"), getGearValue(gear,"YP")) - (NR*NR))
-				--AddCaption(loc("Dist: ") .. dist .. "!",0xffba00ff,capgrpGameState)
 				if dist >= 1000000 then
 					sniperHits = sniperHits +1
 					AddCaption(loc("Sniper! +8 points!"),0xffba00ff,capgrpGameState)

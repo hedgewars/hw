@@ -98,8 +98,8 @@ TargetPos[6] = {
 TargetPos[7] = { 
 	Targets = {{ X = 1884, Y = 704 }},
 	MessageTime = 6500,
-	Message = loc("Now dive just one more time and collect the next crate." .. "|" ..
-		loc("Tip: Don't remain for too long in the water, or you won't make it.")),
+	Message = loc("Now dive just one more time and collect the next crate.") .. "|" ..
+		loc("Tip: Don't remain for too long in the water, or you won't make it."),
 	Ammo = { [amJetpack] = 1}, }
 
 -- The Boom Target
@@ -114,8 +114,8 @@ TargetPos[8] = {
 		loc("Step 2: Select your grenade.") .. "|" ..
 		loc("Step 3: Start flying and get yourself right above the target.") .. "|" ..
 		loc("Step 4: Drop your grenade by pressing the [Long jump] key.") .. "|" ..
-		loc("Step 5: Get away quickly and land safely anywhere." .. "| |" ..
-		loc("Note: We only give you grenades if you stay in your flying saucer.")), nil, 20000)
+		loc("Step 5: Get away quickly and land safely anywhere.") .. "| |" ..
+		loc("Note: We only give you grenades if you stay in your flying saucer."), nil, 20000)
 
 		SpawnBoomTarget()
 

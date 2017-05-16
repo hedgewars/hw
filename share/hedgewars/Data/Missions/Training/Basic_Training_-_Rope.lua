@@ -30,7 +30,7 @@ local GetTime = 0
 TargetPos[ 1 ] = { X = 1100, Y = 1100, Message = loc("Now find the next target! |Tip: Normally you lose health by falling down, so be careful!") }
 TargetPos[ 2 ] = { X = 1500, Y = 1490, Message = loc("You're getting pretty good! |Tip: When you shorten you rope, you move faster!|And when you lengthen it, you move slower.") }
 TargetPos[ 3 ] = { X = 2200, Y = 800, Message = loc("The next one is pretty hard! |Tip: You have to do multiple swings!") }
-TargetPos[ 4 ] = { X = 2870, Y = 400, Message = loc("I don't know how you did that .. But good work! |The next one should be easy as cake for you!") }
+TargetPos[ 4 ] = { X = 2870, Y = 400, Message = loc("I don't know how you did that. But good work!|The next one should be easy as cake for you!") }
 TargetPos[ 5 ] = { X = 4000, Y = 1750, Message = "" }
 TargetPos[ 6 ] = { Modifier = true, Func = function() -- Last target is ALWAYS the "winning" target!
 	Info( loc("Congratulations"), loc("Congratulations! You've completed the Basic Rope Training!"), 0 ) -- Congrats
@@ -39,7 +39,7 @@ TargetPos[ 6 ] = { Modifier = true, Func = function() -- Last target is ALWAYS t
 	AddCaption( loc( "Victory!" ))
 	if TurnTimeLeft >= 250000 then -- If you very fast, unlock the ahievement "Rope Master!"
 		RopeMaster = true
-		AddCaption( string.format(loc( "Achievement gotten: %s"), loc("Rope Master") ),0xffba00ff,capgrpAmmoinfo )
+		AddCaption( string.format(loc("Achievement gotten: %s"), loc("Rope Master") ),0xffba00ff,capgrpAmmoinfo )
 		PlaySound( sndHomerun )
 	end
 	Objective = true

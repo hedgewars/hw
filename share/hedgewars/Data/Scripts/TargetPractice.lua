@@ -222,7 +222,7 @@ function TargetPracticeMission(params)
 		if GetGearType(gear) == gtHedgehog then
 			if not game_lost then
 				game_lost = true
-				AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
+				AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
 				ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 				SetHealth(player, 0)

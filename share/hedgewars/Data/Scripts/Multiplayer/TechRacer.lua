@@ -997,8 +997,6 @@ function onGameStart()
                         	loc("Complete the track as fast as you can!") .. "|" ..
                                 loc("Round limit:") .. " " .. roundLimit .. "|" ..
 				loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
-								--loc("For example, the below line would play map 4, with infinite fuel for the flying saucer, and four rounds.") .. "|" ..
-								--"m=4, ufo=true, rounds=4" .. "|" ..
 
                                 "", 4, 4000
                                 )
