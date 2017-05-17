@@ -310,7 +310,7 @@ function FlagDeleted(gear)
 					HandleRespawns() -- this will set fIsMissing[wtf] to false :)
 					AddCaption(loc("Flag returned!"))
 				elseif fIsMissing[wtf] == false then
-					AddCaption(loc("That was pointless.") .. loc("The flag will respawn next round."))
+					AddCaption(loc("That was pointless. The flag will respawn next round."))
 				end
 
 				--fIsMissing[wtf] = false

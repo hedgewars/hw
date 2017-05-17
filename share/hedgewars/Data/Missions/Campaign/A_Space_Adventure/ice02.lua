@@ -19,10 +19,10 @@ local totalSaucers = 3
 local gameEnded = false
 local RED = 0xff0000ff
 local GREEN = 0x38d61cff
-local challengeObjectives = loc("To win the game you have to pass into the rings in time")..
-	"|"..loc("You'll get extra time in case you need it when you pass a ring").."|"..
-	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer").."|"..
-	loc("Use the attack key twice to change the flying saucer while floating in mid-air")
+local challengeObjectives = loc("To win the game you have to pass into the rings in time.")..
+	"|"..loc("You'll get extra time in case you need it when you pass a ring.").."|"..
+	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer.").."|"..
+	loc("Use the attack key twice to change the flying saucer while floating in mid-air.")
 -- dialogs
 local dialog01 = {}
 -- mission objectives

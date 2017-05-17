@@ -9,10 +9,10 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 -- globals
 local missionName = loc("Precise flying")
-local challengeObjectives = loc("Use the RC plane and destroy the all the targets").."|"..
-	loc("Each time you destroy all the targets on your current level you'll get teleported to the next level").."|"..
-	loc("You'll have only one RC plane at the start of the mission").."|"..
-	loc("During the game you can get new RC planes by collecting the weapon crates")
+local challengeObjectives = loc("Use the RC plane and destroy the all the targets.").."|"..
+	loc("Each time you destroy all the targets on your current level you'll get teleported to the next level.").."|"..
+	loc("You'll have only one RC plane at the start of the mission.").."|"..
+	loc("During the game you can get new RC planes by collecting the weapon crates.")
 local currentTarget = 1
 -- dialogs
 local dialog01 = {}

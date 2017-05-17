@@ -911,7 +911,7 @@ function onNewRound()
 		gameOver = true
 		EndTurn(true)
 		TimeLeft = 0
-		SendStat(siGraphTitle, "Score graph")
+		SendStat(siGraphTitle, loc("Score graph"))
 	end
 end
 
@@ -1093,7 +1093,7 @@ function onLJump()
 		else
 			beam = false
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 0, 0, 1, 10, 0, 0, 0, 0xa800ffff)
-			AddCaption( string.format(loc("Shield ON: %d power remaining"), shieldHealth - 80))
+			AddCaption( string.format(loc("Shield OFF: %d power remaining"), shieldHealth - 80))
 		end
 	end
 end
