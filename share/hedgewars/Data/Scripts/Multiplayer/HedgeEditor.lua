@@ -478,8 +478,8 @@ local preMadeTeam = 	{
 
 				{
 				loc_noop("Mushroom Kingdom"),
-				{"sm_daisy","sm_luigi","sm_mario","sm_peach","sm_toad","sm_wario"},
-				{loc_noop("Daisy"),loc_noop("Luigi"),loc_noop("Mario"),loc_noop("Princess Peach"),loc_noop("Toad"),loc_noop("Wario")},
+				{"sm_daisy","sm_luigi","sm_mario","sm_peach","sm_toad","sm_wario","NoHat","NoHat"},
+				{loc_noop("Daisy"),loc_noop("Luigi"),loc_noop("Mario"),loc_noop("Princess Peach"),loc_noop("Toad"),loc_noop("Wario"),loc_noop("Yoshi"),loc_noop("Waluigi")},
 				"FR","comoros","Default","Badger","Castle"
 				},
 
