@@ -539,7 +539,9 @@ function setMutantStuff(gear)
 
     AddCaption(string.format(loc("%s has mutated! +2 points"), getGearValue(gear, "Name")), GetClanColor(GetHogClan(gear)), capgrpMessage)
 
-    EndTurn(true)
+    if TurnTimeLeft > 0 then
+        EndTurn(true)
+    end
 
     AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
     AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
