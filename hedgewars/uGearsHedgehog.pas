@@ -1225,7 +1225,7 @@ Hedgehog:= HHGear^.Hedgehog;
 if not isInMultiShoot then
     AllInactive:= false
 else if Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle] then
-    HHGear^.Message:= 0;
+    HHGear^.Message:= HHGear^.Message and gmPrecise;
 
 if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then
     AllInactive:= true
