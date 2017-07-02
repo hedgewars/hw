@@ -18,20 +18,12 @@
 <context>
     <name>AmmoSchemeModel</name>
     <message>
-        <source>new</source>
-        <translation type="obsolete">uusi</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">%1 kopio</translation>
-    </message>
-    <message>
         <source>New</source>
-        <translation type="unfinished">Uusi</translation>
+        <translation>Uusi</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kopio</translation>
     </message>
 </context>
 <context>
@@ -86,7 +78,7 @@
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>Bannaa pelaaja</translation>
     </message>
 </context>
 <context>
@@ -128,7 +120,7 @@
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished">Palaute</translation>
+        <translation>Palaute</translation>
     </message>
 </context>
 <context>
@@ -141,7 +133,7 @@
         <source>Every %1 turn</source>
         <translation>
             <numerusform>Joka vuorolla</numerusform>
-            <numerusform>Joka %1:s vuoro</numerusform>
+            <numerusform>Joka %1. vuoro</numerusform>
         </translation>
     </message>
 </context>
@@ -149,15 +141,15 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation>Muokkaa aseita</translation>
+        <translation>Muokkaa pelissä mukana olevia aseita</translation>
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>Muokkaa sääntöjä</translation>
+        <translation>Hienosäädä pelin sääntöjä ja muuttujia</translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation>Aseet valitaan sääntöjen mukaan</translation>
+        <translation>Kun lukittu, aseet valitaan sääntöjen mukaan</translation>
     </message>
     <message>
         <source>Map</source>
@@ -214,7 +206,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation>Säännöille &apos;%1&apos; ei ole tukea</translation>
+        <translation>Säännöt &apos;%1&apos; ei ole tuettu</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -344,15 +336,15 @@ Tarkista, että peli on asennettu oikein!</translation>
     </message>
     <message>
         <source>Chat log</source>
-        <translation type="unfinished"></translation>
+        <translation>Keskusteluloki</translation>
     </message>
     <message>
         <source>Enter chat messages here and send them with [Enter]</source>
-        <translation type="unfinished"></translation>
+        <translation>Kirjoita viestisi ja lähetä [Enter]-napilla</translation>
     </message>
     <message>
         <source>List of players</source>
-        <translation type="unfinished"></translation>
+        <translation>Pelaajalista</translation>
     </message>
 </context>
 <context>
@@ -399,7 +391,7 @@ Tarkista, että peli on asennettu oikein!</translation>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
         <translation>Nimimerkkisi %1 on jo käytössä.
-Valiste jokin muu:</translation>
+Valitse jokin muu:</translation>
     </message>
     <message>
         <source>%1&apos;s Team</source>
@@ -515,7 +507,7 @@ Kaksi viimeistä pelimoottorin viestiä:
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>Yhdistä palvelimelle</translation>
     </message>
 </context>
 <context>
@@ -594,7 +586,7 @@ Kaksi viimeistä pelimoottorin viestiä:
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Muokkaa piirrosta</translation>
+        <translation>Piirrä kartta</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -650,55 +642,55 @@ Kaksi viimeistä pelimoottorin viestiä:
     </message>
     <message>
         <source>Style:</source>
-        <translation>Tyyli:</translation>
+        <translation>Pelityyppi:</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Linnakkeet</translation>
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokkaa siemenlukua, jonka pohjalle pelin satunnaisuus perustuu</translation>
     </message>
     <message>
         <source>Randomize the theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Satunnainen teema</translation>
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaihda teema</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Satunnainen kartta, teema sekä siemenluku</translation>
     </message>
     <message>
         <source>Randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Satunnainen teema ja siemenluku</translation>
     </message>
     <message>
         <source>Randomize the seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Satunnainen siemenluku</translation>
     </message>
     <message>
         <source>Click to randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikkaa sekoittaaksesi kartan, teeman ja siemenluvun</translation>
     </message>
     <message>
         <source>Click to randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikkaa sekoittaaksesi teeman ja siemenluvun</translation>
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
-        <translation type="unfinished"></translation>
+        <translation>Säädä maaston ryppyisyyttä</translation>
     </message>
     <message>
         <source>Adjust the distance between forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Säädä linnakkeiden välistä etäisyyttä</translation>
     </message>
     <message>
         <source>Click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikkaa muokataksesi</translation>
     </message>
 </context>
 <context>
@@ -736,15 +728,11 @@ Kaksi viimeistä pelimoottorin viestiä:
     </message>
     <message>
         <source>You got kicked</source>
-        <translation>Sinut potkittiin</translation>
+        <translation>Sinut potkittiin huoneesta</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 liittyi huoneeseen</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has joined</source>
-        <translation type="obsolete">%1 *** %2 liittyi</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
@@ -834,14 +822,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KB</name>
-    <message>
-        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation type="obsolete">SDL_ttf palautti virheen mallintaessaan tekstiä, todennäköisesti syy on freetype2:n ohjelmavirheessä. Freetype-kirjaston päivitys on suosiltetavaa.</translation>
+        <translation>Valitse hattu</translation>
     </message>
 </context>
 <context>
@@ -867,7 +848,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation></translation>
+        <translation>Video: %1x%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -948,15 +929,15 @@ pelkkä nimimerkki riittää.</translation>
     <name>PageCampaign</name>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Joukkue</translation>
+        <translation>Joukkue</translation>
     </message>
     <message>
         <source>Campaign</source>
-        <translation type="unfinished"></translation>
+        <translation>Operaatio</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Tehtävä</translation>
     </message>
 </context>
 <context>
@@ -1068,11 +1049,11 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>This hedgehog&apos;s name</source>
-        <translation>Tämän siilen nimi</translation>
+        <translation>Tämän siilin nimi</translation>
     </message>
     <message>
         <source>Randomize this hedgehog&apos;s name</source>
-        <translation>Generoi tämän siilen nimi</translation>
+        <translation>Generoi tämän siilin nimi</translation>
     </message>
     <message>
         <source>Random Team</source>
@@ -1080,7 +1061,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Play a random example of this voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuuntele ääninäyte</translation>
     </message>
 </context>
 <context>
@@ -1128,8 +1109,8 @@ pelkkä nimimerkki riittää.</translation>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; ajatteli, että omia siilejä on hienoa vahingoittaa &lt;b&gt;%2&lt;/b&gt; vahinkopisteellä.</numerusform>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; ajatteli, että omia siilejä on hienoa vahingoittaa &lt;b&gt;%2&lt;/b&gt; vahinkopisteellä.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; ajatteli, että omia siilijä on hienoa vahingoittaa &lt;b&gt;%2&lt;/b&gt; vahinkopisteellä.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; ajatteli, että omia siilijä on hienoa vahingoittaa &lt;b&gt;%2&lt;/b&gt; vahinkopisteellä.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1200,7 +1181,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation>Verkkosivuiltamme tarjolla olevaa ladattavaa sisältöä</translation>
+        <translation>Verkkosivuiltamme tarjolla olevaa ilmaiseksi ladattavaa sisältöä</translation>
     </message>
     <message>
         <source>Exit game</source>
@@ -1247,15 +1228,11 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aloita tappelu (vaatii vähintään kaksi joukkuetta)</translation>
     </message>
 </context>
 <context>
     <name>PageNetGame</name>
-    <message>
-        <source>Control</source>
-        <translation type="obsolete">Säädöt</translation>
-    </message>
     <message>
         <source>Edit game preferences</source>
         <translation>Muokkaa asetuksia</translation>
@@ -1274,19 +1251,19 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Huoneen nimi</translation>
     </message>
     <message>
         <source>Update the room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Päivitä huoneen nimeä</translation>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation type="unfinished"></translation>
+        <translation>Sytytä lamppu kun olet valmis tappeluun</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Aloita tappelu (vaatii vähintään kaksi joukkuetta)</translation>
     </message>
 </context>
 <context>
@@ -1483,50 +1460,22 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Play demo</source>
-        <translation type="unfinished">Toista nauhoite</translation>
+        <translation>Toista nauhoite</translation>
     </message>
     <message>
         <source>Play the selected demo</source>
-        <translation type="unfinished"></translation>
+        <translation>Toista valittu nauhoite</translation>
     </message>
     <message>
         <source>Load the selected game</source>
-        <translation type="unfinished"></translation>
+        <translation>Lataa valittu peli</translation>
     </message>
 </context>
 <context>
     <name>PageRoomsList</name>
     <message>
-        <source>Create</source>
-        <translation type="obsolete">Luo</translation>
-    </message>
-    <message>
-        <source>Join</source>
-        <translation type="obsolete">Liity</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Ylläpitäjän ominaisuudet</translation>
-    </message>
-    <message>
-        <source>Room Name:</source>
-        <translation type="obsolete">Huoneen nimi:</translation>
-    </message>
-    <message>
-        <source>Rules:</source>
-        <translation type="obsolete">Säännöt:</translation>
-    </message>
-    <message>
-        <source>Weapons:</source>
-        <translation type="obsolete">Aseet:</translation>
-    </message>
-    <message>
-        <source>Search:</source>
-        <translation type="obsolete">Haku:</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Tyhjennä</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1549,7 +1498,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Room state</source>
-        <translation>Huoneen tilanne</translation>
+        <translation>Suodata</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1558,14 +1507,6 @@ pelkkä nimimerkki riittää.</translation>
 </context>
 <context>
     <name>PageScheme</name>
-    <message>
-        <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="obsolete">Puolusta linnaasi ja tuhoa vastustajasi, enintään kaksi joukkueväriä!</translation>
-    </message>
-    <message>
-        <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="obsolete">Joukkueet aloittavat kartan vastakkaisista päistä, maksimissaan kaksi joukkueväriä!</translation>
-    </message>
     <message>
         <source>Land can not be destroyed!</source>
         <translation>Maata ei voi tuhota!</translation>
@@ -1584,23 +1525,15 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>Saa 80% aiheuttamastasi vahingosta takaisin omaan terveyteesi</translation>
+        <translation>Vampirismi: Saat 80% aiheuttamastasi vahingosta takaisin omaan terveyteesi</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Jaa vastuastajasi tuska, jaa heidän vahinkonsa</translation>
+        <translation>Jaa vastustajasi tuska, jaa heidän vahinkonsa</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation>Siilit eivät voi liikkua, testaa tykistötaitojasi</translation>
-    </message>
-    <message>
-        <source>Random</source>
-        <translation type="obsolete">Satunnainen</translation>
-    </message>
-    <message>
-        <source>Seconds</source>
-        <translation type="obsolete">Sekuntia</translation>
+        <translation>Siilit eivät voi liikkua: testaa tykistötaitojasi</translation>
     </message>
     <message>
         <source>New</source>
@@ -1612,55 +1545,55 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>Pelaamisjärjestys on satunnainen huoneen järjestyksen sijaan.</translation>
+        <translation>Pelaamisjärjestys on satunnainen huoneen järjestyksen sijaan</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>Pelaa kuninkaalla. Jos hän kuolee, sinun jokkueesi häviää.</translation>
+        <translation>Pelissä on kuningas. Jos hän kuolee, joukkueesi häviää</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>Sijoittakaa siilenne vuorotellen ennen pelin alkua.</translation>
+        <translation>Siilit sijoitetaan vuorotellen ennen pelin alkua</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation>Ammukset ovat yhteiset saman värin kesken.</translation>
+        <translation>Ammukset ovat yhteiset värien kesken</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation>Kytke palkit pois päältä satunnaisissa kartoissa.</translation>
+        <translation>Kytke palkit pois päältä satunnaisissa kartoissa</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>Poista maaesteet satunnaisten karttojen luonnissa.</translation>
+        <translation>Poista maaesteet satunnaisten karttojen luonnissa</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation>Tekoäly syntyy uudelleen kuollessaan.</translation>
+        <translation>Tekoäly syntyy uudelleen tuhoutuessaan</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation>Kaikki elossa olevat siilet palautetaan täyteen terveyteen vuoron lopussa</translation>
+        <translation>Kaikki elossa olevat siilit palautetaan täyteen terveyteen vuoron lopussa</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation>Ampuminen ei lopeta vuoroasi.</translation>
+        <translation>Ampuminen ei lopeta vuoroasi</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation>Aseet palautetaan alkutilaan vuoron lopussa.</translation>
+        <translation>Asesetti palautetaan alkutilaan vuoron lopussa</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>Jokaisella siilellä on omakohtaiset ammukset, jotka eivät jakaudu joukkueen kesken.</translation>
+        <translation>Jokaisella siilillä on omakohtaiset ammukset, joita ei jaeta joukkueen kesken</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation>Tuulella ei ole vaikutusta.</translation>
+        <translation>Tuulella ei ole vaikutusta</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation>Tuuli vaikuttaa lähes kaikkeen.</translation>
+        <translation>Tuuli vaikuttaa lähes kaikkeen</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -1668,7 +1601,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation>Vuoron aika jaetaan klaanin joukkueiden kesken.</translation>
+        <translation>Vuoron aika jaetaan klaanin joukkueiden kesken</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1696,83 +1629,83 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jokainen klaani aloittaa omalla mantereellaan</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Mitä isompi luku, sitä enemmän vahinkoa kaikki tuottaa, prosentteina oletustasosta</translation>
     </message>
     <message>
         <source>Turn time in seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoron aika sekunteina</translation>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Terveyspisteet pelin alussa</translation>
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
-        <translation type="unfinished"></translation>
+        <translation>Kierrosten lukumäärä ennen äkkikuolemaa</translation>
     </message>
     <message>
         <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vedennousun määrä kierroksella äkkikuolemassa. Aseta tämä ja terveydenpudotus nollaksi ottaaksesi äkkikuoleman pois käytöstä.</translation>
     </message>
     <message>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Terveyspisteiden pudotus kierroksella äkkikuolemassa. Ei mene alle yhden. Aseta tämä ja vedennousu nollaksi ottaaksesi äkkikuoleman pois käytöstä.</translation>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Köyden maksimipituus prosentteina</translation>
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
-        <translation type="unfinished"></translation>
+        <translation>Todennäköisyys, että pudotettu laatikko on lääkelaatikko. Muuten laatikko on joko työkalu- tai aselaatikko.</translation>
     </message>
     <message>
         <source>Likelihood of a crate dropping before a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Todennäköisyys, että ennen vuoroa putoaa jokin laatikko</translation>
     </message>
     <message>
         <source>Health bonus for collecting a health crate</source>
-        <translation type="unfinished"></translation>
+        <translation>Lääkelaatikon terveyspisteet</translation>
     </message>
     <message>
         <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Miinojen ajastin, nollan ja viiden sekunnin väliltä. Leijuvat miinat ovat neljäsosan tästä ajasta.</translation>
     </message>
     <message>
         <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Montako miinaa keskikokoiselle kartalle sijoitetaan. Lukua muutetaan kartan koon mukaan.</translation>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Viallisten miinojen osuus. Ei vaikuta siilien asettamiin miinoihin.</translation>
     </message>
     <message>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tynnyreiden lukumäärä keskikokoisella kartalla. Lukua muutetaan kartan koon mukaan.</translation>
     </message>
     <message>
         <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Leijuvien miinojen lukumäärä keskikokoisella kartalla. Lukua muutetaan kartan koon mukaan.</translation>
     </message>
     <message>
         <source>Affects the left and right boundaries of the map</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaikuttaa kartan vasempaan ja oikeaan reunaan</translation>
     </message>
     <message>
         <source>Time you get after an attack</source>
-        <translation type="unfinished"></translation>
+        <translation>Aika, jonka saat ampumisen jälkeen</translation>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisäparametrit pelityypin muokkaamiseksi. Tämän tarkoitus riippuu itse pelityypistä, katso tarkat ohjeet dokumentaatiosta. Jätä tyhjäksi jos olet epävarma.</translation>
     </message>
     <message>
         <source>Name of this scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Sääntöjen nimi</translation>
     </message>
 </context>
 <context>
@@ -1806,7 +1739,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Campaign Mode</source>
-        <translation>Tehtävät (englanniksi)</translation>
+        <translation>Operaatiot</translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
@@ -1832,36 +1765,32 @@ pelkkä nimimerkki riittää.</translation>
         <translation>Valitse tehtävä!</translation>
     </message>
     <message>
-        <source>Pick the mission or training to play</source>
-        <translation type="obsolete">Valitse tehtävä tai harjoitus luettelosta</translation>
-    </message>
-    <message>
         <source>Start fighting</source>
         <translation>Käynnistä harjoitus</translation>
     </message>
     <message>
         <source>Pick the training to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse perusharjoitus listalta</translation>
     </message>
     <message>
         <source>Pick the challenge to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse haaste listalta</translation>
     </message>
     <message>
         <source>Pick the scenario to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse pelitilanne listalta</translation>
     </message>
     <message>
         <source>Trainings</source>
-        <translation type="unfinished"></translation>
+        <translation>Harjoitukset</translation>
     </message>
     <message>
         <source>Challenges</source>
-        <translation type="unfinished"></translation>
+        <translation>Haasteet</translation>
     </message>
     <message>
         <source>Scenarios</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilanteet</translation>
     </message>
 </context>
 <context>
@@ -1962,15 +1891,15 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä salasanalla suojatut</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä rajoitetut huoneet</translation>
     </message>
     <message>
         <source>Delegate room control</source>
-        <translation type="unfinished"></translation>
+        <translation>Siirrä huoneen oikeudet</translation>
     </message>
 </context>
 <context>
@@ -2087,28 +2016,12 @@ pelkkä nimimerkki riittää.</translation>
         <translation>Ihminen</translation>
     </message>
     <message>
-        <source>Level</source>
-        <translation type="obsolete">Taso</translation>
-    </message>
-    <message>
         <source>(System default)</source>
         <translation>(Järjestelmän oletus)</translation>
     </message>
     <message>
         <source>Community</source>
         <translation>Yhteisö</translation>
-    </message>
-    <message>
-        <source>Any</source>
-        <translation type="obsolete">Mikä tahansa</translation>
-    </message>
-    <message>
-        <source>In lobby</source>
-        <translation type="obsolete">Aulassa</translation>
-    </message>
-    <message>
-        <source>In progress</source>
-        <translation type="obsolete">Kesken</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -2172,7 +2085,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Computer (Level %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekoäly (Taso %1)</translation>
     </message>
 </context>
 <context>
@@ -2225,10 +2138,6 @@ pelkkä nimimerkki riittää.</translation>
         <translation>Miinat</translation>
     </message>
     <message>
-        <source>Version</source>
-        <translation type="obsolete">Versio</translation>
-    </message>
-    <message>
         <source>Weapons</source>
         <translation>Aseet</translation>
     </message>
@@ -2278,7 +2187,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation>Kaavan nimi:</translation>
+        <translation>Sääntöjen nimi:</translation>
     </message>
     <message>
         <source>Crate Drops</source>
@@ -2291,10 +2200,6 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Name</source>
         <translation>Nimi</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Tyyppi</translation>
     </message>
     <message>
         <source>Grave</source>
@@ -2311,14 +2216,6 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Locale</source>
         <translation>Kieli</translation>
-    </message>
-    <message>
-        <source>Explosives</source>
-        <translation type="obsolete">Räjähteet</translation>
-    </message>
-    <message>
-        <source>Tip: </source>
-        <translation type="obsolete">Vinkki: </translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2350,15 +2247,11 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Tyyli</translation>
+        <translation>Pelityyppi</translation>
     </message>
     <message>
         <source>Scheme</source>
         <translation>Säännöt</translation>
-    </message>
-    <message>
-        <source>% Get Away Time</source>
-        <translation type="obsolete">Pakoaika (%)</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -2434,7 +2327,7 @@ Haluatko varmasti lopettaa?</translation>
     </message>
     <message>
         <source>Windowed Resolution</source>
-        <translation>Ikknan koko</translation>
+        <translation>Ikkunan koko</translation>
     </message>
     <message>
         <source>Your Email</source>
@@ -2482,19 +2375,19 @@ Haluatko varmasti lopettaa?</translation>
     </message>
     <message>
         <source>Air Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Leijuvat miinat</translation>
     </message>
     <message>
         <source>Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Pelaaja</translation>
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tynnyrit</translation>
     </message>
     <message>
         <source>% Retreat Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% Pakoaika</translation>
     </message>
 </context>
 <context>
@@ -2580,14 +2473,6 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <source>All file associations have been set</source>
         <translation>Tiedostotyypit ovat varattu</translation>
-    </message>
-    <message>
-        <source>Cannot create directory %1</source>
-        <translation type="obsolete">Hakemiston %1 luonti epäonnistui</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation type="obsolete">Palvelinta ei pystytty käynnistämään: %1.</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
@@ -2787,10 +2672,6 @@ Kaikki pelaajat eivät ole valmiita.</translation>
         <translation>Käynnistä</translation>
     </message>
     <message>
-        <source>Go!</source>
-        <translation type="obsolete">Aloita!</translation>
-    </message>
-    <message>
         <source>Play demo</source>
         <translation>Toista nauhoite</translation>
     </message>
@@ -2942,7 +2823,7 @@ Kaikki pelaajat eivät ole valmiita.</translation>
     </message>
     <message>
         <source>Script</source>
-        <translation>Kaava</translation>
+        <translation>Tyyppi</translation>
     </message>
     <message>
         <source>Random Perlin</source>
@@ -2950,7 +2831,7 @@ Kaikki pelaajat eivät ole valmiita.</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Linnakkeet</translation>
     </message>
 </context>
 <context>
@@ -2973,7 +2854,7 @@ Kaikki pelaajat eivät ole valmiita.</translation>
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished">Siemen</translation>
+        <translation>Siemen</translation>
     </message>
 </context>
 <context>
@@ -2995,28 +2876,20 @@ Kaikki pelaajat eivät ole valmiita.</translation>
         <translation>Viipeet</translation>
     </message>
     <message>
-        <source>new</source>
-        <translation type="obsolete">uusi</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">%1 kopio</translation>
-    </message>
-    <message>
         <source>New</source>
-        <translation type="unfinished">Uusi</translation>
+        <translation>Uusi</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uusi (%1)</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kopio</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kopio (%2)</translation>
     </message>
 </context>
 <context>
@@ -3069,7 +2942,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse teema</translation>
     </message>
 </context>
 <context>
@@ -3105,10 +2978,6 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <message>
         <source>switch</source>
         <translation>vaihto</translation>
-    </message>
-    <message>
-        <source>find hedgehog</source>
-        <translation type="obsolete">etsi siili</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -3274,7 +3143,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <name>binds (descriptions)</name>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation>Ylitä aukot ja esteet hyyppäämällä:</translation>
+        <translation>Ylitä aukot ja esteet hyppäämällä:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
@@ -3295,10 +3164,6 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
         <translation>Ajasta pommi ja ajastetut aseet:</translation>
-    </message>
-    <message>
-        <source>Move the camera to the active hog:</source>
-        <translation type="obsolete">Liikuta kamera aktiivisen siilen luokse:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -3338,7 +3203,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Hedgehog movement</source>
-        <translation>Siilen liikkuminen</translation>
+        <translation>Siilin liikkuminen</translation>
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
@@ -3835,10 +3700,6 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
         <translation>Peliviestien tulva havaittu - 1</translation>
     </message>
     <message>
-        <source>Game messages flood detected - 2</source>
-        <translation type="obsolete">Peliviestien tulva havaittu - 2</translation>
-    </message>
-    <message>
         <source>Warning! Joins flood protection activated</source>
         <translation>Varoitus! Liittymisien tulvasuoja aktivoitu</translation>
     </message>
@@ -3848,47 +3709,47 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Your vote counted</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinun äänesi ratkaisi</translation>
     </message>
     <message>
         <source>Pause toggled</source>
-        <translation type="unfinished"></translation>
+        <translation>Tauko</translation>
     </message>
     <message>
         <source>new seed</source>
-        <translation type="unfinished"></translation>
+        <translation>uusi siemen</translation>
     </message>
     <message>
         <source>number of hedgehogs in team</source>
-        <translation type="unfinished"></translation>
+        <translation>siilien määrä pelissä</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams: anna luku välillä 2-8</translation>
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Käytössä äänestyskomennot: kick &lt;nimi&gt;, map &lt;nimi&gt;, pause, newseed, hedgehogs</translation>
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>callvote kick: anna nimimerkki</translation>
     </message>
     <message>
         <source>callvote kick: no such user</source>
-        <translation type="unfinished"></translation>
+        <translation>callvote kick: moista käyttäjää ei löydy</translation>
     </message>
     <message>
         <source>callvote map: no such map</source>
-        <translation type="unfinished"></translation>
+        <translation>callvote map: moista karttaa ei löydy</translation>
     </message>
     <message>
         <source>callvote pause: no game in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>callvote pause: peli ei ole käynnissä</translation>
     </message>
     <message>
         <source>callvote hedgehogs: specify number from 1 to 8</source>
-        <translation type="unfinished"></translation>
+        <translation>callvote hedgehogs: anna luku väliltä 1-8</translation>
     </message>
 </context>
 </TS>
