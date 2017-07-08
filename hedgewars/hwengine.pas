@@ -430,7 +430,6 @@ begin
     if GameType = gmtRecord then
     begin
         RecorderMainLoop();
-        freeEverything(true);
         exit;
     end;
 {$ENDIF}
