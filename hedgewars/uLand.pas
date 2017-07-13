@@ -30,10 +30,10 @@ procedure GenPreview(out Preview: TPreview);
 procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 
 implementation
-uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
-     uLandGenTemplateBased, uLandUtils;
+     uLandGenTemplateBased, uLandUtils, uRenderUtils;
 
 var digest: shortstring;
     maskOnly: boolean;
@@ -49,7 +49,7 @@ end;
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
-    r, rr: TSDL_Rect;
+    //r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
     targetMask: Word;
 begin
@@ -79,25 +79,9 @@ begin
             while (yu < yd ) and ((Land[yu, x] and targetMask) =  0) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
-                begin
-                rr.x:= x;
-                rr.y:= yd - 15;
-                r.x:= x mod tmpsurf^.w;
-                r.y:= 16;
-                r.w:= 1;
-                r.h:= 16;
-                SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-                end;
+                copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 16, 1, 16, x, yd - 15);
             if (yu > 0) then
-                begin
-                rr.x:= x;
-                rr.y:= yu;
-                r.x:= x mod tmpsurf^.w;
-                r.y:= 0;
-                r.w:= 1;
-                r.h:= Min(16, yd - yu + 1);
-                SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-                end;
+                copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 0, 1, Min(16, yd - yu + 1), x, yu);
             yd:= yu - 1;
         until yd < 0;
     end;
@@ -194,7 +178,8 @@ begin
         r.x:= 0;
         while r.x < LAND_WIDTH do
             begin
-            SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+            copyToXY(tmpsurf, Surface, r.x, r.y);
+            //SDL_UpperBlit(tmpsurf, nil, Surface, @r);
             inc(r.x, tmpsurf^.w)
             end;
         inc(y, tmpsurf^.h);
@@ -260,10 +245,10 @@ procedure LandSurface2LandPixels(Surface: PSDL_Surface);
 var x, y: LongInt;
     p: PLongwordArray;
 begin
-TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
+if checkFails(Surface <> nil, 'Assert (LandSurface <> nil) failed', true) then exit;
 
 if SDL_MustLock(Surface) then
-    SDLTry(SDL_LockSurface(Surface) >= 0, true);
+    if SDLCheck(SDL_LockSurface(Surface) >= 0, 'SDL_LockSurface', true) then exit;
 
 p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
@@ -271,9 +256,9 @@ for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
     if Land[y, x] <> 0 then
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[y, x]:= p^[x] or AMask
+            LandPixels[y, x]:= p^[x]// or AMask
         else
-            LandPixels[y div 2, x div 2]:= p^[x] or AMask;
+            LandPixels[y div 2, x div 2]:= p^[x];// or AMask;
 
     p:= PLongwordArray(@(p^[Surface^.pitch div 4]));
     end;
@@ -289,9 +274,9 @@ var tmpsurf: PSDL_Surface;
 begin
     AddProgress();
 
-    tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
+    tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, AMask);
 
-    TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
+    if checkFails(tmpsurf <> nil, 'Error creating pre-land surface', true) then exit;
     ColorizeLand(tmpsurf);
     if gameFlags and gfShoppaBorder = 0 then DrawBorderFromImage(tmpsurf);
     AddOnLandObjects(tmpsurf);
@@ -363,35 +348,131 @@ begin
     AddProgress();
 end;
 
-procedure MakeFortsMap;
-var tmpsurf: PSDL_Surface;
+procedure MakeFortsPreview;
+var gap: LongInt;
+    h1, h2, w1, w2, x, y, lastX, wbm, bmref: LongWord;
+const fortHeight = 960;
+      fortWidth  = 704;
+      bmHeight = 53;
+      bmWidth = 64;
 begin
 ResizeLand(4096,2048);
-MaxHedgehogs:= 32;
+
+lastX:= LAND_WIDTH-1;
+
+gap:= (1024 - fortWidth) + 60 + 20 * cFeatureSize;
+
+h2:= LAND_HEIGHT-1;
+h1:= h2 - fortHeight;
+w2:= (LAND_WIDTH - gap) div 2;
+w1:= w2 - fortWidth;
+wbm:= h1 + bmHeight;
+
+// generate 2 forts in center
+for y:= h1 to h2 do
+    for x:= w1 to w2 do
+        begin
+        if x mod 4 <> 0 then
+            begin
+            if (y <= wbm) and ((x - w1) mod (bmWidth * 2) >= bmWidth) then
+                continue;
+            Land[y,x]:= lfBasic;
+            Land[y,lastX-x]:= lfBasic;
+            end;
+        end;
+
+w2:= w1 - gap;
+w1:= max(0, w2 - fortWidth);
+wbm:= h1 + bmHeight;
+bmref:= w2 + bmWidth;
+
+for y:= h1 to h2 do
+    for x:= w1 to w2 do
+        begin
+        if ((y - x) mod 2) = 0 then
+            begin
+            // align battlement on inner edge, because real outer edge could be offscreen
+            if (y <= wbm) and ((LAND_WIDTH + x - bmref) mod (bmWidth * 2) >= bmWidth) then
+                continue;
+            Land[y,x]:= lfBasic;
+            Land[y,lastX-x]:= lfBasic;
+            end;
+        end;
+end;
+
+procedure MakeFortsMap;
+var tmpsurf: PSDL_Surface;
+    sectionWidth, i, t, p: integer;
+    mirror: boolean;
+    pc: PClan;
+begin
+
+// make the gaps between forts adjustable if fort map was selected
+if cMapGen = mgForts then
+    sectionWidth:= 1024 + 60 + 20 * cFeatureSize
+else
+    sectionWidth:= 1024 * 300;
+
+// mix up spawn/fort order of clans
+for i:= 0 to ClansCount - 1 do
+    begin
+    t:= GetRandom(ClansCount);
+    p:= GetRandom(ClansCount);
+    if t <> p then
+        begin
+        pc:= SpawnClansArray[t];
+        SpawnClansArray[t]:= SpawnClansArray[p];
+        SpawnClansArray[p]:= pc;
+        end;
+    end;
+
+// figure out how much space we need
+playWidth:= sectionWidth * ClansCount;
+
+// note: LAND_WIDTH might be bigger than specified below (rounded to next power of 2)
+ResizeLand(playWidth, 2048);
+
 // For now, defining a fort is playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it will give a bit more maneuvering room.
 playHeight:= 1200;
-playWidth:= 2560;
-leftX:= (LAND_WIDTH - playWidth) div 2;
+
+// center playable area in land array
+leftX:= ((LAND_WIDTH - playWidth) div 2);
 rightX:= ((playWidth + (LAND_WIDTH - playWidth) div 2) - 1);
 topY:= LAND_HEIGHT - playHeight;
 
 WriteLnToConsole('Generating forts land...');
 
-tmpsurf:= LoadDataImage(ptForts, ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-// not critical because if no R we can fallback to mirrored L
-tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
-// fallback
-if tmpsurf = nil then
+for i := 0 to ClansCount - 1 do
     begin
-    tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-    BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
-    end
-else
-    BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
-SDL_FreeSurface(tmpsurf);
+
+    // face in random direction
+    mirror:= (GetRandom(2) = 0);
+    // make first/last fort face inwards
+    if (WorldEdge <> weWrap) or (ClansCount = 2) then
+        mirror:= (i <> 0) and (mirror or (i = ClansCount - 1));
+
+    if mirror then
+        begin
+        // not critical because if no R we can fallback to mirrored L
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+        // fallback
+        if tmpsurf = nil then
+            begin
+            tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+            BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
+            end
+        else
+            BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+        SDL_FreeSurface(tmpsurf);
+        end
+    else
+        begin
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+        BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+        SDL_FreeSurface(tmpsurf);
+        end;
+
+    end;
 end;
 
 procedure LoadMapConfig;
@@ -451,8 +532,10 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
     cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
     cpY:= LAND_HEIGHT - tmpsurf^.h;
     if SDL_MustLock(tmpsurf) then
-        SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
+        SDLCheck(SDL_LockSurface(tmpsurf) >= 0, 'SDL_LockSurface', true);
 
+    if allOK then
+    begin
         p:= tmpsurf^.pixels;
         for y:= 0 to Pred(tmpsurf^.h) do
             begin
@@ -461,15 +544,16 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
             p:= PLongwordArray(@(p^[tmpsurf^.pitch div 4]));
             end;
 
-    if SDL_MustLock(tmpsurf) then
-        SDL_UnlockSurface(tmpsurf);
-    if not disableLandBack then
-        begin
-        // freed in freeModule() below
-        LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
-        if (LandBackSurface <> nil) and GrayScale then
-            Surface2GrayScale(LandBackSurface)
-        end;
+        if SDL_MustLock(tmpsurf) then
+            SDL_UnlockSurface(tmpsurf);
+        if not disableLandBack then
+            begin
+            // freed in freeModule() below
+            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+            if (LandBackSurface <> nil) and GrayScale then
+                Surface2GrayScale(LandBackSurface)
+            end;
+    end;
 end;
 if (tmpsurf <> nil) then
     SDL_FreeSurface(tmpsurf);
@@ -487,9 +571,11 @@ if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(cPathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    if not allOK then exit;
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
-TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (QWord(tmpsurf^.w) * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
+if checkFails((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (QWord(tmpsurf^.w) * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true)
+        then exit;
 
 ResizeLand(tmpsurf^.w, tmpsurf^.h);
 LoadMapConfig;
@@ -500,16 +586,16 @@ leftX:= (LAND_WIDTH - playWidth) div 2;
 rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
 
-TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
+if not checkFails(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true) then
+    BlitImageAndGenerateCollisionInfo(
+        (LAND_WIDTH - tmpsurf^.w) div 2,
+        LAND_HEIGHT - tmpsurf^.h,
+        tmpsurf^.w,
+        tmpsurf);
 
-BlitImageAndGenerateCollisionInfo(
-    (LAND_WIDTH - tmpsurf^.w) div 2,
-    LAND_HEIGHT - tmpsurf^.h,
-    tmpsurf^.w,
-    tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-LoadMask;
+if allOK then LoadMask;
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
@@ -565,10 +651,12 @@ begin
                 mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
                 mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
                 mgDrawn : GenDrawnMap;
+                mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
             else
                 OutError('Unknown mapgen', true);
             end;
-            GenLandSurface
+            if cMapGen <> mgForts then
+                GenLandSurface
             end
     else
         MakeFortsMap;
@@ -663,6 +751,8 @@ else
 
 FreeLandObjects;
 
+if not allOK then exit;
+
 if GrayScale then
     begin
     if (cReducedQuality and rqBlurryLand) = 0 then
@@ -706,6 +796,7 @@ begin
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: GenDrawnMap;
+        mgForts: MakeFortsPreview();
     else
         OutError('Unknown mapgen', true);
     end;
@@ -754,6 +845,7 @@ begin
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: GenDrawnMap;
+        mgForts: MakeFortsPreview;
     else
         OutError('Unknown mapgen', true);
     end;
@@ -794,7 +886,7 @@ begin
     if digest = '' then
         digest:= s
     else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
+        checkFails(s = digest, 'Different maps generated, sorry', true);
 end;
 
 procedure chSendLandDigest(var s: shortstring);
@@ -808,7 +900,7 @@ begin
     ScriptSetString('LandDigest', s);
 
     chLandCheck(s);
-    SendIPCRaw(@s[0], Length(s) + 1)
+    if allOK then SendIPCRaw(@s[0], Length(s) + 1)
 end;
 
 procedure initModule;

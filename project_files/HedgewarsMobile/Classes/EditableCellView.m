@@ -43,7 +43,7 @@
         //[textField release];
 
         titleLabel = [[UILabel alloc] init];
-        titleLabel.textAlignment = UITextAlignmentLeft;
+        titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [self.contentView addSubview:titleLabel];

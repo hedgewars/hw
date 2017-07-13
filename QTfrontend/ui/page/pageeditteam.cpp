@@ -100,7 +100,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     tmpLabel->setText(QLabel::tr("Name"));
     GBTLayout->addWidget(tmpLabel, 0, 0);
     tmpLabel = new QLabel(GBoxTeam);
-    tmpLabel->setText(QLabel::tr("Type"));
+    tmpLabel->setText(QLabel::tr("Player"));
     GBTLayout->addWidget(tmpLabel, 1, 0);
     tmpLabel = new QLabel(GBoxTeam);
     tmpLabel->setText(QLabel::tr("Grave"));
@@ -118,30 +118,36 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     vbox2->addWidget(GBoxTeam);
 
     CBTeamLvl = new QComboBox(GBoxTeam);
-    CBTeamLvl->setIconSize(QSize(48, 48));
-    CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
+    CBTeamLvl->setIconSize(QSize(32, 32));
+    CBTeamLvl->addItem(QIcon(":/res/botlevels/small0.png"), QComboBox::tr("Human"));
     for(int i = 5; i > 0; i--)
         CBTeamLvl->addItem(
-            QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
-            QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
+            QIcon(QString(":/res/botlevels/small%1.png").arg(6 - i)),
+            QComboBox::tr("Computer (Level %1)").arg(i)
         );
+    CBTeamLvl->setFixedHeight(38);
     GBTLayout->addWidget(CBTeamLvl, 1, 1);
 
     CBGrave = new QComboBox(GBoxTeam);
     CBGrave->setMaxCount(65535);
+    CBGrave->setMaxVisibleItems(20);
     CBGrave->setIconSize(QSize(32, 32));
+    CBGrave->setFixedHeight(44);
     GBTLayout->addWidget(CBGrave, 2, 1);
 
     CBFlag = new QComboBox(GBoxTeam);
     CBFlag->setMaxCount(65535);
+    CBFlag->setMaxVisibleItems(50);
     CBFlag->setIconSize(QSize(22, 15));
     GBTLayout->addWidget(CBFlag, 3, 1);
 
     QHBoxLayout * hbox = new QHBoxLayout();
     CBVoicepack = new QComboBox(GBoxTeam);
+    CBVoicepack->setMaxVisibleItems(50);
 
     hbox->addWidget(CBVoicepack, 100);
     btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);
+    btnTestSound->setWhatsThis("Play a random example of this voice");
     hbox->setStretchFactor(btnTestSound, 1);
 
     GBTLayout->addLayout(hbox, 4, 1);
@@ -150,6 +156,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBoxFort->setTitle(QGroupBox::tr("Fort"));
     QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
     CBFort = new QComboBox(GBoxFort);
+    CBFort->setMaxVisibleItems(25);
     CBFort->setMaxCount(65535);
     GBFLayout->addWidget(CBFort, 0, 0);
     FortPreview = new SquareLabel(GBoxFort);

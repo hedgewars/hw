@@ -1,3 +1,5 @@
+precision mediump float;
+
 uniform sampler2D tex0;
 uniform vec4 tint;
 uniform bool enableTexture;

@@ -412,7 +412,7 @@ function heroAtFirstBattle(gear)
 end
 
 function heroFleeFirstBattle(gear)
-	AnimSay(smuggler1.gear, loc("Run away you coward!"), SAY_SHOUT, 4000)
+	AnimSay(smuggler1.gear, loc("Run away, you coward!"), SAY_SHOUT, 4000)
 	TurnTimeLeft = 0
 	heroIsInBattle = false
 	ongoingBattle = 0
@@ -439,7 +439,7 @@ end
 function heroAtThirdBattle(gear)
 	heroIsInBattle = true
 	ongoingBattle = 3
-	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you..."), SAY_SHOUT, 5000)
+	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
 	AnimSwitchHog(smuggler3.gear)
 	TurnTimeLeft = 0
 end
@@ -479,22 +479,22 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, getting info about the device
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Planet of Sand, you have to double check your moves..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finally you are here..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Planet of Sand, you have to double check your moves ..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finally you are here!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you for meeting me on such a short notice!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("No problem, I would do anything for H!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now listen carefully! Below us there are tunnels that have been created naturally over the years"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("I have heard that the local tribes say that many years ago some PAotH scientists were dumping their waste here"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("H confirmed that there isn't such a PAotH activity logged"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("So, I believe that it's a good place to start"), SAY_SAY, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Beware though! Many smugglers come often to explore these tunnels and scavenge whatever valuable items they can find"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("I have heard that the local tribes say that many years ago some PAotH scientists were dumping their waste here."), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("H confirmed that there isn't such a PAotH activity logged."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("So, I believe that it's a good place to start."), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Beware, though! Many smugglers come often to explore these tunnels and scavenge whatever valuable items they can find."), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("They won't hesitate to attack you in order to rob you!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 6000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("OK, I'll be extra careful!"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Okay, I'll be extra careful!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is the tunnel entrance"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("The tunnel entrance is over there."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Good luck!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = startMission, args = {hero.gear}})
@@ -510,11 +510,11 @@ end
 function secondBattle()
 	-- second battle
 	if heroIsInBattle and ongoingBattle == 1 then
-		AnimSay(smuggler1.gear, loc("Get him Spike!"), SAY_SHOUT, 4000)
+		AnimSay(smuggler1.gear, loc("Get him, Spike!"), SAY_SHOUT, 4000)
 	end
 	heroIsInBattle = true
 	ongoingBattle = 2
-	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice..."), SAY_THINK, 5000)
+	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
 	TurnTimeLeft = 0
 end
@@ -551,14 +551,14 @@ end
 function checkForWin()
 	if cratesFound ==  0 then
 		-- have to look more
-		AnimSay(hero.gear, loc("Haven't found it yet..."), SAY_THINK, 5000)
+		AnimSay(hero.gear, loc("Haven't found it yet ..."), SAY_THINK, 5000)
 		cratesFound = cratesFound + 1
 	elseif cratesFound == 1 then
 		-- end game
 		saveCompletedStatus(5)
-		AnimSay(hero.gear, loc("Hoorah!!!"), SAY_SHOUT, 5000)
+		AnimSay(hero.gear, loc("Hooray!"), SAY_SHOUT, 5000)
 		SendStat(siGameResult, loc("Congratulations, you won!"))
-		SendStat(siCustomAchievement, loc("To win the game you had to collect the 2 crates with no specific order"))
+		SendStat(siCustomAchievement, loc("To win the game you had to collect the 2 crates with no specific order."))
 		SendStat(siPlayerKills,'1',teamC.name)
 		SendStat(siPlayerKills,'0',teamB.name)
 		EndGame()
@@ -567,9 +567,9 @@ end
 
 function lose()
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate"))
-	SendStat(siCustomAchievement, loc("You can avoid some battles"))
-	SendStat(siCustomAchievement, loc("Use your ammo wisely"))
+	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate."))
+	SendStat(siCustomAchievement, loc("You can avoid some battles."))
+	SendStat(siCustomAchievement, loc("Use your ammo wisely."))
 	SendStat(siCustomAchievement, loc("Don't destroy the device crate!"))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamC.name)

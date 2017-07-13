@@ -77,7 +77,7 @@ About::About(QWidget * parent) :
         "</style>"
         "<div align=\"center\"><h1>Hedgewars " + *cVersionString + "</h1>"
         "<h3>" + QLabel::tr("Revision") + " " + *cRevisionString + " (" + *cHashString + ")</h3>"
-        "<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p>" +
+        "<p><a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a></p>" +
         QLabel::tr("This program is distributed under the %1").arg("<a \
         href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL v2</a>") +
         "</div>"
@@ -101,14 +101,17 @@ About::About(QWidget * parent) :
     libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
 #endif
 
-    const SDL_version *sdl_ver = SDL_Linked_Version();
-    libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL</a> version: %1.%2.%3<br>")
+    const SDL_version *sdl_ver;
+    SDL_version sdl_version;
+    SDL_GetVersion(&sdl_version);
+    sdl_ver = &sdl_version;
+    libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL2</a> version: %1.%2.%3<br>")
         .arg(sdl_ver->major)
         .arg(sdl_ver->minor)
         .arg(sdl_ver->patch));
 
     const SDL_version *sdlmixer_ver = Mix_Linked_Version();
-    libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_mixer</a> version: %1.%2.%3<br>")
+    libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL2_mixer</a> version: %1.%2.%3<br>")
         .arg(sdlmixer_ver->major)
         .arg(sdlmixer_ver->minor)
         .arg(sdlmixer_ver->patch));

@@ -12,7 +12,7 @@ Hurry.ogg
 Illgetyou.ogg
 Incoming.ogg
 Jump*.ogg
-JustYouwait.ogg
+Justyouwait.ogg
 Kamikaze.ogg
 Laugh.ogg
 Melon.ogg

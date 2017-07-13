@@ -226,7 +226,7 @@
     
     cell.textLabel.textColor = [UIColor lightYellowColor];
     //cell.textLabel.font = [UIFont fontWithName:@"Bradley Hand Bold" size:[UIFont labelFontSize]];
-    cell.textLabel.textAlignment = (IS_IPAD()) ? UITextAlignmentCenter : UITextAlignmentLeft;
+    cell.textLabel.textAlignment = (IS_IPAD()) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.detailTextLabel.text = (IS_IPAD()) ? nil : self.dictOfMissions[missionID][@"desc"];
@@ -267,7 +267,6 @@
 
 -(void) didReceiveMemoryWarning
 {
-    self.previewImage = nil;
     self.missionName = nil;
     self.listOfMissionIDs = nil;
     self.dictOfMissions = nil;

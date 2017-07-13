@@ -55,6 +55,9 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     CBTeam = new QComboBox(this);
     CBMission = new QComboBox(this);
     CBCampaign = new QComboBox(this);
+    CBTeam->setMaxVisibleItems(30);
+    CBMission->setMaxVisibleItems(30);
+    CBCampaign->setMaxVisibleItems(30);
 
     infoLayout->addWidget(btnPreview,0,1,2,1);
     infoLayout->addWidget(lbltitle,0,2,1,2);

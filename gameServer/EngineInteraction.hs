@@ -19,7 +19,7 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
 
 #if defined(OFFICIAL_SERVER)
-module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData) where
+module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData, prependGhostPoints) where
 #else
 module EngineInteraction(checkNetCmd, toEngineMsg) where
 #endif
@@ -33,9 +33,12 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.Map as Map
 import qualified Data.List as L
 import Data.Word
+import Data.Int
 import Data.Bits
 import Control.Arrow
 import Data.Maybe
+import Data.Binary
+import Data.Binary.Put
 -------------
 import CoreTypes
 import Utils
@@ -45,12 +48,13 @@ import Utils
     this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
     because standard 'catch' doesn't seem to catch decompression errors for some reason
 -}
-import qualified Codec.Compression.Zlib.Internal as Z
+import qualified Codec.Compression.Zlib.Internal as ZI
+import qualified Codec.Compression.Zlib as Z
 
 decompressWithoutExceptions :: BL.ByteString -> Either String BL.ByteString
 decompressWithoutExceptions = finalise
-                            . Z.foldDecompressStream cons nil err
-                            . Z.decompressWithErrors Z.zlibFormat Z.defaultDecompressParams
+                            . ZI.foldDecompressStream cons nil err
+                            . ZI.decompressWithErrors ZI.zlibFormat ZI.defaultDecompressParams
   where err _ msg = Left msg
         nil = Right []
         cons chunk = right (chunk :)
@@ -78,22 +82,25 @@ splitMessages :: B.ByteString -> [B.ByteString]
 splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt (1 + fromIntegral (BW.head b)) b)
 
 
-checkNetCmd :: B.ByteString -> (B.ByteString, B.ByteString, Maybe (Maybe B.ByteString))
-checkNetCmd msg = check decoded
+checkNetCmd :: [Word8] -> B.ByteString -> (B.ByteString, B.ByteString, Maybe (Maybe B.ByteString))
+checkNetCmd teamsIndexes msg = check decoded
     where
         decoded = liftM (splitMessages . BW.pack) $ Base64.decode $ B.unpack msg
         check Nothing = (B.empty, B.empty, Nothing)
         check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b, lft a)
         encode = B.pack . Base64.encode . BW.unpack . B.concat
-        isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m)
+        isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m) && not (isMalformed (B.head m) (B.tail m))
         lft = foldr l Nothing
         l m n = let m' = B.head $ B.tail m; tst = flip Set.member in
                       if not $ tst timedMessages m' then n
                         else if '+' /= m' then Just Nothing else Just . Just . B.pack . Base64.encode . BW.unpack $ m
         isNonEmpty = (/=) '+' . B.head . B.tail
-        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtgfhbc12345" ++ slotMessages
+        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,NpPwtgfhbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
         timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgfc12345" ++ slotMessages
+        isMalformed 'h' m | B.length m >= 3 = let hognum = m `B.index` 1; teamnum = m `BW.index` 2 in hognum < '1' || hognum > '8' || teamnum `L.notElem` teamsIndexes
+                          | otherwise = True
+        isMalformed _ _ = False
 
 #if defined(OFFICIAL_SERVER)
 replayToDemo :: [TeamInfo]
@@ -144,7 +151,7 @@ replayToDemo ti mParams prms msgs = if not sane then (Nothing, []) else (Just $ 
         schemeFlags = map (\(v, (n, m)) -> eml [n, " ", showB $ (readInt_ v) * m])
             $ filter (\(_, (n, _)) -> not $ B.null n)
             $ zip (drop (length gameFlagConsts) scheme) schemeParams
-        schemeAdditional = let scriptParam = B.tail $ scheme !! 41 in [eml ["e$scriptparam ", scriptParam] | not $ B.null scriptParam]
+        schemeAdditional = let scriptParam = B.tail $ scheme !! 42 in [eml ["e$scriptparam ", scriptParam] | not $ B.null scriptParam]
         ammoStr :: B.ByteString
         ammoStr = head . tail $ prms Map.! "AMMO"
         ammo = let l = B.length ammoStr `div` 4; ((a, b), (c, d)) = (B.splitAt l . fst &&& B.splitAt l . snd) . B.splitAt (l * 2) $ ammoStr in
@@ -173,17 +180,35 @@ drawnMapData =
           L.map (\m -> eml ["edraw ", BW.pack m])
         . L.unfoldr by200
         . BL.unpack
-        . either (const BL.empty) id
+        . unpackDrawnMap
+    where
+        by200 :: [a] -> Maybe ([a], [a])
+        by200 [] = Nothing
+        by200 m = Just $ L.splitAt 200 m
+
+unpackDrawnMap :: B.ByteString -> BL.ByteString
+unpackDrawnMap = either (const BL.empty) id
         . decompressWithoutExceptions
         . BL.pack
         . L.drop 4
         . fromMaybe []
         . Base64.decode
         . B.unpack
-    where
-        by200 :: [a] -> Maybe ([a], [a])
-        by200 [] = Nothing
-        by200 m = Just $ L.splitAt 200 m
+
+compressWithLength :: BL.ByteString -> BL.ByteString
+compressWithLength b = BL.drop 8 . encode . runPut $ do
+    put $ ((fromIntegral $ BL.length b)::Word32)
+    mapM_ putWord8 $ BW.unpack $ BL.toStrict $ Z.compress b
+
+packDrawnMap :: BL.ByteString -> B.ByteString
+packDrawnMap = B.pack
+    . Base64.encode
+    . BW.unpack
+    . BL.toStrict
+    . compressWithLength
+
+prependGhostPoints :: [(Int16, Int16)] -> B.ByteString -> B.ByteString
+prependGhostPoints pts dm = packDrawnMap $ (runPut $ forM_ pts $ \(x, y) -> put x >> put y >> putWord8 99) `BL.append` unpackDrawnMap dm
 
 schemeParams :: [(B.ByteString, Int)]
 schemeParams = [

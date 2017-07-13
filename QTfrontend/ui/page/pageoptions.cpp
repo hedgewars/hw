@@ -132,6 +132,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupTeams->layout()->setColumnStretch(0, 1);
 
             CBTeamName = new QComboBox(groupTeams);
+            CBTeamName->setMaxVisibleItems(50);
             groupTeams->layout()->addWidget(CBTeamName, 0, 0);
 
             BtnNewTeam = new QPushButton(groupTeams);
@@ -172,6 +173,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupSchemes->layout()->setColumnStretch(0, 1);
 
             SchemesName = new QComboBox(groupSchemes);
+            SchemesName->setMaxVisibleItems(50);
             groupSchemes->layout()->addWidget(SchemesName, 0, 0);
 
             SchemeNew = new QPushButton(groupSchemes);
@@ -203,6 +205,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupWeapons->layout()->setColumnStretch(0, 1);
 
             WeaponsName = new QComboBox(groupWeapons);
+            WeaponsName->setMaxVisibleItems(50);
             groupWeapons->layout()->addWidget(WeaponsName, 0, 0);
 
             WeaponNew = new QPushButton(groupWeapons);
@@ -256,6 +259,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupGame->layout()->addWidget(lblFullScreenRes, 1, 0);
 
             CBResolution = new QComboBox(groupGame);
+            CBResolution->setMaxVisibleItems(50);
             CBResolution->setFixedWidth(200);
             groupGame->layout()->addWidget(CBResolution, 1, 1, Qt::AlignLeft);
 
@@ -310,6 +314,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupGame->layout()->addWidget(lblStereo, 4, 0);
 
             CBStereoMode = new QComboBox(groupGame);
+            CBStereoMode->setMaxVisibleItems(50);
             CBStereoMode->addItem(QComboBox::tr("Disabled"));
             CBStereoMode->addItem(QComboBox::tr("Red/Cyan"));
             CBStereoMode->addItem(QComboBox::tr("Cyan/Red"));
@@ -618,6 +623,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupMisc->layout()->addWidget(labelLanguage, 0, 0);
 
             CBLanguage = new QComboBox(groupMisc);
+            CBLanguage->setMaxVisibleItems(50);
             groupMisc->layout()->addWidget(CBLanguage, 0, 1);
             QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
             CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
@@ -696,6 +702,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         // list of supported formats
 
         comboAVFormats = new QComboBox(groupVideoRec);
+        comboAVFormats->setMaxVisibleItems(50);
         groupVideoRec->layout()->addWidget(comboAVFormats, 0, 1, 1, 4);
         LibavInteraction::instance().fillFormats(comboAVFormats);
 
@@ -716,6 +723,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         // list of supported audio codecs
 
         comboAudioCodecs = new QComboBox(groupVideoRec);
+        comboAudioCodecs->setMaxVisibleItems(50);
         groupVideoRec->layout()->addWidget(comboAudioCodecs, 2, 1, 1, 3);
 
         // checkbox 'record audio'
@@ -741,6 +749,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         // list of supported video codecs
 
         comboVideoCodecs = new QComboBox(groupVideoRec);
+        comboVideoCodecs->setMaxVisibleItems(50);
         groupVideoRec->layout()->addWidget(comboVideoCodecs, 4, 1, 1, 4);
 
         // label for resolution

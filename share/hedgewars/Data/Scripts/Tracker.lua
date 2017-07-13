@@ -243,6 +243,18 @@ function runOnGears(func)
     end
 end
 
+-- Returns the first hog (alive or not) in the given clan
+function getFirstHogOfClan(clan)
+    for k, hogs in pairs(teams) do
+        for m, hog in ipairs(hogs) do
+            if GetHogClan(hog) == clan then
+                return hog
+            end
+        end
+    end
+    return nil
+end
+
 -- Run a function on all tracked hogs
 function runOnHogs(func)
     for k, hogs in pairs(teams) do

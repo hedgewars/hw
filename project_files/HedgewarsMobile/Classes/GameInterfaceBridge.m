@@ -241,21 +241,37 @@ static UIViewController *callingController;
 }
 
 +(void) startMissionGame:(NSString *)withScript {
+    NSString *seedCmd = [self seedCommand];
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
-    NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
+    NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", nil];
     [missionPath release];
+    [seedCmd release];
 
-    [self startGame:gtMission atPath:nil withOptions:missionLine];
-    [missionLine release];
+    [self startGame:gtMission atPath:nil withOptions:missionDict];
+    [missionDict release];
+}
+
++(NSString *) seedCommand {
+    // generate a seed
+    NSString *seed = [HWUtils seed];
+    NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
+    [seed release];
+    return seedCmd;
+}
+
++(void) startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName {
+    NSString *seedCmd = [self seedCommand];
+    NSString *campaignMissionPath = [[NSString alloc] initWithFormat:@"escript Missions/Campaign/%@/%@", campaignName, missionScriptName];
+    NSDictionary *campaignMissionDict = [[NSDictionary alloc] initWithObjectsAndKeys:campaignMissionPath, @"mission_command", seedCmd, @"seed_command", nil];
+    [campaignMissionPath release];
+    [seedCmd release];
+    
+    [self startGame:gtCampaign atPath:nil withOptions:campaignMissionDict];
+    [campaignMissionDict release];
 }
 
 +(void) startSimpleGame {
-    // generate a seed
-    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
-    CFRelease(uuid);
-    NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
-    [seed release];
+    NSString *seedCmd = [self seedCommand];
 
     // pick a random static map
     NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];

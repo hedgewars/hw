@@ -55,25 +55,20 @@ procedure MakeCrossHairs;
 procedure InitOffscreenOpenGL;
 {$ENDIF}
 
-{$IFDEF SDL2}
 procedure WarpMouse(x, y: Word); inline;
-{$ENDIF}
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 procedure SetSkyColor(r, g, b: real);
 
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
      uCommands, uPhysFSLayer, uDebug
-    {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
-    {$IF NOT DEFINED(SDL2) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
+    {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
-var
-{$IFDEF SDL2}
+//type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
+
+var 
     SDLwindow: PSDL_Window;
     SDLGLcontext: PSDL_GLContext;
-{$ELSE}
-    SDLPrimSurface: PSDL_Surface;
-{$ENDIF}
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
@@ -117,15 +112,19 @@ clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
-SDLTry(tmpsurf <> nil, true);
+if tmpsurf = nil then exit;
 tmpsurf:= doSurfaceConversion(tmpsurf);
-SDLTry(tmpsurf <> nil, true);
-SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
-SDL_FreeSurface(tmpsurf);
-finalRect.x:= X;
-finalRect.y:= Y;
-finalRect.w:= w + cFontBorder * 2 + 4;
-finalRect.h:= h + cFontBorder * 2;
+
+if tmpsurf <> nil then
+begin
+    SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
+    SDL_FreeSurface(tmpsurf);
+    finalRect.x:= X;
+    finalRect.y:= Y;
+    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.h:= h + cFontBorder * 2;
+end;
+
 WriteInRect:= finalRect
 end;
 
@@ -150,8 +149,10 @@ begin
     rr.h:= h;
 
     texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
-    TryDo(texsurf <> nil, errmsgCreateSurface, true);
-    TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+    if not checkFails(texsurf <> nil, errmsgCreateSurface, true) then
+        checkFails(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+    if not allOK then exit(nil);
 
     DrawRoundRect(@rr, cWhiteColor, cNearBlackColor, texsurf, true);
 
@@ -197,8 +198,9 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 32;
         r.h:= 32;
         texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-        TryDo(texsurf <> nil, errmsgCreateSurface, true);
-        TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        if not checkFails(texsurf <> nil, errmsgCreateSurface, true) then
+            checkFails(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        if not allOK then exit;
 
         r.w:= 26;
         r.h:= 19;
@@ -230,20 +232,20 @@ for t:= 0 to Pred(TeamsCount) do
                 Flag:= 'hedgewars';
 
         flagsurf:= LoadDataImageAltFile(ptFlags, Flag, 'hedgewars', ifNone);
-        TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
+        if not checkFails(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true) then
+        begin
+            case maxLevel of
+                1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0);
+                2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2);
+                3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5);
+                4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9);
+                5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
+                end;
 
-        case maxLevel of
-            1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0);
-            2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2);
-            3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5);
-            4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9);
-            5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
-            end;
-
-        copyToXY(flagsurf, texsurf, 2, 2);
-        SDL_FreeSurface(flagsurf);
-        flagsurf:= nil;
-
+            copyToXY(flagsurf, texsurf, 2, 2);
+            SDL_FreeSurface(flagsurf);
+            flagsurf:= nil;
+        end;
 
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
@@ -255,6 +257,8 @@ for t:= 0 to Pred(TeamsCount) do
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
         texsurf:= nil;
+
+        if not allOK then exit;
 
         AIKillsTex := RenderStringTex(ansistring(inttostr(stats.AIKills)), Clan^.Color, fnt16);
 
@@ -361,7 +365,7 @@ if (not reload) and (not cOnlyStats) then
             s:= cPathz[ptFonts] + '/' + Name;
             WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
             Handle:= TTF_OpenFontRW(rwopsOpenRead(s), true, Height);
-            SDLTry(Handle <> nil, true);
+            if SDLCheck(Handle <> nil, 'TTF_OpenFontRW', true) then exit;
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
             end;
@@ -392,6 +396,7 @@ for ii:= Low(TSprite) to High(TSprite) do
            and ((cCloudsNumber > 0) or (ii <> sprCloud))
            and ((vobCount > 0) or (ii <> sprFlake))
            and (savesurf or (not cOnlyStats)) // in stats-only only load those which are needed later
+           and allOK
             then
             begin
             if reload then
@@ -450,7 +455,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
-if not cOnlyStats then
+if (not cOnlyStats) and allOK then
     begin
     WriteNames(fnt16);
 
@@ -476,9 +481,9 @@ if not cOnlyStats then
     for ai:= Low(TAmmoType) to High(TAmmoType) do
         with Ammoz[ai] do
             begin
-            TryDo(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
+            if checkFails(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true) then exit;
             tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, PChar(trAmmo[NameId]), cWhiteColorChannels);
-            TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
+            if checkFails(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true) then exit;
             tmpsurf:= doSurfaceConversion(tmpsurf);
             FreeAndNilTexture(NameTex);
             NameTex:= Surface2Tex(tmpsurf, false);
@@ -573,7 +578,7 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-str(Hedgehog.Gear^.Health, s);
+s:= IntToStr(Hedgehog.Gear^.Health);
 FreeAndNilTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(ansistring(s), Hedgehog.Team^.Clan^.Color, fnt16)
 end;
@@ -610,7 +615,7 @@ begin
             // anounce that loading failed
             OutError(msgFailed, false);
 
-            SDLTry(false, (imageFlags and ifCritical) <> 0);
+            if SDLCheck(false, 'LoadImage', (imageFlags and ifCritical) <> 0) then exit;
             // rwops was already freed by IMG_Load_RW
             rwops:= nil;
             end else
@@ -630,7 +635,7 @@ begin
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
     if (imageFlags and ifTransparent) <> 0 then
-        TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        if checkFails(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true) then exit;
 
     WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
 
@@ -729,9 +734,6 @@ begin
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$ENDIF}
-{$IFNDEF SDL2} // vsync is default in SDL2
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, LongInt((cReducedQuality and rqDesyncVBlank) = 0));
-{$ENDIF}
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
@@ -742,50 +744,22 @@ begin
 end;
 
 procedure SetupOpenGL;
-var buf: array[byte] of char;
 begin
-
-{$IFDEF SDL2}
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_GetCurrentVideoDriver()) + ')');
-{$ELSE}
-    buf[0]:= char(0); // avoid compiler hint
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
-{$ENDIF}
 
-{$IFDEF MOBILE}
     // TODO: this function creates an opengles1.1 context
     // un-comment below and add proper logic to support opengles2.0
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, true);
+    if SDLCheck(SDLGLcontext <> nil, 'SDLGLcontext', true) then exit;
     SDL_GL_SetSwapInterval(1);
-{$ENDIF}
 
     RendererSetup();
-end;
 
-(*
-procedure UpdateProjection;
-var
-    s: GLfloat;
-begin
-    s:=cScaleFactor;
-    mProjection[0,0]:= s/cScreenWidth; mProjection[0,1]:=  0.0;             mProjection[0,2]:=0.0; mProjection[0,3]:=  0.0;
-    mProjection[1,0]:= 0.0;            mProjection[1,1]:= -s/cScreenHeight; mProjection[1,2]:=0.0; mProjection[1,3]:=  0.0;
-    mProjection[2,0]:= 0.0;            mProjection[2,1]:=  0.0;             mProjection[2,2]:=1.0; mProjection[2,3]:=  0.0;
-    mProjection[3,0]:= cStereoDepth;   mProjection[3,1]:=  s/2;             mProjection[3,2]:=0.0; mProjection[3,3]:=  1.0;
-
-{$IFDEF GL2}
-    UpdateModelviewProjection;
-{$ELSE}
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(@mProjection[0, 0]);
-    glMatrixMode(GL_MODELVIEW);
-{$ENDIF}
+// gl2 init/matrix code was here, but removed
 end;
-*)
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure AddProgress;
@@ -810,7 +784,7 @@ begin
         {$ENDIF}
         end;
 
-    TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
+    if checkFails(ProgrTex <> nil, 'Error - Progress Texure is nil!', true) then exit;
 
     RenderClear();
     if Step < numsquares then
@@ -911,7 +885,7 @@ inc(w, wa);
 inc(h, ha + 8);
 
 tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
-TryDo(tmpsurf <> nil, 'RenderHelpWindow: fail to create surface', true);
+if checkFails(tmpsurf <> nil, 'RenderHelpWindow: fail to create surface', true) then exit(nil);
 
 // render border and background
 r.x:= 0;
@@ -1016,41 +990,23 @@ if WeaponTooltipTex <> nil then
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
-{$IFDEF SDL2}
 procedure InitOffscreenOpenGL;
 begin
     // create hidden window
-    SDLwindow:= SDL_CreateWindow('hedgewars video rendering (SDL2 hidden window)',
+    SDLwindow:= SDL_CreateWindow(PChar('hedgewars video rendering (SDL2 hidden window)'),
                                  SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
                                  cScreenWidth, cScreenHeight,
                                  SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
-    SDLTry(SDLwindow <> nil, true);
+    if SDLCheck(SDLwindow <> nil, 'SDL_CreateWindow', true) then exit;
     SetupOpenGL();
 end;
-{$ELSE}
-procedure InitOffscreenOpenGL;
-var ArgCount: LongInt;
-    PrgName: pchar;
-begin
-    ArgCount:= 1;
-    PrgName:= 'hwengine';
-    glutInit(@ArgCount, @PrgName);
-    glutInitWindowSize(cScreenWidth, cScreenHeight);
-    // we do not need a window, but without this call OpenGL will not initialize
-    glutCreateWindow('hedgewars video rendering (glut hidden window)');
-    glutHideWindow();
-    // we do not need to set this callback, but it is required for GLUT3 compat
-    glutDisplayFunc(@SwapBuffers);
-    RendererSetup();
-end;
-{$ENDIF} // SDL2
 {$ENDIF} // USE_VIDEO_RECORDING
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     reinit: boolean = false;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
-    {$IFDEF SDL2}x, y: LongInt;{$ENDIF}
+    x, y: LongInt;
 begin
     if cOnlyStats then
         begin
@@ -1073,28 +1029,12 @@ begin
         end;
 
     AddFileLog('Preparing to change video parameters...');
-{$IFDEF SDL2}
     if SDLwindow = nil then
-{$ELSE}
-    if SDLPrimSurface = nil then
-{$ENDIF}
         begin
         // set window title
-    {$IFNDEF SDL2}
-        SDL_WM_SetCaption(_P'Hedgewars', nil);
-    {$ENDIF}
         WriteToConsole('Init SDL_image... ');
-        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+        if SDLCheck(IMG_Init(IMG_INIT_PNG) <> 0, 'IMG_Init', true) then exit;
         WriteLnToConsole(msgOK);
-        // load engine icon
-    {$IFNDEF DARWIN}
-        ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
-        if ico <> nil then
-            begin
-            SDL_WM_SetIcon(ico, 0);
-            SDL_FreeSurface(ico)
-            end;
-    {$ENDIF}
         end
     else
         begin
@@ -1119,10 +1059,6 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
-    {$IFNDEF SDL2}
-        SDL_FreeSurface(SDLPrimSurface);
-        SDLPrimSurface:= nil;
-    {$ENDIF}
 {$ENDIF}
         end;
 
@@ -1136,45 +1072,58 @@ begin
  *)
     SetupOpenGLAttributes();
 {$ENDIF}
-{$IFDEF SDL2}
+
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
     y:= SDL_WINDOWPOS_CENTERED_MASK;
-    // SDL_WINDOW_RESIZABLE makes the window resizable and
-    //  respond to rotation events on mobile devices
-    flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE;
-
-    {$IFDEF MOBILE}
-    if isPhone() then
-        SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
-    // no need for borders on mobile devices
-    flags:= flags or SDL_WINDOW_BORDERLESS;
-    {$ENDIF}
-
-    if cFullScreen then
-        flags:= flags or SDL_WINDOW_FULLSCREEN;
 
     if SDLwindow = nil then
-        SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
-    SDLTry(SDLwindow <> nil, true);
-{$ELSE}
-    flags:= SDL_OPENGL or SDL_RESIZABLE;
-    if cFullScreen then
-        flags:= flags or SDL_FULLSCREEN;
-    if not cOnlyStats then
         begin
-    {$IFDEF WIN32}
-        s:= SDL_getenv('SDL_VIDEO_CENTERED');
-        SDL_putenv('SDL_VIDEO_CENTERED=1');
-    {$ENDIF}
-        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, 0, flags);
-        SDLTry(SDLPrimSurface <> nil, true);
-    {$IFDEF WIN32}
-        SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));
-    {$ENDIF}
-        end;
-{$ENDIF}
 
+        // SDL_WINDOW_RESIZABLE makes the window resizable and
+        //  respond to rotation events on mobile devices
+        flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE;
+
+        {$IFDEF MOBILE}
+        if isPhone() then
+            SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
+        // no need for borders on mobile devices
+        flags:= flags or SDL_WINDOW_BORDERLESS;
+        {$ENDIF}
+
+        if cFullScreen then
+            flags:= flags or SDL_WINDOW_FULLSCREEN;
+
+        SDLwindow:= SDL_CreateWindow(PChar('Hedgewars'), x, y, cScreenWidth, cScreenHeight, flags);
+        end
+    // we're toggling
+    else if Length(s) = 0 then
+        begin
+        if cFullScreen then
+            begin
+            SDL_SetWindowSize(SDLwindow, cScreenWidth, cScreenHeight);
+            SDL_SetWindowFullscreen(SDLwindow, SDL_WINDOW_FULLSCREEN);
+            end
+        else
+            begin
+            SDL_SetWindowFullscreen(SDLwindow, 0);
+            SDL_SetWindowSize(SDLwindow, cScreenWidth, cScreenHeight);
+            SDL_SetWindowPosition(SDLwindow, x, y);
+            end;
+        updateViewLimits();
+        end;
+
+    if SDLCheck(SDLwindow <> nil, 'SDL_CreateWindow', true) then exit;
+
+    // load engine ico
+    {$IFNDEF DARWIN}
+    ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
+    if ico <> nil then
+        begin
+        SDL_SetWindowIcon(SDLwindow, ico);
+        SDL_FreeSurface(ico);
+        end;
+    {$ENDIF}
     SetupOpenGL();
 
     if reinit then
@@ -1197,7 +1146,6 @@ begin
         end;
 end;
 
-{$IFDEF SDL2}
 // for sdl1.2 we directly call SDL_WarpMouse()
 // for sdl2 we provide a SDL_WarpMouse() which just calls this function
 // this has the advantage of reducing 'uses' and 'ifdef' statements
@@ -1206,17 +1154,12 @@ procedure WarpMouse(x, y: Word); inline;
 begin
     SDL_WarpMouseInWindow(SDLwindow, x, y);
 end;
-{$ENDIF}
 
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 begin
     if GameType = gmtRecord then
         exit;
-{$IFDEF SDL2}
     SDL_GL_SwapWindow(SDLwindow);
-{$ELSE}
-    SDL_GL_SwapBuffers();
-{$ENDIF}
 end;
 
 procedure SetSkyColor(r, g, b: real);
@@ -1244,12 +1187,8 @@ begin
     // init all count texture pointers
     for i:= Low(CountTexz) to High(CountTexz) do
         CountTexz[i] := nil;
-{$IFDEF SDL2}
     SDLwindow:= nil;
     SDLGLcontext:= nil;
-{$ELSE}
-    SDLPrimSurface:= nil;
-{$ENDIF}
 
     prevHat:= 'NoHat';
     tmpHatSurf:= nil;
@@ -1271,10 +1210,8 @@ begin
             end;
 
     TTF_Quit();
-{$IFDEF SDL2}
     SDL_GL_DeleteContext(SDLGLcontext);
     SDL_DestroyWindow(SDLwindow);
-{$ENDIF}
     SDL_Quit();
 end;
 end.

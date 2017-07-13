@@ -60,6 +60,7 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     setModal(true);
     setWindowFlags(Qt::Sheet);
     setWindowModality(Qt::WindowModal);
+    setWindowTitle(tr("Choose a hat"));
     setMinimumSize(550, 430);
     resize(550, 430);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

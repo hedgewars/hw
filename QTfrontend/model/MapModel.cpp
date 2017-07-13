@@ -32,12 +32,26 @@ MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", ""
 MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", "", false};
 MapModel::MapInfo MapModel::MapInfoPerlin = {MapModel::GeneratedMaze, "+perlin+", "", 0, "", "", "", false};
 MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", "", false};
-
+MapModel::MapInfo MapModel::MapInfoForts = {MapModel::FortsMap, "+forts+", "", 0, "", "", "", false};
 
 MapModel::MapModel(MapType maptype, QObject *parent) : QStandardItemModel(parent)
 {
     m_maptype = maptype;
     m_loaded = false;
+    m_filteredNoDLC = NULL;
+}
+
+QSortFilterProxyModel * MapModel::withoutDLC()
+{
+    if (m_filteredNoDLC == NULL)
+    {
+        m_filteredNoDLC = new QSortFilterProxyModel(this);
+        m_filteredNoDLC->setSourceModel(this);
+        // filtering based on IsDlcRole would be nicer
+        // but seems this model can only do string-based filtering :|
+        m_filteredNoDLC->setFilterRegExp(QRegExp("^[^*]"));
+    }
+    return m_filteredNoDLC;
 }
 
 bool MapModel::loadMaps()

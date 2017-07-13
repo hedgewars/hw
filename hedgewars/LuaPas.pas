@@ -805,7 +805,7 @@ procedure lua_getref(L : Plua_State; ref : LongInt);
 implementation
 
 uses
-  SysUtils;
+  uUtils;
 
 (*****************************************************************************)
 (*                            luaconfig.h                                    *)

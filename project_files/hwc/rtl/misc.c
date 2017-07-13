@@ -78,8 +78,8 @@ astring fpcrtl_strappendA(astring s, char c)
 {
     if(s.len < MAX_ANSISTRING_LENGTH)
     {
-        s.s[s.len] = c;
         ++s.len;
+        s.s[s.len] = c;
     }
 
     return s;

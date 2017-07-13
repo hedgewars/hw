@@ -39,7 +39,9 @@ handleCmd_lobby ["LIST"] = do
     let cl = irnc `client` ci
     rooms <- allRoomInfos
     let roomsInfoList = concatMap (\r -> roomInfo (clientProto cl) (maybeNick . liftM (client irnc) $ masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
-    return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
+    return $ if hasAskedList cl then [] else
+        [ ModifyClient (\c -> c{hasAskedList = True})
+        , AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
 
 handleCmd_lobby ["CHAT", msg] = do
     n <- clientNick
@@ -91,13 +93,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning $ loc "No such room"]
             else if (not sameProto) && (not $ isAdministrator cl) then
             [Warning $ loc "Room version incompatible to your hedgewars version"]
-            else if isRestrictedJoins jRoom then
+            else if isRestrictedJoins jRoom && not (hasSuperPower cl) then
             [Warning $ loc "Joining restricted"]
             else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) && not (isAdministrator cl) then
             [Warning $ loc "Registered users only"]
             else if isBanned then
             [Warning $ loc "You are banned in this room"]
-            else if roomPassword /= password jRoom then
+            else if roomPassword /= password jRoom  && not (hasSuperPower cl) then
             [NoticeMessage WrongPassword]
             else
             (

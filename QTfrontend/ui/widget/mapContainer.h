@@ -85,6 +85,7 @@ class HWMapContainer : public QWidget
         void updateModelViews();
         void onPreviewMapDestroyed(QObject * map);
         void setMaster(bool master);
+        void setRandomWithoutDLC(bool withoutDLC);
 
     signals:
         void seedChanged(const QString & seed);
@@ -154,6 +155,7 @@ class HWMapContainer : public QWidget
         QPushButton * btnLoadMap;
         QPushButton * btnEditMap;
         QPushButton * btnRandomize;
+        QPushButton * btnRandTheme;
         QString selectedTheme;
         QPushButton * btnSeed;
         bool m_master;
@@ -161,6 +163,7 @@ class HWMapContainer : public QWidget
         bool m_previewEnabled;
         bool m_missionsViewSetup;
         bool m_staticViewSetup;
+        bool m_withoutDLC;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
@@ -172,6 +175,7 @@ class HWMapContainer : public QWidget
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
         void setMapInfo(MapModel::MapInfo mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
+        void updateHelpTexts(MapModel::MapType type);
         void updatePreview();
         void updateThemeButtonSize();
         void setupMissionMapsView();

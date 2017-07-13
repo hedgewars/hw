@@ -85,6 +85,7 @@
 01:22=Tryb AFK
 01:23=Automatyczne wyłączanie kamery
 01:24=Automatyczne włączanie kamery
+01:24=Automatyczna kamera włączona
 
 ; Event messages
 ; Hog (%1) died
@@ -532,7 +533,7 @@
 03:39=Środek transportu
 03:40=Płonący granat
 03:41=Wielki fan Wróbla Ćwirka
-03:42=I'm making a note here...
+03:42=Robię notatki tutaj...
 03:43=Chopin to przy tym pikuś
 03:44=Najlepiej spożyć przed: 1923
 03:45=Siła nauki
@@ -549,6 +550,7 @@
 03:55=Przełammy lody!
 03:56=Nie przytnij sobie igieł!
 03:57=Narzędzie
+03:58=Pływająca bomba zbliżeniowa
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą

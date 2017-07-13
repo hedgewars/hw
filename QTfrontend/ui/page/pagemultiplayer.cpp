@@ -46,7 +46,7 @@ QLayout * PageMultiplayer::footerLayoutLeftDefinition()
 {
     QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
 
-    btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true);
+    btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true, Qt::AlignBottom);
     btnSetup->setWhatsThis(tr("Edit game preferences"));
 
     return bottomLeftLayout;
@@ -60,6 +60,7 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStartMPGame = new QPushButton();
     BtnStartMPGame->setText(tr("Start"));
+    BtnStartMPGame->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
     BtnStartMPGame->setMinimumWidth(sz.width() + 60);
     BtnStartMPGame->setIcon(lp);
     BtnStartMPGame->setFixedHeight(50);
@@ -68,7 +69,7 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
     BtnStartMPGame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     footerLayout->addStretch();
-    footerLayout->addWidget(BtnStartMPGame);
+    footerLayout->addWidget(BtnStartMPGame, 0, Qt::AlignBottom);
 
     return footerLayout;
 }

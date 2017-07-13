@@ -21,7 +21,6 @@ Executable hedgewars-server
     containers,
     vector,
     bytestring,
-    bytestring-show,
     network >= 2.3,
     random,
     time,

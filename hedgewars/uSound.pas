@@ -33,7 +33,7 @@ unit uSound;
  *                   The channel id can be used to stop a specific sound loop.
  *)
 interface
-uses SDLh, uConsts, uTypes, SysUtils;
+uses SDLh, uConsts, uTypes;
 
 procedure preInitModule;
 procedure initModule;
@@ -110,7 +110,7 @@ var MusicFN: shortstring; // music file name
 var Volume: LongInt;
     SoundTimerTicks: Longword;
 implementation
-uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
+uses uVariables, uConsole, uCommands, uChat, uUtils, uDebug, uPhysFSLayer;
 
 const chanTPU = 32;
 var cInitVolume: LongInt;
@@ -252,7 +252,10 @@ var cInitVolume: LongInt;
             (FileName:               'TARDIS.ogg'; Path: ptSounds),// sndTardis
             (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds),// sndFrozenHogImpact
             (FileName:             'ice_beam.ogg'; Path: ptSounds),// sndIceBeam
-            (FileName:           'hog_freeze.ogg'; Path: ptSounds) // sndHogFreeze
+            (FileName:           'hog_freeze.ogg'; Path: ptSounds),// sndHogFreeze
+            (FileName:       'airmine_impact.ogg'; Path: ptSounds),// sndAirMineImpact
+            (FileName:         'knife_impact.ogg'; Path: ptSounds),// sndKnifeImpact
+            (FileName:            'extratime.ogg'; Path: ptSounds) // sndExtraTime
             );
 
 
@@ -290,10 +293,10 @@ begin
             exit(AskForVoicepack('Default'));
         end;
 
-    while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
+    while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') and (i < cMaxTeams) do
         begin
         inc(i);
-        TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
+        //TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
         end;
 
     voicepacks[i].name:= name;
@@ -310,7 +313,7 @@ begin
     success:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
     if success then
-        success:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
+        success:= Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, channels, 1024) = 0;
 
     if success then
         WriteLnToConsole(msgOK)
@@ -322,10 +325,11 @@ begin
     end;
 
     WriteToConsole('Init SDL_mixer... ');
-    SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
+    if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
+    previousVolume:= cInitVolume;
     ChangeVolume(cInitVolume);
 end;
 
@@ -424,7 +428,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
+            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
             end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
@@ -523,7 +527,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
+            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
             end;
         if fadems > 0 then
@@ -574,10 +578,10 @@ begin
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
-    SDLTry(Mus <> nil, false);
+    SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
     WriteLnToConsole(msgOK);
 
-    SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
+    SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;
 
 procedure SetVolume(vol: LongInt);

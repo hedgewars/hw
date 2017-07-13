@@ -1,9 +1,5 @@
 #libraries have already been searched in main CMakeLists.txt
 
-# TODO: this check is only for SDL < 2
-# fpc will take care of linking but we need to have this library installed
-find_package(GLUT REQUIRED)
-
 include_directories(${LIBAV_INCLUDE_DIR})
 
 add_library(avwrapper avwrapper.c)

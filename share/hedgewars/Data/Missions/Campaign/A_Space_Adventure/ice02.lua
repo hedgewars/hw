@@ -22,7 +22,7 @@ local GREEN = 0x38d61cff
 local challengeObjectives = loc("To win the game you have to pass into the rings in time")..
 	"|"..loc("You'll get extra time in case you need it when you pass a ring").."|"..
 	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer").."|"..
-	loc("Use space button twice to change flying saucer while floating in mid-air")
+	loc("Use the attack key twice to change the flying saucer while floating in mid-air")
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -99,7 +99,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
@@ -138,10 +138,10 @@ function onGameTick20()
 			totalTime = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
-			SendStat(siGameResult, loc("Hoorah! You are a champion!"))
-			SendStat(siCustomAchievement, loc("You completed the mission in "..totalTime.." seconds"))
-			SendStat(siCustomAchievement, loc("You have used "..saucersUsed.." flying saucers"))
-			SendStat(siCustomAchievement, loc("You had "..saucersLeft.." more flying saucers left"))
+			SendStat(siGameResult, loc("Hooray! You are a champion!"))
+			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds.", totalTime)))
+			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers.", saucersUsed)))
+			SendStat(siCustomAchievement, string.format(loc("You had %d additional flying saucers left"), saucersLeft))
 			SendStat(siPlayerKills,'1',teamA.name)
 			EndGame()
 		end
@@ -188,13 +188,13 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, some story telling
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet flying saucer stadium..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic stadium of saucer flying..."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet Flying Saucer Stadium ..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic stadium of saucer flying."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream to come here one day in order to compete with the best!"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best..."), SAY_SAY, 6000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass through the rings..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best."), SAY_SAY, 6000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass through the rings."), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Pause the game by pressing the pause key (default \"P\") for more details"), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("... can you do it?"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Can you do it?"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = startFlying, args = {hero.gear}})
 end
@@ -260,10 +260,10 @@ end
 
 function heroLost()
 	SendStat(siGameResult, loc("Oh man! Learn how to fly!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time"))
-	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring"))
-	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers"))
-	SendStat(siCustomAchievement, loc("Use space button twice to change flying saucer while being on air"))
+	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time."))
+	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring."))
+	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers."))
+	SendStat(siCustomAchievement, loc("Use the attack key twice to change the flying saucer while being in air."))
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end

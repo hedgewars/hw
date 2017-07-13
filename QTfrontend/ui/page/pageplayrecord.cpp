@@ -40,11 +40,6 @@ QLayout * PagePlayDemo::bodyLayoutDefinition()
     pageLayout->setColumnStretch(2, 1);
     pageLayout->setRowStretch(2, 100);
 
-    BtnPlayDemo = new QPushButton(this);
-    BtnPlayDemo->setFont(*font14);
-    BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-    pageLayout->addWidget(BtnPlayDemo, 3, 2);
-
     BtnRenameRecord = new QPushButton(this);
     BtnRenameRecord->setText(QPushButton::tr("Rename"));
     pageLayout->addWidget(BtnRenameRecord, 0, 2);
@@ -58,6 +53,23 @@ QLayout * PagePlayDemo::bodyLayoutDefinition()
     pageLayout->addWidget(DemosList, 0, 1, 3, 1);
 
     return pageLayout;
+}
+
+QLayout * PagePlayDemo::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
+    BtnPlayDemo = addButton(tr("Play demo"), bottomLayout, 0, false, Qt::AlignBottom);
+    const QIcon& lp = QIcon(":/res/Start.png");
+    QSize sz = lp.actualSize(QSize(65535, 65535));
+    BtnPlayDemo->setMinimumWidth(sz.width());
+    BtnPlayDemo->setIcon(lp);
+    BtnPlayDemo->setFixedHeight(50);
+    BtnPlayDemo->setIconSize(sz);
+    BtnPlayDemo->setFlat(true);
+    BtnPlayDemo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    return bottomLayout;
 }
 
 void PagePlayDemo::connectSignals()
@@ -85,12 +97,14 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
         dir.cd("Demos");
         extension = "hwd";
         BtnPlayDemo->setText(QPushButton::tr("Play demo"));
+        BtnPlayDemo->setWhatsThis(tr("Play the selected demo"));
     }
     else
     {
         dir.cd("Saves");
         extension = "hws";
         BtnPlayDemo->setText(QPushButton::tr("Load"));
+        BtnPlayDemo->setWhatsThis(tr("Load the selected game"));
     }
     dir.setFilter(QDir::Files);
 

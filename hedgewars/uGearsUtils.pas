@@ -274,8 +274,7 @@ begin
                     // was considering pulsing on attack, Tiy thinks it should be permanent while in play
                     //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-                    str(vampDmg, s);
-                    s:= '+' + s;
+                    s:= '+' + IntToStr(vampDmg);
                     AddCaption(ansistring(s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
@@ -927,13 +926,42 @@ if cnt2 > 0 then
         AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
         end
     end
-    else
+else
     begin
     OutError('Can''t find place for Gear', false);
     if Gear^.Kind = gtHedgehog then
-        Gear^.Hedgehog^.Effects[heResurrectable] := 0;
-    DeleteGear(Gear);
-    Gear:= nil
+        begin
+        cnt:= 0;
+        if GameTicks = 0 then
+            begin
+            //AddFileLog('Trying to make a hole');
+            while (cnt < 1000) do
+                begin
+                inc(cnt);
+                x:= left+GetRandom(right-left-2*cHHRadius)+cHHRadius;
+                y:= topY+GetRandom(LAND_HEIGHT-topY-64)+48;
+                if NoGearsToAvoid(x, y, 100 div max(1,cnt div 100), 100 div max(1,cnt div 100)) then
+                    begin
+                    Gear^.State:= Gear^.State or gsttmpFlag;
+                    Gear^.X:= int2hwFloat(x);
+                    Gear^.Y:= int2hwFloat(y);
+                    AddFileLog('Picked a spot for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')');
+                    cnt:= 2000
+                    end
+                end;
+            end;
+        if cnt < 2000 then
+            begin
+            Gear^.Hedgehog^.Effects[heResurrectable] := 0;
+            DeleteGear(Gear);
+            Gear:= nil
+            end
+        end
+    else
+        begin
+        DeleteGear(Gear);
+        Gear:= nil
+        end
     end
 end;
 
@@ -1074,7 +1102,7 @@ while t <> nil do
                     if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
-                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        dmg:= ModifyDamage(min(r - dist, Gear^.Boom), t);
                         end;
                     if dmg > 0 then
                         begin
@@ -1102,7 +1130,7 @@ while t <> nil do
                     if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
-                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        dmg:= ModifyDamage(min(r - dist, Gear^.Boom), t);
                         end;
                     if dmg > 0 then
                         begin
@@ -1141,6 +1169,8 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
+    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot]) and (PGear(Ammo^.Data) = Gear) then
+        continue;
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
        (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
         Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
@@ -1481,6 +1511,9 @@ if WorldEdge = weNone then exit(false);
 if (hwRound(Gear^.X) < LongInt(leftX)) or
    (hwRound(Gear^.X) > LongInt(rightX)) then
     begin
+    // bullets can now hurt the hog that fired them
+    if (WorldEdge <> weSea) and (Gear^.Kind in [gtDEagleShot, gtSniperRifleShot]) then
+        Gear^.Data:= nil;
     if WorldEdge = weWrap then
         begin
         if (hwRound(Gear^.X) < LongInt(leftX)) then

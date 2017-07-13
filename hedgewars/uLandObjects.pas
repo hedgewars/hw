@@ -34,7 +34,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
-     , uTypes, uVariables, uUtils, uDebug, SysUtils
+     , uTypes, uVariables, uDebug, uUtils
      , uPhysFSLayer;
 
 const MaxRects = 512;
@@ -109,10 +109,14 @@ begin
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    if SDLCheck(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true) then exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'Land object should be 32bit', true);
+if checkFails(bpp = 4, 'Land object should be 32bit', true) then
+begin
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+end;
 
 if Width = 0 then
     Width:= Image^.w;
@@ -160,10 +164,14 @@ begin
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    if SDLCheck(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true) then exit;
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp = 4, 'Land object should be 32bit', true);
+if checkFails(bpp = 4, 'Land object should be 32bit', true) then
+begin
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+end;
 
 p:= Image^.pixels;
 mp:= Mask^.pixels;
@@ -203,13 +211,13 @@ with Rects^[RectCount] do
     h:= h1
     end;
 inc(RectCount);
-TryDo(RectCount < MaxRects, 'AddRect: overflow', true)
+checkFails(RectCount < MaxRects, 'AddRect: overflow', true)
 end;
 
 procedure InitRects;
 begin
-RectCount:= 0;
-New(Rects)
+    RectCount:= 0;
+    New(Rects)
 end;
 
 procedure FreeRects;
@@ -365,7 +373,7 @@ with Obj do
 CheckCanPlace:= bRes;
 end;
 
-function TryPut(var Obj: TThemeObject): boolean; overload;
+function TryPut(var Obj: TThemeObject): boolean;
 const MaxPointsIndex = 2047;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
@@ -386,12 +394,12 @@ with Obj do
                 begin
                 ar[cnt].x:= x;
                 ar[cnt].y:= y;
-                inc(cnt);
-                if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
+                if cnt >= MaxPointsIndex then // buffer is full, do not check the rest land
                     begin
                     y:= LAND_HEIGHT;
                     x:= LAND_WIDTH;
                     end
+                    else inc(cnt);
                 end;
             inc(y, 3);
         until y >= LAND_HEIGHT - Height;
@@ -412,7 +420,7 @@ with Obj do
 TryPut:= bRes;
 end;
 
-function TryPut(var Obj: TSprayObject; Surface: PSDL_Surface): boolean; overload;
+function TryPut2(var Obj: TSprayObject; Surface: PSDL_Surface): boolean;
 const MaxPointsIndex = 8095;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
@@ -420,7 +428,7 @@ var x, y: Longword;
     r: TSDL_Rect;
     bRes: boolean;
 begin
-TryPut:= false;
+TryPut2:= false;
 cnt:= 0;
 with Obj do
     begin
@@ -439,18 +447,19 @@ with Obj do
                 begin
                 ar[cnt].x:= x;
                 ar[cnt].y:= y;
-                inc(cnt);
-                if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
+                if cnt >= MaxPointsIndex then // buffer is full, do not check the rest land
                     begin
-                    y:= 5000;
-                    x:= 5000;
+                    y:= $FF000000;
+                    x:= $FF000000;
                     end
+                    else inc(cnt);
                 end;
             inc(y, 12);
         until y >= LAND_HEIGHT - Height - 8;
         inc(x, getrandom(12) + 12)
     until x >= LAND_WIDTH - Width;
     bRes:= cnt <> 0;
+AddFileLog('CHECKPOINT 004');
     if bRes then
         begin
         i:= getrandom(cnt);
@@ -464,7 +473,7 @@ with Obj do
         end
     else Maxcnt:= 0
     end;
-TryPut:= bRes;
+TryPut2:= bRes;
 end;
 
 
@@ -511,12 +520,12 @@ if GrayScale then
 s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 f:= pfsOpenRead(s);
-TryDo(f <> nil, 'Bad data or cannot access file ' + s, true);
+if checkFails(f <> nil, 'Bad data or cannot access file ' + s, true) then exit;
 
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
 
-while not pfsEOF(f) do
+while (not pfsEOF(f)) and allOK do
     begin
     pfsReadLn(f, s);
     if Length(s) = 0 then
@@ -845,13 +854,13 @@ begin
         exit;
     WriteLnToConsole('Adding theme objects...');
 
-    for i:=0 to ThemeObjects.Count do
+    for i:=0 to Pred(ThemeObjects.Count) do
         ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
 
     repeat
         t := getrandom(ThemeObjects.Count);
         b := false;
-        for i:=0 to ThemeObjects.Count do
+        for i:= 0 to Pred(ThemeObjects.Count) do
             begin
             ii := (i+t) mod ThemeObjects.Count;
 
@@ -869,18 +878,18 @@ begin
         exit;
     WriteLnToConsole('Adding spray objects...');
 
-    for i:=0 to SprayObjects.Count do
+    for i:= 0 to Pred(SprayObjects.Count) do
         SprayObjects.objs[i].Maxcnt := max(1, (SprayObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
 
     repeat
         t := getrandom(SprayObjects.Count);
         b := false;
-        for i:=0 to SprayObjects.Count do
+        for i:= 0 to Pred(SprayObjects.Count) do
             begin
             ii := (i+t) mod SprayObjects.Count;
 
             if SprayObjects.objs[ii].Maxcnt <> 0 then
-                b := b or TryPut(SprayObjects.objs[ii], Surface)
+                b := b or TryPut2(SprayObjects.objs[ii], Surface)
             end;
     until not b;
 end;
@@ -915,7 +924,6 @@ end;
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 begin
 InitRects;
-//AddSprayObjects(Surface, SprayObjects, 12);
 AddSprayObjects(Surface, SprayObjects);
 FreeRects
 end;

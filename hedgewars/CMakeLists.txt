@@ -1,15 +1,17 @@
-find_package(SDL1or2)
-find_package(SDL_image)
-find_package(SDL_net)
-find_package(SDL_ttf)
-find_package(SDL_mixer)
+enable_language(Pascal)
+
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_net REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 include(CheckLibraryExists)
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 
 enable_language(Pascal)
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000 -B")
 add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
 add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Xs")
 if(UNIX)
@@ -122,22 +124,16 @@ add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH}")
 
 #DEPENDECIES AND EXECUTABLES SECTION
 if(APPLE AND (NOT BUILD_ENGINE_LIBRARY))
-    #on OSX we need to provide the SDL_main() function when building as
-    #executable and the entry point too
-    add_subdirectory(sdlmain)
-    list(APPEND HW_LINK_LIBS SDLmain)
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdlmain")
-    add_flag_append(CMAKE_Pascal_FLAGS "-XMSDL_main")
     #OpenGL deps
     add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kCocoa")
     add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kOpenGL")
 
     #set the correct library or framework style depending on the main SDL
-    string(FIND "${SDL_LIBRARY}" "dylib" sdl_framework)
+    string(FIND "${SDL2_LIBRARY}" "dylib" sdl_framework)
     if(${sdl_framework} GREATER -1)
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdl -k-lsdl_image -k-lsdl_mixer -k-lsdl_ttf -k-lsdl_net")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdl2 -k-lsdl2_image -k-lsdl2_mixer -k-lsdl2_ttf -k-lsdl2_net")
     else()
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kSDL -k-framework -kSDL_image -k-framework -kSDL_mixer -k-framework -kSDL_net -k-framework -kSDL_net -k-framework -kSDL_ttf")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kSDL2 -k-framework -kSDL2_image -k-framework -kSDL2_mixer -k-framework -kSDL2_net -k-framework -kSDL2_net -k-framework -kSDL2_ttf")
     endif()
 endif()
 
@@ -145,8 +141,6 @@ if(LIBAV_FOUND)
     add_subdirectory(avwrapper)
     list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
-    #only for SDL < 2, linking carried out by fpc
-    find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
 endif()
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
@@ -183,22 +177,6 @@ else()
 endif()
 list(APPEND HW_LINK_LIBS physlayer)
 
-
-#Mix_Init/Mix_Quit from SDL_mixer 1.2.10
-check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
-if(HAVE_MIXINIT)
-    add_definitions(-dSDL_MIXER_NEWER)
-endif(HAVE_MIXINIT)
-
-#IMG_Init/IMG_Quit from SDL_image 1.2.8
-check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
-if(HAVE_IMGINIT)
-    add_definitions(-dSDL_IMAGE_NEWER)
-endif(HAVE_IMGINIT)
-
-if(${SDL_VERSION} VERSION_GREATER 1.3)
-    add_definitions(-dSDL2)
-endif()
 
 #opengl 2
 IF(GL2)

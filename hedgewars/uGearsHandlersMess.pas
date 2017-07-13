@@ -86,7 +86,7 @@ procedure doStepKamikazeIdle(Gear: PGear);
 procedure doStepKamikaze(Gear: PGear);
 procedure doStepCakeExpl(Gear: PGear);
 procedure doStepCakeDown(Gear: PGear);
-procedure doStepCakeWork(Gear: PGear);
+procedure doStepCakeWalk(Gear: PGear);
 procedure doStepCakeUp(Gear: PGear);
 procedure doStepCakeFall(Gear: PGear);
 procedure doStepCake(Gear: PGear);
@@ -128,7 +128,7 @@ procedure doStepHammerHit(Gear: PGear);
 procedure doStepResurrectorWork(Gear: PGear);
 procedure doStepResurrector(Gear: PGear);
 procedure doStepNapalmBomb(Gear: PGear);
-procedure doStepStructure(Gear: PGear);
+//procedure doStepStructure(Gear: PGear);
 procedure doStepTardisWarp(Gear: PGear);
 procedure doStepTardis(Gear: PGear);
 procedure updateFuel(Gear: PGear);
@@ -136,7 +136,7 @@ procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
 procedure doStepIceGun(Gear: PGear);
 procedure doStepAddAmmo(Gear: PGear);
 procedure doStepGenericFaller(Gear: PGear);
-procedure doStepCreeper(Gear: PGear);
+//procedure doStepCreeper(Gear: PGear);
 procedure doStepKnife(Gear: PGear);
 
 var
@@ -343,7 +343,7 @@ begin
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
     if (gX < min(LAND_WIDTH div -2, -2048))
     or (gX > max(LAND_WIDTH * 3 div 2, 6144)) then
-        Gear^.State := Gear^.State or gstCollision;
+        Gear^.Message := Gear^.Message or gmDestroy;
 
     if Gear^.dY.isNegative then
         begin
@@ -464,11 +464,12 @@ begin
     if Gear^.AdvBounce > 1 then
         dec(Gear^.AdvBounce);
 
-    if isFalling then
+    if isFalling and (Gear^.State and gstNoGravity = 0) then
         begin
-        if Gear^.State and gstNoGravity = 0 then
-            Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then
+        Gear^.dY := Gear^.dY + cGravity;
+        if (GameFlags and gfMoreWind <> 0) and 
+           ((xland or land) = 0) and
+           ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
 
@@ -482,10 +483,7 @@ begin
         Gear^.State := Gear^.State or gstMoving;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
-        begin
         Gear^.State := Gear^.State or gstCollision;
-        AddFileLog('no more bounce for you!');
-        end;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
@@ -515,10 +513,10 @@ begin
     dec(Gear^.Timer);
     if Gear^.Timer = 1000 then // might need adjustments
         case Gear^.Kind of
-            gtGrenade: makeHogsWorry(Gear^.X, Gear^.Y, 50);
-            gtClusterBomb: makeHogsWorry(Gear^.X, Gear^.Y, 20);
-            gtWatermelon: makeHogsWorry(Gear^.X, Gear^.Y, 75);
-            gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, 90);
+            gtGrenade,
+            gtClusterBomb,
+            gtWatermelon,
+            gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, Gear^.Boom);
             gtGasBomb: makeHogsWorry(Gear^.X, Gear^.Y, 50);
         end;
 
@@ -526,7 +524,7 @@ begin
         begin
         CheckCollision(Gear);
         if (Gear^.State and gstCollision) <> 0 then
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx);
         end;
 
     if (Gear^.Kind = gtGasBomb) and ((GameTicks mod 200) = 0) then
@@ -539,14 +537,14 @@ begin
     if Gear^.Timer = 0 then
         begin
         case Gear^.Kind of
-            gtGrenade: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
-            gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, Gear^.Hedgehog, EXPLAutoSound);
+            gtGrenade: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+            gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
             gtClusterBomb:
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
                 gdX:= Gear^.dX;
-                doMakeExplosion(x, y, 20, Gear^.Hedgehog, EXPLAutoSound);
+                doMakeExplosion(x, y, Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 4 do
                     begin
                     dX := rndSign(GetRandomf * _0_1) + gdX / 5;
@@ -559,7 +557,7 @@ begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
                 gdX:= Gear^.dX;
-                doMakeExplosion(x, y, 75, Gear^.Hedgehog, EXPLAutoSound);
+                doMakeExplosion(x, y, Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
                     dX := rndSign(GetRandomf * _0_1) + gdX / 5;
@@ -572,7 +570,7 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
-                doMakeExplosion(x, y, 90, Gear^.Hedgehog, EXPLAutoSound);
+                doMakeExplosion(x, y, Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
 
                 for i:= 0 to 127 do
                     begin
@@ -592,7 +590,7 @@ begin
                 end;
             gtGasBomb:
                 begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 2 do
                     begin
                     x:= GetRandom(60);
@@ -701,13 +699,12 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Timer, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
     end;
 
-    if (Gear^.Kind = gtMelonPiece)
-    or (Gear^.Kind = gtBall) then
+    if (Gear^.Kind = gtMelonPiece) then
         CalcRotationDirAngle(Gear)
     else if (GameTicks and $1F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
@@ -722,7 +719,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
         end;
@@ -745,7 +742,7 @@ begin
     CalcRotationDirAngle(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        kick:= hwRound((hwAbs(gdX)+hwAbs(gdY)) * _20);
+        kick:= hwRound((hwAbs(gdX)+hwAbs(gdY)) * Gear^.Boom / 10000);
         Gear^.dX:= gdX;
         Gear^.dY:= gdY;
         AmmoShove(Gear, 0, kick);
@@ -1031,13 +1028,13 @@ begin
         end
     else
         begin
-        if (GameTicks and $F) = 0 then
+        if (Gear^.Timer and $F) = 0 then
             begin
-            if (GameTicks and $30) = 0 then
+            if (Gear^.Timer and $3F) = 0 then
                 AddVisualGear(gX, gY, vgtBeeTrace);
 
-            Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
-            Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
+            Gear^.dX := Gear^.dX + _0_000064 * (Gear^.Target.X - gX);
+            Gear^.dY := Gear^.dY + _0_000064 * (Gear^.Target.Y - gY);
             // make sure new speed isn't higher than original one (which we stored in Friction variable)
             t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
             Gear^.dX := Gear^.dX * t;
@@ -1054,7 +1051,7 @@ begin
     if ((Gear^.State and gstCollision) <> 0) then
         begin
         StopSoundChan(Gear^.SoundChannel);
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         for i:= 0 to 31 do
             begin
             flower:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
@@ -1100,7 +1097,7 @@ begin
     CheckCollision(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
     end;
@@ -1282,9 +1279,9 @@ begin
         if Gear^.Damage > 5 then
             begin
             if Gear^.AmmoType = amDEagle then
-                AmmoShove(Gear, 7, 20)
+                AmmoShove(Gear, Gear^.Boom, 20)
             else
-                AmmoShove(Gear, Gear^.Timer, 20);
+                AmmoShove(Gear, Gear^.Timer * Gear^.Boom div 100000, 20);
             end;
         CheckGearDrowning(Gear);
         dec(i)
@@ -1340,10 +1337,15 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
+    Gear^.Data:= nil;
+    // remember who fired this
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
+
     PlaySound(sndGun);
-    // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
-    Gear^.X := Gear^.X + Gear^.dX * 3;
-    Gear^.Y := Gear^.Y + Gear^.dY * 3;
+    // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
+    Gear^.X := Gear^.X + Gear^.dX * 2;
+    Gear^.Y := Gear^.Y + Gear^.dY * 2;
     Gear^.doStep := @doStepBulletWork
 end;
 
@@ -1352,6 +1354,7 @@ var
     HHGear: PGear;
     shell: PVisualGear;
 begin
+
     cArtillery := true;
     HHGear := Gear^.Hedgehog^.Gear;
 
@@ -1360,6 +1363,9 @@ begin
         DeleteGear(gear);
         exit
         end;
+
+    // remember who fired this
+    Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
     HHGear^.State := HHGear^.State or gstNotKickable;
     HedgehogChAngle(HHGear);
@@ -1385,9 +1391,9 @@ begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
         PlaySound(sndGun);
-        // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
-        Gear^.X := Gear^.X + Gear^.dX * 3;
-        Gear^.Y := Gear^.Y + Gear^.dY * 3;
+        // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
+        Gear^.X := Gear^.X + Gear^.dX * 2;
+        Gear^.Y := Gear^.Y + Gear^.dY * 2;
         Gear^.doStep := @doStepBulletWork;
         end
     else
@@ -1473,7 +1479,7 @@ begin
     if (Gear^.Timer mod 33) = 0 then
         begin
         HHGear^.State := HHGear^.State or gstNoDamage;
-        doMakeExplosion(x, y + 7, 6, Gear^.Hedgehog, EXPLDontDraw);
+        doMakeExplosion(x, y + 7, Gear^.Boom, Gear^.Hedgehog, EXPLDontDraw);
         HHGear^.State := HHGear^.State and (not gstNoDamage)
         end;
 
@@ -1648,7 +1654,7 @@ begin
                 Gear^.Y := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
                 end;
             HHGear^.State := HHGear^.State or gstNoDamage;
-            AmmoShove(Gear, 2, 15);
+            AmmoShove(Gear, Gear^.Boom, 15);
             HHGear^.State := HHGear^.State and (not gstNoDamage)
             end;
         end;
@@ -1733,7 +1739,7 @@ begin
 
         if (Gear^.Damage > 35) then
             begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
             exit
             end
@@ -1757,7 +1763,7 @@ begin
                 or (cMineDudPercent = 0)
                 or (getRandom(100) > cMineDudPercent) then
                     begin
-                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                     DeleteGear(Gear)
                     end
                 else
@@ -1780,12 +1786,6 @@ begin
         or (Gear^.Hedgehog^.Gear = nil) then
             Gear^.State := Gear^.State or gsttmpFlag;
 end;
-
-(*
-Just keeping track for my own benefit.
-Every second, locate new target.  Clear if target radius has been set to 0 or no target in range.
-Every... 16 milliseconds? Update vector to target.
-*)
 
 procedure doStepAirMine(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
@@ -1985,7 +1985,8 @@ begin
         if ((Gear^.State and gstAttacking) = 0) then
             begin
             if ((GameTicks and $1F) = 0) then
-                if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then
+// FIXME - values taken from mine.  use a gear val and set both to same
+               if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then
                     Gear^.State := Gear^.State or gstAttacking
             end
         else // gstAttacking <> 0
@@ -1993,7 +1994,7 @@ begin
             AllInactive := false;
             if Gear^.Timer = 0 then
                 begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                 DeleteGear(Gear);
                 exit
                 end
@@ -2011,16 +2012,18 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDynamite(Gear: PGear);
+var VGear: PVisualGear;
 begin
     doStepFallingGear(Gear);
     AllInactive := false;
+
     if Gear^.Timer mod 166 = 0 then
         inc(Gear^.Tag);
     if Gear^.Timer = 1000 then // might need better timing
         makeHogsWorry(Gear^.X, Gear^.Y, 75);
     if Gear^.Timer = 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
         end;
@@ -2139,13 +2142,13 @@ begin
 
         if k = gtCase then
             begin
-            doMakeExplosion(x, y, 25, hog, EXPLAutoSound);
+            doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
             for i:= 0 to 63 do
                 AddGear(x, y, gtFlame, 0, _0, _0, 0);
             end
         else if k = gtExplosives then
                 begin
-                doMakeExplosion(x, y, 75, hog, EXPLAutoSound);
+                doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
                 for i:= 0 to 31 do
                     begin
                     dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
@@ -2177,23 +2180,6 @@ begin
         end
     else
         begin
-        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $1FFF = 0) then // stir 'em up periodically
-            begin
-            gi := GearsList;
-            while gi <> nil do
-                begin
-                if gi^.Kind = gtGenericFaller then
-                    begin
-                    gi^.Active:= true;
-                    gi^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
-                    gi^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
-                    gi^.dX:= _90-(GetRandomf*_360);
-                    gi^.dY:= _90-(GetRandomf*_360)
-                    end;
-                gi := gi^.NextGear
-                end
-            end;
-
         if Gear^.Timer = 500 then
             begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
@@ -2314,7 +2300,7 @@ begin
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
-    AmmoShove(Gear, 30, 115);
+    AmmoShove(Gear, Gear^.Boom, 115);
 
     HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
     Gear^.Timer := 250;
@@ -2334,7 +2320,7 @@ begin
     for i:= 0 to 3 do
         begin
         AddVisualGear(hwRound(Gear^.X) + hwSign(Gear^.dX) * (10 + 6 * i), hwRound(Gear^.Y) + 12 + Random(6), vgtDust);
-        AmmoShove(Gear, 30, 25);
+        AmmoShove(Gear, Gear^.Boom, 25);
         Gear^.X := Gear^.X + Gear^.dX * 5
         end;
 
@@ -2372,7 +2358,7 @@ begin
             Gear^.dY.QWordValue:= 429496730;
             Gear^.dX.isNegative:= getrandom(2)<>1;
             Gear^.dY.isNegative:= true;
-            AmmoShove(Gear, 2, 125);
+            AmmoShove(Gear, Gear^.Boom, 125);
             Gear^.dX:= tdX;
             Gear^.dY:= tdY;
             Gear^.Radius := 1
@@ -2451,7 +2437,7 @@ begin
             Gear^.dY.QWordValue:= 429496730;
             Gear^.dX.isNegative:= getrandom(2)<>1;
             Gear^.dY.isNegative:= true;
-            AmmoShove(Gear, 2, 125);
+            AmmoShove(Gear, Gear^.Boom, 125);
             Gear^.dX:= tdX;
             Gear^.dY:= tdY;
             Gear^.Radius := 1
@@ -2477,13 +2463,13 @@ begin
                     Gear^.dY.QWordValue:= 429496730;
                     Gear^.dX.isNegative:= getrandom(2)<>1;
                     Gear^.dY.isNegative:= true;
-                    AmmoShove(Gear, 6, 100);
+                    AmmoShove(Gear, Gear^.Boom * 3, 100);
                     Gear^.dX:= tdX;
                     Gear^.dY:= tdY;
                     Gear^.Radius := 1;
                     end
                 else if ((GameTicks and $3) = 3) then
-                    doMakeExplosion(gX, gY, 8, Gear^.Hedgehog, 0);//, EXPLNoDamage);
+                    doMakeExplosion(gX, gY, Gear^.Boom * 4, Gear^.Hedgehog, 0);//, EXPLNoDamage);
                 //DrawExplosion(gX, gY, 4);
 
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
@@ -2550,7 +2536,7 @@ begin
         DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y - _1, _0_5, _0, cHHRadius * 4+2, 2);
         HHGear^.State := HHGear^.State or gstNoDamage;
         Gear^.Y := HHGear^.Y;
-        AmmoShove(Gear, 30, 40);
+        AmmoShove(Gear, Gear^.Boom, 40);
         HHGear^.State := HHGear^.State and (not gstNoDamage)
         end;
 
@@ -2669,7 +2655,7 @@ begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
 
-    if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
+    if (Gear^.Health > 0) and (not (Gear^.X < Gear^.dX)) and (Gear^.X < Gear^.dX + cAirPlaneSpeed) then
         begin
         dec(Gear^.Health);
             case Gear^.State of
@@ -2713,7 +2699,7 @@ begin
         end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * Gear^.Health * Gear^.Damage) / 2;
+    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * (Gear^.Health-1) * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
@@ -2736,7 +2722,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         {$IFNDEF PAS2C}
         with mobileRecord do
@@ -3011,7 +2997,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         gdX.isNegative := not gdX.isNegative;
         gdY.isNegative := not gdY.isNegative;
         gdX:= gdX*_0_2;
@@ -3103,7 +3089,7 @@ begin
                 Gear^.Pos := 2;
             end;
 
-        AmmoShove(Gear, 30, 40);
+        AmmoShove(Gear, Gear^.Boom, 40);
 
         DrawTunnel(HHGear^.X - HHGear^.dX * 10,
                     HHGear^.Y - _2 - HHGear^.dY * 10 + hwAbs(HHGear^.dY) * 2,
@@ -3117,7 +3103,7 @@ begin
 
     if Gear^.Health < Gear^.Damage then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         if hasWishes then
             for i:= 0 to 31 do
                 begin
@@ -3188,7 +3174,8 @@ begin
     if Gear^.Tag < 2250 then
         exit;
 
-    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg, Gear^.Hedgehog, EXPLAutoSound);
+    InCinematicMode:= false;
+    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
     AfterAttack;
     DeleteGear(Gear)
 end;
@@ -3196,8 +3183,9 @@ end;
 procedure doStepCakeDown(Gear: PGear);
 var
     gi: PGear;
-    dmg, dmgBase: LongInt;
+    dmg, dmgBase, partyEpicness, i: LongInt;
     fX, fY, tdX, tdY: hwFloat;
+    sparkles: PVisualGear;
 begin
     AllInactive := false;
 
@@ -3216,6 +3204,7 @@ begin
         fX:= int2hwFloat(hwRound(Gear^.X));
         fY:= int2hwFloat(hwRound(Gear^.Y));
         dmgBase:= cakeDmg shl 1 + cHHRadius div 2;
+        partyEpicness:= 0;
         gi := GearsList;
         while gi <> nil do
             begin
@@ -3229,21 +3218,46 @@ begin
                 if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, cakeDmg), gi);
                 if (dmg > 1) then
                     if (CurrentHedgehog^.Gear = gi) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) then
-                        gi^.State := gi^.State or gstLoser
+                        begin
+                        gi^.State := gi^.State or gstLoser;
+                        // probably not too epic if hitting self too...
+                        dec(partyEpicness, 45);
+                        end
                     else
+                        begin
                         gi^.State := gi^.State or gstWinner;
+                        if CurrentHedgehog^.Gear = gi then
+                            dec(partyEpicness, 45)
+                        else
+                            inc(partyEpicness);
+                        end;
                 end;
             gi := gi^.NextGear
             end;
 //////////////////////////////////////////////////////////////////////
         Gear^.doStep := @doStepCakeExpl;
+        if (partyEpicness > 6) and (abs(90 - abs(trunc(Gear^.DirAngle))) < 20) then
+            begin
+            for i := 0 to (2 * partyEpicness) do
+                begin
+                sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg, 1);
+                if sparkles <> nil then
+                    begin
+                    sparkles^.dX:= 0.008 * (random(100) - 50);
+                    sparkles^.dY:= -0.3 + 0.002 * (random(100) - 50);
+                    sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+                    sparkles^.Angle:= random(360);
+                    end
+                end;
+            InCinematicMode:= true;
+            end;
         PlaySound(sndCake)
         end
     else dec(Gear^.Pos)
 end;
 
 
-procedure doStepCakeWork(Gear: PGear);
+procedure doStepCakeWalk(Gear: PGear);
 var
     tdx, tdy: hwFloat;
     cakeData: PCakeData;
@@ -3310,7 +3324,7 @@ begin
                 end;
             CakeI := 0;
             end;
-        Gear^.doStep := @doStepCakeWork
+        Gear^.doStep := @doStepCakeWalk
         end
     else
         inc(Gear^.Pos)
@@ -3399,7 +3413,7 @@ begin
         Gear^.Timer := 0;
         inc(Gear^.Pos);
         if Gear^.Pos = 5 then
-            PlaySoundV(sndYoohoo, Gear^.Hedgehog^.Team^.voicepack)
+            PlaySound(sndYoohoo);
         end;
 
     if (Gear^.Pos = 14) and (RealTicks and $3 = 0) then
@@ -3512,10 +3526,7 @@ begin
         begin
         //out of time or exited ground
         StopSoundChan(Gear^.SoundChannel);
-        if (Gear^.State and gsttmpFlag) <> 0 then
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound)
-        else
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
         end
@@ -3539,7 +3550,7 @@ var
 begin
     AllInactive := false;
 
-    if (Gear^.State and gsttmpFlag) = 0 then
+    if (Gear^.State and gsttmpFlag = 0) and (GameFlags and gfMoreWind = 0) then
         Gear^.dX := Gear^.dX + cWindSpeed;
 
     oldDx := Gear^.dX;
@@ -3575,10 +3586,7 @@ begin
         else if (t <> nil) then
             begin
             //explode right on contact with HH
-            if (Gear^.State and gsttmpFlag) <> 0 then
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound)
-            else
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
             exit;
             end;
@@ -3598,7 +3606,7 @@ begin
             dec(Gear^.Timer)
         else
             begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
             end
         end;
@@ -3749,6 +3757,7 @@ begin
         Gear^.State := Gear^.State or gsttmpFlag;
         PauseMusic;
         playSound(sndRideOfTheValkyries);
+        inCinematicMode:= true;
         end;
 
     // pickup bonuses
@@ -3760,13 +3769,14 @@ begin
 
     if ((Gear^.State and gstCollision) <> 0) or CheckGearDrowning(Gear) then
         begin
+        inCinematicMode:= false;
         StopSoundChan(Gear^.SoundChannel);
         StopSound(sndRideOfTheValkyries);
         ResumeMusic;
 
         if ((Gear^.State and gstCollision) <> 0) then
             begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, Gear^.Hedgehog, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
             for i:= 0 to 15 do
                 begin
                 dX := AngleCos(i * 64) * _0_5 * (GetRandomf + _1);
@@ -4187,7 +4197,7 @@ begin
 
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, Gear^.Hedgehog, EXPLPoisoned, $C0E0FFE0);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLPoisoned, $C0E0FFE0);
         PlaySound(sndEggBreak);
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
         vg := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
@@ -4356,9 +4366,13 @@ begin
                 continue;
             end;
 
-        // draw bullet trail
-        if isbullet then
+        if (iterator^.Kind = gtDEagleShot) or (iterator^.Kind = gtSniperRifleShot) then
+            begin
+            // draw bullet trail
             spawnBulletTrail(iterator);
+            // the bullet can now hurt the hog that fired it
+            iterator^.Data:= nil;
+            end;
 
         // calc gear offset in portal vector direction
         ox := (iterator^.X - Gear^.X);
@@ -4797,11 +4811,11 @@ begin
         end
     else if (Gear^.State and gstCollision) <> 0 then
         begin
-        r0 := GetRandom(21);
-        r1 := GetRandom(21);
-        doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, Gear^.Hedgehog, 0);
-        doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, Gear^.Hedgehog, 0);
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
+        r0 := GetRandom(Gear^.Boom div 4 + 1);
+        r1 := GetRandom(Gear^.Boom div 4 + 1);
+        doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, Gear^.Boom div 2 + r1, Gear^.Hedgehog, 0);
+        doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, Gear^.Boom div 2 + r0, Gear^.Hedgehog, 0);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom + r0, Gear^.Hedgehog, EXPLAutoSound);
         for r0:= 0 to 4 do
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         Gear^.dY := cGravity * 2 - odY;
@@ -4935,7 +4949,7 @@ begin
                         end;
 
                     // kick nearby hogs
-                    AmmoShove(Gear, 35, 50);
+                    AmmoShove(Gear, Gear^.Boom, 50);
 
                     dec(Gear^.Health, Gear^.Damage);
 
@@ -5005,15 +5019,18 @@ var
 begin
     PlaySound(sndSineGun);
 
-    // push the shooting Hedgehog back
-    HHGear := CurrentHedgehog^.Gear;
-    Gear^.dX.isNegative := not Gear^.dX.isNegative;
-    Gear^.dY.isNegative := not Gear^.dY.isNegative;
-    HHGear^.dX := Gear^.dX;
-    HHGear^.dY := Gear^.dY;
-    AmmoShove(Gear, 0, 80);
-    Gear^.dX.isNegative := not Gear^.dX.isNegative;
-    Gear^.dY.isNegative := not Gear^.dY.isNegative;
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        begin
+        HHGear := Gear^.Hedgehog^.Gear;
+        // push the shooting Hedgehog back
+        Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        Gear^.dY.isNegative := not Gear^.dY.isNegative;
+        HHGear^.dX := Gear^.dX;
+        HHGear^.dY := Gear^.dY;
+        AmmoShove(Gear, 0, 80);
+        Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        Gear^.dY.isNegative := not Gear^.dY.isNegative;
+        end;
 
     Gear^.doStep := @doStepSineGunShotWork;
     {$IFNDEF PAS2C}
@@ -5216,7 +5233,7 @@ begin
     Gear^.dX := Gear^.dX + cWindSpeed / 4;
     Gear^.dY := Gear^.dY + cGravity / 100;
     if (GameTicks and $FF) = 0 then
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
     if Gear^.State and gstTmpFlag = 0 then
         AllInactive:= false;
 end;
@@ -5255,18 +5272,13 @@ while i > 0 do
                 dmg:= (tmp^.Health - tmp^.Damage);
                 if dmg > 0 then
                     begin
-                    // do 1/2 current hp worth of damage if extra damage is enabled (1/3 damage if not)
-                    if cDamageModifier > _1 then
-                        d:= 2
-                    else
-                        d:= 3;
-
                     // always rounding down
-                    dmg:= dmg div d;
+                    dmg:= dmg div Gear^.Boom;
 
                     if dmg > 0 then
                         ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
                     end;
+		tmp^.dY:= _0_03 * Gear^.Boom
                 end;
 
             if (tmp^.Kind <> gtHedgehog) or (dmg > 0) or (tmp^.Health > tmp^.Damage) then
@@ -5536,6 +5548,7 @@ begin
     dec(Gear^.Timer)
 end;
 
+(*
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepStructure(Gear: PGear);
 var
@@ -5627,6 +5640,7 @@ begin
         doMakeExplosion(x, y, 50, CurrentHedgehog, EXPLAutoSound);
         end;
 end;
+*)
 
 ////////////////////////////////////////////////////////////////////////////////
 (*
@@ -6116,7 +6130,7 @@ if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
         end;
     end
 end;
-
+(*
 procedure doStepCreeper(Gear: PGear);
 var hogs: PGearArrayS;
     HHGear: PGear;
@@ -6197,7 +6211,7 @@ if HHGear <> nil then
         end;
     end;
 end;
-
+*)
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepKnife(Gear: PGear);
 //var ox, oy: LongInt;
@@ -6216,7 +6230,7 @@ begin
         DeleteCI(Gear);
         Gear^.Radius:= 7;
         // used for damage and impact calc. needs balancing I think
-        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
+        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*Gear^.Boom/10000));
         doStepFallingGear(Gear);
         AllInactive := false;
         a:= Gear^.DirAngle;
@@ -6230,8 +6244,6 @@ begin
         if TestCollisionXwithGear(Gear, 1)  <> 0 then ox:=  1;
         if TestCollisionXwithGear(Gear, -1) <> 0 then ox:= -1;
         if TestCollisionYwithGear(Gear, 1)  <> 0 then oy:=  1;
-        if Gear^.Health > 0 then
-            PlaySound(sndRopeAttach);
 
         la:= _10000;
         if (ox <> 0) or (oy <> 0) then
@@ -6241,6 +6253,9 @@ begin
             // debug for when we couldn't get an angle
             //AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeWhite);
 *)
+        if Gear^.Health > 0 then
+            PlaySound(Gear^.ImpactSound);
+
             Gear^.DirAngle:= DxDy2Angle(Gear^.dX, Gear^.dY) + (random(30)-15);
             if (Gear^.dX.isNegative and Gear^.dY.isNegative) or
              ((not Gear^.dX.isNegative) and (not Gear^.dY.isNegative)) then Gear^.DirAngle:= Gear^.DirAngle-90;

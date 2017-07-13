@@ -95,17 +95,14 @@ voted forced vote = do
         let rs = Map.lookup roomSave (roomSaves rm)
         case rs of
              Nothing -> return []
-             Just (mp, p) -> do
+             Just (location, mp, p) -> do
                  cl <- thisClient
                  chans <- roomClientsChans
-                 let a = map (replaceChans chans) $ answerFullConfigParams cl mp p
-                 return $ 
-                    (ModifyRoom $ \r -> r{params = p, mapParams = mp})
-                    : SendUpdateOnThisRoom
-                    : a
-        where
-            replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
-            replaceChans _ a = a
+                 return $
+                    [ModifyRoom $ \r -> r{params = p, mapParams = mp}
+                    , AnswerClients chans ["CHAT", "[server]", location]
+                    , SendUpdateOnThisRoom
+                    , LoadGhost location]
     act (VotePause) = do
         rm <- thisRoom
         chans <- roomClientsChans

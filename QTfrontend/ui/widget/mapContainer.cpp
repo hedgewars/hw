@@ -63,6 +63,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_script = QString();
     m_prevMapFeatureSize = 12;
     m_mapFeatureSize = 12;
+    m_withoutDLC = false;
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -109,6 +110,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     cType->insertItem(3, tr("Randomly generated"), MapModel::GeneratedMap);
     cType->insertItem(4, tr("Random maze"), MapModel::GeneratedMaze);
     cType->insertItem(5, tr("Random perlin"), MapModel::GeneratedPerlin);
+    cType->insertItem(6, tr("Forts"), MapModel::FortsMap);
     connect(cType, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
     m_childWidgets << cType;
 
@@ -125,6 +127,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnRandomize->setFlat(true);
     btnRandomize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(btnRandomize, SIGNAL(clicked()), this, SLOT(setRandomMap()));
+
     m_childWidgets << btnRandomize;
     btnRandomize->setStyleSheet("padding: 5px;");
     btnRandomize->setFixedHeight(cType->height());
@@ -134,6 +137,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     btnSeed = new QPushButton(parentWidget()->parentWidget());
     btnSeed->setText(tr("Seed"));
+    btnSeed->setWhatsThis(tr("View and edit the seed, the source of randomness in the game"));
     btnSeed->setStyleSheet("padding: 5px;");
     btnSeed->setFixedHeight(cType->height());
     connect(btnSeed, SIGNAL(clicked()), this, SLOT(showSeedPrompt()));
@@ -249,14 +253,29 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     bottomLeftLayout->addStretch(1);
 
     /* Theme chooser */
+    QHBoxLayout * themeHBox = new QHBoxLayout(this);
+
+    btnRandTheme = new QPushButton();
+    btnRandTheme->setWhatsThis(tr("Randomize the theme"));
+    btnRandTheme->setIcon(lp);
+    btnRandTheme->setIconSize(QSize(24, 24));
+    btnRandTheme->setFixedHeight(30);
+    btnRandTheme->setFixedWidth(30);
+    connect(btnRandTheme, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
+    m_childWidgets << btnTheme;
+    themeHBox->addWidget(btnRandTheme, 0);
 
     btnTheme = new QPushButton(this);
+    btnTheme->setWhatsThis(tr("Choose a theme"));
     btnTheme->setFlat(true);
     btnTheme->setIconSize(QSize(30, 30));
     btnTheme->setFixedHeight(30);
+    btnTheme->setMaximumWidth(222);
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
-    bottomLeftLayout->addWidget(btnTheme, 0);
+    themeHBox->addWidget(btnTheme, 1);
+
+    bottomLeftLayout->addLayout(themeHBox);
 
     /* Add everything to main layout */
 
@@ -461,6 +480,10 @@ void HWMapContainer::intSetMap(const QString & map)
     {
         //changeMapType(MapModel::HandDrawnMap);
     }
+    else if (map == "+forts+")
+    {
+        //nuffin
+    }
     else if (m_staticMapModel->mapExists(map))
     {
         changeMapType(MapModel::StaticMap, m_staticMapModel->index(m_staticMapModel->findMap(map), 0));
@@ -495,18 +518,34 @@ void HWMapContainer::setRandomMap()
     if (!m_master) return;
 
     setRandomSeed();
+
+    QSortFilterProxyModel * mmodel = NULL;
+
     switch(m_mapInfo.type)
     {
         case MapModel::GeneratedMap:
         case MapModel::GeneratedMaze:
         case MapModel::GeneratedPerlin:
+        case MapModel::FortsMap:
             setRandomTheme();
             break;
         case MapModel::MissionMap:
-            missionMapChanged(m_missionMapModel->index(rand() % m_missionMapModel->rowCount(), 0));
+            if (m_withoutDLC)
+            {
+                mmodel = m_missionMapModel->withoutDLC();
+                missionMapChanged(mmodel->mapToSource(mmodel->index(rand() % mmodel->rowCount(),0)));
+            }
+            else
+                missionMapChanged(m_missionMapModel->index(rand() % m_missionMapModel->rowCount(),0));
             break;
         case MapModel::StaticMap:
-            staticMapChanged(m_staticMapModel->index(rand() % m_staticMapModel->rowCount(), 0));
+            if (m_withoutDLC)
+            {
+                mmodel = m_staticMapModel->withoutDLC();
+                staticMapChanged(mmodel->mapToSource(mmodel->index(rand() % mmodel->rowCount(),0)));
+            }
+            else
+                staticMapChanged(m_staticMapModel->index(rand() % m_staticMapModel->rowCount(),0));
             break;
         default:
             break;
@@ -519,11 +558,23 @@ void HWMapContainer::setRandomSeed()
     emit seedChanged(m_seed);
 }
 
+void HWMapContainer::setRandomWithoutDLC(bool withoutDLC)
+{
+    m_withoutDLC = withoutDLC;
+}
+
 void HWMapContainer::setRandomTheme()
 {
-    if(!m_themeModel->rowCount()) return;
-    quint32 themeNum = rand() % m_themeModel->rowCount();
-    updateTheme(m_themeModel->index(themeNum));
+    QAbstractItemModel * tmodel;
+
+    if (m_withoutDLC)
+        tmodel = m_themeModel->withoutDLC();
+    else
+        tmodel = m_themeModel;
+
+    if(!tmodel->rowCount()) return;
+    quint32 themeNum = rand() % tmodel->rowCount();
+    updateTheme(tmodel->index(themeNum,0));
     emit themeChanged(m_theme);
 }
 
@@ -588,6 +639,10 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
                 m_mapInfo.type = MapModel::HandDrawnMap;
                 f = true;
                 break;
+            case MAPGEN_FORTS:
+                m_mapInfo.type = MapModel::FortsMap;
+                f = true;
+                break;
             case MAPGEN_MAP:
                 switch (m_mapInfo.type)
                 {
@@ -595,6 +650,7 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
                     case MapModel::GeneratedMaze:
                     case MapModel::GeneratedPerlin:
                     case MapModel::HandDrawnMap:
+                    case MapModel::FortsMap:
                         m_mapInfo.type = MapModel::Invalid;
                     default:
                         break;
@@ -679,6 +735,7 @@ void HWMapContainer::updatePreview()
         case MapModel::GeneratedMaze:
         case MapModel::GeneratedPerlin:
         case MapModel::HandDrawnMap:
+        case MapModel::FortsMap:
             askForGeneratedPreview();
             break;
         default:
@@ -739,6 +796,44 @@ void HWMapContainer::mapTypeChanged(int index)
 {
     changeMapType((MapModel::MapType)cType->itemData(index).toInt());
 }
+
+void HWMapContainer::updateHelpTexts(MapModel::MapType type)
+{
+    QString randomAll = tr("Randomize the map, theme and seed");
+    QString randomNoMap = tr("Randomize the theme and seed");
+    QString randomSeed = tr("Randomize the seed");
+    QString randomAllPrev = tr("Click to randomize the map, theme and seed");
+    QString randomNoMapPrev = tr("Click to randomize the theme and seed");
+    QString mfsComplex = QString(tr("Adjust the complexity of the generated map"));
+    QString mfsFortsDistance = QString(tr("Adjust the distance between forts"));
+    switch (type)
+    {
+        case MapModel::GeneratedMap:
+        case MapModel::GeneratedPerlin:
+        case MapModel::GeneratedMaze:
+            mapPreview->setWhatsThis(randomAllPrev);
+            mapFeatureSize->setWhatsThis(mfsComplex);
+            btnRandomize->setWhatsThis(randomAll);
+            break;
+        case MapModel::MissionMap:
+        case MapModel::StaticMap:
+            mapPreview->setWhatsThis(randomAllPrev);
+            btnRandomize->setWhatsThis(randomAll);
+            break;
+        case MapModel::HandDrawnMap:
+            mapPreview->setWhatsThis(tr("Click to edit"));
+            btnRandomize->setWhatsThis(randomSeed);
+            break;
+        case MapModel::FortsMap:
+            mapPreview->setWhatsThis(randomNoMapPrev);
+            mapFeatureSize->setWhatsThis(mfsFortsDistance);
+            btnRandomize->setWhatsThis(randomNoMap);
+            break;
+        default:
+            break;
+    }
+}
+ 
 
 void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & newMap)
 {
@@ -804,12 +899,20 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapList->show();
             emit mapChanged(m_curMap);
             break;
+        case MapModel::FortsMap:
+            mapgen = MAPGEN_FORTS;
+            setMapInfo(MapModel::MapInfoForts);
+            lblMapList->hide();
+            break;
         default:
             break;
     }
 
     // Update theme button size
     updateThemeButtonSize();
+
+    // Update “What's This?” help texts
+    updateHelpTexts(type);
 
     // Update cType combobox
     for (int i = 0; i < cType->count(); i++)
@@ -829,6 +932,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
 void HWMapContainer::intSetFeatureSize(int val)
 {
     mapFeatureSize->setValue(val);    
+    updateHelpTexts((MapModel::MapType)cType->itemData(cType->currentIndex()).toInt());
     emit mapFeatureSizeChanged(val);
 }
 void HWMapContainer::setFeatureSize(int val)
@@ -850,12 +954,16 @@ void HWMapContainer::updateThemeButtonSize()
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);
+        btnRandTheme->setFixedHeight(30);
+        btnRandTheme->setIconSize(QSize(24, 24));
     }
     else
     {
         QSize iconSize = btnTheme->icon().actualSize(QSize(65535, 65535));
+        btnRandTheme->setFixedHeight(64);
         btnTheme->setFixedHeight(64);
         btnTheme->setIconSize(iconSize);
+        btnRandTheme->setIconSize(QSize(32, 32));
     }
 
     repaint();

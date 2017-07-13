@@ -16,6 +16,9 @@ Basic_Training_-_Sniper_Rifle.desc="Boom, headshot!"
 Basic_Training_-_Rope.name=Basic Rope Training
 Basic_Training_-_Rope.desc="Get out there and swing!"
 
+Basic_Training_-_Flying_Saucer.name=Basic Flying Saucer Training
+Basic_Training_-_Flying_Saucer.desc="So you really want to become an astronaut, eh? You should learn how to fly first!"
+
 User_Mission_-_Dangerous_Ducklings.name=Mission: Dangerous Ducklings
 User_Mission_-_Dangerous_Ducklings.desc="Alright, rookie! Time to put what we learned in Basic Training into practice!"
 

@@ -168,7 +168,9 @@ var t: PGear;
     i, AliveCount: LongInt;
     s: ansistring;
     prevtime: LongWord;
+    stirFallers: boolean;
 begin
+stirFallers:= false;
 prevtime:= TurnTimeLeft;
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
@@ -199,6 +201,8 @@ while t <> nil do
     begin
     curHandledGear:= t;
     t:= curHandledGear^.NextGear;
+    if (GameTicks and $1FFF = 0) and (curHandledGear^.Kind = gtCase) and (curHandledGear^.Pos <> posCaseHealth) then
+        stirFallers := true; 
 
     if curHandledGear^.Message and gmDelete <> 0 then
         DeleteGear(curHandledGear)
@@ -224,6 +228,23 @@ while t <> nil do
             end
         end
     end;
+if stirFallers then
+    begin
+    t := GearsList;
+    while t <> nil do
+        begin
+        if t^.Kind = gtGenericFaller then
+            begin
+            t^.Active:= true;
+            t^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
+            t^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+            t^.dX:= _90-(GetRandomf*_360);
+            t^.dY:= _90-(GetRandomf*_360)
+            end;
+        t := t^.NextGear
+        end
+    end;
+
 curHandledGear:= nil;
 
 if AllInactive then
@@ -717,20 +738,101 @@ if (not hasBorder) and cSnow then
         end
 end;
 
+// sort clans horizontally (bubble-sort, because why not)
+procedure SortHHsByClan();
+var n, newn, i, j, k, p: LongInt;
+    ar, clar: array[0..Pred(cMaxHHs)] of PHedgehog;
+    Count, clCount: Longword;
+    tmpX, tmpY: hwFloat;
+    hh1, hh2: PHedgehog;
+begin
+Count:= 0;
+// add hedgehogs to the array in clan order
+for p:= 0 to (ClansCount - 1) do
+    with SpawnClansArray[p]^ do
+        begin
+        // count hogs in this clan
+        clCount:= 0;
+        for j:= 0 to Pred(TeamsNumber) do
+            with Teams[j]^ do
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].Gear <> nil then
+                        begin
+                        clar[clCount]:= @Hedgehogs[i];
+                        inc(clCount);
+                        end;
+
+        // shuffle all hogs of this clan
+        for i:= 0 to clCount - 1 do
+            begin
+            j:= GetRandom(clCount);
+            k:= GetRandom(clCount);
+            if clar[j] <> clar[k] then
+                begin
+                hh1:= clar[j];
+                clar[j]:= clar[k];
+                clar[k]:= hh1;
+                end;
+            end;
+
+        // add clan's hog to sorting array
+        for i:= 0 to clCount - 1 do
+            begin
+            ar[Count]:= clar[i];
+            inc(Count);
+            end;
+        end;
+
+
+// bubble-sort hog array
+n:= Count - 1;
+
+repeat
+    newn:= 0;
+    for i:= 1 to n do
+        begin
+        hh1:= ar[i-1];
+        hh2:= ar[i];
+        if hwRound(hh1^.Gear^.X) > hwRound(hh2^.Gear^.X) then
+            begin
+            tmpX:= hh1^.Gear^.X;
+            tmpY:= hh1^.Gear^.Y;
+            hh1^.Gear^.X:= hh2^.Gear^.X;
+            hh1^.Gear^.Y:= hh2^.Gear^.Y;
+            hh2^.Gear^.X:= tmpX;
+            hh2^.Gear^.Y:= tmpY;
+            newn:= i;
+            end;
+        end;
+    n:= newn;
+until n = 0;
+
+end;
+
 procedure AssignHHCoords;
 var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
+    divide, sectionDivide: boolean;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
-if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
+
+divide:= ((GameFlags and gfDivideTeams) <> 0);
+sectionDivide:= divide and ((GameFlags and gfForts) <> 0);
+
+// TODO: there might be a smarter way to decide if dividing clans into equal-width map sections makes sense
+// e.g. by checking if there is enough spawn area in each section
+if divide and (not sectionDivide) then
+    sectionDivide:= (ClansCount = 2);
+
+// in section-divide mode, divide the map into equal-width sections and put each clan in one of them
+if sectionDivide then
     begin
-    t:= 0;
-    TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
-    for p:= 0 to 1 do
+    t:= leftX;
+    for p:= 0 to (ClansCount - 1) do
         begin
-        with ClansArray[p]^ do
+        with SpawnClansArray[p]^ do
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
                     for i:= 0 to cMaxHHIndex do
@@ -740,16 +842,21 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
                                 if PlacingHogs then
                                     Unplaced:= true
                                 else
-                                    FindPlace(Gear, false, t, t + LAND_WIDTH div 2, true);// could make Gear == nil;
+                                    FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
                                     Gear^.Pos:= GetRandom(49);
-                                    Gear^.dX.isNegative:= p = 1;
+                                    // unless the world is wrapping, make outter teams face to map center
+                                    if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
+                                        Gear^.dX.isNegative:= (p <> 0)
+                                    else
+                                        Gear^.dX.isNegative:= (GetRandom(2) = 1);
                                     end
                                 end;
-        t:= LAND_WIDTH div 2
+        inc(t, playWidth div ClansCount);
         end
-    end else // mix hedgehogs
+    end 
+else // mix hedgehogs
     begin
     Count:= 0;
     for p:= 0 to Pred(TeamsCount) do
@@ -769,16 +876,44 @@ if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
         if PlacingHogs then
             ar[i]^.Unplaced:= true
         else
-            FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH, true);
+            FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
         if ar[i]^.Gear <> nil then
             begin
-            ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > LAND_WIDTH div 2;
+            ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
             ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
         ar[i]:= ar[Count - 1];
         dec(Count)
         end
-    end
+    end;
+for p:= 0 to Pred(TeamsCount) do
+    with TeamsArray[p]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
+                    begin
+                    DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50);
+                    AddFileLog('Carved a hole for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    end;
+// place flowers after in case holes overlap (we shrink search distance if we are failing to place)
+for p:= 0 to Pred(TeamsCount) do
+    with TeamsArray[p]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
+                    begin
+                    ForcePlaceOnLand(hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2, 
+                                     hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
+                                     sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
+                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    Gear^.State:= Gear^.State and (not gsttmpFlag);
+                    AddFileLog('Placed flower for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    end;
+
+
+// divided teams: sort the hedgehogs from left to right by clan and shuffle clan members
+if divide and (not sectionDivide) then
+    SortHHsByClan();
 end;
 
 

@@ -19,6 +19,7 @@ local currTeam = ''
 local teams = {}
 local teamScoreStats = {}
 local teamBests = {}
+local teamTimes = {}
 local MrMine -- in honour of sparkle's first arrival in the cabin
 local YouWon = false
 local YouLost = false
@@ -61,7 +62,7 @@ function onParameters()
     if params["delaytime"] ~= nil then
         delayTime = params["delaytime"]
     end
-    if params["delaytime"] ~= nil then
+    if params["delayheight"] ~= nil then
         delayHeight = 32768-params["delayheight"]
     end
     if params["nocake"] ~= nil then addCake = false end
@@ -390,6 +391,7 @@ function onGameTick20()
                     SendStat(siPlayerKills, tostring(roundedFinishTime), loc(GetHogTeamName(CurrentHedgehog)))
 
                     EndGame()
+                    onAchievementsDeclaration()
                     YouWon = true
                 end
             elseif distanceFromWater < 0 and not YouLost then
@@ -399,6 +401,7 @@ function onGameTick20()
                 if deadHedgehogs >= totalHedgehogs then
                     makeFinalMultiPlayerStats()
                     EndGame()
+                    onAchievementsDeclaration()
                 end
             end
 
@@ -445,8 +448,15 @@ function onGameTick20()
             end
 
             if (y > 286) or (y < 286 and MaxHeight > 286) then
+                if MaxHeight > 286 and y <= 286 then
+                    -- wow, reached top
+                    local teamName = GetHogTeamName(CurrentHedgehog)
+                    if teamTimes[teamName] == nil or teamTimes[teamName] > GameTime - startTime then 
+                        teamTimes[teamName] = GameTime - startTime 
+                    end
+                    MaxHeight = 286
+                end
                 if y < MaxHeight and y > 286 then MaxHeight = y end
-                if y < 286 then MaxHeight = 286 end
                 if MaxHeight < hTagHeight then
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
@@ -550,6 +560,7 @@ function onGearDamage(gear, damage)
             if deadHedgehogs >= totalHedgehogs then
                 makeFinalMultiPlayerStats()
                 EndGame()
+                onAchievementsDeclaration()
             end
             makeMultiPlayerLoserStat(gear)
         end
@@ -598,6 +609,7 @@ function makeSinglePlayerLoserStats()
     SendStat(siPointType, loc("points"))
     SendStat(siPlayerKills, actualHeight, loc(GetHogTeamName(CurrentHedgehog)))
     EndGame()
+    onAchievementsDeclaration()
 end
 
 function makeMultiPlayerLoserStat(gear)
@@ -677,4 +689,13 @@ end
 
 function getActualHeight(height)
     return 32640-height
+end
+
+function onAchievementsDeclaration()
+    for teamname, score in pairs(teamBests) do
+        DeclareAchievement("height reached", teamname, "ClimbHome", -score)
+    end
+    for teamname, score in pairs(teamTimes) do
+        DeclareAchievement("rope race", teamname, "ClimbHome", score)
+    end
 end

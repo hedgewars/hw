@@ -144,7 +144,7 @@
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*60/100, 60)];
     label.center = CGPointMake(self.tableView.frame.size.width/2, 30);
-    label.textAlignment = UITextAlignmentCenter;
+    label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont italicSystemFontOfSize:16];
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;

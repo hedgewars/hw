@@ -23,7 +23,7 @@ unit uScript;
  * This unit defines, implements and registers functions and
  * variables/constants bindings for usage in Lua scripts.
  *
- * Please keep http://code.google.com/p/hedgewars/wiki/LuaAPI up to date!
+ * Please keep http://hedgewars.org/kb/LuaAPI up to date!
  *
  * Note: If you add a new function, make sure to test if _all_ parameters
  *       work as intended! (Especially conversions errors can sneak in
@@ -56,7 +56,6 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-{$IFDEF USE_LUA_SCRIPT}
 
 uses LuaPas,
     uConsole,
@@ -76,14 +75,13 @@ uses LuaPas,
     uTypes,
     uVariables,
     uCommands,
-    uUtils,
     uCaptions,
     uDebug,
     uCollisions,
     uRenderUtils,
     uTextures,
     uLandGraphics,
-    SysUtils,
+    uUtils,
     uIO,
     uVisualGearsList,
     uGearsHandlersMess,
@@ -104,6 +102,7 @@ var luaState : Plua_State;
     PointsBuffer: shortstring;
     prevCursorPoint: TPoint;  // why is tpoint still in sdlh...
 
+{$IFDEF USE_LUA_SCRIPT}
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte); forward;
@@ -338,7 +337,7 @@ begin
         LuaToMapGenOrd:= i;
 end;
 
-// wrapped calls //
+// wrapped calls
 
 // functions called from Lua:
 // function(L : Plua_State) : LongInt; Cdecl;
@@ -440,6 +439,19 @@ begin
     lc_setweapon:= 0;
 end;
 
+// enable/disable cinematic effects
+function lc_setcinematicmode(L : Plua_State) : LongInt; Cdecl;
+const
+    call = 'SetCinematicMode';
+    params = 'enable';
+begin
+    if (CheckLuaParamCount(L, 1, call, params)) then
+        begin
+        CinematicScript:= lua_toboolean(L, 1);
+        end;
+    lc_setcinematicmode:= 0;
+end;
+
 // no parameter means reset to default (and 0 means unlimited)
 function lc_setmaxbuilddistance(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
@@ -477,7 +489,7 @@ begin
             cs:= 0; // current slot
             fa:= 0; // first ammo item to check
 
-            // if something is selected, find it's successor
+            // if something is selected, find it is successor
             if curAmmoType <> amNothing then
                 begin
                 // get current slot index
@@ -486,7 +498,7 @@ begin
                 while (fa < cMaxSlotAmmoIndex)
                     and (Ammo^[cs, fa].AmmoType <> CurAmmoType) do
                         inc(fa);
-                // increase once more because we won't successor
+                // increase once more because we will not successor
                 inc(fa);
                 end;
 
@@ -900,7 +912,7 @@ begin
     lc_setvisualgearvalues:= 0
 end;
 
-// so. going to use this to get/set some of the more obscure gear values which weren't already exposed elsewhere
+// so. going to use this to get/set some of the more obscure gear values which were not already exposed elsewhere
 // can keep adding things in the future. isnoneornil makes it safe
 function lc_getgearvalues(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
@@ -921,29 +933,30 @@ begin
             lua_pushinteger(L, Integer(gear^.ImpactSound));
             lua_pushinteger(L, gear^.nImpactSounds);
             lua_pushinteger(L, gear^.Tint);
-            lua_pushinteger(L, gear^.Damage)
+            lua_pushinteger(L, gear^.Damage);
+            lua_pushinteger(L, gear^.Boom)
             end
         else
             begin
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-            lua_pushnil(L); lua_pushnil(L)
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
             end
         end
     else
         begin
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-        lua_pushnil(L); lua_pushnil(L)
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
         end;
-    lc_getgearvalues:= 12
+    lc_getgearvalues:= 13
 end;
 
 function lc_setgearvalues(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-// Currently allows 1-13 params
-//    if CheckLuaParamCount(L, 13, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage') then
+// Currently allows 1-14 params
+//    if CheckLuaParamCount(L, 14, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage, Boom') then
 //        begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -972,6 +985,8 @@ begin
                 gear^.Tint := lua_tointeger(L, 12);
             if not lua_isnoneornil(L, 13) then
                 gear^.Damage := lua_tointeger(L, 13);
+            if not lua_isnoneornil(L, 14) then
+                gear^.Boom := lua_tointeger(L, 14);
             end;
 //        end
 //    else
@@ -1194,9 +1209,24 @@ begin
 end;
 
 function lc_getclancolor(L : Plua_State) : LongInt; Cdecl;
+var idx: integer;
 begin
-    if CheckLuaParamCount(L, 1, 'GetClanColor', 'clan') then
-        lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color shl 8 or $FF)
+    if CheckLuaParamCount(L, 1, 'GetClanColor', 'clanIdx') then
+        begin
+        idx:= lua_tointeger(L, 1);
+        if (not lua_isnumber(L, 1)) then
+            begin
+            LuaError('Argument ''clanIdx'' must be a number!');
+            lua_pushnil(L);
+            end
+        else if (idx < 0) or (idx >= ClansCount) then
+            begin
+            LuaError('Argument ''clanIdx'' out of range! (There are currently ' + IntToStr(ClansCount) + ' clans, so valid range is: 0-' + IntToStr(ClansCount-1) + ')');
+            lua_pushnil(L);
+            end
+        else
+            lua_pushinteger(L, ClansArray[idx]^.Color shl 8 or $FF);
+        end
     else
         lua_pushnil(L); // return value on stack (nil)
     lc_getclancolor:= 1
@@ -1210,8 +1240,8 @@ var clan : PClan;
 begin
     if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
-	i:= lua_tointeger(L,1);
-	if i >= ClansCount then exit(0);
+        i:= lua_tointeger(L,1);
+        if i >= ClansCount then exit(0);
         clan := ClansArray[i];
         clan^.Color:= lua_tointeger(L, 2) shr 8;
 
@@ -1232,7 +1262,7 @@ begin
             team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
-	    FreeAndNilTexture(clan^.HealthTex);
+        FreeAndNilTexture(clan^.HealthTex);
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
 
@@ -2195,24 +2225,6 @@ begin
     lc_setwind:= 0
 end;
 
-function lc_getdatapath(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 0, 'GetDataPath', '') then
-        lua_pushstring(L, str2pchar(cPathz[ptData]))
-    else
-        lua_pushnil(L);
-    lc_getdatapath:= 1
-end;
-
-function lc_getuserdatapath(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 0, 'GetUserDataPath', '') then
-        lua_pushstring(L, str2pchar(cPathz[ptData]))
-    else
-        lua_pushnil(L);
-    lc_getuserdatapath:= 1
-end;
-
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'MapHasBorder', '') then
@@ -2289,16 +2301,16 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         if not lua_isnoneornil(L, 5) then
-	        tint := lua_tointeger(L, 5)
+            tint := lua_tointeger(L, 5)
         else tint := $FFFFFFFF;
         if not lua_isnoneornil(L, 6) then
-	        behind := lua_toboolean(L, 6)
+            behind := lua_toboolean(L, 6)
         else behind := false;
         if not lua_isnoneornil(L, 7) then
-	        flipHoriz := lua_toboolean(L, 7)
+            flipHoriz := lua_toboolean(L, 7)
         else flipHoriz := false;
         if not lua_isnoneornil(L, 8) then
-	        flipVert := lua_toboolean(L, 8)
+            flipVert := lua_toboolean(L, 8)
         else flipVert := false;
         lf:= 0;
 
@@ -2336,16 +2348,16 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         if not lua_isnoneornil(L, 5) then
-	        eraseOnLFMatch := lua_toboolean(L, 5)
+            eraseOnLFMatch := lua_toboolean(L, 5)
         else eraseOnLFMatch := false;
         if not lua_isnoneornil(L, 6) then
-	        onlyEraseLF := lua_toboolean(L, 6)
+            onlyEraseLF := lua_toboolean(L, 6)
         else onlyEraseLF := false;
         if not lua_isnoneornil(L, 7) then
-	        flipHoriz := lua_toboolean(L, 7)
+            flipHoriz := lua_toboolean(L, 7)
         else flipHoriz := false;
         if not lua_isnoneornil(L, 8) then
-	        flipVert := lua_toboolean(L, 8)
+            flipVert := lua_toboolean(L, 8)
         else flipVert := false;
         lf:= 0;
 
@@ -2528,6 +2540,20 @@ begin
     lc_declareachievement:= 0
 end;
 
+function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
+        startGhostPoints(lua_tointeger(L, 1));
+    lc_startghostpoints:= 0
+end;
+
+function lc_dumppoint(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 2, 'DumpPoint', 'x, y') then
+        dumpPoint(lua_tointeger(L, 1), lua_tointeger(L, 2));
+    lc_dumppoint:= 0
+end;
+
 
 procedure ScriptFlushPoints();
 begin
@@ -2591,7 +2617,7 @@ begin
 
         case lua_tointeger(L, 1) of
             HaltTestSuccess : rstring:= 'Success';
-            HaltTestLuaError: rstring:= 'FAILED';
+            HaltTestFailed: rstring:= 'FAILED';
         else
             begin
             LuaCallError('Parameter must be either ' + params, call, params);
@@ -2721,7 +2747,7 @@ ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetInteger('GetAwayTime', cGetAwayTime);
 ScriptSetString('Map', cMapName);
-ScriptSetString('Theme', '');
+ScriptSetString('Theme', Theme);
 ScriptSetString('Goals', '');
 
 ScriptCall('onGameInit');
@@ -2857,7 +2883,7 @@ ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if isCursorVisible and (not bShowAmmoMenu) then
     begin
-    if (prevCursorPoint.X <> CursorPoint.X) or 
+    if (prevCursorPoint.X <> CursorPoint.X) or
        (prevCursorPoint.Y <> CursorPoint.Y) then
         begin
         ScriptSetInteger('CursorX', CursorPoint.X - WorldDx);
@@ -3016,13 +3042,13 @@ end;
 
 procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte);
 begin
-// change loadout string if ammo store hasn't been initialized yet
+// change loadout string if ammo store has not been initialized yet
 if (StoreCnt = 0) then
 begin
     if (delay <= 9) then
         ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
 end
-// change "live" delay values
+// change 'live' delay values
 else if (CurrentTeam <> nil) then
         ammoz[ammo].SkipTurns:= CurrentTeam^.Clan^.TurnNumber + delay;
 end;
@@ -3094,7 +3120,7 @@ var at : TGearType;
 begin
 // initialize lua
 luaState:= lua_open;
-TryDo(luaState <> nil, 'lua_open failed', true);
+if checkFails(luaState <> nil, 'lua_open failed', true) then exit;
 
 // open internal libraries
 luaopen_base(luaState);
@@ -3322,8 +3348,6 @@ lua_register(luaState, _P'GetGearCollisionMask', @lc_getgearcollisionmask);
 lua_register(luaState, _P'SetGearCollisionMask', @lc_setgearcollisionmask);
 lua_register(luaState, _P'GetRandom', @lc_getrandom);
 lua_register(luaState, _P'SetWind', @lc_setwind);
-lua_register(luaState, _P'GetDataPath', @lc_getdatapath);
-lua_register(luaState, _P'GetUserDataPath', @lc_getuserdatapath);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
@@ -3337,6 +3361,7 @@ lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
+lua_register(luaState, _P'SetCinematicMode', @lc_setcinematicmode);
 lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
@@ -3345,6 +3370,8 @@ lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 lua_register(luaState, _P'SetGearAIHints', @lc_setgearaihints);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
+lua_register(luaState, _P'StartGhostPoints', @lc_startghostpoints);
+lua_register(luaState, _P'DumpPoint', @lc_dumppoint);
 
 ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
 ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);
@@ -3436,6 +3463,22 @@ end;
 *)
 
 procedure ScriptOnScreenResize;
+begin
+end;
+
+procedure ScriptOnPreviewInit;
+begin
+end;
+
+procedure ScriptSetInteger(name : shortstring; value : LongInt);
+begin
+end;
+
+procedure ScriptSetString(name : shortstring; value : shortstring);
+begin
+end;
+
+procedure LuaParseString(s : ShortString);
 begin
 end;
 

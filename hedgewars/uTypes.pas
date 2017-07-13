@@ -145,7 +145,7 @@ type
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7,
             sndPiano8, sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
             sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
-            sndIceBeam, sndHogFreeze
+            sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime
             );
 
     // Available ammo types to be used by hedgehogs
@@ -180,7 +180,7 @@ type
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
     TUIDisplay = (uiAll, uiNoTeams, uiNone);
-    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn);
+    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn, mgForts);
 
 
     THHFont = record
@@ -273,6 +273,7 @@ type
 // DirAngle is a 'real' - if you do not need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
 // These are frequently overridden to serve some other purpose
+	    Boom: Longword;          // amount of damage caused by the gear
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
             Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
             Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
@@ -530,6 +531,8 @@ type
     end;
 
     PCakeData = ^TCakeData;
+
+    TClansArray = array[0..Pred(cMaxTeams)] of PClan;
 
 implementation
 

@@ -23,9 +23,9 @@ interface
 
 procedure GetParams;
 {$IFDEF HWLIBRARY}
-var operatingsystem_parameter_argc: LongInt = 0; export;
-    operatingsystem_parameter_argv: pointer = nil; export;
-    operatingsystem_parameter_envp: pointer = nil; export;
+var operatingsystem_parameter_argc: LongInt = 0; {$IFNDEF PAS2C}{$IFNDEF IPHONEOS}cdecl;{$ENDIF} export;{$ENDIF}
+    operatingsystem_parameter_argv: pointer = nil; {$IFNDEF PAS2C}{$IFNDEF IPHONEOS}cdecl;{$ENDIF} export;{$ENDIF}
+    operatingsystem_parameter_envp: pointer = nil; {$IFNDEF PAS2C}{$IFNDEF IPHONEOS}cdecl;{$ENDIF} export;{$ENDIF}
 
 function ParamCount: LongInt;
 function ParamStr(i: LongInt): shortstring;
@@ -100,7 +100,7 @@ begin
     WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
     WriteLn(stdout, 'For more detailed help and examples go to:');
-    WriteLn(stdout, 'http://code.google.com/p/hedgewars/wiki/CommandLineOptions');
+    WriteLn(stdout, 'http://hedgewars.org/kb/CommandLineOptions');
     GameType:= gmtSyntax;
 end;
 

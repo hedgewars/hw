@@ -39,7 +39,7 @@
 #include "GameStyleModel.h"
 #include "themeprompt.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent) :
+GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     QGroupBox(parent)
     , mainLayout(this)
     , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
@@ -80,6 +80,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     // Map options
 
     pMapContainer = new HWMapContainer(mapContainerFree);
+    pMapContainer->setRandomWithoutDLC(randomWithoutDLC);
     stackLayout->addWidget(mapContainerFree, 0, Qt::AlignHCenter);
     pMapContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     pMapContainer->setFixedSize(width() - 14, 278);
@@ -108,6 +109,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), this), 1, 0);
 
     Scripts = new QComboBox(this);
+    Scripts->setMaxVisibleItems(30);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
     Scripts->setModel(DataManager::instance().gameStyleModel());
@@ -121,6 +123,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->setMargin(0);
 
     GameSchemes = new QComboBox(SchemeWidget);
+    GameSchemes->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(GameSchemes, 0, 2);
     connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
@@ -139,6 +142,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Weapons"), SchemeWidget), 1, 0);
 
     WeaponsName = new QComboBox(SchemeWidget);
+    WeaponsName->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(WeaponsName, 1, 2);
 
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));

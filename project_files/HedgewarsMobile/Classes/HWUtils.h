@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 
 
-typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
+typedef enum {gtNone, gtLocal, gtSave, gtMission, gtCampaign, gtNet} TGameType;
 typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 
 @interface HWUtils : NSObject {
@@ -43,6 +43,7 @@ typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 +(BOOL) isNetworkReachable;
 +(NSString *) languageID;
 //+(UIView *)mainSDLViewInstance;
++(NSString *) seed;
 
 @end
 

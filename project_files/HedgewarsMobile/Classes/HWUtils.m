@@ -174,4 +174,12 @@ static TGameStatus gameStatus = gsNone;
 }
 */
 
++ (NSString *)seed
+{
+    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
+    CFRelease(uuid);
+    return seed;
+}
+
 @end

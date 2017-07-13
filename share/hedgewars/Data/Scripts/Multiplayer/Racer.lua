@@ -1,6 +1,6 @@
 
 ------------------------------------------
--- RACER 0.6
+-- RACER 0.8
 -- map-independant racing script
 -- by mikade
 -----------------------------------------
@@ -73,6 +73,11 @@
 
 -- switch to first available weapon if starting race with no weapon selected
 
+-------
+-- 0.8
+-------
+-- allow different boost directions
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
@@ -94,7 +99,7 @@ local fastX = {}
 local fastY = {}
 local fastCount = 0
 local fastIndex = 0
-local fastColour
+local fastColour = 0xffffffff
 
 local currX = {}
 local currY = {}
@@ -150,6 +155,10 @@ local usedWeapons = {}
 local roundN
 local lastRound
 local RoundHasChanged
+
+local boostX = 0
+local boostY = 0
+local boostValue = 1
 
 -------------------
 -- general methods
@@ -223,6 +232,31 @@ end
 -----------------
 -- RACER METHODS
 -----------------
+
+function onLeft()
+	boostX = boostX +boostValue
+end
+function onLeftUp()
+	boostX = boostX -boostValue
+end
+function onRight()
+	boostX = boostX -boostValue
+end
+function onRightUp()
+	boostX = boostX +boostValue
+end
+function onUp()
+	boostY = boostY +boostValue
+end
+function onUpUp()
+	boostY = boostY -boostValue
+end
+function onDown()
+	boostY = boostY -boostValue
+end
+function onDownUp()
+	boostY = boostY +boostValue
+end
 
 function CheckWaypoints()
 
@@ -540,7 +574,7 @@ function PlaceWayPoint(x,y)
             wpY[wpCount] = y
             wpCol[wpCount] = 0xffffffff
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-                                                                                                                                            
+
             SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
 
             wpCount = wpCount + 1
@@ -551,9 +585,18 @@ function PlaceWayPoint(x,y)
 end
 
 function onSpecialPoint(x,y,flag)
-    specialPointsX[specialPointsCount] = x
-    specialPointsY[specialPointsCount] = y
-    specialPointsCount = specialPointsCount + 1
+    if flag == 99 then
+        fastX[fastCount] = x
+        fastY[fastCount] = y
+        fastCount = fastCount + 1
+    else
+        addHashData(x)
+        addHashData(y)
+        addHashData(flag)
+        specialPointsX[specialPointsCount] = x
+        specialPointsY[specialPointsCount] = y
+        specialPointsCount = specialPointsCount + 1
+    end
 end
 
 function onNewTurn()
@@ -649,7 +692,7 @@ function onGameTick20()
                                 trackTime = 0
 
                                 SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
-                                AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
+                                AddGear(GetX(CurrentHedgehog)+boostX, GetY(CurrentHedgehog)+boostY, gtGrenade, 0, 0, 0, 1)
                                 FollowGear(CurrentHedgehog)
 
                                 HideMission()
@@ -743,17 +786,18 @@ end
 
 function onAttack()
     at = GetCurAmmoType()
-    
+
     usedWeapons[at] = 0
 end
 
 function onAchievementsDeclaration()
     usedWeapons[amSkip] = nil
-    
+    usedWeapons[amExtraTime] = nil
+
     usedRope = usedWeapons[amRope] ~= nil
     usedPortal = usedWeapons[amPortalGun] ~= nil
     usedSaucer = usedWeapons[amJetpack] ~= nil
-    
+
     usedWeapons[amNothing] = nil
     usedWeapons[amRope] = nil
     usedWeapons[amPortalGun] = nil
@@ -775,11 +819,19 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMap()
-    
+    map = detectMapWithDigest()
+
     for i = 0, (numTeams-1) do
         if teamScore[i] < 100000 then
             DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+        end
+    end
+
+    if map ~= nil and fastCount > 0 then
+        StartGhostPoints(fastCount)
+
+        for i = 0, (fastCount - 1) do
+            DumpPoint(fastX[i], fastY[i])
         end
     end
 end

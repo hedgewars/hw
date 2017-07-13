@@ -39,7 +39,7 @@
     self.trPath = [NSString stringWithFormat:@"%@", LOCALE_DIRECTORY()];
     self.trFileName = [NSString stringWithFormat:@"%@.txt", [HWUtils languageID]];
     // fill the data structure that we are going to read
-    LoadLocaleWrapper([self.trPath UTF8String], [self.trFileName UTF8String]);
+    LoadLocaleWrapper([self.trPath UTF8String], [DOCUMENTS_FOLDER() UTF8String], [self.trFileName UTF8String]);
 
     quantity = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
     probability = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));

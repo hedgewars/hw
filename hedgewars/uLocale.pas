@@ -30,7 +30,7 @@ function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 {$IFDEF HWLIBRARY}
-procedure LoadLocaleWrapper(path: pchar; filename: pchar); cdecl; export;
+procedure LoadLocaleWrapper(path: pchar; userpath: pchar; filename: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
@@ -50,7 +50,7 @@ for e:= Low(TEventId) to High(TEventId) do
     first[e]:= true;
 
 f:= pfsOpenRead(FileName);
-TryDo(f <> nil, 'Cannot load locale "' + FileName + '"', false);
+checkFails(f <> nil, 'Cannot load locale "' + FileName + '"', false);
 
 s:= '';
 
@@ -63,18 +63,19 @@ if f <> nil then
             continue;
         if (s[1] < '0') or (s[1] > '9') then
             continue;
-        TryDo(Length(s) > 6, 'Load locale: empty string', true);
+        checkFails(Length(s) > 6, 'Load locale: empty string', true);
         {$IFNDEF PAS2C}
         val(s[1]+s[2], a, c);
-        TryDo(c = 0, ansistring('Load locale: numbers should be two-digit: ') + s, true);
+        checkFails(c = 0, ansistring('Load locale: numbers should be two-digit: ') + s, true);
         val(s[4]+s[5], b, c);
-        TryDo(c = 0, ansistring('Load locale: numbers should be two-digit: ') + s, true);
+        checkFails(c = 0, ansistring('Load locale: numbers should be two-digit: ') + s, true);
         {$ELSE}
         val(s[1]+s[2], a);
         val(s[4]+s[5], b);
         {$ENDIF}
-        TryDo(s[3] = ':', 'Load locale: ":" expected', true);
-        TryDo(s[6] = '=', 'Load locale: "=" expected', true);
+        checkFails(s[3] = ':', 'Load locale: ":" expected', true);
+        checkFails(s[6] = '=', 'Load locale: "=" expected', true);
+        if not allOK then exit;
         Delete(s, 1, 6);
         case a of
             0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
@@ -83,7 +84,7 @@ if f <> nil then
                 trmsg[TMsgStrId(b)]:= s;
             2: if (b >=0) and (b <= ord(High(TEventId))) then
                 begin
-                TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
+                checkFails(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
                 if first[TEventId(b)] then
                     begin
                     trevt_n[TEventId(b)]:= 0;
@@ -133,19 +134,26 @@ else
 end;
 
 {$IFDEF HWLIBRARY}
-procedure LoadLocaleWrapper(path: pchar; filename: pchar); cdecl; export;
+procedure LoadLocaleWrapper(path: pchar; userpath: pchar; filename: pchar); cdecl; export;
 begin
     PathPrefix := Strpas(path);
+    UserPathPrefix := Strpas(userpath);
  
-    uUtils.initModule(false);
+    //normally this var set in preInit of engine
+    allOK := true;
+    
     uVariables.initModule;
-    uPhysFSLayer.initModule;
+ 
+    PathPrefix:= PathPrefix + #0;
+    UserPathPrefix:= UserPathPrefix + #0;
+    uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
+    PathPrefix:= copy(PathPrefix, 1, length(PathPrefix) - 1);
+    UserPathPrefix:= copy(UserPathPrefix, 1, length(UserPathPrefix) - 1);
  
     LoadLocale(Strpas(filename));
  
     uPhysFSLayer.freeModule;
     uVariables.freeModule;
-    uUtils.freeModule;
 end;
 {$ENDIF}
 

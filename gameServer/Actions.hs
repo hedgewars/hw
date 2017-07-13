@@ -466,12 +466,15 @@ processAction ClearAccountsCache = do
 
 
 processAction (ProcessAccountInfo info) = do
+    si <- gets serverInfo
     case info of
         HasAccount passwd isAdmin isContr -> do
             b <- isBanned
             c <- client's isChecker
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
-        Guest -> do
+        Guest | isRegisteredUsersOnly si -> do
+            processAction $ ByeClient "Registered users only"
+            | otherwise -> do
             b <- isBanned
             c <- client's isChecker
             when (not b) $
@@ -508,6 +511,7 @@ processAction JoinLobby = do
     chan <- client's sendChan
     rnc <- gets roomsClients
     clientNick <- client's nick
+    clProto <- client's clientProto
     isAuthenticated <- liftM (not . B.null) $ client's webPassword
     isAdmin <- client's isAdministrator
     isContr <- client's isContributor
@@ -521,6 +525,13 @@ processAction JoinLobby = do
         >>= filterM (liftM ((/=) lobbyId) . clientRoomM rnc)
         >>= mapM (client'sM rnc nick)
     let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin], ["c" | isContr]]
+
+    roomsInfoList <- io $ do
+        rooms <- roomsM rnc
+        mapM (\r -> (if isNothing $ masterID r then return "" else client'sM rnc nick (fromJust $ masterID r))
+            >>= \cn -> return $ roomInfo clProto cn r)
+            $ filter (\r -> (roomProto r == clProto)) rooms
+
     mapM_ processAction . concat $ [
         [AnswerClients clientsChans ["LOBBY:JOINED", clientNick]]
         , [AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)]
@@ -531,6 +542,7 @@ processAction JoinLobby = do
         , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
         , [ModifyClient (\cl -> cl{logonPassed = True, isVisible = True})]
         , [SendServerMessage]
+        , [AnswerClients [chan] ("ROOMS" : concat roomsInfoList)]
         ]
 
 
@@ -716,6 +728,31 @@ processAction (Random chans items) = do
     processAction $ AnswerClients chans ["CHAT", "[random]", i !! n]
 
 
+processAction (LoadGhost location) = do
+    ri <- clientRoomA
+    rnc <- gets roomsClients
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+#if defined(OFFICIAL_SERVER)
+    rm <- io $ room'sM rnc id ri
+    points <- io $ loadFile (B.unpack $ "ghosts/" `B.append` sanitizeName location)
+    when (roomProto rm > 51) $ do
+        processAction $ ModifyRoom $ \r -> r{params = Map.insert "DRAWNMAP" [prependGhostPoints (toP points) $ head $ (params r) Map.! "DRAWNMAP"] (params r)}
+#endif
+    cl <- client's id
+    rm <- io $ room'sM rnc id ri
+    mapM_ processAction $ map (replaceChans thisRoomChans) $ answerFullConfigParams cl (mapParams rm) (params rm)
+    where
+    loadFile :: String -> IO [Int]
+    loadFile fileName = E.handle (\(e :: SomeException) -> return []) $ do
+        points <- liftM read $ readFile fileName
+        return (points `deepseq` points)
+    replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
+    replaceChans _ a = a
+    toP [] = []
+    toP (p1:p2:ps) = (fromIntegral p1, fromIntegral p2) : toP ps
+{-
+        let a = map (replaceChans chans) $ answerFullConfigParams cl mp p
+-}
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
     ri <- clientRoomA

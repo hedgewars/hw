@@ -144,17 +144,17 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface"))
-	SendStat(siCustomAchievement, loc("Most mines are not active"))
-	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises"))
+	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface."))
+	SendStat(siCustomAchievement, loc("Most mines are not active."))
+	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises."))
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
 function heroSafe(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You have escaped successfully"))
-	SendStat(siCustomAchievement, loc("Your escape took you "..TotalRounds.." turns"))
+	SendStat(siCustomAchievement, loc("You have escaped successfully."))
+	SendStat(siCustomAchievement, string.format(loc("Your escape took you %d turns."), TotalRounds))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
@@ -172,9 +172,9 @@ function AnimationSetup()
 	-- DIALOG 01 - Start
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Many meters below the surface..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("The tunnel is about to get flooded..."), SAY_THINK, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I have to reach the surface as quickly as I can..."), SAY_THINK, 4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Many meters below the surface ..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("The tunnel is about to get flooded!"), SAY_THINK, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I have to reach the surface as quickly as I can."), SAY_THINK, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = challengeStart, args = {hero.gear}})
 end

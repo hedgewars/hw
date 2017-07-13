@@ -8,13 +8,14 @@ endif()
 
 if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt4 REQUIRED QUIET)
-    find_package(PNG REQUIRED)
-    find_package(SDL REQUIRED)
-    find_package(SDL_image REQUIRED)
-    find_package(SDL_net REQUIRED)
-    find_package(SDL_ttf REQUIRED)
-    find_package(SDL_mixer REQUIRED)
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_image REQUIRED)
+    find_package(SDL2_net REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+    find_package(SDL2_mixer REQUIRED)
     find_package(OggVorbis REQUIRED)
+    find_package(PNG REQUIRED)
+
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle) #needed for SPARKLE_FOUND variable
         #needed because the 'if' clause in the script prints silly policy warnings
@@ -28,9 +29,9 @@ if(APPLE AND NOT SKIPBUNDLE)
     #use the associated tool from the libraries we've selected
     string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
 
-    #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
-    #remove the "libSDLmain.a" from the SDL_LIBRARY variable
+    #remove the ";-framework Cocoa" from the SDL2_LIBRARY variable
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL2_LIBRARY}")
+    #remove the "libSDLmain.a" from the SDL2_LIBRARY variable
     string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
     #get the neme of the library (harmelss if it is static)

@@ -62,7 +62,7 @@ function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, uDebug;
+uses uConsts, uLandGraphics, uVariables;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
@@ -76,16 +76,16 @@ var Count: Longword;
 
 procedure AddCI(Gear: PGear);
 begin
-if (Gear^.CollisionIndex >= 0) or 
+if (Gear^.CollisionIndex >= 0) or (Count > MAXRECTSINDEX) or
     ((Count > MAXRECTSINDEX-200) and ((Gear^.Kind = gtMine) or (Gear^.Kind = gtSMine) or (Gear^.Kind = gtKnife))) then
     exit;
-TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
+
 with cinfos[Count] do
     begin
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true, (Gear = CurrentHedgehog^.Gear) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
+    ChangeRoundInLand(X, Y, Radius - 1, true,  ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)), Gear^.Kind = gtHedgehog);
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -97,7 +97,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false, ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
+        ChangeRoundInLand(X, Y, Radius - 1, false, ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)), Gear^.Kind = gtHedgehog);
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;

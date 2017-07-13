@@ -30,7 +30,7 @@ procedure FreeActionsList;
 
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
-    uAmmos, SysUtils, uTypes,
+    uAmmos, uTypes,
     uVariables, uCommands, uUtils, uDebug, uAILandMarks;
 
 var BestActions: TActions;
@@ -52,10 +52,11 @@ begin
     ThinkThread:= nil;
     SDL_UnlockMutex(ThreadLock);
 
-    with CurrentHedgehog^ do
-        if Gear <> nil then
-            if BotLevel <> 0 then
-                StopMessages(Gear^.Message);
+    if CurrentHedgehog <> nil then
+        with CurrentHedgehog^ do
+            if Gear <> nil then
+                if BotLevel <> 0 then
+                    StopMessages(Gear^.Message);
 
     BestActions.Count:= 0;
     BestActions.Pos:= 0
@@ -162,9 +163,20 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
+                        if HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0 then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amVampiric), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
                         end;
 
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
+
+                    if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+                        begin
+                        AddAction(BestActions, aia_Put, 0, 8, ap.AttackPutX, ap.AttackPutY)
+                        end;
 
                     if (ap.Angle > 0) then
                         AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
@@ -187,11 +199,6 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_Down, aim_push, 300 + random(250), 0, 0);
                             AddAction(BestActions, aia_Down, aim_release, -dAngle, 0, 0)
                             end
-                        end;
-
-                    if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
-                        begin
-                        AddAction(BestActions, aia_Put, 0, 1, ap.AttackPutX, ap.AttackPutY)
                         end;
 
                     if (Ammoz[a].Ammo.Propz and ammoprop_OscAim) <> 0 then
@@ -530,7 +537,7 @@ if Targets.Count = 0 then
 FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot));
 
 SDL_LockMutex(ThreadLock);
-ThinkThread:= SDL_CreateThread(@Think{$IFDEF SDL2}, 'think'{$ENDIF}, Me);
+ThinkThread:= SDL_CreateThread(@Think, PChar('think'), Me);
 SDL_UnlockMutex(ThreadLock);
 end;
 
@@ -552,7 +559,7 @@ with CurrentHedgehog^ do
                 if Gear^.Message <> 0 then
                     begin
                     StopMessages(Gear^.Message);
-                    TryDo((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true);
+                    if checkFails((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true) then exit;
                     end;
 
                 if Gear^.Message <> 0 then

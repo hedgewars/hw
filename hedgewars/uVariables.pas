@@ -23,6 +23,8 @@ interface
 
 uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils{$IFDEF GL2}, uMatrix{$ENDIF};
 
+procedure initScreenSpaceVars();
+
 var
 /////// init flags ///////
     cMinScreenWidth    : LongInt;
@@ -212,6 +214,10 @@ var
     ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
+    InCinematicMode : boolean;
+    CinematicSteps  : LongInt;
+    CinematicBarH   : LongInt;
+    CinematicScript : boolean;
 
     UIDisplay       : TUIDisplay;
     LocalMessage    : LongWord;
@@ -243,8 +249,6 @@ var
     mobileRecord: TMobileRecord;
 
     MaxTextureSize: LongInt;
-
-    ChatPasteBuffer: shortstring;
 
 /////////////////////////////////////
 //Buttons
@@ -294,28 +298,28 @@ var
 const
     FontzInit: array[THWFont] of THHFont = (
             (Handle: nil;
-            Height: 12;
+            Height: 12*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf'),
             (Handle: nil;
-            Height: 24;
+            Height: 24*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf'),
             (Handle: nil;
-            Height: 10;
+            Height: 10*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf')
             {$IFNDEF MOBILE}, // remove chinese fonts for now
             (Handle: nil;
-            Height: 12;
+            Height: 12*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc'),
             (Handle: nil;
-            Height: 24;
+            Height: 24*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc'),
             (Handle: nil;
-            Height: 10;
+            Height: 10*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc')
             {$ENDIF}
@@ -625,7 +629,7 @@ const
             (FileName:  'Egg'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprEgg
             (FileName:  'TargetBee'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetBee
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetBee
             (FileName:  'amBee'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandBee
             (FileName:  'Feather'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -2388,7 +2392,7 @@ var
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword;
-    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
+    ClansArray, SpawnClansArray: TClansArray;
     ClansCount: Longword;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
@@ -2510,6 +2514,14 @@ begin
 {$ENDIF}
 
     cTagsMask:= htTeamName or htName or htHealth;
+end;
+
+procedure initScreenSpaceVars();
+begin
+    // those values still are not perfect
+    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
+    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
+    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
 end;
 
 procedure initModule;
@@ -2687,11 +2699,12 @@ begin
 
     disableLandBack := false;
     ScreenFade      := sfNone;
+    InCinematicMode := false;
+    CinematicSteps  := 0;
+    CinematicBarH   := 0;
+    CinematicScript := false;
 
-    // those values still are not perfect
-    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
-    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
-    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
+    initScreenSpaceVars();
 
     dirtyLandTexCount:= 0;
 
@@ -2739,8 +2752,6 @@ begin
     cViewLimitsDebug:= false;
     AprilOne := false;
 
-    ChatPasteBuffer:= '';
-
     // initialize pointers to nil
     // (don't rely on implicit init of fpc, because that one only happens ONCE when used as lib)
     CurAmmoGear:= nil;
@@ -2766,6 +2777,8 @@ begin
         begin
         ClansArray[i]:= nil;
         end;
+
+    SpawnClansArray:= ClansArray;
 
     for i:= Low(TeamsArray) to High(TeamsArray) do
         begin

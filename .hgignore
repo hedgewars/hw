@@ -23,7 +23,6 @@ glob:install_manifest.txt
 glob:.DS_Store
 glob:*.swp
 glob:*.orig
-glob:*.diff
 glob:vittorio.*
 glob:project_files/HedgewarsMobile/Data/
 glob:project_files/HedgewarsMobile/Build/
@@ -35,7 +34,6 @@ glob:moc_*.cxx_parameters
 relre:^release\/
 glob:*.log
 glob:*.cmd
-glob:*.diff
 glob:*.patch
 glob:*.orig
 glob:*.bak

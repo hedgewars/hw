@@ -28,9 +28,10 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
 uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
      uTypes, uVariables, uCommands, uConsts, uVisualGearsList, uUtils
-     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
+     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF}, uDebug;
 
 procedure DoGameTick(Lag: LongInt);
+const maxCheckedGameDuration = 3*60*60*1000;
 var i,j : LongInt;
     s: ansistring;
 begin
@@ -40,6 +41,7 @@ if isPaused then
 if (not CurrentTeam^.ExtDriven) then
     begin
     NetGetNextCmd; // its for the case of receiving "/say" message
+    if not allOK then exit;
     isInLag:= false;
     FlushMessages(Lag)
     end;
@@ -62,7 +64,15 @@ if GameType <> gmtRecord then
             else Lag:= Lag*80;
             end
         else if cOnlyStats then
-            Lag:= High(LongInt)
+            begin
+                if GameTicks >= maxCheckedGameDuration then
+                begin
+                    gameState:= gsExit;
+                    exit;
+                end;
+
+            Lag:= maxCheckedGameDuration + 60000;
+            end;
     end;
 
 if cTestLua then
@@ -87,7 +97,7 @@ if SoundTimerTicks >= 50 then
     end;
 PlayNextVoice;
 i:= 1;
-while (GameState <> gsExit) and (i <= Lag) do
+while (GameState <> gsExit) and (i <= Lag) and allOK do
     begin
     if not CurrentTeam^.ExtDriven then
         begin
@@ -99,6 +109,8 @@ while (GameState <> gsExit) and (i <= Lag) do
     else
         begin
         NetGetNextCmd;
+        if not allOK then exit;
+
         if isInLag then
             case GameType of
                 gmtNet: begin

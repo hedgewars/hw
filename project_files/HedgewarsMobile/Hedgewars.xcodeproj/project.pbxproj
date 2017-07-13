@@ -242,6 +242,7 @@
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
+		F60ACBB71C7BC08B00385701 /* IniParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F60ACBB61C7BC08B00385701 /* IniParser.m */; };
 		F60D04771BD137B5003ACB00 /* bullet_filled.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04631BD137B5003ACB00 /* bullet_filled.png */; };
 		F60D04781BD137B5003ACB00 /* bullet_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */; };
 		F60D04791BD137B5003ACB00 /* bullet.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04651BD137B5003ACB00 /* bullet.png */; };
@@ -262,6 +263,12 @@
 		F60D04881BD137B5003ACB00 /* teams_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04741BD137B5003ACB00 /* teams_filled@2x.png */; };
 		F60D04891BD137B5003ACB00 /* teams.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04751BD137B5003ACB00 /* teams.png */; };
 		F60D048A1BD137B5003ACB00 /* teams@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04761BD137B5003ACB00 /* teams@2x.png */; };
+		F6338CC81C7A53C100353945 /* CampaignsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6338CC61C7A53C100353945 /* CampaignsViewController.m */; };
+		F6338CC91C7A53C100353945 /* CampaignsViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6338CC71C7A53C100353945 /* CampaignsViewController-iPhone.xib */; };
+		F6338CCC1C7A542C00353945 /* CampaignsViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6338CCB1C7A542C00353945 /* CampaignsViewController-iPad.xib */; };
+		F6338CD81C7A702B00353945 /* CampaignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6338CD61C7A702B00353945 /* CampaignViewController.m */; };
+		F6338CD91C7A702B00353945 /* CampaignViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6338CD71C7A702B00353945 /* CampaignViewController-iPhone.xib */; };
+		F6338CDB1C7A709600353945 /* CampaignViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6338CDA1C7A709600353945 /* CampaignViewController-iPad.xib */; };
 		F6448CE31BD2E00500C31C8C /* TableViewControllerWithDoneButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */; };
 		F65724FD1B7E784700A86262 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724F81B7E784700A86262 /* helpabove.png */; };
 		F65724FE1B7E784700A86262 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724F91B7E784700A86262 /* helpbottom.png */; };
@@ -731,6 +738,8 @@
 		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeaponCellView.m; path = Classes/WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F60ACBB51C7BC08B00385701 /* IniParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IniParser.h; path = Classes/IniParser.h; sourceTree = "<group>"; };
+		F60ACBB61C7BC08B00385701 /* IniParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IniParser.m; path = Classes/IniParser.m; sourceTree = "<group>"; };
 		F60D04631BD137B5003ACB00 /* bullet_filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_filled.png; path = Resources/Icons/bullet_filled.png; sourceTree = "<group>"; };
 		F60D04641BD137B5003ACB00 /* bullet_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bullet_filled@2x.png"; path = "Resources/Icons/bullet_filled@2x.png"; sourceTree = "<group>"; };
 		F60D04651BD137B5003ACB00 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet.png; path = Resources/Icons/bullet.png; sourceTree = "<group>"; };
@@ -751,6 +760,14 @@
 		F60D04741BD137B5003ACB00 /* teams_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "teams_filled@2x.png"; path = "Resources/Icons/teams_filled@2x.png"; sourceTree = "<group>"; };
 		F60D04751BD137B5003ACB00 /* teams.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = teams.png; path = Resources/Icons/teams.png; sourceTree = "<group>"; };
 		F60D04761BD137B5003ACB00 /* teams@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "teams@2x.png"; path = "Resources/Icons/teams@2x.png"; sourceTree = "<group>"; };
+		F6338CC51C7A53C100353945 /* CampaignsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CampaignsViewController.h; sourceTree = "<group>"; };
+		F6338CC61C7A53C100353945 /* CampaignsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CampaignsViewController.m; sourceTree = "<group>"; };
+		F6338CC71C7A53C100353945 /* CampaignsViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "CampaignsViewController-iPhone.xib"; sourceTree = "<group>"; };
+		F6338CCB1C7A542C00353945 /* CampaignsViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "CampaignsViewController-iPad.xib"; sourceTree = "<group>"; };
+		F6338CD51C7A702B00353945 /* CampaignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CampaignViewController.h; sourceTree = "<group>"; };
+		F6338CD61C7A702B00353945 /* CampaignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CampaignViewController.m; sourceTree = "<group>"; };
+		F6338CD71C7A702B00353945 /* CampaignViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "CampaignViewController-iPhone.xib"; sourceTree = "<group>"; };
+		F6338CDA1C7A709600353945 /* CampaignViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "CampaignViewController-iPad.xib"; sourceTree = "<group>"; };
 		F6448CE11BD2E00500C31C8C /* TableViewControllerWithDoneButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerWithDoneButton.h; sourceTree = "<group>"; };
 		F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerWithDoneButton.m; sourceTree = "<group>"; };
 		F65724F81B7E784700A86262 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpabove.png; sourceTree = "<group>"; };
@@ -970,6 +987,7 @@
 				61915D59143A4E2C00299991 /* MissionTrainingViewController.m */,
 				61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */,
 				61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */,
+				F6338CDC1C7A721B00353945 /* Campaigns */,
 			);
 			name = "Satellite Controllers";
 			sourceTree = "<group>";
@@ -1256,6 +1274,8 @@
 				6165922611CA9BD500D6E256 /* HWUtils.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
+				F60ACBB51C7BC08B00385701 /* IniParser.h */,
+				F60ACBB61C7BC08B00385701 /* IniParser.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1392,6 +1412,21 @@
 				F60D04761BD137B5003ACB00 /* teams@2x.png */,
 			);
 			name = Tabbar;
+			sourceTree = "<group>";
+		};
+		F6338CDC1C7A721B00353945 /* Campaigns */ = {
+			isa = PBXGroup;
+			children = (
+				F6338CC51C7A53C100353945 /* CampaignsViewController.h */,
+				F6338CC61C7A53C100353945 /* CampaignsViewController.m */,
+				F6338CC71C7A53C100353945 /* CampaignsViewController-iPhone.xib */,
+				F6338CCB1C7A542C00353945 /* CampaignsViewController-iPad.xib */,
+				F6338CD51C7A702B00353945 /* CampaignViewController.h */,
+				F6338CD61C7A702B00353945 /* CampaignViewController.m */,
+				F6338CD71C7A702B00353945 /* CampaignViewController-iPhone.xib */,
+				F6338CDA1C7A709600353945 /* CampaignViewController-iPad.xib */,
+			);
+			name = Campaigns;
 			sourceTree = "<group>";
 		};
 		F65724F71B7E784700A86262 /* Help Bubbles */ = {
@@ -1608,6 +1643,7 @@
 				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
 				6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */,
+				F6338CCC1C7A542C00353945 /* CampaignsViewController-iPad.xib in Resources */,
 				6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */,
 				F60D04791BD137B5003ACB00 /* bullet.png in Resources */,
 				61F9040911DF58B00068B24D /* settingsButton.png in Resources */,
@@ -1629,6 +1665,7 @@
 				61F2E7EC12060E31005734F7 /* checkbox.png in Resources */,
 				F60D04821BD137B5003ACB00 /* heart@2x.png in Resources */,
 				615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */,
+				F6338CDB1C7A709600353945 /* CampaignViewController-iPad.xib in Resources */,
 				F60D048A1BD137B5003ACB00 /* teams@2x.png in Resources */,
 				F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */,
 				F60D047E1BD137B5003ACB00 /* flower@2x.png in Resources */,
@@ -1652,6 +1689,7 @@
 				61E2F7451283752C00E12521 /* tw.png in Resources */,
 				61808A5D128C930A005D0E2F /* backSound.caf in Resources */,
 				61D3D2A51290E03A003CE7C3 /* irc.png in Resources */,
+				F6338CC91C7A53C100353945 /* CampaignsViewController-iPhone.xib in Resources */,
 				6172FED91298CF9800D73365 /* background~iphone.png in Resources */,
 				6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */,
 				F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */,
@@ -1683,6 +1721,7 @@
 				F67FC8161BEC17AC00A9DC75 /* Appirater.bundle in Resources */,
 				F65724FD1B7E784700A86262 /* helpabove.png in Resources */,
 				F6F07BDE1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib in Resources */,
+				F6338CD91C7A702B00353945 /* CampaignViewController-iPhone.xib in Resources */,
 				61188C0712A6FE960026C5DA /* settingsButton@2x.png in Resources */,
 				61188C0812A6FE9A0026C5DA /* title@2x~iphone.png in Resources */,
 				F65724FF1B7E784700A86262 /* helpleft.png in Resources */,
@@ -1846,6 +1885,7 @@
 				61798838114AA34C00BA94A9 /* uStats.pas in Sources */,
 				61798839114AA34C00BA94A9 /* uStore.pas in Sources */,
 				6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */,
+				F6338CD81C7A702B00353945 /* CampaignViewController.m in Sources */,
 				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
 				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
 				611F4D4B11B27A9900F9759A /* uScript.pas in Sources */,
@@ -1865,6 +1905,7 @@
 				6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */,
 				6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */,
 				6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */,
+				F60ACBB71C7BC08B00385701 /* IniParser.m in Sources */,
 				6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */,
 				6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */,
 				6165922211CA9BA200D6E256 /* WeaponSettingsViewController.m in Sources */,
@@ -1883,6 +1924,7 @@
 				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
 				61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */,
+				F6338CC81C7A53C100353945 /* CampaignsViewController.m in Sources */,
 				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,
 				61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */,
 				61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */,

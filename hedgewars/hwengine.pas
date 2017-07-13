@@ -39,7 +39,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      ;
 
 {$IFDEF HWLIBRARY}
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
@@ -80,9 +80,10 @@ begin
                 AddClouds;
             AddFlakes;
             SetRandomSeed(cSeed, false);
+            StoreLoad(false);
+            if not allOK then exit;
             AssignHHCoords;
             AddMiscGears;
-            StoreLoad(false);
             InitWorld;
             ResetKbd;
             if GameType = gmtSave then
@@ -99,6 +100,9 @@ begin
             end;
         gsConfirm, gsGame, gsChat:
             begin
+            // disable screenshot flash effect when about to make another screenshot
+            if flagMakeCapture and (ScreenFade = sfFromWhite) then
+                ScreenFade:= sfNone;
             if not cOnlyStats then
                 // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 DrawWorld(Lag);
@@ -137,7 +141,7 @@ begin
         ScreenFade:= sfFromWhite;
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
-        
+
         if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or
            (flagDumpLand and MakeScreenshot(s, 1, 1) and ((cReducedQuality and rqBlurryLand <> 0) or MakeScreenshot(s, 1, 2))) then
             WriteLnToConsole('Screenshot saved: ' + s)
@@ -154,27 +158,24 @@ procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: LongWord;
     isTerminated: boolean;
-{$IFDEF SDL2}
     previousGameState: TGameState;
-{$ELSE}
-    prevFocusState: boolean;
-{$ENDIF}
+    wheelEvent: boolean;
 begin
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
-    while isTerminated = false do
+    while (not isTerminated) and allOK do
     begin
+        wheelEvent:= false;
         SDL_PumpEvents();
 
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL2}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
         begin
             case event.type_ of
-{$IFDEF SDL2}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym, event.key.keysym.modifier);
+                        KeyPressChat(event.key.keysym);
                         end
                     else
                         if GameState >= gsGame then ProcessKey(event.key);
@@ -182,31 +183,43 @@ begin
                     if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
+                SDL_TEXTINPUT: if GameState = gsChat then uChat.TextInput(event.text);
+
                 SDL_WINDOWEVENT:
-                    if event.window.event = SDL_WINDOWEVENT_SHOWN then
                     begin
-                        cHasFocus:= true;
-                        onFocusStateChanged()
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
-                    begin
-                        previousGameState:= GameState;
-                        GameState:= gsSuspend;
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_RESTORED then
-                    begin
-                        GameState:= previousGameState;
+                    case event.window.event of
+                        SDL_WINDOWEVENT_FOCUS_GAINED:
+                                begin
+                                cHasFocus:= true;
+                                onFocusStateChanged();
+                                end;
+                        SDL_WINDOWEVENT_FOCUS_LOST:
+                                begin
+                                cHasFocus:= false;
+                                onFocusStateChanged();
+                                end;
+                        SDL_WINDOWEVENT_MINIMIZED:
+                                begin
+                                previousGameState:= GameState;
+                                GameState:= gsSuspend;
+                                end;
+                        SDL_WINDOWEVENT_RESTORED:
+                                begin
+                                GameState:= previousGameState;
 {$IFDEF ANDROID}
-                        //This call is used to reinitialize the glcontext and reload the textures
-                        ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+                                //This call is used to reinitialize the glcontext and reload the textures
+                                ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
 {$ENDIF}
-                    end
-                    else if event.window.event = SDL_WINDOWEVENT_RESIZED then
-                    begin
-                        cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
-                        cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
-                        cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
+                                end;
+                        SDL_WINDOWEVENT_RESIZED:
+                                begin
+                                cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
+                                cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
+                                cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
+                                end;
+                        end; // case closed
                     end;
+
 {$IFDEF USE_TOUCH_INTERFACE}
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
@@ -216,17 +229,7 @@ begin
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-{$ENDIF}
 {$ELSE}
-                SDL_KEYDOWN:
-                    if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym, event.key.keysym.modifier)
-                    else
-                        if GameState >= gsGame then ProcessKey(event.key);
-                SDL_KEYUP:
-                    if (GameState <> gsChat) and (GameState >= gsGame) then
-                        ProcessKey(event.key);
-
                 SDL_MOUSEBUTTONDOWN:
                     if GameState = gsConfirm then
                         ParseCommand('quit', true)
@@ -236,26 +239,13 @@ begin
                 SDL_MOUSEBUTTONUP:
                     if (GameState >= gsGame) then ProcessMouse(event.button, false);
 
-                SDL_ACTIVEEVENT:
-                    if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
+                SDL_MOUSEWHEEL:
                     begin
-                        prevFocusState:= cHasFocus;
-                        cHasFocus:= event.active.gain = 1;
-                        if prevFocusState xor cHasFocus then
-                            onFocusStateChanged()
+                    wheelEvent:= true;
+                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
                     end;
-
-                SDL_VIDEORESIZE:
-                begin
-                    // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
-                    // Change by sheepluva:
-                    // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
-                    // Maybe just fixes the symptom not the actual cause(?), I'm too tired to find out :P
-                    cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
-                    cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
-                    cScreenResizeDelay:= RealTicks+500;
-                end;
 {$ENDIF}
+
                 SDL_JOYAXISMOTION:
                     ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION:
@@ -268,6 +258,9 @@ begin
                     isTerminated:= true
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
+
+        if (not wheelEvent) then
+            ResetMouseWheel();
 
         if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
             handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
@@ -336,12 +329,11 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game;
+procedure GameRoutine;
 //var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
-    initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
@@ -351,22 +343,19 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     WriteToConsole('Init SDL... ');
-    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
+    if not cOnlyStats then SDLCheck(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
     WriteLnToConsole(msgOK);
-
-{$IFDEF SDL2}
-    SDL_StartTextInput();
-{$ELSE}
-    SDL_EnableUNICODE(1);
-{$ENDIF}
-    SDL_ShowCursor(0);
-
     if not cOnlyStats then
         begin
         WriteToConsole('Init SDL_ttf... ');
-        SDLTry(TTF_Init() <> -1, true);
+        SDLCheck(TTF_Init() <> -1, 'TTF_Init', true);
         WriteLnToConsole(msgOK);
         end;
+
+    if not allOK then exit;
+    //SDL_StartTextInput();
+    SDL_ShowCursor(0);
+
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -384,6 +373,7 @@ begin
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
     AddProgress();
+    if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
@@ -397,6 +387,7 @@ begin
         end
     else cLocale := 'en';
 
+    if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);
 
     if cTestLua then
@@ -414,6 +405,7 @@ begin
             LoadRecordFromFile(recordFileName);
         end;
 
+    if not allOK then exit;
     ScriptOnGameInit;
     s:= 'eproto ' + inttostr(cNetProtoVersion);
     SendIPCRaw(@s[0], Length(s) + 1); // send proto version
@@ -427,8 +419,9 @@ begin
     InitSound();
 
     isDeveloperMode:= false;
-    TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+    if checkFails(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
     //ParseCommand('rotmask', true);
+    if not allOK then exit;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -440,16 +433,22 @@ begin
 {$ENDIF}
 
     MainLoop;
+end;
+
+procedure Game;
+begin
+    initEverything(true);
+    GameRoutine;
     // clean up all the memory allocated
     freeEverything(true);
 end;
-
 ///////////////////////////////////////////////////////////////////////////////
 // preInitEverything - init variables that are going to be ovewritten by arguments
 // initEverything - init variables only. Should be coupled by below
 // freeEverything - free above. Pay attention to the init/free order!
 procedure preInitEverything;
 begin
+    allOK:= true;
     Randomize();
 
     uVariables.preInitModule;
@@ -458,6 +457,12 @@ end;
 
 procedure initEverything (complete:boolean);
 begin
+    PathPrefix:= PathPrefix + #0;
+    UserPathPrefix:= UserPathPrefix + #0;
+    uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
+    PathPrefix:= copy(PathPrefix, 1, length(PathPrefix) - 1);
+    UserPathPrefix:= copy(UserPathPrefix, 1, length(UserPathPrefix) - 1);
+
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
     uCommands.initModule;           // helps below
@@ -466,7 +471,7 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
-    uPhysFSLayer.initModule;
+
     uScript.initModule;
 
     if complete then
@@ -550,24 +555,28 @@ begin
     initEverything(false);
 
     InitIPC;
-    IPCWaitPongEvent;
-    TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+    if allOK then
+    begin
+        IPCWaitPongEvent;
+        if checkFails(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
 
-    ScriptOnPreviewInit;
-{$IFDEF MOBILE}
-    GenPreview(Preview);
-{$ELSE}
-    GenPreviewAlpha(Preview);
-{$ENDIF}
-    WriteLnToConsole('Sending preview...');
-    SendIPCRaw(@Preview, sizeof(Preview));
-    SendIPCRaw(@MaxHedgehogs, sizeof(byte));
-    WriteLnToConsole('Preview sent, disconnect');
+        ScriptOnPreviewInit;
+    {$IFDEF MOBILE}
+        GenPreview(Preview);
+    {$ELSE}
+        GenPreviewAlpha(Preview);
+    {$ENDIF}
+        WriteLnToConsole('Sending preview...');
+        SendIPCRaw(@Preview, sizeof(Preview));
+        SendIPCRaw(@MaxHedgehogs, sizeof(byte));
+        WriteLnToConsole('Preview sent, disconnect');
+    end;
+
     freeEverything(false);
 end;
 
 {$IFDEF HWLIBRARY}
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
@@ -613,7 +622,7 @@ begin
         exit(HaltNoError);
     {$ELSE}
         {$IFDEF IPHONEOS}
-            exit;
+            exit(HaltNoError);
         {$ELSE}
             halt(HaltNoError);
         {$ENDIF}

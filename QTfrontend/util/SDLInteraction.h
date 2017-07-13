@@ -27,7 +27,15 @@
 
 #include <QMap>
 #include <QStringList>
+#include <QSize>
 
+// workaround some strange Qt and SLD2 interaction
+#ifdef Q_OS_MAC
+#  ifdef MAC_OS_X_VERSION_MIN_REQUIRED
+#    undef MAC_OS_X_VERSION_MIN_REQUIRED
+#    define MAC_OS_X_VERSION_MIN_REQUIRED MAC_OS_X_VERSION_10_6
+#  endif
+#endif
 #include "SDL_mixer.h"
 
 /**
@@ -103,6 +111,8 @@ class SDLInteraction
 
         /// Fades out and stops the background music (if playing).
         void stopMusic();
+
+        QSize getCurrentResolution();
 };
 
 

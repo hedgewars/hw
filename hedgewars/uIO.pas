@@ -72,28 +72,36 @@ var IPCSock: PTCPSocket;
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
 begin
-new(command);
-FillChar(command^, sizeof(TCmd), 0);
-command^.loTime:= Time;
-command^.str:= str;
-if (command^.cmd <> 'F') and (command^.cmd <> 'G') then dec(command^.len, 2); // cut timestamp
-if headcmd = nil then
+    if (lastcmd <> nil) and (lastcmd^.cmd = '+') then
     begin
-    headcmd:= command;
-    lastcmd:= command
-    end
-else
+        command:= lastcmd;
+    end else
     begin
-    lastcmd^.Next:= command;
-    lastcmd:= command
+        new(command);
+
+        if headcmd = nil then
+            begin
+            headcmd:= command;
+            lastcmd:= command
+            end
+        else
+            begin
+            lastcmd^.Next:= command;
+            lastcmd:= command
+            end;
     end;
-AddCmd:= command;
+
+    FillChar(command^, sizeof(TCmd), 0);
+    command^.loTime:= Time;
+    command^.str:= str;
+    if (command^.cmd <> 'F') and (command^.cmd <> 'G') then dec(command^.len, 2); // cut timestamp
+
+    AddCmd:= command;
 end;
 
 procedure RemoveCmd;
 var tmp: PCmd;
 begin
-TryDo(headcmd <> nil, 'Engine bug: headcmd = nil', true);
 tmp:= headcmd;
 headcmd:= headcmd^.Next;
 if headcmd = nil then
@@ -105,16 +113,16 @@ procedure InitIPC;
 var ipaddr: TIPAddress;
 begin
     WriteToConsole('Init SDL_Net... ');
-    SDLTry(SDLNet_Init = 0, true);
+    SDLCheck(SDLNet_Init = 0, 'SDLNet_Init', true);
     fds:= SDLNet_AllocSocketSet(1);
-    SDLTry(fds <> nil, true);
+    SDLCheck(fds <> nil, 'SDLNet_AllocSocketSet', true);
     WriteLnToConsole(msgOK);
     WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
-    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, true);
+    SDLCheck(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, 'SDLNet_ResolveHost', true);
     {$HINTS ON}
     IPCSock:= SDLNet_TCP_Open(ipaddr);
-    SDLTry(IPCSock <> nil, true);
+    SDLCheck(IPCSock <> nil, 'SDLNet_TCP_Open', true);
     WriteLnToConsole(msgOK)
 end;
 
@@ -163,7 +171,6 @@ case s[1] of
              ParseChatCommand('chatmsg ' + #4, s, 2)
           else
              isProcessed:= false;
-     'Y': ChatPasteBuffer:= copy(s, 2, Length(s) - 1);
      else
         isProcessed:= false;
      end;
@@ -216,7 +223,8 @@ filemode:= 0;
 {$I-}
 assign(f, fileName);
 reset(f, 1);
-tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
+if checkFails(IOResult = 0, 'Error opening file ' + fileName, true) then
+    exit;
 
 i:= 0; // avoid compiler hints
 s[0]:= #0;
@@ -226,13 +234,13 @@ repeat
         begin
         s[0]:= char(i);
         ss:= ss + s;
-        while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
+        while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) and allOK do
             begin
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
             Delete(ss, 1, Succ(byte(ss[1])));
             end
         end
-until i = 0;
+until (i = 0) or (not allOK);
 
 close(f)
 {$I+}
@@ -320,7 +328,7 @@ isPonged:= false;
 repeat
     IPCCheckSock;
     SDL_Delay(1)
-until isPonged
+until isPonged or (not allOK)
 end;
 
 procedure SendIPCAndWaitReply(s: shortstring);
@@ -427,7 +435,7 @@ while (headcmd <> nil)
     end;
 
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
-    TryDo(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
+    checkFails(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
             ' (' + IntToStr(GameTicks) + ' > ' +
             IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',
@@ -504,6 +512,7 @@ begin
     RegisterVariable('fatal', @chFatalError, true );
 
     IPCSock:= nil;
+    fds:= nil;
 
     headcmd:= nil;
     lastcmd:= nil;

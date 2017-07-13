@@ -183,7 +183,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-    qDebug() << "Client: " << QString(buf).split("\n");
+    qDebug() << "Client: " << QString(QString::fromUtf8(buf)).split("\n");
     NetSocket.write(buf);
     NetSocket.write("\n\n", 2);
 }
@@ -552,7 +552,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 }
 
                 netClientState = InLobby;
-                RawSendNet(QString("LIST"));
+                //RawSendNet(QString("LIST")); //deprecated
                 emit connected();
             }
 
@@ -945,7 +945,7 @@ void HWNewNet::askRoomsList()
         qWarning("Illegal try to get rooms list!");
         return;
     }
-    RawSendNet(QString("LIST"));
+    //RawSendNet(QString("LIST")); //deprecated
 }
 
 HWNewNet::ClientState HWNewNet::clientState()

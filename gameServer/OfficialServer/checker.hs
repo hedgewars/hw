@@ -83,6 +83,7 @@ engineListener coreChan h fileName = do
         start = flip L.elem ["WINNERS", "DRAW"]
         ps ("DRAW" : bs) = "DRAW" : ps bs
         ps ("WINNERS" : n : bs) = let c = readInt_ n in "WINNERS" : n : take c bs ++ (ps $ drop c bs)
+        ps ("GHOST_POINTS" : n : bs) = let c = 2 * (readInt_ n) in "GHOST_POINTS" : n : take c bs ++ (ps $ drop c bs)
         ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
             "ACHIEVEMENT" : typ : teamname : location : value : ps bs
         ps _ = []
@@ -153,10 +154,12 @@ session l p home exe prefix s = do
             CheckFailed msg -> do
                 warningM "Check" "Check failed"
                 answer ["CHECKED", "FAIL", msg]
+                threadDelay 1500000
                 answer ["READY"]
             CheckSuccess msgs -> do
                 warningM "Check" "Check succeeded"
                 answer ("CHECKED" : "OK" : msgs)
+                threadDelay 1500000
                 answer ["READY"]
     where
     answer :: [B.ByteString] -> IO ()
@@ -176,7 +179,7 @@ session l p home exe prefix s = do
 
 
 main :: IO ()
-main = withSocketsDo $ do
+main = withSocketsDo . forever $ do
 #if !defined(mingw32_HOST_OS)
     installHandler sigPIPE Ignore Nothing
     installHandler sigCHLD Ignore Nothing
