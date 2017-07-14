@@ -83,8 +83,8 @@ install: |
     export BUILD_ARGS="$BUILD_ARGS -DNOAUTOUPDATE=1"
   elif [ "$TRAVIS_OS_NAME" == "ios" ]; then
     # FPC 3.0.0 required for using FPC 3.0.1 which contains rtl for ios
-    sudo bash tools/dmg_pkg_install.sh ftp://freepascal.stack.nl/pub/fpc/dist/3.0.0/i386-macosx/fpc-3.0.0.intel-macosx.dmg
-    sudo bash tools/dmg_pkg_install.sh ftp://freepascal.stack.nl/pub/fpc/dist/3.0.0/i386-macosx/fpc-3.0.1.intel-macosx.cross.ios.dmg
+    sudo bash tools/dmg_pkg_install.sh ftp://freepascal.stack.nl/pub/mirrors/fpc/dist/3.0.0/i386-macosx/fpc-3.0.0.intel-macosx.dmg
+    sudo bash tools/dmg_pkg_install.sh ftp://freepascal.stack.nl/pub/mirrors/fpc/dist/3.0.0/i386-macosx/fpc-3.0.1.intel-macosx.cross.ios.dmg
   fi
 
 before_script: |
