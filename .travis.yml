@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 language: c
 sudo: true
 os:
@@ -64,7 +66,7 @@ before_install: |
 
 install: |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo apt-get install debhelper cmake dpkg-dev libqt4-dev qt4-qmake libphysfs-dev libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-net-dev bzip2 ghc libghc-mtl-dev libghc-parsec3-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-stm-dev libghc-network-dev libghc-sandi-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev libghc-regex-tdfa-dev liblua5.1-0-dev imagemagick fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev libglew1.6-dev
+    sudo apt-get install -y debhelper cmake dpkg-dev libqt4-dev qt4-qmake libphysfs-dev libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-net-dev bzip2 ghc libghc-mtl-dev libghc-parsec3-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-stm-dev libghc-network-dev libghc-sandi-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev libghc-regex-tdfa-dev liblua5.1-0-dev imagemagick fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev libglew1.6-dev
   elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew install fpc glew qt physfs lua51 sdl2 sdl2_image sdl2_net sdl2_ttf ffmpeg ghc cabal-install
     brew install sdl2_mixer --with-libvorbis
