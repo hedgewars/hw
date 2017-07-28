@@ -317,7 +317,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot their own hedgehogs with <b>%2</b> pts.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
@@ -325,7 +325,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of their own hedgehogs.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
