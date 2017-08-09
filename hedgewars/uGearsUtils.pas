@@ -786,22 +786,22 @@ begin
     RecountTeamHealth(tempTeam);
 end;
 
-function CountNonZeroz(x, y, r, c: LongInt; mask: LongWord): LongInt;
+function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
 var i: LongInt;
     count: LongInt = 0;
 begin
     if (y and LAND_HEIGHT_MASK) = 0 then
         for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 1) do
-            if Land[y, i] and mask <> 0 then
-            begin
+            if (Land[y, i] and mask <> 0) and (Land[y, i] and antimask = 0) then
+                begin
                 inc(count);
                 if count = c then
-                begin
-                    CountNonZeroz:= count;
+                    begin
+                    CountLand:= count;
                     exit
+                    end;
                 end;
-            end;
-    CountNonZeroz:= count;
+    CountLand:= count;
 end;
 
 function isSteadyPosition(x, y, r, c: LongInt; mask: Longword): boolean;
@@ -883,22 +883,27 @@ while tryAgain do
                 repeat
                     inc(y, 2);
                 until (y >= cWaterLine) or
-                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or
-                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask and (not lfIce)) = 0));
+                    (ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, $FF00, 0) = 0)) or
+                    (not ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, 0) = 0));
+
 
                 sy:= y;
 
                 repeat
                     inc(y);
                 until (y >= cWaterLine) or
-                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or
-                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask and (not lfIce)) <> 0));
+                        (ignoreOverlap and 
+                                ((CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, lfIce) <> 0) or
+                                 (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius + 1, lfIce, 0) > Gear^.Radius))) or
+                        (not ignoreOverlap and 
+                            ((CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, lfIce) <> 0) or
+                             (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius + 1, lfIce, 0) > Gear^.Radius)));
 
                 if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
                     and (((Gear^.Kind = gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
                         and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, $FFFF)
-                         or (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF) > Gear^.Radius)
+                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF, 0) > Gear^.Radius)
                             ))
                     or
                         ((Gear^.Kind <> gtExplosives)
