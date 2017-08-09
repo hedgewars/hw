@@ -650,7 +650,10 @@ while (i < cExplosives) and (unplaced < 4) do
     if Gear = nil then
         inc(unplaced)
     else
+        begin
         unplaced:= 0;
+        AddCI(Gear)
+        end;
 
     inc(i)
     end;
@@ -882,6 +885,7 @@ if sectionDivide then
                                     FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
+                                    AddCI(Gear);
                                     Gear^.Pos:= GetRandom(49);
                                     // unless the world is wrapping, make outter teams face to map center
                                     if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
@@ -916,6 +920,7 @@ else // mix hedgehogs
             FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
         if ar[i]^.Gear <> nil then
             begin
+            AddCI(ar[i]^.Gear);
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
             ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
@@ -943,6 +948,7 @@ for p:= 0 to Pred(TeamsCount) do
                                      hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
                                      sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
                     Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    AddCI(Gear);
                     Gear^.State:= Gear^.State and (not gsttmpFlag);
                     AddFileLog('Placed flower for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
                     end;
