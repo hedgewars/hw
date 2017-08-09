@@ -701,7 +701,7 @@ begin
                 // check if surface was penetrated
 
                 // no penetration if center's water distance not smaller than radius
-                if  abs(dist2Water + Gear^.Radius) >= Gear^.Radius then
+                if  ((dist2Water + Gear^.Radius div 2) < 0) or (abs(dist2Water + Gear^.Radius) >= Gear^.Radius) then
                     isImpact:= false
                 else
                     begin
@@ -709,16 +709,19 @@ begin
                     if isDirH then
                         begin
                         tmp:= hwRound(Gear^.X - Gear^.dX);
-                        tmp:= abs(min(tmp - leftX, rightX - tmp));
+                        if abs(tmp - leftX) < abs(tmp - rightX) then  // left edge
+                            isImpact:= (abs(tmp-leftX) >= Gear^.Radius) and (Gear^.dX.isNegative)
+                        else
+                            isImpact:= (abs(tmp-rightX) >= Gear^.Radius) and (not Gear^.dX.isNegative);
                         end
                     else
                         begin
                         tmp:= hwRound(Gear^.Y - Gear^.dY);
                         tmp:= abs(cWaterLine - tmp);
+                        // there was an impact if distance was >= radius
+                        isImpact:= (tmp >= Gear^.Radius) and (not Gear^.dY.isNegative);
                         end;
 
-                    // there was an impact if distance was >= radius
-                    isImpact:= (tmp >= Gear^.Radius)
                     end;
                 end; // end of submersible
             end; // end of not skipping
