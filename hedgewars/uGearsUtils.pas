@@ -893,11 +893,9 @@ while tryAgain do
                     inc(y);
                 until (y >= cWaterLine) or
                         (ignoreOverlap and 
-                                ((CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, lfIce) <> 0) or
-                                 (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius + 1, lfIce, 0) > Gear^.Radius))) or
+                                (CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, 0) <> 0)) or
                         (not ignoreOverlap and 
-                            ((CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, lfIce) <> 0) or
-                             (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius + 1, lfIce, 0) > Gear^.Radius)));
+                            (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) <> 0));
 
                 if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
                     and (((Gear^.Kind = gtExplosives)
@@ -908,7 +906,9 @@ while tryAgain do
                     or
                         ((Gear^.Kind <> gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
-                        )) then
+                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, lfIce)
+                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF, lfIce) <> 0)
+                            ))) then
                     begin
                     ar[cnt].X:= x;
                     if withFall then
