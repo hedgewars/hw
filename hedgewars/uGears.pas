@@ -885,7 +885,7 @@ if sectionDivide then
                                     FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
-                                    AddCI(Gear);
+                                    //AddCI(Gear);  uncomment if new hogs should be able to spawn on top of old ones.
                                     Gear^.Pos:= GetRandom(49);
                                     // unless the world is wrapping, make outter teams face to map center
                                     if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
@@ -920,7 +920,7 @@ else // mix hedgehogs
             FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
         if ar[i]^.Gear <> nil then
             begin
-            AddCI(ar[i]^.Gear);
+            //AddCI(ar[i]^.Gear); uncomment if new hogs should be able to spawn on top of old ones
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
             ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
