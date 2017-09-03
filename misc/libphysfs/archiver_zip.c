@@ -972,8 +972,8 @@ static ZIPentry *zip_hash_ancestors(ZIPinfo *info, char *name)
         BAIL_IF_MACRO(!retval, PHYSFS_ERR_OUT_OF_MEMORY, NULL);
         memset(retval, '\0', sizeof (*retval));
         retval->name = ((char *) retval) + sizeof (ZIPentry);
-        memcpy(retval->name, name, namelen);
-        retval->name[namelen] = '\0';
+        memcpy(retval->name, name, namelen - 1);
+        retval->name[namelen - 1] = '\0';
         retval->resolved = ZIP_DIRECTORY;
         if (!zip_hash_entry(info, retval))
         {
