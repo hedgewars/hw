@@ -421,8 +421,7 @@ static int ZIP_seek(PHYSFS_Io *_io, PHYSFS_uint64 offset)
                 return 0;
 
             inflateEnd(&finfo->stream);
-            inflateCopy(&finfo->stream, &str);
-            inflateEnd(&str);
+            memcpy(&finfo->stream, &str, sizeof (z_stream));
             finfo->uncompressed_position = finfo->compressed_position = 0;
 
             if (encrypted)
