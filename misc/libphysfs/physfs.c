@@ -2588,20 +2588,20 @@ static PHYSFS_sint64 doBufferedRead(FileHandle *fh, void *buffer,
     {
         /* leave buffer empty, go right to output instead. */
         rc = io->read(io, buffer, len);
-        if (rc < 0)
+        if (rc <= 0)
             return ((retval == 0) ? rc : retval);
         return retval + rc;
     } /* if */
 
     /* need less than buffer can take. Fill buffer. */
     rc = io->read(io, fh->buffer, fh->bufsize);
-    if (rc < 0)
+    if (rc <= 0)
         return ((retval == 0) ? rc : retval);
 
     assert(fh->bufpos == 0);
     fh->buffill = (PHYSFS_uint32) rc;
     rc = doBufferedRead(fh, buffer, len);  /* go from the start, again. */
-    if (rc < 0)
+    if (rc <= 0)
         return ((retval == 0) ? rc : retval);
 
     return retval + rc;
