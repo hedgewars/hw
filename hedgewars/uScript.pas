@@ -2995,12 +2995,40 @@ end;
 // custom script loader via physfs, passed to lua_load
 const BUFSIZE = 1024;
 
+var inComment: boolean;
+var lastChar: char;
+// ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
+function  ScriptReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; Cdecl;
+var mybuf: PChar;
+    i: LongInt;
+begin
+    mybuf := physfsReader(L, f, sz);
+    if (mybuf <> nil) and (sz^ > 0) then
+        begin
+            for i:= 0 to sz^-1 do
+                begin
+                    if (lastChar = '-') and (mybuf[i] = '-') then
+                        inComment := true
+                    // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
+                    else if not inComment and (byte(mybuf[i]) > $20) and (byte(mybuf[i]) < $7F) and (mybuf[i]<>'-') then
+                       AddRandomness(byte(mybuf[i]));
+                    lastChar := mybuf[i];
+                    if inComment and ((byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A)) then
+                        inComment := false 
+                end;
+        end;
+    ScriptReader:= mybuf
+end;
+// ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
+
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
       s : shortstring;
       f : PFSFile;
     buf : array[0..Pred(BUFSIZE)] of byte;
 begin
+inComment:= false;
+lastChar:= 'X';
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
     begin
@@ -3015,7 +3043,7 @@ if f = nil then
 hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
-ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
+ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
 pfsClose(f);
 
 if ret <> 0 then
