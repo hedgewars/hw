@@ -80,6 +80,7 @@ begin
                 AddClouds;
             AddFlakes;
             SetRandomSeed(cSeed, false);
+            AddRandomness(CheckSum);
             StoreLoad(false);
             if not allOK then exit;
             AssignHHCoords;

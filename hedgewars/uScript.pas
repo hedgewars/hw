@@ -3011,9 +3011,9 @@ begin
                         inComment := true
                     // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
                     else if not inComment and (byte(mybuf[i]) > $20) and (byte(mybuf[i]) < $7F) and (mybuf[i]<>'-') then
-                       AddRandomness(byte(mybuf[i]));
+                       CheckSum := CheckSum xor (byte(mybuf[i]) shl (i mod 4));
                     lastChar := mybuf[i];
-                    if inComment and ((byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A)) then
+                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
                         inComment := false 
                 end;
         end;
