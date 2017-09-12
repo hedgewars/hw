@@ -2996,6 +2996,9 @@ end;
 const BUFSIZE = 1024;
 
 var inComment: boolean;
+var inQuote: boolean;
+var braceCount: LongWord;
+var wordCount: LongWord;
 var lastChar: char;
 // ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 function  ScriptReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; Cdecl;
@@ -3019,6 +3022,42 @@ begin
         end;
     ScriptReader:= mybuf
 end;
+function  ScriptLocaleReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; Cdecl;
+var mybuf: PChar;
+    i: LongInt;
+begin
+    mybuf := physfsReader(L, f, sz);
+    if (mybuf <> nil) and (sz^ > 0) then
+        begin
+            for i:= 0 to sz^-1 do
+                begin
+                    if not inComment and (mybuf[i] = '"') and (lastChar <> '\') then
+                        inQuote := not inQuote;
+                    if (lastChar = '-') and (mybuf[i] = '-') then
+                        inComment := true;
+                    // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
+                    if not inComment and not inQuote and 
+                        ((mybuf[i] = '(') or 
+                        (mybuf[i] = ')') or 
+                        (mybuf[i] = '+') or 
+                        (mybuf[i] = '#') or 
+                        (braceCount > 2) or
+                        (wordCount > 6)) then 
+                       CheckSum := $deadbeef;
+                    if not inComment and not inQuote and ((mybuf[i] = '{') or (mybuf[i] = '}')) then
+                        inc(braceCount);
+                    if not inComment and not inQuote and 
+                        (((byte(mybuf[i]) > $40) and (byte(mybuf[i]) < $5B)) or
+                        ((byte(mybuf[i]) > $60) and (byte(mybuf[i]) < $6B)) or
+                        ((byte(mybuf[i]) >= $30) and (byte(mybuf[i]) < $40))) then
+                        inc(wordCount);
+                    lastChar := mybuf[i];
+                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
+                        inComment := false 
+                end;
+        end;
+    ScriptLocaleReader:= mybuf
+end;
 // ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 
 procedure ScriptLoad(name : shortstring);
@@ -3028,7 +3067,10 @@ var ret : LongInt;
     buf : array[0..Pred(BUFSIZE)] of byte;
 begin
 inComment:= false;
+inQuote:= false;
 lastChar:= 'X';
+braceCount:= 0;
+wordCount:= 0;
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
     begin
@@ -3043,7 +3085,9 @@ if f = nil then
 hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
-ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
+if Pos('Data/Locale',s) <> 0 then
+     ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
+else ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
 pfsClose(f);
 
 if ret <> 0 then
