@@ -962,7 +962,7 @@ r.x:= cFontBorder + 6;
 r.y:= cFontBorder + 4;
 r.w:= 32;
 r.h:= 32;
-SDL_FillRect(tmpsurf, @r, $ffffffff);
+SDL_FillRect(tmpsurf, @r, $ff000000);
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
 
 RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
