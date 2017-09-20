@@ -688,7 +688,9 @@ begin
             name:= trluaammo[Ammoz[ammo].NameId]
         else
             name:= trammo[Ammoz[ammo].NameId];
-        if cnt <> 0 then
+        if cnt >= AMMO_INFINITE then
+            s:= name + ansistring(' (+∞)')
+        else if cnt <> 0 then
             s:= name + ansistring(' (+' + IntToStr(cnt) + ')')
         else
             s:= name + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
