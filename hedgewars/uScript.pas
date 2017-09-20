@@ -2997,6 +2997,7 @@ const BUFSIZE = 1024;
 
 var inComment: boolean;
 var inQuote: boolean;
+var locSum: LongWord;
 var braceCount: LongWord;
 var wordCount: LongWord;
 var lastChar: char;
@@ -3035,6 +3036,8 @@ begin
                         inQuote := not inQuote;
                     if (lastChar = '-') and (mybuf[i] = '-') then
                         inComment := true;
+                    if not inComment and not inQuote then
+                       locSum := locSum xor (byte(mybuf[i]) shl (i mod 4));
                     if not inComment and not inQuote and 
                         ((mybuf[i] = '(') or 
                         (mybuf[i] = ')') or 
@@ -3042,13 +3045,13 @@ begin
                         (mybuf[i] = '#') or 
                         (braceCount > 2) or
                         (wordCount > 6)) then 
-                       CheckSum := $deadbeef;
+                       CheckSum := locSum;
                     if not inComment and not inQuote and ((mybuf[i] = '{') or (mybuf[i] = '}')) then
                         inc(braceCount);
                     if not inComment and not inQuote and 
                         (((byte(mybuf[i]) > $40) and (byte(mybuf[i]) < $5B)) or
-                        ((byte(mybuf[i]) > $60) and (byte(mybuf[i]) < $6B)) or
-                        ((byte(mybuf[i]) >= $30) and (byte(mybuf[i]) < $40))) then
+                        ((byte(mybuf[i]) > $60) and (byte(mybuf[i]) < $7B)) or
+                        ((byte(mybuf[i]) >= $30) and (byte(mybuf[i]) < $3A))) then
                         inc(wordCount);
                     lastChar := mybuf[i];
                     if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
@@ -3070,6 +3073,7 @@ inQuote:= false;
 lastChar:= 'X';
 braceCount:= 0;
 wordCount:= 0;
+locSum:= 0;
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
     begin
