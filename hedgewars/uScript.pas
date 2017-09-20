@@ -3035,7 +3035,6 @@ begin
                         inQuote := not inQuote;
                     if (lastChar = '-') and (mybuf[i] = '-') then
                         inComment := true;
-                    // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
                     if not inComment and not inQuote and 
                         ((mybuf[i] = '(') or 
                         (mybuf[i] = ')') or 
@@ -3085,7 +3084,7 @@ if f = nil then
 hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
-if Pos('Data/Locale',s) <> 0 then
+if Pos('Locale/',s) <> 0 then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
 else ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
 pfsClose(f);
