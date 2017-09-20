@@ -22,7 +22,7 @@ unit uLocale;
 interface
 uses uTypes;
 
-const MAX_EVENT_STRINGS = 100;
+const MAX_EVENT_STRINGS = 255;
 
 procedure LoadLocale(FileName: shortstring);
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
