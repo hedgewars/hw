@@ -195,7 +195,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         pBottomDescLayout->addWidget(btnDelete);
         btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
         btnToYouTube->setEnabled(false);
-        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your Youtube account"));
+        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your YouTube account"));
         pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addWidget(labelThumbnail, 0);
