@@ -168,7 +168,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: schemes
-            OptionGroupBox * groupSchemes = new OptionGroupBox(":/res/weaponsicon.png", tr("Schemes"), this);
+            OptionGroupBox * groupSchemes = new OptionGroupBox(":/res/schemeicon.png", tr("Schemes"), this);
             leftColumn->addWidget(groupSchemes);
 
             groupSchemes->layout()->setColumnStretch(0, 1);
