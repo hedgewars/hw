@@ -325,7 +325,7 @@ function CheckOnShroom()
 end
 
 function DoOnShroom()
-  ropeCrate1 = SpawnUtilityCrate(2751, 1194, amRope)
+  ropeCrate1 = SpawnUtilityCrate(2751, 1194, amRope, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onShroomAnim)
   AddEvent(CheckOnFlower, {}, DoOnFlower, {}, 0)
@@ -337,7 +337,7 @@ end
 
 function DoOnFlower()
   AddAmmo(youngh, amRope, 100)
-  paraCrate = SpawnUtilityCrate(3245, 1758, amParachute)
+  paraCrate = SpawnUtilityCrate(3245, 1758, amParachute, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onFlowerAnim)
   AddEvent(CheckTookParaCrate, {}, DoTookParaCrate, {}, 0)
@@ -368,7 +368,7 @@ end
 
 function DoPastMoleHead()
   RemoveEventFunc(CheckOnMoleHead)
-  ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope)
+  ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope, 100)
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(pastMoleHeadAnim)
@@ -377,7 +377,7 @@ end
 
 function DoOnMoleHead()
   RemoveEventFunc(CheckPastMoleHead)
-  ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope)
+  ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope, 100)
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onMoleHeadAnim)
@@ -392,7 +392,7 @@ function DoTookRope2()
   AddAmmo(youngh, amRope, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(tookRope2Anim)
-  punchCrate = SpawnAmmoCrate(2460, 1321, amFirePunch)
+  punchCrate = SpawnAmmoCrate(2460, 1321, amFirePunch, 100)
   AddEvent(CheckTookPunch, {}, DoTookPunch, {})
 end
 
@@ -418,11 +418,12 @@ function CheckTargDestroyed()
 end
 
 function DoTargDestroyed()
+  AddAmmo(youngh, amFirePunch, 0)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeAnim)
   targetsDestroyed = 0
   AddFunction({func = SetChoice, args = {}})
-  ropeCrate3 = SpawnAmmoCrate(2000, 1200, amRope)
+  ropeCrate3 = SpawnUtilityCrate(2000, 1200, amRope, 100)
   AddEvent(CheckTookRope3, {}, AddAmmo, {youngh, amRope, 100}, 0)
   AddEvent(CheckCratesColled, {}, DoCratesColled, {}, 0)
   AddEvent(CheckChallengeWon, {}, DoChallengeWon, {}, 0)
@@ -454,7 +455,7 @@ function CheckChallengeWon()
 end
 
 function DoChallengeWon()
-  desertCrate = SpawnAmmoCrate(1240, 1212, amDEagle)
+  desertCrate = SpawnAmmoCrate(1240, 1212, amDEagle, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeCompletedAnim)
   AddEvent(CheckDesertColled, {}, DoDesertColled, {}, 0)
@@ -582,9 +583,9 @@ function PutCrate(i)
     return
   end
   if difficulty == 1 then
-    crates[1] = SpawnAmmoCrate(targXdif1[i], targYdif1[i], amRope)
+    crates[1] = SpawnFakeAmmoCrate(targXdif1[i], targYdif1[i], false, false)
   else
-    crates[1] = SpawnAmmoCrate(targXdif2[i], targYdif2[i], amRope)
+    crates[1] = SpawnFakeAmmoCrate(targXdif2[i], targYdif2[i], false, false)
   end
 end
 
@@ -670,12 +671,20 @@ function onGearDelete(gear)
     rope2Taken = true
   elseif gear == ropeCrate3 then
     rope3Taken = true
-  elseif gear == crates[1] and deleteCrate == true then
-    deleteCrate = false
-  elseif gear == crates[1] and challengeFailed == false then
-    crates[1] = nil
-    cratesCollected = cratesCollected + 1
-    PutCrate(cratesCollected + 1)
+  elseif gear == crates[1] then
+    -- Play sound if challenge crate (fake crate) collected
+    if band(GetGearMessage(gear), gmDestroy) ~= 0 then
+      PlaySound(sndShotgunReload)
+    end
+
+    -- Update crate challenge
+    if deleteCrate == true then
+      deleteCrate = false
+    elseif challengeFailed == false then
+      crates[1] = nil
+      cratesCollected = cratesCollected + 1
+      PutCrate(cratesCollected + 1)
+    end
   elseif gear == punchCrate then
     punchTaken = true
   elseif gear == desertCrate then
