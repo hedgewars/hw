@@ -688,18 +688,27 @@ begin
             name:= trluaammo[Ammoz[ammo].NameId]
         else
             name:= trammo[Ammoz[ammo].NameId];
-        if cnt >= AMMO_INFINITE then
+
+        if cnt = 0 then
+            cnt:= Ammoz[ammo].NumberInCase;
+
+        if (ammo = amNothing) or (cnt = 0) then
+            s:= ansistring(trmsg[sidEmptyCrate])
+        else if cnt >= AMMO_INFINITE then
             s:= name + ansistring(' (+∞)')
-        else if cnt <> 0 then
-            s:= name + ansistring(' (+' + IntToStr(cnt) + ')')
         else
-            s:= name + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
+            s:= name + ansistring(' (+' + IntToStr(cnt) + ')');
+
         AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
 
-        // show ammo icon
-        vga:= AddVisualGear(X, Y, vgtAmmo);
-        if vga <> nil then
-            vga^.Frame:= Longword(ammo);
+        // show ammo icon (if not empty)
+        if (ammo <> amNothing) and (cnt <> 0) then
+            begin
+            vga:= AddVisualGear(X, Y, vgtAmmo);
+            if vga <> nil then
+                vga^.Frame:= Longword(ammo);
+            end
+
         end;
 end;
 

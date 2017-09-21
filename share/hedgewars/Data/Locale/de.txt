@@ -92,6 +92,7 @@
 01:25=Zieltaste drücken, um das Ziel zu markieren
 01:26=Werkzeug nicht verfügbar im Sudden Death
 01:27=+%1
+01:28=Leer!
 
 ; Event messages
 ; Hog (%1) died
