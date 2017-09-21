@@ -339,7 +339,8 @@ case Layer of
                             tinted:= true;
                             Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
                             DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
-                            DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
+                            if Gear^.Frame <> ord(amNothing) then
+                                DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
                             end;
                    vgtShell: begin
                              if Gear^.FrameTicks < $FF then
