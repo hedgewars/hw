@@ -85,7 +85,13 @@ void BanDialog::okClicked()
 {
     if(leId->text().isEmpty())
     {
-        QMessageBox::warning(this, tr("Warning"), tr("Please, specify %1").arg(byIP() ? tr("IP") : tr("nickname")));
+        QString warning_text;
+        if (byIP())
+            warning_text = QString(tr("Please specify an IP address."));
+        else
+            warning_text = QString(tr("Please specify a nickname."));
+
+        QMessageBox::warning(this, tr("Warning"), warning_text);
         return;
     }
 
