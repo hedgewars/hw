@@ -302,8 +302,10 @@ void PageGameStats::GameStats(char type, const QString & info)
             QString message;
             QString killstring;
             if(kindOfPoints.compare("") == 0) {
+                //: Number of kills in stats screen, written after the team name
                 killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
             } else {
+                //: For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”
                 killstring = PageGameStats::tr("(%1 %2)", "", kills).arg(kills).arg(kindOfPoints);
                 kindOfPoints = QString("");
             }

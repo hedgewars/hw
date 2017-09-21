@@ -32,17 +32,18 @@ RoomsListModel::RoomsListModel(QObject *parent) :
     QAbstractTableModel(parent),
     c_nColumns(9)
 {
-    m_headerData =
-    QStringList()
-     << tr("In progress")
-     << tr("Room Name")
-     << tr("C")
-     << tr("T")
-     << tr("Owner")
-     << tr("Map")
-     << tr("Script")
-     << tr("Rules")
-     << tr("Weapons");
+    m_headerData = QStringList();
+    m_headerData << tr("In progress");
+    m_headerData << tr("Room Name");
+    //: Caption of the column for the number of connected clients in the list of rooms
+    m_headerData << tr("C");
+    //: Caption of the column for the number of teams in the list of rooms
+    m_headerData << tr("T");
+    m_headerData << tr("Owner");
+    m_headerData << tr("Map");
+    m_headerData << tr("Script");
+    m_headerData << tr("Rules");
+    m_headerData << tr("Weapons");
 
     m_staticMapModel = DataManager::instance().staticMapModel();
     m_missionMapModel = DataManager::instance().missionMapModel();

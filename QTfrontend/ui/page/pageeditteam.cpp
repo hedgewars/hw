@@ -404,6 +404,7 @@ void PageEditTeam::CBTeamLvl_activated(const int index)
     {
         int cpuLevel = 6 - index;
         CPUFlag->setPixmap(pixCPU[cpuLevel - 1]);
+        //: Name of a flag for computer-controlled enemies. %1 is replaced with the computer level
         CPUFlagLabel->setText(tr("CPU %1").arg(cpuLevel));
     }
     hboxCPUWidget->setHidden(index == 0);

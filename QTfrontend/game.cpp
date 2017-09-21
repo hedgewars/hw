@@ -386,6 +386,8 @@ QStringList HWGame::getArguments()
     arguments << "--user-prefix";
     arguments << cfgdir->absolutePath();
     arguments << "--locale";
+    // TODO: Don't bother translators with this nonsense and detect this file automatically.
+    //: IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.
     arguments << tr("en.txt");
     arguments << "--frame-interval";
     arguments << QString::number(config->timerInterval());
