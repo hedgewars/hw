@@ -136,6 +136,7 @@ void PagePlayDemo::renameRecord()
     {
         QMessageBox recordMsg(this);
         recordMsg.setIcon(QMessageBox::Warning);
+        //: Title of an error message in the demo replay page
         recordMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
         recordMsg.setText(QMessageBox::tr("Please select record from the list"));
         recordMsg.setWindowModality(Qt::WindowModal);
@@ -163,6 +164,7 @@ void PagePlayDemo::renameRecord()
         {
             QMessageBox renameMsg(this);
             renameMsg.setIcon(QMessageBox::Warning);
+            //: Title of an error message in the demo replay page
             renameMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
             renameMsg.setText(QMessageBox::tr("Cannot rename to ") + newfullname);
             renameMsg.setWindowModality(Qt::WindowModal);
@@ -180,6 +182,7 @@ void PagePlayDemo::removeRecord()
     {
         QMessageBox recordMsg(this);
         recordMsg.setIcon(QMessageBox::Warning);
+        //: Title of an error message in the demo replay page
         recordMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
         recordMsg.setText(QMessageBox::tr("Please select record from the list"));
         recordMsg.setWindowModality(Qt::WindowModal);
@@ -195,6 +198,7 @@ void PagePlayDemo::removeRecord()
     {
         QMessageBox removeMsg(this);
         removeMsg.setIcon(QMessageBox::Warning);
+        //: Title of an error message in the demo replay page
         removeMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
         removeMsg.setText(QMessageBox::tr("Cannot delete file ") + rfile.fileName());
         removeMsg.setWindowModality(Qt::WindowModal);
