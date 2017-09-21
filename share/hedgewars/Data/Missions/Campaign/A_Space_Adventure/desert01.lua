@@ -93,6 +93,9 @@ function onGameInit()
 	Explosives = 0
 	Delay = 3
 	HealthCaseAmount = 30
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	Map = "desert01_map"
 	Theme = "Desert"
 

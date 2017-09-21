@@ -79,6 +79,9 @@ function onGameInit()
 	Explosives = 0
 	Map = "ice02_map"
 	Theme = "Snow"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")

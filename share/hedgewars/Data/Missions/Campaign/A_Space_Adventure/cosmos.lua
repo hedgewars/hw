@@ -88,6 +88,9 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 	Delay = 5
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 	-- completed main missions
 	status = getCompletedStatus()
 	if status.death01 then

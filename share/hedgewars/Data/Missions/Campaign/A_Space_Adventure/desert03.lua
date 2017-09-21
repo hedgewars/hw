@@ -66,6 +66,9 @@ function onGameInit()
 	Explosives = 0
 	Map = "desert03_map"
 	Theme = "Desert"
+	-- Disable SuddenDeath
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")

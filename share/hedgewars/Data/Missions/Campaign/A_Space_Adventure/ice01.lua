@@ -90,6 +90,9 @@ function onGameInit()
 	Delay = 3
 	Map = "ice01_map"
 	Theme = "Snow"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- get the check point
 	checkPointReached = initCheckpoint("ice01")
