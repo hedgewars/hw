@@ -83,6 +83,11 @@ function onGameInit()
 	AnimationSetup()
 end
 
+function onAmmoStoreInit()
+	SetAmmo(amRope, 9, 0, 0, 0)
+	SetAmmo(amSkip, 9, 0, 0, 0)
+end
+
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
@@ -92,8 +97,6 @@ function onGameStart()
 
 	SpawnHealthCrate(healthX, health1Y)
 	SpawnHealthCrate(healthX, health2Y)
-
-	AddAmmo(hero.gear, amRope, 100)
 
 	SendHealthStatsOff()
 	AddAnim(dialog01)

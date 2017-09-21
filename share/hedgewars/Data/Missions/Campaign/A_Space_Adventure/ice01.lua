@@ -416,6 +416,7 @@ function antiFlyArea(gear)
 		TurnTimeLeft = 0
 	end
 	AddAmmo(hero.gear, amJetpack, 0)
+	AddAmmo(hero.gear, amSkip, 100)
 	heroVisitedAntiFlyArea = true
 end
 
