@@ -94,7 +94,7 @@ end
 function onNewTurn()
 	if startChallenge and currentPosition < 5 then
 		if CurrentHedgehog ~= hero.gear then
-			TurnTimeLeft = 0
+			EndTurn(true)
 		else
 			if GetAmmoCount(hero.gear, amRope) == 0  then
 				lose()
@@ -219,7 +219,7 @@ function moveRunner()
 			end
 		end
 
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif currentPosition < 4 then
 		if not startChallenge then
 			startChallenge = true
@@ -236,7 +236,7 @@ function moveRunner()
 		currentPosition = currentPosition + 1
 		AddVisualGear(GetX(runner.gear), GetY(runner.gear), vgtExplosion, 0, false) 
 		SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
