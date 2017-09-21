@@ -408,7 +408,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: frontend
-            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/graphicsicon.png", tr("Frontend"), this);
+            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/frontendicon.png", tr("Frontend"), this);
             rightColumn->addWidget(groupFrontend);
 
             // Fullscreen
