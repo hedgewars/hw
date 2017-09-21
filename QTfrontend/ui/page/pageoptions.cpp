@@ -707,7 +707,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             btnUpdateNow = new QPushButton(groupUpdates);
             connect(btnUpdateNow, SIGNAL(clicked()), this, SLOT(checkForUpdates()));
             btnUpdateNow->setWhatsThis(tr("Check for updates"));
-            btnUpdateNow->setText("Check now");
+            btnUpdateNow->setText(tr("Check now"));
             btnUpdateNow->setFixedSize(130, 30);
             groupUpdates->layout()->addWidget(btnUpdateNow, 0, 1);
         }
