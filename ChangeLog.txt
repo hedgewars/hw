@@ -43,6 +43,7 @@ Game engine:
  * Fixed hedgehogs not saying “Stupid” and not displaying announcer message for inflicting self-harm
  * Fixed incorrect time box tooltip when in Sudden Death
  * Remove buggy /finish chat command
+ * Fix "hedgehog info" key toggling the team bars (team bars are now toggled with precise + hedgehog info)
  * Various other fixes
 
 Highlander:
