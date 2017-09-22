@@ -3015,7 +3015,10 @@ begin
                         inComment := true
                     // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
                     else if not inComment and (byte(mybuf[i]) > $20) and (byte(mybuf[i]) < $7F) and (mybuf[i]<>'-') then
-                        AddRandomness(byte(mybuf[i]));
+                        begin
+                        AddRandomness(byte(mybuf[i]));  // wish I had the seed...
+                        CheckSum := CheckSum xor GetRandom($FFFFFFFF);
+                        end;
                     lastChar := mybuf[i];
                     if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
                         inComment := false 
@@ -3034,7 +3037,7 @@ begin
                 begin
                     if not inComment and (mybuf[i] = '"') and (lastChar <> '\') then
                         inQuote := not inQuote;
-                    if (lastChar = '-') and (mybuf[i] = '-') then
+                    if not inQuote and (lastChar = '-') and (mybuf[i] = '-') then
                         inComment := true;
                     if not inComment and not inQuote then
                        locSum := locSum xor (byte(mybuf[i]) shl (i mod 4));
@@ -3092,7 +3095,6 @@ if Pos('Locale/',s) <> 0 then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
 else ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
 pfsClose(f);
-CheckSum := CheckSum xor GetRandom($FFFFFFFF);
 
 if ret <> 0 then
     begin
