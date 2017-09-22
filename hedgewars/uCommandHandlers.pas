@@ -614,25 +614,27 @@ end;
 procedure chRotateMask(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-// this is just for me, 'cause I thought it'd be fun.  using the old precise + switch to keep it out of people's way
+// RotateMask key + Switch + Precise: Toggle entire HUD
 if LocalMessage and (gmPrecise or gmSwitch) = (gmPrecise or gmSwitch) then
     begin
     if UIDisplay <> uiNone then
          UIDisplay:= uiNone
     else UIDisplay:= uiAll
     end
+// Rotate Mask key + Precise: Toggle team bars
 else if LocalMessage and gmPrecise = gmPrecise then
+    begin
+    if UIDisplay <> uiNoTeams then
+         UIDisplay:= uiNoTeams
+    else UIDisplay:= uiAll
+    end
+// Rotate Mask key only: Change hedgehog tags
+else
     begin
     if ((GameFlags and gfInvulnerable) = 0) then
         cTagsMask:= cTagsMasks[cTagsMask]
     else
         cTagsMask:= cTagsMasksNoHealth[cTagsMask]
-    end
-else
-    begin
-    if UIDisplay <> uiNoTeams then
-         UIDisplay:= uiNoTeams
-    else UIDisplay:= uiAll
     end
 end;
 
