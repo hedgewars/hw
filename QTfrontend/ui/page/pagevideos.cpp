@@ -110,12 +110,11 @@ QLayout * PageVideos::bodyLayoutDefinition()
     QGridLayout * pPageLayout = new QGridLayout();
     pPageLayout->setColumnStretch(0, 1);
     pPageLayout->setColumnStretch(1, 2);
-    QString pathIcon = ":/res/Videos.png";
 
     // list of videos
     {
         IconedGroupBox* pTableGroup = new IconedGroupBox(this);
-        pTableGroup->setIcon(QIcon(pathIcon));
+        pTableGroup->setIcon(QIcon(":/res/Videos.png"));
         pTableGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         pTableGroup->setTitle(QGroupBox::tr("Videos"));
 
@@ -152,7 +151,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     // description
     {
         IconedGroupBox* pDescGroup = new IconedGroupBox(this);
-        pDescGroup->setIcon(QIcon(pathIcon));
+        pDescGroup->setIcon(QIcon(":/res/miscicon.png"));
         pDescGroup->setTitle(QGroupBox::tr("Description"));
 
         QVBoxLayout* pDescLayout = new QVBoxLayout(pDescGroup);
