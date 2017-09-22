@@ -59,9 +59,9 @@ QLayout * PageDataDownload::footerLayoutDefinition()
     pbHome->setMinimumWidth(50);
     pbHome->setWhatsThis(tr("Load the start page"));
 
-    pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 2, false, Qt::AlignBottom);
+    pbOpenDir = addButton(":/res/folder.png", bottomLayout, 2, true, Qt::AlignBottom);
     pbOpenDir->setStyleSheet("padding: 5px 10px");
-    pbOpenDir->setWhatsThis(tr("Open the directory in which the downloaded files are stored in your system"));
+    pbOpenDir->setWhatsThis(tr("Open packages directory"));
     pbOpenDir->setMinimumHeight(50);
 
     bottomLayout->setStretch(2, 1);

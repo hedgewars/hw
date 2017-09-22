@@ -41,7 +41,7 @@ QLayout * PageInfo::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     bottomLayout->setContentsMargins(0,0,0,0);
-    BtnSnapshots = addButton(":/res/Star.png", bottomLayout, 0, true, Qt::AlignBottom);
+    BtnSnapshots = addButton(":/res/folder.png", bottomLayout, 0, true, Qt::AlignBottom);
     BtnSnapshots->setWhatsThis(tr("Open the snapshot folder"));
     BtnSnapshots->setMinimumSize(50,50);
     return bottomLayout;
