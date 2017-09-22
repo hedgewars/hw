@@ -106,7 +106,7 @@
 02:00=%1 sieht tote Igel!
 02:00=%1 hat ins Gras gebissen!
 02:00=%1 ist Futter für die Würmer!
-02:00=Für %1 ist's vorbei
+02:00=Für %1 ist’s vorbei
 02:00=%1 wird zurückkehren
 02:00=%1 braucht etwas Ruhe
 02:00=Und tschüss, %1!
@@ -191,6 +191,7 @@
 02:00=Jetzt braucht sich %1 nicht mehr vor dem Tod zu fürchten
 02:00=%1 wurde von den Schrecken des Krieges erlöst
 02:00=Klappe zu, %1 tot!
+02:00=%1 hat uns im Stich gelassen
 
 ; Hog (%1) drowned
 02:01=%1 geht auf Tauchstation!
@@ -260,6 +261,7 @@
 02:01=Und wir dachten, %1 könnte nicht noch tiefer sinken …
 02:01=%1 zieht eine Etage tiefer
 02:01=Seht, %1 kann schwimmen! Nein, doch nicht …
+02:01=%1 trinkt zu viel
 
 ; Round starts
 02:02=Auf in die Schlacht!
@@ -401,6 +403,10 @@
 02:05=Hat jemand »Hatschi!« gesagt?
 02:05=Damit fühlt sich der Igel wieder pudelwohl!
 
+02:05=Ohne Risiken und Nebenwirkungen
+02:05=Packungsbeilage beachten!
+02:05=Luftpost von der Apotheke
+
 ; New ammo crate
 02:06=Noch mehr Waffen!
 02:06=Nachschub!
@@ -481,6 +487,9 @@
 02:07=Damit schlägt das Herz jedes Mechanikers höher!
 02:07=So viele Möglichkeiten …
 
+02:07=Bauarbeiter stimmt dies heiter
+02:07=Direkt aus dem Baumarkt
+
 ; Hog (%1) skips his turn
 02:08=%1 ist so ein Langeweiler …
 02:08=%1 will nicht gestört werden
@@ -541,6 +550,8 @@
 02:08=%1 lässt den Gegner fortfahren
 02:08=Der Feind ist wohl der beste Freund von %1
 
+02:08=%1 will nicht gestört werden
+
 ; Hog (%1) hurts himself only
 02:09=%1 sollte lieber zielen üben!
 02:09=%1 scheint sich zu hassen
@@ -599,13 +610,19 @@
 02:09=%1 hat technische Schwierigkeiten
 02:09=%1 ist betrunken
 02:09=%1 sagt „Autsch!“
-02:09=%1 macht's verkehrt
+02:09=%1 macht’s verkehrt
 02:09=%1 dachte, die Waffe wäre noch gesichert
 02:09=%1 wollte die Waffe reinigen
 02:09=Schnell! Holt die Zwangsjacke!
 02:09=%1 hat einen Termin mit dem Tod
 02:09=%1 testete die Waffe – und sie funktioniert!
 02:09=%1 steht kurz vor der Selbstzerstörung
+
+02:09=%1 hat einen Todeswunsch
+02:09=%1 macht Selbstversuche
+02:09=%1 braucht noch Übung
+02:09=%1 sieht der Gefahr ins Auge
+02:09=%1 braucht professionelle Hilfe
 
 ; Hog (%1) shot an home run (using the bat and another hog)
 02:10=Home Run!
@@ -684,6 +701,13 @@
 02:12=%1 fühlt das Gift
 02:12=%1 fühlt sich schwächer und schwächer
 
+02:12=%1 fallen die Stacheln aus
+02:12=%1 meldet sich krank
+02:12=%1 muss niesen
+02:12=Der Countdown läuft für %1
+02:12=Eine Runde Mitleid für %1
+02:12=Steck uns bloß nicht an, %1!
+
 ; Hog (%1) was resurrected by the Resurrector utility
 02:13=%1 wurde wiederbelebt
 02:13=%1 wurde zurück IN die Hölle gebracht
@@ -729,6 +753,21 @@
 02:13=%1 muss wieder dienen
 02:13=Die Zeit war noch nicht reif für %1
 
+02:13=%1 hat ausgeschlafen
+02:13=%1 will einfach nicht gehen
+02:13=%1 wird man nicht los
+02:13=%1 dreht eine Ehrenrunde
+02:13=%1 schlägt dem Tod ein Schnippchen
+02:13=%1 versucht es noch mal
+02:13=%1 ist ein Steh-auf-Igel
+02:13=%1 hat sich nur tot gestellt
+02:13=%1 hat noch nicht genug
+02:13=%1 hat die eigene Beerdigung verpasst
+02:13=%1 hält den Tod für überbewertet
+02:13=Als wäre %1 nie tot gewesen …
+02:13=Comeback für %1
+02:13=Oh Schreck! %1 ist ein Zombie!
+
 ; Hog (%1) explodes after an kamikaze attack
 02:14=%1 stirbt in Ehre
 02:14=%1 stirbt den Tod eines Mutigen
@@ -764,6 +803,12 @@
 02:14=%1 tat das nur, um auf die Titelseite zu kommen
 02:14=%1 wird weltberühmt
 02:14=%1 hatte nichts zu verlieren
+
+02:14=%1 ist der Kragen geplatzt
+02:14=%1 macht einen stilvollen Abgang
+02:14=%1 macht keine halben Sachen
+02:14=Wer wird denn gleich in die Luft gehen, %1?
+02:14=Raus mit Applaus: %1
 
 ; Hog (%1) returned from time-travel with the time box
 ; These texts are intentionally kept simple and clear to not confuse the player
@@ -816,6 +861,16 @@
 02:16=Haben wir mal wieder die Zeit vergessen, %1?
 02:16=Weitergehen! Hier gibt es nichts zu sehen!
 
+02:16=%1 findet den Abzug nicht
+02:16=%1 fühlt sich nicht angesprochen
+02:16=%1 schlummert selig
+02:16=%1 ist im Land der Träume
+02:16=%1 hält den Betrieb auf
+02:16=%1 lehnt Fristen strikt ab
+02:16=%1 war noch nie gut unter Zeitdruck
+02:16=%1 denkt zu viel
+02:16=%1 macht Yoga
+
 ; King (%1) has died
 02:17=%1 ist tot! Lang lebe %1!
 02:17=Königliche Tragödie: %1 tot aufgefunden
@@ -838,8 +893,8 @@
 02:17=%1 war ein schwacher König
 02:17=Es gibt viel bessere Könige als %1
 02:17=Der Krieg verlangt %1 als Opfer
-02:17=%1 hat's verdient
-02:17=%1 hat's zerrissen
+02:17=%1 hat’s verdient
+02:17=%1 hat’s zerrissen
 02:17=%1 wurde entmachtet
 02:17=%1 stirbt aus königlichen Gründen
 02:17=%1 lebte ein gefährliches Leben
