@@ -3015,7 +3015,7 @@ begin
                         inComment := true
                     // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
                     else if not inComment and (byte(mybuf[i]) > $20) and (byte(mybuf[i]) < $7F) and (mybuf[i]<>'-') then
-                       CheckSum := CheckSum xor (byte(mybuf[i]) shl (i mod 4));
+                        AddRandomness(byte(mybuf[i]));
                     lastChar := mybuf[i];
                     if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
                         inComment := false 
@@ -3092,6 +3092,7 @@ if Pos('Locale/',s) <> 0 then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
 else ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
 pfsClose(f);
+CheckSum := CheckSum xor GetRandom($FFFFFFFF);
 
 if ret <> 0 then
     begin
