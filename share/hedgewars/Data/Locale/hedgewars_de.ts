@@ -443,7 +443,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>Enter chat messages here and send them with [Enter]</source>
-        <translation>Gib hier Chatnachrichten ein und sende Sie mit [Eingabe]</translation>
+        <translation>Gib hier Chatnachrichten ein und sende sie mit [Eingabe]</translation>
     </message>
     <message>
         <source>List of players</source>

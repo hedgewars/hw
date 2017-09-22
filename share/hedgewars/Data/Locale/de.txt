@@ -111,7 +111,7 @@
 02:00=%1 braucht etwas Ruhe
 02:00=Und tschüss, %1!
 02:00=%1 trifft den Großen Weißen Igel im Himmel
-02:00=%1 wurde eleminiert
+02:00=%1 wurde eliminiert
 02:00=Nein! Warum musste %1 nur sterben?
 02:00=Oh nein, %1! Du hattest noch dein ganzes Leben vor dir …
 02:00=%1 ist so tot wie die Dodos
@@ -422,7 +422,7 @@
 02:06=Eine Schachtel zerstörerische Kraft
 02:06=Luftpost!
 02:06=Was auch immer da drin ist, es ist bestimmt nicht Pizza
-02:06=Einsammlen!
+02:06=Einsammeln!
 02:06=Eine Waffenkiste!
 02:06=Waffenkiste gesichtet!
 02:06=Lasst nicht zu, dass der Feind sie sich holt!
@@ -499,7 +499,7 @@
 02:08=%1 ist unmotiviert
 02:08=%1 braucht etwas Motivation
 02:08=%1 ist ein Pazifist
-02:08=%1 hat eine Verschnaufpause
+02:08=%1 macht eine Verschnaufpause
 02:08=%1 nimmt sich eine Auszeit
 02:08=%1 hat kein Vertrauen in die eigenen Fähigkeiten
 02:08=%1 beschließt, nichts zu tun
@@ -642,7 +642,7 @@
 02:11=%1 teleportiert sich in ein Paralleluniversum
 02:11=%1 verschwindet
 02:11=%1 ist futsch
-02:11=%1 hat wohl besseres zu tun
+02:11=%1 hat wohl Besseres zu tun
 02:11=%1 löst sich in Luft auf
 02:11=%1 bringt den Müll raus
 02:11=%1 flieht
@@ -690,7 +690,7 @@
 02:13=%1 erhält eine zweite Chance
 02:13=%1 ist wieder lebendig
 02:13=%1 kehrt von den Toten zurück
-02:13=%1 ist unter den lebenden Toden
+02:13=%1 ist unter den lebenden Toten
 02:13=%1 wurde wiedergeboren
 02:13=%1 fühlt sich lebendig wie noch nie
 02:13=%1 hat den Tod besiegt
@@ -782,7 +782,7 @@
 02:16=%1 ist eingeschlafen
 02:16=%1 hat den Angriff vergessen
 02:16=%1 war kurz davor, den perfekten Schuss abzugeben. Ich schwör!
-02:16=%1 hat kein Zeitgefühlt
+02:16=%1 hat kein Zeitgefühl
 02:16=%1 spielt in Zeitlupe
 02:16=%1 brauchte mehr Zeit
 02:16=%1 hätte ein paar Extrasekunden gebrauchen können
