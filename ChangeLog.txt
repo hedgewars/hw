@@ -43,7 +43,6 @@ Game engine:
  * Fixed hedgehogs not saying “Stupid” and not displaying announcer message for inflicting self-harm
  * Fixed incorrect time box tooltip when in Sudden Death
  * Remove buggy /finish chat command
- * Fix "hedgehog info" key toggling the team bars (team bars are now toggled with precise + hedgehog info)
  * Various other fixes
 
 Highlander:
@@ -233,6 +232,7 @@ Frontend:
  * Fix language names in language list being always in English
  * Prevent starting game with >48 hogs (because engine doesn't support it yet)
  * Team editor Fix flag being selectable for computer players although it had no effect
+ * Fix the key for toggling team bars being incorrectly described
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
