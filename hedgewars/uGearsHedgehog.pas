@@ -1262,6 +1262,7 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (LuaEndTurnRequested = true) th
     isCursorVisible:= false;
     HHGear^.State:= HHGear^.State and (not (gstHHDriven or gstAnimation or gstAttacking));
     AttackBar:= 0;
+    StopSound(sndThrowPowerUp);
     LuaEndTurnRequested:= false;
     LuaNoEndTurnTaunts:= false;
     if HHGear^.Damage > 0 then
