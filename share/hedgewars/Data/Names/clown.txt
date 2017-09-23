@@ -4,6 +4,7 @@ Bozo
 Buttons
 Chocko
 Chuckles
+Clown
 Dinky
 Doodles
 Dusty
@@ -18,7 +19,7 @@ Jester
 Jojo
 Jumbo
 Kinko
-KnicKnac
+Knicknac
 Koko
 Krusty
 Loopy

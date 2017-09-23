@@ -8,6 +8,7 @@ Content:
  + Completely new Cheese map; replaces the old one
  + New forts: Lonely_Island, Octopus, Olympic, Snail
  + New hat: "tf_scout" (this time for real)
+ + Many new random hedgehog names
  * Redo flags: cm_pentagram, cm_soviet, nepal, suisse, sweden
 
 Game engine:
