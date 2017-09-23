@@ -1,0 +1,102 @@
+Army
+Battle Cleaver
+Bearhead
+Bearhelm
+Black Knight
+Boar
+Bone Bane
+Bone Rage
+Bull
+Champion
+Colossal
+Colossus
+Conqueror
+Coyote
+Cruel
+Deathmane
+Dire
+Dire One
+Dog
+Doomhammer
+Dragonslayer
+Dread
+Eternal Hunger
+Exalted
+Fearless
+Feisty
+Feral
+Firepelt
+Firestarter
+Ford
+Freak
+Giantfist
+Gianthallow
+Giant Mane
+Goldmane
+Grandfury
+Grandhide
+Greatchaser
+Great Grimace
+Honorless
+Hurricane
+Insane
+Knight
+Knightingale
+Light Sword
+Lionheart
+Lone Wolf
+Mammoth
+Mammoth Brow
+Mammothfang
+Mammoth Might
+Molten pelt
+Moltenshield
+Monster
+Mutant
+Ni
+Night Eye
+Nighthelm
+Owl
+Ox
+Paragon
+Phantom
+Phoenix
+Pyro
+Rage Strike
+Redcut
+Redmantle
+Redthorn
+Rock Helm
+Rumbleroar
+Sadist
+Scarred One
+Serpent
+Shadowblood
+Shadowhide
+Shadowmight
+Sharpbane
+Shiny Armor
+Silentpelt
+Silverbrow
+Singlecut
+Skullmantle
+Slayer
+Spider
+Steel Blow
+Stormcut
+Stout Fist
+Surgeon
+Swiftgrip
+Swift song
+Swine
+Thief
+Vermin
+Voidblood
+Voidhammer
+Voidhide
+Vulture
+White Knight
+Wildling
+Wolfbreaker
+Wolfhammer
+Wolfhide
