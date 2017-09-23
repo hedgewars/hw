@@ -18,6 +18,7 @@
  */
 
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QStringList>
 #include <QLineEdit>
@@ -176,22 +177,32 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
 {
     QStringList list;
 
-    // find .cfg to load the dicts from
-    QFile file(QString("physfs://Names/%1.cfg").arg(hatname));
+    // Find and check .cfg to load the dicts from
+    QString path = QString("physfs://Names/%1.cfg").arg(hatname);
+    QFileInfo check_file(path);
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    // Note: The .cfg file is optional; a fallback mechanism is in place (see below)
+
+    // Check if file exists to prevent PhysFS from complaining in console so much
+    if (check_file.exists() && check_file.isFile())
     {
-        QTextStream in(&file);
-        QString line;
-        do
-        {
-            line = in.readLine();
+        QFile file(path);
 
-            if(!line.isEmpty())
-                list.append(line);
-        } while (!line.isNull());
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QTextStream in(&file);
+            QString line;
+            do
+            {
+                line = in.readLine();
+
+                if(!line.isEmpty())
+                    list.append(line);
+            } while (!line.isNull());
+        }
     }
 
+    // Use Data/Names/generic.cfg by default
     if (list.size() == 0)
         list.append(QString("generic"));
 
