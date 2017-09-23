@@ -474,14 +474,14 @@ void PageEditTeam::deleteTeam(const QString & name)
 void PageEditTeam::setRandomTeam()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomEverything(team, HWNamegen::rtmEverything);
+    HWNamegen::teamRandomEverything(team);
     loadTeam(team);
 }
 
 void PageEditTeam::setRandomHogNames()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomEverything(team, HWNamegen::rtmHogNames);
+    HWNamegen::teamRandomHogNames(team);
     loadTeam(team);
 }
 

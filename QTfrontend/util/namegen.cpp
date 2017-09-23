@@ -61,7 +61,7 @@ void HWNamegen::teamRandomFort(HWTeam & team, bool withDLC)
     team.setFort(getRandomFort(withDLC));
 }
 
-void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
+void HWNamegen::teamRandomEverything(HWTeam & team)
 {
     // load types if not already loaded
     if (!typesAvailable)
@@ -76,43 +76,65 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
     int kind = (rand()%(TypesHatnames.size()));
 
     // pick team name based on hat
-    if (mode == HWNamegen::rtmEverything)
-    {        team.setName(getRandomTeamName(kind));
-        team.setGrave(getRandomGrave());
-        team.setFort(getRandomFort());
-        team.setFlag(getRandomFlag());
-        team.setVoicepack(getRandomVoice());
-    }
+    team.setName(getRandomTeamName(kind));
+    team.setGrave(getRandomGrave());
+    team.setFort(getRandomFort());
+    team.setFlag(getRandomFlag());
+    team.setVoicepack(getRandomVoice());
 
     QStringList dicts;
     QStringList dict;
 
-    if ((mode == HWNamegen::rtmHogNames || mode == HWNamegen::rtmEverything) && (TypesHatnames[kind].size()) <= 0)
-    {
-        dicts = dictsForHat(team.hedgehog(0).Hat);
-        dict  = dictContents(dicts[rand()%(dicts.size())]);
-    }
+    // Randomness mode:
+    // 0: Themed hats (from types.ini)
+    // 1: Equal hats for all
+    // 2: Random hat for each hedgehog
+    int r = rand() % 10;
+    int randomMode;
+    if (r <= 4)		// 0-4 (50%)
+       randomMode = 0;
+    else if (r <= 8)	// 5-8 (40%)
+       randomMode = 1;
+    else		// 9   (10%)
+       randomMode = 2;
 
+    // Generate random hats
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
-        if (mode == HWNamegen::rtmEverything && (TypesHatnames[kind].size()) > 0)
+        HWHog hh = team.hedgehog(i);
+
+        if (randomMode == 0)
         {
-            HWHog hh = team.hedgehog(i);
             hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
-            team.setHedgehog(i,hh);
         }
+        else if (randomMode == 1)
+        {
+            if (i == 0)
+            {
+                hh.Hat = getRandomHat();
+            }
+            else
+            {
+                hh.Hat = team.hedgehog(i-1).Hat;
+            }
+        }
+        else if (randomMode == 2)
+        {
+            hh.Hat = getRandomHat();
+        }
+
+        team.setHedgehog(i,hh);
 
         // there is a chance that this hog has the same hat as the previous one
         // let's reuse the hat-specific dict in this case
-        if ( (mode == HWNamegen::rtmHogNames || mode == HWNamegen::rtmEverything) && ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat)))
+        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
         {
             dicts = dictsForHat(team.hedgehog(i).Hat);
             dict  = dictContents(dicts[rand()%(dicts.size())]);
         }
 
         // give each hedgehog a random name
-        if (mode == HWNamegen::rtmHogNames || mode == HWNamegen::rtmEverything)
-            HWNamegen::teamRandomHogName(team,i,dict);
+        HWNamegen::teamRandomHogName(team,i,dict);
     }
 
 }
@@ -151,6 +173,24 @@ void HWNamegen::teamRandomHat(HWTeam & team, const int HedgehogNumber, const QSt
     hh.Name = dict[rand()%(dict.size())];
 
     team.setHedgehog(HedgehogNumber, hh);
+}
+
+void HWNamegen::teamRandomHogNames(HWTeam & team)
+{
+    QStringList dicts, dict;
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        // there is a chance that this hog has the same hat as the previous one
+        // let's reuse the hat-specific dict in this case
+        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
+        {
+            dicts = dictsForHat(team.hedgehog(i).Hat);
+            dict  = dictContents(dicts[rand()%(dicts.size())]);
+        }
+
+        // give each hedgehog a random name
+        HWNamegen::teamRandomHogName(team,i,dict);
+    }
 }
 
 void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber)
