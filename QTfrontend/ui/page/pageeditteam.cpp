@@ -488,7 +488,7 @@ void PageEditTeam::setRandomHogNames()
 void PageEditTeam::setRandomHats()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomEverything(team, HWNamegen::rtmHats);
+    HWNamegen::teamRandomHats(team);
     loadTeam(team);
 }
 

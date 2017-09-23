@@ -101,10 +101,6 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
             hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
             team.setHedgehog(i,hh);
         }
-        else if (mode == HWNamegen::rtmHats)
-        {
-            HWNamegen::teamRandomHat(team,i);
-        }
 
         // there is a chance that this hog has the same hat as the previous one
         // let's reuse the hat-specific dict in this case
@@ -119,6 +115,24 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
             HWNamegen::teamRandomHogName(team,i,dict);
     }
 
+}
+
+// Set random hats for entire team
+void HWNamegen::teamRandomHats(HWTeam & team, bool withDLC)
+{
+    // 50% chance that all hogs are set to the same hat.
+    // 50% chance that each hog gets a random head individually.
+
+    bool sameHogs = (rand()%2) == 0;
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        HWHog hh = team.hedgehog(i);
+        if (sameHogs and i > 0)
+            hh.Hat = team.hedgehog(i-1).Hat;
+        else
+            hh.Hat = getRandomHat(withDLC);
+        team.setHedgehog(i, hh);
+    }
 }
 
 void HWNamegen::teamRandomHat(HWTeam & team, const int HedgehogNumber, bool withDLC)
