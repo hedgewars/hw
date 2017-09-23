@@ -77,8 +77,7 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
 
     // pick team name based on hat
     if (mode == HWNamegen::rtmEverything)
-    {
-        team.setName(getRandomTeamName(kind));
+    {        team.setName(getRandomTeamName(kind));
         team.setGrave(getRandomGrave());
         team.setFort(getRandomFort());
         team.setFlag(getRandomFlag());
@@ -88,7 +87,7 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
     QStringList dicts;
     QStringList dict;
 
-    if ((TypesHatnames[kind].size()) <= 0)
+    if ((mode == HWNamegen::rtmHogNames || mode == HWNamegen::rtmEverything) && (TypesHatnames[kind].size()) <= 0)
     {
         dicts = dictsForHat(team.hedgehog(0).Hat);
         dict  = dictContents(dicts[rand()%(dicts.size())]);
@@ -96,15 +95,20 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
-        if (((TypesHatnames[kind].size()) > 0) && (mode == HWNamegen::rtmEverything || mode == HWNamegen::rtmHats))
+        if (mode == HWNamegen::rtmEverything && (TypesHatnames[kind].size()) > 0)
         {
             HWHog hh = team.hedgehog(i);
             hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
             team.setHedgehog(i,hh);
         }
+        else if (mode == HWNamegen::rtmHats)
+        {
+            HWNamegen::teamRandomHat(team,i);
+        }
+
         // there is a chance that this hog has the same hat as the previous one
         // let's reuse the hat-specific dict in this case
-        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
+        if ( (mode == HWNamegen::rtmHogNames || mode == HWNamegen::rtmEverything) && ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat)))
         {
             dicts = dictsForHat(team.hedgehog(i).Hat);
             dict  = dictContents(dicts[rand()%(dicts.size())]);
@@ -115,6 +119,24 @@ void HWNamegen::teamRandomEverything(HWTeam & team, const RandomTeamMode mode)
             HWNamegen::teamRandomHogName(team,i,dict);
     }
 
+}
+
+void HWNamegen::teamRandomHat(HWTeam & team, const int HedgehogNumber, bool withDLC)
+{
+    HWHog hh = team.hedgehog(HedgehogNumber);
+
+    hh.Hat = getRandomHat(withDLC);
+
+    team.setHedgehog(HedgehogNumber, hh);
+}
+
+void HWNamegen::teamRandomHat(HWTeam & team, const int HedgehogNumber, const QStringList & dict)
+{
+    HWHog hh = team.hedgehog(HedgehogNumber);
+
+    hh.Name = dict[rand()%(dict.size())];
+
+    team.setHedgehog(HedgehogNumber, hh);
 }
 
 void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber)
@@ -289,6 +311,29 @@ QString HWNamegen::getRandomTeamName(int kind)
         return TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
     else
         return QString();
+}
+
+QString HWNamegen::getRandomHat(bool withDLC)
+{
+    QStringList Hats;
+
+    // list all available hats
+    Hats.append(DataManager::instance().entryList(
+                      "Graphics/Hats",
+                      QDir::Files,
+                      QStringList("*.png"),
+                      withDLC
+                  ).replaceInStrings(QRegExp("\\.png$"), "")
+                 );
+
+    if(Hats.size()==0)
+    {
+        // TODO do some serious error handling
+        return "Error";
+    }
+
+    // pick a random hat
+    return Hats[rand()%(Hats.size())];
 }
 
 QString HWNamegen::getRandomGrave(bool withDLC)
