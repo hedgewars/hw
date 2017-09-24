@@ -9,7 +9,7 @@ Content:
  + New forts: Lonely_Island, Octopus, Olympic, Snail
  + New hat: "tf_scout" (this time for real)
  + Many new random hedgehog names
- * Redo flags: cm_pentagram, cm_soviet, nepal, suisse, sweden
+ * Redo flags: cm_pentagram, cm_soviet, armenia, ireland, nepal, suisse, sweden, turkey
 
 Game engine:
  + New weapon: rubber duck
