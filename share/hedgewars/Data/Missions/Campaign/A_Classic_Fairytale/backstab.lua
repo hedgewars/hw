@@ -569,8 +569,8 @@ function SpawnPlatformCrates()
   SpawnAmmoCrate(2574, 1279, amSMine)
   SpawnAmmoCrate(2575, 1267, amMine)
   SpawnAmmoCrate(2617, 1259, amSMine)
-  SpawnUtilityCrate(2579, 1254, amMine)
-  SpawnUtilityCrate(2478, 1243, amMine)
+  SpawnAmmoCrate(2579, 1254, amMine)
+  SpawnAmmoCrate(2478, 1243, amMine)
 end
 
 function AfterWave2DeadAnim()

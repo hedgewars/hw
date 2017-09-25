@@ -86,8 +86,8 @@ isHidden = {}
 --------------------------Anim skip functions--------------------------
 function AfterRefusedAnim()
   SpawnUtilityCrate(2045, 1575, amSwitch)
-  SpawnUtilityCrate(2365, 1495, amShotgun)
-  SpawnUtilityCrate(2495, 1519, amGrenade)
+  SpawnAmmoCrate(2365, 1495, amShotgun)
+  SpawnAmmoCrate(2495, 1519, amGrenade)
   SpawnUtilityCrate(2620, 1524, amRope)
   ShowMission(loc("The Shadow Falls"), loc("The Showdown"), loc("Save Leaks A Lot!|Hint: The switch hedgehog utility might be of help to you."), 1, 6000)
   RemoveEventFunc(CheckDenseDead)
@@ -215,8 +215,8 @@ end
 
 function AfterAcceptedAnim()
   stage = acceptedReturnStage
-  SpawnAmmoCrate(1370, 810, amGirder)
-  SpawnAmmoCrate(1300, 810, amParachute)
+  SpawnUtilityCrate(1370, 810, amGirder)
+  SpawnUtilityCrate(1300, 810, amParachute)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
   AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
