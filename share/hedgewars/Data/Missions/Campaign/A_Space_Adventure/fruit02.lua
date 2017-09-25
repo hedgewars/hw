@@ -28,10 +28,13 @@ local goals = {
 	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back").."|"..minesTimeText, 1, 4000},
 }
 -- crates
+local girderCrate = {name = amGirder, x = 1680, y = 1160}
+
 local eagleCrate = {name = amDEagle, x = 1680, y = 1650}
-local girderCrate =	{name = amGirder, x = 1680, y = 1160}
+
+local weaponCrate = { x = 1320, y = 1870}
+local deviceCrate = { gear = nil, x = 1360, y = 1870}
 local ropeCrate = {name = amRope, x = 1400, y = 1870}
-local weaponCrate = { x = 1360, y = 1870}
 -- hogs
 local hero = {}
 local green1 = {}
@@ -125,7 +128,7 @@ function onGameStart()
 	end
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
-	AddEvent(onDeviceCrates, {hero.gear}, deviceCrates, {hero.gear}, 0)
+	AddEvent(onDeviceCrates, {hero.gear}, deviceCrateEvent, {hero.gear}, 0)
 
 	-- Hog Solo and GB weapons
 	AddAmmo(hero.gear, amSwitch, 100)
@@ -185,7 +188,10 @@ function onGameStart()
 	-- place crates
 	SpawnUtilityCrate(girderCrate.x, girderCrate.y, girderCrate.name)
 	SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
-	SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
+	deviceCrate.gear = SpawnFakeUtilityCrate(deviceCrate.x, deviceCrate.y, false, false) -- anti-gravity device
+	-- Rope crate is placed after device crate has been collected.
+	-- This is done so it is impossible the player can rope before getting
+	-- the device part.
 
 	if tookPartInBattle then
 		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
@@ -248,6 +254,14 @@ function onGearDelete(gear)
 		hero.dead = true
 	elseif gear == green1.bot then
 		green1.dead = true
+	elseif gear == deviceCrate.gear then
+		if band(GetGearMessage(gear), gmDestroy) ~= 0 then
+			PlaySound(sndShotgunReload)
+			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
+			deviceCrate.collected = true
+			-- Spawn rope crate
+			SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
+		end
 	end
 end
 
@@ -289,7 +303,7 @@ function onHeroDeath(gear)
 end
 
 function onDeviceCrates(gear)
-	if not hero.dead and GetY(hero.gear)>1850 and GetX(hero.gear)>1340 and GetX(hero.gear)<1640 then
+	if not hero.dead and deviceCrate.collected and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -341,8 +355,8 @@ function heroDeath(gear)
 	end
 end
 
-function deviceCrates(gear)
-	EndTurn(true)
+function deviceCrateEvent(gear)
+	SetGearMessage(hero.gear, 0)
 	if not tookPartInBattle then
 		AddAnim(dialog03)
 	else
@@ -438,7 +452,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG03 - At crates, hero learns that Captain Lime is bad
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
-	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 4000}})
+	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 1250}})
 	table.insert(dialog03, {func = FollowGear, args = {hero.gear}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})

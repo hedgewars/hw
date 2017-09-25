@@ -198,7 +198,9 @@ A Space Adventure:
  + Add skip to a few missions where it doesn't hurt
  + Menu: Show 2 flowers over fully completed planets (with side missions)
  + Allow skipping in some missions
- * Remove checkpoints in: Getting to the device and Searching in the dust. There was a good chance for these missions to become unwinnable
+ * Getting to the device: Add real crate and correct message for collecting device part
+ * Getting to the device: Remove checkpoints. There was a good chance for these missions to become unwinnable
+ * Searching in the dust: Remove checkpoints. See above.
  * Searching in the dust: Fix Hog Solo dropping straight down when roping near smuggler
  * Searching in the dust: Fix incorrect messages after collecting device part
  * Hard Flying: Fix ending in a Lua error
