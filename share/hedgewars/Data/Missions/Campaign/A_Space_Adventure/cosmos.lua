@@ -275,6 +275,12 @@ function onHeroAtSaucerPosition(gear)
 	return false
 end
 
+function onGearDelete(gear)
+	if GetGearType(gear) == gtCase and band(GetGearMessage(gear), gmDestroy) ~= 0 then
+		heroAtSaucerPosition()
+	end
+end
+
 function onHeroOutOfGuardSight(gear)
 	if GetHealth(hero.gear) and GetX(gear) < 3100 and GetY(gear) > saucerY-25 and StoppedGear(gear) and not guard1.keepTurning then
 		return true
@@ -347,15 +353,18 @@ function heroBeforeTreePosition(gear)
 end
 
 function heroAtSaucerPosition(gear)
-	EndTurn(true)
-	-- save check point
-	SaveCampaignVar("CosmosCheckPoint", "2")
-	checkPointReached = 2
-	AddAnim(dialog02)
-	-- check if he was spotted by the guard
-	if guard1.turn and GetX(hero.gear) > saucerX-150 then
-		guard1.keepTurning = false
-		AddAnim(dialog03)
+	if not saucerAcquired then
+		EndTurn(true)
+		-- save check point
+		SaveCampaignVar("CosmosCheckPoint", "2")
+		checkPointReached = 2
+		AddAnim(dialog02)
+		-- check if he was spotted by the guard
+		if guard1.turn and GetX(hero.gear) > saucerX-150 then
+			guard1.keepTurning = false
+			AddAnim(dialog03)
+		end
+		saucerAcquired = true
 	end
 end
 
