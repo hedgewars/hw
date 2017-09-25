@@ -45,8 +45,8 @@ local portalX = 1465
 local girderY = 1630
 local girderX = 3350
 -- win crates
-local btorch2 = {}
-local girder = {}
+local btorch2 = { gear = nil, destroyed = false, deleted = false}
+local girder = { gear = nil, destroyed = false, deleted = false}
 -- hogs
 local hero = {}
 local ally = {}
@@ -141,15 +141,16 @@ function onGameStart()
 	AddAmmo(smuggler3.gear, amRope, 2)
 
 	-- spawn crates
-	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
 	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
 	SpawnUtilityCrate(rope1X, rope1Y, amRope)
 	SpawnUtilityCrate(rope2X, rope2Y, amRope)
 	SpawnUtilityCrate(rope3X, rope3Y, amRope)
 	SpawnUtilityCrate(portalX, portalY, amPortalGun)
-	SpawnUtilityCrate(girderX, girderY, amGirder)
-
 	SpawnHealthCrate(3300, 970)
+
+	-- the win crates, collect both to win
+	btorch2.gear = SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
+	girder.gear = SpawnUtilityCrate(girderX, girderY, amGirder)
 
 	-- adding mines - BOOM!
 	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
@@ -233,35 +234,35 @@ function onAmmoStoreInit()
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 3)
 	SetAmmo(amSkip, 9, 0, 0, 1)
-end
 
-function onGearAdd(gear)
-	if GetGearType(gear) == gtCase then
-		if GetX(gear) == btorch2X and GetY(gear) == btorch2Y then
-			btorch2.gear = gear
-			btorch2.destroyed = false
-			btorch2.deleted = false
-		elseif GetX(gear) == girderX and GetY(gear) == girderY then
-			girder.gear = gear
-			girder.destroyed = false
-			girder.deleted = false
-		end
-	end
-end
-
-function onGearDamage(gear, damage)
-	if gear == girder.gear then
-		girder.destroyed = true
-	elseif gear == btorch2.gear then
-		btorch2.destroyed = true
-	end
+	SetAmmo(amTeleport, 9, 0, 0, 1)
 end
 
 function onGearDelete(gear)
+	local foundDeviceCrateCandidate = function(candidate_crate_table, other_crate_table)
+		candidate_crate_table.deleted = true
+		-- Evaluates to false if crate has been collected
+		if (band(GetGearMessage(candidate_crate_table.gear), gmDestroy) == 0) then
+			candidate_crate_table.destroyed = true
+		end
+
+		if cratesFound == 0 then
+			-- First win crate collected:
+			-- Turn the other crate into a fake crate; this will “contain” the device.
+			SetGearPos(other_crate_table.gear, bor(GetGearPos(other_crate_table.gear), 0x8))
+		elseif cratesFound == 1 then
+			-- Second win crate collected:
+			-- This crate contains the anti-gravity part! VICTORY!
+			PlaySound(sndShotgunReload)
+			-- It's displayed as if collecting a normal ammo/utility crate. :-)
+			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+		end
+	end
+
 	if gear == girder.gear then
-		girder.deleted = true
+		foundDeviceCrateCandidate(girder, btorch2)
 	elseif gear == btorch2.gear then
-		btorch2.deleted = true
+		foundDeviceCrateCandidate(btorch2, girder)
 	end
 	if gear == hero.gear then
 		hero.dead = true
@@ -487,7 +488,8 @@ function checkForWin()
 	elseif cratesFound == 1 then
 		-- end game
 		saveCompletedStatus(5)
-		AnimSay(hero.gear, loc("Hooray!"), SAY_SHOUT, 5000)
+		AnimSay(hero.gear, loc("I found it! Hooray!"), SAY_SHOUT, 5000)
+		PlaySound(sndVictory, hero.gear)
 		SendStat(siGameResult, loc("Congratulations, you won!"))
 		SendStat(siCustomAchievement, loc("To win the game you had to collect the 2 crates with no specific order."))
 		SendStat(siPlayerKills,'1',teamC.name)
