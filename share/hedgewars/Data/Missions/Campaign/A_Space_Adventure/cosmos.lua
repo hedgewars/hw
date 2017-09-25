@@ -37,7 +37,6 @@ local goals = {
 	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon's main mission"), 1, 7000},
 	[dialog04] = {missionName, loc("Objectives"), objectives, 1, 7000},
 	[dialog05] = {missionName, loc("Objectives"), objectives, 1, 7000},
-	[dialog06] = {missionName, loc("Objectives"), objectives, 1, 7000},
 	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit the planets of Ice, Desert and Fruit before you proceed to the Death Planet"), 1, 6000},
 	[dialog08] = {missionName, loc("Saving Hogera"), loc("Fly to the meteorite and detonate the explosives"), 1, 7000}
 }
@@ -598,8 +597,8 @@ function AnimationSetup()
 	table.insert(dialog05, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
 	AddSkipFunction(dialog06, Skipanim, {dialog06})
-	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"),  5000}})
 	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm ... Now I ran out of fuel."), SAY_THINK, 3000}})
+	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"), 0}})
 	table.insert(dialog06, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 07 - Hero lands on Death Planet but isn't allowed yet to play this map
 	AddSkipFunction(dialog07, Skipanim, {dialog07})
