@@ -147,7 +147,7 @@ function onGameInit()
 		AnimSetGearPosition(hero.gear, 1450, 910)
 	end
 
-	AnimInit(true)
+	AnimInit(checkPointReached == 1)
 	AnimationSetup()
 end
 
