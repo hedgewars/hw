@@ -670,7 +670,6 @@ function onNewTurn()
     TurnTimeLeft = 0
   else
     SetInputMask(0xFFFFFFFF)
-    AddCaption(string.format(loc("Turns until Sudden Death: %d"), SuddenDeathTurns - TotalRounds))
   end
 end
 
