@@ -234,8 +234,6 @@ function onAmmoStoreInit()
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 3)
 	SetAmmo(amSkip, 9, 0, 0, 1)
-
-	SetAmmo(amTeleport, 9, 0, 0, 1)
 end
 
 function onGearDelete(gear)
