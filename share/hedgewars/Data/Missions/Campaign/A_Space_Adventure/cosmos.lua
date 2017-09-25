@@ -54,6 +54,8 @@ local guard2 = {}
 local teamA = {}
 local teamB = {}
 local teamC = {}
+-- to check if flying saucer is active
+local saucerGear = nil
 -- hedgehogs values
 hero.name = loc("Hog Solo")
 hero.x = 1450
@@ -275,9 +277,17 @@ function onHeroAtSaucerPosition(gear)
 	return false
 end
 
+function onGearAdd(gear)
+	if GetGearType(gear) == gtJetpack then
+		saucerGear = gear
+	end
+end
+
 function onGearDelete(gear)
 	if GetGearType(gear) == gtCase and band(GetGearMessage(gear), gmDestroy) ~= 0 then
 		heroAtSaucerPosition()
+	elseif GetGearType(gear) == gtJetpack then
+		saucerGear = nil
 	end
 end
 
@@ -332,7 +342,7 @@ end
 
 function onNoFuelAtLand(gear)
 	if checkPointReached > 1 and GetHealth(hero.gear) and GetY(gear) > 1400 and
-			GetAmmoCount(gear, amJetpack) == 0 and StoppedGear(gear) then
+			GetAmmoCount(gear, amJetpack) == 0 and saucerGear == nil and StoppedGear(gear) then
 		return true
 	end
 	return false
