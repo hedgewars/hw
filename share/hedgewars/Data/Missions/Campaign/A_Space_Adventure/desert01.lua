@@ -288,7 +288,9 @@ end
 
 function onHeroAtFirstBattle(gear)
 	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450 and GetX(hero.gear) > 80
-			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-40 and StoppedGear(hero.gear) then
+			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-40 and
+			-- If hero is standing or at a rope
+			(StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then
 		return true
 	end
 	return false
@@ -306,7 +308,8 @@ end
 -- saves the location of the hero and prompts him for the second battle
 function onHeroAtBattlePoint1(gear)
 	if not hero.dead and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
-			and GetY(hero.gear) > 590 and GetY(hero.gear) < 700 and StoppedGear(hero.gear) then
+			and GetY(hero.gear) > 590 and GetY(hero.gear) < 700 and StoppedGear(hero.gear)
+			and (StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then
 		return true
 	end
 	return false
@@ -314,7 +317,8 @@ end
 
 function onHeroAtBattlePoint2(gear)
 	if not hero.dead and GetX(hero.gear) > 1610 and GetX(hero.gear) < 1680
-			and GetY(hero.gear) > 850 and GetY(hero.gear) < 1000 and StoppedGear(hero.gear) then
+			and GetY(hero.gear) > 850 and GetY(hero.gear) < 1000
+			and (StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then
 		return true
 	end
 	return false
@@ -357,11 +361,18 @@ end
 
 function heroAtFirstBattle(gear)
 	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
+	-- Hog gets scared if on rope
+	if GetGearElasticity(hero.gear) ~= 0 then
+		HogSay(hero.gear, loc("Gasp! A smuggler!"), SAY_SHOUT)
+	end
+	-- Remember velocity to restore it later
+	local dx, dy = GetGearVelocity(hero.gear)
 	EndTurn(true)
 	heroIsInBattle = true
 	ongoingBattle = 1
 	AnimSwitchHog(smuggler1.gear)
 	EndTurn(true)
+	SetGearVelocity(hero.gear, dx, dy)
 end
 
 function heroFleeFirstBattle(gear)
@@ -383,8 +394,14 @@ function heroAtThirdBattle(gear)
 	heroIsInBattle = true
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
+	-- Hog gets scared and falls from rope
+	if GetGearElasticity(hero.gear) ~= 0 then
+		HogSay(hero.gear, loc("Yikes!"), SAY_SHOUT)
+	end
+	local dx, dy = GetGearVelocity(hero.gear)
 	AnimSwitchHog(smuggler3.gear)
 	EndTurn(true)
+	SetGearVelocity(hero.gear, dx, dy)
 end
 
 function crateDestroyed(gear)
@@ -449,11 +466,17 @@ function secondBattle()
 	if heroIsInBattle and ongoingBattle == 1 then
 		AnimSay(smuggler1.gear, loc("Get him, Spike!"), SAY_SHOUT, 4000)
 	end
+	-- Hog gets scared if on rope
+	if GetGearElasticity(hero.gear) ~= 0 then
+		HogSay(hero.gear, loc("Gasp!"), SAY_SHOUT)
+	end
+	local dx, dy = GetGearVelocity(hero.gear)
 	heroIsInBattle = true
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
 	EndTurn(true)
+	SetGearVelocity(hero.gear, dx, dy)
 end
 
 function checkForWin()
