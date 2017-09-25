@@ -13,7 +13,6 @@ local missionName = loc("Getting to the device")
 local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
-local checkPointReached = 1 -- 1 is normal spawn
 local permitCaptainLimeDeath = false
 -- dialogs
 local dialog01 = {}
@@ -85,13 +84,7 @@ function onGameInit()
 	Map = "fruit02_map"
 	Theme = "Fruit"
 
-	-- load checkpoints, problem getting the campaign variable
 	local health = 100
-	checkPointReached = initCheckpoint("fruit02")
-	if checkPointReached ~= 1 then
-		loadHogsPositions()
-		health = tonumber(GetCampaignVar("HeroHealth"))
-	end
 
 	-- Hog Solo and Green Bananas
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgehog")
@@ -182,47 +175,16 @@ function onGameStart()
 	AddGear(3085, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3075, 1680, gtMine, 0, 0, 0, 0)
 
-	if checkPointReached == 1 then
-		AddAmmo(hero.gear, amFirePunch, 3)
-		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
-		AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
-		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-		if tookPartInBattle then
-			AddAnim(dialog01)
-		else
-			AddAnim(dialog02)
-		end
-	elseif checkPointReached == 2 then
-		AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
-		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-	elseif checkPointReached == 3 then
-		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
-		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-	elseif checkPointReached == 4 then
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-	elseif checkPointReached == 5 then
-		-- EMPTY
-	end
-	if checkPointReached ~= 1 then
-		loadWeapons()
-	end
-
-	-- girders
-	if checkPointReached > 1 then
-		PlaceGirder(1580, 875, 4)
-		PlaceGirder(1800, 875, 4)
+	AddAmmo(hero.gear, amFirePunch, 3)
+	if tookPartInBattle then
+		AddAnim(dialog01)
+	else
+		AddAnim(dialog02)
 	end
 
 	-- place crates
-	if checkPointReached < 2 then
-		SpawnUtilityCrate(girderCrate.x, girderCrate.y, girderCrate.name)
-	end
-	if checkPointReached < 5 then
-		SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
-	end
+	SpawnUtilityCrate(girderCrate.x, girderCrate.y, girderCrate.name)
+	SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
 	SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 
 	if tookPartInBattle then
@@ -358,44 +320,6 @@ function onRedTeamDeath(gear)
 	return redDead
 end
 
-function onCheckPoint1(gear)
-	-- before barrel jump
-	if not hero.dead and GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945
-			and GetY(hero.gear) > 808 and GetY(hero.gear) < 852 and	not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
-function onCheckPoint2(gear)
-	-- before barrel jump
-	if ((GetHealth(green2.gear) and GetX(green2.gear) > 2850 and GetX(green2.gear) < 2945 and GetY(green2.gear) > 808 and GetY(green2.gear) < 852)
-			or (GetHealth(green3.gear) and GetX(green3.gear) > 2850 and GetX(green3.gear) < 2945 and GetY(green3.gear) > 808 and GetY(green3.gear) < 852))
-			and not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
-function onCheckPoint3(gear)
-	-- after barrel jump
-	if ((GetHealth(green2.gear) and GetY(green2.gear) > 1550 and GetX(green2.gear) < 3000 and StoppedGear(green2.gear))
-			or (GetHealth(green3.gear) and GetY(green3.gear) > 1550 and GetX(green3.gear) < 3000 and StoppedGear(green2.gear)))
-			and not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
-function onCheckPoint4(gear)
-	-- hero at crates
-	if not hero.dead and GetX(hero.gear) > 1288 and GetX(hero.gear) < 1420
-			and GetY(hero.gear) > 1840 and	not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
 -------------- ACTIONS ------------------
 ended = false
 
@@ -477,22 +401,6 @@ function redTeamDeath(gear)
 	EndGame()
 end
 
-function checkPoint1(gear)
-	saveCheckPointLocal(2)
-end
-
-function checkPoint2(gear)
-	saveCheckPointLocal(3)
-end
-
-function checkPoint3(gear)
-	saveCheckPointLocal(4)
-end
-
-function checkPoint4(gear)
-	saveCheckPointLocal(5)
-end
-
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
@@ -556,70 +464,3 @@ function wind()
 	SetWind(GetRandom(201)-100)
 end
 
-function saveHogsPositions()
-	local positions;
-	positions = GetX(hero.gear)..","..GetY(hero.gear)
-	if GetHealth(green2.gear) then
-		positions = positions..","..GetX(green2.gear)..","..GetY(green2.gear)
-	else
-		positions = positions..",1,1"
-	end
-	if GetHealth(green3.gear) then
-		positions = positions..","..GetX(green3.gear)..","..GetY(green3.gear)
-	else
-		positions = positions..",1,1"
-	end
-	SaveCampaignVar("HogsPosition", positions)
-end
-
-function loadHogsPositions()
-	local positions;
-	if GetCampaignVar("HogsPosition") then
-		positions = GetCampaignVar("HogsPosition")
-	else
-		return
-	end
-	positions = split(positions,",")
-	if positions[1] then
-		hero.x = positions[1]
-		hero.y = positions[2]
-	end
-	if positions[3] then
-		green2.x = tonumber(positions[3])
-		green2.y = tonumber(positions[4])
-	end
-	if positions[5] then
-		green3.x = tonumber(positions[5])
-		green3.y = tonumber(positions[6])
-	end
-end
-
-function saveWeapons()
-	-- firepunch - gilder - deagle - watermelon - sniper
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amFirePunch)..GetAmmoCount(hero.gear, amGirder)..
-			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
-end
-
-function loadWeapons()
-	local ammo = GetCampaignVar("HeroAmmo")
-	AddAmmo(hero.gear, amFirePunch, tonumber(ammo:sub(1,1)))
-	AddAmmo(hero.gear, amGirder, tonumber(ammo:sub(2,2)))
-	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(3,3)))
-	AddAmmo(hero.gear, amWatermelon, tonumber(ammo:sub(4,4)))
-	AddAmmo(hero.gear, amSniperRifle, tonumber(ammo:sub(5,5)))
-end
-
-function isHeroAtWrongPlace()
-	if GetX(hero.gear) > 1480 and GetX(hero.gear) < 1892 and GetY(hero.gear) > 1000 and GetY(hero.gear) < 1220 then
-		return true
-	end
-	return false
-end
-
-function saveCheckPointLocal(cpoint)
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
-	saveCheckpoint(cpoint)
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	saveHogsPositions()
-	saveWeapons()
-end
