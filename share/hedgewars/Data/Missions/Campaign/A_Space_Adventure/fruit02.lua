@@ -223,7 +223,7 @@ function onGameStart()
 	if checkPointReached < 5 then
 		SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
 	end
-	SpawnAmmoCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
+	SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 
 	if tookPartInBattle then
 		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
@@ -236,17 +236,17 @@ end
 
 function onNewTurn()
 	if not inBattle and CurrentHedgehog == green1.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
-			TurnTimeLeft = 0
+			EndTurn(true)
 			return
 		end
 		for i=1,table.getn(redHedgehogs) do
 			if CurrentHedgehog == redHedgehogs[i].gear and previousHog ~= hero.gear then
-				TurnTimeLeft = 0
+				EndTurn(true)
 				return
 			end
 		end
@@ -256,7 +256,7 @@ function onNewTurn()
 		TurnTimeLeft = -1
 		wind()
 	else
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 	previousHog = CurrentHedgehog
 end
@@ -418,7 +418,7 @@ function heroDeath(gear)
 end
 
 function deviceCrates(gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	if not tookPartInBattle then
 		AddAnim(dialog03)
 	else
@@ -499,7 +499,7 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
     end
-    TurnTimeLeft = 0
+    EndTurn(true)
 end
 
 function AnimationSetup()
@@ -549,7 +549,7 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function goToThesurface()
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function wind()

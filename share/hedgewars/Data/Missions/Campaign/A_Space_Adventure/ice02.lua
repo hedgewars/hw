@@ -224,7 +224,7 @@ end
 
 function startFlying()
 	AnimSwitchHog(ally.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	challengeStarted = true
 end
 

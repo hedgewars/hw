@@ -244,20 +244,20 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
 		TurnTimeLeft = -1
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 2 then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler2.gear) and ongoingBattle == 3 then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif CurrentHedgehog == ally.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
@@ -408,16 +408,16 @@ end
 
 function heroAtFirstBattle(gear)
 	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	heroIsInBattle = true
 	ongoingBattle = 1
 	AnimSwitchHog(smuggler1.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function heroFleeFirstBattle(gear)
 	AnimSay(smuggler1.gear, loc("Run away, you coward!"), SAY_SHOUT, 4000)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	heroIsInBattle = false
 	ongoingBattle = 0
 end
@@ -445,7 +445,7 @@ function heroAtThirdBattle(gear)
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
 	AnimSwitchHog(smuggler3.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function crateDestroyed(gear)
@@ -508,7 +508,7 @@ end
 
 function startMission()
 	AnimSwitchHog(ally.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function secondBattle()
@@ -520,7 +520,7 @@ function secondBattle()
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function saveCheckPointLocal(cpoint)

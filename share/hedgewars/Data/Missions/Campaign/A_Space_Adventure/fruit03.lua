@@ -291,7 +291,7 @@ end
 
 function startBattle()
 	AnimSwitchHog(enemiesOdd[table.getn(enemiesOdd)].gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	-- these 2 are needed in order hero has 10 sec more in the first turn
 	timeLeft = 0
 	AddAmmo(hero.gear, amSkip, 100)

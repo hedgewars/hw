@@ -194,7 +194,7 @@ function onGameStart()
 		SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
 		SpawnAmmoCrate(deserteagleX, weaponsY, amDEagle)
 		AddEvent(onWeaponsPlatform, {hero.gear}, weaponsPlatform, {hero.gear}, 0)
-		TurnTimeLeft = 0
+		EndTurn(true)
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amBazooka, 3)
@@ -205,7 +205,7 @@ function onGameStart()
 		GameFlags = bor(GameFlags,gfDisableWind)
 		weaponsAcquired = true
 		afterDialog02 = true
-		TurnTimeLeft = 0
+		EndTurn(true)
 		AddAnim(dialog02)
 	end
 	-- this event check goes here to be executed after the onWeaponsPlatform check
@@ -230,24 +230,24 @@ function onGameTick()
 	ExecuteAfterAnimations()
 	CheckEvents()
 	if CurrentHedgehog ~= hero.gear and not battleZone then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
 function onNewTurn()
 	-- rounds start if hero got his weapons or got near the enemies
 	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear and afterDialog02 then
 		battleZone(hero.gear)
 	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
 	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
 		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif CurrentHedgehog == professor.gear then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
@@ -320,7 +320,7 @@ end
 function weaponsPlatform(gear)
 	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
-	TurnTimeLeft = 0
+	EndTurn(true)
 	weaponsAcquired = true
 	SetWind(60)
 	GameFlags = bor(GameFlags,gfDisableWind)
@@ -339,7 +339,7 @@ function heroDeath(gear)
 end
 
 function battleZone(gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	battleZoneReached = true
 	if weaponsAcquired then
 		AddAnim(dialog04)
@@ -456,7 +456,7 @@ end
 function startCombat()
 	-- use this so minion3 will gain control
 	AnimSwitchHog(minion3.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function setAfterDialog02()

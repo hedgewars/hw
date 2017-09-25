@@ -251,7 +251,7 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 	if guard1.keepTurning then
 		AnimSwitchHog(hero.gear)
@@ -350,7 +350,7 @@ function heroBeforeTreePosition(gear)
 end
 
 function heroAtSaucerPosition(gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	-- save check point
 	SaveCampaignVar("CosmosCheckPoint", "2")
 	checkPointReached = 2
@@ -606,7 +606,7 @@ end
 function startCombat()
 	-- use this so guard2 will gain control
 	AnimSwitchHog(hero.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function sendStats(planetMsg)

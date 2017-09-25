@@ -200,17 +200,17 @@ end
 
 function onNewTurn()
 	if not heroPlayedFirstTurn and CurrentHedgehog ~= hero.gear and startBattleCalled then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif not heroPlayedFirstTurn and CurrentHedgehog == hero.gear and startBattleCalled then
 		heroPlayedFirstTurn = true
 	elseif not heroPlayedFirstTurn and CurrentHedgehog == green1.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	else
 		if chooseToBattle then
 			if CurrentHedgehog == green1.gear then
 				TotalRounds = TotalRounds - 2
 				AnimSwitchHog(previousHog)
-				TurnTimeLeft = 0
+				EndTurn(true)
 			end
 			previousHog = CurrentHedgehog
 		end
@@ -353,7 +353,7 @@ function escapeWin(gear)
 end
 
 function heroSelect(gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 	FollowGear(hero.gear)
 	if GetX(hero.gear) < hero.x then
 		chooseToBattle = true
@@ -443,7 +443,7 @@ function startBattle()
 	DeleteGear(green1.human)
 	green1.gear = green1.bot
 	startBattleCalled = true
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function gameLost()

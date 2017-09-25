@@ -202,7 +202,7 @@ end
 function onNewTurn()
 	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
@@ -317,5 +317,5 @@ function startBattle()
 	DeleteGear(professor.human)
 	RestoreHog(professor.bot)
 	AnimSwitchHog(professor.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end

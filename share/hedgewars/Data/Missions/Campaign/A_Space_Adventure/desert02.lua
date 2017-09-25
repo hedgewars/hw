@@ -198,5 +198,5 @@ end
 
 function challengeStart()
 	startChallenge = true
-	TurnTimeLeft = 0
+	EndTurn(true)
 end

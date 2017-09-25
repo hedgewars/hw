@@ -232,23 +232,23 @@ function onNewTurn()
 	heroDamageAtCurrentTurn = 0
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
 	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
 		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
 			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
 			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
-			TurnTimeLeft = 0
+			EndTurn(true)
 		else
 			AnimSwitchHog(hero.gear)
-			TurnTimeLeft = 0
+			EndTurn(true)
 		end
 	elseif CurrentHedgehog == ally.gear then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
@@ -409,11 +409,12 @@ end
 function antiFlyArea(gear)
 	heroAtAntiFlyArea = true
 	if not heroVisitedAntiFlyArea then
-		TurnTimeLeft = 0
+		EndTurn(true)
 		FollowGear(hero.gear)
 		AnimSwitchHog(bandit1.gear)
 		FollowGear(hero.gear)
-		TurnTimeLeft = 0
+		HogSay(hero.gear, loc("My flying saucer stopped working!"), SAY_THINK)
+		EndTurn(true)
 	end
 	AddAmmo(hero.gear, amJetpack, 0)
 	AddAmmo(hero.gear, amSkip, 100)
