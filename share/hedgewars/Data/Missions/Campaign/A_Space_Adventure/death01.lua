@@ -81,9 +81,9 @@ thug7.health = 80
 teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green
 teamB.name = loc("PAotH")
-teamB.color = tonumber("0033FF",16) -- blue because otherwise enemies attack them
+teamB.color = tonumber("0072FF",16) -- blue because otherwise enemies attack them
 teamC.name = loc("Professor")
-teamC.color = tonumber("0033FF",16) -- blue
+teamC.color = tonumber("0072FF",16) -- blue
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 

@@ -88,9 +88,9 @@ minion3.y = 1750
 teamA.name = loc("PAotH")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Minions")
-teamB.color = tonumber("0033FF",16) -- blue
+teamB.color = tonumber("0072FF",16) -- blue
 teamC.name = loc("Professor")
-teamC.color = tonumber("0033FF",16) -- blue
+teamC.color = tonumber("0072FF",16) -- blue
 teamD.name = loc("Hog Solo")
 teamD.color = tonumber("38D61C",16) -- green
 

@@ -45,7 +45,7 @@ local teamA = {
 }
 local teamB = {
 	name = loc("Crazy Runner"),
-	color = tonumber("FF0000",16) -- red
+	color = tonumber("0072FF",16) -- blue
 }
 
 -------------- LuaAPI EVENT HANDLERS ------------------

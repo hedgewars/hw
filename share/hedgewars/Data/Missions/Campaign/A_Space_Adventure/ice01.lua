@@ -74,7 +74,7 @@ bandit5.roundsToUnfreeze = 0
 teamA.name = loc("Allies")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Frozen Bandits")
-teamB.color = tonumber("0033FF",16) -- blues
+teamB.color = tonumber("0072FF",16) -- blues
 teamC.name = loc("Hog Solo")
 teamC.color = tonumber("38D61C",16) -- green
 
