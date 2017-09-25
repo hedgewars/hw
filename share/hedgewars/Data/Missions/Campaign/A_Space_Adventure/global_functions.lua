@@ -118,11 +118,14 @@ function initCheckpoint(mission)
 	if GetCampaignVar("CurrentMission") ~= mission then
 		SaveCampaignVar("CurrentMission", mission)
 		SaveCampaignVar("CurrentMissionCheckpoint", 1)
-		SaveCampaignVar("HogsPosition", "")
 	else
-		checkPoint = tonumber(GetCampaignVar("currentMissionCheckpoint"))
+		checkPoint = tonumber(GetCampaignVar("CurrentMissionCheckpoint"))
 	end
 	return checkPoint
+end
+
+function resetCheckpoint(mission)
+	SaveCampaignVar("CurrentMissionCheckpoint", 1)
 end
 
 function saveCheckpoint(cp)

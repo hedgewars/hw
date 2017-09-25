@@ -191,6 +191,11 @@ function onGameStart()
 		AddAmmo(hero.gear, amJetpack, 100)
 	end
 
+	-- Reset checkpoint of other missions when entering this mission.
+	-- The player has left the planet, so we count that “abandoning” any incomplete missions.
+	-- This also allows the player (indirectly) to reset the checkpointed missions.
+	abandoned = resetCheckpoint()
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onNoFuelAtLand, {hero.gear}, noFuelAtLand, {hero.gear}, 0)
 	-- always check for landings
