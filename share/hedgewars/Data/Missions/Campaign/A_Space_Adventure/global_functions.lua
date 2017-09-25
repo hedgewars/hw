@@ -124,8 +124,13 @@ function initCheckpoint(mission)
 	return checkPoint
 end
 
+-- Reset mission checkpoint to 1
+-- Returns true if the player reached a checkpoint before, false otherwise.
 function resetCheckpoint(mission)
+	local cp = tonumber(GetCampaignVar("CurrentMissionCheckpoint"))
 	SaveCampaignVar("CurrentMissionCheckpoint", 1)
+
+	return (type(cp) == "number" and cp > 1)
 end
 
 function saveCheckpoint(cp)

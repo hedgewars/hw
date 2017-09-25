@@ -55,6 +55,8 @@ local teamB = {}
 local teamC = {}
 -- to check if flying saucer is active
 local saucerGear = nil
+-- if player abandoned any incomplete planet mission
+local abandonedPlanetMission = false
 -- hedgehogs values
 hero.name = loc("Hog Solo")
 hero.x = 1450
@@ -156,6 +158,12 @@ function onGameInit()
 		end
 	end
 	AnimInit(startSequence)
+
+	-- Reset checkpoint of other missions when entering this mission.
+	-- The player has left the planet, so we count that “abandoning” any incomplete missions.
+	-- This also allows the player (indirectly) to reset the checkpointed missions.
+	abandonedPlanetMission = resetCheckpoint()
+
 	AnimationSetup()
 end
 
@@ -190,11 +198,6 @@ function onGameStart()
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
 		AddAmmo(hero.gear, amJetpack, 100)
 	end
-
-	-- Reset checkpoint of other missions when entering this mission.
-	-- The player has left the planet, so we count that “abandoning” any incomplete missions.
-	-- This also allows the player (indirectly) to reset the checkpointed missions.
-	abandoned = resetCheckpoint()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onNoFuelAtLand, {hero.gear}, noFuelAtLand, {hero.gear}, 0)
@@ -255,7 +258,16 @@ function onAmmoStoreInit()
 	SetAmmo(amJetpack, 0, 0, 0, 1)
 end
 
+local abandonCheck = false
+
 function onNewTurn()
+	if not abandonCheck and checkPointReached == 5 then
+		if abandonedPlanetMission then
+			HogSay(hero.gear, loc("I just forgot all checkpoints of incomplete missions."), SAY_THINK)
+		end
+		abandonCheck = false
+	end
+
 	if guard1.keepTurning then
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = -1
@@ -598,6 +610,10 @@ function AnimationSetup()
 	-- DIALOG 05 - Hero returned from moon without fuels
 	AddSkipFunction(dialog05, Skipanim, {dialog05})
 	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("I guess I can't go far without fuel!"), SAY_THINK, 6000}})
+	if abandonedPlanetMission then
+		-- Hog solo is mad he has to play the moon main mission from start. Very sarcastic tone. ;-)
+		table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("And I just forgot the checkpoint of my main mission. Great, just great!"), SAY_THINK, 7000}})
+	end
 	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Got to go back."), SAY_THINK, 2000}})
 	table.insert(dialog05, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
