@@ -317,9 +317,9 @@ function AfterStartAnim()
   FollowGear(native)
   AddNewEvent(CheckGearsDead, {{crates[1], crates[2]}}, PutCrates, {2}, 0) 
   TurnTimeLeft = TurnTime
-  ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to collect the crates first.|") ..
-                                                  loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
-                                                  loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
+  ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to get rid of the crates first.") .. "|" ..
+                                                  loc("As the ammo is sparse, you might want to reuse ropes while mid-air.") .. "|" ..
+                                                  loc("The enemy can't move but it might be a good idea to stay out of sight!") .. "|" ..
                                                   loc("Mines time: 5 seconds"), 1, 0)
 end
 
@@ -460,7 +460,7 @@ function CyborgDeadReact()
   freshDead = nil
   if cyborgsLeft == 0 then
     if not cratesTaken then
-       AnimSay(native, loc("I still have to collect the crates."), SAY_THINK, 8000)
+       AnimSay(native, loc("I still have to get rid of the crates."), SAY_THINK, 8000)
     end
     return
   end
