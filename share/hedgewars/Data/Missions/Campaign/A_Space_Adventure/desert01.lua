@@ -20,7 +20,6 @@ local missionName = loc("Searching in the dust")
 local heroIsInBattle = false
 local ongoingBattle = 0
 local cratesFound = 0
-local checkPointReached = 1 -- 1 is normal spawn
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -99,13 +98,8 @@ function onGameInit()
 	Map = "desert01_map"
 	Theme = "Desert"
 
-	-- get the check point
-	checkPointReached = initCheckpoint("desert01")
 	-- get hero health
 	local heroHealth = 100
-	if checkPointReached > 1 and tonumber(GetCampaignVar("HeroHealth")) then
-		heroHealth = tonumber(GetCampaignVar("HeroHealth"))
-	end
 
 	-- Hog Solo
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "hedgewars")
@@ -125,33 +119,7 @@ function onGameInit()
 	smuggler3.gear = AddHog(smuggler3.name, 1, 100, "beefeater")
 	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)
 
-	if checkPointReached == 1 then
-		-- Start of the game
-	elseif checkPointReached == 2 then
-		AnimSetGearPosition(hero.gear, 1050, 615)
-		HogTurnLeft(hero.gear, true)
-	elseif checkPointReached == 3 then
-		AnimSetGearPosition(hero.gear, 1680, 920)
-		HogTurnLeft(hero.gear, true)
-	elseif checkPointReached == 4 then
-		AnimSetGearPosition(hero.gear, 1160, 1180)
-	elseif checkPointReached == 5 then
-		local positions = GetCampaignVar("HogsPosition")
-		positions = split(positions,",")
-		local x
-		local y
-		if positions[1] then
-			x = positions[1]
-			y = positions[2]
-		else
-			-- this should *NEVER* happen, remove?
-			x = girderX+40
-			y = girderY-30
-		end
-		AnimSetGearPosition(hero.gear, x, y)
-	end
-
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 
@@ -161,7 +129,6 @@ function onGameStart()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
-	AddEvent(onHeroAtCheckpoint4, {hero.gear}, heroAtCheckpoint4, {hero.gear}, 0)
 	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
 	AddEvent(onCheckForWin1, {hero.gear}, checkForWin1, {hero.gear}, 0)
 	AddEvent(onCheckForWin2, {hero.gear}, checkForWin2, {hero.gear}, 0)
@@ -213,31 +180,21 @@ function onGameStart()
 		x = x + GetRandom(13)+8
 	end
 
-	if checkPointReached == 1 then
-		AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
-		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
-		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
-		-- crates
-		SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
-		SpawnHealthCrate(680, 460)
-		-- hero ammo
-		AddAmmo(hero.gear, amRope, 2)
-		AddAmmo(hero.gear, amBazooka, 3)
-		AddAmmo(hero.gear, amParachute, 1)
-		AddAmmo(hero.gear, amGrenade, 6)
-		AddAmmo(hero.gear, amDEagle, 4)
-		AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
+	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
+	AddEvent(onHeroAtBattlePoint1, {hero.gear}, heroAtBattlePoint1, {hero.gear}, 0)
+	AddEvent(onHeroAtBattlePoint2, {hero.gear}, heroAtBattlePoint2, {hero.gear}, 0)
+	-- crates
+	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
+	SpawnHealthCrate(680, 460)
+	-- hero ammo
+	AddAmmo(hero.gear, amRope, 2)
+	AddAmmo(hero.gear, amBazooka, 3)
+	AddAmmo(hero.gear, amParachute, 1)
+	AddAmmo(hero.gear, amGrenade, 6)
+	AddAmmo(hero.gear, amDEagle, 4)
+	AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
 
-		AddAnim(dialog01)
-	elseif checkPointReached == 2 or checkPointReached == 3 then
-		ShowMission(campaignName, missionName, loc("The device part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
-		loadHeroAmmo()
-
-		secondBattle()
-	elseif checkPointReached == 4 or checkPointReached == 5 then
-		ShowMission(campaignName, missionName, loc("The part device is hidden in one of the crates! Go and get it!"), -amSkip, 0)
-		loadHeroAmmo()
-	end
+	AddAnim(dialog01)
 
 	SendHealthStatsOff()
 end
@@ -347,7 +304,7 @@ function onHeroFleeFirstBattle(gear)
 end
 
 -- saves the location of the hero and prompts him for the second battle
-function onHeroAtCheckpoint2(gear)
+function onHeroAtBattlePoint1(gear)
 	if not hero.dead and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
 			and GetY(hero.gear) > 590 and GetY(hero.gear) < 700 and StoppedGear(hero.gear) then
 		return true
@@ -355,17 +312,9 @@ function onHeroAtCheckpoint2(gear)
 	return false
 end
 
-function onHeroAtCheckpoint3(gear)
+function onHeroAtBattlePoint2(gear)
 	if not hero.dead and GetX(hero.gear) > 1610 and GetX(hero.gear) < 1680
 			and GetY(hero.gear) > 850 and GetY(hero.gear) < 1000 and StoppedGear(hero.gear) then
-		return true
-	end
-	return false
-end
-
-function onHeroAtCheckpoint4(gear)
-	if not hero.dead and GetX(hero.gear) > 1110 and GetX(hero.gear) < 1300
-			and GetY(hero.gear) > 1100 and GetY(hero.gear) < 1220 then
 		return true
 	end
 	return false
@@ -422,22 +371,12 @@ function heroFleeFirstBattle(gear)
 	ongoingBattle = 0
 end
 
-function heroAtCheckpoint2(gear)
-	if GetAmmoCount(hero.gear, amRope) > 0 or GetAmmoCount(hero.gear, amParachute) > 0 then
-		saveCheckPointLocal("2")
-	end
+function heroAtBattlePoint1(gear)
 	secondBattle()
 end
 
-function heroAtCheckpoint3(gear)
-	if GetAmmoCount(hero.gear, amRope) > 0 then
-		saveCheckPointLocal("3")
-	end
+function heroAtBattlePoint2(gear)
 	secondBattle()
-end
-
-function heroAtCheckpoint4(gear)
-	saveCheckPointLocal("4")
 end
 
 function heroAtThirdBattle(gear)
@@ -458,12 +397,6 @@ function checkForWin1(gear)
 end
 
 function checkForWin2(gear)
-	-- ok lets place one more checkpoint as next part seems challenging without rope
-	if cratesFound ==  0 then
-		saveCheckPointLocal("5")
-		SaveCampaignVar("HogsPosition", GetX(hero.gear)..","..GetY(hero.gear))
-	end
-
 	checkForWin()
 end
 
@@ -521,35 +454,6 @@ function secondBattle()
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
 	EndTurn(true)
-end
-
-function saveCheckPointLocal(cpoint)
-	-- save checkpoint
-	saveCheckpoint(cpoint)
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal - rcplane
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
-			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amGirder)..
-			GetAmmoCount(hero.gear, amPortalGun)..GetAmmoCount(hero.gear, amRCPlane))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
-end
-
-function loadHeroAmmo()
-	-- hero ammo
-	local ammo = GetCampaignVar("HeroAmmo")
-	AddAmmo(hero.gear, amRope, tonumber(ammo:sub(3,3)))
-	AddAmmo(hero.gear, amBazooka, tonumber(ammo:sub(1,1)))
-	AddAmmo(hero.gear, amParachute, tonumber(ammo:sub(4,4)))
-	AddAmmo(hero.gear, amGrenade, tonumber(ammo:sub(2,2)))
-	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(5,5)))
-	AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
-	-- weird, if 0 bazooka isn't displayed in the weapons menu
-	if tonumber(ammo:sub(7,7)) > 0 then
-		AddAmmo(hero.gear, amGirder, tonumber(ammo:sub(7,7)))
-	end
-	AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
-	AddAmmo(hero.gear, amRCPlane, tonumber(ammo:sub(9,9)))
 end
 
 function checkForWin()
