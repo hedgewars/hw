@@ -138,16 +138,16 @@ cyborgsPos = {{2937, 831}, {2945, 1264}, {2335, 1701}, {448, 484}}
 cyborgsDir = {"Left", "Left", "Left", "Right"}
 
 cratePos = {
-            {788, 1919, amGirder, 2}, {412, 1615, amGirder, 1},
-            {209, 1474, amSniperRifle, 1}, {1178, 637, amDEagle, 1},
-            {633, 268, amDEagle, 1}, {3016, 1545, amDEagle, 1},
-            {249, 1377, amRope, 3}, {330, 1018, amGirder, 1},
-            {888, 647, amRope, 3}, {2116, 337, amRope, 3},
-            {1779, 948, amRope, 3}, {3090, 1066, amRope, 3},
-            {947, 480, amBazooka, 3}, {1097, 480, amMortar, 3},
-            {1139, 451, amSnowball, 3}, {1207, 468, amShotgun, 3},
-            {1024, 393, amSniperRifle, 2}, {998, 391, amDynamite, 2},
-            {1024, 343, amRope, 2}, {998, 341, amRope, 2}
+            {{788, 1919, amGirder, 2}, true}, {{412, 1615, amGirder, 1}, true},
+            {{209, 1474, amSniperRifle, 1}}, {{1178, 637, amDEagle, 1}},
+            {{633, 268, amDEagle, 1}}, {{3016, 1545, amDEagle, 1}},
+            {{249, 1377, amRope, 3}, true}, {{330, 1018, amGirder, 1}, true},
+            {{888, 647, amRope, 3}, true}, {{2116, 337, amRope, 3}, true},
+            {{1779, 948, amRope, 3}, true}, {{3090, 1066, amRope, 3}, true},
+            {{947, 480, amBazooka, 3}}, {{1097, 480, amMortar, 3}},
+            {{1139, 451, amSnowball, 3}}, {{1207, 468, amShotgun, 3}},
+            {{1024, 393, amSniperRifle, 2}}, {{998, 391, amDynamite, 2}},
+            {{1024, 343, amRope, 2}, true}, {{998, 341, amRope, 2}, true},
            }
 reactions = {loc("Yeah, take that!"), loc("Bullseye"), loc("Die, die, die!")}
 
@@ -308,11 +308,20 @@ function SkipStartAnim()
   AddFunction({func = HideHedge, args = {cyborg}})
 end
 
+function SpawnCrateByID(id)
+    if cratePos[id][2] == true then
+       crates[id] = SpawnUtilityCrate(unpack(cratePos[id][1]))
+    else
+       crates[id] = SpawnAmmoCrate(unpack(cratePos[id][1]))
+    end
+    return crates[id]
+end
+
 function AfterStartAnim()
   SetGearMessage(native, 0)
   cratesNum = 0
   for i = 1, 6 do
-    crates[i] = SpawnAmmoCrate(unpack(cratePos[i]))
+    SpawnCrateByID(i)
     cratesNum = cratesNum + 1
   end
   FollowGear(native)
@@ -392,7 +401,7 @@ end
 function PutWeaponCrates()
   for i = 1, 8 do
     cratesNum = cratesNum + 1
-    crates[cratesNum] = SpawnAmmoCrate(unpack(cratePos[cratesNum]))
+    SpawnCrateByID(cratesNum)
   end
   FollowGear(native)
 end
@@ -408,7 +417,7 @@ end
 function PutCrates(index)
   if index <= 7 then
     cratesNum = cratesNum + 1
-    crates[cratesNum] = SpawnUtilityCrate(unpack(cratePos[cratesNum]))
+    SpawnCrateByID(cratesNum)
     AddNewEvent(CheckGearDead, {crates[cratesNum]}, PutCrates, {index + 1}, 0)
     FollowGear(native)
   else

@@ -185,10 +185,12 @@ A Classic Fairytale:
  * Mission 3: Fix broken end sequence after killing cyborg or princess
  * Mission 5: Fix crash when skipping animation while the cyborg talks before the 3rd wave of cannibals starts
  * Mission 6: Block off left cave entrance to stop player to just rope all the way around
- * Mission 6: Remove some misleading mission panel texts
+ * Mission 6: Fix mines not being able to get triggered in first turn
+ * Mission 6: Rewrite misleading mission texts
  * Mission 8: Fix Lua error message at the beginning
  * Mission 10: Fix mission becoming unplayable when all hogs except the traitor died
  * All missions: Add missing texts for translation
+ * All missions: Fix incorrect crate types
  * Fix swapped mission preview images of missions 2 and 3
 
 A Space Adventure:
@@ -201,6 +203,7 @@ A Space Adventure:
  * Fix weird behaviour when walking right before the first animation in most missions
  * Fix a coupe of texts being untranslatable
  * Fix typos
+ * All missions: Fix incorrect crate types
 
 Missions:
  + New scenario: Teamwork 2
