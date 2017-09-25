@@ -172,6 +172,7 @@ crates = {}
 cratesNum = 0
 jetCrate = nil
 
+firstTurn = true
 cyborgsKilledBeforeCrates = false
 cratesTaken = false
 doneCyborgsDead = false
@@ -604,7 +605,7 @@ function onGameInit()
   end
 
   AddHogs()
-  AnimInit()
+  AnimInit(true)
 end
 
 function onGameStart()
@@ -613,8 +614,6 @@ function onGameStart()
   SetupPlace()
   AnimationSetup()
   SetupEvents()
-  AddAnim(startAnim)
-  AddFunction({func = AfterStartAnim, args = {}})
   ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 1, 0)
 end
 
@@ -646,9 +645,10 @@ function onAmmoStoreInit()
 end
 
 function onNewTurn()
-  if AnimInProgress() then
-    TurnTimeLeft = -1
-    return
+  if firstTurn then
+    AddAnim(startAnim)
+    AddFunction({func = AfterStartAnim, args = {}})
+    firstTurn = false
   end
   if GetHogTeamName(CurrentHedgehog) == loc("011101000") then
     SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
