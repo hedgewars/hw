@@ -190,7 +190,7 @@ function onGameStart()
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amRope, 2)
 		SpawnAmmoCrate(bazookaX, weaponsY, amBazooka)
-		SpawnAmmoCrate(parachuteX, weaponsY, amParachute)
+		SpawnUtilityCrate(parachuteX, weaponsY, amParachute)
 		SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
 		SpawnAmmoCrate(deserteagleX, weaponsY, amDEagle)
 		AddEvent(onWeaponsPlatform, {hero.gear}, weaponsPlatform, {hero.gear}, 0)

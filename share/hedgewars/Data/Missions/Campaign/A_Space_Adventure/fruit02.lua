@@ -218,7 +218,7 @@ function onGameStart()
 
 	-- place crates
 	if checkPointReached < 2 then
-		SpawnAmmoCrate(girderCrate.x, girderCrate.y, girderCrate.name)
+		SpawnUtilityCrate(girderCrate.x, girderCrate.y, girderCrate.name)
 	end
 	if checkPointReached < 5 then
 		SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)

@@ -176,11 +176,11 @@ function onGameStart()
 	-- spawn crates
 	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
 	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
-	SpawnAmmoCrate(rope1X, rope1Y, amRope)
-	SpawnAmmoCrate(rope2X, rope2Y, amRope)
-	SpawnAmmoCrate(rope3X, rope3Y, amRope)
-	SpawnAmmoCrate(portalX, portalY, amPortalGun)
-	SpawnAmmoCrate(girderX, girderY, amGirder)
+	SpawnUtilityCrate(rope1X, rope1Y, amRope)
+	SpawnUtilityCrate(rope2X, rope2Y, amRope)
+	SpawnUtilityCrate(rope3X, rope3Y, amRope)
+	SpawnUtilityCrate(portalX, portalY, amPortalGun)
+	SpawnUtilityCrate(girderX, girderY, amGirder)
 
 	SpawnHealthCrate(3300, 970)
 

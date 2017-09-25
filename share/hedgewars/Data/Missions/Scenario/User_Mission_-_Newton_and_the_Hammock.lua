@@ -82,7 +82,7 @@ function onGameStart()
 	SpawnAmmoCrate(548,858,amBazooka)
 	--UTILITY CRATE LIST.
 	SpawnUtilityCrate(479,847,amJetpack)
-	SpawnUtilityCrate(1550,1715,amBlowTorch)
+	SpawnAmmoCrate(1550,1715,amBlowTorch)
 	SpawnUtilityCrate(1227,1941,amJetpack)
 	SpawnUtilityCrate(1070,1964,amInvulnerable)
 	SpawnUtilityCrate(1070,1875,amTeleport)
