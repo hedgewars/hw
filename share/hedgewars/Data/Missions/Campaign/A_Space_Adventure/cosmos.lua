@@ -250,9 +250,6 @@ function onAmmoStoreInit()
 end
 
 function onNewTurn()
-	if CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
-		EndTurn(true)
-	end
 	if guard1.keepTurning then
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = -1
