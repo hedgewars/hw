@@ -75,7 +75,7 @@ professor.name = loc("Prof. Hogevil")
 professor.x = 3800
 professor.y = 1600
 professor.dead = false
-professor.health = 100
+professor.health = 120
 minion1.name = loc("Minion")
 minion1.x = 2460
 minion1.y = 1450
@@ -85,6 +85,7 @@ minion2.y = 1900
 minion3.name = loc("Minion")
 minion3.x = 3500
 minion3.y = 1750
+
 teamA.name = loc("PAotH")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Minions")
@@ -131,7 +132,7 @@ function onGameInit()
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_sine")
-	professor.gear = AddHog(professor.name, 0, 120, "tophats")
+	professor.gear = AddHog(professor.name, 0, professor.health, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
@@ -185,6 +186,7 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onProfessorDeath, {professor.gear}, professorDeath, {professor.gear}, 0)
 	AddEvent(onMinionsDeath, {professor.gear}, minionsDeath, {professor.gear}, 0)
+	AddEvent(onProfessorAndMinionsDeath, {professor.gear}, professorAndMinionsDeath, {professor.gear}, 0)
 	AddEvent(onProfessorHit, {professor.gear}, professorHit, {professor.gear}, 1)
 
 	if checkPointReached == 1 then
@@ -315,6 +317,13 @@ function onMinionsDeath(gear)
 	return false
 end
 
+function onProfessorAndMinionsDeath(gear)
+	if professor.dead and (not (GetHealth(minion1.gear) or GetHealth(minion2.gear) or GetHealth(minion3.gear))) then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function weaponsPlatform(gear)
@@ -354,23 +363,10 @@ function professorHit(gear)
 	end
 end
 
-function professorDeath(gear)
-	if gameOver then return end
-	if GetHealth(minion1.gear) then
-		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
-	elseif GetHealth(minion2.gear) then
-		AnimSay(minion2.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
-	elseif GetHealth(minion3.gear) then
-		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
-	end
-	DismissTeam(teamB.name)
-	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
-	AnimWait(hero.gear,5000)
-
+function victory()
+	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	saveCompletedStatus(1)
 	SendStat(siGameResult, loc("Hog Solo wins, congratulations!"))
-	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
-	SendStat(siCustomAchievement, loc("You drove the minions away."))
 	SendStat(siPlayerKills,'1',teamD.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
@@ -379,24 +375,49 @@ function professorDeath(gear)
 	EndGame()
 end
 
-function minionsDeath(gear)
+function professorAndMinionsDeath(gear)
 	if gameOver then return end
-	-- do staffs here
-	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
-	DismissTeam(teamC.name)
-	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
+	AnimCaption(hero.gear, loc("Congrats! You destroyed the enemy!"), 6000)
+	SendStat(siCustomAchievement, loc("You have eliminated the whole evil team. You're pretty tough!"))
+
+	victory()
+end
+
+function professorDeath(gear)
+	if gameOver then return end
+	local m1h = GetHealth(minion1.gear)
+	local m2h = GetHealth(minion2.gear)
+	local m3h = GetHealth(minion3.gear)
+	if m1h == 0 or m2h == 0 or m3h == 0 then return end
+
+	if m1h and m1h > 0 and StoppedGear(minion1.gear) then
+		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+	elseif m2h and m2h > 0 and StoppedGear(minion2.gear) then
+		AnimSay(minion2.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+	elseif m3h and m3h > 0 and StoppedGear(minion3.gear) then
+		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+	end
+
+	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
+	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
+	SendStat(siCustomAchievement, loc("You drove the minions away."))
+	DismissTeam(teamB.name)
 	AnimWait(hero.gear,5000)
 
-	saveCompletedStatus(1)
-	SendStat(siGameResult, loc("Congratulations, you won!"))
+	victory()
+end
+
+function minionsDeath(gear)
+	if professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0 then return end
+	if gameOver then return end
+
+	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
+	DismissTeam(teamC.name)
+	AnimWait(hero.gear,5000)
 	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
 	SendStat(siCustomAchievement, loc("You drove Professor Hogevil away."))
-	SendStat(siPlayerKills,'1',teamD.name)
-	SendStat(siPlayerKills,'0',teamC.name)
-	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
-	resetCheckpoint() -- reset this mission
-	gameOver = true
-	EndGame()
+
+	victory()
 end
 
 -------------- ANIMATIONS ------------------
