@@ -217,12 +217,16 @@ function onGameStart()
 		AddEvent(onHeroAtIceGun, {hero.gear}, heroAtIceGun, {hero.gear}, 0)
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then
-		AddAmmo(hero.gear, amBazooka, 1)
+		local baz = tonumber(GetCampaignVar("HeroAmmoIce01Bazooka")) or 1
+		AddAmmo(hero.gear, amBazooka, baz)
 		AddAmmo(hero.gear, amIceGun, 8)
 		AnimCaption(hero.gear, goToThantaString, 5000)
 		ShowMission(unpack(goals["checkpoint"]))
 	elseif checkPointReached == 3 then
-		AddAmmo(hero.gear, amIceGun, 6)
+		local baz = tonumber(GetCampaignVar("HeroAmmoIce01Bazooka")) or 0
+		local ice = math.max(6, tonumber(GetCampaignVar("HeroAmmoIce01IceGun")) or 6)
+		AddAmmo(hero.gear, amBazooka, baz)
+		AddAmmo(hero.gear, amIceGun, ice)
 		AnimCaption(hero.gear, goToThantaString, 5000)
 		ShowMission(unpack(goals["checkpoint"]))
 	end
@@ -447,12 +451,17 @@ function heroFinalStep(gear)
 	heroAtFinalStep = true
 	saveCheckpoint("3")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
+	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
+	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
+	AddCaption(loc("Checkpoint reached!"), 0xFFFFFFFF, capgrpMessage2)
 end
 
 function columnCheckPoint(gear)
 	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
+	AddCaption(loc("Checkpoint reached!"), 0xFFFFFFFF, capgrpMessage2)
+	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
+	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
 end
 
 function heroAtIceGun(gear)

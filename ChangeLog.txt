@@ -197,7 +197,8 @@ A Space Adventure:
  + A few campaign missions now save your personal best successes (e.g. fastest finish in Hard Flying) which get shown after you finish them agin
  + Add skip to a few missions where it doesn't hurt
  + Menu: Show 2 flowers over fully completed planets (with side missions)
- + Allow skipping in some missions
+ * A frozen adventure: Fix bazooka and excess freezers (>6) not retained over checkpoints
+ * A frozen adventure: Fix and improve poorly written messages
  * Getting to the device: Add real crate and correct message for collecting device part
  * Getting to the device: Remove checkpoints. There was a good chance for these missions to become unwinnable
  * Searching in the dust: Remove checkpoints. See above.
