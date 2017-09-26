@@ -161,7 +161,7 @@ function onGameTick20()
 				SaveCampaignVar("IceStadiumLeastSaucersUsed", tostring(saucersUsed))
 			end
 
-			SendStat(siPlayerKills,'0',teamA.name)
+			sendSimpleTeamRankings({teamA.name})
 			SaveCampaignVar("Mission6Won", "true")
 			checkAllMissionsCompleted()
 			EndGame()
@@ -294,6 +294,6 @@ function heroLost()
 	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring."))
 	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers."))
 	SendStat(siCustomAchievement, loc("Use the attack key twice to change the flying saucer while being in air."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end

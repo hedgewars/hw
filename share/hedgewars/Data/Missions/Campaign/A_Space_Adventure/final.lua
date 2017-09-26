@@ -149,7 +149,7 @@ function heroDeath(gear)
 	SendStat(siCustomAchievement, loc("You have to destroy all the explosives without dying!"))
 	SendStat(siCustomAchievement, loc("Red areas are indestructible."))
 	SendStat(siCustomAchievement, loc("Green areas are portal-proof and repel portals."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end
 
@@ -159,6 +159,6 @@ function heroWin(gear)
 	checkAllMissionsCompleted()
 	SendStat(siGameResult, loc("Congratulations, you have saved Hogera!"))
 	SendStat(siCustomAchievement, loc("Hogera is safe!"))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end

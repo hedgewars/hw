@@ -150,7 +150,7 @@ function heroDeath(gear)
 	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface."))
 	SendStat(siCustomAchievement, loc("Most mines are not active."))
 	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end
 
@@ -168,7 +168,7 @@ function heroSafe(gear)
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
 	end
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	SaveCampaignVar("Mission7Won", "true")
 	checkAllMissionsCompleted()
 	EndGame()
