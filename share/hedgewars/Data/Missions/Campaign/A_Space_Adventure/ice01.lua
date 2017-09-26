@@ -217,6 +217,7 @@ function onGameStart()
 		AddEvent(onHeroAtIceGun, {hero.gear}, heroAtIceGun, {hero.gear}, 0)
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then
+		AddAmmo(hero.gear, amBazooka, 1)
 		AddAmmo(hero.gear, amIceGun, 8)
 		AnimCaption(hero.gear, goToThantaString, 5000)
 		ShowMission(unpack(goals["checkpoint"]))
