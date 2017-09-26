@@ -209,6 +209,7 @@ A Space Adventure:
  * Killing The Specialists: Fix killing hog with Deagle gave you chance to use another weapon in same turn
  * Fix weird behaviour when walking right before the first animation in most missions
  * Fix a coupe of texts being untranslatable
+ * Fix a variety of minor logic flaws in the story
  * Fix typos
  * All missions: Fix incorrect crate types
 

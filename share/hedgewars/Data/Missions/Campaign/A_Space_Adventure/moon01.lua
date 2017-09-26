@@ -380,6 +380,7 @@ function professorAndMinionsDeath(gear)
 	AnimCaption(hero.gear, loc("Congrats! You destroyed the enemy!"), 6000)
 	SendStat(siCustomAchievement, loc("You have eliminated the whole evil team. You're pretty tough!"))
 
+	SaveCampaignVar("ProfDiedOnMoon", "1")
 	victory()
 end
 
@@ -404,6 +405,7 @@ function professorDeath(gear)
 	DismissTeam(teamB.name)
 	AnimWait(hero.gear,5000)
 
+	SaveCampaignVar("ProfDiedOnMoon", "1")
 	victory()
 end
 
@@ -417,6 +419,7 @@ function minionsDeath(gear)
 	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
 	SendStat(siCustomAchievement, loc("You drove Professor Hogevil away."))
 
+	SaveCampaignVar("ProfDiedOnMoon", "0")
 	victory()
 end
 

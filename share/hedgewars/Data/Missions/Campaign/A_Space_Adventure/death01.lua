@@ -295,19 +295,28 @@ function Skipanim(anim)
 end
 
 function AnimationSetup()
+	local profDiedOnMoon = GetCampaignVar("ProfDiedOnMoon") == "1"
 	-- DIALOG01, GAME START, INTRODUCTION
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the uninhabitable Death Planet ..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surprised to see me?"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})
+	if profDiedOnMoon then
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("After you left the moon, my other loyal minions came and resurrected me so I could complete my master plan."), SAY_SAY, 6000}})
+	else
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})
+	end
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("I've thought that the best way to get the device is to let you collect most of the parts for me!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, now I got the last part and I have your friends captured."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Will you give me the other parts?"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I will never hand you the parts!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {professor.human, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})
+	if profDiedOnMoon then
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SHOUT, 4000}})
+	else
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})
+	end
 	table.insert(dialog01, {func = startBattle, args = {}})
 end
 
