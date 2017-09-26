@@ -63,15 +63,15 @@ elderFace = "Left"
 
 goals = {
   [startDialogue] = {loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Enter] to jump"), 1, 4000},
-  [onShroomAnim] = {loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower"), 1, 4000},
+  [onShroomAnim] = {loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower") .. "|" .. loc("Hint: Press [Esc] to review the mission texts."), 1, 7000},
   [onFlowerAnim] = {loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.|Hint: Select the rope, [Up] or [Down] to aim, [Space] to fire, directional keys to move.|Ropes can be fired again in the air!"), 1, 7000},
   [tookParaAnim] = {loc("First Blood"), loc("Omnivore"), loc("Get on the head of the mole"), 1, 4000},
   [onMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute ([Space] while in air) to get the next crate"), 1, 4000},
-  [tookRope2Anim] = {loc("First Blood"), loc("The Rising"), loc("Do the deed"), 1, 4000},
+  [tookRope2Anim] = {loc("First Blood"), loc("The Rising"), loc("Get that crate!"), 1, 4000},
   [tookPunchAnim] = {loc("First Blood"), loc("The Slaughter"), loc("Destroy the targets!|Hint: Select the Shoryuken and hit [Space]|P.S. You can use it mid-air."), 1, 5000},
   [challengeAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000},
   [challengeFailedAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000},
-  [challengeCompletedAnim] = {loc("First Blood"), loc("The Ultimate Weapon"), loc("Destroy the targets!|Hint: [Up], [Down] to aim, [Space] to shoot"), 1, 5000},
+  [challengeCompletedAnim] = {loc("First Blood"), loc("The Ultimate Weapon"), loc("Get that crate!"), 1, 5000},
   [beforeKillAnim] = {loc("First Blood"), loc("The First Blood"), loc("Kill the cannibal!"), 1, 5000},
   [closeCannim] = {loc("First Blood"), loc("The First Blood"), loc("KILL IT!"), 1, 5000}
 }
@@ -111,7 +111,7 @@ function AnimationSetup()
   table.insert(elderDamagedAnim, {func = AnimWait, args = {elderh, 500}, skipFunc = Skipanim, skipArgs = elderDamagedAnim})
   table.insert(elderDamagedAnim, {func = AnimSay, args = {elderh, loc("Violence is not the answer to your problems!"), SAY_SAY, 3000}})
   table.insert(elderDamagedAnim, {func = AnimGearWait, args = {youngh, 500}})
-  
+
   AddSkipFunction(startDialogue, Skipanim, {startDialogue})
   table.insert(startDialogue, {func = AnimWait, args = {youngh, 3500}, skipFunc = Skipanim, skipArgs = startDialogue})
   table.insert(startDialogue, {func = AnimCaption, args = {youngh, loc("Once upon a time, on an island with great natural resources, lived two tribes in heated conflict..."),  5000}})
@@ -124,7 +124,7 @@ function AnimationSetup()
   table.insert(startDialogue, {func = AnimJump, args = {youngh, "long"}})
   table.insert(startDialogue, {func = AnimTurn, args = {princess, "Right"}})
   table.insert(startDialogue, {func = AnimSwitchHog, args = {youngh}})
-  table.insert(startDialogue, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Enter] to jump"), 1, 4000}}) 
+  table.insert(startDialogue, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Enter] to jump"), 1, 4000}})
 
   AddSkipFunction(onShroomAnim, SkipOnShroom, {onShroomAnim})
   table.insert(onShroomAnim, {func = AnimSay, args = {elderh, loc("I can see you have been training diligently."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = onShroomAnim})
@@ -134,29 +134,29 @@ function AnimationSetup()
   table.insert(onShroomAnim, {func = AnimTurn, args = {elderh, "Left"}})
   table.insert(onShroomAnim, {func = AnimSay, args = {princess, loc("He moves like an eagle in the sky."), SAY_THINK, 4000}})
   table.insert(onShroomAnim, {func = AnimSwitchHog, args = {youngh}})
-  table.insert(onShroomAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower"), 1, 4000}}) 
+  table.insert(onShroomAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower") .. "|" .. loc("Hint: Press [Esc] to review the mission texts."), 1, 7000}})
 
   AddSkipFunction(onFlowerAnim, Skipanim, {onFlowerAnim})
   table.insert(onFlowerAnim, {func = AnimSay, args = {elderh, loc("See that crate farther on the right?"), SAY_SAY, 4000}})
   table.insert(onFlowerAnim, {func = AnimSay, args = {elderh, loc("Swing, Leaks A Lot, on the wings of the wind!"), SAY_SAY, 6000}})
   table.insert(onFlowerAnim, {func = AnimSay, args = {princess, loc("His arms are so strong!"), SAY_THINK, 4000}})
   table.insert(onFlowerAnim, {func = AnimSwitchHog, args = {youngh}})
-  table.insert(onFlowerAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.|Hint: Select the rope, [Up] or [Down] to aim, [Space] to fire, directional keys to move.|Ropes can be fired again in the air!"), 1, 7000}}) 
-  
+  table.insert(onFlowerAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.|Hint: Select the rope, [Up] or [Down] to aim, [Space] to fire, directional keys to move.|Ropes can be fired again in the air!"), 1, 7000}})
+
   AddSkipFunction(tookParaAnim, Skipanim, {tookParaAnim})
   table.insert(tookParaAnim, {func = AnimGearWait, args = {youngh, 1000}, skipFunc = Skipanim, skipArgs = tookParaAnim})
   table.insert(tookParaAnim, {func = AnimSay, args = {elderh, loc("Use the rope to get on the head of the mole, young one!"), SAY_SHOUT, 4000}})
   table.insert(tookParaAnim, {func = AnimSay, args = {elderh, loc("Worry not, for it is a peaceful animal! There is no reason to be afraid..."), SAY_SHOUT, 5000}})
   table.insert(tookParaAnim, {func = AnimSay, args = {elderh, loc("We all know what happens when you get frightened..."), SAY_SAY, 4000}})
   table.insert(tookParaAnim, {func = AnimSay, args = {youngh, loc("So humiliating..."), SAY_SAY, 4000}})
-  table.insert(tookParaAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("Omnivore"), loc("Get on the head of the mole"), 1, 4000}}) 
+  table.insert(tookParaAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("Omnivore"), loc("Get on the head of the mole"), 1, 4000}})
   table.insert(tookParaAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(onMoleHeadAnim, Skipanim, {onMoleHeadAnim})
   table.insert(onMoleHeadAnim, {func = AnimSay, args = {elderh, loc("Perfect! Now try to get the next crate without hurting yourself!"), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = onMoleHeadAnim})
   table.insert(onMoleHeadAnim, {func = AnimSay, args = {elderh, loc("The giant umbrella from the last crate should help break the fall."), SAY_SAY, 4000}})
   table.insert(onMoleHeadAnim, {func = AnimSay, args = {princess, loc("He's so brave..."), SAY_THINK, 4000}})
-  table.insert(onMoleHeadAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute ([Space] while in air) to get the next crate"), 1, 4000}}) 
+  table.insert(onMoleHeadAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute ([Space] while in air) to get the next crate"), 1, 4000}})
   table.insert(onMoleHeadAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(pastMoleHeadAnim, Skipanim, {pastMoleHeadAnim})
@@ -167,13 +167,13 @@ function AnimationSetup()
   AddSkipFunction(tookRope2Anim, Skipanim, {tookRope2Anim})
   table.insert(tookRope2Anim, {func = AnimSay, args = {elderh, loc("Impressive...you are still dry as the corpse of a hawk after a week in the desert..."), SAY_SAY, 5000}, skipFunc = Skipanim, skipArgs = tookRope2Anim})
   table.insert(tookRope2Anim, {func = AnimSay, args = {elderh, loc("You probably know what to do next..."), SAY_SAY, 4000}})
-  table.insert(tookRope2Anim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Rising"), loc("Do the deed"), 1, 4000}}) 
+  table.insert(tookRope2Anim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Rising"), loc("Get that crate!"), 1, 4000}})
   table.insert(tookRope2Anim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(tookPunchAnim, Skipanim, {tookPunchAnim})
   table.insert(tookPunchAnim, {func = AnimSay, args = {elderh, loc("It is time to practice your fighting skills."), SAY_SAY, 4000}})
   table.insert(tookPunchAnim, {func = AnimSay, args = {elderh, loc("Imagine those targets are the wolves that killed your parents! Take your anger out on them!"), SAY_SAY, 5000}})
-  table.insert(tookPunchAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Slaughter"), loc("Destroy the targets!|Hint: Select the Shoryuken and hit [Space]|P.S. You can use it mid-air."), 1, 5000}}) 
+  table.insert(tookPunchAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Slaughter"), loc("Destroy the targets!|Hint: Select the Shoryuken and hit [Space]|P.S. You can use it mid-air."), 1, 5000}})
   table.insert(tookPunchAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(challengeAnim, Skipanim, {challengeAnim})
@@ -186,7 +186,7 @@ function AnimationSetup()
 
   AddSkipFunction(challengeFailedAnim, Skipanim, {challengeFailedAnim})
   table.insert(challengeFailedAnim, {func = AnimSay, args = {elderh, loc("Hmmm...perhaps a little more time will help."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = challengeFailedAnim})
-  table.insert(challengeFailedAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000}}) 
+  table.insert(challengeFailedAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000}})
   table.insert(challengeFailedAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(challengeCompletedAnim, Skipanim, {challengeCompletedAnim})
@@ -194,7 +194,7 @@ function AnimationSetup()
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("You have proven yourself worthy to see our most ancient secret!"), SAY_SAY, 4000}})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The weapon in that last crate was bestowed upon us by the ancients!"), SAY_SAY, 4000}})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("Use it with precaution!"), SAY_SAY, 4000}})
-  table.insert(challengeCompletedAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Ultimate Weapon"), loc("Destroy the targets!|Hint: [Up], [Down] to aim, [Space] to shoot"), 1, 5000}}) 
+  table.insert(challengeCompletedAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Ultimate Weapon"), loc("Get that crate!"), 1, 5000}})
   table.insert(challengeCompletedAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(beforeKillAnim, Skipanim, {beforeKillAnim})
@@ -203,16 +203,16 @@ function AnimationSetup()
   table.insert(beforeKillAnim, {func = AnimWait, args = {cannibal, 1000}})
   table.insert(beforeKillAnim, {func = AnimSay, args = {elderh, loc("Destroy him, Leaks A Lot! He is responsible for the deaths of many of us!"), SAY_SHOUT, 4000}})
   table.insert(beforeKillAnim, {func = AnimSay, args = {cannibal, loc("Oh, my!"), SAY_THINK, 4000}})
-  table.insert(beforeKillAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The First Blood"), loc("Kill the cannibal!"), 1, 5000}}) 
+  table.insert(beforeKillAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The First Blood"), loc("Kill the cannibal!"), 1, 5000}})
   table.insert(beforeKillAnim, {func = AnimSwitchHog, args = {youngh}})
-  
+
   AddSkipFunction(closeCannim, Skipanim, {closeCannim})
   table.insert(closeCannim, {func = AnimSay, args = {elderh, loc("I see you would like his punishment to be more...personal..."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = closeCannim})
   table.insert(closeCannim, {func = AnimSay, args = {cannibal, loc("I'm certain that this is a misunderstanding, fellow hedgehogs!"), SAY_SAY, 4000}})
   table.insert(closeCannim, {func = AnimSay, args = {cannibal, loc("If only I were given a chance to explain my being here..."), SAY_SAY, 4000}})
   table.insert(closeCannim, {func = AnimSay, args = {elderh, loc("Do not let his words fool you, young one! He will stab you in the back as soon as you turn away!"), SAY_SAY, 6000}})
   table.insert(closeCannim, {func = AnimSay, args = {elderh, loc("Here...pick your weapon!"), SAY_SAY, 5000}})
-  table.insert(closeCannim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The First Blood"), loc("KILL IT!"), 1, 5000}}) 
+  table.insert(closeCannim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The First Blood"), loc("KILL IT!"), 1, 5000}})
   table.insert(closeCannim, {func = AnimSwitchHog, args = {youngh}})
 
   table.insert(cannKilledAnim, {func = AnimSay, args = {elderh, loc("Yes, yeees! You are now ready to enter the real world!"), SAY_SHOUT, 6000}})
@@ -265,7 +265,7 @@ function DoNeedToTurn(gear)
 end
 
 function CheckDamage()
-  return youngdamaged and StoppedGear(youngh) 
+  return youngdamaged and StoppedGear(youngh)
 end
 
 function DoOnDamage()
@@ -363,7 +363,7 @@ end
 function CheckPastMoleHead()
   x = GetX(youngh)
   y = GetY(youngh)
-  return x < 3005 and y > 1500 and StoppedGear(youngh) 
+  return x < 3005 and y > 1500 and StoppedGear(youngh)
 end
 
 function DoPastMoleHead()
@@ -500,7 +500,7 @@ function DoDesertColled()
   PutTargets(1)
   AddEvent(CheckTargetsKilled, {}, DoTargetsKilled, {}, 1)
   AddEvent(CheckCannibalKilled, {}, DoCannibalKilledEarly, {}, 0)
-  ShowMission(loc("First Blood"), loc("The Bull's Eye"), loc("[Up], [Down] to aim, [Space] to shoot!"), 1, 5000)
+  ShowMission(loc("First Blood"), loc("The Bull's Eye"), loc("Destroy the targets!|Hint: [Up], [Down] to aim, [Space] to shoot"), 1, 5000)
 end
 
 function CheckTargetsKilled()
@@ -559,14 +559,14 @@ function StartChallenge(time)
   cratesCollected = 0
   PutCrate(1)
   TurnTimeLeft = time
-  ShowMission(loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000) 
+  ShowMission(loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000)
 end
 
 function SetChoice()
   SetInputMask(band(0xFFFFFFFF, bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLJump+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon)))
   difficultyChoice = true
-  ShowMission(loc("First Blood"), loc("The Torment"), loc("Select difficulty: [Left] - easier or [Right] - harder"), 0, 4000)
-  AddEvent(CheckChoice, {}, DoChoice, {}, 0) 
+  ShowMission(loc("First Blood"), loc("The Torment"), loc("Select difficulty: [Left] - easier or [Right] - harder"), 0, 300000)
+  AddEvent(CheckChoice, {}, DoChoice, {}, 0)
 end
 
 function SetTime(time)
@@ -603,14 +603,14 @@ end
 -----------------------------Main Functions----------------------------
 
 function onGameInit()
-	Seed = 69 
-	GameFlags = gfInfAttack + gfSolidLand + gfDisableWind 
-	TurnTime = 100000 
+	Seed = 69
+	GameFlags = gfInfAttack + gfSolidLand + gfDisableWind
+	TurnTime = 100000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
+	Delay = 10
 	Map = "A_Classic_Fairytale_first_blood"
 	Theme = "Nature"
 
@@ -630,7 +630,7 @@ function onGameInit()
   cannibal = AddHog(loc("Brainiac"), 0, 5, "Zombi")
   AnimSetGearPosition(cannibal, 525, 1256)
   HogTurnLeft(cannibal, false)
-  
+
   AnimInit()
   AnimationSetup()
 end
@@ -695,7 +695,7 @@ function onGearDelete(gear)
       i = i + 1
     end
     targets[i] = nil
-    targetsDestroyed = targetsDestroyed + 1 
+    targetsDestroyed = targetsDestroyed + 1
   elseif gear == cannibal then
     cannibalKilled = true
   elseif gear == princess then
