@@ -36,9 +36,6 @@ blowTaken = false
 fireTaken = false
 gravityTaken = false
 sniperTaken = false
-girderTaken = false
-girder1Taken = false
-girder2Taken = false
 leaksDead = false
 denseDead = false
 princessDead = false
@@ -91,7 +88,6 @@ function AfterMidAnimAlone()
 
   AddAmmo(cannibals[5], amDEagle, 0)
 
-  AddEvent(CheckGirderTaken, {}, DoGirderTaken, {}, 0)
   AddEvent(CheckOnFirstGirder, {}, DoOnFirstGirder, {}, 0)
   AddEvent(CheckTookSniper, {}, DoTookSniper, {}, 0)
   AddEvent(CheckFailedCourse, {}, DoFailedCourse, {}, 0)
@@ -216,8 +212,6 @@ end
 function AfterPastFlowerAnim()
   PlaceMinesDuo()
   AddEvent(CheckDensePit, {}, DoDensePit, {}, 0)
-  AddEvent(CheckTookGirder1, {}, DoTookGirder1, {}, 0)
-  AddEvent(CheckTookGirder2, {}, DoTookGirder2, {}, 0)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
   EndTurn(0)
@@ -756,22 +750,6 @@ function DoTookFire()
   AddAmmo(leaks, amFirePunch, 100)
 end
 
-function CheckTookGirder1()
-  return girder1Taken
-end
-
-function CheckTookGirder2()
-  return girder2Taken
-end
-
-function DoTookGirder1()
-  AddAmmo(dense, amGirder, 2)
-end
-
-function DoTookGirder2()
-  AddAmmo(dense, amGirder, 3)
-end
-
 function CheckDensePit()
   if GetHealth(dense) ~= nil then
     return GetY(dense) < 1250 and StoppedGear(dense)
@@ -862,15 +840,6 @@ function DoOnBridge()
   AnimWait(cyborg, 1)
   AddFunction({func = AddAnim, args = {midAnim}})
   AddFunction({func = AddFunction, args = {{func = AfterMidAnimAlone, args = {}}}})
-end
-
-function CheckGirderTaken()
-  return girderTaken
-end
-
-function DoGirderTaken()
-  AddAmmo(leaks, amGirder, 2)
---  AddAmmo(leaks, amGirder, 3)
 end
 
 function CheckOnFirstGirder()
@@ -1041,12 +1010,6 @@ function onGearDelete(gear)
     cyborgDead = true
   elseif gear == princess and not victory then
     princessDead = true
-  elseif gear == girderCrate then
-    girderTaken = true
-  elseif gear == girderCrate1 then
-    girder1Taken = true
-  elseif gear == girderCrate2 then
-    girder2Taken = true
   elseif gear == sniperCrate then
     sniperTaken = true
   else
