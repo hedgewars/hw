@@ -265,7 +265,8 @@ function SetupAnimPrincess()
 end
 -----------------------------Misc--------------------------------------
 function GetVariables()
-  m8Scene = tonumber(GetCampaignVar("M8Scene"))
+  m8Scene = tonumber(GetCampaignVar("M8Scene")) or waterScene
+  -- waterScene is for fallback if campaign var was not found
 end
 
 function AddHogs()
