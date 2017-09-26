@@ -183,6 +183,7 @@ A Classic Fairytale:
  * Mission 2: Fix crash when trying to open ammo menu in opening sequence
  * Mission 3: Fix various Lua errors when playing with 2 hogs and one of them dies
  * Mission 3: Fix broken end sequence after killing cyborg or princess
+ * Mission 3: Fix broken sequence of princess being caged
  * Mission 3: All girder crates now have 3 girders each
  * Mission 5: Fix crash when skipping animation while the cyborg talks before the 3rd wave of cannibals starts
  * Mission 6: Block off left cave entrance to stop player to just rope all the way around

@@ -312,6 +312,20 @@ function SetupCourseDuo()
   SpawnUtilityCrate(570, 1357, amLowGravity)
 end
 
+local trackedGears = {}
+
+-- Remove mines and crates for the princess cage scene.
+-- Some annoying gears might get in the way for this scene, like a dropped
+-- mine, or the crate on the leaf.
+function ClearTrashForPrincessCage()
+  for gear, _ in pairs(trackedGears) do
+    if GetY(gear) > 1600 and GetX(gear) > 1800 and GetX(gear) < 2700 then
+      DeleteGear(gear)
+    end
+  end
+end
+
+-- Dump mines in princess cage
 function DumpMines()
   AddGear(2261, 1835, gtMine, 0, 0, 0, 0)
   AddGear(2280, 1831, gtMine, 0, 0, 0, 0)
@@ -401,6 +415,7 @@ function SetupAnimAcceptedDied()
   table.insert(midAnimAD, {func = AnimSay, args = {leaks, loc("Hey! This is cheating!"), SAY_SHOUT, 4000}})
   AddSkipFunction(midAnimAD, SkipMidAnimAlone, {})
 
+  table.insert(failAnimAD, {func = AnimCustomFunction, args = {cyborg, ClearTrashForPrincessCage, {}}})
   table.insert(failAnimAD, {func = AnimCustomFunction, swh = false, args = {leaks, RestoreCyborg, {2299, 1687, 2294, 1841}}})
   table.insert(failAnimAD, {func = AnimTeleportGear, args = {leaks, 2090, 1841}})
   table.insert(failAnimAD, {func = AnimCustomFunction, swh = false, args = {cyborg, SetupKillRoom, {}}})
@@ -414,8 +429,9 @@ function SetupAnimAcceptedDied()
   table.insert(failAnimAD, {func = AnimSwitchHog, args = {cyborg}})
   table.insert(failAnimAD, {func = AnimCustomFunction, args = {cyborg, DumpMines, {}}})
   table.insert(failAnimAD, {func = AnimCustomFunction, args = {cyborg, KillPrincess, {}}})
-  table.insert(failAnimAD, {func = AnimWait, args = {cyborg, 12000}})
-  table.insert(failAnimAD, {func = AnimSay, args = {leaks, loc("No! What have I done?! What have YOU done?!"), SAY_SHOUT, 6000}})
+  table.insert(failAnimAD, {func = AnimWait, args = {cyborg, 500}})
+  table.insert(failAnimAD, {func = AnimSay, args = {leaks, loc("No! What have I done?! What have YOU done?!"), SAY_SHOUT, 3000}})
+  table.insert(failAnimAD, {func = AnimSwitchHog, args = {princess}})
 
   table.insert(endAnimAD, {func = AnimCustomFunction, swh = false, args = {leaks, RestoreCyborg, {437, 1700, 519, 1722}}})
   table.insert(endAnimAD, {func = AnimTurn, swh = false, args = {cyborg, "Right"}})
@@ -567,7 +583,6 @@ function SetupAnimRefusedLived()
 end
 
 function KillPrincess()
-  DismissTeam(loc("Cannibal Sentry"))
   EndTurn(true)
 end
 --/////////////////////////////Misc Functions////////////////////////
@@ -995,7 +1010,18 @@ function onGameTick()
   CheckEvents()
 end
 
+-- Track gears for princess cage cleanup
+function onGearAdd(gear)
+  local gt = GetGearType(gear)
+  if gt == gtCase or gt == gtMine then
+    trackedGears[gear] = true
+  end
+end
+
 function onGearDelete(gear)
+  if trackedGears[gear] then
+    trackedGears[gear] = nil
+  end
   if gear == blowCrate then
     blowTaken = true
   elseif gear == fireCrate then
