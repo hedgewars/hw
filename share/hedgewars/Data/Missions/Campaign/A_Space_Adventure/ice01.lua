@@ -537,5 +537,6 @@ function actionsOnWin()
 	-- maybe add number of tries for each part?
 	SendStat(siPlayerKills,'1',teamC.name)
 	SendStat(siPlayerKills,'0',teamB.name)
+	resetCheckpoint() -- reset this mission
 	EndGame()
 end

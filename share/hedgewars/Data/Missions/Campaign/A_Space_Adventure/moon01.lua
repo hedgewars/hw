@@ -374,6 +374,7 @@ function professorDeath(gear)
 	SendStat(siPlayerKills,'1',teamD.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
+	resetCheckpoint() -- reset this mission
 	gameOver = true
 	EndGame()
 end
@@ -393,6 +394,7 @@ function minionsDeath(gear)
 	SendStat(siPlayerKills,'1',teamD.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
+	resetCheckpoint() -- reset this mission
 	gameOver = true
 	EndGame()
 end
