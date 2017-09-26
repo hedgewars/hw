@@ -211,8 +211,7 @@ function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -231,7 +230,7 @@ function heroWin(gear)
 		end
 	end
 	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	sendSimpleTeamRankings({teamA.name, teamB.name, teamC.name})
 	SaveCampaignVar("Mission10Won", "true")
 	checkAllMissionsCompleted()
 	EndGame()

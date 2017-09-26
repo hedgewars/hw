@@ -442,8 +442,7 @@ function heroDeath(gear)
 	SendStat(siCustomAchievement, loc("To win the game you have to stand next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
 	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamB.name, teamC.name})
 	EndGame()
 end
 
@@ -474,8 +473,7 @@ function thantaDeath(gear)
 	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
 	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamB.name, teamC.name})
 	EndGame()
 end
 
@@ -544,8 +542,7 @@ function actionsOnWin()
 	SendStat(siGameResult, loc("Congratulations, you acquired the device part!"))
 	SendStat(siCustomAchievement, string.format(loc("At the end of the game your health was %d."), GetHealth(hero.gear)))
 	-- maybe add number of tries for each part?
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamB.name)
+	sendSimpleTeamRankings({teamC.name, teamB.name})
 	resetCheckpoint() -- reset this mission
 	EndGame()
 end

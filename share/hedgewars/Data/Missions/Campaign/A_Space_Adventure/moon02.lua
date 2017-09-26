@@ -249,14 +249,14 @@ function lose()
 	SendStat(siCustomAchievement, loc("The time that you have left when you reach the blue hedgehog will be added to the next turn."))
 	SendStat(siCustomAchievement, loc("Each turn you'll have only one rope to use."))
 	SendStat(siCustomAchievement, loc("You'll lose if you die or if your time is up."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamB.name, teamA.name})
 	EndGame()
 end
 
 function win()
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
 	-- siCustomAchievements were added earlier
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name, teamB.name})
 	SaveCampaignVar("Mission13Won", "true")
 	checkAllMissionsCompleted()
 	EndGame()

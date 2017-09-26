@@ -159,6 +159,6 @@ function heroWin(gear)
 	checkAllMissionsCompleted()
 	SendStat(siGameResult, loc("Congratulations, you have saved Hogera!"))
 	SendStat(siCustomAchievement, loc("Hogera is safe!"))
-	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end

@@ -335,9 +335,7 @@ function battleWin(gear)
 	saveVariables()
 	SendStat(siGameResult, loc("Green Bananas won!"))
 	SendStat(siCustomAchievement, loc("You have eliminated all visible enemy hedgehogs!"))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamA.name, teamD.name, teamB.name, teamC.name})
 	EndGame()
 end
 
@@ -346,9 +344,7 @@ function escapeWin(gear)
 	saveVariables()
 	SendStat(siGameResult, loc("Hog Solo escaped successfully!"))
 	SendStat(siCustomAchievement, loc("You have reached the take-off area successfully!"))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamA.name, teamD.name, teamB.name, teamC.name})
 	EndGame()
 end
 
@@ -460,9 +456,7 @@ function gameLost()
 		SendStat(siCustomAchievement, loc("You will play every 3 turns."))
 		SendStat(siCustomAchievement, loc("Green hogs won't intentionally hurt you."))
 	end
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamA.name)
-	SendStat(siPlayerKills,'0',teamB.name)
+	sendSimpleTeamRankings({teamC.name, teamA.name, teamD.name, teamB.name})
 	EndGame()
 end
 

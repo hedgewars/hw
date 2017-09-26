@@ -490,8 +490,7 @@ function checkForWin()
 		PlaySound(sndVictory, hero.gear)
 		SendStat(siGameResult, loc("Congratulations, you won!"))
 		SendStat(siCustomAchievement, loc("To win the game you had to collect the 2 crates with no specific order."))
-		SendStat(siPlayerKills,'1',teamC.name)
-		SendStat(siPlayerKills,'0',teamB.name)
+		sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
 		EndGame()
 	end
 end
@@ -502,7 +501,6 @@ function lose()
 	SendStat(siCustomAchievement, loc("You can avoid some battles."))
 	SendStat(siCustomAchievement, loc("Use your ammo wisely."))
 	SendStat(siCustomAchievement, loc("Don't destroy the device crate!"))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end

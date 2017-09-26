@@ -345,11 +345,20 @@ function heroDeath(gear)
 		SendStat(siCustomAchievement, loc("Do not destroy the crates!"))
 		if tookPartInBattle then
 			SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assassins at the end."))
+			if permitCaptainLimeDeath then
+				sendSimpleTeamRankings({teamC.name, teamA.name})
+			else
+				sendSimpleTeamRankings({teamA.name})
+			end
 		else
 			SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end."))
-		SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
+			SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
+			if permitCaptainLimeDeath then
+				sendSimpleTeamRankings({teamB.name, teamA.name})
+			else
+				sendSimpleTeamRankings({teamA.name})
+			end
 		end
-		SendStat(siPlayerKills,'0',teamA.name)
 		EndGame()
 		ended = true
 	end
@@ -399,8 +408,7 @@ function captainLimeDeath(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
 	SendStat(siCustomAchievement, loc("You defended yourself against Captain Lime."))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamB.name)
+	sendSimpleTeamRankings({teamA.name, teamB.name})
 	EndGame()
 end
 
@@ -410,8 +418,7 @@ function redTeamDeath(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
 	SendStat(siCustomAchievement, loc("You defended yourself against the Strawberry Assassins."))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
 end
 

@@ -268,8 +268,7 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to eliminate all your enemies."))
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -280,8 +279,7 @@ function enemiesDeath(gear)
 	SendStat(siCustomAchievement, loc("You have rescued H and Dr. Cornelius."))
 	SendStat(siCustomAchievement, loc("You have acquired the last device part."))
 	SendStat(siCustomAchievement, loc("Now go and play the menu mission to complete the campaign."))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
 end
 

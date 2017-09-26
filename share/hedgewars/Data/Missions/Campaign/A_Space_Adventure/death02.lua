@@ -186,8 +186,7 @@ function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamB.name, teamA.name})
 	EndGame()
 end
 
@@ -206,7 +205,7 @@ function heroWin(gear)
 		end
 	end
 	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	sendSimpleTeamRankings({teamA.name, teamB.name})
 	SaveCampaignVar("Mission11Won", "true")
 	checkAllMissionsCompleted()
 	EndGame()

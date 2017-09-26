@@ -407,7 +407,7 @@ function moonLanding(gear)
 		SendStat(siGameResult, loc("This is the wrong way!"))
 		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer!"))
 		SendStat(siCustomAchievement, loc("Fly to the moon."))
-		SendStat(siPlayerKills,'0',teamC.name)
+		sendSimpleTeamRankings({teamC.name})
 		EndGame()
 	else
 		if checkPointReached ~= 5 then
@@ -654,7 +654,7 @@ function sendStats(planetMsg)
 	if GetCampaignVar("Won") == "true" and GetCampaignVar("Mission1Won") ~= "true" then
 		SendStat(siCustomAchievement, loc("Complete all main and side missions to complete the spacetrip mission."))
 	end
-	SendStat(siPlayerKills,'1',teamC.name)
+	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
@@ -663,6 +663,6 @@ function sendStatsOnRetry()
 	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
 	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
 	SendStat(siCustomAchievement, loc("You have to be careful and must not die!"))
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
