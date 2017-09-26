@@ -342,8 +342,7 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to get the weapons and rescue the PAotH researchers."))
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamD.name)
+	sendSimpleTeamRankings({teamC.name, teamB.name, teamD.name, teamA.name})
 	EndGame()
 end
 
@@ -367,8 +366,7 @@ function victory()
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	saveCompletedStatus(1)
 	SendStat(siGameResult, loc("Hog Solo wins, congratulations!"))
-	SendStat(siPlayerKills,'1',teamD.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamD.name, teamA.name, teamC.name, teamB.name})
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
 	resetCheckpoint() -- reset this mission
 	gameOver = true

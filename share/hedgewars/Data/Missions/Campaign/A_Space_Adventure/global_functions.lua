@@ -183,3 +183,12 @@ function split(s, delimiter)
 	end
 	return res
 end
+
+-- Send team ranking stats. Teams is a list of teams in the desired order.
+-- The default kills counter is used.
+function sendSimpleTeamRankings(teams)
+	for t=1, #teams do
+		local teamname = teams[t]
+		SendStat(siPlayerKills, GetTeamStats(teamname).Kills, teamname)
+	end
+end
