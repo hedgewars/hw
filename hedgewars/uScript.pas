@@ -2087,6 +2087,53 @@ begin
     lc_dismissteam:= 0;
 end;
 
+function lc_getteamstats(L : Plua_State) : LongInt; Cdecl;
+var i, h  : LongInt;
+begin
+    if CheckLuaParamCount(L, 1, 'GetTeamStats', 'teamname') then
+        begin
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+
+                lua_newtable(L);
+
+                lua_pushstring(L, 'Kills');
+                lua_pushnumber(L, TeamsArray[i]^.stats.Kills);
+                lua_settable(L, -3);
+
+                lua_pushstring(L, 'Suicides');
+                lua_pushnumber(L, TeamsArray[i]^.stats.Suicides);
+                lua_settable(L, -3);
+
+                lua_pushstring(L, 'AIKills');
+                lua_pushnumber(L, TeamsArray[i]^.stats.AIKills);
+                lua_settable(L, -3);
+
+                lua_pushstring(L, 'TeamKills');
+                lua_pushnumber(L, TeamsArray[i]^.stats.TeamKills);
+                lua_settable(L, -3);
+
+                lua_pushstring(L, 'TurnSkips');
+                lua_pushnumber(L, TeamsArray[i]^.stats.TurnSkips);
+                lua_settable(L, -3);
+
+                lua_pushstring(L, 'TeamDamage');
+                lua_pushnumber(L, TeamsArray[i]^.stats.TeamDamage);
+                lua_settable(L, -3);
+
+                end;
+        end
+    else
+        lua_pushnil(L);
+    lc_getteamstats:= 1;
+end;
+
+
+
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
 var temp: ShortString;
 begin
@@ -3519,6 +3566,7 @@ lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
+lua_register(luaState, _P'GetTeamStats', @lc_getteamstats);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
 lua_register(luaState, _P'SendGameResultOff', @lc_sendgameresultoff);
 lua_register(luaState, _P'SendRankingStatsOff', @lc_sendrankingstatsoff);

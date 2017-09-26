@@ -280,6 +280,7 @@ Lua-API:
  + New call: SendGameResultOff() -- Disable the game automatically setting a game result in the stats screen
  + New call: SendRankingStatsOff() -- Disable the game automatically filling the team rankings in the stats screen
  + New call: SendAchievementsStatsOff() -- Disable the game automatically populating the bullet point list in the “Details” section on the stats screen
+ + New call: GetTeamStats(teamname) -- Returns a table of team stats
  + New call: EndTurn([noTaunts]) -- Ends the current turn
  + New hook: onVisualGearAdd(vgUid) -- called when a visual gear is added
  + New hook: onVisualGearDelete(vgUid) -- called when a visual gear is deleted
