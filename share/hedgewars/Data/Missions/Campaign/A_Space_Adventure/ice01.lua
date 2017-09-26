@@ -22,9 +22,10 @@ local heroDamageAtCurrentTurn = 0
 local dialog01 = {}
 local dialog02 = {}
 -- mission objectives
+local goToThantaString = loc("Go to Thanta and get the device part!")
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta") .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
-	[dialog02] = {missionName, loc("Win"), loc("Congratulations, you collected the device part!"), 1, 3500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the freezer and get the device part from Thanta") .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
+	["checkpoint"] = {missionName, loc("Objectives"), goToThantaString .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
 }
 -- crates
 local icegunY = 1950
@@ -209,8 +210,6 @@ function onGameStart()
 	AddAmmo(bandit4.gear, amBazooka, 5)
 	AddAmmo(bandit5.gear, amBazooka, 5)
 
-	goToThantaString = loc("Go to Thanta and get the device part!")
-
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amBazooka, 1)
 		SpawnAmmoCrate(icegunX, icegunY, amIceGun)
@@ -220,9 +219,11 @@ function onGameStart()
 	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amIceGun, 8)
 		AnimCaption(hero.gear, goToThantaString, 5000)
+		ShowMission(unpack(goals["checkpoint"]))
 	elseif checkPointReached == 3 then
 		AddAmmo(hero.gear, amIceGun, 6)
 		AnimCaption(hero.gear, goToThantaString, 5000)
+		ShowMission(unpack(goals["checkpoint"]))
 	end
 
 	SendHealthStatsOff()
@@ -434,8 +435,8 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to stand next to Thanta."))
-	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the icegun only."))
-	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the icegun."))
+	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
+	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
@@ -461,15 +462,15 @@ function thantaDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("Noo, Thanta has to stay alive!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta."))
-	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the icegun only."))
-	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the icegun."))
+	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
+	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
 
 function heroWin(gear)
-	TurnTimeLeft=0
+	SetGearMessage(gear, 0)
 	if GetX(hero.gear) < GetX(bandit1.gear) then
 		HogTurnLeft(bandit1.gear, true)
 	else
@@ -483,8 +484,8 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog02 then
+	end
+	if anim == dialog02 then
 		actionsOnWin()
 	else
 		AnimSwitchHog(hero.gear)
@@ -509,10 +510,10 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is one below us!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
-	-- DIALOG 02 - Hero got to Thant2
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
+	-- DIALOG 02 - Hero got to Thanta
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Congratulations, now you can take Thanta's device part!"), 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Oh! Please spare me. You can take all my treasures!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I just want the strange device you found!"), SAY_SAY, 3000}})
@@ -524,6 +525,11 @@ end
 -------------- Other Functions -------------------
 
 function actionsOnWin()
+	AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
+	PlaySound(sndShotgunReload)
+
+	ShowMission(missionName, loc("Win"), loc("Congratulations, you collected the device part!"), 1, 3500)
+
 	saveCompletedStatus(4)
 	SendStat(siGameResult, loc("Congratulations, you acquired the device part!"))
 	SendStat(siCustomAchievement, string.format(loc("At the end of the game your health was %d."), GetHealth(hero.gear)))
