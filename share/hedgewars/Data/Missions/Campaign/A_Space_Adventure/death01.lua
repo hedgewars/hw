@@ -288,10 +288,7 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
+	startBattle()
 end
 
 function AnimationSetup()
@@ -323,6 +320,7 @@ end
 -------------- OTHER FUNCTIONS -----------------
 
 function startBattle()
+	ShowMission(unpack(goals[dialog01]))
 	DeleteGear(professor.human)
 	RestoreHog(professor.bot)
 	AnimSwitchHog(professor.gear)
