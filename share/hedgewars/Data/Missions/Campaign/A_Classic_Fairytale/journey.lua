@@ -973,7 +973,7 @@ function onGameInit()
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
 
-  AddTeam(loc("Cannibal Sentry"), 14483456, "Skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Cannibal Sentry"), 14483456, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")

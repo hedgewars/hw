@@ -917,12 +917,12 @@ function AddHogs()
   end
 
 
-  AddTeam(loc("Assault Team"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Assault Team"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
     cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end
 
-  AddTeam(loc("Reinforcements"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Reinforcements"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
     cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end

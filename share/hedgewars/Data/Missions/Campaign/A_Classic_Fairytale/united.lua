@@ -308,12 +308,12 @@ function AddHogs()
   natives = {leaks, dense, water, buffalo, chief}
   nativesNum = 5
 
-  AddTeam(loc("Light Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Light Cannfantry"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 4 do
     cannibals[i] = AddHog(HogNames[i], 2, 40, "Zombi")
   end
 
-  AddTeam(loc("Heavy Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Heavy Cannfantry"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 5, 8 do
     cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end

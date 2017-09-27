@@ -504,7 +504,7 @@ function AddHogs()
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   spiky = AddHog(loc("Spiky Cheese"), 0, 100, "hair_yellow")
 
-  AddTeam(loc("Weaklings"), 14483456, "Skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Weaklings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
@@ -513,7 +513,7 @@ function AddHogs()
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("Stronglings"), 14483456, "Skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Stronglings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
 
   for i = 6, 9 do
     cannibals[i] = AddHog(HogNames[i], 2, 30, "vampirichog")
