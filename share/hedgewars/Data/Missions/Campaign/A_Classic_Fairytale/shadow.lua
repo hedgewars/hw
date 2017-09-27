@@ -204,7 +204,7 @@ function AfterAcceptedAnim()
   SpawnUtilityCrate(1370, 810, amGirder)
   SpawnUtilityCrate(1300, 810, amParachute)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot!"), 1, 6000)
-  AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
+  AddEvent(CheckReadyForStronglings, {}, DoReadyForStronglings, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
   AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
   RemoveEventFunc(CheckDenseDead)
@@ -705,11 +705,11 @@ function DoNeedWeapons()
   AddCaption(loc("A little gift from the cyborgs"))
 end
 
-function CheckTookWeapons()
-  return shotgunTaken and grenadeTaken
+function CheckReadyForStronglings()
+  return (shotgunTaken and grenadeTaken) or GetX(dense) > 2700
 end
 
-function DoTookWeapons()
+function DoReadyForStronglings()
   ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
