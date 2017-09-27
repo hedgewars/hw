@@ -18,6 +18,7 @@ local saucerAcquired = false
 local status
 local getReadyForRumble = false -- guards wake up
 local ropeDestroyed = false -- for detecting if player roped to the moon
+local ropedToMoon = 0
 local checkPointReached = 1 -- 1 is start of the game
 local objectives = loc("Go to the moon by using the flying saucer and complete the main mission").."|"..
 loc("Come back to this mission and visit the other planets to collect the crates").."|"..
@@ -32,6 +33,7 @@ local dialog05 = {}
 local dialog06 = {}
 local dialog07 = {}
 local dialog08 = {}
+local dialog09 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
@@ -265,6 +267,11 @@ end
 local abandonCheck = false
 
 function onNewTurn()
+	if ropedToMoon == 1 then
+		SetInputMask(0)
+		sendStatsOnRopedToMoon()
+		return
+	end
 	if saucerAcquired then
 		-- The only way for the player to have a saucer at turn start is by having used the rope
 		-- before; there's no other way to get it. We can therefore conclude the rope has been
@@ -386,8 +393,10 @@ end
 -------------- ACTIONS ------------------
 
 function heroBeforeTreePosition(gear)
-	AnimSay(gear,loc("Now I have to climb these trees"), SAY_SAY, 4000)
-	AnimCaption(hero.gear, loc("Use the rope to get to the crate"),  4000)
+	if band(GetState(gear), gstHHDriven) ~= 0 then
+		AnimSay(gear,loc("Now I have to climb these trees"), SAY_SAY, 4000)
+		AnimCaption(hero.gear, loc("Use the rope to get to the crate"),  4000)
+	end
 end
 
 function prepareDialog02(gear)
@@ -430,14 +439,13 @@ end
 
 function moonLanding(gear)
 	if checkPointReached == 1 and not ropeDestroyed then
-		-- player climbed the moon with rope
-		FollowGear(doctor.gear)
-		AnimSay(doctor.gear, loc("One does not simply rope to the moon!"), SAY_SHOUT, 4000)
-		SendStat(siGameResult, loc("This is the wrong way!"))
-		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer!"))
-		SendStat(siCustomAchievement, loc("Fly to the moon."))
-		sendSimpleTeamRankings({teamC.name})
-		EndGame()
+		-- Player climbed the moon with rope.
+		-- THIS IS A CRIMINAL OFFENSE AND WILL BE PUNISHED!
+		ropedToMoon = 1
+		SetGearVelocity(gear, 0, 0)
+		SetGearMessage(gear, 0)
+		SetInputMask(0)
+		AddAnim(dialog09)
 	else
 		if checkPointReached ~= 5 then
 			SaveCampaignVar("CosmosCheckPoint", "4")
@@ -452,6 +460,17 @@ function moonLanding(gear)
 		SaveCampaignVar("Mission3", "1")
 		sendStats(loc("Hog Solo arrived at the moon!"))
 	end
+end
+
+function punishHeroForRopingToMoon(gear)
+	-- Initiate the secret PAotH anti-rope defense system (5 bazookas dropped from sky)
+	AddGear(GetX(gear), 100, gtShell, 0, 0, 0, 0)
+	AddGear(GetX(gear), 0, gtShell, 0, 0, 0, 0)
+	AddGear(GetX(gear), -100, gtShell, 0, 0, 0, 0)
+	AddGear(GetX(gear), -200, gtShell, 0, 0, 0, 0)
+	AddGear(GetX(gear), -300, gtShell, 0, 0, 0, 0)
+	FollowGear(hero.gear)
+	SetInputMask(0)
 end
 
 function fruitPlanetLanding(gear)
@@ -542,7 +561,11 @@ function noFuelAtLand(gear)
 end
 
 function heroDeath(gear)
-	sendStatsOnRetry()
+	if ropedToMoon == 1 then
+		sendStatsOnRopedToMoon()
+	elseif ropedToMoon == 0 then
+		sendStatsOnRetry()
+	end
 end
 
 function setFoundDeviceVisual()
@@ -589,12 +612,17 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
 	end
-	if CurrentHedgehog ~= hero.gear and anim ~= dialog03 then
+	if anim == dialog09 then
+		SetInputMask(0)
+		-- Quick punishment for the impatient
+		AddGear(GetX(hero.gear)-1, GetY(hero.gear)+1, gtDynamite, 0, 0, 0, 1)
+		sendStatsOnRopedToMoon()
+	elseif anim == dialog05 or anim == dialog06 then
+		sendStatsOnStuckOnMoon()
+	elseif CurrentHedgehog ~= hero.gear and anim ~= dialog03 then
 		AnimSwitchHog(hero.gear)
 	elseif anim == dialog03 then
 		startCombat()
-	elseif anim == dialog05 or anim == dialog06 then
-		sendStatsOnStuckOnMoon()
 	end
 end
 
@@ -666,7 +694,13 @@ function AnimationSetup()
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need you to go there and detonate them yourself! Good luck!"), SAY_SHOUT, 500}})
 	table.insert(dialog08, {func = AnimWait, args = {doctor.gear, 3000}})
 	table.insert(dialog08, {func = AnimSwitchHog, args = {hero.gear}})
-	table.insert(dialog08, {func = ShowMission, args = unpack(goals[dialog08])})
+	table.insert(dialog08, {func = ShowMission, args = goals[dialog08]})
+	-- DIALOG 09 - Hero roped to the moon (how naughty!)
+	AddSkipFunction(dialog09, Skipanim, {dialog09})
+	table.insert(dialog09, {func = AnimSay, args = {doctor.gear, loc("One does not simply rope to the moon!"), SAY_SHOUT, 4500}})
+	table.insert(dialog09, {func = punishHeroForRopingToMoon, args = {hero.gear}})
+	table.insert(dialog09, {func = AnimWait, args = {hero.gear, 5000}})
+	table.insert(dialog09, {func = sendStatsOnRopedToMoon, args = {hero.gear}})
 end
 
 ------------------- custom "animation" functions --------------------------
@@ -703,4 +737,15 @@ function sendStatsOnStuckOnMoon()
 	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
 	sendSimpleTeamRankings({teamC.name})
 	EndGame()
+end
+
+function sendStatsOnRopedToMoon()
+	if ropedToMoon ~= 2 then
+		ropedToMoon = 2
+		SendStat(siGameResult, loc("This is the wrong way!"))
+		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer!"))
+		SendStat(siCustomAchievement, loc("Fly to the moon."))
+		sendSimpleTeamRankings({teamC.name})
+		EndGame()
+	end
 end
