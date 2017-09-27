@@ -115,7 +115,7 @@ end
 
 function AfterStartDialogue()
   stage = spyStage
-  ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Defend yourself!|Hint: You can get tips on using weapons by moving your mouse over them in the weapon selection menu"), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!"), 1, 6000)
   TurnTimeLeft = TurnTime
 end
 
