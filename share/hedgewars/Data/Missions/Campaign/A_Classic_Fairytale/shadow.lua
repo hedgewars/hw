@@ -98,7 +98,7 @@ function AfterRefusedAnim()
   stage = ramonStage
   SwitchHog(cannibals[9])
   FollowGear(ramon)
-  TurnTimeLeft = 0
+  EndTurn(true)
   SetGearMessage(ramon, 0)
   SetGearMessage(leaks, 0)
   AnimWait(ramon, 1)
@@ -173,7 +173,7 @@ function AfterStronglingsAnim()
   AddAmmo(leaks, amSkip, 0)
   SetHealth(SpawnHealthCrate(2557, 1030), 50)
   SetHealth(SpawnHealthCrate(3599, 1009), 50)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function SkipStronglingsAnim()
@@ -619,7 +619,7 @@ end
 function KillCyborg()
   RestoreHog(cyborg)
   DeleteGear(cyborg)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 -----------------------------Events------------------------------------
 
@@ -628,7 +628,7 @@ function CheckBrainiacDead()
 end
 
 function DoBrainiacDead()
-  TurnTimeLeft = 0
+  EndTurn(true)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(weaklingsAnim)
   AddFunction({func = AfterWeaklingsAnim, args = {}})
@@ -806,7 +806,7 @@ end
 function DoDead()
   AddCaption(loc("...and so the cyborgs took over the world..."))
   stage = loseStage
-  TurnTimeLeft = 0
+  EndTurn(true)
   DismissTeam(loc("Natives"))
 end
 
@@ -914,12 +914,9 @@ end
 function onNewTurn()
   if AnimInProgress() then
     TurnTimeLeft = -1
---  elseif stage == interSpyStage and GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
---    TurnTimeLeft = 0
---    SetState(CurrentHedgehog, gstInvisible)
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
-      TurnTimeLeft = 0
+      EndTurn(true)
     else
       TurnTimeLeft = -1
     end
