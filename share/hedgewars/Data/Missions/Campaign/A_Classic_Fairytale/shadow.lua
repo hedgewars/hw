@@ -65,7 +65,6 @@ cyborgHidden = false
 leaksHidden = false
 denseHidden = false
 cyborgAttacked = false
-retryReturn = false
 shotgunTaken = false
 grenadeTaken = false
 spikyDead = false
@@ -200,28 +199,14 @@ function SkipStronglingsAnim()
   SetInputMask(0xFFFFFFFF)
 end
 
-function RestartReturnAccepted()
-  retryReturn = false
-  AnimSetGearPosition(dense, 1350, 1310)
-  AddAmmo(dense, amGirder, 2)
-  AddAmmo(dense, amParachute, 2)
-  ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
-  RemoveEventFunc(CheckNeedGirder)
-  RemoveEventFunc(CheckNeedWeapons)
-  AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
-  AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
-end
-
-
 function AfterAcceptedAnim()
   stage = acceptedReturnStage
   SpawnUtilityCrate(1370, 810, amGirder)
   SpawnUtilityCrate(1300, 810, amParachute)
-  ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot!"), 1, 6000)
   AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
   AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
-  AddEvent(CheckRestartReturnAccepted, {}, RestartReturnAccepted, {}, 1)
   RemoveEventFunc(CheckDenseDead)
   SwitchHog(dense)
   AnimWait(dense, 1)
@@ -707,7 +692,7 @@ function CheckNeedGirder()
 end
 
 function DoNeedGirder()
-  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
 end
 
 function CheckNeedWeapons()
@@ -733,7 +718,6 @@ function DoTookWeapons()
   stage = duoStage
   RemoveEventFunc(CheckNeedGirder)
   RemoveEventFunc(CheckNeedWeapons)
-  RemoveEventFunc(CheckRestartReturnAccepted)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDead, {}, 0)
   AddAmmo(cannibals[6], amGrenade, 2)
   AddAmmo(cannibals[6], amShotgun, 2)
@@ -828,10 +812,6 @@ end
 
 function CheckDenseDead()
   return denseDead and choice ~= choiceAttack 
-end
-
-function CheckRestartReturnAccepted()
-  return retryReturn
 end
 
 -----------------------------Main Functions----------------------------
@@ -960,13 +940,6 @@ function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
     return
-  end
-  if stage == acceptedReturnStage then
-    retryReturn = true
---  else
---    for i = 1, 9 do
---      DeleteGear(cannibals[i])
---    end
   end
 end
 
