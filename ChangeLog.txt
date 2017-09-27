@@ -213,6 +213,8 @@ A Space Adventure:
  * Precise flying: Fix victory not being recognized, also wait for flames to settle before losing
  * Hard Flying: Fix ending in a Lua error
  * The First Stop: Fix stats screen showing teams twice
+ * Fruit planet: Fix “Precise shooting” disappearing directly after completing “Bad timing”
+ * Fruit planet: Fix “Getting to the device” not visible when landing on fruit planet with first main mission completed only
  * Killing The Specialists: Fix killing hog with Deagle gave you chance to use another weapon in same turn
  * Fix weird behaviour when walking right before the first animation in most missions
  * Fix a coupe of texts being untranslatable

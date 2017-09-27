@@ -486,8 +486,9 @@ end
 
 function saveVariables()
 	saveCompletedStatus(2)
-	SaveCampaignVar("UnlockedMissions", "3")
-	SaveCampaignVar("Mission1", "3")
-	SaveCampaignVar("Mission2", "8")
-	SaveCampaignVar("Mission3", "1")
+	SaveCampaignVar("UnlockedMissions", "4")
+	SaveCampaignVar("Mission1", "8")
+	SaveCampaignVar("Mission2", "3")
+	SaveCampaignVar("Mission3", "10")
+	SaveCampaignVar("Mission4", "1")
 end
