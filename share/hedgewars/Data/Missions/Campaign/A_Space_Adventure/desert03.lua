@@ -53,6 +53,7 @@ local targets = {
 	{ x = 1200, y = 1310},
 	{ x = 1700, y = 1310},
 }
+local flameCounter = 0
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -124,6 +125,18 @@ function onPrecise()
 	end
 end
 
+function onGearAdd(gear)
+	if GetGearType(gear) == gtFlame then
+		flameCounter = flameCounter + 1
+	end
+end
+
+function onGearDelete(gear)
+	if GetGearType(gear) == gtFlame then
+		flameCounter = flameCounter - 1
+	end
+end
+
 -------------- EVENTS ------------------
 
 function onHeroDeath(gear)
@@ -134,7 +147,7 @@ function onHeroDeath(gear)
 end
 
 function onLose(gear)
-	if GetHealth(hero.gear) and currentTarget < 4 and GetAmmoCount(hero.gear, amRCPlane) == 0 then
+	if GetHealth(hero.gear) and currentTarget < 4 and GetAmmoCount(hero.gear, amRCPlane) == 0 and flameCounter <= 0 then
 		return true
 	end
 	return false
@@ -147,6 +160,8 @@ function heroDeath(gear)
 end
 
 function lose(gear)
+	AddCaption(loc("Out of ammo!"), 0xFFFFFFFF, capgrpMessage2)
+	PlaySound(sndStupid, hero.gear)
 	gameOver()
 end
 
@@ -200,9 +215,8 @@ function setTargets(ct)
 			targets[i].gear = AddGear(targets[i].x, targets[i].y, gtTarget, 0, 0, 0, 0)
 		end
 	elseif ct == 3 then
-		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane)
-		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane)
-		SpawnAmmoCrate(rcCrates[4].x, rcCrates[4].y, amNothing)
+		SpawnUtilityCrate(rcCrates[4].x, rcCrates[4].y, amNothing)
+		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane, 2)
 		for i=4,13 do
 			targets[i].gear = AddGear(targets[i].x, targets[i].y, gtTarget, 0, 0, 0, 0)
 		end
