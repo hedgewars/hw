@@ -618,8 +618,10 @@ function Skipanim(anim)
 		-- Quick punishment for the impatient
 		AddGear(GetX(hero.gear)-1, GetY(hero.gear)+1, gtDynamite, 0, 0, 0, 1)
 		sendStatsOnRopedToMoon()
-	elseif anim == dialog05 or anim == dialog06 then
+	elseif anim == dialog05 then
 		sendStatsOnStuckOnMoon()
+	elseif anim == dialog06 then
+		sendStatsOnRetry()
 	elseif CurrentHedgehog ~= hero.gear and anim ~= dialog03 then
 		AnimSwitchHog(hero.gear)
 	elseif anim == dialog03 then
@@ -743,7 +745,8 @@ end
 function sendStatsOnRopedToMoon()
 	if ropedToMoon ~= 2 then
 		ropedToMoon = 2
-		SendStat(siGameResult, loc("This is the wrong way!"))
+		SendStat(siGameResult, loc("You have violated PAotH regulations!"))
+		SendStat(siCustomAchievement, loc("You have triggered the secret Do-Not-Rope-to-the-Moon Defense System!"))
 		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer!"))
 		SendStat(siCustomAchievement, loc("Fly to the moon."))
 		sendSimpleTeamRankings({teamC.name})
