@@ -16,6 +16,8 @@ local timeForGuard1ToTurn = 1000 * 5 -- 5 sec
 local timeForGuard1ToTurnLeft = timeForGuard1ToTurn
 local saucerAcquired = false
 local status
+local getReadyForRumble = false -- guards wake up
+local ropeDestroyed = false -- for detecting if player roped to the moon
 local checkPointReached = 1 -- 1 is start of the game
 local objectives = loc("Go to the moon by using the flying saucer and complete the main mission").."|"..
 loc("Come back to this mission and visit the other planets to collect the crates").."|"..
@@ -86,7 +88,7 @@ teamC.color = tonumber("38D61C",16) -- green
 function onGameInit()
 	Seed = 35
 	GameFlags = gfSolidLand + gfDisableWind
-	TurnTime = 40000
+	TurnTime = 15000
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0
@@ -179,12 +181,12 @@ function onGameStart()
 	if checkPointReached == 1 then
 		AddAnim(dialog01)
 		AddAmmo(hero.gear, amRope, 1)
-		AddAmmo(guard1.gear, amDEagle, 2)
-		AddAmmo(guard2.gear, amDEagle, 2)
+		AddAmmo(guard1.gear, amDEagle, 100)
+		AddAmmo(guard2.gear, amDEagle, 100)
 		SpawnUtilityCrate(saucerX, saucerY, amJetpack)
 		-- EVENT HANDLERS
 		AddEvent(onHeroBeforeTreePosition, {hero.gear}, heroBeforeTreePosition, {hero.gear}, 0)
-		AddEvent(onHeroAtSaucerPosition, {hero.gear}, heroAtSaucerPosition, {hero.gear}, 0)
+		AddEvent(onHeroAcquiredSaucer, {hero.gear}, heroAcquiredSaucer, {hero.gear}, 0)
 		AddEvent(onHeroOutOfGuardSight, {hero.gear}, heroOutOfGuardSight, {hero.gear}, 0)
 	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amJetpack, 1)
@@ -261,6 +263,12 @@ end
 local abandonCheck = false
 
 function onNewTurn()
+	if saucerAcquired then
+		-- The only way for the player to have a saucer at turn start is by having used the rope
+		-- before; there's no other way to get it. We can therefore conclude the rope has been
+		-- used.
+		ropeDestroyed = true
+	end
 	if not abandonCheck and checkPointReached == 5 then
 		if abandonedPlanetMission then
 			HogSay(hero.gear, loc("I just forgot all checkpoints of incomplete missions."), SAY_THINK)
@@ -268,26 +276,28 @@ function onNewTurn()
 		abandonCheck = false
 	end
 
-	if guard1.keepTurning then
-		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = -1
+	if CurrentHedgehog == hero.gear then
+		-- Hero just got spotted by guards
+		if getReadyForRumble then
+			EndTurn(true)
+			getReadyForRumble = false
+		else
+			if guard1.keepTurning then
+				TurnTimeLeft = -1
+			end
+		end
+	elseif CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
+		EndTurn(true)
+	elseif (CurrentHedgehog == guard1.gear or CurrentHedgehog == guard2.gear) and guard1.keepTurning then
+		EndTurn(true)
 	end
+
 end
 
 -------------- EVENTS ------------------
 
 function onHeroBeforeTreePosition(gear)
 	if GetHealth(hero.gear) and GetX(gear) > 2350 then
-		return true
-	end
-	return false
-end
-
-function onHeroAtSaucerPosition(gear)
-	if GetHealth(hero.gear) and GetX(gear) >= saucerX-25 and GetX(gear) <= saucerX+32 and GetY(gear) >= saucerY-32 and GetY(gear) <= saucerY+32 then
-		saucerAcquired = true
-	end
-	if saucerAcquired and GetHealth(hero.gear) and StoppedGear(gear) then
 		return true
 	end
 	return false
@@ -301,7 +311,7 @@ end
 
 function onGearDelete(gear)
 	if GetGearType(gear) == gtCase and band(GetGearMessage(gear), gmDestroy) ~= 0 then
-		heroAtSaucerPosition()
+		saucerAcquired = true
 	elseif GetGearType(gear) == gtJetpack then
 		saucerGear = nil
 	end
@@ -378,29 +388,44 @@ function heroBeforeTreePosition(gear)
 	AnimCaption(hero.gear, loc("Use the rope to get to the crate"),  4000)
 end
 
-function heroAtSaucerPosition(gear)
-	if not saucerAcquired then
+function prepareDialog02(gear)
+	if StoppedGear(gear) and guard1.keepTurning and checkPointReached < 2 then
 		EndTurn(true)
 		-- save check point
 		SaveCampaignVar("CosmosCheckPoint", "2")
 		checkPointReached = 2
 		AddAnim(dialog02)
-		-- check if he was spotted by the guard
-		if guard1.turn and GetX(hero.gear) > saucerX-150 then
-			guard1.keepTurning = false
-			AddAnim(dialog03)
-		end
-		saucerAcquired = true
 	end
 end
 
+function heroAcquiredSaucer(gear)
+	SetGearMessage(hero.gear, 0)
+	-- check if he was spotted by the guard
+	if guard1.turn and guard1.keepTurning and GetX(hero.gear) > saucerX-150 then
+		guard1.keepTurning = false
+		SetGearVelocity(gear, 0, 0)
+		AddAnim(dialog03)
+	end
+
+	prepareDialog02(gear)
+end
+
+function onHeroAcquiredSaucer(gear)
+	return saucerAcquired
+end
+
 function heroOutOfGuardSight(gear)
+	SetGearMessage(hero.gear, 0)
 	guard1.keepTurning = true
 	AddAnim(dialog04)
+
+	if onHeroAcquiredSaucer(gear) then
+		prepareDialog02(gear)
+	end
 end
 
 function moonLanding(gear)
-	if checkPointReached == 1 then
+	if checkPointReached == 1 and not ropeDestroyed then
 		-- player climbed the moon with rope
 		FollowGear(doctor.gear)
 		AnimSay(doctor.gear, loc("One does not simply rope to the moon!"), SAY_SHOUT, 4000)
@@ -559,8 +584,8 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if CurrentHedgehog ~= hero.gear and anim ~= dialog03 then
+	end
+	if CurrentHedgehog ~= hero.gear and anim ~= dialog03 then
 		AnimSwitchHog(hero.gear)
 	elseif anim == dialog03 then
 		startCombat()
@@ -596,8 +621,8 @@ function AnimationSetup()
     table.insert(dialog02, {func = AnimGearWait, args = {hero.gear, 500}})
     -- DIALOG 03 - Hero got spotted by guard
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
-	table.insert(dialog03, {func = AnimWait, args = {guard1.gear, 4000}})
-	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to flee!"),  4000}})
+	table.insert(dialog03, {func = AnimWait, args = {guard1.gear, 500}})
+	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to flee!"), 1000}})
 	table.insert(dialog03, {func = AnimSay, args = {guard1.gear, string.format(loc("Hey, %s! Look, someone is stealing the saucer!"), guard2.name), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {guard2.gear, loc("I'll get him!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = startCombat, args = {guard1.gear}})
@@ -640,9 +665,9 @@ end
 ------------------- custom "animation" functions --------------------------
 
 function startCombat()
-	-- use this so guard2 will gain control
-	AnimSwitchHog(hero.gear)
+	-- Use this so guard2 gains control
 	EndTurn(true)
+	getReadyForRumble = true
 end
 
 function sendStats(planetMsg)
