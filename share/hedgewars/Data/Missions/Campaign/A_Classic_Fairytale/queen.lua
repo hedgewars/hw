@@ -467,7 +467,7 @@ function SkipAnim(anim)
     SetGearPosition(enemy, unpack(enemyPos))
   end
   if GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-    TurnTimeLeft = 0
+    EndTurn(true)
   end
   AnimWait(enemy, 1)
 end
@@ -489,7 +489,7 @@ function AfterLeaderDeadAnim()
   SetHealth(SpawnHealthCrate(2143, 54), 25)
   SetHealth(SpawnHealthCrate(70, 1308), 25)
   ShowMission(loc("Long Live The Queen"), loc("Bullseye"), loc("Good job! Defeat the rest of the aliens!"), 1, 0)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 -----------------------------Events------------------------------------
 function CheckTurnsOver()
@@ -513,7 +513,7 @@ function DoNativesDead()
   RemoveEventFunc(CheckGearDead)
   RemoveEventFunc(CheckCyborgsDead)
   AddCaption(loc("And so the cyborgs took over the island."))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckCyborgsDead()
@@ -525,7 +525,7 @@ function KillEnemy()
     DismissTeam(loc("Leaderbot"))
   end
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCyborgsDead()
@@ -812,7 +812,7 @@ function onNewTurn()
     return
   end
   if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
-    TurnTimeLeft = 0
+    EndTurn(true)
   end
 end
 

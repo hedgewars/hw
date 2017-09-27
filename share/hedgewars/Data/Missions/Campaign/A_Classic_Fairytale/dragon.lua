@@ -447,7 +447,7 @@ function DoMissionFinished()
   end
   RestoreHedge(cyborg)
   DeleteGear(cyborg)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckGearsDead(gearList)
@@ -467,7 +467,7 @@ end
 function EndMission()
   RestoreHedge(cyborg)
   DeleteGear(cyborg)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckFreshDead()
@@ -684,7 +684,7 @@ function onNewTurn()
     end
     TurnTimeLeft = 30000
   elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
-    TurnTimeLeft = 0
+    EndTurn(true)
   else
     SetInputMask(0xFFFFFFFF)
   end

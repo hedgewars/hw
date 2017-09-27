@@ -80,7 +80,7 @@ function SkipWave2Anim()
 end
 
 function AfterWave2Anim()
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function AfterFinalAnim()
@@ -113,7 +113,7 @@ function AfterFinalAnim()
     SaveCampaignVar("Progress", "4")
   end
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 -----------------------------Animations--------------------------------
 function Wave2Reaction()
