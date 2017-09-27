@@ -105,6 +105,8 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
+	HealthDecrease = 0
+	WaterRise = 0
 	Delay = 5
 	Map = "moon01_map"
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)

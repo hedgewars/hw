@@ -965,12 +965,12 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-  Map = "Cave"
+	Map = "Cave"
 	Theme = "Nature"
-  SuddenDeathTurns = 3000
-
-  AddHogs()
-  AnimInit()
+	WaterRise = 0
+	HealthDecrease = 0
+	AddHogs()
+	AnimInit()
 end
 
 function onGameStart()
