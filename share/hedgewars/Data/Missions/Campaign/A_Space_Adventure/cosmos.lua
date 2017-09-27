@@ -452,6 +452,7 @@ function moonLanding(gear)
 			SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 		end
 		AnimCaption(hero.gear,loc("Welcome to the moon!"))
+		TurnTimeLeft = -1
 		SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 		SaveCampaignVar("Planet", "moon")
 		SaveCampaignVar("UnlockedMissions", "3")
