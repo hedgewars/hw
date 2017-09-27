@@ -210,6 +210,7 @@ A Space Adventure:
  * Searching in the dust: Remove checkpoints. See above.
  * Searching in the dust: Fix Hog Solo dropping straight down when roping near smuggler
  * Searching in the dust: Fix incorrect messages after collecting device part
+ * Precise flying: Fix victory not being recognized, also wait for flames to settle before losing
  * Hard Flying: Fix ending in a Lua error
  * The First Stop: Fix stats screen showing teams twice
  * Killing The Specialists: Fix killing hog with Deagle gave you chance to use another weapon in same turn

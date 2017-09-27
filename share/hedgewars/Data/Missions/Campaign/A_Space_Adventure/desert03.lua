@@ -53,6 +53,7 @@ local targets = {
 	{ x = 1200, y = 1310},
 	{ x = 1700, y = 1310},
 }
+local targetsDead = {}
 local flameCounter = 0
 
 -------------- LuaAPI EVENT HANDLERS ------------------
@@ -135,6 +136,12 @@ function onGearDelete(gear)
 	if GetGearType(gear) == gtFlame then
 		flameCounter = flameCounter - 1
 	end
+	for t=1, #targets do
+		if gear == targets[t].gear then
+			targetsDead[t] = true
+			break
+		end
+	end
 end
 
 -------------- EVENTS ------------------
@@ -188,23 +195,30 @@ end
 
 function checkTargetsDestroyed()
 	if currentTarget == 1 then
-		if not GetHealth(targets[1].gear) then
+		if targetsDead[1] then
 			AddCaption(loc("Level 1 clear!"))
 			SetGearPosition(hero.gear, 3590, 90)
 			currentTarget = 2
 			setTargets(currentTarget)
 		end
 	elseif currentTarget == 2 then
-		if not (GetHealth(targets[2].gear) or GetHealth(targets[3].gear))  then
+		if targetsDead[2] and targetsDead[3] then
 			AddCaption(loc("Level 2 clear!"))
 			SetGearPosition(hero.gear, 1110, 580)
 			currentTarget = 3
 			setTargets(currentTarget)
 		end
 	elseif currentTarget == 3 then
-
-	else
-		win()
+		local allDead = true
+		for t=3, #targets do
+			if targetsDead[t] ~= true then
+				allDead = false
+			end
+		end
+		if allDead then
+			currentTarget = 4
+			win()
+		end
 	end
 end
 
@@ -224,6 +238,8 @@ function setTargets(ct)
 end
 
 function win()
+	AddCaption(loc("Victory!"))
+	PlaySound(sndVictory, hero.gear)
 	saveBonus(1, 1)
 	SendStat(siGameResult, loc("Congratulations, you are the best!"))
 	SendStat(siCustomAchievement, loc("You have destroyed all the targets."))
