@@ -414,6 +414,14 @@ function DoCratesTaken()
   AddFunction({func = AfterKillAnim, args = {}})
 end
 
+function CheckPutCrates(gear)
+  if gear and GetHealth(gear) then
+    return StoppedGear(gear)
+  else
+    return false
+  end
+end
+
 function PutCrates(index)
   if index <= 7 then
     cratesNum = cratesNum + 1
@@ -421,7 +429,7 @@ function PutCrates(index)
     AddNewEvent(CheckGearDead, {crates[cratesNum]}, PutCrates, {index + 1}, 0)
     FollowGear(native)
   else
-    AddEvent(StoppedGear, {native}, DoCratesTaken, {}, 0)
+    AddEvent(CheckPutCrates, {native}, DoCratesTaken, {}, 0)
   end
   if index == 4 then
     AnimSay(native, loc("I'm a ninja."), SAY_THINK, 0)
