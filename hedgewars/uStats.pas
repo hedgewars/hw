@@ -36,6 +36,7 @@ procedure AmmoUsed(am: TAmmoType);
 procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
 procedure HedgehogSacrificed(Hedgehog: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
+procedure TargetHit;
 procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
@@ -56,6 +57,7 @@ var DamageClan  : Longword = 0;
     KillsClan   : LongWord = 0;
     Kills       : LongWord = 0;
     KillsTotal  : LongWord = 0;
+    HitTargets  : LongWord = 0; // Target (gtTarget) hits per turn
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
     SkippedTurns: LongWord = 0;
@@ -121,6 +123,11 @@ inc(DamageTotal, Damage);
 inc(DamageTurn, Damage)
 end;
 
+procedure TargetHit();
+begin
+   inc(HitTargets)
+end;
+
 procedure Skipped;
 begin
 inc(SkippedTurns);
@@ -179,7 +186,8 @@ if FinishedTurnsTotal <> 0 then
             AddVoice(sndRegret, vpHurtEnemy)
 
     // Missed shot
-    else if AmmoDamagingUsed and (Kills <= killsCheck) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) then
+    // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit
+    else if AmmoDamagingUsed and (Kills <= killsCheck) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) and (HitTargets = 0) then
         // Chance to call hedgehog stupid if sacrificed for nothing
         if CurrentHedgehog^.stats.Sacrificed then
             if random(2) = 0 then
@@ -233,6 +241,7 @@ Kills:= 0;
 KillsClan:= 0;
 DamageClan:= 0;
 DamageTurn:= 0;
+HitTargets:= 0;
 PoisonClan:= 0;
 PoisonTurn:= 0;
 AmmoUsedCount:= 0;
@@ -408,6 +417,7 @@ begin
     KillsClan   := 0;
     Kills       := 0;
     KillsTotal  := 0;
+    HitTargets  := 0;
     AmmoUsedCount := 0;
     AmmoDamagingUsed := false;
     SkippedTurns:= 0;

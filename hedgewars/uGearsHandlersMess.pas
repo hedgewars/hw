@@ -2153,6 +2153,8 @@ begin
             for i:= 0 to 63 do
                 AddGear(x, y, gtFlame, 0, _0, _0, 0);
             end
+        else if k = gtTarget then
+            uStats.TargetHit()
         else if k = gtExplosives then
                 begin
                 doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
