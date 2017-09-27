@@ -123,6 +123,10 @@ function onGameInit()
 	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
 		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
 	end
+	if checkPointReached == 4 then
+		-- Disable walking as long we're stuck on the moon
+		GameFlags = bor(GameFlags, gfArtillery)
+	end
 	-- Whether to start with an animation
 	local startSequence
 	-- do checkpoint stuff needed before game starts
@@ -590,7 +594,7 @@ function Skipanim(anim)
 	elseif anim == dialog03 then
 		startCombat()
 	elseif anim == dialog05 or anim == dialog06 then
-		sendStatsOnRetry()
+		sendStatsOnStuckOnMoon()
 	end
 end
 
@@ -642,7 +646,7 @@ function AnimationSetup()
 		table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("And I just forgot the checkpoint of my main mission. Great, just great!"), SAY_THINK, 7000}})
 	end
 	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Got to go back."), SAY_THINK, 2000}})
-	table.insert(dialog05, {func = sendStatsOnRetry, args = {hero.gear}})
+	table.insert(dialog05, {func = sendStatsOnStuckOnMoon, args = {hero.gear}})
 	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
 	AddSkipFunction(dialog06, Skipanim, {dialog06})
 	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm ... Now I ran out of fuel."), SAY_THINK, 3000}})
@@ -689,8 +693,14 @@ end
 function sendStatsOnRetry()
 	SendStat(siGameResult, loc("You have to travel again"))
 	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
-	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
 	SendStat(siCustomAchievement, loc("You have to be careful and must not die!"))
+	sendSimpleTeamRankings({teamC.name})
+	EndGame()
+end
+
+function sendStatsOnStuckOnMoon()
+	SendStat(siGameResult, loc("You have to go back to the moon!"))
+	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
 	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
