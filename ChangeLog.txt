@@ -176,10 +176,11 @@ Other Game Styles:
  * Disable Sudden Death for good in Shoppa game scheme, some game styles and mission maps
 
 A Classic Fairytale:
- + Mission 3: Improved mission panel texts to clarify the goals at all time
  + Mission 4: Add infinite skip
  + Mission 6: Add alternate dialogues when killing cyborgs before collecting the crates
  + All missions: Clarify mine timers
+ * Mission 1: Leaf of faith: Hog was able to walk to the right and get stuck
+ * Mission 1: Leap of faith: Teleport player back to mole when failing
  * Mission 2: Fix crash when trying to open ammo menu in opening sequence
  * Mission 3: Fix various Lua errors when playing with 2 hogs and one of them dies
  * Mission 3: Fix broken end sequence after killing cyborg or princess
@@ -188,11 +189,11 @@ A Classic Fairytale:
  * Mission 5: Fix crash when skipping animation while the cyborg talks before the 3rd wave of cannibals starts
  * Mission 6: Block off left cave entrance to stop player to just rope all the way around
  * Mission 6: Fix mines not being able to get triggered in first turn
- * Mission 6: Rewrite misleading mission texts
  * Mission 8: Fix Lua error message at the beginning
  * Mission 10: Fix mission becoming unplayable when all hogs except the traitor died
  * All missions: Add missing texts for translation
  * All missions: Fix incorrect crate types
+ * All missions: Rewrite mission texts to state missions more clearly
  * Fix swapped mission preview images of missions 2 and 3
 
 A Space Adventure:

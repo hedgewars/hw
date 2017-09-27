@@ -31,7 +31,8 @@ targYdif1 = {1179, 1313, 1734, 1441, 1152, 1259}
 targetPosX = {{821, 866, 789}, {614, 656, 638}, {1238, 1237, 1200}}
 targetPosY = {{1342, 1347, 1326}, {1112, 1121, 1061}, {1152, 1111, 1111}}
 crateNum = {6, 8}
-
+rope2GirderX = 3245
+rope2GirderY = 1190
 
 stage = 1
 cratesCollected = 0
@@ -52,6 +53,7 @@ princessKilled = false
 rope1Taken = false
 paraTaken = false
 rope2Taken = false
+rope2InProgress = false
 punchTaken = false
 canKilled = false
 desertTaken = false
@@ -270,6 +272,9 @@ end
 
 function DoOnDamage()
   AddAnim(damageAnim)
+  if rope2InProgress and not rope2Taken then
+    AnimSetGearPosition(youngh, 3040, 1221)
+  end
   youngdamaged = false
   AddFunction({func = ResetTurnTime, args = {}})
 end
@@ -367,19 +372,27 @@ function CheckPastMoleHead()
 end
 
 function DoPastMoleHead()
+  -- Initiate parachute challenge
   RemoveEventFunc(CheckOnMoleHead)
   ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope, 100)
+  rope2InProgress = true
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
+  -- Block the way to the hole to the right, since the player loses the rope for this section
+  PlaceGirder(rope2GirderX, rope2GirderY, 6)
   AddAnim(pastMoleHeadAnim)
   AddEvent(CheckTookRope2, {}, DoTookRope2, {}, 0)
 end
 
 function DoOnMoleHead()
+  -- Initiate parachute challenge
   RemoveEventFunc(CheckPastMoleHead)
   ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope, 100)
+  rope2InProgress = true
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
+  -- Block the way to the hole to the right, since the player loses the rope for this section
+  PlaceGirder(rope2GirderX, rope2GirderY, 6)
   AddAnim(onMoleHeadAnim)
   AddEvent(CheckTookRope2, {}, DoTookRope2, {}, 0)
 end
@@ -428,6 +441,8 @@ function DoTargDestroyed()
   AddEvent(CheckCratesColled, {}, DoCratesColled, {}, 0)
   AddEvent(CheckChallengeWon, {}, DoChallengeWon, {}, 0)
   AddEvent(CheckTimesUp, {}, DoTimesUp, {}, 1)
+  -- Remove up the old mole blockade from the parachute challenge
+  EraseSprite(rope2GirderX, rope2GirderY, sprAmGirder, 6)
 end
 
 function CheckChoice()
@@ -669,6 +684,7 @@ function onGearDelete(gear)
     paraTaken = true
   elseif gear == ropeCrate2 then
     rope2Taken = true
+    rope2InProgress = false
   elseif gear == ropeCrate3 then
     rope3Taken = true
   elseif gear == crates[1] then
