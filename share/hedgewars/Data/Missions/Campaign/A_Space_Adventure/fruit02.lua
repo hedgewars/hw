@@ -390,6 +390,7 @@ function surface(gear)
 		AddAmmo(green1.gear, amDEagle, 2)
 		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
+	EndTurn(true)
 	if GetHealth(green2.gear) then
 		HideHog(green2.gear)
 	end
