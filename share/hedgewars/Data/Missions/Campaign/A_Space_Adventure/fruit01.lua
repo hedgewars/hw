@@ -118,11 +118,8 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- Captain Lime
 	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "congo-brazzaville")
-	green1.bot = AddHog(green1.name, 1, 200, "war_desertofficer")
-	AnimSetGearPosition(green1.bot, green1.x, green1.y)
-	green1.human =  AddHog(green1.name, 0, 200, "war_desertofficer")
-	AnimSetGearPosition(green1.human, green1.x, green1.y)
-	green1.gear = green1.human
+	green1.gear = AddHog(green1.name, 0, 200, "war_desertofficer")
+	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	-- Green Bananas
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "congo-brazzaville")
 	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
@@ -188,7 +185,6 @@ function onGameStart()
 	for i=3,7 do
 		HideHog(yellowArmy[i].gear)
 	end
-	HideHog(green1.bot)
 
 	-- crates
 	SpawnHealthCrate(health1X, health1Y)
@@ -437,9 +433,7 @@ function startBattle()
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
 	AddAmmo(hero.gear, amSkip, 100)
-	RestoreHog(green1.bot)
-	DeleteGear(green1.human)
-	green1.gear = green1.bot
+	SetHogLevel(green1.gear, 1)
 	startBattleCalled = true
 	EndTurn(true)
 end
