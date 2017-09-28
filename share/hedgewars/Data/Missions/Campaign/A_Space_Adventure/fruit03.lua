@@ -122,7 +122,6 @@ function onGameStart()
 	AddAmmo(hero.gear, amSniperRifle, 2)
 	AddAmmo(hero.gear, amWatermelon, 2)
 
-	-- these 2 are needed in order hero has 10 sec more in the first turn
 	AddAmmo(hero.gear, amSkip, 100)
 	timeLeft = 0
 
@@ -142,7 +141,7 @@ end
 function onNewTurn()
 	if CurrentHedgehog == hero.gear then
 		if firstTurn then
-			-- Unique game rule in this mission
+			-- Unique game rule in this mission: First turn has more time
 			TurnTimeLeft = 25000
 			-- Generous ready time on first turn to give more time to read
 			ReadyTimeLeft = 35000
@@ -192,10 +191,15 @@ function hideMissionOnAction()
 	end
 end
 
-onHogAttack = hideMissionOnAction
-onAttack = hideMissionOnAction
 onSlot = hideMissionOnAction
 onSetWeapon = hideMissionOnAction
+onAttack = hideMissionOnAction
+function onHogAttack(ammoType)
+	hideMissionOnAction()
+	if CurrentHedgehog == hero.gear then
+		lastWeaponUsed = ammoType
+	end
+end
 
 -------------- EVENTS ------------------
 
@@ -275,11 +279,6 @@ function turnHogs()
 			end
 		end
 	end
-end
-
-function onSwitch()
-	ReadyTimeLeft = ReadyTimeLeft + 2000
-	PlaySound(sndExtraTime)
 end
 
 function isHog(gear)
