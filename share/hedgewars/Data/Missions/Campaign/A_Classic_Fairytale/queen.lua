@@ -539,12 +539,14 @@ function DoCyborgsDead()
 end
 
 function DoLeaderDead()
-  leaderDead = true
-  SetGearMessage(CurrentHedgehog, 0)
-  SetupLeaderDeadAnim()
-  AddAnim(leaderDeadAnim)
-  AddFunction({func = AfterLeaderDeadAnim, args = {}})
-  RemoveEventFunc(CheckTurnsOver)
+  if enemyFled ~= "1" then
+    leaderDead = true
+    SetGearMessage(CurrentHedgehog, 0)
+    SetupLeaderDeadAnim()
+    AddAnim(leaderDeadAnim)
+    AddFunction({func = AfterLeaderDeadAnim, args = {}})
+    RemoveEventFunc(CheckTurnsOver)
+  end
 end
 
 function CheckGearsDead(gearList)
