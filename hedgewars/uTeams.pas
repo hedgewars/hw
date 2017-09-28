@@ -87,6 +87,7 @@ if not TeamsGameOver then
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
+        begin
         with AliveClan^ do
             begin
             ts:= ansistring(Teams[0]^.TeamName);
@@ -94,12 +95,28 @@ if not TeamsGameOver then
                 begin
                 s:= FormatA(trmsg[sidWinner], ts);
                 cap:= FormatA(GetEventString(eidRoundWin), ts);
+                AddCaption(cap, cWhiteColor, capgrpGameState);
                 end
             else // clan wins
-                // FIXME: Clan needs a different message
                 begin
-                s:= FormatA(trmsg[sidWinner], ts);
-                cap:= FormatA(GetEventString(eidRoundWin), ts);
+                s:= '';
+                for j:= 0 to Pred(TeamsNumber) do
+                    begin
+                    (*
+                    Currently, the game result string is just the victory
+                    string concatenated multiple times. This assumes that
+                    sidWinner is a complete sentence.
+                    This might not work well for some languages.
+
+                    FIXME/TODO: Add event strings for 2, 3, 4 and >4 teams winning.
+                                 This requires FormatA to work with multiple parameters. *)
+                    ts:= Teams[j]^.TeamName;
+                    s:= s + ' ' + FormatA(trmsg[sidWinner], ts);
+
+                    // FIXME: Show victory captions one-by-one, not all at once
+                    cap:= FormatA(GetEventString(eidRoundWin), ts);
+                    AddCaption(cap, cWhiteColor, capgrpGameState);
+                    end;
                 end;
 
             for j:= 0 to Pred(TeamsNumber) do
@@ -112,12 +129,12 @@ if not TeamsGameOver then
                 AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
-
-            AddCaption(cap, cWhiteColor, capgrpGameState);
-            if SendGameResultOn then
-                SendStat(siGameResult, shortstring(s));
-            AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;
+
+        if SendGameResultOn then
+            SendStat(siGameResult, shortstring(s));
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        end;
     SendStats;
     end;
 TeamsGameOver:= true;

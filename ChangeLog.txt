@@ -251,6 +251,7 @@ Frontend:
  + Hedgewars creates 4 teams instead of 1 on its first launch
  + Allow to randomize hog names, hats, team name, flag, grave, voice and fort separately
  + “Random team” button is now able to randomly select from all available hats
+ * Fix flag being selectable for computer players although it had no effect
  * Campaign screen does no longer show AI-controlled teams
  * Campaign names and campaign mission names can now be translated
  * Creating randomized teams now randomizes (almost) every aspect
@@ -258,8 +259,8 @@ Frontend:
  * Clicking on "New" in weapon scheme editor now creates empty weapon scheme instead of default
  * Fix language names in language list being always in English
  * Prevent starting game with >48 hogs (because engine doesn't support it yet)
- * Team editor Fix flag being selectable for computer players although it had no effect
  * Fix the key for toggling team bars being incorrectly described
+ * Fix caption of stats screen showing only one winner if multiple teams have won
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
