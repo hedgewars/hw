@@ -79,9 +79,9 @@ function onGameStart()
 	-- health crate
 	SpawnHealthCrate(910, 5)
 	-- ammo crates
-	SpawnAmmoCrate(930, 1000,amRCPlane)
-	SpawnAmmoCrate(1220, 672,amPickHammer)
-	SpawnAmmoCrate(1220, 672,amGirder)
+	SpawnAmmoCrate(930, 1000, amRCPlane)
+	SpawnUtilityCrate(1260, 652, amGirder)
+	SpawnAmmoCrate(1220, 652, amPickHammer)
 
 	-- ammo
 	AddAmmo(hero.gear, amPortalGun, 1)
