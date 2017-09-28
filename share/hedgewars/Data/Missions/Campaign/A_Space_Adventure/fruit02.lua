@@ -66,11 +66,11 @@ local redHedgehogs = {
 	{ name = loc("Deadly Grape") }
 }
 teamA.name = loc("Hog Solo and GB")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = 0x38D61C -- green
 teamB.name = loc("Captain Lime")
-teamB.color = tonumber("38D61D",16) -- greenish
+teamB.color = 0x38D61D -- greenish
 teamC.name = loc("Fruit Assassins")
-teamC.color = tonumber("FF0000",16) -- red
+teamC.color = 0xFF0000 -- red
 
 function onGameInit()
 	GameFlags = gfDisableWind
@@ -102,11 +102,8 @@ function onGameInit()
 	HogTurnLeft(green3.gear, true)
 	-- Captain Lime
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "congo-brazzaville")
-	green1.human = AddHog(green1.name, 0, 100, "war_desertofficer")
-	AnimSetGearPosition(green1.human, green1.x, green1.y)
-	green1.bot = AddHog(green1.name, 1, 100, "war_desertofficer")
-	AnimSetGearPosition(green1.bot, green1.x, green1.y)
-	green1.gear = green1.human
+	green1.gear= AddHog(green1.name, 0, 100, "war_desertofficer")
+	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_scout")
@@ -132,11 +129,6 @@ function onGameStart()
 
 	-- Hog Solo and GB weapons
 	AddAmmo(hero.gear, amSwitch, 100)
-	-- Captain Lime weapons
-	AddAmmo(green1.bot, amBazooka, 6)
-	AddAmmo(green1.bot, amGrenade, 6)
-	AddAmmo(green1.bot, amDEagle, 2)
-	HideHog(green1.bot)
 	-- Assassins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
 	AddAmmo(redHedgehogs[1].gear, amGrenade, 6)
@@ -252,7 +244,7 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
-	elseif gear == green1.bot then
+	elseif gear == green1.gear then
 		green1.dead = true
 	elseif gear == deviceCrate.gear then
 		if band(GetGearMessage(gear), gmDestroy) ~= 0 then
@@ -344,7 +336,7 @@ function heroDeath(gear)
 		SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you."))
 		SendStat(siCustomAchievement, loc("Do not destroy the crates!"))
 		if tookPartInBattle then
-			SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assassins at the end."))
+			SendStat(siCustomAchievement, loc("You'll have to eliminate the Fruit Assassins at the end."))
 			if permitCaptainLimeDeath then
 				sendSimpleTeamRankings({teamC.name, teamA.name})
 			else
@@ -367,8 +359,10 @@ end
 function deviceCrateEvent(gear)
 	SetGearMessage(hero.gear, 0)
 	if not tookPartInBattle then
+		-- Captain Lime turns evil
 		AddAnim(dialog03)
 	else
+		-- Fruit Assassins attack
 		for i=1,table.getn(redHedgehogs) do
 			RestoreHog(redHedgehogs[i].gear)
 		end
@@ -388,9 +382,11 @@ function surface(gear)
 		end
 		AddEvent(onRedTeamDeath, {green1.gear}, redTeamDeath, {green1.gear}, 0)
 	else
-		DeleteGear(green1.human)
-		RestoreHog(green1.bot)
-		green1.gear = green1.bot
+		SetHogLevel(green1.gear, 1)
+		-- Equip Captain Lime with weapons
+		AddAmmo(green1.gear, amBazooka, 6)
+		AddAmmo(green1.gear, amGrenade, 6)
+		AddAmmo(green1.gear, amDEagle, 2)
 		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
 	if GetHealth(green2.gear) then
@@ -417,7 +413,7 @@ function redTeamDeath(gear)
 	saveCompletedStatus(3)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
-	SendStat(siCustomAchievement, loc("You defended yourself against the Strawberry Assassins."))
+	SendStat(siCustomAchievement, loc("You defended yourself against the Fruit Assassins."))
 	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
 end
@@ -427,8 +423,12 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    EndTurn(true)
+	end
+	if anim == dialog03 then
+		makeCptLimeEvil()
+	else
+		EndTurn(true)
+	end
 end
 
 function AnimationSetup()
@@ -442,6 +442,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Good luck!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	-- DIALOG02 - Start, Hog Solo escaped from the previous battle
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
@@ -457,6 +458,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 1800}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Okay then!"), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
+	table.insert(dialog02, {func = ShowMission, args = goals[dialog02]})
 	-- DIALOG03 - At crates, hero learns that Captain Lime is bad
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 1250}})
@@ -464,7 +466,8 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! When he returns I'll shoot him and keep that device for myself!"), SAY_THINK, 4000}})
-	table.insert(dialog03, {func = goToThesurface, args = {hero.gear}})
+	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
+	table.insert(dialog03, {func = makeCptLimeEvil, args = {hero.gear}})
 	-- DIALOG04 - At crates, hero learns about the Assassins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
 	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 4000}})
@@ -472,10 +475,17 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {redHedgehogs[1].gear, loc("We have spotted the enemy! We'll attack when the enemies start gathering!"), SAY_THINK, 4000}})
+	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
 	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})
 end
 
 ------------- OTHER FUNCTIONS ---------------
+
+function makeCptLimeEvil()
+	-- Turn Captain Lime evil
+	SetHogLevel(green1.gear, 1)
+	EndTurn(true)
+end
 
 function goToThesurface()
 	EndTurn(true)
