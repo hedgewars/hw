@@ -77,6 +77,7 @@ guard1.keepTurning = true
 guard2.name = loc("Sam")
 guard2.x = 3400
 guard2.y = 1800
+-- Planetary Association of the Hedgehogs
 teamA.name = loc("PAotH")
 teamA.color = 0x38D61C -- green
 teamB.name = loc("Guards")

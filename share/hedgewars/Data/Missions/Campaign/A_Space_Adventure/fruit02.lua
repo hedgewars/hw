@@ -65,6 +65,7 @@ local redHedgehogs = {
 	{ name = loc("Watermelon Heart") },
 	{ name = loc("Deadly Grape") }
 }
+-- Hog Solo and Green Bananas
 teamA.name = loc("Hog Solo and GB")
 teamA.color = 0x38D61C -- green
 teamB.name = loc("Captain Lime")
