@@ -27,7 +27,7 @@ local challengeObjectives = loc("To win the game you have to pass into the rings
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	["init"] = {missionName, loc("Getting ready"), challengeObjectives, 1, 30000},
+	["init"] = {missionName, loc("Getting ready"), challengeObjectives, 1, 25000},
 }
 -- hogs
 local hero = {}
@@ -73,6 +73,7 @@ function onGameInit()
 	GameFlags = gfInvulnerable + gfOneClanMode
 	Seed = 1
 	TurnTime = 15000
+	Ready = 25000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
@@ -103,6 +104,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(unpack(goals["init"]))
+	HideMission()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
@@ -205,6 +207,7 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
+	ShowMission(unpack(goals["init"]))
 	startFlying()
 end
 
@@ -216,10 +219,9 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic stadium of saucer flying."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream to come here one day in order to compete with the best!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best."), SAY_SAY, 6000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass through the rings."), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Pause the game by pressing the pause key (default \"P\") for more details"), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Can you do it?"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = ShowMission, args = goals["init"]})
 	table.insert(dialog01, {func = startFlying, args = {hero.gear}})
 end
 

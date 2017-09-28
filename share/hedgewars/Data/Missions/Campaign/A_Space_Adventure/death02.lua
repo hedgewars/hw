@@ -18,8 +18,6 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 	loc("If you injure a hedgehog you'll get 35% of the damage dealt.").."|"..
 	loc("Every time you kill an enemy hog your ammo will get reset next turn.").."|"..
 	loc("The rope won't get reset.")
--- dialogs
-local dialog01 = {}
 -- mission objectives
 local goals = {
 	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
@@ -54,6 +52,7 @@ local teamB = {
 -- After hero killed an enemy, his weapons will be reset in the next round
 local heroWeaponResetPending = false
 local battleStarted = false
+local firstTurn = true
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -84,8 +83,7 @@ function onGameInit()
 
 	initCheckpoint("death02")
 
-	AnimInit(true)
-	AnimationSetup()
+	AnimInit()
 end
 
 function onGameStart()
@@ -102,10 +100,15 @@ function onGameStart()
 	refreshHeroAmmo()
 
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
+	battleStarted = true
+	if firstTurn then
+		-- Generous ready time in first turn to more time to read the mission panel
+		ReadyTimeLeft = 35000
+		firstTurn = false
+	end
 	if CurrentHedgehog ~= hero.gear then
 		enemyWeapons()
 	elseif heroWeaponResetPending then
@@ -164,21 +167,8 @@ end
 
 onHogAttack = hideMissionOnAction
 onAttack = hideMissionOnAction
-onLeft = hideMissionOnAction
-onRight = hideMissionOnAction
-onUp = hideMissionOnAction
-onDown = hideMissionOnAction
-onLJump = hideMissionOnAction
-onHJump = hideMissionOnAction
 onSlot = hideMissionOnAction
 onSetWeapon = hideMissionOnAction
-onTimer = hideMissionOnAction
-
-function onPrecise()
-	if GameTime > 3000 then
-		SetAnimSkip(true)
-	end
-end
 
 -------------- EVENTS ------------------
 
@@ -231,36 +221,7 @@ function heroWin(gear)
 	EndGame()
 end
 
--------------- ANIMATIONS ------------------
-
-function Skipanim(anim)
-	startBattle()
-end
-
-function AnimationSetup()
-	-- DIALOG 01 - Start, game instructions
-	AddSkipFunction(dialog01, Skipanim, {dialog01})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Death ..."), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("... Hog Solo fights for his life"), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named after"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your health points will be set to 100"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hedgehog you'll get 35% of the damage dealt"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset next turn"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reset"), 2000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
-end
-
 ------------ Other Functions -------------------
-
-function startBattle()
-	battleStarted = true
-	AnimSwitchHog(hero.gear)
-	TurnTimeLeft = TurnTime
-end
 
 function shuffleHogs(hogs)
     local hogsNumber = table.getn(hogs)

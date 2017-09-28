@@ -18,7 +18,7 @@ local currentTarget = 1
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 60000},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 30000},
 }
 -- hogs
 local hero = {
@@ -62,6 +62,7 @@ function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
 	TurnTime = -1
+	Ready = 30000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
@@ -79,12 +80,10 @@ function onGameInit()
 
 	initCheckpoint("desert03")
 
-	AnimInit(true)
-	AnimationSetup()
+	AnimInit()
 end
 
 function onGameStart()
-	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(unpack(goals["init"]))
 
@@ -173,18 +172,6 @@ function lose(gear)
 	AddCaption(loc("Out of ammo!"), 0xFFFFFFFF, capgrpMessage2)
 	PlaySound(sndStupid, hero.gear)
 	gameOver()
-end
-
--------------- ANIMATIONS ------------------
-
-function AnimationSetup()
-	-- DIALOG 01 - Start, game instructions
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Desert Planet, Hog Solo found some time to play with his RC plane"), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy all the targets on your current level you'll get teleported to the next level"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only one RC plane at the start of the mission"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("During the game you can get new RC planes by collecting the weapon crates"), 5000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 end
 
 ----------------- Other Functions -----------------

@@ -92,11 +92,19 @@ function onGameStart()
 	AddAnim(dialog01)
 end
 
+-- Hide mission panel when jumping or shooting rope
 function onGearAdd(gear)
 	if GetGearType(gear) == gtRope then
 		HideMission()
 	end
 end
+
+function onLJump()
+	if startChallenge then
+		HideMission()
+	end
+end
+onHJump = onLJump
 
 function onNewTurn()
 	if startChallenge and currentPosition < 5 then
