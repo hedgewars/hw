@@ -3160,6 +3160,7 @@ end;
 procedure SetGlobals;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
+ScriptSetInteger('ReadyTimeLeft', ReadyTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
@@ -3206,6 +3207,7 @@ begin
 // It is inconsistent anyway to have some globals be read-only and others not with no indication whatsoever.
 // -- sheepluva
 TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
+ReadyTimeLeft:= ScriptGetInteger('ReadyTimeLeft');
 end;
 
 procedure ScriptCall(fname : shortstring);

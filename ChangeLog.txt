@@ -300,6 +300,7 @@ Lua-API:
  + New variable: AirMinesNum -- Number of air mines being placed on a medium-sized map
  + New variable: WorldEdge -- World edge type (weNone, weWrap, weBounce, weSea)
  + New variable: AmmoTypeMax -- Maximum ammo type ID (useful to iterate through all ammo types, starting by 0)
+ + New variable: ReadyTimeLeft -- Remaining ready time, 0 if turn in progress. Can be set in onNewTurn
  + Locale library: loc_noop -- Mark string for translation but don't translate it
  + Animate library: AnimInit([startAnimating]) -- New parameter startAnimating: if true, will start game in cinematic mode with most controls disabled. Must play an animation after that
  * Fixed call: HideHog(gear) -- Fix crash when gear is invalid. Returns true on success or false otherwise
