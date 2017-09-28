@@ -92,6 +92,9 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
+	ShowMission(unpack(goals[dialog01]))
+	HideMission()
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSafe, {hero.gear}, heroSafe, {hero.gear}, 0)
 
@@ -113,6 +116,12 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+end
+
+function onGearAdd(gear)
+	if GetGearType(gear) == gtRope then
+		HideMission()
+	end
 end
 
 function onGearDelete(gear)
@@ -179,7 +188,7 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
+	end
 	challengeStart()
 end
 
@@ -191,6 +200,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("The tunnel is about to get flooded!"), SAY_THINK, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I have to reach the surface as quickly as I can."), SAY_THINK, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = challengeStart, args = {hero.gear}})
 end
 

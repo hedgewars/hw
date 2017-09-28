@@ -20,10 +20,6 @@ local getReadyForRumble = false -- guards wake up
 local ropeDestroyed = false -- for detecting if player roped to the moon
 local ropedToMoon = 0
 local checkPointReached = 1 -- 1 is start of the game
-local objectives = loc("Go to the moon by using the flying saucer and complete the main mission").."|"..
-loc("Come back to this mission and visit the other planets to collect the crates").."|"..
-loc("Visit the Death Planet after completing all the other planets' main missions").."|"..
-loc("Come back to this mission after collecting all the device parts")
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -36,11 +32,19 @@ local dialog08 = {}
 local dialog09 = {}
 -- mission objectives
 local goals = {
+	["init"] = {missionName, loc("Getting ready"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
+	"|"..loc("Travel to all the neighbor planets and collect all the pieces"), 1, 0},
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
 	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuel is limited"), 1, 4500},
 	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon's main mission"), 1, 7000},
 	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit the planets of Ice, Desert and Fruit before you proceed to the Death Planet"), 1, 6000},
-	[dialog08] = {missionName, loc("Saving Hogera"), loc("Fly to the meteorite and detonate the explosives"), 1, 7000}
+	[dialog08] = {missionName, loc("Saving Hogera"), loc("Fly to the meteorite and detonate the explosives"), 1, 7000},
+	["open_side_missions"] = {missionName, loc("Conquering the galaxy"),
+		loc("Use the flying saucer to fly the other planets.").."|"..
+		loc("Complete the remaining side missions to complete this mission.").."|"..
+		loc("One flower: Incomplete side missions").."|"..
+		loc("Two flowers: All missions complete"), 1, 8000},
+	["free"] = {missionName, loc("Spacetrip"), loc("Use the flying saucer to fly to the other planets."), 1, 5000}
 }
 -- crates
 local saucerX = 3270
@@ -179,8 +183,15 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 
 	FollowGear(hero.gear)
-	ShowMission(loc("Spacetrip"), loc("Getting ready"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
-	"|"..loc("Travel to all the neighbor planets and collect all the pieces"), -amSkip, 0)
+	if GetCampaignVar("Won") == "true" then
+		if GetCampaignVar("Mission1Won") == "true" then
+			ShowMission(unpack(goals["free"]))
+		else
+			ShowMission(unpack(goals["open_side_missions"]))
+		end
+	else
+		ShowMission(unpack(goals["init"]))
+	end
 
 	-- do checkpoint stuff needed after game starts
 	if checkPointReached == 1 then
@@ -747,9 +758,8 @@ function sendStatsOnRopedToMoon()
 	if ropedToMoon ~= 2 then
 		ropedToMoon = 2
 		SendStat(siGameResult, loc("You have violated PAotH regulations!"))
-		SendStat(siCustomAchievement, loc("You have triggered the secret Do-Not-Rope-to-the-Moon Defense System!"))
-		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer!"))
-		SendStat(siCustomAchievement, loc("Fly to the moon."))
+		SendStat(siCustomAchievement, loc("You have triggered the secret Do-Not-Rope-to-the-Moon Defense System."))
+		SendStat(siCustomAchievement, loc("Use the flying saucer from the crate to fly to the moon."))
 		sendSimpleTeamRankings({teamC.name})
 		EndGame()
 	end

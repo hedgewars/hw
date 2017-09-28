@@ -21,7 +21,7 @@ local dialog01 = {}
 local dialog02 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 0},
 }
 -- hogs
 local hero = {
@@ -56,7 +56,6 @@ function onGameInit()
 	TurnTime = 25000
 	CaseFreq = 0
 	MinesNum = 0
-	MinesTime = 1
 	Explosives = 0
 	Map = "moon02_map"
 	Theme = "Cheese"
@@ -83,7 +82,6 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
@@ -92,6 +90,12 @@ function onGameStart()
 	SendHealthStatsOff()
 	hogTurn = runner.gear
 	AddAnim(dialog01)
+end
+
+function onGearAdd(gear)
+	if GetGearType(gear) == gtRope then
+		HideMission()
+	end
 end
 
 function onNewTurn()
@@ -150,12 +154,12 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog01 then
+	end
+    	if anim == dialog01 then
 		moveRunner()
 	elseif anim == dialog02 then
 		win()
-    end
+	end
 end
 
 function AnimationSetup()
@@ -167,6 +171,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("We'll play a game first."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("I'll let you know whatever I know about him if you manage to catch me 3 times."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = moveRunner, args = {}})
 	-- DIALOG 02 - Hog Solo story
 	AddSkipFunction(dialog02, Skipanim, {dialog02})

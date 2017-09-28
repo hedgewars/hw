@@ -18,7 +18,7 @@ local currentTarget = 1
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 60000},
 }
 -- hogs
 local hero = {
@@ -86,7 +86,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onLose, {hero.gear}, lose, {hero.gear}, 0)
@@ -129,6 +129,9 @@ end
 function onGearAdd(gear)
 	if GetGearType(gear) == gtFlame then
 		flameCounter = flameCounter + 1
+	end
+	if GetGearType(gear) == gtRCPlane then
+		HideMission()
 	end
 end
 
@@ -174,15 +177,8 @@ end
 
 -------------- ANIMATIONS ------------------
 
-function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-end
-
 function AnimationSetup()
 	-- DIALOG 01 - Start, game instructions
-	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Desert Planet, Hog Solo found some time to play with his RC plane"), 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy all the targets on your current level you'll get teleported to the next level"), 5000}})

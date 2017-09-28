@@ -25,7 +25,7 @@ local dialog01 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!").."|"..
-			loc("Most of the destructible terrain in marked with blue color").."|"..loc("Mines time: 0 seconds"), 1, 4500},
+			loc("Most of the destructible terrain in marked with blue color").."|"..loc("Mines time: 0 seconds"), 1, 6000},
 }
 -- crates
 local btorch1Y = 60
@@ -421,8 +421,8 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    AnimSwitchHog(hero.gear)
+	end
+	AnimSwitchHog(hero.gear)
 	if anim == dialog01 then
 		startMission()
 	end
@@ -450,6 +450,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("The tunnel entrance is over there."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Good luck!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = startMission, args = {hero.gear}})
 end
 

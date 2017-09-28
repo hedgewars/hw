@@ -14,6 +14,7 @@ local missionName = loc("Precise shooting")
 local timeLeft = 0
 local lastWeaponUsed = amNothing
 local firstTurn = true
+local battleStarted = false
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
 	loc("You can only use the sniper rifle or the watermelon bomb.").."|"..
 	loc("You'll have only 2 watermelon bombs during the game.").."|"..
@@ -26,7 +27,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 30000},
 }
 -- hogs
 local hero = {
@@ -113,7 +114,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -140,6 +141,7 @@ function onNewTurn()
 	if CurrentHedgehog == hero.gear then
 		if firstTurn then
 			TurnTimeLeft = 25000
+			battleStarted = true
 		end
 		if lastWeaponUsed == amSkip then
 			TurnTimeLeft = TurnTime + timeLeft
@@ -176,6 +178,25 @@ function onGearDelete(gear)
 		end
 	end
 end
+
+-- Hide mission panel when player does anything
+function hideMissionOnAction()
+	if battleStarted then
+		HideMission()
+	end
+end
+
+onHogAttack = hideMissionOnAction
+onAttack = hideMissionOnAction
+onLeft = hideMissionOnAction
+onRight = hideMissionOnAction
+onUp = hideMissionOnAction
+onDown = hideMissionOnAction
+onLJump = hideMissionOnAction
+onHJump = hideMissionOnAction
+onSlot = hideMissionOnAction
+onSetWeapon = hideMissionOnAction
+onTimer = hideMissionOnAction
 
 function onPrecise()
 	if GameTime > 3000 then
@@ -241,10 +262,7 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
+	startBattle()
 end
 
 function AnimationSetup()

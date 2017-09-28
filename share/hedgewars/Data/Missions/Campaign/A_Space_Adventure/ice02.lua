@@ -27,7 +27,7 @@ local challengeObjectives = loc("To win the game you have to pass into the rings
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Getting ready"), challengeObjectives, 1, 30000},
 }
 -- hogs
 local hero = {}
@@ -102,7 +102,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
@@ -175,6 +175,12 @@ function onGearDelete(gear)
 	end
 end
 
+function onGearAdd(gear)
+	if GetGearType(gear) == gtJetpack then
+		HideMission()
+	end
+end
+
 function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)
@@ -199,10 +205,7 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startFlying()
+	startFlying()
 end
 
 function AnimationSetup()

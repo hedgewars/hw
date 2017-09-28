@@ -200,10 +200,11 @@ A Classic Fairytale:
 
 A Space Adventure:
  + Side missions save and show your personal best successes (e.g. fastest finish in Hard Flying)
- + All missions: Add skip where it doesn't hurt
  + Spacetrip: Show 2 flowers over fully completed planets (with side missions)
+ + All missions: Add skip where it doesn't hurt
  + All missions: Clarify mine timers
- + Change team colors
+ + All missions: Improve displaying behaviour of mission panel
+ + All missions: Change team colors
  * Spacetrip: Fix various bugs and logic flaws in the initial mission
  * A frozen adventure: Fix bazooka and excess freezers (>6) not retained over checkpoints
  * A frozen adventure: Fix and improve poorly written messages

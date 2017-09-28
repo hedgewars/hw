@@ -32,9 +32,9 @@ local dialog02 = {}
 local dialog03 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer."), 1, 4000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight! Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 4000},
-	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee ... Unfortunately, the only place where you can launch your saucer is the left-most place on the map."), 1, 4000},
+	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer."), 1, 7000},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight! Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 7000},
+	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee ... Unfortunately, the only place where you can launch your saucer is the left-most place on the map."), 1, 7000},
 }
 -- crates
 local crateWMX = 2170
@@ -373,12 +373,12 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog01 then
+	end
+	if anim == dialog01 then
 		AnimSwitchHog(hero.gear)
 	elseif anim == dialog02 or anim == dialog03 then
 		startBattle()
-    end
+	end
 end
 
 function AnimationSetup()
@@ -396,7 +396,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I would gladly help you if we won this battle but under these circumstances I'll only help you if you fight for our side."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = ShowMission, args = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer."), 1, 7000}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - Hero selects to fight
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
@@ -412,6 +412,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be foolish, son, there will be more."), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Try to be smart and eliminate them quickly. This way you might scare off the rest!"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
+	table.insert(dialog02, {func = ShowMission, args = goals[dialog02]})
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
 	-- DIALOG 03 - Hero selects to flee
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
@@ -422,6 +423,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our flight-inhibiting weapons."), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Now go and don't waste more of my time, you coward!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 5000}})
+	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
 	table.insert(dialog03, {func = startBattle, args = {hero.gear}})
 end
 

@@ -22,7 +22,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
 }
 -- hogs
 local hero = {
@@ -53,6 +53,7 @@ local teamB = {
 }
 -- After hero killed an enemy, his weapons will be reset in the next round
 local heroWeaponResetPending = false
+local battleStarted = false
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -90,7 +91,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -154,6 +155,25 @@ function onGameTick()
 	CheckEvents()
 end
 
+-- Hide mission panel when player does anything
+function hideMissionOnAction()
+	if battleStarted then
+		HideMission()
+	end
+end
+
+onHogAttack = hideMissionOnAction
+onAttack = hideMissionOnAction
+onLeft = hideMissionOnAction
+onRight = hideMissionOnAction
+onUp = hideMissionOnAction
+onDown = hideMissionOnAction
+onLJump = hideMissionOnAction
+onHJump = hideMissionOnAction
+onSlot = hideMissionOnAction
+onSetWeapon = hideMissionOnAction
+onTimer = hideMissionOnAction
+
 function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)
@@ -214,10 +234,7 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
+	startBattle()
 end
 
 function AnimationSetup()
@@ -240,6 +257,7 @@ end
 ------------ Other Functions -------------------
 
 function startBattle()
+	battleStarted = true
 	AnimSwitchHog(hero.gear)
 	TurnTimeLeft = TurnTime
 end

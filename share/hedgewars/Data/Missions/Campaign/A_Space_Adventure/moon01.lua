@@ -428,10 +428,10 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog02 then
+	end
+	if anim == dialog02 then
 		setAfterDialog02()
-    elseif anim == dialog03 then
+	elseif anim == dialog03 then
 		startCombat()
 	else
 		AnimSwitchHog(hero.gear)
@@ -453,6 +453,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Okay, then you have to go and take some of the weapons we have hidden in case of an emergency!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("They are up there! Take this rope and hurry!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Ehm, okay ..."), SAY_SAY, 2500}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - To the weapons platform
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
@@ -460,6 +461,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! Yeah!"), SAY_SHOUT, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {paoth1.gear, loc("Nice! Now hurry and get down! You have to rescue my friends!"), SAY_SHOUT, 7000}})
 	table.insert(dialog02, {func = setAfterDialog02, args = {}})
+	table.insert(dialog02, {func = ShowMission, args = goals[dialog02]})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 03 - Hero spotted and has no weapons
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
@@ -467,6 +469,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimSay, args = {minion1.gear, loc("Look, boss! There is the target!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Oops, I've been spotted and I have no weapons! I am doomed!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
 	table.insert(dialog03, {func = startCombat, args = {hero.gear}})
 	-- DIALOG 04 - Hero spotted and *HAS* weapons
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
@@ -474,6 +477,7 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimSay, args = {minion1.gear, loc("Look, boss! There is the target!"), SAY_SHOUT, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Here we go!"), SAY_THINK, 4000}})
+	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
 	table.insert(dialog04, {func = startCombat, args = {hero.gear}})
 end
 
