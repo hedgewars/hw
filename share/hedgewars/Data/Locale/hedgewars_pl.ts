@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation>Wyśłij opinię</translation>
+        <translation>Wyślij opinię</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
