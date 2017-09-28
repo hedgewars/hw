@@ -24,7 +24,7 @@ local dialog02 = {}
 -- mission objectives
 local goToThantaString = loc("Go to Thanta and get the device part!")
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the freezer and get the device part from Thanta") .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the freezer and get the device part from Thanta.") .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
 	["checkpoint"] = {missionName, loc("Objectives"), goToThantaString .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
 }
 -- crates
@@ -73,11 +73,11 @@ bandit5.y = 600
 bandit5.frozen = false
 bandit5.roundsToUnfreeze = 0
 teamA.name = loc("Allies")
-teamA.color = tonumber("FF0000",16) -- red
+teamA.color = 0x38D61C -- green
 teamB.name = loc("Frozen Bandits")
-teamB.color = tonumber("0072FF",16) -- blues
+teamB.color = 0x0072FF -- blue
 teamC.name = loc("Hog Solo")
-teamC.color = tonumber("38D61C",16) -- green
+teamC.color = 0x38D61C -- green
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -442,7 +442,7 @@ function heroDeath(gear)
 	SendStat(siCustomAchievement, loc("To win the game you have to stand next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
 	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
-	sendSimpleTeamRankings({teamB.name, teamC.name})
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -473,7 +473,7 @@ function thantaDeath(gear)
 	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
 	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
-	sendSimpleTeamRankings({teamB.name, teamC.name})
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -542,7 +542,7 @@ function actionsOnWin()
 	SendStat(siGameResult, loc("Congratulations, you acquired the device part!"))
 	SendStat(siCustomAchievement, string.format(loc("At the end of the game your health was %d."), GetHealth(hero.gear)))
 	-- maybe add number of tries for each part?
-	sendSimpleTeamRankings({teamC.name, teamB.name})
+	sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
 	resetCheckpoint() -- reset this mission
 	EndGame()
 end

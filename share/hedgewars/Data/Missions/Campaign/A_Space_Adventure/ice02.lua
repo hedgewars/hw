@@ -44,9 +44,9 @@ ally.name = loc("Paul McHoggy")
 ally.x = 860
 ally.y = 130
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = 0x38D61C -- green
 teamB.name = loc("Allies")
-teamB.color = tonumber("FF0000",16) -- red
+teamB.color = 0x38D61C -- green
 -- way points
 local current waypoint = 1
 local waypoints = {
@@ -70,7 +70,7 @@ local waypoints = {
 -------------- LuaAPI EVENT HANDLERS ------------------
 
 function onGameInit()
-	GameFlags = gfInvulnerable
+	GameFlags = gfInvulnerable + gfOneClanMode
 	Seed = 1
 	TurnTime = 15000
 	CaseFreq = 0

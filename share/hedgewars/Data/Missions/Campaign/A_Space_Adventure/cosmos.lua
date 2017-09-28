@@ -78,11 +78,11 @@ guard2.name = loc("Sam")
 guard2.x = 3400
 guard2.y = 1800
 teamA.name = loc("PAotH")
-teamA.color = tonumber("FF0000",16) -- red
+teamA.color = 0x38D61C -- green
 teamB.name = loc("Guards")
-teamB.color = tonumber("0072FF",16) -- blue
+teamB.color = 0x0072FF -- blue
 teamC.name = loc("Hog Solo")
-teamC.color = tonumber("38D61C",16) -- green
+teamC.color = 0x38D61C -- green
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 function onGameInit()

@@ -79,11 +79,12 @@ thug7.x = 2990
 thug7.y = 1960
 thug7.health = 80
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = 0x38D61C -- green
 teamB.name = loc("PAotH")
-teamB.color = tonumber("0072FF",16) -- blue because otherwise enemies attack them
+-- FIXME: PAotH should share color with Hog Solo
+teamB.color = 0x0072FF -- blue because otherwise enemies attack them
 teamC.name = loc("Professor")
-teamC.color = tonumber("0072FF",16) -- blue
+teamC.color = 0x0072FF -- blue
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 

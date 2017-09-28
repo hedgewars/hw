@@ -87,13 +87,13 @@ minion3.x = 3500
 minion3.y = 1750
 
 teamA.name = loc("PAotH")
-teamA.color = tonumber("FF0000",16) -- red
+teamA.color = 0x38D61C -- green
 teamB.name = loc("Minions")
-teamB.color = tonumber("0072FF",16) -- blue
+teamB.color = 0x0072FF -- blue
 teamC.name = loc("Professor")
-teamC.color = tonumber("0072FF",16) -- blue
+teamC.color = 0x0072FF -- blue
 teamD.name = loc("Hog Solo")
-teamD.color = tonumber("38D61C",16) -- green
+teamD.color = 0x38D61C -- green
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
