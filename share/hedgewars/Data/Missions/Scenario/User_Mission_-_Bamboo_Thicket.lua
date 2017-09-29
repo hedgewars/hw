@@ -22,10 +22,10 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Pathetic Resistance"), 14483456, "Simple", "Island", "Default", "cm_yinyang")
+	AddTeam(loc("Pathetic Resistance"), 14483456, "Plinko", "Island", "Default", "cm_yinyang")
 	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
 			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_cyborg")
+	AddTeam(loc("Cybernetic Empire"), 	1175851, "ring", "Island", "Robot", "cm_cyborg")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
 	SetGearPosition(player,142,656)

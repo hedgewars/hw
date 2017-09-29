@@ -49,7 +49,7 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "hedgewars")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 

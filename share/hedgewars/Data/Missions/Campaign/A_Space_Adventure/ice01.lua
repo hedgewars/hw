@@ -112,16 +112,16 @@ function onGameInit()
 	end
 
 	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "hedgewars")
+	AddTeam(teamC.name, teamC.color, "Simple", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Ally
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_face")
+	AddTeam(teamA.name, teamA.color, "heart", "Island", "HillBilly", "cm_face")
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_pirate")
+	AddTeam(teamB.name, teamB.color, "plant2", "Island", "HillBilly", "cm_pirate")
 	bandit1.gear = AddHog(bandit1.name, 1, 120, "Santa")
 	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)
 	HogTurnLeft(bandit1.gear, true)

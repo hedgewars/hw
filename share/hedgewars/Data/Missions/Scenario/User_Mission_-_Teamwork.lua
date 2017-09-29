@@ -24,12 +24,11 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Feeble Resistance"), 14483456, "Simple", "Island", "Default", "cm_kiwi")
+	AddTeam(loc("Feeble Resistance"), 14483456, "Statue", "Island", "Default", "cm_kiwi")
 	player = AddHog(loc("Greg"), 0, 50, "NoHat")
 	p2 = AddHog(loc("Mark"), 0, 20, "NoHat")
 
-	--AddTeam("Toxic Team", 	1175851, "Simple", "Island", "Robot","cm_binary")
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_cyborg")
+	AddTeam(loc("Cybernetic Empire"), 	1175851, "ring", "Island", "Robot", "cm_cyborg")
 	enemy = AddHog(loc("Unit 3378"), 5, 30, "cyborg1")
 
 	SetGearPosition(player,1403,235)

@@ -131,7 +131,7 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(loc("Wannabe Shoppsta"), 0x11F12B, "Simple", "Island", "Default", "cm_shoppa")
+	AddTeam(loc("Wannabe Shoppsta"), 0x11F12B, "money", "Island", "Default", "cm_shoppa")
 	hhs[0] = AddHog(loc("Ace"), 0, 1, "Gasmask")
 	SetGearPosition(player, 1380, 1500)
 

@@ -30,11 +30,11 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), 14483456, "Simple", "Island", "Default", "cm_duckhead")
+	AddTeam(loc("Bloody Rookies"), 14483456, "Rubberduck", "Island", "Default", "cm_duckhead")
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 	instructor = AddHog(loc("Instructor"), 0, 100, "sf_vega")
 
-	AddTeam(loc("Blue Team"), 29439, "Simple", "Island", "Default", "somalia")
+	AddTeam(loc("Blue Team"), 29439, "bubble", "Island", "Default", "somalia")
 	enemy = AddHog(loc("Filthy Blue"), 1, 100, "Skull")
 
 	SetGearPosition(player,146,902)

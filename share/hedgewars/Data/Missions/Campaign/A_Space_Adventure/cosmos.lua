@@ -111,17 +111,17 @@ function onGameInit()
 	Theme = "Nature"
 	-- I had originally hero in PAotH team and changed it, may reconsider though
 	-- PAotH
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "hedgewars")
+	AddTeam(teamC.name, teamC.color, "Simple", "Island", "HillBilly", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_galaxy")
+	AddTeam(teamA.name, teamA.color, "Earth", "Island", "HillBilly", "cm_galaxy")
 	director.gear = AddHog(director.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(director.gear, director.x, director.y)
 	doctor.gear = AddHog(doctor.name, 0, 100, "Glasses")
 	AnimSetGearPosition(doctor.gear, doctor.x, doctor.y)
 	-- Guards
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_swordshield2")
+	AddTeam(teamB.name, teamB.color, "Statue", "Island", "HillBilly", "cm_swordshield2")
 	guard1.gear = AddHog(guard1.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
