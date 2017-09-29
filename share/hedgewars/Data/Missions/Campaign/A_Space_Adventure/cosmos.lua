@@ -92,7 +92,7 @@ teamC.color = 0x38D61C -- green
 -------------- LuaAPI EVENT HANDLERS ------------------
 function onGameInit()
 	Seed = 35
-	GameFlags = gfSolidLand + gfDisableWind
+	GameFlags = gfSolidLand + gfDisableWind + gfTagTeam
 	TurnTime = 20000
 	CaseFreq = 0
 	MinesNum = 0
@@ -280,7 +280,7 @@ local abandonCheck = false
 
 function onNewTurn()
 	if ropedToMoon == 1 then
-		SetInputMask(0)
+		AnimSetInputMask(0)
 		sendStatsOnRopedToMoon()
 		return
 	end
@@ -413,7 +413,7 @@ end
 
 function prepareDialog02(gear)
 	if StoppedGear(gear) and guard1.keepTurning and checkPointReached < 2 then
-		SetGearMessage(gear, 0)
+		SetGearMessage(gear, band(GetGearMessage(gear), bnot(gmLeft+gmRight+gmUp+gmDown+gmPrecise)))
 		EndTurn(true)
 		-- save check point
 		SaveCampaignVar("CosmosCheckPoint", "2")
@@ -428,7 +428,9 @@ function heroAcquiredSaucer(gear)
 	-- check if he was spotted by the guard
 	if guard1.turn and guard1.keepTurning and GetX(gear) > saucerX-150 then
 		guard1.keepTurning = false
-		SetGearVelocity(gear, 0, 0)
+		SetGearMessage(gear, band(GetGearMessage(gear), bnot(gmLeft+gmRight+gmUp+gmDown+gmPrecise)))
+		local _, dy = GetGearVelocity(gear)
+		SetGearVelocity(gear, 0, dy)
 		AddAnim(dialog03)
 	end
 
@@ -440,7 +442,7 @@ function onHeroAcquiredSaucer(gear)
 end
 
 function heroOutOfGuardSight(gear)
-	SetGearMessage(hero.gear, 0)
+	SetGearMessage(gear, 0)
 	guard1.keepTurning = true
 	AddAnim(dialog04)
 
@@ -456,7 +458,7 @@ function moonLanding(gear)
 		ropedToMoon = 1
 		SetGearVelocity(gear, 0, 0)
 		SetGearMessage(gear, 0)
-		SetInputMask(0)
+		AnimSetInputMask(0)
 		AddAnim(dialog09)
 	else
 		if checkPointReached ~= 5 then
@@ -483,7 +485,7 @@ function punishHeroForRopingToMoon(gear)
 	AddGear(GetX(gear), -200, gtShell, 0, 0, 0, 0)
 	AddGear(GetX(gear), -300, gtShell, 0, 0, 0, 0)
 	FollowGear(hero.gear)
-	SetInputMask(0)
+	AnimSetInputMask(0)
 end
 
 function fruitPlanetLanding(gear)
@@ -626,7 +628,7 @@ function Skipanim(anim)
 		ShowMission(unpack(goals[anim]))
 	end
 	if anim == dialog09 then
-		SetInputMask(0)
+		AnimSetInputMask(0)
 		-- Quick punishment for the impatient
 		AddGear(GetX(hero.gear)-1, GetY(hero.gear)+1, gtDynamite, 0, 0, 0, 1)
 		sendStatsOnRopedToMoon()
