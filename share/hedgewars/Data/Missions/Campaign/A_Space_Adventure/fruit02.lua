@@ -253,12 +253,7 @@ function onGearDelete(gear)
 			PlaySound(sndShotgunReload)
 			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
 			deviceCrate.collected = true
-			if deviceCrate.collector == nil then
-				deviceCrate.collector = CurrentHedgehog
-				if deviceCrate.collector == nil then
-				AddCaption("XXXXX", 0xFF0000FF, capgrpMessage2)
-				end
-			end
+			deviceCrate.collector = CurrentHedgehog
 			-- Spawn rope crate
 			SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 		end
