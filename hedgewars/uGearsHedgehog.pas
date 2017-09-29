@@ -693,7 +693,7 @@ begin
             cnt:= Ammoz[ammo].NumberInCase;
 
         if (ammo = amNothing) or (cnt = 0) then
-            s:= ansistring(trmsg[sidEmptyCrate])
+            s:= trmsg[sidEmptyCrate]
         else if cnt >= AMMO_INFINITE then
             s:= name + ansistring(' (+∞)')
         else

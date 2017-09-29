@@ -2101,27 +2101,27 @@ begin
 
                 lua_newtable(L);
 
-                lua_pushstring(L, 'Kills');
+                lua_pushstring(L, str2pchar('Kills'));
                 lua_pushnumber(L, TeamsArray[i]^.stats.Kills);
                 lua_settable(L, -3);
 
-                lua_pushstring(L, 'Suicides');
+                lua_pushstring(L, str2pchar('Suicides'));
                 lua_pushnumber(L, TeamsArray[i]^.stats.Suicides);
                 lua_settable(L, -3);
 
-                lua_pushstring(L, 'AIKills');
+                lua_pushstring(L, str2pchar('AIKills'));
                 lua_pushnumber(L, TeamsArray[i]^.stats.AIKills);
                 lua_settable(L, -3);
 
-                lua_pushstring(L, 'TeamKills');
+                lua_pushstring(L, str2pchar('TeamKills'));
                 lua_pushnumber(L, TeamsArray[i]^.stats.TeamKills);
                 lua_settable(L, -3);
 
-                lua_pushstring(L, 'TurnSkips');
+                lua_pushstring(L, str2pchar('TurnSkips'));
                 lua_pushnumber(L, TeamsArray[i]^.stats.TurnSkips);
                 lua_settable(L, -3);
 
-                lua_pushstring(L, 'TeamDamage');
+                lua_pushstring(L, str2pchar('TeamDamage'));
                 lua_pushnumber(L, TeamsArray[i]^.stats.TeamDamage);
                 lua_settable(L, -3);
 

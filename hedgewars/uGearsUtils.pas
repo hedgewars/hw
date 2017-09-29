@@ -709,10 +709,10 @@ begin
                     if isDirH then
                         begin
                         tmp:= hwRound(Gear^.X - Gear^.dX);
-                        if abs(tmp - leftX) < abs(tmp - rightX) then  // left edge
-                            isImpact:= (abs(tmp-leftX) >= Gear^.Radius) and (Gear^.dX.isNegative)
+                        if abs(tmp - real(leftX)) < abs(tmp - real(rightX)) then  // left edge
+                            isImpact:= (abs(tmp-real(leftX)) >= Gear^.Radius) and (Gear^.dX.isNegative)
                         else
-                            isImpact:= (abs(tmp-rightX) >= Gear^.Radius) and (not Gear^.dX.isNegative);
+                            isImpact:= (abs(tmp-real(rightX)) >= Gear^.Radius) and (not Gear^.dX.isNegative);
                         end
                     else
                         begin
