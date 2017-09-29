@@ -762,7 +762,7 @@ while (not pfsEOF(f)) and allOK do
         with SprayObjects.objs[Pred(SprayObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifAlpha or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);

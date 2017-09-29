@@ -90,10 +90,11 @@ const
     rqDesyncVBlank= $00000800;  // don't sync on vblank
 
     // image flags (for LoadImage())
+    // TODO: discuss whether ifAlpha and ifColorKey are actually needed and if and where we want to support which colorkeys
     ifNone        = $00000000;  // nothing special
     ifAlpha       = $00000001;  // use alpha channel (unused right now?)
     ifCritical    = $00000002;  // image is critical for gameplay (exit game if unable to load)
-    ifColorKey = $00000004;  // image uses transparent pixels (color keying)
+    ifColorKey    = $00000004;  // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008;  // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
 
     // texture priority (allows OpenGL to keep frequently used textures in video memory more easily)
