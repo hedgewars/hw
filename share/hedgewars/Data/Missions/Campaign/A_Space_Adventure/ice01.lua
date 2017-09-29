@@ -254,8 +254,9 @@ function onNewTurn()
 			EndTurn(true)
 		end
 	elseif CurrentHedgehog == ally.gear then
-		AddCaption("")
-		AnimSwitchHog(hero.gear)
+		-- This switches back to hero (indirectly)
+		SwitchHog(bandit1.gear)
+		EndTurn(true)
 	end
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
