@@ -200,6 +200,7 @@ function AnimationSetup()
   table.insert(challengeCompletedAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(beforeKillAnim, Skipanim, {beforeKillAnim})
+  table.insert(beforeKillAnim, {func = AnimWait, args = {elderh, 100}})
   table.insert(beforeKillAnim, {func = AnimSay, args = {elderh, loc("What do my faulty eyes observe? A spy!"), SAY_SHOUT, 4000}, skipFunc = Skipanim, skipArgs = beforeKillAnim})
   table.insert(beforeKillAnim, {func = AnimFollowGear, args = {cannibal}})
   table.insert(beforeKillAnim, {func = AnimWait, args = {cannibal, 1000}})
