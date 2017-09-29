@@ -40,7 +40,7 @@ chalTries = 0
 targetsDestroyed = 0
 targsWave = 1
 tTime = -1
-difficulty = 0
+difficulty = 1
 
 cannibalVisible = false
 cannibalKilles = false
@@ -90,7 +90,7 @@ end
 
 function SkipDamageAnim(anim)
   SwitchHog(youngh)
-  SetInputMask(0xFFFFFFFF)
+  AnimSetInputMask(0xFFFFFFFF)
 end
 
 function SkipOnShroom()
@@ -446,13 +446,10 @@ function DoTargDestroyed()
   EraseSprite(rope2GirderX, rope2GirderY, sprAmGirder, 6)
 end
 
-function CheckChoice()
-  return difficulty ~= 0
-end
-
 function DoChoice()
+  PlaySound(sndPlaced)
   difficultyChoice = false
-  SetInputMask(0xFFFFFFFF)
+  AnimSetInputMask(0xFFFFFFFF)
   StartChallenge(120000 + chalTries * 20000)
 end
 
@@ -578,11 +575,25 @@ function StartChallenge(time)
   ShowMission(loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000)
 end
 
+function ChoiceDialog()
+  local dstr
+  if difficulty == 2 then
+    dstr = loc("Difficulty: Hard")
+  else
+    dstr = loc("Difficulty: Easy")
+  end
+  ShowMission(loc("First Blood"), loc("The Torment"),
+    loc("Your next task is to collect some crates by using the rope!") .. "|" ..
+    loc("Press [Left] and [Right] to change the difficulty.") .. "| |" ..
+    dstr .. "| |" ..
+    loc("Press [Jump] to begin."),
+    0, 300000)
+end
+
 function SetChoice()
-  SetInputMask(band(0xFFFFFFFF, bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLJump+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon)))
+  AnimSetInputMask(0)
   difficultyChoice = true
-  ShowMission(loc("First Blood"), loc("The Torment"), loc("Select difficulty: [Left] - easier or [Right] - harder"), 0, 300000)
-  AddEvent(CheckChoice, {}, DoChoice, {}, 0)
+  ChoiceDialog()
 end
 
 function SetTime(time)
@@ -764,13 +775,20 @@ end
 
 function onLeft()
   if difficultyChoice == true then
-    difficulty = 1
+    if difficulty ~= 1 then
+       difficulty = 1
+    else
+       difficulty = 2
+    end
+    PlaySound(sndSwitchHog)
+    ChoiceDialog()
   end
 end
+onRight = onLeft
 
-function onRight()
+function onLJump()
   if difficultyChoice == true then
-    difficulty = 2
+    DoChoice()
   end
 end
-
+onHJump = onLJump
