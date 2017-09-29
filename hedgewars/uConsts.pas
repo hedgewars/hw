@@ -27,17 +27,22 @@ uses    SDLh, uFloat, GLunit;
 
 const
     HDPIScaleFactor     =  1;
+
+    // application return codes
     HaltNoError         =  0;
-    HaltUsageError      =  1;
-    HaltFatalError      =  2;
-    HaltStartupError    =  3;
-    HaltFatalErrorNoIPC =  4;
+
+    // error codes are placed in range 50-99 because that way then don't overlap with run-time errors of pascal
+    // see https://www.freepascal.org/docs-html/user/userap4.html
+    HaltUsageError      =  51;
+    HaltFatalError      =  52;
+    HaltStartupError    =  53;
+    HaltFatalErrorNoIPC =  54;
 
     // for automatic tests
     HaltTestSuccess     =  0;
-    HaltTestFailed      =  10;
-    HaltTestLuaError    =  11;
-    HaltTestUnexpected  =  12;
+    HaltTestFailed      =  60;
+    HaltTestLuaError    =  61;
+    HaltTestUnexpected  =  62;
 
 
     sfMax = 1000;
