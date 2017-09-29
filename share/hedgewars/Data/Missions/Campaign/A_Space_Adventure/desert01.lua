@@ -20,6 +20,7 @@ local missionName = loc("Searching in the dust")
 local heroIsInBattle = false
 local ongoingBattle = 0
 local cratesFound = 0
+local ropeGear = nil
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -236,7 +237,16 @@ function onAmmoStoreInit()
 	SetAmmo(amSkip, 9, 0, 0, 1)
 end
 
+function onGearAdd(gear)
+	if GetGearType(gear) == gtRope then
+		ropeGear = gear
+	end
+end
+
 function onGearDelete(gear)
+	if GetGearType(gear) == gtRope then
+		ropeGear = nil
+	end
 	local foundDeviceCrateCandidate = function(candidate_crate_table, other_crate_table)
 		candidate_crate_table.deleted = true
 		-- Evaluates to false if crate has been collected
@@ -360,12 +370,15 @@ end
 
 function heroAtFirstBattle(gear)
 	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
-	-- Hog gets scared if on rope
-	if GetGearElasticity(hero.gear) ~= 0 then
-		HogSay(hero.gear, loc("Gasp! A smuggler!"), SAY_SHOUT)
-	end
 	-- Remember velocity to restore it later
 	local dx, dy = GetGearVelocity(hero.gear)
+	-- Hog gets scared if on rope
+	if isOnRope() then
+		PlaySound(sndRopeRelease)
+		HogSay(hero.gear, loc("Gasp! A smuggler!"), SAY_SHOUT)
+		dx = div(dx, 3)
+		dy = div(dy, 3)
+	end
 	EndTurn(true)
 	heroIsInBattle = true
 	ongoingBattle = 1
@@ -393,11 +406,14 @@ function heroAtThirdBattle(gear)
 	heroIsInBattle = true
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
-	-- Hog gets scared and falls from rope
-	if GetGearElasticity(hero.gear) ~= 0 then
-		HogSay(hero.gear, loc("Yikes!"), SAY_SHOUT)
-	end
 	local dx, dy = GetGearVelocity(hero.gear)
+	-- Hog gets scared and falls from rope
+	if isOnRope() then
+		PlaySound(sndRopeRelease)
+		HogSay(hero.gear, loc("Yikes!"), SAY_SHOUT)
+		dx = div(dx, 3)
+		dy = div(dy, 3)
+	end
 	AnimSwitchHog(smuggler3.gear)
 	EndTurn(true)
 	SetGearVelocity(hero.gear, dx, dy)
@@ -456,6 +472,13 @@ end
 
 --------------- OTHER FUNCTIONS ------------------
 
+function isOnRope()
+	if ropeGear then
+		return true
+	end
+	return false
+end
+
 function startMission()
 	AnimSwitchHog(ally.gear)
 	EndTurn(true)
@@ -466,11 +489,14 @@ function secondBattle()
 	if heroIsInBattle and ongoingBattle == 1 then
 		AnimSay(smuggler1.gear, loc("Get him, Spike!"), SAY_SHOUT, 4000)
 	end
-	-- Hog gets scared if on rope
-	if GetGearElasticity(hero.gear) ~= 0 then
-		HogSay(hero.gear, loc("Gasp!"), SAY_SHOUT)
-	end
 	local dx, dy = GetGearVelocity(hero.gear)
+	-- Hog gets scared if on rope
+	if isOnRope() then
+		PlaySound(sndRopeRelease)
+		HogSay(hero.gear, loc("Gasp!"), SAY_SHOUT)
+		dx = div(dx, 3)
+		dy = div(dy, 3)
+	end
 	heroIsInBattle = true
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
