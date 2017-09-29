@@ -19,6 +19,7 @@ local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
 local dialog04 = {}
+local dialog05 = {}
 -- mission objectives
 local minesTimeText = loc("Mines time: 0 seconds")
 local goals = {
@@ -252,6 +253,12 @@ function onGearDelete(gear)
 			PlaySound(sndShotgunReload)
 			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
 			deviceCrate.collected = true
+			if deviceCrate.collector == nil then
+				deviceCrate.collector = CurrentHedgehog
+				if deviceCrate.collector == nil then
+				AddCaption("XXXXX", 0xFF0000FF, capgrpMessage2)
+				end
+			end
 			-- Spawn rope crate
 			SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 		end
@@ -357,30 +364,40 @@ function heroDeath(gear)
 	end
 end
 
+-- Device crate got taken
 function deviceCrateEvent(gear)
-	SetGearMessage(hero.gear, 0)
-	if not tookPartInBattle then
-		-- Captain Lime turns evil
-		AddAnim(dialog03)
-	else
-		-- Fruit Assassins attack
-		for i=1,table.getn(redHedgehogs) do
-			RestoreHog(redHedgehogs[i].gear)
+	-- Stop hedgehog
+	SetGearMessage(deviceCrate.collector, 0)
+	if deviceCrate.collector == hero.gear then
+		-- Hog Solo collected the device crate
+
+		if not tookPartInBattle then
+			-- Captain Lime turns evil
+			AddAnim(dialog03)
+		else
+			-- Fruit Assassins attack
+			for i=1,table.getn(redHedgehogs) do
+				RestoreHog(redHedgehogs[i].gear)
+			end
+			AddAnim(dialog04)
 		end
-		AddAnim(dialog04)
+		-- needs to be set to true for both plots
+		permitCaptainLimeDeath = true
+		AddAmmo(hero.gear, amSwitch, 0)
+		AddEvent(onSurface, {hero.gear}, surface, {hero.gear}, 0)
+	else
+		-- Player let the Green Bananas collect the crate.
+		-- How dumb!
+		-- Player will lose for this.
+		AnimationSetup05(deviceCrate.collector)
+		AddAnim(dialog05)
 	end
-	-- needs to be set to true for both plots
-	permitCaptainLimeDeath = true
-	AddAmmo(hero.gear, amSwitch, 0)
-	AddEvent(onSurface, {hero.gear}, surface, {hero.gear}, 0)
 end
 
 function surface(gear)
 	previousHog = -1
 	if tookPartInBattle then
-		if GetHealth(green1.gear) then
-			HideHog(green1.gear)
-		end
+		escapeHog(green1.gear)
 		AddEvent(onRedTeamDeath, {green1.gear}, redTeamDeath, {green1.gear}, 0)
 	else
 		SetHogLevel(green1.gear, 1)
@@ -391,12 +408,8 @@ function surface(gear)
 		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
 	EndTurn(true)
-	if GetHealth(green2.gear) then
-		HideHog(green2.gear)
-	end
-	if GetHealth(green3.gear) then
-		HideHog(green3.gear)
-	end
+	escapeHog(green2.gear)
+	escapeHog(green3.gear)
 	inBattle = true
 end
 
@@ -428,6 +441,8 @@ function Skipanim(anim)
 	end
 	if anim == dialog03 then
 		makeCptLimeEvil()
+	elseif anim == dialog05 then
+		heroIsAStupidFool()
 	else
 		EndTurn(true)
 	end
@@ -463,7 +478,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = ShowMission, args = goals[dialog02]})
 	-- DIALOG03 - At crates, hero learns that Captain Lime is bad
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
-	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 1250}})
+	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog03, {func = FollowGear, args = {hero.gear}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
@@ -472,7 +487,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = makeCptLimeEvil, args = {hero.gear}})
 	-- DIALOG04 - At crates, hero learns about the Assassins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
-	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 4000}})
+	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog04, {func = FollowGear, args = {hero.gear}})
 	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
@@ -481,7 +496,33 @@ function AnimationSetup()
 	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})
 end
 
+function AnimationSetup05(collector)
+	-- DIALOG05 - A member or the green bananas collected the target crate and steals it. Player loses
+	AddSkipFunction(dialog05, Skipanim, {dialog05})
+	table.insert(dialog05, {func = AnimWait, args = {collector, 2000}})
+	table.insert(dialog05, {func = FollowGear, args = {collector}})
+	table.insert(dialog05, {func = AnimSay, args = {collector, loc("Oh yes! I got the device part! Now it belongs to me alone."), SAY_SAY, 4000}})
+	table.insert(dialog05, {func = AnimWait, args = {collector, 3000}})
+	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Hey! I was supposed to collect it!"), SAY_SHOUT, 3000}})
+	table.insert(dialog05, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog05, {func = AnimSay, args = {collector, loc("I don't care. It's worth a fortune! Good bye, you idiot!"), SAY_SAY, 5000}})
+	table.insert(dialog05, {func = heroIsAStupidFool, args = {collector}})
+
+end
+
 ------------- OTHER FUNCTIONS ---------------
+
+-- Hide hog and create a simple escaping effect, if hog exists.
+-- No-op is hog does not exist
+function escapeHog(gear)
+	if GetHealth(gear) then
+		AddVisualGear(GetX(gear), GetY(gear), vgtSmokeWhite, 0, false)
+		for i=1, 4 do
+			AddVisualGear(GetX(gear)-16+math.random(32), GetY(gear)-16+math.random(32), vgtSmokeWhite, 0, false)
+		end
+		HideHog(gear)
+	end
+end
 
 function makeCptLimeEvil()
 	-- Turn Captain Lime evil
@@ -491,6 +532,20 @@ end
 
 function goToThesurface()
 	EndTurn(true)
+end
+
+-- Player let wrong hog collect crate
+function heroIsAStupidFool()
+	if not ended then
+		escapeHog(deviceCrate.collector)
+		AddCaption(loc("The device part has been stolen!"))
+		sendSimpleTeamRankings({teamA.name})
+		SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+		SendStat(siCustomAchievement, loc("Oh no, the Green Bananas have betrayed Hog Solo and stole the anti-gravity device part!"))
+		SendStat(siCustomAchievement, loc("Only Hog Solo can be trusted with the crate."))
+		EndGame()
+		ended = true
+	end
 end
 
 function wind()

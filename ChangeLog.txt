@@ -207,6 +207,7 @@ A Space Adventure:
  + All missions: Change team colors
  + Side missions: Remove or shorten intro sequences
  + Side missions: Generous ready time to give more time to read the mission panel
+ + Getting to the device: Put device part in a real crate, improve some dialogues
  * Spacetrip: Fix various bugs and logic flaws in the initial mission
  * A frozen adventure: Fix bazooka and excess freezers (>6) not retained over checkpoints
  * A frozen adventure: Fix and improve poorly written messages
