@@ -254,7 +254,8 @@ function onNewTurn()
 			EndTurn(true)
 		end
 	elseif CurrentHedgehog == ally.gear then
-		EndTurn(true)
+		AddCaption("")
+		AnimSwitchHog(hero.gear)
 	end
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
