@@ -202,21 +202,31 @@ function onGameStart()
 end
 
 function onNewTurn()
+	local function getReady(hog)
+		-- This clears the "Get ready, Hog!" caption from the engine, because it will name the
+		-- false hog because we immediately switch the hog after the turn start.
+		-- TODO: Find a better method for this and show the real hog name (preferably using an engine string)
+		AddCaption("")
+	end
+
 	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
-		EndTurn(true)
+		AnimSwitchHog(hero.gear)
+		getReady(hero.gear)
+		TurnTimeLeft = -1
 	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
 		TurnTimeLeft = -1
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
-		AnimSwitchHog(hero.gear)
-		EndTurn(true)
+		AnimSwitchHog(smuggler1.gear)
+		getReady(smuggler1.gear)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 2 then
-		AnimSwitchHog(hero.gear)
-		EndTurn(true)
+		AnimSwitchHog(smuggler2.gear)
+		getReady(smuggler2.gear)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler2.gear) and ongoingBattle == 3 then
-		AnimSwitchHog(hero.gear)
-		EndTurn(true)
+		AnimSwitchHog(smuggler3.gear)
+		getReady(smuggler3.gear)
 	elseif CurrentHedgehog == ally.gear then
-		EndTurn(true)
+		AnimSwitchHog(hero.gear)
+		getReady(hero.gear)
 	end
 end
 
