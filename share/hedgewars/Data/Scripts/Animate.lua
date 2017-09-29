@@ -5,6 +5,8 @@ local AnimList, AnimListNum
 local FunctionList, FunctionListNum
 local skipFuncList
 local skipping
+local baseInputMask = 0xFFFFFFFF
+local extraInputMask = baseInputMask
 --------------------------------Animation---------------------------------
 --------------------------(In-game cinematics)----------------------------
 
@@ -50,14 +52,25 @@ function ExecuteAfterAnimations()
   RemoveFunction()
 end
 
+local function updateInputMask()
+     SetInputMask(band(baseInputMask, extraInputMask))
+end
+
 local function startCinemaLock()
      SetCinematicMode(true)
-     SetInputMask(bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon))
+     baseInputMask = bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon)
+     updateInputMask()
 end
 
 local function stopCinemaLock()
-     SetInputMask(0xFFFFFFFF)
+     baseInputMask = 0xFFFFFFFF
+     updateInputMask()
      SetCinematicMode(false)
+end
+
+function AnimSetInputMask(newExtraInputMask)
+     extraInputMask = newExtraInputMask
+     updateInputMask()
 end
 
 function AnimInit(startAnimating)
