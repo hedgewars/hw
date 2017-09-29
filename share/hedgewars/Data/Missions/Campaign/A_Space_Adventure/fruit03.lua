@@ -88,18 +88,18 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "HillBilly", "hedgewars")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	local hats = { "Bandit", "fr_apple", "fr_banana", "fr_lemon", "fr_orange",
 					"fr_pumpkin", "Gasmask", "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "bp2", "Island", "HillBilly", "cm_bars")
+	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
 	end
-	AddTeam(teamB.name, teamB.color, "bp2", "Island", "HillBilly", "cm_bars")
+	AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)

@@ -102,16 +102,16 @@ function onGameInit()
 	local heroHealth = 100
 
 	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "HillBilly", "hedgewars")
+	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- PAotH undercover scientist and chief Sandologist
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "HillBilly", "cm_galaxy")
+	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
 	ally.gear = AddHog(ally.name, 0, 100, "Cowboy")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Smugglers
-	AddTeam(teamB.name, teamB.color, "chest", "Island", "HillBilly", "cm_bloodyblade")
+	AddTeam(teamB.name, teamB.color, "chest", "Island", "Default", "cm_bloodyblade")
 	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "hair_orange")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
 	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "lambda")

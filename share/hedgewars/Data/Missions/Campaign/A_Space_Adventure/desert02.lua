@@ -72,7 +72,7 @@ function onGameInit()
 	Theme = "Desert"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "HillBilly", "hedgewars")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
