@@ -53,7 +53,7 @@ var tmpsurf: PSDL_Surface;
     x, yd, yu: LongInt;
     targetMask: Word;
 begin
-    tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifTransparent);
+    tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifColorKey);
 
     // if mask only, all land gets filled with landtex and therefore needs borders
     if maskOnly then
@@ -251,7 +251,7 @@ begin
     SDL_UnlockSurface(mapsurf);
 
     // freed in freeModule() below
-    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifColorKey);
     if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
 end;
 
@@ -278,7 +278,7 @@ begin
     SDL_FreeSurface(tmpsurf);
 
     // freed in freeModule() below
-    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifColorKey);
     if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
 end;
 
@@ -544,11 +544,11 @@ for i := 0 to ClansCount - 1 do
     if mirror then
         begin
         // not critical because if no R we can fallback to mirrored L
-        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifColorKey or ifIgnoreCaps);
         // fallback
         if tmpsurf = nil then
             begin
-            tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+            tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifColorKey or ifIgnoreCaps);
             BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
             end
         else
@@ -557,7 +557,7 @@ for i := 0 to ClansCount - 1 do
         end
     else
         begin
-        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifColorKey or ifIgnoreCaps);
         BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
         SDL_FreeSurface(tmpsurf);
         end;
@@ -597,11 +597,11 @@ var tmpsurf: PSDL_Surface;
     x, y, cpX, cpY: Longword;
     mapName: shortstring;
 begin
-tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifColorKey or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(cPathz[ptMapCurrent]);
-    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifColorKey or ifIgnoreCaps);
     end;
 
 
@@ -639,7 +639,7 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
         if not disableLandBack then
             begin
             // freed in freeModule() below
-            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifColorKey);
             if (LandBackSurface <> nil) and GrayScale then
                 Surface2GrayScale(LandBackSurface)
             end;
@@ -656,11 +656,11 @@ var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifColorKey or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(cPathz[ptMapCurrent]);
-    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifColorKey or ifIgnoreCaps);
     if not allOK then exit;
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take

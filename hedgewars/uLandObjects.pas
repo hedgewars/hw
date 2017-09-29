@@ -259,7 +259,7 @@ var x1, x2, y, k, i, girderHeight: LongInt;
     bRes: boolean;
 begin
 if girSurf = nil then
-    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
 
 girderHeight:= girSurf^.h;
 
@@ -685,10 +685,10 @@ while (not pfsEOF(f)) and allOK do
         with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps or ifCritical);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical);
             Width:= Surf^.w;
             Height:= Surf^.h;
-            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifTransparent or ifIgnoreCaps);
+            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps);
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
@@ -762,7 +762,7 @@ while (not pfsEOF(f)) and allOK do
         with SprayObjects.objs[Pred(SprayObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);

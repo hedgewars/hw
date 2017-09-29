@@ -344,7 +344,7 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             if GraveName = '' then
                 GraveName:= 'Statue';
-            texsurf:= LoadDataImageAltFile(ptGraves, GraveName, 'Statue', ifCritical or ifTransparent);
+            texsurf:= LoadDataImageAltFile(ptGraves, GraveName, 'Statue', ifCritical or ifColorKey);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
@@ -412,7 +412,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                 tmpsurf:= Surface
             else
                 begin
-                imflags := (ifAlpha or ifTransparent);
+                imflags := (ifAlpha or ifColorKey);
 
                 // these sprites are optional
                 if not (ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk, sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL]) then // FIXME: hack
@@ -491,7 +491,7 @@ if (not cOnlyStats) and allOK then
     if not reload then
         AddProgress;
 
-    tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifTransparent);
+    tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifColorKey);
 
     HHTexture:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf);
@@ -663,7 +663,7 @@ begin
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
-    if (imageFlags and ifTransparent) <> 0 then
+    if (imageFlags and ifColorKey) <> 0 then
         if checkFails(SDL_SetColorKey(tmpsurf, SDL_TRUE, 0) = 0, errmsgTransparentSet, true) then exit;
 
     WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
@@ -799,7 +799,7 @@ begin
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
-        texsurf:= LoadDataImage(ptGraphics, 'Progress', ifCritical or ifTransparent);
+        texsurf:= LoadDataImage(ptGraphics, 'Progress', ifCritical or ifColorKey);
 
         ProgrTex:= Surface2Tex(texsurf, false);
 
