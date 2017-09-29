@@ -2723,11 +2723,11 @@ const call = 'GetAmmoName';
 begin
     if CheckAndFetchParamCountRange(L, 1, 2, call, params, np) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);                                                                                                   
+        at:= LuaToAmmoTypeOrd(L, 1, call, params);
         ignoreOverwrite := false;
         if np > 1 then
             ignoreOverwrite := lua_toboolean(L, 2);
-        if at >= 0 then   
+        if at >= 0 then
             if (not ignoreOverwrite) and (length(trluaammo[Ammoz[TAmmoType(at)].NameId]) > 0) then
                 lua_pushstring(L, PChar(trluaammo[Ammoz[TAmmoType(at)].NameId]))
             else
@@ -3054,7 +3054,7 @@ var mybuf: PChar;
     i: LongInt;
 begin
     mybuf := physfsReader(L, f, sz);
-    if (mybuf <> nil) and (sz^ > 0) then
+    if (mybuf <> nil) and ((sz^) > 0) then
         begin
             for i:= 0 to sz^-1 do
                 begin
@@ -3068,7 +3068,7 @@ begin
                         end;
                     lastChar := mybuf[i];
                     if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
-                        inComment := false 
+                        inComment := false
                 end;
         end;
     ScriptReader:= mybuf
@@ -3078,7 +3078,7 @@ var mybuf: PChar;
     i: LongInt;
 begin
     mybuf := physfsReader(L, f, sz);
-    if (mybuf <> nil) and (sz^ > 0) then
+    if (mybuf <> nil) and ((sz^) > 0) then
         begin
             for i:= 0 to sz^-1 do
                 begin
@@ -3086,26 +3086,26 @@ begin
                         inQuote := not inQuote;
                     if not inQuote and (lastChar = '-') and (mybuf[i] = '-') then
                         inComment := true;
-                    if not inComment and not inQuote then
+                    if not inComment and (not inQuote) then
                        locSum := locSum xor (byte(mybuf[i]) shl (i mod 4));
-                    if not inComment and not inQuote and 
-                        ((mybuf[i] = '(') or 
-                        (mybuf[i] = ')') or 
-                        (mybuf[i] = '+') or 
-                        (mybuf[i] = '#') or 
+                    if not inComment and (not inQuote) and
+                        ((mybuf[i] = '(') or
+                        (mybuf[i] = ')') or
+                        (mybuf[i] = '+') or
+                        (mybuf[i] = '#') or
                         (braceCount > 2) or
-                        (wordCount > 6)) then 
+                        (wordCount > 6)) then
                        CheckSum := locSum;
-                    if not inComment and not inQuote and ((mybuf[i] = '{') or (mybuf[i] = '}')) then
+                    if not inComment and (not inQuote) and ((mybuf[i] = '{') or (mybuf[i] = '}')) then
                         inc(braceCount);
-                    if not inComment and not inQuote and 
+                    if not inComment and (not inQuote) and
                         (((byte(mybuf[i]) > $40) and (byte(mybuf[i]) < $5B)) or
                         ((byte(mybuf[i]) > $60) and (byte(mybuf[i]) < $7B)) or
                         ((byte(mybuf[i]) >= $30) and (byte(mybuf[i]) < $3A))) then
                         inc(wordCount);
                     lastChar := mybuf[i];
                     if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
-                        inComment := false 
+                        inComment := false
                 end;
         end;
     ScriptLocaleReader:= mybuf

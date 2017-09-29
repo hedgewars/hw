@@ -447,7 +447,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                         end;
                 if (ii in [sprAMAmmos, sprAMAmmosBW]) then
                     begin
-                    tmpoverlay := LoadDataImage(Path, copy(FileName, 1, length(FileName)-5), (imflags and not ifCritical));
+                    tmpoverlay := LoadDataImage(Path, copy(FileName, 1, length(FileName)-5), (imflags and (not ifCritical)));
                     if tmpoverlay <> nil then
                         begin
                         copyToXY(tmpoverlay, tmpsurf, 0, 0);
