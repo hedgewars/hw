@@ -77,6 +77,9 @@ const
 /////////////////////  CONSTANT DEFINITIONS /////////////////////
 /////////////////////////////////////////////////////////////////
 
+    SDL_FALSE = 0;
+    SDL_TRUE = 1;
+
     // SDL_Init() flags
     SDL_INIT_TIMER          = $00000001;
     SDL_INIT_AUDIO          = $00000010;
