@@ -240,17 +240,20 @@ end
 
 function onNewTurn()
 	-- rounds start if hero got his weapons or got near the enemies
-	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
-		EndTurn(true)
-	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear and afterDialog02 then
-		battleZone(hero.gear)
-	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
+	if CurrentHedgehog == hero.gear then
+		if not weaponsAcquired and not battleZoneReached then
+			TurnTimeLeft = -1
+		end
+	elseif CurrentHedgehog == minion1.gear or CurrentHedgehog == minion2.gear or CurrentHedgehog == minion3.gear then
+		if not weaponsAcquired and not battleZoneReached then
+			EndTurn(true)
+		elseif weaponsAcquired and not battleZoneReached and afterDialog02 then
+			battleZone(hero.gear)
+		end
 	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
 		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
 		EndTurn(true)
 	elseif CurrentHedgehog == professor.gear then
-		AnimSwitchHog(hero.gear)
 		EndTurn(true)
 	end
 end
