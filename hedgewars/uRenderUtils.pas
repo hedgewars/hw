@@ -336,7 +336,7 @@ begin
 
         WriteInRoundRect(finalSurface, 0, 0, Color, font, s, maxLength);
 
-        checkFails(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, false);
+        checkFails(SDL_SetColorKey(finalSurface, SDL_TRUE, 0) = 0, errmsgTransparentSet, false);
 
         RenderStringTexLim:= Surface2Tex(finalSurface, false);
 
