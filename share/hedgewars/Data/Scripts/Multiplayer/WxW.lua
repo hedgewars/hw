@@ -1550,7 +1550,7 @@ function HandleStartingStage()
 				preMenuCfg..
 				missionComment ..
 				postMenuCfg ..
-				"", 2, 300000
+				"", 2, 9999000
 				)
 
 	menu[menuIndex].line = temp
@@ -1618,6 +1618,18 @@ function onGameTick()
 
 	end
 
+end
+
+local menuRepeatTimer = 0
+function onGameTick20()
+  -- Make sure the menu doesn't disappear while it is active
+  if roundN == 1 then
+    menuRepeatTimer = menuRepeatTimer + 20
+    if menuRepeatTimer > 9990000 then
+      HandleStartingStage()
+      menuRepeatTimer = 0
+    end
+  end
 end
 
 function onGearAdd(gear)

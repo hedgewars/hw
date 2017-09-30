@@ -587,7 +587,7 @@ function ChoiceDialog()
     loc("Press [Left] and [Right] to change the difficulty.") .. "| |" ..
     dstr .. "| |" ..
     loc("Press [Attack] to begin."),
-    0, 300000)
+    0, 9999000)
 end
 
 function SetChoice()
@@ -687,6 +687,18 @@ function onGameTick()
   end
   ExecuteAfterAnimations()
   CheckEvents()
+end
+
+local choiceDialogTimer = 0
+function onGameTick20()
+  -- Make sure the choice dialog never disappears while it is active
+  if difficultyChoice then
+    choiceDialogTimer = choiceDialogTimer + 20
+    if choiceDialogTimer > 9990000 then
+      ChoiceDialog()
+      choiceDialogTimer = 0
+    end
+  end
 end
 
 function onGearDelete(gear)

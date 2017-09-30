@@ -232,6 +232,18 @@ function onGameTick()
 	CheckEvents()
 end
 
+local choiceDialogTimer = 0
+function onGameTick20()
+  -- Make sure the choice dialog never disappears while it is active
+  if awaitingInput then
+    choiceDialogTimer = choiceDialogTimer + 20
+    if choiceDialogTimer > 9990000 then
+      ShowMission(unpack(goals[dialog01]))
+      choiceDialogTimer = 0
+    end
+  end
+end
+
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
