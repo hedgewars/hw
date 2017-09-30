@@ -195,6 +195,7 @@ function onGameStart()
 
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amRope, 2)
+		AddAmmo(hero.gear, amSkip, 0)
 		SpawnAmmoCrate(bazookaX, weaponsY, amBazooka)
 		SpawnUtilityCrate(parachuteX, weaponsY, amParachute)
 		SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
@@ -349,6 +350,7 @@ function weaponsPlatform(gear)
 		SetWind(60)
 		GameFlags = bor(GameFlags,gfDisableWind)
 		AddAmmo(hero.gear, amRope, 0)
+		AddAmmo(hero.gear, amSkip, 100)
 		if GetX(hero.gear) < 1900 then
 			AddAnim(dialog02)
 		end
@@ -368,6 +370,7 @@ end
 
 function battleZone(gear)
 	battleZoneReached = true
+	AddAmmo(hero.gear, amSkip, 100)
 	EndTurn(true)
 	if weaponsAcquired then
 		AddAnim(dialog04)

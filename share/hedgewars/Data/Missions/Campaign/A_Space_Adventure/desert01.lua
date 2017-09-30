@@ -195,6 +195,7 @@ function onGameStart()
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
 	AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
+	AddAmmo(hero.gear, amSkip, 0)
 
 	AddAnim(dialog01)
 
@@ -286,6 +287,7 @@ function onGearDelete(gear)
 		hero.dead = true
 	elseif (gear == smuggler1.gear or gear == smuggler2.gear or gear == smuggler3.gear) and heroIsInBattle then
 		heroIsInBattle = false
+		AddAmmo(hero.gear, amSkip, 0)
 		ongoingBattle = 0
 	end
 end
@@ -391,6 +393,7 @@ function heroAtFirstBattle(gear)
 	end
 	EndTurn(true)
 	heroIsInBattle = true
+	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 1
 	AnimSwitchHog(smuggler1.gear)
 	EndTurn(true)
@@ -401,6 +404,7 @@ function heroFleeFirstBattle(gear)
 	AnimSay(smuggler1.gear, loc("Run away, you coward!"), SAY_SHOUT, 4000)
 	EndTurn(true)
 	heroIsInBattle = false
+	AddAmmo(hero.gear, amSkip, 0)
 	ongoingBattle = 0
 end
 
@@ -414,6 +418,7 @@ end
 
 function heroAtThirdBattle(gear)
 	heroIsInBattle = true
+	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
 	local dx, dy = GetGearVelocity(hero.gear)
@@ -508,6 +513,7 @@ function secondBattle()
 		dy = div(dy, 3)
 	end
 	heroIsInBattle = true
+	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
