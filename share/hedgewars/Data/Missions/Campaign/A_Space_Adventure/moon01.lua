@@ -25,6 +25,8 @@ local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
 local dialog04 = {}
+local dialog05 = {}
+local dialog06 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go to the upper platform and get the weapons in the crates!"), 1, 4500},
@@ -380,7 +382,6 @@ end
 
 function professorAndMinionsDeath(gear)
 	if gameOver then return end
-	AnimCaption(hero.gear, loc("Congrats! You destroyed the enemy!"), 6000)
 	SendStat(siCustomAchievement, loc("You have eliminated the whole evil team. You're pretty tough!"))
 
 	SaveCampaignVar("ProfDiedOnMoon", "1")
@@ -395,35 +396,37 @@ function professorDeath(gear)
 	if m1h == 0 or m2h == 0 or m3h == 0 then return end
 
 	if m1h and m1h > 0 and StoppedGear(minion1.gear) then
-		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+		Dialog06Setup(minion1.gear)
 	elseif m2h and m2h > 0 and StoppedGear(minion2.gear) then
-		AnimSay(minion2.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+		Dialog06ASetup(minion2.gear)
 	elseif m3h and m3h > 0 and StoppedGear(minion3.gear) then
-		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+		Dialog06Setup(minion3.gear)
 	end
+	AddAnim(dialog06)
+end
 
-	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
+function afterDialog06()
+	EndTurn(true)
 	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
 	SendStat(siCustomAchievement, loc("You drove the minions away."))
-	DismissTeam(teamB.name)
-	AnimWait(hero.gear,5000)
-
 	SaveCampaignVar("ProfDiedOnMoon", "1")
+	victory()
+end
+
+function afterDialog05()
+	EndTurn(true)
+	HideHog(professor.gear)
+	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
+	SendStat(siCustomAchievement, loc("You drove Professor Hogevil away."))
+
+	SaveCampaignVar("ProfDiedOnMoon", "0")
 	victory()
 end
 
 function minionsDeath(gear)
 	if professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0 then return end
 	if gameOver then return end
-
-	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
-	DismissTeam(teamC.name)
-	AnimWait(hero.gear,5000)
-	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
-	SendStat(siCustomAchievement, loc("You drove Professor Hogevil away."))
-
-	SaveCampaignVar("ProfDiedOnMoon", "0")
-	victory()
+	AddAnim(dialog05)
 end
 
 -------------- ANIMATIONS ------------------
@@ -436,6 +439,14 @@ function Skipanim(anim)
 		setAfterDialog02()
 	elseif anim == dialog03 then
 		startCombat()
+	elseif anim == dialog05 then
+		runaway(professor.gear)
+		afterDialog05()
+	elseif anim == dialog06 then
+		runaway(minion1.gear)
+		runaway(minion2.gear)
+		runaway(minion3.gear)
+		afterDialog06()
 	else
 		AnimSwitchHog(hero.gear)
 	end
@@ -460,7 +471,8 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - To the weapons platform
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Checkpoint reached!"),  4000}})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 100}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Checkpoint reached!"), 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! Yeah!"), SAY_SHOUT, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {paoth1.gear, loc("Nice! Now hurry and get down! You have to rescue my friends!"), SAY_SHOUT, 7000}})
 	table.insert(dialog02, {func = setAfterDialog02, args = {}})
@@ -482,6 +494,33 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Here we go!"), SAY_THINK, 4000}})
 	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
 	table.insert(dialog04, {func = startCombat, args = {hero.gear}})
+	-- DIALOG 05 - All minions dead
+	AddSkipFunction(dialog05, Skipanim, {dialog05})
+	table.insert(dialog05, {func = AnimWait, args = {professor.gear, 1500}})
+	table.insert(dialog05, {func = AnimSay, args = {professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 5000}})
+	table.insert(dialog05, {func = runaway, args = {professor.gear}})
+	table.insert(dialog05, {func = afterDialog05, args = {professor.gear}})
+end
+
+function Dialog06Setup(livingMinion)
+	-- DIALOG 06 - Professor dead
+	AddSkipFunction(dialog06, Skipanim, {dialog06})
+	table.insert(dialog06, {func = AnimWait, args = {livingMinion, 1500}})
+	table.insert(dialog06, {func = AnimSay, args = {livingMinion, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 3000}})
+	table.insert(dialog06, {func = runaway, args = {minion1.gear}})
+	table.insert(dialog06, {func = runaway, args = {minion2.gear}})
+	table.insert(dialog06, {func = runaway, args = {minion3.gear}})
+	table.insert(dialog06, {func = afterDialog06, args = {livingMinion}})
+end
+
+function runaway(gear)
+	if GetHealth(gear) then
+		AddVisualGear(GetX(gear)-5, GetY(gear)-5, vgtSmoke, 0, false)
+		AddVisualGear(GetX(gear)+5, GetY(gear)+5, vgtSmoke, 0, false)
+		AddVisualGear(GetX(gear)-5, GetY(gear)+5, vgtSmoke, 0, false)
+		AddVisualGear(GetX(gear)+5, GetY(gear)-5, vgtSmoke, 0, false)
+		SetState(gear, bor(GetState(gear), gstInvisible))
+	end
 end
 
 ------------------- custom "animation" functions --------------------------

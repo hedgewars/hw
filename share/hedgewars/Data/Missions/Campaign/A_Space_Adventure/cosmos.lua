@@ -294,7 +294,7 @@ function onNewTurn()
 		if abandonedPlanetMission then
 			HogSay(hero.gear, loc("I just forgot all checkpoints of incomplete missions."), SAY_THINK)
 		end
-		abandonCheck = false
+		abandonCheck = true
 	end
 
 	if CurrentHedgehog == hero.gear then
