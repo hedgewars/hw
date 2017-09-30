@@ -459,7 +459,7 @@ begin
 
             if rwops = nil then
                 begin
-                s:= cPathz[Soundz[snd].AltPath] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+                s:= cPathz[Soundz[snd].AltPath] + '/' + Soundz[snd].FileName;
                 WriteToConsole(msgLoading + s + ' ... ');
                 rwops := rwopsOpenRead(s);
                 end;
