@@ -595,9 +595,9 @@ function SkipWave2Anim()
 end
 
 function SkipStartAnim()
+  ReviveNatives()
   AnimSetGearPosition(natives[waterNum], nativePos[denseNum][1] + 50, nativePos[denseNum][2])
   RestoreWave(1)
-  ReviveNatives()
   SetGearMessage(CurrentHedgehog, 0)
   SetState(CurrentHedgehog, 0)
   if m2Choice == choiceAccepted then
