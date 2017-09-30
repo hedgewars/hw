@@ -303,6 +303,7 @@ function SetupKilledAnim()
 end
 --------------------------Anim skip functions--------------------------
 function SkipStartAnim()
+  AnimSetGearPosition(native, 457, 1955)
   AnimSwitchHog(native)
   AnimWait(native, 1)
   AddFunction({func = HideHedge, args = {cyborg}})
