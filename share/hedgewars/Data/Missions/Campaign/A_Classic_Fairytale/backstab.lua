@@ -615,7 +615,10 @@ function AfterStartAnim()
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
   AddEvent(CheckChoiceRefuse, {}, DoChoiceRefuse, {}, 0)
-  ShowMission(loc("Backstab"), loc("Judas"), loc("Kill the traitor...or spare his life!|Kill him or press [Precise]!"), 1, 8000)
+  ShowMission(loc("Backstab"), loc("Judas"),
+    string.format(loc("Kill the traitor, %s, or spare his life!"), GetHogName(spyHog)) .. "|" ..
+    loc("Kill him or skip your turn."),
+    1, 8000)
 end
 
 -----------------------------Events------------------------------------
@@ -1106,7 +1109,10 @@ function onPrecise()
     SetAnimSkip(true)
     return
   end
-  if stage == spyKillStage then
+end
+
+function onHogAttack(ammoType)
+  if stage == spyKillStage and ammoType == amSkip then
     highJumped = true
   end
 end

@@ -177,6 +177,7 @@ Other Game Styles:
 
 A Classic Fairytale:
  + Mission 4: Add infinite skip
+ + Mission 5: Spare traitor's life with Skip instead of Precise
  + Mission 6: Add alternate dialogues when killing cyborgs before collecting the crates
  + All missions: Clarify mine timers
  * Mission 1: Leaf of faith: Hog was able to walk to the right and get stuck
