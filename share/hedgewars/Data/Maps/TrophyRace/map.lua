@@ -168,9 +168,9 @@ function onGameTick()
                     --Place a grenade to make inactive slowest hog active
                     x, y = GetGearPosition(worsthog)
                     AddGear(x, y, gtShell, 0, 0, 0, 0)
-                    worsttime = 0
-                    worsthog = nil
                 end
+                worsttime = 0
+                worsthog = nil
             end
             
             for i=0, ClansCount -1 do
