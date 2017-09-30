@@ -23,6 +23,7 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Bad timing")
 local chooseToBattle = false
+local awaitingInput = false
 local previousHog = 0
 local heroPlayedFirstTurn = false
 local startBattleCalled = false
@@ -30,11 +31,18 @@ local startBattleCalled = false
 local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
+
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer."), 1, 7000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight! Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 7000},
-	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee ... Unfortunately, the only place where you can launch your saucer is the left-most place on the map."), 1, 7000},
+	[dialog01] = {missionName, loc("Ready for Battle?"),
+		loc("Captain Lime offered his help if you assist him in battle.").."|"..
+		loc("What do you want to do?").."| |"..
+		loc("Fight: Press [Left]").."|"..
+		loc("Flee: Press [Right]"), 1, 9999000},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 7000},
+	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 7000},
+	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 1500},
+	["flee"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to flee."), 1, 1500},
 }
 -- crates
 local crateWMX = 2170
@@ -152,11 +160,11 @@ function onGameInit()
 end
 
 function onGameStart()
+	AnimSetInputMask(0)
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
-	AddEvent(onHeroSelect, {hero.gear}, heroSelect, {hero.gear}, 0)
 
 	-- Green team weapons
 	local greenArmy = { green1, green2 }
@@ -309,13 +317,6 @@ function onEscapeWin(gear)
 	return escape
 end
 
-function onHeroSelect(gear)
-	if GetX(hero.gear) ~= hero.x then
-		return true
-	end
-	return false
-end
-
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
@@ -344,16 +345,17 @@ function escapeWin(gear)
 	EndGame()
 end
 
-function heroSelect(gear)
-	EndTurn(true)
+function heroSelect()
+	awaitingInput = false
 	FollowGear(hero.gear)
-	if GetX(hero.gear) < hero.x then
+	if chooseToBattle == true then
 		chooseToBattle = true
+		ShowMission(unpack(goals["fight"]))
 		AddEvent(onGreen1Death, {green1.gear}, green1Death, {green1.gear}, 0)
 		AddEvent(onBattleWin, {hero.gear}, battleWin, {hero.gear}, 0)
 		AddAnim(dialog02)
-	elseif GetX(hero.gear) > hero.x then
-		HogTurnLeft(hero.gear, true)
+	else
+		ShowMission(unpack(goals["flee"]))
 		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
 		local greenTeam = { green2, green3, green4, green5 }
@@ -366,12 +368,17 @@ end
 
 -------------- ANIMATIONS ------------------
 
+function AfterDialog01()
+	AnimSwitchHog(hero.gear)
+	awaitingInput = true
+end
+
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
 	end
 	if anim == dialog01 then
-		AnimSwitchHog(hero.gear)
+		AfterDialog01()
 	elseif anim == dialog02 or anim == dialog03 then
 		startBattle()
 	end
@@ -380,7 +387,7 @@ end
 function AnimationSetup()
 	-- DIALOG 01 - Start, Captain Lime talks explains to Hog Solo
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 1000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Fruits a terrible war is about to begin ..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I was told that as the leader of the king's guard, no one knows this world better than you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help."), SAY_SAY, 3000}})
@@ -393,10 +400,10 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
-	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
+	table.insert(dialog01, {func = AfterDialog01, args = {}})
 	-- DIALOG 02 - Hero selects to fight
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
-	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 3000}})
+	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 400}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You choose well, Hog Solo!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As you are more experienced, I want you to lead them to battle."), SAY_SAY, 4000}})
@@ -412,7 +419,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
 	-- DIALOG 03 - Hero selects to flee
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
-	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 3000}})
+	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 400}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Too bad! Then you should really leave!"), SAY_SAY, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Things are going to get messy around here."), SAY_SAY, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place where you can fly is the left-most part of this area."), SAY_SAY, 5000}})
@@ -426,6 +433,7 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function startBattle()
+	AnimSetInputMask(0xFFFFFFFF)
 	-- Hog Solo weapons
 	AddAmmo(hero.gear, amRope, 2)
 	AddAmmo(hero.gear, amBazooka, 3)
@@ -487,4 +495,23 @@ function saveVariables()
 	SaveCampaignVar("Mission2", "3")
 	SaveCampaignVar("Mission3", "10")
 	SaveCampaignVar("Mission4", "1")
+end
+
+
+function onRight()
+	if awaitingInput then
+		PlaySound(sndPlaced)
+		PlaySound(sndCoward, green1.gear)
+		chooseToBattle = false
+		heroSelect()
+	end
+end
+
+function onLeft()
+	if awaitingInput then
+		PlaySound(sndPlaced)
+		PlaySound(sndYesSir, hero.gear)
+		chooseToBattle = true
+		heroSelect()
+	end
 end
