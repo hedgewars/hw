@@ -339,16 +339,24 @@ end
 -------------- ACTIONS ------------------
 
 function weaponsPlatform(gear)
-	saveCheckpoint("2")
-	SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
-	EndTurn(true)
-	weaponsAcquired = true
-	SetWind(60)
-	GameFlags = bor(GameFlags,gfDisableWind)
-	AddAmmo(hero.gear, amRope, 0)
-	if GetX(hero.gear) < 1900 then
-		AddAnim(dialog02)
+	if not battleZoneReached then
+		-- Player entered weapons platform before entering battle zone.
+		-- Checkpoint and dialog!
+		saveCheckpoint("2")
+		SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
+		EndTurn(true)
+		weaponsAcquired = true
+		SetWind(60)
+		GameFlags = bor(GameFlags,gfDisableWind)
+		AddAmmo(hero.gear, amRope, 0)
+		if GetX(hero.gear) < 1900 then
+			AddAnim(dialog02)
+		end
 	end
+	-- The player may screw up by going into the battle zone too early (dialog03).
+	-- In that case, the player is punished for this stupid move (no checkpoint),
+	-- but it is still theoretically possible to win by going for the weapons
+	-- very fast.
 end
 
 function heroDeath(gear)
