@@ -324,10 +324,14 @@ begin
     if not (isSoundEnabled or isMusicEnabled) then
         exit;
     WriteToConsole('Init sound...');
-    success:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
+    success:= SDL_InitSubSystem(SDL_INIT_AUDIO) = 0;
 
     if success then
+        begin
+        WriteLnToConsole(msgOK);
+        WriteToConsole('Open audio...');
         success:= Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, channels, 1024) = 0;
+        end;
 
     if success then
         WriteLnToConsole(msgOK)
