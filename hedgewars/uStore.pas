@@ -370,9 +370,7 @@ if (not cOnlyStats) then
 end;
 
 procedure StoreLoad(reload: boolean);
-var s: shortstring;
-    ii: TSprite;
-    fi: THWFont;
+var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
     i, imflags: LongInt;

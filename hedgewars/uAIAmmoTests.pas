@@ -254,7 +254,7 @@ end;
 function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, j: LongInt;
     valueResult, v, a, p: LongInt;
-    mX, mY, dX: real;
+    mX, mY: real;
     eX, eY: LongInt;
 begin
     if Level > 1 then

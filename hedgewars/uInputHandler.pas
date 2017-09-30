@@ -30,7 +30,8 @@ function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
-procedure ProcessMouseWheel(x, y: LongInt);
+//procedure ProcessMouseWheel(x, y: LongInt);
+procedure ProcessMouseWheel(y: LongInt);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 
@@ -232,8 +233,10 @@ end;
 
 var mwheelupCode, mwheeldownCode: Integer;
 
-procedure ProcessMouseWheel(x, y: LongInt);
+//procedure ProcessMouseWheel(x, y: LongInt);
+procedure ProcessMouseWheel(y: LongInt);
 begin
+    // we don't use 
     //writelntoconsole('[MOUSEWHEEL] '+inttostr(x)+', '+inttostr(y));
     if y > 0 then
         begin

@@ -742,7 +742,6 @@ procedure ResurrectHedgehog(var gear: PGear);
 var tempTeam : PTeam;
     sparkles: PVisualGear;
     gX, gY: LongInt;
-    s: ansistring;
 begin
     if (Gear^.LastDamage <> nil) then
         uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
@@ -779,7 +778,6 @@ begin
         AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
         PlaySound(sndWarp);
         RenderHealth(gear^.Hedgehog^);
-        s:= ansistring(gear^.Hedgehog^.Name);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
         end;

@@ -243,7 +243,8 @@ begin
                 SDL_MOUSEWHEEL:
                     begin
                     wheelEvent:= true;
-                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    //ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    ProcessMouseWheel(event.wheel.y);
                     end;
 {$ENDIF}
 

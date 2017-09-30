@@ -164,6 +164,7 @@ Assign(f, image^.filename);
 Rewrite(f, 1);
 if IOResult = 0 then
     begin
+    writeResult:= 0; // suppress fpc hint
     BlockWrite(f, head, sizeof(head), writeResult);
     BlockWrite(f, image^.buffer^, size, writeResult);
     Close(f);
