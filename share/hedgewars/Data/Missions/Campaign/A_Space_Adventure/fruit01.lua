@@ -37,8 +37,8 @@ local goals = {
 	[dialog01] = {missionName, loc("Ready for Battle?"),
 		loc("Captain Lime offered his help if you assist him in battle.").."|"..
 		loc("What do you want to do?").."| |"..
-		loc("Fight: Press [Left]").."|"..
-		loc("Flee: Press [Right]"), 1, 9999000},
+		loc("Fight: Press [Attack]").."|"..
+		loc("Flee: Press [Jump]"), 1, 9999000},
 	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 5000},
 	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 5000},
 	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 2000},
@@ -517,7 +517,7 @@ function saveVariables()
 end
 
 
-function onRight()
+function onLJump()
 	if awaitingInput then
 		PlaySound(sndPlaced)
 		PlaySound(sndCoward, green1.gear)
@@ -525,11 +525,11 @@ function onRight()
 		heroSelect()
 	end
 end
+onHJump = onLJump
 
-function onLeft()
+function onAttack()
 	if awaitingInput then
 		PlaySound(sndPlaced)
-		PlaySound(sndYesSir, hero.gear)
 		chooseToBattle = true
 		heroSelect()
 	end

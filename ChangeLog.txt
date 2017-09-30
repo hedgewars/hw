@@ -209,6 +209,7 @@ A Space Adventure:
  + Side missions: Generous ready time to give more time to read the mission panel
  + Getting to the device: Put device part in a real crate, improve some dialogues
  + Final mission: Add outro sequence instead of instantly quitting
+ + Bad timing: Improve messaging and choice dialog
  * Spacetrip: Fix various bugs and logic flaws in the initial mission
  * A frozen adventure: Fix bazooka and excess freezers (>6) not retained over checkpoints
  * A frozen adventure: Fix and improve poorly written messages
