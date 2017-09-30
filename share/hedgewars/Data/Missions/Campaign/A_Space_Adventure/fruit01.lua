@@ -39,10 +39,11 @@ local goals = {
 		loc("What do you want to do?").."| |"..
 		loc("Fight: Press [Left]").."|"..
 		loc("Flee: Press [Right]"), 1, 9999000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 7000},
-	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 7000},
-	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 1500},
-	["flee"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to flee."), 1, 1500},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 5000},
+	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 5000},
+	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 2000},
+	["flee"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to flee."), 1, 2000},
+	["flee_final"] = {missionName, loc("Time to run!"), loc("Knock off the enemies from the left-most place of the map!") .. "|" .. loc("Stay there to flee!"), 1, 6000},
 }
 -- crates
 local crateWMX = 2170
@@ -302,17 +303,35 @@ function onBattleWin(gear)
 	return win
 end
 
+function isHeroOnLaunchPad()
+	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear) > 1980 and StoppedGear(hero.gear) then
+		return true
+	end
+	return false
+end
+
+function isLaunchPadEmpty(gear)
+	local yellowTeam = { yellow1, unpack(yellowArmy) }
+	for i=1, #yellowArmy+1 do
+		if not yellowTeam[i].hidden and GetHealth(yellowTeam[i].gear) and GetX(yellowTeam[i].gear) < 170 then
+			return false
+		end
+	end
+	return true
+end
+
+function onHeroOnLaunchPadWithEnemies()
+	return isHeroOnLaunchPad() and not isLaunchPadEmpty()
+end
+
+function heroOnLaunchPadWithEnemies()
+	ShowMission(unpack(goals["flee_final"]))
+end
+
 function onEscapeWin(gear)
 	local escape = false
-	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear) > 1980 and StoppedGear(hero.gear) then
-		escape = true
-		local yellowTeam = { yellow1, unpack(yellowArmy) }
-		for i=1,8 do
-			if not yellowTeam[i].hidden and GetHealth(yellowTeam[i].gear) and GetX(yellowTeam[i].gear) < 170 then
-				escape = false
-				break
-			end
-		end
+	if isHeroOnLaunchPad() then
+		escape = isLaunchPadEmpty()
 	end
 	return escape
 end
@@ -337,6 +356,7 @@ function battleWin(gear)
 end
 
 function escapeWin(gear)
+	RemoveEventFunc(heroOnLaunchPadWithEnemies)
 	-- add stats
 	saveVariables()
 	SendStat(siGameResult, loc("Hog Solo escaped successfully!"))
@@ -357,6 +377,7 @@ function heroSelect()
 	else
 		ShowMission(unpack(goals["flee"]))
 		AddAmmo(green1.gear, amSwitch, 100)
+		AddEvent(onHeroOnLaunchPadWithEnemies, {hero.gear}, heroOnLaunchPadWithEnemies, {hero.gear}, 0)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
 		local greenTeam = { green2, green3, green4, green5 }
 		for i=1,4 do
@@ -403,7 +424,6 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AfterDialog01, args = {}})
 	-- DIALOG 02 - Hero selects to fight
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
-	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 400}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You choose well, Hog Solo!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As you are more experienced, I want you to lead them to battle."), SAY_SAY, 4000}})
@@ -419,7 +439,6 @@ function AnimationSetup()
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
 	-- DIALOG 03 - Hero selects to flee
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
-	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 400}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Too bad! Then you should really leave!"), SAY_SAY, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Things are going to get messy around here."), SAY_SAY, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place where you can fly is the left-most part of this area."), SAY_SAY, 5000}})
