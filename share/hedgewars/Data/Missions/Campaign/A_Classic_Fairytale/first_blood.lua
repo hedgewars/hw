@@ -586,7 +586,7 @@ function ChoiceDialog()
     loc("Your next task is to collect some crates by using the rope!") .. "|" ..
     loc("Press [Left] and [Right] to change the difficulty.") .. "| |" ..
     dstr .. "| |" ..
-    loc("Press [Jump] to begin."),
+    loc("Press [Attack] to begin."),
     0, 300000)
 end
 
@@ -786,9 +786,8 @@ function onLeft()
 end
 onRight = onLeft
 
-function onLJump()
+function onAttack()
   if difficultyChoice == true then
     DoChoice()
   end
 end
-onHJump = onLJump
