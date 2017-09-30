@@ -536,6 +536,7 @@ end;
 
 function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 begin
+at:= at; dir:= dir; angle:= angle; // parameter hint suppression because code below is currently disabled
 GetLaunchX:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
@@ -546,6 +547,7 @@ end;
 
 function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 begin
+at:= at; angle:= angle; // parameter hint suppression because code below is currently disabled
 GetLaunchY:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then

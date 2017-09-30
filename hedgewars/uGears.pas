@@ -53,7 +53,7 @@ implementation
 uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
-    uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug,
+    uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
     , uVisualGearsList, uGearsHandlersMess, uAI;
 

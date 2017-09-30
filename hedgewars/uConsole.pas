@@ -28,7 +28,7 @@ procedure WriteLnToConsole(s: shortstring);
 var lastConsoleline : shortstring;
 
 implementation
-uses Types, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
+uses uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
 
 procedure WriteToConsole(s: shortstring);

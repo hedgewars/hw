@@ -79,6 +79,7 @@ end;
 
 procedure PngFlushData(png_ptr: png_structp); cdecl;
 begin
+    png_ptr:= png_ptr;
 end;
 
 procedure png_init_pascal_io(png_ptr: png_structp; pf : PFile);

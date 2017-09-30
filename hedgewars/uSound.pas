@@ -110,7 +110,7 @@ var MusicFN: shortstring; // music file name
 var Volume: LongInt;
     SoundTimerTicks: Longword;
 implementation
-uses uVariables, uConsole, uCommands, uChat, uUtils, uDebug, uPhysFSLayer;
+uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
 
 const chanTPU = 32;
 var cInitVolume: LongInt;

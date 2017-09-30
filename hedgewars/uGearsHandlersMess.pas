@@ -2019,7 +2019,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDynamite(Gear: PGear);
-var VGear: PVisualGear;
 begin
     doStepFallingGear(Gear);
     AllInactive := false;
@@ -2121,7 +2120,6 @@ var
     dX, dY: HWFloat;
     hog: PHedgehog;
     sparkles: PVisualGear;
-    gi: PGear;
 begin
     k := Gear^.Kind;
 
@@ -5311,7 +5309,7 @@ end;
 procedure doStepHammer(Gear: PGear);
 var HHGear, tmp, tmp2: PGear;
          t: PGearArray;
- i, dmg, d: LongInt;
+    i, dmg: LongInt;
 begin
 HHGear:= Gear^.Hedgehog^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;

@@ -2088,7 +2088,7 @@ begin
 end;
 
 function lc_getteamstats(L : Plua_State) : LongInt; Cdecl;
-var i, h  : LongInt;
+var i: LongInt;
 begin
     if CheckLuaParamCount(L, 1, 'GetTeamStats', 'teamname') then
         begin

@@ -67,8 +67,7 @@ type TFrame = record
                   zoom: single;
               end;
 
-var YCbCr_Planes: array[0..2] of PByte;
-    RGB_Buffer: PByte;
+var RGB_Buffer: PByte;
     cameraFile: File of TFrame;
     audioFile: File;
     numPixels: LongWord;
