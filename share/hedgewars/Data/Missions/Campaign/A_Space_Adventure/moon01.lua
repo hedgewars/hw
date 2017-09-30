@@ -247,7 +247,7 @@ function onNewTurn()
 			TurnTimeLeft = -1
 		end
 	elseif CurrentHedgehog == minion1.gear or CurrentHedgehog == minion2.gear or CurrentHedgehog == minion3.gear then
-		if not weaponsAcquired and not battleZoneReached then
+		if not battleZoneReached then
 			EndTurn(true)
 		elseif weaponsAcquired and not battleZoneReached and afterDialog02 then
 			battleZone(hero.gear)
@@ -256,7 +256,11 @@ function onNewTurn()
 		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
 		EndTurn(true)
 	elseif CurrentHedgehog == professor.gear then
-		EndTurn(true)
+		if weaponsAcquired and not battleZoneReached and afterDialog02 then
+			battleZone(hero.gear)
+		else
+			EndTurn(true)
+		end
 	end
 end
 
@@ -292,7 +296,8 @@ function onHeroDeath(gear)
 end
 
 function onBattleZone(gear)
-	if not battleZoneReached and not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
+	if not battleZoneReached and not hero.dead and StoppedGear(gear) and
+			(GetX(gear) > 1900 or (weaponsAcquired and GetY(gear) > 1200)) then
 		return true
 	end
 	return false
@@ -354,8 +359,8 @@ function heroDeath(gear)
 end
 
 function battleZone(gear)
-	EndTurn(true)
 	battleZoneReached = true
+	EndTurn(true)
 	if weaponsAcquired then
 		AddAnim(dialog04)
 	else
@@ -435,9 +440,12 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
 	end
-	if anim == dialog02 then
+	if anim == dialog01 then
+		AnimSwitchHog(hero.gear)
+	elseif anim == dialog02 then
 		setAfterDialog02()
-	elseif anim == dialog03 then
+		AnimSwitchHog(hero.gear)
+	elseif anim == dialog03 or anim == dialog04 then
 		startCombat()
 	elseif anim == dialog05 then
 		runaway(professor.gear)
@@ -447,8 +455,6 @@ function Skipanim(anim)
 		runaway(minion2.gear)
 		runaway(minion3.gear)
 		afterDialog06()
-	else
-		AnimSwitchHog(hero.gear)
 	end
 end
 
