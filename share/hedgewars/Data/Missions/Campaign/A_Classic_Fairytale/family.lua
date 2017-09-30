@@ -96,6 +96,7 @@ hedgeHidden = {}
 
 startAnim = {}
 midAnim = {}
+princessFreedAnim = {}
 
 freshDead = nil
 crates = {}
@@ -179,6 +180,10 @@ function AnimationSetup()
   table.insert(midAnim, {func = AnimTeleportGear, args = {natives[1], unpack(nativeMidPos2)}})
   table.insert(midAnim, {func = AnimSay, args = {natives[1], loc("Why can't he just let her go?!"), SAY_THINK, 5000}})
   AddSkipFunction(midAnim, SkipMidAnim, {})
+
+  table.insert(princessFreedAnim, {func = AnimSay, args = {princess, loc("Thank you, my hero!"), SAY_SAY, 4000}})
+  table.insert(princessFreedAnim, {func = Victory, args = {}})
+  AddSkipFunction(princessFreedAnim, SkipPrincessFreedAnim, {})
 end
 
 --------------------------Anim skip functions--------------------------
@@ -192,7 +197,11 @@ function AfterMidAnim()
   vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
-  
+
+function SkipPrincessFreedAnim()
+  Victory()
+end
+
 function SkipMidAnim()
   AnimTeleportGear(natives[1], unpack(nativeMidPos2))
   SkipStartAnim()
@@ -285,13 +294,18 @@ function CheckPrincessFreed()
 end
 
 function DoPrincessFreed()
-  AnimSay(princess, loc("Thank you, my hero!"), SAY_SAY, 0)
-  if progress and progress<7 then
-    SaveCampaignVar("Progress", "7")
+  AddAnim(princessFreedAnim)
+end
+
+function Victory()
+  if not princessFreed then
+    if progress and progress<7 then
+      SaveCampaignVar("Progress", "7")
+    end
+    princessFreed = true
+    DismissTeam(loc("011101001"))
+    EndTurn(true)
   end
-  princessFreed = true
-  DismissTeam(loc("011101001"))
-  EndTurn(true)
 end
 
 function CheckCyborgsDead()
