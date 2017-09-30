@@ -248,7 +248,7 @@ function CheckNeedToTurn(gear)
 end
 
 function DoNeedToTurn(gear)
-  if gear == princess then
+  if gear == princess and not princessDamaged then
     if GetX(princess) > GetX(youngh) then
       HogTurnLeft(princess, true)
       princessFace = "Left"
@@ -256,7 +256,7 @@ function DoNeedToTurn(gear)
       HogTurnLeft(princess, false)
       princessFace = "Right"
     end
-  else
+  elseif gear == elderh and not elderDamaged then
     if GetX(elderh) > GetX(youngh) then
       HogTurnLeft(elderh, true)
       elderFace = "Left"
