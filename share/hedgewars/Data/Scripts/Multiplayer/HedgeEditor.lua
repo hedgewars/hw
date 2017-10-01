@@ -2697,7 +2697,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", 2, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2718,7 +2718,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 2, 60000
+				"", -amAirAttack, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2733,7 +2733,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 3, 60000
+				"", 0, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
@@ -2777,7 +2777,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 3, 60000
+				"", 2, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
