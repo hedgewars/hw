@@ -818,7 +818,9 @@ function onWeaponCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+    if IsHogLocal(CurHog) then
+      AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+    end
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 2 * strength
@@ -844,12 +846,12 @@ function onWeaponCratePickup()
     randAmmo = possibleWeapons[randIndex]
   end
 
-  AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
-
   AddAmmo(CurHog, randAmmo, GetAmmoCount(CurHog, randAmmo) +factor)
-  local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-  SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmo, nil, nil, nil, msgColor)
+  if IsHogLocal(CurHog) then
+    AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
+    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
+    SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmo, nil, nil, nil, msgColor)
+  end
 end
 --[[
  : Adds either 1 (95% chance) or 2 (5% chance) random helper(s) based on the hog variant.
@@ -862,7 +864,9 @@ function onUtilityCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+    if IsHogLocal(CurHog) then
+      AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+    end
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 2 * strength
@@ -885,12 +889,12 @@ function onUtilityCratePickup()
     randUtility = possibleHelpers[randIndex]
   end
   
-  AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
-
   AddAmmo(CurHog, randUtility, GetAmmoCount(CurHog, randUtility) +factor)
-  local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-  SetVisualGearValues(effect, nil, nil, nil, nil, nil, randUtility, nil, nil, nil, msgColor)
+  if IsHogLocal(CurHog) then
+    AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
+    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
+    SetVisualGearValues(effect, nil, nil, nil, nil, nil, randUtility, nil, nil, nil, msgColor)
+  end
 end
 
 function onPickupCrate(crate)
@@ -1112,9 +1116,10 @@ function onHighlandKill(gear)
 
         AddAmmo(CurHog, randAmmoType, GetAmmoCount(CurHog, randAmmoType) +1)
 
-        local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) + (cratePickupGap * i), vgtAmmo, 0, true)
-        -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-        SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmoType, nil, nil, nil, nil)
+        if IsHogLocal(CurHog) then
+           local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) + (cratePickupGap * i), vgtAmmo, 0, true)
+           SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmoType, nil, nil, nil, nil)
+        end
 
         i = i +1
       end
