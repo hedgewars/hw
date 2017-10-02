@@ -50,4 +50,7 @@ At the end of the final team, this line must be written (without the spaces):
 
 Everything after that will be ignored.
 
+The first team entry is special: The team names of this entry are considered
+to be generic and fit (more or less) and don't have any particular theme.
+
 This file must be present at all costs!

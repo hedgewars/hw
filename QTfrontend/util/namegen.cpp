@@ -75,8 +75,6 @@ void HWNamegen::teamRandomEverything(HWTeam & team)
     // the hat will influence which names the hogs get
     int kind = (rand()%(TypesHatnames.size()));
 
-    // pick team name based on hat
-    team.setName(getRandomTeamName(kind));
     team.setGrave(getRandomGrave());
     team.setFort(getRandomFort());
     team.setFlag(getRandomFlag());
@@ -136,6 +134,14 @@ void HWNamegen::teamRandomEverything(HWTeam & team)
         // give each hedgehog a random name
         HWNamegen::teamRandomHogName(team,i,dict);
     }
+
+    // If using themed hats, use themed team name.
+    // Otherwise, only use “generic” team names from the first team
+    // in types.txt.
+    if (randomMode == 0)
+        team.setName(getRandomTeamName(kind));
+    else
+        team.setName(getRandomTeamName(0));
 
 }
 
