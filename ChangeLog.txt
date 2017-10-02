@@ -253,7 +253,7 @@ Frontend:
  + Additional button for just randomizing theme that will not change your selected map
  + Randomizing map/theme in online-mode will not include DLC-content
  + New teams start with a random grave and fort
- + Hedgewars creates 5 human teams and 5 computer teams on its first launch
+ + Hedgewars creates 4 human teams and 2 computer teams on its first launch
  + Allow to randomize hog names, hats, team name, flag, grave, voice and fort separately
  + “Random team” button is now able to randomly select from all available hats
  * Fix flag being selectable for computer players although it had no effect

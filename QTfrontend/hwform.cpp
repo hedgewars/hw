@@ -462,7 +462,7 @@ void HWForm::UpdateTeamsLists()
         QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8();
         QString teamName;
         int firstHumanTeam = 1;
-        int lastHumanTeam = 5;
+        int lastHumanTeam = 4;
 
         // Default team
         if (currentNickName.isEmpty())
@@ -487,7 +487,7 @@ void HWForm::UpdateTeamsLists()
 
         // Add additional default teams
 
-        // 4 human teams to allow local multiplayer instantly
+        // More human teams to allow local multiplayer instantly
         for(int i=firstHumanTeam; i<=lastHumanTeam; i++)
         {
             //: Default team name
@@ -498,8 +498,8 @@ void HWForm::UpdateTeamsLists()
             numberTeam.saveToFile();
             teamslist.push_back(teamName);
         }
-        // Add default CPU teams for each level
-        for(int i=1; i<=5; i++)
+        // Add 2 default CPU teams
+        for(int i=2; i<=5; i=i+2)
         {
             //: Default computer team name
             teamName = tr("Computer %1").arg(i);
