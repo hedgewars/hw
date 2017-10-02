@@ -22,35 +22,35 @@ A_Classic_Fairytale-family.name="7. Mission: Familientreffen"
 A_Classic_Fairytale-family.desc="Undichte Stelle muss erneut seine Freunde retten. Eliminiere die feindlichen Igel und befreie deine Kameraden. Benutze deine Ressourcen vorsichtig, weil sie begrenzt sind. Bohr ein paar Löcher an den richtigen Stellen und nähere dich der Prinzessin."
 
 A_Classic_Fairytale-queen.name="8. Mission: Lang lebe die Königin"
-A_Classic_Fairytale-queen.desc="Undichte Stelle muss noch einmal kämpfen. Um zu gewinnen, muss er den Veräräter bekämpfen und alle verfügbaren Ressourcen benutzen. Besieg den Feind!"
+A_Classic_Fairytale-queen.desc="Undichte Stelle muss noch einmal kämpfen. Um zu gewinnen, muss er den Verräter bekämpfen und alle verfügbaren Ressourcen benutzen. Besieg den Feind!"
 
 A_Classic_Fairytale-enemy.name="9. Mission: Der Feind meines Feindes"
 A_Classic_Fairytale-enemy.desc="Was für eine umwerfende Wendung! Undichte Stelle muss mit den … »Kannibalen« gegen den gemeinsamen Feind – die bösen Cyborgs – kämpfen!"
 
 A_Classic_Fairytale-epil.name="10. Mission: Epilog"
-A_Classic_Fairytale-epil.desc="Gratulation! Undichte Stelle kann endlich in Frieden gehen und von seinen neuen Freunden und seinem Stamm angepriesen werden. Sei stolz auf das, was du erreicht hast! Du kannst vorherige Missionen wieder spielen und andere mögliche Enden sehen."
+A_Classic_Fairytale-epil.desc="Gratulation! Undichte Stelle kann endlich in Frieden leben und von seinen neuen Freunden und seinem Stamm angepriesen werden. Sei stolz auf das, was du erreicht hast! Du kannst vorherige Missionen wieder spielen und andere mögliche Enden sehen."
 
 A_Space_Adventure.name="Ein Weltraumabenteuer"
 
 A_Space_Adventure-cosmos.name="Menü: Weltraumreise"
-A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteroid getroffen. In diesem Wettlauf ums Überleben musst du PAdIs besten Piloten, Igel Einsam, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teil des lang verschollenem Antigravitationsgeräts zu finden!"
+A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteorit getroffen. In diesem Wettlauf ums Überleben musst du PAdIs besten Piloten, Igel Einsam, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teile des lang verschollenem Antigravitationsgeräts zu finden!"
 
 A_Space_Adventure-moon01.name="Hauptmission: Der erste Halt"
 A_Space_Adventure-moon01.desc="Igel Einsam ist auf dem Mond gelandet, um seine fliegende Untertasse aufzutanken, aber Prof. Bösigel war zuerst da und hat einen Hinterhalt aufgestellt! Rette die gefangenen PAdI-Forscher und verscheuche Prof. Bösigel!"
 
-A_Space_Adventure-moon02.name="Nebenmission: Jag' den blauen Igel"
+A_Space_Adventure-moon02.name="Nebenmission: Jag den blauen Igel"
 A_Space_Adventure-moon02.desc="Igel Einsam besucht einen Eremiten, einen alten PAdI-Veteran, der im Mond lebt, um Prof. Bösigel auszuspionieren. Allerdings muss er den Eremiten, Verrückter Renner, zuerst in einem Wettlauf besiegen!"
 
 A_Space_Adventure-ice01.name="Hauptmission: Ein frostiges Abenteuer"
 A_Space_Adventure-ice01.desc="Willkommen auf dem Planeten des Eises. Hier ist es so kalt, dass die meisten Waffen von Igel Einsam nicht funktionieren werden. Du musst dir das verlorene Teil von dem Banditenanführer Thanta ergattern, indem du die Waffen, die du hier findest, verwendest!"
 
 A_Space_Adventure-ice02.name="Nebenmission: Schwerer Flug"
-A_Space_Adventure-ice02.desc="Igel Einsam konnt nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
+A_Space_Adventure-ice02.desc="Igel Einsam konnte nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
 
 A_Space_Adventure-desert01.name="Hauptmission: Suche im Staub"
 A_Space_Adventure-desert01.desc="Du must auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Berkwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
 
-A_Space_Adventure-desert02.name="Nebenmission: Ums Überleben laufen"
+A_Space_Adventure-desert02.name="Nebenmission: Lauf um dein Leben"
 A_Space_Adventure-desert02.desc="Igel Einsam suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
 
 A_Space_Adventure-desert03.name="Nebenmission: Präzisionsfliegen"
@@ -71,5 +71,5 @@ A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten i
 A_Space_Adventure-death02.name="Nebenmission: Die Spezialisten töten"
 A_Space_Adventure-death02.desc="Igel Einsam ist wieder in eine schwierige Situation geraten. Hilf ihm, die »5 tödlichen Igel« in ihrem eigenem Spiel zu besiegen!"
 
-A_Space_Adventure-final.name="Hauptmission: Der Urknall"
+A_Space_Adventure-final.name="Hauptmission: Der große Knall"
 A_Space_Adventure-final.desc="Igel Einsam muss ein paar Sprengkörper, die auf dem Meteriot platziert wurden, detonieren. Hilf ihm, diese Mission zu beenden, ohne verletzt zu werden!"

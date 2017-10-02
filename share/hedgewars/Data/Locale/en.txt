@@ -476,7 +476,7 @@
 02:05=You can't get healthy enough
 02:05=Healthy enough? Still not a problem
 02:05=The secret of immortality
-02:05=Almost like 1-UP
+02:05=Almost like an extra life
 
 ; New ammo crate
 02:06=More weapons!

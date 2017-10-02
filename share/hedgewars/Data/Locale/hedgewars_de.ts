@@ -165,15 +165,23 @@
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation>Bitte leg %1 fest</translation>
+        <translation type="vanished">Bitte leg %1 fest</translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation>Spitzname</translation>
+        <translation type="vanished">Spitzname</translation>
     </message>
     <message>
         <source>permanent</source>
         <translation>Permanent</translation>
+    </message>
+    <message>
+        <source>Please specify an IP address.</source>
+        <translation>Please specify an IP address.</translation>
+    </message>
+    <message>
+        <source>Please specify a nickname.</source>
+        <translation>Please specify a nickname.</translation>
     </message>
 </context>
 <context>
@@ -589,13 +597,20 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Team %1</source>
+        <extracomment>Default team name</extracomment>
         <translation>Team %1</translation>
+    </message>
+    <message>
+        <source>Computer %1</source>
+        <extracomment>Default computer team name</extracomment>
+        <translation>Computer %1</translation>
     </message>
 </context>
 <context>
     <name>HWGame</name>
     <message>
         <source>en.txt</source>
+        <extracomment>IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.</extracomment>
         <translation>de.txt</translation>
     </message>
     <message>
@@ -1176,7 +1191,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Open the directory in which the downloaded files are stored in your system</source>
-        <translation>Verzeichnis, in dem sich die heruntergeladenen Dateien in deinem System befinden, öffnen</translation>
+        <translation type="vanished">Verzeichnis, in dem sich die heruntergeladenen Dateien in deinem System befinden, öffnen</translation>
     </message>
 </context>
 <context>
@@ -1310,6 +1325,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>CPU %1</source>
+        <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
         <translation>CPU %1</translation>
     </message>
 </context>
@@ -1350,6 +1366,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
+        <extracomment>Number of kills in stats screen, written after the team name</extracomment>
         <translation>
             <numerusform>(%1 Opfer)</numerusform>
             <numerusform>(%1 Opfer)</numerusform>
@@ -1357,14 +1374,14 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkt zu verletzen.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
         </translation>
@@ -1386,9 +1403,24 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
+        <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
         <translation>
             <numerusform>(%1 %2)</numerusform>
             <numerusform>(%1 %2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkt zu verletzen.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; der eigenen Igel.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; der eigenen Igel.</numerusform>
         </translation>
     </message>
 </context>
@@ -1711,6 +1743,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>You can&apos;t delete the last team!</source>
         <translation>Du kannst das letzte Team nicht löschen!</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
+        <translation>×</translation>
+    </message>
+    <message>
+        <source>Check now</source>
+        <translation>Jetzt überprüfen</translation>
     </message>
 </context>
 <context>
@@ -2934,19 +2975,19 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation>Aufnahmewiedergabe - Fehler</translation>
+        <translation type="vanished">Aufnahmewiedergabe - Fehler</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation>Bitte eine Aufnahme aus der Liste auswählen</translation>
+        <translation type="vanished">Bitte eine Aufnahme aus der Liste auswählen</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation>Datei konnte nicht unbenannt werden nach </translation>
+        <translation type="vanished">Datei konnte nicht unbenannt werden nach </translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation>Datei konnte nicht gelöscht werden</translation>
+        <translation type="vanished">Datei konnte nicht gelöscht werden</translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -3079,6 +3120,18 @@ Current number of hedgehogs: %1</source>
 
 Momentane Anzahl Igel: %1</translation>
     </message>
+    <message>
+        <source>Please select a file from the list.</source>
+        <translation>Bitte wähl eine Datei aus der Liste.</translation>
+    </message>
+    <message>
+        <source>Cannot rename file to %1.</source>
+        <translation>Datei konnte nicht nach %1 umbenannt werden.</translation>
+    </message>
+    <message>
+        <source>Cannot delete file %1.</source>
+        <translation>Datei %1 konnte nicht gelöscht werden.</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3187,7 +3240,7 @@ Momentane Anzahl Igel: %1</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation>Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
+        <translation type="vanished">Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -3212,6 +3265,10 @@ Momentane Anzahl Igel: %1</translation>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation>Klicke um deine Server-Adresse in die Zwischenablage zu kopieren. Sende diese als Link zu deinen Freunden, damit sie dir beitreten können.</translation>
+    </message>
+    <message>
+        <source>Upload this video to your YouTube account</source>
+        <translation>Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
     </message>
 </context>
 <context>
@@ -3252,10 +3309,12 @@ Momentane Anzahl Igel: %1</translation>
     </message>
     <message>
         <source>C</source>
+        <extracomment>Caption of the column for the number of connected clients in the list of rooms</extracomment>
         <translation>Sp.</translation>
     </message>
     <message>
         <source>T</source>
+        <extracomment>Caption of the column for the number of teams in the list of rooms</extracomment>
         <translation>T.</translation>
     </message>
     <message>
@@ -3591,15 +3650,15 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>mute audio</source>
-        <translation>stummschalten</translation>
+        <translation>Stummschalten</translation>
     </message>
     <message>
         <source>record</source>
-        <translation>aufzeichnen</translation>
+        <translation>Aufzeichnen</translation>
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation>Igel-Info</translation>
+        <translation type="vanished">Igel-Info</translation>
     </message>
     <message>
         <source>autocam / find hedgehog</source>
@@ -3608,6 +3667,10 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     <message>
         <source>speed up replay</source>
         <translation>Wiederholung beschleunigen</translation>
+    </message>
+    <message>
+        <source>toggle team bars</source>
+        <translation>Teamleisten umschalten</translation>
     </message>
 </context>
 <context>
@@ -3689,7 +3752,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Beschriftungsschilder über Igel durchschalten:</translation>
+        <translation type="vanished">Beschriftungsschilder über Igel durchschalten:</translation>
     </message>
     <message>
         <source>Record video:</source>
@@ -3706,6 +3769,10 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     <message>
         <source>Demo replay:</source>
         <translation>Wiederholung abspielen:</translation>
+    </message>
+    <message>
+        <source>Heads-up display:</source>
+        <translation>Heads-up display:</translation>
     </message>
 </context>
 <context>
