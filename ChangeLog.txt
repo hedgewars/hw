@@ -7,8 +7,10 @@ Content:
  + New theme: Beach
  + Completely new Cheese map; replaces the old one
  + New forts: Lonely_Island, Octopus, Olympic, Snail
- + New hat: "tf_scout" (this time for real)
- + Many new random hedgehog names
+ + Many new random hedgehog and team names
+ + Add hats: barrelhider, bishop, jester, leprechaun, pirate_eyepatch, tf_scout, zoo_octopus
+ + Add hair-less variants of old hats: beefeaterhat, lambdahat, nursehat, pirate_bandana, pirate_hat, poke_ash_hat, RamboClean, sf_vega_hat, sf_guile_hat, simple_red, simple_yellow, simple_green, thugclean
+ * Remove hat: tf_scount (this was a duplicate of tf_demoman)
  * Redo flags: cm_pentagram, cm_soviet, armenia, ireland, nepal, suisse, sweden, turkey
 
 Game engine:
