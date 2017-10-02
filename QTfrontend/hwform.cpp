@@ -461,15 +461,19 @@ void HWForm::UpdateTeamsLists()
     {
         QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8();
         QString teamName;
+        int firstHumanTeam = 1;
+        int lastHumanTeam = 5;
 
         // Default team
         if (currentNickName.isEmpty())
         {
             teamName = tr("Team 1");
+            firstHumanTeam++;
         }
         else
         {
             teamName = tr("%1's Team").arg(currentNickName);
+            lastHumanTeam--;
         }
 
         HWTeam defaultTeam(teamName);
@@ -481,13 +485,28 @@ void HWForm::UpdateTeamsLists()
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
 
-        // Add 3 additional teams to allow local multiplayer instantly
-        for(int i=2; i<=4; i++)
+        // Add additional default teams
+
+        // 4 human teams to allow local multiplayer instantly
+        for(int i=firstHumanTeam; i<=lastHumanTeam; i++)
         {
+            //: Default team name
             teamName = tr("Team %1").arg(i);
             HWTeam numberTeam(teamName);
             HWNamegen::teamRandomGrave(numberTeam, false);
             HWNamegen::teamRandomFort(numberTeam, false);
+            numberTeam.saveToFile();
+            teamslist.push_back(teamName);
+        }
+        // Add default CPU teams for each level
+        for(int i=1; i<=5; i++)
+        {
+            //: Default computer team name
+            teamName = tr("Computer %1").arg(i);
+            HWTeam numberTeam(teamName);
+            HWNamegen::teamRandomGrave(numberTeam, false);
+            HWNamegen::teamRandomFort(numberTeam, false);
+            numberTeam.setDifficulty(6-i);
             numberTeam.saveToFile();
             teamslist.push_back(teamName);
         }
