@@ -187,6 +187,11 @@
 02:00=%1 is six feet under
 02:00=%1 lets natural selection take its course
 02:00=%1 says no to life
+02:00=%1 went to the underworld
+02:00=%1 forgot how to breathe
+02:00=%1 tripped fatally
+02:00=%1 faints forever
+02:00=%1 reached the final destination
 
 ; Normal hog (%1) drowned
 02:01=%1 plays submarine!
@@ -242,6 +247,10 @@
 02:01=%1 is swimming upside down
 02:01=%1 needs a refreshing drink
 02:01=%1 retreats to the secret underwater base
+02:01=%1 always wanted to try diving
+02:01=%1 mistook the sea for a bath
+02:01=%1 went to its evolutional roots
+02:01=%1 prefers water to air
 
 ; Round starts
 02:02=Let's fight!
@@ -304,40 +313,37 @@
 02:03=%1 is the winner!
 02:03=%1 showed everyone how to win
 02:03=%1 is the best of the best
-02:03=%1 earned the title of “winner”
 02:03=%1 does the victory dance
 02:03=Victory for %1!
 02:03=And the winner is %1
 02:03=Congratulations, %1 wins!
 02:03=Bow down to %1
 02:03=%1 has mastered the game
-02:03=%1 is the master of the Universe
 02:03=%1 won the battle
 02:03=%1 made an amazing victory
 02:03=%1 is the number one!
 02:03=Bravo, bravo, %1!
 02:03=%1 is the best
-02:03=%1 knows what true mastery means
 02:03=Applause, applause, %1!
 02:03=What an exciting victory, %1!
 02:03=%1 destroyed the enemy
 02:03=%1 has conquered the enemy
 02:03=%1 has crushed the enemy
-02:03=%1 knows the art of victory
 02:03=Everyone cheers for %1
 02:03=%1 chose victory over death
 02:03=%1 gets a star on Victory Road
-02:03=Awesome victory for %1
 02:03=%1 drinks the victory juice
 02:03=Triumph for %1
 02:03=%1 takes a sip from the sweet victory sauce
-02:03=%1 deserves to be a winner
 02:03=%1 masterfully won this round
 02:03=%1 is the victor
 02:03=%1 wins with style
 02:03=Mission accomplished, %1 won
 02:03=%1 earns the victory medal
 02:03=%1 rules the game
+02:03=Who's the winner? %1 is the winner!
+02:03=%1 is having a party today
+02:03=%1 demonstrated a winning strategy
 
 ; Round ends in a draw
 02:04=Round draw
@@ -351,6 +357,12 @@
 02:04=Round draw, so disappointing!
 02:04=Nobody wins, how boring!
 02:04=Everyone's a loser today
+02:04=A draw! World balance has been sustained
+02:04=A draw. Everyone fought bravely to the end
+02:04=Hey! Where is the winner?!
+02:04=Where have all the hedgehogs gone?
+02:04=Boring! Give me my tickets back
+02:04=Everyone is dead. Good!
 
 ; New health crate
 02:05=Incoming aid!
@@ -454,6 +466,17 @@
 02:05=Satisfaction guaranteed!
 02:05=Painkillers for killers
 02:05=Just when you thought you defeated the enemy …
+02:05=Don't hestitate to take it. You might die
+02:05=Take me!
+02:05=Guardian angels send their regards
+02:05=A gift from the gods
+02:05=Mmmm … Tasty bandages
+02:05=A suspicious box with healing powers …
+02:05=It's a box with health inside!
+02:05=You can't get healthy enough
+02:05=Healthy enough? Still not a problem
+02:05=The secret of immortality
+02:05=Almost like 1-UP
 
 ; New ammo crate
 02:06=More weapons!
@@ -598,6 +621,10 @@
 02:06=Let's hope it's not Skip
 02:06=You can't win a war without weapons!
 02:06=And you thought your firearms collection was complete?
+02:06=It's dangerous to go alone. Take this!
+02:06=Heaven likes to play with mortals
+02:06=Pew pew in a box!
+02:06=Could more of you die, please?
 
 ; New utility crate
 02:07=Tooltime!
@@ -695,6 +722,8 @@
 02:07=This may have just what you need
 02:07=The final piece of your strategy?
 02:07=Never underestimate utilities
+02:07=Collect all the tools!
+02:07=Tools!
 
 ; Hog (%1) skips his turn
 02:08=%1 is sooo boring ...
@@ -745,6 +774,11 @@
 02:08=%1 needs time to forge the master plan
 02:08=%1 saves the turn for later use
 02:08=%1 does nothing, risks nothing
+02:08=%1 sticks to the ground
+02:08=%1 takes a break
+02:08=%1 doesn't feel like taking action
+02:08=%1 attacked with nothing
+02:08=%1 is passive
 
 ; Hog (%1) hurts himself only
 02:09=%1 should practice aiming!
@@ -768,7 +802,7 @@
 02:09=That was stupid, %1
 02:09=%1 lives by the mantra of "no pain, no gain"
 02:09=%1 is confused
-02:09=%1 hurt itself in its confusion
+02:09=%1 hurts itself in its confusion
 02:09=%1 has a knack for embarrassing himself
 02:09=%1 is a klutz!
 02:09=%1 is clumsy
@@ -807,6 +841,12 @@
 02:09=%1 is late for a meeting with the Reaper
 02:09=%1 tested the weapon—and it worked!
 02:09=%1 is close to self-destruction!
+02:09=But why, %1?
+02:09=%1 mistook a grenade for an apple
+02:09=%1 goes against the mainstream
+02:09=%1 did a terrible miscalculation
+02:09=Something went terribly wrong for %1
+02:09=%1 had a terrible accident
 
 ; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=Home Run!
@@ -826,6 +866,10 @@
 02:10=%1 took physics classes
 02:10=%1 just slapped someone really hard
 02:10=%1 plays baseball with hedgehogs
+02:10=%1 offers free flights
+02:10=Destination: Moon
+02:10=%1 screws gravity
+02:10=%1 is very proud of this hit
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 has to go to bed!
@@ -841,6 +885,20 @@
 02:11=%1 needs vacation
 02:11=%1 has to do some homework
 02:11=%1 walks away from the trouble
+02:11=%1 evaportated
+02:11=%1 really needs to go
+02:11=%1 dematerialized
+02:11=%1 transforms into nothing
+02:11=%1 is too proud to play
+02:11=%1 just received an important call
+02:11=%1 leaves work early
+02:11=%1 has a side job
+02:11=%1 is unchallenged
+02:11=%1 is a little wimp
+02:11=%1 runs away in horror
+02:11=%1 deserts!
+02:11=%1 ignores the duties of a soldier
+02:11=%1 stirs up a mutiny
 
 ; Hog (%1) was poisoned
 02:12=%1 feels sick
@@ -881,6 +939,11 @@
 02:12=Looks like %1 never got vaccinated
 02:12=%1 needs a first aid kit very soon
 02:12=%1 should collect a health crate
+02:12=%1 kissed a cobra
+02:12=%1 has an immune-system attack
+02:12=%1 played too long with sick friends
+02:12=%1 was attacked by bacteria
+02:12=%1 has an inner battle with a virus
 
 ; Hog (%1) was resurrected by the Resurrector utility
 02:13=%1 has been resurrected
@@ -926,6 +989,12 @@
 02:13=%1 serves again
 02:13=The time for %1 has not come yet
 02:13=%1 rose from the tomb
+02:13=%1 had a deal with a necromancer
+02:13=%1 is ready to die again
+02:13=Live, die, repeat
+02:13=%1 prefers living
+02:13=%1 couldn't miss the battle
+02:13=%1 inserted the next coin
 
 ; Hog (%1) explodes after an kamikaze attack
 02:14=%1 dies in honor
@@ -964,6 +1033,11 @@
 02:14=%1 will be world-famous
 02:14=%1 had nothing to lose
 02:14=%1 gave the best
+02:14=%1 used the ultimate martial arts technique
+02:14=%1 doesn't want enemies to be lonely in the underworld
+02:14=%1 will now continue the battle in afterlife
+02:14=%1 always wanted to die in a really cool way
+02:14=%1 would have died anyway
 
 ; Hog (%1) returned from time-travel with the time box
 ; These texts are intentionally kept simple and clear to not confuse the player
@@ -1015,6 +1089,11 @@
 02:16=Did we forget to check the time, %1?
 02:16=Nothing to see here, move along!
 02:16=%1 didn't know there's a time limit
+02:16=%1 just overheated
+02:16=%1 didn't think of attacking
+02:16=%1 loses the race against the clock
+02:16=The timer! The timer, %1!
+02:16=%1 prepared for too long
 
 ; King (%1) has died
 02:17=%1 is dead! Long live %1!
