@@ -462,7 +462,7 @@ void HWForm::UpdateTeamsLists()
         QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8();
         QString teamName;
         int firstHumanTeam = 1;
-        int lastHumanTeam = 4;
+        int lastHumanTeam = 2;
 
         // Default team
         if (currentNickName.isEmpty())
@@ -499,7 +499,7 @@ void HWForm::UpdateTeamsLists()
             teamslist.push_back(teamName);
         }
         // Add 2 default CPU teams
-        for(int i=2; i<=5; i=i+2)
+        for(int i=1; i<=5; i=i+2)
         {
             //: Default computer team name
             teamName = tr("Computer %1").arg(i);
