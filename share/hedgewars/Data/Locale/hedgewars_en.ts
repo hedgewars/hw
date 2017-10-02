@@ -141,11 +141,11 @@
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation>Please, specify %1</translation>
+        <translation type="vanished">Please, specify %1</translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation>nickname</translation>
+        <translation type="vanished">nickname</translation>
     </message>
     <message>
         <source>permanent</source>
@@ -154,6 +154,14 @@
     <message>
         <source>Ban player</source>
         <translation>Ban player</translation>
+    </message>
+    <message>
+        <source>Please specify an IP address.</source>
+        <translation>Please specify an IP address.</translation>
+    </message>
+    <message>
+        <source>Please specify a nickname.</source>
+        <translation>Please specify a nickname.</translation>
     </message>
 </context>
 <context>
@@ -482,7 +490,7 @@ Please pick another nickname:</translation>
 If this nick isn’t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>This nick is registered, and you haven’t specified a password.
+        <translation type="vanished">This nick is registered, and you haven’t specified a password.
 
 If this nick isn’t yours, please register your own nick at www.hedgewars.org
 
@@ -556,11 +564,24 @@ Please, enter the password:</translation>
         <source>Team %1</source>
         <translation>Team %1</translation>
     </message>
+    <message>
+        <source>This nick is registered, and you haven&apos;t specified a password.
+
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
+
+Password:</source>
+        <translation>This nick is registered, and you haven&apos;t specified a password.
+
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
+
+Password:</translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
     <message>
         <source>en.txt</source>
+        <extracomment>IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.</extracomment>
         <translation>en.txt</translation>
     </message>
     <message>
@@ -1080,7 +1101,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>Open the directory in which the downloaded files are stored in your system</source>
-        <translation>Open the directory in which the downloaded files are stored in your system</translation>
+        <translation type="vanished">Open the directory in which the downloaded files are stored in your system</translation>
     </message>
 </context>
 <context>
@@ -1214,6 +1235,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>CPU %1</source>
+        <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
         <translation>CPU %1</translation>
     </message>
 </context>
@@ -1254,6 +1276,7 @@ just enter your nickname.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
+        <extracomment>Number of kills in stats screen, written after the team name</extracomment>
         <translation>
             <numerusform>(%1 kill)</numerusform>
             <numerusform>(%1 kills)</numerusform>
@@ -1261,14 +1284,14 @@ just enter your nickname.</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; thought it’s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; point.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; thought it’s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; points.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</numerusform>
         </translation>
@@ -1290,9 +1313,24 @@ just enter your nickname.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
+        <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
         <translation>
             <numerusform>(%1 %2)</numerusform>
             <numerusform>(%1 %2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; point.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; points.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; point.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; point.</numerusform>
         </translation>
     </message>
 </context>
@@ -1614,7 +1652,20 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>You can’t delete the last team!</source>
-        <translation>You can’t delete the last team!</translation>
+        <translation type="vanished">You can’t delete the last team!</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
+        <translation>×</translation>
+    </message>
+    <message>
+        <source>Check now</source>
+        <translation>Check now</translation>
+    </message>
+    <message>
+        <source>You can&apos;t delete the last team!</source>
+        <translation>You can&apos;t delete the last team!</translation>
     </message>
 </context>
 <context>
@@ -2730,19 +2781,19 @@ Do you really want to quit?</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation>Record Play—Error</translation>
+        <translation type="vanished">Record Play—Error</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation>Please select record from the list</translation>
+        <translation type="vanished">Please select record from the list</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation>Cannot rename to </translation>
+        <translation type="vanished">Cannot rename to </translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation>Cannot delete file </translation>
+        <translation type="vanished">Cannot delete file </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -2875,6 +2926,18 @@ Current number of hedgehogs: %1</source>
 
 Current number of hedgehogs: %1</translation>
     </message>
+    <message>
+        <source>Please select a file from the list.</source>
+        <translation>Please select a file from the list.</translation>
+    </message>
+    <message>
+        <source>Cannot rename file to %1.</source>
+        <translation>Cannot rename file to %1.</translation>
+    </message>
+    <message>
+        <source>Cannot delete file %1.</source>
+        <translation>Cannot delete file %1.</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -2983,7 +3046,7 @@ Current number of hedgehogs: %1</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation>Upload this video to your Youtube account</translation>
+        <translation type="vanished">Upload this video to your Youtube account</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -3004,6 +3067,10 @@ Current number of hedgehogs: %1</translation>
     <message>
         <source>Start private server</source>
         <translation>Start private server</translation>
+    </message>
+    <message>
+        <source>Upload this video to your YouTube account</source>
+        <translation>Upload this video to your YouTube account</translation>
     </message>
 </context>
 <context>
@@ -3044,10 +3111,12 @@ Current number of hedgehogs: %1</translation>
     </message>
     <message>
         <source>C</source>
+        <extracomment>Caption of the column for the number of connected clients in the list of rooms</extracomment>
         <translation>C</translation>
     </message>
     <message>
         <source>T</source>
+        <extracomment>Caption of the column for the number of teams in the list of rooms</extracomment>
         <translation>T</translation>
     </message>
     <message>
@@ -3374,7 +3443,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation>hedgehog info</translation>
+        <translation type="vanished">hedgehog info</translation>
     </message>
     <message>
         <source>autocam / find hedgehog</source>
@@ -3383,6 +3452,10 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     <message>
         <source>speed up replay</source>
         <translation>speed up replay</translation>
+    </message>
+    <message>
+        <source>toggle team bars</source>
+        <translation>toggle team bars</translation>
     </message>
 </context>
 <context>
@@ -3464,7 +3537,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Toggle labels above hedgehogs:</translation>
+        <translation type="vanished">Toggle labels above hedgehogs:</translation>
     </message>
     <message>
         <source>Record video:</source>
@@ -3481,6 +3554,10 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     <message>
         <source>Demo replay:</source>
         <translation>Demo replay:</translation>
+    </message>
+    <message>
+        <source>Heads-up display:</source>
+        <translation>Heads-up display:</translation>
     </message>
 </context>
 <context>

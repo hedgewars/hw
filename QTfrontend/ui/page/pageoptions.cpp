@@ -276,7 +276,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupGame->layout()->addWidget(winResContainer, 2, 1);
 
             QLabel *winLabelX = new QLabel(groupGame);
-            winLabelX->setText("x"); // decorational x
+            //: Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it
+            winLabelX->setText(tr("x"));
             winLabelX->setFixedWidth(40);
             winLabelX->setAlignment(Qt::AlignCenter);
 
@@ -797,10 +798,10 @@ QLayout * PageOptions::bodyLayoutDefinition()
         widthEdit->setValidator(new QIntValidator(this));
         groupVideoRec->layout()->addWidget(widthEdit, 5, 1);
 
-        // x
+        // multiplication sign
 
         QLabel *labelX = new QLabel(groupVideoRec);
-        labelX->setText("X");
+        labelX->setText(tr("x"));
         groupVideoRec->layout()->addWidget(labelX, 5, 2);
 
         // height
