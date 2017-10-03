@@ -453,6 +453,9 @@ void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 
 void HWGame::StartNet()
 {
+    lastGameStartArgs.clear();
+    lastGameType = gtNet;
+
     gameType = gtNet;
     demo.clear();
     Start(false);

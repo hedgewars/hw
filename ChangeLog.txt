@@ -268,6 +268,7 @@ Frontend:
  * Prevent starting game with >48 hogs (because engine doesn't support it yet)
  * Fix the key for toggling team bars being incorrectly described
  * Fix caption of stats screen showing only one winner if multiple teams have won
+ * Remove broken “Play again” button appearing in stats page after an online game
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
