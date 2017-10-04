@@ -4182,8 +4182,9 @@ begin
         dec(Gear^.Timer, 1);
 
     HHGear := Gear^.Hedgehog^.Gear;
-    if HHGear = nil then
+    if (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
+        Gear^.Hedgehog := nil;
         Gear^.Timer := 0;
         Gear^.State := Gear^.State or gstAnimation or gstTmpFlag;
         Gear^.Timer := 0;
