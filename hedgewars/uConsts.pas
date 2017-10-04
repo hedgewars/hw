@@ -307,6 +307,7 @@ const
                           = $00080000;
     ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode
                           = $00100000;
+    ammoprop_ForceTurnEnd = $00200000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;

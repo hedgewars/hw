@@ -576,7 +576,8 @@ with CurrentHedgehog^ do
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then
                 HHGear^.State:= HHGear^.State or gstAttacked;
-            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then
+            if (a = amNothing) or ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) or
+               (((GameFlags and gfInfAttack) <> 0) and ((Ammoz[a].Ammo.Propz and ammoprop_ForceTurnEnd) = 0)) then
                 ApplyAmmoChanges(CurrentHedgehog^)
             end;
         end

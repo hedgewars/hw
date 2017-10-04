@@ -378,15 +378,14 @@ end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: ansistring;
-    CurWeapon: PAmmo;
+    OldWeapon, CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
 
 with Hedgehog do
     begin
-    Timer:= 10;
-
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
+    OldWeapon:= GetCurAmmoEntry(Hedgehog);
 
     if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog)
@@ -394,6 +393,10 @@ with Hedgehog do
         Hedgehog.CurAmmoType:= amNothing;
 
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
+
+    // Weapon selection animation (if new ammo type)
+    if CurWeapon^.AmmoType <> OldWeapon^.AmmoType then
+        Timer:= 10;
 
     ApplyAngleBounds(Hedgehog, CurWeapon^.AmmoType);
 
