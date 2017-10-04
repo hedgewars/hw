@@ -86,3 +86,4 @@ gameServer2/target
 gameServer2/Cargo.lock
 gameServer2/gameServer2.iml
 .idea
+Testing/
