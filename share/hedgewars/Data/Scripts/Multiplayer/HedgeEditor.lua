@@ -1,8 +1,10 @@
----------------------------------------------------------------
---- HEDGE EDITOR 0.9 (for use with Hedgewars 0.9.22 and up)
----------------------------------------------------------------
--- a horrible mission editor by mikade
--- place gears like a boss
+-----------------------------------------------------------
+--- HEDGE EDITOR (for use with Hedgewars 0.9.22 and up) ---
+-----------------------------------------------------------
+-- A not-so-horrible mission editor.
+-- Place gears like a boss!
+
+-- Original author: mikade
 
 -- feel free to shower me with your adoration and/or hate mail
 -- more info can be found at http://hedgewars.org/HedgeEditor
@@ -39,10 +41,6 @@
 
 -- contextual cursor and menu graphics
 -- placement sounds that are slightly more soothing
-
--- meaningless version number
--- extra whitespace
--- fewer capital letters than ideal
 
 -- upon saving, all level data will be output to logs/game0.log.
 -- game0.log also includes a lot of other data so if you only want to see the relevant lines of code
@@ -83,7 +81,7 @@
 -- script like TechRacer (or HedgeEditor itself) that can interpret the points using InterpretPoints()
 
 ---------------------------------------
--- DISCLAIMER
+-- MIKADE'S DISCLAIMER
 ---------------------------------------
 -- well, I really just made this for myself, so it's usage might be a little complicated for others.
 -- it also probably has a million errors, and has grown rather bloated over time due to the addition of
@@ -110,22 +108,14 @@
 -- possibly try show landflag addcaption constantly like we do for superdelete when
 -- using girders / rubbers.
 
--- check to what extent hog info is preserved on saving (does health/weps really save correctly?)
--- atm I think it's only for missions so I don't think it is preserved in core data
-
--- check if we lose a mission when the enemy collects our crate (we should)
-
 -- How about a weapons profile tool that is used with team ammo
 -- and then hog identity tool would only be available if gfPerHogAmmo is set
 
--- INVESTIGATE when you can bother to do so
--- is airmine still missing anywhere, e.g. the weplist generated FOR THE TEMPLATE SCRIPT
+-- [high]       check if we lose a mission when the enemy collects our crate (we should)
 
 -- [high] 	waypoints don't reload yet
 
--- [high] 	add missing weps/utils/gears as they appear
---			some gameflags and settings are probably missing, too (diff border types etc)
---			and also ScriptParam
+-- [high] 	add missing ammo types as they appear
 
 -- [med] 	add a limited form of save/load within level before mass-output
 
@@ -133,7 +123,6 @@
 -- 			you want the missions to use it
 
 -- [med]	improve ammo handling (if possible, take more scheme settings into account)
--- 			also be sure to generate wep data so crates don't have 0 in them (done?)
 
 -- [low] 	break up the division of labor of the tools into airstrike, minestrike, napalm, etc.
 			--[[
@@ -168,10 +157,6 @@
 
 -- [low]	improve support for ShoppaBalance and ConstructionMode, see ranking)
 
--- [low] 	consider combining landflags
-
--- [low] 	periodically rework the code to make it less terrible (hahahahahaha!)
-
 -- [low]	eventually incorporate scripted structures into the editor / mission mode
 
 -- [low] 	some kind of support for single team training missions
@@ -179,13 +164,8 @@
 
 -- [never?] more detailed goal tagging and multi-stage triggers
 
--- [never?]	theoretically might be possible to create forts (and other grouped objects)
---			that can be mirrored and generated/placed in a big enough space
-
 -- [never?]	add a pulsing glow thing for sprites you have selected,
 --			kind of like the invaders in SpaceInvader (currently they are just displayed as purple)
-
--- [never?] add the thing that would be useful for this editor, but that others might use to cheat
 
 -- [never?]	add GUIs for editing ammo, init settings, additional gear attributes
 -- 			perhaps using precise with timer to enable/disable certain features
@@ -1599,7 +1579,7 @@ function SaveConfigData()
 
 	WriteLnToConsole("	Ready = " .. Ready)
 	WriteLnToConsole("	AirMinesNum = " .. AirMinesNum)
-	--WriteLnToConsole("	ScriptParam = " .. ScriptParam)
+	WriteLnToConsole("	ScriptParam = " .. ScriptParam)
 	WriteLnToConsole("	GetAwayTime = " .. GetAwayTime)
 	WriteLnToConsole("	WorldEdge = " .. WorldEdge)
 
