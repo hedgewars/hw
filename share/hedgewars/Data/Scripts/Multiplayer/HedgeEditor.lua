@@ -291,8 +291,6 @@ local shoppaPX = {}
 local shoppaPY = {}
 local shoppaPR = {}
 
-local savedScriptParam = ""
-
 -- Misc. state variables
 local hedgeEditorMissionPanelShown = false
 local tagGears = {}
@@ -1594,12 +1592,10 @@ function SaveConfigData()
 
 	WriteLnToConsole("	Ready = " .. Ready)
 	WriteLnToConsole("	AirMinesNum = " .. AirMinesNum)
-	if savedScriptParam ~= "" then
-		-- TODO:
-		--WriteLnToConsole("	ScriptParam = \"" .. savedScriptParam .. "\"")
-	end
 	WriteLnToConsole("	GetAwayTime = " .. GetAwayTime)
 	WriteLnToConsole("	WorldEdge = " .. WorldEdge)
+
+	-- ScriptParam intentionally left out, it doesn't make sense for missions.
 
 	WriteLnToConsole("")
 
@@ -3344,9 +3340,6 @@ function onParameters()
 	if mapID == nil then
 		mapID = 1
 	end
-
-	-- Neccessary cuz ScriptParam is not global
-	savedScriptParam = ScriptParam
 
 end
 
