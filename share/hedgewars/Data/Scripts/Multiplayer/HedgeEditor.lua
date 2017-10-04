@@ -291,6 +291,8 @@ local shoppaPX = {}
 local shoppaPY = {}
 local shoppaPR = {}
 
+local savedScriptParam = ""
+
 -- Misc. state variables
 local hedgeEditorMissionPanelShown = false
 local tagGears = {}
@@ -379,6 +381,9 @@ local utilArray =
 				}
 
 				--skiphog is 6
+
+local effectArray = { heInvulnerable, hePoisoned, heResurrectable, heResurrected, heFrozen }
+local effectStr = { "heInvulnerable", "hePoisoned", "heResurrectable", "heResurrected", "heFrozen" }
 
 ----------------------------
 -- hog and map editing junk
@@ -1480,6 +1485,16 @@ function GetDataForSavingHogs(gear)
 
 	table.insert	(tempDataList,"	SetGearPosition(hhs[" .. #hhs .. "], " .. GetX(gear) .. ", " .. GetY(gear) .. ")")
 
+	for e=1, #effectArray do
+		if GetEffect(gear, effectArray[e]) ~= 0 then
+			table.insert	(tempDataList,"	SetEffect(hhs[" .. #hhs .. "], " .. effectStr[e] .. ", " .. GetEffect(gear, effectArray[e]) .. ")")
+		end
+	end
+	local dX, _ = GetGearVelocity(gear)
+	if dX < 0 then
+		table.insert	(tempDataList,"	HogTurnLeft(hhs[" .. #hhs .. "], true)")
+	end
+
 	if getGearValue(gear,"tag") ~= nil then
 		table.insert	(tempDataList,"	setGearValue(hhs[" .. #hhs .. "], \"tag\", \"" .. getGearValue(gear,"tag") .. "\")")
 	end
@@ -1579,7 +1594,10 @@ function SaveConfigData()
 
 	WriteLnToConsole("	Ready = " .. Ready)
 	WriteLnToConsole("	AirMinesNum = " .. AirMinesNum)
-	WriteLnToConsole("	ScriptParam = " .. ScriptParam)
+	if savedScriptParam ~= "" then
+		-- TODO:
+		--WriteLnToConsole("	ScriptParam = \"" .. savedScriptParam .. "\"")
+	end
 	WriteLnToConsole("	GetAwayTime = " .. GetAwayTime)
 	WriteLnToConsole("	WorldEdge = " .. WorldEdge)
 
@@ -3326,6 +3344,9 @@ function onParameters()
 	if mapID == nil then
 		mapID = 1
 	end
+
+	-- Neccessary cuz ScriptParam is not global
+	savedScriptParam = ScriptParam
 
 end
 
