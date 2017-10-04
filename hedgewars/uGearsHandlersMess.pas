@@ -3294,7 +3294,7 @@ begin
     if Gear^.Health mod 100 = 0 then
         Gear^.PortalCounter:= 0;
     // This is not seconds, but at least it is *some* feedback
-    if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
+    if (Gear^.Health <= 0) or ((Gear^.Message and gmAttack) <> 0) then
         begin
         FollowGear := Gear;
         Gear^.RenderTimer := false;
@@ -3329,12 +3329,14 @@ begin
     AllInactive := false;
 
     inc(Gear^.Tag);
-    if Gear^.Tag < 100 then
+    // Animation delay. Skipped if cake only dropped a very short distance.
+    if (Gear^.Tag < 100) and (Gear^.FlightTime > 1) then
         exit;
     Gear^.Tag := 0;
 
-    if Gear^.Pos = 6 then
+    if (Gear^.Pos = 6) or (Gear^.FlightTime <= 1) then
         begin
+        Gear^.Pos := 6;
         cakeData:= PCakeData(Gear^.Data);
         with cakeData^ do
             begin
@@ -3345,6 +3347,13 @@ begin
                 end;
             CakeI := 0;
             end;
+        (* This is called frequently if the cake is completely stuck.
+           With this a stuck cake takes equally long to explode then
+           a normal cake. Removing this code just makes the cake walking
+           for a few seconds longer. *)
+        if (Gear^.FlightTime <= 1) and (Gear^.Health > 2) then
+            dec(Gear^.Health);
+        Gear^.FlightTime := 0;
         Gear^.doStep := @doStepCakeWalk
         end
     else
@@ -3356,6 +3365,8 @@ begin
     AllInactive := false;
 
     Gear^.dY := Gear^.dY + cGravity;
+    // FlightTime remembers the drop time
+    inc(Gear^.FlightTime);
     if TestCollisionYwithGear(Gear, 1) <> 0 then
         Gear^.doStep := @doStepCakeUp
     else

@@ -580,6 +580,8 @@ case Kind of
                 gear^.Z:= cOnHHZ;
                 gear^.RenderTimer:= false;
                 gear^.DirAngle:= -90 * hwSign(Gear^.dX);
+                gear^.FlightTime:= 100; // (roughly) ticks spent dropping, used to skip getting up anim when stuck.
+                                        // Initially set to a high value so cake has at least one getting up anim.
                 if not dX.isNegative then
                     gear^.Angle:= 1
                 else
