@@ -46,6 +46,21 @@ local airMineX = {}
 local airMineY = {}
 local airMine = {}
 local init = true
+local multiplayerVictoryDelay = -1
+local multiplayerWinningHogs = {}
+local multiplayerWins = 0
+
+-- Placement positions of winning hogs
+local victoryPosses = { }
+do
+    local m = 0
+    for y=108, 39, -32 do
+        for x=1820+m, 1972-m, 22 do
+            table.insert(victoryPosses, {x=x, y=y})
+        end
+        m = m + 32
+    end
+end
 
 function onParameters()
     parseParams()
@@ -167,7 +182,7 @@ function onNewTurn()
     recordBroken = false
     currTeam = GetHogTeamName(CurrentHedgehog)
     if CurrentHedgehog ~= nil then
-        if CurrentHedgehog ~= dummyHog then
+        if CurrentHedgehog ~= dummyHog or multiplayerWinningHogs[CurrentHedgehog] == true then
             SetGearPosition(CurrentHedgehog, 1951,32640)
             if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
             AddVisualGear(1951,32640,vgtExplosion,0,false)
@@ -177,6 +192,9 @@ function onNewTurn()
         else
             dummySkip = GameTime+1
         end
+    end
+    for hog, _ in pairs(multiplayerWinningHogs) do
+        SetEffect(hog, heInvulnerable, 1)
     end
     for f,i in pairs(Fire) do
         DeleteGear(f)
@@ -255,6 +273,39 @@ function onGameTick20()
         --    if g5 > 360 then g5 = 0 end
         --    SetVisualGearValues(s, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10)
         --end
+    end
+
+    -- This will be executed if a player reached home in multiplayer
+    if multiplayerVictoryDelay > 0 then
+        multiplayerVictoryDelay = multiplayerVictoryDelay - 20
+        if multiplayerVictoryDelay <= 0 then
+            -- If delay's over, the game will continue with the next hog
+            if CurrentHedgehog then
+
+                multiplayerWinningHogs[CurrentHedgehog] = true
+                multiplayerWins = multiplayerWins + 1
+
+                local victoryX, victoryY
+                if multiplayerWins <= #victoryPosses then
+                    victoryX, victoryY = victoryPosses[multiplayerWins].x, victoryPosses[multiplayerWins].y
+                else
+                    victoryX, victoryY = victoryPosses[#victoryPosses].x, victoryPosses[#victoryPosses].y
+                end
+                SetGearPosition(CurrentHedgehog, victoryX, victoryY)
+                SetEffect(CurrentHedgehog, heInvulnerable, 1)
+                SetHealth(CurrentHedgehog, 1)
+
+                if (deadHedgehogs + multiplayerWins) >= totalHedgehogs then
+                    makeFinalMultiPlayerStats()
+                    EndGame()
+                    onAchievementsDeclaration()
+                else
+                    EndTurn(true)
+                    SetInputMask(0xFFFFFFFF)
+                end
+                return
+            end
+        end
     end
 
     if CurrentHedgehog ~= nil then x,y = GetGearPosition(CurrentHedgehog) end
@@ -354,14 +405,15 @@ function onGameTick20()
                 }
             end
         end
+            local finishTime = (GameTime-startTime)/1000
+            local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
             if isSinglePlayer then
                 if distanceFromWater < 0 and not YouLost and not YouWon then
                     makeSinglePlayerLoserStats()
                     YouLost = true
                 end
+                -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
                 if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
-                    local finishTime = (GameTime-startTime)/1000
-                    local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
                     AddCaption(loc("Victory!"))
                     ShowMission(loc("Climb Home"),
                                 loc("Made it!"),
@@ -380,14 +432,34 @@ function onGameTick20()
                     onAchievementsDeclaration()
                     YouWon = true
                 end
-            elseif distanceFromWater < 0 and not YouLost then
-                makeMultiPlayerLoserStat(CurrentHedgehog)
-                deadHedgehogs = deadHedgehogs + 1
-                YouLost = true
-                if deadHedgehogs >= totalHedgehogs then
-                    makeFinalMultiPlayerStats()
-                    EndGame()
-                    onAchievementsDeclaration()
+            else
+                if distanceFromWater < 0 and not YouLost and not YouWon then
+                    makeMultiPlayerLoserStat(CurrentHedgehog)
+                    deadHedgehogs = deadHedgehogs + 1
+                    YouLost = true
+                    if deadHedgehogs >= totalHedgehogs then
+                        makeFinalMultiPlayerStats()
+                        EndGame()
+                        onAchievementsDeclaration()
+                    end
+                end
+                -- Check victory
+                if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) and
+                        -- Delay victory if MrMine is triggered
+                        (not MrMine or (MrMine and band(GetState(MrMine), gstAttacking) == 0)) then
+                    -- Player managed to reach home in multiplayer.
+                    -- Stop hog, disable controls, celebrate victory and continue the game after 4 seconds.
+                    AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime))
+                    SendStat(siCustomAchievement, string.format(loc("%s (%s) reached home in %.3f seconds."), GetHogName(CurrentHedgehog), GetHogTeamName(CurrentHedgehog), finishTime))
+                    makeMultiPlayerWinnerStat(CurrentHedgehog)
+                    PlaySound(sndVictory, CurrentHedgehog)
+                    -- TODO: Unselect weapon.
+                    -- Note: SetWeapon(amNothing) does not work. :-(
+                    SetGearMessage(CurrentHedgehog, band(GetGearMessage(CurrentHedgehog), bnot(gmLeft+gmRight+gmUp+gmDown+gmHJump+gmLJump+gmPrecise)))
+                    SetInputMask(0x00)
+                    -- TODO: Add stupid winner grin.
+                    multiplayerVictoryDelay = 4000
+                    YouWon = true
                 end
             end
 
@@ -541,7 +613,7 @@ function onGearDamage(gear, damage)
             makeSinglePlayerLoserStats()
         else
             deadHedgehogs = deadHedgehogs + 1
-            if deadHedgehogs >= totalHedgehogs then
+            if (deadHedgehogs + multiplayerWins) >= totalHedgehogs then
                 makeFinalMultiPlayerStats()
                 EndGame()
                 onAchievementsDeclaration()
@@ -604,6 +676,10 @@ function makeMultiPlayerLoserStat(gear)
     if teamScoreStats[teamName] == nil then teamScoreStats[teamName] = {} end
     table.insert(teamScoreStats[teamName], actualHeight)
     --SendStat(siClanHealth, tostring(teamBests[teamName]), teamName)
+end
+
+function makeMultiPlayerWinnerStat(gear)
+    return makeMultiPlayerLoserStat(gear)
 end
 
 function makeFinalMultiPlayerStats()
