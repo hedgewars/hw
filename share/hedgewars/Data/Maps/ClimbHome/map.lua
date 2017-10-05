@@ -614,12 +614,12 @@ function onGearDamage(gear, damage)
             makeSinglePlayerLoserStats()
         else
             deadHedgehogs = deadHedgehogs + 1
+            makeMultiPlayerLoserStat(gear)
             if (deadHedgehogs + multiplayerWins) >= totalHedgehogs then
                 makeFinalMultiPlayerStats()
                 EndGame()
                 onAchievementsDeclaration()
             end
-            makeMultiPlayerLoserStat(gear)
         end
         YouLost = true
     end
