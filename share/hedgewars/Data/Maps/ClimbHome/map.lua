@@ -184,6 +184,7 @@ function onNewTurn()
     if CurrentHedgehog ~= nil then
         if CurrentHedgehog ~= dummyHog or multiplayerWinningHogs[CurrentHedgehog] == true then
             SetGearPosition(CurrentHedgehog, 1951,32640)
+            HogTurnLeft(CurrentHedgehog, true)
             if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
             AddVisualGear(1951,32640,vgtExplosion,0,false)
             SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
