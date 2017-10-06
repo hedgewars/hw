@@ -2865,6 +2865,7 @@ begin
     valid:= false;
 
     lx:= Gear^.Target.X - SpritesData[sprHHTelepMask].Width  div 2; // left
+    lx:= CalcWorldWrap(lx, SpritesData[sprHHTelepMask].Width); // Take world edge into account
     ty:= Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2; // top
 
     // remember original target location

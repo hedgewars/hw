@@ -49,6 +49,7 @@ Game engine:
  * Fixed incorrect time box tooltip when in Sudden Death
  * Fixed cake taking over 200 seconds to explode when its stuck and can't move
  * Fixed Birdy descending into water when hog took damage or died before it got picked up
+ * Fixed teleportation being able to teleport in land if you clicked in the "dark" area of the wrap world edge
  * Remove buggy /finish chat command
  * Various other fixes
 
