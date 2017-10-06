@@ -639,6 +639,8 @@ case Kind of
      gtMolotov: begin
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 6;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 gear^.Density:= _2
                 end;
        gtBirdy: begin
