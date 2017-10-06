@@ -15,26 +15,26 @@ the licenses.
 
 Instructions:
 -------------
-See our wiki at: http://hedgewars.org/kb/BuildingHedgewars
+See our wiki at: https://hedgewars.org/kb/BuildingHedgewars
 
 You can find an outline of the necessary dependencies in the INSTALL file.
 
 Source code:
 ------------
-Our main repository is located at http://hg.hedgewars.org/hedgewars/ using
+Our main repository is located at https://hg.hedgewars.org/hedgewars/ using
 Mercurial as DVCS. A Git repository is also available (mirrored daily)
 at https://github.com/hedgewars/hw
 
 Contribute:
 -----------
 If you see a bug or have any suggestion please use the official bug tracker at
-http://hedgewars.org/bugs or the integrated feedback
+https://hedgewars.org/bugs or the integrated feedback
 button.
 
 If you want to help or get to know the sources better you can do that with some
-easy tasks from http://hedgewars.org/kb/TODO. We also have an
+easy tasks from https://hedgewars.org/kb/TODO. We also have an
 extended API in LUA to customize your adventures in our wiki at
-http://hedgewars.org/kb/LuaAPI.
+https://hedgewars.org/kb/LuaAPI.
 
 If you know your way through the code feel free to send a patch or open a pull
 request. The best LUA scripts get released in the official DLC page and later
@@ -43,6 +43,6 @@ integrated in the next version.
 Contact:
 --------
 * IRC channel     - irc://irc.freenode.net/hedgewars
-* community forum - http://www.hedgewars.org/forum
+* community forum - https://hedgewars.org/forum
 * mailing list    - https://mail.gna.org/listinfo/hedgewars-dev
 
