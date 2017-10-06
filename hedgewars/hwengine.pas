@@ -36,6 +36,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     {$IFDEF WIN32}, dynlibs{$ENDIF}
      ;
 
 {$IFDEF HWLIBRARY}
@@ -50,6 +51,12 @@ implementation
 procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
+{$ENDIF}
+
+{$IFDEF WIN32}
+type TSetProcessDpiAwareness = function(value: Integer): Integer; stdcall;
+var SetProcessDpiAwareness: TSetProcessDpiAwareness;
+var ShcoreLibHandle: TLibHandle;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -585,6 +592,17 @@ begin
     operatingsystem_parameter_argv:= argv;
 {$ELSE}
 begin
+{$ENDIF}
+
+{$IFDEF WIN32}
+    ShcoreLibHandle := LoadLibrary('Shcore.dll');
+    if (ShcoreLibHandle <> 0) then
+    begin
+        SetProcessDpiAwareness :=
+            TSetProcessDpiAwareness(GetProcedureAddress(ShcoreLibHandle, 'SetProcessDpiAwareness'));
+        if (SetProcessDpiAwareness <> nil) then
+            SetProcessDpiAwareness(1);
+    end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
