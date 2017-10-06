@@ -44,6 +44,11 @@
 #include <Shlobj.h>
 #elif defined __APPLE__
 #include "CocoaInitializer.h"
+
+#endif
+
+#ifdef Q_OS_WIN
+#include <QSplashScreen>
 #endif
 
 // Program resources
@@ -162,9 +167,8 @@ int main(int argc, char *argv[])
     HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
-    // file engine and splash. to be initialized later
+    // file engine, to be initialized later
     engine = NULL;
-    QLabel *splash = NULL;
 
     // parse arguments
 
@@ -241,17 +245,13 @@ int main(int argc, char *argv[])
 
     // end of parameter parsing
 
-#if defined Q_OS_WIN
-    QPixmap pixmap(":res/splash.png");
-    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-    splash->setAttribute(Qt::WA_TranslucentBackground);
-    const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
-    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
-                                  (deskSize.height() - pixmap.height())/2 );
-    splash->move(splashCenter);
-    splash->setPixmap(pixmap);
-    splash->show();
+
+#ifdef Q_OS_WIN
+    QPixmap pixmap(":/res/splash.png");
+    QSplashScreen splash(pixmap);
+    splash.show();
 #endif
+
     app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
@@ -393,9 +393,11 @@ int main(int argc, char *argv[])
     qWarning("Starting Hedgewars %s-r%d (%s)", qPrintable(*cVersionString), cRevisionString->toInt(), qPrintable(*cHashString));
 
     app.form = new HWForm(NULL, style);
+#ifdef Q_OS_WIN
+    splash.finish(app.form);
+#endif
     app.form->show();
-    if(splash)
-        splash->close();
+
     if (app.urlString)
         app.fakeEvent();
     return app.exec();
