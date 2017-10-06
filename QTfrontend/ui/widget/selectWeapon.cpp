@@ -327,7 +327,7 @@ void SelWeaponWidget::copy()
         {
             //name already used -> look for an appropriate name:
             int i=2;
-            while(wconf->contains(newName = tr("Copy of %1 (%2)").arg(curWeaponsName, i++)));
+            while(wconf->contains(newName = tr("Copy of %1 (%2)").arg(curWeaponsName).arg(i++)));
         }
         setWeaponsName(newName);
         setWeapons(ammo);
