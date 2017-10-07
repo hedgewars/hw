@@ -270,7 +270,15 @@ var cInitVolume: LongInt;
             (FileName:           'countdown4.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown4
             (FileName:      'rubberduck_drop.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDrop
             (FileName:     'rubberduck_water.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckWater
-            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone) // sndDuckDie
+            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDie
+            (FileName:              'custom1.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom1
+            (FileName:              'custom2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom2
+            (FileName:              'custom3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom3
+            (FileName:              'custom4.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom4
+            (FileName:              'custom5.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom5
+            (FileName:              'custom6.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom6
+            (FileName:              'custom7.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom7
+            (FileName:              'custom8.ogg'; Path: ptSounds; AltPath: ptNone) // sndCustom8
             );
 
 
