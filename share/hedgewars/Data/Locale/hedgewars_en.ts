@@ -100,6 +100,14 @@
         <source>Copy of %1</source>
         <translation>Copy of %1</translation>
     </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>New (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Copy of %1 (%2)</translation>
+    </message>
 </context>
 <context>
     <name>BanDialog</name>
@@ -562,6 +570,7 @@ Please, enter the password:</translation>
     </message>
     <message>
         <source>Team %1</source>
+        <extracomment>Default team name</extracomment>
         <translation>Team %1</translation>
     </message>
     <message>
@@ -575,6 +584,11 @@ Password:</source>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</translation>
+    </message>
+    <message>
+        <source>Computer %1</source>
+        <extracomment>Default computer team name</extracomment>
+        <translation>Computer %1</translation>
     </message>
 </context>
 <context>
@@ -3455,6 +3469,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>toggle team bars</source>
+        <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
         <translation>toggle team bars</translation>
     </message>
 </context>

@@ -724,6 +724,18 @@ int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
         return defaultScheme.size();
 }
 
+bool AmmoSchemeModel::hasScheme(QString name)
+{
+    for(int i=0; i<schemes.size(); i++)
+    {
+        if(schemes[i][0] == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
 {
     Q_UNUSED(index);
@@ -757,13 +769,29 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     if (row == -1)
     {
         QList<QVariant> newScheme = defaultScheme;
-        newScheme[0] = QVariant(tr("New"));
+
+        QString newName = tr("New");
+        if(hasScheme(newName))
+        {
+            //name already used -> look for an appropriate name:
+            int i=2;
+            while(hasScheme(newName = tr("New (%1)").arg(i++))) ;
+        }
+        newScheme[0] = QVariant(newName);
         schemes.insert(schemes.size(), newScheme);
     }
     else
     {
         QList<QVariant> newScheme = schemes[row];
-        newScheme[0] = QVariant(tr("Copy of %1").arg(newScheme[0].toString()));
+        QString oldName = newScheme[0].toString();
+        QString newName = tr("Copy of %1").arg(oldName);
+        if(hasScheme(newName))
+        {
+            //name already used -> look for an appropriate name:
+            int i=2;
+            while(hasScheme(newName = tr("Copy of %1 (%2)").arg(oldName).arg(i++)));
+        }
+        newScheme[0] = QVariant(newName);
         schemes.insert(schemes.size(), newScheme);
     }
 

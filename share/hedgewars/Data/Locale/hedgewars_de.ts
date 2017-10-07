@@ -120,6 +120,14 @@
         <source>Copy of %1</source>
         <translation>Kopie von %1</translation>
     </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Neu (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Kopie von %1 (%2)</translation>
+    </message>
 </context>
 <context>
     <name>BanDialog</name>
@@ -3670,6 +3678,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>toggle team bars</source>
+        <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
         <translation>Teamleisten umschalten</translation>
     </message>
 </context>
