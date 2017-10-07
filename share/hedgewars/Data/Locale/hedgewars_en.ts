@@ -2699,6 +2699,10 @@ Do you really want to quit?</translation>
         <source>anonymous</source>
         <translation>anonymous</translation>
     </message>
+    <message>
+        <source>unnamed (%1)</source>
+        <translation>unnamed (%1)</translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>

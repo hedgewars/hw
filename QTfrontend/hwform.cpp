@@ -1036,7 +1036,16 @@ void HWForm::IntermediateSetup()
 
 void HWForm::NewTeam()
 {
-    ui.pageEditTeam->createTeam(QLineEdit::tr("unnamed"), playerHash);
+    QString teamName = QLineEdit::tr("unnamed");
+    QStringList teamslist = config->GetTeamsList();
+    if(teamslist.contains(teamName))
+    {
+        //name already used -> look for an appropriate name:
+        int i=2;
+        while(teamslist.contains(teamName = QLineEdit::tr("unnamed (%1)").arg(i++)));
+    }
+
+    ui.pageEditTeam->createTeam(teamName, playerHash);
     UpdateTeamsLists();
     GoToPage(ID_PAGE_SETUP_TEAM);
 }

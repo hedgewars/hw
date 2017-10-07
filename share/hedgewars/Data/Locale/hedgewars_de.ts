@@ -2861,6 +2861,10 @@ Willst du wirklich verlassen?</translation>
         <source>anonymous</source>
         <translation>anonym</translation>
     </message>
+    <message>
+        <source>unnamed (%1)</source>
+        <translation>unbenannt (%1)</translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
