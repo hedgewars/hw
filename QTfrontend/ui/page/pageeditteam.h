@@ -70,6 +70,7 @@ class PageEditTeam : public AbstractPage
         HatButton * HHHats[HEDGEHOGS_PER_TEAM];
         HWTeam data();
         QString m_playerHash;
+        QString OldTeamName;
         KeyBinder * binder;
         bool m_loaded;
 

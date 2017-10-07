@@ -278,6 +278,7 @@ Frontend:
  * Fix caption of stats screen showing only one winner if multiple teams have won
  * Remove broken “Play again” button appearing in stats page after an online game
  * Weapons scheme editor: When leaving, it no longer flickers and the selection is not reset to Default
+ * Team editor: Fix old team being retained when renaming a team
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect

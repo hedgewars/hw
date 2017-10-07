@@ -436,6 +436,7 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
 {
     m_playerHash = playerHash;
     lazyLoad();
+    OldTeamName = name;
 
     // Mostly create a default team, with 2 important exceptions:
     HWTeam newTeam(name);
@@ -452,6 +453,7 @@ void PageEditTeam::editTeam(const QString & name, const QString & playerHash)
 {
     m_playerHash = playerHash;
     lazyLoad();
+    OldTeamName = name;
 
     HWTeam team(name);
     team.loadFromFile();
@@ -576,7 +578,8 @@ void PageEditTeam::loadTeam(const HWTeam & team)
 
 HWTeam PageEditTeam::data()
 {
-    HWTeam team(TeamNameEdit->text());
+    HWTeam team(OldTeamName);
+    team.setName(TeamNameEdit->text());
     team.setDifficulty(CBTeamLvl->currentIndex());
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
