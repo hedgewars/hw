@@ -74,9 +74,9 @@ class HWForm : public QMainWindow
         void GoToSaves();
         void GoToDemos();
         void GoToNet();
-        void GoToSelectWeapon();
-        void GoToSelectWeaponSet(int index);
-        void GoToSelectNewWeapon();
+        void GoToEditWeapons();
+        void GoToNewWeapons();
+        void GoToWeapons(int index);
         void GoToScheme(int index);
         void GoToEditScheme();
         void GoToNewScheme();
@@ -123,6 +123,9 @@ class HWForm : public QMainWindow
         void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
         void UpdateWeapons();
+        void DeleteWeapons(QString weaponsName);
+        void AddWeapons(QString weaponsName, QString ammo);
+        void EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo);
         void onFrontendFullscreen(bool value);
         void onFrontendEffects(bool value);
         void Music(bool checked);

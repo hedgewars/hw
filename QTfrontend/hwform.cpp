@@ -265,7 +265,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
             ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
     connect(ui.pageMultiplayer, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
+    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToWeapons(int)));
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMultiplayer->gameCFG, ID_PAGE_DRAWMAP);
 
@@ -279,14 +279,13 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions, SIGNAL(goBack()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
 
-    connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
-    connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+    connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToEditWeapons()));
+    connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToNewWeapons()));
     connect(ui.pageOptions->WeaponDelete, SIGNAL(clicked()), this, SLOT(DeleteWeaponSet()));
     connect(ui.pageOptions->SchemeEdit, SIGNAL(clicked()), this, SLOT(GoToEditScheme()));
     connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
     connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
     connect(ui.pageOptions->CBFrontendEffects, SIGNAL(toggled(bool)), this, SLOT(onFrontendEffects(bool)) );
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
     connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -300,7 +299,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
             ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
     connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToWeapons(int)));
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
@@ -334,13 +333,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
 
-    connect(ui.pageSelectWeapon->BtnDelete, SIGNAL(clicked()),
-            ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
-            this, SLOT(UpdateWeapons())); // executed second
-    //connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
-    //    this, SLOT(GoBack())); // executed third
-
+    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted(QString)),
+             this, SLOT(DeleteWeapons(QString)));
+    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsAdded(QString, QString)),
+             this, SLOT(AddWeapons(QString, QString)));
+    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsEdited(QString, QString, QString)),
+             this, SLOT(EditWeapons(QString, QString, QString)));
 
     connect(ui.pageMain->BtnNetLocal, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageMain->BtnNetOfficial, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
@@ -453,6 +451,62 @@ void HWForm::UpdateWeapons()
     }
 }
 
+void HWForm::AddWeapons(QString weaponsName, QString ammo)
+{
+    QVector<QComboBox*> combos;
+    combos.push_back(ui.pageOptions->WeaponsName);
+    combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+    combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
+
+    QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
+
+    for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it)
+    {
+        (*it)->addItem(weaponsName, QVariant(ammo));
+    }
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageSelectWeapon->selectWeaponSet->count()-1);
+}
+
+void HWForm::DeleteWeapons(QString weaponsName)
+{
+    QVector<QComboBox*> combos;
+    combos.push_back(ui.pageOptions->WeaponsName);
+    combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+    combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
+
+    QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
+
+    for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it)
+    {
+        int pos = (*it)->findText(weaponsName);
+        if (pos != -1)
+        {
+            (*it)->removeItem(pos);
+        }
+    }
+    ui.pageSelectWeapon->pWeapons->deletionDone();
+}
+
+void HWForm::EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo)
+{
+    QVector<QComboBox*> combos;
+    combos.push_back(ui.pageOptions->WeaponsName);
+    combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+    combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
+
+    QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
+
+    for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it)
+    {
+        int pos = (*it)->findText(oldWeaponsName);
+        (*it)->setItemText(pos, newWeaponsName);
+        (*it)->setItemData(pos, ammo);
+    }
+}
+
 void HWForm::UpdateTeamsLists()
 {
     QStringList teamslist = config->GetTeamsList();
@@ -527,23 +581,24 @@ void HWForm::UpdateTeamsLists()
     }
 }
 
-void HWForm::GoToSelectNewWeapon()
+void HWForm::GoToNewWeapons()
 {
     ui.pageSelectWeapon->pWeapons->newWeaponsName();
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
-void HWForm::GoToSelectWeapon()
+void HWForm::GoToEditWeapons()
 {
     ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageOptions->WeaponsName->currentIndex());
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
-void HWForm::GoToSelectWeaponSet(int index)
+void HWForm::GoToWeapons(int index)
 {
     ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(index);
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
+
 
 void HWForm::GoToSaves()
 {

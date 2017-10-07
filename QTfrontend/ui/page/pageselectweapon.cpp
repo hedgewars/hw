@@ -59,11 +59,12 @@ QLayout * PageSelectWeapon::footerLayoutDefinition()
 
 void PageSelectWeapon::connectSignals()
 {
+    connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(switchWeapons(const QString&)));
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
     connect(this, SIGNAL(goBack()), pWeapons, SLOT(save()));
     connect(BtnNew, SIGNAL(clicked()), pWeapons, SLOT(newWeaponsName()));
     connect(BtnCopy, SIGNAL(clicked()), pWeapons, SLOT(copy()));
-    connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(setWeaponsName(const QString&)));
+    connect(BtnDelete, SIGNAL(clicked()), pWeapons, SLOT(deleteWeaponsName()));
 }
 
 PageSelectWeapon::PageSelectWeapon(QWidget* parent) :  AbstractPage(parent)
