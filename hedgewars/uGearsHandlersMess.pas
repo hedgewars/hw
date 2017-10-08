@@ -5748,6 +5748,7 @@ HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
     begin
     StopSoundChan(Gear^.SoundChannel);
+    Gear^.SoundChannel:= -1;
     if (Gear^.Timer = 0) then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
@@ -5796,6 +5797,7 @@ if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) the
 if (Gear^.Pos = 3) and (Gear^.Power = 0) then
     begin
     StopSoundChan(Gear^.SoundChannel);
+    Gear^.SoundChannel:= -1;
     if HH^.GearHidden = nil then
         begin
         DeleteGear(Gear);
