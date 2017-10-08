@@ -62,6 +62,7 @@ class HWTeam : public QObject
         bool deleteFile();
         bool saveToFile();
         bool fileExists();
+        bool wouldOverwriteOtherFile();
 
         // attribute getters
         unsigned int campaignProgress() const;

@@ -279,6 +279,7 @@ Frontend:
  * Remove broken “Play again” button appearing in stats page after an online game
  * Weapons scheme editor: When leaving, it no longer flickers and the selection is not reset to Default
  * Team editor: Fix old team being retained when renaming a team
+ * Team editor: Automatically rename team when leaving team editor page with an already used team name
 
 Content Creation:
  + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect

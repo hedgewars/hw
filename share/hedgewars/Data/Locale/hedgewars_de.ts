@@ -1336,6 +1336,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
         <translation>CPU %1</translation>
     </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation>%1 (%2)</translation>
+    </message>
 </context>
 <context>
     <name>PageGameStats</name>
@@ -3143,6 +3147,14 @@ Momentane Anzahl Igel: %1</translation>
     <message>
         <source>Cannot delete file %1.</source>
         <translation>Datei %1 konnte nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>Teams - Name already taken</source>
+        <translation>Teams – Name bereits belegt</translation>
+    </message>
+    <message>
+        <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
+        <translation>Der Teamname »%1« ist bereits belegt, daher wurde der Name deines Teams auf »%2« geändert.</translation>
     </message>
 </context>
 <context>

@@ -610,7 +610,35 @@ HWTeam PageEditTeam::data()
 
 void PageEditTeam::saveTeam()
 {
-    data().saveToFile();
+    HWTeam team = data();
+    if(!team.wouldOverwriteOtherFile())
+    {
+        team.saveToFile();
+    }
+    else
+    {
+        // Name already used -> look for an appropriate name:
+        int i=2;
+        QString origName = team.name();
+        QString newName;
+        while(team.wouldOverwriteOtherFile())
+        {
+            newName = tr("%1 (%2)").arg(origName).arg(i++);
+            team.setName(newName);
+            if(i > 1000)
+                break;
+        }
+
+        QMessageBox teamNameFixedMsg(this);
+        teamNameFixedMsg.setIcon(QMessageBox::Warning);
+        teamNameFixedMsg.setWindowTitle(QMessageBox::tr("Teams - Name already taken"));
+        teamNameFixedMsg.setText(QMessageBox::tr("The team name '%1' is already taken, so your team has been renamed to '%2'.").arg(origName).arg(team.name()));
+        teamNameFixedMsg.setWindowModality(Qt::WindowModal);
+        teamNameFixedMsg.setStandardButtons(QMessageBox::Ok);
+        teamNameFixedMsg.exec();
+
+        team.saveToFile();
+    }
 }
 
 // When the "Use default for all binds" is pressed...

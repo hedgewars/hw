@@ -1252,6 +1252,10 @@ just enter your nickname.</translation>
         <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
         <translation>CPU %1</translation>
     </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation>%1 (%2)</translation>
+    </message>
 </context>
 <context>
     <name>PageGameStats</name>
@@ -2955,6 +2959,14 @@ Current number of hedgehogs: %1</translation>
     <message>
         <source>Cannot delete file %1.</source>
         <translation>Cannot delete file %1.</translation>
+    </message>
+    <message>
+        <source>Teams - Name already taken</source>
+        <translation>Teams—Name already taken</translation>
+    </message>
+    <message>
+        <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
+        <translation>The team name ‘%1’ is already taken, so your team has been renamed to ‘%2’.</translation>
     </message>
 </context>
 <context>
