@@ -548,7 +548,7 @@ Please wait a few seconds and try again.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>This page requires an internet connection.</translation>
+        <translation type="vanished">This page requires an internet connection.</translation>
     </message>
     <message>
         <source>Guest</source>
@@ -589,6 +589,18 @@ Password:</translation>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
         <translation>Computer %1</translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation>Unknown network error (possibly missing SSL library).</translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation>This feature requires an Internet connection, but you don’t appear to be online (error code: %1).</translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation>Internal error: Reply object is invalid.</translation>
     </message>
 </context>
 <context>
@@ -1103,7 +1115,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>This page requires an internet connection.</translation>
+        <translation type="vanished">This page requires an internet connection.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
@@ -1116,6 +1128,18 @@ just enter your nickname.</translation>
     <message>
         <source>Open the directory in which the downloaded files are stored in your system</source>
         <translation type="vanished">Open the directory in which the downloaded files are stored in your system</translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation>Unknown network error (possibly missing SSL library).</translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation>This feature requires an Internet connection, but you don’t appear to be online (error code: %1).</translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation>Internal error: Reply object is invalid.</translation>
     </message>
 </context>
 <context>

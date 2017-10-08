@@ -359,7 +359,6 @@
 02:03=Alle jubeln für %1
 02:03=%1 wählte den Sieg statt den Tod
 02:03=%1 bekommt einen Stern auf der Siegesstraße
-02:03=Supersieg für %1
 02:03=%1 trinkt den Siegersaft
 02:03=%1 triumphiert
 02:03=%1 schlürft von der Siegersoße

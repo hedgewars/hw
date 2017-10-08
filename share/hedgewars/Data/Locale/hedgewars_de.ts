@@ -597,7 +597,7 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>Diese Seite benötigt eine Internetverbindung.</translation>
+        <translation type="vanished">Diese Seite benötigt eine Internetverbindung.</translation>
     </message>
     <message>
         <source>Team 1</source>
@@ -612,6 +612,18 @@ Bitte Kennwort eingeben:</translation>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
         <translation>Computer %1</translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1187,7 +1199,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>Diese Seite benötigt eine Internetverbindung.</translation>
+        <translation type="vanished">Diese Seite benötigt eine Internetverbindung.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
@@ -1200,6 +1212,18 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Open the directory in which the downloaded files are stored in your system</source>
         <translation type="vanished">Verzeichnis, in dem sich die heruntergeladenen Dateien in deinem System befinden, öffnen</translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
