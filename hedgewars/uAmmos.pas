@@ -212,7 +212,7 @@ else
     cnt:= 0;
 if (cnt <> AMMO_INFINITE) then
     begin
-    inc(cnt, amt);
+    cnt:= min(AMMO_FINITE_MAX, cnt + amt);
     SetAmmo(Hedgehog, ammo, cnt)
     end
 end;

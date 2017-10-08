@@ -311,6 +311,7 @@ const
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
+    AMMO_FINITE_MAX = 99;
 
     // explosion flags
     //EXPLAllDamageInRadius = $00000001;  Completely unused for ages

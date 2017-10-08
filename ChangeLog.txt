@@ -51,6 +51,7 @@ Game engine:
  * Fixed cake taking over 200 seconds to explode when its stuck and can't move
  * Fixed Birdy descending into water when hog took damage or died before it got picked up
  * Fixed teleportation being able to teleport in land if you clicked in the "dark" area of the wrap world edge
+ * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Remove buggy /finish chat command
  * Various other fixes
 
