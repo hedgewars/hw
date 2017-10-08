@@ -2250,11 +2250,27 @@ void HWForm::showFeedbackDialogNetChecked()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
 
-    if (reply && (reply->error() == QNetworkReply::NoError)) {
-        FeedbackDialog dialog(this);
-        dialog.exec();
-    } else
-        MessageDialog::ShowErrorMessage(tr("This page requires an internet connection."), this);
+    if (reply) {
+        switch (reply->error()) {
+            case QNetworkReply::NoError:
+                {
+                    FeedbackDialog dialog(this);
+                    dialog.exec();
+                }
+                break;
+            case QNetworkReply::UnknownNetworkError:
+                MessageDialog::ShowFatalMessage(
+                    tr("Unknown network error (possibly missing SSL library)."), this);
+                break;
+            default:
+                MessageDialog::ShowFatalMessage(
+                    QString(tr("This feature requires an Internet connection, but you don't appear to be online (error code: %1).")).arg(reply->error()), this);
+                break;
+        }
+    }
+    else {
+        MessageDialog::ShowFatalMessage(tr("Internal error: Reply object is invalid."), this);
+    }
 }
 
 void HWForm::startGame()
