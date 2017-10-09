@@ -2968,6 +2968,8 @@ begin
             CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + switchDir) mod CurrentTeam^.HedgehogsNumber;
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Health > 0) and
+              ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.State and gstHHDeath) = 0) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
 
         SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);

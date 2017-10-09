@@ -55,6 +55,7 @@ Game engine:
  * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Fixed short sound effect breakdown right after using a time box
  * Fixed sticky mine sound sometimes playing when shooting portable portal device when a sticky mine is placed on terrain
+ * Fixed player being able to switch to dying hog
  * Remove buggy /finish chat command
  * Various other fixes
 
