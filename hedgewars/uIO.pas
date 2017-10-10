@@ -477,7 +477,7 @@ with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
     if (State and gstChooseTarget) <> 0 then
         begin
-        if CurAmmoType = amBee then
+        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoTargetAfter) <> 0 then
             isCursorVisible:= false;
         if not CurrentTeam^.ExtDriven then
             begin

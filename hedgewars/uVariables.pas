@@ -922,6 +922,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
                           ammoprop_NeedTarget or
+                          ammoprop_NoTargetAfter or
                           ammoprop_DontHold or
                           ammoprop_NeedUpDown;
                 Count: 2;
@@ -1990,6 +1991,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
                             ammoprop_NeedTarget or
+                            ammoprop_NoTargetAfter or
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
                             ammoprop_NotBorder or
