@@ -2919,7 +2919,6 @@ if not ScriptLoaded then
 // push game variables so they may be modified by the script
 ScriptSetInteger('CursorX', CursorPoint.X);
 ScriptSetInteger('CursorY', CursorPoint.Y);
-ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetInteger('WorldEdge', ord(WorldEdge));
 ScriptSetString('Seed', cSeed);
