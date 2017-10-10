@@ -312,6 +312,11 @@ void PageEditTeam::lazyLoad()
 
     CBVoicepack->addItems(list);
 
+    QIcon dlcIcon;
+    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
+    QPixmap emptySpace = QPixmap(7, 15);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    QIcon notDlcIcon = QIcon(emptySpace);
 
     // forts
     list = dataMgr.entryList("Forts", QDir::Files, QStringList("*L.png"));
@@ -320,15 +325,17 @@ void PageEditTeam::lazyLoad()
         QString fortPath = PHYSFS_getRealDir(QString("Forts/%1").arg(file).toLocal8Bit().data());
 
         QString fort = file.replace(QRegExp("L\\.png$"), "");
-        QString fortDisplay;
 
         bool isDLC = !fortPath.startsWith(datadir->absolutePath());
         if (isDLC)
-            fortDisplay = "*" + fort;
+        {
+            CBFort->addItem(dlcIcon, fort, fort);
+        }
         else
-            fortDisplay = fort;
+        {
+            CBFort->addItem(notDlcIcon, fort, fort);
+        }
 
-        CBFort->addItem(fortDisplay, fort);
     }
 
 

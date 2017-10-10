@@ -80,6 +80,13 @@ bool MapModel::loadMaps()
     //QList<QStandardItem *> missionMaps;
     QList<QStandardItem *> mapList;
 
+
+    QIcon dlcIcon;
+    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
+    QPixmap emptySpace = QPixmap(7, 15);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    QIcon notDlcIcon = QIcon(emptySpace);
+
     // add mission/static maps to lists
     foreach (QString map, maps)
     {
@@ -163,9 +170,15 @@ bool MapModel::loadMaps()
             // caption
             caption = map;
 
+            QIcon icon;
+            if (dlc)
+                icon = dlcIcon;
+            else
+                icon = notDlcIcon;
+
             // we know everything there is about the map, let's get am item for it
             QStandardItem * item = MapModel::infoToItem(
-                QIcon(), caption, type, map, theme, limit, scheme, weapons, desc, dlc);
+                icon, caption, type, map, theme, limit, scheme, weapons, desc, dlc);
 
             // append item to the list
             mapList.append(item);
@@ -225,7 +238,7 @@ QStandardItem * MapModel::infoToItem(
     QString desc,
     bool dlc)
 {
-    QStandardItem * item = new QStandardItem(icon, (dlc ? "*" : "") + caption);
+    QStandardItem * item = new QStandardItem(icon, caption);
     MapInfo mapInfo;
     QVariant qvar(QVariant::UserType);
 
