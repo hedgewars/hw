@@ -625,6 +625,9 @@ end
 function CheckProximity(gear)
 
 	dist = GetDistFromGearToXY(gear, GetX(strucGear[tempID]), GetY(strucGear[tempID]))
+	if not dist then
+		return
+	end
 
 	-- calculate my real radius if I am an aura
 	if strucCircType[tempID] == 0 then
@@ -1080,6 +1083,9 @@ local tCirc = {} -- array of circles that appear around tagged gears
 function GetDistFromGearToXY(gear, g2X, g2Y)
 
 	g1X, g1Y = GetGearPosition(gear)
+	if not g1X then
+		return nil
+	end
 	q = g1X - g2X
 	w = g1Y - g2Y
 

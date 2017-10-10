@@ -77,6 +77,7 @@ Construction Mode:
  * Special tools like structure placer now have their own proper descriptions (instead of Air Attack description, etc.)
  * Costs for weapon and utility crates were all equal
  * Remove airplane cursor
+ * Fix Lua errors when hog goes to time travel while any filter is in map
  * Many other fixes and tweaks
 
 Racer and TechRacer:
