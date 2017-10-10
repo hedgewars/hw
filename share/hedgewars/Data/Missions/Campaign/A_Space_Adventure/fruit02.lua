@@ -339,18 +339,18 @@ function heroDeath(gear)
 		SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you."))
 		SendStat(siCustomAchievement, loc("Do not destroy the crates!"))
 		if tookPartInBattle then
-			SendStat(siCustomAchievement, loc("You'll have to eliminate the Fruit Assassins at the end."))
 			if permitCaptainLimeDeath then
+				SendStat(siCustomAchievement, loc("You'll have to eliminate the Fruit Assassins at the end."))
 				sendSimpleTeamRankings({teamC.name, teamA.name})
 			else
 				sendSimpleTeamRankings({teamA.name})
 			end
 		else
-			SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end."))
-			SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
 			if permitCaptainLimeDeath then
+				SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end."))
 				sendSimpleTeamRankings({teamB.name, teamA.name})
 			else
+				SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
 				sendSimpleTeamRankings({teamA.name})
 			end
 		end
