@@ -44,7 +44,7 @@ class PageEditTeam : public AbstractPage
 
     public slots:
         void CBTeamLvl_activated(const int index);
-        void CBFort_activated(const QString & gravename);
+        void CBFort_activated(const int index);
 
     private:
         QTabWidget * tbw;

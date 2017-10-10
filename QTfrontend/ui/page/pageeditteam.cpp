@@ -32,6 +32,7 @@
 #include "HWApplication.h"
 #include "keybinder.h"
 
+#include "physfs.h"
 #include "DataManager.h"
 #include "hatbutton.h"
 
@@ -277,7 +278,7 @@ void PageEditTeam::connectSignals()
 
     connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 
-    connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
+    connect(CBFort, SIGNAL(currentIndexChanged(const int)), this, SLOT(CBFort_activated(const int)));
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
@@ -314,8 +315,21 @@ void PageEditTeam::lazyLoad()
 
     // forts
     list = dataMgr.entryList("Forts", QDir::Files, QStringList("*L.png"));
-    list.replaceInStrings(QRegExp("L\\.png$"), "");
-    CBFort->addItems(list);
+    foreach (QString file, list)
+    {
+        QString fortPath = PHYSFS_getRealDir(QString("Forts/%1").arg(file).toLocal8Bit().data());
+
+        QString fort = file.replace(QRegExp("L\\.png$"), "");
+        QString fortDisplay;
+
+        bool isDLC = !fortPath.startsWith(datadir->absolutePath());
+        if (isDLC)
+            fortDisplay = "*" + fort;
+        else
+            fortDisplay = fort;
+
+        CBFort->addItem(fortDisplay, fort);
+    }
 
 
     // graves
@@ -389,9 +403,10 @@ void PageEditTeam::fixHHname(int idx)
         HHNameEdit[idx]->setText(QLineEdit::tr("hedgehog %1").arg(idx+1));
 }
 
-void PageEditTeam::CBFort_activated(const QString & fortname)
+void PageEditTeam::CBFort_activated(const int index)
 {
-    QPixmap pix("physfs://Forts/" + fortname + "L.png");
+    QString fortName = CBFort->itemData(index).toString();
+    QPixmap pix("physfs://Forts/" + fortName + "L.png");
     FortPreview->setPixmap(pix);
 }
 
@@ -559,7 +574,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     CBGrave->setCurrentIndex(CBGrave->findText(team.grave()));
     CBFlag->setCurrentIndex(CBFlag->findData(team.flag()));
 
-    CBFort->setCurrentIndex(CBFort->findText(team.fort()));
+    CBFort->setCurrentIndex(CBFort->findData(team.fort()));
     CBVoicepack->setCurrentIndex(CBVoicepack->findText(team.voicepack()));
 
     QStandardItemModel * binds = DataManager::instance().bindsModel();
@@ -595,7 +610,7 @@ HWTeam PageEditTeam::data()
     }
 
     team.setGrave(CBGrave->currentText());
-    team.setFort(CBFort->currentText());
+    team.setFort(CBFort->itemData(CBFort->currentIndex()).toString());
     team.setVoicepack(CBVoicepack->currentText());
     team.setFlag(CBFlag->itemData(CBFlag->currentIndex()).toString());
 
