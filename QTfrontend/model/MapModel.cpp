@@ -83,6 +83,7 @@ bool MapModel::loadMaps()
 
     QIcon dlcIcon;
     dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
+    dlcIcon.addFile(":/res/dlcMarkerSelected.png", QSize(), QIcon::Selected, QIcon::On);
     QPixmap emptySpace = QPixmap(7, 15);
     emptySpace.fill(QColor(0, 0, 0, 0));
     QIcon notDlcIcon = QIcon(emptySpace);

@@ -273,7 +273,7 @@ Frontend:
  + Allow to randomize hog names, hats, team name, flag, grave, voice and fort separately
  + “Random team” button is now able to randomly select from all available hats
  + Creating new game/weapon schemes guarantees unique names
- + Custom maps and styles are now marked with a circle instead of an asterisk symbol
+ + Custom maps and styles are now marked with an icon instead of an asterisk
  + Mark custom forts in team editor
  * Fix flag being selectable for computer players although it had no effect
  * Campaign screen does no longer show AI-controlled teams
