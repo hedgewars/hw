@@ -795,6 +795,7 @@ begin
 
             case amt of
                 amAirAttack,
+                amNapalm,
                 amMineStrike,
                 amDrillStrike: DrawSpriteRotated(sprHandAirAttack, sx, oy, sign, 0);
                 amPickHammer: DrawHedgehog(sx, sy,
@@ -802,7 +803,8 @@ begin
                             1,
                             2,
                             0);
-                amTeleport: DrawSpriteRotatedF(sprTeleport, sx, sy, 0, sign, 0);
+                amTeleport,
+                amPiano: DrawSpriteRotatedF(sprTeleport, sx, sy, 0, sign, 0);
                 amKamikaze: DrawHedgehog(sx, sy,
                             sign,
                             1,

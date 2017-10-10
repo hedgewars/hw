@@ -56,6 +56,7 @@ Game engine:
  * Fixed short sound effect breakdown right after using a time box
  * Fixed sticky mine sound sometimes playing when shooting portable portal device when a sticky mine is placed on terrain
  * Fixed player being able to switch to dying hog
+ * Fixed hedgehog holding nothing in hand when napalm or piano strike got selected
  * Remove buggy /finish chat command
  * Various other fixes
 
