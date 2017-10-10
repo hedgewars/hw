@@ -43,6 +43,12 @@ void TeamSelWidget::addTeam(HWTeam team)
         blockSignals(false);
         connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+
+        // Hide team notice if at least two teams.
+        if (curPlayingTeams.size() >= 2)
+        {
+            numTeamNotice->hide();
+        }
     }
     else
     {
@@ -133,6 +139,11 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
         QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
         framePlaying->removeTeam(team);
         curPlayingTeams.erase(itPlay);
+        // Show team notice if less than two teams.
+        if (curPlayingTeams.size() < 2)
+        {
+            numTeamNotice->show();
+        }
     }
     else
     {
@@ -293,6 +304,8 @@ void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
 
     foreach(HWTeam team, teamslist)
         addTeam(team);
+
+    numTeamNotice->show();
 
     repaint();
 }
