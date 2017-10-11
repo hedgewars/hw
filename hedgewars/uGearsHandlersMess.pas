@@ -2616,6 +2616,8 @@ begin
             State := State or gstMoving;
             end;
         DeleteGear(Gear);
+        if (GetAmmoEntry(HHGear^.Hedgehog^, TAmmoType(amParachute))^.Count >= 1) and (HHGear^.Hedgehog^.CurAmmoType <> amParachute) then
+            SetWeapon(amParachute);
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
@@ -4017,6 +4019,8 @@ begin
                 State := State or gstMoving
                 end;
             DeleteGear(Gear);
+            if (GetAmmoEntry(HHGear^.Hedgehog^, TAmmoType(amJetpack))^.Count >= 1) and (HHGear^.Hedgehog^.CurAmmoType <> amJetpack) then
+                SetWeapon(amJetpack);
             isCursorVisible := false;
             ApplyAmmoChanges(HHGear^.Hedgehog^);
         //    if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);

@@ -30,6 +30,7 @@ Game engine:
  + Small visual effects enhancements
  + Briefly show theme and music authors in chat at start of game
  + A few new funny ticker messages (English)
+ + Keep rope / parachute / flying saucer selected when destroyed and secondary ammo selected
  * Fixed cursor often jumping back to screen center when putting target location while moving cursor
  * Fixed air-strikes drops being off-center
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.

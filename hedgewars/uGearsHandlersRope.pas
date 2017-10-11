@@ -449,6 +449,8 @@ begin
         HHGear^.State := HHGear^.State and (not (gstAttacking or gstHHJumping or gstHHHJump));
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         DeleteGear(Gear);
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and (HHGear^.Hedgehog^.CurAmmoType <> amRope) then
+            SetWeapon(amRope);
         exit()
         end;
 
@@ -541,6 +543,8 @@ begin
                 Message := Message and (not gmAttack)
                 end;
         DeleteGear(Gear);
+        if GetAmmoEntry(HHGear^.Hedgehog^, TAmmoType(amRope))^.Count >= 1 then
+            SetWeapon(amRope);
         exit;
         end;
     if CheckGearDrowning(HHGear) then DeleteGear(Gear)
