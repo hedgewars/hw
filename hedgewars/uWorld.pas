@@ -1167,7 +1167,6 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     replicateToLeft, replicateToRight, tmp: boolean;
-    a: Byte;
 begin
 if WorldEdge <> weWrap then
     begin
