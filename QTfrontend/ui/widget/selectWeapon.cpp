@@ -226,12 +226,15 @@ void SelWeaponWidget::save()
 
     for(int i = 0; i < cDefaultAmmos.size(); i++)
     {
-        if (cDefaultAmmos[i].first.compare(m_name->text()) == 0)
+        // Don't allow same name as default weapon set, even case-insensitively.
+        // This prevents some problems with saving/loading.
+        if (cDefaultAmmos[i].first.toLower().compare(m_name->text().toLower()) == 0)
         {
             // don't show warning if no change
             if (cDefaultAmmos[i].second.compare(stateFull) == 0)
                 return;
 
+            m_name->setText(curWeaponsName);
             QMessageBox deniedMsg(this);
             deniedMsg.setIcon(QMessageBox::Warning);
             deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
