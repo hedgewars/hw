@@ -57,6 +57,7 @@ Game engine:
  * Fixed sticky mine sound sometimes playing when shooting portable portal device when a sticky mine is placed on terrain
  * Fixed player being able to switch to dying hog
  * Fixed hedgehog holding nothing in hand when napalm or piano strike got selected
+ * Fixed possible to move rope angle below 0° while having secondary weapon selected
  * Remove buggy /finish chat command
  * Various other fixes
 

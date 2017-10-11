@@ -331,11 +331,19 @@ if Hedgehog.Gear <> nil then
         begin
         if (AmmoType <> amNothing) then
             begin
-            CurMinAngle:= Ammoz[AmmoType].minAngle;
-            if Ammoz[AmmoType].maxAngle <> 0 then
-                CurMaxAngle:= Ammoz[AmmoType].maxAngle
+            if ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope)) then
+                begin
+                CurMaxAngle:= Ammoz[amRope].maxAngle;
+                CurMinAngle:= Ammoz[amRope].minAngle;
+                end
             else
-                CurMaxAngle:= cMaxAngle;
+                begin
+                CurMinAngle:= Ammoz[AmmoType].minAngle;
+                if Ammoz[AmmoType].maxAngle <> 0 then
+                    CurMaxAngle:= Ammoz[AmmoType].maxAngle
+                else
+                    CurMaxAngle:= cMaxAngle;
+                end;
 
             with Hedgehog.Gear^ do
                 begin
