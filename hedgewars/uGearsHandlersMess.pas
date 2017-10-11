@@ -468,7 +468,7 @@ begin
     if isFalling and (Gear^.State and gstNoGravity = 0) then
         begin
         Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind <> 0) and 
+        if (GameFlags and gfMoreWind <> 0) and (TurnTimeLeft > 0) and
            ((xland or land) = 0) and
            ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
