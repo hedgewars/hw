@@ -64,7 +64,11 @@ function onGameInit()
 end
 
 function onGameStart()
-    ShowMission(loc("TrophyRace"), loc("Race"), loc("Use your rope to get from start to finish as fast as you can!"), -amRope, 0)
+    ShowMission(loc("TrophyRace"), loc("Race"),
+        loc("Use your rope to get from start to finish as fast as you can!") .. "|" ..
+        loc("In each round, the worst hedgehog of the round is eliminated.") .. "|" ..
+        loc("The last surviving clan wins."),
+        -amRope, 0)
     started = true
     p=1820
     for i = 0, numhhs - 1 do
