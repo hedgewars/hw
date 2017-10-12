@@ -1167,6 +1167,9 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     replicateToLeft, replicateToRight, tmp: boolean;
+{$IFDEF USE_VIDEO_RECORDING}
+    a: Byte;
+{$ENDIF}
 begin
 if WorldEdge <> weWrap then
     begin
