@@ -242,13 +242,12 @@ void KeyBinder::bindCellClicked(QTableWidgetItem * item)
 {
     QComboBox * box = bindCellComboBoxMappings->value(item);
     QTableWidget * table = item->tableWidget();
-    QFrame * frame = box->findChild<QFrame*>();
 
-    box->showPopup();
-    frame->move(
-        frame->x() + table->horizontalHeader()->sectionSize(0),
-        frame->y() + (table->verticalHeader()->defaultSectionSize() * item->row())
+    box->move(
+        table->horizontalHeader()->sectionSize(0),
+        (table->verticalHeader()->defaultSectionSize() * (item->row() + 1)) - (box->height()) + 1
     );
+    box->showPopup();
 }
 
 // When a new row in a bind table is *selected*, this clears selection in any other table
