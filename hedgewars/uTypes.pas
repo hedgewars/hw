@@ -526,6 +526,8 @@ type
             Surface: PSDL_Surface;
             Width, Height, imageWidth, imageHeight: LongInt;
             saveSurf: boolean;
+            critical: boolean;
+            checkSum: boolean; // use for images where if they are missing a desync can occur.
             priority: GLfloat;
             getDimensions, getImageDimensions: boolean;
             end;

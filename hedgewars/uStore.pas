@@ -413,7 +413,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                 imflags := (ifAlpha or ifColorKey);
 
                 // these sprites are optional
-                if not (ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk, sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL]) then // FIXME: hack
+                if critical then 
                     imflags := (imflags or ifCritical);
 
                 // load the image
