@@ -472,22 +472,25 @@ for i:= 0 to cCloudsNumber - 1 do
 end;
 
 procedure ChangeToSDClouds;
-var       i: LongInt;
+var       i, j: LongInt;
     vg, tmp: PVisualGear;
 begin
 if cCloudsNumber = cSDCloudsNumber then
     exit;
-vg:= VisualGearLayers[0];
-while vg <> nil do
-    if vg^.Kind = vgtCloud then
-        begin
-        tmp:= vg^.NextGear;
-        DeleteVisualGear(vg);
-        vg:= tmp
-        end
-    else vg:= vg^.NextGear;
-for i:= 0 to cSDCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+for i:= 0 to 6 do
+    begin
+    vg:= VisualGearLayers[i];
+    while vg <> nil do
+        if vg^.Kind = vgtCloud then
+            begin
+            tmp:= vg^.NextGear;
+            DeleteVisualGear(vg);
+            vg:= tmp
+            end
+        else vg:= vg^.NextGear;
+    for j:= 0 to cSDCloudsNumber - 1 do
+        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    end;
 end;
 
 procedure AddFlakes;
