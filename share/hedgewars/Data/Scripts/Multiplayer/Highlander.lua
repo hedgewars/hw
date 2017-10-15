@@ -1,8 +1,9 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.4b+
 -- by mikade
 --------------------------------
+
+-- Ancient changelog:
 
 -----------
 --0.1
@@ -132,11 +133,17 @@ local utiltot = 0
 
 local someHog = nil -- just for looking up the weps
 
+-- Script parameter stuff
 local mode = nil
+
+-- If true, killing hogs of your own clan doesn't give you their weapons.
+-- Otherwise, killing any hog gives you their weapons.
+local loyal = false
 
 function onParameters()
     parseParams()
     mode = params["mode"]
+    loyal = params["loyal"] == "true"
 end
 
 function CheckForWeaponSwap()
@@ -217,7 +224,7 @@ end
 -- this is called when a hog dies
 function TransferWeps(gear)
 
-	if CurrentHedgehog ~= nil and CurrentHedgehog ~= gear then
+	if CurrentHedgehog ~= nil and CurrentHedgehog ~= gear and (not loyal or (GetHogClan(CurrentHedgehog) ~= GetHogClan(gear))) then
 
         local x,y,color
         local vgear
@@ -273,8 +280,12 @@ function onGameInit()
 	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
 	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
-	Goals = loc("Highlander: Eliminate enemy hogs to take their weapons") .. "|" ..
-	loc("Replenishment: Weapons are restocked on turn start of a new hog")
+	if loyal then
+		Goals = loc("Loyal Highlander: Eliminate enemy hogs to take their weapons") .. "|"
+	else
+		Goals = loc("Highlander: Eliminate hogs to take their weapons") .. "|"
+	end
+	Goals = Goals .. loc("Replenishment: Weapons are restocked on turn start of a new hog")
 end
 
 function onGameStart()
