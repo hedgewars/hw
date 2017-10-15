@@ -285,7 +285,8 @@ function onGameInit()
 	else
 		Goals = loc("Highlander: Eliminate hogs to take their weapons") .. "|"
 	end
-	Goals = Goals .. loc("Replenishment: Weapons are restocked on turn start of a new hog")
+	Goals = Goals .. loc("Replenishment: Weapons are restocked on turn start of a new hog") .. "|" ..
+	loc("Ammo Limit: Hogs can’t have more than 1 ammo per type")
 end
 
 function onGameStart()
