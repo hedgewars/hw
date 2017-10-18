@@ -150,20 +150,20 @@ for i:= 0 to Pred(Targets.Count) do
                     // if not between shots, activate invulnerability/vampirism if available
                     if CurrentHedgehog^.MultiShootAttacks = 0 then
                         begin
-                        if HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0 then
+                        if (HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0) and (Me^.Hedgehog^.Effects[heInvulnerable] = 0) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
 
-                        if HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0 then
+                        if (HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0) and (cDamageModifier <> _1_5) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
-                        if HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0 then
+                        if (HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0) and (not cVampiric) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amVampiric), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
