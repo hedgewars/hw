@@ -92,7 +92,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
--- These define weps allowed by the script. At present Tardis and Resurrection is banned for example
+-- These define weps allowed by the script.
 -- These were arbitrarily defined out-of-order in initial script, so that was preserved here, resulting 
 -- in a moderately odd syntax.
 local atkWeps = 	{
@@ -104,6 +104,7 @@ local atkWeps = 	{
                     [amSeduction]=true, [amHammer]=true, [amMine]=true, [amDynamite]=true, [amCake]=true,
                     [amBallgun]=true, [amSMine]=true, [amRCPlane]=true, [amBirdy]=true, [amKnife]=true,
                     [amAirAttack]=true, [amMineStrike]=true, [amNapalm]=true, [amDrillStrike]=true, [amPiano]=true, [amAirMine] = true,
+                    [amDuck]=true,
 					}
 
 local utilWeps =  {
@@ -113,6 +114,11 @@ local utilWeps =  {
 					[amLowGravity]=true, [amExtraDamage]=true, [amExtraTime]=true,
 					[amLandGun]=true, [amRubber]=true, [amIceGun]=true,
 					}
+
+-- Intentionally left out:
+-- * Resurrector (guaranteed to screw up the game)
+-- * Time Box
+-- * Switch Hedgehog (not sure why)
 
 local wepArray = {}
 
