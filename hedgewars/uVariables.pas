@@ -822,7 +822,7 @@ const
                 AmmoType: amNothing;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 0;
+            Slot: cHiddenSlotIndex;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2425,9 +2425,7 @@ const
                 AmmoType: amDuck;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 8; // FIXME: Use slot 0. for some reason, hwengine does not like it
-                     // when we put it into slot 0.
-                     // Probably related to amNothing being in slot 0, too?
+            Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;

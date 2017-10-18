@@ -275,7 +275,8 @@ const
     gmDelete         = $00010000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
-    cMaxSlotIndex       = 9;
+    cMaxSlotIndex       = 10;
+    cHiddenSlotIndex    = cMaxSlotIndex; // slot for hidden ammo types, not visible and has no key
     cMaxSlotAmmoIndex   = 5;
 
     // ai hints
