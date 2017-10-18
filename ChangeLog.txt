@@ -18,7 +18,7 @@ Game engine:
  + New weapon: rubber duck
  + Freezer can now freeze sticky mines (they get disabled and fall into the water)
  + Improved hedgehog spawns on maps that lack land mass or free space
- + AI hedgehogs can now use Bee and Vampirism
+ + AI hedgehogs can now use Bee, Vampirism and Time Box
  + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
  + Fort Mode will now work with more than 2 teams
  + Render graves behind everything else, so that they can't hide mines etc.

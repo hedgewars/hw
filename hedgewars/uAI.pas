@@ -471,8 +471,17 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
 
             FillBonuses(false);
 
+            // Hog has no idea what to do. Use tardis or skip
             if not bonuses.activity then
-                AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+                if ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (random(3) < 1) then
+                    // Tardis brings hog to a random place. Perfect for clueless AI
+                    begin
+                    AddAction(BestActions, aia_Weapon, Longword(amTardis), 80, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                    end
+                else
+                    AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;
 
         end else SDL_Delay(100)
