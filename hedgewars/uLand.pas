@@ -978,16 +978,15 @@ begin
     if digest = '' then
         digest:= s
     else
-        checkFails(s = digest, 'Different maps generated, sorry', true);
+        checkFails(s = digest, 'Different map or critical resources loaded, sorry', true);
 end;
 
 procedure chSendLandDigest(var s: shortstring);
-var adler, i: LongInt;
+var i: LongInt;
 begin
-    adler:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
-        adler:= Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-    s:= 'M' + IntToStr(adler) + cScriptName;
+        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @Land[i,0], LAND_WIDTH);
+    s:= 'M' + IntToStr(syncedPixelDigest); // + cScriptName; script name is no longer needed. scripts are hashed
 
     ScriptSetString('LandDigest', s);
 

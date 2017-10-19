@@ -69,7 +69,8 @@ var
     cAudioCodec        : shortstring;
 {$ENDIF}
 //////////////////////////
-    cMapName        : shortstring;
+    cMapName           : shortstring;
+    syncedPixelDigest  : LongInt;
     isCursorVisible : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
@@ -2855,6 +2856,7 @@ begin
 
     LuaGoals:= '';
     cMapName:= '';
+    syncedPixelDigest:= 1;
 
     LuaTemplateNumber:= 0;
 

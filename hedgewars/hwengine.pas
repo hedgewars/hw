@@ -74,7 +74,6 @@ begin
             SetLandTexture;
             UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
             setAILandMarks;
-            ParseCommand('sendlanddigest', true);
             GameState:= gsStart;
             end;
         gsStart:
@@ -88,6 +87,7 @@ begin
             AddFlakes;
             SetRandomSeed(cSeed, false);
             StoreLoad(false);
+            ParseCommand('sendlanddigest', true); // extending land digest to all synced pixels (anything that could modify land)
             if not allOK then exit;
             AssignHHCoords;
             AddMiscGears;

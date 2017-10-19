@@ -62,7 +62,7 @@ procedure SetSkyColor(r, g, b: real);
 
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
-     uCommands, uPhysFSLayer, uDebug
+     uCommands, uPhysFSLayer, uDebug, adler32
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
@@ -373,7 +373,7 @@ procedure StoreLoad(reload: boolean);
 var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
-    i, imflags: LongInt;
+    i, y, imflags: LongInt;
 begin
 AddFileLog('StoreLoad()');
 
@@ -471,6 +471,10 @@ for ii:= Low(TSprite) to High(TSprite) do
 {$IFDEF USE_CONTEXT_RESTORE}
                     Surface:= tmpsurf
 {$ELSE}
+                    if checkSum then
+                        for y := 0 to tmpsurf^.h-1 do
+                            syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PLongWordArray(tmpsurf^.pixels)^[y*tmpsurf^.w], tmpsurf^.w);
+
                     if saveSurf then
                         Surface:= tmpsurf
                     else

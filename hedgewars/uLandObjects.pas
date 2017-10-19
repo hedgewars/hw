@@ -35,7 +35,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uDebug, uUtils
-     , uPhysFSLayer;
+     , uPhysFSLayer, adler32;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -260,6 +260,9 @@ var x1, x2, y, k, i, girderHeight: LongInt;
 begin
 if girSurf = nil then
     girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
+
+for y := 0 to girsurf^.h-1 do
+    syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PLongWordArray(girsurf^.pixels)^[y*girsurf^.w], girsurf^.w);
 
 girderHeight:= girSurf^.h;
 
@@ -498,7 +501,7 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key: shortstring;
     f: PFSFile;
-    i: LongInt;
+    i, y: LongInt;
     ii, t: Longword;
     c2: TSDL_Color;
 begin
@@ -695,6 +698,8 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
+            for y := 0 to Surf^.h-1 do
+                syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PLongWordArray(Surf^.pixels)^[y*Surf^.w], Surf^.w);
 
             inrectcnt := 0;
 
