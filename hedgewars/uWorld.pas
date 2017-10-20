@@ -424,7 +424,7 @@ begin
 
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
-        if((i = 0) and (Ammo^[i,1].Count > 0)) or ((i <> 0) and (i <> cHiddenSlotIndex) and (Ammo^[i,0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             inc(SlotsNum);
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
     SlotsNumX:= SlotsNum;
@@ -455,7 +455,7 @@ begin
     x:= AMRect.x;
     y:= AMRect.y;
     for i:= 0 to cMaxSlotIndex do
-        if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
             y:= AMRect.y;
@@ -662,7 +662,7 @@ Slot:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
 c:= -1;
     for i:= 0 to cMaxSlotIndex do
-        if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
             inc(c);
     {$IFDEF USE_AM_NUMCOLUMN}
@@ -692,7 +692,7 @@ c:= -1;
 {$ELSE}
 c:= -1;
     for i:= 0 to cMaxSlotIndex do
-        if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
             inc(c);
     {$IFDEF USE_AM_NUMCOLUMN}
