@@ -615,15 +615,15 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Netzwerkfehler (möglicherweise fehlt eine SSL-Bibliothek).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Funktion benötigt eine Internetverbindung, aber du scheinst nicht online zu sein (Fehlercode: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interner Fehler: Reply-Objekt ist ungültig.</translation>
     </message>
 </context>
 <context>
@@ -1215,15 +1215,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Netzwerkfehler (möglicherweise fehlt eine SSL-Bibliothek).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Funktion benötigt eine Internetverbindung, aber du scheinst nicht online zu sein (Fehlercode: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interner Fehler: Reply-Objekt ist ungültig.</translation>
     </message>
 </context>
 <context>
