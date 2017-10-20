@@ -386,7 +386,7 @@ void HWForm::onFrontendFullscreen(bool value)
         setWindowState(windowState() | Qt::WindowFullScreen);
     else
     {
-        setWindowState(windowState() & static_cast<int>(!Qt::WindowFullScreen));
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
     }
 }
 
@@ -1296,7 +1296,7 @@ void HWForm::NetError(const QString & errmsg)
     {
         case ID_PAGE_INGAME:
             MessageDialog::ShowErrorMessage(errmsg, this);
-            // no break
+            /* fallthrough */
         case ID_PAGE_NETGAME:
             ui.pageNetGame->displayError(errmsg);
             break;
