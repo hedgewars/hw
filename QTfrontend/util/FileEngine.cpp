@@ -295,7 +295,11 @@ QFile::FileError FileEngine::error() const
 
 QString FileEngine::errorString() const
 {
+#if PHYSFS_VER_MAJOR >= 3
+    return PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode());
+#else
     return PHYSFS_getLastError();
+#endif
 }
 
 bool FileEngine::supportsExtension(Extension extension) const
@@ -352,7 +356,12 @@ void FileEngineHandler::mountPacks()
 
 QString FileEngineHandler::errorStr()
 {
-    QString s = QString::fromUtf8(PHYSFS_getLastError());
+    QString s;
+#if PHYSFS_VER_MAJOR >= 3
+    s = QString::fromUtf8(PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
+#else
+    s = QString::fromUtf8(PHYSFS_getLastError());
+#endif
     return s.isEmpty() ? "ok" : s;
 }
 
