@@ -1,11 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it">
+<TS version="2.1" language="it">
 <context>
     <name>About</name>
     <message>
         <source>Unknown Compiler</source>
         <translation>Compilatore sconosciuto</translation>
+    </message>
+    <message>
+        <source>Hedgewars %1</source>
+        <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
+        <translation type="unfinished">Hedgewars %1</translation>
+    </message>
+    <message>
+        <source>Revision %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visit our homepage: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the %1.</source>
+        <translation type="unfinished">Questo programma è distribuito secondo i termini di %1.</translation>
+    </message>
+    <message>
+        <source>GNU GPL v2</source>
+        <extracomment>Short for “GNU General Public License version 2”</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dependency versions:</source>
+        <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -32,6 +103,14 @@
     <message>
         <source>Copy of %1</source>
         <translation>Copia di %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished">Nuovo (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation type="unfinished">Copia di %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -74,11 +153,11 @@
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation>Per favore, specifica %1</translation>
+        <translation type="vanished">Per favore, specifica %1</translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation>soprannome</translation>
+        <translation type="vanished">soprannome</translation>
     </message>
     <message>
         <source>permanent</source>
@@ -87,6 +166,14 @@
     <message>
         <source>Ban player</source>
         <translation>Espelli giocatore</translation>
+    </message>
+    <message>
+        <source>Please specify an IP address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please specify a nickname.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -363,7 +450,7 @@ Per favore controlla l&apos;installazione!</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation>Squadra_Predefinita</translation>
+        <translation type="vanished">Squadra_Predefinita</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
@@ -465,7 +552,7 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>Questa pagina richiede una connessione a Internet.</translation>
+        <translation type="vanished">Questa pagina richiede una connessione a Internet.</translation>
     </message>
     <message>
         <source>Guest</source>
@@ -481,11 +568,38 @@ Please, enter the password:</source>
         <translation>Questa stanza è protetta da password.
 Per piacere, inserisci la password:</translation>
     </message>
+    <message>
+        <source>Team 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team %1</source>
+        <extracomment>Default team name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer %1</source>
+        <extracomment>Default computer team name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
     <message>
         <source>en.txt</source>
+        <extracomment>IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.</extracomment>
         <translation>it.txt</translation>
     </message>
     <message>
@@ -852,7 +966,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Duration: %1m %2s</source>
-        <translation>Durata: %1m %2s</translation>
+        <translation type="vanished">Durata: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
@@ -860,7 +974,16 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>%1 fps</source>
-        <translation>%1 fps</translation>
+        <translation type="vanished">%1 fps</translation>
+    </message>
+    <message>
+        <source>Duration: %1min %2s</source>
+        <extracomment>Duration in minutes and seconds (SI units)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 FPS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -868,6 +991,20 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>No description available.</source>
         <translation>Nessuna descrizione disponibile.</translation>
+    </message>
+</context>
+<context>
+    <name>MinesTimeSpinBox</name>
+    <message>
+        <source>Random</source>
+        <translation type="unfinished">Casuale</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 seconds</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -947,6 +1084,10 @@ inserisci solo il tuo soprannome.</translation>
         <source>Mission</source>
         <translation>Missione</translation>
     </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished">Inizia combattimento</translation>
+    </message>
 </context>
 <context>
     <name>PageConnecting</name>
@@ -963,11 +1104,27 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>Questa pagina richiede una connessione a Internet.</translation>
+        <translation type="vanished">Questa pagina richiede una connessione a Internet.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
         <translation>Apri la cartella dei pacchetti</translation>
+    </message>
+    <message>
+        <source>Load the start page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1071,6 +1228,43 @@ inserisci solo il tuo soprannome.</translation>
         <source>Play a random example of this voice</source>
         <translation>Riproduci esempio casuale della voce</translation>
     </message>
+    <message>
+        <source>Random Hats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the team name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the fort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU %1</source>
+        <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageGameStats</name>
@@ -1109,6 +1303,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
+        <extracomment>Number of kills in stats screen, written after the team name</extracomment>
         <translation>
             <numerusform>(%1 uccisione)</numerusform>
             <numerusform>(%1 uccisioni)</numerusform>
@@ -1116,14 +1311,14 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; ha pensato che fosse buona cosa sparare ai propri compagni di squadra con &lt;b&gt;%2&lt;/b&gt; punto.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; ha pensato che fosse buona cosa sparare ai propri compagni di squadra con &lt;b&gt;%2&lt;/b&gt; punti.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; ha ucciso &lt;b&gt;%2&lt;/b&gt; dei suoi compagni di squadra.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; ha ucciso &lt;b&gt;%2&lt;/b&gt; dei suoi compagni di squadra.</numerusform>
         </translation>
@@ -1145,9 +1340,24 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
+        <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
         <translation>
             <numerusform>(%1 %2)</numerusform>
             <numerusform>(%1 %2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -1454,6 +1664,27 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Video recording options</source>
         <translation>Opzioni di registrazione video</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MISSING LANGUAGE NAME [%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t delete last team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can&apos;t delete the last team!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2032,6 +2263,14 @@ inserisci solo il tuo soprannome.</translation>
         <source>Enable translucent tags by default</source>
         <translation>Abilita i tag semitrasparenti in automatico</translation>
     </message>
+    <message>
+        <source>Enable visual effects such as animated menu transitions and falling stars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -2114,6 +2353,30 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Computer (Level %1)</source>
         <translation>Computer (livello %1)</translation>
+    </message>
+    <message>
+        <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>24 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>25 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>50 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 FPS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2279,7 +2542,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation>Resa stereo</translation>
+        <translation type="vanished">Resa stereo</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2351,7 +2614,7 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation>Velocità (Kbps)</translation>
+        <translation type="vanished">Velocità (Kbps)</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
@@ -2387,11 +2650,11 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Revision</source>
-        <translation>Revisione</translation>
+        <translation type="vanished">Revisione</translation>
     </message>
     <message>
         <source>This program is distributed under the %1</source>
-        <translation>Questo programma è distribuito secondo i termini di %1</translation>
+        <translation type="vanished">Questo programma è distribuito secondo i termini di %1</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
@@ -2429,6 +2692,15 @@ Vuoi veramente uscire?</translation>
         <source>% Retreat Time</source>
         <translation>% Tempo di ritirata</translation>
     </message>
+    <message>
+        <source>Stereoscopy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kibit/s)</source>
+        <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2443,6 +2715,10 @@ Vuoi veramente uscire?</translation>
     <message>
         <source>anonymous</source>
         <translation>anonimo</translation>
+    </message>
+    <message>
+        <source>unnamed (%1)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2530,19 +2806,19 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation>Registrazione gioco - Errore</translation>
+        <translation type="vanished">Registrazione gioco - Errore</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation>Seleziona un record dalla lista</translation>
+        <translation type="vanished">Seleziona un record dalla lista</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation>Impossibile rinominare a </translation>
+        <translation type="vanished">Impossibile rinominare a </translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation>Impossibile cancellare il file </translation>
+        <translation type="vanished">Impossibile cancellare il file </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -2667,6 +2943,32 @@ Not all players are ready.</source>
         <translation>Sei sicuro che vuoi iniziare il gioco?
 Non tutti i giocatori sono pronti.</translation>
     </message>
+    <message>
+        <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
+
+Current number of hedgehogs: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams - Name already taken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a file from the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot rename file to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -2775,7 +3077,7 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation>Cariva questo video nel tuo account Youtube</translation>
+        <translation type="vanished">Cariva questo video nel tuo account Youtube</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -2796,6 +3098,17 @@ Non tutti i giocatori sono pronti.</translation>
     <message>
         <source>Start private server</source>
         <translation>Avvia un server privato</translation>
+    </message>
+    <message>
+        <source>Upload this video to your YouTube account</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QSpinBox</name>
+    <message>
+        <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2829,10 +3142,12 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>C</source>
+        <extracomment>Caption of the column for the number of connected clients in the list of rooms</extracomment>
         <translation>C</translation>
     </message>
     <message>
         <source>T</source>
+        <extracomment>Caption of the column for the number of teams in the list of rooms</extracomment>
         <translation>T</translation>
     </message>
     <message>
@@ -3159,7 +3474,7 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation>informazioni riccio</translation>
+        <translation type="vanished">informazioni riccio</translation>
     </message>
     <message>
         <source>autocam / find hedgehog</source>
@@ -3168,6 +3483,11 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     <message>
         <source>speed up replay</source>
         <translation>aumenta velocità replay</translation>
+    </message>
+    <message>
+        <source>toggle team bars</source>
+        <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3245,7 +3565,7 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Cambia le etichette sui ricci:</translation>
+        <translation type="vanished">Cambia le etichette sui ricci:</translation>
     </message>
     <message>
         <source>Record video:</source>
@@ -3262,6 +3582,10 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     <message>
         <source>Demo replay:</source>
         <translation>Vizualizza demo:</translation>
+    </message>
+    <message>
+        <source>Heads-up display:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
