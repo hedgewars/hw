@@ -48,7 +48,7 @@ A_Space_Adventure-ice02.name="Nebenmission: Schwerer Flug"
 A_Space_Adventure-ice02.desc="Igel Einsam konnte nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
 
 A_Space_Adventure-desert01.name="Hauptmission: Suche im Staub"
-A_Space_Adventure-desert01.desc="Du must auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Berkwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
+A_Space_Adventure-desert01.desc="Du bist auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Berkwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
 
 A_Space_Adventure-desert02.name="Nebenmission: Lauf um dein Leben"
 A_Space_Adventure-desert02.desc="Igel Einsam suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
@@ -72,4 +72,4 @@ A_Space_Adventure-death02.name="Nebenmission: Die Spezialisten töten"
 A_Space_Adventure-death02.desc="Igel Einsam ist wieder in eine schwierige Situation geraten. Hilf ihm, die »5 tödlichen Igel« in ihrem eigenem Spiel zu besiegen!"
 
 A_Space_Adventure-final.name="Hauptmission: Der große Knall"
-A_Space_Adventure-final.desc="Igel Einsam muss ein paar Sprengkörper, die auf dem Meteriot platziert wurden, detonieren. Hilf ihm, diese Mission zu beenden, ohne verletzt zu werden!"
+A_Space_Adventure-final.desc="Igel Einsam muss ein paar Sprengkörper, die auf dem Meteoriten platziert wurden, detonieren. Hilf ihm, diese Mission zu beenden, ohne verletzt zu werden!"
