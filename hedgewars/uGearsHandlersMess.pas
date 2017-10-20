@@ -5854,46 +5854,17 @@ if (Gear^.Pos = 4) then
 end;
 
 procedure doStepTardis(Gear: PGear);
-var i,j,cnt: LongWord;
-    HH: PHedgehog;
+var HH: PHedgehog;
 begin
-(*
-    Conditions for not activating.
-    1. Hog is last of his clan
-    2. Sudden Death is in play
-    3. Hog is a king
-*)
     HH:= Gear^.Hedgehog;
-    if HH^.Gear <> nil then
-    if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
-        begin
-        if HH^.Gear <> nil then
-            begin
-            HH^.Gear^.Message := HH^.Gear^.Message and (not gmAttack);
-            HH^.Gear^.State:= HH^.Gear^.State and (not gstAttacking);
-            end;
+    if (not CanUseTardis(HH^.Gear)) then
+    begin
+        HH^.Gear^.Message := HH^.Gear^.Message and (not gmAttack);
+        HH^.Gear^.State:= HH^.Gear^.State and (not gstAttacking);
         PlaySound(sndDenied);
-        DeleteGear(gear);
+        DeleteGear(Gear);
         exit
-        end;
-    cnt:= 0;
-    for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
-        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
-            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil)
-            and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
-            and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
-                inc(cnt);
-    if cnt < 2 then
-        begin
-        if HH^.Gear <> nil then
-            begin
-            HH^.Gear^.Message := HH^.Gear^.Message and (not gmAttack);
-            HH^.Gear^.State:= HH^.Gear^.State and (not gstAttacking);
-            end;
-            PlaySound(sndDenied);
-            DeleteGear(gear);
-            exit
-        end;
+    end;
     Gear^.SoundChannel := LoopSound(sndTardis);
     Gear^.doStep:= @doStepTardisWarp
 end;

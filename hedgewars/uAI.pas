@@ -31,7 +31,8 @@ procedure FreeActionsList;
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
     uAmmos, uTypes,
-    uVariables, uCommands, uUtils, uDebug, uAILandMarks;
+    uVariables, uCommands, uUtils, uDebug, uAILandMarks,
+    uGearsUtils;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -473,7 +474,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
 
             // Hog has no idea what to do. Use tardis or skip
             if not bonuses.activity then
-                if ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (random(3) < 1) then
+                if ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(3) < 1) then
                     // Tardis brings hog to a random place. Perfect for clueless AI
                     begin
                     AddAction(BestActions, aia_Weapon, Longword(amTardis), 80, 0, 0);
