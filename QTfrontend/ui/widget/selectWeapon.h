@@ -74,7 +74,7 @@ class SelWeaponWidget : public QFrame
         //the name of the current weapon set
         QString curWeaponsName;
         //set to true while an entry is deleted. Used to avoid duplicate saving due to combobox change
-        bool isDeleting = false;
+        bool isDeleting;
 
         QLineEdit* m_name;
 
