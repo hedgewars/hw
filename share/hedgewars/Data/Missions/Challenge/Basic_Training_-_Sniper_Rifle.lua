@@ -41,8 +41,12 @@ local score_bonus = 0
 
 local cinematic = false
 
+-- Timer of dynamite (shorter than usual)
+local dynamiteTimer = 2000
 -- Number of dynamite gears currently in game
 local dynamiteCounter = 0
+-- Table of dynamite gears, indexed by gear ID
+local dynamiteGears = {}
 
 -- Position for delayed targets
 local delayedTargetTargetX, delayedTargetY
@@ -72,7 +76,10 @@ function blowUp(x, y, follow)
 		cinematic = true
 		SetCinematicMode(true)
 	end
-	local dyna = AddGear(x, y, gtDynamite, 0, 0, 0, 0)
+	-- Spawn dynamite with short timer
+	local dyna = AddGear(x, y, gtDynamite, 0, 0, 0, dynamiteTimer)
+	-- Fix dynamite animation due to non-default timer
+	SetTag(dyna, div(5000-dynamiteTimer, 166))
 	if follow then
 		FollowGear(dyna)
 	end
@@ -197,6 +204,13 @@ function onAttack()
 	end
 end
 
+-- Insta-blow up dynamite with precise key
+function onPrecise()
+	for gear, _ in pairs(dynamiteGears) do
+		SetTimer(gear, 0)
+	end
+end
+
 -- This function is called when a new gear is added.
 -- We use it to count the number of shots, which we
 -- in turn use to calculate the final score and stats
@@ -205,6 +219,7 @@ function onGearAdd(gear)
 		shots = shots + 1
 	elseif GetGearType(gear) == gtDynamite then
 		dynamiteCounter = dynamiteCounter + 1
+		dynamiteGears[gear] = true
 	end
 end
 
@@ -221,6 +236,7 @@ function onGearDelete(gear)
 	if (gt == gtDynamite) then
 		-- Dynamite blow-up, used to continue the game.
 		dynamiteCounter = dynamiteCounter - 1
+		dynamiteGears[gear] = nil
 
 		-- Wait for all dynamites to be destroyed before we continue.
 		-- Most cut scenes spawn multiple dynamites.

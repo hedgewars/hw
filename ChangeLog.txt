@@ -257,6 +257,7 @@ Missions:
  + Rewrote some help texts in basic rope training
  + Graphical effect (black bars) while in cut scenes
  + Change description and icon for baseball bat in Knockball mission map
+ + Sniper rifle target practice: Dynamite blows up quicker, can also skip with precise key
  * TrophyRace: Fix hedgehogs not being eliminated anymore after one hog skipped or ran out of time
  * Portal Mind Challenge was cleaned up and reworked (especially less awful wording)
  * Fixed Target Practice missions getting stuck when a target dropped into water
