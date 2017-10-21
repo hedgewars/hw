@@ -39,8 +39,6 @@ local time_goal = 0
 -- Used to calculate final target score
 local score_bonus = 0
 
-local last_hit_time = 0
-
 local cinematic = false
 
 -- Number of dynamite gears currently in game
@@ -69,12 +67,15 @@ function spawnTargetDelayed(x, y)
 end
 
 -- Cut sequence to blow up land with dynamite
-function blowUp(x, y)
+function blowUp(x, y, follow)
 	if cinematic == false then
 		cinematic = true
 		SetCinematicMode(true)
 	end
-	AddGear(x, y, gtDynamite, 0, 0, 0, 0)
+	local dyna = AddGear(x, y, gtDynamite, 0, 0, 0, 0)
+	if follow then
+		FollowGear(dyna)
+	end
 end
 
 function onNewTurn()
@@ -148,14 +149,6 @@ function onGameTick20()
 	if game_lost then
 		return
 	end
-	-- after a target is destroyed, show hog, then target
-	if (target ~= nil) and (TurnTimeLeft + 1300 < last_hit_time) then
-		-- move camera to the target
-		FollowGear(target)
-	elseif TurnTimeLeft + 300 < last_hit_time then
-		-- move camera to the hog
-		FollowGear(player)
-	end
 	-- If time's up, set the game to be lost.
 	-- We actually check the time to be "1 ms" as it
 	-- will be at "0 ms" right at the start of the game.
@@ -192,6 +185,16 @@ end
 function onAmmoStoreInit()
 	-- add an unlimited supply of shotgun ammo
 	SetAmmo(amSniperRifle, 9, 0, 0, 0)
+end
+
+--[[ Re-center camera to target after using sniper rifle.
+This makes it easier to find the target. If we don't
+do this, the camera would contantly bounce back to
+the hog which would be annoying. ]]
+function onAttack()
+	if target and GetCurAmmoType() == amSniperRifle then
+		FollowGear(target)
+	end
 end
 
 -- This function is called when a new gear is added.
@@ -236,8 +239,6 @@ function onGearDelete(gear)
 
 	if gt == gtTarget then
 		target = nil
-		-- remember when the target was hit for adjusting the camera
-		last_hit_time = TurnTimeLeft
 		-- Add one point to our score/counter
 		score = score + 1
 		score_bonus = score_bonus + 1
@@ -258,7 +259,7 @@ function onGearDelete(gear)
 				blowUp(1440,1595)
 				blowUp(1527,1575)
 				blowUp(1614,1595)
-				blowUp(1420,1675)
+				blowUp(1420,1675, true)
 				blowUp(1527,1675)
 				blowUp(1634,1675)
 				blowUp(1440,1755)
@@ -292,7 +293,7 @@ function onGearDelete(gear)
 				blowUp(780,911)
 				blowUp(920,911)
 				blowUp(1060,913)
-				blowUp(1198,913)
+				blowUp(1198,913, true)
 				spawnTargetDelayed(1200,830)
 			elseif score == 12 then
 				spawnTarget(1430,450)
@@ -308,7 +309,7 @@ function onGearDelete(gear)
 				blowUp(2210,920)
 				blowUp(2200,305)
 				blowUp(2300,305)
-				blowUp(2300,400)
+				blowUp(2300,400, true)
 				blowUp(2300,500)
 				blowUp(2300,600)
 				blowUp(2300,700)
@@ -328,7 +329,7 @@ function onGearDelete(gear)
 				blowUp(2930,305)
 				blowUp(3060,305)
 				blowUp(3190,305)
-				blowUp(3310,305)
+				blowUp(3310,305, true)
 				blowUp(3393,613)
 				blowUp(2805,370)
 				blowUp(2805,500)

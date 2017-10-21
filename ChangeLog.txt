@@ -264,6 +264,7 @@ Missions:
  * Climb Home: Fix game getting stuck when a player reached home in multiplayer
  * Climb Home: Fix Lua error messages and broken stats screen
  * Sniper rifle target practice: Fix targets spawning twice in dynamite scenes
+ * Sniper rifle target practice: Fix auto-camera generally behaving weird
 
 Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far
