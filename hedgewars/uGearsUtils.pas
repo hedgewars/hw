@@ -57,7 +57,6 @@ function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
 
 function WorldWrap(var Gear: PGear): boolean;
-function CalcWorldWrap(X, radius: LongInt): LongInt;
 
 function IsHogLocal(HH: PHedgehog): boolean;
 
@@ -1627,27 +1626,6 @@ This one would be really easy to freeze game unless it was flagged unfortunately
 *)
     WorldWrap:= true
     end;
-end;
-
-// Takes an X coordinate and corrects if according to the world edge rules
-// Wrap-around: X will be wrapped
-// Bouncy: X will be kept inside the legal land (taking radius into account)
-// Other world edges: Just returns X
-// radius is a radius (gear radius) tolerance for an appropriate distance from bouncy world edges.
-// Set radius to 0 if you don't care.
-function CalcWorldWrap(X, radius: LongInt): LongInt;
-begin
-    if WorldEdge = weWrap then
-        if X < LongInt(leftX) then
-             X:= X + (LongInt(rightX) - LongInt(leftX))
-        else if X > LongInt(rightX) then
-             X:= X - (LongInt(rightX) - LongInt(leftX))
-    else if WorldEdge = weBounce then
-        if X - radius < LongInt(leftX) then
-            X:= LongInt(leftX) + radius
-        else if X + radius > LongInt(rightX) then
-            X:= LongInt(rightX) - radius;
-    CalcWorldWrap:= X;
 end;
 
 procedure AddBounceEffectForGear(Gear: PGear);

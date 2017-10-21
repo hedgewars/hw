@@ -77,6 +77,8 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
+function CalcWorldWrap(X, radius: LongInt): LongInt;
+
 function read1stLn(filePath: shortstring): shortstring;
 function readValueFromINI(key, filePath: shortstring): shortstring;
 
@@ -554,6 +556,27 @@ GetLaunchY:= 0
         GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
     else
         GetLaunchY:= 0*)
+end;
+
+// Takes an X coordinate and corrects if according to the world edge rules
+// Wrap-around: X will be wrapped
+// Bouncy: X will be kept inside the legal land (taking radius into account)
+// Other world edges: Just returns X
+// radius is a radius (gear radius) tolerance for an appropriate distance from bouncy world edges.
+// Set radius to 0 if you don't care.
+function CalcWorldWrap(X, radius: LongInt): LongInt;
+begin
+    if WorldEdge = weWrap then
+        if X < LongInt(leftX) then
+             X:= X + (LongInt(rightX) - LongInt(leftX))
+        else if X > LongInt(rightX) then
+             X:= X - (LongInt(rightX) - LongInt(leftX))
+    else if WorldEdge = weBounce then
+        if X - radius < LongInt(leftX) then
+            X:= LongInt(leftX) + radius
+        else if X + radius > LongInt(rightX) then
+            X:= LongInt(rightX) - radius;
+    CalcWorldWrap:= X;
 end;
 
 function CheckNoTeamOrHH: boolean;
