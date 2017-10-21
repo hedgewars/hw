@@ -20,7 +20,7 @@ local score = 0
 -- This variable will hold the number of shots from the sniper rifle
 local shots = 0
 -- This variable represents the number of targets to destroy.
-local score_goal = 31
+local score_goal = 27
 -- This variable controls how many milliseconds/ticks we'd
 -- like to wait before we end the round once all targets
 -- have been destroyed.
@@ -30,19 +30,31 @@ local end_timer = 1000 -- 1000 ms = 1 s
 local game_lost = false
 -- This variable will point to the hog's gear
 local player = nil
+-- Current target gear
+local target = nil
 -- This variable will grab the time left at the end of the round
 local time_goal = 0
 
-local target = nil
+-- Like score, but targets before a blow-up sequence count double.
+-- Used to calculate final target score
+local score_bonus = 0
 
 local last_hit_time = 0
 
 local cinematic = false
 
+-- Number of dynamite gears currently in game
+local dynamiteCounter = 0
+
+-- Position for delayed targets
+local delayedTargetTargetX, delayedTargetY
+
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
 -- You may define as many custom functions as you
 -- like.
+
+-- Spawns a target at (x, y)
 function spawnTarget(x, y)
 	-- add a new target gear
 	target = AddGear(x, y, gtTarget, 0, 0, 0, 0)
@@ -50,13 +62,19 @@ function spawnTarget(x, y)
 	FollowGear(target)
 end
 
+-- Remembers position to spawn a target at (x, y) after a dynamite explosion
+function spawnTargetDelayed(x, y)
+	delayedTargetX = x
+	delayedTargetY = y
+end
+
+-- Cut sequence to blow up land with dynamite
 function blowUp(x, y)
-    if cinematic == false then
-        cinematic = true
-        SetCinematicMode(true)
-    end
-	-- adds some TNT
-	gear = AddGear(x, y, gtDynamite, 0, 0, 0, 0)
+	if cinematic == false then
+		cinematic = true
+		SetCinematicMode(true)
+	end
+	AddGear(x, y, gtDynamite, 0, 0, 0, 0)
 end
 
 function onNewTurn()
@@ -182,6 +200,8 @@ end
 function onGearAdd(gear)
 	if GetGearType(gear) == gtSniperRifleShot then
 		shots = shots + 1
+	elseif GetGearType(gear) == gtDynamite then
+		dynamiteCounter = dynamiteCounter + 1
 	end
 end
 
@@ -195,17 +215,32 @@ function onGearDelete(gear)
 		return
 	end
 
-	if (gt == gtDynamite) and cinematic then
-		cinematic = false
-		SetCinematicMode(false)
+	if (gt == gtDynamite) then
+		-- Dynamite blow-up, used to continue the game.
+		dynamiteCounter = dynamiteCounter - 1
+
+		-- Wait for all dynamites to be destroyed before we continue.
+		-- Most cut scenes spawn multiple dynamites.
+		if dynamiteCounter == 0 then
+			if cinematic then
+				cinematic = false
+				SetCinematicMode(false)
+			end
+			-- Add bonus score for the previuos target
+			score_bonus = score_bonus + 1
+			-- Now *actually* spawn the delayed target
+			spawnTarget(delayedTargetX, delayedTargetY)
+		end
 		return
 	end
 
 	if gt == gtTarget then
+		target = nil
 		-- remember when the target was hit for adjusting the camera
 		last_hit_time = TurnTimeLeft
 		-- Add one point to our score/counter
 		score = score + 1
+		score_bonus = score_bonus + 1
 		-- If we haven't reached the goal ...
 		if score < score_goal then
 			-- ... spawn another target.
@@ -216,6 +251,8 @@ function onGearDelete(gear)
 			elseif score == 3 then
 				spawnTarget(2080,780)
 			elseif score == 4 then
+				-- Short cut scene, blows up up lots up land and prepares
+				-- next target position.
 				AddCaption(loc("Good so far!") .. " " .. loc("Keep it up!"));
 				blowUp(1730,1226)
 				blowUp(1440,1595)
@@ -227,23 +264,22 @@ function onGearDelete(gear)
 				blowUp(1440,1755)
 				blowUp(1527,1775)
 				blowUp(1614,1755)
-				spawnTarget(1527,1667)
+				-- Target appears *after* the cutscene.
+				spawnTargetDelayed(1527,1667)
 			elseif score == 5 then
-				spawnTarget(1527,1667)
-			elseif score == 6 then
 				spawnTarget(2175,1300)
-			elseif score == 7 then
+			elseif score == 6 then
 				spawnTarget(2250,940)
-			elseif score == 8 then
+			elseif score == 7 then
 				spawnTarget(2665,1540)
-			elseif score == 9 then
+			elseif score == 8 then
 				spawnTarget(3040,1160)
-			elseif score == 10 then
+			elseif score == 9 then
 				spawnTarget(2930,1500)
-			elseif score == 11 then
+			elseif score == 10 then
 				AddCaption(loc("This one's tricky."));
 				spawnTarget(700,720)
-			elseif score == 12 then
+			elseif score == 11 then
 				AddCaption(loc("Well done."));
 				blowUp(914,1222)
 				blowUp(1050,1222)
@@ -257,18 +293,16 @@ function onGearDelete(gear)
 				blowUp(920,911)
 				blowUp(1060,913)
 				blowUp(1198,913)
-				spawnTarget(1200,730)
-			elseif score == 13 then
-				spawnTarget(1200,830)
-			elseif score == 14 then
+				spawnTargetDelayed(1200,830)
+			elseif score == 12 then
 				spawnTarget(1430,450)
-			elseif score == 15 then
+			elseif score == 13 then
 				spawnTarget(796,240)
-			elseif score == 16 then
+			elseif score == 14 then
 				spawnTarget(300,10)
-			elseif score == 17 then
+			elseif score == 15 then
 				spawnTarget(2080,820)
-			elseif score == 18 then
+			elseif score == 16 then
 				AddCaption(loc("Demolition is fun!"));
 				blowUp(2110,920)
 				blowUp(2210,920)
@@ -283,14 +317,12 @@ function onGearDelete(gear)
 				blowUp(2401,305)
 				blowUp(2532,305)
 				blowUp(2663,305)
-				spawnTarget(2300,760)
-			elseif score == 19 then
-				spawnTarget(2300,760)
-			elseif score == 20 then
+				spawnTargetDelayed(2300,760)
+			elseif score == 17 then
 				spawnTarget(2738,190)
-			elseif score == 21 then
+			elseif score == 18 then
 				spawnTarget(2590,-100)
-			elseif score == 22 then
+			elseif score == 19 then
 				AddCaption(loc("Will this ever end?"));
 				blowUp(2790,305)
 				blowUp(2930,305)
@@ -306,22 +338,20 @@ function onGearDelete(gear)
 				blowUp(3258,370)
 				blowUp(3258,475)
 				blowUp(3264,575)
-				spawnTarget(3230,240)
-			elseif score == 23 then
-				spawnTarget(3230,290)
-			elseif score == 24 then
+				spawnTargetDelayed(3230,290)
+			elseif score == 20 then
 				spawnTarget(3670,250)
-			elseif score == 25 then
+			elseif score == 21 then
 				spawnTarget(2620,-100)
-			elseif score == 26 then
+			elseif score == 22 then
 				spawnTarget(2870,300)
-			elseif score == 27 then
+			elseif score == 23 then
 				spawnTarget(3850,900)
-			elseif score == 28 then
+			elseif score == 24 then
 				spawnTarget(3780,300)
-			elseif score == 29 then
+			elseif score == 25 then
 				spawnTarget(3670,0)
-			elseif score == 30 then
+			elseif score == 26 then
 				AddCaption(loc("Last Target!"));
 				spawnTarget(3480,1200)
 			end
@@ -342,7 +372,7 @@ end
 -- data for the final stats screen
 function generateStats()
 	local accuracy = (score/shots)*100
-	local end_score_targets = (score * 200)
+	local end_score_targets = (score_bonus * 200)
 	local end_score_overall
 	if not game_lost then
 		local end_score_time = math.ceil(time_goal/5)
@@ -364,3 +394,4 @@ function generateStats()
 	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(end_score_overall), loc("Sniperz"))
 end
+
