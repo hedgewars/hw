@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation>Dieses Programm wird unter der %1. veröffentlicht.</translation>
+        <translation>Dieses Programm wird unter der %1 veröffentlicht.</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
