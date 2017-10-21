@@ -395,7 +395,10 @@ end
 -- This function calculates the final score of the player and provides some texts and
 -- data for the final stats screen
 function generateStats()
-	local accuracy = (score/shots)*100
+	local accuracy = 0
+	if shots > 0 then
+		accuracy = (score/shots)*100
+	end
 	local end_score_targets = (score_bonus * 200)
 	local end_score_overall
 	if not game_lost then
