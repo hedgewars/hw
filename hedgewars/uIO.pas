@@ -491,10 +491,12 @@ with CurrentHedgehog^.Gear^,
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
                 end;
+            TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
             end
         else
             begin
+            TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             TargetPoint.X:= putX;
             TargetPoint.Y:= putY
             end;
