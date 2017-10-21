@@ -210,11 +210,11 @@ if (a^.AmmoType <> amNothing) then
     cnt:= a^.Count
 else
     cnt:= 0;
-if (cnt <> AMMO_INFINITE) then
-    begin
+if (cnt >= AMMO_INFINITE) or (amt >= AMMO_INFINITE) then
+    cnt:= AMMO_INFINITE
+else
     cnt:= min(AMMO_FINITE_MAX, cnt + amt);
-    SetAmmo(Hedgehog, ammo, cnt)
-    end
+SetAmmo(Hedgehog, ammo, cnt);
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
