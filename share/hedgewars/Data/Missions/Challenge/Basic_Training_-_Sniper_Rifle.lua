@@ -374,10 +374,17 @@ function onGearDelete(gear)
 			end
 		else
 			if not game_lost then
-			-- Otherwise show that the goal was accomplished
+			-- Victory!
+			AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
 			ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
 			-- Also let the hogs shout "victory!"
-			PlaySound(sndVictory)
+			PlaySound(sndVictory, CurrentHedgehog)
+			FollowGear(CurrentHedgehog)
+
+			-- Disable hog controls
+			SetInputMask(0)
+			AddAmmo(CurrentHedgehog, amSniperRifle, 0)
+
 			-- Save the time left so we may keep it.
 			time_goal = TurnTimeLeft
 			end
