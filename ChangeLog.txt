@@ -37,6 +37,7 @@ Game engine:
  * Fixed screenshots being too bright if taken in quick succession
  * Video recording functionality is restored
  * Fixed bee not being affected by wrap world edge while still being thrown
+ * Fixed bee homing incorrectly when target is across wrap world edge
  * Rope is now destroyed when attempting to shoot it through wrap or bouncy world edge
  * Fixed turn not ending when sticky mine was trapped on rubberband
  * Fixed molotov cocktails bouncing off vertically off rubber
