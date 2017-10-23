@@ -11,7 +11,7 @@ Content:
  + Add hats: barrelhider, bishop, jester, leprechaun, pirate_eyepatch, tf_scout, zoo_octopus
  + Add hair-less variants of old hats: beefeaterhat, lambdahat, nursehat, pirate_bandana, pirate_hat, poke_ash_hat, RamboClean, sf_vega_hat, sf_guile_hat, simple_red, simple_yellow, simple_green, thugclean
  * Remove hat: tf_scount (this was a duplicate of tf_demoman)
- * Add graves: Clover, Old Apple, pi, Simple reversed, TV, Whisky, Ying and Yang
+ * Add graves: Clover, Old_Apple, pi, Simple_reversed, TV, Whisky, Ying_and_Yang
  * Redo flags: cm_pentagram, cm_soviet, armenia, ireland, nepal, suisse, sweden, turkey
 
 Game engine:
@@ -282,6 +282,7 @@ Frontend:
  + Creating new game/weapon schemes guarantees unique names
  + Custom maps and styles are now marked with an icon instead of an asterisk
  + Mark custom forts in team editor
+ + Room host can delegate room control to other player by rightclick
  * Fix flag being selectable for computer players although it had no effect
  * Campaign screen does no longer show AI-controlled teams
  * Campaign names and campaign mission names can now be translated
