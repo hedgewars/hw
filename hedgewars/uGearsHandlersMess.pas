@@ -3417,7 +3417,12 @@ begin
             with hogs.ar^[i]^ do
                 if (hogs.ar^[i] <> CurrentHedgehog^.Gear) and (Hedgehog^.Effects[heFrozen] = 0)  then
                     begin
-                    dX:= _50 * cGravity * (Gear^.X - X) / _25;
+                    if (WorldEdge <> weWrap) or (not (hwAbs(Gear^.X - X) > int2hwFloat(Gear^.Radius))) then
+                        dX:= _50 * cGravity * (Gear^.X - X) / _25
+                    else if (not (hwAbs(Gear^.X + int2hwFloat(RightX-LeftX) - X) > int2hwFloat(Gear^.Radius))) then
+                        dX:= _50 * cGravity * ((Gear^.X + int2hwFloat(RightX-LeftX)) - X) / _25
+                    else
+                        dX:= _50 * cGravity * ((Gear^.X - int2hwFloat(RightX-LeftX)) - X) / _25;
                     dY:= -_450 * cGravity;
                     Active:= true;
                     end

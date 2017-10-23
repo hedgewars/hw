@@ -1003,7 +1003,10 @@ rY:= sqr(rY);
 while t <> nil do
     begin
     if (t <> Gear) and (t^.Kind = Kind) then
-        if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1) then
+        if (not ((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
+        ((WorldEdge = weWrap) and (
+        (not ((hwSqr(Gear^.X - int2hwFloat(RightX-LeftX) - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
+        (not ((hwSqr(Gear^.X + int2hwFloat(RightX-LeftX) - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)))) then
         begin
             CheckGearNear:= t;
             exit;
@@ -1392,6 +1395,7 @@ function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 var
     t: PGear;
     s: Longword;
+    xc, xc_left, xc_right, yc: hwFloat;
 begin
     r:= r*r;
     s:= 0;
@@ -1399,15 +1403,22 @@ begin
     t := GearsList;
     while t <> nil do
         begin
-        if (t^.Kind = Kind)
-            and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
-            begin
-            inc(s);
-            SetLength(GearsNearArray, s);
-            GearsNearArray[s - 1] := t;
-            end;
-        t := t^.NextGear;
-    end;
+            xc:= (X - t^.X)*(X - t^.X);
+            xc_left:= ((X - int2hwFloat(RightX-LeftX)) - t^.X)*((X - int2hwFloat(RightX-LeftX)) - t^.X);
+            xc_right := ((X + int2hwFloat(RightX-LeftX)) - t^.X)*((X + int2hwFloat(RightX-LeftX)) - t^.X);
+            yc:= (Y - t^.Y)*(Y - t^.Y);
+            if (t^.Kind = Kind)
+                and ((xc + yc < int2hwFloat(r))
+                or ((WorldEdge = weWrap) and
+                ((xc_left + yc < int2hwFloat(r)) or
+                (xc_right + yc < int2hwFloat(r))))) then
+                begin
+                inc(s);
+                SetLength(GearsNearArray, s);
+                GearsNearArray[s - 1] := t;
+                end;
+            t := t^.NextGear;
+        end;
 
     GearsNear.size:= s;
     GearsNear.ar:= @GearsNearArray

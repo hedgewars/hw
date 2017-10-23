@@ -36,9 +36,10 @@ Game engine:
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
  * Fixed screenshots being too bright if taken in quick succession
  * Video recording functionality is restored
- * Fixed bee not being affected by wrap world edge while still being thrown
- * Fixed bee homing incorrectly when target is across wrap world edge
+ * Fixed bee, mine, sticky mine, air mine, seduction, resurrector not working correctly across wrap world edge
  * Rope is now destroyed when attempting to shoot it through wrap or bouncy world edge
+ * Fixed teleportation being able to teleport in land if you clicked in the "dark" area of the wrap world edge
+ * Fixed failure to collect crate across wrap world edge
  * Fixed turn not ending when sticky mine was trapped on rubberband
  * Fixed molotov cocktails bouncing off vertically off rubber
  * Fixed sniper rifle disabling laser sight utility after using
@@ -53,7 +54,6 @@ Game engine:
  * Fixed incorrect time box tooltip when in Sudden Death
  * Fixed cake taking over 200 seconds to explode when its stuck and can't move
  * Fixed Birdy descending into water when hog took damage or died before it got picked up
- * Fixed teleportation being able to teleport in land if you clicked in the "dark" area of the wrap world edge
  * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Fixed short sound effect breakdown right after using a time box
  * Fixed sticky mine sound sometimes playing when shooting portable portal device when a sticky mine is placed on terrain
