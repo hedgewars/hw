@@ -7,6 +7,9 @@ local hogsKilled = 0
 local finishTime
 
 local HogData =	{
+					{"amn",			"NinjaFull",false},
+					{"alfadur",		"NoHat",false},
+					{"Anachron",		"war_americanww2helmet",false},
 					{"Bufon", 			"ShaggyYeti",false},
 					{"burp", 			"lambda",false},
 					{"Blue", 			"cap_blue",false},
@@ -16,14 +19,19 @@ local HogData =	{
 					{"CheezeMonkey",	"NoHat",false},
 					{"claymore", 		"NoHat",false},
 					{"CIA-144", 		"cyborg1",false},
+					{"cri.the.grinch",	"sf_blanka",false},
+					{"eldiablo",		"Evil",false},
+					{"Displacer",		"fr_lemon",false},
 					{"doomy ", 			"NoHat",false},
 					{"Falkenauge", 		"NoHat",false},
 					{"FadeOne", 		"NoHat",false},
 					{"hayaa", 			"NoHat",false},
 					{"Hermes", 			"laurel",false},
+					{"Henek", 		"WizardHat",false},
 					{"HedgeKing",		"NoHat",false},
 					{"Izack1535", 		"NoHat",false},
 					{"Kiofspa", 		"NoHat",false},
+					{"KoBeWi",		"NoHat",false},
 					{"Komplex", 		"NoHat",false},
 					{"koda", 			"poke_mudkip",false},
 					{"Lalo", 			"NoHat",false},
@@ -41,6 +49,8 @@ local HogData =	{
 					{"Radissthor",  	"NoHat",false},
 					{"Sami",			"sm_peach",false},
 					{"soreau", 			"NoHat",false},
+					{"Solar",		"pinksunhat",false},
+					{"szczur", 		"mp3",false},
 					{"sdw195", 			"NoHat",false},
 					{"sphrix", 			"TeamTopHat",false},
 					{"sheepluva",		"zoo_Sheep",false},
@@ -53,6 +63,7 @@ local HogData =	{
 					{"unC0Rr", 			"cyborg1",false},
 					{"Waldsau", 		"cyborg1",false},
 					{"wolfmarc", 		"knight",false},
+					{"Wuzzy",		"fr_orange",false},
 					{"Xeli", 			"android",false}
 
 				}
@@ -67,7 +78,7 @@ function GameOverMan()
 	SendStat(siGameResult, loc("Challenge over!"))
 	local score = math.ceil((hogsKilled / 16)*6000)
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, score))
-	SendStat(siPointType, "points")
+	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(score), loc("Wannabe Shoppsta"))
 	PlaySound(sndHellish)
 end
@@ -83,7 +94,7 @@ function GG()
 	local score = hogScore + timeScore
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, hogScore))
 	SendStat(siCustomAchievement, string.format(loc("You have completed this challenge in %.2f s (+%d points)."), completeTime, timeScore))
-	SendStat(siPointType, "points")
+	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(score), loc("Wannabe Shoppsta"))
 end
 
