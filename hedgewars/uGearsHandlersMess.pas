@@ -3198,6 +3198,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure doStepCakeExpl(Gear: PGear);
+var gi: PGear;
 begin
     AllInactive := false;
 
@@ -3206,6 +3207,14 @@ begin
         exit;
 
     InCinematicMode:= false;
+    gi := GearsList;
+    while gi <> nil do
+        begin
+        if gi^.Kind = gtHedgehog then
+            gi^.State := gi^.State and (not gstLoser);
+        gi:= gi^.NextGear;
+        end;
+
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
     AfterAttack;
     DeleteGear(Gear)
@@ -3215,7 +3224,7 @@ procedure doStepCakeDown(Gear: PGear);
 var
     gi: PGear;
     dmg, dmgBase, partyEpicness, i: LongInt;
-    fX, fY, tdX, tdY: hwFloat;
+    fX, fY: hwFloat;
     sparkles: PVisualGear;
 begin
     AllInactive := false;
@@ -3242,10 +3251,8 @@ begin
             if gi^.Kind = gtHedgehog then
                 begin
                 dmg:= 0;
-                tdX:= gi^.X-fX;
-                tdY:= gi^.Y-fY;
-                if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
-                    dmg:= dmgBase - max(hwRound(Distance(tdX, tdY)),gi^.Radius);
+                if hwRound(PointDistance(gi^.X, fX, gi^.Y, fY, true)) < dmgBase then
+                    dmg:= dmgBase - max(hwRound(PointDistance(gi^.X, fX, gi^.Y, fY, true)), gi^.Radius);
                 if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, cakeDmg), gi);
                 if (dmg > 1) then
                     if (CurrentHedgehog^.Gear = gi) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) then
