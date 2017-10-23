@@ -5,6 +5,7 @@ local missionWon = nil
 local endTimer = 1000
 local hogsKilled = 0
 local finishTime
+local ouchies = false
 
 local HogData =	{
 					{"amn",			"NinjaFull",false},
@@ -221,7 +222,11 @@ end
 
 function onGearDamage(gear, damage)
 
-	if gear ~= hhs[0] and GetGearType(gear) == gtHedgehog then
+	if gear == hhs[0] then
+		ouchies = true
+	end
+
+	if gear ~= hhs[0] and GetGearType(gear) == gtHedgehog and missionWon == nil and ouchies == false then
 
 		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		DeleteGear(gear)
