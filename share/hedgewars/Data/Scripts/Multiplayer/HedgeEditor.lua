@@ -2973,7 +2973,8 @@ function HandleHedgeEditor()
 
 		x,y = GetGearTarget(cGear)
 
-		if GetGearType(cGear) == gtAirAttack then
+		AddCaption(GetGearPos(cGear))
+		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amAirAttack then
 			DeleteGear(cGear)
 			PlaceObject(x, y)
 		elseif GetGearType(cGear) == gtGirder then
@@ -3716,7 +3717,7 @@ function onGearAdd(gear)
 		end
 	end
 
-	if (GetGearType(gear) == gtAirAttack) or (GetGearType(gear) == gtGirder) then
+	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amAirAttack) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
 	end
 
@@ -3768,7 +3769,7 @@ function onGearDelete(gear)
 		ufoGear = nil
 	end
 
-	if gt == gtAirAttack or gt == gtGirder then
+	if (gt == gtAirAttack and GetGearPos(gear) == 0) or gt == gtGirder then
 		cGear = nil
 	end
 
