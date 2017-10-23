@@ -3243,7 +3243,7 @@ begin
         //fY.QWordValue:= fY.QWordValue and $FFFFFFFF00000000;
         fX:= int2hwFloat(hwRound(Gear^.X));
         fY:= int2hwFloat(hwRound(Gear^.Y));
-        dmgBase:= cakeDmg shl 1 + cHHRadius div 2;
+        dmgBase:= Gear^.Boom shl 1 + cHHRadius div 2;
         partyEpicness:= 0;
         gi := GearsList;
         while gi <> nil do
@@ -3253,7 +3253,7 @@ begin
                 dmg:= 0;
                 if hwRound(PointDistance(gi^.X, fX, gi^.Y, fY, true)) < dmgBase then
                     dmg:= dmgBase - max(hwRound(PointDistance(gi^.X, fX, gi^.Y, fY, true)), gi^.Radius);
-                if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, cakeDmg), gi);
+                if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, Gear^.Boom), gi);
                 if (dmg > 1) then
                     if (CurrentHedgehog^.Gear = gi) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) then
                         begin
