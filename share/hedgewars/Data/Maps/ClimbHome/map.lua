@@ -49,6 +49,7 @@ local init = true
 local multiplayerVictoryDelay = -1
 local multiplayerWinningHogs = {}
 local multiplayerWins = 0
+local racing = false
 
 -- Placement positions of winning hogs
 local victoryPosses = { }
@@ -117,6 +118,7 @@ function onGearDelete(gear)
     elseif GetGearType(gear) == gtHedgehog then
 	onGameTick20()
 	onGearDamage(gear, 0)
+        ready = false
         HH[gear] = nil
     end
 end
@@ -251,10 +253,6 @@ end
 function onGameTick20()
     local x,y
 
-    if gameTime - startTime < 40 then 
-        return
-    end
-
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
     if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
         ParseCommand("/skip")
@@ -279,6 +277,10 @@ function onGameTick20()
         --    if g5 > 360 then g5 = 0 end
         --    SetVisualGearValues(s, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10)
         --end
+    end
+
+    if not ready then 
+        return
     end
 
     -- This will be executed if a player reached home in multiplayer
@@ -417,6 +419,7 @@ function onGameTick20()
                 if distanceFromWater < 0 and not YouLost and not YouWon then
                     makeSinglePlayerLoserStats()
                     YouLost = true
+                    ready = false
                 end
                 -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
                 if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
@@ -437,12 +440,14 @@ function onGameTick20()
                     EndGame()
                     onAchievementsDeclaration()
                     YouWon = true
+                    ready = false
                 end
             else
                 if distanceFromWater < 0 and not YouLost and not YouWon then
                     makeMultiPlayerLoserStat(CurrentHedgehog)
                     deadHedgehogs = deadHedgehogs + 1
                     YouLost = true
+                    ready = false
                     if deadHedgehogs >= totalHedgehogs then
                         makeFinalMultiPlayerStats()
                         EndGame()
@@ -466,6 +471,7 @@ function onGameTick20()
                     -- TODO: Add stupid winner grin.
                     multiplayerVictoryDelay = 4000
                     YouWon = true
+                    ready = false
                 end
             end
 
@@ -627,6 +633,7 @@ function onGearDamage(gear, damage)
             end
         end
         YouLost = true
+        ready = false
     end
 end
 
