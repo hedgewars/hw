@@ -985,7 +985,7 @@ procedure chSendLandDigest(var s: shortstring);
 var i: LongInt;
 begin
     for i:= 0 to LAND_HEIGHT-1 do
-        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @Land[i,0], LAND_WIDTH);
+        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @Land[i,0], LAND_WIDTH*2);
     s:= 'M' + IntToStr(syncedPixelDigest); // + cScriptName; script name is no longer needed. scripts are hashed
 
     ScriptSetString('LandDigest', s);

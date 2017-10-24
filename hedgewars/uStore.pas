@@ -473,7 +473,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 {$ELSE}
                     if checkSum then
                         for y := 0 to tmpsurf^.h-1 do
-                            syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PLongWordArray(tmpsurf^.pixels)^[y*tmpsurf^.w], tmpsurf^.w);
+                            syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w);
 
                     if saveSurf then
                         Surface:= tmpsurf
