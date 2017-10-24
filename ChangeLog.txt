@@ -62,6 +62,8 @@ Game engine (gameplay):
  + AI hedgehogs can now use Bee, Vampirism and Time Box
  + Improved hedgehog spawns on maps that lack land mass or free space
  + Hogs no longer spawn on icy terrain
+ + Temporarily suspend Heavy Wind mode while turn timer is not running
+ + Engine supports now really gigantic maps
  * Fixed cursor often jumping back to screen center when putting target location while moving cursor
  * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Fixed failure to collect crate across wrap world edge
@@ -74,7 +76,7 @@ Game engine (graphics, sounds and texts):
  + Play countdown sounds at 1-4 seconds turn time
  + Several new sound effects for weapons and utilities
  + More ticker messages: Hog gets sick, king died, hog was resurrected, hog time travels (and returns), timeout, kamikaze
- + Small visual effects enhancements: Baseball bat, dynamite
+ + Small visual effects enhancements: Baseball bat, dynamite and more
  + Render graves behind everything else, so that they can't hide mines etc.
  * Video recording functionality is restored
  * Fixed screenshots being too bright if taken in quick succession
@@ -214,12 +216,13 @@ HedgeEditor:
  * Disable timer keys 2-4 in rubber placement mode
  * Fix incorrect weapon crate preview of air attack, drill strike and napalm
 
-Other Game Styles:
+Other styles and schemes:
  + The Specialists: Saints get low gravity
- + Capture The Flag supports setting number of captures with script parameter “captures=<number>”
- + Don't place air mines in Shoppa
- * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
- * Mutant script shows now appropriate ranking and graph in stats screen
+ + Capture The Flag: Setting number of captures with script parameter “captures=<number>”
+ + Mutant: Show appropriate ranking and graph in stats screen
+ + Shoppa: Don't place air mines
+ * Capture the Flag: Fix flag of first team spawning at second hog instead of first
+ * Gravity: Using the low gravity *utility* had no effect. Now it halves the base gravity of the style
  * Disable Sudden Death for good in Shoppa game scheme, some game styles and mission maps
 
 A Classic Fairytale:
@@ -311,6 +314,7 @@ Frontend:
  + Custom maps and styles are now marked with an icon instead of an asterisk
  + Mark custom forts in team editor
  + Room host can delegate room control to other player by rightclick
+ + Switch from HTTP to HTTPS where possible
  * Fix flag being selectable for computer players although it had no effect
  * Campaign screen does no longer show AI-controlled teams
  * Campaign names and campaign mission names can now be translated
@@ -372,6 +376,8 @@ Lua API:
  + Locale library: loc_noop -- Mark string for translation but don't translate it
  + Animate library: AnimInit([startAnimating]) -- New parameter startAnimating: if true, will start game in cinematic mode with most controls disabled. Must play an animation after that
  + Animate library: AnimSetInputMask(extraInputMask) -- Set input mask in a manner comptible with the Animate library
+ + Gear values: “Boom” -- used to modify explosion size and/or damage for most gears
+ + 8 overridable custom sprites/sounds: sprCustom1-sprCustom8, sndCustom1-sndCustom8
  * Fixed call: HideHog(gear) -- Fix crash when gear is invalid. Returns true on success or false otherwise
  * Fixed call: SwitchHog(gear) -- Fix new hog being unable to open ammo menu
  * Removed call: SetAmmoStore -- Old undocumented function of questional use, has never been used
