@@ -1,7 +1,28 @@
 + features
 * bugfixes
 
-0.9.22 -> 0.9.23
+====================== 0.9.23 ======================
+HIGHLIGHTS:
+ + Battalion style
+ + Fort mode is now a map type instead of a scheme setting
+ + Fort mode now works with more than 2 teams
+ + New weapon: rubber duck
+ + New theme, map, 3 forts, 3 missions, some hats and graves
+ + WxW style allows you to select one of many wall sets
+ + Complete HedgeEditor overhaul
+ + Greatly improved script parameter support for many styles
+ + Improves stats screen of most styles and missions
+ + Various improvements for almost all styles
+ + AI hedgehogs can now use Bee, Vamprism, and Time Box
+ + Campaign page now shows your progress
+ + Improved turn timer
+ + Improved randomization options in team and multiplayer pages
+ + Improved theme customization support
+ + Various Lua API additions
+ * Fix cursor often jumping around after clicking
+ * A huge amount of bugfixes for both campaigns, the missions and styles
+ * Video recording functionality is restored
+
 Content:
  + New game-style/mode: Battalion (see https://hedgewars.org/wiki/Battalion )
  + New theme: Beach
@@ -14,54 +35,60 @@ Content:
  * Add graves: Clover, Old_Apple, pi, Simple_reversed, TV, Whisky, Ying_and_Yang
  * Redo flags: cm_pentagram, cm_soviet, armenia, ireland, nepal, suisse, sweden, turkey
 
-Game engine:
+Game engine (weapons):
  + New weapon: rubber duck
  + Freezer can now freeze sticky mines (they get disabled and fall into the water)
- + Improved hedgehog spawns on maps that lack land mass or free space
- + AI hedgehogs can now use Bee, Vampirism and Time Box
- + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
+ + Keep rope / parachute / flying saucer selected when destroyed and secondary ammo selected
+ * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
+ * Fixed air strikes drops being off-center
+ * Fixed hedgehogs getting hurt while firing deagle / sniper rifle bullet in certain situations
+ * Fixed bee, mine, sticky mine, air mine, seduction, resurrector not working correctly across wrap world edge
+ * Fixed teleportation being able to teleport in land if you clicked across the wrap world edge
+ * Fixed turn not ending when sticky mine was trapped on rubberband
+ * Rope is now destroyed when attempting to shoot it through wrap or bouncy world edge
+ * Fixed possible to move rope angle below 0° while having secondary weapon selected
+ * Fixed molotov cocktails bouncing vertically off rubber
+ * Fixed sniper rifle disabling laser sight utility after using
+ * Fixed RC planes being able to collect frozen crates
+ * Fixed cake taking over 200 seconds to explode when its stuck and can't move
+ * Fixed Birdy descending into water when hog took damage or died before it got picked up
+ * Fixed player being able to switch to dying hog
+ * Various other fixes
+
+Game engine (gameplay):
  + Fort Mode will now work with more than 2 teams
- + Render graves behind everything else, so that they can't hide mines etc.
+ + Divided Teams mode will now work with more than 2 teams (Hint: you probably want to set world edges to "wrap" in such games)
+ + Frozen hedgehogs can no longer be poisoned
+ + AI hedgehogs can now use Bee, Vampirism and Time Box
+ + Improved hedgehog spawns on maps that lack land mass or free space
+ + Hogs no longer spawn on icy terrain
+ * Fixed cursor often jumping back to screen center when putting target location while moving cursor
+ * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
+ * Fixed failure to collect crate across wrap world edge
+ * Remove buggy “/finish” chat command
+ * Various other fixes
+
+Game engine (graphics, sounds and texts):
  + Show indicator symbols at bottom right while extra damage or low gravity are active
  + Color coding for the turn timer: green = ready timer, yellow = turn in progress, red = retreat timer, gray = timer paused
  + Play countdown sounds at 1-4 seconds turn time
  + Several new sound effects for weapons and utilities
  + More ticker messages: Hog gets sick, king died, hog was resurrected, hog time travels (and returns), timeout, kamikaze
- + Small visual effects enhancements
- + Briefly show theme and music authors in chat at start of game
- + A few new funny ticker messages (English)
- + Keep rope / parachute / flying saucer selected when destroyed and secondary ammo selected
- * Fixed cursor often jumping back to screen center when putting target location while moving cursor
- * Fixed air-strikes drops being off-center
- * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
- * Fixed screenshots being too bright if taken in quick succession
+ + Small visual effects enhancements: Baseball bat, dynamite
+ + Render graves behind everything else, so that they can't hide mines etc.
  * Video recording functionality is restored
- * Fixed bee, mine, sticky mine, air mine, seduction, resurrector not working correctly across wrap world edge
- * Rope is now destroyed when attempting to shoot it through wrap or bouncy world edge
- * Fixed teleportation being able to teleport in land if you clicked in the "dark" area of the wrap world edge
- * Fixed failure to collect crate across wrap world edge
- * Fixed turn not ending when sticky mine was trapped on rubberband
- * Fixed molotov cocktails bouncing off vertically off rubber
- * Fixed sniper rifle disabling laser sight utility after using
- * Fixed hedgehog-voices missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. Linux)
- * Fixed SD-flakes of themes not working if regular flakes were disabled
- * Fixed RC planes being able to collect frozen crates
+ * Fixed screenshots being too bright if taken in quick succession
+ * Fixed hedgehog voices missing a response type (Justyouwait/"You're gonna pay for that") on some platforms (e.g. GNU/Linux)
+ * Fixed SD flakes of themes not working if regular flakes were disabled
  * Fixed Seduction's "Yoohoo!" sound not playing
- * Fixed Hedgehogs getting hurt while firing deagle / sniper rifle bullet in certains situations
  * Fixed hedgehogs saying “Missed” when drowning enemy without dealing damage
  * Fixed enemy saying "Missed” when giving poison without direct damage
  * Fixed hedgehogs not saying “Stupid” and not displaying announcer message for inflicting self-harm
  * Fixed incorrect time box tooltip when in Sudden Death
- * Fixed cake taking over 200 seconds to explode when its stuck and can't move
- * Fixed Birdy descending into water when hog took damage or died before it got picked up
- * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Fixed short sound effect breakdown right after using a time box
  * Fixed sticky mine sound sometimes playing when shooting portable portal device when a sticky mine is placed on terrain
- * Fixed player being able to switch to dying hog
  * Fixed hedgehog holding nothing in hand when napalm or piano strike got selected
- * Fixed possible to move rope angle below 0° while having secondary weapon selected
- * Remove buggy /finish chat command
- * Various other fixes
+ * Fixed excessive water splashes sometimes caused by mines
 
 Highlander:
  + Show collected weapons after kill and play sound
@@ -188,7 +215,8 @@ HedgeEditor:
  * Fix incorrect weapon crate preview of air attack, drill strike and napalm
 
 Other Game Styles:
- + Capture The Flag supports setting number of captures with script parameter “capture=<number>”
+ + The Specialists: Saints get low gravity
+ + Capture The Flag supports setting number of captures with script parameter “captures=<number>”
  + Don't place air mines in Shoppa
  * Fixed Capture the Flag error: Flag of first team spawned at second hog instead of first
  * Mutant script shows now appropriate ranking and graph in stats screen
@@ -199,11 +227,11 @@ A Classic Fairytale:
  + Mission 5: Spare traitor's life with Skip instead of Precise
  + Mission 6: Add alternate dialogues when killing cyborgs before collecting the crates
  + All missions: Clarify mine timers
- * Mission 1: Leaf of faith: Hog was able to walk to the right and get stuck
+ * Mission 1: Leap of faith: Hog was able to walk to the right and get stuck
  * Mission 1: Leap of faith: Teleport player back to mole when failing
  * Mission 2: Fix crash when trying to open ammo menu in opening sequence
  * Mission 2: Fix game sometimes getting stuck after walking back to Leaks A Lot
- * Mission 2: Remove restart option when cooperating with cyborg; it messed things up too much
+ * Mission 2: Remove restart option when cooperating with cyborg; it messed up things too much
  * Mission 3: Fix various Lua errors when playing with 2 hogs and one of them dies
  * Mission 3: Fix broken end sequence after killing cyborg or princess
  * Mission 3: Fix broken sequence of princess being caged
@@ -245,7 +273,7 @@ A Space Adventure:
  * Fruit planet: Fix “Getting to the device” not visible when landing on fruit planet with first main mission completed only
  * Killing The Specialists: Fix killing hog with Deagle gave you chance to use another weapon in same turn
  * Fix weird behaviour when walking right before the first animation in most missions
- * Fix a coupe of texts being untranslatable
+ * Fix a couple of texts being untranslatable
  * Fix a variety of minor logic flaws in the story
  * Fix typos
  * All missions: Fix incorrect crate types
@@ -259,10 +287,10 @@ Missions:
  + Graphical effect (black bars) while in cut scenes
  + Change description and icon for baseball bat in Knockball mission map
  + Sniper rifle target practice: Dynamite blows up quicker, can also skip with precise key
+ * Fixed mistakes and bad wording of strings in several missions, scripts and campaigns
  * TrophyRace: Fix hedgehogs not being eliminated anymore after one hog skipped or ran out of time
  * Portal Mind Challenge was cleaned up and reworked (especially less awful wording)
  * Fixed Target Practice missions getting stuck when a target dropped into water
- * Fixed mistakes and bad wording of strings in several missions, scripts and campaigns
  * Climb Home: Fix game getting stuck when a player reached home in multiplayer
  * Climb Home: Fix Lua error messages and broken stats screen
  * Sniper rifle target practice: Fix targets spawning twice in dynamite scenes
@@ -272,9 +300,9 @@ Frontend:
  + Campaign screen shows which campaigns and missions you've completed so far
  + Training screen now has 3 mission categories: Training (tutorials), Challenge (get a high score), Scenario (complete a task)
  + Replaced the Fort Mode game modifier by adding "Forts" to the map type selection. This makes the mode easier selectable/discoverable. Also the slider can be used to adjust the distance between forts.
- + Menu screens got few new icons and other tweaks, e.g. larger dropdown lists for easier access
+ + Menu screens got few new icons and many other tweaks, e.g. larger dropdown lists for easier access
  + Additional button for just randomizing theme that will not change your selected map
- + Randomizing map/theme in online-mode will not include DLC-content
+ + Randomizing map/theme in online mode will not include DLC content
  + New teams start with a random grave and fort
  + Hedgewars creates 4 human teams and 2 computer teams on its first launch
  + Allow to randomize hog names, hats, team name, flag, grave, voice and fort separately
@@ -299,7 +327,7 @@ Frontend:
  * Team editor: Automatically rename team when leaving team editor page with an already used team name
 
 Content Creation:
- + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and ,) before the first rect
+ + Theme objects can now have more than 1 in-land rect specified. You can specify the amount in theme.cfg by adding another number (and a comma) before the first rect
  + Theme objects can now be placed on water (by setting first in-land rectangle to 0,0,0,0)
  + Themes can now use flakes with negative falling speed (rising flakes)
  + Themes can now contain custom sound files: splash.ogg Droplet1.ogg Droplet2.ogg Droplet3.ogg skip.ogg
@@ -307,6 +335,7 @@ Content Creation:
  + Water in themes supports custom animation and flow speed with water-animation and sd-water-animation in theme.cfg
  + Simplified hat format for unanimated hats; a single 32×32 image is enough. For clan hats, use size 64×32, with the color overlay at the right
  + Ammos.png and Ammos_bw.png in HWPs are now overlayed over the base images; use transparent icons to keep them unchanged from the original
+ + Custom Sudden Death background tint for themes with sd-tint
  * Default water color was black instead of blue
 
 Translations:
@@ -320,7 +349,7 @@ Translations:
  * Fix English-only language/country names in language selection
  * Fix very, very broken mission map descriptions
 
-Lua-API:
+Lua API:
  + New call: SetCinematicMode(enable) -- e.g. for cutscenes etc.
  + New call: GetAmmoName(ammoType [, ignoreOverwrite]) -- returns the localized name for the specified ammoType
  + New call: GetVisualGearType(vgUid) -- returns the visual gear type
@@ -346,8 +375,9 @@ Lua-API:
  * Fixed call: HideHog(gear) -- Fix crash when gear is invalid. Returns true on success or false otherwise
  * Fixed call: SwitchHog(gear) -- Fix new hog being unable to open ammo menu
  * Removed call: SetAmmoStore -- Old undocumented function of questional use, has never been used
+ * Fix huge numbers having sign errors on 64-bit architectures
 
-0.9.21 -> 0.9.22
+====================== 0.9.22 ======================
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
  + Extensive changes to TechRacer: Variable terrain types, enhanced parameters, hwmap interpreter, fuel limiter, etc. 
  + HedgeEditor - create missions/etc. in-game! see https://hedgewars.org/HedgeEditor
@@ -379,7 +409,7 @@ Lua-API:
  * Previously missing gear states are now available (gstSubmersible, gstFrozen and gstNoGravity)
  * Fixed OnHogAttack giving the incorrect AmmoType (amNothing) under certain conditions
 
-0.9.20 -> 0.9.21:
+====================== 0.9.21 ======================
  + New type of randomly generated maps: Perlin Maps.
  + Old Random generated maps are more diverse now.
  + Slider for adjusting land generation detail.
@@ -443,7 +473,7 @@ Lua API:
  * Fixes:
       gfResetHealth is now a available like the other GameFlags
 
-0.9.19 -> 0.9.20:
+====================== 0.9.20 ======================
  + New campaign, A Space Adventure!
  + Password protected rooms
  + Shapes on drawn maps (ellipses, rectangles)  - constrain dimensions with ctrl, as with straight line tool.
@@ -472,7 +502,7 @@ Lua API:
  * Fixed context menu/cursor in text areas
  * Many bugfixes. Keypad enter in chat, hog sliding freezing game, team name flaws in Windows, localisation of tips, crasher in slots with no weapons, frontend holiday css.
 
-0.9.18 -> 0.9.19:
+====================== 0.9.19 ======================
  + New Freezer weapon - freezes terrain, water, hedgehogs, mines, cases, explosives
  + Saucer can aim weapons and fire underwater
  + Main graphical user interface overhaul
@@ -507,7 +537,7 @@ Lua API:
  * ParseCommand should be safe to use in Lua now, at any time
  * Fixes to many weapons. Mudball, blowtorch, explosives, cluster bomb spread, portal.
 
-0.9.17 -> 0.9.18:
+====================== 0.9.18 ======================
 
  + 'A Classic Fairytale' Campaign
  + Video recorder (requires ffmpeg/libav)
@@ -536,7 +566,7 @@ Lua API:
  * Fix drill strike bug when drill's timer gets ridiculously high value instead of explosion
  * Fix some crashes, freezes and memory leaks in frontend and engine
 
-0.9.16 -> 0.9.17:
+====================== 0.9.17 ======================
  + New theme, Cave
  + New voicepack, Hillbilly
  + More attractive mission screen with previews
@@ -569,7 +599,7 @@ Lua API:
  * Many frontend bugfixes, code cleanup. Crash in game abort, flake clipping, invalid state on room close
  * Many other engine bugfixes.  SDL event crasher, timebox crasher, birdy hang, desync on quits, crash in birdy eggshell, hammer + vamp + invuln, clouds on Deep Space theme, etc
 
-0.9.15 -> 0.9.16:
+====================== 0.9.16 ======================
  + In-game chat now supports backspace-repeat and Escape to close the text input area
  + Team status bars shrunk/made translucent if they take up a significant portion of the screen
  + Background music change on sudden death mode
@@ -633,7 +663,7 @@ Frontend/Menu and Netgame:
  * Fix invisible icons in popup menus
  * Various fixes and adjustments
 
-0.9.14 -> 0.9.15:
+====================== 0.9.15 ======================
  + Ability to create, save and load hand drawn maps
  + New maps: Capture the Flag (Blizzard) Map
  + New themes: Christmas
@@ -660,7 +690,7 @@ Frontend/Menu and Netgame:
  + Variable rope length in scheme
  + Allow hog speech when not your turn
 
-0.9.13 -> 0.9.14:
+====================== 0.9.14 ======================
  + New audio tracks
  + New forts: EvilChicken, Tank
  + New game modes: AI Survival Mode, Per Hedgehog Ammo, Reset Health, Reset Weapons, Unlimited Attacks
@@ -698,7 +728,7 @@ Frontend/Menu and Netgame:
  * Fixed bug that allowed charging a weapon while on rope, leading to frozen timer
  * Various bug fixes
 
-0.9.12 -> 0.9.13:
+====================== 0.9.13 ======================
  + Speed optimizations
  + New weapon: Birdy (carries your hog and lets you throw poisonous eggs at your foes)
  + Hats are visible while using rope and blowtorch
@@ -759,7 +789,7 @@ Frontend/Menu and Netgame:
  + PowerPC architecture supported
  * Reduced memory footprint and leakage
 
-0.9.11 -> 0.9.12:
+====================== 0.9.12 ======================
  + Zoom
  + New weapons: flying saucer, molotov cocktail
  + More sounds
@@ -777,7 +807,7 @@ Frontend/Menu and Netgame:
  * Fix rope bugs
  * Fix bugs in weapon selection code
 
-0.9.10 -> 0.9.11:
+====================== 0.9.11 ======================
  + Speech bubbles
  + Many new hats, new graves
  + New taunts
@@ -797,7 +827,7 @@ Frontend/Menu and Netgame:
  * Fix crash in parachute/rope if drowning with active girder/teleport
  * Fix rope disappearing bug
 
-0.9.9 -> 0.9.10:
+====================== 0.9.10 ======================
  + Many new hats, maps, themes, updates on existing ones
  + Remove small pixels left by fire
  + Double possible land dimensions, allow up to 48 hedgehogs in game
@@ -822,7 +852,7 @@ Frontend/Menu and Netgame:
  * Fix bug with not working toggles 'rectrict joins' and 'restrict team adding'
  + Fix engine slowdown when trying to switch ammo while firing bazooka
 
-0.9.8 -> 0.9.9:
+====================== 0.9.9 ======================
  + Voicepacks
  + Teams health graphic on statistics page
  + Colorize join/quit messages in chat
@@ -837,7 +867,7 @@ Frontend/Menu and Netgame:
  * Fix autogenerated demos/saves filenames problems
  * Fix engine freeze when switching hedgehog in certain conditions
 
-0.9.7 -> 0.9.8:
+====================== 0.9.8 ======================
  + Many net server fixes
  + Lobby on net server
  + Napalm weapon
@@ -853,7 +883,7 @@ Frontend/Menu and Netgame:
  * Fix a bug leading to engine silent crash when using whip, bat or firepunch (and probably flame)
  * Limit chat history to 250 entries to avoid DoS attack with its use
 
-0.9.6 -> 0.9.7:
+====================== 0.9.7 ======================
  + Completely redesign the frontend, no longer looks like an ugly program launcher
  + New art
  + Add fullscreen mode to frontend
@@ -877,7 +907,7 @@ Frontend/Menu and Netgame:
  * Fixed grenade sound
  * AI uses the mortar better
 
-0.9.5 -> 0.9.6:
+====================== 0.9.6 ======================
  + New Cake weapon
  + New maps: EarthRise, Bamboo, Bath, BambooPlinko
  + New theme EarthRise
@@ -888,7 +918,7 @@ Frontend/Menu and Netgame:
  * Fix clouds shaking up
  * Repair screenshots capturing
 
-0.9.4 -> 0.9.5:
+====================== 0.9.5 ======================
  + Taunts
  + Exit confirmation dialog
  + Sudden death
@@ -898,7 +928,7 @@ Frontend/Menu and Netgame:
  + More impressive exposions
  * Fix bad sprite when you jump and get hit
 
-0.9.3 -> 0.9.4:
+====================== 0.9.4 ======================
  + In game chat is now implemented, chat (and taunt!) your buddies during network play
  + Mortar, whip and Kamikaze weapon additions
  + Two new themes, desert island and city
@@ -912,7 +942,7 @@ Frontend/Menu and Netgame:
  + Lots of new graphics
  * Many network/gameplay bug fixes
 
-0.9.2 -> 0.9.3:
+====================== 0.9.3 ======================
  + Switch to OpenGL rendering
  + Massive graphics update
  + New animations, weapon sprites
@@ -928,7 +958,7 @@ Frontend/Menu and Netgame:
  * Fix hedgehog moving direction after been shot by shotgun
  * Fix bug with handling keys while it is enemy's turn
 
-0.9 -> 0.9.2:
+====================== 0.9.2 ======================
 
  + Add registration of net game in web
  + Introduce weapons sets support
