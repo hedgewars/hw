@@ -513,7 +513,7 @@ void HWForm::UpdateTeamsLists()
 
     if(teamslist.empty())
     {
-        QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8();
+        QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString();
         QString teamName;
         int firstHumanTeam = 1;
         int lastHumanTeam = 2;
