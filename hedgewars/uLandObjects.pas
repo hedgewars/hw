@@ -262,7 +262,7 @@ if girSurf = nil then
     girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
 
 for y := 0 to girsurf^.h-1 do
-    syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(girsurf^.pixels)^[y*girsurf^.pitch], girsurf^.w);
+    syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(girsurf^.pixels)^[y*girsurf^.pitch], girsurf^.w*4);
 
 girderHeight:= girSurf^.h;
 
@@ -699,7 +699,7 @@ while (not pfsEOF(f)) and allOK do
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
             for y := 0 to Surf^.h-1 do
-                syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Surf^.pixels)^[y*Surf^.pitch], Surf^.w);
+                syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Surf^.pixels)^[y*Surf^.pitch], Surf^.w*4);
 
             inrectcnt := 0;
 
