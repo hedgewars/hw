@@ -474,6 +474,8 @@ end
 
 function DeployHog()
   if not hogDeployed then
+     -- Steal switch to force the deployed hog to be on its own
+     AddAmmo(deployedHog, amSwitch, 0)
      AnimSwitchHog(deployedHog)
      AnimTeleportGear(deployedHog, unpack(deployedPos))
      if deployedHog ~= natives[wiseNum] then
@@ -1069,6 +1071,11 @@ function onNewTurn()
   
   if stage == platformStage then
     AddCaption(string.format(loc("Turns until arrival: %d"), TurnsLeft))
+  end
+  if deployedHog then
+    if GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+      AnimSwitchHog(deployedHog)
+    end
   end
 
   if stage == spyKillStage then

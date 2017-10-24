@@ -240,6 +240,7 @@ A Classic Fairytale:
  * Mission 3: Fix broken sequence of princess being caged
  * Mission 3: All girder crates now have 3 girders each
  * Mission 5: Fix crash when skipping animation while the cyborg talks before the 3rd wave of cannibals starts
+ * Mission 5: Make sure the player can only play with one hog after the cyborg imprisoned the other natives
  * Mission 6: Block off left cave entrance to stop player to just rope all the way around
  * Mission 6: Fix mines not being able to get triggered in first turn
  * Mission 8: Fix Lua error message at the beginning
