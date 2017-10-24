@@ -1,48 +1,125 @@
-Hedgewars - a turn based strategy game.
-=======================================
+Hedgewars - a turn-based strategy game
+======================================
+
+Description
+-----------
+This is the funniest and most addictive game you'll ever play—hilarious fun
+that you can enjoy anywhere, anytime. **Hedgewars** is a **turn-based strategy
+game** but the real buzz is from watching the **devastation caused by those
+pesky hedgehogs** with those fantastic weapons—sneaky little blighters with a
+bad attitude!
+
+Each player controls a **team of up to 8 hedgehogs**. During the course of
+the game, players take turns with one of their hedgehogs. They then use
+whatever tools and weapons are available to **attack and kill the opponents'
+hedgehogs**, thereby winning the game. Hedgehogs may move around the terrain
+in a variety of ways, normally by walking and jumping but also by using
+particular tools such as the rope or parachute, to move to otherwise
+inaccessible areas. Each **turn is time-limited** to ensure that players do
+not hold up the game with excessive thinking or moving.
+
+A large **variety of tools and weapons** are available for players during
+the game. Hedgewars features the standard artillery-genre classics (such as
+grenade, cluster bomb, bazooka, shotgun), but also boasts a host of other
+weapons quite unique to it alone.
+
+Most weapons, when used, cause **explosions that deform the terrain**,
+removing circular chunks. Hedgehogs can die by drowning, being thrown off
+either side of the arena, or when their health is reduced to zero.
+
+Getting started
+---------------
+For complete beginners we recommend to start with the the first 2 or 3
+missions of the campaign “A Classic Fairytale” in the singleplayer menu.
+It explains the basic controls and gameplay.
+
+Note that Hedgewars doesn't have a *complete* tutorial yet, but it is
+planned to create one in future versions.
+
+In-depth information about the game can be found online:
+
+* <https://hedgewars.org/start>: Getting Started
+* <https://hedgewars.org/wiki.html>: Hedgewars Wiki
+
+Default controls (excerpt)
+--------------------------
+The most important default controls are:
+
+* Cursor keys: Walk and aim
+* Mouse: Move camera
+* Right mouse button: Open ammo menu
+* Left mouse button: Select target or weapon
+* Space bar: Shoot
+* Left shift: Precise
+* Left shift + Up/Down: Precise aiming
+* Enter: Jump
+* Backspace: High jump
+* Backspace ×2: Backjump
+* Tab: Switch hedgehog (after activating the utility)
+* 1-5: Set weapon timer
+* F1-F10: Weapon shortcuts
+* P: Pause (also shows mission panel)
+* Esc: Quit with prompt (also shows mission panel)
+* T: Chat
+
+For the full list, go to the Hedgewars settings. Also read the weapon tooltips
+for weapon-specific controls.
+
+### Special controls
+
+These are lesser-known controls of Hedgewars, they are based on your
+configured controls:
+
+* Confirm: Team chat (if not confirming quit)
+* Hold down Precise: Prevent slipping on ice
+* Precise + Left/Right: Turn around
+* Precise + Toggle team bars: Change hedgehog tabs
+* Precise + Toggle team bars + Switch: Toggle HUD
+* Precise + Screenshot: Save current map + mask in Screenshot directory
+
+Installation instructions
+-------------------------
+See the `INSTALL.md` file.
+
+Or see our wiki at <https://hedgewars.org/kb/BuildingHedgewars>.
+
+Source code
+-----------
+Our main repository is located at <https://hg.hedgewars.org/hedgewars/> using
+Mercurial as DVCS. A Git repository is also available (mirrored daily)
+at <https://github.com/hedgewars/hw>.
 
 [![Build Status](https://travis-ci.org/hedgewars/hw.svg)](https://travis-ci.org/hedgewars/hw)
 
-Copyright 2004-2015 Andrey Korotaev <unC0Rr@gmail.com> and others.
-See QTfrontend/res/html/about.html and CREDITS for a complete list of authors.
-
-Licence:
---------
-Source code is distributed under the terms of the GNU General Public Licence
-version 2; images and sounds are distributed under the terms of the GNU Free
-Documentation Licence version 1.2. See the COPYING file for the full text of
-the licenses.
-
-Instructions:
--------------
-See our wiki at: https://hedgewars.org/kb/BuildingHedgewars
-
-You can find an outline of the necessary dependencies in the INSTALL file.
-
-Source code:
-------------
-Our main repository is located at https://hg.hedgewars.org/hedgewars/ using
-Mercurial as DVCS. A Git repository is also available (mirrored daily)
-at https://github.com/hedgewars/hw
-
-Contribute:
------------
+Contribute
+----------
 If you see a bug or have any suggestion please use the official bug tracker at
-https://hedgewars.org/bugs or the integrated feedback
-button.
+<https://hedgewars.org/bugs> or the integrated feedback button.
 
 If you want to help or get to know the sources better you can do that with some
-easy tasks from https://hedgewars.org/kb/TODO. We also have an
-extended API in LUA to customize your adventures in our wiki at
-https://hedgewars.org/kb/LuaAPI.
+easy tasks from <https://hedgewars.org/kb/TODO>. We also have an extensive API
+in Lua to customize your adventures. See our wiki at
+<https://hedgewars.org/kb/LuaAPI>.
 
 If you know your way through the code feel free to send a patch or open a pull
-request. The best LUA scripts get released in the official DLC page and later
+request. The best Lua scripts get released in the official DLC page and later
 integrated in the next version.
 
-Contact:
---------
+Licence and credits
+-------------------
+This game is free software (“free” as in “freedom”). Source code is
+distributed under the terms of the GNU General Public Licence version 2;
+images and sounds are distributed under the terms of the GNU Free Documentation
+Licence version 1.2. See the `COPYING` file for the full text of the licenses.
+
+Copyright 2004-2015 Andrey Korotaev <unC0Rr@gmail.com> and others.
+See `QTfrontend/res/html/about.html` and `CREDITS` for a more complete list of
+authors.
+
+Contact
+-------
+* Homepage        - https://hedgewars.org/
 * IRC channel     - irc://irc.freenode.net/hedgewars
-* community forum - https://hedgewars.org/forum
-* mailing list    - https://mail.gna.org/listinfo/hedgewars-dev
+* Community forum - https://hedgewars.org/forum
+* Mailing list    - https://mail.gna.org/listinfo/hedgewars-dev
 
