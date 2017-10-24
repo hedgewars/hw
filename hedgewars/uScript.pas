@@ -2887,6 +2887,13 @@ begin
     lua_pop(luaState, 1);
 end;
 
+function ScriptGetAnsiString(name : shortstring) : ansistring;
+begin
+    lua_getglobal(luaState, Str2PChar(name));
+    ScriptGetAnsiString:= lua_tostringa(luaState, -1);
+    lua_pop(luaState, 1);
+end;
+
 procedure ScriptOnPreviewInit;
 begin
 // not required if there is no script to run
@@ -2982,7 +2989,7 @@ if cMapName <> ScriptGetString('Map') then
     ParseCommand('map ' + ScriptGetString('Map'), true, true);
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true, true);
-LuaGoals:= ScriptGetString('Goals');
+LuaGoals:= ScriptGetAnsiString('Goals');
 
 // Support lua changing the ammo layout - assume all hogs have same ammo, note this might leave a few ammo stores lying around.
 k:= 0;

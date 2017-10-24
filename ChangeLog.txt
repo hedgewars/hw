@@ -381,6 +381,7 @@ Lua API:
  * Fixed call: HideHog(gear) -- Fix crash when gear is invalid. Returns true on success or false otherwise
  * Fixed call: SwitchHog(gear) -- Fix new hog being unable to open ammo menu
  * Removed call: SetAmmoStore -- Old undocumented function of questional use, has never been used
+ * Fixed variable: Goals -- Fix Goals text being cut off at ca. 255 characters
  * Fix huge numbers having sign errors on 64-bit architectures
 
 ====================== 0.9.22 ======================

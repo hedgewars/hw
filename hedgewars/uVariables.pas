@@ -244,7 +244,7 @@ var
 
     hiTicks: Word;
 
-    LuaGoals        : shortstring;
+    LuaGoals        : ansistring;
 
     LuaTemplateNumber : LongWord;
 
