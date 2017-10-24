@@ -250,6 +250,11 @@ end
 
 function onGameTick20()
     local x,y
+
+    if gameTime - startTime < 40 then 
+        return
+    end
+
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
     if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
         ParseCommand("/skip")
