@@ -244,9 +244,11 @@ if SDL_MustLock(surf) then
 
 fromP4:= Surf^.pixels;
 
+// FIXME move out of surface2tex
 if GrayScale then
     Surface2GrayScale(Surf);
 
+// FIXME move out of surface2tex
 PrettifySurfaceAlpha(surf, fromP4);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then

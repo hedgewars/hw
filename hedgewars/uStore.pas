@@ -417,7 +417,10 @@ for ii:= Low(TSprite) to High(TSprite) do
                     imflags := (imflags or ifCritical);
 
                 // load the image
-                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags)
+                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags);
+                if (tmpsurf <> nil) and checkSum then
+                    for y := 0 to tmpsurf^.h-1 do
+                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4)
                 end;
 
             if tmpsurf <> nil then
@@ -471,10 +474,6 @@ for ii:= Low(TSprite) to High(TSprite) do
 {$IFDEF USE_CONTEXT_RESTORE}
                     Surface:= tmpsurf
 {$ELSE}
-                    if checkSum then
-                        for y := 0 to tmpsurf^.h-1 do
-                            syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4);
-
                     if saveSurf then
                         Surface:= tmpsurf
                     else
