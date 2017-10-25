@@ -1548,7 +1548,7 @@ begin
                                 end
                           end
                       end;
-            gtDuck: DrawSpriteRotatedF(sprDuck, x, y, 1, Gear^.Tag, Gear^.Angle);
+            gtDuck: DrawSpriteRotatedF(sprDuck, x, y, 1, Gear^.Tag, Gear^.DirAngle);
             gtGenericFaller: DrawCircle(x, y, 3, 3, $FF, $00, $00, $FF);  // debug
          end;
     if Gear^.State and gstFrozen <> 0 then untint

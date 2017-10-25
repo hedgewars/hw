@@ -6408,7 +6408,7 @@ begin
             if (((Gear^.Pos = 3) or (Gear^.Pos = 7)) and (cWindSpeed > _0)) or (((Gear^.Pos = 4) or (Gear^.Pos = 8)) and (cWindSpeed < _0)) then
                 begin
                 PlaySound(sndDuckWater);
-                Gear^.Angle:= 0;
+                Gear^.DirAngle:= 0;
                 Gear^.Pos:= 1;
                 Gear^.dY:= _0;
                 end;
@@ -6484,9 +6484,9 @@ begin
             if (Gear^.Pos <> 3) and (Gear^.Pos <> 7) then
                 begin
                 if Gear^.Tag = 1 then
-                    Gear^.Angle:= 90 
+                    Gear^.DirAngle:= 90
                 else
-                    Gear^.Angle:= 270;
+                    Gear^.DirAngle:= 270;
                 end;
 
             // Reaching the edge surface
@@ -6509,9 +6509,9 @@ begin
             if (Gear^.Pos <> 4) and (Gear^.Pos <> 8) then
                 begin
                 if Gear^.Tag = 1 then
-                    Gear^.Angle:= 270 
+                    Gear^.DirAngle:= 270
                 else
-                    Gear^.Angle:= 90;
+                    Gear^.DirAngle:= 90;
                 end;
 
             if (RightX = hwRound(Gear^.X) + Gear^.Karma) and (Gear^.Pos <> 4) then
