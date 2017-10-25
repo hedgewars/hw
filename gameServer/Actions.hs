@@ -515,7 +515,7 @@ processAction JoinLobby = do
     rnc <- gets roomsClients
     clientNick <- client's nick
     clProto <- client's clientProto
-    isAuthenticated <- liftM isRegistered $ client's id
+    isAuthenticated <- client's isRegistered
     isAdmin <- client's isAdministrator
     isContr <- client's isContributor
     loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
@@ -531,8 +531,8 @@ processAction JoinLobby = do
 
     roomsInfoList <- io $ do
         rooms <- roomsM rnc
-        mapM (\r -> (if isNothing $ masterID r then return "" else client'sM rnc nick (fromJust $ masterID r))
-            >>= \cn -> return $ roomInfo clProto cn r)
+        mapM (\r -> (mapM (client'sM rnc id) $ masterID r)
+            >>= \cn -> return $ roomInfo clProto (maybeNick cn) r)
             $ filter (\r -> (roomProto r == clProto)) rooms
 
     mapM_ processAction . concat $ [
