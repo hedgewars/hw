@@ -30,6 +30,7 @@ QLayout * PageSelectWeapon::bodyLayoutDefinition()
     QGridLayout * pageLayout = new QGridLayout();
 
     pWeapons = new SelWeaponWidget(cAmmoNumber, this);
+    pWeapons->init();
     pageLayout->addWidget(pWeapons);
 
     return pageLayout;

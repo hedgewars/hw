@@ -383,3 +383,8 @@ void SelWeaponWidget::deletionDone()
 {
     isDeleting = false;
 }
+
+void SelWeaponWidget::init()
+{
+    isDeleting = false;
+}

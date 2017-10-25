@@ -53,6 +53,7 @@ class SelWeaponWidget : public QFrame
         QString getWeaponsString(const QString& name) const;
         QStringList getWeaponNames() const;
         void deletionDone();
+        void init();
 
     public slots:
         void setDefault();
