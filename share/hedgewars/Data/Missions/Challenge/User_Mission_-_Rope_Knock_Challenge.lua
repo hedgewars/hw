@@ -51,6 +51,7 @@ local HogData =	{
 					{"Sami",			"sm_peach",false},
 					{"soreau", 			"NoHat",false},
 					{"Solar",		"pinksunhat",false},
+					{"sparkle",		"NoHat",false},
 					{"szczur", 		"mp3",false},
 					{"sdw195", 			"NoHat",false},
 					{"sphrix", 			"TeamTopHat",false},
