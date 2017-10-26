@@ -380,6 +380,7 @@ Lua API:
  + Locale library: loc_noop -- Mark string for translation but don't translate it
  + Animate library: AnimInit([startAnimating]) -- New parameter startAnimating: if true, will start game in cinematic mode with most controls disabled. Must play an animation after that
  + Animate library: AnimSetInputMask(extraInputMask) -- Set input mask in a manner comptible with the Animate library
+ + Animate library: AnimMove(gear, dir, posx, posy, [maxMoveTime]) -- new optional parameter maxMoveTime. If hog did not reach its destination within maxMoveTime milliseconds, animation stops and hog is just teleported there
  + Gear values: “Boom” -- used to modify explosion size and/or damage for most gears
  + 8 overridable custom sprites/sounds: sprCustom1-sprCustom8, sndCustom1-sndCustom8
  * Fixed call: HideHog(gear) -- Fix crash when gear is invalid. Returns true on success or false otherwise

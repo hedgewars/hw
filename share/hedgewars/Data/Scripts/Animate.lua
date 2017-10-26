@@ -1,4 +1,5 @@
 local animPos, lastx, lasty, jumpTypes, jumpTimes, moveDirs, jumpStarted
+local moveTime = 0
 local backJumped, jTimer, awTime, globalWait, stageEvents, seNum, curEvent
 local needtoDecrease
 local AnimList, AnimListNum
@@ -166,13 +167,22 @@ function AnimFollowGear(gear)
   return true
 end
 
-function AnimMove(gear, dir, posx, posy)
+function AnimMove(gear, dir, posx, posy, maxMoveTime)
   dirr = moveDirs[dir]
   SetGearMessage(gear, dirr)
-  if GetX(gear) == posx or GetY(gear) == posy then
+  moveTime = moveTime + 1
+  if (maxMoveTime and moveTime > maxMoveTime) then
+    SetGearMessage(gear, 0)
+    SetGearPosition(gear, posx, posy)
+    lastx = GetX(gear)
+    lasty = GetY(gear)
+    moveTime = 0
+    return true
+  elseif GetX(gear) == posx or GetY(gear) == posy then
     SetGearMessage(gear, 0)
     lastx = GetX(gear)
     lasty = GetY(gear)
+    moveTime = 0
     return true
   end
   return false
