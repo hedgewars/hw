@@ -215,6 +215,9 @@ function TargetPracticeMission(params)
 					PlaySound(sndVictory, player)
 					SetState(player, bor(GetState(player), gstWinner))
 					time_goal = TurnTimeLeft
+					-- Disable control
+					SetInputMask(0)
+					AddAmmo(player, params.ammoType, 0)
 				end
 			end
 		end
