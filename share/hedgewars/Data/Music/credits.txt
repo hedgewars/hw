@@ -1,6 +1,8 @@
 City.ogg=HSR ( http://elhombresinremedio.com )
 Compost.ogg=HG
 EarthRise.ogg=Jonatan Nilsson
+Fruit.ogg=Valentin Kraevskiy
+Jungle.ogg=Valentin Kraevskiy
 Nature.ogg=John Dum
 Pirate.ogg=Jonatan Nilsson
 Rock.ogg=HSR ( http://elhombresinremedio.com )
@@ -8,4 +10,3 @@ olympics_sd.ogg=yd ( http://opengameart.org/users/yd )
 oriental.ogg=Jonatan Nilsson
 sdmusic.ogg=Kevin MacLeod - "Hitman" [sheepluva edit]
 snow.ogg=Jonatan Nilsson
-Jungle.ogg=alfadur
