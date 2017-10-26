@@ -10,19 +10,19 @@
     <message>
         <source>Hedgewars %1</source>
         <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
-        <translation type="unfinished">Hedgewars %1</translation>
+        <translation>Hedgewars %1</translation>
     </message>
     <message>
         <source>Revision %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ревизия %1 (%2)</translation>
     </message>
     <message>
         <source>Visit our homepage: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетите нашу домашнюю страничку: %1</translation>
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта программа распространяется на условиях лицензии %1.</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
@@ -32,7 +32,7 @@
     <message>
         <source>Dependency versions:</source>
         <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Версии зависимостей:</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
@@ -102,19 +102,19 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Новая</translation>
+        <translation>Новая</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Копия %1</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая (%1)</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копия %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -173,11 +173,11 @@
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Укажите IP адрес</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Укажите псевдоним</translation>
     </message>
 </context>
 <context>
@@ -219,7 +219,7 @@
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished">Отзыв</translation>
+        <translation>Отзыв</translation>
     </message>
 </context>
 <context>
@@ -334,7 +334,7 @@ Please check your installation!</source>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Использование</translation>
     </message>
     <message>
         <source>OPTION</source>
@@ -445,15 +445,15 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Chat log</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал разговора</translation>
     </message>
     <message>
         <source>Enter chat messages here and send them with [Enter]</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите сообщение и отправьте его нажатием клавиши [Ввод]</translation>
     </message>
     <message>
         <source>List of players</source>
-        <translation type="unfinished"></translation>
+        <translation>Список игроков</translation>
     </message>
 </context>
 <context>
@@ -582,29 +582,29 @@ Please, enter the password:</source>
     </message>
     <message>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда 1</translation>
     </message>
     <message>
         <source>Team %1</source>
         <extracomment>Default team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Команда %1</translation>
     </message>
     <message>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Компьютер %1</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка сети (возможно, отсутствует библиотека SSL)</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта возможность требует соединения с интернетом, но вы, похоже, не подключены (номер ошибки %1)</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутренняя ошибка: невалидный ответ</translation>
     </message>
 </context>
 <context>
@@ -627,14 +627,21 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла фатальная ошибка! - Движку игры пришлось остановить работу .
+
+Мы очень сожалеем о произошедем :(
+
+Если это продолжает происходить, нажмите кнопку &apos;%1&apos; в главном меню!
+
+Последние два сообщения от движка:
+%2</translation>
     </message>
 </context>
 <context>
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключиться к серверу</translation>
     </message>
 </context>
 <context>
@@ -773,11 +780,11 @@ Last two engine messages:
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Форты</translation>
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
-        <translation type="unfinished"></translation>
+        <translation>Просмотр и изменение зерна - источника случайности в игре</translation>
     </message>
     <message>
         <source>Randomize the theme</source>
@@ -785,7 +792,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите тему</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
@@ -817,7 +824,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите для изменения</translation>
     </message>
 </context>
 <context>
@@ -916,7 +923,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>New Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая учётная запись</translation>
     </message>
 </context>
 <context>
@@ -953,7 +960,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите шапку</translation>
     </message>
 </context>
 <context>
@@ -1008,11 +1015,11 @@ just enter your nickname.</source>
     <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Длительность: %1 мин %2 сек</translation>
     </message>
     <message>
         <source>%1 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 кадров/сек</translation>
     </message>
 </context>
 <context>
@@ -1026,14 +1033,14 @@ just enter your nickname.</source>
     <name>MinesTimeSpinBox</name>
     <message>
         <source>Random</source>
-        <translation type="unfinished">Случайно</translation>
+        <translation>Случайно</translation>
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 секунда</numerusform>
+            <numerusform>%1 секунды</numerusform>
+            <numerusform>%1 секунд</numerusform>
         </translation>
     </message>
 </context>
@@ -1104,19 +1111,19 @@ just enter your nickname.</source>
     <name>PageCampaign</name>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Команда</translation>
+        <translation>Команда</translation>
     </message>
     <message>
         <source>Campaign</source>
-        <translation type="unfinished"></translation>
+        <translation>Кампания</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Миссия</translation>
     </message>
     <message>
         <source>Start fighting</source>
-        <translation type="unfinished">Начать битву</translation>
+        <translation>Начать битву</translation>
     </message>
 </context>
 <context>
@@ -1142,19 +1149,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Load the start page</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить начальную страницу</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка сети (возможно, отсутствует библиотека SSL).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта возможность требует соединения с интернетом, но вы, похоже, не подключены (номер ошибки %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутренняя ошибка: невалидный ответ.</translation>
     </message>
 </context>
 <context>
@@ -1260,11 +1267,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Random Hats</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайные шапки</translation>
     </message>
     <message>
         <source>Random Names</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайные имена</translation>
     </message>
     <message>
         <source>Randomize the team name</source>
@@ -1486,7 +1493,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Начать битву (требуется по меньшей мере 2 команды)</translation>
     </message>
 </context>
 <context>
@@ -1513,11 +1520,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Update the room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить название комнаты</translation>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
@@ -1525,7 +1532,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Начать битву (требуется по меньшей мере 2 команды)</translation>
     </message>
 </context>
 <context>
@@ -1712,7 +1719,7 @@ just enter your nickname.</source>
     <message>
         <source>x</source>
         <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>×</translation>
     </message>
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
@@ -1720,15 +1727,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Check now</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить сейчас</translation>
     </message>
     <message>
         <source>Can&apos;t delete last team</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя удалять последнюю команду</translation>
     </message>
     <message>
         <source>You can&apos;t delete the last team!</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя удалять последнюю команду!</translation>
     </message>
 </context>
 <context>
@@ -1743,15 +1750,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play demo</source>
-        <translation type="unfinished">Играть демку</translation>
+        <translation>Играть запись</translation>
     </message>
     <message>
         <source>Play the selected demo</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть выделенную запись</translation>
     </message>
     <message>
         <source>Load the selected game</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить выделенную игру</translation>
     </message>
 </context>
 <context>
@@ -1969,7 +1976,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Turn time in seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Время хода в секундах</translation>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
@@ -1989,7 +1996,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальная длина верёвки в процентах</translation>
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
@@ -2126,7 +2133,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Scenarios</source>
-        <translation type="unfinished"></translation>
+        <translation>Сценарии</translation>
     </message>
 </context>
 <context>
@@ -2246,7 +2253,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Delegate room control</source>
-        <translation type="unfinished"></translation>
+        <translation>Передать управление комнатой</translation>
     </message>
 </context>
 <context>
@@ -2822,7 +2829,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>unnamed (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>безымянный (%1)</translation>
     </message>
 </context>
 <context>
@@ -3170,7 +3177,7 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть папку с видеозаписями</translation>
     </message>
     <message>
         <source>Play this video</source>
@@ -3206,7 +3213,7 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
-        <translation type="unfinished"></translation>
+        <translation>Отправить на YouTube</translation>
     </message>
 </context>
 <context>
@@ -3293,7 +3300,7 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Форты</translation>
     </message>
 </context>
 <context>
@@ -3316,7 +3323,7 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished">Зерно</translation>
+        <translation>Зерно</translation>
     </message>
 </context>
 <context>
@@ -3351,31 +3358,32 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Новая</translation>
+        <translation>Новая</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая (%1)</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Копия %1</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копия %1 (%2)</translation>
     </message>
 </context>
 <context>
     <name>TCPBase</name>
     <message>
         <source>Unable to start server at %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка запуска сервера %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка запуска сервера %1
+Код ошибки: %2</translation>
     </message>
     <message>
         <source>The game engine died unexpectedly!
@@ -3384,7 +3392,12 @@ Error code: %2</source>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок игры неожиданно упал! .
+(код выхода %1)
+
+Мы очень сожалеем о произошедем :(
+
+Если это продолжает происходить, нажмите кнопку &apos;%2&apos; в главном меню!</translation>
     </message>
 </context>
 <context>
@@ -3417,7 +3430,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите тему</translation>
     </message>
 </context>
 <context>
@@ -4093,7 +4106,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним уже используется</translation>
     </message>
     <message>
         <source>No checker rights</source>
@@ -4101,7 +4114,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка аутентификации</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
@@ -4177,7 +4190,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Слишком быстрое переподключение</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
@@ -4201,7 +4214,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Your vote counted</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш голос учтён</translation>
     </message>
     <message>
         <source>Pause toggled</source>
