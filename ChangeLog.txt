@@ -27,6 +27,7 @@ Content:
  + New game-style/mode: Battalion (see https://hedgewars.org/wiki/Battalion )
  + New theme: Beach
  + New theme music for Jungle and Fruit themes
+ + Change SD theme music for Halloween and Hoggywood (old tracks)
  + Completely new Cheese map; replaces the old one
  + New forts: Lonely_Island, Octopus, Olympic, Snail
  + Many new random hedgehog and team names
