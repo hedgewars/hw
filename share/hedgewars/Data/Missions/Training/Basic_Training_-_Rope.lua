@@ -36,10 +36,10 @@ TargetPos[ 6 ] = { Modifier = true, Func = function() -- Last target is ALWAYS t
 	Info( loc("Congratulations"), loc("Congratulations! You've completed the Basic Rope Training!"), 0 ) -- Congrats
 	PlaySound( sndVictory, Player )
 
-	AddCaption( loc( "Victory!" ))
+	AddCaption( loc( "Victory!" ), 0xFFFFFFFF, capgrpGameState)
 	if TurnTimeLeft >= 250000 then -- If you very fast, unlock the ahievement "Rope Master!"
 		RopeMaster = true
-		AddCaption( string.format(loc("Achievement gotten: %s"), loc("Rope Master") ),0xffba00ff,capgrpAmmoinfo )
+		AddCaption( string.format(loc("Achievement gotten: %s"), loc("Rope Master") ), 0xffba00ff, capgrpMessage2)
 		PlaySound( sndHomerun )
 	end
 	Objective = true
