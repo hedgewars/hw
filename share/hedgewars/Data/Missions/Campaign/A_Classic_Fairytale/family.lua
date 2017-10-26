@@ -237,6 +237,7 @@ function SetupPlace3()
 end
 
 function SkipStartAnim()
+  AnimSetGearPosition(natives[1], unpack(nativePos2))
   AnimSwitchHog(natives[1])
   AnimWait(natives[1], 1)
 end
