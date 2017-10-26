@@ -123,7 +123,7 @@ function AfterStartDialogue()
     return
   end
   stage = spyStage
-  ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!"), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
   TurnTimeLeft = TurnTime
 end
 
@@ -160,7 +160,7 @@ function AfterWeaklingsAnim()
   SetGearMessage(dense, 0)
   SetGearMessage(leaks, 0)
   TurnTimeLeft = TurnTime
-  ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover..."), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover...").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
 end
 
 function SkipWeaklingsAnim()
@@ -811,7 +811,7 @@ function DoReadyForStronglings()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Both your hedgehogs must survive."), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)
