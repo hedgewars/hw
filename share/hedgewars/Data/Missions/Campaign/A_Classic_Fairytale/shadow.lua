@@ -84,6 +84,9 @@ isHidden = {}
 
 --------------------------Anim skip functions--------------------------
 function AfterRefusedAnim()
+  if stage == loseStage then
+    return
+  end
   SpawnUtilityCrate(2045, 1575, amSwitch)
   SpawnAmmoCrate(2365, 1495, amShotgun)
   SpawnAmmoCrate(2495, 1519, amGrenade)
@@ -106,6 +109,9 @@ function AfterRefusedAnim()
 end
 
 function SkipRefusedAnim()
+  if stage == loseStage then
+    return
+  end
   RefusedStart()
   AnimSetGearPosition(dense, 2645, 1146)
   AnimSetGearPosition(ramon, 2218, 1675)
@@ -113,6 +119,9 @@ function SkipRefusedAnim()
 end
 
 function AfterStartDialogue()
+  if stage == loseStage then
+    return
+  end
   stage = spyStage
   ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!"), 1, 6000)
   TurnTimeLeft = TurnTime
@@ -120,6 +129,9 @@ end
 
 
 function StartSkipFunc()
+  if stage == loseStage then
+    return
+  end
   SetState(cannibals[1], 0)
   AnimTurn(leaks, "Right")
   AnimSwitchHog(leaks)
@@ -127,6 +139,9 @@ function StartSkipFunc()
 end
 
 function AfterWeaklingsAnim()
+  if stage == loseStage then
+    return
+  end
   AddAmmo(cannibals[2], amShotgun, 1)
   AddAmmo(cannibals[2], amGrenade, 1)
   AddAmmo(cannibals[3], amShotgun, 1)
@@ -149,6 +164,9 @@ function AfterWeaklingsAnim()
 end
 
 function SkipWeaklingsAnim()
+  if stage == loseStage then
+    return
+  end
   for i = 2, 5 do
     if isHidden[cannibals[i]] == true then
       RestoreHog(cannibals[i])
@@ -161,6 +179,9 @@ function SkipWeaklingsAnim()
 end
 
 function AfterStronglingsAnim()
+  if stage == loseStage then
+    return
+  end
   stage = cyborgStage
   ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 1, 8000)
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
@@ -177,6 +198,9 @@ function AfterStronglingsAnim()
 end
 
 function SkipStronglingsAnim()
+  if stage == loseStage then
+    return
+  end
   for i = 6, 9 do
     if isHidden[cannibals[i]] == true then
       RestoreHog(cannibals[i])
@@ -200,6 +224,9 @@ function SkipStronglingsAnim()
 end
 
 function AfterAcceptedAnim()
+  if stage == loseStage then
+    return
+  end
   stage = acceptedReturnStage
   SpawnUtilityCrate(1370, 810, amGirder)
   SpawnUtilityCrate(1300, 810, amParachute)
@@ -214,6 +241,9 @@ function AfterAcceptedAnim()
 end
 
 function SkipAcceptedAnim()
+  if stage == loseStage then
+    return
+  end
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(dense)
@@ -221,6 +251,9 @@ function SkipAcceptedAnim()
 end
 
 function AfterAttackedAnim()
+  if stage == loseStage then
+    return
+  end
   stage = aloneStage
   ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(cannibals[6], amGrenade, 1)
@@ -244,6 +277,9 @@ function AfterAttackedAnim()
 end
 
 function SkipAttackedAnim()
+  if stage == loseStage then
+    return
+  end
   if denseDead == false then
     DeleteGear(dense)
   end
@@ -269,6 +305,9 @@ function SpawnCrates()
 end
 
 function EmitDenseClouds(anim, dir)
+  if stage == loseStage then
+    return
+  end
   local dif
   if dir == "Left" then 
     dif = 10
@@ -286,6 +325,9 @@ function EmitDenseClouds(anim, dir)
 end
 
 function BlowDenseCloud()
+  if stage == loseStage then
+    return
+  end
   AnimInsertStepNext({func = DeleteGear, args = {dense}, swh = false}) 
   AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense), GetY(dense), vgtBigExplosion, 0, true}, swh = false})
   AnimInsertStepNext({func = AnimWait, args = {dense, 1200}})
@@ -482,6 +524,9 @@ end
 
 
 function RefusedStart()
+  if stage == loseStage then
+    return
+  end
   if ramonHidden == true then
     RestoreHog(ramon)
     ramonHidden = false
@@ -553,13 +598,18 @@ function VisiblizeHogs()
 end
 
 function CondNeedToTurn(hog1, hog2)
+  if stage == loseStage then
+    return
+  end
   xl, xd = GetX(hog1), GetX(hog2)
-  if xl > xd then
-    AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
-    AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
-  elseif xl < xd then
-    AnimInsertStepNext({func = AnimTurn, args = {hog2, "Left"}})
-    AnimInsertStepNext({func = AnimTurn, args = {hog1, "Right"}})
+  if xl and xd then
+    if xl > xd then
+      AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
+      AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
+    elseif xl < xd then
+      AnimInsertStepNext({func = AnimTurn, args = {hog2, "Left"}})
+      AnimInsertStepNext({func = AnimTurn, args = {hog1, "Right"}})
+    end
   end
 end
 
@@ -577,6 +627,9 @@ function HideHogs()
 end
 
 function HideStronglings()
+  if stage == loseStage then
+    return
+  end
   for i = 6, 9 do
     HideHog(cannibals[i])
     isHidden[cannibals[i]] = true
@@ -584,6 +637,9 @@ function HideStronglings()
 end
 
 function UnHideWeaklings()
+  if stage == loseStage then
+    return
+  end
   for i = 2, 5 do
     RestoreHog(cannibals[i])
     isHidden[cannibals[i]] = false
@@ -592,6 +648,9 @@ function UnHideWeaklings()
 end
 
 function UnHideStronglings()
+  if stage == loseStage then
+    return
+  end
   for i = 6, 9 do
     RestoreHog(cannibals[i])
     isHidden[cannibals[i]] = false
@@ -603,6 +662,9 @@ function UnHideStronglings()
 end
 
 function ChoiceTaken()
+  if stage == loseStage then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   if choice == choiceAccept then
     AddAnim(acceptedAnim)
@@ -617,6 +679,9 @@ function ChoiceTaken()
 end
 
 function KillCyborg()
+  if stage == loseStage then
+    return
+  end
   RestoreHog(cyborg)
   DeleteGear(cyborg)
   EndTurn(true)
@@ -628,6 +693,9 @@ function CheckBrainiacDead()
 end
 
 function DoBrainiacDead()
+  if stage == loseStage then
+    return
+  end
   EndTurn(true)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(weaklingsAnim)
@@ -645,6 +713,9 @@ function CheckWeaklingsKilled()
 end
 
 function DoWeaklingsKilled()
+  if stage == loseStage then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
@@ -657,6 +728,9 @@ function CheckRefuse()
 end
 
 function DoRefuse()
+  if stage == loseStage then
+    return
+  end
   choice = choiceRefuse
 end
 
@@ -665,6 +739,9 @@ function CheckAccept()
 end
 
 function DoAccept()
+  if stage == loseStage then
+    return
+  end
   choice = choiceAccept
 end
 
@@ -673,6 +750,9 @@ function CheckConfront()
 end
 
 function DoConfront()
+  if stage == loseStage then
+    return
+  end
   choice = choiceAttack
 end
 
@@ -681,6 +761,9 @@ function CheckChoice()
 end
 
 function DoChoice()
+  if stage == loseStage then
+    return
+  end
   RemoveEventFunc(CheckConfront)
   RemoveEventFunc(CheckAccept)
   RemoveEventFunc(CheckRefuse)
@@ -688,28 +771,46 @@ function DoChoice()
 end
 
 function CheckNeedGirder()
+  if stage == loseStage then
+    return false
+  end
   return GetX(dense) > 1640 and StoppedGear(dense)
 end
 
 function DoNeedGirder()
+  if stage == loseStage then
+    return
+  end
   ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
 end
 
 function CheckNeedWeapons()
+  if stage == loseStage then
+    return false
+  end
   return GetX(dense) > 2522 and StoppedGear(dense)
 end
 
 function DoNeedWeapons()
+  if stage == loseStage then
+    return
+  end
   grenadeCrate = SpawnAmmoCrate(2550, 800, amGrenade)
   shotgunCrate = SpawnAmmoCrate(2610, 850, amShotgun)
   AddCaption(loc("A little gift from the cyborgs"))
 end
 
 function CheckReadyForStronglings()
+  if stage == loseStage then
+    return false
+  end
   return (shotgunTaken and grenadeTaken) or GetX(dense) > 2700
 end
 
 function DoReadyForStronglings()
+  if stage == loseStage then
+    return
+  end
   ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
@@ -733,6 +834,9 @@ function DoReadyForStronglings()
 end
 
 function DoStronglingsDead()
+  if stage == loseStage then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   if denseDead == true then
     AddAnim(acceptedDiedFinalAnim)
@@ -752,6 +856,9 @@ function DoStronglingsDead()
 end
 
 function DoStronglingsDeadRefused()
+  if stage == loseStage then
+    return
+  end
   if denseDead == true then
     SaveCampaignVar("M2DenseDead", "1")
   else
@@ -776,6 +883,9 @@ function DoStronglingsDeadRefused()
 end
 
 function DoStronglingsDeadAttacked()
+  if stage == loseStage then
+    return
+  end
   SaveCampaignVar("M2DenseDead", "1")
   SaveCampaignVar("M2RamonDead", "0")
   SaveCampaignVar("M2SpikyDead", "0")
@@ -804,9 +914,11 @@ function CheckLeaksDead()
 end
 
 function DoDead()
+  if stage == loseStage then
+    return
+  end
   AddCaption(loc("...and so the cyborgs took over the world..."))
   stage = loseStage
-  EndTurn(true)
   DismissTeam(loc("Natives"))
 end
 
