@@ -8,3 +8,4 @@ olympics_sd.ogg=yd ( http://opengameart.org/users/yd )
 oriental.ogg=Jonatan Nilsson
 sdmusic.ogg=Kevin MacLeod - "Hitman" [sheepluva edit]
 snow.ogg=Jonatan Nilsson
+Jungle.ogg=alfadur
