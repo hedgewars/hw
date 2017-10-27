@@ -247,8 +247,7 @@ A Classic Fairytale:
  * Mission 5: Fix final animation being stuck if cyborg's way to the left is blocked
  * Mission 6: Block off left cave entrance to stop player to just rope all the way around
  * Mission 6: Fix mines not being able to get triggered in first turn
- * Mission 7: Fix possible Lua error message spam in intro sequence
- * Mission 8: Fix Lua error message at the beginning
+ * Mission 8: Fix Lua error message at the very beginning and error spam in intro sequence
  * Mission 10: Fix mission becoming unplayable when all hogs except the traitor died
  * All missions: Add missing texts for translation
  * All missions: Fix incorrect crate types
