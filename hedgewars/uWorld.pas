@@ -171,7 +171,7 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
 g:= ''; // no text/things to note yet
 
 // add custom goals from lua script if there are any
-if LuaGoals <> '' then
+if LuaGoals <> ansistring('') then
     g:= LuaGoals + '|';
 
 // check different game flags
