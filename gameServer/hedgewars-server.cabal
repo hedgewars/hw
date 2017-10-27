@@ -18,7 +18,7 @@ Executable hedgewars-server
 
 -- Don't forget to update INSTALL.md when you change these dependencies!
   Build-depends:
-    base >= 4.3,
+    base >= 4.8,
     containers,
     vector,
     bytestring,
