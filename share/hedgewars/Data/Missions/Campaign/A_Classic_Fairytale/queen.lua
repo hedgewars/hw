@@ -100,6 +100,8 @@ startAnim = {}
 fleeAnim = {}
 finalAnim = {}
 leaderDeadAnim = {}
+
+nativeAwaitingDeletion = nil
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -648,7 +650,10 @@ function SetupPlace()
     if GetHogName(natives[i]) == GetHogName(enemy) then
       AnimSetGearPosition(enemy, GetGearPosition(natives[i]))
       DeleteGear(natives[i])
+      -- triggers AfterSetupPlace when the gear is *actually* deleted
+      nativeAwaitingDeletion = natives[i]
       DeleteGear(cyborgs[cyborgsLeft])
+      break
     end
   end
 
@@ -762,6 +767,10 @@ end
 function onGameStart()
   SetupAmmo()
   SetupPlace()
+  -- Animation is setup in AfterSetupPlace
+end
+
+function AfterSetupPlace()
   AnimationSetup()
   SetupEvents()
   AddAnim(startAnim)
@@ -791,6 +800,10 @@ function onGearDelete(gear)
       end
       table.remove(natives, toRemove)
       nativesLeft = nativesLeft - 1
+      if nativeAwaitingDeletion and gear == nativeAwaitingDeletion then
+        AfterSetupPlace()
+        nativeAwaitingDeletion = nil
+      end
     end
   end
 end
