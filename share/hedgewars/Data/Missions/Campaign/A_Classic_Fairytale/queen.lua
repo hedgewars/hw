@@ -669,6 +669,10 @@ function SetupPlace()
   SpawnUtilityCrate(1147, 1431, amPortalGun, 2)
   SpawnUtilityCrate(1219, 1542, amRope, 5)
   SpawnUtilityCrate(1259, 1501, amJetpack, 2)
+
+  if not nativeAwaitingDeletion then
+    AfterSetupPlace()
+  end
 end
 
 function SetupEvents()
