@@ -2973,7 +2973,6 @@ function HandleHedgeEditor()
 
 		x,y = GetGearTarget(cGear)
 
-		AddCaption(GetGearPos(cGear))
 		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amAirAttack then
 			DeleteGear(cGear)
 			PlaceObject(x, y)
@@ -3225,27 +3224,29 @@ end
 ---------------------------------------------------------------
 function onLeft()
 
-	leftHeld = true
-	rightHeld = false
+	if (curWep == amAirAttack) then
+		leftHeld = true
+		rightHeld = false
 
-	if preciseOn then
-		if cat[cIndex] == loc("Sprite Placement Mode") then
-			sFrame = sFrame - 1
-			if sFrame < 0 then
-				sFrame = reducedSpriteIDArrayFrames[pIndex] - 1
+		if preciseOn then
+			if cat[cIndex] == loc("Sprite Placement Mode") then
+				sFrame = sFrame - 1
+				if sFrame < 0 then
+					sFrame = reducedSpriteIDArrayFrames[pIndex] - 1
+				end
 			end
-		end
-	else
-		pIndex = pIndex - 1
-		if pIndex == 0 then
-			pIndex = #pMode
-		end
-		if cat[cIndex] == loc("Sprite Placement Mode") then
-			sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
-		end
+		else
+			pIndex = pIndex - 1
+			if pIndex == 0 then
+				pIndex = #pMode
+			end
+			if cat[cIndex] == loc("Sprite Placement Mode") then
+				sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+			end
 
-		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-			showSecondaryMessage()
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+				showSecondaryMessage()
+			end
 		end
 	end
 
@@ -3253,27 +3254,29 @@ end
 
 function onRight()
 
-	leftHeld = false
-	rightHeld = true
+	if (curWep == amAirAttack) then
+		leftHeld = false
+		rightHeld = true
 
-	if preciseOn then
-		if cat[cIndex] == loc("Sprite Placement Mode") then
-			sFrame = sFrame + 1
-			if sFrame >= reducedSpriteIDArrayFrames[pIndex] then
-				sFrame = 0
+		if preciseOn then
+			if cat[cIndex] == loc("Sprite Placement Mode") then
+				sFrame = sFrame + 1
+				if sFrame >= reducedSpriteIDArrayFrames[pIndex] then
+					sFrame = 0
+				end
 			end
-		end
-	else
-		pIndex = pIndex + 1
-		if pIndex > #pMode then
-			pIndex = 1
-		end
-		if cat[cIndex] == loc("Sprite Placement Mode") then
-			sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
-		end
-	
-		if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-			showSecondaryMessage()
+		else
+			pIndex = pIndex + 1
+			if pIndex > #pMode then
+				pIndex = 1
+			end
+			if cat[cIndex] == loc("Sprite Placement Mode") then
+				sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
+			end
+
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+				showSecondaryMessage()
+			end
 		end
 	end
 
