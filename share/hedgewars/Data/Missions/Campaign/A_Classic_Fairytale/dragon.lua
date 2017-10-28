@@ -1,3 +1,31 @@
+--[[
+A Classic Fairytale: Dragon's Lair
+
+= SUMMARY =
+Hero must collect an utility crate on the other side of the river.
+To accomplish that, hero must first collect a series of crates with
+the rope and wipe out the cyborgs.
+
+= GOALS =
+- Mission goal (leads to immediate victory): Collect utility crate at the right side of the river
+- First sub-goal: Collect (or destroy) a series of crates (all other utility crates)
+- Second sub-goal: Wipe out the cyborgs
+
+= FLOW CHART =
+- Cut scene: Intro
+- TBS
+| Player accomplishes first sub-goal first:
+    - Cut scene: Cyborg reveals second goal
+| Player accomplshed second sub-goal first:
+    - Hero reminds player to collect/destroy remaining crates
+- Player accomplished both goals
+- Cut scene: Cyborg teleports hero and congrats hero and reveals portal gun
+- A teleporter crate appears, allowing the player to complete the mission
+- Player takes final crate at the very right
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

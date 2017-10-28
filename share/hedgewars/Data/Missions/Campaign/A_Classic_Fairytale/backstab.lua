@@ -1,3 +1,53 @@
+--[[
+A Classic Fairytale: Backstab
+
+= SUMMARY =
+It is revealed that there's a traitor among the natives.
+Player decides whether to kill him or not.
+After the natives must defeat 3 waves of cannibals.
+
+= FLOW CHART =
+
+== Linear events ==
+
+- Cut scene: startScene (traitor is revealed)
+- Player is instructed to decide what to do with the traitor
+| Player kills traitor
+    - Cut scene: afterChoiceAnim
+| Player spares traitor
+    - Cut scene: afterChoiceAnim (different)
+| Player kills any other hog or own hog
+    > Game over
+- First turn of cannibals
+- TBS
+- First wave of cannibals dead
+- Cut scene: wave2Anim
+- Spawn 2nd cannibal wave
+- TBS
+- 2nd wave dead
+- Cut scene: wave2DeadAnim
+- All natives but one are encaged
+- 7 turns till arrival of 3rd wave
+- Arrival points are marked with circles
+- One hero is deployed near the circles
+- Player now only controls the hero, switch hog is removed
+- TBS
+- 3rd wave appears
+- TBS
+- 3rd wave dead
+- Final cut scene
+> Victory
+
+=== The traitor ===
+The traitor is chosen based on the past player decisions in the campaign.
+
+== Non-linear events ==
+
+| Any native hog dies after traitor decision:
+    - Another hog (if alive) mourns the loss
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

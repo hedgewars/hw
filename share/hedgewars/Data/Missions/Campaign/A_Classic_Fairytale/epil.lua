@@ -1,3 +1,44 @@
+--[[
+A Classic Fairytale: Epilogue
+
+= SUMMARY =
+The epilogue, a final animated sequence (with 4 possible endings),
+plus a sandbox mode.
+
+= GOALS =
+You only need to finish the cut scene and quit.
+The cut scene can be skipped, this is OK, too.
+
+= FLOW CHART =
+== Linear events ==
+- Long cut scene. This is one of four possible endings.
+- The chosen ending depends on the enemy leader chosen in ACF8:
+| ACF8 leader: Dense Cloud
+    - Dense Cloud is the traitor and in prison
+    - See SetupAnimDense
+| ACF8 leader: Fell from Heaven
+    - Fell from Heaven is the traitor
+    - See SetupAnimPrincess
+| ACF8 leader: Fiery Water
+    - Fiery Water is the traitor and in prison
+    - See SetupAnimWater
+| ACF8 leader: Nancy Screw (cyborg)
+    - No traitors
+    - See SetupAnimCyborg
+- Mission is marked as completed after cut scene, but does not exit
+- Mission panel with congratulation message appears
+- Sandbox mode activated
+- All hogs except the traitor are now playable
+
+Note: This mission does not exit on its own.
+The player has either to kill everyone or use the Esc key.
+
+== Non-linear events ==
+| All hogs except the traitor are dead
+    - It's the traitor's turn now
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

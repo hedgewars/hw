@@ -1,3 +1,34 @@
+--[[
+A Classic Fairytale: Long live the Queen
+
+= SUMMARY =
+Deathmatch against a leader of a pack of cyborgs with 4 different storylines (but mostly identical gameplay).
+
+= GOALS =
+Defeat Biomechanic Team.
+
+= FLOW CHART =
+- Show one of 4 possible storylines which affect the choice of the enemy leader (only minor effect on gameplay):
+    | 1) If offer accepted in ACF2 and traitor not executed in ACF5: Dense Cloud
+    | 2) Otherwise: If offer accepted in ACF2: Nancy Screw (cyborg)
+    | 3) Otherwise: If traitor was executed in ACF5: Fell from Heaven
+    | 4) Otherwise: Fiery Water
+- Cut scene: startAnim
+- TBS
+- Biomechanic Team defeated.
+- Cut scene: finalAnim
+> Victory
+
+== Non-linear events ==
+| Leader dead
+    - Cut scene: leaderDeadAnim
+| Played more than 6 rounds and leader is still in game
+    - Cut scene: fleeAnim
+    - Leader flees
+    - Instructions: Kill remaining enemies
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

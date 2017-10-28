@@ -1,3 +1,30 @@
+--[[
+A Classic Fairytale: Family Reunion
+
+= GOALS =
+Kill all visible cyborgs (not the princess).
+Then move hero to princess and Ramon and Spike Cheese to the surface.
+
+= FLOW CHART =
+== Linear events ==
+
+- Cut scene: Intro
+- First goal: Kill all visible cyborgs (princess is not a cyborg)
+- First goal completed
+- Cut scene: Cyborg reveals second goal
+- A ton of 5s mines spawn on the surface
+- Second goal: Hero must reach princess; Ramon and Spiky Cheese must reach the surface
+- Second goal completed
+> Victory
+
+== Non-linear events ==
+| Princess dead:
+    > Game over
+| Ramon, Spiky Cheese or hero dead:
+    > Game over
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

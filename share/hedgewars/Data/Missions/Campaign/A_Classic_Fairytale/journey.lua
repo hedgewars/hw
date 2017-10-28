@@ -1,3 +1,106 @@
+--[[
+A Classic Fairytale: The Journey Back
+
+= SUMMARY =
+This is a very complex and heavily scripted mission with
+2 major gameplay variants and 2 sub-variants each.
+
+This mission is mostly about movement and overcoming obstacles,
+and not much about fighting.
+
+The player has either 1 or 2 hogs (depending on previous mission)
+and must reach the left coast. The cyborg will show up from time
+to time and constantly annoys the heroes with obstacles and additional
+challenges.
+
+The mission's gameplay is affected by whether Dense Cloud survived
+in the previous mission. The mission's dialogues are affected by
+the decision of the player in the previous mission.
+
+= GOALS =
+- Collect the crate at the left coast
+- (Need to accomplish various sub-goals before this is possible)
+- Then kill the cyborg
+
+= FLOW CHART =
+== Linear events ==
+
+Note: This mission's gameplay is significantly affected by the choices of the previous mission (The Shadow Falls).
+There are two major paths, and each of them has two variants.
+
+=== PATH ONE (AL) ===
+Condition: Cyborg's offer in ACF2 accepted and Dense Cloud survived.
+
+- Mission starts with Dense Cloud and Leaks a Lot
+- Mines time: 5s
+- Cut scene: startAnimAL (initial instructions)
+- Hog moves past flower (via teamwork)
+- Animation: pastFlowerAnimAL
+- Player jumps up the tree
+- Cut scene: outPutAnimAL
+- Cyborg teleports one hog to the pit, while the other hog remains
+- TBS
+- Trapped hog walks out of pit
+- Cut scene: midAnimAL
+- Trapped hog is teleported below bridge (and trapped again)
+- A huge barricade at the bridge is erected, and mines spawn on bridge
+- Now any hog needs to collect the final crate
+- TBS
+- Final crate collected
+- Cut scene: endAnimAL
+- Cyborg and princess apear, player must kill cyborg
+| Cyborg killed
+    - Cut scene: winAnim
+    > Victory
+| Princess killed
+    - Cut scene: endFailAnim
+    > Game over
+
+=== PATH TWO (AD) ===
+Condition: Cyborg's offer in ACF2 accepted, but Dense Cloud died afterwards.
+
+- Mission starts with Leaks a Lot only
+- Cut scene: startAnimAD (initial instructions)
+- Hog moves past flower (via blowtorch)
+- Animation: pastFlowerAnimAD
+- TBS
+- Hog proceeds all the way to the bridge
+- Cut scene: outPutAnimAD (the “Princess Game”)
+- Hog is teleported to the pit
+- TBS
+- Hog must reach goal crate within a given number of turns
+| Hog reaches goal crate within the turn limit
+    - Cut scene: endAnimAD
+    - Cyborg and princess spawn
+    | Cyborg killed
+        - Cut scene: winAnim
+        > Victory
+    | Princess killed
+        - Cut scene: endFailAnim
+        > Game over
+| Turn limit exceeded
+    - Cut scene: failAnimAD (princess is caged and killed by cyborg)
+    > Game over
+
+=== PATH THREE (RL) ===
+Condition: Cyborg's offer in ACF2 rejected.
+
+This is almost identical to Path One, only the dialogues differ.
+All AL animations are replaced with RL animations.
+
+=== PATH FOUR (attacked) ===
+Condition: Cyborg from ACF2 was attacked.
+
+This is almost identical to Path Two, only the dialogues differ.
+Uses startAnim and midAnim from SetupAnimAttacked.
+
+
+== Non-linear events ==
+- Any of the Natives dies
+   > Game over
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

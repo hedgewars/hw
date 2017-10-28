@@ -1,3 +1,21 @@
+--[[
+A Classic Fairytale: The enemy of my enemy
+
+= SUMMARY =
+Simple deathmatch on the Islands map.
+
+= GOAL =
+Wipe out the Hedge-cogs and Leader teams
+
+= FLOW CHART =
+- Cut scene: startAnim
+- TBS
+- Goal completed
+- Cut scene: finalAnim
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

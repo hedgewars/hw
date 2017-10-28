@@ -1,3 +1,64 @@
+--[[
+A Classic Fairytale: The Shadow Falls
+
+= SUMMARY =
+Dense Cloud and Leaks a Lot fight against waves of cannibals. Then a
+cyborg shows up and offers one of the natives goodies in exchange for
+betraying his tribe.
+
+The decision affects the rest of the story. The survival of Dense
+Cloud is important for the gameplay of the next mission.
+
+= GOALS =
+Kill Weaklings and Stronglings.
+
+= FLOW CHART =
+== Linear events ==
+
+- Initial hog spawns: Dense Cloud, Leaks a Lot and Brainiac (Weaklings)
+- Cut scene: startDialogue
+- TBS
+- Brainiac dead
+- Cut scene: weaklingsAnim
+- The remaining Weaklings spawn
+- TBS
+- All Weaklings dead
+- Cut scene: stronglingsAnim: Stronglings spawn, hero walks to forest, meets cyborg, cyborg makes offer
+- The cyborg offer is an IMPORTANT decision, it completely changes the next mission, and the rest of the story
+| Accept: Player walks to cyborg
+    - Cut scene: acceptAnim
+    - Hero returns to start
+    - TBS
+    - Stronglings defeated
+    | Stronglings defeated with both hogs survived
+        - Cut scene: acceptedSurvivedFinalAnim
+    | Stronglings deafeated with Dense Cloud dead
+        - Cut scene: acceptedDiedFinalAnim
+    > Victory
+| Reject: Player walks away
+    - Cut scene: refusedAnim
+    - Hero needs to walk all the way back (infinite turn time)
+    - Hero reached tree
+    - Turn time starts
+    - TBS
+    - Stronglings defeated
+    - Cut scene: refusedFinalAnim
+    > Victory
+| Attack: Player attacks cyborg
+    - Cut scene: attackAnim
+    - Cyborg kills hero
+    - Other native's turn to defeat Stronglings
+    - TBS
+    - Stronglings defeated
+    - Cut scene: attackedFinalAnim
+    > Victory
+
+== Non-linear events ==
+| Dense Cloud or Leaks A Lot dead (exceptions: killed by cyborg; or Dense Cloud died in same turn as the Stronglings):
+    > Game over
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

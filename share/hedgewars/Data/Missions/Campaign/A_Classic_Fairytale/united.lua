@@ -1,3 +1,27 @@
+--[[
+A Classic Fairytale: United we stand
+
+= SUMMARY =
+Simple Deathmatch against cannibals in two waves.
+
+= GOAL =
+Kill both Cannfantery (cannibal) teams.
+
+= FLOW CHART =
+
+- Light Cannfantery and player hogs spawn
+- Cut scene: startAnim
+- TBS
+- Light Cannfantery defeated
+- Cut scene: wave2Anim
+- Heavy Cannfantery spawns
+- TBS
+- Heavy Cannfantery defeated
+- Cut scene: finalAnim
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 

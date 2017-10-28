@@ -1,3 +1,90 @@
+--[[
+A Classic Fairytale: First Blood
+
+= SUMMARY =
+Simple introduction to the most basic aspects of gameplay.
+Basically a story-driven mini-tutorial. Does not replace
+a real tutorial, however.
+
+= GOAL =
+To complete the various tasks the chief gives to the player.
+
+= FLOW CHART =
+This section explains how this mission is (roughly)
+*supposed* to work, with a step-to-step list.
+Use this to hunt down bugs or for testing.
+
+All other missions in ACF will have the same section.
+
+These symbols are used:
+- Event
+| Choice (only one of these can happen)
+> End of mission
+: Go to another event in the flow chart
+
+“TBS” stands for “Turn-Based Stragegy”. It is used when the game switches from
+heavily scripted events to the default turn-based stragegy gameplay. This
+is not used in the first mission, however.
+
+== Linear events ==
+This is the expected course of events in chronological order.
+
+- Introduction; movement (left/right/jump) instructions
+- Player moves to mushroom
+- Double jump instructions, move to flower
+- Collect first crate (rope)
+- Rope instructions
+- Parachute crate appears in the right pit
+- Player collects parachute
+- Instruct player to move to mole head
+| If player stopped on mole head:
+    - Cut scene
+    - Place girder to block off right pit
+    - Spawn rope crate in left pit
+    - Player must collect crate safely
+    - If hurt: Reset player to mole head
+| If player skipped the mole (e.g. by roping) and instead went down the pit left from the mole:
+    - Different cut scene
+    - Place girder to block off right pit
+    - Spawn rope crate in left pit
+    - Player must collect this crate
+- Shoryuken crate spawns
+- Player destroys all targets
+- Rope challenge
+    - Player chooses rope challenge difficulty
+    - Crates spawn, one-by-one, while player collects them
+    | If player collects all crates in time:
+        - Proceed
+    | If player fails to collect all crates in time:
+        : Rope challenge restarts
+- Deagle crate spawns
+- Player collects deagle crate
+- Deagle targets spawn
+- Deagle targets destroyd
+- Cannibal and lots of ammo crates appear
+| Player kills cannibal
+    > Victory
+| Player moves close to cannibal
+    - Many weapon crates with melee weapons spawn
+    - Cut scene
+    - Player kills cannibal
+    > Victory
+
+== Non-linear events ==
+These events can be triggered at (theoretically) any time and interrupt
+the normal flow. Obvious events like “all player hogs dead” are omitted here.
+
+- Player hog damages princess:
+    - Princess complains
+- Player hog damages chief
+    - Chief complains
+- Player hog, Princess or Chief dead:
+    > Game over
+- Player hurt itself without dying:
+    - Chief mocks player
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
