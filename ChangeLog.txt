@@ -70,6 +70,7 @@ Game engine (gameplay):
  * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Fixed failure to collect crate across wrap world edge
  * Remove buggy “/finish” chat command
+ * Fix key controls not working in ammo menu: ammo menu, placement, camera/cursor movement keys
  * Various other fixes
 
 Game engine (graphics, sounds and texts):

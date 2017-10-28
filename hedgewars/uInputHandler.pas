@@ -173,7 +173,7 @@ if CurrentBinds[code][0] <> #0 then
     begin
     if (code < cKeyMaxIndex - 2) // means not mouse buttons
         and KeyDown
-        and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) 
+        and (not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')))
         and (CurrentTeam <> nil) 
         and (not CurrentTeam^.ExtDriven) 
         then bShowAmmoMenu:= false;
