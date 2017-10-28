@@ -1106,6 +1106,7 @@ function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format:
 function  SDL_RenderSetViewport(window: PSDL_Window; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
+procedure SDL_SetRelativeMouseMode(enabled: Boolean); cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): Boolean; cdecl; external SDLLibName;
 
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;

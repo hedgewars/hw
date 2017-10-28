@@ -6,6 +6,7 @@ procedure init;
 procedure resetPosition;
 procedure updatePosition;
 procedure handlePositionUpdate(x, y: LongInt);
+procedure setSystemCursor(enabled: boolean);
 
 implementation
 
@@ -18,34 +19,39 @@ end;
 
 procedure resetPosition;
 begin
-    // Move curser by 1px in case it's already centered.
-    // The game camera in the Alpha for 0.9.23 screwed up if
-    // the game started with the mouse already being centered.
-    // This fixes it, but we might have overlooked a related
-    // bug somewhere else.
-    // No big deal since this function is (so far) only called once.
-    SDL_WarpMouse((cScreenWidth div 2) + 1, cScreenHeight div 2);
     SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 end;
 
 procedure updatePosition;
 var x, y: LongInt;
 begin
-    SDL_GetMouseState(@x, @y);
+    SDL_GetRelativeMouseState(@x, @y);
 
-    if(x <> cScreenWidth div 2) or (y <> cScreenHeight div 2) then
-    begin
-        handlePositionUpdate(x - cScreenWidth div 2, y - cScreenHeight div 2);
-
-        if cHasFocus then
-            SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
-    end
+    if(x <> 0) or (y <> 0) then
+        handlePositionUpdate(x, y);
 end;
 
 procedure handlePositionUpdate(x, y: LongInt);
 begin
     CursorPoint.X:= CursorPoint.X + x;
     CursorPoint.Y:= CursorPoint.Y - y;
+end;
+
+procedure setSystemCursor(enabled: boolean);
+begin
+    if enabled then
+        begin
+        SDL_SetRelativeMouseMode(false);
+        if cHasFocus then
+            resetPosition();
+        SDL_ShowCursor(1);
+        end
+    else
+        begin
+        SDL_ShowCursor(0);
+        SDL_GetRelativeMouseState(nil, nil);
+        SDL_SetRelativeMouseMode(true);
+        end;
 end;
 
 end.

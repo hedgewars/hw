@@ -364,6 +364,7 @@ begin
     if not allOK then exit;
     //SDL_StartTextInput();
     SDL_ShowCursor(0);
+    SDL_SetRelativeMouseMode(true);
 
 
 {$IFDEF USE_VIDEO_RECORDING}
