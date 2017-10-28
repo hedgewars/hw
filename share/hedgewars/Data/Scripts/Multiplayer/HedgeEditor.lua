@@ -1434,6 +1434,7 @@ function GetDataForSavingHogs(gear)
 		local rgb = div(band(rgba, 0xFFFFFF00), 0x100)
 		local tColor = string.format("0x%X", rgb)
 
+		local tFort, tGrave, tFlag, tVoice
 		if getGearValue(gear,"grave") == nil then
 			tFort = GetHogFort(gear)
 			tGrave = GetHogGrave(gear)
@@ -1445,6 +1446,10 @@ function GetDataForSavingHogs(gear)
 			tFlag = getGearValue(gear,"flag")
 			tVoice = getGearValue(gear,"voice")
 		end
+		if not tFort then tFort = "Castle" end
+		if not tGrave then tGrave = "Statue" end
+		if not tFlag then tFlag= "hedgewars" end
+		if not tVoice then tVoice = "Default" end
 
 		lastRecordedTeam = GetHogTeamName(gear)
 
