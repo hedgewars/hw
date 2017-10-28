@@ -45,7 +45,7 @@ Game engine (weapons):
  * Fixed air strikes drops being off-center
  * Fixed hedgehogs getting hurt while firing deagle / sniper rifle bullet in certain situations
  * Fixed bee, mine, sticky mine, air mine, seduction, resurrector not working correctly across wrap world edge
- * Fixed teleportation being able to teleport in land if you clicked across the wrap world edge
+ * Fixed teleportation being able to teleport in land if you clicked across the wrap or bounce world edge
  * Fixed turn not ending when sticky mine was trapped on rubberband
  * Rope is now destroyed when attempting to shoot it through wrap or bouncy world edge
  * Fixed possible to move rope angle below 0° while having secondary weapon selected

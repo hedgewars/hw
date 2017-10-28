@@ -600,15 +600,19 @@ end;
 function CalcWorldWrap(X, radius: LongInt): LongInt;
 begin
     if WorldEdge = weWrap then
-        if X < LongInt(leftX) then
-             X:= X + (LongInt(rightX) - LongInt(leftX))
-        else if X > LongInt(rightX) then
-             X:= X - (LongInt(rightX) - LongInt(leftX))
+        begin
+        if X < leftX then
+             X:= X + (rightX - leftX)
+        else if X > rightX then
+             X:= X - (rightX - leftX);
+        end
     else if WorldEdge = weBounce then
-        if X - radius < LongInt(leftX) then
-            X:= LongInt(leftX) + radius
-        else if X + radius > LongInt(rightX) then
-            X:= LongInt(rightX) - radius;
+        begin
+        if (X + radius) < leftX then
+            X:= leftX + radius
+        else if (X - radius) > rightX then
+            X:= rightX - radius;
+        end;
     CalcWorldWrap:= X;
 end;
 

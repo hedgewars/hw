@@ -491,7 +491,8 @@ with CurrentHedgehog^.Gear^,
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
                 end;
-            TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
+            if (WorldEdge <> weBounce) then
+                TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
             end
         else

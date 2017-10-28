@@ -2872,7 +2872,8 @@ begin
     valid:= false;
 
     lx:= Gear^.Target.X - SpritesData[sprHHTelepMask].Width  div 2; // left
-    lx:= CalcWorldWrap(lx, SpritesData[sprHHTelepMask].Width); // Take world edge into account
+    if WorldEdge <> weBounce then
+        lx:= CalcWorldWrap(lx, SpritesData[sprHHTelepMask].Width div 2); // Take world edge into account
     ty:= Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2; // top
 
     // remember original target location
@@ -2887,6 +2888,9 @@ begin
             end;
         dec(Gear^.Target.Y);
         end;
+
+    if (WorldEdge = weBounce) and ((Gear^.Target.X < LeftX) or (Gear^.Target.X > RightX)) then
+        valid:= false;
 
     if not valid then
         begin
