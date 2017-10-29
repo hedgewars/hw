@@ -16,11 +16,14 @@ the rope and wipe out the cyborgs.
 - TBS
 | Player accomplishes first sub-goal first:
     - Cut scene: Cyborg reveals second goal
+    - A ton of weapon crates and some rope crates spawn on the long platform
 | Player accomplshed second sub-goal first:
     - Hero reminds player to collect/destroy remaining crates
 - Player accomplished both goals
-- Cut scene: Cyborg teleports hero and congrats hero and reveals portal gun
-- A teleporter crate appears, allowing the player to complete the mission
+- Cut scene: Cyborg teleports hero to the long platform and congrats hero
+- Hero's ammo is cleared, all crates, mines, sticky mines and barrels are removed from platform
+- Spawn a portal gun crate on the long platform and also a teleportation crate further to the right
+- (These utilities can be used to finish the mission)
 - Player takes final crate at the very right
 > Victory
 
@@ -204,6 +207,8 @@ firstTurn = true
 cyborgsKilledBeforeCrates = false
 cratesTaken = false
 doneCyborgsDead = false
+
+annoyingGearsForPortalScene = {}
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -366,13 +371,18 @@ function SkipKillAnim()
   AnimSwitchHog(native)
   AnimWait(native, 1)
   AddFunction({func = HideHedge, args = {cyborg}})
+  if CheckCyborgsDead() then
+    DoCyborgsDead()
+  end
 end
 
 function AfterKillAnim()
-  PutWeaponCrates()
-  TurnTimeLeft = TurnTime
-  AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
-  ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
+  if not cyborgsKilledBeforeCrates then
+    PutWeaponCrates()
+    TurnTimeLeft = TurnTime
+    AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
+    ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
+  end
 end
 
 function SkipKilledAnim()
@@ -382,16 +392,17 @@ function SkipKilledAnim()
 end
 
 function AfterKilledAnim()
+  -- Final mission segment with the portal gun
   HideHedge(cyborg)
   TurnTimeLeft = TurnTime
   SetGearMessage(native, 0)
-  AddAmmo(native, amPortalGun, 100)
+  SpawnUtilityCrate(1184, 399, amPortalGun, 100)
   SpawnUtilityCrate(2259, 755, amTeleport, 2)
-  SpawnHealthCrate(secondPos[1][1] + 30, secondPos[1][2])
+  SpawnHealthCrate(secondPos[1][1] + 50, secondPos[1][2] - 20)
   ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
                                              loc("Portal hint: one goes to the destination, and one is the entrance.|")..
                                              loc("Teleport hint: just use the mouse to select the destination!").."|"..
-                                             loc("Mines time: 5 seconds"), 1, 0)
+                                             loc("Mines time: 5 seconds"), 1, 8000)
 end
 -----------------------------Events------------------------------------
 
@@ -400,6 +411,7 @@ function CheckCyborgsDead()
 end
 
 function NullifyAmmo()
+  -- Clear the ammo and delete all inappropirate gears on the long platform for the portal scene
   AddAmmo(native, amRope, 0)
   AddAmmo(native, amGirder, 0)
   AddAmmo(native, amLowGravity, 0)
@@ -412,6 +424,13 @@ function NullifyAmmo()
   AddAmmo(native, amMortar, 0)
   AddAmmo(native, amSnowball, 0)
   AddAmmo(native, amShotgun, 0)
+
+  for i=1, #annoyingGearsForPortalScene do
+    local gear = annoyingGearsForPortalScene[i]
+    if not gearDead[gear] and GetY(gear) > 100 and GetY(gear) < 571 and GetX(gear) > 840 and GetX(gear) < 1550 then
+      DeleteGear(annoyingGearsForPortalScene[i])
+    end
+  end
 end
 
 function DoCyborgsDead()
@@ -682,11 +701,20 @@ function onGearDelete(gear)
   end
 end
 
+function onGearAdd(gear)
+  -- Track gears for removal when reaching the portal segment
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtCase or gt == gtExplosives then
+    table.insert(annoyingGearsForPortalScene, gear)
+  end
+end
+
 function onAmmoStoreInit()
   SetAmmo(amFirePunch, 3, 0, 0, 0)
   SetAmmo(amBaseballBat, 2, 0, 0, 0)
   SetAmmo(amGirder, 0, 0, 0, 2)
   SetAmmo(amLowGravity, 0, 0, 0, 1)
+  SetAmmo(amJetpack, 0, 0, 0, 1)
   SetAmmo(amSkip, 9, 0, 0, 0)
 end
 
