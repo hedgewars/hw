@@ -968,7 +968,8 @@ function DoOnFirstGirder()
   PlaceCourseMines()
   ShowMission(loc("The Journey Back"), loc("Slippery"), 
     loc("Collect the weapon crate at the left coast!") .. "|" ..
-    loc("You'd better watch your steps..."), 0, 4000)
+    loc("You'd better watch your steps...") .. "|" ..
+    loc("Mines time: 3 seconds"), 0, 4000)
 end
 
 function CheckTookSniper()
