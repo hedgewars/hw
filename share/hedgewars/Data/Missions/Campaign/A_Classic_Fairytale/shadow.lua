@@ -27,7 +27,9 @@ Kill Weaklings and Stronglings.
 - The cyborg offer is an IMPORTANT decision, it completely changes the next mission, and the rest of the story
 | Accept: Player walks to cyborg
     - Cut scene: acceptAnim
-    - Hero returns to start
+    - Hero needs to walk all the way back (infinite turn time)
+    - Hero reached tree
+    - Turn time starts
     - TBS
     - Stronglings defeated
     | Stronglings defeated with both hogs survived
@@ -37,9 +39,9 @@ Kill Weaklings and Stronglings.
     > Victory
 | Reject: Player walks away
     - Cut scene: refusedAnim
-    - Hero needs to walk all the way back (infinite turn time)
-    - Hero reached tree
-    - Turn time starts
+    - Leaks a Lot teleports back to tree at the start (automatically)
+    - Spiky Cheese and Ramon appear together with crates
+    - Spiky Cheese gains control
     - TBS
     - Stronglings defeated
     - Cut scene: refusedFinalAnim
@@ -54,7 +56,7 @@ Kill Weaklings and Stronglings.
     > Victory
 
 == Non-linear events ==
-| Dense Cloud or Leaks A Lot dead (exceptions: killed by cyborg; or Dense Cloud died in same turn as the Stronglings):
+| Dense Cloud or Leaks A Lot dead (exceptions: killed by cyborg; or Leaks A Lot died in the battle against the Stronglings):
     > Game over
 
 ]]
@@ -159,6 +161,8 @@ function AfterRefusedAnim()
   AddAmmo(cannibals[7], amGrenade, 1)
   AddAmmo(cannibals[8], amGrenade, 1)
   AddAmmo(cannibals[9], amGrenade, 1)
+  AddAmmo(dense, amSkip, 100)
+  AddAmmo(leaks, amSkip, 100)
   stage = ramonStage
   SwitchHog(cannibals[9])
   FollowGear(ramon)
@@ -777,6 +781,9 @@ function DoWeaklingsKilled()
   if stage == loseStage then
     return
   end
+  if denseDead or GetHealth(dense) == 0 or leaksDead or GetHealth(leaks) == 0 then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
@@ -872,7 +879,7 @@ function DoReadyForStronglings()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Both your hedgehogs must survive."), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)
@@ -896,6 +903,9 @@ end
 
 function DoStronglingsDead()
   if stage == loseStage then
+    return
+  end
+  if leaksDead or GetHealth(leaks) == 0 then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
