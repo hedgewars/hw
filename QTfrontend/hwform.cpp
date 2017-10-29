@@ -1526,11 +1526,11 @@ int HWForm::AskForNickAndPwd(void)
                 pwDialog->lePassword->setFocus();
             }
 
-            //if dialog close, create an error message
+            //if dialog aborted, return failure
             if (pwDialog->exec() != QDialog::Accepted) {
                 delete pwDialog;
                 GoBack();
-                break;
+                return 1;
             }
 
             //set nick and pass from the dialog
