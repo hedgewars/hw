@@ -57,8 +57,6 @@ function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
 
-function PointDistance(const x1, x2, y1, y2: hwFloat; checkWrap: boolean): hwFloat;
-
 procedure SetLittle(var r: hwFloat);
 
 function  Str2PChar(const s: shortstring): PChar;
@@ -379,37 +377,6 @@ begin
 DxDy2AttackAnglef:= trunc(arctan2(_dY, _dX) * (cMaxAngle/pi))
 end;
 
-function PointDistance(const x1, x2, y1, y2: hwFloat; checkWrap: boolean): hwFloat;
-var dist_center, dist_across: hwFloat;
-vx1, vx2, vy1, vy2: hwFloat;
-begin
-    // Sort values
-    vx1:= x1;
-    vx2:= x2;
-    vy1:= y1;
-    vy2:= y2;
-    if x1 < x2 then
-        begin
-        vx1:= x2;
-        vx2:= x1;
-        end;
-    if y1 < y2 then
-        begin
-        vy1:= y2;
-        vy2:= y1;
-        end;
-    if checkWrap and (WorldEdge = weWrap) then
-        begin
-        dist_center:= Distance(vx2-vx1, vy2-vy1);
-        dist_across:= Distance((vx2 - int2hwFloat(LeftX)) + (int2hwFloat(RightX) - vx1), vy2-vy1);
-        if (dist_across < dist_center) then
-            PointDistance:= dist_across
-        else
-            PointDistance:= dist_center;
-        end
-    else
-        PointDistance:= Distance(vx2-vx1, vy2-vy1);
-end;
 
 procedure SetLittle(var r: hwFloat);
 begin

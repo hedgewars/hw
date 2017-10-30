@@ -209,7 +209,7 @@ begin
         begin
         if (gi^.Kind = gtHedgehog) then
             begin
-            d := r - hwRound(PointDistance(gi^.X, x, gi^.Y, y, true));
+            d := r - hwRound(Distance(gi^.X - x, gi^.Y - y));
             if (d > 1) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) and (GetRandom(2) = 0) then
                 begin
                 if (CurrentHedgehog^.Gear = gi) then
@@ -1802,7 +1802,7 @@ end;
 procedure doStepAirMine(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;
-    trackSpeed, airFriction: hwFloat;
+    trackSpeed, airFriction, tX, tY: hwFloat;
     isUnderwater: Boolean;
 begin
     isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
@@ -1829,9 +1829,12 @@ begin
         targ:= Gear^.Hedgehog^.Gear;
     if targ <> nil then
         begin
+        tX:=Gear^.X-targ^.X;
+        tY:=Gear^.Y-targ^.Y;
         // allow escaping - should maybe flag this too
         if (GameTicks > Gear^.FlightTime+10000) or 
-            (hwRound(PointDistance(Gear^.X, targ^.X, Gear^.Y, targ^.Y, true)) > Gear^.Angle*6) then
+            ((tX.Round+tY.Round > Gear^.Angle*6) and
+            (hwRound(hwSqr(tX) + hwSqr(tY)) > sqr(Gear^.Angle*6))) then
             targ:= nil
         end;
 
@@ -1851,7 +1854,7 @@ begin
         begin
         gear^.State:= gear^.State or gstChooseTarget;
         if targ <> nil then
-             targDist:= PointDistance(Gear^.X, targ^.X, Gear^.Y, targ^.Y, true).Round
+             targDist:= Distance(Gear^.X-targ^.X,Gear^.Y-targ^.Y).Round
         else targDist:= 0;
         for t:= 0 to Pred(TeamsCount) do
             with TeamsArray[t]^ do
@@ -1859,13 +1862,16 @@ begin
                     if Hedgehogs[i].Gear <> nil then
                         begin
                         tmpG:= Hedgehogs[i].Gear;
+                        tX:=Gear^.X-tmpG^.X;
+                        tY:=Gear^.Y-tmpG^.Y;
                         if (Gear^.Angle = $FFFFFFFF) or
-                            (hwRound(PointDistance(Gear^.X, tmpG^.X, Gear^.Y, tmpG^.Y, true)) < Gear^.Angle) then
+                            ((tX.Round+tY.Round < Gear^.Angle) and
+                            (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Angle))) then
                             begin
-                            if targ <> nil then tmpDist:= PointDistance(Gear^.X, tmpG^.X, Gear^.Y, tmpG^.Y, true).Round;
+                            if targ <> nil then tmpDist:= Distance(tX,tY).Round;
                             if (targ = nil) or (tmpDist < targDist) then
                                 begin
-                                if targ = nil then targDist:= PointDistance(Gear^.X, tmpG^.X, Gear^.Y, tmpG^.Y, true).Round
+                                if targ = nil then targDist:= Distance(tX,tY).Round
                                 else targDist:= tmpDist;
                                 Gear^.Hedgehog:= @Hedgehogs[i];
                                 targ:= tmpG;
@@ -1882,15 +1888,9 @@ begin
         else
             trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
-            if (WorldEdge = weWrap) and ((targ^.X - Gear^.X) > ((Gear^.X - int2hwFloat(LeftX)) + (int2hwFloat(RightX) - targ^.X))) then
-                 Gear^.dX:= Gear^.dX-trackSpeed
-            else
-                 Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
+             Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
         else if (Gear^.X > targ^.X) and (Gear^.dX > -_0_1) then
-            if (WorldEdge = weWrap) and ((Gear^.X - targ^.X) > ((targ^.X - int2hwFloat(LeftX)) + (int2hwFloat(RightX) - Gear^.X))) then
-                Gear^.dX:= Gear^.dX+trackSpeed
-            else
-                Gear^.dX:= Gear^.dX-trackSpeed;
+            Gear^.dX:= Gear^.dX-trackSpeed;
         if (Gear^.Y < targ^.Y) and (Gear^.dY < _0_1)  then
              Gear^.dY:= Gear^.dY+trackSpeed
         else if (Gear^.Y > targ^.Y) and (Gear^.dY > -_0_1) then
@@ -1906,7 +1906,10 @@ begin
                 begin
                 if targ <> nil then
                     begin
-                    if (hwRound(PointDistance(Gear^.X, targ^.X, Gear^.Y, targ^.Y, true)) < Gear^.Karma) then
+                    tX:=Gear^.X-targ^.X;
+                    tY:=Gear^.Y-targ^.Y;
+                    if (tX.Round+tY.Round < Gear^.Karma) and
+                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
                     Gear^.State := Gear^.State or gstAttacking
                     end
                 else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Karma, Gear^.Karma) <> nil) then
@@ -1923,7 +1926,10 @@ begin
                 // recheck
                 if targ <> nil then
                     begin
-                    if (hwRound(PointDistance(Gear^.X, targ^.X, Gear^.Y, targ^.Y, true)) < Gear^.Karma) then
+                    tX:=Gear^.X-targ^.X;
+                    tY:=Gear^.Y-targ^.Y;
+                    if (tX.Round+tY.Round < Gear^.Karma) and
+                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
                         begin
                         Gear^.Hedgehog:= CurrentHedgehog;
                         tmpG:= FollowGear;
