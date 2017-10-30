@@ -1888,9 +1888,15 @@ begin
         else
             trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
-             Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
+            if (WorldEdge = weWrap) and ((targ^.X - Gear^.X) > ((Gear^.X - int2hwFloat(LeftX)) + (int2hwFloat(RightX) - targ^.X))) then
+                 Gear^.dX:= Gear^.dX-trackSpeed
+            else
+                 Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
         else if (Gear^.X > targ^.X) and (Gear^.dX > -_0_1) then
-            Gear^.dX:= Gear^.dX-trackSpeed;
+            if (WorldEdge = weWrap) and ((Gear^.X - targ^.X) > ((targ^.X - int2hwFloat(LeftX)) + (int2hwFloat(RightX) - Gear^.X))) then
+                Gear^.dX:= Gear^.dX+trackSpeed
+            else
+                Gear^.dX:= Gear^.dX-trackSpeed;
         if (Gear^.Y < targ^.Y) and (Gear^.dY < _0_1)  then
              Gear^.dY:= Gear^.dY+trackSpeed
         else if (Gear^.Y > targ^.Y) and (Gear^.dY > -_0_1) then
@@ -3228,7 +3234,7 @@ procedure doStepCakeDown(Gear: PGear);
 var
     gi: PGear;
     dmg, dmgBase, partyEpicness, i: LongInt;
-    fX, fY: hwFloat;
+    fX, fY, tdX, tdY: hwFloat;
     sparkles: PVisualGear;
 begin
     AllInactive := false;
@@ -3255,8 +3261,10 @@ begin
             if gi^.Kind = gtHedgehog then
                 begin
                 dmg:= 0;
-                if hwRound(PointDistance(gi^.X, fX, gi^.Y, fY, true)) < dmgBase then
-                    dmg:= dmgBase - max(hwRound(PointDistance(gi^.X, fX, gi^.Y, fY, true)), gi^.Radius);
+                tdX:= gi^.X-fX;
+                tdY:= gi^.Y-fY;
+                if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                    dmg:= dmgBase - max(hwRound(Distance(tdX, tdY)),gi^.Radius);
                 if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, Gear^.Boom), gi);
                 if (dmg > 1) then
                     if (CurrentHedgehog^.Gear = gi) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) then
