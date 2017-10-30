@@ -352,7 +352,7 @@ Content Creation:
  * Default water color was black instead of blue
 
 Translations:
- + Scottish Gaelic updates for: Engine, frontend, tips, missions
+ + Major translation updates: Scottish Gaelic, Polish
  + Loading screen can now be translated
  + A few window titles can be translated
  + Campaign names and campaign mission names can be translated
