@@ -62,7 +62,7 @@
 00:58=Mina powietrzna
 00:59=Gumowa kaczuszka
 
-; 01:00=Loading …
+01:00=Wczytywanie …
 01:01=Remis
 01:02=%1 wygrywają!
 01:03=Głośność %1%
@@ -103,7 +103,6 @@
 02:00=%1 spotkał stwórcę!
 02:00=%1 już dłużej nie wytrzyma!
 02:00=%1 zakończył służbę!
-02:00=%1 poświęcił się dla ogółu!
 02:00=%1 zrezygnował z trudu życia!
 02:00=Tak jak liść opuszcza drzewo, tak %1 opuszcza nas!
 02:00=%1 mówi "Pokój z wami"!
@@ -117,11 +116,11 @@
 02:00=%1 już nie będzie strzelał z dubeltówki..
 02:00=%1 już nie będzie rzucał w innych owocami...
 02:00=%1 nie postrzela już ze strzelby...
-02:00=%1 przyjął o jeden strzał za dużo.
+02:00=%1 przyjął o jeden strzał za dużo
 02:00=A mógł zebrać tę skrzynkę z życiem...
 02:00=%1 poszedł pograć w lepszą grę...
 02:00=%1 przytupnął nóżką i umarł
-02:00=%1 poniósł całkowitą klęskę.
+02:00=%1 poniósł całkowitą klęskę
 02:00=Biedny %1 ...
 02:00=%1 woli grać w WarMUX
 02:00=%1 blokuje strzały własną twarzą
@@ -140,10 +139,10 @@
 02:00=%1 już się do nas nie uśmiechnie
 02:00=%1 już nie istnieje
 02:00=%1 przestał istnieć
-02:00=Nie chcąc dłużej żyć, %1 umiera w pokoju.
+02:00=Nie chcąc dłużej żyć, %1 umiera w pokoju
 02:00=Żegnaj %1, dopiero Cię poznaliśmy!
-02:00=%1 ma niską tolerancję na bycie postrzelonym.
-02:00=%1 mógł użyć dodatkowego życia.
+02:00=%1 ma niską tolerancję na bycie postrzelonym
+02:00=%1 mógł użyć dodatkowego życia
 02:00=Czy jest na sali jakiś doktor?
 02:00=%1 przeszedł na emeryturę
 02:00=%1 poszedł do innej piaskownicy
@@ -158,7 +157,10 @@
 02:00=%1, machamy na pożegnanie!
 02:00=%1 zatruł się ołowiem
 02:00=%1 się wykrwawił
-02:00=%1 zginął za słuszną sprawę
+02:00=%1 zapomniał jak się oddycha
+02:00=%1 wziął i umarł
+02:00=%1 został zabity na śmierć
+02:00=%1 mógł nie fikać
 
 ; Hog (%1) drowned
 02:01=%1 robi za łódź podwodną!
@@ -211,12 +213,13 @@
 02:01=%1 był bardzo spragniony
 02:01=%1 weźmie udział w "Szczękach"... jako przynęta!
 02:01=%1 lubi nurkować
-02:01=%1 nie zdążył zadzwonić po WOPR-u
+02:01=%1 nie zdążył zadzwonić po WOPR
 02:01=%1 miał za mało tlenu
 02:01=%1 przemoczył sobie wdzianko
 02:01=%1 utonął
 02:01=%1 ma za małą wyporność
 02:01=%1, uważaj na rekiny!
+02:01=%1 ma bardzo ważne spotkanie na dnie oceanu
 
 ; Round starts
 02:02=Walczmy!
@@ -273,9 +276,18 @@
 
 ; Round ends (team/clan %1 wins)
 02:03=%1 wygrywają!
+02:03=%1 są zwycięzcami!
+02:03=%1 zmiażdżyli konkurencję!
+02:03=%1 mają dzisiaj imprezę
+02:03=%1 byli po prostu lepsi
+02:03=Drużynie %1 nikt nie podskoczy
 
 ; Round ends (draw)
 02:04=Remis
+02:04=Ale nudy, remis
+02:04=Nikt nie wygrywa, remis
+02:04=Wszyscy martwi. Dobrze.
+02:04=Gdzie znikły wszystkie jeże?
 
 ; New health crate
 02:05=Przybyła pomoc!
@@ -299,7 +311,6 @@
 02:05=Rozdajemy darmowe HP!
 02:05=Na zdrowie!
 02:05=Szczepionka!
-
 
 ; New ammo crate
 02:06=Więcej broni!
@@ -327,7 +338,6 @@
 02:06=Cokolwiek tam jest, na pewno się przyda
 02:06=Gadżety!
 02:06=Odjazdowy sprzęt!
-02:06=Czy to ptak...? Czy to samolot...?
 
 ; New utility crate
 02:07=Czas na narzędzia!
@@ -393,18 +403,18 @@
 
 ; Hog (%1) hurts himself only
 02:09=%1 powinien potrenować celowanie!
-02:09=%1 najwidoczniej nienawidzi samego siebie..
+02:09=%1 najwidoczniej nienawidzi samego siebie
 02:09=%1 stoi po złej stronie!
-02:09=%1 przypomina emo.
-02:09=%1 trzymał broń drugą stroną.
+02:09=%1 przypomina emo
+02:09=%1 trzymał broń drugą stroną
 02:09=%1 jest trochę sadystyczny
-02:09=%1 jest masochistą.
+02:09=%1 jest masochistą
 02:09=%1 nie ma instynktu samozachowawczego
-02:09=%1 zepsuł strzał.
+02:09=%1 zepsuł strzał
 02:09=%1 musiał to zepsuć
 02:09=To był marny strzał, %1
-02:09=%1 jest trochę za bardzo nieostrożny przy używaniu silnych broni.
-02:09=%1 powinien rozważyć zmianę kariery.
+02:09=%1 jest trochę za bardzo nieostrożny przy używaniu silnych broni
+02:09=%1 powinien rozważyć zmianę kariery
 02:09=Najgorszy strzał! Kiedykolwiek!
 02:09=Źle, źle, źle %1, powinieneś strzelać do WROGA!
 02:09=%1 powinien celować w przeciwnika
@@ -413,20 +423,20 @@
 02:09=To było głupie, %1
 02:09=%1 żyje według zasady: "nie ryzykujesz, nie zyskujesz"
 02:09=%1 jest rozkojarzony
-02:09=%1 przez swoje rozkojarzenie uderza samego siebie.
+02:09=%1 przez swoje rozkojarzenie uderza samego siebie
 02:09=%1 ma talent w niszczeniu samego siebie
 02:09=%1 jest niezdarny
 02:09=%1 pokazuje wrogowi na co go stać!
-02:09=Nie można się spodziewać by %1 był cały czas perfekcyjny.
+02:09=Nie można się spodziewać by %1 był cały czas perfekcyjny
 02:09=Nie martw się %1, nikt nie jest doskonały...
-02:09=%1 zrobił to celowo.
+02:09=%1 zrobił to celowo
 02:09=%1, ta wpadka zostanie między nami
 02:09=%1 zapomniał przeczyścić lufę
 02:09=%1, granat po wyjęciu zawleczki przestaje być przyjacielem
 02:09=Na pewno nikt tego nie zobaczył, %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
 02:09=%1, ktoś popsuł ci giwerę?
-02:09=%1 miał ciężki weekend.
+02:09=%1 miał ciężki weekend
 02:09=Ale Urwał!!!
 02:09=%1, ale z ciebie frajer!
 02:09=%1 próbował zjeść arbuza
@@ -434,14 +444,19 @@
 02:09=%1 trzymał karabin za spust
 02:09=%1 postanowił się rozerwać... na strzępy
 02:09=%1 ma już dość tego świata
+02:09=%1 szuka atencji
+02:09=%1 twierdzi, że strzelanie do wrogów jest za mało hipsterskie
 
-; Hog shot an home run (using the bat and another hog)
+; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Jeżyk idzie w odstawkę!
 02:10=Bzziuuuuu!
 02:10=Niezły rzut!
 02:10=Chyba padnie rekord Guinnessa w rzucie jeżem!
+02:10=Cel: Księżyc
+02:10=%1 daje popis machania kijem
+02:10=%1 wysyła jeże zwiedzać kosmos
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 musi iść spać!
@@ -449,6 +464,74 @@
 02:11=Żegnamy Cię, %1
 02:11=%1 nie ma zamiaru dłużej grać
 02:11=%1 musi odejść
+02:11=%1 aktywował powietrzne moce i zniknął
+02:11=%1 wyparował
+02:11=%1 gdzieś wsiąkł
+02:11=%1 zamienił się w... nic
+02:11=%1 osiągnął wyższą formę egzystencji
+
+; Hog (%1) was poisoned
+02:12=%1 czuje się chory
+02:12=%1 chyba ma grypę
+02:12=%1 złapał jakieś paskudztwo
+02:12=%1 musi odwiedzić doktora
+02:12=%1 nie wygląda najlepiej
+02:12=%1 kaszle jak opętany
+02:12=%1 toczy wewnętrzny bój z groźnym wirusem
+02:12=Miejmy nadzieję, że to nie jest zaraźliwe
+
+; Hog (%1) was resurrected by the Resurrector utility
+02:13=%1 został wskrzeszony
+02:13=%1 powraca z grobu
+02:13=%1 udaje Jezusa
+02:13=%1 dostał drugą szansę
+02:13=%1 znowu żyje
+02:13=%1 stwierdził, że śmierć nie jest dla niego
+02:13=%1 musi się jeszcze trochę pomęczyć
+02:13=%1 pokonał Śmierć i wraca
+02:13=%1 został wyrzucony z piekła
+
+; Hog (%1) explodes after an kamikaze attack
+02:14=%1 umiera z honorem
+02:14=%1 znalazł odlotowy sposób, by umrzeć
+02:14=%1 zabija siebie i innych
+02:14=%1 używa swojej sekretnej samobójczej techniki
+02:14=%1 popełnia zbiorowe samobójstwo
+02:14=%1 poświęcił się dla ogółu!
+02:14=%1 zginął za słuszną sprawę
+
+; Hog (%1) returned from time-travel with the time box
+02:15=%1 wraca z wędrówki w czasie
+02:15=%1 jest z powrotem w naszych czasach
+02:15=%1 wraca do teraźniejszości
+02:15=%1, gdzie ty byłeś?
+
+; Hog (%1) runs out of turn time (not shown in infinite attack mode)
+02:16=%1 był za wolny
+02:16=%1 twierdzi, że czas tury to tylko konstrukt społeczny
+02:16=%1 zapomniał zaatakować
+02:16=%1 za długo się zastanawiał
+02:16=%1 jest jakiś niezdecydowany
+02:16=%1 przegrzał się
+02:16=%1 ma złe nawyki po grze w szachy
+02:16=Sekunda więcej i %1 wszystkich by zniszczył
+02:16=%1 jest totalną ślamazarą
+02:16=%1 jest z natury flegmatykiem
+02:16=%1 zaliczył zwiechę
+02:16=%1 nie zdążył. Peszek.
+02:16=%1 wymyślił genialny plan, w którym zabrakło ataku
+02:16=%1 nie jest zbyt szybki
+
+; King (%1) has died
+02:17=%1 nie żyje! Wiwat %1!
+02:17=%1 był dobrym królem... był
+02:17=Jak na króla, %1 był słabeuszem
+02:17=%1 sobie pokrólował
+02:17=%1 był królem, a teraz nie żyje
+02:17=%1 opuszcza swoje królestwo
+02:17=Król %1 zginął na wojnie
+02:17=%1 nie zostawił dziedzica
+02:17=%1 i tak nie umiał rządzić
 
 ; Weapon Categories
 03:00=Granat z zapalnikiem
@@ -599,4 +682,3 @@
 05:20=Każdy z jeży ma oddzielne uzbrojenie
 05:21=Zespół: Zespoły w klanie wykonują tury po kolei|Wspólny czas: Czas jest wspólny dla każdej drużyny w zespole
 05:22=Silny wiatr: Wiatr wpływa prawie na wszystko
-
