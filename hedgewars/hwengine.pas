@@ -205,11 +205,18 @@ begin
                                 cHasFocus:= false;
                                 onFocusStateChanged();
                                 end;
+{$IFDEF MOBILE}
+(* Suspend game if minimized on mobile.
+NOTE: Mobile doesn't support online multiplayer yet, so it's not a problem.
+BUT: This section WILL become a bug when online multiplayer is added to
+Hedgewars and needs to be rethought. This is because it will cause the
+game to freeze if one online player minimizes Hedgewars. *)
                         SDL_WINDOWEVENT_MINIMIZED:
                                 begin
                                 previousGameState:= GameState;
                                 GameState:= gsSuspend;
                                 end;
+{$ENDIF}
                         SDL_WINDOWEVENT_RESTORED:
                                 begin
                                 if GameState = gsSuspend then
