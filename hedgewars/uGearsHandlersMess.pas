@@ -994,14 +994,11 @@ procedure doStepBeeWork(Gear: PGear);
 var
     t: hwFloat;
     gX,gY,i: LongInt;
-    uw, nuw, wrapped: boolean;
+    uw, nuw: boolean;
     flower: PVisualGear;
 
 begin
-    wrapped:= WorldWrap(Gear);
-    if wrapped then
-        HomingWrap(Gear);
-
+    WorldWrap(Gear);
     AllInactive := false;
     gX := hwRound(Gear^.X);
     gY := hwRound(Gear^.Y);
@@ -1119,9 +1116,6 @@ begin
 
         Gear^.SoundChannel := LoopSound(sndBee);
         Gear^.Timer := 5000;
-
-        HomingWrap(Gear);
-
         // save initial speed in otherwise unused Friction variable
         Gear^.Friction := Distance(Gear^.dX, Gear^.dY);
         Gear^.doStep := @doStepBeeWork
