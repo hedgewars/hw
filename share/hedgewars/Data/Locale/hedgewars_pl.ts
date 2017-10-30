@@ -1360,10 +1360,10 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform>Zwycięzcą nagrody na najlepszy strzał jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; pkt.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Zwycięzcą nagrody na najlepszy strzał jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; punktem.</numerusform>
+            <numerusform>Zwycięzcą nagrody na najlepszy strzał jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; punktami.</numerusform>
+            <numerusform>Zwycięzcą nagrody na najlepszy strzał jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; punktami.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1426,18 +1426,18 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; myśleli, że dobrze jest strzelać do swoich na &lt;b&gt;%2&lt;/b&gt; pkt.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; myśleli, że dobrze jest strzelać do swoich jeży i zadali sobie &lt;b&gt;%2&lt;/b&gt; punkt obrażeń.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; myśleli, że dobrze jest strzelać do swoich jeży i zadali sobie &lt;b&gt;%2&lt;/b&gt; punkty obrażeń.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; myśleli, że dobrze jest strzelać do swoich jeży i zadali sobie &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabili &lt;b&gt;%2&lt;/b&gt; swojego jeża.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabili &lt;b&gt;%2&lt;/b&gt; swoje jeże.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; zabili &lt;b&gt;%2&lt;/b&gt; swoich jeży.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -1561,7 +1561,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation>Zapal żarówką, by pokazać innym graczom, kiedy będziesz gotowy</translation>
+        <translation>Zapal żarówkę, by pokazać innym graczom, kiedy będziesz gotowy</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
@@ -2800,7 +2800,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Send system information</source>
-        <translation>Wyśłij informacje o systemie</translation>
+        <translation>Wyślij informacje o systemie</translation>
     </message>
     <message>
         <source>Type the security code:</source>
