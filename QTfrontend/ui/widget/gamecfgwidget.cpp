@@ -695,6 +695,11 @@ void GameCFGWidget::resendSchemeData()
     schemeChanged(GameSchemes->currentIndex());
 }
 
+void GameCFGWidget::resendAmmoData()
+{
+    ammoChanged(WeaponsName->currentIndex());
+}
+
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
     emit paramChanged("DRAWNMAP", QStringList(qCompress(data, 9).toBase64()));

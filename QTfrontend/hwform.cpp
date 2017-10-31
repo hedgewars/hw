@@ -339,6 +339,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
              this, SLOT(AddWeapons(QString, QString)));
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsEdited(QString, QString, QString)),
              this, SLOT(EditWeapons(QString, QString, QString)));
+    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsEdited(QString, QString, QString)),
+             ui.pageNetGame->pGameCFG, SLOT(resendAmmoData()));
 
     connect(ui.pageMain->BtnNetLocal, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageMain->BtnNetOfficial, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
