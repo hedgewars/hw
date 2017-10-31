@@ -333,6 +333,8 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
     if(!schemeData(43).isNull())
         bcfg << QString("e$scriptparam %1").arg(schemeData(43).toString()).toUtf8();
+    else
+        bcfg << QString("e$scriptparam ").toUtf8();
 
 
     switch (mapgen)
