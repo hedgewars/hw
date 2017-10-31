@@ -1,0 +1,61 @@
+A_Classic_Fairytale.name="Klasyczna Bajka"
+
+A_Classic_Fairytale-first_blood.name="Misja 1: Pierwsza krew"
+A_Classic_Fairytale-first_blood.desc="Pomóż Sporemu Przeciekowi w ukończeniu jego treningu i zostaniu prawdziwym jeżowym wojownikiem. Zostaniesz wytrenowany w sztuce liny, spadochronu, ognistej pięści i desert eagle."
+
+A_Classic_Fairytale-shadow.name="Misja 2: Zapada cień"
+A_Classic_Fairytale-shadow.desc="Spory Przeciek i Gęsta Chmura udają się na polowanie. Bądź przygotowanym na niebezpieczeństwa czekające na ciebie w lesie. Pamiętaj, mądrze podejmuj swoje decyzje."
+
+A_Classic_Fairytale-journey.name="Misja 3: Podróż z powrotem"
+A_Classic_Fairytale-journey.desc="Spory Przeciek musi udać się na drugą stronę wyspy. Bądź szybki i ostrożny."
+
+A_Classic_Fairytale-united.name="Misja 4: Zgoda buduje"
+A_Classic_Fairytale-united.desc="Po swojej długiej podróży, Spory Przeciek nareszcie wrócił do wioski. Jednakże, nie ma czasu na odpoczynek. Musisz bronić wioski przed gniewem kanibali."
+
+A_Classic_Fairytale-backstab.name="Misja 5: Zdrada"
+A_Classic_Fairytale-backstab.desc="Potworne kanibale polują na Sporego Przecieka i jego przyjaciół. Pokonaj ich jeszcze raz i obroń swoich sprzymierzeńców. Użyj odpowiednio swoich zasobów, by pokonać nadchodzących wrogów!"
+
+A_Classic_Fairytale-dragon.name="Misja 6: Gniazdo smoka"
+A_Classic_Fairytale-dragon.desc="Spory Przeciek musi dostać się na drugą stronę jeziora. Stań się mistrzem liny i uniknij oberwania od wrogich pocisków."
+
+A_Classic_Fairytale-family.name="Misja 7: Spotkanie rodzinne"
+A_Classic_Fairytale-family.desc="Spory Przeciek musi znów uratować swoich sprzymierzeńców. Wyeliminuj wrogie jeże i uwolnij swoich kamratów. Używaj swoich zasobów ostrożnie, ponieważ są ograniczone. Wywierć parę dziur w odpowiednim miejscu i podejdź blisko do księżniczki."
+
+A_Classic_Fairytale-queen.name="Misja 8: Niech żyje królowa"
+A_Classic_Fairytale-queen.desc="Spory Przeciek musi walczyć po raz kolejny. By wygrać, będzie musiał walczyć ze zdrajcą i użyć wszelkich dostępnych środków. Pokonaj wroga!"
+
+A_Classic_Fairytale-enemy.name="Misja 9: Wróg mojego wroga"
+A_Classic_Fairytale-enemy.desc="Co za zwrot akcji! Spory Przeciek musi walczyć ramię w ramię z... "kanibalami" przeciw wspólnemu wrogowi. Złym cyborgom!"
+
+A_Classic_Fairytale-epil.name="Misja 10: Epilog"
+A_Classic_Fairytale-epil.desc="Gratulacje! Spory Przeciek może w końcu odejść w pokoju i zostać pochwalonym przez swoich nowych przyjaciół i jego plemię. Bądź dumny z tego co osiągnąłeś! Możesz jeszcze raz zagrać w poprzednie misje i zobaczyć inne możliwe zakończenia."
+
+A_Space_Adventure.name="Kosmiczna Przygoda"
+A_Space_Adventure-cosmos.name="Menu: Kosmiczna wycieczka"
+A_Space_Adventure-cosmos.desc="Jeżera, planeta jeży, niedługo ma zostać uderzona przez gigantyczny metoryt. W tym wyścigu o przetrwanie musisz poprowadzić najlepszego pilota PSJ, Hoga Solo, w kosmiczną wycieczkę po sąsiednich planetach, by zebrać wszystkie 4 kawałki dawno zaginionego urządzenia antygrawitacyjnego!"
+A_Space_Adventure-moon01.name="Misja główna: Pierwszy przystanek"
+A_Space_Adventure-moon01.desc="Hog Solo wylądował na księżycu, by uzupełnić paliwo w swoim spodku, ale profesor Jeżozło udał się tam pierwszy i przygotował zasadzkę! Uratuj porwanych badaczy PSJ i wykurz stamtąd profesora Jeżozło!"
+A_Space_Adventure-moon02.name="Misja poboczna: Ścigając niebieskego jeża"
+A_Space_Adventure-moon02.desc="Hog Solo odwiedza pustelnika, starego weterana PSJ, który mieszka na księżycu, by zebrać trochę informacji o prof. Jeżozło. Jednakże, musi on najpierw pokonać pustelnika, Soneeka Szalonego Biegacza, w ganianego!"
+A_Space_Adventure-ice01.name="Główna misja: Zamrożona przygoda"
+A_Space_Adventure-ice01.desc="Witamy na planecie lodu. Tutaj jest tak zimno, że większość broni Hoga Solo nie będzie działać. Musisz zdobyć zaginioną część od lidera bandytów, Tanty, używając broni, które tam znajdziesz!"
+A_Space_Adventure-ice02.name="Misja poboczna: Twarde latanie"
+A_Space_Adventure-ice02.desc="Hog Solo nie mógł odwiedzić Lodowej Planety bez odwiedzania Stadionu Olimpijskiego Latania Spodkiem! W tej misji możesz dowieść swoich zdolności latania i zająć swoje miejsce wśród najlepszych!"
+A_Space_Adventure-desert01.name="Główna misja: Poszukiwanie w kurzu"
+A_Space_Adventure-desert01.desc="Wylądowałeś na planecie piasku! Hog Solo musi znaleźć brakującą część w podziemnych tunelach. Musisz uważać, gdyż występni przemytnicy tylko czekają, by cię zaatakować i okraść!"
+A_Space_Adventure-desert02.name="Misja poboczna: Bieg o przetrwanie"
+A_Space_Adventure-desert02.desc="Hog Solo szukał części w tym tunelu, kiedy niespodziewanie zaczął się zalewać! Wydostań się na powierzchnię tak szybko, jak to możliwe i uważaj, by nie uruchomić miny."
+A_Space_Adventure-desert03.name="Misja poboczna: Precyzyjne latanie"
+A_Space_Adventure-desert03.desc="Hog Solo ma trochę czasu, by polatać swoim radiowym samolocikem i trochę się pobawić. Poleć radiowym samolotem i uderz wszystkie cele!"
+A_Space_Adventure-fruit01.name="Misja główna: Złe wyczucie czasu"
+A_Space_Adventure-fruit01.desc="Na planecie owoców sprawy nie mają się tak dobrze. Jeże nie zbierają owoców, tylko przygotowują się do bitwy. Będziesz musiał wybrać, czy będziesz walczyć, czy uciekniesz."
+A_Space_Adventure-fruit02.name="Misja główna: Dojście do urządzenia"
+A_Space_Adventure-fruit02.desc="Hog Solo zbliża się do zaginionej części na Planecie Owoców. Czy kapitan Limonka pomoże mu zdobyć tę część, czy nie?"
+A_Space_Adventure-fruit03.name="Misja poboczna: Precyzyjne strzelanie"
+A_Space_Adventure-fruit03.desc="Hog Solo zgubił się i został otoczony przez Czerwone Truskawki. Pomóż mu wyeliminować je i wygraj trochę dodatkowej amunicji do misji “Dojście do urządzenia”."
+A_Space_Adventure-death01.name="Misja główna: Ostateczne spotkanie"
+A_Space_Adventure-death01.desc="Na Planecie Śmierci, najbardziej nieurodzajnej planecie w okolicy, Hog Solo jest bardzo blisko zdobycia ostatniej części urządzenia! Jednakże, czeka go niemiła niespodzianka..."
+A_Space_Adventure-death02.name="Misja poboczna: Zabijanie specjalistów"
+A_Space_Adventure-death02.desc="Hog Solo ponownie wpakował się w trudną sytuację. Pomóż mu pokonać “5 Zabójczych Jeży” w ich własnej grze!"
+A_Space_Adventure-final.name="Misja główna: Wielki wybuch"
+A_Space_Adventure-final.desc="Hog Solo musi zdetonować ładunki wybuchowe, które zostały umieszczone na meteorycie. Pomóż mu ukończyć jego misję, bez zostania rannym!"
