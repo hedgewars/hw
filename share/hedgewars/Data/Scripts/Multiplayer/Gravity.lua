@@ -185,7 +185,7 @@ function grav_onGameInit()
             loc("Script parameter examples:") .. "|" ..
             loc("“g=150”, where 150 is 150% of normal gravity.") .. "|" ..
             loc("“g=50, g2=150, period=4000” for gravity changing|from 50 to 150 and back with period of 4000 ms.") .. "|" ..
-            loc("Set period to negative value for random gravity.") .. "| |"
+            loc("Set period to negative value for random gravity.")
     end
     Goals = v
 
