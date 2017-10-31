@@ -1,2 +1,3 @@
 en=You are far from home and the water is rising. Climb as fast as you can.
 de=Du bist fern von Zuhause und das Wasser steigt. Klettere so schnell du kannst.
+pl=Jesteś daleko od domu_c a woda się podwyższa. Wspinaj się najszybciej_c jak potrafisz.

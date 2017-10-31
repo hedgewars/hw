@@ -1,2 +1,3 @@
 en=Knock your opponents off the platforms using only a bat!
 de=Schubs deine Gegner von den Plattformen nur mit einem Baseball-Schläger!
+pl=Zrzuć swoich przeciwników z platform_c używając tylko kija!

@@ -1,2 +1,3 @@
 en=Stand on the pillars as long as you can.
 de=Steh auf den Säulen so lange du kannst.
+pl=Stój na kolumnach tak długo_c jak możesz.
