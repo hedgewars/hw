@@ -1419,8 +1419,8 @@ function onNewTurn()
 
   if suddenDeath == true then
     onSuddenDeathTurn()
-  else
-    AddCaption(string.format(loc("Round %d (Sudden Death in round %d)"), (TotalRounds +1), (SuddenDeathTurns +2)), getHogInfo(CurHog, 'clanColor'),  capgrpGameState)
+  elseif (TotalRounds + 1 >= 1) then
+    AddCaption(string.format(loc("Round %d (Sudden Death in round %d)"), (TotalRounds +1), (SuddenDeathTurns +2)), 0xFFFFFFFF,  capgrpGameState)
   end
 
   -- Generate new weapons for last hog if it's still alive
