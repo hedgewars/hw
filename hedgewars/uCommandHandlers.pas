@@ -27,7 +27,7 @@ procedure freeModule;
 
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
-    , uVisualGearsList
+    , uVisualGearsList, uGearsHedgehog
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
@@ -474,12 +474,7 @@ if TWave(s[1]) > High(TWave) then
 if not isExternalSource then
     SendIPC('t' + s);
 
-with CurrentHedgehog^.Gear^ do
-    begin
-    Message:= Message or (gmAnimate and InputMask);
-    MsgParam:= byte(s[1]) ;
-    ScriptCall('onTaunt', MsgParam);
-    end
+PlayTaunt(byte(s[1]))
 end;
 
 procedure chPut(var s: shortstring);

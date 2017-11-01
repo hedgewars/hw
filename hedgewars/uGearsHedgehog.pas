@@ -30,6 +30,7 @@ procedure HedgehogChAngle(HHGear: PGear);
 procedure PickUp(HH, Gear: PGear);
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 procedure CheckIce(Gear: PGear); inline;
+procedure PlayTaunt(taunt: Longword);
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
@@ -1549,6 +1550,17 @@ else
         else
             doStepHedgehogDriven(Gear)
     end;
+end;
+
+procedure PlayTaunt(taunt: Longword);
+begin
+    if CurrentHedgehog^.Gear <> nil then
+        with CurrentHedgehog^.Gear^ do
+            begin
+            Message:= Message or (gmAnimate and InputMask);
+            MsgParam:= taunt;
+            ScriptCall('onTaunt', MsgParam);
+            end
 end;
 
 end.

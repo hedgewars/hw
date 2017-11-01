@@ -3894,8 +3894,10 @@ begin
             end;
 
         if HHGear <> nil then
+            begin
             HHGear^.Message := 0;
-        ParseCommand('/taunt ' + #1, true)
+            PlayTaunt(1)
+            end
         end
 end;
 
