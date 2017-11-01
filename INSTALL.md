@@ -175,6 +175,19 @@ If this still doesn't work and you give up, set the CMake option
 `NOVIDEOREC=ON`, but then the video recording functionality will
 not be available.
 
+### Error messages related to Lua, “undefined reference to `lua_tonumber'”, and so on
+If you get error messages like these:
+
+* /home/username/hw/hedgewars//uScript.pas:226: undefined reference to `lua_tonumber'
+* /home/username/hw/hedgewars/CMakeFiles/hwengine.dir/uScript.o: In function `LUATOVISUALGEARTYPEORD':
+
+There might be something wrong with your Lua installation. Try to install Lua 5.1.
+If this doesn't work, or you don't want to install Lua 5.1, try to build Hedgewars
+with the bundled Lua version.
+
+To build with the bundled Lua version, adding the CMake option `SYSTEM_LUA=OFF`, then
+repeat the building process.
+
 ### Cleaning up
 
 In case you want to start over and start with a clean build,
