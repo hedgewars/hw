@@ -168,6 +168,7 @@ var event: TSDL_Event;
     previousGameState: TGameState;
     wheelEvent: boolean;
 begin
+    previousGameState:= gsStart;
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
     while (not isTerminated) and allOK do
