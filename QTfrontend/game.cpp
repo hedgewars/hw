@@ -435,6 +435,7 @@ QStringList HWGame::getArguments()
 void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 {
     gameType = isSave ? gtSave : gtDemo;
+    lastGameType = gameType;
     QFile demofile(demofilename);
     if (!demofile.open(QIODevice::ReadOnly))
     {
