@@ -66,8 +66,6 @@ begin
     or (TestCollisionYwithGear(HHGear, 1) <> 0) then
         begin
         DeleteGear(Gear);
-        if (TestCollisionYwithGear(HHGear, 1) <> 0) and (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
-            SetWeapon(amRope);
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
