@@ -190,7 +190,6 @@ void TCPBase::RealStart()
 
 void TCPBase::ClientDisconnect()
 {
-    disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
     if(!simultaneousRun())
@@ -202,8 +201,11 @@ void TCPBase::ClientDisconnect()
         emit isReadyNow();
     }
 
-    IPCSocket->deleteLater();
-    IPCSocket = NULL;
+    if(IPCSocket) {
+      disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+      IPCSocket->deleteLater();
+      IPCSocket = NULL;
+    }
 
     deleteLater();
 }
@@ -226,7 +228,8 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitStatus);
 
-    ClientDisconnect();
+    if(!m_connected)
+      ClientDisconnect();
 
     // show error message if there was an error that was not an engine's
     // fatal error - because that one already sent a info via IPC
@@ -242,16 +245,6 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
             .arg("Feedback"));
 
     }
-
-    // cleanup up
-    if (IPCSocket)
-    {
-        IPCSocket->close();
-        IPCSocket->deleteLater();
-    }
-
-    // plot suicide
-    deleteLater();
 }
 
 void TCPBase::tcpServerReady()
