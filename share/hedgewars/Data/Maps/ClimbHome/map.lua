@@ -112,7 +112,7 @@ function onGearDelete(gear)
     if gear == MrMine then
         AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), 0xFFFFFFFF, capgrpMessage)
         MrMine = nil
-    elseif gear == Cake then
+    elseif GetGearType(gear) == Cake then
         Cake = nil
     elseif GetGearType(gear) == gtHedgehog then
 	onGameTick20()
@@ -312,28 +312,23 @@ function onGameTick20()
         x,y = GetGearPosition(CurrentHedgehog)
         if Cake ~= nil then
             local cx,cy = GetGearPosition(Cake)
-            if y < cy-1500 then
-                DeleteGear(Cake)
-                Cake = nil
-            end
+            if y < cy-1500 then DeleteGear(Cake) end
 
-            if GetHealth(Cake) < 999980 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
+            if Cake ~= nil and GetHealth(Cake) < 999980 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
                 FireBoom(cx,cy,200) -- todo animate
                 DeleteGear(Cake)
-                Cake = nil
+            end
+        end
+        if band(GetState(CurrentHedgehog),gstHHDriven) == 0 then
+            for f,i in pairs(Fire) do -- takes too long to fall otherwise
+                DeleteGear(f)
+            end
+            if Cake ~= nil then
+                DeleteGear(Cake)
             end
         end
      end
     
-    if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog),gstHHDriven) == 0 then
-        for f,i in pairs(Fire) do -- takes too long to fall otherwise
-            DeleteGear(f)
-        end
-        if Cake ~= nil then
-            DeleteGear(Cake)
-            Cake = nil
-        end
-    end
 
     if CurrentHedgehog ~= nil and TurnTimeLeft > 0 and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
         if MaxHeight < delayHeight and
@@ -488,7 +483,7 @@ function onGameTick20()
                 end
             end
 
-            if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then 
+            if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil then 
                 -- doing this just after the start the first time to take advantage of randomness sources
                 -- Pick a clear y to start with
                 if y > 31000 then cy = 24585 elseif
