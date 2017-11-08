@@ -308,20 +308,22 @@ function onGameTick20()
         end
     end
 
-    if CurrentHedgehog ~= nil then x,y = GetGearPosition(CurrentHedgehog) end
-    if Cake ~= nil and CurrentHedgehog ~= nil then
-        local cx,cy = GetGearPosition(Cake)
-        if y < cy-1500 then
-            DeleteGear(Cake)
-            Cake = nil
-        end
+    if CurrentHedgehog ~= nil then
+        x,y = GetGearPosition(CurrentHedgehog)
+        if Cake ~= nil then
+            local cx,cy = GetGearPosition(Cake)
+            if y < cy-1500 then
+                DeleteGear(Cake)
+                Cake = nil
+            end
 
-        if Cake ~= nil and GetHealth(Cake) < 999980 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
-            FireBoom(cx,cy,200) -- todo animate
-            DeleteGear(Cake)
-            Cake = nil
+            if GetHealth(Cake) < 999980 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
+                FireBoom(cx,cy,200) -- todo animate
+                DeleteGear(Cake)
+                Cake = nil
+            end
         end
-    end
+     end
     
     if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog),gstHHDriven) == 0 then
         for f,i in pairs(Fire) do -- takes too long to fall otherwise
