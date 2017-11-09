@@ -512,7 +512,7 @@ case Kind of
       gtShover: begin
                 gear^.Radius:= 20;
                 gear^.Tag:= 0;
-                gear^.Timer:= 100;
+                gear^.Timer:= 50;
                 end;
        gtFlame: begin
                 gear^.Tag:= GetRandom(32);

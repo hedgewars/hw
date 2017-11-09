@@ -2318,10 +2318,10 @@ begin
     if Gear^.Timer = 0 then
         begin
         inc(Gear^.Tag);
-        Gear^.Timer := 100
+        Gear^.Timer := 50
         end;
 
-    if Gear^.Tag = 4 then
+    if Gear^.Tag = 3 then
         begin
         HHGear := Gear^.Hedgehog^.Gear;
         HHGear^.State := HHGear^.State or gstNoDamage;
@@ -2330,6 +2330,9 @@ begin
         AmmoShove(Gear, Gear^.Boom, 115);
 
         HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
+        end
+    else if Gear^.Tag = 4 then
+        begin
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle
         end
