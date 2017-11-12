@@ -40,7 +40,7 @@ local goals = {
 	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit the planets of Ice, Desert and Fruit before you proceed to the Death Planet"), 1, 6000},
 	[dialog08] = {missionName, loc("Saving Hogera"), loc("Fly to the meteorite and detonate the explosives"), 1, 7000},
 	["open_side_missions"] = {missionName, loc("Conquering the galaxy"),
-		loc("Use the flying saucer to fly the other planets.").."|"..
+		loc("Use the flying saucer to fly to the other planets.").."|"..
 		loc("Complete the remaining side missions to complete this mission.").."|"..
 		loc("One flower: Incomplete side missions").."|"..
 		loc("Two flowers: All missions complete"), 1, 8000},
