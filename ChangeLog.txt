@@ -67,7 +67,6 @@ Game engine (gameplay):
  + Temporarily suspend Heavy Wind mode while turn timer is not running
  + Engine supports now really gigantic maps
  * Fixed cursor often jumping back to screen center when putting target location while moving cursor
- * Fixed cursor not working at all when using custom mouse sensitivity set by the xinput program
  * Fixed team getting infinite ammo when stockpiling >= 100 ammo (max. finite ammo is now limited to 99)
  * Fixed failure to collect crate across wrap world edge
  * Remove buggy “/finish” chat command

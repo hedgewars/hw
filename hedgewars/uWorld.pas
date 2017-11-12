@@ -2014,10 +2014,10 @@ end;
 
 procedure updateCursorVisibility;
 begin
-    if isPaused or isAFK or (GameState = gsConfirm) then
-        uCursor.setSystemCursor(true)
+    if isPaused or isAFK then
+        SDL_ShowCursor(1)
     else
-        uCursor.setSystemCursor(false);
+        SDL_ShowCursor(ord(GameState = gsConfirm))
 end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);
