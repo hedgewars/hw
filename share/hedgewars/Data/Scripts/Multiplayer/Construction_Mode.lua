@@ -196,7 +196,7 @@ wHeight = {}
 wCol = {}
 margin = 20
 
-vTag = {}
+clanPowerTag = nil
 lastWep = nil
 
 checkForSpecialWeaponsIn = -1
@@ -207,43 +207,23 @@ conf_energyPerRound = 50
 conf_maxEnergy = 1000
 conf_cratesPerRound = 5
 
-function HideTags()
-
-	for i = 0, 2 do
-		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
-	end
-
-end
-
-function DrawTag(i)
+function DrawClanPowerTag()
 
 	zoomL = 1.3
 
 	xOffset = 40
 
-	if i == 0 then
-		yOffset = 40
-		tCol = 0xffba00ff
-		tValue = 30
-	elseif i == 1 then
-		zoomL = 1.1
-		xOffset = 45
-		yOffset = 70
-		tCol = 0x00ff00ff
-		tValue = clanPower[GetHogClan(CurrentHedgehog)]
-	elseif i == 2 then
-		zoomL = 1.1
-		xOffset = 60 + 35
-		yOffset = 70
-		tCol = 0xa800ffff
-		tValue = 10
-	end
+	zoomL = 1.1
+	xOffset = 45
+	yOffset = 70
+	tCol = 0x00ff00ff
+	tValue = clanPower[GetHogClan(CurrentHedgehog)]
 
-	DeleteVisualGear(vTag[i])
-	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
+	DeleteVisualGear(clanPowerTag)
+	clanPowerTag = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(clanPowerTag)
 	SetVisualGearValues	(
-				vTag[i], 		--id
+				clanPowerTag, 		--id
 				-div(ScreenWidth,2) + xOffset,	--xoffset
 				ScreenHeight - yOffset, --yoffset
 				0, 			--dx
@@ -262,9 +242,7 @@ function onScreenResize()
 
 	-- redraw Tags so that their screen locations are updated
 	if (CurrentHedgehog ~= nil) then
-			DrawTag(0)
-			DrawTag(1)
-			DrawTag(2)
+		DrawClanPowerTag()
 	end
 
 end
@@ -1276,7 +1254,7 @@ function HandleHedgeEditor()
 
 		if GameTime % 100 == 0 then
 
-			DrawTag(1)
+			DrawClanPowerTag()
 
 			curWep = GetCurAmmoType()
 
