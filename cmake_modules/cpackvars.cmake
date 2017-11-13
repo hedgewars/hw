@@ -81,6 +81,8 @@ set(CPACK_SOURCE_IGNORE_FILES
     "[dD]ebug$"
     "[rR]elease$"
     "CPack"
+    "CTestTestfile.cmake"
+    "gameServer2"
     "cmake_install\\\\.cmake$"
     "cmake_uninstall\\\\.cmake$"
     "CMakeCache\\\\.txt$"
