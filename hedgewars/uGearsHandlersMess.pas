@@ -3169,7 +3169,7 @@ begin
         AfterAttack;
         HHGear^.Message:= HHGear^.Message or gmDestroy;
         DeleteGear(Gear);
-    end
+        end
     else
         begin
         dec(Gear^.Health, Gear^.Damage);
