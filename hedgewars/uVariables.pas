@@ -2565,7 +2565,7 @@ begin
     cScreenHeight     := cWindowedHeight;
 
     cShowFPS        := false;
-    cAltDamage      := true;
+    cAltDamage      := false;
     cTimerInterval  := 8;
     cReducedQuality := rqNone;
     cLocaleFName    := 'en.txt';
