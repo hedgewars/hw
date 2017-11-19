@@ -37,6 +37,7 @@ import qualified Data.ByteString as BW
 import qualified Codec.Binary.Base64 as Base64
 import System.Process
 import Data.Maybe
+import Data.Either
 import qualified Data.List as L
 #if !defined(mingw32_HOST_OS)
 import System.Posix
@@ -54,7 +55,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "51"
+protocolNumber = "53"
 
 getLines :: Handle -> IO [B.ByteString]
 getLines h = g
@@ -92,7 +93,7 @@ checkReplay :: String -> String -> String -> Chan Message -> [B.ByteString] -> I
 checkReplay home exe prefix coreChan msgs = do
     tempDir <- getTemporaryDirectory
     (fileName, h) <- openBinaryTempFile tempDir "checker-demo"
-    B.hPut h . BW.pack . concat . map (fromMaybe [] . Base64.decode . B.unpack) $ msgs
+    B.hPut h . B.concat . map (either (const B.empty) id . Base64.decode) $ msgs
     hFlush h
     hClose h
 
