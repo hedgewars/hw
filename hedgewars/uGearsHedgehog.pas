@@ -1252,7 +1252,7 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (LuaEndTurnRequested = true) th
     if TagTurnTimeLeft = 0 then
         TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
-    if (GameOver = false) and ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) and (LuaNoEndTurnTaunts = false) then
+    if (GameOver = false) and ((GameFlags and gfInfAttack) = 0) and ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) and (LuaNoEndTurnTaunts = false) then
         begin
         AddVoice(sndBoring, Hedgehog^.Team^.voicepack);
         if (GameFlags and gfInfAttack = 0) then
