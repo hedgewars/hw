@@ -35,7 +35,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uDebug, uUtils
-     , uPhysFSLayer, adler32;
+     , uPhysFSLayer, adler32, uRenderUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -472,15 +472,10 @@ with Obj do
         inc(x, getrandom(12) + 12)
     until x >= LAND_WIDTH - Width;
     bRes:= cnt <> 0;
-AddFileLog('CHECKPOINT 004');
     if bRes then
         begin
         i:= getrandom(cnt);
-        r.x:= ar[i].X;
-        r.y:= ar[i].Y;
-        r.w:= Width;
-        r.h:= Height;
-        SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
+        copyToXY(Obj.Surf, Surface, ar[i].X, ar[i].Y);
         AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
         dec(Maxcnt)
         end
