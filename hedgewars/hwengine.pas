@@ -548,6 +548,9 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
         uTextures.freeModule;
+        SDL_GL_DeleteContext(SDLGLcontext);
+        SDL_DestroyWindow(SDLwindow);
+        SDL_Quit()
         end;
 
     uIO.freeModule;

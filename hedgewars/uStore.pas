@@ -68,8 +68,6 @@ uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var 
-    SDLwindow: PSDL_Window;
-    SDLGLcontext: PSDL_GLContext;
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;

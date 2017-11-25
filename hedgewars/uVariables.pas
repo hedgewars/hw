@@ -258,6 +258,9 @@ var
 
     MaxTextureSize: LongInt;
 
+    SDLwindow: PSDL_Window;
+    SDLGLcontext: PSDL_GLContext;
+  
 /////////////////////////////////////
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -2890,6 +2893,9 @@ begin
     ConfirmTexture:= nil;
     MissionIcons:= nil;
     ropeIconTex:= nil;
+
+    SDLWindow:= nil;
+    SDLGLContext:= nil;
 
     for i:= Low(ClansArray) to High(ClansArray) do
         begin
