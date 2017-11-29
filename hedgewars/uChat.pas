@@ -1098,11 +1098,18 @@ begin
 end;
 
 procedure chChat(var s: shortstring);
+var i: Integer;
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
     SDL_StopTextInput();
     SDL_StartTextInput();
+    //Make REALLY sure unexpected events are flushed (1 time is insufficient as of SDL 2.0.7)
+    for i := 1 to 2 do
+    begin
+        SDL_PumpEvents();
+        SDL_FlushEvent(SDL_TEXTINPUT);
+    end;
     //SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
         SetLine(InputStr, '', true)

@@ -1112,6 +1112,7 @@ procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; exte
 function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 procedure SDL_StopTextInput; cdecl; external SDLLibName;
+procedure SDL_FlushEvent(eventType: LongWord); cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 
