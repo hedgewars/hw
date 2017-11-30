@@ -533,7 +533,7 @@ if isDeveloperMode then
     cSeed:= s;
     InitStepsFlags:= InitStepsFlags or cifRandomize
     end
-    end;
+end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
