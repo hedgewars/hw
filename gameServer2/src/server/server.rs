@@ -1,5 +1,5 @@
 use slab;
-use mio::tcp::*;
+use mio::net::*;
 use mio::*;
 use std::io;
 
@@ -7,19 +7,19 @@ use utils;
 use super::client::HWClient;
 use super::actions;
 
-type Slab<T> = slab::Slab<T, Token>;
+type Slab<T> = slab::Slab<T>;
 
 pub struct HWServer {
     listener: TcpListener,
     pub clients: Slab<HWClient>,
     pub rooms: Slab<HWRoom>,
-    pub lobby_id: Token,
+    pub lobby_id: usize,
 }
 
 impl HWServer {
     pub fn new(listener: TcpListener, clients_limit: usize, rooms_limit: usize) -> HWServer {
         let mut rooms = Slab::with_capacity(rooms_limit);
-        let token = rooms.insert(HWRoom::new()).ok().expect("Cannot create lobby");
+        let token = rooms.insert(HWRoom::new());
         HWServer {
             listener: listener,
             clients: Slab::with_capacity(clients_limit),
@@ -38,17 +38,16 @@ impl HWServer {
         info!("Connected: {}", addr);
 
         let client = HWClient::new(sock);
-        let token = self.clients.insert(client)
-            .ok().expect("could not add connection to slab");
+        let token = self.clients.insert(client);
 
         self.clients[token].id = token;
-        self.clients[token].register(poll, token);
+        self.clients[token].register(poll, Token(token));
 
         Ok(())
     }
 
     pub fn client_readable(&mut self, poll: &Poll,
-                           token: Token) -> io::Result<()> {
+                           token: usize) -> io::Result<()> {
         let actions;
         {
             actions = self.clients[token].readable(poll);
@@ -60,14 +59,14 @@ impl HWServer {
     }
 
     pub fn client_writable(&mut self, poll: &Poll,
-                           token: Token) -> io::Result<()> {
+                           token: usize) -> io::Result<()> {
         self.clients[token].writable(poll)?;
 
         Ok(())
     }
 
     pub fn client_error(&mut self, poll: &Poll,
-                           token: Token) -> io::Result<()> {
+                           token: usize) -> io::Result<()> {
         let actions;
         {
             actions = self.clients[token].error(poll);
@@ -78,11 +77,11 @@ impl HWServer {
         Ok(())
     }
 
-    pub fn send(&mut self, token: Token, msg: &String) {
+    pub fn send(&mut self, token: usize, msg: &String) {
         self.clients[token].send_string(msg);
     }
 
-    pub fn react(&mut self, token: Token, poll: &Poll, actions: Vec<actions::Action>) {
+    pub fn react(&mut self, token: usize, poll: &Poll, actions: Vec<actions::Action>) {
         for action in actions {
             actions::run_action(self, token, poll, action);
         }
@@ -91,7 +90,7 @@ impl HWServer {
 
 
 pub struct HWRoom {
-    pub id: Token,
+    pub id: usize,
     pub name: String,
     pub password: Option<String>,
     pub protocol_number: u32,
@@ -101,7 +100,7 @@ pub struct HWRoom {
 impl HWRoom {
     pub fn new() -> HWRoom {
         HWRoom {
-            id: Token(0),
+            id: 0,
             name: String::new(),
             password: None,
             protocol_number: 0,

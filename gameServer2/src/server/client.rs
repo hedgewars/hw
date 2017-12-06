@@ -1,4 +1,4 @@
-use mio::tcp::*;
+use mio::net::TcpStream;
 use mio::*;
 use std::io::Write;
 use std::io;
@@ -15,8 +15,8 @@ pub struct HWClient {
     decoder: ProtocolDecoder,
     buf_out: netbuf::Buf,
 
-    pub id: Token,
-    pub room_id: Option<Token>,
+    pub id: usize,
+    pub room_id: Option<usize>,
     pub nick: String,
     pub protocol_number: u32,
     pub is_master: bool,
@@ -31,7 +31,7 @@ impl HWClient {
             decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
             room_id: None,
-            id: Token(0),
+            id: 0,
 
             nick: String::new(),
             protocol_number: 0,

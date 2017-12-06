@@ -39,19 +39,19 @@ fn main() {
             if event.kind().is_readable() {
                 match event.token() {
                     utils::SERVER => server.accept(&poll).unwrap(),
-                    tok => server.client_readable(&poll, tok).unwrap(),
+                    Token(tok) => server.client_readable(&poll, tok).unwrap(),
                 }
             }
             if event.kind().is_writable() {
                 match event.token() {
                     utils::SERVER => unreachable!(),
-                    tok => server.client_writable(&poll, tok).unwrap(),
+                    Token(tok) => server.client_writable(&poll, tok).unwrap(),
                 }
             }
             if event.kind().is_hup() || event.kind().is_error() {
                 match event.token() {
                     utils::SERVER => unreachable!(),
-                    tok => server.client_error(&poll, tok).unwrap(),
+                    Token(tok) => server.client_error(&poll, tok).unwrap(),
                 }
             }
         }

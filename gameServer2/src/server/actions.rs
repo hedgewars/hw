@@ -22,12 +22,12 @@ pub enum Action {
 
 use self::Action::*;
 
-pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, action: Action) {
+pub fn run_action(server: &mut HWServer, token: usize, poll: &mio::Poll, action: Action) {
     match action {
         SendMe(msg) =>
             server.send(token, &msg),
         SendAllButMe(msg) => {
-            for c in server.clients.iter_mut() {
+            for (i, c) in server.clients.iter_mut() {
                 if c.id != token {
                     c.send_string(&msg)
                 }
@@ -57,7 +57,7 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
             let joined_msg;
             {
                 let mut lobby_nicks: Vec<&str> = Vec::new();
-                for c in server.clients.iter() {
+                for (_, c) in server.clients.iter() {
                     if c.room_id.is_some() {
                         lobby_nicks.push(&c.nick);
                     }
@@ -71,7 +71,7 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
                 ]);
         },
         AddRoom(name, password) => {
-            let room_id = server.rooms.insert(HWRoom::new()).ok().expect("Cannot add room");
+            let room_id = server.rooms.insert(HWRoom::new());
             {
                 let r = &mut server.rooms[room_id];
                 let c = &mut server.clients[token];

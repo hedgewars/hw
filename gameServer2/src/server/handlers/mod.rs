@@ -12,7 +12,7 @@ mod loggingin;
 mod lobby;
 mod inroom;
 
-pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, token: usize, poll: &mio::Poll, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Ping =>
             server.react(token, poll, vec![SendMe(Pong.to_raw_protocol())]),

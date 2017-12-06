@@ -6,7 +6,7 @@ use server::actions::Action::*;
 use protocol::messages::HWProtocolMessage;
 use protocol::messages::HWServerMessage::*;
 
-pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, token: usize, poll: &mio::Poll, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Nick(nick) =>
             if server.clients[token].room_id == None {
