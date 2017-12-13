@@ -9,17 +9,17 @@ use protocol::messages::HWServerMessage::*;
 pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Chat(msg) => {
-            let chat_msg = ChatMsg(&server.clients[token].nick, &msg).to_raw_protocol();
+            let chat_msg = ChatMsg(&server.clients[token.0].nick, &msg).to_raw_protocol();
             server.react(token, poll, vec![SendAllButMe(chat_msg)]);
         },
         HWProtocolMessage::CreateRoom(name, password) => {
-            let room_exists = server.rooms.iter().find(|&r| r.name == name).is_some();
+            let room_exists = server.rooms.iter().find(|&(_, ref r)| r.name == name).is_some();
             if room_exists {
                 server.react(token, poll, vec![Warn("Room exists".to_string())]);
             } else {
-                let flags_msg = ClientFlags("+hr", &[&server.clients[token].nick]).to_raw_protocol();
+                let flags_msg = ClientFlags("+hr", &[&server.clients[token.0].nick]).to_raw_protocol();
                 {
-                    let c = &mut server.clients[token];
+                    let c = &mut server.clients[token.0];
                     c.is_master = true;
                     c.is_ready = true;
                     c.is_joined_mid_game = false;

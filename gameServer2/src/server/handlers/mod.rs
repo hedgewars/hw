@@ -23,9 +23,9 @@ pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, messag
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
         _ => {
-            if !server.clients[token].room_id.is_some() {
+            if !server.clients[token.0].room_id.is_some() {
                 loggingin::handle(server, token, poll, message);
-            } else if server.clients[token].room_id == Some(server.lobby_id) {
+            } else if server.clients[token.0].room_id == Some(server.lobby_id) {
                 lobby::handle(server, token, poll, message);
             } else {
                 inroom::handle(server, token, poll, message);
