@@ -7,7 +7,7 @@ use utils;
 use super::client::HWClient;
 use super::actions;
 
-type Slab<T> = slab::Slab<T, Token>;
+type Slab<T> = slab::Slab<T>;
 
 pub struct HWServer {
     listener: TcpListener,
@@ -19,12 +19,12 @@ pub struct HWServer {
 impl HWServer {
     pub fn new(listener: TcpListener, clients_limit: usize, rooms_limit: usize) -> HWServer {
         let mut rooms = Slab::with_capacity(rooms_limit);
-        let token = rooms.insert(HWRoom::new()).ok().expect("Cannot create lobby");
+        let token = rooms.insert(HWRoom::new());
         HWServer {
             listener: listener,
             clients: Slab::with_capacity(clients_limit),
             rooms: rooms,
-            lobby_id: token,
+            lobby_id: Token(token),
         }
     }
 
@@ -38,11 +38,10 @@ impl HWServer {
         info!("Connected: {}", addr);
 
         let client = HWClient::new(sock);
-        let token = self.clients.insert(client)
-            .ok().expect("could not add connection to slab");
+        let token = Token(self.clients.insert(client));
 
-        self.clients[token].id = token;
-        self.clients[token].register(poll, token);
+        self.clients[token.0].id = token;
+        self.clients[token.0].register(poll, token);
 
         Ok(())
     }
@@ -51,7 +50,7 @@ impl HWServer {
                            token: Token) -> io::Result<()> {
         let actions;
         {
-            actions = self.clients[token].readable(poll);
+            actions = self.clients[token.0].readable(poll);
         }
 
         self.react(token, poll, actions);
@@ -61,7 +60,7 @@ impl HWServer {
 
     pub fn client_writable(&mut self, poll: &Poll,
                            token: Token) -> io::Result<()> {
-        self.clients[token].writable(poll)?;
+        self.clients[token.0].writable(poll)?;
 
         Ok(())
     }
@@ -70,7 +69,7 @@ impl HWServer {
                            token: Token) -> io::Result<()> {
         let actions;
         {
-            actions = self.clients[token].error(poll);
+            actions = self.clients[token.0].error(poll);
         }
 
         self.react(token, poll, actions);
@@ -79,7 +78,7 @@ impl HWServer {
     }
 
     pub fn send(&mut self, token: Token, msg: &String) {
-        self.clients[token].send_string(msg);
+        self.clients[token.0].send_string(msg);
     }
 
     pub fn react(&mut self, token: Token, poll: &Poll, actions: Vec<actions::Action>) {

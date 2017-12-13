@@ -1,4 +1,5 @@
 use mio;
+use mio::Token;
 use std::io::Write;
 use std::io;
 
@@ -27,7 +28,7 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
         SendMe(msg) =>
             server.send(token, &msg),
         SendAllButMe(msg) => {
-            for c in server.clients.iter_mut() {
+            for (_, c) in server.clients.iter_mut() {
                 if c.id != token {
                     c.send_string(&msg)
                 }
@@ -40,41 +41,41 @@ pub fn run_action(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, ac
                 ]);
         },
         RemoveClient => {
-            server.clients[token].deregister(poll);
-            server.clients.remove(token);
+            server.clients[token.0].deregister(poll);
+            server.clients.remove(token.0);
         },
         ReactProtocolMessage(msg) =>
             handlers::handle(server, token, poll, msg),
         CheckRegistered =>
-            if server.clients[token].protocol_number > 0 && server.clients[token].nick != "" {
+            if server.clients[token.0].protocol_number > 0 && server.clients[token.0].nick != "" {
                 server.react(token, poll, vec![
                     JoinLobby,
                     ]);
             },
         JoinLobby => {
-            server.clients[token].room_id = Some(server.lobby_id);
+            server.clients[token.0].room_id = Some(server.lobby_id);
 
             let joined_msg;
             {
                 let mut lobby_nicks: Vec<&str> = Vec::new();
-                for c in server.clients.iter() {
+                for (_, c) in server.clients.iter() {
                     if c.room_id.is_some() {
                         lobby_nicks.push(&c.nick);
                     }
                 }
                 joined_msg = LobbyJoined(&lobby_nicks).to_raw_protocol();
             }
-            let everyone_msg = LobbyJoined(&[&server.clients[token].nick]).to_raw_protocol();
+            let everyone_msg = LobbyJoined(&[&server.clients[token.0].nick]).to_raw_protocol();
             server.react(token, poll, vec![
                 SendAllButMe(everyone_msg),
                 SendMe(joined_msg),
                 ]);
         },
         AddRoom(name, password) => {
-            let room_id = server.rooms.insert(HWRoom::new()).ok().expect("Cannot add room");
+            let room_id = Token(server.rooms.insert(HWRoom::new()));
             {
-                let r = &mut server.rooms[room_id];
-                let c = &mut server.clients[token];
+                let r = &mut server.rooms[room_id.0];
+                let c = &mut server.clients[token.0];
                 r.name = name;
                 r.password = password;
                 r.id = room_id.clone();
