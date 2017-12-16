@@ -3,6 +3,9 @@
 -- by mikade
 ---------------------------------------
 
+---- Script parameter
+-- With “captures=<number>” you can set your own capture limit, e.g. “captures=5” for 5 captures.
+
 -- Version History
 ---------
 -- 0.1
@@ -76,6 +79,7 @@
 
 -- enable awesome translaction support so we can use loc() wherever we want
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 ---------------------------------------------------------------
 ----------lots of bad variables and things
@@ -85,6 +89,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local gameStarted = false
 local gameTurns = 0
+local captureLimit = 3
 
 --------------------------
 -- hog and team tracking variales
@@ -140,7 +145,7 @@ function CheckScore(teamID)
 		alt = 0
 	end
 
-	if fCaptures[teamID] == 3 then
+	if fCaptures[teamID] == captureLimit then
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
 				if GetHogClan(hhs[i]) == alt then
@@ -150,7 +155,8 @@ function CheckScore(teamID)
 			end
 		end
 		if CurrentHedgehog ~= nil then
-			ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
+			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)))
+			showMissionAndScorebar()
 		end
 	end
 
@@ -177,8 +183,9 @@ function DoFlagStuff(gear)
 		fIsMissing[bbq] = false
 		fNeedsRespawn[bbq] = true
 		fCaptures[wtf] = fCaptures[wtf] +1
-		ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
-		PlaySound(sndVictory)
+		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)))
+		showMissionAndScorebar()
+		PlaySound(sndHomerun)
 		fThief[bbq] = nil -- player no longer has the enemy flag
 		CheckScore(wtf)
 
@@ -442,22 +449,66 @@ end
 -- game methods
 ------------------------
 
+function onParameters()
+	parseParams()
+	if params["captures"] ~= nil then
+		local s = string.match(params["captures"], "(%d*)")
+		if s ~= nil then
+			captureLimit = math.max(1, tonumber(s))
+		end
+	end
+end
+
 function onGameInit()
 
-	DisableGameFlags(gfKing, gfForts)
+	DisableGameFlags(gfKing)
 	EnableGameFlags(gfDivideTeams)
 
-	--SuddenDeathTurns = 999 -- suddendeath is off, effectively
+	-- Disable Sudden Death
 	WaterRise = 0
+	HealthDecrease = 0
+
 	Delay = 10
 
 end
 
+function showMissionAndScorebar(instaHide)
+	local captures
+	if captureLimit == 1 then
+		captures = string.format(loc("- First team to capture the flag wins"), captureLimit)
+	else
+		captures = string.format(loc("- First team to score %d captures wins"), captureLimit)
+	end
+
+	local rules = loc("Rules:") .. " |" ..
+		loc("- Place your team flag at the end of your first turn") .. "|" ..
+		loc("- Return the enemy flag to your base to score") .."|"..
+		captures .. "|" ..
+		loc("- You may only score when your flag is in your base") .."|"..
+		loc("- Hogs will drop the flag when killed") .."|"..
+		loc("- Dropped flags may be returned or recaptured").."|"..
+		loc("- Hogs will be revived")
+
+	local scoreboard = ""
+
+	if gameStarted then
+		scoreboard = "|" .. loc("Scores: ") .. "|"
+		for i=0, 1 do
+			scoreboard = scoreboard .. string.format(loc("%s: %d"), teamNameArr[i], fCaptures[i])
+			if i~=1 then scoreboard = scoreboard .. "|" end
+		end
+	end
+	local mission = rules .. scoreboard
+
+	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), mission, 0, 0)
+	if instaHide then
+		HideMission()
+	end
+end
 
 function onGameStart()
 
-	--ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
-	ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
+	showMissionAndScorebar()
 
 	RebuildTeamInfo()
 
@@ -496,10 +547,9 @@ function onNewTurn()
 		HandleRespawns()
 	--new method of placing starting flags
 	elseif gameTurns == 1 then
-		ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
+		showMissionAndScorebar()
 	elseif gameTurns == 2 then
 		fPlaced[0] = true
-		ShowMission(loc("CAPTURE THE FLAG"), loc("RULES OF THE GAME [Press ESC to view]"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
 	elseif gameTurns == 3 then
 		fPlaced[1] = true
 		StartTheGame()
@@ -544,8 +594,10 @@ function onGameTick()
 			i = 1
 		end
 
-		fSpawnX[i] = GetX(CurrentHedgehog)
-		fSpawnY[i] = GetY(CurrentHedgehog)
+		if TurnTimeLeft == 0 then
+			fSpawnX[i] = GetX(CurrentHedgehog)
+			fSpawnY[i] = GetY(CurrentHedgehog)
+		end
 
 	end
 

@@ -16,13 +16,11 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates.").."|"..
 	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100.").."|"..
 	loc("If you injure a hedgehog you'll get 35% of the damage dealt.").."|"..
-	loc("Every time you kill an enemy hog your ammo will get reset.").."|"..
+	loc("Every time you kill an enemy hog your ammo will get reset next turn.").."|"..
 	loc("The rope won't get reset.")
--- dialogs
-local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
 }
 -- hogs
 local hero = {
@@ -36,11 +34,11 @@ local hero = {
 	grenadeAmmo = 4,
 }
 local enemies = {
-	{ name = loc("Mortar"), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
-	{ name = loc("Desert Eagle"), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
-	{ name = loc("Grenade"), x = 186, y = 48, weapon = amGrenade, additionalWeapons = {}},
-	{ name = loc("Shoryuken"), x = 330, y = 270, weapon = amFirePunch, additionalWeapons = {}},
-	{ name = loc("Bazooka"), x = 1950, y = 150, weapon = amBazooka, additionalWeapons = {}},
+	{ name = GetAmmoName(amMortar), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
+	{ name = GetAmmoName(amDEagle), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
+	{ name = GetAmmoName(amGrenade), x = 186, y = 48, weapon = amGrenade, additionalWeapons = {}},
+	{ name = GetAmmoName(amFirePunch), x = 330, y = 270, weapon = amFirePunch, additionalWeapons = {}},
+	{ name = GetAmmoName(amBazooka), x = 1950, y = 150, weapon = amBazooka, additionalWeapons = {}},
 }
 -- teams
 local teamA = {
@@ -51,6 +49,10 @@ local teamB = {
 	name = loc("5 Deadly Hogs"),
 	color = tonumber("FF0000",16) -- red
 }
+-- After hero killed an enemy, his weapons will be reset in the next round
+local heroWeaponResetPending = false
+local battleStarted = false
+local firstTurn = true
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -63,14 +65,17 @@ function onGameInit()
 	Explosives = 0
 	Map = "death02_map"
 	Theme = "Hell"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	shuffleHogs(enemies)
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "skull", "Island", "Default", "cm_skull")
 	for i=1,table.getn(enemies) do
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
@@ -79,13 +84,12 @@ function onGameInit()
 	initCheckpoint("death02")
 
 	AnimInit()
-	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -96,12 +100,19 @@ function onGameStart()
 	refreshHeroAmmo()
 
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
+	battleStarted = true
+	if firstTurn then
+		-- Generous ready time in first turn to more time to read the mission panel
+		ReadyTimeLeft = 35000
+		firstTurn = false
+	end
 	if CurrentHedgehog ~= hero.gear then
 		enemyWeapons()
+	elseif heroWeaponResetPending then
+		refreshHeroAmmo()
 	end
 end
 
@@ -128,7 +139,7 @@ function onGearDelete(gear)
 		for i=1,table.getn(deadHog.additionalWeapons) do
 			table.insert(enemies[randomHog].additionalWeapons, deadHog.additionalWeapons[i])
 		end
-		refreshHeroAmmo()
+		heroWeaponResetPending = true
 	end
 end
 
@@ -147,11 +158,17 @@ function onGameTick()
 	CheckEvents()
 end
 
-function onPrecise()
-	if GameTime > 3000 then
-		SetAnimSkip(true)
+-- Hide mission panel when player does anything
+function hideMissionOnAction()
+	if battleStarted then
+		HideMission()
 	end
 end
+
+onHogAttack = hideMissionOnAction
+onAttack = hideMissionOnAction
+onSlot = hideMissionOnAction
+onSetWeapon = hideMissionOnAction
 
 -------------- EVENTS ------------------
 
@@ -179,8 +196,7 @@ function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamB.name, teamA.name})
 	EndGame()
 end
 
@@ -188,43 +204,24 @@ function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	local record = tonumber(GetCampaignVar("FastestSpecialistsKill"))
+	if record ~= nil and TotalRounds >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
+	end
+	if record == nil or TotalRounds < record then
+		SaveCampaignVar("FastestSpecialistsKill", tostring(TotalRounds))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
 	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	sendSimpleTeamRankings({teamA.name, teamB.name})
+	SaveCampaignVar("Mission11Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end
 
--------------- ANIMATIONS ------------------
-
-function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
-end
-
-function AnimationSetup()
-	-- DIALOG 01 - Start, game instructions
-	AddSkipFunction(dialog01, Skipanim, {dialog01})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Death ..."), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("... Hog Solo fights for his life"), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named after"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your health points will be set to 100"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hedgehog you'll get 35% of the damage dealt"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reset"), 2000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
-end
-
 ------------ Other Functions -------------------
-
-function startBattle()
-	AnimSwitchHog(hero.gear)
-	TurnTimeLeft = TurnTime
-end
 
 function shuffleHogs(hogs)
     local hogsNumber = table.getn(hogs)
@@ -244,6 +241,7 @@ function refreshHeroAmmo()
 	AddAmmo(hero.gear, amDEagle, hero.deagleAmmo + extraAmmo)
 	AddAmmo(hero.gear, amBazooka, hero.bazookaAmmo + extraAmmo)
 	AddAmmo(hero.gear, amGrenade, hero.grenadeAmmo + extraAmmo)
+	heroWeaponResetPending = false
 end
 
 function enemyWeapons()

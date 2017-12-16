@@ -1,5 +1,10 @@
 -- Hedgewars - Roperace for 2+ Players
 
+-- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+-- Be careful when editig this script, do not introduce changes lightly!
+-- This script is used for time records on the official Hedgewars server.
+-- Introducing breaking changes means we have to invalidate past time records!
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- store number of hedgehogs
@@ -52,12 +57,18 @@ function onGameInit()
     MinesNum = 0
     Explosives = 0
     Delay = 500
-    SuddenDeathTurns = 99999 -- "disable" sudden death
     Theme = 'Olympics'
+    -- Disable Sudden Death
+    WaterRise = 0
+    HealthDecrease = 0
 end
 
 function onGameStart()
-    ShowMission(loc("TrophyRace"), "", loc("Use your rope to get from start to finish as fast as you can!"), -amRope, 0)
+    ShowMission(loc("TrophyRace"), loc("Race"),
+        loc("Use your rope to get from start to finish as fast as you can!") .. "|" ..
+        loc("In each round, the worst hedgehog of the round is eliminated.") .. "|" ..
+        loc("The last surviving clan wins."),
+        -amRope, 0)
     started = true
     p=1820
     for i = 0, numhhs - 1 do
@@ -161,9 +172,9 @@ function onGameTick()
                     --Place a grenade to make inactive slowest hog active
                     x, y = GetGearPosition(worsthog)
                     AddGear(x, y, gtShell, 0, 0, 0, 0)
-                    worsttime = 0
-                    worsthog = nil
                 end
+                worsttime = 0
+                worsthog = nil
             end
             
             for i=0, ClansCount -1 do
@@ -174,8 +185,8 @@ function onGameTick()
                 hscore = hscore .. "|" .. string.format(loc("Team %d: "), i+1) .. tt
             end
             
-            ShowMission(loc("TrophyRace"), "", loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
-            TurnTimeLeft = 0
+            ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
+            EndTurn(true)
         end
     end
 end

@@ -27,6 +27,9 @@ interface
 {$IFDEF FREEBSD}
     {$DEFINE UNIX}
 {$ENDIF}
+{$IFDEF OPENBSD}
+    {$DEFINE UNIX}
+{$ENDIF}
 {$IFDEF DARWIN}
     {$DEFINE UNIX}
 {$ENDIF}
@@ -74,6 +77,9 @@ const
 /////////////////////  CONSTANT DEFINITIONS /////////////////////
 /////////////////////////////////////////////////////////////////
 
+    SDL_FALSE = 0;
+    SDL_TRUE = 1;
+
     // SDL_Init() flags
     SDL_INIT_TIMER          = $00000001;
     SDL_INIT_AUDIO          = $00000010;
@@ -94,7 +100,8 @@ const
     AUDIO_S16SYS         = {$IFDEF ENDIAN_LITTLE}AUDIO_S16LSB{$ELSE}AUDIO_S16MSB{$ENDIF};
 
     // default audio format from SDL_mixer.h
-    MIX_DEFAULT_FORMAT   = AUDIO_S16SYS;
+    //MIX_DEFAULT_FORMAT   = AUDIO_S16SYS;
+    MIX_DEFAULT_FORMAT   = {$IFDEF ENDIAN_LITTLE}AUDIO_S16LSB{$ELSE}AUDIO_S16MSB{$ENDIF};
 
     SDL_BUTTON_LEFT      = 1;
     SDL_BUTTON_MIDDLE    = 2;
@@ -1054,7 +1061,7 @@ function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch:
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
-function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongInt): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: LongWord): LongInt; cdecl; external SDLLibName;
@@ -1107,6 +1114,7 @@ procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; exte
 function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 procedure SDL_StopTextInput; cdecl; external SDLLibName;
+procedure SDL_FlushEvent(eventType: LongWord); cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 

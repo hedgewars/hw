@@ -16,7 +16,7 @@ local missionName = loc("The last encounter")
 local dialog01 = {}
 -- missions objectives
 local goals = {
-	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!"), 1, 4500},
+	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!") .. "|" .. loc("Mines time: 1.5 seconds"), 1, 4500},
 }
 -- crates
 local teleportCrate = {x = 1935, y = 1830}
@@ -79,11 +79,12 @@ thug7.x = 2990
 thug7.y = 1960
 thug7.health = 80
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = 0x38D61C -- green
 teamB.name = loc("PAotH")
-teamB.color = tonumber("0033FF",16) -- blue because otherwise enemies attack them
+-- FIXME: PAotH should share color with Hog Solo
+teamB.color = 0x0072FF -- blue because otherwise enemies attack them
 teamC.name = loc("Professor")
-teamC.color = tonumber("0033FF",16) -- blue
+teamC.color = 0x0072FF -- blue
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -96,16 +97,18 @@ function onGameInit()
 	Explosives = 2
 	Delay = 3
 	HealthCaseAmount = 50
-	SuddenDeathTurns = 100
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	Map = "death01_map"
 	Theme = "Hell"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -113,11 +116,11 @@ function onGameInit()
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
 	-- Professor and Thugs
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
 	HogTurnLeft(professor.human, true)
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
 	HogTurnLeft(professor.bot, true)
@@ -130,7 +133,7 @@ function onGameInit()
 
 	initCheckpoint("death01")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 
@@ -142,13 +145,13 @@ function onGameStart()
 	AddEvent(onEnemiesDeath, {hero.gear}, enemiesDeath, {hero.gear}, 0)
 
 	-- add crates
-	SpawnAmmoCrate(teleportCrate.x, teleportCrate.y, amTeleport)
-	SpawnAmmoCrate(drillCrate.x, drillCrate.y, amTeleport)
+	SpawnUtilityCrate(teleportCrate.x, teleportCrate.y, amTeleport)
+	SpawnUtilityCrate(drillCrate.x, drillCrate.y, amTeleport)
 	SpawnAmmoCrate(drillCrate.x, drillCrate.y, amDrill)
 	SpawnAmmoCrate(batCrate.x, batCrate.y, amBaseballBat)
 	SpawnAmmoCrate(blowtorchCrate.x, blowtorchCrate.y, amBlowTorch)
 	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
-	SpawnAmmoCrate(ropeCrate.x, ropeCrate.y, amRope)
+	SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, amRope)
 	SpawnAmmoCrate(pickHammerCrate.x, pickHammerCrate.y, amPickHammer)
 	SpawnHealthCrate(cakeCrate.x + 40, cakeCrate.y)
 	SpawnHealthCrate(blowtorchCrate.x + 40, blowtorchCrate.y)
@@ -200,7 +203,7 @@ end
 function onNewTurn()
 	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
 		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
@@ -266,8 +269,7 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to eliminate all your enemies."))
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -278,42 +280,48 @@ function enemiesDeath(gear)
 	SendStat(siCustomAchievement, loc("You have rescued H and Dr. Cornelius."))
 	SendStat(siCustomAchievement, loc("You have acquired the last device part."))
 	SendStat(siCustomAchievement, loc("Now go and play the menu mission to complete the campaign."))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
 end
 
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
+	startBattle()
 end
 
 function AnimationSetup()
+	local profDiedOnMoon = GetCampaignVar("ProfDiedOnMoon") == "1"
 	-- DIALOG01, GAME START, INTRODUCTION
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the uninhabitable Death Planet ..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surprised to see me?"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})
+	if profDiedOnMoon then
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("After you left the moon, my other loyal minions came and resurrected me so I could complete my master plan."), SAY_SAY, 6000}})
+	else
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})
+	end
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("I've thought that the best way to get the device is to let you collect most of the parts for me!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, now I got the last part and I have your friends captured."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Will you give me the other parts?"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I will never hand you the parts!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {professor.human, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})
+	if profDiedOnMoon then
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SHOUT, 4000}})
+	else
+		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})
+	end
 	table.insert(dialog01, {func = startBattle, args = {}})
 end
 
 -------------- OTHER FUNCTIONS -----------------
 
 function startBattle()
+	ShowMission(unpack(goals[dialog01]))
 	DeleteGear(professor.human)
 	RestoreHog(professor.bot)
 	AnimSwitchHog(professor.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end

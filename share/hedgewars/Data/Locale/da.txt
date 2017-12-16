@@ -57,7 +57,7 @@
 ; 00:54=Struktur
 00:54=Jordspray
 
-01:00=Kæmp!
+; 01:00=Loading …
 01:01=Runde uafgjort
 01:02=%1 vinder!
 01:03=Lydstyrke %1%
@@ -243,11 +243,11 @@
 02:02=Frygt intet!
 02:02=Vær modig og tapper
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 vinder!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Runde uafgjort
 
 ; New health crate
 02:05=Så er der hjælp at hente!
@@ -510,12 +510,12 @@
 ; Game goal strings
 05:00=Spilsystemer
 05:01=De følgende regler gælder
-05:02=Forter: Forsvar din fæstning; knus dine modstandere!
+05:02=Placer din Konge: Vælg et beskyttet sted din konge kan starte
 05:03=Svag Tyngdekraft: Gå forsigtigt
 05:04=Udødelighed: Pindsvin er (næsten) udødelige
 05:05=Vampyr: Pindsvin bliver helbredt når de giver skade
 05:06=Karma: Pindsvin tager skade når de giver skade
-05:07=Forsvar Kongen: Undgå at gå skakmat!|Placer din Konge: Vælg et beskyttet sted din konge kan starte
+05:07=Forsvar Kongen: Undgå at gå skakmat!
 05:08=Placer Pindsvin: Placer dine pindsvin før spillet starter
 05:09=Artilleri: Pindsvin kan ikke gå for at flytte sig rundt
 05:10=Uforgængeligt Terræn: De fleste våben kan ikke ændre på banen

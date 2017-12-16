@@ -117,6 +117,7 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/servermessages.h \
     ../QTfrontend/ui/widget/roomnameprompt.h \
     ../QTfrontend/weapons.h \
+    ../QTfrontend/ui/widget/MinesTimeSpinBox.h \
     ../QTfrontend/net/hwmapoptimizer.h
 
 
@@ -216,6 +217,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/feedbackdialog.cpp \
     ../QTfrontend/ui/widget/lineeditcursor.cpp \
     ../QTfrontend/ui/widget/roomnameprompt.cpp \
+    ../QTfrontend/ui/widget/MinesTimeSpinBox.cpp \
     ../QTfrontend/net/hwmapoptimizer.cpp
 
 
@@ -271,7 +273,6 @@ macx {
 
 win32 {
     RC_FILE = ../QTfrontend/hedgewars.rc
-    SOURCES += ../QTfrontend/util/platform/xfire.cpp ../QTfrontend/util/platform/xfiregameclient.cpp
     LIBS += -L../misc/winutils/lib
     INCLUDEPATH += ../misc/winutils/include
 }

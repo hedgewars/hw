@@ -66,6 +66,8 @@ begin
     or (TestCollisionYwithGear(HHGear, 1) <> 0) then
         begin
         DeleteGear(Gear);
+        if (TestCollisionYwithGear(HHGear, 1) <> 0) and (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+            HHGear^.Hedgehog^.CurAmmoType:= amRope;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
@@ -441,6 +443,21 @@ begin
         end
     else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
 
+    // Destroy rope if it touched bouncy or world wrap world edge.
+    // TODO: Allow to shoot rope through the world wrap edge and rope normally.
+    if (WorldWrap(Gear) and (WorldEdge = weWrap)) or
+       ((WorldEdge = weBounce) and ((hwRound(Gear^.X) <= LeftX) or (hwRound(Gear^.X) >= RightX))) then
+        begin
+        HHGear^.State := HHGear^.State and (not (gstAttacking or gstHHJumping or gstHHHJump));
+        HHGear^.Message := HHGear^.Message and (not gmAttack);
+        DeleteGear(Gear);
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+            HHGear^.Hedgehog^.CurAmmoType:= amRope;
+        isCursorVisible := false;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
+        exit()
+        end;
+
     DeleteCI(HHGear);
 
     if (HHGear^.State and gstMoving) <> 0 then
@@ -530,6 +547,10 @@ begin
                 Message := Message and (not gmAttack)
                 end;
         DeleteGear(Gear);
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+            HHGear^.Hedgehog^.CurAmmoType:= amRope;
+        isCursorVisible := false;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit;
         end;
     if CheckGearDrowning(HHGear) then DeleteGear(Gear)

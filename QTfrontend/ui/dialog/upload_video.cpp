@@ -57,7 +57,7 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
         "<p>By clicking 'upload,' you certify that you own all rights to the content or that "
         "you are authorized by the owner to make the content publicly available on YouTube, "
         "and that it otherwise complies with the YouTube Terms of Service located at "
-        "<a href=\"http://www.youtube.com/t/terms\" style=\"color: white;\">http://www.youtube.com/t/terms</a>.</p>";
+        "<a href=\"https://www.youtube.com/t/terms\" style=\"color: white;\">https://www.youtube.com/t/terms</a>.</p>";
 
     // youtube doesn't understand this characters, even when they are properly escaped
     // (either with CDATA or with &lt or &gt)

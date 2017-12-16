@@ -30,11 +30,16 @@
 --
 -- Possible keys:
 --- initialenergy: Amount of energy that each team starts with (default: 550)
+---                Note: Must be smaller than or equal to maxenergy
 --- energyperround: Amount of energy that each team gets per round (default: 50)
 --- maxenergy: Maximum amount of energy each team can hold (default: 1000)
+--- cratesperround: Maximum number of crates you can place per round (default: 5)
+
+-- For the previous 2 keys, you can use the value “inf” for an unlimited amount
 
 -- Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
--- and sets the maximum energy to 2000
+--          and sets the maximum energy to 2000.
+-- Example: “craterperround=inf” disables the crate placement limit.
 
 ------------------------------------------------------------------------------
 --version history
@@ -191,7 +196,7 @@ wHeight = {}
 wCol = {}
 margin = 20
 
-vTag = {}
+clanPowerTag = nil
 lastWep = nil
 
 checkForSpecialWeaponsIn = -1
@@ -200,44 +205,25 @@ checkForSpecialWeaponsIn = -1
 conf_initialEnergy = 550
 conf_energyPerRound = 50
 conf_maxEnergy = 1000
+conf_cratesPerRound = 5
 
-function HideTags()
-
-	for i = 0, 2 do
-		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
-	end
-
-end
-
-function DrawTag(i)
+function DrawClanPowerTag()
 
 	zoomL = 1.3
 
 	xOffset = 40
 
-	if i == 0 then
-		yOffset = 40
-		tCol = 0xffba00ff
-		tValue = 30
-	elseif i == 1 then
-		zoomL = 1.1
-		xOffset = 45
-		yOffset = 70
-		tCol = 0x00ff00ff
-		tValue = clanPower[GetHogClan(CurrentHedgehog)]
-	elseif i == 2 then
-		zoomL = 1.1
-		xOffset = 60 + 35
-		yOffset = 70
-		tCol = 0xa800ffff
-		tValue = 10
-	end
+	zoomL = 1.1
+	xOffset = 45
+	yOffset = 70
+	tCol = 0x00ff00ff
+	tValue = clanPower[GetHogClan(CurrentHedgehog)]
 
-	DeleteVisualGear(vTag[i])
-	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
+	DeleteVisualGear(clanPowerTag)
+	clanPowerTag = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(clanPowerTag)
 	SetVisualGearValues	(
-				vTag[i], 		--id
+				clanPowerTag, 		--id
 				-div(ScreenWidth,2) + xOffset,	--xoffset
 				ScreenHeight - yOffset, --yoffset
 				0, 			--dx
@@ -256,9 +242,7 @@ function onScreenResize()
 
 	-- redraw Tags so that their screen locations are updated
 	if (CurrentHedgehog ~= nil) then
-			DrawTag(0)
-			DrawTag(1)
-			DrawTag(2)
+		DrawClanPowerTag()
 	end
 
 end
@@ -619,6 +603,9 @@ end
 function CheckProximity(gear)
 
 	dist = GetDistFromGearToXY(gear, GetX(strucGear[tempID]), GetY(strucGear[tempID]))
+	if not dist then
+		return
+	end
 
 	-- calculate my real radius if I am an aura
 	if strucCircType[tempID] == 0 then
@@ -911,14 +898,8 @@ end
 
 function checkForSpecialWeapons()
 
-
-
-	if (GetCurAmmoType() == amAirAttack) then
-		AddCaption(loc("Structure Placement Tool"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
-	elseif (GetCurAmmoType() == amDrillStrike) then
-		AddCaption(loc("Object Placement Tool"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
-	elseif (GetCurAmmoType() == amNapalm) then
-		AddCaption(loc("Crate Placement Tool"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
+	if (GetCurAmmoType() == amDrillStrike) then
+		AddCaption(loc("Object Placer"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
 	end
 
 	lastWep = GetCurAmmoType()
@@ -943,39 +924,39 @@ local hhs = {}
 placeholder = 20
  atkArray =
 				{
-				{amBazooka, 	"amBazooka",		0, loc("Bazooka"), 			2*placeholder},
+				{amBazooka, 	"amBazooka",		0, 2*placeholder},
 				--{amBee, 		"amBee",			0, loc("Homing Bee"), 		4*placeholder},
-				{amMortar, 		"amMortar",			0, loc("Mortar"), 			1*placeholder},
-				{amDrill, 		"amDrill",			0, loc("Drill Rocket"), 	3*placeholder},
-				{amSnowball, 	"amSnowball",		0, loc("Mudball"), 			3*placeholder},
+				{amMortar, 		"amMortar",			0, 1*placeholder},
+				{amDrill, 		"amDrill",			0, 3*placeholder},
+				{amSnowball, 	"amSnowball",		0, 3*placeholder},
 
-				{amGrenade,		"amGrenade",		0, loc("Grenade"), 			2*placeholder},
-				{amClusterBomb,	"amClusterBomb",	0, loc("Cluster Bomb"), 	3*placeholder},
-				{amWatermelon, 	"amWatermelon",		0, loc("Watermelon Bomb"), 25*placeholder},
-				{amHellishBomb,	"amHellishBomb",	0, loc("Hellish hand-grenade"), 25*placeholder},
-				{amMolotov, 	"amMolotov",		0, loc("Molotov Cocktail"), 3*placeholder},
-				{amGasBomb, 	"amGasBomb",		0, loc("Old Limburger"), 		3*placeholder},
+				{amGrenade,		"amGrenade",		0, 2*placeholder},
+				{amClusterBomb,	"amClusterBomb",	0, 3*placeholder},
+				{amWatermelon, 	"amWatermelon",		0, 25*placeholder},
+				{amHellishBomb,	"amHellishBomb",	0, 25*placeholder},
+				{amMolotov, 	"amMolotov",		0, 3*placeholder},
+				{amGasBomb, 	"amGasBomb",		0, 3*placeholder},
 
-				{amShotgun,		"amShotgun",		0, loc("Shotgun"), 			2*placeholder},
-				{amDEagle,		"amDEagle",			0, loc("Desert Eagle"), 	2*placeholder},
-				{amSniperRifle,	"amSniperRifle",	0, loc("Sniper Rifle"), 	3*placeholder},
+				{amShotgun,		"amShotgun",		0, 2*placeholder},
+				{amDEagle,		"amDEagle",			0, 2*placeholder},
+				{amSniperRifle,	"amSniperRifle",	0, 3*placeholder},
 				--{amSineGun, 	"amSineGun",		0, loc("Sine Gun"), 			6*placeholder},
-				{amFlamethrower,"amFlamethrower",	0, loc("Flamethrower"), 	4*placeholder},
-				{amIceGun, 		"amIceGun",			0, loc("Freezer"), 			15*placeholder},
+				{amFlamethrower,"amFlamethrower",	0, 4*placeholder},
+				{amIceGun, 		"amIceGun",			0, 15*placeholder},
 
-				{amFirePunch, 	"amFirePunch",		0, loc("Shoryuken"), 		3*placeholder},
-				{amWhip,		"amWhip",			0, loc("Whip"), 			1*placeholder},
-				{amBaseballBat, "amBaseballBat",	0, loc("Baseball Bat"), 	7*placeholder},
+				{amFirePunch, 	"amFirePunch",		0, 3*placeholder},
+				{amWhip,		"amWhip",			0, 1*placeholder},
+				{amBaseballBat, "amBaseballBat",	0, 7*placeholder},
 				--{amKamikaze, 	"amKamikaze",		0, loc("Kamikaze"),			1*placeholder},
-				{amSeduction, 	"amSeduction",		0, loc("Seduction"),		1*placeholder},
-				{amHammer,		"amHammer",			0, loc("Hammer"), 			1*placeholder},
+				{amSeduction, 	"amSeduction",		0, 1*placeholder},
+				{amHammer,		"amHammer",			0, 1*placeholder},
 
-				{amMine, 		"amMine",			0, loc("Mine"), 			1*placeholder},
-				{amDynamite, 	"amDynamite",		0, loc("Dynamite"),			9*placeholder},
-				{amCake, 		"amCake",			0, loc("Cake"), 			25*placeholder},
-				{amBallgun, 	"amBallgun",		0, loc("Ballgun"), 			40*placeholder},
+				{amMine, 		"amMine",			0, 1*placeholder},
+				{amDynamite, 	"amDynamite",		0, 9*placeholder},
+				{amCake, 		"amCake",			0, 25*placeholder},
+				{amBallgun, 	"amBallgun",		0, 40*placeholder},
 				--{amRCPlane,		"amRCPlane",		0, loc("RC Plane"), 	25*placeholder},
-				{amSMine,		"amSMine",			0, loc("Sticky Mine"), 		5*placeholder},
+				{amSMine,		"amSMine",			0, 5*placeholder},
 
 				--{amAirAttack,	"amAirAttack",		0, loc("Air Attack"), 		10*placeholder},
 				--{amMineStrike,	"amMineStrike",		0, loc("Mine Strike"), 		15*placeholder},
@@ -983,36 +964,38 @@ placeholder = 20
 				--{amPiano,		"amPiano",			0, loc("Piano Strike"), 	40*placeholder},
 				--{amDrillStrike,	"amDrillStrike",	0, loc("Drill Strike"), 15*placeholder},
 
-				{amKnife,		"amKnife",			0, loc("Cleaver"), 			2*placeholder},
+				{amPickHammer,		"amPickHammer",		0, 2*placeholder},
+				{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
+				{amKnife,		"amKnife",			0, 2*placeholder},
 
-				{amBirdy,		"amBirdy",			0, loc("Birdy"), 			7*placeholder}
+				{amBirdy,		"amBirdy",			0, 7*placeholder},
+
+				{amDuck,		"amDuck",			0, 2*placeholder}
 
 				}
 
  utilArray =
 				{
-				{amPickHammer,		"amPickHammer",		0, loc("Pick Hammer"), 		2*placeholder},
-				{amBlowTorch, 		"amBlowTorch",		0, loc("Blow Torch"), 		4*placeholder},
 				--{amGirder, 			"amGirder",			0, loc("Girder"), 		4*placeholder},
-				{amLandGun,		"amLandGun",		0, loc("Land Spray"), 	5*placeholder},
+				{amLandGun,		"amLandGun",		0, 5*placeholder},
 				--{amRubber, 			"amRubber",			0, loc("Rubber"), 	5*placeholder},
 
-				{amRope, 			"amRope",			0, loc("Rope"), 			7*placeholder},
-				{amParachute, 		"amParachute",		0, loc("Parachute"), 		2*placeholder},
+				{amRope, 			"amRope",	0, 7*placeholder},
+				{amParachute, 		"amParachute",		0, 2*placeholder},
 				--{amTeleport,		"amTeleport",		0, loc("Teleport"), 		6*placeholder},
-				{amJetpack,			"amJetpack",		0, loc("Flying Saucer"), 	8*placeholder},
-				{amPortalGun,		"amPortalGun",		0, loc("Portable Portal Device"), 15*placeholder},
+				{amJetpack,			"amJetpack",	0, 8*placeholder},
+				{amPortalGun,		"amPortalGun",		0, 15*placeholder},
 
-				{amInvulnerable,	"amInvulnerable",	0, loc("Invulnerable"), 	5*placeholder},
-				{amLaserSight,		"amLaserSight",		0, loc("Laser Sight"), 		2*placeholder},
-				{amVampiric,		"amVampiric",		0, loc("Vampirism"), 		6*placeholder},
+				{amInvulnerable,	"amInvulnerable",	0, 5*placeholder},
+				{amLaserSight,		"amLaserSight",		0, 2*placeholder},
+				{amVampiric,		"amVampiric",		0, 6*placeholder},
 				--{amResurrector, 	"amResurrector",	0, loc("Resurrector"), 		8*placeholder},
 				--{amTardis, 			"amTardis",			0, loc("Time Box"), 			2*placeholder},
 
 				--{amSwitch,			"amSwitch",			0, loc("Switch Hog"), 		4*placeholder}
-				{amLowGravity, 		"amLowGravity",		0, loc("Low Gravity"), 		4*placeholder},
-				{amExtraDamage, 	"amExtraDamage",	0, loc("Extra Damage"), 	6*placeholder},
-				{amExtraTime,		"amExtraTime",		0, loc("Extra Time"), 		8*placeholder}
+				{amLowGravity, 		"amLowGravity",		0, 4*placeholder},
+				{amExtraDamage, 	"amExtraDamage",	0, 6*placeholder},
+				{amExtraTime,		"amExtraTime",		0, 8*placeholder}
 
 				}
 
@@ -1078,6 +1061,9 @@ local tCirc = {} -- array of circles that appear around tagged gears
 function GetDistFromGearToXY(gear, g2X, g2Y)
 
 	g1X, g1Y = GetGearPosition(gear)
+	if not g1X then
+		return nil
+	end
 	q = g1X - g2X
 	w = g1Y - g2Y
 
@@ -1112,60 +1098,78 @@ function PlaceObject(x,y)
 	placedSpec[placedCount] = pMode[pIndex]
 
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
-		AddCaption(loc("You may only spawn 1 Extra Time per turn."),0xffba00ff,capgrpVolume)
+		AddCaption(loc("You may only place 1 Extra Time crate per turn."),0xffba00ff,capgrpVolume)
 		PlaySound(sndDenied)
-	elseif (clanCratesSpawned[GetHogClan(CurrentHedgehog)] > 4) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
-		AddCaption(loc("You may only spawn 5 crates per turn."),0xffba00ff,capgrpVolume)
+	elseif (conf_cratesPerRound ~= "inf" and clanCratesSpawned[GetHogClan(CurrentHedgehog)] >= conf_cratesPerRound) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
+		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound),0xffba00ff,capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (XYisInRect(x,y, clanBoundsSX[GetHogClan(CurrentHedgehog)],clanBoundsSY[GetHogClan(CurrentHedgehog)],clanBoundsEX[GetHogClan(CurrentHedgehog)],clanBoundsEY[GetHogClan(CurrentHedgehog)]) == true)
 	and (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense)
 	then
-
-
-
+		-- For checking if the actual placement succeeded
+		local placed = false
 		if cat[cIndex] == "Girder Placement Mode" then
-			PlaceGirder(x, y, CGR)
+			placed = PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Rubber Placement Mode" then
-			PlaceSprite(x,y, sprAmRubber, CGR, nil, nil, nil, nil, lfBouncy)
+			placed = PlaceRubber(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Health Crate Placement Mode" then
 			gear = SpawnHealthCrate(x,y)
-			SetHealth(gear, pMode[pIndex])
-			setGearValue(gear,"caseType","med")
-			clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			if gear ~= nil then
+				placed = true
+				SetHealth(gear, pMode[pIndex])
+				setGearValue(gear,"caseType","med")
+				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			end
 		elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 			gear = SpawnAmmoCrate(x, y, atkArray[pIndex][1])
-			placedSpec[placedCount] = atkArray[pIndex][2]
-			setGearValue(gear,"caseType","ammo")
-			setGearValue(gear,"contents",atkArray[pIndex][2])
-			clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			if gear ~= nil then
+				placed = true
+				placedSpec[placedCount] = atkArray[pIndex][2]
+				setGearValue(gear,"caseType","ammo")
+				setGearValue(gear,"contents",atkArray[pIndex][2])
+				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
+			end
 		elseif cat[cIndex] == "Utility Crate Placement Mode" then
 			gear = SpawnUtilityCrate(x, y, utilArray[pIndex][1])
-			placedSpec[placedCount] = utilArray[pIndex][2]
-			setGearValue(gear,"caseType","util")
-			setGearValue(gear,"contents",utilArray[pIndex][2])
-			if utilArray[pIndex][1] == amExtraTime then
-				clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = true
+			if gear ~= nil then
+				placed = true
+				placedSpec[placedCount] = utilArray[pIndex][2]
+				setGearValue(gear,"caseType","util")
+				setGearValue(gear,"contents",utilArray[pIndex][2])
+				if utilArray[pIndex][1] == amExtraTime then
+					clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = true
+				end
+				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
 			end
-			clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
 		elseif cat[cIndex] == "Barrel Placement Mode" then
 			gear = AddGear(x, y, gtExplosives, 0, 0, 0, 0)
-			SetHealth(gear, pMode[pIndex])
+			if gear ~= nil then
+				placed = true
+				SetHealth(gear, pMode[pIndex])
+			end
 		elseif cat[cIndex] == "Mine Placement Mode" then
 			gear = AddGear(x, y, gtMine, 0, 0, 0, 0)
-			SetTimer(gear, pMode[pIndex])
+			if gear ~= nil then
+				placed = true
+				SetTimer(gear, pMode[pIndex])
+			end
 		elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 			gear = AddGear(x, y, gtSMine, 0, 0, 0, 0)
-
+			placed = gear ~= nil
 		elseif cat[cIndex] == "Structure Placement Mode" then
-
 			AddStruc(x,y, pMode[pIndex],GetHogClan(CurrentHedgehog))
-
+			placed = true
 		end
 
-		clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
-		placedCount = placedCount + 1
+		if placed then
+			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
+			placedCount = placedCount + 1
+		else
+			AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+			PlaySound(sndDenied)
+		end
 
 	else
 	    if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
@@ -1203,14 +1207,14 @@ function RedefineSubset()
 		placedExpense = 5
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
-			pMode[i] = atkArray[i][4]
+			pMode[i] = GetAmmoName(atkArray[i][1])
 		end
-		placedExpense = atkArray[pIndex][5]
+		placedExpense = atkArray[pIndex][4]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		for i = 1, #utilArray do
-			pMode[i] = utilArray[i][4]
+			pMode[i] = GetAmmoName(utilArray[i][1])
 		end
-		placedExpense = utilArray[pIndex][5]
+		placedExpense = utilArray[pIndex][4]
 	elseif cat[cIndex] == "Mine Placement Mode" then
 		pMode = {0,1000,2000,3000,4000,5000}
 		placedExpense = 15
@@ -1250,7 +1254,7 @@ function HandleHedgeEditor()
 
 		if GameTime % 100 == 0 then
 
-			DrawTag(1)
+			DrawClanPowerTag()
 
 			curWep = GetCurAmmoType()
 
@@ -1378,9 +1382,9 @@ function updateCost()
 	elseif pMode[pIndex] == loc("Reflector Shield") then
 			placedExpense = 200
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
-		placedExpense = atkArray[pIndex][5]
+		placedExpense = atkArray[pIndex][4]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
-		placedExpense = utilArray[pIndex][5]
+		placedExpense = utilArray[pIndex][4]
 	end
 
 	AddCaption(loc("Cost") .. ": " .. placedExpense,0xffba00ff,capgrpAmmostate)
@@ -1513,7 +1517,10 @@ end
 ----------------------------
 
 -- Parses a positive integer
-function parseInt(str, default)
+function parseInt(str, default, infinityPermitted)
+	if str == "inf" and infinityPermitted then
+		return "inf"
+	end
 	if str == nil then return default end
 	local s = string.match(str, "(%d*)")
 	if s ~= nil then
@@ -1528,11 +1535,8 @@ function onParameters()
 	parseParams()
 	conf_initialEnergy = parseInt(params["initialenergy"], conf_initialEnergy)
 	conf_energyPerRound = parseInt(params["energyperround"], conf_energyPerRound)
-	if params["maxenergy"] == "inf" then
-		conf_maxEnergy = "inf"
-	else
-		conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy)
-	end
+	conf_maxEnergy = parseInt(params["maxenergy"], conf_maxEnergy, true)
+	conf_cratesPerRound = parseInt(params["cratesperround"], conf_cratesPerRound, true)
 end
 
 function onGameInit()
@@ -1541,8 +1545,10 @@ function onGameInit()
 	MinesNum = 0
 
 	EnableGameFlags(gfInfAttack)
+	-- This is a hack to make sure all girder/rubber placement is handled by Construction Mode to overwrite the default behaviour
+	SetMaxBuildDistance(1)
 
-	fortMode = (MapGen == mgForts) or GetGameFlag(gfForts)
+	fortMode = MapGen == mgForts
 
 	-- if there are forts, let engine place the hogs on them
 	if fortMode then
@@ -1576,27 +1582,43 @@ function onGameStart()
 				loc("a Hedgewars mini-game"),
 				loc("Build a fortress and destroy your enemy.") .. "|" ..
 				loc("There are a variety of structures available to aid you.") .. "|" ..
-				loc("Use the air-attack weapons and the arrow keys to select structures.") .. "|" ..
-				" " .. "|" ..
-				loc("Healing Station") .. ": " .. loc("Grants nearby hogs life-regeneration.")  .. "|" ..
-				loc("Bio-Filter") .. ": " .. loc("Aggressively removes enemy hedgehogs.")  .. "|" ..
-				loc("Weapon Filter") .. ": " .. loc("Dematerializes weapons and equipment carried by enemy hedgehogs.")  .. "|" ..
-				loc("Reflector Shield") .. ": " .. loc("Reflects enemy projectiles.")  .. "|" ..
-
-				loc("Generator") .. ": " .. loc("Generates power.")  .. "|" ..
-				loc("Respawner") .. ": " .. loc("Resurrects dead hedgehogs.")  .. "|" ..
-				loc("Teleportation Node") .. ": " .. loc("Allows free teleportation between other nodes.")  .. "|" ..
-				loc("Construction Station") .. ": " .. loc("Allows placement of girders, rubber-bands, mines, sticky mines and barrels.")  .. "|" ..
-				loc("Support Station") .. ": " .. loc("Allows the placement of weapons, utiliites, and health crates.")
+				loc("Use the structure placer to place structures.")
 				, 4, 5000
 				)
 
+	SetAmmoTexts(amAirAttack, loc("Structure Placer"), loc("Construction Mode tool"), loc("Build one of multiple different structures|to aid you in victory, at the cost of energy.") .. "| |" ..
+	loc("Healing Station: Heals nearby hogs.")  .. "|" ..
+	loc("Bio-Filter: Aggressively removes enemies.")  .. "|" ..
+	loc("Weapon Filter: Dematerializes all ammo|    carried by enemies entering it.")  .. "|" ..
+	loc("Reflector Shield: Reflects enemy projectiles.")  .. "|" ..
+	loc("Generator: Generates energy.")  .. "|" ..
+	loc("Respawner: Resurrects dead hogs.")  .. "|" ..
+	loc("Teleportation Node: Allows teleportation|    between other nodes.")  .. "|" ..
+	loc("Construction Station: Allows placement of|    girders, rubber, mines, sticky mines|    and barrels.")  .. "|" ..
+	loc("Support Station: Allows placement of crates.") .. "| |" ..
 
+	loc("Left/right: Choose structure type|Cursor: Build structure"))
+
+	local txt_crateLimit = ""
+	if conf_cratesPerRound ~= "inf" then
+		txt_crateLimit = string.format(loc("You may only place %d crates per round."), conf_cratesPerRound) .. "|"
+	end
+
+	SetAmmoTexts(amNapalm, loc("Crate Placer"), loc("Construction Mode tool"),
+		loc("This allows you to create a crate anywhere|within your clan's area of influence,|at the cost of energy.") .. "|" ..
+		txt_crateLimit ..
+		loc("Up/down: Choose crate type") .. "|" .. 
+		loc("Left/right: Choose crate contents") .. "|" ..
+		loc("|Cursor: Place crate"))
+	SetAmmoTexts(amDrillStrike, loc("Object Placer"), loc("Construction Mode tool"), loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.|Up/down: Choose object type|Left/right: Choose timer (for mines)|Cursor: Place object"))
+
+	SetAmmoDescriptionAppendix(amTeleport, loc("It only works in teleportation nodes of your own clan."))
+	
 	sCirc = AddVisualGear(0,0,vgtCircle,0,true)
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x00000000)
 
 	for i = 0, ClansCount-1 do
-		clanPower[i] = conf_initialEnergy
+		clanPower[i] = math.min(conf_initialEnergy, conf_maxEnergy)
 		clanLWepIndex[i] = 1 -- for ease of use let's track this stuff
 		clanLUtilIndex[i] = 1
 		clanLGearIndex[i] = 1

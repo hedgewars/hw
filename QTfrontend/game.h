@@ -64,6 +64,7 @@ bool checkForDir(const QString & dir);
 // last game info
 extern QList<QVariant> lastGameStartArgs;
 extern GameType lastGameType;
+extern QString lastTrainingSubFolder;
 extern GameCFGWidget * lastGameCfg;
 extern QString lastGameAmmo;
 extern TeamSelWidget * lastGameTeamSel;
@@ -79,7 +80,7 @@ class HWGame : public TCPBase
         void StartLocal();
         void StartQuick();
         void StartNet();
-        void StartTraining(const QString & file);
+        void StartTraining(const QString & file, const QString & subFolder);
         void StartCampaign(const QString & camp, const QString & campScript, const QString & campTeam);
         void abort();
         GameState gameState;

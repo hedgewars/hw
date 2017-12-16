@@ -78,7 +78,6 @@ begin
 new(NewTexture);
 NewTexture^.PrevTexture:= nil;
 NewTexture^.NextTexture:= nil;
-NewTexture^.Scale:= 1;
 if TextureList <> nil then
     begin
     TextureList^.PrevTexture:= NewTexture;
@@ -86,6 +85,8 @@ if TextureList <> nil then
     end;
 TextureList:= NewTexture;
 
+NewTexture^.Scale:= 1;
+NewTexture^.Priority:= 0;
 NewTexture^.w:= width;
 NewTexture^.h:= height;
 NewTexture^.rx:= 1.0;
@@ -224,6 +225,8 @@ if TextureList <> nil then
     end;
 TextureList:= Surface2Tex;
 
+Surface2Tex^.Scale:= 1;
+Surface2Tex^.Priority:= 0;
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
@@ -244,9 +247,11 @@ if SDL_MustLock(surf) then
 
 fromP4:= Surf^.pixels;
 
+// FIXME move out of surface2tex
 if GrayScale then
     Surface2GrayScale(Surf);
 
+// FIXME move out of surface2tex
 PrettifySurfaceAlpha(surf, fromP4);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then

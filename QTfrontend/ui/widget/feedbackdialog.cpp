@@ -156,8 +156,9 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     captchaLayoutWidget->setLayout(captchaLayout);
     feedbackLayout->addWidget(captchaLayoutWidget, 3, 1, 1, 2);
 
-    // TODO: Set green arrow icon for send button (:/res/Start.png)
     BtnSend = new QPushButton(tr("Send Feedback"));
+    BtnSend->setStyleSheet("qproperty-icon: url(:/res/Start.png);");
+
     feedbackLayout->addWidget(BtnSend, 3, 3);
     BtnSend->setFixedHeight(40);
     connect(BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));

@@ -82,9 +82,12 @@ function onGameInit()
 	Map = "Battlefield"
 	-- The theme to be used
 	Theme = "Castle"
+	-- Setting these 2 values to 0 is the official way to disable Sudden Death cleanly
+	HealthDecrease = 0	-- Sudden Death damage
+	WaterRise = 0		-- Water rise in Sudden Death
 
 	-- Create the player team
-	AddTeam(loc("Grenadiers"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Grenadiers"), 14483456, "Simple", "Island", "Default", "cm_grenade")
 	-- And add a hog to it
 	player = AddHog(loc("Nade Boy"), 0, 1, "war_grenadier1")
 	SetGearPosition(player, 506, 76)

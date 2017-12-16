@@ -48,6 +48,7 @@ class PageDataDownload : public AbstractPage
         QHash<QNetworkReply*, QProgressBar *> progressBars;
         QVBoxLayout *progressBarsLayout;
         QPushButtonWithSound * pbOpenDir;
+        QPushButtonWithSound * pbHome;
 
         bool m_contentDownloaded; ///< true if something was downloaded since last page leave
 

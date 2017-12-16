@@ -208,6 +208,14 @@ bool HWTeam::fileExists()
     return f.exists();
 }
 
+// Returns true if the team name has been changed but a file with the same team name already exists.
+// So if this team would be saved, another team file would be overwritten, which is generally not
+// desired.
+bool HWTeam::wouldOverwriteOtherFile()
+{
+    return (m_name != OldTeamName) && fileExists();
+}
+
 bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)

@@ -47,7 +47,7 @@ type TChatLine = record
     s: shortstring;
     Color: TSDL_Color;
     end;
-    TChatCmd = (ccQuit, ccPause, ccFinish, ccShowHistory, ccFullScreen);
+    TChatCmd = (ccQuit, ccPause, ccShowHistory, ccFullScreen);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -88,7 +88,6 @@ const
             end = (
             (ChatCmd: '/quit'; ProcedureCallChatCmd: 'halt'),
             (ChatCmd: '/pause'; ProcedureCallChatCmd: 'pause'),
-            (ChatCmd: '/finish'; ProcedureCallChatCmd: 'finish'),
             (ChatCmd: '/history'; ProcedureCallChatCmd: 'history'),
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
@@ -161,7 +160,7 @@ end;
  * It will use the color stored in cl and update width
  *)
 procedure RenderChatLineTex(var cl: TChatLine; var str: shortstring);
-var strSurface,
+var strSurface, tmpSurface,
     resSurface: PSDL_Surface;
     dstrect   : TSDL_Rect; // destination rectangle for blitting
     font      : THWFont;
@@ -194,10 +193,14 @@ dstrect.h:= ClHeight;
 SDL_FillRect(resSurface, @dstrect, shadowint);
 
 // create and blit text
+tmpSurface:= nil;
 strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color);
-//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
-if strSurface <> nil then copyToXY(strSurface, resSurface, Padding, Padding);
+// fix format
+if strSurface <> nil then tmpSurface:= SDL_ConvertSurface(strSurface, resSurface^.format, 0);
 SDL_FreeSurface(strSurface);
+//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+if tmpSurface <> nil then copyToXY(tmpSurface, resSurface, Padding, Padding);
+SDL_FreeSurface(tmpSurface);
 
 cl.Tex:= Surface2Tex(resSurface, false);
 
@@ -1095,11 +1098,18 @@ begin
 end;
 
 procedure chChat(var s: shortstring);
+var i: Integer;
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
     SDL_StopTextInput();
     SDL_StartTextInput();
+    //Make REALLY sure unexpected events are flushed (1 time is insufficient as of SDL 2.0.7)
+    for i := 1 to 2 do
+    begin
+        SDL_PumpEvents();
+        SDL_FlushEvent(SDL_TEXTINPUT);
+    end;
     //SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
         SetLine(InputStr, '', true)

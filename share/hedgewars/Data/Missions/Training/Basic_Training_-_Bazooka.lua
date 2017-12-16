@@ -66,7 +66,7 @@ function onGameInit()
 	-- The base number for the random number generator
 	Seed = 1
 	-- Game settings and rules
-    EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand)
+    EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand, gfDisableWind)
     -- Uncommenting this wouldn't do anything
     --EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand)
     -- Neither this
@@ -89,9 +89,12 @@ function onGameInit()
 	Map = "Bamboo"
 	-- The theme to be used
 	Theme = "Bamboo"
+	-- Setting these 2 values to 0 is the official way to disable Sudden Death cleanly
+	HealthDecrease = 0	-- Sudden Death damage
+	WaterRise = 0		-- Water rise in Sudden Death
 
 	-- Create the player team
-	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default", "cm_crosshair")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 	SetGearPosition(player, 936, 136)
@@ -105,6 +108,7 @@ function onGameStart()
 	SendHealthStatsOff()
 	-- Spawn the first target.
 	spawnTarget()
+	SetWind(-20)
 	
 	-- Show some nice mission goals.
 	-- Parameters are: caption, sub caption, description,
@@ -223,7 +227,7 @@ function onGearDamage(gear, damage)
 	if GetGearType(gear) == gtHedgehog then
 		if not game_lost then
 			game_lost = true
-			AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
+			AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
 			ShowMission(loc("Bazooka Training") , loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 			time_goal = 1

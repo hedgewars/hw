@@ -6,5 +6,6 @@ if(UNIX AND NOT APPLE)
 
     install(FILES ${miscfiles} DESTINATION ${SHAREPATH}/Data/misc)
     install(FILES hedgewars.xpm DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps)
+    install(FILES hedgewars.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
 endif()
 

@@ -41,7 +41,7 @@
 /**
  * @brief Class for interacting with SDL (used for music and keys)
  *
- * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
  */
 class SDLInteraction
 {
@@ -53,7 +53,7 @@ class SDLInteraction
          * Not to be used from outside the class,
          * use the static {@link DataManager::instance()} instead.
          *
-         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          */
         SDLInteraction();
 
@@ -73,7 +73,7 @@ class SDLInteraction
         /**
          * @brief Returns reference to the <i>singleton</i> instance of this class.
          *
-         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          *
          * @return reference to the instance.
          */

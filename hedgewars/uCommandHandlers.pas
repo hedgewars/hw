@@ -27,7 +27,7 @@ procedure freeModule;
 
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
-    , uVisualGearsList
+    , uVisualGearsList, uGearsHedgehog
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
@@ -37,9 +37,9 @@ var prevGState: TGameState = gsConfirm;
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-    'R': if ReadyTimeLeft > 1 then
+    'R': if ReadyTimeLeft > 0 then
         begin
-        ReadyTimeLeft:= 1;
+        ReadyTimeLeft:= 0;
         if not isExternalSource then
             SendIPC('c'+s);
         end
@@ -474,12 +474,7 @@ if TWave(s[1]) > High(TWave) then
 if not isExternalSource then
     SendIPC('t' + s);
 
-with CurrentHedgehog^.Gear^ do
-    begin
-    Message:= Message or (gmAnimate and InputMask);
-    MsgParam:= byte(s[1]) ;
-    ScriptCall('onTaunt', MsgParam);
-    end
+PlayTaunt(byte(s[1]))
 end;
 
 procedure chPut(var s: shortstring);
@@ -538,7 +533,7 @@ if isDeveloperMode then
     cSeed:= s;
     InitStepsFlags:= InitStepsFlags or cifRandomize
     end
-    end;
+end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
@@ -554,7 +549,7 @@ else
 
             if bShowAmmoMenu then
                 bShowAmmoMenu:= false
-            else if not(CurrentTeam^.Extdriven) and (((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
+            else if not(CurrentTeam^.Extdriven) and ((Gear = nil) or ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
             or ((Gear^.State and gstHHDriven) = 0)) then
                 begin
                 end

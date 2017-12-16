@@ -51,7 +51,4 @@
     <tip>Puedes encontrar los archivos de configuración del juego en la carpeta ".hedgewars" dentro de tu directorio personal. Puedes hacer copias de seguridad de los mismos o copiarlos a otro ordenador si lo deseas, pero no intentes editarlos a mano para evitar posibles pérdidas de datos.</tip>
     <tip>Puedes usar el cóctel molotov o el lanzallamas para evitar que erizos enemigos crucen túneles angostos o puentes.</tip>
     <tip>El abejorro puede ser complicado de usar. Su maniobrabilidad depende de su velocidad, así que intenta no lanzarlo a máxima potencia.</tip>
-    <windows-only>
-        <tip>La versión de Hedgewars para Windows soporta Xfire. Recuerda agregar Hedgewars a tu lista de juegos para que tus amigos puedan saber cuándo estás jugando.</tip>
-    </windows-only>
 </tips>

@@ -50,7 +50,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 
     leRoomName = new HistoryLineEdit(this, 10);
     leRoomName->setWhatsThis(tr("Room name"));
-    leRoomName->setMaxLength(60);
+    leRoomName->setMaxLength(40);
     leRoomName->setMinimumWidth(400);
     leRoomName->setMaximumWidth(600);
     leRoomName->setFixedHeight(30);

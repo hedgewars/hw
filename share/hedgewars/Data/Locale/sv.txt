@@ -57,7 +57,7 @@
 ; 00:54=Struktur
 00:54=Markspruta
 
-01:00=Nu kör vi!
+; 01:00=Loading …
 01:01=Oavgjort
 01:02=%1 vinner!
 01:03=Volym %1%
@@ -256,11 +256,11 @@
 02:02=Ooh, det börjar!
 02:02=Inga mesar tillåtna
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 vinner!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Oavgjort
 
 ; New health crate
 02:05=Inkommande bistånd!
@@ -540,12 +540,12 @@
 ; Game goal strings
 05:00=Spellägen
 05:01=Följande regler gäller
-05:02=Fort: Försvara din fästning; besegra dina fiender!
+05:02=Placera kungen: Välj en skyddad startpunkt till kungen
 05:03=Låg gravitation: Var försiktig
 05:04=Osårbarhet: Igelkottar är (nästan) osårbara
 05:05=Vampyrism: Igelkottar helas med den mängd de skadar andra
 05:06=Karma: Igelkottar skadas med den mängd de skadar andra
-05:07=Skydda kungen: Låt inte kungen dö!|Placera kungen: Välj en skyddad startpunkt till kungen
+05:07=Skydda kungen: Låt inte kungen dö!
 05:08=Placera igelkottar: Placera igelkottarna innan spelet startar
 05:09=Artilleri: Igelkottar kan inte ändra position genom att gå
 05:10=Oförstörbar terräng: De flesta vapnen förstör inte terrängen

@@ -1,3 +1,66 @@
+--[[
+A Classic Fairytale: The Shadow Falls
+
+= SUMMARY =
+Dense Cloud and Leaks a Lot fight against waves of cannibals. Then a
+cyborg shows up and offers one of the natives goodies in exchange for
+betraying his tribe.
+
+The decision affects the rest of the story. The survival of Dense
+Cloud is important for the gameplay of the next mission.
+
+= GOALS =
+Kill Weaklings and Stronglings.
+
+= FLOW CHART =
+== Linear events ==
+
+- Initial hog spawns: Dense Cloud, Leaks a Lot and Brainiac (Weaklings)
+- Cut scene: startDialogue
+- TBS
+- Brainiac dead
+- Cut scene: weaklingsAnim
+- The remaining Weaklings spawn
+- TBS
+- All Weaklings dead
+- Cut scene: stronglingsAnim: Stronglings spawn, hero walks to forest, meets cyborg, cyborg makes offer
+- The cyborg offer is an IMPORTANT decision, it completely changes the next mission, and the rest of the story
+| Accept: Player walks to cyborg
+    - Cut scene: acceptAnim
+    - Hero needs to walk all the way back (infinite turn time)
+    - Hero reached tree
+    - Turn time starts
+    - TBS
+    - Stronglings defeated
+    | Stronglings defeated with both hogs survived
+        - Cut scene: acceptedSurvivedFinalAnim
+    | Stronglings deafeated with Dense Cloud dead
+        - Cut scene: acceptedDiedFinalAnim
+    > Victory
+| Reject: Player walks away
+    - Cut scene: refusedAnim
+    - Leaks a Lot teleports back to tree at the start (automatically)
+    - Spiky Cheese and Ramon appear together with crates
+    - Spiky Cheese gains control
+    - TBS
+    - Stronglings defeated
+    - Cut scene: refusedFinalAnim
+    > Victory
+| Attack: Player attacks cyborg
+    - Cut scene: attackAnim
+    - Cyborg kills hero
+    - Other native's turn to defeat Stronglings
+    - TBS
+    - Stronglings defeated
+    - Cut scene: attackedFinalAnim
+    > Victory
+
+== Non-linear events ==
+| Dense Cloud or Leaks A Lot dead (exceptions: killed by cyborg; or Leaks A Lot died in the battle against the Stronglings):
+    > Game over
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
@@ -65,7 +128,6 @@ cyborgHidden = false
 leaksHidden = false
 denseHidden = false
 cyborgAttacked = false
-retryReturn = false
 shotgunTaken = false
 grenadeTaken = false
 spikyDead = false
@@ -85,21 +147,26 @@ isHidden = {}
 
 --------------------------Anim skip functions--------------------------
 function AfterRefusedAnim()
+  if stage == loseStage then
+    return
+  end
   SpawnUtilityCrate(2045, 1575, amSwitch)
-  SpawnUtilityCrate(2365, 1495, amShotgun)
-  SpawnUtilityCrate(2495, 1519, amGrenade)
+  SpawnAmmoCrate(2365, 1495, amShotgun)
+  SpawnAmmoCrate(2495, 1519, amGrenade)
   SpawnUtilityCrate(2620, 1524, amRope)
-  ShowMission(loc("The Shadow Falls"), loc("The Showdown"), loc("Save Leaks A Lot!|Hint: The Switch utility might be of help to you."), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("The Showdown"), loc("Save Leaks A Lot!|Hint: The switch hedgehog utility might be of help to you."), 1, 6000)
   RemoveEventFunc(CheckDenseDead)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadRefused, {}, 0)
   AddAmmo(cannibals[6], amGrenade, 1)
   AddAmmo(cannibals[7], amGrenade, 1)
   AddAmmo(cannibals[8], amGrenade, 1)
   AddAmmo(cannibals[9], amGrenade, 1)
+  AddAmmo(dense, amSkip, 100)
+  AddAmmo(leaks, amSkip, 100)
   stage = ramonStage
   SwitchHog(cannibals[9])
   FollowGear(ramon)
-  TurnTimeLeft = 0
+  EndTurn(true)
   SetGearMessage(ramon, 0)
   SetGearMessage(leaks, 0)
   AnimWait(ramon, 1)
@@ -107,6 +174,9 @@ function AfterRefusedAnim()
 end
 
 function SkipRefusedAnim()
+  if stage == loseStage then
+    return
+  end
   RefusedStart()
   AnimSetGearPosition(dense, 2645, 1146)
   AnimSetGearPosition(ramon, 2218, 1675)
@@ -114,13 +184,19 @@ function SkipRefusedAnim()
 end
 
 function AfterStartDialogue()
+  if stage == loseStage then
+    return
+  end
   stage = spyStage
-  ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Defend yourself!|Hint: You can get tips on using weapons by moving your mouse over them in the weapon selection menu"), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
   TurnTimeLeft = TurnTime
 end
 
 
 function StartSkipFunc()
+  if stage == loseStage then
+    return
+  end
   SetState(cannibals[1], 0)
   AnimTurn(leaks, "Right")
   AnimSwitchHog(leaks)
@@ -128,6 +204,9 @@ function StartSkipFunc()
 end
 
 function AfterWeaklingsAnim()
+  if stage == loseStage then
+    return
+  end
   AddAmmo(cannibals[2], amShotgun, 1)
   AddAmmo(cannibals[2], amGrenade, 1)
   AddAmmo(cannibals[3], amShotgun, 1)
@@ -136,8 +215,8 @@ function AfterWeaklingsAnim()
   AddAmmo(cannibals[4], amGrenade, 1)
   AddAmmo(cannibals[5], amShotgun, 1)
   AddAmmo(cannibals[5], amGrenade, 1)
-  AddAmmo(leaks, amSkip, 4)
-  AddAmmo(dense, amSkip, 4)
+  AddAmmo(leaks, amSkip, 100)
+  AddAmmo(dense, amSkip, 100)
   AddEvent(CheckWeaklingsKilled, {}, DoWeaklingsKilled, {}, 0)
   SetHealth(SpawnHealthCrate(2757, 1030), 50)
   SetHealth(SpawnHealthCrate(2899, 1009), 50)
@@ -146,10 +225,13 @@ function AfterWeaklingsAnim()
   SetGearMessage(dense, 0)
   SetGearMessage(leaks, 0)
   TurnTimeLeft = TurnTime
-  ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover..."), 1, 6000)
+  ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover...").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
 end
 
 function SkipWeaklingsAnim()
+  if stage == loseStage then
+    return
+  end
   for i = 2, 5 do
     if isHidden[cannibals[i]] == true then
       RestoreHog(cannibals[i])
@@ -162,6 +244,9 @@ function SkipWeaklingsAnim()
 end
 
 function AfterStronglingsAnim()
+  if stage == loseStage then
+    return
+  end
   stage = cyborgStage
   ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 1, 8000)
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
@@ -174,10 +259,13 @@ function AfterStronglingsAnim()
   AddAmmo(leaks, amSkip, 0)
   SetHealth(SpawnHealthCrate(2557, 1030), 50)
   SetHealth(SpawnHealthCrate(3599, 1009), 50)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function SkipStronglingsAnim()
+  if stage == loseStage then
+    return
+  end
   for i = 6, 9 do
     if isHidden[cannibals[i]] == true then
       RestoreHog(cannibals[i])
@@ -200,28 +288,17 @@ function SkipStronglingsAnim()
   SetInputMask(0xFFFFFFFF)
 end
 
-function RestartReturnAccepted()
-  retryReturn = false
-  AnimSetGearPosition(dense, 1350, 1310)
-  AddAmmo(dense, amGirder, 2)
-  AddAmmo(dense, amParachute, 2)
-  ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
-  RemoveEventFunc(CheckNeedGirder)
-  RemoveEventFunc(CheckNeedWeapons)
-  AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
-  AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
-end
-
-
 function AfterAcceptedAnim()
+  if stage == loseStage then
+    return
+  end
   stage = acceptedReturnStage
-  SpawnAmmoCrate(1370, 810, amGirder)
-  SpawnAmmoCrate(1300, 810, amParachute)
-  ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
-  AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
+  SpawnUtilityCrate(1370, 810, amGirder)
+  SpawnUtilityCrate(1300, 810, amParachute)
+  ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot!"), 1, 6000)
+  AddEvent(CheckReadyForStronglings, {}, DoReadyForStronglings, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
   AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
-  AddEvent(CheckRestartReturnAccepted, {}, RestartReturnAccepted, {}, 1)
   RemoveEventFunc(CheckDenseDead)
   SwitchHog(dense)
   AnimWait(dense, 1)
@@ -229,6 +306,9 @@ function AfterAcceptedAnim()
 end
 
 function SkipAcceptedAnim()
+  if stage == loseStage then
+    return
+  end
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(dense)
@@ -236,6 +316,9 @@ function SkipAcceptedAnim()
 end
 
 function AfterAttackedAnim()
+  if stage == loseStage then
+    return
+  end
   stage = aloneStage
   ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(cannibals[6], amGrenade, 1)
@@ -259,6 +342,9 @@ function AfterAttackedAnim()
 end
 
 function SkipAttackedAnim()
+  if stage == loseStage then
+    return
+  end
   if denseDead == false then
     DeleteGear(dense)
   end
@@ -284,6 +370,9 @@ function SpawnCrates()
 end
 
 function EmitDenseClouds(anim, dir)
+  if stage == loseStage then
+    return
+  end
   local dif
   if dir == "Left" then 
     dif = 10
@@ -301,6 +390,9 @@ function EmitDenseClouds(anim, dir)
 end
 
 function BlowDenseCloud()
+  if stage == loseStage then
+    return
+  end
   AnimInsertStepNext({func = DeleteGear, args = {dense}, swh = false}) 
   AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense), GetY(dense), vgtBigExplosion, 0, true}, swh = false})
   AnimInsertStepNext({func = AnimWait, args = {dense, 1200}})
@@ -497,6 +589,9 @@ end
 
 
 function RefusedStart()
+  if stage == loseStage then
+    return
+  end
   if ramonHidden == true then
     RestoreHog(ramon)
     ramonHidden = false
@@ -519,7 +614,7 @@ function AddHogs()
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   spiky = AddHog(loc("Spiky Cheese"), 0, 100, "hair_yellow")
 
-  AddTeam(loc("Weaklings"), 14483456, "Skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Weaklings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
@@ -528,14 +623,14 @@ function AddHogs()
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("Stronglings"), 14483456, "Skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Stronglings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
 
   for i = 6, 9 do
     cannibals[i] = AddHog(HogNames[i], 2, 30, "vampirichog")
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
 end
 
@@ -568,13 +663,18 @@ function VisiblizeHogs()
 end
 
 function CondNeedToTurn(hog1, hog2)
+  if stage == loseStage then
+    return
+  end
   xl, xd = GetX(hog1), GetX(hog2)
-  if xl > xd then
-    AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
-    AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
-  elseif xl < xd then
-    AnimInsertStepNext({func = AnimTurn, args = {hog2, "Left"}})
-    AnimInsertStepNext({func = AnimTurn, args = {hog1, "Right"}})
+  if xl and xd then
+    if xl > xd then
+      AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
+      AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
+    elseif xl < xd then
+      AnimInsertStepNext({func = AnimTurn, args = {hog2, "Left"}})
+      AnimInsertStepNext({func = AnimTurn, args = {hog1, "Right"}})
+    end
   end
 end
 
@@ -592,6 +692,9 @@ function HideHogs()
 end
 
 function HideStronglings()
+  if stage == loseStage then
+    return
+  end
   for i = 6, 9 do
     HideHog(cannibals[i])
     isHidden[cannibals[i]] = true
@@ -599,6 +702,9 @@ function HideStronglings()
 end
 
 function UnHideWeaklings()
+  if stage == loseStage then
+    return
+  end
   for i = 2, 5 do
     RestoreHog(cannibals[i])
     isHidden[cannibals[i]] = false
@@ -607,6 +713,9 @@ function UnHideWeaklings()
 end
 
 function UnHideStronglings()
+  if stage == loseStage then
+    return
+  end
   for i = 6, 9 do
     RestoreHog(cannibals[i])
     isHidden[cannibals[i]] = false
@@ -618,6 +727,9 @@ function UnHideStronglings()
 end
 
 function ChoiceTaken()
+  if stage == loseStage then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   if choice == choiceAccept then
     AddAnim(acceptedAnim)
@@ -632,9 +744,12 @@ function ChoiceTaken()
 end
 
 function KillCyborg()
+  if stage == loseStage then
+    return
+  end
   RestoreHog(cyborg)
   DeleteGear(cyborg)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 -----------------------------Events------------------------------------
 
@@ -643,7 +758,10 @@ function CheckBrainiacDead()
 end
 
 function DoBrainiacDead()
-  TurnTimeLeft = 0
+  if stage == loseStage then
+    return
+  end
+  EndTurn(true)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(weaklingsAnim)
   AddFunction({func = AfterWeaklingsAnim, args = {}})
@@ -660,6 +778,12 @@ function CheckWeaklingsKilled()
 end
 
 function DoWeaklingsKilled()
+  if stage == loseStage then
+    return
+  end
+  if denseDead or GetHealth(dense) == 0 or leaksDead or GetHealth(leaks) == 0 then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
@@ -672,6 +796,9 @@ function CheckRefuse()
 end
 
 function DoRefuse()
+  if stage == loseStage then
+    return
+  end
   choice = choiceRefuse
 end
 
@@ -680,6 +807,9 @@ function CheckAccept()
 end
 
 function DoAccept()
+  if stage == loseStage then
+    return
+  end
   choice = choiceAccept
 end
 
@@ -688,6 +818,9 @@ function CheckConfront()
 end
 
 function DoConfront()
+  if stage == loseStage then
+    return
+  end
   choice = choiceAttack
 end
 
@@ -696,6 +829,9 @@ function CheckChoice()
 end
 
 function DoChoice()
+  if stage == loseStage then
+    return
+  end
   RemoveEventFunc(CheckConfront)
   RemoveEventFunc(CheckAccept)
   RemoveEventFunc(CheckRefuse)
@@ -703,29 +839,47 @@ function DoChoice()
 end
 
 function CheckNeedGirder()
+  if stage == loseStage then
+    return false
+  end
   return GetX(dense) > 1640 and StoppedGear(dense)
 end
 
 function DoNeedGirder()
-  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
+  if stage == loseStage then
+    return
+  end
+  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
 end
 
 function CheckNeedWeapons()
+  if stage == loseStage then
+    return false
+  end
   return GetX(dense) > 2522 and StoppedGear(dense)
 end
 
 function DoNeedWeapons()
+  if stage == loseStage then
+    return
+  end
   grenadeCrate = SpawnAmmoCrate(2550, 800, amGrenade)
   shotgunCrate = SpawnAmmoCrate(2610, 850, amShotgun)
   AddCaption(loc("A little gift from the cyborgs"))
 end
 
-function CheckTookWeapons()
-  return shotgunTaken and grenadeTaken
+function CheckReadyForStronglings()
+  if stage == loseStage then
+    return false
+  end
+  return (shotgunTaken and grenadeTaken) or GetX(dense) > 2700
 end
 
-function DoTookWeapons()
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
+function DoReadyForStronglings()
+  if stage == loseStage then
+    return
+  end
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)
@@ -733,7 +887,6 @@ function DoTookWeapons()
   stage = duoStage
   RemoveEventFunc(CheckNeedGirder)
   RemoveEventFunc(CheckNeedWeapons)
-  RemoveEventFunc(CheckRestartReturnAccepted)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDead, {}, 0)
   AddAmmo(cannibals[6], amGrenade, 2)
   AddAmmo(cannibals[6], amShotgun, 2)
@@ -749,6 +902,12 @@ function DoTookWeapons()
 end
 
 function DoStronglingsDead()
+  if stage == loseStage then
+    return
+  end
+  if leaksDead or GetHealth(leaks) == 0 then
+    return
+  end
   SetGearMessage(CurrentHedgehog, 0)
   if denseDead == true then
     AddAnim(acceptedDiedFinalAnim)
@@ -768,6 +927,9 @@ function DoStronglingsDead()
 end
 
 function DoStronglingsDeadRefused()
+  if stage == loseStage then
+    return
+  end
   if denseDead == true then
     SaveCampaignVar("M2DenseDead", "1")
   else
@@ -792,6 +954,9 @@ function DoStronglingsDeadRefused()
 end
 
 function DoStronglingsDeadAttacked()
+  if stage == loseStage then
+    return
+  end
   SaveCampaignVar("M2DenseDead", "1")
   SaveCampaignVar("M2RamonDead", "0")
   SaveCampaignVar("M2SpikyDead", "0")
@@ -820,18 +985,16 @@ function CheckLeaksDead()
 end
 
 function DoDead()
+  if stage == loseStage then
+    return
+  end
   AddCaption(loc("...and so the cyborgs took over the world..."))
   stage = loseStage
-  TurnTimeLeft = 0
   DismissTeam(loc("Natives"))
 end
 
 function CheckDenseDead()
   return denseDead and choice ~= choiceAttack 
-end
-
-function CheckRestartReturnAccepted()
-  return retryReturn
 end
 
 -----------------------------Main Functions----------------------------
@@ -847,7 +1010,9 @@ function onGameInit()
 	Delay = 10 
 	Map = "A_Classic_Fairytale_shadow"
 	Theme = "Nature"
-    SuddenDeathTurns = 3000
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 
   AddHogs()
   PlaceHogs()
@@ -926,17 +1091,15 @@ function onAmmoStoreInit()
   SetAmmo(amShotgun, 0, 0, 0, 3)
   SetAmmo(amSwitch, 0, 0, 0, 8)
   SetAmmo(amRope, 0, 0, 0, 6)
+  SetAmmo(amSkip, 9, 0, 0, 0)
 end
 
 function onNewTurn()
   if AnimInProgress() then
     TurnTimeLeft = -1
---  elseif stage == interSpyStage and GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
---    TurnTimeLeft = 0
---    SetState(CurrentHedgehog, gstInvisible)
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
-      TurnTimeLeft = 0
+      EndTurn(true)
     else
       TurnTimeLeft = -1
     end
@@ -957,13 +1120,6 @@ function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
     return
-  end
-  if stage == acceptedReturnStage then
-    retryReturn = true
---  else
---    for i = 1, 9 do
---      DeleteGear(cannibals[i])
---    end
   end
 end
 

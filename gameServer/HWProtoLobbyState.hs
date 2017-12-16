@@ -83,7 +83,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
     let clTeams =
-            if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) then
+            if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) && isRegistered cl then
                 filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
                 else
                 []
@@ -95,7 +95,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning $ loc "Room version incompatible to your hedgewars version"]
             else if isRestrictedJoins jRoom && not (hasSuperPower cl) then
             [Warning $ loc "Joining restricted"]
-            else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) && not (isAdministrator cl) then
+            else if isRegisteredOnly jRoom && (not $ isRegistered cl) && not (isAdministrator cl) then
             [Warning $ loc "Registered users only"]
             else if isBanned then
             [Warning $ loc "You are banned in this room"]

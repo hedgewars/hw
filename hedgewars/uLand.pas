@@ -53,7 +53,7 @@ var tmpsurf: PSDL_Surface;
     x, yd, yu: LongInt;
     targetMask: Word;
 begin
-    tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifTransparent);
+    tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifColorKey);
 
     // if mask only, all land gets filled with landtex and therefore needs borders
     if maskOnly then
@@ -165,6 +165,96 @@ begin
                 end
 end;
 
+procedure ColorizeLandFast(mapsurf: PSDL_Surface);
+var ltexsurf: PSDL_Surface;
+    i: LongInt;
+    ltlnp, srcp, dstp, stopp: Pointer;
+    c: SizeInt;
+begin
+    ltexsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
+
+    // pointer to current line of ltexsurf pixels. will be moved from line to line
+    ltlnp:= ltexsurf^.pixels;
+    // pointer to mapsurf pixels. will jump forward after every move()
+    dstp:= mapsurf^.pixels;
+
+    // time to get serious
+    SDL_LockSurface(mapsurf);
+    SDL_LockSurface(ltexsurf);
+
+    // for now only fill a row with the height of landtex. do vertical copies within mapsurf after
+
+    // do this loop for each line of ltexsurf (unless we run out of map height first)
+    for i:= 1 to min(ltexsurf^.h, mapsurf^.h) do
+        begin
+        // amount of pixels to write in first move()
+        c:= ltexsurf^.pitch;
+
+        // protect from odd cases where landtex wider than map
+        if c > mapsurf^.pitch then
+            c:= mapsurf^.pitch;
+
+        // write line of landtex to mapsurf
+        move(ltlnp^, dstp^, c);
+
+        // fill the rest of the line by copying left-to-right until full
+
+        // new src is start of line that we've just written to
+        srcp:= dstp;
+        // set stop pointer to start of next pixel line of mapsurf
+        stopp:= dstp + mapsurf^.pitch;
+        // move dst pointer to after what we've just written
+        inc(dstp, c);
+
+        // loop until dstp went past end of line
+        while dstp < stopp do
+            begin
+            // copy all from left of dstp to right of it (or just fill the gap if smaller)
+            c:= min(dstp-srcp, stopp-dstp);
+            move(srcp^, dstp^, c);
+            inc(dstp, c);
+            end;
+
+        // move to next line in ltexsurf
+        inc(ltlnp, ltexsurf^.pitch);
+        end;
+
+    // we don't need ltexsurf itself anymore -> cleanup
+    ltlnp:= nil;
+    SDL_UnlockSurface(ltexsurf);
+    SDL_FreeSurface(ltexsurf);
+    ltexsurf:= nil;
+
+    // from now on only copy pixels within mapsurf
+
+    // copy all the already written lines at once for that get number of written bytes so far
+    // already written pixels are between start and current dstp
+    srcp:= mapsurf^.pixels;
+
+    // first byte after end of pixels
+    stopp:= srcp + (mapsurf^.pitch * mapsurf^.h);
+
+    while dstp < stopp do
+        begin
+        // copy all from before dstp to after (or just fill the gap if smaller)
+        c:= min(dstp-srcp, stopp-dstp);
+        // worried about size of c with humongous maps? don't be:
+        //  the OS wouldn't have allowed allocation of object with size > max of SizeInt anyway
+        move(srcp^, dstp^, c);
+        inc(dstp, c);
+        end;
+
+    // cleanup
+    srcp:= nil;
+    dstp:= nil;
+    stopp:= nil;
+    SDL_UnlockSurface(mapsurf);
+
+    // freed in freeModule() below
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifColorKey);
+    if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
+end;
+
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
@@ -188,7 +278,7 @@ begin
     SDL_FreeSurface(tmpsurf);
 
     // freed in freeModule() below
-    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifColorKey);
     if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
 end;
 
@@ -277,7 +367,7 @@ begin
     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, AMask);
 
     if checkFails(tmpsurf <> nil, 'Error creating pre-land surface', true) then exit;
-    ColorizeLand(tmpsurf);
+    ColorizeLandFast(tmpsurf);
     if gameFlags and gfShoppaBorder = 0 then DrawBorderFromImage(tmpsurf);
     AddOnLandObjects(tmpsurf);
 
@@ -454,11 +544,11 @@ for i := 0 to ClansCount - 1 do
     if mirror then
         begin
         // not critical because if no R we can fallback to mirrored L
-        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'R', ifAlpha or ifColorKey or ifIgnoreCaps);
         // fallback
         if tmpsurf = nil then
             begin
-            tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+            tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifColorKey or ifIgnoreCaps);
             BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
             end
         else
@@ -467,7 +557,7 @@ for i := 0 to ClansCount - 1 do
         end
     else
         begin
-        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+        tmpsurf:= LoadDataImage(ptForts, SpawnClansArray[i]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifColorKey or ifIgnoreCaps);
         BlitImageAndGenerateCollisionInfo(leftX + sectionWidth * i + ((sectionWidth - tmpsurf^.w) div 2), LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
         SDL_FreeSurface(tmpsurf);
         end;
@@ -507,11 +597,11 @@ var tmpsurf: PSDL_Surface;
     x, y, cpX, cpY: Longword;
     mapName: shortstring;
 begin
-tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifColorKey or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(cPathz[ptMapCurrent]);
-    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifColorKey or ifIgnoreCaps);
     end;
 
 
@@ -549,7 +639,7 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
         if not disableLandBack then
             begin
             // freed in freeModule() below
-            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+            LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifColorKey);
             if (LandBackSurface <> nil) and GrayScale then
                 Surface2GrayScale(LandBackSurface)
             end;
@@ -566,11 +656,11 @@ var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifColorKey or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(cPathz[ptMapCurrent]);
-    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifColorKey or ifIgnoreCaps);
     if not allOK then exit;
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
@@ -599,26 +689,27 @@ if allOK then LoadMask;
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
-var x, w, c: Longword;
+var x, w, c, y: Longword;
 begin
 for w:= 0 to 23 do
     for x:= leftX to rightX do
         begin
-        Land[Longword(cWaterLine) - 1 - w, x]:= lfIndestructible;
-        if (x + w) mod 32 < 16 then
+        y:= Longword(cWaterLine) - 1 - w;
+        Land[y, x]:= lfIndestructible;
+        if (x + y) mod 32 < 16 then
             c:= AMask
         else
             c:= AMask or RMask or GMask; // FF00FFFF
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[Longword(cWaterLine) - 1 - w, x]:= c
+            LandPixels[y, x]:= c
         else
-            LandPixels[(Longword(cWaterLine) - 1 - w) div 2, x div 2]:= c
+            LandPixels[y div 2, x div 2]:= c
         end
 end;
 
 procedure GenMap;
-var x, y, w, c: Longword;
+var x, y, w, c, c2: Longword;
     map, mask: shortstring;
 begin
     hasBorder:= false;
@@ -630,36 +721,33 @@ begin
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
 
-    if (GameFlags and gfForts) = 0 then
-        if cPathz[ptMapCurrent] <> '' then
+    if cPathz[ptMapCurrent] <> '' then
+        begin
+        map:= cPathz[ptMapCurrent] + '/map.png';
+        mask:= cPathz[ptMapCurrent] + '/mask.png';
+        if (not(pfsExists(map)) and pfsExists(mask)) then
             begin
-            map:= cPathz[ptMapCurrent] + '/map.png';
-            mask:= cPathz[ptMapCurrent] + '/mask.png';
-            if (not(pfsExists(map)) and pfsExists(mask)) then
-                begin
-                maskOnly:= true;
-                LoadMask;
-                GenLandSurface
-                end
-            else LoadMap;
+            maskOnly:= true;
+            LoadMask;
+            GenLandSurface
             end
-        else
-            begin
-            WriteLnToConsole('Generating land...');
-            case cMapGen of
-                mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
-                mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
-                mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-                mgDrawn : GenDrawnMap;
-                mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
-            else
-                OutError('Unknown mapgen', true);
-            end;
-            if cMapGen <> mgForts then
-                GenLandSurface
-            end
+        else LoadMap;
+        end
     else
-        MakeFortsMap;
+        begin
+        WriteLnToConsole('Generating land...');
+        case cMapGen of
+            mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+            mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
+            mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
+            mgDrawn : GenDrawnMap;
+            mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
+        else
+            OutError('Unknown mapgen', true);
+        end;
+        if cMapGen <> mgForts then
+            GenLandSurface
+        end;
 
     AddProgress;
 
@@ -704,20 +792,24 @@ if hasBorder then
                     begin
                     Land[y, leftX + w]:= lfIndestructible;
                     Land[y, rightX - w]:= lfIndestructible;
-                    if (y + w) mod 32 < 16 then
+                    if (y + leftX + w) mod 32 < 16 then
                         c:= AMask
                     else
                         c:= AMask or RMask or GMask; // FF00FFFF
+                    if (y + rightX - w) mod 32 < 16 then
+                        c2:= AMask
+                    else
+                        c2:= AMask or RMask or GMask; // FF00FFFF
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         begin
                         LandPixels[y, leftX + w]:= c;
-                        LandPixels[y, rightX - w]:= c;
+                        LandPixels[y, rightX - w]:= c2;
                         end
                     else
                         begin
                         LandPixels[y div 2, (leftX + w) div 2]:= c;
-                        LandPixels[y div 2, (rightX - w) div 2]:= c;
+                        LandPixels[y div 2, (rightX - w) div 2]:= c2;
                         end;
                     end;
 
@@ -886,16 +978,15 @@ begin
     if digest = '' then
         digest:= s
     else
-        checkFails(s = digest, 'Different maps generated, sorry', true);
+        checkFails(s = digest, 'Different map or critical resources loaded, sorry', true);
 end;
 
 procedure chSendLandDigest(var s: shortstring);
-var adler, i: LongInt;
+var i: LongInt;
 begin
-    adler:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
-        adler:= Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-    s:= 'M' + IntToStr(adler) + cScriptName;
+        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @Land[i,0], LAND_WIDTH*2);
+    s:= 'M' + IntToStr(syncedPixelDigest); // + cScriptName; script name is no longer needed. scripts are hashed
 
     ScriptSetString('LandDigest', s);
 

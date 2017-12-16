@@ -42,7 +42,7 @@
 00:39=Disco volador
 00:40=Cóctel Molotov
 
-01:00=Á loita!
+; 01:00=Loading …
 01:01=Empate
 01:02=%1 gaña!
 01:03=Volume %1%
@@ -143,11 +143,11 @@
 02:02=Espetádeos contra o chan!
 02:02=Ourizada!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 gaña!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Empate
 
 ; New health crate
 02:05=Haberá aspirinas?

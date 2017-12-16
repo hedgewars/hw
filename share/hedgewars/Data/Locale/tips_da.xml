@@ -51,7 +51,4 @@
     <tip>Du kan finde konfigurationsfilerne til Hedgewars under mappen ".hedgewars" i din hjemmemappe. Opret gerne en back-up eller tag filerne med dig, men lad være med selv at ændre i dem.</tip>
     <tip>Brug en Molotovcocktail eller Flammekasteren til midlertidigt at forhindre pindsvin i at passere et område, f.eks. en tunnel eller platform.</tip>
     <tip>Den Målsøgende Bi kan være svær at bruge. Den vender lettere hvis den ikke flyver alt for hurtigt, så prøv at spare på kraften når du affyrer den.</tip>
-    <windows-only>
-        <tip>Windows-versionen af Hedgewars understøtter integrering med Xfire. Husk at tilføje Hedgewars til din liste med spil så dine venner kan se hvornår du spiller.</tip>
-    </windows-only>
 </tips>

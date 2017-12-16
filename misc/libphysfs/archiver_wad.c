@@ -1,7 +1,7 @@
 /*
  * WAD support routines for PhysicsFS.
  *
- * This driver handles DOOM engine archives ("wads").
+ * This driver handles DOOM engine archives ("wads"). 
  * This format (but not this driver) was designed by id Software for use
  *  with the DOOM engine.
  * The specs of the format are from the unofficial doom specs v1.666
@@ -28,7 +28,7 @@
  *    (c) an 8-byte ASCII string, the name of the lump, padded with zeros.
  *        For example, the "DEMO1" entry in hexadecimal would be
  *        (44 45 4D 4F 31 00 00 00)
- *
+ * 
  * Note that there is no way to tell if an opened WAD archive is a
  *  IWAD or PWAD with this archiver.
  * I couldn't think of a way to provide that information, without being too
@@ -104,24 +104,26 @@ static void *WAD_openArchive(PHYSFS_Io *io, const char *name, int forWriting)
 
 const PHYSFS_Archiver __PHYSFS_Archiver_WAD =
 {
+    CURRENT_PHYSFS_ARCHIVER_API_VERSION,
     {
         "WAD",
         "DOOM engine format",
         "Travis Wells <traviswells@mchsi.com>",
         "http://www.3dmm2.com/doom/",
+        0,  /* supportsSymlinks */
     },
-    WAD_openArchive,        /* openArchive() method    */
-    UNPK_enumerateFiles,     /* enumerateFiles() method */
-    UNPK_openRead,           /* openRead() method       */
-    UNPK_openWrite,          /* openWrite() method      */
-    UNPK_openAppend,         /* openAppend() method     */
-    UNPK_remove,             /* remove() method         */
-    UNPK_mkdir,              /* mkdir() method          */
-    UNPK_closeArchive,       /* closeArchive() method   */
-    UNPK_stat                /* stat() method           */
+    WAD_openArchive,
+    UNPK_enumerateFiles,
+    UNPK_openRead,
+    UNPK_openWrite,
+    UNPK_openAppend,
+    UNPK_remove,
+    UNPK_mkdir,
+    UNPK_stat,
+    UNPK_closeArchive
 };
 
 #endif  /* defined PHYSFS_SUPPORTS_WAD */
 
-/* end of wad.c ... */
+/* end of archiver_wad.c ... */
 

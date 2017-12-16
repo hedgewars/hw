@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png</file>
+        <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos_base.png</file>
         <file>res/css/qt.css</file>
         <file>res/css/chat.css</file>
         <file>res/css/christmas.css</file>
@@ -85,12 +85,20 @@
         <file>res/delete.png</file>
         <file>res/checked.png</file>
         <file>res/unchecked.png</file>
+        <file>res/missionFinished.png</file>
+        <file>res/missionFinishedSelected.png</file>
+        <file>res/dlcMarker.png</file>
+        <file>res/dlcMarkerSelected.png</file>
         <file>res/graphicsicon.png</file>
+        <file>res/frontendicon.png</file>
+        <file>res/folder.png</file>
         <file>res/miscicon.png</file>
         <file>res/Load.png</file>
         <file>res/Save.png</file>
         <file>res/Record.png</file>
         <file>res/Videos.png</file>
+        <file>res/Palette.png</file>
+        <file>res/schemeicon.png</file>
         <file>res/weaponsicon.png</file>
         <file>res/teamicon.png</file>
         <file>res/panelbg.png</file>
@@ -101,7 +109,6 @@
         <file>res/PlaySound.png</file>
         <file>res/hh_small.png</file>
         <file>res/btnDisabled.png</file>
-        <file>res/btnForts@2x.png</file>
         <file>res/btnBorder@2x.png</file>
         <file>res/btnInvulnerable@2x.png</file>
         <file>res/btnLaserSight@2x.png</file>
@@ -127,6 +134,7 @@
         <file>res/btnTagTeam@2x.png</file>
         <file>res/btnBottomBorder@2x.png</file>
         <file>res/iconBox.png</file>
+        <file>res/iconInitHealth.png</file>
         <file>res/iconHealth.png</file>
         <file>res/iconHealthPercent.png</file>
         <file>res/iconSuddenDeath.png</file>
@@ -148,6 +156,7 @@
         <file>res/iconScript.png</file>
         <file>res/dice.png</file>
         <file>res/Star.png</file>
+        <file>res/home.png</file>
         <file>res/inverse-corner-bl.png</file>
         <file>res/Flake.png</file>
         <file>res/Egg.png</file>

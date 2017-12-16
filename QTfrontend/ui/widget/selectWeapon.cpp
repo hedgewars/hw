@@ -189,11 +189,19 @@ void SelWeaponWidget::setDefault()
     setWeapons(*cDefaultAmmoStore);
 }
 
+//Save current weapons set.
 void SelWeaponWidget::save()
 {
+    //The save() function is called by ANY change of the combo box.
+    //If an entry is deleted, this code would just re-add the deleted
+    //item. We use isDeleted to check if we are currently deleting to
+    //prevent this.
+    if (isDeleting)
+        return;
     // TODO make this return if success or not, so that the page can react
     // properly and not goBack if saving failed
-    if (m_name->text() == "") return;
+    if (m_name->text() == "")
+        return;
 
     QString state1;
     QString state2;
@@ -218,12 +226,15 @@ void SelWeaponWidget::save()
 
     for(int i = 0; i < cDefaultAmmos.size(); i++)
     {
-        if (cDefaultAmmos[i].first.compare(m_name->text()) == 0)
+        // Don't allow same name as default weapon set, even case-insensitively.
+        // This prevents some problems with saving/loading.
+        if (cDefaultAmmos[i].first.toLower().compare(m_name->text().toLower()) == 0)
         {
             // don't show warning if no change
             if (cDefaultAmmos[i].second.compare(stateFull) == 0)
                 return;
 
+            m_name->setText(curWeaponsName);
             QMessageBox deniedMsg(this);
             deniedMsg.setIcon(QMessageBox::Warning);
             deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
@@ -240,7 +251,7 @@ void SelWeaponWidget::save()
         wconf->remove(curWeaponsName);
     }
     wconf->setValue(m_name->text(), stateFull);
-    emit weaponsChanged();
+    emit weaponsEdited(curWeaponsName, m_name->text(), stateFull);
 }
 
 int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
@@ -256,10 +267,11 @@ QString SelWeaponWidget::getWeaponsString(const QString& name) const
 
 void SelWeaponWidget::deleteWeaponsName()
 {
-    if (curWeaponsName == "") return;
+    QString delWeaponsName = curWeaponsName;
+    if (delWeaponsName == "") return;
 
     for(int i = 0; i < cDefaultAmmos.size(); i++)
-        if (!cDefaultAmmos[i].first.compare(m_name->text()))
+        if (!cDefaultAmmos[i].first.compare(delWeaponsName))
         {
             QMessageBox deniedMsg(this);
             deniedMsg.setIcon(QMessageBox::Warning);
@@ -273,19 +285,21 @@ void SelWeaponWidget::deleteWeaponsName()
     QMessageBox reallyDeleteMsg(this);
     reallyDeleteMsg.setIcon(QMessageBox::Question);
     reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Weapons - Are you sure?"));
-    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the weapon set '%1'?").arg(curWeaponsName));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the weapon set '%1'?").arg(delWeaponsName));
     reallyDeleteMsg.setWindowModality(Qt::WindowModal);
     reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
     if (reallyDeleteMsg.exec() == QMessageBox::Ok)
     {
-        wconf->remove(curWeaponsName);
-        emit weaponsDeleted();
+        isDeleting = true;
+        wconf->remove(delWeaponsName);
+        emit weaponsDeleted(delWeaponsName);
     }
 }
 
 void SelWeaponWidget::newWeaponsName()
 {
+    save();
     QString newName = tr("New");
     if(wconf->contains(newName))
     {
@@ -294,6 +308,8 @@ void SelWeaponWidget::newWeaponsName()
         while(wconf->contains(newName = tr("New (%1)").arg(i++))) ;
     }
     setWeaponsName(newName);
+    wconf->setValue(newName, *cEmptyAmmoStore);
+    emit weaponsAdded(newName, *cEmptyAmmoStore);
 }
 
 void SelWeaponWidget::setWeaponsName(const QString& name)
@@ -312,6 +328,13 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
     }
 }
 
+void SelWeaponWidget::switchWeapons(const QString& name)
+{
+    // Rescue old weapons set, then select new one
+    save();
+    setWeaponsName(name);
+}
+
 QStringList SelWeaponWidget::getWeaponNames() const
 {
     return wconf->allKeys();
@@ -319,6 +342,7 @@ QStringList SelWeaponWidget::getWeaponNames() const
 
 void SelWeaponWidget::copy()
 {
+    save();
     if(wconf->contains(curWeaponsName))
     {
         QString ammo = getWeaponsString(curWeaponsName);
@@ -327,10 +351,12 @@ void SelWeaponWidget::copy()
         {
             //name already used -> look for an appropriate name:
             int i=2;
-            while(wconf->contains(newName = tr("Copy of %1 (%2)").arg(curWeaponsName, i++)));
+            while(wconf->contains(newName = tr("Copy of %1 (%2)").arg(curWeaponsName).arg(i++)));
         }
         setWeaponsName(newName);
         setWeapons(ammo);
+        wconf->setValue(newName, ammo);
+        emit weaponsAdded(newName, ammo);
     }
 }
 
@@ -351,4 +377,14 @@ QString SelWeaponWidget::fixWeaponSet(const QString &s)
         sl[i] = sl[i].leftJustified(neededLength, '0', true);
 
     return sl.join(QString());
+}
+
+void SelWeaponWidget::deletionDone()
+{
+    isDeleting = false;
+}
+
+void SelWeaponWidget::init()
+{
+    isDeleting = false;
 }

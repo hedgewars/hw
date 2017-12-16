@@ -42,6 +42,7 @@ function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
 function  EnumToStr(const en : TMapGen) : shortstring; overload;
+function  EnumToStr(const en : TWorldEdge) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  MinD(a, b: double) : double; inline;
@@ -75,6 +76,8 @@ function  CheckNoTeamOrHH: boolean; inline;
 
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+
+function CalcWorldWrap(X, radius: LongInt): LongInt;
 
 function read1stLn(filePath: shortstring): shortstring;
 function readValueFromINI(key, filePath: shortstring): shortstring;
@@ -294,6 +297,11 @@ end;
 function EnumToStr(const en: TMapGen) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TMapGen), ord(en))
+end;
+
+function EnumToStr(const en: TWorldEdge) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TWorldEdge), ord(en))
 end;
 
 
@@ -530,6 +538,7 @@ end;
 
 function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 begin
+at:= at; dir:= dir; angle:= angle; // parameter hint suppression because code below is currently disabled
 GetLaunchX:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
@@ -540,12 +549,38 @@ end;
 
 function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 begin
+at:= at; angle:= angle; // parameter hint suppression because code below is currently disabled
 GetLaunchY:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
         GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
     else
         GetLaunchY:= 0*)
+end;
+
+// Takes an X coordinate and corrects if according to the world edge rules
+// Wrap-around: X will be wrapped
+// Bouncy: X will be kept inside the legal land (taking radius into account)
+// Other world edges: Just returns X
+// radius is a radius (gear radius) tolerance for an appropriate distance from bouncy world edges.
+// Set radius to 0 if you don't care.
+function CalcWorldWrap(X, radius: LongInt): LongInt;
+begin
+    if WorldEdge = weWrap then
+        begin
+        if X < leftX then
+             X:= X + (rightX - leftX)
+        else if X > rightX then
+             X:= X - (rightX - leftX);
+        end
+    else if WorldEdge = weBounce then
+        begin
+        if (X + radius) < leftX then
+            X:= leftX + radius
+        else if (X - radius) > rightX then
+            X:= rightX - radius;
+        end;
+    CalcWorldWrap:= X;
 end;
 
 function CheckNoTeamOrHH: boolean;

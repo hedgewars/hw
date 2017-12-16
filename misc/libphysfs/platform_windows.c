@@ -10,6 +10,7 @@
 #include "physfs_platforms.h"
 
 #ifdef PHYSFS_PLATFORM_WINDOWS
+#ifndef PHYSFS_PLATFORM_WINRT
 
 /* Forcibly disable UNICODE macro, since we manage this ourselves. */
 #ifdef UNICODE
@@ -124,13 +125,13 @@ static PHYSFS_ErrorCode errcodeFromWinApiError(const DWORD err)
         case ERROR_INVALID_NAME: return PHYSFS_ERR_BAD_FILENAME;
         case ERROR_BAD_PATHNAME: return PHYSFS_ERR_BAD_FILENAME;
         case ERROR_DIRECTORY: return PHYSFS_ERR_BAD_FILENAME;
-        case ERROR_FILE_NOT_FOUND: return PHYSFS_ERR_NO_SUCH_PATH;
-        case ERROR_PATH_NOT_FOUND: return PHYSFS_ERR_NO_SUCH_PATH;
-        case ERROR_DELETE_PENDING: return PHYSFS_ERR_NO_SUCH_PATH;
-        case ERROR_INVALID_DRIVE: return PHYSFS_ERR_NO_SUCH_PATH;
+        case ERROR_FILE_NOT_FOUND: return PHYSFS_ERR_NOT_FOUND;
+        case ERROR_PATH_NOT_FOUND: return PHYSFS_ERR_NOT_FOUND;
+        case ERROR_DELETE_PENDING: return PHYSFS_ERR_NOT_FOUND;
+        case ERROR_INVALID_DRIVE: return PHYSFS_ERR_NOT_FOUND;
         case ERROR_HANDLE_DISK_FULL: return PHYSFS_ERR_NO_SPACE;
         case ERROR_DISK_FULL: return PHYSFS_ERR_NO_SPACE;
-        /* !!! FIXME: ?? case ENOTDIR: return PHYSFS_ERR_NO_SUCH_PATH; */
+        /* !!! FIXME: ?? case ENOTDIR: return PHYSFS_ERR_NOT_FOUND; */
         /* !!! FIXME: ?? case EISDIR: return PHYSFS_ERR_NOT_A_FILE; */
         case ERROR_WRITE_PROTECT: return PHYSFS_ERR_READ_ONLY;
         case ERROR_LOCK_VIOLATION: return PHYSFS_ERR_BUSY;
@@ -171,7 +172,7 @@ static DWORD pollDiscDrives(void)
         stem(SEM_FAILCRITICALERRORS, &oldErrorMode);
     else
         oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-
+    
     /* Do detection. This may block if a disc is spinning up. */
     for (i = 'A'; i <= 'Z'; i++)
     {
@@ -369,7 +370,7 @@ char *__PHYSFS_platformCalcBaseDir(const char *argv0)
         } /* while */
 
         if ((ptr == modpath) && (*ptr != '\\'))
-            __PHYSFS_setError(PHYSFS_ERR_OTHER_ERROR);  /* oh well. */
+            PHYSFS_setErrorCode(PHYSFS_ERR_OTHER_ERROR);  /* oh well. */
         else
         {
             *(ptr+1) = '\0';  /* chop off filename. */
@@ -412,6 +413,7 @@ char *__PHYSFS_platformCalcPrefDir(const char *org, const char *app)
     } /* if */
 
     sprintf(retval, "%s\\%s\\%s\\", utf8, org, app);
+    allocator.Free(utf8);
     return retval;
 } /* __PHYSFS_platformCalcPrefDir */
 
@@ -443,7 +445,7 @@ char *__PHYSFS_platformCalcUserDir(void)
          *  psize. Also note that the second parameter can't be
          *  NULL or the function fails.
          */
-        rc = pGetDir(accessToken, &dummy, &psize);
+    	rc = pGetDir(accessToken, &dummy, &psize);
         assert(!rc);  /* !!! FIXME: handle this gracefully. */
         (void) rc;
 
@@ -478,16 +480,7 @@ void *__PHYSFS_platformGetThreadID(void)
     return ( (void *) ((size_t) GetCurrentThreadId()) );
 } /* __PHYSFS_platformGetThreadID */
 
-
-static int isSymlinkAttrs(const DWORD attr, const DWORD tag)
-{
-    return ( (attr & FILE_ATTRIBUTE_REPARSE_POINT) &&
-             (tag == PHYSFS_IO_REPARSE_TAG_SYMLINK) );
-} /* isSymlinkAttrs */
-
-
 void __PHYSFS_platformEnumerateFiles(const char *dirname,
-                                     int omitSymLinks,
                                      PHYSFS_EnumFilesCallback callback,
                                      const char *origdir,
                                      void *callbackdata)
@@ -529,16 +522,12 @@ void __PHYSFS_platformEnumerateFiles(const char *dirname,
 
     do
     {
-        const DWORD attr = entw.dwFileAttributes;
-        const DWORD tag = entw.dwReserved0;
         const WCHAR *fn = entw.cFileName;
         char *utf8;
 
         if ((fn[0] == '.') && (fn[1] == '\0'))
             continue;
         if ((fn[0] == '.') && (fn[1] == '.') && (fn[2] == '\0'))
-            continue;
-        if ((omitSymLinks) && (isSymlinkAttrs(attr, tag)))
             continue;
 
         utf8 = unicodeToUtf8Heap(fn);
@@ -720,7 +709,7 @@ int __PHYSFS_platformSeek(void *opaque, PHYSFS_uint64 pos)
     {
         BAIL_MACRO(errcodeFromWinApi(), 0);
     } /* if */
-
+    
     return 1;  /* No error occured */
 } /* __PHYSFS_platformSeek */
 
@@ -876,7 +865,8 @@ static PHYSFS_sint64 FileTimeToPhysfsTime(const FILETIME *ft)
     return retval;
 } /* FileTimeToPhysfsTime */
 
-int __PHYSFS_platformStat(const char *filename, int *exists, PHYSFS_Stat *stat)
+
+int __PHYSFS_platformStat(const char *filename, PHYSFS_Stat *st)
 {
     WIN32_FILE_ATTRIBUTE_DATA winstat;
     WCHAR *wstr = NULL;
@@ -887,37 +877,36 @@ int __PHYSFS_platformStat(const char *filename, int *exists, PHYSFS_Stat *stat)
     BAIL_IF_MACRO(!wstr, PHYSFS_ERR_OUT_OF_MEMORY, 0);
     rc = GetFileAttributesExW(wstr, GetFileExInfoStandard, &winstat);
     err = (!rc) ? GetLastError() : 0;
-    *exists = ((err != ERROR_FILE_NOT_FOUND) && (err != ERROR_PATH_NOT_FOUND));
     __PHYSFS_smallFree(wstr);
     BAIL_IF_MACRO(!rc, errcodeFromWinApiError(err), 0);
 
-    stat->modtime = FileTimeToPhysfsTime(&winstat.ftLastWriteTime);
-    stat->accesstime = FileTimeToPhysfsTime(&winstat.ftLastAccessTime);
-    stat->createtime = FileTimeToPhysfsTime(&winstat.ftCreationTime);
+    st->modtime = FileTimeToPhysfsTime(&winstat.ftLastWriteTime);
+    st->accesstime = FileTimeToPhysfsTime(&winstat.ftLastAccessTime);
+    st->createtime = FileTimeToPhysfsTime(&winstat.ftCreationTime);
 
     if(winstat.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
     {
-        stat->filetype = PHYSFS_FILETYPE_DIRECTORY;
-        stat->filesize = 0;
+        st->filetype = PHYSFS_FILETYPE_DIRECTORY;
+        st->filesize = 0;
     } /* if */
 
     else if(winstat.dwFileAttributes & (FILE_ATTRIBUTE_OFFLINE | FILE_ATTRIBUTE_DEVICE))
     {
         /* !!! FIXME: what are reparse points? */
-        stat->filetype = PHYSFS_FILETYPE_OTHER;
+        st->filetype = PHYSFS_FILETYPE_OTHER;
         /* !!! FIXME: don't rely on this */
-        stat->filesize = 0;
+        st->filesize = 0;
     } /* else if */
 
     /* !!! FIXME: check for symlinks on Vista. */
 
     else
     {
-        stat->filetype = PHYSFS_FILETYPE_REGULAR;
-        stat->filesize = (((PHYSFS_uint64) winstat.nFileSizeHigh) << 32) | winstat.nFileSizeLow;
+        st->filetype = PHYSFS_FILETYPE_REGULAR;
+        st->filesize = (((PHYSFS_uint64) winstat.nFileSizeHigh) << 32) | winstat.nFileSizeLow;
     } /* else */
 
-    stat->readonly = ((winstat.dwFileAttributes & FILE_ATTRIBUTE_READONLY) != 0);
+    st->readonly = ((winstat.dwFileAttributes & FILE_ATTRIBUTE_READONLY) != 0);
 
     return 1;
 } /* __PHYSFS_platformStat */
@@ -930,6 +919,7 @@ int __PHYSFS_platformSetDefaultAllocator(PHYSFS_Allocator *a)
 } /* __PHYSFS_platformSetDefaultAllocator */
 
 #endif  /* PHYSFS_PLATFORM_WINDOWS */
+#endif  /* PHYSFS_PLATFORM_WINRT */
 
 /* end of windows.c ... */
 

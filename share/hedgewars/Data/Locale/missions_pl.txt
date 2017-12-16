@@ -84,3 +84,13 @@ Challenge_-_Speed_Shoppa_-_Ropes.desc="Bierz linę i zbierz wszystkie skrzynki n
 
 Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Wyzwanie: Klient nasz Pan
 Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Pokaż, że to ty tu rządzisz! Zbierz wszystkie skrzynki najszybciej jak potrafisz na rozległej mapie."
+
+User_Mission_-_Teamwork_2.name=Kryptonim: Praca zespołowa 2
+User_Mission_-_Teamwork_2.desc="Użyj swoich zdolności zespołowych, by pokonać cybernetycznego wroga jeszcze raz!"
+
+Big_Armory.name=Kryptonim: Wielka zbrojownia
+Big_Armory.desc="Jesteś sam, masz pełną zbrojownię i musisz pokonać 8 jeży, zanim skończy się czas."
+
+ClimbHome.name=Kryptonim: Wspinaczka do domu
+ClimbHome.desc="Jesteś daleko od domu, a woda się podwyższa. Wspinaj się najwyżej jak potrafisz!"
+

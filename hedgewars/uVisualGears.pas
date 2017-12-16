@@ -125,6 +125,14 @@ begin
         exit(sprite);
 end;
 
+function GetSpriteByWind(sprite, Lsprite: TSprite): TSprite; inline;
+begin
+    if (SpritesData[Lsprite].Texture <> nil) and (cWindSpeedf<0) then
+        exit(Lsprite)
+    else
+        exit(sprite);
+end;
+
 function GetSpriteData(sprite, SDsprite: TSprite): PSpriteData; inline;
 begin
     exit(@SpritesData[GetSprite(sprite, SDsprite)]);
@@ -152,11 +160,11 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
             case Gear^.Kind of
               vgtCloud: begin
-                        spriteData:= GetSpriteData(sprCloud, sprSDCloud);
+                        spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                         DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                         end;
                vgtFlake: begin
-                         sprite:= GetSprite(sprFlake, sprSDFlake);
+                         sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
                          if cFlattenFlakes then
                              begin
                              if speedlessFlakes then
@@ -188,7 +196,7 @@ case Layer of
               Tint(Gear^.Tint);
           case Gear^.Kind of
               vgtFlake: begin
-                         sprite:= GetSprite(sprFlake, sprSDFlake);
+                         sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
                          if speedlessFlakes then
                              DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                          else
@@ -331,7 +339,8 @@ case Layer of
                             tinted:= true;
                             Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
                             DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
-                            DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
+                            if Gear^.Frame <> ord(amNothing) then
+                                DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
                             end;
                    vgtShell: begin
                              if Gear^.FrameTicks < $FF then
@@ -360,7 +369,7 @@ case Layer of
                end;
            case Gear^.Kind of
                vgtFlake: begin
-                         spriteData:= GetSpriteData(sprFlake, sprSDFlake);
+                         spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
                          if speedlessFlakes then
                              DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                          else
@@ -388,11 +397,11 @@ case Layer of
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                vgtCloud: begin
-                         spriteData:= GetSpriteData(sprCloud, sprSDCloud);
+                         spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                          DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height);
                          end;
               vgtFlake: begin
-                        spriteData:= GetSpriteData(sprFlake, sprSDFlake);
+                        spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
                         if speedlessFlakes then
                             DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                         else
@@ -413,11 +422,11 @@ case Layer of
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                 vgtCloud: begin
-                          sprite:= GetSprite(sprCloud, sprSDCloud);
+                        sprite:= GetSpriteByWind(GetSprite(sprCloud, sprSDCloud), GetSprite(sprCloudL, sprSDCloudL));
                           DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
                           end;
               vgtFlake: begin
-                        sprite:= GetSprite(sprFlake, sprSDFlake);
+                        sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
                         if speedlessFlakes then
                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else
@@ -438,7 +447,7 @@ case Layer of
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                 vgtFlake: begin
-                          sprite:= GetSprite(sprFlake, sprSDFlake);
+                         sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
                           if speedlessFlakes then
                               DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                           else
@@ -463,22 +472,25 @@ for i:= 0 to cCloudsNumber - 1 do
 end;
 
 procedure ChangeToSDClouds;
-var       i: LongInt;
+var       i, j: LongInt;
     vg, tmp: PVisualGear;
 begin
 if cCloudsNumber = cSDCloudsNumber then
     exit;
-vg:= VisualGearLayers[0];
-while vg <> nil do
-    if vg^.Kind = vgtCloud then
-        begin
-        tmp:= vg^.NextGear;
-        DeleteVisualGear(vg);
-        vg:= tmp
-        end
-    else vg:= vg^.NextGear;
-for i:= 0 to cSDCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+for i:= 0 to 6 do
+    begin
+    vg:= VisualGearLayers[i];
+    while vg <> nil do
+        if vg^.Kind = vgtCloud then
+            begin
+            tmp:= vg^.NextGear;
+            DeleteVisualGear(vg);
+            vg:= tmp
+            end
+        else vg:= vg^.NextGear;
+    for j:= 0 to cSDCloudsNumber - 1 do
+        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    end;
 end;
 
 procedure AddFlakes;

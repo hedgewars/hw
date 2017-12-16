@@ -116,6 +116,8 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (50, "0.9.22-dev")
             , (51, "0.9.22")
             , (52, "0.9.23-dev")
+            , (53, "0.9.23")
+            , (54, "0.9.24-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
@@ -245,3 +247,6 @@ sanitizeName = B.map sc
     where
         sc c | isAlphaNum c = c
              | otherwise = '_'
+
+isRegistered :: ClientInfo -> Bool
+isRegistered = (<) 0 . B.length . webPassword

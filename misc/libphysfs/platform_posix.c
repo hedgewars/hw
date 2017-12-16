@@ -41,9 +41,9 @@ static PHYSFS_ErrorCode errcodeFromErrnoError(const int err)
         case ELOOP: return PHYSFS_ERR_SYMLINK_LOOP;
         case EMLINK: return PHYSFS_ERR_NO_SPACE;
         case ENAMETOOLONG: return PHYSFS_ERR_BAD_FILENAME;
-        case ENOENT: return PHYSFS_ERR_NO_SUCH_PATH;
+        case ENOENT: return PHYSFS_ERR_NOT_FOUND;
         case ENOSPC: return PHYSFS_ERR_NO_SPACE;
-        case ENOTDIR: return PHYSFS_ERR_NO_SUCH_PATH;
+        case ENOTDIR: return PHYSFS_ERR_NOT_FOUND;
         case EISDIR: return PHYSFS_ERR_NOT_A_FILE;
         case EROFS: return PHYSFS_ERR_READ_ONLY;
         case ETXTBSY: return PHYSFS_ERR_BUSY;
@@ -83,7 +83,7 @@ static char *getUserDirByUID(void)
             } /* if */
         } /* if */
     } /* if */
-
+    
     return retval;
 } /* getUserDirByUID */
 
@@ -122,31 +122,13 @@ char *__PHYSFS_platformCalcUserDir(void)
 
 
 void __PHYSFS_platformEnumerateFiles(const char *dirname,
-                                     int omitSymLinks,
                                      PHYSFS_EnumFilesCallback callback,
                                      const char *origdir,
                                      void *callbackdata)
 {
     DIR *dir;
     struct dirent *ent;
-    int bufsize = 0;
     char *buf = NULL;
-    int dlen = 0;
-
-    if (omitSymLinks)  /* !!! FIXME: this malloc sucks. */
-    {
-        dlen = strlen(dirname);
-        bufsize = dlen + 256;
-        buf = (char *) allocator.Malloc(bufsize);
-        if (buf == NULL)
-            return;
-        strcpy(buf, dirname);
-        if (buf[dlen - 1] != '/')
-        {
-            buf[dlen++] = '/';
-            buf[dlen] = '\0';
-        } /* if */
-    } /* if */
 
     errno = 0;
     dir = opendir(dirname);
@@ -160,34 +142,8 @@ void __PHYSFS_platformEnumerateFiles(const char *dirname,
     {
         if (strcmp(ent->d_name, ".") == 0)
             continue;
-
-        if (strcmp(ent->d_name, "..") == 0)
+        else if (strcmp(ent->d_name, "..") == 0)
             continue;
-
-        if (omitSymLinks)
-        {
-            PHYSFS_Stat statbuf;
-            int exists = 0;
-            char *p;
-            int len = strlen(ent->d_name) + dlen + 1;
-            if (len > bufsize)
-            {
-                p = (char *) allocator.Realloc(buf, len);
-                if (p == NULL)
-                    continue;
-                buf = p;
-                bufsize = len;
-            } /* if */
-
-            strcpy(buf + dlen, ent->d_name);
-
-            if (!__PHYSFS_platformStat(buf, &exists, &statbuf))
-                continue;
-            else if (!exists)
-                continue;  /* probably can't happen, but just in case. */
-            else if (statbuf.filetype == PHYSFS_FILETYPE_SYMLINK)
-                continue;
-        } /* if */
 
         callback(callbackdata, origdir, ent->d_name);
     } /* while */
@@ -323,7 +279,8 @@ PHYSFS_sint64 __PHYSFS_platformFileLength(void *opaque)
 int __PHYSFS_platformFlush(void *opaque)
 {
     const int fd = *((int *) opaque);
-    BAIL_IF_MACRO(fsync(fd) == -1, errcodeFromErrno(), 0);
+    if ((fcntl(fd, F_GETFL) & O_ACCMODE) != O_RDONLY)
+        BAIL_IF_MACRO(fsync(fd) == -1, errcodeFromErrno(), 0);
     return 1;
 } /* __PHYSFS_platformFlush */
 
@@ -343,17 +300,11 @@ int __PHYSFS_platformDelete(const char *path)
 } /* __PHYSFS_platformDelete */
 
 
-int __PHYSFS_platformStat(const char *filename, int *exists, PHYSFS_Stat *st)
+int __PHYSFS_platformStat(const char *filename, PHYSFS_Stat *st)
 {
     struct stat statbuf;
 
-    if (lstat(filename, &statbuf) == -1)
-    {
-        *exists = (errno != ENOENT);
-        BAIL_MACRO(errcodeFromErrno(), 0);
-    } /* if */
-
-    *exists = 1;
+    BAIL_IF_MACRO(lstat(filename, &statbuf) == -1, errcodeFromErrno(), 0);
 
     if (S_ISREG(statbuf.st_mode))
     {
@@ -364,6 +315,12 @@ int __PHYSFS_platformStat(const char *filename, int *exists, PHYSFS_Stat *st)
     else if(S_ISDIR(statbuf.st_mode))
     {
         st->filetype = PHYSFS_FILETYPE_DIRECTORY;
+        st->filesize = 0;
+    } /* else if */
+
+    else if(S_ISLNK(statbuf.st_mode))
+    {
+        st->filetype = PHYSFS_FILETYPE_SYMLINK;
         st->filesize = 0;
     } /* else if */
 

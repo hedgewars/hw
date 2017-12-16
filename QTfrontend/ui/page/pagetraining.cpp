@@ -73,14 +73,29 @@ QLayout * PageTraining::bodyLayoutDefinition()
     pageLayout->setAlignment(infoLayout, Qt::AlignLeft);
 
 
-    // mission list
-    lstMissions = new QListWidget(this);
-    lstMissions->setWhatsThis(tr("Pick the mission or training to play"));
-    pageLayout->addWidget(lstMissions, 1, 0, 1, 2); // span 2 columns
+    // tab widget containing all lists
+    tbw = new QTabWidget(this);
+    pageLayout->addWidget(tbw, 1, 0, 1, 2); // span 2 columns
+    // let's not make the tab widget use more space than needed
+    tbw->setFixedWidth(400);
+    pageLayout->setAlignment(tbw, Qt::AlignHCenter);
+    
+    tbw->setStyleSheet("QListWidget { border-style: none; padding-top: 6px; }");
 
-    // let's not make the list use more space than needed
-    lstMissions->setFixedWidth(400);
-    pageLayout->setAlignment(lstMissions, Qt::AlignHCenter);
+    // training/challenge/scenario lists
+    lstTrainings = new QListWidget(this);
+    lstTrainings ->setWhatsThis(tr("Pick the training to play"));
+
+    lstChallenges = new QListWidget(this);
+    lstChallenges ->setWhatsThis(tr("Pick the challenge to play"));
+
+    lstScenarios= new QListWidget(this);
+    lstScenarios->setWhatsThis(tr("Pick the scenario to play"));
+
+    tbw->addTab(lstTrainings, tr("Trainings"));
+    tbw->addTab(lstChallenges, tr("Challenges"));
+    tbw->addTab(lstScenarios, tr("Scenarios"));
+    tbw->setCurrentWidget(lstTrainings);
 
     return pageLayout;
 }
@@ -89,9 +104,18 @@ QLayout * PageTraining::footerLayoutDefinition()
 {
     QBoxLayout * bottomLayout = new QVBoxLayout();
 
-    btnStart = formattedButton(QPushButton::tr("Go!"));
+    const QIcon& lp = QIcon(":/res/Start.png");
+    QSize sz = lp.actualSize(QSize(65535, 65535));
+    btnStart = new QPushButton();
+    btnStart->setStyleSheet("padding: 5px 10px");
+    btnStart->setText(QPushButton::tr("Start"));
     btnStart->setWhatsThis(tr("Start fighting"));
-    btnStart->setFixedWidth(140);
+    btnStart->setMinimumWidth(sz.width() + 60);
+    btnStart->setIcon(lp);
+    btnStart->setFixedHeight(50);
+    btnStart->setIconSize(sz);
+    btnStart->setFlat(true);
+    btnStart->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     bottomLayout->addWidget(btnStart);
 
@@ -103,9 +127,20 @@ QLayout * PageTraining::footerLayoutDefinition()
 
 void PageTraining::connectSignals()
 {
-    connect(lstMissions, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstMissions, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstMissions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+    connect(lstTrainings, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstTrainings, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstTrainings, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+
+    connect(lstChallenges, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstChallenges, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstChallenges, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+
+    connect(lstScenarios, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstScenarios, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstScenarios, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+
+    connect(tbw, SIGNAL(currentChanged(int)), this, SLOT(updateInfo()));
+
     connect(btnPreview, SIGNAL(clicked()), this, SLOT(startSelected()));
     connect(btnStart, SIGNAL(clicked()), this, SLOT(startSelected()));
 }
@@ -140,79 +175,130 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     m_info = new QSettings(infoFile, QSettings::IniFormat, this);
     m_info->setIniCodec("UTF-8");
 
+    QStringList m_list;
+    QListWidget * m_widget;
+    QString subFolder;
 
-    QStringList missionList = dataMgr.entryList(
-                                  "Missions/Training",
-                                  QDir::Files, QStringList("*.lua")).
-                              replaceInStrings(QRegExp("\\.lua$"), "");
+    for(int i=1; i<=3; i++) {
+        switch(i) {
+            case 1:
+                subFolder = "Training";
+                m_widget = lstTrainings;
+                break;
+            case 2:
+                subFolder = "Challenge";
+                m_widget = lstChallenges;
+                break;
+            case 3:
+                subFolder = "Scenario";
+                m_widget = lstScenarios;
+                break;
+        }
+        m_list = dataMgr.entryList(
+                    "Missions/" + subFolder,
+                    QDir::Files, QStringList("*.lua")).
+               replaceInStrings(QRegExp("\\.lua$"), "");
 
-    // scripts to lost - TODO: model?
-    foreach (const QString & mission, missionList)
-    {
-        QListWidgetItem * item = new QListWidgetItem(mission);
+        // scripts to load - TODO: model?
+        foreach (const QString & m_id, m_list)
+        {
+            QListWidgetItem * item = new QListWidgetItem(m_id);
 
-        // fallback name: replace underscores in mission name with spaces
-        QString name = item->text().replace("_", " ");
+            // fallback name: replace underscores in mission name with spaces
+            QString name = item->text().replace("_", " ");
 
-        // see if we can get a prettier/translated name
-        name = m_info->value(mission + ".name", name).toString();
+            // see if we can get a prettier/translated name
+            name = m_info->value(m_id + ".name", name).toString();
 
-        item->setText(name);
+            item->setText(name);
 
-        // store original name in data
-        item->setData(Qt::UserRole, mission);
+            // store original name in data
+            item->setData(Qt::UserRole, m_id);
 
-        lstMissions->addItem(item);
+            m_widget->addItem(item);
+        }
     }
 
     updateInfo();
 
     // pre-select first mission
-    if (lstMissions->count() > 0)
-        lstMissions->setCurrentRow(0);
+    if (lstTrainings->count() > 0)
+        lstTrainings->setCurrentRow(0);
+
+    if (lstChallenges->count() > 0)
+        lstChallenges->setCurrentRow(0);
+
+    if (lstScenarios->count() > 0)
+        lstScenarios->setCurrentRow(0);
 }
 
+QString PageTraining::getSubFolderOfSelected()
+{
+    QString subFolder;
+    if (tbw->currentWidget() == lstTrainings) {
+        subFolder = "Training";
+    } else if (tbw->currentWidget() == lstChallenges) {
+        subFolder = "Challenge";
+    } else if (tbw->currentWidget() == lstScenarios) {
+        subFolder = "Scenario";
+    } else {
+        subFolder = "Training";
+    }
+    return subFolder;
+}
 
 void PageTraining::startSelected()
 {
-    QListWidgetItem * curItem = lstMissions->currentItem();
+    QListWidget *list;
+    list = (QListWidget*) tbw->currentWidget();
+    QListWidgetItem * curItem = list->currentItem();
 
     if (curItem != NULL)
-        emit startMission(curItem->data(Qt::UserRole).toString());
+        emit startMission(curItem->data(Qt::UserRole).toString(), getSubFolderOfSelected());
 }
 
 
 void PageTraining::updateInfo()
 {
-    if (lstMissions->currentItem())
+    if (tbw->currentWidget())
     {
-        // TODO also use .pngs in userdata folder
-        QString thumbFile =     "physfs://Graphics/Missions/Training/" +
-                                lstMissions->currentItem()->data(Qt::UserRole).toString() +
-                                "@2x.png";
+        QString subFolder;
+        QListWidget *list;
+        subFolder = getSubFolderOfSelected();
+        list = (QListWidget*) tbw->currentWidget();
+        if (list->currentItem())
+        {
+            // TODO also use .pngs in userdata folder
+            QString thumbFile =     "physfs://Graphics/Missions/" +
+                                    subFolder + "/" +
+                                    list->currentItem()->data(Qt::UserRole).toString() +
+                                    "@2x.png";
 
-        if (QFile::exists(thumbFile))
-            btnPreview->setIcon(QIcon(thumbFile));
+            if (QFile::exists(thumbFile))
+                btnPreview->setIcon(QIcon(thumbFile));
+            else
+                btnPreview->setIcon(QIcon(":/res/Trainings.png"));
+
+            btnPreview->setWhatsThis(tr("Start fighting"));
+
+            QString realName = list->currentItem()->data(
+                                    Qt::UserRole).toString();
+
+            QString caption = m_info->value(realName + ".name",
+                                            list->currentItem()->text()).toString();
+
+            QString description = m_info->value(realName + ".desc",
+                                                tr("No description available")).toString();
+
+            lblCaption->setText("<h2>" + caption +"</h2>");
+            lblDescription->setText(description);
+        }
         else
+        {
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
-
-        QString realName = lstMissions->currentItem()->data(
-                               Qt::UserRole).toString();
-
-        QString caption = m_info->value(realName + ".name",
-                                        lstMissions->currentItem()->text()).toString();
-
-        QString description = m_info->value(realName + ".desc",
-                                            tr("No description available")).toString();
-
-        lblCaption->setText("<h2>" + caption +"</h2>");
-        lblDescription->setText(description);
-    }
-    else
-    {
-        btnPreview->setIcon(QIcon(":/res/Trainings.png"));
-        lblCaption->setText(tr("Select a mission!"));
-        // TODO better text and tr()
-        lblDescription->setText("");
+            lblCaption->setText(tr("Select a mission!"));
+            // TODO better text and tr()
+            lblDescription->setText("");
+        }
     }
 }

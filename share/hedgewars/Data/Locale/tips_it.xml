@@ -66,7 +66,6 @@
     <tip>Fai attenzione nelle terre innevate e Natalizie, perché le travi sono fatte di ghiaccio scivoloso.</tip>
     <tip>Il tempo di fuga dipende dall'arma che hai usato. Fai attenzione, alcune armi non hanno un tempo di fuga e finiscono subito il tuo turno!</tip>
     <windows-only>
-        <tip>Questa versione di Hedgewars supporta <a href="http://www.xfire.com">Xfire</a>. Assicurati di aggiungere Hedgewars alla sua lista giochi, cosi i tuoi amici potranno vederti giocare.</tip>
         <tip>Puoi trovare i file di configurazione di Hedgewars in “My Documents\Hedgewars”. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
     </windows-only>
     <mac-only>

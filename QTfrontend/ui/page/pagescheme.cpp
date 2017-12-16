@@ -68,25 +68,21 @@ QLayout * PageScheme::bodyLayoutDefinition()
     gbBasicSettings->setLayout(glBSLayout);
     // Left
 
-    TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts@2x.png");
-    TBW_mode_Forts->setWhatsThis(tr("Defend your fort and destroy the opponents, two team colours max!"));
-    glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
-
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders@2x.png");
     TBW_disablegirders->setWhatsThis(tr("Disable girders when generating random maps."));
-    glGMLayout->addWidget(TBW_disablegirders,0,1,1,1);
+    glGMLayout->addWidget(TBW_disablegirders,0,0,1,1);
 
     TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects@2x.png");
     TBW_disablelandobjects->setWhatsThis(tr("Disable land objects when generating random maps."));
-    glGMLayout->addWidget(TBW_disablelandobjects,0,2,1,1);
+    glGMLayout->addWidget(TBW_disablelandobjects,0,1,1,1);
 
     TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder@2x.png");
     TBW_border->setWhatsThis(tr("Add an indestructible border around the terrain"));
-    glGMLayout->addWidget(TBW_border,0,3,1,1);
+    glGMLayout->addWidget(TBW_border,0,2,1,1);
 
     TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
     TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
-    glGMLayout->addWidget(TBW_bottomborder,0,4,1,1);
+    glGMLayout->addWidget(TBW_bottomborder,0,3,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
     TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
@@ -232,11 +228,11 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtInitHealth);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png"));
+    l->setPixmap(QPixmap(":/res/iconInitHealth.png"));
     glBSLayout->addWidget(l,2,1,1,1);
     SB_InitHealth = new QSpinBox(gbBasicSettings);
     SB_InitHealth->setWhatsThis(wtInitHealth);
-    SB_InitHealth->setRange(50, 200);
+    SB_InitHealth->setRange(1, 1000);
     SB_InitHealth->setValue(100);
     SB_InitHealth->setSingleStep(25);
     glBSLayout->addWidget(SB_InitHealth,2,2,1,1);
@@ -287,7 +283,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,5,1,1,1);
     SB_HealthDecrease = new QSpinBox(gbBasicSettings);
     SB_HealthDecrease->setWhatsThis(wtHealthDecrease);
-    SB_HealthDecrease->setRange(0, 100);
+    SB_HealthDecrease->setRange(0, 1000);
     SB_HealthDecrease->setValue(5);
     SB_HealthDecrease->setSingleStep(1);
     glBSLayout->addWidget(SB_HealthDecrease,5,2,1,1);
@@ -354,7 +350,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(l,9,1,1,1);
     SB_CrateHealth = new QSpinBox(gbBasicSettings);
     SB_CrateHealth->setWhatsThis(wtCrateHealth);
-    SB_CrateHealth->setRange(0, 200);
+    SB_CrateHealth->setRange(0, 1000);
     SB_CrateHealth->setValue(25);
     SB_CrateHealth->setSingleStep(5);
     glBSLayout->addWidget(SB_CrateHealth,9,2,1,1);
@@ -503,7 +499,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
-    LE_name->setWhatsThis("Name of this scheme");
+    LE_name->setWhatsThis(tr("Name of this scheme"));
 
     gl->addWidget(LE_name,15,1,1,5);
     gl->addWidget(l,15,0,1,1);
@@ -550,7 +546,6 @@ void PageScheme::setModel(QAbstractItemModel * model)
     selectScheme->setModel(model);
 
     mapper->addMapping(LE_name, 0);
-    mapper->addMapping(TBW_mode_Forts, 1);
     mapper->addMapping(TBW_teamsDivide, 2);
     mapper->addMapping(TBW_solid, 3);
     mapper->addMapping(TBW_border, 4);

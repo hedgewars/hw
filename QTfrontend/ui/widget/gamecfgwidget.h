@@ -55,6 +55,7 @@ class GameCFGWidget : public QGroupBox
         void setParam(const QString & param, const QStringList & value);
         void fullNetConfig();
         void resendSchemeData();
+        void resendAmmoData();
         void setMaster(bool master);
         void setTabbed(bool tabbed);
 

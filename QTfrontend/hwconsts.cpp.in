@@ -72,12 +72,15 @@ QList< QPair<QString, QString> > cDefaultAmmos =
         << qMakePair(QString("Highlander"), QString(
             AMMOLINE_HIGHLANDER_QT AMMOLINE_HIGHLANDER_PROB
             AMMOLINE_HIGHLANDER_DELAY AMMOLINE_HIGHLANDER_CRATE ))
-		<< qMakePair(QString("Construction Mode"),   QString(
+        << qMakePair(QString("Construction Mode"),   QString(
             AMMOLINE_CONSTRUCTION_QT AMMOLINE_CONSTRUCTION_PROB
             AMMOLINE_CONSTRUCTION_DELAY AMMOLINE_CONSTRUCTION_CRATE ))
-		<< qMakePair(QString("Shoppa Pro"), QString(
+        << qMakePair(QString("Shoppa Pro"), QString(
             AMMOLINE_SHOPPAPRO_QT AMMOLINE_SHOPPAPRO_PROB
             AMMOLINE_SHOPPAPRO_DELAY AMMOLINE_SHOPPAPRO_CRATE ))
+        << qMakePair(QString("HedgeEditor"), QString(
+            AMMOLINE_HEDGEEDITOR_QT AMMOLINE_HEDGEEDITOR_PROB
+            AMMOLINE_HEDGEEDITOR_DELAY AMMOLINE_HEDGEEDITOR_CRATE ))
         ;
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;

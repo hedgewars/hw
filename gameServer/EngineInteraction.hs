@@ -44,26 +44,20 @@ import CoreTypes
 import Utils
 
 #if defined(OFFICIAL_SERVER)
-{-
-    this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
-    because standard 'catch' doesn't seem to catch decompression errors for some reason
--}
 import qualified Codec.Compression.Zlib.Internal as ZI
 import qualified Codec.Compression.Zlib as Z
 
-decompressWithoutExceptions :: BL.ByteString -> Either String BL.ByteString
-decompressWithoutExceptions = finalise
-                            . ZI.foldDecompressStream cons nil err
-                            . ZI.decompressWithErrors ZI.zlibFormat ZI.defaultDecompressParams
-  where err _ msg = Left msg
-        nil = Right []
-        cons chunk = right (chunk :)
-        finalise = right BL.fromChunks
-{- end snippet  -}
+decompressWithoutExceptions :: BL.ByteString -> BL.ByteString
+decompressWithoutExceptions = BL.fromChunks . ZI.foldDecompressStreamWithInput chunk end err decomp
+    where
+        decomp = ZI.decompressST ZI.zlibFormat ZI.defaultDecompressParams
+        chunk = (:)
+        end _ = []
+        err = const $ [BW.empty]
 #endif
 
 toEngineMsg :: B.ByteString -> B.ByteString
-toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
+toEngineMsg msg = Base64.encode (fromIntegral (BW.length msg) `BW.cons` msg)
 
 
 {-fromEngineMsg :: B.ByteString -> Maybe B.ByteString
@@ -85,15 +79,15 @@ splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt 
 checkNetCmd :: [Word8] -> B.ByteString -> (B.ByteString, B.ByteString, Maybe (Maybe B.ByteString))
 checkNetCmd teamsIndexes msg = check decoded
     where
-        decoded = liftM (splitMessages . BW.pack) $ Base64.decode $ B.unpack msg
-        check Nothing = (B.empty, B.empty, Nothing)
-        check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b, lft a)
-        encode = B.pack . Base64.encode . BW.unpack . B.concat
+        decoded = liftM splitMessages $ Base64.decode msg
+        check (Left _) = (B.empty, B.empty, Nothing)
+        check (Right msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b, lft a)
+        encode = Base64.encode . B.concat
         isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m) && not (isMalformed (B.head m) (B.tail m))
         lft = foldr l Nothing
         l m n = let m' = B.head $ B.tail m; tst = flip Set.member in
                       if not $ tst timedMessages m' then n
-                        else if '+' /= m' then Just Nothing else Just . Just . B.pack . Base64.encode . BW.unpack $ m
+                        else if '+' /= m' then Just Nothing else Just . Just . Base64.encode $ m
         isNonEmpty = (/=) '+' . B.head . B.tail
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,NpPwtgfhbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
@@ -187,13 +181,10 @@ drawnMapData =
         by200 m = Just $ L.splitAt 200 m
 
 unpackDrawnMap :: B.ByteString -> BL.ByteString
-unpackDrawnMap = either (const BL.empty) id
-        . decompressWithoutExceptions
-        . BL.pack
-        . L.drop 4
-        . fromMaybe []
+unpackDrawnMap = either
+        (const BL.empty) 
+        (decompressWithoutExceptions . BL.pack . drop 4 . BW.unpack)
         . Base64.decode
-        . B.unpack
 
 compressWithLength :: BL.ByteString -> BL.ByteString
 compressWithLength b = BL.drop 8 . encode . runPut $ do
@@ -201,9 +192,8 @@ compressWithLength b = BL.drop 8 . encode . runPut $ do
     mapM_ putWord8 $ BW.unpack $ BL.toStrict $ Z.compress b
 
 packDrawnMap :: BL.ByteString -> B.ByteString
-packDrawnMap = B.pack
-    . Base64.encode
-    . BW.unpack
+packDrawnMap =
+      Base64.encode
     . BL.toStrict
     . compressWithLength
 

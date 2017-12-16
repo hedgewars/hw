@@ -42,11 +42,19 @@ topY:= 0;
 
 lx:= LongInt(LAND_WIDTH) - 1;
 
+// use maximum available map width if there is no special world edge
 if WorldEdge = weNone then
     begin
     playWidth:= LAND_WIDTH;
     leftX := 0;
     rightX:= lx;
+    EXIT;
+    end;
+
+// keep fort distance consistent if we're in wrap mode on fort map
+if (cMapGen = mgForts) and (WorldEdge = weWrap) then
+    begin
+    // edges were adjusted already in MakeFortsMap() in uLand
     EXIT;
     end;
 

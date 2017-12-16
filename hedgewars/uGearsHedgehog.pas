@@ -30,6 +30,7 @@ procedure HedgehogChAngle(HHGear: PGear);
 procedure PickUp(HH, Gear: PGear);
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 procedure CheckIce(Gear: PGear); inline;
+procedure PlayTaunt(taunt: Longword);
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
@@ -325,6 +326,19 @@ with Gear^,
                                  newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
                                  end;
                      amDynamite: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
+                         amDuck: begin
+                                 // Does duck spawn inside water?
+                                 if (LeftX > hwRound(Gear^.X) - Gear^.Karma) or (RightX < hwRound(Gear^.X) + Gear^.Karma) or (cWaterLine < hwRound(Gear^.Y) + Gear^.Karma) then
+                                     PlaySound(sndDroplet2)
+                                 else
+                                     // Duck spawned in air, normal drop sound
+                                     PlaySound(sndDuckDrop);
+                                 newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDuck, 0, SignAs(_0_03, dX), _0, 0);
+                                 if not ((not dX.isNegative) xor ((State and gstHHHJump) <> 0)) then
+                                     newGear^.Tag:= -1
+                                 else
+                                     newGear^.Tag:= 1;
+                                 end;
                     amFirePunch: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtFirePunch, 0, xx, _0, 0);
                          amWhip: begin
                                  newGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
@@ -378,18 +392,25 @@ with Gear^,
                    amLowGravity: begin
                                  PlaySound(sndLowGravity);
                                  cGravity:= cMaxWindSpeed;
-                                 cGravityf:= 0.00025
+                                 cGravityf:= 0.00025;
+                                 cLowGravity := true
                                  end;
                   amExtraDamage: begin
                                  PlaySound(sndHellishImpact4);
                                  cDamageModifier:= _1_5
                                  end;
-                 amInvulnerable: Effects[heInvulnerable]:= 1;
+                 amInvulnerable: begin
+                                 PlaySound(sndInvulnerable);
+                                 Effects[heInvulnerable]:= 1
+                                 end;
                     amExtraTime: begin
                                  PlaySound(sndExtraTime);
                                  TurnTimeLeft:= TurnTimeLeft + 30000
                                  end;
-                   amLaserSight: cLaserSighting:= true;
+                   amLaserSight: begin
+                                 PlaySound(sndLaserSight);
+                                 cLaserSighting:= true
+                                 end;
                      amVampiric: begin
                                  PlaySoundV(sndOw1, Team^.voicepack);
                                  cVampiric:= true;
@@ -552,10 +573,12 @@ with CurrentHedgehog^ do
                 if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
                      TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
                 else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
+                IsGetAwayTime := true;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then
                 HHGear^.State:= HHGear^.State or gstAttacked;
-            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then
+            if (a = amNothing) or ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) or
+               (((GameFlags and gfInfAttack) <> 0) and ((Ammoz[a].Ammo.Propz and ammoprop_ForceTurnEnd) = 0)) then
                 ApplyAmmoChanges(CurrentHedgehog^)
             end;
         end
@@ -655,32 +678,45 @@ end;
 
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 var s: ansistring;
+    name: ansistring;
     vga: PVisualGear;
 begin
     if cnt <> 0 then AddAmmo(HH, ammo, cnt)
     else AddAmmo(HH, ammo);
 
-    if (not (HH.Team^.ExtDriven
-    or (HH.BotLevel > 0)))
-    or (HH.Team^.Clan^.ClanIndex = LocalClan)
-    or (GameType = gmtDemo)  then
+    if IsHogLocal(@HH) then
         begin
-        if cnt <> 0 then
-            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(cnt) + ')')
+        if length(trluaammo[Ammoz[ammo].NameId]) > 0 then
+            name:= trluaammo[Ammoz[ammo].NameId]
         else
-            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
+            name:= trammo[Ammoz[ammo].NameId];
+
+        if cnt = 0 then
+            cnt:= Ammoz[ammo].NumberInCase;
+
+        if (ammo = amNothing) or (cnt = 0) then
+            s:= trmsg[sidEmptyCrate]
+        else if cnt >= AMMO_INFINITE then
+            s:= name + ansistring(' (+∞)')
+        else
+            s:= name + ansistring(' (+' + IntToStr(cnt) + ')');
+
         AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
 
-        // show ammo icon
-        vga:= AddVisualGear(X, Y, vgtAmmo);
-        if vga <> nil then
-            vga^.Frame:= Longword(ammo);
+        // show ammo icon (if not empty)
+        if (ammo <> amNothing) and (cnt <> 0) then
+            begin
+            vga:= AddVisualGear(X, Y, vgtAmmo);
+            if vga <> nil then
+                vga^.Frame:= Longword(ammo);
+            end
+
         end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
-var s: shortstring;
+var s: ansistring;
     i: LongInt;
     vga: PVisualGear;
     ag, gi: PGear;
@@ -732,13 +768,13 @@ case Gear^.Pos of
                     PlaySound(sndShotgunReload);
                     inc(HH^.Health, Gear^.Health);
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
-                    s:= '+' + IntToStr(Gear^.Health);
-                    AddCaption(ansistring(s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    s:= IntToStr(Gear^.Health);
+                    AddCaption(FormatA(trmsg[sidHealthGain], s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
 
                     i:= 0;
-                    while i < Gear^.Health do
+                    while (i < Gear^.Health) and (i <= 1000) do
                         begin
                         vga:= AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtStraightShot);
                         if vga <> nil then
@@ -927,6 +963,7 @@ procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
     cnt: LongWord;
+    s: ansistring;
 begin
 if Gear^.Hedgehog^.Unplaced then
     begin
@@ -1178,7 +1215,8 @@ if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGr
     if (Gear^.FlightTime > 1500) and ((hwRound(Gear^.X) < LongInt(leftX)-250) or (hwRound(Gear^.X) > LongInt(rightX)+250))  then
         begin
         Gear^.FlightTime:= 0;
-        AddCaption(GetEventString(eidHomerun), cWhiteColor, capgrpMessage);
+        s:= ansistring(CurrentHedgehog^.Name);
+        AddCaption(FormatA(GetEventString(eidHomerun), s), cWhiteColor, capgrpMessage);
         PlaySound(sndHomerun)
         end;
     end
@@ -1194,28 +1232,41 @@ procedure doStepHedgehogDriven(HHGear: PGear);
 var t: PGear;
     wasJumping: boolean;
     Hedgehog: PHedgehog;
+    s: ansistring;
 begin
 Hedgehog:= HHGear^.Hedgehog;
 if not isInMultiShoot then
     AllInactive:= false
 else if Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle] then
-    HHGear^.Message:= 0;
+    HHGear^.Message:= HHGear^.Message and gmPrecise;
 
 if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then
     AllInactive:= true
 else if not isInMultiShoot then
     AllInactive:= false;
 
-if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
+if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (LuaEndTurnRequested = true) then
     begin
     if (Hedgehog^.CurAmmoType = amKnife) then
        LoadHedgehogHat(Hedgehog^, Hedgehog^.Hat);
     if TagTurnTimeLeft = 0 then
         TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
+    if (GameOver = false) and ((GameFlags and gfInfAttack) = 0) and ((HHGear^.State and gstAttacked) = 0) and (HHGear^.Damage = 0) and (LuaNoEndTurnTaunts = false) then
+        begin
+        AddVoice(sndBoring, Hedgehog^.Team^.voicepack);
+        if (GameFlags and gfInfAttack = 0) then
+            begin
+            s:= Hedgehog^.Name;
+            AddCaption(FormatA(GetEventString(eidTimeout), s), cWhiteColor, capgrpMessage);
+            end;
+        end;
     isCursorVisible:= false;
     HHGear^.State:= HHGear^.State and (not (gstHHDriven or gstAnimation or gstAttacking));
     AttackBar:= 0;
+    StopSound(sndThrowPowerUp);
+    LuaEndTurnRequested:= false;
+    LuaNoEndTurnTaunts:= false;
     if HHGear^.Damage > 0 then
         HHGear^.State:= HHGear^.State and (not (gstHHJumping or gstHHHJump));
     exit
@@ -1375,7 +1426,10 @@ if (Gear^.Health = 0) then
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
                 s:= ansistring(Gear^.Hedgehog^.Name);
-                AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
+                if Gear^.Hedgehog^.King then
+                    AddCaption(FormatA(GetEventString(eidKingDied), s), cWhiteColor, capgrpMessage)
+                else
+                    AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
                 end;
             end
         else
@@ -1496,6 +1550,17 @@ else
         else
             doStepHedgehogDriven(Gear)
     end;
+end;
+
+procedure PlayTaunt(taunt: Longword);
+begin
+    if CurrentHedgehog^.Gear <> nil then
+        with CurrentHedgehog^.Gear^ do
+            begin
+            Message:= Message or (gmAnimate and InputMask);
+            MsgParam:= taunt;
+            ScriptCall('onTaunt', MsgParam);
+            end
 end;
 
 end.

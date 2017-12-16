@@ -1,9 +1,26 @@
+local missionsNum = 14
+
 function saveCompletedStatus(planetNum)
 	--        1       2        3        4      5         6        7
 	-- order: moon01, fruit01, fruit02, ice01, desert01, death01, final
 	local status = "0000000"
 	if tonumber(GetCampaignVar("MainMissionsStatus")) then
 		status = GetCampaignVar("MainMissionsStatus")
+	end
+
+	local planetToLevelMapping = {
+		[1] = 2,
+		[2] = 3,
+		[3] = 8,
+		[4] = 5,
+		[5] = 4,
+		[6] = 9,
+		[7] = 14
+	}
+
+	local level = planetToLevelMapping[planetNum]
+	if level ~= nil then
+		SaveCampaignVar("Mission"..level.."Won", "true")
 	end
 
 	if planetNum == 1 then
@@ -14,6 +31,21 @@ function saveCompletedStatus(planetNum)
 		status = status:sub(1,planetNum-1).."1"..status:sub(planetNum+1)
 	end
 	SaveCampaignVar("MainMissionsStatus",status)
+
+	checkAllMissionsCompleted()
+end
+
+function checkAllMissionsCompleted()
+	local allMissions = true
+	for i=2, missionsNum do
+		if GetCampaignVar("Mission"..i.."Won") ~= "true" then
+			allMissions = false
+			break
+		end
+	end
+	if allMissions then
+		SaveCampaignVar("Mission1Won", "true")
+	end
 end
 
 function getCompletedStatus()
@@ -23,11 +55,17 @@ function getCompletedStatus()
 	end
 	local status = {
 		moon01 = false,
+		moon02 = false,
 		fruit01 = false,
 		fruit02 = false,
+		fruit03 = false,
 		ice01 = false,
+		ice02 = false,
 		desert01 = false,
+		desert02 = false,
+		desert03 = false,
 		death01 = false,
+		death02 = false,
 		final = false
 	}
 	if allStatus ~= "" then
@@ -53,6 +91,25 @@ function getCompletedStatus()
 			status.final = true
 		end
 	end
+	-- Bonus missions
+	if GetCampaignVar("Mission13Won") == "true" then
+		status.moon02 = true
+	end
+	if GetCampaignVar("Mission6Won") == "true" then
+		status.ice02 = true
+	end
+	if GetCampaignVar("Mission7Won") == "true" then
+		status.desert02 = true
+	end
+	if GetCampaignVar("Mission10Won") == "true" then
+		status.fruit03 = true
+	end
+	if GetCampaignVar("Mission11Won") == "true" then
+		status.death02 = true
+	end
+	if GetCampaignVar("Mission12Won") == "true" then
+		status.desert03 = true
+	end
 	return status
 end
 
@@ -61,11 +118,19 @@ function initCheckpoint(mission)
 	if GetCampaignVar("CurrentMission") ~= mission then
 		SaveCampaignVar("CurrentMission", mission)
 		SaveCampaignVar("CurrentMissionCheckpoint", 1)
-		SaveCampaignVar("HogsPosition", "")
 	else
-		checkPoint = tonumber(GetCampaignVar("currentMissionCheckpoint"))
+		checkPoint = tonumber(GetCampaignVar("CurrentMissionCheckpoint"))
 	end
 	return checkPoint
+end
+
+-- Reset mission checkpoint to 1
+-- Returns true if the player reached a checkpoint before, false otherwise.
+function resetCheckpoint(mission)
+	local cp = tonumber(GetCampaignVar("CurrentMissionCheckpoint"))
+	SaveCampaignVar("CurrentMissionCheckpoint", 1)
+
+	return (type(cp) == "number" and cp > 1)
 end
 
 function saveCheckpoint(cp)
@@ -117,4 +182,13 @@ function split(s, delimiter)
 		table.insert(res, tonumber(first))
 	end
 	return res
+end
+
+-- Send team ranking stats. Teams is a list of teams in the desired order.
+-- The default kills counter is used.
+function sendSimpleTeamRankings(teams)
+	for t=1, #teams do
+		local teamname = teams[t]
+		SendStat(siPlayerKills, GetTeamStats(teamname).Kills, teamname)
+	end
 end

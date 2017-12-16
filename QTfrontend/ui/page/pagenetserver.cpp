@@ -83,7 +83,7 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     labelURL->setText(
               "<style type=\"text/css\"> a { color: #ffcc00; } </style>"
               "<div align=\"center\">"
-              "<a href=\"hedgewars.org/kb/HWPlaySchemeSyntax\">" +
+              "<a href=\"https://hedgewars.org/kb/HWPlaySchemeSyntax\">" +
               tr("Click here for details") +
               "</a></div>");
     labelURL->setOpenExternalLinks(true);

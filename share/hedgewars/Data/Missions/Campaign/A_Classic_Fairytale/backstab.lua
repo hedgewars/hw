@@ -1,3 +1,53 @@
+--[[
+A Classic Fairytale: Backstab
+
+= SUMMARY =
+It is revealed that there's a traitor among the natives.
+Player decides whether to kill him or not.
+After the natives must defeat 3 waves of cannibals.
+
+= FLOW CHART =
+
+== Linear events ==
+
+- Cut scene: startScene (traitor is revealed)
+- Player is instructed to decide what to do with the traitor
+| Player kills traitor
+    - Cut scene: afterChoiceAnim
+| Player spares traitor
+    - Cut scene: afterChoiceAnim (different)
+| Player kills any other hog or own hog
+    > Game over
+- First turn of cannibals
+- TBS
+- First wave of cannibals dead
+- Cut scene: wave2Anim
+- Spawn 2nd cannibal wave
+- TBS
+- 2nd wave dead
+- Cut scene: wave2DeadAnim
+- All natives but one are encaged
+- 7 turns till arrival of 3rd wave
+- Arrival points are marked with circles
+- One hero is deployed near the circles
+- Player now only controls the hero, switch hog is removed
+- TBS
+- 3rd wave appears
+- TBS
+- 3rd wave dead
+- Final cut scene
+> Victory
+
+=== The traitor ===
+The traitor is chosen based on the past player decisions in the campaign.
+
+== Non-linear events ==
+
+| Any native hog dies after traitor decision:
+    - Another hog (if alive) mourns the loss
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
@@ -70,6 +120,9 @@ speakerHog = nil
 spyHog = nil
 deployedHog = nil
 deployedDead = false
+nativesTeleported = false
+nativesIsolated = false
+hogDeployed = false
 
 cyborgHidden = false
 needToAct = 0
@@ -193,7 +246,7 @@ function WonderAlive()
     AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("Do not laugh, inexperienced one, for he speaks the truth!"), SAY_SAY, 10000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Yeah, sure! I died. Hillarious!"), SAY_SAY, 6000}})
     AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY, 6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("???"), SAY_SAY, 2000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("Huh?"), SAY_SAY, 2000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Wow, what a dream!"), SAY_SAY, 3000}})
     if nativeDead[chiefNum] ~= true then
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
@@ -207,7 +260,7 @@ function WonderAlive()
     AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("It was not a dream, unwise one!"), SAY_SAY, 5000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Exactly, man! That was my dream."), SAY_SAY, 5000}})
     AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY,  6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("???"), SAY_SAY, 2000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("Huh?"), SAY_SAY, 2000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Dude, wow! I just had the weirdest high!"), SAY_SAY, 6000}})
     if nativeDead[chiefNum] ~= true then
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
@@ -256,7 +309,7 @@ function SpyDebate()
     AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You know what? I don't even regret anything!"), SAY_SAY, 7000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[girlNum], loc("In fact, you are the only one that's been acting strangely."), SAY_SAY, 8000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("Are you accusing me of something?"), SAY_SAY, 3500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Seems like every time you take a \"walk\", the enemy find us!"), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Seems like every time you take a \"walk\", the enemy finds us!"), SAY_SAY, 8000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You know...taking a stroll."), SAY_SAY, 3500}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Where have you been?!"), SAY_SAY, 3000}})
   end
@@ -395,28 +448,31 @@ function SetupWave2DeadAnim()
 end
 
 function IsolateNatives()
-  PlaceGirder(710, 299, 6)
-  PlaceGirder(690, 299, 6)
-  PlaceGirder(761, 209, 4)
-  PlaceGirder(921, 209, 4)
-  PlaceGirder(1081, 209, 4)
-  PlaceGirder(761, 189, 4)
-  PlaceGirder(921, 189, 4)
-  PlaceGirder(1081, 189, 4)
-  PlaceGirder(761, 169, 4)
-  PlaceGirder(921, 169, 4)
-  PlaceGirder(1081, 169, 4)
-  PlaceGirder(761, 149, 4)
-  PlaceGirder(921, 149, 4)
-  PlaceGirder(1081, 149, 4)
-  PlaceGirder(761, 129, 4)
-  PlaceGirder(921, 129, 4)
-  PlaceGirder(1081, 129, 4)
-  PlaceGirder(1120, 261, 2)
-  PlaceGirder(1140, 261, 2)
-  PlaceGirder(1160, 261, 2)
-  AddAmmo(deployedHog, amDEagle, 0)
-  AddAmmo(deployedHog, amFirePunch, 0)
+  if not nativesIsolated then
+    PlaceGirder(710, 299, 6)
+    PlaceGirder(690, 299, 6)
+    PlaceGirder(761, 209, 4)
+    PlaceGirder(921, 209, 4)
+    PlaceGirder(1081, 209, 4)
+    PlaceGirder(761, 189, 4)
+    PlaceGirder(921, 189, 4)
+    PlaceGirder(1081, 189, 4)
+    PlaceGirder(761, 169, 4)
+    PlaceGirder(921, 169, 4)
+    PlaceGirder(1081, 169, 4)
+    PlaceGirder(761, 149, 4)
+    PlaceGirder(921, 149, 4)
+    PlaceGirder(1081, 149, 4)
+    PlaceGirder(761, 129, 4)
+    PlaceGirder(921, 129, 4)
+    PlaceGirder(1081, 129, 4)
+    PlaceGirder(1120, 261, 2)
+    PlaceGirder(1140, 261, 2)
+    PlaceGirder(1160, 261, 2)
+    AddAmmo(deployedHog, amDEagle, 0)
+    AddAmmo(deployedHog, amFirePunch, 0)
+    nativesIsolated = true
+  end
 end
 
 function PutCGI()
@@ -443,11 +499,14 @@ function PutCGI()
 end
 
 function TeleportNatives()
-  nativePos[waterNum] = {1100, 288}
-  for i = 1, 7 do
-    if nativeDead[i] ~= true then 
-      AnimTeleportGear(natives[i], unpack(nativePos[i]))
-    end
+  if not nativesTeleported then
+     nativePos[waterNum] = {1100, 288}
+     for i = 1, 7 do
+       if nativeDead[i] ~= true then 
+         AnimTeleportGear(natives[i], unpack(nativePos[i]))
+       end
+     end
+     nativesTeleported = true
   end
 end
 
@@ -464,10 +523,15 @@ function TurnNatives(hog)
 end
 
 function DeployHog()
-  AnimSwitchHog(deployedHog)
-  AnimTeleportGear(deployedHog, unpack(deployedPos))
-  if deployedHog ~= natives[wiseNum] then
-    AnimSay(deployedHog, loc("Why me?!"), SAY_THINK, 2000)
+  if not hogDeployed then
+     -- Steal switch to force the deployed hog to be on its own
+     AddAmmo(deployedHog, amSwitch, 0)
+     AnimSwitchHog(deployedHog)
+     AnimTeleportGear(deployedHog, unpack(deployedPos))
+     if deployedHog ~= natives[wiseNum] then
+        AnimSay(deployedHog, loc("Why me?!"), SAY_THINK, 2000)
+     end
+     hogDeployed = true
   end
 end
 
@@ -504,12 +568,12 @@ function SetupHogDeadAnim(gear)
   if nativesNum == 0 then
     return
   end
-  local hogDeadStrings = {loc("They killed ") .. gear .. loc("! You bastards!"), 
-                          gear .. loc("! Why?!"), 
+  local hogDeadStrings = {string.format(loc("They killed %s! You bastards!"), gear),
+                          string.format(loc("%s! Why?!"), gear), 
                           loc("That was just mean!"), 
-                          loc("Oh no, not ") .. gear .. "!",
-                          loc("Why ") .. gear .. loc("? Why?"),
-                          loc("What has ") .. gear .. loc(" ever done to you?!")}
+                          string.format(loc("Oh no, not %s!"), gear),
+                          string.format(loc("Why %s? Why?"), gear),
+                          string.format(loc("What has %s ever done to you?"), gear)}
   table.insert(hogDeadAnim, {func = AnimSay, args = {CurrentHedgehog, hogDeadStrings[7 - nativesNum], SAY_SHOUT, 4000}})
 end
 
@@ -546,10 +610,10 @@ end
 
 function SkipWave2DeadAnim()
   TeleportNatives()
-  IsolateNatives()
-  DeployHog()
-  HideCyborg()
   PutCircles()
+  DeployHog()
+  IsolateNatives()
+  HideCyborg()
 end
 
 function SpawnPlatformCrates()
@@ -557,8 +621,8 @@ function SpawnPlatformCrates()
   SpawnAmmoCrate(2574, 1279, amSMine)
   SpawnAmmoCrate(2575, 1267, amMine)
   SpawnAmmoCrate(2617, 1259, amSMine)
-  SpawnUtilityCrate(2579, 1254, amMine)
-  SpawnUtilityCrate(2478, 1243, amMine)
+  SpawnAmmoCrate(2579, 1254, amMine)
+  SpawnAmmoCrate(2478, 1243, amMine)
 end
 
 function AfterWave2DeadAnim()
@@ -569,7 +633,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
-  TurnTimeLeft = 0
+  EndTurn(true)
   ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines..."), 1, 12000)
 end
 
@@ -583,9 +647,9 @@ function SkipWave2Anim()
 end
 
 function SkipStartAnim()
+  ReviveNatives()
   AnimSetGearPosition(natives[waterNum], nativePos[denseNum][1] + 50, nativePos[denseNum][2])
   RestoreWave(1)
-  ReviveNatives()
   SetGearMessage(CurrentHedgehog, 0)
   SetState(CurrentHedgehog, 0)
   if m2Choice == choiceAccepted then
@@ -598,12 +662,15 @@ end
 
 function AfterStartAnim()
   AnimSwitchHog(natives[leaksNum])
-  TurnTimeLeft = 0
+  EndTurn(true)
   stage = spyKillStage
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
   AddEvent(CheckChoiceRefuse, {}, DoChoiceRefuse, {}, 0)
-  ShowMission(loc("Backstab"), loc("Judas"), loc("Kill the traitor...or spare his life!|Kill him or press [Precise]!"), 1, 8000)
+  ShowMission(loc("Backstab"), loc("Judas"),
+    string.format(loc("Kill the traitor, %s, or spare his life!"), GetHogName(spyHog)) .. "|" ..
+    loc("Kill him or skip your turn."),
+    1, 8000)
 end
 
 -----------------------------Events------------------------------------
@@ -620,7 +687,7 @@ function DoDeployedDead()
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Tribe"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckChoice()
@@ -664,7 +731,7 @@ function DoKilledOther()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Tribe"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckWaveDead(index)
@@ -677,7 +744,7 @@ function CheckWaveDead(index)
 end
 
 function DoWaveDead(index)
-  TurnTimeLeft = 0
+  EndTurn(true)
   needToAct = index
 end
 
@@ -711,7 +778,7 @@ function SetupWave3DeadAnim()
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, RestoreCyborg, {}}})
   table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 782}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {cyborg, loc("These primitive people are so funny!"), SAY_THINK, 6500}})
-  table.insert(wave3DeadAnim, {func = AnimMove, args = {cyborg, "Right", 4060, 0}})
+  table.insert(wave3DeadAnim, {func = AnimMove, args = {cyborg, "Right", 4060, 0, 7000}})
   table.insert(wave3DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
   table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 1}})
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, HideCyborg, {}}})
@@ -774,7 +841,7 @@ function AfterWave3DeadAnim()
   DismissTeam(loc("Assault Team"))
   DismissTeam(loc("Reinforcements"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 -----------------------------Misc--------------------------------------
@@ -842,8 +909,7 @@ end
 
 function SetupPlace()
   startNativesNum = nativesNum
-  HideHog(cyborg)
-  cyborgHidden = true
+  HideCyborg()
   for i = 1, 9 do
     HideHog(cannibals[i])
     cannibalHidden[i] = true
@@ -906,17 +972,17 @@ function AddHogs()
   end
 
 
-  AddTeam(loc("Assault Team"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Assault Team"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
     cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end
 
-  AddTeam(loc("Reinforcements"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Reinforcements"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
     cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do
@@ -954,12 +1020,12 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-  Map = "Cave"
+	Map = "Cave"
 	Theme = "Nature"
-  SuddenDeathTurns = 3000
-
-  AddHogs()
-  AnimInit()
+	WaterRise = 0
+	HealthDecrease = 0
+	AddHogs()
+	AnimInit()
 end
 
 function onGameStart()
@@ -1020,7 +1086,7 @@ function onAmmoStoreInit()
   SetAmmo(amGirder, 4, 0, 0, 2)
   SetAmmo(amParachute, 4, 0, 0, 2)
   SetAmmo(amSwitch, 8, 0, 0, 2)
-  SetAmmo(amSkip, 8, 0, 0, 0)
+  SetAmmo(amSkip, 9, 0, 0, 0)
   SetAmmo(amRope, 5, 0, 0, 3)
   SetAmmo(amBlowTorch, 3, 0, 0, 3)
   SetAmmo(amPickHammer, 0, 0, 0, 3)
@@ -1048,18 +1114,23 @@ function onNewTurn()
   end
 
   if GetHogTeamName(CurrentHedgehog) == loc("Tribe") then
-    TurnTimeLeft = 0
+    EndTurn(true)
     return
   end
   TurnsLeft = TurnsLeft - 1
   
   if stage == platformStage then
-    AddCaption(TurnsLeft .. " turns until arrival!")
+    AddCaption(string.format(loc("Turns until arrival: %d"), TurnsLeft))
+  end
+  if deployedHog then
+    if GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+      AnimSwitchHog(deployedHog)
+    end
   end
 
   if stage == spyKillStage then
     if CurrentHedgehog == spyHog or GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-      TurnTimeLeft = 0
+      EndTurn(true)
     else
       SetGearMessage(CurrentHedgehog, 0)
       --AnimSwitchHog(natives[leaksNum])
@@ -1095,7 +1166,10 @@ function onPrecise()
     SetAnimSkip(true)
     return
   end
-  if stage == spyKillStage then
+end
+
+function onHogAttack(ammoType)
+  if stage == spyKillStage and ammoType == amSkip then
     highJumped = true
   end
 end

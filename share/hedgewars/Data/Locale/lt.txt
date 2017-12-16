@@ -60,7 +60,7 @@
 00:56=Cleaver
 00:57=Trintukas
 
-01:00=Kaukimės!
+; 01:00=Loading …
 01:01=Lygiosios
 01:02=%1 Laimėjo!
 01:03=Garsas %1%
@@ -248,11 +248,11 @@
 02:02=Nebijok!
 02:02=Būk drąsus ir laimėk
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 Laimėjo!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Lygiosios
 
 ; New Health Crate
 02:05=Atskrenda pagalba!
@@ -508,12 +508,12 @@
 ; Game goal strings
 05:00=Žaidimo režimai
 05:01=Taikomos šios taisyklės
-05:02=Fortai: Gink savo fortą; nugalėk savo priešus!
+05:02=Padėk karaliui: Pasirink apginta pradžios poziciją savo karaliui
 05:03=Maža gravitacija: Žiūrėk kur eini!
 05:04=Nemirtingumas: Ežiai yra (beveik) nemirtingi
 05:05=Vampirizmas: Ežiai bus pagydyti su žala, kurią jie padaro
 05:06=Karma: Priešo ežiai nukentės taip pat kaip ir tavo
-05:07=Apgink Karalių: Neleisk savo karaliui mirti!|Padėk karaliui: Pasirink apginta pradžios poziciją savo karaliui
+05:07=Apgink Karalių: Neleisk savo karaliui mirti!
 05:08=Padėk ežius: Padėk savo ežius prieš žaidimą
 05:09=Artilerija: Ežiai negali vaikščioti
 05:10=Nesunaikinoma Vietovė: Dauguma ginklų nesunaikins vietovės

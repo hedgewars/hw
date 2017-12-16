@@ -60,8 +60,9 @@
 00:56=Tasak
 00:57=Guma
 00:58=Mina powietrzna
+00:59=Gumowa kaczuszka
 
-01:00=Walczmy!
+01:00=Wczytywanie …
 01:01=Remis
 01:02=%1 wygrywają!
 01:03=Głośność %1%
@@ -86,7 +87,11 @@
 01:22=Tryb AFK
 01:23=Auto-kamera: wyłączona
 01:24=Auto-kamera: włączona
-01:25=Press the target button to mark the target
+01:25=Wciśnij przycisk celu, by zaznaczyć cel
+01:26=To narzędzie jest niedostępne w Nagłej Śmierci
+; E.g. “+25” when gaining health from crate or vampirism
+01:27=+%1
+01:28=Puste!
 
 ; Event messages
 ; Hog (%1) died
@@ -98,7 +103,6 @@
 02:00=%1 spotkał stwórcę!
 02:00=%1 już dłużej nie wytrzyma!
 02:00=%1 zakończył służbę!
-02:00=%1 poświęcił się dla ogółu!
 02:00=%1 zrezygnował z trudu życia!
 02:00=Tak jak liść opuszcza drzewo, tak %1 opuszcza nas!
 02:00=%1 mówi "Pokój z wami"!
@@ -112,11 +116,11 @@
 02:00=%1 już nie będzie strzelał z dubeltówki..
 02:00=%1 już nie będzie rzucał w innych owocami...
 02:00=%1 nie postrzela już ze strzelby...
-02:00=%1 przyjął o jeden strzał za dużo.
+02:00=%1 przyjął o jeden strzał za dużo
 02:00=A mógł zebrać tę skrzynkę z życiem...
 02:00=%1 poszedł pograć w lepszą grę...
 02:00=%1 przytupnął nóżką i umarł
-02:00=%1 poniósł całkowitą klęskę.
+02:00=%1 poniósł całkowitą klęskę
 02:00=Biedny %1 ...
 02:00=%1 woli grać w WarMUX
 02:00=%1 blokuje strzały własną twarzą
@@ -124,7 +128,7 @@
 02:00=%1 opuścił budynek
 02:00=%1 podąża drogą dinozaurów
 02:00=%1 przybliża jeże o krok do wyginięcia
-02:00=Śmierć %1 sprawia, że chce mi się płakać
+02:00=Śmierć %1 sprawia, że chce mi się płakać
 02:00=%1 wącha kwiatki... od spodu
 02:00=%1 zakończył egzystencję
 02:00=Musimy Cię pożegnać, %1
@@ -135,10 +139,10 @@
 02:00=%1 już się do nas nie uśmiechnie
 02:00=%1 już nie istnieje
 02:00=%1 przestał istnieć
-02:00=Nie chcąc dłużej żyć, %1 umiera w pokoju.
+02:00=Nie chcąc dłużej żyć, %1 umiera w pokoju
 02:00=Żegnaj %1, dopiero Cię poznaliśmy!
-02:00=%1 ma niską tolerancję na bycie postrzelonym.
-02:00=%1 mógł użyć dodatkowego życia.
+02:00=%1 ma niską tolerancję na bycie postrzelonym
+02:00=%1 mógł użyć dodatkowego życia
 02:00=Czy jest na sali jakiś doktor?
 02:00=%1 przeszedł na emeryturę
 02:00=%1 poszedł do innej piaskownicy
@@ -153,7 +157,10 @@
 02:00=%1, machamy na pożegnanie!
 02:00=%1 zatruł się ołowiem
 02:00=%1 się wykrwawił
-02:00=%1 zginął za słuszną sprawę
+02:00=%1 zapomniał jak się oddycha
+02:00=%1 wziął i umarł
+02:00=%1 został zabity na śmierć
+02:00=%1 mógł nie fikać
 
 ; Hog (%1) drowned
 02:01=%1 robi za łódź podwodną!
@@ -192,7 +199,7 @@
 02:01=%1 będzie grał w "Uwolnić Orkę"
 02:01=%1 szuka rybek do akwarium!
 02:01=%1 odnalazł Atlantydę!
-02:01=Trzeba było się nauczyć się pływać...
+02:01=Trzeba było się nauczyć się pływać...
 02:01=%1 powinien ze sobą zabrać narty wodne
 02:01=%1 nie lubi sportów wodnych
 02:01=%1 będzie już zawsze puszczał bąbelki
@@ -206,12 +213,13 @@
 02:01=%1 był bardzo spragniony
 02:01=%1 weźmie udział w "Szczękach"... jako przynęta!
 02:01=%1 lubi nurkować
-02:01=%1 nie zdążył zadzwonić po WOPR-u
+02:01=%1 nie zdążył zadzwonić po WOPR
 02:01=%1 miał za mało tlenu
 02:01=%1 przemoczył sobie wdzianko
 02:01=%1 utonął
 02:01=%1 ma za małą wyporność
 02:01=%1, uważaj na rekiny!
+02:01=%1 ma bardzo ważne spotkanie na dnie oceanu
 
 ; Round starts
 02:02=Walczmy!
@@ -266,11 +274,20 @@
 02:02=Nie odczuwaj strachu!
 02:02=Bądź odważny i podbijaj!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 wygrywają!
+02:03=%1 są zwycięzcami!
+02:03=%1 zmiażdżyli konkurencję!
+02:03=%1 mają dzisiaj imprezę
+02:03=%1 byli po prostu lepsi
+02:03=Drużynie %1 nikt nie podskoczy
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Remis
+02:04=Ale nudy, remis
+02:04=Nikt nie wygrywa, remis
+02:04=Wszyscy martwi. Dobrze.
+02:04=Gdzie znikły wszystkie jeże?
 
 ; New health crate
 02:05=Przybyła pomoc!
@@ -294,7 +311,6 @@
 02:05=Rozdajemy darmowe HP!
 02:05=Na zdrowie!
 02:05=Szczepionka!
-
 
 ; New ammo crate
 02:06=Więcej broni!
@@ -322,7 +338,6 @@
 02:06=Cokolwiek tam jest, na pewno się przyda
 02:06=Gadżety!
 02:06=Odjazdowy sprzęt!
-02:06=Czy to ptak...? Czy to samolot...?
 
 ; New utility crate
 02:07=Czas na narzędzia!
@@ -388,18 +403,18 @@
 
 ; Hog (%1) hurts himself only
 02:09=%1 powinien potrenować celowanie!
-02:09=%1 najwidoczniej nienawidzi samego siebie..
+02:09=%1 najwidoczniej nienawidzi samego siebie
 02:09=%1 stoi po złej stronie!
-02:09=%1 przypomina emo.
-02:09=%1 trzymał broń drugą stroną.
-02:09=%1 jest trochę sadystyczny
-02:09=%1 jest masochistą.
+02:09=%1 przypomina emo
+02:09=%1 trzymał broń drugą stroną
+02:09=%1 jest trochę sadystyczny
+02:09=%1 jest masochistą
 02:09=%1 nie ma instynktu samozachowawczego
-02:09=%1 zepsuł strzał.
+02:09=%1 zepsuł strzał
 02:09=%1 musiał to zepsuć
 02:09=To był marny strzał, %1
-02:09=%1 jest trochę za bardzo nieostrożny przy używaniu silnych broni.
-02:09=%1 powinien rozważyć zmianę kariery.
+02:09=%1 jest trochę za bardzo nieostrożny przy używaniu silnych broni
+02:09=%1 powinien rozważyć zmianę kariery
 02:09=Najgorszy strzał! Kiedykolwiek!
 02:09=Źle, źle, źle %1, powinieneś strzelać do WROGA!
 02:09=%1 powinien celować w przeciwnika
@@ -408,20 +423,20 @@
 02:09=To było głupie, %1
 02:09=%1 żyje według zasady: "nie ryzykujesz, nie zyskujesz"
 02:09=%1 jest rozkojarzony
-02:09=%1 przez swoje rozkojarzenie uderza samego siebie.
+02:09=%1 przez swoje rozkojarzenie uderza samego siebie
 02:09=%1 ma talent w niszczeniu samego siebie
 02:09=%1 jest niezdarny
 02:09=%1 pokazuje wrogowi na co go stać!
-02:09=Nie można się spodziewać by %1 był cały czas perfekcyjny.
+02:09=Nie można się spodziewać by %1 był cały czas perfekcyjny
 02:09=Nie martw się %1, nikt nie jest doskonały...
-02:09=%1 zrobił to celowo.
+02:09=%1 zrobił to celowo
 02:09=%1, ta wpadka zostanie między nami
 02:09=%1 zapomniał przeczyścić lufę
 02:09=%1, granat po wyjęciu zawleczki przestaje być przyjacielem
 02:09=Na pewno nikt tego nie zobaczył, %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
 02:09=%1, ktoś popsuł ci giwerę?
-02:09=%1 miał ciężki weekend.
+02:09=%1 miał ciężki weekend
 02:09=Ale Urwał!!!
 02:09=%1, ale z ciebie frajer!
 02:09=%1 próbował zjeść arbuza
@@ -429,14 +444,19 @@
 02:09=%1 trzymał karabin za spust
 02:09=%1 postanowił się rozerwać... na strzępy
 02:09=%1 ma już dość tego świata
+02:09=%1 szuka atencji
+02:09=%1 twierdzi, że strzelanie do wrogów jest za mało hipsterskie
 
-; Hog shot an home run (using the bat and another hog)
+; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Jeżyk idzie w odstawkę!
 02:10=Bzziuuuuu!
 02:10=Niezły rzut!
 02:10=Chyba padnie rekord Guinnessa w rzucie jeżem!
+02:10=Cel: Księżyc
+02:10=%1 daje popis machania kijem
+02:10=%1 wysyła jeże zwiedzać kosmos
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 musi iść spać!
@@ -444,6 +464,74 @@
 02:11=Żegnamy Cię, %1
 02:11=%1 nie ma zamiaru dłużej grać
 02:11=%1 musi odejść
+02:11=%1 aktywował powietrzne moce i zniknął
+02:11=%1 wyparował
+02:11=%1 gdzieś wsiąkł
+02:11=%1 zamienił się w... nic
+02:11=%1 osiągnął wyższą formę egzystencji
+
+; Hog (%1) was poisoned
+02:12=%1 czuje się chory
+02:12=%1 chyba ma grypę
+02:12=%1 złapał jakieś paskudztwo
+02:12=%1 musi odwiedzić doktora
+02:12=%1 nie wygląda najlepiej
+02:12=%1 kaszle jak opętany
+02:12=%1 toczy wewnętrzny bój z groźnym wirusem
+02:12=Miejmy nadzieję, że to nie jest zaraźliwe
+
+; Hog (%1) was resurrected by the Resurrector utility
+02:13=%1 został wskrzeszony
+02:13=%1 powraca z grobu
+02:13=%1 udaje Jezusa
+02:13=%1 dostał drugą szansę
+02:13=%1 znowu żyje
+02:13=%1 stwierdził, że śmierć nie jest dla niego
+02:13=%1 musi się jeszcze trochę pomęczyć
+02:13=%1 pokonał Śmierć i wraca
+02:13=%1 został wyrzucony z piekła
+
+; Hog (%1) explodes after an kamikaze attack
+02:14=%1 umiera z honorem
+02:14=%1 znalazł odlotowy sposób, by umrzeć
+02:14=%1 zabija siebie i innych
+02:14=%1 używa swojej sekretnej samobójczej techniki
+02:14=%1 popełnia zbiorowe samobójstwo
+02:14=%1 poświęcił się dla ogółu!
+02:14=%1 zginął za słuszną sprawę
+
+; Hog (%1) returned from time-travel with the time box
+02:15=%1 wraca z wędrówki w czasie
+02:15=%1 jest z powrotem w naszych czasach
+02:15=%1 wraca do teraźniejszości
+02:15=%1, gdzie ty byłeś?
+
+; Hog (%1) runs out of turn time (not shown in infinite attack mode)
+02:16=%1 był za wolny
+02:16=%1 twierdzi, że czas tury to tylko konstrukt społeczny
+02:16=%1 zapomniał zaatakować
+02:16=%1 za długo się zastanawiał
+02:16=%1 jest jakiś niezdecydowany
+02:16=%1 przegrzał się
+02:16=%1 ma złe nawyki po grze w szachy
+02:16=Sekunda więcej i %1 wszystkich by zniszczył
+02:16=%1 jest totalną ślamazarą
+02:16=%1 jest z natury flegmatykiem
+02:16=%1 zaliczył zwiechę
+02:16=%1 nie zdążył. Peszek.
+02:16=%1 wymyślił genialny plan, w którym zabrakło ataku
+02:16=%1 nie jest zbyt szybki
+
+; King (%1) has died
+02:17=%1 nie żyje! Wiwat %1!
+02:17=%1 był dobrym królem... był
+02:17=Jak na króla, %1 był słabeuszem
+02:17=%1 sobie pokrólował
+02:17=%1 był królem, a teraz nie żyje
+02:17=%1 opuszcza swoje królestwo
+02:17=Król %1 zginął na wojnie
+02:17=%1 nie zostawił dziedzica
+02:17=%1 i tak nie umiał rządzić
 
 ; Weapon Categories
 03:00=Granat z zapalnikiem
@@ -505,7 +593,8 @@
 03:55=Chłodniej już nie będzie!
 03:56=Nie przytnij sobie igieł!
 03:57=Narzędzie
-03:58=Latająca mina
+03:58=Latająca bomba zbliżeniowa
+03:59=Pływająca bomba
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -517,17 +606,17 @@
 04:06=Znudzony? Brak możliwości ataku? Oszczędzasz broń?|Żaden problem! Po prostu pomiń turę, tchórzu!|Atak: Pomiń turę bez walki
 04:07=Pokonaj duże dystanse w krótkim czasie za pomocą|liny. Z rozpędu podcinaj inne jeże, lub użyj sprytu|by upuścić na nie granat lub inną broń.|Atak: Wystrzel albo odczep linę|Długi skok: Upuść granat lub podobną broń
 04:08=Trzymaj przeciwników na dystans przez upuszczenie|miny w wąskim przejściu lub zaraz obok ich stóp. Nie|zapomnij uciec zanim się włączy!|Atak: Upuść minę obok siebie
-04:09=Nie jesteś pewny swoich umiejętności w celowaniu?|Weź pistolet i powystrzelaj przeciwników jak kaczki.|Atak: Strzel (kilka razy)
+04:09=Nie jesteś pewny swoich umiejętności w celowaniu?|Weź pistolet i powystrzelaj przeciwników jak kaczki.|Atak: Strzel (kilka razy)
 04:10=Brutalna siła zawsze jest rozwiązaniem. Upuść|wybuchową laskę dynamitu obok przeciwnika i|uciekaj gdzie pieprz rośnie.|Atak: Upuść dynamit obok siebie
 04:11=Uwolnij się od przeciwników poprzez wyrzucenie|ich poza mapę albo do wody. A co powiesz o|strąceniu min w swoich wrogów?|Atak: Spałuj wszystko co jest przed tobą
 04:12=Zbliż się i osobiście wyzwól moc tej|śmiertelnej techniki sztuk walki.|Atak: Użyj swoich pięści
 04:13=UNUSED
-04:14=Masz lęk wysokości? Lepiej weź spadochron.|Rozwija się kiedy spadasz z wysokości|i ochroni przed obrażeniami od upadku.|Atak: Rozwiń lub złóż spadochron|Lewo/Prawo/Góra/Dół: Kieruj lotem|Długi skok: Upuść granat lub podobną broń
+04:14=Masz lęk wysokości? Lepiej weź spadochron.|Rozwija się kiedy spadasz z wysokości|i ochroni przed obrażeniami od upadku.|Atak: Rozwiń lub złóż spadochron|Lewo/Prawo/Góra/Dół: Kieruj lotem|Długi skok: Upuść granat lub podobną broń
 04:15=Wezwij samolot, żeby zrzucił bomby na|twoich przeciwników.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz cel
 04:16=Wezwij samolot, żeby zrzucił kilka|min w określonym miejscu.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz cel
 04:17=Potrzebny schron? Użyj palnika by|wydrążyć tunel w stałym podłożu|co pozwoli Ci się ukryć.|Atak: Zacznij/Zakończ kopać
 04:18=Potrzebujesz dodatkowej ochrony albo chcesz|przejść przez teren nie do przejścia? Umieść|konstrukcje gdzie chcesz.|Lewo/Prawo: Wybierz konstrukcję do umieszczenia|Kursor: Umieść konstrukcję w odpowiednim miejscu
-04:19=Użyty w odpowiednim momencie teleport jest|potężniejszy niż większość broni. Potrafi|uwolnić jeża z tarapatów w kilka sekund.|Kursor: Wybierz miejsce teleportacji|Lewo/Prawo: Odwróć jeża
+04:19=Użyty w odpowiednim momencie teleport jest|potężniejszy niż większość broni. Potrafi|uwolnić jeża z tarapatów w kilka sekund.|Kursor: Wybierz miejsce teleportacji|Lewo/Prawo: Odwróć jeża
 04:20=Pozwala w tej turze zagrać innym jeżem.|Atak: Uaktywnij wybieranie jeża|Zmiana (Tab): Wybierz następnego jeża|Precyzyjne celowanie (L.Shift) + Zmiana (Tab): |Wybierz poprzedniego jeża
 04:21=Odpal moździerz, który po uderzeniu|wypuści kilka bomb.|Atak: Strzel z całą mocą
 04:22=Nie tylko dla Indiana Jones'a! Ten bicz może|być użyteczny w wielu wypadkach. Szczególnie|kiedy chcesz kogoś zrzucić z urwiska.|Atak: Uderz wszystko co jest przed tobą
@@ -540,8 +629,8 @@
 04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwuje tony małych|kolorowych kulek wypełnionych materiałem|wybuchowym.|Atak: Strzel kulkami|Góra/Dół: Kontynuuj celowanie
 04:30=Wezwij samolot, żeby zrzucić dużą ilość|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz obszar
 04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Góra/Dół: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech Walkirie wkroczą na pole bitwy!
-04:32=Niska grawitacja jest skuteczniejsza od dowolnej|diety! Skacz wyżej i na większy dystans lub pozwól|przeciwnikom lecieć jeszcze dalej.|Atak: Aktywuj
-04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia. Włącze-|nie spowoduje zwiększenie zadawanych|obrażeń o 50% do końca tury.|Atak: Aktywuj
+04:32=Niska grawitacja jest skuteczniejsza od dowolnej|diety! Skacz wyżej i na większy dystans lub pozwól|przeciwnikom lecieć jeszcze dalej.|Atak: Aktywuj
+04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia. Włącze-|nie spowoduje zwiększenie zadawanych|obrażeń o 50% do końca tury.|Atak: Aktywuj
 04:34=Czyni Cię nieważliwym na obrażenia do za-|kończenia tury. Ale nie szalej, nadal możesz|utonąć.|Atak: Aktywuj
 04:35=Bywa, że czas pędzi za szybko. Zyskaj 30|dodatkowych sekund by dokończyć atak.|Atak: Aktywuj
 04:36=Są takie dni gdy po prostu nie ma się cela.|Ułatw sobie zasadnie wykorzystując naj-|nowsze zdobycze technologiczne.|Atak: Aktywuj
@@ -557,7 +646,7 @@
 04:46=Pokrywa twoich wrogów ognistą powłoką.|Czy ktoś zamawiał pieczonego jeża?|Atak: Aktywuj|Góra/Dół: Celowanie|Lewo/Prawo: Ustaw prędkość strzelania
 04:47=Podwój zabawę z pomocą 2 lepkich min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (albo zrób obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
 04:48=Czyż walenie jeży po głowach nie|jest zabawne? Dobre uderzenie|z młotka zabierze 1/3 życia|przeciwnika i wkopie go w podłoże|Atak: Uderz
-04:49=Poświęć swoje zdrowie aby wskrzesić przy-|jaciół! Ale strzeż się, gdyż możesz również|wskrzesić swoich wrogów.|Atak: Przytrzymaj by wskrzeszać powoli|Góra: Przyspiesz wskrzeszanie
+04:49=Poświęć swoje zdrowie aby wskrzesić przy-|jaciół! Ale strzeż się, gdyż możesz również|wskrzesić swoich wrogów.|Atak: Przytrzymaj by wskrzeszać powoli|Góra: Przyspiesz wskrzeszanie
 04:50=Wezwij szwadron śmiercionośnych wierteł|by wykurzyć kogoś z kryjówki. Po użyciu|zostanie zrzuconych 6 wiertniczych bomb|wkręcających się w podłoże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz miejsce zrzutu
 04:51=Obrzuć kogoś błotem! Broń ta nie zadaje dużych|obrażeń ale potrafi zepchnąć z krawędzi!|Atak: Przytrzymaj by strzelić z większą siłą
 04:52=UNUSED
@@ -566,17 +655,18 @@
 04:55=Epoka lodowcowa powraca!!|Zamroź jeże, uczyń podłoże śliskim lub zapobiegnij|utonięciu zamrażając wodę.|Atak: Strzał
 04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)
 04:57=Tworzy elastyczne paski wykonane z gumy,|od których jeże i inne rzeczy odbijają się|bez obrażeń przy upadku.|Lewo/Prawo: Zmiana orientacji paska|Kursor: Umieść pasek w aktualnej pozycji
-04:58=Ta mina będzie się swobodnie unisić w powietrzu i|podążać za jeżami, które się do niej zblizą.|Jej eksplozja jest jednakże mniejsza niż miny przeciwpiechotnej.|Atak: Przytrzymaj by rzucić z większą siłą
+04:58=Ta mina będzie się swobodnie unisić w powietrzu i|podążać za jeżami, które się do niej zblizą.|Jej eksplozja jest jednakże mniejsza niż miny przeciwpiechotnej.|Atak: Przytrzymaj by rzucić z większą siłą
+04:59=Wyślij te brudne jeże popływać! Ta słodka, mała, piskliwa|gumowa kaczuszka zdolna jest pływać po wodzie i będzie|płynąć z wiaterm. Wybucha, kiedy uderzy w ziemię, więc|upewnij się, że zrzucasz ją z klifu lub innego bezpiecznego|miejsca.|Atak: Upuść kaczuszkę
           
 ; Game goal strings
 05:00=Ustawienia gry
 05:01=Obowiązują następujące zasady:
-05:02=Forty: Broń swojej fortecy. Pokonaj przeciwników!
+05:02=Umieść Króla: Wybierz bezpieczną pozycję startową dla króla
 05:03=Niska grawitacja: Proszę uważać!
 05:04=Niezniszczalność: Jeże są (prawie) niezniszczalne
 05:05=Wampiryzm: Jeże dostają życie za zadane obrażenia (80%)
 05:06=Karma: Jeże doznają obrażeń za uszkodzenia zadane innym
-05:07=Broń Króla: Nie pozwól królowi umrzeć!|Umieść Króla: Wybierz bezpieczną pozycję startową dla króla
+05:07=Broń Króla: Nie pozwól królowi umrzeć!
 05:08=Umieść jeże: Umieść jeże przed rozpoczęciem gry.
 05:09=Artyleria: Jeże nie mogą się poruszać
 05:10=Niezniszczalny teren: Większość broni nie niszczy terenu.
@@ -591,3 +681,4 @@
 05:19=Uzbrojenie zostaje przywrócone przy kolejnej turze
 05:20=Każdy z jeży ma oddzielne uzbrojenie
 05:21=Zespół: Zespoły w klanie wykonują tury po kolei|Wspólny czas: Czas jest wspólny dla każdej drużyny w zespole
+05:22=Silny wiatr: Wiatr wpływa prawie na wszystko

@@ -43,7 +43,8 @@ class PageEditTeam : public AbstractPage
         void deleteTeam(const QString & name);
 
     public slots:
-        void CBFort_activated(const QString & gravename);
+        void CBTeamLvl_activated(const int index);
+        void CBFort_activated(const int index);
 
     private:
         QTabWidget * tbw;
@@ -56,6 +57,10 @@ class PageEditTeam : public AbstractPage
         SquareLabel *FortPreview;
         QComboBox *CBGrave;
         QComboBox *CBFlag;
+        QLabel *CPUFlag;
+        QLabel *CPUFlagLabel;
+        QWidget *hboxCPUWidget;
+        QPixmap pixCPU[5];
         QComboBox *CBTeamLvl;
         QComboBox *CBVoicepack;
         QGroupBox *GBoxBinds;
@@ -65,6 +70,7 @@ class PageEditTeam : public AbstractPage
         HatButton * HHHats[HEDGEHOGS_PER_TEAM];
         HWTeam data();
         QString m_playerHash;
+        QString OldTeamName;
         KeyBinder * binder;
         bool m_loaded;
 
@@ -75,17 +81,33 @@ class PageEditTeam : public AbstractPage
         void loadTeam(const HWTeam & team);
 
         // page 1
-        QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
         QPushButton * btnRandomTeam;
+        QPushButton * btnRandomNames;
+        QPushButton * btnRandomHats;
+
+        QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
+        QPushButton * btnRandomTeamName;
+        QPushButton * btnRandomGrave;
+        QPushButton * btnRandomFlag;
+        QPushButton * btnRandomVoice;
+        QPushButton * btnRandomFort;
         QPushButton * btnTestSound;
 
         void lazyLoad();
 
     private slots:
         void saveTeam();
-        void setRandomNames();
+        void setRandomTeam();
+        void setRandomHogNames();
+        void setRandomHats();
 
-        void setRandomName(int hh_index);
+        void setRandomTeamName();
+        void setRandomGrave();
+        void setRandomFlag();
+        void setRandomVoice();
+        void setRandomFort();
+
+        void setRandomHogName(int hh_index);
 
         /// Plays a random voice sound of the currently edited team.
         void testSound();

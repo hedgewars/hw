@@ -1,11 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="zh_TW">
+<TS version="2.1" language="zh_TW">
 <context>
     <name>About</name>
     <message>
         <source>Unknown Compiler</source>
         <translation>未知的編譯器</translation>
+    </message>
+    <message>
+        <source>Hedgewars %1</source>
+        <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
+        <translation type="unfinished">刺蝟大作戰 %1</translation>
+    </message>
+    <message>
+        <source>Revision %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visit our homepage: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the %1.</source>
+        <translation type="unfinished">此程序使用%1.釋出</translation>
+    </message>
+    <message>
+        <source>GNU GPL v2</source>
+        <extracomment>Short for “GNU General Public License version 2”</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dependency versions:</source>
+        <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -31,6 +102,14 @@
     </message>
     <message>
         <source>Copy of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -74,11 +153,11 @@
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation>請指定%1</translation>
+        <translation type="vanished">請指定%1</translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation>暱稱</translation>
+        <translation type="vanished">暱稱</translation>
     </message>
     <message>
         <source>permanent</source>
@@ -86,6 +165,14 @@
     </message>
     <message>
         <source>Ban player</source>
+        <translation>封鎖玩家</translation>
+    </message>
+    <message>
+        <source>Please specify an IP address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please specify a nickname.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -260,7 +347,7 @@ Please check your installation!</source>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線</translation>
+        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線。</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
@@ -355,7 +442,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation>預設隊伍</translation>
+        <translation type="vanished">預設隊伍</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
@@ -453,7 +540,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>此頁面需要連接網際網路。</translation>
+        <translation type="vanished">此頁面需要連接網際網路。</translation>
     </message>
     <message>
         <source>Guest</source>
@@ -469,11 +556,38 @@ Please, enter the password:</source>
         <translation>房間使用密碼保護
 請輸入密碼：</translation>
     </message>
+    <message>
+        <source>Team 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team %1</source>
+        <extracomment>Default team name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer %1</source>
+        <extracomment>Default computer team name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
     <message>
         <source>en.txt</source>
+        <extracomment>IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.</extracomment>
         <translation>zh_TW.txt</translation>
     </message>
     <message>
@@ -500,7 +614,7 @@ Last two engine messages:
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">連線到伺服器</translation>
     </message>
 </context>
 <context>
@@ -651,7 +765,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">選擇一個主題</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
@@ -769,7 +883,7 @@ If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
         <translation>要連接到伺服器，請登錄。
 
-如果你在www.hedgewars.org沒有一個的帳號，
+如果你在www.hedgewars.org沒有一個的帳戶，
 只需輸入你的暱稱。</translation>
     </message>
     <message>
@@ -782,7 +896,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>New Account</source>
-        <translation type="unfinished"></translation>
+        <translation>新帳戶</translation>
     </message>
 </context>
 <context>
@@ -819,7 +933,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation type="unfinished"></translation>
+        <translation>選擇一頂帽子</translation>
     </message>
 </context>
 <context>
@@ -848,7 +962,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Duration: %1m %2s</source>
-        <translation>持續時間：%1分 %2秒</translation>
+        <translation type="vanished">持續時間：%1分 %2秒</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
@@ -856,7 +970,16 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>%1 fps</source>
-        <translation>%1 FPS</translation>
+        <translation type="vanished">%1 FPS</translation>
+    </message>
+    <message>
+        <source>Duration: %1min %2s</source>
+        <extracomment>Duration in minutes and seconds (SI units)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 FPS</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -864,6 +987,19 @@ just enter your nickname.</source>
     <message>
         <source>No description available.</source>
         <translation>沒有可用的描述。</translation>
+    </message>
+</context>
+<context>
+    <name>MinesTimeSpinBox</name>
+    <message>
+        <source>Random</source>
+        <translation type="unfinished">隨機</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 seconds</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -930,6 +1066,25 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished">隊伍</translation>
+    </message>
+    <message>
+        <source>Campaign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished">開始戰鬥</translation>
+    </message>
+</context>
+<context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
@@ -944,11 +1099,27 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation>此頁面需要連接網際網路。</translation>
+        <translation type="vanished">此頁面需要連接網際網路。</translation>
     </message>
     <message>
         <source>Open packages directory</source>
         <translation type="unfinished">打開組件目錄</translation>
+    </message>
+    <message>
+        <source>Load the start page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1048,6 +1219,47 @@ just enter your nickname.</source>
         <source>Random Team</source>
         <translation>隨機隊伍分配</translation>
     </message>
+    <message>
+        <source>Play a random example of this voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Hats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the team name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize the fort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU %1</source>
+        <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageGameStats</name>
@@ -1057,7 +1269,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished">生命圖</translation>
+        <translation type="unfinished">生命走勢</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -1066,7 +1278,7 @@ just enter your nickname.</source>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1%n&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1083,19 +1295,20 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
+        <extracomment>Number of kills in stats screen, written after the team name</extracomment>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>&lt;b&gt;%1&lt;/b&gt;認為攻擊自己的刺猬&lt;b&gt;%2&lt;/b&gt;傷害是很好的。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>&lt;b&gt;%1&lt;/b&gt;殺了&lt;b&gt;%2&lt;/b&gt;隻自己的刺蝟。</numerusform>
         </translation>
     </message>
@@ -1115,6 +1328,19 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
+        <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
@@ -1428,6 +1654,27 @@ just enter your nickname.</source>
         <source>Video recording options</source>
         <translation>視頻錄製選項</translation>
     </message>
+    <message>
+        <source>x</source>
+        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MISSING LANGUAGE NAME [%1]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t delete last team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can&apos;t delete the last team!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PagePlayDemo</name>
@@ -1533,7 +1780,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished">保衛你的堡壘，破壞對手的，努力吧！</translation>
+        <translation type="obsolete">保衛你的堡壘，破壞對手的，努力吧！</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1613,7 +1860,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished">同一顏色的每個隊伍採取連續輪流分享他們的回合時間。</translation>
+        <translation type="unfinished">同樣顏色的任意一隊伍每回合都可動作,但回合時間需共享。</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1715,6 +1962,10 @@ just enter your nickname.</source>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Name of this scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1774,11 +2025,35 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>選擇要玩的任務或培訓</translation>
+        <translation type="obsolete">選擇要玩的任務或培訓</translation>
     </message>
     <message>
         <source>Start fighting</source>
         <translation>開始戰鬥</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1878,10 +2153,14 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示有密碼保護的</translation>
     </message>
     <message>
         <source>Show join restricted</source>
+        <translation>顯示有加入限制的</translation>
+    </message>
+    <message>
+        <source>Delegate room control</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1991,6 +2270,14 @@ just enter your nickname.</source>
         <source>Enable translucent tags by default</source>
         <translation>預設啟用半透明顯示</translation>
     </message>
+    <message>
+        <source>Enable visual effects such as animated menu transitions and falling stars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -2072,6 +2359,30 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Computer (Level %1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>24 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>25 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>30 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>50 FPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 FPS</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2242,7 +2553,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished">立體渲染</translation>
+        <translation type="obsolete">立體渲染</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2314,7 +2625,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation>位元速率 (Kbps)</translation>
+        <translation type="vanished">位元速率 (Kbps)</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
@@ -2350,11 +2661,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Revision</source>
-        <translation>版本</translation>
+        <translation type="vanished">版本</translation>
     </message>
     <message>
         <source>This program is distributed under the %1</source>
-        <translation>此程序使用%1釋出</translation>
+        <translation type="vanished">此程序使用%1釋出</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
@@ -2378,7 +2689,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Air Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>浮空雷</translation>
     </message>
     <message>
         <source>Player</source>
@@ -2390,6 +2701,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>% Retreat Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereoscopy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kibit/s)</source>
+        <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2406,6 +2726,10 @@ Do you really want to quit?</source>
     <message>
         <source>anonymous</source>
         <translation>匿名</translation>
+    </message>
+    <message>
+        <source>unnamed (%1)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2501,19 +2825,19 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation type="unfinished">記錄播放 - 錯誤</translation>
+        <translation type="obsolete">記錄播放 - 錯誤</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation type="unfinished">請從列表選擇記錄</translation>
+        <translation type="obsolete">請從列表選擇記錄</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation type="unfinished">不能改名</translation>
+        <translation type="obsolete">不能改名</translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation type="unfinished">不能刪除檔案</translation>
+        <translation type="obsolete">不能刪除檔案</translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -2637,6 +2961,32 @@ Not all players are ready.</source>
         <translation type="unfinished">你確定要啟動這個遊戲嗎？
 並不是所有的玩家都準備就緒。</translation>
     </message>
+    <message>
+        <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
+
+Current number of hedgehogs: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams - Name already taken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a file from the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot rename file to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -2657,7 +3007,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Go!</source>
-        <translation>出場！</translation>
+        <translation type="obsolete">出場！</translation>
     </message>
     <message>
         <source>Start</source>
@@ -2745,7 +3095,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation type="unfinished">上傳視頻到你的YouTube帳戶</translation>
+        <translation type="obsolete">上傳視頻到你的YouTube帳戶</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -2766,6 +3116,17 @@ Not all players are ready.</source>
     <message>
         <source>Start private server</source>
         <translation>啟動私人伺服器</translation>
+    </message>
+    <message>
+        <source>Upload this video to your YouTube account</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QSpinBox</name>
+    <message>
+        <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2799,10 +3160,12 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>C</source>
+        <extracomment>Caption of the column for the number of connected clients in the list of rooms</extracomment>
         <translation type="unfinished">人數</translation>
     </message>
     <message>
         <source>T</source>
+        <extracomment>Caption of the column for the number of teams in the list of rooms</extracomment>
         <translation type="unfinished">隊伍</translation>
     </message>
     <message>
@@ -2962,7 +3325,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">選擇一個主題</translation>
     </message>
 </context>
 <context>
@@ -3133,7 +3496,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation>刺蝟資訊</translation>
+        <translation type="vanished">刺蝟資訊</translation>
     </message>
     <message>
         <source>autocam / find hedgehog</source>
@@ -3142,6 +3505,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>speed up replay</source>
         <translation>加速播放</translation>
+    </message>
+    <message>
+        <source>toggle team bars</source>
+        <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3223,7 +3591,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>切換刺蝟頭上標籤的顯示方式：</translation>
+        <translation type="vanished">切換刺蝟頭上標籤的顯示方式：</translation>
     </message>
     <message>
         <source>Record video:</source>
@@ -3240,6 +3608,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Demo replay:</source>
         <translation>播放演示：</translation>
+    </message>
+    <message>
+        <source>Heads-up display:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

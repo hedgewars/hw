@@ -4,55 +4,55 @@ Basic_Training_-_Bazooka.desc="Using the wind to your advantage is key!"
 Basic_Training_-_Grenade.name=Basic Grenade Training
 Basic_Training_-_Grenade.desc="Remember, you pull the pin out AND throw!"
 
-Basic_Training_-_Cluster_Bomb.name=Basic Cluster Bomb Training
-Basic_Training_-_Cluster_Bomb.desc="Someone needs hot shower!"
-
-Basic_Training_-_Shotgun.name=Basic Shotgun Training
-Basic_Training_-_Shotgun.desc="Shoot first, ask questions later!"
-
-Basic_Training_-_Sniper_Rifle.name=Basic Sniper Rifle Training
-Basic_Training_-_Sniper_Rifle.desc="Boom, headshot!"
-
 Basic_Training_-_Rope.name=Basic Rope Training
 Basic_Training_-_Rope.desc="Get out there and swing!"
 
 Basic_Training_-_Flying_Saucer.name=Basic Flying Saucer Training
 Basic_Training_-_Flying_Saucer.desc="So you really want to become an astronaut, eh? You should learn how to fly first!"
 
-User_Mission_-_Dangerous_Ducklings.name=Mission: Dangerous Ducklings
+User_Mission_-_Dangerous_Ducklings.name=Dangerous Ducklings
 User_Mission_-_Dangerous_Ducklings.desc="Alright, rookie! Time to put what we learned in Basic Training into practice!"
 
-User_Mission_-_Diver.name=Mission: Diver
+User_Mission_-_Diver.name=Diver
 User_Mission_-_Diver.desc="This 'amphibious assault' thing is harder than it looks..."
 
-User_Mission_-_Teamwork.name=Mission: Teamwork
+User_Mission_-_Teamwork.name=Teamwork
 User_Mission_-_Teamwork.desc="Sometimes, love hurts."
 
-User_Mission_-_Spooky_Tree.name=Mission: Spooky Tree
+User_Mission_-_Teamwork_2.name=Teamwork 2
+User_Mission_-_Teamwork_2.desc="Use your teamwork skills to defeat the cybernetic enemy once again!"
+
+User_Mission_-_Spooky_Tree.name=Spooky Tree
 User_Mission_-_Spooky_Tree.desc="Lots of crates out here. I sure hope that bird ain't feeling hungry."
 
-User_Mission_-_Bamboo_Thicket.name=Mission: Bamboo Thicket
+User_Mission_-_Bamboo_Thicket.name=Bamboo Thicket
 User_Mission_-_Bamboo_Thicket.desc="Death comes from above."
 
-User_Mission_-_That_Sinking_Feeling.name=Mission: That Sinking Feeling
+User_Mission_-_That_Sinking_Feeling.name=That Sinking Feeling
 User_Mission_-_That_Sinking_Feeling.desc="The water is rising rapidly and time is limited. Many have tried and failed. Can you save them all?"
 
-User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton and the Hammock
+User_Mission_-_Newton_and_the_Hammock.name=Newton and the Hammock
 User_Mission_-_Newton_and_the_Hammock.desc="Remember hoglets: The velocity of a body remains constant unless the body is acted upon by an external force!"
 
-User_Mission_-_The_Great_Escape.name=Mission: The Great Escape
+User_Mission_-_The_Great_Escape.name=The Great Escape
 User_Mission_-_The_Great_Escape.desc="You think you can cage me!?"
 
-User_Mission_-_Rope_Knock_Challenge.name=Challenge: Rope Knocking
+User_Mission_-_Rope_Knock_Challenge.name=Rope Knocking
 User_Mission_-_Rope_Knock_Challenge.desc="Look behind you!"
 
-User_Mission_-_Nobody_Laugh.name=Mission: Nobody Laugh
+User_Mission_-_Nobody_Laugh.name=Nobody Laugh
 User_Mission_-_Nobody_Laugh.desc="This ain't no joke."
 
-User_Mission_-_RCPlane_Challenge.name=Challenge: RC Plane
+User_Mission_-_RCPlane_Challenge.name=RC Plane Challenge
 User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
 
-portal.name=Mission: Portal Mind Challenge
+Big_Armory.name=Big Armory
+Big_Armory.desc="You are alone, have a full armory and must defeat 8 hedgehogs before the time runs out."
+
+ClimbHome.name=Climb Home
+ClimbHome.desc="You are far away from home and the water is rising. Climb as high as you can!"
+
+portal.name=Portal Mind Challenge
 portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"
 
 Target_Practice_-_Bazooka_easy.name=Target Practice: Bazooka (easy)
@@ -67,6 +67,9 @@ Target_Practice_-_Cluster_Bomb.desc="Someone needs hot shower!"
 Target_Practice_-_Shotgun.name=Target Practice: Shotgun
 Target_Practice_-_Shotgun.desc="Shoot first, ask questions later!"
 
+Basic_Training_-_Sniper_Rifle.name=Target Practice: Sniper Rifle
+Basic_Training_-_Sniper_Rifle.desc="Boom, headshot!"
+
 Target_Practice_-_Homing_Bee.name=Target Practice: Homing Bee
 Target_Practice_-_Homing_Bee.desc="Using the homing bee is trickier than it seems."
 
@@ -76,11 +79,11 @@ Target_Practice_-_Grenade_easy.desc="A warm-up training for the aspiring grenadi
 Target_Practice_-_Grenade_hard.name=Target Practice: Grenade (hard)
 Target_Practice_-_Grenade_hard.desc="This is nothing for greenhorns! We will place the targets at some really tricky positions."
 
-Challenge_-_Speed_Shoppa_-_Hedgelove.name=Challenge: Shoppa Love
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Time Trial: Shoppa Love
 Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Show your love to rope and collect a few crates on a small map."
 
-Challenge_-_Speed_Shoppa_-_Ropes.name=Challenge: Ropes and Crates
+Challenge_-_Speed_Shoppa_-_Ropes.name=Time Trial: Ropes and Crates
 Challenge_-_Speed_Shoppa_-_Ropes.desc="Take your rope and collect all crates on this medium-sized map."
 
-Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Challenge: The Customer is King
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Time Trial: The Customer is King
 Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Show you're worthy of a true king and collect all crates as fast as possible on this large map."

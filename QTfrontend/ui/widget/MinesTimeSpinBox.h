@@ -44,7 +44,7 @@ class MinesTimeSpinBox : public QSpinBox
 
     protected:
         /**
-         * Returns it's value localized.
+         * Returns its value localized.
          * @param value integer value to be representing as string.
          * @return string representation
          */

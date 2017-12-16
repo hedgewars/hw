@@ -148,6 +148,7 @@ void PageGameStats::clear()
     labelGameStats->setText("");
     healthPoints.clear();
     labelGameRank->setText("");
+    labelGameWin->setText("");
     playerPosition = 0;
     lastColor = 0;
 }
@@ -301,8 +302,10 @@ void PageGameStats::GameStats(char type, const QString & info)
             QString message;
             QString killstring;
             if(kindOfPoints.compare("") == 0) {
+                //: Number of kills in stats screen, written after the team name
                 killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
             } else {
+                //: For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”
                 killstring = PageGameStats::tr("(%1 %2)", "", kills).arg(kills).arg(kindOfPoints);
                 kindOfPoints = QString("");
             }
@@ -316,7 +319,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot their own hedgehogs for <b>%2</b> pts.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
@@ -324,7 +327,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of their own hedgehogs.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }

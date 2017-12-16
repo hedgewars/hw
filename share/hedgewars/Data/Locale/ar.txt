@@ -43,7 +43,7 @@
 00:40=زجاجة حارقة
 00:41=طير
 
-01:00=لنتحارب
+; 01:00=Loading …
 01:01=تعادل
 01:02=%1 يفوز
 01:03=جزء %1%
@@ -220,11 +220,11 @@
 02:02=Have no fear!
 02:02=Be brave and conquer
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 يفوز
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=تعادل
 
 ; New health crate
 02:05=Incoming aid!
@@ -452,12 +452,12 @@
 ; Game goal strings
 05:00=Game Modes
 05:01=The following rules apply
-05:02=Forts: Defend your fortress; vanquish your enemies!
+05:02=Place the King: Pick a protected starting point for your King
 05:03=Low Gravity: Watch your step
 05:04=Invulnerability: Hogs are (almost) invulnerable
 05:05=Vampirism: Hogs will be healed for the damage dealt
 05:06=Karma: Hogs will be damaged for the damage dealt
-05:07=Protect the King: Don't let your king die!|Place the King: Pick a protected starting point for your King
+05:07=Protect the King: Don't let your king die!
 05:08=Place Hedgehogs: Place your hogs before the game starts
 05:09=Artillery: Hogs can't walk to change position
 05:10=Indestructible Terrain: Most weapons won't destroy terrain

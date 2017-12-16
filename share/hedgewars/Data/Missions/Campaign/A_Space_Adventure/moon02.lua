@@ -15,12 +15,13 @@ local challengeObjectives = loc("Use the rope in order to catch the blue hedgeho
 local currentPosition = 1
 local previousTimeLeft = 0
 local startChallenge = false
+local winningTime = nil
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 0},
 }
 -- hogs
 local hero = {
@@ -44,7 +45,7 @@ local teamA = {
 }
 local teamB = {
 	name = loc("Crazy Runner"),
-	color = tonumber("FF0000",16) -- red
+	color = tonumber("0072FF",16) -- blue
 }
 
 -------------- LuaAPI EVENT HANDLERS ------------------
@@ -55,31 +56,32 @@ function onGameInit()
 	TurnTime = 25000
 	CaseFreq = 0
 	MinesNum = 0
-	MinesTime = 1
 	Explosives = 0
 	Map = "moon02_map"
 	Theme = "Cheese"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Crazy Runner
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "ring", "Island", "Default", "cm_sonic")
 	runner.gear = AddHog(runner.name, 0, 100, "sth_Sonic")
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)
 
 	initCheckpoint("moon02")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
@@ -90,10 +92,24 @@ function onGameStart()
 	AddAnim(dialog01)
 end
 
+-- Hide mission panel when jumping or shooting rope
+function onGearAdd(gear)
+	if GetGearType(gear) == gtRope then
+		HideMission()
+	end
+end
+
+function onLJump()
+	if startChallenge then
+		HideMission()
+	end
+end
+onHJump = onLJump
+
 function onNewTurn()
 	if startChallenge and currentPosition < 5 then
 		if CurrentHedgehog ~= hero.gear then
-			TurnTimeLeft = 0
+			EndTurn(true)
 		else
 			if GetAmmoCount(hero.gear, amRope) == 0  then
 				lose()
@@ -146,12 +162,12 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog01 then
+	end
+    	if anim == dialog01 then
 		moveRunner()
 	elseif anim == dialog02 then
 		win()
-    end
+	end
 end
 
 function AnimationSetup()
@@ -163,6 +179,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("We'll play a game first."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("I'll let you know whatever I know about him if you manage to catch me 3 times."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = moveRunner, args = {}})
 	-- DIALOG 02 - Hog Solo story
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
@@ -199,7 +216,26 @@ function moveRunner()
 			HogTurnLeft(runner.gear, false)
 		end
 		AddAnim(dialog02)
-		TurnTimeLeft = 0
+
+		-- Update time record
+		local baseTime = 0
+		for i=1, #runner.places do
+			baseTime = baseTime + runner.places[i].turnTime
+		end
+		winningTime = baseTime - TurnTimeLeft
+		SendStat(siCustomAchievement, string.format(loc("You have managed to catch the blue hedgehog in %.3f seconds."), winningTime/1000))
+		local record = tonumber(GetCampaignVar("FastestBlueHogCatch"))
+		if record ~= nil and winningTime >= record then
+			SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), record/1000))
+		end
+		if record == nil or winningTime < record then
+			SaveCampaignVar("FastestBlueHogCatch", tostring(winningTime))
+			if record ~= nil then
+				SendStat(siCustomAchievement, loc("This is a new personal best time, congratulations!"))
+			end
+		end
+
+		EndTurn(true)
 	elseif currentPosition < 4 then
 		if not startChallenge then
 			startChallenge = true
@@ -216,7 +252,7 @@ function moveRunner()
 		currentPosition = currentPosition + 1
 		AddVisualGear(GetX(runner.gear), GetY(runner.gear), vgtExplosion, 0, false) 
 		SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
@@ -226,13 +262,15 @@ function lose()
 	SendStat(siCustomAchievement, loc("The time that you have left when you reach the blue hedgehog will be added to the next turn."))
 	SendStat(siCustomAchievement, loc("Each turn you'll have only one rope to use."))
 	SendStat(siCustomAchievement, loc("You'll lose if you die or if your time is up."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamB.name, teamA.name})
 	EndGame()
 end
 
 function win()
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
-	SendStat(siCustomAchievement, loc("You have managed to catch the blue hedgehog in time."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	-- siCustomAchievements were added earlier
+	sendSimpleTeamRankings({teamA.name, teamB.name})
+	SaveCampaignVar("Mission13Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end

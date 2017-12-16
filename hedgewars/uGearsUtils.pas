@@ -47,6 +47,7 @@ procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 procedure SpawnBoxOfSmth;
 procedure ShotgunShot(Gear: PGear);
+function  CanUseTardis(HHGear: PGear): boolean;
 
 procedure SetAllToActive;
 procedure SetAllHHToActive(Ice: boolean);
@@ -57,6 +58,7 @@ function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
 
 function WorldWrap(var Gear: PGear): boolean;
 
+function IsHogLocal(HH: PHedgehog): boolean;
 
 
 function MakeHedgehogsStep(Gear: PGear) : boolean;
@@ -83,6 +85,7 @@ var Gear: PGear;
     i, cnt: LongInt;
     wrap: boolean;
     bubble: PVisualGear;
+    s: ansistring;
 begin
 if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');
 if Radius > 25 then KickFlakes(Radius, X, Y);
@@ -174,8 +177,18 @@ while Gear <> nil do
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
-                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.State and gstHHDeath = 0) then
-                                Gear^.Hedgehog^.Effects[hePoisoned] := 5;
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and
+                                (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) and
+                                (Gear^.State and gstHHDeath = 0) then
+                                    begin
+                                    if Gear^.Hedgehog^.Effects[hePoisoned] = 0 then
+                                        begin
+                                        s:= ansistring(Gear^.Hedgehog^.Name);
+                                        AddCaption(FormatA(GetEventString(eidPoisoned), s), cWhiteColor, capgrpMessage);
+                                        uStats.HedgehogPoisoned(Gear, AttackingHog)
+                                        end;
+                                    Gear^.Hedgehog^.Effects[hePoisoned] := 5;
+                                    end
                             end;
 
                         end;
@@ -249,7 +262,7 @@ else
 end;
 
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
-var s: shortstring;
+var s: ansistring;
     vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
@@ -274,12 +287,12 @@ begin
                     // was considering pulsing on attack, Tiy thinks it should be permanent while in play
                     //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-                    s:= '+' + IntToStr(vampDmg);
-                    AddCaption(ansistring(s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    s:= IntToStr(vampDmg);
+                    AddCaption(FormatA(trmsg[sidHealthGain], s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
                     i:= 0;
-                    while i < vampDmg do
+                    while (i < vampDmg) and (i < 1000) do
                         begin
                         vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
                         if vg <> nil then
@@ -292,15 +305,16 @@ begin
                         end;
                     end
                 end;
-        if (GameFlags and gfKarma <> 0) and (GameFlags and gfInvulnerable = 0) and
-           (CurrentHedgehog^.Effects[heInvulnerable] = 0) then
-            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
-            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-            CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
-            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
+            if (GameFlags and gfKarma <> 0) and (GameFlags and gfInvulnerable = 0) and
+               (CurrentHedgehog^.Effects[heInvulnerable] = 0) then
+                begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
+                inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
+                CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
+                spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
+                end;
             end;
+
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);
-        end;
 
 	if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
 	    for i := 0 to random(min(Damage,20))+5 do
@@ -474,7 +488,7 @@ else
         PlaySound(sndSplash)
     else if hwTmp > _0_5 then
         PlaySound(sndSkip)
-    else
+    else if hwTmp > _0_0002 then  // arbitrary sanity cutoff.  mostly for airmines
         PlaySound(sndDroplet2);
     end;
 
@@ -645,6 +659,8 @@ begin
                 begin
                 CheckGearDrowning := true;
                 Gear^.State := gstDrowning;
+                if Gear = CurrentHedgehog^.Gear then
+                    TurnTimeLeft := 0;
                 Gear^.RenderTimer := false;
                 if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot)
                 and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
@@ -661,7 +677,10 @@ begin
                             DrownGear(Gear);
                             Gear^.State := Gear^.State and (not gstHHDriven);
                             s:= ansistring(Gear^.Hedgehog^.Name);
-                            AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
+                            if Gear^.Hedgehog^.King then
+                                AddCaption(FormatA(GetEventString(eidKingDied), s), cWhiteColor, capgrpMessage)
+                            else
+                                AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
                             end
                         end
                     else
@@ -683,7 +702,7 @@ begin
                 // check if surface was penetrated
 
                 // no penetration if center's water distance not smaller than radius
-                if  abs(dist2Water + Gear^.Radius) >= Gear^.Radius then
+                if  ((dist2Water + Gear^.Radius div 2) < 0) or (abs(dist2Water + Gear^.Radius) >= Gear^.Radius) then
                     isImpact:= false
                 else
                     begin
@@ -691,16 +710,19 @@ begin
                     if isDirH then
                         begin
                         tmp:= hwRound(Gear^.X - Gear^.dX);
-                        tmp:= abs(min(tmp - leftX, rightX - tmp));
+                        if abs(tmp - real(leftX)) < abs(tmp - real(rightX)) then  // left edge
+                            isImpact:= (abs(tmp-real(leftX)) >= Gear^.Radius) and (Gear^.dX.isNegative)
+                        else
+                            isImpact:= (abs(tmp-real(rightX)) >= Gear^.Radius) and (not Gear^.dX.isNegative);
                         end
                     else
                         begin
                         tmp:= hwRound(Gear^.Y - Gear^.dY);
                         tmp:= abs(cWaterLine - tmp);
+                        // there was an impact if distance was >= radius
+                        isImpact:= (tmp >= Gear^.Radius) and (not Gear^.dY.isNegative);
                         end;
 
-                    // there was an impact if distance was >= radius
-                    isImpact:= (tmp >= Gear^.Radius)
                     end;
                 end; // end of submersible
             end; // end of not skipping
@@ -763,22 +785,22 @@ begin
     RecountTeamHealth(tempTeam);
 end;
 
-function CountNonZeroz(x, y, r, c: LongInt; mask: LongWord): LongInt;
+function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
 var i: LongInt;
     count: LongInt = 0;
 begin
     if (y and LAND_HEIGHT_MASK) = 0 then
         for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 1) do
-            if Land[y, i] and mask <> 0 then
-            begin
+            if (Land[y, i] and mask <> 0) and (Land[y, i] and antimask = 0) then
+                begin
                 inc(count);
                 if count = c then
-                begin
-                    CountNonZeroz:= count;
+                    begin
+                    CountLand:= count;
                     exit
+                    end;
                 end;
-            end;
-    CountNonZeroz:= count;
+    CountLand:= count;
 end;
 
 function isSteadyPosition(x, y, r, c: LongInt; mask: Longword): boolean;
@@ -860,27 +882,32 @@ while tryAgain do
                 repeat
                     inc(y, 2);
                 until (y >= cWaterLine) or
-                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or
-                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask) = 0));
+                    (ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, $FF00, 0) = 0)) or
+                    (not ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, 0) = 0));
+
 
                 sy:= y;
 
                 repeat
                     inc(y);
                 until (y >= cWaterLine) or
-                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or
-                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask) <> 0));
+                        (ignoreOverlap and 
+                                (CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, 0) <> 0)) or
+                        (not ignoreOverlap and 
+                            (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) <> 0));
 
                 if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
                     and (((Gear^.Kind = gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
                         and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, $FFFF)
-                         or (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF) > Gear^.Radius)
+                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF, 0) > Gear^.Radius)
                             ))
                     or
                         ((Gear^.Kind <> gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
-                        )) then
+                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, lfIce)
+                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF, lfIce) <> 0)
+                            ))) then
                     begin
                     ar[cnt].X:= x;
                     if withFall then
@@ -975,7 +1002,10 @@ rY:= sqr(rY);
 while t <> nil do
     begin
     if (t <> Gear) and (t^.Kind = Kind) then
-        if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1) then
+        if (not ((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
+        ((WorldEdge = weWrap) and (
+        (not ((hwSqr(Gear^.X - int2hwFloat(RightX-LeftX) - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
+        (not ((hwSqr(Gear^.X + int2hwFloat(RightX-LeftX) - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)))) then
         begin
             CheckGearNear:= t;
             exit;
@@ -1143,6 +1173,35 @@ while t <> nil do
     end;
 if (GameFlags and gfSolidLand) = 0 then
     DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
+end;
+
+// Returns true if the given hog gear can use the tardis
+function CanUseTardis(HHGear: PGear): boolean;
+var usable: boolean;
+    i, j, cnt: LongInt;
+    HH: PHedgehog;
+begin
+(*
+    Conditions for not activating.
+    1. Hog is last of his clan
+    2. Sudden Death is in play
+    3. Hog is a king
+*)
+    usable:= true;
+    HH:= HHGear^.Hedgehog;
+    if HHGear <> nil then
+    if (HHGear = nil) or (HH^.King) or (SuddenDeathDmg) then
+        usable:= false;
+    cnt:= 0;
+    for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
+        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
+            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil)
+            and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
+            and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
+                inc(cnt);
+    if (cnt < 2) then
+        usable:= false;
+    CanUseTardis:= usable;
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
@@ -1335,6 +1394,7 @@ function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 var
     t: PGear;
     s: Longword;
+    xc, xc_left, xc_right, yc: hwFloat;
 begin
     r:= r*r;
     s:= 0;
@@ -1342,15 +1402,22 @@ begin
     t := GearsList;
     while t <> nil do
         begin
-        if (t^.Kind = Kind)
-            and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
-            begin
-            inc(s);
-            SetLength(GearsNearArray, s);
-            GearsNearArray[s - 1] := t;
-            end;
-        t := t^.NextGear;
-    end;
+            xc:= (X - t^.X)*(X - t^.X);
+            xc_left:= ((X - int2hwFloat(RightX-LeftX)) - t^.X)*((X - int2hwFloat(RightX-LeftX)) - t^.X);
+            xc_right := ((X + int2hwFloat(RightX-LeftX)) - t^.X)*((X + int2hwFloat(RightX-LeftX)) - t^.X);
+            yc:= (Y - t^.Y)*(Y - t^.Y);
+            if (t^.Kind = Kind)
+                and ((xc + yc < int2hwFloat(r))
+                or ((WorldEdge = weWrap) and
+                ((xc_left + yc < int2hwFloat(r)) or
+                (xc_right + yc < int2hwFloat(r))))) then
+                begin
+                inc(s);
+                SetLength(GearsNearArray, s);
+                GearsNearArray[s - 1] := t;
+                end;
+            t := t^.NextGear;
+        end;
 
     GearsNear.size:= s;
     GearsNear.ar:= @GearsNearArray
@@ -1586,7 +1653,15 @@ begin
             Scale:= hwFloat2Float(Gear^.Density * hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) / 1.5;
             State:= ord(sprBoing)
             end;
-    PlaySound(sndMelonImpact, true)
+    if Gear^.Kind = gtDuck then
+        PlaySound(sndDuckDrop, true)
+    else
+        PlaySound(sndMelonImpact, true)
+end;
+
+function IsHogLocal(HH: PHedgehog): boolean;
+begin
+    IsHogLocal:= (not (HH^.Team^.ExtDriven or (HH^.BotLevel > 0))) or (HH^.Team^.Clan^.ClanIndex = LocalClan) or (GameType = gmtDemo);
 end;
 
 end.

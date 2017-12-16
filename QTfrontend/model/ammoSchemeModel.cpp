@@ -81,11 +81,11 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
                          << "Minefield"
                          << "Barrel Mayhem"
                          << "Tunnel Hogs"
-                         << "Fort Mode"
                          << "Timeless"
                          << "Thinking with Portals"
                          << "King Mode"
-						 << "Construction Mode"
+                         << "Construction Mode"
+                         << "HedgeEditor"
                          ;
 
     numberOfDefaultSchemes = predefSchemesNames.size();
@@ -222,11 +222,11 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
-            << QVariant(8)             // air mines      35
+            << QVariant(0)             // air mines      35
             << QVariant(0)             // health case pct 36
             << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
+            << QVariant(0)             // water rise amt 38
+            << QVariant(0)             // health dec amt 39
             << QVariant(100)           // rope modfier   40
             << QVariant(100)           // get away time  41
             << QVariant(0)             // world edge     42
@@ -425,57 +425,9 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant()              // scriptparam    43
             ;
 
-    QList<QVariant> forts;
-    forts
-            << predefSchemesNames[7]   // name           0
-            << QVariant(true)          // fortsmode      1
-            << QVariant(true)          // team divide    2
-            << QVariant(false)         // solid land     3
-            << QVariant(false)         // border         4
-            << QVariant(false)         // low gravity    5
-            << QVariant(false)         // laser sight    6
-            << QVariant(false)         // invulnerable   7
-            << QVariant(false)         // reset health   8
-            << QVariant(false)         // vampiric       9
-            << QVariant(false)         // karma          10
-            << QVariant(false)         // artillery      11
-            << QVariant(true)          // random order   12
-            << QVariant(false)         // king           13
-            << QVariant(false)         // place hog      14
-            << QVariant(false)         // shared ammo    15
-            << QVariant(false)         // disable girders 16
-            << QVariant(false)         // disable land objects 17
-            << QVariant(false)         // AI survival    18
-            << QVariant(false)         // inf. attack    19
-            << QVariant(false)         // reset weps     20
-            << QVariant(false)         // per hog ammo   21
-            << QVariant(false)         // no wind        22
-            << QVariant(false)         // more wind      23
-            << QVariant(false)         // tag team       24
-            << QVariant(false)         // bottom border  25
-            << QVariant(100)           // damage modfier 26
-            << QVariant(45)            // turn time      27
-            << QVariant(100)           // init health    28
-            << QVariant(15)            // sudden death   29
-            << QVariant(5)             // case prob      30
-            << QVariant(3)             // mines time     31
-            << QVariant(0)             // mines number   32
-            << QVariant(0)             // mine dud pct   33
-            << QVariant(0)             // explosives     34
-            << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
-            ;
-
     QList<QVariant> timeless;
     timeless
-            << predefSchemesNames[8]   // name           0
+            << predefSchemesNames[7]   // name           0
             << QVariant(false)         // fortsmode      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -523,7 +475,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
     QList<QVariant> thinkingportals;
     thinkingportals
-            << predefSchemesNames[9]   // name           0
+            << predefSchemesNames[8]   // name           0
             << QVariant(false)         // fortsmode      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -571,7 +523,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
     QList<QVariant> kingmode;
     kingmode
-            << predefSchemesNames[10]  // name           0
+            << predefSchemesNames[9]  // name           0
             << QVariant(false)         // fortsmode      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -619,7 +571,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
 	QList<QVariant> construction;
     construction
-            << predefSchemesNames[11]  // name           0
+            << predefSchemesNames[10]  // name           0
             << QVariant(false)         // fortsmode      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -664,6 +616,56 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // world edge     42
             << QVariant()              // scriptparam    43
             ;
+
+	QList<QVariant> hedgeeditor;
+    hedgeeditor
+            << predefSchemesNames[11]  // name           0
+            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // team divide    2
+            << QVariant(false)         // solid land     3
+            << QVariant(false)         // border         4
+            << QVariant(false)         // low gravity    5
+            << QVariant(false)         // laser sight    6
+            << QVariant(false)         // invulnerable   7
+            << QVariant(false)         // reset health   8
+            << QVariant(false)         // vampiric       9
+            << QVariant(false)         // karma          10
+            << QVariant(false)         // artillery      11
+            << QVariant(false)         // random order   12
+            << QVariant(false)         // king           13
+            << QVariant(false)         // place hog      14
+            << QVariant(false)         // shared ammo    15
+            << QVariant(false)         // disable girders 16
+            << QVariant(false)         // disable land objects 17
+            << QVariant(false)         // AI survival    18
+            << QVariant(false)         // inf. attack    19
+            << QVariant(false)         // reset weps     20
+            << QVariant(true)          // per hog ammo   21
+            << QVariant(false)         // no wind        22
+            << QVariant(false)         // more wind      23
+            << QVariant(false)         // tag team       24
+            << QVariant(false)         // bottom border  25
+            << QVariant(100)           // damage modfier 26
+            << QVariant(9999)          // turn time      27
+            << QVariant(100)           // init health    28
+            << QVariant(50)            // sudden death   29
+            << QVariant(5)             // case prob      30
+            << QVariant(3)             // mines time     31
+            << QVariant(0)             // mines number   32
+            << QVariant(0)             // mine dud pct   33
+            << QVariant(0)             // explosives     34
+            << QVariant(0)             // air mines      35
+            << QVariant(35)            // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(0)            // water rise amt 38
+            << QVariant(0)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
+            ;
+			
+ 
 			
     schemes.append(defaultScheme);
     schemes.append(proMode);
@@ -672,11 +674,11 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     schemes.append(minefield);
     schemes.append(barrelmayhem);
     schemes.append(tunnelhogs);
-    schemes.append(forts);
     schemes.append(timeless);
     schemes.append(thinkingportals);
     schemes.append(kingmode);
-	schemes.append(construction);
+    schemes.append(construction);
+    schemes.append(hedgeeditor);
 
 
     int size = fileConfig.beginReadArray("schemes");
@@ -722,6 +724,18 @@ int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
         return defaultScheme.size();
 }
 
+bool AmmoSchemeModel::hasScheme(QString name)
+{
+    for(int i=0; i<schemes.size(); i++)
+    {
+        if(schemes[i][0] == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
 {
     Q_UNUSED(index);
@@ -755,13 +769,29 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     if (row == -1)
     {
         QList<QVariant> newScheme = defaultScheme;
-        newScheme[0] = QVariant(tr("New"));
+
+        QString newName = tr("New");
+        if(hasScheme(newName))
+        {
+            //name already used -> look for an appropriate name:
+            int i=2;
+            while(hasScheme(newName = tr("New (%1)").arg(i++))) ;
+        }
+        newScheme[0] = QVariant(newName);
         schemes.insert(schemes.size(), newScheme);
     }
     else
     {
         QList<QVariant> newScheme = schemes[row];
-        newScheme[0] = QVariant(tr("Copy of %1").arg(newScheme[0].toString()));
+        QString oldName = newScheme[0].toString();
+        QString newName = tr("Copy of %1").arg(oldName);
+        if(hasScheme(newName))
+        {
+            //name already used -> look for an appropriate name:
+            int i=2;
+            while(hasScheme(newName = tr("Copy of %1 (%2)").arg(oldName).arg(i++)));
+        }
+        newScheme[0] = QVariant(newName);
         schemes.insert(schemes.size(), newScheme);
     }
 

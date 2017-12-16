@@ -105,6 +105,7 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
+(*           gtDuck *) , amDuck
     );
 
 
@@ -263,6 +264,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
                     else Gear^.Boom := 3;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
+           gtDuck: Gear^.Boom := 40;
     end;
 
 case Kind of
@@ -507,7 +509,11 @@ case Kind of
                 gear^.Density:= _1_5;
                 gear^.RenderTimer:= true
                 end;
-      gtShover: gear^.Radius:= 20;
+      gtShover: begin
+                gear^.Radius:= 20;
+                gear^.Tag:= 0;
+                gear^.Timer:= 50;
+                end;
        gtFlame: begin
                 gear^.Tag:= GetRandom(32);
                 gear^.Radius:= 1;
@@ -574,6 +580,8 @@ case Kind of
                 gear^.Z:= cOnHHZ;
                 gear^.RenderTimer:= false;
                 gear^.DirAngle:= -90 * hwSign(Gear^.dX);
+                gear^.FlightTime:= 100; // (roughly) ticks spent dropping, used to skip getting up anim when stuck.
+                                        // Initially set to a high value so cake has at least one getting up anim.
                 if not dX.isNegative then
                     gear^.Angle:= 1
                 else
@@ -631,6 +639,8 @@ case Kind of
      gtMolotov: begin
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 6;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 gear^.Density:= _2
                 end;
        gtBirdy: begin
@@ -712,6 +722,24 @@ gtFlamethrower: begin
       gtIceGun: begin
                 gear^.Health:= 1000;
                 gear^.Radius:= 8;
+                end;
+        gtDuck: begin
+                gear^.Pos:= 0;               // 0: in air, 1-4: on water, 5-8: underwater
+                                             // 1: bottom, 2: bottom (mirrored),
+                                             // 3: left Sea edge, 4: right Sea edge
+                                             // 6: bottom, 7: bottom (mirrored)
+                                             // 7: left Sea edge, 8: right Sea edge
+                gear^.Tag:= 1;               // 1: facing right, -1: facing left
+                if gear^.Timer = 0 then      
+                    gear^.Timer:= 15000;     // Explosion timer to avoid duck existing forever
+                gear^.Radius:= 9;            // Collision radius (with landscape)
+                gear^.Karma:= 24;            // Distance from water when swimming
+                gear^.Damage:= 500;          // Speed factor when swimming on water (multiplied with wind speed)
+                gear^.State:= gear^.State or gstSubmersible;
+                gear^.Elasticity:= _0_6;
+                gear^.Friction:= _0_8;
+                gear^.Density:= _0_5;
+                gear^.AdvBounce:= 1;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;

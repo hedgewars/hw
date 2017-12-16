@@ -167,6 +167,7 @@ class HWNewNet : public QObject
         void gameFinished(bool correcly);
         void banPlayer(const QString &);
         void kickPlayer(const QString &);
+        void delegateToPlayer(const QString &);
         void infoPlayer(const QString &);
         void followPlayer(const QString &);
         void consoleCommand(const QString &);

@@ -31,7 +31,8 @@ procedure FreeActionsList;
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
     uAmmos, uTypes,
-    uVariables, uCommands, uUtils, uDebug, uAILandMarks;
+    uVariables, uCommands, uUtils, uDebug, uAILandMarks,
+    uGearsUtils;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -150,20 +151,20 @@ for i:= 0 to Pred(Targets.Count) do
                     // if not between shots, activate invulnerability/vampirism if available
                     if CurrentHedgehog^.MultiShootAttacks = 0 then
                         begin
-                        if HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0 then
+                        if (HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0) and (Me^.Hedgehog^.Effects[heInvulnerable] = 0) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
 
-                        if HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0 then
+                        if (HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0) and (cDamageModifier <> _1_5) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
-                        if HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0 then
+                        if (HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0) and (not cVampiric) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amVampiric), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
@@ -471,8 +472,17 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
 
             FillBonuses(false);
 
+            // Hog has no idea what to do. Use tardis or skip
             if not bonuses.activity then
-                AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+                if ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(4) < 3) then
+                    // Tardis brings hog to a random place. Perfect for clueless AI
+                    begin
+                    AddAction(BestActions, aia_Weapon, Longword(amTardis), 80, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                    end
+                else
+                    AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;
 
         end else SDL_Delay(100)

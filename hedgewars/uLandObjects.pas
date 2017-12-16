@@ -35,7 +35,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uDebug, uUtils
-     , uPhysFSLayer;
+     , uPhysFSLayer, adler32, uRenderUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -46,9 +46,10 @@ type TRectsArray = array[0..MaxRects] of TSDL_Rect;
      PRectArray = ^TRectsArray;
      TThemeObject = record
                      Surf, Mask: PSDL_Surface;
-                     inland: TSDL_Rect;
+                     inland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                      outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
-                     rectcnt: Longword;
+                     inrectcnt: Longword;
+                     outrectcnt: Longword;
                      Width, Height: Longword;
                      Maxcnt: Longword;
                      end;
@@ -258,7 +259,10 @@ var x1, x2, y, k, i, girderHeight: LongInt;
     bRes: boolean;
 begin
 if girSurf = nil then
-    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
+
+for y := 0 to girsurf^.h-1 do
+    syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(girsurf^.pixels)^[y*girsurf^.pitch], girsurf^.w*4);
 
 girderHeight:= girSurf^.h;
 
@@ -355,22 +359,27 @@ function CheckCanPlace(x, y: Longword; var Obj: TThemeObject): boolean;
 var i: Longword;
     bRes: boolean;
 begin
-with Obj do
-    if CheckLand(inland, x, y, lfBasic) then
-        begin
+    with Obj do begin
         bRes:= true;
         i:= 1;
-        while bRes and (i <= rectcnt) do
+        while bRes and (i <= inrectcnt) do
+            begin
+            bRes:= CheckLand(inland[i], x, y, lfBasic);
+            inc(i)
+            end;
+
+        i:= 1;
+        while bRes and (i <= outrectcnt) do
             begin
             bRes:= CheckLand(outland[i], x, y, 0);
             inc(i)
             end;
+
         if bRes then
-            bRes:= not CheckIntersect(x, y, Width, Height)
-        end
-    else
-        bRes:= false;
-CheckCanPlace:= bRes;
+            bRes:= not CheckIntersect(x, y, Width, Height);
+
+        CheckCanPlace:= bRes;
+    end
 end;
 
 function TryPut(var Obj: TThemeObject): boolean;
@@ -390,6 +399,10 @@ with Obj do
     repeat
         y:= topY+32; // leave room for a hedgie to teleport in
         repeat
+
+            if (inland[1].x = 0) and (inland[1].y = 0) and (inland[1].w = 0) and (inland[1].h = 0) then
+                y := LAND_HEIGHT - Height;
+
             if CheckCanPlace(x, y, Obj) then
                 begin
                 ar[cnt].x:= x;
@@ -459,15 +472,10 @@ with Obj do
         inc(x, getrandom(12) + 12)
     until x >= LAND_WIDTH - Width;
     bRes:= cnt <> 0;
-AddFileLog('CHECKPOINT 004');
     if bRes then
         begin
         i:= getrandom(cnt);
-        r.x:= ar[i].X;
-        r.y:= ar[i].Y;
-        r.w:= Width;
-        r.h:= Height;
-        SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
+        copyToXY(Obj.Surf, Surface, ar[i].X, ar[i].Y);
         AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
         dec(Maxcnt)
         end
@@ -488,7 +496,7 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key: shortstring;
     f: PFSFile;
-    i: LongInt;
+    i, y: LongInt;
     ii, t: Longword;
     c2: TSDL_Color;
 begin
@@ -560,6 +568,29 @@ while (not pfsEOF(f)) and allOK do
         SDSkyColor.r:= SkyColor.r;
         SDSkyColor.g:= SkyColor.g;
         SDSkyColor.b:= SkyColor.b;
+        end
+    else if key = 'sd-tint' then
+        begin
+        i:= Pos(',', s);
+        SDTint.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDTint.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDTint.b:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        SDTint.a:= StrToInt(Trim(s));
+        if GrayScale
+            then
+            begin
+            t:= round(SDTint.r * RGB_LUMINANCE_RED + SDTint.g * RGB_LUMINANCE_GREEN + SDTint.b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            SDTint.r:= t;
+            SDTint.g:= t;
+            SDTint.b:= t
+            end;
         end
     else if key = 'border' then
         begin
@@ -652,36 +683,55 @@ while (not pfsEOF(f)) and allOK do
         with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps or ifCritical);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical);
             Width:= Surf^.w;
             Height:= Surf^.h;
-            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifTransparent or ifIgnoreCaps);
+            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps);
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            with inland do
-                begin
-                i:= Pos(',', s);
-                x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                CheckRect(Width, Height, x, y, w, h)
-                end;
+            for y := 0 to Surf^.h-1 do
+                syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Surf^.pixels)^[y*Surf^.pitch], Surf^.w*4);
+
+            inrectcnt := 0;
+
+            for ii := 1 to Length(S) do
+              if S[ii] = ',' then
+                inc(inrectcnt);
+
+            if inrectcnt mod 2 = 0 then
+              inrectcnt := 1
+            else begin
+              i:= Pos(',', s);
+              inrectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+              Delete(s, 1, i);
+            end;
+
+            for ii:= 1 to inrectcnt do
+                with inland[ii] do
+                    begin
+                    i:= Pos(',', s);
+                    x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                    Delete(s, 1, i);
+                    CheckRect(Width, Height, x, y, w, h)
+                    end;
+
             i:= Pos(',', s);
-            rectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            outrectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
-            for ii:= 1 to rectcnt do
+            for ii:= 1 to outrectcnt do
                 with outland[ii] do
                     begin
                     i:= Pos(',', s);
@@ -693,7 +743,7 @@ while (not pfsEOF(f)) and allOK do
                     i:= Pos(',', s);
                     w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                     Delete(s, 1, i);
-                    if ii = rectcnt then
+                    if ii = outrectcnt then
                         h:= StrToInt(Trim(s))
                     else
                         begin
@@ -703,6 +753,7 @@ while (not pfsEOF(f)) and allOK do
                         end;
                     CheckRect(Width, Height, x, y, w, h)
                     end;
+
             end;
         end
     else if key = 'spray' then
@@ -711,12 +762,32 @@ while (not pfsEOF(f)) and allOK do
         with SprayObjects.objs[Pred(SprayObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifAlpha or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
             Maxcnt:= StrToInt(Trim(s));
             end;
+        end
+    else if key = 'water-animation' then
+        begin
+        i:= Pos(',', s);
+        watFrames:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        watFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        watMove:= StrToInt(Trim(s));
+        end
+    else if key = 'sd-water-animation' then
+        begin
+        i:= Pos(',', s);
+        watSDFrames:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        watSDFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        watSDMove:= StrToInt(Trim(s));
         end
     else if key = 'flakes' then
         begin

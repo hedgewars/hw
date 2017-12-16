@@ -65,7 +65,7 @@ typedef ptrdiff_t PtrInt;
 typedef wchar_t widechar;
 typedef wchar_t* PWideChar;
 typedef char Char;
-typedef LongInt SizeInt;
+typedef PtrInt SizeInt;
 typedef char ** PPChar;
 typedef Word* PWord;
 

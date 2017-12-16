@@ -1,1 +1,3 @@
-en_US=Capture the Flag\, blizzard style!
+en=Capture the enemy flag and bring it to your own.
+de=Klau die feindliche Flagge und bring sie zu deiner eigenen.
+pl=Zabierz flagę wroga i przynieś ją do swojej.

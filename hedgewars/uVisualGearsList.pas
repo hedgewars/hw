@@ -36,7 +36,7 @@ var VGCounter: LongWord;
     VisualGearLayers: array[0..6] of PVisualGear;
 
 implementation
-uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
+uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers, uScript;
 
 function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 begin
@@ -230,8 +230,16 @@ with gear^ do
                 end;
     vgtDroplet:
                 begin
-                dx:= 0.001 * (random(180) - 90);
-                dy:= -0.001 * (random(160) + 40);
+                // old dx & dy calcs
+                // dx:= 0.001 * (random(180) - 90);
+                // dy:= -0.001 * (random(160) + 40);
+                // => min speed ~ 0.098, max speed ~ 0.218, speed range ~ 0.120
+                // => min angle(4096) ~ 129, max angle ~ 1919, angle range ~ 1790
+                dx:= 0.001 * (98 + random(121)); // speed
+                Frame:= 129 + random(1791); // angle
+                dy:= -dx * hwFloat2Float(AngleSin(Frame));
+                // divide by 2 to create an eliptic shape
+                dx:=  dx * hwFloat2Float(AngleCos(Frame)) / 2;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
@@ -341,9 +349,8 @@ if State <> 0 then
     gear^.State:= State;
 
 case Gear^.Kind of
-    vgtFlake: if cFlattenFlakes then
-        gear^.Layer:= 0
-              else if random(3) = 0 then
+    vgtFlake: 
+              if random(3) = 0 then
                   begin
                   gear^.Scale:= 0.5;
                   gear^.Layer:= 0   // 33% - far back
@@ -355,13 +362,17 @@ case Gear^.Kind of
                   end
               else if random(3) <> 0 then
                   gear^.Layer:= 5  // 30% - just behind land
-              else if random(2) = 0 then
+              else if (not cFlattenFlakes) and (random(2) = 0) then
                   gear^.Layer:= 6   // 7% - just in front of land
-              else
+              else if not cFlattenFlakes then
                   begin
                   gear^.Scale:= 1.5;
-                  gear^.Layer:= 2;  // 7% - close up
-                  end;
+                  gear^.Layer:= 2  // 7% - close up
+                  end
+              else begin 
+                   gear^.Layer:= 0;
+                   gear^.Scale:= 0.5
+                   end;
 
     vgtCloud: if cFlattenClouds then gear^.Layer:= 5
               else if random(3) = 0 then
@@ -429,10 +440,12 @@ if VisualGearLayers[gear^.Layer] <> nil then
 VisualGearLayers[gear^.Layer]:= gear;
 
 AddVisualGear:= gear;
+ScriptCall('onVisualGearAdd', gear^.uid);
 end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
+    ScriptCall('onVisualGearDelete', Gear^.uid);
     FreeAndNilTexture(Gear^.Tex);
 
     if Gear^.NextGear <> nil then

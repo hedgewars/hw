@@ -97,7 +97,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibJoinRoom = (joinRoom_t*) hwlib.resolve("joinRoom");
     flibPartRoom = (partRoom_t*) hwlib.resolve("partRoom");
 
-    flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
+    flibInit("/usr/home/unC0Rr/Sources/Hedgewars/MainRepo/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
 
     ThemeIconProvider * themeIcon = (ThemeIconProvider *)m_engine->imageProvider(QLatin1String("theme"));

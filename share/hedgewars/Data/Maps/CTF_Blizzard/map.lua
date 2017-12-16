@@ -310,7 +310,7 @@ function FlagDeleted(gear)
 					HandleRespawns() -- this will set fIsMissing[wtf] to false :)
 					AddCaption(loc("Flag returned!"))
 				elseif fIsMissing[wtf] == false then
-					AddCaption(loc("That was pointless.") .. loc("The flag will respawn next round."))
+					AddCaption(loc("That was pointless. The flag will respawn next round."))
 				end
 
 				--fIsMissing[wtf] = false
@@ -573,8 +573,9 @@ function onGameInit()
 	MinesTime  = 2000
 	Explosives = 0 -- The number of explosives being placed
 	Delay = 10 -- The delay between each round
-	WaterRise = 0 -- I sure hope this works	
-	--SuddenDeathTurns = 99 -- suddendeath is off, effectively
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 	Map = "Blizzard" -- The map to be played
 	Theme = "Snow" -- The theme to be used "Nature"
 
@@ -583,7 +584,7 @@ end
 
 function onGameStart()
 
-	ShowMission("CTF_BLIZZARD", "", loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
+	ShowMission(loc("CTF_Blizzard"), loc("Capture The Flag"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
 
 
 	-- initialize teleporters

@@ -1,0 +1,78 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Airson cluiche ann an cinneadh, cha leig thu leas ach an aon dath a thaghadh 's a thagh caraid. Stiùirichidh sibh na gràineagan agaibh fhèin fa leth fhathast ach caillidh no buannaichidh sibh còmhla.</tip>
+    <tip>Tha airm ann nach dèan ach beagan a dhochann ach dh'fhaoidte gum bi iad glè èifeachdach a-rèir an t-suidheachaidh. Feuch gun cleachd thu Iolaire an fhàsaich gus iomadh gràineag a chur dhan mhuir.</tip>
+    <tip>Mur eil thu cinnteach na nì thu agus mur eil thu airson connadh a chaitheamh gun fheum, leig seachad do chuairt. Ach na fuirich ro fhada on a thigeadh bàs obann ort!</tip>
+    <tip>A bheil thu airson ròpannan a shàbhaladh? Leig às an ròpa fad 's a bhios tu san adhair is loisg e a-rithist. Cho fad 's nach bean thu ri tìr is a chuimsicheas tu gu soirbheachail, cleachdaidh tu an ròpa agad a-rithist gun a bhith a' caitheamh connaidh!</tip>
+    <tip>Mur eil thu ag iarraidh gun cleachd daoine eile am far-ainm as fhearr leat air an fhrithealaiche oifigeil, clàraich cunntas air <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a>.</tip>
+    <tip>A bheil thu seachd searbh dhen gheama àbhaisteach? Feuch fear dhe na miseanan — bheir iad dòigh-chluiche eadar-dhealaichte dhut a-rèir an fhir a thagh thu</tip>
+    <tip>Clàraichidh sinn an geama mu dheireadh a chluich thu mar demo gu fèin-obrachail. Tagh “Geama ionadail” agus tagh putan nan “Demo” taobh deas aig a' bhonn gus an cluich no an stiùireadh.</tip>
+    <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach. Ma tha duilgheadas agad, faighnich air a' bhòrd-bhrath no tadhail air an t-seòmar IRC againn!</tip>
+    <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach. Ma tha e a' còrdadh riut, nach doir thu tabhartas airgid no obrach dhuinn?</tip>
+    <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach. Co-roinn e le do theaghlach is caraidean mar a thogras tu!</tip>
+    <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach a cum tlachd! Coinnich ris an luchd-leasachaidh ann an <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
+    <tip>Bi fèill-chluiche oifigeil againn o àm gu àm. Sgaoilidh sinn brathan-naidheachd mu na tachartasan air <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> beagan làithean ro làimh.</tip>
+    <tip>Tha Hedgewars ri fhaighinn ann an iomadh cànan. Ma tha an cànan agad a dhìth no an t-eadar-theangachadh ro shean, nach cuir thu fios thugainn?</tip>
+    <tip>Gabhaidh Hedgewars a ruith air iomadh siostam-obrachaidh, a' gabhail a-steach Microsoft Windows, Mac OS X agus GNU/Linux.</tip>
+    <tip>Cuimhnich gur urrainn dhut na geamannan agad fhèin a suidheachadh air an lìonra ionadail no air loidhne. Tha barrachd roghainnean na geama simplidh agad.</tip>
+    <tip>Ma tha iomadh pada-geama agad, ceangail iad ris mus tòisich thu an geama agus sònraich an stiùireadh dha na sgiobannan agad.</tip>
+    <tip>Bu chòir dhut beagan fois a ghabhail on chluich gach uair a thìde air eagal 's gun cuir e an sgithear ort.</tip>
+    <tip>Mur eil comas luathachaidh bathair-chruaidh OpenGL aig a' chairt-ghrafaigeachd agad, feuch an cuir thu an comas modh na càileachd ìseil gus piseach a thoirt air an dèanadas.</tip>
+    <tip>Mur eil comas luathachaidh bathair-chruaidh OpenGL aig a' chairt-ghrafaigeachd agad, feuch gu ùraich thu na draibhearan aice.</tip>
+    <tip>Cuiridh sinn fàilte air molaidhean is beachdan cuideachail. Ma tha rud ann nach eil a' còrdadh riut no ma tha deagh bheachd agad, innis dhuinn mu dhèidhinn!</tip>
+    <tip>For your own benefit we'd like you to be polite and friendly while playing on our server. Also please keep in mind that some players are minors!</tip>
+    <tip>Special game modes such as “Vampirism” or “Karma” allow you to develop completely new tactics. Try them in a custom game!</tip>
+    <tip>Please don't install Hedgewars on computers you don’t own (school, university, work, etc.) unless you got permission. We don't want you to get into any trouble.</tip>
+    <tip>Hedgewars can be perfect for short games during breaks. Just ensure you don’t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</tip>
+    <tip>No hedgehogs were harmed in making this game.</tip>
+    <tip>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</tip>
+    <tip>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</tip>
+    <tip>Some weapons require special strategies or just lots of training, so don’t give up on a particular tool if you miss an enemy once.</tip>
+    <tip>Most weapons won’t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</tip>
+    <tip>The Old Limburger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</tip>
+    <tip>The Piano Strike is the most damaging air strike. You’ll lose the hedgehog performing it, so there’s a huge downside as well.</tip>
+    <tip>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</tip>
+    <tip>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations … or water.</tip>
+    <tip>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</tip>
+    <tip>If you’re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</tip>
+    <tip>The Cake’s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</tip>
+    <tip>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</tip>
+    <tip>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</tip>
+    <tip>Want to know who’s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</tip>
+    <tip>Like Hedgewars? Become a fan on <a href="http://www.facebook.com/Hedgewars">Facebook</a> or follow us on <a href="http://twitter.com/hedgewars">Twitter</a></tip>
+    <tip>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you’ll have to share them somewhere to use them online.</tip>
+    <tip>Keep your video card drivers up to date to avoid issues playing the game.</tip>
+    <tip>Heads or tails? Type “/rnd” in the lobby and you’ll find out. Also “/rnd rock paper scissors” works!</tip>
+    <tip>You’re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or web browser.</tip>
+    <tip>Dud mines are not harmless: Although their timer is broken, they can still explode if they took too much abuse!</tip>
+    <tip>Love is hot! Use Seduction to thaw frozen hedgehogs.</tip>
+    <tip>Smoke coming from a barrel is an indicator that it is low on “health” and even small amounts of damage might cause it to burst.</tip>
+    <tip>Barrels start with 60 health and take damage like hedgehogs, so they need some abuse until they explode.</tip>
+    <tip>Need more bounce power? Change the bounce strength of grenades, cluster bombs, old limburgers and mines while holding [precise] and pressing one of the timer keys.</tip>
+    <tip>Did you forget the goals or game modifiers inside the game? Hit the pause or quit key to review them again!</tip>
+    <tip>You can punch, whip and hammer other things than just hedgehogs. Hit them all!</tip>
+    <tip>If not mentioned otherwise, mines normally explode after 3 seconds.</tip>
+    <tip>In King Mode, your king will start out healthier, stronger and more resistant to damage and blows than the minions.</tip>
+    <tip>In King Mode, the king will take damage each turn when there are no minions left in the team.</tip>
+    <tip>The whip also hits hedgehogs and objects behind a thin wall.</tip>
+    <tip>A cleaver deals more damage the faster it’s moving.</tip>
+    <tip>You can drop cakes from cliffs, but you have to stand very close to the edge, so be careful.</tip>
+    <tip>Use your rope to push away other hedgehogs i.e. by sliding on the ground. This technique is known as “rope-knocking”.</tip>
+    <tip>Don’t stand still on an icy slope, or you will slip away. Alternatively, you can hold down [precise].</tip>
+    <tip>In the lands of Snow and Christmas, the snow piles up over time, unless the land is indestructible.</tip>
+    <tip>Be aware in lands of Snow and Christmas, because girders are made of slippery ice.</tip>
+    <tip>The retreat time depends on the weapon you used. Be careful, some weapons don’t have a retreat time and immediately end your turn!</tip>
+    <windows-only>
+        <tip>This version of Hedgewars supports <a href="http://www.xfire.com">Xfire</a>. Make sure to add Hedgewars to its game list so your friends can see you playing.</tip>
+        <tip>You can find your Hedgewars configuration files under “My Documents\Hedgewars”. Create backups or take the files with you, but don’t edit them by hand.</tip>
+    </windows-only>
+    <mac-only>
+        <tip>You can find your Hedgewars configuration files under “Library/Application Support/Hedgewars” in your home directory. Create backups or take the files with you, but don’t edit them by hand.</tip>
+    </mac-only>
+    <linux-only>
+        <tip>You can find your Hedgewars configuration files under “.hedgewars” in your home directory. Create backups or take the files with you, but don’t edit them by hand.</tip>
+    </linux-only>
+</tips>

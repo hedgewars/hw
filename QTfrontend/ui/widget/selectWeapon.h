@@ -52,24 +52,30 @@ class SelWeaponWidget : public QFrame
         SelWeaponWidget(int numItems, QWidget* parent=0);
         QString getWeaponsString(const QString& name) const;
         QStringList getWeaponNames() const;
+        void deletionDone();
+        void init();
 
     public slots:
         void setDefault();
         void setWeapons(const QString& ammo);
         //sets the name of the current set
         void setWeaponsName(const QString& name);
+        void switchWeapons(const QString& name);
         void deleteWeaponsName();
         void newWeaponsName();
         void save();
         void copy();
 
     signals:
-        void weaponsChanged();
-        void weaponsDeleted();
+        void weaponsDeleted(QString weaponsName);
+        void weaponsAdded(QString weaponsName, QString ammo);
+        void weaponsEdited(QString oldWeaponsName, QString newWeaponsName, QString ammo);
 
     private:
         //the name of the current weapon set
         QString curWeaponsName;
+        //set to true while an entry is deleted. Used to avoid duplicate saving due to combobox change
+        bool isDeleting;
 
         QLineEdit* m_name;
 

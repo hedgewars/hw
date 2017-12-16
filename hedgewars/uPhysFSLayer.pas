@@ -61,6 +61,7 @@ function PHYSFS_writeBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdec
 function PHYSFS_seek(f: PFSFile; pos: QWord): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_flush(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
+function PHYSFS_setBuffer(f: PFSFile; pos: QWord): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_mkdir(path: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_getLastError(): PChar; cdecl; external PhysfsLibName;
@@ -84,8 +85,12 @@ begin
 end;
 
 function pfsOpenRead(fname: shortstring): PFSFile;
+var f: PFSFile;
 begin
-    exit(PHYSFS_openRead(Str2PChar(fname)));
+    f:= PHYSFS_openRead(Str2PChar(fname));
+    if f <> nil then
+        PHYSFS_setBuffer(f, 4096);
+    exit(f);
 end;
 
 function pfsOpenWrite(fname: shortstring): PFSFile;
@@ -189,11 +194,13 @@ end;
 
 procedure pfsMount(path: PChar; mountpoint: PChar);
 begin
+    system.writeln('Mounting ',path,' at ', mountpoint);
     PHYSFS_mount(path, mountpoint, false)
 end;
 
 procedure pfsMountAtRoot(path: PChar);
 begin
+    system.writeln('Mounting ',path,' at root');
     pfsMount(path, PChar(_S'/'));
 end;
 

@@ -32,6 +32,7 @@
 #include <QSlider>
 #include <QSignalMapper>
 #include <QColorDialog>
+#include <QMessageBox>
 #include <QStandardItemModel>
 #include <QDebug>
 
@@ -167,7 +168,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: schemes
-            OptionGroupBox * groupSchemes = new OptionGroupBox(":/res/weaponsicon.png", tr("Schemes"), this);
+            OptionGroupBox * groupSchemes = new OptionGroupBox(":/res/schemeicon.png", tr("Schemes"), this);
             leftColumn->addWidget(groupSchemes);
 
             groupSchemes->layout()->setColumnStretch(0, 1);
@@ -275,7 +276,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupGame->layout()->addWidget(winResContainer, 2, 1);
 
             QLabel *winLabelX = new QLabel(groupGame);
-            winLabelX->setText("x"); // decorational x
+            //: Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it
+            winLabelX->setText(tr("x"));
             winLabelX->setFixedWidth(40);
             winLabelX->setAlignment(Qt::AlignCenter);
 
@@ -310,10 +312,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
             // Stereo spacing
 
             QLabel * lblStereo = new QLabel(groupGame);
-            lblStereo->setText(QLabel::tr("Stereo rendering"));
+            lblStereo->setText(QLabel::tr("Stereoscopy"));
             groupGame->layout()->addWidget(lblStereo, 4, 0);
 
             CBStereoMode = new QComboBox(groupGame);
+            CBStereoMode->setWhatsThis(QComboBox::tr("Stereoscopy creates an illusion of depth when you wear 3D glasses."));
             CBStereoMode->setMaxVisibleItems(50);
             CBStereoMode->addItem(QComboBox::tr("Disabled"));
             CBStereoMode->addItem(QComboBox::tr("Red/Cyan"));
@@ -406,7 +409,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: frontend
-            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/graphicsicon.png", tr("Frontend"), this);
+            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/frontendicon.png", tr("Frontend"), this);
             rightColumn->addWidget(groupFrontend);
 
             // Fullscreen
@@ -419,11 +422,12 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBFrontendEffects = new QCheckBox(groupFrontend);
             CBFrontendEffects->setText(QCheckBox::tr("Visual effects"));
+            CBFrontendEffects->setWhatsThis(QCheckBox::tr("Enable visual effects such as animated menu transitions and falling stars"));
             groupFrontend->layout()->addWidget(CBFrontendEffects, 1, 0);
         }
 
         { // group: colors
-            OptionGroupBox * groupColors = new OptionGroupBox(":/res/lightbulb_on.png", tr("Custom colors"), this);
+            OptionGroupBox * groupColors = new OptionGroupBox(":/res/Palette.png", tr("Custom colors"), this);
             rightColumn->addWidget(groupColors);
 
             groupColors->layout()->setColumnStretch(0, 1);
@@ -626,12 +630,41 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBLanguage->setMaxVisibleItems(50);
             groupMisc->layout()->addWidget(CBLanguage, 0, 1);
             QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
+            QStringList langnames;
             CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
             for(int i = 0; i < locs.count(); i++)
             {
                 QString lname = locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1");
-                QLocale loc(lname);
-                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", lname);
+                QLocale loc = QLocale(lname);
+                QString entryName;
+                // If local identifier has underscore, it means the country has been specified
+                if(lname.contains("_"))
+                {
+                    // Append country name for disambiguation
+                    // FIXME: These brackets are hardcoded and can't be translated. Luckily, these are rarely used and work with most languages anyway
+                    entryName = loc.nativeLanguageName() + " (" + loc.nativeCountryName() + ")";
+                }
+                else
+                {
+                    // Usually, we just print the language name
+                    entryName = loc.nativeLanguageName();
+                }
+                // Fallback code, if language name is empty for some reason. This should normally not happen
+                if(entryName.isEmpty())
+                {
+                    if(lname == "gd")
+                    {
+                        /* Workaround for Qt4: nativeLanguageName does not return correct name for Scottish Gaelic (QTBUG-59929),
+                           so we have to add it ourselves :-/ */
+                        entryName = QString::fromUtf8("Gàidhlig");
+                    }
+                    else
+                    {
+                        // If all else fails, show error and the locale identifier
+                        entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
+                    }
+                }
+                CBLanguage->addItem(entryName, lname);
             }
 
             QLabel *restartNoticeLabel = new QLabel(groupMisc);
@@ -647,6 +680,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBNameWithDate = new QCheckBox(groupMisc);
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+            CBNameWithDate->setWhatsThis(QCheckBox::tr("If enabled, Hedgewars adds the date and time in the form \"YYYY-MM-DD_hh-mm\" for automatically created demos."));
             groupMisc->layout()->addWidget(CBNameWithDate, 3, 0, 1, 2);
 
             // Associate file extensions
@@ -674,7 +708,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             btnUpdateNow = new QPushButton(groupUpdates);
             connect(btnUpdateNow, SIGNAL(clicked()), this, SLOT(checkForUpdates()));
             btnUpdateNow->setWhatsThis(tr("Check for updates"));
-            btnUpdateNow->setText("Check now");
+            btnUpdateNow->setText(tr("Check now"));
             btnUpdateNow->setFixedSize(130, 30);
             groupUpdates->layout()->addWidget(btnUpdateNow, 0, 1);
         }
@@ -764,10 +798,10 @@ QLayout * PageOptions::bodyLayoutDefinition()
         widthEdit->setValidator(new QIntValidator(this));
         groupVideoRec->layout()->addWidget(widthEdit, 5, 1);
 
-        // x
+        // multiplication sign
 
         QLabel *labelX = new QLabel(groupVideoRec);
-        labelX->setText("X");
+        labelX->setText(tr("x"));
         groupVideoRec->layout()->addWidget(labelX, 5, 2);
 
         // height
@@ -789,17 +823,18 @@ QLayout * PageOptions::bodyLayoutDefinition()
         groupVideoRec->layout()->addWidget(labelFramerate, 6, 0);
 
         framerateBox = new QComboBox(groupVideoRec);
-        framerateBox->addItem("24 fps", 24);
-        framerateBox->addItem("25 fps", 25);
-        framerateBox->addItem("30 fps", 30);
-        framerateBox->addItem("50 fps", 50);
-        framerateBox->addItem("60 fps", 60);
+        framerateBox->addItem(QComboBox::tr("24 FPS"), 24);
+        framerateBox->addItem(QComboBox::tr("25 FPS"), 25);
+        framerateBox->addItem(QComboBox::tr("30 FPS"), 30);
+        framerateBox->addItem(QComboBox::tr("50 FPS"), 50);
+        framerateBox->addItem(QComboBox::tr("60 FPS"), 60);
         groupVideoRec->layout()->addWidget(framerateBox, 6, 1);
 
         // label for Bitrate
 
         QLabel *labelBitrate = new QLabel(groupVideoRec);
-        labelBitrate->setText(QLabel::tr("Bitrate (Kbps)"));
+        //: “Kibit/s” is the symbol for 1024 bits per second
+        labelBitrate->setText(QLabel::tr("Bitrate (Kibit/s)"));
         groupVideoRec->layout()->addWidget(labelBitrate, 6, 2);
 
         // bitrate
@@ -807,6 +842,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         bitrateBox = new QSpinBox(groupVideoRec);
         bitrateBox->setRange(100, 5000);
         bitrateBox->setSingleStep(100);
+        bitrateBox->setWhatsThis(QSpinBox::tr("Specify the bitrate of recorded videos as a multiple of 1024 bits per second"));
         groupVideoRec->layout()->addWidget(bitrateBox, 6, 3);
 
         // button 'set default options'
@@ -951,7 +987,10 @@ void PageOptions::requestEditSelectedTeam()
 
 void PageOptions::requestDeleteSelectedTeam()
 {
-    emit deleteTeamRequested(CBTeamName->currentText());
+    if(CBTeamName->count() > 1)
+        emit deleteTeamRequested(CBTeamName->currentText());
+    else
+        QMessageBox::warning(this, tr("Can't delete last team"), tr("You can't delete the last team!"));
 }
 
 void PageOptions::setTeamOptionsEnabled(bool enabled)

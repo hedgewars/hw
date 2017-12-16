@@ -30,7 +30,8 @@ function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
-procedure ProcessMouseWheel(x, y: LongInt);
+//procedure ProcessMouseWheel(x, y: LongInt);
+procedure ProcessMouseWheel(y: LongInt);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 
@@ -172,7 +173,7 @@ if CurrentBinds[code][0] <> #0 then
     begin
     if (code < cKeyMaxIndex - 2) // means not mouse buttons
         and KeyDown
-        and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) 
+        and (not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')))
         and (CurrentTeam <> nil) 
         and (not CurrentTeam^.ExtDriven) 
         then bShowAmmoMenu:= false;
@@ -232,8 +233,10 @@ end;
 
 var mwheelupCode, mwheeldownCode: Integer;
 
-procedure ProcessMouseWheel(x, y: LongInt);
+//procedure ProcessMouseWheel(x, y: LongInt);
+procedure ProcessMouseWheel(y: LongInt);
 begin
+    // we don't use 
     //writelntoconsole('[MOUSEWHEEL] '+inttostr(x)+', '+inttostr(y));
     if y > 0 then
         begin
@@ -321,7 +324,7 @@ begin
     for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+char(48+i);
     for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
-    loadBinds('dbind', cPathz[ptData] + '/settings.ini');
+    loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
 end;
 
 

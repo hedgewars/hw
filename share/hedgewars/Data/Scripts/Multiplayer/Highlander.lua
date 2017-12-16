@@ -1,8 +1,9 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.4b
 -- by mikade
 --------------------------------
+
+-- Ancient changelog:
 
 -----------
 --0.1
@@ -91,7 +92,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
--- These define weps allowed by the script. At present Tardis and Resurrection is banned for example
+-- These define weps allowed by the script.
 -- These were arbitrarily defined out-of-order in initial script, so that was preserved here, resulting 
 -- in a moderately odd syntax.
 local atkWeps = 	{
@@ -103,6 +104,7 @@ local atkWeps = 	{
                     [amSeduction]=true, [amHammer]=true, [amMine]=true, [amDynamite]=true, [amCake]=true,
                     [amBallgun]=true, [amSMine]=true, [amRCPlane]=true, [amBirdy]=true, [amKnife]=true,
                     [amAirAttack]=true, [amMineStrike]=true, [amNapalm]=true, [amDrillStrike]=true, [amPiano]=true, [amAirMine] = true,
+                    [amDuck]=true,
 					}
 
 local utilWeps =  {
@@ -112,6 +114,11 @@ local utilWeps =  {
 					[amLowGravity]=true, [amExtraDamage]=true, [amExtraTime]=true,
 					[amLandGun]=true, [amRubber]=true, [amIceGun]=true,
 					}
+
+-- Intentionally left out:
+-- * Resurrector (guaranteed to screw up the game)
+-- * Time Box
+-- * Switch Hedgehog (not sure why)
 
 local wepArray = {}
 
@@ -129,15 +136,20 @@ local shotsFired = 0
 local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
-local maxWep = 57 -- game crashes if you exceed supported #
 
 local someHog = nil -- just for looking up the weps
 
+-- Script parameter stuff
 local mode = nil
+
+-- If true, killing hogs of your own clan doesn't give you their weapons.
+-- Otherwise, killing any hog gives you their weapons.
+local loyal = false
 
 function onParameters()
     parseParams()
     mode = params["mode"]
+    loyal = params["loyal"] == "true"
 end
 
 function CheckForWeaponSwap()
@@ -161,8 +173,10 @@ function onHogAttack()
 end
 
 function StartingSetUp(gear)
-    for i = 1,maxWep do
-        setGearValue(gear,i,0)
+    for i = 0, AmmoTypeMax do
+        if i ~= amNothing then
+            setGearValue(gear,i,0)
+        end
     end
     for w,c in pairs(wepArray) do
         if c == 9 and (atkWeps[w] or utilWeps[w])  then
@@ -175,23 +189,23 @@ function StartingSetUp(gear)
     local r = 0
     if atktot > 0 then
         r = GetRandom(atktot)+1
-        for i = 1,maxWep do
-        --for w,c in pairs(atkChoices) do
-            --WriteLnToConsole('     c: '..c..' w:'..w..' r:'..r)
-            if atkChoices[i] >= r then
-                setGearValue(gear,i,1)
-                break
+        for i = 0, AmmoTypeMax do
+            if i ~= amNothing then
+                if atkChoices[i] >= r then
+                    setGearValue(gear,i,1)
+                    break
+                end
             end
         end
     end
     if utiltot > 0 then
         r = GetRandom(utiltot)+1
-        for i = 1,maxWep do
-       -- for w,c in pairs(utilChoices) do
-            --WriteLnToConsole('util c: '..c..' w:'..w..' r:'..r)
-            if utilChoices[i] >= r then
-                setGearValue(gear,i,1)
-                break
+        for i = 0, AmmoTypeMax do
+            if i ~= amNothing then
+                if utilChoices[i] >= r then
+                    setGearValue(gear,i,1)
+                    break
+                end
             end
         end
     end
@@ -216,7 +230,18 @@ end
 -- this is called when a hog dies
 function TransferWeps(gear)
 
-	if CurrentHedgehog ~= nil then
+	if CurrentHedgehog ~= nil and CurrentHedgehog ~= gear and (not loyal or (GetHogClan(CurrentHedgehog) ~= GetHogClan(gear))) then
+
+        local x,y,color
+        local vgear
+        local vgtX, vgtY, vgtdX, vgtdY, vgtAngle, vgtFrame, vgtFrameTicks, vgtState, vgtTimer, vgtTint
+        local dspl = IsHogLocal(CurrentHedgehog)
+        local ammolist = ''
+
+        if dspl then
+            x,y = GetGearPosition(CurrentHedgehog)
+            color = GetClanColor(GetHogClan(CurrentHedgehog))
+        end
 
         for w,c in pairs(wepArray) do
 			val = getGearValue(gear,w)
@@ -230,10 +255,29 @@ function TransferWeps(gear)
 				else
 					AddAmmo(CurrentHedgehog, w, val)
 				end
+                if dspl then
+                    if ammolist == '' then
+                        ammolist = GetAmmoName(w)
+                    else
+                        ammolist = ammolist .. ' • ' .. GetAmmoName(w)
+                    end
+                    x = x + 2
+                    y = y + 32
+                    vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
+                    if vgear ~= nil then
+                        vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint = GetVisualGearValues(vgear)
+                        vgtFrame = w
+                        SetVisualGearValues(vgear,vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint)
+                    end
+                end
 
 			end
 		end
 
+        if dspl and ammolist ~= '' then
+            PlaySound(sndShotgunReload);
+            AddCaption(ammolist, color, capgrpAmmoinfo)
+        end
 	end
 
 end
@@ -242,30 +286,37 @@ function onGameInit()
 	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
 	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
-	Goals = loc("Highlander: Eliminate enemy hogs and take their weapons.") .."|" ..
-	loc("Weapons are reset on end of turn.")
+	if loyal then
+		Goals = loc("Loyal Highlander: Eliminate enemy hogs to take their weapons") .. "|"
+	else
+		Goals = loc("Highlander: Eliminate hogs to take their weapons") .. "|"
+	end
+	Goals = Goals .. loc("Replenishment: Weapons are restocked on turn start of a new hog") .. "|" ..
+	loc("Ammo Limit: Hogs can’t have more than 1 ammo per type")
 end
 
 function onGameStart()
     utilChoices[amSkip] = 0
     local c = 0
-    for i = 1,maxWep do
-        atkChoices[i] = 0
-        utilChoices[i] = 0
-        if i ~= 7 then
-            wepArray[i] = 0
-            c = GetAmmoCount(someHog, i)
-            if c > 8 then c = 9 end
-            wepArray[i] = c
-            if c < 9 and c > 0 then
-                if atkWeps[i] then
-                    --WriteLnToConsole('a    c: '..c..' w:'..i)
-                    atktot = atktot + probability[c]
-                    atkChoices[i] = atktot
-                elseif utilWeps[i] then
-                    --WriteLnToConsole('u    c: '..c..' w:'..i)
-                    utiltot = utiltot + probability[c]
-                    utilChoices[i] = utiltot
+    for i = 0, AmmoTypeMax do
+        if i ~= amNothing then
+            atkChoices[i] = 0
+            utilChoices[i] = 0
+            if i ~= 7 then
+                wepArray[i] = 0
+                c = GetAmmoCount(someHog, i)
+                if c > 8 then c = 9 end
+                wepArray[i] = c
+                if c < 9 and c > 0 then
+                    if atkWeps[i] then
+                        --WriteLnToConsole('a    c: '..c..' w:'..i)
+                        atktot = atktot + probability[c]
+                        atkChoices[i] = atktot
+                    elseif utilWeps[i] then
+                        --WriteLnToConsole('u    c: '..c..' w:'..i)
+                            utiltot = utiltot + probability[c]
+                        utilChoices[i] = utiltot
+                    end
                 end
             end
         end
@@ -279,6 +330,10 @@ function onGameStart()
 end
 
 function CheckForHogSwitch()
+
+	--[[ Restock the weapons of the hog on turn start, provided it is not the same hog as before.
+	This exception is done do avoid a single hog receiving tons of weapons when it is the only unfrozen
+	hog and takes consecutive turns. ]]
 
 	if (CurrentHedgehog ~= nil) then
 

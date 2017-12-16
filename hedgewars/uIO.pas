@@ -457,7 +457,8 @@ with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
     if (State and gstChooseTarget) <> 0 then
         begin
-        isCursorVisible:= false;
+        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoTargetAfter) <> 0 then
+            isCursorVisible:= false;
         if not CurrentTeam^.ExtDriven then
             begin
             if fromAI then
@@ -470,10 +471,13 @@ with CurrentHedgehog^.Gear^,
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
                 end;
+            if (WorldEdge <> weBounce) then
+                TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
             end
         else
             begin
+            TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             TargetPoint.X:= putX;
             TargetPoint.Y:= putY
             end;

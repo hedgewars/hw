@@ -1,5 +1,6 @@
 project(hedgewars)
 
+
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.4)
 foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
@@ -79,8 +80,8 @@ set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 23)
-set(HEDGEWARS_PROTO_VER 52)
+set(CPACK_PACKAGE_VERSION_PATCH 24)
+set(HEDGEWARS_PROTO_VER 54)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 

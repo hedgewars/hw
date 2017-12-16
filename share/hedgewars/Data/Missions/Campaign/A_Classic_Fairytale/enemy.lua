@@ -1,3 +1,21 @@
+--[[
+A Classic Fairytale: The enemy of my enemy
+
+= SUMMARY =
+Simple deathmatch on the Islands map.
+
+= GOAL =
+Wipe out the Hedge-cogs and Leader teams
+
+= FLOW CHART =
+- Cut scene: startAnim
+- TBS
+- Goal completed
+- Cut scene: finalAnim
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
@@ -286,7 +304,7 @@ function AfterStartAnim()
   ShowMission(loc("The Enemy Of My Enemy"), loc("The Union"), loc("Defeat the cyborgs!"), 1, 0)
   PutWeaponCrates()
   PutHealthCrates()
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function PutHealthCrates()
@@ -331,12 +349,12 @@ end
 
 function DoNativesDead()
   nativesDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCannibalsDead()
   cannibalsDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoPlayersDead()
@@ -344,14 +362,14 @@ function DoPlayersDead()
   RemoveEventFunc(CheckCannibalsDead)
   RemoveEventFunc(CheckCyborgsDead)
   playersDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCyborgsDead()
 --  RemoveEventFunc(CheckNativesDead)
 --  RemoveEventFunc(CheckCannibalsDead)
   cyborgsDeadFresh= true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckGearsDead(gearList)
@@ -388,7 +406,7 @@ function LoseMission()
   DismissTeam(loc("Natives"))
   DismissTeam(loc("Cannibals"))
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function WonMission()
@@ -404,7 +422,7 @@ function WinMission()
     SaveCampaignVar("Progress", "9")
   end
   DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 -----------------------------Misc--------------------------------------
 function HideHedge(hedge)
@@ -485,7 +503,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
@@ -513,13 +531,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_star")
+    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then
@@ -651,10 +669,10 @@ function onNewTurn()
     cyborgsDeadFresh = false
     WonMission()
   elseif nativesDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Cannibals") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
+    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, Natives!"), SAY_SHOUT, 0)
     nativesDeadFresh = false
   elseif cannibalsDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
+    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, Cannibals!"), SAY_SHOUT, 0)
     cannibalsDeadFresh = false
   end
 end

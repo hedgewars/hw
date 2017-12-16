@@ -15,7 +15,7 @@ local startChallenge = false
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!") .. "|" .. loc("Mines time: 1 second"), 1, 4500},
 }
 -- health crates
 healthX = 565
@@ -72,28 +72,34 @@ function onGameInit()
 	Theme = "Desert"
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 
 	initCheckpoint("desert02")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
+end
+
+function onAmmoStoreInit()
+	SetAmmo(amRope, 9, 0, 0, 0)
+	SetAmmo(amSkip, 9, 0, 0, 0)
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
+	ShowMission(unpack(goals[dialog01]))
+	HideMission()
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSafe, {hero.gear}, heroSafe, {hero.gear}, 0)
 
 	SpawnHealthCrate(healthX, health1Y)
 	SpawnHealthCrate(healthX, health2Y)
-
-	AddAmmo(hero.gear, amRope, 99)
 
 	SendHealthStatsOff()
 	AddAnim(dialog01)
@@ -110,6 +116,12 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+end
+
+function onGearAdd(gear)
+	if GetGearType(gear) == gtRope then
+		HideMission()
+	end
 end
 
 function onGearDelete(gear)
@@ -147,7 +159,7 @@ function heroDeath(gear)
 	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface."))
 	SendStat(siCustomAchievement, loc("Most mines are not active."))
 	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end
 
@@ -155,7 +167,19 @@ function heroSafe(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You have escaped successfully."))
 	SendStat(siCustomAchievement, string.format(loc("Your escape took you %d turns."), TotalRounds))
-	SendStat(siPlayerKills,'1',teamA.name)
+	local record = tonumber(GetCampaignVar("FastestMineEscape"))
+	if record ~= nil and TotalRounds >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest escape so far: %d turns"), record))
+	end
+	if record == nil or TotalRounds < record then
+		SaveCampaignVar("FastestMineEscape", tostring(TotalRounds))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
+	sendSimpleTeamRankings({teamA.name})
+	SaveCampaignVar("Mission7Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end
 
@@ -164,7 +188,7 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
+	end
 	challengeStart()
 end
 
@@ -176,6 +200,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("The tunnel is about to get flooded!"), SAY_THINK, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I have to reach the surface as quickly as I can."), SAY_THINK, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = challengeStart, args = {hero.gear}})
 end
 
@@ -183,5 +208,5 @@ end
 
 function challengeStart()
 	startChallenge = true
-	TurnTimeLeft = 0
+	EndTurn(true)
 end

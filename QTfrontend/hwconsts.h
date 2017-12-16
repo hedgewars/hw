@@ -73,7 +73,7 @@ extern int years_since_foundation;
 #define HEDGEHOGS_PER_TEAM 8
 
 
-// see http://en.wikipedia.org/wiki/List_of_colors
+// see https://en.wikipedia.org/wiki/List_of_colors
 /*define HW_TEAMCOLOR_ARRAY  {0xff007fff, /. azure          ./ \
                               0xffdd0000, /. classic red    ./ \
                               0xff3e9321, /. classic green  ./ \

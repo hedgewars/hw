@@ -141,6 +141,13 @@ QPushButtonWithSound * AbstractPage::addButton(const QString & name, QBoxLayout 
     return btn;
 }
 
+QPushButton* AbstractPage::addSoundlessButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon, Qt::Alignment alignment)
+{
+    QPushButton * btn = formattedSoundlessButton(name, hasIcon);
+    grid->addWidget(btn, row, column, rowSpan, columnSpan, alignment);
+    return btn;
+}
+
 QPushButton* AbstractPage::addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon, Qt::Alignment alignment)
 {
     QPushButton* btn = formattedSoundlessButton(name, hasIcon);

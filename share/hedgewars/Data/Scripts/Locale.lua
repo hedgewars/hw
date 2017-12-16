@@ -7,3 +7,7 @@ function loc(text)
     else return text
     end
 end
+
+function loc_noop(text)
+    return text
+end

@@ -49,12 +49,12 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
     uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
-var GameOver: boolean;
+var TeamsGameOver: boolean;
     NextClan: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
-    s, ts: ansistring;
+    s, ts, cap: ansistring;
     t, AliveCount, i, j: LongInt;
 begin
 CheckForWin:= false;
@@ -77,22 +77,47 @@ ReadyTimeLeft:= 0;
 if (not bBetweenTurns) and isInMultiShoot then
     TurnReaction();
 
-if not GameOver then
+if not TeamsGameOver then
     begin
     if AliveCount = 0 then
         begin // draw
-        AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
-        SendStat(siGameResult, shortstring(trmsg[sidDraw]));
-        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        AddCaption(GetEventString(eidRoundDraw), cWhiteColor, capgrpGameState);
+        if SendGameResultOn then
+            SendStat(siGameResult, shortstring(trmsg[sidDraw]));
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
+        begin
         with AliveClan^ do
             begin
             ts:= ansistring(Teams[0]^.TeamName);
-            if TeamsNumber = 1 then
-                s:= FormatA(trmsg[sidWinner], ts)  // team wins
-            else
-                s:= FormatA(trmsg[sidWinner], ts); // clan wins
+            if TeamsNumber = 1 then // team wins
+                begin
+                s:= FormatA(trmsg[sidWinner], ts);
+                cap:= FormatA(GetEventString(eidRoundWin), ts);
+                AddCaption(cap, cWhiteColor, capgrpGameState);
+                end
+            else // clan wins
+                begin
+                s:= '';
+                for j:= 0 to Pred(TeamsNumber) do
+                    begin
+                    (*
+                    Currently, the game result string is just the victory
+                    string concatenated multiple times. This assumes that
+                    sidWinner is a complete sentence.
+                    This might not work well for some languages.
+
+                    FIXME/TODO: Add event strings for 2, 3, 4 and >4 teams winning.
+                                 This requires FormatA to work with multiple parameters. *)
+                    ts:= Teams[j]^.TeamName;
+                    s:= s + ' ' + FormatA(trmsg[sidWinner], ts);
+
+                    // FIXME: Show victory captions one-by-one, not all at once
+                    cap:= FormatA(GetEventString(eidRoundWin), ts);
+                    AddCaption(cap, cWhiteColor, capgrpGameState);
+                    end;
+                end;
 
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
@@ -104,13 +129,15 @@ if not GameOver then
                 AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
-
-            AddCaption(s, cWhiteColor, capgrpGameState);
-            SendStat(siGameResult, shortstring(s));
-            AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;
+
+        if SendGameResultOn then
+            SendStat(siGameResult, shortstring(s));
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        end;
     SendStats;
     end;
+TeamsGameOver:= true;
 GameOver:= true
 end;
 
@@ -320,6 +347,7 @@ else
     TagTurnTimeLeft:= 0;
     NextClan:= false;
     end;
+IsGetAwayTime:= false;
 
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
@@ -732,25 +760,6 @@ begin
 end;
 
 
-procedure chFinish(var s:shortstring);
-var t: LongInt;
-begin
-// avoid compiler hint
-s:= s;
-
-isPaused:= false;
-
-t:= 0;
-while t < TeamsCount do
-    begin
-    TeamsArray[t]^.hasGone:= true;
-    inc(t)
-    end;
-
-AddChatString(#7 + '* Good-bye!');
-RecountAllTeamsHealth();
-end;
-
 procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 var oldCI, newCI: boolean;
     oldHH: PHedgehog;
@@ -832,7 +841,6 @@ RegisterVariable('hhcoords', @chSetHHCoords, false);
 RegisterVariable('bind', @chBind, true );
 RegisterVariable('teamgone', @chTeamGone, true );
 RegisterVariable('teamback', @chTeamBack, true );
-RegisterVariable('finish', @chFinish, true ); // all teams gone
 RegisterVariable('fort'    , @chFort         , false);
 RegisterVariable('grave'   , @chGrave        , false);
 RegisterVariable('hat'     , @chSetHat       , false);

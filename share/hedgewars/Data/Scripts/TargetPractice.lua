@@ -96,6 +96,7 @@ The argument “params” is a table containing fields which describe the traini
 	- hogName:	name of the hedgehog (default: "Trainee")
 	- teamName:	name of the hedgehog’s team (default: "Training Team")
 	- teamGrave:	name of the hedgehog’s grave
+	- teamFlag:	name of the team’s flag (default: "cm_crosshair")
 	- clanColor:	color of the (only) clan (default: 0xFF0204, which is a red tone)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
@@ -110,6 +111,7 @@ function TargetPracticeMission(params)
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
 	if params.clanColor == nil then params.clanColor = 0xFF0204 end
 	if params.teamGrave == nil then params.teamGrave= "Statue" end
+	if params.teamFlag == nil then params.teamFlag = "cm_crosshair" end
 	if params.wind == nil then params.wind = 0 end
 
 	local solid, artillery
@@ -134,10 +136,13 @@ function TargetPracticeMission(params)
 		CaseFreq = 0
 		MinesNum = 0
 		Explosives = 0
+		-- Disable Sudden Death
+		WaterRise = 0
+		HealthDecrease = 0
 
 		SetWind(params.wind)
 
-		AddTeam(loc(params.teamName), params.clanColor, params.teamGrave, "Island", "Default", "Flowerhog")
+		AddTeam(loc(params.teamName), params.clanColor, params.teamGrave, "Flowerhog", "Default", params.teamFlag)
 
 		player = AddHog(loc(params.hogName), 0, 1, params.hogHat)
 		SetGearPosition(player, params.hog_x, params.hog_y)
@@ -210,6 +215,9 @@ function TargetPracticeMission(params)
 					PlaySound(sndVictory, player)
 					SetState(player, bor(GetState(player), gstWinner))
 					time_goal = TurnTimeLeft
+					-- Disable control
+					SetInputMask(0)
+					AddAmmo(player, params.ammoType, 0)
 				end
 			end
 		end
@@ -217,7 +225,7 @@ function TargetPracticeMission(params)
 		if GetGearType(gear) == gtHedgehog then
 			if not game_lost then
 				game_lost = true
-				AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
+				AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
 				ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 				SetHealth(player, 0)
@@ -228,7 +236,7 @@ function TargetPracticeMission(params)
 
 	_G.onGearDelete = function(gear)
 		if GetGearType(gear) == gtTarget and band(GetState(gear), gstDrowning) ~= 0 then
-			AddCaption(loc("You lost your target, try again!", 0xFFFFFFFF, capgrpGameState))
+			AddCaption(loc("You lost your target, try again!"), 0xFFFFFFFF, capgrpGameState)
 			local newTarget = spawnTarget()
 			local x, y = GetGearPosition(newTarget)
 			local success = PlaceSprite(x, y + 24, sprAmGirder, 0, 0xFFFFFFFF, false, false, false)

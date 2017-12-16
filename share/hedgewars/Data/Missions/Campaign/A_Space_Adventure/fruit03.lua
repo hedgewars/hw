@@ -11,8 +11,10 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local missionName = loc("Precise shooting")
-local timeLeft = 10000
-local lastWeaponUsed = amSniperRifle
+local timeLeft = 0
+local lastWeaponUsed = amNothing
+local firstTurn = true
+local battleStarted = false
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
 	loc("You can only use the sniper rifle or the watermelon bomb.").."|"..
 	loc("You'll have only 2 watermelon bombs during the game.").."|"..
@@ -25,7 +27,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
 }
 -- hogs
 local hero = {
@@ -59,10 +61,12 @@ local teamA = {
 	color = tonumber("38D61C",16) -- green
 }
 local teamB = {
+	-- Red Strawberries 1
 	name = loc("RS1"),
 	color = tonumber("FF0000",16) -- red
 }
 local teamC = {
+	-- Red Strawberries 2
 	name = loc("RS2"),
 	color = tonumber("FF0000",16) -- red
 }
@@ -79,20 +83,23 @@ function onGameInit()
 	Explosives = 0
 	Map = "fruit03_map"
 	Theme = "Fruit"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	local hats = { "Bandit", "fr_apple", "fr_banana", "fr_lemon", "fr_orange",
 					"fr_pumpkin", "Gasmask", "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
 	end
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)
@@ -101,13 +108,11 @@ function onGameInit()
 	initCheckpoint("fruit03")
 
 	AnimInit()
-	AnimationSetup()
 end
 
 function onGameStart()
-	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -116,6 +121,10 @@ function onGameStart()
 	AddAmmo(hero.gear, amTeleport, 2)
 	AddAmmo(hero.gear, amSniperRifle, 2)
 	AddAmmo(hero.gear, amWatermelon, 2)
+
+	AddAmmo(hero.gear, amSkip, 100)
+	timeLeft = 0
+
 	--enemies ammo
 	AddAmmo(enemiesOdd[1].gear, amDEagle, 100)
 	AddAmmo(enemiesOdd[1].gear, amSniperRifle, 100)
@@ -127,14 +136,20 @@ function onGameStart()
 	AddAmmo(enemiesEven[1].gear, amGrenade, 5)
 
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
 	if CurrentHedgehog == hero.gear then
-		if GetAmmoCount(hero.gear, amSkip) == 0 then
+		if firstTurn then
+			-- Unique game rule in this mission: First turn has more time
+			TurnTimeLeft = 25000
+			-- Generous ready time on first turn to give more time to read
+			ReadyTimeLeft = 35000
+			battleStarted = true
+			firstTurn = false
+		end
+		if lastWeaponUsed == amSkip then
 			TurnTimeLeft = TurnTime + timeLeft
-			AddAmmo(hero.gear, amSkip, 1)
 		end
 		timeLeft = 0
 	end
@@ -169,9 +184,20 @@ function onGearDelete(gear)
 	end
 end
 
-function onPrecise()
-	if GameTime > 3000 then
-		SetAnimSkip(true)
+-- Hide mission panel when player does anything
+function hideMissionOnAction()
+	if battleStarted then
+		HideMission()
+	end
+end
+
+onSlot = hideMissionOnAction
+onSetWeapon = hideMissionOnAction
+onAttack = hideMissionOnAction
+function onHogAttack(ammoType)
+	hideMissionOnAction()
+	if CurrentHedgehog == hero.gear then
+		lastWeaponUsed = ammoType
 	end
 end
 
@@ -205,8 +231,7 @@ function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -214,36 +239,21 @@ function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	local record = tonumber(GetCampaignVar("FastestPreciseShooting"))
+	if record ~= nil and TotalRounds >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
+	end
+	if record == nil or TotalRounds < record then
+		SaveCampaignVar("FastestPreciseShooting", tostring(TotalRounds))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
 	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	sendSimpleTeamRankings({teamA.name, teamB.name, teamC.name})
+	SaveCampaignVar("Mission10Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
-end
-
--------------- ANIMATIONS ------------------
-
-function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
-end
-
-function AnimationSetup()
-	-- DIALOG 01 - Start, game instructions
-	AddSkipFunction(dialog01, Skipanim, {dialog01})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Fruit Planet Hog Solo got lost ..."), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("... and got ambushed by the Red Strawberries"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use your available weapons in order to eliminate the enemies"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the sniper rifle or the watermelon bomb"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only 2 watermelon bombs during the game"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra sniper rifle every time you kill an enemy hog with a limit of max 4 rifles"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra teleport every time you kill an enemy hog with a limit of max 2 teleports"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("The first turn will last 25 sec and every other turn 15 sec"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you skip the game your time left will be added to your next turn"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Some parts of the land are indestructible"), 5000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
 end
 
 ------------------ Other Functions -------------------
@@ -269,14 +279,6 @@ function turnHogs()
 			end
 		end
 	end
-end
-
-function startBattle()
-	AnimSwitchHog(enemiesOdd[table.getn(enemiesOdd)].gear)
-	TurnTimeLeft = 0
-	-- these 2 are needed in order hero has 10 sec more in the first turn
-	timeLeft = 10000
-	AddAmmo(hero.gear, amSkip, 0)
 end
 
 function isHog(gear)

@@ -42,14 +42,14 @@ type
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax, gmtRecord);
 
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
-    TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
+    TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptConfig, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts, ptLocale,
             ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps,
-            ptSuddenDeath, ptButtons, ptShaders, ptConfig);
+            ptSuddenDeath, ptButtons, ptShaders);
 
     // Available sprites for displaying stuff
-    TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-            sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
+    TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprBigDigitGray, sprBigDigitGreen,
+            sprBigDigitRed, sprFrame, sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame,
@@ -89,7 +89,9 @@ type
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
-            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprAirMine, sprHandAirMine
+            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
+            sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprAirMine, sprHandAirMine,
+            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck
             );
 
     // Gears that interact with other Gears and/or Land
@@ -107,7 +109,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtDuck); // 66
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -145,8 +147,11 @@ type
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7,
             sndPiano8, sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
             sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
-            sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime
-            );
+            sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime, sndLaserSight,
+            sndInvulnerable, sndJetpackLaunch, sndJetpackBoost, sndPortalShot, sndPortalSwitch,
+            sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4,
+            sndDuckDrop, sndDuckWater, sndDuckDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
+            sndCustom5, sndCustom6, sndCustom7, sndCustom8);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
@@ -158,7 +163,7 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine); // 57
+            amIceGun, amKnife, amRubber, amAirMine, amDuck); // 58
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -273,7 +278,7 @@ type
 // DirAngle is a 'real' - if you do not need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
 // These are frequently overridden to serve some other purpose
-	    Boom: Longword;          // amount of damage caused by the gear
+            Boom: Longword;          // amount of damage caused by the gear
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
             Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
             Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
@@ -326,6 +331,9 @@ type
         StepDamageRecv,
         StepDamageGiven,
         StepKills: Longword;
+        StepPoisoned,
+        StepDied,
+        Sacrificed: boolean;
         MaxStepDamageRecv,
         MaxStepDamageGiven,
         MaxStepKills: Longword;
@@ -451,24 +459,27 @@ type
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine);
+            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine,
+            sidDuck);
 
-    TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
+    TMsgStrId = (sidLoading, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
-            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget);
+            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget,
+            sidNotAvailableInSD, sidHealthGain, sidEmptyCrate);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
             eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped,
-            eidHurtSelf, eidHomerun, eidGone);
+            eidHurtSelf, eidHomerun, eidGone, eidPoisoned, eidResurrected,
+            eidKamikaze, eidTimeTravelEnd, eidTimeout, eidKingDied);
 
-    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
+    TGoalStrId = (gidCaption, gidSubCaption, gidPlaceKing, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
             gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer,
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,
-            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
+            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam, gidMoreWind);
 
 
     TLandArray = packed array of array of LongWord;
@@ -515,6 +526,8 @@ type
             Surface: PSDL_Surface;
             Width, Height, imageWidth, imageHeight: LongInt;
             saveSurf: boolean;
+            critical: boolean;
+            checkSum: boolean; // use for images where if they are missing a desync can occur.
             priority: GLfloat;
             getDimensions, getImageDimensions: boolean;
             end;

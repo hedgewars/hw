@@ -27,17 +27,22 @@ uses    SDLh, uFloat, GLunit;
 
 const
     HDPIScaleFactor     =  1;
+
+    // application return codes
     HaltNoError         =  0;
-    HaltUsageError      =  1;
-    HaltFatalError      =  2;
-    HaltStartupError    =  3;
-    HaltFatalErrorNoIPC =  4;
+
+    // error codes are placed in range 50-99 because that way then don't overlap with run-time errors of pascal
+    // see https://www.freepascal.org/docs-html/user/userap4.html
+    HaltUsageError      =  51;
+    HaltFatalError      =  52;
+    HaltStartupError    =  53;
+    HaltFatalErrorNoIPC =  54;
 
     // for automatic tests
     HaltTestSuccess     =  0;
-    HaltTestFailed      =  10;
-    HaltTestLuaError    =  11;
-    HaltTestUnexpected  =  12;
+    HaltTestFailed      =  60;
+    HaltTestLuaError    =  61;
+    HaltTestUnexpected  =  62;
 
 
     sfMax = 1000;
@@ -90,10 +95,11 @@ const
     rqDesyncVBlank= $00000800;  // don't sync on vblank
 
     // image flags (for LoadImage())
+    // TODO: discuss whether ifAlpha and ifColorKey are actually needed and if and where we want to support which colorkeys
     ifNone        = $00000000;  // nothing special
     ifAlpha       = $00000001;  // use alpha channel (unused right now?)
     ifCritical    = $00000002;  // image is critical for gameplay (exit game if unable to load)
-    ifTransparent = $00000004;  // image uses transparent pixels (color keying)
+    ifColorKey    = $00000004;  // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008;  // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
 
     // texture priority (allows OpenGL to keep frequently used textures in video memory more easily)
@@ -269,7 +275,8 @@ const
     gmDelete         = $00010000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
-    cMaxSlotIndex       = 9;
+    cMaxSlotIndex       = 10;
+    cHiddenSlotIndex    = cMaxSlotIndex; // slot for hidden ammo types, not visible and has no key
     cMaxSlotAmmoIndex   = 5;
 
     // ai hints
@@ -299,9 +306,14 @@ const
     ammoprop_Track        = $00040000;
     ammoprop_DoesntStopTimerInMultiShoot
                           = $00080000;
+    ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode
+                          = $00100000;
+    ammoprop_ForceTurnEnd = $00200000;
+    ammoprop_NoTargetAfter= $00400000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
+    AMMO_FINITE_MAX = 99;
 
     // explosion flags
     //EXPLAllDamageInRadius = $00000001;  Completely unused for ages

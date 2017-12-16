@@ -1,10 +1,13 @@
 local animPos, lastx, lasty, jumpTypes, jumpTimes, moveDirs, jumpStarted
+local moveTime = 0
 local backJumped, jTimer, awTime, globalWait, stageEvents, seNum, curEvent
 local needtoDecrease
 local AnimList, AnimListNum
 local FunctionList, FunctionListNum
 local skipFuncList
 local skipping
+local baseInputMask = 0xFFFFFFFF
+local extraInputMask = baseInputMask
 --------------------------------Animation---------------------------------
 --------------------------(In-game cinematics)----------------------------
 
@@ -50,8 +53,28 @@ function ExecuteAfterAnimations()
   RemoveFunction()
 end
 
-function AnimInit()
-  animPos = 1
+local function updateInputMask()
+     SetInputMask(band(baseInputMask, extraInputMask))
+end
+
+local function startCinemaLock()
+     SetCinematicMode(true)
+     baseInputMask = bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon)
+     updateInputMask()
+end
+
+local function stopCinemaLock()
+     baseInputMask = 0xFFFFFFFF
+     updateInputMask()
+     SetCinematicMode(false)
+end
+
+function AnimSetInputMask(newExtraInputMask)
+     extraInputMask = newExtraInputMask
+     updateInputMask()
+end
+
+function AnimInit(startAnimating)
   lastx = 0
   lasty = 0
   jumpTypes = {long = gmLJump, high = gmHJump, back = gmHJump}
@@ -72,6 +95,10 @@ function AnimInit()
   FunctionListNum = 0
   skipping = false
   skipFuncList = {}
+  animPos = 1
+  if startAnimating then
+     startCinemaLock()
+  end
 end
 
 function AnimSwitchHog(gear)
@@ -140,13 +167,22 @@ function AnimFollowGear(gear)
   return true
 end
 
-function AnimMove(gear, dir, posx, posy)
+function AnimMove(gear, dir, posx, posy, maxMoveTime)
   dirr = moveDirs[dir]
   SetGearMessage(gear, dirr)
-  if GetX(gear) == posx or GetY(gear) == posy then
+  moveTime = moveTime + 1
+  if (maxMoveTime and moveTime > maxMoveTime) then
+    SetGearMessage(gear, 0)
+    SetGearPosition(gear, posx, posy)
+    lastx = GetX(gear)
+    lasty = GetY(gear)
+    moveTime = 0
+    return true
+  elseif GetX(gear) == posx or GetY(gear) == posy then
     SetGearMessage(gear, 0)
     lastx = GetX(gear)
     lasty = GetY(gear)
+    moveTime = 0
     return true
   end
   return false
@@ -288,7 +324,7 @@ end
 function Animate(steps)
   if skipping == true then
     animPos = 1
-    SetInputMask(0xFFFFFFFF)
+    stopCinemaLock()
     SkipAnimation(steps)
     return true
   end
@@ -299,7 +335,7 @@ function Animate(steps)
 
   if steps[animPos] == nil then
       animPos = 1
-      SetInputMask(0xFFFFFFFF)
+      stopCinemaLock()
       return true
   end
   
@@ -308,7 +344,7 @@ function Animate(steps)
       AnimSwitchHog(steps[animPos].args[1])
   end
 
-  SetInputMask(bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon))
+  startCinemaLock()
   retVal = steps[animPos].func(unpack(steps[animPos].args))
   if (retVal ~= false) then
     animPos = animPos + 1

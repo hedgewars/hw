@@ -9,16 +9,16 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 -- globals
 local missionName = loc("Precise flying")
-local challengeObjectives = loc("Use the RC plane and destroy the all the targets").."|"..
-	loc("Each time you destroy all the targets on your current level you'll get teleported to the next level").."|"..
-	loc("You'll have only one RC plane at the start of the mission").."|"..
-	loc("During the game you can get new RC planes by collecting the weapon crates")
+local challengeObjectives = loc("Use the RC plane and destroy the all the targets.").."|"..
+	loc("Each time you destroy all the targets on your current level you'll get teleported to the next level.").."|"..
+	loc("You'll have only one RC plane at the start of the mission.").."|"..
+	loc("During the game you can get new RC planes by collecting the weapon crates.")
 local currentTarget = 1
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 30000},
 }
 -- hogs
 local hero = {
@@ -53,6 +53,8 @@ local targets = {
 	{ x = 1200, y = 1310},
 	{ x = 1700, y = 1310},
 }
+local targetsDead = {}
+local flameCounter = 0
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -60,28 +62,30 @@ function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
 	TurnTime = -1
+	Ready = 30000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
 	Map = "desert03_map"
 	Theme = "Desert"
+	-- Disable SuddenDeath
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
 	initCheckpoint("desert03")
 
 	AnimInit()
-	AnimationSetup()
 end
 
 function onGameStart()
-	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onLose, {hero.gear}, lose, {hero.gear}, 0)
@@ -121,6 +125,27 @@ function onPrecise()
 	end
 end
 
+function onGearAdd(gear)
+	if GetGearType(gear) == gtFlame then
+		flameCounter = flameCounter + 1
+	end
+	if GetGearType(gear) == gtRCPlane then
+		HideMission()
+	end
+end
+
+function onGearDelete(gear)
+	if GetGearType(gear) == gtFlame then
+		flameCounter = flameCounter - 1
+	end
+	for t=1, #targets do
+		if gear == targets[t].gear then
+			targetsDead[t] = true
+			break
+		end
+	end
+end
+
 -------------- EVENTS ------------------
 
 function onHeroDeath(gear)
@@ -131,7 +156,7 @@ function onHeroDeath(gear)
 end
 
 function onLose(gear)
-	if GetHealth(hero.gear) and currentTarget < 4 and GetAmmoCount(hero.gear, amRCPlane) == 0 then
+	if GetHealth(hero.gear) and currentTarget < 4 and GetAmmoCount(hero.gear, amRCPlane) == 0 and flameCounter <= 0 then
 		return true
 	end
 	return false
@@ -144,49 +169,39 @@ function heroDeath(gear)
 end
 
 function lose(gear)
+	AddCaption(loc("Out of ammo!"), 0xFFFFFFFF, capgrpMessage2)
+	PlaySound(sndStupid, hero.gear)
 	gameOver()
-end
-
--------------- ANIMATIONS ------------------
-
-function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-end
-
-function AnimationSetup()
-	-- DIALOG 01 - Start, game instructions
-	AddSkipFunction(dialog01, Skipanim, {dialog01})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Desert Planet, Hog Solo found some time to play with his RC plane"), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy all the targets on your current level you'll get teleported to the next level"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only one RC plane at the start of the mission"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("During the game you can get new RC planes by collecting the weapon crates"), 5000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 end
 
 ----------------- Other Functions -----------------
 
 function checkTargetsDestroyed()
 	if currentTarget == 1 then
-		if not GetHealth(targets[1].gear) then
+		if targetsDead[1] then
 			AddCaption(loc("Level 1 clear!"))
 			SetGearPosition(hero.gear, 3590, 90)
 			currentTarget = 2
 			setTargets(currentTarget)
 		end
 	elseif currentTarget == 2 then
-		if not (GetHealth(targets[2].gear) or GetHealth(targets[3].gear))  then
+		if targetsDead[2] and targetsDead[3] then
 			AddCaption(loc("Level 2 clear!"))
 			SetGearPosition(hero.gear, 1110, 580)
 			currentTarget = 3
 			setTargets(currentTarget)
 		end
 	elseif currentTarget == 3 then
-
-	else
-		win()
+		local allDead = true
+		for t=3, #targets do
+			if targetsDead[t] ~= true then
+				allDead = false
+			end
+		end
+		if allDead then
+			currentTarget = 4
+			win()
+		end
 	end
 end
 
@@ -197,9 +212,8 @@ function setTargets(ct)
 			targets[i].gear = AddGear(targets[i].x, targets[i].y, gtTarget, 0, 0, 0, 0)
 		end
 	elseif ct == 3 then
-		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane)
-		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane)
-		SpawnAmmoCrate(rcCrates[4].x, rcCrates[4].y, amNothing)
+		SpawnUtilityCrate(rcCrates[4].x, rcCrates[4].y, amNothing)
+		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane, 2)
 		for i=4,13 do
 			targets[i].gear = AddGear(targets[i].x, targets[i].y, gtTarget, 0, 0, 0, 0)
 		end
@@ -207,12 +221,16 @@ function setTargets(ct)
 end
 
 function win()
+	AddCaption(loc("Victory!"))
+	PlaySound(sndVictory, hero.gear)
 	saveBonus(1, 1)
 	SendStat(siGameResult, loc("Congratulations, you are the best!"))
 	SendStat(siCustomAchievement, loc("You have destroyed all the targets."))
 	SendStat(siCustomAchievement, loc("You are indeed the best PAotH pilot."))
 	SendStat(siCustomAchievement, loc("Next time you play \"Searching in the dust\" you'll have an RC plane available."))
-	SendStat(siPlayerKills,'1',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
+	SaveCampaignVar("Mission12Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
 end
 
@@ -221,6 +239,6 @@ function gameOver()
 	SendStat(siCustomAchievement, loc("You have to destroy all the targets."))
 	SendStat(siCustomAchievement, loc("You will fail if you run out of ammo and there are still targets available."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
-	SendStat(siPlayerKills,'0',teamA.name)
+	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end

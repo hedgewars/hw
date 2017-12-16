@@ -77,7 +77,7 @@ class VideoItem : public QTableWidgetItem
         QString name;
         QString prefix; // original filename without extension
         QString desc;   // description (duration, resolution, etc...)
-        QString uploadUrl; // http://youtu.be/???????
+        QString uploadUrl; // https://youtu.be/???????
         HWRecorder    * pRecorder; // non NULL if file is being encoded
         QNetworkReply * pUploading; // non NULL if file is being uploaded
         bool seen; // used when updating directory
@@ -114,7 +114,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     // list of videos
     {
         IconedGroupBox* pTableGroup = new IconedGroupBox(this);
-        pTableGroup->setIcon(QIcon(":/res/graphicsicon.png")); // FIXME
+        pTableGroup->setIcon(QIcon(":/res/Videos.png"));
         pTableGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         pTableGroup->setTitle(QGroupBox::tr("Videos"));
 
@@ -151,7 +151,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     // description
     {
         IconedGroupBox* pDescGroup = new IconedGroupBox(this);
-        pDescGroup->setIcon(QIcon(":/res/graphicsicon.png")); // FIXME
+        pDescGroup->setIcon(QIcon(":/res/miscicon.png"));
         pDescGroup->setTitle(QGroupBox::tr("Description"));
 
         QVBoxLayout* pDescLayout = new QVBoxLayout(pDescGroup);
@@ -194,7 +194,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         pBottomDescLayout->addWidget(btnDelete);
         btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
         btnToYouTube->setEnabled(false);
-        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your Youtube account"));
+        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your YouTube account"));
         pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addWidget(labelThumbnail, 0);
@@ -823,7 +823,7 @@ void PageVideos::uploadFinished()
 
     if (!videoid.isEmpty())
     {
-        item->uploadUrl = "http://youtu.be/" + videoid;
+        item->uploadUrl = "https://youtu.be/" + videoid;
         updateDescription();
 
         // save url in file

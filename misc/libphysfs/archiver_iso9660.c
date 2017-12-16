@@ -291,8 +291,8 @@ static int iso_extractfilenameISO(ISO9660FileDescriptor *descriptor,
         for(;pos < descriptor->filenamelen; pos++)
             if (descriptor->filename[pos] == ';')
                 lastfound = pos;
-        BAIL_IF_MACRO(lastfound < 1, PHYSFS_ERR_NO_SUCH_PATH /* !!! FIXME: PHYSFS_ERR_BAD_FILENAME */, -1);
-        BAIL_IF_MACRO(lastfound == (descriptor->filenamelen -1), PHYSFS_ERR_NO_SUCH_PATH /* !!! PHYSFS_ERR_BAD_FILENAME */, -1);
+        BAIL_IF_MACRO(lastfound < 1, PHYSFS_ERR_NOT_FOUND /* !!! FIXME: PHYSFS_ERR_BAD_FILENAME */, -1);
+        BAIL_IF_MACRO(lastfound == (descriptor->filenamelen -1), PHYSFS_ERR_NOT_FOUND /* !!! PHYSFS_ERR_BAD_FILENAME */, -1);
         strncpy(filename, descriptor->filename, lastfound);
         if (filename[lastfound - 1] == '.')
             filename[lastfound - 1] = '\0'; /* consume trailing ., as done in all implementations */
@@ -398,7 +398,7 @@ static void iso_extractsubpath(char *path, char **subpath)
  * a file needs to branch to the directory extent sooner or later.
  */
 static int iso_find_dir_entry(ISO9660Handle *handle,const char *path,
-                              ISO9660FileDescriptor *descriptor, int *exists)
+                              ISO9660FileDescriptor *descriptor)
 {
     char *subpath = 0;
     PHYSFS_uint64 readpos, end_of_dir;
@@ -409,7 +409,6 @@ static int iso_find_dir_entry(ISO9660Handle *handle,const char *path,
 
     strcpy(pathcopy, path);
     mypath = pathcopy;
-    *exists = 0;
 
     readpos = handle->rootdirstart;
     end_of_dir = handle->rootdirstart + handle->rootdirsize;
@@ -442,10 +441,7 @@ static int iso_find_dir_entry(ISO9660Handle *handle,const char *path,
         if (strcmp(filename, mypath) == 0)
         {
             if ( (subpath == 0) || (subpath[0] == 0) )
-            {
-                *exists = 1;
                 return 0;  /* no subpaths left and we found the entry */
-            } /* if */
 
             if (descriptor->flags.directory)
             {
@@ -458,12 +454,14 @@ static int iso_find_dir_entry(ISO9660Handle *handle,const char *path,
             } /* if */
             else
             {
+                /* !!! FIXME: set PHYSFS_ERR_NOT_FOUND? */
                 /* we're at a file but have a remaining subpath -> no match */
                 return 0;
             } /* else */
         } /* if */
     } /* while */
 
+    /* !!! FIXME: set PHYSFS_ERR_NOT_FOUND? */
     return 0;
 } /* iso_find_dir_entry */
 
@@ -555,7 +553,7 @@ static void *ISO9660_openArchive(PHYSFS_Io *io, const char *filename, int forWri
 
     /* Skip system area to magic number in Volume descriptor */
     BAIL_IF_MACRO(!io->seek(io, 32769), ERRPASS, NULL);
-    BAIL_IF_MACRO(!io->read(io, magicnumber, 5) != 5, ERRPASS, NULL);
+    BAIL_IF_MACRO(io->read(io, magicnumber, 5) != 5, ERRPASS, NULL);
     if (memcmp(magicnumber, "CD001", 6) != 0)
         BAIL_MACRO(PHYSFS_ERR_UNSUPPORTED, NULL);
 
@@ -638,7 +636,7 @@ errorcleanup:
 } /* ISO9660_openArchive */
 
 
-static void ISO9660_closeArchive(PHYSFS_Dir *opaque)
+static void ISO9660_closeArchive(void *opaque)
 {
     ISO9660Handle *handle = (ISO9660Handle*) opaque;
     handle->io->destroy(handle->io);
@@ -766,8 +764,7 @@ closefile:
 } /* iso_file_open_foreign */
 
 
-static PHYSFS_Io *ISO9660_openRead(PHYSFS_Dir *opaque, const char *filename,
-                                   int *exists)
+static PHYSFS_Io *ISO9660_openRead(void *opaque, const char *filename)
 {
     PHYSFS_Io *retval = NULL;
     ISO9660Handle *handle = (ISO9660Handle*) opaque;
@@ -783,9 +780,8 @@ static PHYSFS_Io *ISO9660_openRead(PHYSFS_Dir *opaque, const char *filename,
     GOTO_IF_MACRO(retval == 0, PHYSFS_ERR_OUT_OF_MEMORY, errorhandling);
 
     /* find file descriptor */
-    rc = iso_find_dir_entry(handle, filename, &descriptor, exists);
+    rc = iso_find_dir_entry(handle, filename, &descriptor);
     GOTO_IF_MACRO(rc, ERRPASS, errorhandling);
-    GOTO_IF_MACRO(!*exists, PHYSFS_ERR_NO_SUCH_PATH, errorhandling);
 
     fhandle->startblock = descriptor.extentpos + descriptor.extattributelen;
     fhandle->filesize = descriptor.datalen;
@@ -816,8 +812,7 @@ errorhandling:
  * Information gathering functions
  ******************************************************************************/
 
-static void ISO9660_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
-                                   int omitSymLinks,
+static void ISO9660_enumerateFiles(void *opaque, const char *dname,
                                    PHYSFS_EnumFilesCallback cb,
                                    const char *origdir, void *callbackdata)
 {
@@ -836,9 +831,7 @@ static void ISO9660_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
     else
     {
         printf("pfad %s\n",dname);
-        int exists = 0;
-        BAIL_IF_MACRO(iso_find_dir_entry(handle,dname, &descriptor, &exists), ERRPASS,);
-        BAIL_IF_MACRO(!exists, ERRPASS, );
+        BAIL_IF_MACRO(iso_find_dir_entry(handle,dname, &descriptor), ERRPASS,);
         BAIL_IF_MACRO(!descriptor.flags.directory, ERRPASS,);
 
         readpos = descriptor.extentpos * 2048;
@@ -873,15 +866,12 @@ static void ISO9660_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
 } /* ISO9660_enumerateFiles */
 
 
-static int ISO9660_stat(PHYSFS_Dir *opaque, const char *name, int *exists,
-                        PHYSFS_Stat *stat)
+static int ISO9660_stat(void *opaque, const char *name, PHYSFS_Stat *stat)
 {
     ISO9660Handle *handle = (ISO9660Handle*) opaque;
     ISO9660FileDescriptor descriptor;
     ISO9660ExtAttributeRec extattr;
-    BAIL_IF_MACRO(iso_find_dir_entry(handle, name, &descriptor, exists), ERRPASS, -1);
-    if (!*exists)
-        return 0;
+    BAIL_IF_MACRO(iso_find_dir_entry(handle, name, &descriptor), ERRPASS, -1);
 
     stat->readonly = 1;
 
@@ -920,25 +910,25 @@ static int ISO9660_stat(PHYSFS_Dir *opaque, const char *name, int *exists,
  * Not supported functions
  ******************************************************************************/
 
-static PHYSFS_Io *ISO9660_openWrite(PHYSFS_Dir *opaque, const char *name)
+static PHYSFS_Io *ISO9660_openWrite(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, NULL);
 } /* ISO9660_openWrite */
 
 
-static PHYSFS_Io *ISO9660_openAppend(PHYSFS_Dir *opaque, const char *name)
+static PHYSFS_Io *ISO9660_openAppend(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, NULL);
 } /* ISO9660_openAppend */
 
 
-static int ISO9660_remove(PHYSFS_Dir *opaque, const char *name)
+static int ISO9660_remove(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, 0);
 } /* ISO9660_remove */
 
 
-static int ISO9660_mkdir(PHYSFS_Dir *opaque, const char *name)
+static int ISO9660_mkdir(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, 0);
 } /* ISO9660_mkdir */
@@ -946,21 +936,23 @@ static int ISO9660_mkdir(PHYSFS_Dir *opaque, const char *name)
 
 const PHYSFS_Archiver __PHYSFS_Archiver_ISO9660 =
 {
+    CURRENT_PHYSFS_ARCHIVER_API_VERSION,
     {
         "ISO",
         "ISO9660 image file",
         "Christoph Nelles <evilazrael@evilazrael.de>",
-        "http://www.evilazrael.de/",
+        "https://www.evilazrael.de/",
+        0,  /* supportsSymlinks */
     },
-    ISO9660_openArchive,        /* openArchive() method    */
-    ISO9660_enumerateFiles,     /* enumerateFiles() method */
-    ISO9660_openRead,           /* openRead() method       */
-    ISO9660_openWrite,          /* openWrite() method      */
-    ISO9660_openAppend,         /* openAppend() method     */
-    ISO9660_remove,             /* remove() method         */
-    ISO9660_mkdir,              /* mkdir() method          */
-    ISO9660_closeArchive,       /* closeArchive() method   */
-    ISO9660_stat                /* stat() method           */
+    ISO9660_openArchive,
+    ISO9660_enumerateFiles,
+    ISO9660_openRead,
+    ISO9660_openWrite,
+    ISO9660_openAppend,
+    ISO9660_remove,
+    ISO9660_mkdir,
+    ISO9660_stat,
+    ISO9660_closeArchive
 };
 
 #endif  /* defined PHYSFS_SUPPORTS_ISO9660 */

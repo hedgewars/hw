@@ -1,9 +1,26 @@
-EXTENDED CREDITS LIST
+=============================
+=== EXTENDED CREDITS LIST ===
+=============================
+
+IF NOT OTHERWISE SPECIFIED, ALL OTHER CONTENT IS PROPERTY OF Andrey Korotaev <unC0Rr@gmail.com>.
+IF NO LICENSE IS SPECIFIED, THE LICENSE IS THE SAME AS MENTIONED IN README.md.
+
+Note: The asterisk is a placeholder which stands for any sequence of characters.
 
 ==========
 = FONTS
 ==========
 - see Fonts_LICENSE.txt
+
+=================
+= FRONTEND IMAGES
+=================
+(File name suffixes are omitted)
+
+- Tango Project and Wuzzy -> audio, home (CC0)
+- abustany and Wuzzy -> Videos (CC0)
+- Juliane Krug and Wuzzy -> Palette (CC0)
+- raseone and Wuzzy -> folder (CC0)
 
 ==========
 = FORTS
@@ -11,26 +28,36 @@ EXTENDED CREDITS LIST
 - Carlos Vives -> Tank (2010)
 - Dragonfly -> EvilChicken (2010)
 - Randy Broda -> SteelTower (2013)
+- Jon Dum and Wuzzy -> Snail (2017)
+- Maciej Mroziński (a.k.a. alzen) and Wuzzy -> Lonely_Island (2017)
+- Guillaume Englert and Wuzzy -> Olympic (2017)
 
 ==========
 = HATS
 ==========
-- Robinator -> Terminator (2010)
-- shingo666 -> Samus (2010)
+- Robinator -> Terminator_Glasses (2010)
+- shingo666 -> ntd_Samus (2010)
 - MeinCookie95 -> InfernalHorns (2010), Mummy (2010), war_* (2010-2011)
 - thuban -> Elvis (2010)
 - Miphica -> Disguise (2010)
-- Blayde -> Deer (2010), Moose (2010)
+- Blayde -> zoo_Deer (2010), zoo_Moose (2010)
 - hillis -> AkuAku (2010)
-- Lortinak -> OldMan (2010), ShortHair (2010)
-- chujoii -> BrainSlug (2010), Dragon (2010), Ladle (2010), Laminaria (2010), Pantsu (2010), Pig (2010), Plunger (2010), SauceBoat (2010), ShaggyYeti (2010), SleepWalker (2010), SunWukong (2010), Teapot (2010), Teacup (2010), Zombi (2010)
-- Randy Broda -> Cyclops (2011), Soldier (2011)
-- Wohlstand -> PoliceGirl [based on policecap and sm_daisy] (2014)
+- Lortinak -> OldMan (2010), ShortHair_* (2010)
+- chujoii -> scif_BrainSlug (2010), scif_BrainSlug2 (2010), Dragon (2010), dish_Ladle (2010), Laminaria (2010), Pantsu (2010), zoo_Pig (2010), Plunger (2010), dish_SauceBoatSilver (2010), ShaggyYeti (2010), Sleepwalker (2010), SunWukong (2010), dish_Teapot (2010), dish_Teacup (2010), Zombi (2010)
+- Randy Broda -> cyclops (2011), TeamSoldier (2011)
+- Zav -> zoo_octopus (2009)
+- Star and Moon -> bishop (2011)
+- Gimo -> leprechaun [based on tophats] (2011)
+- Terrington_Snyde -> pirate_eyepatch (2013), jester (2013)
+- Wohlstand -> policegirl [based on policecap and sm_daisy] (2014)
+- TheMadCharles -> barrelhider (CC BY 3.0) (2015)
 
 ==========
 = GRAVESTONES
 ==========
-- Randy Broda -> Dragonball (2012)
+- Randy Broda -> dragonball (2012)
+- CheezeMonkey -> pi (2011)
+- rosenholz -> Whisky (2013)
 
 ==========
 = MAPS
@@ -49,6 +76,7 @@ EXTENDED CREDITS LIST
 - Jonatan Nilsson <jonatanfan@gmail.com> -> Pirate theme, EarthRise (former City) theme, Oriental theme, Snow theme)
 - yd - http://opengameart.org/users/yd -> "oriented", used as Olympics SD theme
 - Kevin MacLeod - http://incompetech.com/ -> "hitman", used as basis for preliminary default SD theme
+- Valentin Kraevskiy (alias alfadur) -> Jungle theme, Fruit theme
 
 ==========
 = THEMES
@@ -66,6 +94,12 @@ EXTENDED CREDITS LIST
 - Stephen Alexander <ArmagonNo1@gmail.com>
 
 ==========
+= MISSIONS
+==========
+- Arkhnen -> Teamwork 2 (2012)
+- Wuzzy -> Big Armory (2016)
+
+==========
 = SOUNDS
 ==========
 - Mine impact sound from http://www.freesound.org/people/adcbicycle/sounds/13947/
@@ -77,9 +111,28 @@ EXTENDED CREDITS LIST
      http://www.freesound.org/people/Jovica/sounds/38317/
 - Cleaver impact sound remixed from
      http://www.freesound.org/people/sethlind/sounds/265021/
-- Extra Time sound originally by uair01 (CC-BY), remixed from
+- Extra Time sound originally by uair01 (CC-BY 3.0), remixed from
      http://www.freesound.org/people/uair01/sounds/65291/
-- Air mine impact sound by Wuzzy (WTFPL), based on
+- Air mine impact sound by Wuzzy (CC-0), based on
      http://www.freesound.org/people/batchku/sounds/10479/
+- Rubber duck sounds are in the Public Domain.
+- Countdown sounds by Wuzzy (CC-0)
+- Laser Sight sound originally from drzhn (CC-0), remixed from
+     https://www.freesound.org/people/drzhnn/sounds/199938/
+- Flying Saucer boost sound originally by Jagadamba (CC-BY 3.0), remixed from
+     https://www.freesound.org/people/Jagadamba/sounds/257057/
+- Blowtorch sound originally by rombard (CC-0), remixed from
+     https://www.freesound.org/people/rombart/sounds/197800/
+- Portable Portal Device color switching sound by Wuzzy (CC-0)
+- Portable Portal Device shot sound originally by bubaproducer (CC-BY 3.0), remixed from
+     https://www.freesound.org/people/bubaproducer/sounds/151026/ 
+- Portal opening sound by Wuzzy (CC-0)
+- Invulnerable sound: remix based on a sound by pepingrillin (CC-0)
+     https://www.freesound.org/people/pepingrillin/sounds/252079/
 
-ALL OTHER CONTENT IS PROPERTY OF Andrey Korotaev <unC0Rr@gmail.com> UNLESS OTHERWISE SPECIFIED
+======================
+= LICENSE REFERENCES =
+======================
+
+- CC-BY 3.0: https://creativecommons.org/licenses/by/3.0/
+- CC-0: https://creativecommons.org/publicdomain/zero/1.0/

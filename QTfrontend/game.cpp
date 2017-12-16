@@ -44,6 +44,7 @@
 // last game info
 QList<QVariant> lastGameStartArgs = QList<QVariant>();
 GameType lastGameType = gtNone;
+QString lastTrainingSubFolder = NULL;
 GameCFGWidget * lastGameCfg = NULL;
 QString lastGameAmmo = NULL;
 TeamSelWidget * lastGameTeamSel = NULL;
@@ -153,7 +154,8 @@ void HWGame::SendQuickConfig()
     team1.setDifficulty(0);
     team1.setColor(0);
     team1.setNumHedgehogs(4);
-    HWNamegen::teamRandomNames(team1,true);
+    HWNamegen::teamRandomEverything(team1);
+    team1.setVoicepack("Default");
     HWProto::addStringListToBuffer(teamscfg,
                                    team1.teamGameConfig(100));
 
@@ -162,8 +164,9 @@ void HWGame::SendQuickConfig()
     team2.setColor(1);
     team2.setNumHedgehogs(4);
     do
-        HWNamegen::teamRandomNames(team2,true);
+        HWNamegen::teamRandomEverything(team2);
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
+    team2.setVoicepack("Default");
     HWProto::addStringListToBuffer(teamscfg,
                                    team2.teamGameConfig(100));
 
@@ -383,6 +386,8 @@ QStringList HWGame::getArguments()
     arguments << "--user-prefix";
     arguments << cfgdir->absolutePath();
     arguments << "--locale";
+    // TODO: Don't bother translators with this nonsense and detect this file automatically.
+    //: IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.
     arguments << tr("en.txt");
     arguments << "--frame-interval";
     arguments << QString::number(config->timerInterval());
@@ -430,6 +435,7 @@ QStringList HWGame::getArguments()
 void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 {
     gameType = isSave ? gtSave : gtDemo;
+    lastGameType = gameType;
     QFile demofile(demofilename);
     if (!demofile.open(QIODevice::ReadOnly))
     {
@@ -448,6 +454,9 @@ void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 
 void HWGame::StartNet()
 {
+    lastGameStartArgs.clear();
+    lastGameType = gtNet;
+
     gameType = gtNet;
     demo.clear();
     Start(false);
@@ -476,14 +485,16 @@ void HWGame::StartQuick()
     SetGameState(gsStarted);
 }
 
-void HWGame::StartTraining(const QString & file)
+void HWGame::StartTraining(const QString & file, const QString & subFolder)
 {
     lastGameStartArgs.clear();
     lastGameStartArgs.append(file);
     lastGameType = gtTraining;
+    lastTrainingSubFolder = subFolder;
 
     gameType = gtTraining;
-    training = "Missions/Training/" + file + ".lua";
+
+    training = "Missions/" + subFolder + "/" + file + ".lua";
     demo.clear();
     Start(false);
     SetGameState(gsStarted);

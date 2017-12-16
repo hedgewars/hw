@@ -7,6 +7,7 @@ type
     LongWord = uinteger;
     Cardinal = uinteger;
     PtrInt = integer;
+    SizeInt = PtrInt;
     Word = uinteger;
     Byte = integer;
     SmallInt = integer;
@@ -133,7 +134,7 @@ var
 
     PHYSFS_init, PHYSFS_deinit, PHYSFS_mount, PHYSFS_readBytes, PHYSFS_writeBytes, PHYSFS_read : function : LongInt;
     PHYSFSRWOPS_openRead, PHYSFSRWOPS_openWrite, PHYSFS_openRead, PHYSFS_openWrite : function : pointer;
-    PHYSFS_eof, PHYSFS_close, PHYSFS_exists, PHYSFS_mkdir, PHYSFS_flush, PHYSFS_setWriteDir : function : boolean;
+    PHYSFS_eof, PHYSFS_close, PHYSFS_exists, PHYSFS_mkdir, PHYSFS_flush, PHYSFS_setWriteDir, PHYSFS_setBuffer : function : boolean;
     PHYSFS_getLastError : function : PChar;
     PHYSFS_enumerateFiles : function : PPChar;
     PHYSFS_freeList : procedure;

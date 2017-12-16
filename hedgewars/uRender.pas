@@ -34,6 +34,7 @@ procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Po
 procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
+procedure DrawSpritePivotedF(Sprite: TSprite; X, Y, Frame, Dir, PivotX, PivotY: LongInt; Angle: real);
 
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
@@ -73,6 +74,7 @@ procedure setTintAdd            (f: boolean); inline;
 procedure FinishRender();
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
+function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; inline;
 
 // 0 => not offscreen, <0 => left/top of screen >0 => right/below of screen
 function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
@@ -103,8 +105,8 @@ procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
 
 
 implementation
-uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}uVariables, uUtils, uConsts
-     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}, uPhysFSLayer, uDebug;
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}uVariables, uUtils
+     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}, uConsts;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const
@@ -145,6 +147,20 @@ procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin
     isAreaOffscreen:= (isDxAreaOffscreen(X, Width) <> 0) or (isDyAreaOffscreen(Y, Height) <> 0);
+end;
+
+function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; inline;
+var dRightX, dBottomY, dLeftX, dTopY: LongInt;
+begin
+    dRightX:= (X - ViewRightX);
+    dBottomY:= (Y - ViewBottomY);
+    dLeftX:= (ViewLeftX - X);
+    dTopY:= (ViewTopY - Y);
+    isCircleOffscreen:= 
+        ((dRightX > 0) and (sqr(dRightX) > RadiusSquared)) or
+        ((dBottomY > 0) and (sqr(dBottomY) > RadiusSquared)) or
+        ((dLeftX > 0) and (sqr(dLeftX) > RadiusSquared)) or
+        ((dTopY > 0) and (sqr(dTopY) > RadiusSquared))
 end;
 
 function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
@@ -1131,11 +1147,8 @@ begin
 
 if Angle <> 0  then
     begin
-    // sized doubled because the sprite might occupy up to 1.4 * of it's
-    // original size in each dimension, because it is rotated
-    if isDxAreaOffscreen(X - SpritesData[Sprite].Width, 2 * SpritesData[Sprite].Width) <> 0 then
-        exit;
-    if isDYAreaOffscreen(Y - SpritesData[Sprite].Height, 2 * SpritesData[Sprite].Height) <> 0 then
+    // Check the bounding circle 
+    if isCircleOffscreen(X, Y, sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) then
         exit;
     end
 else
@@ -1162,6 +1175,43 @@ DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height
 
 openglPopMatrix;
 
+end;
+
+procedure DrawSpritePivotedF(Sprite: TSprite; X, Y, Frame, Dir, PivotX, PivotY: LongInt; Angle: real);
+begin
+if Angle <> 0  then
+    begin
+    // Check the bounding circle 
+    // Assuming the pivot point is inside the sprite's rectangle, the farthest possible point is 3/2 of its diagonal away from the center
+    if isCircleOffscreen(X, Y, 9 * (sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) div 4) then
+        exit;
+    end
+else
+    begin
+    if isDxAreaOffscreen(X - SpritesData[Sprite].Width div 2, SpritesData[Sprite].Width) <> 0 then
+        exit;
+    if isDYAreaOffscreen(Y - SpritesData[Sprite].Height div 2 , SpritesData[Sprite].Height) <> 0 then
+        exit;
+    end;
+
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
+
+// mirror
+if Dir < 0 then
+    openglScalef(-1.0, 1.0, 1.0);
+
+// apply rotation around the pivot after (conditional) mirroring
+if Angle <> 0  then
+    begin
+    openglTranslatef(PivotX, PivotY, 0);
+    openglRotatef(Angle, 0, 0, 1);
+    openglTranslatef(-PivotX, -PivotY, 0);
+    end;
+
+DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
+
+openglPopMatrix;
 end;
 
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -1733,19 +1783,31 @@ glColor4ub($FF, $FF, $FF, $FF);
 end;
 
 procedure DrawWaves(Dir, dX, dY, oX: LongInt; tnt: Byte);
-var first, count, topy, lx, rx, spriteHeight, spriteWidth: LongInt;
-    lw, nWaves, shift: GLfloat;
+var first, count, topy, lx, rx, spriteHeight, spriteWidth, waterSpeed: LongInt;
+    waterFrames, waterFrameTicks, frame : LongWord;
+    lw, nWaves, shift, realHeight: GLfloat;
     sprite: TSprite;
 begin
 // note: spriteHeight is the Height of the wave sprite while
 //       cWaveHeight describes how many pixels of it will be above waterline
 
 if SuddenDeathDmg then
-    sprite:= sprSDWater
+    begin
+    sprite:= sprSDWater;
+    waterFrames:= watSDFrames;
+    waterFrameTicks:= watSDFrameTicks;
+    waterSpeed:= watSDMove;
+    end
 else
+    begin
     sprite:= sprWater;
-
+    waterFrames:= watFrames;
+    waterFrameTicks:= watFrameTicks;
+    waterSpeed:= watMove;
+    end;
+ 
 spriteHeight:= SpritesData[sprite].Height;
+realHeight:= SpritesData[sprite].Texture^.ry / waterFrames;
 
 // shift parameters by wave height
 // ( ox and dy are used to create different horizontal and vertical offsets
@@ -1806,14 +1868,19 @@ spriteWidth:= SpritesData[sprite].Width;
 nWaves:= lw / spriteWidth;
     shift:= - nWaves / 2;
 
-TextureBuffer[3].X:= shift + ((LongInt(RealTicks shr 6) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
-TextureBuffer[3].Y:= 0;
+if waterFrames > 1 then
+	frame:= RealTicks div waterFrameTicks mod waterFrames
+else
+	frame:= 0;
+
+TextureBuffer[3].X:= shift + ((LongInt((RealTicks * waterSpeed div 100) shr 6) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
+TextureBuffer[3].Y:= frame * realHeight;
 TextureBuffer[5].X:= TextureBuffer[3].X + nWaves;
-TextureBuffer[5].Y:= 0;
+TextureBuffer[5].Y:= frame * realHeight;
 TextureBuffer[4].X:= TextureBuffer[5].X;
-TextureBuffer[4].Y:= SpritesData[sprite].Texture^.ry;
+TextureBuffer[4].Y:= (frame+1) * realHeight;
 TextureBuffer[2].X:= TextureBuffer[3].X;
-TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
+TextureBuffer[2].Y:= (frame+1) * realHeight;
 
 if (WorldEdge = weSea) then
     begin
@@ -1821,15 +1888,15 @@ if (WorldEdge = weSea) then
 
     // left side
     TextureBuffer[1].X:= TextureBuffer[3].X - nWaves;
-    TextureBuffer[1].Y:= 0;
+    TextureBuffer[1].Y:= frame * realHeight;
     TextureBuffer[0].X:= TextureBuffer[1].X;
-    TextureBuffer[0].Y:= SpritesData[sprite].Texture^.ry;
+    TextureBuffer[0].Y:= (frame+1) * realHeight;
 
     // right side
     TextureBuffer[7].X:= TextureBuffer[5].X + nWaves;
-    TextureBuffer[7].Y:= 0;
+    TextureBuffer[7].Y:= frame * realHeight;
     TextureBuffer[6].X:= TextureBuffer[7].X;
-    TextureBuffer[6].Y:= SpritesData[sprite].Texture^.ry;
+    TextureBuffer[6].Y:= (frame+1) * realHeight;
     end;
 
 glBindTexture(GL_TEXTURE_2D, SpritesData[sprite].Texture^.id);

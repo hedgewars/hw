@@ -40,6 +40,9 @@ import System.Process
 import Network.Socket
 import System.Random
 import qualified Data.Traversable as DT
+import Text.Regex.Base
+import qualified Text.Regex.TDFA as TDFA
+import qualified Text.Regex.TDFA.ByteString as TDFAB
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -512,12 +515,12 @@ processAction JoinLobby = do
     rnc <- gets roomsClients
     clientNick <- client's nick
     clProto <- client's clientProto
-    isAuthenticated <- liftM (not . B.null) $ client's webPassword
+    isAuthenticated <- client's isRegistered
     isAdmin <- client's isAdministrator
     isContr <- client's isContributor
     loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
-    let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
+    let authenticatedNicks = L.map nick . L.filter isRegistered $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
     let contrNicks = L.map nick . L.filter isContributor $ loggedInClients
     inRoomNicks <- io $
@@ -528,8 +531,8 @@ processAction JoinLobby = do
 
     roomsInfoList <- io $ do
         rooms <- roomsM rnc
-        mapM (\r -> (if isNothing $ masterID r then return "" else client'sM rnc nick (fromJust $ masterID r))
-            >>= \cn -> return $ roomInfo clProto cn r)
+        mapM (\r -> (mapM (client'sM rnc id) $ masterID r)
+            >>= \cn -> return $ roomInfo clProto (maybeNick cn) r)
             $ filter (\r -> (roomProto r == clProto)) rooms
 
     mapM_ processAction . concat $ [
@@ -658,9 +661,13 @@ processAction (CheckBanned byIP) = do
     where
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
-        checkBan True ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
-        checkBan False _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
+        checkBan True ip _ (BanByIP bip _ _) = isMatch bip ip
+        checkBan False _ n (BanByNick bn _ _) = isMatch bn n
         checkBan _ _ _ _ = False
+        isMatch :: B.ByteString -> B.ByteString -> Bool
+        isMatch rexp src = (==) (Just True) $ mrexp rexp >>= flip matchM src
+        mrexp :: B.ByteString -> Maybe TDFAB.Regex
+        mrexp = makeRegexOptsM TDFA.defaultCompOpt{TDFA.caseSensitive = False} TDFA.defaultExecOpt
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
 

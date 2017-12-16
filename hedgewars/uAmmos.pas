@@ -50,7 +50,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 var StoreCnt: LongInt;
 
 implementation
-uses uVariables, uCommands, uUtils, uCaptions, uDebug;
+uses uVariables, uCommands, uUtils, uCaptions, uDebug, uScript;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
      TAmmoArray = array[TAmmoType] of TAmmo;
@@ -210,11 +210,11 @@ if (a^.AmmoType <> amNothing) then
     cnt:= a^.Count
 else
     cnt:= 0;
-if (cnt <> AMMO_INFINITE) then
-    begin
-    inc(cnt, amt);
-    SetAmmo(Hedgehog, ammo, cnt)
-    end
+if (cnt >= AMMO_INFINITE) or (amt >= AMMO_INFINITE) then
+    cnt:= AMMO_INFINITE
+else
+    cnt:= min(AMMO_FINITE_MAX, cnt + amt);
+SetAmmo(Hedgehog, ammo, cnt);
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
@@ -287,6 +287,8 @@ begin
 CurWeapon:= GetCurAmmoEntry(Hedgehog);
 with Hedgehog do
     begin
+    if CurAmmoType <> amNothing then
+        ScriptCall('onUsedAmmo', ord(CurAmmoType));
 
     MultiShootAttacks:= 0;
     with CurWeapon^ do
@@ -329,11 +331,19 @@ if Hedgehog.Gear <> nil then
         begin
         if (AmmoType <> amNothing) then
             begin
-            CurMinAngle:= Ammoz[AmmoType].minAngle;
-            if Ammoz[AmmoType].maxAngle <> 0 then
-                CurMaxAngle:= Ammoz[AmmoType].maxAngle
+            if ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope)) then
+                begin
+                CurMaxAngle:= Ammoz[amRope].maxAngle;
+                CurMinAngle:= Ammoz[amRope].minAngle;
+                end
             else
-                CurMaxAngle:= cMaxAngle;
+                begin
+                CurMinAngle:= Ammoz[AmmoType].minAngle;
+                if Ammoz[AmmoType].maxAngle <> 0 then
+                    CurMaxAngle:= Ammoz[AmmoType].maxAngle
+                else
+                    CurMaxAngle:= cMaxAngle;
+                end;
 
             with Hedgehog.Gear^ do
                 begin
@@ -376,15 +386,14 @@ end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: ansistring;
-    CurWeapon: PAmmo;
+    OldWeapon, CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
 
 with Hedgehog do
     begin
-    Timer:= 10;
-
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
+    OldWeapon:= GetCurAmmoEntry(Hedgehog);
 
     if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog)
@@ -393,11 +402,18 @@ with Hedgehog do
 
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
 
+    // Weapon selection animation (if new ammo type)
+    if CurWeapon^.AmmoType <> OldWeapon^.AmmoType then
+        Timer:= 10;
+
     ApplyAngleBounds(Hedgehog, CurWeapon^.AmmoType);
 
     with CurWeapon^ do
         begin
-        s:= trammo[Ammoz[AmmoType].NameId];
+        if length(trluaammo[Ammoz[AmmoType].NameId]) > 0 then
+            s:= trluaammo[Ammoz[AmmoType].NameId]
+        else
+            s:= trammo[Ammoz[AmmoType].NameId];
         if (Count <> AMMO_INFINITE) and (not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0))) then
             s:= s + ansistring(' (' + IntToStr(Count) + ')');
         if (Propz and ammoprop_Timerable) <> 0 then

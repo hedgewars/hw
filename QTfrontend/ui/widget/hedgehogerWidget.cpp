@@ -83,7 +83,7 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    if (this->width() >= 11 * numItems + 26)
+    if ((this->width() >= 11 * numItems + 26) || (numItems == 1))
         ItemNum::paintEvent(event);
     else
     {

@@ -32,6 +32,7 @@ procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
@@ -60,6 +61,7 @@ uses
     , uCursor
     , uCommands
     , uTeams
+    , uDebug
 {$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
 {$ENDIF}
@@ -169,28 +171,28 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
 g:= ''; // no text/things to note yet
 
 // add custom goals from lua script if there are any
-if LuaGoals <> '' then
+if LuaGoals <> ansistring('') then
     g:= LuaGoals + '|';
 
-// check different game flags (goals/game modes first for now)
-g:= AddGoal(g, gfKing, gidKing); // king?
-g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
-
-// other important flags
-g:= AddGoal(g, gfForts, gidForts); // forts?
-g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
-g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
-g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
-g:= AddGoal(g, gfKarma, gidKarma); // karma?
+// check different game flags
 g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
-g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
-g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+g:= AddGoal(g, gfKing, gidKing); // king?
+if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) then
+    g:= AddGoal(g, gfAny, gidPlaceKing);
+g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
-g:= AddGoal(g, gfResetHealth, gidResetHealth);
-g:= AddGoal(g, gfAISurvival, gidAISurvival);
+g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
+g:= AddGoal(g, gfMoreWind, gidMoreWind);
+g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
+g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfInfAttack, gidInfAttack);
 g:= AddGoal(g, gfResetWeps, gidResetWeps);
-g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
+g:= AddGoal(g, gfResetHealth, gidResetHealth);
+g:= AddGoal(g, gfKarma, gidKarma); // karma?
+g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
+g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
+g:= AddGoal(g, gfAISurvival, gidAISurvival);
 
 // modified damage modificator?
 if cDamagePercent <> 100 then
@@ -422,7 +424,7 @@ begin
 
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
-        if((i = 0) and (Ammo^[i,1].Count > 0)) or ((i <> 0) and (Ammo^[i,0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             inc(SlotsNum);
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
     SlotsNumX:= SlotsNum;
@@ -453,7 +455,7 @@ begin
     x:= AMRect.x;
     y:= AMRect.y;
     for i:= 0 to cMaxSlotIndex do
-        if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
             y:= AMRect.y;
@@ -660,7 +662,7 @@ Slot:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
 c:= -1;
     for i:= 0 to cMaxSlotIndex do
-        if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
             inc(c);
     {$IFDEF USE_AM_NUMCOLUMN}
@@ -690,7 +692,7 @@ c:= -1;
 {$ELSE}
 c:= -1;
     for i:= 0 to cMaxSlotIndex do
-        if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
+        if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
             inc(c);
     {$IFDEF USE_AM_NUMCOLUMN}
@@ -718,7 +720,7 @@ c:= -1;
                    end;
             end;
 {$ENDIF}
-    if (Pos >= 0) and (Pos <= cMaxSlotAmmoIndex) and (Slot >= 0) and (Slot <= cMaxSlotIndex)then
+    if (Pos >= 0) and (Pos <= cMaxSlotAmmoIndex) and (Slot >= 0) and (Slot <= cMaxSlotIndex) and (Slot <> cHiddenSlotIndex) then
         begin
         if (AMShiftX = 0) and (AMShiftY = 0) then
         if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
@@ -1025,7 +1027,7 @@ end;
 
 
 procedure RenderTeamsHealth;
-var t, i, h, smallScreenOffset, TeamHealthBarWidth : LongInt;
+var t, i,  h, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
     htex: PTexture;
@@ -1159,12 +1161,15 @@ end;
 
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
+    spr: TSprite;
     r: TSDL_Rect;
     tdx, tdy: Double;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     replicateToLeft, replicateToRight, tmp: boolean;
+{$IFDEF USE_VIDEO_RECORDING}
     a: Byte;
+{$ENDIF}
 begin
 if WorldEdge <> weWrap then
     begin
@@ -1193,7 +1198,7 @@ if (cReducedQuality and rqNoBackground) = 0 then
         // background
         ChangeDepth(RM, cStereo_Sky);
         if SuddenDeathDmg then
-            Tint(SDTint, SDTint, SDTint, $FF);
+            Tint(SDTint.r, SDTint.g, SDTint.b, SDTint.a);
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
         ChangeDepth(RM, -cStereo_Horizon);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
@@ -1323,6 +1328,8 @@ if (cReducedQuality and rq2DWater) = 0 then
     else
         DrawWaves(-1, 50, cWaveHeight div 2, cWaveHeight div 2, 0);
 
+DrawGearsTimers;
+
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
     ChangeDepth(RM, cStereo_Outside);
@@ -1424,7 +1431,7 @@ if UIDisplay <> uiNone then
     offsetX:= 48;
 {$ENDIF}
     offsetY:= cOffsetY;
-    if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
+    if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 999000)) or (ReadyTimeLeft <> 0) then
         begin
         if ReadyTimeLeft <> 0 then
             i:= Succ(Pred(ReadyTimeLeft) div 1000)
@@ -1441,7 +1448,15 @@ if UIDisplay <> uiNone then
         while i > 0 do
             begin
             dec(t, 32);
-            DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
+            if isPaused or (not IsClockRunning()) then
+                spr := sprBigDigitGray
+            else if (ReadyTimeLeft <> 0) then
+                spr := sprBigDigitGreen
+            else if IsGetAwayTime then
+                spr := sprBigDigitRed
+            else
+                spr := sprBigDigit;
+            DrawSprite(spr, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
             i:= i div 10
             end;
         DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
@@ -1505,6 +1520,28 @@ if UIDisplay <> uiNone then
         DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - offsetY + 74 + WindBarWidth, cScreenHeight - offsetX + 2, 13, 0);
         end
     end;
+
+{$IFNDEF USE_TOUCH_INTERFACE}
+// Indicators for global effects (extra damage, low gravity)
+// TODO: Add support for touch interface (need to find out correct offset)
+if UIDisplay <> uiNone then
+    begin
+    offsetX:= 45;
+    offsetY:= 51;
+
+    if cDamageModifier = _1_5 then
+        begin
+            DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
+            DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amExtraDamage) - 1, 1, 32, 32);
+            offsetX := offsetX + 33
+        end;
+    if (cLowGravity) or ((GameFlags and gfLowGravity) <> 0) then
+        begin
+            DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
+            DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLowGravity) - 1, 1, 32, 32);
+        end;
+    end;
+{$ENDIF}
 
 // AmmoMenu
 if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
@@ -1915,6 +1952,33 @@ end;
 procedure HideMission;
 begin
     missionTimer:= 0;
+end;
+
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+var
+    ammoStrId: TAmmoStrId;
+    ammoStr: ansistring;
+    tmpsurf: PSDL_Surface;
+begin
+    ammoStrId := Ammoz[ammoType].NameId;
+
+    trluaammo[ammoStrId] := name;
+    if length(trluaammo[ammoStrId]) > 0 then
+        ammoStr:= trluaammo[ammoStrId]
+    else
+        ammoStr:= trammo[ammoStrId];
+
+    if checkFails(length(ammoStr) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ammoType)) + '!',true) then exit;
+        
+    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(ammoStr,fnt16)].Handle, PChar(ammoStr), cWhiteColorChannels);
+    if checkFails(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ammoType)) + ' failed!',true) then exit;
+    tmpsurf:= doSurfaceConversion(tmpsurf);
+    FreeAndNilTexture(Ammoz[ammoType].NameTex);
+    Ammoz[ammoType].NameTex:= Surface2Tex(tmpsurf, false);
+    SDL_FreeSurface(tmpsurf);
+
+    trluaammoc[ammoStrId] := caption;
+    trluaammod[ammoStrId] := description;
 end;
 
 procedure ShakeCamera(amount: LongInt);

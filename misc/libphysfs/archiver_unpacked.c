@@ -7,7 +7,7 @@
  *
  * RULES: Archive entries must be uncompressed, must not have separate subdir
  *  entries (but can have subdirs), must be case insensitive LOW ASCII
- *  filenames <= 56 bytes. No symlinks, etc. We can relax some of these rules
+ *  filenames <= 64 bytes. No symlinks, etc. We can relax some of these rules
  *  as necessary.
  *
  * Please see the file LICENSE.txt in the source's root directory.
@@ -34,7 +34,7 @@ typedef struct
 } UNPKfileinfo;
 
 
-void UNPK_closeArchive(PHYSFS_Dir *opaque)
+void UNPK_closeArchive(void *opaque)
 {
     UNPKinfo *info = ((UNPKinfo *) opaque);
     info->io->destroy(info->io);
@@ -200,7 +200,7 @@ static PHYSFS_sint32 findStartOfDir(UNPKinfo *info, const char *path,
                 rc = -1;
             else if (ch > '/')
                 rc = 1;
-            else
+            else 
             {
                 if (stop_on_first_find) /* Just checking dir's existance? */
                     return middle;
@@ -242,8 +242,8 @@ static void doEnumCallback(PHYSFS_EnumFilesCallback cb, void *callbackdata,
 } /* doEnumCallback */
 
 
-void UNPK_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
-                         int omitSymLinks, PHYSFS_EnumFilesCallback cb,
+void UNPK_enumerateFiles(void *opaque, const char *dname,
+                         PHYSFS_EnumFilesCallback cb,
                          const char *origdir, void *callbackdata)
 {
     UNPKinfo *info = ((UNPKinfo *) opaque);
@@ -293,7 +293,7 @@ void UNPK_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
 
 /*
  * This will find the UNPKentry associated with a path in platform-independent
- *  notation. Directories don't have UNPKentries associated with them, but
+ *  notation. Directories don't have UNPKentries associated with them, but 
  *  (*isDir) will be set to non-zero if a dir was hit.
  */
 static UNPKentry *findEntry(const UNPKinfo *info, const char *path, int *isDir)
@@ -340,19 +340,18 @@ static UNPKentry *findEntry(const UNPKinfo *info, const char *path, int *isDir)
     if (isDir != NULL)
         *isDir = 0;
 
-    BAIL_MACRO(PHYSFS_ERR_NO_SUCH_PATH, NULL);
+    BAIL_MACRO(PHYSFS_ERR_NOT_FOUND, NULL);
 } /* findEntry */
 
 
-PHYSFS_Io *UNPK_openRead(PHYSFS_Dir *opaque, const char *fnm, int *fileExists)
+PHYSFS_Io *UNPK_openRead(void *opaque, const char *name)
 {
     PHYSFS_Io *retval = NULL;
     UNPKinfo *info = (UNPKinfo *) opaque;
     UNPKfileinfo *finfo = NULL;
     int isdir = 0;
-    UNPKentry *entry = findEntry(info, fnm, &isdir);
+    UNPKentry *entry = findEntry(info, name, &isdir);
 
-    *fileExists = (entry != NULL);
     GOTO_IF_MACRO(isdir, PHYSFS_ERR_NOT_A_FILE, UNPK_openRead_failed);
     GOTO_IF_MACRO(!entry, ERRPASS, UNPK_openRead_failed);
 
@@ -390,32 +389,31 @@ UNPK_openRead_failed:
 } /* UNPK_openRead */
 
 
-PHYSFS_Io *UNPK_openWrite(PHYSFS_Dir *opaque, const char *name)
+PHYSFS_Io *UNPK_openWrite(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, NULL);
 } /* UNPK_openWrite */
 
 
-PHYSFS_Io *UNPK_openAppend(PHYSFS_Dir *opaque, const char *name)
+PHYSFS_Io *UNPK_openAppend(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, NULL);
 } /* UNPK_openAppend */
 
 
-int UNPK_remove(PHYSFS_Dir *opaque, const char *name)
+int UNPK_remove(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, 0);
 } /* UNPK_remove */
 
 
-int UNPK_mkdir(PHYSFS_Dir *opaque, const char *name)
+int UNPK_mkdir(void *opaque, const char *name)
 {
     BAIL_MACRO(PHYSFS_ERR_READ_ONLY, 0);
 } /* UNPK_mkdir */
 
 
-int UNPK_stat(PHYSFS_Dir *opaque, const char *filename,
-              int *exists, PHYSFS_Stat *stat)
+int UNPK_stat(void *opaque, const char *filename, PHYSFS_Stat *stat)
 {
     int isDir = 0;
     const UNPKinfo *info = (const UNPKinfo *) opaque;
@@ -423,19 +421,16 @@ int UNPK_stat(PHYSFS_Dir *opaque, const char *filename,
 
     if (isDir)
     {
-        *exists = 1;
         stat->filetype = PHYSFS_FILETYPE_DIRECTORY;
         stat->filesize = 0;
     } /* if */
     else if (entry != NULL)
     {
-        *exists = 1;
         stat->filetype = PHYSFS_FILETYPE_REGULAR;
         stat->filesize = entry->size;
     } /* else if */
     else
     {
-        *exists = 0;
         return 0;
     } /* else */
 
@@ -448,8 +443,7 @@ int UNPK_stat(PHYSFS_Dir *opaque, const char *filename,
 } /* UNPK_stat */
 
 
-PHYSFS_Dir *UNPK_openArchive(PHYSFS_Io *io, UNPKentry *e,
-                             const PHYSFS_uint32 num)
+void *UNPK_openArchive(PHYSFS_Io *io, UNPKentry *e, const PHYSFS_uint32 num)
 {
     UNPKinfo *info = (UNPKinfo *) allocator.Malloc(sizeof (UNPKinfo));
     if (info == NULL)

@@ -29,58 +29,14 @@
 #include "physfs_internal.h"
 
 
-#if defined(__APPLE__)
-#if defined(TARGET_OS_MAC) && MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-/* __eprintf shouldn't have been made visible from libstdc++, or anywhere, but
-   on Mac OS X 10.4 it was defined in libstdc++.6.0.3.dylib; so on that platform
-   we have to keep defining it to keep binary compatibility.
-   We can't just put the libgcc version in the export list, because that
-   doesn't work; once a symbol is marked as hidden, it stays that way.  */
-
-void __eprintf (const char *string, const char *expression,
-            unsigned int line, const char *filename)
-{
-    fprintf(stderr, string, expression, line, filename);
-    fflush(stderr);
-    abort();
-}
-
-
-/* apparently libssp is missing from 10.4 SDK
-   code from http://wiki.osdev.org/GCC_Stack_Smashing_Protector */
-void * __stack_chk_guard = NULL;
-
-void __stack_chk_guard_setup()
-{
-    unsigned char * p;
-    p = (unsigned char *) &__stack_chk_guard;
-
-    /* If you have the ability to generate random numbers in your kernel then use them,
-       otherwise for 32-bit code: *p = 0x00000aff; */
-    *p = random();
-}
-
-void __attribute__((noreturn)) __stack_chk_fail()
-{
-    /* put your panic function or similar in here */
-    unsigned char * vid = (unsigned char *)0xB8000;
-    vid[1] = 7;
-    for(;;)
-    vid[0]++;
-}
-
-#endif
-#endif /* __APPLE__ */
-
-
 /* Wrap PHYSFS_Allocator in a CFAllocator... */
 static CFAllocatorRef cfallocator = NULL;
 
-static CFStringRef cfallocDesc(const void *info)
+static CFStringRef cfallocCopyDesc(const void *info)
 {
     return CFStringCreateWithCString(cfallocator, "PhysicsFS",
                                      kCFStringEncodingASCII);
-} /* cfallocDesc */
+} /* cfallocCopyDesc */
 
 
 static void *cfallocMalloc(CFIndex allocSize, CFOptionFlags hint, void *info)
@@ -109,7 +65,7 @@ int __PHYSFS_platformInit(void)
     /* set up a CFAllocator, so Carbon can use the physfs allocator, too. */
     CFAllocatorContext ctx;
     memset(&ctx, '\0', sizeof (ctx));
-    ctx.copyDescription = cfallocDesc;
+    ctx.copyDescription = cfallocCopyDesc;
     ctx.allocate = cfallocMalloc;
     ctx.reallocate = cfallocRealloc;
     ctx.deallocate = cfallocFree;
@@ -132,7 +88,7 @@ int __PHYSFS_platformDeinit(void)
 
 /*
  * Code based on sample from Apple Developer Connection:
- *  http://developer.apple.com/samplecode/Sample_Code/Devices_and_Hardware/Disks/VolumeToBSDNode/VolumeToBSDNode.c.htm
+ *  https://developer.apple.com/samplecode/Sample_Code/Devices_and_Hardware/Disks/VolumeToBSDNode/VolumeToBSDNode.c.htm
  */
 
 #if !defined(PHYSFS_NO_CDROM_SUPPORT)
@@ -144,7 +100,7 @@ static int darwinIsWholeMedia(io_service_t service)
 
     if (!IOObjectConformsTo(service, kIOMediaClass))
         return 0;
-
+        
     wholeMedia = IORegistryEntryCreateCFProperty(service,
                                                  CFSTR(kIOMediaWholeKey),
                                                  cfallocator, 0);
@@ -180,7 +136,7 @@ static int darwinIsMountedDisc(char *bsdName, mach_port_t masterPort)
 
     rc = IORegistryEntryCreateIterator(service, kIOServicePlane,
              kIORegistryIterateRecursively | kIORegistryIterateParents, &iter);
-
+    
     if (!iter)
         return 0;
 
@@ -204,7 +160,7 @@ static int darwinIsMountedDisc(char *bsdName, mach_port_t masterPort)
         } /* if */
         IOObjectRelease(service);
     } while ((service = IOIteratorNext(iter)) && (!retval));
-
+                
     IOObjectRelease(iter);
     IOObjectRelease(service);
 

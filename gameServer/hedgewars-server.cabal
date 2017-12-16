@@ -5,7 +5,7 @@ Description:         hedgewars server
 Homepage:            http://www.hedgewars.org/
 License:             GPL-2
 Author:              unC0Rr
-Maintainer:          unC0Rr@hedgewars.org
+Maintainer:          a.korotaev@hedgewars.org
 Category:            Game
 Build-type:          Simple
 Cabal-version:       >=1.10
@@ -16,8 +16,9 @@ Executable hedgewars-server
 
   default-language:    Haskell2010
 
+-- Don't forget to update INSTALL.md when you change these dependencies!
   Build-depends:
-    base >= 4.3,
+    base >= 4.8,
     containers,
     vector,
     bytestring,
@@ -25,14 +26,15 @@ Executable hedgewars-server
     random,
     time,
     mtl >= 2,
-    dataenc,
+    sandi,
     hslogger,
     process,
     deepseq,
     utf8-string,
     SHA,
     entropy,
-    zlib >= 0.5.3 && < 0.6
+    zlib >= 0.5.3 && < 0.6,
+    regex-tdfa
 
   if !os(windows)
     build-depends: unix

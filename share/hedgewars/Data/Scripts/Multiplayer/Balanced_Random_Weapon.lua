@@ -1,10 +1,10 @@
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
-local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amMine, amDEagle, amDynamite, amFirePunch, amWhip, amPickHammer, amBaseballBat, amMortar, amCake, amSeduction, amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane, amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb, amFlamethrower, amSMine, amKamikaze }
+local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amMine, amDEagle, amDynamite, amFirePunch, amWhip, amPickHammer, amBaseballBat, amMortar, amCake, amSeduction, amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane, amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb, amFlamethrower, amSMine, amKamikaze, amDuck }
 
---                      G,C,B,B,S,M,D,D,F,W,P,B,M,C,S,W,H,D,B,R,S,M,B,B,G,F,S,K
-local weapons_values = {1,1,1,2,1,1,1,2,1,1,1,2,1,3,1,3,3,2,3,3,1,1,2,1,1,2,2,1}
+--                      G,C,B,B,S,M,D,D,F,W,P,B,M,C,S,W,H,D,B,R,S,M,B,B,G,F,S,K,D
+local weapons_values = {1,1,1,2,1,1,1,2,1,1,1,2,1,3,1,3,3,2,3,3,1,1,2,1,1,2,2,1,1}
 
 local airweapons = { amAirAttack, amMineStrike, amNapalm, amDrillStrike }
 

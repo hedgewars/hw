@@ -2,6 +2,11 @@
 -- TECH RACER v0.8
 -----------------------------------------
 
+-- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+-- Be careful when editig this script, do not introduce changes lightly!
+-- This script is used for time records on the official Hedgewars server.
+-- Introducing breaking changes means we have to invalidate past time records!
+
 --------------
 -- TO DO
 --------------
@@ -208,8 +213,8 @@ local teamScore = {}
 
 local cGear = nil
 
-local bestClan = nil
-local bestTime = nil
+local bestClan = 10
+local bestTime = 1000000
 
 local gameBegun = false
 local gameOver = false
@@ -322,7 +327,6 @@ function CheckWaypoints()
                 if dist < (NR*NR) then
                 --if dist < (wpRad*wpRad) then
                         --AddCaption("howdy")
-                        wpActive[i] = true
                         wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog)) -- new                             --GetClanColor(1)
                         SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
 
@@ -333,7 +337,17 @@ function CheckWaypoints()
                                 end
                         end
 
-                        AddCaption(loc("Way-Points Remaining") .. ": " .. wpRem,0xffba00ff,capgrpAmmoinfo)
+                        if not wpActive[i] then
+                                local wpMessage = ""
+                                if wpRem-1 == 0 then
+                                        wpMessage = loc("Track completed!")
+                                else
+                                        wpMessage = string.format(loc("Waypoints remaining: %d"), wpRem-1)
+                                end
+                                AddCaption(wpMessage, 0xffba00ff, capgrpGameState)
+                        end
+
+                        wpActive[i] = true
 
                 end
 
@@ -349,11 +363,7 @@ end
 
 function AdjustScores()
 
-        if bestTime == nil then
-                bestTime = 1000000
-                bestClan = 10
-                bestTimeComment = "N/A"
-        end
+	local bestTimeComment = loc("Did not finish")
 
         newScore = false
 
@@ -369,9 +379,6 @@ function AdjustScores()
                 end
         end
 
-        --bestTime = 100000
-        --bestClan = 10
-
         -- find the best time out of those so far
         for i = 0, (numTeams-1) do
                 if teamScore[i] < bestTime then
@@ -381,27 +388,27 @@ function AdjustScores()
         end
 
         if bestTime ~= 1000000 then
-                bestTimeComment = (bestTime/1000) ..loc("s")
+                bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
         end
 
         if newScore == true then
                 if trackTime == bestTime then -- best time of the race
-                        ShowMission(loc("RACER"),
-                        loc("TRACK COMPLETED"),
-                        loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                        loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
+                        ShowMission(loc("TechRacer"),
+                        loc("Track completed!"),
+                        string.format(loc("New race record: %.1fs"), (trackTime/1000)) .. "|" ..
+                        string.format(loc("Winning time: %s"), bestTimeComment), 0, 4000)
                         PlaySound(sndHomerun)
                 else    -- best time for the clan
-                        ShowMission(loc("RACER"),
-                        loc("TRACK COMPLETED"),
-                        loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                        loc("WINNING TIME: ") .. bestTimeComment, 4, 4000)
+                        ShowMission(loc("TechRacer"),
+                        loc("Track completed!"),
+                        string.format(loc("New clan record: %.1fs"), (trackTime/1000)) .. "|" ..
+                        string.format(loc("Winning time: %s"), bestTimeComment), 4, 4000)
                 end
         else -- not any kind of new score
-                ShowMission(loc("RACER"),
-                loc("TRACK COMPLETED"),
-                loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" ..
-                loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
+                ShowMission(loc("TechRacer"),
+                loc("Track completed!"),
+                string.format(loc("Time: %.1fs"), (trackTime/1000)) .. "|" ..
+                string.format(loc("Winning time: %s"), bestTimeComment), -amSkip, 4000)
                 PlaySound(sndHellish)
         end
 
@@ -440,28 +447,69 @@ function onNewRound()
         totalComment = ""
         for i = 0, (TeamsCount-1) do
                         if teamNameArr[i] ~= " " then                           -- teamScore[teamClan[i]]
-                                teamComment[i] = teamNameArr[i] .. ": " .. (teamScore[i]/1000) .. loc("s|")
+				if teamScore[i] ~= 1000000 then
+                                	teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
+				else
+                                	teamComment[i] = string.format(loc("%s: Did not finish"), teamNameArr[i]) .. "|"
+				end
                                 totalComment = totalComment .. teamComment[i]
                         elseif teamNameArr[i] == " " then
                                 teamComment[i] = "|"
                         end
         end
 
-        ShowMission(    loc("RACER"),
-                                        loc("STATUS UPDATE"),
-                                        loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" ..
-                                        loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
+        ShowMission(    loc("TechRacer"),
+                                        loc("Status update"),
+                                        string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
+                                        loc("Best team times: ") .. "|" .. totalComment, 0, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
-                for i = 0, (numhhs-1) do
-                        if GetHogClan(hhs[i]) ~= bestClan then
-                                SetEffect(hhs[i], heResurrectable, 0)
-                                SetHealth(hhs[i],0)
+                -- Sort the scores for the ranking list
+                local unfinishedArray = {}
+                local sortedTeams = {}
+                local k = 1
+                for i = 0, TeamsCount-1 do
+                        if teamScore[i] ~= 1000000 and teamNameArr[i] ~= " " then
+                               sortedTeams[k] = {}
+                               sortedTeams[k].name = teamNameArr[i]
+                               sortedTeams[k].score = teamScore[i]
+                               k = k + 1
+                        else
+                               table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
                         end
                 end
-                gameOver = true
-                TurnTimeLeft = 1
+                table.sort(sortedTeams, function(team1, team2) return team1.score < team2.score end)
+
+                -- Write all the stats!
+
+                for i = 1, #sortedTeams do
+                        SendStat(siPointType, loc("milliseconds"))
+                        SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
+                end
+
+                if #sortedTeams >= 1 then
+                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+                        SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
+                        for i=1,#unfinishedArray do
+                                 SendStat(siCustomAchievement, unfinishedArray[i])
+                        end
+                else
+                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
+                        SendStat(siCustomAchievement, loc("Maybe you should try an easier TechRacer map."))
+                end
+
+		-- Kill all the losers
+		for i = 0, (numhhs-1) do
+			if GetHogClan(hhs[i]) ~= bestClan then
+				SetEffect(hhs[i], heResurrectable, 0)
+				SetHealth(hhs[i],0)
+			end
+		end
+
+		gameOver = true
+		EndTurn(true)
         end
 
 end
@@ -521,11 +569,16 @@ function CheckForNewRound()
 
 end
 
-function DisableTumbler()
-        currCount = 0
-        fastIndex = 0
-        TurnTimeLeft = 0
-        racerActive = false -- newadd
+function DisableTumbler(endTurn)
+        if endTurn == nil then endTurn = true end
+        if racerActive then
+                currCount = 0
+                fastIndex = 0
+                racerActive = false -- newadd
+                if endTurn then
+                         EndTurn(true)
+                end
+        end
 end
 
 function HandleGhost()
@@ -649,6 +702,12 @@ function HandleFreshMapCreation()
 		activationStage = 200
 		--runOnHogs(RestoreHog)
 
+		if ufoFuel == 2000 then
+			SetAmmoDescriptionAppendix(amJetpack, loc("On this map you get infinite fuel."))
+		elseif ufoFuel ~= nil and ufoFuel ~= 0 then
+			SetAmmoDescriptionAppendix(amJetpack, string.format(loc("On this map you get %d%% fuel."), div(ufoFuel, 20)))
+		end
+
 	end
 
 end
@@ -697,6 +756,7 @@ function onGameInit()
     addHashData(mapID)
 
 		Theme = "Cave"
+		Map = ""
 
 		MapGen = mgDrawn
 		TemplateFilter = 0
@@ -706,6 +766,7 @@ function onGameInit()
 		CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
+        HealthDecrease = 0
 
 		for x = 1, 16 do
 			AddPoint(x*100,100,5)
@@ -911,6 +972,10 @@ function InterpretPoints()
 end
 
 function onGameStart()
+	SendGameResultOff()
+	SendRankingStatsOff()
+	SendAchievementsStatsOff()
+	SendHealthStatsOff()
 
 		trackTeams()
 
@@ -926,14 +991,12 @@ function onGameStart()
 		end
 
         ShowMission     (
-                                loc("RACER"),
-                                loc("a Hedgewars mini-game"),
+                                loc("TechRacer"),
+                                loc("A Hedgewars mini-game"),
 
-                                loc("Build a track and race.") .. "|" ..
-                                loc("Round Limit:") .. " " .. roundLimit .. "|" ..
-								loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
-								--loc("For example, the below line would play map 4, with infinite fuel for the flying saucer, and four rounds.") .. "|" ..
-								--"m=4, ufo=true, rounds=4" .. "|" ..
+                        	loc("Complete the track as fast as you can!") .. "|" ..
+                                loc("Round limit:") .. " " .. roundLimit .. "|" ..
+				loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
 
                                 "", 4, 4000
                                 )
@@ -982,9 +1045,6 @@ function onNewTurn()
 						--  --[[activationStage = 200]]
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
-                        ShowMission(loc("RACER"),
-                        loc("GAME BEGUN!!!"),
-                        loc("Complete the track as fast as you can!"), 2, 4000)
                 --else
                 --        ShowMission(loc("RACER"),
                 --        loc("NOT ENOUGH WAYPOINTS"),
@@ -1025,15 +1085,15 @@ function onGameTick20()
 
 
             if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                AddCaption(loc("Please place the waypoint in the air and within the map boundaries"))
                 PlaySound(sndDenied)
             elseif (y > WaterLine-50) then
-                AddCaption(loc("Please place the way-point further from the waterline."))
+                AddCaption(loc("Please place the waypoint further away from the waterline"))
                 PlaySound(sndDenied)
             else
                 CallBob(x, y)
                 if wpCount == wpLimit then
-                    AddCaption(loc("Race complexity limit reached."))
+                    AddCaption(loc("Race complexity limit reached"))
                     DisableTumbler()
                 end
             end
@@ -1104,11 +1164,7 @@ function onGameTick20()
 
                         if GameTime%100 == 0 then
 
-                if trackTime%1000 == 0 then
-                    AddCaption((trackTime/1000)..'.0',GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-                else
-                    AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-                end
+                		AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
                                 if (CheckWaypoints() == true) then
                                         AdjustScores()
@@ -1117,11 +1173,11 @@ function onGameTick20()
 
                         end
 
-                end
+                        -- If hedgehog is not controlled anymore, stop racing mode
+                        if band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+                                DisableTumbler(false)
+                        end
 
-                -- if the player has expended his tunbling time, stop him tumbling
-                if TurnTimeLeft <= 20 then
-                        DisableTumbler()
                 end
 
         end
@@ -1188,7 +1244,7 @@ function onGearResurrect(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
         if gear == CurrentHedgehog then
-                DisableTumbler()
+               DisableTumbler(false)
         end
 
 end

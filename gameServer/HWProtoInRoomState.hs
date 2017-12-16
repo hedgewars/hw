@@ -111,7 +111,6 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         clChan <- thisClientChans
         othChans <- roomOthersChans
         roomChans <- roomClientsChans
-        let isRegistered = (<) 0 . B.length . webPassword $ cl
         teamColor <-
             if clientProto cl < 42 then
                 return color
@@ -123,7 +122,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                     minimum [hhnum $ head roomTeams, canAddNumber roomTeams]
                 else
                     defaultHedgehogsNumber rm
-        let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag isRegistered dif hhNum (hhsList hhsInfo)
+        let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag (isRegistered cl) dif hhNum (hhsList hhsInfo)
         return $
             if not . null . drop (teamsNumberLimit rm - 1) $ roomTeams then
                 [Warning $ loc "too many teams"]

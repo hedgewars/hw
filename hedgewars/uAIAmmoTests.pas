@@ -124,7 +124,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amIceGun
             (proc: nil;              flags: 0), // amKnife
             (proc: nil;              flags: 0), // amRubber
-            (proc: nil;              flags: 0)  // amAirMine
+            (proc: nil;              flags: 0), // amAirMine
+            (proc: nil;              flags: 0)  // amDuck
             );
 
 implementation
@@ -253,7 +254,7 @@ end;
 function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, j: LongInt;
     valueResult, v, a, p: LongInt;
-    mX, mY, dX: real;
+    mX, mY: real;
     eX, eY: LongInt;
 begin
     if Level > 1 then

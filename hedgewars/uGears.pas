@@ -42,16 +42,18 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure DrawGears;
+procedure DrawGearsTimers;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
 function  GearByUID(uid : Longword) : PGear;
+function  IsClockRunning() : boolean;
 
 implementation
 uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
-    uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug,
+    uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
     , uVisualGearsList, uGearsHandlersMess, uAI;
 
@@ -125,7 +127,7 @@ begin
         if Gear^.Kind = gtHedgehog then
             begin
             tmp:= 0;
-            if Gear^.Hedgehog^.Effects[hePoisoned] <> 0 then
+            if (Gear^.Hedgehog^.Effects[hePoisoned] <> 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) then
                 begin
                 inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then
@@ -336,7 +338,7 @@ case step of
 
                     ChangeToSDClouds;
                     ChangeToSDFlakes;
-                    SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255);
+                    SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.r/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
                     Ammoz[amTardis].SkipTurns:= 9999;
                     Ammoz[amTardis].Probability:= 0;
                     end;
@@ -437,6 +439,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
                 step:= stChDmg;
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
+                GameOver:= true;
                 TurnTimeLeft:= 0
                 end
             end
@@ -444,27 +447,32 @@ else if ((GameFlags and gfInfAttack) <> 0) then
     end;
 
 if TurnTimeLeft > 0 then
-    if CurrentHedgehog^.Gear <> nil then
-        if (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
-            or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0))
-            and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0))) then
-            //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
-                begin
-                if (TurnTimeLeft = 5000)
-                and (cHedgehogTurnTime >= 10000)
-                and (not PlacingHogs)
-                and (CurrentHedgehog^.Gear <> nil)
-                and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                    PlaySoundV(sndHurry, CurrentTeam^.voicepack);
-            if ReadyTimeLeft > 0 then
-                begin
-                if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
-                    AddVoice(sndComeonthen, CurrentTeam^.voicepack);
-                dec(ReadyTimeLeft)
-                end
-            else
-                dec(TurnTimeLeft)
-            end;
+    if IsClockRunning() then
+        //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
+        begin
+        if (cHedgehogTurnTime >= 10000)
+        and (CurrentHedgehog^.Gear <> nil)
+        and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0)
+        and (not isGetAwayTime) then
+            if TurnTimeLeft = 5000 then
+                PlaySoundV(sndHurry, CurrentTeam^.voicepack)
+            else if TurnTimeLeft = 4000 then
+                PlaySound(sndCountdown4)
+            else if TurnTimeLeft = 3000 then
+                PlaySound(sndCountdown3)
+            else if TurnTimeLeft = 2000 then
+                PlaySound(sndCountdown2)
+            else if TurnTimeLeft = 1000 then
+                PlaySound(sndCountdown1);
+        if ReadyTimeLeft > 0 then
+            begin
+            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) and (not PlacingHogs) then
+                AddVoice(sndComeonthen, CurrentTeam^.voicepack);
+            dec(ReadyTimeLeft)
+            end
+        else
+            dec(TurnTimeLeft)
+        end;
 
 if skipFlag then
     begin
@@ -505,7 +513,8 @@ begin
     if (GameFlags and gfLowGravity) = 0 then
         begin
         cGravity:= cMaxWindSpeed * 2;
-        cGravityf:= 0.00025 * 2
+        cGravityf:= 0.00025 * 2;
+        cLowGravity:= false
         end;
 
     if (GameFlags and gfVampiric) = 0 then
@@ -514,7 +523,10 @@ begin
     cDamageModifier:= _1;
 
     if (GameFlags and gfLaserSight) = 0 then
+        begin
         cLaserSighting:= false;
+        cLaserSightingSniper:= false
+        end;
 
     if (GameFlags and gfArtillery) = 0 then
         cArtillery:= false;
@@ -578,6 +590,20 @@ if SpeechHogNumber > 0 then
     DrawHHOrder();
 end;
 
+procedure DrawGearsTimers;
+var Gear: PGear;
+    x, y: LongInt;
+begin
+Gear:= GearsList;
+while Gear <> nil do
+    begin
+    x:= hwRound(Gear^.X) + WorldDx;
+    y:= hwRound(Gear^.Y) + WorldDy;
+    RenderGearTimer(Gear, x, y);
+    Gear:= Gear^.NextGear
+    end;
+end;
+
 procedure FreeGearsList;
 var t, tt: PGear;
 begin
@@ -624,7 +650,10 @@ while (i < cExplosives) and (unplaced < 4) do
     if Gear = nil then
         inc(unplaced)
     else
+        begin
         unplaced:= 0;
+        AddCI(Gear)
+        end;
 
     inc(i)
     end;
@@ -696,7 +725,8 @@ if p <> 0 then DeleteGear(Gear);
 if (GameFlags and gfLowGravity) <> 0 then
     begin
     cGravity:= cMaxWindSpeed;
-    cGravityf:= 0.00025
+    cGravityf:= 0.00025;
+    cLowGravity:= true
     end;
 
 if (GameFlags and gfVampiric) <> 0 then
@@ -819,14 +849,24 @@ if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
 
 divide:= ((GameFlags and gfDivideTeams) <> 0);
-sectionDivide:= divide and ((GameFlags and gfForts) <> 0);
+
+(* sectionDivide will determine the mode of hog distribution
+ *
+ * On generated maps or maps not designed with divided mode in mind,
+ * using spawning sections can be problematic, because some sections may
+ * contain too little land surface for sensible spawning.
+ *
+ * if sectionDivide is true, the map will be sliced into equal-width sections
+ * and one team spawned in each
+ * if false, the hogs will be spawned normally and sorted by teams after
+ *
+ *)
 
 // TODO: there might be a smarter way to decide if dividing clans into equal-width map sections makes sense
 // e.g. by checking if there is enough spawn area in each section
-if divide and (not sectionDivide) then
-    sectionDivide:= (ClansCount = 2);
+sectionDivide:= divide and ((cMapGen = mgForts) or (ClansCount = 2));
 
-// in section-divide mode, divide the map into equal-width sections and put each clan in one of them
+// divide the map into equal-width sections and put each clan in one of them
 if sectionDivide then
     begin
     t:= leftX;
@@ -845,6 +885,7 @@ if sectionDivide then
                                     FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
+                                    //AddCI(Gear);  uncomment if new hogs should be able to spawn on top of old ones.
                                     Gear^.Pos:= GetRandom(49);
                                     // unless the world is wrapping, make outter teams face to map center
                                     if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
@@ -879,6 +920,7 @@ else // mix hedgehogs
             FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
         if ar[i]^.Gear <> nil then
             begin
+            //AddCI(ar[i]^.Gear); uncomment if new hogs should be able to spawn on top of old ones
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
             ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
@@ -906,6 +948,7 @@ for p:= 0 to Pred(TeamsCount) do
                                      hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
                                      sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
                     Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    AddCI(Gear);
                     Gear^.State:= Gear^.State and (not gsttmpFlag);
                     AddFileLog('Placed flower for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
                     end;
@@ -1036,6 +1079,17 @@ while gear <> nil do
         end;
     gear:= gear^.NextGear
     end
+end;
+
+function IsClockRunning() : boolean;
+begin
+    IsClockRunning :=
+    (CurrentHedgehog^.Gear <> nil)
+    and (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
+    or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0)
+    or ((GameFlags and gfInfAttack) <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode <> 0)
+    or (CurrentHedgehog^.CurAmmoType = amSniperRifle))
+    and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)));
 end;
 
 
@@ -1195,7 +1249,8 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepIceGun,
             @doStepAddAmmo,
             @doStepGenericFaller,
-            @doStepKnife);
+            @doStepKnife,
+            @doStepDuck);
 begin
     doStepHandlers:= handlers;
 

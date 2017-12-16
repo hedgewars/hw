@@ -79,8 +79,11 @@ uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, u
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
-    moved: boolean;
+    moved, rising, outside: boolean;
     vfc, vft: LongWord;
+    spawnMargin: LongInt;
+const
+    randMargin = 50;
 begin
 if SuddenDeathDmg then
     begin
@@ -162,28 +165,34 @@ with Gear^ do
             X:= X - cScreenSpace;
             moved:= true
             end;
-            // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
-        if (Gear^.Layer = 2) and (round(Y) - 400 > LAND_HEIGHT) and (cGravityf >= 0) then
+
+        // it's possible for flakes to move upwards
+        if SuddenDeathDmg then
+            rising:= (cGravityf * vobSDFallSpeed) < 0
+        else
+            rising:= (cGravityf * vobFallSpeed) < 0;
+
+        if gear^.layer = 2 then
+            spawnMargin:= 400
+        else
+            spawnMargin:= 200;
+
+        // flake fell far below map?
+        outside:= (not rising) and (round(Y) - spawnMargin + randMargin > LAND_HEIGHT);
+        // if not, did it rise far above map?
+        outside:= outside or (rising and (round(Y) < LAND_HEIGHT - 1024 - spawnMargin - randMargin));
+
+        // if flake left acceptable vertical area, respawn it opposite side
+        if outside then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y-(1024 + 400 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
-            moved:= true
-            end
-        else if (Gear^.Layer <> 2) and (round(Y) - 150 > LAND_HEIGHT) and (cGravityf >= 0) then
-            begin
-            X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y-(1024 + 200 + random(50));
-            moved:= true
-            end
-        else if (round(Y) < LAND_HEIGHT-1200) and (cGravityf < 0) then // gravity can make flakes move upwards
-            begin
-            X:= cLeftScreenBorder + random(cScreenSpace);
-            if Gear^.Layer = 2 then
-                Y:= Y+(1024 + 150 + random(100))
+            if rising then
+                Y:= Y + (1024 + spawnMargin + random(50))
             else
-                Y:= Y+(1024 + random(50));
-            moved:= true
+                Y:= Y - (1024 + spawnMargin + random(50));
+            moved:= true;
             end;
+
         if moved then
             begin
             Angle:= random(360);

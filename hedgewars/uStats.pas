@@ -24,13 +24,19 @@ uses uConsts, uTypes;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
+    SendGameResultOn : boolean = true;
+    SendRankingStatsOn : boolean = true;
+    SendAchievementsStatsOn : boolean = true;
     SendHealthStatsOn : boolean = true;
 
 procedure initModule;
 procedure freeModule;
 
 procedure AmmoUsed(am: TAmmoType);
+procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
+procedure HedgehogSacrificed(Hedgehog: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
+procedure TargetHit;
 procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
@@ -45,15 +51,40 @@ uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScri
 var DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
     DamageTurn  : Longword = 0;
+    PoisonTurn  : Longword = 0; // Poisoned enemies per turn
+    PoisonClan  : Longword = 0; // Poisoned own clan members in turn
+    PoisonTotal : Longword = 0; // Poisoned hogs in whole round
     KillsClan   : LongWord = 0;
     Kills       : LongWord = 0;
     KillsTotal  : LongWord = 0;
+    HitTargets  : LongWord = 0; // Target (gtTarget) hits per turn
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
     SkippedTurns: LongWord = 0;
     isTurnSkipped: boolean = false;
     vpHurtSameClan: PVoicepack = nil;
     vpHurtEnemy: PVoicepack = nil;
+
+procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
+begin
+    if Attacker^.Team^.Clan = Gear^.HEdgehog^.Team^.Clan then
+        begin
+        vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack;
+        inc(PoisonClan)
+        end
+    else
+        begin
+        vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
+        inc(PoisonTurn)
+        end;
+    Gear^.Hedgehog^.stats.StepPoisoned:= true;
+    inc(PoisonTotal)
+end;
+
+procedure HedgehogSacrificed(Hedgehog: PHedgehog);
+begin
+    Hedgehog^.stats.Sacrificed:= true
+end;
 
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 begin
@@ -72,6 +103,7 @@ if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan,
 
 if killed then
     begin
+    Gear^.Hedgehog^.stats.StepDied:= true;
     inc(Attacker^.stats.StepKills);
     inc(Kills);
     inc(KillsTotal);
@@ -91,6 +123,11 @@ inc(DamageTotal, Damage);
 inc(DamageTurn, Damage)
 end;
 
+procedure TargetHit();
+begin
+   inc(HitTargets)
+end;
+
 procedure Skipped;
 begin
 inc(SkippedTurns);
@@ -99,6 +136,7 @@ end;
 
 procedure TurnReaction;
 var i, t: LongInt;
+    killsCheck: LongInt;
     s: ansistring;
 begin
 //TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
@@ -108,19 +146,28 @@ if FinishedTurnsTotal <> 0 then
     begin
     s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
+    // If the hog sacrificed (=kamikaze/piano) itself, this needs to be taken into accounts for the reactions later
+    if (CurrentHedgehog^.stats.Sacrificed) then
+        killsCheck:= 1
+    else
+        killsCheck:= 0;
 
-    if (CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (DamageTotal > 0) then
+    // First blood (first damage, poison or kill)
+    if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
-    else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
+    // Hog hurts, poisons or kills itself (except sacrifice)
+    else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.stats.StepDied)) then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
-        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
+        // Message for hurting itself only (not drowning)
+        if (CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
-    else if DamageClan <> 0 then
-        if DamageTurn > DamageClan then
+    // Hog hurts, poisons or kills own team/clan member. Sacrifice is taken into account
+    else if (DamageClan <> 0) or (KillsClan > killsCheck) or (PoisonClan <> 0) then
+        if (DamageTurn > DamageClan) or (Kills > KillsClan) then
             if random(2) = 0 then
                 AddVoice(sndNutter, CurrentTeam^.voicepack)
             else
@@ -131,23 +178,35 @@ if FinishedTurnsTotal <> 0 then
             else
                 AddVoice(sndTraitor, vpHurtSameClan)
 
-    else if CurrentHedgehog^.stats.StepDamageGiven <> 0 then
-        if Kills > 0 then
+    // Hog hurts, kills or poisons enemy
+    else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills > killsCheck) or (PoisonTurn <> 0) then
+        if Kills > killsCheck then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         else
             AddVoice(sndRegret, vpHurtEnemy)
 
-    else if AmmoDamagingUsed then
-        AddVoice(sndMissed, PreviousTeam^.voicepack)
+    // Missed shot
+    // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit
+    else if AmmoDamagingUsed and (Kills <= killsCheck) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) and (HitTargets = 0) then
+        // Chance to call hedgehog stupid if sacrificed for nothing
+        if CurrentHedgehog^.stats.Sacrificed then
+            if random(2) = 0 then
+                AddVoice(sndMissed, PreviousTeam^.voicepack)
+            else
+                AddVoice(sndStupid, PreviousTeam^.voicepack)
+        else
+            AddVoice(sndMissed, PreviousTeam^.voicepack)
+
+    // Timeout
     else if (AmmoUsedCount > 0) and (not isTurnSkipped) then
         begin end// nothing ?
-    else if isTurnSkipped then
+
+    // Turn skipped
+    else if isTurnSkipped and (not PlacingHogs) then
         begin
-        AddVoice(sndBoring, PreviousTeam^.voicepack);
+        AddVoice(sndCoward, PreviousTeam^.voicepack);
         AddCaption(FormatA(GetEventString(eidTurnSkipped), s), cWhiteColor, capgrpMessage);
         end
-    else if not PlacingHogs then
-        AddVoice(sndCoward, PreviousTeam^.voicepack);
     end;
 
 
@@ -166,7 +225,9 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                     MaxStepKills:= StepKills;
                 StepKills:= 0;
                 StepDamageRecv:= 0;
-                StepDamageGiven:= 0
+                StepDamageGiven:= 0;
+                StepPoisoned:= false;
+                StepDied:= false;
                 end;
 
 if SendHealthStatsOn then
@@ -180,6 +241,9 @@ Kills:= 0;
 KillsClan:= 0;
 DamageClan:= 0;
 DamageTurn:= 0;
+HitTargets:= 0;
+PoisonClan:= 0;
+PoisonTurn:= 0;
 AmmoUsedCount:= 0;
 AmmoDamagingUsed:= false;
 isTurnSkipped:= false
@@ -226,7 +290,7 @@ if SendHealthStatsOn then
     for t:= 0 to Pred(TeamsCount) do
         with TeamsArray[t]^ do
         begin
-            if not ExtDriven then
+            if (not ExtDriven) and SendRankingStatsOn then
                 SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
             for i:= 0 to cMaxHHIndex do
                 begin
@@ -250,8 +314,9 @@ if SendHealthStatsOn then
             if Clan^.ClanHealth > 0 then
                 begin
                 winnersClan:= Clan;
-                SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                    IntToStr(stats.Kills) + ' ' + TeamName);
+                if SendRankingStatsOn then
+                    SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                        IntToStr(stats.Kills) + ' ' + TeamName);
             end;
 
             { determine maximum values of TeamKills, TurnSkips, TeamDamage }
@@ -274,32 +339,37 @@ if SendHealthStatsOn then
         end;
 
     { now send player stats for loser teams }
-    for t:= 0 to Pred(TeamsCount) do
-        begin
-        with TeamsArray[t]^ do
+    if SendRankingStatsOn then
+        for t:= 0 to Pred(TeamsCount) do
             begin
-            if Clan^.ClanHealth = 0 then
+            with TeamsArray[t]^ do
                 begin
-                SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                    IntToStr(stats.Kills) + ' ' + TeamName);
+                if Clan^.ClanHealth = 0 then
+                    begin
+                    SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                        IntToStr(stats.Kills) + ' ' + TeamName);
+                end;
             end;
         end;
-    end;
 
-    if msdhh <> nil then
-        SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
-    if mskcnt = 1 then
-        SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+    // “Achievements” / Details part of stats screen
+    if SendAchievementsStatsOn then
+        begin
+        if msdhh <> nil then
+            SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+        if mskcnt = 1 then
+            SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
-    if maxTeamKills > 1 then
-        SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
-    if maxTurnSkips > 2 then
-        SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
-    if maxTeamDamage > 30 then
-        SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
+        if maxTeamKills > 1 then
+            SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
+        if maxTurnSkips > 2 then
+            SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
+        if maxTeamDamage > 30 then
+            SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
-    if KilledHHs > 0 then
-        SendStat(siKilledHHs, IntToStr(KilledHHs));
+        if KilledHHs > 0 then
+            SendStat(siKilledHHs, IntToStr(KilledHHs));
+        end;
 
     // now to console
     if winnersClan <> nil then
@@ -342,9 +412,12 @@ begin
     DamageClan  := 0;
     DamageTotal := 0;
     DamageTurn  := 0;
+    PoisonClan  := 0;
+    PoisonTurn  := 0;
     KillsClan   := 0;
     Kills       := 0;
     KillsTotal  := 0;
+    HitTargets  := 0;
     AmmoUsedCount := 0;
     AmmoDamagingUsed := false;
     SkippedTurns:= 0;

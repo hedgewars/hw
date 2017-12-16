@@ -51,7 +51,4 @@
     <tip>Konfiguračné súbory Hedgewars nájdete v ".hedgewars" vo vašom domovskom adresári. Vytvárajte si zálohy alebo prenášajte si tieto súbory medzi počítačmi, ale needitujte ich ručne.</tip>
     <tip>Použite Molotovov koktejl alebo plameňomet na dočasné zabránenie ježkom prejsť terénom ako sú tunely alebo plošiny.</tip>
     <tip>Navádzaná včela je trošku zložitejšia na použitie. Jej polomer otočenia závisí na jej rýchlosti, takže ju radšej nepoužívajte pri plnej sile.</tip>
-    <windows-only>
-        <tip>Hedgewars vo verzii pre Windows podporujú Xfire. Pridajte si Hedgewars do vášho zoznamu hier tak, aby vás vaši priatelia videli hrať.</tip>
-    </windows-only>
 </tips>

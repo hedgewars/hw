@@ -32,6 +32,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     {$IFDEF WIN32}, dynlibs{$ENDIF}
      ;
 
 function  RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
@@ -41,6 +42,12 @@ procedure freeEverything(complete:boolean);
 
 implementation
 uses uFLUICallback, uFLTypes;
+
+{$IFDEF WIN32}
+type TSetProcessDpiAwareness = function(value: Integer): Integer; stdcall;
+var SetProcessDpiAwareness: TSetProcessDpiAwareness;
+var ShcoreLibHandle: TLibHandle;
+{$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
@@ -57,7 +64,6 @@ begin
             SetLandTexture;
             UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
             setAILandMarks;
-            ParseCommand('sendlanddigest', true);
             GameState:= gsStart;
             end;
         gsStart:
@@ -71,6 +77,7 @@ begin
             AddFlakes;
             SetRandomSeed(cSeed, false);
             StoreLoad(false);
+            ParseCommand('sendlanddigest', true); // extending land digest to all synced pixels (anything that could modify land)
             if not allOK then exit;
             AssignHHCoords;
             AddMiscGears;
@@ -151,6 +158,7 @@ var event: TSDL_Event;
     previousGameState: TGameState;
     wheelEvent: boolean;
 begin
+    previousGameState:= gsStart;
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
     while (not isTerminated) and allOK do
@@ -188,14 +196,22 @@ begin
                                 cHasFocus:= false;
                                 onFocusStateChanged();
                                 end;
+{$IFDEF MOBILE}
+(* Suspend game if minimized on mobile.
+NOTE: Mobile doesn't support online multiplayer yet, so it's not a problem.
+BUT: This section WILL become a bug when online multiplayer is added to
+Hedgewars and needs to be rethought. This is because it will cause the
+game to freeze if one online player minimizes Hedgewars. *)
                         SDL_WINDOWEVENT_MINIMIZED:
                                 begin
                                 previousGameState:= GameState;
                                 GameState:= gsSuspend;
                                 end;
+{$ENDIF}
                         SDL_WINDOWEVENT_RESTORED:
                                 begin
-                                GameState:= previousGameState;
+                                if GameState = gsSuspend then
+                                    GameState:= previousGameState;
 {$IFDEF ANDROID}
                                 //This call is used to reinitialize the glcontext and reload the textures
                                 ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
@@ -232,7 +248,8 @@ begin
                 SDL_MOUSEWHEEL:
                     begin
                     wheelEvent:= true;
-                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    //ProcessMouseWheel(event.wheel.x, event.wheel.y);
+                    ProcessMouseWheel(event.wheel.y);
                     end;
 {$ENDIF}
 
@@ -362,7 +379,6 @@ begin
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
-    AddProgress();
     if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
@@ -379,6 +395,9 @@ begin
 
     if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);
+
+    LoadFonts();
+    AddProgress();
 
     if cTestLua then
         begin
@@ -416,7 +435,6 @@ begin
     if GameType = gmtRecord then
     begin
         RecorderMainLoop();
-        freeEverything(true);
         exit;
     end;
 {$ENDIF}
@@ -514,6 +532,9 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
         uTextures.freeModule;
+        SDL_GL_DeleteContext(SDLGLcontext);
+        SDL_DestroyWindow(SDLwindow);
+        SDL_Quit()
         end;
 
     uIO.freeModule;
@@ -577,6 +598,16 @@ begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
 
+{$IFDEF WIN32}
+    ShcoreLibHandle := LoadLibrary('Shcore.dll');
+    if (ShcoreLibHandle <> 0) then
+    begin
+        SetProcessDpiAwareness :=
+            TSetProcessDpiAwareness(GetProcedureAddress(ShcoreLibHandle, 'SetProcessDpiAwareness'));
+        if (SetProcessDpiAwareness <> nil) then
+            SetProcessDpiAwareness(1);
+    end;
+{$ENDIF}
 {$IFDEF PAS2C}
     // workaround for pascal's ParamStr and ParamCount
     init(argc, argv);

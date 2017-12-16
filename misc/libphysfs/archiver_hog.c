@@ -93,24 +93,26 @@ static void *HOG_openArchive(PHYSFS_Io *io, const char *name, int forWriting)
 
 const PHYSFS_Archiver __PHYSFS_Archiver_HOG =
 {
+    CURRENT_PHYSFS_ARCHIVER_API_VERSION,
     {
         "HOG",
         "Descent I/II HOG file format",
         "Bradley Bell <btb@icculus.org>",
-        "http://icculus.org/physfs/",
+        "https://icculus.org/physfs/",
+        0,  /* supportsSymlinks */
     },
-    HOG_openArchive,         /* openArchive() method    */
-    UNPK_enumerateFiles,     /* enumerateFiles() method */
-    UNPK_openRead,           /* openRead() method       */
-    UNPK_openWrite,          /* openWrite() method      */
-    UNPK_openAppend,         /* openAppend() method     */
-    UNPK_remove,             /* remove() method         */
-    UNPK_mkdir,              /* mkdir() method          */
-    UNPK_closeArchive,       /* closeArchive() method   */
-    UNPK_stat                /* stat() method           */
+    HOG_openArchive,
+    UNPK_enumerateFiles,
+    UNPK_openRead,
+    UNPK_openWrite,
+    UNPK_openAppend,
+    UNPK_remove,
+    UNPK_mkdir,
+    UNPK_stat,
+    UNPK_closeArchive
 };
 
 #endif  /* defined PHYSFS_SUPPORTS_HOG */
 
-/* end of hog.c ... */
+/* end of archiver_hog.c ... */
 
