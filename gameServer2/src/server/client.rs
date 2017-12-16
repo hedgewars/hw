@@ -42,7 +42,7 @@ impl HWClient {
     }
 
     pub fn register(&mut self, poll: &Poll, token: Token) {
-        poll.register(&self.sock, token, Ready::all(),
+        poll.register(&self.sock, token, Ready::readable() | Ready::writable(),
                       PollOpt::edge())
             .ok().expect("could not register socket with event loop");
 
@@ -72,7 +72,7 @@ impl HWClient {
         self.sock.flush();
     }
 
-    pub fn readable(&mut self, poll: &Poll) -> Vec<Action> {
+    pub fn readable(&mut self, _poll: &Poll) -> Vec<Action> {
         let v = self.decoder.read_from(&mut self.sock).unwrap();
         debug!("Read {} bytes", v);
         let mut response = Vec::new();
@@ -85,13 +85,13 @@ impl HWClient {
         response
     }
 
-    pub fn writable(&mut self, poll: &Poll) -> io::Result<()> {
+    pub fn writable(&mut self, _poll: &Poll) -> io::Result<()> {
         self.buf_out.write_to(&mut self.sock)?;
 
         Ok(())
     }
 
-    pub fn error(&mut self, poll: &Poll) -> Vec<Action> {
+    pub fn error(&mut self, _poll: &Poll) -> Vec<Action> {
         return vec![ByeClient("Connection reset".to_string())]
     }
 }

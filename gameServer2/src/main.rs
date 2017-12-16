@@ -11,7 +11,7 @@ extern crate env_logger;
 //use std::io::*;
 //use rand::Rng;
 //use std::cmp::Ordering;
-use mio::tcp::*;
+use mio::net::*;
 use mio::*;
 
 mod utils;
@@ -36,24 +36,24 @@ fn main() {
         poll.poll(&mut events, None).unwrap();
 
         for event in events.iter() {
-            if event.kind().is_readable() {
+            if event.readiness() & Ready::readable() == Ready::readable() {
                 match event.token() {
                     utils::SERVER => server.accept(&poll).unwrap(),
                     Token(tok) => server.client_readable(&poll, tok).unwrap(),
                 }
             }
-            if event.kind().is_writable() {
+            if event.readiness() & Ready::writable() == Ready::writable() {
                 match event.token() {
                     utils::SERVER => unreachable!(),
                     Token(tok) => server.client_writable(&poll, tok).unwrap(),
                 }
             }
-            if event.kind().is_hup() || event.kind().is_error() {
-                match event.token() {
-                    utils::SERVER => unreachable!(),
-                    Token(tok) => server.client_error(&poll, tok).unwrap(),
-                }
-            }
+//            if event.kind().is_hup() || event.kind().is_error() {
+//                match event.token() {
+//                    utils::SERVER => unreachable!(),
+//                    Token(tok) => server.client_error(&poll, tok).unwrap(),
+//                }
+//            }
         }
     }
 }

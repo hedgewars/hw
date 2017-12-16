@@ -27,7 +27,7 @@ pub fn run_action(server: &mut HWServer, token: usize, poll: &mio::Poll, action:
         SendMe(msg) =>
             server.send(token, &msg),
         SendAllButMe(msg) => {
-            for (i, c) in server.clients.iter_mut() {
+            for (_i, c) in server.clients.iter_mut() {
                 if c.id != token {
                     c.send_string(&msg)
                 }
