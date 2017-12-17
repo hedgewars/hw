@@ -39,16 +39,8 @@ uses hwengine
     , uLocale
     {$IFDEF ANDROID}, jni{$ENDIF}
     , uFLTypes
-    , uFLGameConfig
     , uFLIPC
     , uPhysFSLayer
-    , uFLThemes
-    , uFLTeams
-    , uFLScripts
-    , uFLSchemes
-    , uFLAmmo
-    , uFLNet
-    , uFLNetProtocol
     , uFLUICallback
     , uFLRunQueue
     ;
@@ -154,50 +146,10 @@ exports
     Game;
 {$ELSE}
 exports
-    runQuickGame,
-    runLocalGame,
-    getPreview,
     registerUIMessagesCallback,
     flibInit,
-    flibFree,
-    //game config
-    resetGameConfig,
-    setSeed,
-    getSeed,
-    setTheme,
-    setScript,
-    setScheme,
-    setAmmo,
-    getThemesList,
-    freeThemesList,
-    getThemeIcon,
-    getScriptsList,
-    getSchemesList,
-    getAmmosList,
-    getTeamsList,
-    tryAddTeam,
-    tryRemoveTeam,
-    changeTeamColor,
-    // network
-    connectOfficialServer,
-    passNetData,
-    passToNet,
-    passFlibEvent,
-    sendChatLine,
-    joinRoom,
-    partRoom,
-
-    // dunno what these are
-    RunEngine,
-    LoadLocaleWrapper,
-    HW_versionInfo,
-    HW_versionString,
-    HW_terminate,
-    HW_getNumberOfWeapons,
-    HW_getMaxNumberOfHogs,
-    HW_getMaxNumberOfTeams,
-    HW_getWeaponNameByIndex,
-    HW_memoryWarningCallback;
+    flibFree
+    ;
 {$ENDIF}
 
 begin
