@@ -105,12 +105,10 @@ procedure flibInit(localPrefix, userPrefix: PChar); cdecl;
 begin
     initIPC;
     uPhysFSLayer.initModule(localPrefix, userPrefix);
-    uFLNet.initModule;
 end;
 
 procedure flibFree; cdecl;
 begin
-    uFLNet.freeModule;
     uPhysFSLayer.freemodule;
     freeIPC;
 end;

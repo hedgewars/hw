@@ -257,7 +257,7 @@ if(ANDROID)
 else(ANDROID)
     #skip frontend for javascript
     if(NOT BUILD_ENGINE_JS)
-        add_subdirectory(qmlFrontend)
+        add_subdirectory(qmlfrontend)
         add_subdirectory(share)
     endif()
 
