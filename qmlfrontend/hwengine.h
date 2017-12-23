@@ -1,9 +1,11 @@
 #ifndef HWENGINE_H
 #define HWENGINE_H
 
+#include <QList>
 #include <QObject>
 
 #include "flib.h"
+#include "gameconfig.h"
 
 class QQmlEngine;
 
@@ -18,6 +20,9 @@ public:
 
     static void exposeToQML();
 
+    Q_INVOKABLE void getPreview();
+    Q_INVOKABLE void runQuickGame();
+
 signals:
     void previewIsRendering();
     void previewImageChanged();
@@ -27,6 +32,7 @@ public slots:
 
 private:
     QQmlEngine* m_engine;
+    QList<GameConfig> m_runQueue;
 
     static void guiMessagesCallback(void* context, MessageType mt, const char* msg, uint32_t len);
 

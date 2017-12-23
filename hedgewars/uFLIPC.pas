@@ -12,26 +12,19 @@ procedure ipcRemoveBarrierFromEngineQueue();
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
-procedure ipcToNet(s: shortstring);
-procedure ipcToNetRaw(p: pointer; len: Longword);
-
 procedure ipcToFrontend(s: shortstring);
 procedure ipcToFrontendRaw(p: pointer; len: Longword);
 function ipcReadFromFrontend: TIPCMessage;
 function ipcCheckFromFrontend: boolean;
 
 procedure registerIPCCallback(p: pointer; f: TIPCCallback);
-procedure registerNetCallback(p: pointer; f: TIPCCallback);
 
 implementation
 
 var callbackPointerF: pointer;
     callbackFunctionF: TIPCCallback;
     callbackListenerThreadF: PSDL_Thread;
-    callbackPointerN: pointer;
-    callbackFunctionN: TIPCCallback;
-    callbackListenerThreadN: PSDL_Thread;
-    queueFrontend, queueEngine, queueNet: PIPCQueue;
+    queueFrontend, queueEngine: PIPCQueue;
 
 procedure ipcSend(var s: TIPCMessage; queue: PIPCQueue);
 var pmsg: PIPCMessage;
@@ -174,14 +167,6 @@ begin
     SDL_UnlockMutex(q^.mut);
 end;
 
-procedure ipcToNet(s: shortstring);
-var msg: TIPCMessage;
-begin
-    msg.str:= s;
-    msg.buf:= nil;
-    ipcSend(msg, queueNet)
-end;
-
 procedure ipcToEngineRaw(p: pointer; len: Longword);
 var msg: TIPCMessage;
 begin
@@ -202,16 +187,6 @@ begin
     ipcSend(msg, queueFrontend)
 end;
 
-procedure ipcToNetRaw(p: pointer; len: Longword);
-var msg: TIPCMessage;
-begin
-    msg.str[0]:= #0;
-    msg.len:= len;
-    msg.buf:= GetMem(len);
-    Move(p^, msg.buf^, len);
-    ipcSend(msg, queueNet)
-end;
-
 function ipcReadFromEngine: TIPCMessage;
 begin
     ipcReadFromEngine:= ipcRead(queueFrontend)
@@ -220,11 +195,6 @@ end;
 function ipcReadFromFrontend: TIPCMessage;
 begin
     ipcReadFromFrontend:= ipcRead(queueEngine)
-end;
-
-function ipcReadToNet: TIPCMessage;
-begin
-    ipcReadToNet:= ipcRead(queueNet)
 end;
 
 function ipcCheckFromEngine: boolean;
@@ -253,34 +223,11 @@ begin
     until false
 end;
 
-function  netListener(p: pointer): Longint; cdecl; export;
-var msg: TIPCMessage;
-begin
-    netListener:= 0;
-    repeat
-        msg:= ipcReadToNet();
-        if msg.buf = nil then
-            callbackFunctionN(callbackPointerN, @msg.str[1], byte(msg.str[0]))
-        else
-        begin
-            callbackFunctionN(callbackPointerN, msg.buf, msg.len);
-            FreeMem(msg.buf, msg.len)
-        end
-    until false
-end;
-
 procedure registerIPCCallback(p: pointer; f: TIPCCallback);
 begin
     callbackPointerF:= p;
     callbackFunctionF:= f;
     callbackListenerThreadF:= SDL_CreateThread(@engineListener, 'engineListener', nil);
-end;
-
-procedure registerNetCallback(p: pointer; f: TIPCCallback);
-begin
-    callbackPointerN:= p;
-    callbackFunctionN:= f;
-    callbackListenerThreadN:= SDL_CreateThread(@netListener, 'netListener', nil);
 end;
 
 function createQueue: PIPCQueue;
@@ -308,7 +255,6 @@ procedure initIPC;
 begin
     queueFrontend:= createQueue;
     queueEngine:= createQueue;
-    queueNet:= createQueue;
 
     callbackPointerF:= nil;
     callbackListenerThreadF:= nil;
@@ -317,10 +263,8 @@ end;
 procedure freeIPC;
 begin
     //FIXME SDL_KillThread(callbackListenerThreadF);
-    //FIXME SDL_KillThread(callbackListenerThreadN);
     destroyQueue(queueFrontend);
     destroyQueue(queueEngine);
-    destroyQueue(queueNet);
 end;
 
 end.

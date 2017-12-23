@@ -322,14 +322,14 @@ var paramIndex: LongInt;
 var tmpInt: LongInt;
 begin
 
-    paramIndex:= {$IFDEF HWLIBRARY}0{$ELSE}1{$ENDIF};
-    paramTotal:= ParamCount; //-1 because pascal enumeration is inclusive
+    paramIndex:= 0;
+    paramTotal:= ParamCount;
     
     WriteLn(stdout, 'total parameters: ' + inttostr(paramTotal));
     tmpInt:= 0;
     while (tmpInt <= paramTotal) do
         begin
-        WriteLn(stdout, inttostr(tmpInt) + ': ' + {$IFDEF HWLIBRARY}argv[tmpInt]{$ELSE}paramCount(tmpInt){$ENDIF});
+        WriteLn(stdout, inttostr(tmpInt) + ': ' + argv[tmpInt]);
         inc(tmpInt);
         end;
     

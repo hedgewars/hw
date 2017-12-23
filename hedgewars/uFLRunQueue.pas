@@ -3,10 +3,9 @@ interface
 uses uFLTypes;
 
 procedure queueExecution(var config: TGameConfig);
-procedure passFlibEvent(p: pointer); cdecl;
 
 implementation
-uses uFLGameConfig, hwengine, uFLThemes, uFLUICallback, uFLIPC;
+uses hwengine, uFLUICallback, uFLIPC;
 
 var runQueue: PGameConfig = nil;
 
@@ -56,7 +55,7 @@ begin
         runQueue:= pConfig;
 
         ipcSetEngineBarrier();
-        sendConfig(pConfig);
+        //sendConfig(pConfig);
         nextRun
     end else
     begin
@@ -75,18 +74,8 @@ begin
         end;
 
         ipcSetEngineBarrier();
-        sendConfig(pConfig);
+        //sendConfig(pConfig);
         t^.nextConfig:= pConfig
-    end;
-end;
-
-procedure passFlibEvent(p: pointer); cdecl;
-begin
-    case TFLIBEvent(p^) of
-        flibGameFinished: begin
-            cleanupConfig;
-            nextRun
-        end;
     end;
 end;
 

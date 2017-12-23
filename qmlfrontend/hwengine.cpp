@@ -67,3 +67,14 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
     }
     }
 }
+
+void HWEngine::getPreview()
+{
+    int argc;
+    const char** argv;
+    flibRunEngine(argc, argv);
+}
+
+void HWEngine::runQuickGame()
+{
+}
