@@ -10,7 +10,7 @@ public:
 
     const char** argv() const;
     int argc() const;
-    const QList<QByteArray> config();
+    const QList<QByteArray> config() const;
 
     void clear();
     void cmdSeed(const QByteArray& seed);

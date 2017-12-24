@@ -11,6 +11,8 @@ enum MessageType {
     MSG_RENDERINGPREVIEW,
     MSG_PREVIEW,
     MSG_PREVIEWHOGCOUNT,
+    MSG_TONET,
+    MSG_GAMEFINISHED,
 };
 
 typedef union string255_ {

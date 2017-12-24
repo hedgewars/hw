@@ -7,15 +7,7 @@ const
 
 type
     TMessageType = (mtRenderingPreview, mtPreview, mtPreviewHogCount
-                    , mtAddPlayingTeam, mtRemovePlayingTeam
-                    , mtAddTeam, mtRemoveTeam, mtTeamColor, mtHedgehogsNumber
-                    , mtNetData, mtToNet
-                    , mtFlibEvent, mtConnected, mtDisconnected, mtAddLobbyClient
-                    , mtRemoveLobbyClient, mtLobbyChatLine, mtAddRoomClient
-                    , mtRemoveRoomClient, mtRoomChatLine, mtAddRoom, mtUpdateRoom
-                    , mtRemoveRoom, mtError, mtWarning, mtMoveToLobby, mtMoveToRoom
-                    , mtNickname, mtSeed, mtTheme, mtScript, mtFeatureSize, mtMapGen
-                    , mtMap, mtMazeSize, mtTemplate, mtAmmo, mtScheme);
+                    , mtToNet, mtGameFinished);
 
     TFLIBEvent = (flibGameFinished);
 

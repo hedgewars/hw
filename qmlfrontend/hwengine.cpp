@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QLibrary>
+#include <QQmlEngine>
 
 extern "C" {
 RunEngine_t* flibRunEngine;
@@ -46,6 +47,20 @@ HWEngine::~HWEngine()
     flibFree();
 }
 
+static QObject* hwengine_singletontype_provider(QQmlEngine* engine, QJSEngine* scriptEngine)
+{
+    Q_UNUSED(scriptEngine)
+
+    HWEngine* hwengine = new HWEngine(engine);
+    return hwengine;
+}
+
+void HWEngine::exposeToQML()
+{
+    qDebug("HWEngine::exposeToQML");
+    qmlRegisterSingletonType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine", hwengine_singletontype_provider);
+}
+
 void HWEngine::guiMessagesCallback(void* context, MessageType mt, const char* msg, uint32_t len)
 {
     HWEngine* obj = reinterpret_cast<HWEngine*>(context);
@@ -60,15 +75,26 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 {
     switch (mt) {
     case MSG_RENDERINGPREVIEW: {
+        qDebug("MSG_RENDERINGPREVIEW");
         emit previewIsRendering();
         break;
     }
     case MSG_PREVIEW: {
+        qDebug("MSG_PREVIEW");
         emit previewImageChanged();
         break;
     }
     case MSG_PREVIEWHOGCOUNT: {
+        qDebug("MSG_PREVIEWHOGCOUNT");
         emit previewHogCountChanged((quint8)msg.data()[0]);
+        break;
+    }
+    case MSG_TONET: {
+        qDebug("MSG_TONET");
+        break;
+    }
+    case MSG_GAMEFINISHED: {
+        qDebug("MSG_GAMEFINISHED");
         break;
     }
     }
@@ -76,7 +102,15 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 
 void HWEngine::getPreview()
 {
-    m_runQueue.append(GameConfig());
+    GameConfig cfg;
+    cfg.cmdSeed("superseed");
+    m_runQueue.append(cfg);
+    flibIpcSetEngineBarrier();
+    for (const QByteArray& b : m_runQueue[0].config()) {
+        qDebug() << "[frontend] sending msg of size" << b.size();
+        flibIpcToEngineRaw(b.data(), b.size());
+    }
+    flibIpcRemoveBarrierFromEngineQueue();
     flibRunEngine(m_runQueue[0].argc(), m_runQueue[0].argv());
 }
 

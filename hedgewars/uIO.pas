@@ -123,6 +123,7 @@ var loTicks: Word;
     isProcessed: boolean;
 begin
 isProcessed := true;
+system.writeln('IPC:', s);
 
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;

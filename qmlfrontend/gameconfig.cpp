@@ -23,6 +23,13 @@ int GameConfig::argc() const
     return m_arguments.size();
 }
 
+const QList<QByteArray> GameConfig::config() const
+{
+    QList<QByteArray> cfg = m_cfg;
+    cfg.append("\x01!");
+    return cfg;
+}
+
 void GameConfig::clear()
 {
     m_arguments.clear();

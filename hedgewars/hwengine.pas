@@ -580,14 +580,12 @@ begin
 end;
 
 function EngineThread(p: pointer): Longint; cdecl; export;
-var e: TFLIBEvent;
 begin
     if GameType = gmtLandPreview then
         GenLandPreview()
     else Game();
 
-    e:= flibGameFinished;
-    sendUI(mtFlibEvent, @e, sizeof(e));
+    sendUI(mtGameFinished, nil, 0);
     EngineThread:= 0
 end;
 

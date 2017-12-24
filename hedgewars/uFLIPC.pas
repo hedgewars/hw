@@ -173,6 +173,7 @@ begin
     msg.str[0]:= #0;
     msg.len:= len;
     msg.buf:= GetMem(len);
+
     Move(p^, msg.buf^, len);
     ipcSend(msg, queueEngine)
 end;
