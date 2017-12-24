@@ -24,6 +24,10 @@ typedef union string255_ {
 } string255;
 
 typedef void RunEngine_t(int argc, const char** argv);
+typedef void ipcToEngineRaw_t(const char* msg, uint32_t len);
+typedef void ipcSetEngineBarrier_t();
+typedef void ipcRemoveBarrierFromEngineQueue_t();
+
 typedef void registerUIMessagesCallback_t(void* context, void (*)(void* context, MessageType mt, const char* msg, uint32_t len));
 typedef void flibInit_t(const char* localPrefix, const char* userPrefix);
 typedef void flibFree_t();

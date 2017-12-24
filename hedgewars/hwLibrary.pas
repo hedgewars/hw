@@ -60,7 +60,10 @@ exports
     registerUIMessagesCallback,
     flibInit,
     flibFree,
-    queueExecution
+    ipcToEngineRaw,
+    ipcSetEngineBarrier,
+    ipcRemoveBarrierFromEngineQueue,
+    RunEngine
     ;
 
 begin

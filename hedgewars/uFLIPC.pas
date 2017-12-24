@@ -6,9 +6,9 @@ procedure initIPC;
 procedure freeIPC;
 
 procedure ipcToEngine(s: shortstring);
-procedure ipcToEngineRaw(p: pointer; len: Longword);
-procedure ipcSetEngineBarrier();
-procedure ipcRemoveBarrierFromEngineQueue();
+procedure ipcToEngineRaw(p: pointer; len: Longword); cdecl;
+procedure ipcSetEngineBarrier(); cdecl;
+procedure ipcRemoveBarrierFromEngineQueue(); cdecl;
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
@@ -105,7 +105,7 @@ begin
     ipcSend(msg, queueFrontend)
 end;
 
-procedure ipcSetEngineBarrier();
+procedure ipcSetEngineBarrier(); cdecl;
 begin
     SDL_LockMutex(queueEngine^.mut);
 
@@ -114,7 +114,7 @@ begin
     SDL_UnlockMutex(queueEngine^.mut);
 end;
 
-procedure ipcRemoveBarrierFromEngineQueue();
+procedure ipcRemoveBarrierFromEngineQueue(); cdecl;
 var pmsg, t: PIPCMessage;
     q: PIPCQueue;
 begin
@@ -167,7 +167,7 @@ begin
     SDL_UnlockMutex(q^.mut);
 end;
 
-procedure ipcToEngineRaw(p: pointer; len: Longword);
+procedure ipcToEngineRaw(p: pointer; len: Longword); cdecl;
 var msg: TIPCMessage;
 begin
     msg.str[0]:= #0;

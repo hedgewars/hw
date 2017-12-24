@@ -5,6 +5,9 @@
 
 extern "C" {
 RunEngine_t* flibRunEngine;
+ipcToEngineRaw_t* flibIpcToEngineRaw;
+ipcSetEngineBarrier_t* flibIpcSetEngineBarrier;
+ipcRemoveBarrierFromEngineQueue_t* flibIpcRemoveBarrierFromEngineQueue;
 registerUIMessagesCallback_t* flibRegisterUIMessagesCallback;
 flibInit_t* flibInit;
 flibFree_t* flibFree;
@@ -27,6 +30,9 @@ HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
         qWarning() << "Engine library not found" << hwlib.errorString();
 
     flibRunEngine = (RunEngine_t*)hwlib.resolve("RunEngine");
+    flibIpcToEngineRaw = (ipcToEngineRaw_t*)hwlib.resolve("ipcToEngineRaw");
+    flibIpcSetEngineBarrier = (ipcSetEngineBarrier_t*)hwlib.resolve("ipcSetEngineBarrier");
+    flibIpcRemoveBarrierFromEngineQueue = (ipcRemoveBarrierFromEngineQueue_t*)hwlib.resolve("ipcRemoveBarrierFromEngineQueue");
     flibRegisterUIMessagesCallback = (registerUIMessagesCallback_t*)hwlib.resolve("registerUIMessagesCallback");
     flibInit = (flibInit_t*)hwlib.resolve("flibInit");
     flibFree = (flibFree_t*)hwlib.resolve("flibFree");
@@ -70,9 +76,8 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 
 void HWEngine::getPreview()
 {
-    int argc;
-    const char** argv;
-    flibRunEngine(argc, argv);
+    m_runQueue.append(GameConfig());
+    flibRunEngine(m_runQueue[0].argc(), m_runQueue[0].argv());
 }
 
 void HWEngine::runQuickGame()

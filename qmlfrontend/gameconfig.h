@@ -1,17 +1,27 @@
 #ifndef GAMECONFIG_H
 #define GAMECONFIG_H
 
-#include <QObject>
+#include <QList>
+#include <QVector>
 
-class GameConfig : public QObject
-{
-  Q_OBJECT
+class GameConfig {
 public:
-  explicit GameConfig(QObject *parent = nullptr);
+    explicit GameConfig();
 
-signals:
+    const char** argv() const;
+    int argc() const;
+    const QList<QByteArray> config();
 
-public slots:
+    void clear();
+    void cmdSeed(const QByteArray& seed);
+    void cmdMapgen(int mapgen);
+
+private:
+    mutable QVector<const char*> m_argv;
+    QList<QByteArray> m_arguments;
+    QList<QByteArray> m_cfg;
+
+    void cfgAppend(const QByteArray& cmd);
 };
 
 #endif // GAMECONFIG_H
