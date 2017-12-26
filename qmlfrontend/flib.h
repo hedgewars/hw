@@ -8,7 +8,6 @@ extern "C" {
 #endif
 
 enum MessageType {
-    MSG_RENDERINGPREVIEW,
     MSG_PREVIEW,
     MSG_PREVIEWHOGCOUNT,
     MSG_TONET,

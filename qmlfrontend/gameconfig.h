@@ -16,6 +16,8 @@ public:
     void cmdSeed(const QByteArray& seed);
     void cmdMapgen(int mapgen);
 
+    bool isPreview();
+
 private:
     mutable QVector<const char*> m_argv;
     QList<QByteArray> m_arguments;

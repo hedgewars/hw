@@ -3,6 +3,10 @@
 #include <QDebug>
 #include <QLibrary>
 #include <QQmlEngine>
+#include <QUuid>
+
+#include "previewimageprovider.h"
+#include "runqueue.h"
 
 extern "C" {
 RunEngine_t* flibRunEngine;
@@ -18,6 +22,8 @@ passFlibEvent_t* flibPassFlibEvent;
 HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
     : QObject(parent)
     , m_engine(engine)
+    , m_previewProvider(new PreviewImageProvider())
+    , m_runQueue(new RunQueue(this))
 {
     qRegisterMetaType<MessageType>("MessageType");
 
@@ -40,6 +46,11 @@ HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/MainRepo/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
+
+    m_engine->addImageProvider(QLatin1String("preview"), m_previewProvider);
+
+    connect(m_runQueue, &RunQueue::previewIsRendering, this, &HWEngine::previewIsRendering);
+    connect(this, &HWEngine::gameFinished, m_runQueue, &RunQueue::onGameFinished);
 }
 
 HWEngine::~HWEngine()
@@ -74,13 +85,9 @@ void HWEngine::guiMessagesCallback(void* context, MessageType mt, const char* ms
 void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 {
     switch (mt) {
-    case MSG_RENDERINGPREVIEW: {
-        qDebug("MSG_RENDERINGPREVIEW");
-        emit previewIsRendering();
-        break;
-    }
     case MSG_PREVIEW: {
         qDebug("MSG_PREVIEW");
+        m_previewProvider->setPixmap(msg);
         emit previewImageChanged();
         break;
     }
@@ -95,6 +102,7 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
     }
     case MSG_GAMEFINISHED: {
         qDebug("MSG_GAMEFINISHED");
+        emit gameFinished();
         break;
     }
     }
@@ -103,15 +111,9 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 void HWEngine::getPreview()
 {
     GameConfig cfg;
-    cfg.cmdSeed("superseed");
-    m_runQueue.append(cfg);
-    flibIpcSetEngineBarrier();
-    for (const QByteArray& b : m_runQueue[0].config()) {
-        qDebug() << "[frontend] sending msg of size" << b.size();
-        flibIpcToEngineRaw(b.data(), b.size());
-    }
-    flibIpcRemoveBarrierFromEngineQueue();
-    flibRunEngine(m_runQueue[0].argc(), m_runQueue[0].argv());
+    cfg.cmdSeed(QUuid::createUuid().toByteArray());
+
+    m_runQueue->queue(cfg);
 }
 
 void HWEngine::runQuickGame()

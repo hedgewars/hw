@@ -46,6 +46,11 @@ void GameConfig::cmdMapgen(int mapgen)
     cfgAppend("e$mapgen " + QByteArray::number(mapgen));
 }
 
+bool GameConfig::isPreview()
+{
+    return true;
+}
+
 void GameConfig::cfgAppend(const QByteArray& cmd)
 {
     quint8 len = cmd.size();

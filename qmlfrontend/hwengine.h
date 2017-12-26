@@ -5,11 +5,10 @@
 #include <QObject>
 
 #include "flib.h"
-#include "gameconfig.h"
 
 class QQmlEngine;
-
-class HWEnginePrivate;
+class PreviewImageProvider;
+class RunQueue;
 
 class HWEngine : public QObject {
     Q_OBJECT
@@ -27,12 +26,14 @@ signals:
     void previewIsRendering();
     void previewImageChanged();
     void previewHogCountChanged(int count);
+    void gameFinished();
 
 public slots:
 
 private:
     QQmlEngine* m_engine;
-    QList<GameConfig> m_runQueue;
+    PreviewImageProvider* m_previewProvider;
+    RunQueue* m_runQueue;
 
     static void guiMessagesCallback(void* context, MessageType mt, const char* msg, uint32_t len);
 

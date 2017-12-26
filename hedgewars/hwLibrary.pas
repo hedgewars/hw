@@ -39,7 +39,6 @@ uses hwengine
     , uFLIPC
     , uPhysFSLayer
     , uFLUICallback
-    , uFLRunQueue
     ;
 
 {$INCLUDE "config.inc"}

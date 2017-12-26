@@ -6,7 +6,7 @@ const
     MAXARGS = 32;
 
 type
-    TMessageType = (mtRenderingPreview, mtPreview, mtPreviewHogCount
+    TMessageType = (mtPreview, mtPreviewHogCount
                     , mtToNet, mtGameFinished);
 
     TFLIBEvent = (flibGameFinished);

@@ -6,4 +6,18 @@ Page1Form {
     console.log("Button clicked")
     HWEngine.getPreview()
   }
+
+  Connections {
+      target: HWEngine
+      onPreviewImageChanged: {
+          previewImage.source = "image://preview/image"
+      }
+      onPreviewIsRendering: {
+        console.log("==========")
+          previewImage.source = "qrc:/res/iconTime.png"
+      }
+      onPreviewHogCountChanged: {
+      }
+  }
+
 }
