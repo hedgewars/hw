@@ -110,12 +110,23 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 
 void HWEngine::getPreview()
 {
-    GameConfig cfg;
-    cfg.cmdSeed(QUuid::createUuid().toByteArray());
+    m_gameConfig.cmdSeed(QUuid::createUuid().toByteArray());
+    m_gameConfig.setPreview(true);
 
-    m_runQueue->queue(cfg);
+    m_runQueue->queue(m_gameConfig);
 }
 
 void HWEngine::runQuickGame()
 {
+    m_gameConfig.cmdTheme("Bamboo");
+    Team team1;
+    team1.name = "team1";
+    Team team2;
+    team2.name = "team2";
+    team2.color = "7654321";
+    m_gameConfig.cmdTeam(team1);
+    m_gameConfig.cmdTeam(team2);
+    m_gameConfig.setPreview(false);
+
+    m_runQueue->queue(m_gameConfig);
 }

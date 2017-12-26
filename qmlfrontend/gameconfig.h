@@ -4,6 +4,8 @@
 #include <QList>
 #include <QVector>
 
+#include "team.h"
+
 class GameConfig {
 public:
     explicit GameConfig();
@@ -14,14 +16,19 @@ public:
 
     void clear();
     void cmdSeed(const QByteArray& seed);
+    void cmdTheme(const QByteArray& theme);
     void cmdMapgen(int mapgen);
+    void cmdTeam(const Team& team);
 
-    bool isPreview();
+    bool isPreview() const;
+    void setPreview(bool isPreview);
 
 private:
     mutable QVector<const char*> m_argv;
     QList<QByteArray> m_arguments;
     QList<QByteArray> m_cfg;
+    QList<Team> m_teams;
+    bool m_isPreview;
 
     void cfgAppend(const QByteArray& cmd);
 };

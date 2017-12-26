@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "flib.h"
+#include "gameconfig.h"
 
 class QQmlEngine;
 class PreviewImageProvider;
@@ -34,6 +35,7 @@ private:
     QQmlEngine* m_engine;
     PreviewImageProvider* m_previewProvider;
     RunQueue* m_runQueue;
+    GameConfig m_gameConfig;
 
     static void guiMessagesCallback(void* context, MessageType mt, const char* msg, uint32_t len);
 

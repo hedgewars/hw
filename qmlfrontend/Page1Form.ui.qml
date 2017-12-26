@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
   property alias button1: button1
   property alias previewImage: previewImage
+  property alias gameButton: gameButton
 
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -12,8 +13,13 @@ Item {
         anchors.top: parent.top
 
         Button {
-            id: button1
-            text: qsTr("Run")
+          id: button1
+          text: qsTr("Preview")
+        }
+
+        Button {
+            id: gameButton
+            text: qsTr("Game")
         }
     }
 
