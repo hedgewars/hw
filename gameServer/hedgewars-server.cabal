@@ -34,7 +34,8 @@ Executable hedgewars-server
     SHA,
     entropy,
     zlib >= 0.5.3 && < 0.6,
-    regex-tdfa
+    regex-tdfa,
+    binary >= 0.8.5.1
 
   if !os(windows)
     build-depends: unix
