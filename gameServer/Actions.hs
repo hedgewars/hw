@@ -40,7 +40,7 @@ import System.Process
 import Network.Socket
 import System.Random
 import qualified Data.Traversable as DT
-import Text.Regex.Base
+import Text.Regex.TDFA
 import qualified Text.Regex.TDFA as TDFA
 import qualified Text.Regex.TDFA.ByteString as TDFAB
 -----------------------------
