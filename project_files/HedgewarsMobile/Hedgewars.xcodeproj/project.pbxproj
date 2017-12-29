@@ -429,6 +429,13 @@
 			remoteGlobalIDString = 928301160F10CAFC00CC5A3C;
 			remoteInfo = fpc;
 		};
+		EE3DE44D1FF6BF1100E2DF37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB598141BB5C1B100BE72C5;
+			remoteInfo = "libSDL-tv";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -1152,6 +1159,7 @@
 			isa = PBXGroup;
 			children = (
 				61A19AEA14D2010A004B1E6D /* libSDL2.a */,
+				EE3DE44E1FF6BF1100E2DF37 /* libSDL2.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1630,6 +1638,13 @@
 			fileType = archive.ar;
 			path = libSDL2_mixer.a;
 			remoteRef = 61A19C2214D20F51004B1E6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EE3DE44E1FF6BF1100E2DF37 /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = EE3DE44D1FF6BF1100E2DF37 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
