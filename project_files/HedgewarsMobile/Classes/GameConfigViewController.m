@@ -274,12 +274,14 @@
                 UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
                 UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
                 UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
-                [animation addObject:hogWithHat];
+                if (hogWithHat) {
+                    [animation addObject:hogWithHat];
+                }
             }
             [hatSprite release];
             [hatFile release];
 
-            UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
+            UIImageView *hog = [[UIImageView alloc] initWithImage:[animation firstObject]];
             hog.animationImages = animation;
             hog.animationDuration = 3;
             [animation release];
