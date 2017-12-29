@@ -46,7 +46,7 @@
     delay = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
     crateness = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
 
-    NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
+    NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos_base.png", GRAPHICS_DIRECTORY()];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:str];
     self.ammoStoreImage = img;
     [img release];
