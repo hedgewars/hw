@@ -74,9 +74,9 @@
 		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
 		615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */ = {isa = PBXBuildFile; fileRef = 615BE3D3155C5DDF003CA34D /* uInputHandler.pas */; };
 		615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */; };
-		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; };
+		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; };
+		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; };
 		615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */; };
 		615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */; };
 		616065A8159A71FD00CFAEF4 /* hwclassic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */; };
@@ -279,7 +279,7 @@
 		F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBD1B9B95A400A78ADF /* Icon-76.png */; };
 		F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */; };
 		F6756D801BD8550500B6AB6B /* LabelWithIBLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */; };
-		F67FC8121BEC06E700A9DC75 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F67FC8101BEC06E700A9DC75 /* Appirater.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F67FC8121BEC06E700A9DC75 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F67FC8101BEC06E700A9DC75 /* Appirater.m */; };
 		F67FC8141BEC072B00A9DC75 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F67FC8131BEC072B00A9DC75 /* StoreKit.framework */; };
 		F67FC8161BEC17AC00A9DC75 /* Appirater.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F67FC8151BEC17AC00A9DC75 /* Appirater.bundle */; };
 		F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BA38451BA7A834005D16EA /* GameLogViewController.m */; };
@@ -2109,6 +2109,7 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2126,6 +2127,7 @@
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -2218,6 +2220,7 @@
 		61022D7D12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -2337,6 +2340,7 @@
 		6137064C117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;

@@ -24,6 +24,6 @@
 
 }
 
--(IBAction) buttonReleased:(id) sender;
+- (IBAction)buttonReleased:(id)sender;
 
 @end

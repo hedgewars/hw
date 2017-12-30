@@ -22,10 +22,10 @@
 #define  SECTION_START_CHAR '['
 
 @interface IniParser ()
-@property (nonatomic, retain) NSString *iniFilePath;
+@property (nonatomic, strong) NSString *iniFilePath;
 
-@property (nonatomic, retain) NSMutableArray *mutableSections;
-@property (nonatomic, retain) NSMutableDictionary *currentSection;
+@property (nonatomic, strong) NSMutableArray *mutableSections;
+@property (nonatomic, strong) NSMutableDictionary *currentSection;
 @end
 
 @implementation IniParser
@@ -85,7 +85,6 @@
 - (void)addPreviousSectionToSectionsIfNecessary {
     if (self.currentSection != nil) {
         [self.mutableSections addObject:self.currentSection];
-        [self.currentSection release];
     }
 }
 
@@ -108,15 +107,6 @@
 
 - (NSArray *)copyParsedSections {
     return [self.mutableSections copy];
-}
-
-#pragma mark - Dealloc
-
-- (void)dealloc {
-    [_iniFilePath release];
-    [_mutableSections release];
-    [_currentSection release];
-    [super dealloc];
 }
 
 @end

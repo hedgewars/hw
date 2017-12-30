@@ -24,13 +24,13 @@
 
 @implementation MissionTrainingViewController
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View management
--(void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
@@ -54,14 +54,14 @@
     self.descriptionLabel.textColor = [UIColor lightYellowColor];
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:arc4random_uniform((int)[self.listOfMissionIDs count]) inSection:0];
     [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     [super viewWillAppear:animated];
 }
 
--(IBAction) buttonPressed:(id) sender {
+- (IBAction)buttonPressed:(id)sender {
     UIButton *button = (UIButton *)sender;
 
     if (button.tag == 0) {
@@ -87,8 +87,6 @@
         NSDictionary *missionsDict = [self newMissionsDictionaryFromMissionsFile:missionsDescLocation];
         NSDictionary *localizedMissionsDict = [self newMissionsDictionaryFromMissionsFile:localizedMissionsDescLocation];
         
-        [missionsDescLocation release];
-        [localizedMissionsDescLocation release];
         
         NSMutableDictionary *tempMissionsDict = [[NSMutableDictionary alloc] init];
         
@@ -104,8 +102,6 @@
             }
         }
         
-        [missionsDict release];
-        [localizedMissionsDict release];
         
         return tempMissionsDict;
     }
@@ -113,8 +109,6 @@
     {
         NSDictionary *missionsDict = [self newMissionsDictionaryFromMissionsFile:missionsDescLocation];
         
-        [missionsDescLocation release];
-        [localizedMissionsDescLocation release];
         
         return missionsDict;
     }
@@ -126,7 +120,6 @@
     
     NSString *missionsFileContents = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     NSArray *missionsLines = [missionsFileContents componentsSeparatedByString:@"\n"];
-    [missionsFileContents release];
     
     for (NSString *line in missionsLines)
     {
@@ -151,7 +144,6 @@
             {
                 NSMutableDictionary *missionDict = [[NSMutableDictionary alloc] init];
                 [missionsDict setObject:missionDict forKey:missionID];
-                [missionDict release];
             }
             
             NSMutableDictionary *missionDict = [missionsDict objectForKey:missionID];
@@ -200,11 +192,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.listOfMissionIDs count];
 }
 
@@ -218,8 +210,8 @@
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:(IS_IPAD()) ? UITableViewCellStyleDefault : UITableViewCellStyleSubtitle
-                                       reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:(IS_IPAD()) ? UITableViewCellStyleDefault : UITableViewCellStyleSubtitle
+                                       reuseIdentifier:CellIdentifier];
     
     NSString *missionID = [self.listOfMissionIDs objectAtIndex:row];
     cell.textLabel.text = self.dictOfMissions[missionID][@"name"];
@@ -240,7 +232,6 @@
     bgColorView.backgroundColor = [UIColor colorWithRed:(85.0/255.0) green:(15.0/255.0) blue:(106.0/255.0) alpha:1.0];
     bgColorView.layer.masksToBounds = YES;
     cell.selectedBackgroundView = bgColorView;
-    [bgColorView release];
     
     cell.backgroundColor = [UIColor blackColorTransparent];
     return cell;
@@ -248,16 +239,14 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
 
     self.missionName = [self.listOfMissionIDs objectAtIndex:row];
     NSString *size = IS_IPAD() ? @"@2x" : @"";
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@%@.png",GRAPHICS_DIRECTORY(),self.missionName,size];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:filePath];
-    [filePath release];
     [self.previewImage setImage:img];
-    [img release];
 
     self.descriptionLabel.text = self.dictOfMissions[self.missionName][@"desc"];
 }
@@ -265,7 +254,7 @@
 #pragma mark -
 #pragma mark Memory management
 
--(void) didReceiveMemoryWarning
+- (void)didReceiveMemoryWarning
 {
     self.missionName = nil;
     self.listOfMissionIDs = nil;
@@ -274,30 +263,5 @@
     //self.previewImage = nil;
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload
-{
-    self.listOfMissionIDs = nil;
-    self.dictOfMissions = nil;
-    self.previewImage = nil;
-    self.tableView = nil;
-    self.descriptionLabel = nil;
-    self.missionName = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
-
--(void) dealloc
-{
-    releaseAndNil(_listOfMissionIDs);
-    releaseAndNil(_dictOfMissions);
-    releaseAndNil(_previewImage);
-    releaseAndNil(_tableView);
-    releaseAndNil(_descriptionLabel);
-    releaseAndNil(_missionName);
-    [super dealloc];
-}
-
 
 @end

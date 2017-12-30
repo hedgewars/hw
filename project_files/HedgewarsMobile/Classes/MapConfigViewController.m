@@ -30,16 +30,16 @@
             oldPage, oldValue;
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(IBAction) mapButtonPressed:(id) sender {
+- (IBAction)mapButtonPressed:(id)sender {
     [[AudioManagerController mainManager] playClickSound];
     [self updatePreview];
 }
 
--(void) updatePreview {
+- (void)updatePreview {
     // don't generate a new preview while it's already generating one
     if (self.busy)
         return;
@@ -48,7 +48,6 @@
     NSString *seed = [HWUtils seed];
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
     self.seedCommand = seedCmd;
-    [seedCmd release];
 
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     if (isRandomness()) {
@@ -57,7 +56,6 @@
         [self.previewButton updatePreviewWithSeed:seed];
         // the preview for static maps is loaded in didSelectRowAtIndexPath
     }
-    [seed release];
 
     // perform as if user clicked on an entry
     NSIndexPath *theIndex = [NSIndexPath indexPathForRow:arc4random_uniform((int)[source count]) inSection:0];
@@ -66,7 +64,7 @@
         [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
--(void) turnOffWidgets {
+- (void)turnOffWidgets {
     busy = YES;
     self.previewButton.alpha = 0.5f;
     self.previewButton.enabled = NO;
@@ -77,7 +75,7 @@
 
 #pragma mark -
 #pragma mark MapPreviewButtonView delegate methods
--(void) turnOnWidgets {
+- (void)turnOnWidgets {
     self.previewButton.alpha = 1.0f;
     self.previewButton.enabled = YES;
     self.segmentedControl.enabled = YES;
@@ -85,12 +83,12 @@
     self.busy = NO;
 }
 
--(void) setMaxLabelText:(NSString *)str {
+- (void)setMaxLabelText:(NSString *)str {
     self.maxHogs = [str intValue];
     self.maxLabel.text = [NSString stringWithFormat:@"%@ %@",NSLocalizedString(@"Max Hogs:",@""),str];
 }
 
--(NSDictionary *)getDataForEngine {
+- (NSDictionary *)getDataForEngine {
     NSDictionary *dictForEngine = [NSDictionary dictionaryWithObjectsAndKeys:
                                    self.seedCommand,@"seedCommand",
                                    self.templateFilterCommand,@"templateFilterCommand",
@@ -102,11 +100,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger) section {
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     return [[self.dataSourceArray objectAtIndex:scIndex] count];
 }
 
@@ -116,7 +114,7 @@
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
 
@@ -130,14 +128,12 @@
     if (isRandomness()) {
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
         cell.imageView.image = image;
-        [image release];
     } else
         cell.imageView.image = nil;
 
     if (row == [self.lastIndexPath row]) {
         UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
         cell.accessoryView = checkbox;
-        [checkbox release];
     } else
         cell.accessoryView = nil;
 
@@ -146,15 +142,13 @@
 }
 
 // this set details for a static map (called by didSelectRowAtIndexPath)
--(void) setDetailsForStaticMap:(NSInteger) index {
+- (void)setDetailsForStaticMap:(NSInteger)index {
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
 
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",
                          (scIndex == 1) ? MAPS_DIRECTORY() : MISSIONS_DIRECTORY(),[source objectAtIndex:index]];
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
-    [fileCfg release];
     NSArray *split = [contents componentsSeparatedByString:@"\n"];
-    [contents release];
 
     // if the number is not set we keep 18 standard;
     // sometimes it's not set but there are trailing characters, we get around them with the second equation
@@ -176,7 +170,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
@@ -195,7 +189,6 @@
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
         UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
         newCell.accessoryView = checkbox;
-        [checkbox release];
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:self.lastIndexPath];
         oldCell.accessoryView = nil;
 
@@ -209,7 +202,7 @@
 #pragma mark slider & segmentedControl & button
 // this updates the label and the command keys when the slider is moved, depending of the selection in segmentedControl
 // no methods are called by this routine and you can pass nil to it
--(IBAction) sliderChanged:(id) sender {
+- (IBAction)sliderChanged:(id)sender {
     NSString *labelText;
     NSString *templateCommand;
     NSString *mazeCommand;
@@ -282,7 +275,7 @@
 }
 
 // update preview (if not busy and if its value really changed) as soon as the user lifts its finger up
--(IBAction) sliderEndedChanging:(id) sender {
+- (IBAction)sliderEndedChanging:(id)sender {
     int num = (int) (self.slider.value * 100);
     if (oldValue != num) {
         [self updatePreview];
@@ -293,7 +286,7 @@
 
 // perform actions based on the activated section, then call updatePreview to visually update the selection
 // and if necessary update the table with a slide animation
--(IBAction) segmentedControlChanged:(id) sender {
+- (IBAction)segmentedControlChanged:(id)sender {
     NSString *mapgen, *staticmap, *mission;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
 
@@ -372,7 +365,6 @@
             NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
             if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
                 [themeArray addObject:themeName];
-            [checkPath release];
         }
 
         // remove images that are too big for certain devices without loading the whole image
@@ -398,17 +390,13 @@
             [missionArray addObject:str];
         }
         NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
-        [missionArray release];
-        [themeArray release];
-        [mapArray release];
 
         self.dataSourceArray = array;
-        [array release];
     }
     return dataSourceArray;
 }
 
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self localizeSegmentedControl];
@@ -436,44 +424,21 @@
         UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
         backLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view insertSubview:backLabel belowSubview:self.segmentedControl];
-        [backLabel release];
     }
     self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
 
--(void) viewDidAppear:(BOOL) animated {
+- (void)viewDidAppear:(BOOL) animated {
     [self updatePreview];
     [super viewDidAppear:animated];
 }
 
--(void) viewDidUnload {
-    self.previewButton = nil;
-    self.seedCommand = nil;
-    self.templateFilterCommand = nil;
-    self.mapGenCommand = nil;
-    self.mazeSizeCommand = nil;
-    self.themeCommand = nil;
-    self.staticMapCommand = nil;
-    self.missionCommand = nil;
-
-    self.tableView = nil;
-    self.maxLabel = nil;
-    self.segmentedControl = nil;
-    self.slider = nil;
-
-    self.lastIndexPath = nil;
-    self.dataSourceArray = nil;
-
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     self.dataSourceArray = nil;
     [super didReceiveMemoryWarning];
 
@@ -485,27 +450,6 @@
     }
 
     MSG_MEMCLEAN();
-}
-
--(void) dealloc {
-    releaseAndNil(seedCommand);
-    releaseAndNil(templateFilterCommand);
-    releaseAndNil(mapGenCommand);
-    releaseAndNil(mazeSizeCommand);
-    releaseAndNil(themeCommand);
-    releaseAndNil(staticMapCommand);
-    releaseAndNil(missionCommand);
-
-    releaseAndNil(previewButton);
-    releaseAndNil(tableView);
-    releaseAndNil(maxLabel);
-    releaseAndNil(segmentedControl);
-    releaseAndNil(slider);
-
-    releaseAndNil(lastIndexPath);
-    releaseAndNil(dataSourceArray);
-
-    [super dealloc];
 }
 
 @end

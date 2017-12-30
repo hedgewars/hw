@@ -29,7 +29,7 @@
 @synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
             selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, sectionsHidden;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
@@ -85,19 +85,17 @@
                           NSLocalizedString(@"Weapon",@""),
                           NSLocalizedString(@"Style",@""),nil];
         UISegmentedControl *controller = [[UISegmentedControl alloc] initWithItems:array];
-        [array release];
         controller.segmentedControlStyle = UISegmentedControlStyleBar;
         controller.tintColor = [UIColor lightGrayColor];
         controller.selectedSegmentIndex = 0;
         self.topControl = controller;
-        [controller release];
     }
     return topControl;
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     self.sectionsHidden = NO;
 
     NSInteger topOffset = IS_IPAD() ? 45 : 0;
@@ -116,7 +114,6 @@
                                              withBorderWidth:2.7f];
         background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view insertSubview:background atIndex:0];
-        [background release];
 
         self.topControl.frame = CGRectMake(0, 4, self.view.frame.size.width * 80/100, 30);
         self.topControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -128,9 +125,7 @@
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
         background.contentMode = UIViewContentModeScaleAspectFill;
         background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [backgroundImage release];
         [self.view addSubview:background];
-        [background release];
         [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     }
 
@@ -140,7 +135,6 @@
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:aTableView];
-    [aTableView release];
 
     [super viewDidLoad];
 
@@ -157,11 +151,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)aTableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
     return (self.sectionsHidden ? 0 : 1);
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.topControl.selectedSegmentIndex == 0)
         return [self.listOfSchemes count];
     else if (self.topControl.selectedSegmentIndex == 1)
@@ -178,7 +172,7 @@
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 
     cell.accessoryView = nil;
     if (0 == index) {
@@ -186,11 +180,9 @@
         NSString *str = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),[self.listOfSchemes objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
         cell.detailTextLabel.text = [dict objectForKey:@"description"];
-        [dict release];
         if ([[self.listOfSchemes objectAtIndex:row] isEqualToString:self.selectedScheme]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
-            [checkbox release];
             self.lastIndexPath_sc = indexPath;
         }
     } else if (1 == index) {
@@ -198,11 +190,9 @@
         NSString *str = [NSString stringWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
         cell.detailTextLabel.text = [dict objectForKey:@"description"];
-        [dict release];
         if ([[self.listOfWeapons objectAtIndex:row] isEqualToString:self.selectedWeapon]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
-            [checkbox release];
             self.lastIndexPath_we = indexPath;
         }
     } else {
@@ -214,7 +204,6 @@
             {
                 UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
                 cell.accessoryView = checkbox;
-                [checkbox release];
                 self.lastIndexPath_lu = indexPath;
             }
         }
@@ -228,7 +217,6 @@
             if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
                 UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
                 cell.accessoryView = checkbox;
-                [checkbox release];
                 self.lastIndexPath_lu = indexPath;
             }
         }
@@ -242,11 +230,11 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger) section {
+-(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
     return IS_IPAD() ? 0 : 50;
 }
 
--(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
     if (IS_IPAD())
         return nil;
     UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
@@ -255,14 +243,14 @@
     self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
     [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
     [theView addSubview:self.topControl];
-    return [theView autorelease];
+    return theView;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger) section {
+-(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
     return 40;
 }
 
--(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger)section {
     NSInteger height = 40;
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
@@ -280,13 +268,12 @@
     label.text = NSLocalizedString(@"Setting a Style might force a particular Scheme or Weapon configuration.",@"");
 
     [footer addSubview:label];
-    [label release];
-    return [footer autorelease];
+    return footer;
 }
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSIndexPath *lastIndexPath;
     NSInteger index = self.topControl.selectedSegmentIndex;
     if (index == 0)
@@ -304,7 +291,6 @@
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
         UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
         newCell.accessoryView = checkbox;
-        [checkbox release];
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
         oldCell.accessoryView = nil;
 
@@ -350,9 +336,7 @@
                 // some styles disable or force the choice of a particular scheme/weaponset
                 NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
                 NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
-                [path release];
                 NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
-                [configFile release];
                 
                 self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
                 NSString *scheme = [scriptOptions objectAtIndex:0];
@@ -396,7 +380,7 @@
 
 #pragma mark -
 #pragma mark called by an NSNotification to empty or fill the sections completely
--(void) fillSections {
+- (void)fillSections {
     if (self.sectionsHidden == YES) {
         self.sectionsHidden = NO;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
@@ -407,7 +391,7 @@
     }
 }
 
--(void) emptySections {
+- (void)emptySections {
     if (self.sectionsHidden == NO) {
         self.sectionsHidden = YES;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
@@ -426,13 +410,13 @@
                                     UIViewAutoresizingFlexibleBottomMargin;
 
         [self.view addSubview:theLabel];
-        [theLabel release];
     }
 }
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -440,37 +424,9 @@
     [super didReceiveMemoryWarning];
 }
 
--(void) viewDidUnload {
-    self.listOfSchemes = nil;
-    self.listOfWeapons = nil;
-    self.listOfScripts = nil;
-    self.lastIndexPath_sc = nil;
-    self.lastIndexPath_we = nil;
-    self.lastIndexPath_lu = nil;
-    self.selectedScheme = nil;
-    self.selectedWeapon = nil;
-    self.selectedScript = nil;
-    self.scriptCommand = nil;
-    self.topControl = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc
+- (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    releaseAndNil(listOfSchemes);
-    releaseAndNil(listOfWeapons);
-    releaseAndNil(listOfScripts);
-    releaseAndNil(lastIndexPath_sc);
-    releaseAndNil(lastIndexPath_we);
-    releaseAndNil(lastIndexPath_lu);
-    releaseAndNil(selectedScheme);
-    releaseAndNil(selectedWeapon);
-    releaseAndNil(selectedScript);
-    releaseAndNil(scriptCommand);
-    releaseAndNil(topControl);
-    [super dealloc];
 }
 
 

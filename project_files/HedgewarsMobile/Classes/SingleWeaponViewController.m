@@ -20,20 +20,20 @@
 #import "SingleWeaponViewController.h"
 
 @interface SingleWeaponViewController ()
-@property (nonatomic, retain) NSString *trPath;
-@property (nonatomic, retain) NSString *trFileName;
+@property (nonatomic, strong) NSString *trPath;
+@property (nonatomic, strong) NSString *trFileName;
 @end
 
 @implementation SingleWeaponViewController
 @synthesize weaponName, description, ammoStoreImage;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     self.trPath = [NSString stringWithFormat:@"%@", LOCALE_DIRECTORY()];
@@ -49,24 +49,21 @@
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos_base.png", GRAPHICS_DIRECTORY()];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:str];
     self.ammoStoreImage = img;
-    [img release];
 
     self.title = NSLocalizedString(@"Edit weapons preferences",@"");
 }
 
--(void) viewWillAppear:(BOOL) animated {
+- (void)viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
 
     NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName];
     NSDictionary *weapon = [[NSDictionary alloc] initWithContentsOfFile:ammoFile];
-    [ammoFile release];
 
     self.description = [weapon objectForKey:@"description"];
     const char *tmp1 = [[weapon objectForKey:@"ammostore_initialqt"] UTF8String];
     const char *tmp2 = [[weapon objectForKey:@"ammostore_probability"] UTF8String];
     const char *tmp3 = [[weapon objectForKey:@"ammostore_delay"] UTF8String];
     const char *tmp4 = [[weapon objectForKey:@"ammostore_crate"] UTF8String];
-    [weapon release];
 
     // if the new weaponset is diffrent from the older we need to update it replacing
     // the missing ammos with 0 quantity
@@ -87,12 +84,12 @@
     [self.tableView reloadData];
 }
 
--(void) viewWillDisappear:(BOOL) animated {
+- (void)viewWillDisappear:(BOOL) animated {
     [super viewWillDisappear:animated];
     [self saveAmmos];
 }
 
--(void) saveAmmos {
+- (void)saveAmmos {
     quantity[HW_getNumberOfWeapons()] = '\0';
     probability[HW_getNumberOfWeapons()] = '\0';
     delay[HW_getNumberOfWeapons()] = '\0';
@@ -113,17 +110,15 @@
 
     NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName];
     [weapon writeToFile:ammoFile atomically:YES];
-    [ammoFile release];
-    [weapon release];
 }
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return 2;
     else
@@ -140,8 +135,8 @@
     if (0 == [indexPath section]) {
         EditableCellView *editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (editableCell == nil) {
-            editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
-                                                    reuseIdentifier:CellIdentifier0] autorelease];
+            editableCell = [[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
+                                                    reuseIdentifier:CellIdentifier0];
             editableCell.delegate = self;
         }
         editableCell.tag = row;
@@ -162,7 +157,7 @@
     } else {
         WeaponCellView *weaponCell = (WeaponCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (weaponCell == nil) {
-            weaponCell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+            weaponCell = [[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1];
             weaponCell.delegate = self;
         }
 
@@ -213,7 +208,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (0 == [indexPath section]) {
         EditableCellView *editableCell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
         [editableCell replyKeyboard];
@@ -223,7 +218,7 @@
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+- (void)saveTextFieldValue:(NSString *)textString withTag:(NSInteger)tagValue {
     if (tagValue == 0) {
         // delete old file
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName] error:NULL];
@@ -238,7 +233,7 @@
 
 #pragma mark -
 #pragma mark WeaponButtonControllerDelegate
--(void) updateValues:(NSArray *)withArray atIndex:(NSInteger) index {
+- (void)updateValues:(NSArray *)withArray atIndex:(NSInteger)index {
     quantity[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:0] intValue]] characterAtIndex:0];
     probability[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:1] intValue]] characterAtIndex:0];
     delay[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:2] intValue]] characterAtIndex:0];
@@ -247,34 +242,13 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 
--(void) viewDidUnload {
+- (void)dealloc {
     free(quantity); quantity = NULL;
     free(probability); probability = NULL;
     free(delay); delay = NULL;
     free(crateness); crateness = NULL;
-    [super viewDidUnload];
-    self.description = nil;
-    self.weaponName = nil;
-    self.ammoStoreImage = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
 }
-
-
--(void) dealloc {
-    releaseAndNil(_trPath);
-    releaseAndNil(_trFileName);
-    
-    releaseAndNil(weaponName);
-    releaseAndNil(description);
-    releaseAndNil(ammoStoreImage);
-    [super dealloc];
-}
-
 
 @end
 

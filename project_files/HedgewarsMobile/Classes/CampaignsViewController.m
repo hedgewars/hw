@@ -20,7 +20,7 @@
 #import "CampaignViewController.h"
 
 @interface CampaignsViewController ()
-@property (nonatomic, retain) NSArray *campaigns;
+@property (nonatomic, strong) NSArray *campaigns;
 @end
 
 @implementation CampaignsViewController
@@ -48,7 +48,6 @@
     }
     
     NSArray *campaigns = [tempCampaigns copy];
-    [tempCampaigns release];
     return campaigns;
 }
 
@@ -59,7 +58,6 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismiss)];
     self.navigationItem.rightBarButtonItem = doneButton;
-    [doneButton release];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"campaignCell"];
 }
@@ -100,14 +98,9 @@
     campaign.campaignName = self.campaigns[indexPath.row];
     
     [self.navigationController pushViewController:campaign animated:YES];
-    [campaign release];
 }
 
 #pragma mark - Dealloc
 
-- (void)dealloc {
-    [_campaigns release];
-    [super dealloc];
-}
 
 @end

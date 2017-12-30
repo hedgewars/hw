@@ -22,14 +22,14 @@
 
 @interface MissionTrainingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) NSArray *listOfMissionIDs;
-@property (nonatomic, retain) NSDictionary *dictOfMissions;
-@property (nonatomic, retain) NSString *missionName;
+@property (nonatomic, strong) NSArray *listOfMissionIDs;
+@property (nonatomic, strong) NSDictionary *dictOfMissions;
+@property (nonatomic, strong) NSString *missionName;
 
-@property (nonatomic, retain) IBOutlet UIImageView *previewImage;
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (nonatomic, retain) IBOutlet UILabel *descriptionLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *previewImage;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UILabel *descriptionLabel;
 
--(IBAction) buttonPressed:(id) sender;
+- (IBAction)buttonPressed:(id)sender;
 
 @end

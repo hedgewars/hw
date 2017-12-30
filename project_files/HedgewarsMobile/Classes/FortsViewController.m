@@ -26,14 +26,14 @@
 @synthesize teamDictionary, fortArray, lastIndexPath;
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FORTS_DIRECTORY() error:NULL];
@@ -49,7 +49,6 @@
         }
     }
     self.fortArray = filteredContents;
-    [filteredContents release];
 
     // statically set row height instead of using delegate method for performance reasons
     self.tableView.rowHeight = 128;
@@ -58,7 +57,7 @@
 }
 
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView reloadData];
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
@@ -67,11 +66,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.fortArray count];
 }
 
@@ -81,17 +80,15 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                       reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                       reuseIdentifier:CellIdentifier];
 
     NSString *fortName = [fortArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = fortName;
 
     NSString *fortFile = [[NSString alloc] initWithFormat:@"%@/%@-preview.png", FORTS_DIRECTORY(), fortName];
     UIImage *fortSprite = [[UIImage alloc] initWithContentsOfFile:fortFile];
-    [fortFile release];
     cell.imageView.image = fortSprite;
-    [fortSprite release];
 
     //cell.detailTextLabel.text = @"Insert funny description here";
     if ([cell.textLabel.text isEqualToString:[self.teamDictionary objectForKey:@"fort"]]) {
@@ -107,7 +104,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
@@ -132,28 +129,12 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.lastIndexPath = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload {
-    self.teamDictionary = nil;
-    self.lastIndexPath = nil;
-    self.fortArray = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
-
--(void) dealloc {
-    releaseAndNil(teamDictionary);
-    releaseAndNil(lastIndexPath);
-    releaseAndNil(fortArray);
-    [super dealloc];
-}
-
 
 @end
 

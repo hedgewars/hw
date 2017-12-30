@@ -47,12 +47,11 @@
 #pragma mark -
 @implementation UITableView (backgroundColor)
 
--(void) setBackgroundColorForAnyTable:(UIColor *) color {
+- (void)setBackgroundColorForAnyTable:(UIColor *) color {
     if ([self respondsToSelector:@selector(backgroundView)]) {
         UIView *backView = [[UIView alloc] initWithFrame:self.frame];
         backView.backgroundColor = color;
         self.backgroundView = backView;
-        [backView release];
         self.backgroundColor = [UIColor clearColor];
     } else
         self.backgroundColor = color;
@@ -97,8 +96,8 @@
 #pragma mark -
 @implementation UIButton (quickStyle)
 
--(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title {
-    [self initWithFrame:frame];
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title {
+    if (!(self = [self initWithFrame:frame])) return nil;
     [self setTitle:title forState:UIControlStateNormal];
     [self applyBlackQuickStyle];
 
@@ -137,7 +136,7 @@
 #pragma mark -
 @implementation UILabel (quickStyle)
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title {
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title {
     return [self initWithFrame:frame
                       andTitle:title
                withBorderWidth:1.5f
@@ -145,7 +144,7 @@
            withBackgroundColor:[UIColor darkBlueColor]];
 }
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth {
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth {
     return [self initWithFrame:frame
                       andTitle:title
                withBorderWidth:borderWidth
@@ -153,7 +152,7 @@
            withBackgroundColor:[UIColor darkBlueColorTransparent]];
 }
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth
           withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor {
     UILabel *theLabel = [self initWithFrame:frame];
     theLabel.backgroundColor = backColor;

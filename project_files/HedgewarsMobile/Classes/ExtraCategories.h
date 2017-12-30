@@ -30,7 +30,7 @@
 
 @interface UITableView (backgroundColor)
 
--(void) setBackgroundColorForAnyTable:(UIColor *)color;
+- (void)setBackgroundColorForAnyTable:(UIColor *)color;
 
 @end
 
@@ -48,7 +48,7 @@
 
 @interface UIButton (quickStyle)
 
--(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title;
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
 
 - (void)applyBlackQuickStyle;
 - (void)applyDarkBlueQuickStyle;
@@ -58,9 +58,9 @@
 
 @interface UILabel (quickStyle)
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title;
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth;
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth;
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth
     withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
 
 @end

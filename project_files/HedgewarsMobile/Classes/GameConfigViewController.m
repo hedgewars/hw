@@ -35,13 +35,13 @@
 @synthesize imgContainer, titleImage, sliderBackground, helpPage,
             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark - Buttons
 
--(IBAction) buttonPressed:(id) sender {
+- (IBAction)buttonPressed:(id)sender {
     UIButton *theButton = (UIButton *)sender;
 
     switch (theButton.tag) {
@@ -53,7 +53,6 @@
                                                       cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                                       otherButtonTitles:nil];
                 [alert show];
-                [alert release];
             } else {
                 [[AudioManagerController mainManager] playBackSound];
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
@@ -68,7 +67,7 @@
             [self startGame:theButton];
 
             break;
-        case 2:
+        case 2: {
             [[AudioManagerController mainManager] playClickSound];
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
@@ -79,6 +78,7 @@
                 self.helpPage.view.alpha = 1;
             }];
             break;
+        }
         default:
             DLog(@"Nope");
             break;
@@ -96,7 +96,7 @@
     }
 }
 
--(IBAction) segmentPressed:(id) sender {
+- (IBAction)segmentPressed:(id)sender {
 
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
@@ -138,7 +138,7 @@
 
 #pragma mark -
 
--(BOOL) isEverythingSet {
+- (BOOL)isEverythingSet {
     // don't start playing if the preview is in progress
     if ([self.mapConfigViewController busy]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
@@ -147,7 +147,6 @@
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return NO;
     }
 
@@ -159,7 +158,6 @@
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return NO;
     }
 
@@ -174,7 +172,6 @@
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return NO;
     }
 
@@ -186,7 +183,6 @@
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return NO;
     }
 
@@ -198,14 +194,12 @@
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return NO;
     }
 
     // play if the gameflags are set correctly (divideteam works only with 2 teams)
     NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),self.schemeWeaponConfigViewController.selectedScheme];
     NSArray *gameFlags = [[NSDictionary dictionaryWithContentsOfFile:schemePath] objectForKey:@"gamemod"];
-    [schemePath release];
     if ([[gameFlags objectAtIndex:2] boolValue] && [self.teamConfigViewController.listOfSelectedTeams count] != 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Scheme mismatch",@"")
                                                         message:NSLocalizedString(@"The scheme you selected allows only for two teams",@"")
@@ -213,14 +207,13 @@
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
         return NO;
     }
 
     return YES;
 }
 
--(void) startGame:(UIButton *)button {
+- (void)startGame:(UIButton *)button {
     button.enabled = YES;
 
     NSString *script = self.mapConfigViewController.missionCommand;
@@ -243,17 +236,14 @@
 
     [GameInterfaceBridge registerCallingController:self];
     [GameInterfaceBridge startLocalGame:gameDictionary];
-    [gameDictionary release];
 }
 
--(void) loadNiceHogs
+- (void)loadNiceHogs
 {
     @autoreleasepool
     {
-    
         NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
         UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
-        [filePath release];
 
         NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
         NSUInteger numberOfHats = [hatArray count];
@@ -278,13 +268,10 @@
                     [animation addObject:hogWithHat];
                 }
             }
-            [hatSprite release];
-            [hatFile release];
 
             UIImageView *hog = [[UIImageView alloc] initWithImage:[animation firstObject]];
             hog.animationImages = animation;
             hog.animationDuration = 3;
-            [animation release];
 
             int x = 20*i+arc4random_uniform(128);
             while (x > 320 - 32)
@@ -293,9 +280,7 @@
             hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
             [self.imgContainer addSubview:hog];
             [hog startAnimating];
-            [hog release];
         }
-        [hogSprite release];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -326,7 +311,7 @@
     self.imgContainer = nil;
 }
 
--(void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
@@ -342,7 +327,6 @@
                                                    andTitle:nil
                                             withBorderWidth:2.0f];
         self.sliderBackground = backLabel;
-        [backLabel release];
         [self.view addSubview:self.sliderBackground];
 
         // the label for max hogs
@@ -354,7 +338,6 @@
         maxLabel.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:maxLabel];
         self.mapConfigViewController.maxLabel = maxLabel;
-        [maxLabel release];
     }
     else
     {
@@ -370,7 +353,7 @@
     [self.view bringSubviewToFront:self.mapConfigViewController.slider];
 }
 
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval) duration {
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval) duration {
     if (IS_IPAD() == NO)
         return;
 
@@ -406,7 +389,7 @@
     }
 }
 
--(void) viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -436,7 +419,7 @@
     }
 }
 
--(void) didReceiveMemoryWarning
+- (void)didReceiveMemoryWarning
 {
     [self clearImgContainer];
 
@@ -455,32 +438,6 @@
         self.helpPage = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload {
-    self.imgContainer = nil;
-    self.titleImage = nil;
-    self.sliderBackground = nil;
-    self.schemeWeaponConfigViewController = nil;
-    self.teamConfigViewController = nil;
-    self.mapConfigViewController = nil;
-    self.helpPage = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(_tabsSegmentedControl);
-    releaseAndNil(_backButton);
-    releaseAndNil(_startButton);
-    releaseAndNil(imgContainer);
-    releaseAndNil(titleImage);
-    releaseAndNil(sliderBackground);
-    releaseAndNil(schemeWeaponConfigViewController);
-    releaseAndNil(teamConfigViewController);
-    releaseAndNil(mapConfigViewController);
-    releaseAndNil(helpPage);
-    [super dealloc];
 }
 
 @end

@@ -27,8 +27,8 @@
     NSIndexPath *lastIndexPath;
 }
 
-@property (nonatomic,retain) NSMutableDictionary *teamDictionary;
-@property (nonatomic,retain) NSArray *graveArray;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath;
+@property (nonatomic, strong) NSMutableDictionary *teamDictionary;
+@property (nonatomic, strong) NSArray *graveArray;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
 @end

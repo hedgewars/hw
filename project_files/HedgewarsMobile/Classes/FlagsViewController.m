@@ -24,13 +24,13 @@
 @implementation FlagsViewController
 @synthesize teamDictionary, flagArray, communityArray, lastIndexPath;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     NSMutableArray *array_na = [[NSMutableArray alloc] init];
@@ -45,14 +45,12 @@
     }
 
     self.flagArray = array_na;
-    [array_na release];
     self.communityArray = array_cm;
-    [array_cm release];
 
     self.title = NSLocalizedString(@"Set team flag",@"");
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     // reloadData needed because team might change
     [self.tableView reloadData];
@@ -62,11 +60,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return [self.flagArray count];
     else
@@ -80,7 +78,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 
     NSString *flagName = nil;
@@ -94,9 +92,7 @@
     }
     NSString *flagFile = [[NSString alloc] initWithFormat:@"%@/%@", FLAGS_DIRECTORY(), flagName];
     UIImage *flagSprite = [[UIImage alloc] initWithContentsOfFile:flagFile];
-    [flagFile release];
     cell.imageView.image = flagSprite;
-    [flagSprite release];
     cell.imageView.layer.borderWidth = 1;
     cell.imageView.layer.borderColor = [[UIColor blackColor] CGColor];
 
@@ -130,7 +126,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     NSInteger newSection = [indexPath section];
@@ -163,29 +159,12 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.lastIndexPath = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload {
-    self.teamDictionary = nil;
-    self.lastIndexPath = nil;
-    self.flagArray = nil;
-    self.communityArray = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(teamDictionary);
-    releaseAndNil(lastIndexPath);
-    releaseAndNil(flagArray);
-    releaseAndNil(communityArray);
-    [super dealloc];
-}
-
 
 @end
 

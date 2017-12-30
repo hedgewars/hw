@@ -38,15 +38,16 @@
 
 - (UIBarButtonItem *)doneButton
 {
-    return [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                           target:self
-                                                          action:@selector(dismissView)] autorelease];
+                                                          action:@selector(dismissView)];
 }
 
 - (void)dismissView
 {
     [[AudioManagerController mainManager] playBackSound];
-    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissViewControllerAnimated:YES completion:nil];
+    UIViewController *vc = [[HedgewarsAppDelegate sharedAppDelegate] mainViewController];
+    [vc dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

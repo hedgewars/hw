@@ -31,7 +31,7 @@
 @implementation MapPreviewButtonView
 @synthesize delegate;
 
--(id) initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         delegate = nil;
         self.backgroundColor = [UIColor whiteColor];
@@ -40,18 +40,13 @@
     return self;
 }
 
--(void) dealloc {
-    self.delegate = nil;
-    [super dealloc];
-}
-
 #pragma mark -
 #pragma mark image wrappers
--(void) setImageRounded:(UIImage *)image forState:(UIControlState)controlState {
+- (void)setImageRounded:(UIImage *)image forState:(UIControlState)controlState {
     [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:controlState];
 }
 
--(void) setImageRounded:(UIImage *)image {
+- (void)setImageRounded:(UIImage *)image {
     [self setImageRounded:image forState:UIControlStateNormal];
 }
 
@@ -64,7 +59,7 @@
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
--(void) engineProtocol:(uint8_t *)unpackedMap {
+- (void)engineProtocol:(uint8_t *)unpackedMap {
     IPaddress ip;
     BOOL serverQuit = NO;
     uint8_t packedMap[128*32];
@@ -98,13 +93,11 @@
                                           @"--user-prefix", documentsDirectory,
                                           @"--landpreview",
                                           nil];
-        [ipcString release];
         
         int argc = [gameParameters count];
         const char **argv = (const char **)malloc(sizeof(const char*)*argc);
         for (int i = 0; i < argc; i++)
             argv[i] = strdup([[gameParameters objectAtIndex:i] UTF8String]);
-        [gameParameters release];
         
         RunEngine(argc, argv);
         
@@ -154,7 +147,7 @@
     return;
 }
 
--(void) drawingThread {
+- (void)drawingThread {
     @autoreleasepool {
     
     uint8_t unpackedMap[128*32*8];
@@ -174,7 +167,6 @@
     [self performSelectorOnMainThread:@selector(setImageRounded:)
                            withObject:previewImage
                         waitUntilDone:NO];
-    [previewImage release];
     [self performSelectorOnMainThread:@selector(setLabelText:)
                            withObject:[NSString stringWithFormat:@"%ld", (long)maxHogs]
                         waitUntilDone:NO];
@@ -188,7 +180,7 @@
     }
 }
 
--(void) updatePreviewWithSeed:(NSString *)seed {
+- (void)updatePreviewWithSeed:(NSString *)seed {
     // remove the current preview and title
     [self setImage:nil forState:UIControlStateNormal];
     [self setTitle:nil forState:UIControlStateNormal];
@@ -205,22 +197,20 @@
         indicator.tag = INDICATOR_TAG;
         [indicator startAnimating];
         [self addSubview:indicator];
-        [indicator release];
 
         // let's draw in a separate thread so the gui can work; at the end it restore other widgets
         [NSThread detachNewThreadSelector:@selector(drawingThread) toTarget:self withObject:nil];
     }
 }
 
--(void) updatePreviewWithFile:(NSString *)filePath {
+- (void)updatePreviewWithFile:(NSString *)filePath {
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:filePath];
     [self setImageRounded:image forState:UIControlStateNormal];
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = 12;
-    [image release];
 }
 
--(void) removeIndicator {
+- (void)removeIndicator {
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self viewWithTag:INDICATOR_TAG];
     if (indicator) {
         [indicator stopAnimating];
@@ -230,17 +220,17 @@
 
 #pragma mark -
 #pragma mark delegate
--(void) turnOnWidgets {
+- (void)turnOnWidgets {
     if ([self.delegate respondsToSelector:@selector(turnOnWidgets)])
         [self.delegate turnOnWidgets];
 }
 
--(void) setLabelText:(NSString *)string {
+- (void)setLabelText:(NSString *)string {
     if ([self.delegate respondsToSelector:@selector(setMaxLabelText:)])
         [self.delegate setMaxLabelText:string];
 }
 
--(NSDictionary *)getDataForEngine {
+- (NSDictionary *)getDataForEngine {
     if ([self.delegate respondsToSelector:@selector(getDataForEngine)])
         return [self.delegate getDataForEngine];
     return nil;

@@ -23,7 +23,7 @@
 @implementation CreationChamber
 
 #pragma mark Checking status
-+(void) createFirstLaunch {
++ (void)createFirstLaunch {
     DLog(@"Creating necessary files");
     NSInteger index;
 
@@ -50,7 +50,6 @@
     index = 0;
     for (NSString *name in teamNames)
         [self createTeamNamed:name ofType:index++ controlledByAI:[name isEqualToString:@"Robots"]];
-    [teamNames release];
 
     // SCHEMES - always overwrite and delete custom ones
     if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
@@ -61,7 +60,6 @@
     index = 0;
     for (NSString *name in schemeNames)
         [self createSchemeNamed:name ofType:index++];
-    [schemeNames release];
 
     // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
     NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
@@ -69,11 +67,10 @@
     index = 0;
     for (NSString *name in weaponNames)
         [self createWeaponNamed:name ofType:index++];
-    [weaponNames release];
 }
 
 #pragma mark Settings
-+(void) createSettings {
++ (void)createSettings {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
@@ -90,15 +87,15 @@
 }
 
 #pragma mark Teams
-+(void) createTeamNamed:(NSString *)nameWithoutExt {
++ (void)createTeamNamed:(NSString *)nameWithoutExt {
     [self createTeamNamed:nameWithoutExt ofType:0 controlledByAI:NO];
 }
 
-+(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
++ (void)createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type {
     [self createTeamNamed:nameWithoutExt ofType:type controlledByAI:NO];
 }
 
-+(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) shouldAITakeOver {
++ (void)createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type controlledByAI:(BOOL) shouldAITakeOver {
     NSString *teamsDirectory = TEAMS_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: teamsDirectory]) {
@@ -159,10 +156,7 @@
                              [customHats objectAtIndex:i],@"hat",
                              nil];
         [hedgehogs addObject:hog];
-        [hog release];
     }
-    [customHats release];
-    [customNames release];
 
     NSDictionary *theTeam = [[NSDictionary alloc] initWithObjectsAndKeys:
                              @"0",@"hash",
@@ -172,21 +166,18 @@
                              flag,@"flag",
                              hedgehogs,@"hedgehogs",
                              nil];
-    [hedgehogs release];
 
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", teamsDirectory, nameWithoutExt];
 
     [theTeam writeToFile:teamFile atomically:YES];
-    [teamFile release];
-    [theTeam release];
 }
 
 #pragma mark Weapons
-+(void) createWeaponNamed:(NSString *)nameWithoutExt {
++ (void)createWeaponNamed:(NSString *)nameWithoutExt {
     [self createWeaponNamed:nameWithoutExt ofType:0];
 }
 
-+(void) createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
++ (void)createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type {
     NSString *weaponsDirectory = WEAPONS_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: weaponsDirectory]) {
@@ -269,23 +260,17 @@
 
     NSDictionary *theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys: qt,@"ammostore_initialqt",
                                prob,@"ammostore_probability", delay,@"ammostore_delay", crate,@"ammostore_crate", nil];
-    [qt release];
-    [prob release];
-    [delay release];
-    [crate release];
 
     NSString *weaponFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", weaponsDirectory, nameWithoutExt];
     [theWeapon writeToFile:weaponFile atomically:YES];
-    [weaponFile release];
-    [theWeapon release];
 }
 
 #pragma mark Schemes
-+(void) createSchemeNamed:(NSString *)nameWithoutExt {
++ (void)createSchemeNamed:(NSString *)nameWithoutExt {
     [self createSchemeNamed:nameWithoutExt ofType:0];
 }
 
-+(void) createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
++ (void)createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type {
     NSString *schemesDirectory = SCHEMES_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: schemesDirectory]) {
@@ -300,13 +285,11 @@
     NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithCapacity:[basicSettings count]];
     for (NSDictionary *basicDict in basicSettings)
         [basicArray addObject:[basicDict objectForKey:@"default"]];
-    [basicSettings release];
 
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
     NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithCapacity:[mods count]];
     for (NSUInteger i = 0; i < [mods count]; i++)
         [gamemodArray addObject:[NSNumber numberWithBool:NO]];
-    [mods release];
 
     switch (type) {
         default: // default
@@ -422,14 +405,10 @@
                                       basicArray,@"basic",
                                       gamemodArray,@"gamemod",
                                       nil];
-    [gamemodArray release];
-    [basicArray release];
 
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", schemesDirectory, nameWithoutExt];
 
     [theScheme writeToFile:schemeFile atomically:YES];
-    [schemeFile release];
-    [theScheme release];
 }
 
 @end
