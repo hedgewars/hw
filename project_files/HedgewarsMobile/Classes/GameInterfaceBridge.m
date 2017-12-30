@@ -183,6 +183,10 @@ static UIViewController *callingController;
 #pragma mark -
 #pragma mark EngineProtocolDelegate methods
 - (void)gameEndedWithStatistics:(NSArray *)stats {
+    [self performSelectorOnMainThread:@selector(presentStats:) withObject:stats waitUntilDone:NO];
+}
+
+- (void)presentStats:(NSArray *)stats {
     if (stats != nil) {
         StatsPageViewController *statsPage = [[StatsPageViewController alloc] init];
         statsPage.statsArray = stats;
