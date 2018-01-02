@@ -31,7 +31,7 @@ var
     allOK: boolean;
 
 implementation
-uses SDLh, uConsole, uCommands, uConsts;
+uses SDLh, uConsole, uCommands, uConsts, sysutils;
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
@@ -52,6 +52,7 @@ begin
         OutError(Msg, false);
 
     allOK:= allOK and (Assert or (not isFatal));
+    if not allOk then raise Exception.create(msg);
     checkFails:= (not Assert) and isFatal
 end;
 
@@ -65,6 +66,7 @@ begin
     end;
 
     allOK:= allOK and (Assert or (not isFatal));
+    if not allOk then raise Exception.create(msg);
     SDLCheck:= (not Assert) and isFatal
 end;
 

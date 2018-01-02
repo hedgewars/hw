@@ -62,7 +62,8 @@ exports
     ipcToEngineRaw,
     ipcSetEngineBarrier,
     ipcRemoveBarrierFromEngineQueue,
-    RunEngine
+    RunEngine,
+    GameTick
     ;
 
 begin

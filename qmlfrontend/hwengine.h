@@ -36,6 +36,7 @@ private:
     PreviewImageProvider* m_previewProvider;
     RunQueue* m_runQueue;
     GameConfig m_gameConfig;
+    QByteArray m_seed;
 
     static void guiMessagesCallback(void* context, MessageType mt, const char* msg, uint32_t len);
 

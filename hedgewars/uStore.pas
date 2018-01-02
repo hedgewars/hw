@@ -779,10 +779,10 @@ begin
     // un-comment below and add proper logic to support opengles2.0
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    if SDLGLcontext = nil then
+    {if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
     if SDLCheck(SDLGLcontext <> nil, 'SDLGLcontext', true) then exit;
-    SDL_GL_SetSwapInterval(1);
+    SDL_GL_SetSwapInterval(1);}
 
     RendererSetup();
 
@@ -793,8 +793,8 @@ end;
 procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
-begin
-    if cOnlyStats then exit;
+begin 
+    if cOnlyStats then exit; (*
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
@@ -832,11 +832,11 @@ begin
 
     SwapBuffers;
 
-    inc(Step);
+    inc(Step); *)
 end;
 
 procedure FinishProgress;
-begin
+begin (*
     {$IFNDEF PAS2C}
     with mobileRecord do
         if GameLoaded <> nil then
@@ -845,7 +845,7 @@ begin
     WriteLnToConsole('Freeing progress textures... ');
     FreeAndNilTexture(ProgrTex);
     FreeAndNilTexture(LoadingText);
-    Step:= 0
+    Step:= 0 *)
 end;
 
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -1084,7 +1084,7 @@ begin
         cScreenWidth:= cWindowedWidth;
         cScreenHeight:= cWindowedHeight;
         end;
-
+{
     AddFileLog('Preparing to change video parameters...');
     if SDLwindow = nil then
         begin
@@ -1180,7 +1180,7 @@ begin
         SDL_SetWindowIcon(SDLwindow, ico);
         SDL_FreeSurface(ico);
         end;
-    {$ENDIF}
+    {$ENDIF}}
     SetupOpenGL();
 
     if reinit then

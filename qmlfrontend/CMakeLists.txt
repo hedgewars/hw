@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
     "hwengine.cpp" "hwengine.h"
     "gameconfig.cpp" "gameconfig.h"
     "runqueue.cpp" "runqueue.h"
+    "gameview.cpp" "gameview.h"
     "team.cpp" "team.h"
     "previewimageprovider.cpp" "previewimageprovider.h"
     "flib.h")

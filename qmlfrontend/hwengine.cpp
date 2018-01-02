@@ -5,11 +5,13 @@
 #include <QQmlEngine>
 #include <QUuid>
 
+#include "gameview.h"
 #include "previewimageprovider.h"
 #include "runqueue.h"
 
 extern "C" {
 RunEngine_t* flibRunEngine;
+GameTick_t* flibGameTick;
 ipcToEngineRaw_t* flibIpcToEngineRaw;
 ipcSetEngineBarrier_t* flibIpcSetEngineBarrier;
 ipcRemoveBarrierFromEngineQueue_t* flibIpcRemoveBarrierFromEngineQueue;
@@ -37,6 +39,7 @@ HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
         qWarning() << "Engine library not found" << hwlib.errorString();
 
     flibRunEngine = (RunEngine_t*)hwlib.resolve("RunEngine");
+    flibGameTick = (GameTick_t*)hwlib.resolve("GameTick");
     flibIpcToEngineRaw = (ipcToEngineRaw_t*)hwlib.resolve("ipcToEngineRaw");
     flibIpcSetEngineBarrier = (ipcSetEngineBarrier_t*)hwlib.resolve("ipcSetEngineBarrier");
     flibIpcRemoveBarrierFromEngineQueue = (ipcRemoveBarrierFromEngineQueue_t*)hwlib.resolve("ipcRemoveBarrierFromEngineQueue");
@@ -70,6 +73,7 @@ void HWEngine::exposeToQML()
 {
     qDebug("HWEngine::exposeToQML");
     qmlRegisterSingletonType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine", hwengine_singletontype_provider);
+    qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
 }
 
 void HWEngine::guiMessagesCallback(void* context, MessageType mt, const char* msg, uint32_t len)
@@ -110,7 +114,8 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray& msg)
 
 void HWEngine::getPreview()
 {
-    m_gameConfig.cmdSeed(QUuid::createUuid().toByteArray());
+    m_seed = QUuid::createUuid().toByteArray();
+    m_gameConfig.cmdSeed(m_seed);
     m_gameConfig.setPreview(true);
 
     m_runQueue->queue(m_gameConfig);
@@ -118,7 +123,8 @@ void HWEngine::getPreview()
 
 void HWEngine::runQuickGame()
 {
-    m_gameConfig.cmdTheme("Bamboo");
+    m_gameConfig.cmdSeed(m_seed);
+    m_gameConfig.cmdTheme("Nature");
     Team team1;
     team1.name = "team1";
     Team team2;

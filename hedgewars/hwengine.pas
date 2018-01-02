@@ -36,6 +36,8 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      ;
 
 function  RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
+function GameTick(delta: Longword): boolean; cdecl; export;
+
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
@@ -361,7 +363,7 @@ begin
 
     if not allOK then exit;
     //SDL_StartTextInput();
-    SDL_ShowCursor(0);
+    //SDL_ShowCursor(0);
 
 
 {$IFDEF USE_VIDEO_RECORDING}
@@ -439,7 +441,7 @@ begin
     end;
 {$ENDIF}
 
-    MainLoop;
+    //MainLoop;
 end;
 
 procedure Game;
@@ -589,12 +591,16 @@ begin
     EngineThread:= 0
 end;
 
+type TRunState = (rsVoid, rsInit, rsRun);
+var runState: TRunState;
 
 function RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
 var t: PSDL_Thread;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
+
+    runState:= rsInit;
 
 {$IFDEF WIN32}
     ShcoreLibHandle := LoadLibrary('Shcore.dll');
@@ -618,10 +624,34 @@ begin
         RunEngine:= HaltUsageError
     else
     begin
-        t:= SDL_CreateThread(@EngineThread, 'engine', nil);
-        SDL_DetachThread(t);
+        //t:= SDL_CreateThread(@EngineThread, 'engine', nil);
+        //SDL_DetachThread(t);
         RunEngine:= 0
     end
+end;
+
+function GameTick(delta: Longword): boolean; cdecl; export;
+begin
+    GameTick:= true;
+    case runState of
+        rsInit: begin
+                system.writeln('[[]] rsInit');
+        initEverything(true);
+        SendIPC('TG');
+        GameRoutine;
+        runState:= rsRun;
+            end;
+        rsRun: begin
+                system.writeln('[[]] rsRun');
+                if DoTimer(delta) then begin
+                    system.writeln('[[]] Cleaning up');
+                    // clean up all the memory allocated
+                    freeEverything(true);
+                    runState:= rsVoid;
+                    GameTick:= false
+                end;
+            end;
+    end;
 end;
 
 end.
