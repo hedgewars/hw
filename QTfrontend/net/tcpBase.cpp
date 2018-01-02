@@ -228,7 +228,7 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitStatus);
 
-    if(!m_connected)
+    if(m_connected)
       ClientDisconnect();
 
     // show error message if there was an error that was not an engine's
