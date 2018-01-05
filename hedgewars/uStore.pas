@@ -1209,14 +1209,14 @@ end;
 // (SDLwindow is a private member of this module)
 procedure WarpMouse(x, y: Word); inline;
 begin
-    SDL_WarpMouseInWindow(SDLwindow, x, y);
+    //SDL_WarpMouseInWindow(SDLwindow, x, y);
 end;
 
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 begin
     if GameType = gmtRecord then
         exit;
-    SDL_GL_SwapWindow(SDLwindow);
+    //SDL_GL_SwapWindow(SDLwindow);
 end;
 
 procedure SetSkyColor(r, g, b: real);
