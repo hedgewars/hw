@@ -106,7 +106,7 @@ procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
 
 implementation
 uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}uVariables, uUtils
-     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}, uConsts;
+     {$IFDEF GL2}, uMatrix, uConsole, uPhysFSLayer, uDebug{$ENDIF}, uConsts;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const
