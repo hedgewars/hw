@@ -47,8 +47,7 @@ HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
     flibInit = (flibInit_t*)hwlib.resolve("flibInit");
     flibFree = (flibFree_t*)hwlib.resolve("flibFree");
 
-    flibInit("/home/r/data/hwrepos/.hg-qml_installed/hedgewars/share/hedgewars/Data", "/home/r/.hedgewars");
-    //flibInit("/usr/home/unC0Rr/Sources/Hedgewars/MainRepo/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
+    flibInit("/usr/home/unC0Rr/Sources/Hedgewars/MainRepo/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
 
     m_engine->addImageProvider(QLatin1String("preview"), m_previewProvider);
