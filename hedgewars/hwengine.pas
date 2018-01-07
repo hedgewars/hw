@@ -37,6 +37,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
 
 function  RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
 function GameTick(delta: Longword): boolean; cdecl; export;
+procedure ResizeWindow(width, height: Longword); cdecl; export;
 
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
@@ -652,6 +653,13 @@ begin
                 end;
             end;
     end;
+end;
+
+procedure ResizeWindow(width, height: Longword); cdecl; export;
+begin
+    cNewScreenWidth:= max(2 * (width div 2), cMinScreenWidth);
+    cNewScreenHeight:= max(2 * (height div 2), cMinScreenHeight);
+    cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
 end;
 
 end.

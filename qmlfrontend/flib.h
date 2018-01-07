@@ -26,6 +26,7 @@ typedef union string255_ {
 
 typedef void RunEngine_t(int argc, const char** argv);
 typedef void GameTick_t(uint32_t time_delta);
+typedef void ResizeWindow_t(uint32_t width, uint32_t height);
 typedef void ipcToEngineRaw_t(const char* msg, uint32_t len);
 typedef void ipcSetEngineBarrier_t();
 typedef void ipcRemoveBarrierFromEngineQueue_t();

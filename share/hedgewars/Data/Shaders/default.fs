@@ -1,4 +1,6 @@
+#ifdef GL_ES
 precision mediump float;
+#endif
 
 uniform sampler2D tex0;
 uniform vec4 tint;

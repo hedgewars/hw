@@ -8,11 +8,13 @@
 
 extern "C" {
 extern GameTick_t* flibGameTick;
+extern ResizeWindow_t* flibResizeWindow;
 }
 
 GameView::GameView()
     : m_delta(0)
     , m_renderer(0)
+    , m_windowChanged(true)
 {
     connect(this, &QQuickItem::windowChanged, this, &GameView::handleWindowChanged);
 }
@@ -31,6 +33,8 @@ void GameView::handleWindowChanged(QQuickWindow* win)
         connect(win, &QQuickWindow::sceneGraphInvalidated, this, &GameView::cleanup, Qt::DirectConnection);
 
         win->setClearBeforeRendering(false);
+
+        m_windowChanged = true;
     }
 }
 
@@ -42,19 +46,26 @@ void GameView::cleanup()
     }
 }
 
-GameViewRenderer::~GameViewRenderer()
-{
-}
-
 void GameView::sync()
 {
     if (!m_renderer) {
         m_renderer = new GameViewRenderer();
         connect(window(), &QQuickWindow::beforeRendering, m_renderer, &GameViewRenderer::paint, Qt::DirectConnection);
     }
-    m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
+
+    if (m_windowChanged)
+        m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
+
     m_renderer->tick(m_delta);
-    m_renderer->setWindow(window());
+}
+
+GameViewRenderer::~GameViewRenderer()
+{
+}
+
+void GameViewRenderer::setViewportSize(const QSize& size)
+{
+    flibResizeWindow(size.width(), size.height());
 }
 
 void GameViewRenderer::paint()
@@ -64,5 +75,5 @@ void GameViewRenderer::paint()
 
     flibGameTick(m_delta);
 
-    m_window->resetOpenGLState();
+    //m_window->resetOpenGLState();
 }

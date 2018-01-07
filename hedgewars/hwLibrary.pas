@@ -63,7 +63,8 @@ exports
     ipcSetEngineBarrier,
     ipcRemoveBarrierFromEngineQueue,
     RunEngine,
-    GameTick
+    GameTick,
+    ResizeWindow
     ;
 
 begin

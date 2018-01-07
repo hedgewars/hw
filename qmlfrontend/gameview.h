@@ -16,16 +16,13 @@ public:
     ~GameViewRenderer();
 
     void tick(quint32 delta) { m_delta = delta; }
-    void setViewportSize(const QSize& size) { m_viewportSize = size; }
-    void setWindow(QQuickWindow* window) { m_window = window; }
+    void setViewportSize(const QSize& size);
 
 public slots:
     void paint();
 
 private:
-    QSize m_viewportSize;
     quint32 m_delta;
-    QQuickWindow* m_window;
 };
 
 class GameView : public QQuickItem {
@@ -49,6 +46,7 @@ private slots:
 private:
     quint32 m_delta;
     GameViewRenderer* m_renderer;
+    bool m_windowChanged;
 };
 
 #endif // GAMEVIEW_H
