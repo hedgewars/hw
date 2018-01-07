@@ -68,7 +68,7 @@ procedure RenderSetClearColor   (r, g, b, a: real);
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
-procedure setTintAdd            (f: boolean); inline;
+procedure setTintAdd            (enable: boolean); inline;
 
 // call this to finish the rendering of current frame
 procedure FinishRender();
@@ -1969,12 +1969,19 @@ begin
     LastTint:= cWhiteColor;
 end;
 
-procedure setTintAdd(f: boolean); inline;
+procedure setTintAdd(enable: boolean); inline;
 begin
-    if f then
+    {$IFDEF GL2}
+        if enable then
+            glUniform1i(glGetUniformLocation(shaderMain, pchar('tintAdd')), 1)
+        else
+            glUniform1i(glGetUniformLocation(shaderMain, pchar('tintAdd')), 0);
+    {$ELSE}
+    if enable then
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD)
     else
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    {$ENDIF}
 end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
