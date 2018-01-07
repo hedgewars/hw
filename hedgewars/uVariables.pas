@@ -2731,7 +2731,12 @@ begin
     cMaxZoomLevel:= 1.0;
     cMinZoomLevel:= 3.0;
     cZoomDelta:= 0.25;
-{$ENDIF}
+    {$ENDIF}
+
+    aVertex:= 0;
+    aTexCoord:= 1;
+    aColor:= 2;
+
 
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
 
