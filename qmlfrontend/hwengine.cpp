@@ -13,6 +13,7 @@ extern "C" {
 RunEngine_t* flibRunEngine;
 GameTick_t* flibGameTick;
 ResizeWindow_t* flibResizeWindow;
+updateMousePosition_t* flibUpdateMousePosition;
 ipcToEngineRaw_t* flibIpcToEngineRaw;
 ipcSetEngineBarrier_t* flibIpcSetEngineBarrier;
 ipcRemoveBarrierFromEngineQueue_t* flibIpcRemoveBarrierFromEngineQueue;
@@ -42,6 +43,7 @@ HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
     flibRunEngine = (RunEngine_t*)hwlib.resolve("RunEngine");
     flibGameTick = (GameTick_t*)hwlib.resolve("GameTick");
     flibResizeWindow = (ResizeWindow_t*)hwlib.resolve("ResizeWindow");
+    flibUpdateMousePosition = (updateMousePosition_t*)hwlib.resolve("updateMousePosition");
     flibIpcToEngineRaw = (ipcToEngineRaw_t*)hwlib.resolve("ipcToEngineRaw");
     flibIpcSetEngineBarrier = (ipcSetEngineBarrier_t*)hwlib.resolve("ipcSetEngineBarrier");
     flibIpcRemoveBarrierFromEngineQueue = (ipcRemoveBarrierFromEngineQueue_t*)hwlib.resolve("ipcRemoveBarrierFromEngineQueue");

@@ -30,6 +30,7 @@ typedef void ResizeWindow_t(uint32_t width, uint32_t height);
 typedef void ipcToEngineRaw_t(const char* msg, uint32_t len);
 typedef void ipcSetEngineBarrier_t();
 typedef void ipcRemoveBarrierFromEngineQueue_t();
+typedef bool updateMousePosition_t(int32_t centerX, int32_t centerY, int32_t x, int32_t y);
 
 typedef void registerUIMessagesCallback_t(void* context, void (*)(void* context, MessageType mt, const char* msg, uint32_t len));
 typedef void flibInit_t(const char* localPrefix, const char* userPrefix);

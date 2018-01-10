@@ -4,16 +4,17 @@ interface
 
 procedure init;
 procedure resetPosition;
-procedure updatePosition;
 procedure handlePositionUpdate(x, y: LongInt);
+
+function updateMousePosition(cx, cy, x, y: LongInt): boolean; cdecl; export;
 
 implementation
 
-uses SDLh, uVariables;
+uses SDLh, uVariables, uTypes;
 
 procedure init;
 begin
-    resetPosition();
+    //resetPosition();
 end;
 
 procedure resetPosition;
@@ -24,22 +25,26 @@ begin
     // This fixes it, but we might have overlooked a related
     // bug somewhere else.
     // No big deal since this function is (so far) only called once.
-    SDL_WarpMouse((cScreenWidth div 2) + 1, cScreenHeight div 2);
-    SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
+    //SDL_WarpMouse((cScreenWidth div 2) + 1, cScreenHeight div 2);
+    //SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 end;
 
-procedure updatePosition;
-var x, y: LongInt;
+function updateMousePosition(cx, cy, x, y: LongInt): boolean; cdecl; export;
 begin
-    SDL_GetMouseState(@x, @y);
-
-    if(x <> cScreenWidth div 2) or (y <> cScreenHeight div 2) then
+    if (GameState <> gsConfirm)
+            and (GameState <> gsSuspend)
+            and (GameState <> gsExit)
+            and (GameState <> gsLandgen)
+            and (GameState <> gsStart)
+            and cHasFocus
+            and (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu) and autoCameraOn)) 
+            and ((x <> cx) or (y <> cy)) then
     begin
-        handlePositionUpdate(x - cScreenWidth div 2, y - cScreenHeight div 2);
+        handlePositionUpdate(x - cx, y - cy);
 
-        if cHasFocus then
-            SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
-    end
+        updateMousePosition:= true
+    end else
+        updateMousePosition:= false
 end;
 
 procedure handlePositionUpdate(x, y: LongInt);

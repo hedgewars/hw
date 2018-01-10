@@ -39,6 +39,7 @@ uses hwengine
     , uFLIPC
     , uPhysFSLayer
     , uFLUICallback
+    , uCursor
     ;
 
 {$INCLUDE "config.inc"}
@@ -64,7 +65,8 @@ exports
     ipcRemoveBarrierFromEngineQueue,
     RunEngine,
     GameTick,
-    ResizeWindow
+    ResizeWindow,
+    updateMousePosition
     ;
 
 begin

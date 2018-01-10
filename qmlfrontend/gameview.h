@@ -47,6 +47,8 @@ private:
     quint32 m_delta;
     GameViewRenderer* m_renderer;
     bool m_windowChanged;
+    qint32 m_centerX;
+    qint32 m_centerY;
 };
 
 #endif // GAMEVIEW_H

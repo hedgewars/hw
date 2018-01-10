@@ -1,5 +1,7 @@
 #include "gameview.h"
 
+#include <QCursor>
+#include <QTimer>
 #include <QtGui/QOpenGLContext>
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtQuick/qquickwindow.h>
@@ -9,6 +11,7 @@
 extern "C" {
 extern GameTick_t* flibGameTick;
 extern ResizeWindow_t* flibResizeWindow;
+extern updateMousePosition_t* flibUpdateMousePosition;
 }
 
 GameView::GameView()
@@ -22,8 +25,14 @@ GameView::GameView()
 void GameView::tick(quint32 delta)
 {
     m_delta = delta;
-    if (window())
-        window()->update();
+
+    if (window()) {
+        QTimer* timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, window(), &QQuickWindow::update);
+        timer->start(100);
+
+        //window()->update();
+    }
 }
 
 void GameView::handleWindowChanged(QQuickWindow* win)
@@ -53,8 +62,16 @@ void GameView::sync()
         connect(window(), &QQuickWindow::beforeRendering, m_renderer, &GameViewRenderer::paint, Qt::DirectConnection);
     }
 
-    if (m_windowChanged)
-        m_renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
+    if (m_windowChanged) {
+        QSize windowSize = window()->size();
+        m_renderer->setViewportSize(windowSize * window()->devicePixelRatio());
+        m_centerX = windowSize.width() / 2;
+        m_centerY = windowSize.height() / 2;
+    }
+
+    QPoint mousePos = mapFromGlobal(QCursor::pos()).toPoint();
+    if (flibUpdateMousePosition(m_centerX, m_centerY, mousePos.x(), mousePos.y()))
+        QCursor::setPos(mapToGlobal(QPointF(m_centerX, m_centerY)).toPoint());
 
     m_renderer->tick(m_delta);
 }
