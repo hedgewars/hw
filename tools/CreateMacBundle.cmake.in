@@ -18,17 +18,23 @@ if(doBundle EQUAL 1)
         # same here, for libpng and hwengine, let's assume the version pulled
         # by macdeployqt matches (yes, libpng is pulled in by macdeployqt even
         # when NOVIDEOREC is ON)
-        execute_process(COMMAND install_name_tool -change ${PNG_LIBRARY} @executable_path/../Frameworks/${PNG_LIBNAME} ${engine_full_path})
-        execute_process(COMMAND install_name_tool -change ${ZLIB_LIBRARY} @executable_path/../Frameworks/${ZLIB_LIBNAME} ${engine_full_path})
+        execute_process(COMMAND install_name_tool -change ${PNG_LIBRARY} @executable_path/../Frameworks/libpng16.16.dylib ${engine_full_path})
+        #execute_process(COMMAND install_name_tool -change ${ZLIB_LIBRARY} @executable_path/../Frameworks/${ZLIB_LIBNAME} ${engine_full_path})
     endif()
 
     execute_process(COMMAND cp ${PNG_LIBRARY} ${frameworks_dir})
 
     execute_process(COMMAND cp -pPR ${sdl_library_only}  ${frameworks_dir})
+    execute_process(COMMAND install_name_tool -change ${sdl_library_only} @executable_path/../Frameworks/libSDL2-2.0.0.dylib  ${engine_full_path})
     execute_process(COMMAND cp -pPR ${SDL2_IMAGE_LIBRARIES} ${frameworks_dir})
+    execute_process(COMMAND install_name_tool -change ${SDL2_IMAGE_LIBRARIES} @executable_path/../Frameworks/libSDL2_image-2.0.0.dylib  ${engine_full_path})
     execute_process(COMMAND cp -pPR ${SDL2_NET_LIBRARIES}   ${frameworks_dir})
+    execute_process(COMMAND install_name_tool -change ${SDL2_NET_LIBRARIES} @executable_path/../Frameworks/libSDL2_net-2.0.0.dylib  ${engine_full_path})
     execute_process(COMMAND cp -pPR ${SDL2_TTF_LIBRARIES}   ${frameworks_dir})
+    execute_process(COMMAND install_name_tool -change ${SDL2_TTF_LIBRARIES} @executable_path/../Frameworks/libSDL2_ttf-2.0.0.dylib  ${engine_full_path})
     execute_process(COMMAND cp -pPR ${SDL2_MIXER_LIBRARIES} ${frameworks_dir})
+    execute_process(COMMAND install_name_tool -change ${SDL2_MIXER_LIBRARIES} @executable_path/../Frameworks/libSDL2_mixer-2.0.0.dylib  ${engine_full_path})
+
     execute_process(COMMAND cp -pPR ${OGG_LIBRARY}       ${frameworks_dir})
     execute_process(COMMAND cp -pPR ${VORBIS_LIBRARY}    ${frameworks_dir})
 

@@ -9,7 +9,7 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
     endif()
 endforeach()
 
-foreach(hwpolicy CMP0026)
+foreach(hwpolicy CMP0026 CMP0068)
     if(POLICY ${hwpolicy})
         cmake_policy(SET ${hwpolicy} OLD)
     endif()
