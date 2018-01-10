@@ -5,39 +5,14 @@ execute_process(COMMAND mkdir -p ${frameworks_dir})
 # macdeployqt will convert safely any absolute path library for 'hedgewars'
 execute_process(COMMAND ${macdeployqt_executable} ${CMAKE_BINARY_DIR}/Hedgewars.app OUTPUT_QUIET ERROR_QUIET)
 
+# but macdeployqt will not work for a second executable, so employ this series of ridiculous commands to work around it
+execute_process(COMMAND mv ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/hedgewars ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/tmp)
+execute_process(COMMAND mv ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/hwengine ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/hedgewars)
+execute_process(COMMAND ${macdeployqt_executable} ${CMAKE_BINARY_DIR}/Hedgewars.app OUTPUT_QUIET ERROR_QUIET)
+execute_process(COMMAND mv ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/hedgewars ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/hwengine)
+execute_process(COMMAND mv ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/tmp ${CMAKE_BINARY_DIR}/Hedgewars.app/Contents/MacOS/hedgewars)
+
 if(doBundle EQUAL 1)
-    if(NOT ${NOVIDEOREC})
-        # but macdeployqt will not work for 'hwengine'
-        # luckily most the dylibs are already updated before
-        execute_process(COMMAND install_name_tool -change ${LIBAVCODEC_LIBRARY} @executable_path/../Frameworks/libavcodec.dylib ${engine_full_path})
-        execute_process(COMMAND install_name_tool -change ${LIBAVFORMAT_LIBRARY} @executable_path/../Frameworks/libavformat.dylib ${engine_full_path})
-        execute_process(COMMAND install_name_tool -change ${LIBAVUTIL_LIBRARY} @executable_path/../Frameworks/libavutil.dylib ${engine_full_path})
-    endif()
-
-    if(NOT ${NOPNG})
-        # same here, for libpng and hwengine, let's assume the version pulled
-        # by macdeployqt matches (yes, libpng is pulled in by macdeployqt even
-        # when NOVIDEOREC is ON)
-        execute_process(COMMAND install_name_tool -change ${PNG_LIBRARY} @executable_path/../Frameworks/libpng16.16.dylib ${engine_full_path})
-        #execute_process(COMMAND install_name_tool -change ${ZLIB_LIBRARY} @executable_path/../Frameworks/${ZLIB_LIBNAME} ${engine_full_path})
-    endif()
-
-    execute_process(COMMAND cp ${PNG_LIBRARY} ${frameworks_dir})
-
-    execute_process(COMMAND cp -pPR ${sdl_library_only}  ${frameworks_dir})
-    execute_process(COMMAND install_name_tool -change ${sdl_library_only} @executable_path/../Frameworks/libSDL2-2.0.0.dylib  ${engine_full_path})
-    execute_process(COMMAND cp -pPR ${SDL2_IMAGE_LIBRARIES} ${frameworks_dir})
-    execute_process(COMMAND install_name_tool -change ${SDL2_IMAGE_LIBRARIES} @executable_path/../Frameworks/libSDL2_image-2.0.0.dylib  ${engine_full_path})
-    execute_process(COMMAND cp -pPR ${SDL2_NET_LIBRARIES}   ${frameworks_dir})
-    execute_process(COMMAND install_name_tool -change ${SDL2_NET_LIBRARIES} @executable_path/../Frameworks/libSDL2_net-2.0.0.dylib  ${engine_full_path})
-    execute_process(COMMAND cp -pPR ${SDL2_TTF_LIBRARIES}   ${frameworks_dir})
-    execute_process(COMMAND install_name_tool -change ${SDL2_TTF_LIBRARIES} @executable_path/../Frameworks/libSDL2_ttf-2.0.0.dylib  ${engine_full_path})
-    execute_process(COMMAND cp -pPR ${SDL2_MIXER_LIBRARIES} ${frameworks_dir})
-    execute_process(COMMAND install_name_tool -change ${SDL2_MIXER_LIBRARIES} @executable_path/../Frameworks/libSDL2_mixer-2.0.0.dylib  ${engine_full_path})
-
-    execute_process(COMMAND cp -pPR ${OGG_LIBRARY}       ${frameworks_dir})
-    execute_process(COMMAND cp -pPR ${VORBIS_LIBRARY}    ${frameworks_dir})
-
     if(${SPARKLE_FOUND})
         execute_process(COMMAND cp -pPR ${SPARKLE_LIBRARY} ${frameworks_dir})
     endif()
