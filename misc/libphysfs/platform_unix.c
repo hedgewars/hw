@@ -23,6 +23,10 @@
 #include <errno.h>
 #include <limits.h>
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
+
 #if PHYSFS_PLATFORM_LINUX && !defined(PHYSFS_HAVE_MNTENT_H)
 #define PHYSFS_HAVE_MNTENT_H 1
 #elif PHYSFS_PLATFORM_SOLARIS && !defined(PHYSFS_HAVE_SYS_MNTTAB_H)
@@ -251,10 +255,14 @@ char *__PHYSFS_platformCalcBaseDir(const char *argv0)
     #if PHYSFS_PLATFORM_FREEBSD
     {
         char fullpath[PATH_MAX];
-        size_t buflen = sizeof (fullpath);
+        size_t buflen = sizeof (fullpath) - 1;
         int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
-        if (sysctl(mib, 4, fullpath, &buflen, NULL, 0) != -1)
+        if (sysctl(mib, 4, fullpath, &buflen, NULL, 0) != -1) {
+            int pathlen = strlen(fullpath);
+            fullpath[pathlen] = '/';
+            fullpath[pathlen + 1] = 0;
             retval = __PHYSFS_strdup(fullpath);
+        }
     }
     #elif PHYSFS_PLATFORM_SOLARIS
     {
