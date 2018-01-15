@@ -72,7 +72,7 @@ var IPCSock: PTCPSocket;
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
 begin
-    if (lastcmd <> nil) and (lastcmd^.cmd = '+') then
+    if (lastcmd <> nil) and (lastcmd^.cmd = '+') and (str[1] <> 'F') and (str[1] <> 'G') then
     begin
         command:= lastcmd;
     end else
