@@ -72,7 +72,14 @@ var IPCSock: PTCPSocket;
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
 begin
-    if (lastcmd <> nil) and (lastcmd^.cmd = '+') and (str[1] <> 'F') and (str[1] <> 'G') then
+    if (lastcmd <> nil)
+            and (lastcmd^.cmd = '+') // don't overwrite timestamped msg with non-timestamped one
+            and (str[1] <> 'F')
+            and (str[1] <> 'G')
+            and (str[1] <> 's')
+            and (str[1] <> 'h')
+            and (str[1] <> 'b')
+    then
     begin
         command:= lastcmd;
     end else
