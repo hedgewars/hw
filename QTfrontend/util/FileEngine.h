@@ -1,9 +1,7 @@
 #ifndef _FileEngine_h
 #define _FileEngine_h
 
-#include <QAbstractFileEngine>
-#include <QAbstractFileEngineHandler>
-#include <QAbstractFileEngineIterator>
+#include <private/qabstractfileengine_p.h>
 #include <QDateTime>
 
 #include "physfs.h"

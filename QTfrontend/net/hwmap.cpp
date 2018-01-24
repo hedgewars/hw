@@ -79,7 +79,7 @@ void HWMap::onClientDisconnect()
     {
         quint8 *buf = (quint8*) readbuffer.constData();
         QImage im(buf, 256, 128, QImage::Format_Mono);
-        im.setNumColors(2);
+        im.setColorCount(2);
 
         QPixmap px(QSize(256, 128));
         QPixmap pxres(px.size());

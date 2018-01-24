@@ -20,7 +20,6 @@
 
 #include <QTranslator>
 #include <QLocale>
-#include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
@@ -252,7 +251,7 @@ int main(int argc, char *argv[])
     splash.show();
 #endif
 
-    app.setStyle(new QPlastiqueStyle());
+    //app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
     srand(now.toTime_t());
@@ -332,7 +331,7 @@ int main(int argc, char *argv[])
 
             // Fallback to current input locale if "C" locale is returned
             if(cc == "C")
-                cc = HWApplication::keyboardInputLocale().name();
+                cc = HWApplication::inputMethod()->locale().name();
         }
 
         // Load locale files into translators

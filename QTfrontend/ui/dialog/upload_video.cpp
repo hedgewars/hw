@@ -38,7 +38,7 @@
 
 // User-agent string used in http requests.
 // Don't make it a global varibale - crash on linux because of cVersionString
-#define USER_AGENT ("Hedgewars-QtFrontend/" + *cVersionString).toAscii()
+#define USER_AGENT ("Hedgewars-QtFrontend/" + *cVersionString).toLatin1()
 
 // This is developer key obtained from http://code.google.com/apis/youtube/dashboard/
 // If you are reusing this code outside Hedgewars, don't use this developer key,
@@ -193,7 +193,7 @@ void HWUploadVideoDialog::upload()
 
     QString account(QUrl::toPercentEncoding(leAccount->text()));
     QString pass(QUrl::toPercentEncoding(lePassword->text()));
-    QByteArray data = QString("Email=%1&Passwd=%2&service=youtube&source=Hedgewars").arg(account).arg(pass).toAscii();
+    QByteArray data = QString("Email=%1&Passwd=%2&service=youtube&source=Hedgewars").arg(account).arg(pass).toUtf8();
 
     QNetworkReply *reply = netManager->post(request, data);
     connect(reply, SIGNAL(finished()), this, SLOT(authFinished()));
@@ -246,7 +246,7 @@ void HWUploadVideoDialog::authFinished()
         return;
     }
 
-    QByteArray auth = ("GoogleLogin auth=" + authToken).toAscii();
+    QByteArray auth = ("GoogleLogin auth=" + authToken).toLatin1();
 
     // We have authenticated, now we can send metadata and start upload
     // Documentation is here: https://developers.google.com/youtube/2.0/developers_guide_protocol_resumable_uploads#Resumable_uploads

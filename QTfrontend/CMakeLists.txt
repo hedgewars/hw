@@ -1,5 +1,7 @@
 find_package(Qt5 COMPONENTS Core Gui Network Svg Xml OpenGL)
 
+include_directories(${Qt5Core_PRIVATE_INCLUDE_DIRS})
+
 include(CheckLibraryExists)
 
 find_package(SDL2 REQUIRED)

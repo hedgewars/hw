@@ -569,7 +569,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant()              // scriptparam    43
             ;
 
-	QList<QVariant> construction;
+  QList<QVariant> construction;
     construction
             << predefSchemesNames[10]  // name           0
             << QVariant(false)         // fortsmode      1
@@ -617,7 +617,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant()              // scriptparam    43
             ;
 
-	QList<QVariant> hedgeeditor;
+  QList<QVariant> hedgeeditor;
     hedgeeditor
             << predefSchemesNames[11]  // name           0
             << QVariant(false)         // fortsmode      1
@@ -664,9 +664,9 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // world edge     42
             << QVariant()              // scriptparam    43
             ;
-			
- 
-			
+
+
+
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
@@ -896,10 +896,12 @@ void NetAmmoSchemeModel::setNetSchemeConfig(QStringList cfg)
         return;
     }
 
+    beginResetModel();
+
     cfg[cfg.size()-1] = cfg[cfg.size()-1].mid(1);
 
     for(int i = 0; i < cfg.size(); ++i)
         netScheme[i] = QVariant(cfg[i]);
 
-    reset();
+    endResetModel();
 }

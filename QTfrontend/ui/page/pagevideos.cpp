@@ -133,8 +133,8 @@ QLayout * PageVideos::bodyLayoutDefinition()
         filesTable->setMinimumWidth(400);
 
         QHeaderView * header = filesTable->horizontalHeader();
-        header->setResizeMode(vcName, QHeaderView::ResizeToContents);
-        header->setResizeMode(vcSize, QHeaderView::Fixed);
+        header->setSectionResizeMode(vcName, QHeaderView::ResizeToContents);
+        header->setSectionResizeMode(vcSize, QHeaderView::Fixed);
         header->resizeSection(vcSize, 100);
         header->setStretchLastSection(true);
 
@@ -851,7 +851,7 @@ static QString protectPass(QString str)
 
 static QString unprotectPass(QString str)
 {
-    QByteArray array = QByteArray::fromBase64(str.toAscii());
+    QByteArray array = QByteArray::fromBase64(str.toLatin1());
     for (int i = 0; i < array.size(); i++)
         array[i] = array[i] ^ 0xC4 ^ i;
     return QString::fromUtf8(array);
