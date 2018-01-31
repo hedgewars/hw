@@ -1148,7 +1148,7 @@ begin
 if Angle <> 0  then
     begin
     // Check the bounding circle 
-    if isCircleOffscreen(X, Y, sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) then
+    if isCircleOffscreen(X, Y, (sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) div 4) then
         exit;
     end
 else

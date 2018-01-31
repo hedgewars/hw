@@ -277,7 +277,7 @@ const
 
     cMaxSlotIndex       = 10;
     cHiddenSlotIndex    = cMaxSlotIndex; // slot for hidden ammo types, not visible and has no key
-    cMaxSlotAmmoIndex   = 5;
+    cMaxSlotAmmoIndex   = 6;
 
     // ai hints
     aihUsualProcessing    = $00000000;

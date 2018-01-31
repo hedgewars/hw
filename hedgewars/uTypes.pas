@@ -91,7 +91,7 @@ type
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
             sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
             sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprAirMine, sprHandAirMine,
-            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck
+            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck, sprMinigun
             );
 
     // Gears that interact with other Gears and/or Land
@@ -109,7 +109,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtDuck); // 66
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtDuck, gtMinigun, gtMinigunBullet); // 68
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -163,7 +163,7 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine, amDuck); // 58
+            amIceGun, amKnife, amRubber, amAirMine, amDuck, amMinigun); // 59
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -460,7 +460,7 @@ type
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
             {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine,
-            sidDuck);
+            sidDuck, sidMinigun);
 
     TMsgStrId = (sidLoading, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,

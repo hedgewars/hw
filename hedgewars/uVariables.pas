@@ -702,7 +702,7 @@ const
                 Texture: nil; Surface: nil; Width:  32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
-            // sprNapalmBomb
+            // sprBulletHit
             (FileName:  'Snowball'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSnowball
             (FileName:  'amSnowball'; Path: ptCurrTheme; AltPath: ptHedgehog; Texture: nil; Surface: nil;
@@ -772,7 +772,9 @@ const
             (FileName:     'Duck'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprDuck
             (FileName:    'amDuck'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandDuck
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandDuck
+            (FileName: 'amMinigun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprMinigun
             );
 
 const
@@ -2438,7 +2440,30 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 15;
-            ejectY: -7)
+            ejectY: -7),
+// Minigun
+            (NameId: sidMinigun;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NeedUpDown;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amMinigun;
+                AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 2;
+            TimeAfterTurn: 3000;
+            minAngle: cMaxAngle div 6;
+            maxAngle: 5 * cMaxAngle div 6;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0; //23;
+            ejectY: 0) //-6;
         );
 
 var

@@ -5,8 +5,8 @@ syntax: glob
 .git
 CMakeCache.txt
 CMakeFiles
-moc_*.cxx
-qrc_*.cxx
+moc_*.*
+qrc_*.*
 *.o
 *.a
 *.qm

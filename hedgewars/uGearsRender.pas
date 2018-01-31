@@ -639,7 +639,7 @@ begin
                     defaultPos:= false;
                     HatVisible:= true
                     end;
-                gtShover:
+                gtShover, gtMinigun:
                     begin
                     DrawHedgehog(sx, sy, sign, 0, 5, 0);
                     defaultPos:= false;
@@ -822,7 +822,7 @@ begin
                             0,
                             sign,
                             0);
-                amBaseballBat:
+                amBaseballBat, amMinigun:
                     begin
                     HatVisible:= true;
                     DrawHedgehog(sx, sy,
@@ -850,12 +850,6 @@ begin
                             sign,
                             32,
                             32); *)
-            end;
-
-            case amt of
-                amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
-                        sx + 9 * sign,
-                        sy + 2, 0, sign, -8, 1, aangle);
             end;
 
             defaultPos:= false
@@ -1025,6 +1019,7 @@ begin
                     end
                 end
         end;
+
     if (Gear^.State and gstHHDriven) <> 0 then
         begin
     (*    if (CurAmmoGear = nil) then
@@ -1036,15 +1031,17 @@ begin
             end; *)
         if (CurAmmoGear = nil) then
             begin
-            if ((Gear^.State and (gstAttacked or gstAnimation or gstHHJumping)) = 0)
-            and (Gear^.Message and (gmLeft or gmRight) = 0) then
-            begin
+                if ((Gear^.State and (gstAttacked or gstAnimation or gstHHJumping)) = 0)
+                and (Gear^.Message and (gmLeft or gmRight) = 0) then
+                begin
                 amt:= CurrentHedgehog^.CurAmmoType;
-                case amt of
-                    amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
-                        sx + 9 * sign, sy + 2, 0, sign, -8, 1, aangle);
+                    case amt of
+                        amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
+                            sx + 9 * sign, sy + 2, 0, sign, -8, 1, aangle);
+                        amMinigun: DrawSpritePivotedF(sprMinigun,
+                            sx + 20 * sign, sy + 4, 0, sign, -18, -2, aangle);
+                    end;
                 end;
-            end;
             end
         else
             begin
@@ -1065,7 +1062,10 @@ begin
                             DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
                         DrawAltWeapon(Gear, sx, sy)
                         end;
-                gtShover: DrawSpritePivotedF(sprHandBaseball, sx + 9 * sign, sy + 2, CurAmmoGear^.Tag, sign, -8, 1, aangle);
+                gtShover: DrawSpritePivotedF(sprHandBaseball,
+                    sx + 9 * sign, sy + 2, CurAmmoGear^.Tag, sign, -8, 1, aangle);
+                gtMinigun: DrawSpritePivotedF(sprMinigun,
+                    sx + 20 * sign, sy + 4, CurAmmoGear^.Tag, sign, -18, -2, aangle);
                 end;
             end
         end;

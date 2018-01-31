@@ -44,6 +44,7 @@ procedure CheckCollision(Gear: PGear); inline;
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
+procedure AmmoShoveLine(Ammo: PGear; Damage, Power: LongInt; oX, oY, tX, tY: hwFloat);
 function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 procedure SpawnBoxOfSmth;
 procedure ShotgunShot(Gear: PGear);
@@ -663,7 +664,8 @@ begin
                     TurnTimeLeft := 0;
                 Gear^.RenderTimer := false;
                 if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot)
-                and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
+                and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot)
+                and (Gear^.Kind <> gtMinigunBullet) then
                     if Gear^.Kind = gtHedgehog then
                         begin
                         if Gear^.Hedgehog^.Effects[heResurrectable] <> 0 then
@@ -1204,13 +1206,14 @@ begin
     CanUseTardis:= usable;
 end;
 
-procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
+procedure AmmoShoveImpl(Ammo: PGear; Damage, Power: LongInt; collisions: PGearArray);
 var t: PGearArray;
     Gear: PGear;
     i, j, tmpDmg: LongInt;
     VGear: PVisualGear;
 begin
-t:= CheckGearsCollision(Ammo);
+t:= collisions;
+
 // Just to avoid hogs on rope dodging fire.
 if (CurAmmoGear <> nil) and ((CurAmmoGear^.Kind = gtRope) or (CurAmmoGear^.Kind = gtJetpack) or (CurAmmoGear^.Kind = gtBirdy))
 and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex = -1)
@@ -1228,18 +1231,21 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
-    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot]) and (PGear(Ammo^.Data) = Gear) then
+    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) and (PGear(Ammo^.Data) = Gear)
+    or ((Ammo^.Kind = gtMinigunBullet) and (not UpdateHitOrder(Gear, Ammo^.WDTimer))) then
         continue;
+
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
-       (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
+    (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
         Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
     tmpDmg:= ModifyDamage(Damage, Gear);
     if (Gear^.State and gstNoDamage) = 0 then
         begin
 
-        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then
+        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot)
+        or (Ammo^.Kind = gtMinigunBullet) then
             begin
-            VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
+            VGear := AddVisualGear(t^.cX[i], t^.cY[i], vgtBulletHit);
             if VGear <> nil then
                 VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
             end;
@@ -1268,7 +1274,10 @@ while i > 0 do
                 if (Ammo^.Kind = gtKnife) and (tmpDmg > 0) then
                     for j:= 1 to max(1,min(3,tmpDmg div 5)) do
                         begin
-                        VGear:= AddVisualGear(hwRound(Ammo^.X-((Ammo^.X-Gear^.X)/_2)), hwRound(Ammo^.Y-((Ammo^.Y-Gear^.Y)/_2)), vgtStraightShot);
+                        VGear:= AddVisualGear(
+                            t^.cX[i] - ((t^.cX[i] - hwround(Gear^.X)) div 2),
+                            t^.cY[i] - ((t^.cY[i] - hwround(Gear^.Y)) div 2),
+                            vgtStraightShot);
                         if VGear <> nil then
                             with VGear^ do
                                 begin
@@ -1297,13 +1306,13 @@ while i > 0 do
 
             if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
                 begin
-                Gear^.dX:= Ammo^.dX * Power * _0_005;
-                Gear^.dY:= Ammo^.dY * Power * _0_005
+                Gear^.dX:= Gear^.dX + Ammo^.dX * Power * _0_005;
+                Gear^.dY:= Gear^.dY + Ammo^.dY * Power * _0_005
                 end
             else if ((Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog)) and (Power <> 0) then
                 begin
-                Gear^.dX:= Ammo^.dX * Power * _0_01;
-                Gear^.dY:= Ammo^.dY * Power * _0_01
+                Gear^.dX:= Gear^.dX + Ammo^.dX * Power * _0_01;
+                Gear^.dY:= Gear^.dY + Ammo^.dY * Power * _0_01
                 end;
 
             if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
@@ -1336,6 +1345,22 @@ while i > 0 do
     end;
 if i <> 0 then
     SetAllToActive
+end;
+
+procedure AmmoShoveLine(Ammo: PGear; Damage, Power: LongInt; oX, oY, tX, tY: hwFloat);
+var t: PGearArray;
+begin
+    if Ammo^.Kind = gtMinigunBullet then
+        t:= CheckAllGearsLineCollision(Ammo, oX, oY, tX, tY)
+    else
+        t:= CheckGearsLineCollision(Ammo, oX, oY, tX, tY);
+    AmmoShoveImpl(Ammo, Damage, Power, t);
+end;
+
+procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
+begin
+    AmmoShoveImpl(Ammo, Damage, Power,
+        CheckGearsCollision(Ammo));
 end;
 
 
@@ -1579,7 +1604,7 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
    (hwRound(Gear^.X) > LongInt(rightX)) then
     begin
     // bullets can now hurt the hog that fired them
-    if (WorldEdge <> weSea) and (Gear^.Kind in [gtDEagleShot, gtSniperRifleShot]) then
+    if (WorldEdge <> weSea) and (Gear^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) then
         Gear^.Data:= nil;
     if WorldEdge = weWrap then
         begin

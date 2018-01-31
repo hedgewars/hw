@@ -106,6 +106,8 @@ const
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
 (*           gtDuck *) , amDuck
+(*        gtMinigun *) , amMinigun
+(*  gtMinigunBullet *) , amMinigun
     );
 
 
@@ -265,6 +267,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
            gtDuck: Gear^.Boom := 40;
+    gtMinigunBullet: Gear^.Boom := 2;
     end;
 
 case Kind of
@@ -740,6 +743,13 @@ gtFlamethrower: begin
                 gear^.Friction:= _0_8;
                 gear^.Density:= _0_5;
                 gear^.AdvBounce:= 1;
+                end;
+       gtMinigun: begin
+                if gear^.Timer = 0 then gear^.Timer:= 601;
+                end;
+ gtMinigunBullet: begin
+                gear^.Radius:= 1;
+                gear^.Health:= 2;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;

@@ -139,6 +139,9 @@ procedure doStepGenericFaller(Gear: PGear);
 //procedure doStepCreeper(Gear: PGear);
 procedure doStepKnife(Gear: PGear);
 procedure doStepDuck(Gear: PGear);
+procedure doStepMinigunWork(Gear: PGear);
+procedure doStepMinigun(Gear: PGear);
+procedure doStepMinigunBullet(Gear: PGear);
 
 var
     upd: Longword;
@@ -1234,16 +1237,45 @@ begin
             end;
 end;
 
+procedure LineShoveHelp(Gear: PGear; oX, oY, tX, tY, dX, dY: hwFloat; count: LongWord);
+var dmg,power: LongInt;
+begin
+    if ((Gear^.Kind = gtMinigunBullet) or (Gear^.Damage > 0))
+    and (hwSqr(tX - oX) + hwSqr(tY - oY) > _0_25) then
+    begin
+        if (Gear^.AmmoType = amDEagle) or (Gear^.AmmoType = amMinigun) then
+            dmg:= Gear^.Boom
+        else
+            dmg:= Gear^.Timer * Gear^.Boom div 100000;
+        if (Gear^.AmmoType = amMinigun) then
+            power:= 10
+        else
+            power:= 20;
+        AmmoShoveLine(Gear, dmg, power, oX, oY, tX, tY);
+    end;
+    if Gear^.Damage > 0 then
+    begin
+        DrawTunnel(oX, oY, dX, dY, count, 1);
+        dec(Gear^.Health, Gear^.Damage);
+        Gear^.Damage := 0
+    end;
+end;
+
 procedure doStepBulletWork(Gear: PGear);
 var
     i, x, y, iInit: LongWord;
     oX, oY, tX, tY, tDx, tDy: hwFloat;
     VGear: PVisualGear;
+    LandFlags: Word;
+    isDigging: Boolean;
+    isDead: Boolean;
 begin
     AllInactive := false;
     inc(Gear^.Timer);
-    iInit := 80;
+    iInit := 100;
     i := iInit;
+    isDigging := false;
+    isDead := false;
     oX := Gear^.X;
     oY := Gear^.Y;
     repeat
@@ -1255,7 +1287,7 @@ begin
         tDy:= Gear^.dY;
         if (Gear^.PortalCounter < 30) and WorldWrap(Gear) then
             begin
-            DrawTunnel(oX, oY, tDx, tDy, iInit + 2 - i, 1);
+            LineShoveHelp(Gear, oX, oY, tX, tY, tDx, tDy, iInit + 2 - i);
             SpawnBulletTrail(Gear, tX, tY);
             iInit:= i;
             oX:= Gear^.X;
@@ -1268,38 +1300,45 @@ begin
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
 
-        if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
-            inc(Gear^.Damage);
-        // let's interrupt before a collision to give portals a chance to catch the bullet
-        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and (not CheckLandValue(x, y, lfLandMask)) then
+        if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) then
+        begin
+            LandFlags:= Land[y, x];
+            if LandFlags <> 0 then inc(Gear^.Damage);
+            isDigging:= (LandFlags and lfLandMask) <> 0;
+        end;
+        // let's interrupt before a collision with land to give portals a chance to catch the bullet
+        if isDigging and (Gear^.Tag = 0) then
             begin
             Gear^.Tag := 1;
-            Gear^.Damage := 0;
+            dec(Gear^.Damage);
             Gear^.X := Gear^.X - Gear^.dX;
             Gear^.Y := Gear^.Y - Gear^.dY;
             CheckGearDrowning(Gear);
             break;
             end
-        else
+        else if (not isDigging) then
             Gear^.Tag := 0;
 
-        if Gear^.Damage > 5 then
+        //Shove static gears to remove the mask and stop damaging the bullet
+        if (not isDigging) and (Gear^.Damage > 5) and (Gear^.Kind <> gtMinigunBullet) then
             begin
-            if Gear^.AmmoType = amDEagle then
-                AmmoShove(Gear, Gear^.Boom, 20)
-            else
-                AmmoShove(Gear, Gear^.Timer * Gear^.Boom div 100000, 20);
+            LineShoveHelp(Gear, oX, oY, tX, tY, tDx, tDy, iInit + 2 - i);
+            SpawnBulletTrail(Gear, tX, tY);
+            iInit:= i;
+            oX:= Gear^.X;
+            oY:= Gear^.Y;
             end;
-        CheckGearDrowning(Gear);
-        dec(i)
-    until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
 
-    if Gear^.Damage > 0 then
-        begin
-        DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, iInit + 2 - i, 1);
-        dec(Gear^.Health, Gear^.Damage);
-        Gear^.Damage := 0
+        CheckGearDrowning(Gear);
+        case Gear^.Kind of
+            gtMinigunBullet: isDead:= isDigging;
+            gtDEagleShot, gtSniperRifleShot: isDead:= Gear^.Damage >= Gear^.Health;
         end;
+        dec(i)
+    until (i = 0) or (isDead) or ((Gear^.State and gstDrowning) <> 0);
+
+    LineShoveHelp(Gear, oX, oY, Gear^.X, Gear^.Y,
+                  Gear^.dX, Gear^.dY, iInit + 2 - i);
 
     if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Health > 0) then
         begin
@@ -1318,7 +1357,7 @@ begin
         Gear^.Health:= 0;
         end;
 
-    if (Gear^.Health <= 0)
+    if (isDead)
         or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
         or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
             begin
@@ -1330,7 +1369,15 @@ begin
         // Bullet Hit
             if ((Gear^.State and gstDrowning) = 0) and (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
                 begin
-                VGear := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBulletHit);
+                if Gear^.Kind = gtMinigunBullet then
+                    begin
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5,
+                                    Gear^.Hedgehog, EXPLNoDamage{ or EXPLDontDraw or EXPLNoGfx});
+                    VGear := AddVisualGear(hwRound(Gear^.X + Gear^.dX * 5), hwRound(Gear^.Y + Gear^.dY * 5), vgtBulletHit);
+                    end
+                else
+                    VGear := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBulletHit);
+
                 if VGear <> nil then
                     begin
                     VGear^.Angle := DxDy2Angle(-Gear^.dX, Gear^.dY);
@@ -1338,6 +1385,8 @@ begin
                 end;
 
             spawnBulletTrail(Gear, Gear^.X, Gear^.Y);
+            if Gear^.Kind = gtMinigunBullet then
+                ClearHitOrderLeq(Gear^.Tag);
             Gear^.doStep := @doStepShotIdle
             end;
 end;
@@ -1357,8 +1406,7 @@ begin
 end;
 
 procedure doStepSniperRifleShot(Gear: PGear);
-var
-    HHGear: PGear;
+var HHGear: PGear;
     shell: PVisualGear;
 begin
 
@@ -4454,7 +4502,7 @@ begin
             // Make duck go into “falling” mode again
             iterator^.Pos:= 0;
 
-        isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]);
+        isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot, gtMinigunBullet]);
 
         r:= int2hwFloat(iterator^.Radius);
 
@@ -4481,7 +4529,7 @@ begin
                 continue;
             end;
 
-        if (iterator^.Kind = gtDEagleShot) or (iterator^.Kind = gtSniperRifleShot) then
+        if (iterator^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) then
             begin
             // draw bullet trail
             spawnBulletTrail(iterator, iterator^.X, iterator^.Y);
@@ -6562,6 +6610,95 @@ begin
         Gear^.RenderTimer:= false;
 
     dec(Gear^.Timer);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepMinigunWork(Gear: PGear);
+var HHGear: PGear;
+    i: LongWord;
+    shell: PVisualGear;
+    bullet: PGear;
+    rx, ry: hwFloat;
+    gX, gY: LongInt;
+begin
+    AllInactive:= false;
+    HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+    begin
+        ClearHitOrder();
+        DeleteGear(gear);
+        exit
+    end;
+
+    HedgehogChAngle(HHGear);
+
+    dec(Gear^.Timer);
+    if (Gear^.Timer mod 50) = 0 then
+    begin
+        Gear^.Tag := ((Gear^.Tag - 1) and 1) + 2;
+
+        gX := hwRound(Gear^.X) + GetLaunchX(amMinigun, hwSign(HHGear^.dX), HHGear^.Angle);
+        gY := hwRound(Gear^.Y) + GetLaunchY(amMinigun, HHGear^.Angle);
+        rx := rndSign(getRandomf * _0_2);
+        ry := rndSign(getRandomf * _0_2);
+
+        bullet:= AddGear(gx, gy, gtMinigunBullet, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
+        bullet^.CollisionMask:= lfNotCurrentMask;
+        bullet^.WDTimer := Gear^.WDTimer;
+        Inc(Gear^.WDTimer);
+
+        shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
+        if shell <> nil then
+        begin
+            shell^.dX := gear^.dX.QWordValue / -17179869184;
+            shell^.dY := gear^.dY.QWordValue / -17179869184;
+            shell^.Frame := 0
+        end;
+    end;
+
+    if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
+    begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
+        ClearHitOrder();
+        DeleteGear(Gear);
+        AfterAttack
+    end
+end;
+
+procedure doStepMinigun(Gear: PGear);
+var HHGear: PGear;
+begin
+    dec(Gear^.Timer);
+    if (Gear^.Timer mod 100) = 0 then
+        Gear^.Tag := (Gear^.Tag + 1) and 1;
+
+    if Gear^.Timer = 0 then
+        begin
+        Gear^.Tag := 2;
+        HHGear := Gear^.Hedgehog^.Gear;
+        HHGear^.Message := HHGear^.Message and (not (gmUp or gmDown));
+        HHGear^.State := HHGear^.State or gstNotKickable;
+
+        Gear^.Timer := 3501;
+        Gear^.WDTimer := 0; // Order of the next bullet;
+        ClearHitOrder();
+        Gear^.doStep := @doStepMinigunWork
+        end;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+procedure doStepMinigunBullet(Gear: PGear);
+begin
+    Gear^.Data:= nil;
+    // remember who fired this
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
+
+    PlaySound(sndGun);
+    Gear^.X := Gear^.X + Gear^.dX * 2;
+    Gear^.Y := Gear^.Y + Gear^.dY * 2;
+    Gear^.doStep := @doStepBulletWork
 end;
 
 (*
