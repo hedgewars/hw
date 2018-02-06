@@ -11,7 +11,7 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Killing the specialists")
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
-	loc("Each time you play this missions enemy hogs will play in a random order.").."|"..
+	loc("Each time you play this mission, enemy hogs will play in a random order.").."|"..
 	loc("At the start of the game each enemy hog has only the weapon that he is named after.").."|"..
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates.").."|"..
 	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100.").."|"..

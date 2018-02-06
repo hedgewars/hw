@@ -128,7 +128,7 @@ local GLOBAL_SUNDALAND_END_HOG=0
 
 --====GENERAL GLOBALS (useful for handling continents)====
 
-local GLOBAL_GENERAL_INFORMATION="- "..loc("Per team weapons").."|- 10 "..loc("weaponschemes").."|- "..loc("Unique new weapons").."| |"..loc("Select your continent/weaponset: with the \"Up\" or \"Down\" keys. You can also select one with the weapons menu.").."|"..loc("Note: Some weapons have a second option (See continent information). Find and use them with the \"")..loc("switch").."\" "..loc("key.").."|"..loc("Tip: See the \"esc\" key (this menu) if you want to see the currently playing teams continent, or that continents specials.")
+local GLOBAL_GENERAL_INFORMATION="- "..loc("Per team weapons").."|- "..loc("10 weapon schemes").."|- "..loc("Unique new weapons").."| |"..loc("Select your continent/weaponset: with the \"Up\" or \"Down\" keys. You can also select one with the weapons menu.").."|"..string.format(loc("Note: Some weapons have a second option (See continent information). Find and use them with the \"%s\" key."), loc("switch")).."|"..loc("Tip: See the \"Esc\" key (this menu) if you want to see the currently playing teams continent, or that continents specials.")
 
 local GLOBAL_SHOW_SMALL_INFO=0
 
@@ -139,7 +139,7 @@ loc("Anno 1032: [The explosion will make a strong push ~ Wide range, wont affect
 loc("Dust storm: [Deals 15 damage to all enemies in the circle]"),
 loc("Cricket time: [Fire away a 1 sec mine! ~ Cannot be fired close to another hog]"),
 loc("Drop a bomb: [Drop some heroic wind that will turn into a bomb on impact]"),
-loc("Penguin roar: [Deal 15 damage + 10% of your hogs health to all hogs around you and get 2/3 back]"),
+loc("Penguin roar: [Deal 15 damage + 10% of your hog’s health to all hogs around you and get 2/3 back]"),
 loc("Disguise as a Rockhopper Penguin: [Swap place with a random enemy hog in the circle]"),
 nil,
 loc("Lonely Cries: [Rise the water if no hog is in the circle and deal 6 damage to all enemy hogs.]"),
@@ -176,7 +176,7 @@ local GLOBAL_CONTINENT_INFORMATION =
 {loc("Kerguelen"),"["..loc("Difficulty: ")..loc("EASY").."] "..loc("Area")..": 1,100,000 km2, "..loc("Population")..": ~100",loc("Special Weapons:").."|"..loc("Hammer")..": "..GLOBAL_WEAPON_TEXTS[7].."|"..loc("Hammer")..": "..GLOBAL_WEAPON_TEXTS[8].." ("..loc("Duration")..": 2)|"..loc("Hammer")..": "..GLOBAL_WEAPON_TEXTS[10].."|"..loc("Hammer")..": "..GLOBAL_WEAPON_TEXTS[15],amHammer,
 {{amHammer,100},{amMineStrike,1},{amBallgun,1}}},
 
-{loc("Zealandia"),"["..loc("Difficulty: ")..loc("MEDIUM").."] "..loc("Area")..": 3,500,000 km2, "..loc("Population")..": 5,000,000",loc("- Will Get 1-3 random weapons") .. "|" .. loc("- Massive weapon bonus on first turn"),amInvulnerable,
+{loc("Zealandia"),"["..loc("Difficulty: ")..loc("MEDIUM").."] "..loc("Area")..": 3,500,000 km2, "..loc("Population")..": 5,000,000",loc("- Will get 1-3 random weapons") .. "|" .. loc("- Massive weapon bonus on first turn"),amInvulnerable,
 {{amBazooka,1},{amGrenade,1},{amBlowTorch,1},{amSwitch,100},{amRope,1},{amDrill,1},{amDEagle,1},{amPickHammer,1},{amFirePunch,1},{amWhip,1},{amMortar,1},{amSnowball,1},{amExtraTime,1},{amInvulnerable,1},{amVampiric,1},{amFlamethrower,1},{amBee,1},{amClusterBomb,1},{amTeleport,1},{amLowGravity,1},{amJetpack,1},{amGirder,1},{amLandGun,1},{amBirdy,1}}},
 
 {loc("Sundaland"),"["..loc("Difficulty: ")..loc("HARD").."] "..loc("Area")..": 1,850,000 km2, "..loc("Population")..": 290,000,000",loc("- You will recieve 2-4 weapons on each kill! (Even on own hogs)"),amTardis,

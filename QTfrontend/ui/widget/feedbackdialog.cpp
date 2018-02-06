@@ -136,7 +136,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 
     label_captcha = new QLabel();
     label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
-    label_captcha->setText("loading<br>captcha");
+    label_captcha->setText(QLabel::tr("Loading<br>CAPTCHA ..."));
     label_captcha->setFixedSize(200, 50);
     captchaLayout->addWidget(label_captcha);
 

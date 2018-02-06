@@ -703,7 +703,7 @@ function AnimationSetup()
 	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other device parts."), SAY_THINK, 4000}})
 	-- DIALOG 08 - Hero wins death01
 	AddSkipFunction(dialog08, Skipanim, {dialog08})
-	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorites shadow ..."),  4000}})
+	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite’s shadow ..."),  4000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great, Hog Solo! However, we aren't out of danger yet!"), SAY_SHOUT, 4500}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now."), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts."), SAY_SHOUT, 3000}})

@@ -26,7 +26,7 @@ local dialog01 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!").."|"..
-			loc("Most of the destructible terrain in marked with blue color").."|"..loc("Mines time: 0 seconds"), 1, 6000},
+			loc("Most of the destructible terrain is marked with blue color").."|"..loc("Mines time: 0 seconds"), 1, 6000},
 }
 -- crates
 local btorch1Y = 60
@@ -515,7 +515,7 @@ function secondBattle()
 	heroIsInBattle = true
 	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 2
-	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
+	AnimSay(smuggler2.gear, loc("This seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
 	EndTurn(true)
 	SetGearVelocity(hero.gear, dx, dy)

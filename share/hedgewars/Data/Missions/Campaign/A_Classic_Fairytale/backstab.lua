@@ -277,7 +277,7 @@ function ExplainAlive()
     AnimInsertStepNext({func = AnimCustomFunction, args = {water, HideCyborg, {}}})
     AnimInsertStepNext({func = AnimSwitchHog, args = {water}})
     AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("The answer is...entertaintment. You'll see what I mean."), SAY_SAY, 8000}})
-    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("You're probably wondering why I bought you back..."), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("You're probably wondering why I brought you back ..."), SAY_SAY, 8000}})
   end
 end
 
