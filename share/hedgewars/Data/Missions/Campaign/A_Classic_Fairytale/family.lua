@@ -220,7 +220,7 @@ function AfterMidAnim()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
   EndTurn(true)
-  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!") .. "|" .. loc("Mines time: 5 seconds"), 1, 7000)
+  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|All your hedgehogs must be above the marked height!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: Leaks A Lot needs to get really close to the princess!") .. "|" .. loc("Mines time: 5 seconds"), 1, 7000)
   vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end

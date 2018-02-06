@@ -128,7 +128,7 @@ local GLOBAL_SUNDALAND_END_HOG=0
 
 --====GENERAL GLOBALS (useful for handling continents)====
 
-local GLOBAL_GENERAL_INFORMATION="- "..loc("Per team weapons").."|- "..loc("10 weapon schemes").."|- "..loc("Unique new weapons").."| |"..loc("Select your continent/weaponset: with the \"Up\" or \"Down\" keys. You can also select one with the weapons menu.").."|"..string.format(loc("Note: Some weapons have a second option (See continent information). Find and use them with the \"%s\" key."), loc("switch")).."|"..loc("Tip: See the \"Esc\" key (this menu) if you want to see the currently playing teams continent, or that continents specials.")
+local GLOBAL_GENERAL_INFORMATION="- "..loc("Per team weapons").."|- "..loc("10 weapon schemes").."|- "..loc("Unique new weapons").."| |"..loc("Select your continent/weaponset: With the \"Up\" or \"Down\" keys. You can also select one with the weapons menu.").."|"..string.format(loc("Note: Some weapons have a second option (See continent information). Find and use them with the \"%s\" key."), loc("switch")).."|"..loc("Tip: See the \"Esc\" key (this menu) if you want to see the currently playing teams continent, or that continents specials.")
 
 local GLOBAL_SHOW_SMALL_INFO=0
 

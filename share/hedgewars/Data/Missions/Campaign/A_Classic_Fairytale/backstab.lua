@@ -4,7 +4,7 @@ A Classic Fairytale: Backstab
 = SUMMARY =
 It is revealed that there's a traitor among the natives.
 Player decides whether to kill him or not.
-After the natives must defeat 3 waves of cannibals.
+After this, the natives must defeat 3 waves of cannibals.
 
 = FLOW CHART =
 
@@ -634,7 +634,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
   EndTurn(true)
-  ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines..."), 1, 12000)
+  ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: You might want to use some mines ..."), 1, 12000)
 end
 
 function DoTurnsOver()

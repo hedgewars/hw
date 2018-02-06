@@ -320,7 +320,7 @@ function AfterAttackedAnim()
     return
   end
   stage = aloneStage
-  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(cannibals[6], amGrenade, 1)
   AddAmmo(cannibals[6], amFirePunch, 0)
   AddAmmo(cannibals[6], amBaseballBat, 0)
@@ -537,7 +537,7 @@ function AnimationSetup()
   table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {dense, loc("You will be avenged!"), SAY_SAY, 3000}})
 
   table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("I see..."), SAY_SAY, 2000}})
-  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("Remember this, pathetic animal: when the day comes, you will regret your blind loyalty!"), SAY_SAY, 8000}})
+  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("Remember this, pathetic animal: When the day comes, you will regret your blind loyalty!"), SAY_SAY, 8000}})
   table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("You just committed suicide..."), SAY_SAY, 5000}})
   table.insert(refusedAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(refusedAnim, {func = AnimGiveState, args = {cyborg, gstInvisible}})
@@ -879,7 +879,7 @@ function DoReadyForStronglings()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)

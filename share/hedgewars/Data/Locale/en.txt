@@ -1246,14 +1246,14 @@
 04:45=All those physics classes have finally paid off!|Launch a devastating sine wave which burns itself|through terrain.|Watch out, this weapon has a strong knockback.|Attack: Shoot
 04:46=Cover your foes with sizzling liquid flame.|Heartwarming!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
 04:47=Double the fun with two spiky, sneaky, sticky mines.|Set up a chain reaction or defend yourself (or both!)|Attack: Hold to shoot with more power (twice)
-04:48=Why should the moles get all the abuse? Wacking|a hog (or mines, or barrels) can be just as fun!|A good blow from this hammer will shave off|one third of a hog's health (or one half with|Extra Damage) and plunge them underground.|Attack: Activate
+04:48=Why should the moles get all the abuse?|Whacking hogs and stuff can be just as fun!|A good blow from this hammer will shave off|one third of a hog's health (or one half with|Extra Damage) and plunge them underground.|Attack: Activate
 04:49=Sacrifice your health to resurrect your friends!|But beware that this also resurrects your foes.|Attack: Keep attack pressed to resurrect slowly|Up: Accelerate resurrection
 04:50=Is someone hiding underground?|Dig them out with a drill strike!|Timer controls how far it will dig.|Left/Right: Determine attack direction|1-5: Set timer|Cursor: Select target region
 04:51=Get in a free shot by hurling a ball of mud.|Deals no damage, but knocks hogs and|objects back.|Attack: Hold to shoot with more power
 04:52=UNUSED
 04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.|Attack: Activate
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate/Deactivate|Up/Down: Continue aiming|Left/Right: Modify spitting power
-04:55=Bring back the ice-age!|Freeze hedgehogs, make the floor slippery or|save yourself from drowning by freezing the water.|Attack: Activate/Deactivate freezeray|Up/Down: Continue aiming
+04:55=Bring back the ice-age!|Freeze hedgehogs or objects, make the floor slippery|or save yourself from drowning by freezing the water.|Attack: Activate/Deactivate freezeray|Up/Down: Continue aiming
 04:56=You can throw two cleavers at your enemy, block|passages and tunnels and even use them for|climbing! Its damage increases with its speed.|But be careful! Playing with knives is dangerous.|Attack: Hold to shoot with more power (twice)
 04:57=Build a VERY elastic rubber band, from which|hedgehogs and other things bounce off|without taking fall damage.|Left/Right: Change rubber band orientation|Cursor: Place rubber band in a valid position
 04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enouogh to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power

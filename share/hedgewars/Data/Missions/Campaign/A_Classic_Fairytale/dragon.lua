@@ -5,6 +5,7 @@ A Classic Fairytale: Dragon's Lair
 Hero must collect an utility crate on the other side of the river.
 To accomplish that, hero must first collect a series of crates with
 the rope and wipe out the cyborgs.
+The hero is one survivor of the previous missions.
 
 = GOALS =
 - Mission goal (leads to immediate victory): Collect utility crate at the right side of the river
@@ -12,6 +13,7 @@ the rope and wipe out the cyborgs.
 - Second sub-goal: Wipe out the cyborgs
 
 = FLOW CHART =
+- Choose hog to be hero (read from m5DeployedNum)
 - Cut scene: Intro
 - TBS
 | Player accomplishes first sub-goal first:
@@ -400,8 +402,8 @@ function AfterKilledAnim()
   SpawnUtilityCrate(2259, 755, amTeleport, 2)
   SpawnHealthCrate(secondPos[1][1] + 50, secondPos[1][2] - 20)
   ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
-                                             loc("Portal hint: one goes to the destination, and one is the entrance.|")..
-                                             loc("Teleport hint: just use the mouse to select the destination!").."|"..
+                                             loc("Portal hint: One goes to the destination, the other one is the entrance.|")..
+                                             loc("Teleport hint: Just use the mouse to select the destination!").."|"..
                                              loc("Mines time: 5 seconds"), 1, 8000)
 end
 -----------------------------Events------------------------------------
