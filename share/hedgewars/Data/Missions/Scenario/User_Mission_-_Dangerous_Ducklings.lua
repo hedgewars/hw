@@ -66,10 +66,10 @@ function onGameTick()
 	if (notListening == false) and (gameLost == false) then
 
 		if (TurnTimeLeft == 58000) and (speechStage == 0)  then
-			HogSay(instructor, loc("Listen up, maggot!!"), SAY_SHOUT)
+			HogSay(instructor, loc("Listen up, maggot!"), SAY_SHOUT)
 			speechStage = 1
 		elseif (TurnTimeLeft == 57000) and (speechStage == 1) then
-			HogSay(player,loc("!!!"),SAY_SHOUT)
+			HogSay(player,loc("!"),SAY_SHOUT)
 		elseif (TurnTimeLeft == 55000) and (speechStage == 1) then
 			HogSay(instructor, loc("The enemy is hiding out on yonder ducky!"), SAY_SAY)
 			speechStage = 2
