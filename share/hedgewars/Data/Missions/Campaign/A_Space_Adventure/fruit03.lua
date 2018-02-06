@@ -173,6 +173,9 @@ end
 
 -- Display ammo icon above gear. i = offset (start at 1)
 local function displayAmmoIcon(gear, ammoType, i)
+	if not GetHealth(gear) then
+		return
+	end
 	local x = GetX(gear) + 2
 	local y = GetY(gear) + 32 * i
 	local vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
@@ -184,7 +187,7 @@ local function displayAmmoIcon(gear, ammoType, i)
 end
 
 function onGearDelete(gear)
-	if (isHog(gear)) then
+	if (isEnemyHog(gear) and GetHealth(hero.gear)) then
 		local availableTeleports = GetAmmoCount(hero.gear,amTeleport)
 		local availableSniper = GetAmmoCount(hero.gear,amSniperRifle)
 		local ammolist = ""
@@ -308,21 +311,16 @@ function turnHogs()
 	end
 end
 
-function isHog(gear)
-	local hog = false
-	for i=1,table.getn(enemiesOdd) do
+function isEnemyHog(gear)
+	for i=1, table.getn(enemiesOdd) do
 		if gear == enemiesOdd[i].gear then
-			hog = true
-			break
+			return true
 		end
 	end
-	if not hog then
-		for i=1,table.getn(enemiesEven) do
-			if gear == enemiesEven then
-				hog = true
-				break
-			end
+	for i=1, table.getn(enemiesEven) do
+		if gear == enemiesEven then
+			return true
 		end
 	end
-	return hog
+	return false
 end
