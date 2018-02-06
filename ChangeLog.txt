@@ -1,5 +1,16 @@
 + features
 * bugfixes
+====================== 0.9.24 ======================
+Game:
+ + New weapon: Minigun
+ * Fix chat input key being sometimes registered twice
+
+A Space Adventure:
+ + Precise Shooting: Display collected ammo
+
+A Classic Fairytale:
+ + Mission 3: Display number of turns left at timed parcours
+ * Fix incorrect storytelling in mission descriptions
 
 ====================== 0.9.23 ======================
 HIGHLIGHTS:
@@ -38,7 +49,7 @@ Content:
  * Redo flags: cm_pentagram, cm_soviet, armenia, ireland, nepal, suisse, sweden, turkey
 
 Game engine (weapons):
- + New weapon: rubber duck
+ + New weapon: Rubber duck
  + Freezer can now freeze sticky mines (they get disabled and fall into the water)
  + Keep rope / parachute / flying saucer selected when destroyed and secondary ammo selected
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
