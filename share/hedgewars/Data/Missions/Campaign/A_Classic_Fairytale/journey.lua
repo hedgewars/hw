@@ -1191,6 +1191,9 @@ function onNewTurn()
   else
     SetInputMask(0xFFFFFFFF)
     TurnsLeft = TurnsLeft - 1
+    if TurnsLeft >= 1 then
+      AddCaption(string.format(loc("Turns left: %d"), TurnsLeft), 0xFFFFFFFF, capgrpGameState)
+    end
   end
 end
 
