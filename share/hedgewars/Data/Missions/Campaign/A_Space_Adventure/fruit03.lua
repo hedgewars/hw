@@ -171,15 +171,42 @@ function onGameTick20()
 	end
 end
 
+-- Display ammo icon above gear. i = offset (start at 1)
+local function displayAmmoIcon(gear, ammoType, i)
+	local x = GetX(gear) + 2
+	local y = GetY(gear) + 32 * i
+	local vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
+	if vgear ~= nil then
+		local vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint = GetVisualGearValues(vgear)
+		local vgtFrame = ammoType
+		SetVisualGearValues(vgear,vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint)
+	end
+end
+
 function onGearDelete(gear)
 	if (isHog(gear)) then
 		local availableTeleports = GetAmmoCount(hero.gear,amTeleport)
 		local availableSniper = GetAmmoCount(hero.gear,amSniperRifle)
+		local ammolist = ""
+		local tele = false
 		if availableTeleports < 2 then
 			AddAmmo(hero.gear, amTeleport, availableTeleports + 1 )
+			displayAmmoIcon(hero.gear, amTeleport, 1)
+			tele = true
+			ammolist = ammolist .. string.format(loc("%s (+1)"), GetAmmoName(amTeleport))
 		end
 		if availableSniper < 4 then
 			AddAmmo(hero.gear, amSniperRifle, availableSniper + 1 )
+			displayAmmoIcon(hero.gear, amSniperRifle, 2)
+			if tele then
+				ammolist = ammolist .. " • "
+			end
+			ammolist = ammolist .. string.format(loc("%s (+1)"), GetAmmoName(amSniperRifle))
+		end
+		-- Show collected ammo
+		if ammolist ~= "" then
+			PlaySound(sndShotgunReload)
+			AddCaption(ammolist, GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
 		end
 	end
 end
