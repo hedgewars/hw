@@ -191,23 +191,26 @@ with CurrentTeam^ do
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
     with ClansArray[c]^ do
-        if (CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0) then
+        if (GameFlags and gfTagTeam) <> 0 then
             begin
-            TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
-            CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
-            inc(c);
-            NextClan:= true;
-            end;
+            if (CurrTeam = TagTeamIndex) then
+                begin
+                if (c = 0) and (not PlacingHogs) then
+                    inc(TotalRounds);
+                TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
+                CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
+                inc(c);
+                NextClan:= true;
+                end;
+            end
+        else if (c = 0) and (not PlacingHogs) then
+            inc(TotalRounds);
 
     if (GameFlags and gfTagTeam) = 0 then
         inc(c);
 
     if c = ClansCount then
-        begin
-        if not PlacingHogs then
-            inc(TotalRounds);
-        c:= 0
-        end;
+        c:= 0;
 
     with ClansArray[c]^ do
         begin

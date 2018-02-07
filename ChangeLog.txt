@@ -24,6 +24,7 @@ Theme customization:
 Lua API:
  + New call: WriteLnToChat(string): Add a line in the chat
  * Fix call: SetWeapon(amNothing) now unselects weapon
+ * Fix global: TotalRounds was stuck at -1 for several turns
 
 ====================== 0.9.23 ======================
 HIGHLIGHTS:
