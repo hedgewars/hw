@@ -404,6 +404,13 @@ begin
     lc_writelntoconsole:= 0;
 end;
 
+function lc_writelntochat(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'WriteLnToChat', 'string') then
+        AddChatString(#2 + lua_tostring(L, 1));
+    lc_writelntochat:= 0;
+end;
+
 function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
 var t: PChar;
     i,c: LongWord;
@@ -3572,6 +3579,7 @@ lua_register(luaState, _P'SpawnFakeHealthCrate', @lc_spawnfakehealthcrate);
 lua_register(luaState, _P'SpawnFakeAmmoCrate', @lc_spawnfakeammocrate);
 lua_register(luaState, _P'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
 lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
+lua_register(luaState, _P'WriteLnToChat', @lc_writelntochat);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
