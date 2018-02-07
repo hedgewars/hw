@@ -141,14 +141,22 @@ s:= false;
 weap:= TAmmoType(HHGear^.MsgParam);
 Hedgehog:= HHGear^.Hedgehog;
 
+HHGear^.Message:= HHGear^.Message and (not gmWeapon);
+
+// Special case: amNothing unselects weapon
+if weap = amNothing then
+    begin
+    HHGear^.Hedgehog^.CurAmmoType:= amNothing;
+    ApplyAmmoChanges(HHGear^.Hedgehog^);
+    exit
+    end;
+
 if Hedgehog^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then
     exit; // weapon is not activated yet
 
 HHGear^.MsgParam:= Ammoz[weap].Slot;
 
 t:= cMaxSlotAmmoIndex;
-
-HHGear^.Message:= HHGear^.Message and (not gmWeapon);
 
 prevState:= HHGear^.State;
 newState:= prevState;

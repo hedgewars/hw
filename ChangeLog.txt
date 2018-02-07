@@ -16,6 +16,7 @@ A Classic Fairytale:
 
 Lua API:
  + New call: WriteLnToChat(string): Add a line in the chat
+ * Fix call: SetWeapon(amNothing) now unselects weapon
 
 ====================== 0.9.23 ======================
 HIGHLIGHTS:
