@@ -6,6 +6,9 @@ Game:
  + Change weapon icons: Mudball, air mine
  * Fix chat input key being sometimes registered twice
 
+Content:
+ + New flag: uk_scotland
+
 A Space Adventure:
  + Precise Shooting: Display collected ammo
  + Hard Flying: Display personal best at mission start
