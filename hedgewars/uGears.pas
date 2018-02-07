@@ -338,7 +338,7 @@ case step of
 
                     ChangeToSDClouds;
                     ChangeToSDFlakes;
-                    SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.r/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
+                    SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
                     Ammoz[amTardis].SkipTurns:= 9999;
                     Ammoz[amTardis].Probability:= 0;
                     end;

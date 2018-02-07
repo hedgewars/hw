@@ -16,6 +16,7 @@ A Classic Fairytale:
 
 Theme customization:
  + Add fallback music with fallback-music and fallback-sd-music
+ * Fix green color channel on themes with sd-tint
 
 Lua API:
  + New call: WriteLnToChat(string): Add a line in the chat
