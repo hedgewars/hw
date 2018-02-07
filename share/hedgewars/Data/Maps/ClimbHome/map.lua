@@ -449,8 +449,7 @@ function onGameTick20()
                 SendStat(siCustomAchievement, string.format(loc("%s (%s) reached home in %.3f seconds."), GetHogName(CurrentHedgehog), GetHogTeamName(CurrentHedgehog), finishTime))
                 makeMultiPlayerWinnerStat(CurrentHedgehog)
                 PlaySound(sndVictory, CurrentHedgehog)
-                -- TODO: Unselect weapon.
-                -- Note: SetWeapon(amNothing) does not work. :-(
+		SetWeapon(amNothing)
                 SetGearMessage(CurrentHedgehog, band(GetGearMessage(CurrentHedgehog), bnot(gmLeft+gmRight+gmUp+gmDown+gmHJump+gmLJump+gmPrecise)))
                 SetInputMask(0x00)
                 -- TODO: Add stupid winner grin.

@@ -381,8 +381,9 @@ function onGearDelete(gear)
 			PlaySound(sndVictory, CurrentHedgehog)
 			FollowGear(CurrentHedgehog)
 
-			-- Disable hog controls
+			-- Unselect sniper rifle and disable hog controls
 			SetInputMask(0)
+			SetWeapon(amNothing)
 			AddAmmo(CurrentHedgehog, amSniperRifle, 0)
 
 			-- Save the time left so we may keep it.
