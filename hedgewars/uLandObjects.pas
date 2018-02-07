@@ -672,6 +672,10 @@ while (not pfsEOF(f)) and allOK do
         MusicFN:= Trim(s)
     else if key = 'sd-music' then
         SDMusicFN:= Trim(s)
+    else if key = 'fallback-music' then
+        FallbackMusicFN:= Trim(s)
+    else if key = 'fallback-sd-music' then
+        FallbackSDMusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div 4096;

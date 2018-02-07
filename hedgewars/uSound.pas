@@ -106,6 +106,8 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 var MusicFN: shortstring; // music file name
     SDMusicFN: shortstring; // SD music file name
+    FallbackMusicFN: shortstring; // fallback music file name
+    FallbackSDMusicFN: shortstring; // fallback SD music fille name
 
 var Volume: LongInt;
     SoundTimerTicks: Longword;
@@ -632,9 +634,35 @@ begin
     else s:= '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 
+    // Load normal music
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
     SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
-    WriteLnToConsole(msgOK);
+    if Mus <> nil then
+        WriteLnToConsole(msgOK);
+
+    // If normal music failed, try to get fallback music
+    if Mus = nil then
+       begin
+       WriteLnToConsole('Music not found. Trying fallback music.');
+       if SuddenDeath and (FallbackSDMusicFN <> '') then
+           s:= '/Music/' + FallbackSDMusicFN
+       else if (not SuddenDeath) and (FallbackMusicFN <> '') then
+           s:= '/Music/' + FallbackMusicFN
+       else
+           begin
+           WriteLnToConsole('No fallback music configured!');
+           s:= ''
+           end;
+
+       if (s <> '') then
+           begin
+           WriteLnToConsole(msgLoading + s + ' ');
+           Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
+           SDLCheck(Mus <> nil, 'Mix_LoadMUS_RW', false);
+           if Mus <> nil then
+               WriteLnToConsole(msgOK)
+           end;
+       end;
 
     SDLCheck(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;

@@ -14,6 +14,9 @@ A Classic Fairytale:
  + Mission 3: Display number of turns left at timed parcours
  * Fix incorrect storytelling in mission descriptions
 
+Theme customization:
+ + Add fallback music with fallback-music and fallback-sd-music
+
 Lua API:
  + New call: WriteLnToChat(string): Add a line in the chat
  * Fix call: SetWeapon(amNothing) now unselects weapon
