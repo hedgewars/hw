@@ -6615,7 +6615,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMinigunWork(Gear: PGear);
 var HHGear: PGear;
-    i: LongWord;
     shell: PVisualGear;
     bullet: PGear;
     rx, ry: hwFloat;
