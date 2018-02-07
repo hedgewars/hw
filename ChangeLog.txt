@@ -3,6 +3,7 @@
 ====================== 0.9.24 ======================
 Game:
  + New weapon: Minigun
+ + Change weapon icons: Mudball, air mine
  * Fix chat input key being sometimes registered twice
 
 A Space Adventure:
