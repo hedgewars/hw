@@ -46,6 +46,7 @@ procedure DrawGearsTimers;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
+procedure StartSuddenDeath;
 function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
 
@@ -133,6 +134,7 @@ begin
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
+            // Apply SD health decrease as soon as SD starts
             if (TotalRounds > cSuddenDTurns - 1) then
                 begin
                 inc(tmp, cHealthDecrease);
@@ -306,6 +308,7 @@ case step of
     stWater:
     if (not bBetweenTurns) and (not isInMultiShoot) then
         begin
+        // Start Sudden Death water rise in the 2nd round of Sudden Death
         if TotalRounds = cSuddenDTurns + 1 then
             bWaterRising:= true;
         if bWaterRising and (cWaterRise > 0) then
@@ -325,29 +328,7 @@ case step of
         if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
              begin
             if (TotalRounds = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
-                begin
-                SuddenDeath:= true;
-                if cHealthDecrease <> 0 then
-                    begin
-                    SuddenDeathDmg:= true;
-
-                    // flash
-                    ScreenFade:= sfFromWhite;
-                    ScreenFadeValue:= sfMax;
-                    ScreenFadeSpeed:= 1;
-
-                    ChangeToSDClouds;
-                    ChangeToSDFlakes;
-                    SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
-                    Ammoz[amTardis].SkipTurns:= 9999;
-                    Ammoz[amTardis].Probability:= 0;
-                    end;
-                AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
-                ScriptCall('onSuddenDeath');
-                playSound(sndSuddenDeath);
-                StopMusic;
-                if SDMusicFN <> '' then PlayMusic
-                end
+                StartSuddenDeath()
             else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
                 begin
                 i:= cSuddenDTurns - TotalRounds;
@@ -1057,6 +1038,33 @@ begin
     SpawnFakeCrateAt := FollowGear;
 end;
 
+procedure StartSuddenDeath();
+begin
+    if SuddenDeath then
+        exit;
+
+    SuddenDeath:= true;
+    if cHealthDecrease <> 0 then
+    begin
+        SuddenDeathDmg:= true;
+        // flash
+        ScreenFade:= sfFromWhite;
+        ScreenFadeValue:= sfMax;
+        ScreenFadeSpeed:= 1;
+
+        ChangeToSDClouds;
+        ChangeToSDFlakes;
+        SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
+        Ammoz[amTardis].SkipTurns:= 9999;
+        Ammoz[amTardis].Probability:= 0;
+    end;
+    AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+    ScriptCall('onSuddenDeath');
+    playSound(sndSuddenDeath);
+    StopMusic;
+    if SDMusicFN <> '' then
+        PlayMusic
+end;
 
 function GearByUID(uid : Longword) : PGear;
 var gear: PGear;
