@@ -9,6 +9,7 @@ Game:
 
 Frontend:
  + Schemes are now stored in separate files under Schemes
+ * Fix broken preview of team hats (e.g. cap_team)
 
 Content:
  + New flag: uk_scotland
