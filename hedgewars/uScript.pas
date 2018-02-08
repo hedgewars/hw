@@ -2387,6 +2387,23 @@ begin
     lc_setwind:= 0
 end;
 
+function lc_getwind(L : Plua_State) : LongInt; Cdecl;
+var wind: extended;
+begin
+    if CheckLuaParamCount(L, 0, 'GetWind', '') then
+        begin
+        wind:= hwFloat2float((cWindSpeed / cMaxWindSpeed) * 100);
+        if wind < -100 then
+            wind:= -100
+        else if wind > 100 then
+            wind:= 100;
+        lua_pushnumber(L, wind);
+        end
+    else
+        lua_pushnil(L);
+    lc_getwind:= 1
+end;
+
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'MapHasBorder', '') then
@@ -3674,6 +3691,7 @@ lua_register(luaState, _P'GetGearCollisionMask', @lc_getgearcollisionmask);
 lua_register(luaState, _P'SetGearCollisionMask', @lc_setgearcollisionmask);
 lua_register(luaState, _P'GetRandom', @lc_getrandom);
 lua_register(luaState, _P'SetWind', @lc_setwind);
+lua_register(luaState, _P'GetWind', @lc_getwind);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);

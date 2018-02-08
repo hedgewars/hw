@@ -31,6 +31,7 @@ Lua API:
  + New call: WriteLnToChat(string): Add a line in the chat
  + New call: SetVampiric(bool): Toggle vampirism
  + New call: SetLaserSight(bool): Toggle laser sight
+ + New call: GetWind(): Returns current wind (approximation) from -100 to 100
  + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
  * Fix call: SetWeapon(amNothing) now unselects weapon
  * Fix global: TotalRounds was stuck at -1 for several turns
