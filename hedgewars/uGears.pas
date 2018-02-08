@@ -62,7 +62,7 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stDelay, stChDmg, stSweep, stTurnReact,
+    step: (stInit, stDelay, stChDmg, stSweep, stTurnReact,
     stAfterDelay, stChWin, stWater, stChWin2, stHealth,
     stSpawn, stNTurn);
     NewTurnTick: LongWord;
@@ -253,6 +253,11 @@ curHandledGear:= nil;
 
 if AllInactive then
 case step of
+    stInit:
+        begin
+        ScriptCall('onEndTurn');
+        inc(step)
+        end;
     stDelay:
         begin
         if delay = 0 then
