@@ -347,7 +347,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
 
-    ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/Game Settings");
+    ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/Schemes/Game");
     ui.pageScheme->setModel(ammoSchemeModel);
     ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
     ui.pageOptions->SchemesName->setModel(ammoSchemeModel);
