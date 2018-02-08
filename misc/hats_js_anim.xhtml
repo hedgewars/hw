@@ -93,7 +93,7 @@ window.onload = function()
     var r = />([^<]*).png</g;
     var x;
     while(x = r.exec(resp)) 
-        if (!/^Team|NoHat/.test(x[1])) // Exclude team coloured ones as repetitive, NoHat one as uninteresting
+        if (!/NoHat|hair_team|cap_team|TeamTophat/.test(x[1])) // Exclude NoHat as uninteresting. hair_team, cap_team and TeamTophat as repetitive team hats
             masks.push(x[1]);
 
     var opt = document.createElement("option");
