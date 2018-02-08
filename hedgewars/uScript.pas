@@ -2745,6 +2745,20 @@ begin
     lc_getammoname:= 1;
 end;
 
+function lc_setvampiric(L : Plua_state) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetVampiric', 'bool') then
+        cVampiric := lua_toboolean(L, 1);
+    lc_setvampiric := 0;
+end;
+
+function lc_setlasersight(L : Plua_state) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetLaserSight', 'bool') then
+        cLaserSighting:= lua_toboolean(L, 1);
+    lc_setlasersight:= 0;
+end;
+
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
@@ -3677,6 +3691,8 @@ lua_register(luaState, _P'SetWeapon', @lc_setweapon);
 lua_register(luaState, _P'SetCinematicMode', @lc_setcinematicmode);
 lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 lua_register(luaState, _P'GetAmmoName', @lc_getammoname);
+lua_register(luaState, _P'SetVampiric', @lc_setvampiric);
+lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
