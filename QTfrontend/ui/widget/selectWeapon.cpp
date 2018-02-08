@@ -21,6 +21,7 @@
 #include "weaponItem.h"
 #include "hwconsts.h"
 
+#include <QDebug>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -84,16 +85,45 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     QFrame(parent),
     m_numItems(numItems)
 {
-    wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
+    if (!QDir(cfgdir->absolutePath() + "/Weapon Settings").exists()) {
+        QDir().mkdir(cfgdir->absolutePath() + "/Weapon Settings");
+        wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
 
-    for(int i = 0; i < cDefaultAmmos.size(); ++i)
-        wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
+        for(int i = 0; i < cDefaultAmmos.size(); ++i)
+            wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
 
-    QStringList keys = wconf->allKeys();
-    for(int i = 0; i < keys.size(); i++)
-    {
-        if (wconf->value(keys[i]).toString().size() != cDefaultAmmoStore->size())
-            wconf->setValue(keys[i], fixWeaponSet(wconf->value(keys[i]).toString()));
+        QStringList keys = wconf->allKeys();
+        for(int i = 0; i < keys.size(); i++)
+        {
+            if (wconf->value(keys[i]).toString().size() != cDefaultAmmoStore->size())
+                wconf->setValue(keys[i], fixWeaponSet(wconf->value(keys[i]).toString()));
+
+            QFile file(cfgdir->absolutePath() + "/Weapon Settings/" + keys[i] + ".hww");
+            if (file.open(QIODevice::WriteOnly)) {
+                QTextStream stream( &file );
+                stream << wconf->value(keys[i]).toString() << endl;
+            }
+        }
+    } else {
+        wconf = new QSettings("Hedgewars", "Hedgewars");
+        wconf->clear();
+
+        QStringList schemes = QDir(cfgdir->absolutePath() + "/Weapon Settings").entryList();
+
+        for(int i = 0; i < schemes.size(); i++)
+        {
+            if (schemes[i] == "." || schemes[i] == "..") continue;
+
+            QFile file(cfgdir->absolutePath() + "/Weapon Settings/" + schemes[i]);
+            QString config;
+
+            if (file.open(QIODevice::ReadOnly)) {
+                QTextStream stream( &file );
+                stream >> config;
+            }
+
+            wconf->setValue(schemes[i].remove(".hww"), fixWeaponSet(config));
+        }
     }
 
     QString currentState = *cDefaultAmmoStore;
@@ -251,6 +281,11 @@ void SelWeaponWidget::save()
         wconf->remove(curWeaponsName);
     }
     wconf->setValue(m_name->text(), stateFull);
+    QFile file(cfgdir->absolutePath() + "/Weapon Settings/" + m_name->text()+ ".hww");
+    if (file.open(QIODevice::WriteOnly)) {
+        QTextStream stream( &file );
+        stream << stateFull << endl;
+    }
     emit weaponsEdited(curWeaponsName, m_name->text(), stateFull);
 }
 
@@ -293,6 +328,7 @@ void SelWeaponWidget::deleteWeaponsName()
     {
         isDeleting = true;
         wconf->remove(delWeaponsName);
+        QFile(cfgdir->absolutePath() + "/Weapon Settings/" + curWeaponsName + ".hww").remove();
         emit weaponsDeleted(delWeaponsName);
     }
 }

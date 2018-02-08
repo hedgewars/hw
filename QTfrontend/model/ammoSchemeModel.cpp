@@ -69,9 +69,9 @@ QList<QVariant> defaultScheme = QList<QVariant>()
                                 << QVariant()              // scriptparam    43
                                 ;
 
-AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
+AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
     QAbstractTableModel(parent),
-    fileConfig(fileName, QSettings::IniFormat)
+    fileConfig(cfgdir->absolutePath() + "/schemes.ini", QSettings::IniFormat)
 {
     predefSchemesNames = QStringList()
                          << "Default"
@@ -569,7 +569,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant()              // scriptparam    43
             ;
 
-	QList<QVariant> construction;
+    QList<QVariant> construction;
     construction
             << predefSchemesNames[10]  // name           0
             << QVariant(false)         // fortsmode      1
@@ -617,7 +617,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant()              // scriptparam    43
             ;
 
-	QList<QVariant> hedgeeditor;
+    QList<QVariant> hedgeeditor;
     hedgeeditor
             << predefSchemesNames[11]  // name           0
             << QVariant(false)         // fortsmode      1
@@ -664,9 +664,9 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // world edge     42
             << QVariant()              // scriptparam    43
             ;
-			
- 
-			
+
+
+
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
@@ -681,22 +681,44 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     schemes.append(hedgeeditor);
 
 
-    int size = fileConfig.beginReadArray("schemes");
-    for (int i = 0; i < size; ++i)
-    {
-        fileConfig.setArrayIndex(i);
+    if (!QDir(directory).exists()) {
+        QDir().mkdir(directory);
 
-        if (!predefSchemesNames.contains(fileConfig.value(spNames[0]).toString()))
+        int size = fileConfig.beginReadArray("schemes");
+        for (int i = 0; i < size; ++i)
         {
+            fileConfig.setArrayIndex(i);
+
+            if (!predefSchemesNames.contains(fileConfig.value(spNames[0]).toString()))
+            {
+                QList<QVariant> scheme;
+                QSettings file(directory + "/" + fileConfig.value(spNames[0]).toString() + ".ini", QSettings::IniFormat);
+
+                for (int k = 0; k < spNames.size(); ++k) {
+                    scheme << fileConfig.value(spNames[k], defaultScheme[k]);
+                    file.setValue(spNames[k], fileConfig.value(spNames[k], defaultScheme[k]));
+                }
+                file.sync();
+
+                schemes.append(scheme);
+            }
+        }
+        fileConfig.endArray();
+    } else {
+        QStringList scheme_dir = QDir(directory).entryList();
+
+        for(int i = 0; i < scheme_dir.size(); i++)
+        {
+            if (scheme_dir[i] == "." || scheme_dir[i] == "..") continue;
             QList<QVariant> scheme;
+            QSettings file(directory + "/" + scheme_dir[i], QSettings::IniFormat);
 
             for (int k = 0; k < spNames.size(); ++k)
-                scheme << fileConfig.value(spNames[k], defaultScheme[k]);
+                scheme << file.value(spNames[k], defaultScheme[k]);
 
             schemes.append(scheme);
         }
     }
-    fileConfig.endArray();
 }
 
 QVariant AmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -809,6 +831,9 @@ bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 
     beginRemoveRows(parent, row, row);
 
+    QList<QVariant> scheme = schemes[row];
+    int j = spNames.indexOf("name");
+    QFile(cfgdir->absolutePath() + "/Game Settings/" + scheme[j].toString() + ".ini").remove();
     schemes.removeAt(row);
 
     endRemoveRows();
@@ -830,16 +855,16 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 
 void AmmoSchemeModel::Save()
 {
-    fileConfig.beginWriteArray("schemes", schemes.size() - numberOfDefaultSchemes);
-
     for (int i = 0; i < schemes.size() - numberOfDefaultSchemes; ++i)
     {
-        fileConfig.setArrayIndex(i);
-
         QList<QVariant> scheme = schemes[i + numberOfDefaultSchemes];
+        int j = spNames.indexOf("name");
+        QSettings file(cfgdir->absolutePath() + "/Game Settings/" + scheme[j].toString() + ".ini", QSettings::IniFormat);
 
         for (int k = 0; k < scheme.size(); ++k)
-            fileConfig.setValue(spNames[k], scheme[k]);
+            file.setValue(spNames[k], scheme[k]);
+
+        file.sync();
     }
     fileConfig.endArray();
 }
