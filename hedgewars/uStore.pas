@@ -1000,7 +1000,7 @@ extracolor:= 0;
 
 if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
     begin
-    if (atype = amTardis) and (suddenDeathDmg) then
+    if (atype = amTardis) and (SuddenDeathActive) then
         extra:= trmsg[sidNotAvailableInSD]
     else
         extra:= trmsg[sidNotYetAvailable];

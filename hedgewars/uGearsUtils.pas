@@ -1192,7 +1192,7 @@ begin
     usable:= true;
     HH:= HHGear^.Hedgehog;
     if HHGear <> nil then
-    if (HHGear = nil) or (HH^.King) or (SuddenDeathDmg) then
+    if (HHGear = nil) or (HH^.King) or (SuddenDeathActive) then
         usable:= false;
     cnt:= 0;
     for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do

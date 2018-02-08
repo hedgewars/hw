@@ -2480,8 +2480,9 @@ var
     AllInactive: boolean;
     PrvInactive: boolean;
     KilledHHs: Longword;
-    SuddenDeath: Boolean;
-    SuddenDeathDmg: Boolean;
+    SuddenDeath: Boolean; // If the Sudden Death check has been made
+    SuddenDeathActive: Boolean; // Is in Sudden Death with any gameplay effect
+    SuddenDeathDmg: Boolean; // Is in Sudden Death with damage
     SpeechType: Longword;
     SpeechText: shortstring;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress

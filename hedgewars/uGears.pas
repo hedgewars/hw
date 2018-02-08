@@ -1044,20 +1044,27 @@ begin
         exit;
 
     SuddenDeath:= true;
+    SuddenDeathActive:= true;
+
+    // Special effects (only w/ health decrease)
     if cHealthDecrease <> 0 then
     begin
         SuddenDeathDmg:= true;
-        // flash
+        // White screen flash
         ScreenFade:= sfFromWhite;
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 1;
 
+        // Clouds, flakes, sky tint
         ChangeToSDClouds;
         ChangeToSDFlakes;
         SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
-        Ammoz[amTardis].SkipTurns:= 9999;
-        Ammoz[amTardis].Probability:= 0;
     end;
+
+    // Disable tardis
+    Ammoz[amTardis].SkipTurns:= 9999;
+    Ammoz[amTardis].Probability:= 0;
+
     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
     ScriptCall('onSuddenDeath');
     playSound(sndSuddenDeath);
