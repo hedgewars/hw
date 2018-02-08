@@ -85,36 +85,46 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     QFrame(parent),
     m_numItems(numItems)
 {
-    if (!QDir(cfgdir->absolutePath() + "/Weapon Settings").exists()) {
-        QDir().mkdir(cfgdir->absolutePath() + "/Weapon Settings");
-        wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
+    if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
+    if (!QDir(cfgdir->absolutePath() + "/Schemes/Ammo").exists()) {
+        QDir().mkdir(cfgdir->absolutePath() + "/Schemes/Ammo");
+        wconf = new QSettings("Hedgewars", "Hedgewars");
+        wconf->clear();
+        QSettings old_wconf(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat);
 
-        for(int i = 0; i < cDefaultAmmos.size(); ++i)
+        QList<QVariant> defaultAmmos;
+        for(int i = 0; i < cDefaultAmmos.size(); ++i) {
             wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
+            defaultAmmos.append(cDefaultAmmos[i].first);
+        }
 
-        QStringList keys = wconf->allKeys();
+        QStringList keys = old_wconf.allKeys();
         for(int i = 0; i < keys.size(); i++)
         {
-            if (wconf->value(keys[i]).toString().size() != cDefaultAmmoStore->size())
-                wconf->setValue(keys[i], fixWeaponSet(wconf->value(keys[i]).toString()));
+            wconf->setValue(keys[i], fixWeaponSet(old_wconf.value(keys[i]).toString()));
 
-            QFile file(cfgdir->absolutePath() + "/Weapon Settings/" + keys[i] + ".hww");
-            if (file.open(QIODevice::WriteOnly)) {
-                QTextStream stream( &file );
-                stream << wconf->value(keys[i]).toString() << endl;
+            if (!defaultAmmos.contains(keys[i])) {
+                QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + keys[i] + ".hwa");
+                if (file.open(QIODevice::WriteOnly)) {
+                    QTextStream stream( &file );
+                    stream << old_wconf.value(keys[i]).toString() << endl;
+                }
             }
         }
     } else {
         wconf = new QSettings("Hedgewars", "Hedgewars");
         wconf->clear();
 
-        QStringList schemes = QDir(cfgdir->absolutePath() + "/Weapon Settings").entryList();
+        for(int i = 0; i < cDefaultAmmos.size(); ++i)
+            wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
+
+        QStringList schemes = QDir(cfgdir->absolutePath() + "/Schemes/Ammo").entryList();
 
         for(int i = 0; i < schemes.size(); i++)
         {
             if (schemes[i] == "." || schemes[i] == "..") continue;
 
-            QFile file(cfgdir->absolutePath() + "/Weapon Settings/" + schemes[i]);
+            QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + schemes[i]);
             QString config;
 
             if (file.open(QIODevice::ReadOnly)) {
@@ -122,7 +132,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
                 stream >> config;
             }
 
-            wconf->setValue(schemes[i].remove(".hww"), fixWeaponSet(config));
+            wconf->setValue(schemes[i].remove(".hwa"), fixWeaponSet(config));
         }
     }
 
@@ -281,7 +291,7 @@ void SelWeaponWidget::save()
         wconf->remove(curWeaponsName);
     }
     wconf->setValue(m_name->text(), stateFull);
-    QFile file(cfgdir->absolutePath() + "/Weapon Settings/" + m_name->text()+ ".hww");
+    QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + m_name->text()+ ".hwa");
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream stream( &file );
         stream << stateFull << endl;
@@ -328,7 +338,7 @@ void SelWeaponWidget::deleteWeaponsName()
     {
         isDeleting = true;
         wconf->remove(delWeaponsName);
-        QFile(cfgdir->absolutePath() + "/Weapon Settings/" + curWeaponsName + ".hww").remove();
+        QFile(cfgdir->absolutePath() + "/Schemes/Ammo/" + curWeaponsName + ".hwa").remove();
         emit weaponsDeleted(delWeaponsName);
     }
 }

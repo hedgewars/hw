@@ -680,7 +680,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
     schemes.append(construction);
     schemes.append(hedgeeditor);
 
-
+    if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
     if (!QDir(directory).exists()) {
         QDir().mkdir(directory);
 
@@ -692,7 +692,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
             if (!predefSchemesNames.contains(fileConfig.value(spNames[0]).toString()))
             {
                 QList<QVariant> scheme;
-                QSettings file(directory + "/" + fileConfig.value(spNames[0]).toString() + ".ini", QSettings::IniFormat);
+                QSettings file(directory + "/" + fileConfig.value(spNames[0]).toString() + ".hwg", QSettings::IniFormat);
 
                 for (int k = 0; k < spNames.size(); ++k) {
                     scheme << fileConfig.value(spNames[k], defaultScheme[k]);
@@ -833,7 +833,7 @@ bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 
     QList<QVariant> scheme = schemes[row];
     int j = spNames.indexOf("name");
-    QFile(cfgdir->absolutePath() + "/Game Settings/" + scheme[j].toString() + ".ini").remove();
+    QFile(cfgdir->absolutePath() + "/Schemes/Game/" + scheme[j].toString() + ".hwg").remove();
     schemes.removeAt(row);
 
     endRemoveRows();
@@ -859,7 +859,7 @@ void AmmoSchemeModel::Save()
     {
         QList<QVariant> scheme = schemes[i + numberOfDefaultSchemes];
         int j = spNames.indexOf("name");
-        QSettings file(cfgdir->absolutePath() + "/Game Settings/" + scheme[j].toString() + ".ini", QSettings::IniFormat);
+        QSettings file(cfgdir->absolutePath() + "/Schemes/Game/" + scheme[j].toString() + ".hwg", QSettings::IniFormat);
 
         for (int k = 0; k < scheme.size(); ++k)
             file.setValue(spNames[k], scheme[k]);
