@@ -1234,7 +1234,18 @@ function RedefineSubset()
 		pMode = {loc("Sticky Mine")}
 		placedExpense = 20
 	elseif cat[cIndex] == "Structure Placement Mode" then
-		pMode = {loc("Healing Station"), loc("Bio-Filter"), loc("Weapon Filter"), loc("Reflector Shield"), loc("Respawner"),loc("Teleportation Node"),loc("Generator"),loc("Construction Station"),loc("Support Station")}
+		pMode = {
+			loc("Support Station"),
+			loc("Construction Station"),
+			loc("Healing Station"),
+			loc("Teleportation Node"),
+			loc("Weapon Filter"),
+
+			loc("Bio-Filter"),
+			loc("Reflector Shield"),
+			loc("Respawner"),
+			loc("Generator"),
+		}
 	end
 
 
@@ -1639,15 +1650,16 @@ function onGameStart()
 				)
 
 	SetAmmoTexts(amCMStructurePlacer, loc("Structure Placer"), loc("Construction Mode tool"), loc("Build one of multiple different structures|to aid you in victory, at the cost of energy.") .. "| |" ..
+	loc("Support Station: Allows placement of crates.") .. "|"..
+	loc("Construction Station: Allows placement of|    girders, rubber, mines, sticky mines|    and barrels.")  .. "|" ..
 	loc("Healing Station: Heals nearby hogs.")  .. "|" ..
-	loc("Bio-Filter: Aggressively removes enemies.")  .. "|" ..
+	loc("Teleportation Node: Allows teleportation|    between other nodes.")  .. "|" ..
 	loc("Weapon Filter: Dematerializes all ammo|    carried by enemies entering it.")  .. "|" ..
+	loc("Bio-Filter: Aggressively removes enemies.")  .. "|" ..
 	loc("Reflector Shield: Reflects enemy projectiles.")  .. "|" ..
 	loc("Respawner: Resurrects dead hogs.")  .. "|" ..
-	loc("Teleportation Node: Allows teleportation|    between other nodes.")  .. "|" ..
 	loc("Generator: Generates energy.")  .. "|" ..
-	loc("Construction Station: Allows placement of|    girders, rubber, mines, sticky mines|    and barrels.")  .. "|" ..
-	loc("Support Station: Allows placement of crates.") .. "| |" ..
+	" |" ..
 
 	loc("Left/right: Choose structure type").."|"..
 	loc("1-5, Precise + 1-4: Choose structure type").."|"..
@@ -1661,7 +1673,7 @@ function onGameStart()
 	SetAmmoTexts(amCMCratePlacer, loc("Crate Placer"), loc("Construction Mode tool"),
 		loc("This allows you to create a crate anywhere|within your clan's area of influence,|at the cost of energy.") .. "|" ..
 		txt_crateLimit ..
-		loc("Up/down: Choose crate type") .. "|" .. 
+		loc("Up/down: Choose crate type") .. "|" ..
 		loc("Left/right: Choose crate contents") .. "|" ..
 		loc("|Cursor: Place crate"))
 	SetAmmoTexts(amCMObjectPlacer, loc("Object Placer"), loc("Construction Mode tool"),
