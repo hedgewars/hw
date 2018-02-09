@@ -1689,7 +1689,7 @@ end;
 
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
-    at, n: LongInt;
+    at, n, c: LongInt;
 const
     call = 'AddAmmo';
     params = 'gearUid, ammoType [, ammoCount]';
@@ -1697,14 +1697,19 @@ begin
     if CheckAndFetchParamCount(L, 2, 3, call, params, n) then
         begin
         at:= LuaToAmmoTypeOrd(L, 2, call, params);
-        if at >= 0 then
+        if (at >= 0) and (TAmmoType(at) <> amNothing) then
             begin
             gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
             if (gear <> nil) and (gear^.Hedgehog <> nil) then
                 if n = 2 then
                     AddAmmo(gear^.Hedgehog^, TAmmoType(at))
                 else
-                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), Trunc(lua_tonumber(L, 3)))
+                    begin
+                    c:= Trunc(lua_tonumber(L, 3));
+                    if (c = 0) and (CurrentHedgehog = gear^.Hedgehog) and (gear^.Hedgehog^.CurAmmoType = TAmmoType(at)) then
+                        ParseCommand('setweap ' + char(0), true, true);
+                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), c);
+                    end;
             end;
         end;
     lc_addammo:= 0

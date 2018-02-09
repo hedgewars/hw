@@ -43,6 +43,7 @@ Lua API:
  + New call: SpawnSupplyCrate(x, y, content, [, amount]): Spawn ammo or utility crate, depending on content
  + New call: HealHog(gearUid, healthBoost[, showMessage[, tint]]): Heal hedgehog with graphical effects and message
  + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
+ * AddAmmo now automatically unselects weapon if it would remove current ammo from current hedgehog
  * Fix call: SetWeapon(amNothing) now unselects weapon
  * Fix global: TotalRounds was stuck at -1 for several turns
 
