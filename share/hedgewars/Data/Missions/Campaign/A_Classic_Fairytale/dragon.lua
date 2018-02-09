@@ -346,9 +346,9 @@ end
 
 function SpawnCrateByID(id)
     if cratePos[id][2] == true then
-       crates[id] = SpawnUtilityCrate(unpack(cratePos[id][1]))
+       crates[id] = SpawnSupplyCrate(unpack(cratePos[id][1]))
     else
-       crates[id] = SpawnAmmoCrate(unpack(cratePos[id][1]))
+       crates[id] = SpawnSupplyCrate(unpack(cratePos[id][1]))
     end
     return crates[id]
 end
@@ -398,8 +398,8 @@ function AfterKilledAnim()
   HideHedge(cyborg)
   TurnTimeLeft = TurnTime
   SetGearMessage(native, 0)
-  SpawnUtilityCrate(1184, 399, amPortalGun, 100)
-  SpawnUtilityCrate(2259, 755, amTeleport, 2)
+  SpawnSupplyCrate(1184, 399, amPortalGun, 100)
+  SpawnSupplyCrate(2259, 755, amTeleport, 2)
   SpawnHealthCrate(secondPos[1][1] + 50, secondPos[1][2] - 20)
   ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
                                              loc("Portal hint: One goes to the destination, the other one is the entrance.|")..
@@ -563,7 +563,7 @@ function SetupPlace()
     end
   end
   HideHedge(cyborg)
-  jetCrate = SpawnUtilityCrate(3915, 1723, amJetpack)
+  jetCrate = SpawnSupplyCrate(3915, 1723, amJetpack)
 
   --[[ Block the left entrance.
        Otherwise the player could rope out of the map and

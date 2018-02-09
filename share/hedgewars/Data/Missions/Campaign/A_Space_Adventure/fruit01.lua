@@ -197,7 +197,7 @@ function onGameStart()
 
 	-- crates
 	SpawnHealthCrate(health1X, health1Y)
-	SpawnAmmoCrate(crateWMX, crateWMY, amWatermelon)
+	SpawnSupplyCrate(crateWMX, crateWMY, amWatermelon)
 
 	AddAnim(dialog01)
 	SendHealthStatsOff()

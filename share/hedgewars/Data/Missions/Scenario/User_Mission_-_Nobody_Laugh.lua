@@ -82,17 +82,16 @@ function onGameStart()
 	PlaceGirder(1436, 538, 0)
 	PlaceGirder(1505, 468, 4)
 
-	------ AMMO CRATE LIST ------
-	tempG = SpawnAmmoCrate(1242, 315, amBaseballBat)
-	tempG = SpawnAmmoCrate(1309, 315, amAirAttack)
-	tempG = SpawnAmmoCrate(144, 895, amAirAttack)
-	tempG = SpawnAmmoCrate(664, 699, amIceGun)
-	tempG = SpawnAmmoCrate(1572, 444, amFirePunch)
-	tempG = SpawnAmmoCrate(1574, 382, amDynamite)
+	------ CRATE LIST ------
+	tempG = SpawnSupplyCrate(1242, 315, amBaseballBat)
+	tempG = SpawnSupplyCrate(1309, 315, amAirAttack)
+	tempG = SpawnSupplyCrate(144, 895, amAirAttack)
+	tempG = SpawnSupplyCrate(664, 699, amIceGun)
+	tempG = SpawnSupplyCrate(1572, 444, amFirePunch)
+	tempG = SpawnSupplyCrate(1574, 382, amDynamite)
 
-	------ UTIL CRATE LIST ------
-	tempG = SpawnUtilityCrate(654, 513, amParachute)
-	tempG = SpawnUtilityCrate(1569, 413, amParachute)
+	tempG = SpawnSupplyCrate(654, 513, amParachute)
+	tempG = SpawnSupplyCrate(1569, 413, amParachute)
 
 	-- HOG AMMO
 	AddAmmo(hhs[1],amParachute,1)

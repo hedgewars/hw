@@ -71,16 +71,16 @@ function onGameStart()
 	AddGear(640,412,gtMine, 0, 0, 0, 0)
 
 	-- crates crates and more crates
-	SpawnAmmoCrate(1208,576,amBlowTorch)
-	SpawnAmmoCrate(1467,376,amPickHammer)
-	SpawnUtilityCrate(373,165,amGirder)
-	SpawnUtilityCrate(704,623,amJetpack)
-	SpawnUtilityCrate(1646,749,amLaserSight)
+	SpawnSupplyCrate(1208,576,amBlowTorch)
+	SpawnSupplyCrate(1467,376,amPickHammer)
+	SpawnSupplyCrate(373,165,amGirder)
+	SpawnSupplyCrate(704,623,amJetpack)
+	SpawnSupplyCrate(1646,749,amLaserSight)
 
-	SpawnAmmoCrate(745,418,amShotgun) --shotgun1
-	SpawnAmmoCrate(833,432,amFirePunch) --fire punch
-	GirderCrate = SpawnAmmoCrate(1789,514,amShotgun) -- final shotgun
-	SpawnAmmoCrate(1181,419,amBee)
+	SpawnSupplyCrate(745,418,amShotgun) --shotgun1
+	SpawnSupplyCrate(833,432,amFirePunch) --fire punch
+	GirderCrate = SpawnSupplyCrate(1789,514,amShotgun) -- final shotgun
+	SpawnSupplyCrate(1181,419,amBee)
 
 	ShowMission(loc("Spooky Tree"), loc("Scenario"),
 		loc("Eliminate the enemy before the time runs out.") .. "|" ..

@@ -77,15 +77,15 @@ function onGameStart()
 	AddGear(1002,1461,gtSMine, 0, 0, 0, 0)
 	AddGear(1052,1438,gtSMine, 0, 0, 0, 0)
 	AddGear(1102,1464,gtSMine, 0, 0, 0, 0)
-	--WEAPON CRATE LIST. 
-	SpawnAmmoCrate(1565,642,amSineGun)
-	SpawnAmmoCrate(548,858,amBazooka)
-	--UTILITY CRATE LIST.
-	SpawnUtilityCrate(479,847,amJetpack)
-	SpawnAmmoCrate(1550,1715,amBlowTorch)
-	SpawnUtilityCrate(1227,1941,amJetpack)
-	SpawnUtilityCrate(1070,1964,amInvulnerable)
-	SpawnUtilityCrate(1070,1875,amTeleport)
+	-- CRATE LIST.
+	SpawnSupplyCrate(1565,642,amSineGun)
+	SpawnSupplyCrate(548,858,amBazooka)
+
+	SpawnSupplyCrate(479,847,amJetpack)
+	SpawnSupplyCrate(1550,1715,amBlowTorch)
+	SpawnSupplyCrate(1227,1941,amJetpack)
+	SpawnSupplyCrate(1070,1964,amInvulnerable)
+	SpawnSupplyCrate(1070,1875,amTeleport)
 	--HOG POSITION LIST.
 	if hhs[0] ~= nil then
        		 SetGearPosition(hhs[0],397,865)

@@ -235,13 +235,13 @@ function SkipMidAnim()
 end
 
 function SetupPlace3()
-  SpawnUtilityCrate(2086, 1887, amRope, 1)
-  SpawnAmmoCrate(2147, 728, amBlowTorch, 2)
-  SpawnAmmoCrate(2778, 1372, amPickHammer, 3)
-  SpawnAmmoCrate(2579, 1886, amPickHammer, 3)
-  SpawnUtilityCrate(2622, 1893, amGirder, 1)
-  SpawnUtilityCrate(2671, 1883, amPortalGun, 3)
-  SpawnUtilityCrate(2831, 1384, amGirder, 3)
+  SpawnSupplyCrate(2086, 1887, amRope, 1)
+  SpawnSupplyCrate(2147, 728, amBlowTorch, 2)
+  SpawnSupplyCrate(2778, 1372, amPickHammer, 3)
+  SpawnSupplyCrate(2579, 1886, amPickHammer, 3)
+  SpawnSupplyCrate(2622, 1893, amGirder, 1)
+  SpawnSupplyCrate(2671, 1883, amPortalGun, 3)
+  SpawnSupplyCrate(2831, 1384, amGirder, 3)
 
   SetTimer(AddGear(2725, 1387, gtMine, 0, 0, 0, 0), 5000)
   SetTimer(AddGear(2760, 1351, gtMine, 0, 0, 0, 0), 5000)
@@ -299,17 +299,17 @@ function SetupPlace2()
 	PlaceGirder(648, 1427, 5)
   PlaceGirder(2110, 980, 0)
 
-	SpawnAmmoCrate(814, 407, amBazooka, 4)
-	clusterCrate = SpawnAmmoCrate(862, 494, amClusterBomb, 4)
-	SpawnAmmoCrate(855, 486, amBee, 3)
-	grenadeCrate1 = SpawnAmmoCrate(849, 459, amGrenade, 4)
-	SpawnAmmoCrate(2077, 847, amWatermelon, 3)
-	grenadeCrate2 = SpawnAmmoCrate(2122, 847, amGrenade, 3)
+	SpawnSupplyCrate(814, 407, amBazooka, 4)
+	clusterCrate = SpawnSupplyCrate(862, 494, amClusterBomb, 4)
+	SpawnSupplyCrate(855, 486, amBee, 3)
+	grenadeCrate1 = SpawnSupplyCrate(849, 459, amGrenade, 4)
+	SpawnSupplyCrate(2077, 847, amWatermelon, 3)
+	grenadeCrate2 = SpawnSupplyCrate(2122, 847, amGrenade, 3)
 
-	SpawnAmmoCrate(747, 1577, amPickHammer, 1)
-	SpawnUtilityCrate(496, 1757, amGirder, 2)
-  SpawnUtilityCrate(1809, 1880, amGirder, 1)
-	SpawnUtilityCrate(530, 1747, amPortalGun, 1)
+	SpawnSupplyCrate(747, 1577, amPickHammer, 1)
+	SpawnSupplyCrate(496, 1757, amGirder, 2)
+	SpawnSupplyCrate(1809, 1880, amGirder, 1)
+	SpawnSupplyCrate(530, 1747, amPortalGun, 1)
 end
 
 -----------------------------Events------------------------------------
@@ -353,17 +353,17 @@ function DoCyborgDead(index)
     return
   end
   if index == 1 then
-    SpawnAmmoCrate(1700, 407, amBazooka, 3)
+    SpawnSupplyCrate(1700, 407, amBazooka, 3)
   elseif index == 2 then
-    SpawnAmmoCrate(1862, 494, amClusterBomb, 3)
+    SpawnSupplyCrate(1862, 494, amClusterBomb, 3)
   elseif index == 3 then
-  	SpawnAmmoCrate(1855, 486, amBee, 1)
+    SpawnSupplyCrate(1855, 486, amBee, 1)
   elseif index == 4 then
-    SpawnAmmoCrate(1849, 459, amGrenade, 3)
+    SpawnSupplyCrate(1849, 459, amGrenade, 3)
   elseif index == 5 then
-    SpawnAmmoCrate(2122, 847, amGrenade, 3)
+    SpawnSupplyCrate(2122, 847, amGrenade, 3)
   elseif index == 6 then
-    SpawnAmmoCrate(2077, 847, amWatermelon, 1)
+    SpawnSupplyCrate(2077, 847, amWatermelon, 1)
   end
 end
 
@@ -403,14 +403,14 @@ function DoOutOfCluster()
   if (GetX(natives[1]) == nil) then
     return
   end
-  clusterCrate = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
+  clusterCrate = SpawnSupplyCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
 end
 
 function DoOutOfGrenade()
   if (GetX(natives[1]) == nil) then
     return
   end
-  grenadeCrate2 = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
+  grenadeCrate2 = SpawnSupplyCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
 end
 
 function CheckNeedToHide()

@@ -42,10 +42,10 @@ end
 function onGameStart()
 
 
-	SpawnUtilityCrate(426,886,amJetpack)
-	SpawnAmmoCrate(1544,690,amFirePunch)
-	SpawnAmmoCrate(950,851,amBlowTorch)
-	SpawnUtilityCrate(1032,853,amParachute)
+	SpawnSupplyCrate(426,886,amJetpack)
+	SpawnSupplyCrate(1544,690,amFirePunch)
+	SpawnSupplyCrate(950,851,amBlowTorch)
+	SpawnSupplyCrate(1032,853,amParachute)
 
 	AddGear(579, 296, gtMine, 0, 0, 0, 0)
 

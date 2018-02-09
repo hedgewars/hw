@@ -199,7 +199,7 @@ function onGameStart()
 		AddAmmo(hero.gear, amRope, 1)
 		AddAmmo(guard1.gear, amDEagle, 100)
 		AddAmmo(guard2.gear, amDEagle, 100)
-		SpawnUtilityCrate(saucerX, saucerY, amJetpack)
+		SpawnSupplyCrate(saucerX, saucerY, amJetpack)
 		-- EVENT HANDLERS
 		AddEvent(onHeroBeforeTreePosition, {hero.gear}, heroBeforeTreePosition, {hero.gear}, 0)
 		AddEvent(onHeroAcquiredSaucer, {hero.gear}, heroAcquiredSaucer, {hero.gear}, 1)

@@ -59,12 +59,12 @@ function onGameStart()
 	AddGear(1001,356,gtMine, 0, 0, 0, 0)
 
 	-- crates crates and more crates
-	bCrate = SpawnAmmoCrate(1688,476,amBaseballBat)
-	SpawnUtilityCrate(572,143,amGirder)
-	SpawnAmmoCrate(1704,954,amPickHammer)
-	SpawnAmmoCrate(704,623,amBlowTorch)
-	SpawnUtilityCrate(1543,744,amJetpack)
-	SpawnAmmoCrate(227,442,amDrill)
+	bCrate = SpawnSupplyCrate(1688,476,amBaseballBat)
+	SpawnSupplyCrate(572,143,amGirder)
+	SpawnSupplyCrate(1704,954,amPickHammer)
+	SpawnSupplyCrate(704,623,amBlowTorch)
+	SpawnSupplyCrate(1543,744,amJetpack)
+	SpawnSupplyCrate(227,442,amDrill)
 
 	ShowMission(loc("Teamwork"), loc("Scenario"), loc("Eliminate Unit 3378.") .. "|" .. loc("Both your hedgehogs must survive.") .. "|" .. loc("Mines time: 0 seconds"), 0, 0)
 

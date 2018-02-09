@@ -38,11 +38,11 @@ function onGameStart()
 
 	ShowMission(loc("Bamboo Thicket"), loc("Scenario"), loc("Eliminate the enemy."), -amBazooka, 0)
 
-	--WEAPON CRATE LIST. WCRATES: 2
-	SpawnAmmoCrate(891,852,amBazooka)
-	SpawnAmmoCrate(962,117,amBlowTorch)
-	--UTILITY CRATE LIST. UCRATES: 1
-	SpawnUtilityCrate(403,503,amParachute)
+	-- CRATE LIST.
+	SpawnSupplyCrate(891,852,amBazooka)
+	SpawnSupplyCrate(962,117,amBlowTorch)
+
+	SpawnSupplyCrate(403,503,amParachute)
 
 	AddAmmo(enemy, amGrenade, 100)
 		

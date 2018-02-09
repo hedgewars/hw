@@ -180,17 +180,17 @@ function onGameStart()
 	end
 
 	-- place crates
-	SpawnUtilityCrate(girderCrate.x, girderCrate.y, girderCrate.name)
-	SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
+	SpawnSupplyCrate(girderCrate.x, girderCrate.y, girderCrate.name)
+	SpawnSupplyCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
 	deviceCrate.gear = SpawnFakeUtilityCrate(deviceCrate.x, deviceCrate.y, false, false) -- anti-gravity device
 	-- Rope crate is placed after device crate has been collected.
 	-- This is done so it is impossible the player can rope before getting
 	-- the device part.
 
 	if tookPartInBattle then
-		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
+		SpawnSupplyCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
 	else
-		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)
+		SpawnSupplyCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)
 	end
 
 	SendHealthStatsOff()
@@ -255,7 +255,7 @@ function onGearDelete(gear)
 			deviceCrate.collected = true
 			deviceCrate.collector = CurrentHedgehog
 			-- Spawn rope crate
-			SpawnUtilityCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
+			SpawnSupplyCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 		end
 	end
 end

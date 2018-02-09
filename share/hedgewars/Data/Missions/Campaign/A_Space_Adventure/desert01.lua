@@ -142,16 +142,16 @@ function onGameStart()
 	AddAmmo(smuggler3.gear, amRope, 2)
 
 	-- spawn crates
-	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
-	SpawnUtilityCrate(rope1X, rope1Y, amRope)
-	SpawnUtilityCrate(rope2X, rope2Y, amRope)
-	SpawnUtilityCrate(rope3X, rope3Y, amRope)
-	SpawnUtilityCrate(portalX, portalY, amPortalGun)
+	SpawnSupplyCrate(btorch3X, btorch3Y, amBlowTorch)
+	SpawnSupplyCrate(rope1X, rope1Y, amRope)
+	SpawnSupplyCrate(rope2X, rope2Y, amRope)
+	SpawnSupplyCrate(rope3X, rope3Y, amRope)
+	SpawnSupplyCrate(portalX, portalY, amPortalGun)
 	SpawnHealthCrate(3300, 970)
 
 	-- the win crates, collect both to win
-	btorch2.gear = SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
-	girder.gear = SpawnUtilityCrate(girderX, girderY, amGirder)
+	btorch2.gear = SpawnSupplyCrate(btorch2X, btorch2Y, amBlowTorch)
+	girder.gear = SpawnSupplyCrate(girderX, girderY, amGirder)
 
 	-- adding mines - BOOM!
 	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
@@ -186,7 +186,7 @@ function onGameStart()
 	AddEvent(onHeroAtBattlePoint1, {hero.gear}, heroAtBattlePoint1, {hero.gear}, 0)
 	AddEvent(onHeroAtBattlePoint2, {hero.gear}, heroAtBattlePoint2, {hero.gear}, 0)
 	-- crates
-	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
+	SpawnSupplyCrate(btorch1X, btorch1Y, amBlowTorch)
 	SpawnHealthCrate(680, 460)
 	-- hero ammo
 	AddAmmo(hero.gear, amRope, 2)

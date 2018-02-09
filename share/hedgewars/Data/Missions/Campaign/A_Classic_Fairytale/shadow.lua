@@ -150,10 +150,10 @@ function AfterRefusedAnim()
   if stage == loseStage then
     return
   end
-  SpawnUtilityCrate(2045, 1575, amSwitch)
-  SpawnAmmoCrate(2365, 1495, amShotgun)
-  SpawnAmmoCrate(2495, 1519, amGrenade)
-  SpawnUtilityCrate(2620, 1524, amRope)
+  SpawnSupplyCrate(2045, 1575, amSwitch)
+  SpawnSupplyCrate(2365, 1495, amShotgun)
+  SpawnSupplyCrate(2495, 1519, amGrenade)
+  SpawnSupplyCrate(2620, 1524, amRope)
   ShowMission(loc("The Shadow Falls"), loc("The Showdown"), loc("Save Leaks A Lot!|Hint: The switch hedgehog utility might be of help to you."), 1, 6000)
   RemoveEventFunc(CheckDenseDead)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadRefused, {}, 0)
@@ -293,8 +293,8 @@ function AfterAcceptedAnim()
     return
   end
   stage = acceptedReturnStage
-  SpawnUtilityCrate(1370, 810, amGirder)
-  SpawnUtilityCrate(1300, 810, amParachute)
+  SpawnSupplyCrate(1370, 810, amGirder)
+  SpawnSupplyCrate(1300, 810, amParachute)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot!"), 1, 6000)
   AddEvent(CheckReadyForStronglings, {}, DoReadyForStronglings, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
@@ -348,10 +348,10 @@ function SkipAttackedAnim()
   if denseDead == false then
     DeleteGear(dense)
   end
-  SpawnAmmoCrate(2551, 994, amGrenade)
-  SpawnAmmoCrate(3551, 994, amGrenade)
-  SpawnAmmoCrate(3392, 1101, amShotgun)
-  SpawnAmmoCrate(3192, 1101, amShotgun)
+  SpawnSupplyCrate(2551, 994, amGrenade)
+  SpawnSupplyCrate(3551, 994, amGrenade)
+  SpawnSupplyCrate(3392, 1101, amShotgun)
+  SpawnSupplyCrate(3192, 1101, amShotgun)
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(leaks)
@@ -362,10 +362,10 @@ end
 -----------------------------Animations--------------------------------
 
 function SpawnCrates()
-  SpawnAmmoCrate(2551, 994, amGrenade)
-  SpawnAmmoCrate(3551, 994, amGrenade)
-  SpawnAmmoCrate(3392, 1101, amShotgun)
-  SpawnAmmoCrate(3192, 1101, amShotgun)
+  SpawnSupplyCrate(2551, 994, amGrenade)
+  SpawnSupplyCrate(3551, 994, amGrenade)
+  SpawnSupplyCrate(3392, 1101, amShotgun)
+  SpawnSupplyCrate(3192, 1101, amShotgun)
   return true
 end
 
@@ -863,8 +863,8 @@ function DoNeedWeapons()
   if stage == loseStage then
     return
   end
-  grenadeCrate = SpawnAmmoCrate(2550, 800, amGrenade)
-  shotgunCrate = SpawnAmmoCrate(2610, 850, amShotgun)
+  grenadeCrate = SpawnSupplyCrate(2550, 800, amGrenade)
+  shotgunCrate = SpawnSupplyCrate(2610, 850, amShotgun)
   AddCaption(loc("A little gift from the cyborgs"))
 end
 

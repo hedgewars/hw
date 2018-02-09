@@ -39,13 +39,13 @@ function onGameInit()
 end
 
 function onGameStart()
-	Pack = SpawnAmmoCrate(40, 888, amPickHammer)
-	SpawnAmmoCrate(90, 888, amBaseballBat)
-	SpawnAmmoCrate(822, 750, amBlowTorch)
-	SpawnUtilityCrate(700, 580, amJetpack)
-	SpawnUtilityCrate(1400, 425, amParachute)
-	SpawnAmmoCrate(1900, 770, amDynamite)
-	SpawnAmmoCrate(1794, 970, amDynamite)
+	Pack = SpawnSupplyCrate(40, 888, amPickHammer)
+	SpawnSupplyCrate(90, 888, amBaseballBat)
+	SpawnSupplyCrate(822, 750, amBlowTorch)
+	SpawnSupplyCrate(700, 580, amJetpack)
+	SpawnSupplyCrate(1400, 425, amParachute)
+	SpawnSupplyCrate(1900, 770, amDynamite)
+	SpawnSupplyCrate(1794, 970, amDynamite)
 
 	ShowMission(loc("Teamwork 2"), loc("Scenario"), loc("Eliminate WatchBot 4000.") .. "|" .. loc("Both your hedgehogs must survive.") .. "|" .. loc("Land mines explode instantly."), -amBaseballBat, 0)
 

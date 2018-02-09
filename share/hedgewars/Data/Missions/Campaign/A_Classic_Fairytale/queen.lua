@@ -491,7 +491,7 @@ function AfterStartAnim()
   SetHealth(SpawnHealthCrate(2207, 44), 25)
   SetHealth(SpawnHealthCrate(519, 1519), 25)
   SetHealth(SpawnHealthCrate(826, 895), 25)
-  SpawnUtilityCrate(701, 1046, amGirder, 3)
+  SpawnSupplyCrate(701, 1046, amGirder, 3)
   TurnTimeLeft = TurnTime
 end
 
@@ -688,18 +688,18 @@ function SetupPlace()
     end
   end
 
-  SpawnAmmoCrate(34, 410, amBee, 2)
-  SpawnAmmoCrate(33, 374, amRCPlane, 1)
-  SpawnAmmoCrate(74, 410, amAirAttack, 3)
-  SpawnAmmoCrate(1313, 1481, amBazooka, 8)
-  SpawnAmmoCrate(80, 360, amSniperRifle, 4)
-  SpawnAmmoCrate(1037, 1508, amShotgun, 7)
-  SpawnAmmoCrate(1037, 1472, amMolotov, 3)
-  SpawnAmmoCrate(1146, 1576, amMortar, 8)
+  SpawnSupplyCrate(34, 410, amBee, 2)
+  SpawnSupplyCrate(33, 374, amRCPlane, 1)
+  SpawnSupplyCrate(74, 410, amAirAttack, 3)
+  SpawnSupplyCrate(1313, 1481, amBazooka, 8)
+  SpawnSupplyCrate(80, 360, amSniperRifle, 4)
+  SpawnSupplyCrate(1037, 1508, amShotgun, 7)
+  SpawnSupplyCrate(1037, 1472, amMolotov, 3)
+  SpawnSupplyCrate(1146, 1576, amMortar, 8)
 
-  SpawnUtilityCrate(1147, 1431, amPortalGun, 2)
-  SpawnUtilityCrate(1219, 1542, amRope, 5)
-  SpawnUtilityCrate(1259, 1501, amJetpack, 2)
+  SpawnSupplyCrate(1147, 1431, amPortalGun, 2)
+  SpawnSupplyCrate(1219, 1542, amRope, 5)
+  SpawnSupplyCrate(1259, 1501, amJetpack, 2)
 
   if not nativeAwaitingDeletion then
     AfterSetupPlace()

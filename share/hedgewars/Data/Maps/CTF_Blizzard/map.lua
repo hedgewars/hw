@@ -538,21 +538,21 @@ function HandleCrateDrops()
 
 		r = GetRandom(8)
 		if r == 0 then
-			SpawnUtilityCrate(0,0,amSwitch)
+			SpawnSupplyCrate(0,0,amSwitch)
 		elseif r == 1 then
-			SpawnUtilityCrate(0,0,amTeleport)
+			SpawnSupplyCrate(0,0,amTeleport)
 		elseif r == 2 then
-			SpawnUtilityCrate(0,0,amJetpack)
+			SpawnSupplyCrate(0,0,amJetpack)
 		elseif r == 3 then
-			SpawnUtilityCrate(0,0,amExtraTime)
+			SpawnSupplyCrate(0,0,amExtraTime)
 		elseif r == 4 then
-			SpawnUtilityCrate(0,0,amGirder)
+			SpawnSupplyCrate(0,0,amGirder)
 		elseif r == 5 then
-			SpawnAmmoCrate(0,0,amDynamite)
+			SpawnSupplyCrate(0,0,amDynamite)
 		elseif r == 6 then
-			SpawnAmmoCrate(0,0,amFlamethrower)
+			SpawnSupplyCrate(0,0,amFlamethrower)
 		elseif r == 7 then
-			SpawnUtilityCrate(0,0,amPortalGun)
+			SpawnSupplyCrate(0,0,amPortalGun)
 		end
 
 	end
@@ -618,8 +618,8 @@ function onGameStart()
 
 
 	--spawn starting ufos and or super weapons
-	SpawnAmmoCrate(2048,1858,amJetpack)
-	--SpawnUtilityCrate(2048,1858,amExtraTime)
+	SpawnSupplyCrate(2048,1858,amJetpack)
+	--SpawnSupplyCrate(2048,1858,amExtraTime)
 
 	--set flag spawn points and spawn the flags
 	fSpawnX[0] = 957

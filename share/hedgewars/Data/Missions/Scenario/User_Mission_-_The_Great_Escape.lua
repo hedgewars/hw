@@ -79,14 +79,13 @@ SetGearPosition(player,1050,534)
 SetGearPosition(enemy,1512,158)
 SetHealth(player, 1)
 SetHealth(enemy, 1)
------- AMMO CRATE LIST ------
-SpawnAmmoCrate(1632,943,amShotgun)
-SpawnAmmoCrate(1723,888,amFirePunch)
-SpawnAmmoCrate(1915,599,amGrenade)
-SpawnAmmoCrate(1416,913,amBlowTorch)
-SpawnAmmoCrate(1227,640,amPickHammer)
------- UTILITY CRATE LIST ------
-SpawnUtilityCrate(1519,945,amParachute)
+------ CRATE LIST ------
+SpawnSupplyCrate(1632,943,amShotgun)
+SpawnSupplyCrate(1723,888,amFirePunch)
+SpawnSupplyCrate(1915,599,amGrenade)
+SpawnSupplyCrate(1416,913,amBlowTorch)
+SpawnSupplyCrate(1227,640,amPickHammer)
+SpawnSupplyCrate(1519,945,amParachute)
 ------ END LOADING DATA ------
 
 end

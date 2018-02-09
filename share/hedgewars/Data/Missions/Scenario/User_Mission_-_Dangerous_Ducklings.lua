@@ -49,8 +49,8 @@ end
 
 function onGameStart()
 
-	SpawnAmmoCrate(475,476,amRope)
-	SpawnAmmoCrate(1729,476,amFirePunch)
+	SpawnSupplyCrate(475,476,amRope)
+	SpawnSupplyCrate(1729,476,amFirePunch)
 
 	FollowGear(player)
 

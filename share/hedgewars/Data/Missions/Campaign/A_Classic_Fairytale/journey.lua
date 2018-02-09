@@ -274,12 +274,12 @@ function SkipStartAnim()
 end
 
 function PlaceCratesDuo()
-  SpawnAmmoCrate(3090, 827, amBaseballBat)
-  girderCrate1 = SpawnUtilityCrate(2466, 1814, amGirder)
-  girderCrate2 = SpawnUtilityCrate(2630, 1278, amGirder)
-  SpawnUtilityCrate(2422, 1810, amParachute)
-  SpawnUtilityCrate(3157, 1009, amLowGravity)
-  sniperCrate = SpawnAmmoCrate(784, 1715, amSniperRifle)
+  SpawnSupplyCrate(3090, 827, amBaseballBat)
+  girderCrate1 = SpawnSupplyCrate(2466, 1814, amGirder)
+  girderCrate2 = SpawnSupplyCrate(2630, 1278, amGirder)
+  SpawnSupplyCrate(2422, 1810, amParachute)
+  SpawnSupplyCrate(3157, 1009, amLowGravity)
+  sniperCrate = SpawnSupplyCrate(784, 1715, amSniperRifle)
 end
 
 function PlaceMinesDuo()
@@ -408,11 +408,11 @@ function SetupCourseDuo()
   PlaceGirder(1033, 649, 0)
   PlaceGirder(952, 650, 0)
 
-  fireCrate = SpawnAmmoCrate(1846, 1100, amFirePunch)
-  SpawnAmmoCrate(1900, 1100, amPickHammer)
-  SpawnAmmoCrate(950, 674, amDynamite)
-  SpawnUtilityCrate(994, 825, amRope)
-  SpawnUtilityCrate(570, 1357, amLowGravity)
+  fireCrate = SpawnSupplyCrate(1846, 1100, amFirePunch)
+  SpawnSupplyCrate(1900, 1100, amPickHammer)
+  SpawnSupplyCrate(950, 674, amDynamite)
+  SpawnSupplyCrate(994, 825, amRope)
+  SpawnSupplyCrate(570, 1357, amLowGravity)
 end
 
 local trackedGears = {}
@@ -721,14 +721,14 @@ end
 
 function SetupPlaceAlone()
   ------ AMMO CRATE LIST ------
-  SpawnAmmoCrate(3124, 952, amBaseballBat)
-  SpawnAmmoCrate(2508, 1110, amFirePunch)
+  SpawnSupplyCrate(3124, 952, amBaseballBat)
+  SpawnSupplyCrate(2508, 1110, amFirePunch)
   ------ UTILITY CRATE LIST ------
-  blowCrate = SpawnAmmoCrate(3675, 1480, amBlowTorch)
-  gravityCrate = SpawnUtilityCrate(3448, 1349, amLowGravity)
-  SpawnUtilityCrate(3212, 1256, amGirder)
-  SpawnUtilityCrate(3113, 911, amParachute)
-  sniperCrate = SpawnAmmoCrate(784, 1715, amSniperRifle)
+  blowCrate = SpawnSupplyCrate(3675, 1480, amBlowTorch)
+  gravityCrate = SpawnSupplyCrate(3448, 1349, amLowGravity)
+  SpawnSupplyCrate(3212, 1256, amGirder)
+  SpawnSupplyCrate(3113, 911, amParachute)
+  sniperCrate = SpawnSupplyCrate(784, 1715, amSniperRifle)
   ------ MINE LIST ------
   AddGear(3328, 1399, gtMine, 0, 0, 0, 0)
   AddGear(3028, 1262, gtMine, 0, 0, 0, 0)
@@ -836,12 +836,12 @@ function SetupCourse()
   PlaceGirder(1135, 775, 1)
 
   ------ UTILITY CRATE LIST ------
-  SpawnUtilityCrate(1590, 628, amParachute)
-  SpawnAmmoCrate(1540, 100, amDynamite)
-  SpawnUtilityCrate(2175, 1815, amLowGravity)
-  SpawnAmmoCrate(2210, 1499, amFirePunch)
-  girderCrate = SpawnUtilityCrate(2300, 1663, amGirder)
-  SpawnAmmoCrate(610, 1394, amPickHammer)
+  SpawnSupplyCrate(1590, 628, amParachute)
+  SpawnSupplyCrate(1540, 100, amDynamite)
+  SpawnSupplyCrate(2175, 1815, amLowGravity)
+  SpawnSupplyCrate(2210, 1499, amFirePunch)
+  girderCrate = SpawnSupplyCrate(2300, 1663, amGirder)
+  SpawnSupplyCrate(610, 1394, amPickHammer)
   
   ------ BARREL LIST ------
   SetHealth(AddGear(1148, 736, gtExplosives, 0, 0, 0, 0), 20)
