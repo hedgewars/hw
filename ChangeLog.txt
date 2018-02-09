@@ -4,6 +4,7 @@
 Game:
  + New weapon: Minigun
  + Change weapon icons: Mudball, air mine
+ + Add visual effect when hogs heal in "reset health" mode
  * Fix time box being usable in Sudden Death with 0 health decrease
  * Fix chat input key being sometimes registered twice
 

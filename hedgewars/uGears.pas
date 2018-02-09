@@ -542,7 +542,10 @@ begin
         t^.PortalCounter:= 0;
         if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < t^.Hedgehog^.InitialHealth) then
             begin
+            i:= t^.Hedgehog^.InitialHealth - t^.Health;
             t^.Health:= t^.Hedgehog^.InitialHealth;
+            if i > 0 then
+                HHHeal(t^.Hedgehog, i, false, $00FF0040);
             RenderHealth(t^.Hedgehog^);
             end;
         t:= t^.NextGear
