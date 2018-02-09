@@ -707,7 +707,7 @@ function EuropeSpecialMolotovHit(hog)
 	then
 		if(gearIsInCircle(GLOBAL_TEMP_VALUE,GetX(hog), GetY(hog), 100, false))
 		then
-			SetHealth(hog, GetHealth(hog)+25+(div(25*GLOBAL_VAMPIRIC_IS_ON,100)))
+			HealHog(hog, 25 + (div(25*GLOBAL_VAMPIRIC_IS_ON,100)), hog == CurrentHedgehog)
 			SetEffect(hog, hePoisoned, false)
 			GLOBAL_SABOTAGE_HOGS[hog]=0
 		end
@@ -1259,7 +1259,7 @@ function onAttack()
 		then
 			GLOBAL_TEMP_VALUE=0
 			runOnGears(KerguelenSpecialRed)
-			SetHealth(CurrentHedgehog, GetHealth(CurrentHedgehog)+GLOBAL_TEMP_VALUE)
+			HealHog(CurrentHedgehog, GLOBAL_TEMP_VALUE)
 			PlaySound(sndHellish)
 
 		--swap

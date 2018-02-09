@@ -624,11 +624,16 @@ function CheckProximity(gear)
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[tempID] then
 
-					hogLife = GetHealth(gear) + 1
-					if hogLife > 150 then
-						hogLife = 150
+					local hogLife = GetHealth(gear)
+					-- Heal hog by 1 HP, up to 150 HP total
+					if hogLife < 150 then
+						if ((hogLife + 1) % 5) == 0 then
+							-- Health anim every 5 HP
+							HealHog(gear, 1, false)
+						else
+							SetHealth(gear, hogLife+1)
+						end
 					end
-					SetHealth(gear, hogLife)
 
 					-- change this to the med kit sprite health ++++s later
 					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)

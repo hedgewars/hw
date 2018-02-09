@@ -54,25 +54,6 @@ local heroWeaponResetPending = false
 local battleStarted = false
 local firstTurn = true
 
--- Spawn health particles and print health message
-local function healthBoostAnim(gear, health, tint)
-	if health < 1 then
-		return
-	end
-	local h = 0
-	while (h < health and h < 1000) do
-		local vg = AddVisualGear(GetX(gear), GetY(gear), vgtStraightShot, sprHealth, false)
-		if vg ~= nil then
-			SetVisualGearValues(vg, nil, nil, nil, nil, nil, nil, nil, nil, nil, tint)
-			SetState(vg, sprHealth)
-		end
-		h = h + 5
-	end
-	if math.floor(health) >= 1 then
-		AddCaption(string.format(loc("+%d"), math.floor(health)), GetClanColor(GetHogClan(gear)), capgrpMessage2)
-	end
-end
-
 -------------- LuaAPI EVENT HANDLERS ------------------
 
 function onGameInit()
@@ -135,9 +116,13 @@ end
 
 function onGearDelete(gear)
 	if isHog(gear) then
+		-- Set health to 100 (with heal effect, if health was smaller)
 		local healthDiff = 100 - GetHealth(hero.gear)
-		SetHealth(hero.gear, 100)
-		healthBoostAnim(hero.gear, healthDiff, 0x00FF00FF)
+		if healthDiff > 1 then
+			HealHog(hero.gear, healthDiff, true, 0x00FF00FF)
+		else
+			SetHealth(hero.gear, 100)
+		end
 		local deadHog = getHog(gear)
 		if deadHog.weapon == amMortar then
 			hero.mortarAmmo = 0
@@ -165,8 +150,7 @@ end
 function onGearDamage(gear, damage)
 	if isHog(gear) and GetHealth(hero.gear) then
 		local bonusHealth = div(damage, 3)
-		SetHealth(hero.gear, GetHealth(hero.gear) + bonusHealth)
-		healthBoostAnim(hero.gear, bonusHealth, 0xFF0000FF)
+		HealHog(hero.gear, bonusHealth, true, 0xFF0000FF)
 	end
 end
 
