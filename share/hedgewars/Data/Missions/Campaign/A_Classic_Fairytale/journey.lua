@@ -259,7 +259,7 @@ end
 function AfterStartAnim()
   SetGearMessage(leaks, 0)
   TurnTimeLeft = TurnTime
-  local goal = loc("Get the crate on the other side of the island")
+  local goal = loc("Get the crate on the other side of the island.")
   local hint = loc("Hint: You might want to stay out of sight and take all the crates ...")
   local stuck = loc("If you get stuck, use your Desert Eagle or restart the mission!")
   local conds = loc("Leaks A Lot must survive!")
