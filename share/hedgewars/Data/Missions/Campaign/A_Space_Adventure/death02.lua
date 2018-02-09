@@ -11,13 +11,13 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Killing the specialists")
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
-	loc("Each time you play this mission, enemy hogs will play in a random order.").."|"..
+	loc("The enemy hogs play in a random order.").."|"..
 	loc("At the start of the game each enemy hog has only the weapon that he is named after.").."|"..
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates.").."|"..
-	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100.").."|"..
-	loc("If you injure a hedgehog you'll get 35% of the damage dealt.").."|"..
-	loc("Every time you kill an enemy hog your ammo will get reset next turn.").."|"..
-	loc("The rope won't get reset.")
+	loc("After you killed an enemy, you'll lose the weapon that he is named after.").."|"..
+	loc("If only one enemy is left, you'll get bonus ammo.").."|"..
+	loc("If you hurt an enemy, you'll get one third of the damage dealt.").."|"..
+	loc("If you kill an enemy, your health will be set to 100.")
 -- mission objectives
 local goals = {
 	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
@@ -53,6 +53,25 @@ local teamB = {
 local heroWeaponResetPending = false
 local battleStarted = false
 local firstTurn = true
+
+-- Spawn health particles and print health message
+local function healthBoostAnim(gear, health, tint)
+	if health < 1 then
+		return
+	end
+	local h = 0
+	while (h < health and h < 1000) do
+		local vg = AddVisualGear(GetX(gear), GetY(gear), vgtStraightShot, sprHealth, false)
+		if vg ~= nil then
+			SetVisualGearValues(vg, nil, nil, nil, nil, nil, nil, nil, nil, nil, tint)
+			SetState(vg, sprHealth)
+		end
+		h = h + 5
+	end
+	if math.floor(health) >= 1 then
+		AddCaption(string.format(loc("+%d"), math.floor(health)), GetClanColor(GetHogClan(gear)), capgrpMessage2)
+	end
+end
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -111,14 +130,14 @@ function onNewTurn()
 	end
 	if CurrentHedgehog ~= hero.gear then
 		enemyWeapons()
-	elseif heroWeaponResetPending then
-		refreshHeroAmmo()
 	end
 end
 
 function onGearDelete(gear)
 	if isHog(gear) then
+		local healthDiff = 100 - GetHealth(hero.gear)
 		SetHealth(hero.gear, 100)
+		healthBoostAnim(hero.gear, healthDiff, 0x00FF00FF)
 		local deadHog = getHog(gear)
 		if deadHog.weapon == amMortar then
 			hero.mortarAmmo = 0
@@ -145,7 +164,9 @@ end
 
 function onGearDamage(gear, damage)
 	if isHog(gear) and GetHealth(hero.gear) then
-		SetHealth(hero.gear, GetHealth(hero.gear) + damage/3)
+		local bonusHealth = damage/3
+		SetHealth(hero.gear, GetHealth(hero.gear) + bonusHealth)
+		healthBoostAnim(hero.gear, bonusHealth, 0xFF0000FF)
 	end
 end
 
@@ -156,6 +177,13 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+end
+
+function onGameTick20()
+	-- Refresh hero ammo immediately after its not his turn anymore
+	if CurrentHedgehog ~= hero.gear and heroWeaponResetPending then
+		refreshHeroAmmo()
+	end
 end
 
 -- Hide mission panel when player does anything
@@ -235,6 +263,8 @@ function refreshHeroAmmo()
 	local extraAmmo = 0
 	if getAliveEnemiesCount() == 1 then
 		extraAmmo = 2
+		PlaySound(sndShotgunReload)
+		AddCaption(loc("Reinforcements! +2 of each weapon!"), GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
 	end
 	AddAmmo(hero.gear, amMortar, hero.mortarAmmo + extraAmmo)
 	AddAmmo(hero.gear, amFirePunch, hero.firepunchAmmo + extraAmmo)

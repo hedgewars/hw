@@ -18,6 +18,8 @@ Content:
 A Space Adventure:
  + Precise Shooting: Display collected ammo
  + Hard Flying: Display personal best at mission start
+ + Killing the Specialists: Add event messages and graphical effects
+ * Killing the Specialists: Fix very misleading hints in mission panel
 
 A Classic Fairytale:
  + Mission 3: Display number of turns left at timed parcours
