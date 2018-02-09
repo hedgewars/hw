@@ -1024,31 +1024,34 @@ local curWep = amNothing
 
 -- primary placement categories
 local cIndex = 1 -- category index
-local cat = 	{
-				"Girder Placement Mode",
-				"Rubber Placement Mode",
-				"Mine Placement Mode",
-				"Sticky Mine Placement Mode",
-				"Barrel Placement Mode",
-				"Weapon Crate Placement Mode",
-				"Utility Crate Placement Mode",
-				"Health Crate Placement Mode",
-				"Structure Placement Mode"
-				}
+local cat = {
+	"Girder Placement Mode",
+	"Rubber Placement Mode",
+	"Mine Placement Mode",
+	"Sticky Mine Placement Mode",
+	"Barrel Placement Mode",
+	"Weapon Crate Placement Mode",
+	"Utility Crate Placement Mode",
+	"Health Crate Placement Mode",
+	"Structure Placement Mode"
+}
+local catReverse = {}
+for c=1, #cat do
+	catReverse[cat[c]] = c
+end
 
-
- sProx = 	{
-				{loc("Girder Placement Mode"),false},
-				{loc("Rubber Placement Mode"),false},
-				{loc("Mine Placement Mode"),false},
-				{loc("Sticky Mine Placement Mode"),false},
-				{loc("Barrel Placement Mode"),false},
-				{loc("Weapon Crate Placement Mode"),false},
-				{loc("Utility Crate Placement Mode"),false},
-				{loc("Health Crate Placement Mode"),false},
-				{loc("Structure Placement Mode"),false},
-				{loc("Teleportation Mode"),false}
-				}
+sProx = {
+	{loc("Girder Placement Mode"),false},
+	{loc("Rubber Placement Mode"),false},
+	{loc("Mine Placement Mode"),false},
+	{loc("Sticky Mine Placement Mode"),false},
+	{loc("Barrel Placement Mode"),false},
+	{loc("Weapon Crate Placement Mode"),false},
+	{loc("Utility Crate Placement Mode"),false},
+	{loc("Health Crate Placement Mode"),false},
+	{loc("Structure Placement Mode"),false},
+	{loc("Teleportation Mode"),false},
+}
 
 
 local pMode = {}	-- pMode contains custom subsets of the main categories
@@ -1208,7 +1211,7 @@ function RedefineSubset()
 	pMode = {}
 	placedExpense = 1
 
-	if not CurrentHedgehog then
+	if (CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0) then
 		return false
 	end
 
@@ -1282,7 +1285,7 @@ function HandleHedgeEditor()
 			HandleBorderEffects()
 		end
 
-		if (CurrentHedgehog ~= nil) and (TurnTimeLeft ~= TurnTime) then
+		if (TurnTimeLeft ~= TurnTime) then
 			if (lastWep ~= GetCurAmmoType()) then
 				checkForSpecialWeapons()
 			elseif checkForSpecialWeaponsIn == 0 then
@@ -1297,71 +1300,47 @@ function HandleHedgeEditor()
 
 			DrawClanPowerTag()
 
-			curWep = GetCurAmmoType()
 
-			-- change to girder mode on weapon swap
-			if (cIndex ~= 1) and (curWep == amGirder) then
-				cIndex = 1
-				RedefineSubset()
-			elseif (cIndex ~=2) and (curWep == amRubber) then
-				cIndex = 2
-				RedefineSubset()
-			-- change to generic mode if girder no longer selected
-			elseif (cIndex == 1) and (curWep ~= amGirder) then
-				cIndex = 3
-				RedefineSubset()
-			elseif (cIndex == 2) and (curWep ~= amRubber) then
-				cIndex = 3
-				RedefineSubset()
+			-- Update display selection criteria
+			if (band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
+				curWep = GetCurAmmoType()
 
-			end
-
-			-- update display selection criteria
-			if ((curWep == amGirder) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) or (curWep == amRubber))
-				and (CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
-
-				---------------hooolllllyyyy fucking shit this
-				-- code is a broken mess now
-				-- it was redesigned and compromised three times
-				-- so now it is a mess trying to do what it was
-				-- never designed to do
-				-- needs to be rewritten badly sadface
-				-- this bit here catches the new 3 types of weapons
-				if ((sProx[cIndex][1] == loc("Structure Placement Mode") and (curWep ~= amCMStructurePlacer))) then
-					updatePlacementDisplay(1)
-				elseif (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
-							(sProx[cIndex][1] == loc("Weapon Crate Placement Mode")) or
-							(sProx[cIndex][1] == loc("Utility Crate Placement Mode")) then
-								if curWep ~= amCMCratePlacer then
-									updatePlacementDisplay(1)
-								end
-
-				elseif (sProx[cIndex][1] == loc("Mine Placement Mode")) or
-							(sProx[cIndex][1] == loc("Sticky Mine Placement Mode")) or
-							(sProx[cIndex][1] == loc("Barrel Placement Mode")) then
-								if curWep ~= amCMObjectPlacer then
-									updatePlacementDisplay(1)
-								end
-
-				end
-
-				--this is called when it happens that we have placement
-				--mode selected and we are looking at something
-				--we shouldn't be allowed to look at, as would be the case
-				--when you WERE allowed to look at it, but then maybe
-				--a bomb blows up the structure that was granting you
-				--that ability
-				if (sProx[cIndex][2] ~= true) then
-					updatePlacementDisplay(1)
-				else
+				local updated = false
+				local team = GetHogTeamName(CurrentHedgehog)
+				if (curWep == amGirder) then
+					cIndex = 1
+					RedefineSubset()
+					updated = true
+				elseif (curWep == amRubber) then
+					cIndex = 2
+					RedefineSubset()
+					updated = true
+				elseif (curWep == amCMStructurePlacer) then
+					cIndex = 9
+					RedefineSubset()
 					updateCost()
+					updated = true
+				elseif (curWep == amCMCratePlacer) then
+					cIndex = catReverse[teamLCrateMode[team]]
+					RedefineSubset()
+					updateCost()
+					updated = true
+				elseif (curWep == amCMObjectPlacer) then
+					cIndex = catReverse[teamLObjectMode[team]]
+					RedefineSubset()
+					updateCost()
+					updated = true
 				end
 
-
-				AddCaption(loc(cat[cIndex]),0xffba00ff,capgrpMessage)
-				showModeMessage()
-				wallsVisible = true
+				if updated then
+					AddCaption(loc(cat[cIndex]), 0xffba00ff, capgrpMessage)
+					showModeMessage()
+					wallsVisible = true
+				else
+					wallsVisible = false
+				end
 			else
+				curWep = amNothing
 				wallsVisible = false
 			end
 
@@ -1507,7 +1486,9 @@ function updateIndex()
 	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then return end
 	local val = pMode[pIndex]
 	local team = GetHogTeamName(CurrentHedgehog)
-	if cat[cIndex] == "Mine Placement Mode" then
+	if cat[cIndex] == "Structure Placement Mode" then
+		teamLStructIndex[team] = pIndex
+	elseif cat[cIndex] == "Mine Placement Mode" then
 		teamLMineIndex[team] = pIndex
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		teamLWeapIndex[team] = pIndex
@@ -1585,7 +1566,7 @@ end
 function onUp()
 
 	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
-		if CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+		if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
 			updatePlacementDisplay(-1)
 		end
 	end
@@ -1595,7 +1576,7 @@ end
 function onDown()
 
 	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
-		if CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+		if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
 			updatePlacementDisplay(1)
 		end
 	end
@@ -1769,6 +1750,8 @@ end
 
 function onNewTurn()
 
+	curWep = GetCurAmmoType()
+
 	local clan = GetHogClan(CurrentHedgehog)
 	if clanFirstTurn[clan] then
 		clanFirstTurn[clan] = false
@@ -1781,6 +1764,10 @@ function onNewTurn()
 	clanUsedExtraTime[clan] = false
 	clanCratesSpawned[clan] = 0
 
+end
+
+function onTurnEnd()
+	curWep = amNothing
 end
 
 function onGameTick()
