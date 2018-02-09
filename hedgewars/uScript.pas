@@ -2051,6 +2051,22 @@ begin
     lc_addteam:= 0;//1;
 end;
 
+function lc_getteamname(L : Plua_State) : LongInt; Cdecl;
+var t: LongInt;
+begin
+    if CheckLuaParamCount(L, 1, 'GetTeamName', 'teamIdx') then
+        begin
+        t:= Trunc(lua_tonumber(L, 1));
+        if (t < 0) or (t >= TeamsCount) then
+            lua_pushnil(L)
+        else
+            lua_pushstring(L, str2pchar(TeamsArray[t]^.TeamName));
+        end
+    else
+        lua_pushnil(L);
+    lc_getteamname:= 1;
+end;
+
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
 var HHGear: PGear;
     i, h  : LongInt;
@@ -3636,6 +3652,7 @@ lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
+lua_register(luaState, _P'GetTeamName', @lc_getteamname);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
 lua_register(luaState, _P'AddHog', @lc_addhog);
 lua_register(luaState, _P'AddAmmo', @lc_addammo);
