@@ -177,11 +177,15 @@ clanBoundsEY = {}
 
 clanPower = {}
 clanID = {}
-clanLStrucIndex = {}
 
-clanLWepIndex = {} -- for ease of use let's track this stuff
-clanLUtilIndex = {}
-clanLGearIndex = {}
+-- for ease of use let's track previous selection
+teamLStructIndex = {}
+teamLObjectMode = {}
+teamLCrateMode = {}
+teamLMineIndex = {}
+teamLWeapIndex = {}
+teamLUtilIndex = {}
+
 clanUsedExtraTime = {}
 clanCratesSpawned = {}
 clanFirstTurn = {}
@@ -1204,6 +1208,12 @@ function RedefineSubset()
 	pMode = {}
 	placedExpense = 1
 
+	if not CurrentHedgehog then
+		return false
+	end
+
+	local team = GetHogTeamName(CurrentHedgehog)
+
 	if cat[cIndex] == "Girder Placement Mode" then
 		pIndex = CGR
 		pMode = {loc("Girder")}
@@ -1214,25 +1224,34 @@ function RedefineSubset()
 	elseif cat[cIndex] == "Barrel Placement Mode" then
 		pMode = {60}
 		placedExpense = 10
+		teamLObjectMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Health Crate Placement Mode" then
 		pMode = {HealthCaseAmount}
 		placedExpense = 5
+		teamLCrateMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
 			pMode[i] = GetAmmoName(atkArray[i][1])
 		end
 		placedExpense = atkArray[pIndex][4]
+		teamLCrateMode[team] = cat[cIndex]
+		pIndex = teamLWeapIndex[team]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		for i = 1, #utilArray do
 			pMode[i] = GetAmmoName(utilArray[i][1])
 		end
 		placedExpense = utilArray[pIndex][4]
+		teamLCrateMode[team] = cat[cIndex]
+		pIndex = teamLUtilIndex[team]
 	elseif cat[cIndex] == "Mine Placement Mode" then
 		pMode = {0,1000,2000,3000,4000,5000}
 		placedExpense = 15
+		teamLObjectMode[team] = cat[cIndex]
+		pIndex = teamLMineIndex[team]
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 		pMode = {loc("Sticky Mine")}
 		placedExpense = 20
+		teamLObjectMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Structure Placement Mode" then
 		pMode = {
 			loc("Support Station"),
@@ -1246,11 +1265,10 @@ function RedefineSubset()
 			loc("Respawner"),
 			loc("Generator"),
 		}
+		pIndex = teamLStructIndex[team]
 	end
 
-
-
-
+	return true
 end
 
 -- called in onGameTick()
@@ -1434,8 +1452,7 @@ function onTimer(key)
 		-- Check for valid pIndex
 		if structureID <= #pMode then
 			pIndex = structureID
-			showModeMessage()
-			updateCost()
+			updateIndex()
 		end
 	elseif (curWep == amCMObjectPlacer) then
 		-- [Timer X]: Set mine time 1-5
@@ -1443,8 +1460,7 @@ function onTimer(key)
 			local index = key + 1
 			if key <= #pMode then
 				pIndex = index
-				showModeMessage()
-				updateCost()
+				updateIndex()
 			end
 		end
 	end
@@ -1455,38 +1471,49 @@ function onSwitch()
 	if (curWep == amCMObjectPlacer) then
 		-- [Switch]: Set mine time to 0
 		pIndex = 1
-		showModeMessage()
-		updateCost()
+		updateIndex()
 	end
 end
 
 function onLeft()
-
-	pIndex = pIndex - 1
-	if pIndex == 0 then
-		pIndex = #pMode
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
+		pIndex = pIndex - 1
+		if pIndex == 0 then
+			pIndex = #pMode
+		end
+		updateIndex()
 	end
-
-	if (curWep == amGirder) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
-		showModeMessage()
-		updateCost()
-	end
-
-
 end
 
 function onRight()
-
-	pIndex = pIndex + 1
-	if pIndex > #pMode then
-		pIndex = 1
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
+		pIndex = pIndex + 1
+		if pIndex > #pMode then
+			pIndex = 1
+		end
+		updateIndex()
 	end
+end
 
-	if (curWep == amGirder) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
+-- Should be called when the index of the mode was changed by the player.
+-- E.g. new weapon crate contents or structure type
+function updateIndex()
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
 		showModeMessage()
 		updateCost()
 	end
 
+	-- Update team variables so the previous state can be restored later
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then return end
+	local val = pMode[pIndex]
+	local team = GetHogTeamName(CurrentHedgehog)
+	if cat[cIndex] == "Mine Placement Mode" then
+		teamLMineIndex[team] = pIndex
+	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
+		teamLWeapIndex[team] = pIndex
+	elseif cat[cIndex] == "Utility Crate Placement Mode" then
+		teamLUtilIndex[team] = pIndex
+	end
 end
 
 function showModeMessage()
@@ -1688,13 +1715,20 @@ function onGameStart()
 
 	for i = 0, ClansCount-1 do
 		clanPower[i] = math.min(conf_initialEnergy, conf_maxEnergy)
-		clanLWepIndex[i] = 1 -- for ease of use let's track this stuff
-		clanLUtilIndex[i] = 1
-		clanLGearIndex[i] = 1
+
 		clanUsedExtraTime[i] = false
 		clanCratesSpawned[i] = 0
 		clanFirstTurn[i] = true
 
+	end
+	for i = 0, TeamsCount-1 do
+		local team = GetTeamName(i)
+		teamLStructIndex[team] = 1
+		teamLObjectMode[team] = "Mine Placement Mode"
+		teamLCrateMode[team] = "Weapon Crate Placement Mode"
+		teamLMineIndex[team] = 1
+		teamLWeapIndex[team] = 1
+		teamLUtilIndex[team] = 1
 	end
 
 	tMapWidth = RightX - LeftX
