@@ -31,6 +31,8 @@ function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
 procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
+procedure HHHeal(Hedgehog: PHedgehog; healthBoost: Longword; showMessage: boolean; vgTint: Longword);
+procedure HHHeal(Hedgehog: PHedgehog; healthBoost: Longword; showMessage: boolean);
 procedure CheckHHDamage(Gear: PGear);
 procedure CalcRotationDirAngle(Gear: PGear);
 procedure ResurrectHedgehog(var gear: PGear);
@@ -263,8 +265,7 @@ else
 end;
 
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
-var s: ansistring;
-    vampDmg, tmpDmg, i: Longword;
+var vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
     if Damage = 0 then
@@ -288,22 +289,9 @@ begin
                     // was considering pulsing on attack, Tiy thinks it should be permanent while in play
                     //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-                    s:= IntToStr(vampDmg);
-                    AddCaption(FormatA(trmsg[sidHealthGain], s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
-                    i:= 0;
-                    while (i < vampDmg) and (i < 1000) do
-                        begin
-                        vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
-                        if vg <> nil then
-                            with vg^ do
-                                begin
-                                Tint:= $FF0000FF;
-                                State:= ord(sprHealth)
-                                end;
-                        inc(i, 5);
-                        end;
+                    HHHeal(CurrentHedgehog, vampDmg, true, $FF0000FF);
                     end
                 end;
             if (GameFlags and gfKarma <> 0) and (GameFlags and gfInvulnerable = 0) and
@@ -355,6 +343,7 @@ AllInactive:= false;
 HHGear^.Active:= true;
 end;
 
+// Play effects for hurt hedgehog
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 begin
 if Hedgehog^.Effects[heFrozen] <> 0 then exit;
@@ -377,6 +366,48 @@ else
         2: PlaySoundV(sndOw3, Hedgehog^.Team^.voicepack);
         3: PlaySoundV(sndOw4, Hedgehog^.Team^.voicepack);
     end
+end;
+
+{-
+Show heal particles and message at hog gear.
+Hedgehog: Hedgehog which gets the health boost
+healthBoost: Amount of added health added
+showMessage: Whether to show announcer message
+vgTint: Tint of heal particle
+-}
+procedure HHHeal(Hedgehog: PHedgehog; healthBoost: Longword; showMessage: boolean; vgTint: Longword);
+var i: LongInt;
+    vg: PVisualGear;
+    s: ansistring;
+begin
+    if healthBoost < 1 then
+        exit;
+
+    if showMessage then
+        begin
+        s:= IntToStr(healthBoost);
+        AddCaption(FormatA(trmsg[sidHealthGain], s), Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo)
+        end;
+
+    i:= 0;
+    // One particle for every 5 HP. Max. 200 particles
+    while (i < healthBoost) and (i < 1000) do
+        begin
+        vg:= AddVisualGear(hwRound(Hedgehog^.Gear^.X), hwRound(Hedgehog^.Gear^.Y), vgtStraightShot);
+        if vg <> nil then
+            with vg^ do
+                begin
+                Tint:= vgTint;
+                State:= ord(sprHealth)
+                end;
+        inc(i, 5)
+        end;
+end;
+
+// Shorthand for the same above, but with tint implied
+procedure HHHeal(Hedgehog: PHedgehog; healthBoost: Longword; showMessage: boolean);
+begin
+    HHHeal(Hedgehog, healthBoost, showMessage, $00FF00FF);
 end;
 
 procedure CheckHHDamage(Gear: PGear);

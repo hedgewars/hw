@@ -726,10 +726,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
-var s: ansistring;
-    i: LongInt;
-    vga: PVisualGear;
-    ag, gi: PGear;
+var ag, gi: PGear;
 begin
 if Gear^.State and gstFrozen <> 0 then exit;
 
@@ -778,23 +775,9 @@ case Gear^.Pos of
                     PlaySound(sndShotgunReload);
                     inc(HH^.Health, Gear^.Health);
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
-                    s:= IntToStr(Gear^.Health);
-                    AddCaption(FormatA(trmsg[sidHealthGain], s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
-
-                    i:= 0;
-                    while (i < Gear^.Health) and (i <= 1000) do
-                        begin
-                        vga:= AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtStraightShot);
-                        if vga <> nil then
-                            with vga^ do
-                                begin
-                                Tint:= $00FF00FF;
-                                State:= ord(sprHealth)
-                                end;
-                        inc(i, 5);
-                        end;
+                    HHHeal(HH^.Hedgehog, Gear^.Health, true);
                     end;
      end
 end;
