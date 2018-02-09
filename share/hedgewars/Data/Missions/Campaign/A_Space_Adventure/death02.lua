@@ -164,7 +164,7 @@ end
 
 function onGearDamage(gear, damage)
 	if isHog(gear) and GetHealth(hero.gear) then
-		local bonusHealth = damage/3
+		local bonusHealth = div(damage, 3)
 		SetHealth(hero.gear, GetHealth(hero.gear) + bonusHealth)
 		healthBoostAnim(hero.gear, bonusHealth, 0xFF0000FF)
 	end
