@@ -18,6 +18,7 @@ Content:
 
 Styles and game modes:
  + Construction Mode: Add a few shortcuts
+ + Construction Mode: Remember all selections
 
 A Space Adventure:
  + Precise Shooting: Display collected ammo

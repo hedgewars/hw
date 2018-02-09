@@ -1274,8 +1274,58 @@ function RedefineSubset()
 	return true
 end
 
+-- Updates the handling of the main construction mode tools:
+-- Structure Placer, Crate Placer, Object Placer.
+-- This handles the internal category state,
+-- the HUD display and the clans outline.
+function HandleConstructionModeTools()
+	-- Update display selection criteria
+	if (CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
+		curWep = GetCurAmmoType()
+
+		local updated = false
+		local team = GetHogTeamName(CurrentHedgehog)
+		if (curWep == amGirder) then
+			cIndex = 1
+			RedefineSubset()
+			updated = true
+		elseif (curWep == amRubber) then
+			cIndex = 2
+			RedefineSubset()
+			updated = true
+		elseif (curWep == amCMStructurePlacer) then
+			cIndex = 9
+			RedefineSubset()
+			updateCost()
+			updated = true
+		elseif (curWep == amCMCratePlacer) then
+			cIndex = catReverse[teamLCrateMode[team]]
+			RedefineSubset()
+			updateCost()
+			updated = true
+		elseif (curWep == amCMObjectPlacer) then
+			cIndex = catReverse[teamLObjectMode[team]]
+			RedefineSubset()
+			updateCost()
+			updated = true
+		end
+
+		if updated then
+			AddCaption(loc(cat[cIndex]), 0xffba00ff, capgrpMessage)
+			showModeMessage()
+			wallsVisible = true
+		else
+			wallsVisible = false
+		end
+	else
+		curWep = amNothing
+		wallsVisible = false
+	end
+end
+
+
 -- called in onGameTick()
-function HandleHedgeEditor()
+function HandleConstructionMode()
 
 	HandleStructures()
 
@@ -1300,48 +1350,14 @@ function HandleHedgeEditor()
 
 			DrawClanPowerTag()
 
-
-			-- Update display selection criteria
+			-- Force-update the construction mode tools every 100ms.
+			-- This makes sure the announcer messages don't disappear
+			-- while the tool is selected.
 			if (band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
 				curWep = GetCurAmmoType()
-
-				local updated = false
-				local team = GetHogTeamName(CurrentHedgehog)
-				if (curWep == amGirder) then
-					cIndex = 1
-					RedefineSubset()
-					updated = true
-				elseif (curWep == amRubber) then
-					cIndex = 2
-					RedefineSubset()
-					updated = true
-				elseif (curWep == amCMStructurePlacer) then
-					cIndex = 9
-					RedefineSubset()
-					updateCost()
-					updated = true
-				elseif (curWep == amCMCratePlacer) then
-					cIndex = catReverse[teamLCrateMode[team]]
-					RedefineSubset()
-					updateCost()
-					updated = true
-				elseif (curWep == amCMObjectPlacer) then
-					cIndex = catReverse[teamLObjectMode[team]]
-					RedefineSubset()
-					updateCost()
-					updated = true
-				end
-
-				if updated then
-					AddCaption(loc(cat[cIndex]), 0xffba00ff, capgrpMessage)
-					showModeMessage()
-					wallsVisible = true
-				else
-					wallsVisible = false
-				end
+				HandleConstructionModeTools()
 			else
 				curWep = amNothing
-				wallsVisible = false
 			end
 
 		end
@@ -1412,6 +1428,7 @@ function updateCost()
 end
 
 function onTimer(key)
+	curWep = GetCurAmmoType()
 
 	-- Hacky workaround for object placer: Since this is based on the drill strike, it
 	-- allows the 5 timer keys to be pressed, causing the announcer to show up
@@ -1447,6 +1464,7 @@ function onTimer(key)
 end
 
 function onSwitch()
+	curWep = GetCurAmmoType()
 	if (curWep == amCMObjectPlacer) then
 		-- [Switch]: Set mine time to 0
 		pIndex = 1
@@ -1455,6 +1473,7 @@ function onSwitch()
 end
 
 function onLeft()
+	curWep = GetCurAmmoType()
 	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
 		pIndex = pIndex - 1
 		if pIndex == 0 then
@@ -1465,6 +1484,7 @@ function onLeft()
 end
 
 function onRight()
+	curWep = GetCurAmmoType()
 	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
 		pIndex = pIndex + 1
 		if pIndex > #pMode then
@@ -1514,48 +1534,42 @@ function showModeMessage()
 	AddCaption(str,0xffba00ff,capgrpMessage2)
 end
 
-function updatePlacementDisplay(pDir)
-
-	foundMatch = false
+function rotateMode(pDir)
+	curWep = GetCurAmmoType()
+	local foundMatch = false
 	while(foundMatch == false) do
 		cIndex = cIndex + pDir
 
-		if (cIndex == 1) or (cIndex == 2) then --1	--we no longer hit girder by normal means
+		if (cIndex == 1) or (cIndex == 2) then -- we no longer hit girder by normal means
 			cIndex = #cat
 		elseif cIndex > #cat then
-			cIndex = 3	 -- 2 ----we no longer hit girder by normal means
+			cIndex = 3       -- we no longer hit girder by normal means
 		end
 
-		if sProx[cIndex][2] == true then
-			if (GetCurAmmoType() == amCMCratePlacer) then
-				if (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
-					(sProx[cIndex][1] == loc("Weapon Crate Placement Mode")) or
-					(sProx[cIndex][1] == loc("Utility Crate Placement Mode"))
-					then
-						foundMatch = true
-					end
-			elseif (GetCurAmmoType() == amCMObjectPlacer) then
-				if (sProx[cIndex][1] == loc("Mine Placement Mode")) or
-					(sProx[cIndex][1] == loc("Sticky Mine Placement Mode")) or
-					(sProx[cIndex][1] == loc("Barrel Placement Mode"))
-					then
-						foundMatch = true
-					end
-			elseif (GetCurAmmoType() == amCMStructurePlacer) then
-				if sProx[cIndex][1] == loc("Structure Placement Mode") then
+		if (GetCurAmmoType() == amCMCratePlacer) then
+			if (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
+				(sProx[cIndex][1] == loc("Weapon Crate Placement Mode")) or
+				(sProx[cIndex][1] == loc("Utility Crate Placement Mode")) then
 					foundMatch = true
-				end
+			end
+		elseif (GetCurAmmoType() == amCMObjectPlacer) then
+			if (sProx[cIndex][1] == loc("Mine Placement Mode")) or
+				(sProx[cIndex][1] == loc("Sticky Mine Placement Mode")) or
+				(sProx[cIndex][1] == loc("Barrel Placement Mode")) then
+				foundMatch = true
+			end
+		elseif (GetCurAmmoType() == amCMStructurePlacer) then
+			if sProx[cIndex][1] == loc("Structure Placement Mode") then
+				foundMatch = true
 			end
 		end
-
-
-		if foundMatch == true then
-			RedefineSubset()
-			updateCost()
-		end
-
 	end
 
+	if foundMatch == true then
+		RedefineSubset()
+		--updateCost()
+		HandleConstructionModeTools()
+	end
 end
 
 ---------------------------------------------------------
@@ -1565,9 +1579,10 @@ end
 ---------------------------------------------------------
 function onUp()
 
+	curWep = GetCurAmmoType()
 	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
 		if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
-			updatePlacementDisplay(-1)
+			rotateMode(-1)
 		end
 	end
 
@@ -1575,13 +1590,17 @@ end
 
 function onDown()
 
+	curWep = GetCurAmmoType()
 	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
 		if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
-			updatePlacementDisplay(1)
+			rotateMode(1)
 		end
 	end
 
 end
+
+onSetWeapon = HandleConstructionModeTools()
+onSlot = onSetWeapon
 
 ----------------------------
 -- standard event handlers
@@ -1752,6 +1771,8 @@ function onNewTurn()
 
 	curWep = GetCurAmmoType()
 
+	HandleConstructionModeTools()
+
 	local clan = GetHogClan(CurrentHedgehog)
 	if clanFirstTurn[clan] then
 		clanFirstTurn[clan] = false
@@ -1763,15 +1784,15 @@ function onNewTurn()
 	end
 	clanUsedExtraTime[clan] = false
 	clanCratesSpawned[clan] = 0
-
 end
 
-function onTurnEnd()
+function onEndTurn()
 	curWep = amNothing
+	HandleConstructionModeTools()
 end
 
 function onGameTick()
-	HandleHedgeEditor()
+	HandleConstructionMode()
 end
 
 function isATrackedGear(gear)
