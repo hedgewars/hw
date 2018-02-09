@@ -771,6 +771,31 @@ begin
     lc_spawnutilitycrate := 1;
 end;
 
+function lc_spawnsupplycrate(L: PLua_State): LongInt; Cdecl;
+var gear: PGear;
+    n, at:LongInt;
+    t:    TCrateType;
+begin
+    if CheckAndFetchParamCount(L, 3, 4, 'SpawnSupplyCrate', 'x, y, content [, amount]', n) then
+        begin
+        // Get crate type (ammo or utility)
+        at:= Trunc(lua_tonumber(L, 3));
+        if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Utility) <> 0 then
+            t:= UtilityCrate
+        else
+            t:= AmmoCrate;
+        if n = 3 then
+             gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), t, at, 0)
+        else gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), t, at, Trunc(lua_tonumber(L, 4)));
+        if gear <> nil then
+             lua_pushnumber(L, gear^.uid)
+        else lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L);
+    lc_spawnsupplycrate := 1;
+end;
+
 function lc_addgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     x, y, s, t: LongInt;
@@ -3622,6 +3647,7 @@ lua_register(luaState, _P'SetGearValues', @lc_setgearvalues);
 lua_register(luaState, _P'SpawnHealthCrate', @lc_spawnhealthcrate);
 lua_register(luaState, _P'SpawnAmmoCrate', @lc_spawnammocrate);
 lua_register(luaState, _P'SpawnUtilityCrate', @lc_spawnutilitycrate);
+lua_register(luaState, _P'SpawnSupplyCrate', @lc_spawnsupplycrate);
 lua_register(luaState, _P'SpawnFakeHealthCrate', @lc_spawnfakehealthcrate);
 lua_register(luaState, _P'SpawnFakeAmmoCrate', @lc_spawnfakeammocrate);
 lua_register(luaState, _P'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
