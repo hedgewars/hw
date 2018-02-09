@@ -201,6 +201,11 @@ lastWep = nil
 
 checkForSpecialWeaponsIn = -1
 
+-- Fake ammo types, for the overwritten weapons in Construction Mode
+amCMStructurePlacer = amAirAttack
+amCMCratePlacer = amNapalm
+amCMObjectPlacer = amDrillStrike
+
 -- Config variables (script parameter)
 conf_initialEnergy = 550
 conf_energyPerRound = 50
@@ -666,7 +671,7 @@ function CheckProximity(gear)
 						AddAmmo(gear, utilArray[wpnIndex][1], 0)
 					end
 
-					AddAmmo(gear, amAirAttack, 100)
+					AddAmmo(gear, amCMStructurePlacer, 100)
 					AddAmmo(gear, amSwitch, 100)
 					AddAmmo(gear, amSkip, 100)
 
@@ -870,11 +875,11 @@ function HandleStructures()
 				if sProx[i][2] == true then
 					AddAmmo(CurrentHedgehog, amGirder, 100)
 					AddAmmo(CurrentHedgehog, amRubber, 100)
-					AddAmmo(CurrentHedgehog, amDrillStrike, 100)
+					AddAmmo(CurrentHedgehog, amCMObjectPlacer, 100)
 				else
 					AddAmmo(CurrentHedgehog, amGirder, 0)
 					AddAmmo(CurrentHedgehog, amRubber, 0)
-					AddAmmo(CurrentHedgehog, amDrillStrike, 0) -- new
+					AddAmmo(CurrentHedgehog, amCMObjectPlacer, 0) -- new
 				end
 			elseif sProx[i][1] == loc("Teleportation Mode") then
 				if sProx[i][2] == true then
@@ -885,9 +890,9 @@ function HandleStructures()
 			elseif sProx[i][1] == loc("Weapon Crate Placement Mode") then
 				-- this is new stuff
 				if sProx[i][2] == true then
-					AddAmmo(CurrentHedgehog, amNapalm, 100)
+					AddAmmo(CurrentHedgehog, amCMCratePlacer, 100)
 				else
-					AddAmmo(CurrentHedgehog, amNapalm, 0)
+					AddAmmo(CurrentHedgehog, amCMCratePlacer, 0)
 				end
 			end
 
@@ -903,7 +908,7 @@ end
 
 function checkForSpecialWeapons()
 
-	if (GetCurAmmoType() == amDrillStrike) then
+	if (GetCurAmmoType() == amCMObjectPlacer) then
 		AddCaption(loc("Object Placer"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
 	end
 
@@ -962,6 +967,8 @@ placeholder = 20
 				{amBallgun, 	"amBallgun",		0, 40*placeholder},
 				--{amRCPlane,		"amRCPlane",		0, loc("RC Plane"), 	25*placeholder},
 				{amSMine,		"amSMine",			0, 5*placeholder},
+
+				-- Careful! Some airborne attacks are overwritten by the special Construction Mode tools
 
 				--{amAirAttack,	"amAirAttack",		0, loc("Air Attack"), 		10*placeholder},
 				--{amMineStrike,	"amMineStrike",		0, loc("Mine Strike"), 		15*placeholder},
@@ -1281,7 +1288,7 @@ function HandleHedgeEditor()
 			end
 
 			-- update display selection criteria
-			if ((curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) or (curWep == amRubber))
+			if ((curWep == amGirder) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) or (curWep == amRubber))
 				and (CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
 
 				---------------hooolllllyyyy fucking shit this
@@ -1291,19 +1298,19 @@ function HandleHedgeEditor()
 				-- never designed to do
 				-- needs to be rewritten badly sadface
 				-- this bit here catches the new 3 types of weapons
-				if ((sProx[cIndex][1] == loc("Structure Placement Mode") and (curWep ~= amAirAttack))) then
+				if ((sProx[cIndex][1] == loc("Structure Placement Mode") and (curWep ~= amCMStructurePlacer))) then
 					updatePlacementDisplay(1)
 				elseif (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
 							(sProx[cIndex][1] == loc("Weapon Crate Placement Mode")) or
 							(sProx[cIndex][1] == loc("Utility Crate Placement Mode")) then
-								if curWep ~= amNapalm then
+								if curWep ~= amCMCratePlacer then
 									updatePlacementDisplay(1)
 								end
 
 				elseif (sProx[cIndex][1] == loc("Mine Placement Mode")) or
 							(sProx[cIndex][1] == loc("Sticky Mine Placement Mode")) or
 							(sProx[cIndex][1] == loc("Barrel Placement Mode")) then
-								if curWep ~= amDrillStrike then
+								if curWep ~= amCMObjectPlacer then
 									updatePlacementDisplay(1)
 								end
 
@@ -1409,7 +1416,7 @@ function onLeft()
 		pIndex = #pMode
 	end
 
-	if (curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) then
+	if (curWep == amGirder) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
 		showModeMessage()
 		updateCost()
 	end
@@ -1424,7 +1431,7 @@ function onRight()
 		pIndex = 1
 	end
 
-	if (curWep == amGirder) or (curWep == amAirAttack) or (curWep == amNapalm) or (curWep == amDrillStrike) then
+	if (curWep == amGirder) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
 		showModeMessage()
 		updateCost()
 	end
@@ -1461,21 +1468,21 @@ function updatePlacementDisplay(pDir)
 		end
 
 		if sProx[cIndex][2] == true then
-			if (GetCurAmmoType() == amNapalm) then
+			if (GetCurAmmoType() == amCMCratePlacer) then
 				if (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
 					(sProx[cIndex][1] == loc("Weapon Crate Placement Mode")) or
 					(sProx[cIndex][1] == loc("Utility Crate Placement Mode"))
 					then
 						foundMatch = true
 					end
-			elseif (GetCurAmmoType() == amDrillStrike) then
+			elseif (GetCurAmmoType() == amCMObjectPlacer) then
 				if (sProx[cIndex][1] == loc("Mine Placement Mode")) or
 					(sProx[cIndex][1] == loc("Sticky Mine Placement Mode")) or
 					(sProx[cIndex][1] == loc("Barrel Placement Mode"))
 					then
 						foundMatch = true
 					end
-			elseif (GetCurAmmoType() == amAirAttack) then
+			elseif (GetCurAmmoType() == amCMStructurePlacer) then
 				if sProx[cIndex][1] == loc("Structure Placement Mode") then
 					foundMatch = true
 				end
@@ -1499,7 +1506,7 @@ end
 ---------------------------------------------------------
 function onUp()
 
-	if ( (curWep == amNapalm) or (curWep == amDrillStrike) ) then
+	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
 		if CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
 			updatePlacementDisplay(-1)
 		end
@@ -1509,7 +1516,7 @@ end
 
 function onDown()
 
-	if ( (curWep == amNapalm) or (curWep == amDrillStrike) ) then
+	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
 		if CurrentHedgehog ~= nil or band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
 			updatePlacementDisplay(1)
 		end
@@ -1572,7 +1579,7 @@ function initialSetup(gear)
 	end
 
 	-- for now, everyone should have this stuff
-	AddAmmo(gear, amAirAttack, 100)
+	AddAmmo(gear, amCMStructurePlacer, 100)
 	AddAmmo(gear, amSwitch, 100)
 	AddAmmo(gear, amSkip, 100)
 
@@ -1591,7 +1598,7 @@ function onGameStart()
 				, 4, 5000
 				)
 
-	SetAmmoTexts(amAirAttack, loc("Structure Placer"), loc("Construction Mode tool"), loc("Build one of multiple different structures|to aid you in victory, at the cost of energy.") .. "| |" ..
+	SetAmmoTexts(amCMStructurePlacer, loc("Structure Placer"), loc("Construction Mode tool"), loc("Build one of multiple different structures|to aid you in victory, at the cost of energy.") .. "| |" ..
 	loc("Healing Station: Heals nearby hogs.")  .. "|" ..
 	loc("Bio-Filter: Aggressively removes enemies.")  .. "|" ..
 	loc("Weapon Filter: Dematerializes all ammo|    carried by enemies entering it.")  .. "|" ..
@@ -1609,13 +1616,13 @@ function onGameStart()
 		txt_crateLimit = string.format(loc("You may only place %d crates per round."), conf_cratesPerRound) .. "|"
 	end
 
-	SetAmmoTexts(amNapalm, loc("Crate Placer"), loc("Construction Mode tool"),
+	SetAmmoTexts(amCMCratePlacer, loc("Crate Placer"), loc("Construction Mode tool"),
 		loc("This allows you to create a crate anywhere|within your clan's area of influence,|at the cost of energy.") .. "|" ..
 		txt_crateLimit ..
 		loc("Up/down: Choose crate type") .. "|" .. 
 		loc("Left/right: Choose crate contents") .. "|" ..
 		loc("|Cursor: Place crate"))
-	SetAmmoTexts(amDrillStrike, loc("Object Placer"), loc("Construction Mode tool"), loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.|Up/down: Choose object type|Left/right: Choose timer (for mines)|Cursor: Place object"))
+	SetAmmoTexts(amCMObjectPlacer, loc("Object Placer"), loc("Construction Mode tool"), loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.|Up/down: Choose object type|Left/right: Choose timer (for mines)|Cursor: Place object"))
 
 	SetAmmoDescriptionAppendix(amTeleport, loc("It only works in teleportation nodes of your own clan."))
 	

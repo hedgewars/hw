@@ -256,6 +256,9 @@ HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 -- experimental crap
 --local destroyMap = false
 
+-- Fake ammo type for the gear placement tool
+local amCMGearPlacementTool = amAirAttack
+
 -- Special frames in Ammos.png/Ammos_bw.png
 local ammoFrameAirAttack = 63
 
@@ -2456,7 +2459,7 @@ function updateHelp(curAmmoType)
 		curAmmoType = GetCurAmmoType()
 	end
 
-	if (curAmmoType ~= amGirder) and (curAmmoType ~= amRubber) and (curAmmoType ~= amAirAttack) then
+	if (curAmmoType ~= amGirder) and (curAmmoType ~= amRubber) and (curAmmoType ~= amCMGearPlacementTool) then
 
 		if not hedgeEditorMissionPanelShown then
 			showHedgeEditorMissionPanel()
@@ -2555,7 +2558,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", -amCMGearPlacementTool, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2675,7 +2678,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", -amCMGearPlacementTool, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2717,7 +2720,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", -amCMGearPlacementTool, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2813,7 +2816,7 @@ function HandleHedgeEditor()
 		xDisplacement = 42
 		yDisplacement = 42
 
-		if (curWep == amAirAttack) then
+		if (curWep == amCMGearPlacementTool) then
 
 			--wowaweewa, holyeeeee shite this is badly hacked (please rewrite when less lazy/morefeatures)
 			dCol = 0xFFFFFFFF
@@ -2846,7 +2849,7 @@ function HandleHedgeEditor()
 			elseif (cat[cIndex] == loc("Sprite Placement Mode")) then
 				dSprite = reducedSpriteIDArray[pIndex]
 				dFrame = sFrame
-				if ((dSprite == sprAMAmmos) or (dSprite == sprAMAmmosBW)) and (dFrame == (amAirAttack - 1)) then
+				if ((dSprite == sprAMAmmos) or (dSprite == sprAMAmmosBW)) and (dFrame == (amCMGearPlacementTool - 1)) then
 					-- Special case: Air attack icon of ammos sprite needs to be fixed (since this icon is overwritten)
 					dFrame = ammoFrameAirAttack
 				end
@@ -2929,7 +2932,7 @@ function HandleHedgeEditor()
 			end
 
 			-- update display selection criteria
-			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
 				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
 				showSecondaryMessage()
 				if superDelete == true then
@@ -2978,7 +2981,7 @@ function HandleHedgeEditor()
 
 		x,y = GetGearTarget(cGear)
 
-		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amAirAttack then
+		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool then
 			DeleteGear(cGear)
 			PlaceObject(x, y)
 		elseif GetGearType(cGear) == gtGirder then
@@ -3124,7 +3127,7 @@ function onTimer(s)
 	if (commandMode() == true) and (s == 4) then
 		SaveLevelData() -- positions of crates, etc
 	elseif (commandMode() == true) and (s == 2) then
-		if GetAmmoCount(CurrentHedgehog, amAirAttack) == 100 then
+		if GetAmmoCount(CurrentHedgehog, amCMGearPlacementTool) == 100 then
 			SetEditingWeps(0)
 			AddCaption(loc("The editor weapons and tools have been removed!"))
 		else
@@ -3229,7 +3232,7 @@ end
 ---------------------------------------------------------------
 function onLeft()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		leftHeld = true
 		rightHeld = false
 
@@ -3249,7 +3252,7 @@ function onLeft()
 				sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
 			end
 
-			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
 				showSecondaryMessage()
 			end
 		end
@@ -3259,7 +3262,7 @@ end
 
 function onRight()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		leftHeld = false
 		rightHeld = true
 
@@ -3279,7 +3282,7 @@ function onRight()
 				sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
 			end
 
-			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
 				showSecondaryMessage()
 			end
 		end
@@ -3294,7 +3297,7 @@ end
 ---------------------------------------------------------
 function onUp()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		cIndex = cIndex - 1
 		if (cIndex == 1) or (cIndex == 2) then --1	--we no longer hit girder by normal means
 			cIndex = #cat
@@ -3309,7 +3312,7 @@ end
 
 function onDown()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		cIndex = cIndex + 1
 		if cIndex > #cat then
 			cIndex = 3	 -- 2 ----we no longer hit girder by normal means
@@ -3403,7 +3406,7 @@ function showHedgeEditorMissionPanel()
 		, 4, 5000
 		)
 
-	SetAmmoTexts(amAirAttack,
+	SetAmmoTexts(amCMGearPlacementTool,
 		loc("Gear Placement Tool"),
 		loc("HedgeEditor tool"),
 		loc("Place, modify and delete gears (e.g. objects)|and waypoints, edit hedgehog settings, values,|victory conditions, and more.") .. "|" ..
@@ -3436,7 +3439,7 @@ function onGameStart()
 	sSprite = AddVisualGear(0, 0, vgtStraightShot, 0, true,1)
 	SetVisualGearValues(sSprite, 1, 1, 0, 0, nil, frameID, 20000, visualSprite, 20000, 0 )
 
-	SetAmmoDelay(amAirAttack,0)
+	SetAmmoDelay(amCMGearPlacementTool,0)
 	SetAmmoDelay(amGirder,0)
 	SetAmmoDelay(amRubber,0)
 
@@ -3444,7 +3447,7 @@ end
 
 function SetEditingWeps(ammoCount)
 
-	AddAmmo(CurrentHedgehog, amAirAttack, ammoCount)
+	AddAmmo(CurrentHedgehog, amCMGearPlacementTool, ammoCount)
 	AddAmmo(CurrentHedgehog, amGirder, ammoCount)
 	AddAmmo(CurrentHedgehog, amRubber, ammoCount)
 	AddAmmo(CurrentHedgehog, amTeleport, ammoCount)
@@ -3725,7 +3728,7 @@ function onGearAdd(gear)
 		end
 	end
 
-	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amAirAttack) or (GetGearType(gear) == gtGirder) then
+	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
 	end
 
