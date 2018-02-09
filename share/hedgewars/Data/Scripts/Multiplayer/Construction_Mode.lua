@@ -1405,8 +1405,48 @@ end
 
 function onTimer(key)
 
+	-- Hacky workaround for object placer: Since this is based on the drill strike, it
+	-- allows the 5 timer keys to be pressed, causing the announcer to show up
+	-- This triggers code in 1 tick to send other message to mask the earlier one.
 	checkForSpecialWeaponsIn = 1
 
+	if (curWep == amCMStructurePlacer) then
+		-- Select structure directly in structure placer
+		-- [Timer X] selects structures 1-5
+		-- [Precise]+[Timer X] selects structures 6-10
+
+		local structureID = key
+		local precise = band(GetGearMessage(CurrentHedgehog), gmPrecise) ~= 0
+		if precise then
+			structureID = structureID + 5
+		end
+		-- Check for valid pIndex
+		if structureID <= #pMode then
+			pIndex = structureID
+			showModeMessage()
+			updateCost()
+		end
+	elseif (curWep == amCMObjectPlacer) then
+		-- [Timer X]: Set mine time 1-5
+		if cat[cIndex] == "Mine Placement Mode" then
+			local index = key + 1
+			if key <= #pMode then
+				pIndex = index
+				showModeMessage()
+				updateCost()
+			end
+		end
+	end
+
+end
+
+function onSwitch()
+	if (curWep == amCMObjectPlacer) then
+		-- [Switch]: Set mine time to 0
+		pIndex = 1
+		showModeMessage()
+		updateCost()
+	end
 end
 
 function onLeft()
@@ -1603,13 +1643,15 @@ function onGameStart()
 	loc("Bio-Filter: Aggressively removes enemies.")  .. "|" ..
 	loc("Weapon Filter: Dematerializes all ammo|    carried by enemies entering it.")  .. "|" ..
 	loc("Reflector Shield: Reflects enemy projectiles.")  .. "|" ..
-	loc("Generator: Generates energy.")  .. "|" ..
 	loc("Respawner: Resurrects dead hogs.")  .. "|" ..
 	loc("Teleportation Node: Allows teleportation|    between other nodes.")  .. "|" ..
+	loc("Generator: Generates energy.")  .. "|" ..
 	loc("Construction Station: Allows placement of|    girders, rubber, mines, sticky mines|    and barrels.")  .. "|" ..
 	loc("Support Station: Allows placement of crates.") .. "| |" ..
 
-	loc("Left/right: Choose structure type|Cursor: Build structure"))
+	loc("Left/right: Choose structure type").."|"..
+	loc("1-5, Precise + 1-4: Choose structure type").."|"..
+	loc("Cursor: Build structure"))
 
 	local txt_crateLimit = ""
 	if conf_cratesPerRound ~= "inf" then
@@ -1622,7 +1664,10 @@ function onGameStart()
 		loc("Up/down: Choose crate type") .. "|" .. 
 		loc("Left/right: Choose crate contents") .. "|" ..
 		loc("|Cursor: Place crate"))
-	SetAmmoTexts(amCMObjectPlacer, loc("Object Placer"), loc("Construction Mode tool"), loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.|Up/down: Choose object type|Left/right: Choose timer (for mines)|Cursor: Place object"))
+	SetAmmoTexts(amCMObjectPlacer, loc("Object Placer"), loc("Construction Mode tool"),
+		loc("This allows you to create and place mines,|sticky mines and barrels anywhere within your|clan's area of influence at the cost of energy.").."|"..
+		loc("Up/down: Choose object type|1-5/Switch/Left/Right: Choose mine timer|Cursor: Place object")
+	)
 
 	SetAmmoDescriptionAppendix(amTeleport, loc("It only works in teleportation nodes of your own clan."))
 	

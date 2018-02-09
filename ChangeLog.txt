@@ -16,6 +16,9 @@ Content:
  + New flag: uk_scotland
  + New voice: Default_pl (Polish)
 
+Styles and game modes:
+ + Construction Mode: Add a few shortcuts
+
 A Space Adventure:
  + Precise Shooting: Display collected ammo
  + Hard Flying: Display personal best at mission start
