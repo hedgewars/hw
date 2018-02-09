@@ -1764,6 +1764,33 @@ begin
     lc_sethealth:= 0
 end;
 
+function lc_healhog(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+    healthBoost, n: LongInt;
+begin
+    if CheckAndFetchParamCountRange(L, 2, 4, 'HealHog', 'gearUid, healthBoost [, showMessage [, tint]]', n) then
+        begin
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        healthBoost:= Trunc(lua_tonumber(L, 2));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (healthBoost >= 1) then
+            begin
+            gear^.Health:= gear^.Health + healthBoost;
+
+            RenderHealth(gear^.Hedgehog^);
+            RecountTeamHealth(gear^.Hedgehog^.Team);
+            if n = 4 then
+                HHHeal(gear^.Hedgehog, healthBoost, lua_toboolean(L, 3), Trunc(lua_tonumber(L, 4)))
+            else if n = 3 then
+                HHHeal(gear^.Hedgehog, healthBoost, lua_toboolean(L, 3))
+            else if n = 2 then
+                HHHeal(gear^.Hedgehog, healthBoost, true);
+            Gear^.Active:= true;
+            AllInactive:= false
+            end
+        end;
+    lc_healhog:= 0
+end;
+
 function lc_settimer(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -3683,6 +3710,7 @@ lua_register(luaState, _P'AddTeam', @lc_addteam);
 lua_register(luaState, _P'AddHog', @lc_addhog);
 lua_register(luaState, _P'AddAmmo', @lc_addammo);
 lua_register(luaState, _P'GetAmmoCount', @lc_getammocount);
+lua_register(luaState, _P'HealHog', @lc_healhog);
 lua_register(luaState, _P'SetHealth', @lc_sethealth);
 lua_register(luaState, _P'GetHealth', @lc_gethealth);
 lua_register(luaState, _P'SetEffect', @lc_seteffect);

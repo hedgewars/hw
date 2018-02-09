@@ -37,6 +37,7 @@ Lua API:
  + New call: GetWind(): Returns current wind (approximation) from -100 to 100
  + New call: GetTeamName(teamIdx): Returns name of team with given index (starts at 0)
  + New call: SpawnSupplyCrate(x, y, content, [, amount]): Spawn ammo or utility crate, depending on content
+ + New call: HealHog(gearUid, healthBoost[, showMessage[, tint]]): Heal hedgehog with graphical effects and message
  + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
  * Fix call: SetWeapon(amNothing) now unselects weapon
  * Fix global: TotalRounds was stuck at -1 for several turns
