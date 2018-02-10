@@ -55,10 +55,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
-----------------------------------------------
--- STRUCTURES STUFF
-----------------------------------------------
-
+-- Structures stuff
 local strucID = {}
 local strucGear = {}
 local strucClan = {}
@@ -72,28 +69,20 @@ local strucCircRadius = {}
 local strucCircType = {}
 local strucAltDisplay = {}
 
-local fortMode = false
+-- Clan stuff
+local clanPower = {} -- current power for each clan. Used to build stuff
+local clanPowerTag = nil -- visual gear ID of displayed clan power
 
-local placedExpense = 0
-
-local globalTempID = nil
-
-local sUID = 0
-
-local cGear = nil
-
-local colorRed = 0xff0000ff
-local colorGreen = 0x00ff00ff
+local clanUsedExtraTime = {} -- has used extra time in this round?
+local clanCratesSpawned = {} -- number of crates spawned in this round
+local clanFirstTurn = {}
 
 local clanBoundsSX = {}
 local clanBoundsSY = {}
 local clanBoundsEX = {}
 local clanBoundsEY = {}
 
-local clanPower = {}
-local clanID = {}
-
--- for ease of use let's track previous selection
+-- For tracking previous mode selection per-team
 local teamLStructIndex = {}
 local teamLObjectMode = {}
 local teamLCrateMode = {}
@@ -101,24 +90,37 @@ local teamLMineIndex = {}
 local teamLWeapIndex = {}
 local teamLUtilIndex = {}
 
-local clanUsedExtraTime = {}
-local clanCratesSpawned = {}
-local clanFirstTurn = {}
-
-local effectTimer = 0
-
+-- Wall stuff
 local wallsVisible = false
 local wX = {}
 local wY = {}
 local wWidth = {}
 local wHeight = {}
 local wCol = {}
-local margin = 20
+local wMargin = 20
+local borderEffectTimer = 0 -- timer for border clan sparkles
 
-local clanPowerTag = nil
-local lastWep = nil
+-- Other stuff
+local placedExpense = 0 -- Cost of current selected thing
+local curWep = amNothing -- current weapon, used to reduce # of calls to GetCurAmmoType()
 
+local fortMode = false -- is using a fort map?
+local tempID_CheckProximity = nil -- temporary structure variable for CheckProximity
+local cGear = nil -- detects placement of girders and objects (using airattack)
+local uniqueStructureID = 0 -- Counter and ID for structures. Is incremented each time a structure spawns
+
+--[[ Hacky workaround for object placer: Since this thing is
+based on the drill strike, it allows the 5 timer keys to be
+pressed, causing the announcer to show up.
+This variable counts the number of ticks to count down until
+to overwrite this anouncer message.
+-1 means “do nothing”. ]]
 local checkForSpecialWeaponsIn = -1
+local lastWep = amNothing -- helper variable to track the previous hack
+
+-- Colors
+local colorRed = 0xff0000ff
+local colorGreen = 0x00ff00ff
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
 local amCMStructurePlacer = amAirAttack
@@ -137,57 +139,56 @@ local conf_cratesPerRound = 5
 -- format:
 -- { ammoType, ammoTypeString, unused, cost }
 
--- Cost factor
-local placeholder = 20
+local costFactor = 20
 
 -- WEAPON CRATES 
 -- Weapons which shouldn't be aded:
 -- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
 local atkArray = {
-	{amBazooka, 		"amBazooka",		0, 2*placeholder},
-	--{amBee, 		"amBee",		0, 4*placeholder},
-	{amMortar, 		"amMortar",		0, 1*placeholder},
-	{amDrill, 		"amDrill",		0, 3*placeholder},
-	{amSnowball, 		"amSnowball",		0, 3*placeholder},
+	{amBazooka, 		"amBazooka",		0, 2*costFactor},
+	--{amBee, 		"amBee",		0, 4*costFactor},
+	{amMortar, 		"amMortar",		0, 1*costFactor},
+	{amDrill, 		"amDrill",		0, 3*costFactor},
+	{amSnowball, 		"amSnowball",		0, 3*costFactor},
 
-	{amGrenade,		"amGrenade",		0, 2*placeholder},
-	{amClusterBomb,		"amClusterBomb",	0, 3*placeholder},
-	{amWatermelon, 		"amWatermelon",		0, 25*placeholder},
-	{amHellishBomb,		"amHellishBomb",	0, 25*placeholder},
-	{amMolotov, 		"amMolotov",		0, 3*placeholder},
-	{amGasBomb, 		"amGasBomb",		0, 3*placeholder},
+	{amGrenade,		"amGrenade",		0, 2*costFactor},
+	{amClusterBomb,		"amClusterBomb",	0, 3*costFactor},
+	{amWatermelon, 		"amWatermelon",		0, 25*costFactor},
+	{amHellishBomb,		"amHellishBomb",	0, 25*costFactor},
+	{amMolotov, 		"amMolotov",		0, 3*costFactor},
+	{amGasBomb, 		"amGasBomb",		0, 3*costFactor},
 
-	{amShotgun,		"amShotgun",		0, 2*placeholder},
-	{amDEagle,		"amDEagle",		0, 2*placeholder},
-	{amSniperRifle,		"amSniperRifle",	0, 3*placeholder},
-	--{amSineGun, 		"amSineGun",		0, 6*placeholder},
-	{amFlamethrower,	"amFlamethrower",	0, 4*placeholder},
-	{amIceGun, 		"amIceGun",		0, 15*placeholder},
+	{amShotgun,		"amShotgun",		0, 2*costFactor},
+	{amDEagle,		"amDEagle",		0, 2*costFactor},
+	{amSniperRifle,		"amSniperRifle",	0, 3*costFactor},
+	--{amSineGun, 		"amSineGun",		0, 6*costFactor},
+	{amFlamethrower,	"amFlamethrower",	0, 4*costFactor},
+	{amIceGun, 		"amIceGun",		0, 15*costFactor},
 
-	{amFirePunch, 		"amFirePunch",		0, 3*placeholder},
-	{amWhip,		"amWhip",		0, 1*placeholder},
-	{amBaseballBat, 	"amBaseballBat",	0, 7*placeholder},
-	--{amKamikaze, 		"amKamikaze",		0, 1*placeholder},
-	{amSeduction, 		"amSeduction",		0, 1*placeholder},
-	{amHammer,		"amHammer",		0, 1*placeholder},
+	{amFirePunch, 		"amFirePunch",		0, 3*costFactor},
+	{amWhip,		"amWhip",		0, 1*costFactor},
+	{amBaseballBat, 	"amBaseballBat",	0, 7*costFactor},
+	--{amKamikaze, 		"amKamikaze",		0, 1*costFactor},
+	{amSeduction, 		"amSeduction",		0, 1*costFactor},
+	{amHammer,		"amHammer",		0, 1*costFactor},
 
-	{amMine, 		"amMine",		0, 1*placeholder},
-	{amDynamite, 		"amDynamite",		0, 9*placeholder},
-	{amCake, 		"amCake",		0, 25*placeholder},
-	{amBallgun, 		"amBallgun",		0, 40*placeholder},
-	--{amRCPlane,		"amRCPlane",		0, 25*placeholder},
-	{amSMine,		"amSMine",		0, 5*placeholder},
+	{amMine, 		"amMine",		0, 1*costFactor},
+	{amDynamite, 		"amDynamite",		0, 9*costFactor},
+	{amCake, 		"amCake",		0, 25*costFactor},
+	{amBallgun, 		"amBallgun",		0, 40*costFactor},
+	--{amRCPlane,		"amRCPlane",		0, 25*costFactor},
+	{amSMine,		"amSMine",		0, 5*costFactor},
 
-	--{amMineStrike,	"amMineStrike",		0, 15*placeholder},
-	--{amPiano,		"amPiano",		0, 40*placeholder},
+	--{amMineStrike,	"amMineStrike",		0, 15*costFactor},
+	--{amPiano,		"amPiano",		0, 40*costFactor},
 
-	{amPickHammer,		"amPickHammer",		0, 2*placeholder},
-	{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
-	{amKnife,		"amKnife",		0, 2*placeholder},
+	{amPickHammer,		"amPickHammer",		0, 2*costFactor},
+	{amBlowTorch, 		"amBlowTorch",		0, 4*costFactor},
+	{amKnife,		"amKnife",		0, 2*costFactor},
 
-	{amBirdy,		"amBirdy",		0, 7*placeholder},
+	{amBirdy,		"amBirdy",		0, 7*costFactor},
 
-	{amDuck,		"amDuck",		0, 2*placeholder}
+	{amDuck,		"amDuck",		0, 2*costFactor}
 }
 
 -- UTILITY CRATES --
@@ -201,28 +202,25 @@ local atkArray = {
 -- Utilities which might be weird for this mode:
 -- * Tardis: Randomly teleports hog, maybe even into enemy clan's area
 local utilArray = {
-	{amLandGun,		"amLandGun",		0, 5*placeholder},
+	{amLandGun,		"amLandGun",		0, 5*costFactor},
 
-	{amRope, 		"amRope",		0, 7*placeholder},
-	{amParachute, 		"amParachute",		0, 2*placeholder},
-	{amJetpack,		"amJetpack",		0, 8*placeholder},
-	{amPortalGun,		"amPortalGun",		0, 15*placeholder},
+	{amRope, 		"amRope",		0, 7*costFactor},
+	{amParachute, 		"amParachute",		0, 2*costFactor},
+	{amJetpack,		"amJetpack",		0, 8*costFactor},
+	{amPortalGun,		"amPortalGun",		0, 15*costFactor},
 
-	{amInvulnerable,	"amInvulnerable",	0, 5*placeholder},
-	{amLaserSight,		"amLaserSight",		0, 2*placeholder},
-	{amVampiric,		"amVampiric",		0, 6*placeholder},
+	{amInvulnerable,	"amInvulnerable",	0, 5*costFactor},
+	{amLaserSight,		"amLaserSight",		0, 2*costFactor},
+	{amVampiric,		"amVampiric",		0, 6*costFactor},
 
-	{amLowGravity, 		"amLowGravity",		0, 4*placeholder},
-	{amExtraDamage, 	"amExtraDamage",	0, 6*placeholder},
-	{amExtraTime,		"amExtraTime",		0, 8*placeholder}
+	{amLowGravity, 		"amLowGravity",		0, 4*costFactor},
+	{amExtraDamage, 	"amExtraDamage",	0, 6*costFactor},
+	{amExtraTime,		"amExtraTime",		0, 8*costFactor}
 }
 
 ----------------------------
 -- Placement stuff
 ----------------------------
-
-local cGear = nil -- detects placement of girders and objects (using airattack)
-local curWep = amNothing
 
 -- primary placement categories
 local cIndex = 1 -- category index
@@ -259,21 +257,7 @@ local sProx = {
 local pMode = {}	-- pMode contains custom subsets of the main categories
 local pIndex = 1
 
-local CGR = 1 -- current girder rotation, we actually need this as HW remembers what rotation you last used
-
-local placedX = {}
-local placedY = {}
-local placedSpec = {}
-local placedSuperSpec = {}
-local placedType = {}
-local placedCount = 0
-
-local sCirc -- circle that appears around selected gears
-local sGear = nil
-
-local tCirc = {} -- array of circles that appear around tagged gears
-
-
+local currentGirderRotation = 1 -- current girder rotation, we actually need this as HW remembers what rotation you last used
 
 function DrawClanPowerTag()
 
@@ -335,9 +319,9 @@ end
 
 function HandleBorderEffects()
 
-	effectTimer = effectTimer + 1
-	if effectTimer > 15 then
-		effectTimer = 1
+	borderEffectTimer = borderEffectTimer + 1
+	if borderEffectTimer > 15 then
+		borderEffectTimer = 1
 		for i = 1, #wX do
 			BorderSpark(wX[i],wY[i],wWidth[i],wHeight[i], wCol[i])
 		end
@@ -450,17 +434,17 @@ end
 
 function AddStruc(pX,pY, pType, pClan)
 
-	sUID = sUID + 1
+	uniqueStructureID = uniqueStructureID + 1
 
 	local tempG = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
 	SetGearPosition(tempG, pX, pY)
-	setGearValue(tempG, "sUID", sUID)
+	setGearValue(tempG, "uniqueStructureID", uniqueStructureID)
 
 	local tempCirc = AddVisualGear(0,0,vgtCircle,0,true)
 
 	SetVisualGearValues(tempCirc, 0, 0, 100, 255, 1, 100, 0, 500, 1, 0xFFFFFF00)
 
-	table.insert(strucID, sUID)
+	table.insert(strucID, uniqueStructureID)
 	table.insert(strucType, pType)
 	table.insert(strucGear,tempG)
 	table.insert(strucClan,pClan)
@@ -534,7 +518,7 @@ function CheckGearForStructureLink(gear)
 	local respawnerDestroyed = false
 
 	for i = 1, #strucID do
-		if strucID[i] == getGearValue(gear,"sUID") then
+		if strucID[i] == getGearValue(gear,"uniqueStructureID") then
 
 			if strucType[i] == loc("Respawner") then
 				respawnerDestroyed = true
@@ -659,27 +643,29 @@ end
 --Check for proximity of gears to structures, and make structures behave accordingly
 function CheckProximity(gear)
 
-	local dist = GetDistFromGearToXY(gear, GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]))
+	local sID = tempID_CheckProximity
+
+	local dist = GetDistFromGearToXY(gear, GetX(strucGear[sID]), GetY(strucGear[sID]))
 	if not dist then
 		return
 	end
 
 	-- calculate my real radius if I am an aura
 	local NR
-	if strucCircType[globalTempID] == 0 then
-		NR = strucCircRadius[globalTempID]
+	if strucCircType[sID] == 0 then
+		NR = strucCircRadius[sID]
 	else
-		NR = (48/100*strucCircRadius[globalTempID])/2
+		NR = (48/100*strucCircRadius[sID])/2
 	end
 
 	-- we're in business
 	if dist <= NR*NR then
 
 		-- heal clan hogs
-		if strucType[globalTempID] == loc("Healing Station") then
+		if strucType[sID] == loc("Healing Station") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[globalTempID] then
+				if GetHogClan(gear) == strucClan[sID] then
 
 					local hogLife = GetHealth(gear)
 					-- Heal hog by 1 HP, up to 150 HP total
@@ -693,26 +679,26 @@ function CheckProximity(gear)
 					end
 
 					-- change this to the med kit sprite health ++++s later
-					local tempE = AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtSmoke, 0, true)
+					local tempE = AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
 					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, colorGreen)
 
 				end
 			end
 
 		-- explode enemy clan hogs
-		elseif strucType[globalTempID] == loc("Bio-Filter") then
+		elseif strucType[sID] == loc("Bio-Filter") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if (GetHogClan(gear) ~= strucClan[globalTempID]) and (GetHealth(gear) > 0) then
+				if (GetHogClan(gear) ~= strucClan[sID]) and (GetHealth(gear) > 0) then
 					AddGear(GetX(gear), GetY(gear), gtGrenade, 0, 0, 0, 1)
 				end
 			end
 
 		-- were those weapons in your pocket, or were you just happy to see me?
-		elseif strucType[globalTempID] == loc("Weapon Filter") then
+		elseif strucType[sID] == loc("Weapon Filter") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if (GetHogClan(gear) ~= strucClan[globalTempID]) then
+				if (GetHogClan(gear) ~= strucClan[sID]) then
 
 					for wpnIndex = 1, #atkArray do
 						AddAmmo(gear, atkArray[wpnIndex][1], 0)
@@ -730,7 +716,7 @@ function CheckProximity(gear)
 			end
 
 		-- BOUNCE! POGO! POGO! POGO! POGO!
-		elseif strucType[globalTempID] == loc("Reflector Shield") then
+		elseif strucType[sID] == loc("Reflector Shield") then
 
 			-- add check for whose projectile it is
 			if gearCanBeDeflected(gear) == true then
@@ -743,7 +729,7 @@ function CheckProximity(gear)
 					DeleteGear(gear)
 					AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
 					PlaySound(sndVaporize)
-				elseif gOwner ~= strucClan[globalTempID] then
+				elseif gOwner ~= strucClan[sID] then
 					--whether to vaporize gears or bounce them
 					if gDmg ~= 0 then
 						local dx, dy = GetGearVelocity(gear)
@@ -763,12 +749,12 @@ function CheckProximity(gear)
 							AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 							PlaySound(sndExplosion)
 
-							strucHealth[globalTempID] = strucHealth[globalTempID] - gDmg
-							strucCircCol[globalTempID] = strucCircCol[globalTempID] - gDmg
+							strucHealth[sID] = strucHealth[sID] - gDmg
+							strucCircCol[sID] = strucCircCol[sID] - gDmg
 
-							if strucHealth[globalTempID] <= 0 then
-								AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtExplosion, 0, false)
-								DeleteGear(strucGear[globalTempID])
+							if strucHealth[sID] <= 0 then
+								AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtExplosion, 0, false)
+								DeleteGear(strucGear[sID])
 								PlaySound(sndExplosion)
 							end
 
@@ -783,10 +769,10 @@ function CheckProximity(gear)
 			end
 
 		--mark as within range of a teleporter node
-		elseif strucType[globalTempID] == loc("Teleportation Node") then
+		elseif strucType[sID] == loc("Teleportation Node") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[globalTempID] then
+				if GetHogClan(gear) == strucClan[sID] then
 
 					for i = 1, #sProx do
 						if sProx[i][1] == loc("Teleportation Mode") then
@@ -800,11 +786,11 @@ function CheckProximity(gear)
 		-- mark as within range of construction station
 		-- and thus allow menu access to placement modes
 		-- for girders, mines, sticky mines and barrels
-		elseif strucType[globalTempID] == loc("Construction Station") then
+		elseif strucType[sID] == loc("Construction Station") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[globalTempID] then
-					AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtSmoke, 0, true)
+				if GetHogClan(gear) == strucClan[sID] then
+					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
 
 					for i = 1, #sProx do
 						if ((sProx[i][1] == loc("Girder Placement Mode"))
@@ -824,11 +810,11 @@ function CheckProximity(gear)
 		-- mark as within stupport station range
 		-- and thus allow menu access to placement modes
 		-- for weapon, utility, and med crates
-		elseif strucType[globalTempID] == loc("Support Station") then
+		elseif strucType[sID] == loc("Support Station") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[globalTempID] then
-					AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtSmoke, 0, true)
+				if GetHogClan(gear) == strucClan[sID] then
+					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
 
 					for i = 1, #sProx do
 						if ((sProx[i][1] == loc("Health Crate Placement Mode"))
@@ -878,7 +864,7 @@ function HandleStructures()
 
 		SetVisualGearValues(strucCirc[i], GetX(strucGear[i]), GetY(strucGear[i]), nil, nil, nil, nil, nil, strucCircRadius[i], nil, strucCircCol[i])
 
-		globalTempID = i
+		tempID_CheckProximity = i
 
 		SetVisualGearValues(strucAltDisplay[i], GetX(strucGear[i]), GetY(strucGear[i]), 0, 0, nil, nil, 800000, sprTarget)
 
@@ -993,11 +979,6 @@ end
 -- with girders or an airattack
 function PlaceObject(x,y)
 
-	placedX[placedCount] = x
-	placedY[placedCount] = y
-	placedType[placedCount] = cat[cIndex]
-	placedSpec[placedCount] = pMode[pIndex]
-
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
 		AddCaption(loc("You may only place 1 Extra Time crate per turn."),0xffba00ff,capgrpVolume)
 		PlaySound(sndDenied)
@@ -1011,11 +992,9 @@ function PlaceObject(x,y)
 		local placed = false
 		local gear
 		if cat[cIndex] == "Girder Placement Mode" then
-			placed = PlaceGirder(x, y, CGR)
-			placedSpec[placedCount] = CGR
+			placed = PlaceGirder(x, y, currentGirderRotation)
 		elseif cat[cIndex] == "Rubber Placement Mode" then
-			placed = PlaceRubber(x, y, CGR)
-			placedSpec[placedCount] = CGR
+			placed = PlaceRubber(x, y, currentGirderRotation)
 		elseif cat[cIndex] == "Health Crate Placement Mode" then
 			gear = SpawnHealthCrate(x,y)
 			if gear ~= nil then
@@ -1028,7 +1007,6 @@ function PlaceObject(x,y)
 			gear = SpawnAmmoCrate(x, y, atkArray[pIndex][1])
 			if gear ~= nil then
 				placed = true
-				placedSpec[placedCount] = atkArray[pIndex][2]
 				setGearValue(gear,"caseType","ammo")
 				setGearValue(gear,"contents",atkArray[pIndex][2])
 				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
@@ -1037,7 +1015,6 @@ function PlaceObject(x,y)
 			gear = SpawnUtilityCrate(x, y, utilArray[pIndex][1])
 			if gear ~= nil then
 				placed = true
-				placedSpec[placedCount] = utilArray[pIndex][2]
 				setGearValue(gear,"caseType","util")
 				setGearValue(gear,"contents",utilArray[pIndex][2])
 				if utilArray[pIndex][1] == amExtraTime then
@@ -1067,7 +1044,6 @@ function PlaceObject(x,y)
 
 		if placed then
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
-			placedCount = placedCount + 1
 		else
 			AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
 			PlaySound(sndDenied)
@@ -1100,10 +1076,10 @@ function RedefineSubset()
 	local team = GetHogTeamName(CurrentHedgehog)
 
 	if cat[cIndex] == "Girder Placement Mode" then
-		pIndex = CGR
+		pIndex = currentGirderRotation
 		pMode = {loc("Girder")}
 	elseif cat[cIndex] == "Rubber Placement Mode" then
-		pIndex = CGR
+		pIndex = currentGirderRotation
 		pMode = {loc("Rubber")}
 		placedExpense = 3
 	elseif cat[cIndex] == "Barrel Placement Mode" then
@@ -1260,7 +1236,7 @@ function HandleConstructionMode()
 				cGear = nil
 		elseif GetGearType(cGear) == gtGirder then
 
-			CGR = GetState(cGear)
+			currentGirderRotation = GetState(cGear)
 
 			PlaceObject(x, y)
 		end
@@ -1421,9 +1397,6 @@ function onTimer(key)
 		end
 	end
 
-	-- Hacky workaround for object placer: Since this is based on the drill strike, it
-	-- allows the 5 timer keys to be pressed, causing the announcer to show up
-	-- This triggers code in 1 tick to send other message to mask the earlier one.
 	checkForSpecialWeaponsIn = 1
 
 end
@@ -1593,7 +1566,7 @@ function onGameStart()
 
 	SetAmmoDescriptionAppendix(amTeleport, loc("It only works in teleportation nodes of your own clan."))
 	
-	sCirc = AddVisualGear(0,0,vgtCircle,0,true)
+	local sCirc = AddVisualGear(0,0,vgtCircle,0,true)
 	SetVisualGearValues(sCirc, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x00000000)
 
 	for i = 0, ClansCount-1 do
@@ -1636,12 +1609,12 @@ function onGameStart()
 		clanBoundsEY[i] = WaterLine
 
 		--top and bottom
-		AddWall(LeftX+(clanInterval*slot),TopY,clanInterval,margin,color)
-		AddWall(LeftX+(clanInterval*slot),WaterLine-25,clanInterval,margin,color)
+		AddWall(LeftX+(clanInterval*slot),TopY,clanInterval,wMargin,color)
+		AddWall(LeftX+(clanInterval*slot),WaterLine-25,clanInterval,wMargin,color)
 
 		--add a wall to the left and right
-		AddWall(LeftX+(clanInterval*slot)+20,TopY,margin,WaterLine,color)
-		AddWall(LeftX+(clanInterval*slot)+clanInterval-20,TopY,margin,WaterLine,color)
+		AddWall(LeftX+(clanInterval*slot)+20,TopY,wMargin,WaterLine,color)
+		AddWall(LeftX+(clanInterval*slot)+clanInterval-20,TopY,wMargin,WaterLine,color)
 
 	end
 
@@ -1694,10 +1667,14 @@ end
 -- track hedgehogs and placement gears
 function onGearAdd(gear)
 
-	if GetGearType(gear) == gtHedgehog then
-	elseif (GetGearType(gear) == gtAirAttack) or (GetGearType(gear) == gtTeleport) or (GetGearType(gear) == gtGirder) then
+	local gt = GetGearType(gear)
+	if (gt == gtAirAttack) or (gt == gtTeleport) or (gt == gtGirder) then
 		cGear = gear
-
+	elseif (gt == gtMine) or (gt == gtExplosives) or (gt == gtSMine) then
+		curWep = GetCurAmmoType()
+		if curWep == amCMObjectPlacer then
+			checkForSpecialWeaponsIn = 1
+		end
 	end
 
 	if isATrackedGear(gear) then
@@ -1720,10 +1697,6 @@ function onGearDelete(gear)
 	end
 
 	if (isATrackedGear(gear) or gearCanBeDeflected(gear)) then
-
-		if getGearValue(gear, "tCirc") ~= nil then
-			DeleteVisualGear(getGearValue(gear, "tCirc"))
-		end
 
 		trackDeletion(gear)
 
