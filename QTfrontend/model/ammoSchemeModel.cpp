@@ -649,7 +649,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(9999)          // turn time      27
             << QVariant(100)           // init health    28
             << QVariant(50)            // sudden death   29
-            << QVariant(5)             // case prob      30
+            << QVariant(0)             // case prob      30
             << QVariant(3)             // mines time     31
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
