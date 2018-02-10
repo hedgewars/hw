@@ -272,6 +272,17 @@ local pIndex = 1
 
 local currentGirderRotation = 1 -- current girder rotation, we actually need this as HW remembers what rotation you last used
 
+-- Returns true if ammoType is an ammo type with a special meaning
+-- in Construction Mode.
+function IsConstructionModeAmmo(ammoType)
+	return ammoType == amCMStructurePlacer or
+	ammoType == amCMObjectPlacer or
+	ammoType == amCMCratePlacer or
+	ammoType == amGirder or
+	ammoType == amRubber or
+	ammoType == amTeleport
+end
+
 function DrawClanPowerTag()
 
 	local zoomL = 1.1
@@ -708,16 +719,45 @@ function CheckProximity(gear)
 			if GetGearType(gear) == gtHedgehog then
 				if (GetHogClan(gear) ~= strucClan[sID]) then
 
-					for wpnIndex = 1, #atkArray do
-						AddAmmo(gear, atkArray[wpnIndex][1], 0)
+					-- Vaporize (almost) all of the hog's ammo
+
+					local ammosDestroyed = 0
+					for wpnIndex = 0, AmmoTypeMax do
+						if (not IsConstructionModeAmmo(wpnIndex)) and wpnIndex ~= amSkip and wpnIndex ~= amNothing then
+							local count = GetAmmoCount(gear, wpnIndex)
+							-- Infinite ammos are spared
+							if count ~= 100 then
+								ammosDestroyed = ammosDestroyed + count
+								AddAmmo(gear, wpnIndex, 0)
+							end
+						end
 					end
 
-					for wpnIndex = 1, #utilArray do
-						AddAmmo(gear, utilArray[wpnIndex][1], 0)
-					end
+					if ammosDestroyed > 0 then
+						-- Vaporize effects
+						if gear == CurrentHedgehog then
+							local r = math.random(1, 2)
+							if r == 1 then
+								PlaySound(sndNutter, gear)
+							else
+								PlaySound(sndOops, gear)
+							end
+						end
+						PlaySound(sndVaporize)
+						for i=1, 5 do
+							AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
+						end
 
-					AddAmmo(gear, amCMStructurePlacer, 100)
-					AddAmmo(gear, amSkip, 100)
+						local msgs = {
+							loc("%s lost all the weapons"),
+							loc("The ammo of %s has been vaporized"),
+							loc("%s to a weapon filter"),
+							loc("%s is suddenly low on ammo"),
+							loc("%s is now as poor as a church mouse"),
+						}
+						local r = math.random(1, #msgs)
+						AddCaption(string.format(msgs[r], GetHogName(gear)))
+					end
 
 				end
 			end
