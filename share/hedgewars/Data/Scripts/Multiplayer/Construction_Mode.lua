@@ -66,7 +66,6 @@ local strucHealth = {}
 local strucCirc = {}
 local strucCircCol = {}
 local strucCircRadius = {}
-local strucCircType = {}
 local strucAltDisplay = {}
 
 -- Clan stuff
@@ -119,8 +118,19 @@ local checkForSpecialWeaponsIn = -1
 local lastWep = amNothing -- helper variable to track the previous hack
 
 -- Colors
-local colorRed = 0xff0000ff
-local colorGreen = 0x00ff00ff
+local colorClanTag = 0x00ff00ff
+
+local colorSupportStation = 0xFFFF00FF
+local colorConstructionStation = 0xFFFFFFFF
+local colorTeleportationNode = 0x0000FFFF
+local colorHealingStation = 0xFF808040 -- Just a slight glow
+local colorBioFilter = 0xFF0000FF
+local colorReflectorShield = 0xFFAE00FF
+local colorWeaponFilter =  0xA800FFFF
+
+local colorHealingStationParticle = 0x00FF00FF
+
+local colorMessage = 0xFFBA00FF
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
 local amCMStructurePlacer = amAirAttack
@@ -266,7 +276,8 @@ function DrawClanPowerTag()
 	local xOffset = 45
 	local yOffset = 70
 	local tValue = clanPower[GetHogClan(CurrentHedgehog)]
-	local tCol = 0x00ff00ff
+	local tCol = colorClanTag
+	-- alternatively:  tCol = GetClanColor(GetHogClan(CurrentHedgehog))
 
 	DeleteVisualGear(clanPowerTag)
 	clanPowerTag = AddVisualGear(-div(ScreenWidth, 2) + xOffset, ScreenHeight - yOffset, vgtHealthTag, tValue, false)
@@ -282,7 +293,7 @@ function DrawClanPowerTag()
 		nil, 		-- frameticks
 		nil, 		-- value (set above)
 		240000, 	-- timer
-		tCol		-- color.   -- GetClanColor( GetHogClan(CurrentHedgehog) )
+		tCol		-- color
 	)
 
 end
@@ -443,7 +454,12 @@ function AddStruc(pX,pY, pType, pClan)
 
 	local tempCirc = AddVisualGear(0,0,vgtCircle,0,true)
 
-	SetVisualGearValues(tempCirc, 0, 0, 100, 255, 1, 100, 0, 500, 1, 0xFFFFFF00)
+	if pType ~= "Respawner" and pType ~= "Generator" then
+		SetVisualGearValues(tempCirc, 0, 0, 100, 255, 1, 100, 0, 500, 1, 0xFFFFFF00)
+		table.insert(strucCirc, tempCirc)
+	else
+		table.insert(strucCirc, false)
+	end
 
 	table.insert(strucID, uniqueStructureID)
 	table.insert(strucType, pType)
@@ -462,45 +478,42 @@ function AddStruc(pX,pY, pType, pClan)
 		table.insert(strucHealth,1)
 	end
 
-	table.insert(strucCirc,tempCirc)
-
-	table.insert(strucCircType, 1)
 	if pType == "Bio-Filter" then
-		table.insert(strucCircCol,colorRed)
+		table.insert(strucCircCol, colorBioFilter)
 		table.insert(strucCircRadius,1000)
 		frameID = 7
 	elseif pType == "Healing Station" then
-		table.insert(strucCircCol,0xFF00FF00)
+		table.insert(strucCircCol, colorHealingStation)
 		table.insert(strucCircRadius,500)
 		frameID = 3
 	elseif pType == "Respawner" then
-		table.insert(strucCircCol,0xFF00FF00)
-		table.insert(strucCircRadius,75)
+		table.insert(strucCircCol, 0)
+		table.insert(strucCircRadius,0)
 		runOnHogs(EnableHogResurrectionForThisClan)
 		frameID = 1
 	elseif pType == "Teleportation Node" then
-		table.insert(strucCircCol,0x0000FFFF)
+		table.insert(strucCircCol, colorTeleportationNode)
 		table.insert(strucCircRadius,350)
 		frameID = 6
 	elseif pType == "Generator" then
-		table.insert(strucCircCol,0xFFFF00FF)
-		table.insert(strucCircRadius,75)
+		table.insert(strucCircCol, 0)
+		table.insert(strucCircRadius,0)
 		setGearValue(tempG, "power", 0)
 		frameID = 2
 	elseif pType == "Support Station" then
-		table.insert(strucCircCol,0xFFFF00FF)
+		table.insert(strucCircCol, colorSupportStation)
 		table.insert(strucCircRadius,500)
 		frameID = 4
 	elseif pType == "Construction Station" then
-		table.insert(strucCircCol,0xFFFFFFFF)
+		table.insert(strucCircCol, colorConstructionStation)
 		table.insert(strucCircRadius,500)
 		frameID = 8
 	elseif pType == "Reflector Shield" then
-		table.insert(strucCircCol,0xffae00ff)
+		table.insert(strucCircCol, colorReflectorShield)
 		table.insert(strucCircRadius,750)
 		frameID = 9
 	elseif pType == "Weapon Filter" then
-		table.insert(strucCircCol,0xa800ffff)
+		table.insert(strucCircCol, colorWeaponFilter)
 		table.insert(strucCircRadius,750)
 		frameID = 5
 	end
@@ -537,7 +550,6 @@ function CheckGearForStructureLink(gear)
 
 			table.remove(strucCircCol,i)
 			table.remove(strucCircRadius,i)
-			table.remove(strucCircType,i)
 
 			if strucAltDisplay[i] ~= 1 then
 				DeleteVisualGear(strucAltDisplay[i])
@@ -610,21 +622,13 @@ function CheckTeleport(gear, tX, tY)
 
 			local dist = GetDistFromGearToXY(CurrentHedgehog,GetX(strucGear[i]), GetY(strucGear[i]))
 			local NR
-			if strucCircType[i] == 0 then
-				NR = strucCircRadius[i]
-			else
-				NR = (48/100*strucCircRadius[i])/2
-			end
+			NR = (48/100*strucCircRadius[i])/2
 			if dist <= NR*NR then
 				teleportOriginSuccessful = true
 			end
 
 			dist = GetDistFromXYtoXY(tX,tY,GetX(strucGear[i]), GetY(strucGear[i]))
-			if strucCircType[i] == 0 then
-				NR = strucCircRadius[i]
-			else
-				NR = (48/100*strucCircRadius[i])/2
-			end
+			NR = (48/100*strucCircRadius[i])/2
 			if dist <= NR*NR then
 				teleportDestinationSuccessful = true
 			end
@@ -653,11 +657,7 @@ function CheckProximity(gear)
 
 	-- calculate my real radius if I am an aura
 	local NR
-	if strucCircType[sID] == 0 then
-		NR = strucCircRadius[sID]
-	else
-		NR = (48/100*strucCircRadius[sID])/2
-	end
+	NR = (48/100*strucCircRadius[sID])/2
 
 	-- we're in business
 	if dist <= NR*NR then
@@ -681,7 +681,7 @@ function CheckProximity(gear)
 
 					-- change this to the med kit sprite health ++++s later
 					local tempE = AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
-					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, colorGreen)
+					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, colorHealingStationParticle)
 
 				end
 			end
@@ -751,7 +751,9 @@ function CheckProximity(gear)
 							PlaySound(sndExplosion)
 
 							strucHealth[sID] = strucHealth[sID] - gDmg
-							strucCircCol[sID] = strucCircCol[sID] - gDmg
+							if strucCirc[sID] then
+								strucCircCol[sID] = strucCircCol[sID] - gDmg
+							end
 
 							if strucHealth[sID] <= 0 then
 								AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtExplosion, 0, false)
@@ -844,7 +846,9 @@ function HandleStructures()
 
 	for i = 1, #strucID do
 
-		SetVisualGearValues(strucCirc[i], GetX(strucGear[i]), GetY(strucGear[i]), nil, nil, nil, nil, nil, strucCircRadius[i], nil, strucCircCol[i])
+		if strucCirc[i] then
+			SetVisualGearValues(strucCirc[i], GetX(strucGear[i]), GetY(strucGear[i]), nil, nil, nil, nil, nil, strucCircRadius[i], nil, strucCircCol[i])
+		end
 
 		tempID_CheckProximity = i
 
@@ -950,10 +954,10 @@ end
 function PlaceObject(x,y)
 
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
-		AddCaption(loc("You may only place 1 Extra Time crate per turn."),0xffba00ff,capgrpVolume)
+		AddCaption(loc("You may only place 1 Extra Time crate per turn."),colorMessage,capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (conf_cratesPerRound ~= "inf" and clanCratesSpawned[GetHogClan(CurrentHedgehog)] >= conf_cratesPerRound) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
-		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound),0xffba00ff,capgrpVolume)
+		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound),colorMessage,capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (XYisInRect(x,y, clanBoundsSX[GetHogClan(CurrentHedgehog)],clanBoundsSY[GetHogClan(CurrentHedgehog)],clanBoundsEX[GetHogClan(CurrentHedgehog)],clanBoundsEY[GetHogClan(CurrentHedgehog)]) == true)
 	and (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense)
@@ -1010,15 +1014,15 @@ function PlaceObject(x,y)
 		if placed then
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
 		else
-			AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Invalid Placement"),colorMessage,capgrpVolume)
 			PlaySound(sndDenied)
 		end
 
 	else
 		if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
-			AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Invalid Placement"),colorMessage,capgrpVolume)
 		else
-			AddCaption(loc("Insufficient Power"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Insufficient Power"),colorMessage,capgrpVolume)
 		end
 		PlaySound(sndDenied)
 	end
@@ -1134,7 +1138,7 @@ function HandleConstructionModeTools()
 		end
 
 		if updated then
-			AddCaption(loc(cat[cIndex]), 0xffba00ff, capgrpMessage)
+			AddCaption(loc(cat[cIndex]), colorMessage, capgrpMessage)
 			showModeMessage()
 			wallsVisible = true
 		else
@@ -1246,7 +1250,7 @@ function updateCost()
 		placedExpense = utilArray[pIndex][2]
 	end
 
-	AddCaption(string.format(loc("Cost: %d"), placedExpense), 0xffba00ff, capgrpAmmostate)
+	AddCaption(string.format(loc("Cost: %d"), placedExpense), colorMessage, capgrpAmmostate)
 
 end
 
@@ -1293,7 +1297,7 @@ function showModeMessage()
 	else
 		str = tostring(val)
 	end
-	AddCaption(str, 0xffba00ff, capgrpMessage2)
+	AddCaption(str, colorMessage, capgrpMessage2)
 end
 
 function rotateMode(pDir)
