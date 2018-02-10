@@ -578,6 +578,15 @@ function DisableTumbler(endTurn)
                 if endTurn then
                          EndTurn(true)
                 end
+		if trackFinished then
+                         for i=0, wpCount-1 do
+                       	         SetVisualGearValues(wpCirc[i], nil, nil, 255, 255, nil, 2)
+                         end
+                else
+                         for i=0, wpCount-1 do
+                       	         SetVisualGearValues(wpCirc[i], nil, nil, 32, 32, nil, 1)
+                         end
+                end
         end
 end
 

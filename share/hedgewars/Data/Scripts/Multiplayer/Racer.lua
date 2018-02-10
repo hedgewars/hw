@@ -512,6 +512,16 @@ function DisableTumbler(endTurn)
                         EndTurn(true)
                 end
                 racerActive = false -- newadd
+
+		if trackFinished and not turnSkipped then
+                         for i=0, wpCount-1 do
+                       	         SetVisualGearValues(wpCirc[i], nil, nil, 255, 255, nil, 2)
+                         end
+                elseif not turnSkipped then
+                         for i=0, wpCount-1 do
+                       	         SetVisualGearValues(wpCirc[i], nil, nil, 32, 32, nil, 1)
+                         end
+                end
         end
 end
 
