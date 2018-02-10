@@ -305,6 +305,22 @@ end
 -- RACER METHODS
 -----------------
 
+-- Returns min opacity, max opacity and flashing speed (`FrameTicks`)
+-- for the waypoint visual gears
+function FlashingHelper(wpIndex)
+        local minO, maxO, flashing
+        if wpIndex == 0 then
+                -- Notable flashing of first waypoint
+                minO, maxO = 92, 255
+                flashing = 2
+        else
+                -- Slow pulsation
+                minO, maxO = 164, 224
+                flashing = 10
+        end
+	return minO, maxO, flashing
+end
+
 function CheckWaypoints()
 
         trackFinished = true
@@ -672,7 +688,9 @@ function CallBob(x,y)
             wpCol[wpCount] = 0xffffffff
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
 
-            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+            local minO, maxO, flashing = FlashingHelper(wpCount)
+            -- Make first waypoint flash very noticably before the hog starts racing
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[wpCount])
 
             wpCount = wpCount + 1
 
@@ -1056,7 +1074,8 @@ function onNewTurn()
                 for i = 0,(wpCount-1) do
                         wpActive[i] = false
                         wpCol[i] = 0xffffffff
-                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
+                        local minO, maxO, flashing = FlashingHelper(i)
+                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[i])
                 end
         end
 
