@@ -898,7 +898,7 @@ function PlaceWaypoint(x,y)
 	placedSpec[placedCount] = AddVisualGear(x,y,vgtCircle,0,true)
 	placedTint[placedCount] = 0xFF0000FF
 	placedFrame[placedCount] = 1										--rad is 450
-	SetVisualGearValues(placedSpec[placedCount], x, y, 20, 100, 1, 10, 0, 450, 5, placedTint[placedCount])
+	SetVisualGearValues(placedSpec[placedCount], x, y, 164, 224, 1, 10, 0, 450, 5, placedTint[placedCount])
 	placedCount = placedCount +1
 
 end

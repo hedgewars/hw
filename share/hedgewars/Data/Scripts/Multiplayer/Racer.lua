@@ -316,7 +316,7 @@ function CheckWaypoints()
 
                 if dist < (NR*NR) then
                         wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog))
-                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
+                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 64, 64, 1, 10, 0, wpRad, 5, wpCol[i])
 
                         wpRem = 0
                         for k = 0, (wpCount-1) do
@@ -628,7 +628,7 @@ function PlaceWayPoint(x,y,placedByUser)
             end
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
 
-            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
 
             wpCount = wpCount + 1
 
@@ -693,7 +693,7 @@ function onNewTurn()
         for i = 0,(wpCount-1) do
                 wpActive[i] = false
                 wpCol[i] = 0xffffffff
-                SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
+                SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
         end
 
         -- Handle Starting Stage of Game
