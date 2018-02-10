@@ -154,6 +154,8 @@ local costFactor = 20
 -- WEAPON CRATES
 -- Weapons which shouldn't be aded:
 -- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
+-- Mine strike: Is currently broken
+-- Piano strike: Hog is resurrected by respawner
 local atkArray = {
 	{amBazooka,	 2*costFactor},
 	--{amBee,	 4*costFactor},
@@ -1482,16 +1484,23 @@ end
 
 function initialSetup(gear)
 
-	-- engine already placed hogs in fort mode
+	-- Engine already placed hogs in fort mode
 	if not fortMode then
 		FindPlace(gear, false, clanBoundsSX[GetHogClan(gear)], clanBoundsEX[GetHogClan(gear)],true)
 	end
 
-	-- for now, everyone should have this stuff
+
+	-- Add core ammo
 	AddAmmo(gear, amCMStructurePlacer, 100)
 	AddAmmo(gear, amSwitch, 100)
 	AddAmmo(gear, amSkip, 100)
 
+	-- Remove the other special Construction Mode tools
+	AddAmmo(gear, amCMObjectPlacer, 0)
+	AddAmmo(gear, amCMCratePlacer, 0)
+
+	-- Mine strike is broken
+	AddAmmo(gear, amMineStrike, 0)
 end
 
 function onGameStart()
