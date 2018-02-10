@@ -130,7 +130,7 @@ local colorWeaponFilter =  0xA800FFFF
 
 local colorHealingStationParticle = 0x00FF00FF
 
-local colorMessage = 0xFFBA00FF
+local colorMessageError = 0xFFFFFFFF
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
 local amCMStructurePlacer = amAirAttack
@@ -639,7 +639,7 @@ function CheckTeleport(gear, tX, tY)
 	end
 
 	if ((teleportDestinationSuccessful == false) or (teleportOriginSuccessful == false)) then
-		AddCaption(loc("Teleport Unsuccessful. Please teleport within a clan teleporter's sphere of influence."))
+		AddCaption(loc("Teleport unsuccessful. Please teleport within a clan teleporter's sphere of influence."), colorMessageError, capgrpMessage)
 		SetGearTarget(gear, GetX(CurrentHedgehog), GetY(CurrentHedgehog))
 	end
 
@@ -954,10 +954,10 @@ end
 function PlaceObject(x,y)
 
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
-		AddCaption(loc("You may only place 1 Extra Time crate per turn."),colorMessage,capgrpVolume)
+		AddCaption(loc("You may only place 1 Extra Time crate per turn."), colorMessageError, capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (conf_cratesPerRound ~= "inf" and clanCratesSpawned[GetHogClan(CurrentHedgehog)] >= conf_cratesPerRound) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
-		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound),colorMessage,capgrpVolume)
+		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound), colorMessageError, capgrpVolume)
 		PlaySound(sndDenied)
 	elseif (XYisInRect(x,y, clanBoundsSX[GetHogClan(CurrentHedgehog)],clanBoundsSY[GetHogClan(CurrentHedgehog)],clanBoundsEX[GetHogClan(CurrentHedgehog)],clanBoundsEY[GetHogClan(CurrentHedgehog)]) == true)
 	and (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense)
@@ -1014,15 +1014,15 @@ function PlaceObject(x,y)
 		if placed then
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
 		else
-			AddCaption(loc("Invalid Placement"),colorMessage,capgrpVolume)
+			AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
 			PlaySound(sndDenied)
 		end
 
 	else
 		if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
-			AddCaption(loc("Invalid Placement"),colorMessage,capgrpVolume)
+			AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
 		else
-			AddCaption(loc("Insufficient Power"),colorMessage,capgrpVolume)
+			AddCaption(loc("Insufficient Power"), colorMessageError, capgrpVolume)
 		end
 		PlaySound(sndDenied)
 	end
@@ -1138,7 +1138,7 @@ function HandleConstructionModeTools()
 		end
 
 		if updated then
-			AddCaption(loc(cat[cIndex]), colorMessage, capgrpMessage)
+			AddCaption(loc(cat[cIndex]), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage)
 			showModeMessage()
 			wallsVisible = true
 		else
@@ -1250,7 +1250,7 @@ function updateCost()
 		placedExpense = utilArray[pIndex][2]
 	end
 
-	AddCaption(string.format(loc("Cost: %d"), placedExpense), colorMessage, capgrpAmmostate)
+	AddCaption(string.format(loc("Cost: %d"), placedExpense), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
 
 end
 
@@ -1297,7 +1297,7 @@ function showModeMessage()
 	else
 		str = tostring(val)
 	end
-	AddCaption(str, colorMessage, capgrpMessage2)
+	AddCaption(str, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
 end
 
 function rotateMode(pDir)

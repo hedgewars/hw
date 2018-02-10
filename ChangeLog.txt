@@ -19,6 +19,8 @@ Content:
 Styles and game modes:
  + Construction Mode: Add a few shortcuts
  + Construction Mode: Remember all selections
+ + Construction Mode: Add subtle glow to healing station
+ + Construction Mode: Change message colors
 
 A Space Adventure:
  + Precise Shooting: Display collected ammo
