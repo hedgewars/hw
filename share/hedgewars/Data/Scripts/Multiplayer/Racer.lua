@@ -635,14 +635,24 @@ function PlaceWayPoint(x,y,placedByUser)
 
             wpX[wpCount] = x
             wpY[wpCount] = y
-            if wpCount == 0 then
-                wpCol[wpCount] = 0x80ff80ff
-            else
-                wpCol[wpCount] = 0xffffffff
-            end
+            wpCol[wpCount] = 0xffffffff
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
 
-            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+            local flashing, minO, maxO
+            if wpCount == 0 then
+                -- First waypoint flashes. Useful to know since this is the spawn position.
+                minO, maxO = 164, 255
+                flashing = 5
+            else
+                -- Other waypoints are not animated (before the race starts)
+                minO, maxO = 255, 255
+                flashing = 0
+            end
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[wpCount])
+
+            -- Make last waypoint white while making all previous ones light gray.
+            -- Note the last waypoint can be deleted with Precise.
+            SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xaaaaaaff)
 
             wpCount = wpCount + 1
 
@@ -667,6 +677,7 @@ function DeletePreviousWayPoint()
         wpCol[wpCount] = nil
         DeleteVisualGear(wpCirc[wpCount])
         wpCirc[wpCount] = nil
+        SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xffffffff)
         AddCaption(string.format(loc("Waypoint removed. Available points: %d"), wpLimit-wpCount))
     else
         PlaySound(sndDenied)
@@ -703,15 +714,6 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
-        -- Set the waypoints to unactive on new round
-        if not gameOver then
-                for i = 0,(wpCount-1) do
-                        wpActive[i] = false
-                        wpCol[i] = 0xffffffff
-                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
-                end
-        end
-
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
                 if wpCount >= 2 then
@@ -734,6 +736,24 @@ function onNewTurn()
                         loc("Waypoint placement phase"), infoString, 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
+                end
+        end
+
+        -- Set the waypoints to unactive on new round
+        if gameBegun and not gameOver then
+                for i = 0,(wpCount-1) do
+                        wpActive[i] = false
+                        wpCol[i] = 0xffffffff
+                        local flashing, minO, maxO
+                        if i == 0 then
+                            -- Make first waypoint flash very noticably
+                            minO, maxO = 92, 255
+                            flashing = 2
+                        else
+                            minO, maxO = 164, 224
+                            flashing = 10
+                        end
+                        SetVisualGearValues(wpCirc[i], nil, nil, minO, maxO, nil, flashing, nil, nil, nil, wpCol[i])
                 end
         end
 
