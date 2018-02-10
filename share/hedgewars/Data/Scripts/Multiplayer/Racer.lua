@@ -166,9 +166,71 @@ local boostX = 0
 local boostY = 0
 local boostValue = 1
 
+-- themes with bright background
+local brightThemes = {
+	Bath = true,
+	Bamboo = true,
+	Beach = true,
+	Blox = true,
+	Compost = true,
+	Desert = true,
+	Fruit = true,
+	Golf = true,
+	Hoggywood = true,
+	Jungle = true,
+	Olympics = true,
+	Sheep = true,
+}
+-- themes with medium or heavily mixed brightness.
+-- only add themes here if both bright and dark waypoint
+-- colors fail otherwise.
+local mediumThemes = {
+	Halloween = true,
+}
+-- All themes not explicitly listed above are assumed to
+-- be "dark" and work with the default bright waypoints.
+
+-- Waypoint colors in 3 color themes!
+-- We do this so the waypoints are easy on the eyes,
+-- at least in each of the default themes.
+
+-- Bright waypoints (default)
+local waypointColourBright = 0xFFFFFFFF -- Primary colour of inactive waypoints
+local waypointColourBrightAtPlacement = 0xAAAAAAFF -- Colour of non-highlighted waypoints while placing
+-- Medium bright waypoints
+local waypointColourMedium = 0x606060FF
+local waypointColourMediumAtPlacement = 0x404040FF
+-- Dark waypoints
+local waypointColourDark = 0x000000FF
+local waypointColourDarkAtPlacement = 0x303030FF
+
+-- Waypoints touched by the players assume the clan color, which is unchanged.
+-- Touched waypoints are not important to be visible.
+
+-- Default waypoint colors (only use these color variables in the code below)
+local waypointColour = waypointColourBright
+local waypointColourAtPlacement = waypointColourBrightAtPlacement
+
 -------------------
 -- general methods
 -------------------
+
+-- Returns brightness level of background from 1-3.
+-- 1 = brightest
+function GetBackgroundBrightness()
+	-- This just looks at the theme names above.
+	-- This code will fail for bright unofficial themes.
+	-- TODO: Change how this thing works.
+	-- Consider adding a function into the Lua API which looks
+	-- up the theme's sky color, so we could use thit instead.
+	if brightThemes[Theme] then
+		return 1
+	elseif mediumThemes[Theme] then
+		return 2
+	else
+		return 3
+	end
+end
 
 --[[
 Parameters syntax:
@@ -602,6 +664,16 @@ function onGameStart()
         lastRound = TotalRounds
         RoundHasChanged = false
 
+	if GetBackgroundBrightness() == 1 then
+		-- Dark waypoint colour theme
+		waypointColour = waypointColourDark
+		waypointColourAtPlacement = waypointColourDarkAtPlacement
+	elseif GetBackgroundBrightness() == 2 then
+		-- Medium waypoint colour theme
+		waypointColour = waypointColourMedium
+		waypointColourAtPlacement = waypointColourMediumAtPlacement
+	end
+
         for i = 0, (specialPointsCount-1) do
                 PlaceWayPoint(specialPointsX[i], specialPointsY[i], false)
         end
@@ -635,7 +707,7 @@ function PlaceWayPoint(x,y,placedByUser)
 
             wpX[wpCount] = x
             wpY[wpCount] = y
-            wpCol[wpCount] = 0xffffffff
+            wpCol[wpCount] = waypointColour
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
 
             local flashing, minO, maxO
@@ -650,9 +722,8 @@ function PlaceWayPoint(x,y,placedByUser)
             end
             SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[wpCount])
 
-            -- Make last waypoint white while making all previous ones light gray.
-            -- Note the last waypoint can be deleted with Precise.
-            SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xaaaaaaff)
+            -- Use alternate waypoint color for all waypoints but the last one. This gives a subtle “highlighting” effect.
+            SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, waypointColourAtPlacement)
 
             wpCount = wpCount + 1
 
@@ -677,7 +748,7 @@ function DeletePreviousWayPoint()
         wpCol[wpCount] = nil
         DeleteVisualGear(wpCirc[wpCount])
         wpCirc[wpCount] = nil
-        SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xffffffff)
+        SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, waypointColour)
         AddCaption(string.format(loc("Waypoint removed. Available points: %d"), wpLimit-wpCount))
     else
         PlaySound(sndDenied)
@@ -743,7 +814,7 @@ function onNewTurn()
         if gameBegun and not gameOver then
                 for i = 0,(wpCount-1) do
                         wpActive[i] = false
-                        wpCol[i] = 0xffffffff
+                        wpCol[i] = waypointColour
                         local flashing, minO, maxO
                         if i == 0 then
                             -- Make first waypoint flash very noticably
