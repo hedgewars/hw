@@ -622,6 +622,15 @@ function FindRespawner(gear)
 		local i = GetRandom(#respawnerList)+1
 		SetGearPosition(gear,GetX(strucGear[respawnerList[i]]),GetY(strucGear[respawnerList[i]])-25)
 		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
+		local msgs = {
+			loc("The respawner respawns %s"),
+			loc("%s died … and lives again!"),
+			loc("%s gets an extra life"),
+			loc("%s is now a zombie hedgehog"),
+			loc("%s has been rescued from death"),
+		}
+		local r = math.random(1, #msgs)
+		AddCaption(string.format(msgs[r], GetHogName(gear)))
 	else	-- (this should never happen, but just in case)
 		SetEffect(gear, heResurrectable, 0)
 		DeleteGear(gear)
@@ -751,12 +760,12 @@ function CheckProximity(gear)
 						local msgs = {
 							loc("%s lost all the weapons"),
 							loc("The ammo of %s has been vaporized"),
-							loc("%s to a weapon filter"),
+							loc("%s fell victim to a weapon filter"),
 							loc("%s is suddenly low on ammo"),
 							loc("%s is now as poor as a church mouse"),
 						}
 						local r = math.random(1, #msgs)
-						AddCaption(string.format(msgs[r], GetHogName(gear)))
+						AddCaption(string.format(msgs[r], GetHogName(gear)), 0xFFFFFFFF, capgrpAmmoinfo)
 					end
 
 				end
@@ -1699,8 +1708,10 @@ end
 
 
 function onGearResurrect(gear)
-	AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
-	FindRespawner(gear)
+	if GetGearType(gear) == gtHedgehog then
+		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
+		FindRespawner(gear)
+	end
 end
 
 -- track hedgehogs and placement gears
