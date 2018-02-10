@@ -162,6 +162,7 @@ local atkArray = {
 	{amMortar,	 1*costFactor},
 	{amDrill,	 3*costFactor},
 	{amSnowball,	 3*costFactor},
+	{amDuck,	 2*costFactor},
 
 	{amGrenade,	 2*costFactor},
 	{amClusterBomb,	 3*costFactor},
@@ -176,6 +177,7 @@ local atkArray = {
 	--{amSineGun,	 6*costFactor},
 	{amFlamethrower, 4*costFactor},
 	{amIceGun,	15*costFactor},
+	{amMinigun,	13*costFactor},
 
 	{amFirePunch,	 3*costFactor},
 	{amWhip,	 1*costFactor},
@@ -199,8 +201,6 @@ local atkArray = {
 	{amKnife,	 2*costFactor},
 
 	{amBirdy,	 7*costFactor},
-
-	{amDuck,	 2*costFactor}
 }
 
 -- UTILITY CRATES --

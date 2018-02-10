@@ -311,6 +311,7 @@ local atkArray =
 				{amMortar, 	"amMortar"},
 				{amDrill, 	"amDrill"},
 				{amSnowball, 	"amSnowball"},
+				{amDuck,	"amDuck"},
 
 				{amGrenade,	"amGrenade"},
 				{amClusterBomb,	"amClusterBomb"},
@@ -325,6 +326,7 @@ local atkArray =
 				{amSineGun, 	"amSineGun"},
 				{amFlamethrower,"amFlamethrower"},
 				{amIceGun, 	"amIceGun"},
+				{amMinigun, 	"amMinigun"},
 
 				{amFirePunch, 	"amFirePunch"},
 				{amWhip,	"amWhip"},
@@ -352,7 +354,6 @@ local atkArray =
 				{amKnife,	"amKnife"},
 
 				{amBirdy,	"amBirdy"},
-				{amDuck,	"amDuck"},
 
 				}
 

@@ -99,7 +99,7 @@ local atkWeps = 	{
 					[amBazooka]=true, [amBee]=true, [amMortar]=true, [amDrill]=true, [amSnowball]=true,
                     [amGrenade]=true, [amClusterBomb]=true, [amMolotov]=true, [amWatermelon]=true,
                     [amHellishBomb]=true, [amGasBomb]=true, [amShotgun]=true, [amDEagle]=true,
-                    [amFlamethrower]=true, [amSniperRifle]=true, [amSineGun]=true, 
+                    [amFlamethrower]=true, [amSniperRifle]=true, [amSineGun]=true, [amMinigun]=true,
 					[amFirePunch]=true, [amWhip]=true, [amBaseballBat]=true, [amKamikaze]=true,
                     [amSeduction]=true, [amHammer]=true, [amMine]=true, [amDynamite]=true, [amCake]=true,
                     [amBallgun]=true, [amSMine]=true, [amRCPlane]=true, [amBirdy]=true, [amKnife]=true,
