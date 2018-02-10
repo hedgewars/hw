@@ -137,58 +137,58 @@ local conf_cratesPerRound = 5
 -- CRATE DEFINITIONS --
 -----------------------
 -- format:
--- { ammoType, ammoTypeString, unused, cost }
+-- { ammoType, cost }
 
 local costFactor = 20
 
--- WEAPON CRATES 
+-- WEAPON CRATES
 -- Weapons which shouldn't be aded:
 -- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
 local atkArray = {
-	{amBazooka, 		"amBazooka",		0, 2*costFactor},
-	--{amBee, 		"amBee",		0, 4*costFactor},
-	{amMortar, 		"amMortar",		0, 1*costFactor},
-	{amDrill, 		"amDrill",		0, 3*costFactor},
-	{amSnowball, 		"amSnowball",		0, 3*costFactor},
+	{amBazooka,	 2*costFactor},
+	--{amBee,	 4*costFactor},
+	{amMortar,	 1*costFactor},
+	{amDrill,	 3*costFactor},
+	{amSnowball,	 3*costFactor},
 
-	{amGrenade,		"amGrenade",		0, 2*costFactor},
-	{amClusterBomb,		"amClusterBomb",	0, 3*costFactor},
-	{amWatermelon, 		"amWatermelon",		0, 25*costFactor},
-	{amHellishBomb,		"amHellishBomb",	0, 25*costFactor},
-	{amMolotov, 		"amMolotov",		0, 3*costFactor},
-	{amGasBomb, 		"amGasBomb",		0, 3*costFactor},
+	{amGrenade,	 2*costFactor},
+	{amClusterBomb,	 3*costFactor},
+	{amWatermelon,	25*costFactor},
+	{amHellishBomb,	25*costFactor},
+	{amMolotov,	 3*costFactor},
+	{amGasBomb,	 3*costFactor},
 
-	{amShotgun,		"amShotgun",		0, 2*costFactor},
-	{amDEagle,		"amDEagle",		0, 2*costFactor},
-	{amSniperRifle,		"amSniperRifle",	0, 3*costFactor},
-	--{amSineGun, 		"amSineGun",		0, 6*costFactor},
-	{amFlamethrower,	"amFlamethrower",	0, 4*costFactor},
-	{amIceGun, 		"amIceGun",		0, 15*costFactor},
+	{amShotgun,	 2*costFactor},
+	{amDEagle,	 2*costFactor},
+	{amSniperRifle,	 3*costFactor},
+	--{amSineGun,	 6*costFactor},
+	{amFlamethrower, 4*costFactor},
+	{amIceGun,	15*costFactor},
 
-	{amFirePunch, 		"amFirePunch",		0, 3*costFactor},
-	{amWhip,		"amWhip",		0, 1*costFactor},
-	{amBaseballBat, 	"amBaseballBat",	0, 7*costFactor},
-	--{amKamikaze, 		"amKamikaze",		0, 1*costFactor},
-	{amSeduction, 		"amSeduction",		0, 1*costFactor},
-	{amHammer,		"amHammer",		0, 1*costFactor},
+	{amFirePunch,	 3*costFactor},
+	{amWhip,	 1*costFactor},
+	{amBaseballBat,	 7*costFactor},
+	--{amKamikaze,	 1*costFactor},
+	{amSeduction,	 1*costFactor},
+	{amHammer,	 1*costFactor},
 
-	{amMine, 		"amMine",		0, 1*costFactor},
-	{amDynamite, 		"amDynamite",		0, 9*costFactor},
-	{amCake, 		"amCake",		0, 25*costFactor},
-	{amBallgun, 		"amBallgun",		0, 40*costFactor},
-	--{amRCPlane,		"amRCPlane",		0, 25*costFactor},
-	{amSMine,		"amSMine",		0, 5*costFactor},
+	{amMine,	 1*costFactor},
+	{amDynamite,	 9*costFactor},
+	{amCake,	25*costFactor},
+	{amBallgun,	40*costFactor},
+	--{amRCPlane,	25*costFactor},
+	{amSMine,	 5*costFactor},
 
-	--{amMineStrike,	"amMineStrike",		0, 15*costFactor},
-	--{amPiano,		"amPiano",		0, 40*costFactor},
+	--{amMineStrike,15*costFactor},
+	--{amPiano,	40*costFactor},
 
-	{amPickHammer,		"amPickHammer",		0, 2*costFactor},
-	{amBlowTorch, 		"amBlowTorch",		0, 4*costFactor},
-	{amKnife,		"amKnife",		0, 2*costFactor},
+	{amPickHammer,	 2*costFactor},
+	{amBlowTorch,	 4*costFactor},
+	{amKnife,	 2*costFactor},
 
-	{amBirdy,		"amBirdy",		0, 7*costFactor},
+	{amBirdy,	 7*costFactor},
 
-	{amDuck,		"amDuck",		0, 2*costFactor}
+	{amDuck,	 2*costFactor}
 }
 
 -- UTILITY CRATES --
@@ -202,20 +202,20 @@ local atkArray = {
 -- Utilities which might be weird for this mode:
 -- * Tardis: Randomly teleports hog, maybe even into enemy clan's area
 local utilArray = {
-	{amLandGun,		"amLandGun",		0, 5*costFactor},
+ 	{amLandGun,	 5*costFactor},
 
-	{amRope, 		"amRope",		0, 7*costFactor},
-	{amParachute, 		"amParachute",		0, 2*costFactor},
-	{amJetpack,		"amJetpack",		0, 8*costFactor},
-	{amPortalGun,		"amPortalGun",		0, 15*costFactor},
+	{amRope,	 7*costFactor},
+	{amParachute,	 2*costFactor},
+	{amJetpack,	 8*costFactor},
+	{amPortalGun,	 15*costFactor},
 
-	{amInvulnerable,	"amInvulnerable",	0, 5*costFactor},
-	{amLaserSight,		"amLaserSight",		0, 2*costFactor},
-	{amVampiric,		"amVampiric",		0, 6*costFactor},
+	{amInvulnerable, 5*costFactor},
+	{amLaserSight,	 2*costFactor},
+	{amVampiric,	 6*costFactor},
 
-	{amLowGravity, 		"amLowGravity",		0, 4*costFactor},
-	{amExtraDamage, 	"amExtraDamage",	0, 6*costFactor},
-	{amExtraTime,		"amExtraTime",		0, 8*costFactor}
+	{amLowGravity,	 4*costFactor},
+	{amExtraDamage,	 6*costFactor},
+	{amExtraTime,	 8*costFactor}
 }
 
 ----------------------------
@@ -225,34 +225,35 @@ local utilArray = {
 -- primary placement categories
 local cIndex = 1 -- category index
 local cat = {
-	"Girder Placement Mode",
-	"Rubber Placement Mode",
-	"Mine Placement Mode",
-	"Sticky Mine Placement Mode",
-	"Barrel Placement Mode",
-	"Weapon Crate Placement Mode",
-	"Utility Crate Placement Mode",
-	"Health Crate Placement Mode",
-	"Structure Placement Mode"
+	loc_noop("Girder Placement Mode"),
+	loc_noop("Rubber Placement Mode"),
+	loc_noop("Mine Placement Mode"),
+	loc_noop("Sticky Mine Placement Mode"),
+	loc_noop("Barrel Placement Mode"),
+	loc_noop("Weapon Crate Placement Mode"),
+	loc_noop("Utility Crate Placement Mode"),
+	loc_noop("Health Crate Placement Mode"),
+	loc_noop("Structure Placement Mode"),
 }
+
 local catReverse = {}
 for c=1, #cat do
 	catReverse[cat[c]] = c
 end
 
+-- Track girders in proximity of CurrentHedgehog
 local sProx = {
-	{loc("Girder Placement Mode"),false},
-	{loc("Rubber Placement Mode"),false},
-	{loc("Mine Placement Mode"),false},
-	{loc("Sticky Mine Placement Mode"),false},
-	{loc("Barrel Placement Mode"),false},
-	{loc("Weapon Crate Placement Mode"),false},
-	{loc("Utility Crate Placement Mode"),false},
-	{loc("Health Crate Placement Mode"),false},
-	{loc("Structure Placement Mode"),false},
-	{loc("Teleportation Mode"),false},
+	["Girder Placement Mode"] = false,
+	["Rubber Placement Mode"] = false,
+	["Mine Placement Mode"] = false,
+	["Sticky Mine Placement Mode"] = false,
+	["Barrel Placement Mode"] = false,
+	["Weapon Crate Placement Mode"] = false,
+	["Utility Crate Placement Mode"] = false,
+	["Health Crate Placement Mode"] = false,
+	["Structure Placement Mode"] = false,
+	["Teleportation Mode"] = false,
 }
-
 
 local pMode = {}	-- pMode contains custom subsets of the main categories
 local pIndex = 1
@@ -454,7 +455,7 @@ function AddStruc(pX,pY, pType, pClan)
 	local visualSprite = sprTarget
 	local madness = AddVisualGear(GetX(tempG), GetY(tempG), vgtStraightShot, 1, true,1)
 
-	if pType == loc("Reflector Shield") then
+	if pType == "Reflector Shield" then
 		table.insert(strucHealth,255)
 
 	else
@@ -464,41 +465,41 @@ function AddStruc(pX,pY, pType, pClan)
 	table.insert(strucCirc,tempCirc)
 
 	table.insert(strucCircType, 1)
-	if pType == loc("Bio-Filter") then
+	if pType == "Bio-Filter" then
 		table.insert(strucCircCol,colorRed)
 		table.insert(strucCircRadius,1000)
 		frameID = 7
-	elseif pType == loc("Healing Station") then
+	elseif pType == "Healing Station" then
 		table.insert(strucCircCol,0xFF00FF00)
 		table.insert(strucCircRadius,500)
 		frameID = 3
-	elseif pType == loc("Respawner") then
+	elseif pType == "Respawner" then
 		table.insert(strucCircCol,0xFF00FF00)
 		table.insert(strucCircRadius,75)
 		runOnHogs(EnableHogResurrectionForThisClan)
 		frameID = 1
-	elseif pType == loc("Teleportation Node") then
+	elseif pType == "Teleportation Node" then
 		table.insert(strucCircCol,0x0000FFFF)
 		table.insert(strucCircRadius,350)
 		frameID = 6
-	elseif pType == loc("Generator") then
+	elseif pType == "Generator" then
 		table.insert(strucCircCol,0xFFFF00FF)
 		table.insert(strucCircRadius,75)
 		setGearValue(tempG, "power", 0)
 		frameID = 2
-	elseif pType == loc("Support Station") then
+	elseif pType == "Support Station" then
 		table.insert(strucCircCol,0xFFFF00FF)
 		table.insert(strucCircRadius,500)
 		frameID = 4
-	elseif pType == loc("Construction Station") then
+	elseif pType == "Construction Station" then
 		table.insert(strucCircCol,0xFFFFFFFF)
 		table.insert(strucCircRadius,500)
 		frameID = 8
-	elseif pType == loc("Reflector Shield") then
+	elseif pType == "Reflector Shield" then
 		table.insert(strucCircCol,0xffae00ff)
 		table.insert(strucCircRadius,750)
 		frameID = 9
-	elseif pType == loc("Weapon Filter") then
+	elseif pType == "Weapon Filter" then
 		table.insert(strucCircCol,0xa800ffff)
 		table.insert(strucCircRadius,750)
 		frameID = 5
@@ -520,7 +521,7 @@ function CheckGearForStructureLink(gear)
 	for i = 1, #strucID do
 		if strucID[i] == getGearValue(gear,"uniqueStructureID") then
 
-			if strucType[i] == loc("Respawner") then
+			if strucType[i] == "Respawner" then
 				respawnerDestroyed = true
 			end
 
@@ -564,7 +565,7 @@ function RecalibrateRespawn(gear)
 
 	local respawnerList = {}
 	for i = 1, #strucID do
-		if (strucType[i] == loc("Respawner")) and (strucClan[i] == GetHogClan(gear)) then
+		if (strucType[i] == "Respawner") and (strucClan[i] == GetHogClan(gear)) then
 			table.insert(respawnerList, i)
 		end
 	end
@@ -582,7 +583,7 @@ function FindRespawner(gear)
 
 	local respawnerList = {}
 	for i = 1, #strucID do
-		if (strucType[i] == loc("Respawner")) and (strucClan[i] == GetHogClan(gear)) then
+		if (strucType[i] == "Respawner") and (strucClan[i] == GetHogClan(gear)) then
 			table.insert(respawnerList, i)
 		end
 	end
@@ -605,7 +606,7 @@ function CheckTeleport(gear, tX, tY)
 
 	for i = 1, #strucID do
 
-		if (strucType[i] == loc("Teleportation Node")) and (strucClan[i] == GetHogClan(CurrentHedgehog)) then
+		if (strucType[i] == "Teleportation Node") and (strucClan[i] == GetHogClan(CurrentHedgehog)) then
 
 			local dist = GetDistFromGearToXY(CurrentHedgehog,GetX(strucGear[i]), GetY(strucGear[i]))
 			local NR
@@ -662,7 +663,7 @@ function CheckProximity(gear)
 	if dist <= NR*NR then
 
 		-- heal clan hogs
-		if strucType[sID] == loc("Healing Station") then
+		if strucType[sID] == "Healing Station" then
 
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[sID] then
@@ -686,7 +687,7 @@ function CheckProximity(gear)
 			end
 
 		-- explode enemy clan hogs
-		elseif strucType[sID] == loc("Bio-Filter") then
+		elseif strucType[sID] == "Bio-Filter" then
 
 			if GetGearType(gear) == gtHedgehog then
 				if (GetHogClan(gear) ~= strucClan[sID]) and (GetHealth(gear) > 0) then
@@ -695,7 +696,7 @@ function CheckProximity(gear)
 			end
 
 		-- were those weapons in your pocket, or were you just happy to see me?
-		elseif strucType[sID] == loc("Weapon Filter") then
+		elseif strucType[sID] == "Weapon Filter" then
 
 			if GetGearType(gear) == gtHedgehog then
 				if (GetHogClan(gear) ~= strucClan[sID]) then
@@ -716,7 +717,7 @@ function CheckProximity(gear)
 			end
 
 		-- BOUNCE! POGO! POGO! POGO! POGO!
-		elseif strucType[sID] == loc("Reflector Shield") then
+		elseif strucType[sID] == "Reflector Shield" then
 
 			-- add check for whose projectile it is
 			if gearCanBeDeflected(gear) == true then
@@ -769,16 +770,12 @@ function CheckProximity(gear)
 			end
 
 		--mark as within range of a teleporter node
-		elseif strucType[sID] == loc("Teleportation Node") then
+		elseif strucType[sID] == "Teleportation Node" then
 
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[sID] then
 
-					for i = 1, #sProx do
-						if sProx[i][1] == loc("Teleportation Mode") then
-							sProx[i][2] = true
-						end
-					end
+					sProx["Teleportation Mode"] = true
 
 				end
 			end
@@ -786,23 +783,17 @@ function CheckProximity(gear)
 		-- mark as within range of construction station
 		-- and thus allow menu access to placement modes
 		-- for girders, mines, sticky mines and barrels
-		elseif strucType[sID] == loc("Construction Station") then
+		elseif strucType[sID] == "Construction Station" then
 
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[sID] then
 					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
 
-					for i = 1, #sProx do
-						if ((sProx[i][1] == loc("Girder Placement Mode"))
-						or (sProx[i][1] == loc("Rubber Placement Mode"))
-						or (sProx[i][1] == loc("Mine Placement Mode"))
-						or (sProx[i][1] == loc("Sticky Mine Placement Mode"))
-						or (sProx[i][1] == loc("Barrel Placement Mode")))
-						then
-							sProx[i][2] = true
-						end
-					end
-
+					sProx["Girder Placement Mode"] = true
+					sProx["Rubber Placement Mode"] = true
+					sProx["Mine Placement Mode"] = true
+					sProx["Sticky Mine Placement Mode"] = true
+					sProx["Barrel Placement Mode"] = true
 
 				end
 			end
@@ -810,21 +801,15 @@ function CheckProximity(gear)
 		-- mark as within stupport station range
 		-- and thus allow menu access to placement modes
 		-- for weapon, utility, and med crates
-		elseif strucType[sID] == loc("Support Station") then
+		elseif strucType[sID] == "Support Station" then
 
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[sID] then
 					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
 
-					for i = 1, #sProx do
-						if ((sProx[i][1] == loc("Health Crate Placement Mode"))
-						or (sProx[i][1] == loc("Weapon Crate Placement Mode"))
-						or (sProx[i][1] == loc("Utility Crate Placement Mode")))
-						then
-							sProx[i][2] = true
-						end
-					end
-
+					sProx["Health Crate Placement Mode"] = true
+					sProx["Weapon Crate Placement Mode"] = true
+					sProx["Utility Crate Placement Mode"] = true
 
 				end
 			end
@@ -836,10 +821,10 @@ end
 
 -- used to check if we need to run through all hogs or just currenthedgehog
 function isAStructureThatAppliesToMultipleGears(pID)
-	if 	strucType[pID] == loc("Healing Station") or
-		strucType[pID] == loc("Reflector Shield") or
-		strucType[pID] == loc("Weapon Filter") or
-		strucType[pID] == loc("Bio-Filter")
+	if 	strucType[pID] == "Healing Station" or
+		strucType[pID] == "Reflector Shield" or
+		strucType[pID] == "Weapon Filter" or
+		strucType[pID] == "Bio-Filter"
 	then
 		return(true)
 	else
@@ -850,13 +835,10 @@ end
 function HandleStructures()
 
 	if GameTime % 100 == 0 then
-		for i = 1, #sProx do
-			sProx[i][2] = false
-
-			if sProx[i][1] == loc("Structure Placement Mode") then
-				sProx[i][2] = true
+		for k, _ in pairs(sProx) do
+			if k ~= "Structure Placement Mode" then
+				sProx[k] = false
 			end
-
 		end
 	end
 
@@ -878,7 +860,7 @@ function HandleStructures()
 				end
 			end
 
-			if strucType[i] == loc("Generator") then
+			if strucType[i] == "Generator" then
 
 				for z = 0, ClansCount-1 do
 					if z == strucClan[i] then
@@ -899,44 +881,32 @@ function HandleStructures()
 
 	end
 
-
-
-	-- this is kinda messy and gross (even more than usual), fix it up at some point
-	-- it just assumes that if you have access to girders, it works for rubbers
-	-- as that is what the struc implemenation means due to construction station
+	-- Add and remove ammo based on structure proximity
 	if GameTime % 100 == 0 and CurrentHedgehog ~= nil then
-		local anyUIProx = false
-		for i = 1, #sProx do
-
-			if sProx[i][1] == loc("Girder Placement Mode") then
-				if sProx[i][2] == true then
-					AddAmmo(CurrentHedgehog, amGirder, 100)
-					AddAmmo(CurrentHedgehog, amRubber, 100)
-					AddAmmo(CurrentHedgehog, amCMObjectPlacer, 100)
-				else
-					AddAmmo(CurrentHedgehog, amGirder, 0)
-					AddAmmo(CurrentHedgehog, amRubber, 0)
-					AddAmmo(CurrentHedgehog, amCMObjectPlacer, 0) -- new
-				end
-			elseif sProx[i][1] == loc("Teleportation Mode") then
-				if sProx[i][2] == true then
-					AddAmmo(CurrentHedgehog, amTeleport, 100)
-				else
-					AddAmmo(CurrentHedgehog, amTeleport, 0)
-				end
-			elseif sProx[i][1] == loc("Weapon Crate Placement Mode") then
-				-- this is new stuff
-				if sProx[i][2] == true then
-					AddAmmo(CurrentHedgehog, amCMCratePlacer, 100)
-				else
-					AddAmmo(CurrentHedgehog, amCMCratePlacer, 0)
-				end
-			end
-
-			if (sProx[i][2] == true) then
-				anyUIProx = true
-			end
-
+		if sProx["Girder Placement Mode"] then
+			AddAmmo(CurrentHedgehog, amGirder, 100)
+		else
+			AddAmmo(CurrentHedgehog, amGirder, 0)
+		end
+		if sProx["Rubber Placement Mode"] then
+			AddAmmo(CurrentHedgehog, amRubber, 100)
+		else
+			AddAmmo(CurrentHedgehog, amRubber, 0)
+		end
+		if sProx["Mine Placement Mode"] or sProx["Sticky Mine Placement Mode"] or sProx["Barrel Placement Mode"] then
+			AddAmmo(CurrentHedgehog, amCMObjectPlacer, 100)
+		else
+			AddAmmo(CurrentHedgehog, amCMObjectPlacer, 0)
+		end
+		if sProx["Teleportation Mode"] then
+			AddAmmo(CurrentHedgehog, amTeleport, 100)
+		else
+			AddAmmo(CurrentHedgehog, amTeleport, 0)
+		end
+		if sProx["Weapon Crate Placement Mode"] or sProx["Utility Crate Placement Mode"] or sProx["Health Crate Placement Mode"] then
+			AddAmmo(CurrentHedgehog, amCMCratePlacer, 100)
+		else
+			AddAmmo(CurrentHedgehog, amCMCratePlacer, 0)
 		end
 	end
 
@@ -1000,23 +970,18 @@ function PlaceObject(x,y)
 			if gear ~= nil then
 				placed = true
 				SetHealth(gear, pMode[pIndex])
-				setGearValue(gear,"caseType","med")
 				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
 			end
 		elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 			gear = SpawnAmmoCrate(x, y, atkArray[pIndex][1])
 			if gear ~= nil then
 				placed = true
-				setGearValue(gear,"caseType","ammo")
-				setGearValue(gear,"contents",atkArray[pIndex][2])
 				clanCratesSpawned[GetHogClan(CurrentHedgehog)] = clanCratesSpawned[GetHogClan(CurrentHedgehog)] +1
 			end
 		elseif cat[cIndex] == "Utility Crate Placement Mode" then
 			gear = SpawnUtilityCrate(x, y, utilArray[pIndex][1])
 			if gear ~= nil then
 				placed = true
-				setGearValue(gear,"caseType","util")
-				setGearValue(gear,"contents",utilArray[pIndex][2])
 				if utilArray[pIndex][1] == amExtraTime then
 					clanUsedExtraTime[GetHogClan(CurrentHedgehog)] = true
 				end
@@ -1077,10 +1042,10 @@ function RedefineSubset()
 
 	if cat[cIndex] == "Girder Placement Mode" then
 		pIndex = currentGirderRotation
-		pMode = {loc("Girder")}
+		pMode = {amGirder}
 	elseif cat[cIndex] == "Rubber Placement Mode" then
 		pIndex = currentGirderRotation
-		pMode = {loc("Rubber")}
+		pMode = {amRubber}
 		placedExpense = 3
 	elseif cat[cIndex] == "Barrel Placement Mode" then
 		pMode = {60}
@@ -1092,16 +1057,16 @@ function RedefineSubset()
 		teamLCrateMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
-			pMode[i] = GetAmmoName(atkArray[i][1])
+			pMode[i] = atkArray[i][1]
 		end
-		placedExpense = atkArray[pIndex][4]
+		placedExpense = atkArray[pIndex][2]
 		teamLCrateMode[team] = cat[cIndex]
 		pIndex = teamLWeapIndex[team]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		for i = 1, #utilArray do
-			pMode[i] = GetAmmoName(utilArray[i][1])
+			pMode[i] = utilArray[i][1]
 		end
-		placedExpense = utilArray[pIndex][4]
+		placedExpense = utilArray[pIndex][2]
 		teamLCrateMode[team] = cat[cIndex]
 		pIndex = teamLUtilIndex[team]
 	elseif cat[cIndex] == "Mine Placement Mode" then
@@ -1110,21 +1075,21 @@ function RedefineSubset()
 		teamLObjectMode[team] = cat[cIndex]
 		pIndex = teamLMineIndex[team]
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
-		pMode = {loc("Sticky Mine")}
+		pMode = {amSMine}
 		placedExpense = 20
 		teamLObjectMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Structure Placement Mode" then
 		pMode = {
-			loc("Support Station"),
-			loc("Construction Station"),
-			loc("Healing Station"),
-			loc("Teleportation Node"),
-			loc("Weapon Filter"),
+			loc_noop("Support Station"),
+			loc_noop("Construction Station"),
+			loc_noop("Healing Station"),
+			loc_noop("Teleportation Node"),
+			loc_noop("Weapon Filter"),
 
-			loc("Bio-Filter"),
-			loc("Reflector Shield"),
-			loc("Respawner"),
-			loc("Generator"),
+			loc_noop("Bio-Filter"),
+			loc_noop("Reflector Shield"),
+			loc_noop("Respawner"),
+			loc_noop("Generator"),
 		}
 		pIndex = teamLStructIndex[team]
 	end
@@ -1257,31 +1222,31 @@ function updateCost()
 
 	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then return end
 
-	if pMode[pIndex] == loc("Healing Station") then
+	if pMode[pIndex] == "Healing Station" then
 		placedExpense = 50
-	elseif pMode[pIndex] == loc("Weapon Filter") then
+	elseif pMode[pIndex] == "Weapon Filter" then
 		placedExpense = 50
-	elseif pMode[pIndex] == loc("Bio-Filter") then
+	elseif pMode[pIndex] == "Bio-Filter" then
 		placedExpense = 100
-	elseif pMode[pIndex] == loc("Respawner") then
+	elseif pMode[pIndex] == "Respawner" then
 		placedExpense = 300
-	elseif pMode[pIndex] == loc("Teleportation Node") then
+	elseif pMode[pIndex] == "Teleportation Node" then
 		placedExpense = 30
-	elseif pMode[pIndex] == loc("Support Station") then
+	elseif pMode[pIndex] == "Support Station" then
 		placedExpense = 50
-	elseif pMode[pIndex] == loc("Construction Station") then
+	elseif pMode[pIndex] == "Construction Station" then
 		placedExpense = 50
-	elseif pMode[pIndex] == loc("Generator") then
-			placedExpense = 300
-	elseif pMode[pIndex] == loc("Reflector Shield") then
-			placedExpense = 200
+	elseif pMode[pIndex] == "Generator" then
+		placedExpense = 300
+	elseif pMode[pIndex] == "Reflector Shield" then
+		placedExpense = 200
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
-		placedExpense = atkArray[pIndex][4]
+		placedExpense = atkArray[pIndex][2]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
-		placedExpense = utilArray[pIndex][4]
+		placedExpense = utilArray[pIndex][2]
 	end
 
-	AddCaption(loc("Cost") .. ": " .. placedExpense,0xffba00ff,capgrpAmmostate)
+	AddCaption(string.format(loc("Cost: %d"), placedExpense), 0xffba00ff, capgrpAmmostate)
 
 end
 
@@ -1315,14 +1280,20 @@ function showModeMessage()
 	if cat[cIndex] == "Mine Placement Mode" then
 		-- timer in seconds
 		str = string.format(loc("%d sec"), div(val, 1000))
+	elseif cat[cIndex] == "Structure Placement Mode" then
+		str = loc(val)
 	elseif cat[cIndex] == "Girder Placement Mode" then
-		str = loc("Girder")
+		str = GetAmmoName(amGirder)
 	elseif cat[cIndex] == "Rubber Placement Mode" then
-		str = loc("Rubber")
+		str = GetAmmoName(amRubber)
+	elseif cat[cIndex] == "Weapon Crate Placement Mode"
+	or cat[cIndex] == "Utility Crate Placement Mode"
+	or cat[cIndex] == "Sticky Mine Placement Mode" then
+		str = GetAmmoName(val)
 	else
 		str = tostring(val)
 	end
-	AddCaption(str,0xffba00ff,capgrpMessage2)
+	AddCaption(str, 0xffba00ff, capgrpMessage2)
 end
 
 function rotateMode(pDir)
@@ -1338,19 +1309,19 @@ function rotateMode(pDir)
 		end
 
 		if (GetCurAmmoType() == amCMCratePlacer) then
-			if (sProx[cIndex][1] == loc("Health Crate Placement Mode")) or
-				(sProx[cIndex][1] == loc("Weapon Crate Placement Mode")) or
-				(sProx[cIndex][1] == loc("Utility Crate Placement Mode")) then
+			if (cat[cIndex] == "Health Crate Placement Mode") or
+				(cat[cIndex] == "Weapon Crate Placement Mode") or
+				(cat[cIndex] == "Utility Crate Placement Mode") then
 					foundMatch = true
 			end
 		elseif (GetCurAmmoType() == amCMObjectPlacer) then
-			if (sProx[cIndex][1] == loc("Mine Placement Mode")) or
-				(sProx[cIndex][1] == loc("Sticky Mine Placement Mode")) or
-				(sProx[cIndex][1] == loc("Barrel Placement Mode")) then
+			if (cat[cIndex] == "Mine Placement Mode") or
+				(cat[cIndex] == "Sticky Mine Placement Mode") or
+				(cat[cIndex] == "Barrel Placement Mode") then
 				foundMatch = true
 			end
 		elseif (GetCurAmmoType() == amCMStructurePlacer) then
-			if sProx[cIndex][1] == loc("Structure Placement Mode") then
+			if cat[cIndex] == "Structure Placement Mode" then
 				foundMatch = true
 			end
 		end
