@@ -300,6 +300,11 @@ function DrawClanPowerTag()
 
 end
 
+function DeleteClanPowerTag()
+	DeleteVisualGear(clanPowerTag)
+	clanPowerTag = nil
+end
+
 function XYisInRect(px, py, psx, psy, pex, pey)
 
 	if (px > psx) and (px < pex) and (py > psy) and (py < pey) then
@@ -1013,7 +1018,9 @@ function PlaceObject(x,y)
 		end
 
 		if placed then
+			-- Pay the price
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
+			DrawClanPowerTag()
 		else
 			AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
 			PlaySound(sndDenied)
@@ -1176,15 +1183,15 @@ function HandleConstructionMode()
 
 		if GameTime % 100 == 0 then
 
-			DrawClanPowerTag()
-
 			-- Force-update the construction mode tools every 100ms.
 			-- This makes sure the announcer messages don't disappear
 			-- while the tool is selected.
 			if (band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
+				DrawClanPowerTag()
 				curWep = GetCurAmmoType()
 				HandleConstructionModeTools()
 			else
+				DeleteClanPowerTag()
 				curWep = amNothing
 			end
 
@@ -1629,11 +1636,14 @@ function onNewTurn()
 	end
 	clanUsedExtraTime[clan] = false
 	clanCratesSpawned[clan] = 0
+
+	DrawClanPowerTag()
 end
 
 function onEndTurn()
 	curWep = amNothing
 	HandleConstructionModeTools()
+	DeleteClanPowerTag()
 end
 
 function onGameTick()
