@@ -1,149 +1,62 @@
+--[[-----------------------------------------------------
+-- CONSTRUCTION MODE --
 ---------------------------------------------------------
---- LE CONSTRUCTION MODE 0.7+ (badly adapted from Hedge Editor 0.5)
+A Hedgewars gameplay mode by mikade.
+Special thanks to all who helped test and offered suggestions.
+Additional thanks to sheepluva/nemo for adding some extra hooks.
+
+---------------------
+-- STRUCTURES LIST --
+---------------------
+
+* Healing Station: Heals hogs to 150 health
+* Teleportation Node: Allows teleporting to any other teleporter nodes
+* Bio-filter: Explodes enemy hogs
+* Respawner: If you have one of these, any slain hogs are resurrected here
+* Generator: Generates power (used to buy stuff)
+* Support Station: Allows purchasing crates
+* Construction Station: Allows purchasing girders, rubber, mines, sticky mines, barrels
+* Reflector Shield: Reflect projectiles
+* Weapon Filter: Removes all equipement of enemy hogs passing through this area
+
 ---------------------------------------------------------
--- a hedgewars gameplay mode by mikade
--- special thanks to all who helped test and offered suggestions
--- additional thanks to sheepluva/nemo for adding some extra hooks
-
--- (to do)
--- investigate loc not working on addcaptions
--- check for parsecommands before porting to dev
--- test onUpDown more extensively as it may need revision (check for amRubber etc)
--- test localization of weapons and utils and stuff
-
--- try posistion grenades in Harmer so it blows hogs away from the struc
--- and don't explode too close to the struc
-
--- additional/previous balance ideas
--- based on your money?
--- based on the number of strucs/gens you own?
--- based on your existing arsenal?
--- limit number of crates spawned per round perhaps (done)
--- limit number of generators?
-
-------------------------------------------------------------------------------
 -- SCRIPT PARAMETER
-------------------------------------------------------------------------------
--- The script parameter can be used to configure the energy
--- of the game. It is a comma-seperated list of key=value pairs, where each
--- key is a word and each value is an integer between 0 and 4294967295.
---
--- Possible keys:
---- initialenergy: Amount of energy that each team starts with (default: 550)
----                Note: Must be smaller than or equal to maxenergy
---- energyperround: Amount of energy that each team gets per round (default: 50)
---- maxenergy: Maximum amount of energy each team can hold (default: 1000)
---- cratesperround: Maximum number of crates you can place per round (default: 5)
+---------------------------------------------------------
+The script parameter can be used to configure the energy
+of the game. It is a comma-seperated list of key=value pairs, where each
+key is a word and each value is an integer between 0 and 4294967295.
 
--- For the previous 2 keys, you can use the value “inf” for an unlimited amount
+Possible keys:
+* initialenergy:  Amount of energy that each team starts with (default: 550)
+                  Note: Must be smaller than or equal to maxenergy
+* energyperround: Amount of energy that each team gets per round (default: 50)
+* maxenergy:      Maximum amount of energy each team can hold (default: 1000)
+* cratesperround: Maximum number of crates you can place per round (default: 5)
 
--- Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
---          and sets the maximum energy to 2000.
--- Example: “craterperround=inf” disables the crate placement limit.
+For the previous 2 keys, you can use the value “inf” for an unlimited amount.
 
-------------------------------------------------------------------------------
---version history
-------------------------------------------------------------------------------
---v0.1
--- concept test
+Example: “initialenergy=750, maxenergy=2000” starts thee game with 750 energy
+         and sets the maximum energy to 2000.
+Example: “craterperround=inf” disables the crate placement limit.
 
---v0.2
--- improved documentation (in script and in game)
--- improved localisation (or is it? at any rate, crate placement should now say e.g. Bazooka and not amBazooka)
--- added variable weapon costs (based on the values from Vatten's Consumerism script)
+---------------------------------------------------------
+-- Ideas list --
+---------------------------------------------------------
 
--- added reflector shield (still needs work and balancing)
--- added weapon-filter (probably ok)
+* To make the weapon filter more attractive, make it vaporize flying saucers
+  and also rope, and maybe incoming gears
 
--- enabled super weapons like ballgun, rcplane, watermelon, hellish to test balance
--- reduce max money to 1000
+* Make healing thing also cure poison?
+* Maybe make poison more virulent and dangerous
 
---v0.3
--- some /s removed
-
---v0.4
--- added support for per hog ammo (hopefully)
-
---v0.5 (dev)
--- added somewhat horribly implemented support for different structure sprites
--- added override pictures for ammo menu
--- added override message on wep select to aid understanding
--- split menu into/between weps/parts: struc, crates, gears
--- add a limit on crates per turn
--- add a limit on extra time per turn
--- add a test level
--- restored rubber placement
--- cleaned up some of the code a bit and removed about 280 lines of code I didn't need, lol
-
---v0.6 (dev)
--- added magic dance
-
---v0.7 (pushed to repo)
--- added a cfg file
--- removed another 903 lines of code we weren't using (lol)
-
---v0.7+ (merged in repo)
--- applied Wuzzy's patches:
---   script parameters: initialenergy, energyperround, maxenergy
---   fix crate costs
---   various minor tweaks and fixes
---   (see commits in official repo)
--- make Construction Mode play well together with fort mode (clan order = fort order)
-
---------------------------------
--- STRUCTURES LIST / IDEAS
---------------------------------
-
---Healing Station: heals hogs to 150 life
---Teleportation Node: allows teleporting to any other teleporter nodes
---Bio-filter: explodes enemy hogs
---Respawner: if you have one of these, any slain hogs are resurrected here :D
---Generator: generates energy (used to buy stuff, and possibly later other strucs might have upkeep costs)
---Support Station: allows purchasing of weapons, utilities, and med-crates
---Construction Station: allows purchasing of girders, rubber, mines, sticky mines, barrels
---Reflector Shield: reflect projectiles
---Weapon Filter: kill all equipement of enemy hogs passing through this area.
-
-
---to make the grill more attractive make it vaporize flying saucers
---and also rope, and maybe incoming gears
-
--- make healing thing also cure poison
--- maybe make poison more virulent and dangerous
-
---(not implemented / abandoned ideas)
--- Core: allows construction of other structures.
--- Automated Turret (think red drones from space invasion)
--- Canon (gives access to 3 fireballs per turn while near)
--- something that allows control of wind/water
--- Gravity Field generator : triggers world gravity change
-
--- structures consume power over time and
--- maybe you can turn structures OFF/ON, manually to save power.
-
--- hacking
--- allow hacking of structures, either being able to use enemy structures,
--- or turning a team's structures against them.
-
--- pylons
--- allow hogs to put down a pylon-like gear which then allows the core
--- to place other structures/objects within the pylon's sphere of influence
--- this would allow aggressive structure advancement
-
--- resouce mining?
--- you could designate something like mines, that you could get close to,
--- "pick up", and then "drop" back at a central location to simulate
--- resource mining. bit complicated/meh, normal power generators probably easier
-
--- it would be cool to have a red mask we could apply over girders
--- that would indicate they were Indestructible
+]]
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
 ----------------------------------------------
--- STRUC CRAP
+-- STRUCTURES STUFF
 ----------------------------------------------
 
 strucID = {}
@@ -247,15 +160,6 @@ function DrawClanPowerTag()
 
 end
 
-function onScreenResize()
-
-	-- redraw Tags so that their screen locations are updated
-	if (CurrentHedgehog ~= nil) then
-		DrawClanPowerTag()
-	end
-
-end
-
 function XYisInRect(px, py, psx, psy, pex, pey)
 
 	if (px > psx) and (px < pex) and (py > psy) and (py < pey) then
@@ -321,13 +225,13 @@ function gearCanBeDeflected(gear)
 		(GetGearType(gear) == gtDrill) or
 		(GetGearType(gear) == gtBall) or
 		(GetGearType(gear) == gtExplosives) or
-			(GetGearType(gear) == gtFlame) or
-			(GetGearType(gear) == gtPortal) or
-			(GetGearType(gear) == gtDynamite) or
-			(GetGearType(gear) == gtSMine) or
+		(GetGearType(gear) == gtFlame) or
+		(GetGearType(gear) == gtPortal) or
+		(GetGearType(gear) == gtDynamite) or
+		(GetGearType(gear) == gtSMine) or
 		(GetGearType(gear) == gtKnife) or
-		(GetGearType(gear) == gtJetpack) or -- test this and birdy plz
-		(GetGearType(gear) == gtBirdy) or -- test this and birdy plz
+		(GetGearType(gear) == gtJetpack) or
+		(GetGearType(gear) == gtBirdy) or
 		(GetGearType(gear) == gtSnowball) or
 		(GetGearType(gear) == gtMolotov)
 	then
@@ -391,6 +295,17 @@ function setGearReflectionValues(gear)
 		setGearValue(gear,"owner",10)
 	end
 
+end
+
+function isATrackedGear(gear)
+	if 	(GetGearType(gear) == gtHedgehog) or
+		(GetGearType(gear) == gtTarget) or
+		(GetGearType(gear) == gtCase)
+	then
+		return(true)
+	else
+		return(false)
+	end
 end
 
 function AddStruc(pX,pY, pType, pClan)
@@ -561,12 +476,6 @@ function FindRespawner(gear)
 
 end
 
-function onGearResurrect(gear)
-	AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
-	FindRespawner(gear)
-end
-
-
 function CheckTeleport(gear, tX, tY)
 
 	teleportOriginSuccessful = false
@@ -625,7 +534,6 @@ function CheckProximity(gear)
 
 	-- we're in business
 	if dist <= NR*NR then
-
 
 		-- heal clan hogs
 		if strucType[tempID] == loc("Healing Station") then
@@ -909,7 +817,6 @@ function HandleStructures()
 
 end
 
-
 function checkForSpecialWeapons()
 
 	if (GetCurAmmoType() == amCMObjectPlacer) then
@@ -920,103 +827,87 @@ function checkForSpecialWeapons()
 
 end
 
-----------------------------------------------------------
--- EXCERPTS OF ADAPTED HEDGE_EDITOR CODE FOLLOWS
-----------------------------------------------------------
--- experimental crap
-
-local landType = 0
------------------------------------------
--- tracking vars for save slash load purposes
------------------------------------------
-
-local hhs = {}
-
 ---------------------------------
 -- crates are made of this stuff
 ---------------------------------
-placeholder = 20
- atkArray =
-				{
-				{amBazooka, 	"amBazooka",		0, 2*placeholder},
-				--{amBee, 		"amBee",			0, loc("Homing Bee"), 		4*placeholder},
-				{amMortar, 		"amMortar",			0, 1*placeholder},
-				{amDrill, 		"amDrill",			0, 3*placeholder},
-				{amSnowball, 	"amSnowball",		0, 3*placeholder},
+local placeholder = 20
 
-				{amGrenade,		"amGrenade",		0, 2*placeholder},
-				{amClusterBomb,	"amClusterBomb",	0, 3*placeholder},
-				{amWatermelon, 	"amWatermelon",		0, 25*placeholder},
-				{amHellishBomb,	"amHellishBomb",	0, 25*placeholder},
-				{amMolotov, 	"amMolotov",		0, 3*placeholder},
-				{amGasBomb, 	"amGasBomb",		0, 3*placeholder},
+-- Weapons which shouldn't be aded:
+-- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
+atkArray = {
+	{amBazooka, 		"amBazooka",		0, 2*placeholder},
+	--{amBee, 		"amBee",		0, 4*placeholder},
+	{amMortar, 		"amMortar",		0, 1*placeholder},
+	{amDrill, 		"amDrill",		0, 3*placeholder},
+	{amSnowball, 		"amSnowball",		0, 3*placeholder},
 
-				{amShotgun,		"amShotgun",		0, 2*placeholder},
-				{amDEagle,		"amDEagle",			0, 2*placeholder},
-				{amSniperRifle,	"amSniperRifle",	0, 3*placeholder},
-				--{amSineGun, 	"amSineGun",		0, loc("Sine Gun"), 			6*placeholder},
-				{amFlamethrower,"amFlamethrower",	0, 4*placeholder},
-				{amIceGun, 		"amIceGun",			0, 15*placeholder},
+	{amGrenade,		"amGrenade",		0, 2*placeholder},
+	{amClusterBomb,		"amClusterBomb",	0, 3*placeholder},
+	{amWatermelon, 		"amWatermelon",		0, 25*placeholder},
+	{amHellishBomb,		"amHellishBomb",	0, 25*placeholder},
+	{amMolotov, 		"amMolotov",		0, 3*placeholder},
+	{amGasBomb, 		"amGasBomb",		0, 3*placeholder},
 
-				{amFirePunch, 	"amFirePunch",		0, 3*placeholder},
-				{amWhip,		"amWhip",			0, 1*placeholder},
-				{amBaseballBat, "amBaseballBat",	0, 7*placeholder},
-				--{amKamikaze, 	"amKamikaze",		0, loc("Kamikaze"),			1*placeholder},
-				{amSeduction, 	"amSeduction",		0, 1*placeholder},
-				{amHammer,		"amHammer",			0, 1*placeholder},
+	{amShotgun,		"amShotgun",		0, 2*placeholder},
+	{amDEagle,		"amDEagle",		0, 2*placeholder},
+	{amSniperRifle,		"amSniperRifle",	0, 3*placeholder},
+	--{amSineGun, 		"amSineGun",		0, 6*placeholder},
+	{amFlamethrower,	"amFlamethrower",	0, 4*placeholder},
+	{amIceGun, 		"amIceGun",		0, 15*placeholder},
 
-				{amMine, 		"amMine",			0, 1*placeholder},
-				{amDynamite, 	"amDynamite",		0, 9*placeholder},
-				{amCake, 		"amCake",			0, 25*placeholder},
-				{amBallgun, 	"amBallgun",		0, 40*placeholder},
-				--{amRCPlane,		"amRCPlane",		0, loc("RC Plane"), 	25*placeholder},
-				{amSMine,		"amSMine",			0, 5*placeholder},
+	{amFirePunch, 		"amFirePunch",		0, 3*placeholder},
+	{amWhip,		"amWhip",		0, 1*placeholder},
+	{amBaseballBat, 	"amBaseballBat",	0, 7*placeholder},
+	--{amKamikaze, 		"amKamikaze",		0, 1*placeholder},
+	{amSeduction, 		"amSeduction",		0, 1*placeholder},
+	{amHammer,		"amHammer",		0, 1*placeholder},
 
-				-- Careful! Some airborne attacks are overwritten by the special Construction Mode tools
+	{amMine, 		"amMine",		0, 1*placeholder},
+	{amDynamite, 		"amDynamite",		0, 9*placeholder},
+	{amCake, 		"amCake",		0, 25*placeholder},
+	{amBallgun, 		"amBallgun",		0, 40*placeholder},
+	--{amRCPlane,		"amRCPlane",		0, 25*placeholder},
+	{amSMine,		"amSMine",		0, 5*placeholder},
 
-				--{amAirAttack,	"amAirAttack",		0, loc("Air Attack"), 		10*placeholder},
-				--{amMineStrike,	"amMineStrike",		0, loc("Mine Strike"), 		15*placeholder},
-				--{amNapalm, 		"amNapalm",			0, loc("Napalm"), 		15*placeholder},
-				--{amPiano,		"amPiano",			0, loc("Piano Strike"), 	40*placeholder},
-				--{amDrillStrike,	"amDrillStrike",	0, loc("Drill Strike"), 15*placeholder},
+	--{amMineStrike,	"amMineStrike",		0, 15*placeholder},
+	--{amPiano,		"amPiano",		0, 40*placeholder},
 
-				{amPickHammer,		"amPickHammer",		0, 2*placeholder},
-				{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
-				{amKnife,		"amKnife",			0, 2*placeholder},
+	{amPickHammer,		"amPickHammer",		0, 2*placeholder},
+	{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
+	{amKnife,		"amKnife",		0, 2*placeholder},
 
-				{amBirdy,		"amBirdy",			0, 7*placeholder},
+	{amBirdy,		"amBirdy",		0, 7*placeholder},
 
-				{amDuck,		"amDuck",			0, 2*placeholder}
+	{amDuck,		"amDuck",		0, 2*placeholder}
+}
 
-				}
+-- Utilities which shouldn't be added:
+-- * Teleport: We have teleportation node
+-- * Switch: Always infinite
+-- * Girder, rubber: Requires construction station
+-- * Resurrector: We have the resurrector structure for this
 
- utilArray =
-				{
-				--{amGirder, 			"amGirder",			0, loc("Girder"), 		4*placeholder},
-				{amLandGun,		"amLandGun",		0, 5*placeholder},
-				--{amRubber, 			"amRubber",			0, loc("Rubber"), 	5*placeholder},
+-- Utilities which might be weird for this mode:
+-- * Tardis: Randomly teleports hog, maybe even into enemy clan's area
+utilArray = {
+	{amLandGun,		"amLandGun",		0, 5*placeholder},
 
-				{amRope, 			"amRope",	0, 7*placeholder},
-				{amParachute, 		"amParachute",		0, 2*placeholder},
-				--{amTeleport,		"amTeleport",		0, loc("Teleport"), 		6*placeholder},
-				{amJetpack,			"amJetpack",	0, 8*placeholder},
-				{amPortalGun,		"amPortalGun",		0, 15*placeholder},
+	{amRope, 		"amRope",		0, 7*placeholder},
+	{amParachute, 		"amParachute",		0, 2*placeholder},
+	{amJetpack,		"amJetpack",		0, 8*placeholder},
+	{amPortalGun,		"amPortalGun",		0, 15*placeholder},
 
-				{amInvulnerable,	"amInvulnerable",	0, 5*placeholder},
-				{amLaserSight,		"amLaserSight",		0, 2*placeholder},
-				{amVampiric,		"amVampiric",		0, 6*placeholder},
-				--{amResurrector, 	"amResurrector",	0, loc("Resurrector"), 		8*placeholder},
-				--{amTardis, 			"amTardis",			0, loc("Time Box"), 			2*placeholder},
+	{amInvulnerable,	"amInvulnerable",	0, 5*placeholder},
+	{amLaserSight,		"amLaserSight",		0, 2*placeholder},
+	{amVampiric,		"amVampiric",		0, 6*placeholder},
 
-				--{amSwitch,			"amSwitch",			0, loc("Switch Hog"), 		4*placeholder}
-				{amLowGravity, 		"amLowGravity",		0, 4*placeholder},
-				{amExtraDamage, 	"amExtraDamage",	0, 6*placeholder},
-				{amExtraTime,		"amExtraTime",		0, 8*placeholder}
-
-				}
+	{amLowGravity, 		"amLowGravity",		0, 4*placeholder},
+	{amExtraDamage, 	"amExtraDamage",	0, 6*placeholder},
+	{amExtraTime,		"amExtraTime",		0, 8*placeholder}
+}
 
 ----------------------------
--- placement shite
+-- Placement stuff
 ----------------------------
 
 local cGear = nil -- detects placement of girders and objects (using airattack)
@@ -1191,14 +1082,13 @@ function PlaceObject(x,y)
 		end
 
 	else
-	    if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
-            AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
-        else
-            AddCaption(loc("Insufficient Power"),0xffba00ff,capgrpVolume)
-        end
+		if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
+			AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+		else
+			AddCaption(loc("Insufficient Power"),0xffba00ff,capgrpVolume)
+		end
 		PlaySound(sndDenied)
 	end
-
 
 end
 
@@ -1427,73 +1317,6 @@ function updateCost()
 
 end
 
-function onTimer(key)
-	curWep = GetCurAmmoType()
-
-	-- Hacky workaround for object placer: Since this is based on the drill strike, it
-	-- allows the 5 timer keys to be pressed, causing the announcer to show up
-	-- This triggers code in 1 tick to send other message to mask the earlier one.
-	checkForSpecialWeaponsIn = 1
-
-	if (curWep == amCMStructurePlacer) then
-		-- Select structure directly in structure placer
-		-- [Timer X] selects structures 1-5
-		-- [Precise]+[Timer X] selects structures 6-10
-
-		local structureID = key
-		local precise = band(GetGearMessage(CurrentHedgehog), gmPrecise) ~= 0
-		if precise then
-			structureID = structureID + 5
-		end
-		-- Check for valid pIndex
-		if structureID <= #pMode then
-			pIndex = structureID
-			updateIndex()
-		end
-	elseif (curWep == amCMObjectPlacer) then
-		-- [Timer X]: Set mine time 1-5
-		if cat[cIndex] == "Mine Placement Mode" then
-			local index = key + 1
-			if key <= #pMode then
-				pIndex = index
-				updateIndex()
-			end
-		end
-	end
-
-end
-
-function onSwitch()
-	curWep = GetCurAmmoType()
-	if (curWep == amCMObjectPlacer) then
-		-- [Switch]: Set mine time to 0
-		pIndex = 1
-		updateIndex()
-	end
-end
-
-function onLeft()
-	curWep = GetCurAmmoType()
-	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
-		pIndex = pIndex - 1
-		if pIndex == 0 then
-			pIndex = #pMode
-		end
-		updateIndex()
-	end
-end
-
-function onRight()
-	curWep = GetCurAmmoType()
-	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
-		pIndex = pIndex + 1
-		if pIndex > #pMode then
-			pIndex = 1
-		end
-		updateIndex()
-	end
-end
-
 -- Should be called when the index of the mode was changed by the player.
 -- E.g. new weapon crate contents or structure type
 function updateIndex()
@@ -1572,13 +1395,83 @@ function rotateMode(pDir)
 	end
 end
 
----------------------------------------------------------
--- Cycle through primary categories (by changing cIndex)
--- i.e 	mine, sticky mine, barrels
---		health/weapon/utility crate, placement of gears
----------------------------------------------------------
-function onUp()
+---------------------
+-- PLAYER CONTROLS --
+---------------------
 
+-- [Timer X]: Used as shortcut key for faster selection of stuff
+function onTimer(key)
+	curWep = GetCurAmmoType()
+
+	if (curWep == amCMStructurePlacer) then
+		-- Select structure directly in structure placer
+		-- [Timer X] selects structures 1-5
+		-- [Precise]+[Timer X] selects structures 6-10
+
+		local structureID = key
+		local precise = band(GetGearMessage(CurrentHedgehog), gmPrecise) ~= 0
+		if precise then
+			structureID = structureID + 5
+		end
+		-- Check for valid pIndex
+		if structureID <= #pMode then
+			pIndex = structureID
+			updateIndex()
+		end
+	elseif (curWep == amCMObjectPlacer) then
+		-- [Timer X]: Set mine time 1-5
+		if cat[cIndex] == "Mine Placement Mode" then
+			local index = key + 1
+			if key <= #pMode then
+				pIndex = index
+				updateIndex()
+			end
+		end
+	end
+
+	-- Hacky workaround for object placer: Since this is based on the drill strike, it
+	-- allows the 5 timer keys to be pressed, causing the announcer to show up
+	-- This triggers code in 1 tick to send other message to mask the earlier one.
+	checkForSpecialWeaponsIn = 1
+
+end
+
+-- [Switch]: Set mine time to 0 (only in mine placement mode)
+function onSwitch()
+	curWep = GetCurAmmoType()
+	if (curWep == amCMObjectPlacer) then
+		pIndex = 1
+		updateIndex()
+	end
+end
+
+-- [Left]/[Right]: Change submode (e.g. structure type) of any Construction Mode tool or rotate girder/rubber
+function onLeft()
+	curWep = GetCurAmmoType()
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
+		pIndex = pIndex - 1
+		if pIndex == 0 then
+			pIndex = #pMode
+		end
+		updateIndex()
+	end
+end
+function onRight()
+	curWep = GetCurAmmoType()
+	if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMStructurePlacer) or (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) then
+		pIndex = pIndex + 1
+		if pIndex > #pMode then
+			pIndex = 1
+		end
+		updateIndex()
+	end
+end
+
+-- [Up]/[Down]
+-- Cycle through the primary categories
+-- (by changing cIndex) i.e. mine, sticky mine,
+-- barrels, health/weapon/utility crate.
+function onUp()
 	curWep = GetCurAmmoType()
 	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
 		if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
@@ -1587,18 +1480,16 @@ function onUp()
 	end
 
 end
-
 function onDown()
-
 	curWep = GetCurAmmoType()
 	if ( (curWep == amCMCratePlacer) or (curWep == amCMObjectPlacer) ) then
 		if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
 			rotateMode(1)
 		end
 	end
-
 end
 
+-- [Set weapon]/[Slot X]: Just update internal stuff
 onSetWeapon = HandleConstructionModeTools()
 onSlot = onSetWeapon
 
@@ -1795,15 +1686,17 @@ function onGameTick()
 	HandleConstructionMode()
 end
 
-function isATrackedGear(gear)
-	if 	(GetGearType(gear) == gtHedgehog) or
-		(GetGearType(gear) == gtTarget) or
-		(GetGearType(gear) == gtCase)
-	then
-		return(true)
-	else
-		return(false)
+function onScreenResize()
+	-- redraw Tags so that their screen locations are updated
+	if (CurrentHedgehog ~= nil) then
+		DrawClanPowerTag()
 	end
+end
+
+
+function onGearResurrect(gear)
+	AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
+	FindRespawner(gear)
 end
 
 -- track hedgehogs and placement gears
