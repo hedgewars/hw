@@ -59,104 +59,246 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 -- STRUCTURES STUFF
 ----------------------------------------------
 
-strucID = {}
-strucGear = {}
-strucClan = {}
-strucType = {}
-strucCost = {}
-strucHealth = {}
+local strucID = {}
+local strucGear = {}
+local strucClan = {}
+local strucType = {}
+local strucCost = {}
+local strucHealth = {}
 
-strucCirc = {}
-strucCircCol = {}
-strucCircRadius = {}
-strucCircType = {}
-strucAltDisplay = {}
+local strucCirc = {}
+local strucCircCol = {}
+local strucCircRadius = {}
+local strucCircType = {}
+local strucAltDisplay = {}
 
-fortMode = false
+local fortMode = false
 
-placedExpense = 0
+local placedExpense = 0
 
-tempID = nil
+local globalTempID = nil
 
-sUID = 0
+local sUID = 0
 
-colorRed = 0xff0000ff
-colorGreen = 0x00ff00ff
+local cGear = nil
 
-clanBoundsSX = {}
-clanBoundsSY = {}
-clanBoundsEX = {}
-clanBoundsEY = {}
+local colorRed = 0xff0000ff
+local colorGreen = 0x00ff00ff
 
-clanPower = {}
-clanID = {}
+local clanBoundsSX = {}
+local clanBoundsSY = {}
+local clanBoundsEX = {}
+local clanBoundsEY = {}
+
+local clanPower = {}
+local clanID = {}
 
 -- for ease of use let's track previous selection
-teamLStructIndex = {}
-teamLObjectMode = {}
-teamLCrateMode = {}
-teamLMineIndex = {}
-teamLWeapIndex = {}
-teamLUtilIndex = {}
+local teamLStructIndex = {}
+local teamLObjectMode = {}
+local teamLCrateMode = {}
+local teamLMineIndex = {}
+local teamLWeapIndex = {}
+local teamLUtilIndex = {}
 
-clanUsedExtraTime = {}
-clanCratesSpawned = {}
-clanFirstTurn = {}
+local clanUsedExtraTime = {}
+local clanCratesSpawned = {}
+local clanFirstTurn = {}
 
-effectTimer = 0
+local effectTimer = 0
 
-wallsVisible = false
-wX = {}
-wY = {}
-wWidth = {}
-wHeight = {}
-wCol = {}
-margin = 20
+local wallsVisible = false
+local wX = {}
+local wY = {}
+local wWidth = {}
+local wHeight = {}
+local wCol = {}
+local margin = 20
 
-clanPowerTag = nil
-lastWep = nil
+local clanPowerTag = nil
+local lastWep = nil
 
-checkForSpecialWeaponsIn = -1
+local checkForSpecialWeaponsIn = -1
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
-amCMStructurePlacer = amAirAttack
-amCMCratePlacer = amNapalm
-amCMObjectPlacer = amDrillStrike
+local amCMStructurePlacer = amAirAttack
+local amCMCratePlacer = amNapalm
+local amCMObjectPlacer = amDrillStrike
 
 -- Config variables (script parameter)
-conf_initialEnergy = 550
-conf_energyPerRound = 50
-conf_maxEnergy = 1000
-conf_cratesPerRound = 5
+local conf_initialEnergy = 550
+local conf_energyPerRound = 50
+local conf_maxEnergy = 1000
+local conf_cratesPerRound = 5
+
+-----------------------
+-- CRATE DEFINITIONS --
+-----------------------
+-- format:
+-- { ammoType, ammoTypeString, unused, cost }
+
+-- Cost factor
+local placeholder = 20
+
+-- WEAPON CRATES 
+-- Weapons which shouldn't be aded:
+-- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
+local atkArray = {
+	{amBazooka, 		"amBazooka",		0, 2*placeholder},
+	--{amBee, 		"amBee",		0, 4*placeholder},
+	{amMortar, 		"amMortar",		0, 1*placeholder},
+	{amDrill, 		"amDrill",		0, 3*placeholder},
+	{amSnowball, 		"amSnowball",		0, 3*placeholder},
+
+	{amGrenade,		"amGrenade",		0, 2*placeholder},
+	{amClusterBomb,		"amClusterBomb",	0, 3*placeholder},
+	{amWatermelon, 		"amWatermelon",		0, 25*placeholder},
+	{amHellishBomb,		"amHellishBomb",	0, 25*placeholder},
+	{amMolotov, 		"amMolotov",		0, 3*placeholder},
+	{amGasBomb, 		"amGasBomb",		0, 3*placeholder},
+
+	{amShotgun,		"amShotgun",		0, 2*placeholder},
+	{amDEagle,		"amDEagle",		0, 2*placeholder},
+	{amSniperRifle,		"amSniperRifle",	0, 3*placeholder},
+	--{amSineGun, 		"amSineGun",		0, 6*placeholder},
+	{amFlamethrower,	"amFlamethrower",	0, 4*placeholder},
+	{amIceGun, 		"amIceGun",		0, 15*placeholder},
+
+	{amFirePunch, 		"amFirePunch",		0, 3*placeholder},
+	{amWhip,		"amWhip",		0, 1*placeholder},
+	{amBaseballBat, 	"amBaseballBat",	0, 7*placeholder},
+	--{amKamikaze, 		"amKamikaze",		0, 1*placeholder},
+	{amSeduction, 		"amSeduction",		0, 1*placeholder},
+	{amHammer,		"amHammer",		0, 1*placeholder},
+
+	{amMine, 		"amMine",		0, 1*placeholder},
+	{amDynamite, 		"amDynamite",		0, 9*placeholder},
+	{amCake, 		"amCake",		0, 25*placeholder},
+	{amBallgun, 		"amBallgun",		0, 40*placeholder},
+	--{amRCPlane,		"amRCPlane",		0, 25*placeholder},
+	{amSMine,		"amSMine",		0, 5*placeholder},
+
+	--{amMineStrike,	"amMineStrike",		0, 15*placeholder},
+	--{amPiano,		"amPiano",		0, 40*placeholder},
+
+	{amPickHammer,		"amPickHammer",		0, 2*placeholder},
+	{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
+	{amKnife,		"amKnife",		0, 2*placeholder},
+
+	{amBirdy,		"amBirdy",		0, 7*placeholder},
+
+	{amDuck,		"amDuck",		0, 2*placeholder}
+}
+
+-- UTILITY CRATES --
+
+-- Utilities which shouldn't be added:
+-- * Teleport: We have teleportation node
+-- * Switch: Always infinite
+-- * Girder, rubber: Requires construction station
+-- * Resurrector: We have the resurrector structure for this
+
+-- Utilities which might be weird for this mode:
+-- * Tardis: Randomly teleports hog, maybe even into enemy clan's area
+local utilArray = {
+	{amLandGun,		"amLandGun",		0, 5*placeholder},
+
+	{amRope, 		"amRope",		0, 7*placeholder},
+	{amParachute, 		"amParachute",		0, 2*placeholder},
+	{amJetpack,		"amJetpack",		0, 8*placeholder},
+	{amPortalGun,		"amPortalGun",		0, 15*placeholder},
+
+	{amInvulnerable,	"amInvulnerable",	0, 5*placeholder},
+	{amLaserSight,		"amLaserSight",		0, 2*placeholder},
+	{amVampiric,		"amVampiric",		0, 6*placeholder},
+
+	{amLowGravity, 		"amLowGravity",		0, 4*placeholder},
+	{amExtraDamage, 	"amExtraDamage",	0, 6*placeholder},
+	{amExtraTime,		"amExtraTime",		0, 8*placeholder}
+}
+
+----------------------------
+-- Placement stuff
+----------------------------
+
+local cGear = nil -- detects placement of girders and objects (using airattack)
+local curWep = amNothing
+
+-- primary placement categories
+local cIndex = 1 -- category index
+local cat = {
+	"Girder Placement Mode",
+	"Rubber Placement Mode",
+	"Mine Placement Mode",
+	"Sticky Mine Placement Mode",
+	"Barrel Placement Mode",
+	"Weapon Crate Placement Mode",
+	"Utility Crate Placement Mode",
+	"Health Crate Placement Mode",
+	"Structure Placement Mode"
+}
+local catReverse = {}
+for c=1, #cat do
+	catReverse[cat[c]] = c
+end
+
+local sProx = {
+	{loc("Girder Placement Mode"),false},
+	{loc("Rubber Placement Mode"),false},
+	{loc("Mine Placement Mode"),false},
+	{loc("Sticky Mine Placement Mode"),false},
+	{loc("Barrel Placement Mode"),false},
+	{loc("Weapon Crate Placement Mode"),false},
+	{loc("Utility Crate Placement Mode"),false},
+	{loc("Health Crate Placement Mode"),false},
+	{loc("Structure Placement Mode"),false},
+	{loc("Teleportation Mode"),false},
+}
+
+
+local pMode = {}	-- pMode contains custom subsets of the main categories
+local pIndex = 1
+
+local CGR = 1 -- current girder rotation, we actually need this as HW remembers what rotation you last used
+
+local placedX = {}
+local placedY = {}
+local placedSpec = {}
+local placedSuperSpec = {}
+local placedType = {}
+local placedCount = 0
+
+local sCirc -- circle that appears around selected gears
+local sGear = nil
+
+local tCirc = {} -- array of circles that appear around tagged gears
+
+
 
 function DrawClanPowerTag()
 
-	zoomL = 1.3
-
-	xOffset = 40
-
-	zoomL = 1.1
-	xOffset = 45
-	yOffset = 70
-	tCol = 0x00ff00ff
-	tValue = clanPower[GetHogClan(CurrentHedgehog)]
+	local zoomL = 1.1
+	local xOffset = 45
+	local yOffset = 70
+	local tValue = clanPower[GetHogClan(CurrentHedgehog)]
+	local tCol = 0x00ff00ff
 
 	DeleteVisualGear(clanPowerTag)
-	clanPowerTag = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(clanPowerTag)
-	SetVisualGearValues	(
-				clanPowerTag, 		--id
-				-div(ScreenWidth,2) + xOffset,	--xoffset
-				ScreenHeight - yOffset, --yoffset
-				0, 			--dx
-				0, 			--dy
-				zoomL, 			--zoom
-				1, 			--~= 0 means align to screen
-				g7, 			--frameticks
-				tValue, 		--value
-				240000, 		--timer
-				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
-				)
+	clanPowerTag = AddVisualGear(-div(ScreenWidth, 2) + xOffset, ScreenHeight - yOffset, vgtHealthTag, tValue, false)
+
+	SetVisualGearValues(
+		clanPowerTag, 	-- id
+		nil,		-- x offset (set above)
+		nil,		-- y offset (set above)
+		0, 		-- dx
+		0, 		-- dy
+		zoomL, 		-- zoom
+		1, 		-- ~= 0 means align to screen
+		nil, 		-- frameticks
+		nil, 		-- value (set above)
+		240000, 	-- timer
+		tCol		-- color.   -- GetClanColor( GetHogClan(CurrentHedgehog) )
+	)
 
 end
 
@@ -170,7 +312,7 @@ function XYisInRect(px, py, psx, psy, pex, pey)
 
 end
 
-function AddWall(zXMin,zYMin, zWidth, zHeight, zCol)
+function AddWall(zXMin, zYMin, zWidth, zHeight, zCol)
 
 	table.insert(wX, zXMin)
 	table.insert(wY, zYMin)
@@ -182,12 +324,11 @@ end
 
 function BorderSpark(zXMin,zYMin, zWidth, zHeight, bCol)
 
-	eX = zXMin + GetRandom(zWidth+10)
-	eY = zYMin + GetRandom(zHeight+10)
-	tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
+	local eX = zXMin + GetRandom(zWidth+10)
+	local eY = zYMin + GetRandom(zHeight+10)
+	local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
 	if tempE ~= 0 then
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-		SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, 1, g9, bCol )
+		SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, 1, nil, bCol)
 	end
 
 end
@@ -244,6 +385,7 @@ end
 
 function getThreatDamage(gear)
 
+	local dmg
 	--- damage amounts for weapons
 	if 	(GetGearType(gear) == gtGrenade) or
 		(GetGearType(gear) == gtClusterBomb) or
@@ -253,8 +395,7 @@ function getThreatDamage(gear)
 		(GetGearType(gear) == gtMolotov) or
 		(GetGearType(gear) == gtHellishBomb) or
 		(GetGearType(gear) == gtWatermelon) or
-		(GetGearType(gear) == gtSMine)
-	then
+		(GetGearType(gear) == gtSMine) then
 		dmg = 30
 
 	elseif (GetGearType(gear) == gtMelonPiece) then
@@ -268,14 +409,13 @@ function getThreatDamage(gear)
 
 	elseif (GetGearType(gear) == gtFlame) or
 			(GetGearType(gear) == gtPortal) or
-			(GetGearType(gear) == gtDynamite)
-	then
+			(GetGearType(gear) == gtDynamite) then
 		dmg = 0
 
 	elseif (GetGearType(gear) == gtBall) then
 		dmg = 1
 
-	else	--normal shell, snowball etc
+	else	-- normal shell, snowball etc
 		dmg = 65
 	end
 
@@ -285,7 +425,7 @@ end
 
 function setGearReflectionValues(gear)
 
-	dmg = getThreatDamage(gear)
+	local dmg = getThreatDamage(gear)
 	setGearValue(gear,"damage",dmg)
 	setGearValue(gear,"deflects",0)
 
@@ -312,11 +452,11 @@ function AddStruc(pX,pY, pType, pClan)
 
 	sUID = sUID + 1
 
-	tempG = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
+	local tempG = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
 	SetGearPosition(tempG, pX, pY)
 	setGearValue(tempG, "sUID", sUID)
 
-	tempCirc = AddVisualGear(0,0,vgtCircle,0,true)
+	local tempCirc = AddVisualGear(0,0,vgtCircle,0,true)
 
 	SetVisualGearValues(tempCirc, 0, 0, 100, 255, 1, 100, 0, 500, 1, 0xFFFFFF00)
 
@@ -326,11 +466,9 @@ function AddStruc(pX,pY, pType, pClan)
 	table.insert(strucClan,pClan)
 	table.insert(strucCost,2)
 
-	frameID = 0
-	visualSprite = sprTarget
-	madness = AddVisualGear(GetX(tempG), GetY(tempG), vgtStraightShot, 1, true,1)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(madness)	--g9
-
+	local frameID = 0
+	local visualSprite = sprTarget
+	local madness = AddVisualGear(GetX(tempG), GetY(tempG), vgtStraightShot, 1, true,1)
 
 	if pType == loc("Reflector Shield") then
 		table.insert(strucHealth,255)
@@ -383,7 +521,7 @@ function AddStruc(pX,pY, pType, pClan)
 	end
 
 
-	SetVisualGearValues(madness, g1, g2, 0, 0, g5, frameID, g7, visualSprite, g9, g10 )
+	SetVisualGearValues(madness, nil, nil, 0, 0, nil, frameID, nil, visualSprite, nil, nil)
 	SetState(tempG, bor(GetState(tempG),gstInvisible) )
 	table.insert(strucAltDisplay, madness)
 
@@ -393,7 +531,7 @@ end
 -- we may need to expand it for non-gear structures later
 function CheckGearForStructureLink(gear)
 
-	respawnerDestroyed = false
+	local respawnerDestroyed = false
 
 	for i = 1, #strucID do
 		if strucID[i] == getGearValue(gear,"sUID") then
@@ -440,7 +578,7 @@ end
 -- this is called when a respawner blows up
 function RecalibrateRespawn(gear)
 
-	respawnerList = {}
+	local respawnerList = {}
 	for i = 1, #strucID do
 		if (strucType[i] == loc("Respawner")) and (strucClan[i] == GetHogClan(gear)) then
 			table.insert(respawnerList, i)
@@ -458,7 +596,7 @@ end
 --resposition dead hogs at a respawner if they own one
 function FindRespawner(gear)
 
-	respawnerList = {}
+	local respawnerList = {}
 	for i = 1, #strucID do
 		if (strucType[i] == loc("Respawner")) and (strucClan[i] == GetHogClan(gear)) then
 			table.insert(respawnerList, i)
@@ -466,7 +604,7 @@ function FindRespawner(gear)
 	end
 
 	if #respawnerList >= 1 then
-		i = GetRandom(#respawnerList)+1
+		local i = GetRandom(#respawnerList)+1
 		SetGearPosition(gear,GetX(strucGear[respawnerList[i]]),GetY(strucGear[respawnerList[i]])-25)
 		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 	else	-- (this should never happen, but just in case)
@@ -478,14 +616,15 @@ end
 
 function CheckTeleport(gear, tX, tY)
 
-	teleportOriginSuccessful = false
-	teleportDestinationSuccessful = false
+	local teleportOriginSuccessful = false
+	local teleportDestinationSuccessful = false
 
 	for i = 1, #strucID do
 
 		if (strucType[i] == loc("Teleportation Node")) and (strucClan[i] == GetHogClan(CurrentHedgehog)) then
 
-			dist = GetDistFromGearToXY(CurrentHedgehog,GetX(strucGear[i]), GetY(strucGear[i]))
+			local dist = GetDistFromGearToXY(CurrentHedgehog,GetX(strucGear[i]), GetY(strucGear[i]))
+			local NR
 			if strucCircType[i] == 0 then
 				NR = strucCircRadius[i]
 			else
@@ -520,26 +659,27 @@ end
 --Check for proximity of gears to structures, and make structures behave accordingly
 function CheckProximity(gear)
 
-	dist = GetDistFromGearToXY(gear, GetX(strucGear[tempID]), GetY(strucGear[tempID]))
+	local dist = GetDistFromGearToXY(gear, GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]))
 	if not dist then
 		return
 	end
 
 	-- calculate my real radius if I am an aura
-	if strucCircType[tempID] == 0 then
-		NR = strucCircRadius[tempID]
+	local NR
+	if strucCircType[globalTempID] == 0 then
+		NR = strucCircRadius[globalTempID]
 	else
-		NR = (48/100*strucCircRadius[tempID])/2
+		NR = (48/100*strucCircRadius[globalTempID])/2
 	end
 
 	-- we're in business
 	if dist <= NR*NR then
 
 		-- heal clan hogs
-		if strucType[tempID] == loc("Healing Station") then
+		if strucType[globalTempID] == loc("Healing Station") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[tempID] then
+				if GetHogClan(gear) == strucClan[globalTempID] then
 
 					local hogLife = GetHealth(gear)
 					-- Heal hog by 1 HP, up to 150 HP total
@@ -553,27 +693,26 @@ function CheckProximity(gear)
 					end
 
 					-- change this to the med kit sprite health ++++s later
-					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, colorGreen )
+					local tempE = AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtSmoke, 0, true)
+					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, colorGreen)
 
 				end
 			end
 
 		-- explode enemy clan hogs
-		elseif strucType[tempID] == loc("Bio-Filter") then
+		elseif strucType[globalTempID] == loc("Bio-Filter") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if (GetHogClan(gear) ~= strucClan[tempID]) and (GetHealth(gear) > 0) then
+				if (GetHogClan(gear) ~= strucClan[globalTempID]) and (GetHealth(gear) > 0) then
 					AddGear(GetX(gear), GetY(gear), gtGrenade, 0, 0, 0, 1)
 				end
 			end
 
 		-- were those weapons in your pocket, or were you just happy to see me?
-		elseif strucType[tempID] == loc("Weapon Filter") then
+		elseif strucType[globalTempID] == loc("Weapon Filter") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if (GetHogClan(gear) ~= strucClan[tempID]) then
+				if (GetHogClan(gear) ~= strucClan[globalTempID]) then
 
 					for wpnIndex = 1, #atkArray do
 						AddAmmo(gear, atkArray[wpnIndex][1], 0)
@@ -591,23 +730,23 @@ function CheckProximity(gear)
 			end
 
 		-- BOUNCE! POGO! POGO! POGO! POGO!
-		elseif strucType[tempID] == loc("Reflector Shield") then
+		elseif strucType[globalTempID] == loc("Reflector Shield") then
 
 			-- add check for whose projectile it is
 			if gearCanBeDeflected(gear) == true then
 
-				gOwner = getGearValue(gear,"owner")
-				gDeflects = getGearValue(gear,"deflects")
-				gDmg = getGearValue(gear,"damage")
+				local gOwner = getGearValue(gear,"owner")
+				local gDeflects = getGearValue(gear,"deflects")
+				local gDmg = getGearValue(gear,"damage")
 
 				if gDeflects >= 3 then
 					DeleteGear(gear)
 					AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
 					PlaySound(sndVaporize)
-				elseif gOwner ~= strucClan[tempID] then
+				elseif gOwner ~= strucClan[globalTempID] then
 					--whether to vaporize gears or bounce them
 					if gDmg ~= 0 then
-						dx, dy = GetGearVelocity(gear)
+						local dx, dy = GetGearVelocity(gear)
 
 						if (dx == 0) and (dy == 0) then
 							-- static mine, explosive, etc encountered
@@ -624,12 +763,12 @@ function CheckProximity(gear)
 							AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 							PlaySound(sndExplosion)
 
-							strucHealth[tempID] = strucHealth[tempID] - gDmg
-							strucCircCol[tempID] = strucCircCol[tempID] - gDmg
+							strucHealth[globalTempID] = strucHealth[globalTempID] - gDmg
+							strucCircCol[globalTempID] = strucCircCol[globalTempID] - gDmg
 
-							if strucHealth[tempID] <= 0 then
-								AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtExplosion, 0, false)
-								DeleteGear(strucGear[tempID])
+							if strucHealth[globalTempID] <= 0 then
+								AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtExplosion, 0, false)
+								DeleteGear(strucGear[globalTempID])
 								PlaySound(sndExplosion)
 							end
 
@@ -644,10 +783,10 @@ function CheckProximity(gear)
 			end
 
 		--mark as within range of a teleporter node
-		elseif strucType[tempID] == loc("Teleportation Node") then
+		elseif strucType[globalTempID] == loc("Teleportation Node") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[tempID] then
+				if GetHogClan(gear) == strucClan[globalTempID] then
 
 					for i = 1, #sProx do
 						if sProx[i][1] == loc("Teleportation Mode") then
@@ -661,11 +800,11 @@ function CheckProximity(gear)
 		-- mark as within range of construction station
 		-- and thus allow menu access to placement modes
 		-- for girders, mines, sticky mines and barrels
-		elseif strucType[tempID] == loc("Construction Station") then
+		elseif strucType[globalTempID] == loc("Construction Station") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[tempID] then
-					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+				if GetHogClan(gear) == strucClan[globalTempID] then
+					AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtSmoke, 0, true)
 
 					for i = 1, #sProx do
 						if ((sProx[i][1] == loc("Girder Placement Mode"))
@@ -685,11 +824,11 @@ function CheckProximity(gear)
 		-- mark as within stupport station range
 		-- and thus allow menu access to placement modes
 		-- for weapon, utility, and med crates
-		elseif strucType[tempID] == loc("Support Station") then
+		elseif strucType[globalTempID] == loc("Support Station") then
 
 			if GetGearType(gear) == gtHedgehog then
-				if GetHogClan(gear) == strucClan[tempID] then
-					tempE = AddVisualGear(GetX(strucGear[tempID]), GetY(strucGear[tempID]), vgtSmoke, 0, true)
+				if GetHogClan(gear) == strucClan[globalTempID] then
+					AddVisualGear(GetX(strucGear[globalTempID]), GetY(strucGear[globalTempID]), vgtSmoke, 0, true)
 
 					for i = 1, #sProx do
 						if ((sProx[i][1] == loc("Health Crate Placement Mode"))
@@ -739,7 +878,7 @@ function HandleStructures()
 
 		SetVisualGearValues(strucCirc[i], GetX(strucGear[i]), GetY(strucGear[i]), nil, nil, nil, nil, nil, strucCircRadius[i], nil, strucCircCol[i])
 
-		tempID = i
+		globalTempID = i
 
 		SetVisualGearValues(strucAltDisplay[i], GetX(strucGear[i]), GetY(strucGear[i]), 0, 0, nil, nil, 800000, sprTarget)
 
@@ -780,7 +919,7 @@ function HandleStructures()
 	-- it just assumes that if you have access to girders, it works for rubbers
 	-- as that is what the struc implemenation means due to construction station
 	if GameTime % 100 == 0 and CurrentHedgehog ~= nil then
-		anyUIProx = false
+		local anyUIProx = false
 		for i = 1, #sProx do
 
 			if sProx[i][1] == loc("Girder Placement Mode") then
@@ -827,175 +966,27 @@ function checkForSpecialWeapons()
 
 end
 
----------------------------------
--- crates are made of this stuff
----------------------------------
-local placeholder = 20
-
--- Weapons which shouldn't be aded:
--- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
-atkArray = {
-	{amBazooka, 		"amBazooka",		0, 2*placeholder},
-	--{amBee, 		"amBee",		0, 4*placeholder},
-	{amMortar, 		"amMortar",		0, 1*placeholder},
-	{amDrill, 		"amDrill",		0, 3*placeholder},
-	{amSnowball, 		"amSnowball",		0, 3*placeholder},
-
-	{amGrenade,		"amGrenade",		0, 2*placeholder},
-	{amClusterBomb,		"amClusterBomb",	0, 3*placeholder},
-	{amWatermelon, 		"amWatermelon",		0, 25*placeholder},
-	{amHellishBomb,		"amHellishBomb",	0, 25*placeholder},
-	{amMolotov, 		"amMolotov",		0, 3*placeholder},
-	{amGasBomb, 		"amGasBomb",		0, 3*placeholder},
-
-	{amShotgun,		"amShotgun",		0, 2*placeholder},
-	{amDEagle,		"amDEagle",		0, 2*placeholder},
-	{amSniperRifle,		"amSniperRifle",	0, 3*placeholder},
-	--{amSineGun, 		"amSineGun",		0, 6*placeholder},
-	{amFlamethrower,	"amFlamethrower",	0, 4*placeholder},
-	{amIceGun, 		"amIceGun",		0, 15*placeholder},
-
-	{amFirePunch, 		"amFirePunch",		0, 3*placeholder},
-	{amWhip,		"amWhip",		0, 1*placeholder},
-	{amBaseballBat, 	"amBaseballBat",	0, 7*placeholder},
-	--{amKamikaze, 		"amKamikaze",		0, 1*placeholder},
-	{amSeduction, 		"amSeduction",		0, 1*placeholder},
-	{amHammer,		"amHammer",		0, 1*placeholder},
-
-	{amMine, 		"amMine",		0, 1*placeholder},
-	{amDynamite, 		"amDynamite",		0, 9*placeholder},
-	{amCake, 		"amCake",		0, 25*placeholder},
-	{amBallgun, 		"amBallgun",		0, 40*placeholder},
-	--{amRCPlane,		"amRCPlane",		0, 25*placeholder},
-	{amSMine,		"amSMine",		0, 5*placeholder},
-
-	--{amMineStrike,	"amMineStrike",		0, 15*placeholder},
-	--{amPiano,		"amPiano",		0, 40*placeholder},
-
-	{amPickHammer,		"amPickHammer",		0, 2*placeholder},
-	{amBlowTorch, 		"amBlowTorch",		0, 4*placeholder},
-	{amKnife,		"amKnife",		0, 2*placeholder},
-
-	{amBirdy,		"amBirdy",		0, 7*placeholder},
-
-	{amDuck,		"amDuck",		0, 2*placeholder}
-}
-
--- Utilities which shouldn't be added:
--- * Teleport: We have teleportation node
--- * Switch: Always infinite
--- * Girder, rubber: Requires construction station
--- * Resurrector: We have the resurrector structure for this
-
--- Utilities which might be weird for this mode:
--- * Tardis: Randomly teleports hog, maybe even into enemy clan's area
-utilArray = {
-	{amLandGun,		"amLandGun",		0, 5*placeholder},
-
-	{amRope, 		"amRope",		0, 7*placeholder},
-	{amParachute, 		"amParachute",		0, 2*placeholder},
-	{amJetpack,		"amJetpack",		0, 8*placeholder},
-	{amPortalGun,		"amPortalGun",		0, 15*placeholder},
-
-	{amInvulnerable,	"amInvulnerable",	0, 5*placeholder},
-	{amLaserSight,		"amLaserSight",		0, 2*placeholder},
-	{amVampiric,		"amVampiric",		0, 6*placeholder},
-
-	{amLowGravity, 		"amLowGravity",		0, 4*placeholder},
-	{amExtraDamage, 	"amExtraDamage",	0, 6*placeholder},
-	{amExtraTime,		"amExtraTime",		0, 8*placeholder}
-}
-
-----------------------------
--- Placement stuff
-----------------------------
-
-local cGear = nil -- detects placement of girders and objects (using airattack)
-local curWep = amNothing
-
--- primary placement categories
-local cIndex = 1 -- category index
-local cat = {
-	"Girder Placement Mode",
-	"Rubber Placement Mode",
-	"Mine Placement Mode",
-	"Sticky Mine Placement Mode",
-	"Barrel Placement Mode",
-	"Weapon Crate Placement Mode",
-	"Utility Crate Placement Mode",
-	"Health Crate Placement Mode",
-	"Structure Placement Mode"
-}
-local catReverse = {}
-for c=1, #cat do
-	catReverse[cat[c]] = c
-end
-
-sProx = {
-	{loc("Girder Placement Mode"),false},
-	{loc("Rubber Placement Mode"),false},
-	{loc("Mine Placement Mode"),false},
-	{loc("Sticky Mine Placement Mode"),false},
-	{loc("Barrel Placement Mode"),false},
-	{loc("Weapon Crate Placement Mode"),false},
-	{loc("Utility Crate Placement Mode"),false},
-	{loc("Health Crate Placement Mode"),false},
-	{loc("Structure Placement Mode"),false},
-	{loc("Teleportation Mode"),false},
-}
-
-
-local pMode = {}	-- pMode contains custom subsets of the main categories
-local pIndex = 1
-
-local CGR = 1 -- current girder rotation, we actually need this as HW remembers what rotation you last used
-
-local placedX = {}
-local placedY = {}
-local placedSpec = {}
-local placedSuperSpec = {}
-local placedType = {}
-local placedCount = 0
-
-local sCirc -- circle that appears around selected gears
-local sGear = nil
-local closestDist
-local closestGear = nil
-
-local tCirc = {} -- array of circles that appear around tagged gears
-
 ------------------------
 -- SOME GENERAL METHODS
 ------------------------
 
 function GetDistFromGearToXY(gear, g2X, g2Y)
 
-	g1X, g1Y = GetGearPosition(gear)
+	local g1X, g1Y = GetGearPosition(gear)
 	if not g1X then
 		return nil
 	end
-	q = g1X - g2X
-	w = g1Y - g2Y
+	local q = g1X - g2X
+	local w = g1Y - g2Y
 
 	return ( (q*q) + (w*w) )
 
 end
 
 function GetDistFromXYtoXY(a, b, c, d)
-	q = a - c
-	w = b - d
+	local q = a - c
+	local w = b - d
 	return ( (q*q) + (w*w) )
-end
-
-function SelectGear(gear)
-
-	d = GetDistFromGearToXY(gear, placedX[placedCount], placedY[placedCount])
-
-	if d < closestDist then
-		closestDist = d
-		closestGear = gear
-	end
-
 end
 
 -- essentially called when user clicks the mouse
@@ -1018,6 +1009,7 @@ function PlaceObject(x,y)
 	then
 		-- For checking if the actual placement succeeded
 		local placed = false
+		local gear
 		if cat[cIndex] == "Girder Placement Mode" then
 			placed = PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = CGR
@@ -1257,7 +1249,7 @@ function HandleConstructionMode()
 	-- some kind of target detected, tell me your story
 	if cGear ~= nil then
 
-		x,y = GetGearTarget(cGear)
+		local x,y = GetGearTarget(cGear)
 
 		if GetGearType(cGear) == gtAirAttack then
 			DeleteGear(cGear)
@@ -1622,9 +1614,9 @@ function onGameStart()
 		teamLUtilIndex[team] = 1
 	end
 
-	tMapWidth = RightX - LeftX
-	tMapHeight = WaterLine - TopY
-	clanInterval = div(tMapWidth,ClansCount)
+	local tMapWidth = RightX - LeftX
+	local tMapHeight = WaterLine - TopY
+	local clanInterval = div(tMapWidth,ClansCount)
 
 	-- define construction areas for each clan
 	-- if there are forts-based spawn locations, adjust areas around them
