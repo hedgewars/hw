@@ -21,6 +21,7 @@ Styles and game modes:
  + Construction Mode: Remember all selections
  + Construction Mode: Add subtle glow to healing station
  + Construction Mode: Change message colors
+ + Construction Mode: Allow to change "Switch Hedgehog" in weapon scheme
  * Construction Mode: Remove mine strike if added by weapon scheme (it's broken)
 
 A Space Adventure:

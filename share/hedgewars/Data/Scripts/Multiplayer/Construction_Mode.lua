@@ -155,7 +155,7 @@ local costFactor = 20
 -- Weapons which shouldn't be aded:
 -- Air attack, napalm, drillstrike: Overwritten weapons for the Construction Mode tools
 -- Mine strike: Is currently broken
--- Piano strike: Hog is resurrected by respawner
+-- Piano strike: Hog is resurrected by respawner. Not strictly prohibited, however.
 local atkArray = {
 	{amBazooka,	 2*costFactor},
 	--{amBee,	 4*costFactor},
@@ -207,7 +207,7 @@ local atkArray = {
 
 -- Utilities which shouldn't be added:
 -- * Teleport: We have teleportation node
--- * Switch: Always infinite
+-- * Switch: Infinite in default Construction Mode weapons scheme
 -- * Girder, rubber: Requires construction station
 -- * Resurrector: We have the resurrector structure for this
 
@@ -712,7 +712,6 @@ function CheckProximity(gear)
 					end
 
 					AddAmmo(gear, amCMStructurePlacer, 100)
-					AddAmmo(gear, amSwitch, 100)
 					AddAmmo(gear, amSkip, 100)
 
 				end
@@ -1489,18 +1488,24 @@ function initialSetup(gear)
 		FindPlace(gear, false, clanBoundsSX[GetHogClan(gear)], clanBoundsEX[GetHogClan(gear)],true)
 	end
 
-
 	-- Add core ammo
 	AddAmmo(gear, amCMStructurePlacer, 100)
-	AddAmmo(gear, amSwitch, 100)
 	AddAmmo(gear, amSkip, 100)
 
-	-- Remove the other special Construction Mode tools
+	-- Remove special Construction Mode stuff.
+	-- This stuff is added and removed dynamically based on
+	-- proximity to structures.
 	AddAmmo(gear, amCMObjectPlacer, 0)
 	AddAmmo(gear, amCMCratePlacer, 0)
+	AddAmmo(gear, amGirder, 0)
+	AddAmmo(gear, amRubber, 0)
+	AddAmmo(gear, amTeleport, 0)
 
-	-- Mine strike is broken
+	-- Mine strike is broken, so we force-remove it
 	AddAmmo(gear, amMineStrike, 0)
+
+	-- Everything else is set by the weapon scheme.
+	-- Infinite switch is recommended.
 end
 
 function onGameStart()
