@@ -324,7 +324,7 @@ function CheckWaypoints()
 
                 NR = (48/100*wpRad)/2
 
-                if dist < (NR*NR) then
+                if dist < (NR*NR) and not gameOver then
                 --if dist < (wpRad*wpRad) then
                         --AddCaption("howdy")
                         wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog)) -- new                             --GetClanColor(1)
@@ -509,6 +509,10 @@ function onNewRound()
 		end
 
 		gameOver = true
+                for i=0, wpCount-1 do
+                         -- Fade out waypoints
+                         SetVisualGearValues(wpCirc[i], nil, nil, 0, 0, nil, 6)
+                end
 		EndTurn(true)
         end
 
@@ -578,11 +582,11 @@ function DisableTumbler(endTurn)
                 if endTurn then
                          EndTurn(true)
                 end
-		if trackFinished then
+		if trackFinished and not gameOver then
                          for i=0, wpCount-1 do
                        	         SetVisualGearValues(wpCirc[i], nil, nil, 255, 255, nil, 2)
                          end
-                else
+                elseif not gameOver then
                          for i=0, wpCount-1 do
                        	         SetVisualGearValues(wpCirc[i], nil, nil, 32, 32, nil, 1)
                          end
@@ -660,7 +664,7 @@ function ClearMap()
 end
 
 function CallBob(x,y)
-	if not racerActive then
+	if not racerActive and not gameOver then
         if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
             wpX[wpCount] = x
@@ -699,14 +703,21 @@ function HandleFreshMapCreation()
 			LoadMap(mapID)
 		end
 
-		for i = 0,(wpCount-1) do
-			DeleteVisualGear(wpCirc[i])
-		end
-		wpCount = 0
+                if gameOver then
+		        for i = 0,(wpCount-1) do
+                                SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+                        end
 
-		for i = 1, techCount-1 do
-			CallBob(techX[i],techY[i])
-		end
+                else
+		        for i = 0,(wpCount-1) do
+		        	DeleteVisualGear(wpCirc[i])
+		        end
+		        wpCount = 0
+
+		        for i = 1, techCount-1 do
+			        CallBob(techX[i],techY[i])
+		        end
+                end
 
 		activationStage = 200
 		--runOnHogs(RestoreHog)
@@ -1041,10 +1052,12 @@ function onNewTurn()
         gTimer = 0
 
         -- Set the waypoints to unactive on new round
-        for i = 0,(wpCount-1) do
-                wpActive[i] = false
-                wpCol[i] = 0xffffffff
-                SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
+        if not gameOver then
+                for i = 0,(wpCount-1) do
+                        wpActive[i] = false
+                        wpCol[i] = 0xffffffff
+                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
+                end
         end
 
         -- Handle Starting Stage of Game

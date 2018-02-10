@@ -489,6 +489,10 @@ function onNewRound()
 		end
 
 		gameOver = true
+                for i=0, wpCount-1 do
+                         -- Fade out waypoints
+                         SetVisualGearValues(wpCirc[i], nil, nil, 0, 0, nil, 6)
+                end
 		EndTurn(true)
 
         end
@@ -513,11 +517,11 @@ function DisableTumbler(endTurn)
                 end
                 racerActive = false -- newadd
 
-		if trackFinished and not turnSkipped then
+		if trackFinished and not gameOver then
                          for i=0, wpCount-1 do
                        	         SetVisualGearValues(wpCirc[i], nil, nil, 255, 255, nil, 2)
                          end
-                elseif not turnSkipped then
+                elseif not gameOver then
                          for i=0, wpCount-1 do
                        	         SetVisualGearValues(wpCirc[i], nil, nil, 32, 32, nil, 1)
                          end
@@ -700,10 +704,12 @@ function onNewTurn()
         gTimer = 0
 
         -- Set the waypoints to unactive on new round
-        for i = 0,(wpCount-1) do
-                wpActive[i] = false
-                wpCol[i] = 0xffffffff
-                SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
+        if not gameOver then
+                for i = 0,(wpCount-1) do
+                        wpActive[i] = false
+                        wpCol[i] = 0xffffffff
+                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 164, 224, 1, 10, 0, wpRad, 5, wpCol[i])
+                end
         end
 
         -- Handle Starting Stage of Game
