@@ -128,7 +128,8 @@ local colorBioFilter = 0xFF0000FF
 local colorReflectorShield = 0xFFAE00FF
 local colorWeaponFilter =  0xA800FFFF
 
-local colorHealingStationParticle = 0x00FF00FF
+local colorHealingStationParticle = 0x00FF0080
+local colorGeneratorParticle = 0xFFFF00FF
 
 local colorMessageError = 0xFFFFFFFF
 
@@ -706,8 +707,8 @@ function CheckProximity(gear)
 						end
 					end
 
-					-- change this to the med kit sprite health ++++s later
-					local tempE = AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
+					-- Maybe find better animation?
+					local tempE = AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, false)
 					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, colorHealingStationParticle)
 
 				end
@@ -844,7 +845,7 @@ function CheckProximity(gear)
 
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[sID] then
-					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
+					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, false)
 
 					sProx["Girder Placement Mode"] = true
 					sProx["Rubber Placement Mode"] = true
@@ -862,7 +863,7 @@ function CheckProximity(gear)
 
 			if GetGearType(gear) == gtHedgehog then
 				if GetHogClan(gear) == strucClan[sID] then
-					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, true)
+					AddVisualGear(GetX(strucGear[sID]), GetY(strucGear[sID]), vgtSmoke, 0, false)
 
 					sProx["Health Crate Placement Mode"] = true
 					sProx["Weapon Crate Placement Mode"] = true
@@ -926,10 +927,21 @@ function HandleStructures()
 						increaseGearValue(strucGear[i],"power")
 						if getGearValue(strucGear[i],"power") == 10 then
 							setGearValue(strucGear[i],"power",0)
-							clanPower[z] = clanPower[z] + 1
-							if conf_maxEnergy ~= "inf" and clanPower[z] > conf_maxEnergy then
-								clanPower[z] = conf_maxEnergy
+
+							-- Add 1 energy (if not at max. already)
+							if not (conf_maxEnergy ~= "inf" and clanPower[z] + 1 > conf_maxEnergy) then
+								clanPower[z] = clanPower[z] + 1
+
+								-- Spawn one particle per energy added
+								local particle = AddVisualGear(GetX(strucGear[i]), GetY(strucGear[i])-16, vgtStraightShot, sprStar, false)
+								SetVisualGearValues(particle, nil, nil, math.random(-100, 100)*0.00005, 0.02, math.random(360), 0, 900, nil, 0, colorGeneratorParticle)
+
+							else
+
+								SetVisualGearValues(strucAltDisplay[i], GetX(strucGear[i]), GetY(strucGear[i]), 0, 0, nil, nil, 800000, sprTarget)
 							end
+
+
 						end
 
 					end
