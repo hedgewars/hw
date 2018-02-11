@@ -21,7 +21,6 @@ Styles and game modes:
  + Construction Mode: Show selected object at cursor and a crate preview icon
  + Construction Mode: Remember all selections
  + Construction Mode: Add subtle glow to healing station
- + Construction Mode: Change message colors
  + Construction Mode: Allow to change "Switch Hedgehog" in weapon scheme
  + Construction Mode: Hide selected sub-modes from crate/object placer from enemies over the net
  + Racer, Tech Racer: First waypoint flashes before the hog starts moving

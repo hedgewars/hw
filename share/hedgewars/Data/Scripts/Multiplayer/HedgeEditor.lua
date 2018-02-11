@@ -253,14 +253,17 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 
--- experimental crap
---local destroyMap = false
-
 -- Fake ammo type for the gear placement tool
 local amCMGearPlacementTool = amAirAttack
 
 -- Special frames in Ammos.png/Ammos_bw.png
 local ammoFrameAirAttack = 63
+
+-- Caption colors
+local colorErrorMessage = 0xFFFFFFFF
+local colorInfoMessage = 0xFFFFFFFF
+local colorPlaceMode1 = 0xFFBA00FF -- Main placement mode
+local colorPlaceMode2 = 0xFFDE85FF -- Secondary mode
 
 -----------------------------------------
 -- tracking vars for save/load purposes
@@ -1186,9 +1189,9 @@ function PlaceObject(x,y)
 		elseif pMode[pIndex] == loc("Deletion Mode") then
 			sGear = GetClosestGear()
 			if (sGear == nil) then
-				AddCaption(loc("Please click on a gear."),0xffba00ff,capgrpVolume)
+				AddCaption(loc("Please click on a gear."), colorErrorMessage, capgrpVolume)
 			elseif (GetGearType(sGear) == gtHedgehog) then
-				AddCaption(loc("Hedgehogs can not be deleted."),0xffba00ff,capgrpVolume)
+				AddCaption(loc("Hedgehogs can not be deleted."), colorErrorMessage, capgrpVolume)
 			else
 				DeleteGear(sGear)
 			end
@@ -1205,7 +1208,7 @@ function PlaceObject(x,y)
 				SetTeamIdentity(sGear)
 			end
 		else
-			AddCaption(loc("Please click on a hedgehog."),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Please click on a hedgehog."), colorErrorMessage, capgrpVolume)
 		end
 
 
@@ -1237,7 +1240,7 @@ function PlaceObject(x,y)
 				SetGearValues(sGear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 36 - newHealth)
 			end
 		else
-			AddCaption(loc("Please click on a hedgehog, barrel, health crate or dud mine."),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Please click on a hedgehog, barrel, health crate or dud mine."), colorErrorMessage, capgrpVolume)
 		end
 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
@@ -1271,7 +1274,7 @@ function PlaceObject(x,y)
 					if GetGearType(sGear) == gtCase then
 						setGearValue(sGear, "tag","collection")
 					else
-						AddCaption(loc("Please click on a crate."),0xffba00ff,capgrpVolume)
+						AddCaption(loc("Please click on a crate."), colorErrorMessage, capgrpVolume)
 					end
 				else
 					if pMode[pIndex] == loc("Victory Condition: Destroy") then
@@ -2353,7 +2356,7 @@ function SaveLevelData()
 
 	WriteLnToConsole("------ END GENERATED SCRIPT ------")
 
-	AddCaption(loc("Level Data Saved!"))
+	AddCaption(loc("Level Data Saved!"), colorInfoMessage, capgrpGameState)
 
 end
 
@@ -2934,10 +2937,10 @@ function HandleHedgeEditor()
 
 			-- update display selection criteria
 			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
-				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
+				AddCaption(cat[cIndex], colorPlaceMode1, capgrpMessage)
 				showSecondaryMessage()
 				if superDelete == true then
-					AddCaption(loc("Deletition Mode"),0xffba00ff,capgrpAmmoinfo)
+					AddCaption(loc("Deletition Mode"), colorPlaceMode1, capgrpAmmoinfo)
 				end
 			end
 
@@ -3130,25 +3133,25 @@ function onTimer(s)
 	elseif (commandMode() == true) and (s == 2) then
 		if GetAmmoCount(CurrentHedgehog, amCMGearPlacementTool) == 100 then
 			SetEditingWeps(0)
-			AddCaption(loc("The editor weapons and tools have been removed!"))
+			AddCaption(loc("The editor weapons and tools have been removed!"), colorInfoMessage, capgrpGameState)
 		else
 			SetEditingWeps(100)
-			AddCaption(loc("The editor weapons and tools have been added!"))
+			AddCaption(loc("The editor weapons and tools have been added!"), colorInfoMessage, capgrpGameState)
 		end
 	elseif (preciseOn == true) and (s == 1) then
 		helpDisabled = not(helpDisabled)
 		if helpDisabled then
-			AddCaption(loc("Help Disabled"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Help Disabled"), colorInfoMessage, capgrpVolume)
 		else
-			AddCaption(loc("Help Enabled"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Help Enabled"), colorInfoMessage, capgrpVolume)
 		end
 		updateHelp()
 	elseif (preciseOn == true) and (s == 3) then
 		showGearTags = not(showGearTags)
 		if showGearTags then
-			AddCaption(loc("Gear information shown"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Gear information shown"), colorInfoMessage, capgrpVolume)
 		else
-			AddCaption(loc("Gear information hidden"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Gear information hidden"), colorInfoMessage, capgrpVolume)
 		end
 
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
@@ -3156,22 +3159,22 @@ function onTimer(s)
 		if (cat[cIndex] == loc("Rubber Placement Mode")) then
 			if s == 1 then
 				landType = lfBouncy
-				AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
+				AddCaption(loc("Bouncy Land"), colorPlaceMode1, capgrpAmmoinfo)
 			elseif s == 5 then
 				superDelete = true
 			end
 		elseif s == 1 then
 			landType = 0
-			AddCaption(loc("Normal Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Normal Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif s == 2 then
 			landType = lfIndestructible
-			AddCaption(loc("Indestructible Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Indestructible Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif s == 3 then
 			landType = lfIce
-			AddCaption(loc("Icy Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Icy Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif (s == 4) then
 			landType = lfBouncy
-			AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Bouncy Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif (s == 5) and (cat[cIndex] ~= loc("Sprite Modification Mode")) and (cat[cIndex] ~= loc("Sprite Placement Mode")) then
 			superDelete = true
 		end
@@ -3222,7 +3225,7 @@ function showSecondaryMessage()
 	else
 		caption2 = tostring(pMode[pIndex])
 	end
-	AddCaption(caption2, 0xffba00ff, capgrpMessage2)
+	AddCaption(caption2, colorPlaceMode2, capgrpMessage2)
 end
 
 ---------------------------------------------------------------
