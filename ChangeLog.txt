@@ -18,6 +18,7 @@ Content:
 
 Styles and game modes:
  + Construction Mode: Add a few shortcuts
+ + Construction Mode: Show selected object at cursor and a crate preview icon
  + Construction Mode: Remember all selections
  + Construction Mode: Add subtle glow to healing station
  + Construction Mode: Change message colors
@@ -25,7 +26,7 @@ Styles and game modes:
  + Racer, Tech Racer: First waypoint flashes before the hog starts moving
  + Racer: Use dark waypoints in bright themes like Bath
  + Racer, Tech Racer: Various other waypoint appearance improvements
- * Construction Mode: Remove mine strike if added by weapon scheme (it's broken)
+ * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
 
 A Space Adventure:
  + Precise Shooting: Display collected ammo

@@ -239,6 +239,19 @@ local cat = {
 	loc_noop("Structure Placement Mode"),
 }
 
+-- Frames in sprTarget for the structure images
+local catFrames = {
+	["Respawner"] = 1,
+	["Generator"] = 2,
+	["Healing Station"] = 3,
+	["Support Station"] = 4,
+	["Weapon Filter"] = 5,
+	["Teleportation Node"] = 6,
+	["Bio-Filter"] = 7,
+	["Construction Station"] = 8,
+	["Reflector Shield"] = 9,
+}
+
 local catReverse = {}
 for c=1, #cat do
 	catReverse[cat[c]] = c
@@ -490,43 +503,36 @@ function AddStruc(pX,pY, pType, pClan)
 	if pType == "Bio-Filter" then
 		table.insert(strucCircCol, colorBioFilter)
 		table.insert(strucCircRadius,1000)
-		frameID = 7
 	elseif pType == "Healing Station" then
 		table.insert(strucCircCol, colorHealingStation)
 		table.insert(strucCircRadius,500)
-		frameID = 3
 	elseif pType == "Respawner" then
 		table.insert(strucCircCol, 0)
 		table.insert(strucCircRadius,0)
 		runOnHogs(EnableHogResurrectionForThisClan)
-		frameID = 1
 	elseif pType == "Teleportation Node" then
 		table.insert(strucCircCol, colorTeleportationNode)
 		table.insert(strucCircRadius,350)
-		frameID = 6
 	elseif pType == "Generator" then
 		table.insert(strucCircCol, 0)
 		table.insert(strucCircRadius,0)
 		setGearValue(tempG, "power", 0)
-		frameID = 2
 	elseif pType == "Support Station" then
 		table.insert(strucCircCol, colorSupportStation)
 		table.insert(strucCircRadius,500)
-		frameID = 4
 	elseif pType == "Construction Station" then
 		table.insert(strucCircCol, colorConstructionStation)
 		table.insert(strucCircRadius,500)
-		frameID = 8
 	elseif pType == "Reflector Shield" then
 		table.insert(strucCircCol, colorReflectorShield)
 		table.insert(strucCircRadius,750)
-		frameID = 9
 	elseif pType == "Weapon Filter" then
 		table.insert(strucCircCol, colorWeaponFilter)
 		table.insert(strucCircRadius,750)
-		frameID = 5
 	end
-
+	if catFrames[pType] then
+		frameID = catFrames[pType]
+	end
 
 	SetVisualGearValues(madness, nil, nil, 0, 0, nil, frameID, nil, visualSprite, nil, nil)
 	SetState(tempG, bor(GetState(tempG),gstInvisible) )
@@ -1199,6 +1205,93 @@ function HandleConstructionModeTools()
 	end
 end
 
+local cursorIcon = nil
+local ammoIcon = nil
+local ammoIconBorder = nil
+
+function HandleCursor()
+	if curAmmo == amCMStructurePlacer or curAmmo == amCMObjectPlcer or curAmmo == amCMCratePlacer then
+		local dFrame = 0
+		local dSprite
+		local yOffset = 0
+		if (cat[cIndex] == "Structure Placement Mode") then
+			dSprite = sprTarget
+			dFrame = catFrames[pMode[pIndex]]
+		elseif (cat[cIndex] == "Mine Placement Mode") then
+			dSprite = sprCustom2 -- sprMineOff
+		elseif (cat[cIndex] == "Sticky Mine Placement Mode") then
+			dSprite = sprCustom3 -- sprSMineOff
+		elseif (cat[cIndex] == "Barrel Placement Mode") then
+			dSprite = sprExplosives
+		elseif (cat[cIndex] == "Health Crate Placement Mode") then
+			dSprite = sprFAid
+		elseif (cat[cIndex] == "Weapon Crate Placement Mode") then
+			dSprite = sprCase
+		elseif (cat[cIndex] == "Utility Crate Placement Mode") then
+			dSprite = sprUtility
+		else
+			dSprite = sprArrow
+		end
+
+		if not cursorIcon then
+			cursorIcon = AddVisualGear(CursorX, CursorY, vgtStraightShot, dSprite, false, 3)
+		end
+		SetVisualGearValues(cursorIcon, CursorX, CursorY, 0, 0, 0, dFrame, 1000, dSprite, 1000)
+
+		-- Render ammo icon for weapon and utility crate
+		local ammoFrame
+		if (cat[cIndex] == "Weapon Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") then
+			local tArr
+			if (cat[cIndex] == "Weapon Crate Placement Mode") then
+				tArr = atkArray
+			else
+				tArr = utilArray
+			end
+
+			-- Get ammo icon
+			ammoFrame = tArr[pIndex][1] - 1
+		end
+		if ammoFrame then
+			local xDisplacement = 42
+			local yDisplacement = 42
+			local x = CursorX + yDisplacement
+			local y = CursorY + yDisplacement
+
+			-- Border around ammo icon
+			if not ammoIconBorder then
+				ammoIconBorder = AddVisualGear(x, y, vgtStraightShot, sprCustom1, false, 3)
+			end
+			SetVisualGearValues(ammoIconBorder, x, y, 0, 0, 0, 0, 1000, nil, 1000)
+
+			-- Ammo icon
+			if not ammoIcon then
+				ammoIcon = AddVisualGear(x, y, vgtStraightShot, sprAMAmmos, false, 3)
+			end
+			SetVisualGearValues(ammoIcon, x, y, 0, 0, 0, ammoFrame, 1000, nil, 1000)
+
+		else
+			-- Cleanup vgears if not placing ammo crates
+			if ammoIcon then
+				DeleteVisualGear(ammoIcon)
+			end
+			if ammoIconBorder then
+				DeleteVisualGear(ammoIconBorder)
+			end
+		end
+	end
+end
+
+function onVisualGearDelete(vg)
+	if vg ~= nil then
+		if vg == cursorIcon then
+			cursorIcon = nil
+		elseif vg == ammoIcon then
+			ammoIcon = nil
+		elseif vg == ammoIconBorder then
+			ammoIconBorder = nil
+		end
+	end
+end
 
 -- called in onGameTick()
 function HandleConstructionMode()
@@ -1210,6 +1303,8 @@ function HandleConstructionMode()
 		if wallsVisible == true then
 			HandleBorderEffects()
 		end
+
+		HandleCursor()
 
 		if GameTime % 100 == 0 then
 
