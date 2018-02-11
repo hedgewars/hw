@@ -35,6 +35,7 @@ local hero = {
 	x = 1100,
 	y = 560
 }
+local heroTurns = 0
 local enemiesOdd = {
 	{name = loc("Hog 1"), x = 2000 , y = 175},
 	{name = loc("Hog III"), x = 1950 , y = 1110},
@@ -135,6 +136,8 @@ function onGameStart()
 	AddAmmo(enemiesEven[1].gear, amWatermelon, 1)
 	AddAmmo(enemiesEven[1].gear, amGrenade, 5)
 
+	turnHogs()
+
 	SendHealthStatsOff()
 end
 
@@ -152,8 +155,8 @@ function onNewTurn()
 			TurnTimeLeft = TurnTime + timeLeft
 		end
 		timeLeft = 0
+		heroTurns = heroTurns + 1
 	end
-	turnHogs()
 end
 
 function onGameTick()
@@ -268,13 +271,13 @@ end
 function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), heroTurns))
 	local record = tonumber(GetCampaignVar("FastestPreciseShooting"))
-	if record ~= nil and TotalRounds >= record then
+	if record ~= nil and heroTurns >= record then
 		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
 	end
-	if record == nil or TotalRounds < record then
-		SaveCampaignVar("FastestPreciseShooting", tostring(TotalRounds))
+	if record == nil or heroTurns < record then
+		SaveCampaignVar("FastestPreciseShooting", tostring(heroTurns))
 		if record ~= nil then
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
