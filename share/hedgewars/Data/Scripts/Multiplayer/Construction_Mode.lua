@@ -663,7 +663,9 @@ function CheckTeleport(gear, tX, tY)
 	end
 
 	if ((teleportDestinationSuccessful == false) or (teleportOriginSuccessful == false)) then
-		AddCaption(loc("Teleport unsuccessful. Please teleport within a clan teleporter's sphere of influence."), colorMessageError, capgrpMessage)
+		if IsHogLocal(CurrentHedgehog) then
+			AddCaption(loc("Teleport unsuccessful. Please teleport within a clan teleporter's sphere of influence."), colorMessageError, capgrpMessage)
+		end
 		SetGearTarget(gear, GetX(CurrentHedgehog), GetY(CurrentHedgehog))
 	end
 
@@ -1007,10 +1009,14 @@ end
 function PlaceObject(x,y)
 
 	if (clanUsedExtraTime[GetHogClan(CurrentHedgehog)] == true) and (cat[cIndex] == "Utility Crate Placement Mode") and (utilArray[pIndex][1] == amExtraTime) then
-		AddCaption(loc("You may only place 1 Extra Time crate per turn."), colorMessageError, capgrpVolume)
+		if IsHogLocal(CurrentHedgehog) then
+			AddCaption(loc("You may only place 1 Extra Time crate per turn."), colorMessageError, capgrpVolume)
+		end
 		PlaySound(sndDenied)
 	elseif (conf_cratesPerRound ~= "inf" and clanCratesSpawned[GetHogClan(CurrentHedgehog)] >= conf_cratesPerRound) and ( (cat[cIndex] == "Health Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") or (cat[cIndex] == "Weapon Crate Placement Mode")  )  then
-		AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound), colorMessageError, capgrpVolume)
+		if IsHogLocal(CurrentHedgehog) then
+			AddCaption(string.format(loc("You may only place %d crates per round."), conf_cratesPerRound), colorMessageError, capgrpVolume)
+		end
 		PlaySound(sndDenied)
 	elseif (XYisInRect(x,y, clanBoundsSX[GetHogClan(CurrentHedgehog)],clanBoundsSY[GetHogClan(CurrentHedgehog)],clanBoundsEX[GetHogClan(CurrentHedgehog)],clanBoundsEY[GetHogClan(CurrentHedgehog)]) == true)
 	and (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense)
@@ -1069,15 +1075,21 @@ function PlaceObject(x,y)
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
 			DrawClanPowerTag()
 		else
-			AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
+			if IsHogLocal(CurrentHedgehog) then
+				AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
+			end
 			PlaySound(sndDenied)
 		end
 
 	else
 		if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
-			AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
+			if IsHogLocal(CurrentHedgehog) then
+				AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
+			end
 		else
-			AddCaption(loc("Insufficient Power"), colorMessageError, capgrpVolume)
+			if IsHogLocal(CurrentHedgehog) then
+				AddCaption(loc("Insufficient Power"), colorMessageError, capgrpVolume)
+			end
 		end
 		PlaySound(sndDenied)
 	end
@@ -1091,7 +1103,6 @@ function RedefineSubset()
 
 	pIndex = 1
 	pMode = {}
-	placedExpense = 1
 
 	if (CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0) then
 		return false
@@ -1105,37 +1116,30 @@ function RedefineSubset()
 	elseif cat[cIndex] == "Rubber Placement Mode" then
 		pIndex = currentGirderRotation
 		pMode = {amRubber}
-		placedExpense = 3
 	elseif cat[cIndex] == "Barrel Placement Mode" then
 		pMode = {60}
-		placedExpense = 10
 		teamLObjectMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Health Crate Placement Mode" then
 		pMode = {HealthCaseAmount}
-		placedExpense = 5
 		teamLCrateMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Weapon Crate Placement Mode" then
 		for i = 1, #atkArray do
 			pMode[i] = atkArray[i][1]
 		end
-		placedExpense = atkArray[pIndex][2]
 		teamLCrateMode[team] = cat[cIndex]
 		pIndex = teamLWeapIndex[team]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		for i = 1, #utilArray do
 			pMode[i] = utilArray[i][1]
 		end
-		placedExpense = utilArray[pIndex][2]
 		teamLCrateMode[team] = cat[cIndex]
 		pIndex = teamLUtilIndex[team]
 	elseif cat[cIndex] == "Mine Placement Mode" then
 		pMode = {0,1000,2000,3000,4000,5000}
-		placedExpense = 15
 		teamLObjectMode[team] = cat[cIndex]
 		pIndex = teamLMineIndex[team]
 	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
 		pMode = {amSMine}
-		placedExpense = 20
 		teamLObjectMode[team] = cat[cIndex]
 	elseif cat[cIndex] == "Structure Placement Mode" then
 		pMode = {
@@ -1209,6 +1213,7 @@ local cursorIcon = nil
 local ammoIcon = nil
 local ammoIconBorder = nil
 
+-- Handle cursor stuff. This displays a sprite under the cursor so you can see what you're going to place.
 function HandleCursor()
 	if curAmmo == amCMStructurePlacer or curAmmo == amCMObjectPlcer or curAmmo == amCMCratePlacer then
 		local dFrame = 0
@@ -1233,49 +1238,53 @@ function HandleCursor()
 			dSprite = sprArrow
 		end
 
+		-- Display the gear to be spawned under the cursor
 		if not cursorIcon then
-			cursorIcon = AddVisualGear(CursorX, CursorY, vgtStraightShot, dSprite, false, 3)
+			cursorIcon = AddVisualGear(CursorX, CursorY, vgtStraightShot, dSprite, true, 3)
 		end
 		SetVisualGearValues(cursorIcon, CursorX, CursorY, 0, 0, 0, dFrame, 1000, dSprite, 1000)
 
-		-- Render ammo icon for weapon and utility crate
-		local ammoFrame
-		if (cat[cIndex] == "Weapon Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") then
-			local tArr
-			if (cat[cIndex] == "Weapon Crate Placement Mode") then
-				tArr = atkArray
+		-- Render ammo icon for weapon and utility crate.
+		-- But hide this from prying eyes of your enemies online!
+		if IsHogLocal(CurrentHedgehog) then
+			local ammoFrame
+			if (cat[cIndex] == "Weapon Crate Placement Mode") or (cat[cIndex] == "Utility Crate Placement Mode") then
+				local tArr
+				if (cat[cIndex] == "Weapon Crate Placement Mode") then
+					tArr = atkArray
+				else
+					tArr = utilArray
+				end
+
+				-- Get ammo icon
+				ammoFrame = tArr[pIndex][1] - 1
+			end
+			if ammoFrame then
+				local xDisplacement = 42
+				local yDisplacement = 42
+				local x = CursorX + yDisplacement
+				local y = CursorY + yDisplacement
+
+				-- Border around ammo icon
+				if not ammoIconBorder then
+					ammoIconBorder = AddVisualGear(x, y, vgtStraightShot, sprCustom1, true, 3)
+				end
+				SetVisualGearValues(ammoIconBorder, x, y, 0, 0, 0, 0, 1000, nil, 1000)
+
+				-- Ammo icon
+				if not ammoIcon then
+					ammoIcon = AddVisualGear(x, y, vgtStraightShot, sprAMAmmos, true, 3)
+				end
+				SetVisualGearValues(ammoIcon, x, y, 0, 0, 0, ammoFrame, 1000, nil, 1000)
+
 			else
-				tArr = utilArray
-			end
-
-			-- Get ammo icon
-			ammoFrame = tArr[pIndex][1] - 1
-		end
-		if ammoFrame then
-			local xDisplacement = 42
-			local yDisplacement = 42
-			local x = CursorX + yDisplacement
-			local y = CursorY + yDisplacement
-
-			-- Border around ammo icon
-			if not ammoIconBorder then
-				ammoIconBorder = AddVisualGear(x, y, vgtStraightShot, sprCustom1, false, 3)
-			end
-			SetVisualGearValues(ammoIconBorder, x, y, 0, 0, 0, 0, 1000, nil, 1000)
-
-			-- Ammo icon
-			if not ammoIcon then
-				ammoIcon = AddVisualGear(x, y, vgtStraightShot, sprAMAmmos, false, 3)
-			end
-			SetVisualGearValues(ammoIcon, x, y, 0, 0, 0, ammoFrame, 1000, nil, 1000)
-
-		else
-			-- Cleanup vgears if not placing ammo crates
-			if ammoIcon then
-				DeleteVisualGear(ammoIcon)
-			end
-			if ammoIconBorder then
-				DeleteVisualGear(ammoIconBorder)
+				-- Cleanup vgears if not placing ammo crates
+				if ammoIcon then
+					DeleteVisualGear(ammoIcon)
+				end
+				if ammoIconBorder then
+					DeleteVisualGear(ammoIconBorder)
+				end
 			end
 		end
 	end
@@ -1359,6 +1368,8 @@ function updateCost()
 
 	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then return end
 
+	-- Fallback cost
+	placedExpense = 1
 	if pMode[pIndex] == "Healing Station" then
 		placedExpense = 50
 	elseif pMode[pIndex] == "Weapon Filter" then
@@ -1381,9 +1392,25 @@ function updateCost()
 		placedExpense = atkArray[pIndex][2]
 	elseif cat[cIndex] == "Utility Crate Placement Mode" then
 		placedExpense = utilArray[pIndex][2]
+	elseif cat[cIndex] == "Health Crate Placement Mode" then
+		placedExpense = 5
+	elseif cat[cIndex] == "Mine Placement Mode" then
+		placedExpense = 15
+	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
+		placedExpense = 20
+	elseif cat[cIndex] == "Barrel Placement Mode" then
+		placedExpense = 10
+	elseif cat[cIndex] == "Girder Placement Mode" then
+		placedExpense = 1
+	elseif cat[cIndex] == "Rubber Placement Mode" then
+		placedExpense = 3
 	end
 
-	AddCaption(string.format(loc("Cost: %d"), placedExpense), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
+	-- Hide cost from spectators.
+	-- Also, this information is hidden cuz it could be used to infer e.g. crate contents.
+	if IsHogLocal(CurrentHedgehog) then
+		AddCaption(string.format(loc("Cost: %d"), placedExpense), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
+	end
 
 end
 
@@ -1423,14 +1450,21 @@ function showModeMessage()
 		str = GetAmmoName(amGirder)
 	elseif cat[cIndex] == "Rubber Placement Mode" then
 		str = GetAmmoName(amRubber)
+	elseif cat[cIndex] == "Sticky Mine Placement Mode" then
+		str = GetAmmoName(amSMine)
 	elseif cat[cIndex] == "Weapon Crate Placement Mode"
-	or cat[cIndex] == "Utility Crate Placement Mode"
-	or cat[cIndex] == "Sticky Mine Placement Mode" then
+	or cat[cIndex] == "Utility Crate Placement Mode" then
 		str = GetAmmoName(val)
+	elseif cat[cIndex] == "Health Crate Placement Mode" then
+		str = tostring(val)
 	else
 		str = tostring(val)
 	end
-	AddCaption(str, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+	-- Hide the mode message from prying enemy eyes except for the structure placer.
+	-- So stuff like crate contents or mine timers are secret.
+	if cat[cIndex] == "Structure Placement Mode" or IsHogLocal(CurrentHedgehog) then
+		AddCaption(str, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+	end
 end
 
 function rotateMode(pDir)
