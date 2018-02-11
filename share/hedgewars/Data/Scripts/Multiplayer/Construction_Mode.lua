@@ -108,15 +108,6 @@ local tempID_CheckProximity = nil -- temporary structure variable for CheckProxi
 local cGear = nil -- detects placement of girders and objects (using airattack)
 local uniqueStructureID = 0 -- Counter and ID for structures. Is incremented each time a structure spawns
 
---[[ Hacky workaround for object placer: Since this thing is
-based on the drill strike, it allows the 5 timer keys to be
-pressed, causing the announcer to show up.
-This variable counts the number of ticks to count down until
-to overwrite this anouncer message.
--1 means “do nothing”. ]]
-local checkForSpecialWeaponsIn = -1
-local lastWep = amNothing -- helper variable to track the previous hack
-
 -- Colors
 local colorClanTag = 0x00ff00ff
 
@@ -135,8 +126,8 @@ local colorMessageError = 0xFFFFFFFF
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
 local amCMStructurePlacer = amAirAttack
-local amCMCratePlacer = amNapalm
-local amCMObjectPlacer = amDrillStrike
+local amCMCratePlacer = amMineStrike
+local amCMObjectPlacer = amNapalm
 
 -- Config variables (script parameter)
 local conf_initialEnergy = 550
@@ -194,7 +185,6 @@ local atkArray = {
 	--{amRCPlane,	25*costFactor},
 	{amSMine,	 5*costFactor},
 
-	--{amMineStrike,15*costFactor},
 	--{amPiano,	40*costFactor},
 
 	{amPickHammer,	 2*costFactor},
@@ -983,16 +973,6 @@ function HandleStructures()
 
 end
 
-function checkForSpecialWeapons()
-
-	if (GetCurAmmoType() == amCMObjectPlacer) then
-		AddCaption(loc("Object Placer"),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpAmmoinfo)
-	end
-
-	lastWep = GetCurAmmoType()
-
-end
-
 ------------------------
 -- SOME GENERAL METHODS
 ------------------------
@@ -1231,17 +1211,6 @@ function HandleConstructionMode()
 			HandleBorderEffects()
 		end
 
-		if (TurnTimeLeft ~= TurnTime) then
-			if (lastWep ~= GetCurAmmoType()) then
-				checkForSpecialWeapons()
-			elseif checkForSpecialWeaponsIn == 0 then
-				checkForSpecialWeapons()
-				checkForSpecialWeaponsIn = -1
-			else
-				checkForSpecialWeaponsIn = checkForSpecialWeaponsIn - 1
-			end
-		end
-
 		if GameTime % 100 == 0 then
 
 			-- Force-update the construction mode tools every 100ms.
@@ -1441,8 +1410,6 @@ function onTimer(key)
 		end
 	end
 
-	checkForSpecialWeaponsIn = 1
-
 end
 
 -- [Switch]: Set mine time to 0 (only in mine placement mode)
@@ -1569,8 +1536,8 @@ function initialSetup(gear)
 	AddAmmo(gear, amRubber, 0)
 	AddAmmo(gear, amTeleport, 0)
 
-	-- Mine strike is broken, so we force-remove it
-	AddAmmo(gear, amMineStrike, 0)
+	-- Drill strike is broken, so we force-remove it
+	AddAmmo(gear, amDrillStrike, 0)
 
 	-- Everything else is set by the weapon scheme.
 	-- Infinite switch is recommended.
@@ -1586,7 +1553,7 @@ function onGameStart()
 				loc("Build a fortress and destroy your enemy.") .. "|" ..
 				loc("There are a variety of structures available to aid you.") .. "|" ..
 				loc("Use the structure placer to place structures.")
-				, 4, 5000
+				, -amCMStructurePlacer, 5000
 				)
 
 	SetAmmoTexts(amCMStructurePlacer, loc("Structure Placer"), loc("Construction Mode tool"), loc("Build one of multiple different structures|to aid you in victory, at the cost of energy.") .. "| |" ..
@@ -1732,11 +1699,6 @@ function onGearAdd(gear)
 	local gt = GetGearType(gear)
 	if (gt == gtAirAttack) or (gt == gtTeleport) or (gt == gtGirder) then
 		cGear = gear
-	elseif (gt == gtMine) or (gt == gtExplosives) or (gt == gtSMine) then
-		curWep = GetCurAmmoType()
-		if curWep == amCMObjectPlacer then
-			checkForSpecialWeaponsIn = 1
-		end
 	end
 
 	if isATrackedGear(gear) then
