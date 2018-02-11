@@ -32,6 +32,7 @@ A Space Adventure:
  + Hard Flying: Display personal best at mission start
  + Killing the Specialists: Add event messages and graphical effects
  * Killing the Specialists: Fix very misleading hints in mission panel
+ * Killing the Specialists: Fix number of rounds measured being way too low
 
 A Classic Fairytale:
  + Mission 3: Display number of turns left at timed parcours

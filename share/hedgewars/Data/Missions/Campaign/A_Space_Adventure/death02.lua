@@ -33,6 +33,7 @@ local hero = {
 	bazookaAmmo = 2,
 	grenadeAmmo = 4,
 }
+local heroTurns = 0
 local enemies = {
 	{ name = GetAmmoName(amMortar), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
 	{ name = GetAmmoName(amDEagle), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
@@ -111,6 +112,8 @@ function onNewTurn()
 	end
 	if CurrentHedgehog ~= hero.gear then
 		enemyWeapons()
+	else
+		heroTurns = heroTurns + 1
 	end
 end
 
@@ -215,17 +218,20 @@ end
 function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
-	local record = tonumber(GetCampaignVar("FastestSpecialistsKill"))
-	if record ~= nil and TotalRounds >= record then
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), heroTurns))
+	local record = tonumber(GetCampaignVar("FastestSpecialistsWin"))
+	if record ~= nil and heroTurns >= record then
 		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
 	end
-	if record == nil or TotalRounds < record then
-		SaveCampaignVar("FastestSpecialistsKill", tostring(TotalRounds))
+	if record == nil or heroTurns < record then
+		SaveCampaignVar("FastestSpecialistsWin", tostring(heroTurns))
 		if record ~= nil then
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
 	end
+	-- An old version of this mission was buggy and stored a turn record WAY too low.
+	-- Let's clear the broken variable (FastestSpecialistsKill) here.
+	SaveCampaignVar("FastestSpecialistsKill", "")
 	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
 	sendSimpleTeamRankings({teamA.name, teamB.name})
 	SaveCampaignVar("Mission11Won", "true")
