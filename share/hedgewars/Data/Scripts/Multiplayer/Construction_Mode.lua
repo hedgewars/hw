@@ -1215,7 +1215,7 @@ local ammoIconBorder = nil
 
 -- Handle cursor stuff. This displays a sprite under the cursor so you can see what you're going to place.
 function HandleCursor()
-	if curAmmo == amCMStructurePlacer or curAmmo == amCMObjectPlcer or curAmmo == amCMCratePlacer then
+	if curWep == amCMStructurePlacer or curWep == amCMObjectPlacer or curWep == amCMCratePlacer then
 		local dFrame = 0
 		local dSprite
 		local yOffset = 0
@@ -1286,6 +1286,17 @@ function HandleCursor()
 					DeleteVisualGear(ammoIconBorder)
 				end
 			end
+		end
+	else
+		-- Cleanup vgears
+		if cursorIcon then
+			DeleteVisualGear(cursorIcon)
+		end
+		if ammoIcon then
+			DeleteVisualGear(ammoIcon)
+		end
+		if ammoIconBorder then
+			DeleteVisualGear(ammoIconBorder)
 		end
 	end
 end
