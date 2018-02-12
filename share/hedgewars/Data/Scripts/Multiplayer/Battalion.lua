@@ -1147,19 +1147,21 @@ function onKingDeath(KingHog)
   local msgColor = getHogInfo(KingHog, 'clanColor')
 
   AddCaption(string.format(loc("The king of %s has died!"), team), 0xFFFFFFFF, capgrpGameState)
-  PlaySound(sndByeBye)
-  DismissTeam(team)
 
-  -- for hog, val in pairs(hogInfo) do
-  --   if getHogInfo(hog, 'team') == team then
-  --     hp = GetHealth(hog)
-  --     if hp ~= nil and hp > 0 then
-  --       SetState(KingHog, gstHHDeath)
-  --       SetHealth(hog, 0)
-  --       SetGearValues(hog, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0)
-  --     end
-  --   end
-  -- end
+  -- Kill the rest of the team normally, just like the official King Mode game modifier
+  for hog, val in pairs(hogInfo) do
+    if getHogInfo(hog, 'team') == team then
+      hp = GetHealth(hog)
+      if hp ~= nil and hp > 0 then
+        SetState(KingHog, gstHHDeath)
+        SetHealth(hog, 0)
+        SetGearValues(hog, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0)
+      end
+    end
+  end
+
+  -- We don't use DismissTeam, it causes a lot of problems and nasty side-effects.
+
 end
 
 function onPointsKill(gear)
@@ -1654,7 +1656,7 @@ function onGameStart()
   elseif mode == 'king' then
     txt = txt .. " |"
     txt = txt .. loc("--- King Mode ---").."|"
-    txt = txt .. loc("Protect the King: When the king dies, the team is vaporized").."|"
+    txt = txt .. loc("Protect the King: When the king dies, so does the team").."|"
     txt = txt .. string.format(loc("Turns: King's health is set to %d%% of the team health"), kingLinkPerc).."|"
     icon = 0 -- Golden Crown
   elseif mode == 'points' then
