@@ -247,7 +247,9 @@ local mode = 'default' -- Which game type to play
 local modeExplicit = false -- Whether the mode was set in script param
 local luck = 100 -- Multiplier for bonuses like crates
 local strength = 1 -- Multiplier for more weapons
-local mutate = false -- Whether or not to mutate the hogs
+local useVariantHats = true -- Whether to overwrite the hog hats to those of their variants
+                            -- In King Mode, crowns are always enforced regardless of this setting
+local useVariantNames = false -- Whether to overwrite the hog names to those of their variants
 
 local highHasBonusWeps = false -- whether or not a hog got bonus weapons on current turn
 local highHasBonusHelp = false -- whether or not a hog got bonus helpers on current turn
@@ -633,11 +635,28 @@ end
   ##############################################################################
 ]]--
 
-function MutateHog(hog)
+-- Overwrite hog hat to that of its variant
+function SetHogVariantHat(hog)
   local var = getHogInfo(hog, 'variant')
-
-  SetHogName(hog, variants[var]["name"])
   SetHogHat(hog, variants[var]["hat"])
+end
+
+-- Give a crown if the hog is a king.
+-- Strip the hog from its crown if
+-- it is not a king.
+function SetHogVariantHatKingMode(hog)
+  local var = getHogInfo(hog, 'variant')
+  if var == "King" then
+    SetHogHat(hog, variants[var]["hat"])
+  elseif GetHogHat(hog) == "crown" then
+    SetHogHat(hog, "NoHat")
+  end
+end
+
+-- Overwrite hog name to that of its variant
+function SetHogVariantName(hog)
+  local var = getHogInfo(hog, 'variant')
+  SetHogName(hog, variants[var]["name"])
 end
 
 function GetRandomVariant()
@@ -1481,8 +1500,11 @@ function onParameters()
     end
   end
 
+  if params['mutatenames'] ~= nil then
+    useVariantNames = params['mutatenames']
+  end
   if params['mutate'] ~= nil then
-    mutate = params['mutate']
+    useVariantHats = params['mutate']
   end
 
   if params['strength'] ~= nil and tonumber(params['strength']) > 0 then
@@ -1605,8 +1627,16 @@ function onGameStart()
   if mode ~= 'points' then
     runOnGears(setHogVariant)
     runOnGears(setupHogTurn)
-    if mutate ~= false and mutate ~= 'false' then
-      runOnGears(MutateHog)
+    if useVariantNames ~= false and useVariantNames ~= 'false' then
+      runOnGears(SetHogVariantName)
+    end
+    if useVariantHats ~= false and useVariantHats ~= 'false' then
+        runOnGears(SetHogVariantHat)
+    elseif mode == 'king' then
+        -- If variant hats are disabled but we're in King Mode,
+        -- we still change *some* hats to make sure only kings
+        -- wear crows. Otherwise, you don't know who's the king!
+        runOnGears(SetHogVariantHatKingMode)
     end
   end
 

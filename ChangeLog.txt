@@ -28,6 +28,9 @@ Styles and game modes:
  + Racer: Use dark waypoints in bright themes like Bath
  + Racer, Tech Racer: Various other waypoint appearance improvements
  + Battalion: Minor message and visual improvements
+ + Battalion: Mutate hog hats by default, but not the names
+ + Battalion: Script parameter “mutatenames=true” to also change the hog names (default: false)
+ + Battalion (King Mode): Kings always wear crowns and non-kings don't, regardless of settings
  + Battalion (King Mode): If the king dies, the hogs die normally instead of disappearing
  * Battalion: Some texts in the mission panel were wrong and misleading
  * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
