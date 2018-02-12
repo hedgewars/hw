@@ -804,7 +804,7 @@ end
  :
  : Has a 7% chance to be empty.
 ]]--
-function onWeaponCratePickup()
+function onWeaponCratePickup(crate)
   local factor = 1 * strength
   local msgColor = GetClanColor(GetHogClan(CurHog))
   PlaySound(sndShotgunReload)
@@ -841,7 +841,7 @@ function onWeaponCratePickup()
   AddAmmo(CurHog, randAmmo, GetAmmoCount(CurHog, randAmmo) +factor)
   if IsHogLocal(CurHog) then
     AddCaption(string.format(loc("%s (+%d)"), GetAmmoName(randAmmo), factor), msgColor, capgrpMessage)
-    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
+    local effect = AddVisualGear(GetX(crate), GetY(crate) +cratePickupGap, vgtAmmo, 0, true)
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmo, nil, nil, nil, msgColor)
   end
 end
@@ -850,7 +850,7 @@ end
  :
  : Has a 7% chance to be empty.
 ]]--
-function onUtilityCratePickup()
+function onUtilityCratePickup(crate)
   local factor = 1 * strength
   local msgColor = GetClanColor(GetHogClan(CurHog))
   PlaySound(sndShotgunReload)
@@ -884,7 +884,7 @@ function onUtilityCratePickup()
   AddAmmo(CurHog, randUtility, GetAmmoCount(CurHog, randUtility) +factor)
   if IsHogLocal(CurHog) then
     AddCaption(string.format(loc("%s (+%d)"), GetAmmoName(randUtility), factor), msgColor, capgrpMessage)
-    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
+    local effect = AddVisualGear(GetX(crate), GetY(crate) +cratePickupGap, vgtAmmo, 0, true)
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, randUtility, nil, nil, nil, msgColor)
   end
 end
@@ -895,11 +895,11 @@ function onPickupCrate(crate)
   -- Check if the crate is fake
   if pos % posCaseDummy >= 1 then
     if pos % posCaseDummy == posCaseAmmo then
-      onWeaponCratePickup()
+      onWeaponCratePickup(crate)
     elseif pos % posCaseDummy == posCaseHealth then
       onHealthCratePickup()
     elseif pos % posCaseDummy == posCaseUtility then
-      onUtilityCratePickup()
+      onUtilityCratePickup(crate)
     end
   end
 end
