@@ -333,6 +333,7 @@ local pointsToHlp = {} -- List of [points] = {ammo1, ammo2}
 local wepPoints = {}
 local hlpPoints = {}
 
+local firstTurnOver = false
 local suddenDeath = false
 
 local healthCrateChance = 7
@@ -1294,6 +1295,9 @@ function setupHogTurn(hog)
 end
 
 function onEndTurn()
+  if not firstTurnOver then
+    firstTurnOver = true
+  end
   local anyHog = nil
   for team, val in pairs(teamNames) do
     -- Count amount of alive hogs in team
@@ -1418,8 +1422,12 @@ function onNewTurn()
 
   if suddenDeath == true then
     onSuddenDeathTurn()
-  elseif (TotalRounds + 1 >= 1) then
-    AddCaption(string.format(loc("Round %d (Sudden Death in round %d)"), (TotalRounds +1), (SuddenDeathTurns +2)), 0xFFFFFFFF,  capgrpGameState)
+  else
+    local RoundsTillSD = (SuddenDeathTurns+2) - (TotalRounds+1)
+    -- Show SD reminder every couple of turns, and in the first turn
+    if (not firstTurnOver) or (RoundsTillSD <= 6) or (RoundsTillSD <= 25 and RoundsTillSD % 5 == 0) or (RoundsTillSD % 10 == 0) then
+        AddCaption(string.format(loc("Rounds until Sudden Death: %d"), RoundsTillSD), 0xFFFFFFFF, capgrpGameState)
+    end
   end
 
   -- Generate new weapons for last hog if it's still alive
