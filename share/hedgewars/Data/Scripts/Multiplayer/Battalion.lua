@@ -1120,12 +1120,9 @@ function onHighlandKill(gear)
 
     hpDiff = div(deathMaxHP * highEnemyKillHPBonus, 100)
     newHP = curHP + hpDiff
-    SetHealth(CurHog, newHP)
-
-    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) - cratePickupGap, vgtHealthTag, hpDiff, false)
-    -- Set Tint
-    SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurHog)))
-  -- Friendly fire! Remove all weapons and helpers from pool
+    HealHog(CurHog, newHP)
+  -- Friendly fire! Punish hog by removing weapons and helpers from pool
+  -- and reduce health
   else
     highWeapons[CurHog] = {}
     highHelpers[CurHog] = {}
@@ -1235,7 +1232,10 @@ end
   ##############################################################################
 ]]--
 
-function calcKingHP()
+function calcKingHP(doEffects)
+  if doEffects == nil then
+     doEffects = true
+  end
   local teamKings = {}
   local teamHealth = {}
 
@@ -1260,23 +1260,30 @@ function calcKingHP()
   for team, hog in pairs(teamKings) do
     local hp = GetHealth(hog)
     local newHP = div(teamHealth[team] * kingLinkPerc, 100)
-    local diff = newHP - hp
 
     -- Set hitpoints to 1 if no other hog is alive or only has 1 hitpoint
     if newHP <= 0 then
       newHP = 1
-      diff = 0
     end
 
-    if diff < 0 then
-      diff = -diff
-    end
+    local diff = math.abs(newHP - hp)
 
-    if hp ~= newHP then
-      SetHealth(hog, newHP)
-      local effect = AddVisualGear(GetX(hog), GetY(hog) - cratePickupGap, vgtHealthTag, diff, false)
-      -- Set Tint
-      SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
+    -- Change HP and do some nice effects
+    if newHP ~= hp then
+        if not doEffects then
+            SetHealth(hog, newHP)
+        else
+            if newHP > hp then
+                HealHog(hog, diff, false)
+            elseif newHP < hp then
+                SetHealth(hog, newHP)
+                if doEffects then
+                    local effect = AddVisualGear(GetX(hog), GetY(hog) - cratePickupGap, vgtHealthTag, diff, false)
+                    -- Set Tint
+                    SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
+                end
+            end
+        end
     end
   end
 end
@@ -1606,7 +1613,7 @@ function onGameStart()
   end
 
   if mode == 'king' then
-    calcKingHP()
+    calcKingHP(false)
   end
 
   local txt = ''
