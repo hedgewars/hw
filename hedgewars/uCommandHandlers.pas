@@ -76,8 +76,6 @@ begin
         SendIPC(_S'Q');
         GameState:= gsExit
         end
-    else
-        ParseCommand('chat team', true);
 end;
 
 procedure chHalt (var s: shortstring);

@@ -56,6 +56,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"zoomout",   "wheeldown",  QT_TRANSLATE_NOOP("binds", "zoom out"),        NULL, NULL},
     {"zoomreset", "mousem",     QT_TRANSLATE_NOOP("binds", "reset zoom"),      NULL, NULL},
     {"chat",      "t",          QT_TRANSLATE_NOOP("binds", "chat"),            QT_TRANSLATE_NOOP("binds (categories)", "Miscellaneous"), QT_TRANSLATE_NOOP("binds (descriptions)", "Talk to your team or all participants:")},
+    {"chat team", "u",          QT_TRANSLATE_NOOP("binds", "team chat"),       NULL, NULL},
     {"history",   "`",          QT_TRANSLATE_NOOP("binds", "chat history"),    NULL, NULL},
     {"pause",     "p",          QT_TRANSLATE_NOOP("binds", "pause"),           NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pause, continue or leave your game:")},
     {"quit",      "escape",     QT_TRANSLATE_NOOP("binds", "quit"),            NULL, NULL},
