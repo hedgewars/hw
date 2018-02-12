@@ -798,13 +798,9 @@ function onHealthCratePickup()
   -- Add extra 10% of hogs base hp to heal
   healHp = healHp + div(getHogInfo(CurHog, 'maxHp'), 10)
 
-  AddCaption(string.format(loc("+%d"), healHp), msgColor, capgrpMessage)
+  HealHog(CurHog, healHp)
 
   SetEffect(CurHog, hePoisoned, 0)
-  SetHealth(CurHog, hogHealth + healHp)
-  local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtHealthTag, healHp, false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-  SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, msgColor)
 end
 
 --[[
@@ -848,7 +844,7 @@ function onWeaponCratePickup()
 
   AddAmmo(CurHog, randAmmo, GetAmmoCount(CurHog, randAmmo) +factor)
   if IsHogLocal(CurHog) then
-    AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
+    AddCaption(string.format(loc("%s (+%d)"), GetAmmoName(randAmmo), factor), msgColor, capgrpMessage)
     local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmo, nil, nil, nil, msgColor)
   end
@@ -891,7 +887,7 @@ function onUtilityCratePickup()
   
   AddAmmo(CurHog, randUtility, GetAmmoCount(CurHog, randUtility) +factor)
   if IsHogLocal(CurHog) then
-    AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
+    AddCaption(string.format(loc("%s (+%d)"), GetAmmoName(randUtility), factor), msgColor, capgrpMessage)
     local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, randUtility, nil, nil, nil, msgColor)
   end
