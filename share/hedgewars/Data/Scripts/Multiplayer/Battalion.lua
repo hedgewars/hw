@@ -738,8 +738,8 @@ end
 
 function getHogInfo(hog, info)
   if hog == nil then
-    AddCaption(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
-    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
+    WriteLnToChat("ERROR [getHogInfo]: Hog is nil!")
+    WriteLnToConsole("ERROR [getHogInfo]: Hog is nil!")
     return
   end
 
@@ -752,8 +752,8 @@ end
 
 function setHogInfo(hog)
   if hog == nil then
-    AddCaption(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
-    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
+    WriteLnToChat("ERROR [getHogInfo]: Hog is nil!")
+    WriteLnToConsole("ERROR [getHogInfo]: Hog is nil!")
     return
   end
 
