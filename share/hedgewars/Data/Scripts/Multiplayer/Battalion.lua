@@ -244,6 +244,7 @@ local LastTeam = nil -- Last Team
 local CurTeam = nil -- Current Team
 
 local mode = 'default' -- Which game type to play
+local modeExplicit = false -- Whether the mode was set in script param
 local luck = 100 -- Multiplier for bonuses like crates
 local strength = 1 -- Multiplier for more weapons
 local mutate = false -- Whether or not to mutate the hogs
@@ -1465,6 +1466,9 @@ function onParameters()
 
   if params['mode'] ~= nil then
     mode = params['mode']
+    if mode == "default" or mode == "king" or mode == "points" or mode == "highland" then
+       modeExplicit = true
+    end
   end
 
   if params['mutate'] ~= nil then
@@ -1616,10 +1620,10 @@ function onGameStart()
     txt = txt .. loc("Helpers: Hogs will get 1 out of 2 helpers randomly each turn") .. "|"
     txt = txt .. loc("Crates: Crates drop randomly with chance of being empty") .. "|"
     txt = txt .. loc("Last Resort: Having less than 25% base health gives kamikaze") .. "|"
-    txt = txt .. loc("Modifiers: Unlimited ammo, per-hog ammo") .. "|"
+    txt = txt .. loc("Modifiers: Unlimited attacks, per-hog ammo") .. "|"
   else
     txt = txt .. loc("Crates: Crates drop randomly and may be empty") .. "|"
-    txt = txt .. loc("Modifiers: Unlimited ammo, shared clan ammo") .. "|"
+    txt = txt .. loc("Modifiers: Unlimited attacks, shared clan ammo") .. "|"
   end
 
   if luck ~= 100 then
@@ -1632,7 +1636,7 @@ function onGameStart()
 
   if mode == 'highland' then
     txt = txt .. " |"
-    txt = txt .. loc("--- Highland ---").."|"
+    txt = txt .. loc("--- Highland Mode ---").."|"
     txt = txt .. string.format(loc("Enemy kills: Collect victim's weapons and +%d%% of its base health"), highEnemyKillHPBonus).."|"
     txt = txt .. string.format(loc("Friendly kills: Clear killer's pool and -%d%% of its base health"), highFriendlyKillHPBonus).."|"
     txt = txt .. string.format(loc("Turns: Hogs get %d random weapon(s) from their pool"), highPickupCount).."|"
@@ -1641,13 +1645,13 @@ function onGameStart()
     icon = 1 -- Target
   elseif mode == 'king' then
     txt = txt .. " |"
-    txt = txt .. loc("--- King ---").."|"
-    txt = txt .. loc("Variants: The last hog of each team will be a king").."|"
+    txt = txt .. loc("--- King Mode ---").."|"
+    txt = txt .. loc("Protect the King: When the king dies, the team is vaporized").."|"
     txt = txt .. string.format(loc("Turns: King's health is set to %d%% of the team health"), kingLinkPerc).."|"
     icon = 0 -- Golden Crown
   elseif mode == 'points' then
     txt = txt .. " |"
-    txt = txt .. loc("--- Points ---").."|"
+    txt = txt .. loc("--- Points Mode ---").."|"
     txt = txt .. loc("Variants: Kings and air generals are disabled").."|"
     txt = txt .. string.format(loc("Weapons: Each team starts with %d weapon points"), pointsWepBase).."|"
     txt = txt .. string.format(loc("Helpers: Each team starts with %d helper points"), pointsHlpBase).."|"
@@ -1664,7 +1668,8 @@ function onGameStart()
   txt = txt .. loc("Water: Rises by 37 per turn").."|"
   txt = txt .. loc("Health: Hogs lose up to 7% base health per turn").."|"
 
-  if mode == 'default' then
+  -- Add hint if mode was not set in script parameter, or set incorrectly
+  if not modeExplicit then
     txt = txt .. " |"
     txt = txt .. loc("--- Hint ---").."|"
     txt = txt .. loc("Modes: Activate “highland”, “king” or “points” mode by putting mode=<name>|into the script parameter").."|"
