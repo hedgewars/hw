@@ -3812,6 +3812,7 @@ const cAngleSpeed =   3;
 var
     HHGear: PGear;
     i: LongInt;
+    s: ansistring;
     dX, dY : hwFloat;
     fChanged: boolean;
     trueAngle: Longword;
@@ -3890,12 +3891,17 @@ begin
     else
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-    if (HHGear <> nil) and ((HHGear^.Message and gmAttack) <> 0) and (Gear^.Health <> 0) then
+    if (HHGear <> nil) and ((HHGear^.Message and gmAttack) <> 0) then
         begin
-        HHGear^.Message := HHGear^.Message and (not gmAttack);
-        AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY *
-        _0_5, 0);
-        dec(Gear^.Health)
+        if (Gear^.Health) <> 0 then
+            begin
+            HHGear^.Message := HHGear^.Message and (not gmAttack);
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY *
+            _0_5, 0);
+            dec(Gear^.Health)
+            end;
+        s:= ansistring(inttostr(Gear^.Health));
+        AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
         end;
 
     if (HHGear <> nil) and ((HHGear^.Message and gmLJump) <> 0) and ((Gear^.State and gsttmpFlag) = 0) then
@@ -4156,6 +4162,7 @@ var
     HHGear: PGear;
     fuel, i: LongInt;
     move: hwFloat;
+    s: ansistring;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
     if HHGear = nil then
@@ -4217,6 +4224,8 @@ begin
             PlaySound(sndBirdyLay);
             dec(Gear^.FlightTime)
             end;
+        s:= ansistring(inttostr(Gear^.FlightTime));
+        AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
         end;
 
     if HHGear^.Message and (gmUp or gmPrecise or gmLeft or gmRight) <> 0 then
