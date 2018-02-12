@@ -15,7 +15,7 @@
 
 --[[
   ########################################################################
-  Todo/Idea-List
+  TODO / ideas list
   ########################################################################
 
   - Make Hogs sorted by rareness for teams with less hogs (more fair)
@@ -42,9 +42,8 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 --  hitpoints, chances and more
 local variants = {}
 local varName = ""
-local newLine = ""--string.char(0x0A)
+local newLine = ""
 local gmAny = 0xFFFFFFFF
-local version = "0.33"
 
 --[[
   ##############################################################################
@@ -432,9 +431,7 @@ end
 
 function AddHogAmmo(hog, ammo)
   -- Add weapons of variant
-  --for key, val in pairs(variants[var]["weapons"]) do
   for key, val in pairs(ammo) do
-    --AddAmmo(hog, val, 1)
     AddAmmo(hog, val, GetAmmoCount(hog, val) +1)
   end
 end
@@ -738,8 +735,8 @@ end
 
 function getHogInfo(hog, info)
   if hog == nil then
-    WriteLnToChat("ERROR [getHogInfo]: Hog is nil!")
-    WriteLnToConsole("ERROR [getHogInfo]: Hog is nil!")
+    WriteLnToChat("ERROR [getHogInfo]: hog is nil!")
+    WriteLnToConsole("ERROR [getHogInfo]: hog is nil!")
     return
   end
 
@@ -752,8 +749,8 @@ end
 
 function setHogInfo(hog)
   if hog == nil then
-    WriteLnToChat("ERROR [getHogInfo]: Hog is nil!")
-    WriteLnToConsole("ERROR [getHogInfo]: Hog is nil!")
+    WriteLnToChat("ERROR [setHogInfo]: hog is nil!")
+    WriteLnToConsole("ERROR [setHogInfo]: hog is nil!")
     return
   end
 
@@ -1013,13 +1010,13 @@ function onGearAdd(gear)
   elseif gearType == gtRCPlane then
     SetHealth(gear, 2)
   elseif gearType == gtAirBomb then
-    -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
+    -- Set Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 20)
   elseif gearType == gtCake then
-    -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
+    -- Set Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 50)
   elseif gearType == gtDEagleShot then
-    -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
+    -- Set Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 12)
   end
 end
@@ -1126,7 +1123,7 @@ function onHighlandKill(gear)
     SetHealth(CurHog, newHP)
 
     local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) - cratePickupGap, vgtHealthTag, hpDiff, false)
-    -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+    -- Set Tint
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurHog)))
   -- Friendly fire! Remove all weapons and helpers from pool
   else
@@ -1142,7 +1139,7 @@ function onHighlandKill(gear)
     end
 
     local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) - cratePickupGap, vgtHealthTag, hpDiff, false)
-    -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+    -- Set Tint
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurHog)))
   end
 end
@@ -1195,11 +1192,11 @@ function onPointsKill(gear)
   pointsPerTeam[team]['helpers'] = pointsPerTeam[team]['helpers'] + 1
 
   local effect = AddVisualGear(GetX(CurHog) - (cratePickupGap / 2), GetY(CurHog), vgtHealthTag, 2, false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFFFFFFFF)
 
   local effect = AddVisualGear(GetX(CurHog) + (cratePickupGap / 2), GetY(CurHog), vgtHealthTag, 1, false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0x444444FF)
 end
 
@@ -1278,7 +1275,7 @@ function calcKingHP()
     if hp ~= newHP then
       SetHealth(hog, newHP)
       local effect = AddVisualGear(GetX(hog), GetY(hog) - cratePickupGap, vgtHealthTag, diff, false)
-      -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+      -- Set Tint
       SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
     end
   end
@@ -1359,11 +1356,11 @@ function savePoints(hog)
   end
 
   local effect = AddVisualGear(GetX(hog) - (cratePickupGap / 2), GetY(hog), vgtHealthTag, pointsPerTeam[team]['weapons'], false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFFFFFFFF)
 
   local effect = AddVisualGear(GetX(hog) + (cratePickupGap / 2), GetY(hog), vgtHealthTag, pointsPerTeam[team]['helpers'], false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0x444444FF)
 end
 
@@ -1549,11 +1546,6 @@ function onGameStart()
     shuffle(group['all'])
   -- We are in points mode, setup other weapons
   elseif mode == 'points' then
-    --variants['King']['chance'] = 0
-    --if variants['Air General'] ~= nil then
-    --  variants['Air General']['chance'] = 0
-    --end
-
     -- Translate [ammo] -> points to [points] -> {ammo1, ammo2}
     for ammoType, ammoPoints in pairs(pointsWeaponVal) do
       if pointsToWep[ammoPoints] == nil then
@@ -1581,10 +1573,6 @@ function onGameStart()
 
     table.sort(wepPoints)
     table.sort(hlpPoints)
-
-    -- All done, sort the table
-    --table.sort(pointsToWep)
-    --table.sort(pointsToHlp)
   end
 
   -- Initial Hog Setup
@@ -1658,7 +1646,7 @@ function onGameStart()
     txt = txt .. loc("--- King ---").."|"
     txt = txt .. loc("Variants: The last hog of each team will be a king").."|"
     txt = txt .. string.format(loc("Turns: King's health is set to %d%% of the team health"), kingLinkPerc).."|"
-    icon = 0 -- Golen Crown
+    icon = 0 -- Golden Crown
   elseif mode == 'points' then
     txt = txt .. " |"
     txt = txt .. loc("--- Points ---").."|"
@@ -1671,7 +1659,6 @@ function onGameStart()
     icon = -amGrenade -- Grenade
   end
 
-  --txt = txt .. "Switch: Max. 3 times a game per team, cooldown of 5 turns|"
   txt = txt .. " |"
   txt = txt .. loc("--- Sudden Death ---").."|"
   txt = txt .. loc("Weapons: Nearly every hog variant gets 1 kamikaze").."|"
