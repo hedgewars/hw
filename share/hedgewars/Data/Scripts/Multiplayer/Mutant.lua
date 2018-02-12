@@ -98,6 +98,9 @@ local totalKills = 0
 -- Total damage
 local totalDamage = 0
 
+local mutantHat = "WhySoSerious"
+local feederHat = "poke_slowpoke"
+
 function rules()
 
 	local ruleSet = loc("Rules: ") .. "|" ..
@@ -330,7 +333,32 @@ function onGameTick()
 
 end
 
+--[[
+Forces the special mutant/feeder names and hats only to be
+taken by those who deserved it.
+Names and hats will be changed (and ridiculed) if neccesary.
+]]
+function exposeIdentityTheft(gear)
+    local lon = string.lower(GetHogName(gear)) -- lowercase origina name
+    local name, hat
+    -- Change name if hog uses a reserved one
+    if lon == "mutant" or lon == string.lower(loc("Mutant")) then
+       SetHogName(gear, loc("Identity Thief"))
+       SetHogHat(gear, "Disguise")
+    elseif lon == "bottom feeder" or lon == string.lower(loc("Bottom Feeder")) then
+       -- Word play on "Bottom Feeder". Someone who is low on cotton. :D
+       -- Either translate literally or make up your ow word play
+       SetHogName(gear, loc("Cotton Needer"))
+       SetHogHat(gear, "StrawHat")
+    end
+    -- Strip hog off its special hat
+    if GetHogHat(gear) == mutantHat or GetHogHat(gear) == feederHat then
+       SetHogHat(gear, "NoHat")
+    end
+end
+
 function saveStuff(gear)
+    exposeIdentityTheft(gear)
     setGearValue(gear,"Name",GetHogName(gear))
     setGearValue(gear,"Hat",GetHogHat(gear))
 end
@@ -522,7 +550,7 @@ end
 function setFeeder(gear)
     if gear~= mutant and gear~= nil then
         SetHogName(gear, loc("Bottom Feeder"))
-        SetHogHat(gear, 'poke_slowpoke')
+        SetHogHat(gear, feederHat)
         setGearValue(gear,"Feeder", true)
     end
 end
@@ -531,7 +559,7 @@ function setMutantStuff(gear)
     mutant = gear
 
     SetHogName(gear, loc("Mutant"))
-    SetHogHat(gear,'WhySoSerious')
+    SetHogHat(gear, mutantHat)
     SetHealth(gear, ( mutant_base_health + numhhs*25) )
     SetEffect(gear, hePoisoned, 1)
     setGearValue(mutant,"SelfDestruct",false)
