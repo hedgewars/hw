@@ -242,7 +242,6 @@ local LastHog = nil -- Last Hedgehog
 local CurHog = nil -- Current Hedgehog
 local LastTeam = nil -- Last Team
 local CurTeam = nil -- Current Team
-local TurnEnded = true -- Boolean whether current turn ended or not
 
 local mode = 'default' -- Which game type to play
 local luck = 100 -- Multiplier for bonuses like crates
@@ -1293,7 +1292,7 @@ function setupHogTurn(hog)
   addTurnAmmo(hog)
 end
 
-function onTurnEnd()
+function onEndTurn()
   local anyHog = nil
   for team, val in pairs(teamNames) do
     -- Count amount of alive hogs in team
@@ -1415,7 +1414,6 @@ function onNewTurn()
   LastTeam = CurTeam
   CurHog = CurrentHedgehog
   CurTeam = getHogInfo(CurHog, 'team')
-  TurnEnded = false
 
   if suddenDeath == true then
     onSuddenDeathTurn()
@@ -1446,13 +1444,6 @@ function onNewTurn()
 
   -- Set LastWaterLine to the current water line
   LastWaterLine = WaterLine
-end
-
-function onGameTick20()
-  if TurnEnded == false and TurnTimeLeft <= 0 then
-    TurnEnded = true
-    onTurnEnd()
-  end
 end
 
 --[[
