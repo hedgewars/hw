@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg2"
+   version="1.1"
+   width="16"
+   height="64">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Carlos Vives B.</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6" />
+  <path
+     style="color:#000000;fill:#ad5825;fill-opacity:0.97628456;fill-rule:nonzero;stroke:#c8a92c;stroke-width:1.73254383;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="path2884"
+     d="m 12.272497,8.4255676 a 4.5063076,4.5063076 0 1 1 -9.012615,0 4.5063076,4.5063076 0 1 1 9.012615,0 z"
+     transform="matrix(0.57718597,0,0,0.57718597,3.5174643,51.136881)" />
+  <path
+     transform="matrix(0.48723869,0,0,0.48723869,4.2160119,35.894737)"
+     d="m 12.272497,8.4255676 a 4.5063076,4.5063076 0 1 1 -9.012615,0 4.5063076,4.5063076 0 1 1 9.012615,0 z"
+     id="path3630"
+     style="color:#000000;fill:#ad5825;fill-opacity:0.97628456;fill-rule:nonzero;stroke:#c8a92c;stroke-width:2.05238217;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  <path
+     style="color:#000000;fill:#ad5825;fill-opacity:0.97628456;fill-rule:nonzero;stroke:#c8a92c;stroke-width:1.32086337;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="path3632"
+     d="m 12.272497,8.4255676 a 4.5063076,4.5063076 0 1 1 -9.012615,0 4.5063076,4.5063076 0 1 1 9.012615,0 z"
+     transform="matrix(0.75708055,0,0,0.75708055,2.1203692,17.621166)" />
+  <path
+     transform="matrix(0.43791409,0,0,0.43791409,4.5990761,4.3103248)"
+     d="m 12.272497,8.4255676 a 4.5063076,4.5063076 0 1 1 -9.012615,0 4.5063076,4.5063076 0 1 1 9.012615,0 z"
+     id="path3634"
+     style="color:#000000;fill:#ad5825;fill-opacity:0.97628456;fill-rule:nonzero;stroke:#c8a92c;stroke-width:2.28355289;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  <rect
+     style="color:#000000;fill:#545c9d;fill-opacity:1;fill-rule:nonzero;stroke:#9aa3dc;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="rect3603"
+     x="-38.614849"
+     y="21.853107"
+     width="0"
+     height="0"
+     rx="128"
+     ry="128" />
+</svg>

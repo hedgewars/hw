@@ -15,6 +15,7 @@ Frontend:
  * Fix broken preview of team hats (e.g. cap_team)
 
 Content:
+ + Major overhaul of Sudden Death visuals in most themes
  + New flag: uk_scotland
  + New voice: Default_pl (Polish)
 
