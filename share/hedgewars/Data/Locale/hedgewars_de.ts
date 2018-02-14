@@ -1774,7 +1774,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Can&apos;t delete last team</source>
-        <translation>Kann letztes Team nicht löchen</translation>
+        <translation>Kann letztes Team nicht löschen</translation>
     </message>
     <message>
         <source>You can&apos;t delete the last team!</source>
@@ -1899,7 +1899,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation>Deine Igel können sich nicht bewegen, gib Dein Bestes im Fernkampf</translation>
+        <translation>Deine Igel können sich nicht bewegen, gib dein Bestes im Fernkampf</translation>
     </message>
     <message>
         <source>Random</source>
@@ -2755,7 +2755,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Bitte gib entwerder deinen YouTube-Kontonamen oder die entsprechende eMail-Adresse des Google-Kontos an.</translation>
+        <translation>Bitte gib entweder deinen YouTube-Kontonamen oder die entsprechende E-Mail-Adresse des Google-Kontos an.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
@@ -3749,7 +3749,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation>Deine gewählte Waffe feuern oder dein Werkzeug benutzen: </translation>
+        <translation>Deine gewählte Waffe feuern oder dein Werkzeug benutzen:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
@@ -3821,7 +3821,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Heads-up display:</source>
-        <translation>Heads-up display:</translation>
+        <translation>Heads-Up-Display:</translation>
     </message>
 </context>
 <context>
