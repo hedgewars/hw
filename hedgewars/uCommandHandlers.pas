@@ -26,7 +26,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions, uConsole
     , uVisualGearsList, uGearsHedgehog
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
@@ -614,19 +614,21 @@ if LocalMessage and (gmPrecise or gmSwitch) = (gmPrecise or gmSwitch) then
          UIDisplay:= uiNone
     else UIDisplay:= uiAll
     end
-else if LocalMessage and gmPrecise = gmPrecise then
-    begin
-    if ((GameFlags and gfInvulnerable) = 0) then
-        cTagsMask:= cTagsMasks[cTagsMask]
-    else
-        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
-    end
 else
     begin
     if UIDisplay <> uiNoTeams then
          UIDisplay:= uiNoTeams
     else UIDisplay:= uiAll
     end
+end;
+
+procedure chRotateTags(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+if ((GameFlags and gfInvulnerable) = 0) then
+    cTagsMask:= cTagsMasks[cTagsMask]
+else
+    cTagsMask:= cTagsMasksNoHealth[cTagsMask]
 end;
 
 procedure chSpeedup_p(var s: shortstring);
@@ -822,6 +824,7 @@ begin
     RegisterVariable('spectate', @chFastUntilLag   , false);
     RegisterVariable('capture' , @chCapture      , true );
     RegisterVariable('rotmask' , @chRotateMask   , true );
+    RegisterVariable('rottags' , @chRotateTags   , true );
     RegisterVariable('rdriven' , @chTeamLocal    , false);
     RegisterVariable('map'     , @chSetMap       , false);
     RegisterVariable('theme'   , @chSetTheme     , false);

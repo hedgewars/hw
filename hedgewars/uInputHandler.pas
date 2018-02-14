@@ -281,6 +281,7 @@ begin
     DefaultBinds[KeyNameToCode('escape')]:= 'quit';
     DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
     DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
+    DefaultBinds[KeyNameToCode('home')]:= 'rottags';
 
     //numpad
     //DefaultBinds[265]:= '+volup';

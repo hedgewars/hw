@@ -69,6 +69,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"+speedup",  "s",          QT_TRANSLATE_NOOP("binds", "speed up replay"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Demo replay:")},
     //: This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen
     {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "toggle team bars"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Heads-up display:")},
+    {"rottags",   "home",       QT_TRANSLATE_NOOP("binds", "change hedgehog tags"), NULL, NULL},
 #ifdef VIDEOREC
     {"record",    "r",          QT_TRANSLATE_NOOP("binds", "record"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}
 #endif
