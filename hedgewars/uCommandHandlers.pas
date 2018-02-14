@@ -628,9 +628,15 @@ s:= s; // avoid compiler hint
 // Rotate Tags key + Switch: Toggle translucency only
 if LocalMessage and gmSwitch = gmSwitch then
     if ((cTagsMask and htTransparent) = 0) then
-        cTagsMask:= cTagsMask or htTransparent
+        begin
+        cTagsMask:= cTagsMask or htTransparent;
+        cPrevTagsMask:= cPrevTagsMask or htTransparent
+        end
     else
-        cTagsMask:= cTagsMask and (not htTransparent)
+        begin
+        cTagsMask:= cTagsMask and (not htTransparent);
+        cPrevTagsMask:= cPrevTagsMask and (not htTransparent)
+        end
 // Rotate Tags key + Precise: Toggle all tags on and off
 else if LocalMessage and gmPrecise = gmPrecise then
     if ((cTagsMask and (htTeamName or htName or htHealth)) = 0) then
