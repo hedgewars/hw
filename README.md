@@ -50,7 +50,7 @@ The most important default controls are:
 * Right mouse button: Open ammo menu
 * Left mouse button: Select target or weapon
 * Space bar: Shoot
-* Left shift: Precise
+* Left shift: Precise (this is a modifier key)
 * Left shift + Up/Down: Precise aiming
 * Enter: Jump
 * Backspace: High jump
@@ -61,6 +61,7 @@ The most important default controls are:
 * P: Pause (also shows mission panel)
 * Esc: Quit with prompt (also shows mission panel)
 * T: Chat
+* U: Team chat
 
 For the full list, go to the Hedgewars settings. Also read the weapon tooltips
 for weapon-specific controls.
@@ -70,12 +71,11 @@ for weapon-specific controls.
 These are lesser-known controls of Hedgewars, they are based on your
 configured controls:
 
-* Confirm: Team chat (if not confirming quit)
 * Hold down Precise: Prevent slipping on ice
-* Precise + Left/Right: Turn around
-* Precise + Toggle team bars: Change hedgehog tabs
+* Precise + Left/Right: Turn around without walking
+* Precise + Toggle team bars: Change hedgehog tags
 * Precise + Toggle team bars + Switch: Toggle HUD
-* Precise + Screenshot: Save current map + mask in Screenshot directory
+* Precise + Capture (screenshot key): Save current map + mask into Screenshot directory
 
 Installation instructions
 -------------------------
