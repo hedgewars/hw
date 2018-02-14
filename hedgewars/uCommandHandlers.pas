@@ -625,14 +625,14 @@ end;
 procedure chRotateTags(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-// Rotate Tags key + Precise: Toggle translucency only
-if LocalMessage and gmPrecise = gmPrecise then
+// Rotate Tags key + Switch: Toggle translucency only
+if LocalMessage and gmSwitch = gmSwitch then
     if ((cTagsMask and htTransparent) = 0) then
         cTagsMask:= cTagsMask or htTransparent
     else
         cTagsMask:= cTagsMask and (not htTransparent)
-// Rotate Tags key + Switch: Toggle all tags on and off
-else if LocalMessage and gmSwitch = gmSwitch then
+// Rotate Tags key + Precise: Toggle all tags on and off
+else if LocalMessage and gmPrecise = gmPrecise then
     if ((cTagsMask and (htTeamName or htName or htHealth)) = 0) then
         cTagsMask:= cPrevTagsMask
     else
