@@ -26,13 +26,13 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions, uConsole
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
     , uVisualGearsList, uGearsHedgehog
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 0, 1, 2, 0, 0, 0, 0, 11, 8, 9, 10, 8, 8, 8, 8);
 
 procedure chGenCmd(var s: shortstring);
 begin
@@ -625,11 +625,19 @@ end;
 procedure chRotateTags(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if ((GameFlags and gfInvulnerable) = 0) then
-    cTagsMask:= cTagsMasks[cTagsMask]
+// Rotate Tags key + Precise: Toggle translucency only
+if LocalMessage and gmPrecise = gmPrecise then
+    if ((cTagsMask and htTransparent) = 0) then
+        cTagsMask:= cTagsMask or htTransparent
+    else
+        cTagsMask:= cTagsMask and (not htTransparent)
+// Just the rotate tags key: Rotate hog tags
 else
-    cTagsMask:= cTagsMasksNoHealth[cTagsMask]
-end;
+    if ((GameFlags and gfInvulnerable) = 0) then
+        cTagsMask:= cTagsMasks[cTagsMask]
+    else
+        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
+    end;
 
 procedure chSpeedup_p(var s: shortstring);
 begin

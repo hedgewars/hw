@@ -8,6 +8,7 @@ Game:
  + Show remaining ammo when using Birdy egg or RC Plane bomb
  + Add separate control for team chat (default: U)
  + Add separate control for changing hedgehog tags (default: Home)
+ + Hedgehog tag translucency is now changed with Precise + Change hedgehog tags key
  * Fix time box being usable in Sudden Death with 0 health decrease
  * Fix chat input key being sometimes registered twice
 
