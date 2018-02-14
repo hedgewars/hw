@@ -123,6 +123,7 @@ var
     cSDCloudsNumber  : LongWord;
 
     cTagsMask        : byte;
+    cPrevTagsMask    : byte;
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
@@ -2624,6 +2625,7 @@ begin
 {$ENDIF}
 
     cTagsMask:= htTeamName or htName or htHealth;
+    cPrevTagsMask:= cTagsMask;
 end;
 
 procedure initScreenSpaceVars();

@@ -631,13 +631,25 @@ if LocalMessage and gmPrecise = gmPrecise then
         cTagsMask:= cTagsMask or htTransparent
     else
         cTagsMask:= cTagsMask and (not htTransparent)
-// Just the rotate tags key: Rotate hog tags
+// Rotate Tags key + Switch: Toggle all tags on and off
+else if LocalMessage and gmSwitch = gmSwitch then
+    if ((cTagsMask and (htTeamName or htName or htHealth)) = 0) then
+        cTagsMask:= cPrevTagsMask
+    else
+        begin
+        cPrevTagsMask:= cTagsMask;
+        cTagsMask:= cTagsMask and (not (htTeamName or htName or htHealth))
+        end
+// Rotate Tags key only: Rotate hog tags
 else
+    begin
+    cPrevTagsMask:= cTagsMask;
     if ((GameFlags and gfInvulnerable) = 0) then
         cTagsMask:= cTagsMasks[cTagsMask]
     else
         cTagsMask:= cTagsMasksNoHealth[cTagsMask]
     end;
+end;
 
 procedure chSpeedup_p(var s: shortstring);
 begin
