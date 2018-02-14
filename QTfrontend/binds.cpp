@@ -58,7 +58,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"chat",      "t",          QT_TRANSLATE_NOOP("binds", "chat"),            QT_TRANSLATE_NOOP("binds (categories)", "Miscellaneous"), QT_TRANSLATE_NOOP("binds (descriptions)", "Talk to your team or all participants:")},
     {"chat team", "u",          QT_TRANSLATE_NOOP("binds", "team chat"),       NULL, NULL},
     {"history",   "`",          QT_TRANSLATE_NOOP("binds", "chat history"),    NULL, NULL},
-    {"pause",     "p",          QT_TRANSLATE_NOOP("binds", "pause"),           NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pause, continue or leave your game:")},
+    {"pause",     "p",          QT_TRANSLATE_NOOP("binds", "pause / auto skip"),NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pause, continue or leave your game:")},
     {"quit",      "escape",     QT_TRANSLATE_NOOP("binds", "quit"),            NULL, NULL},
     {"confirm",   "y",          QT_TRANSLATE_NOOP("binds", "confirmation"),    NULL, NULL},
     {"+voldown",  "9",          QT_TRANSLATE_NOOP("binds", "volume down"),     NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Modify the game's volume while playing:")},

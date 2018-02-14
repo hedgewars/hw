@@ -47,7 +47,8 @@ begin
     t:= 0;
     while (TeamsArray[t] <> CurrentTeam) do inc(t);
 
-    SendHogSpeech(#1 + char(t) + 'AFK');
+    // TODO: Localize
+    AddChatString(#2 + CurrentTeam^.TeamName + ' automatically skipped turn.');
 
     ParseCommand('/skip', true)
 end;

@@ -86,7 +86,7 @@
 01:19=Extreme
 01:20=%1 Sprungkraft
 01:21=Audio stumm
-01:22=Abwesenheitsmodus
+01:22=Automatisches Überspringen aktiv
 01:23=Autokamera aus
 01:24=Autokamera an
 01:25=Zieltaste drücken, um das Ziel zu markieren
