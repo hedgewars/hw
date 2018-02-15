@@ -75,8 +75,8 @@ for weapon-specific controls.
 These are lesser-known controls of Hedgewars, they are based on your
 configured controls:
 
-* Precise + Change hedgehog tags: Turn all hedgehog tags on and off
-* Switch + Change hedgehog tags: Toggle hedgehog tag translucency
+* Precise + Toggle hedgehog tags: Change visible hedgehog tags (team name/hog name/health)
+* Switch + Toggle hedgehog tags: Toggle hedgehog tag translucency
 * Precise + Toggle team bars + Switch: Toggle HUD
 * Precise + Capture (screenshot key): Save current map + mask into Screenshot directory
 
