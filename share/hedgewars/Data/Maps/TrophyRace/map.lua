@@ -13,6 +13,9 @@ local numhhs = 0
 -- store hedgehog gears
 local hhs = {}
 
+-- count how many hogs each clan has
+local hogsByClan = {}
+
 -- store best time per team
 local clantimes = {}
 
@@ -79,6 +82,7 @@ function onGameStart()
     for i=0, ClansCount-1 do
         clantimes[i] = 0
     end
+    SendAchievementsStatsOff()
 end
 
 function onAmmoStoreInit()
@@ -201,11 +205,63 @@ function onGameTick()
     end
 end
 
+function WriteStats()
+   if besthog then
+       SendStat(siCustomAchievement, string.format(loc("The fastest hedgehog was %s from %s with a time of %.3fs."), besthogname, GetHogTeamName(besthog), besttime/1000))
+   else
+       SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
+   end
+
+   -- Write most skips
+   local mostSkips = 2 -- a minimum skip threshold is required
+   local mostSkipsTeam = nil
+   for i=0, TeamsCount-1 do
+      local teamName = GetTeamName(i)
+      local stats = GetTeamStats(teamName)
+      if stats.TurnSkips > mostSkips then
+          mostSkips = stats.TurnSkips
+          mostSkipsTeam = teamName
+      end
+   end
+   if mostSkipsTeam then
+       SendStat(siMaxTurnSkips, tostring(mostSkips) .. " " .. mostSkipsTeam)
+   end
+end
+
 function onGearAdd(gear)
     if GetGearType(gear) == gtHedgehog then
         hhs[numhhs] = gear
         times[numhhs] = 0
         numhhs = numhhs + 1
+        local clan = GetHogClan(gear)
+        if not hogsByClan[clan] then
+            hogsByClan[clan] = 0
+        end
+        hogsByClan[clan] = hogsByClan[clan] + 1
+    end
+end
+
+function areTwoOrMoreClansLeft()
+    local clans = 0
+    for i=0, ClansCount-1 do
+        if hogsByClan[i] >= 1 then
+            clans = clans + 1
+        end
+        if clans >= 2 then
+            return true
+        end
+    end
+    return false
+end
+
+function onGearDelete(gear)
+    if GetGearType(gear) == gtHedgehog then
+        local clan = GetHogClan(gear)
+
+        hogsByClan[clan] = hogsByClan[clan] - 1
+        if not areTwoOrMoreClansLeft() then
+            WriteStats()
+        end
     end
 end
 
@@ -214,3 +270,4 @@ function onAchievementsDeclaration()
         DeclareAchievement("rope race", team, "TrophyRace", time)
     end
 end
+
