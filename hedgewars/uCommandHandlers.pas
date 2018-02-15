@@ -649,7 +649,11 @@ else if LocalMessage and gmPrecise = gmPrecise then
 // Rotate Tags key only: Toggle all hog tags on and off
 else
     if ((cTagsMask and (htTeamName or htName or htHealth)) = 0) then
-        cTagsMask:= cPrevTagsMask
+        begin
+        cTagsMask:= cPrevTagsMask;
+        if ((GameFlags and gfInvulnerable) <> 0) then
+            cTagsMask:= cTagsMask and (not htHealth);
+        end
     else
         begin
         cPrevTagsMask:= cTagsMask;
