@@ -125,6 +125,7 @@ function onGameTick()
     end
     if CurrentHedgehog ~= nil and TurnTimeLeft == 1 then
         killHog()
+        AddCaption(loc("Time's up!"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
     elseif CurrentHedgehog ~= nil then
         x, y = GetGearPosition(CurrentHedgehog)
         if not reached and x > goal_area[1] and x < goal_area[1] + goal_area[3] and y > goal_area[2] and y < goal_area[2] + goal_area[4] then -- hog is within goal rectangle
@@ -185,8 +186,15 @@ function onGameTick()
                 hscore = hscore .. "|" .. string.format(loc("Team %d: "), i+1) .. tt
             end
             
-            ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
+            local strtime = string.format(loc("Time: %.3fs"), (ttime/1000))
+            ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!") .. "| |" .. strtime .. hscore, 0, 0)
+            AddCaption(strtime, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
             EndTurn(true)
+        else
+            if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and CurrentHedgehog ~= nil and GetHealth(CurrentHedgehog) > 0 and (not reached) and GameTime%100 == 0 then
+                local ttime = GameTime-startTime
+                AddCaption(string.format(loc("Time: %.1fs"), (ttime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+            end
         end
     end
 end
