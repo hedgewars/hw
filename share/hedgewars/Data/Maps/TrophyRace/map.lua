@@ -157,15 +157,19 @@ function onGameTick()
                 besttime = ttime
                 besthog = CurrentHedgehog
                 besthogname = GetHogName(besthog)
-                fastestStr = loc("NEW fastest lap: %.3fs by %s")
             else
-                fastestStr = loc("Fastest lap: %.3fs by %s")
             end
+            fastestStr = loc("Fastest lap: %.3fs by %s")
             if ttime > worsttime then
                 worsttime = ttime
                 worsthog = CurrentHedgehog
             end
-            hscore = hscore .. string.format(fastestStr, (besttime / 1000), besthogname)
+
+            if worsthog then
+                hscore = hscore ..  string.format(loc("Round's slowest lap: %.3fs by %s"), (worsttime / 1000), GetHogName(worsthog))
+            end
+
+            hscore = hscore .. " |" .. string.format(fastestStr, (besttime / 1000), besthogname)
             
             if clan == ClansCount -1 then
                 -- Time for elimination - worst hog is out and the worst hog vars are reset.
@@ -179,18 +183,11 @@ function onGameTick()
                 worsthog = nil
             end
 
-            -- print list of best team times
-            hscore = hscore .. "| |" .. loc("Best laps per team: ") .. "|"
-            for teamName, teamTime in pairs(bestTimes) do
-                if teamTime ~= 0 and teamTime ~= nil then
-                    -- <Team name>: <best team time in seconds>
-                    hscore = hscore .. "|" .. string.format(loc("%s: %.3fs"), teamName, (teamTime / 1000))
-                end
-            end
-
-            local strtime = string.format(loc("Time: %.3fs"), (ttime/1000))
-            ShowMission(loc("TrophyRace"), loc("Status update"), strtime .. hscore, 0, 0)
-            AddCaption(strtime, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+            ShowMission(loc("TrophyRace"), loc("Status update"),
+                string.format(loc("Time: %.3fs by %s"), (ttime/1000), GetHogName(CurrentHedgehog))
+                .. hscore,
+                0, 0)
+            AddCaption(string.format(loc("Time: %.3fs"), (ttime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
             AddCaption(loc("Track completed!"), 0xFFFFFFFF, capgrpGameState)
             EndTurn(true)
         else
