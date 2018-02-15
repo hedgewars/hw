@@ -97,9 +97,11 @@ function killHog()
         lasthog = nil
 end
 
-function onHogAttack()
+function onHogAttack(ammoType)
     if TurnTimeLeft == 0 then
         killHog()
+    elseif ammoType == amRope then
+        HideMission()
     end
 end
 
@@ -131,10 +133,10 @@ function onGameTick()
         if not reached and x > goal_area[1] and x < goal_area[1] + goal_area[3] and y > goal_area[2] and y < goal_area[2] + goal_area[4] then -- hog is within goal rectangle
             reached = true
             local ttime = GameTime-startTime
-            --give it a sound;)
+            -- give it a sound ;)
             if ttime < besttime then
                 PlaySound (sndHomerun)
-            else
+            elseif ttime > worsttime then
                 PlaySound (sndHellish)
             end
             for i = 0, numhhs - 1 do
@@ -205,16 +207,7 @@ function onGearAdd(gear)
         times[numhhs] = 0
         numhhs = numhhs + 1
     end
---    elseif GetGearType(gear) == gtRope then -- rope is shot
 end
-
---function onGearDelete(gear)
---    if GetGearType(gear) == gtRope then -- rope deletion - hog didn't manage to rerope
---        --TurnTimeLeft = 0 -- end turn or not? hm...
---        lasthog = CurrentHedgehog
---        
---    end
---end
 
 function onAchievementsDeclaration()
     for team,time in pairs(bestTimes) do
