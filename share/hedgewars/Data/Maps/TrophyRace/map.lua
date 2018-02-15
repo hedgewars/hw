@@ -152,43 +152,46 @@ function onGameTick()
             if bestTimes[teamname] == nil or bestTimes[teamname] > ttime then
                 bestTimes[teamname] = ttime
             end
+            local fastestStr
             if ttime < besttime then
                 besttime = ttime
                 besthog = CurrentHedgehog
                 besthogname = GetHogName(besthog)
-                hscore = hscore .. loc("NEW fastest lap: ")
+                fastestStr = loc("NEW fastest lap: %.3fs by %s")
             else
-                hscore = hscore .. loc("Fastest lap: ")
+                fastestStr = loc("Fastest lap: %.3fs by %s")
             end
             if ttime > worsttime then
                 worsttime = ttime
                 worsthog = CurrentHedgehog
             end
-            hscore = hscore .. besthogname .. " - " .. (besttime / 1000) .. " s | |" .. loc("Best laps per team: ")
+            hscore = hscore .. string.format(fastestStr, (besttime / 1000), besthogname)
             
             if clan == ClansCount -1 then
                 -- Time for elimination - worst hog is out and the worst hog vars are reset.
                 if worsthog ~= nil then
                     SetHealth(worsthog, 0)
-                    --Place a grenade to make inactive slowest hog active
+                    -- Drop a bazooka to make inactive slowest hog active.
                     x, y = GetGearPosition(worsthog)
                     AddGear(x, y, gtShell, 0, 0, 0, 0)
                 end
                 worsttime = 0
                 worsthog = nil
             end
-            
-            for i=0, ClansCount -1 do
-                local tt = "" .. (clantimes[i] / 1000) .. " s"
-                if clantimes[i] == 0 then
-                    tt = "--"
+
+            -- print list of best team times
+            hscore = hscore .. "| |" .. loc("Best laps per team: ") .. "|"
+            for teamName, teamTime in pairs(bestTimes) do
+                if teamTime ~= 0 and teamTime ~= nil then
+                    -- <Team name>: <best team time in seconds>
+                    hscore = hscore .. "|" .. string.format(loc("%s: %.3fs"), teamName, (teamTime / 1000))
                 end
-                hscore = hscore .. "|" .. string.format(loc("Team %d: "), i+1) .. tt
             end
-            
+
             local strtime = string.format(loc("Time: %.3fs"), (ttime/1000))
-            ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!") .. "| |" .. strtime .. hscore, 0, 0)
+            ShowMission(loc("TrophyRace"), loc("Status update"), strtime .. hscore, 0, 0)
             AddCaption(strtime, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+            AddCaption(loc("Track completed!"), 0xFFFFFFFF, capgrpGameState)
             EndTurn(true)
         else
             if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and CurrentHedgehog ~= nil and GetHealth(CurrentHedgehog) > 0 and (not reached) and GameTime%100 == 0 then
