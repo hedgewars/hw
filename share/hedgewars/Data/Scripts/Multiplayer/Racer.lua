@@ -137,6 +137,7 @@ local teamScore = {}
 --------
 
 local cGear = nil
+local cameraGear = nil -- gear created to center the cameera on
 
 local bestClan = 10
 local bestTime = 1000000
@@ -826,6 +827,15 @@ function onNewTurn()
                         end
                         SetVisualGearValues(wpCirc[i], nil, nil, minO, maxO, nil, flashing, nil, nil, nil, wpCol[i])
                 end
+
+                if cameraGear then
+                        DeleteGear(cameraGear)
+                end
+                -- Move camera to first waypoint
+		-- We use a dummy gear to feed FollowGear. It does not affect the race.
+                cameraGear = AddGear(wpX[0], wpY[0], gtGenericFaller, 0, 0, 0, 5000)
+                SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisible))
+                FollowGear(cameraGear)
         end
 
         if gameOver == true then
@@ -838,7 +848,6 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amMineStrike, 0)
         AddAmmo(CurrentHedgehog, amNapalm, 0)
         AddAmmo(CurrentHedgehog, amPiano, 0)
-
 end
 
 function onGameTick20()
@@ -967,6 +976,8 @@ function onGearDelete(gear)
 
         if GetGearType(gear) == gtAirAttack then
                 cGear = nil
+        elseif gear == cameraGear then
+                cameraGear = nil
         end
 
 end

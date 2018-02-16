@@ -212,6 +212,7 @@ local teamScore = {}
 --------
 
 local cGear = nil
+local cameraGear = nil
 
 local bestClan = 10
 local bestTime = 1000000
@@ -1145,9 +1146,21 @@ function onGameTick20()
         end
 
 
-		if activationStage < 10 then
-				HandleFreshMapCreation()
-		end
+	if activationStage < 10 then
+		HandleFreshMapCreation()
+
+                if not gameOver and gameBegun and not racerActive then
+			if cameraGear then
+				DeleteGear(cameraGear)
+			end
+			-- Move camera to first waypoint.
+			-- We use a dummy gear to feed FollowGear. It does not affect the race.
+			cameraGear = AddGear(wpX[0], wpY[0], gtGenericFaller, 0, 0, 0, 5000)
+			SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisiblee))
+			FollowGear(cameraGear)
+                end
+
+	end
 
 
         -- start the player tumbling with a boom once their turn has actually begun
@@ -1338,12 +1351,14 @@ end
 function onGearDelete(gear)
 
         if isATrackedGear(gear) then
-			trackDeletion(gear)
-		elseif GetGearType(gear) == gtAirAttack then
+		trackDeletion(gear)
+	elseif GetGearType(gear) == gtAirAttack then
                 cGear = nil
         elseif GetGearType(gear) == gtJetpack then
-			jet = nil
-		end
+		jet = nil
+	elseif gear == cameraGear then
+		cameraGear = nil
+	end
 
 end
 
