@@ -225,6 +225,13 @@ function AwardPoints()
 		end
 	end
 
+	-- Update team labels
+	for i = 0,(TeamsCount-1) do
+		if teamNameArr[i] ~= " " then
+			SetTeamLabel(teamNameArr[i], teamScore[teamClan[i]])
+		end
+	end
+
 end
 
 -----------------
@@ -273,6 +280,7 @@ function RebuildTeamInfo()
 
 	-- find out how many hogs per team, and the index of the first hog in hhs
 	for i = 0, (numTeams-1) do
+		SetTeamLabel(GetTeamName(i), "0")
 		for z = 0, (numhhs-1) do
 			if GetHogTeamName(hhs[z]) == teamNameArr[i] then
 				teamClan[i] = GetHogClan(hhs[z])				
@@ -412,22 +420,6 @@ function onNewTurn()
 			TurnTimeLeft = 1
 		end
 
-		totalComment = ""		
-		for i = 0,(TeamsCount-1) do
-				if teamNameArr[i] ~= " " then
-					-- Team scores (“<team name>: <score>”)
-					teamComment[i] = string.format(loc("%s: %d"), teamNameArr[i], teamScore[teamClan[i]]) .. "|"
-					totalComment = totalComment .. teamComment[i]			
-				elseif teamNameArr[i] == " " then
-					teamComment[i] = "|"
-				end
-			end
-			
-			ShowMission(missionName, missionCaption,
-			missionHelp .. "|" ..
-			loc("Team Scores:") .. "|" ..
-			totalComment, 0, 1600)
-	
 	end
 
 end

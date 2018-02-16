@@ -156,7 +156,7 @@ function CheckScore(teamID)
 		end
 		if CurrentHedgehog ~= nil then
 			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)))
-			showMissionAndScorebar()
+			updateScores()
 		end
 	end
 
@@ -184,7 +184,7 @@ function DoFlagStuff(gear)
 		fNeedsRespawn[bbq] = true
 		fCaptures[wtf] = fCaptures[wtf] +1
 		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)))
-		showMissionAndScorebar()
+		updateScores()
 		PlaySound(sndHomerun)
 		fThief[bbq] = nil -- player no longer has the enemy flag
 		CheckScore(wtf)
@@ -472,7 +472,7 @@ function onGameInit()
 
 end
 
-function showMissionAndScorebar(instaHide)
+function showCTFMission()
 	local captures
 	if captureLimit == 1 then
 		captures = string.format(loc("- First team to capture the flag wins"), captureLimit)
@@ -489,26 +489,18 @@ function showMissionAndScorebar(instaHide)
 		loc("- Dropped flags may be returned or recaptured").."|"..
 		loc("- Hogs will be revived")
 
-	local scoreboard = ""
+	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), rules, 0, 0)
+end
 
-	if gameStarted then
-		scoreboard = "|" .. loc("Scores: ") .. "|"
-		for i=0, 1 do
-			scoreboard = scoreboard .. string.format(loc("%s: %d"), teamNameArr[i], fCaptures[i])
-			if i~=1 then scoreboard = scoreboard .. "|" end
-		end
-	end
-	local mission = rules .. scoreboard
-
-	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), mission, 0, 0)
-	if instaHide then
-		HideMission()
+function updateScores()
+	for i=0, 1 do
+		SetTeamLabel(teamNameArr[i], tostring(fCaptures[i]))
 	end
 end
 
 function onGameStart()
 
-	showMissionAndScorebar()
+	showCTFMission()
 
 	RebuildTeamInfo()
 
@@ -547,7 +539,7 @@ function onNewTurn()
 		HandleRespawns()
 	--new method of placing starting flags
 	elseif gameTurns == 1 then
-		showMissionAndScorebar()
+		showCTFMission()
 	elseif gameTurns == 2 then
 		fPlaced[0] = true
 	elseif gameTurns == 3 then

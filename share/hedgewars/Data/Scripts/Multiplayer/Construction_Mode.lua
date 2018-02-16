@@ -1689,7 +1689,7 @@ function onGameStart()
 
 	ShowMission	(
 				loc("CONSTRUCTION MODE"),
-				loc("a Hedgewars mini-game"),
+				loc("A Hedgewars mini-game"),
 				loc("Build a fortress and destroy your enemy.") .. "|" ..
 				loc("There are a variety of structures available to aid you.") .. "|" ..
 				loc("Use the structure placer to place structures.")

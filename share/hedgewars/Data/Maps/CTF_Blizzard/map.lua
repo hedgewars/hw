@@ -1,4 +1,4 @@
---------------------------------
+-------------------------------
 -- CTF_BLIZZARD 0.9
 --------------------------------
 
@@ -119,6 +119,7 @@ local numTeams --  store the number of teams in the game
 local teamNameArr = {}	-- store the list of teams
 local teamSize = {}	-- store how many hogs per team
 local teamIndex = {} -- at what point in the hhs{} does each team begin
+local clanTeams = {} -- list of teams per clan
 
 -------------------
 -- flag variables
@@ -228,11 +229,9 @@ function CheckScore(teamID)
 
 	if teamID == 0 then
 		alt = 1
-		winner = "Red"
 
 	elseif teamID == 1 then
 		alt = 0
-		winner = "Blue"
 	end
 
 	if fCaptures[teamID] == 3 then
@@ -242,7 +241,6 @@ function CheckScore(teamID)
 				SetHealth(hhs[i],0)
 			end
 		end
-		--ShowMission("GAME OVER!", "Victory for the " .. winner .. " Team!", "Hooray!", 0, 0)
 		ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
 	end
 
@@ -253,7 +251,7 @@ function HandleRespawns()
 	for i = 0, 1 do
 
 		if fNeedsRespawn[i] == true then
-			fGear[i] = SpawnAmmoCrate(fSpawnX[i],fSpawnY[i],amSkip)
+			fGear[i] = SpawnFakeAmmoCrate(fSpawnX[i],fSpawnY[i],false,false)
 			--fGear[i] = SpawnHealthCrate(fSpawnX[i],fSpawnY[i])
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
@@ -266,6 +264,7 @@ end
 
 function FlagDeleted(gear)
 
+	PlaySound(sndShotgunReload)
 	if (gear == fGear[0]) then
 		wtf = 0
 		bbq = 1
@@ -292,10 +291,12 @@ function FlagDeleted(gear)
 				fNeedsRespawn[bbq] = true
 				fCaptures[wtf] = fCaptures[wtf] +1					--fCaptures[wtf]
 
-				--ShowMission(LOC_NOT("You have SCORED!!"), "Red Team: " .. fCaptures[0], "Blue Team: " .. fCaptures[1], -amBazooka, 0)
-				ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
+				AddCaption(string.format(loc("%s has scored!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+				for i=1, #clanTeams[wtf] do
+					SetTeamLabel(clanTeams[wtf][i], fCaptures[wtf])
+				end
 
-				PlaySound(sndVictory)
+				PlaySound(sndHomerun)
 				--SetEffect(fThief[bbq], hePoisoned, false)
 				fThief[bbq] = nil -- player no longer has the enemy flag
 				CheckScore(wtf)
@@ -376,9 +377,9 @@ function FlagThiefDead(gear)
 	if fThief[wtf] ~= nil then
 		
 		if fThiefY[wtf] > 2040 then
-			fGear[wtf] = SpawnAmmoCrate(fThiefX[wtf],(fThiefY[wtf]+10),amSkip)
+			fGear[wtf] = SpawnFakeAmmoCrate(fThiefX[wtf],(fThiefY[wtf]+10),false,false)
 		else
-			fGear[wtf] = SpawnAmmoCrate(fThiefX[wtf],(fThiefY[wtf]-50),amSkip)
+			fGear[wtf] = SpawnFakeAmmoCrate(fThiefX[wtf],(fThiefY[wtf]-50),false,false)
 		end
 
 		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
@@ -477,39 +478,12 @@ function RebuildTeamInfo()
 
 	-- make a list of individual team names
 	for i = 0, (TeamsCount-1) do
-		teamNameArr[i] = i
+		teamNameArr[i] = GetTeamName(i)
 		teamSize[i] = 0
 		teamIndex[i] = 0
+		SetTeamLabel(teamNameArr[i], "0")
 	end
-	numTeams = 0
-
-	for i = 0, (numhhs-1) do
-
-		z = 0
-		unfinished = true
-		while(unfinished == true) do
-
-			newTeam = true
-			tempHogTeamName = GetHogTeamName(hhs[i]) -- this is the new name
-
-			if tempHogTeamName == teamNameArr[z] then
-				newTeam = false
-				unfinished = false
-			end
-
-			z = z + 1
-
-			if z == TeamsCount then
-				unfinished = false
-				if newTeam == true then
-					teamNameArr[numTeams] = tempHogTeamName
-					numTeams = numTeams + 1
-				end
-			end
-
-		end
-
-	end
+	numTeams = TeamsCount
 
 	-- find out how many hogs per team, and the index of the first hog in hhs
 	for i = 0, numTeams-1 do
@@ -520,9 +494,16 @@ function RebuildTeamInfo()
 					teamIndex[i] = z -- should give starting index
 				end
 				teamSize[i] = teamSize[i] + 1
-				--add a pointer so this hog appears at i in hhs
+
+				local clan = GetHogClan(hhs[z])
+				-- Also remember the clan to which the team belongs to
+				if not clanTeams[clan] then
+					clanTeams[clan] = {}
+				end
+				table.insert(clanTeams[clan], teamNameArr[i])
 			end
 		end
+
 
 	end
 
@@ -628,7 +609,7 @@ function onGameStart()
 	fSpawnY[1] = 1747
 
 	for i = 0, 1 do
-		fGear[i] = SpawnAmmoCrate(fSpawnX[i],fSpawnY[i],amSkip)
+		fGear[i] = SpawnFakeAmmoCrate(fSpawnX[i],fSpawnY[i],false,false)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 		fCol[i] = GetClanColor(i)
 

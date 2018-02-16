@@ -575,7 +575,6 @@ function RebuildTeamInfo()
 
 	-- make a list of individual team names
 	for i = 0, (TeamsCount-1) do
-		teamNameArr[i] = " " -- = i
 		teamSize[i] = 0
 		teamIndex[i] = 0
 		teamScore[i] = 0
@@ -628,6 +627,10 @@ function RebuildTeamInfo()
 
 	end
 
+	for i=0, TeamsCount-1 do
+		SetTeamLabel(teamNameArr[i], teamScore[i])
+	end
+
 end
 
 -- control
@@ -638,6 +641,7 @@ function AwardPoints(p)
 	for i = 0,(TeamsCount-1) do
 		if teamClan[i] == GetHogClan(CurrentHedgehog) then
 			teamScore[i] = teamScore[i] + p
+			SetTeamLabel(teamNameArr[i], teamScore[i])
 		end
 	end
 
@@ -729,16 +733,11 @@ function CommentOnScore()
 	end
 	local statusText, scoreText
 	if roundNumber >= roundLimit then
-		if teamStats[1].score == teamStats[2].score then
-			statusText = loc("Status Update")
-			scoreText = loc("Team scores:")
-		else
-			statusText = loc("Game over!")
-			scoreText = loc("Final team scores:")
-		end
+		statusText = loc("Game over!")
+		scoreText = loc("Final team scores:")
 	else
-		statusText = loc("Status Update")
-		scoreText = loc("Team scores:")
+		AddCaption(string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit, 0xFFFFFFFF))
+		return
 	end
 	local displayTime
 	if roundNumber >= roundLimit then
@@ -1256,7 +1255,6 @@ function onGameStart()
 				" " .. "|" ..
 
 				string.format(loc("Round Limit: %d"), roundLimit) .. "|" ..
-				string.format(loc("Turn Time: %dsec"), (TurnTime/1000)) .. "|" ..
 				" " .. "|" ..
 
 				loc("Movement: [Up], [Down], [Left], [Right]") .. "|" ..

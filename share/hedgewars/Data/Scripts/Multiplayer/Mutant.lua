@@ -119,8 +119,7 @@ function rules()
 	loc("+2 for becoming the Mutant") .. "|" ..
 	loc("+1 to the Mutant for killing anyone") .. "|" ..
 	loc("+1 to the Bottom Feeder for killing anyone") .. "|" ..
-	loc("-1 to anyone for a suicide") .. "|" ..
-	loc("Other kills don't give you points.")
+	loc("-1 to anyone for a suicide")
 
 	return ruleSet
 
@@ -369,25 +368,12 @@ function armageddon(gear)
     SetHealth(gear, 0)
 end
 
-function updateScore()
-
-    local showScore = ""
-
+function renderScores()
     for i=0, TeamsCount-1 do
         if teams[i]~= nil then
-
-            local curr_score = getTeamValue(teams[i], "Score")
-            showScore = showScore .. string.format(loc("%s: %d (deaths: %d)"), teams[i], curr_score, getTeamValue(teams[i], "DeadHogs")) .. "|"
-
+            SetTeamLabel(teams[i], string.format(loc("Score: %d | Deaths: %d"), getTeamValue(teams[i], "Score"), getTeamValue(teams[i], "DeadHogs")))
         end
     end
-
-    ShowMission(loc("Mutant"),
-                loc("Scores"),
-                showScore, 4, 1)
-
-    HideMission()
-
 end
 
 function checkScore()
@@ -507,11 +493,6 @@ local only_low_score = true
 
     if meh == false then
 		meh = true
-	else
-		ShowMission(    loc("Mutant"),
-                    loc("Scores"),
-                    showScore, 4, 1)
-		HideMission()
 	end
 
     end
@@ -602,6 +583,8 @@ function teamScan()
                 end
             end
         end
+
+        renderScores()
 
         ---***---
 end
@@ -700,7 +683,7 @@ if not gameOver then
         end
         AddVisualGear(GetX(gear), GetY(gear), vgtSmokeRing, 0, false)
         PlaySound(sndWhack)
-        updateScore()
+        renderScores()
     end
 end
 end
