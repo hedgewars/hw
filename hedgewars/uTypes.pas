@@ -405,6 +405,7 @@ type
             OwnerTex,
             GraveTex,
             AIKillsTex,
+            LuaTeamValueTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;
@@ -421,6 +422,8 @@ type
             hasGone: boolean;
             skippedTurns: Longword;
             isGoneFlagPendingToBeSet, isGoneFlagPendingToBeUnset: boolean;
+            luaTeamValue: ansistring;
+            hasLuaTeamValue: boolean;
             end;
 
     TClan = record

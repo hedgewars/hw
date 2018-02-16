@@ -2108,6 +2108,48 @@ begin
     lc_addteam:= 0;//1;
 end;
 
+function lc_setteamlabel(L : Plua_State) : LongInt; Cdecl;
+var teamValue: ansistring;
+    i, n: LongInt;
+    success: boolean;
+begin
+    if CheckAndFetchParamCount(L, 1, 2, 'SetTeamLabel', 'teamname[, label]', n) then
+        begin
+        success:= false;
+        // fetch team
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+
+                // value of type nil? Then let's clear the team value
+                if (n < 2) or lua_isnil(L, 2) then
+                    begin
+                    FreeAndNilTexture(TeamsArray[i]^.LuaTeamValueTex);
+                    TeamsArray[i]^.hasLuaTeamValue:= false;
+                    success:= true;
+                    end
+                // value of type string? Then let's set the team value
+                else if (lua_isstring(L, 2)) then
+                    begin
+                    teamValue:= lua_tostring(L, 2);
+                    TeamsArray[i]^.LuaTeamValue:= teamValue;
+                    FreeAndNilTexture(TeamsArray[i]^.LuaTeamValueTex);
+                    TeamsArray[i]^.LuaTeamValueTex := RenderStringTex(teamValue, TeamsArray[i]^.Clan^.Color, fnt16);
+                    TeamsArray[i]^.hasLuaTeamValue:= true;
+                    success:= true;
+                    end;
+                // don't change more than one team
+                break;
+                end;
+        end;
+    // return true if operation was successful, false otherwise
+    lua_pushboolean(L, success);
+    lc_setteamlabel:= 1;
+end;
+
 function lc_getteamname(L : Plua_State) : LongInt; Cdecl;
 var t: LongInt;
 begin
@@ -3712,6 +3754,7 @@ lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
 lua_register(luaState, _P'GetTeamName', @lc_getteamname);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
+lua_register(luaState, _P'SetTeamLabel', @lc_setteamlabel);
 lua_register(luaState, _P'AddHog', @lc_addhog);
 lua_register(luaState, _P'AddAmmo', @lc_addammo);
 lua_register(luaState, _P'GetAmmoCount', @lc_getammocount);

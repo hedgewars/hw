@@ -261,6 +261,7 @@ for t:= 0 to Pred(TeamsCount) do
         if not allOK then exit;
 
         AIKillsTex := RenderStringTex(ansistring(inttostr(stats.AIKills)), Clan^.Color, fnt16);
+        LuaTeamValueTex := RenderStringTex(LuaTeamValue, Clan^.Color, fnt16);
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;

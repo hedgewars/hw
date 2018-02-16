@@ -1087,11 +1087,12 @@ for t:= 0 to Pred(TeamsCount) do
                     DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
                 end;
 
-        // draw ai kill counter for gfAISurvival
-        if (GameFlags and gfAISurvival) <> 0 then
-            begin
+        // draw Lua value, if set
+        if (hasLuaTeamValue) then
+            DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset, LuaTeamValueTex)
+        // otherwise, draw AI kill counter for gfAISurvival
+        else if (GameFlags and gfAISurvival) <> 0 then
             DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset, AIKillsTex);
-            end;
 
         // if highlighted, draw flag and other contents again to keep their colors
         // this approach should be faster than drawing all borders one by one tinted or not
@@ -1115,7 +1116,13 @@ for t:= 0 to Pred(TeamsCount) do
                 DrawTextureFromRect(-OwnerTex^.w - NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, OwnerTex)
                 end;
 
-            if (GameFlags and gfAISurvival) <> 0 then
+            if (hasLuaTeamValue) then
+                begin
+                r.w:= LuaTeamValueTex^.w - 4;
+                r.h:= LuaTeamValueTex^.h - 4;
+                DrawTextureFromRect(TeamHealthBarWidth + 24, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, LuaTeamValueTex);
+                end
+            else if (GameFlags and gfAISurvival) <> 0 then
                 begin
                 r.w:= AIKillsTex^.w - 4;
                 r.h:= AIKillsTex^.h - 4;
