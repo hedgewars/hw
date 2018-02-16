@@ -145,6 +145,9 @@ function onGameStart()
     end
 -- 1925,263 - Mr. Mine position
     MrMine = AddGear(1925,263,gtMine,0,0,0,0)
+    for i=0, TeamsCount-1 do
+        SetTeamLabel(GetTeamName(i), "0")
+    end
 end
 
 function onAmmoStoreInit()
@@ -508,11 +511,13 @@ function onGameTick20()
                     MaxHeight = 286
                 end
                 if y < MaxHeight and y > 286 then MaxHeight = y end
+                -- New maximum height of this turn?
                 if MaxHeight < hTagHeight then
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
                     hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
                     local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
+                    local score = 32640-hTagHeight
                     -- snagged from space invasion
                     SetVisualGearValues (
                             hTag,        --id
@@ -525,12 +530,15 @@ function onGameTick20()
                             g7,         --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
-                            32640-hTagHeight,    --value
+                            score,    --value
                             99999999999,--timer
                             GetClanColor(GetHogClan(CurrentHedgehog))
                             )
+                    local team = GetHogTeamName(CurrentHedgehog)
+                    SetTeamLabel(team, math.max(score, teamBests[team] or 0))
                 end
 
+                -- New record height?
                 if MaxHeight < RecordHeight then
                     RecordHeight = MaxHeight
                     local oldName = RecordHeightHogName
