@@ -62,6 +62,8 @@ Lua API:
  + New call: SetLaserSight(bool): Toggle laser sight
  + New call: GetWind(): Returns current wind (approximation) from -100 to 100
  + New call: GetTeamName(teamIdx): Returns name of team with given index (starts at 0)
+ + New call: GetTeamIndex(teamname): Returns index of team with given name
+ + New call: GetTeamClan(teamname): Returns clan of team with given name
  + New call: SpawnSupplyCrate(x, y, content, [, amount]): Spawn ammo or utility crate, depending on content
  + New call: HealHog(gearUid, healthBoost[, showMessage[, tint]]): Heal hedgehog with graphical effects and message
  + New call: SetTeamLabel(teamname[, label]): Set an arbitrary label for a team, will be displayed next to the team bar

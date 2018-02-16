@@ -2166,6 +2166,48 @@ begin
     lc_getteamname:= 1;
 end;
 
+function lc_getteamindex(L : Plua_state) : LongInt; Cdecl;
+var i: LongInt;
+    found: boolean;
+begin
+    found:= false;
+    if CheckLuaParamCount(L, 1, 'GetTeamIndex', 'teamname') then
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+                lua_pushnumber(L, i);
+                found:= true;
+                break;
+                end;
+    if (not found) then
+        lua_pushnil(L);
+    lc_getteamindex:= 1;
+end;
+
+function lc_getteamclan(L : Plua_state) : LongInt; Cdecl;
+var i: LongInt;
+    found: boolean;
+begin
+    found:= false;
+    if CheckLuaParamCount(L, 1, 'GetTeamClan', 'teamname') then
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+                lua_pushnumber(L, TeamsArray[i]^.Clan^.ClanIndex);
+                found:= true;
+                break;
+                end;
+    if (not found) then
+        lua_pushnil(L);
+    lc_getteamclan:= 1;
+end;
+
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
 var HHGear: PGear;
     i, h  : LongInt;
@@ -3753,6 +3795,8 @@ lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
 lua_register(luaState, _P'GetTeamName', @lc_getteamname);
+lua_register(luaState, _P'GetTeamIndex', @lc_getteamindex);
+lua_register(luaState, _P'GetTeamClan', @lc_getteamclan);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
 lua_register(luaState, _P'SetTeamLabel', @lc_setteamlabel);
 lua_register(luaState, _P'AddHog', @lc_addhog);
