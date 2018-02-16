@@ -109,8 +109,6 @@ local cGear = nil -- detects placement of girders and objects (using airattack)
 local uniqueStructureID = 0 -- Counter and ID for structures. Is incremented each time a structure spawns
 
 -- Colors
-local colorClanTag = 0x00ff00ff
-
 local colorSupportStation = 0xFFFF00FF
 local colorConstructionStation = 0xFFFFFFFF
 local colorTeleportationNode = 0x0000FFFF
@@ -287,30 +285,38 @@ function IsConstructionModeAmmo(ammoType)
 	ammoType == amTeleport
 end
 
+function RenderClanPower()
+	for i=0, TeamsCount-1 do
+		local name = GetTeamName(i)
+		SetTeamLabel(name, clanPower[GetTeamClan(name)])
+	end
+
+	DrawClanPowerTag()
+end
+
 function DrawClanPowerTag()
 
 	local zoomL = 1.1
 	local xOffset = 45
 	local yOffset = 70
 	local tValue = clanPower[GetHogClan(CurrentHedgehog)]
-	local tCol = colorClanTag
-	-- alternatively:  tCol = GetClanColor(GetHogClan(CurrentHedgehog))
+	local tCol = GetClanColor(GetHogClan(CurrentHedgehog))
 
 	DeleteVisualGear(clanPowerTag)
 	clanPowerTag = AddVisualGear(-div(ScreenWidth, 2) + xOffset, ScreenHeight - yOffset, vgtHealthTag, tValue, false)
 
 	SetVisualGearValues(
-		clanPowerTag, 	-- id
-		nil,		-- x offset (set above)
-		nil,		-- y offset (set above)
-		0, 		-- dx
-		0, 		-- dy
-		zoomL, 		-- zoom
-		1, 		-- ~= 0 means align to screen
-		nil, 		-- frameticks
-		nil, 		-- value (set above)
-		240000, 	-- timer
-		tCol		-- color
+		clanPowerTag,   -- id
+		nil,            -- x offset (set above)
+		nil,            -- y offset (set above)
+		0,              -- dx
+		0,              -- dy
+		zoomL,          -- zoom
+		1,              -- ~= 0 means align to screen
+		nil,            -- frameticks
+		nil,            -- value (set above)
+		240000,         -- timer
+		tCol            -- color
 	)
 
 end
@@ -1073,7 +1079,7 @@ function PlaceObject(x,y)
 		if placed then
 			-- Pay the price
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
-			DrawClanPowerTag()
+			RenderClanPower()
 		else
 			if IsHogLocal(CurrentHedgehog) then
 				AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
@@ -1332,7 +1338,7 @@ function HandleConstructionMode()
 			-- This makes sure the announcer messages don't disappear
 			-- while the tool is selected.
 			if (band(GetState(CurrentHedgehog), gstHHDriven) ~= 0) then
-				DrawClanPowerTag()
+				RenderClanPower()
 				curWep = GetCurAmmoType()
 				HandleConstructionModeTools()
 			else
@@ -1749,6 +1755,7 @@ function onGameStart()
 		teamLMineIndex[team] = 1
 		teamLWeapIndex[team] = 1
 		teamLUtilIndex[team] = 1
+		SetTeamLabel(team, tostring(clanPower[GetTeamClan(team)]))
 	end
 
 	local tMapWidth = RightX - LeftX
@@ -1805,7 +1812,7 @@ function onNewTurn()
 	clanUsedExtraTime[clan] = false
 	clanCratesSpawned[clan] = 0
 
-	DrawClanPowerTag()
+	RenderClanPower()
 end
 
 function onEndTurn()
@@ -1821,7 +1828,7 @@ end
 function onScreenResize()
 	-- redraw Tags so that their screen locations are updated
 	if (CurrentHedgehog ~= nil) then
-		DrawClanPowerTag()
+		RenderClanPower()
 	end
 end
 
