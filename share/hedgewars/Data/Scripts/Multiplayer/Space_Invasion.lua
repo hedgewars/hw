@@ -363,6 +363,7 @@ local lastRound
 local RoundHasChanged = true
 
 -- for script parameters
+-- NOTE: If you change this, also change the default “Space Invasion” game scheme
 local startBarrels = 5		-- "barrels"
 local startShield = 30		-- "shield"
 local startRadShots = 2		-- "pings"

@@ -615,7 +615,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(100)           // rope modfier   40
             << QVariant(100)           // get away time  41
             << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            // NOTE: If you change this, also change the defaults in the Construction Mode script
+            << QVariant("initialenergy=550, energyperround=50, maxenergy=1000, cratesperround=5") // scriptparam    43
             ;
 
     QList<QVariant> spaceinvasion;
@@ -663,7 +664,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(100)           // rope modfier   40
             << QVariant(100)           // get away time  41
             << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            // NOTE: If you change this, also change the defaults in the Space Invasion script
+            << QVariant("rounds=3, shield=30, barrels=5, pings=2, barrelbonus=3, shieldbonus=30, timebonus=4") // scriptparam    43
             ;
 
     QList<QVariant> hedgeeditor;

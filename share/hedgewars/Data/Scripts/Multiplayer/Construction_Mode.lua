@@ -128,6 +128,7 @@ local amCMCratePlacer = amMineStrike
 local amCMObjectPlacer = amNapalm
 
 -- Config variables (script parameter)
+-- NOTE: If you change this, also change the default game scheme “Construction Mode”
 local conf_initialEnergy = 550
 local conf_energyPerRound = 50
 local conf_maxEnergy = 1000
