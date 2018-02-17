@@ -23,6 +23,7 @@ Content:
  + New voice: Default_pl (Polish)
 
 Styles and game modes:
+ + Various styles: Add current score/time next to team bars (where applicable)
  + Construction Mode: Add a few shortcuts
  + Construction Mode: Show selected object at cursor and a crate preview icon
  + Construction Mode: Remember all selections

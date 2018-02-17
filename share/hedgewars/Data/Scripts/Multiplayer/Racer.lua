@@ -461,6 +461,11 @@ function AdjustScores()
                 PlaySound(sndHellish)
         end
 
+        for i = 0, (TeamsCount-1) do
+                if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                        SetTeamLabel(teamNameArr[i], string.format(loc("%.1fs"), teamScore[i]/1000))
+                end
+        end
 
         if bestTime == trackTime then
 

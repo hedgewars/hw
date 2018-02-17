@@ -429,6 +429,11 @@ function AdjustScores()
                 PlaySound(sndHellish)
         end
 
+        for i = 0, (TeamsCount-1) do
+                if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                        SetTeamLabel(teamNameArr[i], string.format(loc("%.1fs"), teamScore[i]/1000))
+                end
+        end
 
         --------
         --new
@@ -1156,7 +1161,7 @@ function onGameTick20()
 			-- Move camera to first waypoint.
 			-- We use a dummy gear to feed FollowGear. It does not affect the race.
 			cameraGear = AddGear(wpX[0], wpY[0], gtGenericFaller, 0, 0, 0, 5000)
-			SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisiblee))
+			SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisible))
 			FollowGear(cameraGear)
                 end
 
