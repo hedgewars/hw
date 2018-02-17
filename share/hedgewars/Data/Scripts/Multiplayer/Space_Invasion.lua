@@ -418,6 +418,14 @@ local awardRoundKills	-- most kills in 1 round (min. 5)
 local awardAccuracy	-- awarded to hog who didn’t miss once in his round, with most kills (min. 5)
 local awardCombo	-- hog with longest combo (min. 5)
 
+
+
+-- Taunt trackers
+local tauntTimer = -1
+local tauntGear = nil
+local tauntSound = nil
+local tauntClanShots = 0 -- hogs of same clans shot in this turn
+
 ---------------------
 -- tumbler goods
 ---------------------
@@ -1089,7 +1097,7 @@ function onLJump()
 			beam = true
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, 300, 1, 0xa800ffff)
 			AddCaption( string.format(loc("Shield ON: %d power remaining"), shieldHealth - 80))
-			PlaySound(sndWarp)
+			PlaySound(sndInvulnerable)
 		else
 			beam = false
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 0, 0, 1, 10, 0, 0, 0, 0xa800ffff)
@@ -1310,6 +1318,9 @@ function onNewTurn()
 	chainLength = 0
 	chainCounter = 0
 
+	tauntClanShots = 0
+	tauntTimer = -1
+
 	-------------------------
 	-- gaudy racer
 	-------------------------
@@ -1400,7 +1411,12 @@ function onGameTick()
 			end
 		end
 
-
+		if tauntTimer > 0 then
+			tauntTimer = tauntTimer - 100
+			if tauntTimer <= 0 and tumbleStarted and not stopMovement then
+				PlaySound(tauntSound, tauntGear)
+			end
+		end
 
 		--nw WriteLnToConsole("Starting ThingsToBeRunOnGears()")
 
@@ -1628,11 +1644,31 @@ function onGameTick()
 end
 
 function onGearDamage(gear, damage)
-	if GetGearType(gear) == gtHedgehog then
-		if (fierceComp == false) and (damage >= 60) and (GetHogClan(gear) ~= GetHogClan(CurrentHedgehog)) then
-			fierceComp = true
-			AddCaption(loc("Fierce Competition! +8 points!"),0xffba00ff,capgrpGameState)
-			AwardPoints(8)
+	if GetGearType(gear) == gtHedgehog and damage >= 60 then
+		if GetHogClan(gear) ~= GetHogClan(CurrentHedgehog) then
+			if (fierceComp == false) then
+				fierceComp = true
+				AddCaption(loc("Fierce Competition! +8 points!"),0xffba00ff,capgrpGameState)
+				AwardPoints(8)
+			end
+
+			tauntTimer = 500
+			tauntGear = gear
+			local r = math.random(1, 2)
+			if r == 1 then
+				tauntSound = sndIllGetYou
+			else
+				tauntSound = sndJustYouWait
+			end
+		elseif gear ~= CurrentHedgehog then
+			tauntTimer = 500
+			tauntGear = gear
+			if tauntClanShots == 0 then
+				tauntSound = sndSameTeam
+			else
+				tauntSound = sndTraitor
+			end
+			tauntClanShots = tauntClanShots + 1
 		end
 	end
 end
@@ -1902,6 +1938,9 @@ function CircleDamaged(i)
 
 		elseif (vType[i] == "blueboss") then
 			PlaySound(sndHellishImpact3)
+			tauntTimer = 300
+			tauntSound = sndEnemyDown
+			tauntGear = CurrentHedgehog
 			AddCaption(loc("Boss defeated! +30 points!"), 0x0050ffff,capgrpMessage)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
@@ -2047,7 +2086,7 @@ function SetMyCircles(s)
 
 end
 
-function WellHeAintGonnaJumpNoMore(x,y,explode)
+function WellHeAintGonnaJumpNoMore(x,y,explode,kamikaze)
 	if explode==true then
 		AddVisualGear(x, y, vgtBigExplosion, 0, false)
 		PlaySound(sndExplosion)
@@ -2058,7 +2097,10 @@ function WellHeAintGonnaJumpNoMore(x,y,explode)
 	playerIsFine = false
 	AddCaption(loc("GOTCHA!"))
 	FailGraphics()
-	PlaySound(sndHellish)
+
+	if not kamikaze then
+		PlaySound(sndHellish)
+	end
 
 	targetHit = true
 
@@ -2219,24 +2261,27 @@ function CheckDistances()
 				ss = CircleDamaged(i)
 				local explosion
 				if vType[i] == "blueboss" then explosion = true else explosion = false end
-				WellHeAintGonnaJumpNoMore(GetX(CurrentHedgehog),GetY(CurrentHedgehog),explosion)
 
+				local kamikaze = false
 				if ss == "fatal" then
-
 					if (wepAmmo[0] == 0) and (TimeLeft <= 9) then
 						AddCaption(loc("Kamikaze Expert! +15 points!"),0xffba00ff,capgrpMessage)
 						AwardPoints(15)
 						PlaySound(sndKamikaze, CurrentHedgehog)
+						kamikaze = true
 					elseif (wepAmmo[0] == 0) then
 						AddCaption(loc("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
 						AwardPoints(5)
 						PlaySound(sndKamikaze, CurrentHedgehog)
+						kamikaze = true
 					elseif TimeLeft <= 9 then
 						AddCaption(loc("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
 						AwardPoints(10)
 						PlaySound(sndKamikaze, CurrentHedgehog)
+						kamikaze = true
 					end
 				end
+				WellHeAintGonnaJumpNoMore(GetX(CurrentHedgehog),GetY(CurrentHedgehog),explosion,kamikaze)
 
 			end
 
