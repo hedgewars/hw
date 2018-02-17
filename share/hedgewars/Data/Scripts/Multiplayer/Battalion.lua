@@ -499,6 +499,10 @@ function GetRandomAmmo(hog, sourceType)
   return ammo
 end
 
+function updatePointsLabel(team)
+  SetTeamLabel(team, string.format(loc("%d / %d"), pointsPerTeam[team]["weapons"], pointsPerTeam[team]["helpers"]))
+end
+
 function addTurnAmmo(hog)
   -- Check if hog is valid
   if hog == nil then
@@ -1203,6 +1207,7 @@ function onPointsKill(gear)
 
   pointsPerTeam[team]['weapons'] = pointsPerTeam[team]['weapons'] + 2
   pointsPerTeam[team]['helpers'] = pointsPerTeam[team]['helpers'] + 1
+  updatePointsLabel(team)
 
   local effect = AddVisualGear(GetX(CurHog) - (cratePickupGap / 2), GetY(CurHog), vgtHealthTag, 2, false)
   -- Set Tint
@@ -1380,6 +1385,8 @@ function savePoints(hog)
     pointsPerTeam[team]['weapons'] = pointsPerTeam[team]['weaponsRem'] + wepWoTax + div(wepToTax * pointsKeepSDPerc, 100)
     pointsPerTeam[team]['helpers'] = pointsPerTeam[team]['helpersRem'] + hlpWoTax + div(hlpToTax * pointsKeepSDPerc, 100)
   end
+
+  updatePointsLabel(team)
 
   local effect = AddVisualGear(GetX(hog) - (cratePickupGap / 2), GetY(hog), vgtHealthTag, pointsPerTeam[team]['weapons'], false)
   -- Set Tint
@@ -1609,6 +1616,7 @@ function onGameStart()
       pointsPerTeam[key] = {}
       pointsPerTeam[key]['weapons'] = pointsWepBase
       pointsPerTeam[key]['helpers'] = pointsHlpBase
+      updatePointsLabel(key)
     else
       setTeamHogs(key)
     end
