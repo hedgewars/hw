@@ -411,13 +411,7 @@ end
 ]]--
 
 function clearHogAmmo(hog)
-  local lastNum = amRubber
-
-  if amAirMine ~= nil then
-    lastNum = amAirMine
-  end
-
-  for val=0,lastNum do
+  for val=0, AmmoTypeMax do
     AddAmmo(hog, val, 0)
   end
 end
@@ -1352,7 +1346,7 @@ function savePoints(hog)
   local hogWepPoints = 0
   local hogHlpPoints = 0
 
-  for ammoType=0,amAirMine do
+  for ammoType=0, AmmoTypeMax do
     local ammoCount = GetAmmoCount(hog, ammoType)
 
     if pointsWeaponVal[ammoType] ~= nil then
@@ -1483,9 +1477,7 @@ end
 ]]--
 
 function onAmmoStoreInit()
-  local lastNum = amAirMine
-
-  for val=0,lastNum do
+  for val=0, AmmoTypeMax do
     SetAmmo(val, 0, 0, 0, 0)
   end
 end
