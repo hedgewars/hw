@@ -255,7 +255,8 @@ if AllInactive then
 case step of
     stInit:
         begin
-        ScriptCall('onEndTurn');
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            ScriptCall('onEndTurn');
         inc(step)
         end;
     stDelay:
