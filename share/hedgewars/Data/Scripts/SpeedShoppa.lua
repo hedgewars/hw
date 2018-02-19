@@ -162,6 +162,7 @@ function SpeedShoppaMission(params)
 		if not gameEnded then
 			if cratesCollected == #crates then
 				PlaySound(sndVictory, playerHog)
+				SetEffect(playerHog, heInvulnerable, 1)
 				SetState(playerHog, bor(GetState(playerHog), gstWinner))
 				SetState(playerHog, band(GetState(playerHog), bnot(gstHHDriven)))
 				AddCaption(loc("Challenge completed!"))

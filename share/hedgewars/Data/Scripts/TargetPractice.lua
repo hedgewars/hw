@@ -213,6 +213,7 @@ function TargetPracticeMission(params)
 					AddCaption(loc("You have destroyed all targets!"), 0xFFFFFFFF, capgrpGameState)
 					ShowMission(params.missionTitle, loc("Aiming practice"), loc("Congratulations! You have destroyed all targets within the time."), 0, 0)
 					PlaySound(sndVictory, player)
+					SetEffect(player, heInvulnerable, 1)
 					SetState(player, bor(GetState(player), gstWinner))
 					time_goal = TurnTimeLeft
 					-- Disable control
