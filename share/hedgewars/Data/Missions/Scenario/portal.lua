@@ -150,7 +150,7 @@ function onGameStart()
 	SpawnSupplyCrate(130, 600, amPickHammer)
 
 	--HEALTH CRATE--
-	SpawnHealthCrate(2000, 780)
+	SpawnHealthCrate(2000, 880)
 
 	--GIRDER--
 	PlaceGirder(3363, 1323, 4)
