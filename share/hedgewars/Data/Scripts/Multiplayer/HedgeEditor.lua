@@ -302,6 +302,8 @@ local hedgeEditorMissionPanelShown = false
 local tagGears = {}
 local showGearTags = true
 
+local tagCursorX, tagCursorY
+
 ---------------------------------
 -- crates are made of this stuff
 ---------------------------------
@@ -2807,9 +2809,43 @@ function onSlot()
 	updateHelp(ammoType)
 end
 
+function onScreenResize()
+	updateCursorCoords()
+end
+
+-- Display the X and Y coordinates of the cursor while the cursor is active
+function updateCursorCoords()
+	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= -2147483648 then
+		local x1, y = 12, 24
+		if tagCursorX then
+			DeleteVisualGear(tagCursorX)
+		end
+		tagCursorX = AddVisualGear(-div(ScreenWidth, 2)+x1, y, vgtHealthTag, CursorX, true)
+		SetVisualGearValues(tagCursorX, nil, nil, 0, 0, nil, 1, nil, nil, 240000, 0xFFFFFFFF)
+
+		local x2
+		if string.len(tostring(CursorX)) > 6 then
+			x2 = x1 + 100
+		else
+			x2 = x1 + 60
+		end
+		if tagCursorY then
+			DeleteVisualGear(tagCursorY)
+		end
+		tagCursorY = AddVisualGear(-div(ScreenWidth, 2)+x2, y, vgtHealthTag, CursorY, true)
+		SetVisualGearValues(tagCursorY, nil, nil, 0, 0, nil, 1, nil, nil, 240000, 0xFFFFFFFF)
+	else
+		if tagCursorX then
+			DeleteVisualGear(tagCursorX)
+		end
+		if tagCursorY then
+			DeleteVisualGear(tagCursorY)
+		end
+	end
+end
+
 -- called in onGameTick()
 function HandleHedgeEditor()
-
 	if CurrentHedgehog ~= nil then
 
 		genTimer = genTimer + 1
@@ -2998,6 +3034,9 @@ function HandleHedgeEditor()
 
 	end
 
+	-- Show cursor coords
+	updateCursorCoords()
+
 	-- Barrel health tags, mine timer tags and health crate health tags
 	do
 		local actualValue	-- internal value
@@ -3110,7 +3149,6 @@ function HandleHedgeEditor()
 			end
 		end
 	end
-
 end
 
 --------------------------------------------------
@@ -3808,3 +3846,11 @@ function onGearDelete(gear)
 
 end
 
+function onVisualGearDelete(vGear)
+	if vGear == tagCursorX then
+		tagCursorX = nil
+	end
+	if vGear == tagCursorY then
+		tagCursorY = nil
+	end
+end
