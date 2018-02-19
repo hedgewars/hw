@@ -53,6 +53,7 @@ A Space Adventure:
 A Classic Fairytale:
  + Mission 3: Display number of turns left at timed parcours
  * Fix incorrect storytelling in mission descriptions
+ * Mission 1: Fix error message spam when Leaks a Lot drowns
 
 Theme customization:
  + Add fallback music with fallback-music and fallback-sd-music
