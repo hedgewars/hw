@@ -93,6 +93,7 @@
 ; E.g. “+25” when gaining health from crate or vampirism
 01:27=+%1
 01:28=Empty!
+01:29=Unknown key
 
 ; Event messages
 ; Normal hog (%1) died (0 health)

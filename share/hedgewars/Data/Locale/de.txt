@@ -93,6 +93,7 @@
 01:26=Werkzeug nicht verfügbar im Sudden Death
 01:27=+%1
 01:28=Leer!
+01:29=Unbekannte Taste
 
 ; Event messages
 ; Hog (%1) died

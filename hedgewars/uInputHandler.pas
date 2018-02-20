@@ -27,6 +27,9 @@ procedure freeModule;
 
 function  KeyNameToCode(name: shortstring): LongInt; inline;
 function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
+
+function  KeyBindToCode(bind: shortstring): LongInt;
+function  KeyBindToName(bind: shortstring): ansistring;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
@@ -91,6 +94,47 @@ begin
     MaskModifier(Modifier, code);
     KeyNameToCode:= code;
 end;
+
+// Takes a control name (e.g. 'quit') and returns the corresponding key code,
+// if it has been bound.
+// Returns -1 if the control has not been bound.
+function KeyBindToCode(bind: shortstring): LongInt;
+var code: LongInt;
+begin
+    code:= 0;
+    while (code <= cKeyMaxIndex) and (CurrentBinds[code] <> bind) do inc(code);
+    if code > cKeyMaxIndex then
+        // Return error
+        KeyBindToCode:= -1
+    else
+        KeyBindToCode:= code;
+end;
+
+// Takes a control name (e.g. 'quit') and returns the corresponding
+// human-readable key name from SDL.
+// FIXME: Does not work 100% for all keys yet, but at least it no
+//        longer hardcodes any key name.
+// TODO: Localize
+function KeyBindToName(bind: shortstring): ansistring;
+var code: LongInt;
+    name: ansistring;
+begin
+    code:= KeyBindToCode(bind);
+    if code = -1 then
+        KeyBindToName:= trmsg[sidUnknownKey]
+    else
+        begin
+        name:= SDL_GetKeyName(SDL_GetKeyFromScancode(code));
+        if (name <> '') then
+            KeyBindToName:= name
+        else
+            begin
+            WriteLnToConsole('Error: KeyBindToName('+bind+') failed to find SDL key name!');
+            KeyBindToName:= trmsg[sidUnknownKey];
+            end;
+        end;
+end;
+
 (*
 procedure MaskModifier(var code: LongInt; Modifier: LongWord);
 begin
