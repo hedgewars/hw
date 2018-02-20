@@ -1482,7 +1482,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
-        <translation>Auf einen einzelnen Computer spielen</translation>
+        <translation>Auf einem einzelnen Computer spielen</translation>
     </message>
     <message>
         <source>Play a game across a network</source>
@@ -1490,7 +1490,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Read about who is behind the Hedgewars Project</source>
-        <translation>Lies wer hinter dem Hedgewars-Projekt steckt</translation>
+        <translation>Lies, wer hinter dem Hedgewars-Projekt steckt</translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
@@ -1514,11 +1514,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Play a game across a local area network</source>
-        <translation>ein Spiel über ein lokales Netzwerk (LAN) spielen</translation>
+        <translation>Ein Spiel über ein lokales Netzwerk (LAN) spielen</translation>
     </message>
     <message>
         <source>Play a game on an official server</source>
-        <translation>ein Spiel auf einem offiziellen Server spielen</translation>
+        <translation>Ein Spiel auf einem offiziellen Server spielen</translation>
     </message>
     <message>
         <source>Feedback</source>
