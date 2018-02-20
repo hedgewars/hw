@@ -3730,10 +3730,16 @@ ScriptSetInteger('gstNoGravity'     , gstNoGravity);
 ScriptSetInteger('aihUsualProcessing', aihUsualProcessing);
 ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 
-// land flags
+// land flags (partial)
 ScriptSetInteger('lfIndestructible', lfIndestructible);
 ScriptSetInteger('lfIce'           , lfIce);
 ScriptSetInteger('lfBouncy'        , lfBouncy);
+
+ScriptSetInteger('lfLandMask'      , lfLandMask);
+ScriptSetInteger('lfCurrentHog'    , lfCurrentHog);
+ScriptSetInteger('lfHHMask'        , lfHHMask);
+ScriptSetInteger('lfNotHHObjMask'  , lfNotHHObjMask);
+ScriptSetInteger('lfAllObjMask'    , lfAllObjMask);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
