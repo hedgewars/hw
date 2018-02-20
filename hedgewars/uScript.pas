@@ -649,24 +649,6 @@ begin
     lc_addcaption:= 0;
 end;
 
-function lc_campaignlock(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 1, 'CampaignLock', 'TODO') then
-        begin
-        // TODO
-        end;
-    lc_campaignlock:= 0;
-end;
-
-function lc_campaignunlock(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 1, 'CampaignUnlock', 'TODO') then
-        begin
-        // TODO
-        end;
-    lc_campaignunlock:= 0;
-end;
-
 function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
@@ -3845,8 +3827,6 @@ lua_register(luaState, _P'GetZoom', @lc_getzoom);
 lua_register(luaState, _P'HogSay', @lc_hogsay);
 lua_register(luaState, _P'SwitchHog', @lc_switchhog);
 lua_register(luaState, _P'HogTurnLeft', @lc_hogturnleft);
-lua_register(luaState, _P'CampaignLock', @lc_campaignlock);
-lua_register(luaState, _P'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, _P'GetGearElasticity', @lc_getgearelasticity);
 lua_register(luaState, _P'SetGearElasticity', @lc_setgearelasticity);
 lua_register(luaState, _P'GetGearFriction', @lc_getgearfriction);
