@@ -166,6 +166,7 @@ var
     cScriptParam    : shortstring;
     cSeed           : shortstring;
     cVolumeDelta    : LongInt;
+    cMuteToggle     : boolean; // Mute toggle requested
     cHasFocus       : boolean;
     cInactDelay     : Longword;
 
@@ -2837,6 +2838,7 @@ begin
     autoCameraOn    := true;
     cSeed           := '';
     cVolumeDelta    := 0;
+    cMuteToggle     := false;
     cHasFocus       := true;
     cInactDelay     := 100;
     ReadyTimeLeft   := 0;

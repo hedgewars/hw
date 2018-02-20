@@ -101,6 +101,9 @@ procedure SetVolume(vol: LongInt);
 // Modifies the sound volume of the game by voldelta and returns the new volume level.
 function  ChangeVolume(voldelta: LongInt): LongInt;
 
+// Returns the current volume in percent
+function  GetVolumePercent(): LongInt;
+
 // Returns a pointer to the voicepack with the given name.
 function  AskForVoicepack(name: shortstring): Pointer;
 
@@ -672,6 +675,11 @@ begin
     cInitVolume:= vol;
 end;
 
+function GetVolumePercent(): LongInt;
+begin
+    GetVolumePercent:= Volume * 100 div MIX_MAX_VOLUME;
+end;
+
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
     ChangeVolume:= 0;
@@ -687,7 +695,7 @@ begin
     Volume:= Mix_Volume(-1, -1);
     if isMusicEnabled then
         Mix_VolumeMusic(Volume * 4 div 8);
-    ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME;
+    ChangeVolume:= GetVolumePercent();
 
     if (isMusicEnabled) then
         if (Volume = 0) then
@@ -793,12 +801,6 @@ begin
     CurrentTeam^.voicepack:= AskForVoicepack(s)
 end;
 
-procedure chMute(var s: shortstring);
-begin
-    s:= s; // avoid compiler hint
-    MuteAudio;
-end;
-
 procedure preInitModule;
 begin
     isMusicEnabled:= true;
@@ -811,7 +813,6 @@ var t: LongInt;
     i: TSound;
 begin
     RegisterVariable('voicepack', @chVoicepack, false);
-    RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
     SDMusicFN:= 'sdmusic.ogg';

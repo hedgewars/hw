@@ -569,6 +569,12 @@ s:= s; // avoid compiler hint
 dec(cVolumeDelta, 3)
 end;
 
+procedure chMute(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cMuteToggle:= true;
+end;
+
 procedure chFindhh(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
@@ -901,6 +907,7 @@ begin
     RegisterVariable('-volup'  , @chVol_m        , true );
     RegisterVariable('+voldown', @chVol_m        , true );
     RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('mute'    , @chMute         , true );
     RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );
     RegisterVariable('+cur_u'  , @chCurU_p       , true );
