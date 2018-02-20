@@ -13,6 +13,7 @@ Game:
  * Fix time box being usable in Sudden Death with 0 health decrease
  * Fix chat input key being sometimes registered twice
  * Fix not displaying current volume status after pressing mute key
+ * Fix many effects not being correctly recorded by the video recorder
 
 Frontend:
  + Schemes are now stored in separate files under Schemes

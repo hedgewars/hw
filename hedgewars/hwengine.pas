@@ -332,6 +332,7 @@ begin
     while LoadNextCameraPosition(newRealTicks, newGameTicks) do
     begin
         IPCCheckSock();
+        RealTicks:= newRealTicks;
         DoGameTick(newGameTicks - oldGameTicks);
         if GameState = gsExit then
             break;
