@@ -2869,7 +2869,7 @@ end;
 function lc_setgearaihints(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParamCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
+    if CheckLuaParamCount(L, 2, 'SetGearAIHints', 'gearUid, aiHints') then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
