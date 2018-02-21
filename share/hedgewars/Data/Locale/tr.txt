@@ -64,7 +64,7 @@
 01:02=%1 kazandı!
 01:03=Bölüm %%1
 01:04=Duraklatıldı
-01:05=Çıkılsın mı (Y/Esc)?
+01:05=Çıkılsın mı (%1/%2)?
 01:06=Ani ölüm!
 01:07=%1 Kaldı
 01:08=Yakıt

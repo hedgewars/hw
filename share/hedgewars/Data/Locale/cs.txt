@@ -62,7 +62,7 @@
 01:02=%1 vyhráli!
 01:03=Hlasitost %1%
 01:04=Pauza
-01:05=Opravdu ukončit (Y/Esc)?
+01:05=Opravdu ukončit (%1/%2)?
 01:06=Náhlá smrt!
 01:07=%1 zbývá
 01:08=Palivo

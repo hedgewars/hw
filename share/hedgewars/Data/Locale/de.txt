@@ -67,7 +67,7 @@
 01:02=%1 gewinnt!
 01:03=Lautstärke: %1 %
 01:04=Pause
-01:05=Wirklich beenden (Z/Esc)?
+01:05=Wirklich beenden (%1/%2)? (Klicken zum Fortfahren)
 01:06=Sudden Death!
 01:07=%1 verbleibend
 01:08=Treibstoff

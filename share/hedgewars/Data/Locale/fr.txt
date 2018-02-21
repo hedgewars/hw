@@ -63,7 +63,7 @@
 01:02=%1 gagne !
 01:03=Volume %1%
 01:04=Pause
-01:05=Quitter? (Y/Esc) (Cliquer pour reprendre)
+01:05=Quitter? (%1/%2) (Cliquer pour reprendre)
 01:06=Mort subite !
 01:07=%1 Restantes
 01:08=Carburant

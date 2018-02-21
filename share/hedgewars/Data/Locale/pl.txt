@@ -67,7 +67,7 @@
 01:02=%1 wygrywają!
 01:03=Głośność %1%
 01:04=Gra wstrzymana
-01:05=Na pewno wyjść (Y/Esc)?
+01:05=Na pewno wyjść (%1/%2)?
 01:06=Nagła śmierć!
 01:07=%1 strzały pozostał(y)
 01:08=Paliwo

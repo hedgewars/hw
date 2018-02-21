@@ -48,7 +48,7 @@
 01:02=%1 nyert!
 01:03=Hangerő %1%
 01:04=Szünet
-01:05=Valóban Kilépsz? (Y/Esc)
+01:05=Valóban Kilépsz? (%1/%2)
 01:06=Hirtelen halál!
 01:07=%1 maradt
 01:08=Töltet

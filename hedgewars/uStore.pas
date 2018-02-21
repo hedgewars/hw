@@ -62,7 +62,7 @@ procedure SetSkyColor(r, g, b: real);
 
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
-     uCommands, uPhysFSLayer, uDebug, adler32
+     uCommands, uPhysFSLayer, uDebug, uLocale, uInputHandler, adler32
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
@@ -373,6 +373,7 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
     i, y, imflags: LongInt;
+    keyConfirm, keyQuit: ansistring;
 begin
 AddFileLog('StoreLoad()');
 
@@ -500,7 +501,9 @@ if (not cOnlyStats) and allOK then
 
     PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
     AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
-    ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
+    keyConfirm:= KeyBindToName('confirm');
+    keyQuit:= KeyBindToName('quit');
+    ConfirmTexture:= RenderStringTex(FormatA(trmsg[sidConfirm], [keyConfirm, keyQuit]), cYellowColor, fntBig);
     SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
     if not reload then

@@ -62,7 +62,7 @@
 01:02=%1 vinner!
 01:03=Volym %1%
 01:04=Pausat
-01:05=Vill du verkligen avsluta (Y/Esc)?
+01:05=Vill du verkligen avsluta (%1/%2)?
 01:06=Sudden death!
 01:07=%1 kvar
 01:08=Bränsle

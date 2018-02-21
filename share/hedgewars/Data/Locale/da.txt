@@ -62,7 +62,7 @@
 01:02=%1 vinder!
 01:03=Lydstyrke %1%
 01:04=Sat på pause
-01:05=Vil du virkelig forlade spillet (Y/Esc)?
+01:05=Vil du virkelig forlade spillet (%1/%2)?
 01:06=Pludselig Død!
 01:07=%1 tilbage
 01:08=Brændstof

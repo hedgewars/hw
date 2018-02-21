@@ -14,6 +14,7 @@ Game:
  * Fix chat input key being sometimes registered twice
  * Fix not displaying current volume status after pressing mute key
  * Fix many effects not being correctly recorded by the video recorder
+ * Fix quit menu showing incorrect keys if using non-default key bindings
 
 Frontend:
  + Schemes are now stored in separate files under Schemes

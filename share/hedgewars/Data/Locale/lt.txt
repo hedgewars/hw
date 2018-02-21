@@ -65,7 +65,7 @@
 01:02=%1 Laimėjo!
 01:03=Garsas %1%
 01:04=Sustabdyta
-01:05=Tikrai išeiti (Y/Esc)?
+01:05=Tikrai išeiti (%1/%2)?
 01:06=Maras!
 01:07=%1 Liko
 01:08=Degalai

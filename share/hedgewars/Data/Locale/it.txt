@@ -64,7 +64,7 @@
 01:02=%1 vince!
 01:03=Volume %1%
 01:04=In pausa
-01:05=Vuoi davvero uscire (Y/Esc)?
+01:05=Vuoi davvero uscire (%1/%2)?
 01:06=Morte improvvisa!
 01:07=%1 rimanenti
 01:08=Carburante
