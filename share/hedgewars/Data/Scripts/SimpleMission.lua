@@ -122,7 +122,7 @@ The argument “params” is a table containing fields which describe the missio
 	- customGoalCheck	When to check goals and non-goals. Values: "instant" (default), "turnStart", "turnEnd"
 
 	- missionTitle:		The name of the mission (highly recommended)
-	- customGoalText:	A short string explaining the goal of the mission (use this if you set custom goals).
+	- goalText:		A short string explaining the goal of the mission (use this if you set custom goals).
 
 	GOAL TYPES:
 	- type			name of goal type
@@ -455,11 +455,31 @@ function SimpleMission(params)
 		return false
 	end
 
+	-- Declare the game ended if all enemy teams are dead and player teams or allies are still alive
+	_G.sm.checkRegularVictory = function()
+		local victory = true
+		for t=0, TeamsCount-1 do
+			local team = GetTeamName(t)
+			local defeat = _G.sm.checkGoal({type="teamDefeat", teamName=team})
+			if (defeat == true) and (GetTeamClan(team) == _G.sm.playerClan) then
+				victory = false
+				break
+			elseif (defeat == false) and (GetTeamClan(team) ~= _G.sm.playerClan) then
+				victory = false
+				break
+			end
+		end
+		if victory then
+			_G.sm.gameEnded = true
+		end
+	end
+
 	-- Checks goals and non goals and wins or loses mission
 	_G.sm.checkWinOrFail = function()
 		if errord then
 			return
 		end
+		_G.sm.checkRegularVictory()
 		if _G.sm.checkNonGoals() == true or _G.sm.checkGoals() == "fail" then
 			_G.sm.lose()
 		elseif _G.sm.checkGoals() == true then
