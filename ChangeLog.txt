@@ -21,6 +21,7 @@ Frontend:
  * Fix broken preview of team hats (e.g. cap_team)
 
 Content:
+ + New scenarios: Bazooka Battlefield, Tentacle Terror
  + Major overhaul of Sudden Death visuals in most themes
  + New flag: uk_scotland
  + New voice: Default_pl (Polish)

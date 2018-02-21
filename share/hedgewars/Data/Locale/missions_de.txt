@@ -55,6 +55,12 @@ portal.desc="Benutze das Portalgerät, um dich schnell und weit zu bewegen; benu
 Big_Armory.name=Großes Arsenal
 Big_Armory.desc="Du bist alleine, hast ein volles Arsenal und musst 8 Igel besiegen, bevor die Zeit abläuft."
 
+Bazooka_Battlefield.name=Bazookaschlachtfeld
+Bazooka_Battlefield.desc="Deine treuen Ritter haben den Feind in einen Hinterhalt gelockt. Zerstöre sie nur mit Bazookas! Aber trödel nicht zu lange, denn das Wasser wird bald steigen."
+
+Tentacle_Terror.name=Tentakel-Terror
+Tentacle_Terror.desc="Unter einem furchtbaren Monster versteckt sich dein Feind wie ein Feigling und wird dich mit Luftangriffen angreifen, sobald du aus der Deckung gehst. Zeig ihm, wer in der Hölle das Sagen hat! Aber du brauchst schon teuflisch gute Seilfähigkeiten, um überhaupt eine Chance zu haben."
+
 Target_Practice_-_Bazooka_easy.name=Zielübung: Bazooka (einfach)
 Target_Practice_-_Bazooka_easy.desc="Nun gut, Soldat: Zerstör einfach die Zielscheiben so schnell, wie du kannst!"
 

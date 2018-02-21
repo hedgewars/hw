@@ -49,6 +49,12 @@ User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
 Big_Armory.name=Big Armory
 Big_Armory.desc="You are alone, have a full armory and must defeat 8 hedgehogs before the time runs out."
 
+Bazooka_Battlefield.name=Bazooka Battlefield
+Bazooka_Battlefield.desc="Your loyal knights have ambushed the enemy. Destroy them only with bazookas! But don't take too long, the water will rise soon."
+
+Tentacle_Terror.name=Tentacle Terror
+Tentacle_Terror.desc="Below a terrible monster, your enemy is hiding like a coward and will attack you with air strikes as soon you lose cover. Show him who's the real boss in Hell! But you need some devilish good roping skills to even stand a chance."
+
 ClimbHome.name=Climb Home
 ClimbHome.desc="You are far away from home and the water is rising. Climb as high as you can!"
 
