@@ -513,7 +513,9 @@ var       i: LongInt;
 begin
 if (cReducedQuality and rqKillFlakes) <> 0 then
     exit;
-if vobCount = vobSDCount then
+if (vobCount = vobSDCount) and (vobFrameTicks = vobSDFrameTicks) and
+        (vobFramesCount = vobSDFramesCount) and (vobVelocity = vobSDVelocity) and
+        (vobFallSpeed = vobSDFallSpeed) then
     exit;
 for i:= 0 to 6 do
     begin
