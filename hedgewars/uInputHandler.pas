@@ -125,7 +125,10 @@ begin
     else
         begin
         name:= SDL_GetKeyName(SDL_GetKeyFromScancode(code));
-        if (name <> '') then
+        if (name = 'Escape') then
+            // Let's shorten the name “Escape” for the quit menu
+            KeyBindToName:= 'Esc'
+        else if (name <> '') then
             KeyBindToName:= name
         else
             begin
