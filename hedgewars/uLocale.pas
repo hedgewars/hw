@@ -23,10 +23,13 @@ interface
 uses uTypes;
 
 const MAX_EVENT_STRINGS = 255;
+const MAX_FORMAT_STRING_SYMBOLS = 9;
 
 procedure LoadLocale(FileName: shortstring);
-function  Format(fmt: shortstring; var arg: shortstring): shortstring;
-function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
+function  Format(fmt: shortstring; args: array of shortstring): shortstring;
+function  FormatA(fmt: ansistring; args: array of ansistring): ansistring;
+function  Format(fmt: shortstring; arg: shortstring): shortstring;
+function  FormatA(fmt: ansistring; arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 {$IFDEF HWLIBRARY}
@@ -113,24 +116,61 @@ begin
         GetEventString:= trevt[e][GetRandom(trevt_n[e])]; // Pick a random message and return it
 end;
 
-function Format(fmt: shortstring; var arg: shortstring): shortstring;
-var i: LongInt;
+// Format the string fmt.
+// Take a shortstring with placeholders %1, %2, %3, etc. and replace
+// them with the corresponding elements of an array with up to
+// MAX_FORMAT_STRING_SYMBOLS. Important! Each placeholder can only be
+// used exactly once and numbers MUST NOT be skipped (e.g. using %1 and %3
+// but not %2.
+function Format(fmt: shortstring; args: array of shortstring): shortstring;
+var i, p: LongInt;
+tempstr: shortstring;
 begin
-i:= Pos('%1', fmt);
-if i = 0 then
-    Format:= fmt
-else
-    Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+tempstr:= fmt;
+for i:=0 to MAX_FORMAT_STRING_SYMBOLS - 1 do
+    begin
+        p:= Pos('%'+IntToStr(i), tempstr);
+        if (p = 0) or (i >= Length(args)) then
+            break
+        else
+            begin
+            delete(tempstr, p, 2);
+            insert(args[i], tempstr, p);
+            end;
+    end;
+Format:= tempstr;
 end;
 
-function FormatA(fmt: ansistring; var arg: ansistring): ansistring;
-var i: LongInt;
+// Same as Format, but for ansistring
+function FormatA(fmt: ansistring; args: array of ansistring): ansistring;
+var i, p: LongInt;
+tempstr: ansistring;
 begin
-i:= Pos('%1', fmt);
-if i = 0 then
-    FormatA:= fmt
-else
-    FormatA:= copy(fmt, 1, i - 1) + arg + FormatA(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+tempstr:= fmt;
+for i:=0 to MAX_FORMAT_STRING_SYMBOLS - 1 do
+    begin
+        p:= Pos('%'+IntToStr(i+1), tempstr);
+        if (p = 0) or (i >= Length(args)) then
+            break
+        else
+            begin
+            delete(tempstr, p, 2);
+            insert(args[i], tempstr, p);
+            end;
+    end;
+FormatA:= tempstr;
+end;
+
+// Same as Format above, but with only one placeholder %1, replaced by arg.
+function Format(fmt: shortstring; arg: shortstring): shortstring;
+begin
+    Format:= Format(fmt, [arg]);
+end;
+
+// Same as above, but for ansistring
+function FormatA(fmt: ansistring; arg: ansistring): ansistring;
+begin
+    FormatA:= FormatA(fmt, [arg]);
 end;
 
 {$IFDEF HWLIBRARY}
