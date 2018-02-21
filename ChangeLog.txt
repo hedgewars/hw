@@ -64,6 +64,7 @@ Theme customization:
  * Fix green color channel on themes with sd-tint
 
 Lua API:
+ + New library: SimpleMission: Allows to create missions more easily
  + New call: WriteLnToChat(string): Add a line in the chat
  + New call: SetVampiric(bool): Toggle vampirism
  + New call: SetLaserSight(bool): Toggle laser sight
