@@ -94,6 +94,13 @@
 01:27=+%1
 01:28=Leer!
 01:29=Unbekannte Taste
+01:30=%1 und %2 gewinnen!
+01:31=%1, %2 und %3 gewinnen!
+01:32=%1, %2, %3 und %4 gewinnen!
+01:33=%1, %2, %3, %4 und %5 gewinnen!
+01:34=%1, %2, %3, %4, %5 und %6 gewinnen!
+01:35=%1, %2, %3, %4, %5, %6 und %7 gewinnen!
+01:36=Alle gewinnen!
 
 ; Event messages
 ; Hog (%1) died
@@ -335,7 +342,7 @@
 02:02=Jetzt geht's los!
 02:02=Auf geht's!
 
-; Round ends and team/clan (%1) wins
+; Round ends and team (%1) wins
 02:03=%1 gewinnt!
 02:03=%1 ist der Champion
 02:03=%1 ist der Sieger!

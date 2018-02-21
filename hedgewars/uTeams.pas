@@ -54,7 +54,8 @@ var TeamsGameOver: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
-    s, ts, cap: ansistring;
+    s, cap: ansistring;
+    ts: array[0..(cMaxTeams - 1)] of ansistring;
     t, AliveCount, i, j: LongInt;
 begin
 CheckForWin:= false;
@@ -90,33 +91,34 @@ if not TeamsGameOver then
         begin
         with AliveClan^ do
             begin
-            ts:= ansistring(Teams[0]^.TeamName);
-            if TeamsNumber = 1 then // team wins
+            if TeamsNumber = 1 then // single team wins
                 begin
-                s:= FormatA(trmsg[sidWinner], ts);
-                cap:= FormatA(GetEventString(eidRoundWin), ts);
+                s:= ansistring(Teams[0]^.TeamName);
+                // Victory caption is randomly selected
+                cap:= FormatA(GetEventString(eidRoundWin), s);
                 AddCaption(cap, cWhiteColor, capgrpGameState);
+                s:= FormatA(trmsg[sidWinner], s);
                 end
-            else // clan wins
+            else // clan with at least 2 teams wins
                 begin
                 s:= '';
                 for j:= 0 to Pred(TeamsNumber) do
                     begin
-                    (*
-                    Currently, the game result string is just the victory
-                    string concatenated multiple times. This assumes that
-                    sidWinner is a complete sentence.
-                    This might not work well for some languages.
-
-                    FIXME/TODO: Add event strings for 2, 3, 4 and >4 teams winning.
-                                 This requires FormatA to work with multiple parameters. *)
-                    ts:= Teams[j]^.TeamName;
-                    s:= s + ' ' + FormatA(trmsg[sidWinner], ts);
-
-                    // FIXME: Show victory captions one-by-one, not all at once
-                    cap:= FormatA(GetEventString(eidRoundWin), ts);
-                    AddCaption(cap, cWhiteColor, capgrpGameState);
+                    ts[j] := Teams[j]^.TeamName;
                     end;
+
+                // Write victory message for caption and stats page
+                if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
+                    // No enemies for some reason … Everyone wins!!1!
+                    s:= trmsg[sidWinnerAll]
+                else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
+                    // List all winning teams in a list
+                    s:= FormatA(trmsg[TMsgStrId(Ord(sidWinner2) + (TeamsNumber - 2))], ts);
+
+                // The winner caption is the same as the stats message and not randomized
+                cap:= s;
+                AddCaption(cap, cWhiteColor, capgrpGameState);
+                // TODO (maybe): Show victory animation/captions per-team instead of all winners at once?
                 end;
 
             for j:= 0 to Pred(TeamsNumber) do

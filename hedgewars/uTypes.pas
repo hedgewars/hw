@@ -470,7 +470,9 @@ type
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
             sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget,
-            sidNotAvailableInSD, sidHealthGain, sidEmptyCrate, sidUnknownKey);
+            sidNotAvailableInSD, sidHealthGain, sidEmptyCrate, sidUnknownKey,
+            sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
+            sidWinner7, sidWinnerAll);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
