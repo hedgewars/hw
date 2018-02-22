@@ -486,6 +486,19 @@ function SimpleMission(params)
 		for t=0, TeamsCount-1 do
 			local team = GetTeamName(t)
 			local defeat = _G.sm.checkGoal({type="teamDefeat", teamName=team})
+			if not defeat then
+				-- Deep check, also look at damage of all hogs
+				local dead = 0
+				for h=1, #teamHogs[team] do
+					local _,_,_,_,_,_,_,_,_,_,_,Damage = GetGearValues(teamHogs[team][h])
+					if Damage >= GetHealth(teamHogs[team][h]) then
+						dead = dead + 1
+					end
+				end
+				if dead >= #teamHogs[team] then
+					defeat = true
+				end
+			end
 			if (defeat == true) and (GetTeamClan(team) == _G.sm.playerClan) then
 				victory = false
 				break
@@ -504,7 +517,6 @@ function SimpleMission(params)
 		if errord then
 			return
 		end
-		_G.sm.checkRegularVictory()
 		local nonGoalStatus, nonGoalFailText = _G.sm.checkNonGoals()
 		local goalStatus, goalFailText = _G.sm.checkGoals()
 		if nonGoalStatus == true then
@@ -685,6 +697,7 @@ function SimpleMission(params)
 		_G.sm.gameStarted = true
 
 		if params.customGoalCheck == "turnStart" then
+			_G.sm.checkRegularVictory()
 			_G.sm.checkWinOrFail()
 		end
 	end
@@ -693,6 +706,7 @@ function SimpleMission(params)
 		_G.sm.gameTurns = _G.sm.gameTurns + 1
 
 		if params.customGoalCheck == "turnEnd" then
+			_G.sm.checkRegularVictory()
 			_G.sm.checkWinOrFail()
 		end
 	end
