@@ -12,6 +12,7 @@ end
 
 SimpleMission({
 	missionTitle = loc("Big Armory"),
+	missionIcon = -amBazooka,
 	wind = 15,
 	initVars = {
 		TurnTime = 45000,

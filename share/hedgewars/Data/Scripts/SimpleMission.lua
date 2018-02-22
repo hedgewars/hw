@@ -122,6 +122,7 @@ The argument “params” is a table containing fields which describe the missio
 	- customGoalCheck	When to check goals and non-goals. Values: "instant" (default), "turnStart", "turnEnd"
 
 	- missionTitle:		The name of the mission (highly recommended)
+	- missionIcon:		Icon of the mission panel, see documentation of ShowMission in the Lua API
 	- goalText:		A short string explaining the goal of the mission (use this if you set custom goals).
 
 	GOAL TYPES:
@@ -248,6 +249,9 @@ local errord = false
 function SimpleMission(params)
 	if params.missionTitle == nil then
 		params.missionTitle = loc("Scenario")
+	end
+	if params.missionIcon == nil then
+		params.missionIcon = 1 -- target icon
 	end
 	if params.goalText == nil then
 		params.goalText = loc("Defeat the enemy!")
@@ -745,7 +749,7 @@ function SimpleMission(params)
 				params.goalText = params.goalText .. "|" .. string.format(loc("Mines time: %.2fs"), MinesTime/1000)
 			end
 		end
-		ShowMission(params.missionTitle, loc("Scenario"), params.goalText, 1, 5000) 
+		ShowMission(params.missionTitle, loc("Scenario"), params.goalText, params.missionIcon, 5000) 
 
 		-- Spawn objects
 
