@@ -126,6 +126,9 @@ The argument “params” is a table containing fields which describe the missio
 
 	GOAL TYPES:
 	- type			name of goal type
+	- failText		Optional. For non-goals, this text will be shown in the stats if mission fails due to this non-goal
+				being completed. For goals which fail, this text will be displayed at failure. Note that
+				all normal goals have sensible default fail texts.
 	- type="destroy"	Gear must be destroyed
 		- id		Gear to destroy
 	- type="teamDefeat"	Team must be defeated
@@ -292,6 +295,15 @@ function SimpleMission(params)
 		end
 	end
 
+	_G.sm.criticalGearFailText = function(gearSmid)
+		local gear = _G.sm.goalGears[gearSmid]
+		if GetGearType(gear) == gtHedgehog then
+			return string.format(loc("%s is dead, who was critical to this mission!"), GetHogName(gear))
+		else
+			return loc("We have lost an object which was critical to this mission.")
+		end
+	end
+
 	_G.sm.checkGoal = function(goal)
 		if goal.type == "destroy" then
 			return getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed")
@@ -303,7 +315,7 @@ function SimpleMission(params)
 						return true
 					else
 						-- Fail if the crate was collected by enemy
-						return "fail"
+						return "fail", loc("The enemy has taken a crate which we really needed!")
 					end
 				else
 					for c=1, #goal.collectors do
@@ -312,12 +324,12 @@ function SimpleMission(params)
 						end
 					end
 					-- Fail if the crate was collected by someone who was not supposed to get it
-					return "fail"
+					return "fail", loc("The wrong hedgehog has taken the crate.")
 				end
 			else
 				-- Fail goal if crate was destroyed
 				if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-					return "fail"
+					return "fail", loc("A crate critical to this mission has been destroyed.")
 				end
 				return false
 			end
@@ -327,7 +339,7 @@ function SimpleMission(params)
 			return (TotalRounds) >= goal.rounds
 		elseif goal.type == "inZone" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			local gX, gY = GetGearPosition(_G.sm.goalGears[goal.id])
 			-- 4 sub-goals, each optional
@@ -341,14 +353,16 @@ function SimpleMission(params)
 			if goal.type == "distGearPos" then
 				if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
 					-- Fail if gear was destroyed
-					return "fail"
+					return "fail", criticalGearFailText(goal.id)
 				end
 				gX, gY = GetGearPosition(_G.sm.goalGears[goal.id])
 				tX, tY = goal.x, goal.y
 			elseif goal.type == "distGearGear" then
-				if getGearValue(_G.sm.goalGears[goal.id1], "sm_destroyed") or getGearValue(_G.sm.goalGears[goal.id2], "sm_destroyed") then
-					-- Fail if one of the gears was destroyed
-					return "fail"
+				-- Fail if one of the gears was destroyed
+				if getGearValue(_G.sm.goalGears[goal.id1], "sm_destroyed") then
+					return "fail", criticalGearFailText(goal.id1)
+				elseif getGearValue(_G.sm.goalGears[goal.id2], "sm_destroyed") then
+					return "fail", criticalGearFailText(goal.id2)
 				end
 				gX, gY = GetGearPosition(_G.sm.goalGears[goal.id1])
 				tX, tY = GetGearPosition(_G.sm.goalGears[goal.id2])
@@ -368,11 +382,16 @@ function SimpleMission(params)
 			return sm.isInSuddenDeath
 		elseif goal.type == "damage" then
 			local damage = goal.damage or 1
-			local tookEnoughDamage = getGearValue(_G.sm.goalGears[goal.id], "sm_maxDamage") >= damage
-			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
+			local gear = _G.sm.goalGears[goal.id]
+			local tookEnoughDamage = getGearValue(gear, "sm_maxDamage") >= damage
+			if getGearValue(gear, "sm_destroyed") then
 				-- Fail if gear was destroyed without taking enough damage first
 				if not tookEnoughDamage and goal.canDestroy == false then
-					return "fail"
+					if GetGearType(gear) == gtHedgehog then
+						return "fail", string.format(loc("%s has been killed before taking enough damage first."), GetHogName(gear))
+					else
+						return "fail", loc("An object has been destroyed before it took enough damage.")
+					end
 				else
 				-- By default, succeed if gear was destroyed
 					return true
@@ -383,27 +402,27 @@ function SimpleMission(params)
 			local drowned = getGearValue(_G.sm.goalGears[goal.id], "sm_drowned")
 			-- Fail if gear was destroyed by something other than drowning
 			if not drowned and getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			return drowned
 		elseif goal.type == "poison" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], hePoisoned) >= 1
 		elseif goal.type == "freeze" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], heFrozen) >= 256
 		elseif goal.type == "cure" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], hePoisoned) == 0
 		elseif goal.type == "melt" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], heFrozen) == 0
 		elseif goal.type == "waterSkip" then
@@ -411,7 +430,7 @@ function SimpleMission(params)
 			local hasEnoughSkips = getGearValue(_G.sm.goalGears[goal.id], "sm_waterSkips") >= skips
 			-- Fail if gear was destroyed before it got the required number of skips
 			if not hasEnoughSkips and getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail"
+				return "fail", criticalGearFailText(goal.id)
 			end
 			return hasEnoughSkips
 		elseif goal.type == "teamDefeat" then
@@ -429,9 +448,15 @@ function SimpleMission(params)
 	_G.sm.checkGoals = function()
 		if params.customGoals ~= nil and #params.customGoals > 0 then
 			for key, goal in pairs(params.customGoals) do
-				local done = _G.sm.checkGoal(goal)
+				local done, defaultFailText = _G.sm.checkGoal(goal)
 				if done == false or done == "fail" then
-					return done
+					local failText
+					if goal.failText then
+						failText = goal.failText
+					else
+						failText = customFailText
+					end
+					return done, failText
 				end
 			end
 			return true
@@ -448,7 +473,7 @@ function SimpleMission(params)
 			for key, nonGoal in pairs(params.customNonGoals) do
 				local done = _G.sm.checkGoal(nonGoal)
 				if done == true then
-					return true
+					return true, nonGoal.failText
 				end
 			end
 		end
@@ -480,9 +505,13 @@ function SimpleMission(params)
 			return
 		end
 		_G.sm.checkRegularVictory()
-		if _G.sm.checkNonGoals() == true or _G.sm.checkGoals() == "fail" then
-			_G.sm.lose()
-		elseif _G.sm.checkGoals() == true then
+		local nonGoalStatus, nonGoalFailText = _G.sm.checkNonGoals()
+		local goalStatus, goalFailText = _G.sm.checkGoals()
+		if nonGoalStatus == true then
+			_G.sm.lose(nonGoalFailText)
+		elseif goalStatus == "fail" then
+			_G.sm.lose(goalText)
+		elseif goalStatus == true then
 			_G.sm.win()
 		end
 	end
@@ -502,11 +531,14 @@ function SimpleMission(params)
 		end
 	end
 
-	_G.sm.lose = function()
+	_G.sm.lose = function(failReason)
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
 			AddCaption(loc("Scenario failed!"), 0xFFFFFFFF, capgrpGameState)
 			SendStat(siGameResult, loc("You lose!"))
+			if failReason then
+				SendStat(siCustomAchievement, failReason)
+			end
 			if GetHogLevel(CurrentHedgehog) == 0 then
 				SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstLoser))
 				SetState(CurrentHedgehog, band(GetState(CurrentHedgehog), bnot(gstHHDriven)))
