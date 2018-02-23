@@ -3487,7 +3487,7 @@ begin
                         dX:= _50 * cGravity * ((Gear^.X + int2hwFloat(RightX-LeftX)) - X) / _25
                     else
                         dX:= _50 * cGravity * ((Gear^.X - int2hwFloat(RightX-LeftX)) - X) / _25;
-                    dY:= -_450 * cGravity;
+                    dY:= -_450 * cMaxWindSpeed * 2;
                     Active:= true;
                     end
                 else if Hedgehog^.Effects[heFrozen] > 255 then
