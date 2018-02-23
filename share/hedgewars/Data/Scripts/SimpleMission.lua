@@ -40,7 +40,7 @@ The argument “params” is a table containing fields which describe the missio
 	Optional fields
 	- ammoConfig		Table containing basic ammo values (default: infinite skip only)
 	- initVars		Table where you set up environment parameters such as MinesNum.
-	- wind			If set, the wind will permanently set to this value (-100..100)
+	- wind			If set, the wind will permanently set to this value (-100..100). Implies gfDisableWind
 	- gears:		Table of objects.
 	- girders		Table of girders
 	- rubbers		Table of rubbers
@@ -641,7 +641,10 @@ function SimpleMission(params)
 			_G[initVarName] = initVarValue
 		end
 		if #params.teams == 1 then
-			EnableGameFlags(gfOneClanMode)
+			GameFlags = bor(GameFlags, gfOneClanMode)
+		end
+		if params.wind then
+			GameFlags = bor(GameFlags, gfDisableWind)
 		end
 
 		local clanCounter = 0
@@ -695,9 +698,6 @@ function SimpleMission(params)
 	end
 
 	_G.onNewTurn = function()
-		if params.wind ~= nil then
-			SetWind(params.wind)
-		end
 		_G.sm.gameStarted = true
 
 		if params.customGoalCheck == "turnStart" then
@@ -748,6 +748,9 @@ function SimpleMission(params)
 			else
 				params.goalText = params.goalText .. "|" .. string.format(loc("Mines time: %.2fs"), MinesTime/1000)
 			end
+		end
+		if params.wind then
+			SetWind(params.wind)
 		end
 		ShowMission(params.missionTitle, loc("Scenario"), params.goalText, params.missionIcon, 5000) 
 
@@ -861,5 +864,6 @@ function SimpleMission(params)
 			_G.sm.checkWinOrFail()
 		end
 	end
+
 end
 

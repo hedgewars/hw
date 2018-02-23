@@ -21,6 +21,7 @@ function onGameInit()
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
+	GameFlags = gfDisableWind
 
 	AddTeam(loc("Pathetic Resistance"), 14483456, "Plinko", "Island", "Default", "cm_yinyang")
 	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
@@ -33,7 +34,6 @@ function onGameInit()
 
 end
 
-
 function onGameStart()
 
 	ShowMission(loc("Bamboo Thicket"), loc("Scenario"), loc("Eliminate the enemy."), -amBazooka, 0)
@@ -45,11 +45,12 @@ function onGameStart()
 	SpawnSupplyCrate(403,503,amParachute)
 
 	AddAmmo(enemy, amGrenade, 100)
+
+	SetWind(100)
 		
 end
 
 function onNewTurn()
-	SetWind(100)
 	turnNumber = turnNumber + 1
 end
 
