@@ -254,7 +254,7 @@ function SimpleMission(params)
 		params.missionIcon = 1 -- target icon
 	end
 	if params.goalText == nil then
-		params.goalText = loc("Defeat the enemy!")
+		params.goalText = loc("Eliminate the enemy.")
 	end
 	if params.customGoalCheck == nil and (params.customGoals ~= nil or params.customNonGoals ~= nil) then
 		params.customGoalCheck = "instant"

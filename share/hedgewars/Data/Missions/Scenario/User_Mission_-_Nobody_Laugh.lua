@@ -1,133 +1,97 @@
---------------------------------------
--- NOBODY LAUGH
--- a hilarious (not really) adventure
---------------------------------------
-
+HedgewarsScriptLoad("/Scripts/SimpleMission.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
-HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
-local hhs = {}
+local enemyAmmo = {
+	[amDEagle] = 100, [amShotgun] = 100, [amGrenade] = 100, [amBazooka] = 100, [amDrill] = 100
+}
 
-function onGameInit()
+SimpleMission({
+	missionTitle = loc("Nobody Laugh"),
+	missionIcon = 0,
+	goalText = 
+		loc("Eliminate the enemy.") .. "|" ..
+		loc("Unlimited Attacks: Attacks don't end your turn") .. "|"..
+		loc("Per-hog Ammo: Weapons are not shared between hogs"),
+	wind = 100,
+	initVars = {
+		TurnTime = 180000,
+		Map = "Bath",
+		Theme = "Nature",
+		Seed = 0,
+		GameFlags = gfInfAttack + gfPerHogAmmo + gfDisableWind,
+	},
+	ammoConfig = {
+		[amSwitch] = { count = 9 },
+	},
+	teams = {
+		{ name = loc("Nameless Heroes"),
+		flag = "cm_crossedswords",
+		grave = "eyecross",
+		voice = "HillBilly",
+		clanID = 0,
+		hogs = {
+			{
+			name = loc("Hunter"),
+			health = 1,
+			x = 1267, y = 451,
+			hat = "Skull",
+			botLevel = 0,
+			ammo = { [amParachute] = 1, [amHammer] = 1 },
+			},
+			{
+			name = loc("Drowner"),
+			health = 31,
+			x = 1332, y = 451,
+			hat = "mp3",
+			botLevel = 0,
+			ammo = { [amWhip] = 1 },
+			},
+		}},
+		{ name = loc("Clowns"),
+		flag = "cm_face",
+		grave = "Duck2",
+		voice = "Mobster",
+		clanID = 5,
+		hogs = {
+			{ name = loc("Poison"), health = 100, x = 1133, y = 446, hat = "WhySoSerious", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Bobo"), health = 100, x = 1215, y = 553, hat = "clown", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Copper"), health = 10, x = 414, y = 376, hat = "clown-copper", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Derp"), health = 100, x = 1590, y = 886, hat = "clown-crossed", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Eckles"), health = 100, x = 772, y = 754, hat = "clown-copper", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Frank"), health = 50, x = 1688, y = 714, hat = "clown-copper", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Harry"), health = 50, x = 1932, y = 837, hat = "clown-copper", botLevel = 1, ammo = enemyAmmo },
+			{ name = loc("Igmund"), health = 50, x = 1601, y = 733, hat = "WhySoSerious", botLevel = 1, ammo = enemyAmmo },
+		}},
+	},
+	girders = {
+		{ x = 1212, y = 710, frameIdx = 7 },
+		{ x = 1215, y = 570, frameIdx = 4 },
+		{ x = 1288, y = 520, frameIdx = 2 },
+		{ x = 1184, y = 468, frameIdx = 4 },
+		{ x = 1344, y = 468, frameIdx = 4 },
+		{ x = 1247, y = 346, frameIdx = 4 },
+		{ x = 667, y = 438, frameIdx = 4 },
+		{ x = 507, y = 438, frameIdx = 4 },
+		{ x = 434, y = 487, frameIdx = 2 },
+		{ x = 505, y = 537, frameIdx = 4 },
+		{ x = 665, y = 537, frameIdx = 4 },
+		{ x = 737, y = 487, frameIdx = 2 },
+		{ x = 416, y = 465, frameIdx = 6 },
+		{ x = 1415, y = 378, frameIdx = 6 },
+		{ x = 1300, y = 625, frameIdx = 3 },
+		{ x = 1359, y = 566, frameIdx = 3 },
+		{ x = 1436, y = 538, frameIdx = 0 },
+		{ x = 1505, y = 468, frameIdx = 4 },
+	},
 
-	Seed = 0
-	GameFlags = gfInfAttack + gfPerHogAmmo +gfDisableWind
-	-- Disable Sudden Death
-	HealthDecrease = 0
-	WaterRise = 0
-	TurnTime = 180000
-	CaseFreq = 0
-	MinesNum = 0
-	Explosives = 0
-	Map = "Bath"
-	Theme = "Nature"
-
-	AddTeam(loc("Nameless Heroes"), 14483456, "eyecross", "Wood", "HillBilly", "cm_crossedswords")
-	hhs[1] = AddHog(loc( "Hunter" ), 0, 1, "Skull")
-	SetGearPosition(hhs[1], 1267, 451)
-	hhs[2] = AddHog(loc("Drowner"), 0, 31, "mp3")
-	SetGearPosition(hhs[2], 1332, 451)
-
-	AddTeam(loc("Clowns"), 1175851, "Duck2", "Tank", "Mobster", "cm_face")
-	hhs[3] = AddHog(loc("Poison"), 1, 100, "WhySoSerious")
-	SetGearPosition(hhs[3], 1133, 446)
-	hhs[4] = AddHog(loc("Bobo"), 1, 100, "clown")
-	SetGearPosition(hhs[4], 1215, 553)
-	hhs[5] = AddHog(loc("Copper"), 1, 10, "clown-copper")
-	SetGearPosition(hhs[5], 414, 376)
-	hhs[6] = AddHog(loc("Derp"), 1, 100, "clown-crossed")
-	SetGearPosition(hhs[6], 1590, 886)
-	hhs[7] = AddHog(loc("Eckles"), 1, 100, "clown-copper")
-	SetGearPosition(hhs[7], 772, 754)
-	hhs[8] = AddHog(loc("Frank"), 1, 50, "clown-copper")
-	SetGearPosition(hhs[8], 1688, 714)
-	hhs[9] = AddHog(loc("Harry"), 1, 50, "clown-copper")
-	SetGearPosition(hhs[9], 1932, 837)
-	hhs[10] = AddHog(loc("Igmund"), 1, 50, "WhySoSerious")
-	SetGearPosition(hhs[10], 1601, 733)
-
-end
-
-function onGameStart()
-
-	AddAmmo(enemy, amAirAttack, 100)
-
-	ShowMission(	loc("Nobody Laugh"),
-					loc("Scenario"),
-					loc("Eliminate the enemy.") .. "|" ..
-					loc("Unlimited Attacks: Attacks don't end your turn") .. "|"..
-					loc("Per-hog Ammo: Weapons are not shared between hogs")
-					, 0, 0
-				)
-
-	-- GIRDERS
-	PlaceGirder(1212, 710, 7)
-	PlaceGirder(1215, 570, 4)
-	PlaceGirder(1288, 520, 2)
-	PlaceGirder(1184, 468, 4)
-	PlaceGirder(1344, 468, 4)
-	PlaceGirder(1247, 346, 4)
-
-	PlaceGirder(667, 438, 4)
-	PlaceGirder(507, 438, 4)
-	PlaceGirder(434, 487, 2)
-	PlaceGirder(505, 537, 4)
-	PlaceGirder(665, 537, 4)
-	PlaceGirder(737, 487, 2)
-
-	PlaceGirder(416, 465, 6)
-	PlaceGirder(1415, 378, 6)
-	PlaceGirder(1300, 625, 3)
-	PlaceGirder(1359, 566, 3)
-	PlaceGirder(1436, 538, 0)
-	PlaceGirder(1505, 468, 4)
-
-	------ CRATE LIST ------
-	tempG = SpawnSupplyCrate(1242, 315, amBaseballBat)
-	tempG = SpawnSupplyCrate(1309, 315, amAirAttack)
-	tempG = SpawnSupplyCrate(144, 895, amAirAttack)
-	tempG = SpawnSupplyCrate(664, 699, amIceGun)
-	tempG = SpawnSupplyCrate(1572, 444, amFirePunch)
-	tempG = SpawnSupplyCrate(1574, 382, amDynamite)
-
-	tempG = SpawnSupplyCrate(654, 513, amParachute)
-	tempG = SpawnSupplyCrate(1569, 413, amParachute)
-
-	-- HOG AMMO
-	AddAmmo(hhs[1],amParachute,1)
-	AddAmmo(hhs[1],amHammer,1)
-	AddAmmo(hhs[2],amWhip,1)
-
-	for i = 3, 10 do
-		AddAmmo(hhs[i], amDEagle, 100)
-		AddAmmo(hhs[i], amShotgun, 100)
-		AddAmmo(hhs[i], amGrenade, 100)
-		AddAmmo(hhs[i], amBazooka, 100)
-		AddAmmo(hhs[i], amDrill, 100)
-	end
-
-end
-
-function onNewTurn()
-	SetWind(100)
-end
-
-function onAmmoStoreInit()
-
-	SetAmmo(amBaseballBat, 0, 0, 0, 1)
-	SetAmmo(amAirAttack, 0, 0, 0, 1)
-	SetAmmo(amFirePunch, 0, 0, 0, 1)
-	SetAmmo(amDynamite, 0, 0, 0, 1)
-	SetAmmo(amHammer, 0, 0, 0, 1)
-	SetAmmo(amIceGun, 0, 0, 0, 1)
-
-	SetAmmo(amParachute, 0, 0, 0, 1)
-
-	SetAmmo(amSwitch, 9, 0, 0, 0)
-	SetAmmo(amSkip, 9, 0, 0, 0)
-
-end
-
-------------------------------
---                  I'm in         whitesppaaaaaaaaaacceeeee           :D
-------------------------------
+	gears = {
+		{ type = gtCase, crateType = "supply", x = 1242, y = 315, ammoType = amBaseballBat },
+		{ type = gtCase, crateType = "supply", x = 1309, y = 315, ammoType = amAirAttack },
+		{ type = gtCase, crateType = "supply", x = 144, y = 895, ammoType = amAirAttack },
+		{ type = gtCase, crateType = "supply", x = 664, y = 699, ammoType = amIceGun },
+		{ type = gtCase, crateType = "supply", x = 1572, y = 444, ammoType = amFirePunch },
+		{ type = gtCase, crateType = "supply", x = 1574, y = 382, ammoType = amDynamite },
+		{ type = gtCase, crateType = "supply", x = 654, y = 513, ammoType = amParachute },
+		{ type = gtCase, crateType = "supply", x = 1569, y = 413, ammoType = amParachute },
+	}
+})
