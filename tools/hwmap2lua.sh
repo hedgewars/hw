@@ -8,8 +8,6 @@
 # draw the map.
 # In Lua, call drawMap() in onGameInit. And don't forget
 # to set MapGen to mgDrawn. Then your map should be ready to go! :-)
-#
-# Many thanks to szczur!
 
 # FILE NAMES 
 IN="./map.hwmap";
