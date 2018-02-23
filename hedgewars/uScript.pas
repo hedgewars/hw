@@ -2514,14 +2514,17 @@ begin
 end;
 
 function lc_setwind(L : Plua_State) : LongInt; Cdecl;
+var vg: PVisualGear;
 begin
     if CheckLuaParamCount(L, 1, 'SetWind', 'windSpeed') then
         begin
         cWindSpeed:= int2hwfloat(Trunc(lua_tonumber(L, 1))) / 100 * cMaxWindSpeed;
         cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
         if cWindSpeed.isNegative then
-            CWindSpeedf := -cWindSpeedf;
-        AddVisualGear(0, 0, vgtSmoothWindBar);
+            cWindSpeedf := -cWindSpeedf;
+        vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
+        if vg <> nil then vg^.dAngle:= hwFloat2Float(cWindSpeed);
+            AddFileLog('Wind = '+FloatToStr(cWindSpeed));
         end;
     lc_setwind:= 0
 end;

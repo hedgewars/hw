@@ -80,6 +80,7 @@ Lua API:
  + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
  * AddAmmo now automatically unselects weapon if it would remove current ammo from current hedgehog
  * Fix call: SetWeapon(amNothing) now unselects weapon
+ * Fix call: SetWind did not update flake flying direction
  * Fix global: TotalRounds was stuck at -1 for several turns
 
 ====================== 0.9.23 ======================
