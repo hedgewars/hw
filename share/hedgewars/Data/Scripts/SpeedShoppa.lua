@@ -139,7 +139,7 @@ function SpeedShoppaMission(params)
 				endTime = TurnTimeLeft
 				finalize()
 			else
-				AddCaption(string.format(loc("%d crate(s) remaining"), #crates - cratesCollected))
+				AddCaption(string.format(loc("Crates left: %d"), #crates - cratesCollected))
 			end
 		elseif gear == playerHog then
 			finalize()
