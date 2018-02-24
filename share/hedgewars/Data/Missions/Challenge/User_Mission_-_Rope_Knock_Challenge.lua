@@ -151,16 +151,17 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(playerTeamName, 0x11F12B, "money", "Island", "Default", "cm_shoppa")
+	AddTeam(playerTeamName, 0xFF0204, "money", "Island", "Default", "cm_shoppa")
 	hhs[0] = AddHog(loc("Ace"), 0, 1, "Gasmask")
 	SetGearPosition(player, 1380, 1500)
 
-	AddTeam(loc("Unsuspecting Louts"), 0xDD0000, "Simple", "Island", "Default", "cm_face")
+	AddTeam(loc("Unsuspecting Louts"), 0x4980C1, "Simple", "Island", "Default", "cm_face")
 	for i = 1, 8 do
+		-- The name "generic" is a placeholder and will be replaced in AssignCharacter
 		hhs[i] = AddHog("generic", 0, 1, "NoHat")
 	end
 
-	AddTeam(loc("Unlucky Sods"), 0xDD0000, "Simple", "Island", "Default", "cm_balrog")
+	AddTeam(loc("Unlucky Sods"), 0x4980C1, "Simple", "Island", "Default", "cm_balrog")
 	for i = 9, 16 do
 		hhs[i] = AddHog("generic", 0, 1, "NoHat")
 	end
