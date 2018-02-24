@@ -53,6 +53,7 @@ function onGameStart()
                                 loc("Compete to use as few planes as possible!") .. "|" ..
 								"", -amRCPlane, 4000
                                 )
+	SetTeamLabel(loc("Wannabe Flyboys"), "0")
 
 	PlaceGirder(2192, 508, 6)
 	PlaceGirder(2192, 670, 6)
@@ -332,6 +333,7 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtRCPlane then
 		RCGear = gear
 		planesUsed = planesUsed + 1
+		SetTeamLabel(loc("Wannabe Flyboys"), tostring(planesUsed))
 		planeTimer = 0
 		missiles = 0
 	end
@@ -352,7 +354,6 @@ function onGearDelete(gear)
 		RCGear = nil
 		planeUhOh = false
 		missiles = 0
-		AddCaption(string.format(loc("Planes used: %d"), planesUsed))
 
 		if(planeTimer < 2000 and crateStreak == 0) then
 			nextComment = sndStupid

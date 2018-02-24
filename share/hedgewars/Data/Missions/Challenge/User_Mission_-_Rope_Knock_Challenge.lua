@@ -70,18 +70,24 @@ local HogData =	{
 
 				}
 
+local playerTeamName = loc("Wannabe Shoppsta")
+
 function GenericEnd()
 	EndGame()
+end
+
+function GetKillScore()
+	return math.ceil((hogsKilled / 16)*6000)
 end
 
 function GameOverMan()
 	missionWon = false
 	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge over!"), loc("Oh no! Just try again!"), -amSkip, 0)
 	SendStat(siGameResult, loc("Challenge over!"))
-	local score = math.ceil((hogsKilled / 16)*6000)
+	local score = GetKillScore()
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, score))
 	SendStat(siPointType, loc("points"))
-	SendStat(siPlayerKills, tostring(score), loc("Wannabe Shoppsta"))
+	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	PlaySound(sndHellish)
 end
 
@@ -91,13 +97,14 @@ function GG()
 	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge completed!"), loc("Congratulations!") .. "|" .. string.format(loc("Completion time: %.2fs"), completeTime), 0, 0)
 	PlaySound(sndHomerun)
 	SendStat(siGameResult, loc("Challenge completed!"))
-	local hogScore = math.ceil((hogsKilled / 16)*6000)
+	local hogScore = GetKillScore()
 	local timeScore = math.ceil((finishTime/TurnTime)*6000)
 	local score = hogScore + timeScore
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, hogScore))
 	SendStat(siCustomAchievement, string.format(loc("You have completed this challenge in %.2f s (+%d points)."), completeTime, timeScore))
 	SendStat(siPointType, loc("points"))
-	SendStat(siPlayerKills, tostring(score), loc("Wannabe Shoppsta"))
+	SendStat(siPlayerKills, tostring(score), playerTeamName)
+	SetTeamLabel(playerTeamName, tostring(score))
 end
 
 function AssignCharacter(p)
@@ -144,7 +151,7 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(loc("Wannabe Shoppsta"), 0x11F12B, "money", "Island", "Default", "cm_shoppa")
+	AddTeam(playerTeamName, 0x11F12B, "money", "Island", "Default", "cm_shoppa")
 	hhs[0] = AddHog(loc("Ace"), 0, 1, "Gasmask")
 	SetGearPosition(player, 1380, 1500)
 
@@ -171,6 +178,7 @@ function onGameStart()
                         loc("Use the rope to knock your enemies to their doom.") .. "|" ..
                         loc("Finish this challenge as fast as possible to earn bonus points."),
                         -amRope, 4000)
+	SetTeamLabel(playerTeamName, "0")
 
 	PlaceGirder(46,1783, 0)
 
@@ -235,6 +243,8 @@ function onGearDamage(gear, damage)
 		AddCaption(string.format(knockTaunt(), GetHogName(gear)), 0xFFFFFFFF, capgrpMessage)
 
 		hogsKilled = hogsKilled +1
+		SetTeamLabel(playerTeamName, tostring(GetKillScore()))
+
 		if hogsKilled == 15 then
 			PlaySound(sndRideOfTheValkyries)
 		elseif hogsKilled == 16 then

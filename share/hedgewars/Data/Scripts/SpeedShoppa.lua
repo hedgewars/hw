@@ -117,6 +117,8 @@ function SpeedShoppaMission(params)
 	_G.onGameStart = function()
 		SendHealthStatsOff()
 		ShowMission(params.missionTitle, loc("Challenge"), params.goalText, -amRope, 5000) 
+		-- <crates collected>/<total number of crates>
+		SetTeamLabel(params.teamName, string.format(loc("%d/%d"), cratesCollected, #crates))
 		for i=1,#crates do
 			spawnCrate(crates[i].x, crates[i].y)
 		end
@@ -130,6 +132,8 @@ function SpeedShoppaMission(params)
 	_G.onGearDelete = function(gear)
 		if GetGearType(gear) == gtCase and not hogHurt and not timeOut then
 			cratesCollected = cratesCollected + 1
+			-- <crates collected>/<total number of crates>
+			SetTeamLabel(params.teamName, string.format(loc("%d/%d"), cratesCollected, #crates))
 			PlaySound(sndShotgunReload)
 			if cratesCollected == #crates then
 				endTime = TurnTimeLeft

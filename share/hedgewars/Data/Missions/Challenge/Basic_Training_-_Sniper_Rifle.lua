@@ -51,6 +51,9 @@ local dynamiteGears = {}
 -- Position for delayed targets
 local delayedTargetTargetX, delayedTargetY
 
+-- Team name of the player's team
+local playerTeamName = loc("Sniperz")
+
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
 -- You may define as many custom functions as you
@@ -68,6 +71,12 @@ end
 function spawnTargetDelayed(x, y)
 	delayedTargetX = x
 	delayedTargetY = y
+	-- The previous target always counts double after destruction
+	score_bonus = score_bonus + 1
+end
+
+function getTargetScore()
+	return score_bonus * 200
 end
 
 -- Cut sequence to blow up land with dynamite
@@ -124,7 +133,7 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Create the player team
-	AddTeam(loc("Sniperz"), 14483456, "Simple", "Island", "Default", "cm_crosshair")
+	AddTeam(playerTeamName, 0xFF0204, "Simple", "Island", "Default", "cm_crosshair")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "Sniper")
 	SetGearPosition(player, 602, 1465)
@@ -146,6 +155,9 @@ function onGameStart()
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
 	ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amSniperRifle, 0)
+
+	-- Displayed initial player score
+	SetTeamLabel(playerTeamName, "0")
 end
 
 -- This function is called every game tick.
@@ -245,8 +257,6 @@ function onGearDelete(gear)
 				cinematic = false
 				SetCinematicMode(false)
 			end
-			-- Add bonus score for the previuos target
-			score_bonus = score_bonus + 1
 			-- Now *actually* spawn the delayed target
 			spawnTarget(delayedTargetX, delayedTargetY)
 		end
@@ -390,6 +400,7 @@ function onGearDelete(gear)
 			time_goal = TurnTimeLeft
 			end
 		end
+		SetTeamLabel(playerTeamName, getTargetScore())
 	end
 end
 
@@ -400,12 +411,13 @@ function generateStats()
 	if shots > 0 then
 		accuracy = (score/shots)*100
 	end
-	local end_score_targets = (score_bonus * 200)
+	local end_score_targets = getTargetScore()
 	local end_score_overall
 	if not game_lost then
 		local end_score_time = math.ceil(time_goal/5)
 		local end_score_accuracy = math.ceil(accuracy * 100)
 		end_score_overall = end_score_time + end_score_targets + end_score_accuracy
+		SetTeamLabel(playerTeamName, tostring(end_score_overall))
 
 		SendStat(siGameResult, loc("You have successfully finished the sniper rifle training!"))
 		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
@@ -420,6 +432,6 @@ function generateStats()
 		end_score_overall = end_score_targets
 	end
 	SendStat(siPointType, loc("points"))
-	SendStat(siPlayerKills, tostring(end_score_overall), loc("Sniperz"))
+	SendStat(siPlayerKills, tostring(end_score_overall), playerTeamName)
 end
 
