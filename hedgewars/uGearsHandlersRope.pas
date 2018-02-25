@@ -26,7 +26,7 @@ procedure doStepRope(Gear: PGear);
 
 implementation
 uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
-    uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender;
+    uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender, uGearsHandlersMess;
 
 const
     IsNilHHFatal = false;
@@ -462,28 +462,10 @@ begin
 
     if (HHGear^.State and gstMoving) <> 0 then
         begin
-        if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
-            SetLittle(HHGear^.dX);
-        if HHGear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
-            HHGear^.dY := _0;
-
-        HHGear^.X := HHGear^.X + HHGear^.dX;
+        doStepHedgehogMoving(HHGear);
         Gear^.X := Gear^.X + HHGear^.dX;
+        Gear^.Y := Gear^.Y + HHGear^.dY;
 
-        if TestCollisionYwithGear(HHGear, 1) <> 0 then
-            begin
-            CheckHHDamage(HHGear);
-            HHGear^.dY := _0
-            //HHGear^.State:= HHGear^.State and (not (gstHHJumping or gstHHHJump));
-            end
-        else
-            begin
-            HHGear^.Y := HHGear^.Y + HHGear^.dY;
-            Gear^.Y := Gear^.Y + HHGear^.dY;
-            HHGear^.dY := HHGear^.dY + cGravity;
-            if (GameFlags and gfMoreWind) <> 0 then
-                HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density
-            end;
 
         tt := Gear^.Elasticity;
         tx := _0;

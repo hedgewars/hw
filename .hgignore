@@ -26,7 +26,7 @@ CPackSourceConfig.cmake
 tools/cmake_uninstall.cmake
 install_manifest.txt
 .DS_Store
-*.swp
+*.sw?
 *.orig
 vittorio.*
 project_files/HedgewarsMobile/Data/
