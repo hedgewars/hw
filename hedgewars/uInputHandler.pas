@@ -99,15 +99,19 @@ end;
 // if it has been bound.
 // Returns -1 if the control has not been bound.
 function KeyBindToCode(bind: shortstring): LongInt;
-var code: LongInt;
+var code, index: LongInt;
 begin
-    code:= 0;
-    while (code <= cKeyMaxIndex) and (CurrentBinds[code] <> bind) do inc(code);
-    if code > cKeyMaxIndex then
+    index:= 0;
+    while (index <= High(CurrentBinds.binds)) and (CurrentBinds.binds[index] <> bind) do inc(index);
+    if index > High(CurrentBinds.binds) then
         // Return error
         KeyBindToCode:= -1
-    else
+    else begin
+        code:= 0;
+        while (code <= High(CurrentBinds.indices)) and (CurrentBinds.indices[code] <> index) do inc(code);
+        checkFails(code <= High(CurrentBinds.indices), 'binds registry inconsistency', True);
         KeyBindToCode:= code;
+    end;
 end;
 
 // Takes a control name (e.g. 'quit') and returns the corresponding
@@ -209,18 +213,23 @@ if(KeyDown and (code = SDLK_w)) then
 {$ELSE}
     // on other systems use this shortcut only if the keys are not bound to any command
     if tkbd[KeyNameToCode('left_ctrl')] or tkbd[KeyNameToCode('right_ctrl')] then
-        if ((CurrentBinds[KeyNameToCode('left_ctrl')] = '') or
-            (CurrentBinds[KeyNameToCode('right_ctrl')] = '')) and
-            (CurrentBinds[SDLK_w] = '') then
+        if ((CurrentBinds.indices[KeyNameToCode('left_ctrl')] = 0) or
+            (CurrentBinds.indices[KeyNameToCode('right_ctrl')] = 0)) and
+            (CurrentBinds.indices[SDLK_w] = 0) then
 {$ENDIF}
         ParseCommand('forcequit', true);
     end;
 
-if CurrentBinds[code][0] <> #0 then
+if CurrentBinds.indices[code] > 0 then
     begin
     if (code < cKeyMaxIndex - 2) // means not mouse buttons
         and KeyDown
-        and (not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')))
+        and (not ((CurrentBinds.binds[CurrentBinds.indices[code]] = 'put') 
+                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = 'ammomenu') 
+                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_u') 
+                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_d') 
+                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_l') 
+                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_r')))
         and (CurrentTeam <> nil) 
         and (not CurrentTeam^.ExtDriven) 
         then bShowAmmoMenu:= false;
@@ -229,20 +238,20 @@ if CurrentBinds[code][0] <> #0 then
         begin
         Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
 
-        if CurrentBinds[code] = 'switch' then
+        if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
-        else if CurrentBinds[code] = '+precise' then
+        else if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
             LocalMessage:= LocalMessage or gmPrecise;
 
-        ParseCommand(CurrentBinds[code], Trusted);
+        ParseCommand(CurrentBinds.binds[CurrentBinds.indices[code]], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
-    else if (CurrentBinds[code][1] = '+') then
+    else if (CurrentBinds.binds[CurrentBinds.indices[code]][1] = '+') then
         begin
-        if CurrentBinds[code] = '+precise' then
+        if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
             LocalMessage:= LocalMessage and (not gmPrecise);
-        s:= CurrentBinds[code];
+        s:= CurrentBinds.binds[CurrentBinds.indices[code]];
         s[1]:= '-';
         ParseCommand(s, Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
@@ -250,7 +259,7 @@ if CurrentBinds[code][0] <> #0 then
         end
     else
         begin
-        if CurrentBinds[code] = 'switch' then
+        if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
             LocalMessage:= LocalMessage and (not gmSwitch)
         end
     end
@@ -321,56 +330,69 @@ for t:= 0 to cKbdMaxIndex do
         ProcessKey(t, False);
 end;
 
+procedure RegisterBind(var binds: TBinds; key, value: shortstring);
+var code: LongInt;
+begin
+    checkFails(binds.lastIndex < 255, 'too many binds', true);
+
+    code:= KeyNameToCode(key);
+
+    checkFails(code >= 0, 'unknown key', true);
+
+    inc(binds.lastIndex);
+    binds.indices[code]:= binds.lastIndex;
+    binds.binds[binds.lastIndex]:= value
+end;
 
 procedure InitDefaultBinds;
 var i: Longword;
 begin
-    DefaultBinds[KeyNameToCode('escape')]:= 'quit';
-    DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
-    DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
-    DefaultBinds[KeyNameToCode('home')]:= 'rottags';
+    RegisterBind(DefaultBinds, 'escape', 'quit');
+    RegisterBind(DefaultBinds, _S'`', 'history');
+    RegisterBind(DefaultBinds, 'delete', 'rotmask');
+    RegisterBind(DefaultBinds, 'home', 'rottags');
 
     //numpad
     //DefaultBinds[265]:= '+volup';
     //DefaultBinds[256]:= '+voldown';
 
-    DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
-    DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
-    DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
-    DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
-    DefaultBinds[KeyNameToCode(_S'r')]:= 'record';
-    DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
-    DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
-    DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
-    DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
-    DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
+    RegisterBind(DefaultBinds, _S'0', '+volup');
+    RegisterBind(DefaultBinds, _S'9', '+voldown');
+    RegisterBind(DefaultBinds, _S'8', 'mute');
+    RegisterBind(DefaultBinds, _S'c', 'capture');
+    RegisterBind(DefaultBinds, _S'r', 'record');
+    RegisterBind(DefaultBinds, _S'h', 'findhh');
+    RegisterBind(DefaultBinds, _S'p', 'pause');
+    RegisterBind(DefaultBinds, _S's', '+speedup');
+    RegisterBind(DefaultBinds, _S't', 'chat');
+    RegisterBind(DefaultBinds, _S'y', 'confirm');
 
-    DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
-    DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
-    DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
+    RegisterBind(DefaultBinds, 'mousem', 'zoomreset');
+    RegisterBind(DefaultBinds, 'wheelup', 'zoomin');
+    RegisterBind(DefaultBinds, 'wheeldown', 'zoomout');
 
-    DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
-
-
-    DefaultBinds[KeyNameToCode('mousel')]:= '/put';
-    DefaultBinds[KeyNameToCode('mouser')]:= 'ammomenu';
-    DefaultBinds[KeyNameToCode('backspace')]:= 'hjump';
-    DefaultBinds[KeyNameToCode('tab')]:= 'switch';
-    DefaultBinds[KeyNameToCode('return')]:= 'ljump';
-    DefaultBinds[KeyNameToCode('space')]:= '+attack';
-    DefaultBinds[KeyNameToCode('up')]:= '+up';
-    DefaultBinds[KeyNameToCode('down')]:= '+down';
-    DefaultBinds[KeyNameToCode('left')]:= '+left';
-    DefaultBinds[KeyNameToCode('right')]:= '+right';
-    DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
+    RegisterBind(DefaultBinds, 'f12', 'fullscr');
 
 
-    DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
-    DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
-    DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
-    DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
-    for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+char(48+i);
-    for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
+    RegisterBind(DefaultBinds, 'mousel', '/put');
+    RegisterBind(DefaultBinds, 'mouser', 'ammomenu');
+    RegisterBind(DefaultBinds, 'backspace', 'hjump');
+    RegisterBind(DefaultBinds, 'tab', 'switch');
+    RegisterBind(DefaultBinds, 'return', 'ljump');
+    RegisterBind(DefaultBinds, 'space', '+attack');
+    RegisterBind(DefaultBinds, 'up', '+up');
+    RegisterBind(DefaultBinds, 'down', '+down');
+    RegisterBind(DefaultBinds, 'left', '+left');
+    RegisterBind(DefaultBinds, 'right', '+right');
+    RegisterBind(DefaultBinds, 'left_shift', '+precise');
+
+
+    RegisterBind(DefaultBinds, 'j0a0u', '+left');
+    RegisterBind(DefaultBinds, 'j0a0d', '+right');
+    RegisterBind(DefaultBinds, 'j0a1u', '+up');
+    RegisterBind(DefaultBinds, 'j0a1d', '+down');
+    for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
+    for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
 
     loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
 end;
@@ -437,7 +459,7 @@ var
     t: LongInt;
 begin
     for t:= 0 to cKbdMaxIndex do
-        if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
+        if (CurrentBinds.binds[CurrentBinds.indices[t]] <> binds.binds[binds.indices[t]]) and tkbd[t] then
             ProcessKey(t, False);
 
     CurrentBinds:= binds;
@@ -627,7 +649,7 @@ end;
 
 procedure addBind(var binds: TBinds; var id: shortstring);
 var KeyName, Modifier, tmp: shortstring;
-    i, b: LongInt;
+    i, code, b: LongInt;
 begin
 KeyName:= '';
 Modifier:= '';
@@ -651,14 +673,26 @@ if b = 0 then
 else
     begin
     // add bind: first check if this cmd is already bound, and remove old bind
-    i:= cKbdMaxIndex;
+    code:= High(binds.binds);
     repeat
-        dec(i)
-    until (i < 0) or (binds[i] = KeyName);
-    if (i >= 0) then
-        binds[i]:= '';
+        dec(code)
+    until (code < 0) or (binds.binds[code] = KeyName);
+    if (code >= 0) then
+    begin
+        i:= 0;
+        while (i <= High(binds.indices)) and (binds.indices[i] <> code) do inc(i);
+        checkFails(i <= High(binds.indices), 'binds registry inconsistency', true);
+        binds.binds[i]:= '';
+        binds.indices[code]:= 0
+    end else
+    begin
+    inc(binds.lastIndex);
+    checkFails(binds.lastIndex < High(binds.binds), 'too many binds', true);
+    i:= binds.lastIndex
+    end;
 
-    binds[b]:= KeyName;
+    binds.indices[b]:= i;
+    binds.binds[i]:= KeyName
     end
 end;
 

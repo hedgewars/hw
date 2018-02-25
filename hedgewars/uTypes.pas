@@ -349,7 +349,13 @@ type
         TeamDamage : Longword;
         end;
 
-    TBinds = array[0..cKbdMaxIndex] of shortstring;
+    TBinds = record
+                 indices: array[0..cKbdMaxIndex] of byte;
+                 // zeroth element is reserved, indices[i] == 0 means no binding
+                 binds: array[0..255] of shortstring;
+                 lastIndex: byte;
+             end;
+
     TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
     PVoicepack = ^TVoicepack;

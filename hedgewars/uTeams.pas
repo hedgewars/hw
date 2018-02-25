@@ -386,7 +386,7 @@ end;
 
 function AddTeam(TeamColor: Longword): PTeam;
 var team: PTeam;
-    c, t: LongInt;
+    c: LongInt;
 begin
 if checkFails(TeamsCount < cMaxTeams, 'Too many teams', true) then exit(nil);
 New(team);
@@ -399,8 +399,7 @@ team^.Flag:= 'hedgewars';
 TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
 
-for t:= 0 to cKbdMaxIndex do
-    team^.Binds[t]:= DefaultBinds[t];
+team^.Binds:= DefaultBinds;
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
