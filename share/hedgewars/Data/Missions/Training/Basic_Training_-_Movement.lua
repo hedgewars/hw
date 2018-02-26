@@ -240,6 +240,7 @@ local function LoadGearData()
 	crates[7] = SpawnHealthCrate(1297, 1683)		-- Back Jumping 2
 	crates[8] = SpawnSupplyCrate(1851, 1402, amSwitch, 100)	-- Switch Hedgehog
 	crates[9] = SpawnHealthCrate(564, 1772)			-- Mission Panel
+	crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
 end
 
 local function victory()
@@ -293,8 +294,7 @@ function onGearDelete(gear)
 		victory()
 	elseif gear == crates[4] then
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (1/2)"),
-		loc("Now just proceed to the next crates.").."|"..
-		loc("To get over the next obstacles, you have to do back jumps.") .. "|" ..
+		loc("For the next crate, you have to do back jumps.") .. "|" ..
 		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 5000)
 	elseif gear == crates[7] then
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
@@ -311,8 +311,8 @@ function onGearDelete(gear)
 		loc("Precise Aim: [Left Shift]"), 2, 9000)
 	elseif gear == crates[6] then
 		ShowMission(loc("Basic Movement Training"), loc("A mysterious Box"),
-		loc("The next crate is an utility crate.").."|"..		loc("What's in the box, you ask? Let's find out!").."|"..
-		loc("Remember: Hold down Left Shift to prevent slipping"), 2, 6000)
+		loc("The next crate is an utility crate.").."|"..loc("What's in the box, you ask? Let's find out!").."|"..
+		loc("Remember: Hold down [Left Shift] to prevent slipping"), 2, 6000)
 	elseif gear == crates[8] then
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (1/3)"),
 		loc("You have collected the “Switch Hedgehog” utility!").."|"..
@@ -322,7 +322,7 @@ function onGearDelete(gear)
 		loc("Attack: [Space]"), 2, 30000)
 	elseif gear == crates[3] then
 		ShowMission(loc("Basic Movement Training"), loc("Rubber"), loc("As you probably noticed, these rubber bands|are VERY elastic. Hedgehogs and many other|things will bounce off without taking any damage.").."|"..
-		loc("Now try to get out of this bounce house|and collect the final crate to the right."), 2, 8000)
+		loc("Now try to get out of this bounce house|and take the next crate."), 2, 8000)
 	elseif gear == crates[9] then
 		ShowMission(loc("Basic Movement Training"), loc("Health and Mission Panel"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
 		loc("Now go to the next crate.").."|"..
@@ -331,6 +331,12 @@ function onGearDelete(gear)
 		loc("Quit: [Esc]").."|"..
 		loc("Pause: [P]")
 		, 2, 900000)
+	elseif gear == crates[10] then
+		ShowMission(loc("Basic Movement Training"), loc("Turning Around"),
+		loc("By the way, you can turn around without walking|by holding down Precise when you hit a walk control.").."|"..
+		loc("Get the final crate to the right to complete the training.").."|"..
+		loc("Turn around: [Left Shift] + [Left]/[Right]")
+		, 2, 8000)
 	end
 end
 
