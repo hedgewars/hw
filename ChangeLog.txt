@@ -22,6 +22,7 @@ Frontend:
 
 Content:
  + New scenarios: Bazooka Battlefield, Tentacle Terror
+ + New basic training: Movement
  + Rewrite descriptions of many missions
  + Major overhaul of Sudden Death visuals in most themes
  + New flag: uk_scotland

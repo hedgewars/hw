@@ -1,3 +1,6 @@
+Basic_Training_-_Movement.name=Basic Movement Training
+Basic_Training_-_Movement.desc="Greenhorns start here! Learn how to move on different forms of terrain and how to switch hedgehogs."
+
 Basic_Training_-_Bazooka.name=Basic Bazooka Training
 Basic_Training_-_Bazooka.desc="Practice with your bazooka to hit 5 targets. Remember, the bazooka is affected by wind, use this to your advantage!"
 
