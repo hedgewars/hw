@@ -430,6 +430,9 @@ function onGearAdd(Gear)
 		if (TargetNumber == LaunchTarget or TargetNumber == UnderwaterAttackTarget) and BazookasLeft > 0 then
 			AddAmmo(Player, amBazooka, BazookasLeft)
 		end
+		-- If player starts using saucer, the player probably finished reading and the mission panel
+		-- would just get in the way. So we hide it!
+		HideMission()
 	end
 	if GetGearType(Gear) == gtGrenade then
 		GrenadeThrown = true
@@ -491,7 +494,9 @@ end
 
 
 function onNewTurn()
-	SetWeapon(amJetpack)
+	if GetAmmoCount(CurrentHedgehog, amJetpack) > 0 then
+		SetWeapon(amJetpack)
+	end
 end
 
 function onGameTick20()
