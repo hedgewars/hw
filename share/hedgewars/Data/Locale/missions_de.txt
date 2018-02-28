@@ -2,7 +2,7 @@ Basic_Training_-_Movement.name=Grundlagentraining: Fortbewegung
 Basic_Training_-_Movement.desc="Grünschnäbel fangen hier an! Lern, wie man sich auf unterschiedlichen Geländearten fortbewegt, und wie man Igel wechselt."
 
 Basic_Training_-_Bazooka.name=Grundlagentraining: Bazooka
-Basic_Training_-_Bazooka.desc="Üb mit deiner Bazooka und triff 5 Ziele. Denk dran, die Bazooka wird vom Wind beeinflusst, nutze dies zu deinem Vorteil aus!"
+Basic_Training_-_Bazooka.desc="Lern, wie man die Bazooka benutzt, lern über den Wind und zerstöre alle Ziele."
 
 Basic_Training_-_Grenade.name=Grundlagentraining: Granate
 Basic_Training_-_Grenade.desc="Wirf ein paar Granaten, um 5 zufällige Zielscheiben zu zerstören. Vergiss nicht: Stift ziehen UND werfen!"
