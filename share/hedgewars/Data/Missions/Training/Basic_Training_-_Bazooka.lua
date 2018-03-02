@@ -244,13 +244,6 @@ function onGearDelete(gear)
 			limitedAmmoReset = 20
 			flawless = false
 		end
-	elseif gear == hog then
-		SendStat(siCustomAchievement, loc("Your hedgehog died."))
-		SendStat(siCustomAchievement, loc("Oh no! Just try again!"))
-		SendStat(siGameResult, loc("You lose!"))
-		SendStat(siPlayerKills, "0", loc("Bazooka Team"))
-		EndGame()
-		gameOver = true
 	end
 end
 
