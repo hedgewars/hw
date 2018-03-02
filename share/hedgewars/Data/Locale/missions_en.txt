@@ -5,7 +5,7 @@ Basic_Training_-_Bazooka.name=Basic Bazooka Training
 Basic_Training_-_Bazooka.desc="Learn how to use the bazooka, learn about the wind and destroy all targets."
 
 Basic_Training_-_Grenade.name=Basic Grenade Training
-Basic_Training_-_Grenade.desc="Throw some grenades to destroy 5 random targets. Remember: You pull the pin AND throw!"
+Basic_Training_-_Grenade.desc="Learn everything you need to know about grenades and destroy all targets. Remember: You pull the pin AND throw!"
 
 Basic_Training_-_Rope.name=Basic Rope Training
 Basic_Training_-_Rope.desc="The rope is one of the most versatile utilities you can get, but it needs a lot of practice. Here you learn the basics of roping."

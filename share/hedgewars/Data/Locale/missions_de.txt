@@ -5,7 +5,7 @@ Basic_Training_-_Bazooka.name=Grundlagentraining: Bazooka
 Basic_Training_-_Bazooka.desc="Lern, wie man die Bazooka benutzt, lern über den Wind und zerstöre alle Ziele."
 
 Basic_Training_-_Grenade.name=Grundlagentraining: Granate
-Basic_Training_-_Grenade.desc="Wirf ein paar Granaten, um 5 zufällige Zielscheiben zu zerstören. Vergiss nicht: Stift ziehen UND werfen!"
+Basic_Training_-_Grenade.desc="Lern alles, was du über Granaten wissen solltest und zerstöre alle Ziele. Vergiss nicht: Stift ziehen UND werfen!"
 
 Basic_Training_-_Sniper_Rifle.name=Zielübung: Scharfschützengewehr
 Basic_Training_-_Sniper_Rifle.desc="Das ist der perfekte Schießstand für Scharfschützen! Zerstöre alle Ziele so schnell und treffsicher du kannst und werd zur Legende!"
