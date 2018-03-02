@@ -21,7 +21,7 @@ local hog_greenhorn, hog_cappy
 local crates = {}
 local switcherGear
 local tookDamage = false
-local switchTicks = -1
+local switchTextDelay = -1
 local walkingText = false
 
 local map = {
@@ -256,14 +256,25 @@ local function victory()
 	EndGame()
 end
 
-function onGearAdd(gear)
-	if GetGearType(gear) == gtSwitcher then
-		switcherGear = gear
+local function switchHedgehogText()
+	if CurrentHedgehog == hog_cappy then
+		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (3/3)"),
+		loc("This is Cappy.").."|"..
+		loc("To finish hedgehog selection, just do anything|with him, like walking."),
+		2, 20000)
+	else
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (2/3)"),
 		loc("You have activated Switch Hedgehog!").."|"..
 		loc("The spinning arrows above your hedgehog show|which hedgehog is selected right now.").."|"..
 		loc("Hit the “Switch Hedgehog” key until you have|selected Cappy, the hedgehog with the cap!").."|"..
 		loc("Switch hedgehog: [Tabulator]"), 2, 20000)
+	end
+end
+
+function onGearAdd(gear)
+	if GetGearType(gear) == gtSwitcher then
+		switcherGear = gear
+		switchHedgehogText()
 	end
 end
 
@@ -351,29 +362,17 @@ end
 function onSwitch()
 	-- Update help while switching hogs
 	if switcherGear then
-		-- Delay by one tick for CurrentHedgehog to update
-		switchTicks = 1
+		-- Delay for CurrentHedgehog to update
+		switchTextDelay = 1
 	end
 end
 
-function onGameTick()
-	--AddCaption(GetX(CurrentHedgehog)..":"..GetY(CurrentHedgehog))
-	if switchTicks > 0 then
-		switchTicks = switchTicks - 1
-	elseif switchTicks == 0 then
-		if CurrentHedgehog == hog_cappy then
-			ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (3/3)"),
-			loc("This is Cappy.").."|"..
-			loc("To finish hedgehog selection, just do anything|with him, like walking."),
-			2, 20000)
-		else
-			ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (2/3)"),
-			loc("You have activated Switch Hedgehog!").."|"..
-			loc("The spinning arrows above your hedgehog show|which hedgehog is selected right now.").."|"..
-			loc("Hit the “Switch Hedgehog” key until you have|selected Cappy, the hedgehog with the cap!").."|"..
-			loc("Switch hedgehog: [Tabulator]"), 2, 20000)
-		end
-		switchTicks = -1
+function onGameTick20()
+	if switchTextDelay > 0 then
+		switchTextDelay = switchTextDelay - 1
+	elseif switchTextDelay == 0 then
+		switchHedgehogText()
+		switchTextDelay = -1
 	end
 end
 
