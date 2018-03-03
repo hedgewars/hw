@@ -36,7 +36,7 @@ type
         end;
 
     // Possible states of the game
-    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
+    TGameState = (gsLandGen, gsStart, gsGame, gsConfirm, gsExit, gsSuspend);
 
     // Game types that help determining what the engine is actually supposed to do
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax, gmtRecord);

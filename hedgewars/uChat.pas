@@ -303,7 +303,7 @@ left:= 4 - cScreenWidth div 2;
 top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 
 // draw chat input line first and under all other lines
-if (GameState = gsChat) and (InputStr.Tex <> nil) then
+if isInChatMode and (InputStr.Tex <> nil) then
     begin
 
     if InputLinePrefix.Tex = nil then
@@ -575,7 +575,7 @@ begin
     history:= 0;
     SDL_StopTextInput();
     //SDL_EnableKeyRepeat(0,0);
-    GameState:= gsGame;
+    isInChatMode:= false;
     ResetKbd;
 end;
 
@@ -1101,7 +1101,7 @@ procedure chChat(var s: shortstring);
 var i: Integer;
 begin
     s:= s; // avoid compiler hint
-    GameState:= gsChat;
+    isInChatMode:= true;
     SDL_StopTextInput();
     SDL_StartTextInput();
     //Make REALLY sure unexpected events are flushed (1 time is insufficient as of SDL 2.0.7)

@@ -26,7 +26,7 @@ procedure doStepRope(Gear: PGear);
 
 implementation
 uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
-    uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender, uGearsHandlersMess;
+    uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender;
 
 const
     IsNilHHFatal = false;

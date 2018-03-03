@@ -51,6 +51,7 @@ var
     cFlattenClouds     : boolean;
     cIce               : boolean;
     cSnow              : boolean;
+    isInChatMode       : boolean;
 
     cAltDamage         : boolean;
     cReducedQuality    : LongWord;
@@ -2662,6 +2663,7 @@ begin
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
+    isInChatMode        := false;
 
         {*  REFERENCE
       4096 -> $FFFFF000
