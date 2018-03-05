@@ -49,12 +49,12 @@ handleCmd_lobby ["CHAT", msg] = do
     return [AnswerClients s ["CHAT", n, msg], RegisterEvent LobbyChatMessage]
 
 handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
-    | illegalName rName = return [Warning $ loc "Illegal room name"]
+    | illegalName rName = return [Warning $ loc "Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}"]
     | otherwise = do
         rs <- allRoomInfos
         cl <- thisClient
         return $ if isJust $ find (\r -> rName == name r) rs then
-            [Warning "Room exists"]
+            [Warning $ loc "A room with the same name already exists."]
             else
             [
                 AddRoom rName roomPassword
@@ -90,15 +90,15 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let clTeamsNames = map teamname clTeams
     return $
         if isNothing maybeRI then
-            [Warning $ loc "No such room"]
+            [Warning $ loc "No such room."]
             else if (not sameProto) && (not $ isAdministrator cl) then
-            [Warning $ loc "Room version incompatible to your hedgewars version"]
+            [Warning $ loc "Room version incompatible to your Hedgewars version!"]
             else if isRestrictedJoins jRoom && not (hasSuperPower cl) then
-            [Warning $ loc "Joining restricted"]
+            [Warning $ loc "Access denied. This room currently doesn't allow joining."]
             else if isRegisteredOnly jRoom && (not $ isRegistered cl) && not (isAdministrator cl) then
-            [Warning $ loc "Registered users only"]
+            [Warning $ loc "Access denied. This room is for registered users only."]
             else if isBanned then
-            [Warning $ loc "You are banned in this room"]
+            [Warning $ loc "You are banned from this room."]
             else if roomPassword /= password jRoom  && not (hasSuperPower cl) then
             [NoticeMessage WrongPassword]
             else

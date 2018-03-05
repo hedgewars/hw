@@ -34,9 +34,9 @@ handleCmd_NotEntered :: CmdHandler
 handleCmd_NotEntered ["NICK", newNick] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
-    if not . B.null $ nick cl then return [ProtocolError $ loc "Nickname already chosen"]
+    if not . B.null $ nick cl then return [ProtocolError $ loc "Nickname already taken."]
         else
-        if illegalName newNick then return [ByeClient $ loc "Illegal nickname"]
+        if illegalName newNick then return [ByeClient $ loc "Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}"]
             else
             return $
                 ModifyClient (\c -> c{nick = newNick}) :
@@ -46,9 +46,9 @@ handleCmd_NotEntered ["NICK", newNick] = do
 handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
-    if clientProto cl > 0 then return [ProtocolError $ loc "Protocol already known"]
+    if clientProto cl > 0 then return [ProtocolError $ loc "Protocol already known."]
         else
-        if parsedProto == 0 then return [ProtocolError $ loc "Bad number"]
+        if parsedProto == 0 then return [ProtocolError $ loc "Bad number."]
             else
             return $
                 ModifyClient (\c -> c{clientProto = parsedProto}) :
@@ -90,7 +90,7 @@ handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
 
-    if parsedProto == 0 then return [ProtocolError $ loc "Bad number"]
+    if parsedProto == 0 then return [ProtocolError $ loc "Bad number."]
         else
         return $ [
             ModifyClient (\c -> c{clientProto = parsedProto, nick = newNick, webPassword = password, isChecker = True})
