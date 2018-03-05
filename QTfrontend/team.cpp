@@ -41,7 +41,7 @@ HWTeam::HWTeam(const QString & teamname) :
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         m_hedgehogs.append(HWHog());
-        m_hedgehogs[i].Name = (QLineEdit::tr("hedgehog %1").arg(i+1));
+        m_hedgehogs[i].Name = (QLineEdit::tr("Hedgehog %1").arg(i+1));
         m_hedgehogs[i].Hat = "NoHat";
     }
     m_grave = "Statue";
@@ -185,7 +185,7 @@ bool HWTeam::loadFromFile()
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
-        m_hedgehogs[i].Name = teamfile.value(hh + "Name", QString("hedgehog %1").arg(i+1)).toString();
+        m_hedgehogs[i].Name = teamfile.value(hh + "Name", QString("Hedgehog %1").arg(i+1)).toString();
         m_hedgehogs[i].Hat = teamfile.value(hh + "Hat", "NoHat").toString();
         m_hedgehogs[i].Rounds = teamfile.value(hh + "Rounds", 0).toInt();
         m_hedgehogs[i].Kills = teamfile.value(hh + "Kills", 0).toInt();
