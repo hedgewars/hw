@@ -34,7 +34,7 @@ handleCmd_NotEntered :: CmdHandler
 handleCmd_NotEntered ["NICK", newNick] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
-    if not . B.null $ nick cl then return [ProtocolError $ loc "Nickname already taken."]
+    if not . B.null $ nick cl then return [ProtocolError $ loc "Nickname already provided."]
         else
         if illegalName newNick then return [ByeClient $ loc "Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}"]
             else
