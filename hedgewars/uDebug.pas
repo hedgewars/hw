@@ -54,7 +54,10 @@ end;
 function checkFails(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
 begin
     if not Assert then
+        begin
+        lastConsoleLine:= Msg;
         OutError(Msg, false);
+        end;
 
     allOK:= allOK and (Assert or (not isFatal));
     checkFails:= (not Assert) and isFatal
