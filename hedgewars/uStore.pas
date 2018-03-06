@@ -189,9 +189,13 @@ md:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
-        NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth);
+        if ExtDriven then
+             NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth)
+        else NameTagTex:= RenderStringTex(ansistring(TeamName), Clan^.Color, Font);
         if length(Owner) > 0 then
-            OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth);
+            if ExtDriven then
+                 OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth)
+            else OwnerTex:= RenderStringTex(ansistring(Owner), Clan^.Color, Font);
 
         r.x:= 0;
         r.y:= 0;
@@ -269,7 +273,9 @@ for t:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth);
+                    if ExtDriven then
+                         NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth)
+                    else NameTagTex:= RenderStringTex(ansistring(Name), Clan^.Color, fnt16);
                     if Hat = 'NoHat' then
                         begin
                         if (month = 4) and (md = 20) then
