@@ -31,12 +31,13 @@ excessive thinking or moving.
 
 Getting started
 ---------------
-For complete beginners we recommend to start with the the first 2 or 3
-missions of the campaign “A Classic Fairytale” in the singleplayer menu.
-It explains the basic controls and gameplay.
-
-Note that Hedgewars doesn't have a *complete* tutorial yet, but it is
-planned to create one in future versions.
+For complete beginners we recommend to play in singleplayer mode first.
+Start with the Basic Movement Training found in the training menu.
+Proceed with the other training missions.
+After completing the training, try to play some quick matches against the
+computer (also found in the singleplayer menu).
+Hedgewars has many weapons, so play a few matches to get a better feeling
+for them.
 
 In-depth information about the game can be found online:
 
