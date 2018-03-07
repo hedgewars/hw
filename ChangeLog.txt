@@ -18,6 +18,7 @@ Game:
 
 Frontend:
  + Schemes are now stored in separate files under Schemes
+ + Lead player to training missions when starting Hedgewars the first time
  * Fix broken preview of team hats (e.g. cap_team)
 
 Content:

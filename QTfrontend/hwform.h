@@ -66,6 +66,7 @@ class HWForm : public QMainWindow
         void setButtonDescription(QString desc);
         void backDescription();
         void GoToVideos();
+        void GoToTraining();
 
         void NetConnectQuick(const QString & host, quint16 port);
         void PlayDemoQuick(const QString & demofilename);

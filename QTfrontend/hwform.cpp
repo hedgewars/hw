@@ -646,6 +646,11 @@ void HWForm::GoToVideos()
     GoToPage(ID_PAGE_VIDEOS);
 }
 
+void HWForm::GoToTraining()
+{
+    GoToPage(ID_PAGE_TRAINING);
+}
+
 //TODO: maybe find a better place for this?
 QString HWForm::stringifyPageId(quint32 id)
 {

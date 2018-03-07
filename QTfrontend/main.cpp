@@ -51,6 +51,8 @@
 #include <QSplashScreen>
 #endif
 
+#include <QMessageBox>
+
 // Program resources
 #ifdef __APPLE__
 static CocoaInitializer * cocoaInit = NULL;
@@ -311,6 +313,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    bool isProbablyNewPlayer = false;
+
     // setup PhysFS
     engine = new FileEngineHandler(argv[0]);
     engine->mount(datadir->absolutePath());
@@ -324,6 +328,23 @@ int main(int argc, char *argv[])
     {
         QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
         settings.setIniCodec("UTF-8");
+
+        // Heuristic to figure out if the user is (probably) a first-time player.
+        // If nickname is not set, then probably yes.
+        // The hidden setting firstLaunch is, if present, used to force HW to
+        // treat iself as if it were launched the first time.
+        QString nick = settings.value("net/nick", QString()).toString();
+        if (settings.contains("frontend/firstLaunch"))
+        {
+            isProbablyNewPlayer = settings.value("frontend/firstLaunch").toBool();
+        }
+        else
+        {
+            isProbablyNewPlayer = nick.isNull();
+        }
+
+        // Set firstLaunch to false to make sure we remember we have been launched before.
+        settings.setValue("frontend/firstLaunch", false);
 
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
@@ -397,6 +418,23 @@ int main(int argc, char *argv[])
     splash.finish(app.form);
 #endif
     app.form->show();
+
+    // Show welcome message for (suspected) first-time player and
+    // point towards the Training menu.
+    if(isProbablyNewPlayer) {
+        QMessageBox questionTutorialMsg(app.form);
+        questionTutorialMsg.setIcon(QMessageBox::Question);
+        questionTutorialMsg.setWindowTitle(QMessageBox::tr("Welcome to Hedgewars"));
+        questionTutorialMsg.setText(QMessageBox::tr("Welcome to Hedgewars!\n\nYou seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?"));
+        questionTutorialMsg.setWindowModality(Qt::WindowModal);
+        questionTutorialMsg.addButton(QMessageBox::Yes);
+        questionTutorialMsg.addButton(QMessageBox::No);
+
+        int answer = questionTutorialMsg.exec();
+        if (answer == QMessageBox::Yes) {
+            app.form->GoToTraining();
+        }
+    }
 
     if (app.urlString)
         app.fakeEvent();
