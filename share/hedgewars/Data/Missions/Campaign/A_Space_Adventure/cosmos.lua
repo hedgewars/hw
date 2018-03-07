@@ -91,8 +91,18 @@ teamC.color = 0x38D61C -- green
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 function onGameInit()
+	-- get the check point
+	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
+		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
+	end
+
 	Seed = 35
-	GameFlags = gfSolidLand + gfDisableWind + gfTagTeam
+	ClearGameFlags()
+	EnableGameFlags(gfSolidLand, gfDisableWind, gfTagTeam)
+	if checkPointReached == 4 then
+		-- Disable walking as long we're stuck on the moon
+		EnableGameFlags(gfArtillery)
+	end
 	TurnTime = 20000
 	CaseFreq = 0
 	MinesNum = 0
@@ -126,14 +136,6 @@ function onGameInit()
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard2.gear, guard2.x, guard2.y)
-	-- get the check point
-	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
-	end
-	if checkPointReached == 4 then
-		-- Disable walking as long we're stuck on the moon
-		GameFlags = bor(GameFlags, gfArtillery)
-	end
 	-- Whether to start with an animation
 	local startSequence
 	-- do checkpoint stuff needed before game starts

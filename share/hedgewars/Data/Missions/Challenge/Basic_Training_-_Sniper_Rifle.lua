@@ -113,7 +113,8 @@ function onGameInit()
 	-- The base number for the random number generator
 	Seed = 0
 	-- Game settings and rules
-	GameFlags = gfMultiWeapon + gfOneClanMode + gfArtillery
+	ClearGameFlags()
+	EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfArtillery)
 	-- The time the player has to move each round (in ms)
 	TurnTime = 150000
 	-- The frequency of crate drops

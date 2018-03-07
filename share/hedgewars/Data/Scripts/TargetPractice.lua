@@ -138,7 +138,8 @@ function TargetPracticeMission(params)
 
 	_G.onGameInit = function()
 		Seed = 1
-		GameFlags = gfDisableWind + gfInfAttack + gfOneClanMode + solid + artillery
+		ClearGameFlags()
+		EnableGameFlags(gfDisableWind, gfInfAttack, gfOneClanMode, solid, artillery)
 		TurnTime = params.time
 		Map = params.map
 		Theme = params.theme
