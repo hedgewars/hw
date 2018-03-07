@@ -225,7 +225,7 @@ function onGameTick()
 			ShowMission(loc("Basic Rope Training"), loc("How to Rope"),
 			loc("Great!").."|"..
 			loc("Use the rope to get to the target!").."|"..
-			loc("Extend/Retract rope: [Up]/[Down]").."|"..
+			loc("Retract/Extend rope: [Up]/[Down]").."|"..
 			loc("Swing: [Left]/[Right]").."|"..
 			loc("Release rope: [Attack]"), 2, 15000)
 			ropeAttached = true
