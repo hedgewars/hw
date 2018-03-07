@@ -23,6 +23,7 @@
 #include <QListWidgetItem>
 #include <QPushButton>
 
+#include <QTextStream>
 #include <QFile>
 #include <QLocale>
 #include <QSettings>
@@ -194,14 +195,46 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
                 m_widget = lstScenarios;
                 break;
         }
+        // scripts to load
+        // first, load scripts in order specified in order.cfg (if present)
+        QFile orderFile(QString("physfs://Missions/%1/order.cfg").arg(subFolder));
+        QStringList orderedMissions;
+        if (orderFile.open(QFile::ReadOnly))
+        {
+            QString m_id;
+            QTextStream input(&orderFile);
+            while(true)
+            {
+                m_id = input.readLine();
+                if(m_id.isNull() || m_id.isEmpty())
+                {
+                    break;
+                }
+                QListWidgetItem * item = new QListWidgetItem(m_id);
+                QString name = item->text().replace("_", " ");
+                name = m_info->value(m_id + ".name", name).toString();
+                item->setText(name);
+                item->setData(Qt::UserRole, m_id);
+                m_widget->addItem(item);
+
+                orderedMissions << m_id;
+            }
+        }
+
+        // then, just load anything else in no particular order
         m_list = dataMgr.entryList(
                     "Missions/" + subFolder,
                     QDir::Files, QStringList("*.lua")).
                replaceInStrings(QRegExp("\\.lua$"), "");
 
-        // scripts to load - TODO: model?
         foreach (const QString & m_id, m_list)
         {
+            // Disallow duplicates from order.cfg
+            if (orderedMissions.contains(m_id))
+            {
+                continue;
+            }
+
             QListWidgetItem * item = new QListWidgetItem(m_id);
 
             // fallback name: replace underscores in mission name with spaces
