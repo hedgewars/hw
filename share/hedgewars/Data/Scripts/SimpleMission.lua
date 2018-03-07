@@ -638,13 +638,17 @@ function SimpleMission(params)
 		Explosives = 0
 
 		for initVarName, initVarValue in pairs(params.initVars) do
-			_G[initVarName] = initVarValue
+			if initVarName == GameFlags then
+				EnableGameFlags(initVarValue)
+			else
+				_G[initVarName] = initVarValue
+			end
 		end
 		if #params.teams == 1 then
-			GameFlags = bor(GameFlags, gfOneClanMode)
+			EnableGameFlags(gfOneClanMode)
 		end
 		if params.wind then
-			GameFlags = bor(GameFlags, gfDisableWind)
+			EnableGameFlags(gfDisableWind)
 		end
 
 		local clanCounter = 0
