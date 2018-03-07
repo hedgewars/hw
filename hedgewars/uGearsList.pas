@@ -315,6 +315,8 @@ case Kind of
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
                         gear^.Hedgehog^.Effects[heResurrectable] := 1;
+                if (GameFlags and gfArtillery) <> 0 then
+                    gear^.Hedgehog^.Effects[heArtillery] := 1;
                 // this would presumably be set in the frontend
                 // if we weren't going to do that yet, would need to reinit GetRandom
                 // oh, and, randomising slightly R and B might be nice too.

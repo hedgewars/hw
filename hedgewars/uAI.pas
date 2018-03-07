@@ -288,7 +288,7 @@ if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 th
     AddAction(Actions, aia_Weapon, Longword(amSkip), 100 + random(200), 0, 0);
 
 if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoMoveAfter) = 0))
-    and (GameFlags and gfArtillery = 0) and (cGravityf <> 0) then
+    and (CurrentHedgehog^.Effects[heArtillery] = 0) and (cGravityf <> 0) then
     begin
     tmp:= random(2) + 1;
     Push(0, Actions, Me^, tmp);

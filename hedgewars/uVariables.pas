@@ -193,7 +193,6 @@ var
     cLaserSighting  : boolean;
     cLaserSightingSniper : boolean;
     cVampiric       : boolean;
-    cArtillery      : boolean;
     WeaponTooltipTex: PTexture;
     AmmoMenuInvalidated: boolean;
     AmmoRect        : TSDL_Rect;
@@ -2823,7 +2822,6 @@ begin
     cLaserSighting  := false;
     cLaserSightingSniper := false;
     cVampiric       := false;
-    cArtillery      := false;
     flagMakeCapture := false;
     flagDumpLand    := false;
     bBetweenTurns   := false;

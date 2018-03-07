@@ -515,8 +515,6 @@ begin
         cLaserSightingSniper:= false
         end;
 
-    if (GameFlags and gfArtillery) = 0 then
-        cArtillery:= false;
     // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
     if (CurrentTeam <> nil) then
         with CurrentTeam^ do
@@ -735,8 +733,6 @@ if (GameFlags and gfInvulnerable) <> 0 then
 if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;
 
-if (GameFlags and gfArtillery) <> 0 then
-    cArtillery:= true;
 for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     begin
     rx:= GetRandom(rightX-leftX)+leftX;

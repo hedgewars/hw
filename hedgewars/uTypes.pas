@@ -229,7 +229,7 @@ type
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen, heArtillery);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 

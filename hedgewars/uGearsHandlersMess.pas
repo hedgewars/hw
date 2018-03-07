@@ -1363,8 +1363,8 @@ begin
             begin
             if (Gear^.Kind = gtSniperRifleShot) then
                 cLaserSightingSniper := false;
-            if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and ((GameFlags and gfArtillery) = 0) then
-                cArtillery := false;
+            if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and (CurrentHedgehog^.Effects[heArtillery] = 2) then
+                CurrentHedgehog^.Effects[heArtillery]:= 0;
 
         // Bullet Hit
             if ((Gear^.State and gstDrowning) = 0) and (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
@@ -1410,8 +1410,9 @@ var HHGear: PGear;
     shell: PVisualGear;
 begin
 
-    cArtillery := true;
     HHGear := Gear^.Hedgehog^.Gear;
+    if (Gear^.Hedgehog^.Effects[heArtillery] <> 1) then
+        Gear^.Hedgehog^.Effects[heArtillery]:= 2;
 
     if HHGear = nil then
         begin
@@ -4860,7 +4861,7 @@ begin
             // let's save the HH's dX's direction so we can decide where the "top" of the portal hole
             newPortal^.Elasticity.isNegative := CurrentHedgehog^.Gear^.dX.isNegative;
             // when doing a backjump the dx is the opposite of the facing direction
-            if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then
+            if ((Gear^.State and gstHHHJump) <> 0) and (Effects[heArtillery] = 0) then
                 newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
 
             // make portal gun look unloaded

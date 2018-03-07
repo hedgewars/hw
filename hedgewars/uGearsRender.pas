@@ -279,7 +279,7 @@ begin
          curhat:= ChefHatTexture
     else curhat:= HH^.HatTex;
     m:= 1;
-    if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then
+    if ((Gear^.State and gstHHHJump) <> 0) and (HH^.Effects[heArtillery] = 0) then
         m:= -1;
     sx:= ox + 1; // this offset is very common
     sy:= oy - 3;

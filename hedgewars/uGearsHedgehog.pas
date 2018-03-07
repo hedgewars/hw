@@ -77,8 +77,8 @@ with HHGear^.Hedgehog^ do
 
     if (MultiShootAttacks > 0) then
         begin
-        if (CurAmmoType = amSniperRifle) and ((GameFlags and gfArtillery) = 0) then
-            cArtillery := false;
+        if (Effects[heArtillery] = 2) then
+            Effects[heArtillery]:= 0;
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0 then
             begin
             MultiShootAttacks:= Ammoz[CurAmmoType].Ammo.NumPerTurn;
@@ -270,7 +270,7 @@ with Gear^,
             lx:= X + int2hwfloat(round(GetLaunchX(CurAmmoType, hwSign(dX), Angle)));
             ly:= Y + int2hwfloat(round(GetLaunchY(CurAmmoType, Angle)));
 
-            if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then
+            if ((Gear^.State and gstHHHJump) <> 0) and (Effects[heArtillery] = 0) then
                 xx:= - xx;
             if Ammoz[CurAmmoType].Ammo.AttackVoice <> sndNone then
                 AddVoice(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
@@ -829,7 +829,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
                (TestCollisionYwithGear(Gear, -1) = 0) then
                 begin
                 Gear^.dY:= -_0_15;
-                if not cArtillery then
+                if Gear^.Hedgehog^.Effects[heArtillery] = 0 then
                     Gear^.dX:= SignAs(_0_15, Gear^.dX);
                 Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
                 PlaySoundV(sndJump1, Gear^.Hedgehog^.Team^.voicepack);
@@ -874,7 +874,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 
     Gear^.Hedgehog^.visStepPos:= (Gear^.Hedgehog^.visStepPos + 1) and 7;
 
-    if (not cArtillery or
+    if ((Gear^.Hedgehog^.Effects[heArtillery] = 0) or
            ((CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch))) and
        ((Gear^.Message and gmPrecise) = 0) then
         MakeHedgehogsStep(Gear);
@@ -1043,7 +1043,7 @@ else
 
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
             begin
-            if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery)
+            if ((Gear^.State and gstHHHJump) <> 0) and (Gear^.Hedgehog^.Effects[heArtillery] = 0)
             and (Gear^.dX.QWordValue < _0_02.QWordValue) then
                 begin
                 if land and lfBouncy <> 0 then
@@ -1348,14 +1348,14 @@ if (HHGear^.State and gstMoving) <> 0 then
             begin
             HHGear^.State:= HHGear^.State or gstHHHJump;
             HHGear^.dY:= -_0_25;
-            if not cArtillery then
+            if (Hedgehog^.Effects[heArtillery] = 0) then
                 HHGear^.dX:= -SignAs(_0_02, HHGear^.dX);
             PlaySoundV(sndJump2, Hedgehog^.Team^.voicepack)
             end;
 
     HHGear^.Message:= HHGear^.Message and (not (gmLJump or gmHJump));
 
-    if (not cArtillery) and wasJumping and (TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0) then
+    if (Hedgehog^.Effects[heArtillery] = 0) and wasJumping and (TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0) then
         SetLittle(HHGear^.dX);
 
     if Hedgehog^.Gear <> nil then
