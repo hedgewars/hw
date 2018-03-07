@@ -3601,7 +3601,7 @@ luaopen_math(luaState);
 luaopen_table(luaState);
 
 // import some variables
-ScriptSetString(_S'L', cLocale);
+ScriptSetString(_S'LOCALE', cLocale);
 
 // import game flags
 ScriptSetInteger('gfForts', gfForts);
