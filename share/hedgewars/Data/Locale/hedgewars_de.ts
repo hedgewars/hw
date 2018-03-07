@@ -2077,7 +2077,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
-        <translation>Wahrscheinlichkeit, dass eine Mine ein Blindgänger ist. Minen, die von Igeln platziert wurden, sind daavon nicht betroffen.</translation>
+        <translation>Wahrscheinlichkeit, dass eine Mine ein Blindgänger ist. Minen, die von Igeln platziert wurden, sind davon nicht betroffen.</translation>
     </message>
     <message>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>

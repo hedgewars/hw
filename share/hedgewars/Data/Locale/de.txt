@@ -703,7 +703,7 @@
 02:07=Ein kleines Helferlein für kleine Igelchen
 02:07=Erweitere deine Möglichkeiten
 02:07=Überliste deinen Feind
-02:07=Bau dir Brücken zum Sig
+02:07=Bau dir Brücken zum Sieg
 02:07=Überraschungswerkzeug!
 02:07=Nützliches Geschenk!
 02:07=Werkzeug für dich!

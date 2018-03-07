@@ -1,23 +1,23 @@
-Basic_Training_-_Movement.name=Grundlagentraining: Fortbewegung
+Basic_Training_-_Movement.name=Grundausbildung: Fortbewegung
 Basic_Training_-_Movement.desc="Grünschnäbel fangen hier an! Lern, wie man sich auf unterschiedlichen Geländearten fortbewegt, und wie man Igel wechselt."
 
-Basic_Training_-_Bazooka.name=Grundlagentraining: Bazooka
+Basic_Training_-_Bazooka.name=Grundausbildung: Bazooka
 Basic_Training_-_Bazooka.desc="Lern, wie man die Bazooka benutzt, lern über den Wind und zerstöre alle Ziele."
 
-Basic_Training_-_Grenade.name=Grundlagentraining: Granate
+Basic_Training_-_Grenade.name=Grundausbildung: Granate
 Basic_Training_-_Grenade.desc="Lern alles, was du über Granaten wissen solltest und zerstöre alle Ziele. Vergiss nicht: Stift ziehen UND werfen!"
 
 Basic_Training_-_Sniper_Rifle.name=Zielübung: Scharfschützengewehr
 Basic_Training_-_Sniper_Rifle.desc="Das ist der perfekte Schießstand für Scharfschützen! Zerstöre alle Ziele so schnell und treffsicher du kannst und werd zur Legende!"
 
-Basic_Training_-_Rope.name=Grundlagentraining: Seil
+Basic_Training_-_Rope.name=Grundausbildung: Seil
 Basic_Training_-_Rope.desc="Das Seil ist eines der vielseitigsten Werkzeuge, das du kriegen kannst, doch es erfordert viel Übung. Hier lernst du die Grundlagen des Seils kennen."
 
-Basic_Training_-_Flying_Saucer.name=Grundlagentraining: Fliegende Untertasse
+Basic_Training_-_Flying_Saucer.name=Grundausbildung: Fliegende Untertasse
 Basic_Training_-_Flying_Saucer.desc="Mit einer fliegenden Untertasse erreicht man so ziemlich jeden Punkt, wenn man denn fliegen kann. Lern, wie man fliegt, wie man von einer fliegenden Untertasse aus angreift und propier ein paar coole Stunts aus."
 
 User_Mission_-_Dangerous_Ducklings.name=Gefährliche Entchen
-User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das im Grundlagentraining Gelernte in die Tag umsetzt!"
+User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tag umsetzt!"
 
 User_Mission_-_Diver.name=Taucher
 User_Mission_-_Diver.desc="Diese amphibische Angriffstrategie ist schwieriger, als sie aussieht."
