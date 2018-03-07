@@ -30,12 +30,18 @@ LUAFILES="../Missions/Challenge/*.lua\
 
 cd ../share/hedgewars/Data/Locale;
 
+# Temporary files
+TEMP_LOC=$(mktemp);
+TEMP_HEAD=$(mktemp);
+TEMP_TAIL=$(mktemp);
+TEMP_LUA=$(mktemp);
+
 # Collect strings
 echo "Step 1: Collect strings";
-echo -n "" > __temp_loc;
+echo -n "" > $TEMP_LOC;
 for F in loc loc_noop;
 	do
-	grep -F "$F(\"" $LUAFILES | sed 's/")/")\n/g' | sed "s/.*$F(\"/loc(\"/;s/\").*/\")/" | grep loc | sort | uniq >> __temp_loc;
+	grep -F "$F(\"" $LUAFILES | sed 's/")/")\n/g' | sed "s/.*$F(\"/loc(\"/;s/\").*/\")/" | grep loc | sort | uniq >> $TEMP_LOC;
 done
 
 # Update locale files
@@ -44,7 +50,7 @@ echo "Step 2: Update locale files (this may take a while)";
 for i in $LOCALEFILES;
 do
 	echo $i;
-	cat __temp_loc | while read f
+	cat $TEMP_LOC | while read f
 		do
 		STR=$(echo "$f" | sed 's/loc("//;s/")\s*$//;s/"/\\"/g');
 		MAPS=$(grep -F -l -- "loc(\"${STR}\")" $LUAFILES | sed 's/.*\/\([^\/]*\)\/map.lua/\1/;s/.*Campaign\/\([^\/]*\)\//\1:/;s/.*\///;s/.lua//;s/ /_/g' | xargs | sed 's/ /, /g');
@@ -67,11 +73,11 @@ echo "Step 3: Sort strings";
 for i in $LOCALEFILES;
 do
 	echo $i;
-	rm -f __temp_head __temp_tail __temp_lua;
-	cat $i | grep -Ev "}|{" | grep -Ev "^[[:space:]]*$" | sort | uniq > __temp_lua;
-	echo "locale = {" > __temp_head;
-	echo "}" > __temp_tail;
-	cat __temp_head __temp_lua __temp_tail > $i;
+	rm -f $TEMP_HEAD $TEMP_TAIL $TEMP_LUA;
+	cat $i | grep -Ev "}|{" | grep -Ev "^[[:space:]]*$" | sort | uniq > $TEMP_LUA;
+	echo "locale = {" > $TEMP_HEAD;
+	echo "}" > $TEMP_TAIL;
+	cat $TEMP_HEAD $TEMP_LUA $TEMP_TAIL > $i;
 done
 
 # Drop unused
@@ -79,7 +85,7 @@ echo "Step 4: Delete unused strings";
 cat stub.lua | grep '"] =' | while read f;
 do
 	PHRASE=$(echo "$f" | sed 's/[^[]*\["//;s/"] =.*//;s/"/\\"/g');
-	CNT=$(grep -Frc "loc(\"$PHRASE\")" __temp_loc);
+	CNT=$(grep -Frc "loc(\"$PHRASE\")" $TEMP_LOC);
 	if (($CNT==0));
 	then
 		echo "|$PHRASE|";
@@ -89,6 +95,6 @@ do
 done
 
 # Delete temporary files
-rm __temp_head __temp_tail __temp_lua __temp_loc;
+rm $TEMP_HEAD $TEMP_TAIL $TEMP_LUA $TEMP_LOC;
 
 echo "Done."
