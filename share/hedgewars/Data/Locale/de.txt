@@ -61,6 +61,7 @@
 00:57=Gummi
 00:58=Luftmine
 00:59=Quietscheentchen
+00:60=Minigun
 
 01:00=Laden …
 01:01=Unentschieden
@@ -1301,6 +1302,7 @@
 03:57=Werkzeug
 03:58=Schwebende Annäherungsmine
 03:59=Schwimmende Bombe
+03:60=Die ultimative Feuerwaffe
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1–5: Zeitzünder einstellen|Genaues Zielen + 1-5: Sprungkraft einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -1363,6 +1365,7 @@
 04:57=Bau einen SEHR elastischen Balken aus Gummi,|von dem Igel und andere Sachen abprallen,|ohne Fallschaden zu nehmen.|Links/Rechts: Ausrichtung des Gummis wählen|Cursor: Gummi platzieren
 04:58=Diese Annäherungsmine wird frei in der Luft schweben und|verfolgt törichte Igel, die dumm genug sind, ihr zu nahe zu|kommen. Allerdings ist ihre Explosion schwächer als|die der Landmine.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:59=Gib diesen dreckigen Igeln ein Bad! Dieses süße|kleine Quietscheentchen kann auf Wasser schwimmen|und folgt dabei dem Wind. Sie explodiert bei Kollision|mit Land, also stell sicher, sie von einer Klippe oder|einem anderem sicheren Ort fallen zu lassen.|Angriff: Quietscheentschen fallen lassen
+04:60=Lass es Kugeln auf deine Gegner hageln!|Und sie dachten wirklich, sie seien hinter|drei Trägerschichten sicher.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Weiterzielen
 
 ; Game goal strings
 05:00=Spielmodifikationen
