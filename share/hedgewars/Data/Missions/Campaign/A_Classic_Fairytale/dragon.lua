@@ -625,6 +625,7 @@ function AddHogs()
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false
+    SetEffect(cyborgs[i], heArtillery, 1)
   end
   cyborgsLeft = 4
 
@@ -727,16 +728,6 @@ function onNewTurn()
     firstTurn = false
   end
   if GetHogTeamName(CurrentHedgehog) == loc("011101000") then
-    SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
-    for i = 1, 4 do
-      if gearDead[CurrentHedgehog] ~= true and gearDead[native] ~= true then
-        if gearDead[cyborgs[i]] ~= true and GetX(cyborgs[i]) < GetX(native) then
-          HogTurnLeft(cyborgs[i], false)
-        else
-          HogTurnLeft(cyborgs[i], true)
-        end
-      end
-    end
     if TotalRounds % 6 == 0 then
       AddAmmo(CurrentHedgehog, amSniperRifle, 1)
       AddAmmo(CurrentHedgehog, amDEagle, 1)
@@ -744,8 +735,6 @@ function onNewTurn()
     TurnTimeLeft = 30000
   elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
     EndTurn(true)
-  else
-    SetInputMask(0xFFFFFFFF)
   end
 end
 
