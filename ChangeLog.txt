@@ -65,6 +65,9 @@ A Classic Fairytale:
  * Mission 1: Fix error message spam when Leaks a Lot drowns
  * Mission 6: Fix cyborgs sometimes doing nothing for a full turn
 
+Missions:
+ + Target Practice: Re-center camera to hog when projectile is destroyed or drowns
+
 Theme customization:
  + Add fallback music with fallback-music and fallback-sd-music
  * Fix green color channel on themes with sd-tint

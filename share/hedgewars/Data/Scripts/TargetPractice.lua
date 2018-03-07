@@ -33,6 +33,7 @@ params = {
 	time = ,
 	ammoType = ,
 	gearType = ,
+	secondaryGearType = ,
 	targets = {
 		{ x = , y = },
 		{ x = , y = },
@@ -64,6 +65,8 @@ local game_lost = false
 local time_goal = 0
 local total_targets
 local targets
+local gearsInGameCount = 0
+local gearsInGame = {}
 
 --[[
 TrainingMission(params)
@@ -76,7 +79,7 @@ The argument “params” is a table containing fields which describe the traini
 	- theme:	the name of the theme (does not need to be a standalone theme)
 	- time:		the time limit in milliseconds
 	- ammoType:	the ammo type of the weapon to be used
-	- gearType:	the gear type of the gear which is fired (used to count shots)
+	- gearType:	the gear type of the gear which is fired (used to count shots and re-center camera)
 	- targets:	The coordinates of where the targets will be spawned.
 			It is a table containing tables containing coordinates of format
 			{ x=value, y=value }. The targets will be spawned in the same
@@ -97,6 +100,7 @@ The argument “params” is a table containing fields which describe the traini
 	- teamName:	name of the hedgehog’s team (default: "Training Team")
 	- teamGrave:	name of the hedgehog’s grave
 	- teamFlag:	name of the team’s flag (default: "cm_crosshair")
+	- secGearType:	cluster of projectile gear (if present) (used to re-center camera)
 	- clanColor:	color of the (only) clan (default: 0xFF0204, which is a red tone)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
@@ -199,13 +203,26 @@ function TargetPracticeMission(params)
 			else
 				TurnTimeLeft = time_goal
 			end
-	        end_timer = end_timer - 20
+	   	     end_timer = end_timer - 20
+		end
+
+		for gear, _ in pairs(gearsInGame) do
+			if band(GetState(gear), gstDrowning) ~= 0 then
+				-- Re-center camera on hog if projectile gears drown
+				gearsInGame[gear] = nil
+				gearsInGameCount = gearsInGameCount - 1
+				if gearsInGameCount == 0 and GetHealth(CurrentHedgehog) then
+					FollowGear(CurrentHedgehog)
+				end
+			end
 		end
 	end
 
 	_G.onGearAdd = function(gear)
-		if GetGearType(gear) == params.gearType then
+		if GetGearType(gear) == params.gearType or (params.secGearType and GetGearType(gear) == params.secGearType) then
 			shots = shots + 1
+			gearsInGameCount = gearsInGameCount + 1
+			gearsInGame[gear] = true
 		end
 	end
 
@@ -251,6 +268,13 @@ function TargetPracticeMission(params)
 			local success = PlaceSprite(x, y + 24, sprAmGirder, 0, 0xFFFFFFFF, false, false, false)
 			if not success then
 				WriteLnToConsole("ERROR: Failed to spawn girder under respawned target!")
+			end
+		elseif gearsInGame[gear] then
+			gearsInGame[gear] = nil
+			gearsInGameCount = gearsInGameCount - 1
+			if gearsInGameCount == 0 and GetHealth(CurrentHedgehog) then
+				-- Re-center camera to hog after all projectile gears were destroyed
+				FollowGear(CurrentHedgehog)
 			end
 		end
 	end
