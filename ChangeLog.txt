@@ -15,6 +15,7 @@ Game:
  * Fix not displaying current volume status after pressing mute key
  * Fix many effects not being correctly recorded by the video recorder
  * Fix quit menu showing incorrect keys if using non-default key bindings
+ * Fix script translations not being loaded for Portuguese and Chinese
 
 Frontend:
  + Schemes are now stored in separate files under Schemes
