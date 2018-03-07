@@ -23,7 +23,7 @@ local HogData =	{
 					{"cri.the.grinch",	"sf_blanka",false},
 					{"eldiablo",		"Evil",false},
 					{"Displacer",		"fr_lemon",false},
-					{"doomy ", 			"NoHat",false},
+					{"doomy", 			"NoHat",false},
 					{"Falkenauge", 		"NoHat",false},
 					{"FadeOne", 		"NoHat",false},
 					{"hayaa", 			"NoHat",false},
