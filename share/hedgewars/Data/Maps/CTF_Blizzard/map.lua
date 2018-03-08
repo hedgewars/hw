@@ -435,15 +435,12 @@ function CheckTeleporters()
 					SetGearMessage(CurrentHedgehog, gmAttack)
 				end
 			end
-			--AddCaption(actionReset .. ";" .. "attack")
 		elseif actionReset == 10 then
 			SetGearMessage(CurrentHedgehog, 0)
-			--AddCaption(actionReset .. ";" .. "reset")
 		elseif actionReset == 20 then
 			AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 			SetGearPosition(CurrentHedgehog,destinationX,destinationY)
 			AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
-			--AddCaption(actionReset .. ";" .. "teleport")
 		end
 
 		actionReset = actionReset + 1
@@ -529,16 +526,15 @@ function onGameInit()
 
 	-- Things we don't modify here will use their default values.
 	GameFlags = gfDivideTeams -- Game settings and rules
-	TurnTime = 30000 -- (was 30) The time the player has to move each round (in ms)
+	TurnTime = 30000 -- The time the player has to move each round (in ms)
 	CaseFreq = 0 -- The frequency of crate drops
 	MinesNum = 0 -- The number of mines being placed
-	MinesTime  = 2000
 	Explosives = 0 -- The number of explosives being placed
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0
 	Map = "Blizzard" -- The map to be played
-	Theme = "Snow" -- The theme to be used "Nature"
+	Theme = "Snow" -- The theme to be used
 
 end
 
@@ -701,17 +697,25 @@ function onGearResurrect(gear)
 
 end
 
+local excessHogsWarning = false
+
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 
-		hhs[numhhs] = gear
-		numhhs = numhhs + 1
-		SetEffect(gear, heResurrectable, 1)
+		if GetHogClan(gear) > 1 then
+			DeleteGear(gear)
+			if not excessHogsWarning then
+				WriteLnToChat(loc("Only two clans allowed! Excess hedgehogs will be removed."))
+				excessHogsWarning = true
+			end
+		else
+			hhs[numhhs] = gear
+			numhhs = numhhs + 1
+			SetEffect(gear, heResurrectable, 1)
+		end
 
-	end
-
-	if GetGearType(gear) == gtRope then
+	elseif GetGearType(gear) == gtRope then
 		ropeGear = gear
 	end
 
