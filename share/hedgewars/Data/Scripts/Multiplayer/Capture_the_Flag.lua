@@ -88,7 +88,6 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 ------------------ "Oh well, they probably have the memory"
 
 local gameStarted = false
-local gameTurns = 0
 local captureLimit = 3
 
 --------------------------
@@ -98,8 +97,6 @@ local captureLimit = 3
 local numhhs = 0 -- store number of hedgehogs
 local hhs = {} -- store hedgehog gears
 
-local numTeams --  store the number of teams in the game
-local teamNameArr = {}	-- store the list of teams
 local teamSize = {}	-- store how many hogs per team
 local teamIndex = {} -- at what point in the hhs{} does each team begin
 
@@ -122,7 +119,6 @@ local fSpawnY = {}		-- spawn Y for flags
 
 local fThiefX = {}
 local fThiefY = {}
-local FTTC = 0 -- flag thief tracker counter
 
 local fSpawnC = {} -- spawn circle marker
 local fCirc = {} -- flag/carrier marker circles
@@ -137,25 +133,21 @@ local fGearTimer = 0
 --flag methods
 ------------------------
 
-function CheckScore(teamID)
+function CheckScore(clanID)
 
-	if teamID == 0 then
-		alt = 1
-	elseif teamID == 1 then
-		alt = 0
-	end
-
-	if fCaptures[teamID] == captureLimit then
+	if fCaptures[clanID] == captureLimit then
+		-- Capture limit reached! We have a winner!
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
-				if GetHogClan(hhs[i]) == alt then
+				-- Kill all losers
+				if GetHogClan(hhs[i]) ~= clanID then
 					SetEffect(hhs[i], heResurrectable, 0)
 					SetHealth(hhs[i],0)
 				end
 			end
 		end
 		if CurrentHedgehog ~= nil then
-			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)))
+			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
 			updateScores()
 		end
 	end
@@ -164,6 +156,7 @@ end
 
 function DoFlagStuff(gear)
 
+	local wtf, bbq
 	if (gear == fGear[0]) then
 		wtf = 0
 		bbq = 1
@@ -183,7 +176,7 @@ function DoFlagStuff(gear)
 		fIsMissing[bbq] = false
 		fNeedsRespawn[bbq] = true
 		fCaptures[wtf] = fCaptures[wtf] +1
-		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)))
+		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
 		updateScores()
 		PlaySound(sndHomerun)
 		fThief[bbq] = nil -- player no longer has the enemy flag
@@ -197,7 +190,7 @@ function DoFlagStuff(gear)
 
 		fNeedsRespawn[wtf] = true
 		HandleRespawns() -- this will set fIsMissing[wtf] to false :)
-		AddCaption(loc("Flag returned!"))
+		AddCaption(loc("Flag returned!"), 0xFFFFFFFF, capgrpMessage2)
 
 	--if the player is taking the enemy flag
 	elseif GetHogClan(CurrentHedgehog) == bbq then
@@ -213,7 +206,7 @@ function DoFlagStuff(gear)
 				end
 			end
 		end
-		AddCaption(loc("Flag captured!"))
+		AddCaption(loc("Flag captured!"), 0xFFFFFFFF, capgrpMessage2)
 
 	end
 
@@ -224,14 +217,14 @@ function CheckFlagProximity()
 	for i = 0, 1 do
 		if fGear[i] ~= nil then
 
-			g1X = fGearX[i]
-			g1Y = fGearY[i]
+			local g1X = fGearX[i]
+			local g1Y = fGearY[i]
 
-			g2X, g2Y = GetGearPosition(CurrentHedgehog)
+			local g2X, g2Y = GetGearPosition(CurrentHedgehog)
 
-			q = g1X - g2X
-			w = g1Y - g2Y
-			dist = (q*q) + (w*w)
+			local q = g1X - g2X
+			local w = g1Y - g2Y
+			local dist = (q*q) + (w*w)
 
 			if dist < 500 then --1600
 				DoFlagStuff(fGear[i])
@@ -253,7 +246,7 @@ function HandleRespawns()
 
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
-			AddCaption(loc("Flag respawned!"))
+			AddCaption(loc("Flag respawned!"), 0xFFFFFFFF, capgrpMessage2)
 		end
 
 	end
@@ -263,6 +256,7 @@ end
 
 function FlagThiefDead(gear)
 
+	local wtf, bbq
 	if (gear == fThief[0]) then
 		wtf = 0
 		bbq = 1
@@ -331,14 +325,12 @@ end
 
 function CheckDistance(gear1, gear2)
 
-	g1X, g1Y = GetGearPosition(gear1)
-	g2X, g2Y = GetGearPosition(gear2)
+	local g1X, g1Y = GetGearPosition(gear1)
+	local g2X, g2Y = GetGearPosition(gear2)
 
 	g1X = g1X - g2X
 	g1Y = g1Y - g2Y
-	z = (g1X*g1X) + (g1Y*g1Y)
-
-	dist = z
+	local dist = (g1X*g1X) + (g1Y*g1Y)
 
 	return dist
 
@@ -346,48 +338,16 @@ end
 
 function RebuildTeamInfo()
 
-
-	-- make a list of individual team names
+	-- make a list of teams
 	for i = 0, (TeamsCount-1) do
-		teamNameArr[i] = i
 		teamSize[i] = 0
 		teamIndex[i] = 0
 	end
-	numTeams = 0
-
-	for i = 0, (numhhs-1) do
-
-		z = 0
-		unfinished = true
-		while(unfinished == true) do
-
-			newTeam = true
-			tempHogTeamName = GetHogTeamName(hhs[i]) -- this is the new name
-
-			if tempHogTeamName == teamNameArr[z] then
-				newTeam = false
-				unfinished = false
-			end
-
-			z = z + 1
-
-			if z == TeamsCount then
-				unfinished = false
-				if newTeam == true then
-					teamNameArr[numTeams] = tempHogTeamName
-					numTeams = numTeams + 1
-				end
-			end
-
-		end
-
-	end
 
 	-- find out how many hogs per team, and the index of the first hog in hhs
-	for i = 0, numTeams-1 do
-
+	for i = 0, (TeamsCount-1) do
 		for z = 0, numhhs-1 do
-			if GetHogTeamName(hhs[z]) == teamNameArr[i] then
+			if GetHogTeamName(hhs[z]) == GetTeamName(i) then
 				if teamSize[i] == 0 then
 					teamIndex[i] = z -- should give starting index
 				end
@@ -395,7 +355,6 @@ function RebuildTeamInfo()
 				--add a pointer so this hog appears at i in hhs
 			end
 		end
-
 	end
 
 end
@@ -403,7 +362,7 @@ end
 function StartTheGame()
 
 	gameStarted = true
-	AddCaption(loc("Game Started!"))
+	AddCaption(loc("Game Started!"), 0xFFFFFFFF, capgrpGameState)
 
 	for i = 0, 1 do
 
@@ -448,8 +407,6 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	Delay = 10
-
 end
 
 function showCTFMission()
@@ -473,8 +430,12 @@ function showCTFMission()
 end
 
 function updateScores()
-	for i=0, 1 do
-		SetTeamLabel(teamNameArr[i], tostring(fCaptures[i]))
+	for i=0, TeamsCount-1 do
+		local team = GetTeamName(i)
+		local clan = GetTeamClan(team)
+		if clan <= 1 then
+			SetTeamLabel(team, tostring(fCaptures[clan]))
+		end
 	end
 end
 
@@ -501,24 +462,31 @@ end
 
 function onNewTurn()
 
-	gameTurns = gameTurns + 1
-
-	if lastTeam ~= GetHogTeamName(CurrentHedgehog) then
-		lastTeam = GetHogTeamName(CurrentHedgehog)
-	end
-
 	if gameStarted == true then
 		HandleRespawns()
-	--new method of placing starting flags
-	elseif gameTurns == 1 then
-		showCTFMission()
-	elseif gameTurns == 2 then
-		fPlaced[0] = true
-	elseif gameTurns == 3 then
-		fPlaced[1] = true
+	end
+
+	for i=0, 1 do
+		if fSpawnX[i] and fSpawnY[i] then
+			fPlaced[i] = true
+		end
+	end
+	if not gameStarted and fPlaced[0] and fPlaced[1] then
 		StartTheGame()
 	end
 
+end
+
+function onEndTurn()
+	 -- if the game hasn't started yet, keep track of where we are gonna put the flags on turn end
+	if not gameStarted and CurrentHedgehog ~= nil then
+		local clan = GetHogClan(CurrentHedgehog)
+
+		if clan <= 1 and GetX(CurrentHedgehog) and not fSpawnX[clan] then
+			fSpawnX[clan] = GetX(CurrentHedgehog)
+			fSpawnY[clan] = GetY(CurrentHedgehog)
+		end
+	end
 end
 
 function onGameTick()
@@ -535,19 +503,6 @@ function onGameTick()
 		if CurrentHedgehog ~= nil then
 			CheckFlagProximity()
 		end
-	elseif CurrentHedgehog ~= nil then -- if the game hasn't started yet, keep track of where we are gonna put the flags on turn end
-
-		if GetHogClan(CurrentHedgehog) == 0 then
-			i = 0
-		elseif GetHogClan(CurrentHedgehog) == 1 then
-			i = 1
-		end
-
-		if TurnTimeLeft == 0 and GetX(CurrentHedgehog) then
-			fSpawnX[i] = GetX(CurrentHedgehog)
-			fSpawnY[i] = GetY(CurrentHedgehog)
-		end
-
 	end
 
 end
@@ -566,15 +521,14 @@ function onGearResurrect(gear)
 end
 
 function InABetterPlaceNow(gear)
-	for i = 0, (numhhs-1) do
-		if gear == hhs[i] then
-
+	for h = 0, (numhhs-1) do
+		if gear == hhs[h] then
 			for i = 0,1 do
 				if gear == fThief[i] then
 					FlagThiefDead(gear)
 				end
 			end
-			hhs[i] = nil
+			hhs[h] = nil
 		end
 	end
 end
@@ -584,11 +538,10 @@ function onHogHide(gear)
 end
 
 function onHogRestore(gear)
-	match = false
 	for i = 0, (numhhs-1) do
-		if (hhs[i] == nil) and (match == false) then
+		if (hhs[i] == nil) then
 			hhs[i] = gear
-			match = true
+			break
 		end
 	end
 end
@@ -626,8 +579,10 @@ function onGearDelete(gear)
 		InABetterPlaceNow(gear)
 	elseif GetGearType(gear) == gtKamikaze and not gameStarted then
 		local i = GetHogClan(CurrentHedgehog)
-		fSpawnX[i] = GetX(CurrentHedgehog)
-		fSpawnY[i] = GetY(CurrentHedgehog)
+		if i <= 1 then
+			fSpawnX[i] = GetX(CurrentHedgehog)
+			fSpawnY[i] = GetY(CurrentHedgehog)
+		end
 	end
 
 end
