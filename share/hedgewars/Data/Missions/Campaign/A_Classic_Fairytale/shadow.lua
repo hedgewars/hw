@@ -616,7 +616,7 @@ function AddHogs()
 
   AddTeam(loc("Weaklings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
-  cannibals[1] = AddHog(loc("Brainiac"), 1, 20, "Zombi")
+  cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
   for i = 2, 5 do
     cannibals[i] = AddHog(HogNames[i], 5, 20, "Zombi")
