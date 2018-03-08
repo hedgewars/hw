@@ -273,7 +273,6 @@ function FlagThiefDead(gear)
 
 	if fThief[wtf] ~= nil then
 		-- falls into water
-		--ShowMission(LAND_HEIGHT,  fThiefY[wtf], (LAND_HEIGHT - fThiefY[wtf]), 0, 0)
 		if (LAND_HEIGHT - fThiefY[wtf]) < 15 then
 			fIsMissing[wtf] = true
 			fNeedsRespawn[wtf] = true
@@ -303,8 +302,6 @@ function HandleCircles()
 
 	for i = 0, 1 do
 
-		--SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 50, 3, fCol[i]) -- draw a circ for spawning area
-
 		if fIsMissing[i] == false then -- draw a flag marker at the flag's spawning place
 			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 20, 0, 10, 0, 33, 3, fCol[i])
 			if fGear[i] ~= nil then -- draw the flag gear itself
@@ -313,23 +310,16 @@ function HandleCircles()
 		elseif (fIsMissing[i] == true) and (fNeedsRespawn[i] == false) then
 			if fThief[i] ~= nil then -- draw circle round flag carrier			-- 33
 				SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], 20, 200, 0, 0, 100, 50, 3, fCol[i])
-				--AddCaption("circle marking carrier")
 			elseif fThief[i] == nil then -- draw cirle round dropped flag
-				--g1X,g1Y,g4,g5,g6,g7,g8,g9,g10,g11 =  GetVisualGearValues(fGear[i])
-				--SetVisualGearValues(fCirc[i], g1X, g1Y, 20, 200, 0, 0, 100, 33, 2, fCol[i])
 				SetVisualGearValues(fCirc[i], fGearX[i], fGearY[i], 20, 200, 0, 0, 100, 33, 3, fCol[i])
-				--AddCaption('dropped circle marker')
 				if fGear[i] ~= nil then -- flag gear itself
-					--SetVisualGearValues(fGear[i], g1X, g1Y, 20, 200, 0, 0, 100, 10, 4, fCol[i])
 					SetVisualGearValues(fGear[i], fGearX[i], fGearY[i], 20, 200, 0, 0, 100, fGearRad, 2, fCol[i])
-					--AddCaption('dropped flag itself')
 				end
 			end
 		end
 
 		if fNeedsRespawn[i] == true then -- if the flag has been destroyed, no need for a circle
 			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 0, 0, fCol[i])
-			--AddCaption("needs respawn = true. flag 'destroyed'?")
 		end
 	end
 
@@ -429,8 +419,6 @@ function StartTheGame()
 		fNeedsRespawn[i] = false
 		fCaptures[i] = 0
 
-		--SetVisualGearValues(zxc, 1000,1000, 20, 100, 0,    10,                     1,         100,        5,      GetClanColor(0))
-
 		SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 20, 100, 0, 10, 0, 75, 5, fCol[i])
 
 	end
@@ -496,27 +484,11 @@ function onGameStart()
 
 	RebuildTeamInfo()
 
-	-- should gfDivideTeams do this automatically?
-	--[[for i = 0, (TeamsCount-1) do
-		for g = teamIndex[i], (teamIndex[i]+teamSize[i]-1) do
-			if GetHogClan(hhs[g]) == 0 then
-				FindPlace(hhs[g], false, 0, LAND_WIDTH/2)
-			elseif GetHogClan(hhs[g]) == 1 then
-				FindPlace(hhs[g], false, LAND_WIDTH/2, LAND_WIDTH)
-			end
-		end
-	end]]
-
 	for i=0, 1 do
 		fPlaced[i] = false
 		fCaptures[i] = 0
 	end
 
-	--zxc = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
-
-
-	--SetVisualGearValues(zxc, 1000,1000, 20, 255, 1,    10,                     0,         200,        1,      GetClanColor(0))
-					--minO,max0 -glowyornot	--pulsate timer	 -- fuckall      -- radius -- width  -- colour
 	for h=1, numhhs do
 		-- Hogs are resurrected for free, so this is pointless
 		AddAmmo(hhs[h], amResurrector, 0)
@@ -535,7 +507,6 @@ function onNewTurn()
 		lastTeam = GetHogTeamName(CurrentHedgehog)
 	end
 
-	--AddCaption("Handling respawns")
 	if gameStarted == true then
 		HandleRespawns()
 	--new method of placing starting flags
@@ -552,26 +523,11 @@ end
 
 function onGameTick()
 
-	-- onRessurect calls AFTER you have resurrected,
-	-- so keeping track of x,y a few milliseconds before
-	-- is useful
-	--FTTC = FTTC + 1
-	--if FTTC == 100 then
-	--	FTTC = 0
-		for i = 0,1 do
-			if fThief[i] ~= nil then
-				fThiefX[i] = GetX(fThief[i])
-				fThiefY[i] = GetY(fThief[i])
-			end
+	for i = 0,1 do
+		if fThief[i] ~= nil then
+			fThiefX[i] = GetX(fThief[i])
+			fThiefY[i] = GetY(fThief[i])
 		end
-	--end
-
-	-- things we wanna check often
-	if (CurrentHedgehog ~= nil) then
-		--AddCaption(LAND_HEIGHT - GetY(CurrentHedgehog))
-		--AddCaption(GetX(CurrentHedgehog) .. "; " .. GetY(CurrentHedgehog))
-		--CheckTeleporters()
-
 	end
 
 	if gameStarted == true then
@@ -598,22 +554,12 @@ end
 
 function onGearResurrect(gear)
 
-	--AddCaption("A gear has been resurrected!")
-
 	-- mark the flag thief as dead if he needed a respawn
 	for i = 0,1 do
 		if gear == fThief[i] then
 			FlagThiefDead(gear)
 		end
 	end
-
-	-- should be covered by gfDivideTeams, actually
-	-- place hogs belonging to each clan either left or right side of map
-	--if GetHogClan(gear) == 0 then
-	--	FindPlace(gear, false, 0, LAND_WIDTH/2)
-	--elseif GetHogClan(gear) == 1 then
-	--	FindPlace(gear, false, LAND_WIDTH/2, LAND_WIDTH)
-	--end
 
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
@@ -642,7 +588,6 @@ function onHogRestore(gear)
 	for i = 0, (numhhs-1) do
 		if (hhs[i] == nil) and (match == false) then
 			hhs[i] = gear
-			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")
 			match = true
 		end
 	end
