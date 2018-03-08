@@ -39,9 +39,10 @@ Styles and game modes:
  + Construction Mode: Allow to change "Switch Hedgehog" in weapon scheme
  + Construction Mode: Hide selected sub-modes from crate/object placer from enemies over the net
  + Continental supplies: Custom weapon icons for the special weapons
- + Racer, Tech Racer: Beforee starting a round, make first waypoint flash and center camera to it
- + Racer: Use dark waypoints in bright themes like Bath
+ + Racer, Tech Racer: Before starting a round, make first waypoint flash and center camera to it
  + Racer, Tech Racer: Various other waypoint appearance improvements
+ + Racer: Use dark waypoints in bright themes like Bath
+ + Racer, HedgeEditor: Show waypoint outline around cursor when placing waypoints
  + Battalion: Minor message and visual improvements
  + Battalion: Mutate hog hats by default, but not the names
  + Battalion: Script parameter “mutatenames=true” to also change the hog names (default: false)

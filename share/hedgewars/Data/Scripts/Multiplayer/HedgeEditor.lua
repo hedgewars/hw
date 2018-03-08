@@ -2981,8 +2981,8 @@ function HandleHedgeEditor()
 			-- Waypoint outline
 			if (cat[cIndex] == loc("Waypoint Editing Mode")) and (pMode[pIndex] == loc("Place Waypoint")) then
 				if not waypointPreviewSprite then
-					waypointPreviewSprite = AddVisualGear(CursorX, CursorY, vgtCircle, 1, true)
-					SetVisualGearValues(waypointPreviewSprite, CursorX, CursorY, 244, 224, 0, 0, 0, wpRadius/5, 5, 0xFF0000FF)
+					waypointPreviewSprite = AddVisualGear(CursorX, CursorY, vgtCircle, 0, true)
+					SetVisualGearValues(waypointPreviewSprite, CursorX, CursorY, 244, 224, 0, 0, 0, div(wpRadius, 5), 5, 0xFF0000FF)
 				end
 			elseif waypointPreviewSprite then
 				DeleteVisualGear(waypointPreviewSprite)

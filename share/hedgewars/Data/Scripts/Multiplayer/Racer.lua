@@ -116,6 +116,9 @@ local specialPointsCount = 0
 
 local TeamRope = false
 
+local waypointCursor = false
+local waypointPreview = nil
+
 --------------------------
 -- hog and team tracking variales
 --------------------------
@@ -760,6 +763,7 @@ function DeletePreviousWayPoint()
         wpCirc[wpCount] = nil
         SetVisualGearValues(wpCirc[wpCount-1], nil, nil, nil, nil, nil, nil, nil, nil, nil, waypointColour)
         AddCaption(string.format(loc("Waypoint removed. Available points: %d"), wpLimit-wpCount))
+        PlaySound(sndBump)
     else
         PlaySound(sndDenied)
         AddCaption(loc("No waypoint to be removed!"))
@@ -916,9 +920,15 @@ function onGameTick20()
                                 -- still in placement mode
                         end
 
-                end
-        end
-
+        	end
+		if not racerActive and not gameBegun and GetCurAmmoType() == amAirAttack then
+			waypointCursor = true
+		else
+			waypointCursor = false
+		end
+	else
+		waypointCursor = false
+	end
 
         -- has the player started his tumbling spree?
         if (CurrentHedgehog ~= nil) then
@@ -955,6 +965,20 @@ function onGameTick20()
 
         end
 
+end
+
+function onGameTick()
+	if waypointCursor then
+		if not waypointPreview then
+			waypointPreview = AddVisualGear(CursorX, CursorY, vgtCircle, 0, true)
+		end
+		SetVisualGearValues(waypointPreview, CursorX, CursorY, 200, 200, 0, 0, 0, div(wpRad, 5), 5, waypointColourAtPlacement)
+	else
+		if waypointPreview then
+			DeleteVisualGear(waypointPreview)
+			waypointPreview = nil
+		end
+	end
 end
 
 function onGearResurrect(gear)
