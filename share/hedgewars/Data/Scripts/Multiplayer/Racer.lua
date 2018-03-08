@@ -666,6 +666,9 @@ function onGameStart()
         SendHealthStatsOff()
 	SendAchievementsStatsOff()
 
+        SetSoundMask(sndIncoming, true)
+        SetSoundMask(sndMissed, true)
+
         roundN = 0
         lastRound = TotalRounds
         RoundHasChanged = false
@@ -735,6 +738,7 @@ function PlaceWayPoint(x,y,placedByUser)
 
             if placedByUser then
                 AddCaption(string.format(loc("Waypoint placed. Available points remaining: %d"), wpLimit-wpCount))
+                PlaySound(sndPlaced)
             end
         end
     end
