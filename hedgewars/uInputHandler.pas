@@ -671,19 +671,22 @@ b:= KeyNameToCode(id, Modifier);
 if b = 0 then
     OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 else
-    begin
+begin
     // add bind: first check if this cmd is already bound, and remove old bind
-    code:= High(binds.binds);
-    repeat
-        dec(code)
-    until (code < 0) or (binds.binds[code] = KeyName);
-    if (code >= 0) then
+    i:= Low(binds.binds);
+    while (i <= High(binds.binds)) and (binds.binds[i] <> KeyName) do
+        inc(i);
+
+    if (i <= High(binds.binds)) then
     begin
-        i:= 0;
-        while (i <= High(binds.indices)) and (binds.indices[i] <> code) do inc(i);
-        checkFails(i <= High(binds.indices), 'binds registry inconsistency', true);
-        binds.binds[i]:= '';
-        binds.indices[code]:= 0
+        code:= Low(binds.indices);
+        while (code <= High(binds.indices)) and (binds.indices[code] <> i) do
+            inc(code);
+
+        checkFails(code <= High(binds.indices), 'binds registry inconsistency', true);
+
+        if allOk then
+            binds.indices[code]:= 0
     end else
     begin
     inc(binds.lastIndex);
