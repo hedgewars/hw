@@ -339,9 +339,15 @@ begin
 
     checkFails(code >= 0, 'unknown key', true);
 
-    inc(binds.lastIndex);
-    binds.indices[code]:= binds.lastIndex;
-    binds.binds[binds.lastIndex]:= value
+    if binds.indices[code] > 0 then
+    begin
+        binds.binds[binds.indices[code]]:= value
+    end
+    else begin
+        inc(binds.lastIndex);
+        binds.indices[code]:= binds.lastIndex;
+        binds.binds[binds.indices[code]]:= value
+    end;
 end;
 
 procedure InitDefaultBinds;
@@ -649,53 +655,59 @@ end;
 
 procedure addBind(var binds: TBinds; var id: shortstring);
 var KeyName, Modifier, tmp: shortstring;
-    i, code, b: LongInt;
+    i, newCode, code, b: LongInt;
 begin
-KeyName:= '';
-Modifier:= '';
+    KeyName:= '';
+    Modifier:= '';
 
-if(Pos('mod:', id) <> 0)then
+    if(Pos('mod:', id) <> 0)then
+        begin
+        tmp:= '';
+        SplitBySpace(id, tmp);
+        Modifier:= id;
+        id:= tmp;
+        end;
+
+    SplitBySpace(id, KeyName);
+    if KeyName[1]='"' then
+        Delete(KeyName, 1, 1);
+    if KeyName[byte(KeyName[0])]='"' then
+        Delete(KeyName, byte(KeyName[0]), 1);
+    b:= KeyNameToCode(id, Modifier);
+    if b = 0 then
+        OutError(errmsgUnknownVariable + ' "' + id + '"', false)
+    else
     begin
-    tmp:= '';
-    SplitBySpace(id, tmp);
-    Modifier:= id;
-    id:= tmp;
-    end;
+        // add bind: first check if this cmd is already bound, and remove old bind
+        i:= Low(binds.binds);
+        while (i <= High(binds.binds)) and (binds.binds[i] <> KeyName) do
+            inc(i);
 
-SplitBySpace(id, KeyName);
-if KeyName[1]='"' then
-    Delete(KeyName, 1, 1);
-if KeyName[byte(KeyName[0])]='"' then
-    Delete(KeyName, byte(KeyName[0]), 1);
-b:= KeyNameToCode(id, Modifier);
-if b = 0 then
-    OutError(errmsgUnknownVariable + ' "' + id + '"', false)
-else
-begin
-    // add bind: first check if this cmd is already bound, and remove old bind
-    i:= Low(binds.binds);
-    while (i <= High(binds.binds)) and (binds.binds[i] <> KeyName) do
-        inc(i);
+        if (i <= High(binds.binds)) then
+        begin
+            code:= Low(binds.indices);
+            while (code <= High(binds.indices)) and (binds.indices[code] <> i) do
+                inc(code);
 
-    if (i <= High(binds.binds)) then
-    begin
-        code:= Low(binds.indices);
-        while (code <= High(binds.indices)) and (binds.indices[code] <> i) do
-            inc(code);
+            checkFails(code <= High(binds.indices), 'binds registry inconsistency', true);
 
-        checkFails(code <= High(binds.indices), 'binds registry inconsistency', true);
+            binds.indices[code]:= 0;
+            binds.binds[i]:= ''
+        end;
 
-        if allOk then
-            binds.indices[code]:= 0
-    end else
-    begin
-    inc(binds.lastIndex);
-    checkFails(binds.lastIndex < High(binds.binds), 'too many binds', true);
-    i:= binds.lastIndex
-    end;
+        if binds.indices[b] > 0 then
+            newCode:= binds.indices[b]
+        else if i >= High(binds.binds) then
+            begin
+                inc(binds.lastIndex);
+                checkFails(binds.lastIndex < High(binds.binds), 'too many binds', true);
+                newCode:= binds.lastIndex
+            end else
+                newCode:= i;
 
-    binds.indices[b]:= i;
-    binds.binds[i]:= KeyName
+
+    binds.indices[b]:= newCode;
+    binds.binds[binds.indices[b]]:= KeyName
     end
 end;
 
