@@ -151,6 +151,24 @@ function CheckScore(clanID)
 			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
 			updateScores()
 		end
+
+		-- Calculate team rankings
+
+		local teamList = {}
+		for i=0, TeamsCount-1 do
+			local name = GetTeamName(i)
+			local clan = GetTeamClan(name)
+			table.insert(teamList, { score = fCaptures[clan], name = name, clan = clan })
+		end
+		local teamRank = function(a, b)
+			return a.score > b.score
+		end
+		table.sort(teamList, teamRank)
+
+		for i=1, #teamList do
+			SendStat(siPointType, loc("point(s)"))
+			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+		end
 	end
 
 end
@@ -254,6 +272,19 @@ function HandleRespawns()
 
 end
 
+-- Advance the clan score graph by one step
+function DrawScores()
+	local clansUsed = {}
+	for i=0, TeamsCount-1 do
+		local team = GetTeamName(i)
+		local clan = GetTeamClan(team)
+		if not clansUsed[clan] then
+			local captures = fCaptures[clan]
+			SendStat(siClanHealth, captures, team)
+			clansUsed[clan] = true
+		end
+	end
+end
 
 function FlagThiefDead(gear)
 
@@ -408,7 +439,6 @@ function onGameInit()
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0
-
 end
 
 function showCTFMission()
@@ -456,12 +486,16 @@ function onGameStart()
 
 	updateScores()
 
+	SendStat(siGraphTitle, loc("Score graph"))
+	SendHealthStatsOff()
+	SendRankingStatsOff()
+
 end
 
 
 function onNewTurn()
 
-	if gameStarted == true then
+	if gameStarted == true and not gameOver then
 		HandleRespawns()
 	end
 
@@ -474,7 +508,6 @@ function onNewTurn()
 	if not gameStarted and flagsPlaced == ClansCount then
 		StartTheGame()
 	end
-
 end
 
 function onEndTurn()
@@ -486,6 +519,10 @@ function onEndTurn()
 			fSpawnX[clan] = GetX(CurrentHedgehog)
 			fSpawnY[clan] = GetY(CurrentHedgehog)
 		end
+	end
+
+	if gameStarted == true then
+		DrawScores()
 	end
 end
 
