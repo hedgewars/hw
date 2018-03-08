@@ -963,7 +963,11 @@ function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 
 end
 
-function CallPlaceSprite(pID)
+function CallPlaceSprite(pID, silent)
+
+	if silent == nil then
+		silent = false
+	end
 
 	if landType == lfIce then
 		placedLandFlags[pID] = "lfIce"
@@ -986,11 +990,21 @@ function CallPlaceSprite(pID)
 		actualDisplayedImage = ammoFrameAirAttack
 	end
 
-	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], actualDisplayedImage,
+	local success = PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], actualDisplayedImage,
 		placedTint[pID],
 		nil, -- overrite existing land
 		nil, nil, -- this stuff specifies flipping
 		landType)
+
+	if not silent then
+		if success then
+			PlaySound(sndPlaced)
+		else
+			PlaySound(sndDenied)
+		end
+	end
+
+	return success
 
 end
 
@@ -1030,6 +1044,8 @@ function EraseClosestSprite()
                     nil, -- flip sprite vertically
                     placedLandFlags[closestSpriteID])
 
+                PlaySound(sndBump)
+
 		placedX[closestSpriteID] = nil
 		placedY[closestSpriteID] = nil
 		placedSpec[closestSpriteID] = nil
@@ -1040,6 +1056,8 @@ function EraseClosestSprite()
 		placedLandFlags[closestSpriteID] = nil
 		closestSpriteID = nil
 		SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+	else
+		PlaySound(sndDenied)
 	end
 end
 
@@ -1051,16 +1069,15 @@ function EraseClosestWaypoint()
 
 	for i = 0, (placedCount-1) do
 		if (placedType[i] == loc("Waypoint Editing Mode")) then
-				q = placedX[i] - placedX[placedCount]
-				w = placedY[i] - placedY[placedCount]
-				d = ( (q*q) + (w*w) )
-				if d < closestDist then
-					closestDist = d
-					closestSpriteID = i
+			local q = placedX[i] - placedX[placedCount]
+			local w = placedY[i] - placedY[placedCount]
+			local d = ( (q*q) + (w*w) )
+			if d < closestDist then
+				closestDist = d
+				closestSpriteID = i
 
-					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
-
-				end
+				SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
+			end
 		end
 	end
 
@@ -1076,6 +1093,9 @@ function EraseClosestWaypoint()
 		placedLandFlags[closestSpriteID] = nil
 		closestSpriteID = nil
 		SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+		PlaySound(sndBump)
+	else
+		PlaySound(sndDenied)
 	end
 end
 
@@ -1139,8 +1159,10 @@ function PlaceObject(x,y)
 				elseif CGR == 2 then placedHWMapFlag[placedCount] = 126
 				elseif CGR == 3 then placedHWMapFlag[placedCount] = 127
 				end
+				PlaySound(sndPlaced)
 			else
 				placedType[placedCount] = "bogus"
+				PlaySound(sndDenied)
 			end
 		else
 			placedType[placedCount] = "bogus"
@@ -1184,18 +1206,25 @@ function PlaceObject(x,y)
 
 		if pMode[pIndex] == loc("Selection Mode") then
 			sGear = GetClosestGear()
+			if sGear ~= nil then
+				PlaySound(sndPortalSwitch)
+			end
 		elseif pMode[pIndex] == loc("Placement Mode") then
 			if sGear ~= nil then
 				SetGearPosition(sGear, x, y)
+				PlaySound(sndWarp)
 			end
 		elseif pMode[pIndex] == loc("Deletion Mode") then
 			sGear = GetClosestGear()
 			if (sGear == nil) then
 				AddCaption(loc("Please click on a gear."), colorErrorMessage, capgrpVolume)
+				PlaySound(sndDenied)
 			elseif (GetGearType(sGear) == gtHedgehog) then
 				AddCaption(loc("Hedgehogs can not be deleted."), colorErrorMessage, capgrpVolume)
+				PlaySound(sndDenied)
 			else
 				DeleteGear(sGear)
+				PlaySound(sndBump)
 			end
 			sGear = nil
 		end
@@ -1209,8 +1238,10 @@ function PlaceObject(x,y)
 			else -- set for the whole team
 				SetTeamIdentity(sGear)
 			end
+			PlaySound(sndHello, sGear)
 		else
 			AddCaption(loc("Please click on a hedgehog."), colorErrorMessage, capgrpVolume)
+			PlaySound(sndDenied)
 		end
 
 
@@ -1220,13 +1251,21 @@ function PlaceObject(x,y)
 		sGear = GetClosestGear()
 		local gt = GetGearType(sGear)
 		if gt == gtHedgehog or gt == gtExplosives or (gt == gtCase and GetGearPos(sGear) == 0x2) then
+			local oldHealth, hDiff = GetHealth(sGear)
 			if pMode[pIndex][2] == "set" then
 				SetHealth(sGear, pMode[pIndex][1])
+				hDiff = pMode[pIndex][1] - oldHealth
 			elseif pMode[pIndex][2] == "mod" then
 				local min
 				if gt == gtCase then min = 0 else min = 1 end
 				local newHealth = math.max(min, GetHealth(sGear) + tonumber(pMode[pIndex][1]))
 				SetHealth(sGear, newHealth)
+				hDiff = newHealth - oldHealth
+			end
+			PlaySound(sndPortalSwitch)
+			if gt == gtHedgehog and hDiff < 0 then
+				local snd = { sndOw1, sndOw2, sndOw3 }
+				PlaySound(snd[math.random(1, #snd)], sGear)
 			end
 		elseif gt == gtMine and GetHealth(sGear) == 0 then
 			local newHealth 
@@ -1240,9 +1279,11 @@ function PlaceObject(x,y)
 			end
 			if newHealth ~= nil then
 				SetGearValues(sGear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 36 - newHealth)
+				PlaySound(sndPortalSwitch)
 			end
 		else
 			AddCaption(loc("Please click on a hedgehog, barrel, health crate or dud mine."), colorErrorMessage, capgrpVolume)
+			PlaySound(sndDenied)
 		end
 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
@@ -1252,16 +1293,21 @@ function PlaceObject(x,y)
 		if closestSpriteID ~= nil then
 			if pMode[pIndex] == loc("LandFlag Modification Mode") then
 				EraseSprite(placedX[closestSpriteID], placedY[closestSpriteID], placedSprite[closestSpriteID], placedFrame[closestSpriteID], nil, nil, nil, nil, placedLandFlags[closestSpriteID])
-				placementSucceeded = CallPlaceSprite(closestSpriteID)
+				placementSucceeded = CallPlaceSprite(closestSpriteID, true)
 				if placementSucceeded then
 					closestSpriteID = nil
 					SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+					PlaySound(sndPortalSwitch)
+				else
+					PlaySound(sndDenied)
 				end
 			elseif pMode[pIndex] == loc("Sprite Erasure Mode") then
 
 				EraseClosestSprite()
 
 			end
+		else
+			PlaySound(sndDenied)
 		end
 
 
@@ -1275,14 +1321,18 @@ function PlaceObject(x,y)
 				if pMode[pIndex] == loc("Victory Condition: Collect") then
 					if GetGearType(sGear) == gtCase then
 						setGearValue(sGear, "tag","collection")
+						PlaySound(sndPortalSwitch)
 					else
 						AddCaption(loc("Please click on a crate."), colorErrorMessage, capgrpVolume)
+						PlaySound(sndDenied)
 					end
 				else
 					if pMode[pIndex] == loc("Victory Condition: Destroy") then
 						setGearValue(sGear, "tag","victory")
+						PlaySound(sndPortalSwitch)
 					elseif pMode[pIndex] == loc("Losing Condition: Destroy") then
 						setGearValue(sGear, "tag","failure")
+						PlaySound(sndPortalSwitch)
 					end
 				end
 
@@ -1291,6 +1341,7 @@ function PlaceObject(x,y)
 				setGearValue(sGear, "tag", nil)
 				DeleteVisualGear(getGearValue(sGear,"tCirc"))
 				setGearValue(sGear, "tCirc", nil)
+				PlaySound(sndBump)
 			end
 
 
@@ -1304,9 +1355,6 @@ function PlaceObject(x,y)
 			placedFrame[placedCount] = sFrame
 			placedSprite[placedCount] = reducedSpriteIDArray[pIndex]
 			placementSucceeded = CallPlaceSprite(placedCount)
-			if placementSucceeded then
-				PlaySound(sndPlaced)
-			end
 		else
 			placedType[placedCount] = "bogus"
 			SelectClosestSprite()
@@ -2857,6 +2905,8 @@ function HandleHedgeEditor()
 
 		if (curWep == amCMGearPlacementTool) then
 
+			SetSoundMask(sndIncoming, true)
+
 			--wowaweewa, holyeeeee shite this is badly hacked (please rewrite when less lazy/morefeatures)
 			dCol = 0xFFFFFFFF
 			dFrame = 0
@@ -2926,6 +2976,7 @@ function HandleHedgeEditor()
 			end
 
 		else
+			SetSoundMask(sndIncoming, false)
 			if CG ~= nil then
 				SetVisualGearValues(CG, 0, 0, 0, 0, 0, 0, 1000, sprArrow, 1000, 0xFFFFFF00)
 			end
@@ -2959,6 +3010,12 @@ function HandleHedgeEditor()
 			elseif (cIndex == 2) and (curWep ~= amRubber) then
 				cIndex = 3 --new
 				RedefineSubset()
+			end
+
+			if curWep == amGirder or curWep == amRubber then
+				SetSoundMask(sndDenied, true)
+			else
+				SetSoundMask(sndDenied, false)
 			end
 
 			-- update display selection criteria
