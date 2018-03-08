@@ -144,11 +144,12 @@ end
 
 function limitHogs(gear)
     cnthhs = cnthhs + 1
-        if cnthhs > 1 then
-            hogLimitHit = true
-            SetEffect(gear, heResurrectable, false)
-            SetGearPosition(gear, -100,LAND_HEIGHT)
-        end
+    if cnthhs > 1 then
+        hogLimitHit = true
+        SetEffect(gear, heResurrectable, 0)
+        setGearValue(gear, "excess", true)
+        DeleteGear(gear)
+    end
 end
 
 function onGameStart()
@@ -165,7 +166,7 @@ function onGameStart()
         runOnHogsInTeam(limitHogs, teams[i])
     end
     if hogLimitHit then
-        AddCaption(loc("Only one hog per team allowed! Excess hogs will be removed"), 0xFFFFFFFF, capgrpGameState)
+        WriteLnToChat(loc("Only one hog per team allowed! Excess hogs will be removed."))
     end
     showStartingInfo()
 end
@@ -363,7 +364,7 @@ end
 
 function armageddon(gear)
     SetState(gear, gstLoser)
-    SetEffect(gear, heResurrectable, false)
+    SetEffect(gear, heResurrectable, 0)
     SetHealth(gear, 0)
 end
 
@@ -759,7 +760,9 @@ function onGearDelete(gear)
             teams[TeamsCount - 1] = nil
             TeamsCount = TeamsCount - 1
         end
-        AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+        if getGearValue(gear, "excess") ~= true then
+            AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+        end
         trackDeletion(gear)
     elseif GetGearType(gear) == gtCase then
         -- Check if a crate has been collected
