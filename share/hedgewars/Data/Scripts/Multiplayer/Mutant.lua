@@ -103,17 +103,16 @@ local feederHat = "poke_slowpoke"
 
 function rules()
 
-	local ruleSet = loc("Rules: ") .. "|" ..
-	loc("Hedgehogs will be revived after their death.") .. "|" ..
+	local ruleSet = loc("Hedgehogs will be revived after their death.") .. "|" ..
 	string.format(loc("Mines explode after %d s."), div(MinesTime, 1000)) .. "|" ..
-	" |"..
 	loc("The first hedgehog to kill someone becomes the Mutant.") .. "|" ..
-	loc("The Mutant has super-weapons and a lot of health.") .. "|" ..
-	loc("The Mutant loses health quickly if he doesn't keep scoring kills.") .. "|" ..
+	loc("The Mutant has super weapons and a lot of health.") .. "|" ..
+	loc("The Mutant loses health quickly, but gains health by killing.") .. "|" ..
 	" |" ..
-	loc("Score points by killing other hedgehogs (see below).") .. "|" ..
+	loc("Score points by killing other hedgehogs.") .. "|" ..
 	loc("The hedgehog with least points (or most deaths) becomes the Bottom Feeder.") .. "|" ..
-	string.format(loc("The first hedgehog which scores %d or more wins the game."), winScore) .. "|" ..
+	loc("The score and deaths are shown next to the team bar.") .. "|" ..
+	string.format(loc("Goal: Score %d points or more to win!"), winScore) .. "|" ..
         " |" ..
 	loc("Scoring: ") .. "|" ..
 	loc("+2 for becoming the Mutant") .. "|" ..
@@ -371,7 +370,7 @@ end
 function renderScores()
     for i=0, TeamsCount-1 do
         if teams[i]~= nil then
-            SetTeamLabel(teams[i], string.format(loc("Score: %d | Deaths: %d"), getTeamValue(teams[i], "Score"), getTeamValue(teams[i], "DeadHogs")))
+            SetTeamLabel(teams[i], string.format(loc("%d | %d"), getTeamValue(teams[i], "Score"), getTeamValue(teams[i], "DeadHogs")))
         end
     end
 end
