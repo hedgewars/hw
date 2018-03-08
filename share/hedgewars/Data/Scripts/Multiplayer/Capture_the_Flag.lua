@@ -88,6 +88,7 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 ------------------ "Oh well, they probably have the memory"
 
 local gameStarted = false
+local gameOver = false
 local captureLimit = 3
 
 --------------------------
@@ -104,13 +105,12 @@ local teamIndex = {} -- at what point in the hhs{} does each team begin
 -- flag variables
 -------------------
 
-local fPlaced = {} -- has the flag been placed TRUE/FALSE
-
 local fGear = {}	-- pointer to the visual gears that represent the flag
 local fGearX = {}
 local fGearY = {}
 
 local fThief = {}	-- pointer to the hogs who stole the flags
+local fThiefFlag = {}   -- contains the stolen flag type of fThief
 local fIsMissing = {}	-- have the flags been destroyed or captured
 local fNeedsRespawn = {}	-- do the flags need to be respawned
 local fCaptures = {}	-- the team "scores" how many captures
@@ -136,6 +136,7 @@ local fGearTimer = 0
 function CheckScore(clanID)
 
 	if fCaptures[clanID] == captureLimit then
+		gameOver = true
 		-- Capture limit reached! We have a winner!
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
@@ -154,55 +155,60 @@ function CheckScore(clanID)
 
 end
 
-function DoFlagStuff(gear)
+function DoFlagStuff(flag, flagClan)
 
-	local wtf, bbq
-	if (gear == fGear[0]) then
-		wtf = 0
-		bbq = 1
-	elseif (gear == fGear[1]) then
-		wtf = 1
-		bbq = 0
+	if not CurrentHedgehog then
+		return
+	end
+	local wtf = flagClan
+
+	local thiefClan
+	for i=0, ClansCount - 1 do
+		if CurrentHedgehog == fThief[i] then
+			thiefClan = i
+		end
 	end
 
 	-- player has successfully captured the enemy flag
-	if (GetHogClan(CurrentHedgehog) == wtf) and (CurrentHedgehog == fThief[bbq]) and (fIsMissing[wtf] == false) then
+	if (GetHogClan(CurrentHedgehog) == flagClan) and (thiefClan ~= nil) and (fIsMissing[flagClan] == false) then
 
-		DeleteVisualGear(fGear[wtf])
-		fGear[wtf] = nil -- the flag has now disappeared
+		DeleteVisualGear(fGear[flagClan])
+		fGear[flagClan] = nil -- the flag has now disappeared
 
-		fIsMissing[wtf] = false
-		fNeedsRespawn[wtf] = true
-		fIsMissing[bbq] = false
-		fNeedsRespawn[bbq] = true
-		fCaptures[wtf] = fCaptures[wtf] +1
+		fIsMissing[flagClan] = false
+		fNeedsRespawn[flagClan] = true
+		fIsMissing[thiefClan] = false
+		fNeedsRespawn[thiefClan] = true
+		fCaptures[flagClan] = fCaptures[flagClan] +1
 		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
 		updateScores()
 		PlaySound(sndHomerun)
-		fThief[bbq] = nil -- player no longer has the enemy flag
-		CheckScore(wtf)
+		fThief[thiefClan] = nil -- player no longer has the enemy flag
+		fThiefFlag[flagClan] = nil
+		CheckScore(flagClan)
 
 	--if the player is returning the flag
-	elseif (GetHogClan(CurrentHedgehog) == wtf) and (fIsMissing[wtf] == true) then
+	elseif (GetHogClan(CurrentHedgehog) == flagClan) and (fIsMissing[flagClan] == true) then
 
-		DeleteVisualGear(fGear[wtf])
-		fGear[wtf] = nil -- the flag has now disappeared
+		DeleteVisualGear(fGear[flagClan])
+		fGear[flagClan] = nil -- the flag has now disappeared
 
-		fNeedsRespawn[wtf] = true
-		HandleRespawns() -- this will set fIsMissing[wtf] to false :)
+		fNeedsRespawn[flagClan] = true
+		HandleRespawns() -- this will set fIsMissing[flagClan] to false :)
 		AddCaption(loc("Flag returned!"), 0xFFFFFFFF, capgrpMessage2)
 
-	--if the player is taking the enemy flag
-	elseif GetHogClan(CurrentHedgehog) == bbq then
+	--if the player is taking the enemy flag (not possible if already holding a flag)
+	elseif GetHogClan(CurrentHedgehog) ~= flagClan and (thiefClan == nil) then
 
-		DeleteVisualGear(fGear[wtf])
-		fGear[wtf] = nil -- the flag has now disappeared
+		DeleteVisualGear(fGear[flagClan])
+		fGear[flagClan] = nil -- the flag has now disappeared
 
-		fIsMissing[wtf] = true
+		fIsMissing[flagClan] = true
 		for i = 0,numhhs-1 do
 			if CurrentHedgehog ~= nil then
 				if CurrentHedgehog == hhs[i] then
-					fThief[wtf] = hhs[i]
+					fThief[flagClan] = hhs[i]
+					fThiefFlag[flagClan] = flagClan
 				end
 			end
 		end
@@ -214,7 +220,7 @@ end
 
 function CheckFlagProximity()
 
-	for i = 0, 1 do
+	for i = 0, ClansCount-1 do
 		if fGear[i] ~= nil then
 
 			local g1X = fGearX[i]
@@ -226,8 +232,8 @@ function CheckFlagProximity()
 			local w = g1Y - g2Y
 			local dist = (q*q) + (w*w)
 
-			if dist < 500 then --1600
-				DoFlagStuff(fGear[i])
+			if dist < 500 then
+				DoFlagStuff(fGear[i], i)
 			end
 		end
 	end
@@ -237,7 +243,7 @@ end
 
 function HandleRespawns()
 
-	for i = 0, 1 do
+	for i = 0, ClansCount-1 do
 
 		if fNeedsRespawn[i] == true then
 			fGear[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
@@ -256,29 +262,30 @@ end
 
 function FlagThiefDead(gear)
 
-	local wtf, bbq
-	if (gear == fThief[0]) then
-		wtf = 0
-		bbq = 1
-	elseif (gear == fThief[1]) then
-		wtf = 1
-		bbq = 0
+	local thiefClan
+	local stolenFlagClan
+	for i=0, ClansCount-1 do
+		if (gear == fThief[i]) then
+			thiefClan = i
+			stolenFlagClan = fThiefFlag[i]
+			break
+		end
 	end
 
-	if fThief[wtf] ~= nil then
+	if stolenFlagClan ~= nil then
 		-- falls into water
-		if (LAND_HEIGHT - fThiefY[wtf]) < 15 then
-			fIsMissing[wtf] = true
-			fNeedsRespawn[wtf] = true
+		if (LAND_HEIGHT - fThiefY[thiefClan]) < 15 then
+			fIsMissing[stolenFlagClan] = true
+			fNeedsRespawn[stolenFlagClan] = true
 			HandleRespawns()
 		else	--normally
-			fGearX[wtf]  =  fThiefX[wtf]
-			fGearY[wtf]  =  fThiefY[wtf]
-			fGear[wtf] = AddVisualGear(fGearX[wtf],fGearY[wtf],vgtCircle,0,true)
+			fGearX[stolenFlagClan] = fThiefX[thiefClan]
+			fGearY[stolenFlagClan] = fThiefY[thiefClan]
+			fGear[stolenFlagClan] = AddVisualGear(fGearX[stolenFlagClan], fGearY[stolenFlagClan], vgtCircle, 0, true)
 		end
 
-		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
-		fThief[wtf] = nil
+		AddVisualGear(fThiefX[thiefClan], fThiefY[thiefClan], vgtBigExplosion, 0, false)
+		fThief[thiefClan] = nil
 	end
 
 end
@@ -294,7 +301,7 @@ function HandleCircles()
 		end
 	end
 
-	for i = 0, 1 do
+	for i = 0, ClansCount-1 do
 
 		if fIsMissing[i] == false then -- draw a flag marker at the flag's spawning place
 			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 20, 0, 10, 0, 33, 3, fCol[i])
@@ -364,7 +371,7 @@ function StartTheGame()
 	gameStarted = true
 	AddCaption(loc("Game Started!"), 0xFFFFFFFF, capgrpGameState)
 
-	for i = 0, 1 do
+	for i = 0, ClansCount-1 do
 
 		fGear[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
@@ -433,9 +440,7 @@ function updateScores()
 	for i=0, TeamsCount-1 do
 		local team = GetTeamName(i)
 		local clan = GetTeamClan(team)
-		if clan <= 1 then
-			SetTeamLabel(team, tostring(fCaptures[clan]))
-		end
+		SetTeamLabel(team, tostring(fCaptures[clan]))
 	end
 end
 
@@ -445,8 +450,7 @@ function onGameStart()
 
 	RebuildTeamInfo()
 
-	for i=0, 1 do
-		fPlaced[i] = false
+	for i=0, ClansCount-1 do
 		fCaptures[i] = 0
 	end
 
@@ -466,12 +470,13 @@ function onNewTurn()
 		HandleRespawns()
 	end
 
-	for i=0, 1 do
+	local flagsPlaced = 0
+	for i=0, ClansCount-1 do
 		if fSpawnX[i] and fSpawnY[i] then
-			fPlaced[i] = true
+			flagsPlaced = flagsPlaced + 1
 		end
 	end
-	if not gameStarted and fPlaced[0] and fPlaced[1] then
+	if not gameStarted and flagsPlaced == ClansCount then
 		StartTheGame()
 	end
 
@@ -482,7 +487,7 @@ function onEndTurn()
 	if not gameStarted and CurrentHedgehog ~= nil then
 		local clan = GetHogClan(CurrentHedgehog)
 
-		if clan <= 1 and GetX(CurrentHedgehog) and not fSpawnX[clan] then
+		if GetX(CurrentHedgehog) and not fSpawnX[clan] then
 			fSpawnX[clan] = GetX(CurrentHedgehog)
 			fSpawnY[clan] = GetY(CurrentHedgehog)
 		end
@@ -491,14 +496,14 @@ end
 
 function onGameTick()
 
-	for i = 0,1 do
+	for i = 0, ClansCount-1 do
 		if fThief[i] ~= nil then
 			fThiefX[i] = GetX(fThief[i])
 			fThiefY[i] = GetY(fThief[i])
 		end
 	end
 
-	if gameStarted == true then
+	if gameStarted == true and not gameOver then
 		HandleCircles()
 		if CurrentHedgehog ~= nil then
 			CheckFlagProximity()
@@ -511,7 +516,7 @@ function onGearResurrect(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 		-- mark the flag thief as dead if he needed a respawn
-		for i = 0,1 do
+		for i = 0, ClansCount-1 do
 			if gear == fThief[i] then
 				FlagThiefDead(gear)
 			end
@@ -524,7 +529,7 @@ end
 function InABetterPlaceNow(gear)
 	for h = 0, (numhhs-1) do
 		if gear == hhs[h] then
-			for i = 0,1 do
+			for i = 0, ClansCount-1 do
 				if gear == fThief[i] then
 					FlagThiefDead(gear)
 				end
@@ -563,7 +568,7 @@ function onGearAdd(gear)
 		SetEffect(gear, heResurrectable, 1)
 
 	elseif GetGearType(gear) == gtPiano then
-		for i = 0, 1 do
+		for i = 0, ClansCount-1 do
 			if CurrentHedgehog == fThief[i] then
 				FlagThiefDead(CurrentHedgehog)
 			end
