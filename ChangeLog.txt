@@ -49,7 +49,7 @@ Styles and game modes:
  + Battalion (King Mode): If the king dies, the hogs die normally instead of disappearing
  + Space Invasion: Add a default Space Invasion game scheme
  + Capture the Flag: Can now be played with more than 2 clans
- + Capture the Flag: Show team scores and score graphi in stats screen
+ + Capture the Flag: Show team scores and score graph in stats screen
  + HedgeEditor: Show cursor coordinates in top left corner
  + Control: Always remove TimeBox and Resurrector
  * Battalion: Some texts in the mission panel were wrong and misleading

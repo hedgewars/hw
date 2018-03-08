@@ -444,13 +444,13 @@ end
 function showCTFMission()
 	local captures
 	if captureLimit == 1 then
-		captures = string.format(loc("- First team to capture the flag wins"), captureLimit)
+		captures = string.format(loc("- First clan to capture the flag wins"), captureLimit)
 	else
-		captures = string.format(loc("- First team to score %d captures wins"), captureLimit)
+		captures = string.format(loc("- First clan to score %d captures wins"), captureLimit)
 	end
 
-	local rules = loc("Rules:") .. " |" ..
-		loc("- Place your team flag at the end of your first turn") .. "|" ..
+	local rules = loc("Rules:") .. "|" ..
+		loc("- Place your clan flag at the end of your first turn") .. "|" ..
 		loc("- Return the enemy flag to your base to score") .."|"..
 		captures .. "|" ..
 		loc("- You may only score when your flag is in your base") .."|"..
