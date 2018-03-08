@@ -417,14 +417,6 @@ function StartTheGame()
 
 	for i = 0, 1 do
 
-		-- if someone uses kamikaze downwards, this can happen as the hog won't respawn
-		if (LAND_HEIGHT - fSpawnY[i]) < 0 then
-			tempG = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
-     			FindPlace(tempG, true, 0, LAND_WIDTH, true)
-			fSpawnX[i], fSpawnY[i] = GetGearPosition(tempG)
-			DeleteGear(tempG)
-		end
-
 		fGear[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 		fSpawnC[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
@@ -515,8 +507,10 @@ function onGameStart()
 		end
 	end]]
 
-	fPlaced[0] = false
-	fPlaced[1] = false
+	for i=0, 1 do
+		fPlaced[i] = false
+		fCaptures[i] = 0
+	end
 
 	--zxc = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 
@@ -524,11 +518,11 @@ function onGameStart()
 	--SetVisualGearValues(zxc, 1000,1000, 20, 255, 1,    10,                     0,         200,        1,      GetClanColor(0))
 					--minO,max0 -glowyornot	--pulsate timer	 -- fuckall      -- radius -- width  -- colour
 	for h=1, numhhs do
-		-- Tardis causes too many unexpected situations, so we forbid it
-		AddAmmo(hhs[h], amTardis, 0)
 		-- Hogs are resurrected for free, so this is pointless
 		AddAmmo(hhs[h], amResurrector, 0)
 	end
+
+	updateScores()
 
 end
 
@@ -593,7 +587,7 @@ function onGameTick()
 			i = 1
 		end
 
-		if TurnTimeLeft == 0 then
+		if TurnTimeLeft == 0 and GetX(CurrentHedgehog) then
 			fSpawnX[i] = GetX(CurrentHedgehog)
 			fSpawnY[i] = GetY(CurrentHedgehog)
 		end
@@ -654,6 +648,13 @@ function onHogRestore(gear)
 	end
 end
 
+function onHogAttack(ammoType)
+	if not gameStarted and ammoType == amTardis then
+		local i = GetHogClan(CurrentHedgehog)
+		fSpawnX[i] = GetX(CurrentHedgehog)
+		fSpawnY[i] = GetY(CurrentHedgehog)
+	end
+end
 
 function onGearAdd(gear)
 
@@ -678,6 +679,10 @@ function onGearDelete(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 		InABetterPlaceNow(gear)
+	elseif GetGearType(gear) == gtKamikaze and not gameStarted then
+		local i = GetHogClan(CurrentHedgehog)
+		fSpawnX[i] = GetX(CurrentHedgehog)
+		fSpawnY[i] = GetY(CurrentHedgehog)
 	end
 
 end
