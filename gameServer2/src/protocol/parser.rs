@@ -5,6 +5,12 @@ use std::str::FromStr;
 use super::messages::HWProtocolMessage;
 use super::messages::HWProtocolMessage::*;
 
+use proptest::test_runner::{TestRunner, Reason};
+use proptest::arbitrary::{any, any_with, Arbitrary, StrategyFor};
+use proptest::strategy::{Strategy, BoxedStrategy, Just, Filter, ValueTree};
+use proptest::string::RegexGeneratorValueTree;
+use std::ops::Range;
+
 named!(end_of_message, tag!("\n\n"));
 named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
 named!(  a_line<&[u8], String>, map!(str_line, String::from));
@@ -50,8 +56,8 @@ named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
     | do_parse!(tag_no_case!("RESTART_SERVER") >> eol >> tag!("YES") >> (RestartServer))
     | do_parse!(tag_no_case!("REGISTERED_ONLY") >> (ToggleServerRegisteredOnly))
     | do_parse!(tag_no_case!("SUPER_POWER")     >> (SuperPower))
-    | do_parse!(tag_no_case!("PART")     >> eol >> m: opt_param >> (Quit(m)))
-    | do_parse!(tag_no_case!("QUIT")     >> eol >> m: opt_param >> (Part(m)))
+    | do_parse!(tag_no_case!("PART")     >> m: opt_param >> (Part(m)))
+    | do_parse!(tag_no_case!("QUIT")     >> m: opt_param >> (Quit(m)))
     | do_parse!(tag_no_case!("DELEGATE") >> eol >> n: a_line  >> (Delegate(n)))
     | do_parse!(tag_no_case!("SAVEROOM") >> eol >> r: a_line  >> (SaveRoom(r)))
     | do_parse!(tag_no_case!("LOADROOM") >> eol >> r: a_line  >> (LoadRoom(r)))
@@ -121,6 +127,138 @@ named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
 
 named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(message)));
 
+// Due to inability to define From between Options
+trait Into2<T>: Sized { fn into2(self) -> T; }
+impl <T> Into2<T> for T { fn into2(self) -> T { self } }
+impl Into2<String> for Ascii { fn into2(self) -> String { self.0 } }
+impl Into2<Option<String>> for Option<Ascii>{
+    fn into2(self) -> Option<String> { self.map(|x| {x.0}) }
+}
+
+macro_rules! proto_msg_case {
+    ($val: ident()) =>
+        (Just($val));
+    ($val: ident($arg: ty)) =>
+        (any::<$arg>().prop_map(|v| {$val(v.into2())}));
+    ($val: ident($arg1: ty, $arg2: ty)) =>
+        (any::<($arg1, $arg2)>().prop_map(|v| {$val(v.0.into2(), v.1.into2())}));
+    ($val: ident($arg1: ty, $arg2: ty, $arg3: ty)) =>
+        (any::<($arg1, $arg2, $arg3)>().prop_map(|v| {$val(v.0.into2(), v.1.into2(), v.2.into2())}));
+}
+
+macro_rules! proto_msg_match {
+    ($var: expr, def = $default: ident, $($num: expr => $constr: ident $res: tt),*) => (
+        match $var {
+            $($num => (proto_msg_case!($constr $res)).boxed()),*,
+            _ => Just($default).boxed()
+        }
+    )
+}
+
+#[derive(Debug)]
+struct Ascii(String);
+
+struct AsciiValueTree(RegexGeneratorValueTree<String>);
+
+impl ValueTree for AsciiValueTree {
+    type Value = Ascii;
+
+    fn current(&self) -> Self::Value { Ascii(self.0.current()) }
+    fn simplify(&mut self) -> bool { self.0.simplify() }
+    fn complicate(&mut self) -> bool { self.0.complicate() }
+}
+
+impl Arbitrary for Ascii {
+    type Parameters = <String as Arbitrary>::Parameters;
+
+    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+        any_with::<String>(args)
+            .prop_filter("not ascii", |s| {
+                s.len() > 0 && s.is_ascii() &&
+                s.find(|c| {
+                    ['\0', '\n', '\x20'].contains(&c)
+                }).is_none()})
+            .prop_map(Ascii)
+            .boxed()
+    }
+
+    type Strategy = BoxedStrategy<Ascii>;
+    type ValueTree = Box<ValueTree<Value = Ascii>>;
+}
+
+fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
+    let res = (0..58).no_shrink().prop_flat_map(|i| {
+        proto_msg_match!(i, def = Malformed,
+        0 => Ping(),
+        1 => Pong(),
+        2 => Quit(Option<Ascii>),
+        //3 => Cmd
+        4 => Global(Ascii),
+        5 => Watch(Ascii),
+        6 => ToggleServerRegisteredOnly(),
+        7 => SuperPower(),
+        8 => Info(Ascii),
+        9 => Nick(Ascii),
+        10 => Proto(u32),
+        11 => Password(Ascii, Ascii),
+        12 => Checker(u32, Ascii, Ascii),
+        13 => List(),
+        14 => Chat(Ascii),
+        15 => CreateRoom(Ascii, Option<Ascii>),
+        16 => Join(Ascii, Option<Ascii>),
+        17 => Follow(Ascii),
+        //18 => Rnd(Vec<String>),
+        19 => Kick(Ascii),
+        20 => Ban(Ascii, Ascii, u32),
+        21 => BanIP(Ascii, Ascii, u32),
+        22 => BanNick(Ascii, Ascii, u32),
+        23 => BanList(),
+        24 => Unban(Ascii),
+        //25 => SetServerVar(ServerVar),
+        26 => GetServerVar(),
+        27 => RestartServer(),
+        28 => Stats(),
+        29 => Part(Option<Ascii>),
+        //30 => Cfg(GameCfg),
+        //31 => AddTeam(TeamInfo),
+        32 => RemoveTeam(Ascii),
+        //33 => SetHedgehogsNumber(String, u8),
+        //34 => SetTeamColor(String, u8),
+        35 => ToggleReady(),
+        36 => StartGame(),
+        37 => EngineMessage(Ascii),
+        38 => RoundFinished(),
+        39 => ToggleRestrictJoin(),
+        40 => ToggleRestrictTeams(),
+        41 => ToggleRegisteredOnly(),
+        42 => RoomName(Ascii),
+        43 => Delegate(Ascii),
+        44 => TeamChat(Ascii),
+        45 => MaxTeams(u8),
+        46 => Fix(),
+        47 => Unfix(),
+        48 => Greeting(Ascii),
+        //49 => CallVote(Option<(String, Option<String>)>),
+        50 => Vote(String),
+        51 => ForceVote(Ascii),
+        //52 => Save(String, String),
+        53 => Delete(Ascii),
+        54 => SaveRoom(Ascii),
+        55 => LoadRoom(Ascii),
+        56 => Malformed(),
+        57 => Empty()
+    )});
+    res.boxed()
+}
+
+proptest! {
+    #[test]
+    fn is_parser_composition_idempotent(ref msg in gen_proto_msg()) {
+        println!("!! Msg: {:?}, Bytes: {:?} !!", msg, msg.to_raw_protocol().as_bytes());
+        assert_eq!(message(msg.to_raw_protocol().as_bytes()), IResult::Done(&b""[..], msg.clone()))
+    }
+}
+
 #[test]
 fn parse_test() {
     assert_eq!(message(b"PING\n\n"),          IResult::Done(&b""[..], Ping));
@@ -131,6 +269,9 @@ fn parse_test() {
     assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
     assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo".to_string())));
     assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me".to_string(), "bad".to_string(), 77)));
+
+    assert_eq!(message(b"CMD\nPART\n\n"),      IResult::Done(&b""[..], Part(None)));
+    assert_eq!(message(b"CMD\nPART\n_msg_\n\n"), IResult::Done(&b""[..], Part(Some("_msg_".to_string()))));
 
     assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    IResult::Done(&b""[..], vec![Malformed]));
 
