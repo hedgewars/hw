@@ -594,6 +594,7 @@ local helpDisabled = false  --determines whether help popups pop up
 local CG = nil -- this is the visual gear displayed at CursorX, CursorY
 local crateSprite = nil-- this is a visual gear aid for crate placement
 local crateSpriteBorer = nil
+local waypointPreviewSprite = nil
 
 local cGear = nil -- detects placement of girders and objects (using airattack)
 local curWep = amNothing
@@ -653,6 +654,8 @@ local sGear = nil
 local closestDist
 local closestGear = nil
 local closestSpriteID = nil
+
+local wpRadius = 450
 
 ------------------------
 -- SOME GENERAL METHODS
@@ -902,8 +905,8 @@ function PlaceWaypoint(x,y)
 	placedSprite[placedCount] = vgtCircle
 	placedSpec[placedCount] = AddVisualGear(x,y,vgtCircle,0,true)
 	placedTint[placedCount] = 0xFF0000FF
-	placedFrame[placedCount] = 1										--rad is 450
-	SetVisualGearValues(placedSpec[placedCount], x, y, 164, 224, 1, 10, 0, 450, 5, placedTint[placedCount])
+	placedFrame[placedCount] = 1
+	SetVisualGearValues(placedSpec[placedCount], x, y, 164, 224, 1, 10, 0, wpRadius, 5, placedTint[placedCount])
 	placedCount = placedCount +1
 
 end
@@ -2973,6 +2976,20 @@ function HandleHedgeEditor()
 					-- Use default ammo icon
 					tempFrame = tArr[pIndex][1] - 1
 				end
+			end
+
+			-- Waypoint outline
+			if (cat[cIndex] == loc("Waypoint Editing Mode")) and (pMode[pIndex] == loc("Place Waypoint")) then
+				if not waypointPreviewSprite then
+					waypointPreviewSprite = AddVisualGear(CursorX, CursorY, vgtCircle, 1, true)
+					SetVisualGearValues(waypointPreviewSprite, CursorX, CursorY, 244, 224, 0, 0, 0, wpRadius/5, 5, 0xFF0000FF)
+				end
+			elseif waypointPreviewSprite then
+				DeleteVisualGear(waypointPreviewSprite)
+				waypointPreviewSprite = nil
+			end
+			if waypointPreviewSprite then
+				SetVisualGearValues(waypointPreviewSprite, CursorX, CursorY)
 			end
 
 		else
