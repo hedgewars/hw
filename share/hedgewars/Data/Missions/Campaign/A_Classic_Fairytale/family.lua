@@ -130,6 +130,8 @@ crates = {}
 cratesNum = 0
 
 princessFreed = false
+closeToPrincess = false
+friendsEscaped = false
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -219,6 +221,8 @@ function AfterMidAnim()
   SetupPlace3()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
+  AddNewEvent(CheckCloseToPrincess, {}, DoCloseToPrincess, {}, 0)
+  AddNewEvent(CheckFriendsEscaped, {}, DoFriendsEscaped, {}, 0)
   EndTurn(true)
   ShowMission(loc("Family Reunion"), loc("Salvation"),
      loc("Get your teammates out of their natural prison and save the princess!") .."|"..
@@ -237,7 +241,8 @@ end
 
 function SkipMidAnim()
   AnimTeleportGear(natives[1], unpack(nativeMidPos2))
-  SkipStartAnim()
+  AnimSwitchHog(natives[1])
+  AnimWait(natives[1], 1)
 end
 
 function SetupPlace3()
@@ -319,16 +324,53 @@ function SetupPlace2()
 end
 
 -----------------------------Events------------------------------------
-function CheckPrincessFreed()
-  if GetX(natives[1]) == nil or GetX(natives[2]) == nil or GetX(natives[3]) == nil or GetX(princess) == nil then
+function CheckCloseToPrincess()
+  if GetX(natives[1]) == nil or GetX(princess) == nil then
     return false
   end
-  return math.abs(GetX(natives[1]) - GetX(princess)) <= 15 and math.abs(GetY(natives[1]) - GetY(princess)) <= 15 and StoppedGear(natives[1]) 
-        and GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
+  return math.abs(GetX(natives[1]) - GetX(princess)) <= 20 and math.abs(GetY(natives[1]) - GetY(princess)) <= 17 and StoppedGear(natives[1])
+end
+
+function CheckFriendsEscaped()
+  if GetX(natives[2]) == nil or GetX(natives[3]) == nil then
+    return false
+  end
+  return GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
+end
+
+function CheckPrincessFreed()
+  return CheckCloseToPrincess() and CheckFriendsEscaped()
 end
 
 function DoPrincessFreed()
   AddAnim(princessFreedAnim)
+end
+
+function DoFriendsEscaped()
+  if friendsEscaped then
+    return
+  end
+  if not CheckCloseToPrincess() then
+    if GetX(natives[2]) == nil and GetX(natives[1]) == nil then
+      return
+    end
+    HogSay(natives[2], string.format(loc("Finally! We're out of this hellhole. Now go save the princess, %s!"), nativeNames[natives[m5DeployedNum]]), SAY_SAY)
+  end
+  friendsEscaped = true
+end
+
+function DoCloseToPrincess()
+  if closeToPrincess then
+    return
+  end
+  if not CheckFriendsEscaped() then
+    if GetX(natives[2]) == nil then
+      return
+    end
+    HogSay(natives[2], loc("Hey, don't forget us! We still need to climb up!"), SAY_SHOUT)
+    FollowGear(natives[2])
+  end
+  closeToPrincess = true
 end
 
 function Victory()
@@ -389,6 +431,8 @@ end
 
 function EndMission()
   if not princessFreed then
+    RemoveEventFunc(CheckFriendsEscaped)
+    RemoveEventFunc(CheckCloseToPrincess)
     RemoveEventFunc(CheckPrincessFreed)
     AddCaption(loc("So the princess was never heard of again ..."))
     DismissTeam(loc("Natives"))
