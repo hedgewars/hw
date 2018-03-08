@@ -509,14 +509,15 @@ end
 
 function onGearResurrect(gear)
 
-	-- mark the flag thief as dead if he needed a respawn
-	for i = 0,1 do
-		if gear == fThief[i] then
-			FlagThiefDead(gear)
+	if GetGearType(gear) == gtHedgehog then
+		-- mark the flag thief as dead if he needed a respawn
+		for i = 0,1 do
+			if gear == fThief[i] then
+				FlagThiefDead(gear)
+			end
 		end
+		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 	end
-
-	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
 end
 
@@ -562,10 +563,9 @@ function onGearAdd(gear)
 		SetEffect(gear, heResurrectable, 1)
 
 	elseif GetGearType(gear) == gtPiano then
-
 		for i = 0, 1 do
 			if CurrentHedgehog == fThief[i] then
-				FlagThiefDead(gear)
+				FlagThiefDead(CurrentHedgehog)
 			end
 		end
 
