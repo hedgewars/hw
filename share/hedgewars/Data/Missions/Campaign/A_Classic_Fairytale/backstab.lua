@@ -974,12 +974,12 @@ function AddHogs()
 
   AddTeam(loc("Assault Team"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
-    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 3, 50, "vampirichog")
   end
 
   AddTeam(loc("Reinforcements"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
-    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 2, 50, "vampirichog")
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
