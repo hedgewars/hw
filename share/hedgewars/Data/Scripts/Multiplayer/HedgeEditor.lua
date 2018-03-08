@@ -569,7 +569,7 @@ local gameFlagList =	{
   sprTargetBee, sprAmGirder, sprAmRubber, sprIceTexture, sprHHTelepMask,
   sprAMAmmos, sprAMAmmosBW, sprAMSlot, sprAMCorners, sprTurnsLeft, sprBotlevels,
   sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
-  sprShoutCorner, sprShoutEdge, sprShoutTail, sprCustom1, sprCustom2, }
+  sprShoutCorner, sprShoutEdge, sprShoutTail, }
 
  -- Set in onGameInit
  local reducedSpriteIDArrayFrames
@@ -578,7 +578,7 @@ local gameFlagList =	{
   "sprTargetBee", "sprAmGirder", "sprAmRubber", "sprIceTexture", "sprHHTelepMask",
   "sprAMAmmos", "sprAMAmmosBW", "sprAMSlot",  "sprAMCorners", "sprTurnsLeft", "sprBotlevels",
   "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail",
-  "sprShoutCorner", "sprShoutEdge", "sprShoutTail", "sprCustom1", "sprCustom2", }
+  "sprShoutCorner", "sprShoutEdge", "sprShoutTail", }
 
 ----------------------------
 -- placement shite
@@ -593,7 +593,7 @@ local portalDistance = 5000/5
 local helpDisabled = false  --determines whether help popups pop up
 local CG = nil -- this is the visual gear displayed at CursorX, CursorY
 local crateSprite = nil-- this is a visual gear aid for crate placement
-local tSpr = {}
+local crateSpriteBorer = nil
 
 local cGear = nil -- detects placement of girders and objects (using airattack)
 local curWep = amNothing
@@ -2850,7 +2850,6 @@ function HandleHedgeEditor()
 
 		genTimer = genTimer + 1
 
-
 		tSprCol = 0x00000000
 		tempFrame = 0
 		xDisplacement = 42
@@ -2863,14 +2862,11 @@ function HandleHedgeEditor()
 			dFrame = 0
 			dAngle = 0
 			if (cat[cIndex] == loc("Mine Placement Mode")) then
-				dSprite = sprBotlevels--sprMineOff
-				dFrame = 1
+				dSprite = sprCustom2
 			elseif (cat[cIndex] == loc("Dud Mine Placement Mode")) then
-				dSprite = sprBotlevels--sprMineDead
-				dFrame = 3
+				dSprite = sprCustom4
 			elseif (cat[cIndex] == loc("Sticky Mine Placement Mode")) then
-				dSprite = sprBotlevels--sprSMineOff
-				dFrame = 2
+				dSprite = sprCustom3
 			elseif (cat[cIndex] == loc("Air Mine Placement Mode")) then
 				dSprite = sprAirMine
 			elseif (cat[cIndex] == loc("Barrel Placement Mode")) then
@@ -2907,9 +2903,7 @@ function HandleHedgeEditor()
 
 			if crateSprite == nil then
 				crateSprite = AddVisualGear(CursorX, CursorY-35, vgtStraightShot,0,true,3)
-				for i = 1, 4 do
-					tSpr[i] = AddVisualGear(CursorX, CursorY-35, vgtStraightShot,0,true,3)
-				end
+				crateSpriteBorder = AddVisualGear(CursorX, CursorY-35, vgtStraightShot,0,true,3)
 			end
 
 
@@ -2938,11 +2932,7 @@ function HandleHedgeEditor()
 		end
 
 		SetVisualGearValues(crateSprite, CursorX+xDisplacement, CursorY+yDisplacement, 0, 0, dAngle, tempFrame, 1000, sprAMAmmos, 1000, tSprCol)
-		SetVisualGearValues(tSpr[1], CursorX+xDisplacement-2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[2], CursorX+xDisplacement-2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[3], CursorX+xDisplacement+2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[4], CursorX+xDisplacement+2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-
+		SetVisualGearValues(crateSpriteBorder, CursorX+xDisplacement, CursorY+yDisplacement, 0, 0, 0, 0, 1000, sprCustom1, 1000, tSprCol)
 
 		if genTimer >= 100 then
 
