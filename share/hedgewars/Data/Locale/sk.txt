@@ -53,17 +53,19 @@
 00:50=Útok raketovými vŕtačkami
 00:51=Blatová guľa
 00:52=Žiadna zbraň nie je vybraná
-00:53=TARDIS
+00:53=Časová kapsula
 ; 00:54=Budova
 00:54=Postrek zeme
 00:55=Zmrazovač
 00:56=Sekáčik
 00:57=Gumička
 00:58=Vzdušná mína
+00:59=Gumená kačička
+00:60=Minigun
 
-; 01:00=Loading …
+01:00=Načítam …
 01:01=Remíza
-01:02=%1 vyhrali!
+01:02=%1 vyhral!
 01:03=Hlasitosť %1%
 01:04=Pauza
 01:05=Naozaj skončiť (%1/%2)?
@@ -87,6 +89,17 @@
 01:23=Automatická kamera vypnutá
 01:24=Automatická kamera zapnutá
 01:25=Stlač cieľové tlačidlo na označenie cieľa
+01:26=Pomôcka nie je dostupná v Rýchlej smrti
+01:27=+%1
+01:28=Prázdny!
+01:29=Neznámy kľúč
+01:30=%1 a %2 vyhrali!
+01:31=%1, %2 a %3 vyhrali!
+01:32=%1, %2, %3 a %4 vyhrali!
+01:33=%1, %2, %3, %4 a %5 vyhrali!
+01:34=%1, %2, %3, %4, %5 a %6 vyhrali!
+01:35=%1, %2, %3, %4, %5, %6 a %7 vyhrali!
+01:35=Všetci vyhrali!
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel
@@ -115,6 +128,7 @@
 02:00=%1 odišiel za lepším
 02:00=%1 už nespotrebováva pamäť tohto počítača
 02:00=%1 odišiel a už sa nevrátil
+02:00=%1 to nedal
 02:00=Je tu niekde doktor?
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
@@ -133,7 +147,8 @@
 02:01=%1 pláva bruchom nahor
 02:01=%1 si len skočí po bazuku na dne mora
 02:01=%1 chcel vedieť, či majú ježkovia žiabre
-; Zápas začína
+
+; Kolo začína
 02:02=Do boja!
 02:02=Ozbrojení a pripravení!
 02:02=Veľa štastia
@@ -155,6 +170,13 @@
 
 ; Round draw
 02:04=Remíza
+02:04=Končíme remízou
+02:04=Nemáme víťaza, je to remíza
+02:04=Neuveriteľné, je to remíza!
+02:04=Nikto neyhral, nudááá
+02:04=Haló, veď nemáme víťaza!
+02:04=Nuda! Chcem vrátiť vstupné!
+02:04=Všetci sú mŕtvi. Fajn
 
 ; Nová krabica so zdravím
 02:05=Doktora!
@@ -223,6 +245,86 @@
 02:11=Vyzerá, že %1 nemá čas na hru
 02:11=%1 musí už ísť
 
+; Ježko (%1) sa musí odpojiť (team je preč)
+02:11=%1 musí ísť hajať!
+02:11=%1 nemá čas hrať
+02:11=%1 musí už ísť
+02:11=%1 sa teleportuje do paralelného vesmíru
+02:11=%1 odišiel
+02:11=%1 potrebuje dovolenku
+02:11=%1 naozaj musí ísť
+02:11=%1 vstáva zajtra skoro do práce
+02:11=%1 si musí ešte urobiť domáce úlohy
+02:11=%1 je dezertér!
+
+; Ježko (%1) je otrávený
+02:12=%1 sa cíti zvláštne
+02:12=%1 vyzerá zle
+02:12=%1 potrebuje doktora
+02:12=%1 vyzerá naozaj zle
+02:12=%1 je celý zelený
+02:12=%1 zabudol na vitamíny
+02:12=Si v poriadku, %1?
+02:12=%1 zabudol na protijed!
+02:12=%1 má horúčku
+02:12=%1 je chorý
+
+; Ježko (%1) bol oživený pomocou Oživovača
+02:13=%1 bol oživený
+02:13=%1 dostal druhú šancu
+02:13=%1 vstal z mŕtvych
+02:13=%1 sa opäť narodil
+02:13=%1 porazil smrť
+02:13=%1 je opäť medzi živými
+02:13=%1 vstal z hrobu
+02:13=%1, vstávaj, ešte ťa potrebujeme
+02:13=Bacha, %1 je späť!
+02:13=%1 je vyvoleným
+
+; Ježko (%1) vybuchuje po Kamikadze
+02:14=%1 odchádza so cťou
+02:14=%1 bojoval so cťou
+02:14=%1 je skutočným hrdinom
+02:14=%1 vybuchol od zlosti
+02:14=Budeš v našich spomienkach, %1
+02:14=%1 sa nebál
+02:14=%1 položil život za vlasť
+02:14=%1 nemal čo stratiť
+
+; Ježko (%1) sa vrátil z cestovania časom
+02:15=%1 už nebaví cestovať časom
+02:15=Cestovateľ časom %1 sa vracia
+02:15=%1 vychádza z časovej kapsule
+02:15=%1 je späť v súčasnosti
+
+; Ježkovi (%1) došiel čas na ťah
+02:16=%1 bol príliš pomalý
+02:16=%1 zabudol sledovať cas
+02:16=%1 sa niekde zabudol
+02:16=%1 potreboval viac času
+02:16=%1 nemá zmysel pre čas
+02:16=Čas vypršal, %1!
+02:16=%1, sklamal si ma
+02:16=%1 si myslí, že čas je relatívny
+02:16=%1 neverí konceptu času
+02:16=Ďalší!
+02:16=%1 je neuveriteľne pomalý
+02:16=%1, budíček!
+02:16=%1 sa prehrial
+02:16=%1 je pacifista
+02:16=%1 mal veľmi dlhú prípravu
+
+; Kráľ (%1) je mŕtvy
+02:27=%1 je mŕtvy, nech žije %1!
+02:27=Kráľovská tragédia: %1 zomrel
+02:27=%1 už nie je medzi nami
+02:27=Náš milovaný kráľ %1 nás opustil
+02:27=Konečne sme sa ťa zbavili, %1!
+02:27=%1 je ex-kráľom
+02:27=%1 žil nebezpečne
+02:27=%1 mal priveľa nepriateľov
+02:27=%1 dostal šach-mat
+
 ; Kategórie zbraní
 03:00=Časovaný granát
 03:01=Časovaný granát
@@ -267,7 +369,7 @@
 03:40=Zápalný granát
 03:41=Skalný fanúšik škriekania
 03:42=Tu si urobím poznámku...
-03:43=Zahrať Beathovenovu smrteľnú sonátu
+03:43=Zahrať Beathovenovu sonátu smrti
 03:44=Spotrebujte do: 1923
 03:45=Sila vedy
 03:46=Páli, páli, páli!
@@ -284,6 +386,8 @@
 03:56=Použite alebo zneužite
 03:57=Pomôcka
 03:58=Vznášajúca sa bomba
+03:59=Plávajúca bomba
+03:60=Totálna zbraň
 
 ; Popis zbraní (ako oddeľovač riadkov použite |)
 04:00=Zaútočte na vašich nepriateľov obyčajným granátom.|Vybuchne vtedy, keď vyprší časomiera.|1‐5: Nastavenie časovača granátu|Útok: Držanie tlačidla zvyšuje silu hodu|
@@ -346,7 +450,8 @@
 04:56=Po nepriateľovi môžete hodiť dva sekáčiky,|zablokovať priechody a tunely a dokonca ich použiť pri šplhaní!|Buďte opatrný! Nože nie su na hranie.|Útok: Podržte pre hod väčšou silou (dvakrát)
 04:57=Použi VEĽMI elastickú gumičku, z ktorej|môžu ježkovia a ďalšie veci skákať|bez ujmy pri dopade.|Vľavo/Vpravo: Mení orientáciu gumičky|Kurzor: Umiestni gumičku na platnú pozíciu
 04:58=Táto bomba so senzorom|priblíženia sa sama udrží|vo vzduchu a prenasleduje ježkov,|ktorý sa k nej nechtiac priblížia.|Jej explózia je slabšia ako|explózia bežnej míny.|Útok: Držaním vystrelíte väčšou silou
-
+04:59=Pošlite tých špinavých ježkov do kúpeľa! Táto milunká pískajúca|gumená kačička vie plávať na vode a popláve tam, kam ju zaveje|vietor. Vybuchne keď narazí na pevninu, a preto|ju zhoďte z útesu alebo iného bezpečného miesta.|Útok: Spusti gumenú kačičku
+04:60=Pošli dážď guliek na vašich nepriateľov!|A mysleli si, že za tou trojitou vrstvou|trámou sú v bezpečí.|Útok: Vystreľ plnou silou|Hore/Dole: Mierenie
 
 ; Reťazce pre ciele hry
 05:00=Herné režimy
@@ -371,3 +476,4 @@
 05:19=Zbrane sú na konci ťahu resetované
 05:20=Zbrane nie sú zdieľané ježkami
 05:21=Tag tím: Teamy v spoločnom klane sa postupne striedajú v ťahaní|Zdieľaný čas: Tímy v rámci klanu zdieľajú čas na ťah
+05:22=Silný vietor: vietor ma vplyv takmer na všetko
