@@ -54,6 +54,7 @@ Styles and game modes:
  + Control: Always remove TimeBox and Resurrector
  * Battalion: Some texts in the mission panel were wrong and misleading
  * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
+ * Construction Mode: No longer play Incoming voice for building stuff, fix other sound issues
  * Capture the Flag: Fix many bugs caused by playing with >2 teams
  * Capture the Flag: Properly place flag when first hog uses kamikaze or TimeBox
  * Capture the Flag: Fix flag not being dropped when carrier uses piano strike

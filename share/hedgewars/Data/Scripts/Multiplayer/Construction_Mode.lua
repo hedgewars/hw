@@ -1081,6 +1081,9 @@ function PlaceObject(x,y)
 			-- Pay the price
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
 			RenderClanPower()
+			if cat[cIndex] == "Girder Placement Mode" or cat[cIndex] == "Rubber Placement Mode" then
+				PlaySound(sndPlaced)
+			end
 		else
 			if IsHogLocal(CurrentHedgehog) then
 				AddCaption(loc("Invalid Placement"), colorMessageError, capgrpVolume)
@@ -1201,6 +1204,17 @@ function HandleConstructionModeTools()
 			RedefineSubset()
 			updateCost()
 			updated = true
+		end
+
+		if curWep == amCMStructurePlacer or curWep == amCMCratePlacer or curWep == amCMObjectPlacer then
+			SetSoundMask(sndIncoming, true)
+		else
+			SetSoundMask(sndIncoming, false)
+		end
+		if curWep == amGirder or curWep == amRubber then
+			SetSoundMask(sndDenied, true)
+		else
+			SetSoundMask(sndDenied, false)
 		end
 
 		if updated then
