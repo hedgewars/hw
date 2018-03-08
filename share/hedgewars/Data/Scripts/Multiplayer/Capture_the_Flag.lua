@@ -101,6 +101,11 @@ local hhs = {} -- store hedgehog gears
 local teamSize = {}	-- store how many hogs per team
 local teamIndex = {} -- at what point in the hhs{} does each team begin
 
+local mostCapturesHogName = nil -- name of hog who holds the record of most flags captured
+local mostCapturesHogTeam = nil -- name of team who holds the record of most flags captured
+local mostCaptures = 0 -- number of most per-hog captures
+local capturesPerHog = {}
+
 -------------------
 -- flag variables
 -------------------
@@ -169,6 +174,10 @@ function CheckScore(clanID)
 			SendStat(siPointType, loc("point(s)"))
 			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
 		end
+
+		if mostCaptures >= 2 then
+			SendStat(siCustomAchievement, string.format(loc("%s (%s) has captured the flag %d times."), mostCapturesHogName, mostCapturesHogTeam, mostCaptures))
+		end
 	end
 
 end
@@ -198,6 +207,14 @@ function DoFlagStuff(flag, flagClan)
 		PlaySound(sndHomerun)
 		fThief[thiefClan] = nil -- player no longer has the enemy flag
 		fThiefFlag[flagClan] = nil
+
+		capturesPerHog[CurrentHedgehog] = capturesPerHog[CurrentHedgehog] + 1
+		if capturesPerHog[CurrentHedgehog] > mostCaptures then
+			mostCaptures = capturesPerHog[CurrentHedgehog]
+			mostCapturesHogName = GetHogName(CurrentHedgehog)
+			mostCapturesHogTeam = GetHogTeamName(CurrentHedgehog)
+		end
+
 		CheckScore(flagClan)
 
 	--if the player is returning the flag
@@ -596,6 +613,7 @@ function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 		hhs[numhhs] = gear
+		capturesPerHog[gear] = 0
 		numhhs = numhhs + 1
 		SetEffect(gear, heResurrectable, 1)
 
