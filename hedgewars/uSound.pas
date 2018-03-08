@@ -63,8 +63,10 @@ procedure StopMusic;                            // Stops and releases the curren
 // then the sound's playback won't be interrupted if asked to play again.
 procedure PlaySound(snd: TSound);
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
+procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean);
 procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
 procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean; ignoreMask: boolean);
 
 // Plays sound snd [of voicepack] in a loop, but starts with fadems milliseconds of fade-in.
 // Returns sound channel of the looped sound.
@@ -80,6 +82,7 @@ procedure StopSoundChan(chn: LongInt);
 procedure StopSoundChan(chn, fadems: LongInt);
 
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
+procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask: boolean);
 procedure PlayNextVoice;
 
 
@@ -414,20 +417,30 @@ end;
 
 procedure PlaySound(snd: TSound);
 begin
-    PlaySoundV(snd, nil, false);
+    PlaySoundV(snd, nil, false, false);
 end;
 
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
 begin
-    PlaySoundV(snd, nil, keepPlaying);
+    PlaySoundV(snd, nil, keepPlaying, false);
+end;
+
+procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean);
+begin
+    PlaySoundV(snd, nil, keepPlaying, ignoreMask);
 end;
 
 procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
 begin
-    PlaySoundV(snd, voicepack, false);
+    PlaySoundV(snd, voicepack, false, false);
 end;
 
 procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+begin
+    PlaySoundV(snd, voicepack, keepPlaying, false);
+end;
+
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean; ignoreMask: boolean);
 var s:shortstring;
 rwops: PSDL_RWops;
 begin
@@ -435,6 +448,9 @@ begin
         exit;
 
     if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
+        exit;
+
+    if (ignoreMask = false) and (MaskedSounds[snd] = true) then
         exit;
 
     if (voicepack <> nil) then
@@ -486,10 +502,19 @@ begin
 end;
 
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
+begin
+    AddVoice(snd, voicepack, false);
+end;
+
+procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask: boolean);
 var i : LongInt;
 begin
+
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then
         exit;
+    if (ignoreMask = false) and (MaskedSounds[snd] = true) then
+        exit;
+
     if (snd = sndVictory) or (snd = sndFlawless) then
         begin
         Mix_FadeOutChannel(-1, 800);

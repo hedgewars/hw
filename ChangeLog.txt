@@ -92,6 +92,7 @@ Lua API:
  + New call: SpawnSupplyCrate(x, y, content, [, amount]): Spawn ammo or utility crate, depending on content
  + New call: HealHog(gearUid, healthBoost[, showMessage[, tint]]): Heal hedgehog with graphical effects and message
  + New call: SetTeamLabel(teamname[, label]): Set an arbitrary label for a team, will be displayed next to the team bar
+ + New call: SetSoundMask(soundId, isMasked): Allows to disable playing a sound effect from engine
  + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
  + New hedgehog effect: heArtillery: Per-hedgehog artillery mode (can't walk). Values: 1 = permanently active. 2 = temporarily active (sniper rifle). 0 = not active
  * AddAmmo now automatically unselects weapon if it would remove current ammo from current hedgehog

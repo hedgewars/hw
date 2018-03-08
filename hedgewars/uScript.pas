@@ -2059,16 +2059,35 @@ begin
             begin
             // no gear specified
             if n = 1 then
-                PlaySound(TSound(s))
+                PlaySound(TSound(s), false, true)
             else
                 begin
                 gear:= GearByUID(Trunc(lua_tonumber(L, 2)));
                 if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-                    AddVoice(TSound(s),gear^.Hedgehog^.Team^.Voicepack)
+                    AddVoice(TSound(s), gear^.Hedgehog^.Team^.Voicepack, true)
                 end;
             end;
         end;
     lc_playsound:= 0;
+end;
+
+function lc_setsoundmask(L : Plua_State) : LongInt; Cdecl;
+var s: LongInt;
+    soundState: boolean;
+const
+    call = 'SetSoundMasked';
+    params = 'soundId, isMasked]';
+begin
+    if CheckLuaParamCount(L, 2, call, params) then
+        begin
+        s:= LuaToSoundOrd(L, 1, call, params);
+        if s <> Ord(sndNone) then
+            begin
+            soundState:= lua_toboolean(L, 2);
+            MaskedSounds[TSound(s)]:= soundState;
+            end;
+        end;
+    lc_setsoundmask:= 0;
 end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
@@ -3785,6 +3804,7 @@ lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
+lua_register(luaState, _P'SetSoundMask', @lc_setsoundmask);
 lua_register(luaState, _P'GetTeamName', @lc_getteamname);
 lua_register(luaState, _P'GetTeamIndex', @lc_getteamindex);
 lua_register(luaState, _P'GetTeamClan', @lc_getteamclan);

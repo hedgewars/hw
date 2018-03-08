@@ -254,6 +254,8 @@ var
     LuaEndTurnRequested: boolean;
     LuaNoEndTurnTaunts: boolean;
 
+    MaskedSounds : array[TSound] of boolean;
+
     LastVoice : TVoice;
 
     mobileRecord: TMobileRecord;
@@ -2640,6 +2642,7 @@ end;
 procedure initModule;
 var s: shortstring;
     i: integer;
+    t: TSound;
 begin
     // init LastVoice
     LastVoice.snd:= sndNone;
@@ -2900,6 +2903,9 @@ begin
 
     LuaEndTurnRequested:= false;
     LuaNoEndTurnTaunts:= false;
+
+    for t:= Low(TSound) to High(TSound) do
+        MaskedSounds[t]:= false;
 
     UIDisplay:= uiAll;
     LocalMessage:= 0;
