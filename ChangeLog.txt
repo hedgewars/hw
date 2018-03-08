@@ -49,6 +49,7 @@ Styles and game modes:
  + Battalion (King Mode): If the king dies, the hogs die normally instead of disappearing
  + Space Invasion: Add a default Space Invasion game scheme
  + HedgeEditor: Show cursor coordinates in top left corner
+ + Control: Remove TimeBox and Resurrector from ammo menu
  * Battalion: Some texts in the mission panel were wrong and misleading
  * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
 

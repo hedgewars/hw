@@ -317,9 +317,9 @@ end
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
-	--GameFlags = gfInfAttack + gfSolidLand -- Game settings and rules
 	
-	GameFlags = band(bor(GameFlags, gfInfAttack + gfSolidLand), bnot(gfKing + gfForts))
+	EnableGameFlags(gfInfAttack, gfSolidLand)
+	DisableGameFlags(gfKing, gfForts)
 	WaterRise = 0
 	HealthDecrease = 0
 
@@ -383,6 +383,15 @@ function onGameStart()
 			reN = 15		
 		end
 		--AddCaption(zz) -- number of times it took to work
+	end
+
+	for h=1, numhhs do
+		-- Tardis screws up the game too much, teams might not get killed correctly after victory
+		-- if a hog is still in time-travel.
+		-- This could be fixed, removing the Tardis is just a simple and lazy fix.
+		AddAmmo(hhs[h], amTardis, 0)
+		-- Resurrector is pointless, all hogs are already automatically resurrected.
+		AddAmmo(hhs[h], amResurrector, 0)
 	end
 
 	ShowMission(missionName, missionCaption, missionHelp, 0, 0)
