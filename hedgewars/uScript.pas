@@ -2048,11 +2048,12 @@ end;
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     n, s: LongInt;
+    instaVoice: boolean;
 const
     call = 'PlaySound';
-    params = 'soundId [, hhGearUid]';
+    params = 'soundId [, hhGearUid [, instaVoice]]';
 begin
-    if CheckAndFetchParamCount(L, 1, 2, call, params, n) then
+    if CheckAndFetchParamCountRange(L, 1, 3, call, params, n) then
         begin
         s:= LuaToSoundOrd(L, 1, call, params);
         if s >= 0 then
@@ -2064,7 +2065,15 @@ begin
                 begin
                 gear:= GearByUID(Trunc(lua_tonumber(L, 2)));
                 if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-                    AddVoice(TSound(s), gear^.Hedgehog^.Team^.Voicepack, true)
+                    begin
+                    instaVoice:= false;
+                    if n = 3 then
+                        instaVoice:= lua_toboolean(L, 3);
+                    if instaVoice then
+                        PlaySoundV(TSound(s), gear^.Hedgehog^.Team^.Voicepack, false, true)
+                    else
+                        AddVoice(TSound(s), gear^.Hedgehog^.Team^.Voicepack, true);
+                    end;
                 end;
             end;
         end;
