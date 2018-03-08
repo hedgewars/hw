@@ -849,6 +849,8 @@ function onNewTurn()
         end
 
         AddAmmo(CurrentHedgehog, amTardis, 0)
+        AddAmmo(CurrentHedgehog, amResurrector, 0)
+        AddAmmo(CurrentHedgehog, amInvulnerable, 0)
         AddAmmo(CurrentHedgehog, amDrillStrike, 0)
         AddAmmo(CurrentHedgehog, amMineStrike, 0)
         AddAmmo(CurrentHedgehog, amNapalm, 0)

@@ -461,7 +461,7 @@ end
 
 function onGameInit()
 
-	DisableGameFlags(gfKing)
+	DisableGameFlags(gfKing, gfAISurvival)
 	EnableGameFlags(gfDivideTeams)
 
 	-- Disable Sudden Death
@@ -523,6 +523,13 @@ function onGameStart()
 
 	--SetVisualGearValues(zxc, 1000,1000, 20, 255, 1,    10,                     0,         200,        1,      GetClanColor(0))
 					--minO,max0 -glowyornot	--pulsate timer	 -- fuckall      -- radius -- width  -- colour
+	for h=1, numhhs do
+		-- Tardis causes too many unexpected situations, so we forbid it
+		AddAmmo(hhs[h], amTardis, 0)
+		-- Hogs are resurrected for free, so this is pointless
+		AddAmmo(hhs[h], amResurrector, 0)
+	end
+
 end
 
 

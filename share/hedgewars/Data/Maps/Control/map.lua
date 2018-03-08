@@ -319,7 +319,7 @@ function onGameInit()
 	-- Things we don't modify here will use their default values.
 	
 	EnableGameFlags(gfInfAttack, gfSolidLand)
-	DisableGameFlags(gfKing, gfForts)
+	DisableGameFlags(gfKing, gfForts, gfAISurvival)
 	WaterRise = 0
 	HealthDecrease = 0
 
