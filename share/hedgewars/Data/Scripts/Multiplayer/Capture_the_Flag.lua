@@ -172,11 +172,6 @@ function DoFlagStuff(flag, flagClan)
 	-- player has successfully captured the enemy flag
 	if (GetHogClan(CurrentHedgehog) == flagClan) and (thiefClan ~= nil) and (fIsMissing[flagClan] == false) then
 
-		DeleteVisualGear(fGear[flagClan])
-		fGear[flagClan] = nil -- the flag has now disappeared
-
-		fIsMissing[flagClan] = false
-		fNeedsRespawn[flagClan] = true
 		fIsMissing[thiefClan] = false
 		fNeedsRespawn[thiefClan] = true
 		fCaptures[flagClan] = fCaptures[flagClan] +1
