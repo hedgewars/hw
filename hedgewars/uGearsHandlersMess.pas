@@ -47,7 +47,7 @@ procedure doStepBeeWork(Gear: PGear);
 procedure doStepBee(Gear: PGear);
 procedure doStepShotIdle(Gear: PGear);
 procedure doStepShotgunShot(Gear: PGear);
-procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat);
+procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat; fadeIn: Boolean);
 procedure doStepBulletWork(Gear: PGear);
 procedure doStepDEagleShot(Gear: PGear);
 procedure doStepSniperRifleShot(Gear: PGear);
@@ -1207,9 +1207,11 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat);
+procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat; fadeIn: Boolean);
 var oX, oY: hwFloat;
+    fromX, fromY, toX, toY, dX, dY, length, stepLength: real;
     VGear: PVisualGear;
+    i, steps: LongWord;
 begin
     if Bullet^.PortalCounter = 0 then
         begin
@@ -1222,28 +1224,71 @@ begin
         oy:= Bullet^.Friction;
         end;
 
-        // Bullet trail
-        VGear := AddVisualGear(hwRound(ox), hwRound(oy), vgtLineTrail);
+    fromX:= hwFloat2Float(ox);
+    fromY:= hwFloat2Float(oy);
+    toX:= hwFloat2Float(bulletX);
+    toY:= hwFloat2Float(bulletY);
 
-        if VGear <> nil then
-            begin
-            VGear^.X:= hwFloat2Float(ox);
-            VGear^.Y:= hwFloat2Float(oy);
-            VGear^.dX:= hwFloat2Float(bulletX);
-            VGear^.dY:= hwFloat2Float(bulletY);
+    dX:= toX - fromX;
+    dY:= toY - fromY;
+    length:= sqrt(dX * dX + dY * dY);
+    dX:= dX / length;
+    dY:= dY / length;
 
-            // reached edge of land. assume infinite beam. Extend it way out past camera
-            if (hwRound(bulletX) and LAND_WIDTH_MASK <> 0)
-            or (hwRound(bulletY) and LAND_HEIGHT_MASK <> 0) then
-                    // only extend if not under water
-                    if not CheckCoordInWater(hwRound(bulletX), hwRound(bulletY)) then
+    if fadeIn then
+        begin
+        steps:= 10;
+        stepLength:= 12;
+        fromX:= fromX + dX * 45;
+        fromY:= fromY + dY * 45;
+        length:= length - 45;
+        end
+    else steps:= 1;
+
+    for i:= 0 to steps - 1 do
+        begin
+            if i < steps - 1 then
+                begin
+                toX:= fromX + dX * minD(stepLength, length);
+                toY:= fromY + dY * minD(stepLength, length);
+                end
+            else if steps > 1 then
+                begin
+                toX:= fromX + dX * length;
+                toY:= fromY + dY * length;
+                end;
+
+            if length > 0 then
+                begin
+                VGear := AddVisualGear(round(fromX), round(fromY), vgtLineTrail);
+                if VGear <> nil then
+                    begin
+                    VGear^.X:= fromX;
+                    VGear^.Y:= fromY;
+                    VGear^.dX:= toX;
+                    VGear^.dY:= toY;
+                    VGear^.Tint:= $FFFFFF00 or ($FF * (i + 1) div (steps));
+
+                    // reached edge of land. assume infinite beam. Extend it way out past camera
+                    if (round(toX) and LAND_WIDTH_MASK <> 0)
+                    or (round(toY) and LAND_HEIGHT_MASK <> 0) then
+                        // only extend if not under water
+                        if not CheckCoordInWater(round(toX), round(toY)) then
                         begin
-                        VGear^.dX := VGear^.dX + max(LAND_WIDTH,4096) * (VGear^.dX - VGear^.X);
-                        VGear^.dY := VGear^.dY + max(LAND_WIDTH,4096) * (VGear^.dY - VGear^.Y);
+                            VGear^.dX := VGear^.dX + max(LAND_WIDTH,4096) * (VGear^.dX - VGear^.X);
+                            VGear^.dY := VGear^.dY + max(LAND_WIDTH,4096) * (VGear^.dY - VGear^.Y);
                         end;
+                    VGear^.Timer := 200;
+                    end;
+                end;
 
-            VGear^.Timer := 200;
-            end;
+            if i < steps - 1 then
+                begin
+                fromX:= toX;
+                fromY:= toY;
+                length:= length - stepLength;
+                end
+        end;
 end;
 
 procedure LineShoveHelp(Gear: PGear; oX, oY, tX, tY, dX, dY: hwFloat; count: LongWord);
@@ -1297,14 +1342,15 @@ begin
         if (Gear^.PortalCounter < 30) and WorldWrap(Gear) then
             begin
             LineShoveHelp(Gear, oX, oY, tX, tY, tDx, tDy, iInit + 2 - i);
-            SpawnBulletTrail(Gear, tX, tY);
+            SpawnBulletTrail(Gear, tX, tY, Gear^.FlightTime = 0);
+            Gear^.FlightTime:= 1;
             iInit:= i;
             oX:= Gear^.X;
             oY:= Gear^.Y;
             inc(Gear^.PortalCounter);
             Gear^.Elasticity:= Gear^.X;
             Gear^.Friction:= Gear^.Y;
-            SpawnBulletTrail(Gear, Gear^.X, Gear^.Y);
+            SpawnBulletTrail(Gear, Gear^.X, Gear^.Y, false);
             end;
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
@@ -1332,7 +1378,8 @@ begin
         if (not isDigging) and (Gear^.Damage > 5) and (Gear^.Kind <> gtMinigunBullet) then
             begin
             LineShoveHelp(Gear, oX, oY, tX, tY, tDx, tDy, iInit + 2 - i);
-            SpawnBulletTrail(Gear, tX, tY);
+            SpawnBulletTrail(Gear, tX, tY, Gear^.FlightTime = 0);
+            Gear^.FlightTime:= 1;
             iInit:= i;
             oX:= Gear^.X;
             oY:= Gear^.Y;
@@ -1393,7 +1440,8 @@ begin
                     end;
                 end;
 
-            spawnBulletTrail(Gear, Gear^.X, Gear^.Y);
+            spawnBulletTrail(Gear, Gear^.X, Gear^.Y, Gear^.FlightTime = 0);
+            Gear^.FlightTime:= 1;
             if Gear^.Kind = gtMinigunBullet then
                 ClearHitOrderLeq(Gear^.Tag);
             Gear^.doStep := @doStepShotIdle
@@ -1411,6 +1459,7 @@ begin
     // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
     Gear^.X := Gear^.X + Gear^.dX * 2;
     Gear^.Y := Gear^.Y + Gear^.dY * 2;
+    Gear^.FlightTime := 0;
     Gear^.doStep := @doStepBulletWork
 end;
 
@@ -1452,6 +1501,7 @@ begin
         // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
         Gear^.X := Gear^.X + Gear^.dX * 2;
         Gear^.Y := Gear^.Y + Gear^.dY * 2;
+        Gear^.FlightTime := 0;
         Gear^.doStep := @doStepBulletWork;
         end
     else
@@ -4544,7 +4594,8 @@ begin
         if (iterator^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) then
             begin
             // draw bullet trail
-            spawnBulletTrail(iterator, iterator^.X, iterator^.Y);
+            spawnBulletTrail(iterator, iterator^.X, iterator^.Y, iterator^.FlightTime = 0);
+            iterator^.FlightTime := 1;
             // the bullet can now hurt the hog that fired it
             iterator^.Data:= nil;
             end;
@@ -6702,6 +6753,7 @@ begin
     PlaySound(sndGun);
     Gear^.X := Gear^.X + Gear^.dX * 2;
     Gear^.Y := Gear^.Y + Gear^.dY * 2;
+    Gear^.FlightTime := 0;
     Gear^.doStep := @doStepBulletWork
 end;
 
