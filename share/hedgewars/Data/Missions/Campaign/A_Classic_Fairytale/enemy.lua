@@ -9,6 +9,9 @@ Wipe out the Hedge-cogs and Leader teams
 
 = FLOW CHART =
 - Cut scene: startAnim
+- Player starts with 3-4 natives and 4 cannibals
+- Player plays with 4 natives if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0
+- Enemy starts with 5 cyborgs
 - TBS
 - Goal completed
 - Cut scene: finalAnim
@@ -194,27 +197,34 @@ function SetupPeopleStartAnim()
   if m5LeaksDead == 1 then
     table.insert(startAnim, {func = AnimSay, args = {players[1], loc("And how am I alive?!"), SAY_SAY, 3000}})
   end
+  local playerTalker
+  -- There are 3 or 4 natives in this mission. The last one takes part in the dialog
+  if nativesNum >= 4 then
+     playerTalker = players[4]
+  else
+     playerTalker = players[3]
+  end
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], players[2]}}})
   table.insert(startAnim, {func = AnimSay, args = {players[2], loc("It must be the cyborgs again!"), SAY_SAY, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {players[3], loc("Looks like the whole world is falling apart!"), SAY_SAY, 6000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Look out! We're surrounded by cannibals!"), SAY_SHOUT, 6000}})
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[4], CondNeedToTurn, {players[4], cannibals[1]}}})
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[4], CondNeedToTurn, {players[1], cannibals[1]}}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Cannibals?! You're the cannibals!"), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimCustomFunction, args = {playerTalker, CondNeedToTurn, {playerTalker, cannibals[1]}}})
+  table.insert(startAnim, {func = AnimCustomFunction, args = {playerTalker, CondNeedToTurn, {players[1], cannibals[1]}}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Cannibals?! You're the cannibals!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("WHAT?! You're the ones attacking us!"), SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("You have kidnapped our whole tribe!"), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("You have kidnapped our whole tribe!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("You've been assaulting us, we have been just defending ourselves!"), SAY_SHOUT, 8000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("I can't believe this!"), SAY_SHOUT, 3000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Have we ever attacked you first?"), SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Yes!"), SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Yes!"), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("When?"), SAY_SHOUT, 2000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Uhmm...ok no."), SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Uhmm...ok no."), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("But you're cannibals. It's what you do."), SAY_SHOUT, 5000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Again with the 'cannibals' thing!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Where do you get that?!"), SAY_SHOUT, 3000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Everyone knows this."), SAY_SHOUT, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Everyone knows this."), SAY_SHOUT, 2500}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("I didn't until about a month ago."), SAY_SHOUT, 4000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Hmmm...actually...I didn't either."), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Hmmm...actually...I didn't either."), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("About a month ago, a cyborg came and told us that you're the cannibals!"), SAY_SHOUT, 8000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("A cy-what?"), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Cyborg. It's what the aliens call themselves."), SAY_SHOUT, 5000}})
@@ -248,7 +258,13 @@ function SetupEnemyStartAnim()
   else
     gear = cyborgs[2]
   end
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[4], gear}}})
+  local turnPlayer
+  if nativesNum >= 4 then
+    turnPlayer = players[4]
+  else
+    turnPlayer = players[3]
+  end
+  table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {turnPlayer, gear}}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], gear}}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You have finally figured it out!"), SAY_SHOUT, 4500}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You meatbags are pretty slow, you know!"), SAY_SHOUT, 5500}})
@@ -507,6 +523,7 @@ function AddHogs()
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   AddTeam(loc("Natives"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
+  -- There are 3-4 natives in this mission
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
     natives[2] = AddHog(nativeNames[m5DeployedNum], 0, 100, nativeHats[m5DeployedNum])
