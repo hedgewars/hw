@@ -612,7 +612,7 @@ function DoTargetsKilled()
   targsWave = targsWave + 1
   if targsWave > 3 then
     RemoveEventFunc(CheckTargetsKilled)
-    SetState(cannibal, gstVisible)
+    RestoreHog(cannibal)
     cannibalVisible = true
     SetGearMessage(CurrentHedgehog, 0)
     AddAnim(beforeKillAnim)
@@ -754,7 +754,7 @@ function onGameStart()
   TurnTimeLeft = -1
   FollowGear(youngh)
 	ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training|Hint: Animations can be skipped with the [Precise] key."), -amSkip, 0)
-  SetState(cannibal, gstInvisible)
+  HideHog(cannibal)
 
   AddAnim(startDialogue)
   princessFace = "Right"
@@ -842,7 +842,7 @@ end
 
 function onNewTurn()
   if CurrentHedgehog == cannibal and cannibalVisible == false then
-    SetState(cannibal, gstInvisible)
+    RestoreHog(cannibal)
   end
   SwitchHog(youngh)
   FollowGear(youngh)
@@ -862,7 +862,6 @@ function onGearDamage(gear, damage)
   elseif gear == cannibal then
     cannibalVisible = true
     cannibalDamaged = true
-    SetState(cannibal, 0)
   end
 end
 
