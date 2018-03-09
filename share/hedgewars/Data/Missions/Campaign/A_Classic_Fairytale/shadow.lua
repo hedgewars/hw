@@ -200,7 +200,6 @@ function StartSkipFunc()
   SetState(cannibals[1], 0)
   AnimTurn(leaks, "Right")
   AnimSwitchHog(leaks)
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterWeaklingsAnim()
@@ -240,7 +239,6 @@ function SkipWeaklingsAnim()
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     SetState(cannibals[i], 0)
   end
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterStronglingsAnim()
@@ -285,7 +283,6 @@ function SkipStronglingsAnim()
   HogTurnLeft(dense, true)
   AnimSetGearPosition(cyborg, 1250, 1315)
   SwitchHog(dense)
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterAcceptedAnim()
@@ -312,7 +309,6 @@ function SkipAcceptedAnim()
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(dense)
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterAttackedAnim()
@@ -355,7 +351,6 @@ function SkipAttackedAnim()
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(leaks)
-  SetInputMask(0xFFFFFFFF)
 end
 
   

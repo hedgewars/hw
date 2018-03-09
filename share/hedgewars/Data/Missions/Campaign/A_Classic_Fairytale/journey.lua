@@ -250,7 +250,6 @@ end
 function SkipMidAnimAlone()
   AnimSetGearPosition(leaks, 2656, 1842)
   AnimSwitchHog(leaks)
-  SetInputMask(0xFFFFFFFF)
   AnimWait(dense, 1)
   AddFunction({func = HideHedge, args = {princess}})
   AddFunction({func = HideHedge, args = {cyborg}})
@@ -1092,11 +1091,13 @@ function onGameInit()
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    SetEffect(cannibals[i], heArtillery, 1)
   end
 
   for i = 5, 8 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
     AnimSetGearPosition(cannibals[i], 0, 0)
+    SetEffect(cannibals[i], heArtillery, 1)
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
@@ -1187,19 +1188,8 @@ function onNewTurn()
     SetGearMessage(leaks, 0)
     TurnTimeLeft = -1
   elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-    for i = 1, 4 do
-      if cannibalDead[i] ~= true and leaksDead ~= true then
-        if GetX(cannibals[i]) < GetX(leaks) then
-          HogTurnLeft(cannibals[i], false)
-        else
-          HogTurnLeft(cannibals[i], true)
-        end
-      end
-    end
-    SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
     TurnTimeLeft = 20000
   else
-    SetInputMask(0xFFFFFFFF)
     TurnsLeft = TurnsLeft - 1
     if TurnsLeft >= 1 then
       AddCaption(string.format(loc("Turns left: %d"), TurnsLeft), 0xFFFFFFFF, capgrpGameState)
