@@ -1138,10 +1138,24 @@ begin
         end
 end;
 
+procedure CreateShellForGear(Gear: PGear; startFrame: Longword);
+var
+    shell: PVisualGear;
+begin
+    shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
+    if shell <> nil then
+    begin
+        shell^.dX := gear^.dX.QWordValue / -17179869184;
+        if (gear^.dX.isNegative) then
+            shell^.dX := -shell^.dX;
+        shell^.dY := gear^.dY.QWordValue / -17179869184;
+        shell^.Frame := startFrame;
+    end;
+end;
+
 procedure doStepShotgunShot(Gear: PGear);
 var
     i: LongWord;
-    shell: PVisualGear;
 begin
     AllInactive := false;
 
@@ -1151,13 +1165,7 @@ begin
         if Gear^.Timer = 0 then
             begin
             PlaySound(sndShotgunFire);
-            shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
-            if shell <> nil then
-                begin
-                shell^.dX := gear^.dX.QWordValue / -17179869184;
-                shell^.dY := gear^.dY.QWordValue / -17179869184;
-                shell^.Frame := 0
-                end;
+            CreateShellForGear(Gear, 0);
             Gear^.State := Gear^.State or gstAnimation
             end;
             exit
@@ -1408,7 +1416,6 @@ end;
 
 procedure doStepSniperRifleShot(Gear: PGear);
 var HHGear: PGear;
-    shell: PVisualGear;
 begin
 
     HHGear := Gear^.Hedgehog^.Gear;
@@ -1437,13 +1444,7 @@ begin
 
     if (HHGear^.Message and gmAttack) <> 0 then
         begin
-        shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
-        if shell <> nil then
-            begin
-            shell^.dX := gear^.dX.QWordValue / -8589934592;
-            shell^.dY := gear^.dY.QWordValue / -8589934592;
-            shell^.Frame := 1
-            end;
+        CreateShellForGear(Gear, 1);
         Gear^.State := Gear^.State or gstAnimation;
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
@@ -6626,7 +6627,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMinigunWork(Gear: PGear);
 var HHGear: PGear;
-    shell: PVisualGear;
     bullet: PGear;
     rx, ry: hwFloat;
     gX, gY: LongInt;
@@ -6657,13 +6657,7 @@ begin
         bullet^.WDTimer := Gear^.WDTimer;
         Inc(Gear^.WDTimer);
 
-        shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
-        if shell <> nil then
-        begin
-            shell^.dX := gear^.dX.QWordValue / -17179869184;
-            shell^.dY := gear^.dY.QWordValue / -17179869184;
-            shell^.Frame := 0
-        end;
+        CreateShellForGear(Gear, Gear^.Tag and 1);
     end;
 
     if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
