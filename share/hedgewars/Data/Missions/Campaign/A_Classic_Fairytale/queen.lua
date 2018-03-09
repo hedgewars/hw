@@ -649,7 +649,6 @@ function SaveCampaignVariables()
 end
 
 function SetupPlace()
-  HideHedge(cyborg)
   SetHogHat(natives[1], nativeHats[m5DeployedNum])
   SetHogName(natives[1], nativeNames[m5DeployedNum])
 
@@ -748,6 +747,7 @@ function AddHogs()
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
+  HideHedge(cyborg)
 
   SetGearPosition(cyborg, 0, 0)
 

@@ -77,6 +77,7 @@ A Classic Fairytale:
  * Mission 1: Fix error message spam when Leaks a Lot drowns
  * Mission 3: Fix cannibals sometimes doing nothing for a full turn
  * Mission 6: Fix cyborgs sometimes doing nothing for a full turn
+ * Mission 8: Fix invisible cyborg sometimes blocking the way
  * Mission 9: Fix cannibal talking to himself in cut scene if mission starts with 3 natives
 
 Missions:
