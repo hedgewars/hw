@@ -590,12 +590,26 @@ function SetupPlace()
   AddGear(957, 1903, gtMine, 0, 0, 0, 0)
   AddGear(909, 1910, gtMine, 0, 0, 0, 0)
   AddGear(889, 1917, gtMine, 0, 0, 0, 0)
+
+  -- Place misc. mines
+  AddGear(759, 878, gtMine, 0, 0, 0, 0)
+  AddGear(2388, 759, gtMine, 0, 0, 0, 0)
+  AddGear(2498, 696, gtMine, 0, 0, 0, 0)
+  AddGear(2936, 1705, gtMine, 0, 0, 0, 0)
+  AddGear(3119, 1366, gtMine, 0, 0, 0, 0)
+  AddGear(2001, 832, gtMine, 0, 0, 0, 0)
+  AddGear(2008, 586, gtMine, 0, 0, 0, 0)
+  AddGear(511, 1245, gtMine, 0, 0, 0, 0)
+
+  -- And one barrel for fun
+  AddGear(719, 276, gtExplosives, 0, 0, 0, 0)
+
   ------ STICKY MINE LIST ------
-  tempG = AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(682, 878, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(789, 876, gtSMine, 0, 0, 0, 0)
+  AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
+  AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
+  AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
+  AddGear(682, 878, gtSMine, 0, 0, 0, 0)
+  AddGear(789, 876, gtSMine, 0, 0, 0, 0)
 end
 
 function SetupEvents()
@@ -660,10 +674,9 @@ function onGameInit()
   GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
   TurnTime = 60000 
   CaseFreq = 0
-  MinesNum = 20
+  MinesNum = 0
   MinesTime = 5000
-  Explosives = 6
-  Delay = 10 
+  Explosives = 0
   MapGen = mgDrawn
   Theme = "City"
   SuddenDeathTurns = 25
