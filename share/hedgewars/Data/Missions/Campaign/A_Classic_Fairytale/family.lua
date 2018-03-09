@@ -354,7 +354,7 @@ function DoFriendsEscaped()
     if GetX(natives[2]) == nil and GetX(natives[1]) == nil then
       return
     end
-    HogSay(natives[2], string.format(loc("Finally! We're out of this hellhole. Now go save the princess, %s!"), nativeNames[natives[m5DeployedNum]]), SAY_SAY)
+    HogSay(natives[2], string.format(loc("Finally! We're out of this hellhole. Now go save the princess, %s!"), nativeNames[m5DeployedNum]), SAY_SAY)
   end
   friendsEscaped = true
 end
