@@ -503,10 +503,10 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), 0xFF0204, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Natives"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
     natives[2] = AddHog(nativeNames[m5DeployedNum], 0, 100, nativeHats[m5DeployedNum])
@@ -523,7 +523,7 @@ function AddHogs()
     table.insert(players, natives[i])
   end
 
-	AddTeam(loc("Cannibals"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Cannibals"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, cannibalsNum do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, "Zombi")
     table.insert(players, cannibals[i])
@@ -531,13 +531,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
+  AddTeam(loc("Hedge-cogs"), 0xFFFF01, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
+    AddTeam(loc("Leader"), 0xFFFF01, "ring", "UFO", "Robot", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then
