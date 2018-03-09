@@ -1130,11 +1130,18 @@ end;
 procedure doStepShotIdle(Gear: PGear);
 begin
     AllInactive := false;
-    inc(Gear^.Timer);
-    if Gear^.Timer > 75 then
+    if (Gear^.Kind <> gtMinigunBullet) then
+        begin
+        inc(Gear^.Timer);
+        if Gear^.Timer > 75 then
+            begin
+            DeleteGear(Gear);
+            AfterAttack
+            end
+        end
+    else
         begin
         DeleteGear(Gear);
-        AfterAttack
         end
 end;
 
