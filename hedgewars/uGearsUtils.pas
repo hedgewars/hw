@@ -1273,8 +1273,10 @@ while i > 0 do
     if (Gear^.State and gstNoDamage) = 0 then
         begin
 
-        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot)
-        or (Ammo^.Kind = gtMinigunBullet) then
+        if (Gear^.Kind <> gtMinigun) and
+            ((Ammo^.Kind = gtDEagleShot)
+                or (Ammo^.Kind = gtSniperRifleShot)
+                or (Ammo^.Kind = gtMinigunBullet)) then
             begin
             VGear := AddVisualGear(t^.cX[i], t^.cY[i], vgtBulletHit);
             if VGear <> nil then
