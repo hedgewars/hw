@@ -16,6 +16,7 @@ Game:
  * Fix many effects not being correctly recorded by the video recorder
  * Fix quit menu showing incorrect keys if using non-default key bindings
  * Fix script translations not being loaded for Portuguese and Chinese
+ * When using seduction, only show “CENSORED” text in English locale
 
 Frontend:
  + Schemes are now stored in separate files under Schemes
