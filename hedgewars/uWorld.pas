@@ -1030,6 +1030,7 @@ procedure RenderTeamsHealth;
 var t, i,  h, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
+    hasVisibleHog: boolean;
     htex: PTexture;
 begin
 if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
@@ -1042,7 +1043,12 @@ if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen 
 else smallScreenOffset:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
-      if TeamHealth > 0 then
+      begin
+      hasVisibleHog:= false;
+      for i:= 0 to cMaxHHIndex do
+          if (Hedgehogs[i].Gear <> nil) then
+              hasVisibleHog:= true;
+      if (TeamHealth > 0) and hasVisibleHog then
         begin
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
@@ -1143,6 +1149,7 @@ for t:= 0 to Pred(TeamsCount) do
             DrawSpriteRotatedF(sprFinger, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFinger].Width div 4, 0, 1, -90);
             end;
         end;
+      end;
 if smallScreenOffset <> 0 then
     begin
     SetScale(cDefaultZoomLevel);

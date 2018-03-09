@@ -257,7 +257,8 @@ begin
         Message := Message and (not gmAttack);
     end;
     HH^.GearHidden:= HH^.Gear;
-    HH^.Gear:= nil
+    HH^.Gear:= nil;
+    AddVisualGear(0, 0, vgtTeamHealthSorter);
 end;
 
 

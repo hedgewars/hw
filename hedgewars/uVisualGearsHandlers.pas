@@ -561,7 +561,7 @@ end;
 
 procedure doStepTeamHealthSorter(Gear: PVisualGear; Steps: Longword);
 var i: Longword;
-    b: boolean;
+    b, noHogs: boolean;
     t, h: LongInt;
 begin
 {$IFNDEF PAS2C}
@@ -606,12 +606,20 @@ if TeamsCount > 1 then
 t:= - 4;
 for i:= 0 to Pred(TeamsCount) do
         with thexchar[i] do
-          if team^.TeamHealth > 0 then
+          begin
+          noHogs:= true;
+          for h:= 0 to cMaxHHIndex do
+              // Check if all hogs are hidden
+              if team^.Hedgehogs[h].Gear <> nil then
+                  noHogs:= false;
+          // Skip team bar if all hogs are dead or hidden
+          if (team^.TeamHealth > 0) and (noHogs = false) then
             begin
             dec(t, team^.Clan^.HealthTex^.h + 2);
             ny:= t;
             dy:= dy - ny
             end;
+          end;
 
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;

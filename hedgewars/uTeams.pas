@@ -539,7 +539,8 @@ begin
     HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
     AddCI(HH^.Gear);
     HH^.Gear^.Active:= true;
-    ScriptCall('onHogRestore', HH^.Gear^.Uid)
+    ScriptCall('onHogRestore', HH^.Gear^.Uid);
+    AddVisualGear(0, 0, vgtTeamHealthSorter);
 end;
 
 procedure RestoreTeamsFromSave;
