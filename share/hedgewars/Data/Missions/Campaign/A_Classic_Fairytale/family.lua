@@ -490,9 +490,9 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
 end
 
 function SetupPlace()

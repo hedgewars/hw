@@ -26,9 +26,9 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 -----------------------------Constants---------------------------------
-choiceAccept = 1
-choiceRefuse = 2
-choiceAttack = 3
+choiceAccepted = 1
+choiceRefused = 2
+choiceAttacked = 3
 
 leaksPos = {2067, 509}
 densePos = {1882, 503}
@@ -289,7 +289,7 @@ function GetVariables()
   if m2DenseDead == 1 then
     denseDead = true
   end
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
 end
 
 function SetupPlace()

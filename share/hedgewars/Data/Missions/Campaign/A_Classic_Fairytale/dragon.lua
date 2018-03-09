@@ -551,7 +551,7 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
 end
 
 function SetupPlace()

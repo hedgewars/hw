@@ -1057,7 +1057,7 @@ end
 
 function onGameInit()
   progress = tonumber(GetCampaignVar("Progress"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
   m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))

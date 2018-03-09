@@ -457,9 +457,9 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
   m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
@@ -477,10 +477,10 @@ function GetVariables()
   m8PrincessDead = tonumber(GetCampaignVar("M8PrincessDead"))
   m8RamonDead = tonumber(GetCampaignVar("M8RamonDead"))
   m8SpikyDead = tonumber(GetCampaignVar("M8SpikyDead"))
-  m8DeployedLeader = tonumber(GetCampaignVar("M8DeployedLeader"))
-  m8PrincessLeader = tonumber(GetCampaignVar("M8PrincessLeader"))
+  m8DeployedLeader = tonumber(GetCampaignVar("M8DeployedLeader")) or 0
+  m8PrincessLeader = tonumber(GetCampaignVar("M8PrincessLeader")) or 1
   m8EnemyFled = tonumber(GetCampaignVar("M8EnemyFled"))
-  m8Scene = tonumber(GetCampaignVar("M8Scene"))
+  m8Scene = tonumber(GetCampaignVar("M8Scene")) or princessScene
 end
 
 function SetupPlace()

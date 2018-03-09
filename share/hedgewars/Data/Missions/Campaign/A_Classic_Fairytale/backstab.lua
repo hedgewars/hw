@@ -885,7 +885,7 @@ end
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
   m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
   m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
   m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
