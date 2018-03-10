@@ -149,7 +149,7 @@
     </message>
     <message>
         <source>you know why</source>
-        <translation type="unfinished"></translation>
+        <translation>вы знаете почему</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -169,7 +169,7 @@
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>Забанить игрока</translation>
     </message>
     <message>
         <source>Please specify an IP address.</source>
@@ -788,7 +788,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Randomize the theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Рандомизировать тему</translation>
     </message>
     <message>
         <source>Choose a theme</source>
@@ -796,31 +796,31 @@ Last two engine messages:
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Рандомизировать карту, тему и зерно</translation>
     </message>
     <message>
         <source>Randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Рандомизировать тему и зерно</translation>
     </message>
     <message>
         <source>Randomize the seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Рандомизировать зерно</translation>
     </message>
     <message>
         <source>Click to randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите, чтобы рандомизировать карту, тему и зерно</translation>
     </message>
     <message>
         <source>Click to randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите, чтобы рандомизировать тему и зерно</translation>
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
-        <translation type="unfinished"></translation>
+        <translation>Отрегулировать сложность созданной карты</translation>
     </message>
     <message>
         <source>Adjust the distance between forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Отрегулировать расстояние между фортами</translation>
     </message>
     <message>
         <source>Click to edit</source>
@@ -1263,7 +1263,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play a random example of this voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Проиграть случайный пример этого голоса</translation>
     </message>
     <message>
         <source>Random Hats</source>
@@ -1528,7 +1528,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation type="unfinished"></translation>
+        <translation>Включите лампочку, чтобы показать другим игрокам, что вы готовы к бою</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
@@ -1539,11 +1539,11 @@ just enter your nickname.</source>
     <name>PageNetServer</name>
     <message>
         <source>Click here for details</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите сюда для деталей</translation>
     </message>
     <message>
         <source>Insert your address here</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите ваш адрес здесь</translation>
     </message>
 </context>
 <context>
@@ -1630,7 +1630,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите действие, для которого изменить управление</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -1678,7 +1678,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Frontend</source>
-        <translation type="unfinished"></translation>
+        <translation>Меню</translation>
     </message>
     <message>
         <source>Custom colors</source>
@@ -1690,7 +1690,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Frontend audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Звук в меню</translation>
     </message>
     <message>
         <source>Account</source>
@@ -1968,7 +1968,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation type="unfinished"></translation>
+        <translation>Каждый клан стартует в своей части карты.</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
@@ -1980,19 +1980,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Начальное здоровье ежей</translation>
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
-        <translation type="unfinished"></translation>
+        <translation>Как много раундов будет до начала Внезапной Смерти</translation>
     </message>
     <message>
         <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Как сильно будет подниматься вода во время Внезапной Смерти. Установите 0 для воды и для здоровья, чтобы отключить Внезапную Смерть.</translation>
     </message>
     <message>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сколько здоровья будут терять ежи каждый ход во время Внезапной смерти вплоть до 1. Установите 0 для здоровья и воды, чтобы отключить Внезапную Смерть.</translation>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
@@ -2044,7 +2044,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Name of this scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Название этой схемы</translation>
     </message>
 </context>
 <context>
@@ -2324,11 +2324,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Frontend sound effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Звуки в меню</translation>
     </message>
     <message>
         <source>Frontend music</source>
-        <translation type="unfinished"></translation>
+        <translation>Музыка в меню</translation>
     </message>
     <message>
         <source>Team</source>
@@ -2364,11 +2364,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable visual effects such as animated menu transitions and falling stars</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить визуальные эффекты, такие как анимированные переходы меню и падающие звездочки</translation>
     </message>
     <message>
         <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если включено, Hedgewars добавляет дату и время в формате &quot;YYYY-MM-DD_hh-mm&quot; для автоматически созданных демок.</translation>
     </message>
 </context>
 <context>
@@ -2689,7 +2689,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation type="unfinished"></translation>
+        <translation>Напишите никнейм на Youtube или адрес электронной почты связанный с аккаунтом в Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
@@ -2697,19 +2697,19 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Пароль:</translation>
+        <translation>Пароль: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation type="unfinished"></translation>
+        <translation>Название видео: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation type="unfinished"></translation>
+        <translation>Описание видео: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation type="unfinished"></translation>
+        <translation>Тэги (разделённые запятыми): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -3201,11 +3201,11 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
-        <translation type="unfinished"></translation>
+        <translation>Пригласите ваших друзей на сервер всего 1 кликом!</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нажмите чтобы скопировать ссылку на сервер в буфер обмена. Отправьте эту ссылку вашим друзьям и они смогут присоединиться к вам.</translation>
     </message>
     <message>
         <source>Start private server</source>
@@ -3708,7 +3708,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить автоматическую камеру / перенести фокус на активного ежа</translation>
     </message>
     <message>
         <source>Demo replay:</source>
@@ -4062,7 +4062,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Бой уже начался</translation>
     </message>
     <message>
         <source>restricted</source>
@@ -4146,7 +4146,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы забанены в этой комнате</translation>
     </message>
     <message>
         <source>Empty config entry</source>
@@ -4158,23 +4158,23 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия комнаты не совместима с вашей версией игры</translation>
     </message>
     <message>
         <source>You already have voted</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы уже проголосовали</translation>
     </message>
     <message>
         <source>Voting closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосование закрыто</translation>
     </message>
     <message>
         <source>New voting started</source>
-        <translation type="unfinished"></translation>
+        <translation>Началось голосование</translation>
     </message>
     <message>
         <source>Voting expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосование истекло</translation>
     </message>
     <message>
         <source>kick</source>
@@ -4194,11 +4194,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation>Внимание! В чате включена защита от флуда</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation type="unfinished"></translation>
+        <translation>Избыток флуда</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
@@ -4226,7 +4226,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>number of hedgehogs in team</source>
-        <translation type="unfinished"></translation>
+        <translation>количество ежей в команде</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
