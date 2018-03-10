@@ -618,14 +618,14 @@ Please, enter the password:</source>
         <translation>Erreur lors de l&apos;ouverture du fichier de démo %1</translation>
     </message>
     <message>
-        <source>A Fatal ERROR occured! - The game engine had to stop.
+        <source>A fatal ERROR occured! The game engine had to stop.
 
-We are very sorry for the inconvenience :(
+We are very sorry for the inconvenience. :-(
 
-If this keeps happening, please click the &apos;%1&apos; button in the main menu!
+If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
 
-Last two engine messages:
-%2</source>
+Last engine message:
+%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2796,6 +2796,10 @@ Voulez-vous vraiment quitter?</translation>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Loading&lt;br&gt;CAPTCHA ...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2813,6 +2817,10 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>unnamed (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgehog %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2992,7 +3000,7 @@ Voulez-vous tout de même rejoindre la partie?</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation>Impossible d&apos;utiliser cette arme : &quot;%1&quot;!</translation>
+        <translation type="vanished">Impossible d&apos;utiliser cette arme : &quot;%1&quot;!</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
@@ -3076,6 +3084,20 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome to Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome to Hedgewars!
+
+You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3533,7 +3555,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>pause</source>
-        <translation>pause</translation>
+        <translation type="vanished">pause</translation>
     </message>
     <message>
         <source>slot 9</source>
@@ -3603,6 +3625,18 @@ zoom</translation>
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>team chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pause / auto skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4051,87 +4085,87 @@ zoom</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation type="unfinished">Configuration vide</translation>
+        <translation type="obsolete">Configuration vide</translation>
     </message>
     <message>
         <source>Not room master</source>
-        <translation type="unfinished">Vous n&apos;êtes pas le propriétaire de la room</translation>
+        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de la room</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished">Info hérisson corrompu</translation>
+        <translation type="obsolete">Info hérisson corrompu</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation type="unfinished">trop d&apos;équipes</translation>
+        <translation type="obsolete">trop d&apos;équipes</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation type="unfinished">trop de hérissons</translation>
+        <translation type="obsolete">trop de hérissons</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished">Il y a déja une équipe avec le même nom dans la liste</translation>
+        <translation type="obsolete">Il y a déja une équipe avec le même nom dans la liste</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="unfinished">La partie est en cours</translation>
+        <translation type="obsolete">La partie est en cours</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="unfinished">Ajout interdit</translation>
+        <translation type="obsolete">Ajout interdit</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished">REMOVE_TEAM: aucune équipe de ce nom</translation>
+        <translation type="obsolete">REMOVE_TEAM: aucune équipe de ce nom</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation type="unfinished">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
+        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation type="unfinished">Il faut 2 clans minimum!</translation>
+        <translation type="obsolete">Il faut 2 clans minimum!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation type="unfinished">Ce nom de room existe déjà</translation>
+        <translation type="obsolete">Ce nom de room existe déjà</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation type="unfinished">Nom de room invalide</translation>
+        <translation type="obsolete">Nom de room invalide</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation type="unfinished">Cette room n&apos;existe pas</translation>
+        <translation type="obsolete">Cette room n&apos;existe pas</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="unfinished">Accès interdit</translation>
+        <translation type="obsolete">Accès interdit</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation type="unfinished">Accès réservé aux utilisateurs enregistrés</translation>
+        <translation type="obsolete">Accès réservé aux utilisateurs enregistrés</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="unfinished">Vous avez été banni de cette room</translation>
+        <translation type="obsolete">Vous avez été banni de cette room</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="unfinished">Pseudo déjà choisi</translation>
+        <translation type="obsolete">Pseudo déjà choisi</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation type="unfinished">Pseudo invalide</translation>
+        <translation type="obsolete">Pseudo invalide</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation type="unfinished">Protocole déjà connu</translation>
+        <translation type="obsolete">Protocole déjà connu</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation type="unfinished">Mauvais numéro</translation>
+        <translation type="obsolete">Mauvais numéro</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
@@ -4139,7 +4173,7 @@ zoom</translation>
     </message>
     <message>
         <source>Restricted</source>
-        <translation type="unfinished">Limité</translation>
+        <translation type="obsolete">Limité</translation>
     </message>
     <message>
         <source>No checker rights</source>
@@ -4147,15 +4181,15 @@ zoom</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
-        <translation type="unfinished">La version de la room est incompatible avec votre version du jeu</translation>
+        <translation type="obsolete">La version de la room est incompatible avec votre version du jeu</translation>
     </message>
     <message>
         <source>You already have voted</source>
-        <translation type="unfinished">Vous avez déjà voté</translation>
+        <translation type="obsolete">Vous avez déjà voté</translation>
     </message>
     <message>
         <source>Voting closed</source>
-        <translation type="unfinished">Vote terminé</translation>
+        <translation type="obsolete">Vote terminé</translation>
     </message>
     <message>
         <source>New voting started</source>
@@ -4163,7 +4197,7 @@ zoom</translation>
     </message>
     <message>
         <source>Voting expired</source>
-        <translation type="unfinished">Vote expiré</translation>
+        <translation type="obsolete">Vote expiré</translation>
     </message>
     <message>
         <source>kick</source>
@@ -4199,15 +4233,15 @@ zoom</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
-        <translation type="unfinished">Il n&apos;y a pas de vote en ce moment</translation>
+        <translation type="obsolete">Il n&apos;y a pas de vote en ce moment</translation>
     </message>
     <message>
         <source>Your vote counted</source>
-        <translation type="unfinished">Votre vote est enregistré</translation>
+        <translation type="obsolete">Votre vote est enregistré</translation>
     </message>
     <message>
         <source>Pause toggled</source>
-        <translation type="unfinished">En pause</translation>
+        <translation type="obsolete">En pause</translation>
     </message>
     <message>
         <source>new seed</source>
@@ -4215,7 +4249,7 @@ zoom</translation>
     </message>
     <message>
         <source>number of hedgehogs in team</source>
-        <translation type="unfinished">Nombre de hedgehogs dans la team</translation>
+        <translation type="obsolete">Nombre de hedgehogs dans la team</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
@@ -4227,23 +4261,167 @@ zoom</translation>
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
-        <translation type="unfinished">Vote d&apos;expulsion: spécifié le pseudo</translation>
+        <translation type="obsolete">Vote d&apos;expulsion: spécifié le pseudo</translation>
     </message>
     <message>
         <source>callvote kick: no such user</source>
-        <translation type="unfinished">Vote d&apos;expulsion: pas d&apos;autres utilisateurs</translation>
+        <translation type="obsolete">Vote d&apos;expulsion: pas d&apos;autres utilisateurs</translation>
     </message>
     <message>
         <source>callvote map: no such map</source>
-        <translation type="unfinished">Vote de carte: pas d&apos;autres cartes</translation>
+        <translation type="obsolete">Vote de carte: pas d&apos;autres cartes</translation>
     </message>
     <message>
         <source>callvote pause: no game in progress</source>
-        <translation type="unfinished">Vote de pause: pas de partie en cours</translation>
+        <translation type="obsolete">Vote de pause: pas de partie en cours</translation>
     </message>
     <message>
         <source>callvote hedgehogs: specify number from 1 to 8</source>
-        <translation type="unfinished">Vote d&apos;hedgehogs: spécifié un chiffre entre 1 et 8</translation>
+        <translation type="obsolete">Vote d&apos;hedgehogs: spécifié un chiffre entre 1 et 8</translation>
+    </message>
+    <message>
+        <source>The game can&apos;t be started with less than two clans!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You&apos;re not the room master!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too many teams!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too many hedgehogs!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Joining not possible: Round is in progress.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This room currently does not allow adding new teams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: The team you tried to remove does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can&apos;t remove a team you don&apos;t own.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A room with the same name already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote kick: You need to specify a nickname.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote kick: No such user!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote map: No such map!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote pause: No game in progress!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your Hedgewars version!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied. This room currently doesn&apos;t allow joining.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied. This room is for registered users only.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are banned from this room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already provided.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You already have voted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your vote has been counted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting closed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause toggled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting expired.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehogs per team: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
