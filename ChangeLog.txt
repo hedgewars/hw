@@ -54,6 +54,7 @@ Styles and game modes:
  + Capture the Flag: Show team scores and score graph in stats screen
  + HedgeEditor: Show cursor coordinates in top left corner
  + Control: Always remove TimeBox and Resurrector
+ + Climb Home: Show messages when a fire cake is nearby and when you're inside home
  * Battalion: Some texts in the mission panel were wrong and misleading
  * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
  * Construction Mode, Racer, HedgeEditor: No longer play Incoming voice for building stuff, fix other sound problems
