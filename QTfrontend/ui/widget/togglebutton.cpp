@@ -30,6 +30,8 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
     pmChecked.load(img);
     pmDisabled.load(img);
 
+    pmDisabled.setDevicePixelRatio(pm.devicePixelRatio());
+
     setMaximumWidth(pmChecked.width() + 6);
 
     painter->begin(&pmDisabled);
