@@ -70,6 +70,7 @@ class PageGameStats : public AbstractPage
         unsigned int playerPosition;
         quint32 lastColor;
         bool defaultGraphTitle;
+        QScopedPointer<QGraphicsScene> m_scene;
 
     protected:
         QLayout * bodyLayoutDefinition();
