@@ -47,8 +47,7 @@ begin
     t:= 0;
     while (TeamsArray[t] <> CurrentTeam) do inc(t);
 
-    // TODO: Localize
-    AddChatString(#2 + CurrentTeam^.TeamName + ' automatically skipped turn.');
+    AddChatString(#2 + FormatA(trmsg[sidAutoSkip], CurrentTeam^.TeamName));
 
     ParseCommand('/skip', true)
 end;

@@ -101,6 +101,10 @@
 01:34=%1, %2, %3, %4, %5 and %6 win!
 01:35=%1, %2, %3, %4, %5, %6 and %7 win!
 01:36=Everyone wins!
+01:37=%1 is gone.
+01:38=%1 is back.
+01:39=%1 automatically skipped turn.
+01:40=%1 fps
 
 ; Event messages
 ; Normal hog (%1) died (0 health)

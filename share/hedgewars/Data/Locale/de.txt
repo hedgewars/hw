@@ -102,6 +102,10 @@
 01:34=%1, %2, %3, %4, %5 und %6 gewinnen!
 01:35=%1, %2, %3, %4, %5, %6 und %7 gewinnen!
 01:36=Alle gewinnen!
+01:37=%1 ist gegangen.
+01:38=%1 ist zurück.
+01:39=%1 hat den Zug automatisch übersprungen.
+01:40=%1 fps
 
 ; Event messages
 ; Hog (%1) died

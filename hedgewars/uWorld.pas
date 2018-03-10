@@ -1648,7 +1648,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             FPS:= Frames;
             Frames:= 0;
             CountTicks:= 0;
-            s:= inttostr(FPS) + ' fps';
+            s:= Format(trmsg[sidFPS], inttostr(FPS));
             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
             FreeAndNilTexture(fpsTexture);

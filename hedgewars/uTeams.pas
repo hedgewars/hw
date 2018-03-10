@@ -704,7 +704,7 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString(#7 + '* '+ TeamName + ' is gone'); // TODO: localize
+                    AddChatString(#7 + '* '+ FormatA(trmsg[sidTeamGone], TeamName));
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -743,7 +743,7 @@ begin
         with TeamsArray[t]^ do
             if hasGone then
                 begin
-                AddChatString(#8 + '* '+ TeamName + ' is back');
+                AddChatString(#8 + '* '+ FormatA(trmsg[sidTeamBack], TeamName));
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
