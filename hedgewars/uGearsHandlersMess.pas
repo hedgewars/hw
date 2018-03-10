@@ -6741,7 +6741,7 @@ begin
         HHGear^.Message := HHGear^.Message and (not (gmUp or gmDown));
         HHGear^.State := HHGear^.State or gstNotKickable;
 
-        Gear^.Timer := 3451;
+        Gear^.Timer := Gear^.Karma;
         Gear^.WDTimer := 0; // Order of the next bullet;
         ClearHitOrder();
         Gear^.doStep := @doStepMinigunWork

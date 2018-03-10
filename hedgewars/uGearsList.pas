@@ -746,8 +746,12 @@ gtFlamethrower: begin
                 gear^.Density:= _0_5;
                 gear^.AdvBounce:= 1;
                 end;
-       gtMinigun: begin
-                if gear^.Timer = 0 then gear^.Timer:= 601;
+     gtMinigun: begin
+                // Timer. First, it's the timer before shooting. Then it will become the shooting timer and is set to Karma
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 601;
+                // minigun shooting time. 1 bullet is fired every 50ms
+                gear^.Karma:= 3451;
                 end;
  gtMinigunBullet: begin
                 gear^.Radius:= 1;
