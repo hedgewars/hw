@@ -129,7 +129,7 @@ begin
 tempstr:= fmt;
 for i:=0 to MAX_FORMAT_STRING_SYMBOLS - 1 do
     begin
-        p:= Pos('%'+IntToStr(i), tempstr);
+        p:= Pos('%'+IntToStr(i+1), tempstr);
         if (p = 0) or (i >= Length(args)) then
             break
         else
