@@ -291,7 +291,7 @@ function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
 var i: LongInt;
 begin
 UpdateHitOrder:= true;
-for i:= 0 to cMaxGearHitOrderInd do
+for i:= 0 to ordera.Count - 1 do
     if ordera.ar[i] = Gear then
         begin
         if Order <= ordera.order[i] then UpdateHitOrder:= false;
