@@ -171,15 +171,8 @@ function onNewTurn()
 	end
 end
 
-function onSetWeapon(ammoType)
-	if ammoType == amGrenade and not weaponSelected and gamePhase == 1 then
-		newGamePhase()
-		weaponSelected = true
-	end
-end
-
-function onSlot(msgParam)
-	if msgParam <= 1 and not weaponSelected and gamePhase == 1 then
+function onGameTick20()
+	if not weaponSelected and gamePhase == 1 and GetCurAmmoType() == amGrenade then
 		newGamePhase()
 		weaponSelected = true
 	end

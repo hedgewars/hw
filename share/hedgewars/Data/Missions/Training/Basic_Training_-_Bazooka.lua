@@ -199,19 +199,6 @@ function onNewTurn()
 	end
 end
 
-function onSetWeapon(ammoType)
-	if ammoType == amBazooka and not weaponSelected and gamePhase == 1 then
-		newGamePhase()
-		weaponSelected = true
-	end
-end
-function onSlot(msgParam)
-	if msgParam == 0 and not weaponSelected and gamePhase == 1 then
-		newGamePhase()
-		weaponSelected = true
-	end
-end
-
 function onHogAttack(ammoType)
 	if ammoType == amBazooka then
 		HideMission()
@@ -277,6 +264,11 @@ function onGameTick20()
 	if missedTauntTimer == 0 then
 		PlaySound(sndMissed, hog)
 		missedTauntTimer = -1
+	end
+
+	if not weaponSelected and gamePhase == 1 and GetCurAmmoType() == amBazooka then
+		newGamePhase()
+		weaponSelected = true
 	end
 end
 
