@@ -72,16 +72,15 @@
 #pragma mark Settings
 + (void)createSettings {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    [settings setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
-    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
-    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
-    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sync_ws"];
+    
+    [settings setDefaultBool:NO forNonExistingKey:@"alternate"];
+    [settings setDefaultBool:YES forNonExistingKey:@"music"];
+    [settings setDefaultBool:YES forNonExistingKey:@"sound"];
+    [settings setDefaultBool:YES forNonExistingKey:@"sync_ws"];
 
     // don't overwrite these two strings when present
-    if ([settings objectForKey:@"username"] == nil)
-        [settings setObject:@"" forKey:@"username"];
-    if ([settings objectForKey:@"password"] == nil)
-        [settings setObject:@"" forKey:@"password"];
+    [settings setDefaultValue:@"" forNonExistingKey:@"username"];
+    [settings setDefaultValue:@"" forNonExistingKey:@"password"];
 
     [settings synchronize];
 }

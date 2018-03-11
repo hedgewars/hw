@@ -72,3 +72,9 @@
 
 @end
 
+@interface NSUserDefaults (setNonExisting)
+
+- (void)setDefaultValue:(nullable id)value forNonExistingKey:(NSString *_Nonnull)key;
+- (void)setDefaultBool:(BOOL)boolValue forNonExistingKey:(NSString *_Nonnull)key;
+
+@end

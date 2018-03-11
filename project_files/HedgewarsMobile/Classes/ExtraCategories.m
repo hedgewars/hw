@@ -190,3 +190,19 @@
 }
 
 @end
+
+
+#pragma mark -
+@implementation NSUserDefaults (setNonExisting)
+
+- (void)setDefaultValue:(nullable id)value forNonExistingKey:(NSString *_Nonnull)key {
+    if ([self objectForKey:key] == nil) {
+        [self setObject:value forKey:key];
+    }
+}
+
+- (void)setDefaultBool:(BOOL)boolValue forNonExistingKey:(NSString *_Nonnull)key {
+    [self setDefaultValue:[NSNumber numberWithBool:boolValue] forNonExistingKey:key];
+}
+
+@end
