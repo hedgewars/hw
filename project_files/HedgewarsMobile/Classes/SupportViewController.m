@@ -165,7 +165,7 @@
         return nil;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     // image height + label height
     return (section == 1) ? 265 : 20;
 }

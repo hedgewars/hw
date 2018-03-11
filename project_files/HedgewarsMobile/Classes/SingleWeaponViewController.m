@@ -183,14 +183,14 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (0 == [indexPath section])
         return aTableView.rowHeight;
     else
         return IS_ON_PORTRAIT() ? 208 : 120;
 }
 
--(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:

@@ -107,7 +107,7 @@
     return cell;
 }
 
--(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:

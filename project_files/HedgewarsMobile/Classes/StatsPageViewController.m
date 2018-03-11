@@ -126,7 +126,7 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
     return (section == 0) ? 160 : 40;
 }
 
@@ -146,7 +146,7 @@
         return nil;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
     return aTableView.rowHeight + 30;
 }
 

@@ -35,25 +35,25 @@
 
 #pragma mark -
 #pragma mark custom setters/getters
--(NSString *)selectedScheme {
+- (NSString *)selectedScheme {
     if (selectedScheme == nil)
         self.selectedScheme = @"Default.plist";
     return selectedScheme;
 }
 
--(NSString *)selectedWeapon {
+- (NSString *)selectedWeapon {
     if (selectedWeapon == nil)
         self.selectedWeapon = @"Default.plist";
     return selectedWeapon;
 }
 
--(NSString *)selectedScript {
+- (NSString *)selectedScript {
     if (selectedScript == nil)
         self.selectedScript = @"";
     return selectedScript;
 }
 
--(NSString *)scriptCommand {
+- (NSString *)scriptCommand {
     if (scriptCommand == nil)
         self.scriptCommand = @"";
     return scriptCommand;
@@ -230,7 +230,7 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
     return IS_IPAD() ? 0 : 50;
 }
 
@@ -246,7 +246,7 @@
     return theView;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
     return 40;
 }
 

@@ -25,14 +25,14 @@
 #pragma mark -
 @implementation UIScreen (safe)
 
--(CGFloat) safeScale {
+- (CGFloat)safeScale {
     CGFloat theScale = 1.0f;
 //    if ([self respondsToSelector:@selector(scale)])
 //         theScale = [self scale];
     return theScale;
 }
 
--(CGRect) safeBounds {
+- (CGRect)safeBounds {
     return [self bounds];
 //    CGRect original = [self bounds];
 //    if (IS_ON_PORTRAIT())
@@ -63,27 +63,27 @@
 #pragma mark -
 @implementation UIColor (HWColors)
 
-+(UIColor *)darkYellowColor {
++ (UIColor *)darkYellowColor {
     return [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xC0/255 blue:0 alpha:1];
 }
 
-+(UIColor *)lightYellowColor {
++ (UIColor *)lightYellowColor {
     return [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1];
 }
 
-+(UIColor *)darkBlueColor {
++ (UIColor *)darkBlueColor {
     return [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1];
 }
 
 // older devices don't get any transparency for performance reasons
-+(UIColor *)darkBlueColorTransparent {
++ (UIColor *)darkBlueColorTransparent {
     return [UIColor colorWithRed:(CGFloat)0x0F/255
                            green:0
                             blue:(CGFloat)0x55/255
                            alpha:IS_NOT_POWERFUL([HWUtils modelType]) ? 1 : 0.6f];
 }
 
-+(UIColor *)blackColorTransparent {
++ (UIColor *)blackColorTransparent {
     return [UIColor colorWithRed:0
                            green:0
                             blue:0
@@ -178,7 +178,7 @@
 #pragma mark -
 @implementation NSString (MD5)
 
--(NSString *)MD5hash {
+- (NSString *)MD5hash {
     const char *cStr = [self UTF8String];
     unsigned char result[16];
     CC_MD5( cStr, strlen(cStr), result );

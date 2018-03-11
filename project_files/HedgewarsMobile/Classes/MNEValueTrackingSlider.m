@@ -179,7 +179,7 @@
 
 #pragma mark -
 #pragma mark Custom property accessors
--(CGRect) thumbRect {
+- (CGRect)thumbRect {
     CGRect trackRect = [self trackRectForBounds:self.bounds];
     CGRect thumbR = [self thumbRectForBounds:self.bounds
                                          trackRect:trackRect

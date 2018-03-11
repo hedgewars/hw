@@ -22,8 +22,8 @@
 
 @interface UIScreen (safe)
 
--(CGFloat) safeScale;
--(CGRect) safeBounds;
+- (CGFloat)safeScale;
+- (CGRect)safeBounds;
 
 @end
 
@@ -37,11 +37,11 @@
 
 @interface UIColor (HWColors)
 
-+(UIColor *)darkYellowColor;
-+(UIColor *)lightYellowColor;
-+(UIColor *)darkBlueColor;
-+(UIColor *)darkBlueColorTransparent;
-+(UIColor *)blackColorTransparent;
++ (UIColor *)darkYellowColor;
++ (UIColor *)lightYellowColor;
++ (UIColor *)darkBlueColor;
++ (UIColor *)darkBlueColorTransparent;
++ (UIColor *)blackColorTransparent;
 
 @end
 
@@ -68,7 +68,7 @@
 
 @interface NSString (MD5)
 
--(NSString *)MD5hash;
+- (NSString *)MD5hash;
 
 @end
 

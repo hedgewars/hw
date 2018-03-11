@@ -200,7 +200,7 @@
     return [self.listOfMissionIDs count];
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return (IS_IPAD()) ? self.tableView.rowHeight : 80;
 }
 

@@ -300,7 +300,7 @@
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
@@ -319,7 +319,7 @@
     return sectionTitle;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 0)
         return aTableView.rowHeight;
     else if ([indexPath section] == 1)
