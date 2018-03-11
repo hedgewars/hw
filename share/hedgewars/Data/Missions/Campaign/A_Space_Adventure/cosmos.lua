@@ -309,9 +309,9 @@ function onNewTurn()
 				TurnTimeLeft = -1
 			end
 		end
-	elseif CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
+	elseif not onHeroDeath() and CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
 		EndTurn(true)
-	elseif (CurrentHedgehog == guard1.gear or CurrentHedgehog == guard2.gear) and guard1.keepTurning then
+	elseif not onHeroDeath() and (CurrentHedgehog == guard1.gear or CurrentHedgehog == guard2.gear) and guard1.keepTurning then
 		EndTurn(true)
 	end
 
