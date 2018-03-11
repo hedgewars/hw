@@ -6757,7 +6757,6 @@ begin
     if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
         Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
-    PlaySound(sndGun);
     Gear^.X := Gear^.X + Gear^.dX * 2;
     Gear^.Y := Gear^.Y + Gear^.dY * 2;
     Gear^.FlightTime := 0;

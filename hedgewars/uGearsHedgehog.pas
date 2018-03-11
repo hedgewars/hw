@@ -323,7 +323,10 @@ with Gear^,
                                  newGear^.Radius:= 4 // temporarily shrink so it doesn't instantly embed in the ground
                                  end;
                        amDEagle: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
-                      amMinigun: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtMinigun, 0, xx * _0_5, yy * _0_5, 0);
+                      amMinigun: begin
+                                 PlaySound(sndMinigun);
+                                 newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtMinigun, 0, xx * _0_5, yy * _0_5, 0);
+                                 end;
                       amSineGun: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
                     amPortalGun: begin
                                  newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6,
