@@ -1027,20 +1027,21 @@ end;
 
 
 procedure RenderTeamsHealth;
-var t, i,  h, smallScreenOffset, TeamHealthBarWidth : LongInt;
+var t, i, h, v, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
     hasVisibleHog: boolean;
     htex: PTexture;
 begin
-if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
+if VisibleTeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
     begin
     SetScale(1.5);
     smallScreenOffset:= cScreenHeight div 6;
-    if TeamsCount * 100 > Longword(cScreenHeight) then
+    if VisibleTeamsCount * 100 > Longword(cScreenHeight) then
         Tint($FF,$FF,$FF,$80);
     end
 else smallScreenOffset:= 0;
+v:= 0; // for updating VisibleTeamsCount
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
       begin
@@ -1050,6 +1051,8 @@ for t:= 0 to Pred(TeamsCount) do
               hasVisibleHog:= true;
       if (TeamHealth > 0) and hasVisibleHog then
         begin
+        // count visible teams
+        inc(v);
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
         if highlight then
@@ -1104,7 +1107,7 @@ for t:= 0 to Pred(TeamsCount) do
         // this approach should be faster than drawing all borders one by one tinted or not
         if highlight then
             begin
-            if TeamsCount * 100 > Longword(cScreenHeight) then
+            if VisibleTeamsCount * 100 > Longword(cScreenHeight) then
                 Tint($FF,$FF,$FF,$80)
             else untint;
 
@@ -1153,9 +1156,10 @@ for t:= 0 to Pred(TeamsCount) do
 if smallScreenOffset <> 0 then
     begin
     SetScale(cDefaultZoomLevel);
-    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
+    if VisibleTeamsCount * 20 > Longword(cScreenHeight) div 5 then
         untint;
     end;
+VisibleTeamsCount:= v;
 end;
 
 

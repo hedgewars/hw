@@ -2497,7 +2497,8 @@ var
     PreviousTeam: PTeam;
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
-    TeamsCount: Longword;
+    TeamsCount: Longword; // number of teams on game start
+    VisibleTeamsCount: Longword; // number of teams visible in team bar
     ClansArray, SpawnClansArray: TClansArray;
     ClansCount: Longword;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan

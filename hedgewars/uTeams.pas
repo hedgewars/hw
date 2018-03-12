@@ -398,6 +398,7 @@ team^.Flag:= 'hedgewars';
 
 TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
+inc(VisibleTeamsCount);
 
 team^.Binds:= DefaultBinds;
 
