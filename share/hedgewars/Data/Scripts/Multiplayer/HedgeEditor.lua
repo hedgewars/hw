@@ -3789,7 +3789,7 @@ function onNewTurn()
 	if GetHogLevel(CurrentHedgehog) == 0 then
 		TurnTimeLeft = -1	-- is that turntime in your pocket? :D
 	else
-		ParseCommand("skip") -- skip the computer's turn
+		SkipTurn() -- skip the computer's turn
 	end
 
 end

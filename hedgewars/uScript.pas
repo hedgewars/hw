@@ -1926,6 +1926,13 @@ begin
     lc_endturn:= 0
 end;
 
+function lc_skipturn(L : Plua_State): LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    ParseCommand('skip', true, true);
+    lc_skipturn:= 0;
+end;
+
 function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
 var statInfo : TStatInfoType;
     i, n     : LongInt;
@@ -3791,6 +3798,7 @@ lua_register(luaState, _P'WriteLnToChat', @lc_writelntochat);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
+lua_register(luaState, _P'SkipTurn', @lc_skipturn);
 lua_register(luaState, _P'GetTeamStats', @lc_getteamstats);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
 lua_register(luaState, _P'SendGameResultOff', @lc_sendgameresultoff);

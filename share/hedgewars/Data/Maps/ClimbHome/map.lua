@@ -260,7 +260,7 @@ function onGameTick20()
 
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
     if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
-        ParseCommand("/skip")
+        SkipTurn()
         dummySkip = 0
     end
 
