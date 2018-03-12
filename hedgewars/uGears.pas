@@ -1119,7 +1119,8 @@ s:= s; // avoid compiler hint
 if not isExternalSource then
     SendIPC(_S',');
 uStats.Skipped;
-skipFlag:= true
+skipFlag:= true;
+ScriptCall('onSkipTurn');
 end;
 
 procedure chHogSay(var s: shortstring);
