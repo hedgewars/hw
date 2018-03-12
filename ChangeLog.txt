@@ -33,6 +33,7 @@ Content:
 
 Styles and game modes:
  + Various styles: Add current score/time next to team bars (where applicable)
+ + Remove rubber duck from most weapon schemes and Random Weapon and Balanced Random Weapon
  + Construction Mode: Add a few shortcuts
  + Construction Mode: Show selected object at cursor and a crate preview icon
  + Construction Mode: Remember all selections

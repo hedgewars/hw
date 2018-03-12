@@ -12,7 +12,7 @@ local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun,
             amBaseballBat, amTeleport, amMortar, amCake, amSeduction,
             amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane,
             amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb,
-            amFlamethrower, amSMine, amHammer, amDuck, amMinigun, amSineGun,
+            amFlamethrower, amSMine, amHammer, amMinigun, amSineGun,
             amKnife, amAirMine }
 
 -- List of weapons that attack from the air
