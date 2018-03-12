@@ -555,9 +555,7 @@ function onGearResurrect(Gear)
 	end
 end
 
-function onHogAttack(ammoType)
-	if ammoType == amSkip then
-		AddCaption(loc("Try again!"), 0xFFFFFFFF, capgrpMessage2)
-		ResetCurrentTarget()
-	end
+function onSkipTurn()
+	AddCaption(loc("Try again!"), 0xFFFFFFFF, capgrpMessage2)
+	ResetCurrentTarget()
 end

@@ -1168,8 +1168,8 @@ function onPrecise()
   end
 end
 
-function onHogAttack(ammoType)
-  if stage == spyKillStage and ammoType == amSkip then
+function onSkipTurn()
+  if stage == spyKillStage then
     highJumped = true
   end
 end

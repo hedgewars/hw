@@ -694,16 +694,14 @@ function onGearDamage(gear, damage)
 	end
 end
 
-function onHogAttack(ammoType)
+function onSkipTurn()
 	-- Record skips for achievement
-	if ammoType == amSkip then
-		local team = GetHogTeamName(CurrentHedgehog)
-		increaseTeamValue(team, "Skips")
-		if(getTeamValue(team, "Skips") > recordSkips) then
-			recordSkips = getTeamValue(team, "Skips")
-			recordSkipsHogName = getGearValue(CurrentHedgehog, "Name")
-			recordSkipsTeamName = team
-		end
+	local team = GetHogTeamName(CurrentHedgehog)
+	increaseTeamValue(team, "Skips")
+	if(getTeamValue(team, "Skips") > recordSkips) then
+		recordSkips = getTeamValue(team, "Skips")
+		recordSkipsHogName = getGearValue(CurrentHedgehog, "Name")
+		recordSkipsTeamName = team
 	end
 end
 
