@@ -74,6 +74,7 @@ A Classic Fairytale:
  + Mission 3: Display number of turns left at timed parcours
  + Mission 2, Mission 5: Reduce computer hog levels
  + Mission 6: Change mines
+ + Mission 7: Add one additional pick hammer in a crate
  * Fix incorrect storytelling in mission descriptions
  * Missions now work even with corrupted team file, by using a default behaviour
  * Mission 1: Fix error message spam when Leaks a Lot drowns

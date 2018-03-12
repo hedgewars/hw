@@ -248,7 +248,7 @@ end
 function SetupPlace3()
   SpawnSupplyCrate(2086, 1887, amRope, 1)
   SpawnSupplyCrate(2147, 728, amBlowTorch, 2)
-  SpawnSupplyCrate(2778, 1372, amPickHammer, 3)
+  SpawnSupplyCrate(2778, 1372, amPickHammer, 4)
   SpawnSupplyCrate(2579, 1886, amPickHammer, 3)
   SpawnSupplyCrate(2622, 1893, amGirder, 1)
   SpawnSupplyCrate(2671, 1883, amPortalGun, 3)
