@@ -22,6 +22,8 @@
 #import "GameInterfaceBridge.h"
 
 #define TRAINING_MISSION_TYPE @"Training"
+#define CHALLENGE_MISSION_TYPE @"Challenge"
+#define SCENARIO_MISSION_TYPE @"Scenario"
 
 @implementation MissionTrainingViewController
 
@@ -85,7 +87,7 @@
 {
     NSString *languageID = [HWUtils languageID];
     
-    NSString *missionsDescLocation = [[NSString alloc] initWithFormat:@"%@/missions_en.txt",LOCALE_DIRECTORY()];
+    NSString *missionsDescLocation = [[NSString alloc] initWithFormat:@"%@/missions_en.txt", LOCALE_DIRECTORY()];
     NSString *localizedMissionsDescLocation = [[NSString alloc] initWithFormat:@"%@/missions_%@.txt", LOCALE_DIRECTORY(), languageID];
     
     if (![languageID isEqualToString:@"en"] && [[NSFileManager defaultManager] fileExistsAtPath:localizedMissionsDescLocation])
@@ -180,7 +182,7 @@
 {
     if (!_missionsTypes)
     {
-        _missionsTypes = @[ TRAINING_MISSION_TYPE ];
+        _missionsTypes = @[ TRAINING_MISSION_TYPE, CHALLENGE_MISSION_TYPE, SCENARIO_MISSION_TYPE ];
     }
     
     return _missionsTypes;
@@ -191,7 +193,9 @@
     if (!_dictOfAllMissions)
     {
         NSArray *types = [self missionsTypes];
-        _dictOfAllMissions = @{ types[0] : [self dictOfTraining] };
+        _dictOfAllMissions = @{ types[0] : self.dictOfTraining,
+                                types[1] : self.dictOfChallenge,
+                                types[2] : self.dictOfScenario };
     }
     
     return _dictOfAllMissions;
@@ -201,8 +205,7 @@
 {
     if (!_listOfTrainingIDs)
     {
-        NSArray *sortedKeys = [[self.dictOfTraining allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        _listOfTrainingIDs = [[NSArray alloc] initWithArray:sortedKeys];
+        _listOfTrainingIDs = [[self.dictOfTraining allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     }
     
     return _listOfTrainingIDs;
@@ -218,6 +221,46 @@
     return _dictOfTraining;
 }
 
+- (NSArray *)listOfChallengeIDs
+{
+    if (!_listOfChallengeIDs)
+    {
+        _listOfChallengeIDs = [[self.dictOfChallenge allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    }
+    
+    return _listOfChallengeIDs;
+}
+
+- (NSDictionary *)dictOfChallenge
+{
+    if (!_dictOfChallenge)
+    {
+        _dictOfChallenge = [self newLocalizedMissionsDictionaryForType:CHALLENGE_MISSION_TYPE];
+    }
+    
+    return _dictOfChallenge;
+}
+
+- (NSArray *)listOfScenarioIDs
+{
+    if (!_listOfScenarioIDs)
+    {
+        _listOfScenarioIDs = [[self.dictOfScenario allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    }
+
+    return _listOfScenarioIDs;
+}
+
+- (NSDictionary *)dictOfScenario
+{
+    if (!_dictOfScenario)
+    {
+        _dictOfScenario = [self newLocalizedMissionsDictionaryForType:SCENARIO_MISSION_TYPE];
+    }
+
+    return _dictOfScenario;
+}
+
 #pragma mark -
 #pragma mark Missions types
 
@@ -225,6 +268,10 @@
 {
     if ([type isEqualToString:TRAINING_MISSION_TYPE]) {
         return TRAININGS_DIRECTORY();
+    } else if ([type isEqualToString:CHALLENGE_MISSION_TYPE]) {
+        return CHALLENGE_DIRECTORY();
+    } else if ([type isEqualToString:SCENARIO_MISSION_TYPE]) {
+        return SCENARIO_DIRECTORY();
     }
     return nil;
 }
@@ -233,6 +280,10 @@
 {
     if ([type isEqualToString:TRAINING_MISSION_TYPE]) {
         return self.listOfTrainingIDs;
+    } else if ([type isEqualToString:CHALLENGE_MISSION_TYPE]) {
+        return self.listOfChallengeIDs;
+    } else if ([type isEqualToString:SCENARIO_MISSION_TYPE]) {
+        return self.listOfScenarioIDs;
     }
     return nil;
 }
@@ -241,6 +292,10 @@
 {
     if ([type isEqualToString:TRAINING_MISSION_TYPE]) {
         return self.dictOfTraining;
+    } else if ([type isEqualToString:CHALLENGE_MISSION_TYPE]) {
+        return self.dictOfChallenge;
+    } else if ([type isEqualToString:SCENARIO_MISSION_TYPE]) {
+        return self.dictOfScenario;
     }
     return nil;
 }

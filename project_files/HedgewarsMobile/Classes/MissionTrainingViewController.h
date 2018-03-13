@@ -30,6 +30,12 @@
 @property (nonatomic, strong) NSArray *listOfTrainingIDs;
 @property (nonatomic, strong) NSDictionary *dictOfTraining;
 
+@property (nonatomic, strong) NSArray *listOfChallengeIDs;
+@property (nonatomic, strong) NSDictionary *dictOfChallenge;
+
+@property (nonatomic, strong) NSArray *listOfScenarioIDs;
+@property (nonatomic, strong) NSDictionary *dictOfScenario;
+
 @property (nonatomic, strong) IBOutlet UIImageView *previewImage;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UILabel *descriptionLabel;

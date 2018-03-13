@@ -63,6 +63,8 @@
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
 #define MISSIONS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Maps/"]
 #define TRAININGS_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Training/"]
+#define SCENARIO_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Scenario/"]
+#define CHALLENGE_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Challenge/"]
 #define CAMPAIGNS_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Campaign/"]
 #define LOCALE_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Locale/"]
 #define SCRIPTS_DIRECTORY()     [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Scripts/Multiplayer/"]
