@@ -95,7 +95,7 @@ local targetData = {
 	-- 5: Barrel pit
 	{2060, 885},
 	-- 6: Grand Finale
-	{757, 679},
+	{834, 381},
 	-- 7: Goal
 	{3802, 356},
 }
