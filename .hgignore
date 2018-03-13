@@ -5,7 +5,8 @@ syntax: glob
 .git
 CMakeCache.txt
 CMakeFiles
-moc_*.cxx
+moc_*.cpp
+qrc_*.cpp
 qrc_*.cxx
 *.o
 *.a
@@ -35,7 +36,7 @@ gameServer/dist/
 misc/liblua/Xcode/build/
 misc/libphysfs/Xcode/build/
 misc/libphyslayer/Xcode/build/
-moc_*.cxx_parameters
+moc_*.cpp_parameters
 *.log
 *.cmd
 *.patch
