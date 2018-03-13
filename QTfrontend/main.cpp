@@ -355,11 +355,12 @@ int main(int argc, char *argv[]) {
             if(cc == "C")
                 cc = HWApplication::inputMethod()->locale().name();
         }
+        qDebug("Frontend uses locale: %s", qPrintable(cc));
 
         // Load locale files into translators
-        if (!TranslatorHedgewars.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+        if (!TranslatorHedgewars.load(QString("hedgewars_%1").arg(cc), QString("physfs://Locale")))
             qWarning("Failed to install Hedgewars translation (%s)", qPrintable(cc));
-        if (!TranslatorQt.load(QString("%1/qt_%2").arg(QLibraryInfo::location(QLibraryInfo::TranslationsPath), cc)))
+        if (!TranslatorQt.load(QString("qt_%1").arg(cc), QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
             qWarning("Failed to install Qt translation (%s)", qPrintable(cc));
         app.installTranslator(&TranslatorHedgewars);
         app.installTranslator(&TranslatorQt);
