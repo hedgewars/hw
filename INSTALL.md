@@ -16,22 +16,29 @@ To compile and install Hedgewars, you need at least:
 - CMake >= 2.6.0
 - A make program (e.g. GNU Make)
 - Free Pascal Compiler (FPC) >= 2.2.4
-- Qt = 4.7.0
+- Qt 5
 - SDL >= 2.0
 - SDL\_net >= 2.0
 - SDL\_mixer >= 2.0
 - SDL\_image >= 2.0
 - SDL\_ttf >= 2.0
 
+### Recommended optional dependencies
+
+These are not strictly required to build Hedgewars, but it's
+usually better to have them installed. Hedgewars has fallback mechanisms
+in if these are not found on your system.
+
+- qtstyleplugins (for Qt 5)
+- PhysFS >= 2.0.0
+- Lua = 5.1.0
+
 ### Optional dependencies
 
 For some additional features, you can optionally install these dependencies:
 
-- For Hedgewars:
-    - PhysFS >= 2.0.0 (recommended)
-    - Lua = 5.1.0 (recommended)
 - For PNG screenshots:
-    - libpng >= 1.2 (recommended)
+    - libpng >= 1.2
 - For video recording:
     - FFmpeg or Libav
 - For the Hedgewars Server:
