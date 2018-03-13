@@ -147,6 +147,8 @@ local function LoadGearData()
 
 	--BEGIN CORE DATA--
 
+	local iceColor = 0x0CE4F3C0
+
 	------ GIRDER LIST ------
 	PlaceSprite(292, 1488, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(454, 1731, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
@@ -165,24 +167,24 @@ local function LoadGearData()
 	PlaceSprite(1368, 1560, sprAmGirder, 3, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1390, 1665, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1481, 1716, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1625, 1652, sprAmGirder, 7, 16448250, nil, nil, nil, lfIce)
+	PlaceSprite(1625, 1652, sprAmGirder, 7, iceColor, nil, nil, nil, lfIce)
 	PlaceSprite(1729, 1596, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1762, 1545, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1563, 1536, sprAmGirder, 5, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(1506, 1392, sprAmGirder, 6, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(1591, 1450, sprAmGirder, 3, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(1650, 1463, sprAmGirder, 1, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(1766, 1492, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(1925, 1492, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
+	PlaceSprite(1563, 1536, sprAmGirder, 5, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(1506, 1392, sprAmGirder, 6, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(1591, 1450, sprAmGirder, 3, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(1650, 1463, sprAmGirder, 1, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(1766, 1492, sprAmGirder, 4, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(1925, 1492, sprAmGirder, 4, iceColor, nil, nil, nil, lfIce)
 	PlaceSprite(2114, 1428, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(2187, 1435, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(2135, 1478, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(2284, 1650, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(2005, 1724, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1885, 1562, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2252, 1700, sprAmGirder, 2, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(2308, 1803, sprAmGirder, 5, 16448250, nil, nil, nil, lfIce)
-	PlaceSprite(2394, 1893, sprAmGirder, 1, 16448250, nil, nil, nil, lfIce)
+	PlaceSprite(2252, 1700, sprAmGirder, 2, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(2308, 1803, sprAmGirder, 5, iceColor, nil, nil, nil, lfIce)
+	PlaceSprite(2394, 1893, sprAmGirder, 1, iceColor, nil, nil, nil, lfIce)
 	PlaceSprite(605, 1761, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1813, 1312, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1742, 1260, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
@@ -199,7 +201,7 @@ local function LoadGearData()
 	PlaceSprite(684, 1505, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(2046, 1492, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(2064, 1442, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1849, 1426, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
+	PlaceSprite(1849, 1426, sprAmGirder, 4, iceColor, nil, nil, nil, lfIce)
 	PlaceSprite(3051, 1957, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(3101, 1956, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(3150, 1954, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
@@ -227,7 +229,7 @@ local function LoadGearData()
 	PlaceSprite(1860, 1687, sprAmRubber, 1, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
 
 	------ SPRITE LIST ------
-	PlaceSprite(2115, 1295, 140, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
+	PlaceSprite(1297, 1732, sprTargetBee, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 
 	------ CRATE LIST ------
 	crates[1] = SpawnHealthCrate(401, 1850)			-- Jumping
@@ -311,6 +313,7 @@ function onGearDelete(gear)
 		loc("To get over the next obstacle, you need to perform your back jump precisely.").."|"..
 		loc("Hint: Hit “High Jump” again when you're close to the highest point of a high jump.").."|"..
 		loc("Hint: Don't stand too close at the wall before you jump!").."|"..
+		loc("Hint: Use the flower for orientation.").."|"..
 		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 15000)
 	elseif gear == crates[5] then
 		ShowMission(loc("Basic Movement Training"), loc("Walking on Ice"),
