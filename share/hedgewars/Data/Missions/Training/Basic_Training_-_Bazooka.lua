@@ -20,7 +20,7 @@ local targetsLeft = 0		-- # of targets left in this round
 local targetGears = {}		-- list of target gears
 local bazookasInGame = 0	-- # of bazookas currently flying
 local bazookaGears = {}		-- list of bazooka gears
-local limitedAmmo = 5		-- amount of ammo for the limited ammo challenge
+local limitedAmmo = 10		-- amount of ammo for the limited ammo challenge
 local limitedAmmoReset = -1	-- Timer for resetting ammo if player fails in
 				-- limited ammo challenge. -1 = no-op
 local gameOver = false		-- If true, game has ended
@@ -89,6 +89,7 @@ function placeGirders()
 	PlaceGirder(2805, 1781, 3)
 	PlaceGirder(2905, 1621, 3)
 	PlaceGirder(3005, 1441, 3)
+	PlaceGirder(945, 1340, 5)
 end
 
 function spawnTargets(phase)
@@ -110,6 +111,8 @@ function spawnTargets(phase)
 	elseif phase == 4 then
 		AddGear(2584, 2010, gtTarget, 0, 0, 0, 0)
 	elseif phase == 5 then
+		AddGear(955, 1320, gtTarget, 0, 0, 0, 0)
+	elseif phase == 6 then
 		AddGear(2794, 1759, gtTarget, 0, 0, 0, 0)
 		AddGear(2894, 1599, gtTarget, 0, 0, 0, 0)
 		AddGear(2994, 1419, gtTarget, 0, 0, 0, 0)
@@ -151,7 +154,7 @@ function newGamePhase()
 			PlaySound(sndVaporize)
 		end
 		ShowMission(loc("Basic Bazooka Training"), loc("Limited Ammo"), loc("Your ammo is limited this time.").."|"..
-		loc("Destroy all targets with no more than 5 bazookas."),
+		loc("Destroy all targets with no more than 10 bazookas."),
 		2, 8000)
 		SetWind(-20)
 		AddAmmo(hog, amBazooka, limitedAmmo)
@@ -167,12 +170,21 @@ function newGamePhase()
 			SetWeapon(amBazooka)
 		end
 	elseif gamePhase == 5 then
-		ShowMission(loc("Basic Bazooka Training"), loc("Final Targets"), loc("The final targets are quite tricky. You need to aim well.").."|"..
-		loc("Precise Aim: [Left Shift] + [Up]/[Down]"),
+		ShowMission(loc("Basic Bazooka Training"), loc("High Target"),
+		loc("By the way, not only bazookas will bounce on water, but also greandes and many other things.").."|"..
+		loc("The next target is high in the sky."),
 		2, 8000)
-		SetWind(75)
+		SetWind(-33)
 		spawnTargets()
 	elseif gamePhase == 6 then
+		ShowMission(loc("Basic Bazooka Training"), loc("Final Targets"),
+		loc("The final targets are quite tricky. You need to aim well.").."|"..
+		loc("Precise Aim: [Left Shift] + [Up]/[Down]").."|"..
+		loc("Hint: It might be easier if you vary the angle only slightly"),
+		2, 12000)
+		SetWind(75)
+		spawnTargets()
+	elseif gamePhase == 7 then
 		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amBazooka, 0)
