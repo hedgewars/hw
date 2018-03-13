@@ -180,7 +180,7 @@ function newGamePhase()
 		ShowMission(loc("Basic Bazooka Training"), loc("Final Targets"),
 		loc("The final targets are quite tricky. You need to aim well.").."|"..
 		loc("Precise Aim: [Left Shift] + [Up]/[Down]").."|"..
-		loc("Hint: It might be easier if you vary the angle only slightly"),
+		loc("Hint: It might be easier if you vary the angle only slightly."),
 		2, 12000)
 		SetWind(75)
 		spawnTargets()

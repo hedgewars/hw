@@ -377,7 +377,7 @@ local function firstMission()
 	loc("Quit: [Esc]").."|"..
 	loc("Pause: [P]").."| |"..
 	loc("To begin with the training, hit the attack key!").."|"..
-	loc("Attack: [Space bar]"), 2, 900000)
+	loc("Attack: [Space]"), 2, 900000)
 
 	-- TODO: This and other training missions are currently hardcoding control names.
 	-- This should be fixed eventually.
