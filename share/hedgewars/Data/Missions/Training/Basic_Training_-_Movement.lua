@@ -2,10 +2,10 @@
 -- Teaches the basic movement controls.
 
 --[[ Lessons:
+* How to show the mission panel again
 * Walking
 * Collecting crates
 * Health basics
-* How to show the mission panel again
 * Jumping
 * Fall damage
 * Walking and staying on ice
@@ -22,7 +22,8 @@ local crates = {}
 local switcherGear
 local tookDamage = false
 local switchTextDelay = -1
-local walkingText = false
+local missionPanelConfirmed = false
+local turnStarted = false
 
 local map = {
 "\1\74\7\29\135\1\74\8\11\0\1\83\7\135\135",
@@ -116,7 +117,6 @@ function onGameInit()
 	
 	hhs[1] = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
 	SetGearPosition(hhs[1], 404, 1714)
-	--SetGearPosition(hhs[1], 1368, 1400)
 	SetEffect(hhs[1], heResurrectable, 1)
 
 	hhs[2] = AddHog(loc("Rhombus"), 0, 100, "NoHat")
@@ -184,7 +184,6 @@ local function LoadGearData()
 	PlaceSprite(2308, 1803, sprAmGirder, 5, 16448250, nil, nil, nil, lfIce)
 	PlaceSprite(2394, 1893, sprAmGirder, 1, 16448250, nil, nil, nil, lfIce)
 	PlaceSprite(605, 1761, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	--PlaceSprite(2429, 1817, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1813, 1312, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1742, 1260, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
 	PlaceSprite(1812, 1210, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
@@ -239,7 +238,7 @@ local function LoadGearData()
 	crates[6] = SpawnHealthCrate(2033, 1470)		-- Walking on Ice completed
 	crates[7] = SpawnHealthCrate(1297, 1683)		-- Back Jumping 2
 	crates[8] = SpawnSupplyCrate(1851, 1402, amSwitch, 100)	-- Switch Hedgehog
-	crates[9] = SpawnHealthCrate(564, 1772)			-- Mission Panel
+	crates[9] = SpawnHealthCrate(564, 1772)			-- Health
 	crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
 end
 
@@ -297,7 +296,7 @@ function onGearDelete(gear)
 
 	-- Crate collected (or destroyed, but this should not be possible)
 	elseif gear == crates[1] then
-		ShowMission(loc("Basic Movement Training"), loc("Jumping"), 
+		ShowMission(loc("Basic Movement Training"), loc("Jumping"),
 		loc("Get the next crate by jumping over the abyss.").."|"..
 		loc("Careful, hedgehogs can't swim!").."|"..
 		loc("Long Jump: [Enter]"), 2, 5000)
@@ -335,13 +334,8 @@ function onGearDelete(gear)
 		ShowMission(loc("Basic Movement Training"), loc("Rubber"), loc("As you probably noticed, these rubber bands|are VERY elastic. Hedgehogs and many other|things will bounce off without taking any damage.").."|"..
 		loc("Now try to get out of this bounce house|and take the next crate."), 2, 8000)
 	elseif gear == crates[9] then
-		ShowMission(loc("Basic Movement Training"), loc("Health and Mission Panel"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
-		loc("Now go to the next crate.").."|"..
-		-- This part is CRITICALLY important for all future missions
-		loc("Hint: If this mission panel disappears, you can|see it again by hitting the Pause or Quit key.").."|"..
-		loc("Quit: [Esc]").."|"..
-		loc("Pause: [P]")
-		, 2, 900000)
+		ShowMission(loc("Basic Movement Training"), loc("Health"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
+		loc("Now go to the next crate."), 2, 900000)
 	elseif gear == crates[10] then
 		ShowMission(loc("Basic Movement Training"), loc("Turning Around"),
 		loc("By the way, you can turn around without walking|by holding down Precise when you hit a walk control.").."|"..
@@ -367,12 +361,35 @@ function onSwitch()
 	end
 end
 
+local function firstMission()
+	-- This part is CRITICALLY important for all future missions.
+	-- Because the player must know how to show the current mission texts again.
+	-- We force the player to hit Attack before the actual training begins.
+	ShowMission(loc("Basic Movement Training"), loc("Mission Panel"),
+	loc("This is the mission panel.").."|"..
+	loc("Here you will find the current mission instructions.").."|"..
+	loc("Normally, the mission panel disappears after a few seconds.").."|"..
+	loc("IMPORTANT: To see the mission panel again, use the quit or pause key.").."| |"..
+	loc("Note: This basic training assumes default controls.").."|"..
+	loc("Quit: [Esc]").."|"..
+	loc("Pause: [P]").."| |"..
+	loc("To begin with the training, hit the attack key!").."|"..
+	loc("Attack: [Space bar]"), 2, 900000)
+
+	-- TODO: This and other training missions are currently hardcoding control names.
+	-- This should be fixed eventually.
+end
+
 function onGameTick20()
 	if switchTextDelay > 0 then
 		switchTextDelay = switchTextDelay - 1
 	elseif switchTextDelay == 0 then
 		switchHedgehogText()
 		switchTextDelay = -1
+	end
+	if turnStarted and GameTime % 10000 == 0 and not missionPanelConfirmed then
+		-- Forces the first mission panel to be displayed without time limit
+		firstMission()
 	end
 end
 
@@ -391,18 +408,33 @@ end
 
 function onNewTurn()
 	SwitchHog(hog_greenhorn)
-	if not walkingText then
+	FollowGear(hog_greenhorn)
+	if not missionPanelConfirmed then
+		turnStarted = true
+		PlaySound(sndHello, hog_greenhorn)
+		firstMission()
+	end
+end
+
+function onAttack()
+	if not missionPanelConfirmed then
+		-- Mission panel confirmed, release controls
+		PlaySound(sndPlaced)
+		SetInputMask(0xFFFFFFFF)
+		SetSoundMask(sndYesSir, false)
+		PlaySound(sndYesSir, hog_greenhorn)
+		-- First mission: How to walk
 		ShowMission(loc("Basic Movement Training"), loc("First Steps"), loc("Complete the obstacle course.") .."|"..
 		loc("To begin, walk to the crate to the right.").."|"..
-		loc("Walk: [Left] and [Right]") .."|"..
-		-- TODO: Remove this note when it's no longer needed.
-		-- Hardcoding control names is not good.
-		loc("Note: This basic training assumes default controls."), 2, 900000)
-		walkingText = true
+		loc("Walk: [Left]/[Right]"), 2, 7000)
+		missionPanelConfirmed = true
 	end
 end
 
 function onGameStart()
+	-- Disable input to force player to confirm first message
+	SetInputMask(0)
+	SetSoundMask(sndYesSir, true)
 	LoadGearData()
 	ShowMission(loc("Basic Movement Training"), loc("Basic Training"), loc("Complete the obstacle course."), 1, 0)
 	FollowGear(hog_greenhorn)
