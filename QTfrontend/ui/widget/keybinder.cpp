@@ -154,7 +154,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
             curTable = new QTableWidget(0, 2);
             curTable->verticalHeader()->setVisible(false);
             curTable->horizontalHeader()->setVisible(false);
-            curTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+            curTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             curTable->verticalHeader()->setDefaultSectionSize(rowHeight);
             curTable->setShowGrid(false);
             curTable->setStyleSheet("QTableWidget { border: none; } ");

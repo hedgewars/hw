@@ -20,7 +20,7 @@
 #include <QLineEdit>
 #include <QTextBrowser>
 #include <QLabel>
-#include <QHttp>
+#include <QNetworkAccessManager>
 #include <QSysInfo>
 #include <QDebug>
 #include <QBuffer>
@@ -474,7 +474,7 @@ void FeedbackDialog::SendFeedback()
             this, SLOT(finishedSlot(QNetworkReply*)));
 
     QNetworkRequest header(QUrl("https://hedgewars.org/feedback/?submit"));
-    header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
+    header.setRawHeader("Content-Length", QString::number(body.size()).toLatin1());
     header.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     nam->post(header, body);

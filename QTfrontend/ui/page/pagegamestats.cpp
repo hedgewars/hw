@@ -78,6 +78,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     gbl->addWidget(graphic);
     graphic->scale(1.0, -1.0);
     graphic->setBackgroundBrush(QBrush(Qt::black));
+    graphic->setRenderHint(QPainter::Antialiasing, true);
 
     labelGameWin = new QLabel(this);
     labelGameWin->setTextFormat(Qt::RichText);
@@ -172,27 +173,45 @@ void PageGameStats::renderStats()
         labelGraphTitle->hide();
         graphic->hide();
     } else {
-        QGraphicsScene * scene = new QGraphicsScene();
+        graphic->setScene(Q_NULLPTR);
+        m_scene.reset(new QGraphicsScene(this));
+
+        quint32 maxValue = 0;
+        int maxSize = 0;
+        for(QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin(); i != healthPoints.constEnd(); ++i)
+        {
+          maxSize = qMax(maxSize, i.value().size());
+
+          foreach (quint32 v, i.value())
+            maxValue = qMax(maxValue, v);
+        }
+
+        if(maxSize < 2)
+          return;
 
         QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
         while (i != healthPoints.constEnd())
         {
             quint32 c = i.key();
             //QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
-            QVector<quint32> hps = i.value();
+            const QVector<quint32>& hps = i.value();
 
             QPainterPath path;
             if (hps.size())
                 path.moveTo(0, hps[0]);
 
             for(int t = 1; t < hps.size(); ++t)
-                path.lineTo(t, hps[t]);
+                path.lineTo(t * maxValue / (maxSize - 1), hps[t]);
 
-            scene->addPath(path, QPen(c));
+            QPen pen(c);
+            pen.setWidth(2);
+            pen.setCosmetic(true);
+
+            m_scene->addPath(path, pen);
             ++i;
         }
 
-        graphic->setScene(scene);
+        graphic->setScene(m_scene.data());
         graphic->fitInView(graphic->sceneRect());
     }
 }

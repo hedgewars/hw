@@ -35,7 +35,7 @@ gameServer/dist/
 misc/liblua/Xcode/build/
 misc/libphysfs/Xcode/build/
 misc/libphyslayer/Xcode/build/
-moc_*.cxx_parameters
+moc_*.cpp_parameters
 *.log
 *.cmd
 *.patch

@@ -984,7 +984,7 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
 {
     m_theme = selectedTheme = current.data(ThemeModel::ActualNameRole).toString();
     m_themeID = current.row();
-    QIcon icon = qVariantValue<QIcon>(current.data(Qt::DecorationRole));
+    QIcon icon = current.data(Qt::DecorationRole).value<QIcon>();
     //QSize iconSize = icon.actualSize(QSize(65535, 65535));
     //btnTheme->setFixedHeight(64);
     //btnTheme->setIconSize(iconSize);

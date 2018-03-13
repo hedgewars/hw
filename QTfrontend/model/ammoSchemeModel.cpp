@@ -974,10 +974,12 @@ void NetAmmoSchemeModel::setNetSchemeConfig(QStringList cfg)
         return;
     }
 
+    beginResetModel();
+
     cfg[cfg.size()-1] = cfg[cfg.size()-1].mid(1);
 
     for(int i = 0; i < cfg.size(); ++i)
         netScheme[i] = QVariant(cfg[i]);
 
-    reset();
+    endResetModel();
 }

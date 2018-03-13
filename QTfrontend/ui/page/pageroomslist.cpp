@@ -154,7 +154,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     roomsList = new RoomTableView(this);
     roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
     roomsList->verticalHeader()->setVisible(false);
-    roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    roomsList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     roomsList->setAlternatingRowColors(true);
     roomsList->setShowGrid(false);
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -587,7 +587,7 @@ void PageRoomsList::setModel(RoomsListModel * model)
 
     h->setSortIndicatorShown(true);
     h->setSortIndicator(RoomsListModel::StateColumn, Qt::AscendingOrder);
-    h->setResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
+    h->setSectionResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
 
     if (!restoreHeaderState())
     {

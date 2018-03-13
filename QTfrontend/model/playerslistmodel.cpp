@@ -309,10 +309,10 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
     }
 
     if(index.data(Ignore).toBool())
-        setData(index, Qt::gray, Qt::ForegroundRole);
+        setData(index, QColor(Qt::gray), Qt::ForegroundRole);
     else
     if(index.data(Friend).toBool())
-        setData(index, Qt::green, Qt::ForegroundRole);
+        setData(index, QColor(Qt::green), Qt::ForegroundRole);
     else
         setData(index, QBrush(QColor(0xff, 0xcc, 0x00)), Qt::ForegroundRole);
 }

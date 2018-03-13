@@ -20,7 +20,6 @@
 
 #include <QTranslator>
 #include <QLocale>
-#include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
@@ -29,6 +28,8 @@
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QLibraryInfo>
+#include <QStyle>
+#include <QStyleFactory>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -155,8 +156,30 @@ QString getUsage()
 .arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+    /* Qt5 Base removed Motif, Plastique. These are now in the Qt style plugins
+    (Ubuntu: qt5-style-plugins, which was NOT backported by Debian/Ubuntu to stable/LTS).
+    Windows appears to render best of the remaining options but still isn't quite right. */
+
+    // Try setting Plastique if available
+    QStyle* coreStyle;
+    coreStyle = QStyleFactory::create("Plastique");
+    if(coreStyle != 0) {
+        QApplication::setStyle(coreStyle);
+        qDebug("Qt style set: Plastique");
+    } else {
+        // Use Windows as fallback.
+        // FIXME: Under Windows style, some widgets like scrollbars don't render as nicely
+        coreStyle = QStyleFactory::create("Windows");
+        if(coreStyle != 0) {
+            QApplication::setStyle(coreStyle);
+            qDebug("Qt style set: Windows");
+        } else {
+            // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
+            qWarning("No Qt style could be set! Using the default one.");
+        }
+    }
+
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
 
@@ -253,8 +276,6 @@ int main(int argc, char *argv[])
     QSplashScreen splash(pixmap);
     splash.show();
 #endif
-
-    app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
     srand(now.toTime_t());
@@ -353,13 +374,14 @@ int main(int argc, char *argv[])
 
             // Fallback to current input locale if "C" locale is returned
             if(cc == "C")
-                cc = HWApplication::keyboardInputLocale().name();
+                cc = HWApplication::inputMethod()->locale().name();
         }
+        qDebug("Frontend uses locale: %s", qPrintable(cc));
 
         // Load locale files into translators
-        if (!TranslatorHedgewars.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+        if (!TranslatorHedgewars.load(QString("hedgewars_%1").arg(cc), QString("physfs://Locale")))
             qWarning("Failed to install Hedgewars translation (%s)", qPrintable(cc));
-        if (!TranslatorQt.load(QString("%1/qt_%2").arg(QLibraryInfo::location(QLibraryInfo::TranslationsPath), cc)))
+        if (!TranslatorQt.load(QString("qt_%1").arg(cc), QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
             qWarning("Failed to install Qt translation (%s)", qPrintable(cc));
         app.installTranslator(&TranslatorHedgewars);
         app.installTranslator(&TranslatorQt);
