@@ -28,6 +28,8 @@
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QLibraryInfo>
+#include <QStyle>
+#include <QStyleFactory>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -152,8 +154,9 @@ QString getUsage()
 .arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+	/* Qt5 removed motif, plastique.  These are now in qt5-style-plugins which was NOT backported by debian/ubuntu to stable/LTS - windows appears to render best of the remaining options */
+	QApplication::setStyle(QStyleFactory::create("windows"));
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
 
@@ -164,6 +167,7 @@ int main(int argc, char *argv[])
     SDLInteraction::instance();
 
     HWApplication app(argc, argv);
+	//qDebug() << app.style();
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     // file engine, to be initialized later
@@ -250,8 +254,6 @@ int main(int argc, char *argv[])
     QSplashScreen splash(pixmap);
     splash.show();
 #endif
-
-    //app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
     srand(now.toTime_t());
