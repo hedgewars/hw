@@ -155,8 +155,11 @@ QString getUsage()
 }
 
 int main(int argc, char *argv[]) {
-	/* Qt5 removed motif, plastique.  These are now in qt5-style-plugins which was NOT backported by debian/ubuntu to stable/LTS - windows appears to render best of the remaining options */
+	/* Qt5 removed motif, plastique.  These are now in qt5-style-plugins which was NOT backported by debian/ubuntu to stable/LTS - windows appears to render best of the remaining options but still isn't quite right. */
+	// set windows initially
 	QApplication::setStyle(QStyleFactory::create("windows"));
+	// try setting plastique if available from qt5-style-plugins - in testing qt5 skips the call on fail to locate which leaves us on windows
+	QApplication::setStyle(QStyleFactory::create("plastique"));
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
 
@@ -167,7 +170,6 @@ int main(int argc, char *argv[]) {
     SDLInteraction::instance();
 
     HWApplication app(argc, argv);
-	//qDebug() << app.style();
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     // file engine, to be initialized later
