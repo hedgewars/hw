@@ -147,7 +147,7 @@ local function LoadGearData()
 
 	--BEGIN CORE DATA--
 
-	local iceColor = 0x0CE4F3C0
+	local iceColor = 0x00FAFAFA
 
 	------ GIRDER LIST ------
 	PlaceSprite(292, 1488, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
