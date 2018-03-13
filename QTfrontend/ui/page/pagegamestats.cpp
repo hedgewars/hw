@@ -176,19 +176,32 @@ void PageGameStats::renderStats()
         graphic->setScene(Q_NULLPTR);
         m_scene.reset(new QGraphicsScene(this));
 
+        quint32 maxValue = 0;
+        int maxSize = 0;
+        for(QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin(); i != healthPoints.constEnd(); ++i)
+        {
+          maxSize = qMax(maxSize, i.value().size());
+
+          foreach (quint32 v, i.value())
+            maxValue = qMax(maxValue, v);
+        }
+
+        if(maxSize < 2)
+          return;
+
         QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
         while (i != healthPoints.constEnd())
         {
             quint32 c = i.key();
             //QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
-            QVector<quint32> hps = i.value();
+            const QVector<quint32>& hps = i.value();
 
             QPainterPath path;
             if (hps.size())
                 path.moveTo(0, hps[0]);
 
             for(int t = 1; t < hps.size(); ++t)
-                path.lineTo(t, hps[t]);
+                path.lineTo(t * maxValue / (maxSize - 1), hps[t]);
 
             QPen pen(c);
             pen.setWidth(2);
