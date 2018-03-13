@@ -22,9 +22,13 @@
 
 @interface MissionTrainingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSArray *listOfMissionIDs;
-@property (nonatomic, strong) NSDictionary *dictOfMissions;
+@property (nonatomic, strong) NSArray *missionsTypes;
+@property (nonatomic, strong) NSDictionary *dictOfAllMissions;
+
 @property (nonatomic, strong) NSString *missionName;
+
+@property (nonatomic, strong) NSArray *listOfTrainingIDs;
+@property (nonatomic, strong) NSDictionary *dictOfTraining;
 
 @property (nonatomic, strong) IBOutlet UIImageView *previewImage;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;

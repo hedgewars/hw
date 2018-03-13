@@ -21,6 +21,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "GameInterfaceBridge.h"
 
+#define TRAINING_MISSION_TYPE @"Training"
 
 @implementation MissionTrainingViewController
 
@@ -55,7 +56,12 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:arc4random_uniform((int)[self.listOfMissionIDs count]) inSection:0];
+    NSInteger randomSection = arc4random_uniform((int)[self.missionsTypes count]);
+    NSString *type = self.missionsTypes[randomSection];
+    NSArray *listOfIDs = [self listOfMissionsIDsForType:type];
+    NSInteger randomRow = arc4random_uniform((int)[listOfIDs count]);
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:randomRow inSection:randomSection];
     [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     [super viewWillAppear:animated];
@@ -75,7 +81,7 @@
 
 #pragma mark - Missions dictionaries methods
 
-- (NSDictionary *)newLocalizedMissionsDictionary
+- (NSDictionary *)newLocalizedMissionsDictionaryForType: (NSString *)type
 {
     NSString *languageID = [HWUtils languageID];
     
@@ -84,8 +90,8 @@
     
     if (![languageID isEqualToString:@"en"] && [[NSFileManager defaultManager] fileExistsAtPath:localizedMissionsDescLocation])
     {
-        NSDictionary *missionsDict = [self newMissionsDictionaryFromMissionsFile:missionsDescLocation];
-        NSDictionary *localizedMissionsDict = [self newMissionsDictionaryFromMissionsFile:localizedMissionsDescLocation];
+        NSDictionary *missionsDict = [self newMissionsDictionaryForType:type fromMissionsFile:missionsDescLocation];
+        NSDictionary *localizedMissionsDict = [self newMissionsDictionaryForType:type fromMissionsFile:localizedMissionsDescLocation];
         
         
         NSMutableDictionary *tempMissionsDict = [[NSMutableDictionary alloc] init];
@@ -107,20 +113,21 @@
     }
     else
     {
-        NSDictionary *missionsDict = [self newMissionsDictionaryFromMissionsFile:missionsDescLocation];
+        NSDictionary *missionsDict = [self newMissionsDictionaryForType:type fromMissionsFile:missionsDescLocation];
         
         
         return missionsDict;
     }
 }
 
-- (NSDictionary *)newMissionsDictionaryFromMissionsFile:(NSString *)filePath
+- (NSDictionary *)newMissionsDictionaryForType:(NSString *)type fromMissionsFile:(NSString *)filePath
 {
     NSMutableDictionary *missionsDict = [[NSMutableDictionary alloc] init];
     
     NSString *missionsFileContents = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     NSArray *missionsLines = [missionsFileContents componentsSeparatedByString:@"\n"];
     
+    NSString *directory = [self missionsDirectoryForType:type];
     for (NSString *line in missionsLines)
     {
         if ([line length] > 0)
@@ -129,7 +136,7 @@
             
             NSString *missionID = [line substringToIndex:firstDotLocation];
             
-            NSString *missionFullPath = [NSString stringWithFormat:@"%@%@.lua", TRAININGS_DIRECTORY(), missionID];
+            NSString *missionFullPath = [NSString stringWithFormat:@"%@%@.lua", directory, missionID];
             if (![[NSFileManager defaultManager] fileExistsAtPath:missionFullPath])
             {
                 continue;
@@ -169,35 +176,85 @@
 #pragma mark -
 #pragma mark override setters/getters for better memory handling
 
--(NSArray *)listOfMissionIDs
+- (NSArray *)missionsTypes
 {
-    if (!_listOfMissionIDs)
+    if (!_missionsTypes)
     {
-        NSArray *sortedKeys = [[self.dictOfMissions allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        _listOfMissionIDs = [[NSArray alloc] initWithArray:sortedKeys];
+        _missionsTypes = @[ TRAINING_MISSION_TYPE ];
     }
     
-    return _listOfMissionIDs;
+    return _missionsTypes;
 }
 
-- (NSDictionary *)dictOfMissions
+- (NSDictionary *)dictOfAllMissions
 {
-    if (!_dictOfMissions)
+    if (!_dictOfAllMissions)
     {
-        _dictOfMissions = [self newLocalizedMissionsDictionary];
+        NSArray *types = [self missionsTypes];
+        _dictOfAllMissions = @{ types[0] : [self dictOfTraining] };
     }
     
-    return _dictOfMissions;
+    return _dictOfAllMissions;
+}
+
+- (NSArray *)listOfTrainingIDs
+{
+    if (!_listOfTrainingIDs)
+    {
+        NSArray *sortedKeys = [[self.dictOfTraining allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        _listOfTrainingIDs = [[NSArray alloc] initWithArray:sortedKeys];
+    }
+    
+    return _listOfTrainingIDs;
+}
+
+- (NSDictionary *)dictOfTraining
+{
+    if (!_dictOfTraining)
+    {
+        _dictOfTraining = [self newLocalizedMissionsDictionaryForType:TRAINING_MISSION_TYPE];
+    }
+    
+    return _dictOfTraining;
+}
+
+#pragma mark -
+#pragma mark Missions types
+
+- (NSString *)missionsDirectoryForType:(NSString *)type
+{
+    if ([type isEqualToString:TRAINING_MISSION_TYPE]) {
+        return TRAININGS_DIRECTORY();
+    }
+    return nil;
+}
+
+- (NSArray *)listOfMissionsIDsForType:(NSString *)type
+{
+    if ([type isEqualToString:TRAINING_MISSION_TYPE]) {
+        return self.listOfTrainingIDs;
+    }
+    return nil;
+}
+
+- (NSDictionary *)dictOfMissionsForType:(NSString *)type
+{
+    if ([type isEqualToString:TRAINING_MISSION_TYPE]) {
+        return self.dictOfTraining;
+    }
+    return nil;
 }
 
 #pragma mark -
 #pragma mark Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [self.missionsTypes count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.listOfMissionIDs count];
+    NSString *type = self.missionsTypes[section];
+    NSArray *listOfIDs = [self listOfMissionsIDsForType:type];
+    return [listOfIDs count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -213,15 +270,20 @@
         cell = [[UITableViewCell alloc] initWithStyle:(IS_IPAD()) ? UITableViewCellStyleDefault : UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier];
     
-    NSString *missionID = [self.listOfMissionIDs objectAtIndex:row];
-    cell.textLabel.text = self.dictOfMissions[missionID][@"name"];
+    NSInteger section = [indexPath section];
+    NSString *type = self.missionsTypes[section];
+    NSArray *listOfIDs = [self listOfMissionsIDsForType:type];
+    NSDictionary *dict = [self dictOfMissionsForType:type];
+    
+    NSString *missionID = [listOfIDs objectAtIndex:row];
+    cell.textLabel.text = dict[missionID][@"name"];
     
     cell.textLabel.textColor = [UIColor lightYellowColor];
     //cell.textLabel.font = [UIFont fontWithName:@"Bradley Hand Bold" size:[UIFont labelFontSize]];
     cell.textLabel.textAlignment = (IS_IPAD()) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.detailTextLabel.text = (IS_IPAD()) ? nil : self.dictOfMissions[missionID][@"desc"];
+    cell.detailTextLabel.text = (IS_IPAD()) ? nil : dict[missionID][@"desc"];
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
@@ -240,15 +302,19 @@
 #pragma mark -
 #pragma mark Table view delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger section = [indexPath section];
+    NSString *type = self.missionsTypes[section];
+    NSArray *listOfIDs = [self listOfMissionsIDsForType:type];
+    
     NSInteger row = [indexPath row];
-
-    self.missionName = [self.listOfMissionIDs objectAtIndex:row];
+    self.missionName = [listOfIDs objectAtIndex:row];
     NSString *size = IS_IPAD() ? @"@2x" : @"";
-    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@%@.png",GRAPHICS_DIRECTORY(),self.missionName,size];
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/%@/%@%@.png",GRAPHICS_DIRECTORY(), type, self.missionName, size];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:filePath];
     [self.previewImage setImage:img];
 
-    self.descriptionLabel.text = self.dictOfMissions[self.missionName][@"desc"];
+    NSDictionary *dict = [self dictOfMissionsForType:type];
+    self.descriptionLabel.text = dict[self.missionName][@"desc"];
 }
 
 #pragma mark -
@@ -256,9 +322,10 @@
 
 - (void)didReceiveMemoryWarning
 {
-    self.missionName = nil;
-    self.listOfMissionIDs = nil;
-    self.dictOfMissions = nil;
+    self.listOfTrainingIDs = nil;
+    self.dictOfTraining = nil;
+    self.dictOfAllMissions = nil;
+    self.missionsTypes = nil;
     // if you nil this one it won't get updated anymore
     //self.previewImage = nil;
     [super didReceiveMemoryWarning];
