@@ -19,10 +19,10 @@
 #ifndef _AMMO_SCHEME_MODEL_INCLUDED
 #define _AMMO_SCHEME_MODEL_INCLUDED
 
-#include <QSettings>
 #include <QAbstractTableModel>
 #include <QStringList>
 #include <QList>
+#include <QSettings>
 
 class AmmoSchemeModel : public QAbstractTableModel
 {

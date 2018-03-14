@@ -18,6 +18,9 @@
 
 #include <QDebug>
 #include <QModelIndex>
+#include <QFile>
+#include <QTextStream>
+#include <QHash>
 
 #include "ammoSchemeModel.h"
 #include "hwconsts.h"
@@ -92,7 +95,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
     numberOfDefaultSchemes = predefSchemesNames.size();
 
     spNames = QStringList()
-              << "name"                //  0
+              << "name"                //  0 | Name should be first forever
               << "fortsmode"           //  1
               << "divteams"            //  2
               << "solidland"           //  3
@@ -747,16 +750,29 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
             fileConfig.setArrayIndex(i);
 
             QString schemeName = fileConfig.value(spNames[0]).toString();
-            if (!predefSchemesNames.contains(schemeName))
+            if (!schemeName.isNull() && !predefSchemesNames.contains(schemeName))
             {
                 QList<QVariant> scheme;
-                QSettings file(directory + "/" + schemeName + ".hwg", QSettings::IniFormat);
+                QFile file(directory + "/" + schemeName + ".hwg");
 
-                for (int k = 0; k < spNames.size(); ++k) {
-                    scheme << fileConfig.value(spNames[k], defaultScheme[k]);
-                    file.setValue(spNames[k], fileConfig.value(spNames[k], defaultScheme[k]));
+                // Add keys to scheme info and create file
+                if (file.open(QIODevice::WriteOnly)) {
+                    QTextStream stream(&file);
+
+                    for (int k = 0; k < spNames.size(); ++k) {
+                        scheme << fileConfig.value(spNames[k], defaultScheme[k]);
+
+                        // File handling
+                        // We skip the name key (k==0), it is not stored redundantly in file.
+                        // The file name is used for that already.
+                        if(k != 0) {
+                            // The file is just a list of key=value pairs
+                            stream << spNames[k] << "=" << fileConfig.value(spNames[k], defaultScheme[k]).toString();
+                            stream << endl;
+                        }
+                    }
+                    file.close();
                 }
-                file.sync();
                 imported++;
 
                 schemes.append(scheme);
@@ -765,18 +781,49 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
         qDebug("%d game scheme(s) imported.", imported);
         fileConfig.endArray();
     } else {
-        QStringList scheme_dir = QDir(directory).entryList();
+        QStringList scheme_dir = QDir(directory).entryList(QDir::Files);
 
         for(int i = 0; i < scheme_dir.size(); i++)
         {
-            if (scheme_dir[i] == "." || scheme_dir[i] == "..") continue;
             QList<QVariant> scheme;
-            QSettings file(directory + "/" + scheme_dir[i], QSettings::IniFormat);
+            QFile file(directory + "/" + scheme_dir[i]);
 
-            for (int k = 0; k < spNames.size(); ++k)
-                scheme << file.value(spNames[k], defaultScheme[k]);
+            // Chop off file name suffix
+            QString schemeName = scheme_dir[i];
+            if (schemeName.endsWith(".hwg", Qt::CaseInsensitive)) {
+                schemeName.chop(4);
+            }
+            // Parse game scheme file
+            if (file.open(QIODevice::ReadOnly)) {
+                QTextStream stream(&file);
+                QString line, key, value;
+                QHash<QString, QString> fileKeyValues;
+                do {
+                    // Read line and get key and value
+                    line = stream.readLine();
+                    key = line.section(QChar('='), 0, 0);
+                    value = line.section(QChar('='), 1);
+                    if(!key.isNull() && !value.isNull()) {
+                        fileKeyValues[key] = value;
+                    }
+                } while (!line.isNull());
 
-            schemes.append(scheme);
+                // Add scheme name manually
+                scheme << schemeName;
+                // Add other keys from the QHash.
+                for (int k = 1; k < spNames.size(); ++k) {
+                    key = spNames[k];
+                    if (fileKeyValues.contains(key)) {
+                        scheme << fileKeyValues.value(key);
+                    } else {
+                        // Use default value in case the key is not set
+                        scheme << defaultScheme[k];
+                    }
+                }
+                schemes.append(scheme);
+
+                file.close();
+            }
         }
     }
 }
@@ -920,12 +967,22 @@ void AmmoSchemeModel::Save()
     {
         QList<QVariant> scheme = schemes[i + numberOfDefaultSchemes];
         int j = spNames.indexOf("name");
-        QSettings file(cfgdir->absolutePath() + "/Schemes/Game/" + scheme[j].toString() + ".hwg", QSettings::IniFormat);
 
-        for (int k = 0; k < scheme.size(); ++k)
-            file.setValue(spNames[k], scheme[k]);
+        QString schemeName = scheme[j].toString();
+        QFile file(cfgdir->absolutePath() + "/Schemes/Game/" + schemeName + ".hwg");
 
-        file.sync();
+        if (file.open(QIODevice::WriteOnly)) {
+            QTextStream stream(&file);
+            for (int k = 0; k < spNames.size(); ++k) {
+                // We skip the name key
+                if(k != j) {
+                    // The file is just a list of key=value pairs
+                    stream << spNames[k] << "=" << scheme[k].toString();
+                    stream << endl;
+                }
+            }
+            file.close();
+        }
     }
     fileConfig.endArray();
 }

@@ -111,6 +111,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
                 if (file.open(QIODevice::WriteOnly)) {
                     QTextStream stream( &file );
                     stream << old_wconf.value(keys[i]).toString() << endl;
+                    file.close();
                 }
                 imported++;
             }
@@ -131,13 +132,18 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 
             QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + schemes[i]);
             QString config;
-
             if (file.open(QIODevice::ReadOnly)) {
                 QTextStream stream( &file );
                 stream >> config;
+                file.close();
             }
 
-            wconf->setValue(schemes[i].remove(".hwa"), fixWeaponSet(config));
+            // Chop off file name suffix
+            QString schemeName = schemes[i];
+            if (schemeName.endsWith(".hwa", Qt::CaseInsensitive)) {
+                schemeName.chop(4);
+            }
+            wconf->setValue(schemeName, fixWeaponSet(config));
         }
     }
 
@@ -300,6 +306,7 @@ void SelWeaponWidget::save()
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream stream( &file );
         stream << stateFull << endl;
+        file.close();
     }
     emit weaponsEdited(curWeaponsName, m_name->text(), stateFull);
 }
