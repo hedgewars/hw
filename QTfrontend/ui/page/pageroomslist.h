@@ -23,7 +23,7 @@
 #include "AbstractPage.h"
 
 class HWChatWidget;
-class AmmoSchemeModel;
+class GameSchemeModel;
 class QTableView;
 class RoomsListModel;
 class QSortFilterProxyModel;
@@ -100,7 +100,7 @@ class PageRoomsList : public AbstractPage
         QAction * showJoinRestricted;
         QSplitter * m_splitter;
 
-        AmmoSchemeModel * ammoSchemeModel;
+        GameSchemeModel * gameSchemeModel;
 
         bool restoreHeaderState();
 };

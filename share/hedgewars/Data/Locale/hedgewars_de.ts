@@ -99,7 +99,7 @@
     </message>
 </context>
 <context>
-    <name>AmmoSchemeModel</name>
+    <name>GameSchemeModel</name>
     <message>
         <source>new</source>
         <translation type="obsolete">Neu</translation>

@@ -34,7 +34,7 @@
 #include "igbox.h"
 #include "DataManager.h"
 #include "hwconsts.h"
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "proto.h"
 #include "GameStyleModel.h"
 #include "themeprompt.h"

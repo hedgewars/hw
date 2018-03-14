@@ -27,7 +27,7 @@
 #include <QDataWidgetMapper>
 #include <QSpinBox>
 
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "pagescheme.h"
 #include "FreqSpinBox.h"
 #include "MinesTimeSpinBox.h"
@@ -608,7 +608,7 @@ void PageScheme::copyRow()
 
 void PageScheme::deleteRow()
 {
-    int numberOfDefaultSchemes = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    int numberOfDefaultSchemes = ((GameSchemeModel*)mapper->model())->numberOfDefaultSchemes;
     if (selectScheme->currentIndex() < numberOfDefaultSchemes)
     {
         QMessageBox deniedMsg(this);
@@ -637,7 +637,7 @@ void PageScheme::deleteRow()
 
 void PageScheme::schemeSelected(int n)
 {
-    int c = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    int c = ((GameSchemeModel*)mapper->model())->numberOfDefaultSchemes;
     gbGameModes->setEnabled(n >= c);
     gbBasicSettings->setEnabled(n >= c);
     LE_name->setEnabled(n >= c);

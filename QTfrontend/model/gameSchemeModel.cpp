@@ -22,7 +22,7 @@
 #include <QTextStream>
 #include <QHash>
 
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "hwconsts.h"
 
 QList<QVariant> defaultScheme = QList<QVariant>()
@@ -72,7 +72,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
                                 << QVariant()              // scriptparam    43
                                 ;
 
-AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
+GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QAbstractTableModel(parent),
     fileConfig(cfgdir->absolutePath() + "/schemes.ini", QSettings::IniFormat)
 {
@@ -828,7 +828,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
     }
 }
 
-QVariant AmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant GameSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section);
     Q_UNUSED(orientation);
@@ -837,7 +837,7 @@ QVariant AmmoSchemeModel::headerData(int section, Qt::Orientation orientation, i
     return QVariant();
 }
 
-int AmmoSchemeModel::rowCount(const QModelIndex &parent) const
+int GameSchemeModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -845,7 +845,7 @@ int AmmoSchemeModel::rowCount(const QModelIndex &parent) const
         return schemes.size();
 }
 
-int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
+int GameSchemeModel::columnCount(const QModelIndex & parent) const
 {
     if (parent.isValid())
         return 0;
@@ -853,7 +853,7 @@ int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
         return defaultScheme.size();
 }
 
-bool AmmoSchemeModel::hasScheme(QString name)
+bool GameSchemeModel::hasScheme(QString name)
 {
     for(int i=0; i<schemes.size(); i++)
     {
@@ -865,7 +865,7 @@ bool AmmoSchemeModel::hasScheme(QString name)
     return false;
 }
 
-Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
+Qt::ItemFlags GameSchemeModel::flags(const QModelIndex & index) const
 {
     Q_UNUSED(index);
 
@@ -875,7 +875,7 @@ Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
         | Qt::ItemIsEditable;
 }
 
-bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool GameSchemeModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     if (!index.isValid() || index.row() < numberOfDefaultSchemes
             || index.row() >= schemes.size()
@@ -889,7 +889,7 @@ bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value,
     return true;
 }
 
-bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
+bool GameSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 {
     Q_UNUSED(count);
 
@@ -929,7 +929,7 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     return true;
 }
 
-bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
+bool GameSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 {
     if(count != 1
             || row < numberOfDefaultSchemes
@@ -948,7 +948,7 @@ bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
     return true;
 }
 
-QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
+QVariant GameSchemeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.row() < 0
             || index.row() >= schemes.size()
@@ -960,7 +960,7 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
     return schemes[index.row()][index.column()];
 }
 
-void AmmoSchemeModel::Save()
+void GameSchemeModel::Save()
 {
     fileConfig.beginWriteArray("schemes");
     for (int i = 0; i < schemes.size() - numberOfDefaultSchemes; ++i)
@@ -988,13 +988,13 @@ void AmmoSchemeModel::Save()
 }
 
 
-NetAmmoSchemeModel::NetAmmoSchemeModel(QObject * parent) :
+NetGameSchemeModel::NetGameSchemeModel(QObject * parent) :
     QAbstractTableModel(parent)
 {
     netScheme = defaultScheme;
 }
 
-QVariant NetAmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant NetGameSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section);
     Q_UNUSED(orientation);
@@ -1003,7 +1003,7 @@ QVariant NetAmmoSchemeModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
-int NetAmmoSchemeModel::rowCount(const QModelIndex & parent) const
+int NetGameSchemeModel::rowCount(const QModelIndex & parent) const
 {
     if (parent.isValid())
         return 0;
@@ -1011,7 +1011,7 @@ int NetAmmoSchemeModel::rowCount(const QModelIndex & parent) const
         return 1;
 }
 
-int NetAmmoSchemeModel::columnCount(const QModelIndex & parent) const
+int NetGameSchemeModel::columnCount(const QModelIndex & parent) const
 {
     if (parent.isValid())
         return 0;
@@ -1019,7 +1019,7 @@ int NetAmmoSchemeModel::columnCount(const QModelIndex & parent) const
         return defaultScheme.size();
 }
 
-QVariant NetAmmoSchemeModel::data(const QModelIndex &index, int role) const
+QVariant NetGameSchemeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.row() < 0
             || index.row() > 1
@@ -1031,7 +1031,7 @@ QVariant NetAmmoSchemeModel::data(const QModelIndex &index, int role) const
     return netScheme[index.column()];
 }
 
-void NetAmmoSchemeModel::setNetSchemeConfig(QStringList cfg)
+void NetGameSchemeModel::setNetSchemeConfig(QStringList cfg)
 {
     if(cfg.size() != netScheme.size())
     {

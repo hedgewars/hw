@@ -16,20 +16,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _AMMO_SCHEME_MODEL_INCLUDED
-#define _AMMO_SCHEME_MODEL_INCLUDED
+#ifndef _GAME_SCHEME_MODEL_INCLUDED
+#define _GAME_SCHEME_MODEL_INCLUDED
 
 #include <QAbstractTableModel>
 #include <QStringList>
 #include <QList>
 #include <QSettings>
 
-class AmmoSchemeModel : public QAbstractTableModel
+class GameSchemeModel : public QAbstractTableModel
 {
         Q_OBJECT
 
     public:
-        AmmoSchemeModel(QObject * parent, const QString & fileName);
+        GameSchemeModel(QObject * parent, const QString & fileName);
 
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         int rowCount(const QModelIndex & parent) const;
@@ -58,12 +58,12 @@ class AmmoSchemeModel : public QAbstractTableModel
         QSettings fileConfig;
 };
 
-class NetAmmoSchemeModel : public QAbstractTableModel
+class NetGameSchemeModel : public QAbstractTableModel
 {
         Q_OBJECT
 
     public:
-        NetAmmoSchemeModel(QObject * parent);
+        NetGameSchemeModel(QObject * parent);
 
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         int rowCount(const QModelIndex & parent) const;
@@ -77,4 +77,4 @@ class NetAmmoSchemeModel : public QAbstractTableModel
         QList<QVariant> netScheme;
 };
 
-#endif // _AMMO_SCHEME_MODEL_INCLUDED
+#endif // _GAME_SCHEME_MODEL_INCLUDED

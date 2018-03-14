@@ -34,7 +34,7 @@
 
 #include "roomslistmodel.h"
 
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "hwconsts.h"
 #include "chatwidget.h"
 #include "roomnameprompt.h"

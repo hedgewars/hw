@@ -106,24 +106,24 @@
     </message>
 </context>
 <context>
-    <name>AmmoSchemeModel</name>
+    <name>GameSchemeModel</name>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="847"/>
+        <location filename="../../../../QTfrontend/model/gameSchemeModel.cpp" line="847"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="852"/>
+        <location filename="../../../../QTfrontend/model/gameSchemeModel.cpp" line="852"/>
         <source>New (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="861"/>
+        <location filename="../../../../QTfrontend/model/gameSchemeModel.cpp" line="861"/>
         <source>Copy of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="866"/>
+        <location filename="../../../../QTfrontend/model/gameSchemeModel.cpp" line="866"/>
         <source>Copy of %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
