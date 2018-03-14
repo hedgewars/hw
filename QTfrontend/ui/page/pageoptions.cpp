@@ -1008,7 +1008,7 @@ void PageOptions::colorButtonClicked(int i)
         return;
 
     QPalette p = m_colorButtons[i]->palette();
-    QColor c = QColorDialog::getColor(p.color(QPalette::Button));
+    QColor c = QColorDialog::getColor(p.color(QPalette::Button), this, QString(), QColorDialog::DontUseNativeDialog);
 
     if(c.isValid())
     {
