@@ -32,27 +32,45 @@ QLayout * PageDrawMap::bodyLayoutDefinition()
 
     cbEraser = new QCheckBox(tr("Eraser"), this);
     pageLayout->addWidget(cbEraser, 0, 0);
-    pbUndo = addButton(tr("Undo"), pageLayout, 1, 0);
 
     rbPolyline = new QRadioButton(tr("Polyline"), this);
-    pageLayout->addWidget(rbPolyline, 2, 0);
+    pageLayout->addWidget(rbPolyline, 1, 0);
     rbRectangle = new QRadioButton(tr("Rectangle"), this);
-    pageLayout->addWidget(rbRectangle, 3, 0);
+    pageLayout->addWidget(rbRectangle, 2, 0);
     rbEllipse = new QRadioButton(tr("Ellipse"), this);
-    pageLayout->addWidget(rbEllipse, 4, 0);
+    pageLayout->addWidget(rbEllipse, 3, 0);
 
     rbPolyline->setChecked(true);
 
+    pbUndo = addButton(tr("Undo"), pageLayout, 4, 0);
     pbClear = addButton(tr("Clear"), pageLayout, 5, 0);
+
     pbOptimize = addButton(tr("Optimize"), pageLayout, 6, 0);
+    // The optimize button is quite buggy, so we disable it for now.
+    // TODO: Re-enable optimize button when it's finished.
     pbOptimize->setVisible(false);
-    pbLoad = addButton(tr("Load"), pageLayout, 7, 0);
-    pbSave = addButton(tr("Save"), pageLayout, 8, 0);
 
     drawMapWidget = new DrawMapWidget(this);
     pageLayout->addWidget(drawMapWidget, 0, 1, 10, 1);
 
     return pageLayout;
+}
+
+QLayout * PageDrawMap::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
+    bottomLayout->addStretch();
+
+    pbLoad = addButton(":/res/Load.png", bottomLayout, 0, true, Qt::AlignBottom);
+    pbLoad ->setWhatsThis(tr("Load"));
+    pbLoad->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+
+    pbSave = addButton(":/res/Save.png", bottomLayout, 0, true, Qt::AlignBottom);
+    pbSave ->setWhatsThis(tr("Save"));
+    pbSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+
+    return bottomLayout;
 }
 
 void PageDrawMap::connectSignals()

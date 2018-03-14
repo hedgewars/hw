@@ -35,6 +35,7 @@ class PageDrawMap : public AbstractPage
 
     protected:
         QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
         void connectSignals();
 
     private:

@@ -59,10 +59,12 @@ namespace Ui
             {
                 QVBoxLayout * vbox = new QVBoxLayout(drawMapWidget);
                 vbox->setMargin(0);
-                lblPoints = new QLabel("0", drawMapWidget);
                 QLayout * arLayout = new QVBoxLayout();
                 arLayout->setAlignment(Qt::AlignCenter);
                 vbox->addLayout(arLayout);
+
+                lblPoints = new QLabel("0", drawMapWidget);
+                arLayout->addWidget(lblPoints);
 
                 graphicsView = new DrawMapView(drawMapWidget);
                 graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
