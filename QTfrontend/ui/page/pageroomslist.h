@@ -84,7 +84,6 @@ class PageRoomsList : public AbstractPage
         void onJoinConfirmation(const QString &);
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
         void onFilterChanged();
-        void saveHeaderState();
         void onRoomNameChosen(const QString &, const QString &password);
         void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
         void moveSelectionUp();
