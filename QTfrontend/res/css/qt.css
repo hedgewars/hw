@@ -213,8 +213,39 @@ left: 15px;
 QCheckBox::indicator:checked{
 image: url(":/res/checked.png");
 }
+QCheckBox::indicator:checked:hover{
+image: url(":/res/checkedHover.png");
+}
+QCheckBox::indicator:checked:pressed{
+image: url(":/res/checkedPressed.png");
+}
 QCheckBox::indicator:unchecked{
 image: url(":/res/unchecked.png");
+}
+QCheckBox::indicator:unchecked:hover{
+image: url(":/res/uncheckedHover.png");
+}
+QCheckBox::indicator:unchecked:pressed{
+image: url(":/res/uncheckedPressed.png");
+}
+
+QRadioButton::indicator:checked{
+image: url(":/res/radioButtonChecked.png");
+}
+QRadioButton::indicator:checked:hover{
+image: url(":/res/radioButtonCheckedHover.png");
+}
+QRadioButton::indicator:checked:pressed{
+image: url(":/res/radioButtonCheckedPressed.png");
+}
+QRadioButton::indicator:unchecked{
+image: url(":/res/radioButtonUnchecked.png");
+}
+QRadioButton::indicator:unchecked:hover{
+image: url(":/res/radioButtonUncheckedHover.png");
+}
+QRadioButton::indicator:unchecked:pressed{
+image: url(":/res/radioButtonUncheckedPressed.png");
 }
 
 .QWidget{

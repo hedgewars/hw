@@ -84,7 +84,17 @@
         <file>res/edit.png</file>
         <file>res/delete.png</file>
         <file>res/checked.png</file>
+        <file>res/checkedHover.png</file>
+        <file>res/checkedPressed.png</file>
         <file>res/unchecked.png</file>
+        <file>res/uncheckedHover.png</file>
+        <file>res/uncheckedPressed.png</file>
+        <file>res/radioButtonChecked.png</file>
+        <file>res/radioButtonCheckedHover.png</file>
+        <file>res/radioButtonCheckedPressed.png</file>
+        <file>res/radioButtonUnchecked.png</file>
+        <file>res/radioButtonUncheckedHover.png</file>
+        <file>res/radioButtonUncheckedPressed.png</file>
         <file>res/missionFinished.png</file>
         <file>res/missionFinishedSelected.png</file>
         <file>res/dlcMarker.png</file>
