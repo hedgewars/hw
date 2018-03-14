@@ -30,6 +30,7 @@ Content:
  + Major overhaul of Sudden Death visuals in most themes
  + New flag: uk_scotland
  + New voice: Default_pl (Polish)
+ + New voice: Russian_pl (Polish with a Russian accent)
 
 Styles and game modes:
  + Various styles: Add current score/time next to team bars (where applicable)

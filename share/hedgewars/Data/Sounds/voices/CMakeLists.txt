@@ -11,6 +11,7 @@ foreach(dir
     Pirate
     Robot
     Russian
+    Russian_pl
     Singer
     Surfer
     )
