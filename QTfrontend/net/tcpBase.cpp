@@ -228,8 +228,10 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitStatus);
 
-    if(m_connected)
-      ClientDisconnect();
+    if(!m_connected) { // yes, it is intended to be like this
+      ClientDisconnect(); // need to do cleanup in case no connection occured,
+      //if m_connected is true, it is done automatically in socket disconnect handler
+    }
 
     // show error message if there was an error that was not an engine's
     // fatal error - because that one already sent a info via IPC
