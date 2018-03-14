@@ -22,7 +22,6 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 #include <QList>
-#include <QSettings>
 
 class GameSchemeModel : public QAbstractTableModel
 {
@@ -48,14 +47,8 @@ class GameSchemeModel : public QAbstractTableModel
     public slots:
         void Save();
 
-//    signals:
-//        void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
-
     protected:
         QList< QList<QVariant> > schemes;
-
-    private:
-        QSettings fileConfig;
 };
 
 class NetGameSchemeModel : public QAbstractTableModel

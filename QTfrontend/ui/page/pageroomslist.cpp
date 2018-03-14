@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QDebug>
 #include <QSplitter>
+#include <QSettings>
 
 #include <QSortFilterProxyModel>
 

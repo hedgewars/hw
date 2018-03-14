@@ -19,6 +19,7 @@
 #include <QDebug>
 #include <QModelIndex>
 #include <QFile>
+#include <QSettings>
 #include <QTextStream>
 #include <QHash>
 
@@ -73,8 +74,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
                                 ;
 
 GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
-    QAbstractTableModel(parent),
-    fileConfig(cfgdir->absolutePath() + "/schemes.ini", QSettings::IniFormat)
+    QAbstractTableModel(parent)
 {
     predefSchemesNames = QStringList()
                          << "Default"
@@ -743,13 +743,14 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
 
         qDebug("No /Schemes/Game directory found. Trying to import game schemes from schemes.ini.");
 
-        int size = fileConfig.beginReadArray("schemes");
+        QSettings legacyFileConfig(cfgdir->absolutePath() + "/schemes.ini", QSettings::IniFormat);
+        int size = legacyFileConfig.beginReadArray("schemes");
         int imported = 0;
         for (int i = 0; i < size; ++i)
         {
-            fileConfig.setArrayIndex(i);
+            legacyFileConfig.setArrayIndex(i);
 
-            QString schemeName = fileConfig.value(spNames[0]).toString();
+            QString schemeName = legacyFileConfig.value(spNames[0]).toString();
             if (!schemeName.isNull() && !predefSchemesNames.contains(schemeName))
             {
                 QList<QVariant> scheme;
@@ -760,14 +761,14 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
                     QTextStream stream(&file);
 
                     for (int k = 0; k < spNames.size(); ++k) {
-                        scheme << fileConfig.value(spNames[k], defaultScheme[k]);
+                        scheme << legacyFileConfig.value(spNames[k], defaultScheme[k]);
 
                         // File handling
                         // We skip the name key (k==0), it is not stored redundantly in file.
                         // The file name is used for that already.
                         if(k != 0) {
                             // The file is just a list of key=value pairs
-                            stream << spNames[k] << "=" << fileConfig.value(spNames[k], defaultScheme[k]).toString();
+                            stream << spNames[k] << "=" << legacyFileConfig.value(spNames[k], defaultScheme[k]).toString();
                             stream << endl;
                         }
                     }
@@ -779,7 +780,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             }
         }
         qDebug("%d game scheme(s) imported.", imported);
-        fileConfig.endArray();
+        legacyFileConfig.endArray();
     } else {
         QStringList scheme_dir = QDir(directory).entryList(QDir::Files);
 
@@ -962,7 +963,6 @@ QVariant GameSchemeModel::data(const QModelIndex &index, int role) const
 
 void GameSchemeModel::Save()
 {
-    fileConfig.beginWriteArray("schemes");
     for (int i = 0; i < schemes.size() - numberOfDefaultSchemes; ++i)
     {
         QList<QVariant> scheme = schemes[i + numberOfDefaultSchemes];
@@ -984,7 +984,6 @@ void GameSchemeModel::Save()
             file.close();
         }
     }
-    fileConfig.endArray();
 }
 
 
