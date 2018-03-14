@@ -67,6 +67,7 @@ namespace Ui
                 graphicsView = new DrawMapView(drawMapWidget);
                 graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                graphicsView->setRenderHint(QPainter::Antialiasing, true);
                 arLayout->addWidget(graphicsView);
 
                 retranslateUi(drawMapWidget);

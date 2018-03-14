@@ -25,6 +25,10 @@
 
 #include "drawmapscene.h"
 
+#define DRAWN_MAP_COLOR_LAND (Qt::yellow)
+#define DRAWN_MAP_COLOR_CURSOR_PEN (Qt::green)
+#define DRAWN_MAP_COLOR_CURSOR_ERASER (Qt::red)
+
 template <class T> T sqr(const T & x)
 {
     return x*x;
@@ -32,8 +36,8 @@ template <class T> T sqr(const T & x)
 
 DrawMapScene::DrawMapScene(QObject *parent) :
     QGraphicsScene(parent),
-    m_pen(Qt::yellow),
-    m_brush(Qt::yellow),
+    m_pen(DRAWN_MAP_COLOR_LAND),
+    m_brush(DRAWN_MAP_COLOR_LAND),
     m_cursor(new QGraphicsEllipseItem(-5, -5, 5, 5))
 {
     setSceneRect(0, 0, 4096, 2048);
@@ -54,7 +58,7 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     m_currPath = 0;
 
     m_isCursorShown = false;
-    QPen cursorPen = QPen(Qt::green);
+    QPen cursorPen = QPen(DRAWN_MAP_COLOR_CURSOR_PEN);
     cursorPen.setJoinStyle(Qt::RoundJoin);
     cursorPen.setCapStyle(Qt::RoundCap);
     cursorPen.setWidth(m_pen.width());
@@ -271,10 +275,15 @@ void DrawMapScene::clearMap()
 void DrawMapScene::setErasing(bool erasing)
 {
     m_isErasing = erasing;
-    if(erasing)
+    QPen cursorPen = m_cursor->pen();
+    if(erasing) {
         m_pen.setBrush(m_eraser);
-    else
+        cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_ERASER);
+    } else {
         m_pen.setBrush(m_brush);
+        cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_PEN);
+    }
+    m_cursor->setPen(cursorPen);
 }
 
 QByteArray DrawMapScene::encode()
