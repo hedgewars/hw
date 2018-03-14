@@ -22,9 +22,11 @@
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QDir>
 
 #include "pagedrawmap.h"
 #include "drawmapwidget.h"
+#include "hwconsts.h"
 
 
 QLayout * PageDrawMap::bodyLayoutDefinition()
@@ -106,7 +108,8 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
 
 void PageDrawMap::load()
 {
-    QString fileName = QFileDialog::getOpenFileName(NULL, tr("Load drawn map"), ".", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+    QString loadDir = QDir(cfgdir->absolutePath() + "/DrawnMaps").absolutePath();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load drawn map"), loadDir, tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(!fileName.isEmpty())
         drawMapWidget->load(fileName);
@@ -114,7 +117,8 @@ void PageDrawMap::load()
 
 void PageDrawMap::save()
 {
-    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), "./map.hwmap", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+    QString saveDir = QDir(cfgdir->absolutePath() + "/DrawnMaps/map.hwmap").absolutePath();
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save drawn map"), saveDir, tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(!fileName.isEmpty())
         drawMapWidget->save(fileName);

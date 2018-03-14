@@ -1068,7 +1068,8 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
 
 void HWMapContainer::loadDrawing()
 {
-    QString fileName = QFileDialog::getOpenFileName(NULL, tr("Load drawn map"), ".", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+    QString loadDir = QDir(cfgdir->absolutePath() + "/DrawnMaps").absolutePath();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load drawn map"), loadDir, tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(fileName.isEmpty()) return;
 

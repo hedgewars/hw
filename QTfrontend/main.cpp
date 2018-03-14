@@ -318,6 +318,7 @@ int main(int argc, char *argv[]) {
 
         // config/save paths
         checkForDir(cfgdir->absolutePath() + "/Demos");
+        checkForDir(cfgdir->absolutePath() + "/DrawnMaps");
         checkForDir(cfgdir->absolutePath() + "/Saves");
         checkForDir(cfgdir->absolutePath() + "/Screenshots");
         checkForDir(cfgdir->absolutePath() + "/Teams");

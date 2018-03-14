@@ -19,7 +19,9 @@ Game:
  * When using seduction, only show “CENSORED” text in English locale
 
 Frontend:
+ + Migrate to Qt 5
  + Schemes are now stored in separate files under Schemes
+ + Add default directory DrawnMaps for hand-drawn maps
  + Lead player to training missions when starting Hedgewars the first time
  * Fix broken preview of team hats (e.g. cap_team)
 
