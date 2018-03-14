@@ -108,6 +108,10 @@ class DrawMapWidget : public QWidget
         void save(const QString & fileName);
         void load(const QString & fileName);
         void setPathType(DrawMapScene::PathType pathType);
+        void setBrushSize(int brushSize);
+
+    signals:
+        void brushSizeChanged(int brushSize);
 
     protected:
         void changeEvent(QEvent *e);
@@ -121,6 +125,7 @@ class DrawMapWidget : public QWidget
 
     private slots:
         void pathChanged();
+        void brushSizeChanged_slot(int brushSize);
 };
 
 #endif // DRAWMAPWIDGET_H

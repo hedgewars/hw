@@ -48,6 +48,10 @@ class PageDrawMap : public AbstractPage
         QRadioButton * rbPolyline;
         QRadioButton * rbRectangle;
         QRadioButton * rbEllipse;
+        QSpinBox * sbBrushSize;
+
+    public slots:
+        void brushSizeChanged(int brushSize);
 
     private slots:
         void load();

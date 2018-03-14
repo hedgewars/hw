@@ -52,7 +52,7 @@ DrawMapScene::DrawMapScene(QObject *parent) :
 
     m_pathType = Polyline;
 
-    m_pen.setWidth(76);
+    m_pen.setWidth(DRAWN_MAP_BRUSH_SIZE_START);
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
     m_currPath = 0;
@@ -61,7 +61,7 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     QPen cursorPen = QPen(DRAWN_MAP_COLOR_CURSOR_PEN);
     cursorPen.setJoinStyle(Qt::RoundJoin);
     cursorPen.setCapStyle(Qt::RoundCap);
-    cursorPen.setWidth(m_pen.width());
+    cursorPen.setWidth(brushSize());
     m_cursor->setPen(cursorPen);
     m_cursor->setZValue(1);
 }
@@ -131,7 +131,7 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     path.lineTo(mouseEvent->scenePos());
 
     PathParams params;
-    params.width = serializePenWidth(m_pen.width());
+    params.width = serializePenWidth(brushSize());
     params.erasing = m_isErasing;
     params.initialPoint = mouseEvent->scenePos().toPoint();
     params.points = QList<QPoint>() << params.initialPoint;
@@ -185,22 +185,38 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
     }
 }
 
-void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
+void DrawMapScene::setBrushSize(int newBrushSize)
 {
-    if(wheelEvent->delta() > 0 && m_pen.width() < 516)
-        m_pen.setWidth(m_pen.width() + 10);
-    else if(wheelEvent->delta() < 0 && m_pen.width() >= 16)
-        m_pen.setWidth(m_pen.width() - 10);
+    if(newBrushSize > DRAWN_MAP_BRUSH_SIZE_MAX)
+        newBrushSize = DRAWN_MAP_BRUSH_SIZE_MAX;
+    if(newBrushSize < DRAWN_MAP_BRUSH_SIZE_MIN)
+        newBrushSize = DRAWN_MAP_BRUSH_SIZE_MIN;
 
+    m_pen.setWidth(newBrushSize);
     QPen cursorPen = m_cursor->pen();
     cursorPen.setWidth(m_pen.width());
     m_cursor->setPen(cursorPen);
-
     if(m_currPath)
     {
         m_currPath->setPen(m_pen);
         paths.first().width = serializePenWidth(m_pen.width());
     }
+
+    emit brushSizeChanged(newBrushSize);
+}
+
+int DrawMapScene::brushSize()
+{
+    return m_pen.width();
+}
+
+void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
+{
+    int b = brushSize();
+    if(wheelEvent->delta() > 0)
+        setBrushSize(b + DRAWN_MAP_BRUSH_SIZE_STEP);
+    else if(wheelEvent->delta() < 0 && b >= DRAWN_MAP_BRUSH_SIZE_MIN)
+        setBrushSize(b - DRAWN_MAP_BRUSH_SIZE_STEP);
 }
 
 void DrawMapScene::showCursor()

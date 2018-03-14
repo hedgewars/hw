@@ -56,6 +56,7 @@ void DrawMapWidget::setScene(DrawMapScene * scene)
 
     ui->graphicsView->setScene(scene);
     connect(scene, SIGNAL(pathChanged()), this, SLOT(pathChanged()));
+    connect(scene, SIGNAL(brushSizeChanged(int)), this, SLOT(brushSizeChanged_slot(int)));
 }
 
 void DrawMapWidget::resizeEvent(QResizeEvent * event)
@@ -133,6 +134,11 @@ void DrawMapWidget::setPathType(DrawMapScene::PathType pathType)
     if(m_scene) m_scene->setPathType(pathType);
 }
 
+void DrawMapWidget::setBrushSize(int brushSize)
+{
+    if(m_scene) m_scene->setBrushSize(brushSize);
+}
+
 void DrawMapWidget::save(const QString & fileName)
 {
     if(m_scene)
@@ -179,7 +185,10 @@ void DrawMapWidget::pathChanged()
     ui->lblPoints->setNum(m_scene->pointsCount());
 }
 
-
+void DrawMapWidget::brushSizeChanged_slot(int brushSize)
+{
+    emit brushSizeChanged(brushSize);
+}
 
 DrawMapView::DrawMapView(QWidget *parent) :
     QGraphicsView(parent)

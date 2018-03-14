@@ -21,6 +21,7 @@
 #include <QFileDialog>
 #include <QCheckBox>
 #include <QRadioButton>
+#include <QSpinBox>
 
 #include "pagedrawmap.h"
 #include "drawmapwidget.h"
@@ -42,10 +43,17 @@ QLayout * PageDrawMap::bodyLayoutDefinition()
 
     rbPolyline->setChecked(true);
 
-    pbUndo = addButton(tr("Undo"), pageLayout, 4, 0);
-    pbClear = addButton(tr("Clear"), pageLayout, 5, 0);
+    sbBrushSize = new QSpinBox(this);
+    sbBrushSize->setWhatsThis(tr("Brush size"));
+    sbBrushSize->setRange(DRAWN_MAP_BRUSH_SIZE_MIN, DRAWN_MAP_BRUSH_SIZE_MAX);
+    sbBrushSize->setValue(DRAWN_MAP_BRUSH_SIZE_START);
+    sbBrushSize->setSingleStep(DRAWN_MAP_BRUSH_SIZE_STEP);
+    pageLayout->addWidget(sbBrushSize, 4, 0);
 
-    pbOptimize = addButton(tr("Optimize"), pageLayout, 6, 0);
+    pbUndo = addButton(tr("Undo"), pageLayout, 5, 0);
+    pbClear = addButton(tr("Clear"), pageLayout, 6, 0);
+
+    pbOptimize = addButton(tr("Optimize"), pageLayout, 7, 0);
     // The optimize button is quite buggy, so we disable it for now.
     // TODO: Re-enable optimize button when it's finished.
     pbOptimize->setVisible(false);
@@ -79,6 +87,10 @@ void PageDrawMap::connectSignals()
     connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
     connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
     connect(pbOptimize, SIGNAL(clicked()), drawMapWidget, SLOT(optimize()));
+    connect(sbBrushSize, SIGNAL(valueChanged(int)), drawMapWidget, SLOT(setBrushSize(int)));
+
+    connect(drawMapWidget, SIGNAL(brushSizeChanged(int)), this, SLOT(brushSizeChanged(int)));
+
     connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
     connect(pbSave, SIGNAL(clicked()), this, SLOT(save()));
 
@@ -116,4 +128,9 @@ void PageDrawMap::pathTypeSwitched(bool b)
         else if(rbRectangle->isChecked()) drawMapWidget->setPathType(DrawMapScene::Rectangle);
         else if(rbEllipse->isChecked()) drawMapWidget->setPathType(DrawMapScene::Ellipse);
     }
+}
+
+void PageDrawMap::brushSizeChanged(int brushSize)
+{
+    sbBrushSize->setValue(brushSize);
 }
