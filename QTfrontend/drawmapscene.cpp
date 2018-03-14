@@ -34,7 +34,7 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     QGraphicsScene(parent),
     m_pen(Qt::yellow),
     m_brush(Qt::yellow),
-    m_cursor(new QGraphicsEllipseItem(-0.5, -0.5, 1, 1))
+    m_cursor(new QGraphicsEllipseItem(-5, -5, 5, 5))
 {
     setSceneRect(0, 0, 4096, 2048);
 
@@ -54,9 +54,12 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     m_currPath = 0;
 
     m_isCursorShown = false;
-    m_cursor->setPen(QPen(Qt::green));
+    QPen cursorPen = QPen(Qt::green);
+    cursorPen.setJoinStyle(Qt::RoundJoin);
+    cursorPen.setCapStyle(Qt::RoundCap);
+    cursorPen.setWidth(m_pen.width());
+    m_cursor->setPen(cursorPen);
     m_cursor->setZValue(1);
-    m_cursor->setScale(m_pen.width());
 }
 
 void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -185,7 +188,9 @@ void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
     else if(wheelEvent->delta() < 0 && m_pen.width() >= 16)
         m_pen.setWidth(m_pen.width() - 10);
 
-    m_cursor->setScale(m_pen.width());
+    QPen cursorPen = m_cursor->pen();
+    cursorPen.setWidth(m_pen.width());
+    m_cursor->setPen(cursorPen);
 
     if(m_currPath)
     {
