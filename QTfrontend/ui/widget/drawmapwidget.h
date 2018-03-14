@@ -24,6 +24,7 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QLabel>
+#include <QSizePolicy>
 
 #include "drawmapscene.h"
 
@@ -64,12 +65,14 @@ namespace Ui
                 vbox->addLayout(arLayout);
 
                 lblPoints = new QLabel("0", drawMapWidget);
+                lblPoints->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
                 arLayout->addWidget(lblPoints);
 
                 graphicsView = new DrawMapView(drawMapWidget);
                 graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 graphicsView->setRenderHint(QPainter::Antialiasing, true);
+                graphicsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
                 arLayout->addWidget(graphicsView);
 
                 retranslateUi(drawMapWidget);
