@@ -225,9 +225,9 @@ static UIViewController *callingController;
     [self startGame:gtSave atPath:atPath withOptions:nil];
 }
 
-+ (void)startMissionGame:(NSString *)withScript {
++ (void)startMissionGame:(NSString *)withSubPath {
     NSString *seedCmd = [self seedCommand];
-    NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
+    NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/%@.lua", withSubPath];
     NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", nil];
 
     [self startGame:gtMission atPath:nil withOptions:missionDict];

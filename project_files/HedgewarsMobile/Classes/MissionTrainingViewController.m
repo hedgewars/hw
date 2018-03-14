@@ -77,7 +77,7 @@
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     } else {
         [GameInterfaceBridge registerCallingController:self];
-        [GameInterfaceBridge startMissionGame:self.missionName];
+        [GameInterfaceBridge startMissionGame:self.missionSubPath];
     }
 }
 
@@ -362,14 +362,15 @@
     NSArray *listOfIDs = [self listOfMissionsIDsForType:type];
     
     NSInteger row = [indexPath row];
-    self.missionName = [listOfIDs objectAtIndex:row];
+    NSString *missionID = [listOfIDs objectAtIndex:row];
+    self.missionSubPath = [NSString stringWithFormat:@"%@/%@", type, missionID];
     NSString *size = IS_IPAD() ? @"@2x" : @"";
-    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/%@/%@%@.png",GRAPHICS_DIRECTORY(), type, self.missionName, size];
+    NSString *filePath = [NSString stringWithFormat:@"%@/Missions/%@%@.png",GRAPHICS_DIRECTORY(), self.missionSubPath, size];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:filePath];
     [self.previewImage setImage:img];
 
     NSDictionary *dict = [self dictOfMissionsForType:type];
-    self.descriptionLabel.text = dict[self.missionName][@"desc"];
+    self.descriptionLabel.text = dict[missionID][@"desc"];
 }
 
 #pragma mark -

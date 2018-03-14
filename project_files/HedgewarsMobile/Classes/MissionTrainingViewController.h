@@ -25,7 +25,7 @@
 @property (nonatomic, strong) NSArray *missionsTypes;
 @property (nonatomic, strong) NSDictionary *dictOfAllMissions;
 
-@property (nonatomic, strong) NSString *missionName;
+@property (nonatomic, strong) NSString *missionSubPath;
 
 @property (nonatomic, strong) NSArray *listOfTrainingIDs;
 @property (nonatomic, strong) NSDictionary *dictOfTraining;
