@@ -87,37 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">новый</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">копия</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">копия %1</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Новая</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Копия %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>Новая (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>Копия %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -262,6 +231,37 @@
     <message>
         <source>Game options</source>
         <translation>Настройки игры</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">новый</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">копия</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="obsolete">копия %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Новая</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Копия %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Новая (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Копия %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1228,6 +1228,10 @@ just enter your nickname.</source>
     <message>
         <source>Optimize</source>
         <translation>Оптимизировать</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

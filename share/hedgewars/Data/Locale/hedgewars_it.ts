@@ -87,33 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">nuovo</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">copia di %1</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Nuovo</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Copia di %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation type="unfinished">Nuovo (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation type="unfinished">Copia di %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -253,6 +226,33 @@
     <message>
         <source>Game options</source>
         <translation>Opzioni di gioco</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">nuovo</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="obsolete">copia di %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nuovo</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Copia di %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished">Nuovo (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation type="unfinished">Copia di %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1191,6 +1191,10 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Optimize</source>
         <translation>Ottimizza</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

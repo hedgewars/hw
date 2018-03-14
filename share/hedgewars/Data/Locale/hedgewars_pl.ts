@@ -87,37 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">nowy</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">kopia</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">kopia %1</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Nowy</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Kopia %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>Nowy (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>Kopia %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -262,6 +231,37 @@
     <message>
         <source>Game options</source>
         <translation>Ustawienia gry</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">nowy</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">kopia</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="obsolete">kopia %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nowy</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Kopia %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Nowy (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Kopia %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1269,6 +1269,10 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Optimize</source>
         <translation>Optymalizuj</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -87,33 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">nový</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">kópia z</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Nová</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Kópia z %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>Nový (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>Kópia z %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -250,6 +223,33 @@
     <message>
         <source>Game options</source>
         <translation>Voľby hry</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">nový</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">kópia z</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nová</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Kópia z %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Nový (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Kópia z %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1174,6 +1174,10 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Optimize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brush size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

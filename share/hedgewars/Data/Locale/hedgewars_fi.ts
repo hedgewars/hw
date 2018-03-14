@@ -87,25 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>New</source>
-        <translation>Uusi</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>%1 kopio</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation type="unfinished">Uusi (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation type="unfinished">%1 kopio (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -245,6 +226,25 @@
     <message>
         <source>Game options</source>
         <translation>Peliasetukset</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>New</source>
+        <translation>Uusi</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>%1 kopio</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished">Uusi (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation type="unfinished">%1 kopio (%2)</translation>
     </message>
 </context>
 <context>
@@ -1183,6 +1183,10 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Optimize</source>
         <translation>Optimoi</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -87,25 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>New</source>
-        <translation>Ùr</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Lethbhreac dhe %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation type="unfinished">Ùr (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation type="unfinished">Lethbhreac dhe %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -247,6 +228,25 @@
     <message>
         <source>Game options</source>
         <translation>Roghainnean a’ gheama</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>New</source>
+        <translation>Ùr</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Lethbhreac dhe %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished">Ùr (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation type="unfinished">Lethbhreac dhe %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1197,6 +1197,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Optimize</source>
         <translation>Pisich</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

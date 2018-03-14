@@ -87,29 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">new</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>New</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Copy of %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>New (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>Copy of %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -249,6 +226,29 @@
     <message>
         <source>Game options</source>
         <translation>Game options</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">new</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>New</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Copy of %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>New (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Copy of %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1213,6 +1213,10 @@ just enter your nickname.</translation>
     <message>
         <source>Optimize</source>
         <translation>Optimize</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation>Brush size</translation>
     </message>
 </context>
 <context>

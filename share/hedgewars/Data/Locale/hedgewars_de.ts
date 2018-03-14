@@ -99,37 +99,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">Neu</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">Kopie von</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">Kopie von %1</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Neu</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Kopie von %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>Neu (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>Kopie von %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -285,6 +254,37 @@
     <message>
         <source>Game options</source>
         <translation>Spieloptionen</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">Neu</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">Kopie von</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="obsolete">Kopie von %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Neu</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Kopie von %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Neu (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Kopie von %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1297,6 +1297,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Optimize</source>
         <translation>Optimieren</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation>Pinselgröße</translation>
     </message>
 </context>
 <context>

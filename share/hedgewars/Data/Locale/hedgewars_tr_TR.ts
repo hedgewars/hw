@@ -87,33 +87,6 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">yeni</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">kopya</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="unfinished">Yeni</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -264,6 +237,33 @@
     <message>
         <source>Game options</source>
         <translation>Oyun seçenekleri</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">yeni</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">kopya</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Yeni</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1192,6 +1192,10 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Optimize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brush size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
