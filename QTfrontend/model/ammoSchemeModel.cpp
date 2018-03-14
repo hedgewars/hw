@@ -732,29 +732,37 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & directory) :
     schemes.append(spaceinvasion);
     schemes.append(hedgeeditor);
 
-    if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
+    if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
+        QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
+    }
     if (!QDir(directory).exists()) {
         QDir().mkdir(directory);
 
+        qDebug("No /Schemes/Game directory found. Trying to import game schemes from schemes.ini.");
+
         int size = fileConfig.beginReadArray("schemes");
+        int imported = 0;
         for (int i = 0; i < size; ++i)
         {
             fileConfig.setArrayIndex(i);
 
-            if (!predefSchemesNames.contains(fileConfig.value(spNames[0]).toString()))
+            QString schemeName = fileConfig.value(spNames[0]).toString();
+            if (!predefSchemesNames.contains(schemeName))
             {
                 QList<QVariant> scheme;
-                QSettings file(directory + "/" + fileConfig.value(spNames[0]).toString() + ".hwg", QSettings::IniFormat);
+                QSettings file(directory + "/" + schemeName + ".hwg", QSettings::IniFormat);
 
                 for (int k = 0; k < spNames.size(); ++k) {
                     scheme << fileConfig.value(spNames[k], defaultScheme[k]);
                     file.setValue(spNames[k], fileConfig.value(spNames[k], defaultScheme[k]));
                 }
                 file.sync();
+                imported++;
 
                 schemes.append(scheme);
             }
         }
+        qDebug("%d game scheme(s) imported.", imported);
         fileConfig.endArray();
     } else {
         QStringList scheme_dir = QDir(directory).entryList();

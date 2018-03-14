@@ -85,32 +85,37 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     QFrame(parent),
     m_numItems(numItems)
 {
-    if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
+    if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
+        QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
+    }
     if (!QDir(cfgdir->absolutePath() + "/Schemes/Ammo").exists()) {
+        qDebug("No /Schemes/Ammo directory found. Trying to import weapon schemes from weapons.ini.");
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes/Ammo");
         wconf = new QSettings("Hedgewars", "Hedgewars");
         wconf->clear();
         QSettings old_wconf(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat);
 
-        QList<QVariant> defaultAmmos;
+        QStringList defaultAmmos;
         for(int i = 0; i < cDefaultAmmos.size(); ++i) {
             wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
             defaultAmmos.append(cDefaultAmmos[i].first);
         }
 
         QStringList keys = old_wconf.allKeys();
+        int imported = 0;
         for(int i = 0; i < keys.size(); i++)
         {
-            wconf->setValue(keys[i], fixWeaponSet(old_wconf.value(keys[i]).toString()));
-
             if (!defaultAmmos.contains(keys[i])) {
+                wconf->setValue(keys[i], fixWeaponSet(old_wconf.value(keys[i]).toString()));
                 QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + keys[i] + ".hwa");
                 if (file.open(QIODevice::WriteOnly)) {
                     QTextStream stream( &file );
                     stream << old_wconf.value(keys[i]).toString() << endl;
                 }
+                imported++;
             }
         }
+        qDebug("%d weapon scheme(s) imported.", imported);
     } else {
         wconf = new QSettings("Hedgewars", "Hedgewars");
         wconf->clear();
