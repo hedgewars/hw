@@ -1995,12 +1995,14 @@ end;
 
 procedure onFocusStateChanged;
 begin
-if (not cHasFocus) and (GameState <> gsConfirm) then
-    ParseCommand('quit', true);
 {$IFDEF MOBILE}
+if (not cHasFocus) and (not isPaused) then
+    ParseCommand('pause', true);
 // when created SDL receives an exposure event that calls UndampenAudio at full power, muting audio
 exit;
 {$ENDIF}
+if (not cHasFocus) and (GameState <> gsConfirm) then
+    ParseCommand('quit', true);
 
 {$IFDEF USE_VIDEO_RECORDING}
 // do not change volume during prerecording as it will affect sound in video file
