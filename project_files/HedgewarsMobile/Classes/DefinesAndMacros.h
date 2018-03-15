@@ -28,6 +28,7 @@
   #ifndef NS_BLOCK_ASSERTIONS
     #define NS_BLOCK_ASSERTIONS
   #endif
+  #define DLog(...)
   #define ALog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
 #endif
 
