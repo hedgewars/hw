@@ -116,6 +116,7 @@ Lua API:
  * Fix call: SetWeapon(amNothing) now unselects weapon
  * Fix call: SetWind did not update flake flying direction
  * Fix global: TotalRounds was stuck at -1 for several turns
+ * Fix CursorX, CursorY often not being updated when moving cursor at screen border
 
 ====================== 0.9.23 ======================
 HIGHLIGHTS:

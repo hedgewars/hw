@@ -100,7 +100,7 @@ var luaState : Plua_State;
     ScriptLoaded : boolean;
     mapDims : boolean;
     PointsBuffer: shortstring;
-    prevCursorPoint: TPoint;  // why is tpoint still in sdlh...
+    PrevCursorX, PrevCursorY: LongInt;
 
 {$IFDEF USE_LUA_SCRIPT}
 procedure ScriptPrepareAmmoStore; forward;
@@ -3139,8 +3139,8 @@ if not ScriptLoaded then
     exit;
 
 // push game variables so they may be modified by the script
-ScriptSetInteger('CursorX', CursorPoint.X);
-ScriptSetInteger('CursorY', CursorPoint.Y);
+ScriptSetInteger('CursorX', NoPointX);
+ScriptSetInteger('CursorY', NoPointX);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetInteger('WorldEdge', ord(WorldEdge));
 ScriptSetString('Seed', cSeed);
@@ -3380,6 +3380,7 @@ else
 end;
 
 procedure SetGlobals;
+var x, y: LongInt;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('ReadyTimeLeft', ReadyTimeLeft);
@@ -3388,21 +3389,23 @@ ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if isCursorVisible and (not bShowAmmoMenu) then
     begin
-    if (prevCursorPoint.X <> CursorPoint.X) or
-       (prevCursorPoint.Y <> CursorPoint.Y) then
+    x:= CursorPoint.X - WorldDx;
+    y:= cScreenHeight - CursorPoint.Y - WorldDy;
+    if (PrevCursorX <> x) or
+       (PrevCursorY <> y) then
         begin
-        ScriptSetInteger('CursorX', CursorPoint.X - WorldDx);
-        ScriptSetInteger('CursorY', cScreenHeight - CursorPoint.Y- WorldDy);
-        prevCursorPoint.X:= CursorPoint.X;
-        prevCursorPoint.Y:= CursorPoint.Y;
+        ScriptSetInteger('CursorX', x);
+        ScriptSetInteger('CursorY', y);
+        PrevCursorX:= x;
+        PrevCursorY:= y;
         end
     end
 else
     begin
     ScriptSetInteger('CursorX', NoPointX);
     ScriptSetInteger('CursorY', NoPointX);
-    prevCursorPoint.X:= NoPointX;
-    prevCursorPoint.Y:= NoPointX
+    PrevCursorX:= NoPointX;
+    PrevCursorY:= NoPointX
     end;
 
 if not mapDims then
@@ -4023,8 +4026,8 @@ procedure initModule;
 begin
 mapDims:= false;
 PointsBuffer:= '';
-prevCursorPoint.X:= NoPointX;
-prevCursorPoint.Y:= 0;
+PrevCursorX:= NoPointX;
+PrevCursorY:= NoPointX;
 end;
 
 procedure freeModule;
