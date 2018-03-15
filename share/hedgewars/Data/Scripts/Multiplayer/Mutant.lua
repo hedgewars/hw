@@ -423,8 +423,6 @@ local only_low_score = true
     end
 
     if gameOver then
-        SendStat(siGraphTitle, loc("Score graph"))
-
         EndTurn(true)
 
         teamsSorted = {}
@@ -713,6 +711,8 @@ function onGearAdd(gear)
         hhs[numhhs] = gear
         numhhs = numhhs + 1
         SetEffect(gear, heResurrectable, 1)
+    elseif GetGearType(gear) == gtATFinishGame then
+        SendStat(siGraphTitle, loc("Score graph"))
     end
 end
 
