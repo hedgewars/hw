@@ -1554,7 +1554,13 @@ begin
             gtDuck: DrawSpriteRotatedF(sprDuck, x, y, 1, Gear^.Tag, 
                     // replace with something based on dx/dy?
                     Gear^.DirAngle + 10-round(20 * abs(1 - (RealTicks mod round(0.1/max(0.00005,cWindSpeedf))) / round(0.05/max(0.00005,cWindSpeedf))) ));
-            gtGenericFaller: DrawCircle(x, y, max(3, Gear^.Radius), 3, $FF, $00, $00, $FF); // debug
+            gtGenericFaller: begin
+                             // DEBUG: draw gtGenericFaller
+                             if Gear^.Tag <> 0 then
+                                 DrawCircle(x, y, max(3, Gear^.Radius), 3, $FF, $00, $00, $FF)
+                             else
+                                 DrawCircle(x, y, max(3, Gear^.Radius), 3, $80, $FF, $80, $8F);
+                             end;
          end;
     if Gear^.State and gstFrozen <> 0 then untint
 end;

@@ -6329,7 +6329,8 @@ else
         begin
         with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
         AddRandomness(CheckSum);
-        if gi^.Kind = gtGenericFaller then gi^.State:= gi^.State and (not gstTmpFlag);
+        if (gi^.Kind = gtGenericFaller) and (gi^.Tag = 1) then
+            gi^.State:= gi^.State and (not gstTmpFlag);
         gi := gi^.NextGear
         end;
     AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
@@ -6350,7 +6351,7 @@ if Gear^.Timer < $FFFFFFFF then
 if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
     begin
     doStepFallingGear(Gear);
-    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX)) or (hwRound(Gear^.Y) < LongInt(topY)) then
+    if (Gear^.Tag = 1) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX)) or (hwRound(Gear^.Y) < LongInt(topY)) then
         begin
         Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
         Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);

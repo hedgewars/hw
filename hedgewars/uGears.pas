@@ -237,7 +237,7 @@ if stirFallers then
     t := GearsList;
     while t <> nil do
         begin
-        if t^.Kind = gtGenericFaller then
+        if (t^.Kind = gtGenericFaller) and (t^.Tag = 1) then
             begin
             t^.Active:= true;
             t^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
@@ -739,7 +739,9 @@ for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
     rdx:= _90-(GetRandomf*_360);
     rdy:= _90-(GetRandomf*_360);
-    AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    Gear:= AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    // Tag=1: This allows this generic faller to be displaced randomly by events
+    Gear^.Tag:= 1;
     end;
 
 snowRight:= max(LAND_WIDTH,4096)+512;

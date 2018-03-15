@@ -758,7 +758,7 @@ case Gear^.Pos of
                         gi := GearsList;
                         while gi <> nil do
                             begin
-                            if (gi^.Kind = gtGenericFaller) and (gi^.State and gstInvisible <> 0) then
+                            if (gi^.Kind = gtGenericFaller) and (gi^.Tag = 1) then
                                 begin
                                 gi^.Active:= true;
                                 gi^.State:= gi^.State or gstTmpFlag;
