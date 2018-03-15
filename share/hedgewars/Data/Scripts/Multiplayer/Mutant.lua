@@ -60,7 +60,7 @@ local timer=0
 local winScore = 15
 local hogsLimit = 1
 
-local teams = {}
+local teamsDead = {}
 
 local circles = {}
 local circleFrame = -1
@@ -82,7 +82,7 @@ local recordSkips = 0
 local recordSkipsHogName = nil
 local recordSkipsTeamName = nil
 
--- Most crates collected 
+-- Most crates collected
 local recordCrates = 0
 local recordCratesHogName = nil
 local recordCratesTeamName = nil
@@ -163,7 +163,7 @@ function onGameStart()
     hogLimitHit = false
     for i=0 , TeamsCount - 1 do
         cnthhs = 0
-        runOnHogsInTeam(limitHogs, teams[i])
+        runOnHogsInTeam(limitHogs, GetTeamName(i))
     end
     if hogLimitHit then
         WriteLnToChat(loc("Only one hog per team allowed! Excess hogs will be removed."))
@@ -241,7 +241,7 @@ function onNewTurn()
     checkScore()
 
     for i=0, TeamsCount-1 do
-        SendStat(siClanHealth, getTeamValue(teams[i], "Score"), teams[i])
+        SendStat(siClanHealth, getTeamValue(GetTeamName(i), "Score"), GetTeamName(i))
     end
 
     giveWeapons(CurrentHedgehog)
@@ -370,14 +370,85 @@ end
 
 function renderScores()
     for i=0, TeamsCount-1 do
-        if teams[i]~= nil then
-            SetTeamLabel(teams[i], string.format(loc("%d | %d"), getTeamValue(teams[i], "Score"), getTeamValue(teams[i], "DeadHogs")))
-        end
+        local name = GetTeamName(i)
+        SetTeamLabel(name, string.format(loc("%d | %d"), getTeamValue(name, "Score"), getTeamValue(name, "DeadHogs")))
+    end
+end
+
+function createEndGameStats()
+    SendStat(siGraphTitle, loc("Score graph"))
+
+    local teamsSorted = {}
+    for i=0, TeamsCount-1, 1 do
+        teamsSorted[i+1] = GetTeamName(i)
+    end
+
+    -- Achievements stuff
+    local achievements = 0
+    --- Most kills per turn
+    if recordKills >= 3 then
+        SendStat(siMaxStepKills, string.format("%d %s (%s)", recordKills, recordKillsHogName, recordKillsTeamName))
+        achievements = achievements + 1
+    end
+    --- Most crates collected
+    if recordCrates >= 5 then
+        SendStat(siCustomAchievement, string.format(loc("%s (%s) was the greediest hedgehog and collected %d crates."), recordCratesHogName, recordCratesTeamName, recordCrates))
+        achievements = achievements + 1
+    end
+    --- Most suicides
+    if recordSuicides >= 5 then
+        SendStat(siCustomAchievement, string.format(loc("%s (%s) hate life and suicided %d times."), recordSuicidesHogName, recordSuicidesTeamName, recordSuicides))
+        achievements = achievements + 1
+    end
+    --- Most deaths
+    if recordDeaths >= 5 then
+        SendStat(siCustomAchievement, string.format(loc("Poor %s (%s) died %d times."), recordDeathsHogName, recordDeathsTeamName, recordDeaths))
+        achievements = achievements + 1
+    end
+    --- Most skips
+    if recordSkips >= 3 then
+        SendStat(siMaxTurnSkips, string.format("%d %s (%s)", recordSkips, recordSkipsHogName, recordSkipsTeamName))
+        achievements = achievements + 1
+    end
+    --- Total damage
+    if totalDamage >= 900 then
+        SendStat(siCustomAchievement, string.format(loc("%d damage was dealt in this game."), totalDamage))
+        achievements = achievements + 1
+    end
+    --- Total kills
+    if totalKills >= 20 or (achievements <= 0 and totalKills >= 1) then
+        SendStat(siKilledHHs, tostring(totalKills))
+        achievements = achievements + 1
+    end
+
+    -- Score and stats stuff
+    local showScore = ""
+    table.sort(teamsSorted, function(team1, team2) return getTeamValue(team1, "Score") > getTeamValue(team2, "Score") end)
+    for i=1, TeamsCount do
+        SendStat(siPointType, loc("point(s)"))
+        local score = getTeamValue(teamsSorted[i], "Score")
+        local deaths = getTeamValue(teamsSorted[i], "DeadHogs")
+        SendStat(siPlayerKills, score, teamsSorted[i])
+
+        showScore = showScore .. string.format(loc("%s: %d (deaths: %d)"), teamsSorted[i], score, deaths) .. "|"
+    end
+
+    if getTeamValue(teamsSorted[1], "Score") == getTeamValue(teamsSorted[2], "Score") then
+        -- The first two teams have the same score! Round is drawn.
+        return nil
+    else
+
+    ShowMission(loc("Mutant"),
+        loc("Final result"),
+        string.format(loc("Winner: %s"), teamsSorted[1]) .. "| |" .. loc("Scores:") .. " |" ..
+        showScore, 0, 15000)
+
+        -- return winning team
+        return teamsSorted[1]
     end
 end
 
 function checkScore()
-local showScore = ""
 local lowest_score_team = nil
 local min_score=nil
 local winTeam = nil
@@ -385,36 +456,35 @@ local winTeam = nil
 local only_low_score = true
 
     for i=0, TeamsCount-1 do
-        if teams[i]~=nil then
-            local curr_score = getTeamValue(teams[i], "Score")
+        local teamName = GetTeamName(i)
+        if not teamsDead[teamName] then
+            local curr_score = getTeamValue(teamName, "Score")
 
-            runOnHogsInTeam(removeFeeder, teams[i])
-
-            showScore = showScore .. string.format(loc("%s: %d (deaths: %d)"), teams[i], curr_score, getTeamValue(teams[i], "DeadHogs")) .. "|"
+            runOnHogsInTeam(removeFeeder, teamName)
 
             if curr_score >= winScore then
                 gameOver = true
-                winTeam = teams[i]
+                winTeam = teamName
             end
 
             if min_score==nil then
                 min_score= curr_score
-                lowest_score_team = teams[i]
+                lowest_score_team = teamName
             else
                 if curr_score <= min_score then
                     if curr_score == min_score then
-                        if getTeamValue(teams[i], "DeadHogs") == getTeamValue(lowest_score_team, "DeadHogs") then
+                        if getTeamValue(teamName, "DeadHogs") == getTeamValue(lowest_score_team, "DeadHogs") then
                             only_low_score = false
                         else
-                            if getTeamValue(teams[i], "DeadHogs") > getTeamValue(lowest_score_team, "DeadHogs") then
-                                lowest_score_team = teams[i]
+                            if getTeamValue(teamName, "DeadHogs") > getTeamValue(lowest_score_team, "DeadHogs") then
+                                lowest_score_team = teamName
                             end
                             only_low_score = true
                         end
 
                     else
                         min_score= curr_score
-                        lowest_score_team = teams[i]
+                        lowest_score_team = teamName
                         only_low_score = true
                     end
                 end
@@ -425,64 +495,14 @@ local only_low_score = true
     if gameOver then
         EndTurn(true)
 
-        teamsSorted = {}
- 
         for i=0, TeamsCount-1 do
-            if teams[i]~=winTeam then
-                runOnHogsInTeam(armageddon, teams[i])
+            local teamName = GetTeamName(i)
+            if teamName~=winTeam then
+                runOnHogsInTeam(armageddon, teamName)
             end
-            teamsSorted[i+1] = teams[i]
         end
 
-        -- Achievements stuff
-        local achievements = 0
-        --- Most kills per turn
-        if recordKills >= 3 then
-            SendStat(siMaxStepKills, string.format("%d %s (%s)", recordKills, recordKillsHogName, recordKillsTeamName))
-            achievements = achievements + 1
-        end
-        --- Most crates collected
-        if recordCrates >= 5 then
-            SendStat(siCustomAchievement, string.format(loc("%s (%s) was the greediest hedgehog and collected %d crates."), recordCratesHogName, recordCratesTeamName, recordCrates))
-            achievements = achievements + 1
-        end
-        --- Most suicides
-        if recordSuicides >= 5 then
-            SendStat(siCustomAchievement, string.format(loc("%s (%s) hate life and suicided %d times."), recordSuicidesHogName, recordSuicidesTeamName, recordSuicides))
-            achievements = achievements + 1
-        end
-        --- Most deaths
-        if recordDeaths >= 5 then
-            SendStat(siCustomAchievement, string.format(loc("Poor %s (%s) died %d times."), recordDeathsHogName, recordDeathsTeamName, recordDeaths))
-            achievements = achievements + 1
-        end
-        --- Most skips
-        if recordSkips >= 3 then
-            SendStat(siMaxTurnSkips, string.format("%d %s (%s)", recordSkips, recordSkipsHogName, recordSkipsTeamName))
-            achievements = achievements + 1
-        end
-        --- Total damage 
-        if totalDamage >= 900 then
-            SendStat(siCustomAchievement, string.format(loc("%d damage was dealt in this game."), totalDamage))
-            achievements = achievements + 1
-        end
-        --- Total kills
-        if totalKills >= 20 or achievements <= 0 then
-            SendStat(siKilledHHs, tostring(totalKills))
-            achievements = achievements + 1
-        end
-
-        -- Score and stats stuff
-        table.sort(teamsSorted, function(team1, team2) return getTeamValue(team1, "Score") < getTeamValue(team2, "Score") end)
-        for i=TeamsCount, 1, -1 do
-            SendStat(siPointType, loc("point(s)"))
-            SendStat(siPlayerKills, getTeamValue(teamsSorted[i], "Score"), teamsSorted[i])
-        end
-
-        ShowMission(    loc("Mutant"),
-                        loc("Final result"),
-                        string.format(loc("Winner: %s"), winTeam) .. "| |" .. loc("Scores:") .. " |" ..
-                        showScore, 0, 15000)
+        createEndGameStats()
     else
 
     if only_low_score then
@@ -560,26 +580,14 @@ end
 
 function teamScan()
 
-        for i=0, TeamsCount-1 do --nil filling
-        teams[i]=nil
-        end
-
-        for i=0, #hhs do
-            for j=0, TeamsCount-1 do
-                if teams[j] ==nil and hhs[i]~=nil then
-                teams[j] = GetHogTeamName(hhs[i])
-                setTeamValue(teams[j], "Score",0)
-                setTeamValue(teams[j], "Suicides",0)
-                setTeamValue(teams[j], "Skips",0)
-                setTeamValue(teams[j], "Crates",0)
-                setTeamValue(teams[j], "DeadHogs",0)
-                break
-                end
-
-                if teams[j] == GetHogTeamName(hhs[i]) then
-                    break
-                end
-            end
+        for j=0, TeamsCount-1 do
+            teamName = GetTeamName(j)
+            teamsDead[teamName] = false
+            setTeamValue(teamName, "Score",0)
+            setTeamValue(teamName, "Suicides",0)
+            setTeamValue(teamName, "Skips",0)
+            setTeamValue(teamName, "Crates",0)
+            setTeamValue(teamName, "DeadHogs",0)
         end
 
         renderScores()
@@ -712,7 +720,14 @@ function onGearAdd(gear)
         numhhs = numhhs + 1
         SetEffect(gear, heResurrectable, 1)
     elseif GetGearType(gear) == gtATFinishGame then
-        SendStat(siGraphTitle, loc("Score graph"))
+        if not gameOver then
+            local winner = createEndGameStats()
+            if winner then
+                SendStat(siGameResult, string.format(loc("%s wins!"), winner))
+                AddCaption(string.format(loc("%s wins!"), winner), 0xFFFFFFFF, capgrpGameState)
+            end
+            gameOver = true
+        end
     end
 end
 
@@ -747,18 +762,14 @@ function onGearDelete(gear)
         local t_name = GetHogTeamName(gear)
         if checkEmptyTeam(t_name) then
             for i = 0, TeamsCount - 1 do
-                if teams[i] == t_name then
+                if GetTeamName(i) == t_name then
                     found = i
+                    teamsDead[t_name] = true
                     break
                 end
             end
-            for i = found, TeamsCount - 2 do
-                teams[i] = teams[i + 1]
-            end
-            teams[TeamsCount - 1] = nil
-            TeamsCount = TeamsCount - 1
         end
-        if getGearValue(gear, "excess") ~= true then
+        if getGearValue(gear, "excess") ~= true and band(GetState(gear), gstDrowning) == 0 then
             AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
         end
         trackDeletion(gear)
