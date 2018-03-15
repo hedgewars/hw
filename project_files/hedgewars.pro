@@ -16,6 +16,7 @@ INCLUDEPATH += /usr/local/include/lua52/
 
 DESTDIR = ../bin
 
+QT += widgets
 QT += network
 QT += webkit
 
