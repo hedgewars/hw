@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS Core Widgets Gui Network Xml)
+find_package(Qt5 COMPONENTS Core Widgets Gui Network)
 
 include_directories(${Qt5Core_PRIVATE_INCLUDE_DIRS})
 
@@ -182,7 +182,7 @@ add_executable(hedgewars ${console_access}
 
 list(APPEND HW_LINK_LIBS
     physfs physlayer
-    Qt5::Core Qt5::Widgets Qt5::Gui Qt5::Network Qt5::Xml
+    Qt5::Core Qt5::Widgets Qt5::Gui Qt5::Network
     )
 
 list(APPEND HW_LINK_LIBS
