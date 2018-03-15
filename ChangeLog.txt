@@ -24,6 +24,7 @@ Frontend:
  + Add default directory DrawnMaps for hand-drawn maps
  + Lead player to training missions when starting Hedgewars the first time
  * Fix broken preview of team hats (e.g. cap_team)
+ * Fix chart in stats screen not supporting negative numbers
 
 Content:
  + New scenarios: Bazooka Battlefield, Tentacle Terror
