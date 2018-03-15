@@ -161,8 +161,6 @@ void PageGameStats::restartBtnVisible(bool visible)
 
 void PageGameStats::renderStats()
 {
-    graphic->show();
-    labelGraphTitle-> show();
     if(defaultGraphTitle) {
         labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
     } else {
@@ -177,31 +175,35 @@ void PageGameStats::renderStats()
         m_scene.reset(new QGraphicsScene(this));
 
         quint32 maxValue = 0;
-        int maxSize = 0;
+        int maxDataPoints = 0;
         for(QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin(); i != healthPoints.constEnd(); ++i)
         {
-          maxSize = qMax(maxSize, i.value().size());
-
-          foreach (quint32 v, i.value())
-            maxValue = qMax(maxValue, v);
+            maxDataPoints = qMax(maxDataPoints, i.value().size());
         }
 
-        if(maxSize < 2)
-          return;
+        /* There must be at least 2 data points for any clan,
+           otherwise there's not much to look at. ;-) */
+        if(maxDataPoints < 2) {
+            labelGraphTitle->hide();
+            graphic->hide();
+            return;
+        }
 
         QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
         while (i != healthPoints.constEnd())
         {
             quint32 c = i.key();
-            //QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
             const QVector<quint32>& hps = i.value();
 
             QPainterPath path;
+
             if (hps.size())
                 path.moveTo(0, hps[0]);
 
-            for(int t = 1; t < hps.size(); ++t)
-                path.lineTo(t * maxValue / (maxSize - 1), hps[t]);
+            for(int t = 0; t < hps.size(); ++t) {
+                path.lineTo(t, hps[t]);
+                maxValue = qMax(maxValue, hps[t]);
+            }
 
             QPen pen(c);
             pen.setWidth(2);
@@ -212,7 +214,11 @@ void PageGameStats::renderStats()
         }
 
         graphic->setScene(m_scene.data());
+        graphic->setSceneRect(0, 0, maxDataPoints-1, qMax(maxValue, (quint32) 1));
         graphic->fitInView(graphic->sceneRect());
+
+        graphic->show();
+        labelGraphTitle->show();
     }
 }
 
