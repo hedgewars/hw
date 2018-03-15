@@ -81,6 +81,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 
 ------------------
@@ -793,30 +794,36 @@ function onParameters()
 end
 
 function onGameInit()
+
+    TemplateFilter = 0
+
+    if MapGen == mgDrawn then
+        eraseMap(false)
+    else
+        MapGen = mgDrawn
+    end
+
     if mapID == nil then
         mapID = 2 + GetRandom(7)
     end
 
     addHashData(mapID)
 
-		Theme = "Cave"
-		Map = ""
+    Theme = "Cave"
+    Map = ""
 
-		MapGen = mgDrawn
-		TemplateFilter = 0
+    EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
+    DisableGameFlags(gfSolidLand)
+    CaseFreq = 0
+    TurnTime = 90000
+    WaterRise = 0
+    HealthDecrease = 0
 
-		EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
-		DisableGameFlags(gfSolidLand)
-		CaseFreq = 0
-        TurnTime = 90000
-        WaterRise = 0
-        HealthDecrease = 0
+    for x = 1, 16 do
+        AddPoint(x*100,100,5)
+    end
 
-		for x = 1, 16 do
-			AddPoint(x*100,100,5)
-		end
-
-		FlushPoints()
+    FlushPoints()
 
 end
 

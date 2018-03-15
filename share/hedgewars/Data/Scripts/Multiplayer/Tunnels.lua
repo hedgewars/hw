@@ -1,16 +1,13 @@
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 function onPreviewInit()
-onGameInit()
+    onGameInit()
 end
 
 function onGameInit()
     MapGen = mgDrawn
     TemplateFilter = 0
-    for i = 200,2000,600 do
-        AddPoint(1,i,63)
-        AddPoint(4000,i)
-    end
-
+    fillMap(false)
     side = 0
     for i = 0,1+MapFeatureSize*2 do
         if side > 3 then 

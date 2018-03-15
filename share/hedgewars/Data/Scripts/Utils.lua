@@ -20,3 +20,27 @@ function gearIsInCircle(gear, x, y, r, useRadius)
     end
     return false
 end
+
+local function drawFullMap(erase, flush)
+	for x = 200,4000,600 do
+		for y = 100,2000,150 do
+			AddPoint(x, y, 63, erase)
+		end
+	end
+	if flush ~= false then
+		FlushPoints()
+	end
+end
+
+-- Completely fill the map with land. Requires MapGen=mgDrawn.
+-- If flush is false, FlushPoints() is not called.
+function fillMap(flush)
+	drawFullMap(false, flush)
+end
+
+-- Completely erase all land from drawn maps. Requires MapGen=mgDrawn.
+-- If flush is false, FlushPoints() is not called.
+function eraseMap(flush)
+	drawFullMap(true, flush)
+end
+

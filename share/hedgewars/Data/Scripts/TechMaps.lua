@@ -12,6 +12,7 @@
 
 
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 techX = {}
 techY = {}
@@ -92,11 +93,16 @@ function onPreviewInit()
 		return
 	end
 
+        if MapGen == mgDrawn then
+	    eraseMap(false)
+        else
+	    MapGen = mgDrawn
+        end
+
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)
 	end
 
-	MapGen = mgDrawn
     TemplateFilter = 0
 
     for x = 1, 16 do
