@@ -67,6 +67,9 @@
     [self.missionsButton applyDarkBlueQuickStyle];
     [self.campaignButton applyDarkBlueQuickStyle];
     
+    // not yet ready for release...
+    [self.campaignButton setHidden:YES];
+    
     // get the app's version
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 
