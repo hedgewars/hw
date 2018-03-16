@@ -1049,7 +1049,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Video: %1x%2</translation>
+        <translation>Video: %1×%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -1063,6 +1063,22 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>%1 FPS</source>
         <translation>%1 FPS</translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation>Spieler: %1</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation>Szenerie: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation>Karte: %1</translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <translation>Aufzeichnung: %1</translation>
     </message>
 </context>
 <context>
@@ -4086,11 +4102,11 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Rechte Umschalttaste</translation>
+        <translation>Umschalt rechts</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Linke Umschalttaste</translation>
+        <translation>Umschalt links</translation>
     </message>
     <message>
         <source>Right ctrl</source>

@@ -1014,6 +1014,22 @@ just enter your nickname.</translation>
         <source>%1 FPS</source>
         <translation>%1 FPS</translation>
     </message>
+    <message>
+        <source>Player: %1</source>
+        <translation>Player: %1</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation>Theme: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation>Map: %1</translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <translation>Record: %1</translation>
+    </message>
 </context>
 <context>
     <name>MapModel</name>
