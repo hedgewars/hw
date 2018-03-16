@@ -32,16 +32,36 @@ selection-color: #00351d;
 
 a { color:#c8c8ff; }
 
-QLineEdit, QListWidget, QListView, QTableView, QTextBrowser, QSpinBox, QComboBox,
+QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser, QSpinBox, QComboBox,
 QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item, #labelLikeLineEdit {
 background-color: rgba(13, 5, 68, 70%);
+}
+
+VertScrArea, QGraphicsView {
+border-style: solid; border-width: 2px; border-color: #cca300; border-radius: 3px;
+}
+#gameStatsView {
+border-color: #332816;
+}
+
+QSplitter::handle {
+background-image: url(":/res/splitter.png");
+background-clip: content;
+}
+QSplitter::handle:horizontal {
+width: 7px;
+background-repeat: repeat-y;
+}
+QSplitter::handle:vertical {
+height: 7px;
+background-repeat: repeat-x;
 }
 
 QComboBox::separator {
 border: solid; border-width: 3px; border-color: #ffcc00;
 }
 
-QPushButton, QListWidget, QListView, QTableView, QLineEdit, QHeaderView,
+QPushButton, QListWidget, QListView, QTableView, QTableWidget, QLineEdit,
 QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, #gameStackContainer, TeamSelWidget, SelWeaponWidget,
@@ -81,7 +101,7 @@ QToolButton:pressed {
 background-color: #100744;
 }
 
-QLineEdit, QListWidget, QListView, QTableView, QTextBrowser,
+QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser,
 QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview, #labelLikeLineEdit {
 border-radius: 10px;
 }
@@ -96,7 +116,7 @@ color: #ffffff;
 }
 
 QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
-QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
+QTableWidget, QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, #gameStackContainer, TeamSelWidget,
 SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit {
 font: bold 13px;
@@ -149,12 +169,35 @@ outline: none;
 }
 
 QHeaderView {
-border-radius: 0;
-border-width: 0;
-border-bottom-width: 3px;
 background-color: #00351d;
+border: solid;
+border-bottom-width: 3px;
+border-top-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-color: #ffcc00;
 }
-QTableView {
+QHeaderView::section {
+border-left-width: 1px;
+border-right-width: 1px;
+border-top-width: 0;
+border-bottom-width: 0px;
+border-color: #001d10;
+border-style: solid;
+background-color: #00351d;
+padding: 4px;
+}
+QHeaderView::section:pressed {
+background-color: #00250d;
+}
+QHeaderView::up-arrow {
+image: url(":/res/sort_up.png");
+}
+QHeaderView::down-arrow{
+image: url(":/res/sort_down.png");
+}
+
+QTableView, QTableWidget {
 alternate-background-color: #2f213a;
 gridline-color: transparent;
 }

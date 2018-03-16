@@ -70,6 +70,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
 
     // graph
     graphic = new FitGraphicsView(gb);
+    graphic->setObjectName("gameStatsView");
     labelGraphTitle = new QLabel(this);
     labelGraphTitle->setTextFormat(Qt::RichText);
     labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
