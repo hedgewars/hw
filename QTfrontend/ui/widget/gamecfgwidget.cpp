@@ -130,11 +130,12 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Scheme"), SchemeWidget), 0, 0);
 
     QPixmap pmEdit(":/res/edit.png");
+    QIcon iconEdit = QIcon(pmEdit);
 
     QPushButton * goToSchemePage = new QPushButton(SchemeWidget);
     goToSchemePage->setWhatsThis(tr("Edit schemes"));
     goToSchemePage->setIconSize(pmEdit.size());
-    goToSchemePage->setIcon(pmEdit);
+    goToSchemePage->setIcon(iconEdit);
     goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
     SchemeWidgetLayout->addWidget(goToSchemePage, 0, 3);
     connect(goToSchemePage, SIGNAL(clicked()), this, SLOT(jumpToSchemes()));
@@ -159,8 +160,10 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     bindEntries->setWhatsThis(tr("Game scheme will auto-select a weapon"));
     bindEntries->setChecked(true);
     bindEntries->setMaximumWidth(42);
-    bindEntries->setStyleSheet( "QCheckBox::indicator:checked   { image: url(\":/res/lock.png\"); }"
-                                "QCheckBox::indicator:unchecked { image: url(\":/res/unlock.png\");   }" );
+    bindEntries->setStyleSheet( "QCheckBox::indicator:checked:enabled    { image: url(\":/res/lock.png\"); }"
+                                "QCheckBox::indicator:checked:disabled   { image: url(\":/res/lock_disabled.png\"); }"
+                                "QCheckBox::indicator:unchecked:enabled  { image: url(\":/res/unlock.png\");   }"
+                                "QCheckBox::indicator:unchecked:disabled { image: url(\":/res/unlock_disabled.png\");   }" );
     SchemeWidgetLayout->addWidget(bindEntries, 0, 1, 0, 1, Qt::AlignVCenter);
 
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));

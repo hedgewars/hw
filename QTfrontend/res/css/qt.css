@@ -56,6 +56,19 @@ QSpinBox:hover, QToolBox:hover, QComboBox:hover {
 border-color: yellow;
 }
 
+TeamShowWidget QPushButton {
+icon-size: 48px;
+text-align: left;
+background-color: #0d0544;
+color: orange;
+font: bold;
+border-width: 2px;
+margin: 6px 0px 6px 0px;
+}
+TeamShowWidget QPushButton:disabled {
+color: #a0a0a0;
+}
+
 QToolButton {
 background-color: #11084A;
 }
@@ -75,6 +88,11 @@ border-radius: 10px;
 
 #mapPreview {
 background-color: #0d0544;
+}
+#mapPreview:disabled{
+border-color: #a0a0a0;
+background-color: #0d0544;
+color: #ffffff;
 }
 
 QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
@@ -109,10 +127,6 @@ background-color: #130f2c;
 QTabWidget::pane {
 border-radius: 8px;
 border-top-left-radius: 0px;
-}
-
-QLineEdit:disabled, QSpinBox:disabled {
-border-color: gray;
 }
 
 GameCFGWidget {
@@ -166,9 +180,15 @@ height: 10px;
 QSpinBox::up-arrow {
 image: url(":/res/spin_up.png");
 }
+QSpinBox::up-arrow:disabled {
+image: url(":/res/spin_up_disabled.png");
+}
 
 QSpinBox::down-arrow {
 image: url(":/res/spin_down.png");
+}
+QSpinBox::down-arrow:disabled {
+image: url(":/res/spin_down_disabled.png");
 }
 
 QSpinBox::down-button {
@@ -191,6 +211,9 @@ width: 25px;
 }
 QComboBox::down-arrow {
 image: url(":/res/dropdown.png");
+}
+QComboBox::down-arrow:disabled {
+image: url(":/res/dropdown_disabled.png");
 }
 
 VertScrArea {
@@ -287,6 +310,11 @@ border: 1px solid #ffcc00;
 
 :disabled{
 color: #a0a0a0;
+border-color: #a0a0a0;
+}
+QListWidget:item:selected:disabled, QListView:item:selected:disabled{
+color: rgba(13, 5, 68, 70%);
+background-color: #a0a0a0;
 }
 SquareLabel, ItemNum {
 background-color: #000000;
@@ -297,6 +325,9 @@ height: 2px;
 margin: 2px 0px;
 background-color: #ffcc00;
 }
+QSlider::groove::horizontal:disabled {
+background-color: #a0a0a0;
+}
 
 QSlider::handle::horizontal {
 border: 0px;
@@ -305,6 +336,9 @@ background-color: #ffcc00;
 width: 12px;
 height: 6px;
 border-radius: 3px;
+}
+QSlider::handle::horizontal:disabled {
+background-color: #a0a0a0;
 }
 
 HatButton, ThemeButton {

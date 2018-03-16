@@ -94,6 +94,7 @@ class PageScheme : public AbstractPage
         QSpinBox * SB_GetAwayTime;
         QComboBox * CB_WorldEdge;
         QLineEdit * LE_name;
+        QLabel * L_name;
         QLineEdit * LE_ScriptParam;
 
         QGroupBox * gbGameModes;

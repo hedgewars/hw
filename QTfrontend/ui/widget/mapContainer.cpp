@@ -98,10 +98,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     twoColumnLayout->addLayout(rightLayout, 0);
     QVBoxLayout * drawnControls = new QVBoxLayout();
 
+    /* Map type label */
+
+    QLabel* lblMapType = new QLabel(tr("Map type:"));
+    topLayout->setSpacing(10);
+    topLayout->addWidget(lblMapType, 0);
+    m_childWidgets << lblMapType;
+
     /* Map type combobox */
 
-    topLayout->setSpacing(10);
-    topLayout->addWidget(new QLabel(tr("Map type:")), 0);
     cType = new QComboBox(this);
     topLayout->addWidget(cType, 1);
     cType->insertItem(0, tr("Image map"), MapModel::StaticMap);
@@ -148,6 +153,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     QLabel * lblMapPreviewText = new QLabel(this);
     lblMapPreviewText->setText(tr("Map preview:"));
     leftLayout->addWidget(lblMapPreviewText, 0);
+    m_childWidgets << lblMapPreviewText;
 
     /* Map Preview */
 
@@ -158,6 +164,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
     connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
+    m_childWidgets << mapPreview;
 
     /* Bottom-Left layout */
 
@@ -168,6 +175,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     lblMapList = new QLabel(this);
     rightLayout->addWidget(lblMapList, 0);
+    m_childWidgets << lblMapList;
 
     /* Static maps list */
 
@@ -329,7 +337,12 @@ void HWMapContainer::addInfoToPreview(const QPixmap &image)
     pc.fillRect(centered.rect(), linearGrad);
     pc.drawPixmap(-3, -3, finalImage);*/
 
-    mapPreview->setIcon(QIcon(finalImage));
+    // Set the map preview image. Make sure it is always colored the same,
+    // no matter if disabled or not.
+    QIcon mapPreviewIcon = QIcon();
+    mapPreviewIcon.addPixmap(finalImage, QIcon::Normal);
+    mapPreviewIcon.addPixmap(finalImage, QIcon::Disabled);
+    mapPreview->setIcon(mapPreviewIcon);
     mapPreview->setIconSize(finalImage.size());
 }
 

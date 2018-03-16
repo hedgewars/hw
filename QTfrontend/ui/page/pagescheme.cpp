@@ -494,15 +494,14 @@ QLayout * PageScheme::bodyLayoutDefinition()
     LE_ScriptParam->setMaxLength(240);
     glBSLayout->addWidget(LE_ScriptParam,17,2,1,1);
 
-
-    l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Scheme Name:"));
+    L_name = new QLabel(gbBasicSettings);
+    L_name->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
     LE_name->setWhatsThis(tr("Name of this scheme"));
 
     gl->addWidget(LE_name,15,1,1,5);
-    gl->addWidget(l,15,0,1,1);
+    gl->addWidget(L_name,15,0,1,1);
 
     return pageLayout;
 }
@@ -641,6 +640,7 @@ void PageScheme::schemeSelected(int n)
     gbGameModes->setEnabled(n >= c);
     gbBasicSettings->setEnabled(n >= c);
     LE_name->setEnabled(n >= c);
+    L_name->setEnabled(n >= c);
 }
 
 

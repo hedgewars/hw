@@ -30,7 +30,7 @@ void ColorWidget::setColor(int color)
 
     QStandardItem * item = m_colorsModel->item(m_color);
 
-    setStyleSheet(QString("border: 2px solid orange; border-radius: 8px; background: %1").arg(item->data().value<QColor>().name()));
+    setStyleSheet(QString("* { border: 2px solid #ffcc00; border-radius: 8px; background: %1 } :disabled { border-color: #a0a0a0; }").arg(item->data().value<QColor>().name()));
     /*
     QPalette p = palette();
     p.setColor(QPalette::Window, item->data().value<QColor>());

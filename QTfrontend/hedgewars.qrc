@@ -80,6 +80,7 @@
         <file>res/camera.png</file>
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
+        <file>res/dropdown_disabled.png</file>
         <file>res/new.png</file>
         <file>res/edit.png</file>
         <file>res/delete.png</file>
@@ -115,7 +116,9 @@
         <file>res/lightbulb_on.png</file>
         <file>res/lightbulb_off.png</file>
         <file>res/spin_up.png</file>
+        <file>res/spin_up_disabled.png</file>
         <file>res/spin_down.png</file>
+        <file>res/spin_down_disabled.png</file>
         <file>res/PlaySound.png</file>
         <file>res/hh_small.png</file>
         <file>res/btnDisabled.png</file>
@@ -181,7 +184,9 @@
         <file>res/info.png</file>
         <file>res/kick.png</file>
         <file>res/lock.png</file>
+        <file>res/lock_disabled.png</file>
         <file>res/unlock.png</file>
+        <file>res/unlock_disabled.png</file>
         <file>res/StatsMedal1.png</file>
         <file>res/StatsMedal2.png</file>
         <file>res/StatsMedal3.png</file>
