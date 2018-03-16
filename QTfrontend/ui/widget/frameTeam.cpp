@@ -28,7 +28,8 @@
 #include "DataManager.h"
 
 FrameTeams::FrameTeams(QWidget* parent) :
-    QFrame(parent), mainLayout(this), nonInteractive(false)
+    QFrame(parent), mainLayout(this), nonInteractive(false),
+    hasDecoFrame(false)
 {
     QPalette newPalette = palette();
     newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
@@ -73,6 +74,7 @@ void FrameTeams::addTeam(HWTeam team, bool willPlay)
     teamToWidget.insert(team, pTeamShowWidget);
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
     QCoreApplication::postEvent(parentWidget(), pevent);
+    updateDecoFrame();
 }
 
 void FrameTeams::removeTeam(HWTeam team)
@@ -84,6 +86,7 @@ void FrameTeams::removeTeam(HWTeam team)
     teamToWidget.erase(it);
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
     QCoreApplication::postEvent(parentWidget(), pevent);
+    updateDecoFrame();
 }
 
 void FrameTeams::resetTeams()
@@ -133,4 +136,29 @@ void FrameTeams::emitTeamColorChanged(const HWTeam& team)
 QSize FrameTeams::sizeHint() const
 {
     return QSize(-1, teamToWidget.size() * 39 + 9);
+}
+
+void FrameTeams::setDecoFrameEnabled(bool enabled)
+{
+    hasDecoFrame = enabled;
+    updateDecoFrame();
+}
+
+void FrameTeams::updateDecoFrame()
+{
+    if (hasDecoFrame && teamToWidget.size() >= 1)
+    {
+        setStyleSheet(
+            "FrameTeams{"
+            "border: solid;"
+            "border-width: 1px;"
+            "border-radius: 16px;"
+            "border-color: #ffcc00;"
+            "}"
+        );
+    }
+    else
+    {
+        setStyleSheet("FrameTeams{ border: transparent }");
+    }
 }

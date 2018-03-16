@@ -44,6 +44,7 @@ class FrameTeams : public QFrame
         void setInteractivity(bool interactive);
         int getNextColor();
         QSize sizeHint() const;
+        void setDecoFrameEnabled(bool enabled);
 
     signals:
         void teamColorChanged(const HWTeam&);
@@ -61,6 +62,9 @@ class FrameTeams : public QFrame
         typedef QMap<HWTeam, QWidget*> tmapTeamToWidget;
         tmapTeamToWidget teamToWidget;
         bool nonInteractive;
+
+        bool hasDecoFrame;
+        void updateDecoFrame();
 };
 
 #endif // _FRAME_TAM_INCLUDED
