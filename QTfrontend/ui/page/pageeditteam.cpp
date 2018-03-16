@@ -77,7 +77,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         HHNameEdit[i]->setMinimumWidth(120);
         HHNameEdit[i]->setFixedHeight(36);
         HHNameEdit[i]->setWhatsThis(tr("This hedgehog's name"));
-        HHNameEdit[i]->setStyleSheet("padding: 6px;");
+        HHNameEdit[i]->setStyleSheet("QLineEdit { padding: 6px; }");
         GBHLayout->addWidget(HHNameEdit[i], i + 1, 1, 1, 2);
 
         btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 5, 1, 1, true);
@@ -128,6 +128,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     TeamNameEdit = new QLineEdit(GBoxTeam);
     TeamNameEdit->setMaxLength(64);
     TeamNameEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    TeamNameEdit->setStyleSheet("QLineEdit { padding: 6px; }");
     GBTLayout->addWidget(TeamNameEdit, 0, 1, 1, 2);
     vbox2->addWidget(GBoxTeam);
 

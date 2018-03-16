@@ -134,6 +134,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBTeamName = new QComboBox(groupTeams);
             CBTeamName->setMaxVisibleItems(50);
+            CBTeamName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             groupTeams->layout()->addWidget(CBTeamName, 0, 0);
 
             BtnNewTeam = new QPushButton(groupTeams);
@@ -175,6 +176,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             SchemesName = new QComboBox(groupSchemes);
             SchemesName->setMaxVisibleItems(50);
+            SchemesName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             groupSchemes->layout()->addWidget(SchemesName, 0, 0);
 
             SchemeNew = new QPushButton(groupSchemes);
@@ -207,6 +209,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             WeaponsName = new QComboBox(groupWeapons);
             WeaponsName->setMaxVisibleItems(50);
+            WeaponsName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             groupWeapons->layout()->addWidget(WeaponsName, 0, 0);
 
             WeaponNew = new QPushButton(groupWeapons);
