@@ -640,12 +640,14 @@ if Gear^.Frame <> 0 then  // use a non-hedgehog gear - a lua trick that hopefull
         begin
         Gear^.X:= hwFloat2Float(realgear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
         Gear^.Y:= hwFloat2Float(realgear^.Y) - (realgear^.Radius + Gear^.Tex^.h);
+        Gear^.Angle:= 1; // Mark speech bubble as ready for rendering
         end
     end
 else if Gear^.Hedgehog^.Gear <> nil then
     begin
     Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
     Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (cHHRadius + Gear^.Tex^.h);
+    Gear^.Angle:= 1; // Mark speech bubble as ready for rendering
     end;
 
 if (Gear^.Timer = 0) or ((realgear = nil) and (Gear^.Frame <> 0))  then
