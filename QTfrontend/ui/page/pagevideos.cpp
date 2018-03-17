@@ -39,9 +39,6 @@
 #include <QFileSystemWatcher>
 #include <QDateTime>
 #include <QRegExp>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QXmlStreamReader>
 
 #include "hwconsts.h"
@@ -51,7 +48,6 @@
 #include "gameuiconfig.h"
 #include "recorder.h"
 #include "ask_quit.h"
-#include "upload_video.h"
 
 static const QSize ThumbnailSize(350, 350*3/5);
 
@@ -60,7 +56,7 @@ enum VideosColumns
 {
     vcName,
     vcSize,
-    vcProgress, // either encoding or uploading
+    vcProgress, // for encoding
 
     vcNumColumns,
 };
@@ -77,9 +73,7 @@ class VideoItem : public QTableWidgetItem
         QString name;
         QString prefix; // original filename without extension
         QString desc;   // description (duration, resolution, etc...)
-        QString uploadUrl; // https://youtu.be/???????
         HWRecorder    * pRecorder; // non NULL if file is being encoded
-        QNetworkReply * pUploading; // non NULL if file is being uploaded
         bool seen; // used when updating directory
         float lastSizeUpdate;
         float progress;
@@ -96,7 +90,6 @@ VideoItem::VideoItem(const QString& name)
 {
     this->name = name;
     pRecorder = NULL;
-    pUploading = NULL;
     lastSizeUpdate = 0;
     progress = 0;
     seen = false;
@@ -180,8 +173,6 @@ QLayout * PageVideos::bodyLayoutDefinition()
         labelDesc->setTextFormat(Qt::RichText);
         labelDesc->setWordWrap(true);
         labelDesc->setOpenExternalLinks(true);
-        //labelDesc->setMinimumSize(ThumbnailSize);
-        //pTopDescLayout->addWidget(labelDesc, 1);
 
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
@@ -192,10 +183,6 @@ QLayout * PageVideos::bodyLayoutDefinition()
         btnDelete->setEnabled(false);
         btnDelete->setWhatsThis(QPushButton::tr("Delete this video"));
         pBottomDescLayout->addWidget(btnDelete);
-        btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
-        btnToYouTube->setEnabled(false);
-        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your YouTube account"));
-        pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addWidget(labelThumbnail, 0);
         pDescLayout->addWidget(labelDesc, 0);
@@ -220,16 +207,14 @@ void PageVideos::connectSignals()
     connect(filesTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(currentCellChanged()));
     connect(btnPlay,   SIGNAL(clicked()), this, SLOT(playSelectedFile()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
-    connect(btnToYouTube, SIGNAL(clicked()), this, SLOT(uploadToYouTube()));
     connect(btnOpenDir, SIGNAL(clicked()), this, SLOT(openVideosDirectory()));
 }
 
 PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
-    config(0), netManager(0)
+    config(0)
 {
     nameChangedFromCode = false;
     numRecorders = 0;
-    numUploads = 0;
     initPage();
 }
 
@@ -491,15 +476,12 @@ void PageVideos::updateDescription()
         clearThumbnail();
         btnPlay->setEnabled(false);
         btnDelete->setEnabled(false);
-        btnToYouTube->setEnabled(false);
         return;
     }
 
     btnPlay->setEnabled(item->ready());
-    btnToYouTube->setEnabled(item->ready());
     btnDelete->setEnabled(true);
     btnDelete->setText(item->ready()? QPushButton::tr("Delete") :  QPushButton::tr("Cancel"));
-    btnToYouTube->setText(item->pUploading? QPushButton::tr("Cancel uploading") :  QPushButton::tr("Upload to YouTube"));
 
     // construct string with desctiption of this file to display it
     QString desc = item->name + "\n\n";
@@ -543,21 +525,6 @@ void PageVideos::updateDescription()
             item->prefix.truncate(pt);
     }
 
-    if (item->ready() && item->uploadUrl.isEmpty())
-    {
-        // try to load url from file
-        QFile * file = new QFile(cfgdir->absoluteFilePath("VideoTemp/" + item->prefix + "-url.txt"), this);
-        if (!file->open(QIODevice::ReadOnly))
-            item->uploadUrl = "no";
-        else
-        {
-            QByteArray data = file->readAll();
-            file->close();
-            item->uploadUrl = QString::fromUtf8(data.data());
-        }
-    }
-    if (item->uploadUrl != "no")
-        desc += QString("<a href=\"%1\" style=\"color: white;\">%1</a>").arg(item->uploadUrl);
     desc.replace("\n", "<br/>");
 
     labelDesc->setText(desc);
@@ -688,14 +655,14 @@ void PageVideos::openVideosDirectory()
     QDesktopServices::openUrl(QUrl("file:///" + path));
 }
 
-// clear VideoTemp directory (except for thumbnails and upload links)
+// clear VideoTemp directory (except for thumbnails)
 void PageVideos::clearTemp()
 {
     QDir temp(cfgdir->absolutePath() + "/VideoTemp");
     QStringList files = temp.entryList(QDir::Files);
     foreach (const QString& file, files)
     {
-        if (!file.endsWith(".bmp") && !file.endsWith(".png") && !file.endsWith("-url.txt"))
+        if (!file.endsWith(".bmp") && !file.endsWith(".png"))
             temp.remove(file);
     }
 }
@@ -703,7 +670,7 @@ void PageVideos::clearTemp()
 bool PageVideos::tryQuit(HWForm * form)
 {
     bool quit = true;
-    if (numRecorders != 0 || numUploads != 0)
+    if (numRecorders != 0)
     {
         // ask user what to do - abort or wait
         HWAskQuitDialog * askd = new HWAskQuitDialog(this, form);
@@ -718,7 +685,6 @@ bool PageVideos::tryQuit(HWForm * form)
 // returns multi-line string with list of videos in progress
 /* it will look like this:
 foo.avi (15.21% - encoding)
-bar.avi (18.21% - uploading)
 */
 QString PageVideos::getVideosInProgress()
 {
@@ -730,8 +696,6 @@ QString PageVideos::getVideosInProgress()
         QString process;
         if (!item->ready())
             process = tr("encoding");
-        else if (item->pUploading)
-            process = tr("uploading");
         else
             continue;
         float progress = 100*item->progress;
@@ -771,168 +735,3 @@ void PageVideos::startEncoding(const QByteArray & record)
     }
 }
 
-VideoItem * PageVideos::itemFromReply(QNetworkReply* reply, int & row)
-{
-    VideoItem * item = NULL;
-    int count = filesTable->rowCount();
-    // find corresponding item (maybe there is a better way to implement this?)
-    for (int i = 0; i < count; i++)
-    {
-        item = nameItem(i);
-        if (item->pUploading == reply)
-        {
-            row = i;
-            break;
-        }
-    }
-    return item;
-}
-
-void PageVideos::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
-{
-    QNetworkReply* reply = (QNetworkReply*)sender();
-    int row;
-    VideoItem * item = itemFromReply(reply, row);
-    setProgress(row, item, bytesSent*1.0/bytesTotal);
-}
-
-void PageVideos::uploadFinished()
-{
-    QNetworkReply* reply = (QNetworkReply*)sender();
-    reply->deleteLater();
-
-    int row;
-    VideoItem * item = itemFromReply(reply, row);
-    if (!item)
-        return;
-
-    item->pUploading = NULL;
-
-    // extract video id from reply
-    QString videoid;
-    QXmlStreamReader xml(reply);
-    while (!xml.atEnd())
-    {
-        xml.readNext();
-        if (xml.qualifiedName() == "yt:videoid")
-        {
-            videoid = xml.readElementText();
-            break;
-        }
-    }
-
-    if (!videoid.isEmpty())
-    {
-        item->uploadUrl = "https://youtu.be/" + videoid;
-        updateDescription();
-
-        // save url in file
-        QFile * file = new QFile(cfgdir->absoluteFilePath("VideoTemp/" + item->prefix + "-url.txt"), this);
-        if (file->open(QIODevice::WriteOnly))
-        {
-            file->write(item->uploadUrl.toUtf8());
-            file->close();
-        }
-    }
-
-    filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
-    numUploads--;
-}
-
-// this will protect saved youtube password from those who cannot read source code
-static QString protectPass(QString str)
-{
-    QByteArray array = str.toUtf8();
-    for (int i = 0; i < array.size(); i++)
-        array[i] = array[i] ^ 0xC4 ^ i;
-    array = array.toBase64();
-    return QString::fromLatin1(array.data());
-}
-
-static QString unprotectPass(QString str)
-{
-    QByteArray array = QByteArray::fromBase64(str.toLatin1());
-    for (int i = 0; i < array.size(); i++)
-        array[i] = array[i] ^ 0xC4 ^ i;
-    return QString::fromUtf8(array);
-}
-
-void PageVideos::uploadToYouTube()
-{
-    int row = filesTable->currentRow();
-    VideoItem * item = nameItem(row);
-
-    if (item->pUploading) //Act as 'cancel uploading' button
-    {
-        // ask user if (s)he is serious
-        QMessageBox reallyStopMsg(this);
-        reallyStopMsg.setIcon(QMessageBox::Question);
-        reallyStopMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
-        reallyStopMsg.setText(QMessageBox::tr("Do you really want to cancel uploading %1?").arg(item->name));
-        reallyStopMsg.setWindowModality(Qt::WindowModal);
-        reallyStopMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-
-        if (reallyStopMsg.exec() != QMessageBox::Ok)
-            return;
-        item->pUploading->abort();
-        btnToYouTube->setText(QPushButton::tr("Upload to YouTube"));
-        filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
-        //numUploads--;
-        return;
-    }
-
-    if (!netManager)
-        netManager = new QNetworkAccessManager(this);
-
-    HWUploadVideoDialog* dlg = new HWUploadVideoDialog(this, item->name, netManager);
-    dlg->deleteLater();
-    if (config->value("youtube/save").toBool())
-    {
-        dlg->cbSave->setChecked(true);
-        dlg->leAccount->setText(config->value("youtube/name").toString());
-        dlg->lePassword->setText(unprotectPass(config->value("youtube/pswd").toString()));
-    }
-
-    bool result = dlg->exec();
-
-    if (dlg->cbSave->isChecked())
-    {
-        config->setValue("youtube/save", true);
-        config->setValue("youtube/name", dlg->leAccount->text());
-        config->setValue("youtube/pswd", protectPass(dlg->lePassword->text()));
-    }
-    else
-    {
-        config->setValue("youtube/save", false);
-        config->setValue("youtube/name", "");
-        config->setValue("youtube/pswd", "");
-    }
-
-    if (!result)
-        return;
-
-    QNetworkRequest request(QUrl(dlg->location));
-    request.setRawHeader("Content-Type", "application/octet-stream");
-
-    QFile * file = new QFile(item->path(), this);
-    if (!file->open(QIODevice::ReadOnly))
-        return;
-
-    // add progress bar
-    QProgressBar * progressBar = new QProgressBar(filesTable);
-    progressBar->setMinimum(0);
-    progressBar->setMaximum(10000);
-    progressBar->setValue(0);
-    // make it different from progress-bar used during encoding (use blue color)
-    progressBar->setStyleSheet("* {color: #00ccff; selection-background-color: #00ccff;}" );
-    filesTable->setCellWidget(row, vcProgress, progressBar);
-
-    QNetworkReply* reply = netManager->put(request, file);
-    file->setParent(reply); // automatically close file when needed
-    item->pUploading = reply;
-    connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
-    connect(reply, SIGNAL(finished()), this, SLOT(uploadFinished()));
-    numUploads++;
-
-    updateDescription();
-}
