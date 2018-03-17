@@ -73,8 +73,8 @@ void FrameTeams::addTeam(HWTeam team, bool willPlay)
     mainLayout.addWidget(pTeamShowWidget);
     teamToWidget.insert(team, pTeamShowWidget);
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
-    QCoreApplication::postEvent(parentWidget(), pevent);
     updateDecoFrame();
+    QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
 void FrameTeams::removeTeam(HWTeam team)
@@ -85,8 +85,8 @@ void FrameTeams::removeTeam(HWTeam team)
     it.value()->deleteLater();
     teamToWidget.erase(it);
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
-    QCoreApplication::postEvent(parentWidget(), pevent);
     updateDecoFrame();
+    QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
 void FrameTeams::resetTeams()
@@ -98,6 +98,7 @@ void FrameTeams::resetTeams()
         teamToWidget.erase(it++);
     }
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    updateDecoFrame();
     QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
