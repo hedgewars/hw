@@ -25,6 +25,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QIcon>
 
 class ToggleButtonWidget : public QPushButton
 {
@@ -33,8 +34,8 @@ class ToggleButtonWidget : public QPushButton
         ToggleButtonWidget(QWidget * parent, QString img);
         ~ToggleButtonWidget();
     private:
-        QPixmap pmChecked;
-        QPixmap pmDisabled;
+        QIcon icoUnchecked;
+        QIcon icoChecked;
     private slots:
         void eventToggled(bool checked);
 };
