@@ -490,10 +490,14 @@ begin
                                 begin
                                 DrawTextureRotatedF(curhat, 1.0, -1.0, -6.0, ox, oy, 0, i, 32, 32,
                                     i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                                if curhat^.w > 64 then
+                                if (curhat^.w > 64) or ((curhat^.w = 64) and (curhat^.h = 32)) then
                                     begin
+                                    if ((curhat^.w = 64) and (curhat^.h = 32)) then
+                                        tx := 1
+                                    else
+                                        tx := 32;
                                     Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                                    DrawTextureRotatedF(curhat, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
+                                    DrawTextureRotatedF(curhat, 1.0, -1.0, -6.0, ox, oy, tx, i, 32, 32,
                                         i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
                                     untint
                                     end
@@ -521,14 +525,18 @@ begin
                                 sign,
                                 32,
                                 32);
-                            if curhat^.w > 64 then
+                            if (curhat^.w > 64) or ((curhat^.w = 64) and (curhat^.h = 32)) then
                                 begin
+                                if ((curhat^.w = 64) and (curhat^.h = 32)) then
+                                    tx := 1
+                                else
+                                    tx := 32;
                                 Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                                 DrawTextureF(curhat,
                                     1,
                                     sx,
                                     sy - 5,
-                                    32,
+                                    tx,
                                     sign,
                                     32,
                                     32);
