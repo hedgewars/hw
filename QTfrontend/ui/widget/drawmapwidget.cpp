@@ -63,6 +63,9 @@ void DrawMapWidget::resizeEvent(QResizeEvent * event)
 {
     Q_UNUSED(event);
 
+	if(!m_scene)
+		return;
+		
     int height = this->height();
     int width = this->width();
 
