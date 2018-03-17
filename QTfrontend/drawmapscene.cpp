@@ -336,7 +336,11 @@ void DrawMapScene::decode(QByteArray data)
 {
     hideCursor();
 
+    // Remember erasing mode
     bool erasing = m_isErasing;
+
+    // Use seperate for decoding the map, don't mess with the user pen
+    QPen load_pen = QPen(m_pen);
 
     oldItems.clear();
     oldPaths.clear();
@@ -363,7 +367,7 @@ void DrawMapScene::decode(QByteArray data)
 
             if(params.points.size())
             {
-                addPath(pointsToPath(params.points), m_pen);
+                addPath(pointsToPath(params.points), load_pen);
 
                 paths.prepend(params);
 
@@ -371,12 +375,12 @@ void DrawMapScene::decode(QByteArray data)
             }
 
             quint8 penWidth = flags & 0x3f;
-            m_pen.setWidth(deserializePenWidth(penWidth));
+            load_pen.setWidth(deserializePenWidth(penWidth));
             params.erasing = flags & 0x40;
             if(params.erasing)
-                m_pen.setBrush(m_eraser);
+                load_pen.setBrush(m_eraser);
             else
-                m_pen.setBrush(m_brush);
+                load_pen.setBrush(m_brush);
             params.width = penWidth;
         } else
             if(isSpecial)
@@ -399,12 +403,13 @@ void DrawMapScene::decode(QByteArray data)
 
     if(params.points.size())
     {
-        addPath(pointsToPath(params.points), m_pen);
+        addPath(pointsToPath(params.points), load_pen);
         paths.prepend(params);
     }
 
     emit pathChanged();
 
+    // Restore erasing mode
     setErasing(erasing);
 }
 
