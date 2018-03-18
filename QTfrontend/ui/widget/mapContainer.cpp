@@ -524,6 +524,11 @@ void HWMapContainer::intSetMap(const QString & map)
         qDebug() << "HWMapContainer::intSetMap: Map doesn't exist: " << map;
         m_missingMap = true;
         lblMapName->setText(map);
+        if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::MissionMap)
+        {
+            m_mapInfo.type = MapModel::StaticMap;
+            changeMapType(MapModel::StaticMap, QModelIndex());
+        }
         updatePreview();
     }
 }
@@ -934,6 +939,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             missionMapChanged(newMap.isValid() ? newMap : missionMapList->currentIndex());
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
+            lblMapName->setText(m_curMap);
             if(m_master)
             {
                 missionMapList->show();
@@ -953,6 +959,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
+            lblMapName->setText(m_curMap);
             if(m_master)
             {
                 staticMapList->show();
@@ -1127,7 +1134,6 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
     }
 
     lblDesc->setText(mapInfo.desc);
-    lblMapName->setText(m_curMap);
 
     updatePreview();
     emit mapChanged(m_curMap);
