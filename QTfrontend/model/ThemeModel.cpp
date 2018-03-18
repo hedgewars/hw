@@ -131,7 +131,7 @@ void ThemeModel::loadThemes() const
             dataset.insert(IsHiddenRole, true);
 
         // detect if theme is dlc
-        QString themeDir = PHYSFS_getRealDir(QString("Themes/%1/icon.png").arg(theme).toLocal8Bit().data());
+        QString themeDir = PHYSFS_getRealDir(QString("Themes/%1").arg(theme).toLocal8Bit().data());
         bool isDLC = !themeDir.startsWith(datadir->absolutePath());
         dataset.insert(IsDlcRole, isDLC);
 

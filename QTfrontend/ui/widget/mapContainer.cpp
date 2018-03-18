@@ -541,7 +541,7 @@ void HWMapContainer::setTheme(const QString & theme)
     if(mdl.size())
         updateTheme(mdl.at(0));
     else
-        intSetIconlessTheme(theme);
+        setMissingTheme(theme);
 }
 
 void HWMapContainer::setRandomMap()
@@ -1197,13 +1197,18 @@ void HWMapContainer::setMaster(bool master)
     }
 }
 
-void HWMapContainer::intSetIconlessTheme(const QString & name)
+void HWMapContainer::setMissingTheme(const QString & name)
 {
     if (name.isEmpty()) return;
 
     m_theme = name;
-    btnTheme->setIcon(QIcon());
+    QPixmap pixMissing = QPixmap(":/res/missingTheme@2x.png");
+    QIcon iconMissing  = QIcon();
+    iconMissing.addPixmap(pixMissing, QIcon::Normal);
+    iconMissing.addPixmap(pixMissing, QIcon::Disabled);
+    btnTheme->setIcon(iconMissing);
     btnTheme->setText(tr("Theme: %1").arg(name));
+    updateThemeButtonSize();
 }
 
 void HWMapContainer::setupMissionMapsView()

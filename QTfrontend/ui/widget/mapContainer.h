@@ -174,7 +174,7 @@ class HWMapContainer : public QWidget
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
         void intSetFeatureSize(int size);
-        void intSetIconlessTheme(const QString & name);
+        void setMissingTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
         void setMapInfo(MapModel::MapInfo mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
