@@ -35,15 +35,13 @@ ThemeModel::ThemeModel(QObject *parent) :
     m_filteredNoDLC = NULL;
 }
 
-QSortFilterProxyModel * ThemeModel::withoutDLC()
+ThemeFilterProxyModel * ThemeModel::withoutDLC()
 {
     if (m_filteredNoDLC == NULL)
     {
-        m_filteredNoDLC = new QSortFilterProxyModel(this);
+        m_filteredNoDLC = new ThemeFilterProxyModel(this);
         m_filteredNoDLC->setSourceModel(this);
-        // filtering based on IsDlcRole would be nicer
-        // but seems this model can only do string-based filtering :|
-        m_filteredNoDLC->setFilterRegExp(QRegExp("^[^*]"));
+        m_filteredNoDLC->setFilterDLC(true);
     }
     return m_filteredNoDLC;
 }
