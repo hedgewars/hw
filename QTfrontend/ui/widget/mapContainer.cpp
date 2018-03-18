@@ -192,15 +192,27 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     rightLayout->addWidget(missionMapList, 1);
     m_childWidgets << missionMapList;
 
-    /* Map name label (when not room master) */
+    /* Map name (when not room master) */
+    /* We use a QTextEdit instead of QLabel because it is able
+       to wrap at any character. */
+    teMapName = new QTextEdit(this);
+    teMapName->setObjectName("mapName");
+    teMapName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    teMapName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
-    lblMapName = new QLabel(this);
-    lblMapName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    lblMapName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    lblMapName->setTextFormat(Qt::PlainText);
-    lblMapName->setWordWrap(true),
-    rightLayout->addWidget(lblMapName, 1);
-    m_childWidgets << lblMapName;
+    /* Boilerplate to emulate a QLabel */
+    teMapName->setReadOnly(true);
+    teMapName->setAcceptRichText(false);
+    teMapName->setFrameStyle(QFrame::NoFrame);
+    QPalette pal = QPalette(qApp->palette());
+    pal.setColor(QPalette::Base, Qt::transparent);
+    teMapName->setPalette(pal);
+
+    teMapName->setLineWrapMode(QTextEdit::WidgetWidth);
+    teMapName->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+
+    rightLayout->addWidget(teMapName, 1);
+    m_childWidgets << teMapName;
 
     /* Map load and edit buttons */
 
@@ -523,7 +535,7 @@ void HWMapContainer::intSetMap(const QString & map)
     {
         qDebug() << "HWMapContainer::intSetMap: Map doesn't exist: " << map;
         m_missingMap = true;
-        lblMapName->setText(map);
+        setMapNameLabel(map);
         if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::MissionMap)
         {
             m_mapInfo.type = MapModel::StaticMap;
@@ -894,7 +906,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
 {
     staticMapList->hide();
     missionMapList->hide();
-    lblMapName->hide();
+    teMapName->hide();
     lblMapList->hide();
     generationStyles->hide();
     mazeStyles->hide();
@@ -939,14 +951,14 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             missionMapChanged(newMap.isValid() ? newMap : missionMapList->currentIndex());
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
-            lblMapName->setText(m_curMap);
+            setMapNameLabel(m_curMap);
             if(m_master)
             {
                 missionMapList->show();
             }
             else
             {
-                lblMapName->show();
+                teMapName->show();
             }
             mapFeatureSize->hide();
             lblDesc->setText(m_mapInfo.desc);
@@ -959,14 +971,14 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
-            lblMapName->setText(m_curMap);
+            setMapNameLabel(m_curMap);
             if(m_master)
             {
                 staticMapList->show();
             }
             else
             {
-                lblMapName->show();
+                teMapName->show();
             }
             mapFeatureSize->hide();
             emit mapChanged(m_curMap);
@@ -1186,12 +1198,12 @@ void HWMapContainer::setMaster(bool master)
 
     if(m_mapInfo.type == MapModel::StaticMap)
     {
-        lblMapName->setHidden(master);
+        teMapName->setHidden(master);
         staticMapList->setVisible(master);
     }
     else if(m_mapInfo.type == MapModel::MissionMap)
     {
-        lblMapName->setHidden(master);
+        teMapName->setHidden(master);
         missionMapList->setVisible(master);
     }
 
@@ -1247,4 +1259,17 @@ void HWMapContainer::setupStaticMapsView()
             this,
             SLOT(staticMapChanged(const QModelIndex &, const QModelIndex &)));
     staticSelectionModel->setCurrentIndex(m_staticMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+}
+
+// Call this function instead of setting the text of the map name label
+// directly.
+void HWMapContainer::setMapNameLabel(QString mapName)
+{
+    // Cut off insanely long names to be displayed
+    if(mapName.length() >= 90)
+    {
+        mapName.truncate(84);
+        mapName.append(" (...)");
+    }
+    teMapName->setPlainText(mapName);
 }

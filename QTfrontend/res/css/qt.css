@@ -118,7 +118,8 @@ color: #ffffff;
 QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
 QTableWidget, QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, #gameStackContainer, TeamSelWidget,
-SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit {
+SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit,
+#mapName {
 font: bold 13px;
 }
 SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {

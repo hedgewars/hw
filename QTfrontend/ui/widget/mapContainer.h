@@ -24,6 +24,7 @@
 #include <QComboBox>
 #include <QGridLayout>
 #include <QLabel>
+#include <QTextEdit>
 #include <QLineEdit>
 #include <QSlider>
 #include <QVBoxLayout>
@@ -147,7 +148,7 @@ class HWMapContainer : public QWidget
         QComboBox * cType;
         QListView * staticMapList;
         QListView * missionMapList;
-        QLabel * lblMapName;
+        QTextEdit * teMapName;
         QListWidget * generationStyles;
         QListWidget * mazeStyles;
         QLabel * lblMapList;
@@ -183,6 +184,7 @@ class HWMapContainer : public QWidget
         void updateThemeButtonSize();
         void setupMissionMapsView();
         void setupStaticMapsView();
+        void setMapNameLabel(QString mapName);
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;
