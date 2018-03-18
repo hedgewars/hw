@@ -64,6 +64,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_prevMapFeatureSize = 12;
     m_mapFeatureSize = 12;
     m_withoutDLC = false;
+    m_missingMap = false;
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -90,11 +91,11 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     topWidget->setContentsMargins(0, 0, 0, 0);
     topLayout->setContentsMargins(0, 0, 0, 0);
 
-    QHBoxLayout * twoColumnLayout = new QHBoxLayout();
+    twoColumnLayout = new QHBoxLayout();
     QVBoxLayout * leftLayout = new QVBoxLayout();
+    leftLayout->setAlignment(Qt::AlignLeft);
     QVBoxLayout * rightLayout = new QVBoxLayout();
     twoColumnLayout->addLayout(leftLayout, 0);
-    twoColumnLayout->addStretch(1);
     twoColumnLayout->addLayout(rightLayout, 0);
     QVBoxLayout * drawnControls = new QVBoxLayout();
 
@@ -174,6 +175,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     /* Map list label */
 
     lblMapList = new QLabel(this);
+    lblMapList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    lblMapList->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     rightLayout->addWidget(lblMapList, 0);
     m_childWidgets << lblMapList;
 
@@ -188,6 +191,16 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     missionMapList = new QListView(this);
     rightLayout->addWidget(missionMapList, 1);
     m_childWidgets << missionMapList;
+
+    /* Map name label (when not room master) */
+
+    lblMapName = new QLabel(this);
+    lblMapName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    lblMapName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    lblMapName->setTextFormat(Qt::PlainText);
+    lblMapName->setWordWrap(true),
+    rightLayout->addWidget(lblMapName, 1);
+    m_childWidgets << lblMapName;
 
     /* Map load and edit buttons */
 
@@ -242,7 +255,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setMinimum(1);
     //mapFeatureSize->setFixedWidth(259);
     mapFeatureSize->setValue(m_mapFeatureSize);
-    mapFeatureSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    mapFeatureSize->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
     connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(setFeatureSize(int)));
     m_childWidgets << mapFeatureSize;
@@ -252,7 +265,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     lblDesc = new QLabel();
     lblDesc->setWordWrap(true);
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    lblDesc->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    lblDesc->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     lblDesc->setStyleSheet("font: 10px;");
     bottomLeftLayout->addWidget(lblDesc, 100);
 
@@ -499,20 +512,25 @@ void HWMapContainer::intSetMap(const QString & map)
     }
     else if (m_staticMapModel->mapExists(map))
     {
+        m_missingMap = false;
         changeMapType(MapModel::StaticMap, m_staticMapModel->index(m_staticMapModel->findMap(map), 0));
     }
     else if (m_missionMapModel->mapExists(map))
     {
+        m_missingMap = false;
         changeMapType(MapModel::MissionMap, m_missionMapModel->index(m_missionMapModel->findMap(map), 0));
     } else
     {
         qDebug() << "HWMapContainer::intSetMap: Map doesn't exist: " << map;
+        m_missingMap = true;
+        lblMapName->setText(map);
+        updatePreview();
     }
 }
 
 void HWMapContainer::setMap(const QString & map)
 {
-    if ((m_mapInfo.type == MapModel::Invalid) || (map != m_mapInfo.name))
+    if ((m_mapInfo.type == MapModel::Invalid) || (map != m_mapInfo.name) || m_missingMap)
         intSetMap(map);
 }
 
@@ -735,14 +753,19 @@ void HWMapContainer::updatePreview()
         pMap = 0;
     }
 
-    QPixmap failIcon;
+    QPixmap failPixmap;
+    QIcon failIcon;
 
     switch(m_mapInfo.type)
     {
         case MapModel::Invalid:
-            failIcon = QPixmap(":/res/btnDisabled.png");
-            mapPreview->setIcon(QIcon(failIcon));
-            mapPreview->setIconSize(failIcon.size());
+            failPixmap = QPixmap(":/res/missingMap.png");
+            failIcon = QIcon();
+            failIcon.addPixmap(failPixmap, QIcon::Normal);
+            failIcon.addPixmap(failPixmap, QIcon::Disabled);
+            mapPreview->setIcon(failIcon);
+            mapPreview->setIconSize(failPixmap.size());
+            lblDesc->clear();
             break;
         case MapModel::GeneratedMap:
         case MapModel::GeneratedMaze:
@@ -752,17 +775,31 @@ void HWMapContainer::updatePreview()
             askForGeneratedPreview();
             break;
         default:
-            QPixmap mapImage;
-            bool success = mapImage.load("physfs://Maps/" + m_mapInfo.name + "/preview.png");
-
-            if(!success)
+            if(m_missingMap)
             {
-                mapPreview->setIcon(QIcon());
-                return;
+                failPixmap = QPixmap(":/res/missingMap.png");
+                failIcon = QIcon();
+                failIcon.addPixmap(failPixmap, QIcon::Normal);
+                failIcon.addPixmap(failPixmap, QIcon::Disabled);
+                mapPreview->setIcon(failIcon);
+                mapPreview->setIconSize(failPixmap.size());
+                lblDesc->clear();
+                break;
             }
+            else
+            {
+                QPixmap mapImage;
+                bool success = mapImage.load("physfs://Maps/" + m_mapInfo.name + "/preview.png");
 
-            hhLimit = m_mapInfo.limit;
-            addInfoToPreview(mapImage);
+                if(!success)
+                {
+                    mapPreview->setIcon(QIcon());
+                    return;
+                }
+
+                hhLimit = m_mapInfo.limit;
+                addInfoToPreview(mapImage);
+            }
     }
 }
 
@@ -852,6 +889,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
 {
     staticMapList->hide();
     missionMapList->hide();
+    lblMapName->hide();
     lblMapList->hide();
     generationStyles->hide();
     mazeStyles->hide();
@@ -896,7 +934,14 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             missionMapChanged(newMap.isValid() ? newMap : missionMapList->currentIndex());
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
-            missionMapList->show();
+            if(m_master)
+            {
+                missionMapList->show();
+            }
+            else
+            {
+                lblMapName->show();
+            }
             mapFeatureSize->hide();
             lblDesc->setText(m_mapInfo.desc);
             lblDesc->show();
@@ -908,8 +953,15 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
+            if(m_master)
+            {
+                staticMapList->show();
+            }
+            else
+            {
+                lblMapName->show();
+            }
             mapFeatureSize->hide();
-            staticMapList->show();
             emit mapChanged(m_curMap);
             break;
         case MapModel::FortsMap:
@@ -998,11 +1050,9 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
     m_theme = selectedTheme = current.data(ThemeModel::ActualNameRole).toString();
     m_themeID = current.row();
     QIcon icon = current.data(Qt::DecorationRole).value<QIcon>();
-    //QSize iconSize = icon.actualSize(QSize(65535, 65535));
-    //btnTheme->setFixedHeight(64);
-    //btnTheme->setIconSize(iconSize);
     btnTheme->setIcon(icon);
-    btnTheme->setText(tr("Theme: %1").arg(current.data(Qt::DisplayRole).toString()));
+    QString themeLabel = tr("Theme: %1").arg(current.data(Qt::DisplayRole).toString());
+    btnTheme->setText(themeLabel);
     updateThemeButtonSize();
 }
 
@@ -1028,17 +1078,15 @@ void HWMapContainer::mapChanged(const QModelIndex & map, int type, const QModelI
     // Make sure it is a valid index
     if (!map.isValid())
     {
+        // Make sure there's always a valid selection in the map list
         if (old.isValid())
         {
             mapList->setCurrentIndex(old);
             mapList->scrollTo(old);
         }
-        else
-        {
-            m_mapInfo.type = MapModel::Invalid;
-            updatePreview();
-        }
-
+        m_mapInfo.type = MapModel::Invalid;
+        m_missingMap = true;
+        updatePreview();
         return;
     }
 
@@ -1047,6 +1095,11 @@ void HWMapContainer::mapChanged(const QModelIndex & map, int type, const QModelI
     {
         mapList->setCurrentIndex(map);
         mapList->scrollTo(map);
+    }
+    if (m_missingMap)
+    {
+        m_missingMap = false;
+        updatePreview();
     }
 
     Q_ASSERT(map.data(Qt::UserRole + 1).canConvert<MapModel::MapInfo>()); // Houston, we have a problem.
@@ -1074,6 +1127,7 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
     }
 
     lblDesc->setText(mapInfo.desc);
+    lblMapName->setText(m_curMap);
 
     updatePreview();
     emit mapChanged(m_curMap);
@@ -1123,6 +1177,24 @@ void HWMapContainer::setMaster(bool master)
 
     foreach (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);
+
+    if(m_mapInfo.type == MapModel::StaticMap)
+    {
+        lblMapName->setHidden(master);
+        staticMapList->setVisible(master);
+    }
+    else if(m_mapInfo.type == MapModel::MissionMap)
+    {
+        lblMapName->setHidden(master);
+        missionMapList->setVisible(master);
+    }
+
+    if(m_missingMap)
+    {
+        // Force map type reset if host provided missing map
+        m_missingMap = false;
+        changeMapType(MapModel::GeneratedMap);
+    }
 }
 
 void HWMapContainer::intSetIconlessTheme(const QString & name)

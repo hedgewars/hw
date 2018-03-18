@@ -98,6 +98,7 @@
         <file>res/radioButtonUncheckedPressed.png</file>
         <file>res/missionFinished.png</file>
         <file>res/missionFinishedSelected.png</file>
+        <file>res/missingMap.png</file>
         <file>res/dlcMarker.png</file>
         <file>res/dlcMarkerSelected.png</file>
         <file>res/graphicsicon.png</file>

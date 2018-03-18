@@ -147,6 +147,7 @@ class HWMapContainer : public QWidget
         QComboBox * cType;
         QListView * staticMapList;
         QListView * missionMapList;
+        QLabel * lblMapName;
         QListWidget * generationStyles;
         QListWidget * mazeStyles;
         QLabel * lblMapList;
@@ -158,12 +159,14 @@ class HWMapContainer : public QWidget
         QPushButton * btnRandTheme;
         QString selectedTheme;
         QPushButton * btnSeed;
+        QHBoxLayout * twoColumnLayout;
         bool m_master;
         QList<QWidget *> m_childWidgets;
         bool m_previewEnabled;
         bool m_missionsViewSetup;
         bool m_staticViewSetup;
         bool m_withoutDLC;
+        bool m_missingMap;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
