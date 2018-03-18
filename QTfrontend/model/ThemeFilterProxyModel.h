@@ -36,12 +36,14 @@ class ThemeFilterProxyModel : public QSortFilterProxyModel
     public:
         ThemeFilterProxyModel(QObject *parent = 0);
         void setFilterDLC(bool enabled);
+        void setFilterHidden(bool enabled);
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
     private:
         bool isFilteringDLC;
+        bool isFilteringHidden;
 };
 
 #endif // HEDGEWARS_THEMEFILTERPROXYMODEL_H

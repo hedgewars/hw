@@ -40,17 +40,21 @@ class ThemeModel : public QAbstractListModel
         Q_OBJECT
 
     public:
-        enum Roles { ActualNameRole = Qt::UserRole, IsDlcRole, IconPathRole };
+        enum Roles { ActualNameRole = Qt::UserRole, IsDlcRole, IconPathRole, IsHiddenRole };
         explicit ThemeModel(QObject *parent = 0);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
         ThemeFilterProxyModel * withoutDLC();
+        ThemeFilterProxyModel * withoutHidden();
+        ThemeFilterProxyModel * withoutDLCOrHidden();
 
     private:
         mutable QList<QMap<int, QVariant> > m_data;
         mutable bool m_themesLoaded;
         mutable ThemeFilterProxyModel * m_filteredNoDLC;
+        mutable ThemeFilterProxyModel * m_filteredNoHidden;
+        mutable ThemeFilterProxyModel * m_filteredNoDLCOrHidden;
 
         void loadThemes() const;
 };

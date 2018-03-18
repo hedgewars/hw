@@ -33,8 +33,11 @@ ThemeModel::ThemeModel(QObject *parent) :
     m_themesLoaded = false;
 
     m_filteredNoDLC = NULL;
+    m_filteredNoHidden = NULL;
+    m_filteredNoDLCOrHidden = NULL;
 }
 
+// Filters out DLC themes, e.g. themes which do not come by default
 ThemeFilterProxyModel * ThemeModel::withoutDLC()
 {
     if (m_filteredNoDLC == NULL)
@@ -44,6 +47,32 @@ ThemeFilterProxyModel * ThemeModel::withoutDLC()
         m_filteredNoDLC->setFilterDLC(true);
     }
     return m_filteredNoDLC;
+}
+
+// Filters out hidden themes, these are themes which are not supposed to be
+// seen by the user.
+ThemeFilterProxyModel * ThemeModel::withoutHidden()
+{
+    if (m_filteredNoHidden == NULL)
+    {
+        m_filteredNoHidden = new ThemeFilterProxyModel(this);
+        m_filteredNoHidden->setSourceModel(this);
+        m_filteredNoHidden->setFilterHidden(true);
+    }
+    return m_filteredNoHidden;
+}
+
+// Combination of the two above for convenience
+ThemeFilterProxyModel * ThemeModel::withoutDLCOrHidden()
+{
+    if (m_filteredNoDLCOrHidden == NULL)
+    {
+        m_filteredNoDLCOrHidden = new ThemeFilterProxyModel(this);
+        m_filteredNoDLCOrHidden->setSourceModel(this);
+        m_filteredNoDLCOrHidden->setFilterDLC(true);
+        m_filteredNoDLCOrHidden->setFilterHidden(true);
+    }
+    return m_filteredNoDLCOrHidden;
 }
 
 int ThemeModel::rowCount(const QModelIndex &parent) const
@@ -93,13 +122,13 @@ void ThemeModel::loadThemes() const
 
     foreach (QString theme, themes)
     {
+        QMap<int, QVariant> dataset;
+
         // themes without icon are supposed to be hidden
         QString iconpath = QString("physfs://Themes/%1/icon.png").arg(theme);
 
         if (!QFile::exists(iconpath))
-            continue;
-
-        QMap<int, QVariant> dataset;
+            dataset.insert(IsHiddenRole, true);
 
         // detect if theme is dlc
         QString themeDir = PHYSFS_getRealDir(QString("Themes/%1/icon.png").arg(theme).toLocal8Bit().data());

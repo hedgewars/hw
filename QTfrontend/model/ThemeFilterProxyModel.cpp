@@ -28,15 +28,20 @@ ThemeFilterProxyModel::ThemeFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
     isFilteringDLC = false;
+    isFilteringHidden = false;
 }
 
 bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const
 {
-    if(isFilteringDLC)
+    if(isFilteringDLC || isFilteringHidden)
     {
         QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         bool isDLC = index.data(ThemeModel::IsDlcRole).toBool();
-        return !isDLC;
+        bool isHidden = index.data(ThemeModel::IsHiddenRole).toBool();
+        return (
+            ((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
+            ((isFilteringHidden && !isHidden) || !isFilteringHidden));
+
     }
     else
     {
@@ -47,5 +52,11 @@ bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & 
 void ThemeFilterProxyModel::setFilterDLC(bool enable)
 {
     isFilteringDLC = enable;
+    invalidateFilter();
+}
+
+void ThemeFilterProxyModel::setFilterHidden(bool enable)
+{
+    isFilteringHidden = enable;
     invalidateFilter();
 }

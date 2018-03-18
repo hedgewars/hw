@@ -68,10 +68,10 @@ ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     setStyleSheet("QPushButton { padding: 5px; margin-top: 10px; }");
 
-    // Theme model, and a model for setting a filter
+    // Theme model
     ThemeModel * themeModel = DataManager::instance().themeModel();
-    filterModel = new QSortFilterProxyModel();
-    filterModel->setSourceModel(themeModel);
+    filterModel = themeModel->withoutHidden();
+    // Custom filter extension
     filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     // Grid

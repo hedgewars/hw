@@ -599,9 +599,9 @@ void HWMapContainer::setRandomTheme()
     QAbstractItemModel * tmodel;
 
     if (m_withoutDLC)
-        tmodel = m_themeModel->withoutDLC();
+        tmodel = m_themeModel->withoutDLCOrHidden();
     else
-        tmodel = m_themeModel;
+        tmodel = m_themeModel->withoutHidden();
 
     if(!tmodel->rowCount()) return;
     quint32 themeNum = rand() % tmodel->rowCount();
