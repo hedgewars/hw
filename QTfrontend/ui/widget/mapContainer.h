@@ -177,6 +177,7 @@ class HWMapContainer : public QWidget
         void intSetFeatureSize(int size);
         void setMissingTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
+        void setImage(const QPixmap & newImage, bool showHHLimit);
         void setMapInfo(MapModel::MapInfo mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
         void updateHelpTexts(MapModel::MapType type);

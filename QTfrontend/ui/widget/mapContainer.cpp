@@ -333,6 +333,27 @@ void HWMapContainer::setImage(const QPixmap &newImage)
     cType->setEnabled(isMaster());
 }
 
+void HWMapContainer::setImage(const QPixmap &newImage, bool showHHLimit)
+{
+    if (showHHLimit)
+    {
+        addInfoToPreview(newImage);
+    }
+    else
+    {
+        QIcon mapPreviewIcon = QIcon();
+        mapPreviewIcon.addPixmap(newImage, QIcon::Normal);
+        mapPreviewIcon.addPixmap(newImage, QIcon::Disabled);
+        mapPreview->setIcon(mapPreviewIcon);
+        mapPreview->setIconSize(newImage.size());
+    }
+
+    pMap = 0;
+
+    cType->setEnabled(isMaster());
+}
+
+
 void HWMapContainer::setHHLimit(int newHHLimit)
 {
     hhLimit = newHHLimit;
@@ -776,12 +797,9 @@ void HWMapContainer::updatePreview()
     switch(m_mapInfo.type)
     {
         case MapModel::Invalid:
+            // Map error image
             failPixmap = QPixmap(":/res/missingMap.png");
-            failIcon = QIcon();
-            failIcon.addPixmap(failPixmap, QIcon::Normal);
-            failIcon.addPixmap(failPixmap, QIcon::Disabled);
-            mapPreview->setIcon(failIcon);
-            mapPreview->setIconSize(failPixmap.size());
+            setImage(failPixmap, false);
             lblDesc->clear();
             break;
         case MapModel::GeneratedMap:
@@ -792,30 +810,30 @@ void HWMapContainer::updatePreview()
             askForGeneratedPreview();
             break;
         default:
+            // For maps loaded from image
             if(m_missingMap)
             {
+                // Map error image due to missing map
                 failPixmap = QPixmap(":/res/missingMap.png");
-                failIcon = QIcon();
-                failIcon.addPixmap(failPixmap, QIcon::Normal);
-                failIcon.addPixmap(failPixmap, QIcon::Disabled);
-                mapPreview->setIcon(failIcon);
-                mapPreview->setIconSize(failPixmap.size());
+                setImage(failPixmap, false);
                 lblDesc->clear();
                 break;
             }
             else
             {
+                // Draw map preview
                 QPixmap mapImage;
                 bool success = mapImage.load("physfs://Maps/" + m_mapInfo.name + "/preview.png");
 
                 if(!success)
                 {
-                    mapPreview->setIcon(QIcon());
+                    // Missing preview image
+                    setImage(QPixmap());
                     return;
                 }
 
-                hhLimit = m_mapInfo.limit;
-                addInfoToPreview(mapImage);
+                setHHLimit(m_mapInfo.limit);
+                setImage(mapImage);
             }
     }
 }
