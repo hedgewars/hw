@@ -38,10 +38,20 @@ bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & 
         QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         bool isDLC = index.data(ThemeModel::IsDlcRole).toBool();
         bool isHidden = index.data(ThemeModel::IsHiddenRole).toBool();
-        return (
+        if(
             ((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
-            ((isFilteringHidden && !isHidden) || !isFilteringHidden));
-
+            ((isFilteringHidden && !isHidden) || !isFilteringHidden))
+        {
+            if(!filterRegExp().isEmpty())
+            {
+                // Also check regular expression set by the theme chooser search
+                QString name = index.data(ThemeModel::ActualNameRole).toString();
+                int index = filterRegExp().indexIn(name);
+                return index != -1;
+            }
+            else
+                return true;
+        }
     }
     else
     {

@@ -73,6 +73,8 @@ ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     filterModel = themeModel->withoutHidden();
     // Custom filter extension
     filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    // Reset search field
+    filterModel->setFilterFixedString(QString());
 
     // Grid
     QGridLayout * dialogLayout = new QGridLayout(this);
