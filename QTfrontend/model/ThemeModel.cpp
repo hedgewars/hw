@@ -145,8 +145,12 @@ void ThemeModel::loadThemes() const
         dataset.insert(Qt::DisplayRole, (isDLC ? "*" : "") + theme);
 
         // load and set preview icon
-        QIcon preview(QString("physfs://Themes/%1/icon@2x.png").arg(theme));
-        dataset.insert(Qt::DecorationRole, preview);
+        iconpath = QString("physfs://Themes/%1/icon@2x.png").arg(theme);
+        if (QFile::exists(iconpath))
+        {
+            QIcon preview(QString("physfs://Themes/%1/icon@2x.png").arg(theme));
+            dataset.insert(Qt::DecorationRole, preview);
+        }
 
         m_data.append(dataset);
     }
