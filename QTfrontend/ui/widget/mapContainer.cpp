@@ -1247,7 +1247,8 @@ void HWMapContainer::setMissingTheme(const QString & name)
     iconMissing.addPixmap(pixMissing, QIcon::Normal);
     iconMissing.addPixmap(pixMissing, QIcon::Disabled);
     btnTheme->setIcon(iconMissing);
-    btnTheme->setText(tr("Theme: %1").arg(name));
+    // Question mark in front of theme name denotes it's missing
+    btnTheme->setText(tr("Theme: %1").arg("?" + name));
     updateThemeButtonSize();
 }
 
