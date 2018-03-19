@@ -71,9 +71,21 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     templateFilter = 0;
     m_master = true;
 
-    linearGrad = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
-    linearGrad.setColorAt(1, QColor(0, 0, 192));
-    linearGrad.setColorAt(0, QColor(66, 115, 225));
+    linearGradNormal = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
+    linearGradNormal.setColorAt(1, QColor(0, 0, 192));
+    linearGradNormal.setColorAt(0, QColor(66, 115, 225));
+
+    linearGradLoading = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
+    linearGradLoading.setColorAt(1, QColor(58, 58, 137));
+    linearGradLoading.setColorAt(0, QColor(90, 109, 153));
+
+    linearGradMapError = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
+    linearGradMapError.setColorAt(1, QColor(255, 1, 0));
+    linearGradMapError.setColorAt(0, QColor(255, 119, 0));
+
+    linearGradNoPreview = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
+    linearGradNoPreview.setColorAt(1, QColor(15, 9, 72));
+    linearGradNoPreview.setColorAt(0, QColor(15, 9, 72));
 
     mainLayout.setContentsMargins(HWApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
                                   10,
@@ -333,20 +345,9 @@ void HWMapContainer::setImage(const QPixmap &newImage)
     cType->setEnabled(isMaster());
 }
 
-void HWMapContainer::setImage(const QPixmap &newImage, bool showHHLimit)
+void HWMapContainer::setImage(const QPixmap &newImage, const QLinearGradient &linearGrad, bool showHHLimit)
 {
-    if (showHHLimit)
-    {
-        addInfoToPreview(newImage);
-    }
-    else
-    {
-        QIcon mapPreviewIcon = QIcon();
-        mapPreviewIcon.addPixmap(newImage, QIcon::Normal);
-        mapPreviewIcon.addPixmap(newImage, QIcon::Disabled);
-        mapPreview->setIcon(mapPreviewIcon);
-        mapPreview->setIconSize(newImage.size());
-    }
+    addInfoToPreview(newImage, linearGrad, showHHLimit);
 
     pMap = 0;
 
@@ -359,29 +360,32 @@ void HWMapContainer::setHHLimit(int newHHLimit)
     hhLimit = newHHLimit;
 }
 
-// Should this add text to identify map size?
 void HWMapContainer::addInfoToPreview(const QPixmap &image)
 {
-    QPixmap finalImage = QPixmap(image.size());
-//finalImage.fill(QColor(0, 0, 0, 0));
+    addInfoToPreview(image, linearGradNormal, true);
+}
 
+// Should this add text to identify map size?
+void HWMapContainer::addInfoToPreview(const QPixmap &image, const QLinearGradient &linearGrad, bool drawHHLimit)
+{
+    QPixmap finalImage = QPixmap(image.size());
     QPainter p(&finalImage);
+
     p.fillRect(finalImage.rect(), linearGrad);
     p.drawPixmap(finalImage.rect(), image);
-    //p.setPen(QColor(0xf4,0x9e,0xe9));
-    p.setPen(QColor(0xff,0xcc,0x00));
-    p.setBrush(QColor(0, 0, 0));
-    p.drawRect(finalImage.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
-    p.setFont(QFont("MS Shell Dlg", 10));
-    QString text = (hhLimit > 0) ? QString::number(hhLimit) : "?";
-    p.drawText(finalImage.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
-    p.drawPixmap(finalImage.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
 
-    // Shrink, crop, and center preview image
-    /*QPixmap centered(QSize(m_previewSize.width() - 6, m_previewSize.height() - 6));
-    QPainter pc(&centered);
-    pc.fillRect(centered.rect(), linearGrad);
-    pc.drawPixmap(-3, -3, finalImage);*/
+    if (drawHHLimit)
+    {
+        p.setPen(QColor(0xff,0xcc,0x00));
+        p.setBrush(QColor(0, 0, 0));
+        p.setFont(QFont("MS Shell Dlg", 10));
+
+        p.drawRect(finalImage.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
+
+        QString text = (hhLimit > 0) ? QString::number(hhLimit) : "?";
+        p.drawText(finalImage.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
+        p.drawPixmap(finalImage.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
+    }
 
     // Set the map preview image. Make sure it is always colored the same,
     // no matter if disabled or not.
@@ -410,17 +414,16 @@ void HWMapContainer::askForGeneratedPreview()
 
     setHHLimit(0);
 
-    const QPixmap waitIcon(":/res/iconTime.png");
-
     QPixmap waitImage(m_previewSize);
-    QPainter p(&waitImage);
+    waitImage.fill(Qt::transparent);
 
-    p.fillRect(waitImage.rect(), linearGrad);
+    QPainter p(&waitImage);
+    const QPixmap waitIcon(":/res/iconTime.png");
     int x = (waitImage.width() - waitIcon.width()) / 2;
     int y = (waitImage.height() - waitIcon.height()) / 2;
     p.drawPixmap(QPoint(x, y), waitIcon);
 
-    addInfoToPreview(waitImage);
+    setImage(waitImage, linearGradLoading, false);
 
     cType->setEnabled(false);
 }
@@ -799,7 +802,7 @@ void HWMapContainer::updatePreview()
         case MapModel::Invalid:
             // Map error image
             failPixmap = QPixmap(":/res/missingMap.png");
-            setImage(failPixmap, false);
+            setImage(failPixmap, linearGradMapError, false);
             lblDesc->clear();
             break;
         case MapModel::GeneratedMap:
@@ -815,7 +818,7 @@ void HWMapContainer::updatePreview()
             {
                 // Map error image due to missing map
                 failPixmap = QPixmap(":/res/missingMap.png");
-                setImage(failPixmap, false);
+                setImage(failPixmap, linearGradMapError, false);
                 lblDesc->clear();
                 break;
             }
@@ -825,14 +828,15 @@ void HWMapContainer::updatePreview()
                 QPixmap mapImage;
                 bool success = mapImage.load("physfs://Maps/" + m_mapInfo.name + "/preview.png");
 
+                setHHLimit(m_mapInfo.limit);
                 if(!success)
                 {
                     // Missing preview image
-                    setImage(QPixmap());
+                    QPixmap empty = QPixmap(m_previewSize);
+                    empty.fill(Qt::transparent);
+                    setImage(empty, linearGradNoPreview, true);
                     return;
                 }
-
-                setHHLimit(m_mapInfo.limit);
                 setImage(mapImage);
             }
     }

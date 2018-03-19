@@ -105,7 +105,6 @@ class HWMapContainer : public QWidget
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void addInfoToPreview(const QPixmap & image);
         void setNewSeed(const QString & newSeed);
         void mapTypeChanged(int);
         void showThemePrompt();
@@ -177,7 +176,9 @@ class HWMapContainer : public QWidget
         void intSetFeatureSize(int size);
         void setMissingTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
-        void setImage(const QPixmap & newImage, bool showHHLimit);
+        void setImage(const QPixmap & newImage, const QLinearGradient & linearGrad, bool showHHLimit);
+        void addInfoToPreview(const QPixmap & image);
+        void addInfoToPreview(const QPixmap & image, const QLinearGradient & linearGrad, bool drawHHLimit);
         void setMapInfo(MapModel::MapInfo mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
         void updateHelpTexts(MapModel::MapType type);
@@ -194,7 +195,10 @@ class HWMapContainer : public QWidget
         QString m_theme;
         QString m_curMap;
 
-        QLinearGradient linearGrad; ///< for preview background
+        QLinearGradient linearGradNormal; ///< for preview background
+        QLinearGradient linearGradLoading; ///< for preview background while loading/generating map
+        QLinearGradient linearGradNoPreview; ///< for preview background when map preview image is missing
+        QLinearGradient linearGradMapError; ///< for preview background when map is missing
         QSize m_previewSize;
 };
 
