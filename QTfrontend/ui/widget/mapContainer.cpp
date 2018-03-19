@@ -1229,11 +1229,24 @@ void HWMapContainer::setMaster(bool master)
         missionMapList->setVisible(master);
     }
 
-    if(m_missingMap)
+    if(master)
     {
-        // Force map type reset if host provided missing map
-        m_missingMap = false;
-        changeMapType(MapModel::GeneratedMap);
+        // Room delegation cleanup if we get room control.
+
+        if(m_missingMap)
+        {
+            // Force map type and theme reset we don't have the map
+            m_missingMap = false;
+            changeMapType(MapModel::GeneratedMap);
+            setRandomTheme();
+        }
+        else
+        {
+            // Set random theme if we don't have it
+            QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
+            if(!mdl.size())
+                setRandomTheme();
+        }
     }
 }
 
