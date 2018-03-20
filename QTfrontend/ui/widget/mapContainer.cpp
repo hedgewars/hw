@@ -399,7 +399,7 @@ void HWMapContainer::addInfoToPreview(const QPixmap &image, const QLinearGradien
 void HWMapContainer::askForGeneratedPreview()
 {
     pMap = new HWMap(this);
-    connect(pMap, SIGNAL(ImageReceived(QPixmap)), this, SLOT(setImage(QPixmap)));
+    connect(pMap, SIGNAL(ImageReceived(QPixmap)), this, SLOT(setImage(const QPixmap)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
     connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
     pMap->getImage(m_seed,
@@ -563,7 +563,7 @@ void HWMapContainer::intSetMap(const QString & map)
         if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::MissionMap)
         {
             m_mapInfo.type = MapModel::StaticMap;
-            changeMapType(MapModel::StaticMap, QModelIndex());
+            changeMapType(m_mapInfo.type, QModelIndex());
         }
         updatePreview();
     }
@@ -1112,9 +1112,18 @@ void HWMapContainer::mapChanged(const QModelIndex & map, int type, const QModelI
 {
     QListView * mapList;
 
-    if (type == 0)      mapList = staticMapList;
-    else if (type == 1) mapList = missionMapList;
-    else                return;
+    if (type == 0)
+    {
+        mapList = staticMapList;
+        m_mapInfo.type = MapModel::StaticMap;
+    }
+    else if (type == 1)
+    {
+        mapList = missionMapList;
+        m_mapInfo.type = MapModel::MissionMap;
+    }
+    else
+        return;
 
     // Make sure it is a valid index
     if (!map.isValid())
