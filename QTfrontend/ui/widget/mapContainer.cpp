@@ -858,7 +858,7 @@ void HWMapContainer::updateModelViews()
 {
     // restore theme selection
     // do this before map selection restore, because map may overwrite theme
-    if (!m_theme.isEmpty())
+    if (!m_theme.isNull() && !m_theme.isEmpty())
     {
         QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), Qt::DisplayRole, m_theme);
         if (mdl.size() > 0)
@@ -868,7 +868,7 @@ void HWMapContainer::updateModelViews()
     }
 
     // restore map selection
-    if (!m_curMap.isEmpty())
+    if (!m_curMap.isNull() && !m_curMap.isEmpty())
         intSetMap(m_curMap);
     else
         updatePreview();
@@ -1162,9 +1162,9 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
     m_curMap = m_mapInfo.name;
 
     // the map has no pre-defined theme, so let's use the selected one
-    if (m_mapInfo.theme.isEmpty())
+    if (m_mapInfo.theme.isNull() || m_mapInfo.theme.isEmpty())
     {
-        if (!selectedTheme.isEmpty())
+        if (!selectedTheme.isNull() && !selectedTheme.isEmpty())
         {
             setTheme(selectedTheme);
             emit themeChanged(selectedTheme);
@@ -1261,7 +1261,7 @@ void HWMapContainer::setMaster(bool master)
 
 void HWMapContainer::setMissingTheme(const QString & name)
 {
-    if (name.isEmpty()) return;
+    if (name.isNull() || name.isEmpty()) return;
 
     m_theme = name;
     QPixmap pixMissing = QPixmap(":/res/missingTheme@2x.png");
