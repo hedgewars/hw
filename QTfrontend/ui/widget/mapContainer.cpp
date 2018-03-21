@@ -578,14 +578,16 @@ void HWMapContainer::intSetMap(const QString & map)
         qDebug() << "HWMapContainer::intSetMap: Map doesn't exist: " << map;
         m_missingMap = true;
         m_curMap = map;
+        m_mapInfo.name = map;
+        setMapNameLabel(map);
         if (m_mapInfo.type == MapModel::StaticMap)
-            setupStaticMapsView();
+            setupStaticMapsView(m_curMap);
         else if (m_mapInfo.type == MapModel::MissionMap)
-            setupMissionMapsView();
+            setupMissionMapsView(m_curMap);
         else
         {
             m_mapInfo.type = MapModel::StaticMap;
-            setupStaticMapsView();
+            setupStaticMapsView(m_curMap);
             changeMapType(m_mapInfo.type, QModelIndex());
         }
         updatePreview();
@@ -1299,7 +1301,7 @@ void HWMapContainer::setMissingTheme(const QString & name)
     updateThemeButtonSize();
 }
 
-void HWMapContainer::setupMissionMapsView()
+void HWMapContainer::setupMissionMapsView(const QString & initialMap)
 {
     if(m_missionsViewSetup) return;
     m_missionsViewSetup = true;
@@ -1312,11 +1314,13 @@ void HWMapContainer::setupMissionMapsView()
             SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
             this,
             SLOT(missionMapChanged(const QModelIndex &, const QModelIndex &)));
-    if(!missionSelectionModel->hasSelection())
-        missionSelectionModel->setCurrentIndex(m_missionMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+    int m = 0;
+    if(!initialMap.isNull())
+        m = m_missionMapModel->findMap(initialMap);
+    missionSelectionModel->setCurrentIndex(m_missionMapModel->index(m, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
 }
 
-void HWMapContainer::setupStaticMapsView()
+void HWMapContainer::setupStaticMapsView(const QString & initialMap)
 {
     if(m_staticViewSetup) return;
     m_staticViewSetup = true;
@@ -1329,8 +1333,10 @@ void HWMapContainer::setupStaticMapsView()
             SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
             this,
             SLOT(staticMapChanged(const QModelIndex &, const QModelIndex &)));
-    if(!staticSelectionModel->hasSelection())
-        staticSelectionModel->setCurrentIndex(m_staticMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+    int m = 0;
+    if(!initialMap.isNull())
+        m = m_staticMapModel->findMap(initialMap);
+    staticSelectionModel->setCurrentIndex(m_staticMapModel->index(m, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
 }
 
 // Call this function instead of setting the text of the map name label

@@ -185,8 +185,8 @@ class HWMapContainer : public QWidget
         void updateHelpTexts(MapModel::MapType type);
         void updatePreview();
         void updateThemeButtonSize();
-        void setupMissionMapsView();
-        void setupStaticMapsView();
+        void setupMissionMapsView(const QString & initialMap = QString());
+        void setupStaticMapsView(const QString & initialMap = QString());
         void setMapNameLabel(QString mapName);
 
         MapModel::MapInfo m_mapInfo;
