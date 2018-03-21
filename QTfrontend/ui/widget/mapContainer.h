@@ -100,7 +100,7 @@ class HWMapContainer : public QWidget
         void drawnMapChanged(const QByteArray & data);
 
     private slots:
-        void setImage(const QPixmap & newImage);
+        void onImageReceived(const QPixmap & newImage);
         void setHHLimit(int hhLimit);
         void setRandomSeed();
         void setRandomTheme();
@@ -176,6 +176,7 @@ class HWMapContainer : public QWidget
         void intSetFeatureSize(int size);
         void setMissingTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
+        void setImage(const QPixmap & newImage);
         void setImage(const QPixmap & newImage, const QLinearGradient & linearGrad, bool showHHLimit);
         void addInfoToPreview(const QPixmap & image);
         void addInfoToPreview(const QPixmap & image, const QLinearGradient & linearGrad, bool drawHHLimit);

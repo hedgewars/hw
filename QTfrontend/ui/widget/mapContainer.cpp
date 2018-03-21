@@ -337,6 +337,24 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     changeMapType(MapModel::GeneratedMap);
 }
 
+void HWMapContainer::onImageReceived(const QPixmap &newImage)
+{
+    // When image received from the engine.
+    switch (m_mapInfo.type)
+    {
+        case MapModel::GeneratedMap:
+        case MapModel::GeneratedMaze:
+        case MapModel::GeneratedPerlin:
+        case MapModel::HandDrawnMap:
+        case MapModel::FortsMap:
+            setImage(newImage);
+            break;
+        // Throw away image if we have switched the map mode in the meantime
+        default:
+            return;
+    }
+}
+
 void HWMapContainer::setImage(const QPixmap &newImage)
 {
     addInfoToPreview(newImage);
@@ -399,7 +417,7 @@ void HWMapContainer::addInfoToPreview(const QPixmap &image, const QLinearGradien
 void HWMapContainer::askForGeneratedPreview()
 {
     pMap = new HWMap(this);
-    connect(pMap, SIGNAL(ImageReceived(QPixmap)), this, SLOT(setImage(const QPixmap)));
+    connect(pMap, SIGNAL(ImageReceived(QPixmap)), this, SLOT(onImageReceived(const QPixmap)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
     connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
     pMap->getImage(m_seed,
@@ -559,10 +577,15 @@ void HWMapContainer::intSetMap(const QString & map)
     {
         qDebug() << "HWMapContainer::intSetMap: Map doesn't exist: " << map;
         m_missingMap = true;
-        setMapNameLabel(map);
-        if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::MissionMap)
+        m_curMap = map;
+        if (m_mapInfo.type == MapModel::StaticMap)
+            setupStaticMapsView();
+        else if (m_mapInfo.type == MapModel::MissionMap)
+            setupMissionMapsView();
+        else
         {
             m_mapInfo.type = MapModel::StaticMap;
+            setupStaticMapsView();
             changeMapType(m_mapInfo.type, QModelIndex());
         }
         updatePreview();
@@ -773,7 +796,8 @@ void HWMapContainer::mapDrawingFinished()
 
 void HWMapContainer::showEvent(QShowEvent * event)
 {
-    if (!m_previewEnabled) {
+    if (!m_previewEnabled)
+    {
         m_previewEnabled = true;
         setRandomTheme();
         updatePreview();
@@ -789,8 +813,9 @@ void HWMapContainer::updatePreview()
 
     if (pMap)
     {
-        disconnect(pMap, 0, this, SLOT(setImage(const QPixmap)));
+        disconnect(pMap, 0, this, SLOT(onImageReceived(const QPixmap)));
         disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
+        disconnect(pMap, 0, this, SLOT(onPreviewMapDestroyed(QObject *)));
         pMap = 0;
     }
 
@@ -1287,7 +1312,8 @@ void HWMapContainer::setupMissionMapsView()
             SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
             this,
             SLOT(missionMapChanged(const QModelIndex &, const QModelIndex &)));
-    missionSelectionModel->setCurrentIndex(m_missionMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+    if(!missionSelectionModel->hasSelection())
+        missionSelectionModel->setCurrentIndex(m_missionMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
 }
 
 void HWMapContainer::setupStaticMapsView()
@@ -1303,7 +1329,8 @@ void HWMapContainer::setupStaticMapsView()
             SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
             this,
             SLOT(staticMapChanged(const QModelIndex &, const QModelIndex &)));
-    staticSelectionModel->setCurrentIndex(m_staticMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+    if(!staticSelectionModel->hasSelection())
+        staticSelectionModel->setCurrentIndex(m_staticMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
 }
 
 // Call this function instead of setting the text of the map name label
