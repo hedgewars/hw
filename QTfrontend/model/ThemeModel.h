@@ -28,6 +28,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QIcon>
+#include <QTextStream>
 
 #include "ThemeFilterProxyModel.h"
 #include "DataManager.h"

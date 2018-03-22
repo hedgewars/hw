@@ -128,7 +128,33 @@ void ThemeModel::loadThemes() const
         QString iconpath = QString("physfs://Themes/%1/icon.png").arg(theme);
 
         if (!QFile::exists(iconpath))
+        {
             dataset.insert(IsHiddenRole, true);
+        }
+        else
+        {
+            // themes with the key “hidden” in theme.cfg are hidden, too
+            QFile themeCfgFile(QString("physfs://Themes/%1/theme.cfg").arg(theme));
+            if (themeCfgFile.open(QFile::ReadOnly))
+            {
+                QTextStream stream(&themeCfgFile);
+                QString line = stream.readLine();
+                QString key;
+                while (!line.isNull())
+                {
+                    key = QString(line);
+                    int equalsPos = line.indexOf('=');
+                    key.truncate(equalsPos - 1);
+                    key = key.simplified();
+                    if (!line.startsWith(';') && key == "hidden")
+                    {
+                        dataset.insert(IsHiddenRole, true);
+                        break;
+                    }
+                    line = stream.readLine();
+                }
+            }
+        }
 
         // detect if theme is dlc
         QString themeDir = PHYSFS_getRealDir(QString("Themes/%1").arg(theme).toLocal8Bit().data());

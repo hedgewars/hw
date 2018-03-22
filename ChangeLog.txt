@@ -36,6 +36,7 @@ Content:
  + New flag: uk_scotland
  + New voice: Default_pl (Polish)
  + New voice: Russian_pl (Polish with a Russian accent)
+ + Add theme icons for: Blox, CrazyMission, Deepspace, Eyes, Planes
 
 Styles and game modes:
  + Various styles: Add current score/time next to team bars (where applicable)
@@ -95,8 +96,9 @@ Missions:
  + Target Practice: Re-center camera to hog when projectile is destroyed or drowns
 
 Theme customization:
- + Add fallback music with fallback-music and fallback-sd-music
- * Fix green color channel on themes with sd-tint
+ + Add fallback music with new keys “fallback-music” and “fallback-sd-music”
+ + Allow to hide themes explicitly with new key “hidden”. Using this key it's possible for hidden themes to have icons
+ * Fix green color channel on themes with key “sd-tint”
 
 Lua API:
  + New library: SimpleMission: Allows to create missions more easily
