@@ -1269,10 +1269,20 @@ void HWMapContainer::setMaster(bool master)
 
         if(m_missingMap)
         {
-            // Force map type and theme reset we don't have the map
+            // Reset map if we don't have the host's map
             m_missingMap = false;
-            changeMapType(MapModel::GeneratedMap);
-            setRandomTheme();
+            if(m_mapInfo.type == MapModel::MissionMap)
+            {
+                missionMapList->selectionModel()->setCurrentIndex(m_missionMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+            }
+            else
+            {
+                if(m_mapInfo.type != MapModel::StaticMap)
+                {
+                    changeMapType(MapModel::StaticMap);
+                }
+                staticMapList->selectionModel()->setCurrentIndex(m_staticMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+            }
         }
         else
         {
