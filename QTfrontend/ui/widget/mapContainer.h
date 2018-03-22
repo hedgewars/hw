@@ -187,7 +187,7 @@ class HWMapContainer : public QWidget
         void updateThemeButtonSize();
         void setupMissionMapsView(const QString & initialMap = QString());
         void setupStaticMapsView(const QString & initialMap = QString());
-        void setMapNameLabel(QString mapName);
+        void setMapNameLabel(QString mapName, bool validMap);
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;

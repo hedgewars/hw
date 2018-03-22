@@ -216,9 +216,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     teMapName->setReadOnly(true);
     teMapName->setAcceptRichText(false);
     teMapName->setFrameStyle(QFrame::NoFrame);
-    QPalette pal = QPalette(qApp->palette());
-    pal.setColor(QPalette::Base, Qt::transparent);
-    teMapName->setPalette(pal);
+    teMapName->setStyleSheet("background-color: transparent");
 
     teMapName->setLineWrapMode(QTextEdit::WidgetWidth);
     teMapName->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
@@ -579,7 +577,7 @@ void HWMapContainer::intSetMap(const QString & map)
         m_missingMap = true;
         m_curMap = map;
         m_mapInfo.name = map;
-        setMapNameLabel(map);
+        setMapNameLabel(map, false);
         if (m_mapInfo.type == MapModel::StaticMap)
             setupStaticMapsView(m_curMap);
         else if (m_mapInfo.type == MapModel::MissionMap)
@@ -1000,7 +998,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             missionMapChanged(newMap.isValid() ? newMap : missionMapList->currentIndex());
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
-            setMapNameLabel(m_curMap);
+            setMapNameLabel(m_curMap, !m_missingMap);
             if(m_master)
             {
                 missionMapList->show();
@@ -1020,7 +1018,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
-            setMapNameLabel(m_curMap);
+            setMapNameLabel(m_curMap, !m_missingMap);
             if(m_master)
             {
                 staticMapList->show();
@@ -1284,6 +1282,10 @@ void HWMapContainer::setMaster(bool master)
                 setRandomTheme();
         }
     }
+    else
+    {
+        setMapNameLabel(m_curMap, true);
+    }
 }
 
 void HWMapContainer::setMissingTheme(const QString & name)
@@ -1341,7 +1343,7 @@ void HWMapContainer::setupStaticMapsView(const QString & initialMap)
 
 // Call this function instead of setting the text of the map name label
 // directly.
-void HWMapContainer::setMapNameLabel(QString mapName)
+void HWMapContainer::setMapNameLabel(QString mapName, bool validMap)
 {
     // Cut off insanely long names to be displayed
     if(mapName.length() >= 90)
@@ -1350,4 +1352,8 @@ void HWMapContainer::setMapNameLabel(QString mapName)
         mapName.append(" (...)");
     }
     teMapName->setPlainText(mapName);
+    if(validMap)
+        teMapName->setStyleSheet("background-color: transparent;");
+    else
+        teMapName->setStyleSheet("background-color: transparent; color: #b50000;");
 }

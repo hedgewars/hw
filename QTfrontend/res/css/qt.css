@@ -122,6 +122,9 @@ SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit,
 #mapName {
 font: bold 13px;
 }
+.QLabel{
+background-color: transparent;
+}
 SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {
 background-position: bottom center;
 background-repeat: repeat-x;
