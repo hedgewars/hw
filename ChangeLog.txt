@@ -114,6 +114,7 @@ Lua API:
  + New call: SetTeamLabel(teamname[, label]): Set an arbitrary label for a team, will be displayed next to the team bar
  + New call: SetSoundMask(soundId, isMasked): Allows to disable playing a sound effect from engine
  + New call: SkipTurn(): Force current hedgehog to skip turn
+ + New call: Explode(x, y, radius[, options]): Cause an explosion
  + New param: PlaySound accepts 3rd parameter for voices: instaVoice: If true, sound plays instantly instead of being queued
  + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
  + New callback: onSkipTurn(): Called when a hog skips turn

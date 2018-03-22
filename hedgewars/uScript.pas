@@ -2953,6 +2953,26 @@ begin
     lc_setlasersight:= 0;
 end;
 
+function lc_explode(L : Plua_state) : LongInt; Cdecl;
+var mask: LongWord;
+    n: LongInt;
+begin
+    if CheckAndFetchParamCount(L, 3, 4, 'Explode', 'x, y, radius[, options]', n) then
+        if CurrentHedgehog <> nil then
+            begin
+            mask:= EXPLAutoSound;
+            if (n = 4) then
+                mask:= Trunc(lua_tonumber(L, 4));
+            doMakeExplosion(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), Trunc(lua_tonumber(L, 3)), CurrentHedgehog, mask);
+            lua_pushboolean(L, true);
+            end
+        else
+            lua_pushboolean(L, false)
+    else
+        lua_pushboolean(L, false);
+    lc_explode:= 1;
+end;
+
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
@@ -3764,6 +3784,15 @@ ScriptSetInteger('lfHHMask'        , lfHHMask);
 ScriptSetInteger('lfNotHHObjMask'  , lfNotHHObjMask);
 ScriptSetInteger('lfAllObjMask'    , lfAllObjMask);
 
+// explosion constants
+ScriptSetInteger('EXPLAutoSound'    , EXPLAutoSound);
+ScriptSetInteger('EXPLNoDamage'     , EXPLNoDamage);
+ScriptSetInteger('EXPLDoNotTouchHH' , EXPLDoNotTouchHH);
+ScriptSetInteger('EXPLDontDraw'     , EXPLDontDraw);
+ScriptSetInteger('EXPLNoGfx'        , EXPLNoGfx);
+ScriptSetInteger('EXPLPoisoned'     , EXPLPoisoned);
+ScriptSetInteger('EXPLDoNotTouchAny', EXPLDoNotTouchAny);
+
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
 lua_register(luaState, _P'RestoreHog', @lc_restorehog);
@@ -3903,6 +3932,7 @@ lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 lua_register(luaState, _P'GetAmmoName', @lc_getammoname);
 lua_register(luaState, _P'SetVampiric', @lc_setvampiric);
 lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
+lua_register(luaState, _P'Explode', @lc_explode);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
