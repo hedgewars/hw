@@ -117,6 +117,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
 
     ScriptsLabel = new QLabel(this);
     ScriptsLabel->setHidden(true);
+    ScriptsLabel->setTextFormat(Qt::PlainText);
     GBoxOptionsLayout->addWidget(ScriptsLabel, 1, 1);
 
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
@@ -133,6 +134,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
 
     GameSchemesLabel = new QLabel(SchemeWidget);
     GameSchemesLabel->setHidden(true);
+    GameSchemesLabel->setTextFormat(Qt::PlainText);
     SchemeWidgetLayout->addWidget(GameSchemesLabel, 0, 2);
 
     connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
@@ -160,6 +162,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
 
     WeaponsNameLabel = new QLabel(SchemeWidget);
     WeaponsNameLabel->setHidden(true);
+    WeaponsNameLabel->setTextFormat(Qt::PlainText);
     SchemeWidgetLayout->addWidget(WeaponsNameLabel, 1, 2);
 
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
