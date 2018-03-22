@@ -112,9 +112,13 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     Scripts = new QComboBox(this);
     Scripts->setMaxVisibleItems(30);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
-
     Scripts->setModel(DataManager::instance().gameStyleModel());
     m_curScript = Scripts->currentText();
+
+    ScriptsLabel = new QLabel(this);
+    ScriptsLabel->setHidden(true);
+    GBoxOptionsLayout->addWidget(ScriptsLabel, 1, 1);
+
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
     QWidget *SchemeWidget = new QWidget(this);
@@ -126,6 +130,11 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     GameSchemes = new QComboBox(SchemeWidget);
     GameSchemes->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(GameSchemes, 0, 2);
+
+    GameSchemesLabel = new QLabel(SchemeWidget);
+    GameSchemesLabel->setHidden(true);
+    SchemeWidgetLayout->addWidget(GameSchemesLabel, 0, 2);
+
     connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
     lblScheme = new QLabel(QLabel::tr("Scheme"), SchemeWidget);
@@ -148,6 +157,10 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     WeaponsName = new QComboBox(SchemeWidget);
     WeaponsName->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(WeaponsName, 1, 2);
+
+    WeaponsNameLabel = new QLabel(SchemeWidget);
+    WeaponsNameLabel->setHidden(true);
+    SchemeWidgetLayout->addWidget(WeaponsNameLabel, 1, 2);
 
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
@@ -470,7 +483,9 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SCRIPT")
         {
-            Scripts->setCurrentIndex(Scripts->findText(value));
+            int in = Scripts->findText(value);
+            Scripts->setCurrentIndex(in);
+            ScriptsLabel->setText(value);
             pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
             return;
         }
@@ -515,10 +530,15 @@ void GameCFGWidget::ammoChanged(int index)
 {
     if (index >= 0)
     {
+        WeaponsNameLabel->setText(WeaponsName->currentText());
         emit paramChanged(
             "AMMO",
             QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
         );
+    }
+    else
+    {
+        WeaponsNameLabel->setText("");
     }
 }
 
@@ -632,6 +652,12 @@ void GameCFGWidget::schemeChanged(int index)
             }
         }
     }
+
+    if(index == -1)
+        GameSchemesLabel->setText("");
+    else
+        GameSchemesLabel->setText(GameSchemes->currentText());
+
     pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
 }
 
@@ -698,14 +724,18 @@ void GameCFGWidget::scriptChanged(int index)
         lblWeapons->setEnabled(true);
         bindEntries->setEnabled(true);
     }
-    if (!index)
+    if (index == -1)
     {
         pMapContainer->setScript(QString(""), QString(""));
+        ScriptsLabel->setStyleSheet("color: #b50000;");
     }
     else
     {
         pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
+        ScriptsLabel->setText(Scripts->currentText());
+        ScriptsLabel->setStyleSheet("");
     }
+
     emit paramChanged("SCRIPT", QStringList(name));
 }
 
@@ -763,7 +793,27 @@ void GameCFGWidget::setMaster(bool master)
     if (master == m_master) return;
     m_master = master;
 
+    if (master)
+    {
+        // Reset script if not found
+        if (Scripts->currentIndex() == -1)
+        {
+            Scripts->setCurrentIndex(Scripts->findText("Normal"));
+        }
+    }
+
     pMapContainer->setMaster(master);
+
+    GameSchemes->setHidden(!master);
+    WeaponsName->setHidden(!master);
+    Scripts->setHidden(!master);
+    goToSchemePage->setHidden(!master);
+    goToWeaponPage->setHidden(!master);
+    bindEntries->setHidden(!master);
+
+    GameSchemesLabel->setHidden(master);
+    WeaponsNameLabel->setHidden(master);
+    ScriptsLabel->setHidden(master);
 
     foreach (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);

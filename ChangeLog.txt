@@ -23,6 +23,7 @@ Frontend:
  + Schemes are now stored in separate files under Schemes
  + Add default directory DrawnMaps for hand-drawn maps
  + Lead player to training missions when starting Hedgewars the first time
+ * Fix map preview, map name, style name not being displayed if host selects map or style you don't have
  * Remove “Upload to YouTube” functionality (it was broken for years)
  * Fix broken preview of team hats (e.g. cap_team)
  * Fix chart in stats screen not supporting negative numbers
