@@ -710,7 +710,7 @@ locale = {
 ["“g=150”, where 150 is 150% of normal gravity."] = "»g=150«, wobei die »150« für 150% der Normalschwerkraft steht.", -- Gravity
 ["“g=50, g2=150, period=4000” for gravity changing|from 50 to 150 and back with period of 4000 ms."] = "»g=50, g2=150, period=4000«, für Schwerkraft,|die von 50% bis 150% wechselt mit einer Periode von 4000ms.", -- Gravity
 ["Galaxy Guardians"] = "Galaxiewächter", -- Big_Armory
-["Game Modifiers: "]="Spiel-Modifikatoren",
+["Game Modifiers: "]="Spiel-Modifikatoren: ",
 ["Game over!"] = "Spiel vorbei!", -- Space_Invasion
 ["GAME OVER!"]="SPIEL ZU ENDE!",
 ["Game Started!"]="Spiel gestartet!",
