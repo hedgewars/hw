@@ -3662,7 +3662,7 @@ luaopen_table(luaState);
 ScriptSetString(_S'LOCALE', cLocale);
 
 // import game flags
-ScriptSetInteger('gfForts', gfForts);
+ScriptSetInteger('gfSwitchHog', gfSwitchHog);
 ScriptSetInteger('gfMultiWeapon', gfMultiWeapon);
 ScriptSetInteger('gfSolidLand', gfSolidLand);
 ScriptSetInteger('gfBorder', gfBorder);

@@ -973,11 +973,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Video hochladen</translation>
+        <translation type="vanished">Video hochladen</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Hochladen</translation>
+        <translation type="vanished">Hochladen</translation>
     </message>
 </context>
 <context>
@@ -2135,6 +2135,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Sea (Edges connect to sea)</source>
         <translation>Ozean (Grenzen sind mit dem Wasser verbunden)</translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation>Wähle am Zugbeginn einen Igel aus</translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2252,7 +2256,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>hochladen</translation>
+        <translation type="vanished">hochladen</translation>
     </message>
     <message>
         <source>Date: %1
@@ -2376,11 +2380,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Kontoname und Passwort speichern</translation>
+        <translation type="vanished">Kontoname und Passwort speichern</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Video ist privat</translation>
+        <translation type="vanished">Video ist privat</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2793,27 +2797,27 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Bitte gib entweder deinen YouTube-Kontonamen oder die entsprechende E-Mail-Adresse des Google-Kontos an.</translation>
+        <translation type="vanished">Bitte gib entweder deinen YouTube-Kontonamen oder die entsprechende E-Mail-Adresse des Google-Kontos an.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Kontoname (oder E-Mail): </translation>
+        <translation type="vanished">Kontoname (oder E-Mail): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Passwort: </translation>
+        <translation type="vanished">Passwort: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Videotitel: </translation>
+        <translation type="vanished">Videotitel: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Videobeschreibung: </translation>
+        <translation type="vanished">Videobeschreibung: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tags (durch Kommas getrennt): </translation>
+        <translation type="vanished">Tags (durch Kommas getrennt): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2964,17 +2968,17 @@ Willst du wirklich verlassen?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Fehler während Authentifizierung auf google.com:
+        <translation type="vanished">Fehler während Authentifizierung auf google.com:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Login oder Passwort inkorrekt</translation>
+        <translation type="vanished">Login oder Passwort inkorrekt</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Fehler bei Senden von Meta-Daten zu youtube.com:
+        <translation type="vanished">Fehler bei Senden von Meta-Daten zu youtube.com:
 </translation>
     </message>
     <message>
@@ -3045,7 +3049,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Video hochladen - Fehler</translation>
+        <translation type="vanished">Video hochladen - Fehler</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -3122,7 +3126,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Willst du das Hochladen von %1 wirklich abbrechen?</translation>
+        <translation type="vanished">Willst du das Hochladen von %1 wirklich abbrechen?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3326,11 +3330,11 @@ Du scheinst hier neu zu sein. Möchtest zuerst ein paar Übungsmissionen spielen
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Auf YouTube hochladen</translation>
+        <translation type="vanished">Auf YouTube hochladen</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Hochladen abbrechen</translation>
+        <translation type="vanished">Hochladen abbrechen</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3378,7 +3382,7 @@ Du scheinst hier neu zu sein. Möchtest zuerst ein paar Übungsmissionen spielen
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
-        <translation>Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
+        <translation type="vanished">Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
     </message>
 </context>
 <context>

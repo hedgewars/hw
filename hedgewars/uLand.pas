@@ -717,10 +717,6 @@ begin
 
     LoadThemeConfig;
 
-    // is this not needed any more? lets hope setlength sets also 0s
-    //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
-    //    FillChar(Land,SizeOf(TCollisionArray),0);*)
-
     if cPathz[ptMapCurrent] <> '' then
         begin
         map:= cPathz[ptMapCurrent] + '/map.png';
@@ -741,7 +737,7 @@ begin
             mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
             mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
             mgDrawn : GenDrawnMap;
-            mgForts : begin GameFlags:= (GameFlags or gfForts or gfDivideTeams); MakeFortsMap(); end;
+            mgForts : begin GameFlags:= (GameFlags or gfDivideTeams); MakeFortsMap(); end;
         else
             OutError('Unknown mapgen', true);
         end;
@@ -835,7 +831,7 @@ if (GameFlags and gfBottomBorder) <> 0 then
 if (GameFlags and gfDisableGirders) <> 0 then
     hasGirders:= false;
 
-if (GameFlags and gfForts = 0) and (maskOnly or (cPathz[ptMapCurrent] = '')) then
+if (cMapGen <> mgForts) and (maskOnly or (cPathz[ptMapCurrent] = '')) then
     AddObjects
 
 else

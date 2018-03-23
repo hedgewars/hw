@@ -944,11 +944,11 @@ just enter your nickname.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Upload video</translation>
+        <translation type="vanished">Upload video</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation type="vanished">Upload</translation>
     </message>
 </context>
 <context>
@@ -2027,6 +2027,10 @@ just enter your nickname.</translation>
         <source>Name of this scheme</source>
         <translation>Name of this scheme</translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation>Select a hedgehog at the beginning of a turn</translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2140,7 +2144,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>uploading</translation>
+        <translation type="vanished">uploading</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2254,11 +2258,11 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Save account name and password</translation>
+        <translation type="vanished">Save account name and password</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Video is private</translation>
+        <translation type="vanished">Video is private</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2627,27 +2631,27 @@ Do you really want to quit?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Please provide either the YouTube account name or the email address associated with the Google Account.</translation>
+        <translation type="vanished">Please provide either the YouTube account name or the email address associated with the Google Account.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Account name (or email): </translation>
+        <translation type="vanished">Account name (or email): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Password: </translation>
+        <translation type="vanished">Password: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Video title: </translation>
+        <translation type="vanished">Video title: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Video description: </translation>
+        <translation type="vanished">Video description: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tags (comma separated): </translation>
+        <translation type="vanished">Tags (comma separated): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2802,17 +2806,17 @@ Do you really want to quit?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Error while authenticating at google.com:
+        <translation type="vanished">Error while authenticating at google.com:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Login or password is incorrect</translation>
+        <translation type="vanished">Login or password is incorrect</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Error while sending metadata to youtube.com:
+        <translation type="vanished">Error while sending metadata to youtube.com:
 </translation>
     </message>
     <message>
@@ -2857,7 +2861,7 @@ Do you really want to quit?</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Video upload—Error</translation>
+        <translation type="vanished">Video upload—Error</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2934,7 +2938,7 @@ Do you still want to join the room?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Do you really want to cancel uploading %1?</translation>
+        <translation type="vanished">Do you really want to cancel uploading %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3138,11 +3142,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Upload to YouTube</translation>
+        <translation type="vanished">Upload to YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Cancel uploading</translation>
+        <translation type="vanished">Cancel uploading</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3186,7 +3190,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
-        <translation>Upload this video to your YouTube account</translation>
+        <translation type="vanished">Upload this video to your YouTube account</translation>
     </message>
 </context>
 <context>

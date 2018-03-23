@@ -75,6 +75,7 @@ class PageScheme : public AbstractPage
         ToggleButtonWidget * TBW_morewind;
         ToggleButtonWidget * TBW_tagteam;
         ToggleButtonWidget * TBW_bottomborder;
+        ToggleButtonWidget * TBW_switchhog;
 
         QSpinBox * SB_DamageModifier;
         QSpinBox * SB_TurnTime;

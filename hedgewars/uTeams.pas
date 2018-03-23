@@ -271,6 +271,7 @@ var i, t: LongInt;
     CurWeapon: PAmmo;
     w: real;
     vg: PVisualGear;
+    g: PGear;
     s: ansistring;
 begin
 if PlacingHogs then
@@ -332,25 +333,35 @@ ApplyAmmoChanges(CurrentHedgehog^);
 if (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
     SetBinds(CurrentTeam^.Binds);
 
-bShowFinger:= true;
-
 if PlacingHogs then
     begin
     if CurrentHedgehog^.Unplaced then
         TurnTimeLeft:= 15000
     else TurnTimeLeft:= 0
     end
-else if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
-    begin
-    if TagTurnTimeLeft <> 0 then
-        TurnTimeLeft:= TagTurnTimeLeft;
-    TagTurnTimeLeft:= 0;
-    end
 else
     begin
-    TurnTimeLeft:= cHedgehogTurnTime;
-    TagTurnTimeLeft:= 0;
-    NextClan:= false;
+    if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
+        begin
+        if TagTurnTimeLeft <> 0 then
+            TurnTimeLeft:= TagTurnTimeLeft;
+        TagTurnTimeLeft:= 0;
+        end
+    else
+        begin
+        TurnTimeLeft:= cHedgehogTurnTime;
+        TagTurnTimeLeft:= 0;
+        NextClan:= false;
+        end;
+
+    if (GameFlags and gfSwitchHog) <> 0 then
+        begin
+        g:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
+        CurAmmoGear:= g;
+        lastGearByUID:= g;
+        end
+    else
+        bShowFinger:= true;
     end;
 IsGetAwayTime:= false;
 

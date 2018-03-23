@@ -3,6 +3,7 @@
 ====================== 0.9.24 ======================
 Game:
  + New weapon: Minigun
+ + New game modifier: Enable switch hedgehog at start of turn
  + Change weapon icons: Mudball, air mine
  + Add healing visual effect in Paramedics mode and a few scripts
  + Show remaining ammo when using Birdy egg or RC Plane bomb

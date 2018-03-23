@@ -84,6 +84,10 @@ QLayout * PageScheme::bodyLayoutDefinition()
     TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
     glGMLayout->addWidget(TBW_bottomborder,0,3,1,1);
 
+    TBW_switchhog = new ToggleButtonWidget(gbGameModes, ":/res/btnSwitchHog@2x.png");
+    TBW_switchhog->setWhatsThis(tr("Select a hedgehog at the beginning of a turn"));
+    glGMLayout->addWidget(TBW_switchhog,0,4,1,1);
+
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
     TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
     glGMLayout->addWidget(TBW_solid,1,0,1,1);
@@ -545,6 +549,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     selectScheme->setModel(model);
 
     mapper->addMapping(LE_name, 0);
+    mapper->addMapping(TBW_switchhog, 1);
     mapper->addMapping(TBW_teamsDivide, 2);
     mapper->addMapping(TBW_solid, 3);
     mapper->addMapping(TBW_border, 4);

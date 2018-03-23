@@ -1205,7 +1205,7 @@ function onGameInit()
 		gfDisableGirders + gfRandomOrder +	-- highly recommended!
 		gfDisableLandObjects + gfSolidLand + gfLowGravity +
 		-- a bit unusual but may still be useful
-		gfBottomBorder + gfForts + gfDivideTeams +
+		gfBottomBorder + gfDivideTeams +
 		gfDisableWind + gfMoreWind + gfTagTeam +
 		-- very unusual flags, they don’t affect gameplay really, they are mostly for funny graphical effects
 		gfKing + 	-- King Mode doesn’t work like expected, since hedgehogs never really die here in this mode

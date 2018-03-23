@@ -28,7 +28,7 @@
 
 QList<QVariant> defaultScheme = QList<QVariant>()
                                 << QVariant("Default")     // name           0
-                                << QVariant(false)         // fortsmode      1
+                                << QVariant(false)         // switchhog      1
                                 << QVariant(false)         // team divide    2
                                 << QVariant(false)         // solid land     3
                                 << QVariant(false)         // border         4
@@ -96,7 +96,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
 
     spNames = QStringList()
               << "name"                //  0 | Name should be first forever
-              << "fortsmode"           //  1
+              << "switchhog"           //  1
               << "divteams"            //  2
               << "solidland"           //  3
               << "border"              //  4
@@ -144,7 +144,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> proMode;
     proMode
             << predefSchemesNames[1]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -192,7 +192,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> shoppa;
     shoppa
             << predefSchemesNames[2]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(true)          // solid land     3
             << QVariant(true)          // border         4
@@ -240,7 +240,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> cleanslate;
     cleanslate
             << predefSchemesNames[3]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -288,7 +288,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> minefield;
     minefield
             << predefSchemesNames[4]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -336,7 +336,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> barrelmayhem;
     barrelmayhem
             << predefSchemesNames[5]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -384,7 +384,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> tunnelhogs;
     tunnelhogs
             << predefSchemesNames[6]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(true)          // border         4
@@ -432,7 +432,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> timeless;
     timeless
             << predefSchemesNames[7]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -480,7 +480,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> thinkingportals;
     thinkingportals
             << predefSchemesNames[8]   // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -528,7 +528,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> kingmode;
     kingmode
             << predefSchemesNames[9]  // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -576,7 +576,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> construction;
     construction
             << predefSchemesNames[10]  // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -625,7 +625,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> spaceinvasion;
     spaceinvasion
             << predefSchemesNames[11]  // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
@@ -674,7 +674,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QList<QVariant> hedgeeditor;
     hedgeeditor
             << predefSchemesNames[12]  // name           0
-            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4

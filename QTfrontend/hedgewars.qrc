@@ -127,6 +127,7 @@
         <file>res/hh_small.png</file>
         <file>res/btnDisabled.png</file>
         <file>res/btnBorder@2x.png</file>
+        <file>res/btnSwitchHog@2x.png</file>
         <file>res/btnInvulnerable@2x.png</file>
         <file>res/btnLaserSight@2x.png</file>
         <file>res/btnLowGravity@2x.png</file>
