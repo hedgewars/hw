@@ -157,9 +157,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     QSettings settings(dataMgr.settingsFileName(),
                        QSettings::IniFormat);
 
-    QString loc = settings.value("misc/locale", "").toString();
-    if (loc.isEmpty())
-        loc = QLocale::system().name();
+    QString loc = QLocale().name();
 
     QString infoFile = QString("physfs://Locale/missions_" + loc + ".txt");
 

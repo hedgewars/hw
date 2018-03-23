@@ -166,9 +166,7 @@ QString PageMain::randomTip()
         QSettings settings(dataMgr.settingsFileName(),
                            QSettings::IniFormat);
 
-        QString loc = settings.value("misc/locale", "").toString();
-        if (loc.isEmpty())
-            loc = QLocale::system().name();
+        QString loc = QLocale().name();
 
         QString tipFile = QString("physfs://Locale/tips_" + loc + ".xml");
 

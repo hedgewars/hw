@@ -372,21 +372,31 @@ int main(int argc, char *argv[]) {
         if (cc.isEmpty())
         {
             cc = QLocale::system().name();
+            qDebug("Detected system locale: %s", qPrintable(cc));
 
             // Fallback to current input locale if "C" locale is returned
             if(cc == "C")
                 cc = HWApplication::inputMethod()->locale().name();
         }
-        qDebug("Frontend uses locale: %s", qPrintable(cc));
+        else
+        {
+            qDebug("Configured frontend locale: %s", qPrintable(cc));
+        }
+        QLocale::setDefault(cc);
+        QString defaultLocaleName = QLocale().name();
+        qDebug("Frontend uses locale: %s", qPrintable(defaultLocaleName));
 
-        // Load locale files into translators
-        if (!TranslatorHedgewars.load(QString("hedgewars_%1").arg(cc), QString("physfs://Locale")))
-            qWarning("Failed to install Hedgewars translation (%s)", qPrintable(cc));
-        if (!TranslatorQt.load(QString("qt_%1").arg(cc), QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
-            qWarning("Failed to install Qt translation (%s)", qPrintable(cc));
-        app.installTranslator(&TranslatorHedgewars);
-        app.installTranslator(&TranslatorQt);
-        app.setLayoutDirection(QLocale(cc).textDirection());
+        if (defaultLocaleName != "C")
+        {
+            // Load locale files into translators
+            if (!TranslatorHedgewars.load(QLocale(), "hedgewars", "_", QString("physfs://Locale")))
+                qWarning("Failed to install Hedgewars translation (%s)", qPrintable(defaultLocaleName));
+            if (!TranslatorQt.load(QLocale(), "qt", "_", QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
+                qWarning("Failed to install Qt translation (%s)", qPrintable(defaultLocaleName));
+            app.installTranslator(&TranslatorHedgewars);
+            app.installTranslator(&TranslatorQt);
+        }
+        app.setLayoutDirection(QLocale().textDirection());
     }
 
 #ifdef _WIN32
