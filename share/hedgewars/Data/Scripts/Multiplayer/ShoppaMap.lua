@@ -23,11 +23,10 @@ function onGearAdd(gear)
     end
 end
 
-
 -- This could probably use less points and more precision
 -- 700x700 for object space
 function DrawStar(x, y, d, f)
--- default scale is 700x700 or so
+    -- default scale is 700x700 or so
     local s = 700
     local i = 0
     local j = 0
@@ -317,8 +316,6 @@ function NoOverlapXY(x,y,x2,y2)
         oy = ObjectList[i][2]
         ox2 = ObjectList[i][3]
         oy2 = ObjectList[i][4]
-         --   WriteLnToConsole(ox..' '..oy..' '..ox2..' '..oy2..' - '..x..' '..y..' '..x2..' '..y2)
-        --if (math.abs(ox + ox2 -x - x2) <= (ox2 - ox + x2 - x)) and (math.abs(oy + oy2 - y - y2) <= (oy - oy2 + y - y2)) then
         if x < ox2 and ox < x2 and y < oy2 and oy < y2 then
             return false
         end
@@ -327,30 +324,8 @@ function NoOverlapXY(x,y,x2,y2)
     return true
 end
 
-function dbg()
-    local i = 1
-    local l = table.getn(ObjectList)
-    local ox = 0
-    local oy = 0
-    local ox2 = 0
-    local oy2 = 0
-    while i<=l do
-        ox = ObjectList[i][1]
-        oy = ObjectList[i][2]
-        ox2 = ObjectList[i][3]
-        oy2 = ObjectList[i][4]
-        AddPoint(ox,oy,1)
-        AddPoint(ox2,oy)
-        AddPoint(ox2,oy2)
-        AddPoint(ox,oy2)
-        AddPoint(ox,oy)
-        AddPoint(ox2,oy2)
-        i=i+1
-    end
-end
-
 function onPreviewInit()
-onGameInit()
+    onGameInit()
 end
 
 function onGameInit()
@@ -455,17 +430,5 @@ function onGameInit()
         end
         Tries = Tries + 1
     end
---    Padding = div(Padding,2)
---    Tries = 0
---    while (TotGen < 21) and (Tries < 10000) do
---        r = GetRandom(20-div(Tries,223))+5
---        x = GetRandom(4050-r*20)+r*10
---        y = GetRandom(2000-r*20)+r*10
---        if DrawCircle(x,y,r) then
---            TotGen = TotGen+1
---        end
---        Tries = Tries + 1
---    end
-    --dbg()
     FlushPoints()
 end 
