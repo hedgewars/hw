@@ -4199,6 +4199,7 @@ begin
         if (dY < _0_1) and (dY > -_0_1) then
             begin
             Gear^.State := Gear^.State or gsttmpFlag;
+            dX := _0;
             dY := dY - _0_2
             end
         end
