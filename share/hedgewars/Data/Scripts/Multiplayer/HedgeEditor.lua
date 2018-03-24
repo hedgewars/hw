@@ -27,7 +27,6 @@
 -- CORE FEATURES as of latest version
 ---------------------------------------
 -- togglable help (press PRECISE + 1, while you have a tool (e.g. airstrike) selected)
--- you can also the set the ScriptParameter in scheme, e.g: helpDisabled="true"
 
 -- place girders, rubberbands and custom sprites anywhere on the map.
 -- the above objects may be destructible, indestructible, icy, or bouncy.
@@ -73,7 +72,6 @@
 -- ufoFuel=1000 (Flying Saucer will start with half the normal fuel. A value of 2000 is infinite fuel)
 -- portalDistance=15 (This is the distance portals can travel before fizzling)
 -- m=3 (load a particular map from the map library of Data/Scripts/TechMaps
--- helpDisabled="true" (the help pop-up overlay will be disabled by default)
 
 -- when saving data, points for conversion to HWMAP are also generated and placed inside block comments.
 -- copy paste/these points at the START of a converted HWMAP and then convert the map back to HWMAP format.
@@ -3449,10 +3447,6 @@ function onParameters()
 
 	if portalDistance == nil then
 		portalDistance = 5000
-	end
-
-	if params["helpDisabled"] == "true" then
-		helpDisabled = true
 	end
 
 	if mapID == nil then
