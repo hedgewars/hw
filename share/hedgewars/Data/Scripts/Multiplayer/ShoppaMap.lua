@@ -4,13 +4,11 @@ local ObjectList = {}
 
 -- Overall padding for roping freedom
 local Padding = 430
+-- If true, rope assumes team color
 local TeamRope = false
 
 function onParameters()
     parseParams()
-    if params["pad"] ~= nil then
-        Padding = params["pad"]
-    end
     if params["teamrope"] ~= nil then
         TeamRope = true
     end
@@ -329,6 +327,15 @@ function onPreviewInit()
 end
 
 function onGameInit()
+    -- Calculate padding, determined  by map feature size
+    if MapFeatureSize <= 20 then
+        -- 10 .. 710. Step size=35
+        Padding = 10 + MapFeatureSize * 35
+    else
+        -- 780 .. 1060. Step size=70
+        Padding = 710 + (MapFeatureSize-20) * 70
+    end
+
     MapGen = mgDrawn
     TemplateFilter = 0
     local TotGen = 0
