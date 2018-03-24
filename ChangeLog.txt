@@ -48,6 +48,8 @@ Styles and game modes:
  + Construction Mode: Add subtle glow to healing station
  + Construction Mode: Allow to change "Switch Hedgehog" in weapon scheme
  + Construction Mode: Hide selected sub-modes from crate/object placer from enemies over the net
+ + Highlander: Replace undocumented script param “mode=orig” to “multiuse=true”
+ + Highlander: Display the meaning of “multiuse=true” (or lack thereof) in mission panel
  + Continental supplies: Custom weapon icons for the special weapons
  + Racer, Tech Racer: Before starting a round, make first waypoint flash and center camera to it
  + Racer, Tech Racer: Various other waypoint appearance improvements

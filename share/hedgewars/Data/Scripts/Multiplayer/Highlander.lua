@@ -140,15 +140,50 @@ local utiltot = 0
 local someHog = nil -- just for looking up the weps
 
 -- Script parameter stuff
-local mode = nil
 
--- If true, killing hogs of your own clan doesn't give you their weapons.
--- Otherwise, killing any hog gives you their weapons.
+--[[ Loyal Highlander.
+If true, killing hogs of your own clan doesn't give you their weapons.
+Otherwise, killing any hog gives you their weapons. ]]
 local loyal = false
+
+
+--[[ Multiple weapon usages.
+This is a bit tricky to explain.
+First, remind yourselves that hogs can never hold more than 1 of the same ammo type.
+
+This param changes how ammo will be restocked after killing a hog if you
+already owned this ammo.
+Basically this is about if you can use the same weapon multiple times in a
+turn by killing enemies in a clever way.
+We need to distinguish between your current inventory and the “reset inventory”,
+that is, the state to which your inventory will get reset in the next turn.
+
+No Multi-Use (default):
+    If you kill a hog who owns a weapon you currently have in your reset inventory,
+    but not your inventory, you DO NOT get this weapon again.
+
+Multi-Use:
+    If you kill a hog who owns a weapon you currently have in your reset inventory,
+    but not your inventory, you DO get this weapon.
+
+Example 1:
+    You have a ballgun, and use it to kill a hog who also owns a ballgun.
+    No Multi-Use: You will NOT get another ballgun, since it's in your
+                  reset inventory.
+    Multi-Use: You get another ballgun.
+
+Example 2:
+    You have a grenade and a bazooka in your inventory. You use the bazooka
+    to kill a hedgehog who owns a grenade.
+    In both ammo limit modes, you do NOT win any ammo since you already have
+    a grenade in your inventory (not just your reset inventory), and the
+    rule “no more than 1 ammo per type” applies.
+]]
+local multiUse = false
 
 function onParameters()
     parseParams()
-    mode = params["mode"]
+    multiUse = params["multiuse"] == "true"
     loyal = params["loyal"] == "true"
 end
 
@@ -245,7 +280,7 @@ function TransferWeps(gear)
 
         for w,c in pairs(wepArray) do
 			val = getGearValue(gear,w)
-			if val ~= 0 and (mode == "orig" or (wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0))  then
+			if val ~= 0 and (multiUse or (wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0))  then
 				setGearValue(CurrentHedgehog, w, val)
 
 				-- if you are using multi-shot weapon, gimme one more
@@ -292,7 +327,12 @@ function onGameInit()
 		Goals = loc("Highlander: Eliminate hogs to take their weapons") .. "|"
 	end
 	Goals = Goals .. loc("Replenishment: Weapons are restocked on turn start of a new hog") .. "|" ..
-	loc("Ammo Limit: Hogs can’t have more than 1 ammo per type")
+	loc("Ammo Limit: Hogs can’t have more than 1 ammo per type") .. "|"
+	if multiUse then
+		Goals = Goals .. loc("Multi-Use: You can take and use the same ammo type multiple times in a turn")
+	else
+		Goals = Goals .. loc("No Multi-Use: Once you used an ammo, you can’t take it again in this turn")
+	end
 end
 
 function onGameStart()
