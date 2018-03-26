@@ -1238,11 +1238,24 @@ begin
                   end;
        gtBall: DrawSpriteRotatedF(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 
-       gtPortal: if ((Gear^.Tag and 1) = 0) // still moving?
+       gtPortal: begin
+                 if ((Gear^.Tag and 1) = 0) // still moving?
                  or (Gear^.LinkedGear = nil) or (Gear^.LinkedGear^.LinkedGear <> Gear) // not linked&backlinked?
                  or ((Gear^.LinkedGear^.Tag and 1) = 0) then // linked portal still moving?
-                      DrawSpriteRotatedF(sprPortal, x, y, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
-                 else DrawSpriteRotatedF(sprPortal, x, y, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
+                     DrawSpriteRotatedF(sprPortal, x, y, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
+                 else
+                     DrawSpriteRotatedF(sprPortal, x, y, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
+
+                 // Portal ball trace effects
+                 if ((Gear^.Tag and 1) = 0) and ((GameTicks mod 4) = 0) and (not isPaused) then
+                     begin
+                     vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+                     if Gear^.Tag = 0 then
+                         vg^.Tint:= $fab02ab0
+                     else if Gear^.Tag = 2 then
+                         vg^.Tint:= $364df7b0;
+                     end;
+                 end;
 
            gtDrill: if (Gear^.State and gsttmpFlag) <> 0 then
                         DrawSpriteRotated(sprAirDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX))

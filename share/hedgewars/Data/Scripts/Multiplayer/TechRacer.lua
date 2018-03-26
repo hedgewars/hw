@@ -1255,7 +1255,8 @@ function PortalEffects(gear)
 
 	if GetGearType(gear) == gtPortal then
 
-		tag = GetTag(gear)
+		local tag = GetTag(gear)
+		local col
 		if tag == 0 then
 			col = 0xfab02aFF -- orange ball
 		elseif tag == 1 then
@@ -1267,32 +1268,23 @@ function PortalEffects(gear)
 		end
 
 		if (tag == 0) or (tag == 2) then -- i.e ball form
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, col )
-
-			remLife = getGearValue(gear,"life")
+			local remLife = getGearValue(gear,"life")
 			remLife = remLife - 1
 			setGearValue(gear, "life", remLife)
 
 			if remLife == 0 then
 
-				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
-
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				PlaySound(sndVaporize)
 				DeleteGear(gear)

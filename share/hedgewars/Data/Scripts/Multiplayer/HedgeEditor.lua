@@ -2464,7 +2464,8 @@ function PortalEffects(gear)
 
 	if GetGearType(gear) == gtPortal then
 
-		tag = GetTag(gear)
+		local tag = GetTag(gear)
+		local col
 		if tag == 0 then
 			col = 0xfab02aFF -- orange ball
 		elseif tag == 1 then
@@ -2476,27 +2477,24 @@ function PortalEffects(gear)
 		end
 
 		if (tag == 0) or (tag == 2) then -- i.e ball form
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
-			SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, 1, nil, col )
-
-			remLife = getGearValue(gear,"life")
+			local remLife = getGearValue(gear,"life")
 			remLife = remLife - 1
 			setGearValue(gear, "life", remLife)
 
+			-- Destroy portal ball when max. distance reached
 			if remLife == 0 then
 
-				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
+				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
-
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				PlaySound(sndVaporize)
 				DeleteGear(gear)
