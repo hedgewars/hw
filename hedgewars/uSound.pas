@@ -186,12 +186,12 @@ var cInitVolume: LongInt;
             (FileName:                  'Ow2.ogg'; Path: ptVoices; AltPath: ptNone),// sndOw2
             (FileName:                  'Ow3.ogg'; Path: ptVoices; AltPath: ptNone),// sndOw3
             (FileName:                  'Ow4.ogg'; Path: ptVoices; AltPath: ptNone),// sndOw4
-            (FileName:           'Firepunch1.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirepunch1
-            (FileName:           'Firepunch2.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirepunch2
-            (FileName:           'Firepunch3.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirepunch3
-            (FileName:           'Firepunch4.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirepunch4
-            (FileName:           'Firepunch5.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirepunch5
-            (FileName:           'Firepunch6.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirepunch6
+            (FileName:           'Firepunch1.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirePunch1
+            (FileName:           'Firepunch2.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirePunch2
+            (FileName:           'Firepunch3.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirePunch3
+            (FileName:           'Firepunch4.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirePunch4
+            (FileName:           'Firepunch5.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirePunch5
+            (FileName:           'Firepunch6.ogg'; Path: ptVoices; AltPath: ptNone),// sndFirePunch6
             (FileName:                'Melon.ogg'; Path: ptVoices; AltPath: ptNone),// sndMelon
             (FileName:              'Hellish.ogg'; Path: ptSounds; AltPath: ptNone),// sndHellish
             (FileName:               'Yoohoo.ogg'; Path: ptSounds; AltPath: ptNone),// sndYoohoo
@@ -459,8 +459,12 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            // Fallback to sndFirePunch1 if sndFirePunch{2,6} is missing
             if (not pfsExists(s)) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
-                s:= cPathz[Soundz[sndFirePunch1].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+                begin
+                snd := sndFirePunch1;
+                s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+                end;
             WriteToConsole(msgLoading + s + ' ');
             rwops := rwopsOpenRead(s);
 
