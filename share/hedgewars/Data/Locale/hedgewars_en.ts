@@ -2139,7 +2139,7 @@ just enter your nickname.</translation>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>%1 byte</numerusform>
             <numerusform>%1 bytes</numerusform>
         </translation>

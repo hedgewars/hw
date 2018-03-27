@@ -235,7 +235,23 @@ void PageVideos::init(GameUIConfig * config)
 static QString FileSizeStr(const QString & path)
 {
     qint64 size = QFileInfo(path).size();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     return QLocale().formattedDataSize(size);
+#else
+    qint64 KiB = 1024;
+    qint64 MiB = 1024*KiB;
+    qint64 GiB = 1024*MiB;
+    QString sizeStr;
+    float fsize = (float) size;
+    if (size >= GiB)
+        return QString("%1 GiB").arg(QLocale().toString(fsize/GiB, 'f', 2));
+    if (size >= MiB)
+        return QString("%1 MiB").arg(QLocale().toString(fsize/MiB, 'f', 2));
+    if (size >= KiB)
+        return QString("%1 KiB").arg(QLocale().toString(fsize/KiB, 'f', 2));
+    return PageVideos::tr("%1 bytes", "", size).arg(QString::number(size));
+#endif
 }
 
 // set file size in file list in specified row

@@ -2251,7 +2251,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>%1 Byte</numerusform>
             <numerusform>%1 Bytes</numerusform>
         </translation>
