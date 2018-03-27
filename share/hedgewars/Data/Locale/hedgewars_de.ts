@@ -1049,7 +1049,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Video: %1×%2</translation>
+        <translation type="vanished">Video: %1×%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -1062,7 +1062,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>%1 FPS</source>
-        <translation>%1 FPS</translation>
+        <translation type="vanished">%1 FPS</translation>
     </message>
     <message>
         <source>Player: %1</source>
@@ -1079,6 +1079,16 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Record: %1</source>
         <translation>Aufzeichnung: %1</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation>Video: %1×%2, %3 FPS, %4</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation>Video: %1×%2, %3</translation>
     </message>
 </context>
 <context>
@@ -2241,7 +2251,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%1 Byte</numerusform>
             <numerusform>%1 Bytes</numerusform>
         </translation>
@@ -2275,6 +2285,21 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Size: %1</source>
         <translation>Größe: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation>%1%</translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3)</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="vanished">%1 (%2%) – %3</translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation>%1 (%2%) – %3</translation>
     </message>
 </context>
 <context>

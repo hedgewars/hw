@@ -302,21 +302,30 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         if (!pCodec)
             continue;
 
+
+        AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+        QString decoderName = pDecoder ? pDecoder->name : tr("unknown");
         if (pCodec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
-            desc += QString(tr("Video: %1x%2")).arg(pCodec->width).arg(pCodec->height) + ", ";
             if (pStream->avg_frame_rate.den)
             {
                 float fps = float(pStream->avg_frame_rate.num)/pStream->avg_frame_rate.den;
-                desc += QString(tr("%1 FPS")).arg(fps, 0, 'f', 2) + ", ";
+                //: Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name
+                desc += QString(tr("Video: %1x%2, %3 FPS, %4")).arg(pCodec->width).arg(pCodec->height).arg(QLocale().toString(fps, 'f', 2)).arg(decoderName);
+            }
+            else
+            {
+                //: Video metadata. %1 = video width, %2 = video height, %3 = decoder name
+                desc += QString(tr("Video: %1x%2, %3")).arg(pCodec->width).arg(pCodec->height).arg(decoderName);
             }
         }
         else if (pCodec->codec_type == AVMEDIA_TYPE_AUDIO)
+        {
             desc += tr("Audio: ");
+            desc += decoderName;
+        }
         else
             continue;
-        AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
-        desc += pDecoder? pDecoder->name : tr("unknown");
         desc += "\n";
     }
     AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);

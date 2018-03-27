@@ -234,19 +234,8 @@ void PageVideos::init(GameUIConfig * config)
 // get file size as string
 static QString FileSizeStr(const QString & path)
 {
-    quint64 size = QFileInfo(path).size();
-
-    quint64 KiB = 1024;
-    quint64 MiB = 1024*KiB;
-    quint64 GiB = 1024*MiB;
-    QString sizeStr;
-    if (size >= GiB)
-        return QString("%1 GiB").arg(QString::number(float(size)/GiB, 'f', 2));
-    if (size >= MiB)
-        return QString("%1 MiB").arg(QString::number(float(size)/MiB, 'f', 2));
-     if (size >= KiB)
-        return QString("%1 KiB").arg(QString::number(float(size)/KiB, 'f', 2));
-    return PageVideos::tr("%1 bytes", "", size).arg(QString::number(size));
+    qint64 size = QFileInfo(path).size();
+    return QLocale().formattedDataSize(size);
 }
 
 // set file size in file list in specified row
@@ -319,7 +308,8 @@ void PageVideos::setProgress(int row, VideoItem* item, float value)
 {
     QProgressBar * progressBar = (QProgressBar*)filesTable->cellWidget(row, vcProgress);
     progressBar->setValue(value*10000);
-    progressBar->setFormat(QString("%1%").arg(value*100, 0, 'f', 2));
+    //: Video encoding progress. %1 = number
+    progressBar->setFormat(QString(tr("%1%")).arg(QLocale().toString(value*100, 'f', 2)));
     item->progress = value;
 }
 
@@ -694,14 +684,17 @@ QString PageVideos::getVideosInProgress()
     {
         VideoItem * item = nameItem(i);
         QString process;
-        if (!item->ready())
-            process = tr("encoding");
-        else
+        if (item->ready())
             continue;
         float progress = 100*item->progress;
         if (progress > 99.99)
             progress = 99.99; // displaying 100% may be confusing
-        list += item->name + " (" + QString::number(progress, 'f', 2) + "% - " + process + ")\n";
+        //: Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)
+        list += QString(tr("%1 (%2%) - %3"))
+            .arg(item->name)
+            .arg(QLocale().toString(progress, 'f', 2))
+            .arg(tr("encoding"))
+            + "\n";
     }
     return list;
 }
