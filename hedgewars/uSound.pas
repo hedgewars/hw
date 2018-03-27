@@ -459,10 +459,15 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            // Fallback to sndFirePunch1 if sndFirePunch{2,6} is missing
-            if (not pfsExists(s)) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+            // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
+            if (not pfsExists(s)) then
                 begin
-                snd := sndFirePunch1;
+                if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+                    snd := sndFirePunch1
+                else if (snd in [sndOw2, sndOw3, sndOw4]) then
+                    snd := sndOw1
+                else if (snd in [sndOoff2, sndOoff3]) then
+                    snd := sndOoff1;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
