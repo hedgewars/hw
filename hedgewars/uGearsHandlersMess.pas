@@ -6320,10 +6320,6 @@ begin
 if Gear^.Timer > 0 then dec(Gear^.Timer)
 else
     begin
-    if Gear^.Pos = posCaseUtility then
-        a:= GetUtility(Gear^.Hedgehog)
-    else
-        a:= GetAmmo(Gear^.Hedgehog);
     CheckSum:= CheckSum xor GameTicks;
     gi := GearsList;
     while gi <> nil do
@@ -6334,6 +6330,9 @@ else
             gi^.State:= gi^.State and (not gstTmpFlag);
         gi := gi^.NextGear
         end;
+    if Gear^.Pos = posCaseUtility then
+         a:= GetUtility(Gear^.Hedgehog)
+    else a:= GetAmmo(Gear^.Hedgehog);
     AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
     DeleteGear(Gear)
     end;
