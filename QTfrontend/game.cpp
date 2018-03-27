@@ -536,7 +536,7 @@ void HWGame::abort()
 void HWGame::sendCampaignVar(const QByteArray &varToSend)
 {
     QString varToFind = QString::fromUtf8(varToSend);
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     QString varValue = teamfile.value("Campaign " + campaign + "/" + varToFind, "").toString();
     QByteArray command;
@@ -553,7 +553,7 @@ void HWGame::writeCampaignVar(const QByteArray & varVal)
     QString varToWrite = QString::fromUtf8(varVal.left(i));
     QString varValue = QString::fromUtf8(varVal.mid(i + 1));
 
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Campaign " + campaign + "/" + varToWrite, varValue);
 }

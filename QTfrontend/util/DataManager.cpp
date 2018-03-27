@@ -172,11 +172,11 @@ QString DataManager::settingsFileName()
 {
     if(m_settingsFileName.isEmpty())
     {
-        QFile settingsFile("physfs://settings.ini");
+        QFile settingsFile(cfgdir->absoluteFilePath("settings.ini"));
 
         if(!settingsFile.exists())
         {
-            QFile oldSettingsFile("physfs://hedgewars.ini");
+            QFile oldSettingsFile(cfgdir->absoluteFilePath("hedgewars.ini"));
 
             settingsFile.open(QFile::WriteOnly);
             settingsFile.close();

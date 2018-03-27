@@ -31,8 +31,6 @@
 #include "pagedata.h"
 #include "databrowser.h"
 #include "hwconsts.h"
-#include "DataManager.h"
-#include "FileEngine.h"
 
 QLayout * PageDataDownload::bodyLayoutDefinition()
 {
@@ -197,9 +195,6 @@ void PageDataDownload::fileDownloaded()
         out.write(reply->readAll());
 
         out.close();
-
-        // now mount it
-        FileEngineHandler::mount(fileName);
     }
 }
 
@@ -229,7 +224,6 @@ void PageDataDownload::onPageLeave()
     if (m_contentDownloaded)
     {
         m_contentDownloaded = false;
-        //DataManager::instance().reload();
     }
 }
 
