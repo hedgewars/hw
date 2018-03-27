@@ -33,29 +33,28 @@ ThemeFilterProxyModel::ThemeFilterProxyModel(QObject *parent)
 
 bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const
 {
+    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+    bool searchOkay = true;
+    if(!filterRegExp().isEmpty())
+    {
+        // Check regular expression set by the theme chooser search
+        QString name = index.data(ThemeModel::ActualNameRole).toString();
+        int in = filterRegExp().indexIn(name);
+        searchOkay = in != -1;
+    }
+
     if(isFilteringDLC || isFilteringHidden)
     {
-        QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         bool isDLC = index.data(ThemeModel::IsDlcRole).toBool();
         bool isHidden = index.data(ThemeModel::IsHiddenRole).toBool();
-        if(
-            ((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
-            ((isFilteringHidden && !isHidden) || !isFilteringHidden))
-        {
-            if(!filterRegExp().isEmpty())
-            {
-                // Also check regular expression set by the theme chooser search
-                QString name = index.data(ThemeModel::ActualNameRole).toString();
-                int index = filterRegExp().indexIn(name);
-                return index != -1;
-            }
-            else
-                return true;
-        }
+
+        return ( ((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
+                 ((isFilteringHidden && !isHidden) || !isFilteringHidden) ) &&
+               searchOkay;
     }
     else
     {
-        return true;
+        return searchOkay;
     }
 }
 

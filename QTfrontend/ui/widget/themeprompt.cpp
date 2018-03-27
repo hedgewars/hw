@@ -121,7 +121,7 @@ ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     // Cancel button (closes dialog)
     QPushButton * btnCancel = new QPushButton(tr("Cancel"));
-    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(btnCancel, SIGNAL(clicked()), this, SLOT(onRejected()));
 
     // Select button
     QPushButton * btnSelect = new QPushButton(tr("Use selected theme"));
@@ -170,9 +170,16 @@ void ThemePrompt::moveRight()
     list->moveRight();
 }
 
+void ThemePrompt::onRejected()
+{
+    reject();
+    filterModel->setFilterFixedString(QString());
+}
+
 void ThemePrompt::onAccepted()
 {
     themeChosen(list->currentIndex());
+    filterModel->setFilterFixedString(QString());
 }
 
 // When a theme is selected
