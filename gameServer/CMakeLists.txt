@@ -55,6 +55,7 @@ set(hwserv_main ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars-server.hs)
 
 set(ghc_flags
     --make ${hwserv_main}
+    -dynamic
     -i${CMAKE_CURRENT_SOURCE_DIR}
     -o ${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}
     -odir ${CMAKE_CURRENT_BINARY_DIR}
