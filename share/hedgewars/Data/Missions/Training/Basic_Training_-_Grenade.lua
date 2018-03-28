@@ -80,22 +80,25 @@ end
 local function spawnTargets()
 	-- Warm-up
 	if gamePhase == 0 then
+		AddGear(882, 39, gtTarget, 0, 0, 0, 0)
+	-- Timer
+	elseif gamePhase == 2 then
 		AddGear(233, 97, gtTarget, 0, 0, 0, 0)
 		AddGear(333, 255, gtTarget, 0, 0, 0, 0)
 		AddGear(753, 225, gtTarget, 0, 0, 0, 0)
 	-- No Wind
-	elseif gamePhase == 2 then
+	elseif gamePhase == 3 then
+		AddGear(15, 240, gtTarget, 0, 0, 0, 0)
 		AddGear(61, 9, gtTarget, 0, 0, 0, 0)
-		AddGear(882, 39, gtTarget, 0, 0, 0, 0)
 		AddGear(945, 498, gtTarget, 0, 0, 0, 0)
 	-- Bounciness
-	elseif gamePhase == 3 then
+	elseif gamePhase == 4 then
 		AddGear(323, 960, gtTarget, 0, 0, 0, 0)
 		AddGear(1318, 208, gtTarget, 0, 0, 0, 0)
 		AddGear(1697, 250, gtTarget, 0, 0, 0, 0)
 		AddGear(1852, 100, gtTarget, 0, 0, 0, 0)
 	-- Grand Final
-	elseif gamePhase == 4 then
+	elseif gamePhase == 5 then
 		AddGear(186, 473, gtTarget, 0, 0, 0, 0)
 		AddGear(950, 250, gtTarget, 0, 0, 0, 0)
 		AddGear(1102, 345, gtTarget, 0, 0, 0, 0)
@@ -117,20 +120,24 @@ function newGamePhase()
 		loc("Select weapon: [Left click]"), 2, 5000)
 	elseif gamePhase == 1 then
 		ShowMission(loc("Basic Grenade Training"), loc("Warming Up"),
-		loc("Throw some grenades to destroy the targets!").."|"..
+		loc("Throw a grenade to destroy the target!").."|"..
 		loc("Hold the Attack key pressed for more power.").."|"..
-		loc("Grenades explode after 1 to 5 seconds (you decide).").."|"..
 		loc("Attack: [Space]").."|"..
 		loc("Aim: [Up]/[Down]").."|"..
-		loc("Set detonation timer: [1]-[5]").."|"..
 		loc("Change direction: [Left]/[Right]"), 2, 20000)
 		spawnTargets()
 	elseif gamePhase == 2 then
+		ShowMission(loc("Basic Grenade Training"), loc("Timer"),
+		loc("You can change the detonation timer of grenades.").."|"..
+		loc("Grenades explode after 1 to 5 seconds (you decide).").."|"..
+		loc("Set detonation timer: [1]-[5]"), 2, 15000)
+		spawnTargets()
+	elseif gamePhase == 3 then
 		ShowMission(loc("Basic Grenade Training"), loc("No Wind Influcence"), loc("Unlike bazookas, grenades are not influenced by wind.").."|"..
 		loc("Destroy the targets!"), 2, 6000)
 		SetWind(50)
 		spawnTargets()
-	elseif gamePhase == 3 then
+	elseif gamePhase == 4 then
 		ShowMission(loc("Basic Grenade Training"), loc("Bounciness"),
 		loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
 		loc("Grenades with high bounciness bounce a lot and behave chaotic.").."|"..
@@ -139,12 +146,12 @@ function newGamePhase()
 		loc("Set bounciness: [Left Shift] + [1]-[5]"),
 		2, 20000)
 		spawnTargets()
-	elseif gamePhase == 4 then
+	elseif gamePhase == 5 then
 		ShowMission(loc("Basic Grenade Training"), loc("Final Targets"), loc("Good job! Now destroy the final targets to finish the training.").."|"..
 		loc("Precise Aim: [Left Shift] + [Up]/[Down]"),
 		2, 7000)
 		spawnTargets()
-	elseif gamePhase == 5 then
+	elseif gamePhase == 6 then
 		ShowMission(loc("Basic Grenade Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amGrenade, 0)
