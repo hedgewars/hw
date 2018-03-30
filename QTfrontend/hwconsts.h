@@ -67,6 +67,7 @@ extern int years_since_foundation;
 #define SEASON_CHRISTMAS 2
 #define SEASON_HWBDAY 4
 #define SEASON_EASTER 8
+#define SEASON_APRIL1 16
 
 #define NETGAME_DEFAULT_SERVER "netserver.hedgewars.org"
 #define NETGAME_DEFAULT_PORT 46631

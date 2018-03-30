@@ -17,6 +17,11 @@
  *
  *****************************************************************************/
 
+#infoButton 
+{
+border: transparent;
+background: transparent; 
+}
 HWForm,QDialog {
 background-image: url(":/res/Background.png");
 background-position: bottom center;

@@ -75,7 +75,7 @@ QLayout * PageMain::bodyLayoutDefinition()
 
     // button order matters for overlapping (what's on top and what isn't)
     BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-    BtnInfo->setStyleSheet("border: transparent;background: transparent;");
+	BtnInfo->setObjectName("infoButton");
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 

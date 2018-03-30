@@ -96,6 +96,10 @@ void checkSeason()
         season = SEASON_HWBDAY;
         years_since_foundation = date.year() - 2004;
     }
+    else if (date.month() == 4 && date.day() == 1)
+    {
+        season = SEASON_APRIL1;
+    }
     //Easter?
     else if (calculateEaster(date.year()) == date)
         season = SEASON_EASTER;
@@ -422,6 +426,9 @@ int main(int argc, char *argv[]) {
     {
         case SEASON_CHRISTMAS :
             fname = "christmas.css";
+            break;
+        case SEASON_APRIL1 :
+            fname = "april1.css";
             break;
         case SEASON_EASTER :
             fname = "easter.css";

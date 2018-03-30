@@ -4,6 +4,7 @@
         <file>res/css/qt.css</file>
         <file>res/css/chat.css</file>
         <file>res/css/christmas.css</file>
+        <file>res/css/april1.css</file>
         <file>res/css/easter.css</file>
         <file>res/css/birthday.css</file>
         <file>res/hh25x25.png</file>
@@ -73,6 +74,7 @@
         <file>res/BackgroundBirthday.png</file>
         <file>res/Exit.png</file>
         <file>res/HedgewarsTitle.png</file>
+        <file>res/TomatowarsTitle.png</file>
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
         <file>res/NetworkPlayDisabled.png</file>
