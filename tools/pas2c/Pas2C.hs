@@ -1098,7 +1098,7 @@ expr2C (BuiltInFunCall [e, e1, e2] (SimpleReference (Identifier "copy" _))) = do
          BTString -> f "fpcrtl_copy"
          BTAString -> f "fpcrtl_copyA"
          _ -> error $ "copy() called on " ++ show lt
-     
+
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref
     t <- gets lastType
@@ -1106,7 +1106,7 @@ expr2C (BuiltInFunCall params ref) = do
     case t of
         BTFunction _ _ _ t' -> do
             modify (\s -> s{lastType = t'})
-        _ -> error $ "BuiltInFunCall lastType: " ++ show t
+        _ -> error $ "BuiltInFunCall `" ++ show ref ++ "`, lastType: " ++ show t
     return $
         r <> parens (hsep . punctuate (char ',') $ ps)
 expr2C a = error $ "Don't know how to render " ++ show a
