@@ -180,6 +180,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         curTable->insertRow(row);
         curTable->setItem(row, 0, nameCell);
         QTableWidgetItem * bindCell = new QTableWidgetItem(comboBox->currentText());
+        QIcon dropDownIcon = QIcon();
+        QPixmap dd1 = QPixmap(":/res/dropdown.png");
+        QPixmap dd2 = QPixmap(":/res/dropdown_selected.png");
+        dropDownIcon.addPixmap(dd1, QIcon::Normal);
+        dropDownIcon.addPixmap(dd2, QIcon::Selected);
+        bindCell->setIcon(dropDownIcon);
         bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         curTable->setItem(row, 1, bindCell);
         curTable->resizeColumnsToContents();

@@ -83,6 +83,7 @@
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
         <file>res/dropdown_disabled.png</file>
+        <file>res/dropdown_selected.png</file>
         <file>res/new.png</file>
         <file>res/edit.png</file>
         <file>res/delete.png</file>
