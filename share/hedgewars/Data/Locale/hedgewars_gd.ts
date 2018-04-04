@@ -929,11 +929,11 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Luchdaidh suas video</translation>
+        <translation type="vanished">Luchdaidh suas video</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Luchdadh suas</translation>
+        <translation type="vanished">Luchdadh suas</translation>
     </message>
 </context>
 <context>
@@ -985,7 +985,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Video: %1x%2</translation>
+        <translation type="vanished">Video: %1x%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -997,7 +997,29 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Ùrlar: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1993,6 +2015,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2112,7 +2138,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>’ga luchdadh suas</translation>
+        <translation type="vanished">’ga luchdadh suas</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2121,6 +2147,16 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Size: %1</source>
         <translation>Meud: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2222,11 +2258,11 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Sàbhail ainm a’ chunntais ’s am facal-faire</translation>
+        <translation type="vanished">Sàbhail ainm a’ chunntais ’s am facal-faire</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Tha a’ video prìobhaideach</translation>
+        <translation type="vanished">Tha a’ video prìobhaideach</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2583,27 +2619,27 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Cuir a-steach ainm a’ chunntais agad air YouTube no an seòladh puist-d a tha co-cheangailte ris a’ chunntas Google agad.</translation>
+        <translation type="vanished">Cuir a-steach ainm a’ chunntais agad air YouTube no an seòladh puist-d a tha co-cheangailte ris a’ chunntas Google agad.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Ainm a’ chunntais (no post-d):</translation>
+        <translation type="vanished">Ainm a’ chunntais (no post-d):</translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Facal-faire:</translation>
+        <translation type="vanished">Facal-faire:</translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Tiotal a’ video:</translation>
+        <translation type="vanished">Tiotal a’ video:</translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Tuairisgeul a’ video:</translation>
+        <translation type="vanished">Tuairisgeul a’ video:</translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tagaichean (sgaraichte le cromagan):</translation>
+        <translation type="vanished">Tagaichean (sgaraichte le cromagan):</translation>
     </message>
     <message>
         <source>Description</source>
@@ -2770,17 +2806,17 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Mearachd le dearbhadh le google.com:
+        <translation type="vanished">Mearachd le dearbhadh le google.com:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Chan eil an t-ainm-clàraidh no facal-faire mar bu chòir</translation>
+        <translation type="vanished">Chan eil an t-ainm-clàraidh no facal-faire mar bu chòir</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Mearachd a’ cur meata-dàta gu youtube.com:
+        <translation type="vanished">Mearachd a’ cur meata-dàta gu youtube.com:
 </translation>
     </message>
     <message>
@@ -2817,7 +2853,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Luchdadh suas video – Mearachd</translation>
+        <translation type="vanished">Luchdadh suas video – Mearachd</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2896,7 +2932,7 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>A bheil thu airson sgur de luchdadh suas %1?</translation>
+        <translation type="vanished">A bheil thu airson sgur de luchdadh suas %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3096,11 +3132,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Luchdaich suas gu YouTube</translation>
+        <translation type="vanished">Luchdaich suas gu YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Sguir dhen luchdadh suas</translation>
+        <translation type="vanished">Sguir dhen luchdadh suas</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3141,10 +3177,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>Tòisich frithealaiche prìobhaideach</translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

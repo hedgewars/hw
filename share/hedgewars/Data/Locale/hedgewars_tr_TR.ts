@@ -919,11 +919,11 @@ sadece takma adını gir.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Video yükle</translation>
+        <translation type="vanished">Video yükle</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Yükle</translation>
+        <translation type="vanished">Yükle</translation>
     </message>
 </context>
 <context>
@@ -991,16 +991,34 @@ sadece takma adını gir.</translation>
         <translation>bilinmiyor</translation>
     </message>
     <message>
-        <source>Video: %1x%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1992,6 +2010,10 @@ sadece takma adını gir.</translation>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2108,7 +2130,7 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>yükleniyor</translation>
+        <translation type="vanished">yükleniyor</translation>
     </message>
     <message>
         <source>Date: %1
@@ -2131,6 +2153,16 @@ sadece takma adını gir.</translation>
         <source>Size: %1</source>
         <translation type="unfinished">Boyut: %1
  {1?}</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2236,11 +2268,11 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Hesap adı ve parolasını kaydet</translation>
+        <translation type="vanished">Hesap adı ve parolasını kaydet</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Video özel</translation>
+        <translation type="vanished">Video özel</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2625,27 +2657,27 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Lütfen YouTube hesap adını veya Google Hesabınız ile ilişkilendirmiş e-posta adresini gir.</translation>
+        <translation type="vanished">Lütfen YouTube hesap adını veya Google Hesabınız ile ilişkilendirmiş e-posta adresini gir.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Hesap adı (veya e-posta): </translation>
+        <translation type="vanished">Hesap adı (veya e-posta): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Parola: </translation>
+        <translation type="vanished">Parola: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Video başlığı: </translation>
+        <translation type="vanished">Video başlığı: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Video açıklaması: </translation>
+        <translation type="vanished">Video açıklaması: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Etiketler (virgülle ayrılmış): </translation>
+        <translation type="vanished">Etiketler (virgülle ayrılmış): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2816,16 +2848,16 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Google.com ile kimlik açma başarısız</translation>
+        <translation type="vanished">Google.com ile kimlik açma başarısız</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Kullanıcı adı veya parolası yanlış</translation>
+        <translation type="vanished">Kullanıcı adı veya parolası yanlış</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Youtube.com üst verisi gönderilirken hata</translation>
+        <translation type="vanished">Youtube.com üst verisi gönderilirken hata</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2891,7 +2923,7 @@ Lütfen kurulumunuzu denetleyin!</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Video yükleme - Hata</translation>
+        <translation type="vanished">Video yükleme - Hata</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2967,7 +2999,7 @@ Hala odaya katılmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Gerçekten %1 yüklemesini iptal etmek istiyor musunuz?</translation>
+        <translation type="vanished">Gerçekten %1 yüklemesini iptal etmek istiyor musunuz?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3171,11 +3203,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>YouTube&apos;a Yükle</translation>
+        <translation type="vanished">YouTube&apos;a Yükle</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Yüklemeyi iptal et</translation>
+        <translation type="vanished">Yüklemeyi iptal et</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3219,10 +3251,6 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

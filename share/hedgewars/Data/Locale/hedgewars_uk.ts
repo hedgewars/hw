@@ -921,11 +921,11 @@ just enter your nickname.</source>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Надіслати відео</translation>
+        <translation type="vanished">Надіслати відео</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Надсилання</translation>
+        <translation type="vanished">Надсилання</translation>
     </message>
 </context>
 <context>
@@ -984,7 +984,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Відео: %1x%2</translation>
+        <translation type="vanished">Відео: %1x%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -996,7 +996,29 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Тема: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2024,6 +2046,10 @@ just enter your nickname.</source>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2142,7 +2168,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>uploading</source>
-        <translation>надсилання</translation>
+        <translation type="vanished">надсилання</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2151,6 +2177,16 @@ just enter your nickname.</source>
     <message>
         <source>Size: %1</source>
         <translation>Розмір: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2256,11 +2292,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Зберегти ім&apos;я і пароль</translation>
+        <translation type="vanished">Зберегти ім&apos;я і пароль</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Відео є приватним</translation>
+        <translation type="vanished">Відео є приватним</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2653,27 +2689,27 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Вкажіть ім&apos;я акаунта на YouTube або електронну адресу акаунта на Google.</translation>
+        <translation type="vanished">Вкажіть ім&apos;я акаунта на YouTube або електронну адресу акаунта на Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Ім&apos;я акаунта (або е-мейл): </translation>
+        <translation type="vanished">Ім&apos;я акаунта (або е-мейл): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Пароль: </translation>
+        <translation type="vanished">Пароль: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Заголовок відео: </translation>
+        <translation type="vanished">Заголовок відео: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Опис відео: </translation>
+        <translation type="vanished">Опис відео: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Теги (через кому): </translation>
+        <translation type="vanished">Теги (через кому): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2840,17 +2876,17 @@ Do you really want to quit?</source>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Помилка авторизації на google.com:
+        <translation type="vanished">Помилка авторизації на google.com:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Логін або пароль невірні</translation>
+        <translation type="vanished">Логін або пароль невірні</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Помилка відсилання метаданих на youtube.com:
+        <translation type="vanished">Помилка відсилання метаданих на youtube.com:
 </translation>
     </message>
     <message>
@@ -2895,7 +2931,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Надсилання відео - Помилка</translation>
+        <translation type="vanished">Надсилання відео - Помилка</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2973,7 +3009,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Ви дійсно хочете скасувати відсилання %1?</translation>
+        <translation type="vanished">Ви дійсно хочете скасувати відсилання %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3173,11 +3209,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Надіслати на YouTube</translation>
+        <translation type="vanished">Надіслати на YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Скасувати надсилання</translation>
+        <translation type="vanished">Скасувати надсилання</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3218,10 +3254,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>Запутити приватний сервер</translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

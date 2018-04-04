@@ -911,11 +911,11 @@ informe apenas seu apelido. </translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Enviar vídeo</translation>
+        <translation type="vanished">Enviar vídeo</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Enviar</translation>
+        <translation type="vanished">Enviar</translation>
     </message>
 </context>
 <context>
@@ -982,16 +982,34 @@ informe apenas seu apelido. </translation>
         <translation>desconhecido</translation>
     </message>
     <message>
-        <source>Video: %1x%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Tema: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2011,6 +2029,10 @@ informe apenas seu apelido. </translation>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2128,7 +2150,7 @@ informe apenas seu apelido. </translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>enviando</translation>
+        <translation type="vanished">enviando</translation>
     </message>
     <message>
         <source>Date: %1
@@ -2147,6 +2169,16 @@ informe apenas seu apelido. </translation>
     <message>
         <source>Size: %1</source>
         <translation type="unfinished">Tamanho: %1 {1?}</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2252,11 +2284,11 @@ informe apenas seu apelido. </translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Salvar o nome e a senha da conta</translation>
+        <translation type="vanished">Salvar o nome e a senha da conta</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>O vídeo é particular</translation>
+        <translation type="vanished">O vídeo é particular</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2649,27 +2681,27 @@ Você deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Forneça ou um nome de conta do YouTube ou o endereço de e-mail associado à Conta Google.</translation>
+        <translation type="vanished">Forneça ou um nome de conta do YouTube ou o endereço de e-mail associado à Conta Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Nome da conta (ou e-mail): </translation>
+        <translation type="vanished">Nome da conta (ou e-mail): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Senha: </translation>
+        <translation type="vanished">Senha: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Título do vídeo: </translation>
+        <translation type="vanished">Título do vídeo: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Descrição do vídeo: </translation>
+        <translation type="vanished">Descrição do vídeo: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Etiquetas (separadas por vírgula): </translation>
+        <translation type="vanished">Etiquetas (separadas por vírgula): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2840,16 +2872,16 @@ Você deseja mesmo sair?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Erro ao se autenticar com google.com:</translation>
+        <translation type="vanished">Erro ao se autenticar com google.com:</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Usuário ou senha incorretos</translation>
+        <translation type="vanished">Usuário ou senha incorretos</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Erro ao enviar metadados a youtube.com:</translation>
+        <translation type="vanished">Erro ao enviar metadados a youtube.com:</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2893,7 +2925,7 @@ Você deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Envio de vídeo - Erro</translation>
+        <translation type="vanished">Envio de vídeo - Erro</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2970,7 +3002,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Você deseja mesmo cancelar o envio de %1?</translation>
+        <translation type="vanished">Você deseja mesmo cancelar o envio de %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3170,11 +3202,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Enviar para o YouTube</translation>
+        <translation type="vanished">Enviar para o YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Cancelar envio</translation>
+        <translation type="vanished">Cancelar envio</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3215,10 +3247,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>Iniciar servidor privado</translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

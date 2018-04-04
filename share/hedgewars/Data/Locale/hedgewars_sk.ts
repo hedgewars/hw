@@ -900,11 +900,11 @@ just enter your nickname.</source>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Upload videa</translation>
+        <translation type="vanished">Upload videa</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation type="vanished">Upload</translation>
     </message>
 </context>
 <context>
@@ -971,16 +971,34 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Video: %1x%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Téma: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2004,6 +2022,10 @@ just enter your nickname.</source>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2122,7 +2144,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>uploading</source>
-        <translation>uploadujem</translation>
+        <translation type="vanished">uploadujem</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2130,6 +2152,16 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Size: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2236,11 +2268,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Uložiť meno účtu a heslo</translation>
+        <translation type="vanished">Uložiť meno účtu a heslo</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Video je súkromné</translation>
+        <translation type="vanished">Video je súkromné</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2635,27 +2667,27 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Prosím zadajte buď názov YouTube účtu alebo e-mailovú adresu prepojenú s Google účtom.</translation>
+        <translation type="vanished">Prosím zadajte buď názov YouTube účtu alebo e-mailovú adresu prepojenú s Google účtom.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Názov účtu (alebo e-mail): </translation>
+        <translation type="vanished">Názov účtu (alebo e-mail): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Heslo:</translation>
+        <translation type="vanished">Heslo:</translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Názov videa: </translation>
+        <translation type="vanished">Názov videa: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Popis videa: </translation>
+        <translation type="vanished">Popis videa: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Značky (oddelené čiarkou): </translation>
+        <translation type="vanished">Značky (oddelené čiarkou): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2814,16 +2846,16 @@ Do you really want to quit?</source>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Chyba pri autentizácii voči google.com:</translation>
+        <translation type="vanished">Chyba pri autentizácii voči google.com:</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Prihlasovacie meno alebo heslo je nesprávne</translation>
+        <translation type="vanished">Prihlasovacie meno alebo heslo je nesprávne</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Chyba pri posielaní metadát na youtube.com:</translation>
+        <translation type="vanished">Chyba pri posielaní metadát na youtube.com:</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2893,7 +2925,7 @@ Skontrolujte, prosím, inštaláciu!</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Upload videa - Chyba</translation>
+        <translation type="vanished">Upload videa - Chyba</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2971,7 +3003,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Naozaj chcete zrušiť uploadovanie %1?</translation>
+        <translation type="vanished">Naozaj chcete zrušiť uploadovanie %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3170,11 +3202,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Uploadovať na YouTube</translation>
+        <translation type="vanished">Uploadovať na YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Zrušiť upload</translation>
+        <translation type="vanished">Zrušiť upload</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3214,10 +3246,6 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

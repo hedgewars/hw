@@ -917,11 +917,11 @@ pelkkä nimimerkki riittää.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Julkaise video</translation>
+        <translation type="vanished">Julkaise video</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Julkaise</translation>
+        <translation type="vanished">Julkaise</translation>
     </message>
 </context>
 <context>
@@ -973,7 +973,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Video: %1x%2</translation>
+        <translation type="vanished">Video: %1x%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -985,7 +985,29 @@ pelkkä nimimerkki riittää.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Teema: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1953,6 +1975,10 @@ pelkkä nimimerkki riittää.</translation>
         <source>Name of this scheme</source>
         <translation>Sääntöjen nimi</translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2066,7 +2092,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>lähetetään</translation>
+        <translation type="vanished">lähetetään</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2075,6 +2101,16 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Size: %1</source>
         <translation>Koko: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2180,11 +2216,11 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Tallenna tunnus ja salasana</translation>
+        <translation type="vanished">Tallenna tunnus ja salasana</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Video on yksityinen</translation>
+        <translation type="vanished">Video on yksityinen</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2541,27 +2577,27 @@ Haluatko varmasti lopettaa?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Anna joko YouTube-tunnuksesi tai siihen liitetty Google Account -sähköpostiosoite.</translation>
+        <translation type="vanished">Anna joko YouTube-tunnuksesi tai siihen liitetty Google Account -sähköpostiosoite.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Tunnus (tai sähköposti):</translation>
+        <translation type="vanished">Tunnus (tai sähköposti):</translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Salasana: </translation>
+        <translation type="vanished">Salasana: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Videon otsikko: </translation>
+        <translation type="vanished">Videon otsikko: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Videon kuvaus: </translation>
+        <translation type="vanished">Videon kuvaus: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Hakusanat (pilkulla eroteltuna): </translation>
+        <translation type="vanished">Hakusanat (pilkulla eroteltuna): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2728,17 +2764,17 @@ Haluatko varmasti lopettaa?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Virhe kirjautuessa google.comiin:
+        <translation type="vanished">Virhe kirjautuessa google.comiin:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Tunnus tai salasana ovat virheellisiä</translation>
+        <translation type="vanished">Tunnus tai salasana ovat virheellisiä</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Virhe lähetettäessä oheistietoja youtube.comiin:
+        <translation type="vanished">Virhe lähetettäessä oheistietoja youtube.comiin:
 </translation>
     </message>
     <message>
@@ -2775,7 +2811,7 @@ Haluatko varmasti lopettaa?</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Videon lähetys - Virhe</translation>
+        <translation type="vanished">Videon lähetys - Virhe</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2852,7 +2888,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Haluatko varmasti peruuttaa %1 lähetyksen?</translation>
+        <translation type="vanished">Haluatko varmasti peruuttaa %1 lähetyksen?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3048,11 +3084,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Julkaise YouTubessa</translation>
+        <translation type="vanished">Julkaise YouTubessa</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Peruuta lähetys</translation>
+        <translation type="vanished">Peruuta lähetys</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3093,10 +3129,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>Käynnistä oma palvelin</translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

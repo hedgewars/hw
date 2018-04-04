@@ -941,11 +941,11 @@ just enter your nickname.</source>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Залить видео</translation>
+        <translation type="vanished">Залить видео</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Залить</translation>
+        <translation type="vanished">Залить</translation>
     </message>
 </context>
 <context>
@@ -1017,7 +1017,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Видео: %1x%2</translation>
+        <translation type="vanished">Видео: %1x%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -1030,7 +1030,33 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>%1 FPS</source>
-        <translation>%1 кадров/сек</translation>
+        <translation type="vanished">%1 кадров/сек</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Тема: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2061,6 +2087,10 @@ just enter your nickname.</source>
         <source>Name of this scheme</source>
         <translation>Название этой схемы</translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2179,7 +2209,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>uploading</source>
-        <translation>отправка</translation>
+        <translation type="vanished">отправка</translation>
     </message>
     <message>
         <source>Date: %1
@@ -2198,6 +2228,16 @@ just enter your nickname.</source>
     <message>
         <source>Size: %1</source>
         <translation>Размер: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2303,11 +2343,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Сохранить псевдоним и пароль</translation>
+        <translation type="vanished">Сохранить псевдоним и пароль</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Частное видео</translation>
+        <translation type="vanished">Частное видео</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2703,28 +2743,8 @@ Do you really want to quit?</source>
 Всё равно выйти?</translation>
     </message>
     <message>
-        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Account name (or email): </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Password: </source>
-        <translation>Пароль: </translation>
-    </message>
-    <message>
-        <source>Video title: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Video description: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags (comma separated): </source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Пароль: </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2877,18 +2897,8 @@ Do you really want to quit?</source>
         <translation>Сопоставление не удалось.</translation>
     </message>
     <message>
-        <source>Error while authenticating at google.com:
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Login or password is incorrect</source>
-        <translation>Некорректное имя пользователя или пароль</translation>
-    </message>
-    <message>
-        <source>Error while sending metadata to youtube.com:
-</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Некорректное имя пользователя или пароль</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2929,10 +2939,6 @@ Do you really want to quit?</source>
     <message>
         <source>Unable to start the server: %1.</source>
         <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
-    </message>
-    <message>
-        <source>Video upload - Error</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2999,10 +3005,6 @@ Do you still want to join the room?</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Do you really want to cancel uploading %1?</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>File error</source>
@@ -3198,11 +3200,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Отправить на YouTube</translation>
+        <translation type="vanished">Отправить на YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Отменить отправку</translation>
+        <translation type="vanished">Отменить отправку</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3246,7 +3248,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
-        <translation>Отправить на YouTube</translation>
+        <translation type="vanished">Отправить на YouTube</translation>
     </message>
 </context>
 <context>

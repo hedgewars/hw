@@ -914,11 +914,11 @@ just enter your nickname.</source>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>上傳視頻</translation>
+        <translation type="vanished">上傳視頻</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>上傳</translation>
+        <translation type="vanished">上傳</translation>
     </message>
 </context>
 <context>
@@ -977,7 +977,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>視頻：%1X%2</translation>
+        <translation type="vanished">視頻：%1X%2</translation>
     </message>
     <message>
         <source>%1 fps</source>
@@ -989,7 +989,29 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">主題：%1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1981,6 +2003,10 @@ just enter your nickname.</source>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2097,7 +2123,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>uploading</source>
-        <translation>上傳</translation>
+        <translation type="vanished">上傳</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2106,6 +2132,16 @@ just enter your nickname.</source>
     <message>
         <source>Size: %1</source>
         <translation type="unfinished">大小：%1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2211,11 +2247,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation type="unfinished">保存帳戶名和密碼</translation>
+        <translation type="obsolete">保存帳戶名和密碼</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation type="unfinished">視頻是私人</translation>
+        <translation type="obsolete">視頻是私人</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2592,27 +2628,27 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>請提供YouTube帳戶名稱或與Google帳戶關聯的電子郵件地址。</translation>
+        <translation type="vanished">請提供YouTube帳戶名稱或與Google帳戶關聯的電子郵件地址。</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>賬戶名（或電子郵件）：</translation>
+        <translation type="vanished">賬戶名（或電子郵件）：</translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>密碼：</translation>
+        <translation type="vanished">密碼：</translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>視頻標題：</translation>
+        <translation type="vanished">視頻標題：</translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>視頻說明：</translation>
+        <translation type="vanished">視頻說明：</translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation type="unfinished">標籤（以逗號分隔）：</translation>
+        <translation type="obsolete">標籤（以逗號分隔）：</translation>
     </message>
     <message>
         <source>Description</source>
@@ -2779,16 +2815,16 @@ Do you really want to quit?</source>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation type="unfinished">在google.com認證時錯誤：</translation>
+        <translation type="obsolete">在google.com認證時錯誤：</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation type="unfinished">登錄或密碼不正確</translation>
+        <translation type="obsolete">登錄或密碼不正確</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation type="unfinished">傳送中繼資料給youtube.com時錯誤：</translation>
+        <translation type="obsolete">傳送中繼資料給youtube.com時錯誤：</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2832,7 +2868,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation type="unfinished">視頻上錯 - 錯誤</translation>
+        <translation type="obsolete">視頻上錯 - 錯誤</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2908,7 +2944,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation type="unfinished">你確定要取消上傳%1嗎?</translation>
+        <translation type="obsolete">你確定要取消上傳%1嗎?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3108,11 +3144,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>上傳到YouTube</translation>
+        <translation type="vanished">上傳到YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>取消上傳</translation>
+        <translation type="vanished">取消上傳</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3153,10 +3189,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>啟動私人伺服器</translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

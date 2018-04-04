@@ -985,11 +985,11 @@ po prostu wpisz swój nick.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Prześłij wideo</translation>
+        <translation type="vanished">Prześłij wideo</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Prześlij</translation>
+        <translation type="vanished">Prześlij</translation>
     </message>
 </context>
 <context>
@@ -1062,7 +1062,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Wideo: %1x%2</translation>
+        <translation type="vanished">Wideo: %1x%2</translation>
     </message>
     <message>
         <source>Duration: %1min %2s</source>
@@ -1071,7 +1071,33 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>%1 FPS</source>
-        <translation>%1 FPS</translation>
+        <translation type="vanished">%1 FPS</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Motyw: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2094,6 +2120,10 @@ po prostu wpisz swój nick.</translation>
         <source>Name of this scheme</source>
         <translation>Nazwa tego schematu</translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2212,7 +2242,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>wysyłanie</translation>
+        <translation type="vanished">wysyłanie</translation>
     </message>
     <message>
         <source>Date: %1
@@ -2233,6 +2263,16 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Size: %1</source>
         <translation>Rozmiar: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2338,11 +2378,11 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Zapisz nazwę użytkownika i hasło</translation>
+        <translation type="vanished">Zapisz nazwę użytkownika i hasło</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Film jest prywatny</translation>
+        <translation type="vanished">Film jest prywatny</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2739,27 +2779,27 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Wprowadź nazwę użytkownika YouTube lub adres mailowy powiązany z Kontem Google.</translation>
+        <translation type="vanished">Wprowadź nazwę użytkownika YouTube lub adres mailowy powiązany z Kontem Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Nazwa konta (lub email): </translation>
+        <translation type="vanished">Nazwa konta (lub email): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Hasło: </translation>
+        <translation type="vanished">Hasło: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Nazwa filmu: </translation>
+        <translation type="vanished">Nazwa filmu: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Opis filmu: </translation>
+        <translation type="vanished">Opis filmu: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tagi (oddzielone przecinkami): </translation>
+        <translation type="vanished">Tagi (oddzielone przecinkami): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2930,17 +2970,17 @@ Czy na pewno chcesz wyjść?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Błąd uwierzytelniania na google.com:
+        <translation type="vanished">Błąd uwierzytelniania na google.com:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Login lub hasło są niepoprawne</translation>
+        <translation type="vanished">Login lub hasło są niepoprawne</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Błąd w trakcie wysyłania danych do Youtube:
+        <translation type="vanished">Błąd w trakcie wysyłania danych do Youtube:
 </translation>
     </message>
     <message>
@@ -3009,7 +3049,7 @@ Sprawdź poprawność instalacji!</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Wysyłanei filmu - Błąd</translation>
+        <translation type="vanished">Wysyłanei filmu - Błąd</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -3087,7 +3127,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Na pewno chcesz anulować wysyłanie &apos;%1&apos;?</translation>
+        <translation type="vanished">Na pewno chcesz anulować wysyłanie &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3295,11 +3335,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Wyślij do YouTube</translation>
+        <translation type="vanished">Wyślij do YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Anuluj wysyłanie</translation>
+        <translation type="vanished">Anuluj wysyłanie</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3343,7 +3383,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
-        <translation>Prześlij to wideo na swoje konto YouTube</translation>
+        <translation type="vanished">Prześlij to wideo na swoje konto YouTube</translation>
     </message>
 </context>
 <context>

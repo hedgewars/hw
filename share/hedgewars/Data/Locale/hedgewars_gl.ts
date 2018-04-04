@@ -871,17 +871,6 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
-    <name>HWUploadVideoDialog</name>
-    <message>
-        <source>Upload video</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>HatButton</name>
     <message>
         <source>Change hat (%1)</source>
@@ -932,16 +921,34 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Video: %1x%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1927,6 +1934,10 @@ just enter your nickname.</source>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2039,15 +2050,21 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>uploading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Size: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2146,14 +2163,6 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save account name and password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Video is private</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2460,30 +2469,6 @@ Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Account name (or email): </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Video title: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Video description: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tags (comma separated): </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2730,24 +2715,6 @@ Do you really want to quit?</source>
         <translation type="obsolete">Non se puido iniciar o servidor: %1.</translation>
     </message>
     <message>
-        <source>Error while authenticating at google.com:
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login or password is incorrect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Video upload - Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error while sending metadata to youtube.com:
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Netgame - Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2806,10 +2773,6 @@ Do you still want to join the room?</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Do you really want to cancel uploading %1?</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>File error</source>
@@ -3019,14 +2982,6 @@ You seem to be new around here. Would you like to play some training missions fi
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Upload to YouTube</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel uploading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3044,10 +2999,6 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
