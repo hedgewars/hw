@@ -351,7 +351,6 @@
 02:03=%1 masterfully won this round
 02:03=%1 is the victor
 02:03=%1 wins with style
-02:03=Mission accomplished, %1 won
 02:03=%1 earns the victory medal
 02:03=%1 rules the game
 02:03=Who's the winner? %1 is the winner!

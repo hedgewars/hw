@@ -377,7 +377,6 @@
 02:03=%1 schlürft von der Siegersoße
 02:03=%1 hat diese Runde meisterhaft gewonnen
 02:03=%1 siegt mit Stil
-02:03=Mission erfolgreich, %1 gewinnt
 02:03=%1 verdient sich die Siegermedaillie
 02:03=Wer ist der Sieger? %1 ist der Sieger!
 02:03=%1 hat Grund zum Feiern
