@@ -11,6 +11,8 @@ Game:
  + Add separate control for changing hedgehog tags (default: Home)
  + Toggle all hedgehog tags at once with [Precise] + [Change hedgehog tags]
  + Hedgehog tag translucency is now changed with [Switch] + [Change hedgehog tags]
+ + When using flying saucer shortly after a jump, stay in-mid air
+ + No longer cut off team/hedgehog names when not playing online
  * Fix time box being usable in Sudden Death with 0 health decrease
  * Fix chat input key being sometimes registered twice
  * Fix not displaying current volume status after pressing mute key
