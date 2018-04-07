@@ -87,7 +87,9 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 {
     wconf = new QMap<QString, QString>();
     for(int i = 0; i < cDefaultAmmos.size(); ++i)
+    {
         wconf->insert(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
+    }
 
     if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
@@ -99,8 +101,10 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
         QSettings old_wconf(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat);
 
         QStringList defaultAmmos;
-        for(int i = 0; i < cDefaultAmmos.size(); ++i) 
-            defaultAmmos.append(cDefaultAmmos[i].first);        
+        for(int i = 0; i < cDefaultAmmos.size(); ++i)
+        {
+            defaultAmmos.append(cDefaultAmmos[i].first);
+        }
 
         QStringList keys = old_wconf.allKeys();
         int imported = 0;
@@ -118,7 +122,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
             }
         }
         qDebug("%d weapon scheme(s) imported.", imported);
-    } else {        
+    } else {
         QStringList schemes = QDir(cfgdir->absolutePath() + "/Schemes/Ammo").entryList();
 
         for(int i = 0; i < schemes.size(); i++)
@@ -205,10 +209,13 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 {
     bool enable = true;
     for(int i = 0; i < cDefaultAmmos.size(); i++)
+    {
         if (!cDefaultAmmos[i].first.compare(m_name->text()))
         {
             enable = false;
+            break;
         }
+    }
     for(int i = 0; i < m_numItems; ++i)
     {
         twi::iterator it = weaponItems.find(i);
@@ -228,10 +235,12 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 void SelWeaponWidget::setDefault()
 {
     for(int i = 0; i < cDefaultAmmos.size(); i++)
+    {
         if (!cDefaultAmmos[i].first.compare(m_name->text()))
         {
             return;
         }
+    }
     setWeapons(*cDefaultAmmoStore);
 }
 
@@ -323,6 +332,7 @@ void SelWeaponWidget::deleteWeaponsName()
     if (delWeaponsName == "") return;
 
     for(int i = 0; i < cDefaultAmmos.size(); i++)
+    {
         if (!cDefaultAmmos[i].first.compare(delWeaponsName))
         {
             QMessageBox deniedMsg(this);
@@ -333,6 +343,7 @@ void SelWeaponWidget::deleteWeaponsName()
             deniedMsg.exec();
             return;
         }
+    }
 
     QMessageBox reallyDeleteMsg(this);
     reallyDeleteMsg.setIcon(QMessageBox::Question);
@@ -427,7 +438,9 @@ QString SelWeaponWidget::fixWeaponSet(const QString &s)
                ;
 
     for(int i = sl.length() - 1; i >= 0; --i)
+    {
         sl[i] = sl[i].leftJustified(neededLength, '0', true);
+    }
 
     return sl.join(QString());
 }
