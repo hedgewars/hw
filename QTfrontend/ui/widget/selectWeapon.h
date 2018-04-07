@@ -80,7 +80,7 @@ class SelWeaponWidget : public QFrame
         QLineEdit* m_name;
 
         //storage for all the weapons sets
-        QSettings* wconf;
+        QMap<QString, QString>* wconf;
 
         const int m_numItems;
         int operator [] (unsigned int weaponIndex) const;

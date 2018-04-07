@@ -85,28 +85,29 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     QFrame(parent),
     m_numItems(numItems)
 {
+    wconf = new QMap<QString, QString>();
+    for(int i = 0; i < cDefaultAmmos.size(); ++i)
+        wconf->insert(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
+
     if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
     }
     if (!QDir(cfgdir->absolutePath() + "/Schemes/Ammo").exists()) {
         qDebug("No /Schemes/Ammo directory found. Trying to import weapon schemes from weapons.ini.");
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes/Ammo");
-        wconf = new QSettings("Hedgewars", "Hedgewars");
-        wconf->clear();
+
         QSettings old_wconf(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat);
 
         QStringList defaultAmmos;
-        for(int i = 0; i < cDefaultAmmos.size(); ++i) {
-            wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
-            defaultAmmos.append(cDefaultAmmos[i].first);
-        }
+        for(int i = 0; i < cDefaultAmmos.size(); ++i) 
+            defaultAmmos.append(cDefaultAmmos[i].first);        
 
         QStringList keys = old_wconf.allKeys();
         int imported = 0;
         for(int i = 0; i < keys.size(); i++)
         {
             if (!defaultAmmos.contains(keys[i])) {
-                wconf->setValue(keys[i], fixWeaponSet(old_wconf.value(keys[i]).toString()));
+                wconf->insert(keys[i], fixWeaponSet(old_wconf.value(keys[i]).toString()));
                 QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + keys[i] + ".hwa");
                 if (file.open(QIODevice::WriteOnly)) {
                     QTextStream stream( &file );
@@ -117,13 +118,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
             }
         }
         qDebug("%d weapon scheme(s) imported.", imported);
-    } else {
-        wconf = new QSettings("Hedgewars", "Hedgewars");
-        wconf->clear();
-
-        for(int i = 0; i < cDefaultAmmos.size(); ++i)
-            wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
-
+    } else {        
         QStringList schemes = QDir(cfgdir->absolutePath() + "/Schemes/Ammo").entryList();
 
         for(int i = 0; i < schemes.size(); i++)
@@ -143,7 +138,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
             if (schemeName.endsWith(".hwa", Qt::CaseInsensitive)) {
                 schemeName.chop(4);
             }
-            wconf->setValue(schemeName, fixWeaponSet(config));
+            wconf->insert(schemeName, fixWeaponSet(config));
         }
     }
 
@@ -301,7 +296,7 @@ void SelWeaponWidget::save()
         // remove old entry
         wconf->remove(curWeaponsName);
     }
-    wconf->setValue(m_name->text(), stateFull);
+    wconf->insert(m_name->text(), stateFull);
     QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + m_name->text()+ ".hwa");
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream stream( &file );
@@ -319,7 +314,7 @@ int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
 
 QString SelWeaponWidget::getWeaponsString(const QString& name) const
 {
-    return wconf->value(name).toString();
+    return wconf->find(name).value();
 }
 
 void SelWeaponWidget::deleteWeaponsName()
@@ -366,7 +361,7 @@ void SelWeaponWidget::newWeaponsName()
         while(wconf->contains(newName = tr("New (%1)").arg(i++))) ;
     }
     setWeaponsName(newName);
-    wconf->setValue(newName, *cEmptyAmmoStore);
+    wconf->insert(newName, *cEmptyAmmoStore);
     emit weaponsAdded(newName, *cEmptyAmmoStore);
 }
 
@@ -378,7 +373,7 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
 
     if(name != "" && wconf->contains(name))
     {
-        setWeapons(wconf->value(name).toString());
+        setWeapons(wconf->find(name).value());
     }
     else
     {
@@ -395,7 +390,7 @@ void SelWeaponWidget::switchWeapons(const QString& name)
 
 QStringList SelWeaponWidget::getWeaponNames() const
 {
-    return wconf->allKeys();
+    return wconf->keys();
 }
 
 void SelWeaponWidget::copy()
@@ -413,7 +408,7 @@ void SelWeaponWidget::copy()
         }
         setWeaponsName(newName);
         setWeapons(ammo);
-        wconf->setValue(newName, ammo);
+        wconf->insert(newName, ammo);
         emit weaponsAdded(newName, ammo);
     }
 }
