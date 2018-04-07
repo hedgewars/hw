@@ -751,9 +751,14 @@ end;
 procedure freeModule;
 begin
 {$IFDEF DEBUGFILE}
+if logFile <> nil then
+    begin
     pfsWriteLn(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
     pfsFlush(logFile);
     pfsClose(logFile);
+    end
+else
+    WriteLn(stdout, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
 {$IFDEF USE_VIDEO_RECORDING}
     DoneCriticalSection(logMutex);
 {$ENDIF}
