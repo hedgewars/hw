@@ -140,11 +140,11 @@ void HWGame::SendConfig()
 void HWGame::SendQuickConfig()
 {
     QByteArray teamscfg;
-    ThemeModel * themeModel = DataManager::instance().themeModel();
+    QAbstractItemModel * themeModel = DataManager::instance().themeModel()->withoutHidden();
 
     HWProto::addStringToBuffer(teamscfg, "TL");
     HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
-                               .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount()).data(ThemeModel::ActualNameRole).toString() : "Nature"));
+                               .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount(), 0).data(ThemeModel::ActualNameRole).toString() : "Nature"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
