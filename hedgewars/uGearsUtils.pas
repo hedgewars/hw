@@ -1636,9 +1636,6 @@ if WorldEdge = weNone then exit(false);
 if (hwRound(Gear^.X) < LongInt(leftX)) or
    (hwRound(Gear^.X) > LongInt(rightX)) then
     begin
-    // bullets can now hurt the hog that fired them
-    if (WorldEdge <> weSea) and (Gear^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) then
-        Gear^.Data:= nil;
     if WorldEdge = weWrap then
         begin
         if (hwRound(Gear^.X) < LongInt(leftX)) then

@@ -1358,6 +1358,9 @@ begin
             Gear^.Elasticity:= Gear^.X;
             Gear^.Friction:= Gear^.Y;
             SpawnBulletTrail(Gear, Gear^.X, Gear^.Y, false);
+
+            // bullets can now hurt the hog that fired them
+            if WorldEdge <> weSea then Gear^.Data:= nil;
             end;
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
