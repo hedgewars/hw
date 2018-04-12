@@ -1277,7 +1277,7 @@ begin
                     VGear^.Tint:= $FFFFFF00 or ($FF * (i + 1) div (steps));
 
                     // reached edge of land. assume infinite beam. Extend it way out past camera
-                    if (round(toX) and LAND_WIDTH_MASK <> 0)
+                    if ((round(toX) and LAND_WIDTH_MASK <> 0) and (not (WorldEdge in [weBounce, weWrap])))
                     or (round(toY) and LAND_HEIGHT_MASK <> 0) then
                         // only extend if not under water
                         if not CheckCoordInWater(round(toX), round(toY)) then
