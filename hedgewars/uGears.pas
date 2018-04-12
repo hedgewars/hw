@@ -158,8 +158,12 @@ begin
                 end;
             if tmp > 0 then
                 begin
-                inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
-                HHHurt(Gear^.Hedgehog, dsPoison);
+                // SD damage never reduces health below 1
+                tmp:= min(tmp, max(0, Gear^.Health - 1 - Gear^.Damage));
+                inc(Gear^.Damage, tmp);
+                if tmp > 0 then
+                    // Make hedgehog moan on damage
+                    HHHurt(Gear^.Hedgehog, dsPoison);
                 end
             end;
 
