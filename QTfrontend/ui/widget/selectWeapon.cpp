@@ -123,12 +123,10 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
         }
         qDebug("%d weapon scheme(s) imported.", imported);
     } else {
-        QStringList schemes = QDir(cfgdir->absolutePath() + "/Schemes/Ammo").entryList();
+        QStringList schemes = QDir(cfgdir->absolutePath() + "/Schemes/Ammo").entryList(QDir::Files);
 
         for(int i = 0; i < schemes.size(); i++)
         {
-            if (schemes[i] == "." || schemes[i] == "..") continue;
-
             QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + schemes[i]);
             QString config;
             if (file.open(QIODevice::ReadOnly)) {
