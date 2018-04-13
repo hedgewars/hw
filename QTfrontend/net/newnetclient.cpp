@@ -99,7 +99,7 @@ void HWNewNet::Disconnect()
 
 void HWNewNet::CreateRoom(const QString & room, const QString & password)
 {
-    if(netClientState != InLobby)
+    if(netClientState != InLobby || !ByteLength(room))
     {
         qWarning("Illegal try to create room!");
         return;
@@ -174,6 +174,11 @@ void HWNewNet::SendNet(const QByteArray & buf)
     QString msg = QString(buf.toBase64());
 
     RawSendNet(QString("EM%1%2").arg(delimiter).arg(msg));
+}
+
+int HWNewNet::ByteLength(const QString & str)
+{
+	return str.toUtf8().size();
 }
 
 void HWNewNet::RawSendNet(const QString & str)
@@ -909,7 +914,7 @@ void HWNewNet::chatLineToNetWithEcho(const QString& str)
 
 void HWNewNet::chatLineToNet(const QString& str)
 {
-    if(str != "")
+    if(ByteLength(str))
     {
         RawSendNet(QString("CHAT") + delimiter + str);
         QString action = HWProto::chatStringToAction(str);
@@ -922,7 +927,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 
 void HWNewNet::chatLineToLobby(const QString& str)
 {
-    if(str != "")
+    if(ByteLength(str))
     {
         RawSendNet(QString("CHAT") + delimiter + str);
         QString action = HWProto::chatStringToAction(str);
