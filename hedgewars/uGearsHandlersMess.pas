@@ -6724,6 +6724,8 @@ begin
 
     if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
     begin
+        if (HHGear^.State and gstHHDriven) = 0 then
+            StopSound(sndMinigun);
         HHGear^.State := HHGear^.State and (not gstNotKickable);
         ClearHitOrder();
         DeleteGear(Gear);
