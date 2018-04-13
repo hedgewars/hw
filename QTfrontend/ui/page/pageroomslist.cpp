@@ -156,6 +156,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
     roomsList->verticalHeader()->setVisible(false);
     roomsList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+	roomsList->horizontalHeader()->stretchLastSection();
     roomsList->setAlternatingRowColors(true);
     roomsList->setShowGrid(false);
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
