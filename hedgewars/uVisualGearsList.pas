@@ -65,7 +65,7 @@ begin
 AddVisualGear:= nil;
 if (GameType <> gmtRecord) and
    (((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastScrolling) and // we are scrolling now
-   ((Kind <> vgtCloud) and (not Critical))) then
+   (not Critical)) then
        exit;
 
 if ((cReducedQuality and rqAntiBoom) <> 0) and

@@ -468,7 +468,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud, 0, true)
 end;
 
 procedure ChangeToSDClouds;
@@ -489,7 +489,7 @@ for i:= 0 to 6 do
             end
         else vg:= vg^.NextGear;
     for j:= 0 to cSDCloudsNumber - 1 do
-        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud, 0, true)
     end;
 end;
 
