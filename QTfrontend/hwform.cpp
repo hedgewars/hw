@@ -231,10 +231,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     pageSwitchMapper = new QSignalMapper(this);
     connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
-
-    connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
-    onFrontendFullscreen(config->isFrontendFullscreen());
-
+    
     connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSinglePlayer, ID_PAGE_SINGLEPLAYER);
 
@@ -380,6 +377,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     PagesStack.push(ID_PAGE_MAIN);
     ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageEnter();
     GoBack();
+
+    connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
+    onFrontendFullscreen(config->isFrontendFullscreen());
 }
 
 void HWForm::onFrontendFullscreen(bool value)
