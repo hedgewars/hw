@@ -1,5 +1,8 @@
 + features
 * bugfixes
+====================== 0.9.24.1 =====================
+ * Fix crash when portable portal device is fired at reduced graphics quality
+
 ====================== 0.9.24 ======================
 Game:
  + New weapon: Minigun

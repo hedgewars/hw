@@ -1250,10 +1250,11 @@ begin
                  if ((Gear^.Tag and 1) = 0) and ((GameTicks mod 4) = 0) and (not isPaused) then
                      begin
                      vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
-                     if Gear^.Tag = 0 then
-                         vg^.Tint:= $fab02ab0
-                     else if Gear^.Tag = 2 then
-                         vg^.Tint:= $364df7b0;
+                     if vg <> nil then
+                         if Gear^.Tag = 0 then
+                             vg^.Tint:= $fab02ab0
+                         else if Gear^.Tag = 2 then
+                             vg^.Tint:= $364df7b0;
                      end;
                  end;
 
