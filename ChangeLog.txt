@@ -1,7 +1,8 @@
 + features
 * bugfixes
-====================== 0.9.24.1 =====================
+====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality
+ * Fix possible crash when starting Hedgewars frontend in fullscreen mode
 
 ====================== 0.9.24 ======================
 Game:
