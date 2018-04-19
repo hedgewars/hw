@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if !defined(TARGET_OS_IPHONE)
+#if !(TARGET_OS_IPHONE)
 #include <QString>
 #include <QDir>
 #include <QStringList>
