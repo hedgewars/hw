@@ -1926,6 +1926,35 @@ begin
     lc_endturn:= 0
 end;
 
+function lc_retreat(L : Plua_State) : LongInt; Cdecl;
+var n, time: LongInt;
+    respectFactor: Boolean;
+const
+    call = 'Retreat';
+    params = 'time [, respectGetAwayTimeFactor]';
+begin
+    if CheckAndFetchParamCount(L, 1, 2, call, params, n) then
+        begin
+        IsGetAwayTime:= true;
+        AttackBar:= 0;
+        time:= Trunc(lua_tonumber(L, 1));
+        if n = 2 then
+            respectFactor:= lua_toboolean(L, 2)
+        else
+            respectFactor:= True;
+        if respectFactor then
+            TurnTimeLeft:= (time * cGetAwayTime) div 100
+        else
+            TurnTimeLeft:= time;
+        if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
+            begin
+            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstAttacked;
+            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstAttacking);
+            end;
+        end;
+    lc_retreat:= 0
+end;
+
 function lc_skipturn(L : Plua_State): LongInt; Cdecl;
 begin
     L:= L; // avoid compiler hint
@@ -3830,6 +3859,7 @@ lua_register(luaState, _P'WriteLnToChat', @lc_writelntochat);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
+lua_register(luaState, _P'Retreat', @lc_retreat);
 lua_register(luaState, _P'SkipTurn', @lc_skipturn);
 lua_register(luaState, _P'GetTeamStats', @lc_getteamstats);
 lua_register(luaState, _P'SendStat', @lc_sendstat);

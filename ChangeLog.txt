@@ -1,5 +1,9 @@
 + features
 * bugfixes
+====================== 0.9.25 ======================
+Lua API:
+ + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
+
 ====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality
  * Fix possible crash when starting Hedgewars frontend in fullscreen mode
