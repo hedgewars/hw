@@ -1216,7 +1216,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure spawnBulletTrail(Bullet: PGear; bulletX, bulletY: hwFloat; fadeIn: Boolean);
 var oX, oY: hwFloat;
-    fromX, fromY, toX, toY, dX, dY, length, stepLength: real;
+    fromX, fromY, toX, toY, dX, dY, bLength, stepLength: real;
     VGear: PVisualGear;
     i, steps: LongWord;
 begin
@@ -1238,9 +1238,9 @@ begin
 
     dX:= toX - fromX;
     dY:= toY - fromY;
-    length:= sqrt(dX * dX + dY * dY);
-    dX:= dX / length;
-    dY:= dY / length;
+    bLength:= sqrt(dX * dX + dY * dY);
+    dX:= dX / bLength;
+    dY:= dY / bLength;
 
     if fadeIn then
         begin
@@ -1248,7 +1248,7 @@ begin
         stepLength:= 12;
         fromX:= fromX + dX * 45;
         fromY:= fromY + dY * 45;
-        length:= length - 45;
+        bLength:= bLength - 45;
         end
     else steps:= 1;
 
@@ -1256,16 +1256,16 @@ begin
         begin
             if i < steps - 1 then
                 begin
-                toX:= fromX + dX * minD(stepLength, length);
-                toY:= fromY + dY * minD(stepLength, length);
+                toX:= fromX + dX * minD(stepLength, bLength);
+                toY:= fromY + dY * minD(stepLength, bLength);
                 end
             else if steps > 1 then
                 begin
-                toX:= fromX + dX * length;
-                toY:= fromY + dY * length;
+                toX:= fromX + dX * bLength;
+                toY:= fromY + dY * bLength;
                 end;
 
-            if length > 0 then
+            if bLength > 0 then
                 begin
                 VGear := AddVisualGear(round(fromX), round(fromY), vgtLineTrail);
                 if VGear <> nil then
@@ -1293,7 +1293,7 @@ begin
                 begin
                 fromX:= toX;
                 fromY:= toY;
-                length:= length - stepLength;
+                bLength:= bLength - stepLength;
                 end
         end;
 end;
