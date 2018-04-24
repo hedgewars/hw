@@ -958,6 +958,7 @@ expr2C bop@(BinOp op expr1 expr2) = do
     case (op2C op, t1, t2) of
         ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (fff t1 t2 BTString))
         ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (fff t1 t2  BTAString))
+        ("+", BTChar, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprependA" (fff t1 t2  BTAString))
         ("!=", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompareA" (fff t1 t2  BTBool))
         (_, BTAString, _) -> error $ "unhandled bin op with ansistring on the left side: " ++ show bop
         (_, _, BTAString) -> error $ "unhandled bin op with ansistring on the right side: " ++ show bop
