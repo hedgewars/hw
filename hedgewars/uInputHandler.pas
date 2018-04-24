@@ -29,7 +29,7 @@ function  KeyNameToCode(name: shortstring): LongInt; inline;
 function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 
 function  KeyBindToCode(bind: shortstring): LongInt;
-function  KeyBindToName(bind: shortstring): ansistring;
+function  KeyBindToName(bind: shortstring): shortstring;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
@@ -119,9 +119,9 @@ end;
 // FIXME: Does not work 100% for all keys yet, but at least it no
 //        longer hardcodes any key name.
 // TODO: Localize
-function KeyBindToName(bind: shortstring): ansistring;
+function KeyBindToName(bind: shortstring): shortstring;
 var code: LongInt;
-    name: ansistring;
+    name: shortstring;
 begin
     code:= KeyBindToCode(bind);
     if code = -1 then
@@ -132,7 +132,7 @@ begin
         if (name = 'Escape') then
             // Let's shorten the name “Escape” for the quit menu
             KeyBindToName:= 'Esc'
-        else if (name <> '') then
+        else if (length(name) <> 0) then
             KeyBindToName:= name
         else
             begin

@@ -379,7 +379,7 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
     i, y, imflags: LongInt;
-    keyConfirm, keyQuit: ansistring;
+    keyConfirm, keyQuit: shortstring;
 begin
 AddFileLog('StoreLoad()');
 
@@ -509,7 +509,7 @@ if (not cOnlyStats) and allOK then
     AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
     keyConfirm:= KeyBindToName('confirm');
     keyQuit:= KeyBindToName('quit');
-    ConfirmTexture:= RenderStringTex(FormatA(trmsg[sidConfirm], [keyConfirm, keyQuit]), cYellowColor, fntBig);
+    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], [keyConfirm, keyQuit]), cYellowColor, fntBig);
     SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
     if not reload then
