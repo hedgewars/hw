@@ -1,8 +1,9 @@
 + features
 * bugfixes
-====================== 0.9.25 ======================
+====================== 0.9.24.2 ====================
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
+ * Fix hog being unable to walk after using sniper rifle without firing both shots
 
 ====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality

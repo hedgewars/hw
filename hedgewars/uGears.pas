@@ -537,6 +537,8 @@ begin
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
                             Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
+                        if (Gear^.Hedgehog^.Effects[heArtillery] = 2) then
+                            Gear^.Hedgehog^.Effects[heArtillery]:= 0;
                         end;
                     end;
     t:= GearsList;
