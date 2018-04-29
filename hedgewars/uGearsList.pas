@@ -434,6 +434,7 @@ case Kind of
                     end
                 end;
      gtAirMine: begin
+                gear^.AdvBounce:= 1;
                 gear^.ImpactSound:= sndAirMineImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
