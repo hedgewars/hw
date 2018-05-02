@@ -14,13 +14,13 @@ Basic_Training_-_Rope.name=Grundausbildung: Seil
 Basic_Training_-_Rope.desc="Das Seil ist eines der vielseitigsten Werkzeuge, das du kriegen kannst, doch es erfordert viel Übung. Hier lernst du die Grundlagen des Seils kennen."
 
 Basic_Training_-_Flying_Saucer.name=Grundausbildung: Fliegende Untertasse
-Basic_Training_-_Flying_Saucer.desc="Mit einer fliegenden Untertasse erreicht man so ziemlich jeden Punkt, wenn man denn fliegen kann. Lern, wie man fliegt, wie man von einer fliegenden Untertasse aus angreift und propier ein paar coole Stunts aus."
+Basic_Training_-_Flying_Saucer.desc="Mit einer fliegenden Untertasse erreicht man so ziemlich jeden Punkt, wenn man denn fliegen kann. Lern, wie man fliegt, wie man von einer fliegenden Untertasse aus angreift und probier ein paar coole Stunts aus."
 
 User_Mission_-_Dangerous_Ducklings.name=Gefährliche Entchen
 User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tag umsetzt!"
 
 User_Mission_-_Diver.name=Taucher
-User_Mission_-_Diver.desc="Diese amphibische Angriffstrategie ist schwieriger, als sie aussieht."
+User_Mission_-_Diver.desc="Diese amphibische Angriffsstrategie ist schwieriger, als sie aussieht."
 
 User_Mission_-_Teamwork.name=Teamwork
 User_Mission_-_Teamwork.desc="Ein defekter Cyborg hütet ein wertvolles Militärgeheimnis. Führe deine Spezialeinheit aus zwei Igeln, um den Gegner zu vernichten und das Geheimnis zu erhalten. Es ist absolut unerlässlich für unsere künftigen Operationen, dass beide Igel überleben."

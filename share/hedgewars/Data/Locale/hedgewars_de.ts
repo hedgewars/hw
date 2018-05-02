@@ -512,7 +512,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
-        <translation>Kein Spitznahme angegeben.</translation>
+        <translation>Kein Spitzname angegeben.</translation>
     </message>
     <message>
         <source>Someone already uses your nickname %1 on the server.
@@ -783,7 +783,7 @@ Karte bearbeiten</translation>
     </message>
     <message>
         <source>Randomize the theme</source>
-        <translation>Zufällige Szenierie auswählen</translation>
+        <translation>Zufällige Szenerie auswählen</translation>
     </message>
     <message>
         <source>Choose a theme</source>
@@ -1643,7 +1643,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Insert your address here</source>
-        <translation>Gib deine Adress hier ein</translation>
+        <translation>Gib deine Adresse hier ein</translation>
     </message>
 </context>
 <context>
@@ -1975,7 +1975,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation>Zielfhilfe durch Laservisier</translation>
+        <translation>Zielhilfe durch Laservisier</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
@@ -2189,7 +2189,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
-        <translation>Aufgezeichnete Widerholungen ansehen</translation>
+        <translation>Aufgezeichnete Wiederholungen ansehen</translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
@@ -3224,7 +3224,7 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-        <translation>Bist du sicher, dass du diesees Spiel starten willst?
+        <translation>Bist du sicher, dass du dieses Spiel starten willst?
 Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>

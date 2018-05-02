@@ -568,7 +568,7 @@
 02:06=Nette Überraschung!
 02:06=Neue Spielzeuge
 02:06=Eine Kiste voller Überraschungen
-02:06=Explosive Übrraschungen!
+02:06=Explosive Überraschungen!
 02:06=Nimm dir das für eine Überraschung
 02:06=Heb mich auf! Ich bin eine Kiste!
 02:06=Wehe, wenn da kein schweres Geschütz drin ist
@@ -590,13 +590,13 @@
 02:06=Zerschmettert den Feind!
 02:06=Spaß! Explosionen! Zerstörung!
 02:06=Lass Tod und Zerstörung auf deine Feinde herabregnen
-02:06=Waffen, davon kann man nie genung haben
+02:06=Waffen, davon kann man nie genug haben
 02:06=Hol sie dir, bevor dir die Munition ausgeht!
 02:06=Das bedeutet Chaos!
 02:06=Extras für wahre Krieger
 02:06=Achtung: Nicht bei hohen Temperaturen aufbewahren
 02:06=Bist du gut genug für diese Waffe?
-02:06=Herorische Bewaffnung für heroische Igel
+02:06=Heroische Bewaffnung für heroische Igel
 02:06=Überraschungswaffe!
 02:06=Es regnet Kisten!
 02:06=Die ultimative Waffe? Oder nur so 'ne Langweilige?
@@ -1321,7 +1321,7 @@
 04:10=Rohe Gewalt ist immer eine Lösung. Lege einfach|diesen klassischen Sprengsatz neben deinen Feinden|ab und mach dich aus dem Staub.|Angriff: Dynamitstange legen
 04:11=Beseitige Feinde, indem du diese mit dem|Baseballschläger einfach von der Karte fegst.|Oder wie wäre es, wenn du deinen Freunden ein|paar Minen vor die Beine schlägst?|Angriff: Alles vor dem Igel schlagen
 04:12=Rücke mit deinen Feinden näher zusammen und|entfessle die Kraft dieser so gut wie tödlichen|Kampftechnik.|Angriff: Alles vor dem Igel schlagen
-04:13=UNUSED
+04:13=NICHT IN VERWENDUNG
 04:14=Höhenangst? Greif besser zum Fallschirm.|Er wird sich von alleine entfalten, wenn du|zu lange oder zu tief fällst, und so deinem|Igel den Hals retten.|Angriff: Fallschirm manuell öffnen oder entfernen|Links/Rechts/Hoch/Runter: Flug steuern|Weitsprung: Waffe benutzen
 04:15=Rufe ein Flugzeug, um deine Feinde mit einem|Bombenteppich einzudecken.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
 04:16=Rufe ein Flugzeug, um mehrere Minen im|Zielgebiet abwerfen zu lassen.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten

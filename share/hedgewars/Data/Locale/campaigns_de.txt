@@ -48,7 +48,7 @@ A_Space_Adventure-ice02.name="Nebenmission: Schwerer Flug"
 A_Space_Adventure-ice02.desc="Igel Einsam konnte nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
 
 A_Space_Adventure-desert01.name="Hauptmission: Suche im Staub"
-A_Space_Adventure-desert01.desc="Du bist auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Berkwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
+A_Space_Adventure-desert01.desc="Du bist auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Bergwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
 
 A_Space_Adventure-desert02.name="Nebenmission: Lauf um dein Leben"
 A_Space_Adventure-desert02.desc="Igel Einsam suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
@@ -63,10 +63,10 @@ A_Space_Adventure-fruit02.name="Hauptmission: Zum Greifen nah"
 A_Space_Adventure-fruit02.desc="Igel Einsam nähert sich dem verlorenen Teil des Obstplaneten. Wird ihn Leutnant Limone dabei helfen, das Teil zu besorgen? Oder nicht?"
 
 A_Space_Adventure-fruit03.name="Nebenmission: Präzisionsschießen"
-A_Space_Adventure-fruit03.desc="Igel Einsam has sich verlaufen und ist in den Hinterhalt der Roten Erdbeeren geraten. Hilf ihm, sie zu eliminieren, um etwas zusätzliche Munition für die Mission »Zum Greifen nah« zu gewinnen."
+A_Space_Adventure-fruit03.desc="Igel Einsam hat sich verlaufen und ist in dem Hinterhalt der Roten Erdbeeren geraten. Hilf ihm, sie zu eliminieren, um etwas zusätzliche Munition für die Mission »Zum Greifen nah« zu gewinnen."
 
 A_Space_Adventure-death01.name="Hauptmission: Das letzte Gefecht" 
-A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist Igel Einsam ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschnug."
+A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist Igel Einsam ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschung."
 
 A_Space_Adventure-death02.name="Nebenmission: Die Spezialisten töten"
 A_Space_Adventure-death02.desc="Igel Einsam ist wieder in eine schwierige Situation geraten. Hilf ihm, die »5 tödlichen Igel« in ihrem eigenem Spiel zu besiegen!"
