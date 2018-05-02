@@ -3943,7 +3943,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Hat</source>
-        <translation>Cooliehat</translation>
+        <translation>Hat</translation>
     </message>
     <message>
         <source>(Left)</source>
