@@ -79,7 +79,7 @@ while (t < l) and ((not dropAdditionalPart) or (Seed[t + 1] <> '|')) do
 for i:= t to 54 do
     cirbuf[i]:= $A98765 + 68; // odd number
 
-for i:= 0 to 1023 do
+for i:= 0 to 2047 do
    GetNext;
 end;
 
