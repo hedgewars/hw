@@ -124,7 +124,8 @@ function newGamePhase()
 		loc("Hold the Attack key pressed for more power.").."|"..
 		loc("Attack: [Space]").."|"..
 		loc("Aim: [Up]/[Down]").."|"..
-		loc("Change direction: [Left]/[Right]"), 2, 20000)
+		loc("Change direction: [Left]/[Right]").."|"..
+		loc("Note: Walking is disabled in this mission."), 2, 20000)
 		spawnTargets()
 	elseif gamePhase == 2 then
 		ShowMission(loc("Basic Grenade Training"), loc("Timer"),

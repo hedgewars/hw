@@ -307,7 +307,8 @@ function onGearDelete(gear)
 	elseif gear == crates[4] then
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (1/2)"),
 		loc("For the next crate, you have to do back jumps.") .. "|" ..
-		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 5000)
+		loc("To reach higher ground, walk to a ledge, look to the left, then do a back jump.") .. "|" ..
+		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 6600)
 	elseif gear == crates[7] then
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
 		loc("To get over the next obstacle, you need to perform your back jump precisely.").."|"..
@@ -338,7 +339,8 @@ function onGearDelete(gear)
 		loc("Now try to get out of this bounce house|and take the next crate."), 2, 8000)
 	elseif gear == crates[9] then
 		ShowMission(loc("Basic Movement Training"), loc("Health"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
-		loc("Now go to the next crate."), 2, 900000)
+		loc("Now go to the next crate.").."|"..
+		loc("Look around: [Mouse movement]"), 2, 10000)
 	elseif gear == crates[10] then
 		ShowMission(loc("Basic Movement Training"), loc("Turning Around"),
 		loc("By the way, you can turn around without walking|by holding down Precise when you hit a walk control.").."|"..
