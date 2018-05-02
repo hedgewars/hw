@@ -1397,11 +1397,11 @@ begin
 
         CheckGearDrowning(Gear);
         case Gear^.Kind of
-            gtMinigunBullet: isDead:= isDigging;
-            gtDEagleShot, gtSniperRifleShot: isDead:= Gear^.Damage >= Gear^.Health;
+            gtMinigunBullet: isDead:= isDigging or ((Gear^.State and gstDrowning) <> 0);
+            gtDEagleShot, gtSniperRifleShot: isDead:= (Gear^.Damage >= Gear^.Health) or ((Gear^.State and gstDrowning) <> 0)
         end;
         dec(i)
-    until (i = 0) or (isDead) or ((Gear^.State and gstDrowning) <> 0);
+    until (i = 0) or (isDead);
 
     LineShoveHelp(Gear, oX, oY, Gear^.X, Gear^.Y,
                   Gear^.dX, Gear^.dY, iInit + 2 - i);
@@ -1411,7 +1411,11 @@ begin
         // draw bubbles
         if (not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF)) then
             begin
-            for i:=(Gear^.Health * 4) downto 0 do
+			case Gear^.Kind of
+				gtMinigunBullet: iInit:= Gear^.Health * 100;
+				gtDEagleShot, gtSniperRifleShot: iInit:= Gear^.Health * 4
+				end;
+            for i:=iInit downto 0 do
                 begin
                 if Random(6) = 0 then
                     AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);

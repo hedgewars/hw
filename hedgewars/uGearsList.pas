@@ -757,7 +757,6 @@ gtFlamethrower: begin
  gtMinigunBullet: begin
                 gear^.Radius:= 1;
                 gear^.Health:= 2;
-                gear^.Density:= _0_3;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;
