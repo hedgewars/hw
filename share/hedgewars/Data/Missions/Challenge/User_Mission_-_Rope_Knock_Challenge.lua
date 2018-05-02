@@ -281,7 +281,7 @@ function knockTaunt()
 	elseif r == 18 then taunt =	loc("%s is eliminated!")
 	elseif r == 19 then taunt =	loc("%s fell too fast.")
 	elseif r == 20 then taunt =	loc("%s flew like a rock.")
-	elseif r == 21 then taunt =	loc("%s stumpled.")
+	elseif r == 21 then taunt =	loc("%s stumbled.")
 	elseif r == 22 then taunt =	loc("%s was shoved away.")
 	elseif r == 23 then taunt =	loc("%s didn't expect that.")
 	end

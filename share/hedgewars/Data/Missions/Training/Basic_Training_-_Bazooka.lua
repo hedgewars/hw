@@ -171,7 +171,7 @@ function newGamePhase()
 		end
 	elseif gamePhase == 5 then
 		ShowMission(loc("Basic Bazooka Training"), loc("High Target"),
-		loc("By the way, not only bazookas will bounce on water, but also greandes and many other things.").."|"..
+		loc("By the way, not only bazookas will bounce on water, but also grenades and many other things.").."|"..
 		loc("The next target is high in the sky."),
 		2, 8000)
 		SetWind(-33)

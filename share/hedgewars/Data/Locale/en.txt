@@ -245,7 +245,7 @@
 02:01=%1 has found the lost city of Atlantis
 02:01=Your doggy paddle could use a little work, %1
 02:01=%1 should have brought a jet ski
-02:01=%1 doesn't like watersports
+02:01=%1 doesn't like water sports
 02:01=%1 is forever blowing bubbles
 02:01=%1 is short of a raft
 02:01=%1 thinks salt water is good for the skin
@@ -294,7 +294,7 @@
 02:02=Just count yourself lucky you're not up against Jessor
 02:02=Give it your all!
 02:02=The losers do the cleaning up!
-02:02=Let the fight of the millenium begin
+02:02=Let the fight of the millennium begin
 02:02=Let the fight of the century begin
 02:02=Let the fight of the decade begin
 02:02=Let the fight of the year begin
@@ -478,7 +478,7 @@
 02:05=Satisfaction guaranteed!
 02:05=Painkillers for killers
 02:05=Just when you thought you defeated the enemy …
-02:05=Don't hestitate to take it. You might die
+02:05=Don't hesitate to take it. You might die
 02:05=Take me!
 02:05=Guardian angels send their regards
 02:05=A gift from the gods
@@ -524,7 +524,7 @@
 02:06=You'll never get enough of these
 02:06=More weapons to make the game more exciting
 02:06=Not for wimps
-02:06=Warning: Higly explosive
+02:06=Warning: Highly explosive
 02:06=For those gun nuts
 02:06=This could be the match-winning weapon!
 02:06=Explosive fun!
@@ -565,7 +565,7 @@
 02:06=Caution: Don't expose to high temperatures
 02:06=Do you have what it takes to handle this weapon?
 02:06=Are you worthy of this weapon?
-02:06=Heroric weaponry for heroic hedgehogs
+02:06=Heroic weaponry for heroic hedgehogs
 02:06=Surprise weapon!
 02:06=Damage in boxes
 02:06=Deliver some damage
@@ -699,7 +699,7 @@
 02:07=Prof. Hedge's latest invention
 02:07=Gears!
 02:07=Gadgets!
-02:07=A thingamajing!
+02:07=A thingamajig!
 02:07=Who feels inventive today?
 02:07=Here's part 1 of the 19-part DIY set
 02:07=A do-it-yourself box!
@@ -711,7 +711,7 @@
 02:07=Collect it or be damned
 02:07=Collectibles!
 02:07=Useful utilities!
-02:07=Look what I found in the toolshed!
+02:07=Look what I found in the tool shed!
 02:07=If I had a spanner …
 02:07=A Swiss army knife in box form
 02:07=You may need this
@@ -768,7 +768,7 @@
 02:08=%1 was never much of a good shot anyway
 02:08=%1 didn't want to join the army in the first place
 02:08=Stop wasting our time, %1
-02:08=I'm dissapointed in you, %1
+02:08=I'm disappointed in you, %1
 02:08=Come on, you can do better than that, %1
 02:08=%1's will has broken
 02:08=%1 apparently has better things to do
@@ -897,7 +897,7 @@
 02:11=%1 needs vacation
 02:11=%1 has to do some homework
 02:11=%1 walks away from the trouble
-02:11=%1 evaportated
+02:11=%1 evaporated
 02:11=%1 really needs to go
 02:11=%1 dematerialized
 02:11=%1 transforms into nothing
@@ -923,7 +923,7 @@
 02:12=%1 should have taken those vitamins
 02:12=%1 feels a pain in the stomach
 02:12=%1 doesn't look healthy
-02:12=%1 nees a sickbay
+02:12=%1 needs a sickbay
 02:12=%1 has a really, really foul smell
 02:12=Are you okay, %1?
 02:12=%1 suffers from the health loss disease
@@ -1227,20 +1227,20 @@
 04:15=Call in an airplane to attack your enemies|using a bombing run.|Left/Right: Determine attack direction|Cursor: Select target region
 04:16=Call in an airplane to drop several mines|in the target area.|Left/Right: Determine attack direction|Cursor: Select target region
 04:17=Need shelter? Use the blow torch to dig|a tunnel into solid ground granting you|cover.|Attack: Start or stop digging|Up/down: Change digging direction
-04:18=Need additional protection or want to pass|unpassable ground? Place some girders as you|like.|Left/Right: Select girder to place|Cursor: Place girder in a valid position
+04:18=Need additional protection or want to pass|impassable ground? Place some girders as you|like.|Left/Right: Select girder to place|Cursor: Place girder in a valid position
 04:19=Used at the right moment teleportation can|be more powerful than almost all weapons as|it allows you to save hogs from dangerous|situations within seconds.|Cursor: Select target region|Left/Right: Choose facing direction
 04:20=Allows you to play the current turn with|a different hog.|Attack: Enable switching hogs|Switch: Select next hog|Precise + Switch: Select previous hog
 04:21=Shoot a projectile that will release|multiple clusters upon impact. The|clusters are hurled backwards and are|more dangerous than the main projectile.|Attack: Shoot at full power
 04:22=Not just for Indiana Jones! The whip is a|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
 04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
 04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
-04:25=With this costume kit your hog becomes irresistibly|attractive and makes nearby hogs jump in blind love|towards it (and into some gap or hole). The seduction is|so heartwarming, it even breaks the ice of frozen hogs.|Attack: Use the irresistable seduction
+04:25=With this costume kit your hog becomes irresistibly|attractive and makes nearby hogs jump in blind love|towards it (and into some gap or hole). The seduction is|so heartwarming, it even breaks the ice of frozen hogs.|Attack: Use the irresistible seduction
 04:26=Throw this juicy (and bouncy) watermelon at|your enemies. Once the timer expires, it will|split into several explosive pieces.|1-5: Set watermelon's timer|Attack: Hold to shoot with more power
 04:27=Let hellfire rain onto your opponents by using|this fiendish explosive. Don't get too close to|the explosion as smaller fires might last longer.|Attack: Hold to shoot with more power
 04:28=Short time after launching this rocket, it will|start drilling through solid ground and explode|once its fuse is triggered or it resurfaces again.|Attack: Hold to shoot with more power
 04:29=This is nothing for small kids! The ball gun fires|tons of small colored balls filled with explosives.|Attack: Shoot at full power|Up/Down: Continue aiming
 04:30=Call in an airplane to launch a powerful napalm|strike. With proper aiming this attack can eradicate|huge parts of landscape including unlucky hogs|sitting there.|Left/Right: Determine attack direction|Cursor: Select target region
-04:31=The RC plane is the ideal weapon to collect crates or|attack far away hogs. Either steer it into enemies or|drop some bombs first.|Attack: Launch the plane or drop bombs|Long Jump: Let the valkyries ride into battle|Left/Right: Steer the plane
+04:31=The RC plane is the ideal weapon to collect crates or|attack far away hogs. Either steer it into enemies or|drop some bombs first.|Attack: Launch the plane or drop bombs|Long Jump: Let the Valkyries ride into battle|Left/Right: Steer the plane
 04:32=Low gravity is more effective than any diet! Jump|higher and over greater distances or let your enemies|fly even further.|Attack: Activate
 04:33=Sometimes you just need that little extra boost to|deal some more damage. Activating this increases|the damage dealt by 50% for the rest of the turn.|Attack: Activate
 04:34=Makes you immune to damage for the|rest of your turn. But don't be too|cocky, you could still drown.|Attack: Activate
@@ -1264,10 +1264,10 @@
 04:52=UNUSED
 04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.|Attack: Activate
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate/Deactivate|Up/Down: Continue aiming|Left/Right: Modify spitting power
-04:55=Bring back the ice-age!|Freeze hedgehogs or objects, make the floor slippery|or save yourself from drowning by freezing the water.|Attack: Activate/Deactivate freezeray|Up/Down: Continue aiming
+04:55=Bring back the ice-age!|Freeze hedgehogs or objects, make the floor slippery|or save yourself from drowning by freezing the water.|Attack: Activate/Deactivate freeze ray|Up/Down: Continue aiming
 04:56=You can throw two cleavers at your enemy, block|passages and tunnels and even use them for|climbing! Its damage increases with its speed.|But be careful! Playing with knives is dangerous.|Attack: Hold to shoot with more power (twice)
 04:57=Build a VERY elastic rubber band, from which|hedgehogs and other things bounce off|without taking fall damage.|Left/Right: Change rubber band orientation|Cursor: Place rubber band in a valid position
-04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enouogh to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power
+04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enough to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power
 04:59=Send those dirty hogs swimming! This cute little squeaky|rubber duck is able to swim on water and will go with the|wind once swimming. It explodes when it hits land, so|make sure to drop it from a cliff or another safe spot.|Attack: Drop the rubber duck
 04:60=Unleash a rain of bullets upon your foes!|And they thought they were safe|behind a triple layer of girders.|Attack: Shoot at full power|Up/Down: Continue aiming
 

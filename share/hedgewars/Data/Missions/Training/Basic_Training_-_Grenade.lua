@@ -133,7 +133,7 @@ function newGamePhase()
 		loc("Set detonation timer: [1]-[5]"), 2, 15000)
 		spawnTargets()
 	elseif gamePhase == 3 then
-		ShowMission(loc("Basic Grenade Training"), loc("No Wind Influcence"), loc("Unlike bazookas, grenades are not influenced by wind.").."|"..
+		ShowMission(loc("Basic Grenade Training"), loc("No Wind Influence"), loc("Unlike bazookas, grenades are not influenced by wind.").."|"..
 		loc("Destroy the targets!"), 2, 6000)
 		SetWind(50)
 		spawnTargets()

@@ -62,7 +62,7 @@ TargetPos[2] = {
 	InfFuel = true,
 	MessageTime = 10000,
 	Message = loc("Get to the crate using your flying saucer!") .. "|" ..
-	loc("Press [Attack] (space bar by default) to start,|repeadedly tap the up, left and right movement keys to accelerate.") .. "|" ..
+	loc("Press [Attack] (space bar by default) to start,|repeatedly tap the up, left and right movement keys to accelerate.") .. "|" ..
 	loc("Try to land softly, as you can still take fall damage!"), }
 TargetPos[3] = {
 	Targets = {{ X = 689, Y = 58 }},
@@ -140,7 +140,7 @@ TargetPos[9] = {
 		loc("You have to destroy two targets, but the previous technique would be very difficult or dangerous to use.") .. "|" ..
 		loc("So you are able to launch projectiles into your aiming direction, always at full power.") .."|"..
 		loc("To launch a projectile in mid-flight, hold [Precise] and press [Long jump].") .. "|" ..
-		loc("You can even change your aiming direction in mid-flight if you first hold [Precice] and then press [Up] or [Down].") .. "|" ..
+		loc("You can even change your aiming direction in mid-flight if you first hold [Precise] and then press [Up] or [Down].") .. "|" ..
 		loc("Tip: Changing your aim while flying is very difficult, so adjust it before you take off."),
 	Ammo = { [amJetpack] = 1, },
 	Respawn = { X = 1764, Y = 916 },

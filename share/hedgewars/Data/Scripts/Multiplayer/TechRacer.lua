@@ -1047,7 +1047,7 @@ function onGameStart()
 
                         	loc("Complete the track as fast as you can!") .. "|" ..
                                 loc("Round limit:") .. " " .. roundLimit .. "|" ..
-				loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
+				loc("You can further customize the race by changing the scheme script parameter.") .. "|" ..
 
                                 "", 4, 4000
                                 )

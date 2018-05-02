@@ -3036,7 +3036,7 @@ function HandleHedgeEditor()
 				AddCaption(cat[cIndex], colorPlaceMode1, capgrpMessage)
 				showSecondaryMessage()
 				if superDelete == true then
-					AddCaption(loc("Deletition Mode"), colorPlaceMode1, capgrpAmmoinfo)
+					AddCaption(loc("Deletion Mode"), colorPlaceMode1, capgrpAmmoinfo)
 				end
 			end
 

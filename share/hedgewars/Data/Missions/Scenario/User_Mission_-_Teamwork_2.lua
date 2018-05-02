@@ -97,7 +97,7 @@ end
 
 function onGearDelete(gear)
 	if gear == Pack then
-		HogSay(CurrentHedgehog, loc("This will certianly come in handy."), SAY_THINK)
+		HogSay(CurrentHedgehog, loc("This will certainly come in handy."), SAY_THINK)
 	end
 	-- Note: The victory sequence is done automatically by Hedgewars
 	if ( ((gear == player) or (gear == hlayer)) and (GameOver == false)) then

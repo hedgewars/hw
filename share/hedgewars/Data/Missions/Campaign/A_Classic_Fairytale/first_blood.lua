@@ -279,7 +279,7 @@ function AnimationSetup()
   table.insert(challengeFailedAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(challengeCompletedAnim, Skipanim, {challengeCompletedAnim})
-  table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The spirits of the ancerstors are surely pleased, Leaks A Lot."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = challengeCompletedAnim})
+  table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The spirits of the ancestors are surely pleased, Leaks A Lot."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = challengeCompletedAnim})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("You have proven yourself worthy to see our most ancient secret!"), SAY_SAY, 4000}})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The weapon in that last crate was bestowed upon us by the ancients!"), SAY_SAY, 4000}})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("Use it with precaution!"), SAY_SAY, 4000}})
