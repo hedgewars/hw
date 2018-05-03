@@ -2144,7 +2144,9 @@ function onGearDelete(gearUid)
 	--australian special
 	elseif(GetGearType(gearUid)==gtBall and GetGearMessage(gearUid)==3)
 	then
-		SpawnRandomCrate(GetX(gearUid), GetY(gearUid))
+		if band(GetState(gearUid), gstDrowning) == 0 then
+			SpawnRandomCrate(GetX(gearUid), GetY(gearUid))
+		end
 
 	--asia (using para)
 	elseif(GetGearType(gearUid)==gtParachute)
