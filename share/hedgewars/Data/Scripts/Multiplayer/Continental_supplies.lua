@@ -159,6 +159,7 @@ CS.PRECISE=false
 CS.CONTINENT_LABEL_TIMER=-1
 CS.SPEECH_TIMER=-1
 CS.HANDLE_SPECIAL_WEAPON_MISC_TIMER=-1
+CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER=-1
 CS.CONFIRM_CONTINENT_SELECTION=-1
 
 --the visual circle for kerguelen
@@ -1298,18 +1299,53 @@ function onNewTurn()
 	end
 end
 
+function WeaponCaption(ammoType, customName)
+	local caption
+	if not customName then
+		customName = GetAmmoName(ammoType)
+	end
+	local count = GetAmmoCount(CurrentHedgehog, ammoType)
+	local timer = GetAmmoTimer(CurrentHedgehog, ammoType)
+	local secs
+	if type(timer) == "number" then
+		secs = div(timer, 1000)
+	end
+	if count ~= 100 then
+		strCount = tostring(count)
+	end
+	-- Finite count, timerable
+	if type(timer) == "number" and count ~= 100 then
+		-- e.g. “Grenade (5), 3 sec”
+		caption = string.format(loc("%s (%d), %d sec"), customName, count, secs)
+	-- Infinite count, timerable
+	elseif type(timer) == "number" and count == 100 then
+		-- e.g. “Grenade, 3 sec”
+		caption = string.format(loc("%s, %d sec"), customName, secs)
+	-- Finite count, non-timerable
+	elseif type(timer) ~= "number" and count ~= 100 then
+		-- e.g. “Bazooka (5)”
+		caption = string.format(loc("%s (%d)"), customName, count)
+	-- Infinite count, non-timerable
+	else
+		-- e.g. “Bazooka”
+		caption = customName
+	end
+
+	AddCaption(caption, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+end
+
 function ShowSpecialWeaponCaption(ammoType)
 	--place mine (australia)
 	if(ammoType == amBaseballBat)
 	then
 		if(CS.AUSTRALIAN_SPECIAL==1)
 		then
-			AddCaption(CS.BASEBALLBAT_CRICKET_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amBaseballBat, CS.BASEBALLBAT_CRICKET_NAME)
 		elseif(CS.AUSTRALIAN_SPECIAL==2)
 		then
-			AddCaption(CS.BASEBALLBAT_BOOMERANG_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amBaseballBat, CS.BASEBALLBAT_BOOMERANG_NAME)
 		else
-			AddCaption(GetAmmoName(amBaseballBat), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amBaseballBat)
 		end
 
 	--africa
@@ -1317,10 +1353,10 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.AFRICAN_SPECIAL_SEDUCTION==1)
 		then
-			AddCaption(CS.SEDUCTION_SPECIAL_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSeduction, CS.SEDUCTION_SPECIAL_NAME)
 			AddCaption(string.format(CS.INVULNERABLE_SPECIAL_CAPTION, CS.SEDUCTION_INCREASER, GetAmmoCount(CurrentHedgehog,amInvulnerable)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
 		else
-			AddCaption(GetAmmoName(amSeduction), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSeduction)
 		end
 
 	--south america
@@ -1328,9 +1364,9 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.SOUTH_AMERICAN_SPECIAL==true)
 		then
-			AddCaption(CS.CHEESE_SPECIAL_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amGasBomb, CS.CHEESE_SPECIAL_NAME)
 		else
-			AddCaption(GetAmmoName(amGasBomb), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amGasBomb)
 		end
 
 	--africa
@@ -1338,12 +1374,12 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.AFRICAN_SPECIAL_STICKY==1)
 		then
-			AddCaption(CS.STICKY_PROJECTILE_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSMine, CS.STICKY_PROJECTILE_NAME)
 		elseif(CS.AFRICAN_SPECIAL_STICKY == 2)
 		then
-			AddCaption(CS.STICKY_NAPALM_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSMine, CS.STICKY_NAPALM_NAME)
 		else
-			AddCaption(GetAmmoName(amSMine), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSMine)
 		end
 
 	--north america (sniper)
@@ -1351,10 +1387,10 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.NORTH_AMERICAN_SPECIAL_SNIPER==1)
 		then
-			AddCaption(GetAmmoName(amSniperRifle), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSniperRifle)
 		elseif(CS.NORTH_AMERICAN_SPECIAL_SNIPER==2)
 		then
-			AddCaption(CS.SNIPER_SPECIAL_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amSniperRifle, CS.SNIPER_SPECIAL_NAME)
 		end
 
 	--north america (shotgun)
@@ -1362,9 +1398,9 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.NORTH_AMERICAN_SPECIAL_SHOTGUN==true)
 		then
-			AddCaption(CS.SHOTGUN_SPECIAL_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amShotgun, CS.SHOTGUN_SPECIAL_NAME)
 		else
-			AddCaption(GetAmmoName(amShotgun), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amShotgun)
 		end
 
 	--europe
@@ -1372,9 +1408,9 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.EUROPE_SPECIAL==1)
 		then
-			AddCaption(CS.MOLOTOV_SPECIAL_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amMolotov, CS.MOLOTOV_SPECIAL_NAME)
 		else
-			AddCaption(GetAmmoName(amMolotov), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amMolotov)
 		end
 
 	--antarctica
@@ -1382,9 +1418,9 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.ANTARCTICA_SPECIAL==1)
 		then
-			AddCaption(CS.PICKHAMMER_SPECIAL_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amPickHammer, CS.PICKHAMMER_SPECIAL_NAME)
 		else
-			AddCaption(GetAmmoName(amPickHammer), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amPickHammer)
 		end
 
 	--kerguelen
@@ -1392,19 +1428,19 @@ function ShowSpecialWeaponCaption(ammoType)
 	then
 		if(CS.KERGUELEN_SPECIAL==1)
 		then
-			AddCaption(GetAmmoName(amHammer), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amHammer)
 		elseif(CS.KERGUELEN_SPECIAL==2)
 		then
-			AddCaption(CS.HAMMER_ROAR_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amHammer, CS.HAMMER_ROAR_NAME)
 		elseif(CS.KERGUELEN_SPECIAL==3)
 		then
-			AddCaption(CS.HAMMER_SWAP_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amHammer, CS.HAMMER_SWAP_NAME)
 		elseif(CS.KERGUELEN_SPECIAL==5)
 		then
-			AddCaption(CS.HAMMER_LONELY_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amHammer, CS.HAMMER_LONELY_NAME)
 		elseif(CS.KERGUELEN_SPECIAL==6)
 		then
-			AddCaption(CS.HAMMER_SABOTAGE_NAME, GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			WeaponCaption(amHammer, CS.HAMMER_SABOTAGE_NAME)
 		end
 	end
 end
@@ -1628,6 +1664,15 @@ function onGameTick()
 		HandleSpecialWeaponMisc()
 		CS.HANDLE_SPECIAL_WEAPON_MISC_TIMER = -1
 	end
+
+	if CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER > 0 then
+		CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER = CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER - 1
+	end
+	if CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER == 0 then
+		WeaponCaption(amGasBomb, CS.CHEESE_SPECIAL_NAME)
+		CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER = -1
+	end
+
 
 	-- See onAttack()
 	if CS.CONFIRM_CONTINENT_SELECTION > 0 then
@@ -1963,6 +2008,13 @@ function onAttack()
 	elseif(GetCurAmmoType() == amExtraDamage)
 	then
 		CS.EXTRA_DAMAGE_IS_ON=150
+	end
+end
+
+function onTimer()
+	-- This hack makes sure the correct weapon label + timer is displayed for the GasBomb special
+	if GetCurAmmoType() == amGasBomb and (CS.SOUTH_AMERICAN_SPECIAL==true) then
+		CS.HANDLE_SOUTH_AMERICAN_SPECIAL_TIMER = 2
 	end
 end
 
