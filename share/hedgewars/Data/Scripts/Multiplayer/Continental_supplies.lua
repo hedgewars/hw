@@ -1083,7 +1083,7 @@ function SetCSAmmoDescriptions(mode)
 			SetAmmoTexts(cont[4][1], cont[1], cont[2], hp .."|" .. cont[3])
 			SetAmmoDescriptionAppendix(cont[4][1], nil)
 		end
-		SetAmmoTexts(amSwitch, loc("Random continent"), loc("If you just don't care …"), loc("Select this item for a random continent."))
+		SetAmmoTexts(amSwitch, loc("Random continent"), loc("If you just don’t care …"), loc("Select this item for a random continent."))
 
 	elseif mode == "weapons" then
 		local specSelect = loc("Switch: Select weapon special")
@@ -1132,7 +1132,9 @@ function SetCSAmmoDescriptions(mode)
 		SetAmmoDescriptionAppendix(amPickHammer,
 			specText..
 			CS.PICKHAMMER_SPECIAL_INFO)
-
+		SetAmmoDescriptionAppendix(amVampiric,
+			loc("This also increases the effectiveness of Medicine.")
+			)
 		for c=1, #CS.CONTINENT_INFORMATION do
 			local cont = CS.CONTINENT_INFORMATION[c]
 			SetAmmoTexts(cont[4][1], nil, nil, nil)
