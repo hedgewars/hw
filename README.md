@@ -116,7 +116,7 @@ distributed under the terms of the GNU General Public Licence version 2;
 images and sounds are distributed under the terms of the GNU Free Documentation
 Licence version 1.2. See the `COPYING` file for the full text of the licenses.
 
-Copyright 2004-2015 Andrey Korotaev <unC0Rr@gmail.com> and others.
+Copyright 2004-2018 Andrey Korotaev <unC0Rr@gmail.com> and others.
 See `QTfrontend/res/html/about.html` and `CREDITS` for a more complete list of
 authors.
 
