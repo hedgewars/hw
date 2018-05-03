@@ -2976,6 +2976,26 @@ begin
     lc_getammoname:= 1;
 end;
 
+function lc_getammotimer(L : Plua_state) : LongInt; Cdecl;
+var at: LongInt;
+    weapon: PAmmo;
+const call = 'GetAmmoTimer';
+      params = 'ammoType, gearUid';
+begin
+    if CheckLuaParamCount(L, 2, call, params) then
+        begin
+        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        weapon:= GetAmmoEntry(CurrentHedgehog^, TAmmoType(at));
+        if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Timerable) <> 0 then
+            lua_pushnumber(L, weapon^.Timer)
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L);
+    lc_getammotimer:= 1;
+end;
+
 function lc_setvampiric(L : Plua_state) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'SetVampiric', 'bool') then
@@ -3971,6 +3991,7 @@ lua_register(luaState, _P'SetWeapon', @lc_setweapon);
 lua_register(luaState, _P'SetCinematicMode', @lc_setcinematicmode);
 lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 lua_register(luaState, _P'GetAmmoName', @lc_getammoname);
+lua_register(luaState, _P'GetAmmoTimer', @lc_getammotimer);
 lua_register(luaState, _P'SetVampiric', @lc_setvampiric);
 lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
 lua_register(luaState, _P'Explode', @lc_explode);

@@ -23,6 +23,7 @@ Continental supplies:
 
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
+ + New call: GetAmmoTimer(ammoType, gearUid): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  * Fix hog being unable to walk after using sniper rifle without firing both shots
 
