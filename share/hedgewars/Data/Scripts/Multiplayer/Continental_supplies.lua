@@ -48,6 +48,8 @@ end
 
 --Will end the turn + give escape time
 function EndTurnCS(seconds)
+	-- Set attacked state to prevent “Boring” sound to be played
+	SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstAttacked))
 	--set escape time
 	TurnTimeLeft = GetAwayTime*10*seconds
 	if TurnTimeLeft > 0 then
