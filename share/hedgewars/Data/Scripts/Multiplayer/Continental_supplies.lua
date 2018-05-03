@@ -1906,10 +1906,29 @@ function onAttack()
 	elseif(CS.ANTARCTICA_SPECIAL == 1 and GetCurAmmoType() == amPickHammer and band(GetState(CurrentHedgehog),gstAttacked)==0)
 	then
 		EndTurnCS(10)
-		SetGearPosition(CurrentHedgehog,GetX(CurrentHedgehog),0)
-		ParseCommand("hjump")
-		SetGearVelocity(CurrentHedgehog, 0, 100000000)
+		local dx, dy = GetGearVelocity(CurrentHedgehog)
+		local isLeft = dx < 0
+		-- Cave map / map has border
+		if not MapHasBorder() then
+			-- Place hog at Y = 0
+			SetGearPosition(CurrentHedgehog, GetX(CurrentHedgehog), 0)
+			ParseCommand("hjump")
+			SetGearVelocity(CurrentHedgehog, 0, 100000000)
 
+		-- Open air map
+		else
+			-- Place hog just below the top border, erase a bit of land as well
+			local x = GetX(CurrentHedgehog)
+			Explode(x, TopY + 6, 32, EXPLNoDamage + EXPLDoNotTouchAny + EXPLNoGfx)
+			Explode(x, TopY + 20, 24, EXPLNoDamage + EXPLDoNotTouchAny)
+			SetGearPosition(CurrentHedgehog, x, TopY + 26)
+			local dx, dy = GetGearVelocity(CurrentHedgehog)
+			SetGearVelocity(CurrentHedgehog, 0, dy)
+			ParseCommand("hjump")
+		end
+		if isLeft then
+			HogTurnLeft(CurrentHedgehog, true)
+		end
 		PlaySound(sndPiano8)
 		PlaySound(sndWarp)
 
