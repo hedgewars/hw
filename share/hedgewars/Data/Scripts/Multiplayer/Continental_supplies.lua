@@ -1082,10 +1082,10 @@ function SetCSAmmoDescriptions(mode)
 		for c=1, #CS.CONTINENT_INFORMATION do
 			local cont = CS.CONTINENT_INFORMATION[c]
 			local hp = string.format(loc("Initial health: %d"), cont[7])
-			SetAmmoTexts(cont[4][1], cont[1], cont[2], hp .."|" .. cont[3])
+			SetAmmoTexts(cont[4][1], cont[1], cont[2], hp .."|" .. cont[3], false)
 			SetAmmoDescriptionAppendix(cont[4][1], nil)
 		end
-		SetAmmoTexts(amSwitch, loc("Random continent"), loc("If you just don’t care …"), loc("Select this item for a random continent."))
+		SetAmmoTexts(amSwitch, loc("Random continent"), loc("If you just don’t care …"), loc("Select this item for a random continent."), false)
 
 	elseif mode == "weapons" then
 		local specSelect = loc("Switch: Select weapon special")
