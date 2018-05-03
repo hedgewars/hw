@@ -32,7 +32,7 @@ procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
-procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
@@ -1972,7 +1972,7 @@ begin
     missionTimer:= 0;
 end;
 
-procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 var
     ammoStrId: TAmmoStrId;
     ammoStr: ansistring;
@@ -1997,6 +1997,7 @@ begin
 
     trluaammoc[ammoStrId] := caption;
     trluaammod[ammoStrId] := description;
+    trluaammoe[ammoStrId] := autoLabels;
 end;
 
 procedure ShakeCamera(amount: LongInt);

@@ -1008,25 +1008,21 @@ r.h:= 32;
 extra:= _S'';
 extracolor:= 0;
 
-if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
-    begin
-    if (atype = amTardis) and (SuddenDeathActive) then
-        extra:= trmsg[sidNotAvailableInSD]
-    else
-        extra:= trmsg[sidNotYetAvailable];
-    extracolor:= LongInt($ffc77070);
-    end
-else if (((GameFlags and gfInfAttack) <> 0) and ((Ammoz[atype].Ammo.Propz and ammoprop_ForceTurnEnd) = 0)) or ((Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
-    // weapon or utility will not end your turn
-    begin
-    extra:= trmsg[sidNoEndTurn];
-    extracolor:= LongInt($ff70c770);
-    end
-else
-    begin
-    extra:= _S'';
-    extracolor:= 0;
-    end;
+if (trluaammoe[Ammoz[atype].NameId] = true) then
+    if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
+        begin
+        if (atype = amTardis) and (SuddenDeathActive) then
+            extra:= trmsg[sidNotAvailableInSD]
+        else
+            extra:= trmsg[sidNotYetAvailable];
+        extracolor:= LongInt($ffc77070);
+        end
+    else if (((GameFlags and gfInfAttack) <> 0) and ((Ammoz[atype].Ammo.Propz and ammoprop_ForceTurnEnd) = 0)) or ((Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
+        // weapon or utility will not end your turn
+        begin
+        extra:= trmsg[sidNoEndTurn];
+        extracolor:= LongInt($ff70c770);
+        end;
 
 if length(trluaammo[Ammoz[atype].NameId]) > 0  then
     ammoname := trluaammo[Ammoz[atype].NameId]

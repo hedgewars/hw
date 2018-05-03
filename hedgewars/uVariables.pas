@@ -2577,6 +2577,7 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trluaammoc: array[TAmmoStrId] of ansistring; // caption of the weapon (Lua overwrite)
     trluaammod: array[TAmmoStrId] of ansistring;  // description of the weapon (Lua overwrite)
     trluaammoa: array[TAmmoStrId] of ansistring; // description appendix of the weapon (Lua only)
+    trluaammoe: array[TAmmoStrId] of boolean;   // whether to render extra text (Lua overwrite)
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
     cTestLua : Boolean;
@@ -2644,6 +2645,7 @@ procedure initModule;
 var s: shortstring;
     i: integer;
     t: TSound;
+    a: TAmmoStrId;
 begin
     // init LastVoice
     LastVoice.snd:= sndNone;
@@ -2907,6 +2909,9 @@ begin
 
     for t:= Low(TSound) to High(TSound) do
         MaskedSounds[t]:= false;
+
+    for a:= Low(TAmmoStrId) to High(TAmmoStrId) do
+        trluaammoe[a]:= true;
 
     UIDisplay:= uiAll;
     LocalMessage:= 0;

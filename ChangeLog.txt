@@ -23,6 +23,7 @@ Continental supplies:
 
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
+ + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  * Fix hog being unable to walk after using sniper rifle without firing both shots
 
 ====================== 0.9.24.1 ====================

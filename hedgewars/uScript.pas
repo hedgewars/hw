@@ -560,10 +560,18 @@ end;
 function lc_setammotexts(L : Plua_State) : LongInt; Cdecl;
 const
     call = 'SetAmmoTexts';
-    params = 'ammoType, name, caption, description';
+    params = 'ammoType, name, caption, description [, showExtra]';
+var n: integer;
+    showExtra: boolean;
 begin
-    if CheckLuaParamCount(L, 4, call, params) then
-        SetAmmoTexts(TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params)), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tostringA(L, 4));
+    if CheckAndFetchParamCount(L, 4, 5, call, params, n) then
+        begin
+        if n = 5 then
+            showExtra:= lua_toboolean(L, 5)
+        else
+            showExtra:= true;
+        SetAmmoTexts(TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params)), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tostringA(L, 4), showExtra);
+        end;
     lc_setammotexts:= 0;
 end;
 
