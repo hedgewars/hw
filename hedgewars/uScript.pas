@@ -2979,15 +2979,22 @@ end;
 function lc_getammotimer(L : Plua_state) : LongInt; Cdecl;
 var at: LongInt;
     weapon: PAmmo;
+    gear: PGear;
 const call = 'GetAmmoTimer';
-      params = 'ammoType, gearUid';
+      params = 'gearUid, ammoType';
 begin
     if CheckLuaParamCount(L, 2, call, params) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);
-        weapon:= GetAmmoEntry(CurrentHedgehog^, TAmmoType(at));
-        if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Timerable) <> 0 then
-            lua_pushnumber(L, weapon^.Timer)
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            begin
+            at:= LuaToAmmoTypeOrd(L, 2, call, params);
+            weapon:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(at));
+            if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Timerable) <> 0 then
+                lua_pushnumber(L, weapon^.Timer)
+            else
+                lua_pushnil(L);
+            end
         else
             lua_pushnil(L);
         end
