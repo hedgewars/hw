@@ -1678,16 +1678,41 @@ begin
 end;
 
 function lc_enableswitchhog(L : Plua_State) : LongInt; Cdecl;
-var gear: PGear;
+var gear, iterator: PGear;
+    alreadySwitching: boolean;
 begin
     if CheckLuaParamCount(L, 0, 'EnableSwitchHog', '') then
-        begin
-        gear:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
-        CurAmmoGear:= gear;
-        lastGearByUID:= gear;
-        bShowFinger:= false;
-        end;
-    lc_enableswitchhog:= 0;
+        if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
+            begin
+            alreadySwitching:= false;
+            iterator:= GearsList;
+            // Check if there's already a switcher gear
+            while (iterator <> nil) do
+                begin
+                if (iterator^.Kind = gtSwitcher) then
+                    begin
+                    alreadySwitching:= true;
+                    lua_pushnumber(L, iterator^.Uid);
+                    break;
+                    end;
+                iterator:= iterator^.NextGear;
+                end;
+            if (not alreadySwitching) then
+                begin
+                // Enable switching and return gear UID
+                gear:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
+                CurAmmoGear:= gear;
+                lastGearByUID:= gear;
+                bShowFinger:= false;
+                lua_pushnumber(L, gear^.Uid);
+                end;
+            end
+    // Return nil on failure
+        else
+            lua_pushnil(L)
+    else
+        lua_pushnil(L);
+    lc_enableswitchhog:= 1;
 end;
 
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
