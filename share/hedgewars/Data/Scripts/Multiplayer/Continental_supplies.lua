@@ -1286,10 +1286,8 @@ function onNewTurn()
 
 				if(CS.TEMP_VALUE>1)
 				then
-					AddAmmo(CurrentHedgehog,amSwitch,GetAmmoCount(CurrentHedgehog, amSwitch)+1)
-
-					SetWeapon(amSwitch)
-					CS.TEMP_VALUE=87
+					-- Enable switch hog on turn start (North America)
+					EnableSwitchHog()
 				end
 			end
 
@@ -1822,13 +1820,6 @@ function onGameTick20()
 	then
 		-- Reset gravity
 		SetGravity(100)
-	end
-
-	--enable switch (north america)
-	if(GetCurAmmoType() == amSwitch and CS.TEMP_VALUE==87)
-	then
-		SetGearMessage(CurrentHedgehog,gmAttack)
-		CS.TEMP_VALUE=0
 	end
 
 	if(CS.SPEECH_TIMER > 0) then
