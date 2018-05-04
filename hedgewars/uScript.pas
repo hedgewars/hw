@@ -1677,6 +1677,19 @@ begin
     lc_switchhog:= 0
 end;
 
+function lc_enableswitchhog(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if CheckLuaParamCount(L, 0, 'EnableSwitchHog', '') then
+        begin
+        gear:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
+        CurAmmoGear:= gear;
+        lastGearByUID:= gear;
+        bShowFinger:= false;
+        end;
+    lc_enableswitchhog:= 0;
+end;
+
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     at, n, c: LongInt;
@@ -3966,6 +3979,7 @@ lua_register(luaState, _P'SetZoom', @lc_setzoom);
 lua_register(luaState, _P'GetZoom', @lc_getzoom);
 lua_register(luaState, _P'HogSay', @lc_hogsay);
 lua_register(luaState, _P'SwitchHog', @lc_switchhog);
+lua_register(luaState, _P'EnableSwitchHog', @lc_enableswitchhog);
 lua_register(luaState, _P'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, _P'GetGearElasticity', @lc_getgearelasticity);
 lua_register(luaState, _P'SetGearElasticity', @lc_setgearelasticity);
