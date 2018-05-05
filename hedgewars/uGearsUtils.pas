@@ -1273,7 +1273,7 @@ while i > 0 do
     if (Gear^.State and gstNoDamage) = 0 then
         begin
 
-        if (Gear^.Kind <> gtMinigun) and
+        if (not (Gear^.Kind in [gtMinigun, gtPortal])) and
             ((Ammo^.Kind = gtDEagleShot)
                 or (Ammo^.Kind = gtSniperRifleShot)
                 or (Ammo^.Kind = gtMinigunBullet)) then

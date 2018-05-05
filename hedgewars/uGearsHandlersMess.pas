@@ -1322,6 +1322,22 @@ begin
     end;
 end;
 
+procedure CheckBulletDrowningHelp(Bullet: PGear);
+var dX, dY: hwFloat;
+begin
+    dX := Bullet^.dX;
+    dY := Bullet^.dY;
+    CheckGearDrowning(Bullet);
+    if (dX <> Bullet^.dX) or (dY <> Bullet^.dY) then
+    begin
+        SpawnBulletTrail(Bullet, Bullet^.X, Bullet^.Y, Bullet^.FlightTime = 0);
+        Bullet^.Elasticity := Bullet^.X;
+        Bullet^.Friction := Bullet^.Y;
+        Inc(Bullet^.PortalCounter);
+        Bullet^.FlightTime:= 1;
+    end;
+end;
+
 procedure doStepBulletWork(Gear: PGear);
 var
     i, x, y, iInit: LongWord;
@@ -1378,7 +1394,7 @@ begin
             dec(Gear^.Damage);
             Gear^.X := Gear^.X - Gear^.dX;
             Gear^.Y := Gear^.Y - Gear^.dY;
-            CheckGearDrowning(Gear);
+            CheckBulletDrowningHelp(Gear);
             break;
             end
         else if (not isDigging) then
@@ -1395,7 +1411,7 @@ begin
             oY:= Gear^.Y;
             end;
 
-        CheckGearDrowning(Gear);
+        CheckBulletDrowningHelp(Gear);
         case Gear^.Kind of
             gtMinigunBullet: isDead:= isDigging or ((Gear^.State and gstDrowning) <> 0);
             gtDEagleShot, gtSniperRifleShot: isDead:= (Gear^.Damage >= Gear^.Health) or ((Gear^.State and gstDrowning) <> 0)
