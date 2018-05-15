@@ -33,6 +33,7 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 function makeHealthBarTexture(w, h, Color: Longword): PTexture;
 procedure AddProgress;
 procedure FinishProgress;
+procedure LoadFont(font: THWFont);
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 
 // loads an image from the games data files
@@ -355,23 +356,35 @@ for t:= 0 to Pred(TeamsCount) do
             end
 end;
 
-procedure LoadFonts();
+procedure LoadFont(font: THWFont);
 var s: shortstring;
-    fi: THWFont;
+begin
+    with Fontz[font] do
+        begin
+        if Handle <> nil then
+            begin
+            TTF_CloseFont(Handle);
+            Handle:= nil;
+            end;
+        s:= cPathz[ptFonts] + '/' + Name;
+        WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
+        Handle:= TTF_OpenFontRW(rwopsOpenRead(s), true, Height);
+        if SDLCheck(Handle <> nil, 'TTF_OpenFontRW', true) then exit;
+        TTF_SetFontStyle(Handle, style);
+        WriteLnToConsole(msgOK)
+        end;
+end;
+
+procedure LoadFonts();
+var fi: THWFont;
 begin
 AddFileLog('LoadFonts();');
 
 if (not cOnlyStats) then
     for fi:= Low(THWFont) to High(THWFont) do
-        with Fontz[fi] do
-            begin
-            s:= cPathz[ptFonts] + '/' + Name;
-            WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
-            Handle:= TTF_OpenFontRW(rwopsOpenRead(s), true, Height);
-            if SDLCheck(Handle <> nil, 'TTF_OpenFontRW', true) then exit;
-            TTF_SetFontStyle(Handle, style);
-            WriteLnToConsole(msgOK)
-            end;
+        begin
+        LoadFont(fi);
+        end;
 end;
 
 procedure StoreLoad(reload: boolean);

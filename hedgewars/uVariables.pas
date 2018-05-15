@@ -127,6 +127,8 @@ var
     cPrevTagsMask    : byte;
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
+    ChatScaleValue   : real;
+    UIScaleValue     : real;
 
     cWaterLine       : LongInt;
     cGearScrEdgesDist: LongInt;
@@ -238,6 +240,8 @@ var
 
     // for tracking the limits of the visible grid based on cScaleFactor
     ViewLeftX, ViewRightX, ViewBottomY, ViewTopY, ViewWidth, ViewHeight: LongInt;
+    // for tracking the limits of the visible UI space based on cUIScaleFactor
+    UIWidth, UIHeight: LongInt;
 
     // for debugging the view limits visually
     cViewLimitsDebug: boolean;
@@ -324,6 +328,10 @@ const
             (Handle: nil;
             Height: 10*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
+            Name: 'DejaVuSans-Bold.ttf'),
+            (Handle: nil; // fntChat
+            Height: 12*HDPIScaleFactor;
+            style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf')
             {$IFNDEF MOBILE}, // remove chinese fonts for now
             (Handle: nil;
@@ -336,6 +344,10 @@ const
             Name: 'wqy-zenhei.ttc'),
             (Handle: nil;
             Height: 10*HDPIScaleFactor;
+            style: TTF_STYLE_NORMAL;
+            Name: 'wqy-zenhei.ttc'),
+            (Handle: nil; // CJKfntChat
+            Height: 12*HDPIScaleFactor;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc')
             {$ENDIF}
@@ -2525,6 +2537,7 @@ var
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
+    cUIScaleFactor: float;
     cStereoDepth: GLfloat;
     SupportNPOTT: Boolean;
     Step: LongInt;
@@ -2822,6 +2835,8 @@ begin
     GameState       := Low(TGameState);
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
+    ChatScaleValue  := cDefaultChatScaleLevel;
+    UIScaleValue    := cDefaultUIScaleLevel;
     WeaponTooltipTex:= nil;
     cLaserSighting  := false;
     cLaserSightingSniper := false;

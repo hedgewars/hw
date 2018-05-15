@@ -194,6 +194,8 @@ const
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
+    cDefaultChatScaleLevel = 1.0;
+    cDefaultUIScaleLevel = 1.0;
 
     // game flags
     gfAny                = $FFFFFFFF;
