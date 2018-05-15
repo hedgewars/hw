@@ -320,7 +320,8 @@ procedure ReloadLines;
 var i: LongWord;
 begin
     // also reload empty input line (as chat size/scaling might have changed)
-    //if InputStr.s <> '' then SetLine(InputStr, InputStr.s, true); for i:= 0 to MaxStrIndex do
+    //if InputStr.s <> '' then
+    SetLine(InputStr, InputStr.s, true);
     for i:= 0 to MaxStrIndex do
         if Strs[i].s <> '' then
             begin
