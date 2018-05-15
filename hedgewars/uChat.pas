@@ -1257,7 +1257,7 @@ begin
 
     LastChatScaleValue:= 0;
     LastUIScaleValue:= 0;
-    SkipNextInput:= true;
+    SkipNextInput:= false;
 
     InputLinePrefix.Tex:= nil;
     UpdateInputLinePrefix();
