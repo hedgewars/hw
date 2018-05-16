@@ -129,8 +129,8 @@ begin
     LastChatScaleValue:= ChatScaleValue;
     LastUIScaleValue:= UIScaleValue;
 
-    // determine font size - note: +0.1 to because I don't trust float inaccuracy combined with floor
-    fntSize:= max(1, floor(UIScaleValue * ChatScaleValue * Fontz[fnt16].Height + 0.1));
+    // determine font size - note: +0.001 to because I don't trust float inaccuracy combined with floor
+    fntSize:= max(1, floor(UIScaleValue * ChatScaleValue * cBaseChatFontHeight + 0.001));
 
     if Fontz[fntChat].Height <> fntSize then
         begin
@@ -154,26 +154,36 @@ begin
     UpdateCursorCoords();
 end;
 
-procedure ChatSizeInc();
+procedure ChatSizeInc(pxprecise: boolean);
+var fntSize: integer;
 begin
-// TODO cChatMinScaleLevel, cChatSizeDelta (probably half of cZoomDelta)
-// TODO always - effectively -- increase font by 1px?
-if ChatScaleValue < cMinZoomLevel then
+if pxprecise then
     begin
-    ChatScaleValue:= ChatScaleValue + cZoomDelta;
-    AdjustToUIScale();
-    end;
+    fntSize:= Fontz[fntChat].Height;
+    inc(fntSize);
+    ChatScaleValue:= 1.0 * fntSize / cBaseChatFontHeight;
+    end
+else
+    ChatScaleValue:= ChatScaleValue * (1.0 + cChatScaleRelDelta);
+if ChatScaleValue > cMaxChatScaleValue then
+    ChatScaleValue:= cMaxChatScaleValue;
+AdjustToUIScale();
 end;
 
-procedure ChatSizeDec();
+procedure ChatSizeDec(pxprecise: boolean);
+var fntSize: integer;
 begin
-// TODO cChatMaxScaleLevel, cChatSizeDelta (probably half of cZoomDelta)
-// TODO always - effectively -- increase font by 1px?
-if ChatScaleValue > cMaxZoomLevel then
+if pxprecise then
     begin
-    ChatScaleValue:= ChatScaleValue - cZoomDelta;
-    AdjustToUIScale();
-    end;
+    fntSize:= Fontz[fntChat].Height;
+    dec(fntSize);
+    ChatScaleValue:= 1.0 * fntSize / cBaseChatFontHeight;
+    end
+else
+    ChatScaleValue:= ChatScaleValue / (1.0 + cChatScaleRelDelta);
+if ChatScaleValue < cMinChatScaleValue then
+    ChatScaleValue:= cMinChatScaleValue;
+AdjustToUIScale();
 end;
 
 procedure chatSizeReset();
@@ -1091,7 +1101,7 @@ begin
             begin
             if ctrl then
                 begin
-                ChatSizeInc();
+                ChatSizeInc(selMode);
                 SkipNextInput:= true;
                 end;
             end;
@@ -1100,7 +1110,7 @@ begin
             begin
             if ctrl then
                 begin
-                ChatSizeDec();
+                ChatSizeDec(selMode);
                 SkipNextInput:= true;
                 end;
             end;
