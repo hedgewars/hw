@@ -689,7 +689,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupMisc->addDivider(); // row 5
 
             QLabel *labelChatSize = new QLabel(groupMisc);
-            labelChatSize->setText(QLabel::tr("Chat size in percent"));
+            labelChatSize->setText(QLabel::tr("Initial in-game chat size (%)"));
             groupMisc->layout()->addWidget(labelChatSize, 6, 0);
 
             // Chat size adjustment

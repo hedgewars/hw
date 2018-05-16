@@ -1,6 +1,10 @@
 + features
 * bugfixes
 ====================== 0.9.25 ======================
+User Interface:
+ + In-Game chat size can now be adjusted. Hold Ctrl and press -, + or = while in chat input. Hold shift for finer control.
+ + The intial in-game chat size can be configured in the Frontend's "advanced" settings tab.
+
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
 
