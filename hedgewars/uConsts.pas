@@ -196,10 +196,9 @@ const
     cDefaultZoomLevel = 2.0;
 
     cBaseChatFontHeight = 12;
-    cDefaultChatScaleLevel = 1.0;
     cChatScaleRelDelta = 0.1;
     cMinChatScaleValue = 0.8;
-    cMaxChatScaleValue = 20;
+    cMaxChatScaleValue = 20.0;
 
     cDefaultUIScaleLevel = 1.0;
 

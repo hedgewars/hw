@@ -35,7 +35,7 @@ procedure CopyToClipboard(var newContent: shortstring);
 procedure TextInput(var event: TSDL_TextInputEvent);
 
 implementation
-uses uConsts, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uStore, Math;
+uses uConsts, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uStore;
 
 const MaxStrIndex = 27;
       MaxInputStrLen = 200;
@@ -129,8 +129,8 @@ begin
     LastChatScaleValue:= ChatScaleValue;
     LastUIScaleValue:= UIScaleValue;
 
-    // determine font size - note: +0.001 to because I don't trust float inaccuracy combined with floor
-    fntSize:= max(1, floor(UIScaleValue * ChatScaleValue * cBaseChatFontHeight + 0.001));
+    // determine font size - note: +0.001 to because I don't trust float inaccuracy combined with trunc
+    fntSize:= max(1, trunc(UIScaleValue * ChatScaleValue * cBaseChatFontHeight + 0.001));
 
     if Fontz[fntChat].Height <> fntSize then
         begin
@@ -145,7 +145,7 @@ begin
         end;
 
     // adjust line height etc.
-    Padding:= max(1, floor(PaddingFactor * fntSize + 0.1));
+    Padding:= max(1, trunc(PaddingFactor * fntSize + 0.1));
     ClHeight:= 2 * Padding + fntSize;
 
     // clear cache of already rendered lines
@@ -188,7 +188,7 @@ end;
 
 procedure chatSizeReset();
 begin
-ChatScaleValue:= cDefaultChatScaleLevel;
+ChatScaleValue:= cDefaultChatScale;
 AdjustToUIScale();
 end;
 

@@ -683,6 +683,22 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setVisible(!custom_data && !custom_config);
             groupMisc->layout()->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
+
+            // Divider
+
+            groupMisc->addDivider(); // row 5
+
+            QLabel *labelChatSize = new QLabel(groupMisc);
+            labelChatSize->setText(QLabel::tr("Chat size in percent"));
+            groupMisc->layout()->addWidget(labelChatSize, 6, 0);
+
+            // Chat size adjustment
+            sbChatSize = new QSpinBox(groupMisc);
+            sbChatSize->setMinimum(80);
+            sbChatSize->setMaximum(2000);
+            sbChatSize->setValue(100);
+            groupMisc->layout()->addWidget(sbChatSize, 6, 1);
+
         }
 
 #ifdef __APPLE__

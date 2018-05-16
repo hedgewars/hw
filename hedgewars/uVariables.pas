@@ -128,6 +128,7 @@ var
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
     ChatScaleValue   : real;
+    cDefaultChatScale: real;
     UIScaleValue     : real;
 
     cWaterLine       : LongInt;
@@ -2641,6 +2642,8 @@ begin
     cAudioCodec        := '';
 {$ENDIF}
 
+    cDefaultChatScale:= 1.0;
+
     cTagsMask:= htTeamName or htName or htHealth;
     cPrevTagsMask:= cTagsMask;
 end;
@@ -2835,8 +2838,14 @@ begin
     GameState       := Low(TGameState);
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
-    ChatScaleValue  := cDefaultChatScaleLevel;
+
+    if cDefaultChatScale < cMinChatScaleValue then
+        cDefaultChatScale := cMinChatScaleValue
+    else if cDefaultChatScale > cMaxChatScaleValue then
+        cDefaultChatScale := cMaxChatScaleValue;
+    ChatScaleValue  := cDefaultChatScale;
     UIScaleValue    := cDefaultUIScaleLevel;
+
     WeaponTooltipTex:= nil;
     cLaserSighting  := false;
     cLaserSightingSniper := false;

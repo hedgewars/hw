@@ -427,6 +427,8 @@ QStringList HWGame::getArguments()
         arguments << "--no-healthtag";
     if (config->Form->ui.pageOptions->CBTagOpacity->isChecked())
         arguments << "--translucent-tags";
+    arguments << "--chat-size";
+    arguments << QString::number(config->chatSize());
 
     return arguments;
 }

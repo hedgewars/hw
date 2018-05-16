@@ -141,6 +141,8 @@ QStringList HWRecorder::getArguments()
 // The library does support using both at once after all.
     arguments << QString::number(config->rec_Bitrate()*1024);
     arguments << (config->recordAudio() ? config->audioCodec() : "no");
+    arguments << "--chat-size";
+    arguments << QString::number(config->chatSize());
 
     return arguments;
 }

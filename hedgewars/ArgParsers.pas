@@ -96,6 +96,7 @@ begin
     WriteLn(stdout, ' --no-hogtag');
     WriteLn(stdout, ' --no-healthtag');
     WriteLn(stdout, ' --translucent-tags');
+    WriteLn(stdout, ' --chat-size [default chat size in percent]');
     WriteLn(stdout, ' --stats-only');
     WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
@@ -215,13 +216,13 @@ const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-h
       otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
       mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allarray: array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..35] of shortstring = (
+      reallyAll: array[0..36] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
+  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test','--chat-size');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -271,6 +272,7 @@ begin
         {--no-healthtag}        33 : cTagsMask := cTagsMask and (not htHealth);
         {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
         {--lua-test}            35 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--chat-size}           36 : cDefaultChatScale := 1.0 * getLongIntParameter(arg, paramIndex, parseParameter) / 100;
     else
         begin
         //Assume the first "non parameter" is the replay file, anything else is invalid
