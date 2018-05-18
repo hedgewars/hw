@@ -49,12 +49,14 @@ PHYSFS_DECL void hedgewarsMountPackage(char * fileName)
 				{
 					if (strcmp(dir + dirLength - 4, ".hwp") == 0)
 					{
+#if PHYSFS_VER_MAJOR > 2 || PHYSFS_VER_MINOR > 0
 						char * uniqName = (char *)malloc(strlen(dir) + fileNameLength + 2);
 						strcpy(uniqName, dir);
 						strcat(uniqName, ",");
 						strcat(uniqName, fileName);
 						PHYSFS_mountHandle(PHYSFS_openRead(fileName), uniqName, NULL, 0);
 						free(uniqName);
+#endif
 					}
 					else
 					{
