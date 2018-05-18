@@ -3478,7 +3478,7 @@ f:= pfsOpenRead(s);
 if f = nil then
     exit;
 
-hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
+hedgewarsMountPackage(Str2PChar(copy(s, 3, length(s)-6)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
 if Pos('Locale/',s) <> 0 then

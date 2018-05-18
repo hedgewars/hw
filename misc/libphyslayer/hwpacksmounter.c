@@ -37,20 +37,37 @@ PHYSFS_DECL void hedgewarsMountPackages()
 PHYSFS_DECL void hedgewarsMountPackage(char * fileName)
 {
     int fileNameLength = strlen(fileName);
+    int dirLength = 0;
     if (fileNameLength > 4)
         if (strcmp(fileName + fileNameLength - 4, ".hwp") == 0)
         {
             const char * dir = PHYSFS_getRealDir(fileName);
             if(dir)
             {
-                char * fullPath = (char *)malloc(strlen(dir) + fileNameLength + 2);
-                strcpy(fullPath, dir);
-                strcat(fullPath, "/");
-                strcat(fullPath, fileName);
+				dirLength = strlen(dir);
+				if (dirLength > 4)
+				{
+					if (strcmp(dir + dirLength - 4, ".hwp") == 0)
+					{
+						char * uniqName = (char *)malloc(strlen(dir) + fileNameLength + 2);
+						strcpy(uniqName, dir);
+						strcat(uniqName, ",");
+						strcat(uniqName, fileName);
+						PHYSFS_mountHandle(PHYSFS_openRead(fileName), uniqName, NULL, 0);
+						free(uniqName);
+					}
+					else
+					{
+						char * fullPath = (char *)malloc(strlen(dir) + fileNameLength + 2);
+						strcpy(fullPath, dir);
+						strcat(fullPath, "/");
+						strcat(fullPath, fileName);
 
-                PHYSFS_mount(fullPath, NULL, 0);
+						PHYSFS_mount(fullPath, NULL, 0);
 
-                free(fullPath);
+						free(fullPath);
+					}
+				}
             }
         }
 }
