@@ -323,6 +323,28 @@ begin
     CountNonZeroz:= lRes;
 end;
 
+procedure ChecksumLandObjectImage(Image: PSDL_Surface);
+var y: LongInt;
+begin
+    if Image = nil then exit;
+
+    if SDL_MustLock(Image) then
+        SDL_LockSurface(Image);
+
+    if checkFails(Image^.format^.BytesPerPixel = 4, 'Land object image should be 32bit', true) then
+    begin
+        if SDL_MustLock(Image) then
+            SDL_UnlockSurface(Image);
+        exit
+    end;
+
+    for y := 0 to Image^.h-1 do
+        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
+
+    if SDL_MustLock(Image) then
+        SDL_UnlockSurface(Image);
+end;
+
 function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
 var x1, x2, y, k, i, girderHeight: LongInt;
     rr: TSDL_Rect;
@@ -331,8 +353,7 @@ begin
 if girSurf = nil then
     girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
 
-for y := 0 to girsurf^.h-1 do
-    syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(girsurf^.pixels)^[y*girsurf^.pitch], girsurf^.w*4);
+ChecksumLandObjectImage(girsurf);
 
 girderHeight:= girSurf^.h;
 
@@ -671,6 +692,7 @@ with overlay do
     Width:= Surf^.w;
     Height:= Surf^.h;
     Delete(s, 1, i);
+    ChecksumLandObjectImage(Surf);
     end;
 end;
 
@@ -879,8 +901,8 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            for y := 0 to Surf^.h-1 do
-                syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Surf^.pixels)^[y*Surf^.pitch], Surf^.w*4);
+            ChecksumLandObjectImage(Surf);
+            ChecksumLandObjectImage(Mask);
 
             inrectcnt := 0;
 
