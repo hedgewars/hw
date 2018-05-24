@@ -699,7 +699,7 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key, nameRef: shortstring;
     f: PFSFile;
-    i, y: LongInt;
+    i: LongInt;
     ii, t: Longword;
     c2: TSDL_Color;
 begin
