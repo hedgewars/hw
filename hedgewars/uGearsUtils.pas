@@ -1291,8 +1291,9 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
-    if (Ammo^.Data <> nil) and (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) and (PGear(Ammo^.Data) = Gear)
-    or ((Ammo^.Kind = gtMinigunBullet) and (not UpdateHitOrder(Gear, Ammo^.WDTimer))) then
+    if (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet])
+        and (((Ammo^.Data <> nil) and (PGear(Ammo^.Data) = Gear))
+             or (not UpdateHitOrder(Gear, Ammo^.WDTimer))) then
         continue;
 
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
@@ -1303,9 +1304,7 @@ while i > 0 do
         begin
 
         if (not (Gear^.Kind in [gtMinigun, gtPortal])) and
-            ((Ammo^.Kind = gtDEagleShot)
-                or (Ammo^.Kind = gtSniperRifleShot)
-                or (Ammo^.Kind = gtMinigunBullet)) then
+            (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) then
             begin
             VGear := AddVisualGear(t^.cX[i], t^.cY[i], vgtBulletHit);
             if VGear <> nil then
@@ -1413,10 +1412,7 @@ end;
 procedure AmmoShoveLine(Ammo: PGear; Damage, Power: LongInt; oX, oY, tX, tY: hwFloat);
 var t: PGearArray;
 begin
-    if Ammo^.Kind = gtMinigunBullet then
-        t:= CheckAllGearsLineCollision(Ammo, oX, oY, tX, tY)
-    else
-        t:= CheckGearsLineCollision(Ammo, oX, oY, tX, tY);
+    t:= CheckAllGearsLineCollision(Ammo, oX, oY, tX, tY);
     AmmoShoveImpl(Ammo, Damage, Power, t);
 end;
 

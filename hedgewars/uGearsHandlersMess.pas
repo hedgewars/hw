@@ -1301,8 +1301,7 @@ end;
 procedure LineShoveHelp(Gear: PGear; oX, oY, tX, tY, dX, dY: hwFloat; count: LongWord);
 var dmg,power: LongInt;
 begin
-    if ((Gear^.Kind = gtMinigunBullet) or (Gear^.Damage > 0))
-    and (hwSqr(tX - oX) + hwSqr(tY - oY) > _0_25) then
+    if hwSqr(tX - oX) + hwSqr(tY - oY) > _0_25 then
     begin
         if (Gear^.AmmoType = amDEagle) or (Gear^.AmmoType = amMinigun) then
             dmg:= Gear^.Boom
@@ -1486,6 +1485,7 @@ begin
         Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
     PlaySound(sndGun);
+    ClearHitOrder();
     // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
     Gear^.X := Gear^.X + Gear^.dX * 2;
     Gear^.Y := Gear^.Y + Gear^.dY * 2;
@@ -1528,6 +1528,7 @@ begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
         PlaySound(sndGun);
+        ClearHitOrder();
         // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
         Gear^.X := Gear^.X + Gear^.dX * 2;
         Gear^.Y := Gear^.Y + Gear^.dY * 2;
