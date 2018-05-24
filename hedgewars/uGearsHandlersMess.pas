@@ -6263,6 +6263,7 @@ begin
                             else if iter^.Kind = gtAirMine then
                                 begin
                                 AddCI(iter);
+                                iter^.Damage := 0;
                                 iter^.State:= iter^.State or gstFrozen
                                 end
                             else // gtExplosives
