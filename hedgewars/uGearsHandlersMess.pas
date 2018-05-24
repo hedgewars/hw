@@ -1936,6 +1936,15 @@ var i,t,targDist,tmpDist: LongWord;
     trackSpeed, airFriction, tX, tY: hwFloat;
     isUnderwater: Boolean;
 begin
+	if (Gear^.State and gstFrozen) <> 0 then
+		begin
+		if Gear^.Damage > 0 then
+			begin
+			doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+			DeleteGear(Gear)
+			end;
+		exit
+		end;
     isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
     if Gear^.Pos > 0 then
         begin
@@ -2045,11 +2054,11 @@ begin
                     begin
                     tX:=Gear^.X-targ^.X;
                     tY:=Gear^.Y-targ^.Y;
-                    if (tX.Round+tY.Round < Gear^.Karma) and
-                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
+                    if (tX.Round+tY.Round < Gear^.Boom) and
+                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Boom)) then
                     Gear^.State := Gear^.State or gstAttacking
                     end
-                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Karma, Gear^.Karma) <> nil) then
+                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Boom, Gear^.Boom) <> nil) then
                     Gear^.State := Gear^.State or gstAttacking
                 end
             end
@@ -2065,21 +2074,21 @@ begin
                     begin
                     tX:=Gear^.X-targ^.X;
                     tY:=Gear^.Y-targ^.Y;
-                    if (tX.Round+tY.Round < Gear^.Karma) and
-                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
+                    if (tX.Round+tY.Round < Gear^.Boom) and
+                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Boom)) then
                         begin
                         Gear^.Hedgehog:= CurrentHedgehog;
                         tmpG:= FollowGear;
-                        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                         FollowGear:= tmpG;
                         DeleteGear(Gear);
                         exit
                         end
                     end
-                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Karma, Gear^.Karma) <> nil) then
+                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Boom, Gear^.Boom) <> nil) then
                     begin
                     Gear^.Hedgehog:= CurrentHedgehog;
-                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                     DeleteGear(Gear);
                     exit
                     end;
@@ -6144,9 +6153,9 @@ begin
         ndX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _4;
         ndY:= -AngleCos(HHGear^.Angle) * _4;
         if (ndX <> dX) or (ndY <> dY) or
-           ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
+           (((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
-             (not CheckCoordInWater(Target.X, Target.Y))) then
+             (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*2, Gear^.Radius*2) = nil)) then
             begin
             updateTarget(Gear, ndX, ndY);
             Timer := iceWaitCollision;
@@ -6162,7 +6171,7 @@ begin
             if Target.X <> NoPointX then
                 begin
                 CheckCollision(Gear);
-                if (State and gstCollision) <> 0 then
+                if ((State and gstCollision) <> 0) or (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) <> nil) then
                     begin
                     if Timer = iceWaitCollision then
                         begin
@@ -6207,7 +6216,7 @@ begin
                     while iter <> nil do
                         begin
                         if (iter^.State and gstFrozen = 0) and
-                           ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine) or (iter^.Kind = gtSMine)) and
+                           ((iter^.Kind = gtExplosives) or (iter^.Kind = gtAirMine) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine) or (iter^.Kind = gtSMine)) and
                            (abs(LongInt(iter^.X.Round) - target.x) + abs(LongInt(iter^.Y.Round) - target.y) + 2 < 2 * iceRadius)
                            and (Distance(iter^.X - int2hwFloat(target.x), iter^.Y - int2hwFloat(target.y)) < int2hwFloat(iceRadius * 2)) then
                             begin
@@ -6250,6 +6259,11 @@ begin
                                 DeleteCI(iter);
                                 iter^.State:= iter^.State or gstFrozen;
                                 AddCI(iter)
+                                end
+                            else if iter^.Kind = gtAirMine then
+                                begin
+                                AddCI(iter);
+                                iter^.State:= iter^.State or gstFrozen
                                 end
                             else // gtExplosives
                                 begin
@@ -6321,7 +6335,14 @@ begin
                 Target.Y:= gY;
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-                end;
+                end
+			else if CheckGearNear(Gear, gtAirMine, Gear^.Radius*2, Gear^.Radius*2) <> nil then
+				begin
+                Target.X:= gX;
+                Target.Y:= gY;
+                X:= HHGear^.X;
+                Y:= HHGear^.Y
+				end; 
             if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or

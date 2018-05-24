@@ -1289,9 +1289,9 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
-         gtAirMine: if Gear^.State and gstTmpFlag = 0 then                // mine is inactive
+         gtAirMine: if (Gear^.State and gstTmpFlag = 0) or (Gear^.State and gstFrozen <> 0) then                // mine is inactive
                         begin
-                        Tint(150,150,150,255);
+						if (Gear^.State and gstTmpFlag = 0) then Tint(150,150,150,255);
                         DrawSprite(sprAirMine, x-16, y-16, 15);
                         untint
                         end

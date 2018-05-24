@@ -40,6 +40,7 @@ procedure ResurrectHedgehog(var gear: PGear);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 
+function  CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
 function  CheckGearDrowning(var Gear: PGear): boolean;
 procedure CheckCollision(Gear: PGear); inline;
@@ -1025,20 +1026,48 @@ else
     end
 end;
 
-function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
+function CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
 var t: PGear;
+	width: hwFloat;
 begin
 t:= GearsList;
 rX:= sqr(rX);
 rY:= sqr(rY);
+width:= int2hwFloat(RightX-LeftX);
+
+while t <> nil do
+    begin
+    if (t^.Kind = Kind) then
+        if (not ((hwSqr(X - t^.X) / rX + hwSqr(Y - t^.Y) / rY) > _1)) or
+        ((WorldEdge = weWrap) and (
+        (not ((hwSqr(X - width - t^.X) / rX + hwSqr(Y - t^.Y) / rY) > _1)) or
+        (not ((hwSqr(X + width - t^.X) / rX + hwSqr(Y - t^.Y) / rY) > _1)))) then
+        begin
+            CheckGearNear:= t;
+            exit;
+        end;
+    t:= t^.NextGear
+    end;
+
+CheckGearNear:= nil
+end;
+
+function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
+var t: PGear;
+	width: hwFloat;
+begin
+t:= GearsList;
+rX:= sqr(rX);
+rY:= sqr(rY);
+width:= int2hwFloat(RightX-LeftX);
 
 while t <> nil do
     begin
     if (t <> Gear) and (t^.Kind = Kind) then
         if (not ((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
         ((WorldEdge = weWrap) and (
-        (not ((hwSqr(Gear^.X - int2hwFloat(RightX-LeftX) - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
-        (not ((hwSqr(Gear^.X + int2hwFloat(RightX-LeftX) - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)))) then
+        (not ((hwSqr(Gear^.X - width - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
+        (not ((hwSqr(Gear^.X + width - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)))) then
         begin
             CheckGearNear:= t;
             exit;
@@ -1290,6 +1319,7 @@ while i > 0 do
         case Gear^.Kind of
             gtHedgehog,
             gtMine,
+            gtAirMine,
             gtSMine,
             gtKnife,
             gtTarget,
@@ -1480,7 +1510,6 @@ begin
     GearsNear.size:= s;
     GearsNear.ar:= @GearsNearArray
 end;
-
 
 procedure SpawnBoxOfSmth;
 var t, aTot, uTot, a, h: LongInt;
