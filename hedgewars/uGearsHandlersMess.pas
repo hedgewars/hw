@@ -6156,7 +6156,7 @@ begin
         if (ndX <> dX) or (ndY <> dY) or
            (((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
-             (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*2, Gear^.Radius*2) = nil)) then
+             (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) = nil)) then
             begin
             updateTarget(Gear, ndX, ndY);
             Timer := iceWaitCollision;
@@ -6172,7 +6172,7 @@ begin
             if Target.X <> NoPointX then
                 begin
                 CheckCollision(Gear);
-                if ((State and gstCollision) <> 0) or (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) <> nil) then
+                if ((State and gstCollision) <> 0) or (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*4, Gear^.Radius*4) <> nil) then
                     begin
                     if Timer = iceWaitCollision then
                         begin

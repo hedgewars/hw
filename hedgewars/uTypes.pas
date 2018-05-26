@@ -90,7 +90,7 @@ type
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
             sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
-            sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprAirMine, sprHandAirMine,
+            sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprFrozenAirMine, sprAirMine, sprHandAirMine,
             sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck, sprMinigun
             );
 

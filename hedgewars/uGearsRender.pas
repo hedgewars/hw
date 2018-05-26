@@ -1207,7 +1207,8 @@ var
     aAngle: real;
     startX, endX, startY, endY: LongInt;
 begin
-    if Gear^.State and gstFrozen <> 0 then Tint($A0, $A0, $FF, $FF);
+	// airmine has its own sprite
+    if (Gear^.State and gstFrozen <> 0) and (Gear^.Kind <> gtAirMine) then Tint($A0, $A0, $FF, $FF);
     //if Gear^.State and gstFrozen <> 0 then Tint(IceColor or $FF);
     if Gear^.Target.X <> NoPointX then
         if Gear^.AmmoType = amBee then
@@ -1289,7 +1290,10 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
-         gtAirMine: if (Gear^.State and gstTmpFlag = 0) or (Gear^.State and gstFrozen <> 0) then                // mine is inactive
+         gtAirMine: 
+					if (Gear^.State and gstFrozen <> 0) then 
+                        DrawSprite(sprFrozenAirMine, x-16, y-16, 15)
+					else if (Gear^.State and gstTmpFlag = 0) then                // mine is inactive
                         begin
 						if (Gear^.State and gstTmpFlag = 0) then Tint(150,150,150,255);
                         DrawSprite(sprAirMine, x-16, y-16, 15);

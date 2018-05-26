@@ -761,6 +761,8 @@ const
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom7
             (FileName:       'custom8'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom8
+            (FileName:      'FrozenAirMine'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true), // sprFrozenAirMine
             (FileName:      'AirMine'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true), // sprAirMine
             (FileName:  'amAirMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
