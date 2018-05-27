@@ -1300,9 +1300,9 @@ begin
                         untint
                         end
                     else if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then  // mine is chasing a hog
-                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 25) mod 16)
+                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 25 + Gear^.Uid) mod 16)
                     else if Gear^.State and gstChooseTarget <> 0 then   // mine is seeking for hogs
-                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125) mod 16)
+                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125 + Gear^.Uid) mod 16)
                     else
                          DrawSprite(sprAirMine, x-16, y-16, 4);           // mine is active but not seeking
 

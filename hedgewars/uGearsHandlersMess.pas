@@ -6263,9 +6263,8 @@ begin
                                 end
                             else if iter^.Kind = gtAirMine then
                                 begin
-                                AddCI(iter);
-                                iter^.Damage := 0;
-                                iter^.State:= iter^.State or gstFrozen
+								ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);
+								iter^.State:= gstFrozen or gstInvisible;
                                 end
                             else // gtExplosives
                                 begin
@@ -6279,6 +6278,7 @@ begin
                     // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;
                     Timer := iceWaitCollision;
+					Power:= GameTicks
                     end;
 
                 if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime div 2) then
@@ -6338,13 +6338,17 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
                 end
-			else if CheckGearNear(Gear, gtAirMine, Gear^.Radius*2, Gear^.Radius*2) <> nil then
+			else
 				begin
-                Target.X:= gX;
-                Target.Y:= gY;
-                X:= HHGear^.X;
-                Y:= HHGear^.Y
-				end; 
+				iter:= CheckGearNear(Gear, gtAirMine, Gear^.Radius*2, Gear^.Radius*2);
+				if (iter <> nil) and (iter^.State <> gstFrozen) then
+					begin
+					Target.X:= gX;
+					Target.Y:= gY;
+					X:= HHGear^.X;
+					Y:= HHGear^.Y
+					end 
+				end;
             if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
