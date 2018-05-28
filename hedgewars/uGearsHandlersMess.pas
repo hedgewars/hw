@@ -1160,9 +1160,33 @@ begin
     end;
 end;
 
+function ShotgunLineHitHelp(Gear: PGear; oX, oY, tX, tY: hwFloat): Boolean;
+var i: LongInt;
+    Collisions: PGearArray;
+begin
+    ShotgunLineHitHelp := false;
+    Collisions := CheckAllGearsLineCollision(Gear, oX, oY, tX, tY);
+    i := Collisions^.Count;
+    while i > 0 do
+        begin
+        dec(i);
+        if Collisions^.ar[i]^.Kind in
+            [gtMine, gtSMine, gtAirMine, gtKnife, gtCase, gtTarget, gtExplosives] then
+            begin
+            Gear^.X := Collisions^.ar[i]^.X;
+            Gear^.Y := Collisions^.ar[i]^.Y;
+            ShotgunShot(Gear);
+            Gear^.doStep := @doStepShotIdle;
+            ShotgunLineHitHelp := true;
+            exit;
+            end;
+        end;
+end;
+
 procedure doStepShotgunShot(Gear: PGear);
 var
     i: LongWord;
+    oX, oY, tmpX, tmpY: hwFloat;
 begin
     AllInactive := false;
 
@@ -1186,29 +1210,60 @@ begin
     else
         inc(Gear^.Timer);
 
-        i := 200;
+    i := 100;
+    oX := Gear^.X;
+    oY := Gear^.Y;
     repeat
-        Gear^.X := Gear^.X + Gear^.dX;
-        Gear^.Y := Gear^.Y + Gear^.dY;
-        WorldWrap(Gear);
-        CheckCollision(Gear);
-        if (Gear^.State and gstCollision) <> 0 then
+        if Gear^.Tag = 0 then
             begin
-            Gear^.X := Gear^.X + Gear^.dX * 8;
-            Gear^.Y := Gear^.Y + Gear^.dY * 8;
-            ShotgunShot(Gear);
-            Gear^.doStep := @doStepShotIdle;
-            exit
+            Gear^.X := Gear^.X + Gear^.dX;
+            Gear^.Y := Gear^.Y + Gear^.dY;
             end;
+
+        tmpX := Gear^.X;
+        tmpY := Gear^.Y;
+        if (Gear^.PortalCounter < 30) and WorldWrap(Gear) then
+            begin
+            inc(Gear^.PortalCounter);
+            if ShotgunLineHitHelp(Gear, oX, oY, tmpX, tmpY) then
+                exit;
+            oX := Gear^.X;
+            oY := Gear^.Y;
+            end;
+        CheckCollision(Gear);
+
+        if ((Gear^.State and gstCollision) <> 0) then
+            begin
+            if Gear^.Tag = 0 then
+                begin
+                    //Try to align the shot with the land to give portals a chance to catch it
+                    Gear^.X := Gear^.X + Gear^.dX * 2;
+                    Gear^.Y := Gear^.Y + Gear^.dY * 2;
+                    Gear^.Tag := 1
+                end
+                else
+                begin
+                    Gear^.X := Gear^.X + Gear^.dX * 6;
+                    Gear^.Y := Gear^.Y + Gear^.dY * 6;
+                    ShotgunShot(Gear);
+                    Gear^.doStep := @doStepShotIdle;
+                end;
+                exit
+            end
+        else
+            Gear^.Tag := 0;
 
         CheckGearDrowning(Gear);
         if (Gear^.State and gstDrowning) <> 0 then
             begin
             Gear^.doStep := @doStepShotIdle;
-            exit
+            break;
             end;
         dec(i)
     until i = 0;
+
+    ShotgunLineHitHelp(Gear, oX, oY, Gear^.X, Gear^.Y);
+
     if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
         Gear^.doStep := @doStepShotIdle
 end;

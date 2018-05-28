@@ -1179,6 +1179,7 @@ while t <> nil do
         gtHedgehog,
             gtMine,
             gtSMine,
+            gtAirMine,
             gtKnife,
             gtCase,
             gtTarget,
