@@ -6263,8 +6263,16 @@ begin
                                 end
                             else if iter^.Kind = gtAirMine then
                                 begin
-								ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);
-								iter^.State:= gstFrozen or gstInvisible;
+								iter^.Damage:= 0;
+								iter^.State:= iter^.State or gstFrozen;
+								if (hwRound(iter^.X) < RightX) and (hwRound(iter^.X) > 0) and 
+									(hwRound(iter^.Y) < LAND_HEIGHT) and (hwRound(iter^.Y) > 0) then
+									begin
+									iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), 16)));
+									iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),16)));
+									ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);	
+									iter^.State:= iter^.State or gstInvisible
+									end
                                 end
                             else // gtExplosives
                                 begin
