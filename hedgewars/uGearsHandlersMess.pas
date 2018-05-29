@@ -1392,6 +1392,31 @@ begin
     end;
 end;
 
+procedure CreateBubblesForBullet(Gear: PGear);
+var i, iInit: LongWord;
+begin
+if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Health > 0) then
+    begin
+    // draw bubbles
+    if (not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF)) then
+        begin
+        case Gear^.Kind of
+            gtMinigunBullet: iInit:= Gear^.Health * 100;
+            gtDEagleShot, gtSniperRifleShot: iInit:= Gear^.Health * 4
+            end;
+        for i:=iInit downto 0 do
+            begin
+            if Random(6) = 0 then
+                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
+            Gear^.X := Gear^.X + Gear^.dX;
+            Gear^.Y := Gear^.Y + Gear^.dY;
+            end;
+        end;
+    // bullet dies underwater
+    Gear^.Health:= 0;
+    end;
+end;
+
 procedure doStepBulletWork(Gear: PGear);
 var
     i, x, y, iInit: LongWord;
@@ -1476,60 +1501,61 @@ begin
     LineShoveHelp(Gear, oX, oY, Gear^.X, Gear^.Y,
                   Gear^.dX, Gear^.dY, iInit + 2 - i);
 
-    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Health > 0) then
-        begin
-        // draw bubbles
-        if (not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF)) then
-            begin
-			case Gear^.Kind of
-				gtMinigunBullet: iInit:= Gear^.Health * 100;
-				gtDEagleShot, gtSniperRifleShot: iInit:= Gear^.Health * 4
-				end;
-            for i:=iInit downto 0 do
-                begin
-                if Random(6) = 0 then
-                    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
-                Gear^.X := Gear^.X + Gear^.dX;
-                Gear^.Y := Gear^.Y + Gear^.dY;
-                end;
-            end;
-        // bullet dies underwater
-        Gear^.Health:= 0;
-        end;
+    CreateBubblesForBullet(Gear);
 
-    if (isDead)
-        or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
-        or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
-            begin
-            if (Gear^.Kind = gtSniperRifleShot) then
-                cLaserSightingSniper := false;
-            if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and (CurrentHedgehog^.Effects[heArtillery] = 2) then
-                CurrentHedgehog^.Effects[heArtillery]:= 0;
+    x := hwRound(Gear^.X);
+    y := hwRound(Gear^.Y);
+    if (isDead) or (x and LAND_WIDTH_MASK <> 0) or (y and LAND_HEIGHT_MASK <> 0) then
+        begin
+        if (Gear^.Kind = gtSniperRifleShot) then
+            cLaserSightingSniper := false;
+        if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and (CurrentHedgehog^.Effects[heArtillery] = 2) then
+            CurrentHedgehog^.Effects[heArtillery]:= 0;
 
         // Bullet Hit
-            if ((Gear^.State and gstDrowning) = 0) and (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
-                begin
-                if Gear^.Kind = gtMinigunBullet then
-                    begin
-                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5,
-                                    Gear^.Hedgehog, EXPLNoDamage{ or EXPLDontDraw or EXPLNoGfx});
-                    VGear := AddVisualGear(hwRound(Gear^.X + Gear^.dX * 5), hwRound(Gear^.Y + Gear^.dY * 5), vgtBulletHit);
-                    end
-                else
-                    VGear := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBulletHit);
-
-                if VGear <> nil then
-                    begin
-                    VGear^.Angle := DxDy2Angle(-Gear^.dX, Gear^.dY);
-                    end;
-                end;
-
-            spawnBulletTrail(Gear, Gear^.X, Gear^.Y, Gear^.FlightTime = 0);
-            Gear^.FlightTime:= 1;
+        if ((Gear^.State and gstDrowning) = 0) and (x and LAND_WIDTH_MASK = 0) and (y and LAND_HEIGHT_MASK = 0) then
+            begin
             if Gear^.Kind = gtMinigunBullet then
-                ClearHitOrderLeq(Gear^.Tag);
-            Gear^.doStep := @doStepShotIdle
+                begin
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5,
+                                Gear^.Hedgehog, EXPLNoDamage{ or EXPLDontDraw or EXPLNoGfx});
+                VGear := AddVisualGear(hwRound(Gear^.X + Gear^.dX * 5), hwRound(Gear^.Y + Gear^.dY * 5), vgtBulletHit);
+                end
+            else
+                VGear := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBulletHit);
+
+            if VGear <> nil then
+                begin
+                VGear^.Angle := DxDy2Angle(-Gear^.dX, Gear^.dY);
+                end;
             end;
+
+        spawnBulletTrail(Gear, Gear^.X, Gear^.Y, Gear^.FlightTime = 0);
+        Gear^.FlightTime:= 1;
+        if Gear^.Kind = gtMinigunBullet then
+            ClearHitOrderLeq(Gear^.Tag);
+
+        if (worldEdge = weSea) and (Gear^.Kind = gtMinigunBullet)
+            and Gear^.Y.isNegative and Gear^.dY.isNegative
+            and (Gear^.Health > 0) and (not isZero(Gear^.dX)) then
+        begin
+            if Gear^.dX.isNegative then
+                begin
+
+                Gear^.X:= int2hwFloat(-1);
+                iInit:= x - leftX;
+                end
+            else
+                begin
+                Gear^.X:= int2hwFloat(LAND_WIDTH);
+                iInit:= rightX - x - 1;
+                end;
+            Gear^.Y:= Gear^.Y + Gear^.dY * hwAbs(int2hwFloat(iInit) / Gear^.dX);
+            CheckGearDrowning(Gear);
+            CreateBubblesForBullet(Gear);
+        end;
+        Gear^.doStep := @doStepShotIdle
+        end;
 end;
 
 procedure doStepDEagleShot(Gear: PGear);
