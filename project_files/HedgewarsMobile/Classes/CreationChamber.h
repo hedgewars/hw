@@ -24,18 +24,18 @@
 
 }
 
-+(void) createFirstLaunch;
-+(void) createSettings;
++ (void)createFirstLaunch;
++ (void)createSettings;
 
-+(void) createTeamNamed:(NSString *)nameWithoutExt;
-+(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
-+(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) shouldAITakeOver;
++ (void)createTeamNamed:(NSString *)nameWithoutExt;
++ (void)createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type;
++ (void)createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type controlledByAI:(BOOL) shouldAITakeOver;
 
-+(void) createWeaponNamed:(NSString *)nameWithoutExt;
-+(void) createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
++ (void)createWeaponNamed:(NSString *)nameWithoutExt;
++ (void)createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type;
 
-+(void) createSchemeNamed:(NSString *)nameWithoutExt;
-+(void) createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
++ (void)createSchemeNamed:(NSString *)nameWithoutExt;
++ (void)createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger)type;
 
 @end
 

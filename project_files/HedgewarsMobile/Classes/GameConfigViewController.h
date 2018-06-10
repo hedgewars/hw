@@ -45,9 +45,9 @@
 @property (nonatomic,retain) IBOutlet MapConfigViewController *mapConfigViewController;
 @property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
 
--(IBAction) buttonPressed:(id) sender;
--(IBAction) segmentPressed:(id) sender;
--(void) startGame:(UIButton *)button;
--(BOOL) isEverythingSet;
+- (IBAction)buttonPressed:(id)sender;
+- (IBAction)segmentPressed:(id)sender;
+- (void)startGame:(UIButton *)button;
+- (BOOL)isEverythingSet;
 
 @end

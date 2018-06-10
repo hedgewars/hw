@@ -28,9 +28,9 @@
     NSIndexPath *lastIndexPath;
 }
 
-@property (nonatomic,retain) NSDictionary * teamDictionary;
-@property (nonatomic,retain) NSArray *flagArray;
-@property (nonatomic,retain) NSArray *communityArray;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath;
+@property (nonatomic, strong) NSDictionary * teamDictionary;
+@property (nonatomic, strong) NSArray *flagArray;
+@property (nonatomic, strong) NSArray *communityArray;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
 @end

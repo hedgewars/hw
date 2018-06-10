@@ -23,11 +23,11 @@
 @implementation AboutViewController
 @synthesize tableView, segmentedControl, people;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
@@ -36,7 +36,6 @@
 
     NSArray *array = [[NSArray alloc] initWithContentsOfFile:CREDITS_FILE()];
     self.people = array;
-    [array release];
 
     NSString *imgName;
     if (IS_IPAD())
@@ -45,16 +44,14 @@
         imgName = @"smallerBackground~iphone.png";
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
     UIImageView *background = [[UIImageView alloc] initWithImage:img];
-    [img release];
     background.frame = self.view.frame;
     background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:background atIndex:0];
-    [background release];
 
     [self localizeSegmentedControl];
 }
 
--(IBAction) buttonPressed:(id) sender {
+- (IBAction)buttonPressed:(id)sender {
     [[AudioManagerController mainManager] playBackSound];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -70,7 +67,7 @@
     }
 }
 
--(IBAction) segmentedControlChanged:(id) sender {
+- (IBAction)segmentedControlChanged:(id)sender {
     [[AudioManagerController mainManager] playClickSound];
     [self.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
     [self.tableView reloadData];
@@ -91,7 +88,7 @@
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 
     // first all the names, then the title (which is offset 5)
     cell.textLabel.text = [[self.people objectAtIndex:self.segmentedControl.selectedSegmentIndex] objectAtIndex:[indexPath row]];
@@ -105,15 +102,15 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // do nothing
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 95;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     char *fullver;
     int proto;
@@ -133,33 +130,18 @@
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;
     label.text = footerString;
-    [footerString release];
 
     label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];
-    [label release];
-    return [footer autorelease];
+    return footer;
 }
 
 #pragma mark -
 #pragma mark Memory Management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.people = nil;
     [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload {
-    self.tableView = nil;
-    self.segmentedControl = nil;
-    self.people = nil;
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(tableView);
-    releaseAndNil(segmentedControl);
-    releaseAndNil(people);
-    [super dealloc];
 }
 
 @end

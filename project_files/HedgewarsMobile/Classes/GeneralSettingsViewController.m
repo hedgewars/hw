@@ -23,23 +23,23 @@
 @implementation GeneralSettingsViewController
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View Lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     self.navigationItem.title = NSLocalizedString(@"Edit game options", nil);
     [super viewDidLoad];
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
     [super viewWillAppear:animated];
 }
 
--(void) viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
     if ([[userDefaults objectForKey:@"music"] boolValue] == NO)
@@ -49,7 +49,7 @@
 }
 
 #pragma mark -
--(void) switchValueChanged:(id) sender {
+- (void)switchValueChanged:(id)sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
@@ -76,7 +76,7 @@
     }
 }
 
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+- (void)saveTextFieldValue:(NSString *)textString withTag:(NSInteger)tagValue {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     if (tagValue == 40)
@@ -87,11 +87,11 @@
 
 #pragma mark -
 #pragma mark TableView Methods
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger )section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger )section {
     switch (section) {
         case 0:     // user and pass
             return 1;   // set 2 here to show the password field
@@ -109,7 +109,7 @@
     return 0;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
@@ -143,7 +143,7 @@
         case 0:
             editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier0];
             if (nil == editableCell) {
-                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier0] autorelease];
+                editableCell = [[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier0];
                 editableCell.minimumCharacters = 0;
                 editableCell.delegate = self;
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
@@ -170,11 +170,10 @@
         case 1:
             cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier1];
             if (nil == cell) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier1] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier1];
                 UISwitch *theSwitch = [[UISwitch alloc] init];
                 [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = theSwitch;
-                [theSwitch release];
             }
 
             switchContent = (UISwitch *)cell.accessoryView;
@@ -191,11 +190,10 @@
         case 2:
             cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier2];
             if (nil == cell) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier2] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier2];
                 UISwitch *theSwitch = [[UISwitch alloc] init];
                 [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = theSwitch;
-                [theSwitch release];
             }
 
             switchContent = (UISwitch *)cell.accessoryView;
@@ -231,7 +229,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (0 == [indexPath section]) {
         EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
@@ -242,16 +240,9 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload {
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    [super dealloc];
 }
 
 @end

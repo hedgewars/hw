@@ -23,13 +23,13 @@
 @implementation LevelViewController
 @synthesize teamDictionary, levelArray, levelSprites, lastIndexPath;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     NSArray *array = [[NSArray alloc] initWithObjects:
@@ -40,12 +40,11 @@
                       NSLocalizedString(@"Weaky",@""),
                       nil];
     self.levelArray = array;
-    [array release];
 
     self.title = NSLocalizedString(@"Set difficulty level",@"");
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     if ([[[[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0] objectForKey:@"level"] intValue] == 0)
@@ -60,11 +59,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return numberOfSections;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return 1;
     else
@@ -83,11 +82,10 @@
     if (section == 0) {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0];
             UISwitch *theSwitch = [[UISwitch alloc] init];
             [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = theSwitch;
-            [theSwitch release];
         }
         UISwitch *theSwitch = (UISwitch *)cell.accessoryView;
         if (numberOfSections == 1)
@@ -98,7 +96,7 @@
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (cell == nil)
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1];
 
         cell.textLabel.text = [levelArray objectAtIndex:row];
         NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0];
@@ -111,15 +109,13 @@
 
         NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/bot%d.png",[[NSBundle mainBundle] resourcePath],row+1];
         UIImage *levelImage = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
-        [botlevelPath release];
         cell.imageView.image = levelImage;
-        [levelImage release];
     }
 
     return cell;
 }
 
--(void) switchValueChanged:(id) sender {
+- (void)switchValueChanged:(id)sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     NSIndexSet *sections = [[NSIndexSet alloc] initWithIndex:1];
     NSMutableArray *hogs = [self.teamDictionary objectForKey:@"hedgehogs"];
@@ -134,7 +130,6 @@
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
         level = 0;
     }
-    [sections release];
 
     DLog(@"New level is %ld", (long)level);
     for (NSMutableDictionary *hog in hogs)
@@ -147,7 +142,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (self.lastIndexPath != nil) ? [self.lastIndexPath row] : -1;
 
@@ -174,29 +169,12 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.lastIndexPath = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload {
-    self.lastIndexPath = nil;
-    self.teamDictionary = nil;
-    self.levelArray = nil;
-    self.levelSprites = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(levelArray);
-    releaseAndNil(levelSprites);
-    releaseAndNil(teamDictionary);
-    releaseAndNil(lastIndexPath);
-    [super dealloc];
-}
-
 
 @end
 

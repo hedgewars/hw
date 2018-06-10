@@ -20,7 +20,7 @@
 // The AVAudioPlayer that the volume fade will be applied to.
 // Retained until the fade is completed.
 // Must be set with init method.
-@property (nonatomic, retain, readonly) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong, readonly) AVAudioPlayer *audioPlayer;
 
 // The duration of the volume fade.
 // Default value is 1.0

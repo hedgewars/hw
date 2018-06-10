@@ -22,17 +22,17 @@
 
 @interface UIImage (extra)
 
-+(UIImage *)whiteImage:(CGSize) ofSize;
-+(UIImage *)drawHogsRepeated:(NSInteger) manyTimes;
-+(CGSize) imageSizeFromMetadataOf:(NSString *)aFileName;
++ (UIImage *)whiteImage:(CGSize)ofSize;
++ (UIImage *)drawHogsRepeated:(NSInteger)manyTimes;
++ (CGSize)imageSizeFromMetadataOf:(NSString *)aFileName;
 
--(UIImage *)scaleToSize:(CGSize) size;
--(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint;
--(id) initWithContentsOfFile:(NSString *)path andCutAt:(CGRect) rect;
--(UIImage *)cutAt:(CGRect) rect;
--(UIImage *)convertToGrayScale;
--(UIImage *)convertToNegative;
--(UIImage *)maskImageWith:(UIImage *)maskImage;
--(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh;
+- (UIImage *)scaleToSize:(CGSize)size;
+- (UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint)secondImagePoint;
+- (id)initWithContentsOfFile:(NSString *)path andCutAt:(CGRect)rect;
+- (UIImage *)cutAt:(CGRect)rect;
+- (UIImage *)convertToGrayScale;
+- (UIImage *)convertToNegative;
+- (UIImage *)maskImageWith:(UIImage *)maskImage;
+- (UIImage *)makeRoundCornersOfSize:(CGSize)sizewh;
 
 @end

@@ -497,7 +497,7 @@ procedure ControllerInit;
 var j: Integer;
 begin
 ControllerEnabled:= 0;
-{$IFDEF IPHONE}
+{$IFDEF IPHONEOS}
 exit; // joystick subsystem disabled on iPhone
 {$ENDIF}
 

@@ -23,11 +23,11 @@
 @implementation StatsPageViewController
 @synthesize statsArray;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(void) viewDidLoad {
+- (void)viewDidLoad {
     UITableView *aTableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
@@ -35,11 +35,9 @@
     NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
     UIImageView *background = [[UIImageView alloc] initWithImage:img];
-    [img release];
     background.frame = self.view.frame;
     background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:background atIndex:0];
-    [background release];
 
     aTableView.separatorColor = [UIColor darkYellowColor];
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -49,7 +47,6 @@
     aTableView.rowHeight = 44;
     
     [self.view addSubview:aTableView];
-    [aTableView release];
 
     [super viewDidLoad];
 }
@@ -70,11 +67,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
 
--(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return 1;
     else if (section == 1)
@@ -92,7 +89,7 @@
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0];
 
     if (section == 0) {         // winning team
         imgName = @"star";
@@ -117,12 +114,9 @@
 
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",imgPath,imgName];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgString];
-    [imgString release];
     UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
     cell.imageView.image = img;
-    [img release];
     cell.accessoryView = imgView;
-    [imgView release];
 
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
@@ -132,7 +126,7 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
     return (section == 0) ? 160 : 40;
 }
 
@@ -143,18 +137,16 @@
 
         UIImage *img = [[UIImage alloc] initWithContentsOfFile:@"smallerTitle.png"];
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
-        [img release];
         imgView.center = CGPointMake(aTableView.frame.size.width/2, 160/2);
         imgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [header addSubview:imgView];
-        [imgView release];
 
-        return [header autorelease];
+        return header;
     } else
         return nil;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
     return aTableView.rowHeight + 30;
 }
 
@@ -168,32 +160,27 @@
         button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];
         [footer addSubview:button];
-        [button release];
 
-        return [footer autorelease];
+        return footer;
     } else
         return nil;
 }
 
 #pragma mark -
 #pragma mark button delegate
--(void) dismissView {
+- (void)dismissView {
     [[AudioManagerController mainManager] playClickSound];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     self.statsArray = nil;
 }
 
--(void) dealloc {
-    releaseAndNil(statsArray);
-    [super dealloc];
-}
 
 
 @end

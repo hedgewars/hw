@@ -37,6 +37,6 @@
 @property (nonatomic,retain) NSString *description;
 @property (nonatomic,retain) UIImage *ammoStoreImage;
 
--(void) saveAmmos;
+- (void)saveAmmos;
 
 @end

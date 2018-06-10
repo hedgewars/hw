@@ -23,17 +23,17 @@
 @implementation HelpPageLobbyViewController
 @synthesize scrollView;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(void) didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     self.scrollView = nil;
 }
 
 // on iPhone the XIBs contain UIScrollView
--(void) viewDidLoad {
+- (void)viewDidLoad {
     if (IS_IPAD() == NO){
         scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 650);
         scrollView.maximumZoomScale = 4.0;
@@ -44,17 +44,7 @@
     [super viewDidLoad];
 }
 
--(void) viewDidUnload {
-    [super viewDidUnload];
-    self.scrollView = nil;
-}
-
--(void) dealloc {
-    releaseAndNil(scrollView);
-    [super dealloc];
-}
-
--(IBAction) dismiss {
+- (IBAction)dismiss {
     [UIView animateWithDuration:0.5 animations:^{
         self.view.alpha = 0;
     } completion:^(BOOL finished){

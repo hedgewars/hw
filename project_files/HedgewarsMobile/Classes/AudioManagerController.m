@@ -37,7 +37,7 @@ static AudioManagerController *mainInstance;
     return mainInstance;
 }
 
--(id) init {
+- (id)init {
     if ((self = [super init])) {
         self.backgroundMusic = nil;
         self.clickSound = -1;
@@ -49,15 +49,12 @@ static AudioManagerController *mainInstance;
     return self;
 }
 
--(void) dealloc {
+- (void)dealloc {
     [self unloadSounds];
-    releaseAndNil(backgroundMusic);
-    releaseAndNil(audioFaderQueue);
     mainInstance = nil;
-    [super dealloc];
 }
 
--(void) didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     if (self.backgroundMusic.playing == NO)
         self.backgroundMusic = nil;
     if ([self.audioFaderQueue operationCount] == 0)
@@ -69,7 +66,7 @@ static AudioManagerController *mainInstance;
 
 #pragma mark -
 #pragma mark background music control
--(void) playBackgroundMusic {
+- (void)playBackgroundMusic {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"music"] boolValue] == NO)
         return;
 
@@ -84,15 +81,15 @@ static AudioManagerController *mainInstance;
     [self.backgroundMusic play];
 }
 
--(void) pauseBackgroundMusic {
+- (void)pauseBackgroundMusic {
     [self.backgroundMusic pause];
 }
 
--(void) stopBackgroundMusic {
+- (void)stopBackgroundMusic {
     [self.backgroundMusic stop];
 }
 
--(void) fadeOutBackgroundMusic {
+- (void)fadeOutBackgroundMusic {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"music"] boolValue] == NO)
         return;
 
@@ -103,10 +100,9 @@ static AudioManagerController *mainInstance;
                                                                                              toVolume:0.0
                                                                                          overDuration:FADEOUT_DURATION];
     [self.audioFaderQueue addOperation:fadeOut];
-    [fadeOut release];
 }
 
--(void) fadeInBackgroundMusic {
+- (void)fadeInBackgroundMusic {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"music"] boolValue] == NO)
         return;
 
@@ -118,7 +114,6 @@ static AudioManagerController *mainInstance;
                                                                                             toVolume:DEFAULT_VOLUME
                                                                                         overDuration:FADEIN_DURATION];
     [audioFaderQueue addOperation:fadeIn];
-    [fadeIn release];
 }
 
 #pragma mark -
@@ -131,17 +126,17 @@ static AudioManagerController *mainInstance;
     NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
 
     // use audio sevices to create and play the sound
-    AudioServicesCreateSystemSoundID((CFURLRef)filePath, &soundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)filePath, &soundID);
     return soundID;
 }
 
--(void) unloadSounds {
+- (void)unloadSounds {
     AudioServicesDisposeSystemSoundID(clickSound), clickSound = -1;
     AudioServicesDisposeSystemSoundID(backSound), backSound = -1;
     AudioServicesDisposeSystemSoundID(selSound), selSound = -1;
 }
 
--(void) playClickSound {
+- (void)playClickSound {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == NO)
         return;
 
@@ -151,7 +146,7 @@ static AudioManagerController *mainInstance;
     AudioServicesPlaySystemSound(self.clickSound);
 }
 
--(void) playBackSound {
+- (void)playBackSound {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == NO)
         return;
 
@@ -161,7 +156,7 @@ static AudioManagerController *mainInstance;
     AudioServicesPlaySystemSound(self.backSound);
 }
 
--(void) playSelectSound {
+- (void)playSelectSound {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == NO)
         return;
 

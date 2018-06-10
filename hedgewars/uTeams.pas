@@ -872,7 +872,7 @@ ClansCount:= 0;
 LocalClan:= -1;
 LocalTeam:= -1;
 LocalAmmo:= -1;
-GameOver:= false;
+TeamsGameOver:= false;
 NextClan:= true;
 MaxTeamHealth:= 0;
 end;

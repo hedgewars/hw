@@ -24,14 +24,14 @@
 @implementation TeamSettingsViewController
 @synthesize listOfTeams;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
 // add an edit button
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"")
@@ -39,25 +39,23 @@
                                                                   target:self
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
-    [editButton release];
 
     self.navigationItem.title = NSLocalizedString(@"List of teams", nil);
 }
 
 // load the list of teams in the teams directory
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
     self.listOfTeams = array;
-    [array release];
 
     [self.tableView reloadData];
 }
 
 // modifies the navigation bar to add the "Add" and "Done" buttons
--(void) toggleEdit:(id) sender {
+- (void)toggleEdit:(id)sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
 
@@ -73,12 +71,11 @@
                                                                      target:self
                                                                      action:@selector(addTeam:)];
         self.navigationItem.leftBarButtonItem = addButton;
-        [addButton release];
     }
 }
 
 // add a team file with default values and updates the table
--(void) addTeam:(id) sender {
+- (void)addTeam:(id)sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Default Team %u.plist", [self.listOfTeams count]];
 
     [CreationChamber createTeamNamed:[fileName stringByDeletingPathExtension]];
@@ -91,16 +88,15 @@
 
     NSInteger index = [self.listOfTeams indexOfObject:fileName];
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    [fileName release];
 }
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.listOfTeams count];
 }
 
@@ -110,7 +106,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 
     NSUInteger row = [indexPath row];
@@ -122,12 +118,11 @@
 }
 
 // delete the row and the file
--(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
 
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@",TEAMS_DIRECTORY(),[self.listOfTeams objectAtIndex:row]];
     [[NSFileManager defaultManager] removeItemAtPath:teamFile error:NULL];
-    [teamFile release];
 
     [self.listOfTeams removeObjectAtIndex:row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -136,7 +131,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SingleTeamViewController *singleTeamViewController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
@@ -148,7 +143,6 @@
     [singleTeamViewController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:singleTeamViewController animated:YES];
-    [singleTeamViewController release];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -156,26 +150,13 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning
+
+- (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
-
--(void) viewDidUnload
-{
-    self.listOfTeams = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc
-{
-    releaseAndNil(listOfTeams);
-    [super dealloc];
-}
-
 
 @end
 
