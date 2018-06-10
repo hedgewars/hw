@@ -4,7 +4,7 @@ A Classic Fairytale: Backstab
 = SUMMARY =
 It is revealed that there's a traitor among the natives.
 Player decides whether to kill him or not.
-After the natives must defeat 3 waves of cannibals.
+After this, the natives must defeat 3 waves of cannibals.
 
 = FLOW CHART =
 
@@ -244,7 +244,7 @@ function WonderAlive()
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Why would they do this?"), SAY_SAY, 6000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("It must be the aliens' deed."), SAY_SAY, 5000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("Do not laugh, inexperienced one, for he speaks the truth!"), SAY_SAY, 10000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Yeah, sure! I died. Hillarious!"), SAY_SAY, 6000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Yeah, sure! I died. Hilarious!"), SAY_SAY, 6000}})
     AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY, 6000}})
     AnimInsertStepNext({func = AnimSay, args = {gearr, loc("Huh?"), SAY_SAY, 2000}})
     AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Wow, what a dream!"), SAY_SAY, 3000}})
@@ -276,8 +276,8 @@ function ExplainAlive()
     AnimSetGearPosition(cyborg, unpack(cyborgPos))
     AnimInsertStepNext({func = AnimCustomFunction, args = {water, HideCyborg, {}}})
     AnimInsertStepNext({func = AnimSwitchHog, args = {water}})
-    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("The answer is...entertaintment. You'll see what I mean."), SAY_SAY, 8000}})
-    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("You're probably wondering why I bought you back..."), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("The answer is ... entertainment. You'll see what I mean."), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("You're probably wondering why I brought you back ..."), SAY_SAY, 8000}})
   end
 end
 
@@ -617,12 +617,12 @@ function SkipWave2DeadAnim()
 end
 
 function SpawnPlatformCrates()
-  SpawnAmmoCrate(2494, 1262, amMine)
-  SpawnAmmoCrate(2574, 1279, amSMine)
-  SpawnAmmoCrate(2575, 1267, amMine)
-  SpawnAmmoCrate(2617, 1259, amSMine)
-  SpawnAmmoCrate(2579, 1254, amMine)
-  SpawnAmmoCrate(2478, 1243, amMine)
+  SpawnSupplyCrate(2494, 1262, amMine)
+  SpawnSupplyCrate(2574, 1279, amSMine)
+  SpawnSupplyCrate(2575, 1267, amMine)
+  SpawnSupplyCrate(2617, 1259, amSMine)
+  SpawnSupplyCrate(2579, 1254, amMine)
+  SpawnSupplyCrate(2478, 1243, amMine)
 end
 
 function AfterWave2DeadAnim()
@@ -634,7 +634,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
   EndTurn(true)
-  ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines..."), 1, 12000)
+  ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: You might want to use some mines ..."), 1, 12000)
 end
 
 function DoTurnsOver()
@@ -847,21 +847,21 @@ end
 -----------------------------Misc--------------------------------------
 
 function SpawnCrates()
-  SpawnAmmoCrate(0, 0, amDrill)
-  SpawnAmmoCrate(0, 0, amGrenade)
-  SpawnAmmoCrate(0, 0, amBazooka)
-  SpawnAmmoCrate(0, 0, amDynamite)
-  SpawnAmmoCrate(0, 0, amGrenade)
-  SpawnAmmoCrate(0, 0, amMine)
-  SpawnAmmoCrate(0, 0, amShotgun)
-  SpawnAmmoCrate(0, 0, amFlamethrower)
-  SpawnAmmoCrate(0, 0, amMolotov)
-  SpawnAmmoCrate(0, 0, amSMine)
-  SpawnAmmoCrate(0, 0, amMortar)
-  SpawnUtilityCrate(0, 0, amRope)
-  SpawnUtilityCrate(0, 0, amRope)
-  SpawnUtilityCrate(0, 0, amParachute)
-  SpawnUtilityCrate(0, 0, amParachute)
+  SpawnSupplyCrate(0, 0, amDrill)
+  SpawnSupplyCrate(0, 0, amGrenade)
+  SpawnSupplyCrate(0, 0, amBazooka)
+  SpawnSupplyCrate(0, 0, amDynamite)
+  SpawnSupplyCrate(0, 0, amGrenade)
+  SpawnSupplyCrate(0, 0, amMine)
+  SpawnSupplyCrate(0, 0, amShotgun)
+  SpawnSupplyCrate(0, 0, amFlamethrower)
+  SpawnSupplyCrate(0, 0, amMolotov)
+  SpawnSupplyCrate(0, 0, amSMine)
+  SpawnSupplyCrate(0, 0, amMortar)
+  SpawnSupplyCrate(0, 0, amRope)
+  SpawnSupplyCrate(0, 0, amRope)
+  SpawnSupplyCrate(0, 0, amParachute)
+  SpawnSupplyCrate(0, 0, amParachute)
   SetHealth(SpawnHealthCrate(0, 0), 25)
   SetHealth(SpawnHealthCrate(0, 0), 25)
   SetHealth(SpawnHealthCrate(0, 0), 25)
@@ -885,7 +885,7 @@ end
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
   m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
   m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
   m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
@@ -974,12 +974,12 @@ function AddHogs()
 
   AddTeam(loc("Assault Team"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
-    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 3, 50, "vampirichog")
   end
 
   AddTeam(loc("Reinforcements"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
-    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 2, 50, "vampirichog")
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
@@ -1168,8 +1168,8 @@ function onPrecise()
   end
 end
 
-function onHogAttack(ammoType)
-  if stage == spyKillStage and ammoType == amSkip then
+function onSkipTurn()
+  if stage == spyKillStage then
     highJumped = true
   end
 end

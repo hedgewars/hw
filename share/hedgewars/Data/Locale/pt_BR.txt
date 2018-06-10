@@ -64,7 +64,7 @@
 01:02=%1 ganhou!
 01:03=Volume %1%
 01:04=Pausado
-01:05=Realmente sair (Y/Esc)?
+01:05=Realmente sair (%1/%2)?
 01:06=Morte Súbita!
 01:07=%1 Remanescente
 01:08=Combustível

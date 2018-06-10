@@ -100,7 +100,7 @@ var luaState : Plua_State;
     ScriptLoaded : boolean;
     mapDims : boolean;
     PointsBuffer: shortstring;
-    prevCursorPoint: TPoint;  // why is tpoint still in sdlh...
+    PrevCursorX, PrevCursorY: LongInt;
 
 {$IFDEF USE_LUA_SCRIPT}
 procedure ScriptPrepareAmmoStore; forward;
@@ -404,6 +404,13 @@ begin
     lc_writelntoconsole:= 0;
 end;
 
+function lc_writelntochat(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'WriteLnToChat', 'string') then
+        AddChatString(#2 + lua_tostring(L, 1));
+    lc_writelntochat:= 0;
+end;
+
 function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
 var t: PChar;
     i,c: LongWord;
@@ -553,10 +560,18 @@ end;
 function lc_setammotexts(L : Plua_State) : LongInt; Cdecl;
 const
     call = 'SetAmmoTexts';
-    params = 'ammoType, name, caption, description';
+    params = 'ammoType, name, caption, description [, showExtra]';
+var n: integer;
+    showExtra: boolean;
 begin
-    if CheckLuaParamCount(L, 4, call, params) then
-        SetAmmoTexts(TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params)), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tostringA(L, 4));
+    if CheckAndFetchParamCount(L, 4, 5, call, params, n) then
+        begin
+        if n = 5 then
+            showExtra:= lua_toboolean(L, 5)
+        else
+            showExtra:= true;
+        SetAmmoTexts(TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params)), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tostringA(L, 4), showExtra);
+        end;
     lc_setammotexts:= 0;
 end;
 
@@ -640,24 +655,6 @@ begin
             end
         end;
     lc_addcaption:= 0;
-end;
-
-function lc_campaignlock(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 1, 'CampaignLock', 'TODO') then
-        begin
-        // TODO
-        end;
-    lc_campaignlock:= 0;
-end;
-
-function lc_campaignunlock(L : Plua_State) : LongInt; Cdecl;
-begin
-    if CheckLuaParamCount(L, 1, 'CampaignUnlock', 'TODO') then
-        begin
-        // TODO
-        end;
-    lc_campaignunlock:= 0;
 end;
 
 function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
@@ -762,6 +759,31 @@ begin
     else
         lua_pushnil(L);
     lc_spawnutilitycrate := 1;
+end;
+
+function lc_spawnsupplycrate(L: PLua_State): LongInt; Cdecl;
+var gear: PGear;
+    n, at:LongInt;
+    t:    TCrateType;
+begin
+    if CheckAndFetchParamCount(L, 3, 4, 'SpawnSupplyCrate', 'x, y, content [, amount]', n) then
+        begin
+        // Get crate type (ammo or utility)
+        at:= Trunc(lua_tonumber(L, 3));
+        if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Utility) <> 0 then
+            t:= UtilityCrate
+        else
+            t:= AmmoCrate;
+        if n = 3 then
+             gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), t, at, 0)
+        else gear := SpawnCustomCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), t, at, Trunc(lua_tonumber(L, 4)));
+        if gear <> nil then
+             lua_pushnumber(L, gear^.uid)
+        else lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L);
+    lc_spawnsupplycrate := 1;
 end;
 
 function lc_addgear(L : Plua_State) : LongInt; Cdecl;
@@ -1655,9 +1677,47 @@ begin
     lc_switchhog:= 0
 end;
 
+function lc_enableswitchhog(L : Plua_State) : LongInt; Cdecl;
+var gear, iterator: PGear;
+    alreadySwitching: boolean;
+begin
+    if CheckLuaParamCount(L, 0, 'EnableSwitchHog', '') then
+        if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
+            begin
+            alreadySwitching:= false;
+            iterator:= GearsList;
+            // Check if there's already a switcher gear
+            while (iterator <> nil) do
+                begin
+                if (iterator^.Kind = gtSwitcher) then
+                    begin
+                    alreadySwitching:= true;
+                    lua_pushnumber(L, iterator^.Uid);
+                    break;
+                    end;
+                iterator:= iterator^.NextGear;
+                end;
+            if (not alreadySwitching) then
+                begin
+                // Enable switching and return gear UID
+                gear:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
+                CurAmmoGear:= gear;
+                lastGearByUID:= gear;
+                bShowFinger:= false;
+                lua_pushnumber(L, gear^.Uid);
+                end;
+            end
+    // Return nil on failure
+        else
+            lua_pushnil(L)
+    else
+        lua_pushnil(L);
+    lc_enableswitchhog:= 1;
+end;
+
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
-    at, n: LongInt;
+    at, n, c: LongInt;
 const
     call = 'AddAmmo';
     params = 'gearUid, ammoType [, ammoCount]';
@@ -1665,14 +1725,19 @@ begin
     if CheckAndFetchParamCount(L, 2, 3, call, params, n) then
         begin
         at:= LuaToAmmoTypeOrd(L, 2, call, params);
-        if at >= 0 then
+        if (at >= 0) and (TAmmoType(at) <> amNothing) then
             begin
             gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
             if (gear <> nil) and (gear^.Hedgehog <> nil) then
                 if n = 2 then
                     AddAmmo(gear^.Hedgehog^, TAmmoType(at))
                 else
-                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), Trunc(lua_tonumber(L, 3)))
+                    begin
+                    c:= Trunc(lua_tonumber(L, 3));
+                    if (c = 0) and (CurrentHedgehog = gear^.Hedgehog) and (gear^.Hedgehog^.CurAmmoType = TAmmoType(at)) then
+                        ParseCommand('setweap ' + char(0), true, true);
+                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), c);
+                    end;
             end;
         end;
     lc_addammo:= 0
@@ -1730,6 +1795,33 @@ begin
             end
         end;
     lc_sethealth:= 0
+end;
+
+function lc_healhog(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+    healthBoost, n: LongInt;
+begin
+    if CheckAndFetchParamCountRange(L, 2, 4, 'HealHog', 'gearUid, healthBoost [, showMessage [, tint]]', n) then
+        begin
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        healthBoost:= Trunc(lua_tonumber(L, 2));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (healthBoost >= 1) then
+            begin
+            gear^.Health:= gear^.Health + healthBoost;
+
+            RenderHealth(gear^.Hedgehog^);
+            RecountTeamHealth(gear^.Hedgehog^.Team);
+            if n = 4 then
+                HHHeal(gear^.Hedgehog, healthBoost, lua_toboolean(L, 3), Trunc(lua_tonumber(L, 4)))
+            else if n = 3 then
+                HHHeal(gear^.Hedgehog, healthBoost, lua_toboolean(L, 3))
+            else if n = 2 then
+                HHHeal(gear^.Hedgehog, healthBoost, true);
+            Gear^.Active:= true;
+            AllInactive:= false
+            end
+        end;
+    lc_healhog:= 0
 end;
 
 function lc_settimer(L : Plua_State) : LongInt; Cdecl;
@@ -1880,6 +1972,42 @@ begin
     lc_endturn:= 0
 end;
 
+function lc_retreat(L : Plua_State) : LongInt; Cdecl;
+var n, time: LongInt;
+    respectFactor: Boolean;
+const
+    call = 'Retreat';
+    params = 'time [, respectGetAwayTimeFactor]';
+begin
+    if CheckAndFetchParamCount(L, 1, 2, call, params, n) then
+        begin
+        IsGetAwayTime:= true;
+        AttackBar:= 0;
+        time:= Trunc(lua_tonumber(L, 1));
+        if n = 2 then
+            respectFactor:= lua_toboolean(L, 2)
+        else
+            respectFactor:= True;
+        if respectFactor then
+            TurnTimeLeft:= (time * cGetAwayTime) div 100
+        else
+            TurnTimeLeft:= time;
+        if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
+            begin
+            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstAttacked;
+            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstAttacking);
+            end;
+        end;
+    lc_retreat:= 0
+end;
+
+function lc_skipturn(L : Plua_State): LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    ParseCommand('skip', true, true);
+    lc_skipturn:= 0;
+end;
+
 function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
 var statInfo : TStatInfoType;
     i, n     : LongInt;
@@ -2002,27 +2130,55 @@ end;
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     n, s: LongInt;
+    instaVoice: boolean;
 const
     call = 'PlaySound';
-    params = 'soundId [, hhGearUid]';
+    params = 'soundId [, hhGearUid [, instaVoice]]';
 begin
-    if CheckAndFetchParamCount(L, 1, 2, call, params, n) then
+    if CheckAndFetchParamCountRange(L, 1, 3, call, params, n) then
         begin
         s:= LuaToSoundOrd(L, 1, call, params);
         if s >= 0 then
             begin
             // no gear specified
             if n = 1 then
-                PlaySound(TSound(s))
+                PlaySound(TSound(s), false, true)
             else
                 begin
                 gear:= GearByUID(Trunc(lua_tonumber(L, 2)));
                 if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-                    AddVoice(TSound(s),gear^.Hedgehog^.Team^.Voicepack)
+                    begin
+                    instaVoice:= false;
+                    if n = 3 then
+                        instaVoice:= lua_toboolean(L, 3);
+                    if instaVoice then
+                        PlaySoundV(TSound(s), gear^.Hedgehog^.Team^.Voicepack, false, true)
+                    else
+                        AddVoice(TSound(s), gear^.Hedgehog^.Team^.Voicepack, true);
+                    end;
                 end;
             end;
         end;
     lc_playsound:= 0;
+end;
+
+function lc_setsoundmask(L : Plua_State) : LongInt; Cdecl;
+var s: LongInt;
+    soundState: boolean;
+const
+    call = 'SetSoundMasked';
+    params = 'soundId, isMasked]';
+begin
+    if CheckLuaParamCount(L, 2, call, params) then
+        begin
+        s:= LuaToSoundOrd(L, 1, call, params);
+        if s <> Ord(sndNone) then
+            begin
+            soundState:= lua_toboolean(L, 2);
+            MaskedSounds[TSound(s)]:= soundState;
+            end;
+        end;
+    lc_setsoundmask:= 0;
 end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
@@ -2042,6 +2198,106 @@ begin
     //else
         //lua_pushnil(L)
     lc_addteam:= 0;//1;
+end;
+
+function lc_setteamlabel(L : Plua_State) : LongInt; Cdecl;
+var teamValue: ansistring;
+    i, n: LongInt;
+    success: boolean;
+begin
+    if CheckAndFetchParamCount(L, 1, 2, 'SetTeamLabel', 'teamname[, label]', n) then
+        begin
+        success:= false;
+        // fetch team
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+
+                // value of type nil? Then let's clear the team value
+                if (n < 2) or lua_isnil(L, 2) then
+                    begin
+                    FreeAndNilTexture(TeamsArray[i]^.LuaTeamValueTex);
+                    TeamsArray[i]^.hasLuaTeamValue:= false;
+                    success:= true;
+                    end
+                // value of type string? Then let's set the team value
+                else if (lua_isstring(L, 2)) then
+                    begin
+                    teamValue:= lua_tostring(L, 2);
+                    TeamsArray[i]^.LuaTeamValue:= teamValue;
+                    FreeAndNilTexture(TeamsArray[i]^.LuaTeamValueTex);
+                    TeamsArray[i]^.LuaTeamValueTex := RenderStringTex(teamValue, TeamsArray[i]^.Clan^.Color, fnt16);
+                    TeamsArray[i]^.hasLuaTeamValue:= true;
+                    success:= true;
+                    end;
+                // don't change more than one team
+                break;
+                end;
+        end;
+    // return true if operation was successful, false otherwise
+    lua_pushboolean(L, success);
+    lc_setteamlabel:= 1;
+end;
+
+function lc_getteamname(L : Plua_State) : LongInt; Cdecl;
+var t: LongInt;
+begin
+    if CheckLuaParamCount(L, 1, 'GetTeamName', 'teamIdx') then
+        begin
+        t:= Trunc(lua_tonumber(L, 1));
+        if (t < 0) or (t >= TeamsCount) then
+            lua_pushnil(L)
+        else
+            lua_pushstring(L, str2pchar(TeamsArray[t]^.TeamName));
+        end
+    else
+        lua_pushnil(L);
+    lc_getteamname:= 1;
+end;
+
+function lc_getteamindex(L : Plua_state) : LongInt; Cdecl;
+var i: LongInt;
+    found: boolean;
+begin
+    found:= false;
+    if CheckLuaParamCount(L, 1, 'GetTeamIndex', 'teamname') then
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+                lua_pushnumber(L, i);
+                found:= true;
+                break;
+                end;
+    if (not found) then
+        lua_pushnil(L);
+    lc_getteamindex:= 1;
+end;
+
+function lc_getteamclan(L : Plua_state) : LongInt; Cdecl;
+var i: LongInt;
+    found: boolean;
+begin
+    found:= false;
+    if CheckLuaParamCount(L, 1, 'GetTeamClan', 'teamname') then
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+                lua_pushnumber(L, TeamsArray[i]^.Clan^.ClanIndex);
+                found:= true;
+                break;
+                end;
+    if (not found) then
+        lua_pushnil(L);
+    lc_getteamclan:= 1;
 end;
 
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
@@ -2368,16 +2624,36 @@ begin
 end;
 
 function lc_setwind(L : Plua_State) : LongInt; Cdecl;
+var vg: PVisualGear;
 begin
     if CheckLuaParamCount(L, 1, 'SetWind', 'windSpeed') then
         begin
         cWindSpeed:= int2hwfloat(Trunc(lua_tonumber(L, 1))) / 100 * cMaxWindSpeed;
         cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
         if cWindSpeed.isNegative then
-            CWindSpeedf := -cWindSpeedf;
-        AddVisualGear(0, 0, vgtSmoothWindBar);
+            cWindSpeedf := -cWindSpeedf;
+        vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
+        if vg <> nil then vg^.dAngle:= hwFloat2Float(cWindSpeed);
+            AddFileLog('Wind = '+FloatToStr(cWindSpeed));
         end;
     lc_setwind:= 0
+end;
+
+function lc_getwind(L : Plua_State) : LongInt; Cdecl;
+var wind: extended;
+begin
+    if CheckLuaParamCount(L, 0, 'GetWind', '') then
+        begin
+        wind:= hwFloat2float((cWindSpeed / cMaxWindSpeed) * 100);
+        if wind < -100 then
+            wind:= -100
+        else if wind > 100 then
+            wind:= 100;
+        lua_pushnumber(L, wind);
+        end
+    else
+        lua_pushnil(L);
+    lc_getwind:= 1
 end;
 
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
@@ -2688,7 +2964,7 @@ end;
 function lc_setgearaihints(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParamCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
+    if CheckLuaParamCount(L, 2, 'SetGearAIHints', 'gearUid, aiHints') then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
@@ -2736,6 +3012,67 @@ begin
     else
         lua_pushnil(L);
     lc_getammoname:= 1;
+end;
+
+function lc_getammotimer(L : Plua_state) : LongInt; Cdecl;
+var at: LongInt;
+    weapon: PAmmo;
+    gear: PGear;
+const call = 'GetAmmoTimer';
+      params = 'gearUid, ammoType';
+begin
+    if CheckLuaParamCount(L, 2, call, params) then
+        begin
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            begin
+            at:= LuaToAmmoTypeOrd(L, 2, call, params);
+            weapon:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(at));
+            if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Timerable) <> 0 then
+                lua_pushnumber(L, weapon^.Timer)
+            else
+                lua_pushnil(L);
+            end
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L);
+    lc_getammotimer:= 1;
+end;
+
+function lc_setvampiric(L : Plua_state) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetVampiric', 'bool') then
+        cVampiric := lua_toboolean(L, 1);
+    lc_setvampiric := 0;
+end;
+
+function lc_setlasersight(L : Plua_state) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetLaserSight', 'bool') then
+        cLaserSighting:= lua_toboolean(L, 1);
+    lc_setlasersight:= 0;
+end;
+
+function lc_explode(L : Plua_state) : LongInt; Cdecl;
+var mask: LongWord;
+    n: LongInt;
+begin
+    if CheckAndFetchParamCount(L, 3, 4, 'Explode', 'x, y, radius[, options]', n) then
+        if CurrentHedgehog <> nil then
+            begin
+            mask:= EXPLAutoSound;
+            if (n = 4) then
+                mask:= Trunc(lua_tonumber(L, 4));
+            doMakeExplosion(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)), Trunc(lua_tonumber(L, 3)), CurrentHedgehog, mask);
+            lua_pushboolean(L, true);
+            end
+        else
+            lua_pushboolean(L, false)
+    else
+        lua_pushboolean(L, false);
+    lc_explode:= 1;
 end;
 
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
@@ -2924,8 +3261,8 @@ if not ScriptLoaded then
     exit;
 
 // push game variables so they may be modified by the script
-ScriptSetInteger('CursorX', CursorPoint.X);
-ScriptSetInteger('CursorY', CursorPoint.Y);
+ScriptSetInteger('CursorX', NoPointX);
+ScriptSetInteger('CursorY', NoPointX);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetInteger('WorldEdge', ord(WorldEdge));
 ScriptSetString('Seed', cSeed);
@@ -3141,12 +3478,16 @@ f:= pfsOpenRead(s);
 if f = nil then
     exit;
 
-hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
+hedgewarsMountPackage(Str2PChar(copy(s, 3, length(s)-6)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
 if Pos('Locale/',s) <> 0 then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
-else ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s));
+else
+	begin
+    SetRandomSeed(cSeed,true);
+	ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s))
+	end;
 pfsClose(f);
 
 if ret <> 0 then
@@ -3164,6 +3505,7 @@ else
 end;
 
 procedure SetGlobals;
+var x, y: LongInt;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('ReadyTimeLeft', ReadyTimeLeft);
@@ -3172,21 +3514,23 @@ ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if isCursorVisible and (not bShowAmmoMenu) then
     begin
-    if (prevCursorPoint.X <> CursorPoint.X) or
-       (prevCursorPoint.Y <> CursorPoint.Y) then
+    x:= CursorPoint.X - WorldDx;
+    y:= cScreenHeight - CursorPoint.Y - WorldDy;
+    if (PrevCursorX <> x) or
+       (PrevCursorY <> y) then
         begin
-        ScriptSetInteger('CursorX', CursorPoint.X - WorldDx);
-        ScriptSetInteger('CursorY', cScreenHeight - CursorPoint.Y- WorldDy);
-        prevCursorPoint.X:= CursorPoint.X;
-        prevCursorPoint.Y:= CursorPoint.Y;
+        ScriptSetInteger('CursorX', x);
+        ScriptSetInteger('CursorY', y);
+        PrevCursorX:= x;
+        PrevCursorY:= y;
         end
     end
 else
     begin
     ScriptSetInteger('CursorX', NoPointX);
     ScriptSetInteger('CursorY', NoPointX);
-    prevCursorPoint.X:= NoPointX;
-    prevCursorPoint.Y:= NoPointX
+    PrevCursorX:= NoPointX;
+    PrevCursorY:= NoPointX
     end;
 
 if not mapDims then
@@ -3420,10 +3764,10 @@ luaopen_math(luaState);
 luaopen_table(luaState);
 
 // import some variables
-ScriptSetString(_S'L', cLocale);
+ScriptSetString(_S'LOCALE', cLocale);
 
 // import game flags
-ScriptSetInteger('gfForts', gfForts);
+ScriptSetInteger('gfSwitchHog', gfSwitchHog);
 ScriptSetInteger('gfMultiWeapon', gfMultiWeapon);
 ScriptSetInteger('gfSolidLand', gfSolidLand);
 ScriptSetInteger('gfBorder', gfBorder);
@@ -3534,10 +3878,25 @@ ScriptSetInteger('gstNoGravity'     , gstNoGravity);
 ScriptSetInteger('aihUsualProcessing', aihUsualProcessing);
 ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 
-// land flags
+// land flags (partial)
 ScriptSetInteger('lfIndestructible', lfIndestructible);
 ScriptSetInteger('lfIce'           , lfIce);
 ScriptSetInteger('lfBouncy'        , lfBouncy);
+
+ScriptSetInteger('lfLandMask'      , lfLandMask);
+ScriptSetInteger('lfCurrentHog'    , lfCurrentHog);
+ScriptSetInteger('lfHHMask'        , lfHHMask);
+ScriptSetInteger('lfNotHHObjMask'  , lfNotHHObjMask);
+ScriptSetInteger('lfAllObjMask'    , lfAllObjMask);
+
+// explosion constants
+ScriptSetInteger('EXPLAutoSound'    , EXPLAutoSound);
+ScriptSetInteger('EXPLNoDamage'     , EXPLNoDamage);
+ScriptSetInteger('EXPLDoNotTouchHH' , EXPLDoNotTouchHH);
+ScriptSetInteger('EXPLDontDraw'     , EXPLDontDraw);
+ScriptSetInteger('EXPLNoGfx'        , EXPLNoGfx);
+ScriptSetInteger('EXPLPoisoned'     , EXPLPoisoned);
+ScriptSetInteger('EXPLDoNotTouchAny', EXPLDoNotTouchAny);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
@@ -3567,13 +3926,17 @@ lua_register(luaState, _P'SetGearValues', @lc_setgearvalues);
 lua_register(luaState, _P'SpawnHealthCrate', @lc_spawnhealthcrate);
 lua_register(luaState, _P'SpawnAmmoCrate', @lc_spawnammocrate);
 lua_register(luaState, _P'SpawnUtilityCrate', @lc_spawnutilitycrate);
+lua_register(luaState, _P'SpawnSupplyCrate', @lc_spawnsupplycrate);
 lua_register(luaState, _P'SpawnFakeHealthCrate', @lc_spawnfakehealthcrate);
 lua_register(luaState, _P'SpawnFakeAmmoCrate', @lc_spawnfakeammocrate);
 lua_register(luaState, _P'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
 lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
+lua_register(luaState, _P'WriteLnToChat', @lc_writelntochat);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'EndTurn', @lc_endturn);
+lua_register(luaState, _P'Retreat', @lc_retreat);
+lua_register(luaState, _P'SkipTurn', @lc_skipturn);
 lua_register(luaState, _P'GetTeamStats', @lc_getteamstats);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
 lua_register(luaState, _P'SendGameResultOff', @lc_sendgameresultoff);
@@ -3596,10 +3959,16 @@ lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
+lua_register(luaState, _P'SetSoundMask', @lc_setsoundmask);
+lua_register(luaState, _P'GetTeamName', @lc_getteamname);
+lua_register(luaState, _P'GetTeamIndex', @lc_getteamindex);
+lua_register(luaState, _P'GetTeamClan', @lc_getteamclan);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
+lua_register(luaState, _P'SetTeamLabel', @lc_setteamlabel);
 lua_register(luaState, _P'AddHog', @lc_addhog);
 lua_register(luaState, _P'AddAmmo', @lc_addammo);
 lua_register(luaState, _P'GetAmmoCount', @lc_getammocount);
+lua_register(luaState, _P'HealHog', @lc_healhog);
 lua_register(luaState, _P'SetHealth', @lc_sethealth);
 lua_register(luaState, _P'GetHealth', @lc_gethealth);
 lua_register(luaState, _P'SetEffect', @lc_seteffect);
@@ -3635,9 +4004,8 @@ lua_register(luaState, _P'SetZoom', @lc_setzoom);
 lua_register(luaState, _P'GetZoom', @lc_getzoom);
 lua_register(luaState, _P'HogSay', @lc_hogsay);
 lua_register(luaState, _P'SwitchHog', @lc_switchhog);
+lua_register(luaState, _P'EnableSwitchHog', @lc_enableswitchhog);
 lua_register(luaState, _P'HogTurnLeft', @lc_hogturnleft);
-lua_register(luaState, _P'CampaignLock', @lc_campaignlock);
-lua_register(luaState, _P'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, _P'GetGearElasticity', @lc_getgearelasticity);
 lua_register(luaState, _P'SetGearElasticity', @lc_setgearelasticity);
 lua_register(luaState, _P'GetGearFriction', @lc_getgearfriction);
@@ -3651,6 +4019,7 @@ lua_register(luaState, _P'GetGearCollisionMask', @lc_getgearcollisionmask);
 lua_register(luaState, _P'SetGearCollisionMask', @lc_setgearcollisionmask);
 lua_register(luaState, _P'GetRandom', @lc_getrandom);
 lua_register(luaState, _P'SetWind', @lc_setwind);
+lua_register(luaState, _P'GetWind', @lc_getwind);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
@@ -3668,6 +4037,10 @@ lua_register(luaState, _P'SetWeapon', @lc_setweapon);
 lua_register(luaState, _P'SetCinematicMode', @lc_setcinematicmode);
 lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 lua_register(luaState, _P'GetAmmoName', @lc_getammoname);
+lua_register(luaState, _P'GetAmmoTimer', @lc_getammotimer);
+lua_register(luaState, _P'SetVampiric', @lc_setvampiric);
+lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
+lua_register(luaState, _P'Explode', @lc_explode);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
@@ -3791,8 +4164,8 @@ procedure initModule;
 begin
 mapDims:= false;
 PointsBuffer:= '';
-prevCursorPoint.X:= NoPointX;
-prevCursorPoint.Y:= 0;
+PrevCursorX:= NoPointX;
+PrevCursorY:= NoPointX;
 end;
 
 procedure freeModule;

@@ -9,11 +9,13 @@
 body 
 {
     background: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
+    background-color: #0B203D;
+    color: #FFD902;
     -moz-background-size: 200%;
     background-size: 100% 100%;
     font-family: sans-serif;
 }
-h1 { text-shadow: 0 0 2px white; }
+h1 { text-shadow: 0 0 2px white; color: black;}
 a 
 {
     margin-top: 12px;
@@ -93,7 +95,7 @@ window.onload = function()
     var r = />([^<]*).png</g;
     var x;
     while(x = r.exec(resp)) 
-        if (!/^Team|NoHat/.test(x[1])) // Exclude team coloured ones as repetitive, NoHat one as uninteresting
+        if (!/NoHat|hair_team|cap_team|TeamTophat/.test(x[1])) // Exclude NoHat as uninteresting. hair_team, cap_team and TeamTophat as repetitive team hats
             masks.push(x[1]);
 
     var opt = document.createElement("option");
@@ -105,7 +107,7 @@ window.onload = function()
         sel.appendChild(opt.cloneNode(true));
         sel.lastChild.value = theme;
         sel.lastChild.lastChild.data = theme;
-        if(theme == "Nature") sel.lastChild.selected = true;
+        if(theme === "Nature") sel.lastChild.selected = true;
     }
     var chk = document.createElement("input");
     chk.type = "checkbox";
@@ -116,7 +118,7 @@ window.onload = function()
     document.body.appendChild(chk);
     var s = document.styleSheets[0].cssRules;
     for(var i=0;i<s.length;i++)
-        if (s[i].selectorText.toLowerCase()==".girder") girder = s[i];
+        if (s[i].selectorText.toLowerCase() === ".girder") girder = s[i];
         
     var a = document.createElement("a");
     var g = document.createElement("div");
@@ -131,7 +133,7 @@ window.onload = function()
         h.lastChild.lastChild.data = masks[i];
         h.title = masks[i];
         h.idle = Math.floor(Math.random()*19);
-        if (i%17==16 || i==masks.length-1) document.body.appendChild(g.cloneNode(false));
+        if (i%17 === 16 || i === masks.length-1) document.body.appendChild(g.cloneNode(false));
     }
     
 /* quick and dirty animation */
@@ -184,5 +186,9 @@ function switchTheme()
 </head>
 <body>
 <h1>List of Hedgewars hats</h1>
+<noscript>
+<p><strong>ERROR</strong>: We're so sorry, but this webpage only works with JavaScript enabled. It seems JavaScript is disabled or not supported in your browser.</p>
+<p>Normally, this webpage would display an animated preview of the hats in Hedgewars.</p>
+</noscript>
 </body>
 </html>

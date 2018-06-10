@@ -5,8 +5,8 @@ syntax: glob
 .git
 CMakeCache.txt
 CMakeFiles
-moc_*.cxx
-qrc_*.cxx
+moc_*.*
+qrc_*.*
 *.o
 *.a
 *.qm
@@ -26,7 +26,7 @@ CPackSourceConfig.cmake
 tools/cmake_uninstall.cmake
 install_manifest.txt
 .DS_Store
-*.swp
+*.sw?
 *.orig
 vittorio.*
 project_files/HedgewarsMobile/Data/
@@ -35,7 +35,7 @@ gameServer/dist/
 misc/liblua/Xcode/build/
 misc/libphysfs/Xcode/build/
 misc/libphyslayer/Xcode/build/
-moc_*.cxx_parameters
+moc_*.cpp_parameters
 *.log
 *.cmd
 *.patch

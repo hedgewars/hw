@@ -33,6 +33,7 @@ params = {
 	time = ,
 	ammoType = ,
 	gearType = ,
+	secondaryGearType = ,
 	targets = {
 		{ x = , y = },
 		{ x = , y = },
@@ -64,6 +65,8 @@ local game_lost = false
 local time_goal = 0
 local total_targets
 local targets
+local gearsInGameCount = 0
+local gearsInGame = {}
 
 --[[
 TrainingMission(params)
@@ -76,7 +79,7 @@ The argument “params” is a table containing fields which describe the traini
 	- theme:	the name of the theme (does not need to be a standalone theme)
 	- time:		the time limit in milliseconds
 	- ammoType:	the ammo type of the weapon to be used
-	- gearType:	the gear type of the gear which is fired (used to count shots)
+	- gearType:	the gear type of the gear which is fired (used to count shots and re-center camera)
 	- targets:	The coordinates of where the targets will be spawned.
 			It is a table containing tables containing coordinates of format
 			{ x=value, y=value }. The targets will be spawned in the same
@@ -97,12 +100,19 @@ The argument “params” is a table containing fields which describe the traini
 	- teamName:	name of the hedgehog’s team (default: "Training Team")
 	- teamGrave:	name of the hedgehog’s grave
 	- teamFlag:	name of the team’s flag (default: "cm_crosshair")
+	- secGearType:	cluster of projectile gear (if present) (used to re-center camera)
 	- clanColor:	color of the (only) clan (default: 0xFF0204, which is a red tone)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
 	- shootText:	A string which says how many times the player shot, “%d” is replaced
 			by the number of shots. (default: "You have shot %d times.")
 ]]
+
+
+local getTargetsScore = function()
+	return scored * math.ceil(6000/#targets)
+end
+
 function TargetPracticeMission(params)
 	if params.hogHat == nil then params.hogHat = "NoHat" end
 	if params.hogName == nil then params.hogName = loc("Trainee") end
@@ -128,7 +138,8 @@ function TargetPracticeMission(params)
 
 	_G.onGameInit = function()
 		Seed = 1
-		GameFlags = gfDisableWind + gfInfAttack + gfOneClanMode + solid + artillery
+		ClearGameFlags()
+		EnableGameFlags(gfDisableWind, gfInfAttack, gfOneClanMode, solid, artillery)
 		TurnTime = params.time
 		Map = params.map
 		Theme = params.theme
@@ -151,6 +162,7 @@ function TargetPracticeMission(params)
 	_G.onGameStart = function()
 		SendHealthStatsOff()
 		ShowMission(params.missionTitle, loc("Aiming practice"), params.goalText, -params.ammoType, 5000)
+		SetTeamLabel(params.teamName, "0")
 		spawnTarget()
 	end
 
@@ -192,19 +204,33 @@ function TargetPracticeMission(params)
 			else
 				TurnTimeLeft = time_goal
 			end
-	        end_timer = end_timer - 20
+	   	     end_timer = end_timer - 20
+		end
+
+		for gear, _ in pairs(gearsInGame) do
+			if band(GetState(gear), gstDrowning) ~= 0 then
+				-- Re-center camera on hog if projectile gears drown
+				gearsInGame[gear] = nil
+				gearsInGameCount = gearsInGameCount - 1
+				if gearsInGameCount == 0 and GetHealth(CurrentHedgehog) then
+					FollowGear(CurrentHedgehog)
+				end
+			end
 		end
 	end
 
 	_G.onGearAdd = function(gear)
-		if GetGearType(gear) == params.gearType then
+		if GetGearType(gear) == params.gearType or (params.secGearType and GetGearType(gear) == params.secGearType) then
 			shots = shots + 1
+			gearsInGameCount = gearsInGameCount + 1
+			gearsInGame[gear] = true
 		end
 	end
 
 	_G.onGearDamage = function(gear, damage)
 		if GetGearType(gear) == gtTarget then
 			scored = scored + 1
+			SetTeamLabel(params.teamName, tostring(getTargetsScore()))
 			if scored < total_targets then
 				AddCaption(string.format(loc("Targets left: %d"), (total_targets-scored)), 0xFFFFFFFF, capgrpMessage)
 				spawnTarget()
@@ -213,6 +239,7 @@ function TargetPracticeMission(params)
 					AddCaption(loc("You have destroyed all targets!"), 0xFFFFFFFF, capgrpGameState)
 					ShowMission(params.missionTitle, loc("Aiming practice"), loc("Congratulations! You have destroyed all targets within the time."), 0, 0)
 					PlaySound(sndVictory, player)
+					SetEffect(player, heInvulnerable, 1)
 					SetState(player, bor(GetState(player), gstWinner))
 					time_goal = TurnTimeLeft
 					-- Disable control
@@ -243,17 +270,25 @@ function TargetPracticeMission(params)
 			if not success then
 				WriteLnToConsole("ERROR: Failed to spawn girder under respawned target!")
 			end
+		elseif gearsInGame[gear] then
+			gearsInGame[gear] = nil
+			gearsInGameCount = gearsInGameCount - 1
+			if gearsInGameCount == 0 and GetHealth(CurrentHedgehog) then
+				-- Re-center camera to hog after all projectile gears were destroyed
+				FollowGear(CurrentHedgehog)
+			end
 		end
 	end
 
 	_G.generateStats = function()
 		local accuracy = (scored/shots)*100
-		local end_score_targets = scored * math.ceil(6000/#targets)
+		local end_score_targets = getTargetsScore()
 		local end_score_overall
 		if not game_lost then
 			local end_score_time = math.ceil(time_goal/(params.time/6000))
 			local end_score_accuracy = math.ceil(accuracy * 60)
 			end_score_overall = end_score_time + end_score_targets + end_score_accuracy
+			SetTeamLabel(params.teamName, tostring(end_score_overall))
 
 			SendStat(siGameResult, loc("You have finished the target practice!"))
 

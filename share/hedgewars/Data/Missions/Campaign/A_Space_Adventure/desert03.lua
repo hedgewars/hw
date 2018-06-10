@@ -91,7 +91,7 @@ function onGameStart()
 	AddEvent(onLose, {hero.gear}, lose, {hero.gear}, 0)
 
 	-- original crates and targets
-	SpawnAmmoCrate(rcCrates[1].x, rcCrates[1].y, amRCPlane)
+	SpawnSupplyCrate(rcCrates[1].x, rcCrates[1].y, amRCPlane)
 	targets[1].gear = AddGear(targets[1].x, targets[1].y, gtTarget, 0, 0, 0, 0)
 
 	-- hero ammo
@@ -207,13 +207,13 @@ end
 
 function setTargets(ct)
 	if ct == 2 then
-		SpawnAmmoCrate(rcCrates[2].x, rcCrates[2].y, amRCPlane)
+		SpawnSupplyCrate(rcCrates[2].x, rcCrates[2].y, amRCPlane)
 		for i=2,3 do
 			targets[i].gear = AddGear(targets[i].x, targets[i].y, gtTarget, 0, 0, 0, 0)
 		end
 	elseif ct == 3 then
 		SpawnUtilityCrate(rcCrates[4].x, rcCrates[4].y, amNothing)
-		SpawnAmmoCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane, 2)
+		SpawnSupplyCrate(rcCrates[3].x, rcCrates[3].y, amRCPlane, 2)
 		for i=4,13 do
 			targets[i].gear = AddGear(targets[i].x, targets[i].y, gtTarget, 0, 0, 0, 0)
 		end

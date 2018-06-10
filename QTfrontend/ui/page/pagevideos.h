@@ -22,8 +22,6 @@
 
 #include "AbstractPage.h"
 
-class QNetworkAccessManager;
-class QNetworkReply;
 class GameUIConfig;
 class HWRecorder;
 class VideoItem;
@@ -60,17 +58,15 @@ class PageVideos : public AbstractPage
         void clearTemp();
         void clearThumbnail();
         void setProgress(int row, VideoItem* item, float value);
-        VideoItem * itemFromReply(QNetworkReply* reply, int & row);
 
         GameUIConfig * config;
-        QNetworkAccessManager* netManager;
 
         // file list group
         QTableWidget *filesTable;
         QPushButton *btnOpenDir;
 
         // description group
-        QPushButton *btnPlay, *btnDelete, *btnToYouTube;
+        QPushButton *btnPlay, *btnDelete;
         QLabel *labelDesc;
         QLabel *labelThumbnail;
 
@@ -78,7 +74,7 @@ class PageVideos : public AbstractPage
         // (in signal cellChanged)
         bool nameChangedFromCode;
 
-        int numRecorders, numUploads;
+        int numRecorders;
 
     private slots:
         void encodingFinished(bool success);
@@ -90,9 +86,6 @@ class PageVideos : public AbstractPage
         void deleteSelectedFiles();
         void openVideosDirectory();
         void updateFileList(const QString & path);
-        void uploadToYouTube();
-        void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
-        void uploadFinished();
 };
 
 #endif // PAGE_VIDEOS_H

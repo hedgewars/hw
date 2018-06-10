@@ -1,35 +1,38 @@
-Basic_Training_-_Bazooka.name=Grundlagentraining: Bazooka
-Basic_Training_-_Bazooka.desc="Nutze den Wind zu deinem Vorteil aus!"
+Basic_Training_-_Movement.name=Grundausbildung: Fortbewegung
+Basic_Training_-_Movement.desc="Grünschnäbel fangen hier an! Lern, wie man sich auf unterschiedlichen Geländearten fortbewegt, und wie man Igel wechselt."
 
-Basic_Training_-_Grenade.name=Grundlagentraining: Granate
-Basic_Training_-_Grenade.desc="Vergiss nicht: Stift ziehen UND werfen!"
+Basic_Training_-_Bazooka.name=Grundausbildung: Bazooka
+Basic_Training_-_Bazooka.desc="Lern, wie man die Bazooka benutzt, lern über den Wind und zerstöre alle Ziele."
+
+Basic_Training_-_Grenade.name=Grundausbildung: Granate
+Basic_Training_-_Grenade.desc="Lern alles, was du über Granaten wissen solltest und zerstöre alle Ziele. Vergiss nicht: Stift ziehen UND werfen!"
 
 Basic_Training_-_Sniper_Rifle.name=Zielübung: Scharfschützengewehr
-Basic_Training_-_Sniper_Rifle.desc="Peng, Kopfschuss!"
+Basic_Training_-_Sniper_Rifle.desc="Das ist der perfekte Schießstand für Scharfschützen! Zerstöre alle Ziele so schnell und treffsicher du kannst und werd zur Legende!"
 
-Basic_Training_-_Rope.name=Grundlagentraining: Seil
-Basic_Training_-_Rope.desc="Raus da und schwing!"
+Basic_Training_-_Rope.name=Grundausbildung: Seil
+Basic_Training_-_Rope.desc="Das Seil ist eines der vielseitigsten Werkzeuge, das du kriegen kannst, doch es erfordert viel Übung. Hier lernst du die Grundlagen des Seils kennen."
 
-Basic_Training_-_Flying_Saucer.name=Grundlagentraining: Fliegende Untertasse
-Basic_Training_-_Flying_Saucer.desc="Du willst also ausgerechnet Astronaut werden, wie? Dann lern erstmal fliegen!"
+Basic_Training_-_Flying_Saucer.name=Grundausbildung: Fliegende Untertasse
+Basic_Training_-_Flying_Saucer.desc="Mit einer fliegenden Untertasse erreicht man so ziemlich jeden Punkt, wenn man denn fliegen kann. Lern, wie man fliegt, wie man von einer fliegenden Untertasse aus angreift und probier ein paar coole Stunts aus."
 
 User_Mission_-_Dangerous_Ducklings.name=Gefährliche Entchen
-User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das im Grundlagentraining Gelernte in die Tag umsetzt!"
+User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tag umsetzt!"
 
 User_Mission_-_Diver.name=Taucher
-User_Mission_-_Diver.desc="Diese amphibische Angriffstrategie ist schwieriger, als sie aussieht."
+User_Mission_-_Diver.desc="Diese amphibische Angriffsstrategie ist schwieriger, als sie aussieht."
 
 User_Mission_-_Teamwork.name=Teamwork
-User_Mission_-_Teamwork.desc="Ab und zu … tut Liebe weh."
+User_Mission_-_Teamwork.desc="Ein defekter Cyborg hütet ein wertvolles Militärgeheimnis. Führe deine Spezialeinheit aus zwei Igeln, um den Gegner zu vernichten und das Geheimnis zu erhalten. Es ist absolut unerlässlich für unsere künftigen Operationen, dass beide Igel überleben."
 
 User_Mission_-_Teamwork_2.name=Teamwork 2
-User_Mission_-_Teamwork_2.desc="Benutze deine Teamfähigkeiten, um den kybernetischen Feind erneut zu besiegen!"
+User_Mission_-_Teamwork_2.desc="Wir haben einen geheimen Außenposten des Kybernetischen Imperiums entdeckt und er wird lediglich von einem harmlosen Wachboter bewacht. Führe die Spezialeinheit, um ihn zu zerstören, damit wir die Basis unser eigen nennen können. Auch hier müssen beide Igel unbedingt überleben!"
 
 User_Mission_-_Spooky_Tree.name=Spukiger Baum
 User_Mission_-_Spooky_Tree.desc="Viele Kisten hier draußen. Ich hoffe jedenfalls, dass dieser Vogel hier nicht hungrig wird."
 
 User_Mission_-_Bamboo_Thicket.name=Bambusdickicht
-User_Mission_-_Bamboo_Thicket.desc="Tod von oben."
+User_Mission_-_Bamboo_Thicket.desc="Ein Cyborg terrorisiert das Bambusdickicht und greift jeden Igel in Sichtweite an, und das mit praktsch perfekter Treffsicherheit. Plane voraus, beweg dich zügig und vernichte den Feind möglichst schnell!"
 
 User_Mission_-_That_Sinking_Feeling.name=Land unter
 User_Mission_-_That_Sinking_Feeling.desc="Hier steht einen das Wasser ganz schön schnell bis zum Halse. Viele sind hieran gescheitert. Kannst du alle Igel retten?"
@@ -38,22 +41,28 @@ User_Mission_-_Newton_and_the_Hammock.name=Newton und die Hängematte
 User_Mission_-_Newton_and_the_Hammock.desc="Nicht vergessen, Igelinge: Die Geschwindigkeit eines Körpers bleibt konstant, es sei denn, es wirkt eine äußere Kraft auf ihn ein!"
 
 User_Mission_-_The_Great_Escape.name=Gesprengte Ketten
-User_Mission_-_The_Great_Escape.desc="Glaubst du, dass du mich einsperren könnest?"
+User_Mission_-_The_Great_Escape.desc="Brich aus deinem Gefängnis aus und räch dich!"
 
 User_Mission_-_Rope_Knock_Challenge.name=Seilschubsen
-User_Mission_-_Rope_Knock_Challenge.desc="Sieh! Hinter dir!"
+User_Mission_-_Rope_Knock_Challenge.desc="Benutze dein Seil, um alle Feinde in ihr Verderben zu schubsen!"
 
 User_Mission_-_Nobody_Laugh.name=Niemand darf lachen
-User_Mission_-_Nobody_Laugh.desc="Das ist kein Witz!"
+User_Mission_-_Nobody_Laugh.desc="Oh, diese Clowns halten sich wohl für besonders lustig! Sie mögen uns zahlenmäßig überlegen sein, aber wir haben viel Zugzeit. Eliminiere all diese Möchtegernspaßvögel, und zwar einen nach den anderen, bis es keinen mehr gibt, der noch lachen kann."
 
 User_Mission_-_RCPlane_Challenge.name=Funkflugzeugsherausforderung
-User_Mission_-_RCPlane_Challenge.desc="Bist wohl ziemlich eingebildet, was, Flieger?"
+User_Mission_-_RCPlane_Challenge.desc="Benutze Funkflugzeuge, um dir alle Kisten zu schnappen. Sei sparsam mit Funkflugzeugen für einen besseren Rang. Hast du das Zeug zum Elitepiloten der Spitzenklasse?"
 
 portal.name=Knifflige Portalherausforderung
 portal.desc="Benutze das Portalgerät, um dich schnell und weit zu bewegen; benutze es zum Töten; benutze es mit Vorsicht!"
 
 Big_Armory.name=Großes Arsenal
 Big_Armory.desc="Du bist alleine, hast ein volles Arsenal und musst 8 Igel besiegen, bevor die Zeit abläuft."
+
+Bazooka_Battlefield.name=Bazookaschlachtfeld
+Bazooka_Battlefield.desc="Deine treuen Ritter haben den Feind in einen Hinterhalt gelockt. Zerstöre sie nur mit Bazookas! Aber trödel nicht zu lange, denn das Wasser wird bald steigen."
+
+Tentacle_Terror.name=Tentakel-Terror
+Tentacle_Terror.desc="Unter einem furchtbaren Monster versteckt sich dein Feind wie ein Feigling und wird dich mit Luftangriffen angreifen, sobald du aus der Deckung gehst. Zeig ihm, wer in der Hölle das Sagen hat! Aber du brauchst schon teuflisch gute Seilfähigkeiten, um überhaupt eine Chance zu haben."
 
 Target_Practice_-_Bazooka_easy.name=Zielübung: Bazooka (einfach)
 Target_Practice_-_Bazooka_easy.desc="Nun gut, Soldat: Zerstör einfach die Zielscheiben so schnell, wie du kannst!"
@@ -62,7 +71,7 @@ Target_Practice_-_Bazooka_hard.name=Zielübung: Bazooka (schwer)
 Target_Practice_-_Bazooka_hard.desc="Kannst du die Zielscheiben treffen, auch wenn sie sehr weit weg sind?"
 
 Target_Practice_-_Cluster_Bomb.name=Zielübung: Splittergranate
-Target_Practice_-_Cluster_Bomb.desc="Jemand braucht eine heiße Dusche!"
+Target_Practice_-_Cluster_Bomb.desc="Jemand braucht eine heiße Dusche! Mit Splittergranaten!"
 
 Target_Practice_-_Shotgun.name=Zielübung: Schrotflinte
 Target_Practice_-_Shotgun.desc="Erst schießen, dann fragen!"

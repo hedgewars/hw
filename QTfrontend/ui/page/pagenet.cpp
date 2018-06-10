@@ -99,7 +99,7 @@ void PageNet::updateServersList()
 {
     tvServersList->setModel(new HWNetUdpModel(tvServersList));
 
-    tvServersList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    tvServersList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 

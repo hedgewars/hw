@@ -91,8 +91,18 @@ teamC.color = 0x38D61C -- green
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 function onGameInit()
+	-- get the check point
+	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
+		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
+	end
+
 	Seed = 35
-	GameFlags = gfSolidLand + gfDisableWind + gfTagTeam
+	ClearGameFlags()
+	EnableGameFlags(gfSolidLand, gfDisableWind, gfTagTeam)
+	if checkPointReached == 4 then
+		-- Disable walking as long we're stuck on the moon
+		EnableGameFlags(gfArtillery)
+	end
 	TurnTime = 20000
 	CaseFreq = 0
 	MinesNum = 0
@@ -126,14 +136,6 @@ function onGameInit()
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard2.gear, guard2.x, guard2.y)
-	-- get the check point
-	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
-	end
-	if checkPointReached == 4 then
-		-- Disable walking as long we're stuck on the moon
-		GameFlags = bor(GameFlags, gfArtillery)
-	end
 	-- Whether to start with an animation
 	local startSequence
 	-- do checkpoint stuff needed before game starts
@@ -199,7 +201,7 @@ function onGameStart()
 		AddAmmo(hero.gear, amRope, 1)
 		AddAmmo(guard1.gear, amDEagle, 100)
 		AddAmmo(guard2.gear, amDEagle, 100)
-		SpawnUtilityCrate(saucerX, saucerY, amJetpack)
+		SpawnSupplyCrate(saucerX, saucerY, amJetpack)
 		-- EVENT HANDLERS
 		AddEvent(onHeroBeforeTreePosition, {hero.gear}, heroBeforeTreePosition, {hero.gear}, 0)
 		AddEvent(onHeroAcquiredSaucer, {hero.gear}, heroAcquiredSaucer, {hero.gear}, 1)
@@ -307,9 +309,9 @@ function onNewTurn()
 				TurnTimeLeft = -1
 			end
 		end
-	elseif CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
+	elseif not onHeroDeath() and CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
 		EndTurn(true)
-	elseif (CurrentHedgehog == guard1.gear or CurrentHedgehog == guard2.gear) and guard1.keepTurning then
+	elseif not onHeroDeath() and (CurrentHedgehog == guard1.gear or CurrentHedgehog == guard2.gear) and guard1.keepTurning then
 		EndTurn(true)
 	end
 
@@ -703,7 +705,7 @@ function AnimationSetup()
 	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other device parts."), SAY_THINK, 4000}})
 	-- DIALOG 08 - Hero wins death01
 	AddSkipFunction(dialog08, Skipanim, {dialog08})
-	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorites shadow ..."),  4000}})
+	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite’s shadow ..."),  4000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great, Hog Solo! However, we aren't out of danger yet!"), SAY_SHOUT, 4500}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now."), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts."), SAY_SHOUT, 3000}})

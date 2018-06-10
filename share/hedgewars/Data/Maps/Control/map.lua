@@ -225,6 +225,13 @@ function AwardPoints()
 		end
 	end
 
+	-- Update team labels
+	for i = 0,(TeamsCount-1) do
+		if teamNameArr[i] ~= " " then
+			SetTeamLabel(teamNameArr[i], teamScore[teamClan[i]])
+		end
+	end
+
 end
 
 -----------------
@@ -273,6 +280,7 @@ function RebuildTeamInfo()
 
 	-- find out how many hogs per team, and the index of the first hog in hhs
 	for i = 0, (numTeams-1) do
+		SetTeamLabel(GetTeamName(i), "0")
 		for z = 0, (numhhs-1) do
 			if GetHogTeamName(hhs[z]) == teamNameArr[i] then
 				teamClan[i] = GetHogClan(hhs[z])				
@@ -309,9 +317,9 @@ end
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
-	--GameFlags = gfInfAttack + gfSolidLand -- Game settings and rules
 	
-	GameFlags = band(bor(GameFlags, gfInfAttack + gfSolidLand), bnot(gfKing + gfForts))
+	EnableGameFlags(gfInfAttack, gfSolidLand)
+	DisableGameFlags(gfKing, gfAISurvival)
 	WaterRise = 0
 	HealthDecrease = 0
 
@@ -377,6 +385,15 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
+	for h=1, numhhs do
+		-- Tardis screws up the game too much, teams might not get killed correctly after victory
+		-- if a hog is still in time-travel.
+		-- This could be fixed, removing the Tardis is just a simple and lazy fix.
+		AddAmmo(hhs[h], amTardis, 0)
+		-- Resurrector is pointless, all hogs are already automatically resurrected.
+		AddAmmo(hhs[h], amResurrector, 0)
+	end
+
 	ShowMission(missionName, missionCaption, missionHelp, 0, 0)
 
 end
@@ -412,22 +429,6 @@ function onNewTurn()
 			TurnTimeLeft = 1
 		end
 
-		totalComment = ""		
-		for i = 0,(TeamsCount-1) do
-				if teamNameArr[i] ~= " " then
-					-- Team scores (“<team name>: <score>”)
-					teamComment[i] = string.format(loc("%s: %d"), teamNameArr[i], teamScore[teamClan[i]]) .. "|"
-					totalComment = totalComment .. teamComment[i]			
-				elseif teamNameArr[i] == " " then
-					teamComment[i] = "|"
-				end
-			end
-			
-			ShowMission(missionName, missionCaption,
-			missionHelp .. "|" ..
-			loc("Team Scores:") .. "|" ..
-			totalComment, 0, 1600)
-	
 	end
 
 end

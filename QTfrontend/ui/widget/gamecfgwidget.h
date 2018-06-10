@@ -47,6 +47,11 @@ class GameCFGWidget : public QGroupBox
         QComboBox * Scripts;
         QComboBox * GameSchemes;
         QComboBox * WeaponsName;
+        QPushButton * goToSchemePage;
+        QPushButton * goToWeaponPage;
+        QLabel * ScriptsLabel;
+        QLabel * GameSchemesLabel;
+        QLabel * WeaponsNameLabel;
         HWMapContainer* pMapContainer;
         QVariant schemeData(int column) const;
         bool isMaster();
@@ -93,6 +98,9 @@ class GameCFGWidget : public QGroupBox
         QGridLayout * GBoxOptionsLayout;
         QWidget * OptionsInnerContainer;
         QWidget * StackContainer;
+        QLabel * lblScript;
+        QLabel * lblScheme;
+        QLabel * lblWeapons;
 
         QWidget * mapContainerFree;
         QWidget * mapContainerTabbed;

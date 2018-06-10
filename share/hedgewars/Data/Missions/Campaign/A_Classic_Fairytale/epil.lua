@@ -285,7 +285,7 @@ function SetupAnimPrincess()
     {func = AnimVisualGear, args = {cannibals[hanniNum], cannibalPos[hanniNum][1], cannibalPos[hanniNum][2], vgtSmoke, 0, true}},
     {func = AnimWait, args = {natives[1], 1000}},
     {func = AnimSay, args = {natives[buffaloNum], loc("So I shook my fist in the air!"), SAY_SAY, 5000}},
-    {func = AnimSay, args = {cannibals[brutalNum], loc("Well that was an unnecessary act of violence."), SAY_SAY, 7000}},
+    {func = AnimSay, args = {cannibals[brutalNum], loc("Well, that was an unnecessary act of violence."), SAY_SAY, 7000}},
     {func = AnimSay, args = {natives[waterNum], loc("… and then I took a stroll …"), SAY_SAY, 4000}},
     {func = AnimSay, args = {natives[leaksNum], loc("I'm glad this is over!"), SAY_SAY, 4000}},
     {func = AnimSay, args = {natives[girlNum], loc("I still can't believe you forgave her!"), SAY_SAY, 6000}},
@@ -306,8 +306,8 @@ function SetupAnimPrincess()
 end
 -----------------------------Misc--------------------------------------
 function GetVariables()
-  m8Scene = tonumber(GetCampaignVar("M8Scene")) or waterScene
-  -- waterScene is for fallback if campaign var was not found
+  m8Scene = tonumber(GetCampaignVar("M8Scene")) or princessScene
+  -- princessScene is for fallback if campaign var was not found
 end
 
 function AddHogs()

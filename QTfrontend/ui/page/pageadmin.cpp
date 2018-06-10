@@ -98,7 +98,7 @@ QLayout * PageAdmin::bodyLayoutDefinition()
                               << tr("Expiration")
                               << tr("Reason")
                     );
-        twBans->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+        twBans->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
         twBans->setEditTriggers(QAbstractItemView::NoEditTriggers);
         twBans->setSelectionBehavior(QAbstractItemView::SelectRows);
         twBans->setSelectionMode(QAbstractItemView::SingleSelection);

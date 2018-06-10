@@ -53,6 +53,7 @@ function onGameStart()
                                 loc("Compete to use as few planes as possible!") .. "|" ..
 								"", -amRCPlane, 4000
                                 )
+	SetTeamLabel(loc("Wannabe Flyboys"), "0")
 
 	PlaceGirder(2192, 508, 6)
 	PlaceGirder(2192, 670, 6)
@@ -140,43 +141,25 @@ function onGameStart()
 	PlaceGirder(2803, 1373, 2)
 	PlaceGirder(2811, 1559, 2)
 
-	tempG = SpawnHealthCrate(930, 557)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(979, 692)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(876, 703)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2309, 1260)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1733, 1127)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1738, 1320)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3249, 1460)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3051, 617)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2972, 353)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2548, 358)
+	SpawnFakeHealthCrate(930, 557, false, false)
+	SpawnFakeHealthCrate(979, 692, false, false)
+	SpawnFakeHealthCrate(876, 703, false, false)
+	SpawnFakeHealthCrate(2309, 1260, false, false)
+	SpawnFakeHealthCrate(1733, 1127, false, false)
+	SpawnFakeHealthCrate(1738, 1320, false, false)
+	SpawnFakeHealthCrate(3249, 1460, false, false)
+	SpawnFakeHealthCrate(3051, 617, false, false)
+	SpawnFakeHealthCrate(2972, 353, false, false)
+	SpawnFakeHealthCrate(2548, 358, false, false)
 
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2090, 1580)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1752, 1753)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1865, 1758)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1985, 1760)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2429, 1760)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2810, 1480)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2800, 1277)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2806, 1107)
-	SetHealth(tempG, 25)
+	SpawnFakeHealthCrate(2090, 1580, false, false)
+	SpawnFakeHealthCrate(1752, 1753, false, false)
+	SpawnFakeHealthCrate(1865, 1758, false, false)
+	SpawnFakeHealthCrate(1985, 1760, false, false)
+	SpawnFakeHealthCrate(2429, 1760, false, false)
+	SpawnFakeHealthCrate(2810, 1480, false, false)
+	SpawnFakeHealthCrate(2800, 1277, false, false)
+	SpawnFakeHealthCrate(2806, 1107, false, false)
 
 	PlaceGirder(1897, 903, 6)
 	PlaceGirder(1916, 784, 3)
@@ -247,57 +230,28 @@ function onGameStart()
 	PlaceGirder(3210, 179, 2)
 	PlaceGirder(2932, 181, 2)
 
-	tempG = SpawnHealthCrate(3804, 1461)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3269, 1742)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3066, 121)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3207, 104)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2928, 103)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1997, 202)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2253, 159)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2132, 774)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(2549, 490)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3527, 694)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3777, 78)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1124, 1746)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1056, 1740)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(993, 1742)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(799, 1298)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(577, 1126)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(596, 1463)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(3854, 1043)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(1944, 567)
-	SetHealth(tempG, 25)
-	tempG = SpawnHealthCrate(338, 1748)
-	SetHealth(tempG, 25)
-
+	SpawnFakeHealthCrate(3804, 1461, false, false)
+	SpawnFakeHealthCrate(3269, 1742, false, false)
+	SpawnFakeHealthCrate(3066, 121, false, false)
+	SpawnFakeHealthCrate(3207, 104, false, false)
+	SpawnFakeHealthCrate(2928, 103, false, false)
+	SpawnFakeHealthCrate(1997, 202, false, false)
+	SpawnFakeHealthCrate(2253, 159, false, false)
+	SpawnFakeHealthCrate(2132, 774, false, false)
+	SpawnFakeHealthCrate(2549, 490, false, false)
+	SpawnFakeHealthCrate(3527, 694, false, false)
+	SpawnFakeHealthCrate(3777, 78, false, false)
+	SpawnFakeHealthCrate(1124, 1746, false, false)
+	SpawnFakeHealthCrate(1056, 1740, false, false)
+	SpawnFakeHealthCrate(993, 1742, false, false)
+	SpawnFakeHealthCrate(799, 1298, false, false)
+	SpawnFakeHealthCrate(577, 1126, false, false)
+	SpawnFakeHealthCrate(596, 1463, false, false)
+	SpawnFakeHealthCrate(3854, 1043, false, false)
+	SpawnFakeHealthCrate(1944, 567, false, false)
+	SpawnFakeHealthCrate(338, 1748, false, false)
 
 end
-
---function onGameTick()
-
-	--if RCGear ~= nil then
-	--	AddCaption(GetTimer(RCGear))
-	--end
-
---end
 
 function onGameTick20()
 	if RCGear ~= nil then
@@ -332,6 +286,7 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtRCPlane then
 		RCGear = gear
 		planesUsed = planesUsed + 1
+		SetTeamLabel(loc("Wannabe Flyboys"), tostring(planesUsed))
 		planeTimer = 0
 		missiles = 0
 	end
@@ -352,7 +307,6 @@ function onGearDelete(gear)
 		RCGear = nil
 		planeUhOh = false
 		missiles = 0
-		AddCaption(string.format(loc("Planes used: %d"), planesUsed))
 
 		if(planeTimer < 2000 and crateStreak == 0) then
 			nextComment = sndStupid
@@ -381,6 +335,10 @@ function onGearDelete(gear)
 			longestCrateStreak = crateStreak
 		end
 
+		if band(GetGearMessage(gear), gmDestroy) ~= 0 then
+			-- Crate collection sound
+			PlaySound(sndShotgunReload)
+		end
 		AddCaption(string.format(loc("Crates left: %d"), cratesLeft))
 
 		if cratesLeft == 0 then

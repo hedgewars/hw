@@ -47,7 +47,7 @@ class HWNewNet;
 class GameUIConfig;
 class HWNetRegisterServer;
 class QCloseEvent;
-class AmmoSchemeModel;
+class GameSchemeModel;
 class QSettings;
 class QSignalMapper;
 
@@ -66,6 +66,7 @@ class HWForm : public QMainWindow
         void setButtonDescription(QString desc);
         void backDescription();
         void GoToVideos();
+        void GoToTraining();
 
         void NetConnectQuick(const QString & host, quint16 port);
         void PlayDemoQuick(const QString & demofilename);
@@ -196,7 +197,7 @@ class HWForm : public QMainWindow
         QPointer<HWTeam> editedTeam;
         QPointer<HWNewNet> hwnet;
         HWNamegen * namegen;
-        AmmoSchemeModel * ammoSchemeModel;
+        GameSchemeModel * gameSchemeModel;
         QStack<int> PagesStack;
         QString previousCampaignName;
         QString previousTeamName;

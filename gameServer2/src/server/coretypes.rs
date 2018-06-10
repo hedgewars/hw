@@ -1,16 +1,16 @@
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum ServerVar {
     MOTDNew(String),
     MOTDOld(String),
     LatestProto(u32),
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum GameCfg {
 
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub struct TeamInfo {
     name: String,
     color: u8,
@@ -23,7 +23,7 @@ pub struct TeamInfo {
     hedgehogs: [HedgehogInfo; 8],
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub struct HedgehogInfo {
     name: String,
     hat: String,

@@ -20,7 +20,7 @@
 #include <QLineEdit>
 #include <QTextBrowser>
 #include <QLabel>
-#include <QHttp>
+#include <QNetworkAccessManager>
 #include <QSysInfo>
 #include <QDebug>
 #include <QBuffer>
@@ -109,7 +109,8 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 
     CheckSendSpecs = new QCheckBox();
     CheckSendSpecs->setText(QLabel::tr("Send system information"));
-    CheckSendSpecs->setChecked(true);
+    CheckSendSpecs->setChecked(false);
+    CheckSendSpecs->setToolTip(tr("This is optional, but this information might help us to resolve bugs and other technical problems."));
     BtnViewInfo = new QPushButton(tr("View"));
     BtnViewInfo->setFixedHeight(40);
     feedbackLayout->addWidget(CheckSendSpecs, 0, 2, 2, 1);
@@ -136,7 +137,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 
     label_captcha = new QLabel();
     label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
-    label_captcha->setText("loading<br>captcha");
+    label_captcha->setText(QLabel::tr("Loading<br>CAPTCHA ..."));
     label_captcha->setFixedSize(200, 50);
     captchaLayout->addWidget(label_captcha);
 
@@ -474,7 +475,7 @@ void FeedbackDialog::SendFeedback()
             this, SLOT(finishedSlot(QNetworkReply*)));
 
     QNetworkRequest header(QUrl("https://hedgewars.org/feedback/?submit"));
-    header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
+    header.setRawHeader("Content-Length", QString::number(body.size()).toLatin1());
     header.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     nam->post(header, body);

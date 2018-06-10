@@ -5,78 +5,78 @@
     <name>About</name>
     <message>
         <source>Unknown Compiler</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámy kompilátor</translation>
     </message>
     <message>
         <source>Hedgewars %1</source>
         <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
-        <translation type="unfinished">Hedgewars %1</translation>
+        <translation>Hedgewars %1</translation>
     </message>
     <message>
         <source>Revision %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Revízia %1 (%2)</translation>
     </message>
     <message>
         <source>Visit our homepage: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Navštívte našu stránku: %1</translation>
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento program je šírený pod %1.</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
         <extracomment>Short for “GNU General Public License version 2”</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>GNU GPL v2</translation>
     </message>
     <message>
         <source>Dependency versions:</source>
         <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Závislosti vo verziách:</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
     </message>
 </context>
 <context>
@@ -87,127 +87,100 @@
     </message>
 </context>
 <context>
-    <name>AmmoSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">nový</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">kópia z</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="unfinished">Nová</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
-        <translation type="unfinished">IP</translation>
+        <translation>IP</translation>
     </message>
     <message>
         <source>Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezývka</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>IP/Prezývka</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation>Dôvod</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Trvanie</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Zrušiť</translation>
+        <translation>Zrušiť</translation>
     </message>
     <message>
         <source>you know why</source>
-        <translation type="unfinished"></translation>
+        <translation>ty vieš prečo</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varovanie</translation>
     </message>
     <message>
         <source>permanent</source>
-        <translation type="unfinished"></translation>
+        <translation>permanentný</translation>
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakázať hráča</translation>
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosím zadajte IP adresu.</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosím zadajte prezývku.</translation>
     </message>
 </context>
 <context>
     <name>DataManager</name>
     <message>
         <source>Use Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Použi východzie nastavenia</translation>
     </message>
 </context>
 <context>
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobraziť</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Zrušiť</translation>
+        <translation>Zrušiť</translation>
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Pošli odozvu</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vždy sa potešíme novým návrhom, nápadom alebo hláseniam o chybách.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Pošli nám odozvu!</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation type="unfinished"></translation>
+        <translation>Ak ste našli chybu, skúste najprv pozrieť, či ju už niekto nenahlásil tu: </translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Váš email je nepovinný, ale potrebný ak chcete, aby sme vám odpísali.</translation>
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Odozva</translation>
     </message>
 </context>
 <context>
@@ -241,80 +214,107 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Schéma hry automaticky vyberie zbran</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Mapa</translation>
+        <translation>Mapa</translation>
     </message>
     <message>
         <source>Game options</source>
-        <translation type="unfinished"></translation>
+        <translation>Voľby hry</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">nový</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">kópia z</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nová</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Kópia z %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Nový (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Kópia z %1 (%2)</translation>
     </message>
 </context>
 <context>
     <name>GameUIConfig</name>
     <message>
         <source>Guest</source>
-        <translation type="unfinished"></translation>
+        <translation>Hosť</translation>
     </message>
 </context>
 <context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 minúta</numerusform>
+            <numerusform>%1 minúty</numerusform>
+            <numerusform>%1 minút</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 hodina</numerusform>
+            <numerusform>%1 hodiny</numerusform>
+            <numerusform>%1 hodín</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 hodiny</numerusform>
+            <numerusform>%1 hodiny</numerusform>
+            <numerusform>%1 hodín</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 deň</numerusform>
+            <numerusform>%1 dni</numerusform>
+            <numerusform>%1 dní</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 dni</numerusform>
+            <numerusform>%1 dni</numerusform>
+            <numerusform>%1 dní</numerusform>
         </translation>
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Schéma &apos;%1&apos; nie je podporovaná</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation type="unfinished">Nepodarilo sa vytvoriť adresár %1</translation>
+        <translation>Nepodarilo sa vytvoriť adresár %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation type="unfinished">Chyba pri otváraní adresára s dátami:
+        <translation>Chyba pri otváraní adresára s dátami:
 %1
 
 Skontrolujte, prosím, inštaláciu!</translation>
@@ -322,37 +322,37 @@ Skontrolujte, prosím, inštaláciu!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Syntax</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>VOĽBA</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>PRIPOJOVACI_RETAZEC</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Voľby</translation>
     </message>
     <message>
         <source>Display this help</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Zobraziť túto nápovedu</translation>
     </message>
     <message>
         <source>Custom path for configuration data and user data</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vlastná cesta pre údaje konfigurácie a užívateľa</translation>
     </message>
     <message>
         <source>Custom path to the game data folder</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vlastná cesta k priečinku s údajmi hry</translation>
     </message>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
@@ -362,12 +362,12 @@ Skontrolujte, prosím, inštaláciu!</translation>
     <message>
         <source>Malformed option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Neplatný argument voľby %1</translation>
     </message>
     <message>
         <source>Unknown option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Neznámy argument voľby %1</translation>
     </message>
 </context>
 <context>
@@ -421,27 +421,27 @@ Skontrolujte, prosím, inštaláciu!</translation>
     </message>
     <message>
         <source>%1 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 sa pripojil(a)</translation>
     </message>
     <message>
         <source>%1 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 odišiel</translation>
     </message>
     <message>
         <source>%1 has left (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 odišiel (%2)</translation>
     </message>
     <message>
         <source>Chat log</source>
-        <translation type="unfinished"></translation>
+        <translation>Záznam chatu</translation>
     </message>
     <message>
         <source>Enter chat messages here and send them with [Enter]</source>
-        <translation type="unfinished"></translation>
+        <translation>Sem zadaj text, ktorý chceš poslať a stlač [Enter]</translation>
     </message>
     <message>
         <source>List of players</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoznam hráčov</translation>
     </message>
 </context>
 <context>
@@ -491,11 +491,11 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>%1&apos;s Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Team %1</translation>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Prezývka zaregistrovaná</translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
@@ -503,7 +503,11 @@ Please pick another nickname:</source>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Táto prezývka už je registrovaná a nezadali ste heslo.
+
+Ak táto prezývka nepatrí vám, zaregistrujte si svoju vlastnú na www.hedgewars.org.
+
+Heslo:</translation>
     </message>
     <message>
         <source>Your nickname is not registered.
@@ -519,23 +523,23 @@ Your password wasn&apos;t saved either.</source>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Prázdna prezývka</translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Nesprávne heslo</translation>
     </message>
     <message>
         <source>You entered a wrong password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadali ste nesprávne heslo.</translation>
     </message>
     <message>
         <source>Try Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Skúsiť znova</translation>
     </message>
     <message>
         <source>Hedgewars - Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Chyba pripojenia</translation>
     </message>
     <message>
         <source>You reconnected too fast.
@@ -544,42 +548,43 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Guest</source>
-        <translation type="unfinished"></translation>
+        <translation>Hosť</translation>
     </message>
     <message>
         <source>Room password</source>
-        <translation type="unfinished"></translation>
+        <translation>Heslo miestnosti</translation>
     </message>
     <message>
         <source>The room is protected with password.
 Please, enter the password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Miestnosť je chránená heslom.
+Prosím, zadajte heslo:</translation>
     </message>
     <message>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Team 1</translation>
     </message>
     <message>
         <source>Team %1</source>
         <extracomment>Default team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Team %1</translation>
     </message>
     <message>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Počítač %1</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznáma chyba siete (možno vám chýba knižnica SSL).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Táto funkcia vyžaduje pripojenie k Internetu, ale nevyzeráte byť online (kód chyby: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interná chyba: Objekt odpovede nie je platný.</translation>
     </message>
 </context>
 <context>
@@ -594,14 +599,14 @@ Please, enter the password:</source>
         <translation>Nie je možné otvoriť demosúbor %1</translation>
     </message>
     <message>
-        <source>A Fatal ERROR occured! - The game engine had to stop.
+        <source>A fatal ERROR occured! The game engine had to stop.
 
-We are very sorry for the inconvenience :(
+We are very sorry for the inconvenience. :-(
 
-If this keeps happening, please click the &apos;%1&apos; button in the main menu!
+If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
 
-Last two engine messages:
-%2</source>
+Last engine message:
+%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -609,7 +614,7 @@ Last two engine messages:
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>Pripojiť sa na server</translation>
     </message>
 </context>
 <context>
@@ -652,91 +657,91 @@ Last two engine messages:
     </message>
     <message>
         <source>Map type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ mapy:</translation>
     </message>
     <message>
         <source>Image map</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrázková mapa</translation>
     </message>
     <message>
         <source>Mission map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa misie</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation type="unfinished">Ručne kreslená</translation>
+        <translation>Ručne kreslená</translation>
     </message>
     <message>
         <source>Randomly generated</source>
-        <translation type="unfinished"></translation>
+        <translation>Náhodne generovaná</translation>
     </message>
     <message>
         <source>Random maze</source>
-        <translation type="unfinished"></translation>
+        <translation>Náhodné bludisko</translation>
     </message>
     <message>
         <source>Random</source>
-        <translation type="unfinished">Náhodné</translation>
+        <translation>Náhodná</translation>
     </message>
     <message>
         <source>Map preview:</source>
-        <translation type="unfinished"></translation>
+        <translation>Náhľad mapy:</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahrať kreslenú mapu</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Upraviť kreslenú mapu</translation>
     </message>
     <message>
         <source>Small islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Malé ostrovčeky</translation>
     </message>
     <message>
         <source>Medium islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Stredne veľké ostrovčeky</translation>
     </message>
     <message>
         <source>Large islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Veľké ostrovy</translation>
     </message>
     <message>
         <source>Map size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Veľkosť mapy:</translation>
     </message>
     <message>
         <source>Maze style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Štýl bludiska:</translation>
     </message>
     <message>
         <source>Mission:</source>
-        <translation type="unfinished"></translation>
+        <translation>Misia:</translation>
     </message>
     <message>
         <source>Map:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa:</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished">Načítať nakreslenú mapu</translation>
+        <translation>Načítať nakreslenú mapu</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished">Kreslené mapy</translation>
+        <translation>Kreslené mapy</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished">Všetky súbory</translation>
+        <translation>Všetky súbory</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Veľké tunely</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Téma: %1</translation>
     </message>
     <message>
         <source>Random perlin</source>
@@ -744,11 +749,11 @@ Last two engine messages:
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Štýl:</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Pevnosti</translation>
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
@@ -760,7 +765,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrať tému</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
@@ -792,7 +797,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknite pre úpravy</translation>
     </message>
 </context>
 <context>
@@ -862,14 +867,14 @@ Last two engine messages:
     </message>
     <message>
         <source>Server authentication error</source>
-        <translation type="unfinished"></translation>
+        <translation>Server pri overovaní vrátil chybu</translation>
     </message>
 </context>
 <context>
     <name>HWPasswordDialog</name>
     <message>
         <source>Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Login</translation>
     </message>
     <message>
         <source>To connect to the server, please log in.
@@ -880,7 +885,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezývka:</translation>
     </message>
     <message>
         <source>Password:</source>
@@ -895,11 +900,11 @@ just enter your nickname.</source>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Upload videa</translation>
+        <translation type="vanished">Upload videa</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Upload</translation>
+        <translation type="vanished">Upload</translation>
     </message>
 </context>
 <context>
@@ -966,16 +971,34 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Video: %1x%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 FPS</source>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Téma: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1041,7 +1064,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">IP/Prezývka</translation>
     </message>
     <message>
         <source>Expiration</source>
@@ -1049,7 +1072,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dôvod</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -1106,15 +1129,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neznáma chyba siete (možno vám chýba knižnica SSL).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Táto funkcia vyžaduje pripojenie k Internetu, ale nevyzeráte byť online (kód chyby: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Interná chyba: Objekt odpovede nie je platný.</translation>
     </message>
 </context>
 <context>
@@ -1169,6 +1192,10 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Optimize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brush size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1423,7 +1450,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odozva</translation>
     </message>
     <message>
         <source>Play local network game</source>
@@ -1995,6 +2022,10 @@ just enter your nickname.</source>
         <source>Name of this scheme</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2113,7 +2144,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>uploading</source>
-        <translation>uploadujem</translation>
+        <translation type="vanished">uploadujem</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2121,6 +2152,16 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Size: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2227,11 +2268,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Uložiť meno účtu a heslo</translation>
+        <translation type="vanished">Uložiť meno účtu a heslo</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Video je súkromné</translation>
+        <translation type="vanished">Video je súkromné</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2626,27 +2667,27 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Prosím zadajte buď názov YouTube účtu alebo e-mailovú adresu prepojenú s Google účtom.</translation>
+        <translation type="vanished">Prosím zadajte buď názov YouTube účtu alebo e-mailovú adresu prepojenú s Google účtom.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Názov účtu (alebo e-mail): </translation>
+        <translation type="vanished">Názov účtu (alebo e-mail): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Heslo:</translation>
+        <translation type="vanished">Heslo:</translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Názov videa: </translation>
+        <translation type="vanished">Názov videa: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Popis videa: </translation>
+        <translation type="vanished">Popis videa: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Značky (oddelené čiarkou): </translation>
+        <translation type="vanished">Značky (oddelené čiarkou): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2753,6 +2794,10 @@ Do you really want to quit?</source>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Loading&lt;br&gt;CAPTCHA ...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2770,6 +2815,10 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>unnamed (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgehog %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2797,16 +2846,16 @@ Do you really want to quit?</source>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Chyba pri autentizácii voči google.com:</translation>
+        <translation type="vanished">Chyba pri autentizácii voči google.com:</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Prihlasovacie meno alebo heslo je nesprávne</translation>
+        <translation type="vanished">Prihlasovacie meno alebo heslo je nesprávne</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Chyba pri posielaní metadát na youtube.com:</translation>
+        <translation type="vanished">Chyba pri posielaní metadát na youtube.com:</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2876,7 +2925,7 @@ Skontrolujte, prosím, inštaláciu!</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Upload videa - Chyba</translation>
+        <translation type="vanished">Upload videa - Chyba</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -2954,7 +3003,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Naozaj chcete zrušiť uploadovanie %1?</translation>
+        <translation type="vanished">Naozaj chcete zrušiť uploadovanie %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -2970,7 +3019,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation>Nemôžem použiť muníciu &apos;%1&apos;!</translation>
+        <translation type="vanished">Nemôžem použiť muníciu &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
@@ -3053,6 +3102,20 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome to Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome to Hedgewars!
+
+You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3139,11 +3202,11 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Uploadovať na YouTube</translation>
+        <translation type="vanished">Uploadovať na YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Zrušiť upload</translation>
+        <translation type="vanished">Zrušiť upload</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3183,10 +3246,6 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3274,7 +3333,7 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pevnosti</translation>
     </message>
 </context>
 <context>
@@ -3332,15 +3391,15 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nový (%1)</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kópia z %1</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kópia z %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -3387,7 +3446,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vybrať tému</translation>
     </message>
 </context>
 <context>
@@ -3486,7 +3545,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>pause</source>
-        <translation>pauza</translation>
+        <translation type="vanished">pauza</translation>
     </message>
     <message>
         <source>volume down</source>
@@ -3567,6 +3626,18 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>team chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pause / auto skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3994,74 +4065,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
 <context>
     <name>server</name>
     <message>
-        <source>Restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Nickname is already in use</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4090,43 +4093,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room version incompatible to your hedgewars version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You already have voted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voting closed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>New voting started</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Voting expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4162,23 +4129,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>There&apos;s no voting going on</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Your vote counted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pause toggled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>new seed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>number of hedgehogs in team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4190,23 +4141,147 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>callvote kick: specify nickname</source>
+        <source>The game can&apos;t be started with less than two clans!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>callvote kick: no such user</source>
+        <source>Empty config entry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>callvote map: no such map</source>
+        <source>Access denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>callvote pause: no game in progress</source>
+        <source>You&apos;re not the room master!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>callvote hedgehogs: specify number from 1 to 8</source>
+        <source>Corrupted hedgehogs info!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too many teams!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too many hedgehogs!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Joining not possible: Round is in progress.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This room currently does not allow adding new teams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: The team you tried to remove does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can&apos;t remove a team you don&apos;t own.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A room with the same name already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote kick: You need to specify a nickname.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote kick: No such user!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote map: No such map!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote pause: No game in progress!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your Hedgewars version!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied. This room currently doesn&apos;t allow joining.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied. This room is for registered users only.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are banned from this room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already provided.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You already have voted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your vote has been counted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting closed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause toggled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting expired.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehogs per team: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

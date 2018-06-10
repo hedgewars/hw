@@ -90,7 +90,7 @@
 #include "chatwidget.h"
 #include "input_ip.h"
 #include "input_password.h"
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "bgwidget.h"
 #include "drawmapwidget.h"
 #include "mouseoverfilter.h"
@@ -231,10 +231,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     pageSwitchMapper = new QSignalMapper(this);
     connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
-
-    connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
-    onFrontendFullscreen(config->isFrontendFullscreen());
-
+    
     connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSinglePlayer, ID_PAGE_SINGLEPLAYER);
 
@@ -347,10 +344,10 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
 
-    ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
-    ui.pageScheme->setModel(ammoSchemeModel);
-    ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
-    ui.pageOptions->SchemesName->setModel(ammoSchemeModel);
+    gameSchemeModel = new GameSchemeModel(this, cfgdir->absolutePath() + "/Schemes/Game");
+    ui.pageScheme->setModel(gameSchemeModel);
+    ui.pageMultiplayer->gameCFG->GameSchemes->setModel(gameSchemeModel);
+    ui.pageOptions->SchemesName->setModel(gameSchemeModel);
 
     wBackground = new BGWidget(this);
     wBackground->setFixedSize(this->width(), this->height());
@@ -380,6 +377,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     PagesStack.push(ID_PAGE_MAIN);
     ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageEnter();
     GoBack();
+
+    connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
+    onFrontendFullscreen(config->isFrontendFullscreen());
 }
 
 void HWForm::onFrontendFullscreen(bool value)
@@ -644,6 +644,11 @@ void HWForm::GoToEditScheme()
 void HWForm::GoToVideos()
 {
     GoToPage(ID_PAGE_VIDEOS);
+}
+
+void HWForm::GoToTraining()
+{
+    GoToPage(ID_PAGE_TRAINING);
 }
 
 //TODO: maybe find a better place for this?
@@ -914,7 +919,7 @@ void HWForm::GoBack()
     //if (curid == ID_PAGE_NETGAME && (!game || game->gameState != gsStarted)) hwnet->partRoom();
 
     if (curid == ID_PAGE_SCHEME)
-        ammoSchemeModel->Save();
+        gameSchemeModel->Save();
 
 #if (QT_VERSION >= 0x040600)
     /**Start animation :**/
@@ -1074,14 +1079,14 @@ void HWForm::DeleteTeam(const QString & teamName)
 void HWForm::DeleteScheme()
 {
     ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
-    if (ui.pageOptions->SchemesName->currentIndex() < ammoSchemeModel->numberOfDefaultSchemes)
+    if (ui.pageOptions->SchemesName->currentIndex() < gameSchemeModel->numberOfDefaultSchemes)
     {
         MessageDialog::ShowErrorMessage(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()), this);
     }
     else
     {
         ui.pageScheme->deleteRow();
-        ammoSchemeModel->Save();
+        gameSchemeModel->Save();
     }
 }
 
@@ -1894,7 +1899,7 @@ void HWForm::NetGameMaster()
     ui.pageNetGame->restrictJoins->setChecked(false);
     ui.pageNetGame->restrictTeamAdds->setChecked(false);
     ui.pageNetGame->restrictUnregistered->setChecked(false);
-    ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
+    ui.pageNetGame->pGameCFG->GameSchemes->setModel(gameSchemeModel);
     ui.pageNetGame->pGameCFG->setMaster(true);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
 
@@ -1931,7 +1936,7 @@ void HWForm::NetGameSlave()
 
     if (hwnet)
     {
-        NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);
+        NetGameSchemeModel * netAmmo = new NetGameSchemeModel(hwnet);
         connect(hwnet, SIGNAL(netSchemeConfig(QStringList)), netAmmo, SLOT(setNetSchemeConfig(QStringList)));
 
         ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);

@@ -26,9 +26,9 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 -----------------------------Constants---------------------------------
-choiceAccept = 1
-choiceRefuse = 2
-choiceAttack = 3
+choiceAccepted = 1
+choiceRefused = 2
+choiceAttacked = 3
 
 leaksPos = {2067, 509}
 densePos = {1882, 503}
@@ -289,7 +289,7 @@ function GetVariables()
   if m2DenseDead == 1 then
     denseDead = true
   end
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
 end
 
 function SetupPlace()
@@ -379,20 +379,20 @@ end
 
 function SpawnCrates(index)
   if index == 1 then
-    SpawnAmmoCrate(1943, 408, amBazooka)
-    SpawnAmmoCrate(1981, 464, amGrenade)
-    SpawnAmmoCrate(1957, 459, amShotgun)
-    SpawnAmmoCrate(1902, 450, amDynamite)
-    SpawnAmmoCrate(1982, 405, amPickHammer)
-    SpawnUtilityCrate(2028, 455, amRope)
-    SpawnUtilityCrate(2025, 464, amTeleport)
+    SpawnSupplyCrate(1943, 408, amBazooka)
+    SpawnSupplyCrate(1981, 464, amGrenade)
+    SpawnSupplyCrate(1957, 459, amShotgun)
+    SpawnSupplyCrate(1902, 450, amDynamite)
+    SpawnSupplyCrate(1982, 405, amPickHammer)
+    SpawnSupplyCrate(2028, 455, amRope)
+    SpawnSupplyCrate(2025, 464, amTeleport)
   else
-    SpawnAmmoCrate(1982, 405, amBlowTorch)
-    SpawnAmmoCrate(2171, 428, amMolotov)
-    SpawnAmmoCrate(2364, 346, amFlamethrower)
-    SpawnAmmoCrate(2521, 303, amBazooka)
-    SpawnAmmoCrate(2223, 967, amGrenade)
-    SpawnAmmoCrate(1437, 371, amShotgun)
+    SpawnSupplyCrate(1982, 405, amBlowTorch)
+    SpawnSupplyCrate(2171, 428, amMolotov)
+    SpawnSupplyCrate(2364, 346, amFlamethrower)
+    SpawnSupplyCrate(2521, 303, amBazooka)
+    SpawnSupplyCrate(2223, 967, amGrenade)
+    SpawnSupplyCrate(1437, 371, amShotgun)
  end
   cratesSpawned[index] = true
 end

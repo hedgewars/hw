@@ -250,16 +250,7 @@ void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int minHeight,
     if (maxHeight > 0)
         area->setMaximumHeight(maxHeight);
     if (setFrame)
-    {
-        area->setStyleSheet(
-            "FrameTeams{"
-            "border: solid;"
-            "border-width: 1px;"
-            "border-radius: 16px;"
-            "border-color: #ffcc00;"
-            "}"
-        );
-    }
+        pfteams->setDecoFrameEnabled(true);
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :

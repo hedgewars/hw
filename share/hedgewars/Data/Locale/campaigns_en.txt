@@ -1,34 +1,34 @@
 A_Classic_Fairytale.name="A Classic Fairytale"
 
 A_Classic_Fairytale-first_blood.name="Mission 1: First Blood"
-A_Classic_Fairytale-first_blood.desc="Help Leaks a lot to complete his training and become a proper hedgehog warrior. You will be trained in the art of rope, parachute, shoryuken and desert eagle."
+A_Classic_Fairytale-first_blood.desc="Help Leaks a Lot to complete his training and become a proper hedgehog warrior. You will be trained in the art of rope, parachute, shoryuken and desert eagle."
 
 A_Classic_Fairytale-shadow.name="Mission 2: The Shadow Falls"
-A_Classic_Fairytale-shadow.desc="Leaks a lot and Dense Cloud are going for hunting. Be prepared for the dangers awaiting you at the forest. Remember, make your choices wisely."
+A_Classic_Fairytale-shadow.desc="Leaks a Lot and Dense Cloud are going for hunting. Be prepared for the dangers awaiting you at the forest. Remember, make your choices wisely."
 
 A_Classic_Fairytale-journey.name="Mission 3: The Journey Back"
-A_Classic_Fairytale-journey.desc="Leaks a lot has to go to the other side of the island. Be fast and cautious."
+A_Classic_Fairytale-journey.desc="Leaks a Lot has to go to the other side of the island. Be fast and cautious."
 
 A_Classic_Fairytale-united.name="Mission 4: United We Stand"
-A_Classic_Fairytale-united.desc="After his long journey Leaks a lot is finally back to the village. However, there isn't time to rest. You have to defend the village from the rage of the cannibals."
+A_Classic_Fairytale-united.desc="After his long journey Leaks a Lot is finally back to the village. However, there isn't time to rest. You have to defend the village from the rage of the cannibals."
 
 A_Classic_Fairytale-backstab.name="Mission 5: Backstab"
-A_Classic_Fairytale-backstab.desc="The monstrous cannibals are hunting Leaks a lot and his friends. Defeat them once again and protect your allies. Use your resources accordingly to defeat the incoming enemies!"
+A_Classic_Fairytale-backstab.desc="The monstrous cannibals are hunting Leaks a Lot and his friends. Defeat them once again and protect your allies. Use your resources accordingly to defeat the incoming enemies!"
 
 A_Classic_Fairytale-dragon.name="Mission 6: Dragon's Lair"
-A_Classic_Fairytale-dragon.desc="Leaks a lot has to get to the other side of the lake. Become a rope master and avoid get hit by the enemy shots."
+A_Classic_Fairytale-dragon.desc="Our hero has to get to the other side of the lake. Become a rope master and avoid getting hit by the enemy shots."
 
 A_Classic_Fairytale-family.name="Mission 7: Family Reunion"
-A_Classic_Fairytale-family.desc="Leaks a lot has to save once more his allies. Eliminate the enemy hogs and free your comrades. Use your resources carefully as they are limited. Drill some holes in the right spot and go close to the princess."
+A_Classic_Fairytale-family.desc="Our hero has to save the natives once more. Eliminate the enemy hogs and free your comrades. Use your resources carefully as they are limited. Drill some holes in the right spot and get close to the princess."
 
 A_Classic_Fairytale-queen.name="Mission 8: Long Live The Queen"
-A_Classic_Fairytale-queen.desc="Leaks a lot has to fight once again. In order to win he'll have to fight the traitor and use all the resources available. Defeat the enemy!"
+A_Classic_Fairytale-queen.desc="The natives have to fight once again. In order to win, they'll have to fight the traitor and use all the resources available. Defeat the enemy!"
 
 A_Classic_Fairytale-enemy.name="Mission 9: The Enemy Of My Enemy"
-A_Classic_Fairytale-enemy.desc="What a great twist! Leaks a lot has to fight side by side with the… “cannibals” against the common enemy. The evil cyborgs!"
+A_Classic_Fairytale-enemy.desc="What a great twist! Leaks a Lot has to fight side by side with the … “cannibals” against the common enemy: The evil cyborgs!"
 
 A_Classic_Fairytale-epil.name="Mission 10: Epilogue"
-A_Classic_Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings."
+A_Classic_Fairytale-epil.desc="Congratulations! Leaks a Lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings."
 
 A_Space_Adventure.name="A Space Adventure"
 A_Space_Adventure-cosmos.name="Menu: Spacetrip"

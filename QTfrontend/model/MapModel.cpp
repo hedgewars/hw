@@ -129,18 +129,19 @@ bool MapModel::loadMaps()
             {
                 // get locale
                 QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
-                QString locale = settings.value("misc/locale", "").toString();
-                if (locale.isEmpty())
-                    locale = QLocale::system().name();
+                QString locale = QLocale().name();
 
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
                 descSettings.setIniCodec("UTF-8");
                 desc = descSettings.value(locale, QString()).toString();
-                // If not found, try with lanague-only code
+                // If not found, try with language-only code
                 if (desc.isEmpty())
                 {
                     QString localeSimple = locale.remove(QRegExp("_.*$"));
                     desc = descSettings.value(localeSimple, QString()).toString();
+                    // If still not found, use English
+                    if (desc.isEmpty())
+                        desc = descSettings.value("en", QString()).toString();
                 }
                 desc = desc.replace("_n", "\n").replace("_c", ",").replace("__", "_");
             }

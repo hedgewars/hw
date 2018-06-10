@@ -21,9 +21,12 @@
 #include <QFileDialog>
 #include <QCheckBox>
 #include <QRadioButton>
+#include <QSpinBox>
+#include <QDir>
 
 #include "pagedrawmap.h"
 #include "drawmapwidget.h"
+#include "hwconsts.h"
 
 
 QLayout * PageDrawMap::bodyLayoutDefinition()
@@ -32,27 +35,52 @@ QLayout * PageDrawMap::bodyLayoutDefinition()
 
     cbEraser = new QCheckBox(tr("Eraser"), this);
     pageLayout->addWidget(cbEraser, 0, 0);
-    pbUndo = addButton(tr("Undo"), pageLayout, 1, 0);
 
     rbPolyline = new QRadioButton(tr("Polyline"), this);
-    pageLayout->addWidget(rbPolyline, 2, 0);
+    pageLayout->addWidget(rbPolyline, 1, 0);
     rbRectangle = new QRadioButton(tr("Rectangle"), this);
-    pageLayout->addWidget(rbRectangle, 3, 0);
+    pageLayout->addWidget(rbRectangle, 2, 0);
     rbEllipse = new QRadioButton(tr("Ellipse"), this);
-    pageLayout->addWidget(rbEllipse, 4, 0);
+    pageLayout->addWidget(rbEllipse, 3, 0);
 
     rbPolyline->setChecked(true);
 
-    pbClear = addButton(tr("Clear"), pageLayout, 5, 0);
-    pbOptimize = addButton(tr("Optimize"), pageLayout, 6, 0);
+    sbBrushSize = new QSpinBox(this);
+    sbBrushSize->setWhatsThis(tr("Brush size"));
+    sbBrushSize->setRange(DRAWN_MAP_BRUSH_SIZE_MIN, DRAWN_MAP_BRUSH_SIZE_MAX);
+    sbBrushSize->setValue(DRAWN_MAP_BRUSH_SIZE_START);
+    sbBrushSize->setSingleStep(DRAWN_MAP_BRUSH_SIZE_STEP);
+    pageLayout->addWidget(sbBrushSize, 4, 0);
+
+    pbUndo = addButton(tr("Undo"), pageLayout, 5, 0);
+    pbClear = addButton(tr("Clear"), pageLayout, 6, 0);
+
+    pbOptimize = addButton(tr("Optimize"), pageLayout, 7, 0);
+    // The optimize button is quite buggy, so we disable it for now.
+    // TODO: Re-enable optimize button when it's finished.
     pbOptimize->setVisible(false);
-    pbLoad = addButton(tr("Load"), pageLayout, 7, 0);
-    pbSave = addButton(tr("Save"), pageLayout, 8, 0);
 
     drawMapWidget = new DrawMapWidget(this);
     pageLayout->addWidget(drawMapWidget, 0, 1, 10, 1);
 
     return pageLayout;
+}
+
+QLayout * PageDrawMap::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
+    bottomLayout->addStretch();
+
+    pbLoad = addButton(":/res/Load.png", bottomLayout, 0, true, Qt::AlignBottom);
+    pbLoad ->setWhatsThis(tr("Load"));
+    pbLoad->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+
+    pbSave = addButton(":/res/Save.png", bottomLayout, 0, true, Qt::AlignBottom);
+    pbSave ->setWhatsThis(tr("Save"));
+    pbSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+
+    return bottomLayout;
 }
 
 void PageDrawMap::connectSignals()
@@ -61,6 +89,10 @@ void PageDrawMap::connectSignals()
     connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
     connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
     connect(pbOptimize, SIGNAL(clicked()), drawMapWidget, SLOT(optimize()));
+    connect(sbBrushSize, SIGNAL(valueChanged(int)), drawMapWidget, SLOT(setBrushSize(int)));
+
+    connect(drawMapWidget, SIGNAL(brushSizeChanged(int)), this, SLOT(brushSizeChanged(int)));
+
     connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
     connect(pbSave, SIGNAL(clicked()), this, SLOT(save()));
 
@@ -76,7 +108,8 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
 
 void PageDrawMap::load()
 {
-    QString fileName = QFileDialog::getOpenFileName(NULL, tr("Load drawn map"), ".", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+    QString loadDir = QDir(cfgdir->absolutePath() + "/DrawnMaps").absolutePath();
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load drawn map"), loadDir, tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(!fileName.isEmpty())
         drawMapWidget->load(fileName);
@@ -84,7 +117,8 @@ void PageDrawMap::load()
 
 void PageDrawMap::save()
 {
-    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), "./map.hwmap", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+    QString saveDir = QDir(cfgdir->absolutePath() + "/DrawnMaps/map.hwmap").absolutePath();
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save drawn map"), saveDir, tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(!fileName.isEmpty())
         drawMapWidget->save(fileName);
@@ -98,4 +132,9 @@ void PageDrawMap::pathTypeSwitched(bool b)
         else if(rbRectangle->isChecked()) drawMapWidget->setPathType(DrawMapScene::Rectangle);
         else if(rbEllipse->isChecked()) drawMapWidget->setPathType(DrawMapScene::Ellipse);
     }
+}
+
+void PageDrawMap::brushSizeChanged(int brushSize)
+{
+    sbBrushSize->setValue(brushSize);
 }

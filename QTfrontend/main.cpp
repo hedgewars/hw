@@ -20,7 +20,6 @@
 
 #include <QTranslator>
 #include <QLocale>
-#include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
@@ -29,6 +28,8 @@
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QLibraryInfo>
+#include <QStyle>
+#include <QStyleFactory>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -50,6 +51,8 @@
 #ifdef Q_OS_WIN
 #include <QSplashScreen>
 #endif
+
+#include <QMessageBox>
 
 // Program resources
 #ifdef __APPLE__
@@ -92,6 +95,10 @@ void checkSeason()
     {
         season = SEASON_HWBDAY;
         years_since_foundation = date.year() - 2004;
+    }
+    else if (date.month() == 4 && date.day() == 1)
+    {
+        season = SEASON_APRIL1;
     }
     //Easter?
     else if (calculateEaster(date.year()) == date)
@@ -153,8 +160,30 @@ QString getUsage()
 .arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+    /* Qt5 Base removed Motif, Plastique. These are now in the Qt style plugins
+    (Ubuntu: qt5-style-plugins, which was NOT backported by Debian/Ubuntu to stable/LTS).
+    Windows appears to render best of the remaining options but still isn't quite right. */
+
+    // Try setting Plastique if available
+    QStyle* coreStyle;
+    coreStyle = QStyleFactory::create("Plastique");
+    if(coreStyle != 0) {
+        QApplication::setStyle(coreStyle);
+        qDebug("Qt style set: Plastique");
+    } else {
+        // Use Windows as fallback.
+        // FIXME: Under Windows style, some widgets like scrollbars don't render as nicely
+        coreStyle = QStyleFactory::create("Windows");
+        if(coreStyle != 0) {
+            QApplication::setStyle(coreStyle);
+            qDebug("Qt style set: Windows");
+        } else {
+            // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
+            qWarning("No Qt style could be set! Using the default one.");
+        }
+    }
+
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
 
@@ -252,8 +281,6 @@ int main(int argc, char *argv[])
     splash.show();
 #endif
 
-    app.setStyle(new QPlastiqueStyle());
-
     QDateTime now = QDateTime::currentDateTime();
     srand(now.toTime_t());
     rand();
@@ -295,6 +322,7 @@ int main(int argc, char *argv[])
 
         // config/save paths
         checkForDir(cfgdir->absolutePath() + "/Demos");
+        checkForDir(cfgdir->absolutePath() + "/DrawnMaps");
         checkForDir(cfgdir->absolutePath() + "/Saves");
         checkForDir(cfgdir->absolutePath() + "/Screenshots");
         checkForDir(cfgdir->absolutePath() + "/Teams");
@@ -311,6 +339,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    bool isProbablyNewPlayer = false;
+
     // setup PhysFS
     engine = new FileEngineHandler(argv[0]);
     engine->mount(datadir->absolutePath());
@@ -325,24 +355,52 @@ int main(int argc, char *argv[])
         QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
         settings.setIniCodec("UTF-8");
 
+        // Heuristic to figure out if the user is (probably) a first-time player.
+        // If nickname is not set, then probably yes.
+        // The hidden setting firstLaunch is, if present, used to force HW to
+        // treat iself as if it were launched the first time.
+        QString nick = settings.value("net/nick", QString()).toString();
+        if (settings.contains("frontend/firstLaunch"))
+        {
+            isProbablyNewPlayer = settings.value("frontend/firstLaunch").toBool();
+        }
+        else
+        {
+            isProbablyNewPlayer = nick.isNull();
+        }
+
+        // Set firstLaunch to false to make sure we remember we have been launched before.
+        settings.setValue("frontend/firstLaunch", false);
+
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
         {
             cc = QLocale::system().name();
+            qDebug("Detected system locale: %s", qPrintable(cc));
 
             // Fallback to current input locale if "C" locale is returned
             if(cc == "C")
-                cc = HWApplication::keyboardInputLocale().name();
+                cc = HWApplication::inputMethod()->locale().name();
         }
+        else
+        {
+            qDebug("Configured frontend locale: %s", qPrintable(cc));
+        }
+        QLocale::setDefault(cc);
+        QString defaultLocaleName = QLocale().name();
+        qDebug("Frontend uses locale: %s", qPrintable(defaultLocaleName));
 
-        // Load locale files into translators
-        if (!TranslatorHedgewars.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
-            qWarning("Failed to install Hedgewars translation (%s)", qPrintable(cc));
-        if (!TranslatorQt.load(QString("%1/qt_%2").arg(QLibraryInfo::location(QLibraryInfo::TranslationsPath), cc)))
-            qWarning("Failed to install Qt translation (%s)", qPrintable(cc));
-        app.installTranslator(&TranslatorHedgewars);
-        app.installTranslator(&TranslatorQt);
-        app.setLayoutDirection(QLocale(cc).textDirection());
+        if (defaultLocaleName != "C")
+        {
+            // Load locale files into translators
+            if (!TranslatorHedgewars.load(QLocale(), "hedgewars", "_", QString("physfs://Locale")))
+                qWarning("Failed to install Hedgewars translation (%s)", qPrintable(defaultLocaleName));
+            if (!TranslatorQt.load(QLocale(), "qt", "_", QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
+                qWarning("Failed to install Qt translation (%s)", qPrintable(defaultLocaleName));
+            app.installTranslator(&TranslatorHedgewars);
+            app.installTranslator(&TranslatorQt);
+        }
+        app.setLayoutDirection(QLocale().textDirection());
     }
 
 #ifdef _WIN32
@@ -368,6 +426,9 @@ int main(int argc, char *argv[])
     {
         case SEASON_CHRISTMAS :
             fname = "christmas.css";
+            break;
+        case SEASON_APRIL1 :
+            fname = "april1.css";
             break;
         case SEASON_EASTER :
             fname = "easter.css";
@@ -397,6 +458,23 @@ int main(int argc, char *argv[])
     splash.finish(app.form);
 #endif
     app.form->show();
+
+    // Show welcome message for (suspected) first-time player and
+    // point towards the Training menu.
+    if(isProbablyNewPlayer) {
+        QMessageBox questionTutorialMsg(app.form);
+        questionTutorialMsg.setIcon(QMessageBox::Question);
+        questionTutorialMsg.setWindowTitle(QMessageBox::tr("Welcome to Hedgewars"));
+        questionTutorialMsg.setText(QMessageBox::tr("Welcome to Hedgewars!\n\nYou seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?"));
+        questionTutorialMsg.setWindowModality(Qt::WindowModal);
+        questionTutorialMsg.addButton(QMessageBox::Yes);
+        questionTutorialMsg.addButton(QMessageBox::No);
+
+        int answer = questionTutorialMsg.exec();
+        if (answer == QMessageBox::Yes) {
+            app.form->GoToTraining();
+        }
+    }
 
     if (app.urlString)
         app.fakeEvent();

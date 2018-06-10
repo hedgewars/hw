@@ -63,7 +63,7 @@
 01:02=¡%1 venció!
 01:03=Volumen %1%
 01:04=Pausa
-01:05=¿Seguro que quieres salir (Y / Esc)?
+01:05=¿Seguro que quieres salir (%1 / %2)?
 01:06=¡Muerte súbita!
 01:07=%1 restante
 01:08=Combustible

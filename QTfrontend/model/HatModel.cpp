@@ -78,7 +78,7 @@ void HatModel::loadHats()
 
         QString str = hatsList.at(i);
         str = str.remove(QRegExp("\\.png$"));
-        QPixmap pix(
+        QPixmap hatpix(
                 "physfs://Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str +
                 ".png"
         );
@@ -87,20 +87,51 @@ void HatModel::loadHats()
         if (isReserved)
             str = "Reserved "+str.remove(0,32);
 
-        QPixmap tmppix(32, 37);
-        tmppix.fill(QColor(Qt::transparent));
+        // Color for team hats. We use the default color of the first team.
+        QColor overlay_color = QColor(colors[0]);
 
-        QPainter painter(&tmppix);
+        QPixmap ppix(32, 37);
+        ppix.fill(QColor(Qt::transparent));
+        QPainter painter(&ppix);
+
+        QPixmap opix(32, 37);
+        opix.fill(QColor(Qt::transparent));
+        QPainter overlay_painter(&opix);
+
+        // The hat is drawn in reverse: First the color overlay, then the hat, then the hedgehog.
+
+        // draw hat's color layer, if present
+        int overlay_offset = -1;
+        if((hatpix.height() == 32) && (hatpix.width() == 64)) {
+            overlay_offset = 32;
+        } else if(hatpix.width() > 64) {
+            overlay_offset = 64;
+        }
+        if(overlay_offset > -1) {
+            // colorized layer
+            overlay_painter.drawPixmap(QPoint(0, 0), hatpix.copy(overlay_offset, 0, 32, 32));
+            overlay_painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+            overlay_painter.fillRect(0, 0, 32, 32, overlay_color);
+
+            // uncolorized layer and combine
+            painter.drawPixmap(QPoint(0, 0), hatpix.copy(overlay_offset, 0, 32, 32));
+            painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+            painter.drawPixmap(QPoint(0, 0), opix.copy(0, 0, 32, 32));
+        }
+
+        // draw hat below the color layer
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+        painter.drawPixmap(QPoint(0, 0), hatpix.copy(0, 0, 32, 32));
+
+        // draw hedgehog below the hat
         painter.drawPixmap(QPoint(0, 5), hhpix);
-        painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
-        if(pix.width() > 32)
-            painter.drawPixmap(QPoint(0, 0), pix.copy(32, 0, 32, 32));
+
         painter.end();
 
         if (str == "NoHat")
-            hats.prepend(new QStandardItem(QIcon(tmppix), str));
+            hats.prepend(new QStandardItem(QIcon(ppix), str));
         else
-            hats.append(new QStandardItem(QIcon(tmppix), str));
+            hats.append(new QStandardItem(QIcon(ppix), str));
     }
 
     QStandardItemModel::appendColumn(hats);

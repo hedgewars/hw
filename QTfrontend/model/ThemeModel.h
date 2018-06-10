@@ -25,11 +25,12 @@
 #define HEDGEWARS_THEMEMODEL_H
 
 #include <QAbstractListModel>
-#include <QSortFilterProxyModel>
 #include <QStringList>
 #include <QMap>
 #include <QIcon>
+#include <QTextStream>
 
+#include "ThemeFilterProxyModel.h"
 #include "DataManager.h"
 
 /**
@@ -40,17 +41,21 @@ class ThemeModel : public QAbstractListModel
         Q_OBJECT
 
     public:
-        enum Roles { ActualNameRole = Qt::UserRole, IsDlcRole, IconPathRole };
+        enum Roles { ActualNameRole = Qt::UserRole, IsDlcRole, IconPathRole, IsHiddenRole };
         explicit ThemeModel(QObject *parent = 0);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
-        QSortFilterProxyModel * withoutDLC();
+        ThemeFilterProxyModel * withoutDLC();
+        ThemeFilterProxyModel * withoutHidden();
+        ThemeFilterProxyModel * withoutDLCOrHidden();
 
     private:
         mutable QList<QMap<int, QVariant> > m_data;
         mutable bool m_themesLoaded;
-        mutable QSortFilterProxyModel * m_filteredNoDLC;
+        mutable ThemeFilterProxyModel * m_filteredNoDLC;
+        mutable ThemeFilterProxyModel * m_filteredNoHidden;
+        mutable ThemeFilterProxyModel * m_filteredNoDLCOrHidden;
 
         void loadThemes() const;
 };

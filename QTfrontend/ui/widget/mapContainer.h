@@ -24,6 +24,7 @@
 #include <QComboBox>
 #include <QGridLayout>
 #include <QLabel>
+#include <QTextEdit>
 #include <QLineEdit>
 #include <QSlider>
 #include <QVBoxLayout>
@@ -99,12 +100,11 @@ class HWMapContainer : public QWidget
         void drawnMapChanged(const QByteArray & data);
 
     private slots:
-        void setImage(const QPixmap & newImage);
+        void onImageReceived(const QPixmap & newImage);
         void setHHLimit(int hhLimit);
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void addInfoToPreview(const QPixmap & image);
         void setNewSeed(const QString & newSeed);
         void mapTypeChanged(int);
         void showThemePrompt();
@@ -147,6 +147,7 @@ class HWMapContainer : public QWidget
         QComboBox * cType;
         QListView * staticMapList;
         QListView * missionMapList;
+        QTextEdit * teMapName;
         QListWidget * generationStyles;
         QListWidget * mazeStyles;
         QLabel * lblMapList;
@@ -158,12 +159,14 @@ class HWMapContainer : public QWidget
         QPushButton * btnRandTheme;
         QString selectedTheme;
         QPushButton * btnSeed;
+        QHBoxLayout * twoColumnLayout;
         bool m_master;
         QList<QWidget *> m_childWidgets;
         bool m_previewEnabled;
         bool m_missionsViewSetup;
         bool m_staticViewSetup;
         bool m_withoutDLC;
+        bool m_missingMap;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
@@ -171,15 +174,20 @@ class HWMapContainer : public QWidget
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
         void intSetFeatureSize(int size);
-        void intSetIconlessTheme(const QString & name);
+        void setMissingTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
+        void setImage(const QPixmap & newImage);
+        void setImage(const QPixmap & newImage, const QLinearGradient & linearGrad, bool showHHLimit);
+        void addInfoToPreview(const QPixmap & image);
+        void addInfoToPreview(const QPixmap & image, const QLinearGradient & linearGrad, bool drawHHLimit);
         void setMapInfo(MapModel::MapInfo mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
         void updateHelpTexts(MapModel::MapType type);
         void updatePreview();
         void updateThemeButtonSize();
-        void setupMissionMapsView();
-        void setupStaticMapsView();
+        void setupMissionMapsView(const QString & initialMap = QString());
+        void setupStaticMapsView(const QString & initialMap = QString());
+        void setMapNameLabel(QString mapName, bool validMap);
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;
@@ -188,7 +196,10 @@ class HWMapContainer : public QWidget
         QString m_theme;
         QString m_curMap;
 
-        QLinearGradient linearGrad; ///< for preview background
+        QLinearGradient linearGradNormal; ///< for preview background
+        QLinearGradient linearGradLoading; ///< for preview background while loading/generating map
+        QLinearGradient linearGradNoPreview; ///< for preview background when map preview image is missing
+        QLinearGradient linearGradMapError; ///< for preview background when map is missing
         QSize m_previewSize;
 };
 

@@ -30,9 +30,8 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
     , uVisualGearsList, uGearsHedgehog
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
-var prevGState: TGameState = gsConfirm;
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
+var cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 0, 1, 2, 0, 0, 0, 0, 11, 8, 9, 10, 8, 8, 8, 8);
 
 procedure chGenCmd(var s: shortstring);
 begin
@@ -49,14 +48,15 @@ end;
 procedure chQuit(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if (GameState = gsGame) or (GameState = gsChat) then
-        begin
-        prevGState:= GameState;
+    if (GameState = gsGame) then
+    begin
+        isInChatMode:= false;
         GameState:= gsConfirm;
-        end
-    else
+    end
+    else begin
         if GameState = gsConfirm then
-            GameState:= prevGState;
+            GameState:= gsGame;
+    end;
 
     updateCursorVisibility;
 end;
@@ -76,8 +76,6 @@ begin
         SendIPC(_S'Q');
         GameState:= gsExit
         end
-    else
-        ParseCommand('chat team', true);
 end;
 
 procedure chHalt (var s: shortstring);
@@ -533,7 +531,7 @@ if isDeveloperMode then
     cSeed:= s;
     InitStepsFlags:= InitStepsFlags or cifRandomize
     end
-    end;
+end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
@@ -569,6 +567,12 @@ procedure chVol_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 dec(cVolumeDelta, 3)
+end;
+
+procedure chMute(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cMuteToggle:= true;
 end;
 
 procedure chFindhh(var s: shortstring);
@@ -616,19 +620,51 @@ if LocalMessage and (gmPrecise or gmSwitch) = (gmPrecise or gmSwitch) then
          UIDisplay:= uiNone
     else UIDisplay:= uiAll
     end
-else if LocalMessage and gmPrecise = gmPrecise then
-    begin
-    if ((GameFlags and gfInvulnerable) = 0) then
-        cTagsMask:= cTagsMasks[cTagsMask]
-    else
-        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
-    end
 else
     begin
     if UIDisplay <> uiNoTeams then
          UIDisplay:= uiNoTeams
     else UIDisplay:= uiAll
     end
+end;
+
+procedure chRotateTags(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+// Rotate Tags key + Switch: Toggle translucency only
+if LocalMessage and gmSwitch = gmSwitch then
+    if ((cTagsMask and htTransparent) = 0) then
+        begin
+        cTagsMask:= cTagsMask or htTransparent;
+        cPrevTagsMask:= cPrevTagsMask or htTransparent
+        end
+    else
+        begin
+        cTagsMask:= cTagsMask and (not htTransparent);
+        cPrevTagsMask:= cPrevTagsMask and (not htTransparent)
+        end
+// Rotate Tags key + Precise: Cycle through hog tags (keeping translucency)
+else if LocalMessage and gmPrecise = gmPrecise then
+    begin
+    cPrevTagsMask:= cTagsMask;
+    if ((GameFlags and gfInvulnerable) = 0) then
+        cTagsMask:= cTagsMasks[cTagsMask]
+    else
+        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
+    end
+// Rotate Tags key only: Toggle all hog tags on and off
+else
+    if ((cTagsMask and (htTeamName or htName or htHealth)) = 0) then
+        begin
+        cTagsMask:= cPrevTagsMask;
+        if ((GameFlags and gfInvulnerable) <> 0) then
+            cTagsMask:= cTagsMask and (not htHealth);
+        end
+    else
+        begin
+        cPrevTagsMask:= cTagsMask;
+        cTagsMask:= cTagsMask and (not (htTeamName or htName or htHealth))
+        end;
 end;
 
 procedure chSpeedup_p(var s: shortstring);
@@ -824,6 +860,7 @@ begin
     RegisterVariable('spectate', @chFastUntilLag   , false);
     RegisterVariable('capture' , @chCapture      , true );
     RegisterVariable('rotmask' , @chRotateMask   , true );
+    RegisterVariable('rottags' , @chRotateTags   , true );
     RegisterVariable('rdriven' , @chTeamLocal    , false);
     RegisterVariable('map'     , @chSetMap       , false);
     RegisterVariable('theme'   , @chSetTheme     , false);
@@ -870,6 +907,7 @@ begin
     RegisterVariable('-volup'  , @chVol_m        , true );
     RegisterVariable('+voldown', @chVol_m        , true );
     RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('mute'    , @chMute         , true );
     RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );
     RegisterVariable('+cur_u'  , @chCurU_p       , true );

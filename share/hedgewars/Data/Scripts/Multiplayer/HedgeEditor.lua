@@ -27,7 +27,6 @@
 -- CORE FEATURES as of latest version
 ---------------------------------------
 -- togglable help (press PRECISE + 1, while you have a tool (e.g. airstrike) selected)
--- you can also the set the ScriptParameter in scheme, e.g: helpDisabled="true"
 
 -- place girders, rubberbands and custom sprites anywhere on the map.
 -- the above objects may be destructible, indestructible, icy, or bouncy.
@@ -73,7 +72,6 @@
 -- ufoFuel=1000 (Flying Saucer will start with half the normal fuel. A value of 2000 is infinite fuel)
 -- portalDistance=15 (This is the distance portals can travel before fizzling)
 -- m=3 (load a particular map from the map library of Data/Scripts/TechMaps
--- helpDisabled="true" (the help pop-up overlay will be disabled by default)
 
 -- when saving data, points for conversion to HWMAP are also generated and placed inside block comments.
 -- copy paste/these points at the START of a converted HWMAP and then convert the map back to HWMAP format.
@@ -253,11 +251,17 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 
--- experimental crap
---local destroyMap = false
+-- Fake ammo type for the gear placement tool
+local amCMGearPlacementTool = amAirAttack
 
 -- Special frames in Ammos.png/Ammos_bw.png
 local ammoFrameAirAttack = 63
+
+-- Caption colors
+local colorErrorMessage = 0xFFFFFFFF
+local colorInfoMessage = 0xFFFFFFFF
+local colorPlaceMode1 = 0xFFBA00FF -- Main placement mode
+local colorPlaceMode2 = 0xFFDE85FF -- Secondary mode
 
 -----------------------------------------
 -- tracking vars for save/load purposes
@@ -296,6 +300,8 @@ local hedgeEditorMissionPanelShown = false
 local tagGears = {}
 local showGearTags = true
 
+local tagCursorX, tagCursorY
+
 ---------------------------------
 -- crates are made of this stuff
 ---------------------------------
@@ -308,6 +314,7 @@ local atkArray =
 				{amMortar, 	"amMortar"},
 				{amDrill, 	"amDrill"},
 				{amSnowball, 	"amSnowball"},
+				{amDuck,	"amDuck"},
 
 				{amGrenade,	"amGrenade"},
 				{amClusterBomb,	"amClusterBomb"},
@@ -322,6 +329,7 @@ local atkArray =
 				{amSineGun, 	"amSineGun"},
 				{amFlamethrower,"amFlamethrower"},
 				{amIceGun, 	"amIceGun"},
+				{amMinigun, 	"amMinigun"},
 
 				{amFirePunch, 	"amFirePunch"},
 				{amWhip,	"amWhip"},
@@ -349,7 +357,6 @@ local atkArray =
 				{amKnife,	"amKnife"},
 
 				{amBirdy,	"amBirdy"},
-				{amDuck,	"amDuck"},
 
 				}
 
@@ -560,7 +567,7 @@ local gameFlagList =	{
   sprTargetBee, sprAmGirder, sprAmRubber, sprIceTexture, sprHHTelepMask,
   sprAMAmmos, sprAMAmmosBW, sprAMSlot, sprAMCorners, sprTurnsLeft, sprBotlevels,
   sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
-  sprShoutCorner, sprShoutEdge, sprShoutTail, sprCustom1, sprCustom2, }
+  sprShoutCorner, sprShoutEdge, sprShoutTail, }
 
  -- Set in onGameInit
  local reducedSpriteIDArrayFrames
@@ -569,7 +576,7 @@ local gameFlagList =	{
   "sprTargetBee", "sprAmGirder", "sprAmRubber", "sprIceTexture", "sprHHTelepMask",
   "sprAMAmmos", "sprAMAmmosBW", "sprAMSlot",  "sprAMCorners", "sprTurnsLeft", "sprBotlevels",
   "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail",
-  "sprShoutCorner", "sprShoutEdge", "sprShoutTail", "sprCustom1", "sprCustom2", }
+  "sprShoutCorner", "sprShoutEdge", "sprShoutTail", }
 
 ----------------------------
 -- placement shite
@@ -584,7 +591,8 @@ local portalDistance = 5000/5
 local helpDisabled = false  --determines whether help popups pop up
 local CG = nil -- this is the visual gear displayed at CursorX, CursorY
 local crateSprite = nil-- this is a visual gear aid for crate placement
-local tSpr = {}
+local crateSpriteBorer = nil
+local waypointPreviewSprite = nil
 
 local cGear = nil -- detects placement of girders and objects (using airattack)
 local curWep = amNothing
@@ -644,6 +652,8 @@ local sGear = nil
 local closestDist
 local closestGear = nil
 local closestSpriteID = nil
+
+local wpRadius = 450
 
 ------------------------
 -- SOME GENERAL METHODS
@@ -893,8 +903,8 @@ function PlaceWaypoint(x,y)
 	placedSprite[placedCount] = vgtCircle
 	placedSpec[placedCount] = AddVisualGear(x,y,vgtCircle,0,true)
 	placedTint[placedCount] = 0xFF0000FF
-	placedFrame[placedCount] = 1										--rad is 450
-	SetVisualGearValues(placedSpec[placedCount], x, y, 20, 100, 1, 10, 0, 450, 5, placedTint[placedCount])
+	placedFrame[placedCount] = 1
+	SetVisualGearValues(placedSpec[placedCount], x, y, 164, 224, 1, 10, 0, wpRadius, 5, placedTint[placedCount])
 	placedCount = placedCount +1
 
 end
@@ -954,7 +964,11 @@ function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 
 end
 
-function CallPlaceSprite(pID)
+function CallPlaceSprite(pID, silent)
+
+	if silent == nil then
+		silent = false
+	end
 
 	if landType == lfIce then
 		placedLandFlags[pID] = "lfIce"
@@ -977,11 +991,21 @@ function CallPlaceSprite(pID)
 		actualDisplayedImage = ammoFrameAirAttack
 	end
 
-	return PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], actualDisplayedImage,
+	local success = PlaceSprite(placedX[pID], placedY[pID], placedSprite[pID], actualDisplayedImage,
 		placedTint[pID],
 		nil, -- overrite existing land
 		nil, nil, -- this stuff specifies flipping
 		landType)
+
+	if not silent then
+		if success then
+			PlaySound(sndPlaced)
+		else
+			PlaySound(sndDenied)
+		end
+	end
+
+	return success
 
 end
 
@@ -1021,6 +1045,8 @@ function EraseClosestSprite()
                     nil, -- flip sprite vertically
                     placedLandFlags[closestSpriteID])
 
+                PlaySound(sndBump)
+
 		placedX[closestSpriteID] = nil
 		placedY[closestSpriteID] = nil
 		placedSpec[closestSpriteID] = nil
@@ -1031,6 +1057,8 @@ function EraseClosestSprite()
 		placedLandFlags[closestSpriteID] = nil
 		closestSpriteID = nil
 		SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+	else
+		PlaySound(sndDenied)
 	end
 end
 
@@ -1042,16 +1070,15 @@ function EraseClosestWaypoint()
 
 	for i = 0, (placedCount-1) do
 		if (placedType[i] == loc("Waypoint Editing Mode")) then
-				q = placedX[i] - placedX[placedCount]
-				w = placedY[i] - placedY[placedCount]
-				d = ( (q*q) + (w*w) )
-				if d < closestDist then
-					closestDist = d
-					closestSpriteID = i
+			local q = placedX[i] - placedX[placedCount]
+			local w = placedY[i] - placedY[placedCount]
+			local d = ( (q*q) + (w*w) )
+			if d < closestDist then
+				closestDist = d
+				closestSpriteID = i
 
-					SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
-
-				end
+				SetVisualGearValues(sSprite, placedX[i], placedY[i], 0, 0, nil, placedFrame[i], 10000, placedSprite[i], 10000, newTint )
+			end
 		end
 	end
 
@@ -1067,6 +1094,9 @@ function EraseClosestWaypoint()
 		placedLandFlags[closestSpriteID] = nil
 		closestSpriteID = nil
 		SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+		PlaySound(sndBump)
+	else
+		PlaySound(sndDenied)
 	end
 end
 
@@ -1130,8 +1160,10 @@ function PlaceObject(x,y)
 				elseif CGR == 2 then placedHWMapFlag[placedCount] = 126
 				elseif CGR == 3 then placedHWMapFlag[placedCount] = 127
 				end
+				PlaySound(sndPlaced)
 			else
 				placedType[placedCount] = "bogus"
+				PlaySound(sndDenied)
 			end
 		else
 			placedType[placedCount] = "bogus"
@@ -1175,18 +1207,25 @@ function PlaceObject(x,y)
 
 		if pMode[pIndex] == loc("Selection Mode") then
 			sGear = GetClosestGear()
+			if sGear ~= nil then
+				PlaySound(sndPortalSwitch)
+			end
 		elseif pMode[pIndex] == loc("Placement Mode") then
 			if sGear ~= nil then
 				SetGearPosition(sGear, x, y)
+				PlaySound(sndWarp)
 			end
 		elseif pMode[pIndex] == loc("Deletion Mode") then
 			sGear = GetClosestGear()
 			if (sGear == nil) then
-				AddCaption(loc("Please click on a gear."),0xffba00ff,capgrpVolume)
+				AddCaption(loc("Please click on a gear."), colorErrorMessage, capgrpVolume)
+				PlaySound(sndDenied)
 			elseif (GetGearType(sGear) == gtHedgehog) then
-				AddCaption(loc("Hedgehogs can not be deleted."),0xffba00ff,capgrpVolume)
+				AddCaption(loc("Hedgehogs can not be deleted."), colorErrorMessage, capgrpVolume)
+				PlaySound(sndDenied)
 			else
 				DeleteGear(sGear)
+				PlaySound(sndBump)
 			end
 			sGear = nil
 		end
@@ -1200,8 +1239,10 @@ function PlaceObject(x,y)
 			else -- set for the whole team
 				SetTeamIdentity(sGear)
 			end
+			PlaySound(sndHello, sGear)
 		else
-			AddCaption(loc("Please click on a hedgehog."),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Please click on a hedgehog."), colorErrorMessage, capgrpVolume)
+			PlaySound(sndDenied)
 		end
 
 
@@ -1211,13 +1252,21 @@ function PlaceObject(x,y)
 		sGear = GetClosestGear()
 		local gt = GetGearType(sGear)
 		if gt == gtHedgehog or gt == gtExplosives or (gt == gtCase and GetGearPos(sGear) == 0x2) then
+			local oldHealth, hDiff = GetHealth(sGear)
 			if pMode[pIndex][2] == "set" then
 				SetHealth(sGear, pMode[pIndex][1])
+				hDiff = pMode[pIndex][1] - oldHealth
 			elseif pMode[pIndex][2] == "mod" then
 				local min
 				if gt == gtCase then min = 0 else min = 1 end
 				local newHealth = math.max(min, GetHealth(sGear) + tonumber(pMode[pIndex][1]))
 				SetHealth(sGear, newHealth)
+				hDiff = newHealth - oldHealth
+			end
+			PlaySound(sndPortalSwitch)
+			if gt == gtHedgehog and hDiff < 0 then
+				local snd = { sndOw1, sndOw2, sndOw3 }
+				PlaySound(snd[math.random(1, #snd)], sGear)
 			end
 		elseif gt == gtMine and GetHealth(sGear) == 0 then
 			local newHealth 
@@ -1231,9 +1280,11 @@ function PlaceObject(x,y)
 			end
 			if newHealth ~= nil then
 				SetGearValues(sGear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 36 - newHealth)
+				PlaySound(sndPortalSwitch)
 			end
 		else
-			AddCaption(loc("Please click on a hedgehog, barrel, health crate or dud mine."),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Please click on a hedgehog, barrel, health crate or dud mine."), colorErrorMessage, capgrpVolume)
+			PlaySound(sndDenied)
 		end
 
 	elseif cat[cIndex] == loc("Sprite Modification Mode") then
@@ -1243,16 +1294,21 @@ function PlaceObject(x,y)
 		if closestSpriteID ~= nil then
 			if pMode[pIndex] == loc("LandFlag Modification Mode") then
 				EraseSprite(placedX[closestSpriteID], placedY[closestSpriteID], placedSprite[closestSpriteID], placedFrame[closestSpriteID], nil, nil, nil, nil, placedLandFlags[closestSpriteID])
-				placementSucceeded = CallPlaceSprite(closestSpriteID)
+				placementSucceeded = CallPlaceSprite(closestSpriteID, true)
 				if placementSucceeded then
 					closestSpriteID = nil
 					SetVisualGearValues(sSprite, 0, 0, 0, 0, 0, 1, 10000, sprAmGirder, 10000, 0x00000000 )
+					PlaySound(sndPortalSwitch)
+				else
+					PlaySound(sndDenied)
 				end
 			elseif pMode[pIndex] == loc("Sprite Erasure Mode") then
 
 				EraseClosestSprite()
 
 			end
+		else
+			PlaySound(sndDenied)
 		end
 
 
@@ -1266,14 +1322,18 @@ function PlaceObject(x,y)
 				if pMode[pIndex] == loc("Victory Condition: Collect") then
 					if GetGearType(sGear) == gtCase then
 						setGearValue(sGear, "tag","collection")
+						PlaySound(sndPortalSwitch)
 					else
-						AddCaption(loc("Please click on a crate."),0xffba00ff,capgrpVolume)
+						AddCaption(loc("Please click on a crate."), colorErrorMessage, capgrpVolume)
+						PlaySound(sndDenied)
 					end
 				else
 					if pMode[pIndex] == loc("Victory Condition: Destroy") then
 						setGearValue(sGear, "tag","victory")
+						PlaySound(sndPortalSwitch)
 					elseif pMode[pIndex] == loc("Losing Condition: Destroy") then
 						setGearValue(sGear, "tag","failure")
+						PlaySound(sndPortalSwitch)
 					end
 				end
 
@@ -1282,6 +1342,7 @@ function PlaceObject(x,y)
 				setGearValue(sGear, "tag", nil)
 				DeleteVisualGear(getGearValue(sGear,"tCirc"))
 				setGearValue(sGear, "tCirc", nil)
+				PlaySound(sndBump)
 			end
 
 
@@ -1295,9 +1356,6 @@ function PlaceObject(x,y)
 			placedFrame[placedCount] = sFrame
 			placedSprite[placedCount] = reducedSpriteIDArray[pIndex]
 			placementSucceeded = CallPlaceSprite(placedCount)
-			if placementSucceeded then
-				PlaySound(sndPlaced)
-			end
 		else
 			placedType[placedCount] = "bogus"
 			SelectClosestSprite()
@@ -2349,7 +2407,7 @@ function SaveLevelData()
 
 	WriteLnToConsole("------ END GENERATED SCRIPT ------")
 
-	AddCaption(loc("Level Data Saved!"))
+	AddCaption(loc("Level Data Saved!"), colorInfoMessage, capgrpGameState)
 
 end
 
@@ -2406,7 +2464,8 @@ function PortalEffects(gear)
 
 	if GetGearType(gear) == gtPortal then
 
-		tag = GetTag(gear)
+		local tag = GetTag(gear)
+		local col
 		if tag == 0 then
 			col = 0xfab02aFF -- orange ball
 		elseif tag == 1 then
@@ -2418,27 +2477,24 @@ function PortalEffects(gear)
 		end
 
 		if (tag == 0) or (tag == 2) then -- i.e ball form
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
-			SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, 1, nil, col )
-
-			remLife = getGearValue(gear,"life")
+			local remLife = getGearValue(gear,"life")
 			remLife = remLife - 1
 			setGearValue(gear, "life", remLife)
 
+			-- Destroy portal ball when max. distance reached
 			if remLife == 0 then
 
-				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
+				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
-				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, col)
-
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				PlaySound(sndVaporize)
 				DeleteGear(gear)
@@ -2456,7 +2512,7 @@ function updateHelp(curAmmoType)
 		curAmmoType = GetCurAmmoType()
 	end
 
-	if (curAmmoType ~= amGirder) and (curAmmoType ~= amRubber) and (curAmmoType ~= amAirAttack) then
+	if (curAmmoType ~= amGirder) and (curAmmoType ~= amRubber) and (curAmmoType ~= amCMGearPlacementTool) then
 
 		if not hedgeEditorMissionPanelShown then
 			showHedgeEditorMissionPanel()
@@ -2555,7 +2611,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", -amCMGearPlacementTool, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2675,7 +2731,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", -amCMGearPlacementTool, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2717,7 +2773,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirAttack, 60000
+				"", -amCMGearPlacementTool, 60000
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2800,34 +2856,66 @@ function onSlot()
 	updateHelp(ammoType)
 end
 
+function onScreenResize()
+	updateCursorCoords()
+end
+
+-- Display the X and Y coordinates of the cursor while the cursor is active
+function updateCursorCoords()
+	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= -2147483648 then
+		local x1, y = 12, 24
+		if tagCursorX then
+			DeleteVisualGear(tagCursorX)
+		end
+		tagCursorX = AddVisualGear(-div(ScreenWidth, 2)+x1, y, vgtHealthTag, CursorX, true)
+		SetVisualGearValues(tagCursorX, nil, nil, 0, 0, nil, 1, nil, nil, 240000, 0xFFFFFFFF)
+
+		local x2
+		if string.len(tostring(CursorX)) > 6 then
+			x2 = x1 + 100
+		else
+			x2 = x1 + 60
+		end
+		if tagCursorY then
+			DeleteVisualGear(tagCursorY)
+		end
+		tagCursorY = AddVisualGear(-div(ScreenWidth, 2)+x2, y, vgtHealthTag, CursorY, true)
+		SetVisualGearValues(tagCursorY, nil, nil, 0, 0, nil, 1, nil, nil, 240000, 0xFFFFFFFF)
+	else
+		if tagCursorX then
+			DeleteVisualGear(tagCursorX)
+		end
+		if tagCursorY then
+			DeleteVisualGear(tagCursorY)
+		end
+	end
+end
+
 -- called in onGameTick()
 function HandleHedgeEditor()
-
 	if CurrentHedgehog ~= nil then
 
 		genTimer = genTimer + 1
-
 
 		tSprCol = 0x00000000
 		tempFrame = 0
 		xDisplacement = 42
 		yDisplacement = 42
 
-		if (curWep == amAirAttack) then
+		if (curWep == amCMGearPlacementTool) then
+
+			SetSoundMask(sndIncoming, true)
 
 			--wowaweewa, holyeeeee shite this is badly hacked (please rewrite when less lazy/morefeatures)
 			dCol = 0xFFFFFFFF
 			dFrame = 0
 			dAngle = 0
 			if (cat[cIndex] == loc("Mine Placement Mode")) then
-				dSprite = sprBotlevels--sprMineOff
-				dFrame = 1
+				dSprite = sprCustom2
 			elseif (cat[cIndex] == loc("Dud Mine Placement Mode")) then
-				dSprite = sprBotlevels--sprMineDead
-				dFrame = 3
+				dSprite = sprCustom4
 			elseif (cat[cIndex] == loc("Sticky Mine Placement Mode")) then
-				dSprite = sprBotlevels--sprSMineOff
-				dFrame = 2
+				dSprite = sprCustom3
 			elseif (cat[cIndex] == loc("Air Mine Placement Mode")) then
 				dSprite = sprAirMine
 			elseif (cat[cIndex] == loc("Barrel Placement Mode")) then
@@ -2846,7 +2934,7 @@ function HandleHedgeEditor()
 			elseif (cat[cIndex] == loc("Sprite Placement Mode")) then
 				dSprite = reducedSpriteIDArray[pIndex]
 				dFrame = sFrame
-				if ((dSprite == sprAMAmmos) or (dSprite == sprAMAmmosBW)) and (dFrame == (amAirAttack - 1)) then
+				if ((dSprite == sprAMAmmos) or (dSprite == sprAMAmmosBW)) and (dFrame == (amCMGearPlacementTool - 1)) then
 					-- Special case: Air attack icon of ammos sprite needs to be fixed (since this icon is overwritten)
 					dFrame = ammoFrameAirAttack
 				end
@@ -2864,9 +2952,7 @@ function HandleHedgeEditor()
 
 			if crateSprite == nil then
 				crateSprite = AddVisualGear(CursorX, CursorY-35, vgtStraightShot,0,true,3)
-				for i = 1, 4 do
-					tSpr[i] = AddVisualGear(CursorX, CursorY-35, vgtStraightShot,0,true,3)
-				end
+				crateSpriteBorder = AddVisualGear(CursorX, CursorY-35, vgtStraightShot,0,true,3)
 			end
 
 
@@ -2888,18 +2974,29 @@ function HandleHedgeEditor()
 				end
 			end
 
+			-- Waypoint outline
+			if (cat[cIndex] == loc("Waypoint Editing Mode")) and (pMode[pIndex] == loc("Place Waypoint")) then
+				if not waypointPreviewSprite then
+					waypointPreviewSprite = AddVisualGear(CursorX, CursorY, vgtCircle, 0, true)
+					SetVisualGearValues(waypointPreviewSprite, CursorX, CursorY, 244, 224, 0, 0, 0, div(wpRadius, 5), 5, 0xFF0000FF)
+				end
+			elseif waypointPreviewSprite then
+				DeleteVisualGear(waypointPreviewSprite)
+				waypointPreviewSprite = nil
+			end
+			if waypointPreviewSprite then
+				SetVisualGearValues(waypointPreviewSprite, CursorX, CursorY)
+			end
+
 		else
+			SetSoundMask(sndIncoming, false)
 			if CG ~= nil then
 				SetVisualGearValues(CG, 0, 0, 0, 0, 0, 0, 1000, sprArrow, 1000, 0xFFFFFF00)
 			end
 		end
 
 		SetVisualGearValues(crateSprite, CursorX+xDisplacement, CursorY+yDisplacement, 0, 0, dAngle, tempFrame, 1000, sprAMAmmos, 1000, tSprCol)
-		SetVisualGearValues(tSpr[1], CursorX+xDisplacement-2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[2], CursorX+xDisplacement-2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[3], CursorX+xDisplacement+2, CursorY+yDisplacement-2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-		SetVisualGearValues(tSpr[4], CursorX+xDisplacement+2, CursorY+yDisplacement+2, 0, 0, dAngle, 1, 1000, sprTarget, 1000, tSprCol)
-
+		SetVisualGearValues(crateSpriteBorder, CursorX+xDisplacement, CursorY+yDisplacement, 0, 0, 0, 0, 1000, sprCustom1, 1000, tSprCol)
 
 		if genTimer >= 100 then
 
@@ -2928,12 +3025,18 @@ function HandleHedgeEditor()
 				RedefineSubset()
 			end
 
+			if curWep == amGirder or curWep == amRubber then
+				SetSoundMask(sndDenied, true)
+			else
+				SetSoundMask(sndDenied, false)
+			end
+
 			-- update display selection criteria
-			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
-				AddCaption(cat[cIndex],0xffba00ff,capgrpMessage)
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
+				AddCaption(cat[cIndex], colorPlaceMode1, capgrpMessage)
 				showSecondaryMessage()
 				if superDelete == true then
-					AddCaption(loc("Deletition Mode"),0xffba00ff,capgrpAmmoinfo)
+					AddCaption(loc("Deletion Mode"), colorPlaceMode1, capgrpAmmoinfo)
 				end
 			end
 
@@ -2978,7 +3081,7 @@ function HandleHedgeEditor()
 
 		x,y = GetGearTarget(cGear)
 
-		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amAirAttack then
+		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool then
 			DeleteGear(cGear)
 			PlaceObject(x, y)
 		elseif GetGearType(cGear) == gtGirder then
@@ -2990,6 +3093,9 @@ function HandleHedgeEditor()
 		end
 
 	end
+
+	-- Show cursor coords
+	updateCursorCoords()
 
 	-- Barrel health tags, mine timer tags and health crate health tags
 	do
@@ -3103,7 +3209,6 @@ function HandleHedgeEditor()
 			end
 		end
 	end
-
 end
 
 --------------------------------------------------
@@ -3124,27 +3229,27 @@ function onTimer(s)
 	if (commandMode() == true) and (s == 4) then
 		SaveLevelData() -- positions of crates, etc
 	elseif (commandMode() == true) and (s == 2) then
-		if GetAmmoCount(CurrentHedgehog, amAirAttack) == 100 then
+		if GetAmmoCount(CurrentHedgehog, amCMGearPlacementTool) == 100 then
 			SetEditingWeps(0)
-			AddCaption(loc("The editor weapons and tools have been removed!"))
+			AddCaption(loc("The editor weapons and tools have been removed!"), colorInfoMessage, capgrpGameState)
 		else
 			SetEditingWeps(100)
-			AddCaption(loc("The editor weapons and tools have been added!"))
+			AddCaption(loc("The editor weapons and tools have been added!"), colorInfoMessage, capgrpGameState)
 		end
 	elseif (preciseOn == true) and (s == 1) then
 		helpDisabled = not(helpDisabled)
 		if helpDisabled then
-			AddCaption(loc("Help Disabled"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Help Disabled"), colorInfoMessage, capgrpVolume)
 		else
-			AddCaption(loc("Help Enabled"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Help Enabled"), colorInfoMessage, capgrpVolume)
 		end
 		updateHelp()
 	elseif (preciseOn == true) and (s == 3) then
 		showGearTags = not(showGearTags)
 		if showGearTags then
-			AddCaption(loc("Gear information shown"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Gear information shown"), colorInfoMessage, capgrpVolume)
 		else
-			AddCaption(loc("Gear information hidden"),0xffba00ff,capgrpVolume)
+			AddCaption(loc("Gear information hidden"), colorInfoMessage, capgrpVolume)
 		end
 
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
@@ -3152,22 +3257,22 @@ function onTimer(s)
 		if (cat[cIndex] == loc("Rubber Placement Mode")) then
 			if s == 1 then
 				landType = lfBouncy
-				AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
+				AddCaption(loc("Bouncy Land"), colorPlaceMode1, capgrpAmmoinfo)
 			elseif s == 5 then
 				superDelete = true
 			end
 		elseif s == 1 then
 			landType = 0
-			AddCaption(loc("Normal Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Normal Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif s == 2 then
 			landType = lfIndestructible
-			AddCaption(loc("Indestructible Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Indestructible Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif s == 3 then
 			landType = lfIce
-			AddCaption(loc("Icy Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Icy Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif (s == 4) then
 			landType = lfBouncy
-			AddCaption(loc("Bouncy Land"),0xffba00ff,capgrpAmmoinfo)
+			AddCaption(loc("Bouncy Land"), colorPlaceMode1, capgrpAmmoinfo)
 		elseif (s == 5) and (cat[cIndex] ~= loc("Sprite Modification Mode")) and (cat[cIndex] ~= loc("Sprite Placement Mode")) then
 			superDelete = true
 		end
@@ -3218,7 +3323,7 @@ function showSecondaryMessage()
 	else
 		caption2 = tostring(pMode[pIndex])
 	end
-	AddCaption(caption2, 0xffba00ff, capgrpMessage2)
+	AddCaption(caption2, colorPlaceMode2, capgrpMessage2)
 end
 
 ---------------------------------------------------------------
@@ -3229,7 +3334,7 @@ end
 ---------------------------------------------------------------
 function onLeft()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		leftHeld = true
 		rightHeld = false
 
@@ -3249,7 +3354,7 @@ function onLeft()
 				sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
 			end
 
-			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
 				showSecondaryMessage()
 			end
 		end
@@ -3259,7 +3364,7 @@ end
 
 function onRight()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		leftHeld = false
 		rightHeld = true
 
@@ -3279,7 +3384,7 @@ function onRight()
 				sFrame = math.min(sFrame, reducedSpriteIDArrayFrames[pIndex] - 1)
 			end
 
-			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amAirAttack) then
+			if (curWep == amGirder) or (curWep == amRubber) or (curWep == amCMGearPlacementTool) then
 				showSecondaryMessage()
 			end
 		end
@@ -3294,7 +3399,7 @@ end
 ---------------------------------------------------------
 function onUp()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		cIndex = cIndex - 1
 		if (cIndex == 1) or (cIndex == 2) then --1	--we no longer hit girder by normal means
 			cIndex = #cat
@@ -3309,7 +3414,7 @@ end
 
 function onDown()
 
-	if (curWep == amAirAttack) then
+	if (curWep == amCMGearPlacementTool) then
 		cIndex = cIndex + 1
 		if cIndex > #cat then
 			cIndex = 3	 -- 2 ----we no longer hit girder by normal means
@@ -3340,10 +3445,6 @@ function onParameters()
 
 	if portalDistance == nil then
 		portalDistance = 5000
-	end
-
-	if params["helpDisabled"] == "true" then
-		helpDisabled = true
 	end
 
 	if mapID == nil then
@@ -3403,7 +3504,7 @@ function showHedgeEditorMissionPanel()
 		, 4, 5000
 		)
 
-	SetAmmoTexts(amAirAttack,
+	SetAmmoTexts(amCMGearPlacementTool,
 		loc("Gear Placement Tool"),
 		loc("HedgeEditor tool"),
 		loc("Place, modify and delete gears (e.g. objects)|and waypoints, edit hedgehog settings, values,|victory conditions, and more.") .. "|" ..
@@ -3436,7 +3537,7 @@ function onGameStart()
 	sSprite = AddVisualGear(0, 0, vgtStraightShot, 0, true,1)
 	SetVisualGearValues(sSprite, 1, 1, 0, 0, nil, frameID, 20000, visualSprite, 20000, 0 )
 
-	SetAmmoDelay(amAirAttack,0)
+	SetAmmoDelay(amCMGearPlacementTool,0)
 	SetAmmoDelay(amGirder,0)
 	SetAmmoDelay(amRubber,0)
 
@@ -3444,7 +3545,7 @@ end
 
 function SetEditingWeps(ammoCount)
 
-	AddAmmo(CurrentHedgehog, amAirAttack, ammoCount)
+	AddAmmo(CurrentHedgehog, amCMGearPlacementTool, ammoCount)
 	AddAmmo(CurrentHedgehog, amGirder, ammoCount)
 	AddAmmo(CurrentHedgehog, amRubber, ammoCount)
 	AddAmmo(CurrentHedgehog, amTeleport, ammoCount)
@@ -3680,7 +3781,7 @@ function onNewTurn()
 	if GetHogLevel(CurrentHedgehog) == 0 then
 		TurnTimeLeft = -1	-- is that turntime in your pocket? :D
 	else
-		ParseCommand("skip") -- skip the computer's turn
+		SkipTurn() -- skip the computer's turn
 	end
 
 end
@@ -3725,7 +3826,7 @@ function onGearAdd(gear)
 		end
 	end
 
-	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amAirAttack) or (GetGearType(gear) == gtGirder) then
+	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
 	end
 
@@ -3801,3 +3902,11 @@ function onGearDelete(gear)
 
 end
 
+function onVisualGearDelete(vGear)
+	if vGear == tagCursorX then
+		tagCursorX = nil
+	end
+	if vGear == tagCursorY then
+		tagCursorY = nil
+	end
+end

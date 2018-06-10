@@ -84,6 +84,7 @@ class HWNewNet : public QObject
 
         QStringList cmdbuf;
 
+        int  ByteLength(const QString & str);
         void RawSendNet(const QString & buf);
         void RawSendNet(const QByteArray & buf);
         void ParseCmd(const QStringList & lst);

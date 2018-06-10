@@ -13,6 +13,9 @@ local numhhs = 0
 -- store hedgehog gears
 local hhs = {}
 
+-- count how many hogs each clan has
+local hogsByClan = {}
+
 -- store best time per team
 local clantimes = {}
 
@@ -79,6 +82,7 @@ function onGameStart()
     for i=0, ClansCount-1 do
         clantimes[i] = 0
     end
+    SendAchievementsStatsOff()
 end
 
 function onAmmoStoreInit()
@@ -97,9 +101,11 @@ function killHog()
         lasthog = nil
 end
 
-function onHogAttack()
+function onHogAttack(ammoType)
     if TurnTimeLeft == 0 then
         killHog()
+    elseif ammoType == amRope then
+        HideMission()
     end
 end
 
@@ -125,15 +131,16 @@ function onGameTick()
     end
     if CurrentHedgehog ~= nil and TurnTimeLeft == 1 then
         killHog()
+        AddCaption(loc("Time's up!"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
     elseif CurrentHedgehog ~= nil then
         x, y = GetGearPosition(CurrentHedgehog)
         if not reached and x > goal_area[1] and x < goal_area[1] + goal_area[3] and y > goal_area[2] and y < goal_area[2] + goal_area[4] then -- hog is within goal rectangle
             reached = true
             local ttime = GameTime-startTime
-            --give it a sound;)
+            -- give it a sound ;)
             if ttime < besttime then
                 PlaySound (sndHomerun)
-            else
+            elseif ttime > worsttime then
                 PlaySound (sndHellish)
             end
             for i = 0, numhhs - 1 do
@@ -151,44 +158,74 @@ function onGameTick()
             if bestTimes[teamname] == nil or bestTimes[teamname] > ttime then
                 bestTimes[teamname] = ttime
             end
+            local fastestStr
             if ttime < besttime then
                 besttime = ttime
                 besthog = CurrentHedgehog
                 besthogname = GetHogName(besthog)
-                hscore = hscore .. loc("NEW fastest lap: ")
             else
-                hscore = hscore .. loc("Fastest lap: ")
             end
+            fastestStr = loc("Fastest lap: %.3fs by %s")
             if ttime > worsttime then
                 worsttime = ttime
                 worsthog = CurrentHedgehog
             end
-            hscore = hscore .. besthogname .. " - " .. (besttime / 1000) .. " s | |" .. loc("Best laps per team: ")
+
+            if worsthog then
+                hscore = hscore ..  string.format(loc("Round's slowest lap: %.3fs by %s"), (worsttime / 1000), GetHogName(worsthog))
+            end
+
+            hscore = hscore .. " |" .. string.format(fastestStr, (besttime / 1000), besthogname)
             
             if clan == ClansCount -1 then
                 -- Time for elimination - worst hog is out and the worst hog vars are reset.
                 if worsthog ~= nil then
                     SetHealth(worsthog, 0)
-                    --Place a grenade to make inactive slowest hog active
+                    -- Drop a bazooka to make inactive slowest hog active.
                     x, y = GetGearPosition(worsthog)
                     AddGear(x, y, gtShell, 0, 0, 0, 0)
                 end
                 worsttime = 0
                 worsthog = nil
             end
-            
-            for i=0, ClansCount -1 do
-                local tt = "" .. (clantimes[i] / 1000) .. " s"
-                if clantimes[i] == 0 then
-                    tt = "--"
-                end
-                hscore = hscore .. "|" .. string.format(loc("Team %d: "), i+1) .. tt
-            end
-            
-            ShowMission(loc("TrophyRace"), loc("Race"), loc("You've reached the goal!| |Time: ") .. (ttime / 1000) .. " s" .. hscore, 0, 0)
+
+            ShowMission(loc("TrophyRace"), loc("Status update"),
+                string.format(loc("Time: %.3fs by %s"), (ttime/1000), GetHogName(CurrentHedgehog))
+                .. hscore,
+                0, 0)
+            AddCaption(string.format(loc("Time: %.3fs"), (ttime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+            AddCaption(loc("Track completed!"), 0xFFFFFFFF, capgrpGameState)
             EndTurn(true)
+        else
+            if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and CurrentHedgehog ~= nil and GetHealth(CurrentHedgehog) > 0 and (not reached) and GameTime%100 == 0 then
+                local ttime = GameTime-startTime
+                AddCaption(string.format(loc("Time: %.1fs"), (ttime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
+            end
         end
     end
+end
+
+function WriteStats()
+   if besthog then
+       SendStat(siCustomAchievement, string.format(loc("The fastest hedgehog was %s from %s with a time of %.3fs."), besthogname, GetHogTeamName(besthog), besttime/1000))
+   else
+       SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
+   end
+
+   -- Write most skips
+   local mostSkips = 2 -- a minimum skip threshold is required
+   local mostSkipsTeam = nil
+   for i=0, TeamsCount-1 do
+      local teamName = GetTeamName(i)
+      local stats = GetTeamStats(teamName)
+      if stats.TurnSkips > mostSkips then
+          mostSkips = stats.TurnSkips
+          mostSkipsTeam = teamName
+      end
+   end
+   if mostSkipsTeam then
+       SendStat(siMaxTurnSkips, tostring(mostSkips) .. " " .. mostSkipsTeam)
+   end
 end
 
 function onGearAdd(gear)
@@ -196,20 +233,41 @@ function onGearAdd(gear)
         hhs[numhhs] = gear
         times[numhhs] = 0
         numhhs = numhhs + 1
+        local clan = GetHogClan(gear)
+        if not hogsByClan[clan] then
+            hogsByClan[clan] = 0
+        end
+        hogsByClan[clan] = hogsByClan[clan] + 1
     end
---    elseif GetGearType(gear) == gtRope then -- rope is shot
 end
 
---function onGearDelete(gear)
---    if GetGearType(gear) == gtRope then -- rope deletion - hog didn't manage to rerope
---        --TurnTimeLeft = 0 -- end turn or not? hm...
---        lasthog = CurrentHedgehog
---        
---    end
---end
+function areTwoOrMoreClansLeft()
+    local clans = 0
+    for i=0, ClansCount-1 do
+        if hogsByClan[i] >= 1 then
+            clans = clans + 1
+        end
+        if clans >= 2 then
+            return true
+        end
+    end
+    return false
+end
+
+function onGearDelete(gear)
+    if GetGearType(gear) == gtHedgehog then
+        local clan = GetHogClan(gear)
+
+        hogsByClan[clan] = hogsByClan[clan] - 1
+        if not areTwoOrMoreClansLeft() then
+            WriteStats()
+        end
+    end
+end
 
 function onAchievementsDeclaration()
     for team,time in pairs(bestTimes) do
         DeclareAchievement("rope race", team, "TrophyRace", time)
     end
 end
+

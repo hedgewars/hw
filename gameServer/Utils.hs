@@ -72,6 +72,7 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
         else
             t : replaceTeam tm ts
 
+-- NOTE: Don't forget to update the error messages when you change the naming rules!
 illegalName :: B.ByteString -> Bool
 illegalName b = B.null b || length s > 40 || all isSpace s || isSpace (head s) || isSpace (last s) || any isIllegalChar s
     where
@@ -118,6 +119,8 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (52, "0.9.23-dev")
             , (53, "0.9.23")
             , (54, "0.9.24-dev")
+            , (55, "0.9.24")
+            , (56, "0.9.25-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString

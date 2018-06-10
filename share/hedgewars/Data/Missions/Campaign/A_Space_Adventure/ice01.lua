@@ -212,7 +212,7 @@ function onGameStart()
 
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amBazooka, 1)
-		SpawnAmmoCrate(icegunX, icegunY, amIceGun)
+		SpawnSupplyCrate(icegunX, icegunY, amIceGun)
 		AddEvent(onColumnCheckPoint, {hero.gear}, columnCheckPoint, {hero.gear}, 0)
 		AddEvent(onHeroAtIceGun, {hero.gear}, heroAtIceGun, {hero.gear}, 0)
 		AddAnim(dialog01)

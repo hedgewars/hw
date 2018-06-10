@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if !defined(TARGET_OS_IPHONE)
+#if !(TARGET_OS_IPHONE)
 #include <QString>
 #include <QDir>
 #include <QStringList>
@@ -67,6 +67,7 @@ extern int years_since_foundation;
 #define SEASON_CHRISTMAS 2
 #define SEASON_HWBDAY 4
 #define SEASON_EASTER 8
+#define SEASON_APRIL1 16
 
 #define NETGAME_DEFAULT_SERVER "netserver.hedgewars.org"
 #define NETGAME_DEFAULT_PORT 46631

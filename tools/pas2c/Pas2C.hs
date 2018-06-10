@@ -958,6 +958,7 @@ expr2C bop@(BinOp op expr1 expr2) = do
     case (op2C op, t1, t2) of
         ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (fff t1 t2 BTString))
         ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (fff t1 t2  BTAString))
+        ("+", BTChar, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprependA" (fff t1 t2  BTAString))
         ("!=", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompareA" (fff t1 t2  BTBool))
         (_, BTAString, _) -> error $ "unhandled bin op with ansistring on the left side: " ++ show bop
         (_, _, BTAString) -> error $ "unhandled bin op with ansistring on the right side: " ++ show bop
@@ -1098,7 +1099,7 @@ expr2C (BuiltInFunCall [e, e1, e2] (SimpleReference (Identifier "copy" _))) = do
          BTString -> f "fpcrtl_copy"
          BTAString -> f "fpcrtl_copyA"
          _ -> error $ "copy() called on " ++ show lt
-     
+
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref
     t <- gets lastType
@@ -1106,7 +1107,7 @@ expr2C (BuiltInFunCall params ref) = do
     case t of
         BTFunction _ _ _ t' -> do
             modify (\s -> s{lastType = t'})
-        _ -> error $ "BuiltInFunCall lastType: " ++ show t
+        _ -> error $ "BuiltInFunCall `" ++ show ref ++ "`, lastType: " ++ show t
     return $
         r <> parens (hsep . punctuate (char ',') $ ps)
 expr2C a = error $ "Don't know how to render " ++ show a

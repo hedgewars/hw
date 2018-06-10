@@ -34,7 +34,7 @@
 #include "igbox.h"
 #include "DataManager.h"
 #include "hwconsts.h"
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "proto.h"
 #include "GameStyleModel.h"
 #include "themeprompt.h"
@@ -106,14 +106,20 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     OptionsInnerContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     GBoxOptionsLayout = new QGridLayout(OptionsInnerContainer);
 
-    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), this), 1, 0);
+    lblScript = new QLabel(QLabel::tr("Style"), this);
+    GBoxOptionsLayout->addWidget(lblScript, 1, 0);
 
     Scripts = new QComboBox(this);
     Scripts->setMaxVisibleItems(30);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
-
     Scripts->setModel(DataManager::instance().gameStyleModel());
     m_curScript = Scripts->currentText();
+
+    ScriptsLabel = new QLabel(this);
+    ScriptsLabel->setHidden(true);
+    ScriptsLabel->setTextFormat(Qt::PlainText);
+    GBoxOptionsLayout->addWidget(ScriptsLabel, 1, 1);
+
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
     QWidget *SchemeWidget = new QWidget(this);
@@ -125,29 +131,43 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     GameSchemes = new QComboBox(SchemeWidget);
     GameSchemes->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(GameSchemes, 0, 2);
+
+    GameSchemesLabel = new QLabel(SchemeWidget);
+    GameSchemesLabel->setHidden(true);
+    GameSchemesLabel->setTextFormat(Qt::PlainText);
+    SchemeWidgetLayout->addWidget(GameSchemesLabel, 0, 2);
+
     connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
-    SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Scheme"), SchemeWidget), 0, 0);
+    lblScheme = new QLabel(QLabel::tr("Scheme"), SchemeWidget);
+    SchemeWidgetLayout->addWidget(lblScheme, 0, 0);
 
     QPixmap pmEdit(":/res/edit.png");
+    QIcon iconEdit = QIcon(pmEdit);
 
-    QPushButton * goToSchemePage = new QPushButton(SchemeWidget);
+    goToSchemePage = new QPushButton(SchemeWidget);
     goToSchemePage->setWhatsThis(tr("Edit schemes"));
     goToSchemePage->setIconSize(pmEdit.size());
-    goToSchemePage->setIcon(pmEdit);
+    goToSchemePage->setIcon(iconEdit);
     goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
     SchemeWidgetLayout->addWidget(goToSchemePage, 0, 3);
     connect(goToSchemePage, SIGNAL(clicked()), this, SLOT(jumpToSchemes()));
 
-    SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Weapons"), SchemeWidget), 1, 0);
+    lblWeapons = new QLabel(QLabel::tr("Weapons"), SchemeWidget);
+    SchemeWidgetLayout->addWidget(lblWeapons, 1, 0);
 
     WeaponsName = new QComboBox(SchemeWidget);
     WeaponsName->setMaxVisibleItems(30);
     SchemeWidgetLayout->addWidget(WeaponsName, 1, 2);
 
+    WeaponsNameLabel = new QLabel(SchemeWidget);
+    WeaponsNameLabel->setHidden(true);
+    WeaponsNameLabel->setTextFormat(Qt::PlainText);
+    SchemeWidgetLayout->addWidget(WeaponsNameLabel, 1, 2);
+
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
-    QPushButton * goToWeaponPage = new QPushButton(SchemeWidget);
+    goToWeaponPage = new QPushButton(SchemeWidget);
     goToWeaponPage->setWhatsThis(tr("Edit weapons"));
     goToWeaponPage->setIconSize(pmEdit.size());
     goToWeaponPage->setIcon(pmEdit);
@@ -159,8 +179,10 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     bindEntries->setWhatsThis(tr("Game scheme will auto-select a weapon"));
     bindEntries->setChecked(true);
     bindEntries->setMaximumWidth(42);
-    bindEntries->setStyleSheet( "QCheckBox::indicator:checked   { image: url(\":/res/lock.png\"); }"
-                                "QCheckBox::indicator:unchecked { image: url(\":/res/unlock.png\");   }" );
+    bindEntries->setStyleSheet( "QCheckBox::indicator:checked:enabled    { image: url(\":/res/lock.png\"); }"
+                                "QCheckBox::indicator:checked:disabled   { image: url(\":/res/lock_disabled.png\"); }"
+                                "QCheckBox::indicator:unchecked:enabled  { image: url(\":/res/unlock.png\");   }"
+                                "QCheckBox::indicator:unchecked:disabled { image: url(\":/res/unlock_disabled.png\");   }" );
     SchemeWidgetLayout->addWidget(bindEntries, 0, 1, 0, 1, Qt::AlignVCenter);
 
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
@@ -377,7 +399,7 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
         QMessageBox illegalMsg(parentWidget());
         illegalMsg.setIcon(QMessageBox::Warning);
         illegalMsg.setWindowTitle(QMessageBox::tr("Error"));
-        illegalMsg.setText(QMessageBox::tr("Cannot use the ammo '%1'!").arg(name));
+        illegalMsg.setText(QMessageBox::tr("Cannot use the weapon scheme '%1'!").arg(name));
         illegalMsg.setWindowModality(Qt::WindowModal);
         illegalMsg.exec();
     }
@@ -464,7 +486,9 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SCRIPT")
         {
-            Scripts->setCurrentIndex(Scripts->findText(value));
+            int in = Scripts->findText(value);
+            Scripts->setCurrentIndex(in);
+            ScriptsLabel->setText(value);
             pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
             return;
         }
@@ -509,10 +533,15 @@ void GameCFGWidget::ammoChanged(int index)
 {
     if (index >= 0)
     {
+        WeaponsNameLabel->setText(WeaponsName->currentText());
         emit paramChanged(
             "AMMO",
             QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
         );
+    }
+    else
+    {
+        WeaponsNameLabel->setText("");
     }
 }
 
@@ -521,16 +550,21 @@ void GameCFGWidget::mapChanged(const QString & value)
     if(isEnabled() && pMapContainer->getCurrentIsMission())
     {
         Scripts->setEnabled(false);
+        lblScript->setEnabled(false);
         Scripts->setCurrentIndex(0);
 
         if (pMapContainer->getCurrentScheme() == "locked")
         {
             GameSchemes->setEnabled(false);
+            goToSchemePage->setEnabled(false);
+            lblScheme->setEnabled(false);
             GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
         else
         {
             GameSchemes->setEnabled(true);
+            goToSchemePage->setEnabled(true);
+            lblScheme->setEnabled(true);
             int num = GameSchemes->findText(pMapContainer->getCurrentScheme());
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
@@ -541,11 +575,15 @@ void GameCFGWidget::mapChanged(const QString & value)
         if (pMapContainer->getCurrentWeapons() == "locked")
         {
             WeaponsName->setEnabled(false);
+            goToWeaponPage->setEnabled(false);
+            lblWeapons->setEnabled(false);
             WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
         else
         {
             WeaponsName->setEnabled(true);
+            goToWeaponPage->setEnabled(true);
+            lblWeapons->setEnabled(true);
             int num = WeaponsName->findText(pMapContainer->getCurrentWeapons());
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
@@ -561,8 +599,13 @@ void GameCFGWidget::mapChanged(const QString & value)
     else
     {
         Scripts->setEnabled(true);
+        lblScript->setEnabled(true);
         GameSchemes->setEnabled(true);
+        goToSchemePage->setEnabled(true);
+        lblScheme->setEnabled(true);
         WeaponsName->setEnabled(true);
+        goToWeaponPage->setEnabled(true);
+        lblWeapons->setEnabled(true);
         bindEntries->setEnabled(true);
     }
     emit paramChanged("MAP", QStringList(value));
@@ -612,6 +655,12 @@ void GameCFGWidget::schemeChanged(int index)
             }
         }
     }
+
+    if(index == -1)
+        GameSchemesLabel->setText("");
+    else
+        GameSchemesLabel->setText(GameSchemes->currentText());
+
     pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
 }
 
@@ -628,11 +677,15 @@ void GameCFGWidget::scriptChanged(int index)
         if (scheme == "locked")
         {
             GameSchemes->setEnabled(false);
+            goToSchemePage->setEnabled(false);
+            lblScheme->setEnabled(false);
             GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
         else if (m_master)
         {
             GameSchemes->setEnabled(true);
+            goToSchemePage->setEnabled(true);
+            lblScheme->setEnabled(true);
             int num = GameSchemes->findText(scheme);
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
@@ -643,11 +696,15 @@ void GameCFGWidget::scriptChanged(int index)
         if (weapons == "locked")
         {
             WeaponsName->setEnabled(false);
+            goToWeaponPage->setEnabled(false);
+            lblWeapons->setEnabled(false);
             WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
         else if (m_master)
         {
             WeaponsName->setEnabled(true);
+            goToWeaponPage->setEnabled(true);
+            lblWeapons->setEnabled(true);
             int num = WeaponsName->findText(weapons);
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
@@ -663,17 +720,25 @@ void GameCFGWidget::scriptChanged(int index)
     else
     {
         GameSchemes->setEnabled(true);
+        goToSchemePage->setEnabled(true);
+        lblScheme->setEnabled(true);
         WeaponsName->setEnabled(true);
+        goToWeaponPage->setEnabled(true);
+        lblWeapons->setEnabled(true);
         bindEntries->setEnabled(true);
     }
-    if (!index)
+    if (index == -1)
     {
         pMapContainer->setScript(QString(""), QString(""));
+        ScriptsLabel->setStyleSheet("color: #b50000;");
     }
     else
     {
         pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
+        ScriptsLabel->setText(Scripts->currentText());
+        ScriptsLabel->setStyleSheet("");
     }
+
     emit paramChanged("SCRIPT", QStringList(name));
 }
 
@@ -731,7 +796,27 @@ void GameCFGWidget::setMaster(bool master)
     if (master == m_master) return;
     m_master = master;
 
+    if (master)
+    {
+        // Reset script if not found
+        if (Scripts->currentIndex() == -1)
+        {
+            Scripts->setCurrentIndex(Scripts->findText("Normal"));
+        }
+    }
+
     pMapContainer->setMaster(master);
+
+    GameSchemes->setHidden(!master);
+    WeaponsName->setHidden(!master);
+    Scripts->setHidden(!master);
+    goToSchemePage->setHidden(!master);
+    goToWeaponPage->setHidden(!master);
+    bindEntries->setHidden(!master);
+
+    GameSchemesLabel->setHidden(master);
+    WeaponsNameLabel->setHidden(master);
+    ScriptsLabel->setHidden(master);
 
     foreach (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);

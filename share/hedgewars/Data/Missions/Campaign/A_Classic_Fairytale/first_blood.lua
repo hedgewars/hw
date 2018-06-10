@@ -279,7 +279,7 @@ function AnimationSetup()
   table.insert(challengeFailedAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(challengeCompletedAnim, Skipanim, {challengeCompletedAnim})
-  table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The spirits of the ancerstors are surely pleased, Leaks A Lot."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = challengeCompletedAnim})
+  table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The spirits of the ancestors are surely pleased, Leaks A Lot."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = challengeCompletedAnim})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("You have proven yourself worthy to see our most ancient secret!"), SAY_SAY, 4000}})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("The weapon in that last crate was bestowed upon us by the ancients!"), SAY_SAY, 4000}})
   table.insert(challengeCompletedAnim, {func = AnimSay, args = {elderh, loc("Use it with precaution!"), SAY_SAY, 4000}})
@@ -418,7 +418,7 @@ function CheckOnShroom()
 end
 
 function DoOnShroom()
-  ropeCrate1 = SpawnUtilityCrate(2751, 1194, amRope, 100)
+  ropeCrate1 = SpawnSupplyCrate(2751, 1194, amRope, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onShroomAnim)
   AddEvent(CheckOnFlower, {}, DoOnFlower, {}, 0)
@@ -430,7 +430,7 @@ end
 
 function DoOnFlower()
   AddAmmo(youngh, amRope, 100)
-  paraCrate = SpawnUtilityCrate(3245, 1758, amParachute, 100)
+  paraCrate = SpawnSupplyCrate(3245, 1758, amParachute, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onFlowerAnim)
   AddEvent(CheckTookParaCrate, {}, DoTookParaCrate, {}, 0)
@@ -462,7 +462,7 @@ end
 function DoPastMoleHead()
   -- Initiate parachute challenge
   RemoveEventFunc(CheckOnMoleHead)
-  ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope, 100)
+  ropeCrate2 = SpawnSupplyCrate(2782, 1720, amRope, 100)
   rope2InProgress = true
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
@@ -475,7 +475,7 @@ end
 function DoOnMoleHead()
   -- Initiate parachute challenge
   RemoveEventFunc(CheckPastMoleHead)
-  ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope, 100)
+  ropeCrate2 = SpawnSupplyCrate(2782, 1720, amRope, 100)
   rope2InProgress = true
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
@@ -493,7 +493,7 @@ function DoTookRope2()
   AddAmmo(youngh, amRope, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(tookRope2Anim)
-  punchCrate = SpawnAmmoCrate(2460, 1321, amFirePunch, 100)
+  punchCrate = SpawnSupplyCrate(2460, 1321, amFirePunch, 100)
   AddEvent(CheckTookPunch, {}, DoTookPunch, {})
 end
 
@@ -524,7 +524,7 @@ function DoTargDestroyed()
   AddAnim(challengeAnim)
   targetsDestroyed = 0
   AddFunction({func = SetChoice, args = {}})
-  ropeCrate3 = SpawnUtilityCrate(2000, 1200, amRope, 100)
+  ropeCrate3 = SpawnSupplyCrate(2000, 1200, amRope, 100)
   AddEvent(CheckTookRope3, {}, AddAmmo, {youngh, amRope, 100}, 0)
   AddEvent(CheckCratesColled, {}, DoCratesColled, {}, 0)
   AddEvent(CheckChallengeWon, {}, DoChallengeWon, {}, 0)
@@ -555,7 +555,7 @@ function CheckChallengeWon()
 end
 
 function DoChallengeWon()
-  desertCrate = SpawnAmmoCrate(1240, 1212, amDEagle, 100)
+  desertCrate = SpawnSupplyCrate(1240, 1212, amDEagle, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeCompletedAnim)
   AddEvent(CheckDesertColled, {}, DoDesertColled, {}, 0)
@@ -612,7 +612,7 @@ function DoTargetsKilled()
   targsWave = targsWave + 1
   if targsWave > 3 then
     RemoveEventFunc(CheckTargetsKilled)
-    SetState(cannibal, gstVisible)
+    RestoreHog(cannibal)
     cannibalVisible = true
     SetGearMessage(CurrentHedgehog, 0)
     AddAnim(beforeKillAnim)
@@ -633,9 +633,9 @@ end
 function DoCloseToCannibal()
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(closeCannim)
-  AddFunction({func = SpawnAmmoCrate, args = {targetPosX[1][1], targetPosY[1][1], amWhip}})
-  AddFunction({func = SpawnAmmoCrate, args = {targetPosX[1][2], targetPosY[1][2], amBaseballBat}})
-  AddFunction({func = SpawnAmmoCrate, args = {targetPosX[1][3], targetPosY[1][3], amHammer}})
+  AddFunction({func = SpawnSupplyCrate, args = {targetPosX[1][1], targetPosY[1][1], amWhip}})
+  AddFunction({func = SpawnSupplyCrate, args = {targetPosX[1][2], targetPosY[1][2], amBaseballBat}})
+  AddFunction({func = SpawnSupplyCrate, args = {targetPosX[1][3], targetPosY[1][3], amHammer}})
 end
 
 function CheckCannibalKilled()
@@ -754,7 +754,7 @@ function onGameStart()
   TurnTimeLeft = -1
   FollowGear(youngh)
 	ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training|Hint: Animations can be skipped with the [Precise] key."), -amSkip, 0)
-  SetState(cannibal, gstInvisible)
+  HideHog(cannibal)
 
   AddAnim(startDialogue)
   princessFace = "Right"
@@ -842,7 +842,7 @@ end
 
 function onNewTurn()
   if CurrentHedgehog == cannibal and cannibalVisible == false then
-    SetState(cannibal, gstInvisible)
+    RestoreHog(cannibal)
   end
   SwitchHog(youngh)
   FollowGear(youngh)
@@ -862,7 +862,6 @@ function onGearDamage(gear, damage)
   elseif gear == cannibal then
     cannibalVisible = true
     cannibalDamaged = true
-    SetState(cannibal, 0)
   end
 end
 

@@ -99,7 +99,7 @@ void HWNewNet::Disconnect()
 
 void HWNewNet::CreateRoom(const QString & room, const QString & password)
 {
-    if(netClientState != InLobby)
+    if(netClientState != InLobby || !ByteLength(room))
     {
         qWarning("Illegal try to create room!");
         return;
@@ -176,6 +176,11 @@ void HWNewNet::SendNet(const QByteArray & buf)
     RawSendNet(QString("EM%1%2").arg(delimiter).arg(msg));
 }
 
+int HWNewNet::ByteLength(const QString & str)
+{
+	return str.toUtf8().size();
+}
+
 void HWNewNet::RawSendNet(const QString & str)
 {
     RawSendNet(str.toUtf8());
@@ -242,7 +247,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 void HWNewNet::SendPasswordHash(const QString & hash)
 {
     // don't send it immediately, only store and check if server asked us for a password
-    m_passwordHash = hash.toAscii();
+    m_passwordHash = hash.toLatin1();
 
     maybeSendPassword();
 }
@@ -271,7 +276,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "ERROR")
     {
         if (lst.size() == 2)
-            emit Error(HWApplication::translate("server", lst[1].toAscii().constData()));
+            emit Error(HWApplication::translate("server", lst[1].toLatin1().constData()));
         else
             emit Error("Unknown error");
         return;
@@ -280,7 +285,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "WARNING")
     {
         if (lst.size() == 2)
-            emit Warning(HWApplication::translate("server", lst[1].toAscii().constData()));
+            emit Warning(HWApplication::translate("server", lst[1].toLatin1().constData()));
         else
             emit Warning("Unknown warning");
         return;
@@ -447,7 +452,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         while(flags.size() > 1)
         {
             flags.remove(0, 1);
-            char c = flags[0].toAscii();
+            char c = flags[0].toLatin1();
             bool inRoom = (netClientState == InRoom || netClientState == InGame);
 
             switch(c)
@@ -673,7 +678,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
         m_game_connected = false;
         Disconnect();
-        emit disconnected(HWApplication::translate("server", lst[1].toAscii().constData()));
+        emit disconnected(HWApplication::translate("server", lst[1].toLatin1().constData()));
         return;
     }
 
@@ -727,7 +732,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             }
             for(int i = 1; i < lst.size(); ++i)
             {
-                QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
+                QByteArray em = QByteArray::fromBase64(lst[i].toLatin1());
                 emit FromNet(em);
             }
             return;
@@ -909,7 +914,7 @@ void HWNewNet::chatLineToNetWithEcho(const QString& str)
 
 void HWNewNet::chatLineToNet(const QString& str)
 {
-    if(str != "")
+    if(ByteLength(str))
     {
         RawSendNet(QString("CHAT") + delimiter + str);
         QString action = HWProto::chatStringToAction(str);
@@ -922,7 +927,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 
 void HWNewNet::chatLineToLobby(const QString& str)
 {
-    if(str != "")
+    if(ByteLength(str))
     {
         RawSendNet(QString("CHAT") + delimiter + str);
         QString action = HWProto::chatStringToAction(str);
@@ -1155,18 +1160,18 @@ void HWNewNet::maybeSendPassword()
         return;
 
     QString hash = QCryptographicHash::hash(
-                m_clientSalt.toAscii()
-                .append(m_serverSalt.toAscii())
+                m_clientSalt.toLatin1()
+                .append(m_serverSalt.toLatin1())
                 .append(m_passwordHash)
-                .append(cProtoVer->toAscii())
+                .append(cProtoVer->toLatin1())
                 .append("!hedgewars")
                 , QCryptographicHash::Sha1).toHex();
 
     m_serverHash = QCryptographicHash::hash(
-                m_serverSalt.toAscii()
-                .append(m_clientSalt.toAscii())
+                m_serverSalt.toLatin1()
+                .append(m_clientSalt.toLatin1())
                 .append(m_passwordHash)
-                .append(cProtoVer->toAscii())
+                .append(cProtoVer->toLatin1())
                 .append("!hedgewars")
                 , QCryptographicHash::Sha1).toHex();
 

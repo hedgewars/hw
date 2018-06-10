@@ -26,8 +26,11 @@ local YouLost = false
 local HogsAreInvulnerable = false
 local WaterRise = nil
 local Cake = nil
+local CakeWarning = false
+local CakeFireWarning = false
 local CakeTries = 0
 local addCake = true
+local takeASeat = false
 local Stars = {}
 local tauntNoo = false
 local jokeAwardNavy = nil
@@ -110,10 +113,11 @@ end
 
 function onGearDelete(gear)
     if gear == MrMine then
-        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), 0xFFFFFFFF, capgrpMessage)
+        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), 0xFFFFFFFF, capgrpMessage2)
         MrMine = nil
     elseif GetGearType(gear) == gtCake then
         Cake = nil
+        CakeWarning = false
     elseif GetGearType(gear) == gtHedgehog then
 	onGameTick20()
 	onGearDamage(gear, 0)
@@ -145,6 +149,9 @@ function onGameStart()
     end
 -- 1925,263 - Mr. Mine position
     MrMine = AddGear(1925,263,gtMine,0,0,0,0)
+    for i=0, TeamsCount-1 do
+        SetTeamLabel(GetTeamName(i), "0")
+    end
 end
 
 function onAmmoStoreInit()
@@ -178,6 +185,7 @@ function onNewTurn()
     YouWon = false
     YouLost = false
     tauntNoo = false
+    takeASeat = false
     recordBroken = false
     currTeam = GetHogTeamName(CurrentHedgehog)
     if CurrentHedgehog ~= nil then
@@ -221,6 +229,7 @@ end
 --end
 
 function FireBoom(x,y,d) -- going to add for rockets too
+    PlaySound(sndExplosion)
     AddVisualGear(x,y,vgtExplosion,0,false)
     -- should approximate circle by removing corners
     --if BoomFire == nil then BoomFire = {} end
@@ -251,7 +260,7 @@ function onGameTick20()
 
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
     if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
-        ParseCommand("/skip")
+        SkipTurn()
         dummySkip = 0
     end
 
@@ -314,9 +323,19 @@ function onGameTick20()
             local cx,cy = GetGearPosition(Cake)
             if y < cy-1500 then DeleteGear(Cake) end
 
-            if Cake ~= nil and GetHealth(Cake) < 999980 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
-                FireBoom(cx,cy,200) -- todo animate
-                DeleteGear(Cake)
+            if Cake ~= nil and GetHealth(Cake) < 999980 then
+                if not CakeWarning and gearIsInCircle(CurrentHedgehog,cx,cy,1350) then
+                    AddCaption(loc("Warning: Fire cake detected"))
+                    CakeWarning = true
+                end
+                if gearIsInCircle(CurrentHedgehog,cx,cy,450) then
+                    if not CakeFireWarning then
+                        AddCaption(loc("Don't touch the flames!"))
+                        CakeFireWarning = true
+                    end
+                    FireBoom(cx,cy,200) -- todo animate
+                    DeleteGear(Cake)
+                end
             end
         end
         if band(GetState(CurrentHedgehog),gstHHDriven) == 0 then
@@ -410,7 +429,7 @@ function onGameTick20()
             end
             -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
             if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
-                AddCaption(loc("Victory!"))
+                AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
                 ShowMission(loc("Climb Home"),
                             loc("Made it!"),
                             string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
@@ -445,12 +464,11 @@ function onGameTick20()
                     (not MrMine or (MrMine and band(GetState(MrMine), gstAttacking) == 0)) then
                 -- Player managed to reach home in multiplayer.
                 -- Stop hog, disable controls, celebrate victory and continue the game after 4 seconds.
-                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime))
+                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime), 0xFFFFFFFF, capgrpGameState)
                 SendStat(siCustomAchievement, string.format(loc("%s (%s) reached home in %.3f seconds."), GetHogName(CurrentHedgehog), GetHogTeamName(CurrentHedgehog), finishTime))
                 makeMultiPlayerWinnerStat(CurrentHedgehog)
                 PlaySound(sndVictory, CurrentHedgehog)
-                -- TODO: Unselect weapon.
-                -- Note: SetWeapon(amNothing) does not work. :-(
+		SetWeapon(amNothing)
                 SetGearMessage(CurrentHedgehog, band(GetGearMessage(CurrentHedgehog), bnot(gmLeft+gmRight+gmUp+gmDown+gmHJump+gmLJump+gmPrecise)))
                 SetInputMask(0x00)
                 -- TODO: Add stupid winner grin.
@@ -470,6 +488,11 @@ function onGameTick20()
                 end
             else
                 SendStat(siClanHealth, tostring(getActualHeight(y)), GetHogTeamName(CurrentHedgehog))
+            end
+            -- If player is inside home, tell player to take a seat.
+            if not takeASeat and gearIsInBox(CurrentHedgehog, 1765, 131, 244, 189) then
+                AddCaption(loc("Welcome home! Please take a seat"))
+                takeASeat = true
             end
     
             -- play taunts
@@ -509,11 +532,13 @@ function onGameTick20()
                     MaxHeight = 286
                 end
                 if y < MaxHeight and y > 286 then MaxHeight = y end
+                -- New maximum height of this turn?
                 if MaxHeight < hTagHeight then
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
                     hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
                     local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
+                    local score = 32640-hTagHeight
                     -- snagged from space invasion
                     SetVisualGearValues (
                             hTag,        --id
@@ -526,12 +551,15 @@ function onGameTick20()
                             g7,         --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
-                            32640-hTagHeight,    --value
+                            score,    --value
                             99999999999,--timer
                             GetClanColor(GetHogClan(CurrentHedgehog))
                             )
+                    local team = GetHogTeamName(CurrentHedgehog)
+                    SetTeamLabel(team, math.max(score, teamBests[team] or 0))
                 end
 
+                -- New record height?
                 if MaxHeight < RecordHeight then
                     RecordHeight = MaxHeight
                     local oldName = RecordHeightHogName

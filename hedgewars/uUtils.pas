@@ -216,16 +216,12 @@ begin
 SplitByChar(a,b,' ');
 end;
 
-// should this include "strtolower()" for the split string?
 procedure SplitByChar(var a, b: shortstring; c : char);
-var i, t: LongInt;
+var i: LongInt;
 begin
 i:= Pos(c, a);
 if i > 0 then
     begin
-    for t:= 1 to Pred(i) do
-        if (a[t] >= 'A')and(a[t] <= 'Z') then
-            Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
     a[0]:= char(Pred(i))
     {$IFDEF PAS2C}
@@ -755,9 +751,14 @@ end;
 procedure freeModule;
 begin
 {$IFDEF DEBUGFILE}
+if logFile <> nil then
+    begin
     pfsWriteLn(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
     pfsFlush(logFile);
     pfsClose(logFile);
+    end
+else
+    WriteLn(stdout, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
 {$IFDEF USE_VIDEO_RECORDING}
     DoneCriticalSection(logMutex);
 {$ENDIF}

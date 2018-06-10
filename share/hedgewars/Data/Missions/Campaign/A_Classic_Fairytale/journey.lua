@@ -250,7 +250,6 @@ end
 function SkipMidAnimAlone()
   AnimSetGearPosition(leaks, 2656, 1842)
   AnimSwitchHog(leaks)
-  SetInputMask(0xFFFFFFFF)
   AnimWait(dense, 1)
   AddFunction({func = HideHedge, args = {princess}})
   AddFunction({func = HideHedge, args = {cyborg}})
@@ -259,14 +258,14 @@ end
 function AfterStartAnim()
   SetGearMessage(leaks, 0)
   TurnTimeLeft = TurnTime
-  local goal = loc("Get the crate on the other side of the island!|")
-  local hint = loc("Hint: you might want to stay out of sight and take all the crates...|")
-  local stuck = loc("If you get stuck, use your Desert Eagle or restart the mission!|")
+  local goal = loc("Get the crate on the other side of the island.")
+  local hint = loc("Hint: You might want to stay out of sight and take all the crates ...")
+  local stuck = loc("If you get stuck, use your Desert Eagle or restart the mission!")
   local conds = loc("Leaks A Lot must survive!")
   if m2DenseDead == 0 then
     conds = loc("Your hogs must survive!")
   end
-  ShowMission(loc("The Journey Back"), loc("Adventurous"), goal .. hint .. stuck .. conds, 0, 7000)
+  ShowMission(loc("The Journey Back"), loc("Adventurous"), goal .. "|" .. hint .. "|" .. stuck .. "|" .. conds, 0, 7000)
 end
 
 function SkipStartAnim()
@@ -274,12 +273,12 @@ function SkipStartAnim()
 end
 
 function PlaceCratesDuo()
-  SpawnAmmoCrate(3090, 827, amBaseballBat)
-  girderCrate1 = SpawnUtilityCrate(2466, 1814, amGirder)
-  girderCrate2 = SpawnUtilityCrate(2630, 1278, amGirder)
-  SpawnUtilityCrate(2422, 1810, amParachute)
-  SpawnUtilityCrate(3157, 1009, amLowGravity)
-  sniperCrate = SpawnAmmoCrate(784, 1715, amSniperRifle)
+  SpawnSupplyCrate(3090, 827, amBaseballBat)
+  girderCrate1 = SpawnSupplyCrate(2466, 1814, amGirder)
+  girderCrate2 = SpawnSupplyCrate(2630, 1278, amGirder)
+  SpawnSupplyCrate(2422, 1810, amParachute)
+  SpawnSupplyCrate(3157, 1009, amLowGravity)
+  sniperCrate = SpawnSupplyCrate(784, 1715, amSniperRifle)
 end
 
 function PlaceMinesDuo()
@@ -408,11 +407,11 @@ function SetupCourseDuo()
   PlaceGirder(1033, 649, 0)
   PlaceGirder(952, 650, 0)
 
-  fireCrate = SpawnAmmoCrate(1846, 1100, amFirePunch)
-  SpawnAmmoCrate(1900, 1100, amPickHammer)
-  SpawnAmmoCrate(950, 674, amDynamite)
-  SpawnUtilityCrate(994, 825, amRope)
-  SpawnUtilityCrate(570, 1357, amLowGravity)
+  fireCrate = SpawnSupplyCrate(1846, 1100, amFirePunch)
+  SpawnSupplyCrate(1900, 1100, amPickHammer)
+  SpawnSupplyCrate(950, 674, amDynamite)
+  SpawnSupplyCrate(994, 825, amRope)
+  SpawnSupplyCrate(570, 1357, amLowGravity)
 end
 
 local trackedGears = {}
@@ -429,41 +428,44 @@ function ClearTrashForPrincessCage()
 end
 
 -- Dump mines in princess cage
-function DumpMines()
-  AddGear(2261, 1835, gtMine, 0, 0, 0, 0)
-  AddGear(2280, 1831, gtMine, 0, 0, 0, 0)
-  AddGear(2272, 1809, gtMine, 0, 0, 0, 0)
-  AddGear(2290, 1815, gtMine, 0, 0, 0, 0)
-  AddGear(2278, 1815, gtMine, 0, 0, 0, 0)
-  AddGear(2307, 1811, gtMine, 0, 0, 0, 0)
-  AddGear(2286, 1820, gtMine, 0, 0, 0, 0)
-  AddGear(2309, 1813, gtMine, 0, 0, 0, 0)
-  AddGear(2303, 1822, gtMine, 0, 0, 0, 0)
-  AddGear(2317, 1827, gtMine, 0, 0, 0, 0)
-  AddGear(2312, 1816, gtMine, 0, 0, 0, 0)
-  AddGear(2316, 1812, gtMine, 0, 0, 0, 0)
-  AddGear(2307, 1802, gtMine, 0, 0, 0, 0)
-  AddGear(2276, 1818, gtMine, 0, 0, 0, 0)
-  AddGear(2284, 1816, gtMine, 0, 0, 0, 0)
-  AddGear(2292, 1811, gtMine, 0, 0, 0, 0)
-  AddGear(2295, 1814, gtMine, 0, 0, 0, 0)
-  AddGear(2306, 1811, gtMine, 0, 0, 0, 0)
-  AddGear(2292, 1815, gtMine, 0, 0, 0, 0)
-  AddGear(2314, 1815, gtMine, 0, 0, 0, 0)
-  AddGear(2286, 1813, gtMine, 0, 0, 0, 0)
-  AddGear(2275, 1813, gtMine, 0, 0, 0, 0)
-  AddGear(2269, 1814, gtMine, 0, 0, 0, 0)
-  AddGear(2273, 1812, gtMine, 0, 0, 0, 0)
-  AddGear(2300, 1808, gtMine, 0, 0, 0, 0)
-  AddGear(2322, 1812, gtMine, 0, 0, 0, 0)
-  AddGear(2323, 1813, gtMine, 0, 0, 0, 0)
-  AddGear(2311, 1811, gtMine, 0, 0, 0, 0)
-  AddGear(2303, 1809, gtMine, 0, 0, 0, 0)
-  AddGear(2287, 1808, gtMine, 0, 0, 0, 0)
-  AddGear(2282, 1808, gtMine, 0, 0, 0, 0)
-  AddGear(2277, 1809, gtMine, 0, 0, 0, 0)
-  AddGear(2296, 1809, gtMine, 0, 0, 0, 0)
-  AddGear(2314, 1818, gtMine, 0, 0, 0, 0)
+function DumpMines(t)
+  if not t then
+    t = 0
+  end
+  AddGear(2261, 1835, gtMine, 0, 0, 0, t)
+  AddGear(2280, 1831, gtMine, 0, 0, 0, t)
+  AddGear(2272, 1809, gtMine, 0, 0, 0, t)
+  AddGear(2290, 1815, gtMine, 0, 0, 0, t)
+  AddGear(2278, 1815, gtMine, 0, 0, 0, t)
+  AddGear(2307, 1811, gtMine, 0, 0, 0, t)
+  AddGear(2286, 1820, gtMine, 0, 0, 0, t)
+  AddGear(2309, 1813, gtMine, 0, 0, 0, t)
+  AddGear(2303, 1822, gtMine, 0, 0, 0, t)
+  AddGear(2317, 1827, gtMine, 0, 0, 0, t)
+  AddGear(2312, 1816, gtMine, 0, 0, 0, t)
+  AddGear(2316, 1812, gtMine, 0, 0, 0, t)
+  AddGear(2307, 1802, gtMine, 0, 0, 0, t)
+  AddGear(2276, 1818, gtMine, 0, 0, 0, t)
+  AddGear(2284, 1816, gtMine, 0, 0, 0, t)
+  AddGear(2292, 1811, gtMine, 0, 0, 0, t)
+  AddGear(2295, 1814, gtMine, 0, 0, 0, t)
+  AddGear(2306, 1811, gtMine, 0, 0, 0, t)
+  AddGear(2292, 1815, gtMine, 0, 0, 0, t)
+  AddGear(2314, 1815, gtMine, 0, 0, 0, t)
+  AddGear(2286, 1813, gtMine, 0, 0, 0, t)
+  AddGear(2275, 1813, gtMine, 0, 0, 0, t)
+  AddGear(2269, 1814, gtMine, 0, 0, 0, t)
+  AddGear(2273, 1812, gtMine, 0, 0, 0, t)
+  AddGear(2300, 1808, gtMine, 0, 0, 0, t)
+  AddGear(2322, 1812, gtMine, 0, 0, 0, t)
+  AddGear(2323, 1813, gtMine, 0, 0, 0, t)
+  AddGear(2311, 1811, gtMine, 0, 0, 0, t)
+  AddGear(2303, 1809, gtMine, 0, 0, 0, t)
+  AddGear(2287, 1808, gtMine, 0, 0, 0, t)
+  AddGear(2282, 1808, gtMine, 0, 0, 0, t)
+  AddGear(2277, 1809, gtMine, 0, 0, 0, t)
+  AddGear(2296, 1809, gtMine, 0, 0, 0, t)
+  AddGear(2314, 1818, gtMine, 0, 0, 0, t)
 end
 
 function SetupAnimRefusedDied()
@@ -487,7 +489,7 @@ function SetupAnimAttacked()
   table.insert(midAnim, {func = AnimCustomFunction, args = {cyborg, TargetPrincess, {}}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("Welcome, Leaks A Lot!"), SAY_SAY, 3000}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("I want to play a game..."), SAY_SAY, 3000}})
-  table.insert(midAnim, {func = AnimSay, args = {princess, loc("Help me, please!!!"), SAY_SHOUT, 3000}})
+  table.insert(midAnim, {func = AnimSay, args = {princess, loc("Help me, please!"), SAY_SHOUT, 3000}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("If you can get that crate fast enough, your beloved \"princess\" may go free."), SAY_SAY, 7000}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("However, if you fail to do so, she dies a most violent death! Muahahaha!"), SAY_SAY, 8000}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("Good luck...or else!"), SAY_SAY, 4000}})
@@ -509,7 +511,7 @@ function SetupAnimAcceptedDied()
   table.insert(midAnimAD, {func = AnimCustomFunction, args = {cyborg, TargetPrincess, {}}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("Welcome, Leaks A Lot!"), SAY_SAY, 3000}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("I want to play a game..."), SAY_SAY, 3000}})
-  table.insert(midAnimAD, {func = AnimSay, args = {princess, loc("Help me, please!!!"), SAY_SHOUT, 3000}})
+  table.insert(midAnimAD, {func = AnimSay, args = {princess, loc("Help me, please!"), SAY_SHOUT, 3000}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("If you can get that crate fast enough, your beloved \"princess\" may go free."), SAY_SAY, 7000}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("However, if you fail to do so, she dies a most violent death, just like your friend! Muahahaha!"), SAY_SAY, 8000}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("Good luck...or else!"), SAY_SAY, 4000}})
@@ -535,6 +537,7 @@ function SetupAnimAcceptedDied()
   table.insert(failAnimAD, {func = AnimWait, args = {cyborg, 500}})
   table.insert(failAnimAD, {func = AnimSay, args = {leaks, loc("No! What have I done?! What have YOU done?!"), SAY_SHOUT, 3000}})
   table.insert(failAnimAD, {func = AnimSwitchHog, args = {princess}})
+  AddSkipFunction(failAnimAD, SkipFailAnimAlone, {})
 
   table.insert(endAnimAD, {func = AnimCustomFunction, swh = false, args = {leaks, RestoreCyborg, {437, 1700, 519, 1722}}})
   table.insert(endAnimAD, {func = AnimTurn, swh = false, args = {cyborg, "Right"}})
@@ -717,14 +720,14 @@ end
 
 function SetupPlaceAlone()
   ------ AMMO CRATE LIST ------
-  SpawnAmmoCrate(3124, 952, amBaseballBat)
-  SpawnAmmoCrate(2508, 1110, amFirePunch)
+  SpawnSupplyCrate(3124, 952, amBaseballBat)
+  SpawnSupplyCrate(2508, 1110, amFirePunch)
   ------ UTILITY CRATE LIST ------
-  blowCrate = SpawnAmmoCrate(3675, 1480, amBlowTorch)
-  gravityCrate = SpawnUtilityCrate(3448, 1349, amLowGravity)
-  SpawnUtilityCrate(3212, 1256, amGirder)
-  SpawnUtilityCrate(3113, 911, amParachute)
-  sniperCrate = SpawnAmmoCrate(784, 1715, amSniperRifle)
+  blowCrate = SpawnSupplyCrate(3675, 1480, amBlowTorch)
+  gravityCrate = SpawnSupplyCrate(3448, 1349, amLowGravity)
+  SpawnSupplyCrate(3212, 1256, amGirder)
+  SpawnSupplyCrate(3113, 911, amParachute)
+  sniperCrate = SpawnSupplyCrate(784, 1715, amSniperRifle)
   ------ MINE LIST ------
   AddGear(3328, 1399, gtMine, 0, 0, 0, 0)
   AddGear(3028, 1262, gtMine, 0, 0, 0, 0)
@@ -832,12 +835,12 @@ function SetupCourse()
   PlaceGirder(1135, 775, 1)
 
   ------ UTILITY CRATE LIST ------
-  SpawnUtilityCrate(1590, 628, amParachute)
-  SpawnAmmoCrate(1540, 100, amDynamite)
-  SpawnUtilityCrate(2175, 1815, amLowGravity)
-  SpawnAmmoCrate(2210, 1499, amFirePunch)
-  girderCrate = SpawnUtilityCrate(2300, 1663, amGirder)
-  SpawnAmmoCrate(610, 1394, amPickHammer)
+  SpawnSupplyCrate(1590, 628, amParachute)
+  SpawnSupplyCrate(1540, 100, amDynamite)
+  SpawnSupplyCrate(2175, 1815, amLowGravity)
+  SpawnSupplyCrate(2210, 1499, amFirePunch)
+  girderCrate = SpawnSupplyCrate(2300, 1663, amGirder)
+  SpawnSupplyCrate(610, 1394, amPickHammer)
   
   ------ BARREL LIST ------
   SetHealth(AddGear(1148, 736, gtExplosives, 0, 0, 0, 0), 20)
@@ -1044,11 +1047,17 @@ function DoFailedCourse()
   AddFunction({func = AddFunction, args = {{func = AfterMidFailAnim, args = {}}}})
 end
 
+function SkipFailAnimAlone()
+  DumpMines(1)
+  KillPrincess()
+  AnimSwitchHog(princess)
+end
+
 --////////////////////////////Main Functions/////////////////////////
 
 function onGameInit()
   progress = tonumber(GetCampaignVar("Progress"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
   m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))
@@ -1082,11 +1091,13 @@ function onGameInit()
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    SetEffect(cannibals[i], heArtillery, 1)
   end
 
   for i = 5, 8 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
     AnimSetGearPosition(cannibals[i], 0, 0)
+    SetEffect(cannibals[i], heArtillery, 1)
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
@@ -1177,20 +1188,12 @@ function onNewTurn()
     SetGearMessage(leaks, 0)
     TurnTimeLeft = -1
   elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-    for i = 1, 4 do
-      if cannibalDead[i] ~= true and leaksDead ~= true then
-        if GetX(cannibals[i]) < GetX(leaks) then
-          HogTurnLeft(cannibals[i], false)
-        else
-          HogTurnLeft(cannibals[i], true)
-        end
-      end
-    end
-    SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
     TurnTimeLeft = 20000
   else
-    SetInputMask(0xFFFFFFFF)
     TurnsLeft = TurnsLeft - 1
+    if TurnsLeft >= 1 then
+      AddCaption(string.format(loc("Turns left: %d"), TurnsLeft), 0xFFFFFFFF, capgrpGameState)
+    end
   end
 end
 

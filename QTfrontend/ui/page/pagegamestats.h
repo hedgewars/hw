@@ -66,10 +66,11 @@ class PageGameStats : public AbstractPage
     private:
         void AddStatText(const QString & msg);
 
-        QMap<quint32, QVector<quint32> > healthPoints;
+        QMap<qint32, QVector<qint32> > healthPoints;
         unsigned int playerPosition;
         quint32 lastColor;
         bool defaultGraphTitle;
+        QScopedPointer<QGraphicsScene> m_scene;
 
     protected:
         QLayout * bodyLayoutDefinition();

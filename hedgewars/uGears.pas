@@ -46,6 +46,7 @@ procedure DrawGearsTimers;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
+procedure StartSuddenDeath;
 function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
 
@@ -61,7 +62,7 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stDelay, stChDmg, stSweep, stTurnReact,
+    step: (stInit, stDelay, stChDmg, stSweep, stTurnReact,
     stAfterDelay, stChWin, stWater, stChWin2, stHealth,
     stSpawn, stNTurn);
     NewTurnTick: LongWord;
@@ -133,6 +134,7 @@ begin
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
+            // Apply SD health decrease as soon as SD starts
             if (TotalRounds > cSuddenDTurns - 1) then
                 begin
                 inc(tmp, cHealthDecrease);
@@ -156,8 +158,12 @@ begin
                 end;
             if tmp > 0 then
                 begin
-                inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
-                HHHurt(Gear^.Hedgehog, dsPoison);
+                // SD damage never reduces health below 1
+                tmp:= min(tmp, max(0, Gear^.Health - 1 - Gear^.Damage));
+                inc(Gear^.Damage, tmp);
+                if tmp > 0 then
+                    // Make hedgehog moan on damage
+                    HHHurt(Gear^.Hedgehog, dsPoison);
                 end
             end;
 
@@ -235,7 +241,7 @@ if stirFallers then
     t := GearsList;
     while t <> nil do
         begin
-        if t^.Kind = gtGenericFaller then
+        if (t^.Kind = gtGenericFaller) and (t^.Tag = 1) then
             begin
             t^.Active:= true;
             t^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
@@ -251,6 +257,12 @@ curHandledGear:= nil;
 
 if AllInactive then
 case step of
+    stInit:
+        begin
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            ScriptCall('onEndTurn');
+        inc(step)
+        end;
     stDelay:
         begin
         if delay = 0 then
@@ -306,6 +318,7 @@ case step of
     stWater:
     if (not bBetweenTurns) and (not isInMultiShoot) then
         begin
+        // Start Sudden Death water rise in the 2nd round of Sudden Death
         if TotalRounds = cSuddenDTurns + 1 then
             bWaterRising:= true;
         if bWaterRising and (cWaterRise > 0) then
@@ -325,29 +338,7 @@ case step of
         if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
              begin
             if (TotalRounds = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
-                begin
-                SuddenDeath:= true;
-                if cHealthDecrease <> 0 then
-                    begin
-                    SuddenDeathDmg:= true;
-
-                    // flash
-                    ScreenFade:= sfFromWhite;
-                    ScreenFadeValue:= sfMax;
-                    ScreenFadeSpeed:= 1;
-
-                    ChangeToSDClouds;
-                    ChangeToSDFlakes;
-                    SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.r/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
-                    Ammoz[amTardis].SkipTurns:= 9999;
-                    Ammoz[amTardis].Probability:= 0;
-                    end;
-                AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
-                ScriptCall('onSuddenDeath');
-                playSound(sndSuddenDeath);
-                StopMusic;
-                if SDMusicFN <> '' then PlayMusic
-                end
+                StartSuddenDeath()
             else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
                 begin
                 i:= cSuddenDTurns - TotalRounds;
@@ -528,8 +519,6 @@ begin
         cLaserSightingSniper:= false
         end;
 
-    if (GameFlags and gfArtillery) = 0 then
-        cArtillery:= false;
     // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
     if (CurrentTeam <> nil) then
         with CurrentTeam^ do
@@ -548,6 +537,8 @@ begin
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
                             Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
+                        if (Gear^.Hedgehog^.Effects[heArtillery] = 2) then
+                            Gear^.Hedgehog^.Effects[heArtillery]:= 0;
                         end;
                     end;
     t:= GearsList;
@@ -556,7 +547,10 @@ begin
         t^.PortalCounter:= 0;
         if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < t^.Hedgehog^.InitialHealth) then
             begin
+            i:= t^.Hedgehog^.InitialHealth - t^.Health;
             t^.Health:= t^.Hedgehog^.InitialHealth;
+            if i > 0 then
+                HHHeal(t^.Hedgehog, i, false, $00FF0040);
             RenderHealth(t^.Hedgehog^);
             end;
         t:= t^.NextGear
@@ -745,15 +739,15 @@ if (GameFlags and gfInvulnerable) <> 0 then
 if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;
 
-if (GameFlags and gfArtillery) <> 0 then
-    cArtillery:= true;
 for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     begin
     rx:= GetRandom(rightX-leftX)+leftX;
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
     rdx:= _90-(GetRandomf*_360);
     rdy:= _90-(GetRandomf*_360);
-    AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    Gear:= AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    // Tag=1: This allows this generic faller to be displaced randomly by events
+    Gear^.Tag:= 1;
     end;
 
 snowRight:= max(LAND_WIDTH,4096)+512;
@@ -1057,6 +1051,40 @@ begin
     SpawnFakeCrateAt := FollowGear;
 end;
 
+procedure StartSuddenDeath();
+begin
+    if SuddenDeath then
+        exit;
+
+    SuddenDeath:= true;
+    SuddenDeathActive:= true;
+
+    // Special effects (only w/ health decrease)
+    if cHealthDecrease <> 0 then
+    begin
+        SuddenDeathDmg:= true;
+        // White screen flash
+        ScreenFade:= sfFromWhite;
+        ScreenFadeValue:= sfMax;
+        ScreenFadeSpeed:= 1;
+
+        // Clouds, flakes, sky tint
+        ChangeToSDClouds;
+        ChangeToSDFlakes;
+        SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255);
+    end;
+
+    // Disable tardis
+    Ammoz[amTardis].SkipTurns:= 9999;
+    Ammoz[amTardis].Probability:= 0;
+
+    AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+    ScriptCall('onSuddenDeath');
+    playSound(sndSuddenDeath);
+    StopMusic;
+    if SDMusicFN <> '' then
+        PlayMusic
+end;
 
 function GearByUID(uid : Longword) : PGear;
 var gear: PGear;
@@ -1099,7 +1127,8 @@ s:= s; // avoid compiler hint
 if not isExternalSource then
     SendIPC(_S',');
 uStats.Skipped;
-skipFlag:= true
+skipFlag:= true;
+ScriptCall('onSkipTurn');
 end;
 
 procedure chHogSay(var s: shortstring);
@@ -1250,7 +1279,9 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepAddAmmo,
             @doStepGenericFaller,
             @doStepKnife,
-            @doStepDuck);
+            @doStepDuck,
+            @doStepMinigun,
+            @doStepMinigunBullet);
 begin
     doStepHandlers:= handlers;
 

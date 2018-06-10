@@ -105,7 +105,7 @@ begin
             RecountAllTeamsHealth;
             GameState:= gsGame;
             end;
-        gsConfirm, gsGame, gsChat:
+        gsConfirm, gsGame:
             begin
             // disable screenshot flash effect when about to make another screenshot
             if flagMakeCapture and (ScreenFade = sfFromWhite) then
@@ -180,7 +180,7 @@ begin
         begin
             case event.type_ of
                 SDL_KEYDOWN:
-                    if GameState = gsChat then
+                    if isInChatMode then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                         KeyPressChat(event.key.keysym);
@@ -188,10 +188,10 @@ begin
                     else
                         if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
-                    if (GameState <> gsChat) and (GameState >= gsGame) then
+                    if (not isInChatMode) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
-                SDL_TEXTINPUT: if GameState = gsChat then uChat.TextInput(event.text);
+                SDL_TEXTINPUT: if isInChatMode then uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
                     begin
@@ -332,6 +332,7 @@ begin
     while LoadNextCameraPosition(newRealTicks, newGameTicks) do
     begin
         IPCCheckSock();
+        RealTicks:= newRealTicks;
         DoGameTick(newGameTicks - oldGameTicks);
         if GameState = gsExit then
             break;

@@ -27,7 +27,7 @@
 #include <QDataWidgetMapper>
 #include <QSpinBox>
 
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "pagescheme.h"
 #include "FreqSpinBox.h"
 #include "MinesTimeSpinBox.h"
@@ -83,6 +83,10 @@ QLayout * PageScheme::bodyLayoutDefinition()
     TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
     TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
     glGMLayout->addWidget(TBW_bottomborder,0,3,1,1);
+
+    TBW_switchhog = new ToggleButtonWidget(gbGameModes, ":/res/btnSwitchHog@2x.png");
+    TBW_switchhog->setWhatsThis(tr("Select a hedgehog at the beginning of a turn"));
+    glGMLayout->addWidget(TBW_switchhog,0,4,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
     TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
@@ -494,15 +498,14 @@ QLayout * PageScheme::bodyLayoutDefinition()
     LE_ScriptParam->setMaxLength(240);
     glBSLayout->addWidget(LE_ScriptParam,17,2,1,1);
 
-
-    l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Scheme Name:"));
+    L_name = new QLabel(gbBasicSettings);
+    L_name->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
     LE_name->setWhatsThis(tr("Name of this scheme"));
 
     gl->addWidget(LE_name,15,1,1,5);
-    gl->addWidget(l,15,0,1,1);
+    gl->addWidget(L_name,15,0,1,1);
 
     return pageLayout;
 }
@@ -546,6 +549,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     selectScheme->setModel(model);
 
     mapper->addMapping(LE_name, 0);
+    mapper->addMapping(TBW_switchhog, 1);
     mapper->addMapping(TBW_teamsDivide, 2);
     mapper->addMapping(TBW_solid, 3);
     mapper->addMapping(TBW_border, 4);
@@ -608,7 +612,7 @@ void PageScheme::copyRow()
 
 void PageScheme::deleteRow()
 {
-    int numberOfDefaultSchemes = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    int numberOfDefaultSchemes = ((GameSchemeModel*)mapper->model())->numberOfDefaultSchemes;
     if (selectScheme->currentIndex() < numberOfDefaultSchemes)
     {
         QMessageBox deniedMsg(this);
@@ -637,10 +641,11 @@ void PageScheme::deleteRow()
 
 void PageScheme::schemeSelected(int n)
 {
-    int c = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    int c = ((GameSchemeModel*)mapper->model())->numberOfDefaultSchemes;
     gbGameModes->setEnabled(n >= c);
     gbBasicSettings->setEnabled(n >= c);
     LE_name->setEnabled(n >= c);
+    L_name->setEnabled(n >= c);
 }
 
 

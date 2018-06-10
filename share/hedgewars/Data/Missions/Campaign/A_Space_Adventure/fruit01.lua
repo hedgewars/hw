@@ -197,7 +197,7 @@ function onGameStart()
 
 	-- crates
 	SpawnHealthCrate(health1X, health1Y)
-	SpawnAmmoCrate(crateWMX, crateWMY, amWatermelon)
+	SpawnSupplyCrate(crateWMX, crateWMY, amWatermelon)
 
 	AddAnim(dialog01)
 	SendHealthStatsOff()
@@ -489,7 +489,6 @@ function gameLost()
 		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
 		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there."))
 		SendStat(siCustomAchievement, loc("You will play every 3 turns."))
-		SendStat(siCustomAchievement, loc("Green hogs won't intentionally hurt you."))
 	end
 	sendSimpleTeamRankings({teamC.name, teamA.name, teamD.name, teamB.name})
 	EndGame()

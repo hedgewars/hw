@@ -3,6 +3,7 @@ foreach(dir
     Classic
     Default
     Default_es
+    Default_pl
     Default_ru
     Default_uk
     HillBilly
@@ -10,6 +11,7 @@ foreach(dir
     Pirate
     Robot
     Russian
+    Russian_pl
     Singer
     Surfer
     )

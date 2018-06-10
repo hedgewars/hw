@@ -42,16 +42,16 @@ voted forced vote = do
 
     case voting rm of
         Nothing -> 
-            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "There's no voting going on"]]
+            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "There's no voting going on."]]
         Just voting ->
             if (not forced) && (uid `L.notElem` entitledToVote voting) then
                 return []
             else if (not forced) && (uid `L.elem` map fst (votes voting)) then
-                return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
+                return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted."]]
             else if forced && (not $ isAdministrator cl) then
                 return []
             else
-                ((:) (AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Your vote counted"]))
+                ((:) (AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Your vote has been counted."]))
                 <$> (actOnVoting $ voting{votes = (uid, vote):votes voting})
 
     where
@@ -73,7 +73,7 @@ voted forced vote = do
     closeVoting = do
         chans <- roomClientsChans
         return [
-            AnswerClients chans ["CHAT", "[server]", loc "Voting closed"]
+            AnswerClients chans ["CHAT", "[server]", loc "Voting closed."]
             , ModifyRoom (\r -> r{voting = Nothing})
             ]
 
@@ -108,7 +108,7 @@ voted forced vote = do
         chans <- roomClientsChans
         let modifyGameInfo f room  = room{gameInfo = fmap f $ gameInfo room}
         return [ModifyRoom (modifyGameInfo $ \g -> g{isPaused = not $ isPaused g}),
-                AnswerClients chans ["CHAT", "[server]", loc "Pause toggled"],
+                AnswerClients chans ["CHAT", "[server]", loc "Pause toggled."],
                 AnswerClients chans ["EM", toEngineMsg "I"]]
     act (VoteNewSeed) =
         return [SetRandomSeed]
@@ -162,7 +162,7 @@ checkVotes = do
                      modifyRoom rnc (\r -> r{voting = if voteTTL rv == 0 then Nothing else Just rv{voteTTL = voteTTL rv - 1}}) ri
                      if voteTTL rv == 0 then do
                         chans <- liftM (map sendChan) $ roomClientsM rnc ri
-                        return [AnswerClients chans ["CHAT", "[server]", loc "Voting expired"]]
+                        return [AnswerClients chans ["CHAT", "[server]", loc "Voting expired."]]
                         else
                         return []
                  Nothing -> return []
@@ -173,4 +173,4 @@ voteInfo (VoteKick n) = B.concat [loc "kick", " ", n]
 voteInfo (VoteMap n) = B.concat [loc "map", " ", n]
 voteInfo (VotePause) = B.concat [loc "pause"]
 voteInfo (VoteNewSeed) = B.concat [loc "new seed"]
-voteInfo (VoteHedgehogsPerTeam i) = B.concat [loc "number of hedgehogs in team", " ", showB i]
+voteInfo (VoteHedgehogsPerTeam i) = B.concat [loc "hedgehogs per team: ", " ", showB i]

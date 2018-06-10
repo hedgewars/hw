@@ -68,11 +68,13 @@ ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     setStyleSheet("QPushButton { padding: 5px; margin-top: 10px; }");
 
-    // Theme model, and a model for setting a filter
+    // Theme model
     ThemeModel * themeModel = DataManager::instance().themeModel();
-    filterModel = new QSortFilterProxyModel();
-    filterModel->setSourceModel(themeModel);
+    filterModel = themeModel->withoutHidden();
+    // Custom filter extension
     filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    // Reset search field
+    filterModel->setFilterFixedString(QString());
 
     // Grid
     QGridLayout * dialogLayout = new QGridLayout(this);
@@ -119,7 +121,7 @@ ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     // Cancel button (closes dialog)
     QPushButton * btnCancel = new QPushButton(tr("Cancel"));
-    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(btnCancel, SIGNAL(clicked()), this, SLOT(onRejected()));
 
     // Select button
     QPushButton * btnSelect = new QPushButton(tr("Use selected theme"));
@@ -168,9 +170,16 @@ void ThemePrompt::moveRight()
     list->moveRight();
 }
 
+void ThemePrompt::onRejected()
+{
+    reject();
+    filterModel->setFilterFixedString(QString());
+}
+
 void ThemePrompt::onAccepted()
 {
     themeChosen(list->currentIndex());
+    filterModel->setFilterFixedString(QString());
 }
 
 // When a theme is selected

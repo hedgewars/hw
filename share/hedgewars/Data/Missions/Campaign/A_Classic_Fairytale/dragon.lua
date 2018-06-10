@@ -5,6 +5,7 @@ A Classic Fairytale: Dragon's Lair
 Hero must collect an utility crate on the other side of the river.
 To accomplish that, hero must first collect a series of crates with
 the rope and wipe out the cyborgs.
+The hero is one survivor of the previous missions.
 
 = GOALS =
 - Mission goal (leads to immediate victory): Collect utility crate at the right side of the river
@@ -12,6 +13,7 @@ the rope and wipe out the cyborgs.
 - Second sub-goal: Wipe out the cyborgs
 
 = FLOW CHART =
+- Choose hog to be hero (read from m5DeployedNum)
 - Cut scene: Intro
 - TBS
 | Player accomplishes first sub-goal first:
@@ -344,9 +346,9 @@ end
 
 function SpawnCrateByID(id)
     if cratePos[id][2] == true then
-       crates[id] = SpawnUtilityCrate(unpack(cratePos[id][1]))
+       crates[id] = SpawnSupplyCrate(unpack(cratePos[id][1]))
     else
-       crates[id] = SpawnAmmoCrate(unpack(cratePos[id][1]))
+       crates[id] = SpawnSupplyCrate(unpack(cratePos[id][1]))
     end
     return crates[id]
 end
@@ -396,12 +398,12 @@ function AfterKilledAnim()
   HideHedge(cyborg)
   TurnTimeLeft = TurnTime
   SetGearMessage(native, 0)
-  SpawnUtilityCrate(1184, 399, amPortalGun, 100)
-  SpawnUtilityCrate(2259, 755, amTeleport, 2)
+  SpawnSupplyCrate(1184, 399, amPortalGun, 100)
+  SpawnSupplyCrate(2259, 755, amTeleport, 2)
   SpawnHealthCrate(secondPos[1][1] + 50, secondPos[1][2] - 20)
   ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
-                                             loc("Portal hint: one goes to the destination, and one is the entrance.|")..
-                                             loc("Teleport hint: just use the mouse to select the destination!").."|"..
+                                             loc("Portal hint: One goes to the destination, the other one is the entrance.|")..
+                                             loc("Teleport hint: Just use the mouse to select the destination!").."|"..
                                              loc("Mines time: 5 seconds"), 1, 8000)
 end
 -----------------------------Events------------------------------------
@@ -549,7 +551,7 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
 end
 
 function SetupPlace()
@@ -561,7 +563,7 @@ function SetupPlace()
     end
   end
   HideHedge(cyborg)
-  jetCrate = SpawnUtilityCrate(3915, 1723, amJetpack)
+  jetCrate = SpawnSupplyCrate(3915, 1723, amJetpack)
 
   --[[ Block the left entrance.
        Otherwise the player could rope out of the map and
@@ -588,12 +590,26 @@ function SetupPlace()
   AddGear(957, 1903, gtMine, 0, 0, 0, 0)
   AddGear(909, 1910, gtMine, 0, 0, 0, 0)
   AddGear(889, 1917, gtMine, 0, 0, 0, 0)
+
+  -- Place misc. mines
+  AddGear(759, 878, gtMine, 0, 0, 0, 0)
+  AddGear(2388, 759, gtMine, 0, 0, 0, 0)
+  AddGear(2498, 696, gtMine, 0, 0, 0, 0)
+  AddGear(2936, 1705, gtMine, 0, 0, 0, 0)
+  AddGear(3119, 1366, gtMine, 0, 0, 0, 0)
+  AddGear(2001, 832, gtMine, 0, 0, 0, 0)
+  AddGear(2008, 586, gtMine, 0, 0, 0, 0)
+  AddGear(511, 1245, gtMine, 0, 0, 0, 0)
+
+  -- And one barrel for fun
+  AddGear(719, 276, gtExplosives, 0, 0, 0, 0)
+
   ------ STICKY MINE LIST ------
-  tempG = AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(682, 878, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(789, 876, gtSMine, 0, 0, 0, 0)
+  AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
+  AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
+  AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
+  AddGear(682, 878, gtSMine, 0, 0, 0, 0)
+  AddGear(789, 876, gtSMine, 0, 0, 0, 0)
 end
 
 function SetupEvents()
@@ -609,20 +625,21 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Natives"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), 0xFF0204, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("011101000"), 14483455, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101000"), 0xFFFF01, "ring", "UFO", "Robot", "cm_binary")
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false
+    SetEffect(cyborgs[i], heArtillery, 1)
   end
   cyborgsLeft = 4
 
@@ -657,10 +674,9 @@ function onGameInit()
   GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
   TurnTime = 60000 
   CaseFreq = 0
-  MinesNum = 20
+  MinesNum = 0
   MinesTime = 5000
-  Explosives = 6
-  Delay = 10 
+  Explosives = 0
   MapGen = mgDrawn
   Theme = "City"
   SuddenDeathTurns = 25
@@ -725,16 +741,6 @@ function onNewTurn()
     firstTurn = false
   end
   if GetHogTeamName(CurrentHedgehog) == loc("011101000") then
-    SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
-    for i = 1, 4 do
-      if gearDead[CurrentHedgehog] ~= true and gearDead[native] ~= true then
-        if gearDead[cyborgs[i]] ~= true and GetX(cyborgs[i]) < GetX(native) then
-          HogTurnLeft(cyborgs[i], false)
-        else
-          HogTurnLeft(cyborgs[i], true)
-        end
-      end
-    end
     if TotalRounds % 6 == 0 then
       AddAmmo(CurrentHedgehog, amSniperRifle, 1)
       AddAmmo(CurrentHedgehog, amDEagle, 1)
@@ -742,8 +748,6 @@ function onNewTurn()
     TurnTimeLeft = 30000
   elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
     EndTurn(true)
-  else
-    SetInputMask(0xFFFFFFFF)
   end
 end
 

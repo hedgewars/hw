@@ -1,5 +1,170 @@
 + features
 * bugfixes
+====================== 0.9.25 ======================
+Game:
+ * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
+ * Fix hog being unable to walk after using sniper rifle without firing both shots
+
+Continental supplies:
+ + Continents are now selected before the game starts
+ + Continents give hog different start health
+ + Add Antarctica special: Upside-Down World (teleport to top of map)
+ + Major rewrite of ALL texts for better usability
+ + Add custom weapon tooltips
+ + Improve audiovisual effects
+ + Show message when hog receives new continent ammo
+ + Sabotaged hedgehogs also emit smoke when it's not their turn
+ + Can switch continent in reverse order with [Precise]+[Switch]
+ * Invulnerability now protects from sabotage damage
+ * Sabotage kills hog instantly when health reaches 0
+ * Reliably prevent using of Lonely Cries and baseball bat specials when usage not allowed
+ * Don't explode Anno 1302, Medicine and Bouncy Boomerang if drowning
+ * Don't play “Missed” and “Laugh” taunt when those don't make sense
+ * Fix retreat timer not turning red for some weapons
+
+Lua API:
+ + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
+ + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
+ + New call: EnableSwitchHog(): Enable hog switching
+ + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
+
+====================== 0.9.24.1 ====================
+ * Fix crash when portable portal device is fired at reduced graphics quality
+ * Fix possible crash when starting Hedgewars frontend in fullscreen mode
+
+====================== 0.9.24 ======================
+Game:
+ + New weapon: Minigun
+ + New game modifier: Enable switch hedgehog at start of turn
+ + Change weapon icons: Mudball, air mine
+ + Add healing visual effect in Paramedics mode and a few scripts
+ + Show remaining ammo when using Birdy egg or RC Plane bomb
+ + Add separate control for team chat (default: U)
+ + Add separate control for changing hedgehog tags (default: Home)
+ + Toggle all hedgehog tags at once with [Precise] + [Change hedgehog tags]
+ + Hedgehog tag translucency is now changed with [Switch] + [Change hedgehog tags]
+ + When using flying saucer shortly after a jump, stay in-mid air
+ + No longer cut off team/hedgehog names when not playing online
+ * Fix possible network desynchronization and crash when players rejoin an active game
+ * Fix time box being usable in Sudden Death with 0 health decrease
+ * Fix chat input key being sometimes registered twice
+ * Fix not displaying current volume status after pressing mute key
+ * Fix many effects not being correctly recorded by the video recorder
+ * Fix quit menu showing incorrect keys if using non-default key bindings
+ * Fix script translations not being loaded for Portuguese and Chinese
+ * When using seduction, only show “CENSORED” text in English locale
+
+Frontend:
+ + Migrate to Qt 5
+ + Schemes are now stored in separate files under Schemes
+ + Add default directory DrawnMaps for hand-drawn maps
+ + Lead player to training missions when starting Hedgewars the first time
+ * Fix map preview, map name, style name not being displayed if host selects map or style you don't have
+ * Remove “Upload to YouTube” functionality (it was broken for years)
+ * Fix broken preview of team hats (e.g. cap_team)
+ * Fix chart in stats screen not supporting negative numbers
+
+Content:
+ + New scenarios: Bazooka Battlefield, Tentacle Terror
+ + New basic training mission: Movement
+ + Completely redo basic training missions: Bazooka, Grenade, Rope
+ + Major overhaul of Sudden Death visuals in most themes
+ + New flag: uk_scotland
+ + New voice: Default_pl (Polish)
+ + New voice: Russian_pl (Polish with a Russian accent)
+ + Add theme icons for: Blox, CrazyMission, Deepspace, Eyes, Planes
+
+Styles and game modes:
+ + Various styles: Add current score/time next to team bars (where applicable)
+ + Remove rubber duck from most weapon schemes and Random Weapon and Balanced Random Weapon
+ + Construction Mode: Add a few shortcuts
+ + Construction Mode: Show selected object at cursor and a crate preview icon
+ + Construction Mode: Remember all selections
+ + Construction Mode: Add subtle glow to healing station
+ + Construction Mode: Allow to change "Switch Hedgehog" in weapon scheme
+ + Construction Mode: Hide selected sub-modes from crate/object placer from enemies over the net
+ + Highlander: Replace undocumented script param “mode=orig” to “multiuse=true”
+ + Highlander: Display the meaning of “multiuse=true” (or lack thereof) in mission panel
+ + Continental supplies: Custom weapon icons for the special weapons
+ + Racer, Tech Racer: Before starting a round, make first waypoint flash and center camera to it
+ + Racer, Tech Racer: Various other waypoint appearance improvements
+ + Racer: Use dark waypoints in bright themes like Bath
+ + Racer, HedgeEditor: Show waypoint outline around cursor when placing waypoints
+ + Battalion: Minor message and visual improvements
+ + Battalion: Mutate hog hats by default, but not the names
+ + Battalion: Script parameter “mutatenames=true” to also change the hog names (default: false)
+ + Battalion (King Mode): Kings always wear crowns and non-kings don't, regardless of settings
+ + Battalion (King Mode): If the king dies, the hogs die normally instead of disappearing
+ + Space Invasion: Add a default Space Invasion game scheme
+ + Capture the Flag: Can now be played with more than 2 clans
+ + Capture the Flag: Show team scores and score graph in stats screen
+ + HedgeEditor: Show cursor coordinates in top left corner
+ + Control: Always remove TimeBox and Resurrector
+ + Climb Home: Show messages when a fire cake is nearby and when you're inside home
+ + ShoppaMap: Map complexity can now be changed with the slider
+ + ShoppaMap: Remove script parameter “pad”
+ * The Specialists: Less buggy hog switching at turn start
+ * Mutant: When game ends due to all land being gone, declare the highest-scoring team the winner
+ * Battalion: Some texts in the mission panel were wrong and misleading
+ * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
+ * Construction Mode, Racer, HedgeEditor: No longer play Incoming voice for building stuff, fix other sound problems
+ * Capture the Flag: Fix many bugs caused by playing with >2 teams
+ * Capture the Flag: Properly place flag when first hog uses kamikaze or TimeBox
+ * Capture the Flag: Fix flag not being dropped when carrier uses piano strike
+ * CTF_Blizzard: Don't allow more than 2 clans. Excess hogs will be removed
+
+A Space Adventure:
+ + Precise Shooting: Display collected ammo
+ + Hard Flying: Display personal best at mission start
+ + Killing the Specialists: Add event messages and graphical effects
+ * Killing the Specialists: Fix very misleading hints in mission panel
+ * Killing the Specialists: Fix number of rounds measured being way too low
+
+A Classic Fairytale:
+ + Mission 3: Display number of turns left at timed parcours
+ + Mission 2, Mission 5: Reduce computer hog levels
+ + Mission 6: Change mines
+ + Mission 7: Add one additional pick hammer in a crate
+ * Fix incorrect storytelling in mission descriptions
+ * Missions now work even with corrupted team file, by using a default behaviour
+ * Mission 1: Fix error message spam when Leaks a Lot drowns
+ * Mission 3: Fix cannibals sometimes doing nothing for a full turn
+ * Mission 6: Fix cyborgs sometimes doing nothing for a full turn
+ * Mission 8: Fix invisible cyborg sometimes blocking the way
+ * Mission 9: Fix cannibal talking to himself in cut scene if mission starts with 3 natives
+
+Missions:
+ + Target Practice: Re-center camera to hog when projectile is destroyed or drowns
+
+Theme customization:
+ + Add fallback music with new keys “fallback-music” and “fallback-sd-music”
+ + Allow to hide themes explicitly with new key “hidden”. Using this key it's possible for hidden themes to have icons
+ * Fix green color channel on themes with key “sd-tint”
+
+Lua API:
+ + New library: SimpleMission: Allows to create missions more easily
+ + New call: WriteLnToChat(string): Add a line in the chat
+ + New call: SetVampiric(bool): Toggle vampirism
+ + New call: SetLaserSight(bool): Toggle laser sight
+ + New call: GetWind(): Returns current wind (approximation) from -100 to 100
+ + New call: GetTeamName(teamIdx): Returns name of team with given index (starts at 0)
+ + New call: GetTeamIndex(teamname): Returns index of team with given name
+ + New call: GetTeamClan(teamname): Returns clan of team with given name
+ + New call: SpawnSupplyCrate(x, y, content, [, amount]): Spawn ammo or utility crate, depending on content
+ + New call: HealHog(gearUid, healthBoost[, showMessage[, tint]]): Heal hedgehog with graphical effects and message
+ + New call: SetTeamLabel(teamname[, label]): Set an arbitrary label for a team, will be displayed next to the team bar
+ + New call: SetSoundMask(soundId, isMasked): Allows to disable playing a sound effect from engine
+ + New call: SkipTurn(): Force current hedgehog to skip turn
+ + New call: Explode(x, y, radius[, options]): Cause an explosion
+ + New param: PlaySound accepts 3rd parameter for voices: instaVoice: If true, sound plays instantly instead of being queued
+ + New callback: onEndTurn(): Called at the end of a turn (when gears have settled)
+ + New callback: onSkipTurn(): Called when a hog skips turn
+ + New hedgehog effect: heArtillery: Per-hedgehog artillery mode (can't walk). Values: 1 = permanently active. 2 = temporarily active (sniper rifle). 0 = not active
+ * AddAmmo now automatically unselects weapon if it would remove current ammo from current hedgehog
+ * Fix call: SetWeapon(amNothing) now unselects weapon
+ * Fix call: SetWind did not update flake flying direction
+ * Fix global: TotalRounds was stuck at -1 for several turns
+ * Fix CursorX, CursorY often not being updated when moving cursor at screen border
 
 ====================== 0.9.23 ======================
 HIGHLIGHTS:
@@ -38,7 +203,7 @@ Content:
  * Redo flags: cm_pentagram, cm_soviet, armenia, ireland, nepal, suisse, sweden, turkey
 
 Game engine (weapons):
- + New weapon: rubber duck
+ + New weapon: Rubber duck
  + Freezer can now freeze sticky mines (they get disabled and fall into the water)
  + Keep rope / parachute / flying saucer selected when destroyed and secondary ammo selected
  * Gameplay fix: Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.

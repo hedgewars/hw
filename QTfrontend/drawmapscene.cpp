@@ -25,6 +25,10 @@
 
 #include "drawmapscene.h"
 
+#define DRAWN_MAP_COLOR_LAND (Qt::yellow)
+#define DRAWN_MAP_COLOR_CURSOR_PEN (Qt::green)
+#define DRAWN_MAP_COLOR_CURSOR_ERASER (Qt::red)
+
 template <class T> T sqr(const T & x)
 {
     return x*x;
@@ -32,9 +36,9 @@ template <class T> T sqr(const T & x)
 
 DrawMapScene::DrawMapScene(QObject *parent) :
     QGraphicsScene(parent),
-    m_pen(Qt::yellow),
-    m_brush(Qt::yellow),
-    m_cursor(new QGraphicsEllipseItem(-0.5, -0.5, 1, 1))
+    m_pen(DRAWN_MAP_COLOR_LAND),
+    m_brush(DRAWN_MAP_COLOR_LAND),
+    m_cursor(new QGraphicsEllipseItem(-5, -5, 5, 5))
 {
     setSceneRect(0, 0, 4096, 2048);
 
@@ -48,15 +52,18 @@ DrawMapScene::DrawMapScene(QObject *parent) :
 
     m_pathType = Polyline;
 
-    m_pen.setWidth(76);
+    m_pen.setWidth(DRAWN_MAP_BRUSH_SIZE_START);
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
     m_currPath = 0;
 
     m_isCursorShown = false;
-    m_cursor->setPen(QPen(Qt::green));
+    QPen cursorPen = QPen(DRAWN_MAP_COLOR_CURSOR_PEN);
+    cursorPen.setJoinStyle(Qt::RoundJoin);
+    cursorPen.setCapStyle(Qt::RoundCap);
+    cursorPen.setWidth(brushSize());
+    m_cursor->setPen(cursorPen);
     m_cursor->setZValue(1);
-    m_cursor->setScale(m_pen.width());
 }
 
 void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -124,7 +131,7 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     path.lineTo(mouseEvent->scenePos());
 
     PathParams params;
-    params.width = serializePenWidth(m_pen.width());
+    params.width = serializePenWidth(brushSize());
     params.erasing = m_isErasing;
     params.initialPoint = mouseEvent->scenePos().toPoint();
     params.points = QList<QPoint>() << params.initialPoint;
@@ -178,20 +185,38 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
     }
 }
 
-void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
+void DrawMapScene::setBrushSize(int newBrushSize)
 {
-    if(wheelEvent->delta() > 0 && m_pen.width() < 516)
-        m_pen.setWidth(m_pen.width() + 10);
-    else if(wheelEvent->delta() < 0 && m_pen.width() >= 16)
-        m_pen.setWidth(m_pen.width() - 10);
+    if(newBrushSize > DRAWN_MAP_BRUSH_SIZE_MAX)
+        newBrushSize = DRAWN_MAP_BRUSH_SIZE_MAX;
+    if(newBrushSize < DRAWN_MAP_BRUSH_SIZE_MIN)
+        newBrushSize = DRAWN_MAP_BRUSH_SIZE_MIN;
 
-    m_cursor->setScale(m_pen.width());
-
+    m_pen.setWidth(newBrushSize);
+    QPen cursorPen = m_cursor->pen();
+    cursorPen.setWidth(m_pen.width());
+    m_cursor->setPen(cursorPen);
     if(m_currPath)
     {
         m_currPath->setPen(m_pen);
         paths.first().width = serializePenWidth(m_pen.width());
     }
+
+    emit brushSizeChanged(newBrushSize);
+}
+
+int DrawMapScene::brushSize()
+{
+    return m_pen.width();
+}
+
+void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
+{
+    int b = brushSize();
+    if(wheelEvent->delta() > 0)
+        setBrushSize(b + DRAWN_MAP_BRUSH_SIZE_STEP);
+    else if(wheelEvent->delta() < 0 && b >= DRAWN_MAP_BRUSH_SIZE_MIN)
+        setBrushSize(b - DRAWN_MAP_BRUSH_SIZE_STEP);
 }
 
 void DrawMapScene::showCursor()
@@ -266,10 +291,15 @@ void DrawMapScene::clearMap()
 void DrawMapScene::setErasing(bool erasing)
 {
     m_isErasing = erasing;
-    if(erasing)
+    QPen cursorPen = m_cursor->pen();
+    if(erasing) {
         m_pen.setBrush(m_eraser);
-    else
+        cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_ERASER);
+    } else {
         m_pen.setBrush(m_brush);
+        cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_PEN);
+    }
+    m_cursor->setPen(cursorPen);
 }
 
 QByteArray DrawMapScene::encode()
@@ -306,7 +336,11 @@ void DrawMapScene::decode(QByteArray data)
 {
     hideCursor();
 
+    // Remember erasing mode
     bool erasing = m_isErasing;
+
+    // Use seperate for decoding the map, don't mess with the user pen
+    QPen load_pen = QPen(m_pen);
 
     oldItems.clear();
     oldPaths.clear();
@@ -333,7 +367,7 @@ void DrawMapScene::decode(QByteArray data)
 
             if(params.points.size())
             {
-                addPath(pointsToPath(params.points), m_pen);
+                addPath(pointsToPath(params.points), load_pen);
 
                 paths.prepend(params);
 
@@ -341,12 +375,12 @@ void DrawMapScene::decode(QByteArray data)
             }
 
             quint8 penWidth = flags & 0x3f;
-            m_pen.setWidth(deserializePenWidth(penWidth));
+            load_pen.setWidth(deserializePenWidth(penWidth));
             params.erasing = flags & 0x40;
             if(params.erasing)
-                m_pen.setBrush(m_eraser);
+                load_pen.setBrush(m_eraser);
             else
-                m_pen.setBrush(m_brush);
+                load_pen.setBrush(m_brush);
             params.width = penWidth;
         } else
             if(isSpecial)
@@ -369,12 +403,13 @@ void DrawMapScene::decode(QByteArray data)
 
     if(params.points.size())
     {
-        addPath(pointsToPath(params.points), m_pen);
+        addPath(pointsToPath(params.points), load_pen);
         paths.prepend(params);
     }
 
     emit pathChanged();
 
+    // Restore erasing mode
     setErasing(erasing);
 }
 

@@ -57,7 +57,7 @@
 01:02=%1 wins!
 01:03=Volume %1%
 01:04=Paused
-01:05=Really quit (Y/Esc)?
+01:05=Really quit (%1/%2)?
 01:06=Sudden Death!
 01:07=%1 remaining
 01:08=Fuel

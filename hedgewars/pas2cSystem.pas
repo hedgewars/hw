@@ -121,7 +121,7 @@ var
 
     _strconcat, _strappend, _strprepend, _chrconcat : function : string;
     _strcompare, _strncompare, _strcomparec, _strncompareA : function : boolean;
-    _strconcatA, _strappendA : function : ansistring;
+    _strconcatA, _strappendA, _strprependA: function : ansistring;
 
     png_structp, png_set_write_fn, png_get_io_ptr,
     png_get_libpng_ver, png_create_write_struct,

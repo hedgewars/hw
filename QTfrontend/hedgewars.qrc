@@ -4,6 +4,7 @@
         <file>res/css/qt.css</file>
         <file>res/css/chat.css</file>
         <file>res/css/christmas.css</file>
+        <file>res/css/april1.css</file>
         <file>res/css/easter.css</file>
         <file>res/css/birthday.css</file>
         <file>res/hh25x25.png</file>
@@ -73,6 +74,7 @@
         <file>res/BackgroundBirthday.png</file>
         <file>res/Exit.png</file>
         <file>res/HedgewarsTitle.png</file>
+        <file>res/TomatowarsTitle.png</file>
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
         <file>res/NetworkPlayDisabled.png</file>
@@ -80,13 +82,27 @@
         <file>res/camera.png</file>
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
+        <file>res/dropdown_disabled.png</file>
+        <file>res/dropdown_selected.png</file>
         <file>res/new.png</file>
         <file>res/edit.png</file>
         <file>res/delete.png</file>
         <file>res/checked.png</file>
+        <file>res/checkedHover.png</file>
+        <file>res/checkedPressed.png</file>
         <file>res/unchecked.png</file>
+        <file>res/uncheckedHover.png</file>
+        <file>res/uncheckedPressed.png</file>
+        <file>res/radioButtonChecked.png</file>
+        <file>res/radioButtonCheckedHover.png</file>
+        <file>res/radioButtonCheckedPressed.png</file>
+        <file>res/radioButtonUnchecked.png</file>
+        <file>res/radioButtonUncheckedHover.png</file>
+        <file>res/radioButtonUncheckedPressed.png</file>
         <file>res/missionFinished.png</file>
         <file>res/missionFinishedSelected.png</file>
+        <file>res/missingMap.png</file>
+        <file>res/missingTheme@2x.png</file>
         <file>res/dlcMarker.png</file>
         <file>res/dlcMarkerSelected.png</file>
         <file>res/graphicsicon.png</file>
@@ -105,11 +121,16 @@
         <file>res/lightbulb_on.png</file>
         <file>res/lightbulb_off.png</file>
         <file>res/spin_up.png</file>
+        <file>res/spin_up_disabled.png</file>
         <file>res/spin_down.png</file>
+        <file>res/spin_down_disabled.png</file>
+        <file>res/sort_up.png</file>
+        <file>res/sort_down.png</file>
         <file>res/PlaySound.png</file>
         <file>res/hh_small.png</file>
         <file>res/btnDisabled.png</file>
         <file>res/btnBorder@2x.png</file>
+        <file>res/btnSwitchHog@2x.png</file>
         <file>res/btnInvulnerable@2x.png</file>
         <file>res/btnLaserSight@2x.png</file>
         <file>res/btnLowGravity@2x.png</file>
@@ -171,7 +192,10 @@
         <file>res/info.png</file>
         <file>res/kick.png</file>
         <file>res/lock.png</file>
+        <file>res/lock_disabled.png</file>
         <file>res/unlock.png</file>
+        <file>res/unlock_disabled.png</file>
+        <file>res/splitter.png</file>
         <file>res/StatsMedal1.png</file>
         <file>res/StatsMedal2.png</file>
         <file>res/StatsMedal3.png</file>

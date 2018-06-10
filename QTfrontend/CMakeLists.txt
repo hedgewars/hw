@@ -1,24 +1,17 @@
-# Configure for Qt4
-set(QT_MIN_VERSION "4.7.0")
-include(CheckLibraryExists)
-
-set(QT_USE_QTCORE TRUE)
-set(QT_USE_QTGUI TRUE)
-set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTSVG FALSE)
-set(QT_USE_QTXML FALSE)
-set(QT_USE_QTOPENGL FALSE)
-set(QT_USE_QTMAIN TRUE)
-
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
-
-# https://bugreports.qt-project.org/browse/QTBUG-17333
-if(APPLE AND
-   ${QTVERSION} VERSION_GREATER "4.7.0" AND
-   ${QTVERSION} VERSION_LESS "4.7.4")
-   message(FATAL_ERROR "This version of Qt is known *not* to work, please update or use a lower version")
+if(APPLE AND EXISTS /usr/local/opt/qt5)
+	# Special treatment for OS X users who
+	# install Qt5 via Homebrew.
+	# Homebrew installs Qt5 (up to at least 5.9.1) in
+	# /usr/local/qt5, ensure it can be found by CMake since
+	# it is not in the default /usr/local prefix.
+	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
 endif()
+
+find_package(Qt5 COMPONENTS Core Widgets Gui Network)
+
+include_directories(${Qt5Core_PRIVATE_INCLUDE_DIRS})
+
+include(CheckLibraryExists)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer 2 REQUIRED) #audio in SDLInteraction
@@ -159,9 +152,9 @@ if(BUILD_ENGINE_LIBRARY)
     endif()
 endif()
 
-qt4_add_resources(hwfr_rez_src ${hwfr_rez})
+qt5_add_resources(hwfr_rez_src ${hwfr_rez})
 
-qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
+qt5_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
 if(APPLE)
@@ -198,14 +191,14 @@ add_executable(hedgewars ${console_access}
 
 list(APPEND HW_LINK_LIBS
     physfs physlayer
-    ${QT_LIBRARIES}
+    Qt5::Core Qt5::Widgets Qt5::Gui Qt5::Network
     )
 
 list(APPEND HW_LINK_LIBS
     ${SDL2_LIBRARY}
     ${SDL2_MIXER_LIBRARIES}
     )
-    
+
 if(WIN32 AND NOT UNIX)
     if(NOT SDL2_LIBRARY)
         list(APPEND HW_LINK_LIBS SDL2)

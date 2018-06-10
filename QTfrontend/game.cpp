@@ -140,11 +140,11 @@ void HWGame::SendConfig()
 void HWGame::SendQuickConfig()
 {
     QByteArray teamscfg;
-    ThemeModel * themeModel = DataManager::instance().themeModel();
+    QAbstractItemModel * themeModel = DataManager::instance().themeModel()->withoutHidden();
 
     HWProto::addStringToBuffer(teamscfg, "TL");
     HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
-                               .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount()).data(ThemeModel::ActualNameRole).toString() : "steel"));
+                               .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount(), 0).data(ThemeModel::ActualNameRole).toString() : "Nature"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
@@ -255,11 +255,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
         {
             int size = msg.size();
             emit ErrorMessage(
-                tr("A Fatal ERROR occured! - The game engine had to stop.\n\n"
-                "We are very sorry for the inconvenience :(\n\n"
-                "If this keeps happening, please click the '%1' button in the main menu!\n\n"
-                "Last two engine messages:\n%2")
-                .arg("Feedback")
+                tr("A fatal ERROR occured! The game engine had to stop.\n\n"
+                "We are very sorry for the inconvenience. :-(\n\n"
+                "If this keeps happening, please click the 'Feedback' button in the main menu!\n\n"
+                "Last engine message:\n%1")
                 .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
             return;
         }
@@ -537,7 +536,7 @@ void HWGame::abort()
 void HWGame::sendCampaignVar(const QByteArray &varToSend)
 {
     QString varToFind = QString::fromUtf8(varToSend);
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     QString varValue = teamfile.value("Campaign " + campaign + "/" + varToFind, "").toString();
     QByteArray command;
@@ -554,7 +553,7 @@ void HWGame::writeCampaignVar(const QByteArray & varVal)
     QString varToWrite = QString::fromUtf8(varVal.left(i));
     QString varValue = QString::fromUtf8(varVal.mid(i + 1));
 
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Campaign " + campaign + "/" + varToWrite, varValue);
 }

@@ -32,7 +32,7 @@ procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
-procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
@@ -1027,23 +1027,32 @@ end;
 
 
 procedure RenderTeamsHealth;
-var t, i,  h, smallScreenOffset, TeamHealthBarWidth : LongInt;
+var t, i, h, v, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
+    hasVisibleHog: boolean;
     htex: PTexture;
 begin
-if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
+if VisibleTeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
     begin
     SetScale(1.5);
     smallScreenOffset:= cScreenHeight div 6;
-    if TeamsCount * 100 > Longword(cScreenHeight) then
+    if VisibleTeamsCount * 100 > Longword(cScreenHeight) then
         Tint($FF,$FF,$FF,$80);
     end
 else smallScreenOffset:= 0;
+v:= 0; // for updating VisibleTeamsCount
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
-      if TeamHealth > 0 then
+      begin
+      hasVisibleHog:= false;
+      for i:= 0 to cMaxHHIndex do
+          if (Hedgehogs[i].Gear <> nil) then
+              hasVisibleHog:= true;
+      if (TeamHealth > 0) and hasVisibleHog then
         begin
+        // count visible teams
+        inc(v);
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
         if highlight then
@@ -1087,17 +1096,18 @@ for t:= 0 to Pred(TeamsCount) do
                     DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
                 end;
 
-        // draw ai kill counter for gfAISurvival
-        if (GameFlags and gfAISurvival) <> 0 then
-            begin
+        // draw Lua value, if set
+        if (hasLuaTeamValue) then
+            DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset, LuaTeamValueTex)
+        // otherwise, draw AI kill counter for gfAISurvival
+        else if (GameFlags and gfAISurvival) <> 0 then
             DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset, AIKillsTex);
-            end;
 
         // if highlighted, draw flag and other contents again to keep their colors
         // this approach should be faster than drawing all borders one by one tinted or not
         if highlight then
             begin
-            if TeamsCount * 100 > Longword(cScreenHeight) then
+            if VisibleTeamsCount * 100 > Longword(cScreenHeight) then
                 Tint($FF,$FF,$FF,$80)
             else untint;
 
@@ -1115,7 +1125,13 @@ for t:= 0 to Pred(TeamsCount) do
                 DrawTextureFromRect(-OwnerTex^.w - NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, OwnerTex)
                 end;
 
-            if (GameFlags and gfAISurvival) <> 0 then
+            if (hasLuaTeamValue) then
+                begin
+                r.w:= LuaTeamValueTex^.w - 4;
+                r.h:= LuaTeamValueTex^.h - 4;
+                DrawTextureFromRect(TeamHealthBarWidth + 24, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, LuaTeamValueTex);
+                end
+            else if (GameFlags and gfAISurvival) <> 0 then
                 begin
                 r.w:= AIKillsTex^.w - 4;
                 r.h:= AIKillsTex^.h - 4;
@@ -1136,12 +1152,14 @@ for t:= 0 to Pred(TeamsCount) do
             DrawSpriteRotatedF(sprFinger, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFinger].Width div 4, 0, 1, -90);
             end;
         end;
+      end;
 if smallScreenOffset <> 0 then
     begin
     SetScale(cDefaultZoomLevel);
-    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
+    if VisibleTeamsCount * 20 > Longword(cScreenHeight) div 5 then
         untint;
     end;
+VisibleTeamsCount:= v;
 end;
 
 
@@ -1634,7 +1652,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             FPS:= Frames;
             Frames:= 0;
             CountTicks:= 0;
-            s:= inttostr(FPS) + ' fps';
+            s:= Format(trmsg[sidFPS], inttostr(FPS));
             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
             FreeAndNilTexture(fpsTexture);
@@ -1954,7 +1972,7 @@ begin
     missionTimer:= 0;
 end;
 
-procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 var
     ammoStrId: TAmmoStrId;
     ammoStr: ansistring;
@@ -1979,6 +1997,7 @@ begin
 
     trluaammoc[ammoStrId] := caption;
     trluaammod[ammoStrId] := description;
+    trluaammoe[ammoStrId] := autoLabels;
 end;
 
 procedure ShakeCamera(amount: LongInt);

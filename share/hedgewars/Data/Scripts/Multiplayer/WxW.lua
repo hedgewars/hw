@@ -859,7 +859,7 @@ function CheckCrateConditions()
 				toSpawn = maxCrates - cratesInGame
 			end
 			for i=1,toSpawn do
-				SpawnAmmoCrate(0, 0, weapons[1+GetRandom(#weapons)] )
+				SpawnSupplyCrate(0, 0, weapons[1+GetRandom(#weapons)] )
 			end
 			rPingTimer = 0
 			rAlpha = 0

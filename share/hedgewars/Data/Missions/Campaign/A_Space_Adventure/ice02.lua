@@ -23,12 +23,9 @@ local challengeObjectives = loc("To win the game you have to pass into the rings
 	"|"..loc("You'll get extra time in case you need it when you pass a ring.").."|"..
 	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer.").."|"..
 	loc("Use the attack key twice to change the flying saucer while floating in mid-air.")
+local timeRecord
 -- dialogs
 local dialog01 = {}
--- mission objectives
-local goals = {
-	["init"] = {missionName, loc("Getting ready"), challengeObjectives, 1, 25000},
-}
 -- hogs
 local hero = {}
 local ally = {}
@@ -94,16 +91,28 @@ function onGameInit()
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)
 
+	timeRecord = tonumber(GetCampaignVar("IceStadiumBestTime"))
+
 	initCheckpoint("ice02")
 
 	AnimInit(true)
 	AnimationSetup()
 end
 
+function ShowGoals()
+	-- mission objectives
+	local goalStr = challengeObjectives
+	if timeRecord ~= nil then
+		local personalBestStr = string.format(loc("Personal best: %.3f seconds"), timeRecord/1000)
+		goalStr = goalStr .. "|" .. personalBestStr
+	end
+	ShowMission(missionName, loc("Getting ready"), goalStr, 1, 25000)
+end
+
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(unpack(goals["init"]))
+	ShowGoals()
 	HideMission()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
@@ -145,25 +154,25 @@ function onGameTick20()
 			local saucersUsed = totalSaucers - saucersLeft
 			SendStat(siGameResult, loc("Hooray! You are a champion!"))
 			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds."), totalTimePrinted))
-			local record = tonumber(GetCampaignVar("IceStadiumBestTime"))
-			if record ~= nil and totalTime >= record then
-				SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), record/1000))
+			if timeRecord ~= nil and totalTime >= timeRecord then
+				SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), timeRecord/1000))
 			end
-			if record == nil or totalTime < record then
+			if timeRecord == nil or totalTime < timeRecord then
 				SaveCampaignVar("IceStadiumBestTime", tostring(totalTime))
-				if record ~= nil then
+				if timeRecord ~= nil then
 					SendStat(siCustomAchievement, loc("This is a new personal best time, congratulations!"))
 				end
 			end
 			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers."), saucersUsed))
 			SendStat(siCustomAchievement, string.format(loc("You had %d additional flying saucers left."), saucersLeft))
 
-			record = tonumber(GetCampaignVar("IceStadiumLeastSaucersUsed"))
-			if record == nil or saucersUsed < record then
+			local leastSaucersRecord = tonumber(GetCampaignVar("IceStadiumLeastSaucersUsed"))
+			if leastSaucersRecord == nil or saucersUsed < leastSaucersRecord then
 				SaveCampaignVar("IceStadiumLeastSaucersUsed", tostring(saucersUsed))
 			end
 
-			sendSimpleTeamRankings({teamA.name})
+			SendStat(siPointType, loc("milliseconds"))
+			SendStat(siPlayerKills, totalTime, GetHogTeamName(hero.gear))
 			SaveCampaignVar("Mission6Won", "true")
 			checkAllMissionsCompleted()
 			EndGame()
@@ -207,7 +216,7 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	ShowMission(unpack(goals["init"]))
+	ShowGoals()
 	startFlying()
 end
 
@@ -215,13 +224,13 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, some story telling
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet Flying Saucer Stadium ..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic stadium of saucer flying."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the stadium, where the best pilots compete ..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic Stadium of Saucer Flying."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream to come here one day in order to compete with the best!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Can you do it?"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = ShowMission, args = goals["init"]})
+	table.insert(dialog01, {func = ShowGoals, args = {}})
 	table.insert(dialog01, {func = startFlying, args = {hero.gear}})
 end
 

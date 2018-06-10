@@ -298,7 +298,7 @@ function SetupWaterAnim()
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("Why, why, why, why!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("I grew sick of the oppression! I broke free!"), SAY_SHOUT, 6500}})
   table.insert(startAnim, {func = AnimSay, args = {natives[1], loc("What oppression? You were the most unoppressed member of the tribe!"), SAY_SHOUT, 10000}})
-  table.insert(startAnim, {func = AnimSay, args = {enemy, loc("The opression of the elders, of course!"), SAY_SHOUT, 6500}})
+  table.insert(startAnim, {func = AnimSay, args = {enemy, loc("The oppression of the elders, of course!"), SAY_SHOUT, 6500}})
   if m5DeployedNum == leaksNum then
     table.insert(startAnim, {func = AnimSay, args = {enemy, loc("You should know this more than anyone, Leaks!"), SAY_SHOUT, 7000}})
   elseif m5LeaksDead == 1 then
@@ -342,7 +342,7 @@ function SetupWaterAnimDeployed()
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("Why, why, why, why!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("I grew sick of the oppression! I broke free!"), SAY_SHOUT, 6500}})
   table.insert(startAnim, {func = AnimSay, args = {natives[1], loc("What oppression? You were the most unoppressed member of the tribe!"), SAY_SHOUT, 10000}})
-  table.insert(startAnim, {func = AnimSay, args = {enemy, loc("The opression of the elders, of course!"), SAY_SHOUT, 6500}})
+  table.insert(startAnim, {func = AnimSay, args = {enemy, loc("The oppression of the elders, of course!"), SAY_SHOUT, 6500}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("Just look at Leaks, may he rest in peace!"), SAY_SHOUT, 6500}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("We, the youth, have to constantly prove our value."), SAY_SHOUT, 7000}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, loc("We work and work until we sweat blood."), SAY_SHOUT, 5000}})
@@ -491,7 +491,7 @@ function AfterStartAnim()
   SetHealth(SpawnHealthCrate(2207, 44), 25)
   SetHealth(SpawnHealthCrate(519, 1519), 25)
   SetHealth(SpawnHealthCrate(826, 895), 25)
-  SpawnUtilityCrate(701, 1046, amGirder, 3)
+  SpawnSupplyCrate(701, 1046, amGirder, 3)
   TurnTimeLeft = TurnTime
 end
 
@@ -612,9 +612,9 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
   m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
@@ -649,7 +649,6 @@ function SaveCampaignVariables()
 end
 
 function SetupPlace()
-  HideHedge(cyborg)
   SetHogHat(natives[1], nativeHats[m5DeployedNum])
   SetHogName(natives[1], nativeNames[m5DeployedNum])
 
@@ -688,18 +687,18 @@ function SetupPlace()
     end
   end
 
-  SpawnAmmoCrate(34, 410, amBee, 2)
-  SpawnAmmoCrate(33, 374, amRCPlane, 1)
-  SpawnAmmoCrate(74, 410, amAirAttack, 3)
-  SpawnAmmoCrate(1313, 1481, amBazooka, 8)
-  SpawnAmmoCrate(80, 360, amSniperRifle, 4)
-  SpawnAmmoCrate(1037, 1508, amShotgun, 7)
-  SpawnAmmoCrate(1037, 1472, amMolotov, 3)
-  SpawnAmmoCrate(1146, 1576, amMortar, 8)
+  SpawnSupplyCrate(34, 410, amBee, 2)
+  SpawnSupplyCrate(33, 374, amRCPlane, 1)
+  SpawnSupplyCrate(74, 410, amAirAttack, 3)
+  SpawnSupplyCrate(1313, 1481, amBazooka, 8)
+  SpawnSupplyCrate(80, 360, amSniperRifle, 4)
+  SpawnSupplyCrate(1037, 1508, amShotgun, 7)
+  SpawnSupplyCrate(1037, 1472, amMolotov, 3)
+  SpawnSupplyCrate(1146, 1576, amMortar, 8)
 
-  SpawnUtilityCrate(1147, 1431, amPortalGun, 2)
-  SpawnUtilityCrate(1219, 1542, amRope, 5)
-  SpawnUtilityCrate(1259, 1501, amJetpack, 2)
+  SpawnSupplyCrate(1147, 1431, amPortalGun, 2)
+  SpawnSupplyCrate(1219, 1542, amRope, 5)
+  SpawnSupplyCrate(1259, 1501, amJetpack, 2)
 
   if not nativeAwaitingDeletion then
     AfterSetupPlace()
@@ -748,6 +747,7 @@ function AddHogs()
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
+  HideHedge(cyborg)
 
   SetGearPosition(cyborg, 0, 0)
 

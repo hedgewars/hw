@@ -41,7 +41,7 @@ HWTeam::HWTeam(const QString & teamname) :
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         m_hedgehogs.append(HWHog());
-        m_hedgehogs[i].Name = (QLineEdit::tr("hedgehog %1").arg(i+1));
+        m_hedgehogs[i].Name = (QLineEdit::tr("Hedgehog %1").arg(i+1));
         m_hedgehogs[i].Hat = "NoHat";
     }
     m_grave = "Statue";
@@ -171,7 +171,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
 
 bool HWTeam::loadFromFile()
 {
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name)), QSettings::IniFormat, 0);
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(DataManager::safeFileName(m_name)), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     m_name = teamfile.value("Team/Name", m_name).toString();
     m_grave = teamfile.value("Team/Grave", "Statue").toString();
@@ -185,7 +185,7 @@ bool HWTeam::loadFromFile()
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
-        m_hedgehogs[i].Name = teamfile.value(hh + "Name", QString("hedgehog %1").arg(i+1)).toString();
+        m_hedgehogs[i].Name = teamfile.value(hh + "Name", QString("Hedgehog %1").arg(i+1)).toString();
         m_hedgehogs[i].Hat = teamfile.value(hh + "Hat", "NoHat").toString();
         m_hedgehogs[i].Rounds = teamfile.value(hh + "Rounds", 0).toInt();
         m_hedgehogs[i].Kills = teamfile.value(hh + "Kills", 0).toInt();
@@ -204,7 +204,7 @@ bool HWTeam::loadFromFile()
 
 bool HWTeam::fileExists()
 {
-    QFile f(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name)));
+    QFile f(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(DataManager::safeFileName(m_name)));
     return f.exists();
 }
 
@@ -220,7 +220,7 @@ bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name)));
+    QFile cfgfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(DataManager::safeFileName(m_name)));
     cfgfile.remove();
     return true;
 }
@@ -229,12 +229,12 @@ bool HWTeam::saveToFile()
 {
     if (OldTeamName != m_name)
     {
-        QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(OldTeamName)));
+        QFile cfgfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(DataManager::safeFileName(OldTeamName)));
         cfgfile.remove();
         OldTeamName = m_name;
     }
 
-    QString fileName = QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name));
+    QString fileName = QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(DataManager::safeFileName(m_name));
     DataManager::ensureFileExists(fileName);
     QSettings teamfile(fileName, QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");

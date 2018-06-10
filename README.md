@@ -6,35 +6,38 @@ Description
 This is the funniest and most addictive game you'll ever play—hilarious fun
 that you can enjoy anywhere, anytime. **Hedgewars** is a **turn-based strategy
 game** but the real buzz is from watching the **devastation caused by those
-pesky hedgehogs** with those fantastic weapons—sneaky little blighters with a
-bad attitude!
+pesky hedgehogs** with those fantastic weapons—sneaky little blighters with
+a bad attitude!
 
 Each player controls a **team of up to 8 hedgehogs**. During the course of
 the game, players take turns with one of their hedgehogs. They then use
 whatever tools and weapons are available to **attack and kill the opponents'
-hedgehogs**, thereby winning the game. Hedgehogs may move around the terrain
-in a variety of ways, normally by walking and jumping but also by using
-particular tools such as the rope or parachute, to move to otherwise
-inaccessible areas. Each **turn is time-limited** to ensure that players do
-not hold up the game with excessive thinking or moving.
+hedgehogs**, thereby winning the game.
 
-A large **variety of tools and weapons** are available for players during
-the game. Hedgewars features the standard artillery-genre classics (such as
-grenade, cluster bomb, bazooka, shotgun), but also boasts a host of other
-weapons quite unique to it alone.
+To destroy your foes you can use one out of **over 40 weapons**!
+Launch bazookas or homing bees, drop mines, dynamite or explosive rubber ducks,
+throw grenades or watermelon bombs, poison them with stinky cheese, send them
+flying with a baseball bat, and much more!
 
-Most weapons, when used, cause **explosions that deform the terrain**,
-removing circular chunks. Hedgehogs can die by drowning, being thrown off
+Most weapons cause **explosions that deform the terrain**, removing
+circular chunks. Hedgehogs can die by drowning, being thrown off
 either side of the arena, or when their health is reduced to zero.
+
+Hedgehogs may move around the terrain in a variety of ways, normally by
+walking and jumping but also by using particular tools such as the rope
+or parachute, to move to otherwise inaccessible areas. Each **turn is
+time-limited** to ensure that players do not hold up the game with
+excessive thinking or moving.
 
 Getting started
 ---------------
-For complete beginners we recommend to start with the the first 2 or 3
-missions of the campaign “A Classic Fairytale” in the singleplayer menu.
-It explains the basic controls and gameplay.
-
-Note that Hedgewars doesn't have a *complete* tutorial yet, but it is
-planned to create one in future versions.
+For complete beginners we recommend to play in singleplayer mode first.
+Start with the Basic Movement Training found in the training menu.
+Proceed with the other training missions.
+After completing the training, try to play some quick matches against the
+computer (also found in the singleplayer menu).
+Hedgewars has many weapons, so play a few matches to get a better feeling
+for them.
 
 In-depth information about the game can be found online:
 
@@ -50,17 +53,20 @@ The most important default controls are:
 * Right mouse button: Open ammo menu
 * Left mouse button: Select target or weapon
 * Space bar: Shoot
-* Left shift: Precise
-* Left shift + Up/Down: Precise aiming
+* Left shift: Precise (this is a modifier key)
+* Precise + Up/Down: Precise aiming
+* Precise + Left/Right: Turn around without walking
+* Hold down Precise: Prevent slipping on ice
 * Enter: Jump
 * Backspace: High jump
 * Backspace ×2: Backjump
 * Tab: Switch hedgehog (after activating the utility)
 * 1-5: Set weapon timer
 * F1-F10: Weapon shortcuts
-* P: Pause (also shows mission panel)
+* P: Pause, when playing offline, toggle automatic turn skipping when online
 * Esc: Quit with prompt (also shows mission panel)
 * T: Chat
+* U: Team chat
 
 For the full list, go to the Hedgewars settings. Also read the weapon tooltips
 for weapon-specific controls.
@@ -70,12 +76,10 @@ for weapon-specific controls.
 These are lesser-known controls of Hedgewars, they are based on your
 configured controls:
 
-* Confirm: Team chat (if not confirming quit)
-* Hold down Precise: Prevent slipping on ice
-* Precise + Left/Right: Turn around
-* Precise + Toggle team bars: Change hedgehog tabs
+* Precise + Toggle hedgehog tags: Change visible hedgehog tags (team name/hog name/health)
+* Switch + Toggle hedgehog tags: Toggle hedgehog tag translucency
 * Precise + Toggle team bars + Switch: Toggle HUD
-* Precise + Screenshot: Save current map + mask in Screenshot directory
+* Precise + Capture (screenshot key): Save current map + mask into Screenshot directory
 
 Installation instructions
 -------------------------
@@ -112,7 +116,7 @@ distributed under the terms of the GNU General Public Licence version 2;
 images and sounds are distributed under the terms of the GNU Free Documentation
 Licence version 1.2. See the `COPYING` file for the full text of the licenses.
 
-Copyright 2004-2015 Andrey Korotaev <unC0Rr@gmail.com> and others.
+Copyright 2004-2018 Andrey Korotaev <unC0Rr@gmail.com> and others.
 See `QTfrontend/res/html/about.html` and `CREDITS` for a more complete list of
 authors.
 

@@ -134,7 +134,7 @@ void GameUIConfig::reloadValues(void)
     netHost = new QString(value("net/ip", "").toString());
     netPort = value("net/port", NETGAME_DEFAULT_PORT).toUInt();
 
-    Form->ui.pageNetServer->leServerDescr->setText(value("net/servername", "hedgewars server").toString());
+    Form->ui.pageNetServer->leServerDescr->setText(value("net/servername", "Hedgewars Server").toString());
     Form->ui.pageNetServer->sbPort->setValue(value("net/serverport", NETGAME_DEFAULT_PORT).toUInt());
 
     Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());

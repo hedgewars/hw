@@ -78,8 +78,8 @@ function onGameStart()
 	HogTurnLeft(hh[0], false)
 	HogTurnLeft(hh[1], true)
 
-	SpawnUtilityCrate(148,265,amLowGravity)
-	SpawnUtilityCrate(2124,1516,amJetpack)
+	SpawnSupplyCrate(148,265,amLowGravity)
+	SpawnSupplyCrate(2124,1516,amJetpack)
 
 end
 

@@ -23,6 +23,11 @@
 #include <QPainterPath>
 #include <QGraphicsEllipseItem>
 
+#define DRAWN_MAP_BRUSH_SIZE_STEP (10)
+#define DRAWN_MAP_BRUSH_SIZE_MAX (516)
+#define DRAWN_MAP_BRUSH_SIZE_MIN (16)
+#define DRAWN_MAP_BRUSH_SIZE_START (76)
+
 class QGraphicsPathItem;
 
 struct PathParams
@@ -50,9 +55,11 @@ class DrawMapScene : public QGraphicsScene
         QByteArray encode();
         void decode(QByteArray data);
         int pointsCount();
+        int brushSize();
 
     signals:
         void pathChanged();
+        void brushSizeChanged(int brushSize);
 
     public slots:
         void undo();
@@ -63,6 +70,7 @@ class DrawMapScene : public QGraphicsScene
         void showCursor();
         void hideCursor();
         void setPathType(PathType pathType);
+        void setBrushSize(int brushSize);
 
     private:
         QPen m_pen;

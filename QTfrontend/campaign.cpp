@@ -88,9 +88,7 @@ QSettings* getCampMetaInfo()
     // get locale
     QSettings settings(dataMgr.settingsFileName(),
     QSettings::IniFormat);
-    QString loc = settings.value("misc/locale", "").toString();
-    if (loc.isEmpty())
-        loc = QLocale::system().name();
+    QString loc = QLocale().name();
     QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
     // if file is non-existant try with language only
     if (!QFile::exists(campaignDescFile))

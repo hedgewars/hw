@@ -209,7 +209,7 @@ const
     gfVampiric           = $00000200;
     gfKarma              = $00000400;
     gfArtillery          = $00000800;
-    gfForts              = $00001000;
+    gfSwitchHog          = $00001000;
     gfRandomOrder        = $00002000;
     gfKing               = $00004000;
     gfPlaceHog           = $00008000;
@@ -277,7 +277,7 @@ const
 
     cMaxSlotIndex       = 10;
     cHiddenSlotIndex    = cMaxSlotIndex; // slot for hidden ammo types, not visible and has no key
-    cMaxSlotAmmoIndex   = 5;
+    cMaxSlotAmmoIndex   = 6;
 
     // ai hints
     aihUsualProcessing    = $00000000;

@@ -130,6 +130,8 @@ crates = {}
 cratesNum = 0
 
 princessFreed = false
+closeToPrincess = false
+friendsEscaped = false
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -219,8 +221,16 @@ function AfterMidAnim()
   SetupPlace3()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
+  AddNewEvent(CheckCloseToPrincess, {}, DoCloseToPrincess, {}, 0)
+  AddNewEvent(CheckFriendsEscaped, {}, DoFriendsEscaped, {}, 0)
   EndTurn(true)
-  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!") .. "|" .. loc("Mines time: 5 seconds"), 1, 7000)
+  ShowMission(loc("Family Reunion"), loc("Salvation"),
+     loc("Get your teammates out of their natural prison and save the princess!") .."|"..
+     loc("All your hedgehogs must be above the marked height!") .."|"..
+     loc("Hint: Drilling holes should solve everything.").."|"..
+     loc("Hint: It might be a good idea to place a girder before starting to drill. Just saying.").."|"..
+     string.format(loc("Hint: %s needs to get really close to the princess!"), nativeNames[m5DeployedNum]).."|"..
+     loc("Mines time: 5 seconds"), 1, 7000)
   vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
@@ -231,17 +241,18 @@ end
 
 function SkipMidAnim()
   AnimTeleportGear(natives[1], unpack(nativeMidPos2))
-  SkipStartAnim()
+  AnimSwitchHog(natives[1])
+  AnimWait(natives[1], 1)
 end
 
 function SetupPlace3()
-  SpawnUtilityCrate(2086, 1887, amRope, 1)
-  SpawnAmmoCrate(2147, 728, amBlowTorch, 2)
-  SpawnAmmoCrate(2778, 1372, amPickHammer, 3)
-  SpawnAmmoCrate(2579, 1886, amPickHammer, 3)
-  SpawnUtilityCrate(2622, 1893, amGirder, 1)
-  SpawnUtilityCrate(2671, 1883, amPortalGun, 3)
-  SpawnUtilityCrate(2831, 1384, amGirder, 3)
+  SpawnSupplyCrate(2086, 1887, amRope, 1)
+  SpawnSupplyCrate(2147, 728, amBlowTorch, 2)
+  SpawnSupplyCrate(2778, 1372, amPickHammer, 4)
+  SpawnSupplyCrate(2579, 1886, amPickHammer, 3)
+  SpawnSupplyCrate(2622, 1893, amGirder, 1)
+  SpawnSupplyCrate(2671, 1883, amPortalGun, 3)
+  SpawnSupplyCrate(2831, 1384, amGirder, 3)
 
   SetTimer(AddGear(2725, 1387, gtMine, 0, 0, 0, 0), 5000)
   SetTimer(AddGear(2760, 1351, gtMine, 0, 0, 0, 0), 5000)
@@ -299,30 +310,67 @@ function SetupPlace2()
 	PlaceGirder(648, 1427, 5)
   PlaceGirder(2110, 980, 0)
 
-	SpawnAmmoCrate(814, 407, amBazooka, 4)
-	clusterCrate = SpawnAmmoCrate(862, 494, amClusterBomb, 4)
-	SpawnAmmoCrate(855, 486, amBee, 3)
-	grenadeCrate1 = SpawnAmmoCrate(849, 459, amGrenade, 4)
-	SpawnAmmoCrate(2077, 847, amWatermelon, 3)
-	grenadeCrate2 = SpawnAmmoCrate(2122, 847, amGrenade, 3)
+	SpawnSupplyCrate(814, 407, amBazooka, 4)
+	clusterCrate = SpawnSupplyCrate(862, 494, amClusterBomb, 4)
+	SpawnSupplyCrate(855, 486, amBee, 3)
+	grenadeCrate1 = SpawnSupplyCrate(849, 459, amGrenade, 4)
+	SpawnSupplyCrate(2077, 847, amWatermelon, 3)
+	grenadeCrate2 = SpawnSupplyCrate(2122, 847, amGrenade, 3)
 
-	SpawnAmmoCrate(747, 1577, amPickHammer, 1)
-	SpawnUtilityCrate(496, 1757, amGirder, 2)
-  SpawnUtilityCrate(1809, 1880, amGirder, 1)
-	SpawnUtilityCrate(530, 1747, amPortalGun, 1)
+	SpawnSupplyCrate(747, 1577, amPickHammer, 1)
+	SpawnSupplyCrate(496, 1757, amGirder, 2)
+	SpawnSupplyCrate(1809, 1880, amGirder, 1)
+	SpawnSupplyCrate(530, 1747, amPortalGun, 1)
 end
 
 -----------------------------Events------------------------------------
-function CheckPrincessFreed()
-  if GetX(natives[1]) == nil or GetX(natives[2]) == nil or GetX(natives[3]) == nil or GetX(princess) == nil then
+function CheckCloseToPrincess()
+  if GetX(natives[1]) == nil or GetX(princess) == nil then
     return false
   end
-  return math.abs(GetX(natives[1]) - GetX(princess)) <= 15 and math.abs(GetY(natives[1]) - GetY(princess)) <= 15 and StoppedGear(natives[1]) 
-        and GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
+  return math.abs(GetX(natives[1]) - GetX(princess)) <= 20 and math.abs(GetY(natives[1]) - GetY(princess)) <= 17 and StoppedGear(natives[1])
+end
+
+function CheckFriendsEscaped()
+  if GetX(natives[2]) == nil or GetX(natives[3]) == nil then
+    return false
+  end
+  return GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
+end
+
+function CheckPrincessFreed()
+  return CheckCloseToPrincess() and CheckFriendsEscaped()
 end
 
 function DoPrincessFreed()
   AddAnim(princessFreedAnim)
+end
+
+function DoFriendsEscaped()
+  if friendsEscaped then
+    return
+  end
+  if not CheckCloseToPrincess() then
+    if GetX(natives[2]) == nil and GetX(natives[1]) == nil then
+      return
+    end
+    HogSay(natives[2], string.format(loc("Finally! We're out of this hellhole. Now go save the princess, %s!"), nativeNames[m5DeployedNum]), SAY_SAY)
+  end
+  friendsEscaped = true
+end
+
+function DoCloseToPrincess()
+  if closeToPrincess then
+    return
+  end
+  if not CheckFriendsEscaped() then
+    if GetX(natives[2]) == nil then
+      return
+    end
+    HogSay(natives[2], loc("Hey, don't forget us! We still need to climb up!"), SAY_SHOUT)
+    FollowGear(natives[2])
+  end
+  closeToPrincess = true
 end
 
 function Victory()
@@ -353,17 +401,17 @@ function DoCyborgDead(index)
     return
   end
   if index == 1 then
-    SpawnAmmoCrate(1700, 407, amBazooka, 3)
+    SpawnSupplyCrate(1700, 407, amBazooka, 3)
   elseif index == 2 then
-    SpawnAmmoCrate(1862, 494, amClusterBomb, 3)
+    SpawnSupplyCrate(1862, 494, amClusterBomb, 3)
   elseif index == 3 then
-  	SpawnAmmoCrate(1855, 486, amBee, 1)
+    SpawnSupplyCrate(1855, 486, amBee, 1)
   elseif index == 4 then
-    SpawnAmmoCrate(1849, 459, amGrenade, 3)
+    SpawnSupplyCrate(1849, 459, amGrenade, 3)
   elseif index == 5 then
-    SpawnAmmoCrate(2122, 847, amGrenade, 3)
+    SpawnSupplyCrate(2122, 847, amGrenade, 3)
   elseif index == 6 then
-    SpawnAmmoCrate(2077, 847, amWatermelon, 1)
+    SpawnSupplyCrate(2077, 847, amWatermelon, 1)
   end
 end
 
@@ -383,6 +431,8 @@ end
 
 function EndMission()
   if not princessFreed then
+    RemoveEventFunc(CheckFriendsEscaped)
+    RemoveEventFunc(CheckCloseToPrincess)
     RemoveEventFunc(CheckPrincessFreed)
     AddCaption(loc("So the princess was never heard of again ..."))
     DismissTeam(loc("Natives"))
@@ -403,14 +453,14 @@ function DoOutOfCluster()
   if (GetX(natives[1]) == nil) then
     return
   end
-  clusterCrate = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
+  clusterCrate = SpawnSupplyCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
 end
 
 function DoOutOfGrenade()
   if (GetX(natives[1]) == nil) then
     return
   end
-  grenadeCrate2 = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
+  grenadeCrate2 = SpawnSupplyCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
 end
 
 function CheckNeedToHide()
@@ -440,9 +490,9 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
 end
 
 function SetupPlace()

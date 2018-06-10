@@ -16,12 +16,13 @@ INCLUDEPATH += /usr/local/include/lua52/
 
 DESTDIR = ../bin
 
+QT += widgets
 QT += network
 QT += webkit
 
 HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/model/MapModel.h \
-    ../QTfrontend/model/ammoSchemeModel.h \
+    ../QTfrontend/model/gameSchemeModel.h \
     ../QTfrontend/model/netserverslist.h \
     ../QTfrontend/ui/page/pagedrawmap.h \
     ../QTfrontend/ui/page/pagedata.h \
@@ -121,7 +122,7 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/net/hwmapoptimizer.h
 
 
-SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
+SOURCES += ../QTfrontend/model/gameSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
     ../QTfrontend/model/ThemeModel.cpp \
     ../QTfrontend/model/netserverslist.cpp \

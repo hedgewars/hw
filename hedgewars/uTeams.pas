@@ -54,7 +54,8 @@ var TeamsGameOver: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
-    s, ts, cap: ansistring;
+    s, cap: ansistring;
+    ts: array[0..(cMaxTeams - 1)] of ansistring;
     t, AliveCount, i, j: LongInt;
 begin
 CheckForWin:= false;
@@ -90,33 +91,34 @@ if not TeamsGameOver then
         begin
         with AliveClan^ do
             begin
-            ts:= ansistring(Teams[0]^.TeamName);
-            if TeamsNumber = 1 then // team wins
+            if TeamsNumber = 1 then // single team wins
                 begin
-                s:= FormatA(trmsg[sidWinner], ts);
-                cap:= FormatA(GetEventString(eidRoundWin), ts);
+                s:= ansistring(Teams[0]^.TeamName);
+                // Victory caption is randomly selected
+                cap:= FormatA(GetEventString(eidRoundWin), s);
                 AddCaption(cap, cWhiteColor, capgrpGameState);
+                s:= FormatA(trmsg[sidWinner], s);
                 end
-            else // clan wins
+            else // clan with at least 2 teams wins
                 begin
                 s:= '';
                 for j:= 0 to Pred(TeamsNumber) do
                     begin
-                    (*
-                    Currently, the game result string is just the victory
-                    string concatenated multiple times. This assumes that
-                    sidWinner is a complete sentence.
-                    This might not work well for some languages.
-
-                    FIXME/TODO: Add event strings for 2, 3, 4 and >4 teams winning.
-                                 This requires FormatA to work with multiple parameters. *)
-                    ts:= Teams[j]^.TeamName;
-                    s:= s + ' ' + FormatA(trmsg[sidWinner], ts);
-
-                    // FIXME: Show victory captions one-by-one, not all at once
-                    cap:= FormatA(GetEventString(eidRoundWin), ts);
-                    AddCaption(cap, cWhiteColor, capgrpGameState);
+                    ts[j] := Teams[j]^.TeamName;
                     end;
+
+                // Write victory message for caption and stats page
+                if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
+                    // No enemies for some reason … Everyone wins!!1!
+                    s:= trmsg[sidWinnerAll]
+                else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
+                    // List all winning teams in a list
+                    s:= FormatA(trmsg[TMsgStrId(Ord(sidWinner2) + (TeamsNumber - 2))], ts);
+
+                // The winner caption is the same as the stats message and not randomized
+                cap:= s;
+                AddCaption(cap, cWhiteColor, capgrpGameState);
+                // TODO (maybe): Show victory animation/captions per-team instead of all winners at once?
                 end;
 
             for j:= 0 to Pred(TeamsNumber) do
@@ -191,23 +193,26 @@ with CurrentTeam^ do
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
     with ClansArray[c]^ do
-        if (CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0) then
+        if (GameFlags and gfTagTeam) <> 0 then
             begin
-            TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
-            CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
-            inc(c);
-            NextClan:= true;
-            end;
+            if (CurrTeam = TagTeamIndex) then
+                begin
+                if (c = 0) and (not PlacingHogs) then
+                    inc(TotalRounds);
+                TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
+                CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
+                inc(c);
+                NextClan:= true;
+                end;
+            end
+        else if (c = 0) and (not PlacingHogs) then
+            inc(TotalRounds);
 
     if (GameFlags and gfTagTeam) = 0 then
         inc(c);
 
     if c = ClansCount then
-        begin
-        if not PlacingHogs then
-            inc(TotalRounds);
-        c:= 0
-        end;
+        c:= 0;
 
     with ClansArray[c]^ do
         begin
@@ -266,6 +271,7 @@ var i, t: LongInt;
     CurWeapon: PAmmo;
     w: real;
     vg: PVisualGear;
+    g: PGear;
     s: ansistring;
 begin
 if PlacingHogs then
@@ -327,25 +333,35 @@ ApplyAmmoChanges(CurrentHedgehog^);
 if (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
     SetBinds(CurrentTeam^.Binds);
 
-bShowFinger:= true;
-
 if PlacingHogs then
     begin
     if CurrentHedgehog^.Unplaced then
         TurnTimeLeft:= 15000
     else TurnTimeLeft:= 0
     end
-else if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
-    begin
-    if TagTurnTimeLeft <> 0 then
-        TurnTimeLeft:= TagTurnTimeLeft;
-    TagTurnTimeLeft:= 0;
-    end
 else
     begin
-    TurnTimeLeft:= cHedgehogTurnTime;
-    TagTurnTimeLeft:= 0;
-    NextClan:= false;
+    if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
+        begin
+        if TagTurnTimeLeft <> 0 then
+            TurnTimeLeft:= TagTurnTimeLeft;
+        TagTurnTimeLeft:= 0;
+        end
+    else
+        begin
+        TurnTimeLeft:= cHedgehogTurnTime;
+        TagTurnTimeLeft:= 0;
+        NextClan:= false;
+        end;
+
+    if (GameFlags and gfSwitchHog) <> 0 then
+        begin
+        g:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
+        CurAmmoGear:= g;
+        lastGearByUID:= g;
+        end
+    else
+        bShowFinger:= true;
     end;
 IsGetAwayTime:= false;
 
@@ -381,7 +397,7 @@ end;
 
 function AddTeam(TeamColor: Longword): PTeam;
 var team: PTeam;
-    c, t: LongInt;
+    c: LongInt;
 begin
 if checkFails(TeamsCount < cMaxTeams, 'Too many teams', true) then exit(nil);
 New(team);
@@ -393,9 +409,9 @@ team^.Flag:= 'hedgewars';
 
 TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
+inc(VisibleTeamsCount);
 
-for t:= 0 to cKbdMaxIndex do
-    team^.Binds[t]:= DefaultBinds[t];
+team^.Binds:= DefaultBinds;
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
@@ -535,7 +551,8 @@ begin
     HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
     AddCI(HH^.Gear);
     HH^.Gear^.Active:= true;
-    ScriptCall('onHogRestore', HH^.Gear^.Uid)
+    ScriptCall('onHogRestore', HH^.Gear^.Uid);
+    AddVisualGear(0, 0, vgtTeamHealthSorter);
 end;
 
 procedure RestoreTeamsFromSave;
@@ -699,7 +716,7 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString(#7 + '* '+ TeamName + ' is gone'); // TODO: localize
+                    AddChatString(#7 + '* '+ FormatA(trmsg[sidTeamGone], TeamName));
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -738,7 +755,7 @@ begin
         with TeamsArray[t]^ do
             if hasGone then
                 begin
-                AddChatString(#8 + '* '+ TeamName + ' is back');
+                AddChatString(#8 + '* '+ FormatA(trmsg[sidTeamBack], TeamName));
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
@@ -888,6 +905,7 @@ if TeamsCount > 0 then
             FreeAndNilTexture(OwnerTex);
             FreeAndNilTexture(GraveTex);
             FreeAndNilTexture(AIKillsTex);
+            FreeAndNilTexture(LuaTeamValueTex);
             FreeAndNilTexture(FlagTex);
             end;
 

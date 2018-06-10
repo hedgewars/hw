@@ -51,6 +51,7 @@ var
     cFlattenClouds     : boolean;
     cIce               : boolean;
     cSnow              : boolean;
+    isInChatMode       : boolean;
 
     cAltDamage         : boolean;
     cReducedQuality    : LongWord;
@@ -123,6 +124,7 @@ var
     cSDCloudsNumber  : LongWord;
 
     cTagsMask        : byte;
+    cPrevTagsMask    : byte;
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
@@ -165,6 +167,7 @@ var
     cScriptParam    : shortstring;
     cSeed           : shortstring;
     cVolumeDelta    : LongInt;
+    cMuteToggle     : boolean; // Mute toggle requested
     cHasFocus       : boolean;
     cInactDelay     : Longword;
 
@@ -190,7 +193,6 @@ var
     cLaserSighting  : boolean;
     cLaserSightingSniper : boolean;
     cVampiric       : boolean;
-    cArtillery      : boolean;
     WeaponTooltipTex: PTexture;
     AmmoMenuInvalidated: boolean;
     AmmoRect        : TSDL_Rect;
@@ -251,6 +253,8 @@ var
     // for EndTurn Lua call
     LuaEndTurnRequested: boolean;
     LuaNoEndTurnTaunts: boolean;
+
+    MaskedSounds : array[TSound] of boolean;
 
     LastVoice : TVoice;
 
@@ -702,7 +706,7 @@ const
                 Texture: nil; Surface: nil; Width:  32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
-            // sprNapalmBomb
+            // sprBulletHit
             (FileName:  'Snowball'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSnowball
             (FileName:  'amSnowball'; Path: ptCurrTheme; AltPath: ptHedgehog; Texture: nil; Surface: nil;
@@ -757,6 +761,8 @@ const
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom7
             (FileName:       'custom8'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom8
+            (FileName:      'FrozenAirMine'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: true; critical: true; checkSum: true; priority: tpHighest; getDimensions: false; getImageDimensions: true), // sprFrozenAirMine
             (FileName:      'AirMine'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true), // sprAirMine
             (FileName:  'amAirMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -772,7 +778,9 @@ const
             (FileName:     'Duck'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprDuck
             (FileName:    'amDuck'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandDuck
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandDuck
+            (FileName: 'amMinigun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprMinigun
             );
 
 const
@@ -2438,7 +2446,30 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 15;
-            ejectY: -7)
+            ejectY: -7),
+// Minigun
+            (NameId: sidMinigun;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NeedUpDown;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amMinigun;
+                AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 2;
+            TimeAfterTurn: 3000;
+            minAngle: cMaxAngle div 6;
+            maxAngle: 5 * cMaxAngle div 6;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0; //23;
+            ejectY: 0) //-6;
         );
 
 var
@@ -2455,8 +2486,9 @@ var
     AllInactive: boolean;
     PrvInactive: boolean;
     KilledHHs: Longword;
-    SuddenDeath: Boolean;
-    SuddenDeathDmg: Boolean;
+    SuddenDeath: Boolean; // If the Sudden Death check has been made
+    SuddenDeathActive: Boolean; // Is in Sudden Death with any gameplay effect
+    SuddenDeathDmg: Boolean; // Is in Sudden Death with damage
     SpeechType: Longword;
     SpeechText: shortstring;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
@@ -2467,7 +2499,8 @@ var
     PreviousTeam: PTeam;
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
-    TeamsCount: Longword;
+    TeamsCount: Longword; // number of teams on game start
+    VisibleTeamsCount: Longword; // number of teams visible in team bar
     ClansArray, SpawnClansArray: TClansArray;
     ClansCount: Longword;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
@@ -2546,6 +2579,7 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trluaammoc: array[TAmmoStrId] of ansistring; // caption of the weapon (Lua overwrite)
     trluaammod: array[TAmmoStrId] of ansistring;  // description of the weapon (Lua overwrite)
     trluaammoa: array[TAmmoStrId] of ansistring; // description appendix of the weapon (Lua only)
+    trluaammoe: array[TAmmoStrId] of boolean;   // whether to render extra text (Lua overwrite)
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
     cTestLua : Boolean;
@@ -2598,6 +2632,7 @@ begin
 {$ENDIF}
 
     cTagsMask:= htTeamName or htName or htHealth;
+    cPrevTagsMask:= cTagsMask;
 end;
 
 procedure initScreenSpaceVars();
@@ -2611,6 +2646,8 @@ end;
 procedure initModule;
 var s: shortstring;
     i: integer;
+    t: TSound;
+    a: TAmmoStrId;
 begin
     // init LastVoice
     LastVoice.snd:= sndNone;
@@ -2633,6 +2670,7 @@ begin
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
+    isInChatMode        := false;
 
         {*  REFERENCE
       4096 -> $FFFFF000
@@ -2731,7 +2769,12 @@ begin
     cMaxZoomLevel:= 1.0;
     cMinZoomLevel:= 3.0;
     cZoomDelta:= 0.25;
-{$ENDIF}
+    {$ENDIF}
+
+    aVertex:= 0;
+    aTexCoord:= 1;
+    aColor:= 2;
+
 
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
 
@@ -2787,7 +2830,6 @@ begin
     cLaserSighting  := false;
     cLaserSightingSniper := false;
     cVampiric       := false;
-    cArtillery      := false;
     flagMakeCapture := false;
     flagDumpLand    := false;
     bBetweenTurns   := false;
@@ -2804,6 +2846,7 @@ begin
     autoCameraOn    := true;
     cSeed           := '';
     cVolumeDelta    := 0;
+    cMuteToggle     := false;
     cHasFocus       := true;
     cInactDelay     := 100;
     ReadyTimeLeft   := 0;
@@ -2865,6 +2908,12 @@ begin
 
     LuaEndTurnRequested:= false;
     LuaNoEndTurnTaunts:= false;
+
+    for t:= Low(TSound) to High(TSound) do
+        MaskedSounds[t]:= false;
+
+    for a:= Low(TAmmoStrId) to High(TAmmoStrId) do
+        trluaammoe[a]:= true;
 
     UIDisplay:= uiAll;
     LocalMessage:= 0;

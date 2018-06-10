@@ -93,7 +93,14 @@ begin
     end;
 {$IOCHECKS ON}
 
-    // store some description in output file
+    { Store some description in output file.
+    The comment must follow a particular format and must be in English.
+    This will be parsed by the frontend.
+    The frontend will parse lines of this format:
+        Key: Value
+    The key names will be localized in the frontend.
+    If you add a key/value pair, don't forget to add a localization
+    in the frontend! }
     desc:= '';
     if UserNick <> '' then
         desc:= desc + 'Player: ' + UserNick + #10;

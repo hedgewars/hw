@@ -87,37 +87,6 @@
     </message>
 </context>
 <context>
-    <name>AmmoSchemeModel</name>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">nowy</translation>
-    </message>
-    <message>
-        <source>copy of</source>
-        <translation type="obsolete">kopia</translation>
-    </message>
-    <message>
-        <source>copy of %1</source>
-        <translation type="obsolete">kopia %1</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Nowy</translation>
-    </message>
-    <message>
-        <source>Copy of %1</source>
-        <translation>Kopia %1</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>Nowy (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>Kopia %1 (%2)</translation>
-    </message>
-</context>
-<context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
@@ -262,6 +231,37 @@
     <message>
         <source>Game options</source>
         <translation>Ustawienia gry</translation>
+    </message>
+</context>
+<context>
+    <name>GameSchemeModel</name>
+    <message>
+        <source>new</source>
+        <translation type="obsolete">nowy</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="obsolete">kopia</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="obsolete">kopia %1</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Nowy</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>Kopia %1</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>Nowy (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>Kopia %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -663,7 +663,7 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-        <translation>Wystąpił fatalny BŁĄD! - Silnik gry musiał się zatrzymać.
+        <translation type="vanished">Wystąpił fatalny BŁĄD! - Silnik gry musiał się zatrzymać.
 
 Bardzo nam przykro z powodu niedogodności :(
 
@@ -671,6 +671,17 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%1&quot; w menu głó
 
 Dwie ostatnie wiadomości silnika:
 %2</translation>
+    </message>
+    <message>
+        <source>A fatal ERROR occured! The game engine had to stop.
+
+We are very sorry for the inconvenience. :-(
+
+If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
+
+Last engine message:
+%1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -974,11 +985,11 @@ po prostu wpisz swój nick.</translation>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Prześłij wideo</translation>
+        <translation type="vanished">Prześłij wideo</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Prześlij</translation>
+        <translation type="vanished">Prześlij</translation>
     </message>
 </context>
 <context>
@@ -1051,7 +1062,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Video: %1x%2</source>
-        <translation>Wideo: %1x%2</translation>
+        <translation type="vanished">Wideo: %1x%2</translation>
     </message>
     <message>
         <source>Duration: %1min %2s</source>
@@ -1060,7 +1071,33 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>%1 FPS</source>
-        <translation>%1 FPS</translation>
+        <translation type="vanished">%1 FPS</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished">Motyw: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1258,6 +1295,10 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Optimize</source>
         <translation>Optymalizuj</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2079,6 +2120,10 @@ po prostu wpisz swój nick.</translation>
         <source>Name of this scheme</source>
         <translation>Nazwa tego schematu</translation>
     </message>
+    <message>
+        <source>Select a hedgehog at the beginning of a turn</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2197,7 +2242,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation>wysyłanie</translation>
+        <translation type="vanished">wysyłanie</translation>
     </message>
     <message>
         <source>Date: %1
@@ -2218,6 +2263,16 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Size: %1</source>
         <translation>Rozmiar: %1</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2323,11 +2378,11 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Zapisz nazwę użytkownika i hasło</translation>
+        <translation type="vanished">Zapisz nazwę użytkownika i hasło</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation>Film jest prywatny</translation>
+        <translation type="vanished">Film jest prywatny</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2724,27 +2779,27 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Wprowadź nazwę użytkownika YouTube lub adres mailowy powiązany z Kontem Google.</translation>
+        <translation type="vanished">Wprowadź nazwę użytkownika YouTube lub adres mailowy powiązany z Kontem Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation>Nazwa konta (lub email): </translation>
+        <translation type="vanished">Nazwa konta (lub email): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation>Hasło: </translation>
+        <translation type="vanished">Hasło: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation>Nazwa filmu: </translation>
+        <translation type="vanished">Nazwa filmu: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Opis filmu: </translation>
+        <translation type="vanished">Opis filmu: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tagi (oddzielone przecinkami): </translation>
+        <translation type="vanished">Tagi (oddzielone przecinkami): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2859,6 +2914,10 @@ Czy na pewno chcesz wyjść?</translation>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
         <translation>Bitrate (Kibit/s)</translation>
     </message>
+    <message>
+        <source>Loading&lt;br&gt;CAPTCHA ...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2877,6 +2936,10 @@ Czy na pewno chcesz wyjść?</translation>
     <message>
         <source>unnamed (%1)</source>
         <translation>nienazwany (%1)</translation>
+    </message>
+    <message>
+        <source>Hedgehog %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2907,17 +2970,17 @@ Czy na pewno chcesz wyjść?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Błąd uwierzytelniania na google.com:
+        <translation type="vanished">Błąd uwierzytelniania na google.com:
 </translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Login lub hasło są niepoprawne</translation>
+        <translation type="vanished">Login lub hasło są niepoprawne</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Błąd w trakcie wysyłania danych do Youtube:
+        <translation type="vanished">Błąd w trakcie wysyłania danych do Youtube:
 </translation>
     </message>
     <message>
@@ -2986,7 +3049,7 @@ Sprawdź poprawność instalacji!</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation>Wysyłanei filmu - Błąd</translation>
+        <translation type="vanished">Wysyłanei filmu - Błąd</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
@@ -3064,7 +3127,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Na pewno chcesz anulować wysyłanie &apos;%1&apos;?</translation>
+        <translation type="vanished">Na pewno chcesz anulować wysyłanie &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -3080,7 +3143,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation>Nie możn aużyć aminucji &apos;%1&apos;!</translation>
+        <translation type="vanished">Nie możn aużyć aminucji &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
@@ -3174,6 +3237,20 @@ Current number of hedgehogs: %1</source>
 
 Aktualna liczba jeży: %1</translation>
     </message>
+    <message>
+        <source>Welcome to Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome to Hedgewars!
+
+You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3258,11 +3335,11 @@ Aktualna liczba jeży: %1</translation>
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation>Wyślij do YouTube</translation>
+        <translation type="vanished">Wyślij do YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Anuluj wysyłanie</translation>
+        <translation type="vanished">Anuluj wysyłanie</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3306,7 +3383,7 @@ Aktualna liczba jeży: %1</translation>
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
-        <translation>Prześlij to wideo na swoje konto YouTube</translation>
+        <translation type="vanished">Prześlij to wideo na swoje konto YouTube</translation>
     </message>
 </context>
 <context>
@@ -3628,7 +3705,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>pause</source>
-        <translation>pauza</translation>
+        <translation type="vanished">pauza</translation>
     </message>
     <message>
         <source>volume down</source>
@@ -3714,6 +3791,18 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
         <translation>przełącz paski drużyn</translation>
+    </message>
+    <message>
+        <source>team chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pause / auto skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4141,71 +4230,71 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <name>server</name>
     <message>
         <source>Restricted</source>
-        <translation>Zabronione</translation>
+        <translation type="vanished">Zabronione</translation>
     </message>
     <message>
         <source>Not room master</source>
-        <translation>Nie jesteś mistrzem pokoju</translation>
+        <translation type="vanished">Nie jesteś mistrzem pokoju</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation>Uszkodzone informacje o jeżach</translation>
+        <translation type="vanished">Uszkodzone informacje o jeżach</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation>zbyt wiele drużyn</translation>
+        <translation type="vanished">zbyt wiele drużyn</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation>zbyt wiele jeży</translation>
+        <translation type="vanished">zbyt wiele jeży</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation>Na liście jest już drużyna z tą nazwą</translation>
+        <translation type="vanished">Na liście jest już drużyna z tą nazwą</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation>w trakcie rundy</translation>
+        <translation type="vanished">w trakcie rundy</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation>zabronione</translation>
+        <translation type="vanished">zabronione</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation>USUWANIE_DRUŻYNY: nie ma takiej drużyny</translation>
+        <translation type="vanished">USUWANIE_DRUŻYNY: nie ma takiej drużyny</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation>Nie jesteś właścicielem drużyny!</translation>
+        <translation type="vanished">Nie jesteś właścicielem drużyny!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation>Mniej niż dwa klany!</translation>
+        <translation type="vanished">Mniej niż dwa klany!</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation>Niepoprawna nazwa pokoju</translation>
+        <translation type="vanished">Niepoprawna nazwa pokoju</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation>Pokój z taką nazwą już istnieje</translation>
+        <translation type="vanished">Pokój z taką nazwą już istnieje</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation>Nick już wybrany</translation>
+        <translation type="vanished">Nick już wybrany</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation>Niepoprawny nick</translation>
+        <translation type="vanished">Niepoprawny nick</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation>Protokół już znany</translation>
+        <translation type="vanished">Protokół już znany</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation>Zły numer</translation>
+        <translation type="vanished">Zły numer</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
@@ -4237,35 +4326,35 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>No such room</source>
-        <translation>Nie ma takiego pokoju</translation>
+        <translation type="vanished">Nie ma takiego pokoju</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
-        <translation>Wersja pokoju niekompatybilna z twoją wersją Hedgewars</translation>
+        <translation type="vanished">Wersja pokoju niekompatybilna z twoją wersją Hedgewars</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation>Dołączanie zabronione</translation>
+        <translation type="vanished">Dołączanie zabronione</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation>Tylko zarejestrowani gracze</translation>
+        <translation type="vanished">Tylko zarejestrowani gracze</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation>Jesteś zbanowany w tym pokoju</translation>
+        <translation type="vanished">Jesteś zbanowany w tym pokoju</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation>Pusty wpis konfiguracjy</translation>
+        <translation type="vanished">Pusty wpis konfiguracjy</translation>
     </message>
     <message>
         <source>You already have voted</source>
-        <translation>Już głosowałeś</translation>
+        <translation type="vanished">Już głosowałeś</translation>
     </message>
     <message>
         <source>Voting closed</source>
-        <translation>Głosowanie zamknięte</translation>
+        <translation type="vanished">Głosowanie zamknięte</translation>
     </message>
     <message>
         <source>New voting started</source>
@@ -4273,7 +4362,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>Voting expired</source>
-        <translation>Głosowanie przedawnione</translation>
+        <translation type="vanished">Głosowanie przedawnione</translation>
     </message>
     <message>
         <source>kick</source>
@@ -4309,15 +4398,15 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
-        <translation>Nie ma żadnego głosowania w trakcie</translation>
+        <translation type="vanished">Nie ma żadnego głosowania w trakcie</translation>
     </message>
     <message>
         <source>Your vote counted</source>
-        <translation>Twój głos został policzony</translation>
+        <translation type="vanished">Twój głos został policzony</translation>
     </message>
     <message>
         <source>Pause toggled</source>
-        <translation>Pauza przełączona</translation>
+        <translation type="vanished">Pauza przełączona</translation>
     </message>
     <message>
         <source>new seed</source>
@@ -4325,7 +4414,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>number of hedgehogs in team</source>
-        <translation>liczba jeży w drużynie</translation>
+        <translation type="vanished">liczba jeży w drużynie</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
@@ -4337,23 +4426,167 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
-        <translation>callvote kick: podaj nick</translation>
+        <translation type="vanished">callvote kick: podaj nick</translation>
     </message>
     <message>
         <source>callvote kick: no such user</source>
-        <translation>callvote kick: nie ma takiego użytkownika</translation>
+        <translation type="vanished">callvote kick: nie ma takiego użytkownika</translation>
     </message>
     <message>
         <source>callvote map: no such map</source>
-        <translation>callvote map: nie ma takiej mapy</translation>
+        <translation type="vanished">callvote map: nie ma takiej mapy</translation>
     </message>
     <message>
         <source>callvote pause: no game in progress</source>
-        <translation>callvote pause: nie trwa żaden mecz</translation>
+        <translation type="vanished">callvote pause: nie trwa żaden mecz</translation>
     </message>
     <message>
         <source>callvote hedgehogs: specify number from 1 to 8</source>
-        <translation>callvote hedgehogs: podaj liczbę od 1 do 8</translation>
+        <translation type="vanished">callvote hedgehogs: podaj liczbę od 1 do 8</translation>
+    </message>
+    <message>
+        <source>The game can&apos;t be started with less than two clans!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You&apos;re not the room master!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too many teams!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too many hedgehogs!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Joining not possible: Round is in progress.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This room currently does not allow adding new teams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: The team you tried to remove does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can&apos;t remove a team you don&apos;t own.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A room with the same name already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote kick: You need to specify a nickname.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote kick: No such user!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote map: No such map!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote pause: No game in progress!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your Hedgewars version!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied. This room currently doesn&apos;t allow joining.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied. This room is for registered users only.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are banned from this room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already provided.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You already have voted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your vote has been counted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting closed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause toggled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting expired.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehogs per team: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

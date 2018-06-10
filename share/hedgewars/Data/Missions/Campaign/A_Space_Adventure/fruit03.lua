@@ -35,6 +35,7 @@ local hero = {
 	x = 1100,
 	y = 560
 }
+local heroTurns = 0
 local enemiesOdd = {
 	{name = loc("Hog 1"), x = 2000 , y = 175},
 	{name = loc("Hog III"), x = 1950 , y = 1110},
@@ -135,6 +136,8 @@ function onGameStart()
 	AddAmmo(enemiesEven[1].gear, amWatermelon, 1)
 	AddAmmo(enemiesEven[1].gear, amGrenade, 5)
 
+	turnHogs()
+
 	SendHealthStatsOff()
 end
 
@@ -152,8 +155,8 @@ function onNewTurn()
 			TurnTimeLeft = TurnTime + timeLeft
 		end
 		timeLeft = 0
+		heroTurns = heroTurns + 1
 	end
-	turnHogs()
 end
 
 function onGameTick()
@@ -171,15 +174,45 @@ function onGameTick20()
 	end
 end
 
+-- Display ammo icon above gear. i = offset (start at 1)
+local function displayAmmoIcon(gear, ammoType, i)
+	if not GetHealth(gear) then
+		return
+	end
+	local x = GetX(gear) + 2
+	local y = GetY(gear) + 32 * i
+	local vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
+	if vgear ~= nil then
+		local vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint = GetVisualGearValues(vgear)
+		local vgtFrame = ammoType
+		SetVisualGearValues(vgear,vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint)
+	end
+end
+
 function onGearDelete(gear)
-	if (isHog(gear)) then
+	if (isEnemyHog(gear) and GetHealth(hero.gear)) then
 		local availableTeleports = GetAmmoCount(hero.gear,amTeleport)
 		local availableSniper = GetAmmoCount(hero.gear,amSniperRifle)
+		local ammolist = ""
+		local tele = false
 		if availableTeleports < 2 then
 			AddAmmo(hero.gear, amTeleport, availableTeleports + 1 )
+			displayAmmoIcon(hero.gear, amTeleport, 1)
+			tele = true
+			ammolist = ammolist .. string.format(loc("%s (+1)"), GetAmmoName(amTeleport))
 		end
 		if availableSniper < 4 then
 			AddAmmo(hero.gear, amSniperRifle, availableSniper + 1 )
+			displayAmmoIcon(hero.gear, amSniperRifle, 2)
+			if tele then
+				ammolist = ammolist .. " • "
+			end
+			ammolist = ammolist .. string.format(loc("%s (+1)"), GetAmmoName(amSniperRifle))
+		end
+		-- Show collected ammo
+		if ammolist ~= "" then
+			PlaySound(sndShotgunReload)
+			AddCaption(ammolist, GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
 		end
 	end
 end
@@ -238,13 +271,13 @@ end
 function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), heroTurns))
 	local record = tonumber(GetCampaignVar("FastestPreciseShooting"))
-	if record ~= nil and TotalRounds >= record then
+	if record ~= nil and heroTurns >= record then
 		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
 	end
-	if record == nil or TotalRounds < record then
-		SaveCampaignVar("FastestPreciseShooting", tostring(TotalRounds))
+	if record == nil or heroTurns < record then
+		SaveCampaignVar("FastestPreciseShooting", tostring(heroTurns))
 		if record ~= nil then
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
@@ -281,21 +314,16 @@ function turnHogs()
 	end
 end
 
-function isHog(gear)
-	local hog = false
-	for i=1,table.getn(enemiesOdd) do
+function isEnemyHog(gear)
+	for i=1, table.getn(enemiesOdd) do
 		if gear == enemiesOdd[i].gear then
-			hog = true
-			break
+			return true
 		end
 	end
-	if not hog then
-		for i=1,table.getn(enemiesEven) do
-			if gear == enemiesEven then
-				hog = true
-				break
-			end
+	for i=1, table.getn(enemiesEven) do
+		if gear == enemiesEven then
+			return true
 		end
 	end
-	return hog
+	return false
 end

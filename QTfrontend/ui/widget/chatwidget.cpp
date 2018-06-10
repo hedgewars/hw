@@ -32,6 +32,7 @@
 #include <QSortFilterProxyModel>
 #include <QMenu>
 #include <QScrollBar>
+#include <QMimeData>
 
 #include "DataManager.h"
 #include "hwconsts.h"
@@ -312,7 +313,7 @@ void HWChatWidget::linkClicked(const QUrl & link)
     else if (link.scheme() == "hwnick")
     {
         // decode nick
-        QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
+        QString nick = QString::fromUtf8(QByteArray::fromBase64(link.query(QUrl::FullyDecoded).toLatin1()));
         QModelIndexList mil = chatNicks->model()->match(chatNicks->model()->index(0, 0), Qt::DisplayRole, nick);
 
         bool isOffline = (mil.size() < 1);
@@ -374,10 +375,10 @@ QString HWChatWidget::linkedNick(const QString & nickname)
 {
     if (nickname != m_userNick)
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-                   QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
+                   QString(nickname.toUtf8().toBase64())).arg(nickname.toHtmlEscaped());
 
     // unlinked nick (if own one)
-    return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
+    return QString("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
 }
 
 const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
@@ -399,7 +400,7 @@ bool HWChatWidget::containsHighlight(const QString & sender, const QString & mes
 
 QString HWChatWidget::messageToHTML(const QString & message)
 {
-    QString formattedStr = Qt::escape(message);
+    QString formattedStr = message.toHtmlEscaped();
     // link some urls
     formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http\\2://\\4\">\\4</a>");
     return formattedStr;
@@ -606,9 +607,9 @@ void HWChatWidget::onPlayerInfo(
 {
     addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
         .arg(linkedNick(nick))
-        .arg(Qt::escape(ip == "[]"?"":ip))
-        .arg(Qt::escape(version))
-        .arg(Qt::escape(roomInfo))
+        .arg(QString(ip == "[]"?"":ip).toHtmlEscaped())
+        .arg(version.toHtmlEscaped())
+        .arg(roomInfo.toHtmlEscaped())
     );
 }
 

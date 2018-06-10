@@ -71,7 +71,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     "hwengine\\\\.desktop$"
     "Info\\\\.plist$"
     #qt extra files
-    "moc_.*\\\\.cxx_parameters"
+    "moc_.*"
     "\\\\.qrc.depends$"
     "\\\\.qm$"
     #other cmake generated files

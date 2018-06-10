@@ -61,13 +61,14 @@
 00:57=Gummi
 00:58=Luftmine
 00:59=Quietscheentchen
+00:60=Minigun
 
 01:00=Laden …
 01:01=Unentschieden
 01:02=%1 gewinnt!
 01:03=Lautstärke: %1 %
 01:04=Pause
-01:05=Wirklich beenden (Z/Esc)?
+01:05=Wirklich beenden (%1/%2)?
 01:06=Sudden Death!
 01:07=%1 verbleibend
 01:08=Treibstoff
@@ -86,13 +87,25 @@
 01:19=Extreme
 01:20=%1 Sprungkraft
 01:21=Audio stumm
-01:22=Abwesenheitsmodus
+01:22=Automatisches Überspringen aktiv
 01:23=Autokamera aus
 01:24=Autokamera an
 01:25=Zieltaste drücken, um das Ziel zu markieren
 01:26=Werkzeug nicht verfügbar im Sudden Death
 01:27=+%1
 01:28=Leer!
+01:29=Unbekannte Taste
+01:30=%1 und %2 gewinnen!
+01:31=%1, %2 und %3 gewinnen!
+01:32=%1, %2, %3 und %4 gewinnen!
+01:33=%1, %2, %3, %4 und %5 gewinnen!
+01:34=%1, %2, %3, %4, %5 und %6 gewinnen!
+01:35=%1, %2, %3, %4, %5, %6 und %7 gewinnen!
+01:36=Alle gewinnen!
+01:37=%1 ist gegangen.
+01:38=%1 ist zurück.
+01:39=%1 hat den Zug automatisch übersprungen.
+01:40=%1 fps
 
 ; Event messages
 ; Hog (%1) died
@@ -334,7 +347,7 @@
 02:02=Jetzt geht's los!
 02:02=Auf geht's!
 
-; Round ends and team/clan (%1) wins
+; Round ends and team (%1) wins
 02:03=%1 gewinnt!
 02:03=%1 ist der Champion
 02:03=%1 ist der Sieger!
@@ -364,7 +377,6 @@
 02:03=%1 schlürft von der Siegersoße
 02:03=%1 hat diese Runde meisterhaft gewonnen
 02:03=%1 siegt mit Stil
-02:03=Mission erfolgreich, %1 gewinnt
 02:03=%1 verdient sich die Siegermedaillie
 02:03=Wer ist der Sieger? %1 ist der Sieger!
 02:03=%1 hat Grund zum Feiern
@@ -556,7 +568,7 @@
 02:06=Nette Überraschung!
 02:06=Neue Spielzeuge
 02:06=Eine Kiste voller Überraschungen
-02:06=Explosive Übrraschungen!
+02:06=Explosive Überraschungen!
 02:06=Nimm dir das für eine Überraschung
 02:06=Heb mich auf! Ich bin eine Kiste!
 02:06=Wehe, wenn da kein schweres Geschütz drin ist
@@ -578,13 +590,13 @@
 02:06=Zerschmettert den Feind!
 02:06=Spaß! Explosionen! Zerstörung!
 02:06=Lass Tod und Zerstörung auf deine Feinde herabregnen
-02:06=Waffen, davon kann man nie genung haben
+02:06=Waffen, davon kann man nie genug haben
 02:06=Hol sie dir, bevor dir die Munition ausgeht!
 02:06=Das bedeutet Chaos!
 02:06=Extras für wahre Krieger
 02:06=Achtung: Nicht bei hohen Temperaturen aufbewahren
 02:06=Bist du gut genug für diese Waffe?
-02:06=Herorische Bewaffnung für heroische Igel
+02:06=Heroische Bewaffnung für heroische Igel
 02:06=Überraschungswaffe!
 02:06=Es regnet Kisten!
 02:06=Die ultimative Waffe? Oder nur so 'ne Langweilige?
@@ -694,7 +706,7 @@
 02:07=Ein kleines Helferlein für kleine Igelchen
 02:07=Erweitere deine Möglichkeiten
 02:07=Überliste deinen Feind
-02:07=Bau dir Brücken zum Sig
+02:07=Bau dir Brücken zum Sieg
 02:07=Überraschungswerkzeug!
 02:07=Nützliches Geschenk!
 02:07=Werkzeug für dich!
@@ -1293,6 +1305,7 @@
 03:57=Werkzeug
 03:58=Schwebende Annäherungsmine
 03:59=Schwimmende Bombe
+03:60=Die ultimative Feuerwaffe
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1–5: Zeitzünder einstellen|Genaues Zielen + 1-5: Sprungkraft einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -1308,7 +1321,7 @@
 04:10=Rohe Gewalt ist immer eine Lösung. Lege einfach|diesen klassischen Sprengsatz neben deinen Feinden|ab und mach dich aus dem Staub.|Angriff: Dynamitstange legen
 04:11=Beseitige Feinde, indem du diese mit dem|Baseballschläger einfach von der Karte fegst.|Oder wie wäre es, wenn du deinen Freunden ein|paar Minen vor die Beine schlägst?|Angriff: Alles vor dem Igel schlagen
 04:12=Rücke mit deinen Feinden näher zusammen und|entfessle die Kraft dieser so gut wie tödlichen|Kampftechnik.|Angriff: Alles vor dem Igel schlagen
-04:13=UNUSED
+04:13=NICHT IN VERWENDUNG
 04:14=Höhenangst? Greif besser zum Fallschirm.|Er wird sich von alleine entfalten, wenn du|zu lange oder zu tief fällst, und so deinem|Igel den Hals retten.|Angriff: Fallschirm manuell öffnen oder entfernen|Links/Rechts/Hoch/Runter: Flug steuern|Weitsprung: Waffe benutzen
 04:15=Rufe ein Flugzeug, um deine Feinde mit einem|Bombenteppich einzudecken.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
 04:16=Rufe ein Flugzeug, um mehrere Minen im|Zielgebiet abwerfen zu lassen.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
@@ -1343,18 +1356,19 @@
 04:45=All die Physikstunden haben sich endlich bezahlt gemacht!|Entfessle eine zerstörerische Sinuswelle, die sich durch|das Gelände (und deine Feinde) brennen wird.|Pass auf, die Waffe erzeugt einen ordentlichen Rückstoß.|Angriff: Feuern
 04:46=Brutzle deine Feinde mit fließenden Flammen.|Herzerwärmend!|Angriff: Aktivieren|Hoch/Runter: Beim Feuern zielen|Links/Rechts: Durchfluss ändern
 04:47=Verdopple den Spaß mit zwei spitzigen, schicken, klebrigen Minen.|Löse eine Kettenreaktion aus oder beschütze dich (oder beides).|Angriff: Halten, um mit mehr Kraft zu feuern (zwei mal)
-04:48=Warum sind Maulwürfe verhasst? Igel, Minen|oder Fässer in den Boden zu stampfen, kann|auch sehr lustig sein! Ein guter Treffer des Hammers wird|ein Drittel (mit Zusatzschaden sogar die Hälfte) der|Lebenspunkte eines Igels abziehen und ihn im Boden|versenken.|Angriff: Zuschlagen
+04:48=Warum sind Maulwürfe verhasst? Igel und Gedöhns|in den Boden zu stampfen, kann auch sehr lustig sein!|Ein guter Treffer des Hammers wird ein Drittel|(mit Zusatzschaden sogar die Hälfte) der Lebenspunkte|eines Igels abziehen und ihn im Boden versenken.|Angriff: Zuschlagen
 04:49=Opfere deine Gesundheit, um deine Freunde zurückzuholen!|Aber pass auf, dass du keine Feinde beschwörst.|Angriff: Gedrückt halten, um Igel langsam wiederauferstehen zu lassen.|Hoch: Totenbeschwörung beschleunigen
 04:50=Verstecken sich Feinde im Untergrund?|Grabe sie aus mit dem Bohr-Luftangriff!|Der Zeitzünder bestimmt, wie tief dieser graben wird.|Links/Rechts: Angriffsrichtung wählen|1-5: Zeitzünder einstellen|Cursor: Zielgebiet wählen und Angriff starten
 04:51=Wirf mit Dreck um dich! Der Schlammball|schubst Igel und andere Dinge weg,|aber richtet keinen Schaden an.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:52=NICHT IN VERWENDUNG
 04:53=Unternimm eine Reise durch Zeit und Raum,|während du deine Kameraden alleine am Schlachtfeld zurücklässt.|Sei darauf vorbereitet, jederzeit wieder zurückzukommen,|oder auf Sudden Death, oder wenn sie alle besiegt wurden.|Haftungsausschluss. Nicht funktionstüchtig, wenn in Sudden Death,|wenn du alleine bist – oder der König.|Angriff: Aktivieren
 04:54=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen|Links/Rechts: Schussweite einstellen
-04:55=Hol die Eiszeit zurück! Friere Igel ein,|mach den Boden rutschig oder|rette dich selbst vor dem Ertrinken,|indem du das Wasser einfrierst.|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen
+04:55=Hol die Eiszeit zurück!|Friere Igel und Sachen ein, mach den Boden|rutschig oder rette dich selbst vor dem|Ertrinken, indem du das Wasser einfrierst.|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen
 04:56=Du kannst zwei Hackebeile auf deinen Feind schleudern,|Passagen und Tunnel blockieren, und sie sogar zum Klettern|benutzen! Der Schaden erhöht sich mit der Geschwindigkeit.|Aber sei vorsichtig! Es ist gefährlich, mit Messern zu spielen.|Angriff: Gedrückt halten, um mit mehr Schwung zu werfen (zwei mal)
 04:57=Bau einen SEHR elastischen Balken aus Gummi,|von dem Igel und andere Sachen abprallen,|ohne Fallschaden zu nehmen.|Links/Rechts: Ausrichtung des Gummis wählen|Cursor: Gummi platzieren
 04:58=Diese Annäherungsmine wird frei in der Luft schweben und|verfolgt törichte Igel, die dumm genug sind, ihr zu nahe zu|kommen. Allerdings ist ihre Explosion schwächer als|die der Landmine.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:59=Gib diesen dreckigen Igeln ein Bad! Dieses süße|kleine Quietscheentchen kann auf Wasser schwimmen|und folgt dabei dem Wind. Sie explodiert bei Kollision|mit Land, also stell sicher, sie von einer Klippe oder|einem anderem sicheren Ort fallen zu lassen.|Angriff: Quietscheentschen fallen lassen
+04:60=Lass es Kugeln auf deine Gegner hageln!|Und sie dachten wirklich, sie seien hinter|drei Trägerschichten sicher.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Weiterzielen
 
 ; Game goal strings
 05:00=Spielmodifikationen

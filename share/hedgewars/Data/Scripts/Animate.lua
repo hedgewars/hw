@@ -425,6 +425,11 @@ end
 -------------------------------------Misc---------------------------------
 
 function StoppedGear(gear)
+  -- GetHealth returns nil if gear does not exist
+  if not GetHealth(gear) then
+     -- We consider the gear to be “stopped” if it has been destroyed
+     return true
+  end
   dx,dy = GetGearVelocity(gear)
   return math.abs(dx) <= 1 and math.abs(dy) <= 1
 end

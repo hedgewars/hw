@@ -1,134 +1,83 @@
-
+HedgewarsScriptLoad("/Scripts/SimpleMission.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
-local player = nil 
-local enemy = nil
-local failed = false
+SimpleMission({
+	missionTitle = loc("Newton and the Hammock"),
+	missionIcon = -amJetpack,
+	initVars = {
+		TurnTime = 60000,
+		MinesTime = 1000,
+		Map = "Hammock",
+		Theme = "Nature",
+		MapGen = mgRandom,
+		MapFeatureSize = 12,
+	},
+	teams = {
+		{ name = loc("Pathetic Resistance"),
+		clanID = 0,
+		flag = "cm_yinyang",
+		grave = "Plinko",
+		hogs = {
+			{name = loc("Ikeda"), health = 48, x = 397, y = 865, hat = "StrawHat"}
+		}, },
 
-local hhs = {}
-local numhhs = 0
-
-function onGameInit()
-
-	Seed = 0
-	TurnTime = 60000 
-	CaseFreq = 0
-	MinesTime  = 1000
-	-- Disable Sudden Death
-	HealthDecrease = 0
-	WaterRise = 0
-	HealthCaseProb = 35
-	Explosives = 0
-	MinesNum = 0
-	Map = "Hammock" 
-	Theme = "Nature"
-
-	AddTeam(loc("Pathetic Resistance"), 14483456, "Statue", "Island", "Default", "cm_duckhead")
-	player = AddHog(loc("Ikeda"), 0, 48, "StrawHat")
-			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "ring", "Island", "Robot", "cm_cyborg")
-	enemy = AddHog(loc("Unit") .. " 811", 1, 100, "cyborg1")
-
-	SetGearPosition(player,430,1540)
-	SetGearPosition(enemy,1464,1960)
-
-end
-
-
-function onGameStart()
-
-	AddAmmo(enemy, amShotgun, 100)
-	AddAmmo(enemy, amFirePunch, 100)
-
-	--GIRDER LIST. 
-	PlaceGirder(1073,2009,0)
-	PlaceGirder(524,1487,3)
-	PlaceGirder(638,1453,4)
-	PlaceGirder(761,1453,0)
-	PlaceGirder(840,1421,3)
-	PlaceGirder(302,1388,6)
-	PlaceGirder(327,1506,1)
-	PlaceGirder(1669,1832,3)
-	--MINE LIST. 
-	AddGear(1056,1987,gtMine, 0, 0, 0, 0)
-	AddGear(1086,1988,gtMine, 0, 0, 0, 0)
-	--STICKY MINE LIST. 
-	AddGear(1089,965,gtSMine, 0, 0, 0, 0)
-	AddGear(1133,945,gtSMine, 0, 0, 0, 0)	
-	AddGear(1010,1081,gtSMine, 0, 0, 0, 0)
-	AddGear(1036,1049,gtSMine, 0, 0, 0, 0)
-	AddGear(1057,1004,gtSMine, 0, 0, 0, 0)
-	AddGear(784,1252,gtSMine, 0, 0, 0, 0)
-	AddGear(841,1257,gtSMine, 0, 0, 0, 0)
-	AddGear(902,1263,gtSMine, 0, 0, 0, 0)
-	AddGear(952,1281,gtSMine, 0, 0, 0, 0)
-	AddGear(517,1546,gtSMine, 0, 0, 0, 0)
-	AddGear(559,1597,gtSMine, 0, 0, 0, 0)
-	AddGear(613,1650,gtSMine, 0, 0, 0, 0)
-	AddGear(674,1705,gtSMine, 0, 0, 0, 0)
-	AddGear(746,1692,gtSMine, 0, 0, 0, 0)
-	AddGear(810,1692,gtSMine, 0, 0, 0, 0)
-	AddGear(872,1673,gtSMine, 0, 0, 0, 0)
-	AddGear(933,1666,gtSMine, 0, 0, 0, 0)
-	AddGear(981,1662,gtSMine, 0, 0, 0, 0)
-	AddGear(1016,1634,gtSMine, 0, 0, 0, 0)
-	AddGear(1063,1595,gtSMine, 0, 0, 0, 0)
-	AddGear(1100,1574,gtSMine, 0, 0, 0, 0)
-	AddGear(1002,1461,gtSMine, 0, 0, 0, 0)
-	AddGear(1052,1438,gtSMine, 0, 0, 0, 0)
-	AddGear(1102,1464,gtSMine, 0, 0, 0, 0)
-	--WEAPON CRATE LIST. 
-	SpawnAmmoCrate(1565,642,amSineGun)
-	SpawnAmmoCrate(548,858,amBazooka)
-	--UTILITY CRATE LIST.
-	SpawnUtilityCrate(479,847,amJetpack)
-	SpawnAmmoCrate(1550,1715,amBlowTorch)
-	SpawnUtilityCrate(1227,1941,amJetpack)
-	SpawnUtilityCrate(1070,1964,amInvulnerable)
-	SpawnUtilityCrate(1070,1875,amTeleport)
-	--HOG POSITION LIST.
-	if hhs[0] ~= nil then
-       		 SetGearPosition(hhs[0],397,865)
-	end
-		if hhs[1] ~= nil then
-        	SetGearPosition(hhs[1],561,1365)
-	end
-
-	ShowMission(loc("Newton and the Hammock"), loc("Scenario"), loc("Eliminate the enemy.") .. "|" .. loc("Mines time: 1 second"), -amParachute, 0)
-		
-end
-
-function onAmmoStoreInit()
-	SetAmmo(amSkip, 9, 0, 0, 1)
-	SetAmmo(amBazooka, 0, 0, 0, 1)
-	SetAmmo(amJetpack, 0, 0, 0, 1)
-	SetAmmo(amTeleport, 0, 0, 0, 1)
-	SetAmmo(amSineGun, 0, 0, 0, 1)
-	SetAmmo(amInvulnerable, 0, 0, 0, 1)
-	SetAmmo(amBlowTorch, 0, 0, 0, 1)
-end
-
-function onGearDamage(gear, damage)
-	if (gear == player) and (damage >= 48) then
-		failed = true
-	end
-end
-
-function onGearAdd(gear)
-
-	if GetGearType(gear) == gtHedgehog then
-		hhs[numhhs] = gear
-		numhhs = numhhs + 1
-	end	
-
-end
-
-function onGearDelete(gear)
-
-	if (gear == enemy) and (failed == false) then
-		ShowMission(loc("Newton and the Hammock"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
-	elseif gear == player then
-		ShowMission(loc("Newton and the Hammock"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
-	end
-
-end
+		{ name = loc("Cybernetic Empire"),
+		clanID = 5,
+		flag = "cm_cyborg",
+		grave = "ring",
+		voice = "Robot",
+		hogs = {
+			{name=loc("Unit 881"), x=561, y=1365, health=100, hat="cyborg1", botLevel=1,
+			ammo = {
+				[amShotgun] = 100,
+				[amFirePunch] = 100,
+			},},
+		},
+		}
+	},
+	girders = {
+		{ x=1073, y=2009, frameIdx=0, },
+		{ x=524, y=1487, frameIdx=3, },
+		{ x=638, y=1453, frameIdx=4, },
+		{ x=761, y=1453, frameIdx=0, },
+		{ x=840, y=1421, frameIdx=3, },
+		{ x=302, y=1388, frameIdx=6, },
+		{ x=327, y=1506, frameIdx=1, },
+		{ x=1669, y=1832, frameIdx=3, },
+	},
+	gears = {
+		{ type = gtMine, x = 1056, y = 1987 },
+		{ type = gtMine, x = 1086, y = 1988 },
+		{ type = gtSMine, x = 1089, y =965 },
+		{ type = gtSMine, x = 1133, y =945 },
+		{ type = gtSMine, x = 1010, y =1081 },
+		{ type = gtSMine, x = 1036, y =1049 },
+		{ type = gtSMine, x = 1057, y =1004 },
+		{ type = gtSMine, x = 784, y =1252 },
+		{ type = gtSMine, x = 841, y =1257 },
+		{ type = gtSMine, x = 902, y =1263 },
+		{ type = gtSMine, x = 952, y =1281 },
+		{ type = gtSMine, x = 517, y =1546 },
+		{ type = gtSMine, x = 559, y =1597 },
+		{ type = gtSMine, x = 613, y =1650 },
+		{ type = gtSMine, x = 674, y =1705 },
+		{ type = gtSMine, x = 746, y =1692 },
+		{ type = gtSMine, x = 810, y =1692 },
+		{ type = gtSMine, x = 872, y =1673 },
+		{ type = gtSMine, x = 933, y =1666 },
+		{ type = gtSMine, x = 981, y =1662 },
+		{ type = gtSMine, x = 1016, y =1634 },
+		{ type = gtSMine, x = 1063, y =1595 },
+		{ type = gtSMine, x = 1100, y =1574 },
+		{ type = gtSMine, x = 1002, y =1461 },
+		{ type = gtSMine, x = 1052, y =1438 },
+		{ type = gtSMine, x = 1102, y =1464 },
+		{ type = gtCase, x = 1565, y = 642, crateType="supply", ammoType = amSineGun },
+		{ type = gtCase, x = 548, y = 858, crateType="supply", ammoType = amBazooka },
+		{ type = gtCase, x = 479, y = 847, crateType="supply", ammoType = amJetpack },
+		{ type = gtCase, x = 1550, y = 1715, crateType="supply", ammoType = amBlowTorch },
+		{ type = gtCase, x = 1227, y = 1941, crateType="supply", ammoType = amJetpack },
+		{ type = gtCase, x = 1070, y = 1964, crateType="supply", ammoType = amInvulnerable },
+		{ type = gtCase, x = 1070, y = 1875, crateType="supply", ammoType = amTeleport },
+	},
+})

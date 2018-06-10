@@ -302,26 +302,64 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         if (!pCodec)
             continue;
 
+
+        AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+        QString decoderName = pDecoder ? pDecoder->name : tr("unknown");
         if (pCodec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
-            desc += QString(tr("Video: %1x%2")).arg(pCodec->width).arg(pCodec->height) + ", ";
             if (pStream->avg_frame_rate.den)
             {
                 float fps = float(pStream->avg_frame_rate.num)/pStream->avg_frame_rate.den;
-                desc += QString(tr("%1 FPS")).arg(fps, 0, 'f', 2) + ", ";
+                //: Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name
+                desc += QString(tr("Video: %1x%2, %3 FPS, %4")).arg(pCodec->width).arg(pCodec->height).arg(QLocale().toString(fps, 'f', 2)).arg(decoderName);
+            }
+            else
+            {
+                //: Video metadata. %1 = video width, %2 = video height, %3 = decoder name
+                desc += QString(tr("Video: %1x%2, %3")).arg(pCodec->width).arg(pCodec->height).arg(decoderName);
             }
         }
         else if (pCodec->codec_type == AVMEDIA_TYPE_AUDIO)
+        {
             desc += tr("Audio: ");
+            desc += decoderName;
+        }
         else
             continue;
-        AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
-        desc += pDecoder? pDecoder->name : tr("unknown");
         desc += "\n";
     }
     AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);
     if (pComment)
-        desc += QString("\n") + pComment->value;
+    {
+        // Video comment. We expect a simple key value storage in a particular format
+        // and parse it here so the key names can be localized.
+        desc += QString("\n");
+        QStringList strings = QString(pComment->value).split('\n');
+        QString sPlayer, sTheme, sMap, sRecord;
+        for(int i=0; i < strings.count(); i++)
+        {
+            QString s = strings.at(i);
+            // Original key names are in English, like:
+            //     Key: Value
+            if (s.startsWith("Player: "))
+                sPlayer = QString(s.mid(8));
+            else if (s.startsWith("Theme: "))
+                sTheme = QString(s.mid(7));
+            else if (s.startsWith("Map: "))
+                sMap = QString(s.mid(5));
+            else if (s.startsWith("Record: "))
+                sRecord = QString(s.mid(8));
+        }
+        if(!sPlayer.isNull())
+            desc += QString(tr("Player: %1")).arg(sPlayer) + "\n";
+        if(!sTheme.isNull())
+            desc += QString(tr("Theme: %1")).arg(sTheme) + "\n";
+        if(!sMap.isNull())
+            desc += QString(tr("Map: %1")).arg(sMap) + "\n";
+        if(!sRecord.isNull())
+            //: As in ‘recording’
+            desc += QString(tr("Record: %1")).arg(sRecord);
+    }
     avformat_close_input(&pContext);
     return desc;
 }

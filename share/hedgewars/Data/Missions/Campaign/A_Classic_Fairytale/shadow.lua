@@ -150,10 +150,10 @@ function AfterRefusedAnim()
   if stage == loseStage then
     return
   end
-  SpawnUtilityCrate(2045, 1575, amSwitch)
-  SpawnAmmoCrate(2365, 1495, amShotgun)
-  SpawnAmmoCrate(2495, 1519, amGrenade)
-  SpawnUtilityCrate(2620, 1524, amRope)
+  SpawnSupplyCrate(2045, 1575, amSwitch)
+  SpawnSupplyCrate(2365, 1495, amShotgun)
+  SpawnSupplyCrate(2495, 1519, amGrenade)
+  SpawnSupplyCrate(2620, 1524, amRope)
   ShowMission(loc("The Shadow Falls"), loc("The Showdown"), loc("Save Leaks A Lot!|Hint: The switch hedgehog utility might be of help to you."), 1, 6000)
   RemoveEventFunc(CheckDenseDead)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadRefused, {}, 0)
@@ -200,7 +200,6 @@ function StartSkipFunc()
   SetState(cannibals[1], 0)
   AnimTurn(leaks, "Right")
   AnimSwitchHog(leaks)
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterWeaklingsAnim()
@@ -240,7 +239,6 @@ function SkipWeaklingsAnim()
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     SetState(cannibals[i], 0)
   end
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterStronglingsAnim()
@@ -285,7 +283,6 @@ function SkipStronglingsAnim()
   HogTurnLeft(dense, true)
   AnimSetGearPosition(cyborg, 1250, 1315)
   SwitchHog(dense)
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterAcceptedAnim()
@@ -293,8 +290,8 @@ function AfterAcceptedAnim()
     return
   end
   stage = acceptedReturnStage
-  SpawnUtilityCrate(1370, 810, amGirder)
-  SpawnUtilityCrate(1300, 810, amParachute)
+  SpawnSupplyCrate(1370, 810, amGirder)
+  SpawnSupplyCrate(1300, 810, amParachute)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot!"), 1, 6000)
   AddEvent(CheckReadyForStronglings, {}, DoReadyForStronglings, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
@@ -312,7 +309,6 @@ function SkipAcceptedAnim()
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(dense)
-  SetInputMask(0xFFFFFFFF)
 end
 
 function AfterAttackedAnim()
@@ -320,7 +316,7 @@ function AfterAttackedAnim()
     return
   end
   stage = aloneStage
-  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(cannibals[6], amGrenade, 1)
   AddAmmo(cannibals[6], amFirePunch, 0)
   AddAmmo(cannibals[6], amBaseballBat, 0)
@@ -348,24 +344,23 @@ function SkipAttackedAnim()
   if denseDead == false then
     DeleteGear(dense)
   end
-  SpawnAmmoCrate(2551, 994, amGrenade)
-  SpawnAmmoCrate(3551, 994, amGrenade)
-  SpawnAmmoCrate(3392, 1101, amShotgun)
-  SpawnAmmoCrate(3192, 1101, amShotgun)
+  SpawnSupplyCrate(2551, 994, amGrenade)
+  SpawnSupplyCrate(3551, 994, amGrenade)
+  SpawnSupplyCrate(3392, 1101, amShotgun)
+  SpawnSupplyCrate(3192, 1101, amShotgun)
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(leaks)
-  SetInputMask(0xFFFFFFFF)
 end
 
   
 -----------------------------Animations--------------------------------
 
 function SpawnCrates()
-  SpawnAmmoCrate(2551, 994, amGrenade)
-  SpawnAmmoCrate(3551, 994, amGrenade)
-  SpawnAmmoCrate(3392, 1101, amShotgun)
-  SpawnAmmoCrate(3192, 1101, amShotgun)
+  SpawnSupplyCrate(2551, 994, amGrenade)
+  SpawnSupplyCrate(3551, 994, amGrenade)
+  SpawnSupplyCrate(3392, 1101, amShotgun)
+  SpawnSupplyCrate(3192, 1101, amShotgun)
   return true
 end
 
@@ -537,7 +532,7 @@ function AnimationSetup()
   table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {dense, loc("You will be avenged!"), SAY_SAY, 3000}})
 
   table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("I see..."), SAY_SAY, 2000}})
-  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("Remember this, pathetic animal: when the day comes, you will regret your blind loyalty!"), SAY_SAY, 8000}})
+  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("Remember this, pathetic animal: When the day comes, you will regret your blind loyalty!"), SAY_SAY, 8000}})
   table.insert(refusedAnim, {func = AnimSay, args = {cyborg, loc("You just committed suicide..."), SAY_SAY, 5000}})
   table.insert(refusedAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(refusedAnim, {func = AnimGiveState, args = {cyborg, gstInvisible}})
@@ -619,14 +614,14 @@ function AddHogs()
   cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
   for i = 2, 5 do
-    cannibals[i] = AddHog(HogNames[i], 1, 20, "Zombi")
+    cannibals[i] = AddHog(HogNames[i], 5, 20, "Zombi")
     hogNr[cannibals[i]] = i - 2
   end
 
   AddTeam(loc("Stronglings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
 
   for i = 6, 9 do
-    cannibals[i] = AddHog(HogNames[i], 2, 30, "vampirichog")
+    cannibals[i] = AddHog(HogNames[i], 4, 30, "vampirichog")
     hogNr[cannibals[i]] = i - 2
   end
 
@@ -863,8 +858,8 @@ function DoNeedWeapons()
   if stage == loseStage then
     return
   end
-  grenadeCrate = SpawnAmmoCrate(2550, 800, amGrenade)
-  shotgunCrate = SpawnAmmoCrate(2610, 850, amShotgun)
+  grenadeCrate = SpawnSupplyCrate(2550, 800, amGrenade)
+  shotgunCrate = SpawnSupplyCrate(2610, 850, amShotgun)
   AddCaption(loc("A little gift from the cyborgs"))
 end
 
@@ -879,7 +874,7 @@ function DoReadyForStronglings()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)

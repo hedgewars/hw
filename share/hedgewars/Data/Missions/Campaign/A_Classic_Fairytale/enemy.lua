@@ -9,6 +9,9 @@ Wipe out the Hedge-cogs and Leader teams
 
 = FLOW CHART =
 - Cut scene: startAnim
+- Player starts with 3-4 natives and 4 cannibals
+- Player plays with 4 natives if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0
+- Enemy starts with 5 cyborgs
 - TBS
 - Goal completed
 - Cut scene: finalAnim
@@ -194,27 +197,34 @@ function SetupPeopleStartAnim()
   if m5LeaksDead == 1 then
     table.insert(startAnim, {func = AnimSay, args = {players[1], loc("And how am I alive?!"), SAY_SAY, 3000}})
   end
+  local playerTalker
+  -- There are 3 or 4 natives in this mission. The last one takes part in the dialog
+  if nativesNum >= 4 then
+     playerTalker = players[4]
+  else
+     playerTalker = players[3]
+  end
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], players[2]}}})
   table.insert(startAnim, {func = AnimSay, args = {players[2], loc("It must be the cyborgs again!"), SAY_SAY, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {players[3], loc("Looks like the whole world is falling apart!"), SAY_SAY, 6000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Look out! We're surrounded by cannibals!"), SAY_SHOUT, 6000}})
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[4], CondNeedToTurn, {players[4], cannibals[1]}}})
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[4], CondNeedToTurn, {players[1], cannibals[1]}}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Cannibals?! You're the cannibals!"), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimCustomFunction, args = {playerTalker, CondNeedToTurn, {playerTalker, cannibals[1]}}})
+  table.insert(startAnim, {func = AnimCustomFunction, args = {playerTalker, CondNeedToTurn, {players[1], cannibals[1]}}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Cannibals?! You're the cannibals!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("WHAT?! You're the ones attacking us!"), SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("You have kidnapped our whole tribe!"), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("You have kidnapped our whole tribe!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("You've been assaulting us, we have been just defending ourselves!"), SAY_SHOUT, 8000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("I can't believe this!"), SAY_SHOUT, 3000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Have we ever attacked you first?"), SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Yes!"), SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Yes!"), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("When?"), SAY_SHOUT, 2000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Uhmm...ok no."), SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Uhmm...ok no."), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("But you're cannibals. It's what you do."), SAY_SHOUT, 5000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Again with the 'cannibals' thing!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Where do you get that?!"), SAY_SHOUT, 3000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Everyone knows this."), SAY_SHOUT, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Everyone knows this."), SAY_SHOUT, 2500}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("I didn't until about a month ago."), SAY_SHOUT, 4000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Hmmm...actually...I didn't either."), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Hmmm...actually...I didn't either."), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("About a month ago, a cyborg came and told us that you're the cannibals!"), SAY_SHOUT, 8000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("A cy-what?"), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Cyborg. It's what the aliens call themselves."), SAY_SHOUT, 5000}})
@@ -248,7 +258,13 @@ function SetupEnemyStartAnim()
   else
     gear = cyborgs[2]
   end
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[4], gear}}})
+  local turnPlayer
+  if nativesNum >= 4 then
+    turnPlayer = players[4]
+  else
+    turnPlayer = players[3]
+  end
+  table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {turnPlayer, gear}}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], gear}}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You have finally figured it out!"), SAY_SHOUT, 4500}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You meatbags are pretty slow, you know!"), SAY_SHOUT, 5500}})
@@ -314,21 +330,21 @@ function PutHealthCrates()
 end
 
 function PutWeaponCrates()
-  SpawnAmmoCrate(2399, 622, amNapalm, 2)
-  SpawnAmmoCrate(2199, -18, amBee, 2)
-  SpawnAmmoCrate(2088, 430, amBee, 2)
-  SpawnAmmoCrate(237, 20, amMortar, 4)
-  SpawnAmmoCrate(312, 1107, amMolotov, 3)
-  SpawnAmmoCrate(531, 1123, amWatermelon, 2)
-  SpawnAmmoCrate(1253, 1444, amFlamethrower, 5)
-  SpawnAmmoCrate(994, 1364, amBaseballBat, 3)
-  SpawnAmmoCrate(1104, 1553, amMine, 6)
-  SpawnAmmoCrate(2277, 803, amDynamite, 2)
-  SpawnAmmoCrate(1106, 184, amRCPlane, 3)
-  SpawnAmmoCrate(1333, 28, amSMine, 4)
-  SpawnAmmoCrate(90, 279, amAirAttack, 2)
-  SpawnAmmoCrate(288, 269, amBee, 2)
-  SpawnAmmoCrate(818, 1633, amBaseballBat, 2)
+  SpawnSupplyCrate(2399, 622, amNapalm, 2)
+  SpawnSupplyCrate(2199, -18, amBee, 2)
+  SpawnSupplyCrate(2088, 430, amBee, 2)
+  SpawnSupplyCrate(237, 20, amMortar, 4)
+  SpawnSupplyCrate(312, 1107, amMolotov, 3)
+  SpawnSupplyCrate(531, 1123, amWatermelon, 2)
+  SpawnSupplyCrate(1253, 1444, amFlamethrower, 5)
+  SpawnSupplyCrate(994, 1364, amBaseballBat, 3)
+  SpawnSupplyCrate(1104, 1553, amMine, 6)
+  SpawnSupplyCrate(2277, 803, amDynamite, 2)
+  SpawnSupplyCrate(1106, 184, amRCPlane, 3)
+  SpawnSupplyCrate(1333, 28, amSMine, 4)
+  SpawnSupplyCrate(90, 279, amAirAttack, 2)
+  SpawnSupplyCrate(288, 269, amBee, 2)
+  SpawnSupplyCrate(818, 1633, amBaseballBat, 2)
 end
 -----------------------------Events------------------------------------
 function CheckNativesDead()
@@ -441,9 +457,9 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
   m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
@@ -461,10 +477,10 @@ function GetVariables()
   m8PrincessDead = tonumber(GetCampaignVar("M8PrincessDead"))
   m8RamonDead = tonumber(GetCampaignVar("M8RamonDead"))
   m8SpikyDead = tonumber(GetCampaignVar("M8SpikyDead"))
-  m8DeployedLeader = tonumber(GetCampaignVar("M8DeployedLeader"))
-  m8PrincessLeader = tonumber(GetCampaignVar("M8PrincessLeader"))
+  m8DeployedLeader = tonumber(GetCampaignVar("M8DeployedLeader")) or 0
+  m8PrincessLeader = tonumber(GetCampaignVar("M8PrincessLeader")) or 1
   m8EnemyFled = tonumber(GetCampaignVar("M8EnemyFled"))
-  m8Scene = tonumber(GetCampaignVar("M8Scene"))
+  m8Scene = tonumber(GetCampaignVar("M8Scene")) or princessScene
 end
 
 function SetupPlace()
@@ -503,10 +519,11 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), 0xFF0204, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Natives"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
+  -- There are 3-4 natives in this mission
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
     natives[2] = AddHog(nativeNames[m5DeployedNum], 0, 100, nativeHats[m5DeployedNum])
@@ -523,7 +540,7 @@ function AddHogs()
     table.insert(players, natives[i])
   end
 
-	AddTeam(loc("Cannibals"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Cannibals"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, cannibalsNum do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, "Zombi")
     table.insert(players, cannibals[i])
@@ -531,13 +548,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
+  AddTeam(loc("Hedge-cogs"), 0xFFFF01, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_cyborg")
+    AddTeam(loc("Leader"), 0xFFFF01, "ring", "UFO", "Robot", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then

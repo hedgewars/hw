@@ -62,7 +62,7 @@ procedure SetSkyColor(r, g, b: real);
 
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
-     uCommands, uPhysFSLayer, uDebug, adler32
+     uCommands, uPhysFSLayer, uDebug, uLocale, uInputHandler, adler32
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
@@ -189,9 +189,13 @@ md:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
-        NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth);
+        if ExtDriven then
+             NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth)
+        else NameTagTex:= RenderStringTex(ansistring(TeamName), Clan^.Color, Font);
         if length(Owner) > 0 then
-            OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth);
+            if ExtDriven then
+                 OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth)
+            else OwnerTex:= RenderStringTex(ansistring(Owner), Clan^.Color, Font);
 
         r.x:= 0;
         r.y:= 0;
@@ -261,6 +265,7 @@ for t:= 0 to Pred(TeamsCount) do
         if not allOK then exit;
 
         AIKillsTex := RenderStringTex(ansistring(inttostr(stats.AIKills)), Clan^.Color, fnt16);
+        LuaTeamValueTex := RenderStringTex(LuaTeamValue, Clan^.Color, fnt16);
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
@@ -268,7 +273,9 @@ for t:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth);
+                    if ExtDriven then
+                         NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth)
+                    else NameTagTex:= RenderStringTex(ansistring(Name), Clan^.Color, fnt16);
                     if Hat = 'NoHat' then
                         begin
                         if (month = 4) and (md = 20) then
@@ -372,6 +379,7 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
     i, y, imflags: LongInt;
+    keyConfirm, keyQuit: shortstring;
 begin
 AddFileLog('StoreLoad()');
 
@@ -499,7 +507,9 @@ if (not cOnlyStats) and allOK then
 
     PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
     AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
-    ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
+    keyConfirm:= KeyBindToName('confirm');
+    keyQuit:= KeyBindToName('quit');
+    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], [keyConfirm, keyQuit]), cYellowColor, fntBig);
     SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
     if not reload then
@@ -998,24 +1008,21 @@ r.h:= 32;
 extra:= _S'';
 extracolor:= 0;
 
-if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
-    begin
-    if (atype = amTardis) and (suddenDeathDmg) then
-        extra:= trmsg[sidNotAvailableInSD]
-    else
-        extra:= trmsg[sidNotYetAvailable];
-    extracolor:= LongInt($ffc77070);
-    end
-else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility will not end your turn
-    begin
-    extra:= trmsg[sidNoEndTurn];
-    extracolor:= LongInt($ff70c770);
-    end
-else
-    begin
-    extra:= _S'';
-    extracolor:= 0;
-    end;
+if (trluaammoe[Ammoz[atype].NameId] = true) then
+    if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
+        begin
+        if (atype = amTardis) and (SuddenDeathActive) then
+            extra:= trmsg[sidNotAvailableInSD]
+        else
+            extra:= trmsg[sidNotYetAvailable];
+        extracolor:= LongInt($ffc77070);
+        end
+    else if (((GameFlags and gfInfAttack) <> 0) and ((Ammoz[atype].Ammo.Propz and ammoprop_ForceTurnEnd) = 0)) or ((Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
+        // weapon or utility will not end your turn
+        begin
+        extra:= trmsg[sidNoEndTurn];
+        extracolor:= LongInt($ff70c770);
+        end;
 
 if length(trluaammo[Ammoz[atype].NameId]) > 0  then
     ammoname := trluaammo[Ammoz[atype].NameId]

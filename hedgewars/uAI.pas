@@ -288,7 +288,7 @@ if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 th
     AddAction(Actions, aia_Weapon, Longword(amSkip), 100 + random(200), 0, 0);
 
 if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoMoveAfter) = 0))
-    and (GameFlags and gfArtillery = 0) and (cGravityf <> 0) then
+    and (CurrentHedgehog^.Effects[heArtillery] = 0) and (cGravityf <> 0) then
     begin
     tmp:= random(2) + 1;
     Push(0, Actions, Me^, tmp);
@@ -474,7 +474,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
 
             // Hog has no idea what to do. Use tardis or skip
             if not bonuses.activity then
-                if ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(4) < 3) then
+                if (((GameFlags and gfInfAttack) <> 0) or (not isInMultiShoot)) and ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(4) < 3) then
                     // Tardis brings hog to a random place. Perfect for clueless AI
                     begin
                     AddAction(BestActions, aia_Weapon, Longword(amTardis), 80, 0, 0);

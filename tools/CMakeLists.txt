@@ -7,7 +7,7 @@ if(NOT APPLE)
 endif()
 
 if(APPLE AND NOT SKIPBUNDLE)
-    find_package(Qt4 REQUIRED QUIET)
+    find_package(Qt5 REQUIRED QUIET COMPONENTS Core Widgets Gui Network)
     find_package(SDL2 REQUIRED)
     find_package(SDL2_image 2 REQUIRED)
     find_package(SDL2_net 2 REQUIRED)

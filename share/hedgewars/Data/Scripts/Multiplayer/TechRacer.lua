@@ -81,6 +81,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 
 ------------------
@@ -212,6 +213,7 @@ local teamScore = {}
 --------
 
 local cGear = nil
+local cameraGear = nil
 
 local bestClan = 10
 local bestTime = 1000000
@@ -305,6 +307,22 @@ end
 -- RACER METHODS
 -----------------
 
+-- Returns min opacity, max opacity and flashing speed (`FrameTicks`)
+-- for the waypoint visual gears
+function FlashingHelper(wpIndex)
+        local minO, maxO, flashing
+        if wpIndex == 0 then
+                -- Notable flashing of first waypoint
+                minO, maxO = 92, 255
+                flashing = 2
+        else
+                -- Slow pulsation
+                minO, maxO = 164, 224
+                flashing = 10
+        end
+	return minO, maxO, flashing
+end
+
 function CheckWaypoints()
 
         trackFinished = true
@@ -324,11 +342,11 @@ function CheckWaypoints()
 
                 NR = (48/100*wpRad)/2
 
-                if dist < (NR*NR) then
+                if dist < (NR*NR) and not gameOver then
                 --if dist < (wpRad*wpRad) then
                         --AddCaption("howdy")
                         wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog)) -- new                             --GetClanColor(1)
-                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
+                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 64, 64, 1, 10, 0, wpRad, 5, wpCol[i])
 
                         wpRem = 0
                         for k = 0, (wpCount-1) do
@@ -412,6 +430,11 @@ function AdjustScores()
                 PlaySound(sndHellish)
         end
 
+        for i = 0, (TeamsCount-1) do
+                if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                        SetTeamLabel(teamNameArr[i], string.format(loc("%.1fs"), teamScore[i]/1000))
+                end
+        end
 
         --------
         --new
@@ -509,6 +532,10 @@ function onNewRound()
 		end
 
 		gameOver = true
+                for i=0, wpCount-1 do
+                         -- Fade out waypoints
+                         SetVisualGearValues(wpCirc[i], nil, nil, 0, 0, nil, 6)
+                end
 		EndTurn(true)
         end
 
@@ -577,6 +604,15 @@ function DisableTumbler(endTurn)
                 racerActive = false -- newadd
                 if endTurn then
                          EndTurn(true)
+                end
+		if trackFinished and not gameOver then
+                         for i=0, wpCount-1 do
+                       	         SetVisualGearValues(wpCirc[i], nil, nil, 255, 255, nil, 2)
+                         end
+                elseif not gameOver then
+                         for i=0, wpCount-1 do
+                       	         SetVisualGearValues(wpCirc[i], nil, nil, 32, 32, nil, 1)
+                         end
                 end
         end
 end
@@ -651,7 +687,7 @@ function ClearMap()
 end
 
 function CallBob(x,y)
-	if not racerActive then
+	if not racerActive and not gameOver then
         if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
             wpX[wpCount] = x
@@ -659,7 +695,9 @@ function CallBob(x,y)
             wpCol[wpCount] = 0xffffffff
             wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
 
-            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+            local minO, maxO, flashing = FlashingHelper(wpCount)
+            -- Make first waypoint flash very noticably before the hog starts racing
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[wpCount])
 
             wpCount = wpCount + 1
 
@@ -690,14 +728,21 @@ function HandleFreshMapCreation()
 			LoadMap(mapID)
 		end
 
-		for i = 0,(wpCount-1) do
-			DeleteVisualGear(wpCirc[i])
-		end
-		wpCount = 0
+                if gameOver then
+		        for i = 0,(wpCount-1) do
+                                SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+                        end
 
-		for i = 1, techCount-1 do
-			CallBob(techX[i],techY[i])
-		end
+                else
+		        for i = 0,(wpCount-1) do
+		        	DeleteVisualGear(wpCirc[i])
+		        end
+		        wpCount = 0
+
+		        for i = 1, techCount-1 do
+			        CallBob(techX[i],techY[i])
+		        end
+                end
 
 		activationStage = 200
 		--runOnHogs(RestoreHog)
@@ -749,30 +794,36 @@ function onParameters()
 end
 
 function onGameInit()
+
+    TemplateFilter = 0
+
+    if MapGen == mgDrawn then
+        eraseMap(false)
+    else
+        MapGen = mgDrawn
+    end
+
     if mapID == nil then
         mapID = 2 + GetRandom(7)
     end
 
     addHashData(mapID)
 
-		Theme = "Cave"
-		Map = ""
+    Theme = "Cave"
+    Map = ""
 
-		MapGen = mgDrawn
-		TemplateFilter = 0
+    EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
+    DisableGameFlags(gfSolidLand)
+    CaseFreq = 0
+    TurnTime = 90000
+    WaterRise = 0
+    HealthDecrease = 0
 
-		EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
-		DisableGameFlags(gfSolidLand)
-		CaseFreq = 0
-        TurnTime = 90000
-        WaterRise = 0
-        HealthDecrease = 0
+    for x = 1, 16 do
+        AddPoint(x*100,100,5)
+    end
 
-		for x = 1, 16 do
-			AddPoint(x*100,100,5)
-		end
-
-		FlushPoints()
+    FlushPoints()
 
 end
 
@@ -996,7 +1047,7 @@ function onGameStart()
 
                         	loc("Complete the track as fast as you can!") .. "|" ..
                                 loc("Round limit:") .. " " .. roundLimit .. "|" ..
-				loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
+				loc("You can further customize the race by changing the scheme script parameter.") .. "|" ..
 
                                 "", 4, 4000
                                 )
@@ -1032,10 +1083,13 @@ function onNewTurn()
         gTimer = 0
 
         -- Set the waypoints to unactive on new round
-        for i = 0,(wpCount-1) do
-                wpActive[i] = false
-                wpCol[i] = 0xffffffff
-                SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 20, 100, 1, 10, 0, wpRad, 5, wpCol[i])
+        if not gameOver then
+                for i = 0,(wpCount-1) do
+                        wpActive[i] = false
+                        wpCol[i] = 0xffffffff
+                        local minO, maxO, flashing = FlashingHelper(i)
+                        SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[i])
+                end
         end
 
         -- Handle Starting Stage of Game
@@ -1104,9 +1158,21 @@ function onGameTick20()
         end
 
 
-		if activationStage < 10 then
-				HandleFreshMapCreation()
-		end
+	if activationStage < 10 then
+		HandleFreshMapCreation()
+
+                if not gameOver and gameBegun and not racerActive then
+			if cameraGear then
+				DeleteGear(cameraGear)
+			end
+			-- Move camera to first waypoint.
+			-- We use a dummy gear to feed FollowGear. It does not affect the race.
+			cameraGear = AddGear(wpX[0], wpY[0], gtGenericFaller, 0, 0, 0, 5000)
+			SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisible))
+			FollowGear(cameraGear)
+                end
+
+	end
 
 
         -- start the player tumbling with a boom once their turn has actually begun
@@ -1189,7 +1255,8 @@ function PortalEffects(gear)
 
 	if GetGearType(gear) == gtPortal then
 
-		tag = GetTag(gear)
+		local tag = GetTag(gear)
+		local col
 		if tag == 0 then
 			col = 0xfab02aFF -- orange ball
 		elseif tag == 1 then
@@ -1201,32 +1268,23 @@ function PortalEffects(gear)
 		end
 
 		if (tag == 0) or (tag == 2) then -- i.e ball form
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, col )
-
-			remLife = getGearValue(gear,"life")
+			local remLife = getGearValue(gear,"life")
 			remLife = remLife - 1
 			setGearValue(gear, "life", remLife)
 
 			if remLife == 0 then
 
-				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
-
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				PlaySound(sndVaporize)
 				DeleteGear(gear)
@@ -1297,12 +1355,14 @@ end
 function onGearDelete(gear)
 
         if isATrackedGear(gear) then
-			trackDeletion(gear)
-		elseif GetGearType(gear) == gtAirAttack then
+		trackDeletion(gear)
+	elseif GetGearType(gear) == gtAirAttack then
                 cGear = nil
         elseif GetGearType(gear) == gtJetpack then
-			jet = nil
-		end
+		jet = nil
+	elseif gear == cameraGear then
+		cameraGear = nil
+	end
 
 end
 

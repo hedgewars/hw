@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QNetworkReply>
 #include <QDebug>
+#include <QMimeData>
 #include "hwconsts.h"
 #include "SDLInteraction.h"
 #include "SDL.h"

@@ -58,16 +58,7 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 local numhhs = 0
 local hhs = {}
 
-local currName
-local lastName
 local started = false
-local switchStage = 0
-
-local hogCounter
-
-function CountHog(gear)
-	hogCounter = hogCounter +1
-end
 
 function onNewAmmoStore(groupIndex, hogIndex)
 
@@ -183,7 +174,7 @@ end
 
 function onGameInit()
 	ClearGameFlags()
-	EnableGameFlags(gfRandomOrder, gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo)
+	EnableGameFlags(gfRandomOrder, gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo, gfSwitchHog)
 	Delay = 10
 	HealthCaseProb = 100
 end
@@ -213,55 +204,9 @@ end
 
 
 function onNewTurn()
-	currName = GetHogName(CurrentHedgehog)
-	lastName = GetHogName(CurrentHedgehog)
+
 	started = true
-	switchStage = 0
-end
-
-function onGameTick20()
-
-	if (CurrentHedgehog ~= nil) then
-
-		currName = GetHogName(CurrentHedgehog)
-
-		if (currName ~= lastName) and (switchStage > 5) then
-			AddCaption(loc("Switched to ") .. currName .. "!")
-		end
-
-		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 5) then
-
-			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!")
-
-			hogCounter = 0
-			runOnHogsInTeam(CountHog, GetHogTeamName(CurrentHedgehog) )
-
-			if hogCounter > 1 then
-
-				switchStage = switchStage + 1
-
-				if switchStage == 1 then
-					AddAmmo(CurrentHedgehog, amSwitch, 1)
-
-				elseif switchStage == 2 then
-					SetWeapon(amSwitch)
-				elseif switchStage == 3 then
-					SetGearMessage(CurrentHedgehog,gmAttack)
-				elseif switchStage == 4 then
-					switchStage = 6
-					AddAmmo(CurrentHedgehog, amSwitch, 0)
-				end
-
-			else
-				switchStage = 6
-			end
-
-
-		end
-
-		lastName = currName
-
-	end
+	AddCaption(loc("Prepare yourself") .. ", " .. GetHogName(CurrentHedgehog).. "!")
 
 end
 
@@ -278,16 +223,11 @@ function onGearAdd(gear)
 		trackGear(gear)
 	end
 
-
 end
 
 function onGearDelete(gear)
 	if (GetGearType(gear) == gtHedgehog) or (GetGearType(gear) == gtResurrector) then
 		trackDeletion(gear)
 	end
-end
-
-function onAmmoStoreInit()
---
 end
 

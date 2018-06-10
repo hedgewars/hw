@@ -795,9 +795,11 @@ case bpp of
                     begin
                     if (LandFlags and lfBasic <> 0) or 
                        ((LandPixels[gY, gX] and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
-                         (LandFlags and lfObject = 0)) then
+                         (LandFlags and (lfObject or lfIce) = 0)) then
                          Land[cpY + y, cpX + x]:= lfBasic or LandFlags
-                    else Land[cpY + y, cpX + x]:= lfObject or LandFlags
+                    else if (LandFlags and lfIce = 0) then
+						 Land[cpY + y, cpX + x]:= lfObject or LandFlags
+					else Land[cpY + y, cpX + x]:= LandFlags
                     end;
                 if (not behind) or (LandPixels[gY, gX] = 0) then
                     begin

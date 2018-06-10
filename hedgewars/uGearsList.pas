@@ -106,6 +106,8 @@ const
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
 (*           gtDuck *) , amDuck
+(*        gtMinigun *) , amMinigun
+(*  gtMinigunBullet *) , amMinigun
     );
 
 
@@ -222,7 +224,7 @@ case Kind of
        gtHedgehog: Gear^.Boom := 30;
            gtMine: Gear^.Boom := 50;
            gtCase: Gear^.Boom := 25;
-        gtAirMine: Gear^.Boom := 25;
+        gtAirMine: Gear^.Boom := 30;
      gtExplosives: Gear^.Boom := 75;
         gtGrenade: Gear^.Boom := 50;
           gtShell: Gear^.Boom := 50;
@@ -265,6 +267,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
            gtDuck: Gear^.Boom := 40;
+    gtMinigunBullet: Gear^.Boom := 2;
     end;
 
 case Kind of
@@ -312,6 +315,8 @@ case Kind of
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
                         gear^.Hedgehog^.Effects[heResurrectable] := 1;
+                if (GameFlags and gfArtillery) <> 0 then
+                    gear^.Hedgehog^.Effects[heArtillery] := 1;
                 // this would presumably be set in the frontend
                 // if we weren't going to do that yet, would need to reinit GetRandom
                 // oh, and, randomising slightly R and B might be nice too.
@@ -429,6 +434,7 @@ case Kind of
                     end
                 end;
      gtAirMine: begin
+                gear^.AdvBounce:= 1;
                 gear^.ImpactSound:= sndAirMineImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
@@ -440,7 +446,6 @@ case Kind of
                 gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
                 gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                 gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
-                gear^.Karma:= 30; // damage
                 if gear^.Timer = 0 then
                     begin
                     if cMinesTime < 0 then
@@ -740,6 +745,17 @@ gtFlamethrower: begin
                 gear^.Friction:= _0_8;
                 gear^.Density:= _0_5;
                 gear^.AdvBounce:= 1;
+                end;
+     gtMinigun: begin
+                // Timer. First, it's the timer before shooting. Then it will become the shooting timer and is set to Karma
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 601;
+                // minigun shooting time. 1 bullet is fired every 50ms
+                gear^.Karma:= 3451;
+                end;
+ gtMinigunBullet: begin
+                gear^.Radius:= 1;
+                gear^.Health:= 2;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;

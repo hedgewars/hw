@@ -11,13 +11,13 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Killing the specialists")
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
-	loc("Each time you play this missions enemy hogs will play in a random order.").."|"..
+	loc("The enemy hogs play in a random order.").."|"..
 	loc("At the start of the game each enemy hog has only the weapon that he is named after.").."|"..
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates.").."|"..
-	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100.").."|"..
-	loc("If you injure a hedgehog you'll get 35% of the damage dealt.").."|"..
-	loc("Every time you kill an enemy hog your ammo will get reset next turn.").."|"..
-	loc("The rope won't get reset.")
+	loc("After you killed an enemy, you'll lose the weapon that he is named after.").."|"..
+	loc("If only one enemy is left, you'll get bonus ammo.").."|"..
+	loc("If you hurt an enemy, you'll get one third of the damage dealt.").."|"..
+	loc("If you kill an enemy, your health will be set to 100.")
 -- mission objectives
 local goals = {
 	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
@@ -33,6 +33,7 @@ local hero = {
 	bazookaAmmo = 2,
 	grenadeAmmo = 4,
 }
+local heroTurns = 0
 local enemies = {
 	{ name = GetAmmoName(amMortar), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
 	{ name = GetAmmoName(amDEagle), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
@@ -65,6 +66,7 @@ function onGameInit()
 	Explosives = 0
 	Map = "death02_map"
 	Theme = "Hell"
+	Delay = 600 -- this makes the messages between turns more readable
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0
@@ -111,14 +113,20 @@ function onNewTurn()
 	end
 	if CurrentHedgehog ~= hero.gear then
 		enemyWeapons()
-	elseif heroWeaponResetPending then
-		refreshHeroAmmo()
+	else
+		heroTurns = heroTurns + 1
 	end
 end
 
 function onGearDelete(gear)
 	if isHog(gear) then
-		SetHealth(hero.gear, 100)
+		-- Set health to 100 (with heal effect, if health was smaller)
+		local healthDiff = 100 - GetHealth(hero.gear)
+		if healthDiff > 1 then
+			HealHog(hero.gear, healthDiff, true, 0x00FF00FF)
+		else
+			SetHealth(hero.gear, 100)
+		end
 		local deadHog = getHog(gear)
 		if deadHog.weapon == amMortar then
 			hero.mortarAmmo = 0
@@ -145,7 +153,8 @@ end
 
 function onGearDamage(gear, damage)
 	if isHog(gear) and GetHealth(hero.gear) then
-		SetHealth(hero.gear, GetHealth(hero.gear) + damage/3)
+		local bonusHealth = div(damage, 3)
+		HealHog(hero.gear, bonusHealth, true, 0xFF0000FF)
 	end
 end
 
@@ -156,6 +165,13 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+end
+
+function onGameTick20()
+	-- Refresh hero ammo immediately after its not his turn anymore
+	if CurrentHedgehog ~= hero.gear and heroWeaponResetPending then
+		refreshHeroAmmo()
+	end
 end
 
 -- Hide mission panel when player does anything
@@ -203,17 +219,20 @@ end
 function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), TotalRounds))
-	local record = tonumber(GetCampaignVar("FastestSpecialistsKill"))
-	if record ~= nil and TotalRounds >= record then
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), heroTurns))
+	local record = tonumber(GetCampaignVar("FastestSpecialistsWin"))
+	if record ~= nil and heroTurns >= record then
 		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
 	end
-	if record == nil or TotalRounds < record then
-		SaveCampaignVar("FastestSpecialistsKill", tostring(TotalRounds))
+	if record == nil or heroTurns < record then
+		SaveCampaignVar("FastestSpecialistsWin", tostring(heroTurns))
 		if record ~= nil then
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
 	end
+	-- An old version of this mission was buggy and stored a turn record WAY too low.
+	-- Let's clear the broken variable (FastestSpecialistsKill) here.
+	SaveCampaignVar("FastestSpecialistsKill", "")
 	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a laser sight."))
 	sendSimpleTeamRankings({teamA.name, teamB.name})
 	SaveCampaignVar("Mission11Won", "true")
@@ -235,6 +254,8 @@ function refreshHeroAmmo()
 	local extraAmmo = 0
 	if getAliveEnemiesCount() == 1 then
 		extraAmmo = 2
+		PlaySound(sndShotgunReload)
+		AddCaption(loc("Reinforcements! +2 of each weapon!"), GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
 	end
 	AddAmmo(hero.gear, amMortar, hero.mortarAmmo + extraAmmo)
 	AddAmmo(hero.gear, amFirePunch, hero.firepunchAmmo + extraAmmo)

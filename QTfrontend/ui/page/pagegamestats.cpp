@@ -70,6 +70,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
 
     // graph
     graphic = new FitGraphicsView(gb);
+    graphic->setObjectName("gameStatsView");
     labelGraphTitle = new QLabel(this);
     labelGraphTitle->setTextFormat(Qt::RichText);
     labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
@@ -78,6 +79,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     gbl->addWidget(graphic);
     graphic->scale(1.0, -1.0);
     graphic->setBackgroundBrush(QBrush(Qt::black));
+    graphic->setRenderHint(QPainter::Antialiasing, true);
 
     labelGameWin = new QLabel(this);
     labelGameWin->setTextFormat(Qt::RichText);
@@ -160,8 +162,6 @@ void PageGameStats::restartBtnVisible(bool visible)
 
 void PageGameStats::renderStats()
 {
-    graphic->show();
-    labelGraphTitle-> show();
     if(defaultGraphTitle) {
         labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
     } else {
@@ -172,28 +172,81 @@ void PageGameStats::renderStats()
         labelGraphTitle->hide();
         graphic->hide();
     } else {
-        QGraphicsScene * scene = new QGraphicsScene();
+        graphic->setScene(Q_NULLPTR);
+        m_scene.reset(new QGraphicsScene(this));
 
-        QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
+        // min and max value across the entire chart
+        qint32 minValue = 0;
+        qint32 maxValue = 0;
+        bool minMaxValuesInitialized = false;
+
+        // max data points per clan
+        int maxDataPoints = 0;
+        for(QMap<qint32, QVector<qint32> >::const_iterator i = healthPoints.constBegin(); i != healthPoints.constEnd(); ++i)
+        {
+            maxDataPoints = qMax(maxDataPoints, i.value().size());
+        }
+
+        /* There must be at least 2 data points for any clan,
+           otherwise there's not much to look at. ;-) */
+        if(maxDataPoints < 2) {
+            labelGraphTitle->hide();
+            graphic->hide();
+            return;
+        }
+
+        QMap<qint32, QVector<qint32> >::const_iterator i = healthPoints.constBegin();
         while (i != healthPoints.constEnd())
         {
-            quint32 c = i.key();
-            //QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
-            QVector<quint32> hps = i.value();
+            qint32 c = i.key();
+            const QVector<qint32>& hps = i.value();
 
             QPainterPath path;
-            if (hps.size())
+
+            if (hps.size()) {
                 path.moveTo(0, hps[0]);
+                if(minMaxValuesInitialized) {
+                    minValue = qMin(minValue, hps[0]);
+                    maxValue = qMax(maxValue, hps[0]);
+                } else {
+                    minValue = hps[0];
+                    maxValue = hps[0];
+                    minMaxValuesInitialized = true;
+                }
+            }
 
-            for(int t = 1; t < hps.size(); ++t)
+            for(int t = 0; t < hps.size(); ++t) {
                 path.lineTo(t, hps[t]);
+                maxValue = qMax(maxValue, hps[t]);
+                minValue = qMin(minValue, hps[t]);
+            }
 
-            scene->addPath(path, QPen(c));
+            QPen pen(c);
+            pen.setWidth(2);
+            pen.setCosmetic(true);
+
+            m_scene->addPath(path, pen);
             ++i;
         }
 
-        graphic->setScene(scene);
+        graphic->setScene(m_scene.data());
+
+        // Calculate the bounding box of the final chart
+        qint32 sceneMinY = minValue;
+        qint32 sceneMaxY = maxValue;
+        // If all values are 0 or greater, make sure to include 0 at the bottom.
+        if(sceneMinY >= 0 && sceneMaxY >= 0)
+            sceneMinY = 0;
+        // If all values are equal, we must increase sceneMaxY, otherwise the scene rect
+        // would have a height of 0 and will screw up
+        if(sceneMinY == sceneMaxY)
+            sceneMaxY++;
+        graphic->setSceneRect(0, sceneMinY, maxDataPoints-1, sceneMaxY - sceneMinY);
+
         graphic->fitInView(graphic->sceneRect());
+
+        graphic->show();
+        labelGraphTitle->show();
     }
 }
 
@@ -233,7 +286,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             quint32 clan = info.left(i).toInt();
-            quint32 hp = info.mid(i + 1).toUInt();
+            qint32 hp = info.mid(i + 1).toInt();
             healthPoints[clan].append(hp);
             break;
         }

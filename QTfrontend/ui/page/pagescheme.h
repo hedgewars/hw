@@ -75,6 +75,7 @@ class PageScheme : public AbstractPage
         ToggleButtonWidget * TBW_morewind;
         ToggleButtonWidget * TBW_tagteam;
         ToggleButtonWidget * TBW_bottomborder;
+        ToggleButtonWidget * TBW_switchhog;
 
         QSpinBox * SB_DamageModifier;
         QSpinBox * SB_TurnTime;
@@ -94,6 +95,7 @@ class PageScheme : public AbstractPage
         QSpinBox * SB_GetAwayTime;
         QComboBox * CB_WorldEdge;
         QLineEdit * LE_name;
+        QLabel * L_name;
         QLineEdit * LE_ScriptParam;
 
         QGroupBox * gbGameModes;

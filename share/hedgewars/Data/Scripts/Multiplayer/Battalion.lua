@@ -15,7 +15,7 @@
 
 --[[
   ########################################################################
-  Todo/Idea-List
+  TODO / ideas list
   ########################################################################
 
   - Make Hogs sorted by rareness for teams with less hogs (more fair)
@@ -42,9 +42,8 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 --  hitpoints, chances and more
 local variants = {}
 local varName = ""
-local newLine = ""--string.char(0x0A)
+local newLine = ""
 local gmAny = 0xFFFFFFFF
-local version = "0.33"
 
 --[[
   ##############################################################################
@@ -243,12 +242,14 @@ local LastHog = nil -- Last Hedgehog
 local CurHog = nil -- Current Hedgehog
 local LastTeam = nil -- Last Team
 local CurTeam = nil -- Current Team
-local TurnEnded = true -- Boolean whether current turn ended or not
 
 local mode = 'default' -- Which game type to play
+local modeExplicit = false -- Whether the mode was set in script param
 local luck = 100 -- Multiplier for bonuses like crates
 local strength = 1 -- Multiplier for more weapons
-local mutate = false -- Whether or not to mutate the hogs
+local useVariantHats = true -- Whether to overwrite the hog hats to those of their variants
+                            -- In King Mode, crowns are always enforced regardless of this setting
+local useVariantNames = false -- Whether to overwrite the hog names to those of their variants
 
 local highHasBonusWeps = false -- whether or not a hog got bonus weapons on current turn
 local highHasBonusHelp = false -- whether or not a hog got bonus helpers on current turn
@@ -334,6 +335,7 @@ local pointsToHlp = {} -- List of [points] = {ammo1, ammo2}
 local wepPoints = {}
 local hlpPoints = {}
 
+local firstTurnOver = false
 local suddenDeath = false
 
 local healthCrateChance = 7
@@ -409,13 +411,7 @@ end
 ]]--
 
 function clearHogAmmo(hog)
-  local lastNum = amRubber
-
-  if amAirMine ~= nil then
-    lastNum = amAirMine
-  end
-
-  for val=0,lastNum do
+  for val=0, AmmoTypeMax do
     AddAmmo(hog, val, 0)
   end
 end
@@ -432,9 +428,7 @@ end
 
 function AddHogAmmo(hog, ammo)
   -- Add weapons of variant
-  --for key, val in pairs(variants[var]["weapons"]) do
   for key, val in pairs(ammo) do
-    --AddAmmo(hog, val, 1)
     AddAmmo(hog, val, GetAmmoCount(hog, val) +1)
   end
 end
@@ -503,6 +497,10 @@ function GetRandomAmmo(hog, sourceType)
   end
 
   return ammo
+end
+
+function updatePointsLabel(team)
+  SetTeamLabel(team, string.format(loc("%d / %d"), pointsPerTeam[team]["weapons"], pointsPerTeam[team]["helpers"]))
 end
 
 function addTurnAmmo(hog)
@@ -635,11 +633,28 @@ end
   ##############################################################################
 ]]--
 
-function MutateHog(hog)
+-- Overwrite hog hat to that of its variant
+function SetHogVariantHat(hog)
   local var = getHogInfo(hog, 'variant')
-
-  SetHogName(hog, variants[var]["name"])
   SetHogHat(hog, variants[var]["hat"])
+end
+
+-- Give a crown if the hog is a king.
+-- Strip the hog from its crown if
+-- it is not a king.
+function SetHogVariantHatKingMode(hog)
+  local var = getHogInfo(hog, 'variant')
+  if var == "King" then
+    SetHogHat(hog, variants[var]["hat"])
+  elseif GetHogHat(hog) == "crown" then
+    SetHogHat(hog, "NoHat")
+  end
+end
+
+-- Overwrite hog name to that of its variant
+function SetHogVariantName(hog)
+  local var = getHogInfo(hog, 'variant')
+  SetHogName(hog, variants[var]["name"])
 end
 
 function GetRandomVariant()
@@ -738,8 +753,8 @@ end
 
 function getHogInfo(hog, info)
   if hog == nil then
-    AddCaption(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
-    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
+    WriteLnToChat("ERROR [getHogInfo]: hog is nil!")
+    WriteLnToConsole("ERROR [getHogInfo]: hog is nil!")
     return
   end
 
@@ -752,8 +767,8 @@ end
 
 function setHogInfo(hog)
   if hog == nil then
-    AddCaption(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
-    WriteLnToConsole(loc("ERROR [getHogInfo]: Hog is nil!"), 0xFFFFFFFF, capgrpMessage)
+    WriteLnToChat("ERROR [setHogInfo]: hog is nil!")
+    WriteLnToConsole("ERROR [setHogInfo]: hog is nil!")
     return
   end
 
@@ -798,13 +813,9 @@ function onHealthCratePickup()
   -- Add extra 10% of hogs base hp to heal
   healHp = healHp + div(getHogInfo(CurHog, 'maxHp'), 10)
 
-  AddCaption(string.format(loc("+%d"), healHp), msgColor, capgrpMessage)
+  HealHog(CurHog, healHp)
 
   SetEffect(CurHog, hePoisoned, 0)
-  SetHealth(CurHog, hogHealth + healHp)
-  local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtHealthTag, healHp, false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-  SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, msgColor)
 end
 
 --[[
@@ -812,7 +823,7 @@ end
  :
  : Has a 7% chance to be empty.
 ]]--
-function onWeaponCratePickup()
+function onWeaponCratePickup(crate)
   local factor = 1 * strength
   local msgColor = GetClanColor(GetHogClan(CurHog))
   PlaySound(sndShotgunReload)
@@ -848,8 +859,8 @@ function onWeaponCratePickup()
 
   AddAmmo(CurHog, randAmmo, GetAmmoCount(CurHog, randAmmo) +factor)
   if IsHogLocal(CurHog) then
-    AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
-    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
+    AddCaption(string.format(loc("%s (+%d)"), GetAmmoName(randAmmo), factor), msgColor, capgrpMessage)
+    local effect = AddVisualGear(GetX(crate), GetY(crate) +cratePickupGap, vgtAmmo, 0, true)
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, randAmmo, nil, nil, nil, msgColor)
   end
 end
@@ -858,7 +869,7 @@ end
  :
  : Has a 7% chance to be empty.
 ]]--
-function onUtilityCratePickup()
+function onUtilityCratePickup(crate)
   local factor = 1 * strength
   local msgColor = GetClanColor(GetHogClan(CurHog))
   PlaySound(sndShotgunReload)
@@ -891,8 +902,8 @@ function onUtilityCratePickup()
   
   AddAmmo(CurHog, randUtility, GetAmmoCount(CurHog, randUtility) +factor)
   if IsHogLocal(CurHog) then
-    AddCaption(string.format(loc("+%d ammo"), factor), msgColor, capgrpMessage)
-    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) +cratePickupGap, vgtAmmo, 0, true)
+    AddCaption(string.format(loc("%s (+%d)"), GetAmmoName(randUtility), factor), msgColor, capgrpMessage)
+    local effect = AddVisualGear(GetX(crate), GetY(crate) +cratePickupGap, vgtAmmo, 0, true)
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, randUtility, nil, nil, nil, msgColor)
   end
 end
@@ -903,11 +914,11 @@ function onPickupCrate(crate)
   -- Check if the crate is fake
   if pos % posCaseDummy >= 1 then
     if pos % posCaseDummy == posCaseAmmo then
-      onWeaponCratePickup()
+      onWeaponCratePickup(crate)
     elseif pos % posCaseDummy == posCaseHealth then
       onHealthCratePickup()
     elseif pos % posCaseDummy == posCaseUtility then
-      onUtilityCratePickup()
+      onUtilityCratePickup(crate)
     end
   end
 end
@@ -1017,13 +1028,13 @@ function onGearAdd(gear)
   elseif gearType == gtRCPlane then
     SetHealth(gear, 2)
   elseif gearType == gtAirBomb then
-    -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
+    -- Set Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 20)
   elseif gearType == gtCake then
-    -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
+    -- Set Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 50)
   elseif gearType == gtDEagleShot then
-    -- gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, ImpactSounds, Tint, Damage, Boom
+    -- Set Boom
     SetGearValues(gear, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 12)
   end
 end
@@ -1127,12 +1138,9 @@ function onHighlandKill(gear)
 
     hpDiff = div(deathMaxHP * highEnemyKillHPBonus, 100)
     newHP = curHP + hpDiff
-    SetHealth(CurHog, newHP)
-
-    local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) - cratePickupGap, vgtHealthTag, hpDiff, false)
-    -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-    SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurHog)))
-  -- Friendly fire! Remove all weapons and helpers from pool
+    HealHog(CurHog, newHP)
+  -- Friendly fire! Punish hog by removing weapons and helpers from pool
+  -- and reduce health
   else
     highWeapons[CurHog] = {}
     highHelpers[CurHog] = {}
@@ -1146,7 +1154,7 @@ function onHighlandKill(gear)
     end
 
     local effect = AddVisualGear(GetX(CurHog), GetY(CurHog) - cratePickupGap, vgtHealthTag, hpDiff, false)
-    -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+    -- Set Tint
     SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurHog)))
   end
 end
@@ -1156,19 +1164,21 @@ function onKingDeath(KingHog)
   local msgColor = getHogInfo(KingHog, 'clanColor')
 
   AddCaption(string.format(loc("The king of %s has died!"), team), 0xFFFFFFFF, capgrpGameState)
-  PlaySound(sndByeBye)
-  DismissTeam(team)
 
-  -- for hog, val in pairs(hogInfo) do
-  --   if getHogInfo(hog, 'team') == team then
-  --     hp = GetHealth(hog)
-  --     if hp ~= nil and hp > 0 then
-  --       SetState(KingHog, gstHHDeath)
-  --       SetHealth(hog, 0)
-  --       SetGearValues(hog, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0)
-  --     end
-  --   end
-  -- end
+  -- Kill the rest of the team normally, just like the official King Mode game modifier
+  for hog, val in pairs(hogInfo) do
+    if getHogInfo(hog, 'team') == team then
+      hp = GetHealth(hog)
+      if hp ~= nil and hp > 0 then
+        SetState(KingHog, gstHHDeath)
+        SetHealth(hog, 0)
+        SetGearValues(hog, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0)
+      end
+    end
+  end
+
+  -- We don't use DismissTeam, it causes a lot of problems and nasty side-effects.
+
 end
 
 function onPointsKill(gear)
@@ -1197,13 +1207,14 @@ function onPointsKill(gear)
 
   pointsPerTeam[team]['weapons'] = pointsPerTeam[team]['weapons'] + 2
   pointsPerTeam[team]['helpers'] = pointsPerTeam[team]['helpers'] + 1
+  updatePointsLabel(team)
 
   local effect = AddVisualGear(GetX(CurHog) - (cratePickupGap / 2), GetY(CurHog), vgtHealthTag, 2, false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFFFFFFFF)
 
   local effect = AddVisualGear(GetX(CurHog) + (cratePickupGap / 2), GetY(CurHog), vgtHealthTag, 1, false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0x444444FF)
 end
 
@@ -1242,7 +1253,10 @@ end
   ##############################################################################
 ]]--
 
-function calcKingHP()
+function calcKingHP(doEffects)
+  if doEffects == nil then
+     doEffects = true
+  end
   local teamKings = {}
   local teamHealth = {}
 
@@ -1267,23 +1281,30 @@ function calcKingHP()
   for team, hog in pairs(teamKings) do
     local hp = GetHealth(hog)
     local newHP = div(teamHealth[team] * kingLinkPerc, 100)
-    local diff = newHP - hp
 
     -- Set hitpoints to 1 if no other hog is alive or only has 1 hitpoint
     if newHP <= 0 then
       newHP = 1
-      diff = 0
     end
 
-    if diff < 0 then
-      diff = -diff
-    end
+    local diff = math.abs(newHP - hp)
 
-    if hp ~= newHP then
-      SetHealth(hog, newHP)
-      local effect = AddVisualGear(GetX(hog), GetY(hog) - cratePickupGap, vgtHealthTag, diff, false)
-      -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
-      SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
+    -- Change HP and do some nice effects
+    if newHP ~= hp then
+        if not doEffects then
+            SetHealth(hog, newHP)
+        else
+            if newHP > hp then
+                HealHog(hog, diff, false)
+            elseif newHP < hp then
+                SetHealth(hog, newHP)
+                if doEffects then
+                    local effect = AddVisualGear(GetX(hog), GetY(hog) - cratePickupGap, vgtHealthTag, diff, false)
+                    -- Set Tint
+                    SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
+                end
+            end
+        end
     end
   end
 end
@@ -1293,7 +1314,10 @@ function setupHogTurn(hog)
   addTurnAmmo(hog)
 end
 
-function onTurnEnd()
+function onEndTurn()
+  if not firstTurnOver then
+    firstTurnOver = true
+  end
   local anyHog = nil
   for team, val in pairs(teamNames) do
     -- Count amount of alive hogs in team
@@ -1327,7 +1351,7 @@ function savePoints(hog)
   local hogWepPoints = 0
   local hogHlpPoints = 0
 
-  for ammoType=0,amAirMine do
+  for ammoType=0, AmmoTypeMax do
     local ammoCount = GetAmmoCount(hog, ammoType)
 
     if pointsWeaponVal[ammoType] ~= nil then
@@ -1362,12 +1386,14 @@ function savePoints(hog)
     pointsPerTeam[team]['helpers'] = pointsPerTeam[team]['helpersRem'] + hlpWoTax + div(hlpToTax * pointsKeepSDPerc, 100)
   end
 
+  updatePointsLabel(team)
+
   local effect = AddVisualGear(GetX(hog) - (cratePickupGap / 2), GetY(hog), vgtHealthTag, pointsPerTeam[team]['weapons'], false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFFFFFFFF)
 
   local effect = AddVisualGear(GetX(hog) + (cratePickupGap / 2), GetY(hog), vgtHealthTag, pointsPerTeam[team]['helpers'], false)
-  -- (vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint)
+  -- Set Tint
   SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0x444444FF)
 end
 
@@ -1415,12 +1441,15 @@ function onNewTurn()
   LastTeam = CurTeam
   CurHog = CurrentHedgehog
   CurTeam = getHogInfo(CurHog, 'team')
-  TurnEnded = false
 
   if suddenDeath == true then
     onSuddenDeathTurn()
-  elseif (TotalRounds + 1 >= 1) then
-    AddCaption(string.format(loc("Round %d (Sudden Death in round %d)"), (TotalRounds +1), (SuddenDeathTurns +2)), 0xFFFFFFFF,  capgrpGameState)
+  else
+    local RoundsTillSD = (SuddenDeathTurns+2) - (TotalRounds+1)
+    -- Show SD reminder every couple of turns, and in the first turn
+    if (not firstTurnOver) or (RoundsTillSD <= 6) or (RoundsTillSD <= 25 and RoundsTillSD % 5 == 0) or (RoundsTillSD % 10 == 0) then
+        AddCaption(string.format(loc("Rounds until Sudden Death: %d"), RoundsTillSD), 0xFFFFFFFF, capgrpGameState)
+    end
   end
 
   -- Generate new weapons for last hog if it's still alive
@@ -1448,13 +1477,6 @@ function onNewTurn()
   LastWaterLine = WaterLine
 end
 
-function onGameTick20()
-  if TurnEnded == false and TurnTimeLeft <= 0 then
-    TurnEnded = true
-    onTurnEnd()
-  end
-end
-
 --[[
   ##############################################################################
   ### GAME START FUNCTIONS                                                   ###
@@ -1462,9 +1484,7 @@ end
 ]]--
 
 function onAmmoStoreInit()
-  local lastNum = amAirMine
-
-  for val=0,lastNum do
+  for val=0, AmmoTypeMax do
     SetAmmo(val, 0, 0, 0, 0)
   end
 end
@@ -1474,10 +1494,16 @@ function onParameters()
 
   if params['mode'] ~= nil then
     mode = params['mode']
+    if mode == "default" or mode == "king" or mode == "points" or mode == "highland" then
+       modeExplicit = true
+    end
   end
 
+  if params['mutatenames'] ~= nil then
+    useVariantNames = params['mutatenames']
+  end
   if params['mutate'] ~= nil then
-    mutate = params['mutate']
+    useVariantHats = params['mutate']
   end
 
   if params['strength'] ~= nil and tonumber(params['strength']) > 0 then
@@ -1553,11 +1579,6 @@ function onGameStart()
     shuffle(group['all'])
   -- We are in points mode, setup other weapons
   elseif mode == 'points' then
-    --variants['King']['chance'] = 0
-    --if variants['Air General'] ~= nil then
-    --  variants['Air General']['chance'] = 0
-    --end
-
     -- Translate [ammo] -> points to [points] -> {ammo1, ammo2}
     for ammoType, ammoPoints in pairs(pointsWeaponVal) do
       if pointsToWep[ammoPoints] == nil then
@@ -1585,10 +1606,6 @@ function onGameStart()
 
     table.sort(wepPoints)
     table.sort(hlpPoints)
-
-    -- All done, sort the table
-    --table.sort(pointsToWep)
-    --table.sort(pointsToHlp)
   end
 
   -- Initial Hog Setup
@@ -1599,6 +1616,7 @@ function onGameStart()
       pointsPerTeam[key] = {}
       pointsPerTeam[key]['weapons'] = pointsWepBase
       pointsPerTeam[key]['helpers'] = pointsHlpBase
+      updatePointsLabel(key)
     else
       setTeamHogs(key)
     end
@@ -1609,8 +1627,16 @@ function onGameStart()
   if mode ~= 'points' then
     runOnGears(setHogVariant)
     runOnGears(setupHogTurn)
-    if mutate ~= false and mutate ~= 'false' then
-      runOnGears(MutateHog)
+    if useVariantNames ~= false and useVariantNames ~= 'false' then
+      runOnGears(SetHogVariantName)
+    end
+    if useVariantHats ~= false and useVariantHats ~= 'false' then
+        runOnGears(SetHogVariantHat)
+    elseif mode == 'king' then
+        -- If variant hats are disabled but we're in King Mode,
+        -- we still change *some* hats to make sure only kings
+        -- wear crows. Otherwise, you don't know who's the king!
+        runOnGears(SetHogVariantHatKingMode)
     end
   end
 
@@ -1622,7 +1648,7 @@ function onGameStart()
   end
 
   if mode == 'king' then
-    calcKingHP()
+    calcKingHP(false)
   end
 
   local txt = ''
@@ -1634,10 +1660,10 @@ function onGameStart()
     txt = txt .. loc("Helpers: Hogs will get 1 out of 2 helpers randomly each turn") .. "|"
     txt = txt .. loc("Crates: Crates drop randomly with chance of being empty") .. "|"
     txt = txt .. loc("Last Resort: Having less than 25% base health gives kamikaze") .. "|"
-    txt = txt .. loc("Modifiers: Unlimited ammo, per-hog ammo") .. "|"
+    txt = txt .. loc("Modifiers: Unlimited attacks, per-hog ammo") .. "|"
   else
     txt = txt .. loc("Crates: Crates drop randomly and may be empty") .. "|"
-    txt = txt .. loc("Modifiers: Unlimited ammo, shared clan ammo") .. "|"
+    txt = txt .. loc("Modifiers: Unlimited attacks, shared clan ammo") .. "|"
   end
 
   if luck ~= 100 then
@@ -1650,7 +1676,7 @@ function onGameStart()
 
   if mode == 'highland' then
     txt = txt .. " |"
-    txt = txt .. loc("--- Highland ---").."|"
+    txt = txt .. loc("--- Highland Mode ---").."|"
     txt = txt .. string.format(loc("Enemy kills: Collect victim's weapons and +%d%% of its base health"), highEnemyKillHPBonus).."|"
     txt = txt .. string.format(loc("Friendly kills: Clear killer's pool and -%d%% of its base health"), highFriendlyKillHPBonus).."|"
     txt = txt .. string.format(loc("Turns: Hogs get %d random weapon(s) from their pool"), highPickupCount).."|"
@@ -1659,13 +1685,13 @@ function onGameStart()
     icon = 1 -- Target
   elseif mode == 'king' then
     txt = txt .. " |"
-    txt = txt .. loc("--- King ---").."|"
-    txt = txt .. loc("Variants: The last hog of each team will be a king").."|"
+    txt = txt .. loc("--- King Mode ---").."|"
+    txt = txt .. loc("Protect the King: When the king dies, so does the team").."|"
     txt = txt .. string.format(loc("Turns: King's health is set to %d%% of the team health"), kingLinkPerc).."|"
-    icon = 0 -- Golen Crown
+    icon = 0 -- Golden Crown
   elseif mode == 'points' then
     txt = txt .. " |"
-    txt = txt .. loc("--- Points ---").."|"
+    txt = txt .. loc("--- Points Mode ---").."|"
     txt = txt .. loc("Variants: Kings and air generals are disabled").."|"
     txt = txt .. string.format(loc("Weapons: Each team starts with %d weapon points"), pointsWepBase).."|"
     txt = txt .. string.format(loc("Helpers: Each team starts with %d helper points"), pointsHlpBase).."|"
@@ -1675,7 +1701,6 @@ function onGameStart()
     icon = -amGrenade -- Grenade
   end
 
-  --txt = txt .. "Switch: Max. 3 times a game per team, cooldown of 5 turns|"
   txt = txt .. " |"
   txt = txt .. loc("--- Sudden Death ---").."|"
   txt = txt .. loc("Weapons: Nearly every hog variant gets 1 kamikaze").."|"
@@ -1683,7 +1708,8 @@ function onGameStart()
   txt = txt .. loc("Water: Rises by 37 per turn").."|"
   txt = txt .. loc("Health: Hogs lose up to 7% base health per turn").."|"
 
-  if mode == 'default' then
+  -- Add hint if mode was not set in script parameter, or set incorrectly
+  if not modeExplicit then
     txt = txt .. " |"
     txt = txt .. loc("--- Hint ---").."|"
     txt = txt .. loc("Modes: Activate “highland”, “king” or “points” mode by putting mode=<name>|into the script parameter").."|"

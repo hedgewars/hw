@@ -125,33 +125,32 @@ function onGameStart()
 	end
 	--needed this MineArray cause timer didn't work, its was always 3sec, i wanna instant mines
 
-	--UTILITY CRATE--
-	parachute = SpawnUtilityCrate(1670, 1165, amParachute)
-	girder = SpawnUtilityCrate(2101, 1297, amGirder)
-	SpawnUtilityCrate(1375, 900, amTeleport)
-	SpawnUtilityCrate(1660,1820, amLaserSight)
-	SpawnUtilityCrate(4070,1840, amLaserSight)
-	portalgun = SpawnUtilityCrate(505, 1943, amPortalGun, 1000)
-	extratime = SpawnUtilityCrate(4020, 785, amExtraTime, 2)
+	--CRATES
+	parachute = SpawnSupplyCrate(1670, 1165, amParachute)
+	girder = SpawnSupplyCrate(2101, 1297, amGirder)
+	SpawnSupplyCrate(1375, 900, amTeleport)
+	SpawnSupplyCrate(1660,1820, amLaserSight)
+	SpawnSupplyCrate(4070,1840, amLaserSight)
+	portalgun = SpawnSupplyCrate(505, 1943, amPortalGun, 1000)
+	extratime = SpawnSupplyCrate(4020, 785, amExtraTime, 2)
 
-	--AMMO CRATE--
-	SpawnAmmoCrate(425, 613, amSnowball)
-	SpawnAmmoCrate(861, 633, amHellishBomb)
-	SpawnAmmoCrate(2510, 623, amSnowball)
-	SpawnAmmoCrate(2900, 1600, amGrenade)
-	SpawnAmmoCrate(2680, 320, amGrenade)
-	SpawnAmmoCrate(2650, 80, amDEagle)
-	SpawnAmmoCrate(3000, 100, amDEagle)
-	SpawnAmmoCrate(2900, 1400, amRope)
-	SpawnAmmoCrate(4025, 1117, amFirePunch)
-	SpawnAmmoCrate(3965, 625, amBlowTorch)
-	SpawnAmmoCrate(2249, 93, amBlowTorch)
-	SpawnAmmoCrate(2181, 829, amBlowTorch)
-	SpawnAmmoCrate(1820, 567, amBlowTorch)
-	SpawnAmmoCrate(130, 600, amPickHammer)
+	SpawnSupplyCrate(425, 613, amSnowball)
+	SpawnSupplyCrate(861, 633, amHellishBomb)
+	SpawnSupplyCrate(2510, 623, amSnowball)
+	SpawnSupplyCrate(2900, 1600, amGrenade)
+	SpawnSupplyCrate(2680, 320, amGrenade)
+	SpawnSupplyCrate(2650, 80, amDEagle)
+	SpawnSupplyCrate(3000, 100, amDEagle)
+	SpawnSupplyCrate(2900, 1400, amRope)
+	SpawnSupplyCrate(4025, 1117, amFirePunch)
+	SpawnSupplyCrate(3965, 625, amBlowTorch)
+	SpawnSupplyCrate(2249, 93, amBlowTorch)
+	SpawnSupplyCrate(2181, 829, amBlowTorch)
+	SpawnSupplyCrate(1820, 567, amBlowTorch)
+	SpawnSupplyCrate(130, 600, amPickHammer)
 
 	--HEALTH CRATE--
-	SpawnHealthCrate(2000, 780)
+	SpawnHealthCrate(2000, 880)
 
 	--GIRDER--
 	PlaceGirder(3363, 1323, 4)

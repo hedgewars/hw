@@ -36,7 +36,7 @@ type
         end;
 
     // Possible states of the game
-    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
+    TGameState = (gsLandGen, gsStart, gsGame, gsConfirm, gsExit, gsSuspend);
 
     // Game types that help determining what the engine is actually supposed to do
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax, gmtRecord);
@@ -90,8 +90,8 @@ type
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
             sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
-            sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprAirMine, sprHandAirMine,
-            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck
+            sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprFrozenAirMine, sprAirMine, sprHandAirMine,
+            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck, sprMinigun
             );
 
     // Gears that interact with other Gears and/or Land
@@ -109,7 +109,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtDuck); // 66
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtDuck, gtMinigun, gtMinigunBullet); // 68
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -151,7 +151,7 @@ type
             sndInvulnerable, sndJetpackLaunch, sndJetpackBoost, sndPortalShot, sndPortalSwitch,
             sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4,
             sndDuckDrop, sndDuckWater, sndDuckDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
-            sndCustom5, sndCustom6, sndCustom7, sndCustom8);
+            sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
@@ -163,7 +163,7 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine, amDuck); // 58
+            amIceGun, amKnife, amRubber, amAirMine, amDuck, amMinigun); // 59
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -229,7 +229,7 @@ type
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen, heArtillery);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 
@@ -349,7 +349,13 @@ type
         TeamDamage : Longword;
         end;
 
-    TBinds = array[0..cKbdMaxIndex] of shortstring;
+    TBinds = record
+                 indices: array[0..cKbdMaxIndex] of byte;
+                 // zeroth element is reserved, indices[i] == 0 means no binding
+                 binds: array[0..255] of shortstring;
+                 lastIndex: byte;
+             end;
+
     TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
     PVoicepack = ^TVoicepack;
@@ -405,6 +411,7 @@ type
             OwnerTex,
             GraveTex,
             AIKillsTex,
+            LuaTeamValueTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;
@@ -421,6 +428,8 @@ type
             hasGone: boolean;
             skippedTurns: Longword;
             isGoneFlagPendingToBeSet, isGoneFlagPendingToBeUnset: boolean;
+            luaTeamValue: ansistring;
+            hasLuaTeamValue: boolean;
             end;
 
     TClan = record
@@ -460,14 +469,17 @@ type
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
             {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine,
-            sidDuck);
+            sidDuck, sidMinigun);
 
     TMsgStrId = (sidLoading, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
             sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget,
-            sidNotAvailableInSD, sidHealthGain, sidEmptyCrate);
+            sidNotAvailableInSD, sidHealthGain, sidEmptyCrate, sidUnknownKey,
+            sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
+            sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
+            sidFPS);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,

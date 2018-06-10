@@ -134,6 +134,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBTeamName = new QComboBox(groupTeams);
             CBTeamName->setMaxVisibleItems(50);
+            CBTeamName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             groupTeams->layout()->addWidget(CBTeamName, 0, 0);
 
             BtnNewTeam = new QPushButton(groupTeams);
@@ -175,6 +176,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             SchemesName = new QComboBox(groupSchemes);
             SchemesName->setMaxVisibleItems(50);
+            SchemesName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             groupSchemes->layout()->addWidget(SchemesName, 0, 0);
 
             SchemeNew = new QPushButton(groupSchemes);
@@ -207,6 +209,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             WeaponsName = new QComboBox(groupWeapons);
             WeaponsName->setMaxVisibleItems(50);
+            WeaponsName->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             groupWeapons->layout()->addWidget(WeaponsName, 0, 0);
 
             WeaponNew = new QPushButton(groupWeapons);
@@ -652,17 +655,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
                 // Fallback code, if language name is empty for some reason. This should normally not happen
                 if(entryName.isEmpty())
                 {
-                    if(lname == "gd")
-                    {
-                        /* Workaround for Qt4: nativeLanguageName does not return correct name for Scottish Gaelic (QTBUG-59929),
-                           so we have to add it ourselves :-/ */
-                        entryName = QString::fromUtf8("Gàidhlig");
-                    }
-                    else
-                    {
-                        // If all else fails, show error and the locale identifier
-                        entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
-                    }
+                    // Show error and the locale identifier
+                    entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
                 }
                 CBLanguage->addItem(entryName, lname);
             }

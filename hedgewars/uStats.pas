@@ -22,7 +22,7 @@ unit uStats;
 interface
 uses uConsts, uTypes;
 
-var TotalRounds: LongInt;
+var TotalRounds: LongInt; // Number of rounds played (-1 if game not started)
     FinishedTurnsTotal: LongInt;
     SendGameResultOn : boolean = true;
     SendRankingStatsOn : boolean = true;

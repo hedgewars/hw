@@ -12,23 +12,24 @@ mod loggingin;
 mod lobby;
 mod inroom;
 
-pub fn handle(server: &mut HWServer, token: mio::Token, poll: &mio::Poll, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Ping =>
-            server.react(token, poll, vec![SendMe(Pong.to_raw_protocol())]),
+            server.react(token, vec![SendMe(Pong)]),
         HWProtocolMessage::Quit(Some(msg)) =>
-            server.react(token, poll, vec![ByeClient("User quit: ".to_string() + &msg)]),
+            server.react(token, vec![ByeClient("User quit: ".to_string() + &msg)]),
         HWProtocolMessage::Quit(None) =>
-            server.react(token, poll, vec![ByeClient("User quit".to_string())]),
+            server.react(token, vec![ByeClient("User quit".to_string())]),
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
         _ => {
-            if !server.clients[token].room_id.is_some() {
-                loggingin::handle(server, token, poll, message);
-            } else if server.clients[token].room_id == Some(server.lobby_id) {
-                lobby::handle(server, token, poll, message);
-            } else {
-                inroom::handle(server, token, poll, message);
+            match server.clients[token].room_id {
+                None =>
+                    loggingin::handle(server, token, message),
+                Some(id) if id == server.lobby_id =>
+                    lobby::handle(server, token, message),
+                _ =>
+                    inroom::handle(server, token, message)
             }
         },
     }
