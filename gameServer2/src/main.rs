@@ -22,6 +22,7 @@ mod server;
 mod protocol;
 
 use server::network::NetworkLayer;
+use std::time::Duration;
 
 fn main() {
     env_logger::init().unwrap();
@@ -38,7 +39,12 @@ fn main() {
     let mut events = Events::with_capacity(1024);
 
     loop {
-        poll.poll(&mut events, None).unwrap();
+        let timeout = if hw_network.has_pending_operations() {
+            Some(Duration::from_millis(1))
+        } else {
+            None
+        };
+        poll.poll(&mut events, timeout).unwrap();
 
         for event in events.iter() {
             if event.readiness() & Ready::readable() == Ready::readable() {
@@ -60,5 +66,6 @@ fn main() {
 //                }
 //            }
         }
+        hw_network.on_idle(&poll).unwrap();
     }
 }
