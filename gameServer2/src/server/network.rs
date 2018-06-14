@@ -3,7 +3,8 @@ extern crate slab;
 use std::{
     io, io::{Error, ErrorKind, Write},
     net::{SocketAddr, IpAddr, Ipv4Addr},
-    collections::VecDeque
+    collections::HashSet,
+    mem::swap
 };
 
 use mio::{
@@ -22,7 +23,7 @@ use super::{
 
 const MAX_BYTES_PER_READ: usize = 2048;
 
-#[derive(PartialEq, Copy, Clone)]
+#[derive(Hash, Eq, PartialEq, Copy, Clone)]
 pub enum NetworkClientState {
     Idle,
     NeedsWrite,
@@ -90,8 +91,7 @@ impl NetworkClient {
             match self.buf_out.write_to(&mut self.socket) {
                 Ok(bytes) if self.buf_out.is_empty() || bytes == 0 =>
                     break Ok(((), NetworkClientState::Idle)),
-                Ok(bytes) =>
-                    (),
+                Ok(_) => (),
                 Err(ref error) if error.kind() == ErrorKind::Interrupted
                     || error.kind() == ErrorKind::WouldBlock => {
                     break Ok(((), NetworkClientState::NeedsWrite));
@@ -120,17 +120,18 @@ impl NetworkClient {
 pub struct NetworkLayer {
     listener: TcpListener,
     server: HWServer,
-
     clients: Slab<NetworkClient>,
-    pending: VecDeque<(ClientId, NetworkClientState)>
+    pending: HashSet<(ClientId, NetworkClientState)>,
+    pending_cache: Vec<(ClientId, NetworkClientState)>
 }
 
 impl NetworkLayer {
     pub fn new(listener: TcpListener, clients_limit: usize, rooms_limit: usize) -> NetworkLayer {
         let server = HWServer::new(clients_limit, rooms_limit);
         let clients = Slab::with_capacity(clients_limit);
-        let pending = VecDeque::with_capacity(clients_limit);
-        NetworkLayer {listener, server, clients, pending}
+        let pending = HashSet::with_capacity(2 * clients_limit);
+        let pending_cache = Vec::with_capacity(2 * clients_limit);
+        NetworkLayer {listener, server, clients, pending, pending_cache}
     }
 
     pub fn register_server(&self, poll: &Poll) -> io::Result<()> {
@@ -170,7 +171,7 @@ impl NetworkLayer {
                 Destination::ToSelf(id)  => {
                     if let Some(ref mut client) = self.clients.get_mut(id) {
                         client.send_msg(msg);
-                        self.pending.push_back((id, NetworkClientState::NeedsWrite));
+                        self.pending.insert((id, NetworkClientState::NeedsWrite));
                     }
                 }
                 Destination::ToOthers(id) => {
@@ -178,7 +179,7 @@ impl NetworkLayer {
                     for (client_id, client) in self.clients.iter_mut() {
                         if client_id != id {
                             client.send_string(&msg_string);
-                            self.pending.push_back((client_id, NetworkClientState::NeedsWrite));
+                            self.pending.insert((client_id, NetworkClientState::NeedsWrite));
                         }
                     }
                 }
@@ -223,8 +224,9 @@ impl NetworkLayer {
                     self.server.handle_msg(client_id, message);
                 }
                 match state {
-                    NetworkClientState::NeedsRead =>
-                        self.pending.push_back((client_id, state)),
+                    NetworkClientState::NeedsRead => {
+                        self.pending.insert((client_id, state));
+                    },
                     NetworkClientState::Closed =>
                         self.client_error(&poll, client_id)?,
                     _ => {}
@@ -258,10 +260,10 @@ impl NetworkLayer {
             };
 
         match result {
-            Ok(((), state)) if state == NetworkClientState::NeedsWrite =>
-                self.pending.push_back((client_id, state)),
-            Ok(_) =>
-                {}
+            Ok(((), state)) if state == NetworkClientState::NeedsWrite => {
+                self.pending.insert((client_id, state));
+            },
+            Ok(_) => {}
             Err(e) => self.operation_failed(
                 poll, client_id, e,
                 "Error while writing to client socket")?
@@ -283,14 +285,20 @@ impl NetworkLayer {
     }
 
     pub fn on_idle(&mut self, poll: &Poll) -> io::Result<()> {
-        while let Some((id, state)) = self.pending.pop_front() {
-            match state {
-                NetworkClientState::NeedsRead =>
-                    self.client_readable(poll, id)?,
-                NetworkClientState::NeedsWrite =>
-                    self.client_writable(poll, id)?,
-                _ => {}
+        if self.has_pending_operations() {
+            let mut cache = Vec::new();
+            swap(&mut cache, &mut self.pending_cache);
+            cache.extend(self.pending.drain());
+            for (id, state) in cache.drain(..) {
+                match state {
+                    NetworkClientState::NeedsRead =>
+                        self.client_readable(poll, id)?,
+                    NetworkClientState::NeedsWrite =>
+                        self.client_writable(poll, id)?,
+                    _ => {}
+                }
             }
+            swap(&mut cache, &mut self.pending_cache);
         }
         Ok(())
     }
