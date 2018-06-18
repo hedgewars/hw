@@ -4,6 +4,7 @@ use std::io::Result;
 use nom::IResult;
 
 pub mod messages;
+pub mod test;
 mod parser;
 
 pub struct ProtocolDecoder {

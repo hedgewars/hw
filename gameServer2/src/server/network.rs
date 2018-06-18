@@ -55,7 +55,7 @@ impl NetworkClient {
         let result = loop {
             match self.decoder.read_from(&mut self.socket) {
                 Ok(bytes) => {
-                    debug!("Read {} bytes", bytes);
+                    debug!("Client {}: read {} bytes", self.id, bytes);
                     bytes_read += bytes;
                     if bytes == 0 {
                         let result = if bytes_read == 0 {
@@ -167,9 +167,17 @@ impl NetworkLayer {
     fn flush_server_messages(&mut self) {
         debug!("{} pending server messages", self.server.output.len());
         for PendingMessage(destination, msg) in self.server.output.drain(..) {
+            debug!("Message {:?} to {:?}", msg, destination);
             match destination {
+                Destination::ToAll => {
+                    let msg_string = msg.to_raw_protocol();
+                    for (client_id, client) in self.clients.iter_mut() {
+                        client.send_string(&msg_string);
+                        self.pending.insert((client_id, NetworkClientState::NeedsWrite));
+                    }
+                },
                 Destination::ToSelf(id)  => {
-                    if let Some(ref mut client) = self.clients.get_mut(id) {
+                    if let Some(client) = self.clients.get_mut(id) {
                         client.send_msg(msg);
                         self.pending.insert((id, NetworkClientState::NeedsWrite));
                     }
@@ -180,6 +188,15 @@ impl NetworkLayer {
                         if client_id != id {
                             client.send_string(&msg_string);
                             self.pending.insert((client_id, NetworkClientState::NeedsWrite));
+                        }
+                    }
+                },
+                Destination::ToSelected(client_ids) => {
+                    let msg_string = msg.to_raw_protocol();
+                    for id in client_ids {
+                        if let Some(client) = self.clients.get_mut(id) {
+                            client.send_string(&msg_string);
+                            self.pending.insert((id, NetworkClientState::NeedsWrite));
                         }
                     }
                 }
