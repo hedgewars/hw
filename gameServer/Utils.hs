@@ -32,6 +32,8 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
 import Data.Maybe
+import qualified Data.Aeson.Types as Aeson
+import qualified Data.Text as Text
 -------------------------------------------------
 import CoreTypes
 
@@ -253,3 +255,16 @@ sanitizeName = B.map sc
 
 isRegistered :: ClientInfo -> Bool
 isRegistered = (<) 0 . B.length . webPassword
+
+instance Aeson.ToJSON B.ByteString where
+  toJSON = Aeson.toJSON . B.unpack
+
+instance Aeson.FromJSON B.ByteString where
+  parseJSON = Aeson.withText "ByteString" $ pure . B.pack . Text.unpack
+  
+instance Aeson.ToJSONKey B.ByteString where
+  toJSONKey = Aeson.toJSONKeyText (Text.pack . B.unpack)
+  
+instance Aeson.FromJSONKey B.ByteString where
+  fromJSONKey = Aeson.FromJSONKeyTextParser (return . B.pack . Text.unpack)
+  

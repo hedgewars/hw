@@ -43,6 +43,7 @@ import qualified Data.Traversable as DT
 import Text.Regex.TDFA
 import qualified Text.Regex.TDFA as TDFA
 import qualified Text.Regex.TDFA.ByteString as TDFAB
+import qualified Data.Yaml as YAML
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -852,10 +853,10 @@ processAction (SaveRoom rname) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     rm <- io $ room'sM rnc id ri
-    liftIO $ writeFile (B.unpack rname) $ show (greeting rm, roomSaves rm)
+    liftIO $ YAML.encodeFile (B.unpack rname) (greeting rm, roomSaves rm)
 
 processAction (LoadRoom rname) = do
-    (g, rs) <- liftIO $ liftM read $ readFile (B.unpack rname)
+    Right (g, rs) <- io $ YAML.decodeFileEither (B.unpack rname)
     processAction $ ModifyRoom $ \r -> r{greeting = g, roomSaves = rs}
 
 processAction Cleanup = do
