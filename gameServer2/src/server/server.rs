@@ -1,27 +1,19 @@
 use slab;
 use utils;
 use super::{
-    client::*, room::*, actions, handlers
+    client::*, room::*, actions, handlers,
+    actions::{Destination, PendingMessage}
 };
 use protocol::messages::*;
 
 type Slab<T> = slab::Slab<T>;
 
-#[derive(Debug)]
-pub enum Destination {
-    ToAll,
-    ToSelf(ClientId),
-    ToOthers(ClientId),
-    ToSelected(Vec<ClientId>)
-}
-
-pub struct PendingMessage(pub Destination, pub HWServerMessage);
 
 pub struct HWServer {
     pub clients: Slab<HWClient>,
     pub rooms: Slab<HWRoom>,
     pub lobby_id: RoomId,
-    pub output: Vec<PendingMessage>,
+    pub output: Vec<(Vec<ClientId>, HWServerMessage)>,
     pub removed_clients: Vec<ClientId>,
 }
 
@@ -47,7 +39,7 @@ impl HWServer {
             let client = HWClient::new(entry.key());
             entry.insert(client);
         }
-        self.send_self(key, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
+        self.send(key, Destination::ToSelf, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
         key
     }
 
@@ -69,24 +61,28 @@ impl HWServer {
         handlers::handle(self, client_id, msg);
     }
 
-    pub fn send_all(&mut self, msg: HWServerMessage) {
-        self.output.push(PendingMessage(
-            Destination::ToAll, msg));
+    fn get_recipients(&self, client_id: ClientId, destination: Destination) -> Vec<ClientId> {
+        let mut ids = match destination {
+            Destination::ToSelf => vec![client_id],
+            Destination::ToAll {room_id: Some(id), ..} =>
+                self.room_clients(id),
+            Destination::ToAll {protocol: Some(proto), ..} =>
+                self.protocol_clients(proto),
+            Destination::ToAll {..} =>
+                self.clients.iter().map(|(id, _)| id).collect::<Vec<_>>(),
+            _ => Vec::new()
+        };
+        if let Destination::ToAll {skip_self: true, ..} = destination {
+            if let Some(index) = ids.iter().position(|id| *id == client_id) {
+                ids.remove(index);
+            }
+        }
+        ids
     }
 
-    pub fn send_self(&mut self, client_id: ClientId, msg: HWServerMessage) {
-        self.output.push(PendingMessage(
-            Destination::ToSelf(client_id), msg));
-    }
-
-    pub fn send_others(&mut self, client_id: ClientId, msg: HWServerMessage) {
-        self.output.push(PendingMessage(
-            Destination::ToOthers(client_id), msg));
-    }
-
-    pub fn send_to_selected(&mut self, client_ids: Vec<ClientId>, msg: HWServerMessage) {
-        self.output.push(PendingMessage(
-            Destination::ToSelected(client_ids), msg));
+    pub fn send(&mut self, client_id: ClientId, destination: Destination, message: HWServerMessage) {
+        let ids = self.get_recipients(client_id, destination);
+        self.output.push((ids, message));
     }
 
     pub fn react(&mut self, client_id: ClientId, actions: Vec<actions::Action>) {

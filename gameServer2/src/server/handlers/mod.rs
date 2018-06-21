@@ -15,7 +15,7 @@ mod inroom;
 pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Ping =>
-            server.react(token, vec![SendMe(Pong)]),
+            server.react(token, vec![Pong.send_self().action()]),
         HWProtocolMessage::Quit(Some(msg)) =>
             server.react(token, vec![ByeClient("User quit: ".to_string() + &msg)]),
         HWProtocolMessage::Quit(None) =>

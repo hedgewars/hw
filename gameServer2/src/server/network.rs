@@ -17,7 +17,7 @@ use slab::Slab;
 use utils;
 use protocol::{ProtocolDecoder, messages::*};
 use super::{
-    server::{HWServer, PendingMessage, Destination},
+    server::{HWServer},
     client::ClientId
 };
 
@@ -166,39 +166,13 @@ impl NetworkLayer {
 
     fn flush_server_messages(&mut self) {
         debug!("{} pending server messages", self.server.output.len());
-        for PendingMessage(destination, msg) in self.server.output.drain(..) {
-            debug!("Message {:?} to {:?}", msg, destination);
-            match destination {
-                Destination::ToAll => {
-                    let msg_string = msg.to_raw_protocol();
-                    for (client_id, client) in self.clients.iter_mut() {
-                        client.send_string(&msg_string);
-                        self.pending.insert((client_id, NetworkClientState::NeedsWrite));
-                    }
-                },
-                Destination::ToSelf(id)  => {
-                    if let Some(client) = self.clients.get_mut(id) {
-                        client.send_msg(msg);
-                        self.pending.insert((id, NetworkClientState::NeedsWrite));
-                    }
-                }
-                Destination::ToOthers(id) => {
-                    let msg_string = msg.to_raw_protocol();
-                    for (client_id, client) in self.clients.iter_mut() {
-                        if client_id != id {
-                            client.send_string(&msg_string);
-                            self.pending.insert((client_id, NetworkClientState::NeedsWrite));
-                        }
-                    }
-                },
-                Destination::ToSelected(client_ids) => {
-                    let msg_string = msg.to_raw_protocol();
-                    for id in client_ids {
-                        if let Some(client) = self.clients.get_mut(id) {
-                            client.send_string(&msg_string);
-                            self.pending.insert((id, NetworkClientState::NeedsWrite));
-                        }
-                    }
+        for (clients, message) in self.server.output.drain(..) {
+            debug!("Message {:?} to {:?}", message, clients);
+            let msg_string = message.to_raw_protocol();
+            for client_id in clients {
+                if let Some(client) = self.clients.get_mut(client_id) {
+                    client.send_string(&msg_string);
+                    self.pending.insert((client_id, NetworkClientState::NeedsWrite));
                 }
             }
         }

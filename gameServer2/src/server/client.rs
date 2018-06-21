@@ -7,6 +7,8 @@ pub struct HWClient {
     pub protocol_number: u32,
     pub is_master: bool,
     pub is_ready: bool,
+    pub teams_in_game: u8,
+    pub clan: Option<u8>,
     pub is_joined_mid_game: bool,
 }
 
@@ -19,6 +21,8 @@ impl HWClient {
             protocol_number: 0,
             is_master: false,
             is_ready: false,
+            teams_in_game: 0,
+            clan: None,
             is_joined_mid_game: false,
         }
     }

@@ -8,6 +8,9 @@ use super::{
     messages::{HWProtocolMessage, HWProtocolMessage::*},
     test::gen_proto_msg
 };
+use server::coretypes::{
+    HedgehogInfo, TeamInfo
+};
 
 named!(end_of_message, tag!("\n\n"));
 named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
@@ -15,6 +18,15 @@ named!(  a_line<&[u8], String>, map!(str_line, String::from));
 named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
 named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
 named!(opt_param<&[u8], Option<String> >, opt!(map!(flat_map!(preceded!(eol, str_line), non_empty), String::from)));
+named!(hog_line<&[u8], HedgehogInfo>,
+    do_parse!(name: str_line >> eol >> hat: str_line >>
+        (HedgehogInfo{name: name.to_string(), hat: hat.to_string()})));
+named!(_8_hogs<&[u8], [HedgehogInfo; 8]>,
+    do_parse!(h1: hog_line >> eol >> h2: hog_line >> eol >>
+              h3: hog_line >> eol >> h4: hog_line >> eol >>
+              h5: hog_line >> eol >> h6: hog_line >> eol >>
+              h7: hog_line >> eol >> h8: hog_line >>
+              ([h1, h2, h3, h4, h5, h6, h7, h8])));
 
 named!(basic_message<&[u8], HWProtocolMessage>, alt!(
       do_parse!(tag!("PING") >> (Ping))
@@ -88,6 +100,28 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     n: a_line       >>
                     p: opt_param    >>
                     (JoinRoom(n, p)))
+    | do_parse!(tag!("ADD_TEAM")    >> eol >>
+                    name: a_line    >> eol >>
+                    color: u8_line  >> eol >>
+                    grave: a_line   >> eol >>
+                    fort: a_line    >> eol >>
+                    voice_pack: a_line >> eol >>
+                    flag: a_line    >> eol >>
+                    difficulty: u8_line >> eol >>
+                    hedgehogs: _8_hogs >>
+                    (AddTeam(TeamInfo{
+                        name, color, grave, fort,
+                        voice_pack, flag, difficulty,
+                        hedgehogs, hedgehogs_number: 0
+                     })))
+    | do_parse!(tag!("HH_NUM")    >> eol >>
+                    n: a_line     >> eol >>
+                    c: u8_line    >>
+                    (SetHedgehogsNumber(n, c)))
+    | do_parse!(tag!("TEAM_COLOR")    >> eol >>
+                    n: a_line     >> eol >>
+                    c: u8_line    >>
+                    (SetTeamColor(n, c)))
     | do_parse!(tag!("BAN")    >> eol >>
                     n: a_line     >> eol >>
                     r: a_line     >> eol >>

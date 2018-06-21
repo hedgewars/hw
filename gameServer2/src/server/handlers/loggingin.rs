@@ -1,18 +1,21 @@
 use mio;
 
-use server::server::HWServer;
-use server::actions::Action;
-use server::actions::Action::*;
-use protocol::messages::HWProtocolMessage;
-use protocol::messages::HWServerMessage::*;
+use server::{
+    server::HWServer,
+    client::ClientId,
+    actions::{Action, Action::*}
+};
+use protocol::messages::{
+    HWProtocolMessage, HWServerMessage::*
+};
 use utils::is_name_illegal;
 
-pub fn handle(server: & mut HWServer, token: usize, message: HWProtocolMessage) {
+pub fn handle(server: & mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Nick(nick) => {
             let actions;
             {
-                let client = &mut server.clients[token];
+                let client = &mut server.clients[client_id];
                 debug!("{} {}", nick, is_name_illegal(&nick));
                 actions = if client.room_id != None {
                     unreachable!()
@@ -25,15 +28,16 @@ pub fn handle(server: & mut HWServer, token: usize, message: HWProtocolMessage) 
                 }
                 else {
                     client.nick = nick.clone();
-                    vec![SendMe(Nick(nick)), CheckRegistered]
+                    vec![Nick(nick).send_self().action(),
+                         CheckRegistered]
                 };
             }
-            server.react(token, actions);
+            server.react(client_id, actions);
         },
         HWProtocolMessage::Proto(proto) => {
             let actions;
             {
-                let client = &mut server.clients[token];
+                let client = &mut server.clients[client_id];
                 actions = if client.protocol_number != 0 {
                     vec![ProtocolError("Protocol already known.".to_string())]
                 }
@@ -42,10 +46,11 @@ pub fn handle(server: & mut HWServer, token: usize, message: HWProtocolMessage) 
                 }
                 else {
                     client.protocol_number = proto;
-                    vec![SendMe(Proto(proto)), CheckRegistered]
+                    vec![Proto(proto).send_self().action(),
+                         CheckRegistered]
                 };
             }
-            server.react(token, actions);
+            server.react(client_id, actions);
         },
         _ => warn!("Incorrect command in logging-in state"),
     }

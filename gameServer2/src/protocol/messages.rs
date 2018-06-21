@@ -86,8 +86,13 @@ pub enum HWServerMessage {
     RoomLeft(String, String),
     RoomRemove(String),
     RoomUpdated(String, Vec<String>),
-    ServerMessage(String),
+    TeamAdd(Vec<String>),
+    TeamRemove(String),
+    TeamAccepted(String),
+    TeamColor(String, u8),
+    HedgehogsNumber(String, u8),
 
+    ServerMessage(String),
     Warning(String),
     Error(String),
     Connected(u32),
@@ -183,9 +188,11 @@ macro_rules! msg {
     };
 }
 
-fn construct_message(mut msg: Vec<&str>) -> String {
-    msg.push("\n");
-    msg.join("\n")
+fn construct_message(header: &[&str], msg: &Vec<String>) -> String {
+    let mut v: Vec<_> = header.iter().map(|s| *s).collect();
+    v.extend(msg.iter().map(|s| &s[..]));
+    v.push("\n");
+    v.join("\n")
 }
 
 impl HWServerMessage {
@@ -202,40 +209,26 @@ impl HWServerMessage {
             Nick(nick) => msg!["NICK", nick],
             Proto(proto) => msg!["PROTO", proto],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
-            LobbyJoined(nicks) => {
-                let mut v = vec!["LOBBY:JOINED"];
-                v.extend(nicks.iter().map(|n| { &n[..] }));
-                construct_message(v)
-            },
-            ClientFlags(flags, nicks)
-                => {
-                let mut v = vec!["CLIENT_FLAGS"];
-                v.push(&flags[..]);
-                v.extend(nicks.iter().map(|n| { &n[..] }));
-                construct_message(v)
-            },
-            Rooms(info) => {
-                let mut v = vec!["ROOMS"];
-                v.extend(info.iter().map(|n| { &n[..] }));
-                construct_message(v)
-            },
-            RoomAdd(info) => {
-                let mut v = vec!["ROOM", "ADD"];
-                v.extend(info.iter().map(|n| { &n[..] }));
-                construct_message(v)
-            },
-            RoomJoined(nicks) => {
-                let mut v = vec!["JOINED"];
-                v.extend(nicks.iter().map(|n| { &n[..] }));
-                construct_message(v)
-            },
+            LobbyJoined(nicks) =>
+                construct_message(&["LOBBY:JOINED"], &nicks),
+            ClientFlags(flags, nicks) =>
+                construct_message(&["CLIENT_FLAGS", flags], &nicks),
+            Rooms(info) =>
+                construct_message(&["ROOMS"], &info),
+            RoomAdd(info) =>
+                construct_message(&["ROOM", "ADD"], &info),
+            RoomJoined(nicks) =>
+                construct_message(&["JOINED"], &nicks),
             RoomLeft(nick, msg) => msg!["LEFT", nick, msg],
             RoomRemove(name) => msg!["ROOM", "DEL", name],
-            RoomUpdated(name, info) => {
-                let mut v = vec!["ROOM", "UPD", name];
-                v.extend(info.iter().map(|n| { &n[..] }));
-                construct_message(v)
-            }
+            RoomUpdated(name, info) =>
+                construct_message(&["ROOM", "UPD", name], &info),
+            TeamAdd(info) =>
+                construct_message(&["ADD_TEAM"], &info),
+            TeamRemove(name) => msg!["REMOVE_TEAM", name],
+            TeamAccepted(name) => msg!["TEAM_ACCEPTED", name],
+            TeamColor(name, color) => msg!["TEAM_COLOR", name, color],
+            HedgehogsNumber(name, number) => msg!["HH_NUM", name, number],
             ChatMsg(nick, msg) => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             Warning(msg) => msg!["WARNING", msg],

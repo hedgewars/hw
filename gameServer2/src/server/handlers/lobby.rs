@@ -2,6 +2,7 @@ use mio;
 
 use server::{
     server::HWServer,
+    client::ClientId,
     actions::{Action, Action::*}
 };
 use protocol::messages::{
@@ -10,7 +11,7 @@ use protocol::messages::{
 };
 use utils::is_name_illegal;
 
-pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
     match message {
         CreateRoom(name, password) => {
@@ -22,15 +23,15 @@ pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
                 } else {
                     let flags_msg = ClientFlags(
                         "+hr".to_string(),
-                        vec![server.clients[token].nick.clone()]);
+                        vec![server.clients[client_id].nick.clone()]);
                     vec![AddRoom(name, password),
-                         SendMe(flags_msg)]
+                         flags_msg.send_self().action()]
                 };
-            server.react(token, actions);
+            server.react(client_id, actions);
         },
         Chat(msg) => {
-            let chat_msg = ChatMsg(server.clients[token].nick.clone(), msg);
-            server.react(token, vec![SendAllButMe(chat_msg)]);
+            let chat_msg = ChatMsg(server.clients[client_id].nick.clone(), msg);
+            server.react(client_id, vec![chat_msg.send_all().but_self().action()]);
         },
         JoinRoom(name, password) => {
             let actions;
@@ -41,7 +42,7 @@ pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
                     .filter(|(_, c)| c.room_id == room_id)
                     .map(|(_, c)| c.nick.clone())
                     .collect();
-                let c = &mut server.clients[token];
+                let c = &mut server.clients[client_id];
                 actions = match room {
                     None => vec![Warn("No such room.".to_string())],
                     Some((_, r)) => {
@@ -49,12 +50,12 @@ pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
                             vec![Warn("Room version incompatible to your Hedgewars version!".to_string())]
                         } else {
                             vec![MoveToRoom(r.id),
-                                 SendMe(RoomJoined(nicks))]
+                                 RoomJoined(nicks).send_self().action()]
                         }
                     }
                 };
             }
-            server.react(token, actions);
+            server.react(client_id, actions);
         },
         List => warn!("Deprecated LIST message received"),
         _ => warn!("Incorrect command in lobby state"),
