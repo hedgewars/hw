@@ -65,7 +65,7 @@ impl Arbitrary for Ascii {
     }
 
     type Strategy = BoxedStrategy<Ascii>;
-    type ValueTree = Box<ValueTree<Value = Ascii>>;
+    type ValueTree = Box<dyn ValueTree<Value = Ascii>>;
 }
 
 pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
