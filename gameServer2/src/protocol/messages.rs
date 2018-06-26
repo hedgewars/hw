@@ -91,12 +91,40 @@ pub enum HWServerMessage {
     TeamAccepted(String),
     TeamColor(String, u8),
     HedgehogsNumber(String, u8),
+    ConfigEntry(String, Vec<String>),
 
     ServerMessage(String),
     Warning(String),
     Error(String),
     Connected(u32),
     Unreachable,
+}
+
+impl GameCfg {
+    pub fn into_server_msg(self) -> HWServerMessage {
+        use self::HWServerMessage::ConfigEntry;
+        use server::coretypes::GameCfg::*;
+        match self {
+            FeatureSize(s) => ConfigEntry("FEATURE_SIZE".to_string(), vec![s.to_string()]),
+            MapType(t) => ConfigEntry("MAP".to_string(), vec![t.to_string()]),
+            MapGenerator(g) => ConfigEntry("MAPGEN".to_string(), vec![g.to_string()]),
+            MazeSize(s) => ConfigEntry("MAZE_SIZE".to_string(), vec![s.to_string()]),
+            Seed(s) => ConfigEntry("SEED".to_string(), vec![s.to_string()]),
+            Template(t) => ConfigEntry("TEMPLATE".to_string(), vec![t.to_string()]),
+
+            Ammo(n, None) => ConfigEntry("AMMO".to_string(), vec![n.to_string()]),
+            Ammo(n, Some(s)) => ConfigEntry("AMMO".to_string(), vec![n.to_string(), s.to_string()]),
+            Scheme(n, None) => ConfigEntry("SCHEME".to_string(), vec![n.to_string()]),
+            Scheme(n, Some(s)) => ConfigEntry("SCHEME".to_string(), {
+                let mut v = vec![n.to_string()];
+                v.extend(s.into_iter());
+                v
+            }),
+            Script(s) => ConfigEntry("SCRIPT".to_string(), vec![s.to_string()]),
+            Theme(t) => ConfigEntry("THEME".to_string(), vec![t.to_string()]),
+            DrawnMap(m) => ConfigEntry("DRAWNMAP".to_string(), vec![m.to_string()])
+        }
+    }
 }
 
 impl<'a> HWProtocolMessage {
@@ -229,6 +257,8 @@ impl HWServerMessage {
             TeamAccepted(name) => msg!["TEAM_ACCEPTED", name],
             TeamColor(name, color) => msg!["TEAM_COLOR", name, color],
             HedgehogsNumber(name, number) => msg!["HH_NUM", name, number],
+            ConfigEntry(name, values) =>
+                construct_message(&["CFG", name], &values),
             ChatMsg(nick, msg) => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             Warning(msg) => msg!["WARNING", msg],

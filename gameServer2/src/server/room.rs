@@ -1,11 +1,55 @@
-use std::iter;
+use std::{iter};
 use server::{
-    coretypes::{TeamInfo, GameCfg},
+    coretypes::{TeamInfo, GameCfg, GameCfg::*},
     client::{ClientId, HWClient}
 };
 
 const MAX_HEDGEHOGS_IN_ROOM: u8 = 48;
 pub type RoomId = usize;
+
+struct Ammo {
+    name: String,
+    settings: Option<String>
+}
+
+struct Scheme {
+    name: String,
+    settings: Option<Vec<String>>
+}
+
+struct RoomConfig {
+    feature_size: u32,
+    map_type: String,
+    map_generator: u32,
+    maze_size: u32,
+    seed: String,
+    template: u32,
+
+    ammo: Ammo,
+    scheme: Scheme,
+    script: String,
+    theme: String,
+    drawn_map: Option<String>
+}
+
+impl RoomConfig {
+    fn new() -> RoomConfig {
+        RoomConfig {
+            feature_size: 12,
+            map_type: "+rnd+".to_string(),
+            map_generator: 0,
+            maze_size: 0,
+            seed: "seed".to_string(),
+            template: 0,
+
+            ammo: Ammo {name: "Default".to_string(), settings: None },
+            scheme: Scheme {name: "Default".to_string(), settings: None },
+            script: "Normal".to_string(),
+            theme: "\u{1f994}".to_string(),
+            drawn_map: None
+        }
+    }
+}
 
 pub struct HWRoom {
     pub id: RoomId,
@@ -19,6 +63,7 @@ pub struct HWRoom {
     pub team_limit: u8,
     pub ready_players_number: u8,
     pub teams: Vec<(ClientId, TeamInfo)>,
+    config: RoomConfig,
     pub game_info: Option<()>
 }
 
@@ -35,6 +80,7 @@ impl HWRoom {
             team_limit: 8,
             ready_players_number: 0,
             teams: Vec::new(),
+            config: RoomConfig::new(),
             game_info: None
         }
     }
@@ -90,19 +136,59 @@ impl HWRoom {
         self.client_teams(owner_id).nth(0).map(|t| t.color)
     }
 
+    pub fn set_config(&mut self, cfg: GameCfg) {
+        let c = &mut self.config;
+        match cfg {
+            FeatureSize(s) => c.feature_size = s,
+            MapType(t) => c.map_type = t,
+            MapGenerator(g) => c.map_generator = g,
+            MazeSize(s) => c.maze_size = s,
+            Seed(s) => c.seed = s,
+            Template(t) => c.template = t,
+
+            Ammo(n, s) => c.ammo = Ammo {name: n, settings: s},
+            Scheme(n, s) => c.scheme = Scheme {name: n, settings: s},
+            Script(s) => c.script = s,
+            Theme(t) => c.theme = t,
+            DrawnMap(m) => c.drawn_map = Some(m)
+        };
+    }
+
     pub fn info(&self, master: Option<&HWClient>) -> Vec<String> {
         let flags = "-".to_string();
+        let c = &self.config;
         vec![
             flags,
             self.name.clone(),
             self.players_number.to_string(),
             self.teams.len().to_string(),
-            master.map_or("?", |c| &c.nick).to_string(),
-            "Normal".to_string(),
-            "Default".to_string(),
-            "Default".to_string(),
-            "Default".to_string(),
+            master.map_or("[]", |c| &c.nick).to_string(),
+            c.map_type.to_string(),
+            c.script.to_string(),
+            c.scheme.name.to_string(),
+            c.ammo.name.to_string()
         ]
+    }
+
+    pub fn map_config(&self) -> Vec<String> {
+        let c = &self.config;
+        vec![c.feature_size.to_string(), c.map_type.to_string(),
+             c.map_generator.to_string(), c.maze_size.to_string(),
+             c.seed.to_string(), c.template.to_string()]
+    }
+
+    pub fn game_config(&self) -> Vec<GameCfg> {
+        use server::coretypes::GameCfg::*;
+        let c = &self.config;
+        let mut v = vec![
+            Ammo(c.ammo.name.to_string(), c.ammo.settings.clone()),
+            Scheme(c.scheme.name.to_string(), c.scheme.settings.clone()),
+            Script(c.script.to_string()),
+            Theme(c.theme.to_string())];
+        if let Some(ref m) = c.drawn_map {
+            v.push(DrawnMap(m.to_string()))
+        }
+        v
     }
 
     pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {

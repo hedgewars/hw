@@ -7,7 +7,18 @@ pub enum ServerVar {
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum GameCfg {
+    FeatureSize(u32),
+    MapType(String),
+    MapGenerator(u32),
+    MazeSize(u32),
+    Seed(String),
+    Template(u32),
 
+    Ammo(String, Option<String>),
+    Scheme(String, Option<Vec<String>>),
+    Script(String),
+    Theme(String),
+    DrawnMap(String)
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

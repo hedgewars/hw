@@ -69,8 +69,7 @@ impl HWServer {
             Destination::ToAll {protocol: Some(proto), ..} =>
                 self.protocol_clients(proto),
             Destination::ToAll {..} =>
-                self.clients.iter().map(|(id, _)| id).collect::<Vec<_>>(),
-            _ => Vec::new()
+                self.clients.iter().map(|(id, _)| id).collect::<Vec<_>>()
         };
         if let Destination::ToAll {skip_self: true, ..} = destination {
             if let Some(index) = ids.iter().position(|id| *id == client_id) {

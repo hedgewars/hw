@@ -211,9 +211,18 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 }
                 let flags_msg = ClientFlags("+i".to_string(), vec![c.nick.clone()]);
 
-                vec![RoomJoined(vec![c.nick.clone()]).send_all().in_room(room_id).action(),
-                     flags_msg.send_all().action(),
-                     SendRoomUpdate(None)]
+                let mut v = vec![
+                    RoomJoined(vec![c.nick.clone()]).send_all().in_room(room_id).action(),
+                    flags_msg.send_all().action(),
+                    SendRoomUpdate(None)];
+                if !c.is_master {
+                    v.push(ConfigEntry("FULLMAPCONFIG".to_string(), r.map_config())
+                        .send_self().action());
+                    for cfg in r.game_config().into_iter() {
+                        v.push(cfg.into_server_msg().send_self().action());
+                    }
+                }
+                v
             };
             server.react(client_id, actions);
         },
@@ -274,7 +283,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             server.react(client_id, actions);
         }
         RemoveTeam(name) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
+            let actions = if let (_, Some(r)) = server.client_and_room(client_id) {
                 r.remove_team(&name);
                 vec![TeamRemove(name).send_all().in_room(r.id).action(),
                      SendRoomUpdate(None)]

@@ -40,7 +40,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     vec![Warn("A room with the same name already exists.".to_string())]
                 } else {
                     let mut old_name = new_name.clone();
-                    if let (c, Some(r)) = server.client_and_room(client_id) {
+                    if let (_, Some(r)) = server.client_and_room(client_id) {
                         swap(&mut r.name, &mut old_name);
                         vec![SendRoomUpdate(Some(old_name))]
                     } else {
@@ -66,7 +66,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             };
             server.react(client_id, actions);
         }
-        AddTeam(mut info) => {
+        AddTeam(info) => {
             let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 let room_id = r.id;
@@ -162,6 +162,20 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 server.clients[id].clan = Some(color);
             }
 
+            server.react(client_id, actions);
+        },
+        Cfg(cfg) => {
+            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
+                if !c.is_master {
+                    vec![ProtocolError("You're not the room master!".to_string())]
+                } else {
+                    r.set_config(cfg.clone());
+                    vec![cfg.into_server_msg()
+                        .send_all().in_room(r.id).but_self().action()]
+                }
+            } else {
+                Vec::new()
+            };
             server.react(client_id, actions);
         }
         _ => warn!("Unimplemented!")

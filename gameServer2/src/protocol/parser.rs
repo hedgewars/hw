@@ -9,7 +9,7 @@ use super::{
     test::gen_proto_msg
 };
 use server::coretypes::{
-    HedgehogInfo, TeamInfo
+    HedgehogInfo, TeamInfo, GameCfg
 };
 
 named!(end_of_message, tag!("\n\n"));
@@ -139,6 +139,45 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     (BanNick(n, r, t)))
 ));
 
+named!(cfg_message<&[u8], HWProtocolMessage>, preceded!(tag!("CFG\n"), map!(alt!(
+      do_parse!(tag!("THEME")    >> eol >>
+                name: a_line     >>
+                (GameCfg::Theme(name)))
+    | do_parse!(tag!("SCRIPT")   >> eol >>
+                name: a_line     >>
+                (GameCfg::Script(name)))
+    | do_parse!(tag!("AMMO")     >> eol >>
+                name: a_line     >>
+                value: opt_param >>
+                (GameCfg::Ammo(name, value)))
+    | do_parse!(tag!("SCHEME")   >> eol >>
+                name: a_line     >> eol >>
+                values: separated_list!(eol, a_line) >>
+                (GameCfg::Scheme(name,
+                    if values.is_empty() {None} else {Some(values)})))
+    | do_parse!(tag!("FEATURE_SIZE") >> eol >>
+                value: u32_line    >>
+                (GameCfg::FeatureSize(value)))
+    | do_parse!(tag!("MAP")      >> eol >>
+                value: a_line    >>
+                (GameCfg::MapType(value)))
+    | do_parse!(tag!("MAPGEN")   >> eol >>
+                value: u32_line  >>
+                (GameCfg::MapGenerator(value)))
+    | do_parse!(tag!("MAZE_SIZE") >> eol >>
+                value: u32_line   >>
+                (GameCfg::MazeSize(value)))
+    | do_parse!(tag!("SEED")     >> eol >>
+                value: a_line    >>
+                (GameCfg::Seed(value)))
+    | do_parse!(tag!("TEMPLATE") >> eol >>
+                value: u32_line  >>
+                (GameCfg::Template(value)))
+    | do_parse!(tag!("DRAWNMAP") >> eol >>
+                value: a_line    >>
+                (GameCfg::DrawnMap(value)))
+), Cfg)));
+
 named!(malformed_message<&[u8], HWProtocolMessage>,
     do_parse!(separated_list!(eol, a_line) >> (Malformed)));
 
@@ -151,6 +190,7 @@ named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
         | one_param_message
         | cmd_message
         | complex_message
+        | cfg_message
         ), end_of_message
     )
     | terminated!(malformed_message, end_of_message)
