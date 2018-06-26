@@ -51,6 +51,10 @@ impl RoomConfig {
     }
 }
 
+pub struct GameInfo {
+    pub teams_in_game: u8
+}
+
 pub struct HWRoom {
     pub id: RoomId,
     pub master_id: Option<ClientId>,
@@ -64,7 +68,7 @@ pub struct HWRoom {
     pub ready_players_number: u8,
     pub teams: Vec<(ClientId, TeamInfo)>,
     config: RoomConfig,
-    pub game_info: Option<()>
+    pub game_info: Option<GameInfo>
 }
 
 impl HWRoom {
@@ -127,6 +131,12 @@ impl HWRoom {
         self.teams.iter().filter(move |(id, _)| *id == client_id).map(|(_, t)| t)
     }
 
+    pub fn client_team_indices(&self, client_id: ClientId) -> Vec<u8> {
+        self.teams.iter().enumerate()
+            .filter(move |(_, (id, _))| *id == client_id)
+            .map(|(i, _)| i as u8).collect()
+    }
+
     pub fn find_team_owner(&self, team_name: &str) -> Option<(ClientId, &str)> {
         self.teams.iter().find(|(_, t)| t.name == team_name)
             .map(|(id, t)| (*id, &t.name[..]))
@@ -134,6 +144,11 @@ impl HWRoom {
 
     pub fn find_team_color(&self, owner_id: ClientId) -> Option<u8> {
         self.client_teams(owner_id).nth(0).map(|t| t.color)
+    }
+
+    pub fn has_multiple_clans(&self) -> bool {
+        self.teams.iter().min_by_key(|(_, t)| t.color) !=
+            self.teams.iter().max_by_key(|(_, t)| t.color)
     }
 
     pub fn set_config(&mut self, cfg: GameCfg) {

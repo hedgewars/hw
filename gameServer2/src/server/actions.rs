@@ -1,9 +1,10 @@
 use std::{
-    io, io::Write
+    io, io::Write,
+    iter::once
 };
 use super::{
     server::HWServer,
-    room::RoomId,
+    room::{RoomId, GameInfo},
     client::{ClientId, HWClient},
     room::HWRoom,
     handlers
@@ -13,10 +14,11 @@ use protocol::messages::{
     HWServerMessage,
     HWServerMessage::*
 };
+use utils::to_engine_msg;
 
 pub enum Destination {
     ToSelf,
-        ToAll {
+    ToAll {
         room_id: Option<RoomId>,
         protocol: Option<u32>,
         skip_self: bool
@@ -90,6 +92,9 @@ pub enum Action {
     RemoveTeam(String),
     RemoveClientTeams,
     SendRoomUpdate(Option<String>),
+    StartRoomGame(RoomId),
+    SendTeamRemovalMessage(String),
+    FinishRoomGame(RoomId),
     Warn(String),
     ProtocolError(String)
 }
@@ -309,8 +314,59 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 Vec::new()
             };
             server.react(client_id, actions);
-        }
+        },
+        StartRoomGame(room_id) => {
+            let actions = {
+                let (room_clients, room_nicks): (Vec<_>, Vec<_>) = server.clients.iter()
+                    .map(|(id, c)| (id, c.nick.clone())).unzip();
+                let room = &mut server.rooms[room_id];
 
+                if !room.has_multiple_clans() {
+                    vec![Warn("The game can't be started with less than two clans!".to_string())]
+                } else if room.game_info.is_some() {
+                    vec![Warn("The game is already in progress".to_string())]
+                } else {
+                    room.game_info = Some(GameInfo {
+                        teams_in_game: room.teams.len() as u8
+                    });
+                    for id in room_clients {
+                        let c = &mut server.clients[id];
+                        c.is_in_game = true;
+                        c.team_indices = room.client_team_indices(c.id);
+                    }
+                    vec![RunGame.send_all().in_room(room.id).action(),
+                         SendRoomUpdate(None),
+                         ClientFlags("+g".to_string(), room_nicks)
+                             .send_all().in_room(room.id).action()]
+                }
+            };
+            server.react(client_id, actions);
+        }
+        SendTeamRemovalMessage(team_name) => {
+            let mut actions = Vec::new();
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                if let Some(ref mut info) = r.game_info {
+                    let msg = once(b'F').chain(team_name.bytes());
+                    actions.push(ForwardEngineMessage(to_engine_msg(msg)).
+                        send_all().in_room(r.id).but_self().action());
+                    info.teams_in_game -= 1;
+                    if info.teams_in_game == 0 {
+                        actions.push(FinishRoomGame(r.id));
+                    }
+                }
+            }
+            server.react(client_id, actions);
+        }
+        FinishRoomGame(room_id) => {
+            let actions = {
+                let r = &mut server.rooms[room_id];
+                r.game_info = None;
+                r.ready_players_number = 0;
+                vec![SendRoomUpdate(None),
+                     RoundFinished.send_all().in_room(r.id).action()]
+            };
+            server.react(client_id, actions);
+        }
         Warn(msg) => {
             run_action(server, client_id, Warning(msg).send_self().action());
         }

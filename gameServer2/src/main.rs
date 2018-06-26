@@ -1,11 +1,13 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
 #![warn(unreachable_pub)]
+#![feature(slice_patterns)]
 
 extern crate rand;
 extern crate mio;
 extern crate slab;
 extern crate netbuf;
+extern crate base64;
 #[macro_use]
 extern crate nom;
 #[macro_use]

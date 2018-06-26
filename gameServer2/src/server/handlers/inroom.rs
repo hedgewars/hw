@@ -12,6 +12,53 @@ use server::{
 };
 use utils::is_name_illegal;
 use std::mem::swap;
+use base64::{encode, decode};
+
+#[derive(Clone)]
+struct ByMsg<'a> {
+    messages: &'a[u8]
+}
+
+impl <'a> Iterator for ByMsg<'a> {
+    type Item = &'a[u8];
+
+    fn next(&mut self) -> Option<<Self as Iterator>::Item> {
+        if let Some(size) = self.messages.get(0) {
+            let (msg, next) = self.messages.split_at(*size as usize + 1);
+            self.messages = next;
+            Some(msg)
+        } else {
+            None
+        }
+    }
+}
+
+fn by_msg(source: &Vec<u8>) -> ByMsg {
+    ByMsg {messages: &source[..]}
+}
+
+const VALID_MESSAGES: &[u8] =
+    b"M#+LlRrUuDdZzAaSjJ,NpPwtgfhbc12345\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A";
+const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
+
+fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
+    if let [size, typ, body..] = msg {
+        VALID_MESSAGES.contains(typ) &&
+            match body {
+                [1...8, team, ..] if *typ == b'h' => team_indices.contains(team),
+                _ => *typ != b'h'
+            }
+    } else {
+        false
+    }
+}
+
+fn is_msg_empty(msg: &[u8]) -> bool {
+    match msg {
+        [_, b'+', ..] => true,
+        _ => false
+    }
+}
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
@@ -76,7 +123,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     actions.push(Warn("Too many hedgehogs!".to_string()))
                 } else if r.find_team(|t| t.name == info.name) != None {
                     actions.push(Warn("There's already a team with same name in the list.".to_string()))
-                } else if r.game_info != None {
+                } else if r.game_info.is_some() {
                     actions.push(Warn("Joining not possible: Round is in progress.".to_string()))
                 } else {
                     let team = r.add_team(c.id, info);
@@ -177,6 +224,51 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 Vec::new()
             };
             server.react(client_id, actions);
+        }
+        StartGame => {
+            let actions = if let (_, Some(r)) = server.client_and_room(client_id) {
+                vec![StartRoomGame(r.id)]
+            } else {
+                Vec::new()
+            };
+            server.react(client_id, actions);
+        }
+        EngineMessage(em) => {
+            let mut actions = Vec::new();
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                if c.teams_in_game > 0 {
+                    let decoding = decode(&em[..]).unwrap();
+                    let messages = by_msg(&decoding);
+                    let valid = messages.clone().filter(|m| is_msg_valid(m, &c.team_indices));
+                    let _non_empty = messages.filter(|m| !is_msg_empty(m));
+                    let _last_valid_timed_msg = valid.clone().scan(None, |res, msg| match msg {
+                        [_, b'+', ..] => Some(msg),
+                        [_, typ, ..] if NON_TIMED_MESSAGES.contains(typ) => *res,
+                        _ => None
+                    }).next();
+
+                    let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
+                    if !em_response.is_empty() {
+                        actions.push(ForwardEngineMessage(em_response)
+                            .send_all().in_room(r.id).but_self().action());
+                    }
+                }
+            }
+            server.react(client_id, actions)
+        }
+        RoundFinished => {
+            let mut actions = Vec::new();
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                if c.is_in_game {
+                    c.is_in_game = false;
+                    actions.push(ClientFlags("-g".to_string(), vec![c.nick.clone()]).
+                        send_all().in_room(r.id).action());
+                    for team in r.client_teams(c.id) {
+                        actions.push(SendTeamRemovalMessage(team.name.clone()));
+                    }
+                }
+            }
+            server.react(client_id, actions)
         }
         _ => warn!("Unimplemented!")
     }

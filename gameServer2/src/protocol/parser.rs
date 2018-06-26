@@ -36,7 +36,7 @@ named!(basic_message<&[u8], HWProtocolMessage>, alt!(
     | do_parse!(tag!("GET_SERVER_VAR") >> (GetServerVar))
     | do_parse!(tag!("TOGGLE_READY")   >> (ToggleReady))
     | do_parse!(tag!("START_GAME")     >> (StartGame))
-    | do_parse!(tag!("ROUNDFINISHED")  >> (RoundFinished))
+    | do_parse!(tag!("ROUNDFINISHED")  >> m: opt_param >> (RoundFinished))
     | do_parse!(tag!("TOGGLE_RESTRICT_JOINS")  >> (ToggleRestrictJoin))
     | do_parse!(tag!("TOGGLE_RESTRICT_TEAMS")  >> (ToggleRestrictTeams))
     | do_parse!(tag!("TOGGLE_REGISTERED_ONLY") >> (ToggleRegisteredOnly))

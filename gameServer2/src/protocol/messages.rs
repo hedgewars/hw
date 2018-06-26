@@ -92,6 +92,9 @@ pub enum HWServerMessage {
     TeamColor(String, u8),
     HedgehogsNumber(String, u8),
     ConfigEntry(String, Vec<String>),
+    RunGame,
+    ForwardEngineMessage(String),
+    RoundFinished,
 
     ServerMessage(String),
     Warning(String),
@@ -259,6 +262,9 @@ impl HWServerMessage {
             HedgehogsNumber(name, number) => msg!["HH_NUM", name, number],
             ConfigEntry(name, values) =>
                 construct_message(&["CFG", name], &values),
+            RunGame => msg!["RUN_GAME"],
+            ForwardEngineMessage(em) => msg!["EM", em],
+            RoundFinished => msg!["ROUND_FINISHED"],
             ChatMsg(nick, msg) => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             Warning(msg) => msg!["WARNING", msg],
