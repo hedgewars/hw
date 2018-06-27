@@ -41,6 +41,7 @@ const VALID_MESSAGES: &[u8] =
     b"M#+LlRrUuDdZzAaSjJ,NpPwtgfhbc12345\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A";
 const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
 
+#[cfg(canhazslicepatterns)]
 fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     match msg {
         [size, typ, body..] => VALID_MESSAGES.contains(typ)
@@ -52,11 +53,16 @@ fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     }
 }
 
-fn is_msg_empty(msg: &[u8]) -> bool {
-    match msg {
-        [_, b'+', ..] => true,
-        _ => false
+fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
+    if let Some(typ) = msg.get(1) {
+        VALID_MESSAGES.contains(typ)
+    } else {
+        false
     }
+}
+
+fn is_msg_empty(msg: &[u8]) -> bool {
+    msg.get(1).filter(|t| **t == b'+').is_some()
 }
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
@@ -240,11 +246,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     let messages = by_msg(&decoding);
                     let valid = messages.clone().filter(|m| is_msg_valid(m, &c.team_indices));
                     let non_empty = messages.filter(|m| !is_msg_empty(m));
-                    let last_msg = valid.clone().scan(None, |res, msg| match msg {
-                        [_, b'+', ..] => Some(msg),
-                        [_, typ, ..] if NON_TIMED_MESSAGES.contains(typ) => *res,
-                        _ => None
-                    }).next().map(|s| encode(s));
+                    let last_msg = None;
 
                     let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
                     if !em_response.is_empty() {
@@ -253,7 +255,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     }
                     let em_log = encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
                     if let Some(ref mut info) = r.game_info {
-                        if (!em_log.is_empty()) {
+                        if !em_log.is_empty() {
                             info.msg_log.push(em_log);
                         }
                         if last_msg.is_some() {

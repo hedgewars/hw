@@ -1,7 +1,6 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
 #![warn(unreachable_pub)]
-#![feature(slice_patterns)]
 
 extern crate rand;
 extern crate mio;
