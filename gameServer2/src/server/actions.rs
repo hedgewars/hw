@@ -222,14 +222,56 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     c.is_ready = false;
                     c.is_master = false;
                 }
-                let flags_msg = ClientFlags("+i".to_string(), vec![c.nick.clone()]);
 
                 let mut v = vec![
                     RoomJoined(vec![c.nick.clone()]).send_all().in_room(room_id).action(),
-                    flags_msg.send_all().action(),
+                    ClientFlags("+i".to_string(), vec![c.nick.clone()]).send_all().action(),
                     SendRoomUpdate(None)];
                 if !c.is_master {
+                    let team_names: Vec<_>;
+                    if let Some(ref mut info) = r.game_info {
+                        c.is_in_game = true;
+                        c.is_joined_mid_game = true;
+
+                        {
+                            let teams = info.client_teams(c.id);
+                            c.teams_in_game = teams.clone().count() as u8;
+                            c.clan = teams.clone().next().map(|t| t.color);
+                            team_names = teams.map(|t| t.name.clone()).collect();
+                        }
+
+                        if !team_names.is_empty() {
+                            info.left_teams.retain(|name|
+                                !team_names.contains(&name));
+                            info.teams_in_game += team_names.len() as u8;
+                            r.teams = info.teams_at_start.iter()
+                                .filter(|(_, t)| !team_names.contains(&t.name))
+                                .cloned().collect();
+                        }
+                    } else {
+                        team_names = Vec::new();
+                    }
+
                     v.push(SendRoomData{ to: client_id, teams: true, config: true, flags: true});
+
+                    if let Some(ref info) = r.game_info {
+                        v.push(RunGame.send_self().action());
+                        v.push(ClientFlags("+g".to_string(), vec![c.nick.clone()])
+                            .send_all().in_room(r.id).action());
+                        v.push(ForwardEngineMessage(
+                            to_engine_msg("e$spectate 1".bytes()) + &info.msg_log)
+                            .send_self().action());
+
+                        for name in team_names.iter() {
+                            v.push(ForwardEngineMessage(
+                                to_engine_msg(once(b'G').chain(name.bytes())))
+                                .send_all().in_room(r.id).action());
+                        }
+                        if info.is_paused {
+                            v.push(ForwardEngineMessage(to_engine_msg(once(b'I')))
+                                .send_all().in_room(r.id).action())
+                        }
+                    }
                 }
                 v
             };
@@ -247,8 +289,16 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     }
                 }
                 if teams {
-                    for (owner_id, team) in r.teams.iter() {
+                    let current_teams = match r.game_info {
+                        Some(ref info) => &info.teams_at_start,
+                        None => &r.teams
+                    };
+                    for (owner_id, team) in current_teams.iter() {
                         actions.push(TeamAdd(HWRoom::team_info(&server.clients[*owner_id], &team))
+                            .send(to).action());
+                        actions.push(TeamColor(team.name.clone(), team.color)
+                            .send(to).action());
+                        actions.push(HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
                             .send(to).action());
                     }
                 }
@@ -368,7 +418,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 } else if room.game_info.is_some() {
                     vec![Warn("The game is already in progress".to_string())]
                 } else {
-                    room.game_info = Some(GameInfo::new(room.teams.len() as u8));
+                    room.start_round();
                     for id in room_clients {
                         let c = &mut server.clients[id];
                         c.is_in_game = true;
@@ -393,6 +443,13 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     if info.teams_in_game == 0 {
                         actions.push(FinishRoomGame(r.id));
                     }
+                    let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
+                    match &info.last_msg {
+                        Some(m) => info.msg_log.push_str(&m),
+                        None => info.msg_log.push_str(&remove_msg)
+                    }
+                    actions.push(ForwardEngineMessage(remove_msg)
+                        .send_all().in_room(r.id).but_self().action());
                 }
             }
             server.react(client_id, actions);

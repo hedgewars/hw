@@ -239,17 +239,24 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     let decoding = decode(&em[..]).unwrap();
                     let messages = by_msg(&decoding);
                     let valid = messages.clone().filter(|m| is_msg_valid(m, &c.team_indices));
-                    let _non_empty = messages.filter(|m| !is_msg_empty(m));
-                    let _last_valid_timed_msg = valid.clone().scan(None, |res, msg| match msg {
+                    let non_empty = messages.filter(|m| !is_msg_empty(m));
+                    let last_msg = valid.clone().scan(None, |res, msg| match msg {
                         [_, b'+', ..] => Some(msg),
                         [_, typ, ..] if NON_TIMED_MESSAGES.contains(typ) => *res,
                         _ => None
-                    }).next();
+                    }).next().map(|s| encode(s));
 
                     let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
                     if !em_response.is_empty() {
                         actions.push(ForwardEngineMessage(em_response)
                             .send_all().in_room(r.id).but_self().action());
+                    }
+                    let em_log = encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
+                    if let Some(ref mut info) = r.game_info {
+                        info.msg_log.push_str(&em_log);
+                        if last_msg.is_some() {
+                            info.last_msg = last_msg;
+                        }
                     }
                 }
             }

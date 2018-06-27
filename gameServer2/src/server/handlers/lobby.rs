@@ -43,16 +43,16 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     .map(|(_, c)| c.nick.clone())
                     .collect();
                 let c = &mut server.clients[client_id];
-                actions = match room {
-                    None => vec![Warn("No such room.".to_string())],
-                    Some((_, r)) => {
-                        if c.protocol_number != r.protocol_number {
-                            vec![Warn("Room version incompatible to your Hedgewars version!".to_string())]
-                        } else {
-                            vec![MoveToRoom(r.id),
-                                 RoomJoined(nicks).send_self().action()]
-                        }
+
+                actions = if let Some((_, r)) = room {
+                    if c.protocol_number != r.protocol_number {
+                        vec![Warn("Room version incompatible to your Hedgewars version!".to_string())]
+                    } else {
+                        vec![MoveToRoom(r.id),
+                             RoomJoined(nicks).send_self().action()]
                     }
+                } else {
+                    vec![Warn("No such room.".to_string())]
                 };
             }
             server.react(client_id, actions);

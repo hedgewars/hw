@@ -7,16 +7,19 @@ use server::{
 const MAX_HEDGEHOGS_IN_ROOM: u8 = 48;
 pub type RoomId = usize;
 
+#[derive(Clone)]
 struct Ammo {
     name: String,
     settings: Option<String>
 }
 
+#[derive(Clone)]
 struct Scheme {
     name: String,
     settings: Option<Vec<String>>
 }
 
+#[derive(Clone)]
 struct RoomConfig {
     feature_size: u32,
     map_type: String,
@@ -51,17 +54,56 @@ impl RoomConfig {
     }
 }
 
+fn client_teams_impl(teams: &Vec<(ClientId, TeamInfo)>, client_id: ClientId)
+    -> impl Iterator<Item = &TeamInfo> + Clone
+{
+    teams.iter().filter(move |(id, _)| *id == client_id).map(|(_, t)| t)
+}
+
+fn map_config_from(c: &RoomConfig) -> Vec<String> {
+    vec![c.feature_size.to_string(), c.map_type.to_string(),
+         c.map_generator.to_string(), c.maze_size.to_string(),
+         c.seed.to_string(), c.template.to_string()]
+}
+
+fn game_config_from(c: &RoomConfig) -> Vec<GameCfg> {
+    use server::coretypes::GameCfg::*;
+    let mut v = vec![
+        Ammo(c.ammo.name.to_string(), c.ammo.settings.clone()),
+        Scheme(c.scheme.name.to_string(), c.scheme.settings.clone()),
+        Script(c.script.to_string()),
+        Theme(c.theme.to_string())];
+    if let Some(ref m) = c.drawn_map {
+        v.push(DrawnMap(m.to_string()))
+    }
+    v
+}
+
 pub struct GameInfo {
     pub teams_in_game: u8,
-    pub left_teams: Vec<String>
+    pub teams_at_start: Vec<(ClientId, TeamInfo)>,
+    pub left_teams: Vec<String>,
+    pub msg_log: String,
+    pub last_msg: Option<String>,
+    pub is_paused: bool,
+    config: RoomConfig
 }
 
 impl GameInfo {
-    pub fn new(teams_number: u8) -> GameInfo {
+    fn new(teams: Vec<(ClientId, TeamInfo)>, config: RoomConfig) -> GameInfo {
         GameInfo {
-            teams_in_game: teams_number,
-            left_teams: Vec::new()
+            left_teams: Vec::new(),
+            msg_log: String::new(),
+            last_msg: None,
+            is_paused: false,
+            teams_in_game: teams.len() as u8,
+            teams_at_start: teams,
+            config
         }
+    }
+
+    pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
+        client_teams_impl(&self.teams_at_start, client_id)
     }
 }
 
@@ -138,7 +180,7 @@ impl HWRoom {
     }
 
     pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> {
-        self.teams.iter().filter(move |(id, _)| *id == client_id).map(|(_, t)| t)
+        client_teams_impl(&self.teams, client_id)
     }
 
     pub fn client_team_indices(&self, client_id: ClientId) -> Vec<u8> {
@@ -179,6 +221,13 @@ impl HWRoom {
         };
     }
 
+    pub fn start_round(&mut self) {
+        if self.game_info.is_none() {
+            self.game_info = Some(GameInfo::new(
+                self.teams.clone(), self.config.clone()));
+        }
+    }
+
     pub fn info(&self, master: Option<&HWClient>) -> Vec<String> {
         let flags = "-".to_string();
         let c = &self.config;
@@ -196,24 +245,17 @@ impl HWRoom {
     }
 
     pub fn map_config(&self) -> Vec<String> {
-        let c = &self.config;
-        vec![c.feature_size.to_string(), c.map_type.to_string(),
-             c.map_generator.to_string(), c.maze_size.to_string(),
-             c.seed.to_string(), c.template.to_string()]
+        match self.game_info {
+            Some(ref info) => map_config_from(&info.config),
+            None => map_config_from(&self.config)
+        }
     }
 
     pub fn game_config(&self) -> Vec<GameCfg> {
-        use server::coretypes::GameCfg::*;
-        let c = &self.config;
-        let mut v = vec![
-            Ammo(c.ammo.name.to_string(), c.ammo.settings.clone()),
-            Scheme(c.scheme.name.to_string(), c.scheme.settings.clone()),
-            Script(c.script.to_string()),
-            Theme(c.theme.to_string())];
-        if let Some(ref m) = c.drawn_map {
-            v.push(DrawnMap(m.to_string()))
+        match self.game_info {
+            Some(ref info) => game_config_from(&info.config),
+            None => game_config_from(&self.config)
         }
-        v
     }
 
     pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {
