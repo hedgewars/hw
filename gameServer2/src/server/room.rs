@@ -52,7 +52,17 @@ impl RoomConfig {
 }
 
 pub struct GameInfo {
-    pub teams_in_game: u8
+    pub teams_in_game: u8,
+    pub left_teams: Vec<String>
+}
+
+impl GameInfo {
+    pub fn new(teams_number: u8) -> GameInfo {
+        GameInfo {
+            teams_in_game: teams_number,
+            left_teams: Vec::new()
+        }
+    }
 }
 
 pub struct HWRoom {

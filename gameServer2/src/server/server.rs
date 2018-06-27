@@ -64,6 +64,7 @@ impl HWServer {
     fn get_recipients(&self, client_id: ClientId, destination: Destination) -> Vec<ClientId> {
         let mut ids = match destination {
             Destination::ToSelf => vec![client_id],
+            Destination::ToId(id) => vec![id],
             Destination::ToAll {room_id: Some(id), ..} =>
                 self.room_clients(id),
             Destination::ToAll {protocol: Some(proto), ..} =>

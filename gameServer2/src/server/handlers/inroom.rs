@@ -262,8 +262,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     c.is_in_game = false;
                     actions.push(ClientFlags("-g".to_string(), vec![c.nick.clone()]).
                         send_all().in_room(r.id).action());
-                    for team in r.client_teams(c.id) {
-                        actions.push(SendTeamRemovalMessage(team.name.clone()));
+                    if r.game_info.is_some() {
+                        for team in r.client_teams(c.id) {
+                            actions.push(SendTeamRemovalMessage(team.name.clone()));
+                        }
                     }
                 }
             }
