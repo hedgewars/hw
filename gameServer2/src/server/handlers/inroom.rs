@@ -42,14 +42,13 @@ const VALID_MESSAGES: &[u8] =
 const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
 
 fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
-    if let [size, typ, body..] = msg {
-        VALID_MESSAGES.contains(typ) &&
-            match body {
+    match msg {
+        [size, typ, body..] => VALID_MESSAGES.contains(typ)
+            && match body {
                 [1...8, team, ..] if *typ == b'h' => team_indices.contains(team),
                 _ => *typ != b'h'
-            }
-    } else {
-        false
+            },
+        _ => false
     }
 }
 

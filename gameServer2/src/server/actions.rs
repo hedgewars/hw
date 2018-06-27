@@ -95,6 +95,7 @@ pub enum Action {
     StartRoomGame(RoomId),
     SendTeamRemovalMessage(String),
     FinishRoomGame(RoomId),
+    SendRoomData{teams: bool, config: bool, flags: bool},
     Warn(String),
     ProtocolError(String)
 }
@@ -221,22 +222,51 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     flags_msg.send_all().action(),
                     SendRoomUpdate(None)];
                 if !c.is_master {
-                    v.push(ConfigEntry("FULLMAPCONFIG".to_string(), r.map_config())
-                        .send_self().action());
-                    for cfg in r.game_config().into_iter() {
-                        v.push(cfg.into_server_msg().send_self().action());
-                    }
+                    v.push(SendRoomData{ teams: true, config: true, flags: true});
                 }
                 v
             };
             server.react(client_id, actions);
-        },
+        }
+        SendRoomData {teams, config, flags} => {
+            let mut actions = Vec::new();
+            let room_id = server.clients[client_id].room_id;
+            if let Some(r) = room_id.and_then(|id| server.rooms.get(id)) {
+                if config {
+                    actions.push(ConfigEntry("FULLMAPCONFIG".to_string(), r.map_config())
+                        .send_self().action());
+                    for cfg in r.game_config().into_iter() {
+                        actions.push(cfg.into_server_msg().send_self().action());
+                    }
+                }
+                if teams {
+                    for (owner_id, team) in r.teams.iter() {
+                        actions.push(TeamAdd(HWRoom::team_info(&server.clients[*owner_id], &team))
+                            .send_self().action());
+                    }
+                }
+                if flags {
+                    if let Some(id) = r.master_id {
+                        actions.push(ClientFlags("+h".to_string(), vec![server.clients[id].nick.clone()])
+                            .send_self().action());
+                    }
+                    let nicks: Vec<_> = server.clients.iter()
+                        .filter(|(_, c)| c.room_id == Some(r.id) && c.is_ready)
+                        .map(|(_, c)| c.nick.clone()).collect();
+                    if !nicks.is_empty() {
+                        actions.push(ClientFlags("+r".to_string(), nicks)
+                            .send_self().action());
+                    }
+                }
+            }
+            server.react(client_id, actions);
+        }
         MoveToLobby(msg) => {
             let mut actions = Vec::new();
             let lobby_id = server.lobby_id;
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 r.players_number -= 1;
-                if c.is_ready {
+                if c.is_ready && r.ready_players_number > 0 {
                     r.ready_players_number -= 1;
                 }
                 if r.players_number > 0 && c.is_master {
