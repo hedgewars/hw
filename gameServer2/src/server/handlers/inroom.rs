@@ -248,12 +248,14 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
 
                     let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
                     if !em_response.is_empty() {
-                        actions.push(ForwardEngineMessage(em_response)
+                        actions.push(ForwardEngineMessage(vec![em_response])
                             .send_all().in_room(r.id).but_self().action());
                     }
                     let em_log = encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
                     if let Some(ref mut info) = r.game_info {
-                        info.msg_log.push_str(&em_log);
+                        if (!em_log.is_empty()) {
+                            info.msg_log.push(em_log);
+                        }
                         if last_msg.is_some() {
                             info.last_msg = last_msg;
                         }

@@ -259,16 +259,18 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         v.push(ClientFlags("+g".to_string(), vec![c.nick.clone()])
                             .send_all().in_room(r.id).action());
                         v.push(ForwardEngineMessage(
-                            to_engine_msg("e$spectate 1".bytes()) + &info.msg_log)
+                            vec![to_engine_msg("e$spectate 1".bytes())])
+                            .send_self().action());
+                        v.push(ForwardEngineMessage(info.msg_log.clone())
                             .send_self().action());
 
                         for name in team_names.iter() {
                             v.push(ForwardEngineMessage(
-                                to_engine_msg(once(b'G').chain(name.bytes())))
+                                vec![to_engine_msg(once(b'G').chain(name.bytes()))])
                                 .send_all().in_room(r.id).action());
                         }
                         if info.is_paused {
-                            v.push(ForwardEngineMessage(to_engine_msg(once(b'I')))
+                            v.push(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
                                 .send_all().in_room(r.id).action())
                         }
                     }
@@ -437,7 +439,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 if let Some(ref mut info) = r.game_info {
                     let msg = once(b'F').chain(team_name.bytes());
-                    actions.push(ForwardEngineMessage(to_engine_msg(msg)).
+                    actions.push(ForwardEngineMessage(vec![to_engine_msg(msg)]).
                         send_all().in_room(r.id).but_self().action());
                     info.teams_in_game -= 1;
                     if info.teams_in_game == 0 {
@@ -445,10 +447,10 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     }
                     let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
                     match &info.last_msg {
-                        Some(m) => info.msg_log.push_str(&m),
-                        None => info.msg_log.push_str(&remove_msg)
+                        Some(m) => info.msg_log.push(m.clone()),
+                        None => info.msg_log.push(remove_msg.clone())
                     }
-                    actions.push(ForwardEngineMessage(remove_msg)
+                    actions.push(ForwardEngineMessage(vec![remove_msg])
                         .send_all().in_room(r.id).but_self().action());
                 }
             }
