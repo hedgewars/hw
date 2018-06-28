@@ -1,6 +1,5 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
-#![warn(unreachable_pub)]
 
 extern crate rand;
 extern crate mio;
