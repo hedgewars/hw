@@ -1,3 +1,12 @@
+/** The parsers for the chat and multiplayer protocol. The main parser is `message`.
+ * # Protocol
+ * All messages consist of `\n`-separated strings. The end of a message is
+ * indicated by a double newline - `\n\n`.
+ *
+ * For example, a nullary command like PING will be actually sent as `PING\n\n`.
+ * A unary command, such as `START_GAME nick` will be actually sent as `START_GAME\nnick\n\n`.
+ */
+
 use nom::*;
 
 use std::{
@@ -28,6 +37,7 @@ named!(_8_hogs<&[u8], [HedgehogInfo; 8]>,
               h7: hog_line >> eol >> h8: hog_line >>
               ([h1, h2, h3, h4, h5, h6, h7, h8])));
 
+/** Recognizes messages which do not take any parameters */
 named!(basic_message<&[u8], HWProtocolMessage>, alt!(
       do_parse!(tag!("PING") >> (Ping))
     | do_parse!(tag!("PONG") >> (Pong))
@@ -42,6 +52,7 @@ named!(basic_message<&[u8], HWProtocolMessage>, alt!(
     | do_parse!(tag!("TOGGLE_REGISTERED_ONLY") >> (ToggleRegisteredOnly))
 ));
 
+/** Recognizes messages which take exactly one parameter */
 named!(one_param_message<&[u8], HWProtocolMessage>, alt!(
       do_parse!(tag!("NICK")    >> eol >> n: a_line >> (Nick(n)))
     | do_parse!(tag!("INFO")    >> eol >> n: a_line >> (Info(n)))
@@ -60,6 +71,7 @@ named!(one_param_message<&[u8], HWProtocolMessage>, alt!(
     | do_parse!(tag!("QUIT")   >> msg: opt_param >> (Quit(msg)))
 ));
 
+/** Recognizes messages preceded with CMD */
 named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
       do_parse!(tag_no_case!("STATS") >> (Stats))
     | do_parse!(tag_no_case!("FIX")   >> (Fix))
@@ -80,6 +92,10 @@ named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
     | do_parse!(tag_no_case!("FORCE")    >> eol >> m: a_line  >> (ForceVote(m)))
     | do_parse!(tag_no_case!("INFO")     >> eol >> n: a_line  >> (Info(n)))
     | do_parse!(tag_no_case!("MAXTEAMS") >> eol >> n: u8_line >> (MaxTeams(n)))
+    | do_parse!(
+        tag_no_case!("RND") >>
+        v: str_line >>
+        (Rnd(v.split_whitespace().map(String::from).collect())))
 )));
 
 named!(complex_message<&[u8], HWProtocolMessage>, alt!(
@@ -221,6 +237,12 @@ fn parse_test() {
 
     assert_eq!(message(b"CMD\nPART\n\n"),      IResult::Done(&b""[..], Part(None)));
     assert_eq!(message(b"CMD\nPART\n_msg_\n\n"), IResult::Done(&b""[..], Part(Some("_msg_".to_string()))));
+
+    assert_eq!(message(b"CMD\nRND\n\n"), IResult::Done(&b""[..], Rnd(vec![])));
+    assert_eq!(
+        message(b"CMD\nRND A B\n\n"),
+        IResult::Done(&b""[..], Rnd(vec![String::from("A"), String::from("B")]))
+    );
 
     assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    IResult::Done(&b""[..], vec![Malformed]));
 
