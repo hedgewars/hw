@@ -27,6 +27,8 @@ named!(  a_line<&[u8], String>, map!(str_line, String::from));
 named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
 named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
 named!(opt_param<&[u8], Option<String> >, opt!(map!(flat_map!(preceded!(eol, str_line), non_empty), String::from)));
+named!(spaces<&[u8], &[u8]>, preceded!(tag!(" "), eat_separator!(" ")));
+named!(opt_space_param<&[u8], Option<String> >, opt!(map!(flat_map!(preceded!(spaces, str_line), non_empty), String::from)));
 named!(hog_line<&[u8], HedgehogInfo>,
     do_parse!(name: str_line >> eol >> hat: str_line >>
         (HedgehogInfo{name: name.to_string(), hat: hat.to_string()})));
@@ -76,24 +78,24 @@ named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
       do_parse!(tag_no_case!("STATS") >> (Stats))
     | do_parse!(tag_no_case!("FIX")   >> (Fix))
     | do_parse!(tag_no_case!("UNFIX") >> (Unfix))
-    | do_parse!(tag_no_case!("RESTART_SERVER") >> eol >> tag!("YES") >> (RestartServer))
+    | do_parse!(tag_no_case!("RESTART_SERVER") >> spaces >> tag!("YES") >> (RestartServer))
     | do_parse!(tag_no_case!("REGISTERED_ONLY") >> (ToggleServerRegisteredOnly))
     | do_parse!(tag_no_case!("SUPER_POWER")     >> (SuperPower))
-    | do_parse!(tag_no_case!("PART")     >> m: opt_param >> (Part(m)))
-    | do_parse!(tag_no_case!("QUIT")     >> m: opt_param >> (Quit(m)))
-    | do_parse!(tag_no_case!("DELEGATE") >> eol >> n: a_line  >> (Delegate(n)))
-    | do_parse!(tag_no_case!("SAVEROOM") >> eol >> r: a_line  >> (SaveRoom(r)))
-    | do_parse!(tag_no_case!("LOADROOM") >> eol >> r: a_line  >> (LoadRoom(r)))
-    | do_parse!(tag_no_case!("DELETE")   >> eol >> r: a_line  >> (Delete(r)))
-    | do_parse!(tag_no_case!("GLOBAL")   >> eol >> m: a_line  >> (Global(m)))
-    | do_parse!(tag_no_case!("WATCH")    >> eol >> i: a_line  >> (Watch(i)))
-    | do_parse!(tag_no_case!("GREETING") >> eol >> m: a_line  >> (Greeting(m)))
-    | do_parse!(tag_no_case!("VOTE")     >> eol >> m: a_line  >> (Vote(m)))
-    | do_parse!(tag_no_case!("FORCE")    >> eol >> m: a_line  >> (ForceVote(m)))
-    | do_parse!(tag_no_case!("INFO")     >> eol >> n: a_line  >> (Info(n)))
-    | do_parse!(tag_no_case!("MAXTEAMS") >> eol >> n: u8_line >> (MaxTeams(n)))
+    | do_parse!(tag_no_case!("PART")     >> m: opt_space_param >> (Part(m)))
+    | do_parse!(tag_no_case!("QUIT")     >> m: opt_space_param >> (Quit(m)))
+    | do_parse!(tag_no_case!("DELEGATE") >> spaces >> n: a_line  >> (Delegate(n)))
+    | do_parse!(tag_no_case!("SAVEROOM") >> spaces >> r: a_line  >> (SaveRoom(r)))
+    | do_parse!(tag_no_case!("LOADROOM") >> spaces >> r: a_line  >> (LoadRoom(r)))
+    | do_parse!(tag_no_case!("DELETE")   >> spaces >> r: a_line  >> (Delete(r)))
+    | do_parse!(tag_no_case!("GLOBAL")   >> spaces >> m: a_line  >> (Global(m)))
+    | do_parse!(tag_no_case!("WATCH")    >> spaces >> i: a_line  >> (Watch(i)))
+    | do_parse!(tag_no_case!("GREETING") >> spaces >> m: a_line  >> (Greeting(m)))
+    | do_parse!(tag_no_case!("VOTE")     >> spaces >> m: a_line  >> (Vote(m)))
+    | do_parse!(tag_no_case!("FORCE")    >> spaces >> m: a_line  >> (ForceVote(m)))
+    | do_parse!(tag_no_case!("INFO")     >> spaces >> n: a_line  >> (Info(n)))
+    | do_parse!(tag_no_case!("MAXTEAMS") >> spaces >> n: u8_line >> (MaxTeams(n)))
     | do_parse!(
-        tag_no_case!("RND") >>
+        tag_no_case!("RND") >> alt!(spaces | peek!(end_of_message)) >>
         v: str_line >>
         (Rnd(v.split_whitespace().map(String::from).collect())))
 )));
@@ -232,11 +234,11 @@ fn parse_test() {
     assert_eq!(message(b"PROTO\n51\n\n"),     IResult::Done(&b""[..], Proto(51)));
     assert_eq!(message(b"QUIT\nbye-bye\n\n"), IResult::Done(&b""[..], Quit(Some("bye-bye".to_string()))));
     assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
-    assert_eq!(message(b"CMD\nwatch\ndemo\n\n"), IResult::Done(&b""[..], Watch("demo".to_string())));
+    assert_eq!(message(b"CMD\nwatch demo\n\n"), IResult::Done(&b""[..], Watch("demo".to_string())));
     assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me".to_string(), "bad".to_string(), 77)));
 
     assert_eq!(message(b"CMD\nPART\n\n"),      IResult::Done(&b""[..], Part(None)));
-    assert_eq!(message(b"CMD\nPART\n_msg_\n\n"), IResult::Done(&b""[..], Part(Some("_msg_".to_string()))));
+    assert_eq!(message(b"CMD\nPART _msg_\n\n"), IResult::Done(&b""[..], Part(Some("_msg_".to_string()))));
 
     assert_eq!(message(b"CMD\nRND\n\n"), IResult::Done(&b""[..], Rnd(vec![])));
     assert_eq!(

@@ -130,85 +130,6 @@ impl GameCfg {
     }
 }
 
-impl<'a> HWProtocolMessage {
-    pub fn to_raw_protocol(&self) -> String {
-        use self::HWProtocolMessage::*;
-        match self {
-            Ping => "PING\n\n".to_string(),
-            Pong => "PONG\n\n".to_string(),
-            Quit(None) => format!("QUIT\n\n"),
-            Quit(Some(msg)) => format!("QUIT\n{}\n\n", msg),
-            Global(msg) => format!("CMD\nGLOBAL\n{}\n\n", msg),
-            Watch(name) => format!("CMD\nWATCH\n{}\n\n", name),
-            ToggleServerRegisteredOnly => "CMD\nREGISTERED_ONLY\n\n".to_string(),
-            SuperPower => "CMD\nSUPER_POWER\n\n".to_string(),
-            Info(info) => format!("CMD\nINFO\n{}\n\n", info),
-            Nick(nick) => format!("NICK\n{}\n\n", nick),
-            Proto(version) => format!("PROTO\n{}\n\n", version),
-            Password(p, s) => format!("PASSWORD\n{}\n{}\n\n", p, s), //?
-            Checker(i, n, p) =>
-                format!("CHECKER\n{}\n{}\n{}\n\n", i, n, p), //?,
-            List => "LIST\n\n".to_string(),
-            Chat(msg) => format!("CHAT\n{}\n\n", msg),
-            CreateRoom(name, None) =>
-                format!("CREATE_ROOM\n{}\n\n", name),
-            CreateRoom(name, Some(password)) =>
-                format!("CREATE_ROOM\n{}\n{}\n\n", name, password),
-            JoinRoom(name, None) =>
-                format!("JOIN\n{}\n\n", name),
-            JoinRoom(name, Some(arg)) =>
-                format!("JOIN\n{}\n{}\n\n", name, arg),
-            Follow(name) =>
-                format!("FOLLOW\n{}\n\n", name),
-            //Rnd(Vec<String>), ???
-            Kick(name) => format!("KICK\n{}\n\n", name),
-            Ban(name, reason, time) =>
-                format!("BAN\n{}\n{}\n{}\n\n", name, reason, time),
-            BanIP(ip, reason, time) =>
-                format!("BAN_IP\n{}\n{}\n{}\n\n", ip, reason, time),
-            BanNick(nick, reason, time) =>
-                format!("BAN_NICK\n{}\n{}\n{}\n\n", nick, reason, time),
-            BanList => "BANLIST\n\n".to_string(),
-            Unban(name) => format!("UNBAN\n{}\n\n", name),
-            //SetServerVar(ServerVar), ???
-            GetServerVar => "GET_SERVER_VAR\n\n".to_string(),
-            RestartServer => "CMD\nRESTART_SERVER\nYES\n\n".to_string(),
-            Stats => "CMD\nSTATS\n\n".to_string(),
-            Part(None) => "CMD\nPART\n\n".to_string(),
-            Part(Some(msg)) => format!("CMD\nPART\n{}\n\n", msg),
-            //Cfg(GameCfg) ??
-            //AddTeam(TeamInfo) ??,
-            RemoveTeam(name) => format!("REMOVE_TEAM\n{}\n\n", name),
-            //SetHedgehogsNumber(String, u8), ??
-            //SetTeamColor(String, u8), ??
-            ToggleReady => "TOGGLE_READY\n\n".to_string(),
-            StartGame => "START_GAME\n\n".to_string(),
-            EngineMessage(msg) => format!("EM\n{}\n\n", msg),
-            RoundFinished => "ROUNDFINISHED\n\n".to_string(),
-            ToggleRestrictJoin => "TOGGLE_RESTRICT_JOINS\n\n".to_string(),
-            ToggleRestrictTeams => "TOGGLE_RESTRICT_TEAMS\n\n".to_string(),
-            ToggleRegisteredOnly => "TOGGLE_REGISTERED_ONLY\n\n".to_string(),
-            RoomName(name) => format!("ROOM_NAME\n{}\n\n", name),
-            Delegate(name) => format!("CMD\nDELEGATE\n{}\n\n", name),
-            TeamChat(msg) => format!("TEAMCHAT\n{}\n\n", msg),
-            MaxTeams(count) => format!("CMD\nMAXTEAMS\n{}\n\n", count) ,
-            Fix => "CMD\nFIX\n\n".to_string(),
-            Unfix => "CMD\nUNFIX\n\n".to_string(),
-            Greeting(msg) => format!("CMD\nGREETING\n{}\n\n", msg),
-            //CallVote(Option<(String, Option<String>)>) =>, ??
-            Vote(msg) => format!("CMD\nVOTE\n{}\n\n", msg),
-            ForceVote(msg) => format!("CMD\nFORCE\n{}\n\n", msg),
-            //Save(String, String), ??
-            Delete(room) => format!("CMD\nDELETE\n{}\n\n", room),
-            SaveRoom(room) => format!("CMD\nSAVEROOM\n{}\n\n", room),
-            LoadRoom(room) => format!("CMD\nLOADROOM\n{}\n\n", room),
-            Malformed => "A\nQUICK\nBROWN\nHOG\nJUMPS\nOVER\nTHE\nLAZY\nDOG\n\n".to_string(),
-            Empty => "\n\n".to_string(),
-            _ => panic!("Protocol message not yet implemented")
-        }
-    }
-}
-
 macro_rules! const_braces {
     ($e: expr) => { "{}\n" }
 }
@@ -217,6 +138,79 @@ macro_rules! msg {
     [$($part: expr),*] => {
         format!(concat!($(const_braces!($part)),*, "\n"), $($part),*);
     };
+}
+
+impl<'a> HWProtocolMessage {
+    pub fn to_raw_protocol(&self) -> String {
+        use self::HWProtocolMessage::*;
+        match self {
+            Ping => msg!["PING"],
+            Pong => msg!["PONG"],
+            Quit(None) => msg!["QUIT"],
+            Quit(Some(msg)) => msg!["QUIT", msg],
+            Global(msg) => msg!["CMD", format!("GLOBAL {}", msg)],
+            Watch(name) => msg!["CMD", format!("WATCH {}", name)],
+            ToggleServerRegisteredOnly => msg!["CMD", "REGISTERED_ONLY"],
+            SuperPower =>  msg!["CMD", "SUPER_POWER"],
+            Info(info) => msg!["CMD", format!("INFO {}", info)],
+            Nick(nick) => msg!("NICK", nick),
+            Proto(version) => msg!["PROTO", version],
+            Password(p, s) => msg!["PASSWORD", p, s],
+            Checker(i, n, p) => msg!["CHECKER", i, n, p],
+            List => msg!["LIST"],
+            Chat(msg) => msg!["CHAT", msg],
+            CreateRoom(name, None) => msg!["CREATE_ROOM", name],
+            CreateRoom(name, Some(password)) =>
+                msg!["CREATE_ROOM", name, password],
+            JoinRoom(name, None) => msg!["JOIN_ROOM", name],
+            JoinRoom(name, Some(password)) =>
+                msg!["JOIN_ROOM", name, password],
+            Follow(name) => msg!["FOLLOW", name],
+            Rnd(args) => msg!["RND", args.join(" ")],
+            Kick(name) => msg!["KICK", name],
+            Ban(name, reason, time) => msg!["BAN", name, reason, time],
+            BanIP(ip, reason, time) => msg!["BAN_IP", ip, reason, time],
+            BanNick(nick, reason, time) =>
+                msg!("BAN_NICK", nick, reason, time),
+            BanList => msg!["BANLIST"],
+            Unban(name) => msg!["UNBAN", name],
+            //SetServerVar(ServerVar), ???
+            GetServerVar => msg!["GET_SERVER_VAR"],
+            RestartServer => msg!["CMD", "RESTART_SERVER YES"],
+            Stats => msg!["CMD", "STATS"],
+            Part(None) => msg!["PART"],
+            Part(Some(msg)) => msg!["PART", msg],
+            //Cfg(GameCfg) =>
+            //AddTeam(info) =>
+            RemoveTeam(name) => msg!["REMOVE_TEAM", name],
+            //SetHedgehogsNumber(team, number), ??
+            //SetTeamColor(team, color), ??
+            ToggleReady => msg!["TOGGLE_READY"],
+            StartGame => msg!["START_GAME"],
+            EngineMessage(msg) => msg!["EM", msg],
+            RoundFinished => msg!["ROUNDFINISHED"],
+            ToggleRestrictJoin => msg!["TOGGLE_RESTRICT_JOINS"],
+            ToggleRestrictTeams => msg!["TOGGLE_RESTRICT_TEAMS"],
+            ToggleRegisteredOnly => msg!["TOGGLE_REGISTERED_ONLY"],
+            RoomName(name) => msg!["ROOM_NAME", name],
+            Delegate(name) => msg!["CMD", format!("DELEGATE {}", name)],
+            TeamChat(msg) => msg!["TEAMCHAT", msg],
+            MaxTeams(count) => msg!["CMD", format!("MAXTEAMS {}", count)] ,
+            Fix => msg!["CMD", "FIX"],
+            Unfix => msg!["CMD", "UNFIX"],
+            Greeting(msg) => msg!["CMD", format!("GREETING {}", msg)],
+            //CallVote(Option<(String, Option<String>)>) =>, ??
+            Vote(msg) => msg!["CMD", format!("VOTE {}", msg)],
+            ForceVote(msg) => msg!["CMD", format!("FORCE {}", msg)],
+            //Save(String, String), ??
+            Delete(room) => msg!["CMD", format!("DELETE {}", room)],
+            SaveRoom(room) => msg!["CMD", format!("SAVEROOM {}", room)],
+            LoadRoom(room) => msg!["CMD", format!("LOADROOM {}", room)],
+            Malformed => msg!["A", "QUICK", "BROWN", "HOG", "JUMPS", "OVER", "THE", "LAZY", "DOG"],
+            Empty => msg![""],
+            _ => panic!("Protocol message not yet implemented")
+        }
+    }
 }
 
 fn construct_message(header: &[&str], msg: &Vec<String>) -> String {

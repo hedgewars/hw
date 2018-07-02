@@ -37,6 +37,7 @@ macro_rules! proto_msg_match {
     )
 }
 
+/// Wrapper type for generating non-empty strings
 #[derive(Debug)]
 struct Ascii(String);
 
@@ -121,7 +122,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         47 => Unfix(),
         48 => Greeting(Ascii),
         //49 => CallVote(Option<(String, Option<String>)>),
-        50 => Vote(String),
+        50 => Vote(Ascii),
         51 => ForceVote(Ascii),
         //52 => Save(String, String),
         53 => Delete(Ascii),
