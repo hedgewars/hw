@@ -140,8 +140,12 @@ macro_rules! msg {
     };
 }
 
-impl<'a> HWProtocolMessage {
-    pub fn to_raw_protocol(&self) -> String {
+impl HWProtocolMessage {
+    /** Converts the message to a raw `String`, which can be sent over the network.
+     *
+     * This is the inverse of the `message` parser.
+     */
+    pub(crate) fn to_raw_protocol(&self) -> String {
         use self::HWProtocolMessage::*;
         match self {
             Ping => msg!["PING"],
@@ -166,7 +170,11 @@ impl<'a> HWProtocolMessage {
             JoinRoom(name, Some(password)) =>
                 msg!["JOIN_ROOM", name, password],
             Follow(name) => msg!["FOLLOW", name],
-            Rnd(args) => msg!["RND", args.join(" ")],
+            Rnd(args) => if args.is_empty() {
+                msg!["CMD", "RND"]
+            } else {
+                msg!["CMD", format!("RND {}", args.join(" "))]
+            },
             Kick(name) => msg!["KICK", name],
             Ban(name, reason, time) => msg!["BAN", name, reason, time],
             BanIP(ip, reason, time) => msg!["BAN_IP", ip, reason, time],

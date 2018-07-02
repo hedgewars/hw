@@ -81,3 +81,5 @@ xcuserdata
 *.mode1v3
 *.mode2v3
 Testing/*
+gameServer2/rls
+gameServer2/target

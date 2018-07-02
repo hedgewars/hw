@@ -12,6 +12,11 @@ use super::messages::{
 // Due to inability to define From between Options
 trait Into2<T>: Sized { fn into2(self) -> T; }
 impl <T> Into2<T> for T { fn into2(self) -> T { self } }
+impl Into2<Vec<String>> for Vec<Ascii> {
+    fn into2(self) -> Vec<String> {
+        self.into_iter().map(|x| x.0).collect()
+    }
+}
 impl Into2<String> for Ascii { fn into2(self) -> String { self.0 } }
 impl Into2<Option<String>> for Option<Ascii>{
     fn into2(self) -> Option<String> { self.map(|x| {x.0}) }
@@ -90,7 +95,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         15 => CreateRoom(Ascii, Option<Ascii>),
         16 => JoinRoom(Ascii, Option<Ascii>),
         17 => Follow(Ascii),
-        //18 => Rnd(Vec<String>),
+        18 => Rnd(Vec<Ascii>),
         19 => Kick(Ascii),
         20 => Ban(Ascii, Ascii, u32),
         21 => BanIP(Ascii, Ascii, u32),
