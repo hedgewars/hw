@@ -970,7 +970,9 @@ begin
             if not lua_isnoneornil(L, 10) then
                 vg^.Timer:= Trunc(lua_tonumber(L, 10));
             if not lua_isnoneornil(L, 11) then
-                vg^.Tint:= Trunc(lua_tonumber(L, 11))
+                vg^.Tint:= Trunc(lua_tonumber(L, 11));
+            if not lua_isnoneornil(L, 12) then
+                vg^.Scale:= Trunc(lua_tonumber(L, 12))
             end;
 //        end
 //    else
