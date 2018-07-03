@@ -4,12 +4,12 @@ version = "0.0.1"
 authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
 
 [dependencies]
-rand = "0.3"
+rand = "0.5"
 mio = "0.6"
 slab = "0.4"
 netbuf = "0.4.0"
 nom = "3.2"
 env_logger = "0.4"
-log = "0.3.8"
+log = "0.4"
 proptest = "0.5.1"
 base64 = "*"
