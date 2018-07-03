@@ -46,16 +46,6 @@ macro_rules! proto_msg_match {
 #[derive(Debug)]
 struct Ascii(String);
 
-struct AsciiValueTree(RegexGeneratorValueTree<String>);
-
-impl ValueTree for AsciiValueTree {
-    type Value = Ascii;
-
-    fn current(&self) -> Self::Value { Ascii(self.0.current()) }
-    fn simplify(&mut self) -> bool { self.0.simplify() }
-    fn complicate(&mut self) -> bool { self.0.complicate() }
-}
-
 impl Arbitrary for Ascii {
     type Parameters = <String as Arbitrary>::Parameters;
 
@@ -71,7 +61,6 @@ impl Arbitrary for Ascii {
     }
 
     type Strategy = BoxedStrategy<Ascii>;
-    type ValueTree = Box<dyn ValueTree<Value = Ascii>>;
 }
 
 pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
