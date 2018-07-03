@@ -26,9 +26,13 @@ named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
 named!(  a_line<&[u8], String>, map!(str_line, String::from));
 named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
 named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
-named!(opt_param<&[u8], Option<String> >, opt!(map!(flat_map!(preceded!(eol, str_line), non_empty), String::from)));
+named!(opt_param<&[u8], Option<String> >, alt!(
+      do_parse!(peek!(tag!("\n\n")) >> (None))
+    | do_parse!(tag!("\n") >> s: str_line >> (Some(s.to_string())))));
 named!(spaces<&[u8], &[u8]>, preceded!(tag!(" "), eat_separator!(" ")));
-named!(opt_space_param<&[u8], Option<String> >, opt!(map!(flat_map!(preceded!(spaces, str_line), non_empty), String::from)));
+named!(opt_space_param<&[u8], Option<String> >, alt!(
+      do_parse!(peek!(tag!("\n\n")) >> (None))
+    | do_parse!(spaces >> s: str_line >> (Some(s.to_string())))));
 named!(hog_line<&[u8], HedgehogInfo>,
     do_parse!(name: str_line >> eol >> hat: str_line >>
         (HedgehogInfo{name: name.to_string(), hat: hat.to_string()})));
@@ -222,34 +226,34 @@ proptest! {
     #[test]
     fn is_parser_composition_idempotent(ref msg in gen_proto_msg()) {
         println!("!! Msg: {:?}, Bytes: {:?} !!", msg, msg.to_raw_protocol().as_bytes());
-        assert_eq!(message(msg.to_raw_protocol().as_bytes()), IResult::Done(&b""[..], msg.clone()))
+        assert_eq!(message(msg.to_raw_protocol().as_bytes()), Ok((&b""[..], msg.clone())))
     }
 }
 
 #[test]
 fn parse_test() {
-    assert_eq!(message(b"PING\n\n"),          IResult::Done(&b""[..], Ping));
-    assert_eq!(message(b"START_GAME\n\n"),    IResult::Done(&b""[..], StartGame));
-    assert_eq!(message(b"NICK\nit's me\n\n"), IResult::Done(&b""[..], Nick("it's me".to_string())));
-    assert_eq!(message(b"PROTO\n51\n\n"),     IResult::Done(&b""[..], Proto(51)));
-    assert_eq!(message(b"QUIT\nbye-bye\n\n"), IResult::Done(&b""[..], Quit(Some("bye-bye".to_string()))));
-    assert_eq!(message(b"QUIT\n\n"),          IResult::Done(&b""[..], Quit(None)));
-    assert_eq!(message(b"CMD\nwatch demo\n\n"), IResult::Done(&b""[..], Watch("demo".to_string())));
-    assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), IResult::Done(&b""[..], Ban("me".to_string(), "bad".to_string(), 77)));
+    assert_eq!(message(b"PING\n\n"),          Ok((&b""[..], Ping)));
+    assert_eq!(message(b"START_GAME\n\n"),    Ok((&b""[..], StartGame)));
+    assert_eq!(message(b"NICK\nit's me\n\n"), Ok((&b""[..], Nick("it's me".to_string()))));
+    assert_eq!(message(b"PROTO\n51\n\n"),     Ok((&b""[..], Proto(51))));
+    assert_eq!(message(b"QUIT\nbye-bye\n\n"), Ok((&b""[..], Quit(Some("bye-bye".to_string())))));
+    assert_eq!(message(b"QUIT\n\n"),          Ok((&b""[..], Quit(None))));
+    assert_eq!(message(b"CMD\nwatch demo\n\n"), Ok((&b""[..], Watch("demo".to_string()))));
+    assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), Ok((&b""[..], Ban("me".to_string(), "bad".to_string(), 77))));
 
-    assert_eq!(message(b"CMD\nPART\n\n"),      IResult::Done(&b""[..], Part(None)));
-    assert_eq!(message(b"CMD\nPART _msg_\n\n"), IResult::Done(&b""[..], Part(Some("_msg_".to_string()))));
+    assert_eq!(message(b"CMD\nPART\n\n"),      Ok((&b""[..], Part(None))));
+    assert_eq!(message(b"CMD\nPART _msg_\n\n"), Ok((&b""[..], Part(Some("_msg_".to_string())))));
 
-    assert_eq!(message(b"CMD\nRND\n\n"), IResult::Done(&b""[..], Rnd(vec![])));
+    assert_eq!(message(b"CMD\nRND\n\n"), Ok((&b""[..], Rnd(vec![]))));
     assert_eq!(
         message(b"CMD\nRND A B\n\n"),
-        IResult::Done(&b""[..], Rnd(vec![String::from("A"), String::from("B")]))
+        Ok((&b""[..], Rnd(vec![String::from("A"), String::from("B")])))
     );
 
-    assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    IResult::Done(&b""[..], vec![Malformed]));
+    assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    Ok((&b""[..], vec![Malformed])));
 
-    assert_eq!(extract_messages(b"PING\n\nPING\n\nP"), IResult::Done(&b"P"[..], vec![Ping, Ping]));
-    assert_eq!(extract_messages(b"SING\n\nPING\n\n"),  IResult::Done(&b""[..],  vec![Malformed, Ping]));
-    assert_eq!(extract_messages(b"\n\n\n\nPING\n\n"),  IResult::Done(&b""[..],  vec![Empty, Empty, Ping]));
-    assert_eq!(extract_messages(b"\n\n\nPING\n\n"),    IResult::Done(&b""[..],  vec![Empty, Empty, Ping]));
+    assert_eq!(extract_messages(b"PING\n\nPING\n\nP"), Ok((&b"P"[..], vec![Ping, Ping])));
+    assert_eq!(extract_messages(b"SING\n\nPING\n\n"),  Ok((&b""[..],  vec![Malformed, Ping])));
+    assert_eq!(extract_messages(b"\n\n\n\nPING\n\n"),  Ok((&b""[..],  vec![Empty, Empty, Ping])));
+    assert_eq!(extract_messages(b"\n\n\nPING\n\n"),    Ok((&b""[..],  vec![Empty, Empty, Ping])));
 }

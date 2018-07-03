@@ -1,7 +1,10 @@
 use netbuf;
-use std::io::Read;
-use std::io::Result;
-use nom::IResult;
+use std::{
+    io::{Read, Result}
+};
+use nom::{
+    IResult, Err
+};
 
 pub mod messages;
 pub mod test;
@@ -27,12 +30,12 @@ impl ProtocolDecoder {
     pub fn extract_messages(&mut self) -> Vec<messages::HWProtocolMessage> {
         let parse_result = parser::extract_messages(&self.buf[..]);
         match parse_result {
-            IResult::Done(tail, msgs) => {
+            Ok((tail, msgs)) => {
                 self.consumed = self.buf.len() - self.consumed - tail.len();
                 msgs
             },
-            IResult::Incomplete(_) => unreachable!(),
-            IResult::Error(_) => unreachable!(),
+            Err(Err::Incomplete(_)) => unreachable!(),
+            Err(Err::Error(_)) | Err(Err::Failure(_)) => unreachable!(),
         }
     }
 
