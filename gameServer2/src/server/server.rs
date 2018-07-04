@@ -58,7 +58,9 @@ impl HWServer {
 
     pub fn handle_msg(&mut self, client_id: ClientId, msg: HWProtocolMessage) {
         debug!("Handling message {:?} for client {}", msg, client_id);
-        handlers::handle(self, client_id, msg);
+        if self.clients.contains(client_id) {
+            handlers::handle(self, client_id, msg);
+        }
     }
 
     fn get_recipients(&self, client_id: ClientId, destination: Destination) -> Vec<ClientId> {
