@@ -173,10 +173,9 @@ named!(cfg_message<&[u8], HWProtocolMessage>, preceded!(tag!("CFG\n"), map!(alt!
                 value: opt_param >>
                 (GameCfg::Ammo(name, value)))
     | do_parse!(tag!("SCHEME")   >> eol >>
-                name: a_line     >> eol >>
-                values: separated_list!(eol, a_line) >>
-                (GameCfg::Scheme(name,
-                    if values.is_empty() {None} else {Some(values)})))
+                name: a_line     >>
+                values: opt!(preceded!(eol, separated_list!(eol, a_line))) >>
+                (GameCfg::Scheme(name, values)))
     | do_parse!(tag!("FEATURE_SIZE") >> eol >>
                 value: u32_line    >>
                 (GameCfg::FeatureSize(value)))
