@@ -1,7 +1,5 @@
 use server::coretypes::{ServerVar, GameCfg, TeamInfo, HedgehogInfo};
-use std;
-use std::ops;
-use std::convert::From;
+use std::{ops, convert::From, iter::once};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HWProtocolMessage {
@@ -104,29 +102,34 @@ pub enum HWServerMessage {
 }
 
 impl GameCfg {
-    pub fn into_server_msg(self) -> HWServerMessage {
-        use self::HWServerMessage::ConfigEntry;
+    pub fn to_protocol(&self) -> (String, Vec<String>) {
         use server::coretypes::GameCfg::*;
         match self {
-            FeatureSize(s) => ConfigEntry("FEATURE_SIZE".to_string(), vec![s.to_string()]),
-            MapType(t) => ConfigEntry("MAP".to_string(), vec![t.to_string()]),
-            MapGenerator(g) => ConfigEntry("MAPGEN".to_string(), vec![g.to_string()]),
-            MazeSize(s) => ConfigEntry("MAZE_SIZE".to_string(), vec![s.to_string()]),
-            Seed(s) => ConfigEntry("SEED".to_string(), vec![s.to_string()]),
-            Template(t) => ConfigEntry("TEMPLATE".to_string(), vec![t.to_string()]),
+            FeatureSize(s) => ("FEATURE_SIZE".to_string(), vec![s.to_string()]),
+            MapType(t) => ("MAP".to_string(), vec![t.to_string()]),
+            MapGenerator(g) => ("MAPGEN".to_string(), vec![g.to_string()]),
+            MazeSize(s) => ("MAZE_SIZE".to_string(), vec![s.to_string()]),
+            Seed(s) => ("SEED".to_string(), vec![s.to_string()]),
+            Template(t) => ("TEMPLATE".to_string(), vec![t.to_string()]),
 
-            Ammo(n, None) => ConfigEntry("AMMO".to_string(), vec![n.to_string()]),
-            Ammo(n, Some(s)) => ConfigEntry("AMMO".to_string(), vec![n.to_string(), s.to_string()]),
-            Scheme(n, None) => ConfigEntry("SCHEME".to_string(), vec![n.to_string()]),
-            Scheme(n, Some(s)) => ConfigEntry("SCHEME".to_string(), {
+            Ammo(n, None) => ("AMMO".to_string(), vec![n.to_string()]),
+            Ammo(n, Some(s)) => ("AMMO".to_string(), vec![n.to_string(), s.to_string()]),
+            Scheme(n, None) => ("SCHEME".to_string(), vec![n.to_string()]),
+            Scheme(n, Some(s)) => ("SCHEME".to_string(), {
                 let mut v = vec![n.to_string()];
-                v.extend(s.into_iter());
+                v.extend(s.clone().into_iter());
                 v
             }),
-            Script(s) => ConfigEntry("SCRIPT".to_string(), vec![s.to_string()]),
-            Theme(t) => ConfigEntry("THEME".to_string(), vec![t.to_string()]),
-            DrawnMap(m) => ConfigEntry("DRAWNMAP".to_string(), vec![m.to_string()])
+            Script(s) => ("SCRIPT".to_string(), vec![s.to_string()]),
+            Theme(t) => ("THEME".to_string(), vec![t.to_string()]),
+            DrawnMap(m) => ("DRAWNMAP".to_string(), vec![m.to_string()])
         }
+    }
+
+    pub fn to_server_msg(&self) -> HWServerMessage {
+        use self::HWServerMessage::ConfigEntry;
+        let (name, args) = self.to_protocol();
+        HWServerMessage::ConfigEntry(name, args)
     }
 }
 
@@ -138,6 +141,11 @@ macro_rules! msg {
     [$($part: expr),*] => {
         format!(concat!($(const_braces!($part)),*, "\n"), $($part),*);
     };
+}
+
+macro_rules! several {
+    [$part: expr] => { once($part) };
+    [$part: expr, $($other: expr),*] => { once($part).chain(several![$($other),*]) };
 }
 
 impl HWProtocolMessage {
@@ -188,11 +196,18 @@ impl HWProtocolMessage {
             Stats => msg!["CMD", "STATS"],
             Part(None) => msg!["PART"],
             Part(Some(msg)) => msg!["PART", msg],
-            //Cfg(GameCfg) =>
-            //AddTeam(info) =>
+            Cfg(config) => {
+                let (name, args) = config.to_protocol();
+                msg!["CFG", name, args.join("\n")]
+            },
+            AddTeam(info) =>
+                msg![info.name, info.color, info.grave, info.fort,
+                     info.voice_pack, info.flag, info.difficulty,
+                     info.hedgehogs.iter().flat_map(|h|
+                        several![&h.name[..], "\n", &h.hat[..]]).collect::<String>()],
             RemoveTeam(name) => msg!["REMOVE_TEAM", name],
-            //SetHedgehogsNumber(team, number), ??
-            //SetTeamColor(team, color), ??
+            SetHedgehogsNumber(team, number) => msg!["HH_NUM", team, number],
+            SetTeamColor(team, color) => msg!["TEAM_COLOR", team, color],
             ToggleReady => msg!["TOGGLE_READY"],
             StartGame => msg!["START_GAME"],
             EngineMessage(msg) => msg!["EM", msg],

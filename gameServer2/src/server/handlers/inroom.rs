@@ -221,9 +221,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 if !c.is_master {
                     vec![ProtocolError("You're not the room master!".to_string())]
                 } else {
-                    r.set_config(cfg.clone());
-                    vec![cfg.into_server_msg()
-                        .send_all().in_room(r.id).but_self().action()]
+                    let v = vec![cfg.to_server_msg()
+                        .send_all().in_room(r.id).but_self().action()];
+                    r.set_config(cfg);
+                    v
                 }
             } else {
                 Vec::new()

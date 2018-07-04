@@ -287,7 +287,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     actions.push(ConfigEntry("FULLMAPCONFIG".to_string(), r.map_config())
                         .send(to).action());
                     for cfg in r.game_config().into_iter() {
-                        actions.push(cfg.into_server_msg().send(to).action());
+                        actions.push(cfg.to_server_msg().send(to).action());
                     }
                 }
                 if teams {

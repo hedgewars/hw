@@ -2,8 +2,10 @@ use proptest::{
     test_runner::{TestRunner, Reason},
     arbitrary::{any, any_with, Arbitrary, StrategyFor},
     strategy::{Strategy, BoxedStrategy, Just, Filter, ValueTree},
-    string::RegexGeneratorValueTree
+    string::RegexGeneratorValueTree,
 };
+
+use server::coretypes::{GameCfg, TeamInfo, HedgehogInfo};
 
 use super::messages::{
     HWProtocolMessage, HWProtocolMessage::*
@@ -21,6 +23,9 @@ impl Into2<String> for Ascii { fn into2(self) -> String { self.0 } }
 impl Into2<Option<String>> for Option<Ascii>{
     fn into2(self) -> Option<String> { self.map(|x| {x.0}) }
 }
+impl Into2<Option<Vec<String>>> for Option<Vec<Ascii>>{
+    fn into2(self) -> Option<Vec<String>> { self.map(|x| {x.into2()}) }
+}
 
 macro_rules! proto_msg_case {
     ($val: ident()) =>
@@ -34,7 +39,7 @@ macro_rules! proto_msg_case {
 }
 
 macro_rules! proto_msg_match {
-    ($var: expr, def = $default: ident, $($num: expr => $constr: ident $res: tt),*) => (
+    ($var: expr, def = $default: expr, $($num: expr => $constr: ident $res: tt),*) => (
         match $var {
             $($num => (proto_msg_case!($constr $res)).boxed()),*,
             _ => Just($default).boxed()
@@ -61,6 +66,51 @@ impl Arbitrary for Ascii {
     }
 
     type Strategy = BoxedStrategy<Ascii>;
+}
+
+impl Arbitrary for GameCfg {
+    type Parameters = ();
+
+    fn arbitrary_with(args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
+        use server::coretypes::GameCfg::*;
+        (0..10).no_shrink().prop_flat_map(|i| {
+            proto_msg_match!(i, def = FeatureSize(0),
+            0 => FeatureSize(u32),
+            1 => MapType(Ascii),
+            2 => MapGenerator(u32),
+            3 => MazeSize(u32),
+            4 => Seed(Ascii),
+            5 => Template(u32),
+            6 => Ammo(Ascii, Option<Ascii>),
+            7 => Scheme(Ascii, Option<Vec<Ascii>>),
+            8 => Script(Ascii),
+            9 => Theme(Ascii),
+            10 => DrawnMap(Ascii))
+        }).boxed()
+    }
+
+    type Strategy = BoxedStrategy<GameCfg>;
+}
+
+impl Arbitrary for TeamInfo {
+    type Parameters = ();
+
+    fn arbitrary_with(args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
+        ("[a-z]+", 0u8..127u8, "[a-z]+", "[a-z]+", "[a-z]+", "[a-z]+",  0u8..127u8)
+            .prop_map(|(name, color, grave, fort, voice_pack, flag, difficulty)| {
+                fn hog(n: u8) -> HedgehogInfo {
+                    HedgehogInfo { name: format!("hog{}", n), hat: format!("hat{}", n)}
+                }
+                let hedgehogs = [hog(1), hog(2), hog(3), hog(4), hog(5), hog(6), hog(7), hog(8)];
+                TeamInfo {
+                    name, color, grave, fort,
+                    voice_pack, flag,difficulty,
+                    hedgehogs, hedgehogs_number: 0
+                }
+            }).boxed()
+    }
+
+    type Strategy = BoxedStrategy<TeamInfo>;
 }
 
 pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
@@ -96,11 +146,11 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         27 => RestartServer(),
         28 => Stats(),
         29 => Part(Option<Ascii>),
-        //30 => Cfg(GameCfg),
-        //31 => AddTeam(TeamInfo),
+        30 => Cfg(GameCfg),
+        31 => AddTeam(TeamInfo),
         32 => RemoveTeam(Ascii),
-        //33 => SetHedgehogsNumber(String, u8),
-        //34 => SetTeamColor(String, u8),
+        33 => SetHedgehogsNumber(Ascii, u8),
+        34 => SetTeamColor(Ascii, u8),
         35 => ToggleReady(),
         36 => StartGame(),
         37 => EngineMessage(Ascii),
