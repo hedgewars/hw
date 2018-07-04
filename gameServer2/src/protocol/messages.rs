@@ -201,10 +201,11 @@ impl HWProtocolMessage {
                 msg!["CFG", name, args.join("\n")]
             },
             AddTeam(info) =>
-                msg![info.name, info.color, info.grave, info.fort,
+                msg!["ADD_TEAM", info.name, info.color, info.grave, info.fort,
                      info.voice_pack, info.flag, info.difficulty,
-                     info.hedgehogs.iter().flat_map(|h|
-                        several![&h.name[..], "\n", &h.hat[..]]).collect::<String>()],
+                     info.hedgehogs.iter()
+                        .flat_map(|h| several![&h.name[..], &h.hat[..]])
+                        .collect::<Vec<_>>().join("\n")],
             RemoveTeam(name) => msg!["REMOVE_TEAM", name],
             SetHedgehogsNumber(team, number) => msg!["HH_NUM", team, number],
             SetTeamColor(team, color) => msg!["TEAM_COLOR", team, color],
