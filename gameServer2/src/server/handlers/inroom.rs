@@ -65,6 +65,10 @@ fn is_msg_empty(msg: &[u8]) -> bool {
     msg.get(1).filter(|t| **t == b'+').is_some()
 }
 
+fn is_msg_timed(msg: &[u8]) -> bool {
+    msg.get(1).filter(|t| !NON_TIMED_MESSAGES.contains(t)).is_some()
+}
+
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
     match message {
@@ -245,9 +249,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 if c.teams_in_game > 0 {
                     let decoding = decode(&em[..]).unwrap();
                     let messages = by_msg(&decoding);
-                    let valid = messages.clone().filter(|m| is_msg_valid(m, &c.team_indices));
-                    let non_empty = messages.filter(|m| !is_msg_empty(m));
-                    let last_msg = None;
+                    let valid = messages.filter(|m| is_msg_valid(m, &c.team_indices));
+                    let non_empty = valid.clone().filter(|m| !is_msg_empty(m));
+                    let sync_msg = valid.clone().filter(|m| is_msg_timed(m))
+                        .last().map(|m| if is_msg_empty(m) {Some(encode(m))} else {None});
 
                     let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
                     if !em_response.is_empty() {
@@ -259,8 +264,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                         if !em_log.is_empty() {
                             info.msg_log.push(em_log);
                         }
-                        if last_msg.is_some() {
-                            info.last_msg = last_msg;
+                        if let Some(msg) = sync_msg {
+                            info.sync_msg = msg;
                         }
                     }
                 }

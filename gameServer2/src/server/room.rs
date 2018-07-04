@@ -84,7 +84,7 @@ pub struct GameInfo {
     pub teams_at_start: Vec<(ClientId, TeamInfo)>,
     pub left_teams: Vec<String>,
     pub msg_log: Vec<String>,
-    pub last_msg: Option<String>,
+    pub sync_msg: Option<String>,
     pub is_paused: bool,
     config: RoomConfig
 }
@@ -94,7 +94,7 @@ impl GameInfo {
         GameInfo {
             left_teams: Vec::new(),
             msg_log: Vec::new(),
-            last_msg: None,
+            sync_msg: None,
             is_paused: false,
             teams_in_game: teams.len() as u8,
             teams_at_start: teams,

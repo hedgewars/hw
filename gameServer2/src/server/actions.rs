@@ -446,10 +446,13 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         actions.push(FinishRoomGame(r.id));
                     }
                     let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
-                    match &info.last_msg {
-                        Some(m) => info.msg_log.push(m.clone()),
-                        None => info.msg_log.push(remove_msg.clone())
+                    if let Some(m) = &info.sync_msg {
+                        info.msg_log.push(m.clone());
                     }
+                    if info.sync_msg.is_some() {
+                        info.sync_msg = None
+                    }
+                    info.msg_log.push(remove_msg.clone());
                     actions.push(ForwardEngineMessage(vec![remove_msg])
                         .send_all().in_room(r.id).but_self().action());
                 }
