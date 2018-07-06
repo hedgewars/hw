@@ -113,6 +113,8 @@ pub struct HWRoom {
     pub name: String,
     pub password: Option<String>,
     pub protocol_number: u32,
+    pub greeting: String,
+    pub is_fixed: bool,
 
     pub players_number: u32,
     pub default_hedgehog_number: u8,
@@ -130,6 +132,8 @@ impl HWRoom {
             master_id: None,
             name: String::new(),
             password: None,
+            greeting: "".to_string(),
+            is_fixed: false,
             protocol_number: 0,
             players_number: 0,
             default_hedgehog_number: 4,

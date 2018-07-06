@@ -89,10 +89,29 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             };
             server.react(client_id, actions);
         },
+        Fix => {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                if c.is_admin { r.is_fixed = true }
+            }
+        }
+        Unfix => {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                if c.is_admin { r.is_fixed = false }
+            }
+        }
+        Greeting(text) => {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                if c.is_admin || c.is_master && !r.is_fixed {
+                    r.greeting = text
+                }
+            }
+        }
         RoomName(new_name) => {
             let actions =
                 if is_name_illegal(&new_name) {
                     vec![Warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
+                } else if server.room(client_id).map(|r| r.is_fixed).unwrap_or(false) {
+                    vec![Warn("Access denied.".to_string())]
                 } else if server.has_room(&new_name) {
                     vec![Warn("A room with the same name already exists.".to_string())]
                 } else {
@@ -116,8 +135,13 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     "+r"
                 };
                 c.is_ready = !c.is_ready;
-                vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
-                    .send_all().in_room(r.id).action()]
+                let mut v =
+                    vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
+                        .send_all().in_room(r.id).action()];
+                if r.is_fixed && r.ready_players_number as u32 == r.players_number {
+                    v.push(StartRoomGame(r.id))
+                }
+                v
             } else {
                 Vec::new()
             };
@@ -223,7 +247,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         },
         Cfg(cfg) => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                if !c.is_master {
+                if r.is_fixed {
+                    vec![Warn("Access denied.".to_string())]
+                } else if !c.is_master {
                     vec![ProtocolError("You're not the room master!".to_string())]
                 } else {
                     let v = vec![cfg.to_server_msg()

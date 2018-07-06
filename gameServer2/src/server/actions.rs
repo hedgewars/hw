@@ -227,6 +227,10 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     RoomJoined(vec![c.nick.clone()]).send_all().in_room(room_id).action(),
                     ClientFlags("+i".to_string(), vec![c.nick.clone()]).send_all().action(),
                     SendRoomUpdate(None)];
+                if !r.greeting.is_empty() {
+                    v.push(ChatMsg {nick: "[greeting]".to_string(), msg: r.greeting.clone()}
+                        .send_self().action());
+                }
                 if !c.is_master {
                     let team_names: Vec<_>;
                     if let Some(ref mut info) = r.game_info {
@@ -328,23 +332,24 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 if c.is_ready && r.ready_players_number > 0 {
                     r.ready_players_number -= 1;
                 }
-                if r.players_number > 0 && c.is_master {
+                if c.is_master && (r.players_number > 0 || r.is_fixed) {
                     actions.push(ChangeMaster(r.id, None));
                 }
-                actions.push(RemoveClientTeams);
-                actions.push(RoomLeft(c.nick.clone(), msg)
-                    .send_all().in_room(r.id).but_self().action());
                 actions.push(ClientFlags("-i".to_string(), vec![c.nick.clone()])
                     .send_all().action());
-                actions.push(SendRoomUpdate(Some(r.name.clone())));
             }
             server.react(client_id, actions);
             actions = Vec::new();
 
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 c.room_id = Some(lobby_id);
-                if r.players_number == 0 {
+                if r.players_number == 0 && !r.is_fixed {
                     actions.push(RemoveRoom(r.id));
+                } else {
+                    actions.push(RemoveClientTeams);
+                    actions.push(RoomLeft(c.nick.clone(), msg)
+                        .send_all().in_room(r.id).but_self().action());
+                    actions.push(SendRoomUpdate(Some(r.name.clone())));
                 }
             }
             server.react(client_id, actions)
@@ -352,8 +357,12 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         ChangeMaster(room_id, new_id) => {
             let mut actions = Vec::new();
             let room_client_ids = server.room_clients(room_id);
-            let new_id = new_id.or_else(||
-                room_client_ids.iter().find(|id| **id != client_id).map(|id| *id));
+            let new_id = if server.room(client_id).map(|r| r.is_fixed).unwrap_or(false) {
+                new_id
+            } else {
+                new_id.or_else(||
+                    room_client_ids.iter().find(|id| **id != client_id).map(|id| *id))
+            };
             let new_nick = new_id.map(|id| server.clients[id].nick.clone());
 
             if let (c, Some(r)) = server.client_and_room(client_id) {
