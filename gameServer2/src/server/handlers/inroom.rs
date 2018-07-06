@@ -13,6 +13,7 @@ use server::{
 use utils::is_name_illegal;
 use std::mem::swap;
 use base64::{encode, decode};
+use super::common::rnd_reply;
 
 #[derive(Clone)]
 struct ByMsg<'a> {
@@ -79,7 +80,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         Chat(msg) => {
             let actions = {
                 let c = &mut server.clients[client_id];
-                let chat_msg = ChatMsg(c.nick.clone(), msg);
+                let chat_msg = ChatMsg {nick: c.nick.clone(), msg: msg};
                 if let Some(room_id) = c.room_id {
                     vec![chat_msg.send_all().in_room(room_id).but_self().action()]
                 } else {
@@ -287,7 +288,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 }
             }
             server.react(client_id, actions)
-        }
+        },
+        Rnd(v) => server.react(client_id, rnd_reply(v)),
         _ => warn!("Unimplemented!")
     }
 }

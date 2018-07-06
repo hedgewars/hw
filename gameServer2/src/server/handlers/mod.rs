@@ -8,6 +8,7 @@ use super::actions::Action::*;
 use protocol::messages::HWProtocolMessage;
 use protocol::messages::HWServerMessage::*;
 
+mod common;
 mod loggingin;
 mod lobby;
 mod inroom;

@@ -10,6 +10,7 @@ use protocol::messages::{
     HWServerMessage::*
 };
 use utils::is_name_illegal;
+use super::common::rnd_reply;
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
@@ -30,7 +31,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             server.react(client_id, actions);
         },
         Chat(msg) => {
-            let chat_msg = ChatMsg(server.clients[client_id].nick.clone(), msg);
+            let chat_msg = ChatMsg {nick: server.clients[client_id].nick.clone(), msg: msg};
             server.react(client_id, vec![chat_msg.send_all().but_self().action()]);
         },
         JoinRoom(name, password) => {
@@ -57,6 +58,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             }
             server.react(client_id, actions);
         },
+        Rnd(v) => server.react(client_id, rnd_reply(v)),
         List => warn!("Deprecated LIST message received"),
         _ => warn!("Incorrect command in lobby state"),
     }
