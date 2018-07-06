@@ -132,4 +132,8 @@ impl HWServer {
             (c, None)
         }
     }
+
+    pub fn room(&mut self, client_id: ClientId) -> Option<&mut HWRoom> {
+        self.client_and_room(client_id).1
+    }
 }

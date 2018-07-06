@@ -13,7 +13,7 @@ use server::{
 use utils::is_name_illegal;
 use std::mem::swap;
 use base64::{encode, decode};
-use super::common::rnd_reply;
+use super::common::rnd_action;
 
 #[derive(Clone)]
 struct ByMsg<'a> {
@@ -289,7 +289,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             }
             server.react(client_id, actions)
         },
-        Rnd(v) => server.react(client_id, rnd_reply(v)),
+        Rnd(v) => {
+            let actions = rnd_action(v, server.room(client_id));
+            server.react(client_id, actions)
+        },
         _ => warn!("Unimplemented!")
     }
 }

@@ -1,10 +1,24 @@
 use protocol::messages::{
-    HWProtocolMessage::{self, Rnd}, HWServerMessage::ChatMsg,
+    HWProtocolMessage::{self, Rnd},
+    HWServerMessage::{self, ChatMsg},
 };
 use rand::{self, Rng};
-use server::{actions::Action, server::HWServer};
+use server::{
+    actions::Action,
+    room::HWRoom,
+    server::HWServer
+};
 
-pub fn rnd_reply(options: Vec<String>) -> Vec<Action> {
+pub fn rnd_action(options: Vec<String>, room: Option<&mut HWRoom>) -> Vec<Action> {
+    if let Some(room) = room {
+        let msg = rnd_reply(options);
+        vec![msg.send_all().in_room(room.id).action()]
+    } else {
+        Vec::new()
+    }
+}
+
+fn rnd_reply(options: Vec<String>) -> HWServerMessage {
     let options = if options.is_empty() {
         vec!["heads".to_owned(), "tails".to_owned()]
     } else {
@@ -15,8 +29,7 @@ pub fn rnd_reply(options: Vec<String>) -> Vec<Action> {
         nick: "[random]".to_owned(),
         msg: reply.clone(),
     };
-    let msg = msg.send_all().action();
-    vec![msg]
+    msg
 }
 
 #[cfg(test)]
@@ -27,14 +40,10 @@ mod tests {
         Action::{self, Send}, PendingMessage,
     };
 
-    fn reply2string(mut r: Vec<Action>) -> String {
-        assert_eq!(r.len(), 1);
-        match r.remove(0) {
-            Send(PendingMessage {
-                message: ChatMsg { msg: p, .. },
-                ..
-            }) => String::from(p),
-            _ => panic!("reply should be a string"),
+    fn reply2string(r: HWServerMessage) -> String {
+        match r {
+            ChatMsg { msg: p, .. } => String::from(p),
+            _ => panic!("expected a ChatMsg"),
         }
     }
 
