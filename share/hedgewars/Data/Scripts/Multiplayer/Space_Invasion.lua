@@ -2183,7 +2183,7 @@ function CheckVarious(gear)
 		end
 
 	-- if player is hit by circle bazooka
-	elseif (GetGearType(gear) == gtShell) then
+	elseif (GetGearType(gear) == gtShell) and (CurrentHedgehog ~= nil) then
 
 		dist = GetDistFromGearToGear(gear, CurrentHedgehog)
 
@@ -2223,6 +2223,9 @@ end
 -- collision detection for player entering a circle
 function CheckDistances()
 
+	if not CurrentHedgehog then
+		return
+	end
 	--nw WriteLnToConsole("Start of CheckDistances()")
 
 	for i = 0,(vCCount-1) do
