@@ -200,7 +200,7 @@ function TransferWeps(gear)
 		end
 
 		for w,c in pairs(wepArray) do
-			val = getGearValue(gear,w)
+			local val = getGearValue(gear,w)
 			if val ~= 0 and (multiUse or (wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0))  then
 				setGearValue(CurrentHedgehog, w, val)
 
