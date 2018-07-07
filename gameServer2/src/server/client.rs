@@ -1,4 +1,4 @@
-pub type ClientId = usize;
+use super::coretypes::ClientId;
 
 pub struct HWClient {
     pub id: ClientId,

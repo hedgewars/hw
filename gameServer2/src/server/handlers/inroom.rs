@@ -2,11 +2,12 @@ use mio;
 
 use protocol::messages::{
     HWProtocolMessage,
-    HWServerMessage::*
+    HWServerMessage::*,
+    server_chat
 };
 use server::{
+    coretypes::{ClientId, Voting, VoteType},
     server::HWServer,
-    client::ClientId,
     room::HWRoom,
     actions::{Action, Action::*}
 };
@@ -257,6 +258,76 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     r.set_config(cfg);
                     v
                 }
+            } else {
+                Vec::new()
+            };
+            server.react(client_id, actions);
+        }
+        CallVote(None) => {
+            server.react(client_id, vec![
+                server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>")
+                    .send_self().action()])
+        }
+        CallVote(Some(kind)) => {
+            let (room_id, is_in_game) = server.room(client_id)
+                .map(|r| (r.id, r.game_info.is_some())).unwrap();
+            let error = match &kind {
+                VoteType::Kick(nick) => {
+                    if server.find_client(&nick).filter(|c| c.room_id == Some(room_id)).is_some() {
+                        None
+                    } else {
+                        Some("/callvote kick: No such user!")
+                    }
+                },
+                VoteType::Map(None) => {
+                    Some("/callvote map: Not implemented")
+                },
+                VoteType::Map(Some(name)) => {
+                    Some("/callvote map: Not implemented")
+                },
+                VoteType::Pause => {
+                    if is_in_game {
+                        None
+                    } else {
+                        Some("/callvote pause: No game in progress!")
+                    }
+                },
+                VoteType::NewSeed => {
+                    None
+                },
+                VoteType::HedgehogsPerTeam(number) => {
+                    match number {
+                        1...8 => None,
+                        _ => Some("/callvote hedgehogs: Specify number from 1 to 8.")
+                    }
+                },
+            };
+            match error {
+                None => {
+                    let voting = Voting::new(kind, server.room_clients(client_id));
+                    server.room(client_id).unwrap().voting = Some(voting);
+                    server.react(client_id, vec![
+                        server_chat("New voting started: ")
+                            .send_all().in_room(room_id).action(),
+                        AddVote{ vote: true, is_forced: false}]);
+                }
+                Some(msg) => {
+                    server.react(client_id, vec![
+                        server_chat(msg).send_self().action()])
+                }
+            }
+        }
+        Vote(vote) => {
+            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
+                vec![AddVote{ vote, is_forced: false }]
+            } else {
+                Vec::new()
+            };
+            server.react(client_id, actions);
+        }
+        ForceVote(vote) => {
+            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
+                vec![AddVote{ vote, is_forced: c.is_admin} ]
             } else {
                 Vec::new()
             };

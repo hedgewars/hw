@@ -1,19 +1,21 @@
 use std::{
     io, io::Write,
     iter::once,
-    mem::swap
+    mem::replace
 };
 use super::{
     server::HWServer,
-    room::{RoomId, GameInfo},
-    client::{ClientId, HWClient},
+    room::{GameInfo},
+    client::HWClient,
+    coretypes::{ClientId, RoomId, VoteType},
     room::HWRoom,
     handlers
 };
 use protocol::messages::{
     HWProtocolMessage,
     HWServerMessage,
-    HWServerMessage::*
+    HWServerMessage::*,
+    server_chat
 };
 use utils::to_engine_msg;
 
@@ -103,6 +105,8 @@ pub enum Action {
     SendTeamRemovalMessage(String),
     FinishRoomGame(RoomId),
     SendRoomData{to: ClientId, teams: bool, config: bool, flags: bool},
+    AddVote{vote: bool, is_forced: bool},
+    ApplyVoting(VoteType, RoomId),
     Warn(String),
     ProtocolError(String)
 }
@@ -324,6 +328,80 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             }
             server.react(client_id, actions);
         }
+        AddVote{vote, is_forced} => {
+            let mut actions = Vec::new();
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                let mut result = None;
+                if let Some(ref mut voting) = r.voting {
+                    if is_forced || voting.votes.iter().find(|(id, _)| client_id == *id).is_none() {
+                        actions.push(server_chat("Your vote has been counted.").send_self().action());
+                        voting.votes.push((client_id, vote));
+                        let i = voting.votes.iter();
+                        let pro = i.clone().filter(|(_, v)| *v).count();
+                        let contra = i.filter(|(_, v)| !*v).count();
+                        let success_quota = voting.voters.len() / 2 + 1;
+                        if is_forced && vote || pro >= success_quota {
+                            result = Some(true);
+                        } else if is_forced && !vote || contra > voting.voters.len() - success_quota {
+                            result = Some(false);
+                        }
+                    } else {
+                        actions.push(server_chat("You already have voted.").send_self().action());
+                    }
+                } else {
+                    actions.push(server_chat("There's no voting going on.").send_self().action());
+                }
+
+                if let Some(res) = result {
+                    actions.push(server_chat("Voting closed.")
+                        .send_all().in_room(r.id).action());
+                    let voting = replace(&mut r.voting, None).unwrap();
+                    if res {
+                        actions.push(ApplyVoting(voting.kind, r.id));
+                    }
+                }
+            }
+
+            server.react(client_id, actions);
+        }
+        ApplyVoting(kind, room_id) => {
+            let mut actions = Vec::new();
+            let mut id = client_id;
+            match kind {
+                VoteType::Kick(nick) => {
+                    if let Some(c) = server.find_client(&nick) {
+                        if c.room_id == Some(room_id) {
+                            id = c.id;
+                            actions.push(Kicked.send_self().action());
+                            actions.push(MoveToLobby("kicked".to_string()));
+                        }
+                    }
+                },
+                VoteType::Map(_) => {
+                    unimplemented!();
+                },
+                VoteType::Pause => {
+                    if let Some(ref mut info) = server.room(client_id).unwrap().game_info {
+                        info.is_paused = !info.is_paused;
+                        actions.push(server_chat("Pause toggled.")
+                            .send_all().in_room(room_id).action());
+                        actions.push(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
+                            .send_all().in_room(room_id).action());
+                    }
+                },
+                VoteType::NewSeed => {
+                    unimplemented!();
+                },
+                VoteType::HedgehogsPerTeam(number) => {
+                    let r = &mut server.rooms[room_id];
+                    let nicks = r.set_hedgehogs_number(number);
+                    actions.extend(nicks.into_iter().map(|n|
+                        HedgehogsNumber(n, number).send_all().in_room(room_id).action()
+                    ));
+                },
+            }
+            server.react(id, actions);
+        }
         MoveToLobby(msg) => {
             let mut actions = Vec::new();
             let lobby_id = server.lobby_id;
@@ -470,10 +548,10 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         }
         FinishRoomGame(room_id) => {
             let mut actions = Vec::new();
-            let mut old_info = None;
+            let old_info;
             {
                 let r = &mut server.rooms[room_id];
-                swap(&mut old_info, &mut r.game_info);
+                old_info = replace(&mut r.game_info, None);
                 r.game_info = None;
                 r.ready_players_number = 1;
                 actions.push(SendRoomUpdate(None));

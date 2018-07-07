@@ -2,7 +2,7 @@ use mio;
 
 use server::{
     server::HWServer,
-    client::ClientId,
+    coretypes::ClientId,
     actions::{Action, Action::*}
 };
 use protocol::messages::{

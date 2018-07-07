@@ -1,11 +1,10 @@
 use std::{iter};
 use server::{
-    coretypes::{TeamInfo, GameCfg, GameCfg::*},
-    client::{ClientId, HWClient}
+    coretypes::{ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting},
+    client::{HWClient}
 };
 
 const MAX_HEDGEHOGS_IN_ROOM: u8 = 48;
-pub type RoomId = usize;
 
 #[derive(Clone)]
 struct Ammo {
@@ -122,6 +121,7 @@ pub struct HWRoom {
     pub ready_players_number: u8,
     pub teams: Vec<(ClientId, TeamInfo)>,
     config: RoomConfig,
+    pub voting: Option<Voting>,
     pub game_info: Option<GameInfo>
 }
 
@@ -141,6 +141,7 @@ impl HWRoom {
             ready_players_number: 0,
             teams: Vec::new(),
             config: RoomConfig::new(),
+            voting: None,
             game_info: None
         }
     }
@@ -171,6 +172,23 @@ impl HWRoom {
         if let Some(index) = self.teams.iter().position(|(_, t)| t.name == name) {
             self.teams.remove(index);
         }
+    }
+
+    pub fn set_hedgehogs_number(&mut self, n: u8) -> Vec<String> {
+        let mut names = Vec::new();
+        let teams = match self.game_info {
+            Some(ref mut info) => &mut info.teams_at_start,
+            None => &mut self.teams
+        };
+
+        if teams.len() as u8 * n <= MAX_HEDGEHOGS_IN_ROOM {
+            for (_, team) in teams.iter_mut() {
+                team.hedgehogs_number = n;
+                names.push(team.name.clone())
+            };
+            self.default_hedgehog_number = n;
+        }
+        names
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>
