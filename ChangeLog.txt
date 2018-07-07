@@ -4,6 +4,7 @@
 Game:
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
+ * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
 
 Continental supplies:
  + Continents are now selected before the game starts
