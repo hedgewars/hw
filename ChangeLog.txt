@@ -23,7 +23,10 @@ Continental supplies:
  * Fix retreat timer not turning red for some weapons
 
 Space Invation:
+ + Display round score in a separate row
+ + Keep round score displayed after round ends, remove round score announcer message
  * Fix rare Lua error message spam at end of game
+ * Fix round score and other info numbers messing up after screen resize
 
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode

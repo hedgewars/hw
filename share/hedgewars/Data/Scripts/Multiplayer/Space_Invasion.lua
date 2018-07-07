@@ -339,6 +339,12 @@ AddCaption(LOC_NOT("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
 
 local fMod = 1000000 -- use this for dev and .16+ games
 
+-- Tag IDs
+local TAG_TIME = 0
+local TAG_BARRELS = 1
+local TAG_SHIELD = 2
+local TAG_ROUND_SCORE = 4
+
 -- some console stuff
 local shellID = 0
 local explosivesID = 0
@@ -525,11 +531,9 @@ local vCircCol = {}
 
 
 
-function HideTags()
+function HideTag(i)
 
-	for i = 0, 4 do
-		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
-	end
+	SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
 
 end
 
@@ -539,25 +543,25 @@ function DrawTag(i)
 	local xOffset = 40
 	local yOffset, tValue, tCol
 
-	if i == 0 then
+	if i == TAG_TIME then
 		yOffset = 40
 		tCol = 0xffee00ff
 		tValue = TimeLeft
-	elseif i == 1 then
+	elseif i == TAG_BARRELS then
 		zoomL = 1.1
 		yOffset = 70
 		tCol = 0x00ff00ff
 		tValue = wepAmmo[wepIndex] --primShotsLeft
-	elseif i == 2 then
+	elseif i == TAG_SHIELD then
 		zoomL = 1.1
 		xOffset = 40 + 35
 		yOffset = 70
 		tCol = 0xa800ffff
 		tValue = shieldHealth - 80
-	elseif i == 4 then
+	elseif i == TAG_ROUND_SCORE then
 		zoomL = 1.1
-		xOffset = 40 + 80
-		yOffset = 70
+		xOffset = 40
+		yOffset = 100
 		tCol = 0xffffffff
 		tValue = roundScore
 	end
@@ -566,7 +570,7 @@ function DrawTag(i)
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	SetVisualGearValues	(
 				vTag[i], 		--id
-				-(ScreenWidth/2) + xOffset,	--xoffset
+				-(div(ScreenWidth, 2)) + xOffset,	--xoffset
 				ScreenHeight - yOffset, --yoffset
 				0, 			--dx
 				0, 			--dy
@@ -645,7 +649,7 @@ end
 -- control
 function AwardPoints(p)
 	roundScore = roundScore + p
-	DrawTag(4)
+	DrawTag(TAG_ROUND_SCORE)
 
 	for i = 0,(TeamsCount-1) do
 		if teamClan[i] == GetHogClan(CurrentHedgehog) then
@@ -1066,12 +1070,12 @@ function onPrecise()
 			else
 				PlaySound(sndThrowRelease)
 			end
-			DrawTag(1)
+			DrawTag(TAG_BARRELS)
 
 		elseif wep[wepIndex] == loc("Mine Deployer") then
 			local morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtAirBomb, 0, 0, 0, 0)
 			SetTimer(morte, 1000)
-			DrawTag(1)
+			DrawTag(TAG_BARRELS)
 		end
 
 	elseif (wepAmmo[wepIndex] == 0) and (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
@@ -1231,7 +1235,10 @@ function onGameInit()
 		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
-	HideTags()
+	HideTag(TAG_TIME)
+	HideTag(TAG_BARRELS)
+	HideTag(TAG_SHIELD)
+	HideTag(TAG_ROUND_SCORE)
 
 	wep[0] = loc("Barrel Launcher")
 	wep[1] = loc("Mine Deployer")
@@ -1284,11 +1291,15 @@ end
 function onScreenResize()
 
 	-- redraw Tags so that their screen locations are updated
-	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
-			DrawTag(0)
-			DrawTag(1)
-			DrawTag(2)
-			DrawTag(4)
+	if (gameBegun == true) then
+		DrawTag(TAG_ROUND_SCORE)
+		if (stopMovement == false) then
+			DrawTag(TAG_BARRELS)
+			DrawTag(TAG_SHIELD)
+			if (tumbleStarted == true) then
+				DrawTag(TAG_TIME)
+			end
+		end
 	end
 
 end
@@ -1352,7 +1363,16 @@ function onNewTurn()
 	ChangeWeapon()
 
 
-	HideTags()
+	HideTag(TAG_TIME)
+	if not gameOver then
+		DrawTag(TAG_BARRELS)
+		DrawTag(TAG_SHIELD)
+		DrawTag(TAG_ROUND_SCORE)
+	else
+		HideTag(TAG_BARRELS)
+		HideTag(TAG_SHIELD)
+		HideTag(TAG_ROUND_SCORE)
+	end
 
 	---------------
 	---------------
@@ -1449,10 +1469,10 @@ function onGameTick()
 			fadeAlpha = 0
 			rAlpha = 255
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
-			DrawTag(0)
-			DrawTag(1)
-			DrawTag(2)
-			DrawTag(4)
+			DrawTag(TAG_TIME)
+			DrawTag(TAG_BARRELS)
+			DrawTag(TAG_SHIELD)
+			DrawTag(TAG_ROUND_SCORE)
 			SetMyCircles(true)
 		end
 	end
@@ -1468,7 +1488,7 @@ function onGameTick()
 			TimeLeft = TimeLeft - 1
 
 			if TimeLeft >= 0 then
-				DrawTag(0)
+				DrawTag(TAG_TIME)
 			end
 
 		end
@@ -1541,13 +1561,13 @@ function onGameTick()
 		
 				end
 
-				AddCaption(loc(string.format(loc("Round score: %d"), roundScore)), 0xFFFFFFFF, capgrpMessage2)
-
 				-- other awards
 				awardRoundScore = UpdateSimpleAward(awardRoundScore, roundScore, 50)
 				awardRoundKills = UpdateSimpleAward(awardRoundKills, roundKills, 5)
 
-				HideTags()
+				HideTag(TAG_TIME)
+				HideTag(TAG_BARRELS)
+				HideTag(TAG_SHIELD)
 
 			end
 		else -- remove this if you want tumbler to fall slowly on death
@@ -1879,7 +1899,7 @@ function CircleDamaged(i)
 			PlaySound(sndHellishImpact4)
 			TimeLeft = TimeLeft + timeBonus
 			AddCaption(string.format(loc("Time extended! +%dsec"), timeBonus), 0xff0000ff,capgrpMessage )
-			DrawTag(0)
+			DrawTag(TAG_TIME)
 
 			local morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
@@ -1897,7 +1917,7 @@ function CircleDamaged(i)
 			PlaySound(sndShotgunReload)
 			wepAmmo[0] = wepAmmo[0] + barrelBonus
 			AddCaption(string.format(loc("+%d Ammo"), barrelBonus), 0x00ff00ff,capgrpMessage)
-			DrawTag(1)
+			DrawTag(TAG_BARRELS)
 
 			GK = GK + 1
 			if GK == 3 then
@@ -1926,7 +1946,7 @@ function CircleDamaged(i)
 				shieldHealth = 250
 				AddCaption(loc("Shield is fully recharged!"),0xa800ffff,capgrpMessage)
 			end
-			DrawTag(2)
+			DrawTag(TAG_SHIELD)
 
 			OK = OK + 1
 			if OK == 3 then
@@ -2490,7 +2510,7 @@ function HandleCircles()
 	if (CurrentHedgehog ~= nil) then
 		if beam == true then
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 200, nil, 0xa800ffff-0x000000ff - -shieldHealth )
-			DrawTag(2)
+			DrawTag(TAG_SHIELD)
 		else
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 0)
 		end
