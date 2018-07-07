@@ -33,6 +33,7 @@ Lua API:
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New call: EnableSwitchHog(): Enable hog switching
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
+ * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
 
 ====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality
