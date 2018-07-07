@@ -79,7 +79,6 @@ AmmoMenuInvalidated:= true;
 end;
 
 procedure AddAmmoStore;
-const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
@@ -99,7 +98,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if a <> amNothing then
         begin
-        Ammoz[a].Probability:= probability[byte(ammoProbability[ord(a)]) - byte('0')];
+        Ammoz[a].Probability:= probabilityLevels[byte(ammoProbability[ord(a)]) - byte('0')];
         Ammoz[a].SkipTurns:= (byte(ammoDelay[ord(a)]) - byte('0'));
         Ammoz[a].NumberInCase:= (byte(ammoReinforcement[ord(a)]) - byte('0'));
         cnt:= byte(ammoLoadout[ord(a)]) - byte('0');

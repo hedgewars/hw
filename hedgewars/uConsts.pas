@@ -315,6 +315,8 @@ const
     AMMO_INFINITE = 100;
     AMMO_FINITE_MAX = 99;
 
+    probabilityLevels: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
+
     // explosion flags
     //EXPLAllDamageInRadius = $00000001;  Completely unused for ages
     EXPLAutoSound         = $00000002;
