@@ -2604,7 +2604,7 @@ begin
         if at >= 0 then
             begin
             // Ammo count
-            i:= Ammoz[TAmmoType(at)].Ammo.Count;
+            i:= InitialAmmoCounts[TAmmoType(at)];
             if i = AMMO_INFINITE then
                 i:= 9;
             lua_pushnumber(L, i);
