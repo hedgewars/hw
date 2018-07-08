@@ -68,7 +68,7 @@ local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
 
-local someHog = nil -- just for looking up the weps
+local teleportConverted = false -- used for special handling of teleport when gfPlaceHog is active
 
 -- Script parameter stuff
 
@@ -179,7 +179,11 @@ end
 
 function ConvertValues(gear)
 	for w,c in pairs(wepArray) do
-		AddAmmo(gear, w, getGearValue(gear,w) )
+		-- Add hog ammo loadout, but don't touch teleport if in hog placement phase.
+		-- If in hog placement phase, teleport will be touched later (see onNewTurn).
+		if not (GetGameFlag(gfPlaceHog) and TotalRounds == -1 and (w == amTeleport)) then
+			AddAmmo(gear, w, getGearValue(gear,w) )
+		end
 	end
 end
 
@@ -265,7 +269,7 @@ function onGameStart()
 			utilChoices[i] = 0
 			if i ~= 7 then
 				wepArray[i] = 0
-				c = GetAmmoCount(someHog, i)
+				c = GetAmmo(i)
 				if c > 8 then
 					c = 9
 				end
@@ -301,7 +305,7 @@ function CheckForHogSwitch()
 
 			-- re-assign ammo to this guy, so that his entire ammo set will
 			-- be visible during another player's turn
-			if lastHog ~= nil then
+			if lastHog ~= nil and GetHealth(lastHog) then
 				ConvertValues(lastHog)
 			end
 
@@ -318,15 +322,21 @@ end
 
 function onNewTurn()
 	CheckForHogSwitch()
+
+	-- If hog placement phase is over, set the hog's actual teleport loadout
+	if GetGameFlag(gfPlaceHog) and TotalRounds == 0 and not teleportConverted then
+		runOnHogs(function(gear)
+			AddAmmo(gear, amTeleport, getGearValue(gear, amTeleport))
+		end)
+		-- This makes sure this code is only run once
+		teleportConverted = true
+	end
 end
 
 function onGearAdd(gear)
 
 	if (GetGearType(gear) == gtHedgehog) then
 		trackGear(gear)
-		if someHog == nil then
-			someHog = gear
-		end
 	end
 
 end
