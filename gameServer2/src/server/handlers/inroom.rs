@@ -71,6 +71,16 @@ fn is_msg_timed(msg: &[u8]) -> bool {
     msg.get(1).filter(|t| !NON_TIMED_MESSAGES.contains(t)).is_some()
 }
 
+fn voting_description(kind: &VoteType) -> String {
+    format!("New voting started: {}", match kind {
+        VoteType::Kick(nick) => format!("kick {}", nick),
+        VoteType::Map(name) => format!("map {}", name.as_ref().unwrap()),
+        VoteType::Pause => "pause".to_string(),
+        VoteType::NewSeed => "new seed".to_string(),
+        VoteType::HedgehogsPerTeam(number) => format!("hedgehogs per team: {}", number)
+    })
+}
+
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
     match message {
@@ -304,11 +314,11 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             };
             match error {
                 None => {
+                    let msg = voting_description(&kind);
                     let voting = Voting::new(kind, server.room_clients(client_id));
                     server.room(client_id).unwrap().voting = Some(voting);
                     server.react(client_id, vec![
-                        server_chat("New voting started: ")
-                            .send_all().in_room(room_id).action(),
+                        server_chat(&msg).send_all().in_room(room_id).action(),
                         AddVote{ vote: true, is_forced: false}]);
                 }
                 Some(msg) => {

@@ -7,7 +7,7 @@ use super::{
     server::HWServer,
     room::{GameInfo},
     client::HWClient,
-    coretypes::{ClientId, RoomId, VoteType},
+    coretypes::{ClientId, RoomId, GameCfg, VoteType},
     room::HWRoom,
     handlers
 };
@@ -18,6 +18,7 @@ use protocol::messages::{
     server_chat
 };
 use utils::to_engine_msg;
+use rand::{thread_rng, Rng, distributions::Uniform};
 
 pub enum Destination {
     ToId(ClientId),
@@ -381,7 +382,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     unimplemented!();
                 },
                 VoteType::Pause => {
-                    if let Some(ref mut info) = server.room(client_id).unwrap().game_info {
+                    if let Some(ref mut info) = server.rooms[room_id].game_info {
                         info.is_paused = !info.is_paused;
                         actions.push(server_chat("Pause toggled.")
                             .send_all().in_room(room_id).action());
@@ -390,7 +391,10 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     }
                 },
                 VoteType::NewSeed => {
-                    unimplemented!();
+                    let seed = thread_rng().gen_range(0, 1_000_000_000).to_string();
+                    let cfg = GameCfg::Seed(seed);
+                    actions.push(cfg.to_server_msg().send_all().in_room(room_id).action());
+                    server.rooms[room_id].set_config(cfg);
                 },
                 VoteType::HedgehogsPerTeam(number) => {
                     let r = &mut server.rooms[room_id];
