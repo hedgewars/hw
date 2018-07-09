@@ -232,8 +232,8 @@ impl HWProtocolMessage {
             Unfix => msg!["CMD", "UNFIX"],
             Greeting(msg) => msg!["CMD", format!("GREETING {}", msg)],
             //CallVote(Option<(String, Option<String>)>) =>, ??
-            Vote(msg) => msg!["CMD", format!("VOTE {}", msg)],
-            ForceVote(msg) => msg!["CMD", format!("FORCE {}", msg)],
+            Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg {"YES"} else {"NO"})],
+            ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg {"YES"} else {"NO"})],
             //Save(String, String), ??
             Delete(room) => msg!["CMD", format!("DELETE {}", room)],
             SaveRoom(room) => msg!["CMD", format!("SAVEROOM {}", room)],
