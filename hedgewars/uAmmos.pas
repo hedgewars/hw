@@ -52,11 +52,10 @@ var StoreCnt: LongInt;
 implementation
 uses uVariables, uCommands, uUtils, uCaptions, uDebug, uScript;
 
-type TAmmoCounts = array[TAmmoType] of Longword;
-     TAmmoArray = array[TAmmoType] of TAmmo;
+type TAmmoArray = array[TAmmoType] of TAmmo;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
-    InitialCounts: array[0..Pred(cMaxHHs)] of TAmmoCounts;
+    InitialCountsLocal: array[0..Pred(cMaxHHs)] of TAmmoCounts;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var newAmmo: TAmmoArray);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -79,7 +78,6 @@ AmmoMenuInvalidated:= true;
 end;
 
 procedure AddAmmoStore;
-const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
@@ -99,7 +97,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if a <> amNothing then
         begin
-        Ammoz[a].Probability:= probability[byte(ammoProbability[ord(a)]) - byte('0')];
+        Ammoz[a].Probability:= probabilityLevels[byte(ammoProbability[ord(a)]) - byte('0')];
         Ammoz[a].SkipTurns:= (byte(ammoDelay[ord(a)]) - byte('0'));
         Ammoz[a].NumberInCase:= (byte(ammoReinforcement[ord(a)]) - byte('0'));
         cnt:= byte(ammoLoadout[ord(a)]) - byte('0');
@@ -140,9 +138,15 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     else
         ammos[a]:= AMMO_INFINITE;
     if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
-        InitialCounts[Pred(StoreCnt)][a]:= cnt
+        begin
+        InitialCountsLocal[Pred(StoreCnt)][a]:= cnt;
+        InitialAmmoCounts[a]:= cnt;
+        end
     else
-        InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
+        begin
+        InitialCountsLocal[Pred(StoreCnt)][a]:= ammos[a];
+        InitialAmmoCounts[a]:= ammos[a];
+        end
     end;
 
     for a:= Low(TAmmoType) to High(TAmmoType) do
@@ -458,7 +462,7 @@ for i:= 0 to Pred(StoreCnt) do
                 if (Propz and ammoprop_NotBorder) <> 0 then
                     begin
                     Count:= 0;
-                    InitialCounts[i][AmmoType]:= 0
+                    InitialCountsLocal[i][AmmoType]:= 0
                     end;
 
         PackAmmo(StoresList[i], slot)
@@ -506,7 +510,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 for i:= 0 to Pred(StoreCnt) do
     begin
     for a:= Low(TAmmoType) to High(TAmmoType) do
-        newAmmos[a].Count:= InitialCounts[i][a];
+        newAmmos[a].Count:= InitialCountsLocal[i][a];
     FillAmmoStore(StoresList[i], newAmmos);
     end;
 
@@ -546,7 +550,7 @@ begin
         ammoDelay:= ammoDelay + '0';
         ammoReinforcement:= ammoReinforcement + '0'
         end;
-    FillChar(InitialCounts, sizeof(InitialCounts), 0)
+    FillChar(InitialCountsLocal, sizeof(InitialCountsLocal), 0)
 end;
 
 procedure freeModule;

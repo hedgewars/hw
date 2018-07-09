@@ -2591,6 +2591,42 @@ begin
     lc_setammo:= 0
 end;
 
+
+function lc_getammo(L : Plua_State) : LongInt; Cdecl;
+var i, at, rawProb, probLevel: LongInt;
+const
+    call = 'GetAmmo';
+    params = 'ammoType';
+begin
+    if CheckLuaParamCount(L, 1, call, params) then
+        begin
+        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        if at >= 0 then
+            begin
+            // Ammo count
+            i:= InitialAmmoCounts[TAmmoType(at)];
+            if i = AMMO_INFINITE then
+                i:= 9;
+            lua_pushnumber(L, i);
+            // Probability
+            rawProb:=  Ammoz[TAmmoType(at)].Probability;
+            probLevel:= -1;
+            for i := 0 to High(probabilityLevels) do
+                if rawProb = probabilityLevels[i] then
+                    probLevel:= i;
+            lua_pushnumber(L, probLevel);
+            // Delay in turns
+            lua_pushnumber(L, Ammoz[TAmmoType(at)].SkipTurns);
+            // Number in case
+            lua_pushnumber(L, Ammoz[TAmmoType(at)].NumberInCase);
+            lc_getammo:= 4
+            end
+        else
+            lc_getammo:= 0
+        end;
+end;
+
+
 function lc_setammodelay(L : Plua_State) : LongInt; Cdecl;
 var at: LongInt;
 const
@@ -3959,6 +3995,7 @@ lua_register(luaState, _P'SetAmmoTexts', @lc_setammotexts);
 lua_register(luaState, _P'SetAmmoDescriptionAppendix', @lc_setammodescriptionappendix);
 lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
+lua_register(luaState, _P'GetAmmo', @lc_getammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
 lua_register(luaState, _P'SetSoundMask', @lc_setsoundmask);

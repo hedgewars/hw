@@ -339,6 +339,12 @@ AddCaption(LOC_NOT("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
 
 local fMod = 1000000 -- use this for dev and .16+ games
 
+-- Tag IDs
+local TAG_TIME = 0
+local TAG_BARRELS = 1
+local TAG_SHIELD = 2
+local TAG_ROUND_SCORE = 4
+
 -- some console stuff
 local shellID = 0
 local explosivesID = 0
@@ -346,6 +352,7 @@ local luaGameTicks = 0
 
 -- gaudyRacer
 local boosterOn = false
+local preciseOn = false
 local roundLimit = 3		-- can be overridden by script parameter "rounds"
 local roundNumber = 0
 local firstClan = 10
@@ -464,7 +471,7 @@ local shockwave
 local shockwaveHealth = 0
 local shockwaveRad = 300
 
-local Timer100 = 0
+local timer100 = 0
 
 local vTag = {}
 
@@ -472,11 +479,11 @@ local vTag = {}
 -- CIRCLY GOODIES
 -----------------------------------------------
 
-local CirclesAreGo = false
+local circlesAreGo = false
 local playerIsFine = true
 local targetHit = false
 
-local FadeAlpha = 0 -- used to fade the circles out gracefully when player dies
+local fadeAlpha = 0 -- used to fade the circles out gracefully when player dies
 local pTimer = 0 -- tracking projectiles following player
 
 local circAdjustTimer = 0		-- handle adjustment of circs direction
@@ -524,11 +531,9 @@ local vCircCol = {}
 
 
 
-function HideTags()
+function HideTag(i)
 
-	for i = 0, 4 do
-		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
-	end
+	SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
 
 end
 
@@ -538,41 +543,40 @@ function DrawTag(i)
 	local xOffset = 40
 	local yOffset, tValue, tCol
 
-	if i == 0 then
+	if i == TAG_TIME then
 		yOffset = 40
 		tCol = 0xffee00ff
 		tValue = TimeLeft
-	elseif i == 1 then
+	elseif i == TAG_BARRELS then
 		zoomL = 1.1
 		yOffset = 70
 		tCol = 0x00ff00ff
 		tValue = wepAmmo[wepIndex] --primShotsLeft
-	elseif i == 2 then
+	elseif i == TAG_SHIELD then
 		zoomL = 1.1
 		xOffset = 40 + 35
 		yOffset = 70
 		tCol = 0xa800ffff
 		tValue = shieldHealth - 80
-	elseif i == 4 then
+	elseif i == TAG_ROUND_SCORE then
 		zoomL = 1.1
-		xOffset = 40 + 80
-		yOffset = 70
+		xOffset = 40
+		yOffset = 100
 		tCol = 0xffffffff
 		tValue = roundScore
 	end
 
 	DeleteVisualGear(vTag[i])
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
 	SetVisualGearValues	(
 				vTag[i], 		--id
-				-(ScreenWidth/2) + xOffset,	--xoffset
+				-(div(ScreenWidth, 2)) + xOffset,	--xoffset
 				ScreenHeight - yOffset, --yoffset
 				0, 			--dx
 				0, 			--dy
 				zoomL, 			--zoom
 				1, 			--~= 0 means align to screen
-				g7, 			--frameticks
+				nil, 			--frameticks
 				tValue, 		--value
 				240000, 		--timer
 				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
@@ -594,12 +598,12 @@ function RebuildTeamInfo()
 
 	for i = 0, (numhhs-1) do
 
-		z = 0
-		unfinished = true
+		local z = 0
+		local unfinished = true
 		while(unfinished == true) do
 
-			newTeam = true
-			tempHogTeamName = GetHogTeamName(hhs[i]) -- this is the new name
+			local newTeam = true
+			local tempHogTeamName = GetHogTeamName(hhs[i]) -- this is the new name
 
 			if tempHogTeamName == teamNameArr[z] then
 				newTeam = false
@@ -645,7 +649,7 @@ end
 -- control
 function AwardPoints(p)
 	roundScore = roundScore + p
-	DrawTag(4)
+	DrawTag(TAG_ROUND_SCORE)
 
 	for i = 0,(TeamsCount-1) do
 		if teamClan[i] == GetHogClan(CurrentHedgehog) then
@@ -951,6 +955,7 @@ end
 
 function setNewGearValues(gear)
 
+	local lfs
 	if GetGearType(gear) == gtShell then
 		lfs = 50	-- roughly 5 seconds
 		shellID = shellID + 1
@@ -1052,9 +1057,9 @@ function onPrecise()
 		if wep[wepIndex] == loc("Barrel Launcher") then
 			shotsFired = shotsFired +1
 
-			morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
+			local morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
 			CopyPV(CurrentHedgehog, morte) -- new addition
-			x,y = GetGearVelocity(morte)
+			local x,y = GetGearVelocity(morte)
 			x = x*2
 			y = y*2
 			SetGearVelocity(morte, x, y)
@@ -1065,12 +1070,12 @@ function onPrecise()
 			else
 				PlaySound(sndThrowRelease)
 			end
-			DrawTag(1)
+			DrawTag(TAG_BARRELS)
 
 		elseif wep[wepIndex] == loc("Mine Deployer") then
-			morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtAirBomb, 0, 0, 0, 0)
+			local morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtAirBomb, 0, 0, 0, 0)
 			SetTimer(morte, 1000)
-			DrawTag(1)
+			DrawTag(TAG_BARRELS)
 		end
 
 	elseif (wepAmmo[wepIndex] == 0) and (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
@@ -1230,7 +1235,10 @@ function onGameInit()
 		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
-	HideTags()
+	HideTag(TAG_TIME)
+	HideTag(TAG_BARRELS)
+	HideTag(TAG_SHIELD)
+	HideTag(TAG_ROUND_SCORE)
 
 	wep[0] = loc("Barrel Launcher")
 	wep[1] = loc("Mine Deployer")
@@ -1283,11 +1291,15 @@ end
 function onScreenResize()
 
 	-- redraw Tags so that their screen locations are updated
-	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
-			DrawTag(0)
-			DrawTag(1)
-			DrawTag(2)
-			DrawTag(4)
+	if (gameBegun == true) then
+		DrawTag(TAG_ROUND_SCORE)
+		if (stopMovement == false) then
+			DrawTag(TAG_BARRELS)
+			DrawTag(TAG_SHIELD)
+			if (tumbleStarted == true) then
+				DrawTag(TAG_TIME)
+			end
+		end
 	end
 
 end
@@ -1334,7 +1346,6 @@ function onNewTurn()
 	end
 
 	if gameOver == true then
-		gameBegun = false
 		stopMovement = true
 		tumbleStarted = false
 		SetMyCircles(false)
@@ -1352,7 +1363,16 @@ function onNewTurn()
 	ChangeWeapon()
 
 
-	HideTags()
+	HideTag(TAG_TIME)
+	if not gameOver then
+		DrawTag(TAG_BARRELS)
+		DrawTag(TAG_SHIELD)
+		DrawTag(TAG_ROUND_SCORE)
+	else
+		HideTag(TAG_BARRELS)
+		HideTag(TAG_SHIELD)
+		HideTag(TAG_ROUND_SCORE)
+	end
 
 	---------------
 	---------------
@@ -1367,7 +1387,7 @@ function ThingsToBeRunOnGears(gear)
 	HandleLifeSpan(gear)
 	DeleteFarFlungBarrel(gear)
 
-	if CirclesAreGo == true then
+	if circlesAreGo == true then
 		CheckVarious(gear)
 		ProjectileTrack(gear)
 	end
@@ -1396,9 +1416,9 @@ function onGameTick()
 
 	HandleCircles()
 
-	Timer100 = Timer100 + 1
-	if Timer100 >= 100 then
-		Timer100 = 0
+	timer100 = timer100 + 1
+	if timer100 >= 100 then
+		timer100 = 0
 
 		if beam == true then
 			shieldHealth = shieldHealth - 1
@@ -1424,13 +1444,13 @@ function onGameTick()
 
 		--nw WriteLnToConsole("Finished ThingsToBeRunOnGears()")
 
-		if CirclesAreGo == true then
+		if circlesAreGo == true then
 			CheckDistances()
 		end
 
 		-- white smoke trail as player falls from the sky
 		if (TimeLeft <= 0) and (stopMovement == true) and (CurrentHedgehog ~= nil) then
-			j,k = GetGearVelocity(CurrentHedgehog)
+			local j,k = GetGearVelocity(CurrentHedgehog)
 			if (j ~= 0) and (k ~= 0) then
 				AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, true)
 			end
@@ -1446,13 +1466,13 @@ function onGameTick()
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
 			tumbleStarted = true
 			TimeLeft = (TurnTime/1000)
-			FadeAlpha = 0
+			fadeAlpha = 0
 			rAlpha = 255
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
-			DrawTag(0)
-			DrawTag(1)
-			DrawTag(2)
-			DrawTag(4)
+			DrawTag(TAG_TIME)
+			DrawTag(TAG_BARRELS)
+			DrawTag(TAG_SHIELD)
+			DrawTag(TAG_ROUND_SCORE)
 			SetMyCircles(true)
 		end
 	end
@@ -1468,7 +1488,7 @@ function onGameTick()
 			TimeLeft = TimeLeft - 1
 
 			if TimeLeft >= 0 then
-				DrawTag(0)
+				DrawTag(TAG_TIME)
 			end
 
 		end
@@ -1510,7 +1530,7 @@ function onGameTick()
 
 				if shieldMiser == true then
 
-					p = (roundKills*3.5) - ((roundKills*3.5)%1) + 2
+					local p = (roundKills*3.5) - ((roundKills*3.5)%1) + 2
 
 					AddCaption(string.format(loc("Shield Miser! +%d points!"), p),0xffba00ff,capgrpAmmoinfo)
 					AwardPoints(p)
@@ -1541,13 +1561,13 @@ function onGameTick()
 		
 				end
 
-				AddCaption(loc(string.format(loc("Round score: %d"), roundScore)), 0xFFFFFFFF, capgrpMessage2)
-
 				-- other awards
 				awardRoundScore = UpdateSimpleAward(awardRoundScore, roundScore, 50)
 				awardRoundKills = UpdateSimpleAward(awardRoundKills, roundKills, 5)
 
-				HideTags()
+				HideTag(TAG_TIME)
+				HideTag(TAG_BARRELS)
+				HideTag(TAG_SHIELD)
 
 			end
 		else -- remove this if you want tumbler to fall slowly on death
@@ -1575,22 +1595,21 @@ function onGameTick()
 				---------------
 				-- the trail lets you know you have 5s left to pilot, akin to birdy feathers
 				if (TimeLeft <= 5) and (TimeLeft > 0) then							--vgtSmoke
-					tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(GetHogClan(CurrentHedgehog)) )
+					local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, true)
+					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurrentHedgehog)) )
 				end
 				--------------
 				--------------
 
-				dx, dy = GetGearVelocity(CurrentHedgehog)
+				local dx, dy = GetGearVelocity(CurrentHedgehog)
 
 				--WriteLnToConsole("I just got the velocity of currenthedgehog. It is dx: " .. dx .. "; dy: " .. dy)
 				--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
 
+				local dxlimit, dylimit
 				if boosterOn == true then
-					tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtDust, 0, false)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, GetClanColor(GetHogClan(CurrentHedgehog)) )
+					local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtDust, 0, false)
+					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, 1, nil, GetClanColor(GetHogClan(CurrentHedgehog)) )
 					dxlimit = 0.8*fMod
 					dylimit = 0.8*fMod
 				else
@@ -1733,24 +1752,24 @@ end
 function DoHorribleThings(cUID)
 
 	-- work out the distance to the target
-	g1X, g1Y = GetGearPosition(CurrentHedgehog)
-	g2X, g2Y = vCircX[cUID], vCircY[cUID]
-	q = g1X - g2X
-	w = g1Y - g2Y
-	r = math.sqrt( (q*q) + (w*w) )	--alternate
+	local g1X, g1Y = GetGearPosition(CurrentHedgehog)
+	local g2X, g2Y = vCircX[cUID], vCircY[cUID]
+	local q = g1X - g2X
+	local w = g1Y - g2Y
+	local r = math.sqrt( (q*q) + (w*w) )	--alternate
 
-	opp = w
+	local opp = w
 	if opp < 0 then
 		opp = opp*-1
 	end
 
 	-- work out the angle (theta) to the target
-	t = math.deg ( math.asin(opp / r) )
+	local t = math.deg ( math.asin(opp / r) )
 
 	-- based on the radius of the radar, calculate what x/y displacement should be
-	NR = 150 -- radius at which to draw circs
-	NX = math.cos( math.rad(t) ) * NR
-	NY = math.sin( math.rad(t) ) * NR
+	local NR = 150 -- radius at which to draw circs
+	local NX = math.cos( math.rad(t) ) * NR
+	local NY = math.sin( math.rad(t) ) * NR
 
 	-- displace xy based on where this thing actually is
 
@@ -1777,17 +1796,17 @@ function PlayerIsFine()
 end
 
 function GetDistFromXYtoXY(a, b, c, d)
-	q = a - c
-	w = b - d
+	local q = a - c
+	local w = b - d
 	return ( (q*q) + (w*w) )
 end
 
 function GetDistFromGearToGear(gear, gear2)
 
-	g1X, g1Y = GetGearPosition(gear)
-	g2X, g2Y = GetGearPosition(gear2)
-	q = g1X - g2X
-	w = g1Y - g2Y
+	local g1X, g1Y = GetGearPosition(gear)
+	local g2X, g2Y = GetGearPosition(gear2)
+	local q = g1X - g2X
+	local w = g1Y - g2Y
 
 	return ( (q*q) + (w*w) )
 
@@ -1795,9 +1814,9 @@ end
 
 function GetDistFromGearToXY(gear, g2X, g2Y)
 
-	g1X, g1Y = GetGearPosition(gear)
-	q = g1X - g2X
-	w = g1Y - g2Y
+	local g1X, g1Y = GetGearPosition(gear)
+	local q = g1X - g2X
+	local w = g1Y - g2Y
 
 	return ( (q*q) + (w*w) )
 
@@ -1853,11 +1872,11 @@ end
 
 function IGotMeASafeXYValue(i)
 
-	acceptibleDistance = 800
+	local acceptibleDistance = 800
 
 	vCircX[i] = GetRandom(5000)
 	vCircY[i] = GetRandom(2000)
-	dist = GetDistFromGearToXY(CurrentHedgehog, vCircX[i], vCircY[i])
+	local dist = GetDistFromGearToXY(CurrentHedgehog, vCircX[i], vCircY[i])
 	if dist > acceptibleDistance*acceptibleDistance then
 		return(true)
 	else
@@ -1868,7 +1887,7 @@ end
 
 function CircleDamaged(i)
 
-	res = ""
+	local res = ""
 	vCircHealth[i] = vCircHealth[i] -1
 
 	if vCircHealth[i] <= 0 then
@@ -1880,9 +1899,9 @@ function CircleDamaged(i)
 			PlaySound(sndHellishImpact4)
 			TimeLeft = TimeLeft + timeBonus
 			AddCaption(string.format(loc("Time extended! +%dsec"), timeBonus), 0xff0000ff,capgrpMessage )
-			DrawTag(0)
+			DrawTag(TAG_TIME)
 
-			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
+			local morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
 
 			RK = RK + 1
@@ -1898,7 +1917,7 @@ function CircleDamaged(i)
 			PlaySound(sndShotgunReload)
 			wepAmmo[0] = wepAmmo[0] + barrelBonus
 			AddCaption(string.format(loc("+%d Ammo"), barrelBonus), 0x00ff00ff,capgrpMessage)
-			DrawTag(1)
+			DrawTag(TAG_BARRELS)
 
 			GK = GK + 1
 			if GK == 3 then
@@ -1927,7 +1946,7 @@ function CircleDamaged(i)
 				shieldHealth = 250
 				AddCaption(loc("Shield is fully recharged!"),0xa800ffff,capgrpMessage)
 			end
-			DrawTag(2)
+			DrawTag(TAG_SHIELD)
 
 			OK = OK + 1
 			if OK == 3 then
@@ -1943,7 +1962,7 @@ function CircleDamaged(i)
 			tauntGear = CurrentHedgehog
 			AddCaption(loc("Boss defeated! +30 points!"), 0x0050ffff,capgrpMessage)
 
-			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
+			local morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
 
 			BK = BK + 1
@@ -1973,7 +1992,7 @@ function CircleDamaged(i)
 	-- circle is merely damaged
 	-- do damage effects/sounds
 		AddVisualGear(vCircX[i], vCircY[i], vgtSteam, 0, false)
-		r = math.random(1,4)
+		local r = math.random(1,4)
 		PlaySound(_G["sndHellishImpact" .. tostring(r)])
 		res = "non-fatal"
 
@@ -1986,7 +2005,7 @@ end
 function SetUpCircle(i)
 
 
-	r = GetRandom(10)
+	local r = GetRandom(10)
 	-- 80% of spawning either red/green
 	if r <= 7 then
 
@@ -2032,7 +2051,7 @@ function SetUpCircle(i)
 	end
 
 	-- regenerate circle xy if too close to player or until sanity limit kicks in
-	reN = 0
+	local reN = 0
 	while (reN < 10) do
 		if IGotMeASafeXYValue(i) == false then
 			reN = reN + 1
@@ -2043,11 +2062,9 @@ function SetUpCircle(i)
 
 	vCircRadius[i] = vCircRadMax[i] - GetRandom(vCircRadMin[i])
 
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
-	SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], vCircWidth[i], vCircCol[i]-0x000000ff)
+	SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], nil, nil, nil, nil, nil, vCircRadius[i], vCircWidth[i], vCircCol[i]-0x000000ff)
 
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(rCirc[i])
-	SetVisualGearValues(rCirc[i], 0, 0, g3, g4, g5, g6, g7, g8, g9, vCircCol[i]-0x000000ff)
+	SetVisualGearValues(rCirc[i], 0, 0, nil, nil, nil, nil, nil, nil, nil, vCircCol[i]-0x000000ff)
 
 
 	vCircActive[i] = true
@@ -2060,7 +2077,7 @@ end
 
 function SetMyCircles(s)
 
-	CirclesAreGo = s
+	circlesAreGo = s
 	playerIsFine = s
 
 	if s == true then
@@ -2120,7 +2137,7 @@ function CheckVarious(gear)
 
 	-- if circle is hit by player fire
 	if (GetGearType(gear) == gtExplosives) then
-		circsHit = 0
+		local circsHit = 0
 
 		for i = 0,(vCCount-1) do
 
@@ -2128,9 +2145,10 @@ function CheckVarious(gear)
 
 			--nw WriteLnToConsole("YES. about to calc distance between gtExplosives and circ " .. i)
 
-			dist = GetDistFromGearToXY(gear, vCircX[i], vCircY[i])
+			local dist = GetDistFromGearToXY(gear, vCircX[i], vCircY[i])
 
 			-- calculate my real radius if I am an aura
+			local NR
 			if vCircType[i] == 0 then
 				NR = vCircRadius[i]
 			else
@@ -2183,16 +2201,15 @@ function CheckVarious(gear)
 		end
 
 	-- if player is hit by circle bazooka
-	elseif (GetGearType(gear) == gtShell) then
+	elseif (GetGearType(gear) == gtShell) and (CurrentHedgehog ~= nil) then
 
-		dist = GetDistFromGearToGear(gear, CurrentHedgehog)
+		local dist = GetDistFromGearToGear(gear, CurrentHedgehog)
 
 		if beam == true then
 
 			if dist < 3000 then
-				tempE = AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, true)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, 0xff00ffff )
+				local tempE = AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, true)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xff00ffff )
 				PlaySound(sndVaporize)
 				DeleteGear(gear)
 
@@ -2223,6 +2240,9 @@ end
 -- collision detection for player entering a circle
 function CheckDistances()
 
+	if not CurrentHedgehog then
+		return
+	end
 	--nw WriteLnToConsole("Start of CheckDistances()")
 
 	for i = 0,(vCCount-1) do
@@ -2230,16 +2250,17 @@ function CheckDistances()
 
 		--nw WriteLnToConsole("Attempting to calculate dist of circ " .. i)
 
-		g1X, g1Y = GetGearPosition(CurrentHedgehog)
-		g2X, g2Y = vCircX[i], vCircY[i]
+		local g1X, g1Y = GetGearPosition(CurrentHedgehog)
+		local g2X, g2Y = vCircX[i], vCircY[i]
 
 		g1X = g1X - g2X
 		g1Y = g1Y - g2Y
-		dist = (g1X*g1X) + (g1Y*g1Y)
+		local dist = (g1X*g1X) + (g1Y*g1Y)
 
 		--nw WriteLnToConsole("Calcs done. Dist to CurrentHedgehog is " .. dist)
 
 		-- calculate my real radius if I am an aura
+		local NR
 		if vCircType[i] == 0 then
 			NR = vCircRadius[i]
 		else
@@ -2258,7 +2279,7 @@ function CheckDistances()
 					( (vType[i] == "drone") or (vType[i] == "blueboss") )
 			then
 
-				ss = CircleDamaged(i)
+				local ss = CircleDamaged(i)
 				local explosion
 				if vType[i] == "blueboss" then explosion = true else explosion = false end
 
@@ -2335,6 +2356,7 @@ function HandleCircles()
 				vCircRadCounter[i] = 0
 
 				-- make my radius increase/decrease faster if I am an aura
+				local M
 				if vCircType[i] == 0 then
 					M = 1
 				else
@@ -2358,37 +2380,32 @@ function HandleCircles()
 				--vgtSmokeTrace
 				if vType[i] == "ammo" then
 
-					tempE = AddVisualGear(vCircX[i], vCircY[i], vgtSmoke, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, vCircX[i], vCircY[i], g3, g4, g5, g6, g7, g8, g9, vCircCol[i] )
+					local tempE = AddVisualGear(vCircX[i], vCircY[i], vgtSmoke, 0, true)
+					SetVisualGearValues(tempE, vCircX[i], vCircY[i], nil, nil, nil, nil, nil, nil, nil, vCircCol[i] )
 
 				elseif vType[i] == "bonus" then
 
-					tempE = AddVisualGear(vCircX[i], vCircY[i], vgtDust, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, vCircX[i], vCircY[i], g3, g4, g5, g6, g7, 1, g9, 0xff00ffff )
+					local tempE = AddVisualGear(vCircX[i], vCircY[i], vgtDust, 0, true)
+					SetVisualGearValues(tempE, vCircX[i], vCircY[i], nil, nil, nil, nil, nil, 1, nil, 0xff00ffff )
 
 
 				elseif vType[i] == "blueboss" then
 
-					k = 25
-					g = vgtSteam
-					trailColour = 0xae00ffff
+					local k = 25
+					local g = vgtSteam
+					local trailColour = 0xae00ffff
 
 					-- 0xffae00ff -- orange
 					-- 0xae00ffff -- purp
 
-					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, vCircX[i], vCircY[i]+k, g3, g4, g5, g6, g7, g8, g9, trailColour-75 )
+					local tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
+					SetVisualGearValues(tempE, vCircX[i], vCircY[i]+k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, vCircX[i]+k, vCircY[i]-k, g3, g4, g5, g6, g7, g8, g9, trailColour-75 )
+					SetVisualGearValues(tempE, vCircX[i]+k, vCircY[i]-k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
 
 					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
-					g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-					SetVisualGearValues(tempE, vCircX[i]-k, vCircY[i]-k, g3, g4, g5, g6, g7, g8, g9, trailColour-75 )
+					SetVisualGearValues(tempE, vCircX[i]-k, vCircY[i]-k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
 
 
 				end
@@ -2418,7 +2435,7 @@ function HandleCircles()
 				vCircDX[i] = 5	--5 circmovchange
 			else
 
-				z = GetRandom(2)
+				local z = GetRandom(2)
 				if z == 1 then
 					z = 1
 				else
@@ -2432,7 +2449,7 @@ function HandleCircles()
 			elseif vCircY[i] < -2900 then
 				vCircDY[i] = 5	--5 circmovchange
 			else
-				z = GetRandom(2)
+				local z = GetRandom(2)
 				if z == 1 then
 					z = 1
 				else
@@ -2462,9 +2479,9 @@ function HandleCircles()
 
 		if (TimeLeft == 0) and (tumbleStarted == true) then
 
-			FadeAlpha = FadeAlpha + 1
-			if FadeAlpha >= 255 then
-				FadeAlpha = 255
+			fadeAlpha = fadeAlpha + 1
+			if fadeAlpha >= 255 then
+				fadeAlpha = 255
 			end
 
 		end
@@ -2479,33 +2496,29 @@ function HandleCircles()
 	end
 
 	for i = 0,(vCCount-1) do
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
-		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], g9, g10)
+		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], nil, nil, nil, nil, nil, vCircRadius[i])
 	end
 
 	if 	(TimeLeft == 0) or
 		((tumbleStarted == false)) then
 		for i = 0,(vCCount-1) do
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
-			SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], g9, (vCircCol[i]-FadeAlpha))
+			SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], nil, nil, nil, nil, nil, vCircRadius[i], nil, (vCircCol[i]-fadeAlpha))
 		end
 	end
 
 
 	if (CurrentHedgehog ~= nil) then
 		if beam == true then
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(pShield)
-			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 200, g9, 0xa800ffff-0x000000ff - -shieldHealth )
-			DrawTag(2)
+			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 200, nil, 0xa800ffff-0x000000ff - -shieldHealth )
+			DrawTag(TAG_SHIELD)
 		else
-			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 0, g9, g10 )
+			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 0)
 		end
 
 		if shockwaveHealth > 0 then
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(shockwave)
-			SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, shockwaveRad, g9, 0xff3300ff-0x000000ff - -shockwaveHealth )
+			SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, shockwaveRad, nil, 0xff3300ff-0x000000ff - -shockwaveHealth )
 		else
-			SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 0, g9, g10 )
+			SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 0)
 		end
 
 	end
@@ -2519,11 +2532,9 @@ function ProjectileTrack(gear)
 
 		--nw WriteLnToConsole("ProjectileTrack() for Shell ID: " .. getGearValue(gear,"ID"))
 
-		if (GetGearType(gear) == gtShell) then
-			turningSpeed = 0.1*fMod
-		end
+		local turningSpeed = 0.1*fMod
 
-		dx, dy = GetGearVelocity(gear)
+		local dx, dy = GetGearVelocity(gear)
 
 		--WriteLnToConsole("I'm trying to track currenthedge with shell ID: " .. getGearValue(gear,"ID"))
 		--WriteLnToConsole("I just got the velocity of the shell. It is dx: " .. dx .. "; dy: " .. dy)
@@ -2542,10 +2553,8 @@ function ProjectileTrack(gear)
 		end
 
 
-		if (GetGearType(gear) == gtShell) then
-			dxlimit = 0.4*fMod
-			dylimit = 0.4*fMod
-		end
+		local dxlimit = 0.4*fMod
+		local dylimit = 0.4*fMod
 
 		if dx > dxlimit then
 			dx = dxlimit

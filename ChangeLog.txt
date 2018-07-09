@@ -4,6 +4,10 @@
 Game:
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
+ * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
+
+Highlander:
+ * Fix all hogs getting teleport after hog placement phase
 
 Continental supplies:
  + Continents are now selected before the game starts
@@ -22,11 +26,19 @@ Continental supplies:
  * Don't play “Missed” and “Laugh” taunt when those don't make sense
  * Fix retreat timer not turning red for some weapons
 
+Space Invation:
+ + Display round score in a separate row
+ + Keep round score displayed after round ends, remove round score announcer message
+ * Fix rare Lua error message spam at end of game
+ * Fix round score and other info numbers messing up after screen resize
+
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New call: EnableSwitchHog(): Enable hog switching
+ + New call: GetAmmo(ammoType): Returns ammo configuration (corresponds to SetAmmo)
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
+ * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
 
 ====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality

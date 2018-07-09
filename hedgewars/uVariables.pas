@@ -816,9 +816,11 @@ type
             PosSprite: TSprite;
             ejectX, ejectY: Longint;
             end;
+    TAmmoCounts = array[TAmmoType] of Longword;
 
 var
     Ammoz: array [TAmmoType] of TAmmozRec;
+    InitialAmmoCounts: TAmmoCounts;
 
 const
     AmmozInit: array [TAmmoType] of TAmmozRec = (
