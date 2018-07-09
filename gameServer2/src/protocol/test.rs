@@ -1,8 +1,7 @@
 use proptest::{
     test_runner::{TestRunner, Reason},
     arbitrary::{any, any_with, Arbitrary, StrategyFor},
-    strategy::{Strategy, BoxedStrategy, Just, Filter, ValueTree},
-    string::RegexGeneratorValueTree,
+    strategy::{Strategy, BoxedStrategy, Just, Map},
 };
 
 use server::coretypes::{GameCfg, TeamInfo, HedgehogInfo};
@@ -55,14 +54,7 @@ impl Arbitrary for Ascii {
     type Parameters = <String as Arbitrary>::Parameters;
 
     fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
-        any_with::<String>(args)
-            .prop_filter("not ascii", |s| {
-                s.len() > 0 && s.is_ascii() &&
-                    s.find(|c| {
-                        ['\0', '\n', '\x20'].contains(&c)
-                    }).is_none()})
-            .prop_map(Ascii)
-            .boxed()
+        "[a-zA-Z0-9]+".prop_map(Ascii).boxed()
     }
 
     type Strategy = BoxedStrategy<Ascii>;
