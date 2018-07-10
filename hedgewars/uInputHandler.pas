@@ -357,6 +357,7 @@ begin
     RegisterBind(DefaultBinds, _S'`', 'history');
     RegisterBind(DefaultBinds, 'delete', 'rotmask');
     RegisterBind(DefaultBinds, 'home', 'rottags');
+    RegisterBind(DefaultBinds, 'm', '+mission');
 
     //numpad
     //DefaultBinds[265]:= '+volup';

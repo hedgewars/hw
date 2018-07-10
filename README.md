@@ -63,8 +63,9 @@ The most important default controls are:
 * Tab: Switch hedgehog (after activating the utility)
 * 1-5: Set weapon timer
 * F1-F10: Weapon shortcuts
+* M: Mission panel / game mode information. Hold pressed to display, release to hide
 * P: Pause, when playing offline, toggle automatic turn skipping when online
-* Esc: Quit with prompt (also shows mission panel)
+* Esc: Quit with prompt
 * T: Chat
 * U: Team chat
 

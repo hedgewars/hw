@@ -2,6 +2,7 @@
 * bugfixes
 ====================== 0.9.25 ======================
 Game:
+ + Add new key to show mission panel (default: M)
  + Add chat command “/help”, displays help for chat commands
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots

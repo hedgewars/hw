@@ -67,8 +67,9 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"fullscr",   "f12",        QT_TRANSLATE_NOOP("binds", "change mode"),     NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle fullscreen mode:")},
     {"capture",   "c",          QT_TRANSLATE_NOOP("binds", "capture"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Take a screenshot:")},
     {"+speedup",  "s",          QT_TRANSLATE_NOOP("binds", "speed up replay"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Demo replay:")},
+    {"+mission",  "m",          QT_TRANSLATE_NOOP("binds", "show mission information"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Heads-up display:")},
     //: This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen
-    {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "toggle team bars"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Heads-up display:")},
+    {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "toggle team bars"), NULL, NULL},
     {"rottags",   "home",       QT_TRANSLATE_NOOP("binds", "toggle hedgehog tags"), NULL, NULL},
 #ifdef VIDEOREC
     {"record",    "r",          QT_TRANSLATE_NOOP("binds", "record"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}

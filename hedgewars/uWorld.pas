@@ -1597,7 +1597,7 @@ if isPaused then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
 if isAFK then
     DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture);
-if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
+if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then
         dec(missionTimer, Lag);

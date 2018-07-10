@@ -78,6 +78,7 @@ var
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
     isAFK           : boolean;
+    isShowMission   : boolean;
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
@@ -2843,6 +2844,7 @@ begin
     isInMultiShoot  := false;
     isSpeed         := false;
     isAFK           := false;
+    isShowMission   := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
     fastScrolling   := false;

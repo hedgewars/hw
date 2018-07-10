@@ -834,6 +834,19 @@ begin
   cAdvancedMapGenMode:= true;
 end;
 
+procedure chShowMission_p(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowMission:= true;
+end;
+
+procedure chShowMission_m(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowMission:= false;
+  HideMission();
+end;
+
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
@@ -922,6 +935,8 @@ begin
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
+    RegisterVariable('+mission', @chShowMission_p, true);
+    RegisterVariable('-mission', @chShowMission_m, true);
 end;
 
 procedure freeModule;
