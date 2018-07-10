@@ -374,8 +374,9 @@ local function firstMission()
 	loc("This is the mission panel.").."|"..
 	loc("Here you will find the current mission instructions.").."|"..
 	loc("Normally, the mission panel disappears after a few seconds.").."|"..
-	loc("IMPORTANT: To see the mission panel again, use the quit or pause key.").."| |"..
+	loc("IMPORTANT: To see the mission panel again, hold the mission panel key.").."| |"..
 	loc("Note: This basic training assumes default controls.").."|"..
+        loc("Mission panel: [M]").."|"..
 	loc("Quit: [Esc]").."|"..
 	loc("Pause: [P]").."| |"..
 	loc("To begin with the training, hit the attack key!").."|"..
