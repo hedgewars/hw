@@ -1550,7 +1550,7 @@ function HandleStartingStage()
 				preMenuCfg..
 				missionComment ..
 				postMenuCfg ..
-				"", 2, 9999000
+				"", 2, 9999000, true
 				)
 
 	menu[menuIndex].line = temp

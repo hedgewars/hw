@@ -152,7 +152,7 @@ elderFace = "Left"
 
 goals = {
   [startDialogue] = {loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Enter] to jump"), 1, 4000},
-  [onShroomAnim] = {loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower") .. "|" .. loc("Hint: Press [M] to review the mission texts."), 1, 7000},
+  [onShroomAnim] = {loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower") .. "|" .. loc("Hint: Hold down [M] to review the mission texts."), 1, 7000},
   [onFlowerAnim] = {loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.|Hint: Select the rope, [Up] or [Down] to aim, [Space] to fire, directional keys to move.|Ropes can be fired again in the air!"), 1, 7000},
   [tookParaAnim] = {loc("First Blood"), loc("Omnivore"), loc("Get on the head of the mole"), 1, 4000},
   [onMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute ([Space] while in air) to get the next crate"), 1, 4000},
@@ -674,7 +674,7 @@ function ChoiceDialog()
     loc("Press [Left] and [Right] to change the difficulty.") .. "| |" ..
     dstr .. "| |" ..
     loc("Press [Attack] to begin."),
-    0, 9999000)
+    0, 9999000, true)
 end
 
 function SetChoice()

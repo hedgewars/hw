@@ -38,7 +38,7 @@ local goals = {
 		loc("Captain Lime offered his help if you assist him in battle.").."|"..
 		loc("What do you want to do?").."| |"..
 		loc("Fight: Press [Attack]").."|"..
-		loc("Flee: Press [Jump]"), 1, 9999000},
+		loc("Flee: Press [Jump]"), 1, 9999000, true},
 	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 5000},
 	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 5000},
 	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 2000},

@@ -2535,7 +2535,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amGirder, 60000
+				"", -amGirder, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2553,7 +2553,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amRubber, 60000
+				"", -amRubber, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2568,7 +2568,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 8, 60000
+				"", 8, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2582,7 +2582,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amKnife, 60000
+				"", -amKnife, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2596,7 +2596,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 1, 60000
+				"", 1, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2611,7 +2611,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amCMGearPlacementTool, 60000
+				"", -amCMGearPlacementTool, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2626,7 +2626,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amMine, 60000
+				"", -amMine, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2641,7 +2641,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 9, 60000
+				"", 9, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2656,7 +2656,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amSMine, 60000
+				"", -amSMine, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2671,7 +2671,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirMine, 60000
+				"", -amAirMine, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2686,7 +2686,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 7, 60000
+				"", 7, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2701,7 +2701,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 5, 60000
+				"", 5, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2716,7 +2716,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 6, 60000
+				"", 6, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2731,7 +2731,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amCMGearPlacementTool, 60000
+				"", -amCMGearPlacementTool, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2752,7 +2752,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 2, 60000
+				"", 2, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2773,7 +2773,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amCMGearPlacementTool, 60000
+				"", -amCMGearPlacementTool, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2788,7 +2788,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 0, 60000
+				"", 0, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
@@ -2802,7 +2802,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 3, 60000
+				"", 3, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2817,7 +2817,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 3, 60000
+				"", 3, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2832,7 +2832,7 @@ function updateHelp(curAmmoType)
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
 				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 2, 60000
+				"", 2, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
