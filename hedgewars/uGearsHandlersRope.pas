@@ -497,7 +497,7 @@ begin
         end;
 
     if Gear^.Elasticity < _20 then Gear^.CollisionMask:= lfLandMask
-    else Gear^.CollisionMask:= lfNotCurrentMask; //lfNotObjMask or lfNotHHObjMask;
+    else Gear^.CollisionMask:= lfNotCurHogCrate; //lfNotObjMask or lfNotHHObjMask;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then

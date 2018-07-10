@@ -493,7 +493,7 @@ with Gear^,
                 newGear^.Target.X:= TargetPoint.X;
                 newGear^.Target.Y:= TargetPoint.Y
                 end;
-            if (newGear <> nil) and (newGear^.CollisionMask and lfCurrentHog <> 0) then newGear^.CollisionMask:= newGear^.CollisionMask and (not lfCurrentHog);
+            if (newGear <> nil) and (newGear^.CollisionMask and lfCurHogCrate <> 0) then newGear^.CollisionMask:= newGear^.CollisionMask and (not lfCurHogCrate);
 
             // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
             if altUse then

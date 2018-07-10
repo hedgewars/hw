@@ -3635,7 +3635,7 @@ procedure doStepCake(Gear: PGear);
 begin
     AllInactive := false;
 
-    Gear^.CollisionMask:= lfNotCurrentMask;
+    Gear^.CollisionMask:= lfNotCurHogCrate;
 
     Gear^.dY:= cMaxWindSpeed * 100;
 
@@ -3956,7 +3956,7 @@ begin
         ry := rndSign(getRandomf * _0_1);
 
         ball:= AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
-        ball^.CollisionMask:= lfNotCurrentMask;
+        ball^.CollisionMask:= lfNotCurHogCrate;
 
         PlaySound(sndGun);
         end;
@@ -5442,7 +5442,7 @@ begin
             flame:= AddGear(gx, gy, gtFlame, gstTmpFlag,
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-            flame^.CollisionMask:= lfNotCurrentMask;
+            flame^.CollisionMask:= lfNotCurHogCrate;
             //flame^.FlightTime:= 500;  use the default huge value to avoid sticky flame suddenly being damaging as opposed to other flames
 
             if (Gear^.Health mod 30) = 0 then
@@ -5450,7 +5450,7 @@ begin
                 flame:= AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-                flame^.CollisionMask:= lfNotCurrentMask;
+                flame^.CollisionMask:= lfNotCurHogCrate;
 		//flame^.FlightTime:= 500;
                 end
             end;
@@ -5534,7 +5534,7 @@ begin
         land:= AddGear(gx, gy, gtFlake, gstTmpFlag,
                 SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-        land^.CollisionMask:= lfNotCurrentMask;
+        land^.CollisionMask:= lfNotCurHogCrate;
 
         Gear^.Timer:= Gear^.Tag
         end;
@@ -6851,7 +6851,7 @@ begin
         ry := rndSign(getRandomf * _0_2);
 
         bullet:= AddGear(gx, gy, gtMinigunBullet, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
-        bullet^.CollisionMask:= lfNotCurrentMask;
+        bullet^.CollisionMask:= lfNotCurHogCrate;
         bullet^.WDTimer := Gear^.WDTimer;
         Inc(Gear^.WDTimer);
 

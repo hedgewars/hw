@@ -3926,7 +3926,7 @@ ScriptSetInteger('lfIce'           , lfIce);
 ScriptSetInteger('lfBouncy'        , lfBouncy);
 
 ScriptSetInteger('lfLandMask'      , lfLandMask);
-ScriptSetInteger('lfCurrentHog'    , lfCurrentHog);
+ScriptSetInteger('lfCurHogCrate'   , lfCurHogCrate);
 ScriptSetInteger('lfHHMask'        , lfHHMask);
 ScriptSetInteger('lfNotHHObjMask'  , lfNotHHObjMask);
 ScriptSetInteger('lfAllObjMask'    , lfAllObjMask);

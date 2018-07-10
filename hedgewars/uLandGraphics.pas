@@ -236,12 +236,12 @@ begin
     setCurrentHog:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] or lfCurrentHog
+            Land[y, i]:= Land[y, i] or lfCurHogCrate
             end;
     removeCurrentHog:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
+            Land[y, i]:= Land[y, i] and lfNotCurHogCrate;
             end;
     end;
 end;

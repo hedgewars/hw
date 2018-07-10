@@ -120,8 +120,8 @@ const
     lfBouncy         = $0400;  // green
     lfLandMask       = $FF00;  // upper byte is used for terrain, not objects.
 
-    lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this does not impact play
-    lfNotCurrentMask = $FF7F;  // inverse of above. frequently used
+    lfCurHogCrate    = $0080;  // CurrentHedgehog, and crates, for convenience of AI.  Since an active hog would instantly collect the crate, this does not impact playj
+    lfNotCurHogCrate = $FF7F;  // inverse of above. frequently used
     lfObjMask        = $007F;  // lower 7 bits used for hogs and explosives and mines 
     lfNotObjMask     = $FF80;  // inverse of above.
 
@@ -136,7 +136,7 @@ const
 
     // lower byte is for objects.
     // consists of 0-127 counted for object checkins and $80 as a bit flag for current hog.
-    lfAllObjMask     = $00FF;  // lfCurrentHog or lfObjMask
+    lfAllObjMask     = $00FF;  // lfCurHogCrate or lfObjMask
 
 
 

@@ -372,10 +372,10 @@ begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x+r] and lfNotCurrentMask <> 0) then
+    if (Land[y-r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y+r, x+r] and lfNotCurHogCrate <> 0) then
        exit(true);
 
     TestColl:= false;
@@ -927,7 +927,7 @@ function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
-Gear^.CollisionMask:= lfNotCurrentMask;
+Gear^.CollisionMask:= lfNotCurHogCrate;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;

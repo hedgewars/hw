@@ -212,7 +212,7 @@ if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     if (CurrentHedgehog^.Gear <> nil) and (hwRound(CurrentHedgehog^.Gear^.X) = X) and (hwRound(CurrentHedgehog^.Gear^.Y) = Y) then
-        gear^.CollisionMask:= lfNotCurrentMask
+        gear^.CollisionMask:= lfNotCurHogCrate
     end;
 
 if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
@@ -414,7 +414,7 @@ case Kind of
                 RopePoints.Count:= 0;
                 gear^.Tint:= $D8D8D8FF;
                 gear^.Tag:= 0; // normal rope render
-                gear^.CollisionMask:= lfNotCurrentMask //lfNotObjMask or lfNotHHObjMask;
+                gear^.CollisionMask:= lfNotCurHogCrate //lfNotObjMask or lfNotHHObjMask;
                 end;
         gtMine: begin
                 gear^.ImpactSound:= sndMineImpact;
