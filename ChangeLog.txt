@@ -34,6 +34,9 @@ Space Invation:
  * Fix rare Lua error message spam at end of game
  * Fix round score and other info numbers messing up after screen resize
 
+Content:
+ + New Sudden Death water textures for CrazyMission theme
+
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
