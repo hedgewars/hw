@@ -31,6 +31,7 @@ procedure ResetWorldTex;
 procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
+procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt; forceDisplay : boolean);
 procedure HideMission;
 procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 procedure ShakeCamera(amount: LongInt);
@@ -1606,6 +1607,8 @@ if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fast
     if missionTex <> nil then
         DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
     end;
+if missionTimer = 0 then
+    isForceMission := false;
 
 // fps
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -1941,12 +1944,21 @@ if WorldDx > 1024 then
 end;
 
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
+begin
+    ShowMission(caption, subcaption, text, icon, time, false);
+end;
+
+procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt; forceDisplay : boolean);
 var r: TSDL_Rect;
 begin
 if cOnlyStats then exit;
 
 r.w:= 32;
 r.h:= 32;
+
+// If true, then mission panel cannot be hidden by releasing the mission panel key.
+// Is in effect until timer runs out, is hidden with HideMission or ShowMission is called with forceDisplay=false.
+isForceMission := forceDisplay;
 
 if time = 0 then
     time:= 5000;
@@ -1970,6 +1982,7 @@ end;
 procedure HideMission;
 begin
     missionTimer:= 0;
+    isForceMission:= false;
 end;
 
 procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);

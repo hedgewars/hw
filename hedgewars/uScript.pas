@@ -544,9 +544,13 @@ begin
 end;
 
 function lc_showmission(L : Plua_State) : LongInt; Cdecl;
+var n: LongInt;
 begin
-    if CheckLuaParamCount(L, 5, 'ShowMission', 'caption, subcaption, text, icon, time') then
-        ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), Trunc(lua_tonumber(L, 4)), Trunc(lua_tonumber(L, 5)));
+    if CheckAndFetchParamCount(L, 5, 6, 'ShowMission', 'caption, subcaption, text, icon, time [, forceDisplay]', n) then
+        if n = 5 then
+            ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), Trunc(lua_tonumber(L, 4)), Trunc(lua_tonumber(L, 5)))
+        else
+            ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), Trunc(lua_tonumber(L, 4)), Trunc(lua_tonumber(L, 5)), lua_toboolean(L, 6));
     lc_showmission:= 0;
 end;
 

@@ -844,7 +844,8 @@ procedure chShowMission_m(var s: shortstring);
 begin
   s:= s; // avoid compiler hint
   isShowMission:= false;
-  HideMission();
+  if (not isForceMission) then
+    HideMission();
 end;
 
 procedure initModule;

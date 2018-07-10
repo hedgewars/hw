@@ -79,6 +79,7 @@ var
     isSpeed         : boolean;
     isAFK           : boolean;
     isShowMission   : boolean;
+    isForceMission  : boolean;
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
@@ -2845,6 +2846,7 @@ begin
     isSpeed         := false;
     isAFK           := false;
     isShowMission   := false;
+    isForceMission  := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
     fastScrolling   := false;
