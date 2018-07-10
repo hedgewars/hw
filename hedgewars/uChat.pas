@@ -528,15 +528,17 @@ if (s[1] = '/') then
             if liveLua then
                 begin
                 AddFileLog('[Lua] chat input string parsing enabled');
-                AddChatString(#3 + 'Lua parsing: ON');
+                AddChatString(#3 + trmsg[sidLuaParsingOn]);
                 end
             else
                 begin
                 AddFileLog('[Lua] chat input string parsing disabled');
-                AddChatString(#3 + 'Lua parsing: OFF');
+                AddChatString(#3 + trmsg[sidLuaParsingOff]);
                 end;
             UpdateInputLinePrefix();
-            end;
+            end
+        else
+            AddChatString(#5 + trmsg[sidLuaParsingDenied]);
         exit
         end;
 

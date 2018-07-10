@@ -106,6 +106,9 @@
 01:38=%1 ist zurück.
 01:39=%1 hat den Zug automatisch übersprungen.
 01:40=%1 fps
+01:41=Lua-Parsing: AUS
+01:42=Lua-Parsing: AN
+01:43=Lua-Parsing ist in Online-Spielen nicht erlaubt!
 
 ; Event messages
 ; Hog (%1) died
@@ -1407,7 +1410,7 @@
 06:08=/help: Grundlegende Client-Chatbefehle auflisten
 06:09=/help taunts: Spott-Chatbefehle auflisten
 06:10=/history: Langes Chatprotokoll umschalten
-06:11=/lua: Lua-Entwicklerkonsole umschalten
+06:11=/lua: Lua-Parsing umschalten (für Entwickler)
 06:12=Liste der Spott-Chatbefehle:
 06:13="Text": Text in Sprechblase anzeigen
 06:14='Text': Text in Denkblase anzeigen

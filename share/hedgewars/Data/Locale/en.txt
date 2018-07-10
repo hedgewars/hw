@@ -105,6 +105,9 @@
 01:38=%1 is back.
 01:39=%1 automatically skipped turn.
 01:40=%1 fps
+01:41=Lua parsing: OFF
+01:42=Lua parsing: ON
+01:43=Lua parsing is not allowed in online games!
 
 ; Event messages
 ; Normal hog (%1) died (0 health)
@@ -1308,7 +1311,7 @@
 06:08=/help: List basic client chat commands
 06:09=/help taunts: List taunt chat commands
 06:10=/history: Toggle long chat history display
-06:11=/lua: Toggle Lua developer console
+06:11=/lua: Toggle Lua parsing (for developers)
 06:12=List of taunt chat commands:
 06:13="text": Put text in speech bubble
 06:14='text': Put text in thinking bubble

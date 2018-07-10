@@ -479,7 +479,7 @@ type
             sidNotAvailableInSD, sidHealthGain, sidEmptyCrate, sidUnknownKey,
             sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
             sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
-            sidFPS);
+            sidFPS, sidLuaParsingOff, sidLuaParsingOn, sidLuaParsingDenied);
 
     TCmdHelpStrId = (
             sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,
