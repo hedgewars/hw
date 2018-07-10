@@ -1295,3 +1295,31 @@
 05:20=Per-hog Ammo: Weapons are not shared between hogs
 05:21=Tag Team: Teams in a clan takes successive turns|Shared Time: Teams within a clan share turn time
 05:22=Heavy Wind: Wind affects almost everything
+
+; Chat command help
+06:00=List of basic client chat commands:
+06:01=/togglechat: Toggle chat display
+06:02=/team <message>: Send message to clan members only
+06:03=/me <message>: Chat action, e.g. “/me eats pizza” becomes “* Player eats pizza”
+06:04=/pause: Toggle pause
+06:05=/pause: Toggle auto skip
+06:06=/fullscreen: Toggle fullscreen
+06:07=/quit [message]: Quit Hedgewars with optional message
+06:08=/help: List basic client chat commands
+06:09=/help taunts: List taunt chat commands
+06:10=/history: Toggle long chat history display
+06:11=/lua: Toggle Lua developer console
+06:12=List of taunt chat commands:
+06:13="text": Put text in speech bubble
+06:14='text': Put text in thinking bubble
+06:15=-text-: Put text in yelling bubble
+06:16=For above commands, put a number at start of text to select a hog.
+06:17=/hsa <text>: Put text in speech bubble on next attack
+06:18=/hta <text>: Put text in thinking bubble on next attack
+06:19=/hya <text>: Put text in yelling bubble on next attack
+06:20=/hurrah: Make hedgehog grin
+06:21=/ilovelotsoflemonade: Make hedgehog pee
+06:22=/juggle: Make hedgehog juggle
+06:23=/rollup: Make hedgehog roll up
+06:24=/shrug: Make hedgehog shrug
+06:25=/wave: Make hedgehog wave its hand

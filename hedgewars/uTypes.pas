@@ -481,6 +481,16 @@ type
             sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
             sidFPS);
 
+    TCmdHelpStrId = (
+            sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,
+            sidCmdPause, sidCmdPauseNet, sidCmdFullscreen, sidCmdQuit,
+            sidCmdHelp, sidCmdHelpTaunts, sidCmdHistory, sidLua,
+
+            sidCmdHeaderTaunts, sidCmdSpeech, sidCmdThink, sidCmdYell,
+            sidCmdSpeechNumberHint, sidCmdHsa, sidCmdHta, sidCmdHya,
+            sidCmdHurrah, sidCmdIlovelotsoflemonade, sidCmdJuggle,
+            sidCmdRollup, sidCmdShrug, sidCmdWave);
+
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
             eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped,

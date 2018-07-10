@@ -102,6 +102,8 @@ if f <> nil then
                 trammod[TAmmoStrId(b)]:= s;
             5: if (b >=0) and (b <= ord(High(TGoalStrId))) then
                 trgoal[TGoalStrId(b)]:= s;
+            6: if (b >=0) and (b <= ord(High(TCmdHelpStrId))) then
+                trcmd[TCmdHelpStrId(b)]:= s;
            end;
        end;
    pfsClose(f);

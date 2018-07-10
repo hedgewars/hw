@@ -2584,6 +2584,7 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trluaammoe: array[TAmmoStrId] of boolean;   // whether to render extra text (Lua overwrite)
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
+    trcmd:   array[TCmdHelpStrId] of ansistring; // chat command help
     cTestLua : Boolean;
 
 procedure preInitModule;

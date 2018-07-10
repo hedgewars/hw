@@ -512,6 +512,7 @@ if (s[1] = '/') then
 
     // debugging commands
     if (copy(s, 2, 7) = 'debugvl') then
+        // This command intentionally not documented in /help
         begin
         cViewLimitsDebug:= (not cViewLimitsDebug);
         UpdateViewLimits();
@@ -536,6 +537,48 @@ if (s[1] = '/') then
                 end;
             UpdateInputLinePrefix();
             end;
+        exit
+        end;
+
+    // Help commands
+    if (copy(s, 2, 11) = 'help taunts') then
+        begin
+        AddChatString(#3 + trcmd[sidCmdHeaderTaunts]);
+        AddChatString(#3 + trcmd[sidCmdSpeech]);
+        AddChatString(#3 + trcmd[sidCmdThink]);
+        AddChatString(#3 + trcmd[sidCmdYell]);
+        AddChatString(#3 + trcmd[sidCmdSpeechNumberHint]);
+        AddChatString(#3 + trcmd[sidCmdHsa]);
+        AddChatString(#3 + trcmd[sidCmdHta]);
+        AddChatString(#3 + trcmd[sidCmdHya]);
+        AddChatString(#3 + trcmd[sidCmdHurrah]);
+        AddChatString(#3 + trcmd[sidCmdIlovelotsoflemonade]);
+        AddChatString(#3 + trcmd[sidCmdJuggle]);
+        AddChatString(#3 + trcmd[sidCmdRollup]);
+        AddChatString(#3 + trcmd[sidCmdShrug]);
+        AddChatString(#3 + trcmd[sidCmdWave]);
+        exit
+        end;
+
+    if (copy(s, 2, 4) = 'help') then
+        begin
+        AddChatString(#3 + trcmd[sidCmdHeaderBasic]);
+        if gameType = gmtNet then
+            AddChatString(#3 + trcmd[sidCmdPauseNet])
+        else
+            AddChatString(#3 + trcmd[sidCmdPause]);
+        AddChatString(#3 + trcmd[sidCmdFullscreen]);
+        AddChatString(#3 + trcmd[sidCmdQuit]);
+        if gameType <> gmtNet then
+            AddChatString(#3 + trcmd[sidLua]);
+        // history and help commands needs to be close to the end because they are always visible
+        // with a short chat history length.
+        AddChatString(#3 + trcmd[sidCmdTeam]);
+        AddChatString(#3 + trcmd[sidCmdMe]);
+        AddChatString(#3 + trcmd[sidCmdTogglechat]);
+        AddChatString(#3 + trcmd[sidCmdHistory]);
+        AddChatString(#3 + trcmd[sidCmdHelp]);
+        AddChatString(#3 + trcmd[sidCmdHelpTaunts]);
         exit
         end;
 

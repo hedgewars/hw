@@ -1394,3 +1394,31 @@
 05:20=Igelwaffen: Igel teilen Waffen nicht untereinander
 05:21=Staffellauf: Teams gleicher Farbe kommen nacheinander dran|Gemeinsame Zeit: Teams gleicher Farbe teilen sich ihre Zugzeit
 05:22=Starker Wind: Wind beeinflusst fast alles
+
+; Chat command help
+06:00=Liste der grundlegenden Client-Chatbefehle:
+06:01=/togglechat: Chatanzeige umschalten
+06:02=/team <Nachricht>: Nachricht nur an Klanmitglieder schicken
+06:03=/me <Nachricht>: Chataktion, z.B. wird „/me isst Pizza“ zu „* Spieler isst Pizza“
+06:04=/pause: Pause umschalten
+06:05=/pause: Automatisches Überspringen umschalten
+06:06=/fullscreen: Vollbild umschalten
+06:07=/quit [Nachricht]: Hedgewars verlassen, mit optionaler Nachricht
+06:08=/help: Grundlegende Client-Chatbefehle auflisten
+06:09=/help taunts: Spott-Chatbefehle auflisten
+06:10=/history: Langes Chatprotokoll umschalten
+06:11=/lua: Lua-Entwicklerkonsole umschalten
+06:12=Liste der Spott-Chatbefehle:
+06:13="Text": Text in Sprechblase anzeigen
+06:14='Text': Text in Denkblase anzeigen
+06:15=-Text-: Text in Brüllblase anzeigen
+06:16=Füg eine Nummer am Textanfang bei den obigen Befehlen hinzu, um einen Igel auszuwählen.
+06:17=/hsa <Text>: Text in Sprechblase beim nächsten Angriff anzeigen
+06:18=/hta <Text>: Text in Denkblase beim nächsten Angriff anzeigen
+06:19=/hya <Text>: Text in Brüllblase beim nächsten Angriff anzeigen
+06:20=/hurrah: Igel grinsen lassen
+06:21=/ilovelotsoflemonade: Igel pinkeln lassen
+06:22=/juggle: Igel jonglieren lassen
+06:23=/rollup: Igel sich einigeln lassen
+06:24=/shrug: Igel mit den Achseln zucken lassen
+06:25=/wave: Igel winken lassen
