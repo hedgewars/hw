@@ -204,7 +204,7 @@ gear^.ImpactSound:= sndNone;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
-gear^.CollisionMask:= $FFFF;
+gear^.CollisionMask:= lfAll;
 gear^.Tint:= $FFFFFFFF;
 gear^.Data:= nil;
 

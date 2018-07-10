@@ -138,6 +138,8 @@ const
     // consists of 0-127 counted for object checkins and $80 as a bit flag for current hog.
     lfAllObjMask     = $00FF;  // lfCurHogCrate or lfObjMask
 
+    lfAll            = $FFFF;  // everything
+
 
 
     cMaxPower     = 1500;

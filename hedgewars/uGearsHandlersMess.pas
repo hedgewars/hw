@@ -3832,7 +3832,7 @@ begin
     end;
 
     tempColl:= Gear^.CollisionMask;
-    Gear^.CollisionMask:= $007F;
+    Gear^.CollisionMask:= lfObjMask;
     if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) <> 0) or (TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) <> 0) or (GameTicks > Gear^.FlightTime) then
         t := CheckGearsCollision(Gear)
     else t := nil;
@@ -6588,7 +6588,7 @@ procedure doStepKnife(Gear: PGear);
 var   a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
-    if (Gear^.Radius = 4) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 7;
+    if (Gear^.Radius = 4) and (Gear^.CollisionMask = lfAll) then Gear^.Radius:= 7;
     if Gear^.Damage > 100 then Gear^.CollisionMask:= 0
     else if Gear^.Damage > 30 then
         if GetRandom(max(4,18-Gear^.Damage div 10)) < 3 then Gear^.CollisionMask:= 0;
