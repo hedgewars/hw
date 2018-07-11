@@ -179,6 +179,7 @@ winAnimAD = {}
 --/////////////////////////Animation Functions///////////////////////
 function AfterMidFailAnim()
   DismissTeam(loc("Natives"))
+  DismissTeam(loc("Princess"))
   EndTurn(true)
 end
 
@@ -913,6 +914,7 @@ function DoLeaksDead()
     EndTurn(true)
     AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
     DismissTeam(loc("Natives"))
+    DismissTeam(loc("Princess"))
   end
 end
 
@@ -925,6 +927,7 @@ function DoDenseDead()
     EndTurn(true)
     AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
     DismissTeam(loc("Natives"))
+    DismissTeam(loc("Princess"))
   end
 end
 
@@ -1009,8 +1012,11 @@ function DoLost()
   if not cyborgDead then
     SwitchHog(cyborg)
   end
-  AddAnim(endFailAnim)
+  if not (leaksDead or denseDead) then
+    AddAnim(endFailAnim)
+  end
   AddFunction({func = DismissTeam, args = {loc("Natives")}})
+  AddFunction({func = DismissTeam, args = {loc("Princess")}})
   AddFunction({func = EndTurn, args = {true}})
 end
 
@@ -1082,11 +1088,11 @@ function onGameInit()
     HealthDecrease = 0
     WaterRise = 0
 
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("Natives"), 0x0072FF, "Bone", "Island", "HillBilly", "cm_birdy")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
 
-  AddTeam(loc("Cannibal Sentry"), 14483456, "skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Cannibal Sentry"), 0xDD0000, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
@@ -1100,8 +1106,10 @@ function onGameInit()
     SetEffect(cannibals[i], heArtillery, 1)
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), 0xDD0000, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
+
+  AddTeam(loc("Princess"), 0x0072FF, "Bone", "Island", "HillBilly", "cm_birdy")
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 
   AnimSetGearPosition(dense, 0, 0)

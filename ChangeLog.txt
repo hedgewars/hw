@@ -28,11 +28,14 @@ Continental supplies:
  * Don't play “Missed” and “Laugh” taunt when those don't make sense
  * Fix retreat timer not turning red for some weapons
 
-Space Invation:
+Space Invasion:
  + Display round score in a separate row
  + Keep round score displayed after round ends, remove round score announcer message
  * Fix rare Lua error message spam at end of game
  * Fix round score and other info numbers messing up after screen resize
+
+A Classic Fairytale:
+ * Mission 3: Fix clan color of princess
 
 Content:
  + New Sudden Death water texture for CrazyMission theme
