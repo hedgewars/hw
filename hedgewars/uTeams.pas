@@ -290,7 +290,10 @@ if PlacingHogs then
         ResetWeapons;
         inc(TotalRounds)
         end
-    end;
+    end
+else
+    if TotalRounds <= -1 then
+        TotalRounds:= 0;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 with CurrentTeam^.Clan^ do
