@@ -617,18 +617,20 @@ for i:= 0 to Targets.Count do
 
 if hadSkips and (rate = 0) then
     RealRateExplosion:= BadTurn
-    else
+else
     RealRateExplosion:= rate;
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, rate, subrate: LongInt;
     dX, dY, pX, pY: real;
+    hadSkips: boolean;
 begin
 fallDmg:= 0;
 dX:= gdX * 0.01 * kick;
 dY:= gdY * 0.01 * kick;
 rate:= 0;
+hadSkips:= false;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
         if skip then
@@ -695,8 +697,14 @@ for i:= 0 to Pred(Targets.Count) do
                     if abs(subrate) > 2000 then inc(Rate,subrate div 1024);
                     end
                 end
-            end;
-RateShove:= rate * 1024;
+            end
+        else
+            hadSkips:= true;
+
+if hadSkips and (rate = 0) then
+    RateShove:= BadTurn
+else
+    RateShove:= rate * 1024;
 ResetTargets
 end;
 
@@ -801,23 +809,26 @@ for i:= 0 to Targets.Count do
 
 if hadSkips and (rate = 0) then
     RateShotgun:= BadTurn
-    else
+else
     RateShotgun:= rate * 1024;
-    ResetTargets;
+ResetTargets;
 end;
 
 function RateHammer(Me: PGear): LongInt;
 var x, y, i, r, rate: LongInt;
+    hadSkips: boolean;
 begin
 // hammer hit shift against attecker hog is 10
 x:= hwRound(Me^.X) + hwSign(Me^.dX) * 10;
 y:= hwRound(Me^.Y);
 rate:= 0;
-
+hadSkips:= false;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
          // hammer hit radius is 8, shift is 10
-      if matters and (Kind = gtHedgehog) and (abs(Point.x - x) + abs(Point.y - y) < 18) then
+      if (not matters) then
+          hadSkips:= true
+      else if matters and (Kind = gtHedgehog) and (abs(Point.x - x) + abs(Point.y - y) < 18) then
             begin
             r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
@@ -827,7 +838,11 @@ for i:= 0 to Pred(Targets.Count) do
                 else
                     inc(rate, Score div 3 * friendlyfactor div 100)
             end;
-RateHammer:= rate * 1024;
+
+if hadSkips and (rate = 0) then
+    RateHammer:= BadTurn
+else
+    RateHammer:= rate * 1024;
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
