@@ -81,8 +81,7 @@ thug7.health = 80
 teamA.name = loc("Hog Solo")
 teamA.color = 0x38D61C -- green
 teamB.name = loc("PAotH")
--- FIXME: PAotH should share color with Hog Solo
-teamB.color = 0x0072FF -- blue because otherwise enemies attack them
+teamB.color = teamA.color
 teamC.name = loc("Professor")
 teamC.color = 0x0072FF -- blue
 
@@ -107,19 +106,8 @@ function onGameInit()
 	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	-- PAotH
-	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
-	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
-	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
-	HogTurnLeft(paoth1.gear, true)
-	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
-	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
-	HogTurnLeft(paoth2.gear, true)
+
 	-- Professor and Thugs
-	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
-	professor.human = AddHog(professor.name, 0, 300, "tophats")
-	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
-	HogTurnLeft(professor.human, true)
 	AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
@@ -130,6 +118,22 @@ function onGameInit()
 		AnimSetGearPosition(thugs[i].gear, thugs[i].x, thugs[i].y)
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
+
+	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	professor.human = AddHog(professor.name, 0, 300, "tophats")
+	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
+	HogTurnLeft(professor.human, true)
+
+	-- PAotH
+	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
+	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
+	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
+	HogTurnLeft(paoth1.gear, true)
+	SetGearAIHints(paoth1.gear, aihDoesntMatter)
+	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
+	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
+	HogTurnLeft(paoth2.gear, true)
+	SetGearAIHints(paoth2.gear, aihDoesntMatter)
 
 	initCheckpoint("death01")
 
@@ -202,7 +206,9 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
-		AnimSwitchHog(hero.gear)
+		if professor.gear and GetHealth(professor.gear) then
+			AnimSwitchHog(professor.gear)
+		end
 		EndTurn(true)
 	end
 end
@@ -269,7 +275,7 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to eliminate all your enemies."))
-	sendSimpleTeamRankings({teamC.name, teamA.name})
+	sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
 	EndGame()
 end
 
@@ -280,7 +286,7 @@ function enemiesDeath(gear)
 	SendStat(siCustomAchievement, loc("You have rescued H and Dr. Cornelius."))
 	SendStat(siCustomAchievement, loc("You have acquired the last device part."))
 	SendStat(siCustomAchievement, loc("Now go and play the menu mission to complete the campaign."))
-	sendSimpleTeamRankings({teamA.name, teamC.name})
+	sendSimpleTeamRankings({teamA.name, teamB.name, teamC.name})
 	EndGame()
 end
 
