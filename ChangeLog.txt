@@ -36,6 +36,7 @@ Space Invasion:
 
 A Classic Fairytale:
  * Fix clan membership of princess in some missions
+ * Mission 5: Tribe was not in same clan as Natives, screwing up stats a bit
 
 A Space Adventure:
  * Fix clan membership of PAotH in main Death Planet mission
