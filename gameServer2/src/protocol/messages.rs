@@ -1,4 +1,7 @@
-use server::coretypes::{ServerVar, GameCfg, TeamInfo, HedgehogInfo};
+use server::coretypes::{
+    ServerVar, GameCfg, TeamInfo,
+    HedgehogInfo, VoteType
+};
 use std::{ops, convert::From, iter::once};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -56,9 +59,9 @@ pub enum HWProtocolMessage {
     Fix,
     Unfix,
     Greeting(String),
-    CallVote(Option<(String, Option<String>)>),
-    Vote(String),
-    ForceVote(String),
+    CallVote(Option<VoteType>),
+    Vote(bool),
+    ForceVote(bool),
     Save(String, String),
     Delete(String),
     SaveRoom(String),
@@ -90,6 +93,7 @@ pub enum HWServerMessage {
     TeamColor(String, u8),
     HedgehogsNumber(String, u8),
     ConfigEntry(String, Vec<String>),
+    Kicked,
     RunGame,
     ForwardEngineMessage(Vec<String>),
     RoundFinished,
@@ -99,6 +103,10 @@ pub enum HWServerMessage {
     Error(String),
     Connected(u32),
     Unreachable,
+}
+
+pub fn server_chat(msg: &str) -> HWServerMessage  {
+    HWServerMessage::ChatMsg{ nick: "[server]".to_string(), msg: msg.to_string() }
 }
 
 impl GameCfg {
@@ -224,8 +232,8 @@ impl HWProtocolMessage {
             Unfix => msg!["CMD", "UNFIX"],
             Greeting(msg) => msg!["CMD", format!("GREETING {}", msg)],
             //CallVote(Option<(String, Option<String>)>) =>, ??
-            Vote(msg) => msg!["CMD", format!("VOTE {}", msg)],
-            ForceVote(msg) => msg!["CMD", format!("FORCE {}", msg)],
+            Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg {"YES"} else {"NO"})],
+            ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg {"YES"} else {"NO"})],
             //Save(String, String), ??
             Delete(room) => msg!["CMD", format!("DELETE {}", room)],
             SaveRoom(room) => msg!["CMD", format!("SAVEROOM {}", room)],
@@ -280,6 +288,7 @@ impl HWServerMessage {
             HedgehogsNumber(name, number) => msg!["HH_NUM", name, number],
             ConfigEntry(name, values) =>
                 construct_message(&["CFG", name], &values),
+            Kicked => msg!["KICKED"],
             RunGame => msg!["RUN_GAME"],
             ForwardEngineMessage(em) =>
                 construct_message(&["EM"], &em),

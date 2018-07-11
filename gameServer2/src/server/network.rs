@@ -4,7 +4,7 @@ use std::{
     io, io::{Error, ErrorKind, Write},
     net::{SocketAddr, IpAddr, Ipv4Addr},
     collections::HashSet,
-    mem::swap
+    mem::{swap, replace}
 };
 
 use mio::{
@@ -18,7 +18,7 @@ use utils;
 use protocol::{ProtocolDecoder, messages::*};
 use super::{
     server::{HWServer},
-    client::ClientId
+    coretypes::ClientId
 };
 
 const MAX_BYTES_PER_READ: usize = 2048;
@@ -277,8 +277,7 @@ impl NetworkLayer {
 
     pub fn on_idle(&mut self, poll: &Poll) -> io::Result<()> {
         if self.has_pending_operations() {
-            let mut cache = Vec::new();
-            swap(&mut cache, &mut self.pending_cache);
+            let mut cache = replace(&mut self.pending_cache, Vec::new());
             cache.extend(self.pending.drain());
             for (id, state) in cache.drain(..) {
                 match state {
