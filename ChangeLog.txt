@@ -50,6 +50,7 @@ Lua API:
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
+ * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set
 
 ====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality

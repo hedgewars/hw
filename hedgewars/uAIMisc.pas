@@ -615,7 +615,7 @@ for i:= 0 to Targets.Count do
                 end
             end;
 
-if hadSkips and (rate = 0) then
+if hadSkips and (rate <= 0) then
     RealRateExplosion:= BadTurn
 else
     RealRateExplosion:= rate;
@@ -701,7 +701,7 @@ for i:= 0 to Pred(Targets.Count) do
         else
             hadSkips:= true;
 
-if hadSkips and (rate = 0) then
+if hadSkips and (rate <= 0) then
     RateShove:= BadTurn
 else
     RateShove:= rate * 1024;
@@ -807,7 +807,7 @@ for i:= 0 to Targets.Count do
                 end
             end;
 
-if hadSkips and (rate = 0) then
+if hadSkips and (rate <= 0) then
     RateShotgun:= BadTurn
 else
     RateShotgun:= rate * 1024;
@@ -839,7 +839,7 @@ for i:= 0 to Pred(Targets.Count) do
                     inc(rate, Score div 3 * friendlyfactor div 100)
             end;
 
-if hadSkips and (rate = 0) then
+if hadSkips and (rate <= 0) then
     RateHammer:= BadTurn
 else
     RateHammer:= rate * 1024;

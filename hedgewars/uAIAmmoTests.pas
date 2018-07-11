@@ -1209,20 +1209,23 @@ repeat
             end;
 until fexit or (Y > cWaterLine);
 
-for i:= 0 to 5 do inc(valueResult, dmg[i]);
+for i:= 0 to 5 do
+    if dmg[i] <> BadTurn then
+        inc(valueResult, dmg[i]);
 t:= valueResult;
 ap.AttackPutX:= Targ.Point.X - 60;
 
 for i:= 0 to 3 do
-    begin
-    dec(t, dmg[i]);
-    inc(t, dmg[i + 6]);
-    if t > valueResult then
+    if dmg[i] <> BadTurn then
         begin
-        valueResult:= t;
-        ap.AttackPutX:= Targ.Point.X - 30 - cShift + i * 30
-        end
-    end;
+        dec(t, dmg[i]);
+        inc(t, dmg[i + 6]);
+        if t > valueResult then
+            begin
+            valueResult:= t;
+            ap.AttackPutX:= Targ.Point.X - 30 - cShift + i * 30
+            end
+        end;
 
 if valueResult <= 0 then
     valueResult:= BadTurn;
