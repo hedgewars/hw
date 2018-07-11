@@ -35,7 +35,10 @@ Space Invasion:
  * Fix round score and other info numbers messing up after screen resize
 
 A Classic Fairytale:
- * Mission 3: Fix clan color of princess
+ * Fix clan membership of princess in some missions
+
+A Space Adventure:
+ * Fix clan membership of PAotH in main Death Planet mission
 
 Content:
  + New Sudden Death water texture for CrazyMission theme

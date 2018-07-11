@@ -436,7 +436,7 @@ function EndMission()
     RemoveEventFunc(CheckPrincessFreed)
     AddCaption(loc("So the princess was never heard of again ..."))
     DismissTeam(loc("Natives"))
-    DismissTeam(loc("011101001"))
+    DismissTeam(loc("Princess"))
     EndTurn(true)
   end
 end
@@ -519,17 +519,20 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Princess"), 0x0072FF, "Bone", "Island", "HillBilly", "cm_birdy")
+  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
+  SetGearAIHints(princess, aihDoesntMatter)
+  gearDead[princess] = false
+
+  AddTeam(loc("Natives"), 0x0072FF, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     gearDead[natives[i-6]] = false
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), 0xDD0000, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
-  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   gearDead[cyborg] = false
-  gearDead[princess] = false
 
   AddTeam(loc("Biomechanic Team"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
@@ -570,7 +573,8 @@ end
 
 function onGameInit()
 	Seed = 0
-	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableGirders
+	-- Using gfTagTeam makes it far easier to skip the Princess team
+	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableGirders + gfTagTeam
 	TurnTime = 60000 
 	CaseFreq = 0
 	MinesNum = 0
@@ -635,7 +639,7 @@ function onNewTurn()
     TurnTimeLeft = -1
     return
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+  if CurrentHedgehog == cyborg then
     if CheckCyborgsDead() ~= true then
       for i = 1, 3 do
         if gearDead[natives[i]] ~= true then
@@ -643,6 +647,9 @@ function onNewTurn()
         end
       end
     end
+    EndTurn(true)
+  elseif CurrentHedgehog == princess then
+    -- Princess is passive
     EndTurn(true)
   else
     for i = 1, 3 do
