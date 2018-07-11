@@ -96,6 +96,8 @@ function onGameInit()
 	Explosives = 2
 	Delay = 3
 	HealthCaseAmount = 50
+	-- gfTagTeam makes it easier to skip the PAotH team
+	GameFlags = gfTagTeam
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
@@ -106,6 +108,17 @@ function onGameInit()
 	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
+
+	-- PAotH
+	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
+	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
+	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
+	HogTurnLeft(paoth1.gear, true)
+	SetGearAIHints(paoth1.gear, aihDoesntMatter)
+	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
+	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
+	HogTurnLeft(paoth2.gear, true)
+	SetGearAIHints(paoth2.gear, aihDoesntMatter)
 
 	-- Professor and Thugs
 	AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
@@ -123,17 +136,6 @@ function onGameInit()
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
 	HogTurnLeft(professor.human, true)
-
-	-- PAotH
-	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
-	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
-	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
-	HogTurnLeft(paoth1.gear, true)
-	SetGearAIHints(paoth1.gear, aihDoesntMatter)
-	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
-	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
-	HogTurnLeft(paoth2.gear, true)
-	SetGearAIHints(paoth2.gear, aihDoesntMatter)
 
 	initCheckpoint("death01")
 
@@ -205,10 +207,8 @@ function onGameStart()
 end
 
 function onNewTurn()
+	-- Team PAotH is passive and does not play
 	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
-		if professor.gear and GetHealth(professor.gear) then
-			AnimSwitchHog(professor.gear)
-		end
 		EndTurn(true)
 	end
 end
