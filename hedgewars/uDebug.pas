@@ -69,7 +69,7 @@ begin
     if not Assert then
     begin
         s:= SDL_GetError();
-        OutError(Msg + ': ' + s, false)
+        OutError(Msg + ': ' + s, isFatal)
     end;
 
     allOK:= allOK and (Assert or (not isFatal));

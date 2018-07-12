@@ -624,10 +624,11 @@ end;
 function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
+    logMsg: shortstring;
     rwops: PSDL_RWops;
 begin
     LoadImage:= nil;
-    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
+    logMsg:= msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + ']';
 
     s:= filename + '.png';
 
@@ -651,20 +652,22 @@ begin
         if rwops <> nil then
             begin
             // anounce that loading failed
-            OutError(msgFailed, false);
+            OutError(logMsg + ' ' + msgFailed, false);
 
-            if SDLCheck(false, 'LoadImage', (imageFlags and ifCritical) <> 0) then exit;
+            if SDLCheck(false, 'LoadImage: ' + logMsg + ' ' + msgFailed, (imageFlags and ifCritical) <> 0) then
+                exit;
             // rwops was already freed by IMG_Load_RW
             rwops:= nil;
-            end else
-            OutError(msgFailed, (imageFlags and ifCritical) <> 0);
+            end
+        else
+            OutError(logMsg + ' ' + msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
         end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
         begin
         SDL_FreeSurface(tmpsurf);
-        OutError(msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
+        OutError(logMsg + ' ' + msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
         // dummy surface to replace non-critical textures that failed to load due to their size
         LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
         exit;
@@ -675,7 +678,8 @@ begin
     if (imageFlags and ifColorKey) <> 0 then
         if checkFails(SDL_SetColorKey(tmpsurf, SDL_TRUE, 0) = 0, errmsgTransparentSet, true) then exit;
 
-    WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
+    // log success
+    WriteLnToConsole(logMsg + ' ' + msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
 
     LoadImage:= tmpsurf //Result
 end;
