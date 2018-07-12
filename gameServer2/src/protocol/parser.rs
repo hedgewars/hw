@@ -18,7 +18,7 @@ use super::{
     test::gen_proto_msg
 };
 use server::coretypes::{
-    HedgehogInfo, TeamInfo, GameCfg
+    HedgehogInfo, TeamInfo, GameCfg, VoteType
 };
 
 named!(end_of_message, tag!("\n\n"));
@@ -26,6 +26,9 @@ named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
 named!(  a_line<&[u8], String>, map!(str_line, String::from));
 named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
 named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
+named!(yes_no_line<&[u8], bool>, alt!(
+      do_parse!(tag_no_case!("YES") >> (true))
+    | do_parse!(tag_no_case!("NO") >> (false))));
 named!(opt_param<&[u8], Option<String> >, alt!(
       do_parse!(peek!(tag!("\n\n")) >> (None))
     | do_parse!(tag!("\n") >> s: str_line >> (Some(s.to_string())))));
@@ -42,6 +45,18 @@ named!(_8_hogs<&[u8], [HedgehogInfo; 8]>,
               h5: hog_line >> eol >> h6: hog_line >> eol >>
               h7: hog_line >> eol >> h8: hog_line >>
               ([h1, h2, h3, h4, h5, h6, h7, h8])));
+named!(voting<&[u8], VoteType>, alt!(
+      do_parse!(tag_no_case!("KICK") >> spaces >> n: a_line >>
+        (VoteType::Kick(n)))
+    | do_parse!(tag_no_case!("MAP") >>
+        n: opt!(preceded!(spaces, a_line)) >>
+        (VoteType::Map(n)))
+    | do_parse!(tag_no_case!("PAUSE") >>
+        (VoteType::Pause))
+    | do_parse!(tag_no_case!("NEWSEED") >>
+        (VoteType::NewSeed))
+    | do_parse!(tag_no_case!("HEDGEHOGS") >> spaces >> n: u8_line >>
+        (VoteType::HedgehogsPerTeam(n)))));
 
 /** Recognizes messages which do not take any parameters */
 named!(basic_message<&[u8], HWProtocolMessage>, alt!(
@@ -94,10 +109,12 @@ named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
     | do_parse!(tag_no_case!("GLOBAL")   >> spaces >> m: a_line  >> (Global(m)))
     | do_parse!(tag_no_case!("WATCH")    >> spaces >> i: a_line  >> (Watch(i)))
     | do_parse!(tag_no_case!("GREETING") >> spaces >> m: a_line  >> (Greeting(m)))
-    | do_parse!(tag_no_case!("VOTE")     >> spaces >> m: a_line  >> (Vote(m)))
-    | do_parse!(tag_no_case!("FORCE")    >> spaces >> m: a_line  >> (ForceVote(m)))
+    | do_parse!(tag_no_case!("VOTE")     >> spaces >> m: yes_no_line >> (Vote(m)))
+    | do_parse!(tag_no_case!("FORCE")    >> spaces >> m: yes_no_line >> (ForceVote(m)))
     | do_parse!(tag_no_case!("INFO")     >> spaces >> n: a_line  >> (Info(n)))
     | do_parse!(tag_no_case!("MAXTEAMS") >> spaces >> n: u8_line >> (MaxTeams(n)))
+    | do_parse!(tag_no_case!("CALLVOTE") >>
+        v: opt!(preceded!(spaces, voting)) >> (CallVote(v)))
     | do_parse!(
         tag_no_case!("RND") >> alt!(spaces | peek!(end_of_message)) >>
         v: str_line >>

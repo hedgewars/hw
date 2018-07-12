@@ -1,3 +1,6 @@
+pub type ClientId = usize;
+pub type RoomId = usize;
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum ServerVar {
     MOTDNew(String),
@@ -38,4 +41,30 @@ pub struct TeamInfo {
 pub struct HedgehogInfo {
     pub name: String,
     pub hat: String,
+}
+
+#[derive(PartialEq, Eq, Clone, Debug)]
+pub enum VoteType {
+    Kick(String),
+    Map(Option<String>),
+    Pause,
+    NewSeed,
+    HedgehogsPerTeam(u8)
+}
+
+#[derive(Clone, Debug)]
+pub struct Voting {
+    pub ttl: u32,
+    pub voters: Vec<ClientId>,
+    pub votes: Vec<(ClientId, bool)>,
+    pub kind: VoteType
+}
+
+impl Voting {
+    pub fn new(kind: VoteType, voters: Vec<ClientId>) -> Voting {
+        Voting {
+            kind, voters, ttl: 2,
+            votes: Vec::new()
+        }
+    }
 }

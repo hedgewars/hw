@@ -1,10 +1,11 @@
-pub type ClientId = usize;
+use super::coretypes::ClientId;
 
 pub struct HWClient {
     pub id: ClientId,
     pub room_id: Option<usize>,
     pub nick: String,
     pub protocol_number: u32,
+    pub is_admin: bool,
     pub is_master: bool,
     pub is_ready: bool,
     pub is_in_game: bool,
@@ -21,6 +22,7 @@ impl HWClient {
             room_id: None,
             nick: String::new(),
             protocol_number: 0,
+            is_admin: false,
             is_master: false,
             is_ready: false,
             is_in_game: false,

@@ -1,7 +1,8 @@
 use slab;
 use utils;
 use super::{
-    client::*, room::*, actions, handlers,
+    client::HWClient, room::HWRoom, actions, handlers,
+    coretypes::{ClientId, RoomId},
     actions::{Destination, PendingMessage}
 };
 use protocol::messages::*;
@@ -103,6 +104,14 @@ impl HWServer {
 
     pub fn find_room_mut(&mut self, name: &str) -> Option<&mut HWRoom> {
         self.rooms.iter_mut().find(|(_, r)| r.name == name).map(|(_, r)| r)
+    }
+
+    pub fn find_client(&self, nick: &str) -> Option<&HWClient> {
+        self.clients.iter().find(|(_, c)| c.nick == nick).map(|(_, c)| c)
+    }
+
+    pub fn find_client_mut(&mut self, nick: &str) -> Option<&mut HWClient> {
+        self.clients.iter_mut().find(|(_, c)| c.nick == nick).map(|(_, c)| c)
     }
 
     pub fn select_clients<F>(&self, f: F) -> Vec<ClientId>
