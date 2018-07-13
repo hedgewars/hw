@@ -124,7 +124,7 @@ impl HWServer {
         self.select_clients(|(_, c)| c.room_id == Some(room_id))
     }
 
-    pub fn protocol_clients(&self, protocol: u32) -> Vec<ClientId> {
+    pub fn protocol_clients(&self, protocol: u16) -> Vec<ClientId> {
         self.select_clients(|(_, c)| c.protocol_number == protocol)
     }
 

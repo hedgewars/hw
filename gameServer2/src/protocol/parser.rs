@@ -25,6 +25,7 @@ named!(end_of_message, tag!("\n\n"));
 named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
 named!(  a_line<&[u8], String>, map!(str_line, String::from));
 named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
+named!(u16_line<&[u8],    u16>, map_res!(str_line, FromStr::from_str));
 named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
 named!(yes_no_line<&[u8], bool>, alt!(
       do_parse!(tag_no_case!("YES") >> (true))
@@ -87,7 +88,7 @@ named!(one_param_message<&[u8], HWProtocolMessage>, alt!(
     | do_parse!(tag!("ROOM_NAME")   >> eol >> n: a_line >> (RoomName(n)))
     | do_parse!(tag!("REMOVE_TEAM") >> eol >> n: a_line >> (RemoveTeam(n)))
 
-    | do_parse!(tag!("PROTO")   >> eol >> d: u32_line >> (Proto(d)))
+    | do_parse!(tag!("PROTO")   >> eol >> d: u16_line >> (Proto(d)))
 
     | do_parse!(tag!("QUIT")   >> msg: opt_param >> (Quit(msg)))
 ));

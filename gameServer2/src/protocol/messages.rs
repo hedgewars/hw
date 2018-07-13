@@ -18,7 +18,7 @@ pub enum HWProtocolMessage {
     Info(String),
     // not entered state
     Nick(String),
-    Proto(u32),
+    Proto(u16),
     Password(String, String),
     Checker(u32, String, String),
     // lobby
@@ -76,7 +76,7 @@ pub enum HWServerMessage {
     Pong,
     Bye(String),
     Nick(String),
-    Proto(u32),
+    Proto(u16),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
     ChatMsg {nick: String, msg: String},

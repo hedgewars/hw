@@ -118,7 +118,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         7 => SuperPower(),
         8 => Info(Ascii),
         9 => Nick(Ascii),
-        10 => Proto(u32),
+        10 => Proto(u16),
         11 => Password(Ascii, Ascii),
         12 => Checker(u32, Ascii, Ascii),
         13 => List(),

@@ -102,17 +102,17 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         },
         Fix => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin { r.is_fixed = true }
+                if c.is_admin() { r.is_fixed = true }
             }
         }
         Unfix => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin { r.is_fixed = false }
+                if c.is_admin() { r.is_fixed = false }
             }
         }
         Greeting(text) => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin || c.is_master && !r.is_fixed {
+                if c.is_admin() || c.is_master() && !r.is_fixed {
                     r.greeting = text
                 }
             }
@@ -138,14 +138,15 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         },
         ToggleReady => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                let flags = if c.is_ready {
+                let flags = if c.is_ready() {
                     r.ready_players_number -= 1;
                     "-r"
                 } else {
                     r.ready_players_number += 1;
                     "+r"
                 };
-                c.is_ready = !c.is_ready;
+                let is_ready = !c.is_ready();
+                c.set_is_ready(is_ready);
                 let mut v =
                     vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
                         .send_all().in_room(r.id).action()];
@@ -209,7 +210,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 let room_id = r.id;
                 let addable_hedgehogs = r.addable_hedgehogs();
                 if let Some((_, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !c.is_master {
+                    if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
                     } else if number < 1 || number > 8
                            || number > addable_hedgehogs + team.hedgehogs_number {
@@ -233,7 +234,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
                 let room_id = r.id;
                 if let Some((owner, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !c.is_master {
+                    if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
                     } else if false  {
                         Vec::new()
@@ -260,7 +261,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
                 if r.is_fixed {
                     vec![Warn("Access denied.".to_string())]
-                } else if !c.is_master {
+                } else if !c.is_master() {
                     vec![ProtocolError("You're not the room master!".to_string())]
                 } else {
                     let v = vec![cfg.to_server_msg()
@@ -337,7 +338,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         }
         ForceVote(vote) => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                vec![AddVote{ vote, is_forced: c.is_admin} ]
+                vec![AddVote{ vote, is_forced: c.is_admin()} ]
             } else {
                 Vec::new()
             };
@@ -383,8 +384,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         RoundFinished => {
             let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_in_game {
-                    c.is_in_game = false;
+                if c.is_in_game() {
+                    c.set_is_in_game(false);
                     actions.push(ClientFlags("-g".to_string(), vec![c.nick.clone()]).
                         send_all().in_room(r.id).action());
                     if r.game_info.is_some() {

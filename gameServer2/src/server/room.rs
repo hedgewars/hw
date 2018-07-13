@@ -111,7 +111,7 @@ pub struct HWRoom {
     pub master_id: Option<ClientId>,
     pub name: String,
     pub password: Option<String>,
-    pub protocol_number: u32,
+    pub protocol_number: u16,
     pub greeting: String,
     pub is_fixed: bool,
 

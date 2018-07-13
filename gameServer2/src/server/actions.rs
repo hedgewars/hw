@@ -5,7 +5,7 @@ use std::{
 };
 use super::{
     server::HWServer,
-    room::{GameInfo},
+    room::GameInfo,
     client::HWClient,
     coretypes::{ClientId, RoomId, GameCfg, VoteType},
     room::HWRoom,
@@ -25,7 +25,7 @@ pub enum Destination {
     ToSelf,
     ToAll {
         room_id: Option<RoomId>,
-        protocol: Option<u32>,
+        protocol: Option<u16>,
         skip_self: bool
     }
 }
@@ -60,7 +60,7 @@ impl PendingMessage {
         self
     }
 
-    pub fn with_protocol(mut self, protocol_number: u32) -> PendingMessage {
+    pub fn with_protocol(mut self, protocol_number: u16) -> PendingMessage {
         if let Destination::ToAll {ref mut protocol, ..} = self.destination {
             *protocol = Some(protocol_number)
         }
@@ -218,14 +218,14 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 let c = &mut server.clients[client_id];
                 r.players_number += 1;
                 c.room_id = Some(room_id);
-                c.is_joined_mid_game = false;
-                if r.master_id == Some(c.id) {
+
+                let is_master = r.master_id == Some(c.id);
+                c.set_is_master(is_master);
+                c.set_is_ready(is_master);
+                c.set_is_joined_mid_game(false);
+
+                if is_master {
                     r.ready_players_number += 1;
-                    c.is_master = true;
-                    c.is_ready = true;
-                } else {
-                    c.is_ready = false;
-                    c.is_master = false;
                 }
 
                 let mut v = vec![
@@ -236,11 +236,11 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     v.push(ChatMsg {nick: "[greeting]".to_string(), msg: r.greeting.clone()}
                         .send_self().action());
                 }
-                if !c.is_master {
+                if !c.is_master() {
                     let team_names: Vec<_>;
                     if let Some(ref mut info) = r.game_info {
-                        c.is_in_game = true;
-                        c.is_joined_mid_game = true;
+                        c.set_is_in_game(true);
+                        c.set_is_joined_mid_game(true);
 
                         {
                             let teams = info.client_teams(c.id);
@@ -319,7 +319,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                             .send(to).action());
                     }
                     let nicks: Vec<_> = server.clients.iter()
-                        .filter(|(_, c)| c.room_id == Some(r.id) && c.is_ready)
+                        .filter(|(_, c)| c.room_id == Some(r.id) && c.is_ready())
                         .map(|(_, c)| c.nick.clone()).collect();
                     if !nicks.is_empty() {
                         actions.push(ClientFlags("+r".to_string(), nicks)
@@ -411,10 +411,10 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             let lobby_id = server.lobby_id;
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 r.players_number -= 1;
-                if c.is_ready && r.ready_players_number > 0 {
+                if c.is_ready() && r.ready_players_number > 0 {
                     r.ready_players_number -= 1;
                 }
-                if c.is_master && (r.players_number > 0 || r.is_fixed) {
+                if c.is_master() && (r.players_number > 0 || r.is_fixed) {
                     actions.push(ChangeMaster(r.id, None));
                 }
                 actions.push(ClientFlags("-i".to_string(), vec![c.nick.clone()])
@@ -450,7 +450,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 match r.master_id {
                     Some(id) if id == c.id => {
-                        c.is_master = false;
+                        c.set_is_master(false);
                         r.master_id = None;
                         actions.push(ClientFlags("-h".to_string(), vec![c.nick.clone()])
                             .send_all().in_room(r.id).action());
@@ -464,7 +464,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         .send_all().in_room(r.id).action());
                 }
             }
-            new_id.map(|id| server.clients[id].is_master = true);
+            new_id.map(|id| server.clients[id].set_is_master(true));
             server.react(client_id, actions);
         }
         RemoveTeam(name) => {
@@ -476,7 +476,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 }
                 actions.push(TeamRemove(name.clone()).send_all().in_room(r.id).action());
                 actions.push(SendRoomUpdate(None));
-                if r.game_info.is_some() && c.is_in_game {
+                if r.game_info.is_some() && c.is_in_game() {
                     actions.push(SendTeamRemovalMessage(name));
                 }
             }
@@ -514,7 +514,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     room.start_round();
                     for id in room_clients {
                         let c = &mut server.clients[id];
-                        c.is_in_game = true;
+                        c.set_is_in_game(false);
                         c.team_indices = room.client_team_indices(c.id);
                     }
                     vec![RunGame.send_all().in_room(room.id).action(),
@@ -564,7 +564,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
 
             if let Some(info) = old_info {
                 for (_, c) in server.clients.iter() {
-                    if c.room_id == Some(room_id) && c.is_joined_mid_game {
+                    if c.room_id == Some(room_id) && c.is_joined_mid_game() {
                         actions.push(SendRoomData{
                             to: c.id, teams: false,
                             config: true, flags: false});
@@ -579,10 +579,11 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             let nicks: Vec<_> = server.clients.iter_mut()
                 .filter(|(_, c)| c.room_id == Some(room_id))
                 .map(|(_, c)| {
-                    c.is_ready = c.is_master;
-                    c.is_joined_mid_game = false;
+                    let is_master = c.is_master();
+                    c.set_is_ready(is_master);
+                    c.set_is_joined_mid_game(false);
                     c
-                }).filter_map(|c| if !c.is_master {
+                }).filter_map(|c| if !c.is_master() {
                     Some(c.nick.clone())
                 } else {
                     None
