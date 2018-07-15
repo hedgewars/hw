@@ -630,11 +630,11 @@ begin
 
     if GameType = gmtLandPreview then
         GenLandPreview()
-    else if GameType <> gmtSyntax then
+    else if (GameType <> gmtBadSyntax) and (GameType <> gmtSyntaxHelp) then
         Game();
 
-    // return 1 when engine is not called correctly
-    if GameType = gmtSyntax then
+    // return error when engine is not called correctly
+    if GameType = gmtBadSyntax then
         {$IFDEF PAS2C}
         exit(HaltUsageError);
         {$ELSE}
