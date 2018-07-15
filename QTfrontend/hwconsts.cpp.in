@@ -16,6 +16,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/*
+ * PLEASE NOTE: hwconsts.cpp is automatically generated from hwconsts.cpp.in.
+ * Do not edit hwconsts.cpp manually, it will be overwritten when building.
+ * Edit hwconsts.cpp.in to change the code.
+ */
+
 #include <QStandardItemModel>
 
 #include "hwconsts.h"
@@ -37,6 +43,7 @@ bool custom_config = false;
 bool custom_data = false;
 
 int cMaxTeams = 8;
+int cMaxHHs = 48;
 int cMinServerVersion = 3;
 
 QString * cDefaultAmmoStore = new QString( AMMOLINE_DEFAULT_QT AMMOLINE_DEFAULT_PROB
