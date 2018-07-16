@@ -1165,7 +1165,7 @@ procedure SDL_LockAudio; cdecl; external SDLLibName;
 procedure SDL_UnlockAudio; cdecl; external SDLLibName;
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
-function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
+function  SDL_JoystickNameForIndex(idx: LongInt): PChar; cdecl; external SDLLibName;
 function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
 function  SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickIndex(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
