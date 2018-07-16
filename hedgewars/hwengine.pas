@@ -45,12 +45,14 @@ function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
+procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
 
 implementation
 {$ELSE}
 procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
+procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer); forward;
 {$ENDIF}
 
 {$IFDEF WIN32}
@@ -597,6 +599,28 @@ begin
     freeEverything(false);
 end;
 
+// Write backtrace to console and log when an unhandled exception occurred
+procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
+var
+  Message: string;
+  i: LongInt;
+begin
+  WriteLnToConsole('An unhandled exception occurred at $' + HexStr(Addr) + ':');
+  if Obj is exception then
+   begin
+     Message := Exception(Obj).ClassName + ': ' + Exception(Obj).Message;
+     WriteLnToConsole(Message);
+   end
+  else
+    WriteLnToConsole('Exception object ' + Obj.ClassName + ' is not of class Exception.');
+  WriteLnToConsole(BackTraceStrFunc(Addr));
+  if (FrameCount > 0) then
+    begin
+      for i := 0 to FrameCount - 1 do
+        WriteLnToConsole(BackTraceStrFunc(Frames[i]));
+    end;
+end;
+
 {$IFDEF HWLIBRARY}
 function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 begin
@@ -624,6 +648,9 @@ begin
     // workaround for pascal's ParamStr and ParamCount
     init(argc, argv);
 {$ENDIF}
+    // Custom procedure for unhandled exceptions; ExceptProc is used by sysutils module
+    ExceptProc:= @catchUnhandledException;
+
     preInitEverything();
 
     GetParams();
