@@ -12,6 +12,7 @@ extern crate nom;
 extern crate log;
 extern crate env_logger;
 #[macro_use] extern crate proptest;
+#[macro_use] extern crate bitflags;
 
 //use std::io::*;
 //use rand::Rng;
