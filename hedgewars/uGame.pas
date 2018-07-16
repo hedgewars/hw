@@ -86,7 +86,7 @@ if SoundTimerTicks >= 50 then
         begin
         j:= Volume;
         i:= ChangeVolume(cVolumeDelta);
-        if isAudioMuted and (j<>i) then
+        if (not cIsSoundEnabled) or (isAudioMuted and (j<>i)) then
             AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
         else if not isAudioMuted then
             begin

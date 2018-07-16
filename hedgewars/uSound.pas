@@ -339,7 +339,11 @@ const channels: LongInt = 2;
 var success: boolean;
 begin
     if not (isSoundEnabled or isMusicEnabled) then
+        begin
+        isAudioMuted:= true;
+        cInitVolume:= 0;
         exit;
+        end;
     WriteToConsole('Init sound...');
     success:= SDL_InitSubSystem(SDL_INIT_AUDIO) = 0;
 
@@ -357,11 +361,16 @@ begin
         WriteLnToConsole(msgFailed);
         isSoundEnabled:= false;
         isMusicEnabled:= false;
+        isAudioMuted:= true;
+        cInitVolume:= 0;
     end;
 
     WriteToConsole('Init SDL_mixer... ');
     if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
     WriteLnToConsole(msgOK);
+
+    // from uVariables to be used by other modules
+    cIsSoundEnabled:= true;
 
     Mix_AllocateChannels(Succ(chanTPU));
     previousVolume:= cInitVolume;
