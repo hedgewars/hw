@@ -8,7 +8,7 @@ use protocol::messages::{
 use server::{
     coretypes::{ClientId, RoomId, Voting, VoteType},
     server::HWServer,
-    room::HWRoom,
+    room::{HWRoom, RoomFlags},
     actions::{Action, Action::*}
 };
 use utils::is_name_illegal;
@@ -81,6 +81,16 @@ fn voting_description(kind: &VoteType) -> String {
     })
 }
 
+fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
+    use protocol::messages::HWProtocolMessage::*;
+    match msg {
+        ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
+        ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
+        ToggleRegisteredOnly => RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS,
+        _ => RoomFlags::empty()
+    }
+}
+
 pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
     match message {
@@ -98,17 +108,17 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
         },
         Fix => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin() { r.is_fixed = true }
+                if c.is_admin() { r.set_is_fixed(true) }
             }
         }
         Unfix => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin() { r.is_fixed = false }
+                if c.is_admin() { r.set_is_fixed(false) }
             }
         }
         Greeting(text) => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin() || c.is_master() && !r.is_fixed {
+                if c.is_admin() || c.is_master() && !r.is_fixed() {
                     r.greeting = text
                 }
             }
@@ -117,7 +127,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             let actions =
                 if is_name_illegal(&new_name) {
                     vec![Warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
-                } else if server.room(client_id).map(|r| r.is_fixed).unwrap_or(false) {
+                } else if server.room(client_id).map(|r| r.is_fixed()).unwrap_or(false) {
                     vec![Warn("Access denied.".to_string())]
                 } else if server.has_room(&new_name) {
                     vec![Warn("A room with the same name already exists.".to_string())]
@@ -146,7 +156,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 let mut v =
                     vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
                         .send_all().in_room(r.id).action()];
-                if r.is_fixed && r.ready_players_number as u32 == r.players_number {
+                if r.is_fixed() && r.ready_players_number == r.players_number {
                     v.push(StartRoomGame(r.id))
                 }
                 v
@@ -166,6 +176,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     actions.push(Warn("There's already a team with same name in the list.".to_string()))
                 } else if r.game_info.is_some() {
                     actions.push(Warn("Joining not possible: Round is in progress.".to_string()))
+                } else if r.is_team_add_restricted() {
+                    actions.push(Warn("This room currently does not allow adding new teams.".to_string()));
                 } else {
                     let team = r.add_team(c.id, info);
                     c.teams_in_game += 1;
@@ -252,7 +264,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
         },
         Cfg(cfg) => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                if r.is_fixed {
+                if r.is_fixed() {
                     vec![Warn("Access denied.".to_string())]
                 } else if !c.is_master() {
                     vec![ProtocolError("You're not the room master!".to_string())]
@@ -335,6 +347,12 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 Vec::new()
             };
             server.react(client_id, actions);
+        }
+        ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly  => {
+            if server.clients[client_id].is_master() {
+                server.rooms[room_id].flags.toggle(room_message_flag(&message));
+            }
+            server.react(client_id, vec![SendRoomUpdate(None)]);
         }
         StartGame => {
             let actions = if let (_, Some(r)) = server.client_and_room(client_id) {

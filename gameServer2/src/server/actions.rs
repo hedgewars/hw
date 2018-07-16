@@ -5,7 +5,7 @@ use std::{
 };
 use super::{
     server::HWServer,
-    room::GameInfo,
+    room::{GameInfo, RoomFlags},
     client::HWClient,
     coretypes::{ClientId, RoomId, GameCfg, VoteType},
     room::HWRoom,
@@ -414,7 +414,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 if c.is_ready() && r.ready_players_number > 0 {
                     r.ready_players_number -= 1;
                 }
-                if c.is_master() && (r.players_number > 0 || r.is_fixed) {
+                if c.is_master() && (r.players_number > 0 || r.is_fixed()) {
                     actions.push(ChangeMaster(r.id, None));
                 }
                 actions.push(ClientFlags("-i".to_string(), vec![c.nick.clone()])
@@ -425,7 +425,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
 
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 c.room_id = Some(lobby_id);
-                if r.players_number == 0 && !r.is_fixed {
+                if r.players_number == 0 && !r.is_fixed() {
                     actions.push(RemoveRoom(r.id));
                 } else {
                     actions.push(RemoveClientTeams);
@@ -439,7 +439,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         ChangeMaster(room_id, new_id) => {
             let mut actions = Vec::new();
             let room_client_ids = server.room_clients(room_id);
-            let new_id = if server.room(client_id).map(|r| r.is_fixed).unwrap_or(false) {
+            let new_id = if server.room(client_id).map(|r| r.is_fixed()).unwrap_or(false) {
                 new_id
             } else {
                 new_id.or_else(||
@@ -459,6 +459,10 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     None => {}
                 }
                 r.master_id = new_id;
+                r.set_join_restriction(false);
+                r.set_team_add_restriction(false);
+                let is_fixed = r.is_fixed();
+                r.set_unregistered_players_restriction(is_fixed);
                 if let Some(nick) = new_nick {
                     actions.push(ClientFlags("+h".to_string(), vec![nick])
                         .send_all().in_room(r.id).action());

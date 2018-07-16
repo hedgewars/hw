@@ -49,6 +49,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 actions = if let Some((_, r)) = room {
                     if c.protocol_number != r.protocol_number {
                         vec![Warn("Room version incompatible to your Hedgewars version!".to_string())]
+                    } else if r.is_join_restricted() {
+                        vec![Warn("Access denied. This room currently doesn't allow joining.".to_string())]
+                    } else if r.players_number == u8::max_value() {
+                        vec![Warn("This room is already full".to_string())]
                     } else {
                         vec![MoveToRoom(r.id),
                              RoomJoined(nicks).send_self().action()]

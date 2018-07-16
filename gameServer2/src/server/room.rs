@@ -106,16 +106,25 @@ impl GameInfo {
     }
 }
 
+bitflags!{
+    pub struct RoomFlags: u8 {
+        const FIXED = 0b0000_0001;
+        const RESTRICTED_JOIN = 0b0000_0010;
+        const RESTRICTED_TEAM_ADD = 0b0000_0100;
+        const RESTRICTED_UNREGISTERED_PLAYERS = 0b0000_1000;
+    }
+}
+
 pub struct HWRoom {
     pub id: RoomId,
     pub master_id: Option<ClientId>,
     pub name: String,
     pub password: Option<String>,
-    pub protocol_number: u16,
     pub greeting: String,
-    pub is_fixed: bool,
+    pub protocol_number: u16,
+    pub flags: RoomFlags,
 
-    pub players_number: u32,
+    pub players_number: u8,
     pub default_hedgehog_number: u8,
     pub team_limit: u8,
     pub ready_players_number: u8,
@@ -133,7 +142,7 @@ impl HWRoom {
             name: String::new(),
             password: None,
             greeting: "".to_string(),
-            is_fixed: false,
+            flags: RoomFlags::empty(),
             protocol_number: 0,
             players_number: 0,
             default_hedgehog_number: 4,
@@ -250,11 +259,47 @@ impl HWRoom {
         }
     }
 
+    pub fn is_fixed(&self) -> bool {
+        self.flags.contains(RoomFlags::FIXED)
+    }
+    pub fn is_join_restricted(&self) -> bool {
+        self.flags.contains(RoomFlags::RESTRICTED_JOIN)
+    }
+    pub fn is_team_add_restricted(&self) -> bool {
+        self.flags.contains(RoomFlags::RESTRICTED_TEAM_ADD)
+    }
+    pub fn are_unregistered_players_restricted(&self) -> bool {
+        self.flags.contains(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS)
+    }
+
+    pub fn set_is_fixed(&mut self, value: bool) {
+        self.flags.set(RoomFlags::FIXED, value)
+    }
+    pub fn set_join_restriction(&mut self, value: bool) {
+        self.flags.set(RoomFlags::RESTRICTED_JOIN, value)
+    }
+    pub fn set_team_add_restriction(&mut self, value: bool) {
+        self.flags.set(RoomFlags::RESTRICTED_TEAM_ADD, value)
+    }
+    pub fn set_unregistered_players_restriction(&mut self, value: bool) {
+        self.flags.set(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS, value)
+    }
+
+    fn flags_string(&self) -> String {
+        let mut result = "-".to_string();
+        if self.game_info.is_some()  { result += "g" }
+        if self.password.is_some()   { result += "p" }
+        if self.is_join_restricted() { result += "j" }
+        if self.are_unregistered_players_restricted() {
+            result += "r"
+        }
+        result
+    }
+
     pub fn info(&self, master: Option<&HWClient>) -> Vec<String> {
-        let flags = "-".to_string();
         let c = &self.config;
         vec![
-            flags,
+            self.flags_string(),
             self.name.clone(),
             self.players_number.to_string(),
             self.teams.len().to_string(),
