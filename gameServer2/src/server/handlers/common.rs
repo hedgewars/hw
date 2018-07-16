@@ -1,30 +1,21 @@
 use protocol::messages::{
     HWProtocolMessage::{self, Rnd}, HWServerMessage::{self, ChatMsg},
 };
-use rand::{self, Rng};
-use server::{actions::Action, room::HWRoom, server::HWServer};
+use rand::{self, Rng, thread_rng};
+use server::{actions::Action, server::HWServer};
 
-pub fn rnd_action(options: Vec<String>, room: Option<&mut HWRoom>) -> Vec<Action> {
-    if let Some(room) = room {
-        let msg = rnd_reply(options);
-        vec![msg.send_all().in_room(room.id).action()]
+pub fn rnd_reply(options: &Vec<String>) -> HWServerMessage {
+    let mut rng = thread_rng();
+    let reply = if options.is_empty() {
+        (*rng.choose(&["heads", "tails"]).unwrap()).to_owned()
     } else {
-        Vec::new()
-    }
-}
-
-fn rnd_reply(options: Vec<String>) -> HWServerMessage {
-    let options = if options.is_empty() {
-        vec!["heads".to_owned(), "tails".to_owned()]
-    } else {
-        options
+        rng.choose(&options).unwrap().clone()
     };
-    let reply = rand::thread_rng().choose(&options).unwrap();
-    let msg = ChatMsg {
+
+    ChatMsg {
         nick: "[random]".to_owned(),
         msg: reply.clone(),
-    };
-    msg
+    }
 }
 
 #[cfg(test)]
@@ -45,7 +36,7 @@ mod tests {
     fn run_handle_test(opts: Vec<String>) {
         let opts2 = opts.clone();
         for opt in opts {
-            while reply2string(rnd_reply(opts2.clone())) != opt {}
+            while reply2string(rnd_reply(&opts2)) != opt {}
         }
     }
 
@@ -72,7 +63,7 @@ mod tests {
 
         while tries < 1000 || ((ones as f64 / tries as f64) - lim).abs() >= eps {
             tries += 1;
-            if reply2string(rnd_reply(opts.clone())) == 1.to_string() {
+            if reply2string(rnd_reply(&opts)) == 1.to_string() {
                 ones += 1;
             }
         }

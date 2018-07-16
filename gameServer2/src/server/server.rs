@@ -94,6 +94,8 @@ impl HWServer {
         }
     }
 
+    pub fn lobby(&self) -> &HWRoom { &self.rooms[self.lobby_id] }
+
     pub fn has_room(&self, name: &str) -> bool {
         self.rooms.iter().any(|(_, r)| r.name == name)
     }

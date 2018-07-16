@@ -6,7 +6,7 @@ use protocol::messages::{
     server_chat
 };
 use server::{
-    coretypes::{ClientId, Voting, VoteType},
+    coretypes::{ClientId, RoomId, Voting, VoteType},
     server::HWServer,
     room::HWRoom,
     actions::{Action, Action::*}
@@ -14,7 +14,7 @@ use server::{
 use utils::is_name_illegal;
 use std::mem::swap;
 use base64::{encode, decode};
-use super::common::rnd_action;
+use super::common::rnd_reply;
 
 #[derive(Clone)]
 struct ByMsg<'a> {
@@ -81,7 +81,7 @@ fn voting_description(kind: &VoteType) -> String {
     })
 }
 
-pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
     match message {
         Part(None) => server.react(client_id, vec![
@@ -92,11 +92,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             let actions = {
                 let c = &mut server.clients[client_id];
                 let chat_msg = ChatMsg {nick: c.nick.clone(), msg: msg};
-                if let Some(room_id) = c.room_id {
-                    vec![chat_msg.send_all().in_room(room_id).but_self().action()]
-                } else {
-                    Vec::new()
-                }
+                vec![chat_msg.send_all().in_room(room_id).but_self().action()]
             };
             server.react(client_id, actions);
         },
@@ -162,7 +158,6 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         AddTeam(info) => {
             let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                let room_id = r.id;
                 if r.teams.len() >= r.team_limit as usize {
                     actions.push(Warn("Too many teams!".to_string()))
                 } else if r.addable_hedgehogs() == 0 {
@@ -207,7 +202,6 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         },
         SetHedgehogsNumber(team_name, number) => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                let room_id = r.id;
                 let addable_hedgehogs = r.addable_hedgehogs();
                 if let Some((_, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
                     if !c.is_master() {
@@ -232,7 +226,6 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         SetTeamColor(team_name, color) => {
             let mut owner_id = None;
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                let room_id = r.id;
                 if let Some((owner, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
                     if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
@@ -280,8 +273,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     .send_self().action()])
         }
         CallVote(Some(kind)) => {
-            let (room_id, is_in_game) = server.room(client_id)
-                .map(|r| (r.id, r.game_info.is_some())).unwrap();
+            let is_in_game = server.rooms[room_id].game_info.is_some();
             let error = match &kind {
                 VoteType::Kick(nick) => {
                     if server.find_client(&nick).filter(|c| c.room_id == Some(room_id)).is_some() {
@@ -398,8 +390,16 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             server.react(client_id, actions)
         },
         Rnd(v) => {
-            let actions = rnd_action(v, server.room(client_id));
-            server.react(client_id, actions)
+            let result = rnd_reply(&v);
+            let mut echo = vec!["/rnd".to_string()];
+            echo.extend(v.into_iter());
+            let chat_msg = ChatMsg {
+                nick: server.clients[client_id].nick.clone(),
+                msg: echo.join(" ")
+            };
+            server.react(client_id, vec![
+                chat_msg.send_all().in_room(room_id).action(),
+                result.send_all().in_room(room_id).action()])
         },
         _ => warn!("Unimplemented!")
     }
