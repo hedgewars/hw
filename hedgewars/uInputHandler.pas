@@ -542,10 +542,10 @@ if ControllerNumControllers > 0 then
     begin
     for j:= 0 to pred(ControllerNumControllers) do
         begin
-        WriteLnToConsole('Using game controller: ' + shortstring(SDL_JoystickName(j)));
+        WriteLnToConsole('Game controller no. ' + IntToStr(j) + ', name "' + shortstring(SDL_JoystickNameForIndex(j)) + '":');
         Controller[j]:= SDL_JoystickOpen(j);
         if Controller[j] = nil then
-            WriteLnToConsole('* Failed to open game controller!')
+            WriteLnToConsole('* Failed to open game controller no. ' + IntToStr(j) + '!')
         else
             begin
             ControllerNumAxes[j]:= SDL_JoystickNumAxes(Controller[j]);
