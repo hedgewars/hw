@@ -192,6 +192,12 @@ function onHogAttack(ammoType)
 	end
 end
 
+function onAttack()
+	if GetCurAmmoType() == amGrenade then
+		HideMission()
+	end
+end
+
 function onGearAdd(gear)
 	if GetGearType(gear) == gtTarget then
 		targetsLeft = targetsLeft + 1
