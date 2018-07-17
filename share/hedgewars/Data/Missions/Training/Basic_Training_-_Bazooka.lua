@@ -12,6 +12,7 @@
 ]]
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local hog			-- Hog gear
 local weaponSelected = false	-- Player has selected the weapon
@@ -190,6 +191,9 @@ function newGamePhase()
 		AddAmmo(CurrentHedgehog, amBazooka, 0)
 		if shotsFired > maxTargets then
 			flawless = false
+		else
+			-- For 100% accuracy
+			awardAchievement(loc("Bazooka Master"))
 		end
 		if flawless then
 			PlaySound(sndFlawless, hog)
