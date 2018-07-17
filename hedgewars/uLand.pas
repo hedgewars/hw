@@ -974,7 +974,7 @@ begin
     if digest = '' then
         digest:= s
     else
-        checkFails(s = digest, 'Different map or critical resources loaded, sorry', true);
+        checkFails(s = digest, 'Loaded map or other critical resource does not match across all players', true);
 end;
 
 procedure chSendLandDigest(var s: shortstring);

@@ -829,7 +829,7 @@ begin
         {$ENDIF}
         end;
 
-    if checkFails((ProgrTex <> nil) and (LoadingText <> nil), 'Error - Progress or Loading Texture is nil!', true) then exit;
+    if checkFails((ProgrTex <> nil) and (LoadingText <> nil), 'Error - Progress or Loading texture is nil!', true) then exit;
 
     RenderClear();
     if Step < numsquares then

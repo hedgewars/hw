@@ -148,7 +148,7 @@ var c, i, t: LongWord;
     PrevHH, PrevTeam : LongWord;
 begin
 TargetPoint.X:= NoPointX;
-if checkFails(CurrentTeam <> nil, 'nil Team', true) then exit;
+if checkFails(CurrentTeam <> nil, 'Team is nil!', true) then exit;
 with CurrentHedgehog^ do
     if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
         begin

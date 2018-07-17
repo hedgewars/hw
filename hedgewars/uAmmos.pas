@@ -160,7 +160,7 @@ end;
 
 function GetAmmoByNum(num: LongInt): PHHAmmo;
 begin
-    if checkFails(num < StoreCnt, 'Invalid store number', true) then
+    if checkFails(num < StoreCnt, 'Invalid ammo store number', true) then
         GetAmmoByNum:= nil
     else
         GetAmmoByNum:= StoresList[num]

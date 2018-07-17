@@ -109,7 +109,7 @@ begin
     else begin
         code:= 0;
         while (code <= High(CurrentBinds.indices)) and (CurrentBinds.indices[code] <> index) do inc(code);
-        checkFails(code <= High(CurrentBinds.indices), 'binds registry inconsistency', True);
+        checkFails(code <= High(CurrentBinds.indices), 'Inconsistency in key binding registry', True);
         KeyBindToCode:= code;
     end;
 end;
@@ -333,7 +333,7 @@ end;
 procedure RegisterBind(var binds: TBinds; key, value: shortstring);
 var code: LongInt;
 begin
-    checkFails(binds.lastIndex < 255, 'too many binds', true);
+    checkFails(binds.lastIndex < 255, 'Too many key bindings', true);
 
     code:= KeyNameToCode(key);
 
