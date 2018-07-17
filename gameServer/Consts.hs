@@ -23,3 +23,12 @@ import qualified Data.ByteString.Char8 as B
 
 serverVersion :: B.ByteString
 serverVersion = "3"
+
+cHogsPerTeam :: Int
+cHogsPerTeam = 8
+
+cMaxTeams :: Int
+cMaxTeams = 8
+
+cMaxHHs :: Int
+cMaxHHs = 48

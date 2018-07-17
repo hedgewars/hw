@@ -27,6 +27,7 @@ import Control.Monad
 import Control.Monad.Reader
 --------------------------------------
 import CoreTypes
+import Consts
 import Utils
 import HandlerUtils
 import RoomsAndClients
@@ -144,7 +145,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 AnswerClients roomChans ["HH_NUM", tName, showB $ hhnum newTeam]
                 ]
         where
-        canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
+        canAddNumber rt = (cMaxHHs) - (sum $ map hhnum rt)
         findTeam = find (\t -> tName == teamname t) . teams
         dif = readInt_ difStr
         hhsList [] = []
@@ -153,7 +154,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         newTeamHHNum rt p = min p (canAddNumber rt)
         maxTeams r
             | roomProto r < 38 = 6
-            | otherwise = 8
+            | otherwise = cMaxTeams
 
 
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
@@ -196,7 +197,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
             [ProtocolError $ loc "You're not the room master!"]
         else if isNothing maybeTeam then
             []
-        else if hhNumber < 1 || hhNumber > 8 || hhNumber > canAddNumber r + hhnum team then
+        else if hhNumber < 1 || hhNumber > cHogsPerTeam || hhNumber > canAddNumber r + hhnum team then
             [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
@@ -204,7 +205,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     where
         hhNumber = readInt_ numberStr
         findTeam = find (\t -> teamName == teamname t) . teams
-        canAddNumber = (-) 48 . sum . map hhnum . teams
+        canAddNumber = (-) cMaxHHs . sum . map hhnum . teams
 
 
 
@@ -393,7 +394,7 @@ handleCmd_inRoom ("RND":rs) = do
 handleCmd_inRoom ["MAXTEAMS", n] = roomAdminOnly $ do
     cl <- thisClient
     let m = readInt_ n
-    if m < 2 || m > 8 then
+    if m < 2 || m > cMaxTeams then
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/maxteams: specify number from 2 to 8"]]
     else
         return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
@@ -476,7 +477,7 @@ handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
     cl <- thisClient
     let h = readInt_ hhs
 
-    if h > 0 && h <= 8 then
+    if h > 0 && h <= cHogsPerTeam then
         startVote $ VoteHedgehogsPerTeam h
         else
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote hedgehogs: Specify number from 1 to 8."]]
