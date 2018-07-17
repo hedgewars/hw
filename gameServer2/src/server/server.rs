@@ -40,7 +40,7 @@ impl HWServer {
             let client = HWClient::new(entry.key());
             entry.insert(client);
         }
-        self.send(key, Destination::ToSelf, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
+        self.send(key, &Destination::ToSelf, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
         key
     }
 
@@ -64,8 +64,8 @@ impl HWServer {
         }
     }
 
-    fn get_recipients(&self, client_id: ClientId, destination: Destination) -> Vec<ClientId> {
-        let mut ids = match destination {
+    fn get_recipients(&self, client_id: ClientId, destination: &Destination) -> Vec<ClientId> {
+        let mut ids = match *destination {
             Destination::ToSelf => vec![client_id],
             Destination::ToId(id) => vec![id],
             Destination::ToAll {room_id: Some(id), ..} =>
@@ -83,8 +83,8 @@ impl HWServer {
         ids
     }
 
-    pub fn send(&mut self, client_id: ClientId, destination: Destination, message: HWServerMessage) {
-        let ids = self.get_recipients(client_id, destination);
+    pub fn send(&mut self, client_id: ClientId, destination: &Destination, message: HWServerMessage) {
+        let ids = self.get_recipients(client_id, &destination);
         self.output.push((ids, message));
     }
 

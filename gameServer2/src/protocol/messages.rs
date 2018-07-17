@@ -41,7 +41,7 @@ pub enum HWProtocolMessage {
     // in room
     Part(Option<String>),
     Cfg(GameCfg),
-    AddTeam(TeamInfo),
+    AddTeam(Box<TeamInfo>),
     RemoveTeam(String),
     SetHedgehogsNumber(String, u8),
     SetTeamColor(String, u8),
@@ -245,7 +245,7 @@ impl HWProtocolMessage {
     }
 }
 
-fn construct_message(header: &[&str], msg: &Vec<String>) -> String {
+fn construct_message(header: &[&str], msg: &[String]) -> String {
     let mut v: Vec<_> = header.iter().map(|s| *s).collect();
     v.extend(msg.iter().map(|s| &s[..]));
     v.push("\n");

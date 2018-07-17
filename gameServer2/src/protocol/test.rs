@@ -139,7 +139,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         28 => Stats(),
         29 => Part(Option<Ascii>),
         30 => Cfg(GameCfg),
-        31 => AddTeam(TeamInfo),
+        31 => AddTeam(Box<TeamInfo>),
         32 => RemoveTeam(Ascii),
         33 => SetHedgehogsNumber(Ascii, u8),
         34 => SetTeamColor(Ascii, u8),

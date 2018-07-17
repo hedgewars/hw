@@ -4,7 +4,7 @@ use protocol::messages::{
 use rand::{self, Rng, thread_rng};
 use server::{actions::Action, server::HWServer};
 
-pub fn rnd_reply(options: &Vec<String>) -> HWServerMessage {
+pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     let mut rng = thread_rng();
     let reply = if options.is_empty() {
         (*rng.choose(&["heads", "tails"]).unwrap()).to_owned()

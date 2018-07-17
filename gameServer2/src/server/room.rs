@@ -53,7 +53,7 @@ impl RoomConfig {
     }
 }
 
-fn client_teams_impl(teams: &Vec<(ClientId, TeamInfo)>, client_id: ClientId)
+fn client_teams_impl(teams: &[(ClientId, TeamInfo)], client_id: ClientId)
     -> impl Iterator<Item = &TeamInfo> + Clone
 {
     teams.iter().filter(move |(id, _)| *id == client_id).map(|(_, t)| t)

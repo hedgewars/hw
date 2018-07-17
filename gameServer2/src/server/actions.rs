@@ -116,7 +116,7 @@ use self::Action::*;
 
 pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
     match action {
-        Send(msg) => server.send(client_id, msg.destination, msg.message),
+        Send(msg) => server.send(client_id, &msg.destination, msg.message),
         ByeClient(msg) => {
             let room_id;
             let nick;
@@ -126,12 +126,12 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 nick = c.nick.clone();
             }
 
-            room_id.map (|id| {
+            if let Some(id) = room_id{
                 if id != server.lobby_id {
                     server.react(client_id, vec![
                         MoveToLobby(format!("quit: {}", msg.clone()))]);
                 }
-            });
+            }
 
             server.react(client_id, vec![
                 LobbyLeft(nick, msg.clone()).send_all().action(),
@@ -273,7 +273,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         v.push(ForwardEngineMessage(info.msg_log.clone())
                             .send_self().action());
 
-                        for name in team_names.iter() {
+                        for name in &team_names {
                             v.push(ForwardEngineMessage(
                                 vec![to_engine_msg(once(b'G').chain(name.bytes()))])
                                 .send_all().in_room(r.id).action());
@@ -295,7 +295,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 if config {
                     actions.push(ConfigEntry("FULLMAPCONFIG".to_string(), r.map_config())
                         .send(to).action());
-                    for cfg in r.game_config().into_iter() {
+                    for cfg in r.game_config() {
                         actions.push(cfg.to_server_msg().send(to).action());
                     }
                 }
@@ -443,7 +443,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 new_id
             } else {
                 new_id.or_else(||
-                    room_client_ids.iter().find(|id| **id != client_id).map(|id| *id))
+                    room_client_ids.iter().find(|id| **id != client_id).cloned())
             };
             let new_nick = new_id.map(|id| server.clients[id].nick.clone());
 
@@ -468,7 +468,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         .send_all().in_room(r.id).action());
                 }
             }
-            new_id.map(|id| server.clients[id].set_is_master(true));
+            if let Some(id) = new_id { server.clients[id].set_is_master(true) }
             server.react(client_id, actions);
         }
         RemoveTeam(name) => {
@@ -572,7 +572,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         actions.push(SendRoomData{
                             to: c.id, teams: false,
                             config: true, flags: false});
-                        for name in info.left_teams.iter() {
+                        for name in &info.left_teams {
                             actions.push(TeamRemove(name.clone())
                                 .send(c.id).action());
                         }

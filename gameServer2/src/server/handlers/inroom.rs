@@ -35,8 +35,8 @@ impl <'a> Iterator for ByMsg<'a> {
     }
 }
 
-fn by_msg(source: &Vec<u8>) -> ByMsg {
-    ByMsg {messages: &source[..]}
+fn by_msg(source: &[u8]) -> ByMsg {
+    ByMsg {messages: source}
 }
 
 const VALID_MESSAGES: &[u8] =
@@ -99,9 +99,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
         Part(Some(msg)) => server.react(client_id, vec![
             MoveToLobby(format!("part: {}", msg))]),
         Chat(msg) => {
+            
             let actions = {
                 let c = &mut server.clients[client_id];
-                let chat_msg = ChatMsg {nick: c.nick.clone(), msg: msg};
+                let chat_msg = ChatMsg {nick: c.nick.clone(), msg};
                 vec![chat_msg.send_all().in_room(room_id).but_self().action()]
             };
             server.react(client_id, actions);
@@ -179,7 +180,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 } else if r.is_team_add_restricted() {
                     actions.push(Warn("This room currently does not allow adding new teams.".to_string()));
                 } else {
-                    let team = r.add_team(c.id, info);
+                    let team = r.add_team(c.id, *info);
                     c.teams_in_game += 1;
                     c.clan = Some(team.color);
                     actions.push(TeamAccepted(team.name.clone())

@@ -149,11 +149,11 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     flag: a_line    >> eol >>
                     difficulty: u8_line >> eol >>
                     hedgehogs: _8_hogs >>
-                    (AddTeam(TeamInfo{
+                    (AddTeam(Box::new(TeamInfo{
                         name, color, grave, fort,
                         voice_pack, flag, difficulty,
                         hedgehogs, hedgehogs_number: 0
-                     })))
+                     }))))
     | do_parse!(tag!("HH_NUM")    >> eol >>
                     n: a_line     >> eol >>
                     c: u8_line    >>
