@@ -8,6 +8,7 @@ Game:
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix video recorder not working when game audio was disabled
+ * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
 
 Highlander:
