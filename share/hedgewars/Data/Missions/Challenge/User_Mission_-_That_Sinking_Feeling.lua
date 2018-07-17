@@ -1,6 +1,7 @@
 
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player
 local hh = {}
@@ -241,8 +242,7 @@ function onGameTick()
 				SendStat(siCustomAchievement, string.format(loc("You saved %d of 8 Hapless Hogs."), hhLeft))
 
 				if hhLeft == 8 then
-					AddCaption(string.format(loc("Achievement gotten: %s"), loc("Lively Lifeguard")) ,0xffba00ff,capgrpMessage2)
-					SendStat(siCustomAchievement, loc("You have obtained an achievement: Lively Lifeguard"))
+					awardAchievement(loc("Lively Lifeguard"))
 				end
 				EndGame()
 
