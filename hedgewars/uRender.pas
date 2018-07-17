@@ -527,7 +527,10 @@ begin
 
 {$IFNDEF PAS2C}
     if not Load_GL_VERSION_2_0 then
-        halt;
+        begin
+        WriteLnToConsole('Load_GL_VERSION_2_0 returned false!');
+        halt(HaltStartupError);
+        end;
 {$ENDIF}
 
     shaderWater:= CompileProgram('water');

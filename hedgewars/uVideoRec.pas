@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uTypes, uDebug;
+uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uConsts, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';
@@ -153,7 +153,10 @@ begin
     FreeMem(RGB_Buffer, 4*numPixels);
     Close(cameraFile);
     if AVWrapper_Close() < 0 then
-        halt(-1);
+        begin
+        AddFileLog('AVWrapper_Close() has failed.');
+        halt(HaltVideoRec);
+        end;
     Erase(cameraFile);
     if recordAudio then
         DeleteFile(soundFilePath);
@@ -167,7 +170,10 @@ begin
     glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_RGBA, GL_UNSIGNED_BYTE, RGB_Buffer);
 
     if AVWrapper_WriteFrame(RGB_Buffer) < 0 then
-        halt(-1);
+        begin
+        AddFileLog('AVWrapper_WriteFrame(RGB_Buffer) has failed.');
+        halt(HaltVideoRec);
+        end;
 
     // inform frontend that we have encoded new frame
     s[0]:= #3;
