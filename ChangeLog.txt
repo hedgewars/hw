@@ -4,8 +4,10 @@
 Game:
  + Add new key to show mission panel (default: M)
  + Add chat command “/help”, displays help for chat commands
+ * Fix crash when 2 or more controllers were connected
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
+ * Fix video recorder not working when game audio was disabled
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
 
 Highlander:
