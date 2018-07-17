@@ -333,7 +333,7 @@ begin
         // call SDL_LockAudio because RecordPostMix may be executing right now
         SDL_LockAudio();
         Close(audioFile);
-        end
+        end;
     Close(cameraFile);
     if cIsSoundEnabled then
         begin
