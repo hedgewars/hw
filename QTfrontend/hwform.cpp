@@ -1707,14 +1707,6 @@ void HWForm::RemoveNetTeam(const HWTeam& team)
 
 void HWForm::StartMPGame()
 {
-    int numHogs = ui.pageMultiplayer->teamsSelect->getNumHedgehogs();
-    /* Don't allow to start game with more than cMaxHHs hedgehogs.
-    TODO: Remove this as soon the engine supports more hedgehogs. */
-    if(numHogs > cMaxHHs)
-    {
-        MessageDialog::ShowErrorMessage(QMessageBox::tr("Sorry, there are too many hedgehogs! Please try again with fewer hedgehogs.\n\nMaximum number of hedgehogs: %1\nCurrent number of hedgehogs: %2").arg(cMaxHHs).arg(numHogs), this);
-        return;
-    }
     QString ammo;
     ammo = ui.pageMultiplayer->gameCFG->WeaponsName->itemData(
                ui.pageMultiplayer->gameCFG->WeaponsName->currentIndex()

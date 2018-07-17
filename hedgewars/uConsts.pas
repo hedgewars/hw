@@ -172,7 +172,7 @@ const
 
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
-    cMaxHHs          = 48;
+    cMaxHHs          = cMaxTeams * (cMaxHHIndex+1);
 
     cMaxEdgePoints = 32768;
 

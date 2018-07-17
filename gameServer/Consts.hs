@@ -31,4 +31,4 @@ cMaxTeams :: Int
 cMaxTeams = 8
 
 cMaxHHs :: Int
-cMaxHHs = 48
+cMaxHHs = cHogsPerTeam * cMaxTeams
