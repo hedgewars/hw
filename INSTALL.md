@@ -79,7 +79,10 @@ To compile it, you need:
     - `entropy`
     - `zlib` >= 0.5.3 and < 0.6
     - `regex-tdfa`
-
+    - `binary` >= 0.8.5.1
+    - `yaml` >= 0.8.30
+    - `aeson`
+    - `text` >= 1.2
 
 Building
 --------
