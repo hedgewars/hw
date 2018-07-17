@@ -721,7 +721,7 @@ begin
 end;
 
 procedure openglRotatef(RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
-{ workaround for pascal bug http://bugs.freepascal.org/view.php?id=27222 }
+{ workaround for pascal bug https://bugs.freepascal.org/view.php?id=27222 }
 var tmpdir: LongInt;
 begin
 tmpdir:=dir;

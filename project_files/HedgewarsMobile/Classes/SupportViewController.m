@@ -122,16 +122,16 @@
         switch ([indexPath row])
         {
             case 0:
-                urlString = @"http://www.facebook.com/Hedgewars";
+                urlString = @"https://www.facebook.com/Hedgewars";
                 break;
             case 1:
-                urlString = @"http://twitter.com/hedgewars";
+                urlString = @"https://twitter.com/hedgewars";
                 break;
             case 2:
-                urlString = @"http://www.hedgewars.org";
+                urlString = @"https://www.hedgewars.org";
                 break;
             case 3:
-                urlString = @"http://webchat.freenode.net/?channels=hedgewars";
+                urlString = @"https://webchat.freenode.net/?channels=hedgewars";
                 break;
             default:
                 DLog(@"No way");

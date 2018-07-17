@@ -260,7 +260,7 @@ impl HWServerMessage {
             Pong => msg!["PONG"],
             Connected(protocol_version) => msg![
                 "CONNECTED",
-                "Hedgewars server http://www.hedgewars.org/",
+                "Hedgewars server https://www.hedgewars.org/",
                 protocol_version],
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],

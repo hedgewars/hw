@@ -202,7 +202,7 @@ var i: LongInt;
 {$ENDIF}
 begin
 {$IFDEF HWLIBRARY}
-    //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
+    //TODO: https://icculus.org/pipermail/physfs/2011-August/001006.html
     cPhysfsId:= shortstring(GetCurrentDir()) + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
 {$ELSE}
     cPhysfsId:= ParamStr(0);

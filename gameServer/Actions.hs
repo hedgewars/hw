@@ -634,7 +634,7 @@ processAction (AddClient cl) = do
         mapM_ processAction
             [
                 CheckBanned True
-                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
+                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server https://www.hedgewars.org/", serverVersion]
             ]
         else
         processAction $ ByeClient $ loc "Reconnected too fast"

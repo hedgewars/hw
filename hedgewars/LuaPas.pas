@@ -114,7 +114,7 @@ const
 (*
 ** $Id: lua.h,v 1.216 2006/01/10 12:50:13 roberto Exp $
 ** Lua - An Extensible Extension Language
-** Lua.org, PUC-Rio, Brazil (http://www.lua.org)
+** Lua.org, PUC-Rio, Brazil (https://www.lua.org)
 ** See Copyright Notice at the end of this file
 *)
 

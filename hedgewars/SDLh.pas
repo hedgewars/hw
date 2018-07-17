@@ -541,8 +541,8 @@ const
 /////////////////////////////////////////////////////////////////
 
 // two important reference points for the wanderers of this area
-// http://www.freepascal.org/docs-html/ref/refsu5.html
-// http://www.freepascal.org/docs-html/prog/progsu144.html
+// https://www.freepascal.org/docs-html/ref/refsu5.html
+// https://www.freepascal.org/docs-html/prog/progsu144.html
 
 type
     PSDL_Window   = Pointer;

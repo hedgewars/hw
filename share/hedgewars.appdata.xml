@@ -52,42 +52,42 @@
   <screenshot type="default">
     <caption>A classic Hedgewars match</caption>
     <caption xml:lang="de">Eine klassische Runde Hedgewars</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Snow_Dynamite.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-Snow_Dynamite.png</image>
   </screenshot>
   <screenshot>
     <caption>Throwing the dangerous hellish hand-grenade</caption>
     <caption xml:lang="de">Die gefährliche höllische Handgranate wird geworfen</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Hell_HellishHandgrenade.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-Hell_HellishHandgrenade.png</image>
   </screenshot>
   <screenshot>
     <caption>The awesome shoryuken attack</caption>
     <caption xml:lang="de">Der großartige Shoryuken-Angriff</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Trash_Shoryuken.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-Trash_Shoryuken.png</image>
   </screenshot>
   <screenshot>
     <caption>Kamikaze attack</caption>
     <caption xml:lang="de">Kamikaze-Angriff</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-Fruit_Kamikaze.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-Fruit_Kamikaze.png</image>
   </screenshot>
   <screenshot>
     <caption>Hedgehog using a sniper rifle</caption>
     <caption xml:lang="de">Igel, der ein Scharfschützengewehr benutzt</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-EarthRise_Sniper.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-EarthRise_Sniper.png</image>
   </screenshot>
   <screenshot>
     <caption>2nd mission in the campaign “A Classic Fairytale”</caption>
     <caption xml:lang="de">2. Mission in der Kampagne „Ein klassisches Märchen”</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-AFT02.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-AFT02.png</image>
   </screenshot>
   <screenshot>
     <caption>9th mission in the campaign “A Classic Fairytale”</caption>
     <caption xml:lang="de">9. Mission in der Kampagne „Ein klassisches Märchen”</caption>
-    <image width="1600" height="900">http://hedgewars.org/images/screenshots/0_9_19-AFT09.png</image>
+    <image width="1600" height="900">https://hedgewars.org/images/screenshots/0_9_19-AFT09.png</image>
   </screenshot>
  </screenshots>
- <url type="homepage">http://hedgewars.org/</url>
- <url type="bugtracker">http://hedgewars.org/bugs</url>
- <url type="faq">http://hedgewars.org/faq</url>
- <url type="help">http://hedgewars.org/wiki.html</url>
+ <url type="homepage">https://hedgewars.org/</url>
+ <url type="bugtracker">https://hedgewars.org/bugs</url>
+ <url type="faq">https://hedgewars.org/faq</url>
+ <url type="help">https://hedgewars.org/wiki.html</url>
  <developer_name>Hedgewars Project</developer_name>
 </component>

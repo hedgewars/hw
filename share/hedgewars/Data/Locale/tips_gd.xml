@@ -7,14 +7,14 @@
     <tip>Tha airm ann nach dèan ach beagan a dhochann ach dh'fhaoidte gum bi iad glè èifeachdach a-rèir an t-suidheachaidh. Feuch gun cleachd thu Iolaire an fhàsaich gus iomadh gràineag a chur dhan mhuir.</tip>
     <tip>Mur eil thu cinnteach na nì thu agus mur eil thu airson connadh a chaitheamh gun fheum, leig seachad do chuairt. Ach na fuirich ro fhada on a thigeadh bàs obann ort!</tip>
     <tip>A bheil thu airson ròpannan a shàbhaladh? Leig às an ròpa fad 's a bhios tu san adhair is loisg e a-rithist. Cho fad 's nach bean thu ri tìr is a chuimsicheas tu gu soirbheachail, cleachdaidh tu an ròpa agad a-rithist gun a bhith a' caitheamh connaidh!</tip>
-    <tip>Mur eil thu ag iarraidh gun cleachd daoine eile am far-ainm as fhearr leat air an fhrithealaiche oifigeil, clàraich cunntas air <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a>.</tip>
+    <tip>Mur eil thu ag iarraidh gun cleachd daoine eile am far-ainm as fhearr leat air an fhrithealaiche oifigeil, clàraich cunntas air <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>.</tip>
     <tip>A bheil thu seachd searbh dhen gheama àbhaisteach? Feuch fear dhe na miseanan — bheir iad dòigh-chluiche eadar-dhealaichte dhut a-rèir an fhir a thagh thu</tip>
     <tip>Clàraichidh sinn an geama mu dheireadh a chluich thu mar demo gu fèin-obrachail. Tagh “Geama ionadail” agus tagh putan nan “Demo” taobh deas aig a' bhonn gus an cluich no an stiùireadh.</tip>
     <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach. Ma tha duilgheadas agad, faighnich air a' bhòrd-bhrath no tadhail air an t-seòmar IRC againn!</tip>
     <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach. Ma tha e a' còrdadh riut, nach doir thu tabhartas airgid no obrach dhuinn?</tip>
     <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach. Co-roinn e le do theaghlach is caraidean mar a thogras tu!</tip>
     <tip>'S e bathar-bog saor (Open Source) a th' ann an Hedgewars a tha sinn a' cruthachadh gu saor-thoileach a cum tlachd! Coinnich ris an luchd-leasachaidh ann an <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
-    <tip>Bi fèill-chluiche oifigeil againn o àm gu àm. Sgaoilidh sinn brathan-naidheachd mu na tachartasan air <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> beagan làithean ro làimh.</tip>
+    <tip>Bi fèill-chluiche oifigeil againn o àm gu àm. Sgaoilidh sinn brathan-naidheachd mu na tachartasan air <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> beagan làithean ro làimh.</tip>
     <tip>Tha Hedgewars ri fhaighinn ann an iomadh cànan. Ma tha an cànan agad a dhìth no an t-eadar-theangachadh ro shean, nach cuir thu fios thugainn?</tip>
     <tip>Gabhaidh Hedgewars a ruith air iomadh siostam-obrachaidh, a' gabhail a-steach Microsoft Windows, Mac OS X agus GNU/Linux.</tip>
     <tip>Cuimhnich gur urrainn dhut na geamannan agad fhèin a suidheachadh air an lìonra ionadail no air loidhne. Tha barrachd roghainnean na geama simplidh agad.</tip>
@@ -42,7 +42,7 @@
     <tip>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</tip>
     <tip>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</tip>
     <tip>Want to know who’s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</tip>
-    <tip>Like Hedgewars? Become a fan on <a href="http://www.facebook.com/Hedgewars">Facebook</a> or follow us on <a href="http://twitter.com/hedgewars">Twitter</a></tip>
+    <tip>Like Hedgewars? Become a fan on <a href="https://www.facebook.com/Hedgewars">Facebook</a> or follow us on <a href="https://twitter.com/hedgewars">Twitter</a></tip>
     <tip>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you’ll have to share them somewhere to use them online.</tip>
     <tip>Keep your video card drivers up to date to avoid issues playing the game.</tip>
     <tip>Heads or tails? Type “/rnd” in the lobby and you’ll find out. Also “/rnd rock paper scissors” works!</tip>
@@ -66,7 +66,7 @@
     <tip>Be aware in lands of Snow and Christmas, because girders are made of slippery ice.</tip>
     <tip>The retreat time depends on the weapon you used. Be careful, some weapons don’t have a retreat time and immediately end your turn!</tip>
     <windows-only>
-        <tip>This version of Hedgewars supports <a href="http://www.xfire.com">Xfire</a>. Make sure to add Hedgewars to its game list so your friends can see you playing.</tip>
+        <tip>This version of Hedgewars supports <a href="https://www.xfire.com">Xfire</a>. Make sure to add Hedgewars to its game list so your friends can see you playing.</tip>
         <tip>You can find your Hedgewars configuration files under “My Documents\Hedgewars”. Create backups or take the files with you, but don’t edit them by hand.</tip>
     </windows-only>
     <mac-only>
