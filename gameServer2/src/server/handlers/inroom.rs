@@ -99,7 +99,6 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
         Part(Some(msg)) => server.react(client_id, vec![
             MoveToLobby(format!("part: {}", msg))]),
         Chat(msg) => {
-            
             let actions = {
                 let c = &mut server.clients[client_id];
                 let chat_msg = ChatMsg {nick: c.nick.clone(), msg};

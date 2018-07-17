@@ -4,7 +4,8 @@ use server::{
     client::{HWClient}
 };
 
-const MAX_HEDGEHOGS_IN_ROOM: u8 = 48;
+const MAX_HEDGEHOGS_IN_ROOM: u8 = 64;
+const MAX_TEAMS_IN_ROOM: u8 = 8;
 
 #[derive(Clone)]
 struct Ammo {
@@ -146,7 +147,7 @@ impl HWRoom {
             protocol_number: 0,
             players_number: 0,
             default_hedgehog_number: 4,
-            team_limit: 8,
+            team_limit: MAX_TEAMS_IN_ROOM,
             ready_players_number: 0,
             teams: Vec::new(),
             config: RoomConfig::new(),
