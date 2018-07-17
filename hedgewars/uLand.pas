@@ -314,7 +314,7 @@ begin
             end else getRandom(1);
 
         case cTemplateFilter of
-        0: OutError('Ask unC0Rr about what you did wrong', true);
+        0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
         1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
         2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
         3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];

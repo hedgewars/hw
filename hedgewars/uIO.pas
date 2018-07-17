@@ -515,7 +515,7 @@ with CurrentHedgehog^.Gear^,
         end
     else
         if CurrentTeam^.ExtDriven then
-            OutError('got /put while not being in choose target mode', false)
+            OutError('Got /put while not being in choose target mode', false)
 end;
 
 procedure initModule;
