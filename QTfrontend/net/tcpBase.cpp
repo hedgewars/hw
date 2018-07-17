@@ -235,7 +235,7 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
 
     // show error message if there was an error that was not an engine's
     // fatal error - because that one already sent a info via IPC
-    if ((exitCode != 0) && (exitCode != 2))
+    if ((exitCode != HWENGINE_EXITCODE_OK) && (exitCode != HWENGINE_EXITCODE_FATAL))
     {
         // inform user that something bad happened
         MessageDialog::ShowFatalMessage(
