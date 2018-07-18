@@ -166,6 +166,16 @@ handleCmd_lobby ("RND":rs) = do
     c <- liftM sendChan thisClient
     return [Random [c] rs]
 
+handleCmd_lobby ["HELP"] = do
+    cl <- thisClient
+    return [
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc "List of chat commands for lobby:" ],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /info <player>: Show info about player"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /me <message>: Chat action, e.g. '/me eats piza' becomes '* Player eats pizza'"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /rnd: Flip a virtual coin and write 'heads' or 'tails' in chat"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /rnd [A] [B] [C] [...]: Randomly select a word and write it in chat"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /help: Show command help"] ]
+
     ---------------------------
     -- Administrator's stuff --
 

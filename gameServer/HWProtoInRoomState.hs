@@ -405,6 +405,21 @@ handleCmd_inRoom ["FIX"] = serverAdminOnly $
 handleCmd_inRoom ["UNFIX"] = serverAdminOnly $
     return [ModifyRoom (\r -> r{isSpecial = False})]
 
+handleCmd_inRoom ["HELP"] = do
+    cl <- thisClient
+    return [
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc "List of chat command for rooms:"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /greeting: Set greeting message to be shown to players who join the room"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /delegate <player>: Surrender room control to player"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /maxteams <N>: Limit maximum number of teams to N"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /callvote [arguments]: Start a vote"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /vote <yes/no>: Vote 'yes' or 'no' for active vote"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /info <player>: Show info about player"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /me <message>: Chat action, e.g. '/me eats piza' becomes '* Player eats pizza'"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /rnd: Flip a virtual coin and write 'heads' or 'tails' in chat"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /rnd [A] [B] [C] [...]: Randomly select a word and write it in chat"],
+        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /help: Show command help"] ]
+
 handleCmd_inRoom ["GREETING", msg] = do
     cl <- thisClient
     rm <- thisRoom

@@ -90,6 +90,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
         h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
+        h "HELP" _ = handleCmd ["HELP"]
         h "RESTART_SERVER" "YES" = handleCmd ["RESTART_SERVER"]
         h "REGISTERED_ONLY" _ = serverAdminOnly $ do
             cl <- thisClient
