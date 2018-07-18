@@ -29,6 +29,7 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
+import CommandHelp
 
 
 handleCmd_lobby :: CmdHandler
@@ -168,13 +169,10 @@ handleCmd_lobby ("RND":rs) = do
 
 handleCmd_lobby ["HELP"] = do
     cl <- thisClient
-    return [
-        AnswerClients [sendChan cl] ["CHAT", "[server]", loc "List of chat commands for lobby:" ],
-        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /info <player>: Show info about player"],
-        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /me <message>: Chat action, e.g. '/me eats piza' becomes '* Player eats pizza'"],
-        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /rnd: Flip a virtual coin and write 'heads' or 'tails' in chat"],
-        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /rnd [A] [B] [C] [...]: Randomly select a word and write it in chat"],
-        AnswerClients [sendChan cl] ["CHAT", "[server]", loc " /help: Show command help"] ]
+    if isAdministrator cl then
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyAdmin)
+    else
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyPlayer)
 
     ---------------------------
     -- Administrator's stuff --
