@@ -381,7 +381,10 @@ QString HWChatWidget::linkedNick(const QString & nickname)
     return QString("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
 }
 
-const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
+// Regex to make some URLs clickable for selected domains:
+// - hedgewars.org (official website)
+// - hh.unit22.org (community addon server)
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|hh\\.unit22\\.org)(/[^ ]*)?)");
 
 bool HWChatWidget::containsHighlight(const QString & sender, const QString & message)
 {
@@ -401,7 +404,7 @@ bool HWChatWidget::containsHighlight(const QString & sender, const QString & mes
 QString HWChatWidget::messageToHTML(const QString & message)
 {
     QString formattedStr = message.toHtmlEscaped();
-    // link some urls
+    // link some URLs
     formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http\\2://\\4\">\\4</a>");
     return formattedStr;
 }
