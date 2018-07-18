@@ -496,8 +496,13 @@ handleCmd_inRoom ("VOTE" : m : p) = do
     let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
     if isJust b then
         voted (p == ["FORCE"]) (fromJust b)
-        else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "/vote: Please use 'yes' or 'no'."]]
+    else
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]",
+            if (p == ["FORCE"]) then
+                loc "/force: Please use 'yes' or 'no'."
+            else
+                loc "/vote: Please use 'yes' or 'no'."
+        ]]
 
 
 handleCmd_inRoom ["SAVE", stateName, location] = serverAdminOnly $ do
