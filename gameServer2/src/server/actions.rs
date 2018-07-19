@@ -331,11 +331,12 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         }
         AddVote{vote, is_forced} => {
             let mut actions = Vec::new();
-            if let (c, Some(r)) = server.client_and_room(client_id) {
+            if let Some(r) = server.room(client_id) {
                 let mut result = None;
                 if let Some(ref mut voting) = r.voting {
                     if is_forced || voting.votes.iter().find(|(id, _)| client_id == *id).is_none() {
-                        actions.push(server_chat("Your vote has been counted.").send_self().action());
+                        actions.push(server_chat("Your vote has been counted.".to_string())
+                            .send_self().action());
                         voting.votes.push((client_id, vote));
                         let i = voting.votes.iter();
                         let pro = i.clone().filter(|(_, v)| *v).count();
@@ -347,14 +348,16 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                             result = Some(false);
                         }
                     } else {
-                        actions.push(server_chat("You already have voted.").send_self().action());
+                        actions.push(server_chat("You already have voted.".to_string())
+                            .send_self().action());
                     }
                 } else {
-                    actions.push(server_chat("There's no voting going on.").send_self().action());
+                    actions.push(server_chat("There's no voting going on.".to_string())
+                        .send_self().action());
                 }
 
                 if let Some(res) = result {
-                    actions.push(server_chat("Voting closed.")
+                    actions.push(server_chat("Voting closed.".to_string())
                         .send_all().in_room(r.id).action());
                     let voting = replace(&mut r.voting, None).unwrap();
                     if res {
@@ -378,13 +381,25 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         }
                     }
                 },
-                VoteType::Map(_) => {
-                    unimplemented!();
+                VoteType::Map(None) => (),
+                VoteType::Map(Some(name)) => {
+                    if let Some(location) = server.rooms[room_id].load_config(&name) {
+                        actions.push(server_chat(location.to_string())
+                            .send_all().in_room(room_id).action());
+                        actions.push(SendRoomUpdate(None));
+                        for (_, c) in server.clients.iter() {
+                            if c.room_id == Some(room_id) {
+                               actions.push(SendRoomData{
+                                   to: c.id, teams: false,
+                                   config: true, flags: false})
+                            }
+                        }
+                    }
                 },
                 VoteType::Pause => {
                     if let Some(ref mut info) = server.rooms[room_id].game_info {
                         info.is_paused = !info.is_paused;
-                        actions.push(server_chat("Pause toggled.")
+                        actions.push(server_chat("Pause toggled.".to_string())
                             .send_all().in_room(room_id).action());
                         actions.push(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
                             .send_all().in_room(room_id).action());
@@ -531,7 +546,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         }
         SendTeamRemovalMessage(team_name) => {
             let mut actions = Vec::new();
-            if let (c, Some(r)) = server.client_and_room(client_id) {
+            if let Some(r) = server.room(client_id) {
                 if let Some(ref mut info) = r.game_info {
                     let msg = once(b'F').chain(team_name.bytes());
                     actions.push(ForwardEngineMessage(vec![to_engine_msg(msg)]).

@@ -277,7 +277,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
         }
         CallVote(None) => {
             server.react(client_id, vec![
-                server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>")
+                server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
                     .send_self().action()])
         }
         CallVote(Some(kind)) => {
@@ -287,20 +287,29 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     if server.find_client(&nick).filter(|c| c.room_id == Some(room_id)).is_some() {
                         None
                     } else {
-                        Some("/callvote kick: No such user!")
+                        Some("/callvote kick: No such user!".to_string())
                     }
                 },
                 VoteType::Map(None) => {
-                    Some("/callvote map: Not implemented")
+                    let names: Vec<_> = server.rooms[room_id].saves.keys().cloned().collect();
+                    if names.is_empty() {
+                        Some("/callvote map: No maps saved in this room!".to_string())
+                    } else {
+                        Some(format!("Available maps: {}", names.join(", ")))
+                    }
                 },
                 VoteType::Map(Some(name)) => {
-                    Some("/callvote map: Not implemented")
+                    if server.rooms[room_id].saves.get(&name[..]).is_some() {
+                        Some("/callvote map: No such map!".to_string())
+                    } else {
+                        None
+                    }
                 },
                 VoteType::Pause => {
                     if is_in_game {
                         None
                     } else {
-                        Some("/callvote pause: No game in progress!")
+                        Some("/callvote pause: No game in progress!".to_string())
                     }
                 },
                 VoteType::NewSeed => {
@@ -309,7 +318,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 VoteType::HedgehogsPerTeam(number) => {
                     match number {
                         1...8 => None,
-                        _ => Some("/callvote hedgehogs: Specify number from 1 to 8.")
+                        _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string())
                     }
                 },
             };
@@ -319,7 +328,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     let voting = Voting::new(kind, server.room_clients(client_id));
                     server.rooms[room_id].voting = Some(voting);
                     server.react(client_id, vec![
-                        server_chat(&msg).send_all().in_room(room_id).action(),
+                        server_chat(msg).send_all().in_room(room_id).action(),
                         AddVote{ vote: true, is_forced: false}]);
                 }
                 Some(msg) => {

@@ -1,4 +1,6 @@
-use std::{iter};
+use std::{
+    iter, collections::HashMap
+};
 use server::{
     coretypes::{ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting},
     client::{HWClient}
@@ -107,6 +109,11 @@ impl GameInfo {
     }
 }
 
+pub struct RoomSave {
+    pub location: String,
+    config: RoomConfig
+}
+
 bitflags!{
     pub struct RoomFlags: u8 {
         const FIXED = 0b0000_0001;
@@ -132,6 +139,7 @@ pub struct HWRoom {
     pub teams: Vec<(ClientId, TeamInfo)>,
     config: RoomConfig,
     pub voting: Option<Voting>,
+    pub saves: HashMap<String, RoomSave>,
     pub game_info: Option<GameInfo>
 }
 
@@ -152,6 +160,7 @@ impl HWRoom {
             teams: Vec::new(),
             config: RoomConfig::new(),
             voting: None,
+            saves: HashMap::new(),
             game_info: None
         }
     }
@@ -323,6 +332,15 @@ impl HWRoom {
         match self.game_info {
             Some(ref info) => game_config_from(&info.config),
             None => game_config_from(&self.config)
+        }
+    }
+
+    pub fn load_config(&mut self, name: &str) -> Option<&str> {
+        if let Some(save) = self.saves.get(name) {
+            self.config = save.config.clone();
+            Some(&save.location[..])
+        } else {
+            None
         }
     }
 

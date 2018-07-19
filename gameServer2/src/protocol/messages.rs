@@ -105,8 +105,8 @@ pub enum HWServerMessage {
     Unreachable,
 }
 
-pub fn server_chat(msg: &str) -> HWServerMessage  {
-    HWServerMessage::ChatMsg{ nick: "[server]".to_string(), msg: msg.to_string() }
+pub fn server_chat(msg: String) -> HWServerMessage  {
+    HWServerMessage::ChatMsg{ nick: "[server]".to_string(), msg }
 }
 
 impl GameCfg {
