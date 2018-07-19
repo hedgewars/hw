@@ -12,6 +12,9 @@ Game:
  * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
 
+Frontend:
+ * Controllers are detected again
+
 Highlander:
  * Fix all hogs getting teleport after hog placement phase
 

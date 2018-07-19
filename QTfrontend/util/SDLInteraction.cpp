@@ -105,19 +105,23 @@ void SDLInteraction::addGameControllerKeys() const
     QStringList result;
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
-// TODO or not TODO?
-#else
     int i = 0;
     while(i < 1024 && sdlkeys[i][1][0] != '\0')
         i++;
 
     // Iterate through all game controllers
+    qDebug("Detecting controllers ...");
     for(int jid = 0; jid < SDL_NumJoysticks(); jid++)
     {
         SDL_Joystick* joy = SDL_JoystickOpen(jid);
 
-        // Retrieve the game controller's name and strip "Controller (...)" that's added by some drivers (English only)
-        QString joyname = QString(SDL_JoystickName(jid)).replace(QRegExp("^Controller \\((.*)\\)$"), "\\1");
+        // Retrieve the game controller's name
+        QString joyname = QString(SDL_JoystickNameForIndex(jid));
+
+        // Strip "Controller (...)" that's added by some drivers (English only)
+        joyname.replace(QRegExp("^Controller \\((.*)\\)$"), "\\1");
+
+        qDebug("- Controller no. %d: %s", jid, qPrintable(joyname));
 
         // Connected Xbox 360 controller? Use specific button names then
         // Might be interesting to add 'named' buttons for the most often used gamepads
