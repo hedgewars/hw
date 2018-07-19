@@ -251,9 +251,15 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
 
 void TCPBase::tcpServerReady()
 {
-    disconnect(srvsList.first(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
-
-    RealStart();
+    if (!srvsList.isEmpty())
+    {
+        disconnect(srvsList.first(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+        RealStart();
+    }
+    else
+    {
+        qDebug("tcpServerReady() called while srvsList was empty. Not starting TCP server");
+    }
 }
 
 void TCPBase::Start(bool couldCancelPreviousRequest)
