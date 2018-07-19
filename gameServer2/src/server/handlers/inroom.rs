@@ -127,18 +127,14 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             let actions =
                 if is_name_illegal(&new_name) {
                     vec![Warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
-                } else if server.room(client_id).map(|r| r.is_fixed()).unwrap_or(false) {
+                } else if server.rooms[room_id].is_fixed() {
                     vec![Warn("Access denied.".to_string())]
                 } else if server.has_room(&new_name) {
                     vec![Warn("A room with the same name already exists.".to_string())]
                 } else {
                     let mut old_name = new_name.clone();
-                    if let (_, Some(r)) = server.client_and_room(client_id) {
-                        swap(&mut r.name, &mut old_name);
-                        vec![SendRoomUpdate(Some(old_name))]
-                    } else {
-                        Vec::new()
-                    }
+                    swap(&mut server.rooms[room_id].name, &mut old_name);
+                    vec![SendRoomUpdate(Some(old_name))]
                 };
             server.react(client_id, actions);
         },
@@ -321,7 +317,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 None => {
                     let msg = voting_description(&kind);
                     let voting = Voting::new(kind, server.room_clients(client_id));
-                    server.room(client_id).unwrap().voting = Some(voting);
+                    server.rooms[room_id].voting = Some(voting);
                     server.react(client_id, vec![
                         server_chat(&msg).send_all().in_room(room_id).action(),
                         AddVote{ vote: true, is_forced: false}]);
@@ -333,20 +329,11 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             }
         }
         Vote(vote) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                vec![AddVote{ vote, is_forced: false }]
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+            server.react(client_id, vec![AddVote{ vote, is_forced: false }]);
         }
         ForceVote(vote) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                vec![AddVote{ vote, is_forced: c.is_admin()} ]
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+            let is_forced = server.clients[client_id].is_admin();
+            server.react(client_id, vec![AddVote{ vote, is_forced }]);
         }
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly  => {
             if server.clients[client_id].is_master() {
@@ -355,12 +342,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             server.react(client_id, vec![SendRoomUpdate(None)]);
         }
         StartGame => {
-            let actions = if let (_, Some(r)) = server.client_and_room(client_id) {
-                vec![StartRoomGame(r.id)]
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+            server.react(client_id, vec![StartRoomGame(room_id)]);
         }
         EngineMessage(em) => {
             let mut actions = Vec::new();
