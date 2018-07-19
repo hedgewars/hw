@@ -157,8 +157,15 @@ begin
         AddFileLog('AVWrapper_Close() has failed.');
         halt(HaltVideoRec);
         end;
-    Erase(cameraFile);
-    if recordAudio then
+{$IOCHECKS OFF}
+    // Provoke IOResult to be set
+    FileSize(cameraFile);
+    if IOResult = 0 then
+        Erase(cameraFile)
+    else
+        AddFileLog('Warning: Tried to delete the cameraFile but it was already deleted');
+{$IOCHECKS ON}
+    if recordAudio and FileExists(soundFilePath) then
         DeleteFile(soundFilePath);
     SendIPC(_S'v'); // inform frontend that we finished
 end;
