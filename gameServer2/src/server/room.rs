@@ -335,6 +335,10 @@ impl HWRoom {
         }
     }
 
+    pub fn save_config(&mut self, name: String, location: String) {
+        self.saves.insert(name, RoomSave { location, config: self.config.clone() });
+    }
+
     pub fn load_config(&mut self, name: &str) -> Option<&str> {
         if let Some(save) = self.saves.get(name) {
             self.config = save.config.clone();
@@ -342,6 +346,10 @@ impl HWRoom {
         } else {
             None
         }
+    }
+
+    pub fn delete_config(&mut self, name: &str) -> bool {
+        self.saves.remove(name).is_some()
     }
 
     pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {

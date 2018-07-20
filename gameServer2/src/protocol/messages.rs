@@ -234,10 +234,10 @@ impl HWProtocolMessage {
             //CallVote(Option<(String, Option<String>)>) =>, ??
             Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg {"YES"} else {"NO"})],
             ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg {"YES"} else {"NO"})],
-            //Save(String, String), ??
-            Delete(room) => msg!["CMD", format!("DELETE {}", room)],
-            SaveRoom(room) => msg!["CMD", format!("SAVEROOM {}", room)],
-            LoadRoom(room) => msg!["CMD", format!("LOADROOM {}", room)],
+            Save(name, location) => msg!["CMD", format!("SAVE {} {}", name, location)],
+            Delete(name) => msg!["CMD", format!("DELETE {}", name)],
+            SaveRoom(name) => msg!["CMD", format!("SAVEROOM {}", name)],
+            LoadRoom(name) => msg!["CMD", format!("LOADROOM {}", name)],
             Malformed => msg!["A", "QUICK", "BROWN", "HOG", "JUMPS", "OVER", "THE", "LAZY", "DOG"],
             Empty => msg![""],
             _ => panic!("Protocol message not yet implemented")

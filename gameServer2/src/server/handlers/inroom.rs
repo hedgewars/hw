@@ -275,6 +275,21 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             };
             server.react(client_id, actions);
         }
+        Save(name, location) => {
+            let actions = vec![server_chat(format!("Room config saved as {}", name))
+                .send_all().in_room(room_id).action()];
+            server.rooms[room_id].save_config(name, location);
+            server.react(client_id, actions);
+        }
+        Delete(name) => {
+            let actions = if !server.rooms[room_id].delete_config(&name) {
+                vec![Warn(format!("Save doesn't exist: {}", name))]
+            } else {
+                vec![server_chat(format!("Room config {} has been deleted", name))
+                    .send_all().in_room(room_id).action()]
+            };
+            server.react(client_id, actions);
+        }
         CallVote(None) => {
             server.react(client_id, vec![
                 server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())

@@ -160,7 +160,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         //49 => CallVote(Option<(String, Option<String>)>),
         50 => Vote(bool),
         51 => ForceVote(bool),
-        //52 => Save(String, String),
+        52 => Save(Ascii, Ascii),
         53 => Delete(Ascii),
         54 => SaveRoom(Ascii),
         55 => LoadRoom(Ascii),
