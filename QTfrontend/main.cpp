@@ -191,8 +191,6 @@ int main(int argc, char *argv[]) {
     cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
 #endif
 
-    SDLInteraction::instance();
-
     HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -413,6 +411,8 @@ int main(int argc, char *argv[]) {
         registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
 #endif
+
+    SDLInteraction::instance();
 
     QString style = "";
     QString fname;
