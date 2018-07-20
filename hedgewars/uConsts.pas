@@ -318,6 +318,10 @@ const
     AMMO_INFINITE = 100;
     AMMO_FINITE_MAX = 99;
 
+    // Special msgParam value used internally for invalid/non-existing value
+    // Must not be sent over the network!
+    MSGPARAM_INVALID = High(LongWord);
+
     probabilityLevels: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 
     defaultBounciness = 1000;

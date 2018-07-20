@@ -419,6 +419,32 @@ with CurrentHedgehog^.Gear^ do
     end
 end;
 
+// Increment timer or bounciness
+procedure chTimerU(var s: shortstring);
+var t: LongWord;
+    tb: Byte;
+begin
+s:= s; // avoid compiler hint
+if CheckNoTeamOrHH then
+    exit;
+// We grab the current timer first so we can increment it
+if (CurrentHedgehog^.Gear^.Message and gmPrecise) = 0 then
+    t:= HHGetTimerMsg(CurrentHedgehog^.Gear)
+else
+    // Use bounciness if Precise is pressed
+    t:= HHGetBouncinessMsg(CurrentHedgehog^.Gear);
+if t <> MSGPARAM_INVALID then
+    begin
+    // Calculate new timer
+    Inc(t);
+    if t > 5 then
+        t:= 1;
+    tb:= t mod 255;
+    // Delegate the actual change to /timer
+    ParseCommand('timer ' + Chr(tb + Ord('0')), true);
+    end;
+end;
+
 procedure chSlot(var s: shortstring);
 var slot: LongWord;
     ss: shortstring;
@@ -938,6 +964,7 @@ begin
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
     RegisterVariable('+mission', @chShowMission_p, true);
     RegisterVariable('-mission', @chShowMission_m, true);
+    RegisterVariable('timer_u' , @chTimerU       , true );
 end;
 
 procedure freeModule;

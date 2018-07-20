@@ -380,6 +380,9 @@ begin
 
     RegisterBind(DefaultBinds, 'f12', 'fullscr');
 
+    for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
+    for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
+    RegisterBind(DefaultBinds, 'n', 'timer_u');
 
     RegisterBind(DefaultBinds, 'mousel', '/put');
     RegisterBind(DefaultBinds, 'mouser', 'ammomenu');
@@ -410,7 +413,7 @@ begin
     RegisterBind(DefaultBinds, 'j0b4', '+precise');
     RegisterBind(DefaultBinds, 'j0b5', 'put');
     RegisterBind(DefaultBinds, 'j0b6', 'switch');
-    // TODO: Add controller-friendly way to change timer
+    RegisterBind(DefaultBinds, 'j0b7', 'timer_u');
 
     // Cursor movement (also essential)
     RegisterBind(DefaultBinds, 'j0h1r', '+cur_r');
@@ -424,11 +427,8 @@ begin
     RegisterBind(DefaultBinds, 'j0a1d', '+cur_u');
 
     // Additional controls
-    RegisterBind(DefaultBinds, 'j0b7', 'findhh');
-    RegisterBind(DefaultBinds, 'j0b8', '+mission');
-
-    for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
-    for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
+    RegisterBind(DefaultBinds, 'j0b8', 'findhh');
+    RegisterBind(DefaultBinds, 'j0b9', '+mission');
 
     loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
 end;

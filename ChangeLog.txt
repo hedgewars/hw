@@ -3,6 +3,8 @@
 ====================== 0.9.25 ======================
 Game:
  + Add new key to show mission panel (default: M)
+ + Add new key to cycle through timer values (default: N)
+ + Add default controls for controller (see README.md)
  + Add chat command “/help”, displays help for chat commands
  + Increase hedgehog limit to 64
  * Functionality of controllers restored

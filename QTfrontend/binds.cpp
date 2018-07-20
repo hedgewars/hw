@@ -44,6 +44,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"timer 3",   "3",          QT_TRANSLATE_NOOP("binds", "timer 3 sec"),     NULL, NULL},
     {"timer 4",   "4",          QT_TRANSLATE_NOOP("binds", "timer 4 sec"),     NULL, NULL},
     {"timer 5",   "5",          QT_TRANSLATE_NOOP("binds", "timer 5 sec"),     NULL, NULL},
+    {"timer_u",   "n",          QT_TRANSLATE_NOOP("binds", "change timer"),    NULL, NULL},
     {"+attack",   "space",      QT_TRANSLATE_NOOP("binds", "attack"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Fire your selected weapon or trigger an utility item:")},
     {"put",       "mousel",     QT_TRANSLATE_NOOP("binds", "put"),             NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pick a weapon or a target location under the cursor:")},
     {"findhh",    "h",          QT_TRANSLATE_NOOP("binds", "autocam / find hedgehog"),QT_TRANSLATE_NOOP("binds (categories)", "Camera"), QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle automatic camera / refocus on active hedgehog:")},

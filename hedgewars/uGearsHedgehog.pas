@@ -31,6 +31,10 @@ procedure PickUp(HH, Gear: PGear);
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 procedure CheckIce(Gear: PGear); inline;
 procedure PlayTaunt(taunt: Longword);
+function HHGetTimer(Gear: PGear): LongWord;
+function HHGetTimerMsg(Gear: PGear): LongWord;
+function HHGetBounciness(Gear: PGear): LongWord;
+function HHGetBouncinessMsg(Gear: PGear): LongWord;
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
@@ -213,6 +217,57 @@ with Gear^.Hedgehog^ do
         end;
 end;
 
+// Return timer (in ticks) of hogs current ammo or MSGPARAM_INVALID
+// if not timerable
+function HHGetTimer(Gear: PGear): LongWord;
+var CurWeapon: PAmmo;
+begin
+CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
+with Gear^.Hedgehog^ do
+    if ((CurWeapon^.Propz and ammoprop_Timerable) <> 0) then
+        HHGetTimer:= CurWeapon^.Timer
+    else
+        HHGetTimer:= MSGPARAM_INVALID;
+end;
+
+// Returns timer as a corresponding msgParam for /timer command
+function HHGetTimerMsg(Gear: PGear): LongWord;
+var timer: LongInt;
+begin
+timer:= HHGetTimer(Gear);
+if timer > -1 then
+    HHGetTimerMsg:= timer div 1000
+else
+    HHGetTimerMsg:= MSGPARAM_INVALID
+end;
+
+// Returns the selected bounciness value for the hog gear's current ammo
+// or MSGPARAM_INVALID if current ammo has no settable bounciness
+function HHGetBounciness(Gear: PGear): LongWord;
+var CurWeapon: PAmmo;
+begin
+CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
+with Gear^.Hedgehog^ do
+    if ((CurWeapon^.Propz and ammoprop_SetBounce) <> 0) then
+        HHGetBounciness:= CurWeapon^.Bounciness
+    else
+        HHGetBounciness:= MSGPARAM_INVALID
+end;
+
+// Returns bounciness as a corresponding msgParam for /timer command
+function HHGetBouncinessMsg(Gear: PGear): LongWord;
+var bounciness, i: LongInt;
+begin
+    bounciness:= HHGetBounciness(Gear);
+    if bounciness > -1 then
+        for i:=0 to High(bouncinessLevels) do
+            if bounciness = bouncinessLevels[i] then
+                begin
+                HHGetBouncinessMsg:= i+1;
+                exit
+                end;
+    HHGetBouncinessMsg:= MSGPARAM_INVALID
+end;
 
 procedure Attack(Gear: PGear);
 var xx, yy, newDx, newDy, lx, ly: hwFloat;

@@ -77,15 +77,16 @@ in the settings menu.
 
 * 1st D-pad: Walk and aim
 * 2nd D-pad / 1st thumbstick: Move camera/cursor
-* Button 1: Long jump
-* Button 2: High jump
-* Button 3: Attack
-* Button 4: Ammo menu
-* Button 5: Precise
-* Button 6: Select target, or pick weapon (in ammo menu)
-* Button 7: Switch hedgehog
-* Button 8: Find hedgehog / toggle auto camera
-* Button 9: Mission panel
+* Button  1: Long jump
+* Button  2: High jump
+* Button  3: Attack
+* Button  4: Ammo menu
+* Button  5: Precise
+* Button  6: Select target, or pick weapon (in ammo menu)
+* Button  7: Switch hedgehog
+* Button  8: Change timer
+* Button  9: Find hedgehog / toggle auto camera
+* Button 10: Mission panel
 
 For the full list, go to the Hedgewars settings. Also read the weapon tooltips
 for weapon-specific controls.
@@ -96,7 +97,7 @@ These are lesser-known controls of Hedgewars, they are based on your
 configured controls:
 
 * Precise + Toggle hedgehog tags: Change visible hedgehog tags (team name/hog name/health)
-* Switch + Toggle hedgehog tags: Toggle hedgehog tag translucency
+* Switch  + Toggle hedgehog tags: Toggle hedgehog tag translucency
 * Precise + Toggle team bars + Switch: Toggle HUD
 * Precise + Capture (screenshot key): Save current map + mask into Screenshot directory
 
