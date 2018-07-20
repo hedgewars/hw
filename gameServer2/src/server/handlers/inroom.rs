@@ -372,9 +372,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 },
                 VoteType::Map(Some(name)) => {
                     if server.rooms[room_id].saves.get(&name[..]).is_some() {
-                        Some("/callvote map: No such map!".to_string())
-                    } else {
                         None
+                    } else {
+                        Some("/callvote map: No such map!".to_string())
                     }
                 },
                 VoteType::Pause => {
