@@ -7,6 +7,9 @@ bitflags!{
         const IS_READY = 0b0000_0100;
         const IS_IN_GAME = 0b0000_1000;
         const IS_JOINED_MID_GAME = 0b0001_0000;
+
+        const NONE = 0b0000_0000;
+        const DEFAULT = Self::NONE.bits;
     }
 }
 
@@ -28,7 +31,7 @@ impl HWClient {
             room_id: None,
             nick: String::new(),
             protocol_number: 0,
-            flags: ClientFlags::empty(),
+            flags: ClientFlags::DEFAULT,
             teams_in_game: 0,
             team_indices: Vec::new(),
             clan: None,

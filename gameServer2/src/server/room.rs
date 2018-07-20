@@ -5,23 +5,25 @@ use server::{
     coretypes::{ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting},
     client::{HWClient}
 };
+use serde::{Serialize, Deserialize};
+use serde_yaml;
 
 const MAX_HEDGEHOGS_IN_ROOM: u8 = 64;
 const MAX_TEAMS_IN_ROOM: u8 = 8;
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Ammo {
     name: String,
     settings: Option<String>
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Scheme {
     name: String,
     settings: Option<Vec<String>>
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct RoomConfig {
     feature_size: u32,
     map_type: String,
@@ -109,6 +111,7 @@ impl GameInfo {
     }
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct RoomSave {
     pub location: String,
     config: RoomConfig
@@ -350,6 +353,17 @@ impl HWRoom {
 
     pub fn delete_config(&mut self, name: &str) -> bool {
         self.saves.remove(name).is_some()
+    }
+
+    pub fn get_saves(&self) -> Result<String, serde_yaml::Error> {
+        serde_yaml::to_string(&(&self.greeting, &self.saves))
+    }
+
+    pub fn set_saves(&mut self, text: &str) -> Result<(), serde_yaml::Error> {
+        serde_yaml::from_str::<(String, HashMap<String, RoomSave>)>(text).map(|(greeting, saves)| {
+            self.greeting = greeting;
+            self.saves = saves;
+        })
     }
 
     pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {

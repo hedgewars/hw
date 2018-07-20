@@ -12,7 +12,10 @@ use server::{
     actions::{Action, Action::*}
 };
 use utils::is_name_illegal;
-use std::mem::swap;
+use std::{
+    mem::swap, fs::{File, OpenOptions},
+    io::{Read, Write, Result, Error, ErrorKind}
+};
 use base64::{encode, decode};
 use super::common::rnd_reply;
 
@@ -89,6 +92,18 @@ fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
         ToggleRegisteredOnly => RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS,
         _ => RoomFlags::empty()
     }
+}
+
+fn read_file(filename: &str) -> Result<String> {
+    let mut reader = File::open(filename)?;
+    let mut result = String::new();
+    reader.read_to_string(&mut result)?;
+    Ok(result)
+}
+
+fn write_file(filename: &str, content: &str) -> Result<()> {
+    let mut writer = OpenOptions::new().create(true).write(true).open(filename)?;
+    writer.write_all(content.as_bytes())
 }
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, message: HWProtocolMessage) {
@@ -279,6 +294,48 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             let actions = vec![server_chat(format!("Room config saved as {}", name))
                 .send_all().in_room(room_id).action()];
             server.rooms[room_id].save_config(name, location);
+            server.react(client_id, actions);
+        }
+        SaveRoom(filename) => {
+            let actions = if server.clients[client_id].is_admin() {
+                match server.rooms[room_id].get_saves() {
+                    Ok(text) => match write_file(&filename, &text) {
+                        Ok(_) => vec![server_chat("Room configs saved successfully.".to_string())
+                            .send_self().action()],
+                        Err(e) => {
+                            warn!("Error while writing the config file \"{}\": {}", filename, e);
+                            vec![Warn("Unable to save the room configs.".to_string())]
+                        }
+                    }
+                    Err(e) => {
+                        warn!("Error while serializing the room configs: {}", e);
+                        vec![Warn("Unable to serialize the room configs.".to_string())]
+                    }
+                }
+            } else {
+                Vec::new()
+            };
+            server.react(client_id, actions);
+        }
+        LoadRoom(filename) => {
+            let actions = if server.clients[client_id].is_admin() {
+                match read_file(&filename) {
+                    Ok(text) => match server.rooms[room_id].set_saves(&text) {
+                        Ok(_) => vec![server_chat("Room configs loaded successfully.".to_string())
+                            .send_self().action()],
+                        Err(e) => {
+                            warn!("Error while deserializing the room configs: {}", e);
+                            vec![Warn("Unable to deserialize the room configs.".to_string())]
+                        }
+                    }
+                    Err(e) => {
+                        warn!("Error while reading the config file \"{}\": {}", filename, e);
+                        vec![Warn("Unable to load the room configs.".to_string())]
+                    }
+                }
+            } else {
+                Vec::new()
+            };
             server.react(client_id, actions);
         }
         Delete(name) => {

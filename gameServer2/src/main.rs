@@ -13,6 +13,9 @@ extern crate log;
 extern crate env_logger;
 #[macro_use] extern crate proptest;
 #[macro_use] extern crate bitflags;
+extern crate serde;
+extern crate serde_yaml;
+#[macro_use] extern crate serde_derive;
 
 //use std::io::*;
 //use rand::Rng;
