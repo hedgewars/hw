@@ -320,6 +320,9 @@ const
 
     probabilityLevels: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 
+    defaultBounciness = 1000;
+    bouncinessLevels: array [0..4] of LongWord = (350, 700, defaultBounciness, 2000, 4000);
+
     // explosion flags
     //EXPLAllDamageInRadius = $00000001;  Completely unused for ages
     EXPLAutoSound         = $00000002;

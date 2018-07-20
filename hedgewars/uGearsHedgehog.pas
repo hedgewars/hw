@@ -185,28 +185,25 @@ with Gear^.Hedgehog^ do
     if ((Gear^.Message and gmPrecise) <> 0) and ((CurWeapon^.Propz and ammoprop_SetBounce) <> 0) then
         begin
         color:= Gear^.Hedgehog^.Team^.Clan^.Color;
+
         case Gear^.MsgParam of
             1: begin
                AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce1]), color, capgrpAmmostate);
-               CurWeapon^.Bounciness:= 350;
                end;
             2: begin
                AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce2]), color, capgrpAmmostate);
-               CurWeapon^.Bounciness:= 700;
                end;
             3: begin
                AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce3]), color, capgrpAmmostate);
-               CurWeapon^.Bounciness:= 1000;
                end;
             4: begin
                AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce4]), color, capgrpAmmostate);
-               CurWeapon^.Bounciness:= 2000;
                end;
             5: begin
                AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce5]), color, capgrpAmmostate);
-               CurWeapon^.Bounciness:= 4000;
                end
-            end
+            end;
+        CurWeapon^.Bounciness:= bouncinessLevels[Gear^.MsgParam - 1];
         end
     else if (CurWeapon^.Propz and ammoprop_Timerable) <> 0 then
         begin
