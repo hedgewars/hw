@@ -69,6 +69,24 @@ The most important default controls are:
 * T: Chat
 * U: Team chat
 
+### Default controller controls
+Hedgewars also supports controllers. By default, Hedgewars sets up a few
+controls for your first (!) connected controller.
+This default might not be ideal, we recommend you set manual controls
+in the settings menu.
+
+* 1st D-pad: Walk and aim
+* 2nd D-pad / 1st thumbstick: Move camera/cursor
+* Button 1: Long jump
+* Button 2: High jump
+* Button 3: Attack
+* Button 4: Ammo menu
+* Button 5: Precise
+* Button 6: Select target, or pick weapon (in ammo menu)
+* Button 7: Switch hedgehog
+* Button 8: Find hedgehog / toggle auto camera
+* Button 9: Mission panel
+
 For the full list, go to the Hedgewars settings. Also read the weapon tooltips
 for weapon-specific controls.
 
