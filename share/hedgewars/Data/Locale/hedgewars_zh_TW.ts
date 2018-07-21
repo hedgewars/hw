@@ -190,6 +190,10 @@
         <source>Feedback</source>
         <translation type="unfinished">信息反饋</translation>
     </message>
+    <message>
+        <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -3021,12 +3025,6 @@ Not all players are ready.</source>
 並不是所有的玩家都準備就緒。</translation>
     </message>
     <message>
-        <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
-
-Current number of hedgehogs: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Teams - Name already taken</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3592,6 +3590,14 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <source>toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>change timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show mission information</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3699,31 +3705,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>軸</translation>
+        <translation type="vanished">軸</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(上)</translation>
+        <translation type="vanished">(上)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(下)</translation>
+        <translation type="vanished">(下)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>帽子</translation>
+        <translation type="vanished">帽子</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>(左)</translation>
+        <translation type="vanished">(左)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>(右)</translation>
+        <translation type="vanished">(右)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>按鈕</translation>
+        <translation type="vanished">按鈕</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -4011,7 +4017,26 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished">十字键</translation>
+        <translation type="obsolete">十字键</translation>
+    </message>
+    <message>
+        <source>D-pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4346,6 +4371,142 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>hedgehogs per team: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/info &lt;player&gt;: Show info about player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/help: Show chat command help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote [arguments]: Start a vote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/delegate &lt;player&gt;: Surrender room control to player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/save &lt;parameter&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/stats: Query server stats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/fix: Force this room to stay open when it is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/unfix: Undo the /fix command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/delete &lt;parameter&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of lobby chat commands:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of room chat commands:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Commands for server admins only:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown command:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Say &apos;/help&apos; in chat for a list of commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lobby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(playing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(spectating)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player is not online.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

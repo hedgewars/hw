@@ -182,6 +182,10 @@
         <source>Feedback</source>
         <translation>フィードバック</translation>
     </message>
+    <message>
+        <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -189,10 +193,12 @@
         <source>Never</source>
         <translation>なし</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>%1ターンごとに</translation>
-    </message>    
+        <translation type="unfinished">
+            <numerusform>%1ターンごとに</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>GameCFGWidget</name>
@@ -218,7 +224,7 @@
     </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>    
+    <name>GameSchemeModel</name>
     <message>
         <source>New</source>
         <translation>新規</translation>
@@ -245,25 +251,35 @@
 </context>
 <context>
     <name>HWApplication</name>
-    <message>
+    <message numerus="yes">
         <source>%1 minutes</source>
-        <translation>%1分</translation>
+        <translation type="unfinished">
+            <numerusform>%1分</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 hour</source>
-        <translation>%1時間</translation>
+        <translation type="unfinished">
+            <numerusform>%1時間</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 hours</source>
-        <translation>%1時間</translation>
+        <translation type="unfinished">
+            <numerusform>%1時間</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 day</source>
-        <translation>%1日</translation>
+        <translation type="unfinished">
+            <numerusform>%1日</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 days</source>
-        <translation>%1日</translation>
+        <translation type="unfinished">
+            <numerusform>%1日</numerusform>
+        </translation>
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
@@ -456,8 +472,8 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation>ヘッジウォーズ　-　ニックネーム登録</translation>
-    </message>    
+        <translation>ヘッジウォーズ&#x3000;-&#x3000;ニックネーム登録</translation>
+    </message>
     <message>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
@@ -476,11 +492,11 @@ Your password wasn&apos;t saved either.</source>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
-        <translation>ヘッジウォーズ　-　空のニックネーム</translation>
+        <translation>ヘッジウォーズ&#x3000;-&#x3000;空のニックネーム</translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
-        <translation>ヘッジウォーズ　-　パスワードに誤り</translation>
+        <translation>ヘッジウォーズ&#x3000;-&#x3000;パスワードに誤り</translation>
     </message>
     <message>
         <source>You entered a wrong password.</source>
@@ -492,14 +508,14 @@ Your password wasn&apos;t saved either.</source>
     </message>
     <message>
         <source>Hedgewars - Connection error</source>
-        <translation>ヘッジウォーズ　-　接続エラー</translation>
+        <translation>ヘッジウォーズ&#x3000;-&#x3000;接続エラー</translation>
     </message>
     <message>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
         <translation>再接続は速すぎました。
 数秒待ってからまた再試行してください。</translation>
-    </message>    
+    </message>
     <message>
         <source>Guest</source>
         <translation>ゲスト</translation>
@@ -915,7 +931,7 @@ just enter your nickname.</source>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation>期間：%1分%2秒</translation>
-    </message>    
+    </message>
     <message>
         <source>Player: %1</source>
         <translation>プレーヤー：%1</translation>
@@ -956,9 +972,11 @@ just enter your nickname.</source>
         <source>Random</source>
         <translation>ランダム</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 seconds</source>
-        <translation>%1秒</translation>
+        <translation type="unfinished">
+            <numerusform>%1秒</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1055,7 +1073,7 @@ just enter your nickname.</source>
     <message>
         <source>Loading, please wait.</source>
         <translation>ロード中、少々お待ちください。</translation>
-    </message>    
+    </message>
     <message>
         <source>Open packages directory</source>
         <translation>パッケージディレクトリを開く</translation>
@@ -1063,7 +1081,7 @@ just enter your nickname.</source>
     <message>
         <source>Load the start page</source>
         <translation>スタートページをロードする</translation>
-    </message>    
+    </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
         <translation>未知のネットワークエラー（SSLライブラリーが欠けている可能性があります）。</translation>
@@ -1234,27 +1252,37 @@ just enter your nickname.</source>
         <source>Ranking</source>
         <translation>ランキング</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>最高射撃賞は&lt;b&gt;%2&lt;/b&gt;ダメージを与えた&lt;b&gt;%1&lt;/b&gt;が受賞します。</translation>
-    </message>
-    <message>
-        <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation>一ターンに針鼠&lt;b&gt;%2&lt;/b&gt;匹を倒した&lt;b&gt;%1&lt;/b&gt;が最強です。</translation>
-    </message>
-    <message>
-        <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation>針鼠はラウンド中に、&lt;b&gt;%1&lt;/b&gt;匹亡くなりました。
+        <translation type="unfinished">
+            <numerusform>最高射撃賞は&lt;b&gt;%2&lt;/b&gt;ダメージを与えた&lt;b&gt;%1&lt;/b&gt;が受賞します。</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
+        <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
+        <translation type="unfinished">
+            <numerusform>一ターンに針鼠&lt;b&gt;%2&lt;/b&gt;匹を倒した&lt;b&gt;%1&lt;/b&gt;が最強です。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
+        <translation type="unfinished">
+            <numerusform>針鼠はラウンド中に、&lt;b&gt;%1&lt;/b&gt;匹亡くなりました。
+        </numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
         <extracomment>Number of kills in stats screen, written after the team name</extracomment>
-        <translation>（倒した針鼠数：%1匹）</translation>
-    </message>    
-    <message>
+        <translation type="unfinished">
+            <numerusform>（倒した針鼠数：%1匹）</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt;は、怖くて自分のターンを&lt;b&gt;%2&lt;/b&gt;回もスキップしました。</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;は、怖くて自分のターンを&lt;b&gt;%2&lt;/b&gt;回もスキップしました。</numerusform>
+        </translation>
     </message>
     <message>
         <source>Play again</source>
@@ -1264,18 +1292,24 @@ just enter your nickname.</source>
         <source>Save</source>
         <translation>セーブ</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 %2)</source>
         <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
-        <translation>(%1 %2)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 %2)</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt;は自分の針鼠に&lt;b&gt;%2&lt;/b&gt;ダメージを与えてもいいと思いました。</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;は自分の針鼠に&lt;b&gt;%2&lt;/b&gt;ダメージを与えてもいいと思いました。</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt;は自分の針鼠を&lt;b&gt;%2&lt;/b&gt;匹犠牲にしました。</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;は自分の針鼠を&lt;b&gt;%2&lt;/b&gt;匹犠牲にしました。</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1634,9 +1668,11 @@ just enter your nickname.</source>
         <source>Admin features</source>
         <translation>管理機能</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 players online</source>
-        <translation>オンラインプレーヤー：%1名</translation>
+        <translation type="unfinished">
+            <numerusform>オンラインプレーヤー：%1名</numerusform>
+        </translation>
     </message>
     <message>
         <source>Search for a room:</source>
@@ -1961,9 +1997,11 @@ just enter your nickname.</source>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 bytes</source>
-        <translation>%1バイト</translation>
+        <translation type="unfinished">
+            <numerusform>%1バイト</numerusform>
+        </translation>
     </message>
     <message>
         <source>(in progress...)</source>
@@ -1972,7 +2010,7 @@ just enter your nickname.</source>
     <message>
         <source>encoding</source>
         <translation>エンコーディング</translation>
-    </message>    
+    </message>
     <message>
         <source>Date: %1</source>
         <translation>日付：%1</translation>
@@ -1989,7 +2027,7 @@ just enter your nickname.</source>
     <message>
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
-        <translation>%1（%2%）-　%3</translation>
+        <translation>%1（%2%）-&#x3000;%3</translation>
     </message>
 </context>
 <context>
@@ -2435,7 +2473,7 @@ just enter your nickname.</source>
 Exiting now will abort them.
 Do you really want to quit?</source>
         <translation>ゲームを終了すると、現在処理中の動画を中断することになります。本当によろしいですか？</translation>
-    </message>    
+    </message>
     <message>
         <source>Description</source>
         <translation>説明文</translation>
@@ -2585,7 +2623,7 @@ Do you really want to quit?</source>
     <message>
         <source>File association failed.</source>
         <translation>ファイルの関連付けに失敗しました。</translation>
-    </message>    
+    </message>
     <message>
         <source>Teams - Are you sure?</source>
         <translation>チーム - よろしいですか？</translation>
@@ -2667,10 +2705,12 @@ Do you still want to join the room?</source>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
         <translation>「%1」の動画を削除します。よろしいですか？</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation>%1ファイルを削除します。よろしいですか？</translation>
-    </message>    
+        <translation type="unfinished">
+            <numerusform>%1ファイルを削除します。よろしいですか？</numerusform>
+        </translation>
+    </message>
     <message>
         <source>File error</source>
         <translation>ファイルエラー</translation>
@@ -2682,7 +2722,7 @@ Do you still want to join the room?</source>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
         <translation>ファイル「%1」を読み込みモードで開けませんでした</translation>
-    </message>    
+    </message>
     <message>
         <source>Weapons - Warning</source>
         <translation>武器 - 忠告</translation>
@@ -2744,7 +2784,7 @@ Not all players are ready.</source>
         <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
 
 Current number of hedgehogs: %1</source>
-        <translation>ヘッジウォーズは針鼠48匹以内のみでプレイ可能です。針鼠の数を減らしてから、やり直してください。
+        <translation type="vanished">ヘッジウォーズは針鼠48匹以内のみでプレイ可能です。針鼠の数を減らしてから、やり直してください。
 
 現在の針鼠の数：%1</translation>
     </message>
@@ -2826,7 +2866,6 @@ You seem to be new around here. Would you like to play some training missions fi
         <source>Start</source>
         <translation>スタート</translation>
     </message>
-
     <message>
         <source>Play demo</source>
         <translation>デモ再生</translation>
@@ -2862,7 +2901,7 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Play</source>
         <translation>再生</translation>
-    </message>    
+    </message>
     <message>
         <source>Restore default coding parameters</source>
         <translation>エンコーダー設定を初期に戻す</translation>
@@ -2878,7 +2917,7 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Delete this video</source>
         <translation>動画を削除する</translation>
-    </message>    
+    </message>
     <message>
         <source>Reset</source>
         <translation>初期設定</translation>
@@ -2898,7 +2937,7 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>私用のサーバーを起動する</translation>
-    </message>    
+    </message>
 </context>
 <context>
     <name>QSpinBox</name>
@@ -3198,7 +3237,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>chat history</source>
         <translation>チャット歴史</translation>
-    </message>    
+    </message>
     <message>
         <source>confirmation</source>
         <translation>確認</translation>
@@ -3254,7 +3293,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>record</source>
         <translation>録画</translation>
-    </message>    
+    </message>
     <message>
         <source>autocam / find hedgehog</source>
         <translation>自動カメラ／針鼠を見つける</translation>
@@ -3279,6 +3318,14 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>toggle hedgehog tags</source>
         <translation>針鼠タグの切り替え</translation>
+    </message>
+    <message>
+        <source>change timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show mission information</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3325,7 +3372,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
         <translation>爆弾や他の時限式武器のタイマーを調整する：</translation>
-    </message>    
+    </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
         <translation>キャメラやカーソルをマウスを使わずに移動する：</translation>
@@ -3353,7 +3400,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Take a screenshot:</source>
         <translation>スクリーンショットを撮る：</translation>
-    </message>    
+    </message>
     <message>
         <source>Record video:</source>
         <translation>動画を録画する：</translation>
@@ -3379,31 +3426,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>軸</translation>
+        <translation type="vanished">軸</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>（上）</translation>
+        <translation type="vanished">（上）</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>（下）</translation>
+        <translation type="vanished">（下）</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>帽子</translation>
+        <translation type="vanished">帽子</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>（左）</translation>
+        <translation type="vanished">（左）</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>（右）</translation>
+        <translation type="vanished">（右）</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>ボタン</translation>
+        <translation type="vanished">ボタン</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -3691,7 +3738,26 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>DPad</source>
-        <translation>十字ボタン</translation>
+        <translation type="vanished">十字ボタン</translation>
+    </message>
+    <message>
+        <source>D-pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3723,11 +3789,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>bye</source>
         <translation>バイバイでござる</translation>
-    </message>    
+    </message>
     <message>
         <source>New voting started</source>
         <translation>新しい投票が始まりました</translation>
-    </message>    
+    </message>
     <message>
         <source>kick</source>
         <translation>キック</translation>
@@ -3763,7 +3829,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>new seed</source>
         <translation>新しいシード</translation>
-    </message>    
+    </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
         <translation>/maxteams: 2から8までの数値を指定してください</translation>
@@ -3771,7 +3837,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
         <translation>使用可能なcallvote指令：kick &lt;ニックネーム&gt;, map &lt;マップ名&gt;, pause, newseed, hedgehogs</translation>
-    </message>    
+    </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
         <translation>ゲームを始めるには、二つ以上のクランが必要です！</translation>
@@ -3915,6 +3981,142 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>hedgehogs per team: </source>
         <translation>チーム内の針鼠数：</translation>
+    </message>
+    <message>
+        <source>/info &lt;player&gt;: Show info about player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/help: Show chat command help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/callvote [arguments]: Start a vote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/delegate &lt;player&gt;: Surrender room control to player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/save &lt;parameter&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/stats: Query server stats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/fix: Force this room to stay open when it is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/unfix: Undo the /fix command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/delete &lt;parameter&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of lobby chat commands:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of room chat commands:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Commands for server admins only:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown command:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Say &apos;/help&apos; in chat for a list of commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lobby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(playing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(spectating)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player is not online.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
