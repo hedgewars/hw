@@ -34,6 +34,7 @@ function ParamStr(i: LongInt): shortstring;
 implementation
 uses uVariables, uTypes, uUtils, uSound, uConsts;
 var isInternal: Boolean;
+    helpCommandUsed: Boolean;
 
 {$IFDEF HWLIBRARY}
 
@@ -100,8 +101,9 @@ begin
     WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
     WriteLn(stdout, 'For more detailed help and examples go to:');
-    WriteLn(stdout, 'http://hedgewars.org/kb/CommandLineOptions');
-    GameType:= gmtSyntax;
+    WriteLn(stdout, 'https://hedgewars.org/kb/CommandLineOptions');
+    GameType:= gmtSyntaxHelp;
+    helpCommandUsed:= true;
 end;
 
 procedure setDepth(var paramIndex: LongInt);
@@ -357,12 +359,13 @@ begin
         inc(paramIndex);
         end;
     if wrongParameter = true then
-        GameType:= gmtSyntax;
+        GameType:= gmtBadSyntax;
 end;
 
 procedure GetParams;
 begin
     isInternal:= (ParamStr(1) = '--internal');
+    helpCommandUsed:= false;
 
     UserPathPrefix := _S'.';
     PathPrefix     := cDefaultPathPrefix;
@@ -372,18 +375,19 @@ begin
     if (isInternal) and (ParamCount<=1) then
         begin
         WriteLn(stderr, '--internal should not be manually used');
-        GameType := gmtSyntax;
+        GameType := gmtBadSyntax;
         end;
 
-    if (not cTestLua) and (not isInternal) and (recordFileName = '') then
-        begin
-        WriteLn(stderr, 'You must specify a replay file');
-        GameType := gmtSyntax;
-        end
-    else if (recordFileName <> '') then
-        WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
+    if (not helpCommandUsed) then
+        if (not cTestLua) and (not isInternal) and (recordFileName = '') then
+            begin
+            WriteLn(stderr, 'You must specify a replay file');
+            GameType := gmtBadSyntax;
+            end
+        else if (recordFileName <> '') then
+            WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
 
-    if (GameType = gmtSyntax) then
+    if (GameType = gmtBadSyntax) then
         WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
 
     (*

@@ -1,6 +1,20 @@
+:: WARNNG WARNING WARNING ::
+:: This Batch script is BROKEN and EXTREMELY OUTDATED!
+:: It does not work with latest version and needs a complete redo or removal.
+:: Its functionality has been disabled.
+
+:: Print dummy text and return.
+echo Sorry, this script is outdated. You're on your own.
+exit
+
+
+::::::::::::::::::::::::::::::
+:: Old script code follows ...
+::::::::::::::::::::::::::::::
 @echo off
 ::edit these variables if you need
 set PASCAL=C:\FPC\2.6.0\bin\i386-win32\
+:: FIXME: Go Qt 5
 set QTDIR=C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
 set PATH=%PATH%;%PASCAL%
 set BUILD_TYPE="Debug"
@@ -14,10 +28,12 @@ if %BUILD_TYPE%=="Debug" (
     for %%G in (QtCored4 QtGuid4 QtNetworkd4) do xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
 :: should you libgcc dynamically you should try adding libgcc_s_dw2-1 and mingwm10
+:: FIXME: Use Qt5
 for %%G in (QtCore4 QtGui4 QtNetwork4) do (
     xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
 
+:: FIXME: Use SDL 2.0
 if not exist %CD%\misc\winutils\bin\ mkdir %CD%\misc\winutils\bin\
 if not exist %CD%\misc\winutils\bin\SDL.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/release/SDL-1.2.15-win32.zip %CD%\misc\winutils\bin
 if not exist %CD%\misc\winutils\bin\SDL_image.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12-win32.zip %CD%\misc\winutils\bin
@@ -26,6 +42,7 @@ if not exist %CD%\misc\winutils\bin\SDL_mixer.dll cscript %CD%\tools\w32Download
 if not exist %CD%\misc\winutils\bin\SDL_ttf.dll cscript %CD%\tools\w32DownloadUnzip.vbs  http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11-win32.zip %CD%\misc\winutils\bin
 
 ::for video recording
+:: FIXME: googlecode.com is defunct.
 if not exist %CD%\misc\winutils\bin\avformat-54.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://hedgewars.googlecode.com/files/libav-win32-20121022-dll.zip %CD%\misc\winutils\bin
 
 ::this is needed because fpc png unit hardcodes libpng-1.2.12

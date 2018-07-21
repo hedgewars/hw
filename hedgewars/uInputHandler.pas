@@ -109,7 +109,7 @@ begin
     else begin
         code:= 0;
         while (code <= High(CurrentBinds.indices)) and (CurrentBinds.indices[code] <> index) do inc(code);
-        checkFails(code <= High(CurrentBinds.indices), 'binds registry inconsistency', True);
+        checkFails(code <= High(CurrentBinds.indices), 'Inconsistency in key binding registry', True);
         KeyBindToCode:= code;
     end;
 end;
@@ -333,7 +333,7 @@ end;
 procedure RegisterBind(var binds: TBinds; key, value: shortstring);
 var code: LongInt;
 begin
-    checkFails(binds.lastIndex < 255, 'too many binds', true);
+    checkFails(binds.lastIndex < 255, 'Too many key bindings', true);
 
     code:= KeyNameToCode(key);
 
@@ -393,11 +393,40 @@ begin
     RegisterBind(DefaultBinds, 'right', '+right');
     RegisterBind(DefaultBinds, 'left_shift', '+precise');
 
+    // Default controls for first connected controller
+    { NOTE: This is provided for convenience so players
+    don't have to set-up the controller entirely in a new install.
+    It's not ideal, so players are still encourages to
+    set up things manually. }
+    // Essential controls
+    RegisterBind(DefaultBinds, 'j0h0r', '+right');
+    RegisterBind(DefaultBinds, 'j0h0l', '+left');
+    RegisterBind(DefaultBinds, 'j0h0u', '+up');
+    RegisterBind(DefaultBinds, 'j0h0d', '+down');
+    RegisterBind(DefaultBinds, 'j0b0', 'ljump');
+    RegisterBind(DefaultBinds, 'j0b1', 'hjump');
+    RegisterBind(DefaultBinds, 'j0b2', '+attack');
+    RegisterBind(DefaultBinds, 'j0b3', 'ammomenu');
+    RegisterBind(DefaultBinds, 'j0b4', '+precise');
+    RegisterBind(DefaultBinds, 'j0b5', 'put');
+    RegisterBind(DefaultBinds, 'j0b6', 'switch');
+    // TODO: Add controller-friendly way to change timer
 
-    RegisterBind(DefaultBinds, 'j0a0u', '+left');
-    RegisterBind(DefaultBinds, 'j0a0d', '+right');
-    RegisterBind(DefaultBinds, 'j0a1u', '+up');
-    RegisterBind(DefaultBinds, 'j0a1d', '+down');
+    // Cursor movement (also essential)
+    RegisterBind(DefaultBinds, 'j0h1r', '+cur_r');
+    RegisterBind(DefaultBinds, 'j0h1l', '+cur_l');
+    RegisterBind(DefaultBinds, 'j0h1d', '+cur_d');
+    RegisterBind(DefaultBinds, 'j0h1u', '+cur_u');
+
+    RegisterBind(DefaultBinds, 'j0a0u', '+cur_r');
+    RegisterBind(DefaultBinds, 'j0a0d', '+cur_l');
+    RegisterBind(DefaultBinds, 'j0a1u', '+cur_d');
+    RegisterBind(DefaultBinds, 'j0a1d', '+cur_u');
+
+    // Additional controls
+    RegisterBind(DefaultBinds, 'j0b7', 'findhh');
+    RegisterBind(DefaultBinds, 'j0b8', '+mission');
+
     for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
     for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
 
@@ -514,10 +543,10 @@ if ControllerNumControllers > 0 then
     begin
     for j:= 0 to pred(ControllerNumControllers) do
         begin
-        WriteLnToConsole('Using game controller: ' + shortstring(SDL_JoystickName(j)));
+        WriteLnToConsole('Game controller no. ' + IntToStr(j) + ', name "' + shortstring(SDL_JoystickNameForIndex(j)) + '":');
         Controller[j]:= SDL_JoystickOpen(j);
         if Controller[j] = nil then
-            WriteLnToConsole('* Failed to open game controller!')
+            WriteLnToConsole('* Failed to open game controller no. ' + IntToStr(j) + '!')
         else
             begin
             ControllerNumAxes[j]:= SDL_JoystickNumAxes(Controller[j]);

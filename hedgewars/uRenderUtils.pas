@@ -46,7 +46,7 @@ var r: TSDL_Rect;
 begin
     r:= rect^;
     if Clear then
-        SDL_FillRect(Surface, @r, 0);
+        SDL_FillRect(Surface, @r, SDL_MapRGB(Surface^.format, 0, 0, 0));
 
     BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
     FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
@@ -554,7 +554,7 @@ begin
     rect.h:= textHeight + cornerHeight * 2 - edgeHeight * 2;
     i:= rect.w;
     j:= rect.h;
-    SDL_FillRect(finalSurface, @rect, cWhiteColor);
+    SDL_FillRect(finalSurface, @rect, SDL_MapRGB(finalSurface^.format, cWhiteColor shr 16, cWhiteColor shr 8, cWhiteColor and $FF));
 
     pos:= 1; line:= 0;
     while GetNextSpeechLine(s, #1, pos, substr) do

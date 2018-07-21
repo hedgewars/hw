@@ -647,9 +647,9 @@ end;
 procedure CheckRect(Width, Height, x, y, w, h: LongWord);
 begin
     if (x + w > Width) then
-        OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
+        OutError('Broken theme. Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
     if (y + h > Height) then
-        OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
+        OutError('Broken theme. Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
 end;
 
 procedure ReadRect(var rect: TSDL_Rect; var s: ShortString);
@@ -901,7 +901,7 @@ while (not pfsEOF(f)) and allOK do
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
-                OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
+                OutError('Broken theme. Object''s max. count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
             ChecksumLandObjectImage(Surf);
             ChecksumLandObjectImage(Mask);
 
@@ -920,7 +920,7 @@ while (not pfsEOF(f)) and allOK do
             end;
 
             if inrectcnt > MAXOBJECTRECTS then
-                OutError('Object''s inland rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(inrectcnt) +').', true);
+                OutError('Broken theme. Object''s inland rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(inrectcnt) +').', true);
 
             for ii:= 0 to Pred(inrectcnt) do
                 ReadRect(inland[ii], s);
@@ -930,7 +930,7 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
 
             if outrectcnt > MAXOBJECTRECTS then
-                OutError('Object''s outland rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(outrectcnt) +').', true);
+                OutError('Broken theme. Object''s outland rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(outrectcnt) +').', true);
 
             for ii:= 0 to Pred(outrectcnt) do
                 ReadRect(outland[ii], s);
@@ -944,13 +944,13 @@ while (not pfsEOF(f)) and allOK do
             if ThemeObjects.objs[ii].Name = nameRef then with ThemeObjects.objs[ii] do
                 begin
                 if anchorcnt <> 0 then
-                    OutError('Duplicate anchors declaration for ' + nameRef, true);
+                    OutError('Broken theme. Duplicate anchors declaration for object ' + nameRef, true);
                 Delete(s, 1, i);
                 i:= Pos(',', s);
                 anchorcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                 Delete(s, 1, i);
                 if anchorcnt > MAXOBJECTRECTS then
-                    OutError('Object''s anchor rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(anchorcnt) +').', true);
+                    OutError('Broken theme. Object''s anchor rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(anchorcnt) +').', true);
                 for t:= 0 to Pred(anchorcnt) do
                     ReadRect(anchors[t], s);
                 break
@@ -964,13 +964,13 @@ while (not pfsEOF(f)) and allOK do
             if ThemeObjects.objs[ii].Name = nameRef then with ThemeObjects.objs[ii] do
             begin
                 if overlaycnt <> 0 then
-                    OutError('Duplicate overlays declaration for ' + nameRef, true);
+                    OutError('Broken theme. Duplicate overlays declaration for object ' + nameRef, true);
                 Delete(s, 1, i);
                 i:= Pos(',', s);
                 overlaycnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                 Delete(s, 1, i);
                 if overlaycnt > MAXOBJECTRECTS then
-                    OutError('Object''s overlay count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(overlaycnt) +').', true);
+                    OutError('Broken theme. Object''s overlay count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(overlaycnt) +').', true);
                 for t:= 0 to Pred(overlaycnt) do
                     ReadOverlay(overlays[t], s);
                 break

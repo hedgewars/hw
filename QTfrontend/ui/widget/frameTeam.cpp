@@ -126,7 +126,7 @@ QWidget* FrameTeams::getTeamWidget(HWTeam team)
 
 bool FrameTeams::isFullTeams() const
 {
-    return teamToWidget.size() >= 8;
+    return teamToWidget.size() >= cMaxTeams;
 }
 
 void FrameTeams::emitTeamColorChanged(const HWTeam& team)

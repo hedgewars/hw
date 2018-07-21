@@ -527,7 +527,10 @@ begin
 
 {$IFNDEF PAS2C}
     if not Load_GL_VERSION_2_0 then
-        halt;
+        begin
+        WriteLnToConsole('Load_GL_VERSION_2_0 returned false!');
+        halt(HaltStartupError);
+        end;
 {$ENDIF}
 
     shaderWater:= CompileProgram('water');
@@ -718,7 +721,7 @@ begin
 end;
 
 procedure openglRotatef(RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
-{ workaround for pascal bug http://bugs.freepascal.org/view.php?id=27222 }
+{ workaround for pascal bug https://bugs.freepascal.org/view.php?id=27222 }
 var tmpdir: LongInt;
 begin
 tmpdir:=dir;

@@ -5,12 +5,15 @@
 
 # HOW TO USE:
 # - Run this script in the tools/ directory.
-# - All .lua files in share/hedgewars/Data/Locale will be updated.
-# - Change LOCALEFILES below to limit the number of locale files to update
+# - (Optional) Change LOCALEFILES below to limit the number of locale files to update
+# Result: All .lua files in share/hedgewars/Data/Locale will be updated.
 
+# SETTINGS:
 # Space-separated list of locale files to update, or *.lua for all.
 # (Note: always include stub.lua)
 LOCALEFILES="*.lua"
+
+# END OF SETTINGS
 
 # List of all Lua files to scan:
 # * Missions

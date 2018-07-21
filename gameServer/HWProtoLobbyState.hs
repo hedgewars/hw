@@ -29,6 +29,7 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
+import CommandHelp
 
 
 handleCmd_lobby :: CmdHandler
@@ -165,6 +166,13 @@ handleCmd_lobby ["FOLLOW", asknick] = do
 handleCmd_lobby ("RND":rs) = do
     c <- liftM sendChan thisClient
     return [Random [c] rs]
+
+handleCmd_lobby ["HELP"] = do
+    cl <- thisClient
+    if isAdministrator cl then
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyAdmin)
+    else
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyPlayer)
 
     ---------------------------
     -- Administrator's stuff --

@@ -7,7 +7,7 @@
 -- Original author: mikade
 
 -- feel free to shower me with your adoration and/or hate mail
--- more info can be found at http://hedgewars.org/HedgeEditor
+-- more info can be found at https://hedgewars.org/HedgeEditor
 
 -- special thanks to nemo, unC0Rr, sheepluva and koda for their assistance
 

@@ -1,5 +1,6 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil 
 local enemy = nil
@@ -81,9 +82,7 @@ function onGearDelete(gear)
 		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 		
 		if (turnNumber < 6) and (firedShell == false) then
-			local achievementString = string.format(loc("Achievement gotten: %s"), loc("Energetic Engineer"))
-			AddCaption(achievementString, 0xffba00ff, capgrpMessage2)
-			SendStat(siCustomAchievement, achievementString)
+			awardAchievement(loc("Energetic Engineer"))
 		end
 
 	elseif gear == player then

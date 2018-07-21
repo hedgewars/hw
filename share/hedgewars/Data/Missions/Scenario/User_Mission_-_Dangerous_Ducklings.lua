@@ -1,5 +1,6 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil -- This variable will point to the hog's gear
 local instructor = nil
@@ -136,9 +137,7 @@ function onGearDelete(gear)
 		elseif (gear == instructor) and (GetY(gear) > WaterLine) then
 			HogSay(player, loc("See ya!"), SAY_THINK)
 			TurnTimeLeft = 3000
-			local achievementString = string.format(loc("Achievement gotten: %s"), loc("Naughty Ninja"))
-			AddCaption(achievementString, 0xffba00ff, capgrpMessage2)
-			SendStat(siCustomAchievement, achievementString)
+			awardAchievement(loc("Naughty Ninja"))
 			DismissTeam(loc("Blue Team"))
 			gameWon = true
 		elseif gear == enemy then

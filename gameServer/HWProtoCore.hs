@@ -87,9 +87,14 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
                          | otherwise = let (c, p) = extractParameters msg in
                                            if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
         h "VOTE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg]
+                     | otherwise = handleCmd ["VOTE", ""]
+        h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
+                      | otherwise = handleCmd ["VOTE", "", "FORCE"]
+        h "VOTE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg]
         h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
         h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
+        h "HELP" _ = handleCmd ["HELP"]
         h "RESTART_SERVER" "YES" = handleCmd ["RESTART_SERVER"]
         h "REGISTERED_ONLY" _ = serverAdminOnly $ do
             cl <- thisClient
@@ -98,7 +103,8 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
                 , AnswerClients [sendChan cl] ["CHAT", "[server]", "'Registered only' state toggled"]
                 ]
         h "SUPER_POWER" _ = serverAdminOnly $ return [ModifyClient (\c -> c{hasSuperPower = True})]
-        h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
+        h c p = return [Warning $ B.concat [ loc "Unknown command:", " /", c, " ", p, "<br/>", loc "Say '/help' in chat for a list of commands" ]]
+
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
 
@@ -113,14 +119,14 @@ handleCmd_loggedin ["INFO", asknick] = do
     let clRoom = room rnc roomId
     let roomMasterSign = if isMaster cl then "+" else ""
     let adminSign = if isAdministrator cl then "@" else ""
-    let rInfo = if roomId /= lobbyId then B.concat [adminSign, roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
+    let rInfo = if roomId /= lobbyId then B.concat [adminSign, roomMasterSign, loc "room", " ", name clRoom] else adminSign `B.append` (loc "lobby")
     let roomStatus = if isJust $ gameInfo clRoom then
-            if teamsInGame cl > 0 then "(playing)" else "(spectating)"
+            if teamsInGame cl > 0 then (loc "(playing)") else (loc "(spectating)")
             else
             ""
     let hostStr = if isAdminAsking then host cl else B.empty
     if noSuchClient then
-        return []
+        answerClient [ "CHAT", "[server]", loc "Player is not online." ]
         else
         answerClient [
             "INFO",

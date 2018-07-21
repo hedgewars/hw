@@ -37,6 +37,7 @@ const
     HaltFatalError      =  52;
     HaltStartupError    =  53;
     HaltFatalErrorNoIPC =  54;
+    HaltVideoRec        =  55;
 
     // for automatic tests
     HaltTestSuccess     =  0;
@@ -171,7 +172,7 @@ const
 
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
-    cMaxHHs          = 48;
+    cMaxHHs          = cMaxTeams * (cMaxHHIndex+1);
 
     cMaxEdgePoints = 32768;
 

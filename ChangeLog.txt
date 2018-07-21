@@ -4,9 +4,17 @@
 Game:
  + Add new key to show mission panel (default: M)
  + Add chat command “/help”, displays help for chat commands
+ + Increase hedgehog limit to 64
+ * Functionality of controllers restored
+ * Fix crash when 2 or more controllers were connected
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
+ * Fix video recorder not working when game audio was disabled
+ * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
+
+Frontend:
+ * Controllers are detected again
 
 Highlander:
  * Fix all hogs getting teleport after hog placement phase
@@ -52,6 +60,7 @@ Lua API:
  + New call: GetAmmo(ammoType): Returns ammo configuration (corresponds to SetAmmo)
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
+ + New Lua library: Achievements
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set

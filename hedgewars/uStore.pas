@@ -288,7 +288,7 @@ for t:= 0 to Pred(TeamsCount) do
                     if (month = 4) and (md = 1) then
                         begin
                         AprilOne:= true;
-                        Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see http://hedgewars.org/node/5818
+                        Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see https://hedgewars.org/node/5818
                         end;
 
                     if Hat <> 'NoHat' then
@@ -829,7 +829,7 @@ begin
         {$ENDIF}
         end;
 
-    if checkFails((ProgrTex <> nil) and (LoadingText <> nil), 'Error - Progress or Loading Texture is nil!', true) then exit;
+    if checkFails((ProgrTex <> nil) and (LoadingText <> nil), 'Error - Progress or Loading texture is nil!', true) then exit;
 
     RenderClear();
     if Step < numsquares then
@@ -975,7 +975,7 @@ r.x:= cFontBorder + 6;
 r.y:= cFontBorder + 4;
 r.w:= 32;
 r.h:= 32;
-SDL_FillRect(tmpsurf, @r, $ff000000);
+SDL_FillRect(tmpsurf, @r, SDL_MapRGB(tmpsurf^.format, 0, 0, 0));
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
 
 RenderHelpWindow:=  Surface2Tex(tmpsurf, true);

@@ -1707,14 +1707,6 @@ void HWForm::RemoveNetTeam(const HWTeam& team)
 
 void HWForm::StartMPGame()
 {
-    int numHogs = ui.pageMultiplayer->teamsSelect->getNumHedgehogs();
-    /* Don't allow to start game with >48 hogs.
-    TODO: Remove this as soon the engine supports more hogs. */
-    if(numHogs > 48)
-    {
-        MessageDialog::ShowErrorMessage(QMessageBox::tr("Sorry, Hedgewars can't be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.\n\nCurrent number of hedgehogs: %1").arg(numHogs), this);
-        return;
-    }
     QString ammo;
     ammo = ui.pageMultiplayer->gameCFG->WeaponsName->itemData(
                ui.pageMultiplayer->gameCFG->WeaponsName->currentIndex()

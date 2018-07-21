@@ -168,6 +168,7 @@ var
     cScriptName     : shortstring;
     cScriptParam    : shortstring;
     cSeed           : shortstring;
+    cIsSoundEnabled : boolean; // If the sound system is enabled
     cVolumeDelta    : LongInt;
     cMuteToggle     : boolean; // Mute toggle requested
     cHasFocus       : boolean;
@@ -2852,6 +2853,7 @@ begin
     fastScrolling   := false;
     autoCameraOn    := true;
     cSeed           := '';
+    cIsSoundEnabled := false;
     cVolumeDelta    := 0;
     cMuteToggle     := false;
     cHasFocus       := true;

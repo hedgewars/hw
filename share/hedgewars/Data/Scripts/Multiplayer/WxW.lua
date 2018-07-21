@@ -6,7 +6,7 @@
 -- by mikade
 
 -- feel free to add map specific walls to LoadConfig, or post additional
--- wall suggestions on our forum at: http://www.hedgewars.org/forum
+-- wall suggestions on our forum at: https://www.hedgewars.org/forum
 
 ----------------
 --0.1

@@ -28,6 +28,7 @@ import qualified Data.Map as Map
 import Data.Maybe
 import Control.Applicative
 -------------------
+import Consts
 import Utils
 import CoreTypes
 import HandlerUtils
@@ -118,7 +119,7 @@ voted forced vote = do
         let answers = concatMap (\t -> 
                 [ModifyRoom $ modifyTeam t{hhnum = h}
                 , AnswerClients chans ["HH_NUM", teamname t, showB h]]
-                ) $ if length curteams * h > 48 then [] else curteams
+                ) $ if length curteams * h > cMaxHHs then [] else curteams
             ;
             curteams =
                 if isJust $ gameInfo rm then

@@ -37,6 +37,7 @@ extern bool custom_config;
 extern bool custom_data;
 
 extern int cMaxTeams;
+extern int cMaxHHs;
 extern int cMinServerVersion;
 
 class QStandardItemModel;
@@ -73,6 +74,9 @@ extern int years_since_foundation;
 #define NETGAME_DEFAULT_PORT 46631
 #define HEDGEHOGS_PER_TEAM 8
 
+//Selected engine exit codes, see hedgewars/uConsts.pas
+#define HWENGINE_EXITCODE_OK 0
+#define HWENGINE_EXITCODE_FATAL 52
 
 // see https://en.wikipedia.org/wiki/List_of_colors
 /*define HW_TEAMCOLOR_ARRAY  {0xff007fff, /. azure          ./ \

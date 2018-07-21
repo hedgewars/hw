@@ -1,4 +1,5 @@
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil
 local RCGear = nil
@@ -424,7 +425,7 @@ function onGearDelete(gear)
 			end
 			if(planesUsed == 1) then
 				SendStat(siCustomAchievement, loc("Congratulations! You have truly mastered this challenge! Don't forget to save the demo."))
-				SendStat(siCustomAchievement, string.format(loc("Achievement gotten: %s"), loc("Prestigious Pilot")))
+				awardAchievement(loc("Prestigious Pilot"), nil, false)
 			end
 
 			ShowMission     (

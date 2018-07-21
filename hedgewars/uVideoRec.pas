@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uTypes, uDebug;
+uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uConsts, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';
@@ -73,7 +73,8 @@ var RGB_Buffer: PByte;
     numPixels: LongWord;
     startTime, numFrames, curTime, progress, maxProgress: LongWord;
     soundFilePath: shortstring;
-    thumbnailSaved : Boolean;
+    thumbnailSaved: boolean;
+    recordAudio: boolean;
 
 function BeginVideoRecording: Boolean;
 var filename, desc: shortstring;
@@ -113,7 +114,12 @@ begin
     desc:= desc + 'prefix[' + RecPrefix + ']prefix';
 
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix;
-    soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
+
+    recordAudio:= (cAudioCodec <> 'no');
+    if recordAudio then
+        soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw'
+    else
+        soundFilePath:= '';
 
     if checkFails(AVWrapper_Init(@AddFileLogRaw
         , PChar(ansistring(filename))
@@ -147,9 +153,20 @@ begin
     FreeMem(RGB_Buffer, 4*numPixels);
     Close(cameraFile);
     if AVWrapper_Close() < 0 then
-        halt(-1);
-    Erase(cameraFile);
-    DeleteFile(soundFilePath);
+        begin
+        AddFileLog('AVWrapper_Close() has failed.');
+        halt(HaltVideoRec);
+        end;
+{$IOCHECKS OFF}
+    // Provoke IOResult to be set
+    FileSize(cameraFile);
+    if IOResult = 0 then
+        Erase(cameraFile)
+    else
+        AddFileLog('Warning: Tried to delete the cameraFile but it was already deleted');
+{$IOCHECKS ON}
+    if recordAudio and FileExists(soundFilePath) then
+        DeleteFile(soundFilePath);
     SendIPC(_S'v'); // inform frontend that we finished
 end;
 
@@ -160,7 +177,10 @@ begin
     glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_RGBA, GL_UNSIGNED_BYTE, RGB_Buffer);
 
     if AVWrapper_WriteFrame(RGB_Buffer) < 0 then
-        halt(-1);
+        begin
+        AddFileLog('AVWrapper_WriteFrame(RGB_Buffer) has failed.');
+        halt(HaltVideoRec);
+        end;
 
     // inform frontend that we have encoded new frame
     s[0]:= #3;
@@ -268,43 +288,49 @@ begin
         CopyFile(recordFileName, UserPathPrefix + '/VideoTemp/' + RecPrefix + '.hwd');
     end;
 
-    Mix_QuerySpec(@frequency, @format, @channels);
-    AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
-    if format <> $8010 then
-    begin
-        // TODO: support any audio format
-        AddFileLog('Error: Unexpected audio format ' + IntToStr(format));
-        exit;
-    end;
+    if cIsSoundEnabled then
+        begin
+        Mix_QuerySpec(@frequency, @format, @channels);
+        AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
+        if format <> $8010 then
+            begin
+            // TODO: support any audio format
+            AddFileLog('Error: Unexpected audio format ' + IntToStr(format));
+            exit;
+            end;
 
 {$IOCHECKS OFF}
-    // create sound file
-    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
-    Assign(audioFile, filename);
-    Rewrite(audioFile, 1);
-    if IOResult <> 0 then
-    begin
-        AddFileLog('Error: Could not write to ' + filename);
-        exit;
-    end;
+        // create sound file
+        filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
+        Assign(audioFile, filename);
+        Rewrite(audioFile, 1);
+        if IOResult <> 0 then
+            begin
+            AddFileLog('Error: Could not write to ' + filename);
+            exit;
+            end;
+        end;
 
     // create file with camera positions
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtout';
     Assign(cameraFile, filename);
     Rewrite(cameraFile);
     if IOResult <> 0 then
-    begin
+        begin
         AddFileLog('Error: Could not write to ' + filename);
         exit;
-    end;
+        end;
 
-    // save audio parameters in sound file
-    BlockWrite(audioFile, frequency, 4);
-    BlockWrite(audioFile, channels, 4);
+    if cIsSoundEnabled then
+        begin
+        // save audio parameters in sound file
+        BlockWrite(audioFile, frequency, 4);
+        BlockWrite(audioFile, channels, 4);
 {$IOCHECKS ON}
 
-    // register callback for actual audio recording
-    Mix_SetPostMix(@RecordPostMix, nil);
+        // register callback for actual audio recording
+        Mix_SetPostMix(@RecordPostMix, nil);
+        end;
 
     startTime:= SDL_GetTicks();
     flagPrerecording:= true;
@@ -315,12 +341,18 @@ begin
     AddFileLog('StopPreRecording');
     flagPrerecording:= false;
 
-    // call SDL_LockAudio because RecordPostMix may be executing right now
-    SDL_LockAudio();
-    Close(audioFile);
+    if cIsSoundEnabled then
+        begin
+        // call SDL_LockAudio because RecordPostMix may be executing right now
+        SDL_LockAudio();
+        Close(audioFile);
+        end;
     Close(cameraFile);
-    Mix_SetPostMix(nil, nil);
-    SDL_UnlockAudio();
+    if cIsSoundEnabled then
+        begin
+        Mix_SetPostMix(nil, nil);
+        SDL_UnlockAudio();
+        end;
 
     if not thumbnailSaved then
         SaveThumbnail();

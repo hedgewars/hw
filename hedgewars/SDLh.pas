@@ -541,8 +541,8 @@ const
 /////////////////////////////////////////////////////////////////
 
 // two important reference points for the wanderers of this area
-// http://www.freepascal.org/docs-html/ref/refsu5.html
-// http://www.freepascal.org/docs-html/prog/progsu144.html
+// https://www.freepascal.org/docs-html/ref/refsu5.html
+// https://www.freepascal.org/docs-html/prog/progsu144.html
 
 type
     PSDL_Window   = Pointer;
@@ -553,6 +553,7 @@ type
     TSDL_FingerId = Int64;
     TSDL_Keycode = LongInt;
     TSDL_Scancode = LongInt;
+    TSDL_JoystickID = LongInt;
 
     TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
 
@@ -765,7 +766,7 @@ type
     TSDL_ControllerAxisEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongInt;
+        which: TSDL_JoystickID;
         axis, padding1, padding2, padding3: Byte;
         value: SmallInt;
         padding4: Word;
@@ -774,14 +775,14 @@ type
     TSDL_ControllerButtonEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongInt;
+        which: TSDL_JoystickID;
         button, states, padding1, padding2: Byte;
         end;
 
     TSDL_ControllerDeviceEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: SmallInt;
+        which: LongInt;
         end;
 
     TSDL_JoyDeviceEvent = TSDL_ControllerDeviceEvent;
@@ -829,17 +830,17 @@ type
     TSDL_JoyAxisEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         axis: Byte;
         padding1, padding2, padding3: Byte;
-        value: LongInt;
+        value: SmallInt;
         padding4: Word;
         end;
 
     TSDL_JoyBallEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         ball: Byte;
         padding1, padding2, padding3: Byte;
         xrel, yrel: SmallInt;
@@ -848,7 +849,7 @@ type
     TSDL_JoyHatEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         hat: Byte;
         value: Byte;
         padding1, padding2: Byte;
@@ -857,10 +858,11 @@ type
     TSDL_JoyButtonEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: Byte;
+        which: TSDL_JoystickID;
         button: Byte;
         state: Byte;
         padding1: Byte;
+        padding2: Byte;
         end;
 
     TSDL_QuitEvent = record
@@ -1165,7 +1167,7 @@ procedure SDL_LockAudio; cdecl; external SDLLibName;
 procedure SDL_UnlockAudio; cdecl; external SDLLibName;
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
-function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
+function  SDL_JoystickNameForIndex(idx: LongInt): PChar; cdecl; external SDLLibName;
 function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
 function  SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickIndex(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
