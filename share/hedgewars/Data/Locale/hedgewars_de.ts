@@ -216,7 +216,7 @@
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies ist optional, aber diese Information könnte uns dabei helfen, Bugs und andere technische Probleme zu lösen.</translation>
     </message>
 </context>
 <context>
@@ -1190,7 +1190,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation>IP-Adr./Spitzname</translation>
+        <translation>IP/Spitzname</translation>
     </message>
     <message>
         <source>Expiration</source>
@@ -3830,11 +3830,11 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer ändern</translation>
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>Missionsinformationen anzeigen</translation>
     </message>
 </context>
 <context>
@@ -4259,22 +4259,22 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>D-pad</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Pad</translation>
     </message>
     <message>
         <source>Axis %1 %2</source>
         <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Achse %1 %2</translation>
     </message>
     <message>
         <source>Button %1</source>
         <extracomment>Game controller button. %1 = button number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Button %1</translation>
     </message>
     <message>
         <source>D-pad %1 %2</source>
         <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>D-Pad %1 %2</translation>
     </message>
 </context>
 <context>
@@ -4648,139 +4648,139 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
+        <translation>/info &lt;Spieler&gt;: Infos über Spieler anzeigen</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/me &lt;Nachricht&gt;: Chat-Aktion, z.B. wird „/me isst Pizza” zu „* Spieler isst Pizza“</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd: Wirft eine virtuelle Münze und antwortet mit „heads“ oder „tails“</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd [A] [B] [C] [...]: Antwortet mit einem zufälligen Wort aus der gegebenen Liste</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
+        <translation>/watch &lt;ID&gt;: Schau dir eine auf dem Server gespeicherte Wiederholung mit der gegebenen ID an</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
+        <translation>/help: Hilfe für Chatbefehle anzeigen</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote [Parameter]: Abstimmung starten</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote &lt;yes/no&gt;: Stimme dafür („yes“) oder dagegen („no“) bei der laufenden Abstimmung</translation>
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting &lt;Nachricht&gt;: Begrüßungsnachricht für Spieler, die diesen Raum betreten, setzen</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
+        <translation>/delegate &lt;Spieler&gt;: Raumsteuerung an Spieler übergeben</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams &lt;N&gt;: Maximale Anzahl Teams auf N begrenzen</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/global &lt;Nachricht&gt;: Globale Chatnachricht senden, die von allen Spielern auf dem Server gelesen werden kann</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
+        <translation>/registered_only: Schalte den „registered only“-Zustand um. Falls aktiviert, können nur registrierte Spieler den Server betreten</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
+        <translation>/super_power: Aktiviert deine Superkraft. Mit ihr kannst du jeden Raum betreten und bist vor Hinauswürfen geschützt. Läuft ab, wenn du den Server verlässt</translation>
     </message>
     <message>
         <source>/save &lt;parameter&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>/save &lt;Parameter&gt;</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
+        <translation>/stats: Serverstatistiken abfragen</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/force &lt;yes/no&gt;: Abstimmungsergebnis für laufende Abstimmung erzwingen</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>/fix: Zwinge diesen Raum, geöffnet zu bleiben, auch, wenn er leer ist</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation type="unfinished"></translation>
+        <translation>/unfix: Macht den „/fix“-Befehl rückgängig</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom &lt;Dateiname&gt;: Raumeinstellungen in eine Datei speichern</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom &lt;Dateiname&gt;: Raumeinstellungen aus einer Datei laden</translation>
     </message>
     <message>
         <source>/delete &lt;parameter&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete &lt;Parameter&gt;</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste der Lobby-Chatbefehle:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste der Raum-Chatbefehle:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation>Befehle nur für Server-Admins:</translation>
     </message>
     <message>
         <source>Unknown command:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Befehl</translation>
     </message>
     <message>
         <source>Say &apos;/help&apos; in chat for a list of commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Sag „/help“ im Chat für eine Liste von Befehlen</translation>
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>Raum</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>Lobby</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation type="unfinished"></translation>
+        <translation>(spielend)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation type="unfinished"></translation>
+        <translation>(zuschauend)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spieler ist nicht online.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/force: Bitte benutze „yes“ oder „no“.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote: Bitte benutze „yes“ oder „no“.</translation>
     </message>
 </context>
 </TS>
