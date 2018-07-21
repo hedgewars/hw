@@ -1,36 +1,38 @@
 use mio;
-use std::io::Write;
-use std::io;
+use std::{io, io::Write};
 
-use super::server::HWServer;
-use super::actions::Action;
-use super::actions::Action::*;
-use protocol::messages::HWProtocolMessage;
-use protocol::messages::HWServerMessage::*;
-
+use super::{
+    server::HWServer,
+    actions::{Action, Action::*},
+    coretypes::ClientId
+};
+use protocol::messages::{
+    HWProtocolMessage,
+    HWServerMessage::*
+};
 mod common;
 mod loggingin;
 mod lobby;
 mod inroom;
 
-pub fn handle(server: &mut HWServer, token: usize, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     match message {
         HWProtocolMessage::Ping =>
-            server.react(token, vec![Pong.send_self().action()]),
+            server.react(client_id, vec![Pong.send_self().action()]),
         HWProtocolMessage::Quit(Some(msg)) =>
-            server.react(token, vec![ByeClient("User quit: ".to_string() + &msg)]),
+            server.react(client_id, vec![ByeClient("User quit: ".to_string() + &msg)]),
         HWProtocolMessage::Quit(None) =>
-            server.react(token, vec![ByeClient("User quit".to_string())]),
+            server.react(client_id, vec![ByeClient("User quit".to_string())]),
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
         _ => {
-            match server.clients[token].room_id {
+            match server.clients[client_id].room_id {
                 None =>
-                    loggingin::handle(server, token, message),
+                    loggingin::handle(server, client_id, message),
                 Some(id) if id == server.lobby_id =>
-                    lobby::handle(server, token, message),
-                _ =>
-                    inroom::handle(server, token, message)
+                    lobby::handle(server, client_id, message),
+                Some(id) =>
+                    inroom::handle(server, client_id, id, message)
             }
         },
     }

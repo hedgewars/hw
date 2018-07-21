@@ -18,7 +18,7 @@ pub enum HWProtocolMessage {
     Info(String),
     // not entered state
     Nick(String),
-    Proto(u32),
+    Proto(u16),
     Password(String, String),
     Checker(u32, String, String),
     // lobby
@@ -41,7 +41,7 @@ pub enum HWProtocolMessage {
     // in room
     Part(Option<String>),
     Cfg(GameCfg),
-    AddTeam(TeamInfo),
+    AddTeam(Box<TeamInfo>),
     RemoveTeam(String),
     SetHedgehogsNumber(String, u8),
     SetTeamColor(String, u8),
@@ -76,7 +76,7 @@ pub enum HWServerMessage {
     Pong,
     Bye(String),
     Nick(String),
-    Proto(u32),
+    Proto(u16),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
     ChatMsg {nick: String, msg: String},
@@ -105,8 +105,8 @@ pub enum HWServerMessage {
     Unreachable,
 }
 
-pub fn server_chat(msg: &str) -> HWServerMessage  {
-    HWServerMessage::ChatMsg{ nick: "[server]".to_string(), msg: msg.to_string() }
+pub fn server_chat(msg: String) -> HWServerMessage  {
+    HWServerMessage::ChatMsg{ nick: "[server]".to_string(), msg }
 }
 
 impl GameCfg {
@@ -234,10 +234,10 @@ impl HWProtocolMessage {
             //CallVote(Option<(String, Option<String>)>) =>, ??
             Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg {"YES"} else {"NO"})],
             ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg {"YES"} else {"NO"})],
-            //Save(String, String), ??
-            Delete(room) => msg!["CMD", format!("DELETE {}", room)],
-            SaveRoom(room) => msg!["CMD", format!("SAVEROOM {}", room)],
-            LoadRoom(room) => msg!["CMD", format!("LOADROOM {}", room)],
+            Save(name, location) => msg!["CMD", format!("SAVE {} {}", name, location)],
+            Delete(name) => msg!["CMD", format!("DELETE {}", name)],
+            SaveRoom(name) => msg!["CMD", format!("SAVEROOM {}", name)],
+            LoadRoom(name) => msg!["CMD", format!("LOADROOM {}", name)],
             Malformed => msg!["A", "QUICK", "BROWN", "HOG", "JUMPS", "OVER", "THE", "LAZY", "DOG"],
             Empty => msg![""],
             _ => panic!("Protocol message not yet implemented")
@@ -245,7 +245,7 @@ impl HWProtocolMessage {
     }
 }
 
-fn construct_message(header: &[&str], msg: &Vec<String>) -> String {
+fn construct_message(header: &[&str], msg: &[String]) -> String {
     let mut v: Vec<_> = header.iter().map(|s| *s).collect();
     v.extend(msg.iter().map(|s| &s[..]));
     v.push("\n");

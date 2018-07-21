@@ -3,7 +3,7 @@ use mio;
 use base64::{encode};
 
 pub const PROTOCOL_VERSION : u32 = 3;
-pub const SERVER: mio::Token = mio::Token(1000000000 + 0);
+pub const SERVER: mio::Token = mio::Token(1_000_000_000);
 
 pub fn is_name_illegal(name: &str ) -> bool{
     name.len() > 40 ||

@@ -24,7 +24,10 @@ use server::coretypes::{
 named!(end_of_message, tag!("\n\n"));
 named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
 named!(  a_line<&[u8], String>, map!(str_line, String::from));
+named!(cmd_arg<&[u8], String>,
+    map!(map_res!(take_until_either!(" \n"), str::from_utf8), String::from));
 named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
+named!(u16_line<&[u8],    u16>, map_res!(str_line, FromStr::from_str));
 named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
 named!(yes_no_line<&[u8], bool>, alt!(
       do_parse!(tag_no_case!("YES") >> (true))
@@ -87,7 +90,7 @@ named!(one_param_message<&[u8], HWProtocolMessage>, alt!(
     | do_parse!(tag!("ROOM_NAME")   >> eol >> n: a_line >> (RoomName(n)))
     | do_parse!(tag!("REMOVE_TEAM") >> eol >> n: a_line >> (RemoveTeam(n)))
 
-    | do_parse!(tag!("PROTO")   >> eol >> d: u32_line >> (Proto(d)))
+    | do_parse!(tag!("PROTO")   >> eol >> d: u16_line >> (Proto(d)))
 
     | do_parse!(tag!("QUIT")   >> msg: opt_param >> (Quit(msg)))
 ));
@@ -103,9 +106,10 @@ named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
     | do_parse!(tag_no_case!("PART")     >> m: opt_space_param >> (Part(m)))
     | do_parse!(tag_no_case!("QUIT")     >> m: opt_space_param >> (Quit(m)))
     | do_parse!(tag_no_case!("DELEGATE") >> spaces >> n: a_line  >> (Delegate(n)))
+    | do_parse!(tag_no_case!("SAVE")     >> spaces >> n: cmd_arg >> spaces >> l: cmd_arg >> (Save(n, l)))
+    | do_parse!(tag_no_case!("DELETE")   >> spaces >> n: a_line  >> (Delete(n)))
     | do_parse!(tag_no_case!("SAVEROOM") >> spaces >> r: a_line  >> (SaveRoom(r)))
     | do_parse!(tag_no_case!("LOADROOM") >> spaces >> r: a_line  >> (LoadRoom(r)))
-    | do_parse!(tag_no_case!("DELETE")   >> spaces >> r: a_line  >> (Delete(r)))
     | do_parse!(tag_no_case!("GLOBAL")   >> spaces >> m: a_line  >> (Global(m)))
     | do_parse!(tag_no_case!("WATCH")    >> spaces >> i: a_line  >> (Watch(i)))
     | do_parse!(tag_no_case!("GREETING") >> spaces >> m: a_line  >> (Greeting(m)))
@@ -148,11 +152,11 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     flag: a_line    >> eol >>
                     difficulty: u8_line >> eol >>
                     hedgehogs: _8_hogs >>
-                    (AddTeam(TeamInfo{
+                    (AddTeam(Box::new(TeamInfo{
                         name, color, grave, fort,
                         voice_pack, flag, difficulty,
                         hedgehogs, hedgehogs_number: 0
-                     })))
+                     }))))
     | do_parse!(tag!("HH_NUM")    >> eol >>
                     n: a_line     >> eol >>
                     c: u8_line    >>

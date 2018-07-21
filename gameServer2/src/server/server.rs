@@ -40,7 +40,7 @@ impl HWServer {
             let client = HWClient::new(entry.key());
             entry.insert(client);
         }
-        self.send(key, Destination::ToSelf, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
+        self.send(key, &Destination::ToSelf, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
         key
     }
 
@@ -64,8 +64,8 @@ impl HWServer {
         }
     }
 
-    fn get_recipients(&self, client_id: ClientId, destination: Destination) -> Vec<ClientId> {
-        let mut ids = match destination {
+    fn get_recipients(&self, client_id: ClientId, destination: &Destination) -> Vec<ClientId> {
+        let mut ids = match *destination {
             Destination::ToSelf => vec![client_id],
             Destination::ToId(id) => vec![id],
             Destination::ToAll {room_id: Some(id), ..} =>
@@ -83,8 +83,8 @@ impl HWServer {
         ids
     }
 
-    pub fn send(&mut self, client_id: ClientId, destination: Destination, message: HWServerMessage) {
-        let ids = self.get_recipients(client_id, destination);
+    pub fn send(&mut self, client_id: ClientId, destination: &Destination, message: HWServerMessage) {
+        let ids = self.get_recipients(client_id, &destination);
         self.output.push((ids, message));
     }
 
@@ -93,6 +93,8 @@ impl HWServer {
             actions::run_action(self, client_id, action);
         }
     }
+
+    pub fn lobby(&self) -> &HWRoom { &self.rooms[self.lobby_id] }
 
     pub fn has_room(&self, name: &str) -> bool {
         self.rooms.iter().any(|(_, r)| r.name == name)
@@ -124,7 +126,7 @@ impl HWServer {
         self.select_clients(|(_, c)| c.room_id == Some(room_id))
     }
 
-    pub fn protocol_clients(&self, protocol: u32) -> Vec<ClientId> {
+    pub fn protocol_clients(&self, protocol: u16) -> Vec<ClientId> {
         self.select_clients(|(_, c)| c.protocol_number == protocol)
     }
 

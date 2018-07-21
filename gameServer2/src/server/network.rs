@@ -105,14 +105,14 @@ impl NetworkClient {
     }
 
     pub fn send_raw_msg(&mut self, msg: &[u8]) {
-        self.buf_out.write(msg).unwrap();
+        self.buf_out.write_all(msg).unwrap();
     }
 
-    pub fn send_string(&mut self, msg: &String) {
+    pub fn send_string(&mut self, msg: &str) {
         self.send_raw_msg(&msg.as_bytes());
     }
 
-    pub fn send_msg(&mut self, msg: HWServerMessage) {
+    pub fn send_msg(&mut self, msg: &HWServerMessage) {
         self.send_string(&msg.to_raw_protocol());
     }
 }
@@ -143,7 +143,7 @@ impl NetworkLayer {
         let mut client_exists = false;
         if let Some(ref client) = self.clients.get(id) {
             poll.deregister(&client.socket)
-                .ok().expect("could not deregister socket");
+                .expect("could not deregister socket");
             info!("client {} ({}) removed", client.id, client.peer_addr);
             client_exists = true;
         }
@@ -156,7 +156,7 @@ impl NetworkLayer {
         poll.register(&client_socket, Token(id),
                       Ready::readable() | Ready::writable(),
                       PollOpt::edge())
-            .ok().expect("could not register socket with event loop");
+            .expect("could not register socket with event loop");
 
         let entry = self.clients.vacant_entry();
         let client = NetworkClient::new(id, client_socket, addr);
@@ -189,7 +189,7 @@ impl NetworkLayer {
         Ok(())
     }
 
-    fn operation_failed(&mut self, poll: &Poll, client_id: ClientId, error: Error, msg: &str) -> io::Result<()> {
+    fn operation_failed(&mut self, poll: &Poll, client_id: ClientId, error: &Error, msg: &str) -> io::Result<()> {
         let addr = if let Some(ref mut client) = self.clients.get_mut(client_id) {
             client.peer_addr
         } else {
@@ -224,7 +224,7 @@ impl NetworkLayer {
                 };
             }
             Err(e) => self.operation_failed(
-                poll, client_id, e,
+                poll, client_id, &e,
                 "Error while reading from client socket")?
         }
 
@@ -256,7 +256,7 @@ impl NetworkLayer {
             },
             Ok(_) => {}
             Err(e) => self.operation_failed(
-                poll, client_id, e,
+                poll, client_id, &e,
                 "Error while writing to client socket")?
         }
 

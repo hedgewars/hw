@@ -6,15 +6,18 @@ use protocol::messages::{
     server_chat
 };
 use server::{
-    coretypes::{ClientId, Voting, VoteType},
+    coretypes::{ClientId, RoomId, Voting, VoteType},
     server::HWServer,
-    room::HWRoom,
+    room::{HWRoom, RoomFlags},
     actions::{Action, Action::*}
 };
 use utils::is_name_illegal;
-use std::mem::swap;
+use std::{
+    mem::swap, fs::{File, OpenOptions},
+    io::{Read, Write, Result, Error, ErrorKind}
+};
 use base64::{encode, decode};
-use super::common::rnd_action;
+use super::common::rnd_reply;
 
 #[derive(Clone)]
 struct ByMsg<'a> {
@@ -35,8 +38,8 @@ impl <'a> Iterator for ByMsg<'a> {
     }
 }
 
-fn by_msg(source: &Vec<u8>) -> ByMsg {
-    ByMsg {messages: &source[..]}
+fn by_msg(source: &[u8]) -> ByMsg {
+    ByMsg {messages: source}
 }
 
 const VALID_MESSAGES: &[u8] =
@@ -81,7 +84,29 @@ fn voting_description(kind: &VoteType) -> String {
     })
 }
 
-pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
+fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
+    use protocol::messages::HWProtocolMessage::*;
+    match msg {
+        ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
+        ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
+        ToggleRegisteredOnly => RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS,
+        _ => RoomFlags::empty()
+    }
+}
+
+fn read_file(filename: &str) -> Result<String> {
+    let mut reader = File::open(filename)?;
+    let mut result = String::new();
+    reader.read_to_string(&mut result)?;
+    Ok(result)
+}
+
+fn write_file(filename: &str, content: &str) -> Result<()> {
+    let mut writer = OpenOptions::new().create(true).write(true).open(filename)?;
+    writer.write_all(content.as_bytes())
+}
+
+pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, message: HWProtocolMessage) {
     use protocol::messages::HWProtocolMessage::*;
     match message {
         Part(None) => server.react(client_id, vec![
@@ -91,28 +116,24 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         Chat(msg) => {
             let actions = {
                 let c = &mut server.clients[client_id];
-                let chat_msg = ChatMsg {nick: c.nick.clone(), msg: msg};
-                if let Some(room_id) = c.room_id {
-                    vec![chat_msg.send_all().in_room(room_id).but_self().action()]
-                } else {
-                    Vec::new()
-                }
+                let chat_msg = ChatMsg {nick: c.nick.clone(), msg};
+                vec![chat_msg.send_all().in_room(room_id).but_self().action()]
             };
             server.react(client_id, actions);
         },
         Fix => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin { r.is_fixed = true }
+                if c.is_admin() { r.set_is_fixed(true) }
             }
         }
         Unfix => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin { r.is_fixed = false }
+                if c.is_admin() { r.set_is_fixed(false) }
             }
         }
         Greeting(text) => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin || c.is_master && !r.is_fixed {
+                if c.is_admin() || c.is_master() && !r.is_fixed() {
                     r.greeting = text
                 }
             }
@@ -121,35 +142,32 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             let actions =
                 if is_name_illegal(&new_name) {
                     vec![Warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
-                } else if server.room(client_id).map(|r| r.is_fixed).unwrap_or(false) {
+                } else if server.rooms[room_id].is_fixed() {
                     vec![Warn("Access denied.".to_string())]
                 } else if server.has_room(&new_name) {
                     vec![Warn("A room with the same name already exists.".to_string())]
                 } else {
                     let mut old_name = new_name.clone();
-                    if let (_, Some(r)) = server.client_and_room(client_id) {
-                        swap(&mut r.name, &mut old_name);
-                        vec![SendRoomUpdate(Some(old_name))]
-                    } else {
-                        Vec::new()
-                    }
+                    swap(&mut server.rooms[room_id].name, &mut old_name);
+                    vec![SendRoomUpdate(Some(old_name))]
                 };
             server.react(client_id, actions);
         },
         ToggleReady => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                let flags = if c.is_ready {
+                let flags = if c.is_ready() {
                     r.ready_players_number -= 1;
                     "-r"
                 } else {
                     r.ready_players_number += 1;
                     "+r"
                 };
-                c.is_ready = !c.is_ready;
+                let is_ready = !c.is_ready();
+                c.set_is_ready(is_ready);
                 let mut v =
                     vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
                         .send_all().in_room(r.id).action()];
-                if r.is_fixed && r.ready_players_number as u32 == r.players_number {
+                if r.is_fixed() && r.ready_players_number == r.players_number {
                     v.push(StartRoomGame(r.id))
                 }
                 v
@@ -161,7 +179,6 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         AddTeam(info) => {
             let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                let room_id = r.id;
                 if r.teams.len() >= r.team_limit as usize {
                     actions.push(Warn("Too many teams!".to_string()))
                 } else if r.addable_hedgehogs() == 0 {
@@ -170,8 +187,10 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     actions.push(Warn("There's already a team with same name in the list.".to_string()))
                 } else if r.game_info.is_some() {
                     actions.push(Warn("Joining not possible: Round is in progress.".to_string()))
+                } else if r.is_team_add_restricted() {
+                    actions.push(Warn("This room currently does not allow adding new teams.".to_string()));
                 } else {
-                    let team = r.add_team(c.id, info);
+                    let team = r.add_team(c.id, *info);
                     c.teams_in_game += 1;
                     c.clan = Some(team.color);
                     actions.push(TeamAccepted(team.name.clone())
@@ -206,10 +225,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         },
         SetHedgehogsNumber(team_name, number) => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                let room_id = r.id;
                 let addable_hedgehogs = r.addable_hedgehogs();
                 if let Some((_, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !c.is_master {
+                    if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
                     } else if number < 1 || number > 8
                            || number > addable_hedgehogs + team.hedgehogs_number {
@@ -231,9 +249,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         SetTeamColor(team_name, color) => {
             let mut owner_id = None;
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                let room_id = r.id;
                 if let Some((owner, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !c.is_master {
+                    if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
                     } else if false  {
                         Vec::new()
@@ -258,9 +275,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         },
         Cfg(cfg) => {
             let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                if r.is_fixed {
+                if r.is_fixed() {
                     vec![Warn("Access denied.".to_string())]
-                } else if !c.is_master {
+                } else if !c.is_master() {
                     vec![ProtocolError("You're not the room master!".to_string())]
                 } else {
                     let v = vec![cfg.to_server_msg()
@@ -273,33 +290,98 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             };
             server.react(client_id, actions);
         }
+        Save(name, location) => {
+            let actions = vec![server_chat(format!("Room config saved as {}", name))
+                .send_all().in_room(room_id).action()];
+            server.rooms[room_id].save_config(name, location);
+            server.react(client_id, actions);
+        }
+        SaveRoom(filename) => {
+            let actions = if server.clients[client_id].is_admin() {
+                match server.rooms[room_id].get_saves() {
+                    Ok(text) => match write_file(&filename, &text) {
+                        Ok(_) => vec![server_chat("Room configs saved successfully.".to_string())
+                            .send_self().action()],
+                        Err(e) => {
+                            warn!("Error while writing the config file \"{}\": {}", filename, e);
+                            vec![Warn("Unable to save the room configs.".to_string())]
+                        }
+                    }
+                    Err(e) => {
+                        warn!("Error while serializing the room configs: {}", e);
+                        vec![Warn("Unable to serialize the room configs.".to_string())]
+                    }
+                }
+            } else {
+                Vec::new()
+            };
+            server.react(client_id, actions);
+        }
+        LoadRoom(filename) => {
+            let actions = if server.clients[client_id].is_admin() {
+                match read_file(&filename) {
+                    Ok(text) => match server.rooms[room_id].set_saves(&text) {
+                        Ok(_) => vec![server_chat("Room configs loaded successfully.".to_string())
+                            .send_self().action()],
+                        Err(e) => {
+                            warn!("Error while deserializing the room configs: {}", e);
+                            vec![Warn("Unable to deserialize the room configs.".to_string())]
+                        }
+                    }
+                    Err(e) => {
+                        warn!("Error while reading the config file \"{}\": {}", filename, e);
+                        vec![Warn("Unable to load the room configs.".to_string())]
+                    }
+                }
+            } else {
+                Vec::new()
+            };
+            server.react(client_id, actions);
+        }
+        Delete(name) => {
+            let actions = if !server.rooms[room_id].delete_config(&name) {
+                vec![Warn(format!("Save doesn't exist: {}", name))]
+            } else {
+                vec![server_chat(format!("Room config {} has been deleted", name))
+                    .send_all().in_room(room_id).action()]
+            };
+            server.react(client_id, actions);
+        }
         CallVote(None) => {
             server.react(client_id, vec![
-                server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>")
+                server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
                     .send_self().action()])
         }
         CallVote(Some(kind)) => {
-            let (room_id, is_in_game) = server.room(client_id)
-                .map(|r| (r.id, r.game_info.is_some())).unwrap();
+            let is_in_game = server.rooms[room_id].game_info.is_some();
             let error = match &kind {
                 VoteType::Kick(nick) => {
                     if server.find_client(&nick).filter(|c| c.room_id == Some(room_id)).is_some() {
                         None
                     } else {
-                        Some("/callvote kick: No such user!")
+                        Some("/callvote kick: No such user!".to_string())
                     }
                 },
                 VoteType::Map(None) => {
-                    Some("/callvote map: Not implemented")
+                    let names: Vec<_> = server.rooms[room_id].saves.keys().cloned().collect();
+                    if names.is_empty() {
+                        Some("/callvote map: No maps saved in this room!".to_string())
+                    } else {
+                        Some(format!("Available maps: {}", names.join(", ")))
+                    }
                 },
                 VoteType::Map(Some(name)) => {
-                    Some("/callvote map: Not implemented")
+                    if server.rooms[room_id].saves.get(&name[..]).is_some() {
+                        None
+                    } else {
+                        Some("/callvote map: No such map!".to_string())
+                    }
                 },
                 VoteType::Pause => {
                     if is_in_game {
                         None
                     } else {
-                        Some("/callvote pause: No game in progress!")
+                        Some("/callvote pause: No game in progress!".to_string())
                     }
                 },
                 VoteType::NewSeed => {
@@ -308,7 +390,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 VoteType::HedgehogsPerTeam(number) => {
                     match number {
                         1...8 => None,
-                        _ => Some("/callvote hedgehogs: Specify number from 1 to 8.")
+                        _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string())
                     }
                 },
             };
@@ -316,9 +398,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 None => {
                     let msg = voting_description(&kind);
                     let voting = Voting::new(kind, server.room_clients(client_id));
-                    server.room(client_id).unwrap().voting = Some(voting);
+                    server.rooms[room_id].voting = Some(voting);
                     server.react(client_id, vec![
-                        server_chat(&msg).send_all().in_room(room_id).action(),
+                        server_chat(msg).send_all().in_room(room_id).action(),
                         AddVote{ vote: true, is_forced: false}]);
                 }
                 Some(msg) => {
@@ -328,28 +410,20 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             }
         }
         Vote(vote) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                vec![AddVote{ vote, is_forced: false }]
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+            server.react(client_id, vec![AddVote{ vote, is_forced: false }]);
         }
         ForceVote(vote) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                vec![AddVote{ vote, is_forced: c.is_admin} ]
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+            let is_forced = server.clients[client_id].is_admin();
+            server.react(client_id, vec![AddVote{ vote, is_forced }]);
+        }
+        ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly  => {
+            if server.clients[client_id].is_master() {
+                server.rooms[room_id].flags.toggle(room_message_flag(&message));
+            }
+            server.react(client_id, vec![SendRoomUpdate(None)]);
         }
         StartGame => {
-            let actions = if let (_, Some(r)) = server.client_and_room(client_id) {
-                vec![StartRoomGame(r.id)]
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+            server.react(client_id, vec![StartRoomGame(room_id)]);
         }
         EngineMessage(em) => {
             let mut actions = Vec::new();
@@ -383,8 +457,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
         RoundFinished => {
             let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_in_game {
-                    c.is_in_game = false;
+                if c.is_in_game() {
+                    c.set_is_in_game(false);
                     actions.push(ClientFlags("-g".to_string(), vec![c.nick.clone()]).
                         send_all().in_room(r.id).action());
                     if r.game_info.is_some() {
@@ -397,8 +471,16 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
             server.react(client_id, actions)
         },
         Rnd(v) => {
-            let actions = rnd_action(v, server.room(client_id));
-            server.react(client_id, actions)
+            let result = rnd_reply(&v);
+            let mut echo = vec!["/rnd".to_string()];
+            echo.extend(v.into_iter());
+            let chat_msg = ChatMsg {
+                nick: server.clients[client_id].nick.clone(),
+                msg: echo.join(" ")
+            };
+            server.react(client_id, vec![
+                chat_msg.send_all().in_room(room_id).action(),
+                result.send_all().in_room(room_id).action()])
         },
         _ => warn!("Unimplemented!")
     }

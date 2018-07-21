@@ -1,24 +1,29 @@
-use std::{iter};
+use std::{
+    iter, collections::HashMap
+};
 use server::{
     coretypes::{ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting},
     client::{HWClient}
 };
+use serde::{Serialize, Deserialize};
+use serde_yaml;
 
-const MAX_HEDGEHOGS_IN_ROOM: u8 = 48;
+const MAX_HEDGEHOGS_IN_ROOM: u8 = 64;
+const MAX_TEAMS_IN_ROOM: u8 = 8;
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Ammo {
     name: String,
     settings: Option<String>
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Scheme {
     name: String,
     settings: Option<Vec<String>>
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct RoomConfig {
     feature_size: u32,
     map_type: String,
@@ -53,7 +58,7 @@ impl RoomConfig {
     }
 }
 
-fn client_teams_impl(teams: &Vec<(ClientId, TeamInfo)>, client_id: ClientId)
+fn client_teams_impl(teams: &[(ClientId, TeamInfo)], client_id: ClientId)
     -> impl Iterator<Item = &TeamInfo> + Clone
 {
     teams.iter().filter(move |(id, _)| *id == client_id).map(|(_, t)| t)
@@ -106,22 +111,38 @@ impl GameInfo {
     }
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct RoomSave {
+    pub location: String,
+    config: RoomConfig
+}
+
+bitflags!{
+    pub struct RoomFlags: u8 {
+        const FIXED = 0b0000_0001;
+        const RESTRICTED_JOIN = 0b0000_0010;
+        const RESTRICTED_TEAM_ADD = 0b0000_0100;
+        const RESTRICTED_UNREGISTERED_PLAYERS = 0b0000_1000;
+    }
+}
+
 pub struct HWRoom {
     pub id: RoomId,
     pub master_id: Option<ClientId>,
     pub name: String,
     pub password: Option<String>,
-    pub protocol_number: u32,
     pub greeting: String,
-    pub is_fixed: bool,
+    pub protocol_number: u16,
+    pub flags: RoomFlags,
 
-    pub players_number: u32,
+    pub players_number: u8,
     pub default_hedgehog_number: u8,
     pub team_limit: u8,
     pub ready_players_number: u8,
     pub teams: Vec<(ClientId, TeamInfo)>,
     config: RoomConfig,
     pub voting: Option<Voting>,
+    pub saves: HashMap<String, RoomSave>,
     pub game_info: Option<GameInfo>
 }
 
@@ -133,15 +154,16 @@ impl HWRoom {
             name: String::new(),
             password: None,
             greeting: "".to_string(),
-            is_fixed: false,
+            flags: RoomFlags::empty(),
             protocol_number: 0,
             players_number: 0,
             default_hedgehog_number: 4,
-            team_limit: 8,
+            team_limit: MAX_TEAMS_IN_ROOM,
             ready_players_number: 0,
             teams: Vec::new(),
             config: RoomConfig::new(),
             voting: None,
+            saves: HashMap::new(),
             game_info: None
         }
     }
@@ -250,11 +272,47 @@ impl HWRoom {
         }
     }
 
+    pub fn is_fixed(&self) -> bool {
+        self.flags.contains(RoomFlags::FIXED)
+    }
+    pub fn is_join_restricted(&self) -> bool {
+        self.flags.contains(RoomFlags::RESTRICTED_JOIN)
+    }
+    pub fn is_team_add_restricted(&self) -> bool {
+        self.flags.contains(RoomFlags::RESTRICTED_TEAM_ADD)
+    }
+    pub fn are_unregistered_players_restricted(&self) -> bool {
+        self.flags.contains(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS)
+    }
+
+    pub fn set_is_fixed(&mut self, value: bool) {
+        self.flags.set(RoomFlags::FIXED, value)
+    }
+    pub fn set_join_restriction(&mut self, value: bool) {
+        self.flags.set(RoomFlags::RESTRICTED_JOIN, value)
+    }
+    pub fn set_team_add_restriction(&mut self, value: bool) {
+        self.flags.set(RoomFlags::RESTRICTED_TEAM_ADD, value)
+    }
+    pub fn set_unregistered_players_restriction(&mut self, value: bool) {
+        self.flags.set(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS, value)
+    }
+
+    fn flags_string(&self) -> String {
+        let mut result = "-".to_string();
+        if self.game_info.is_some()  { result += "g" }
+        if self.password.is_some()   { result += "p" }
+        if self.is_join_restricted() { result += "j" }
+        if self.are_unregistered_players_restricted() {
+            result += "r"
+        }
+        result
+    }
+
     pub fn info(&self, master: Option<&HWClient>) -> Vec<String> {
-        let flags = "-".to_string();
         let c = &self.config;
         vec![
-            flags,
+            self.flags_string(),
             self.name.clone(),
             self.players_number.to_string(),
             self.teams.len().to_string(),
@@ -278,6 +336,34 @@ impl HWRoom {
             Some(ref info) => game_config_from(&info.config),
             None => game_config_from(&self.config)
         }
+    }
+
+    pub fn save_config(&mut self, name: String, location: String) {
+        self.saves.insert(name, RoomSave { location, config: self.config.clone() });
+    }
+
+    pub fn load_config(&mut self, name: &str) -> Option<&str> {
+        if let Some(save) = self.saves.get(name) {
+            self.config = save.config.clone();
+            Some(&save.location[..])
+        } else {
+            None
+        }
+    }
+
+    pub fn delete_config(&mut self, name: &str) -> bool {
+        self.saves.remove(name).is_some()
+    }
+
+    pub fn get_saves(&self) -> Result<String, serde_yaml::Error> {
+        serde_yaml::to_string(&(&self.greeting, &self.saves))
+    }
+
+    pub fn set_saves(&mut self, text: &str) -> Result<(), serde_yaml::Error> {
+        serde_yaml::from_str::<(String, HashMap<String, RoomSave>)>(text).map(|(greeting, saves)| {
+            self.greeting = greeting;
+            self.saves = saves;
+        })
     }
 
     pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {
