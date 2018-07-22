@@ -35,6 +35,8 @@
 #define AVWRAP_DECL
 #endif
 
+#define UNUSED(x) (void)(x)
+
 static AVFormatContext* g_pContainer;
 static AVOutputFormat* g_pFormat;
 static AVStream* g_pAStream;
@@ -138,6 +140,9 @@ static int FatalError(const char* pFmt, ...)
 // (there is mutex in AddFileLogRaw).
 static void LogCallback(void* p, int Level, const char* pFmt, va_list VaArgs)
 {
+    UNUSED(p);
+    UNUSED(Level);
+
     char Buffer[1024];
 
     vsnprintf(Buffer, 1024, pFmt, VaArgs);
