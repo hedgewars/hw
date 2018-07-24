@@ -3623,31 +3623,31 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>Akselit</translation>
+        <translation type="vanished">Akselit</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(Ylös)</translation>
+        <translation type="vanished">(Ylös)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(Alas)</translation>
+        <translation type="vanished">(Alas)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>Hattu</translation>
+        <translation type="vanished">Hattu</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>(Vasen)</translation>
+        <translation type="vanished">(Vasen)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>(Oikea)</translation>
+        <translation type="vanished">(Oikea)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>Nappi</translation>
+        <translation type="vanished">Nappi</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -3931,11 +3931,30 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="vanished">DPad</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
         <translation>Hiiri: Vasen nappi</translation>
+    </message>
+    <message>
+        <source>D-pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

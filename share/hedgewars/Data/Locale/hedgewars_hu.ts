@@ -3486,31 +3486,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>Tengely</translation>
+        <translation type="vanished">Tengely</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(Fel)</translation>
+        <translation type="vanished">(Fel)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(Le)</translation>
+        <translation type="vanished">(Le)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>Kalap</translation>
+        <translation type="vanished">Kalap</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>(Balra)</translation>
+        <translation type="vanished">(Balra)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>(Jobbra)</translation>
+        <translation type="vanished">(Jobbra)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>Gomb</translation>
+        <translation type="vanished">Gomb</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -3798,7 +3798,26 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="vanished">DPad</translation>
+    </message>
+    <message>
+        <source>D-pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

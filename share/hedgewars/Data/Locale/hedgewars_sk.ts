@@ -3747,31 +3747,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>Os</translation>
+        <translation type="vanished">Os</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(Hore)</translation>
+        <translation type="vanished">(Hore)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(Dole)</translation>
+        <translation type="vanished">(Dole)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>Klobúk</translation>
+        <translation type="vanished">Klobúk</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>(Vľavo)</translation>
+        <translation type="vanished">(Vľavo)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>(Vpravo)</translation>
+        <translation type="vanished">(Vpravo)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>Tlačidlo</translation>
+        <translation type="vanished">Tlačidlo</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -4027,7 +4027,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="vanished">DPad</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
@@ -4060,6 +4060,25 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Right stick (Left)</source>
         <translation>Pravý joystick (Doľava)</translation>
+    </message>
+    <message>
+        <source>D-pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

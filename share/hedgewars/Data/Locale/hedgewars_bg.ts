@@ -3533,31 +3533,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>Ос</translation>
-    </message>
-    <message>
-        <source>(Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>(Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>(Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ос</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>Бутон</translation>
+        <translation type="vanished">Бутон</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -3844,7 +3824,22 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>DPad</source>
+        <source>D-pad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
