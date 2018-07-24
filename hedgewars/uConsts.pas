@@ -349,6 +349,8 @@ const
     cMinPlayWidth = 200;
     cWorldEdgeDist = 200;
 
+    maxDroplets = 50;
+
 implementation
 
 end.

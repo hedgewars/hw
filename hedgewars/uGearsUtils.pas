@@ -516,12 +516,13 @@ else
     // adjust water impact sound based on gear speed and density
     hwTmp:= hwAbs(Gear^.Density * speed);
 
-    if hwTmp > _1 then
-        PlaySound(sndSplash)
-    else if hwTmp > _0_5 then
-        PlaySound(sndSkip)
-    else if hwTmp > _0_0002 then  // arbitrary sanity cutoff.  mostly for airmines
-        PlaySound(sndDroplet2);
+    if (numDroplets < maxDroplets) then
+        if hwTmp > _1 then
+            PlaySound(sndSplash)
+        else if hwTmp > _0_5 then
+            PlaySound(sndSkip)
+        else if hwTmp > _0_0002 then  // arbitrary sanity cutoff.  mostly for airmines
+            PlaySound(sndDroplet2);
     end;
 
 

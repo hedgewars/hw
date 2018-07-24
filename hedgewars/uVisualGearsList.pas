@@ -84,6 +84,11 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
 
         exit;
 
+// 0.9.24.2 workaround for minigun droplet spam.
+// Limit the max. number of droplets.
+if ((Kind = vgtDroplet) or (Kind = vgtSplash)) and (numDroplets > maxDroplets) and (not Critical) then
+    exit;
+
 inc(VGCounter);
 New(gear);
 FillChar(gear^, sizeof(TVisualGear), 0);
@@ -231,6 +236,8 @@ with gear^ do
                 end;
     vgtDroplet:
                 begin
+                // droplet counter for 0.9.24.2 bugfix
+                inc(numDroplets);
                 // old dx & dy calcs
                 // dx:= 0.001 * (random(180) - 90);
                 // dy:= -0.001 * (random(160) + 40);
@@ -458,6 +465,9 @@ begin
 
     if lastVisualGearByUID = Gear then
         lastVisualGearByUID:= nil;
+
+    if (Gear^.Kind = vgtDroplet) and (numDroplets > 0) then
+        dec(numDroplets);
 
     Dispose(Gear);
 end;

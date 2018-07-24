@@ -264,6 +264,10 @@ var
 
     SDLwindow: PSDL_Window;
     SDLGLcontext: PSDL_GLContext;
+
+// 0.9.24.2 TEMPORARY BUGFIXES
+
+    numDroplets: LongInt; // number of droplets in game
   
 /////////////////////////////////////
 //Buttons
@@ -2955,6 +2959,8 @@ begin
         begin
         CountTexz[i]:= nil;
         end;
+
+    numDroplets:= 0;
 
 end;
 
