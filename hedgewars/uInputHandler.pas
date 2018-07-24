@@ -392,11 +392,40 @@ begin
     RegisterBind(DefaultBinds, 'right', '+right');
     RegisterBind(DefaultBinds, 'left_shift', '+precise');
 
+    // Default controls for first connected controller
+    { NOTE: This is provided for convenience so players
+    don't have to set-up the controller entirely in a new install.
+    It's not ideal, so players are still encourages to
+    set up things manually. }
+    // Essential controls
+    RegisterBind(DefaultBinds, 'j0h0r', '+right');
+    RegisterBind(DefaultBinds, 'j0h0l', '+left');
+    RegisterBind(DefaultBinds, 'j0h0u', '+up');
+    RegisterBind(DefaultBinds, 'j0h0d', '+down');
+    RegisterBind(DefaultBinds, 'j0b0', 'ljump');
+    RegisterBind(DefaultBinds, 'j0b1', 'hjump');
+    RegisterBind(DefaultBinds, 'j0b2', '+attack');
+    RegisterBind(DefaultBinds, 'j0b3', 'ammomenu');
+    RegisterBind(DefaultBinds, 'j0b4', '+precise');
+    RegisterBind(DefaultBinds, 'j0b5', 'put');
+    RegisterBind(DefaultBinds, 'j0b6', 'switch');
+    // TODO: Add controller-friendly way to change timer
 
-    RegisterBind(DefaultBinds, 'j0a0u', '+left');
-    RegisterBind(DefaultBinds, 'j0a0d', '+right');
-    RegisterBind(DefaultBinds, 'j0a1u', '+up');
-    RegisterBind(DefaultBinds, 'j0a1d', '+down');
+    // Cursor movement (also essential)
+    RegisterBind(DefaultBinds, 'j0h1r', '+cur_r');
+    RegisterBind(DefaultBinds, 'j0h1l', '+cur_l');
+    RegisterBind(DefaultBinds, 'j0h1d', '+cur_d');
+    RegisterBind(DefaultBinds, 'j0h1u', '+cur_u');
+
+    RegisterBind(DefaultBinds, 'j0a0u', '+cur_r');
+    RegisterBind(DefaultBinds, 'j0a0d', '+cur_l');
+    RegisterBind(DefaultBinds, 'j0a1u', '+cur_d');
+    RegisterBind(DefaultBinds, 'j0a1d', '+cur_u');
+
+    // Additional controls
+    RegisterBind(DefaultBinds, 'j0b7', 'findhh');
+    RegisterBind(DefaultBinds, 'j0b8', '+mission');
+
     for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
     for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
 
