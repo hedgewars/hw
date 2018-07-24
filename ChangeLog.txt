@@ -2,7 +2,7 @@
 * bugfixes
 ====================== 0.9.24.2 ====================
  * Restore joystick/controller functionality
- * Fix crash when starting game with 2 controllers or mor connected
+ * Fix crash when starting game with 2 controllers or more
  + Add default controls for controllers (see README)
 
 ====================== 0.9.24.1 ====================
