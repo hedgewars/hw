@@ -1,8 +1,8 @@
 + features
 * bugfixes
-====================== 0.9.25 ======================
-Lua API:
- + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
+====================== 0.9.24.2 ====================
+ * Restore joystick/controller functionality
+ * Fix crash when starting Hedgewars with 2 controllers connected
 
 ====================== 0.9.24.1 ====================
  * Fix crash when portable portal device is fired at reduced graphics quality
