@@ -34,6 +34,8 @@ class GameSchemeModel : public QAbstractTableModel
         int rowCount(const QModelIndex & parent) const;
         int columnCount(const QModelIndex & parent) const;
         bool hasScheme(QString name);
+        bool hasScheme(QString name, int ignoreID);
+        bool renameScheme(int index, QString newName);
         Qt::ItemFlags flags(const QModelIndex & index) const;
         bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
         bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex());
@@ -46,6 +48,9 @@ class GameSchemeModel : public QAbstractTableModel
 
     public slots:
         void Save();
+
+    signals:
+        void dataChanged(const QModelIndex &topLeft, const QModelIndex& bottomRight);
 
     protected:
         QList< QList<QVariant> > schemes;

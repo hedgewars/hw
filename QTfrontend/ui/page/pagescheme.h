@@ -101,8 +101,13 @@ class PageScheme : public AbstractPage
         QGroupBox * gbGameModes;
         QGroupBox * gbBasicSettings;
 
+        bool changingSchemes = false;
+
+        void checkDupe();
+
     private slots:
         void schemeSelected(int);
+        void dataChanged(QModelIndex topLeft, QModelIndex bottomRight);
 };
 
 #endif

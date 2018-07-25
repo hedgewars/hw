@@ -856,14 +856,25 @@ int GameSchemeModel::columnCount(const QModelIndex & parent) const
 
 bool GameSchemeModel::hasScheme(QString name)
 {
+    return hasScheme(name, -1);
+}
+
+bool GameSchemeModel::hasScheme(QString name, int ignoreID)
+{
+    QString nameLower = name.toLower();
     for(int i=0; i<schemes.size(); i++)
     {
-        if(schemes[i][0] == name)
+        if(((ignoreID == -1) || (i != ignoreID)) && (schemes[i][0].toString().toLower() == nameLower))
         {
             return true;
         }
     }
     return false;
+}
+
+bool GameSchemeModel::renameScheme(int index, QString newName)
+{
+    return setData(QAbstractItemModel::createIndex(index, 0), QVariant(newName));
 }
 
 Qt::ItemFlags GameSchemeModel::flags(const QModelIndex & index) const
