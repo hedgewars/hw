@@ -22,6 +22,9 @@ Frontend:
 Highlander:
  * Fix all hogs getting teleport after hog placement phase
 
+TechRacer:
+ * Fix rare bug causing crates and other objects not appearing on start of turn
+
 Continental supplies:
  + Continents are now selected before the game starts
  + Continents give hog different start health

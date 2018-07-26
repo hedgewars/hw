@@ -710,50 +710,46 @@ end
 
 function HandleFreshMapCreation()
 
-	-- the boom stage, boom girders, reset ammo, and delete other map objects
-	if activationStage == 1 then
+	if activationStage ~= 1 then
+		return
+	end
 
-		ClearMap()
-		activationStage = activationStage + 1
+	-- the boom stage, boom girders, reset ammo, and delete other map objects
+	ClearMap()
 
 	-- the creation stage, place girders and needed gears, grant ammo
-	elseif activationStage == 2 then
+	InterpretPoints()
 
-		InterpretPoints()
-
-		-- these are from onParameters()
-		if (mapID == nil) or (mapID == 0) then
-			LoadMap(2000)
-		else
-			LoadMap(mapID)
-		end
-
-                if gameOver then
-		        for i = 0,(wpCount-1) do
-                                SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
-                        end
-
-                else
-		        for i = 0,(wpCount-1) do
-		        	DeleteVisualGear(wpCirc[i])
-		        end
-		        wpCount = 0
-
-		        for i = 1, techCount-1 do
-			        CallBob(techX[i],techY[i])
-		        end
-                end
-
-		activationStage = 200
-		--runOnHogs(RestoreHog)
-
-		if ufoFuel == 2000 then
-			SetAmmoDescriptionAppendix(amJetpack, loc("On this map you get infinite fuel."))
-		elseif ufoFuel ~= nil and ufoFuel ~= 0 then
-			SetAmmoDescriptionAppendix(amJetpack, string.format(loc("On this map you get %d%% fuel."), div(ufoFuel, 20)))
-		end
-
+	-- these are from onParameters()
+	if (mapID == nil) or (mapID == 0) then
+		LoadMap(2000)
+	else
+		LoadMap(mapID)
 	end
+
+	if gameOver then
+		for i = 0,(wpCount-1) do
+			SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 164, 224, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+		end
+
+        else
+		for i = 0,(wpCount-1) do
+			DeleteVisualGear(wpCirc[i])
+		end
+		wpCount = 0
+
+		for i = 1, techCount-1 do
+			CallBob(techX[i],techY[i])
+		end
+	end
+
+	if ufoFuel == 2000 then
+		SetAmmoDescriptionAppendix(amJetpack, loc("On this map you get infinite fuel."))
+	elseif ufoFuel ~= nil and ufoFuel ~= 0 then
+		SetAmmoDescriptionAppendix(amJetpack, string.format(loc("On this map you get %d%% fuel."), div(ufoFuel, 20)))
+	end
+
+	activationStage = 200
 
 end
 
@@ -1054,7 +1050,7 @@ function onGameStart()
 
         TryRepositionHogs()
 
-		activationStage = 2
+		activationStage = 1
 		HandleFreshMapCreation()
 
 end
@@ -1158,7 +1154,7 @@ function onGameTick20()
         end
 
 
-	if activationStage < 10 then
+	if activationStage < 200 then
 		HandleFreshMapCreation()
 
                 if not gameOver and gameBegun and not racerActive then
@@ -1182,8 +1178,7 @@ function onGameTick20()
 
                         -- if the gamehas started put the player in the middle of the first
                         --waypoint that was placed
-                        --if activationStage == 200 then
-						if gameBegun == true then
+                        if gameBegun == true then
                                 AddCaption(loc("Good to go!"))
                                 racerActive = true
                                 trackTime = 0
