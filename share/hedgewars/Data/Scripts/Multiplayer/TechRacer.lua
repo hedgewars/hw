@@ -664,6 +664,7 @@ function onGameInit()
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)
 	end
+	WriteLnToConsole("TechRacer: Using map "..tostring(mapID))
 
 	addHashData(mapID)
 

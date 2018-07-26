@@ -102,6 +102,7 @@ function onPreviewInit()
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)
 	end
+	WriteLnToConsole("TechRacer preview: Using map "..tostring(mapID))
 
     TemplateFilter = 0
 
