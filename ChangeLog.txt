@@ -14,6 +14,7 @@ Game:
  * Fix video recorder not working when game audio was disabled
  * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
+ * Fix /hta, /hsa and /hya commands not writing message in chat
 
 Frontend:
  * Controllers are detected again
