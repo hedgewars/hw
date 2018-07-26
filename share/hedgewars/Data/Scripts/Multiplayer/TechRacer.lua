@@ -1,6 +1,6 @@
-------------------------------------------
--- TECH RACER v0.8
------------------------------------------
+--------------
+-- TECH RACER
+--------------
 
 -- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
 -- Be careful when editig this script, do not introduce changes lightly!
@@ -11,67 +11,6 @@
 -- TO DO
 --------------
 -- allow scrolling of maps (was going to add this in the engine itself, but it can be done now by refreshing preview)
-
---------------
---0.2
---------------
--- should work better "out the box"
--- changed map generation
--- put a hog limiter in place
--- removed parsecommand
--- fix one of the test maps
--- hopefully added some support for future official challenges etc
--- changed theme
--- minor cleanups?
-
---------------
---0.3
---------------
--- ehh, scrap everything? those old maps probably still desync so they can die for now
--- hopefully fix map 3
--- add two new crappy map to test an idea.
-
---------------
---0.4
---------------
--- updated version text (lol)
--- some preliminary support for hand-drawn map loading
--- some support for being really lazy
--- an extra map or two
--- param for infinite UFO fuel
--- param for number of rounds
-
---------------
---0.5
---------------
--- migrated maps to an external script
-
---------------
---0.6
---------------
--- move 1 line of code :D (allows loading of HWMAP points to actually work)
-
---------------
---0.7
---------------
--- allow waypoints to be loaded automatically via TechMaps or HWMAP
--- (temporarily?) remove ability to place waypoints manually
--- break stuff?
-
---------------
---0.8
---------------
--- should (more or less) work "out of the box" now
--- generate map previews for level
--- randomly assign a map in the case of no map param
--- no longer allow custom ammosets (ammo should be specified by map so that records can be valid, though we probably still need to completely limit gameflags)
-
---------------
---0.9
---------------
--- added variable portal limiter (and effects) from Escape script
--- allow variable ufoFuel (nil is default, 2000 is infinite)
--- disallow specifying fuel in params (do this in TechMaps or HedgeEditor please)
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -168,9 +107,9 @@ local utilArray =
 
 local activationStage = 0
 local jet = nil
-portalDistance = 5000 -- 15
+portalDistance = 5000
 ufoFuel = 0
-local fMod = 1000000 -- 1
+local fMod = 1000000
 local roundLimit = 3
 local roundNumber = 0
 local firstClan = 10
@@ -241,9 +180,6 @@ local RoundHasChanged
 -------------------
 -- general methods
 -------------------
-
---function onPrecise()
---end
 
 function RebuildTeamInfo()
 
@@ -336,16 +272,10 @@ function CheckWaypoints()
                 g1Y = g1Y - g2Y
                 dist = (g1X*g1X) + (g1Y*g1Y)
 
-                --if i == 0 then
-                --      AddCaption(dist .. "/" .. (wpRad*wpRad) )
-                --end
-
                 NR = (48/100*wpRad)/2
 
                 if dist < (NR*NR) and not gameOver then
-                --if dist < (wpRad*wpRad) then
-                        --AddCaption("howdy")
-                        wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog)) -- new                             --GetClanColor(1)
+                        wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog))
                         SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 64, 64, 1, 10, 0, wpRad, 5, wpCol[i])
 
                         wpRem = 0
@@ -436,13 +366,7 @@ function AdjustScores()
                 end
         end
 
-        --------
-        --new
-        --------
-
         if bestTime == trackTime then
-                --AddCaption("wooooooooooooooooooooooooooooo")
-
                 fastColour = GetClanColor(GetHogClan(CurrentHedgehog))
 
                 for i = 0, (currCount-1) do
@@ -452,8 +376,6 @@ function AdjustScores()
 
                 fastCount = currCount
                 fastIndex = 0
-
-                --currCount = 0 -- is this needed?
 
         else
                 currCount = 0
@@ -469,7 +391,7 @@ function onNewRound()
 
         totalComment = ""
         for i = 0, (TeamsCount-1) do
-                        if teamNameArr[i] ~= " " then                           -- teamScore[teamClan[i]]
+                        if teamNameArr[i] ~= " " then
 				if teamScore[i] ~= 1000000 then
                                 	teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
 				else
@@ -543,53 +465,6 @@ end
 
 function CheckForNewRound()
 
-        -------------
-        ------ new
-        -------------
-
-        --[[turnN = turnN + 1
-        if gameBegun == false then
-                if turnN == 2 then
-                        for i = 0, (numhhs-1) do
-                                if hhs[i] ~= nil then
-                                        SetEffect(hhs[i], heResurrectable, 0)
-                                        SetHealth(hhs[i],0)
-                                end
-                        end
-                        gameOver = true
-                        TurnTimeLeft = 1
-                end
-        else
-
-
-        end]]
-
-        --[[if roundBegun == true then
-
-                if RoundHasChanged == true then
-                        roundN = roundN + 1
-                        RoundHasChanged = false
-                        onNewRound()
-                end
-
-                if lastRound ~= TotalRounds then -- new round, but not really
-
-                        if RoundHasChanged == false then
-                                RoundHasChanged = true
-                        end
-
-                end
-
-                AddCaption("RoundN:" .. roundN .. "; " .. "TR: " .. TotalRounds)
-
-                lastRound = TotalRounds
-
-        end]]
-
-        ------------
-        ----- old
-        ------------
-
         if GetHogClan(CurrentHedgehog) == firstClan then
                 onNewRound()
         end
@@ -632,12 +507,6 @@ function HandleGhost()
                 tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
                 g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
                 SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, fastColour )
-
-                --AddCaption("fC: " .. fastIndex .. " / " .. fastCount)
-
-        else
-
-                --AddCaption("excep fC: " .. fastIndex .. " / " .. fastCount)
 
         end
 
@@ -700,8 +569,6 @@ function CallBob(x,y)
             SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], minO, maxO, 1, flashing, 0, wpRad, 5, wpCol[wpCount])
 
             wpCount = wpCount + 1
-
-            --AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
         end
     end
 end
@@ -776,7 +643,6 @@ function onParameters()
 	parseParams()
 	mapID = tonumber(params["m"])
 
-	--ufoFuel = tonumber(params["ufoFuel"])
 	roundLimit = tonumber(params["rounds"])
 
 	if (roundLimit == 0) or (roundLimit == nil) then
@@ -922,24 +788,6 @@ function InterpretPoints()
 		--89,88,87,86 and 85,84,83,82 (reserved for the 2 custom sprites and their landflags)
 
 		--90-99 reserved for scripted structures
-		--[[elseif specialPointsFlag[i] == 90 then
-			--PlaceStruc("generator")
-		elseif specialPointsFlag[i] == 91 then
-			--PlaceStruc("healingstation")
-		elseif specialPointsFlag[i] == 92 then
-			--PlaceStruc("respawner")
-		elseif specialPointsFlag[i] == 93 then
-			--PlaceStruc("teleportationnode")
-		elseif specialPointsFlag[i] == 94 then
-			--PlaceStruc("biofilter")
-		elseif specialPointsFlag[i] == 95 then
-			--PlaceStruc("supportstation")
-		elseif specialPointsFlag[i] == 96 then
-			--PlaceStruc("constructionstation")
-		elseif specialPointsFlag[i] == 97 then
-			--PlaceStruc("reflectorshield")
-		elseif specialPointsFlag[i] == 98 then
-			--PlaceStruc("weaponfilter")]]
 
 		elseif specialPointsFlag[i] == 98 then
 			portalDistance = specialPointsX[i]
@@ -1028,7 +876,7 @@ function onGameStart()
 
 		roundN = 0
         lastRound = TotalRounds
-        RoundHasChanged = false -- true
+        RoundHasChanged = false
 
 	    RebuildTeamInfo()
 
@@ -1066,16 +914,9 @@ function onNewTurn()
 
 		activationStage = 1
 
-		--AddAmmo(CurrentHedgehog, amBazooka, 100)
-		--AddAmmo(CurrentHedgehog, amJetpack, 100)
-
-		--ClearMap()
-
-
         trackTime = 0
 
         currCount = 0 -- hopefully this solves problem
-    --    AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
         -- Set the waypoints to unactive on new round
@@ -1090,23 +931,14 @@ function onNewTurn()
 
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
-               -- if wpCount >= 3 then
                         gameBegun = true
-						--  --[[activationStage = 200]]
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
-                --else
-                --        ShowMission(loc("RACER"),
-                --        loc("NOT ENOUGH WAYPOINTS"),
-                --        loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
-                --        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-				--		SetWeapon(amAirAttack)
-               -- end
         end
 
         if gameOver == true then
                 gameBegun = false
-                racerActive = false -- newadd
+                racerActive = false
         end
 
         AddAmmo(CurrentHedgehog, amTardis, 0)
@@ -1177,41 +1009,31 @@ function onGameTick20()
                 if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
 
                         -- if the gamehas started put the player in the middle of the first
-                        --waypoint that was placed
+                        -- waypoint that was placed
                         if gameBegun == true then
                                 AddCaption(loc("Good to go!"))
                                 racerActive = true
                                 trackTime = 0
 
 
-								SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
-                                --AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
-                                --SetGearVelocity(CurrentHedgehog,1000000,1000000)
-								SetGearMessage(CurrentHedgehog,gmLeft)
+                                SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
+                                SetGearMessage(CurrentHedgehog,gmLeft)
 
-
-								FollowGear(CurrentHedgehog)
+                                FollowGear(CurrentHedgehog)
 
                                 HideMission()
-								activationStage = 201
-
-						else
-                                -- still in placement mode
+                                activationStage = 201
                         end
 
                 end
 
         elseif (activationStage == 201) and (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
-			SetGearMessage(CurrentHedgehog,0)
-			activationStage = 202
-		end
-
-
+                SetGearMessage(CurrentHedgehog,0)
+                activationStage = 202
+	end
 
         -- has the player started his tumbling spree?
         if (CurrentHedgehog ~= nil) then
-
-                --airstrike conversion used to be here
 
                 -- if the RACE has started, show tracktimes and keep tabs on waypoints
                 if (racerActive == true) and (activationStage == 202) then
