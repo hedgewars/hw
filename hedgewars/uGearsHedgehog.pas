@@ -524,6 +524,7 @@ with Gear^,
                     speech^.Text:= SpeechText;
                     speech^.Hedgehog:= Gear^.Hedgehog;
                     speech^.FrameTicks:= SpeechType;
+                    AddChatString(#9+'[' + Gear^.Hedgehog^.Name + '] '+SpeechText);
                     end;
                 SpeechText:= ''
                 end;

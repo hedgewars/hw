@@ -7,6 +7,7 @@
  * Limit number of droplets to 50 (temporary bugfix)
  * Prevent creation of schemes with same name as an existing scheme
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
+ * Fix /hta, /hsa and /hya commands not writing message in chat
  + Add default controls for controllers (see README)
 
 ====================== 0.9.24.1 ====================
