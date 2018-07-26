@@ -5,6 +5,7 @@
  * Fix crash when starting game with 2 controllers or more
  * Fix insane amount of droplets appearing when shooting minigun into ocean world edge
  * Limit number of droplets to 50 (temporary bugfix)
+ * Prevent creation of schemes with same name as an existing scheme
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
  + Add default controls for controllers (see README)
 

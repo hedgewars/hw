@@ -251,8 +251,6 @@ void SelWeaponWidget::save()
     //prevent this.
     if (isDeleting)
         return;
-    // TODO make this return if success or not, so that the page can react
-    // properly and not goBack if saving failed
     if (m_name->text() == "")
         return;
 
@@ -277,21 +275,24 @@ void SelWeaponWidget::save()
 
     stateFull = state1 + state2 + state3 + state4;
 
-    for(int i = 0; i < cDefaultAmmos.size(); i++)
+    // Check for duplicates
+    QString inputNameLower = m_name->text().toLower();
+    QString curWeaponsNameLower = curWeaponsName.toLower();
+    QStringList keys = wconf->keys();
+    for(int i = 0; i < keys.size(); i++)
     {
-        // Don't allow same name as default weapon set, even case-insensitively.
+        QString compName = keys[i];
+        QString compNameLower = compName.toLower();
+        // Don't allow same name as other weapon set, even case-insensitively.
         // This prevents some problems with saving/loading.
-        if (cDefaultAmmos[i].first.toLower().compare(m_name->text().toLower()) == 0)
+        if ((compNameLower == inputNameLower) && (compNameLower != curWeaponsNameLower))
         {
-            // don't show warning if no change
-            if (cDefaultAmmos[i].second.compare(stateFull) == 0)
-                return;
-
+            // Discard changed made to current weapon scheme if there's a duplicate
             m_name->setText(curWeaponsName);
             QMessageBox deniedMsg(this);
             deniedMsg.setIcon(QMessageBox::Warning);
             deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
-            deniedMsg.setText(QMessageBox::tr("Cannot overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setText(QMessageBox::tr("A weapon scheme with the name '%1' already exists. Changes made to the weapon scheme have been discarded.").arg(compName));
             deniedMsg.setWindowModality(Qt::WindowModal);
             deniedMsg.exec();
             return;
