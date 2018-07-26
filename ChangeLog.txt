@@ -17,6 +17,7 @@ Game:
 
 Frontend:
  * Controllers are detected again
+ * No longer allow having schemes with equal names (case-insensitive)
 
 Highlander:
  * Fix all hogs getting teleport after hog placement phase
