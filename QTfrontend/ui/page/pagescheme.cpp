@@ -594,24 +594,33 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(LE_ScriptParam, 43);
 
     mapper->toFirst();
+
+    connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex, QModelIndex)));
 }
 
 void PageScheme::newRow()
 {
+    changingSchemes = true;
     QAbstractItemModel * model = mapper->model();
     model->insertRow(-1);
     selectScheme->setCurrentIndex(model->rowCount() - 1);
+    changingSchemes = false;
+    checkDupe();
 }
 
 void PageScheme::copyRow()
 {
+    changingSchemes = true;
     QAbstractItemModel * model = mapper->model();
     model->insertRow(selectScheme->currentIndex());
     selectScheme->setCurrentIndex(model->rowCount() - 1);
+    changingSchemes = false;
+    checkDupe();
 }
 
 void PageScheme::deleteRow()
 {
+    changingSchemes = true;
     int numberOfDefaultSchemes = ((GameSchemeModel*)mapper->model())->numberOfDefaultSchemes;
     if (selectScheme->currentIndex() < numberOfDefaultSchemes)
     {
@@ -637,6 +646,15 @@ void PageScheme::deleteRow()
             model->removeRow(selectScheme->currentIndex());
         }
     }
+    changingSchemes = false;
+}
+
+void PageScheme::dataChanged(QModelIndex topLeft, QModelIndex bottomRight)
+{
+    Q_UNUSED(bottomRight)
+    if(topLeft.column() == 0) {
+        checkDupe();
+    };
 }
 
 void PageScheme::schemeSelected(int n)
@@ -646,6 +664,42 @@ void PageScheme::schemeSelected(int n)
     gbBasicSettings->setEnabled(n >= c);
     LE_name->setEnabled(n >= c);
     L_name->setEnabled(n >= c);
+    checkDupe();
 }
 
+// Check for duplicates and rename scheme if duplicate found
+void PageScheme::checkDupe()
+{
+    if (changingSchemes)
+    {
+        return;
+    }
+    int except = selectScheme->currentIndex();
+    QString name = selectScheme->currentText();
+    GameSchemeModel* model = (GameSchemeModel*)mapper->model();
+    bool dupe = model->hasScheme(name, except);
+    if (dupe)
+    {
+        QString newName;
+        //name already used -> look for an appropriate name
+        int i=2;
+        while(model->hasScheme(newName = tr("%1 (%2)").arg(name).arg(i++), except))
+        {
+            if(i > 1000)
+            {
+                return;
+            }
+        }
+        LE_name->setText(newName);
+        selectScheme->setCurrentText(newName);
+        model->renameScheme(except, newName);
+
+        QMessageBox dupeMsg(this);
+        dupeMsg.setIcon(QMessageBox::Warning);
+        dupeMsg.setWindowTitle(QMessageBox::tr("Schemes - Name already taken"));
+        dupeMsg.setText(QMessageBox::tr("A scheme with the name '%1' already exists. Your scheme has been renamed to '%2'.").arg(name).arg(newName));
+        dupeMsg.setWindowModality(Qt::WindowModal);
+        dupeMsg.exec();
+    }
+}
 
