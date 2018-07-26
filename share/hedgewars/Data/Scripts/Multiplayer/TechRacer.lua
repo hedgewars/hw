@@ -163,7 +163,7 @@ local wpX = {}
 local wpY = {}
 local wpCol = {}
 local wpActive = {}
-local wpRad = 450 --75
+local wpRad = 450
 local wpCount = 0
 local wpLimit = 20
 
@@ -172,6 +172,8 @@ local usedWeapons = {}
 local roundN
 local lastRound
 local RoundHasChanged
+
+local cnthhs = 0
 
 -------------------
 -- general methods
@@ -190,12 +192,12 @@ function RebuildTeamInfo()
 
 	for i = 0, (numhhs-1) do
 
-		z = 0
-		unfinished = true
+		local z = 0
+		local unfinished = true
 		while(unfinished == true) do
 
-			newTeam = true
-			tempHogTeamName = GetHogTeamName(hhs[i]) -- this is the new name
+			local newTeam = true
+			local tempHogTeamName = GetHogTeamName(hhs[i]) -- this is the new name
 
 			if tempHogTeamName == teamNameArr[z] then
 				newTeam = false
@@ -260,20 +262,20 @@ function CheckWaypoints()
 
 	for i = 0, (wpCount-1) do
 
-		g1X, g1Y = GetGearPosition(CurrentHedgehog)
-		g2X, g2Y = wpX[i], wpY[i]
+		local g1X, g1Y = GetGearPosition(CurrentHedgehog)
+		local g2X, g2Y = wpX[i], wpY[i]
 
-		g1X = g1X - g2X
-		g1Y = g1Y - g2Y
-		dist = (g1X*g1X) + (g1Y*g1Y)
+		local g1X = g1X - g2X
+		local g1Y = g1Y - g2Y
+		local dist = (g1X*g1X) + (g1Y*g1Y)
 
-		NR = (48/100*wpRad)/2
+		local NR = (48/100*wpRad)/2
 
 		if dist < (NR*NR) and not gameOver then
 			wpCol[i] = GetClanColor(GetHogClan(CurrentHedgehog))
 			SetVisualGearValues(wpCirc[i], wpX[i], wpY[i], 64, 64, 1, 10, 0, wpRad, 5, wpCol[i])
 
-			wpRem = 0
+			local wpRem = 0
 			for k = 0, (wpCount-1) do
 				if wpActive[k] == false then
 					wpRem = wpRem + 1
@@ -308,7 +310,7 @@ function AdjustScores()
 
 	local bestTimeComment = loc("Did not finish")
 
-	newScore = false
+	local newScore = false
 
 	-- update this clan's time if the new track is better
 	for i = 0, (numTeams-1) do
@@ -349,9 +351,9 @@ function AdjustScores()
 		end
 	else -- not any kind of new score
 		ShowMission(loc("TechRacer"),
-		loc("Track completed!"),
-		string.format(loc("Time: %.1fs"), (trackTime/1000)) .. "|" ..
-		string.format(loc("Winning time: %s"), bestTimeComment), -amSkip, 4000)
+			loc("Track completed!"),
+			string.format(loc("Time: %.1fs"), (trackTime/1000)) .. "|" ..
+			string.format(loc("Winning time: %s"), bestTimeComment), -amSkip, 4000)
 		PlaySound(sndHellish)
 	end
 
@@ -384,7 +386,7 @@ function onNewRound()
 
 	roundNumber = roundNumber + 1
 
-	totalComment = ""
+	local totalComment = ""
 	for i = 0, (TeamsCount-1) do
 		if teamNameArr[i] ~= " " then
 			if teamScore[i] ~= 1000000 then
@@ -501,42 +503,41 @@ function HandleGhost()
 
 		fastIndex = fastIndex + 1
 
-		tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
-		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-		SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, fastColour )
+		local tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
+		SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, fastColour )
 
 	end
 
 end
 
 function BoomGirder(x,y,rot)
-	girTime = 1
+	local girTime = 1
 	if rot < 4 then
 		AddGear(x, y, gtGrenade, 0, 0, 0, girTime)
 	elseif rot == 4 then
-		g = AddGear(x-45, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-		g = AddGear(x-30, y, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-		g = AddGear(x+30, y, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x+45, y, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x-45, y, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x-30, y, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x+30, y, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x+45, y, gtGrenade, 0, 0, 0, girTime) -- needed?
 	elseif rot == 5 then ------- diag
-		g = AddGear(x+45, y+45, gtGrenade, 0, 0, 0, girTime) --n
-		g = AddGear(x+30, y+30, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-		g = AddGear(x-30, y-30, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x-45, y-45, gtGrenade, 0, 0, 0, girTime) --n
+		AddGear(x+45, y+45, gtGrenade, 0, 0, 0, girTime) --n
+		AddGear(x+30, y+30, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x-30, y-30, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x-45, y-45, gtGrenade, 0, 0, 0, girTime) --n
 	elseif rot == 6 then
-		g = AddGear(x, y-45, gtGrenade, 0, 0, 0, girTime) -- needed?
-		g = AddGear(x, y+30, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-		g = AddGear(x, y-30, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x, y+45, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x, y-45, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x, y+30, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x, y-30, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x, y+45, gtGrenade, 0, 0, 0, girTime) -- needed?
 	elseif rot == 7 then -------
-		g = AddGear(x+45, y-45, gtGrenade, 0, 0, 0, girTime) --n
-		g = AddGear(x+30, y-30, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
-		g = AddGear(x-30, y+30, gtGrenade, 0, 0, 0, girTime)
-		g = AddGear(x-45, y+45, gtGrenade, 0, 0, 0, girTime) --n
+		AddGear(x+45, y-45, gtGrenade, 0, 0, 0, girTime) --n
+		AddGear(x+30, y-30, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x, y, gtGrenade, 0, 0, 0, girTime) -- needed?
+		AddGear(x-30, y+30, gtGrenade, 0, 0, 0, girTime)
+		AddGear(x-45, y+45, gtGrenade, 0, 0, 0, girTime) --n
 	end
 end
 
@@ -911,7 +912,6 @@ function onNewTurn()
 	trackTime = 0
 
 	currCount = 0 -- hopefully this solves problem
-	gTimer = 0
 
 	-- Set the waypoints to unactive on new round
 	if not gameOver then
@@ -955,7 +955,7 @@ function onGameTick20()
 
 	-- airstrike detected, convert this into a potential waypoint spot
 	if cGear ~= nil then
-		x,y = GetGearPosition(cGear)
+		local x,y = GetGearPosition(cGear)
 		if x > -9000 then
 			x,y = GetGearTarget(cGear)
 
@@ -1082,8 +1082,10 @@ function PortalEffects(gear)
 			remLife = remLife - 1
 			setGearValue(gear, "life", remLife)
 
+			-- Limited range portal ball dies
 			if remLife == 0 then
 
+				-- Make portal ball disappear in a puff of smoke
 				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
@@ -1177,7 +1179,7 @@ function onGearDelete(gear)
 end
 
 function onAttack()
-	at = GetCurAmmoType()
+	local at = GetCurAmmoType()
 
 	usedWeapons[at] = 0
 end
@@ -1186,16 +1188,17 @@ function onAchievementsDeclaration()
 	usedWeapons[amSkip] = nil
 	usedWeapons[amExtraTime] = nil
 
-	usedRope = usedWeapons[amRope] ~= nil
-	usedPortal = usedWeapons[amPortalGun] ~= nil
-	usedSaucer = usedWeapons[amJetpack] ~= nil
+	local usedRope = usedWeapons[amRope] ~= nil
+	local usedPortal = usedWeapons[amPortalGun] ~= nil
+	local usedSaucer = usedWeapons[amJetpack] ~= nil
 
 	usedWeapons[amRope] = nil
 	usedWeapons[amPortalGun] = nil
 	usedWeapons[amJetpack] = nil
 
-	usedOther = next(usedWeapons) ~= nil
+	local usedOther = next(usedWeapons) ~= nil
 
+	local raceType
 	if usedOther then -- smth besides skip, rope, portal or saucer used
 		raceType = "unknown race"
 	elseif usedRope and not usedPortal and not usedSaucer then
