@@ -1710,7 +1710,7 @@ begin
         ei := x + Gear^.Radius + LongInt(GetRandom(2));
         while i <= ei do
             begin
-            DrawExplosion(i, y + 3, 3);
+            doMakeExplosion(i, y + 3, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
             inc(i, 1)
             end;
 
@@ -2673,7 +2673,7 @@ begin
                 begin
                 gX := hwRound(Gear^.X);
                 gY := hwRound(Gear^.Y) - 6;
-                DrawExplosion(gX, gY, 4);
+                doMakeExplosion(gX, gY, 4, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
                 PlaySound(sndVaporize);
                 AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSteam);
                 DeleteGear(Gear);
@@ -2723,7 +2723,6 @@ begin
                     end
                 else if ((GameTicks and $3) = 3) then
                     doMakeExplosion(gX, gY, Gear^.Boom * 4, Gear^.Hedgehog, 0);//, EXPLNoDamage);
-                //DrawExplosion(gX, gY, 4);
 
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                     for i:= Random(2) downto 0 do
@@ -2738,7 +2737,7 @@ begin
                 // Modified fire
                 if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
                     begin
-                    DrawExplosion(gX, gY, 4);
+                    doMakeExplosion(gX, gY, 4, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
 
                     for i:= Random(3) downto 0 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
@@ -5298,7 +5297,7 @@ begin
                     begin
                     if ((GameFlags and gfSolidLand) = 0) then
                         begin
-                        DrawExplosion(rX,rY,Gear^.Radius);
+                        doMakeExplosion(rX,rY,Gear^.Radius, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
                         end;
 
                     // kick nearby hogs
@@ -5669,11 +5668,11 @@ begin
 
         i := hwRound(Gear^.X) - HitGear^.Radius + 2;
         ei := hwRound(Gear^.X) + HitGear^.Radius - 2;
-        for j := 1 to 4 do DrawExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
-        for j := 1 to 4 do DrawExplosion(ei + LongInt(GetRandom(5)), hwRound(Gear^.Y) + 6*j, 3);
+        for j := 1 to 4 do doMakeExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
+        for j := 1 to 4 do doMakeExplosion(ei + LongInt(GetRandom(5)), hwRound(Gear^.Y) + 6*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
         while i <= ei do
             begin
-            for j := 1 to 11 do DrawExplosion(i, hwRound(Gear^.Y) + 3*j, 3);
+            for j := 1 to 11 do doMakeExplosion(i, hwRound(Gear^.Y) + 3*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
             inc(i, 1)
             end;
 
