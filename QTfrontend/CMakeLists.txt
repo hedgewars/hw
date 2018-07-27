@@ -94,7 +94,7 @@ list(APPEND hwfr_src
     campaign.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/sdlkeys.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sdlkeys.cpp
     )
 
 if(MINGW)
