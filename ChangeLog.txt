@@ -9,6 +9,7 @@ Game:
  + Increase hedgehog limit to 64
  * Functionality of controllers restored
  * Fix crash when 2 or more controllers were connected
+ * Fix hammer and pickhammer not digging correctly at wrap world edge
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix video recorder not working when game audio was disabled

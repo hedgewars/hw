@@ -473,8 +473,8 @@ var tx, ty, by, bx,  i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
-        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, TopY) do
+        for tx:= Max(LeftX, ar^[i].Left - Radius) to Min(RightX, ar^[i].Right + Radius) do
             begin
             if (Land[ty, tx] and lfIndestructible) = 0 then
                 begin
@@ -500,8 +500,8 @@ dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
-        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, TopY) do
+        for tx:= Max(LeftX, ar^[i].Left - Radius) to Min(RightX, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
                  if (cReducedQuality and rqBlurryLand) = 0 then
