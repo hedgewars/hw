@@ -684,7 +684,7 @@ if cAirMines > 0 then
                 begin
                 h:= 0;
                 with TeamsArray[t]^ do
-                    while (h < cMaxHHIndex) and (p = 0) do
+                    while (h <= cMaxHHIndex) and (p = 0) do
                         begin
                         if (Hedgehogs[h].Gear <> nil) then
                             begin
