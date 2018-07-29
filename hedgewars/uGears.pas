@@ -671,7 +671,7 @@ while (i < cAirMines) and (j < 1000*cAirMines) do
         rx:= leftX+GetRandom(rightX-leftX+400)-200;
         ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
         end;
-    Gear^.X:= int2hwFloat(rx);
+    Gear^.X:= int2hwFloat(CalcWorldWrap(rx,Gear^.Radius));
     Gear^.Y:= int2hwFloat(ry);
     if CheckLandValue(rx, ry, $FFFF) and
        (TestCollisionYwithGear(Gear,-1) = 0) and
