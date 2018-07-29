@@ -658,62 +658,62 @@ p:= 0; // 0 searching, 1 bad position, 2 added.
 unplaced:= 0;
 if cAirMines > 0 then
     Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0);
-while (i < cAirMines) and (j < 1000*cAirMines) do
-    begin
-    p:= 0;
-    if hasBorder then
+    while (i < cAirMines) and (j < 1000*cAirMines) do
         begin
-        rx:= leftX+GetRandom(rightX-leftX-16)+8;
-        ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
-        end
-    else
-        begin
-        rx:= leftX+GetRandom(rightX-leftX+400)-200;
-        ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
-        end;
-    Gear^.X:= int2hwFloat(CalcWorldWrap(rx,Gear^.Radius));
-    Gear^.Y:= int2hwFloat(ry);
-    if CheckLandValue(rx, ry, $FFFF) and
-       (TestCollisionYwithGear(Gear,-1) = 0) and
-       (TestCollisionXwithGear(Gear, 1) = 0) and
-       (TestCollisionXwithGear(Gear,-1) = 0) and
-       (TestCollisionYwithGear(Gear, 1) = 0) then
-        begin
-        t:= 0;
-        while (t < TeamsCount) and (p = 0) do
+        p:= 0;
+        if hasBorder then
             begin
-            h:= 0;
-            with TeamsArray[t]^ do
-                while (h < cMaxHHIndex) and (p = 0) do
-                    begin
-                    if (Hedgehogs[h].Gear <> nil) then
-                        begin
-                        rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
-                        rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
-                        if (Gear^.Angle < $FFFFFFFF) and
-                            ((rdx.Round+rdy.Round < Gear^.Angle) and
-                            (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
-                            begin
-// Debug line. Remove later
-// AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
-
-                            p:= 1
-                            end
-                        end;
-                    inc(h)
-                    end;
-            inc(t)
-            end;
-        if p = 0 then
-            begin
-            inc(i);
-            AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
-            if i < cAirMines then
-                Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+            rx:= leftX+GetRandom(rightX-leftX-16)+8;
+            ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
             end
+        else
+            begin
+            rx:= leftX+GetRandom(rightX-leftX+400)-200;
+            ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
+            end;
+        Gear^.X:= int2hwFloat(CalcWorldWrap(rx,Gear^.Radius));
+        Gear^.Y:= int2hwFloat(ry);
+        if CheckLandValue(rx, ry, $FFFF) and
+           (TestCollisionYwithGear(Gear,-1) = 0) and
+           (TestCollisionXwithGear(Gear, 1) = 0) and
+           (TestCollisionXwithGear(Gear,-1) = 0) and
+           (TestCollisionYwithGear(Gear, 1) = 0) then
+            begin
+            t:= 0;
+            while (t < TeamsCount) and (p = 0) do
+                begin
+                h:= 0;
+                with TeamsArray[t]^ do
+                    while (h < cMaxHHIndex) and (p = 0) do
+                        begin
+                        if (Hedgehogs[h].Gear <> nil) then
+                            begin
+                            rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
+                            rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
+                            if (Gear^.Angle < $FFFFFFFF) and
+                                ((rdx.Round+rdy.Round < Gear^.Angle) and
+                                (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
+                                begin
+    // Debug line. Remove later
+    // AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+
+                                p:= 1
+                                end
+                            end;
+                        inc(h)
+                        end;
+                inc(t)
+                end;
+            if p = 0 then
+                begin
+                inc(i);
+                AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+                if i < cAirMines then
+                    Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+                end
+            end;
+        inc(j)
         end;
-    inc(j)
-    end;
 if p <> 0 then DeleteGear(Gear);
 
 if (GameFlags and gfLowGravity) <> 0 then
