@@ -3090,11 +3090,23 @@ begin
     lc_setvampiric := 0;
 end;
 
+function lc_getvampiric(L : Plua_state) : LongInt; Cdecl;
+begin
+    lua_pushboolean(L, cVampiric);
+    lc_getvampiric := 1;
+end;
+
 function lc_setlasersight(L : Plua_state) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'SetLaserSight', 'bool') then
         cLaserSighting:= lua_toboolean(L, 1);
     lc_setlasersight:= 0;
+end;
+
+function lc_getlasersight(L : Plua_state) : LongInt; Cdecl;
+begin
+    lua_pushboolean(L, cLaserSighting);
+    lc_getlasersight:= 1;
 end;
 
 function lc_explode(L : Plua_state) : LongInt; Cdecl;
@@ -4082,7 +4094,9 @@ lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 lua_register(luaState, _P'GetAmmoName', @lc_getammoname);
 lua_register(luaState, _P'GetAmmoTimer', @lc_getammotimer);
 lua_register(luaState, _P'SetVampiric', @lc_setvampiric);
+lua_register(luaState, _P'GetVampiric', @lc_getvampiric);
 lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
+lua_register(luaState, _P'GetLaserSight', @lc_getlasersight);
 lua_register(luaState, _P'Explode', @lc_explode);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
