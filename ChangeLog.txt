@@ -58,6 +58,7 @@ A Classic Fairytale:
  * Mission 5: Tribe was not in same clan as Natives, screwing up stats a bit
 
 A Space Adventure:
+ + Final mission: Terrain types are easier to distinguish
  * Fix clan membership of PAotH in main Death Planet mission
 
 Content:

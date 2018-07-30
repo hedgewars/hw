@@ -13,8 +13,8 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("The big bang")
 local challengeObjectives = loc("Find a way to detonate all the explosives and stay alive!").."|"..
-							loc("Red areas are indestructible.").."|"..
-							loc("Green areas are portal-proof.").."|"..
+							loc("Areas with a security outline are indestructible.").."|"..
+							loc("Areas with a green dashed outline are portal-proof.").."|"..
 							loc("Mines time: 0 seconds")
 
 local dialog01 = {}
@@ -63,7 +63,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 7500)
 
 	-- explosives
 	x = 400
@@ -153,8 +153,8 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to destroy all the explosives without dying!"))
-	SendStat(siCustomAchievement, loc("Red areas are indestructible."))
-	SendStat(siCustomAchievement, loc("Green areas are portal-proof and repel portals."))
+	SendStat(siCustomAchievement, loc("Areas surrounded by a security border are indestructible."))
+	SendStat(siCustomAchievement, loc("Areas surrounded by a green dashed outline are portal-proof and repel portals."))
 	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end
