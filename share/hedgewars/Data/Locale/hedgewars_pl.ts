@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>To jest opcjonalne, ale ta informacja moze pomóc nam rozwiązać błędy i inne problemy techniczne.</translation>
     </message>
 </context>
 <context>
@@ -608,7 +608,7 @@ Podaj hasło:</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation>Ta funkcja wymaga połączenia z internetem, a ty nie jesteś online (kod błędu: %1)</translation>
+        <translation>Ta funkcja wymaga połączenia z internetem, a ty nie jesteś online (kod błędu: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
@@ -685,7 +685,14 @@ If this keeps happening, please click the &apos;Feedback&apos; button in the mai
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił BŁĄD krytyczny! Silnik gry musiał zostać zatrzymany.
+
+Bardzo przepraszamy za niedogodność.
+
+Jeśli to się będzie powtarzać, kliknij przycisk &quot;Twoja opinia&quot; w menu głównym!
+
+Ostatnia wiadomość silnika:
+%1</translation>
     </message>
 </context>
 <context>
@@ -905,7 +912,7 @@ Last engine message:
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Powód wyjścia:</translation>
+        <translation>Powód wyjścia: </translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -1080,28 +1087,28 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Wideo: %1x%2, %3 FPS, %4</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Wideo: %1x%2, %3</translation>
     </message>
     <message>
         <source>Player: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gracz: %1</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished">Motyw: %1</translation>
+        <translation>Motyw: %1</translation>
     </message>
     <message>
         <source>Map: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa: %1</translation>
     </message>
     <message>
         <source>Record: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekord: %1</translation>
     </message>
 </context>
 <context>
@@ -1239,7 +1246,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation>Ta funkcja wymaga połączenia z internetem, a ty nie jesteś online (kod błędu: %1)</translation>
+        <translation>Ta funkcja wymaga połączenia z internetem, a ty nie jesteś online (kod błędu: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
@@ -1302,7 +1309,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Brush size</source>
-        <translation type="unfinished"></translation>
+        <translation>Wielkość pędzla</translation>
     </message>
 </context>
 <context>
@@ -2126,7 +2133,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz jeża na początku tury</translation>
     </message>
 </context>
 <context>
@@ -2271,12 +2278,12 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>%1%</source>
         <extracomment>Video encoding progress. %1 = number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2%) - %3</translation>
     </message>
 </context>
 <context>
@@ -2875,7 +2882,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
-        <translation>Ustawienia zadziałają po restarcie gry</translation>
+        <translation>Ustawienia zadziałają po restarcie gry.</translation>
     </message>
     <message>
         <source>Tip: %1</source>
@@ -2920,7 +2927,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ładowanie&lt;br&gt;CAPTCHA...</translation>
     </message>
 </context>
 <context>
@@ -2943,7 +2950,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeż %1</translation>
     </message>
 </context>
 <context>
@@ -3243,17 +3250,19 @@ Aktualna liczba jeży: %1</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Witamy w Hedgewars</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars!
 
 You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
-        <translation type="unfinished"></translation>
+        <translation>Witamy w Hedgewars
+
+Wydajesz się być tu nowy. Zechcesz zagrać w jakieś misje treningowe, by poznać podstawy Hedgewars?</translation>
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można użyć schematu broni &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -3798,23 +3807,23 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>team chat</source>
-        <translation type="unfinished"></translation>
+        <translation>czat drużyny</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
-        <translation type="unfinished"></translation>
+        <translation>pauza / auto-pomijanie</translation>
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>przełącz etykiety jeży</translation>
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień czas</translation>
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>pokaż informacje o misji</translation>
     </message>
 </context>
 <context>
@@ -4239,22 +4248,22 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>D-pad</source>
-        <translation type="unfinished"></translation>
+        <translation>D-pad</translation>
     </message>
     <message>
         <source>Axis %1 %2</source>
         <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Oś %1 %2</translation>
     </message>
     <message>
         <source>Button %1</source>
         <extracomment>Game controller button. %1 = button number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Przycisk %1</translation>
     </message>
     <message>
         <source>D-pad %1 %2</source>
         <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>D-pad %1 %2</translation>
     </message>
 </context>
 <context>
@@ -4477,283 +4486,283 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation type="unfinished"></translation>
+        <translation>Gra nie może zostać rozpoczęta z mniej niż dwoma klanami!</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pusty wpis konfiguracji.</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak dostępu.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie jesteś właścicielem pokoju!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation type="unfinished"></translation>
+        <translation>Uszkodzone informacje o jeżach!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation type="unfinished"></translation>
+        <translation>Zbyt wiele drużyn!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation type="unfinished"></translation>
+        <translation>Zbyt wiele jeży!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Na liście jeż już drużyna z taką samą nazwą.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dołączenie niemożlie: Runda w trakcie.</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten pokój aktualnie nie pozwala dodawania nowych drużyn.</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Błąd: Drużyna, którą próbujesz usunąć nie istnieje.</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie możesz usunąć nieswojej drużyny.</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedopowiednia nazwa pokoju! Nazwa pokoju muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokój z taką nazwą już istnieje.</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: Musisz wprowadzić pseudonim.</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: Nie ma takiego użytkownika!</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: Nie ma takiej mapy!</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote pause: Nie ma gry w trakcie!</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote hedgehogs: Wybierz liczbę od 1 do 8.</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedopowiednia nazwa pokoju! Nazwa pokoju muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie ma takiego pokoju.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja pokoju niekompatybilna z twoją wersją Hedgewars!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak dostępu. Ten pokój aktualnie nie pozwala dołączać.</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak dostępu. Ten pokój wpuszcza tylko zarejestrowanych użytkowników.</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jesteś zbanowany w tym pokoju.</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pseudonim już podany.</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedopowiedni pseudonim! Pseudonimy muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokół już znany.</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zły numer.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Żadne głosowanie nie trwa.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Już głosowałeś.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Twój głos został policzony.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Głosowanie zamknięte.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pauza przełączona.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Głosowanie przedawnione.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation type="unfinished"></translation>
+        <translation>jeże na drużynę: </translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
+        <translation>/info &lt;gracz&gt;: Pokaż informacje o graczu</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/me &lt;wiadomość&gt;: Akcja czatu, np. &apos;/me je pizzę&apos; staje się &apos;* Gracz je pizzę&apos;</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd: Rzuć virtualną monetą i odpowiedz &apos;heads&apos; (orzeł) lub &apos;tails&apos; (reszka)</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd [A] [B] [C] [...]: Odpowiedź losowym słowem z podanej listy</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
+        <translation>/watch &lt;id&gt;: Obejrzyj demo z podanym ID zapisane na serwerze</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
+        <translation>/help: Pokaż pomoc komend czatu</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote [argumenty]: Zacznij głosowanie</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote &lt;yes/no&gt;: Zagłosuj &apos;tak&apos; lub &apos;nie&apos; do aktywnego głosowania</translation>
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting &lt;wiadomość&gt;: Ustaw wiadomość powitalną, która zostanie pokazana graczom dołączającym do pokoju</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
+        <translation>/delegate &lt;gracz&gt;: Poddaj kontrolę nad pokojem innemu graczowi</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams &lt;N&gt;: Ustaw maksymalną liczbę drużyn na N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/global &lt;wiadomość&gt;: Wyślij globalną wiadomość czatu, która może być zobaczona przez każdego na serwerze</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
+        <translation>/registered_only: Przestaw stan &apos;tylko zarejestrowani&apos;. Jeśli włączony, tylko zarejestrowani gracze mogą dołączyć na serwer</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
+        <translation>/super_power: Aktywuj super moc. Możesz z tym wejść do każdego pokoju i być chronionym od wyrzucenia. Kończy się jak opuścisz serwer</translation>
     </message>
     <message>
         <source>/save &lt;parameter&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>/save &lt;parametr&gt;</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
+        <translation>/stats: Zapytaj o statystyki serwera</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/force &lt;yes/no&gt;: Wymuś rezultat głosowania dla aktywnego głosowania</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>/fix: Wymuś, by ten pokój został otwarty, kiedy jest pusty</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation type="unfinished"></translation>
+        <translation>/unfix: Cofnij komendę /fix</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom &lt;nazwa pliku&gt;: Zapisz konfigurację pokoju do pliku</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom &lt;nazwa pliku&gt;: Wczytaj  konfigurację pokoju z pliku</translation>
     </message>
     <message>
         <source>/delete &lt;parameter&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete &lt;parametr&gt;</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista komend czatu poczekalni:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista komend czatu pokoju:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation>Komendy tylko dla administratorów serwera:</translation>
     </message>
     <message>
         <source>Unknown command:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznana komenda:</translation>
     </message>
     <message>
         <source>Say &apos;/help&apos; in chat for a list of commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiedz /help do czatu, by dostać listę komend</translation>
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>pokój</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>poczekalnia</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation type="unfinished"></translation>
+        <translation>(w grze)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation type="unfinished"></translation>
+        <translation>(obserwowanie)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gracz nie jest online.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/force: Użyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote: Uzyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
     </message>
 </context>
 </TS>
