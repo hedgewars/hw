@@ -727,6 +727,7 @@ gtFlamethrower: begin
       gtIceGun: begin
                 gear^.Health:= 1000;
                 gear^.Radius:= 8;
+                gear^.Density:= _0;
                 end;
         gtDuck: begin
                 gear^.Pos:= 0;               // 0: in air, 1-4: on water, 5-8: underwater

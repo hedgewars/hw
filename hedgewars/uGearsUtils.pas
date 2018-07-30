@@ -1723,6 +1723,8 @@ end;
 procedure AddBounceEffectForGear(Gear: PGear);
 var boing: PVisualGear;
 begin
+    if Gear^.Density < _0_01 then
+        exit;
     boing:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot, 0, false, 1);
     if boing <> nil then
         with boing^ do

@@ -6227,6 +6227,9 @@ begin
         exit
         end;
     updateFuel(Gear);
+    if WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.Target.X = NoPointX) then
+        // Use FlightTime to count number of times the gear has world-wrapped
+        inc(Gear^.FlightTime);
 
     with Gear^ do
         begin
@@ -6240,6 +6243,7 @@ begin
             begin
             updateTarget(Gear, ndX, ndY);
             Timer := iceWaitCollision;
+            FlightTime := 0;
             end
         else
             begin

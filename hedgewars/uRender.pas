@@ -53,6 +53,8 @@ procedure DrawCircleFilled      (X, Y, Radius: LongInt; r, g, b, a: Byte);
 
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
+procedure DrawLineWrapped       (X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; color: LongWord); inline;
+procedure DrawLineWrapped       (X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; r, g, b, a: Byte);
 procedure DrawLineOnScreen      (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawRect              (rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
@@ -1337,11 +1339,17 @@ begin
         end;
 end;
 
+// Same as below, but with color as LongWord
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 begin
 DrawLine(X0, Y0, X1, Y1, Width, (color shr 24) and $FF, (color shr 16) and $FF, (color shr 8) and $FF, color and $FF)
 end;
 
+// Draw line between 2 points
+// X0, Y0: Start point
+// X0, Y1: End point
+// Width: Visual line width
+// r, g, b, a: Color
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 begin
     openglPushMatrix();
@@ -1350,6 +1358,106 @@ begin
     UpdateModelviewProjection;
 
     DrawLineOnScreen(X0, Y0, X1, Y1, Width, r, g, b, a);
+
+    openglPopMatrix();
+
+    UpdateModelviewProjection;
+end;
+
+// Same as below, but with color as a longword
+procedure DrawLineWrapped(X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; color: LongWord); inline;
+begin
+DrawLineWrapped(X0, Y0, X1, Y1, Width, goesLeft, Wraps, (color shr 24) and $FF, (color shr 16) and $FF, (color shr 8) and $FF, color and $FF);
+end;
+
+// Draw a line between 2 points, but it wraps around the
+// world edge for a given number of times.
+// goesLeft: true if the line direction from the start point is left
+// Wraps: Number of times the line intersects the wrapping world edge
+// r, g, b, a: color
+procedure DrawLineWrapped(X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; r, g, b, a: Byte);
+var w: LongWord;
+    startX, startY, endX, endY: Single;
+    // total X and Y distance the line travels if you would unwrap it
+    // with this we know the slope of the line.
+    totalX, totalY: Single;
+    // x variable for the line formula
+    x: Single;
+begin
+    openglPushMatrix();
+    openglTranslatef(WorldDx, WorldDy, 0);
+
+    UpdateModelviewProjection;
+
+    startX:= X0;
+    startY:= Y0;
+    if (Wraps = 0) then
+        begin
+        // Wraps=0 is trivial: Just draw one direct connection
+        endX:= X1;
+        endY:= Y1;
+        DrawLineOnScreen(startX, startY, endX, endY, Width, r, g, b, a);
+        end
+    else
+        begin
+        // A wrapping line is drawn using multiple line segments
+        // which stop at the left and right border. We
+        // calculate the points at which the line intersects with the border.
+        // Then we draws all line segments.
+
+        // Calculate position of first wrap point
+        if goesLeft then
+            begin
+            endX:= LeftX;
+            totalX:= (RightX - X1) + (X0 - LeftX);
+            x:= X0 - LeftX;
+            end
+        else
+            begin
+            endX:= RightX;
+            totalX:= (RightX - X0) + (X1 - LeftX);
+            x:= RightX - X0;
+            end;
+        if (Wraps >= 2) then
+            totalX:= totalX + ((RightX - LeftX) * (Wraps-1));
+        totalY:= Y1 - Y0;
+        // Calculate Y of first wrap point using the line formula
+        endY:= Y0 + (totalY / totalX) * x;
+        // Draw line segment between starting point and first wrap point
+        DrawLineOnScreen(startX, startY, endX, endY, Width, r, g, b, a);
+
+        // Calculate and draw all remaining line segments
+        for w:=1 to Wraps do
+            begin
+            startY:= endY;
+            if goesLeft then
+                begin
+                startX:= RightX;
+                if w < Wraps then
+                    endX:= LeftX
+                else
+                    endX:= X1;
+                end
+            else
+                begin
+                startX:= LeftX;
+                if w < Wraps then
+                    endX:= RightX
+                else
+                    endX:= X1;
+                end;
+            if w < Wraps then
+                begin
+                x:= x + (RightX - LeftX);
+                endY:= Y0 + (totalY / totalX) * x;
+                end
+            else
+                endY:= Y1;
+
+            DrawLineOnScreen(startX, startY, endX, endY, Width, r, g, b, a);
+            end;
+
+        end;
 
     openglPopMatrix();
 

@@ -1568,11 +1568,11 @@ begin
                                 i:= random(100)+100;
                                 if Gear^.Target.X <> NoPointX then
                                     begin
-                                    DrawLine(Gear^.Target.X, Gear^.Target.Y, hwRound(HHGear^.X), hwRound(HHGear^.Y), 4.0, i, i, $FF, $40);
+                                    DrawLineWrapped(hwRound(HHGear^.X), hwRound(HHGear^.Y), Gear^.Target.X, Gear^.Target.Y, 4.0, hwSign(HHGear^.dX) < 0, Gear^.FlightTime, i, i, $FF, $40);
                                     end
                                 else
                                     begin
-                                    DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
+                                    DrawLineWrapped(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, hwSign(HHGear^.dX) < 0, Gear^.FlightTime, i, i, $FF, $40);
                                     end;
                                 end
                           end
