@@ -265,6 +265,7 @@ var i, t: LongInt;
     amt: TAmmoType;
     sign, hx, hy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     dx, dy, ax, ay, aAngle, dAngle, hAngle, lx, ly: real;  // laser, change
+    wraps: LongWord; // numbe of wraps for laser in world wrap
     defaultPos, HatVisible: boolean;
     HH: PHedgehog;
     CurWeapon: PAmmo;
@@ -407,26 +408,52 @@ begin
                 ty:= round(ly);
                 hx:= tx;
                 hy:= ty;
-                while ((ty and LAND_HEIGHT_MASK) = 0) and
-                    ((tx and LAND_WIDTH_MASK) = 0) and
-                    (Land[ty, tx] = 0) do // TODO: check for constant variable instead
+                wraps:= 0;
+                while ((Land[ty, tx] and lfAll) = 0) do
                     begin
+                    if wraps > cMaxLaserSightWraps then
+                        break;
                     lx:= lx + ax;
                     ly:= ly + ay;
                     tx:= round(lx);
-                    ty:= round(ly)
-                    end;
-                // reached edge of land. assume infinite beam. Extend it way out past camera
-                if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
-                    begin
-                    tx:= round(lx + ax * (max(LAND_WIDTH,4096) div 2));
-                    ty:= round(ly + ay * (max(LAND_WIDTH,4096) div 2));
+                    ty:= round(ly);
+                    // reached edge of land.
+                    if ((ty and LAND_HEIGHT_MASK) <> 0) then
+                        begin
+                        // assume infinite beam. Extend it way out past camera
+                        tx:= round(lx + ax * (max(LAND_WIDTH,4096) div 2));
+                        ty:= round(ly + ay * (max(LAND_WIDTH,4096) div 2));
+                        break;
+                        end;
+
+                    if ((sign*m < 0) and (tx < LeftX)) or ((sign*m > 0) and (tx >= RightX)) then
+                        if (WorldEdge = weWrap) then
+                            // wrap beam
+                            begin
+                            if (sign*m) < 0 then
+                                lx:= RightX - (ax - (lx - LeftX))
+                            else
+                                lx:= LeftX + (ax - (RightX - lx));
+                            tx:= round(lx);
+                            inc(wraps);
+                            end
+                        else if (WorldEdge = weBounce) then
+                            // just stop
+                            break;
+
+                    if ((tx and LAND_WIDTH_MASK) <> 0) then
+                        begin
+                        if (WorldEdge <> weWrap) and (WorldEdge <> weBounce) then
+                            // assume infinite beam. Extend it way out past camera
+                            begin
+                            tx:= round(lx + ax * (max(LAND_WIDTH,4096) div 2));
+                            ty:= round(ly + ay * (max(LAND_WIDTH,4096) div 2));
+                            end;
+                        break;
+                        end;
                     end;
 
-                //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
-                    begin
-                    DrawLine(hx, hy, tx, ty, 1.0, $FF, $00, $00, $C0);
-                    end;
+                DrawLineWrapped(hx, hy, tx, ty, 1.0, (sign*m) < 0, wraps, $FF, $00, $00, $C0);
                 end;
             // draw crosshair
             CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));

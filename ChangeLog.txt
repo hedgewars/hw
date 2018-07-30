@@ -12,6 +12,7 @@ Game:
  * Fix hammer and pickhammer not digging correctly at wrap world edge
  * Fix freezer ray not working through wrap world edge
  * Fix freezer ray going through bounce world edge
+ * Laser sight now works properly through wrap world edge
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix video recorder not working when game audio was disabled

@@ -361,6 +361,8 @@ const
     cMinPlayWidth = 200;
     cWorldEdgeDist = 200;
 
+    cMaxLaserSightWraps = 1;
+
 implementation
 
 end.
