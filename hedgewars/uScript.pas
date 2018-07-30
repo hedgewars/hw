@@ -2942,6 +2942,36 @@ begin
     lc_restorehog := 0;
 end;
 
+function lc_ishoghidden(L: Plua_State): LongInt; Cdecl;
+var i, h: LongInt;
+    uid: LongWord;
+    gear: PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'IsHogHidden', 'gearUid') then
+        begin
+        uid:= LongWord(Trunc(lua_tonumber(L, 1)));
+        gear:= GearByUID(uid);
+        if (gear <> nil) and (gear^.hedgehog <> nil) then
+            begin
+            lua_pushboolean(L, false);
+            lc_ishoghidden:= 1;
+            exit;
+            end
+        else
+            if TeamsCount > 0 then
+                for i:= 0 to Pred(TeamsCount) do
+                    for h:= 0 to cMaxHHIndex do
+                        if (TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil) and (TeamsArray[i]^.Hedgehogs[h].GearHidden^.uid = uid) then
+                            begin
+                            lua_pushboolean(L, true);
+                            lc_ishoghidden:= 1;
+                            exit;
+                            end
+        end;
+    lua_pushnil(L);
+    lc_ishoghidden:= 1;
+end;
+
 // boolean TestRectForObstacle(x1, y1, x2, y2, landOnly)
 function lc_testrectforobstacle(L : Plua_State) : LongInt; Cdecl;
 var rtn: Boolean;
@@ -3955,6 +3985,7 @@ ScriptSetInteger('EXPLDoNotTouchAny', EXPLDoNotTouchAny);
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
 lua_register(luaState, _P'RestoreHog', @lc_restorehog);
+lua_register(luaState, _P'IsHogHidden', @lc_ishoghidden);
 lua_register(luaState, _P'SaveCampaignVar', @lc_savecampaignvar);
 lua_register(luaState, _P'GetCampaignVar', @lc_getcampaignvar);
 lua_register(luaState, _P'band', @lc_band);

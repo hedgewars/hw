@@ -72,6 +72,7 @@ Lua API:
  + New call: GetAmmo(ammoType): Returns ammo configuration (corresponds to SetAmmo)
  + New call: GetVampiric(): Returns true if vampirism is currently active
  + New call: GetLaserSight(): Returns true if laser sight (as utility) is currenctly active (ignoring sniper rifle)
+ + New call: IsHogHidden(gear): Returns true if hog is hidden
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
  + New Lua library: Achievements
