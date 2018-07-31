@@ -109,7 +109,7 @@ extern int years_since_foundation;
                               0xffe55bb0, /* pink   */ \
                               0xff20bf00, /* green  */ \
                               0xfffe8b0e, /* orange */ \
-                              0xff5f3605, /* brown  */ \
+                              0xff8f5902, /* brown  */ \
                               0xffffff01, /* yellow */ \
                               /* add new colors here */ \
                               0 }

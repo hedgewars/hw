@@ -19,6 +19,7 @@ Game:
  * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
  * Fix /hta, /hsa and /hya commands not writing message in chat
+ * New default brown clan color for better contrast
 
 Frontend:
  * Controllers are detected again
