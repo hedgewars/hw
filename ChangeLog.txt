@@ -53,6 +53,7 @@ Space Invasion:
  + Keep round score displayed after round ends, remove round score announcer message
  * Fix rare Lua error message spam at end of game
  * Fix round score and other info numbers messing up after screen resize
+ * Fix kamikaze bonus not being shown
 
 A Classic Fairytale:
  * Fix clan membership of princess in some missions

@@ -72,8 +72,6 @@ local mineSpawn
 local barrelSpawn
 
 local roundKills = 0
-local barrelsEaten = 0
-local minesEaten = 0
 
 local moveTimer = 0
 local fireTimer = 0
@@ -354,22 +352,12 @@ function CheckProximityToExplosives(gear)
 			AddCaption(loc("+1 barrel!"), wepCol[0], capgrpAmmoinfo )
 			DrawTag(1)
 
-			barrelsEaten = barrelsEaten + 1
-			if barrelsEaten == 5 then
-				AddCaption(string.format(loc("Achievement gotten: %s"), loc("Barrel Eater")),0xffba00ff,capgrpMessage2)
-			end
-
 		elseif (GetGearType(gear) == gtMine) then
 			wepAmmo[1] = wepAmmo[1] + 1
 			PlaySound(sndShotgunReload)
 			DeleteGear(gear)
 			AddCaption(loc("+1 mine!"), wepCol[1], capgrpAmmoinfo )
 			DrawTag(2)
-
-			minesEaten = minesEaten + 1
-			if minesEaten == 5 then
-				AddCaption(string.format(loc("Achievement gotten: %s"), loc("Mine Eater")),0xffba00ff,capgrpMessage2)
-			end
 
 		end
 
@@ -415,7 +403,7 @@ function shotsRemainingMessage()
 			shotsMsg = loc("Ammo: %d")
 		end
 	end
-	AddCaption(string.format(shotsMsg, wepAmmo[wepIndex]), wepCol[wepIndex],capgrpMessage2)
+	AddCaption(string.format(shotsMsg, wepAmmo[wepIndex]), wepCol[wepIndex],capgrpAmmostate)
 end
 
 function ChangeWeapon(newIndex)
@@ -430,11 +418,11 @@ function ChangeWeapon(newIndex)
 
 	local selText
 	if wepIndex == 0 then
-		selText = loc("Barrel Launcher selected!")
+		selText = loc("Barrel Launcher")
 	elseif wepIndex == 1 then
-		selText = loc("Mine Deployer selected!")
+		selText = loc("Mine Deployer")
 	else
-		selText = loc("Flamer selected!")
+		selText = loc("Flamer")
 	end
 	AddCaption(selText, wepCol[wepIndex],capgrpAmmoinfo )
 
@@ -724,8 +712,6 @@ function onNewTurn()
 	ChangeWeapon()
 
 	roundKills = 0
-	barrelsEaten = 0
-	minesEaten = 0
 
 	FollowGear(CurrentHedgehog)
 
@@ -930,18 +916,18 @@ function onGearDelete(gear)
 
 			roundKills = roundKills + 1
 			if roundKills == 2 then
-				AddCaption(loc("Double Kill!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Double Kill!"),0xffffffff,capgrpMessage2)
 			elseif roundKills == 3 then
-				AddCaption(loc("Killing spree!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Killing spree!"),0xffffffff,capgrpMessage2)
 			elseif roundKills >= 4 then
-				AddCaption(loc("Unstoppable!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Unstoppable!"),0xffffffff,capgrpMessage2)
 			end
 
 		elseif gear == CurrentHedgehog then
 			DisableTumbler()
 
 		elseif gear ~= CurrentHedgehog then
-			AddCaption(loc("Friendly Fire!"),0xffba00ff,capgrpMessage2)
+			AddCaption(loc("Friendly Fire!"),0xffffffff,capgrpMessage2)
 		end
 
 	end
