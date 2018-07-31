@@ -4,7 +4,7 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
 --[[
-Space Invasion 1.2
+Space Invasion
 
 === DOCUMENTATION ===
 
@@ -80,165 +80,6 @@ shield=0, barrels=3, pings=0
 (empty string)
 >>> Use defaults for everything
 
-
--- VERSION HISTORY
-----------------
--- version 0.1
-----------------
--- conversion of tumbler into space invasion
--- a million and one changes
--- bells and whistles
-
-----------------
--- version 0.2
-----------------
--- code slowly getting cleaner, it still looks like a spaghetti monster tho
--- lots of console tracking :/
--- all visual gears are now compulsary (will probably revert this)
--- implemented fMod to try combat desyncs and bring this in line with dev
-
-----------------
--- version 0.3
-----------------
--- values of scoring changed to 3:10, and now based on vCircScore
--- time gained from killing a red circ increased from 3 to 4
--- circles now spawn at a distance of at least 800 or until sanity limit
--- roundsLimit now based off MinesTime (kinda, its an experiment)
-
------------------
---0.4
------------------
--- commented out a lot of WriteLnToConsoles (dont need them at this point)
--- added some different WriteLnToConsoles
--- changed some of the collision detect for explosives in checkvarious()
-
------------------
---0.5
------------------
--- added implementation for a projectile shield
--- added a "bonus" orange invader that partially recharges player shield
--- added a tough "blueboss" blue invader
--- expanded user feedback
--- circles now have health and are capable of being merely "damaged"
--- redid a lot of the collision code and added CircleDamaged
--- added more sounds to events
--- added more visual gears
-
------------------
---0.6
------------------
--- removed a few WriteLns
--- added randomized grunts on circ damage
--- added (mostly) graceful fading out of circles :D:
--- changed odds for circles
--- changed user feedback
--- fixed the location of the explosion where player bashes into circ
-
------------------
---0.7
------------------
--- added PlaySound(sndSuddenDeath) when ammo gets depleted
--- added an extra "Ammo Depleted" note if user presses fire while empty
--- specified how much shield power is gained on shield powerup collection
--- changed odds for circles AGAIN, ammo is now sliiightly more common
--- switched most of the explosions/smoke effects back to non-critical vgears (with a few exceptions)
--- tumbletime is now based off turntime and is variable
--- delete explosives in DeleteFarFlungBarrel rather than explode them on map boundaries to save on performance
--- utilized the improved AddCaption to tint / prevent overrides
--- temporarily disabled bugged sort that displays teams according to their score
--- reluctantly changed the colour of the bonus circ to purple
--- standarized point notation
--- added some missing locs
--- commented out remaining WriteLnToConsoles for the meanwhile with the prefix "nw"
-
--- ACHIEIVEMENTS added
--- (during one turn) aka repeatable
--- Ammo Manic (Destroy 3 green circles for + 5 points)
--- Drone Hunter (Destroy 5 red circles for + 10 points)
--- Shield Seeker (Destroy 3 purple circles for +10 points)
--- Boss Slayer (Destroy 2 blue circles for +25 points)
-
--- Shield Master (disolve 5 shells for +10 points)
--- Shield Miser (don't use your shield at all (3.5*roundkills)+2 points)
-
--- Depleted Kamikaze! (kamikaze into a blue/red circ when you are out of ammo) 5pts
--- Timed Kamikaze! (kamikaze into a blue/red circ when you only have 5s left) 10pts
--- Kamikaze Expert (combination of the above two) 15pts
-
--- Multi-shot (destroy more than 1 invader with a single bullet) 15pts
--- X-Hit Combo (destroy another invader in less than 3 seconds) chainLength*2 points
-
--- Accuracy Bonus (80% accuracy at the end of your turn with more than 5 shots fired) 15pts
-
---(during the length of the game) aka non-repeatable
--- 10/25/50 kills (+25/+50/+100 points)
-
------------------
---0.8
------------------
--- added a HUD for turntimeleft, ammo, shield
--- shieldhealth hits 0 properly
-
-------------------------
--- version 0.8.1
-------------------------
-
--- stop hiding non-existant 4th Tag
--- redraw HUD on screen resolution change
-
-------------------------
--- version 0.9
-------------------------
--- time for more 'EXPERIMENTS' mwahahahahahaha D:
--- (hopefully) balanced Shield Miser
--- bosses are no longer a redunkulous 50 points, but toned down to 30
--- experimental radar (it's INTERACTIVE and math-heavy :D) (visual gears are safe... right? D:)
--- bugfix and balance for multishot
-
-------------------------
--- version 1.0
-------------------------
--- if only version numbers actually worked like this, wouldn't that be awful :D
--- added surfer achievement
--- increased value of shield miser by 1 point per kill (OP?)
-
-------------------------
--- version 1.1
-------------------------
--- fixed radar so that blips dont go past circs when you get very close
--- added a missing loc for shield depletion
--- increased delay to 1000 to try stop noobies missing their turn
--- added sniper achievement for hits from over a 1000000 away
--- added achievement for 3 "sniper" shots in a round
--- added achievement for 3 "point blank" shots in a round
--- added "fierce Competition" achievement for shooting an enemy hog (once per round)
--- some support for more weapons later
-
-------------------------
--- version 1.2
-------------------------
--- show actual scores in stats screen
--- show a couple of “awards” and more or less snarky comments in stats screen
---  for various accomplisments and events those are just for fun, they don’t
---  affect score or game outcome
--- use script parameters for configuration, see top of file for more information
--- stop overwriting game most scheme’s parameters
--- disable weapon scheme
--- play “denied” sound when trying to use empty radar, ammo or shield
--- play “Hurry!” taunt when 5 seconds are left
--- play throw sound when throwing a barrel
--- play sonar sound for using radar
--- play “Kamikaze!” taunt for receiving one of the kamikaze bonuses
--- show total team score in HUD (white number)
--- show message when trying to use empty radar
--- show message when time’s up
--- show message with round score at end of a round
--- disabled health graph, replaced with score per round
--- removed “selected weapon” message, we only have one weapon
--- removed unused bubbleSort function
--- play “Ooff” sound when hit by bazooka
--- fix explosion being drawn twice when colliding with circle
--- play explosion sound when barrel’s lifespan is over
 ]]
 
 --------------------------
@@ -249,8 +90,6 @@ shield=0, barrels=3, pings=0
 -- add support for other world edges (they are currently disabled)
 
 -- maybe add a check for a tie, IMPOSSIBRU THERE ARE NO TIES
--- more achievements?
--- more just-for-fun awards (for stats screen)
 
 -- if more weps are added, replace primshotsfired all over the place
 
@@ -265,73 +104,12 @@ shield=0, barrels=3, pings=0
 -- doing really well in a given round.
 -- probably new kind of shield that pops any invaders who come near
 
--- fix game never ending bug
--- fix radar
 -- new invader: golden snitch, doesn't show up on your radar
 
 -- maybe replace (48/100*vCircRadius[i])/2 with something better
 
 
 ------- CODE FOLLOWS -------
-
-
---[[CAPTION CATEGORIES
------------------
-capgrpGameState
------------------
-AddCaption(LOC_NOT("Sniper!") .. " +10 " .. LOC_NOT("points") .. "!",0xffba00ff,capgrpAmmostate)
---they call me bullsye
---point blank combo
---fierce Competition
------------------
-capgrpAmmostate
------------------
-AddCaption( chainLength .. LOC_NOT("-chain! +") .. chainLength*2 .. LOC_NOT(" points!"),0xffba00ff,capgrpAmmostate)
-AddCaption(LOC_NOT("Multi-shot! +15 points!"),0xffba00ff,capgrpAmmostate)
-
------------------
-capgrpAmmoinfo
------------------
-AddCaption(LOC_NOT("Shield Miser! +20 points!"),0xffba00ff,capgrpAmmoinfo)
-AddCaption(LOC_NOT("Shield Master! +10 points!"),0xffba00ff,capgrpAmmoinfo)
-
------------------
-capgrpVolume
------------------
-AddCaption(LOC_NOT("Boom! +25 points!"),0xffba00ff,capgrpVolume)
-AddCaption(LOC_NOT("BOOM! +50 points!"),0xffba00ff,capgrpVolume)
-AddCaption(LOC_NOT("BOOM! BOOM! BOOM! +100 points!"),0xffba00ff,capgrpVolume)
-AddCaption(LOC_NOT("Accuracy Bonus! +15 points!"),0xffba00ff,capgrpVolume)
-AddCaption(LOC_NOT("Surfer! +15 points!"),0xffba00ff,capgrpVolume)
-
------------------
-capgrpMessage
------------------
-AddCaption(LOC_NOT("Ammo Depleted!"),0xff0000ff,capgrpMessage)
-AddCaption(LOC_NOT("Ammo: ") .. primShotsLeft)
-AddCaption(LOC_NOT("Shield Depleted"),0xff0000ff,capgrpMessage)
-AddCaption( LOC_NOT("Shield ON:") .. " " .. shieldHealth - 80 .. " " .. LOC_NOT("Power Remaining") )
-AddCaption(LOC_NOT("Shield OFF:") .. " " .. shieldHealth - 80 .. " " .. LOC_NOT("Power Remaining") )
-
-AddCaption(LOC_NOT("Time Extended!") .. "+" .. 4 .. LOC_NOT("s"), 0xff0000ff,capgrpMessage )
-AddCaption("+" .. 3 .. " " .. LOC_NOT("Ammo"), 0x00ff00ff,capgrpMessage)
-AddCaption(LOC_NOT("Shield boosted! +30 power"), 0xff00ffff,capgrpMessage)
-AddCaption(LOC_NOT("Shield is fully recharged!"), 0xffae00ff,capgrpMessage)
-AddCaption(LOC_NOT("Boss defeated! +50 points!"), 0x0050ffff,capgrpMessage)
-
-AddCaption(LOC_NOT("GOTCHA!"))
-AddCaption(LOC_NOT("Kamikaze Expert! +15 points!"),0xffba00ff,capgrpMessage)
-AddCaption(LOC_NOT("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
-AddCaption(LOC_NOT("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
-
------------------
-capgrpMessage2
------------------
-AddCaption(LOC_NOT("Drone Hunter! +10 points!"),0xffba00ff,capgrpMessage2)
-AddCaption(LOC_NOT("Ammo Maniac! +5 points!"),0xffba00ff,capgrpMessage2)
-AddCaption(LOC_NOT("Shield Seeker! +10 points!"),0xffba00ff,capgrpMessage2)
-AddCaption(LOC_NOT("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
-]]
 
 ----------------------------------
 -- so I herd u liek wariables
@@ -447,10 +225,8 @@ local downOn = false
 -- TUMBLER
 local wep = {}
 local wepAmmo = {}
-local wepCol = {}
 local wepIndex = 0
 local wepCount = 0
-local fireTimer = 0
 ----------------
 
 
@@ -579,7 +355,7 @@ function DrawTag(i)
 				nil, 			--frameticks
 				tValue, 		--value
 				240000, 		--timer
-				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
+				tCol			--color
 				)
 
 end
@@ -960,7 +736,6 @@ function setNewGearValues(gear)
 		lfs = 50	-- roughly 5 seconds
 		shellID = shellID + 1
 		setGearValue(gear,"ID",shellID)
-		--nw WriteLnToConsole("Just assigned ID " .. getGearValue(gear,"ID") .. " to this shell")
 	elseif GetGearType(gear) == gtBall then
 		lfs = 5 --70	-- 7s
 	elseif GetGearType(gear) == gtExplosives then
@@ -969,7 +744,6 @@ function setNewGearValues(gear)
 		setGearValue(gear,"ID",explosivesID)
 		setGearValue(gear,"XP", GetX(gear))
 		setGearValue(gear,"YP", GetY(gear))
-		--nw WriteLnToConsole("Just assigned ID " .. getGearValue(gear,"ID") .. " to this explosives")
 	elseif GetGearType(gear) == gtFlame then
 		lfs = 5	-- 0.5s
 	else
@@ -977,8 +751,6 @@ function setNewGearValues(gear)
 	end
 
 	setGearValue(gear,"lifespan",lfs)
-	--WriteLnToConsole("I also set its lifespan to " .. lfs)
-
 
 end
 
@@ -986,16 +758,10 @@ function HandleLifeSpan(gear)
 
 	decreaseGearValue(gear,"lifespan")
 
-	--WriteLnToConsole("Just decreased the lifespan of a gear to " .. getGearValue(gear,"lifespan"))
-	--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-
-
 	if getGearValue(gear,"lifespan") == 0 then
 
 		if GetGearType(gear) == gtShell then
 			AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
-
-			WriteLnToConsole("about to delete a shell due to lifespan == 0")
 		elseif GetGearType(gear) == gtExplosives then
 			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 			PlaySound(sndExplosion)
@@ -1019,7 +785,6 @@ function DeleteFarFlungBarrel(gear)
 		then
 			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 			DeleteGear(gear)
-			--WriteLnToConsole("I'm setting barrel ID " .. getGearValue(gear,"ID") .. " to 0 health because it's been flung too close to the map edges. at Game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
 		end
 
 	end
@@ -1037,14 +802,6 @@ function ChangeWeapon()
 	if wepIndex == wepCount then
 		wepIndex = 0
 	end
-
---[[
-	NOTE: Don’t show selected weapon as long we only have one. Remove this comment and activate this code
-	again as soon as at least one other weapon appears.
-	AddCaption(wep[wepIndex] .. " " .. loc("selected!"), wepCol[wepIndex],capgrpAmmoinfo )
-	AddCaption(wepAmmo[wepIndex] .. " " .. loc("shots remaining."), wepCol[wepIndex],capgrpMessage2)
-]]
-
 end
 
 -- derp tumbler
@@ -1058,7 +815,7 @@ function onPrecise()
 			shotsFired = shotsFired +1
 
 			local morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
-			CopyPV(CurrentHedgehog, morte) -- new addition
+			CopyPV(CurrentHedgehog, morte)
 			local x,y = GetGearVelocity(morte)
 			x = x*2
 			y = y*2
@@ -1244,10 +1001,6 @@ function onGameInit()
 	wep[1] = loc("Mine Deployer")
 	wep[2] = loc("Flamer")
 
-	wepCol[0] = 0x78818eff
-	wepCol[1] = 0xa12a77ff
-	wepCol[2] = 0xf49318ff
-
 	wepCount = 3
 
 end
@@ -1374,12 +1127,6 @@ function onNewTurn()
 		HideTag(TAG_ROUND_SCORE)
 	end
 
-	---------------
-	---------------
-	--AddCaption("num g: " .. numGears() )
-	--WriteLnToConsole("onNewTurn, I just set a bunch of variables to their necessary states. This was done at:")
-	--WriteLnToConsole("The above occured at Game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-
 end
 
 function ThingsToBeRunOnGears(gear)
@@ -1410,9 +1157,7 @@ end
 
 function onGameTick()
 
-
-	--WriteLnToConsole("Start of GameTick")
-	luaGameTicks = luaGameTicks + 1 -- GameTime
+	luaGameTicks = luaGameTicks + 1
 
 	HandleCircles()
 
@@ -1422,7 +1167,7 @@ function onGameTick()
 
 		if beam == true then
 			shieldHealth = shieldHealth - 1
-			if shieldHealth < 80 then -- <= 80
+			if shieldHealth < 80 then
 				shieldHealth = 80
 				beam = false
 				AddCaption(loc("Shield depleted"),0xff0000ff,capgrpMessage)
@@ -1438,11 +1183,7 @@ function onGameTick()
 			end
 		end
 
-		--nw WriteLnToConsole("Starting ThingsToBeRunOnGears()")
-
 		runOnGears(ThingsToBeRunOnGears)
-
-		--nw WriteLnToConsole("Finished ThingsToBeRunOnGears()")
 
 		if circlesAreGo == true then
 			CheckDistances()
@@ -1455,8 +1196,6 @@ function onGameTick()
 				AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, true)
 			end
 		end
-
-		--nw WriteLnToConsole("Finished 100Timer")
 
 	end
 
@@ -1476,8 +1215,6 @@ function onGameTick()
 			SetMyCircles(true)
 		end
 	end
-
-	--WriteLnToConsole("Finished initial check")
 
 	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
 
@@ -1501,8 +1238,6 @@ function onGameTick()
 			end
 		end
 
-		--WriteLnToConsole("Finished timeleft calculations")
-
 		-------------------------------
 		-- Player has run out of luck (out of time or hit by gtShell)
 		-------------------------------
@@ -1510,8 +1245,6 @@ function onGameTick()
 		if PlayerIsFine() == false then
 			TimeLeft = 0
 		end
-
-		--WriteLnToConsole("successfully checked playerIsFine")
 
 		if (TimeLeft == 0) then
 			if PlayerIsFine() then AddCaption(loc("Time's up!")) end
@@ -1526,7 +1259,6 @@ function onGameTick()
 				SetMyCircles(false)
 				rAlpha = 255
 				FailGraphics()
-				--nw WriteLnToConsole("Player is out of luck")
 
 				if shieldMiser == true then
 
@@ -1575,8 +1307,6 @@ function onGameTick()
 		-- Player is still in luck
 		-------------------------------
 
-
-			--WriteLnToConsole("about to do chainCounter checks")
 			if chainCounter > 0 then
 				chainCounter = chainCounter -1
 				if chainCounter == 0 then
@@ -1587,7 +1317,6 @@ function onGameTick()
 			-- handle movement based on IO
 			moveTimer = moveTimer + 1
 			if moveTimer == 100 then -- 100
-				--nw WriteLnToConsole("Start of Player MoveTimer")
 				moveTimer = 0
 
 				---------------
@@ -1602,9 +1331,6 @@ function onGameTick()
 				--------------
 
 				local dx, dy = GetGearVelocity(CurrentHedgehog)
-
-				--WriteLnToConsole("I just got the velocity of currenthedgehog. It is dx: " .. dx .. "; dy: " .. dy)
-				--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
 
 				local dxlimit, dylimit
 				if boosterOn == true then
@@ -1647,18 +1373,12 @@ function onGameTick()
 
 				SetGearVelocity(CurrentHedgehog, dx, dy)
 
-				--WriteLnToConsole("I just SET the velocity of currenthedgehog. It is now dx: " .. dx .. "; dy: " .. dy)
-				--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-				--nw WriteLnToConsole("End of Player MoveTimer")
-
 			end
 
 
 		end -- new end I put here to check if he's still alive or not
 
 	end
-
-	--WriteLnToConsole("End of GameTick")
 
 end
 
@@ -1698,8 +1418,6 @@ function onGearResurrect(gear)
 	if gear == CurrentHedgehog then
 		TimeLeft = 0
 		playerIsFine = false
-		--WriteLnToConsole("Current hedgehog just drowned himself")
-		--WriteLnToConsole("The above event occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
 	end
 
 end
@@ -2069,10 +1787,6 @@ function SetUpCircle(i)
 
 	vCircActive[i] = true
 
-	--nw WriteLnToConsole("CIRC " .. i .. ": X: " .. vCircX[i] .. "; Y: " .. vCircY[i])
-	--nw WriteLnToConsole("CIRC " .. i .. ": dX: " .. vCircDX[i] .. "; dY: " .. vCircDY[i])
-	--nw WriteLnToConsole("CIRC " .. i .. ": RAD:" .. vCircRadius[i])
-
 end
 
 function SetMyCircles(s)
@@ -2080,20 +1794,9 @@ function SetMyCircles(s)
 	circlesAreGo = s
 	playerIsFine = s
 
-	if s == true then
-		--nw WriteLnToConsole("About to set up all circles, old values are here:")
-		for i = 0,(vCCount-1) do
-			--nw WriteLnToConsole("CIRC " .. i .. ": X: " .. vCircX[i] .. "; Y: " .. vCircY[i])
-			--nw WriteLnToConsole("CIRC " .. i .. ": dX: " .. vCircDX[i] .. "; dY: " .. vCircDY[i])
-			--nw WriteLnToConsole("CIRC " .. i .. ": RAD:" .. vCircRadius[i])
-		end
-		--nw WriteLnToConsole("Old values given, new values to follow...")
-	end
-
 	for i = 0,(vCCount-1) do
 
 		if s == false then
-			--vCircCol[i] = 0xffffffff
 			vCircActive[i] = false
 		elseif s == true then
 			SetUpCircle(i)
@@ -2141,10 +1844,6 @@ function CheckVarious(gear)
 
 		for i = 0,(vCCount-1) do
 
-			--nw WriteLnToConsole("Is it neccessary to check for collision with circ " .. i)
-
-			--nw WriteLnToConsole("YES. about to calc distance between gtExplosives and circ " .. i)
-
 			local dist = GetDistFromGearToXY(gear, vCircX[i], vCircY[i])
 
 			-- calculate my real radius if I am an aura
@@ -2156,9 +1855,6 @@ function CheckVarious(gear)
 			end
 
 			if dist <= NR*NR then
-
-
-				--nw WriteLnToConsole("Collision confirmed. The gtExplosives is within the circ radius!")
 
 				dist = (GetDistFromXYtoXY(vCircX[i], vCircY[i], getGearValue(gear,"XP"), getGearValue(gear,"YP")) - (NR*NR))
 				if dist >= 1000000 then
@@ -2182,9 +1878,6 @@ function CheckVarious(gear)
 				AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
 				targetHit = true
-				--WriteLnToConsole("set " .. "Exp ID: " .. getGearValue(gear,"ID") .. " health to 0")
-				--WriteLnToConsole("targetHit set to true, explosive is at distance " .. dist .. "(within range " .. NR*NR.. ") of circ" )
-
 				CircleDamaged(i)
 
 				circsHit = circsHit + 1
@@ -2228,12 +1921,8 @@ function CheckVarious(gear)
 	end
 
 	if targetHit == true then
-			--nw WriteLnToConsole("about to delete something due to targetHit being set to true earlier")
-			DeleteGear(gear)
-			--nw WriteLnToConsole("there, I deleted it")
+		DeleteGear(gear)
 	end
-
-	--nw WriteLnToConsole("End of CheckVarious()")
 
 end
 
@@ -2243,12 +1932,8 @@ function CheckDistances()
 	if not CurrentHedgehog then
 		return
 	end
-	--nw WriteLnToConsole("Start of CheckDistances()")
 
 	for i = 0,(vCCount-1) do
-
-
-		--nw WriteLnToConsole("Attempting to calculate dist of circ " .. i)
 
 		local g1X, g1Y = GetGearPosition(CurrentHedgehog)
 		local g2X, g2Y = vCircX[i], vCircY[i]
@@ -2256,8 +1941,6 @@ function CheckDistances()
 		g1X = g1X - g2X
 		g1Y = g1Y - g2Y
 		local dist = (g1X*g1X) + (g1Y*g1Y)
-
-		--nw WriteLnToConsole("Calcs done. Dist to CurrentHedgehog is " .. dist)
 
 		-- calculate my real radius if I am an aura
 		local NR
@@ -2310,8 +1993,6 @@ function CheckDistances()
 		end
 
 	end
-
-	--nw WriteLnToConsole("End of CheckDistances()")
 
 end
 
@@ -2394,9 +2075,6 @@ function HandleCircles()
 					local k = 25
 					local g = vgtSteam
 					local trailColour = 0xae00ffff
-
-					-- 0xffae00ff -- orange
-					-- 0xae00ffff -- purp
 
 					local tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i]+k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
@@ -2530,15 +2208,9 @@ function ProjectileTrack(gear)
 
 	if (GetGearType(gear) == gtShell) then
 
-		--nw WriteLnToConsole("ProjectileTrack() for Shell ID: " .. getGearValue(gear,"ID"))
-
 		local turningSpeed = 0.1*fMod
 
 		local dx, dy = GetGearVelocity(gear)
-
-		--WriteLnToConsole("I'm trying to track currenthedge with shell ID: " .. getGearValue(gear,"ID"))
-		--WriteLnToConsole("I just got the velocity of the shell. It is dx: " .. dx .. "; dy: " .. dy)
-		--WriteLnToConsole("CurrentHedgehog is at X: " .. GetX(CurrentHedgehog) .. "; Y: " .. GetY(CurrentHedgehog) )
 
 		if GetX(gear) > GetX(CurrentHedgehog) then
 			dx = dx - turningSpeed
@@ -2570,10 +2242,6 @@ function ProjectileTrack(gear)
 		end
 
 		SetGearVelocity(gear, dx, dy)
-
-		--WriteLnToConsole("I just SET the velocity of shell towards currenthegdge. It is now dx: " .. dx .. "; dy: " .. dy)
-		--WriteLnToConsole("The above events occured game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
-		--nw WriteLnToConsole("ProjectileTrack() finished successfully")
 
 	end
 
