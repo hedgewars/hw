@@ -113,7 +113,7 @@ function onGameInit()
 	drawMap()
 
 	------ HOG LIST ------
-	AddTeam(loc("Training Team"), 0xFF0204, "deadhog", "SteelTower", "Default", "hedgewars")
+	AddTeam(loc("Training Team"), -1, "deadhog", "SteelTower", "Default", "hedgewars")
 	
 	hhs[1] = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
 	SetGearPosition(hhs[1], 404, 1714)

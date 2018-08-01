@@ -41,9 +41,9 @@ ally.name = loc("Paul McHoggy")
 ally.x = 860
 ally.y = 130
 teamA.name = loc("Hog Solo")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Allies")
-teamB.color = 0x38D61C -- green
+teamB.color = -6
 -- way points
 local current waypoint = 1
 local waypoints = {

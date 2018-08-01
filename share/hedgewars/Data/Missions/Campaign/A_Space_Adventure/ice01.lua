@@ -73,11 +73,11 @@ bandit5.y = 600
 bandit5.frozen = false
 bandit5.roundsToUnfreeze = 0
 teamA.name = loc("Allies")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Frozen Bandits")
-teamB.color = 0x0072FF -- blue
+teamB.color = -2
 teamC.name = loc("Hog Solo")
-teamC.color = 0x38D61C -- green
+teamC.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 

@@ -67,9 +67,11 @@ local redHedgehogs = {
 	{ name = loc("Deadly Grape") }
 }
 -- Hog Solo and Green Bananas
+-- TODO: Use default clan colors
 teamA.name = loc("Hog Solo and GB")
 teamA.color = 0x38D61C -- green
 teamB.name = loc("Captain Lime")
+-- FIXME: Use different clan color
 teamB.color = 0x38D61D -- greenish
 teamC.name = loc("Fruit Assassins")
 teamC.color = 0xFF0000 -- red

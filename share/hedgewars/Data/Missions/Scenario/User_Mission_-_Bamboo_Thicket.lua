@@ -24,10 +24,10 @@ function onGameInit()
 	WaterRise = 0
 	GameFlags = gfDisableWind
 
-	AddTeam(loc("Pathetic Resistance"), 14483456, "Plinko", "Island", "Default", "cm_yinyang")
+	AddTeam(loc("Pathetic Resistance"), -1, "Plinko", "Island", "Default", "cm_yinyang")
 	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
 			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "ring", "Island", "Robot", "cm_cyborg")
+	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot", "cm_cyborg")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
 	SetGearPosition(player,142,656)

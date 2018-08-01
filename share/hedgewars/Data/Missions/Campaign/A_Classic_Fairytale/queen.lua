@@ -722,7 +722,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     origNatives[i-6] = natives[i-6]
@@ -731,21 +731,21 @@ function AddHogs()
   origNatives[4] = natives[4]
   nativesLeft = nativesNum
 
-  AddTeam(loc("Beep Loopers"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  AddTeam(loc("Beep Loopers"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsTeamNum[1] do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
 
-  AddTeam(loc("Corporationals"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  AddTeam(loc("Corporationals"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   for i = cyborgsTeamNum[1] + 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
   cyborgsLeft = cyborgsTeamNum[1] + cyborgsTeamNum[2]
 
-  AddTeam(loc("Leaderbot"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  AddTeam(loc("Leaderbot"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   enemy = AddHog(loc("Name"), 2, 200, "cyborg1")
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   HideHedge(cyborg)
 

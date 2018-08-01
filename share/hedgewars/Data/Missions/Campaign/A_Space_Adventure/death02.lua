@@ -44,11 +44,11 @@ local enemies = {
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 local teamB = {
 	name = loc("5 Deadly Hogs"),
-	color = tonumber("FF0000",16) -- red
+	color = -1
 }
 -- After hero killed an enemy, his weapons will be reset in the next round
 local heroWeaponResetPending = false

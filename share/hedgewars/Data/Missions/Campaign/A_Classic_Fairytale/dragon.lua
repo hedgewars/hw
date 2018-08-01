@@ -625,17 +625,17 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("Natives"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false
   end
 
-  AddTeam(loc("011101001"), 0xFF0204, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("011101000"), 0xFFFF01, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101000"), -9, "ring", "UFO", "Robot", "cm_binary")
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false

@@ -134,7 +134,7 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Create the player team
-	AddTeam(playerTeamName, 0xFF0204, "Simple", "Island", "Default", "cm_crosshair")
+	AddTeam(playerTeamName, -1, "Simple", "Island", "Default", "cm_crosshair")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "Sniper")
 	SetGearPosition(player, 602, 1465)

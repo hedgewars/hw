@@ -200,17 +200,6 @@ local teamHogs = {}
 	HELPER VARIABLES
 ]]
 
-local defaultClanColors = {
-	[0] = 0xff0204,	-- red
-	[1] = 0x4980c1,	-- blue
-	[2] = 0x1de6ba,	-- cyan
-	[3] = 0xb541ef,	-- purple
-	[4] = 0xe55bb0,	-- magenta
-	[5] = 0x20bf00,	-- green
-	[6] = 0xfe8b0e,	-- orange
-	[7] = 0x5f3605,	-- brown
-	[8] = 0xffff01,	-- yellow
-}
 local defaultGraves = {
 	"Grave", "Statue", "pyramid", "Simple", "skull", "Badger", "Duck2", "Flower"
 }
@@ -666,7 +655,7 @@ function SimpleMission(params)
 			voice = def(teamData.voice, "Default")
 			flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
 
-			AddTeam(name, defaultClanColors[clanID], grave, fort, voice, flag)
+			AddTeam(name, -(clanID+1), grave, fort, voice, flag)
 
 			for hogID, hogData in pairs(teamData.hogs) do
 				local name, botLevel, health, hat

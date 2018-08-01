@@ -29,7 +29,7 @@ local hero = {
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 -- creates & targets
 local rcCrates = {

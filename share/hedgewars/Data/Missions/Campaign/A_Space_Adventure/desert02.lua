@@ -31,7 +31,7 @@ hero.x = 1600
 hero.y = 1950
 hero.dead = false
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = -6
 -- way points
 local current waypoint = 1
 local waypoints = {

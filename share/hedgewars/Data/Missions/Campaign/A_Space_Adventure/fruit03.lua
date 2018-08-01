@@ -59,17 +59,17 @@ local enemiesEven = {
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 local teamB = {
 	-- Red Strawberries 1
 	name = loc("RS1"),
-	color = tonumber("FF0000",16) -- red
+	color = -1
 }
 local teamC = {
 	-- Red Strawberries 2
 	name = loc("RS2"),
-	color = tonumber("FF0000",16) -- red
+	color = -1
 }
 
 -------------- LuaAPI EVENT HANDLERS ------------------

@@ -26,11 +26,11 @@ function onGameInit()
 	Map = "CrazyMission"
 	Theme = "CrazyMission"
 
-	AddTeam(loc("Feeble Resistance"), 14483456, "Statue", "Island", "Default", "cm_kiwi")
+	AddTeam(loc("Feeble Resistance"), -1, "Statue", "Island", "Default", "cm_kiwi")
 	player = AddHog(loc("Greg"), 0, 30, "NoHat")
 	hlayer = AddHog(loc("Mark"), 0, 40, "NoHat")
 
-	AddTeam(loc("Cybernetic Empire"), 1175851, "ring", "Island", "Robot", "cm_binary")
+	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot", "cm_binary")
 	enemy = AddHog(loc("WatchBot 4000"), 5, 50, "cyborg1")
 
 	SetGearPosition(player, 180, 555)

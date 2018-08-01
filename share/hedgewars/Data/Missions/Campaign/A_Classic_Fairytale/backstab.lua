@@ -960,28 +960,28 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("Tribe"), 0x0072FF, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 8, 9 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-  AddTeam(loc("Natives"), 0x0072FF, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
   nativesNum = 7
 
-  AddTeam(loc("Assault Team"), 0xDD0000, "skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Assault Team"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 50, "vampirichog")
   end
 
-  AddTeam(loc("Reinforcements"), 0xDD0000, "skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Reinforcements"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
     cannibals[i] = AddHog(cannibalNames[i], 2, 50, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 0xDD0000, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do

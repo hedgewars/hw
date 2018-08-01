@@ -101,7 +101,7 @@ The argument “params” is a table containing fields which describe the traini
 	- teamGrave:	name of the hedgehog’s grave
 	- teamFlag:	name of the team’s flag (default: "cm_crosshair")
 	- secGearType:	cluster of projectile gear (if present) (used to re-center camera)
-	- clanColor:	color of the (only) clan (default: 0xFF0204, which is a red tone)
+	- clanColor:	color of the (only) clan (default: -1, default first clan color)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
 	- shootText:	A string which says how many times the player shot, “%d” is replaced
@@ -119,7 +119,7 @@ function TargetPracticeMission(params)
 	if params.teamName == nil then params.teamName = loc("Training Team") end
 	if params.goalText == nil then params.goalText = loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.") end
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
-	if params.clanColor == nil then params.clanColor = 0xFF0204 end
+	if params.clanColor == nil then params.clanColor = -1 end
 	if params.teamGrave == nil then params.teamGrave= "Statue" end
 	if params.teamFlag == nil then params.teamFlag = "cm_crosshair" end
 	if params.wind == nil then params.wind = 0 end

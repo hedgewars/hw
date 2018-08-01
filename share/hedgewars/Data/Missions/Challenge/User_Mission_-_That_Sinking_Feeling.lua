@@ -41,7 +41,7 @@ function onGameInit()
 	Theme = "City"
 	SuddenDeathTurns = 1
 
-	AddTeam(loc("Hapless Hogs"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Hapless Hogs"), -1, "Simple", "Island", "Default")
 	hh[0] = AddHog(loc("Sinky"), 1, 100, "fr_lemon")
 	hh[1] = AddHog(loc("Drowner"), 1, 100, "fr_orange")
 	hh[2] = AddHog(loc("Heavy"), 1, 100, "dish_Teapot")
@@ -51,7 +51,7 @@ function onGameInit()
 	hh[6] = AddHog(loc("Sponge"), 1, 100, "sf_chunli")
 	hh[7] = AddHog(loc("Deadweight"), 1, 100, "dish_Teacup")
 
-	AddTeam(loc("Nameless Heroes"), 14483456, "Simple", "Island", "Default", "cm_crossedswords")
+	AddTeam(loc("Nameless Heroes"), -1, "Simple", "Island", "Default", "cm_crossedswords")
 	player = AddHog(loc("The Nameless One"), 0, 1, "NoHat")
 
 	SetGearPosition(player, 3992, 733)

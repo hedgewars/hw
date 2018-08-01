@@ -34,7 +34,7 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(loc("Wannabe Flyboys"), 14483456, "Simple", "Island", "Default", "cm_scout")
+	AddTeam(loc("Wannabe Flyboys"), -1, "Simple", "Island", "Default", "cm_scout")
 	player = AddHog(loc("Ace"), 0, 80, "Gasmask")
 	SetGearPosition(player, 1380, 1500)
 

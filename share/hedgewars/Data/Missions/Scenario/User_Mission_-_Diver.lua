@@ -27,10 +27,10 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), 14483456, "deadhog", "Island", "Default", "cm_eyes")
+	AddTeam(loc("Bloody Rookies"), -1, "deadhog", "Island", "Default", "cm_eyes")
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 			
-	AddTeam(loc("Toxic Team"), 	1175851, "skull", "Island", "Default", "cm_magicskull")
+	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 100, "Skull")
 
 	SetGearPosition(player,430,516)

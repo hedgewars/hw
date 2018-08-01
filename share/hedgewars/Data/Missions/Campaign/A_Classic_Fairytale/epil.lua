@@ -311,23 +311,23 @@ function GetVariables()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 5 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-	AddTeam(loc("More Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("More Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 6, 10 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-	AddTeam(loc("Cannibals"), 29439, "skull", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("Cannibals"), -2, "skull", "Island", "HillBilly", "cm_birdy")
   for i = 1, 5 do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, cannibalHats[i])
   end
 
   if m8Scene == denseScene or m8Scene == waterScene then
-    AddTeam(loc("Traitors"), 29439, "Bone", "Island", "HillBilly", "cm_bloodyblade")
+    AddTeam(loc("Traitors"), -2, "Bone", "Island", "HillBilly", "cm_bloodyblade")
     if m8Scene == denseScene then
       DeleteGear(natives[2])
       natives[2] = AddHog(nativeNames[2], 0, 100, nativeHats[2])

@@ -603,13 +603,13 @@ function RefusedStart()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   ramon = AddHog(loc("Ramon"), 0, 100, "rasta")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   spiky = AddHog(loc("Spiky Cheese"), 0, 100, "hair_yellow")
 
-  AddTeam(loc("Weaklings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Weaklings"), -1, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
@@ -618,14 +618,14 @@ function AddHogs()
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("Stronglings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Stronglings"), -1, "skull", "Island", "Pirate","cm_vampire")
 
   for i = 6, 9 do
     cannibals[i] = AddHog(HogNames[i], 4, 30, "vampirichog")
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
 end
 

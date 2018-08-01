@@ -375,7 +375,7 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Team name is a pun on “hedgehog” and “astronauts”
-	AddTeam( loc( "Hogonauts" ), 0xDDDD00, "earth", "Earth", "Default", "cm_galaxy" )
+	AddTeam( loc( "Hogonauts" ), -9, "earth", "Earth", "Default", "cm_galaxy" )
 
 	-- Hedgehog name is a pun on “Neil Armstrong”
 	Player = AddHog( loc( "Neil Hogstrong" ), 0, 1, "NoHat" )

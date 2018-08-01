@@ -79,11 +79,11 @@ thug7.x = 2990
 thug7.y = 1960
 thug7.health = 80
 teamA.name = loc("Hog Solo")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("PAotH")
 teamB.color = teamA.color
 teamC.name = loc("Professor")
-teamC.color = 0x0072FF -- blue
+teamC.color = -2
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 

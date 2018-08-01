@@ -47,7 +47,7 @@ function onGameInit()
 
 	------ TEAM LIST ------
 
-	AddTeam(loc("Bazooka Team"), 0xFF0204, "Flower", "Earth", "Default", "hedgewars")
+	AddTeam(loc("Bazooka Team"), -1, "Flower", "Earth", "Default", "hedgewars")
 	hog = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
 	SetGearPosition(hog, 1485, 2001)
 	SetEffect(hog, heResurrectable, 1)

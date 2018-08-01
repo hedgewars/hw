@@ -39,7 +39,7 @@ function onGameInit()
 
 	------ TEAM LIST ------
 
-	AddTeam(loc("Grenade Team"), 0xFF0204, "Flower", "Earth", "Default", "cm_grenade")
+	AddTeam(loc("Grenade Team"), -1, "Flower", "Earth", "Default", "cm_grenade")
 	hog = AddHog(loc("Greenhorn"), 0, 1, "NoHat")
 	SetGearPosition(hog, 570, 157)
 	SetEffect(hog, heResurrectable, 1)

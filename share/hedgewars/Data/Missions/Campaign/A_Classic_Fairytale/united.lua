@@ -323,7 +323,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   water = AddHog(loc("Fiery Water"), 0, 100, "pirate_jack")
@@ -332,17 +332,17 @@ function AddHogs()
   natives = {leaks, dense, water, buffalo, chief}
   nativesNum = 5
 
-  AddTeam(loc("Light Cannfantry"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Light Cannfantry"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 4 do
     cannibals[i] = AddHog(HogNames[i], 2, 40, "Zombi")
   end
 
-  AddTeam(loc("Heavy Cannfantry"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Heavy Cannfantry"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 5, 8 do
     cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(leaks,   unpack(leaksPos))

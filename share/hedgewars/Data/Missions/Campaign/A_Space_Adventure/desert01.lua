@@ -76,11 +76,11 @@ smuggler3.name = loc("Sandstorm")
 smuggler3.x = 1940
 smuggler3.y = 1625
 teamA.name = loc("PAotH")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Smugglers")
-teamB.color = 0xFE8B0E -- orange
+teamB.color = -7
 teamC.name = loc("Hog Solo")
-teamC.color = 0x38D61C -- green
+teamC.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 

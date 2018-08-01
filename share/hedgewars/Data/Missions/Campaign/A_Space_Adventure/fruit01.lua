@@ -97,13 +97,13 @@ local yellowArmy = {
 	{name = loc("Naranja Jed"), x = 960 , y = 516, health = 40},
 }
 teamA.name = loc("Hog Solo")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Green Bananas")
-teamB.color = 0x38D61C -- green
+teamB.color = -6
 teamC.name = loc("Yellow Watermelons")
-teamC.color = 0xFFFF01 -- yellow
+teamC.color = -9
 teamD.name = loc("Captain Lime")
-teamD.color = 0x38D61C -- green
+teamD.color = -6
 
 function onGameInit()
 	Seed = 1
