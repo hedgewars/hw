@@ -1487,10 +1487,9 @@ function GetDataForSavingHogs(gear)
 			teamCounter = 1
 		end
 
-		-- Convert color to string
-		local rgba = GetClanColor(GetHogClan(gear))
-		local rgb = div(band(rgba, 0xFFFFFF00), 0x100)
-		local tColor = string.format("0x%X", rgb)
+		-- Color argument for AddTeam; using the
+		-- default clan color format.
+		local tColor = -(GetHogClan(gear)+1)
 
 		local tFort, tGrave, tFlag, tVoice
 		if getGearValue(gear,"grave") == nil then
