@@ -67,14 +67,17 @@ local redHedgehogs = {
 	{ name = loc("Deadly Grape") }
 }
 -- Hog Solo and Green Bananas
--- TODO: Use default clan colors
 teamA.name = loc("Hog Solo and GB")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
+-- Captain Lime will use a color which is almost the same as the color of teamA.
+-- It works, but it's a hack.
+-- Technically, this makes Captain Lime an enemy team in the mission but for the player
+-- it looks like an ally. This is because Camptain Lime starts friendly (story-wise),
+-- but might become your enemy during the course of this mission.
+-- TODO: For teamB, use same color of teamA when friendly, change color when evil
 teamB.name = loc("Captain Lime")
--- FIXME: Use different clan color
-teamB.color = 0x38D61D -- greenish
 teamC.name = loc("Fruit Assassins")
-teamC.color = 0xFF0000 -- red
+teamC.color = -1
 
 function onGameInit()
 	GameFlags = gfDisableWind
@@ -93,6 +96,16 @@ function onGameInit()
 
 	local health = 100
 
+
+	-- Fruit Assassins
+	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
+	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
+	for i=1,table.getn(redHedgehogs) do
+		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
+		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
+	end
+	local assassinsColor = div(GetClanColor(GetHogClan(redHedgehogs[1].gear)), 0x100)
+
 	-- Hog Solo and Green Bananas
 	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgehog")
 	hero.gear = AddHog(hero.name, 0, health, "war_desertgrenadier1")
@@ -104,17 +117,32 @@ function onGameInit()
 	green3.gear = AddHog(green3.name, 0, 100, "hair_red")
 	AnimSetGearPosition(green3.gear, green3.x, green3.y)
 	HogTurnLeft(green3.gear, true)
+	local heroColor = div(GetClanColor(GetHogClan(hero.gear)), 0x100)
+
 	-- Captain Lime
-	AddTeam(teamB.name, teamB.color, "Cherry", "Island", "Default", "congo-brazzaville")
+	-- Returns a color that is as close as possible to the color argument
+	-- but does not equal color and otherCollision.
+	local getSimilarColor = function(color, otherCollision)
+		local goingUp = false
+		local collision1 = color
+		while(color == collision1 or color == otherCollision) do
+			-- Try out colors by varying the blue color component until
+			-- we don't collide with any of the 2 colors.
+			if ((color % 0x100) > 0) and (not goingUp) then
+				color = color - 0x1
+			else
+				goingUp = true
+				color = color + 0x1
+			end
+		end
+		return color
+	end
+	-- Captain Lime gets a fake color clore to hero's clan color.
+	-- This is a hack, but it works. See explanation at top of file
+	local cptnColor = getSimilarColor(heroColor, assassinsColor)
+	AddTeam(teamB.name, cptnColor, "Cherry", "Island", "Default", "congo-brazzaville")
 	green1.gear= AddHog(green1.name, 0, 100, "war_desertofficer")
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
-	-- Fruit Assassins
-	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
-	for i=1,table.getn(redHedgehogs) do
-		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
-		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
-	end
 
 	AnimInit(true)
 	AnimationSetup()
