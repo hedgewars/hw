@@ -215,6 +215,7 @@ var
 
     WaterColorArray : array[0..7] of HwColor4f;
     SDWaterColorArray : array[0..7] of HwColor4f;
+    ClanColorArray : array[0..Pred(cClanColors)] of Longword;
 
     TargetCursorPoint     : TPoint;
     CursorPoint           : TPoint;
@@ -2716,6 +2717,19 @@ begin
     WaterColorArray[7]:= WaterColorArray[1];
 
     WaterOpacity:= $80;
+
+    // default clan colors
+    // always keep in sync with QTfrontend/hwconsts.h
+
+    ClanColorArray[0] := $ffff0204;
+    ClanColorArray[1] := $ff4980c1;
+    ClanColorArray[2] := $ff1de6ba;
+    ClanColorArray[3] := $ffb541ef;
+    ClanColorArray[4] := $ffe55bb0;
+    ClanColorArray[5] := $ff20bf00;
+    ClanColorArray[6] := $fffe8b0e;
+    ClanColorArray[7] := $ff8f5902;
+    ClanColorArray[8] := $ffffff01;
 
     // default sudden death water
 

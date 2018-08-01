@@ -78,6 +78,9 @@ extern int years_since_foundation;
 #define HWENGINE_EXITCODE_OK 0
 #define HWENGINE_EXITCODE_FATAL 52
 
+// Default clan colors
+// NOTE: Always keep this in sync with hedgewars/uVariables.pas (ClanColorArray)
+
 // see https://en.wikipedia.org/wiki/List_of_colors
 /*define HW_TEAMCOLOR_ARRAY  {0xff007fff, /. azure          ./ \
                               0xffdd0000, /. classic red    ./ \

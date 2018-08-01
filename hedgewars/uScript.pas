@@ -2189,10 +2189,25 @@ end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
+    colorArg: Int64;
+    colorStr: shortstring;
 begin
     if CheckAndFetchParamCount(L, 5, 6, 'AddTeam', 'teamname, color, grave, fort, voicepack [, flag]', np) then
         begin
-        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true, true);
+        colorArg:= Trunc(lua_tonumber(L, 2));
+        if (colorArg < 0) and (abs(colorArg) <= cClanColors) then
+            // Pick clan color from settings (recommended)
+            colorStr:= IntToStr(ClanColorArray[Pred(abs(colorArg))])
+        else if (colorArg >= 0) and (colorArg <= $ffffffff) then
+            // Specify color directly
+            colorStr:= IntToStr(colorArg)
+        else
+            begin
+            OutError('Lua error: AddTeam: Invalid ''color'' argument, must be between '+IntToStr(-cClanColors)+' and 0xffffffff!', true);
+            lc_addteam:= 0;
+            exit;
+            end;
+        ParseCommand('addteam x ' + colorStr + ' ' + lua_tostring(L, 1), true, true);
         ParseCommand('grave ' + lua_tostring(L, 3), true, true);
         ParseCommand('fort ' + lua_tostring(L, 4), true, true);
         ParseCommand('voicepack ' + lua_tostring(L, 5), true, true);

@@ -174,6 +174,8 @@ const
     cMaxHHIndex      = 7;
     cMaxHHs          = cMaxTeams * (cMaxHHIndex+1);
 
+    cClanColors      = 9;
+
     cMaxEdgePoints = 32768;
 
     cHHRadius = 9;
