@@ -627,7 +627,7 @@ function SimpleMission(params)
 		Explosives = 0
 
 		for initVarName, initVarValue in pairs(params.initVars) do
-			if initVarName == GameFlags then
+			if initVarName == "GameFlags" then
 				EnableGameFlags(initVarValue)
 			else
 				_G[initVarName] = initVarValue
