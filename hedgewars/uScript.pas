@@ -3917,8 +3917,10 @@ ScriptSetInteger('SAY_THINK', 2);
 ScriptSetInteger('SAY_SHOUT', 3);
 
 // other
+ScriptSetInteger('AMMO_INFINITE', AMMO_INFINITE);
 ScriptSetInteger('JETPACK_FUEL_INFINITE', JETPACK_FUEL_INFINITE);
 ScriptSetInteger('BIRDY_ENERGY_INFINITE', BIRDY_ENERGY_INFINITE);
+ScriptSetInteger('NoPointX', NoPointX);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
