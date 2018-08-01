@@ -1030,7 +1030,7 @@ begin
 
     if Gear^.Timer = 0 then
         begin
-        // no "fuel"? just fall
+        // no energy? just fall
         doStepFallingGear(Gear);
         // if drowning, stop bee sound
         if (Gear^.State and gstDrowning) <> 0 then
@@ -4170,7 +4170,7 @@ begin
     end;*)
     if HHGear^.Message and gmPrecise <> 0 then
         HedgehogChAngle(HHGear)
-    else if Gear^.Health > 0 then
+    else if (Gear^.Health > 0) or (Gear^.Health = JETPACK_FUEL_INFINITE) then
         begin
         if HHGear^.Message and gmUp <> 0 then
             begin
@@ -4192,7 +4192,8 @@ begin
                     HHGear^.dY := HHGear^.dY - move;
                     end
                 end;
-            dec(Gear^.Health, fuel);
+            if Gear^.Health <> JETPACK_FUEL_INFINITE then
+                dec(Gear^.Health, fuel);
             Gear^.MsgParam := Gear^.MsgParam or gmUp;
             Gear^.Timer := GameTicks
             end;
@@ -4218,7 +4219,8 @@ begin
                     end
                 end
             else PlaySound(sndJetpackBoost);
-            dec(Gear^.Health, fuel div 5);
+            if Gear^.Health <> JETPACK_FUEL_INFINITE then
+                dec(Gear^.Health, fuel div 5);
             Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
             Gear^.Timer := GameTicks
             end
@@ -4231,7 +4233,7 @@ begin
         Gear^.MsgParam := 0
         end;
 
-    if Gear^.Health < 0 then
+    if (Gear^.Health < 0) and (Gear^.Health <> JETPACK_FUEL_INFINITE) then
         Gear^.Health := 0;
 
     i:= Gear^.Health div 20;
@@ -4239,9 +4241,9 @@ begin
     if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
         begin
         Gear^.Damage:= i;
-        //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
         FreeAndNilTexture(Gear^.Tex);
-        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) + '%'), cWhiteColor, fntSmall)
+        if Gear^.Health <> JETPACK_FUEL_INFINITE then
+            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) + '%'), cWhiteColor, fntSmall)
         end;
 
     if (HHGear^.Message and (gmAttack or gmUp or gmLeft or gmRight) <> 0) and
@@ -4334,7 +4336,7 @@ end;
 procedure doStepBirdyFly(Gear: PGear);
 var
     HHGear: PGear;
-    fuel, i: LongInt;
+    energy, i: LongInt;
     move: hwFloat;
     s: ansistring;
 begin
@@ -4352,7 +4354,7 @@ begin
         end;
 
     move := _0_2;
-    fuel := 50;
+    energy:= 50;
 
     if Gear^.Pos > 0 then
         dec(Gear^.Pos, 1)
@@ -4370,7 +4372,8 @@ begin
         or (HHGear^.Y > -_256) then
             HHGear^.dY := HHGear^.dY - move;
 
-        dec(Gear^.Health, fuel);
+        if (Gear^.Health <> BIRDY_ENERGY_INFINITE) then
+            dec(Gear^.Health, energy);
         Gear^.MsgParam := Gear^.MsgParam or gmUp;
         end;
 
@@ -4378,14 +4381,15 @@ begin
     if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
         begin
         HHGear^.dX := HHGear^.dX + (move * _0_1);
-        dec(Gear^.Health, fuel div 5);
+        if (Gear^.Health <> BIRDY_ENERGY_INFINITE) then
+            dec(Gear^.Health, energy div 5);
         Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
         end;
 
-    if Gear^.Health < 0 then
+    if (Gear^.Health < 0) and (Gear^.Health <> BIRDY_ENERGY_INFINITE) then
         Gear^.Health := 0;
 
-    if ((GameTicks and $FF) = 0) and (Gear^.Health < 500) then
+    if ((GameTicks and $FF) = 0) and (Gear^.Health < 500) and (Gear^.Health <> BIRDY_ENERGY_INFINITE) then
         for i:= ((500-Gear^.Health) div 250) downto 0 do
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
 

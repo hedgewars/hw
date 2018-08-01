@@ -79,6 +79,7 @@ Lua API:
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
  + New Lua library: Achievements
+ + Can enable infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set

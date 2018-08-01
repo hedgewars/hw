@@ -3916,6 +3916,10 @@ ScriptSetInteger('SAY_SAY', 1);
 ScriptSetInteger('SAY_THINK', 2);
 ScriptSetInteger('SAY_SHOUT', 3);
 
+// other
+ScriptSetInteger('JETPACK_FUEL_INFINITE', JETPACK_FUEL_INFINITE);
+ScriptSetInteger('BIRDY_ENERGY_INFINITE', BIRDY_ENERGY_INFINITE);
+
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
     ScriptSetInteger(EnumToStr(at), ord(at));

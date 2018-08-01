@@ -320,6 +320,9 @@ const
     AMMO_INFINITE = 100;
     AMMO_FINITE_MAX = 99;
 
+    JETPACK_FUEL_INFINITE : LongInt = Low(LongInt);
+    BIRDY_ENERGY_INFINITE : LongInt = Low(LongInt);
+
     // Special msgParam value used internally for invalid/non-existing value
     // Must not be sent over the network!
     MSGPARAM_INVALID = High(LongWord);
