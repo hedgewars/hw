@@ -7,6 +7,7 @@ Game:
  + Add default controls for controller (see README.md)
  + Add chat command “/help”, displays help for chat commands
  + Increase hedgehog limit to 64
+ + Campaigns and missions now use the user's chosen custom clan colors
  * Functionality of controllers restored
  * Fix crash when 2 or more controllers were connected
  * Fix hammer and pickhammer not digging correctly at wrap world edge

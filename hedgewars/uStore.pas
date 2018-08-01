@@ -45,6 +45,8 @@ function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: s
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 procedure LoadHedgehogHat2(var HH: THedgehog; newHat: shortstring; allowSurfReuse: boolean);
 
+procedure LoadDefaultClanColors(s: shortstring);
+
 procedure InitZoom(zoom: real);
 
 procedure SetupOpenGL;
@@ -764,6 +766,78 @@ AddFileLog('Got Hat');
             freeTmpHatSurf();
         end;
 end;
+
+// Load default clan colors from config fiile
+procedure LoadDefaultClanColors(s: shortstring);
+var i: LongInt;
+    f: PFSFile;
+    key, value, l, temp: shortstring;
+    color: Longword;
+    c: byte;
+begin
+    if cOnlyStats then exit;
+
+    WriteLnToConsole('Loading default clan colors from: ' + s);
+
+    l:= '';
+    if pfsExists(s) then
+        begin
+        f:= pfsOpenRead(s);
+        while (not pfsEOF(f)) and (l <> '[colors]') do
+            pfsReadLn(f, l);
+
+        while (not pfsEOF(f)) and (l <> '') do
+            begin
+            pfsReadLn(f, l);
+
+            key:= '';
+            i:= 1;
+            while (i <= length(l)) and (l[i] <> '=') do
+                begin
+                key:= key + l[i];
+                inc(i)
+                end;
+            temp:= copy(key, 1, 5);
+            if temp = 'color' then
+                begin
+                temp:= copy(key, 6, length(key) - 5);
+                try
+                    c:= StrToInt(temp);
+                except
+                    on E : EConvertError do continue;
+                end;
+                end
+            else
+                continue;
+
+            if i < length(l) then
+                begin
+                value:= copy(l, i + 1, length(l) - i);
+                if (length(value) = 2) and (value[1] = '\') then
+                    value:= value[1] + ''
+                else if (value[1] = '"') and (value[length(value)] = '"') then
+                    value:= copy(value, 2, length(value) - 2);
+                if value[1] <> '#' then
+                    continue;
+                temp:= copy(value, 2, length(value) - 1);
+                try
+                    color:= StrToInt('0x'+temp);
+                except
+                    on E : EConvertError do continue;
+                end;
+                end;
+
+            if c <= cClanColors then
+                ClanColorArray[c]:= color;
+
+            end;
+
+        pfsClose(f)
+        end
+        else
+            WriteLnToConsole('Settings file not found');
+end;
+
 
 procedure SetupOpenGLAttributes;
 begin

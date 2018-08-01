@@ -411,6 +411,7 @@ begin
 
     LoadFonts();
     AddProgress();
+    LoadDefaultClanColors(cPathz[ptConfig] + '/settings.ini');
 
     if cTestLua then
         begin
