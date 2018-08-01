@@ -2861,7 +2861,7 @@ end
 
 -- Display the X and Y coordinates of the cursor while the cursor is active
 function updateCursorCoords()
-	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= -2147483648 then
+	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= NoPoitX then
 		local x1, y = 12, 24
 		if tagCursorX then
 			DeleteVisualGear(tagCursorX)
