@@ -267,6 +267,7 @@ function AutoSpawn() -- Auto-spawn the next target after you've obtained the cur
 	else
 		InfFuel = false
 	end
+	UpdateInfFuel()
 
 	-- Func (if present) will be run instead of the ordinary spawning handling
 	if TargetPos[TargetNumber].Modifier then -- If there is a modifier, run the function
@@ -356,6 +357,7 @@ function ResetCurrentTarget()
 	else
 		InfFuel = false
 	end
+	UpdateInfFuel()
 
 	SetGearPosition(Player, X, Y)
 end
@@ -430,6 +432,7 @@ function onGearAdd(Gear)
 		if (TargetNumber == LaunchTarget or TargetNumber == UnderwaterAttackTarget) and BazookasLeft > 0 then
 			AddAmmo(Player, amBazooka, BazookasLeft)
 		end
+		UpdateInfFuel()
 		-- If player starts using saucer, the player probably finished reading and the mission panel
 		-- would just get in the way. So we hide it!
 		HideMission()
@@ -526,19 +529,17 @@ function onGameTick20()
 			end
 		end
 	end
-	ResetFuel()
 end
 
--- Used to ensure infinite fuel
-function ResetFuel()
-	if SaucerGear and InfFuel then
-		SetHealth(SaucerGear, 2000)
+function UpdateInfFuel()
+	if SaucerGear then
+		if InfFuel then
+			SetHealth(SaucerGear, JETPACK_FUEL_INFINITE)
+		elseif GetHealth(SaucerGear == JETPACK_FUEL_INFINITE) then
+			SetHealth(SaucerGear, 2000)
+		end
 	end
 end
-
-onUp = ResetFuel
-onLeft = ResetFuel
-onRight = ResetFuel
 
 function onGearDamage(Gear)
 	if Gear == Player then
