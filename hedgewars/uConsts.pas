@@ -181,6 +181,8 @@ const
     cHHRadius = 9;
     cHHStepTicks = 29;
 
+    cMaxHogHealth : LongInt = High(LongInt) div (cMaxHHIndex+1);
+
     cHHZ = 1000;
     cCurrHHZ = Succ(cHHZ);
 

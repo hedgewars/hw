@@ -21,6 +21,7 @@ Game:
  * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
  * Fix /hta, /hsa and /hya commands not writing message in chat
+ * Limit hedgehog health to 268435455 to prevent some bugs
 
 Frontend:
  * Controllers are detected again
@@ -82,6 +83,7 @@ Lua API:
  + Can enable infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
  + New global: NoPointX. Value of CursorX and CursorY if cursor is inactive
  + New global: AMMO_INFINITE. Value for infinite ammo count for AddAmmo and other functions
+ + New global: cMaxHogHealth. Maximum possible hedgehog health
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set

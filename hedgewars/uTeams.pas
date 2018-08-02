@@ -495,6 +495,9 @@ for t:= 0 to Pred(TeamsCount) do
                 end
             else
                 Hedgehogs[0].Gear^.Health:= h;
+            // Prevent overflow
+            if (Hedgehogs[0].Gear^.Health < 0) or (Hedgehogs[0].Gear^.Health > cMaxHogHealth) then
+                Hedgehogs[0].Gear^.Health:= cMaxHogHealth;
             Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health
             end;
         end;
@@ -614,7 +617,7 @@ with CurrentTeam^ do
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
     Gear^.Health:= StrToInt(s);
-    if checkFails(Gear^.Health > 0, 'Invalid hedgehog health', true) then exit;
+    if checkFails((Gear^.Health > 0) and (Gear^.Health <= cMaxHogHealth), 'Invalid hedgehog health (must be between 1 and '+IntToStr(cMaxHogHealth)+')', true) then exit;
     if (GameFlags and gfSharedAmmo) <> 0 then
         CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
     else if (GameFlags and gfPerHogAmmo) <> 0 then

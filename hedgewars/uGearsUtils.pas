@@ -290,6 +290,9 @@ begin
                     // was considering pulsing on attack, Tiy thinks it should be permanent while in play
                     //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
+                    // Prevent overflow
+                    if (CurrentHedgehog^.Gear^.Health < 0) or (CurrentHedgehog^.Gear^.Health > cMaxHogHealth) then
+                        CurrentHedgehog^.Gear^.Health:= cMaxHogHealth;
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
                     HHHeal(CurrentHedgehog, vampDmg, true, $FF0000FF);

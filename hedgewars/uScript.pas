@@ -1791,6 +1791,10 @@ begin
 
             if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
                 begin
+                if gear^.Health > cMaxHogHealth then
+                    gear^.Health:= cMaxHogHealth;
+                if gear^.Health < 0 then
+                    gear^.Health:= 0;
                 RenderHealth(gear^.Hedgehog^);
                 RecountTeamHealth(gear^.Hedgehog^.Team)
                 end;
@@ -1813,7 +1817,10 @@ begin
         healthBoost:= Trunc(lua_tonumber(L, 2));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (healthBoost >= 1) then
             begin
-            gear^.Health:= gear^.Health + healthBoost;
+            inc(gear^.Health, healthBoost);
+            // Prevent overflow
+            if (gear^.Health < 0) or (gear^.Health > cMaxHogHealth) then
+                gear^.Health:= cMaxHogHealth;
 
             RenderHealth(gear^.Hedgehog^);
             RecountTeamHealth(gear^.Hedgehog^.Team);
@@ -3921,6 +3928,7 @@ ScriptSetInteger('AMMO_INFINITE', AMMO_INFINITE);
 ScriptSetInteger('JETPACK_FUEL_INFINITE', JETPACK_FUEL_INFINITE);
 ScriptSetInteger('BIRDY_ENERGY_INFINITE', BIRDY_ENERGY_INFINITE);
 ScriptSetInteger('NoPointX', NoPointX);
+ScriptSetInteger('cMaxHogHealth', cMaxHogHealth);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do

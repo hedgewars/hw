@@ -830,6 +830,9 @@ case Gear^.Pos of
      posCaseHealth: begin
                     PlaySound(sndShotgunReload);
                     inc(HH^.Health, Gear^.Health);
+                    // Prevent overflow
+                    if (HH^.Health < 0) or (HH^.Health > cMaxHogHealth) then
+                        HH^.Health:= cMaxHogHealth;
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
