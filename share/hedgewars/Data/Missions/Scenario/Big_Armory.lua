@@ -16,11 +16,16 @@ SimpleMission({
 	wind = 15,
 	initVars = {
 		TurnTime = 45000,
-		Seed = "{7e34a56b-ee7b-4fe1-8f30-352a998f3f6a}",
 		GameFlags = gfDisableWind + gfDisableLandObjects,
 		Theme = "EarthRise",
-		MapGen = mgRandom,
-		MapFeatureSize = 12,
+		Map = "BigArmory", -- from sidecar HWP
+		--[[ Map has been generated in Hedgewars 0.9.24 and
+                     then exported as PNG with these settings:
+		* Seed = "{7e34a56b-ee7b-4fe1-8f30-352a998f3f6a}"
+		* MapGen = mgRandom
+		* MapFeatureSize = 12
+		* Theme = "EarthRise"
+		* relevant GameFlag: gfDisableLandObjects ]]
 	},
 	teams = {
 		{ name = loc("Pro Killers"),
