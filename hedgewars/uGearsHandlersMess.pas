@@ -3559,6 +3559,23 @@ begin
 
     if not cakeStep(Gear) then Gear^.doStep:= @doStepCakeFall;
 
+    if (Gear^.Karma = 1) then
+        begin
+        // Cake hit bouncy edge, turn around
+        Gear^.dX.isNegative := (not Gear^.dX.isNegative);
+        Gear^.WDTimer := 0;
+        Gear^.Angle := (LongInt(Gear^.Angle) + 2) and 3;
+        Gear^.Karma := 0;
+        end
+    else if (Gear^.Karma = 2) then
+        begin
+        // Cake doesn't know how walk through world wrap
+        // so it gives up and stops.
+        // TODO: Teach cake how to deal with world wrap.
+        Gear^.Health := 0;
+        Gear^.Karma := 0;
+        end;
+
     if Gear^.Tag = 0 then
         begin
         cakeData:= PCakeData(Gear^.Data);

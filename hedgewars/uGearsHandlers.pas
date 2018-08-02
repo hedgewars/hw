@@ -27,7 +27,7 @@ function cakeStep(Gear: PGear): boolean;
 
 implementation
 
-uses SDLh, uFloat, uCollisions;
+uses SDLh, uFloat, uCollisions, uVariables, uGearsUtils;
 
 
 
@@ -94,6 +94,28 @@ begin
                 NextAngle(Gear, dA)
                 end
             end;
+
+    // Handle world wrap and bounce edge manually
+    if (WorldEdge = weWrap) and
+        ((hwRound(Gear^.X) <= LongInt(leftX)) or (hwRound(Gear^.X) >= LongInt(rightX))) then
+        begin
+        LeftImpactTimer:= 150;
+        RightImpactTimer:= 150;
+        Gear^.WDTimer:= 4;
+        Gear^.Karma:= 2;
+        end
+    else if (WorldEdge = weBounce) and
+        (((hwRound(Gear^.X) - Gear^.Radius) < LongInt(leftX)) or ((hwRound(Gear^.X) + Gear^.Radius) > LongInt(rightX))) then
+        begin
+        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
+            LeftImpactTimer:= 333
+        else
+            RightImpactTimer:= 333;
+        Gear^.Karma:= 1;
+        Gear^.WDTimer:= 0;
+        if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+            AddBounceEffectForGear(Gear);
+        end;
 
     cakeStep:= Gear^.WDTimer < 4
 end;
