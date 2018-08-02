@@ -5621,7 +5621,6 @@ while i > 0 do
         if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
             dmg:= 0;
-            //tmp^.State:= tmp^.State or gstFlatened;
             if (tmp^.Kind <> gtHedgehog) or (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
                 begin
                 // base damage on remaining health
@@ -5634,12 +5633,12 @@ while i > 0 do
                     if dmg > 0 then
                         ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
                     end;
-		tmp^.dY:= _0_03 * Gear^.Boom
+                if (GameFlags and gfSolidLand) <> 0 then
+                    tmp^.dY:= _0_03 * Gear^.Boom;
                 end;
 
             if (tmp^.Kind <> gtHedgehog) or (dmg > 0) or (tmp^.Health > tmp^.Damage) then
                 begin
-                //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
                 tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
                 tmp2^.LinkedGear:= tmp;
                 SetAllToActive
@@ -5681,11 +5680,8 @@ begin
             end;
 
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
-           , lfIndestructible) then
-            begin
-            //Gear^.X := Gear^.X + Gear^.dX;
-            Gear^.Y := Gear^.Y + _1_9
-            end;
+           , lfIndestructible) and ((GameFlags and gfSolidLand) = 0) then
+            Gear^.Y := Gear^.Y + _1_9;
         end;
     if TestCollisionYwithGear(Gear, 1) <> 0 then
         begin
@@ -5695,13 +5691,10 @@ begin
         end
     else
         begin
-        //Gear^.dY := Gear^.dY + cGravity;
-        //Gear^.Y := Gear^.Y + Gear^.dY;
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             Gear^.Timer := 1
         end;
 
-    //Gear^.X := Gear^.X + HitGear^.dX;
     HitGear^.X := Gear^.X;
     HitGear^.Y := Gear^.Y;
     SetLittle(HitGear^.dY);

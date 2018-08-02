@@ -11,6 +11,7 @@ Game:
  + New default brown clan color for better contrast
  * Functionality of controllers restored
  * Fix crash when 2 or more controllers were connected
+ * Hammer no longer destroys land if indestructible terrain is enabled
  * Fix hammer and pickhammer not digging correctly at wrap world edge
  * Fix freezer ray not working through wrap world edge
  * Fix freezer ray going through bounce world edge
