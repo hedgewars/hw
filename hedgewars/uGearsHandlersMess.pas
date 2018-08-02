@@ -1710,7 +1710,7 @@ begin
         ei := x + Gear^.Radius + LongInt(GetRandom(2));
         while i <= ei do
             begin
-            doMakeExplosion(i, y + 3, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
+            doMakeExplosion(i, y + 3, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx or EXPLForceDraw);
             inc(i, 1)
             end;
 
@@ -5672,11 +5672,11 @@ begin
 
         i := hwRound(Gear^.X) - HitGear^.Radius + 2;
         ei := hwRound(Gear^.X) + HitGear^.Radius - 2;
-        for j := 1 to 4 do doMakeExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
-        for j := 1 to 4 do doMakeExplosion(ei + LongInt(GetRandom(5)), hwRound(Gear^.Y) + 6*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
+        for j := 1 to 4 do doMakeExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx or EXPLForceDraw);
+        for j := 1 to 4 do doMakeExplosion(ei + LongInt(GetRandom(5)), hwRound(Gear^.Y) + 6*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx or EXPLForceDraw);
         while i <= ei do
             begin
-            for j := 1 to 11 do doMakeExplosion(i, hwRound(Gear^.Y) + 3*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
+            for j := 1 to 11 do doMakeExplosion(i, hwRound(Gear^.Y) + 3*j, 3, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx or EXPLForceDraw);
             inc(i, 1)
             end;
 

@@ -343,6 +343,7 @@ const
     EXPLNoGfx             = $00000020;
     EXPLPoisoned          = $00000040;
     EXPLDoNotTouchAny     = $00000080;
+    EXPLForceDraw         = $00000100;
 
     posCaseAmmo    = $00000001;
     posCaseHealth  = $00000002;

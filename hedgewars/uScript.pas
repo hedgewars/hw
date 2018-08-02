@@ -4010,6 +4010,7 @@ ScriptSetInteger('EXPLDontDraw'     , EXPLDontDraw);
 ScriptSetInteger('EXPLNoGfx'        , EXPLNoGfx);
 ScriptSetInteger('EXPLPoisoned'     , EXPLPoisoned);
 ScriptSetInteger('EXPLDoNotTouchAny', EXPLDoNotTouchAny);
+ScriptSetInteger('EXPLForceDraw'    , EXPLForceDraw);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);

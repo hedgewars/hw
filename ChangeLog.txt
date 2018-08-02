@@ -84,6 +84,7 @@ Lua API:
  + New global: NoPointX. Value of CursorX and CursorY if cursor is inactive
  + New global: AMMO_INFINITE. Value for infinite ammo count for AddAmmo and other functions
  + New global: cMaxHogHealth. Maximum possible hedgehog health
+ + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set
