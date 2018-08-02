@@ -1111,7 +1111,6 @@
 02:16=%1 prepared for too long
 
 ; King (%1) has died
-02:17=%1 is dead! Long live %1!
 02:17=Royal tragedy: %1 found dead
 02:17=%1 is no longer with us
 02:17=Our beloved king %1 has left us

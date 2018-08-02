@@ -535,7 +535,6 @@
 02:16=%1 nie jest zbyt szybki
 
 ; Król (%1) umarł (tryb króla)
-02:17=%1 nie żyje! Wiwat %1!
 02:17=%1 był dobrym królem... był
 02:17=Jak na króla, %1 był słabeuszem
 02:17=%1 sobie pokrólował

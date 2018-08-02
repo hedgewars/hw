@@ -1207,7 +1207,6 @@
 02:16=%1 vergisst die Zeit
 
 ; King (%1) has died
-02:17=%1 ist tot! Lang lebe %1!
 02:17=Königliche Tragödie: %1 tot aufgefunden
 02:17=%1 ist nicht mehr bei uns
 02:17=Unser geschätzter König %1 ist von uns gegangen
