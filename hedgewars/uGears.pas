@@ -1279,7 +1279,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepAddAmmo,
             @doStepGenericFaller,
             @doStepKnife,
-            @doStepDuck,
+            @doStepCreeper,
             @doStepMinigun,
             @doStepMinigunBullet);
 begin

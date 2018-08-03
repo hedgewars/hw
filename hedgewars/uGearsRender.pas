@@ -1604,9 +1604,10 @@ begin
                                 end
                           end
                       end;
-            gtDuck: DrawSpriteRotatedF(sprDuck, x, y, 1, Gear^.Tag, 
-                    // replace with something based on dx/dy?
-                    Gear^.DirAngle + 10-round(20 * abs(1 - (RealTicks mod round(0.1/max(0.00005,cWindSpeedf))) / round(0.05/max(0.00005,cWindSpeedf))) ));
+            gtDuck: if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+					     DrawSpriteRotatedF(sprDuck, x, y, 1, hwRound(SignAs(_1,Gear^.Hedgehog^.Gear^.X-Gear^.X)), 0) 
+					else DrawSpriteRotatedF(sprDuck, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0); 
+
             gtGenericFaller: begin
                              // DEBUG: draw gtGenericFaller
                              if Gear^.Tag <> 0 then

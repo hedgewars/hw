@@ -266,7 +266,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
                     else Gear^.Boom := 3;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
-           gtDuck: Gear^.Boom := 40;
+           gtDuck: Gear^.Boom := 100;
     gtMinigunBullet: Gear^.Boom := 2;
     end;
 
@@ -730,6 +730,7 @@ gtFlamethrower: begin
                 gear^.Density:= _0;
                 end;
         gtDuck: begin
+{
                 gear^.Pos:= 0;               // 0: in air, 1-4: on water, 5-8: underwater
                                              // 1: bottom, 2: bottom (mirrored),
                                              // 3: left Sea edge, 4: right Sea edge
@@ -746,6 +747,25 @@ gtFlamethrower: begin
                 gear^.Friction:= _0_8;
                 gear^.Density:= _0_5;
                 gear^.AdvBounce:= 1;
+}
+
+
+                gear^.Radius:= cHHRadius;
+                gear^.Elasticity:= _0_35;
+                gear^.Friction:= _0_93;
+                gear^.Density:= _5;
+
+                gear^.AdvBounce:= 1;
+                gear^.ImpactSound:= sndAirMineImpact;
+                gear^.nImpactSounds:= 1;
+                gear^.Health:= 30;
+                gear^.Radius:= 8;
+                gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+                gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
+                gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 5000;
+                gear^.WDTimer:= gear^.Timer
                 end;
      gtMinigun: begin
                 // Timer. First, it's the timer before shooting. Then it will become the shooting timer and is set to Karma
