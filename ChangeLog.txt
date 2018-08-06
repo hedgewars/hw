@@ -17,6 +17,7 @@ Game:
  * Fix cake walking through bounce world edge
  * Cake now stops at wrap world edge instead of walking through land (temporary fix)
  * Laser sight now works properly through wrap world edge
+ * Fix projectiles reacing incorrectly with land just behind the wrap world edge
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix video recorder not working when game audio was disabled

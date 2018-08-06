@@ -325,11 +325,20 @@ begin
     tX:= Gear^.X;
     gX:= hwRound(Gear^.X);
     gY:= hwRound(Gear^.Y);
-    if (Gear^.Kind <> gtGenericFaller) and WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
+    Gear^.State := Gear^.State and (not gstCollision);
+
+    // World wrap
+    if (Gear^.Kind <> gtGenericFaller) and WorldWrap(Gear) and (WorldEdge = weWrap) and
       ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
-        Gear^.X:= tX;
-        Gear^.dX.isNegative:= (gX > LongInt(leftX) + Gear^.Radius*2)
+        // Collision with land that *just* behind the other side of the world wrap edge
+        if (not Gear^.Sticky) then
+            begin
+            Gear^.X:= tX;
+            Gear^.dX.isNegative:= (gX > LongInt(leftX) + Gear^.Radius*2);
+            Gear^.dX := Gear^.dX * Gear^.Friction;
+            end;
+        Gear^.State := Gear^.State or gstCollision;
         end;
 
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
@@ -344,7 +353,6 @@ begin
         Gear^.dY:= Gear^.dY * _0_999
         end;
 
-    Gear^.State := Gear^.State and (not gstCollision);
     collV := 0;
     collH := 0;
     tdX := Gear^.dX;

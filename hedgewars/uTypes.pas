@@ -268,6 +268,7 @@ type
             Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
             CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
             AdvBounce: Longword; // Triggers 45 bounces. Is a counter to avoid edge cases
+            Sticky: Boolean;     // True if gear is *normally* able to stick to landscape on impact
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Density   : hwFloat; // Density is kind of a mix of size and density. Impacts distance thrown, wind.

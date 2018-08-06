@@ -207,6 +207,7 @@ gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= lfAll;
 gear^.Tint:= $FFFFFFFF;
 gear^.Data:= nil;
+gear^.Sticky:= false;
 
 if CurrentHedgehog <> nil then
     begin
@@ -353,6 +354,7 @@ case Kind of
                     Pos:= 0;
                     Radius:= 1;
                     DirAngle:= random(360);
+                    Sticky:= true;
                     if State and gstTmpFlag = 0 then
                         begin
                         dx.isNegative:= GetRandom(2) = 0;
@@ -463,6 +465,7 @@ case Kind of
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1_6;
                 gear^.AdvBounce:= 1;
+                gear^.Sticky:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 500;
                 end;
        gtKnife: begin
@@ -471,7 +474,8 @@ case Kind of
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
                 gear^.Density:= _4;
-                gear^.Radius:= 7
+                gear^.Radius:= 7;
+                gear^.Sticky:= true;
                 end;
         gtCase: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -671,6 +675,7 @@ case Kind of
                 gear^.Timer:= 15000;
                 gear^.RenderTimer:= false;
                 gear^.Health:= 100;
+                gear^.Sticky:= true;
                 end;
        gtPiano: begin
                 gear^.Radius:= 32;
