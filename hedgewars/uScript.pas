@@ -1817,11 +1817,7 @@ begin
         healthBoost:= Trunc(lua_tonumber(L, 2));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (healthBoost >= 1) then
             begin
-            inc(gear^.Health, healthBoost);
-            // Prevent overflow
-            if (gear^.Health < 0) or (gear^.Health > cMaxHogHealth) then
-                gear^.Health:= cMaxHogHealth;
-
+            healthBoost:= IncHogHealth(gear^.Hedgehog, healthBoost);
             RenderHealth(gear^.Hedgehog^);
             RecountTeamHealth(gear^.Hedgehog^.Team);
             if n = 4 then

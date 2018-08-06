@@ -783,6 +783,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
 var ag, gi: PGear;
+    healthBoost: LongInt;
 begin
 if Gear^.State and gstFrozen <> 0 then exit;
 
@@ -829,14 +830,11 @@ case Gear^.Pos of
                     end;
      posCaseHealth: begin
                     PlaySound(sndShotgunReload);
-                    inc(HH^.Health, Gear^.Health);
-                    // Prevent overflow
-                    if (HH^.Health < 0) or (HH^.Health > cMaxHogHealth) then
-                        HH^.Health:= cMaxHogHealth;
+                    healthBoost:= IncHogHealth(HH^.Hedgehog, Gear^.Health);
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
-                    HHHeal(HH^.Hedgehog, Gear^.Health, true);
+                    HHHeal(HH^.Hedgehog, healthBoost, true);
                     end;
      end
 end;
