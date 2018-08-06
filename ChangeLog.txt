@@ -66,6 +66,7 @@ Campaigns and missions:
  + A Space Adventure, final mission: Terrain types are easier to distinguish
  * A Space Adeventure: Fix clan membership of PAotH in main Death Planet mission
  * The Great Escape: Infinite attack mode did not work
+ * Shotgun/Sniper Rifle Target Practicse: Suppress “X remaining” message
 
 Content:
  + New Sudden Death water texture for CrazyMission theme
