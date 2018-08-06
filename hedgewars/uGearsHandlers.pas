@@ -97,12 +97,12 @@ begin
 
     // Handle world wrap and bounce edge manually
     if (WorldEdge = weWrap) and
-        ((hwRound(Gear^.X) <= LongInt(leftX)) or (hwRound(Gear^.X) >= LongInt(rightX))) then
+        ((hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX))) then
         begin
         LeftImpactTimer:= 150;
         RightImpactTimer:= 150;
-        Gear^.WDTimer:= 4;
-        Gear^.Karma:= 2;
+        Gear^.WDTimer:= 0;
+        Gear^.Karma:= 1;
         end
     else if (WorldEdge = weBounce) and
         (((hwRound(Gear^.X) - Gear^.Radius) < LongInt(leftX)) or ((hwRound(Gear^.X) + Gear^.Radius) > LongInt(rightX))) then
@@ -111,7 +111,7 @@ begin
             LeftImpactTimer:= 333
         else
             RightImpactTimer:= 333;
-        Gear^.Karma:= 1;
+        Gear^.Karma:= 2;
         Gear^.WDTimer:= 0;
         if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
             AddBounceEffectForGear(Gear);

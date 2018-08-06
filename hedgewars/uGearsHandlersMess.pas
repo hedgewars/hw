@@ -3568,18 +3568,58 @@ begin
 
     if not cakeStep(Gear) then Gear^.doStep:= @doStepCakeFall;
 
+    // Cake passed world edge.
     if (Gear^.Karma = 1) then
+        (* This code is not ideal, but at least not horribly broken.
+        The cake tries to reach the other side and continue to walk,
+        but there are some exceptions.
+        This code is called *after* the X coordinate have been wrapped.
+        Depending on terrain on the other side, the cake does this:
+        * Cake collides horizontally (even by 1 pixel): Turn around
+        * Cake does not see walkable ground above or below: Fall
+        * Otherwise: Walk normally
+        *)
         begin
-        // Cake hit bouncy edge, turn around
+        // Update coordinates
+        tdx:=Gear^.X;
+        if (hwRound(Gear^.X) < LongInt(leftX)) then
+             Gear^.X:= Gear^.X + int2hwfloat(rightX - leftX)
+        else Gear^.X:= Gear^.X - int2hwfloat(rightX - leftX);
+
+        Gear^.Tag:= 0;
+        if ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0)) then
+            // Cake collided horizontally, turn around. Prevents cake from being stuck in infinite loop.
+            // This can also happen if the terrain is just a slight slope. :-(
+            begin
+            Gear^.X := tdx;
+            Gear^.Karma := 3;
+            end
+        else
+            begin
+            // Check if cake has something to walk on the other side. If not, make it drop.
+            // There is nothing for the cake to stand on.
+            if (TestCollisionYwithGear(Gear, 1) = 0) and (TestCollisionYwithGear(Gear, -1) = 0) then
+                Gear^.doStep:= @doStepCakeFall;
+            Gear^.Karma := 4;
+            end;
+        end;
+    // Cake bounced!
+    if (Gear^.Karma = 2) or (Gear^.Karma = 3) then
+        begin
+        // Turn cake around
         Gear^.dX.isNegative := (not Gear^.dX.isNegative);
         Gear^.WDTimer := 0;
         Gear^.Angle := (LongInt(Gear^.Angle) + 2) and 3;
-        Gear^.Karma := 0;
 
         // Bounce effect
-        if (Gear^.Radius > 2) then
+        if (Gear^.Karma = 2) and (Gear^.Radius > 2) then
             AddBounceEffectForGear(Gear, 0.55);
 
+        Gear^.Tag:= 0;
+        Gear^.Karma := 4;
+        end;
+    if (Gear^.Karma = 4) then
+        begin
         // Reset CakePoints to fix cake angle
         cakeData:= PCakeData(Gear^.Data);
         with cakeData^ do
@@ -3591,15 +3631,6 @@ begin
                 end;
                 CakeI:= 0;
             end;
-        Gear^.Tag:= 0;
-        end
-    else if (Gear^.Karma = 2) then
-        begin
-        (* Cake passed world edge.
-        Cake doesn't know yet how walk through
-        world wrap so it gives up and stops.
-        TODO: Teach cake how to deal with world wrap. *)
-        Gear^.Health := 0;
         Gear^.Karma := 0;
         end;
 
