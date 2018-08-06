@@ -139,7 +139,13 @@ function TargetPracticeMission(params)
 	_G.onGameInit = function()
 		Seed = 1
 		ClearGameFlags()
-		EnableGameFlags(gfDisableWind, gfMultiWeapon, gfOneClanMode, solid, artillery)
+		local attackMode
+		if (params.ammoType == amBee) then
+			attackMode = gfInfAttack
+		else
+			attackMode = gfMultiWeapon
+		end
+		EnableGameFlags(gfDisableWind, attackMode, gfOneClanMode, solid, artillery)
 		TurnTime = params.time
 		Map = params.map
 		Theme = params.theme
