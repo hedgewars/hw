@@ -3568,6 +3568,10 @@ begin
         Gear^.Angle := (LongInt(Gear^.Angle) + 2) and 3;
         Gear^.Karma := 0;
 
+        // Bounce effect
+        if (Gear^.Radius > 2) then
+            AddBounceEffectForGear(Gear, 0.55);
+
         // Reset CakePoints to fix cake angle
         cakeData:= PCakeData(Gear^.Data);
         with cakeData^ do

@@ -25,6 +25,7 @@ uses uTypes, uFloat;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 procedure AddSplashForGear(Gear: PGear; justSkipping: boolean);
+procedure AddBounceEffectForGear(Gear: PGear; imageScale: Single);
 procedure AddBounceEffectForGear(Gear: PGear);
 
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
@@ -1723,7 +1724,16 @@ This one would be really easy to freeze game unless it was flagged unfortunately
     end;
 end;
 
+
+// Add an audiovisual bounce effect for gear after it bounced from bouncy material.
+// Graphical effect is based on speed.
 procedure AddBounceEffectForGear(Gear: PGear);
+begin
+    AddBounceEffectForGear(Gear, hwFloat2Float(Gear^.Density * hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) / 1.5);
+end;
+
+// Same as above, but can specify the size of bounce image with imageScale manually.
+procedure AddBounceEffectForGear(Gear: PGear; imageScale: Single);
 var boing: PVisualGear;
 begin
     if Gear^.Density < _0_01 then
@@ -1736,7 +1746,7 @@ begin
             dx:= 0;
             dy:= 0;
             FrameTicks:= 200;
-            Scale:= hwFloat2Float(Gear^.Density * hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) / 1.5;
+            Scale:= imageScale;
             State:= ord(sprBoing)
             end;
     if Gear^.Kind = gtDuck then
