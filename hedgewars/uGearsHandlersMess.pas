@@ -6554,8 +6554,7 @@ end;
 procedure doStepCreeper(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;
-    trackSpeed, airFriction, tX, tY: hwFloat;
-    isUnderwater: Boolean;
+    tX, tY: hwFloat;
     vg: PVisualGear;
 begin
     doStepFallingGear(Gear);
