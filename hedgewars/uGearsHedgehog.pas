@@ -1565,14 +1565,15 @@ if WorldWrap(Gear) then
        CurAmmoGear^.PortalCounter:= 1;
     if (WorldEdge = weWrap) and ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         // Stop hedgehog if it collides with land *just* behind other side of world wrap edge
-        begin
-        if (hwRound(tX) > LongInt(leftX) + Gear^.Radius * 2) then
-            Gear^.X:= int2HwFloat(RightX)
-        else
-            Gear^.X:= int2HwFloat(LeftX);
-        Gear^.dX.QWordValue:= 0;
-        Gear^.State := Gear^.State or gstCollision;
-        end
+        if ((Gear^.State and gstNotKickable) = 0) then
+            begin
+            if (hwRound(tX) > LongInt(leftX) + Gear^.Radius * 2) then
+                Gear^.X:= int2HwFloat(RightX)
+            else
+                Gear^.X:= int2HwFloat(LeftX);
+            Gear^.dX.QWordValue:= 0;
+            Gear^.State := Gear^.State or gstCollision;
+            end;
     end;
 
 CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
