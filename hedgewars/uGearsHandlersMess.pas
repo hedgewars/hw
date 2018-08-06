@@ -3535,6 +3535,7 @@ procedure doStepCakeWalk(Gear: PGear);
 var
     tdx, tdy: hwFloat;
     cakeData: PCakeData;
+    i: Longword;
 begin
     AllInactive := false;
 
@@ -3566,12 +3567,26 @@ begin
         Gear^.WDTimer := 0;
         Gear^.Angle := (LongInt(Gear^.Angle) + 2) and 3;
         Gear^.Karma := 0;
+
+        // Reset CakePoints to fix cake angle
+        cakeData:= PCakeData(Gear^.Data);
+        with cakeData^ do
+            begin
+            for i:= 0 to Pred(cakeh) do
+                begin
+                CakePoints[i].x := Gear^.X;
+                CakePoints[i].y := Gear^.Y;
+                end;
+                CakeI:= 0;
+            end;
+        Gear^.Tag:= 0;
         end
     else if (Gear^.Karma = 2) then
         begin
-        // Cake doesn't know how walk through world wrap
-        // so it gives up and stops.
-        // TODO: Teach cake how to deal with world wrap.
+        (* Cake passed world edge.
+        Cake doesn't know yet how walk through
+        world wrap so it gives up and stops.
+        TODO: Teach cake how to deal with world wrap. *)
         Gear^.Health := 0;
         Gear^.Karma := 0;
         end;
