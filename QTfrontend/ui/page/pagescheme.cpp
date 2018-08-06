@@ -89,7 +89,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glGMLayout->addWidget(TBW_switchhog,0,4,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
-    TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
+    TBW_solid->setWhatsThis(tr("Land can not be destroyed by most weapons."));
     glGMLayout->addWidget(TBW_solid,1,0,1,1);
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity@2x.png");
