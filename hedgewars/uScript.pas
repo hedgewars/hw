@@ -1320,7 +1320,7 @@ begin
         for i:= 0 to Pred(clan^.TeamsNumber) do
             begin
             team:= clan^.Teams[i];
-            for j:= 0 to 7 do
+            for j:= 0 to cMaxHHIndex do
                 begin
                 hh:= team^.Hedgehogs[j];
                 if (hh.Gear <> nil) or (hh.GearHidden <> nil) then
