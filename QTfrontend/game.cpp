@@ -414,6 +414,8 @@ QStringList HWGame::getArguments()
         arguments << "--nosound";
     if (!config->isMusicEnabled())
         arguments << "--nomusic";
+    if (!config->isAudioDampenEnabled())
+        arguments << "--nodampen";
     if (!nick.isEmpty()) {
         arguments << "--nick";
         arguments << nick;

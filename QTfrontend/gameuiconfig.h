@@ -47,6 +47,7 @@ class GameUIConfig : public QSettings
         QString language();
         bool isMusicEnabled();
         bool isFrontendMusicEnabled();
+        bool isAudioDampenEnabled();
         bool isShowFPSEnabled();
         bool isAltDamageEnabled();
         bool appendDateTimeToRecordName();

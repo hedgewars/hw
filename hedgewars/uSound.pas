@@ -43,6 +43,7 @@ procedure InitSound;                            // Initiates sound-system if isS
 procedure ReleaseSound(complete: boolean);      // Releases sound-system and used resources.
 procedure ResetSound;                           // Reset sound state to the previous state.
 procedure SetSound(enabled: boolean);           // Enable/disable sound-system and backup status.
+procedure SetAudioDampen(enabled: boolean);     // Enable/disable automatic dampening if losing window focus.
 
 // MUSIC
 
@@ -129,6 +130,7 @@ var cInitVolume: LongInt;
     Mus: PMixMusic; // music pointer
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
+    isAutoDampening: boolean;
     isSEBackup: boolean;
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),
@@ -386,6 +388,11 @@ procedure SetSound(enabled: boolean);
 begin
     isSEBackup:= isSoundEnabled;
     isSoundEnabled:= enabled;
+end;
+
+procedure SetAudioDampen(enabled: boolean);
+begin
+    isAutoDampening:= enabled;
 end;
 
 // when complete is false, this procedure just releases some of the chucks on inactive channels
@@ -752,7 +759,7 @@ end;
 
 procedure DampenAudio;
 begin
-    if (isAudioMuted) then
+    if (isAudioMuted or (not isAutoDampening)) then
         exit;
     previousVolume:= Volume;
     ChangeVolume(-Volume * 7 div 9);
@@ -760,7 +767,7 @@ end;
 
 procedure UndampenAudio;
 begin
-     if (isAudioMuted) then
+    if (isAudioMuted or (not isAutoDampening)) then
         exit;
     ChangeVolume(previousVolume - Volume);
 end;
@@ -849,6 +856,7 @@ procedure preInitModule;
 begin
     isMusicEnabled:= true;
     isSoundEnabled:= true;
+    isAutoDampening:= true;
     cInitVolume:= 100;
 end;
 

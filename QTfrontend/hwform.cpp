@@ -2101,6 +2101,7 @@ QString HWForm::getDemoArguments()
                    + " --volume " + QString::number(config->volume())
                    + (config->isMusicEnabled() ? "" : " --nomusic")
                    + (config->isSoundEnabled() ? "" : " --nosound")
+                   + (config->isAudioDampenEnabled() ? "" : " --nodampen")
                    + " --locale " + config->language() + ".txt"
                    + (config->vid_Fullscreen() ? " --fullscreen" : "")
                    + (config->isShowFPSEnabled() ? " --showfps" : "")

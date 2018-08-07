@@ -111,6 +111,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendSound->setChecked(value("frontend/sound", true).toBool());
     Form->ui.pageOptions->CBMusic->setChecked(value("audio/music", true).toBool());
     Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
+    Form->ui.pageOptions->CBDampenAudio->setChecked(value("audio/dampen", true).toBool());
     Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", tr("Guest")+QString("%1").arg(rand())).toString();
@@ -268,6 +269,7 @@ void GameUIConfig::SaveOptions()
     setValue("audio/music", isMusicEnabled());
     setValue("frontend/music", isFrontendMusicEnabled());
     setValue("audio/volume", Form->ui.pageOptions->SLVolume->value());
+    setValue("audio/dampen", isAudioDampenEnabled());
 
     setValue("net/nick", netNick());
     if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
@@ -455,6 +457,10 @@ bool GameUIConfig::isMusicEnabled()
 bool GameUIConfig::isFrontendMusicEnabled()
 {
     return Form->ui.pageOptions->CBFrontendMusic->isChecked();
+}
+bool GameUIConfig::isAudioDampenEnabled()
+{
+    return Form->ui.pageOptions->CBDampenAudio->isChecked();
 }
 
 bool GameUIConfig::isShowFPSEnabled()

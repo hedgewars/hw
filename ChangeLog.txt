@@ -28,6 +28,7 @@ Game:
  * Limit hedgehog health to 268435455 to prevent some bugs
 
 Frontend:
+ + Add setting to disable audio dampening when losing window focus
  * Controllers are detected again
  * No longer allow having schemes with equal names (case-insensitive)
  * Lobby/room: No longer allow opening context menu if no player selected

@@ -90,6 +90,7 @@ begin
     WriteLn(stdout, ' --low-quality');
     WriteLn(stdout, ' --nomusic');
     WriteLn(stdout, ' --nosound');
+    WriteLn(stdout, ' --nodampen');
     WriteLn(stdout, ' --fullscreen');
     WriteLn(stdout, ' --showfps');
     WriteLn(stdout, ' --altdmg');
@@ -216,10 +217,10 @@ const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-h
       audioarray: array [0..2] of string = ('--volume','--nomusic','--nosound');
       otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
       mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allarray: array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..35] of shortstring = (
+      allarray: array [0..18] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--nodampen','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+      reallyAll: array[0..36] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
-                '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
+                '--height', '--frame-interval', '--volume','--nomusic', '--nosound', '--nodampen',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
@@ -245,34 +246,35 @@ begin
         {--volume}               8 : SetVolume          ( max(getLongIntParameter(arg, paramIndex, parseParameter), 0) );
         {--nomusic}              9 : SetMusic           ( false );
         {--nosound}             10 : SetSound           ( false );
-        {--fullscreen}          11 : cFullScreen       := true;
-        {--showfps}             12 : cShowFPS          := true;
-        {--altdmg}              13 : cAltDamage        := true;
-        {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
-        {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}                17 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
+        {--nodampen}            11 : SetAudioDampen     ( false );
+        {--fullscreen}          12 : cFullScreen       := true;
+        {--showfps}             13 : cShowFPS          := true;
+        {--altdmg}              14 : cAltDamage        := true;
+        {--low-quality}         15 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
+        {--raw-quality}         16 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--stereo}              17 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nick}                18 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
-        {--depth}               18 : setDepth(paramIndex);
-        {--set-video}           19 : parseClassicParameter(videoarray,5,paramIndex);
-        {--set-audio}           20 : parseClassicParameter(audioarray,3,paramIndex);
-        {--set-other}           21 : parseClassicParameter(otherarray,3,paramIndex);
-        {--set-multimedia}      22 : parseClassicParameter(mediaarray,10,paramIndex);
-        {--set-everything}      23 : parseClassicParameter(allarray,14,paramIndex);
+        {--depth}               19 : setDepth(paramIndex);
+        {--set-video}           20 : parseClassicParameter(videoarray,5,paramIndex);
+        {--set-audio}           21 : parseClassicParameter(audioarray,3,paramIndex);
+        {--set-other}           22 : parseClassicParameter(otherarray,3,paramIndex);
+        {--set-multimedia}      23 : parseClassicParameter(mediaarray,10,paramIndex);
+        {--set-everything}      24 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
-        {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
-        {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
-        {--recorder}            26 : startVideoRecording(paramIndex);
-        {--landpreview}         27 : GameType := gmtLandPreview;
+        {--internal}            25 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
+        {--port}                26 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
+        {--recorder}            27 : startVideoRecording(paramIndex);
+        {--landpreview}         28 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}          28 : statsOnlyGame();
-        {--gci}                 29 : GciEasterEgg();
-        {--help}                30 : DisplayUsage();
-        {--no-teamtag}          31 : cTagsMask := cTagsMask and (not htTeamName);
-        {--no-hogtag}           32 : cTagsMask := cTagsMask and (not htName);
-        {--no-healthtag}        33 : cTagsMask := cTagsMask and (not htHealth);
-        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            35 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--stats-only}          29 : statsOnlyGame();
+        {--gci}                 30 : GciEasterEgg();
+        {--help}                31 : DisplayUsage();
+        {--no-teamtag}          32 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           33 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        34 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    35 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            36 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
         //Assume the first "non parameter" is the replay file, anything else is invalid
@@ -308,10 +310,10 @@ begin
         isValid:= (cmd<>'--depth');
 
         // check if the parameter is a boolean one
-        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg') or (cmd = '--no-teamtag') or (cmd = '--no-hogtag') or (cmd = '--no-healthtag') or (cmd = '--translucent-tags');
+        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--nodampen') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg') or (cmd = '--no-teamtag') or (cmd = '--no-hogtag') or (cmd = '--no-healthtag') or (cmd = '--translucent-tags');
         if isBool and (arg='0') then
             isValid:= false;
-        if (cmd='--nomusic') or (cmd='--nosound') then
+        if (cmd='--nomusic') or (cmd='--nosound') or (cmd='--nodampen') then
             isValid:= not isValid;
 
         if isValid then

@@ -84,6 +84,7 @@ class PageOptions : public AbstractPage
         QCheckBox *CBFrontendMusic;
         QCheckBox *CBSound;
         QCheckBox *CBMusic;
+        QCheckBox *CBDampenAudio;
         QCheckBox *CBFullscreen;
         QCheckBox *CBFrontendFullscreen;
         QCheckBox *CBShowFPS;
