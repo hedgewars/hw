@@ -60,24 +60,6 @@
        width="2048"
        id="sky"
        style="opacity:1;fill:url(#linearGradient3165);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-    <g
-       transform="translate(52.616155)"
-       id="SunGroup">
-      <circle
-         r="283.1167"
-         cy="579.10236"
-         cx="382.39139"
-         transform="matrix(1.4181621,0,0,1.4181621,-112.10268,55.601968)"
-         id="Sunshine"
-         style="display:inline;overflow:visible;visibility:visible;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;filter:url(#filter3296);enable-background:accumulate" />
-      <circle
-         r="283.1167"
-         cy="579.10236"
-         cx="382.39139"
-         style="display:inline;overflow:visible;visibility:visible;opacity:1;fill:#f9f8e6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
-         id="Sun"
-         transform="matrix(1.2178383,0,0,1.2178383,-35.500582,171.60996)" />
-    </g>
     <path
        id="hills2"
        d="M 0,733.17706 C 106.46437,733.17706 186.98085,657.77942 340.58085,657.77942 C 494.18085,657.77942 628.76125,782.57551 726.82924,782.57551 C 824.89724,782.57551 969.78754,719.7456 1084.0566,714.33609 C 1173.9359,710.08119 1328.312,826.58331 1466.1207,826.18276 C 1603.9294,825.78221 1680.6311,714.27025 1787.6247,714.27025 C 1894.6183,714.27025 1972.4613,733.17706 2048,733.17706 L 2048,1070.7985 L 0,1070.7985 L 0,733.17706 z"
