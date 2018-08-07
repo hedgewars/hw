@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- * CSS-like definition of Qt frontend appearance
+ * CSS-like definition of Qt frontend appearance: Hedgewars' Birthday.
  *
  ******************************************************************************
  *
- * see http://doc.qt.nokia.com/4.5/stylesheet.html
+ * see https://doc.qt.io/qt-5/style-reference.html
  *
  ******************************************************************************
  *
@@ -12,17 +12,30 @@
  * once, based on first file found in this order:
  *
  *    <userdir>/Data/css/birthday.css
- *    <datadir>/css/birthday.css
+ *    <datadir>/css/brithday.css
  *    <internal default style-sheet> (:/res/css/birthday.css)
+ *
+ *****************************************************************************
+ *
+ * This file is based off qt.css with changes. The altered parts are
+ * marked with “CUSTOM”.
  *
  *****************************************************************************/
 
-HWForm,QDialog {
-background-image: url(":/res/BackgroundBirthday.png");
+#infoButton
+{
+border: transparent;
+background: transparent;
+}
+HWForm {
+background-image: url(":/res/BackgroundBirthday.png"); /* CUSTOM */
 background-position: bottom center;
 background-repeat: repeat-x;
-background-color: #100308;
+background-color: #100308; /* CUSTOM */
 }
+QDialog{ /* CUSTOM */
+background-color: #100308; /* CUSTOM */
+} /* CUSTOM */
 
 * {
 color: #ffcc00;
@@ -32,16 +45,36 @@ selection-color: #00351d;
 
 a { color:#c8c8ff; }
 
-QLineEdit, QListWidget, QListView, QTableView, QTextBrowser, QSpinBox, QComboBox,
+QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser, QSpinBox, QComboBox,
 QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item, #labelLikeLineEdit {
-background-color: rgba(20, 20, 20, 70%);
+background-color: rgba(20, 20, 20, 70%); /* CUSTOM */
+}
+
+VertScrArea, QGraphicsView {
+border-style: solid; border-width: 2px; border-color: #cca300; border-radius: 3px;
+}
+#gameStatsView {
+border-color: #332816;
+}
+
+QSplitter::handle {
+background-image: url(":/res/splitter.png");
+background-clip: content;
+}
+QSplitter::handle:horizontal {
+width: 7px;
+background-repeat: repeat-y;
+}
+QSplitter::handle:vertical {
+height: 7px;
+background-repeat: repeat-x;
 }
 
 QComboBox::separator {
 border: solid; border-width: 3px; border-color: #ffcc00;
 }
 
-QPushButton, QListWidget, QListView, QTableView, QLineEdit, QHeaderView,
+QPushButton, QListWidget, QListView, QTableView, QTableWidget, QLineEdit,
 QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, #gameStackContainer, TeamSelWidget, SelWeaponWidget,
@@ -56,8 +89,21 @@ QSpinBox:hover, QToolBox:hover, QComboBox:hover {
 border-color: yellow;
 }
 
+TeamShowWidget QPushButton {
+icon-size: 48px;
+text-align: left;
+background-color: #0d0d0d; /* CUSTOM */
+color: orange;
+font: bold;
+border-width: 2px;
+margin: 6px 0px 6px 0px;
+}
+TeamShowWidget QPushButton:disabled {
+color: #a0a0a0;
+}
+
 QToolButton {
-background-color: #11084A;
+background-color: #080808; /* CUSTOM */
 }
 
 QToolButton:hover {
@@ -68,20 +114,29 @@ QToolButton:pressed {
 background-color: #100744;
 }
 
-QLineEdit, QListWidget, QListView, QTableView, QTextBrowser,
+QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser,
 QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview, #labelLikeLineEdit {
 border-radius: 10px;
 }
 
 #mapPreview {
-background-color: #0d0544;
+background-color: #0d0d0d; /* CUSTOM */
+}
+#mapPreview:disabled{
+border-color: #a0a0a0;
+background-color: #0d0d0d; /* CUSTOM */
+color: #ffffff;
 }
 
 QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
-QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
+QTableWidget, QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, #gameStackContainer, TeamSelWidget,
-SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit {
+SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit,
+#mapName {
 font: bold 13px;
+}
+.QLabel{
+background-color: transparent;
 }
 SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {
 background-position: bottom center;
@@ -94,6 +149,7 @@ background-repeat: repeat-x;
 border-radius: 16px;
 background-color: rgba(20, 20, 20, 70%);
 padding: 6px;
+margin-top: 4px;
 }
 /*  Experimenting with PaintOnScreen and border-radius on IconedGroupBox children didn't work out well
 IconedGroupBox QComboBox, IconedGroupBox QPushButton, IconedGroupBox QLineEdit,
@@ -110,10 +166,6 @@ border-radius: 8px;
 border-top-left-radius: 0px;
 }
 
-QLineEdit:disabled, QSpinBox:disabled {
-border-color: gray;
-}
-
 GameCFGWidget {
 border: none;
 }
@@ -122,7 +174,7 @@ QPushButton {
 border-radius: 8px;
 background-origin: margin;
 background-position: top left;
-background-color: rgba(18, 42, 5, 70%);
+background-color: rgba(20, 20, 20, 70%); /* CUSTOM */
 }
 
 QPushButton:pressed, QToolButton:pressed {
@@ -134,12 +186,35 @@ outline: none;
 }
 
 QHeaderView {
-border-radius: 0;
-border-width: 0;
-border-bottom-width: 3px;
 background-color: #00351d;
+border: solid;
+border-bottom-width: 3px;
+border-top-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-color: #ffcc00;
 }
-QTableView {
+QHeaderView::section {
+border-left-width: 1px;
+border-right-width: 1px;
+border-top-width: 0;
+border-bottom-width: 0px;
+border-color: #001d10;
+border-style: solid;
+background-color: #00351d;
+padding: 4px;
+}
+QHeaderView::section:pressed {
+background-color: #00250d;
+}
+QHeaderView::up-arrow {
+image: url(":/res/sort_up.png");
+}
+QHeaderView::down-arrow{
+image: url(":/res/sort_down.png");
+}
+
+QTableView, QTableWidget {
 alternate-background-color: #2f213a;
 gridline-color: transparent;
 }
@@ -149,7 +224,7 @@ border-radius: 0;
 border-top-left-radius: 6px;
 border-top-right-radius: 6px;
 padding: 3px;
-background-color: #00351d;
+background-color: #000000; /* CUSTOM */
 color: #ffcc00;
 }
 QTabBar::tab:selected {
@@ -165,9 +240,15 @@ height: 10px;
 QSpinBox::up-arrow {
 image: url(":/res/spin_up.png");
 }
+QSpinBox::up-arrow:disabled {
+image: url(":/res/spin_up_disabled.png");
+}
 
 QSpinBox::down-arrow {
 image: url(":/res/spin_down.png");
+}
+QSpinBox::down-arrow:disabled {
+image: url(":/res/spin_down_disabled.png");
 }
 
 QSpinBox::down-button {
@@ -191,6 +272,9 @@ width: 25px;
 QComboBox::down-arrow {
 image: url(":/res/dropdown.png");
 }
+QComboBox::down-arrow:disabled {
+image: url(":/res/dropdown_disabled.png");
+}
 
 VertScrArea {
 background-position: bottom center;
@@ -207,14 +291,44 @@ subcontrol-origin: margin;
 subcontrol-position: top left;
 text-align: left;
 left: 15px;
-top: -4px;
 }
 
 QCheckBox::indicator:checked{
 image: url(":/res/checked.png");
 }
+QCheckBox::indicator:checked:hover{
+image: url(":/res/checkedHover.png");
+}
+QCheckBox::indicator:checked:pressed{
+image: url(":/res/checkedPressed.png");
+}
 QCheckBox::indicator:unchecked{
 image: url(":/res/unchecked.png");
+}
+QCheckBox::indicator:unchecked:hover{
+image: url(":/res/uncheckedHover.png");
+}
+QCheckBox::indicator:unchecked:pressed{
+image: url(":/res/uncheckedPressed.png");
+}
+
+QRadioButton::indicator:checked{
+image: url(":/res/radioButtonChecked.png");
+}
+QRadioButton::indicator:checked:hover{
+image: url(":/res/radioButtonCheckedHover.png");
+}
+QRadioButton::indicator:checked:pressed{
+image: url(":/res/radioButtonCheckedPressed.png");
+}
+QRadioButton::indicator:unchecked{
+image: url(":/res/radioButtonUnchecked.png");
+}
+QRadioButton::indicator:unchecked:hover{
+image: url(":/res/radioButtonUncheckedHover.png");
+}
+QRadioButton::indicator:unchecked:pressed{
+image: url(":/res/radioButtonUncheckedPressed.png");
 }
 
 .QWidget{
@@ -250,12 +364,17 @@ image: url(":/res/unchecked.png");
 }
 
 QToolTip{
-background-color: #0d0544;
+background-color: #0d0d0d; /* CUSTOM */
 border: 1px solid #ffcc00;
 }
 
 :disabled{
 color: #a0a0a0;
+border-color: #a0a0a0;
+}
+QListWidget:item:selected:disabled, QListView:item:selected:disabled{
+color: rgba(13, 5, 68, 70%);
+background-color: #a0a0a0;
 }
 SquareLabel, ItemNum {
 background-color: #000000;
@@ -266,6 +385,9 @@ height: 2px;
 margin: 2px 0px;
 background-color: #ffcc00;
 }
+QSlider::groove::horizontal:disabled {
+background-color: #a0a0a0;
+}
 
 QSlider::handle::horizontal {
 border: 0px;
@@ -274,6 +396,9 @@ background-color: #ffcc00;
 width: 12px;
 height: 6px;
 border-radius: 3px;
+}
+QSlider::handle::horizontal:disabled {
+background-color: #a0a0a0;
 }
 
 HatButton, ThemeButton {
