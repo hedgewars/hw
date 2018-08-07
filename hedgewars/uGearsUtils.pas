@@ -1536,7 +1536,7 @@ var t, aTot, uTot, a, h: LongInt;
 begin
 if (PlacingHogs) or
     (cCaseFactor = 0)
-    or (CountGears(gtCase) >= 5)
+    or (CountGears(gtCase) >= cMaxCaseDrops)
     or (GetRandom(cCaseFactor) <> 0) then
        exit;
 

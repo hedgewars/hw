@@ -161,6 +161,7 @@ var
     cScreenSpace          : Longword;
 
     cCaseFactor     : Longword;
+    cMaxCaseDrops   : Longword; // Max. number of crates which can be in the game when dropping
     cLandMines      : Longword;
     cAirMines       : Longword;
     cExplosives     : Longword;
@@ -2839,6 +2840,7 @@ begin
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
+    cMaxCaseDrops   := 5;
     cLandMines      := 4;
     cAirMines       := 0;
     cExplosives     := 2;
