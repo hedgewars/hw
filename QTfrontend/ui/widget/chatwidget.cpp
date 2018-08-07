@@ -897,7 +897,9 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
 
     QString nick;
 
-    if(mil.size())
+    if(mil.size() == 0)
+        return;
+    else if(mil.size() == 1)
         nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
