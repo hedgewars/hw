@@ -474,10 +474,6 @@ function onGameTick()
 
 end
 
-function onGearResurrect(gear)
-	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
-end
-
 function InABetterPlaceNow(gear)
 	for i = 0, (numhhs-1) do
 		if gear == hhs[i] then

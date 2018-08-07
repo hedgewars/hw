@@ -70,6 +70,7 @@ Campaigns and missions:
  * A Space Adeventure: Fix clan membership of PAotH in main Death Planet mission
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practicse: Suppress “X remaining” message
+ * Fix resurrection animation appearing at wrong position for some missions and styles
 
 Content:
  + New Sudden Death water texture for CrazyMission theme

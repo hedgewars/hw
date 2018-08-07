@@ -570,7 +570,6 @@ function onGearResurrect(gear)
 				FlagThiefDead(gear)
 			end
 		end
-		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 	end
 
 end

@@ -549,10 +549,13 @@ function onGearDamage(Gear)
 	end
 end
 
-function onGearResurrect(Gear)
+function onGearResurrect(Gear, VGear)
 	if Gear == Player then
 		AddCaption(loc("Oh no! You have died. Try again!"), 0xFFFFFFFF, capgrpMessage2)
 		ResetCurrentTarget()
+		if VGear then
+			SetVisualGearValues(VGear, GetX(Gear), GetY(Gear))
+		end
 	end
 end
 

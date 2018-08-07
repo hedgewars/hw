@@ -1848,10 +1848,12 @@ function onScreenResize()
 end
 
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	if GetGearType(gear) == gtHedgehog then
-		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 		FindRespawner(gear)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(gear), GetY(gear))
+		end
 	end
 end
 

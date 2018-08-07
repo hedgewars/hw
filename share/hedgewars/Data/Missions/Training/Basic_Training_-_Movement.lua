@@ -399,7 +399,7 @@ function onGameTick20()
 	end
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	AddCaption(loc("Your hedgehog has been revived!"))
 	if gear == hog_cappy then
 		SetGearPosition(gear, 404, 1714)
@@ -408,6 +408,9 @@ function onGearResurrect(gear)
 	else
 		-- Generic teleport to Rhombus' cage
 		SetGearPosition(gear, 619, 1559)
+	end
+	if vGear then
+		SetVisualGearValues(vGear, GetX(gear), GetY(gear))
 	end
 	FollowGear(gear)
 end

@@ -267,10 +267,13 @@ function onGearAdd(gear)
 	end
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	-- Teleport hog to previous checkpoint
 	if gear == hog then
 		SetGearPosition(hog, cpX, cpY)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
+		end
 		FollowGear(hog)
 		AddCaption(loc("Your hedgehog has been revived!"))
 		if isInMineChallenge then

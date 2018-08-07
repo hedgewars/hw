@@ -1110,12 +1110,13 @@ function PortalEffects(gear)
 
 end
 
-function onGearResurrect(gear)
-
-	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+function onGearResurrect(gear, vGear)
 
 	if gear == CurrentHedgehog then
 	       DisableTumbler(false)
+	end
+	if vGear then
+		DeleteVisualGear(vGear)
 	end
 
 end

@@ -677,7 +677,7 @@ function onAmmoStoreInit()
 end
 
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 
 	-- mark the flag thief as dead if he needed a respawn
 	for i = 0,1 do
@@ -693,7 +693,9 @@ function onGearResurrect(gear)
 		FindPlace(gear, false, 2048, LAND_WIDTH)
 	end
 
-	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+	if vGear then
+		SetVisualGearValues(vGear, GetX(gear), GetY(gear))
+	end
 
 end
 

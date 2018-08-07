@@ -47,10 +47,13 @@ function onGameInit()
 	SendHealthStatsOff()
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	if gear == hog then
 		flawless = false
 		SetGearPosition(hog, 570, 157)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
+		end
 		AddCaption(loc("Your hedgehog has been revived!"))
 	end
 end
