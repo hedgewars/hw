@@ -3887,6 +3887,7 @@ var
     t: PGearArray;
     tempColl: Word;
 begin
+    WorldWrap(Gear);
     AllInactive := false;
     if (Gear^.Timer > 0) and (Gear^.Timer mod 10 <> 0) then
         begin
