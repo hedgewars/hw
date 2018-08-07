@@ -56,7 +56,10 @@ QLayout * PageTraining::bodyLayoutDefinition()
 // right column
 
     // info area (caption on top, description below)
+    QWidget * infoWidget = new QWidget();
     QVBoxLayout * infoLayout = new QVBoxLayout();
+    infoWidget->setObjectName("trainingInfo");
+    infoWidget->setLayout(infoLayout);
 
     lblCaption = new QLabel();
     lblCaption->setMinimumWidth(360);
@@ -70,8 +73,8 @@ QLayout * PageTraining::bodyLayoutDefinition()
     infoLayout->addWidget(lblCaption);
     infoLayout->addWidget(lblDescription);
 
-    pageLayout->addLayout(infoLayout, 0, 1);
-    pageLayout->setAlignment(infoLayout, Qt::AlignLeft);
+    pageLayout->addWidget(infoWidget, 0, 1);
+    pageLayout->setAlignment(infoWidget, Qt::AlignLeft);
 
 
     // tab widget containing all lists

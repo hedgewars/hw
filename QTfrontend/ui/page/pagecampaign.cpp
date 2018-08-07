@@ -33,7 +33,10 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(3, 1);
 
+    QWidget * infoWidget = new QWidget();
+    infoWidget->setObjectName("campaignInfo");
     QGridLayout * infoLayout = new QGridLayout();
+    infoWidget->setLayout(infoLayout);
     infoLayout->setColumnStretch(0, 1);
     infoLayout->setColumnStretch(1, 1);
     infoLayout->setColumnStretch(2, 1);
@@ -69,7 +72,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     infoLayout->addWidget(lbltitle,0,2,1,2);
     infoLayout->addWidget(lbldescription,1,2,1,2);
 
-    pageLayout->addLayout(infoLayout, 0, 0, 2, 4);
+    pageLayout->addWidget(infoWidget, 0, 0, 2, 4);
     pageLayout->addWidget(lblteam, 2, 1);
     pageLayout->addWidget(lblcampaign, 3, 1);
     pageLayout->addWidget(lblmission, 4, 1);

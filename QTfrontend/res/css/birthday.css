@@ -35,6 +35,11 @@ background-color: #100308; /* CUSTOM */
 }
 QDialog{ /* CUSTOM */
 background-color: #100308; /* CUSTOM */
+} /* CUSTOM: This makes yellow text readable (because yellow text vs white moon) */
+#campaignInfo, #trainingInfo{ /* CUSTOM */
+background-color: rgba(20, 20, 20, 70%); /* CUSTOM */
+border-radius: 16px;
+padding: 6px;
 } /* CUSTOM */
 
 * {
