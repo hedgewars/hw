@@ -797,13 +797,14 @@ end;
 
 procedure ResurrectHedgehog(var gear: PGear);
 var tempTeam : PTeam;
-    sparkles: PVisualGear;
+    sparkles, expl: PVisualGear;
     gX, gY: LongInt;
 begin
     if (Gear^.LastDamage <> nil) then
         uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
     else
         uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
+    // Reset gear state
     AttackBar:= 0;
     gear^.dX := _0;
     gear^.dY := _0;
@@ -822,20 +823,25 @@ begin
     DeleteCI(gear);
     gX := hwRound(gear^.X);
     gY := hwRound(gear^.Y);
-    // might need more sparkles for a column
+    // Spawn a few sparkles at death position.
+    // Might need more sparkles for a column.
     sparkles:= AddVisualGear(gX, gY, vgtDust, 1);
     if sparkles <> nil then
         begin
         sparkles^.Tint:= tempTeam^.Clan^.Color shl 8 or $FF;
-        //sparkles^.Angle:= random(360);
         end;
+    // Set new position of gear (might fail)
     FindPlace(gear, false, 0, LAND_WIDTH, true);
     if gear <> nil then
         begin
-        AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
+        // Visual effect at position of resurrection
+        expl:= AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
         PlaySound(sndWarp);
         RenderHealth(gear^.Hedgehog^);
-        ScriptCall('onGearResurrect', gear^.uid);
+        if expl <> nil then
+            ScriptCall('onGearResurrect', gear^.uid, expl^.uid)
+        else
+            ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
         end;
     RecountTeamHealth(tempTeam);
