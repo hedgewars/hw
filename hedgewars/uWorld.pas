@@ -1225,9 +1225,9 @@ if (cReducedQuality and rqNoBackground) = 0 then
             untint;
     end;
 
-DrawVisualGears(0);
+DrawVisualGears(0, false);
 ChangeDepth(RM, -cStereo_MidDistance);
-DrawVisualGears(4);
+DrawVisualGears(4, false);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
@@ -1246,7 +1246,7 @@ else
     DrawWaves(-1, 100, - cWaveHeight div 2, - cWaveHeight div 2, 0);
 
 ChangeDepth(RM, cStereo_Land);
-DrawVisualGears(5);
+DrawVisualGears(5, false);
 DrawLand(WorldDx, WorldDy);
 
 if replicateToLeft then
@@ -1295,26 +1295,26 @@ bShowFinger:= false;
 if replicateToLeft then
     begin
     ShiftWorld(-1);
-    DrawVisualGears(1);
+    DrawVisualGears(1, true);
     DrawGears();
-    DrawVisualGears(6);
+    DrawVisualGears(6, true);
     UnshiftWorld();
     end;
 
 if replicateToRight then
     begin
     ShiftWorld(1);
-    DrawVisualGears(1);
+    DrawVisualGears(1, true);
     DrawGears();
-    DrawVisualGears(6);
+    DrawVisualGears(6, true);
     UnshiftWorld();
     end;
 
 bShowFinger:= tmp;
 
-DrawVisualGears(1);
+DrawVisualGears(1, false);
 DrawGears;
-DrawVisualGears(6);
+DrawVisualGears(6, false);
 
 
 if SuddenDeathDmg then
@@ -1356,18 +1356,18 @@ DrawGearsTimers;
     if replicateToLeft then
         begin
         ShiftWorld(-1);
-        DrawVisualGears(2);
+        DrawVisualGears(2, true);
         UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
         ShiftWorld(1);
-        DrawVisualGears(2);
+        DrawVisualGears(2, true);
         UnshiftWorld();
         end;
 
-    DrawVisualGears(2);
+    DrawVisualGears(2, false);
 
 // everything after this ResetDepth will be drawn at screen level (depth = 0)
 // note: everything that needs to be readable should be on this level
@@ -1376,18 +1376,18 @@ DrawGearsTimers;
     if replicateToLeft then
         begin
         ShiftWorld(-1);
-        DrawVisualGears(3);
+        DrawVisualGears(3, true);
         UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
         ShiftWorld(1);
-        DrawVisualGears(3);
+        DrawVisualGears(3, true);
         UnshiftWorld();
         end;
 
-    DrawVisualGears(3);
+    DrawVisualGears(3, false);
 
 {$WARNINGS OFF}
 // Target

@@ -35,7 +35,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure ProcessVisualGears(Steps: Longword);
-procedure DrawVisualGears(Layer: LongWord);
+procedure DrawVisualGears(Layer: LongWord; worldIsShifted: boolean);
 
 procedure AddClouds;
 procedure AddFlakes;
@@ -138,7 +138,7 @@ begin
     exit(@SpritesData[GetSprite(sprite, SDsprite)]);
 end;
 
-procedure DrawVisualGears(Layer: LongWord);
+procedure DrawVisualGears(Layer: LongWord; worldIsShifted: boolean);
 var Gear: PVisualGear;
     tinted, speedlessFlakes: boolean;
     tmp: real;
@@ -163,23 +163,24 @@ case Layer of
                         spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                         DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                         end;
-               vgtFlake: begin
-                         sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
-                         if cFlattenFlakes then
+               vgtFlake: if (not worldIsShifted) then
                              begin
-                             if speedlessFlakes then
-                                 DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                             if cFlattenFlakes then
+                                 begin
+                                 if speedlessFlakes then
+                                     DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 else
+                                     DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                                 end
                              else
-                                 DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-                             end
-                         else
-                             begin
-                             if speedlessFlakes then
-                                 DrawTextureF(SpritesData[sprite].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                             else
-                                 DrawTextureRotatedF(SpritesData[sprite].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                                 begin
+                                 if speedlessFlakes then
+                                     DrawTextureF(SpritesData[sprite].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                                 else
+                                     DrawTextureRotatedF(SpritesData[sprite].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                                 end;
                              end;
-                         end;
                end;
            if Gear^.Tint <> $FFFFFFFF then
                untint;
@@ -195,13 +196,14 @@ case Layer of
           if Gear^.Tint <> $FFFFFFFF then
               Tint(Gear^.Tint);
           case Gear^.Kind of
-              vgtFlake: begin
-                         sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
-                         if speedlessFlakes then
-                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                         else
-                             DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-                        end;
+              vgtFlake: if (not worldIsShifted) then
+                            begin
+                            sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                            if speedlessFlakes then
+                                DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                            else
+                                DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                            end;
               vgtSmokeTrace: if Gear^.State < 8 then
                   DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
               vgtEvilTrace: if Gear^.State < 8 then
@@ -368,13 +370,14 @@ case Layer of
                    vgtBulletHit: DrawSpriteRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
                end;
            case Gear^.Kind of
-               vgtFlake: begin
-                         spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
-                         if speedlessFlakes then
-                             DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
-                         else
-                             DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
-                         end;
+               vgtFlake: if (not worldIsShifted) then
+                         begin
+                             spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
+                             if speedlessFlakes then
+                                 DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
+                             else
+                                 DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
+                             end;
                vgtCircle: if gear^.Angle = 1 then
                               begin
                               tmp:= Gear^.State / 100;
@@ -400,13 +403,14 @@ case Layer of
                          spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                          DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height);
                          end;
-              vgtFlake: begin
-                        spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
-                        if speedlessFlakes then
-                            DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
-                        else
-                            DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
-                        end;
+              vgtFlake: if (not worldIsShifted) then
+                            begin
+                            spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
+                            if speedlessFlakes then
+                                DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
+                            else
+                                DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
+                            end;
             end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;
@@ -425,13 +429,14 @@ case Layer of
                         sprite:= GetSpriteByWind(GetSprite(sprCloud, sprSDCloud), GetSprite(sprCloudL, sprSDCloudL));
                           DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
                           end;
-              vgtFlake: begin
-                        sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
-                        if speedlessFlakes then
-                            DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                        else
-                            DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-                        end;
+              vgtFlake: if not (worldIsShifted) then
+                            begin
+                            sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                            if speedlessFlakes then
+                                DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                            else
+                                DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                            end;
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;
@@ -446,13 +451,14 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
-                vgtFlake: begin
-                         sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
-                          if speedlessFlakes then
-                              DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                          else
-                              DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                          end;
+                vgtFlake: if (not worldIsShifted) then
+                              begin
+                              sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                              if speedlessFlakes then
+                                  DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                              else
+                                  DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                              end;
                 vgtNoPlaceWarn:
                             DrawTexture(round(Gear^.X) + WorldDx - round(Gear^.Tex^.w * Gear^.Scale) div 2, round(Gear^.Y) + WorldDy - round(Gear^.Tex^.h * Gear^.Scale) div 2, Gear^.Tex, Gear^.Scale);
                 end;
