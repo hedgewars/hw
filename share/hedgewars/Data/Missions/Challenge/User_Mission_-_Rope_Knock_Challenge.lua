@@ -221,9 +221,9 @@ function onGameTick()
 		end
 
 		if missionWon == true then
-			AddCaption(loc("Victory!"), 0xFFFFFFFF,capgrpGameState)
+			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 		else
-			AddCaption(loc("Challenge over!"), 0xFFFFFFFF,capgrpGameState)
+			AddCaption(loc("Challenge over!"), capcolDefault, capgrpGameState)
 		end
 
 	end
@@ -241,7 +241,7 @@ function onGearDamage(gear, damage)
 		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		DeleteGear(gear)
 		PlaySound(sndExplosion)
-		AddCaption(string.format(knockTaunt(), GetHogName(gear)), 0xFFFFFFFF, capgrpMessage)
+		AddCaption(string.format(knockTaunt(), GetHogName(gear)), capcolDefault, capgrpMessage)
 
 		hogsKilled = hogsKilled +1
 		SetTeamLabel(playerTeamName, tostring(GetKillScore()))

@@ -345,7 +345,7 @@ function onGearDelete(gear)
 		if cratesLeft == 0 then
 
 			local rank = "unknown"
-			local color = 0xFFFFFFFF
+			local color = capcolDefault
 			local sound = sndVictory
 			if planesUsed >= 156 then
 				rank = loc("Destroyer of planes")	

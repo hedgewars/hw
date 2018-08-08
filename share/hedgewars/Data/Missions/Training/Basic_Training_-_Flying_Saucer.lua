@@ -184,7 +184,7 @@ TargetPos[11] = {
 	InfFuel = true, }
 TargetPos[12] = { Modifier = true, Func = function()
 	Objective = true
-	AddCaption(loc("Training complete!"), 0xFFFFFFFF, capgrpGameState)
+	AddCaption(loc("Training complete!"), capcolDefault, capgrpGameState)
 	Info(loc("Training complete!"), loc("Good bye!"), 4, 5000)
 
 	if SaucerGear ~= nil then
@@ -292,7 +292,7 @@ function AutoSpawn() -- Auto-spawn the next target after you've obtained the cur
 	SpawnTargets()
 
 	if TargetNumber > 1 then
-		AddCaption(loc("Next target is ready!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Next target is ready!"), capcolDefault, capgrpMessage2)
 	end
 end
 
@@ -460,7 +460,7 @@ function onGearDelete(Gear)
 		if TargetsRemaining <= 0 then
 			if TargetNumber == BoomTarget or not HasHedgehogLandedYet() then
 				if SaucerGear then
-					AddCaption(loc("Objective completed! Now land safely."), 0xFFFFFFFF, capgrpMessage2)
+					AddCaption(loc("Objective completed! Now land safely."), capcolDefault, capgrpMessage2)
 				end
 				Check = true
 				CheckTimer = 500
@@ -490,7 +490,7 @@ function onGearDelete(Gear)
 	end
 	if Gear == Barrels[2] then
 		Barrels[2] = nil
-		AddCaption(loc("Kaboom!"), 0xFFFFFFFF, capgrpMessage)
+		AddCaption(loc("Kaboom!"), capcolDefault, capgrpMessage)
 	end
 end
 
@@ -516,7 +516,7 @@ function onGameTick20()
 			end
 		end
 	end
-	if GrenadeExploded and TargetNumber == BoomTarget then
+	if GrenadeExploded and TargetNumber == BoomTarget and GetHealth(Player) then
 		GrenadeTimer = GrenadeTimer + 20
 		if GrenadeTimer > 1500 then
 			GrenadeTimer = 0
@@ -524,7 +524,7 @@ function onGameTick20()
 			GrenadeExploded = false
 			if SaucerGear and TargetNumber == BoomTarget and TargetsRemaining > 0 then
 				PlaySound(sndShotgunReload)
-				AddCaption(loc("+1 Grenade"), 0xDDDD00FF, capgrpAmmoinfo)
+				AddCaption(loc("+1 Grenade"), GetClanColor(GetHogClan(Player)), capgrpAmmoinfo)
 				AddAmmo(Player, amGrenade, 1)
 			end
 		end
@@ -551,7 +551,7 @@ end
 
 function onGearResurrect(Gear, VGear)
 	if Gear == Player then
-		AddCaption(loc("Oh no! You have died. Try again!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Oh no! You have died. Try again!"), capcolDefault, capgrpMessage2)
 		ResetCurrentTarget()
 		if VGear then
 			SetVisualGearValues(VGear, GetX(Gear), GetY(Gear))
@@ -560,6 +560,6 @@ function onGearResurrect(Gear, VGear)
 end
 
 function onSkipTurn()
-	AddCaption(loc("Try again!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Try again!"), capcolDefault, capgrpMessage2)
 	ResetCurrentTarget()
 end

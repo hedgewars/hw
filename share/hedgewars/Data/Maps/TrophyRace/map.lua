@@ -194,7 +194,7 @@ function onGameTick()
                 .. hscore,
                 0, 0)
             AddCaption(string.format(loc("Time: %.3fs"), (ttime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
-            AddCaption(loc("Track completed!"), 0xFFFFFFFF, capgrpGameState)
+            AddCaption(loc("Track completed!"), capcolDefault, capgrpGameState)
             EndTurn(true)
         else
             if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and CurrentHedgehog ~= nil and GetHealth(CurrentHedgehog) > 0 and (not reached) and GameTime%100 == 0 then

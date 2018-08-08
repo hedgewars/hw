@@ -874,7 +874,7 @@ end
 function onGearWaterSkip(gear)
 	if gear == CurrentHedgehog then
 		hasSurfed = true
-		AddCaption(loc("Surfer!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Surfer!"), capcolDefault, capgrpMessage2)
 	end
 end
 
@@ -890,7 +890,7 @@ function WallHit(id, zXMin,zYMin, zWidth, zHeight)
 			AddCaption(loc("All walls touched!"))
 			allWallsHit = true
 			if (requireSurfer == true) and (hasSurfed == false) then
-				AddCaption(loc("Go surf!"), 0xFFFFFFFF, capgrpMessage2)
+				AddCaption(loc("Go surf!"), capcolDefault, capgrpMessage2)
 			end
 		else
 			AddCaption(string.format(loc("Walls left: %d"), wallsLeft))
@@ -974,7 +974,7 @@ function onLJump()
 			roundN = 2
 		else
 			TurnTimeLeft = TurnTime
-			AddCaption(string.format(loc("Let's go, %s!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpMessage2)
+			AddCaption(string.format(loc("Let's go, %s!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpMessage2)
 			roundN = 100
 			wallsLeft = #wTouched
 			allowCrate = true

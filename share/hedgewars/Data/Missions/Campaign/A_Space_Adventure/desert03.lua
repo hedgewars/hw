@@ -169,7 +169,7 @@ function heroDeath(gear)
 end
 
 function lose(gear)
-	AddCaption(loc("Out of ammo!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Out of ammo!"), capcolDefault, capgrpMessage2)
 	PlaySound(sndStupid, hero.gear)
 	gameOver()
 end

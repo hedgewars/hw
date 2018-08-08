@@ -190,7 +190,7 @@ function TargetPracticeMission(params)
 	_G.onGameTick20 = function()
 		if TurnTimeLeft < 40 and TurnTimeLeft > 0 and scored < total_targets and game_lost == false then
 			game_lost = true
-			AddCaption(loc("Time’s up!"), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(loc("Time’s up!"), capcolDefault, capgrpGameState)
 			ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 			SetHealth(player, 0)
 			time_goal = 1
@@ -199,7 +199,7 @@ function TargetPracticeMission(params)
 		if band(GetState(player), gstDrowning) == gstDrowning and game_lost == false and scored < total_targets then
 			game_lost = true
 			time_goal = 1
-			AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(loc("You lose!"), capcolDefault, capgrpGameState)
 			ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 		end
 
@@ -238,11 +238,11 @@ function TargetPracticeMission(params)
 			scored = scored + 1
 			SetTeamLabel(params.teamName, tostring(getTargetsScore()))
 			if scored < total_targets then
-				AddCaption(string.format(loc("Targets left: %d"), (total_targets-scored)), 0xFFFFFFFF, capgrpMessage)
+				AddCaption(string.format(loc("Targets left: %d"), (total_targets-scored)), capcolDefault, capgrpMessage)
 				spawnTarget()
 			else
 				if not game_lost then
-					AddCaption(loc("You have destroyed all targets!"), 0xFFFFFFFF, capgrpGameState)
+					AddCaption(loc("You have destroyed all targets!"), capcolDefault, capgrpGameState)
 					ShowMission(params.missionTitle, loc("Aiming practice"), loc("Congratulations! You have destroyed all targets within the time."), 0, 0)
 					PlaySound(sndVictory, player)
 					SetEffect(player, heInvulnerable, 1)
@@ -258,7 +258,7 @@ function TargetPracticeMission(params)
 		if GetGearType(gear) == gtHedgehog then
 			if not game_lost then
 				game_lost = true
-				AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
+				AddCaption(loc("You lose!"), capcolDefault, capgrpGameState)
 				ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 				SetHealth(player, 0)
@@ -269,7 +269,7 @@ function TargetPracticeMission(params)
 
 	_G.onGearDelete = function(gear)
 		if GetGearType(gear) == gtTarget and band(GetState(gear), gstDrowning) ~= 0 then
-			AddCaption(loc("You lost your target, try again!"), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(loc("You lost your target, try again!"), capcolDefault, capgrpGameState)
 			local newTarget = spawnTarget()
 			local x, y = GetGearPosition(newTarget)
 			local success = PlaceSprite(x, y + 24, sprAmGirder, 0, 0xFFFFFFFF, false, false, false)

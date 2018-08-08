@@ -285,7 +285,7 @@ function FlagDeleted(gear)
 				fNeedsRespawn[bbq] = true
 				fCaptures[wtf] = fCaptures[wtf] +1
 
-				AddCaption(string.format(loc("%s has scored!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+				AddCaption(string.format(loc("%s has scored!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 				for i=1, #clanTeams[wtf] do
 					SetTeamLabel(clanTeams[wtf][i], fCaptures[wtf])
 				end

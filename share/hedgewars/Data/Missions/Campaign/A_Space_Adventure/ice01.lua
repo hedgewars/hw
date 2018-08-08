@@ -454,13 +454,13 @@ function heroFinalStep(gear)
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
 	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
-	AddCaption(loc("Checkpoint reached!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Checkpoint reached!"), capcolDefault, capgrpMessage2)
 end
 
 function columnCheckPoint(gear)
 	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	AddCaption(loc("Checkpoint reached!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Checkpoint reached!"), capcolDefault, capgrpMessage2)
 	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
 	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
 end

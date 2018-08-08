@@ -524,7 +524,7 @@ function SimpleMission(params)
 	_G.sm.win = function()
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
-			AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 			SendStat(siGameResult, loc("You win!"))
 			if GetHogLevel(CurrentHedgehog) == 0 then
 				SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstWinner))
@@ -539,7 +539,7 @@ function SimpleMission(params)
 	_G.sm.lose = function(failReason)
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
-			AddCaption(loc("Scenario failed!"), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(loc("Scenario failed!"), capcolDefault, capgrpGameState)
 			SendStat(siGameResult, loc("You lose!"))
 			if failReason then
 				SendStat(siCustomAchievement, failReason)
@@ -836,7 +836,7 @@ function SimpleMission(params)
 		end
 		if params.rubbers ~= nil then
 			for i, rubberData in pairs(params.rubbers) do
-				PlaceSprite(rubberData.x, rubberData.y, sprAmRubber, 0xFFFFFFFF, rubberData.frameIdx, false, false, false, lfBouncy)
+				PlaceSprite(rubberData.x, rubberData.y, sprAmRubber, capcolDefault, rubberData.frameIdx, false, false, false, lfBouncy)
 			end
 		end
 

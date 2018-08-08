@@ -113,7 +113,7 @@ end
 
 function onGearDelete(gear)
     if gear == MrMine then
-        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), 0xFFFFFFFF, capgrpMessage2)
+        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), capcolDefault, capgrpMessage2)
         MrMine = nil
     elseif GetGearType(gear) == gtCake then
         Cake = nil
@@ -429,7 +429,7 @@ function onGameTick20()
             end
             -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
             if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
-                AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
+                AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
                 ShowMission(loc("Climb Home"),
                             loc("Made it!"),
                             string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
@@ -464,7 +464,7 @@ function onGameTick20()
                     (not MrMine or (MrMine and band(GetState(MrMine), gstAttacking) == 0)) then
                 -- Player managed to reach home in multiplayer.
                 -- Stop hog, disable controls, celebrate victory and continue the game after 4 seconds.
-                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime), 0xFFFFFFFF, capgrpGameState)
+                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime), capcolDefault, capgrpGameState)
                 SendStat(siCustomAchievement, string.format(loc("%s (%s) reached home in %.3f seconds."), GetHogName(CurrentHedgehog), GetHogTeamName(CurrentHedgehog), finishTime))
                 makeMultiPlayerWinnerStat(CurrentHedgehog)
                 PlaySound(sndVictory, CurrentHedgehog)

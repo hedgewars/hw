@@ -1214,7 +1214,7 @@ function onNewTurn()
 
 			TurnTimeLeft=100000
 
-			AddCaption(string.format(CS.SELECT_WEP_INFORMATION_SHORT, GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(string.format(CS.SELECT_WEP_INFORMATION_SHORT, GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 			AddCaption(loc("No continent selected"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 			CS.SELECT_CONTINENT_CHECK=true
 			ShowMission(loc("Continental supplies"),loc("Let a continent provide your weapons!"),GeneralInformation(), 0, 0)

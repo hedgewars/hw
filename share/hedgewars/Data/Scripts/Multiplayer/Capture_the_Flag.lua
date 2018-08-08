@@ -153,7 +153,7 @@ function CheckScore(clanID)
 			end
 		end
 		if CurrentHedgehog ~= nil then
-			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 			updateScores()
 		end
 
@@ -202,7 +202,7 @@ function DoFlagStuff(flag, flagClan)
 		fIsMissing[thiefClan] = false
 		fNeedsRespawn[thiefClan] = true
 		fCaptures[flagClan] = fCaptures[flagClan] +1
-		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 		updateScores()
 		PlaySound(sndHomerun)
 		fThief[thiefClan] = nil -- player no longer has the enemy flag
@@ -225,7 +225,7 @@ function DoFlagStuff(flag, flagClan)
 
 		fNeedsRespawn[flagClan] = true
 		HandleRespawns() -- this will set fIsMissing[flagClan] to false :)
-		AddCaption(loc("Flag returned!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Flag returned!"), capcolDefault, capgrpMessage2)
 
 	--if the player is taking the enemy flag (not possible if already holding a flag)
 	elseif GetHogClan(CurrentHedgehog) ~= flagClan and (thiefClan == nil) then
@@ -242,7 +242,7 @@ function DoFlagStuff(flag, flagClan)
 				end
 			end
 		end
-		AddCaption(loc("Flag captured!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Flag captured!"), capcolDefault, capgrpMessage2)
 
 	end
 
@@ -282,7 +282,7 @@ function HandleRespawns()
 
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
-			AddCaption(loc("Flag respawned!"), 0xFFFFFFFF, capgrpMessage2)
+			AddCaption(loc("Flag respawned!"), capcolDefault, capgrpMessage2)
 		end
 
 	end
@@ -412,7 +412,7 @@ end
 function StartTheGame()
 
 	gameStarted = true
-	AddCaption(loc("Game Started!"), 0xFFFFFFFF, capgrpGameState)
+	AddCaption(loc("Game Started!"), capcolDefault, capgrpGameState)
 
 	for i = 0, ClansCount-1 do
 

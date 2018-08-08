@@ -1163,7 +1163,7 @@ function onKingDeath(KingHog)
   local team = getHogInfo(KingHog, 'team')
   local msgColor = getHogInfo(KingHog, 'clanColor')
 
-  AddCaption(string.format(loc("The king of %s has died!"), team), 0xFFFFFFFF, capgrpGameState)
+  AddCaption(string.format(loc("The king of %s has died!"), team), capcolDefault, capgrpGameState)
 
   -- Kill the rest of the team normally, just like the official King Mode game modifier
   for hog, val in pairs(hogInfo) do
@@ -1448,7 +1448,7 @@ function onNewTurn()
     local RoundsTillSD = (SuddenDeathTurns+2) - (TotalRounds+1)
     -- Show SD reminder every couple of turns, and in the first turn
     if (not firstTurnOver) or (RoundsTillSD <= 6) or (RoundsTillSD <= 25 and RoundsTillSD % 5 == 0) or (RoundsTillSD % 10 == 0) then
-        AddCaption(string.format(loc("Rounds until Sudden Death: %d"), RoundsTillSD), 0xFFFFFFFF, capgrpGameState)
+        AddCaption(string.format(loc("Rounds until Sudden Death: %d"), RoundsTillSD), capcolDefault, capgrpGameState)
     end
   end
 

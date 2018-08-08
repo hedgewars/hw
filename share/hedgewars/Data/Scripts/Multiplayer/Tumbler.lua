@@ -916,18 +916,18 @@ function onGearDelete(gear)
 
 			roundKills = roundKills + 1
 			if roundKills == 2 then
-				AddCaption(loc("Double Kill!"),0xffffffff,capgrpMessage2)
+				AddCaption(loc("Double Kill!"),capcolDefault,capgrpMessage2)
 			elseif roundKills == 3 then
-				AddCaption(loc("Killing spree!"),0xffffffff,capgrpMessage2)
+				AddCaption(loc("Killing spree!"),capcolDefault,capgrpMessage2)
 			elseif roundKills >= 4 then
-				AddCaption(loc("Unstoppable!"),0xffffffff,capgrpMessage2)
+				AddCaption(loc("Unstoppable!"),capcolDefault,capgrpMessage2)
 			end
 
 		elseif gear == CurrentHedgehog then
 			DisableTumbler()
 
 		elseif gear ~= CurrentHedgehog then
-			AddCaption(loc("Friendly Fire!"),0xffffffff,capgrpMessage2)
+			AddCaption(loc("Friendly Fire!"),capcolDefault,capgrpMessage2)
 		end
 
 	end

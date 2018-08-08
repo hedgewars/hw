@@ -235,7 +235,7 @@ function onNewTurn()
     killsCounter = 0
 
     if mutant == nil then
-        AddCaption( loc("First killer will mutate"), 0xFFFFFFFF, capgrpGameState )
+        AddCaption( loc("First killer will mutate"), capcolDefault, capgrpGameState )
     end
 
     checkScore()
@@ -262,23 +262,23 @@ end
 
 function countBodies()
         if killsCounter == 2 then
-            AddCaption(loc("Double kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Double kill!"), capcolDefault, capgrpGameState )
         elseif killsCounter == 3 then
-            AddCaption(loc("Mega kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Mega kill!"), capcolDefault, capgrpGameState )
             PlaySound(sndRegret)
         elseif killsCounter == 4 then
-            AddCaption(loc("Ultra kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Ultra kill!"), capcolDefault, capgrpGameState )
         elseif killsCounter == 5 then
-            AddCaption(loc("Monster kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Monster kill!"), capcolDefault, capgrpGameState )
             PlaySound(sndIllGetYou)
         elseif killsCounter == 6 then
-            AddCaption(loc("Ludicrous kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Ludicrous kill!"), capcolDefault, capgrpGameState )
             PlaySound(sndNutter)
         elseif killsCounter == 7 then
-            AddCaption(loc("Holy shit!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Holy shit!"), capcolDefault, capgrpGameState )
             PlaySound(sndLaugh)
         elseif killsCounter > 8 then
-            AddCaption(loc("Insanity!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Insanity!"), capcolDefault, capgrpGameState )
         end
 
         if killsCounter > recordKills then
@@ -724,7 +724,7 @@ function onGearAdd(gear)
             local winner = createEndGameStats()
             if winner then
                 SendStat(siGameResult, string.format(loc("%s wins!"), winner))
-                AddCaption(string.format(loc("%s wins!"), winner), 0xFFFFFFFF, capgrpGameState)
+                AddCaption(string.format(loc("%s wins!"), winner), capcolDefault, capgrpGameState)
             end
             gameOver = true
         end

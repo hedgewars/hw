@@ -555,7 +555,7 @@ function CommentOnScore()
 		statusText = loc("Game over!")
 		scoreText = loc("Final team scores:")
 	else
-		AddCaption(string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit), 0xFFFFFFFF, capgrpMessage)
+		AddCaption(string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit), capcolDefault, capgrpMessage)
 		return
 	end
 	local displayTime
@@ -576,7 +576,7 @@ function CommentOnScore()
 				SetState(hhs[i], bor(GetState(hhs[i]), gstWinner))
 			end
 		end
-		AddCaption(string.format(loc("%s wins!"), winnerTeam), 0xFFFFFFFF, capgrpGameState)
+		AddCaption(string.format(loc("%s wins!"), winnerTeam), capcolDefault, capgrpGameState)
 		SendStat(siGameResult, string.format(loc("%s wins!"), winnerTeam))
 
 		for i = 1, TeamsCount do
@@ -1279,7 +1279,7 @@ function onGameTick()
 
 		if (TimeLeft == 0) then
 			if PlayerIsFine() then
-				AddCaption(loc("Time's up!"), 0xFFFFFFFF, capgrpGameState)
+				AddCaption(loc("Time's up!"), capcolDefault, capgrpGameState)
 			end
 			if (stopMovement == false) then	--time to stop the player
 				stopMovement = true
@@ -1852,7 +1852,7 @@ function WellHeAintGonnaJumpNoMore(x,y,explode,kamikaze)
 	FailGraphics()
 
 	if not kamikaze then
-		AddCaption(loc("GOTCHA!"), 0xFFFFFFFF, capgrpGameState)
+		AddCaption(loc("GOTCHA!"), capcolDefault, capgrpGameState)
 		PlaySound(sndHellish)
 	end
 

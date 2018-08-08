@@ -120,7 +120,7 @@ local colorWeaponFilter =  0xA800FFFF
 local colorHealingStationParticle = 0x00FF0080
 local colorGeneratorParticle = 0xFFFF00FF
 
-local colorMessageError = 0xFFFFFFFF
+local colorMessageError = capcolDefault
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
 local amCMStructurePlacer = amAirAttack
@@ -771,7 +771,7 @@ function CheckProximity(gear)
 							loc("%s is now as poor as a church mouse"),
 						}
 						local r = math.random(1, #msgs)
-						AddCaption(string.format(msgs[r], GetHogName(gear)), 0xFFFFFFFF, capgrpAmmoinfo)
+						AddCaption(string.format(msgs[r], GetHogName(gear)), capcolDefault, capgrpAmmoinfo)
 					end
 
 				end
