@@ -32,6 +32,7 @@ Game:
 
 Frontend:
  + Add setting to disable audio dampening when losing window focus
+ * Fix rare crash when aborting video encoding in progress
  * Controllers are detected again
  * No longer allow having schemes with equal names (case-insensitive)
  * Lobby/room: No longer allow opening context menu if no player selected

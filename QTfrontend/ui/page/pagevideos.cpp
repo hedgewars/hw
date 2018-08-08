@@ -594,9 +594,9 @@ void PageVideos::deleteSelectedFiles()
     if (reallyDeleteMsg.exec() != QMessageBox::Ok)
         return;
 
-    // remove
+    // abort / remove
     if (!item->ready())
-        item->pRecorder->deleteLater();
+        item->pRecorder->abort();
     else
     {
         cfgdir->remove("Videos/" + item->name);

@@ -39,6 +39,7 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
     this->prefix = prefix;
     item = 0;
     finished = false;
+    aborted = false;
     name = prefix + "." + LibavInteraction::instance().getExtension(config->AVFormat());
 }
 
@@ -151,4 +152,11 @@ QStringList HWRecorder::getArguments()
 bool HWRecorder::simultaneousRun()
 {
     return true;
+}
+
+void HWRecorder::abort()
+{
+    queue.removeOne(this);
+    aborted = true;
+    deleteLater();
 }

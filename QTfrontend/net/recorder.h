@@ -35,6 +35,7 @@ class HWRecorder : public TCPBase
         virtual ~HWRecorder();
 
         void EncodeVideo(const QByteArray & record);
+        void abort();
         bool simultaneousRun();
 
         VideoItem * item; // used by pagevideos
@@ -53,6 +54,7 @@ class HWRecorder : public TCPBase
 
     private:
         bool finished;
+        bool aborted;
         GameUIConfig * config;
 };
 
