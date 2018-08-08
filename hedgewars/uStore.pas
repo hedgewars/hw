@@ -533,7 +533,7 @@ if (not cOnlyStats) and allOK then
     // number of weapons in ammo menu
     for i:= Low(CountTexz) to High(CountTexz) do
         begin
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(Format(trmsg[sidAmmoCount], IntToStr(i))), cWhiteColorChannels);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeAndNilTexture(CountTexz[i]);
         CountTexz[i]:= Surface2Tex(tmpsurf, false);

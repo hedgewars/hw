@@ -108,6 +108,8 @@
 01:41=Lua parsing: OFF
 01:42=Lua parsing: ON
 01:43=Lua parsing is not allowed in online games!
+; Ammo count in ammo menu
+01:44=%1×
 
 ; Event messages
 ; Normal hog (%1) died (0 health)
