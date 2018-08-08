@@ -65,7 +65,7 @@
 01:05=Opravdu ukončit (%1/%2)?
 01:06=Náhlá smrt!
 01:07=%1 zbývá
-01:08=Palivo
+01:08=Palivo: %1%
 01:09=Synchronizuji...
 01:10=Použití tohoto nástroje neukončí tvůj tah!
 01:11=Tato zbraň nebo nástroj není dosud povolena!

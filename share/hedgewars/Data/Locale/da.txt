@@ -65,7 +65,7 @@
 01:05=Vil du virkelig forlade spillet (%1/%2)?
 01:06=Pludselig Død!
 01:07=%1 tilbage
-01:08=Brændstof
+01:08=Brændstof: %1%
 01:09=Synkroniserer...
 01:10=Brug af dette værktøj afslutter ikke din tur!
 01:11=Dette våben eller værktøj er ikke tilgængeligt endnu!

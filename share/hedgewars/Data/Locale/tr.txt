@@ -67,7 +67,7 @@
 01:05=Çıkılsın mı (%1/%2)?
 01:06=Ani ölüm!
 01:07=%1 Kaldı
-01:08=Yakıt
+01:08=Yakıt: %1%
 01:09=Eşzamanlanıyor...
 01:10=Bu yardımcıyı kullanmak sıranı bitirmeyecek!
 01:11=Bu silah veya yardımcı henüz kullanılamıyor!

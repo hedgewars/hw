@@ -4319,7 +4319,7 @@ begin
         Gear^.Damage:= i;
         FreeAndNilTexture(Gear^.Tex);
         if Gear^.Health <> JETPACK_FUEL_INFINITE then
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) + '%'), cWhiteColor, fntSmall)
+            Gear^.Tex := RenderStringTex(FormatA(trmsg[sidFuel], inttostr(i)), cWhiteColor, fntSmall)
         end;
 
     if (HHGear^.Message and (gmAttack or gmUp or gmLeft or gmRight) <> 0) and
@@ -5549,8 +5549,8 @@ begin
             begin
             Gear^.Damage:= i;
             FreeAndNilTexture(Gear^.Tex);
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
-                         '%'), cWhiteColor, fntSmall)
+            Gear^.Tex := RenderStringTex(FormatA(trmsg[sidFuel], inttostr(i)),
+                         cWhiteColor, fntSmall)
             end
         end
 end;
@@ -5632,8 +5632,8 @@ begin
             begin
             Gear^.Damage:= i;
             FreeAndNilTexture(Gear^.Tex);
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
-                         '%'), cWhiteColor, fntSmall)
+            Gear^.Tex := RenderStringTex(FormatA(trmsg[sidFuel], inttostr(i)),
+                         cWhiteColor, fntSmall)
             end
         end
 end;
@@ -6246,8 +6246,8 @@ begin
     begin
     Gear^.Damage:= t;
     FreeAndNilTexture(Gear^.Tex);
-    Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(t) +
-              '%'), cWhiteColor, fntSmall)
+    Gear^.Tex := RenderStringTex(FormatA(trmsg[sidFuel], inttostr(t)),
+              cWhiteColor, fntSmall)
     end;
     if Gear^.Message and (gmUp or gmDown) <> 0 then
         begin

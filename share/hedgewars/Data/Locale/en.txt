@@ -71,7 +71,7 @@
 01:05=Really quit? (%1/%2)
 01:06=Sudden Death!
 01:07=%1 remaining
-01:08=Fuel
+01:08=Fuel: %1%
 01:09=Synchronizing ...
 01:10=Using this utility won't end your turn!
 01:11=This weapon or utility is not yet available!

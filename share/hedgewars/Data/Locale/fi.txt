@@ -69,7 +69,7 @@
 01:05=Poistutaanko (%1/%2)?
 01:06=Äkkikuolema!
 01:07=%1 Jäljellä
-01:08=Polttoaine
+01:08=Polttoaine: %1%
 01:09=Synkronoidaan...
 01:10=Tämän apuvälineen käyttäminen ei päätä vuoroasi!
 01:11=Tämä ase tai apuväline ei ole vielä käytettävissä!

@@ -69,7 +69,7 @@
 01:05=Fàgail dha-rìribh? (%1/%2) (Briog gus leantainn air adhart)
 01:06=Bàs obann!
 01:07=%1 air fhàgail
-01:08=Connadh
+01:08=Connadh: %1%
 01:09=’Ga shioncronachadh…
 01:10=Ma chleachdas tu an acainn seo, chan adhbharaich seo crìoch air a’ chuairt agad!
 01:11=Chan eil an t-arm no acainn seo ri làimh fhathast!

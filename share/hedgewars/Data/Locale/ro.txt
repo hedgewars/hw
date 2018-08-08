@@ -65,7 +65,7 @@
 01:05=Sigur ieșiți (%1/%2)?
 01:06=Moarte subita!
 01:07=%1 rămas
-01:08=combustibil
+01:08=combustibil: %1%
 01:09=Sincronizare...
 01:10=Folosind această utilitate tura nu se va termina!
 01:11=Această armă sau utilitate nu sunt valabile momentan!

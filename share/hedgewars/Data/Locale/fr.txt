@@ -66,7 +66,7 @@
 01:05=Quitter? (%1/%2) (Cliquer pour reprendre)
 01:06=Mort subite !
 01:07=%1 Restantes
-01:08=Carburant
+01:08=Carburant: %1%
 
 ; Event messages
 ; Hog (%1) died

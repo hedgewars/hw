@@ -67,7 +67,7 @@
 01:05=Deseja realmente sair (%1/%2)?
 01:06=Morte Súbita!
 01:07=%1 restante
-01:08=Combustível
+01:08=Combustível: %1%
 01:09=A sincronizar...
 01:10=Usar este utilitário não termina o turno!
 01:11=Esta arma ou utilitário ainda não está disponível!

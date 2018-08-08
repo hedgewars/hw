@@ -65,7 +65,7 @@
 01:05=Vill du verkligen avsluta (%1/%2)?
 01:06=Sudden death!
 01:07=%1 kvar
-01:08=Bränsle
+01:08=Bränsle: %1%
 01:09=Synkroniserar...
 01:10=Detta verktyg avslutar inte din tur!
 01:11=Detta vapen eller verktyg är inte tillgängligt än!

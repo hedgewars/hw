@@ -71,7 +71,7 @@
 01:05=Na pewno wyjść (%1/%2)?
 01:06=Nagła śmierć!
 01:07=%1 strzały pozostał(y)
-01:08=Paliwo
+01:08=Paliwo: %1%
 01:09=Synchronizowanie...
 01:10=Użycie tego przedmiotu nie zakończy tury!
 01:11=Ta broń/narzędzie nie jest jeszcze dostępna/e!
