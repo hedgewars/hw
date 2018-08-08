@@ -98,6 +98,7 @@ Lua API:
  + New global: AMMO_INFINITE. Value for infinite ammo count for AddAmmo and other functions
  + New global: cMaxHogHealth. Maximum possible hedgehog health
  + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
+ + New globals: capcolDefault, capcolSetting: Default caption colors
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set

@@ -82,7 +82,7 @@ if not TeamsGameOver then
     begin
     if AliveCount = 0 then
         begin // draw
-        AddCaption(GetEventString(eidRoundDraw), cWhiteColor, capgrpGameState);
+        AddCaption(GetEventString(eidRoundDraw), capcolDefault, capgrpGameState);
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(trmsg[sidDraw]));
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
@@ -96,7 +96,7 @@ if not TeamsGameOver then
                 s:= ansistring(Teams[0]^.TeamName);
                 // Victory caption is randomly selected
                 cap:= FormatA(GetEventString(eidRoundWin), s);
-                AddCaption(cap, cWhiteColor, capgrpGameState);
+                AddCaption(cap, capcolDefault, capgrpGameState);
                 s:= FormatA(trmsg[sidWinner], s);
                 end
             else // clan with at least 2 teams wins
@@ -117,7 +117,7 @@ if not TeamsGameOver then
 
                 // The winner caption is the same as the stats message and not randomized
                 cap:= s;
-                AddCaption(cap, cWhiteColor, capgrpGameState);
+                AddCaption(cap, capcolDefault, capgrpGameState);
                 // TODO (maybe): Show victory animation/captions per-team instead of all winners at once?
                 end;
 
@@ -385,7 +385,7 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
     s:= ansistring(CurrentTeam^.TeamName);
-    AddCaption(FormatA(trmsg[sidReady], s), cWhiteColor, capgrpGameState)
+    AddCaption(FormatA(trmsg[sidReady], s), capcolDefault, capgrpGameState)
     end
 else
     begin

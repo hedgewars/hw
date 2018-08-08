@@ -621,7 +621,7 @@ with CurrentHedgehog^ do
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) and ((GameFlags and gfMultiWeapon) = 0) then
             begin
             s:= ansistring(inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1));
-            AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
+            AddCaption(formatA(trmsg[sidRemaining], s), capcolDefault, capgrpAmmostate);
             end;
 
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks)
@@ -1262,7 +1262,7 @@ if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGr
         begin
         Gear^.FlightTime:= 0;
         s:= ansistring(CurrentHedgehog^.Name);
-        AddCaption(FormatA(GetEventString(eidHomerun), s), cWhiteColor, capgrpMessage);
+        AddCaption(FormatA(GetEventString(eidHomerun), s), capcolDefault, capgrpMessage);
         PlaySound(sndHomerun)
         end;
     end
@@ -1304,7 +1304,7 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (LuaEndTurnRequested = true) th
         if (GameFlags and gfInfAttack = 0) then
             begin
             s:= Hedgehog^.Name;
-            AddCaption(FormatA(GetEventString(eidTimeout), s), cWhiteColor, capgrpMessage);
+            AddCaption(FormatA(GetEventString(eidTimeout), s), capcolDefault, capgrpMessage);
             end;
         end;
     isCursorVisible:= false;
@@ -1473,9 +1473,9 @@ if (Gear^.Health = 0) then
                 // Death message
                 s:= ansistring(Gear^.Hedgehog^.Name);
                 if Gear^.Hedgehog^.King then
-                    AddCaption(FormatA(GetEventString(eidKingDied), s), cWhiteColor, capgrpMessage)
+                    AddCaption(FormatA(GetEventString(eidKingDied), s), capcolDefault, capgrpMessage)
                 else
-                    AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
+                    AddCaption(FormatA(GetEventString(eidDied), s), capcolDefault, capgrpMessage);
                 end;
             end
         else
@@ -1485,7 +1485,7 @@ if (Gear^.Health = 0) then
 
             // Gone message
             s:= ansistring(Gear^.Hedgehog^.Name);
-            AddCaption(FormatA(GetEventString(eidGone), s), cWhiteColor, capgrpMessage);
+            AddCaption(FormatA(GetEventString(eidGone), s), capcolDefault, capgrpMessage);
             end
         end;
     exit

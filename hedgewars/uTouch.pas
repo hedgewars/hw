@@ -296,7 +296,7 @@ if (buttonsDown > 0) and (widget <> nil) then
     end;
 
 if targetting then
-    AddCaption(trmsg[sidPressTarget], cWhiteColor, capgrpAmmoInfo);
+    AddCaption(trmsg[sidPressTarget], capcolDefault, capgrpAmmoInfo);
 
 deleteFinger(pointerId);
 end;

@@ -344,9 +344,9 @@ case step of
                 i:= cSuddenDTurns - TotalRounds;
                 s:= ansistring(inttostr(i));
                 if i = 1 then
-                    AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
+                    AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState)
                 else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                    AddCaption(FormatA(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
+                    AddCaption(FormatA(trmsg[sidRoundsSD], s), capcolDefault, capgrpGameState);
                 end;
             end;
             if bBetweenTurns
@@ -995,19 +995,19 @@ begin
             // health crate is smaller than the other crates
             FollowGear^.Radius := cCaseHealthRadius;
             FollowGear^.Health := content;
-            AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+            AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
             end;
         AmmoCrate:
             begin
             FollowGear^.Pos := posCaseAmmo;
             FollowGear^.AmmoType := TAmmoType(content);
-            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+            AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
             end;
         UtilityCrate:
             begin
             FollowGear^.Pos := posCaseUtility;
             FollowGear^.AmmoType := TAmmoType(content);
-            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+            AddCaption(GetEventString(eidNewUtilityPack), capColDefault, capgrpAmmoInfo);
             end;
     end;
 
@@ -1034,17 +1034,17 @@ begin
             FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
             // health crate is smaller than the other crates
             FollowGear^.Radius := cCaseHealthRadius;
-            AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+            AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
             end;
         AmmoCrate:
             begin
             FollowGear^.Pos := FollowGear^.Pos + posCaseAmmo;
-            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+            AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
             end;
         UtilityCrate:
             begin
             FollowGear^.Pos := FollowGear^.Pos + posCaseUtility;
-            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+            AddCaption(GetEventString(eidNewUtilityPack), capcolDefault, capgrpAmmoInfo);
             end;
     end;
 
@@ -1081,7 +1081,7 @@ begin
     Ammoz[amTardis].SkipTurns:= 9999;
     Ammoz[amTardis].Probability:= 0;
 
-    AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+    AddCaption(trmsg[sidSuddenDeath], capcolDefault, capgrpGameState);
     ScriptCall('onSuddenDeath');
     playSound(sndSuddenDeath);
     StopMusic;

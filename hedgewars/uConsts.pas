@@ -73,9 +73,12 @@ const
     cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; a:$FF);
 
     cWhiteColor           : Longword = $FFFFFFFF; // white
-    cYellowColor          : Longword = $FFFFFF00; // yellow
-    cLightGrayColor       : Longword = $FFCCCCCC; // light gray
     cNearBlackColor       : Longword = $FF000010; // nearly black
+
+    capcolDefault         : Longword = $FFFFFFFF; // default caption color
+    capcolSetting         : Longword = $FFCCCCCC; // caption color for changing client setting like volume or auto camera
+
+    cCentralMessageColor  : Longword = $FFFFFF00; // color of message in center of screen like quit or pause
 
 {$WARNINGS OFF}
     cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4

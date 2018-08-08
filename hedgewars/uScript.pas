@@ -650,7 +650,7 @@ begin
     if CheckAndFetchParamCount(L, 1, 3, call, params, cg) then
         begin
         if cg = 1 then
-            AddCaption(lua_tostringA(L, 1), cWhiteColor, capgrpMessage)
+            AddCaption(lua_tostringA(L, 1), capcolDefault, capgrpMessage)
         else
             begin
             cg:= LuaToCapGroupOrd(L, 3, call, params);
@@ -3960,6 +3960,9 @@ for mg:= Low(TMapGen) to High(TMapGen) do
 
 for we:= Low(TWorldEdge) to High(TWorldEdge) do
     ScriptSetInteger(EnumToStr(we), ord(we));
+
+ScriptSetInteger('capcolDefault'    , capcolDefault);
+ScriptSetInteger('capcolSetting'    , capcolSetting);
 
 ScriptSetInteger('gstDrowning'      , gstDrowning);
 ScriptSetInteger('gstHHDriven'      , gstHHDriven);

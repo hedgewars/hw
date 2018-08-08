@@ -162,7 +162,7 @@ if FinishedTurnsTotal <> 0 then
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         // Message for hurting itself only (not drowning)
         if (CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
-            AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
+            AddCaption(FormatA(GetEventString(eidHurtSelf), s), capcolDefault, capgrpMessage);
         end
 
     // Hog hurts, poisons or kills own team/clan member. Sacrifice is taken into account
@@ -205,7 +205,7 @@ if FinishedTurnsTotal <> 0 then
     else if isTurnSkipped and (not PlacingHogs) then
         begin
         AddVoice(sndCoward, PreviousTeam^.voicepack);
-        AddCaption(FormatA(GetEventString(eidTurnSkipped), s), cWhiteColor, capgrpMessage);
+        AddCaption(FormatA(GetEventString(eidTurnSkipped), s), capcolDefault, capgrpMessage);
         end
     end;
 

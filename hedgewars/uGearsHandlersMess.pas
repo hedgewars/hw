@@ -1653,7 +1653,7 @@ case Gear^.Kind of
         AllInactive := false;
         if Gear^.Timer = 0 then
             begin
-            AddCaption(GetEventString(eidRoundStart), cWhiteColor, capgrpGameState);
+            AddCaption(GetEventString(eidRoundStart), capcolDefault, capgrpGameState);
             end
         end;
     gtATFinishGame:
@@ -3393,7 +3393,7 @@ begin
                         end
                 end;
         s:= ansistring(Gear^.Hedgehog^.Name);
-        AddCaption(FormatA(GetEventString(eidKamikaze), s), cWhiteColor, capgrpMessage);
+        AddCaption(FormatA(GetEventString(eidKamikaze), s), capcolDefault, capgrpMessage);
         uStats.HedgehogSacrificed(Gear^.Hedgehog);
         AfterAttack;
         HHGear^.Message:= HHGear^.Message or gmDestroy;
@@ -4150,7 +4150,7 @@ begin
             dec(Gear^.Health)
             end;
         s:= ansistring(inttostr(Gear^.Health));
-        AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
+        AddCaption(formatA(trmsg[sidRemaining], s), capcolDefault, capgrpAmmostate);
         end;
 
     if (HHGear <> nil) and ((HHGear^.Message and gmLJump) <> 0) and ((Gear^.State and gsttmpFlag) = 0) then
@@ -4479,7 +4479,7 @@ begin
             dec(Gear^.FlightTime)
             end;
         s:= ansistring(inttostr(Gear^.FlightTime));
-        AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
+        AddCaption(formatA(trmsg[sidRemaining], s), capcolDefault, capgrpAmmostate);
         end;
 
     if HHGear^.Message and (gmUp or gmPrecise or gmLeft or gmRight) <> 0 then
@@ -5890,7 +5890,7 @@ begin
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
                 s:= ansistring(resgear^.Hedgehog^.Name);
-                AddCaption(FormatA(GetEventString(eidResurrected), s), cWhiteColor, capgrpMessage);
+                AddCaption(FormatA(GetEventString(eidResurrected), s), capcolDefault, capgrpMessage);
                 // only make hat-less hedgehogs look like zombies, preserve existing hats
 
                 if resgear^.Hedgehog^.Hat = 'NoHat' then
@@ -6116,7 +6116,7 @@ if Gear^.Pos = 2 then
             begin
             RestoreHog(HH);
             s:= ansistring(HH^.Name);
-            AddCaption(FormatA(GetEventString(eidTimeTravelEnd), s), cWhiteColor, capgrpMessage)
+            AddCaption(FormatA(GetEventString(eidTimeTravelEnd), s), capcolDefault, capgrpMessage)
             end
         end;
 

@@ -507,12 +507,12 @@ if (not cOnlyStats) and allOK then
 
     InitHealth;
 
-    PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
-    AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
+    PauseTexture:= RenderStringTex(trmsg[sidPaused], cCentralMessageColor, fntBig);
+    AFKTexture:= RenderStringTex(trmsg[sidAFK], cCentralMessageColor, fntBig);
     keyConfirm:= KeyBindToName('confirm');
     keyQuit:= KeyBindToName('quit');
-    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], [keyConfirm, keyQuit]), cYellowColor, fntBig);
-    SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
+    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], [keyConfirm, keyQuit]), cCentralMessageColor, fntBig);
+    SyncTexture:= RenderStringTex(trmsg[sidSync], cCentralMessageColor, fntBig);
 
     if not reload then
         AddProgress;

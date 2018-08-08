@@ -190,7 +190,7 @@ while Gear <> nil do
                                     if Gear^.Hedgehog^.Effects[hePoisoned] = 0 then
                                         begin
                                         s:= ansistring(Gear^.Hedgehog^.Name);
-                                        AddCaption(FormatA(GetEventString(eidPoisoned), s), cWhiteColor, capgrpMessage);
+                                        AddCaption(FormatA(GetEventString(eidPoisoned), s), capcolDefault, capgrpMessage);
                                         uStats.HedgehogPoisoned(Gear, AttackingHog)
                                         end;
                                     Gear^.Hedgehog^.Effects[hePoisoned] := 5;
@@ -734,9 +734,9 @@ begin
                             Gear^.State := Gear^.State and (not gstHHDriven);
                             s:= ansistring(Gear^.Hedgehog^.Name);
                             if Gear^.Hedgehog^.King then
-                                AddCaption(FormatA(GetEventString(eidKingDied), s), cWhiteColor, capgrpMessage)
+                                AddCaption(FormatA(GetEventString(eidKingDied), s), capcolDefault, capgrpMessage)
                             else
-                                AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
+                                AddCaption(FormatA(GetEventString(eidDrowned), s), capcolDefault, capgrpMessage);
                             end
                         end
                     else
@@ -1580,7 +1580,7 @@ if t<h then
     FollowGear^.Pos:= posCaseHealth;
     // health crate is smaller than the other crates
     FollowGear^.Radius := cCaseHealthRadius;
-    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+    AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
     end
 else if (t<a+h) then
     begin
@@ -1592,7 +1592,7 @@ else if (t<a+h) then
         i:= Low(TAmmoType);
         FollowGear^.Pos:= posCaseAmmo;
         FollowGear^.AmmoType:= i;
-        AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+        AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
         end
     end
 else
@@ -1605,7 +1605,7 @@ else
         i:= Low(TAmmoType);
         FollowGear^.Pos:= posCaseUtility;
         FollowGear^.AmmoType:= i;
-        AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+        AddCaption(GetEventString(eidNewUtilityPack), capcolDefault, capgrpAmmoInfo);
         end
     end;
 
