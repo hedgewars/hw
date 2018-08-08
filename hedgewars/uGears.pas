@@ -42,7 +42,7 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure DrawGears;
-procedure DrawGearsTimers;
+procedure DrawGearsGui;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
@@ -584,7 +584,8 @@ if SpeechHogNumber > 0 then
     DrawHHOrder();
 end;
 
-procedure DrawGearsTimers;
+// Draw gear timers and other GUI overlays
+procedure DrawGearsGui;
 var Gear: PGear;
     x, y: LongInt;
 begin
@@ -594,6 +595,8 @@ while Gear <> nil do
     x:= hwRound(Gear^.X) + WorldDx;
     y:= hwRound(Gear^.Y) + WorldDy;
     RenderGearTimer(Gear, x, y);
+    if Gear^.Kind = gtHedgehog then
+        RenderHHGuiExtras(Gear, x, y);
     Gear:= Gear^.NextGear
     end;
 end;

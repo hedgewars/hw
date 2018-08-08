@@ -37,6 +37,7 @@ type
          end;
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
+procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure DrawHHOrder();
 
 var RopePoints: record
@@ -259,6 +260,40 @@ if TeamsArray[t] <> nil then
 
 end;
 
+// Render some informational GUI next to hedgehog, like fuel and alternate weapon
+procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
+var HH: PHedgehog;
+    sx, sy: LongInt;
+begin
+    HH:= Gear^.Hedgehog;
+    sx:= ox + 1; // this offset is very common
+    sy:= oy - 3;
+    if HH^.Unplaced then
+        exit;
+    if (Gear^.State and gstHHDeath) <> 0 then
+        exit;
+    if (Gear^.State and gstHHGone) <> 0 then
+        exit;
+
+    if ((Gear^.State and gstHHDriven) <> 0) and (CurAmmoGear <> nil) then
+        begin
+        case CurAmmoGear^.Kind of
+            gtJetpack:      begin
+                            if CurAmmoGear^.Tex <> nil then
+                                DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
+                            DrawAltWeapon(Gear, sx, sy);
+                            end;
+            gtRope:         DrawAltWeapon(Gear, sx, sy);
+            gtParachute:    DrawAltWeapon(Gear, sx, sy);
+            gtLandGun:      if CurAmmoGear^.Tex <> nil then
+                                DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
+            gtFlamethrower: if CurAmmoGear^.Tex <> nil then
+                                DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
+            gtIceGun:       if CurAmmoGear^.Tex <> nil then
+                                DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
+        end;
+        end;
+end;
 
 procedure DrawHH(Gear: PGear; ox, oy: LongInt);
 var i, t: LongInt;
@@ -530,7 +565,6 @@ begin
                                     end
                                 end
                     end;
-                    DrawAltWeapon(Gear, ox, oy);
                     defaultPos:= false
                     end;
                 gtBlowTorch:
@@ -650,22 +684,9 @@ begin
                         end;
                     defaultPos:= false
                     end;
-                gtFlamethrower:
-                    begin
-                    DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
-                    if CurAmmoGear^.Tex <> nil then
-                        DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
-                    end;
-                gtLandGun:
-                    begin DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
-                    if CurAmmoGear^.Tex <> nil then
-                        DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
-                    end;
-                gtIceGun:
-                    begin DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
-                    if CurAmmoGear^.Tex <> nil then
-                        DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
-                    end;
+                gtFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
+                gtLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                gtIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
             end;
 
             case CurAmmoGear^.Kind of
@@ -1096,9 +1117,6 @@ begin
                             if (CurAmmoGear^.MsgParam and gmRight) <> 0 then
                                 DrawSprite(sprJetpack, sx-36, sy-28, 3)
                             end;
-                        if CurAmmoGear^.Tex <> nil then
-                            DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
-                        DrawAltWeapon(Gear, sx, sy)
                         end;
                 gtShover: DrawSpritePivotedF(sprHandBaseball,
                     sx + 9 * sign, sy + 2, CurAmmoGear^.Tag, sign, -8, 1, aangle);
@@ -1429,7 +1447,6 @@ begin
                     else DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (RealTicks shr 7 + LongWord(Gear^.Tag)) mod 8, -1, 16, 16);
        gtParachute: begin
                     DrawSprite(sprParachute, x - 24, y - 48, 0);
-                    DrawAltWeapon(Gear, x + 1, y - 3)
                     end;
        gtAirAttack: begin
                     Tint(Gear^.Tint);

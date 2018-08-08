@@ -1347,7 +1347,7 @@ if (cReducedQuality and rq2DWater) = 0 then
     else
         DrawWaves(-1, 50, cWaveHeight div 2, cWaveHeight div 2, 0);
 
-DrawGearsTimers;
+DrawGearsGui;
 
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
