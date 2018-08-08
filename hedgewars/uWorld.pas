@@ -737,7 +737,7 @@ c:= -1;
                         Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
                 DrawTexture(AmmoRect.x + AmmoRect.w - 20 - (CountTexz[Ammo^[Slot, Pos].Count]^.w),
-                            AmmoRect.y + AmmoRect.h - BORDERSIZE - (AMslotSize shr 1) - (CountTexz[Ammo^[Slot, Pos].Count]^.w shr 1),
+                            AmmoRect.y + AmmoRect.h - BORDERSIZE - (AMslotSize shr 1) - (CountTexz[Ammo^[Slot, Pos].Count]^.h shr 1),
                             CountTexz[Ammo^[Slot, Pos].Count]);
 
             if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
