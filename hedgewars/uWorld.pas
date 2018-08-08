@@ -1403,19 +1403,32 @@ DrawGearsGui();
 
     DrawVisualGears(3, false);
 
-{$WARNINGS OFF}
 // Target
 if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> nil) then
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
         if CurAmmoType = amBee then
-            DrawSpriteRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            spr:= sprTargetBee
         else
-            DrawSpriteRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
-        end
+            spr:= sprTargetP;
+        if replicateToLeft then
+            begin
+            ShiftWorld(-1);
+            DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            UnshiftWorld();
+            end;
+
+        if replicateToRight then
+            begin
+            ShiftWorld(1);
+            DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            UnshiftWorld();
+            end;
+
+        DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+        end;
     end;
-{$WARNINGS ON}
 
 RenderWorldEdge();
 
