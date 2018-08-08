@@ -87,22 +87,22 @@ if SoundTimerTicks >= 50 then
         j:= Volume;
         i:= ChangeVolume(cVolumeDelta);
         if (not cIsSoundEnabled) or (isAudioMuted and (j<>i)) then
-            AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
+            AddCaption(trmsg[sidMute], cLightGrayColor, capgrpVolume)
         else if not isAudioMuted then
             begin
             s:= ansistring(inttostr(i));
-            AddCaption(FormatA(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
+            AddCaption(FormatA(trmsg[sidVolume], s), cLightGrayColor, capgrpVolume)
             end
         end
     else if cMuteToggle then
         begin
         MuteAudio;
         if isAudioMuted then
-            AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
+            AddCaption(trmsg[sidMute], cLightGrayColor, capgrpVolume)
         else
             begin
             s:= ansistring(inttostr(GetVolumePercent()));
-            AddCaption(FormatA(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
+            AddCaption(FormatA(trmsg[sidVolume], s), cLightGrayColor, capgrpVolume);
             end;
         cMuteToggle:= false;
         end;

@@ -74,6 +74,7 @@ const
 
     cWhiteColor           : Longword = $FFFFFFFF; // white
     cYellowColor          : Longword = $FFFFFF00; // yellow
+    cLightGrayColor       : Longword = $FFCCCCCC; // light gray
     cNearBlackColor       : Longword = $FF000010; // nearly black
 
 {$WARNINGS OFF}
