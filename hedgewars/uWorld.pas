@@ -1163,6 +1163,24 @@ if smallScreenOffset <> 0 then
 VisibleTeamsCount:= v;
 end;
 
+procedure RenderAttackBar();
+var i: LongInt;
+    tdx, tdy: Double;
+begin
+    if CurrentTeam <> nil then
+        case AttackBar of
+        2: with CurrentHedgehog^ do
+                begin
+                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower,
+                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
+                            i)
+                end;
+        end;
+end;
 
 var preShiftWorldDx: LongInt;
 
@@ -1182,7 +1200,6 @@ procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
     spr: TSprite;
     r: TSDL_Rect;
-    tdx, tdy: Double;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     replicateToLeft, replicateToRight, tmp: boolean;
@@ -1264,30 +1281,6 @@ if replicateToRight then
     end;
 
 DrawWater(255, 0, 0);
-
-(*
-// Attack bar
-    if CurrentTeam <> nil then
-        case AttackBar of
-        //1: begin
-        //r:= StuffPoz[sPowerBar];
-        //{$WARNINGS OFF}
-        //r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-        //{$WARNINGS ON}
-        //DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-        //end;
-        2: with CurrentHedgehog^ do
-                begin
-                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
-                            i)
-                end
-        end;
-*)
 
 tmp:= bShowFinger;
 bShowFinger:= false;
@@ -1429,6 +1422,23 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
         DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
         end;
     end;
+
+// Attack bar
+if replicateToLeft then
+    begin
+    ShiftWorld(-1);
+    RenderAttackBar();
+    UnshiftWorld();
+    end;
+
+if replicateToRight then
+    begin
+    ShiftWorld(1);
+    RenderAttackBar();
+    UnshiftWorld();
+    end;
+
+RenderAttackBar();
 
 RenderWorldEdge();
 
@@ -1752,29 +1762,6 @@ if flagPrerecording then
 {$ENDIF}
 
 SetScale(zoom);
-
-// Attack bar
-    if CurrentTeam <> nil then
-        case AttackBar of
-(*        1: begin
-        r:= StuffPoz[sPowerBar];
-        {$WARNINGS OFF}
-        r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-        {$WARNINGS ON}
-        DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-        end;*)
-        2: with CurrentHedgehog^ do
-                begin
-                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
-                            i)
-                end
-        end;
-
 
 // Cursor
 if isCursorVisible and (not bShowAmmoMenu) then

@@ -21,6 +21,8 @@ Game:
  * Fix projectiles behaving incorrectly with land just behind the wrap world edge
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix some flakes disappearing in world wrap worlds while moving camera
+ * Fix invisible projectile timer, attack bar, target on other side of wrap world edge
+ * Fix attack bar drawn over GUI elements
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix video recorder not working when game audio was disabled
  * Fix cursor teleporting to center after leaving game with a video recording
