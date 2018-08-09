@@ -51,6 +51,7 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
 
 var TeamsGameOver: boolean;
     NextClan: boolean;
+    SwapClan: LongInt;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
@@ -204,12 +205,10 @@ repeat
     if (GameFlags and gfTagTeam) = 0 then
         inc(c);
 
+    if (c = SwapClan) and (not PlacingHogs) then
+        inc(TotalRounds);
     if c = ClansCount then
-        begin
-        if not PlacingHogs then
-            inc(TotalRounds);
-        c:= 0
-        end;
+        c:= 0;
 
     with ClansArray[c]^ do
         begin
@@ -285,8 +284,16 @@ if PlacingHogs then
             if ClansArray[i] <> nil then
                 ClansArray[i]^.TurnNumber:= 0;
         ResetWeapons
-        end
+        end;
+
     end;
+
+// Clan ID (+1) to check to determine whether to increase TotalRounds
+if (SwapClan = -1) and (not PlacingHogs) then
+    if (GameFlags and gfRandomOrder) <> 0 then
+        SwapClan:= ClansCount
+    else
+        SwapClan:= 1;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 with CurrentTeam^.Clan^ do
@@ -874,6 +881,7 @@ LocalTeam:= -1;
 LocalAmmo:= -1;
 TeamsGameOver:= false;
 NextClan:= true;
+SwapClan:= -1;
 MaxTeamHealth:= 0;
 end;
 
@@ -919,6 +927,7 @@ if TeamsCount > 0 then
     end;
 TeamsCount:= 0;
 ClansCount:= 0;
+SwapClan:= -1;
 end;
 
 end.
