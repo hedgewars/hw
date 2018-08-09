@@ -284,8 +284,7 @@ if PlacingHogs then
         for i:= 0 to ClansCount do
             if ClansArray[i] <> nil then
                 ClansArray[i]^.TurnNumber:= 0;
-        ResetWeapons;
-        inc(TotalRounds)
+        ResetWeapons
         end
     end
 else
