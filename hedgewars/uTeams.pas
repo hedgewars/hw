@@ -286,10 +286,7 @@ if PlacingHogs then
                 ClansArray[i]^.TurnNumber:= 0;
         ResetWeapons
         end
-    end
-else
-    if TotalRounds <= -1 then
-        TotalRounds:= 0;
+    end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 with CurrentTeam^.Clan^ do
