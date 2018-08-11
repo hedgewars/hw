@@ -193,22 +193,39 @@ with CurrentTeam^ do
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
-    with ClansArray[c]^ do
-        if (CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0) then
+    if (GameFlags and gfTagTeam) <> 0 then
+        begin
+        with ClansArray[c]^ do
             begin
-            TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
-            CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
-            inc(c);
-            NextClan:= true;
+            if (CurrTeam = TagTeamIndex) then
+                begin
+                TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
+                CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
+                inc(c);
+                if c = ClansCount then
+                    c:= 0;
+                NextClan:= true;
+                end;
             end;
 
-    if (GameFlags and gfTagTeam) = 0 then
+        with ClansArray[c]^ do
+            begin
+            if (c = SwapClan) and (not PlacingHogs) and ((Succ(CurrTeam) mod TeamsNumber) = TagTeamIndex) then
+                begin
+                inc(TotalRounds);
+                end;
+            end;
+        end
+    else
+        begin
         inc(c);
-
-    if (c = SwapClan) and (not PlacingHogs) then
-        inc(TotalRounds);
-    if c = ClansCount then
-        c:= 0;
+        if c = ClansCount then
+            c:= 0;
+        if (c = SwapClan) and (not PlacingHogs) then
+            begin
+            inc(TotalRounds);
+            end;
+        end;
 
     with ClansArray[c]^ do
         begin
@@ -288,12 +305,14 @@ if PlacingHogs then
 
     end;
 
-// Clan ID (+1) to check to determine whether to increase TotalRounds
+// Determine clan ID to check to determine whether to increase TotalRounds
 if (SwapClan = -1) and (not PlacingHogs) then
+    begin
     if (GameFlags and gfRandomOrder) <> 0 then
-        SwapClan:= ClansCount
+        SwapClan:= 0
     else
-        SwapClan:= 1;
+        SwapClan:= ClansCount - 1;
+    end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 with CurrentTeam^.Clan^ do
