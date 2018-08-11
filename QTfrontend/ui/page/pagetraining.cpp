@@ -302,7 +302,6 @@ void PageTraining::updateInfo()
         list = (QListWidget*) tbw->currentWidget();
         if (list->currentItem())
         {
-            // TODO also use .pngs in userdata folder
             QString thumbFile =     "physfs://Graphics/Missions/" +
                                     subFolder + "/" +
                                     list->currentItem()->data(Qt::UserRole).toString() +
