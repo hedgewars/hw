@@ -135,7 +135,7 @@ begin
                     dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
             // Apply SD health decrease as soon as SD starts
-            if (TotalRounds > cSuddenDTurns - 1) then
+            if (TotalRoundsPre > cSuddenDTurns - 1) then
                 begin
                 inc(tmp, cHealthDecrease);
                 if (GameFlags and gfResetHealth) <> 0 then
@@ -319,7 +319,7 @@ case step of
     if (not bBetweenTurns) and (not isInMultiShoot) then
         begin
         // Start Sudden Death water rise in the 2nd round of Sudden Death
-        if TotalRounds = cSuddenDTurns + 1 then
+        if TotalRoundsPre = cSuddenDTurns + 1 then
             bWaterRising:= true;
         if bWaterRising and (cWaterRise > 0) then
             AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
@@ -337,11 +337,11 @@ case step of
         begin
         if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
              begin
-            if (TotalRounds = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
+            if (TotalRoundsPre = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
                 StartSuddenDeath()
-            else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
+            else if (TotalRoundsPre < cSuddenDTurns) and (not isInMultiShoot) then
                 begin
-                i:= cSuddenDTurns - TotalRounds;
+                i:= cSuddenDTurns - TotalRoundsPre;
                 s:= ansistring(inttostr(i));
                 if i = 1 then
                     AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState)
@@ -351,7 +351,7 @@ case step of
             end;
             if bBetweenTurns
             or isInMultiShoot
-            or (TotalRounds = -1) then
+            or (TotalRoundsPre = -1) then
                 inc(step)
             else
                 begin

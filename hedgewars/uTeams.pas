@@ -51,7 +51,7 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
 
 var TeamsGameOver: boolean;
     NextClan: boolean;
-    SwapClan: LongInt;
+    SwapClanPre, SwapClanReal: LongInt;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
@@ -204,15 +204,18 @@ repeat
                 inc(c);
                 if c = ClansCount then
                     c:= 0;
+                if c = SwapClanReal then
+                    inc(TotalRoundsReal);
                 NextClan:= true;
                 end;
             end;
 
         with ClansArray[c]^ do
             begin
-            if (c = SwapClan) and (not PlacingHogs) and ((Succ(CurrTeam) mod TeamsNumber) = TagTeamIndex) then
+            if (not PlacingHogs) and ((Succ(CurrTeam) mod TeamsNumber) = TagTeamIndex) then
                 begin
-                inc(TotalRounds);
+                if c = SwapClanPre then
+                    inc(TotalRoundsPre);
                 end;
             end;
         end
@@ -221,9 +224,12 @@ repeat
         inc(c);
         if c = ClansCount then
             c:= 0;
-        if (c = SwapClan) and (not PlacingHogs) then
+        if (not PlacingHogs) then
             begin
-            inc(TotalRounds);
+            if c = SwapClanPre then
+                inc(TotalRoundsPre);
+            if c = SwapClanReal then
+                inc(TotalRoundsReal);
             end;
         end;
 
@@ -305,13 +311,22 @@ if PlacingHogs then
 
     end;
 
-// Determine clan ID to check to determine whether to increase TotalRounds
-if (SwapClan = -1) and (not PlacingHogs) then
+if not PlacingHogs then
+    if (TotalRoundsReal = -1) then
+        TotalRoundsReal:= 0;
+
+// Determine clan ID to check to determine whether to increase TotalRoundsPre/TotalRoundsReal
+if (not PlacingHogs) then
     begin
-    if (GameFlags and gfRandomOrder) <> 0 then
-        SwapClan:= 0
-    else
-        SwapClan:= ClansCount - 1;
+    if SwapClanPre = -1 then
+        begin
+        if (GameFlags and gfRandomOrder) <> 0 then
+            SwapClanPre:= 0
+        else
+            SwapClanPre:= ClansCount - 1;
+        end;
+    if SwapClanReal = -1 then
+        SwapClanReal:= CurrentTeam^.Clan^.ClanIndex;
     end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
@@ -900,7 +915,8 @@ LocalTeam:= -1;
 LocalAmmo:= -1;
 TeamsGameOver:= false;
 NextClan:= true;
-SwapClan:= -1;
+SwapClanPre:= -1;
+SwapClanReal:= -1;
 MaxTeamHealth:= 0;
 end;
 
@@ -946,7 +962,8 @@ if TeamsCount > 0 then
     end;
 TeamsCount:= 0;
 ClansCount:= 0;
-SwapClan:= -1;
+SwapClanPre:= -1;
+SwapClanReal:= -1;
 end;
 
 end.

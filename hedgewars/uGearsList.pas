@@ -725,7 +725,7 @@ gtFlamethrower: begin
                 gear^.Radius:= 13;
                 gear^.Health:= 200;
                 gear^.Timer:= 0;
-                gear^.Tag:= TotalRounds + 3;
+                gear^.Tag:= TotalRoundsPre + 3;
                 gear^.Pos:= 1;
                 end;
 }

@@ -3614,7 +3614,7 @@ begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('ReadyTimeLeft', ReadyTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
-ScriptSetInteger('TotalRounds', TotalRounds);
+ScriptSetInteger('TotalRounds', TotalRoundsReal);
 ScriptSetInteger('WaterLine', cWaterLine);
 if isCursorVisible and (not bShowAmmoMenu) then
     begin

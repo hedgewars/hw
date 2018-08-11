@@ -22,7 +22,8 @@ unit uStats;
 interface
 uses uConsts, uTypes;
 
-var TotalRounds: LongInt; // Number of rounds played (-1 if game not started)
+var TotalRoundsPre: LongInt; // Helper variable for calculating start of Sudden Death and more. Starts at -1 and is incremented on the turn BEFORE the turn which marks the start of the next round. Always -1 while in hog placing phase
+    TotalRoundsReal: LongInt; // Total number of rounds played (-1 if not started or in hog placing phase). Exported to Lua as 'TotalRounds'
     FinishedTurnsTotal: LongInt;
     SendGameResultOn : boolean = true;
     SendRankingStatsOn : boolean = true;
@@ -424,7 +425,8 @@ begin
     isTurnSkipped:= false;
     vpHurtSameClan:= nil;
     vpHurtEnemy:= nil;
-    TotalRounds:= -1;
+    TotalRoundsPre:= -1;
+    TotalRoundsReal:= -1;
     FinishedTurnsTotal:= -1;
 end;
 

@@ -6027,7 +6027,7 @@ begin
                 end;
             inc(Gear^.Timer);
             end;
-        if Gear^.Tag <= TotalRounds then
+        if Gear^.Tag <= TotalRoundsPre then
             Gear^.Pos:= 3;
         end;
 
