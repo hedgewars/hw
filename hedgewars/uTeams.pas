@@ -314,6 +314,8 @@ if PlacingHogs then
 if not PlacingHogs then
     if (TotalRoundsReal = -1) then
         TotalRoundsReal:= 0;
+    if (TotalRoundsPre = -1) and (ClansCount = 1) then
+        TotalRoundsPre:= 0;
 
 // Determine clan ID to check to determine whether to increase TotalRoundsPre/TotalRoundsReal
 if (not PlacingHogs) then

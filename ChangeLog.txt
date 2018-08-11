@@ -29,6 +29,7 @@ Game:
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
  * Fix /hta, /hsa and /hya commands not writing message in chat
  * Limit hedgehog health to 268435455 to prevent some bugs
+ * Fix Sudden Death starting in the second turn of a round rather than the first
 
 Frontend:
  + Add setting to disable audio dampening when losing window focus
