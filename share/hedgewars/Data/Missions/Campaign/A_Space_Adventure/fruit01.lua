@@ -495,22 +495,26 @@ function gameLost()
 end
 
 function getNextWave()
+	if GetHogTeamName(CurrentHedgehog) ~= teamC.name then
+		return
+	end
 	if TotalRounds == 4 then
 		RestoreHog(yellowArmy[3].gear)
-		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)
+		AnimCaption(hero.gear, string.format(loc("%s enters the battlefield"), yellowArmy[3].name), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) then
 			SetGearPosition(yellowArmy[3].gear, yellow1.x, yellow1.y)
 		end
 	elseif TotalRounds == 7 then
 		RestoreHog(yellowArmy[4].gear)
 		RestoreHog(yellowArmy[5].gear)
-		AnimCaption(hero.gear, loc("Last wave in 3 turns"), 5000)
+		AnimCaption(hero.gear, string.format(loc("%s and %s enter the battlefield"), yellowArmy[4].name, yellowArmy[5].name), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear) then
 			SetGearPosition(yellowArmy[4].gear, yellow1.x, yellow1.y)
 		end
 	elseif TotalRounds == 10 then
 		RestoreHog(yellowArmy[6].gear)
 		RestoreHog(yellowArmy[7].gear)
+		AnimCaption(hero.gear, string.format(loc("%s and %s enter the battlefield"), yellowArmy[6].name, yellowArmy[7].name), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear)
 				and not GetHealth(yellowArmy[4].gear) then
 			SetGearPosition(yellowArmy[6].gear, yellow1.x, yellow1.y)
