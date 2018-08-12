@@ -36,6 +36,7 @@ Frontend:
  * Fix rare crash when aborting video encoding in progress
  * Controllers are detected again
  * No longer allow having schemes with equal names (case-insensitive)
+ * Pseudo player names in chat (like “[server]”) are no longer clickable
  * Lobby/room: No longer allow opening context menu if no player selected
 
 Highlander:

@@ -373,11 +373,13 @@ void HWChatWidget::returnPressed()
 // it as host would convert it to it's lower case variant
 QString HWChatWidget::linkedNick(const QString & nickname)
 {
-    if (nickname != m_userNick)
+    // '[' is reserved character used for fake player names in special server messages
+    if ((nickname != m_userNick) && (!nickname.contains('[')))
+        // linked nick
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
                    QString(nickname.toUtf8().toBase64())).arg(nickname.toHtmlEscaped());
 
-    // unlinked nick (if own one)
+    // unlinked nick (if own one or fake player name)
     return QString("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
 }
 
