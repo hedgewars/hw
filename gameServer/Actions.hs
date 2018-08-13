@@ -557,7 +557,7 @@ processAction (KickClient kickId) = do
     mapM_ processAction [
         AddIP2Bans clHost (loc "60 seconds cooldown after kick") (addUTCTime 60 currentTime)
         , ModifyClient (\c -> c{isKickedFromServer = True})
-        , ByeClient "Kicked"
+        , ByeClient $ loc "Kicked"
         ]
 
 
