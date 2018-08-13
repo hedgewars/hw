@@ -237,7 +237,12 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
             emit disconnected(tr("The host was not found. Please check the host name and port settings."));
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            emit disconnected(tr("Connection refused"));
+            if (getHost() == (QString("%1:%2").arg(NETGAME_DEFAULT_SERVER).arg(NETGAME_DEFAULT_PORT)))
+                // Error for official server
+                emit disconnected(tr("The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later."));
+            else
+                // Error for every other host
+                emit disconnected(tr("The connection was refused by the host or timed out. This might have one of the following reasons:\n- The Hedgewars Server program does currently not run on the host\n- The specified port number is incorrect\n- There is a temporary network problem\n\nPlease check the host name and port settings and/or try again later."));
             break;
         default:
             emit disconnected(NetSocket.errorString());
