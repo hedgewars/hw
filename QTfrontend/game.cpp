@@ -531,7 +531,7 @@ void HWGame::SetGameState(GameState state)
 void HWGame::abort()
 {
     QByteArray buf;
-    HWProto::addStringToBuffer(buf, QString("efinish"));
+    HWProto::addStringToBuffer(buf, QString("eforcequit"));
     RawSendIPC(buf);
 }
 
