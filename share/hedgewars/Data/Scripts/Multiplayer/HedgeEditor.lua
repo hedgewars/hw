@@ -534,33 +534,33 @@ for i=1, #preMadeTeam do
 end
 
 local gameFlagList =	{
+			{"gfOneClanMode", false, gfOneClanMode},
 			{"gfMultiWeapon", false, gfMultiWeapon},
-			{"gfBorder", false, gfBorder},
 			{"gfSolidLand", false, gfSolidLand},
+			{"gfBorder", false, gfBorder},
 			{"gfDivideTeams", false, gfDivideTeams},
 			{"gfLowGravity", false, gfLowGravity},
 			{"gfLaserSight", true, gfLaserSight},
 			{"gfInvulnerable", false, gfInvulnerable},
-			{"gfMines", false, gfMines},
+			{"gfResetHealth", false, gfResetHealth},
 			{"gfVampiric", false, gfVampiric},
 			{"gfKarma", false, gfKarma},
 			{"gfArtillery", false, gfArtillery},
-			{"gfOneClanMode", false, gfOneClanMode},
+			{"gfSwitchHog", false, gfSwitchHog},
 			{"gfRandomOrder", false, gfRandomOrder},
 			{"gfKing", false, gfKing},
 			{"gfPlaceHog", false, gfPlaceHog},
 			{"gfSharedAmmo", false, gfSharedAmmo},
 			{"gfDisableGirders", false, gfDisableGirders},
-			{"gfExplosives", false, gfExplosives},
 			{"gfDisableLandObjects", false, gfDisableLandObjects},
 			{"gfAISurvival", false, gfAISurvival},
 			{"gfInfAttack", true, gfInfAttack},
 			{"gfResetWeps", false, gfResetWeps},
-			{"gfResetHealth", false, gfResetHealth},
 			{"gfPerHogAmmo", false, gfPerHogAmmo},
 			{"gfDisableWind", false, gfDisableWind},
 			{"gfMoreWind", false, gfMoreWind},
-			{"gfTagTeam", false, gfTagTeam}
+			{"gfTagTeam", false, gfTagTeam},
+			{"gfShoppaBorder", false, gfShoppaBorder},
 			}
 
  local reducedSpriteIDArray = {
