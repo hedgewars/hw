@@ -365,8 +365,8 @@ end
 function onGameInit()
 	Seed = 1
 	GameFlags = gfInfAttack + gfOneClanMode + gfSolidLand + gfDisableWind
-	TurnTime = 2000000 --[[ This rffectively hides the turn time; a turn time above 1000s is not displayed.
-				We will also ensure this timer always stays above 999s later ]]
+	TurnTime = cMaxTurnTime --[[ This effectively hides the turn time; a turn time above 1000s is not displayed.
+			   	     We will also ensure this timer always stays above 999s later ]]
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0

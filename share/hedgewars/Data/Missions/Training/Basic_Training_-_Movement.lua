@@ -102,7 +102,7 @@ function onGameInit()
 	Seed = 0
 	Theme = "Brick"
 	MapGen = mgDrawn
-	TurnTime = 9999000
+	TurnTime = cMaxTurnTime
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0

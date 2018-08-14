@@ -3778,7 +3778,7 @@ function onNewTurn()
 	-- regardless of our other ammo, give stuff that is useful for editing
 	SetEditingWeps(100)
 	if GetHogLevel(CurrentHedgehog) == 0 then
-		TurnTimeLeft = -1	-- is that turntime in your pocket? :D
+		TurnTimeLeft = cMaxTurnTime
 	else
 		SkipTurn() -- skip the computer's turn
 	end

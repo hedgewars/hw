@@ -30,7 +30,7 @@ function onGameInit()
 	Map = "Mushrooms"
 	Seed = 0
 	Theme = "Nature"
-	TurnTime = 9999000
+	TurnTime = cMaxTurnTime
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0

@@ -21,7 +21,7 @@ function onGameInit()
 	GameFlags = gfInfAttack + gfInvulnerable + gfOneClanMode + gfSolidLand
 
 	-- Basically unlimited turn time
-	TurnTime = 100000000
+	TurnTime = cMaxTurnTime
 
 	Map = "Ropes"
 	Theme = "Eyes"

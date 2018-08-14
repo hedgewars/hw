@@ -16,7 +16,7 @@ function onGameInit()
     -- Ensure people get same map for same theme
     Theme = themes[GetRandom(#themes)+1]
     Seed = ClimbHome
-    TurnTime = 999999999
+    TurnTime = cMaxTurnTime
     EnableGameFlags(gfOneClanMode)
     DisableGameFlags(gfBottomBorder+gfBorder)
     CaseFreq = 0

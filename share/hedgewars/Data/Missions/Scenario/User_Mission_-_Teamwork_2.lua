@@ -13,7 +13,7 @@ local GameOver = false
 function onGameInit()
 	Seed = 0
 	GameFlags = gfDisableWind
-	TurnTime = 600000000
+	TurnTime = cMaxTurnTime
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 0

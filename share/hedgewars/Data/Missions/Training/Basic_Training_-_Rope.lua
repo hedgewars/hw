@@ -110,7 +110,7 @@ function onGameInit()
 	MapFeatureSize = 12
 	TemplateFilter = 0
 	TemplateNumber = 0
-	TurnTime = 9999000
+	TurnTime = cMaxTurnTime
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0
