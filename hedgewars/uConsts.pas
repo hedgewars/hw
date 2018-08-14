@@ -209,6 +209,8 @@ const
 
     cDefaultBuildMaxDist = 256; // default max. building distance with girder/rubber
 
+    ExtraTime = 30000; // amount of time (ms) given for using Extra Time
+
     // do not change this value
     cDefaultZoomLevel = 2.0;
 
@@ -388,6 +390,8 @@ const
     cWorldEdgeDist = 200;
 
     cMaxLaserSightWraps = 1; // maximum number of world wraps of laser sight
+
+    cMaxTurnTime = Pred(High(LongInt)); // maximum possible turn time
 
 implementation
 

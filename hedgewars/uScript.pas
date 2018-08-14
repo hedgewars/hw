@@ -3927,6 +3927,7 @@ ScriptSetInteger('JETPACK_FUEL_INFINITE', JETPACK_FUEL_INFINITE);
 ScriptSetInteger('BIRDY_ENERGY_INFINITE', BIRDY_ENERGY_INFINITE);
 ScriptSetInteger('NoPointX', NoPointX);
 ScriptSetInteger('cMaxHogHealth', cMaxHogHealth);
+ScriptSetInteger('cMaxTurnTime', cMaxTurnTime);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do

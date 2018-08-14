@@ -102,6 +102,7 @@ Lua API:
  + New global: NoPointX. Value of CursorX and CursorY if cursor is inactive
  + New global: AMMO_INFINITE. Value for infinite ammo count for AddAmmo and other functions
  + New global: cMaxHogHealth. Maximum possible hedgehog health
+ + New global: cMaxTurnTime. Maximum possible turn time
  + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
  + New globals: capcolDefault, capcolSetting: Default caption colors
  * Changed global: lfCurrentHog becomes lfCurHogCrate

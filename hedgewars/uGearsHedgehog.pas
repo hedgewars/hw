@@ -469,7 +469,10 @@ with Gear^,
                                  end;
                     amExtraTime: begin
                                  PlaySound(sndExtraTime);
-                                 TurnTimeLeft:= TurnTimeLeft + 30000
+                                 if TurnTimeLeft <= (cMaxTurnTime - ExtraTime) then
+                                     TurnTimeLeft:= TurnTimeLeft + ExtraTime
+                                 else
+                                     TurnTimeLeft:= cMaxTurnTime;
                                  end;
                    amLaserSight: begin
                                  PlaySound(sndLaserSight);
