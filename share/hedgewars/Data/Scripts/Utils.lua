@@ -1,5 +1,6 @@
--- Library for miscellaneous utilitiy functions
+-- Library for miscellaneous utilitiy functions and global helper variables
 
+--[[ FUNCTIONS ]]
 -- Check if a gear is inside a box
 function gearIsInBox(gear, x, y, w, h)
     gx, gy = GetGearPosition(gear)
@@ -44,3 +45,13 @@ function eraseMap(flush)
 	drawFullMap(true, flush)
 end
 
+
+--[[ GLOBAL VARIABLES ]]
+
+-- Shared common land color values for land sprites.
+-- These are useful if you want to make the land type visible.
+-- To be used as tint argument of PlaceSprite.
+U_LAND_TINT_NORMAL = 0xFFFFFFFF			-- tint for normal land
+U_LAND_TINT_INDESTRUCTIBLE = 0x960000FF		-- tint for indestructible land
+U_LAND_TINT_ICE = 0x00FAFAFA			-- tint for icy land
+U_LAND_TINT_BOUNCY = 0x00FA00FF			-- tint for bouncy land

@@ -97,6 +97,7 @@ Lua API:
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
  + New Lua library: Achievements
+ + Add sprite tint globals in Utilts library: U_LAND_TINT_NORMAL, U_LAND_TINT_ICE, U_LAND_TINT_INDESTRUCTIBLE and U_LAND_TINT_BOUNCY
  + Can enable infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
  + New global game variable: MaxCaseDrops. Max. number of crats which can be in game by crate drops
  + New global: NoPointX. Value of CursorX and CursorY if cursor is inactive

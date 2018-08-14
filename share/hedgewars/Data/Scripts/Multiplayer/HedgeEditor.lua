@@ -778,67 +778,67 @@ function InterpretPoints()
 
 		-- Normal Girders
 		elseif specialPointsFlag[i] == 100 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 101 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 102 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 103 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 104 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 105 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 106 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 107 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 
 		-- Invulnerable Girders
 		elseif specialPointsFlag[i] == 108 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 109 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 110 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 111 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 112 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 113 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 114 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 115 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 
 		-- Icy Girders
 		elseif specialPointsFlag[i] == 116 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 117 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 118 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 119 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 120 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 121 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 121 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 123 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 
 		-- Rubber Bands
 		elseif specialPointsFlag[i] == 124 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 		elseif specialPointsFlag[i] == 125 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 		elseif specialPointsFlag[i] == 126 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 		elseif specialPointsFlag[i] == 127 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 
 		-- Waypoints
 		else -- 0 / no value
@@ -972,17 +972,16 @@ function CallPlaceSprite(pID, silent)
 
 	if landType == lfIce then
 		placedLandFlags[pID] = "lfIce"
-		placedTint[pID] = 250 + (250*0x100) + (250*0x10000) + (0*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_ICE
 	elseif landType == lfIndestructible then
 		placedLandFlags[pID] = "lfIndestructible"
-		placedTint[pID] = 250 + (0*0x100) + (0*0x10000) + (150*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_INDESTRUCTIBLE
 	elseif landType == lfBouncy then
 		placedLandFlags[pID] = "lfBouncy"
-		placedTint[pID] = 250 + (0*0x100) + (250*0x10000) + (0*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_BOUNCY
 	else
 		placedLandFlags[pID] = "lfNormal"
-		--placedTint[pID] = nil
-		placedTint[pID] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_NORMAL
 	end
 
 	-- Special case: Placing amAirAttack of the ammos sprite (since this one is overwritten)
@@ -1147,7 +1146,7 @@ function PlaceObject(x,y)
 
 			--new ermagerd
 			placedLandFlags[placedCount] = "lfBouncy"
-			placedTint[placedCount] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
+			placedTint[placedCount] = U_LAND_TINT_NORMAL
 			placementSucceeded = PlaceSprite(placedX[placedCount], placedY[placedCount], placedSprite[placedCount], placedFrame[placedCount],
 				placedTint[placedCount],
 				nil,
@@ -2007,6 +2006,7 @@ function SaveLevelData()
 
 	WriteLnToConsole("HedgewarsScriptLoad(\"/Scripts/Locale.lua\")")
 	WriteLnToConsole("HedgewarsScriptLoad(\"/Scripts/Tracker.lua\")")
+	WriteLnToConsole("HedgewarsScriptLoad(\"/Scripts/Utils.lua\")")
 
 	WriteLnToConsole("")
 	WriteLnToConsole("local hhs = {}")
@@ -2082,6 +2082,13 @@ function SaveLevelData()
 		end
 	end
 
+	-- Helper table to convert tint color value to printable string
+	local tint2String = {
+		[U_LAND_TINT_INDESTRUCTIBLE] = "U_LAND_TINT_INDESTRUCTIBLE",
+		[U_LAND_TINT_ICE] = "U_LAND_TINT_ICE",
+		[U_LAND_TINT_BOUNCY] = "U_LAND_TINT_BOUNCY",
+		[U_LAND_TINT_NORMAL] = "U_LAND_TINT_NORMAL",
+	}
 	for i = 0, (placedCount-1) do
 		if placedType[i] == loc("Girder Placement Mode") then
 			table.insert(girderList,
@@ -2090,7 +2097,7 @@ function SaveLevelData()
 				placedY[i] ..", sprAmGirder, " ..
 				placedFrame[i] ..			-- the rotation/frame
 				", " ..
-				placedTint[i] ..", " .. -- color
+				tint2String[placedTint[i]] ..", " .. -- color
 				"nil, nil, nil, " ..
 				placedLandFlags[i] .. ")" --the landType
 				)
@@ -2107,7 +2114,7 @@ function SaveLevelData()
 				placedY[i] ..", sprAmRubber, " ..
 				placedFrame[i] ..
 				", " ..
-				placedTint[i] ..", " .. -- color
+				tint2String[placedTint[i]] ..", " .. -- color
 				"nil, nil, nil, " ..
 				"lfBouncy)" --the landType
 				)
@@ -2124,7 +2131,7 @@ function SaveLevelData()
 				placedY[i] ..", " .. placedSprite[i] .. ", " ..
 				placedFrame[i] .. -- I think this is the frame, can't remember
 				", " ..
-				placedTint[i] ..", " .. -- color
+				tint2String[placedTint[i]] ..", " .. -- color
 				"nil, nil, nil, " ..
 				placedLandFlags[i] .. ")" --the landType
 				)
