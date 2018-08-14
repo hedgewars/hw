@@ -82,6 +82,7 @@ Campaigns and missions:
 Content:
  + New Sudden Death water texture for CrazyMission theme
  + Add dust flakes for Cheese and CrazyMission themes
+ * Fix repeating sun in Hoggywood theme
 
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
