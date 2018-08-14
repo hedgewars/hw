@@ -3488,7 +3488,7 @@ end
 function showHedgeEditorMissionPanel()
 	ShowMission	(
 		loc("HEDGEEDITOR"),
-		loc("An experimental (and buggy!) editing tool for missions and more"),
+		loc("An experimental editing tool for missions and more"),
 		loc("Manual: https://hedgewars.org/hedgeeditor") .. "|" ..
 		" " .. "|" ..
 		loc("Place Girder: Girder") .. "|" ..
