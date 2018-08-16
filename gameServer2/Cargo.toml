@@ -1,4 +1,7 @@
+cargo-features = ["edition"]
+
 [package]
+edition = "2018"
 name = "hedgewars-server"
 version = "0.0.1"
 authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
@@ -7,7 +10,7 @@ authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
 rand = "0.5"
 mio = "0.6"
 slab = "0.4"
-netbuf = "0.4.0"
+netbuf = "0.4"
 nom = "4.0"
 env_logger = "0.4"
 log = "0.4"

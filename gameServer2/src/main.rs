@@ -1,5 +1,6 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
+#![feature(rust_2018_preview)]
 
 extern crate rand;
 extern crate mio;
@@ -27,7 +28,7 @@ mod utils;
 mod server;
 mod protocol;
 
-use server::network::NetworkLayer;
+use crate::server::network::NetworkLayer;
 use std::time::Duration;
 
 fn main() {

@@ -1,7 +1,7 @@
 use std::{
     iter, collections::HashMap
 };
-use server::{
+use crate::server::{
     coretypes::{ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting},
     client::{HWClient}
 };
@@ -71,7 +71,7 @@ fn map_config_from(c: &RoomConfig) -> Vec<String> {
 }
 
 fn game_config_from(c: &RoomConfig) -> Vec<GameCfg> {
-    use server::coretypes::GameCfg::*;
+    use crate::server::coretypes::GameCfg::*;
     let mut v = vec![
         Ammo(c.ammo.name.to_string(), c.ammo.settings.clone()),
         Scheme(c.scheme.name.to_string(), c.scheme.settings.clone()),

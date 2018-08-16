@@ -4,7 +4,7 @@ use proptest::{
     strategy::{Strategy, BoxedStrategy, Just, Map},
 };
 
-use server::coretypes::{GameCfg, TeamInfo, HedgehogInfo};
+use crate::server::coretypes::{GameCfg, TeamInfo, HedgehogInfo};
 
 use super::messages::{
     HWProtocolMessage, HWProtocolMessage::*
@@ -53,7 +53,7 @@ struct Ascii(String);
 impl Arbitrary for Ascii {
     type Parameters = <String as Arbitrary>::Parameters;
 
-    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+    fn arbitrary_with(_args: Self::Parameters) -> Self::Strategy {
         "[a-zA-Z0-9]+".prop_map(Ascii).boxed()
     }
 
@@ -63,8 +63,8 @@ impl Arbitrary for Ascii {
 impl Arbitrary for GameCfg {
     type Parameters = ();
 
-    fn arbitrary_with(args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
-        use server::coretypes::GameCfg::*;
+    fn arbitrary_with(_args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
+        use crate::server::coretypes::GameCfg::*;
         (0..10).no_shrink().prop_flat_map(|i| {
             proto_msg_match!(i, def = FeatureSize(0),
             0 => FeatureSize(u32),
@@ -87,7 +87,7 @@ impl Arbitrary for GameCfg {
 impl Arbitrary for TeamInfo {
     type Parameters = ();
 
-    fn arbitrary_with(args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
+    fn arbitrary_with(_args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
         ("[a-z]+", 0u8..127u8, "[a-z]+", "[a-z]+", "[a-z]+", "[a-z]+",  0u8..127u8)
             .prop_map(|(name, color, grave, fort, voice_pack, flag, difficulty)| {
                 fn hog(n: u8) -> HedgehogInfo {

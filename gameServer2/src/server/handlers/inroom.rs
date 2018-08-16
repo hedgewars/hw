@@ -1,17 +1,19 @@
 use mio;
 
-use protocol::messages::{
-    HWProtocolMessage,
-    HWServerMessage::*,
-    server_chat
+use crate::{
+    server::{
+        coretypes::{ClientId, RoomId, Voting, VoteType},
+        server::HWServer,
+        room::{HWRoom, RoomFlags},
+        actions::{Action, Action::*}
+    },
+    protocol::messages::{
+        HWProtocolMessage,
+        HWServerMessage::*,
+        server_chat
+    },
+    utils::is_name_illegal
 };
-use server::{
-    coretypes::{ClientId, RoomId, Voting, VoteType},
-    server::HWServer,
-    room::{HWRoom, RoomFlags},
-    actions::{Action, Action::*}
-};
-use utils::is_name_illegal;
 use std::{
     mem::swap, fs::{File, OpenOptions},
     io::{Read, Write, Result, Error, ErrorKind}
@@ -58,7 +60,7 @@ fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     }
 }
 
-fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
+fn is_msg_valid(msg: &[u8], _team_indices: &[u8]) -> bool {
     if let Some(typ) = msg.get(1) {
         VALID_MESSAGES.contains(typ)
     } else {
@@ -85,7 +87,7 @@ fn voting_description(kind: &VoteType) -> String {
 }
 
 fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
-    use protocol::messages::HWProtocolMessage::*;
+    use crate::protocol::messages::HWProtocolMessage::*;
     match msg {
         ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
         ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
@@ -107,7 +109,7 @@ fn write_file(filename: &str, content: &str) -> Result<()> {
 }
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, message: HWProtocolMessage) {
-    use protocol::messages::HWProtocolMessage::*;
+    use crate::protocol::messages::HWProtocolMessage::*;
     match message {
         Part(None) => server.react(client_id, vec![
             MoveToLobby("part".to_string())]),
@@ -154,7 +156,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             server.react(client_id, actions);
         },
         ToggleReady => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
                 let flags = if c.is_ready() {
                     r.ready_players_number -= 1;
                     "-r"
@@ -162,19 +164,15 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     r.ready_players_number += 1;
                     "+r"
                 };
-                let is_ready = !c.is_ready();
-                c.set_is_ready(is_ready);
+                c.set_is_ready(!c.is_ready());
                 let mut v =
                     vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
                         .send_all().in_room(r.id).action()];
                 if r.is_fixed() && r.ready_players_number == r.players_number {
                     v.push(StartRoomGame(r.id))
                 }
-                v
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+                server.react(client_id, v);
+            }
         }
         AddTeam(info) => {
             let mut actions = Vec::new();
@@ -224,9 +222,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             server.react(client_id, actions);
         },
         SetHedgehogsNumber(team_name, number) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
                 let addable_hedgehogs = r.addable_hedgehogs();
-                if let Some((_, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
+                let actions = if let Some((_, team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
                     if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
                     } else if number < 1 || number > 8
@@ -240,16 +238,14 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     }
                 } else {
                     vec![(Warn("No such team.".to_string()))]
-                }
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+                };
+                server.react(client_id, actions);
+            }
         },
         SetTeamColor(team_name, color) => {
-            let mut owner_id = None;
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                if let Some((owner, mut team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                let mut owner_id = None;
+                let actions = if let Some((owner, team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
                     if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
                     } else if false  {
@@ -262,20 +258,18 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     }
                 } else {
                     vec![(Warn("No such team.".to_string()))]
+                };
+
+                if let Some(id) = owner_id {
+                    server.clients[id].clan = Some(color);
                 }
-            } else {
-                Vec::new()
+
+                server.react(client_id, actions);
             };
-
-            if let Some(id) = owner_id {
-                server.clients[id].clan = Some(color);
-            }
-
-            server.react(client_id, actions);
         },
         Cfg(cfg) => {
-            let actions = if let (c, Some(r)) = server.client_and_room(client_id) {
-                if r.is_fixed() {
+            if let (c, Some(r)) = server.client_and_room(client_id) {
+                let actions = if r.is_fixed() {
                     vec![Warn("Access denied.".to_string())]
                 } else if !c.is_master() {
                     vec![ProtocolError("You're not the room master!".to_string())]
@@ -284,11 +278,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                         .send_all().in_room(r.id).but_self().action()];
                     r.set_config(cfg);
                     v
-                }
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+                };
+                server.react(client_id, actions);
+            }
         }
         Save(name, location) => {
             let actions = vec![server_chat(format!("Room config saved as {}", name))
@@ -297,8 +289,8 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
             server.react(client_id, actions);
         }
         SaveRoom(filename) => {
-            let actions = if server.clients[client_id].is_admin() {
-                match server.rooms[room_id].get_saves() {
+            if server.clients[client_id].is_admin() {
+                let actions = match server.rooms[room_id].get_saves() {
                     Ok(text) => match write_file(&filename, &text) {
                         Ok(_) => vec![server_chat("Room configs saved successfully.".to_string())
                             .send_self().action()],
@@ -311,15 +303,13 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                         warn!("Error while serializing the room configs: {}", e);
                         vec![Warn("Unable to serialize the room configs.".to_string())]
                     }
-                }
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+                };
+                server.react(client_id, actions);
+            }
         }
         LoadRoom(filename) => {
-            let actions = if server.clients[client_id].is_admin() {
-                match read_file(&filename) {
+            if server.clients[client_id].is_admin() {
+                let actions = match read_file(&filename) {
                     Ok(text) => match server.rooms[room_id].set_saves(&text) {
                         Ok(_) => vec![server_chat("Room configs loaded successfully.".to_string())
                             .send_self().action()],
@@ -332,11 +322,9 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                         warn!("Error while reading the config file \"{}\": {}", filename, e);
                         vec![Warn("Unable to load the room configs.".to_string())]
                     }
-                }
-            } else {
-                Vec::new()
-            };
-            server.react(client_id, actions);
+                };
+                server.react(client_id, actions);
+            }
         }
         Delete(name) => {
             let actions = if !server.rooms[room_id].delete_config(&name) {

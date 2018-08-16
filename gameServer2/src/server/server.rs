@@ -1,11 +1,11 @@
 use slab;
-use utils;
+use crate::utils;
 use super::{
     client::HWClient, room::HWRoom, actions, handlers,
     coretypes::{ClientId, RoomId},
     actions::{Destination, PendingMessage}
 };
-use protocol::messages::*;
+use crate::protocol::messages::*;
 
 type Slab<T> = slab::Slab<T>;
 

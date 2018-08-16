@@ -1,4 +1,4 @@
-use server::coretypes::{
+use crate::server::coretypes::{
     ServerVar, GameCfg, TeamInfo,
     HedgehogInfo, VoteType
 };
@@ -111,7 +111,7 @@ pub fn server_chat(msg: String) -> HWServerMessage  {
 
 impl GameCfg {
     pub fn to_protocol(&self) -> (String, Vec<String>) {
-        use server::coretypes::GameCfg::*;
+        use crate::server::coretypes::GameCfg::*;
         match self {
             FeatureSize(s) => ("FEATURE_SIZE".to_string(), vec![s.to_string()]),
             MapType(t) => ("MAP".to_string(), vec![t.to_string()]),
@@ -260,7 +260,7 @@ impl HWServerMessage {
             Pong => msg!["PONG"],
             Connected(protocol_version) => msg![
                 "CONNECTED",
-                "Hedgewars server https://www.hedgewars.org/",
+                "Hedgewars server http://www.hedgewars.org/",
                 protocol_version],
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],

@@ -1,8 +1,10 @@
-use protocol::messages::{
-    HWProtocolMessage::{self, Rnd}, HWServerMessage::{self, ChatMsg},
+use crate::{
+    server::{actions::Action, server::HWServer},
+    protocol::messages::{
+        HWProtocolMessage::{self, Rnd}, HWServerMessage::{self, ChatMsg},
+    }
 };
 use rand::{self, Rng, thread_rng};
-use server::{actions::Action, server::HWServer};
 
 pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     let mut rng = thread_rng();
