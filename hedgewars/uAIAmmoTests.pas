@@ -151,15 +151,16 @@ mY:= hwFloat2Float(Me^.Y);
 ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
-if (Targ.Point.X < mX) then
-     targXWrap:= Targ.Point.X + (RightX-LeftX)
-else targXWrap:= Targ.Point.X - (RightX-LeftX);
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < mX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime
-    else Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime;
+         Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
+    else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -318,7 +319,7 @@ var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     EX, EY: LongInt;
     valueResult: LongInt;
-    x, y, dX, dY: real;
+    targXWrap, x, y, dX, dY: real;
     t: LongInt;
     value: LongInt;
     t2: real;
@@ -332,10 +333,17 @@ begin
     rTime:= 350;
     ap.ExplR:= 0;
     valueResult:= BadTurn;
+    if (WorldEdge = weWrap) then
+        if (Targ.Point.X < mX) then
+             targXWrap:= Targ.Point.X + (RightX-LeftX)
+        else targXWrap:= Targ.Point.X - (RightX-LeftX);
     timer:= 0;
     repeat
         rTime:= rTime + 300 + Level * 50 + random(300);
         Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
+        if (WorldEdge = weWrap) and (random(2)=0) then
+             Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
+        else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
         Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - 35 - mY) / rTime;
         r:= sqr(Vx) + sqr(Vy);
         if not (r > 1) then
@@ -346,6 +354,7 @@ begin
             dY:= -Vy;
             t:= rTime;
             repeat
+                x:= CheckWrap(x);
                 x:= x + dX;
                 y:= y + dY;
                 dX:= dX + windSpeed;
@@ -399,7 +408,7 @@ var Vx, Vy, r: real;
     rTime: LongInt;
     EX, EY: LongInt;
     valueResult: LongInt;
-    x, y, dX, dY, meX, meY: real;
+    targXWrap, x, y, dX, dY, meX, meY: real;
     t: LongInt;
     value: LongInt;
 
@@ -410,9 +419,15 @@ ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
 valueResult:= BadTurn;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     rTime:= rTime + 300 + Level * 50 + random(1000);
-    Vx:= - windSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= - windSpeed * rTime * 0.5 + ((targXWrap + AIrndSign(2)) - meX) / rTime
+    else Vx:= - windSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -423,6 +438,7 @@ repeat
         dY:= -Vy;
         t:= rTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + dX;
             y:= y + dY;
             dX:= dX + windSpeed;
@@ -456,7 +472,7 @@ function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPa
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: LongInt;
-    x, y, dY, meX, meY: real;
+    targXWrap, x, y, dY, meX, meY: real;
     t: LongInt;
 begin
 meX:= hwFloat2Float(Me^.X);
@@ -464,9 +480,15 @@ meY:= hwFloat2Float(Me^.Y);
 valueResult:= BadTurn;
 TestTime:= 0;
 ap.ExplR:= 0;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     inc(TestTime, 300);
-    Vx:= (Targ.Point.X - meX) / TestTime;
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= (targXWrap - meX) / TestTime
+    else Vx:= (Targ.Point.X - meX) / TestTime;
     Vy:= cGravityf * (TestTime div 2) - Targ.Point.Y - meY / TestTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -476,6 +498,7 @@ repeat
         dY:= -Vy;
         t:= TestTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + Vx;
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -508,7 +531,7 @@ const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: LongInt;
-    x, y, meX, meY, dY: real;
+    targXWrap, x, y, meX, meY, dY: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
@@ -516,9 +539,15 @@ TestTime:= 0;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     inc(TestTime, 1000);
-    Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= (targXWrap - meX) / (TestTime + tDelta)
+    else Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -528,6 +557,7 @@ repeat
         dY:= -Vy;
         t:= TestTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + Vx;
             y:= y + dY;
             dY:= dY + cGravityf;
