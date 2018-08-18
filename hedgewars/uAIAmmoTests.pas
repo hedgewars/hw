@@ -142,7 +142,7 @@ var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     EX, EY: LongInt;
     valueResult: LongInt;
-    x, y, dX, dY: real;
+    targXWrap, x, y, dX, dY: real;
     t: LongInt;
     value: LongInt;
 begin
@@ -151,10 +151,15 @@ mY:= hwFloat2Float(Me^.Y);
 ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
+if (Targ.Point.X < mX) then
+     targXWrap:= Targ.Point.X + (RightX-LeftX)
+else targXWrap:= Targ.Point.X - (RightX-LeftX);
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
-    Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime
+    else Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -165,9 +170,12 @@ repeat
         dY:= -Vy;
         t:= rTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + dX;
+
             y:= y + dY;
             dX:= dX + windSpeed;
+            //dX:= CheckBounce(x,dX);
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or

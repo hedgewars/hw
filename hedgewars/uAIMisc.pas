@@ -76,6 +76,7 @@ procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
 
 function  RatePlace(Gear: PGear): LongInt;
+function  CheckWrap(x: real): real; inline;
 function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
@@ -330,6 +331,16 @@ for i:= 0 to Pred(bonuses.Count) do
     RatePlace:= rate;
 end;
 
+function CheckWrap(x: real): real; inline;
+begin
+    if WorldEdge = weWrap then
+        if (x < leftX) then
+             x:= x + (rightX - leftX)
+        else if x > rightX then    
+             x:= x - (rightX - leftX);
+    CheckWrap:= x;
+end;
+
 function CheckBounds(x, y, r: Longint): boolean; inline;
 begin
     CheckBounds := (((x-r) and LAND_WIDTH_MASK) = 0) and
@@ -412,6 +423,7 @@ begin
     rCorner:= r * 0.75;
     while true do
         begin
+        x:= CheckWrap(x);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
@@ -458,6 +470,7 @@ begin
 //v:= random($FFFFFFFF);
     while true do
         begin
+        x:= CheckWrap(x);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
@@ -519,6 +532,7 @@ var i, fallDmg, dmg, dmgBase, rate, subrate, erasure: LongInt;
     pX, pY, dX, dY: real;
     hadSkips: boolean;
 begin
+x:= round(CheckWrap(real(x)));
 fallDmg:= 0;
 rate:= 0;
 // add our virtual position
