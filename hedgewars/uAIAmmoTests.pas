@@ -340,7 +340,6 @@ begin
     timer:= 0;
     repeat
         rTime:= rTime + 300 + Level * 50 + random(300);
-        Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
         if (WorldEdge = weWrap) and (random(2)=0) then
              Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
         else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
