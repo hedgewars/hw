@@ -650,7 +650,7 @@ const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-    x, y, dY, meX, meY: real;
+    targXWrap, x, y, dY, meX, meY: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
@@ -658,9 +658,15 @@ TestTime:= 500;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     inc(TestTime, 900);
-    Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+    if (WorldEdge = weWrap) and (random(2)=0) then
+		 Vx:= (targXWrap - meX) / (TestTime + tDelta)
+    else Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
@@ -670,6 +676,7 @@ repeat
         dY:= -Vy;
         t:= TestTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + Vx;
             y:= y + dY;
             dY:= dY + cGravityf;
