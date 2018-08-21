@@ -479,7 +479,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>%1 has left (message: &quot;%2&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ist gegangen (Nachricht: »%2«)</translation>
     </message>
 </context>
 <context>
@@ -952,11 +952,11 @@ Karte bearbeiten</translation>
     </message>
     <message>
         <source>Reason:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grund:</translation>
     </message>
     <message>
         <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung wurde vom offiziellen Server abgelehnt oder die maximale Wartezeit wurde überschritten. Mit dem offiziellen Server scheint im Moment      etwas nicht zu stimmen. Dies könnte ein temporäres Problem sein. Bitte versuch es später erneut.</translation>
     </message>
     <message>
         <source>The connection was refused by the host or timed out. This might have one of the following reasons:
@@ -965,11 +965,16 @@ Karte bearbeiten</translation>
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung wurde vom Host abgelehnt oder die maximale Wartezeit ist abgelaufen. Dies könnte einen der folgenden Gründe haben:
+– Das Hedgewars-Server-Programm läuft momentant nicht auf dem Host
+– Die angegebene Portnummer ist falsch
+– Es gibt ein temporäres Netzwerkproblem
+
+Bitte überprüfe den Hostnamen und den Port und/oder versuche es später erneut.</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ist gegangen (Nachricht: »%3«)</translation>
     </message>
 </context>
 <context>
@@ -2184,11 +2189,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Gelände kann von den meisten Waffen nicht zerstört werden.</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2531,11 +2536,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Dämpfen bei Fokusverlust</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Reduziert die Lautstärke im Spiel, wenn das Spielfenster den Fokus verloren hat</translation>
     </message>
 </context>
 <context>
@@ -3323,19 +3328,19 @@ Du scheinst hier neu zu sein. Möchtest zuerst ein paar Übungsmissionen spielen
     </message>
     <message>
         <source>The connection to the server is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verbindung zum Server ging verloren.</translation>
     </message>
     <message>
         <source>Schemes - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofile – Name bereits vergeben</translation>
     </message>
     <message>
         <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Spielprofil mit dem Namen »%1« existiert bereits. Dein Spielprofil wurde zu »%2« umbenannt.</translation>
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Arsenal mit dem Namen »%1« existiert bereits. Die am Arsenal vorgenommenen Änderungen wurden verworfen.</translation>
     </message>
 </context>
 <context>
@@ -3901,7 +3906,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>clan chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Klanchat</translation>
     </message>
 </context>
 <context>
@@ -4007,7 +4012,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Talk to your clan or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit deinem Klan oder allen Teilnehmern reden:</translation>
     </message>
 </context>
 <context>
@@ -4723,11 +4728,11 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me &lt;Nachricht&gt;: Chat-Aktion, z.B. wird „/me isst Pizza” zu „* Spieler isst Pizza“</translation>
+        <translation>/me &lt;Nachricht&gt;: Chat-Aktion, z.B. wird »/me isst Pizza« zu »* Spieler isst Pizza«</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: Wirft eine virtuelle Münze und antwortet mit „heads“ oder „tails“</translation>
+        <translation>/rnd: Wirft eine virtuelle Münze und antwortet mit »heads« oder »tails«</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
@@ -4747,7 +4752,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote &lt;yes/no&gt;: Stimme dafür („yes“) oder dagegen („no“) bei der laufenden Abstimmung</translation>
+        <translation>/vote &lt;yes/no&gt;: Stimme dafür (»yes«) oder dagegen (»no«) bei der laufenden Abstimmung</translation>
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
@@ -4767,7 +4772,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only: Schalte den „registered only“-Zustand um. Falls aktiviert, können nur registrierte Spieler den Server betreten</translation>
+        <translation>/registered_only: Schalte den »registered only«-Zustand um. Falls aktiviert, können nur registrierte Spieler den Server betreten</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
@@ -4791,7 +4796,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation>/unfix: Macht den „/fix“-Befehl rückgängig</translation>
+        <translation>/unfix: Macht den »/fix«-Befehl rückgängig</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
@@ -4823,7 +4828,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Say &apos;/help&apos; in chat for a list of commands</source>
-        <translation>Sag „/help“ im Chat für eine Liste von Befehlen</translation>
+        <translation>Sag »/help« im Chat für eine Liste von Befehlen</translation>
     </message>
     <message>
         <source>room</source>
@@ -4847,15 +4852,15 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force: Bitte benutze „yes“ oder „no“.</translation>
+        <translation>/force: Bitte benutze »yes« oder »no«.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote: Bitte benutze „yes“ oder „no“.</translation>
+        <translation>/vote: Bitte benutze »yes« oder »no«.</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinausgeworfen</translation>
     </message>
 </context>
 </TS>
