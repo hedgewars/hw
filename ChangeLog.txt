@@ -106,6 +106,7 @@ Lua API:
  + New global: cMaxTurnTime. Maximum possible turn time
  + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
  + New globals: capcolDefault, capcolSetting: Default caption colors
+ * Animate library: Remove defunct follow argument for AnimVisualGear
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set

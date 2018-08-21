@@ -256,11 +256,8 @@ function AnimTeleportGear(gear, destX, destY)
   return true
 end
 
-function AnimVisualGear(gear, x, y, vgType, state, critical, follow)
-  local vgear = AddVisualGear(x, y, vgType, state, critical)
-  if follow == true then 
-    FollowGear(vgear)
-  end
+function AnimVisualGear(gear, x, y, vgType, state, critical)
+  AddVisualGear(x, y, vgType, state, critical)
   return true
 end
 
