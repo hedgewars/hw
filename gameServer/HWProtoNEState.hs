@@ -65,6 +65,7 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
     if clientProto cl < 48 && passwd == webPassword cl then
         return $ JoinLobby : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
         else
+        -- String is parsed by frontend, do not localize!
         return [ByeClient "Authentication failed"]
 
 
@@ -81,6 +82,7 @@ handleCmd_NotEntered ["PASSWORD", passwd, clientSalt] = do
             , JoinLobby
             ]
         else
+        -- String is parsed by frontend, do not localize!
         return [ByeClient "Authentication failed"]
     where
         h = B.pack . showDigest . sha1 . BL.fromChunks

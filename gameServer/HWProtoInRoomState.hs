@@ -74,7 +74,10 @@ handleCmd_inRoom ["CHAT", msg] = do
     s <- roomOthersChans
     return [AnswerClients s ["CHAT", n, msg]]
 
-handleCmd_inRoom ["PART"] = return [MoveToLobby "part"]
+-- Leave room normally
+handleCmd_inRoom ["PART"] = return [MoveToLobby ""]
+-- Leave room with custom quit message by player
+-- "part: " is a special marker string to be detected by the frontend. Not translated for obvious reasons
 handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
 
 

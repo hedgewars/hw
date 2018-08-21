@@ -117,7 +117,7 @@ processAction (ByeClient msg) = do
     loggedIn <- client's isVisible
 
     when (ri /= lobbyId) $ do
-        processAction $ MoveToLobby ("quit: " `B.append` msg)
+        processAction $ (MoveToLobby msg)
         return ()
 
     clientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS

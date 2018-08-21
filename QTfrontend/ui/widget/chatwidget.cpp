@@ -539,10 +539,28 @@ void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
-    if (message.isEmpty())
+    // Normal quit
+    if (message.isEmpty() || message == "bye")
         printChatString(nick, QString("*** ") + tr("%1 has left").arg(linkedNick(nick)), "Leave", false);
+    // Quit with custom player message
+    else if (message.startsWith("User quit: ") && message.length() > 11)
+    {
+        QString playerMessage = QString(message);
+        playerMessage.remove(0, 11);
+        printChatString(nick, QString("*** ") + tr("%1 has left (message: \"%2\")").arg(linkedNick(nick)).arg(playerMessage.toHtmlEscaped()), "Leave", false);
+    }
+    // Quit with special PART message
+    else if (message.startsWith("part: ") && message.length() > 6)
+    {
+        QString playerMessage = QString(message);
+        playerMessage.remove(0, 6);
+        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick).arg(playerMessage.toHtmlEscaped())), "Leave", false);
+    }
+    // Quit with additional server message (i.e. ping timeout)
     else
-        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(messageToHTML(message)), "Leave", false);
+    {
+        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), "Leave", false);
+    }
 }
 
 void HWChatWidget::clear()

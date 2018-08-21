@@ -1672,7 +1672,8 @@ void HWForm::ForcedDisconnect(const QString & reason)
     }
     if (pnetserver)
         return; // we have server - let it care of all things
-    if (hwnet) {
+    if (hwnet && (reason != "bye") && (!reason.startsWith("User quit: ")))
+    {
         QString errorStr = QMessageBox::tr("The connection to the server is lost.") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Reason:") + "\n" + reason));
         MessageDialog::ShowErrorMessage(errorStr, this);
     }

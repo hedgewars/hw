@@ -40,7 +40,10 @@ handleCmd ["PING"] = answerClient ["PONG"]
 
 handleCmd ("QUIT" : xs) = return [ByeClient msg]
     where
-        msg = if not $ null xs then "User quit: " `B.append` (head xs) else loc "bye"
+        -- "User quit: " is a special string parsed by frontend, do not localize.
+        -- It denotes when the /quit command has been used with message parameter.
+        -- "bye" is also a special string.
+        msg = if not $ null xs then "User quit: " `B.append` (head xs) else "bye"
 
 
 handleCmd ["PONG"] = do

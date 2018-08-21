@@ -233,6 +233,9 @@ answerAllTeams cl = concatMap toAnswer
             AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
 
 
+-- Locale function to localize strings.
+-- loc is just the identity functions, but it will be collected by scripts
+-- for localization. Use loc to mark a string for translation.
 loc :: B.ByteString -> B.ByteString
 loc = id
 

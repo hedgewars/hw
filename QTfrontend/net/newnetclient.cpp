@@ -74,7 +74,7 @@ HWNewNet::~HWNewNet()
 {
     if (m_game_connected)
     {
-        RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("User quit"));
+        RawSendNet(QString("QUIT%1").arg(delimiter));
         emit disconnected(tr("User quit"));
     }
     NetSocket.flush();
@@ -91,7 +91,7 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 void HWNewNet::Disconnect()
 {
     if (m_game_connected)
-        RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("User quit"));
+        RawSendNet(QString("QUIT%1").arg(delimiter));
     m_game_connected = false;
 
     NetSocket.disconnectFromHost();
@@ -870,7 +870,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             if (lst.size() < 3)
                 emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
             else
-                emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+            {
+                QString leaveMsg = QString(lst[2]);
+                if (leaveMsg.startsWith("User quit: "))
+                {
+                    leaveMsg.remove(0, 11);
+                    emit chatStringFromNet(tr("%1 *** %2 has left (message: \"%3\")").arg('\x03').arg(lst[1]).arg(leaveMsg));
+                }
+                else if (leaveMsg.startsWith("part: "))
+                {
+                    leaveMsg.remove(0, 6);
+                    emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1]).arg(leaveMsg));
+                }
+                else
+                    emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1]).arg(HWApplication::translate("server", leaveMsg.toLatin1().constData())));
+            }
             m_playersModel->playerLeftRoom(lst[1]);
             return;
         }
