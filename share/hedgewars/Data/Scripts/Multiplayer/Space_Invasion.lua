@@ -1224,7 +1224,7 @@ function onGameTick()
 		if (TimeLeft <= 0) and (stopMovement == true) and (CurrentHedgehog ~= nil) then
 			local j,k = GetGearVelocity(CurrentHedgehog)
 			if (j ~= 0) and (k ~= 0) then
-				AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, true)
+				AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
 			end
 		end
 
@@ -1357,7 +1357,7 @@ function onGameTick()
 				---------------
 				-- the trail lets you know you have 5s left to pilot, akin to birdy feathers
 				if (TimeLeft <= 5) and (TimeLeft > 0) then							--vgtSmoke
-					local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, true)
+					local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
 					SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurrentHedgehog)) )
 				end
 				--------------
@@ -1935,7 +1935,7 @@ function CheckVarious(gear)
 		if beam == true then
 
 			if dist < 3000 then
-				local tempE = AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, true)
+				local tempE = AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFF00FFFF)
 				PlaySound(sndVaporize)
 				DeleteGear(gear)
@@ -2095,12 +2095,12 @@ function HandleCircles()
 				--vgtSmokeTrace
 				if vType[i] == "ammo" then
 
-					local tempE = AddVisualGear(vCircX[i], vCircY[i], vgtSmoke, 0, true)
+					local tempE = AddVisualGear(vCircX[i], vCircY[i], vgtSmoke, 0, false)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i], nil, nil, nil, nil, nil, nil, nil, vCircCol[i] )
 
 				elseif vType[i] == "bonus" then
 
-					local tempE = AddVisualGear(vCircX[i], vCircY[i], vgtDust, 0, true)
+					local tempE = AddVisualGear(vCircX[i], vCircY[i], vgtDust, 0, false)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i], nil, nil, nil, nil, nil, 1, nil, colorShieldParticle)
 
 
@@ -2110,13 +2110,13 @@ function HandleCircles()
 					local g = vgtSteam
 					local trailColour = colorBossParticle
 
-					local tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
+					local tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, false)
 					SetVisualGearValues(tempE, vCircX[i], vCircY[i]+k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
 
-					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
+					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, false)
 					SetVisualGearValues(tempE, vCircX[i]+k, vCircY[i]-k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
 
-					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, true)
+					tempE = AddVisualGear(vCircX[i], vCircY[i], g, 0, false)
 					SetVisualGearValues(tempE, vCircX[i]-k, vCircY[i]-k, nil, nil, nil, nil, nil, nil, nil, trailColour-75 )
 
 
