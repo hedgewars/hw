@@ -467,6 +467,10 @@ Sprawdź poprawność instalacji!</translation>
         <source>List of players</source>
         <translation>Lista graczy</translation>
     </message>
+    <message>
+        <source>%1 has left (message: &quot;%2&quot;)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -738,6 +742,7 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>Ziarno</translation>
     </message>
     <message>
@@ -893,10 +898,12 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>IP</source>
+        <extracomment>short for &quot;IP address&quot; (Internet Protocol), part of server address</extracomment>
         <translation>IP</translation>
     </message>
     <message>
         <source>Port</source>
+        <extracomment>short for &quot;port number&quot;, part of server address</extracomment>
         <translation>Port</translation>
     </message>
 </context>
@@ -908,11 +915,11 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Połączenie odrzucone</translation>
+        <translation type="vanished">Połączenie odrzucone</translation>
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Powód wyjścia: </translation>
+        <translation type="vanished">Powód wyjścia: </translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -953,6 +960,27 @@ Ostatnia wiadomość silnika:
     <message>
         <source>Server authentication error</source>
         <translation>Błąd uwierzytelniania serwera</translation>
+    </message>
+    <message>
+        <source>Reason:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The connection was refused by the host or timed out. This might have one of the following reasons:
+- The Hedgewars Server program does currently not run on the host
+- The specified port number is incorrect
+- There is a temporary network problem
+
+Please check the host name and port settings and/or try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1157,6 +1185,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
+        <extracomment>MOTD = Message Of The Day, the message which is shown to players joining the server</extracomment>
         <translation>Podgląd wiadomości dnia:</translation>
     </message>
     <message>
@@ -1933,7 +1962,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation>Podłoże jest niezniszczalne!</translation>
+        <translation type="vanished">Podłoże jest niezniszczalne!</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -2134,6 +2163,14 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
         <translation>Wybierz jeża na początku tury</translation>
+    </message>
+    <message>
+        <source>Land can not be destroyed by most weapons.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation type="unfinished">%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2470,6 +2507,15 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
         <translation>Jeśli włączone, Hedgewars dodaje datę i czas w formacie &quot;RRRR-MM-DD_gg-mm&quot; do automatycznie utworzonych demo.</translation>
+    </message>
+    <message>
+        <source>Dampen when losing focus</source>
+        <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reduce the game audio volume if the game window has lost its focus</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2968,7 +3014,7 @@ Czy na pewno chcesz wyjść?</translation>
     <name>QMessageBox</name>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Połączenie z serwerem zostało przerwane</translation>
+        <translation type="vanished">Połączenie z serwerem zostało przerwane</translation>
     </message>
     <message>
         <source>Error</source>
@@ -3162,7 +3208,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>Nie można nadpisać domyślnego zestawu broni &apos;%1&apos;!</translation>
+        <translation type="vanished">Nie można nadpisać domyślnego zestawu broni &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
@@ -3263,6 +3309,22 @@ Wydajesz się być tu nowy. Zechcesz zagrać w jakieś misje treningowe, by pozn
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
         <translation>Nie można użyć schematu broni &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>The connection to the server is lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Name already taken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3506,6 +3568,7 @@ Wydajesz się być tu nowy. Zechcesz zagrać w jakieś misje treningowe, by pozn
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>Ziarno</translation>
     </message>
 </context>
@@ -3807,7 +3870,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>team chat</source>
-        <translation>czat drużyny</translation>
+        <translation type="vanished">czat drużyny</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
@@ -3824,6 +3887,10 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <message>
         <source>show mission information</source>
         <translation>pokaż informacje o misji</translation>
+    </message>
+    <message>
+        <source>clan chat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3885,7 +3952,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Porozmawiaj z drużyną bądź wszystkimi graczami:</translation>
+        <translation type="vanished">Porozmawiaj z drużyną bądź wszystkimi graczami:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
@@ -3926,6 +3993,10 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <message>
         <source>Heads-up display:</source>
         <translation>Wyświetl interfejs:</translation>
+    </message>
+    <message>
+        <source>Talk to your clan or all participants:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4362,7 +4433,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>bye</source>
-        <translation>pa</translation>
+        <translation type="vanished">pa</translation>
     </message>
     <message>
         <source>No such room</source>
@@ -4763,6 +4834,10 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
         <translation>/vote: Uzyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
+    </message>
+    <message>
+        <source>Kicked</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

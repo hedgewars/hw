@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>This is optional, but this information might help us to resolve bugs and other technical problems.</translation>
     </message>
 </context>
 <context>
@@ -440,6 +440,10 @@ Please check your installation!</translation>
     <message>
         <source>List of players</source>
         <translation>List of players</translation>
+    </message>
+    <message>
+        <source>%1 has left (message: &quot;%2&quot;)</source>
+        <translation>%1 has left (message: “%2”)</translation>
     </message>
 </context>
 <context>
@@ -698,6 +702,7 @@ Last engine message:
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>Seed</translation>
     </message>
     <message>
@@ -853,10 +858,12 @@ Last engine message:
     </message>
     <message>
         <source>IP</source>
+        <extracomment>short for &quot;IP address&quot; (Internet Protocol), part of server address</extracomment>
         <translation>IP</translation>
     </message>
     <message>
         <source>Port</source>
+        <extracomment>short for &quot;port number&quot;, part of server address</extracomment>
         <translation>Port</translation>
     </message>
 </context>
@@ -868,7 +875,7 @@ Last engine message:
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Connection refused</translation>
+        <translation type="vanished">Connection refused</translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -876,7 +883,7 @@ Last engine message:
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Quit reason: </translation>
+        <translation type="vanished">Quit reason: </translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -913,6 +920,32 @@ Last engine message:
     <message>
         <source>Server authentication error</source>
         <translation>Server authentication error</translation>
+    </message>
+    <message>
+        <source>Reason:</source>
+        <translation>Reason:</translation>
+    </message>
+    <message>
+        <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
+        <translation>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</translation>
+    </message>
+    <message>
+        <source>The connection was refused by the host or timed out. This might have one of the following reasons:
+- The Hedgewars Server program does currently not run on the host
+- The specified port number is incorrect
+- There is a temporary network problem
+
+Please check the host name and port settings and/or try again later.</source>
+        <translation>The connection was refused by the host or timed out. This might have one of the following reasons:
+– The Hedgewars Server program does currently not run on the host
+– The specified port number is incorrect
+– There is a temporary network problem
+
+Please check the host name and port settings and/or try again later.</translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
+        <translation>%1 *** %2 has left (message: “%3”)</translation>
     </message>
 </context>
 <context>
@@ -1090,6 +1123,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
+        <extracomment>MOTD = Message Of The Day, the message which is shown to players joining the server</extracomment>
         <translation>MOTD preview:</translation>
     </message>
     <message>
@@ -1843,7 +1877,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation>Land can not be destroyed!</translation>
+        <translation type="vanished">Land can not be destroyed!</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -2044,6 +2078,14 @@ just enter your nickname.</translation>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
         <translation>Select a hedgehog at the beginning of a turn</translation>
+    </message>
+    <message>
+        <source>Land can not be destroyed by most weapons.</source>
+        <translation>Land can not be destroyed by most weapons.</translation>
+    </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2368,6 +2410,15 @@ just enter your nickname.</translation>
     <message>
         <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
         <translation>If enabled, Hedgewars adds the date and time in the form “YYYY-MM-DD_hh-mm” for automatically created demos.</translation>
+    </message>
+    <message>
+        <source>Dampen when losing focus</source>
+        <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
+        <translation>Dampen when losing focus</translation>
+    </message>
+    <message>
+        <source>Reduce the game audio volume if the game window has lost its focus</source>
+        <translation>Reduce the game audio volume if the game window has lost its focus</translation>
     </message>
 </context>
 <context>
@@ -2822,7 +2873,7 @@ Do you really want to quit?</translation>
     <name>QMessageBox</name>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Connection to server is lost</translation>
+        <translation type="vanished">Connection to server is lost</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2991,7 +3042,7 @@ Do you still want to join the room?</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>Cannot overwrite default weapon set ‘%1’!</translation>
+        <translation type="vanished">Cannot overwrite default weapon set ‘%1’!</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
@@ -3086,6 +3137,22 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
         <translation>Cannot use the weapon scheme ‘%1’!</translation>
+    </message>
+    <message>
+        <source>The connection to the server is lost.</source>
+        <translation>The connection to the server is lost.</translation>
+    </message>
+    <message>
+        <source>Schemes - Name already taken</source>
+        <translation>Schemes—Name already taken</translation>
+    </message>
+    <message>
+        <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
+        <translation>A scheme with the name ‘%1’ already exists. Your scheme has been renamed to ‘%2’.</translation>
+    </message>
+    <message>
+        <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
+        <translation>A weapon scheme with the name ‘%1’ already exists. Changes made to the weapon scheme have been discarded.</translation>
     </message>
 </context>
 <context>
@@ -3329,6 +3396,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>Seed</translation>
     </message>
 </context>
@@ -3609,7 +3677,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>team chat</source>
-        <translation>team chat</translation>
+        <translation type="vanished">team chat</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
@@ -3621,11 +3689,15 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>change timer</translation>
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>show mission information</translation>
+    </message>
+    <message>
+        <source>clan chat</source>
+        <translation>clan chat</translation>
     </message>
 </context>
 <context>
@@ -3687,7 +3759,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Talk to your team or all participants:</translation>
+        <translation type="vanished">Talk to your team or all participants:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
@@ -3728,6 +3800,10 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     <message>
         <source>Heads-up display:</source>
         <translation>Heads-up display:</translation>
+    </message>
+    <message>
+        <source>Talk to your clan or all participants:</source>
+        <translation>Talk to your clan or all participants:</translation>
     </message>
 </context>
 <context>
@@ -4050,22 +4126,22 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>D-pad</source>
-        <translation type="unfinished"></translation>
+        <translation>D-pad</translation>
     </message>
     <message>
         <source>Axis %1 %2</source>
         <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Axis %1 %2</translation>
     </message>
     <message>
         <source>Button %1</source>
         <extracomment>Game controller button. %1 = button number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Button %1</translation>
     </message>
     <message>
         <source>D-pad %1 %2</source>
         <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>D-pad %1 %2</translation>
     </message>
 </context>
 <context>
@@ -4164,7 +4240,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>bye</source>
-        <translation>bye</translation>
+        <translation type="vanished">bye</translation>
     </message>
     <message>
         <source>No such room</source>
@@ -4432,139 +4508,143 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
+        <translation>/info &lt;player&gt;: Show info about player</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/me &lt;message&gt;: Chat action, e.g. ‘/me eats pizza’ becomes ‘* Player eats pizza’</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd: Flip a virtual coin and reply with ‘heads’ or ‘tails’</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
+        <translation>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
+        <translation>/help: Show chat command help</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote [arguments]: Start a vote</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote &lt;yes/no&gt;: Vote ‘yes’ or ‘no’ for active vote</translation>
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
+        <translation>/delegate &lt;player&gt;: Surrender room control to player</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams &lt;N&gt;: Limit maximum number of teams to N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
+        <translation>/registered_only: Toggle ‘registered only’ state. If enabled, only registered players can join server</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
+        <translation>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</translation>
     </message>
     <message>
         <source>/save &lt;parameter&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>/save &lt;parameter&gt;</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
+        <translation>/stats: Query server stats</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/force &lt;yes/no&gt;: Force vote result for active vote</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>/fix: Force this room to stay open when it is empty</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation type="unfinished"></translation>
+        <translation>/unfix: Undo the /fix command</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom &lt;file name&gt;: Save room configuration into a file</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom &lt;file name&gt;: Load room configuration from a file</translation>
     </message>
     <message>
         <source>/delete &lt;parameter&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete &lt;parameter&gt;</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>List of lobby chat commands:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>List of room chat commands:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation>Commands for server admins only:</translation>
     </message>
     <message>
         <source>Unknown command:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unknown command:</translation>
     </message>
     <message>
         <source>Say &apos;/help&apos; in chat for a list of commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Say ‘/help’ in chat for a list of commands</translation>
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>room</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>lobby</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation type="unfinished"></translation>
+        <translation>(playing)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation type="unfinished"></translation>
+        <translation>(spectating)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Player is not online.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/force: Please use ‘yes’ or ‘no’.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote: Please use ‘yes’ or ‘no’.</translation>
+    </message>
+    <message>
+        <source>Kicked</source>
+        <translation>Kicked</translation>
     </message>
 </context>
 </TS>
