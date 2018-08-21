@@ -705,7 +705,9 @@ function DrawBlip(gear)
 		baseColor = GetClanColor(GetHogClan(CurrentHedgehog))
 		alpha = rAlpha
 	end
-	SetVisualGearValues(getGearValue(gear,"CIRC"), getGearValue(gear,"RX"), getGearValue(gear,"RY"), 100, 255, 1, 10, 0, radius, 3, baseColor-alpha)
+	if getGearValue(gear,"CIRC") ~= nil then
+		SetVisualGearValues(getGearValue(gear,"CIRC"), getGearValue(gear,"RX"), getGearValue(gear,"RY"), 100, 255, 1, 10, 0, radius, 3, baseColor-alpha)
+	end
 end
 
 function TrackRadarBlip(gear)
@@ -1640,11 +1642,14 @@ function onGearAdd(gear)
 
 		trackGear(gear)
 
-		table.insert(rCirc, AddVisualGear(0,0,vgtCircle,0,true) )
-		setGearValue(gear,"CIRC",rCirc[#rCirc])
+		local vg = AddVisualGear(0, 0, vgtCircle, 0, true)
+		if vg then
+			table.insert(rCirc, vg)
+			setGearValue(gear,"CIRC",vg)
+			SetVisualGearValues(vg, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xff00ffff)
+		end
 		setGearValue(gear,"RX",0)
 		setGearValue(gear,"RY",0)
-		SetVisualGearValues(rCirc[#rCirc], 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xff00ffff)
 
 		allowCrate = false
 		crateSpawned = true
@@ -1681,7 +1686,8 @@ function onGearDelete(gear)
 		crateGearsInGame = crateGearsInGame - 1
 
 		for i = 1, #rCirc do
-			if rCirc[i] == getGearValue(gear,"CIRC") then
+			local CIRC = getGearValue(gear,"CIRC")
+			if CIRC ~= nil and rCirc[i] == CIRC then
 				DeleteVisualGear(rCirc[i])
 				table.remove(rCirc, i)
 			end

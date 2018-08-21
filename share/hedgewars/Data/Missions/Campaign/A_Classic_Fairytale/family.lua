@@ -231,7 +231,7 @@ function AfterMidAnim()
      loc("Hint: It might be a good idea to place a girder before starting to drill. Just saying.").."|"..
      string.format(loc("Hint: %s needs to get really close to the princess!"), nativeNames[m5DeployedNum]).."|"..
      loc("Mines time: 5 seconds"), 1, 7000)
-  vCirc = AddVisualGear(0,0,vgtCircle,0,true)
+  local vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
 

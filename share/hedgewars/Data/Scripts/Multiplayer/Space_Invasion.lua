@@ -1014,14 +1014,11 @@ function onGameInit()
 	HealthDecrease = 0
 	WorldEdge = weNone
 
-	for i = 0, 4 do
-		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+	local tags = { TAG_TIME, TAG_BARRELS, TAG_SHIELD, TAG_ROUND_SCORE }
+	for t=1, #tags do
+		vTag[tags[t]] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+		HideTag(tags[t])
 	end
-
-	HideTag(TAG_TIME)
-	HideTag(TAG_BARRELS)
-	HideTag(TAG_SHIELD)
-	HideTag(TAG_ROUND_SCORE)
 
 	wep[0] = loc("Barrel Launcher")
 	wep[1] = loc("Mine Deployer")

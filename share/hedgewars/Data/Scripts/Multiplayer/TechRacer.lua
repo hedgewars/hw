@@ -1087,16 +1087,16 @@ function PortalEffects(gear)
 			if remLife == 0 then
 
 				-- Make portal ball disappear in a puff of smoke
-				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
-				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
+				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
-				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
+				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
-				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
+				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				PlaySound(sndVaporize)

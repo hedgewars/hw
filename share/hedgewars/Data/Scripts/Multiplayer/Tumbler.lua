@@ -594,7 +594,7 @@ function onGameInit()
 	Delay = 1000
 
 	for i = 0, 3 do
-		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+		vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
 	HideTags()

@@ -183,9 +183,7 @@ function ManageTeleporterEffects()
 			-- smoketrace and eviltrace are not effected by wind?
 			-- chunk is a LR falling gear
 			local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
-			if tempE ~= 0 then
-				SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, nil, nil, fCol[i])
-			end
+			SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, nil, nil, fCol[i])
 		end
 	end
 end

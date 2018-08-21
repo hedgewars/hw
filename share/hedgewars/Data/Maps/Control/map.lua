@@ -217,10 +217,8 @@ function AwardPoints()
 	for i = 0,(zCount-1) do			
 		if CurrentHedgehog ~= nil then		
 			if cOwnerClan[i] == GetHogClan(CurrentHedgehog) then
-				g = AddVisualGear(vCircX[i], vCircY[i]-100, vgtHealthTag, 100, False)
-                if g ~= 0 then
-				    SetVisualGearValues(g, vCircX[i], vCircY[i]-100, 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
-                end
+				local g = AddVisualGear(vCircX[i], vCircY[i]-100, vgtHealthTag, 100, false)
+				SetVisualGearValues(g, vCircX[i], vCircY[i]-100, 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
 			end
 		end
 	end
