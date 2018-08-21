@@ -310,7 +310,6 @@ function DrawTag(i)
 
 	DeleteVisualGear(vTag[i])
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
 	SetVisualGearValues	(
 				vTag[i], 		--id
 				-(ScreenWidth/2) + xOffset,	--xoffset
@@ -319,7 +318,7 @@ function DrawTag(i)
 				0, 			--dy
 				zoomL, 			--zoom
 				1, 			--~= 0 means align to screen
-				g7, 			--frameticks
+				nil, 			--frameticks
 				tValue, 		--value
 				240000, 		--timer
 				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
@@ -682,13 +681,13 @@ function onNewTurn()
 		gear = AddGear(100, 100, gtExplosives, 0, 0, 0, 0)
 		SetHealth(gear, 100)
 		if FindPlace(gear, false, 0, LAND_WIDTH, false) ~= nil then
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		end
 	end
 	for i = 0, mineSpawn-1 do
 		gear = AddGear(100, 100, gtMine, 0, 0, 0, 0)
 		if FindPlace(gear, false, 0, LAND_WIDTH, false) ~= nil then
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		end
 	end
 
@@ -781,9 +780,8 @@ function onGameTick()
 			---------------
 			-- the trail lets you know you have 5s left to pilot, akin to birdy feathers
 			if (TimeLeft <= 5) and (TimeLeft > 0) then
-				tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(GetHogClan(CurrentHedgehog)) )
+				local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurrentHedgehog)) )
 			end
 			--------------
 

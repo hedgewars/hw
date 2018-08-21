@@ -882,7 +882,7 @@ end
 function WallHit(id, zXMin,zYMin, zWidth, zHeight)
 
 	if wTouched[id] == false then
-		tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
+		AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 		PlaySound(sndExplosion)
 		wallsLeft = wallsLeft - 1
 
@@ -900,7 +900,7 @@ function WallHit(id, zXMin,zYMin, zWidth, zHeight)
 
 	wTouched[id] = true
 	if #wTouched > 0 then
-		tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
+		AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
 	end
 
 end
@@ -925,10 +925,7 @@ function BorderSpark(zXMin,zYMin, zWidth, zHeight, bCol)
 		local eY = zYMin + GetRandom(zHeight+10)
 
 		local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
-		if tempE ~= 0 then
-			local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, 1, g9, bCol )
-		end
+		SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, 1, nil, bCol )
 	end
 
 end

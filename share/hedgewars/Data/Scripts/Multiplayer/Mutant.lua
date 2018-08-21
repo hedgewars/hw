@@ -294,8 +294,7 @@ function onGameTick()
         for i = 0, #hhs do
             if circles[hhs[i]] ~= nil and hhs[i]~= nil then
                 hhx, hhy = GetGearPosition(hhs[i])
-                X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint = GetVisualGearValues(circles[hhs[i]])
-                SetVisualGearValues(circles[hhs[i]], hhx + 1, hhy - 3, 0, 0, 0, 0, 0, 40 - (circleFrame % 25), Timer, Tint)
+                SetVisualGearValues(circles[hhs[i]], hhx + 1, hhy - 3, 0, 0, 0, 0, 0, 40 - (circleFrame % 25))
             end
         end
 

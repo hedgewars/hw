@@ -612,9 +612,8 @@ function HandleGhost()
 
                 fastIndex = fastIndex + 1
 
-                tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
-                g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-                SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, fastColour )
+                local tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
+                SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, fastColour )
 
         end
 

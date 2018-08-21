@@ -194,7 +194,6 @@ function TransferWeps(gear)
 
 		local x,y,color
 		local vgear
-		local vgtX, vgtY, vgtdX, vgtdY, vgtAngle, vgtFrame, vgtFrameTicks, vgtState, vgtTimer, vgtTint
 		local dspl = IsHogLocal(CurrentHedgehog)
 		local ammolist = ''
 
@@ -225,9 +224,8 @@ function TransferWeps(gear)
 					y = y + 32
 					vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
 					if vgear ~= nil then
-						vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint = GetVisualGearValues(vgear)
-						vgtFrame = w
-						SetVisualGearValues(vgear,vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint)
+						local vgtFrame = w
+						SetVisualGearValues(vgear,nil,nil,nil,nil,nil,vgtFrame)
 					end
 				end
 

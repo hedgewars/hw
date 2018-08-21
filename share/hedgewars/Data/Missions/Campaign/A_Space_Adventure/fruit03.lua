@@ -183,9 +183,8 @@ local function displayAmmoIcon(gear, ammoType, i)
 	local y = GetY(gear) + 32 * i
 	local vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
 	if vgear ~= nil then
-		local vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint = GetVisualGearValues(vgear)
 		local vgtFrame = ammoType
-		SetVisualGearValues(vgear,vgtX,vgtY,vgtdX,vgtdY,vgtAngle,vgtFrame,vgtFrameTicks,vgtState,vgtTimer,vgtTint)
+		SetVisualGearValues(vgear,nil,nil,nil,nil,nil,vgtFrame)
 	end
 end
 
