@@ -67,7 +67,7 @@ The most important default controls are:
 * P: Pause, when playing offline, toggle automatic turn skipping when online
 * Esc: Quit with prompt
 * T: Chat
-* U: Team chat
+* U: Clan chat
 
 ### Default controller controls
 Hedgewars also supports controllers. By default, Hedgewars sets up a few

@@ -112,8 +112,8 @@
 01:44=%1×
 ; Chat. %1 = player, %2 = message
 01:45=%1: %2
-; Team chat. %1 = player, %2 = message
-01:46=[Team] %1: %2
+; Clan chat. %1 = player, %2 = message
+01:46=[Clan] %1: %2
 ; Hedgehog chat. %1 = hog name, %2 = message
 01:47=[%1]: %2
 
