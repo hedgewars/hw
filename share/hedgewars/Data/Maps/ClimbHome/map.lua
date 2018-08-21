@@ -272,16 +272,13 @@ function onGameTick20()
     --end
 
     for s,i in pairs(Stars) do
-        g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(s)
-        if g1 > WaterLine + 500 then
+        local _, Y = GetVisualGearValues(s)
+        if Y ~= nil and Y > WaterLine + 500 then
             DeleteVisualGear(s)
             Stars[s] = nil
+        elseif Y == nil then
+            Stars[s] = nil
         end
-        --else  wasn't really visible, pointless.
-        --    g5 = g5+1
-        --    if g5 > 360 then g5 = 0 end
-        --    SetVisualGearValues(s, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10)
-        --end
     end
 
     -- This will be executed if a player reached home in multiplayer
@@ -360,19 +357,21 @@ function onGameTick20()
             end
         end
         if y > 0 and y < 30000 and MaxHeight > 286 and math.random(y) < 500 then
-            local s = AddVisualGear(0, 0, vgtStraightShot, 0, true)
-            local c = div(250000,y)
-            if c > 255 then c = 255 end
-            c = c * 0x10000 + 0xFF0000FF
-            SetVisualGearValues(s,
-                math.random(2048), -5000, 0, -1-(1/y*1000), 
-                math.random(360),
-                0,
-                999999999, -- frameticks
-                sprStar, -- star
-                0, c)
-                --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
-            Stars[s] = 1
+            local s = AddVisualGear(0, 0, vgtStraightShot, 0, false)
+            if s then
+                local c = div(250000,y)
+                if c > 255 then c = 255 end
+                c = c * 0x10000 + 0xFF0000FF
+                SetVisualGearValues(s,
+                    math.random(2048), -5000, 0, -1-(1/y*1000),
+                    math.random(360),
+                    0,
+                    999999999, -- frameticks
+                    sprStar, -- star
+                    0, c)
+                    --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
+                Stars[s] = 1
+            end
         end
 
         local vx, vy = GetGearVelocity(CurrentHedgehog)
@@ -537,7 +536,6 @@ function onGameTick20()
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
                     hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                    local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
                     local score = 32640-hTagHeight
                     -- snagged from space invasion
                     SetVisualGearValues (
@@ -548,7 +546,7 @@ function onGameTick20()
                             0,          --dy
                             1.1,        --zoom
                             1,          --~= 0 means align to screen
-                            g7,         --frameticks
+                            nil,        --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
                             score,    --value
@@ -572,7 +570,6 @@ function onGameTick20()
                     if not isSinglePlayer then
                         if rTag ~= nil then DeleteVisualGear(rTag) end
                         rTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                        local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
                         -- snagged from space invasion
                         SetVisualGearValues (
                             rTag,        --id
@@ -582,7 +579,7 @@ function onGameTick20()
                             0,          --dy
                             1.1,        --zoom
                             1,          --~= 0 means align to screen
-                            g7,         --frameticks
+                            nil,        --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
                             getActualHeight(RecordHeight),    --value
@@ -595,7 +592,6 @@ function onGameTick20()
             if MaxHeight > 286 then
                 if tTag ~= nil then DeleteVisualGear(tTag) end
                 tTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tTag)
                 -- snagged from space invasion
                 SetVisualGearValues (
                     tTag,        --id
@@ -605,7 +601,7 @@ function onGameTick20()
                     0,          --dy
                     1.1,        --zoom
                     1,          --~= 0 means align to screen
-                    g7,         --frameticks
+                    nil,        --frameticks
                     (GameTime-startTime)/1000,    --value
                     99999999999,--timer
                     0xffffffff
