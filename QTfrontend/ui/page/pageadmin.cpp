@@ -73,6 +73,7 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 
         // 4
         QLabel * lblPreview = new QLabel(this);
+        //: MOTD = Message Of The Day, the message which is shown to players joining the server
         lblPreview->setText(tr("MOTD preview:"));
         tab1Layout->addWidget(lblPreview, 4, 0);
 
@@ -94,6 +95,7 @@ QLayout * PageAdmin::bodyLayoutDefinition()
         twBans = new QTableWidget(this);
         twBans->setColumnCount(3);
         twBans->setHorizontalHeaderLabels(QStringList()
+                              //: IP = short for "IP address" (Internet Protocol). Nick = short for "nick name"
                               << tr("IP/Nick")
                               << tr("Expiration")
                               << tr("Reason")

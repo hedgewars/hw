@@ -512,6 +512,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             // Dampen
 
             CBDampenAudio = new QCheckBox(groupGame);
+            //: Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus
             CBDampenAudio->setText(QCheckBox::tr("Dampen when losing focus"));
             CBDampenAudio->setWhatsThis(QCheckBox::tr("Reduce the game audio volume if the game window has lost its focus"));
             groupGame->layout()->addWidget(CBDampenAudio, 2, 1, 1, 3, Qt::AlignLeft);

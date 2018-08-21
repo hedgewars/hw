@@ -154,6 +154,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     /* Seed button */
 
     btnSeed = new QPushButton(parentWidget()->parentWidget());
+    //: Refers to the "random seed"; the source of randomness in the game
     btnSeed->setText(tr("Seed"));
     btnSeed->setWhatsThis(tr("View and edit the seed, the source of randomness in the game"));
     btnSeed->setStyleSheet("padding: 5px;");
