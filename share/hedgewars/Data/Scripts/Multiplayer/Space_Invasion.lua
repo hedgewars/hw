@@ -256,10 +256,6 @@ local beam = false
 local pShield
 local shieldHealth
 
-local shockwave
-local shockwaveHealth = 0
-local shockwaveRad = 300
-
 local timer100 = 0
 
 local vTag = {}
@@ -329,7 +325,6 @@ local colorMsgDepleted = 0xFF0000FF
 local colorMsgBonus = 0xFFBA00FF
 local colorTimer = 0xFFEE00FF
 local colorScore = 0xFFFFFFFF
-local colorShockwave = 0xFF3300FF
 
 -------------------------------------------
 -- some lazy copypasta/modified methods
@@ -1096,7 +1091,6 @@ function onNewTurn()
 	boosterOn = false
 	beam = false
 	shieldHealth = startShield + 80 -- 50 = 5 secs, roughly
-	shockwaveHealth = 0
 
 	RK = 0
 	GK = 0
@@ -1616,8 +1610,6 @@ function CreateMeSomeCircles()
 	end
 
 	pShield = AddVisualGear(0,0,vgtCircle,0,true)
-
-	shockwave = AddVisualGear(0,0,vgtCircle,0,true)
 
 end
 
@@ -2198,13 +2190,6 @@ function HandleCircles()
 
 		end
 
-
-		-- derp
-		if shockwaveHealth > 0 then
-			shockwaveHealth = shockwaveHealth - 1
-			shockwaveRad = shockwaveRad + 80
-		end
-
 	end
 
 	for i = 0,(vCCount-1) do
@@ -2225,12 +2210,6 @@ function HandleCircles()
 			DrawTag(TAG_SHIELD)
 		else
 			SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 0)
-		end
-
-		if shockwaveHealth > 0 then
-			SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, shockwaveRad, nil, colorShockwave-0x000000FF - -shockwaveHealth )
-		else
-			SetVisualGearValues(shockwave, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 0)
 		end
 
 	end
