@@ -481,7 +481,7 @@ type
             sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
             sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
             sidFPS, sidLuaParsingOff, sidLuaParsingOn, sidLuaParsingDenied,
-            sidAmmoCount);
+            sidAmmoCount, sidChat, sidChatTeam, sidChatHog);
 
     TCmdHelpStrId = (
             sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,

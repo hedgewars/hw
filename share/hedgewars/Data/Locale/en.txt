@@ -110,6 +110,12 @@
 01:43=Lua parsing is not allowed in online games!
 ; Ammo count in ammo menu
 01:44=%1×
+; Chat. %1 = player, %2 = message
+01:45=%1: %2
+; Team chat. %1 = player, %2 = message
+01:46=[Team] %1: %2
+; Hedgehog chat. %1 = hog name, %2 = message
+01:47=[%1]: %2
 
 ; Event messages
 ; Normal hog (%1) died (0 health)

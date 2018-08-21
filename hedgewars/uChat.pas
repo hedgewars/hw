@@ -35,7 +35,7 @@ procedure CopyToClipboard(var newContent: shortstring);
 procedure TextInput(var event: TSDL_TextInputEvent);
 
 implementation
-uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
+uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uLocale;
 
 const MaxStrIndex = 27;
       MaxInputStrLen = 200;
@@ -1113,7 +1113,7 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
-        s:= #1 + UserNick + ': ' + s;
+        s:= #1 + Format(trmsg[sidChat], [UserNick, s]);
 
     AddChatString(s)
 end;
@@ -1122,7 +1122,7 @@ procedure chTeamSay(var s: shortstring);
 begin
     SendIPC('b' + s);
 
-    s:= #4 + '[Team] ' + UserNick + ': ' + s;
+    s:= #4 + Format(trmsg[sidChatTeam], [UserNick, s]);
 
     AddChatString(s)
 end;

@@ -86,6 +86,7 @@ uses LuaPas,
     uVisualGearsList,
     uGearsHandlersMess,
     uPhysFSLayer,
+    uLocale,
     SDLh
 {$IFNDEF PAS2C}
     , typinfo
@@ -1628,7 +1629,7 @@ begin
                vgear^.Text:= lua_tostring(L, 2);
                if Gear^.Kind = gtHedgehog then
                    begin
-                   AddChatString(#9+'[' + gear^.Hedgehog^.Name + '] '+vgear^.text);
+                   AddChatString(#9+FormatA(trmsg[sidChatHog], [gear^.Hedgehog^.Name, vgear^.text]));
                    vgear^.Hedgehog:= gear^.Hedgehog
                    end
                else vgear^.Frame:= gear^.uid;
