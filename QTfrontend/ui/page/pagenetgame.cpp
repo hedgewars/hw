@@ -218,6 +218,10 @@ void PageNetGame::displayWarning(const QString & message)
     chatWidget->displayWarning(message);
 }
 
+void PageNetGame::cleanupFakeNetTeams()
+{
+    pNetTeamsWidget->cleanupFakeNetTeams();
+}
 
 void PageNetGame::setReadyStatus(bool isReady)
 {
@@ -280,6 +284,7 @@ void PageNetGame::setMasterMode(bool isMaster)
 
 void PageNetGame::setUser(const QString & nickname)
 {
+    pNetTeamsWidget->setUser(nickname);
     chatWidget->setUser(nickname);
 }
 

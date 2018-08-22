@@ -34,6 +34,7 @@ Game:
 Frontend:
  + Add setting to disable audio dampening when losing window focus
  * Fix rare crash when aborting video encoding in progress
+ * Fix critical failure to cleanup teams list after rejoining game under certain conditions
  * Controllers are detected again
  * Fix failure to shutdown game window properly after player got kicked
  * No longer allow having schemes with equal names (case-insensitive)

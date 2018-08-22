@@ -1746,7 +1746,15 @@ void HWForm::GameStateChanged(GameState gameState)
             Music(ui.pageOptions->CBFrontendMusic->isChecked());
             if (wBackground) wBackground->startAnimation();
             GoToPage(ID_PAGE_GAMESTATS);
-            if (hwnet && (!game || !game->netSuspend)) hwnet->gameFinished(true);
+            if (hwnet)
+            {
+                if (!game || !game->netSuspend)
+                    hwnet->gameFinished(true);
+                // After a game, the local player might have pseudo-teams left
+                // when rejoining a previously left game. This makes sure the
+                // teams list is in a consistent state.
+                ui.pageNetGame->cleanupFakeNetTeams();
+            }
             if (game) game->netSuspend = false;
             break;
         }
