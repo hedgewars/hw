@@ -143,13 +143,13 @@ QLayout * PageNetGame::footerLayoutDefinition()
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStart = new QPushButton();
     BtnStart->setText(tr("Start"));
+    BtnStart->setStyleSheet("padding: 5px 10px");
     BtnStart->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
-    BtnStart->setMinimumWidth(sz.width() + 60);
     BtnStart->setIcon(lp);
     BtnStart->setFixedHeight(50);
     BtnStart->setIconSize(sz);
     BtnStart->setFlat(true);
-    BtnStart->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    BtnStart->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     bottomLayout->addWidget(BtnStart, 0, Qt::AlignBottom);
 
     return bottomLayout;
