@@ -26,6 +26,7 @@ import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Utils
+import Consts
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
@@ -117,7 +118,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
-            ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
+            ++ [AnswerClients [sendChan cl] ["CHAT", nickGreeting, greeting jRoom] | greeting jRoom /= ""]
             ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeamsNames
             ++ [AnswerClients [sendChan cl] ["EM", toEngineMsg "I"] | isPaused `fmap` gameInfo jRoom == Just True]
 

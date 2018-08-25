@@ -53,3 +53,7 @@ nickRandom = "(random)"
 -- For /global command
 nickGlobal :: B.ByteString
 nickGlobal = "(global notice)"
+
+-- For greeting message added with /greeting command
+nickGreeting :: B.ByteString
+nickGreeting = "(greeting)"
