@@ -170,9 +170,9 @@ QLayout * PageVideos::bodyLayoutDefinition()
                                            Qt::TextSelectableByKeyboard |
                                            Qt::LinksAccessibleByMouse |
                                            Qt::LinksAccessibleByKeyboard);
-        labelDesc->setTextFormat(Qt::RichText);
+        labelDesc->setTextFormat(Qt::PlainText);
         labelDesc->setWordWrap(true);
-        labelDesc->setOpenExternalLinks(true);
+        labelDesc->setOpenExternalLinks(false);
 
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
@@ -530,8 +530,6 @@ void PageVideos::updateDescription()
         if (pt != -1)
             item->prefix.truncate(pt);
     }
-
-    desc.replace("\n", "<br/>");
 
     labelDesc->setText(desc);
 
