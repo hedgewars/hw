@@ -456,9 +456,16 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP"] = do
+    -- Display list of available maps for voting
     cl <- thisClient
     s <- liftM (Map.keys . roomSaves) thisRoom
-    return [AnswerClients [sendChan cl] ["CHAT", nickServer, B.concat ["callvote map: ", B.intercalate ", " s]]]
+    return [AnswerClients [sendChan cl]
+        ["CHAT", nickServer,
+            if (not $ null s) then
+                (B.concat ["/callvote map: ", B.intercalate ", " s])
+            else
+                loc "/callvote map: No maps available."
+        ]]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
