@@ -107,7 +107,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
                 , AnswerClients [sendChan cl] ["CHAT", "[server]", "'Registered only' state toggled"]
                 ]
         h "SUPER_POWER" _ = serverAdminOnly $ return [ModifyClient (\c -> c{hasSuperPower = True})]
-        h c p = return [Warning $ B.concat [ loc "Unknown command:", " /", c, " ", p, "<br/>", loc "Say '/help' in chat for a list of commands" ]]
+        h _ _ = return [Warning $ loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands." ]
 
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
