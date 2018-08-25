@@ -31,6 +31,7 @@ import HWProtoChecker
 import HandlerUtils
 import RoomsAndClients
 import Utils
+import Consts
 
 handleCmd, handleCmd_loggedin :: CmdHandler
 
@@ -81,8 +82,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "GLOBAL" p = serverAdminOnly $ do
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
-            -- parenthesis instead of square brackets used to avoid accidental translation by frontend
-            return [AnswerClients chans ["CHAT", "(global notice)", p]]
+            return [AnswerClients chans ["CHAT", nickGlobal, p]]
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
@@ -105,13 +105,13 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
             return
                 [ModifyServerInfo(\s -> s{isRegisteredUsersOnly = not $ isRegisteredUsersOnly s})
                 -- TODO: Say whether 'registered only' state is on or off
-                , AnswerClients [sendChan cl] ["CHAT", "[server]", loc "'Registered only' state toggled."]
+                , AnswerClients [sendChan cl] ["CHAT", nickServer, loc "'Registered only' state toggled."]
                 ]
         h "SUPER_POWER" _ = serverAdminOnly $ do
             cl <- thisClient
             return
                 [ModifyClient (\c -> c{hasSuperPower = True})
-                , AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Super power activated."]
+                , AnswerClients [sendChan cl] ["CHAT", nickServer, loc "Super power activated."]
                 ]
         h _ _ = return [Warning $ loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands." ]
 
@@ -136,7 +136,7 @@ handleCmd_loggedin ["INFO", asknick] = do
             ""
     let hostStr = if isAdminAsking then host cl else B.empty
     if noSuchClient then
-        answerClient [ "CHAT", "[server]", loc "Player is not online." ]
+        answerClient [ "CHAT", nickServer, loc "Player is not online." ]
         else
         answerClient [
             "INFO",

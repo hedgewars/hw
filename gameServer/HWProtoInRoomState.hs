@@ -399,7 +399,7 @@ handleCmd_inRoom ["MAXTEAMS", n] = roomAdminOnly $ do
     cl <- thisClient
     let m = readInt_ n
     if m < 2 || m > cMaxTeams then
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/maxteams: specify number from 2 to 8"]]
+        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/maxteams: specify number from 2 to 8"]]
     else
         return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
 
@@ -425,12 +425,12 @@ handleCmd_inRoom ["GREETING", msg] = do
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient
     return [AnswerClients [sendChan cl]
-        ["CHAT", "[server]", loc "Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs"]
+        ["CHAT", nickServer, loc "Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs"]
         ]
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote kick: You need to specify a nickname."]]
+    return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote kick: You need to specify a nickname."]]
 
 handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     (thisClientId, rnc) <- ask
@@ -446,13 +446,13 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
         if isJust maybeClientId && sameRoom then
             startVote $ VoteKick nickname
             else
-            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote kick: No such user!"]]
+            return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote kick: No such user!"]]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP"] = do
     cl <- thisClient
     s <- liftM (Map.keys . roomSaves) thisRoom
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", B.concat ["callvote map: ", B.intercalate ", " s]]]
+    return [AnswerClients [sendChan cl] ["CHAT", nickServer, B.concat ["callvote map: ", B.intercalate ", " s]]]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
@@ -462,7 +462,7 @@ handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
     if Map.member roomSave $ roomSaves rm then
         startVote $ VoteMap roomSave
         else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote map: No such map!"]]
+        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote map: No such map!"]]
 
 
 handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
@@ -472,7 +472,7 @@ handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
     if isJust $ gameInfo rm then
         startVote VotePause
         else 
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote pause: No game in progress!"]]
+        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote pause: No game in progress!"]]
 
 
 handleCmd_inRoom ["CALLVOTE", "NEWSEED"] = do
@@ -481,7 +481,7 @@ handleCmd_inRoom ["CALLVOTE", "NEWSEED"] = do
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote hedgehogs: Specify number from 1 to 8."]]
+    return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote hedgehogs: Specify number from 1 to 8."]]
 
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
@@ -491,7 +491,7 @@ handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
     if h > 0 && h <= cHogsPerTeam then
         startVote $ VoteHedgehogsPerTeam h
         else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/callvote hedgehogs: Specify number from 1 to 8."]]
+        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote hedgehogs: Specify number from 1 to 8."]]
 
 
 handleCmd_inRoom ("VOTE" : m : p) = do
@@ -500,7 +500,7 @@ handleCmd_inRoom ("VOTE" : m : p) = do
     if isJust b then
         voted (p == ["FORCE"]) (fromJust b)
     else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]",
+        return [AnswerClients [sendChan cl] ["CHAT", nickServer,
             if (p == ["FORCE"]) then
                 loc "/force: Please use 'yes' or 'no'."
             else

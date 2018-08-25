@@ -23,6 +23,7 @@ import qualified Data.ByteString.Char8 as B
 
 import CoreTypes
 import Utils
+import Consts
 
 -- List and documentation of chat commands
 
@@ -99,7 +100,7 @@ cmdHelpRoomAdmin = cmdHelpRoomPlayer ++ cmdHelpHeaderAdmin ++ cmdHelpRoomOnlyAdm
 
 -- Helper functions for chat command handler
 cmdHelpActionEntry :: [ClientChan] -> B.ByteString -> Action
-cmdHelpActionEntry chan msg = AnswerClients chan [ "CHAT", "[server]", msg ]
+cmdHelpActionEntry chan msg = AnswerClients chan [ "CHAT", nickServer, msg ]
 
 cmdHelpActionList :: [ClientChan] -> [B.ByteString] -> [Action]
 cmdHelpActionList chan list = map (cmdHelpActionEntry chan) list
