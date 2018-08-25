@@ -99,7 +99,7 @@ cmdHelpRoomAdmin = cmdHelpRoomPlayer ++ cmdHelpHeaderAdmin ++ cmdHelpRoomOnlyAdm
 
 -- Helper functions for chat command handler
 cmdHelpActionEntry :: [ClientChan] -> B.ByteString -> Action
-cmdHelpActionEntry chan msg = AnswerClients chan [ "CHAT", "[server]", B.concat [ " ", msg ] ]
+cmdHelpActionEntry chan msg = AnswerClients chan [ "CHAT", "[server]", msg ]
 
 cmdHelpActionList :: [ClientChan] -> [B.ByteString] -> [Action]
 cmdHelpActionList chan list = map (cmdHelpActionEntry chan) list

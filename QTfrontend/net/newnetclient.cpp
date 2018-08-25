@@ -381,22 +381,40 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
-        QString action = HWProto::chatStringToAction(lst[2]);
-
-        if (netClientState == InLobby)
+        QString action;
+        QString message;
+        // Fake nicks are nicks used for messages from the server with nicks like
+        // [server], [random], etc.
+        // The '[' character is not allowed in real nicks.
+        bool isFakeNick = lst[1].startsWith('[');
+        if(!isFakeNick)
         {
-            if (action != NULL)
-                emit lobbyChatAction(lst[1], action);
-            else
-                emit lobbyChatMessage(lst[1], lst[2]);
+            // Normal message
+            message = lst[2];
+            // Check for action (/me command)
+            action = HWProto::chatStringToAction(message);
         }
         else
         {
-            emit chatStringFromNet(HWProto::formatChatMsg(lst[1], lst[2]));
-            if (action != NULL)
+            // Server message
+            // Server messages are translated client-side
+            message = HWApplication::translate("server", lst[2].toLatin1().constData());
+        }
+
+        if (netClientState == InLobby)
+        {
+            if (!action.isNull())
+                emit lobbyChatAction(lst[1], action);
+            else
+                emit lobbyChatMessage(lst[1], message);
+        }
+        else
+        {
+            emit chatStringFromNet(HWProto::formatChatMsg(lst[1], message));
+            if (!action.isNull())
                 emit roomChatAction(lst[1], action);
             else
-                emit roomChatMessage(lst[1], lst[2]);
+                emit roomChatMessage(lst[1], message);
         }
         return;
     }

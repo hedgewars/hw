@@ -81,7 +81,8 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "GLOBAL" p = serverAdminOnly $ do
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
-            return [AnswerClients chans ["CHAT", "[global notice]", p]]
+            -- parenthesis instead of square brackets used to avoid accidental translation by frontend
+            return [AnswerClients chans ["CHAT", "(global notice)", p]]
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
