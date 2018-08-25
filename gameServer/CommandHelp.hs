@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 module CommandHelp where
 
 import qualified Data.ByteString.Char8 as B
@@ -33,7 +33,9 @@ cmdHelpSharedPlayer = [
     loc "/me <message>: Chat action, e.g. '/me eats pizza' becomes '* Player eats pizza'",
     loc "/rnd: Flip a virtual coin and reply with 'heads' or 'tails'",
     loc "/rnd [A] [B] [C] [...]: Reply with a random word from the given list",
+#if defined(OFFICIAL_SERVER)
     loc "/watch <id>: Watch a demo stored on the server with the given ID",
+#endif
     loc "/help: Show chat command help"
     ]
 
