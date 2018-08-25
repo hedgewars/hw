@@ -383,16 +383,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         QString action;
         QString message;
-        // Fake nicks are nicks used for messages from the server with nicks like
-        // [server], [random], etc.
-        // The '[' character is not allowed in real nicks.
-        bool isFakeNick = lst[1].startsWith('[');
-        if(!isFakeNick)
+        // '[' is a special character used in fake nick names of server messages.
+        // Those are supposed to be translated
+        if(!lst[1].startsWith('['))
         {
             // Normal message
             message = lst[2];
-            // Check for action (/me command)
-            action = HWProto::chatStringToAction(message);
+            // Another kind of fake nick. '(' nicks are server messages, but they must not be translated
+            if(!lst[1].startsWith('('))
+            {
+                // Check for action (/me command)
+                action = HWProto::chatStringToAction(message);
+            }
         }
         else
         {
