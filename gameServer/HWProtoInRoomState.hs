@@ -335,21 +335,27 @@ handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
 
 handleCmd_inRoom ["KICK", kickNick] = roomAdminOnly $ do
     (thisClientId, rnc) <- ask
-    maybeClientId <- clientByNick kickNick
+    maybeKickId <- clientByNick kickNick
     rm <- thisRoom
-    let kickId = fromJust maybeClientId
+    let kickId = fromJust maybeKickId
     let kickCl = rnc `client` kickId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
     let notOnly2Players = (length . group . sort . map teamowner . teams $ rm) > 2
-    return
-        [KickRoomClient kickId |
-            isJust maybeClientId
-            && (kickId /= thisClientId)
-            && sameRoom
-            && (not $ hasSuperPower kickCl)
-            && ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)
-        ]
-
+    return $
+        -- Catch some error conditions
+        if (isNothing maybeKickId) then
+            [Warning $ loc "Player is not online."]
+        else if (kickId == thisClientId) then
+            [Warning $ loc "You can't kick yourself!"]
+        else if (not ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)) then
+            [Warning $ loc "You can't kick the only other player!"]
+        else if (not sameRoom) then
+            [Warning $ loc "The player you tried to kick is not in your room."]
+        else if (hasSuperPower kickCl) then
+            [Warning $ loc "This player is protected from being kicked."]
+        else
+            -- Kick!
+            [KickRoomClient kickId]
 
 handleCmd_inRoom ["DELEGATE", newAdmin] = do
     (thisClientId, rnc) <- ask
@@ -441,7 +447,7 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
 
     if isJust $ masterID rm then
-        return []
+        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote kick: This is only allowed in rooms without a room master."]]
         else
         if isJust maybeClientId && sameRoom then
             startVote $ VoteKick nickname
