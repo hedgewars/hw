@@ -104,9 +104,15 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
             cl <- thisClient
             return
                 [ModifyServerInfo(\s -> s{isRegisteredUsersOnly = not $ isRegisteredUsersOnly s})
-                , AnswerClients [sendChan cl] ["CHAT", "[server]", "'Registered only' state toggled"]
+                -- TODO: Say whether 'registered only' state is on or off
+                , AnswerClients [sendChan cl] ["CHAT", "[server]", loc "'Registered only' state toggled."]
                 ]
-        h "SUPER_POWER" _ = serverAdminOnly $ return [ModifyClient (\c -> c{hasSuperPower = True})]
+        h "SUPER_POWER" _ = serverAdminOnly $ do
+            cl <- thisClient
+            return
+                [ModifyClient (\c -> c{hasSuperPower = True})
+                , AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Super power activated."]
+                ]
         h _ _ = return [Warning $ loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands." ]
 
 
