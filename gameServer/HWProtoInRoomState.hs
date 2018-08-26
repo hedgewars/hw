@@ -439,7 +439,7 @@ handleCmd_inRoom ["GREETING", msg] = do
                  [ModifyRoom (\r -> r{greeting = msg}),
                   AnswerClients [sendChan cl]
                       ["CHAT", nickServer,
-                          if msg == "" then
+                          if B.null msg then
                               loc "Greeting message cleared."
                           else
                               loc "Greeting message set."
