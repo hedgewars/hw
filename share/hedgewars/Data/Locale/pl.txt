@@ -60,7 +60,7 @@
 00:56=Tasak
 00:57=Guma
 00:58=Mina powietrzna
-00:59=Gumowa kaczuszka
+
 00:60=Minigun
 
 01:00=Wczytywanie...
@@ -605,7 +605,7 @@
 03:56=Nie przytnij sobie igieł!
 03:57=Narzędzie
 03:58=Latająca bomba zbliżeniowa
-03:59=Pływająca bomba
+
 03:60=Ostateczna broń palna
 
 ; Weapon Descriptions (use | as line breaks)
@@ -668,7 +668,7 @@
 04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)
 04:57=Tworzy elastyczne paski wykonane z gumy,|od których jeże i inne rzeczy odbijają się|bez obrażeń przy upadku.|Lewo/Prawo: Zmiana orientacji paska|Kursor: Umieść pasek w aktualnej pozycji
 04:58=Ta mina będzie się swobodnie unisić w powietrzu i|podążać za jeżami, które się do niej zblizą.|Jej eksplozja jest jednakże mniejsza niż miny przeciwpiechotnej.|Atak: Przytrzymaj by rzucić z większą siłą
-04:59=Wyślij te brudne jeże popływać! Ta słodka, mała, piskliwa|gumowa kaczuszka zdolna jest pływać po wodzie i będzie|płynąć z wiaterm. Wybucha, kiedy uderzy w ziemię, więc|upewnij się, że zrzucasz ją z klifu lub innego bezpiecznego|miejsca.|Atak: Upuść kaczuszkę
+
 04:60=Wywołaj deszcz pocisków na swoich wrogów!|A oni myśleli, że są bezpieczni za potrójną|warstwą belek.|Atak: Strzel z pełną mocą|Góra/Dół: Kontynuuj celowanie
           
 ; Game goal strings

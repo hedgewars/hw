@@ -60,7 +60,7 @@
 00:56=Cleaver
 00:57=Rubber
 00:58=Air Mine
-00:59=Rubber Duck
+00:59=Creeper
 00:60=Minigun
 
 01:00=Loading …
@@ -1215,7 +1215,7 @@
 03:56=Please use or misuse
 03:57=Utility
 03:58=Floating proximity bomb
-03:59=Swimming bomb
+03:59=Incomplete weapon
 03:60=The ultimate firearm
 
 ; Weapon Descriptions (use | as line breaks)
@@ -1278,7 +1278,7 @@
 04:56=You can throw two cleavers at your enemy, block|passages and tunnels and even use them for|climbing! Its damage increases with its speed.|But be careful! Playing with knives is dangerous.|Attack: Hold to shoot with more power (twice)
 04:57=Build a VERY elastic rubber band, from which|hedgehogs and other things bounce off|without taking fall damage.|Left/Right: Change rubber band orientation|Cursor: Place rubber band in a valid position
 04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enough to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power
-04:59=Send those dirty hogs swimming! This cute little squeaky|rubber duck is able to swim on water and will go with the|wind once swimming. It explodes when it hits land, so|make sure to drop it from a cliff or another safe spot.|Attack: Drop the rubber duck
+04:59=This weapon is unfinished and experimental.|Use at your own risk!
 04:60=Unleash a rain of bullets upon your foes!|And they thought they were safe|behind a triple layer of girders.|Attack: Shoot at full power|Up/Down: Continue aiming
 
 ; Game goal strings

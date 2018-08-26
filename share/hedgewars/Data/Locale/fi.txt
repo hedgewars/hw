@@ -59,7 +59,6 @@
 00:56=Jättiveitsi
 00:57=Kuminauha
 00:58=Ilmamiina
-00:59=Kumiankka
 
 ; 01:00=Loading …
 01:01=Tasapeli
@@ -439,7 +438,6 @@
 03:56=Käytä tai väärinkäytä
 03:57=Työkalu
 03:58=Leijuva miina
-03:59=Kelluva pommi
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Hyökkää yksinkertaisella kranaatilla.|Se räjähtää kun ajastimesta loppuu aika.|1-5: Säädä kranaatin ajastin|Hyökkää: Pidä pohjassa lisätäksesi heittovoimaa
@@ -501,7 +499,6 @@
 04:56=Voit heittää kaksi veistä vihollista kohti,|tukkia käytäviä tai vaikkapa tehdä niistä portaat!|Ole kuitenkin varovainen, teräaseilla leikkiminen on vaarallista!|Hyökkää: Aktivoi
 04:57=Rakenna elastinen kumiseinä, josta siilit |ja aseet kimpoavat vahingoittumatta.|Vasen/Oikea: Käännä kumea|Hiiri: Sijoita kumi
 04:58=Tämä pommi leijuu ilmassa ja odottaa huolimattomia|siiliä jotka tulevat sen lähelle.|Sen teho on tavallista miinaa heikompi.|Hyökkää: Heitä ilmaan
-04:59=Laita likaiset siilet pesulle! Tämä söpö pieni|kumiankka ui vedessä ja liikkuu tuulen mukana.|Se räjähtää koskettaessaan maata, joten|varmista, että pudotat sen sopivasta kohdasta.|Hyökkää: Pudota ankka
 
 ; Game goal strings
 05:00=Pelimoodit

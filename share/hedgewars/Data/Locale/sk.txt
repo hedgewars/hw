@@ -60,7 +60,6 @@
 00:56=Sekáčik
 00:57=Gumička
 00:58=Vzdušná mína
-00:59=Gumená kačička
 00:60=Minigun
 
 01:00=Načítam …
@@ -386,7 +385,6 @@
 03:56=Použite alebo zneužite
 03:57=Pomôcka
 03:58=Vznášajúca sa bomba
-03:59=Plávajúca bomba
 03:60=Totálna zbraň
 
 ; Popis zbraní (ako oddeľovač riadkov použite |)
@@ -450,7 +448,6 @@
 04:56=Po nepriateľovi môžete hodiť dva sekáčiky,|zablokovať priechody a tunely a dokonca ich použiť pri šplhaní!|Buďte opatrný! Nože nie su na hranie.|Útok: Podržte pre hod väčšou silou (dvakrát)
 04:57=Použi VEĽMI elastickú gumičku, z ktorej|môžu ježkovia a ďalšie veci skákať|bez ujmy pri dopade.|Vľavo/Vpravo: Mení orientáciu gumičky|Kurzor: Umiestni gumičku na platnú pozíciu
 04:58=Táto bomba so senzorom|priblíženia sa sama udrží|vo vzduchu a prenasleduje ježkov,|ktorý sa k nej nechtiac priblížia.|Jej explózia je slabšia ako|explózia bežnej míny.|Útok: Držaním vystrelíte väčšou silou
-04:59=Pošlite tých špinavých ježkov do kúpeľa! Táto milunká pískajúca|gumená kačička vie plávať na vode a popláve tam, kam ju zaveje|vietor. Vybuchne keď narazí na pevninu, a preto|ju zhoďte z útesu alebo iného bezpečného miesta.|Útok: Spusti gumenú kačičku
 04:60=Pošli dážď guliek na vašich nepriateľov!|A mysleli si, že za tou trojitou vrstvou|trámou sú v bezpečí.|Útok: Vystreľ plnou silou|Hore/Dole: Mierenie
 
 ; Reťazce pre ciele hry
