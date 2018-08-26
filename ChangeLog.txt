@@ -85,6 +85,12 @@ Content:
  + Add dust flakes for Cheese and CrazyMission themes
  * Fix repeating sun in Hoggywood theme
 
+Server:
+ + Add “/help” chat command for command help
+ + Can now clear room greeting by using chat command “/greeting” without arguments
+ + Many new error and status messages for improved usability
+ * Fix many server messages being not translated
+
 Lua API:
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo

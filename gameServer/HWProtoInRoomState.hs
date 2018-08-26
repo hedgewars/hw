@@ -433,8 +433,17 @@ handleCmd_inRoom ["HELP"] = do
 handleCmd_inRoom ["GREETING", msg] = do
     cl <- thisClient
     rm <- thisRoom
-    return [ModifyRoom (\r -> r{greeting = msg}) | isAdministrator cl || (isMaster cl && (not $ isSpecial rm))]
-
+    return $ if (not (isAdministrator cl || (isMaster cl && (not $ isSpecial rm)))) then
+                 [Warning $ loc "You're not the room master or a server admin!"]
+             else
+                 [ModifyRoom (\r -> r{greeting = msg}),
+                  AnswerClients [sendChan cl]
+                      ["CHAT", nickServer,
+                          if msg == "" then
+                              loc "Greeting message cleared."
+                          else
+                              loc "Greeting message set."
+                      ]]
 
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient

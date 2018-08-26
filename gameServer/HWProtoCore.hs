@@ -86,7 +86,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
-        h "GREETING" msg | not $ B.null msg = handleCmd ["GREETING", msg]
+        h "GREETING" msg = handleCmd ["GREETING", msg]
         h "CALLVOTE" msg | B.null msg = handleCmd ["CALLVOTE"]
                          | otherwise = let (c, p) = extractParameters msg in
                                            if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]

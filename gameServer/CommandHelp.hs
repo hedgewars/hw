@@ -45,7 +45,7 @@ cmdHelpRoomOnlyPlayer = [
     loc "/callvote [arguments]: Start a vote",
     loc "/vote <yes/no>: Vote 'yes' or 'no' for active vote",
     -- For room master only
-    loc "/greeting <message>: Set greeting message to be shown to players who join the room",
+    loc "/greeting [message]: Set or clear greeting message to be shown to players who join the room",
     loc "/delegate <player>: Surrender room control to player",
     loc "/maxteams <N>: Limit maximum number of teams to N"
     ]
