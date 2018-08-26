@@ -350,7 +350,7 @@ handleCmd_inRoom ["KICK", kickNick] = roomAdminOnly $ do
         else if (not ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)) then
             [Warning $ loc "You can't kick the only other player!"]
         else if (not sameRoom) then
-            [Warning $ loc "The player you tried to kick is not in your room."]
+            [Warning $ loc "The player is not in your room."]
         else if (hasSuperPower kickCl) then
             [Warning $ loc "This player is protected from being kicked."]
         else
@@ -365,13 +365,17 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
     thisRoomMasterId <- liftM masterID thisRoom
     let newAdminId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
-    return
-        [ChangeMaster (Just newAdminId) |
-            (master || serverAdmin)
-                && isJust maybeClientId
-                && (Just newAdminId /= thisRoomMasterId)
-                && sameRoom]
-
+    return $
+        if (not (master || serverAdmin)) then
+            [Warning $ loc "You not the room master or a server admin!"]
+        else if (isNothing maybeClientId) then
+            [Warning $ loc "Player is not online."]
+        else if (Just newAdminId == thisRoomMasterId) then
+            [Warning $ loc "You're already the room master."]
+        else if (not sameRoom) then
+            [Warning $ loc "The player is not in your room."]
+        else
+            [ChangeMaster (Just newAdminId)]
 
 handleCmd_inRoom ["TEAMCHAT", msg] = do
     cl <- thisClient
@@ -412,8 +416,12 @@ handleCmd_inRoom ["MAXTEAMS", n] = roomAdminOnly $ do
 handleCmd_inRoom ["FIX"] = serverAdminOnly $
     return [ModifyRoom (\r -> r{isSpecial = True})]
 
-handleCmd_inRoom ["UNFIX"] = serverAdminOnly $
-    return [ModifyRoom (\r -> r{isSpecial = False})]
+handleCmd_inRoom ["UNFIX"] = serverAdminOnly $ do
+    cl <- thisClient
+    return $ if not $ isMaster cl then
+                 [Warning $ loc "You're not the room master!"]
+             else
+                 [ModifyRoom (\r -> r{isSpecial = False})]
 
 handleCmd_inRoom ["HELP"] = do
     cl <- thisClient

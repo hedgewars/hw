@@ -266,6 +266,8 @@ processAction (ChangeMaster delegateId)= do
           ModifyClient2 (fromJust newMasterId) (\c -> c{isMaster = True})
         , AnswerClients [sendChan $ fromJust newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick $ fromJust newMaster]
+        -- TODO: Send message to other clients, too (requires proper localization, however)
+        , AnswerClients [sendChan $ fromJust newMaster] ["CHAT", nickServer, loc "You're the new room master!"]
         ]
 
     processAction $
@@ -823,7 +825,7 @@ processAction SaveReplay = return ()
 processAction CheckRecord = return ()
 processAction (CheckFailed _) = return ()
 processAction (CheckSuccess _) = return ()
-processAction (QueryReplay _) = return ()
+processAction (QueryReplay _) = processAction $ Warning $ loc "This server does not support replays!"
 #endif
 
 processAction (ShowReplay rname) = do
