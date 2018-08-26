@@ -382,7 +382,9 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     chans <- roomSameClanChans
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, " (team): ", msg, "\x20\x20"]
+        -- FIXME: Use different method to send team message, without hardcoding the format.
+        -- The formatting should be decided by the engine, not the sever. This one cannot be localized.
+        engineMsg cl = toEngineMsg $ B.concat ["b", "[Clan] ", nick cl, ": ", msg, "\x20\x20"]
 
 
 handleCmd_inRoom ["BAN", banNick] = do
