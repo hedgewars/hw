@@ -2,7 +2,10 @@ use mio;
 
 use crate::{
     server::{
-        coretypes::{ClientId, RoomId, Voting, VoteType},
+        coretypes::{
+            ClientId, RoomId, Voting, VoteType,
+            MAX_HEDGEHOGS_PER_TEAM
+        },
         server::HWServer,
         room::{HWRoom, RoomFlags},
         actions::{Action, Action::*}
@@ -53,7 +56,8 @@ fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     match msg {
         [size, typ, body..] => VALID_MESSAGES.contains(typ)
             && match body {
-                [1...8, team, ..] if *typ == b'h' => team_indices.contains(team),
+                [1...MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' =>
+                    team_indices.contains(team),
                 _ => *typ != b'h'
             },
         _ => false
@@ -227,7 +231,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 let actions = if let Some((_, team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
                     if !c.is_master() {
                         vec![ProtocolError("You're not the room master!".to_string())]
-                    } else if number < 1 || number > 8
+                    } else if number < 1 || number > MAX_HEDGEHOGS_PER_TEAM
                            || number > addable_hedgehogs + team.hedgehogs_number {
                         vec![HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
                             .send_self().action()]
@@ -377,7 +381,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 },
                 VoteType::HedgehogsPerTeam(number) => {
                     match number {
-                        1...8 => None,
+                        1...MAX_HEDGEHOGS_PER_TEAM => None,
                         _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string())
                     }
                 },

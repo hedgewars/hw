@@ -2,14 +2,18 @@ use std::{
     iter, collections::HashMap
 };
 use crate::server::{
-    coretypes::{ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting},
+    coretypes::{
+        ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting,
+        MAX_HEDGEHOGS_PER_TEAM
+    },
     client::{HWClient}
 };
 use serde::{Serialize, Deserialize};
 use serde_yaml;
 
-const MAX_HEDGEHOGS_IN_ROOM: u8 = 64;
 const MAX_TEAMS_IN_ROOM: u8 = 8;
+const MAX_HEDGEHOGS_IN_ROOM: u8 =
+    MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
 
 #[derive(Clone, Serialize, Deserialize)]
 struct Ammo {

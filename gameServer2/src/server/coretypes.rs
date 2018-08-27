@@ -1,6 +1,8 @@
 pub type ClientId = usize;
 pub type RoomId = usize;
 
+pub const MAX_HEDGEHOGS_PER_TEAM: u8 = 8;
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum ServerVar {
     MOTDNew(String),
@@ -34,7 +36,7 @@ pub struct TeamInfo {
     pub flag: String,
     pub difficulty: u8,
     pub hedgehogs_number: u8,
-    pub hedgehogs: [HedgehogInfo; 8],
+    pub hedgehogs: [HedgehogInfo; MAX_HEDGEHOGS_PER_TEAM as usize],
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]

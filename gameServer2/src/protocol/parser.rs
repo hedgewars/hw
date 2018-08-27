@@ -18,7 +18,7 @@ use super::{
     test::gen_proto_msg
 };
 use crate::server::coretypes::{
-    HedgehogInfo, TeamInfo, GameCfg, VoteType
+    HedgehogInfo, TeamInfo, GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM
 };
 
 named!(end_of_message, tag!("\n\n"));
@@ -42,7 +42,7 @@ named!(opt_space_param<&[u8], Option<String> >, alt!(
 named!(hog_line<&[u8], HedgehogInfo>,
     do_parse!(name: str_line >> eol >> hat: str_line >>
         (HedgehogInfo{name: name.to_string(), hat: hat.to_string()})));
-named!(_8_hogs<&[u8], [HedgehogInfo; 8]>,
+named!(_8_hogs<&[u8], [HedgehogInfo; MAX_HEDGEHOGS_PER_TEAM as usize]>,
     do_parse!(h1: hog_line >> eol >> h2: hog_line >> eol >>
               h3: hog_line >> eol >> h4: hog_line >> eol >>
               h5: hog_line >> eol >> h6: hog_line >> eol >>
