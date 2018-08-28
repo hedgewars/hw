@@ -367,7 +367,7 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
     return $
         if (not (master || serverAdmin)) then
-            [Warning $ loc "You not the room master or a server admin!"]
+            [Warning $ loc "You're not the room master or a server admin!"]
         else if (isNothing maybeClientId) then
             [Warning $ loc "Player is not online."]
         else if (Just newAdminId == thisRoomMasterId) then
