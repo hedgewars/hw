@@ -101,6 +101,24 @@ configured controls:
 * Precise + Toggle team bars + Switch: Toggle HUD
 * Precise + Capture (screenshot key): Save current map + mask into Screenshot directory
 
+System requirements
+-------------------
+For PC or Mac:
+
+* Mouse and keyboard
+* Monitor, minimal resolution 1024×768
+* 200 MiB storage space
+* Processor: 1 GHz (1 core is enough), 64bit recommended
+* Video card: 250 MHz or so
+              (any decent card from the year 2004 or later should do fine)
+* 1 GiB RAM minimum
+* Operating system: Windows Vista/7/8/10, GNU/Linux, macOS, FreeBSD, others
+
+Hedgewars has been ported to other operating systems in the past.
+Check out <https://hedgewars.org/download.html> for the latest information.
+
+Gamepads are supported partially (only in-game, not in the main menu).
+
 Installation instructions
 -------------------------
 See the `INSTALL.md` file.
