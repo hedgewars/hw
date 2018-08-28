@@ -724,6 +724,8 @@ function onNewRound()
 			if GetHogClan(SI.hhs[i]) ~= bestClan then
 				SetEffect(SI.hhs[i], heResurrectable, 0)
 				SetHealth(SI.hhs[i],0)
+				-- hilarious loser face
+				SetState(SI.hhs[i], bor(GetState(SI.hhs[i]), gstLoser))
 			end
 		end
 
