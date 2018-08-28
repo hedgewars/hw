@@ -89,8 +89,6 @@ shield=0, barrels=3, pings=0
 
 -- add support for other world edges (they are currently disabled)
 
--- maybe add a check for a tie, IMPOSSIBRU THERE ARE NO TIES
-
 -- if more weapons are added, replace primshotsfired all over the place
 
 -- look for derp and let invaders shoot again
@@ -148,12 +146,9 @@ SI.boosterOn = false
 SI.preciseOn = false
 SI.roundLimit = 3		-- can be overridden by script parameter "rounds"
 SI.roundNumber = 0
-SI.firstClan = 10
+SI.lastRound = -1
 SI.gameOver = false
 SI.gameBegun = false
-
-SI.bestClan = 65535
-SI.bestScore = 0
 
 -- for script parameters
 -- NOTE: If you change this, also change the default “Space Invasion” game scheme
@@ -172,8 +167,8 @@ SI.forceTheme = true		-- "forcetheme"
 SI.numhhs = 0
 SI.hhs = {}
 
-SI.numTeams = 0
 SI.teamNameArr = {}
+SI.teamNameArrReverse = {}
 SI.teamClan = {}
 SI.teamSize = {}
 SI.teamIndex = {}
@@ -390,33 +385,12 @@ function RebuildTeamInfo()
 		SI.teamCircsKilled[i] = 0
 		SI.teamSurfer[i] = false
 	end
-	SI.numTeams = 0
 
-	for i = 0, (SI.numhhs-1) do
+	for i=0, TeamsCount-1 do
 
-		local z = 0
-		local unfinished = true
-		while(unfinished == true) do
-
-			local newTeam = true
-			local tempHogTeamName = GetHogTeamName(SI.hhs[i]) -- this is the new name
-
-			if tempHogTeamName == SI.teamNameArr[z] then
-				newTeam = false
-				unfinished = false
-			end
-
-			z = z + 1
-
-			if z == (TeamsCount-1) then
-				unfinished = false
-				if newTeam == true then
-					SI.teamNameArr[SI.numTeams] = tempHogTeamName
-					SI.numTeams = SI.numTeams + 1
-				end
-			end
-
-		end
+		local name = GetTeamName(i)
+		SI.teamNameArr[i] = name
+		SI.teamNameArrReverse[name] = i
 
 	end
 
@@ -500,6 +474,11 @@ function UpdateSimpleAward(oldAward, value, threshold)
 	return newAward
 end
 
+-- Update scoreboard and check victory state.
+-- Returns 2 bools:
+-- 1: true if game over
+-- 2: true if game's not over but we're playing now in tie-breaking phase
+
 function CommentOnScore()
 	local teamStats = {}
 	for i = 0,(TeamsCount-1) do
@@ -521,7 +500,7 @@ function CommentOnScore()
 			local comment = teamStats[i].name .. " |" ..
 			string.format(loc("Score: %d"), teamStats[i].score) .. "|" ..
 			string.format(loc("Kills: %d"), teamStats[i].kills)
-			if i < TeamsCount then	
+			if i < TeamsCount then
 				comment = comment .. "| |"
 			end
 			table.insert(teamComment, comment)
@@ -533,20 +512,40 @@ function CommentOnScore()
 		table.insert(teamComment, comment)
 	end
 
+	local roundLimitHit = SI.roundNumber >= SI.roundLimit
+	local tie = teamStats[1].score == teamStats[2].score
+	local lGameOver = roundLimitHit and (not tie)
+
 	local entireC = ""
+
 	for i = TeamsCount,1,-1 do
 		entireC = entireC .. teamComment[i]
 	end
+
 	local statusText, scoreText
-	if SI.roundNumber >= SI.roundLimit then
+	-- Game is over
+	if lGameOver then
 		statusText = loc("Game over!")
 		scoreText = loc("Final team scores:")
-	else
+	-- Round is over and game is not yet complete
+	elseif not roundLimitHit then
 		AddCaption(string.format(loc("Rounds complete: %d/%d"), SI.roundNumber, SI.roundLimit), capcolDefault, capgrpMessage)
-		return
+		return lGameOver, false
+	-- Teams are tied for the lead at the end
+	elseif roundLimitHit and tie then
+		local tieBreakingRound = SI.roundNumber - SI.roundLimit + 1
+		local msg
+		if tieBreakingRound == 1 then
+			msg = loc("Teams are tied! Continue playing rounds until we have a winner!")
+		else
+			msg = string.format(loc("Tie-breaking round %d"), tieBreakingRound)
+		end
+		AddCaption(msg, capcolDefault, capgrpMessage)
+		return lGameOver, true
 	end
+
 	local displayTime
-	if SI.roundNumber >= SI.roundLimit then
+	if lGameOver then
 		displayTime = 20000
 	else
 		displayTime = 1
@@ -556,7 +555,7 @@ function CommentOnScore()
 			string.format(loc("Rounds complete: %d/%d"), SI.roundNumber, SI.roundLimit) .. "| " .. "|" ..
 			scoreText .. " |" ..entireC, 4, displayTime)
 
-	if SI.roundNumber >= SI.roundLimit then
+	if lGameOver then
 		local winnerTeam = teamStats[1].name
 		for i = 0, (SI.numhhs-1) do
 			if GetHogTeamName(SI.hhs[i]) == winnerTeam then
@@ -583,7 +582,17 @@ function CommentOnScore()
 --[[ Award some awards (just for fun, its for the stats screen only
 and has no effect on the score or game outcome. ]]
 		local awardsGiven = 0
-	
+
+		if SI.roundNumber == SI.roundLimit + 1 then
+			SendStat(siCustomAchievement,
+			loc("The teams were tied, so an additional round has been played to determine the winner."))
+			awardsGiven = awardsGiven + 1
+		elseif SI.roundNumber > SI.roundLimit then
+			SendStat(siCustomAchievement,
+			string.format(loc("The teams were tied, so %d additional rounds have been played to determine the winner."),
+			SI.roundNumber - SI.roundLimit))
+			awardsGiven = awardsGiven + 1
+		end
 		if SI.awardTotalKills >= 30 then
 			awardsGiven = awardsGiven + 1
 			SendStat(siCustomAchievement,
@@ -683,30 +692,36 @@ and has no effect on the score or game outcome. ]]
 			elseif r == 3 then text = loc("Nothing of interest has happened.")
 			elseif r == 4 then text = loc("There are no snarky comments this time.")
 			end
-		
+
 			SendStat(siCustomAchievement, text)
 		end
 	end
+
+	return lGameOver, false
 end
 
 function onNewRound()
+	SI.lastRound = TotalRounds
 	SI.roundNumber = SI.roundNumber + 1
 
-	CommentOnScore()
+	local lGameOver, lTied = CommentOnScore()
+	local bestScore = 0
+	local bestClan = -1
 
-	-- end game if its at round limit
-	if SI.roundNumber >= SI.roundLimit then
+	-- Game has been determined to be over, so end it
+	if lGameOver then
 
+		-- Get winning score
 		for i = 0, (TeamsCount-1) do
-			if SI.teamScore[i] > SI.bestScore then
-				SI.bestScore = SI.teamScore[i]
-				SI.bestClan = SI.teamClan[i]
+			if SI.teamScore[i] > bestScore then
+				bestScore = SI.teamScore[i]
+				bestClan = SI.teamClan[i]
 			end
 		end
 
 		-- Kill off all the losers
 		for i = 0, (SI.numhhs-1) do
-			if GetHogClan(SI.hhs[i]) ~= SI.bestClan then
+			if GetHogClan(SI.hhs[i]) ~= bestClan then
 				SetEffect(SI.hhs[i], heResurrectable, 0)
 				SetHealth(SI.hhs[i],0)
 			end
@@ -717,13 +732,66 @@ function onNewRound()
 		EndTurn(true)
 		SI.TimeLeft = 0
 		SendStat(siGraphTitle, loc("Score graph"))
+
+	-- Round limit passed and teams are tied!
+	elseif lTied then
+		-- Enter (or continue) tie-breaking phase...
+
+		-- Rules in case of a tie:
+		-- 1) All teams that are not tied for the lead are killed (they can't play anymore, but they will keep their score and be ranked normally)
+		-- 2) Another round is played with the remaining teams
+		-- 3) After this round, scores are checked again to determine a winner. If there's a tie again, this procedure is repeated
+
+		-- Get leading teams
+		for i = 0, (TeamsCount-1) do
+			if SI.teamScore[i] > bestScore then
+				bestScore = SI.teamScore[i]
+			end
+		end
+
+		local tiedForTheLead = {}
+		for i = 0, (TeamsCount-1) do
+			if SI.teamScore[i] == bestScore then
+				tiedForTheLead[i] = true
+			end
+		end
+
+		local wasCurrent = false
+		-- Kill teams not in the top
+		for i = 0, (SI.numhhs-1) do
+			local hog = SI.hhs[i]
+			if GetHealth(hog) then -- check if hog is still alive
+				local team = SI.teamNameArrReverse[GetHogTeamName(hog)]
+				if team and tiedForTheLead[team] ~= true then
+					-- hilarious loser face
+					SetState(hog, bor(GetState(hog), gstLoser))
+					-- die!
+					SetEffect(hog, heResurrectable, 0)
+					SetHealth(hog, 0)
+					-- Note the death might not trigger immediately since we
+					-- zero the health at the beginning of a turn rather than
+					-- the end of one.
+					-- It's just a minor visual thing, not a big deal.
+					if hog == CurrentHedgehog then
+						wasCurrent = true
+					end
+				end
+			end
+		end
+
+		-- if current hedgehog was among the loser, end the turn
+		if wasCurrent then
+			EndTurn(true)
+		end
+
+		-- From that point on, the game just continues normally ...
 	end
 end
 
 -- gaudy racer
 function CheckForNewRound()
 
-	if GetHogClan(CurrentHedgehog) == SI.firstClan then
+	if TotalRounds > 0 and TotalRounds > SI.lastRound then
 		onNewRound()
 	end
 
@@ -1108,7 +1176,6 @@ function onNewTurn()
 	if (SI.gameOver == false) and (SI.gameBegun == false) then
 		SI.gameBegun = true
 		SI.roundNumber = 0 -- 0
-		SI.firstClan = GetHogClan(CurrentHedgehog)
 	end
 
 	if SI.gameOver == true then
@@ -1303,7 +1370,7 @@ function onGameTick()
 							value = SI.shotsHit, 
 						}
 					end
-		
+
 				end
 
 				-- other awards

@@ -67,6 +67,7 @@ Continental supplies:
 Space Invasion:
  + Display round score in a separate row
  + Keep round score displayed after round ends, remove round score announcer message
+ + If team scores are tied at the end, continue playing rounds with the tied teams until there's a winner
  * Fix rare Lua error message spam at end of game
  * Fix round score and other info numbers messing up after screen resize
  * Fix kamikaze bonus not being shown
