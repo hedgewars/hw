@@ -14,9 +14,10 @@ use std::{
     ops::Range
 };
 use super::{
-    messages::{HWProtocolMessage, HWProtocolMessage::*},
-    test::gen_proto_msg
+    messages::{HWProtocolMessage, HWProtocolMessage::*}
 };
+#[cfg(test)]
+use super::test::gen_proto_msg;
 use crate::server::coretypes::{
     HedgehogInfo, TeamInfo, GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM
 };
@@ -242,6 +243,7 @@ named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
 
 named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(message)));
 
+#[cfg(test)]
 proptest! {
     #[test]
     fn is_parser_composition_idempotent(ref msg in gen_proto_msg()) {

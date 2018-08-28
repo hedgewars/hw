@@ -12,6 +12,7 @@ extern crate nom;
 #[macro_use]
 extern crate log;
 extern crate env_logger;
+#[cfg(test)]
 #[macro_use] extern crate proptest;
 #[macro_use] extern crate bitflags;
 extern crate serde;

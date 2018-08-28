@@ -151,6 +151,7 @@ macro_rules! msg {
     };
 }
 
+#[cfg(test)]
 macro_rules! several {
     [$part: expr] => { once($part) };
     [$part: expr, $($other: expr),*] => { once($part).chain(several![$($other),*]) };
@@ -161,6 +162,7 @@ impl HWProtocolMessage {
      *
      * This is the inverse of the `message` parser.
      */
+    #[cfg(test)]
     pub(crate) fn to_raw_protocol(&self) -> String {
         use self::HWProtocolMessage::*;
         match self {

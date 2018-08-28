@@ -23,8 +23,8 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use protocol::messages::HWServerMessage::ChatMsg;
-    use server::actions::{
+    use crate::protocol::messages::HWServerMessage::ChatMsg;
+    use crate::server::actions::{
         Action::{self, Send}, PendingMessage,
     };
 
