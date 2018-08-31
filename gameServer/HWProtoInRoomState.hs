@@ -407,10 +407,12 @@ handleCmd_inRoom ("RND":rs) = do
     return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
 
-handleCmd_inRoom ["MAXTEAMS", n] = roomAdminOnly $ do
+handleCmd_inRoom ["MAXTEAMS", n] = do
     cl <- thisClient
     let m = readInt_ n
-    if m < 2 || m > cMaxTeams then
+    if not $ isMaster cl then
+        return [Warning $ loc "You're not the room master!"]
+    else if m < 2 || m > cMaxTeams then
         return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/maxteams: specify number from 2 to 8"]]
     else
         return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
