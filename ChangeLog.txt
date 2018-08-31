@@ -107,6 +107,8 @@ Lua API:
  + New call: GetLaserSight(): Returns true if laser sight (as utility) is currenctly active (ignoring sniper rifle)
  + New call: IsHogHidden(gear): Returns true if hog is hidden
  + Changed call: AddTeam: 2nd param. color: Accepts negative value to use a default clan color from player settings
+ + Changed call: HedgewarsScriptLoad: 2nd param. mustExist. If false, it's allowed for the script to not exist
+ + Changed call: HedgewarsScriptLoad: Return true on success and false on failure
  + Change callback: onGearResurrect: 2nd parameter for visual gear spawned at resurrect position (might be nil)
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player

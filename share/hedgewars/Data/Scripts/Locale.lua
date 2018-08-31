@@ -1,7 +1,7 @@
 -- Library for localizing strings in lua scripts
 
 if LOCALE ~= "en" then
-    HedgewarsScriptLoad("Locale/" .. tostring(LOCALE) .. ".lua")
+    HedgewarsScriptLoad("Locale/" .. tostring(LOCALE) .. ".lua", false)
 end
 
 function loc(text)
