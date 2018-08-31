@@ -1,6 +1,8 @@
 -- Library for localizing strings in lua scripts
 
-local lang = HedgewarsScriptLoad("Locale/" .. tostring(LOCALE) .. ".lua")
+if LOCALE ~= "en" then
+    HedgewarsScriptLoad("Locale/" .. tostring(LOCALE) .. ".lua")
+end
 
 function loc(text)
     if locale ~= nil and locale[text] ~= nil then return locale[text]
