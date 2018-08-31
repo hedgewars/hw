@@ -27,10 +27,11 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 local weapons = {}
 local weapons_values = {}
 local weapons_count = 0
-local airweapons = {}
-local airweapons_values = {}
 local utilities = {}
 local utilities_values = {}
+local utilities_count = 0
+
+local gotten_air_weapons = {}
 
 local isUtility, isAirWeapon
 
@@ -54,15 +55,22 @@ Steps:
 
 If 0 points are left, the algorithm terminates.
 ]]
+    local picked_items = {}
 
     local n = 3   --"points" to be allocated on weapons
 
     --pick random weapon and subtract cost
-    local r = GetRandom(weapons_count) + 1
-    local picked_items = {}
-    table.insert(picked_items, weapons[r])
-    n = n - weapons_values[r]
-
+    if weapons_count > 0 then
+        local r = GetRandom(weapons_count) + 1
+        table.insert(picked_items, weapons[r])
+        n = n - weapons_values[r]
+    elseif utilities_count > 0 then
+        local r = GetRandom(utilities_count) + 1
+        table.insert(picked_items, utilities[r])
+        n = n - utilities_values[r]
+    else
+        return picked_items
+    end
 
     --choose any weapons or utilities to use up remaining n
 
@@ -193,14 +201,17 @@ end
 
 function onGameStart()
     trackTeams()
+    -- Add air weapons
     if MapHasBorder() == false then
         for a = 0, AmmoTypeMax do
-            if a ~= amNothing and a ~= amSkip then
-                local ammoCount = GetAmmo(a)
+            if isAirWeapon[a] then
+                local gotten = gotten_air_weapons[a]
+                local ammoCount, prob, delay, ammoInCrate = gotten[1], gotten[2], gotten[3], gotten[4]
                 local cost = getCost(a, ammoCount)
-                if cost > 0 and isAirWeapon[a] then
-                    table.insert(airweapons, a)
-                    table.insert(airweapons_values, cost)
+                if cost > 0 then
+                    table.insert(weapons, a)
+                    table.insert(weapons_values, cost)
+                    weapons_count = weapons_count + 1
                 end
             end
         end
@@ -213,12 +224,13 @@ function onAmmoStoreInit()
     for a=0, AmmoTypeMax do
         if a ~= amNothing and a ~= amSkip then
             local ammoCount, prob, delay, ammoInCrate = GetAmmo(a)
-            local cost = getCost(a, ammoCount)
             if (not isAirWeapon[a]) then
+                local cost = getCost(a, ammoCount)
                 if cost > 0 then
                     if isUtility[a] then
                         table.insert(utilities, a)
-                        table.insert(utilities, cost)
+                        table.insert(utilities_values, cost)
+                        utilities_count = utilities_count + 1
                     else
                         table.insert(weapons, a)
                         table.insert(weapons_values, cost)
@@ -226,7 +238,8 @@ function onAmmoStoreInit()
                     end
                 end
             else
-                prob = 0
+                -- air weapons are handled in onGameStart
+                gotten_air_weapons[a] = { ammoCount, prob, delay, ammoInCrate }
             end
             local realAmmoCount
             if ammoCount ~= 9 then
