@@ -72,37 +72,50 @@ end;
 
 procedure DisplayUsage;
 begin
-    WriteLn(stdout, 'Usage: hwengine <path to replay file> [options]');
+    WriteLn(stdout, 'This is the Hedgewars Engine (hwengine), used to play Hedgewars games and demos.');
+    WriteLn(stdout, 'Use the command-line arguments to play a demo.');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Usage: hwengine <path to demo file> [options]');
     WriteLn(stdout, '');
     WriteLn(stdout, 'where [options] can be any of the following:');
-    WriteLn(stdout, ' --prefix [path to folder]');
-    WriteLn(stdout, ' --user-prefix [path to folder]');
-    WriteLn(stdout, ' --locale [name of language file]');
-    WriteLn(stdout, ' --nick [string]');
-    WriteLn(stdout, ' --fullscreen-width [fullscreen width in pixels]');
-    WriteLn(stdout, ' --fullscreen-height [fullscreen height in pixels]');
-    WriteLn(stdout, ' --width [window width in pixels]');
-    WriteLn(stdout, ' --height [window height in pixels]');
-    WriteLn(stdout, ' --volume [sound level]');
-    WriteLn(stdout, ' --frame-interval [milliseconds]');
-    Writeln(stdout, ' --stereo [value]');
-    WriteLn(stdout, ' --raw-quality [flags]');
-    WriteLn(stdout, ' --low-quality');
-    WriteLn(stdout, ' --nomusic');
-    WriteLn(stdout, ' --nosound');
-    WriteLn(stdout, ' --nodampen');
-    WriteLn(stdout, ' --fullscreen');
-    WriteLn(stdout, ' --showfps');
-    WriteLn(stdout, ' --altdmg');
-    WriteLn(stdout, ' --no-teamtag');
-    WriteLn(stdout, ' --no-hogtag');
-    WriteLn(stdout, ' --no-healthtag');
-    WriteLn(stdout, ' --translucent-tags');
-    WriteLn(stdout, ' --stats-only');
-    WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
-    WriteLn(stdout, 'For more detailed help and examples go to:');
-    WriteLn(stdout, 'https://hedgewars.org/kb/CommandLineOptions');
+    WriteLn(stdout, 'File locations:');
+    WriteLn(stdout, '  --prefix <path to folder>: Set the path to the system game data folder');
+    WriteLn(stdout, '  --user-prefix <path to folder>: Set the path to the custom data folder to find game content');
+    WriteLn(stdout, '  --locale <name of file>: Set the game language (en.txt for example)');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Graphics:');
+    WriteLn(stdout, '  --width <width in pixels>: Set game window width');
+    WriteLn(stdout, '  --height <height in pixels>: Set game window height');
+    WriteLn(stdout, '  --fullscreen: Start in fullscreen');
+    WriteLn(stdout, '  --fullscreen-width <width in pixels>: Set fullscreen width');
+    WriteLn(stdout, '  --fullscreen-height <height in pixels>: Set fullscreen height');
+    WriteLn(stdout, '  --low-quality: Lowers the game quality');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Audio:');
+    WriteLn(stdout, '  --volume <sound level>: Set volume between 0 and 100');
+    WriteLn(stdout, '  --nomusic: Disable music');
+    WriteLn(stdout, '  --nosound: Disable sound effects');
+    WriteLn(stdout, '  --nodampen: Don''t dampen sound volume when game application loses focus');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'HUD:');
+    WriteLn(stdout, '  --altdmg: Show alternative damage');
+    WriteLn(stdout, '  --no-teamtag: Disable team name tags');
+    WriteLn(stdout, '  --no-hogtag: Disable hedgehog name tags');
+    WriteLn(stdout, '  --no-healthtag: Disable hedgehog health tags');
+    WriteLn(stdout, '  --translucent-tags: Enable translucent name and health tags');
+    WriteLn(stdout, '  --showfps: Show frames per second');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Miscellaneous:');
+    WriteLn(stdout, '  --nick <name>: Set user nickname');
+    WriteLn(stdout, '  --help: Show a list of command-line options and exit');
+    WriteLn(stdout, '');
+    Writeln(stdout, 'Advanced options:');
+    Writeln(stdout, '  --stereo <value>: Set stereoscopic rendering (1 to 14)');
+    WriteLn(stdout, '  --frame-interval <milliseconds>: Set minimum interval (in ms) between each frame. Eg, 40 would make the game run at most 25 fps');
+    WriteLn(stdout, '  --raw-quality <flags>: Manually specify the reduced quality flags');
+    WriteLn(stdout, '  --stats-only: Write the round information to console without launching the game, useful for statistics only');
+    WriteLn(stdout, '  --lua-test <path to script>: Run a Lua test script');
     GameType:= gmtSyntaxHelp;
     helpCommandUsed:= true;
 end;
@@ -110,7 +123,7 @@ end;
 procedure setDepth(var paramIndex: LongInt);
 begin
     WriteLn(stdout, 'WARNING: --depth is a deprecated command, which could be removed in a future version!');
-    WriteLn(stdout, '         This option no longer does anything, please consider removing it');
+    WriteLn(stdout, '         This option no longer does anything, please consider removing it.');
     WriteLn(stdout, '');
    inc(ParamIndex);
 end;
@@ -130,7 +143,7 @@ begin
         ipcPort := port
     else
         begin
-        WriteLn(stderr, 'ERROR: use of --port is not allowed');
+        WriteLn(stderr, 'ERROR: use of --port is not allowed!');
         wrongParameter := true;
         end
 end;
@@ -194,7 +207,7 @@ begin
     val(str, tmpInt, c);
     wrongParameter:= c <> 0;
     if wrongParameter then
-        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"');
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"!');
 {$ENDIF}
     getLongIntParameter:= tmpInt;
 end;
@@ -205,7 +218,7 @@ begin
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
     {$IFNDEF HWLIBRARY}
     if wrongParameter then
-        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"!');
     {$ENDIF}
     getstringParameter:= str;
 end;
@@ -277,12 +290,12 @@ begin
         {--lua-test}            36 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
-        //Assume the first "non parameter" is the replay file, anything else is invalid
+        //Assume the first "non parameter" is the demo file, anything else is invalid
         if (recordFileName = '') and (Copy(cmd,1,2) <> '--') then
             recordFileName := cmd
         else
             begin
-            WriteLn(stderr, '"'+cmd+'" is not a valid option');
+            WriteLn(stderr, '"'+cmd+'" is not a valid option.');
             parseParameter:= true;
             end;
         end;
@@ -294,9 +307,9 @@ var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
     cmd, arg, newSyntax: string;
 begin
-    WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
+    WriteLn(stdout, 'WARNING: You are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
-    WriteLn(stdout, '         Run `hwegine --help` to learn it!');
+    WriteLn(stdout, '         Run "hwegine --help" to learn it!');
     WriteLn(stdout, '');
 
     index:= 0;
@@ -376,21 +389,21 @@ begin
 
     if (isInternal) and (ParamCount<=1) then
         begin
-        WriteLn(stderr, '--internal should not be manually used');
+        WriteLn(stderr, 'The "--internal" option should not be manually used!');
         GameType := gmtBadSyntax;
         end;
 
     if (not helpCommandUsed) then
         if (not cTestLua) and (not isInternal) and (recordFileName = '') then
             begin
-            WriteLn(stderr, 'You must specify a replay file');
+            WriteLn(stderr, 'You must specify a demo file.');
             GameType := gmtBadSyntax;
             end
         else if (recordFileName <> '') then
-            WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
+            WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '".');
 
     if (GameType = gmtBadSyntax) then
-        WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
+        WriteLn(stderr, 'Please use --help to see possible arguments and their usage.');
 
     (*
     WriteLn(stdout,'PathPrefix:     ' + PathPrefix);
