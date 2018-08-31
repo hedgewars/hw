@@ -54,9 +54,7 @@ cmdHelpSharedAdmin :: [B.ByteString]
 cmdHelpSharedAdmin = [
     loc "/global <message>: Send global chat message which can be seen by everyone on the server",
     loc "/registered_only: Toggle 'registered only' state. If enabled, only registered players can join server",
-    loc "/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server",
-    -- TODO: Add help for /save
-    loc "/save <parameter>"
+    loc "/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server"
     -- TODO: Add /restart_server? This command seems broken at the moment
     ]
 
@@ -70,10 +68,10 @@ cmdHelpRoomOnlyAdmin = [
     loc "/force <yes/no>: Force vote result for active vote",
     loc "/fix: Force this room to stay open when it is empty",
     loc "/unfix: Undo the /fix command",
-    loc "/saveroom <file name>: Save room configuration into a file",
-    loc "/loadroom <file name>: Load room configuration from a file",
-    -- TODO: Add help for /delete
-    loc "/delete <parameter>"
+    loc "/save <config ID> <config name>: Add current room configuration as votable choice for /callvote map",
+    loc "/delete <config ID>: Delete a votable room configuration",
+    loc "/saveroom <file name>: Save all votable room configurations (and the greeting) of this room into a file",
+    loc "/loadroom <file name>: Load votable room configurations (and greeting) from a file"
     ]
 
 cmdHelpHeaderLobby :: [B.ByteString]
