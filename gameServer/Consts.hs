@@ -47,8 +47,11 @@ nickServer :: B.ByteString
 nickServer = "[server]"
 
 -- For /rnd command
-nickRandom :: B.ByteString
-nickRandom = "(random)"
+nickRandomCoin :: B.ByteString
+nickRandomCoin = "[random]"
+
+nickRandomCustom :: B.ByteString
+nickRandomCustom = "(random)"
 
 -- For /global command
 nickGlobal :: B.ByteString

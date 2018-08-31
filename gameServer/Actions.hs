@@ -733,9 +733,9 @@ processAction Stats = do
 
 
 processAction (Random chans items) = do
-    let i = if null items then ["heads", "tails"] else items
+    let i = if null items then [loc "heads", loc "tails"] else items
     n <- io $ randomRIO (0, length i - 1)
-    processAction $ AnswerClients chans ["CHAT", nickRandom, i !! n]
+    processAction $ AnswerClients chans ["CHAT", if null items then nickRandomCoin else nickRandomCustom, i !! n]
 
 
 processAction (LoadGhost location) = do
