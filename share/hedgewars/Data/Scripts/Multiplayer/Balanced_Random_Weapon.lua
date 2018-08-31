@@ -146,7 +146,7 @@ function reset(hog)
 end
 
 function onGameInit()
-    DisableGameFlags(gfPerHogAmmo)
+    DisableGameFlags(gfPerHogAmmo, gfSharedAmmo)
     EnableGameFlags(gfResetWeps)
     Goals = loc("Each turn you get 1-3 random weapons")
 
