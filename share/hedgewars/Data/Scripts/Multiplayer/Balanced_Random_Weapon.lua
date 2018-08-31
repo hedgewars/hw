@@ -26,6 +26,7 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 local weapons = {}
 local weapons_values = {}
+local weapons_count = 0
 local airweapons = {}
 local airweapons_values = {}
 local utilities = {}
@@ -57,7 +58,7 @@ If 0 points are left, the algorithm terminates.
     local n = 3   --"points" to be allocated on weapons
 
     --pick random weapon and subtract cost
-    local r = GetRandom(table.maxn(weapons_values)) + 1
+    local r = GetRandom(weapons_count) + 1
     local picked_items = {}
     table.insert(picked_items, weapons[r])
     n = n - weapons_values[r]
@@ -68,6 +69,7 @@ If 0 points are left, the algorithm terminates.
     while n > 0 do
         local items = {}
         local items_values = {}
+        local items_count = 0
 
         for i, w in pairs(weapons_values) do
             local used = false
@@ -81,6 +83,7 @@ If 0 points are left, the algorithm terminates.
                 if not used then
                     table.insert(items_values, w)
                     table.insert(items, weapons[i])
+                    items_count = items_count + 1
                 end
             end
         end
@@ -97,13 +100,18 @@ If 0 points are left, the algorithm terminates.
                 if not used then
                     table.insert(items_values, w)
                     table.insert(items, utilities[i])
+                    items_count = items_count + 1
                 end
             end
         end
 
-        local r = GetRandom(table.maxn(items_values)) + 1
-        table.insert(picked_items, items[r])
-        n = n - items_values[r]
+        if items_count > 0 then
+            local r = GetRandom(items_count) + 1
+            table.insert(picked_items, items[r])
+            n = n - items_values[r]
+        else
+            break
+        end
     end
 
     return picked_items
@@ -214,6 +222,7 @@ function onAmmoStoreInit()
                     else
                         table.insert(weapons, a)
                         table.insert(weapons_values, cost)
+                        weapons_count = weapons_count + 1
                     end
                 end
             else
