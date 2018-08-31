@@ -479,7 +479,7 @@ processAction (ProcessAccountInfo info) = do
             c <- client's isChecker
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
         Guest | isRegisteredUsersOnly si -> do
-            processAction $ ByeClient "Registered users only"
+            processAction $ ByeClient $ loc "This server only allows registered users to join."
             | otherwise -> do
             b <- isBanned
             c <- client's isChecker
