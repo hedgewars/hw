@@ -34,7 +34,7 @@ interface
 procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
-procedure ScriptLoad(name : shortstring);
+procedure ScriptLoad(name : shortstring; mustExist : boolean);
 procedure ScriptOnPreviewInit;
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
@@ -3068,7 +3068,7 @@ end;
 function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'HedgewarsScriptLoad', 'scriptPath') then
-        ScriptLoad(lua_tostring(L, 1))
+        ScriptLoad(lua_tostring(L, 1), true)
     else
         lua_pushnil(L);
     lc_hedgewarsscriptload:= 0;
@@ -3560,7 +3560,7 @@ begin
 end;
 // ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 
-procedure ScriptLoad(name : shortstring);
+procedure ScriptLoad(name : shortstring; mustExist : boolean);
 var ret : LongInt;
       s : shortstring;
       f : PFSFile;
@@ -3575,13 +3575,16 @@ locSum:= 0;
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
     begin
-    AddFileLog('[LUA] Script not found: ' + name);
+    if mustExist then
+        OutError('Script not found: ' + name, true)
+    else
+        AddFileLog('[LUA] Script not found: ' + name);
     exit;
     end;
 
 f:= pfsOpenRead(s);
 if f = nil then
-    exit;
+    OutError('Error reading script: ' + name, true);
 
 hedgewarsMountPackage(Str2PChar(copy(s, 3, length(s)-6)+'.hwp'));
 

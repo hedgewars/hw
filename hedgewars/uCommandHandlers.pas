@@ -113,7 +113,7 @@ if s[1]='"' then
 if s[byte(s[0])]='"' then
     Delete(s, byte(s[0]), 1);
 cScriptName:= s;
-ScriptLoad(s)
+ScriptLoad(s, true)
 end;
 
 procedure chScriptParam(var s: shortstring);
@@ -536,7 +536,7 @@ if isDeveloperMode then
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
 cMapName:= s;
-ScriptLoad('Maps/' + s + '/map.lua')
+ScriptLoad('Maps/' + s + '/map.lua', false)
 end;
 
 procedure chSetTheme(var s: shortstring);
