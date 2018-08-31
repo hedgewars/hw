@@ -34,7 +34,7 @@ interface
 procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
-function  ScriptLoad(name : shortstring; mustExist : boolean) : boolean;
+procedure ScriptLoad(name : shortstring; mustExist : boolean);
 procedure ScriptOnPreviewInit;
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
@@ -3066,16 +3066,12 @@ end;
 
 
 function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
-var success : boolean;
 begin
     if CheckLuaParamCount(L, 1, 'HedgewarsScriptLoad', 'scriptPath') then
-        begin
-        success:= ScriptLoad(lua_tostring(L, 1), false);
-        lua_pushboolean(L, success);
-        end
+        ScriptLoad(lua_tostring(L, 1), true)
     else
-        lua_pushboolean(L, false);
-    lc_hedgewarsscriptload:= 1;
+        lua_pushnil(L);
+    lc_hedgewarsscriptload:= 0;
 end;
 
 
@@ -3564,7 +3560,7 @@ begin
 end;
 // ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 
-function ScriptLoad(name : shortstring; mustExist : boolean) : boolean;
+procedure ScriptLoad(name : shortstring; mustExist : boolean);
 var ret : LongInt;
       s : shortstring;
       f : PFSFile;
@@ -3583,7 +3579,6 @@ if not pfsExists(s) then
         OutError('Script not found: ' + name, true)
     else
         AddFileLog('[LUA] Script not found: ' + name);
-    ScriptLoad:= false;
     exit;
     end;
 
@@ -3607,15 +3602,13 @@ if ret <> 0 then
     begin
     LuaError('Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
     LuaError(lua_tostring(luaState, -1));
-    ScriptLoad:= false;
     end
 else
     begin
     WriteLnToConsole('Lua: ' + name + ' loaded');
     // call the script file
     lua_pcall(luaState, 0, 0, 0);
-    ScriptLoaded:= true;
-    ScriptLoad:= true;
+    ScriptLoaded:= true
     end;
 end;
 
