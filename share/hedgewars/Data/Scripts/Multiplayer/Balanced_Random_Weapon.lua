@@ -127,7 +127,7 @@ function assignAmmo(hog)
             setTeamValue(name, "ammo", ammo)
         end
         for i, w in pairs(ammo) do
-            AddAmmo(hog, w)
+            AddAmmo(hog, w, 1)
         end
         setTeamValue(name, "processed", true)
     end
