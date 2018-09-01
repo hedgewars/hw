@@ -868,8 +868,8 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
-                spawnHealthTagForHH(Gear, t);
+            // Display hedgehog damage in water
+            spawnHealthTagForHH(Gear, t);
             end;
 
         team:= Gear^.Hedgehog^.Team;
