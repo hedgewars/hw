@@ -30,6 +30,7 @@ Game:
  * Fix /hta, /hsa and /hya commands not writing message in chat
  * Limit hedgehog health to 268435455 to prevent some bugs
  * Fix Sudden Death starting in the second turn of a round rather than the first
+ * Prevent voices from being spoken directly before a victory voice
 
 Frontend:
  + Add setting to disable audio dampening when losing window focus

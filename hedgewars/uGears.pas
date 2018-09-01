@@ -62,8 +62,8 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stInit, stDelay, stChDmg, stSweep, stTurnReact,
-    stAfterDelay, stChWin, stWater, stChWin2, stHealth,
+    step: (stInit, stDelay, stChDmg, stSweep, stChWin1, stTurnReact,
+    stAfterDelay, stChWin2, stWater, stChWin3, stHealth,
     stSpawn, stNTurn);
     NewTurnTick: LongWord;
     //SDMusic: shortstring;
@@ -289,6 +289,12 @@ case step of
     else
         inc(step);
 
+    stChWin1:
+        begin
+        CheckForWin();
+        inc(step)
+        end;
+
     stTurnReact:
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
@@ -310,7 +316,7 @@ case step of
         if delay = 0 then
             inc(step)
             end;
-    stChWin:
+    stChWin2:
         begin
         CheckForWin();
         inc(step)
@@ -327,7 +333,7 @@ case step of
         end
     else // since we are not raising the water, a second win-check isn't needed
         inc(step,2);
-    stChWin2:
+    stChWin3:
         begin
         CheckForWin;
         inc(step)
