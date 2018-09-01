@@ -270,11 +270,13 @@ function onGearDelete(gear)
 			-- Turn the other crate into a fake crate; this will “contain” the device.
 			SetGearPos(other_crate_table.gear, bor(GetGearPos(other_crate_table.gear), 0x8))
 		elseif cratesFound == 1 then
-			-- Second win crate collected:
-			-- This crate contains the anti-gravity part! VICTORY!
-			PlaySound(sndShotgunReload)
-			-- It's displayed as if collecting a normal ammo/utility crate. :-)
-			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			if not candidate_crate_table.destroyed then
+				-- Second win crate collected:
+				-- This crate contains the anti-gravity part! VICTORY!
+				PlaySound(sndShotgunReload)
+				-- It's displayed as if collecting a normal ammo/utility crate. :-)
+				AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			end
 		end
 	end
 

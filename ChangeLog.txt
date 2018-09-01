@@ -82,6 +82,8 @@ Campaigns and missions:
  * A Classic Fairytale: Fix clan membership of princess in some missions
  * A Classic Fairytale, Mission 5: Tribe was not in same clan as Natives, screwing up stats a bit
  + A Space Adventure, final mission: Terrain types are easier to distinguish
+ * A Space Adventure, Searching in the Dust: Fix display error when destroying device crate
+ * A Space Adventure, Searching in the Dust: Don't take away control right above the pit near Sandy
  * A Space Adeventure: Fix clan membership of PAotH in main Death Planet mission
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practicse: Suppress “X remaining” message
