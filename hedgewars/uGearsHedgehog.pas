@@ -596,15 +596,14 @@ with Gear^,
                 if (not CurrentTeam^.ExtDriven) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
                     SendIPC(_S'a');
                 AfterAttack;
-                end
+                end;
+            TargetPoint.X := NoPointX;
             end
         else
             Message:= Message and (not gmAttack);
 
     ScriptCall('onHogAttack', ord(usedAmmoType));
     end; // of with Gear^, Gear^.Hedgehog^ do
-
-    TargetPoint.X := NoPointX;
 end;
 
 procedure AfterAttack;

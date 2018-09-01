@@ -24,6 +24,7 @@ Game:
  * Fix invisible projectile timer, attack bar, target on other side of wrap world edge
  * Fix attack bar drawn over GUI elements
  * Fix hog being unable to walk after using sniper rifle without firing both shots
+ * Fix bee weapon becoming unusable when hitting attack key in mid-air
  * Fix video recorder not working when game audio was disabled
  * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
