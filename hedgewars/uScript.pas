@@ -157,7 +157,10 @@ begin
     else
         s:= intro + ': ' + s;
     WriteLnToConsole(s);
-    AddChatString(#5 + s);
+    if isWarning then
+        AddChatString(#0 + s)
+    else
+        AddChatString(#5 + s);
     if cTestLua and (not isWarning) then
         halt(HaltTestLuaError);
 end;
