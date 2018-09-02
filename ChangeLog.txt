@@ -104,6 +104,9 @@ Server:
  * Fix many server messages being not translated
 
 Lua API:
+ * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
+ + New call: SetTurnTimeLeft(TurnTimeLeft): Set remaining turn time
+ + New call: SetReadyTimeLeft(ReadyTimeLeft): Set remaining ready time
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New call: EnableSwitchHog(): Enable hog switching
@@ -111,9 +114,6 @@ Lua API:
  + New call: GetVampiric(): Returns true if vampirism is currently active
  + New call: GetLaserSight(): Returns true if laser sight (as utility) is currenctly active (ignoring sniper rifle)
  + New call: IsHogHidden(gear): Returns true if hog is hidden
- + New call: SetTurnTimeLeft(TurnTimeLeft): Set remaining turn time
- + New call: SetReadyTimeLeft(ReadyTimeLeft): Set remaining ready time
- * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is now deprecated and will become useless in a future version. Use the setter functions instead
  + Changed call: AddTeam: 2nd param. color: Accepts negative value to use a default clan color from player settings
  + Changed call: HedgewarsScriptLoad: 2nd param. mustExist. If false, it's allowed for the script to not exist
  + Changed call: HedgewarsScriptLoad: Return true on success and false on failure

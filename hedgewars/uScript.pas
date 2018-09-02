@@ -102,6 +102,8 @@ var luaState : Plua_State;
     mapDims : boolean;
     PointsBuffer: shortstring;
     PrevCursorX, PrevCursorY: LongInt;
+    PendingTurnTimeLeft, PendingReadyTimeLeft: LongWord;
+    isPendingTurnTimeLeft, isPendingReadyTimeLeft: boolean;
 
 {$IFDEF USE_LUA_SCRIPT}
 procedure ScriptPrepareAmmoStore; forward;
@@ -136,24 +138,38 @@ begin
     exit(true);
 end;
 
-procedure LuaError(s: shortstring);
-var src: shortstring;
+procedure LuaErrorOrWarning(s: shortstring; isWarning: boolean);
+var src, intro: shortstring;
 const
     maxsrclen = 20;
 begin
+    if isWarning then
+        intro:= 'LUA WARNING'
+    else
+        intro:= 'LUA ERROR';
     if LuaUpdateDebugInfo() then
         begin
         src:= StrPas(LuaDebugInfo.source);
-        s:= 'LUA ERROR [ ... '
+        s:= intro + ': [ ... '
             + copy(src, Length(src) - maxsrclen, maxsrclen - 3) + ':'
             + inttostr(LuaDebugInfo.currentLine) + ']: ' + s;
         end
     else
-        s:= 'LUA ERROR: ' + s;
+        s:= intro + ': ' + s;
     WriteLnToConsole(s);
     AddChatString(#5 + s);
-    if cTestLua then
+    if cTestLua and (not isWarning) then
         halt(HaltTestLuaError);
+end;
+
+procedure LuaError(s: shortstring);
+begin
+    LuaErrorOrWarning(s, false);
+end;
+
+procedure LuaWarning(s: shortstring);
+begin
+    LuaErrorOrWarning(s, true);
 end;
 
 procedure LuaCallError(error, call, paramsyntax: shortstring);
@@ -3187,16 +3203,36 @@ begin
 end;
 
 function lc_setturntimeleft(L : Plua_State) : LongInt; Cdecl;
+var number: Int64;
 begin
     if CheckLuaParamCount(L, 1, 'SetTurnTimeLeft', 'TurnTimeLeft') then
-        TurnTimeLeft:= Trunc(lua_tonumber(L, 1));
+        begin
+        number:= Trunc(lua_tonumber(L, 1));
+        if number < 0 then
+            number:= 0;
+        if number > cMaxTurnTime then
+            number:= cMaxTurnTime;
+        // The real TurnTimeLeft will be set in SetGlobals
+        PendingTurnTimeLeft:= number;
+        isPendingTurnTimeLeft:= true;
+        end;
     lc_setturntimeleft:= 0;
 end;
 
 function lc_setreadytimeleft(L : Plua_State) : LongInt; Cdecl;
+var number: Int64;
 begin
     if CheckLuaParamCount(L, 1, 'SetReadyTimeLeft', 'ReadyTimeLeft') then
-        ReadyTimeLeft:= Trunc(lua_tonumber(L, 1));
+        begin
+        number:= Trunc(lua_tonumber(L, 1));
+        if number < 0 then
+            number:= 0;
+        if number > cMaxTurnTime then
+            number:= cMaxTurnTime;
+        // The real ReadyTimeLeft will be set in SetGlobals
+        PendingReadyTimeLeft:= number;
+        isPendingReadyTimeLeft:= true;
+        end;
     lc_setreadytimeleft:= 0;
 end;
 
@@ -3682,14 +3718,41 @@ else
 end;
 
 procedure GetGlobals;
+var currentTTL, currentRTL, newTTL, newRTL: LongInt;
 begin
-// This function is deprecated.
-// TODO: Remove this function.
-// Setting TurnTimeLeft and ReadyTimeLeft is now done in the setter functions
+// Setting TurnTimeLeft and ReadyTimeLeft should now be done in the setter functions.
 // SetTurnTimeLeft and SetReadTimeLeft.
 // GetGloals should be removed in a future release.
-TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
-ReadyTimeLeft:= ScriptGetInteger('ReadyTimeLeft');
+
+// DEPRECATED: Read TurnTimeLeft and ReadyTimeLeft from script directly.
+// TODO: Remove this behaviour in a future version.
+currentTTL:= TurnTimeLeft;
+currentRTL:= ReadyTimeLeft;
+newTTL:= ScriptGetInteger('TurnTimeLeft');
+newRTL:= ScriptGetInteger('ReadyTimeLeft');
+if currentTTL <> newTTL then
+    begin
+    TurnTimeLeft:= newTTL;
+    LuaWarning('Writing to TurnTimeLeft directly is deprecated! Use SetTurnTimeLeft instead!');
+    end;
+
+if currentRTL <> newRTL then
+    begin
+    ReadyTimeLeft:= newRTL;
+    LuaWarning('Writing to ReadyTimeLeft directly is deprecated! Use SetReadyTimeLeft instead!');
+    end;
+
+// Set TurnTimeLeft and ReadyTimeLeft if activated by SetTurnTimeLeft and SetReadyTimeLeft before
+if isPendingTurnTimeLeft then
+    begin
+    TurnTimeLeft:= PendingTurnTimeLeft;
+    isPendingTurnTimeLeft:= false;
+    end;
+if isPendingReadyTimeLeft then
+    begin
+    ReadyTimeLeft:= PendingReadyTimeLeft;
+    isPendingReadyTimeLeft:= false;
+    end;
 end;
 
 procedure ScriptCall(fname : shortstring);
@@ -4316,6 +4379,8 @@ mapDims:= false;
 PointsBuffer:= '';
 PrevCursorX:= NoPointX;
 PrevCursorY:= NoPointX;
+isPendingTurnTimeLeft:= false;
+isPendingReadyTimeLeft:= false;
 end;
 
 procedure freeModule;
