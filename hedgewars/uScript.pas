@@ -2018,9 +2018,10 @@ begin
         else
             respectFactor:= True;
         if respectFactor then
-            TurnTimeLeft:= (time * cGetAwayTime) div 100
+            PendingTurnTimeLeft:= (time * cGetAwayTime) div 100
         else
-            TurnTimeLeft:= time;
+            PendingTurnTimeLeft:= time;
+        isPendingTurnTimeLeft:= true;
         if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
             begin
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstAttacked;
