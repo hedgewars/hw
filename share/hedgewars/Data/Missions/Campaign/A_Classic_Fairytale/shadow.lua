@@ -189,7 +189,7 @@ function AfterStartDialogue()
   end
   stage = spyStage
   ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 
@@ -223,7 +223,7 @@ function AfterWeaklingsAnim()
   SwitchHog(dense)
   SetGearMessage(dense, 0)
   SetGearMessage(leaks, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover...").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
 end
 
@@ -330,7 +330,7 @@ function AfterAttackedAnim()
   AddAmmo(cannibals[9], amFirePunch, 0)
   AddAmmo(cannibals[9], amBaseballBat, 0)
   SetGearMessage(leaks, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadAttacked, {}, 0)
   SwitchHog(leaks)
   AnimWait(dense, 1)
@@ -893,7 +893,7 @@ function DoReadyForStronglings()
   AddAmmo(cannibals[9], amShotgun, 2)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function DoStronglingsDead()
@@ -1091,17 +1091,17 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(cMaxTurnTime)
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
       EndTurn(true)
     else
-      TurnTimeLeft = -1
+      SetTurnTimeLeft(cMaxTurnTime)
     end
   elseif stage == acceptedReturnStage then
     SwitchHog(dense)
     FollowGear(dense)
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(cMaxTurnTime)
   end
 end
 

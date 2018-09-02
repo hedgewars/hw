@@ -262,7 +262,7 @@ function placeNextWaypoint()
 			end
 			local message 
 			if TurnTimeLeft <= 22000 then
-				TurnTimeLeft = TurnTimeLeft + 8000
+				SetTurnTimeLeft(TurnTimeLeft + 8000)
 				totalTime = totalTime + 8000
 				PlaySound(sndExtraTime)
 				message = loc("Got 1 more saucer and 8 more seconds added to the clock")
@@ -273,7 +273,7 @@ function placeNextWaypoint()
 		else
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, GREEN)
 			if TurnTimeLeft <= 16000 then
-				TurnTimeLeft = TurnTimeLeft + 6000
+				SetTurnTimeLeft(TurnTimeLeft + 6000)
 				totalTime = totalTime + 6000
 				if currentWaypoint ~= 1 then
 					PlaySound(sndExtraTime)

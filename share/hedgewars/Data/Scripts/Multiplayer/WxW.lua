@@ -962,7 +962,7 @@ function onLJump()
 		SetInputMask(0xFFFFFFFF)
 		AddCaption(loc("Configuration accepted."), msgColorTech, capgrpMessage)
 		if GetGameFlag(gfPlaceHog) then
-			TurnTimeLeft = PlacementTime
+			SetTurnTimeLeft(PlacementTime)
 			AddAmmo(CurrentHedgehog, amTeleport, 100)
 			SetWeapon(amTeleport)
 			AddCaption(
@@ -972,7 +972,7 @@ function onLJump()
 			)
 			roundN = 2
 		else
-			TurnTimeLeft = TurnTime
+			SetTurnTimeLeft(TurnTime)
 			AddCaption(string.format(loc("Let's go, %s!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpMessage2)
 			roundN = 100
 			wallsLeft = #wTouched
@@ -1280,7 +1280,7 @@ function onNewTurn()
 		if roundN < 2 then
 			SetWeapon(amSkip)
 			AddAmmo(CurrentHedgehog, amTeleport, 0)
-			TurnTimeLeft = -1
+			SetTurnTimeLeft(cMaxTurnTime)
 			SetInputMask(0)
 		end
 		if roundN == 2 then
@@ -1337,7 +1337,7 @@ function onNewTurn()
 	end
 
 	if roundN == 1 then
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(cMaxTurnTime)
 		SetInputMask(0)
 		allowCrate = false
 		UpdateMenu()

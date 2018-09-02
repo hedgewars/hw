@@ -242,10 +242,10 @@ function onNewTurn()
 				return
 			end
 		end
-		TurnTimeLeft = 20000
+		SetTurnTimeLeft(20000)
 		wind()
 	elseif not inBattle and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(cMaxTurnTime)
 		wind()
 	else
 		EndTurn(true)

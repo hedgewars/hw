@@ -145,14 +145,14 @@ function onNewTurn()
 	if CurrentHedgehog == hero.gear then
 		if firstTurn then
 			-- Unique game rule in this mission: First turn has more time
-			TurnTimeLeft = 25000
+			SetTurnTimeLeft(25000)
 			-- Generous ready time on first turn to give more time to read
-			ReadyTimeLeft = 35000
+			SetReadyTimeLeft(35000)
 			battleStarted = true
 			firstTurn = false
 		end
 		if lastWeaponUsed == amSkip then
-			TurnTimeLeft = TurnTime + timeLeft
+			SetTurnTimeLeft(TurnTime + timeLeft)
 		end
 		timeLeft = 0
 		heroTurns = heroTurns + 1

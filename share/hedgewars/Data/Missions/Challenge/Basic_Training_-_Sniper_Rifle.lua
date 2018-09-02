@@ -194,7 +194,7 @@ function onGameTick20()
 		else
 			-- ... or just lower the timer by 1.
 			-- Reset the time left to stop the timer
-			TurnTimeLeft = time_goal
+			SetTurnTimeLeft(time_goal)
 		end
         end_timer = end_timer - 20
 	end

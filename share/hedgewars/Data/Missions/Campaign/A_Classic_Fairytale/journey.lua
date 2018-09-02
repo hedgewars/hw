@@ -197,7 +197,7 @@ function AfterMidAnimAlone()
   AddEvent(CheckFailedCourse, {}, DoFailedCourse, {}, 0)
   SetGearMessage(leaks, 0)
   TurnsLeft = 12
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage"),
     loc("Save the princess by collecting the crate in under 12 turns!") .. "|" ..
     loc("Mines time: 3 seconds"), 0, 6000)
@@ -230,7 +230,7 @@ function AfterEndAnimAlone()
   stage = endStage
   SwitchHog(leaks)
   SetGearMessage(leaks, 0)
-  TurnTimeLeft = -1
+  SetTurnTimeLeft(cMaxTurnTime)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
   AddEvent(CheckWon, {}, DoWon, {}, 0)
@@ -242,7 +242,7 @@ function AfterEndAnimDuo()
   SwitchHog(leaks)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  TurnTimeLeft = -1
+  SetTurnTimeLeft(cMaxTurnTime)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
   AddEvent(CheckWon, {}, DoWon, {}, 0)
@@ -258,7 +258,7 @@ end
 
 function AfterStartAnim()
   SetGearMessage(leaks, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   local goal = loc("Get the crate on the other side of the island.")
   local hint = loc("Hint: You might want to stay out of sight and take all the crates ...")
   local stuck = loc("If you get stuck, use your Desert Eagle or restart the mission!")
@@ -1188,15 +1188,15 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(cMaxTurnTime)
   elseif victory then
     EndTurn(true)
   elseif stage == endStage and CurrentHedgehog ~= leaks then
     AnimSwitchHog(leaks)
     SetGearMessage(leaks, 0)
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(cMaxTurnTime)
   elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
-    TurnTimeLeft = 20000
+    SetTurnTimeLeft(20000)
   else
     TurnsLeft = TurnsLeft - 1
     if TurnsLeft >= 1 then

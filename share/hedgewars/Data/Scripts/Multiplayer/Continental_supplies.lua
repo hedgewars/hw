@@ -53,7 +53,7 @@ function EndTurnCS(seconds)
 	-- Set attacked state to prevent “Boring” sound to be played
 	SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstAttacked))
 	--set escape time
-	TurnTimeLeft = GetAwayTime*10*seconds
+	SetTurnTimeLeft(GetAwayTime*10*seconds)
 	if TurnTimeLeft > 0 then
 		Retreat(TurnTimeLeft, false)
 	end
@@ -1212,7 +1212,7 @@ function onNewTurn()
 				CS.HOG_HEALTH=GetHealth(CurrentHedgehog)
 			end
 
-			TurnTimeLeft=100000
+			SetTurnTimeLeft(100000)
 
 			AddCaption(string.format(CS.SELECT_WEP_INFORMATION_SHORT, GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 			AddCaption(loc("No continent selected"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)

@@ -198,7 +198,7 @@ TargetPos[12] = { Modifier = true, Func = function()
 	SendStat(siCustomAchievement, loc("Good job!"))
 	SendStat(siPlayerKills, "0", loc("Hogonauts"))
 
-	TurnTimeLeft = 0
+	SetTurnTimeLeft(0)
 	EndGame()
 end,
 }
@@ -504,7 +504,7 @@ end
 
 function onGameTick20()
 	if (TurnTimeLeft < 1500000 and not Objective) then
-		TurnTimeLeft = TurnTime
+		SetTurnTimeLeft(TurnTime)
 	end
 	if Check then
 		CheckTimer = CheckTimer - 20

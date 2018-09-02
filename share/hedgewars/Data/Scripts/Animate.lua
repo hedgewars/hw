@@ -310,7 +310,7 @@ function ShowAnimation()
     skipping = false
     return true
   else
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(cMaxTurnTime)
     if Animate(AnimList[1]) == true then
       RemoveAnim()
     end

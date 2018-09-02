@@ -492,7 +492,7 @@ function AfterStartAnim()
   SetHealth(SpawnHealthCrate(519, 1519), 25)
   SetHealth(SpawnHealthCrate(826, 895), 25)
   SpawnSupplyCrate(701, 1046, amGirder, 3)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function SkipAnim(anim)
@@ -513,7 +513,7 @@ function AfterFleeAnim()
   SetGearMessage(CurrentHedgehog, 0)
   HideHedge(enemy)
   ShowMission(loc("Long Live The Queen"), loc("Coward"), loc("The leader escaped. Defeat the rest of the aliens!"), 1, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function AfterLeaderDeadAnim()
@@ -858,7 +858,7 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(cMaxTurnTime)
     return
   end
   if GetHogTeamName(CurrentHedgehog) == loc("011101001") then

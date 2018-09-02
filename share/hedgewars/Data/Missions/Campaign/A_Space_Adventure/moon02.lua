@@ -115,7 +115,7 @@ function onNewTurn()
 				lose()
 			end
 			SetWeapon(amRope)
-			TurnTimeLeft = runner.places[currentPosition].turnTime + previousTimeLeft
+			SetTurnTimeLeft(runner.places[currentPosition].turnTime + previousTimeLeft)
 			previousTimeLeft = 0
 		end
 	end
