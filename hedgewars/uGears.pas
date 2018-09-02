@@ -450,7 +450,7 @@ if TurnTimeLeft > 0 then
         if (cHedgehogTurnTime >= 10000)
         and (CurrentHedgehog^.Gear <> nil)
         and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0)
-        and (not isGetAwayTime) then
+        and (not isGetAwayTime) and (ReadyTimeLeft = 0) then
             if TurnTimeLeft = 5000 then
                 PlaySoundV(sndHurry, CurrentTeam^.voicepack)
             else if TurnTimeLeft = 4000 then
