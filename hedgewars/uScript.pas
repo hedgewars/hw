@@ -114,6 +114,7 @@ procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 var LuaDebugInfo: lua_Debug;
 
 procedure SetGlobals; forward;
+procedure GetGlobals; forward;
 procedure LuaParseString(s: shortString);
 begin
     SetGlobals;
@@ -123,7 +124,9 @@ begin
         begin
         AddFileLog('[Lua] input string parsing error!');
         AddChatString(#5 + '[Lua] Error while parsing!');
-        end;
+        end
+    else
+        GetGlobals();
 end;
 
 function LuaUpdateDebugInfo(): Boolean;
