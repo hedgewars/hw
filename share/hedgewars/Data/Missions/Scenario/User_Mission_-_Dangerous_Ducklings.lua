@@ -136,14 +136,14 @@ function onGearDelete(gear)
 			gameLost = true
 		elseif (gear == instructor) and (GetY(gear) > WaterLine) then
 			HogSay(player, loc("See ya!"), SAY_THINK)
-			SetTurnTimeLeft(3000)
+			Retreat(3000)
 			awardAchievement(loc("Naughty Ninja"))
 			DismissTeam(loc("Blue Team"))
 			gameWon = true
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
 			gameWon = true
-			SetTurnTimeLeft(3000)
+			Retreat(3000)
 		end
 
 	end
