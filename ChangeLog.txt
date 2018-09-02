@@ -33,6 +33,7 @@ Game:
  * Fix Sudden Death starting in the second turn of a round rather than the first
  * Prevent voices from being spoken directly before a victory voice
  * Fix damage not being displayed if hog drowns in water with 100% opacity (like in Compost theme)
+ * Fix retreat timer appearing after using baseball bat or whip and immediately taking damage
 
 Frontend:
  + Add setting to disable audio dampening when losing window focus

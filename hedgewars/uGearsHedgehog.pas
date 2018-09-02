@@ -638,10 +638,13 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
-                     TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
-                else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
-                IsGetAwayTime := true;
+                if (HHGear^.State and gstHHDriven) <> 0 then
+                    begin
+                    if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
+                         TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
+                    else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
+                    IsGetAwayTime := true;
+                    end;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then
                 HHGear^.State:= HHGear^.State or gstAttacked;
