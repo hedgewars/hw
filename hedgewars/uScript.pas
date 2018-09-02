@@ -3186,6 +3186,20 @@ begin
     lc_explode:= 1;
 end;
 
+function lc_setturntimeleft(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetTurnTimeLeft', 'TurnTimeLeft') then
+        TurnTimeLeft:= Trunc(lua_tonumber(L, 1));
+    lc_setturntimeleft:= 0;
+end;
+
+function lc_setreadytimeleft(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetReadyTimeLeft', 'ReadyTimeLeft') then
+        ReadyTimeLeft:= Trunc(lua_tonumber(L, 1));
+    lc_setreadytimeleft:= 0;
+end;
+
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
@@ -3669,12 +3683,11 @@ end;
 
 procedure GetGlobals;
 begin
-// TODO
-// Use setters instead, because globals should be read-only!
-// Otherwise globals might be changed by Lua, but then unexpectatly overwritten by engine when a ScriptCall is triggered by whatever Lua is doing!
-// Sure, one could work around that in engine (e.g. by setting writable globals in SetGlobals only when their engine-side value has actually changed since SetGlobals was called the last time...), but things just get messier and messier then.
-// It is inconsistent anyway to have some globals be read-only and others not with no indication whatsoever.
-// -- sheepluva
+// This function is deprecated.
+// TODO: Remove this function.
+// Setting TurnTimeLeft and ReadyTimeLeft is now done in the setter functions
+// SetTurnTimeLeft and SetReadTimeLeft.
+// GetGloals should be removed in a future release.
 TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
 ReadyTimeLeft:= ScriptGetInteger('ReadyTimeLeft');
 end;
@@ -4176,6 +4189,8 @@ lua_register(luaState, _P'GetVampiric', @lc_getvampiric);
 lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
 lua_register(luaState, _P'GetLaserSight', @lc_getlasersight);
 lua_register(luaState, _P'Explode', @lc_explode);
+lua_register(luaState, _P'SetTurnTimeLeft', @lc_setturntimeleft);
+lua_register(luaState, _P'SetReadyTimeLeft', @lc_setreadytimeleft);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
