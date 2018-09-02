@@ -1639,8 +1639,11 @@ function SabotageSmokeInactive(gear)
 	end
 end
 
-function ShowContinentLabel()
-	if CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] == 0 then
+function ShowContinentLabel(continent)
+	if not continent then
+		continent = CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]
+	end
+	if continent == 0 then
 		AddCaption(loc("Random continent"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 	else
 		AddCaption(CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1], GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
@@ -1682,7 +1685,15 @@ function onGameTick()
 		CS.SELECT_CONTINENT_CHECK=false
 		EndTurnCS(0)
 		PlaySound(sndPlaced)
-		ShowContinentLabel()
+		if(CurrentHedgehog and CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
+		then
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+			SetContinentWeapons()
+			HideMission()
+			ShowContinentLabel(0)
+		else
+			ShowContinentLabel()
+		end
 		CS.CONFIRM_CONTINENT_SELECTION = -1
 	end
 
