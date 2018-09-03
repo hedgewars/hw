@@ -62,8 +62,8 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stInit, stDelay, stChDmg, stSweep, stChWin1, stTurnReact,
-    stAfterDelay, stChWin2, stWater, stChWin3, stHealth,
+    step: (stInit, stDelay, stChDmg, stSweep, stTurnStats, stChWin1,
+    stTurnReact, stAfterDelay, stChWin2, stWater, stChWin3, stHealth,
     stSpawn, stNTurn);
     NewTurnTick: LongWord;
     //SDMusic: shortstring;
@@ -288,6 +288,13 @@ case step of
         end
     else
         inc(step);
+
+    stTurnStats:
+        begin
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            uStats.TurnStats;
+        inc(step)
+        end;
 
     stChWin1:
         begin

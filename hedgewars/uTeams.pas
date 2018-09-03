@@ -75,9 +75,12 @@ CheckForWin:= true;
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 
-// if the game ends during a multishot, do last TurnReaction
+// if the game ends during a multishot, do last TurnStats + TurnReaction
 if (not bBetweenTurns) and isInMultiShoot then
+    begin
+    TurnStats();
     TurnReaction();
+    end;
 
 if not TeamsGameOver then
     begin

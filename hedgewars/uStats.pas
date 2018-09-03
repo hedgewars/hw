@@ -39,6 +39,7 @@ procedure HedgehogSacrificed(Hedgehog: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 procedure TargetHit;
 procedure Skipped;
+procedure TurnStats;
 procedure TurnReaction;
 procedure SendStats;
 procedure hedgehogFlight(Gear: PGear; time: Longword);
@@ -135,14 +136,56 @@ inc(SkippedTurns);
 isTurnSkipped:= true
 end;
 
-procedure TurnReaction;
+procedure TurnStats;
 var i, t: LongInt;
-    killsCheck: LongInt;
+begin
+inc(FinishedTurnsTotal);
+
+for t:= 0 to Pred(TeamsCount) do // send even on zero turn
+    with TeamsArray[t]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i].stats do
+                begin
+                inc(DamageRecv, StepDamageRecv);
+                inc(DamageGiven, StepDamageGiven);
+                if StepDamageRecv > MaxStepDamageRecv then
+                    MaxStepDamageRecv:= StepDamageRecv;
+                if StepDamageGiven > MaxStepDamageGiven then
+                    MaxStepDamageGiven:= StepDamageGiven;
+                if StepKills > MaxStepKills then
+                    MaxStepKills:= StepKills;
+                StepKills:= 0;
+                StepDamageRecv:= 0;
+                StepDamageGiven:= 0;
+                StepPoisoned:= false;
+                StepDied:= false;
+                end;
+
+if SendHealthStatsOn then
+    for t:= 0 to Pred(ClansCount) do
+        with ClansArray[t]^ do
+            begin
+            SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
+            end;
+
+Kills:= 0;
+KillsClan:= 0;
+DamageClan:= 0;
+DamageTurn:= 0;
+HitTargets:= 0;
+PoisonClan:= 0;
+PoisonTurn:= 0;
+AmmoUsedCount:= 0;
+AmmoDamagingUsed:= false;
+isTurnSkipped:= false;
+end;
+
+procedure TurnReaction;
+var killsCheck: LongInt;
     s: ansistring;
 begin
 //TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
-inc(FinishedTurnsTotal);
 if FinishedTurnsTotal <> 0 then
     begin
     s:= ansistring(CurrentHedgehog^.Name);
@@ -209,45 +252,6 @@ if FinishedTurnsTotal <> 0 then
         AddCaption(FormatA(GetEventString(eidTurnSkipped), s), capcolDefault, capgrpMessage);
         end
     end;
-
-
-for t:= 0 to Pred(TeamsCount) do // send even on zero turn
-    with TeamsArray[t]^ do
-        for i:= 0 to cMaxHHIndex do
-            with Hedgehogs[i].stats do
-                begin
-                inc(DamageRecv, StepDamageRecv);
-                inc(DamageGiven, StepDamageGiven);
-                if StepDamageRecv > MaxStepDamageRecv then
-                    MaxStepDamageRecv:= StepDamageRecv;
-                if StepDamageGiven > MaxStepDamageGiven then
-                    MaxStepDamageGiven:= StepDamageGiven;
-                if StepKills > MaxStepKills then
-                    MaxStepKills:= StepKills;
-                StepKills:= 0;
-                StepDamageRecv:= 0;
-                StepDamageGiven:= 0;
-                StepPoisoned:= false;
-                StepDied:= false;
-                end;
-
-if SendHealthStatsOn then
-    for t:= 0 to Pred(ClansCount) do
-        with ClansArray[t]^ do
-            begin
-            SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
-            end;
-
-Kills:= 0;
-KillsClan:= 0;
-DamageClan:= 0;
-DamageTurn:= 0;
-HitTargets:= 0;
-PoisonClan:= 0;
-PoisonTurn:= 0;
-AmmoUsedCount:= 0;
-AmmoDamagingUsed:= false;
-isTurnSkipped:= false
 end;
 
 procedure AmmoUsed(am: TAmmoType);
