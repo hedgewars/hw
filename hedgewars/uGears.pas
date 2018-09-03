@@ -1208,8 +1208,7 @@ begin
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
                 end;
-            //ParseCommand('/say [' + hh^.Name + '] '+text, true)
-            AddChatString(#9+'[' + HH^.Name + '] '+text);
+            AddChatString(#9+FormatA(trmsg[sidChatHog], [HH^.Name, text]));
             end
         end
     else if (x >= 4) then
