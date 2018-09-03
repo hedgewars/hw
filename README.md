@@ -163,5 +163,4 @@ Contact
 * Homepage        - https://hedgewars.org/
 * IRC channel     - irc://irc.freenode.net/hedgewars
 * Community forum - https://hedgewars.org/forum
-* Mailing list    - https://mail.gna.org/listinfo/hedgewars-dev
 
