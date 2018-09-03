@@ -873,6 +873,7 @@ PrettifyLandAlpha();
 if (WorldEdge <> weNone) and (not hasBorder) then
     InitWorldEdges();
 
+ScriptSetMapGlobals;
 end;
 
 procedure GenPreview(out Preview: TPreview);
@@ -888,6 +889,8 @@ begin
     else
         OutError('Unknown mapgen', true);
     end;
+
+    ScriptSetMapGlobals;
 
     // strict scaling needed here since preview assumes a rectangle
     rh:= max(LAND_HEIGHT,2048);
@@ -937,6 +940,8 @@ begin
     else
         OutError('Unknown mapgen', true);
     end;
+
+    ScriptSetMapGlobals;
 
     // strict scaling needed here since preview assumes a rectangle
     rh:= max(LAND_HEIGHT, 2048);

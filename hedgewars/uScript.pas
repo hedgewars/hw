@@ -40,6 +40,7 @@ procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
 procedure ScriptSetInteger(name : shortstring; value : LongInt);
 procedure ScriptSetString(name : shortstring; value : shortstring);
+procedure ScriptSetMapGlobals;
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -99,7 +100,6 @@ var luaState : Plua_State;
     ScriptAmmoDelay : shortstring;
     ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
-    mapDims : boolean;
     PointsBuffer: shortstring;
     PrevCursorX, PrevCursorY: LongInt;
     PendingTurnTimeLeft, PendingReadyTimeLeft: LongWord;
@@ -3540,7 +3540,6 @@ if ScriptExists('onAmmoStoreInit') or ScriptExists('onNewAmmoStore') then
 
 ScriptSetInteger('ClansCount', ClansCount);
 ScriptSetInteger('TeamsCount', TeamsCount);
-mapDims:= false
 end;
 
 
@@ -3709,19 +3708,19 @@ else
     PrevCursorY:= NoPointX
     end;
 
-if not mapDims then
-    begin
-    mapDims:= true;
-    ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
-    ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
-    ScriptSetInteger('LeftX', leftX);
-    ScriptSetInteger('RightX', rightX);
-    ScriptSetInteger('TopY', topY)
-    end;
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
     ScriptSetNil('CurrentHedgehog');
+end;
+
+procedure ScriptSetMapGlobals;
+begin
+ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
+ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
+ScriptSetInteger('LeftX', leftX);
+ScriptSetInteger('RightX', rightX);
+ScriptSetInteger('TopY', topY);
 end;
 
 procedure GetGlobals;
@@ -4382,7 +4381,6 @@ end;
 
 procedure initModule;
 begin
-mapDims:= false;
 PointsBuffer:= '';
 PrevCursorX:= NoPointX;
 PrevCursorY:= NoPointX;

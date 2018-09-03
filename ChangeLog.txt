@@ -134,6 +134,7 @@ Lua API:
  * Animate library: Remove defunct follow argument for AnimVisualGear
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
+ * Fixed variables: LeftX, RightX, TopY, LAND_WIDTH, LAND_HEIGHT were broken if onVisualGearAdd was defined
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set
 
 ====================== 0.9.24.1 ====================
