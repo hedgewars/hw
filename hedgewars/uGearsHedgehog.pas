@@ -638,7 +638,7 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                if (HHGear^.State and gstHHDriven) <> 0 then
+                if (HHGear <> nil) and ((HHGear^.State and gstHHDriven) <> 0) then
                     begin
                     if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
                          TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
