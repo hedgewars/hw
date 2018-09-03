@@ -484,14 +484,14 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
   -- Don't allow player to play with traitor, except when it is the final hog left
   if CurrentHedgehog == traitor and not IsEveryoneExceptTraitorDead() then
     EndTurn(true)
   else
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
   end
 end
 

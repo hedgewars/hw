@@ -38,7 +38,7 @@ local teamA = {
 function onGameInit()
 	GameFlags = gfDisableWind + gfOneClanMode
 	Seed = 1
-	TurnTime = cMaxTurnTime
+	TurnTime = MAX_TURN_TIME
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1

@@ -123,12 +123,12 @@ Lua API:
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
  + New Lua library: Achievements
  + Add sprite tint globals in Utilts library: U_LAND_TINT_NORMAL, U_LAND_TINT_ICE, U_LAND_TINT_INDESTRUCTIBLE and U_LAND_TINT_BOUNCY
- + Can enable infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
+ + New globals: Infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
  + New global game variable: MaxCaseDrops. Max. number of crats which can be in game by crate drops
- + New global: NoPointX. Value of CursorX and CursorY if cursor is inactive
+ + New global: NO_CURSOR. Value of CursorX and CursorY if cursor is inactive
  + New global: AMMO_INFINITE. Value for infinite ammo count for AddAmmo and other functions
- + New global: cMaxHogHealth. Maximum possible hedgehog health
- + New global: cMaxTurnTime. Maximum possible turn time
+ + New global: MAX_HOG_HEALTH. Maximum possible hedgehog health
+ + New global: MAX_TURN_TIME. Maximum possible turn time
  + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
  + New globals: capcolDefault, capcolSetting: Default caption colors
  * Animate library: Remove defunct follow argument for AnimVisualGear

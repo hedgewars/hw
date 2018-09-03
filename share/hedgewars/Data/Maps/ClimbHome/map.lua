@@ -86,7 +86,7 @@ end
 
 function onGameInit()
     -- Ensure people get same map for same theme
-    TurnTime = cMaxTurnTime
+    TurnTime = MAX_TURN_TIME
     CaseFreq = 0
     Explosives = 0
     MineDudPercent = 0
@@ -348,7 +348,7 @@ function onGameTick20()
 
     if CurrentHedgehog ~= nil and TurnTimeLeft > 0 and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
         if MaxHeight < delayHeight and
-           TurnTimeLeft<(cMaxTurnTime-delayTime) and
+           TurnTimeLeft<(MAX_TURN_TIME-delayTime) and
             MaxHeight > 286 and WaterLine > 286 then
             if waterAccel ~= 0 then
                 SetWaterLine(WaterLine-(baseWaterSpeed+div(getActualHeight(MaxHeight)*100,waterAccel)))

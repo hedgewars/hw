@@ -61,7 +61,7 @@ local flameCounter = 0
 function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
-	TurnTime = cMaxTurnTime
+	TurnTime = MAX_TURN_TIME
 	Ready = 30000
 	CaseFreq = 0
 	MinesNum = 0

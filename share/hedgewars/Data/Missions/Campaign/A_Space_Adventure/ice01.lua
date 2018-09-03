@@ -240,7 +240,7 @@ function onNewTurn()
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
 		EndTurn(true)
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
-		SetTurnTimeLeft(cMaxTurnTime)
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then
 		AnimSwitchHog(hero.gear)
 		EndTurn(true)

@@ -38,7 +38,7 @@ function onGameInit()
 	Seed = 0
 	Theme = "Nature"
 	MapGen = mgDrawn
-	TurnTime = cMaxTurnTime
+	TurnTime = MAX_TURN_TIME
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0

@@ -306,7 +306,7 @@ function onNewTurn()
 			getReadyForRumble = false
 		else
 			if guard1.keepTurning then
-				SetTurnTimeLeft(cMaxTurnTime)
+				SetTurnTimeLeft(MAX_TURN_TIME)
 			end
 		end
 	elseif not onHeroDeath() and CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
@@ -468,7 +468,7 @@ function moonLanding(gear)
 			SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 		end
 		AnimCaption(hero.gear,loc("Welcome to the moon!"))
-		SetTurnTimeLeft(cMaxTurnTime)
+		SetTurnTimeLeft(MAX_TURN_TIME)
 		SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 		SaveCampaignVar("Planet", "moon")
 		SaveCampaignVar("UnlockedMissions", "3")

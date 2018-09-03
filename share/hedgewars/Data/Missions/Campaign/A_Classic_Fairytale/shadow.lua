@@ -1091,17 +1091,17 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
       EndTurn(true)
     else
-      SetTurnTimeLeft(cMaxTurnTime)
+      SetTurnTimeLeft(MAX_TURN_TIME)
     end
   elseif stage == acceptedReturnStage then
     SwitchHog(dense)
     FollowGear(dense)
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
   end
 end
 

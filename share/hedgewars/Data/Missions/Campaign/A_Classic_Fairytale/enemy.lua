@@ -676,7 +676,7 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
   if playersDeadFresh then

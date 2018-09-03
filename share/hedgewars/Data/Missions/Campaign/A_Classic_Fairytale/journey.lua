@@ -230,7 +230,7 @@ function AfterEndAnimAlone()
   stage = endStage
   SwitchHog(leaks)
   SetGearMessage(leaks, 0)
-  SetTurnTimeLeft(cMaxTurnTime)
+  SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
   AddEvent(CheckWon, {}, DoWon, {}, 0)
@@ -242,7 +242,7 @@ function AfterEndAnimDuo()
   SwitchHog(leaks)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  SetTurnTimeLeft(cMaxTurnTime)
+  SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
   AddEvent(CheckWon, {}, DoWon, {}, 0)
@@ -1188,13 +1188,13 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
   elseif victory then
     EndTurn(true)
   elseif stage == endStage and CurrentHedgehog ~= leaks then
     AnimSwitchHog(leaks)
     SetGearMessage(leaks, 0)
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
   elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
     SetTurnTimeLeft(20000)
   else

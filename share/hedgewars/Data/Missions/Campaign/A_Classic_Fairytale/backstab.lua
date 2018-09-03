@@ -587,7 +587,7 @@ function AfterAfterChoiceAnim()
   AddAmmo(speakerHog, amSwitch, 100)
   SetGearMessage(speakerHog, 0)
   SetState(speakerHog, 0)
-  SetTurnTimeLeft(cMaxTurnTime)
+  SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals"), 1, 4000)
   SpawnCrates()
 end
@@ -1106,7 +1106,7 @@ j = 0
 function onNewTurn()
   tmpVar = 0
   if AnimInProgress() then
-    SetTurnTimeLeft(cMaxTurnTime)
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
 
@@ -1131,7 +1131,7 @@ function onNewTurn()
     else
       SetGearMessage(CurrentHedgehog, 0)
       --AnimSwitchHog(natives[leaksNum])
-      SetTurnTimeLeft(cMaxTurnTime)
+      SetTurnTimeLeft(MAX_TURN_TIME)
     end
   else
     if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then

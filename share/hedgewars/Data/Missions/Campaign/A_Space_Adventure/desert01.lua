@@ -213,9 +213,9 @@ function onNewTurn()
 	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
 		AnimSwitchHog(hero.gear)
 		getReady(hero.gear)
-		SetTurnTimeLeft(cMaxTurnTime)
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
-		SetTurnTimeLeft(cMaxTurnTime)
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
 		AnimSwitchHog(smuggler1.gear)
 		getReady(smuggler1.gear)

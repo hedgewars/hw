@@ -1280,7 +1280,7 @@ function onNewTurn()
 		if roundN < 2 then
 			SetWeapon(amSkip)
 			AddAmmo(CurrentHedgehog, amTeleport, 0)
-			SetTurnTimeLeft(cMaxTurnTime)
+			SetTurnTimeLeft(MAX_TURN_TIME)
 			SetInputMask(0)
 		end
 		if roundN == 2 then
@@ -1337,7 +1337,7 @@ function onNewTurn()
 	end
 
 	if roundN == 1 then
-		SetTurnTimeLeft(cMaxTurnTime)
+		SetTurnTimeLeft(MAX_TURN_TIME)
 		SetInputMask(0)
 		allowCrate = false
 		UpdateMenu()
