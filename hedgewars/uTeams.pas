@@ -89,6 +89,10 @@ if not TeamsGameOver then
         AddCaption(GetEventString(eidRoundDraw), capcolDefault, capgrpGameState);
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(trmsg[sidDraw]));
+        if PreviousTeam <> nil then
+            AddVoice(sndNutter, PreviousTeam^.voicepack)
+        else
+            AddVoice(sndNutter, TeamsArray[0]^.voicepack);
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
