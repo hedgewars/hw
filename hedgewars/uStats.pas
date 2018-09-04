@@ -417,12 +417,12 @@ if SendHealthStatsOn then
                     for t:= 0 to Pred(TeamsCount) do
                         if TeamsArray[t]^.Clan^.ClanIndex = deathEntry^.KilledClans[c]^.ClanIndex then
                             begin
-                            inc(i);
                             SendStat(siTeamRank, IntToStr(currentRank));
                             SendStat(siPlayerKills, IntToStr(deathEntry^.killedClans[c]^.Color) + ' ' +
                                 IntToStr(TeamsArray[t]^.stats.Kills) + ' ' + TeamsArray[t]^.TeamName);
                             end;
                     deathEntry^.KilledClans[c]^.StatsHandled:= true;
+                    inc(i);
                     end;
             if i > 0 then
                 inc(currentRank, i);
