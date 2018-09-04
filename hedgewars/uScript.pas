@@ -3736,13 +3736,13 @@ currentTTL:= TurnTimeLeft;
 currentRTL:= ReadyTimeLeft;
 newTTL:= ScriptGetInteger('TurnTimeLeft');
 newRTL:= ScriptGetInteger('ReadyTimeLeft');
-if currentTTL <> newTTL then
+if (currentTTL <> newTTL) and (not isPendingTurnTimeLeft) then
     begin
     TurnTimeLeft:= newTTL;
     LuaWarning('Writing to TurnTimeLeft directly is deprecated! Use SetTurnTimeLeft instead!');
     end;
 
-if currentRTL <> newRTL then
+if (currentRTL <> newRTL) and (not isPendingReadyTimeLeft) then
     begin
     ReadyTimeLeft:= newRTL;
     LuaWarning('Writing to ReadyTimeLeft directly is deprecated! Use SetReadyTimeLeft instead!');
