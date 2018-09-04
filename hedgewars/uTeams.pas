@@ -80,6 +80,7 @@ if (not bBetweenTurns) and isInMultiShoot then
     begin
     TurnStats();
     TurnReaction();
+    TurnStatsReset();
     end;
 
 if not TeamsGameOver then
