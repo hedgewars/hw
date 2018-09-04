@@ -371,16 +371,9 @@
 ; Round ends in a draw
 02:04=Round draw
 02:04=It's a draw!
-02:04=Nobody wins! Round draw
-02:04=Unbelievable, the round ended in a draw
 02:04=Round draw, how boring
-02:04=Impossible! The round ends in a draw
 02:04=Round draw! Now we have to start again …
-02:04=Game over! Nobody's a winner today
 02:04=Round draw, so disappointing!
-02:04=Nobody wins, how boring!
-02:04=Everyone's a loser today
-02:04=A draw! World balance has been sustained
 02:04=A draw. Everyone fought bravely to the end
 02:04=Hey! Where is the winner?!
 02:04=Where have all the hedgehogs gone?
@@ -647,7 +640,6 @@
 02:06=It's dangerous to go alone. Take this!
 02:06=Heaven likes to play with mortals
 02:06=Pew pew in a box!
-02:06=Could more of you die, please?
 
 ; New utility crate
 02:07=Tooltime!
