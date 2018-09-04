@@ -350,6 +350,16 @@ type
         TeamDamage : Longword;
         end;
 
+    PClanDeathLogEntry = ^TClanDeathLogEntry;
+
+    TClanDeathLogEntry = record
+        Turn : Longword; // turn in which the clans were killed
+        KilledClans : array[0..Pred(cMaxTeams)] of PClan; // array of clans that have died
+        KilledClansCount: Longword; // number of clans that died
+        NextEntry : PClanDeathLogEntry; // linked list
+        end;
+
+
     TBinds = record
                  indices: array[0..cKbdMaxIndex] of byte;
                  // zeroth element is reserved, indices[i] == 0 means no binding
@@ -443,6 +453,8 @@ type
             ClanHealth: LongInt;
             ClanIndex: LongInt;
             TurnNumber: LongWord;
+            DiedThisTurn: boolean; // true if clan died in current turn
+            StatsHandled : boolean; // true if clan has been handled for stats screen
             Flawless: boolean;
             end;
 

@@ -308,7 +308,10 @@ if PlacingHogs then
         begin
         for i:= 0 to ClansCount do
             if ClansArray[i] <> nil then
+                begin
                 ClansArray[i]^.TurnNumber:= 0;
+                ClansArray[i]^.DiedThisTurn:= false;
+                end;
         ResetWeapons
         end;
 
@@ -471,7 +474,9 @@ if c < 0 then
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
         TagTeamIndex:= 0;
-        Flawless:= true
+        Flawless:= true;
+        DiedThisTurn:= false;
+        StatsHandled:= false;
         end
     end
 else

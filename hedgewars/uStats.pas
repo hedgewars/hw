@@ -29,6 +29,7 @@ var TotalRoundsPre: LongInt; // Helper variable for calculating start of Sudden 
     SendRankingStatsOn : boolean = true;
     SendAchievementsStatsOn : boolean = true;
     SendHealthStatsOn : boolean = true;
+    ClanDeathLog : PClanDeathLogEntry;
 
 procedure initModule;
 procedure freeModule;
@@ -138,6 +139,8 @@ end;
 
 procedure TurnStats;
 var i, t: LongInt;
+    c: Longword;
+    newEntry: PClanDeathLogEntry;
 begin
 inc(FinishedTurnsTotal);
 
@@ -161,12 +164,38 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDied:= false;
                 end;
 
-if SendHealthStatsOn then
-    for t:= 0 to Pred(ClansCount) do
-        with ClansArray[t]^ do
+// Remember which clans died in this turn
+c:= 0;
+newEntry:= nil;
+for t:= 0 to Pred(ClansCount) do
+    with ClansArray[t]^ do
+        begin
+        if (ClanHealth = 0) and (ClansArray[t]^.DiedThisTurn = false) then
             begin
-            SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
+            ClansArray[t]^.DiedThisTurn:= true;
+            if c = 0 then
+                begin
+                new(newEntry);
+                newEntry^.Turn := FinishedTurnsTotal;
+                newEntry^.NextEntry := nil;
+                end;
+
+            newEntry^.KilledClans[c]:= ClansArray[t];
+            inc(c);
+            newEntry^.KilledClansCount := c;
             end;
+
+        if SendHealthStatsOn then
+            SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
+        end;
+if newEntry <> nil then
+    begin
+    if ClanDeathLog <> nil then
+        begin
+        newEntry^.NextEntry:= ClanDeathLog;
+        end;
+    ClanDeathLog:= newEntry;
+    end;
 
 Kills:= 0;
 KillsClan:= 0;
@@ -272,7 +301,7 @@ if time > 4000 then
 end;
 
 procedure SendStats;
-var i, t: LongInt;
+var i, t, c: LongInt;
     msd, msk: Longword; msdhh, mskhh: PHedgehog;
     mskcnt: Longword;
     maxTeamKills : Longword;
@@ -282,6 +311,7 @@ var i, t: LongInt;
     maxTeamDamage : Longword;
     maxTeamDamageName : shortstring;
     winnersClan : PClan;
+    deathEntry : PClanDeathLogEntry;
 begin
 if SendHealthStatsOn then
     msd:= 0; msdhh:= nil;
@@ -315,7 +345,8 @@ if SendHealthStatsOn then
                         end;
             end;
 
-            { send player stats for winner teams }
+            { Send player stats for winner clans/teams.
+            The clan that survived is ranked 1st. }
             if Clan^.ClanHealth > 0 then
                 begin
                 winnersClan:= Clan;
@@ -343,19 +374,28 @@ if SendHealthStatsOn then
 
         end;
 
-    { now send player stats for loser teams }
+    { Now send player stats for loser teams/clans.
+    The losing clans are ranked in the reverse order they died.
+    The clan that died last is ranked 2nd,
+    the clan that died second to last is ranked 3rd,
+    and so on. }
+    deathEntry := ClanDeathLog;
     if SendRankingStatsOn then
-        for t:= 0 to Pred(TeamsCount) do
+        while (deathEntry <> nil) do
             begin
-            with TeamsArray[t]^ do
-                begin
-                if Clan^.ClanHealth = 0 then
+            for c:= 0 to Pred(deathEntry^.KilledClansCount) do
+                if ((deathEntry^.KilledClans[c]^.ClanHealth) = 0) and (not deathEntry^.KilledClans[c]^.StatsHandled) then
                     begin
-                    SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                        IntToStr(stats.Kills) + ' ' + TeamName);
-                end;
+                    for t:= 0 to Pred(TeamsCount) do
+                        if TeamsArray[t]^.Clan^.ClanIndex = deathEntry^.KilledClans[c]^.ClanIndex then
+                            begin
+                            SendStat(siPlayerKills, IntToStr(deathEntry^.killedClans[c]^.Color) + ' ' +
+                                IntToStr(TeamsArray[t]^.stats.Kills) + ' ' + TeamsArray[t]^.TeamName);
+                            end;
+                    deathEntry^.KilledClans[c]^.StatsHandled:= true;
+                    end;
+            deathEntry:= deathEntry^.NextEntry;
             end;
-        end;
 
     // “Achievements” / Details part of stats screen
     if SendAchievementsStatsOn then
@@ -432,6 +472,7 @@ begin
     TotalRoundsPre:= -1;
     TotalRoundsReal:= -1;
     FinishedTurnsTotal:= -1;
+    ClanDeathLog:= nil;
 end;
 
 procedure freeModule;
