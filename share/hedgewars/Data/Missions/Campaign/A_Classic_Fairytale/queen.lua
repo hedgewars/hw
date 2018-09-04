@@ -99,7 +99,7 @@ cyborgNames = {loc("Artur Detour"), loc("Led Heart"), loc("Orlando Boom!"), loc(
 
 cyborgsDif = {2, 2, 2, 2, 2, 2, 2, 2}
 cyborgsHealth = {100, 100, 100, 100, 100, 100, 100, 100}
-cyborgPos = {1765, 1145}
+cyborgHidePos = {1665, 1800}
 cyborgsTeamNum = {4, 3}
 cyborgsNum = 7
 cyborgsPos = {{2893, 1717}, {2958, 1701}, {3027, 1696}, {3096, 1698},
@@ -649,6 +649,7 @@ function SaveCampaignVariables()
 end
 
 function SetupPlace()
+  HideHedge(cyborg)
   SetHogHat(natives[1], nativeHats[m5DeployedNum])
   SetHogName(natives[1], nativeNames[m5DeployedNum])
 
@@ -747,9 +748,7 @@ function AddHogs()
 
   AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
-  HideHedge(cyborg)
-
-  SetGearPosition(cyborg, 0, 0)
+  SetGearPosition(cyborg, unpack(cyborgHidePos))
 
   for i = 1, nativesNum do
     AnimSetGearPosition(natives[i], unpack(nativePos[i]))
@@ -869,11 +868,5 @@ end
 function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
---  else
---    DeleteGear(cyborgs[1])
---    table.remove(cyborgs, 1)
---    if cyborgsLeft == 0 then
---      DeleteGear(enemy)
---    end
   end
 end
