@@ -198,7 +198,7 @@ TargetPos[12] = { Modifier = true, Func = function()
 	SendStat(siCustomAchievement, loc("Good job!"))
 	SendStat(siPlayerKills, "0", loc("Hogonauts"))
 
-	SetTurnTimeLeft(0)
+	EndTurn(true)
 	EndGame()
 end,
 }
