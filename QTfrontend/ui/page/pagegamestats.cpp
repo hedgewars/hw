@@ -152,6 +152,7 @@ void PageGameStats::clear()
     labelGameRank->setText("");
     labelGameWin->setText("");
     playerPosition = 0;
+    scriptPlayerPosition = 0;
     lastColor = 0;
 }
 
@@ -326,7 +327,13 @@ void PageGameStats::GameStats(char type, const QString & info)
             if (lastColor == c) playerPosition--;
             lastColor = c;
 
-            switch (playerPosition)
+            unsigned int realPlayerPosition;
+            if(scriptPlayerPosition == 0)
+                realPlayerPosition = playerPosition;
+            else
+                realPlayerPosition = scriptPlayerPosition;
+
+            switch (realPlayerPosition)
             {
                 case 1:
                     image = "<img src=\":/res/StatsMedal1.png\">";
@@ -353,9 +360,10 @@ void PageGameStats::GameStats(char type, const QString & info)
                 kindOfPoints = QString("");
             }
 
-            message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(playerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
+            message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(realPlayerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
 
             labelGameRank->setText(labelGameRank->text() + message);
+            scriptPlayerPosition = 0;
             break;
         }
         case 's' :
@@ -388,6 +396,10 @@ void PageGameStats::GameStats(char type, const QString & info)
             AddStatText(message);
             break;
         }
-
+        case 'R' :
+        {
+            scriptPlayerPosition = info.toInt();
+            break;
+        }
     }
 }

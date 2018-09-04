@@ -312,6 +312,7 @@ var i, t, c: LongInt;
     maxTeamDamageName : shortstring;
     winnersClan : PClan;
     deathEntry : PClanDeathLogEntry;
+    currentRank: Longword;
 begin
 if SendHealthStatsOn then
     msd:= 0; msdhh:= nil;
@@ -321,6 +322,7 @@ if SendHealthStatsOn then
     maxTurnSkips := 0;
     maxTeamDamage := 0;
     winnersClan:= nil;
+    currentRank:= 0;
 
     for t:= 0 to Pred(TeamsCount) do
         with TeamsArray[t]^ do
@@ -351,8 +353,12 @@ if SendHealthStatsOn then
                 begin
                 winnersClan:= Clan;
                 if SendRankingStatsOn then
+                    begin
+                    currentRank:= 1;
+                    SendStat(siTeamRank, '1');
                     SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
                         IntToStr(stats.Kills) + ' ' + TeamName);
+                    end;
             end;
 
             { determine maximum values of TeamKills, TurnSkips, TeamDamage }
@@ -374,12 +380,15 @@ if SendHealthStatsOn then
 
         end;
 
+    inc(currentRank);
+
     { Now send player stats for loser teams/clans.
     The losing clans are ranked in the reverse order they died.
     The clan that died last is ranked 2nd,
     the clan that died second to last is ranked 3rd,
     and so on. }
     deathEntry := ClanDeathLog;
+    i:= 0;
     if SendRankingStatsOn then
         while (deathEntry <> nil) do
             begin
@@ -389,11 +398,16 @@ if SendHealthStatsOn then
                     for t:= 0 to Pred(TeamsCount) do
                         if TeamsArray[t]^.Clan^.ClanIndex = deathEntry^.KilledClans[c]^.ClanIndex then
                             begin
+                            inc(i);
+                            SendStat(siTeamRank, IntToStr(currentRank));
                             SendStat(siPlayerKills, IntToStr(deathEntry^.killedClans[c]^.Color) + ' ' +
                                 IntToStr(TeamsArray[t]^.stats.Kills) + ' ' + TeamsArray[t]^.TeamName);
                             end;
                     deathEntry^.KilledClans[c]^.StatsHandled:= true;
                     end;
+            if i > 0 then
+                inc(currentRank, i);
+            i:= 0;
             deathEntry:= deathEntry^.NextEntry;
             end;
 

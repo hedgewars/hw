@@ -37,6 +37,8 @@ Game:
 
 Frontend:
  + Add setting to disable audio dampening when losing window focus
+ + Rework player rankings: Losing clans are now ranked in the reverse order they died
+ * Fix player rankings on round draw: Clans that died in the same turn now have the same rank
  * Fix rare crash when aborting video encoding in progress
  * Fix critical failure to cleanup teams list after rejoining game under certain conditions
  * Controllers are detected again
@@ -121,6 +123,7 @@ Lua API:
  + Change callback: onGearResurrect: 2nd parameter for visual gear spawned at resurrect position (might be nil)
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
+ + Can set custom team rank: Call SendStat with 1st param siTeamRank and 2nd param to the desired rank, as string. Must be called before siPlayerKills of the team for which this applies
  + New Lua library: Achievements
  + Add sprite tint globals in Utilts library: U_LAND_TINT_NORMAL, U_LAND_TINT_ICE, U_LAND_TINT_INDESTRUCTIBLE and U_LAND_TINT_BOUNCY
  + New globals: Infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
