@@ -453,8 +453,8 @@ type
             ClanHealth: LongInt;
             ClanIndex: LongInt;
             TurnNumber: LongWord;
-            DiedThisTurn: boolean; // true if clan died in current turn
-            StatsHandled : boolean; // true if clan has been handled for stats screen
+            DeathLogged: boolean; // true if clan is dead and its latest death has been logged in the clan death log
+            StatsHandled : boolean; // true if clan's rank has been handled for stats screen
             Flawless: boolean;
             end;
 

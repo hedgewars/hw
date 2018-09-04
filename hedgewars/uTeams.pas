@@ -310,7 +310,6 @@ if PlacingHogs then
             if ClansArray[i] <> nil then
                 begin
                 ClansArray[i]^.TurnNumber:= 0;
-                ClansArray[i]^.DiedThisTurn:= false;
                 end;
         ResetWeapons
         end;
@@ -475,7 +474,7 @@ if c < 0 then
         Color:= TeamColor;
         TagTeamIndex:= 0;
         Flawless:= true;
-        DiedThisTurn:= false;
+        DeathLogged:= false;
         StatsHandled:= false;
         end
     end

@@ -164,15 +164,15 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDied:= false;
                 end;
 
-// Remember which clans died in this turn
+// Write into the death log which clans died in this turn,
+// important for final rankings.
 c:= 0;
 newEntry:= nil;
 for t:= 0 to Pred(ClansCount) do
     with ClansArray[t]^ do
         begin
-        if (ClanHealth = 0) and (ClansArray[t]^.DiedThisTurn = false) then
+        if (ClanHealth = 0) and (ClansArray[t]^.DeathLogged = false) then
             begin
-            ClansArray[t]^.DiedThisTurn:= true;
             if c = 0 then
                 begin
                 new(newEntry);
@@ -183,6 +183,7 @@ for t:= 0 to Pred(ClansCount) do
             newEntry^.KilledClans[c]:= ClansArray[t];
             inc(c);
             newEntry^.KilledClansCount := c;
+            ClansArray[t]^.DeathLogged:= true;
             end;
 
         if SendHealthStatsOn then
@@ -386,7 +387,12 @@ if SendHealthStatsOn then
     The losing clans are ranked in the reverse order they died.
     The clan that died last is ranked 2nd,
     the clan that died second to last is ranked 3rd,
-    and so on. }
+    and so on.
+    Clans that died in the same turn share their rank.
+    If a clan died multiple times in the match
+    (e.g. due to resurrection), only the *latest* death of
+    that clan counts (handled in gtResurrector).
+    }
     deathEntry := ClanDeathLog;
     i:= 0;
     if SendRankingStatsOn then

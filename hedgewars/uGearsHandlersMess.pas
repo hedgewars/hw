@@ -5908,6 +5908,8 @@ begin
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
+                { Reviving a hog implies its clan is now alive, too. }
+                resgear^.Hedgehog^.Team^.Clan^.DeathLogged:= false;
                 s:= ansistring(resgear^.Hedgehog^.Name);
                 AddCaption(FormatA(GetEventString(eidResurrected), s), capcolDefault, capgrpMessage);
                 // only make hat-less hedgehogs look like zombies, preserve existing hats
