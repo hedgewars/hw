@@ -481,7 +481,7 @@ function onNewRound()
 
 		-- Kill all the losers
 		for i = 0, (numhhs-1) do
-			if GetHogClan(hhs[i]) ~= bestClan then
+			if GetHogClan(hhs[i]) ~= bestClan or roundDraw then
 				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
 			end
