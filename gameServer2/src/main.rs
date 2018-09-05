@@ -33,7 +33,7 @@ use crate::server::network::NetworkLayer;
 use std::time::Duration;
 
 fn main() {
-    env_logger::init().unwrap();
+    env_logger::init();
 
     info!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
 
