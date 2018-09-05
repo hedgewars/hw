@@ -910,7 +910,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         end;
 
     if (Gear^.Message and (gmLeft or gmRight) <> 0) and (Gear^.State and gstMoving = 0) and 
-		(CheckGearNear(Gear, gtPortal, 26, 26) <> nil) then 
+		(CheckGearNear(Gear, gtPortal, 26, 26) = nil) then
 		Gear^.PortalCounter:= 0;
     PrevdX:= hwSign(Gear^.dX);
     if (Gear^.Message and gmLeft  )<>0 then
