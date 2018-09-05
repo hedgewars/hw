@@ -50,8 +50,9 @@ Frontend:
 Highlander:
  * Fix all hogs receiving a free teleport after hog placement phase
 
-TechRacer:
- * Fix rare bug causing crates and other objects to not appear on start of turn
+Racer/TechRacer:
+ * Fix rare bug in TechRacer causing crates and other objects to not appear on start of turn
+ * Fix ranking of teams if teams are tied
 
 Balanced Random Weapon:
  + Can adjust weapon start and crate probabilities

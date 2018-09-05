@@ -105,7 +105,6 @@ local activationStage = 0
 local jet = nil
 portalDistance = 5000
 ufoFuel = 0
-local fMod = 1000000
 local roundLimit = 3
 local roundNumber = 0
 local firstClan = 10
@@ -151,7 +150,7 @@ local cGear = nil
 local cameraGear = nil
 
 local bestClan = 10
-local bestTime = 1000000
+local bestTime = MAX_TURN_TIME
 
 local gameBegun = false
 local gameOver = false
@@ -186,7 +185,7 @@ function RebuildTeamInfo()
 		teamNameArr[i] = " " -- = i
 		teamSize[i] = 0
 		teamIndex[i] = 0
-		teamScore[i] = 1000000
+		teamScore[i] = MAX_TURN_TIME
 	end
 	numTeams = 0
 
@@ -332,7 +331,7 @@ function AdjustScores()
 		end
 	end
 
-	if bestTime ~= 1000000 then
+	if bestTime ~= MAX_TURN_TIME then
 		bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
 	end
 
@@ -358,7 +357,7 @@ function AdjustScores()
 	end
 
 	for i = 0, (TeamsCount-1) do
-		if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+		if teamNameArr[i] ~= " " and teamScore[i] ~= MAX_TURN_TIME then
 			SetTeamLabel(teamNameArr[i], string.format(loc("%.1fs"), teamScore[i]/1000))
 		end
 	end
@@ -389,7 +388,7 @@ function onNewRound()
 	local totalComment = ""
 	for i = 0, (TeamsCount-1) do
 		if teamNameArr[i] ~= " " then
-			if teamScore[i] ~= 1000000 then
+			if teamScore[i] ~= MAX_TURN_TIME then
 				teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
 			else
 				teamComment[i] = string.format(loc("%s: Did not finish"), teamNameArr[i]) .. "|"
@@ -413,32 +412,68 @@ function onNewRound()
 		local unfinishedArray = {}
 		local sortedTeams = {}
 		local k = 1
+		local c = 1
+		local clanScores = {}
+		local previousClan
 		for i = 0, TeamsCount-1 do
-			if teamScore[i] ~= 1000000 and teamNameArr[i] ~= " " then
-			       sortedTeams[k] = {}
-			       sortedTeams[k].name = teamNameArr[i]
-			       sortedTeams[k].score = teamScore[i]
-			       k = k + 1
+			local clan = GetTeamClan(teamNameArr[i])
+			if not clanScores[clan+1] then
+				clanScores[clan+1] = {}
+				clanScores[clan+1].index = clan
+				clanScores[clan+1].score = teamScore[i]
+			end
+			if teamScore[i] ~= MAX_TURN_TIME and teamNameArr[i] ~= " " then
+				sortedTeams[k] = {}
+				sortedTeams[k].name = teamNameArr[i]
+				sortedTeams[k].score = teamScore[i]
+				sortedTeams[k].clan = clan
+				k = k + 1
 			else
-			       table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
+				table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
 			end
 		end
-		table.sort(sortedTeams, function(team1, team2) return team1.score < team2.score end)
+		table.sort(sortedTeams, function(team1, team2)
+			if team1.score == team2.score then
+				return team1.clan < team2.clan
+			else
+				return team1.score < team2.score
+			end
+		end)
+		table.sort(clanScores, function(clan1, clan2) return clan1.score < clan2.score end)
+		local rank = 0
+		local rankPlus = 0
+		local prevScore
+		local clanRanks = {}
+		for c = 1, #clanScores do
+			rankPlus = rankPlus + 1
+			if clanScores[c].score ~= prevScore then
+				rank = rank + rankPlus
+				rankPlus = 0
+			end
+			prevScore = clanScores[c].score
+			clanRanks[clanScores[c].index] = rank
+		end
 
 		-- Write all the stats!
-
 		for i = 1, #sortedTeams do
 			SendStat(siPointType, loc("milliseconds"))
+			SendStat(siTeamRank, tostring(clanRanks[GetTeamClan(sortedTeams[i].name)]))
 			SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
 		end
 
-		if #sortedTeams >= 1 then
+		local roundDraw = false
+		if #clanScores >= 2 and clanScores[1].score == clanScores[2].score and clanScores[1].score ~= MAX_TURN_TIME then
+			roundDraw = true
+			SendStat(siGameResult, loc("Round draw"))
+			SendStat(siCustomAchievement, loc("The teams are tied for the fastest time."))
+		elseif #sortedTeams >= 1 then
 			SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
 			SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
 			for i=1,#unfinishedArray do
 				 SendStat(siCustomAchievement, unfinishedArray[i])
 			end
 		else
+			roundDraw = true
 			SendStat(siGameResult, loc("Round draw"))
 			SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
 			SendStat(siCustomAchievement, loc("Maybe you should try an easier TechRacer map."))
@@ -1218,7 +1253,7 @@ function onAchievementsDeclaration()
 	map = detectMapWithDigest()
 
 	for i = 0, (numTeams-1) do
-		if teamScore[i] < 1000000 then
+		if teamScore[i] < MAX_TURN_TIME then
 			DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
 		end
 	end
