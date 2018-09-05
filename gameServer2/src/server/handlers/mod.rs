@@ -17,6 +17,7 @@ mod loggingin;
 mod lobby;
 mod inroom;
 mod common;
+mod checker;
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     match message {

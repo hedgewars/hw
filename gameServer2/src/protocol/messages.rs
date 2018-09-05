@@ -20,7 +20,7 @@ pub enum HWProtocolMessage {
     Nick(String),
     Proto(u16),
     Password(String, String),
-    Checker(u32, String, String),
+    Checker(u16, String, String),
     // lobby
     List,
     Chat(String),

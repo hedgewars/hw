@@ -120,7 +120,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         9 => Nick(Ascii),
         10 => Proto(u16),
         11 => Password(Ascii, Ascii),
-        12 => Checker(u32, Ascii, Ascii),
+        12 => Checker(u16, Ascii, Ascii),
         13 => List(),
         14 => Chat(Ascii),
         15 => CreateRoom(Ascii, Option<Ascii>),

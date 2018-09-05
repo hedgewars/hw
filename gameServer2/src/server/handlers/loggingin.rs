@@ -33,7 +33,7 @@ pub fn handle(server: & mut HWServer, client_id: ClientId, message: HWProtocolMe
             };
 
             server.react(client_id, actions);
-        },
+        }
         HWProtocolMessage::Proto(proto) => {
             let client = &mut server.clients[client_id];
             let actions = if client.protocol_number != 0 {
@@ -48,7 +48,14 @@ pub fn handle(server: & mut HWServer, client_id: ClientId, message: HWProtocolMe
                      CheckRegistered]
             };
             server.react(client_id, actions);
-        },
+        }
+        #[cfg(feature = "official-server")]
+        HWProtocolMessage::Checker(protocol, nick, password) => {
+            let c = &mut server.clients[client_id];
+            c.nick = nick;
+            c.web_password = password;
+            c.set_is_checker(true);
+        }
         _ => warn!("Incorrect command in logging-in state"),
     }
 }

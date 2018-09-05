@@ -6,6 +6,9 @@ name = "hedgewars-server"
 version = "0.0.1"
 authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
 
+[features]
+official-server = []
+
 [dependencies]
 rand = "0.5"
 mio = "0.6"

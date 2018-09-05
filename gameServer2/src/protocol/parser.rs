@@ -132,7 +132,7 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     s: a_line     >>
                     (Password(p, s)))
     | do_parse!(tag!("CHECKER")   >> eol >>
-                    i: u32_line   >> eol >>
+                    i: u16_line   >> eol >>
                     n: a_line     >> eol >>
                     p: a_line     >>
                     (Checker(i, n, p)))

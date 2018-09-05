@@ -6,6 +6,8 @@ use super::{
     actions::{Destination, PendingMessage}
 };
 use crate::protocol::messages::*;
+use rand::{RngCore, thread_rng};
+use base64::{encode};
 
 type Slab<T> = slab::Slab<T>;
 
@@ -37,7 +39,10 @@ impl HWServer {
         {
             let entry = self.clients.vacant_entry();
             key = entry.key();
-            let client = HWClient::new(entry.key());
+            let mut salt = [0u8; 18];
+            thread_rng().fill_bytes(&mut salt);
+
+            let client = HWClient::new(entry.key(), encode(&salt));
             entry.insert(client);
         }
         self.send(key, &Destination::ToSelf, HWServerMessage::Connected(utils::PROTOCOL_VERSION));
