@@ -17,6 +17,8 @@ extern crate env_logger;
 #[macro_use] extern crate bitflags;
 extern crate serde;
 extern crate serde_yaml;
+#[cfg(feature = "tls-connections")]
+extern crate openssl;
 #[macro_use] extern crate serde_derive;
 
 //use std::io::*;

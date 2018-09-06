@@ -8,6 +8,8 @@ authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
 
 [features]
 official-server = []
+tls-connections = ["openssl"]
+default = []
 
 [dependencies]
 rand = "0.5"
@@ -22,6 +24,7 @@ bitflags = "1.0"
 serde = "1.0"
 serde_yaml = "0.8"
 serde_derive = "1.0"
+openssl = { version = "0.10", optional = true }
 
 [dev-dependencies]
 proptest = "0.8"
