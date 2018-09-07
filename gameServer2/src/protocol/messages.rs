@@ -77,6 +77,7 @@ pub enum HWServerMessage {
     Bye(String),
     Nick(String),
     Proto(u16),
+    ServerAuth(String),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
     ChatMsg {nick: String, msg: String},
@@ -267,6 +268,7 @@ impl HWServerMessage {
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
             Proto(proto) => msg!["PROTO", proto],
+            ServerAuth(hash) => msg!["SERVER_AUTH", hash],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
             LobbyJoined(nicks) =>
                 construct_message(&["LOBBY:JOINED"], &nicks),
