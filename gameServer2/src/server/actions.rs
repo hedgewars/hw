@@ -143,12 +143,25 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         },
         ReactProtocolMessage(msg) =>
             handlers::handle(server, client_id, msg),
-        CheckRegistered =>
-            if server.clients[client_id].protocol_number > 0 && server.clients[client_id].nick != "" {
-                server.react(client_id, vec![
-                    JoinLobby,
-                    ]);
-            },
+        CheckRegistered => {
+            let client = &server.clients[client_id];
+            if client.protocol_number > 0 && client.nick != "" {
+                let has_nick_clash = server.clients.iter().any(
+                    |(id, c)| id != client_id && c.nick == client.nick);
+
+                let actions = if !client.is_checker() && has_nick_clash {
+                    if client.protocol_number < 38 {
+                        vec![ByeClient("Nickname is already in use".to_string())]
+                    } else {
+                        server.clients[client_id].nick.clear();
+                        vec![Notice("NickAlreadyInUse".to_string()).send_self().action()]
+                    }
+                } else {
+                    vec![JoinLobby]
+                };
+                server.react(client_id, actions);
+            }
+        },
         JoinLobby => {
             server.clients[client_id].room_id = Some(server.lobby_id);
 
@@ -466,6 +479,9 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     None => {}
                 }
                 r.master_id = new_id;
+                if !r.is_fixed() && c.protocol_number < 42 {
+                    r.name.replace_range(.., new_nick.as_ref().map_or("[]", String::as_str));
+                }
                 r.set_join_restriction(false);
                 r.set_team_add_restriction(false);
                 let is_fixed = r.is_fixed();
@@ -517,6 +533,8 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
 
                 if !room.has_multiple_clans() {
                     vec![Warn("The game can't be started with less than two clans!".to_string())]
+                } else if room.protocol_number <= 43 && room.players_number != room.ready_players_number {
+                    vec![Warn("Not all players are ready".to_string())]
                 } else if room.game_info.is_some() {
                     vec![Warn("The game is already in progress".to_string())]
                 } else {
@@ -561,17 +579,13 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
         }
         FinishRoomGame(room_id) => {
             let mut actions = Vec::new();
-            let old_info;
-            {
-                let r = &mut server.rooms[room_id];
-                old_info = replace(&mut r.game_info, None);
-                r.game_info = None;
-                r.ready_players_number = 1;
-                actions.push(SendRoomUpdate(None));
-                actions.push(RoundFinished.send_all().in_room(r.id).action());
-            }
 
-            if let Some(info) = old_info {
+            let r = &mut server.rooms[room_id];
+            r.ready_players_number = 1;
+            actions.push(SendRoomUpdate(None));
+            actions.push(RoundFinished.send_all().in_room(r.id).action());
+
+            if let Some(info) = replace(&mut r.game_info, None) {
                 for (_, c) in server.clients.iter() {
                     if c.room_id == Some(room_id) && c.is_joined_mid_game() {
                         actions.push(SendRoomData{
@@ -596,9 +610,14 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 } else {
                     None
                 }).collect();
+
             if !nicks.is_empty() {
-                actions.push(ClientFlags("-r".to_string(), nicks)
-                    .send_all().in_room(room_id).action());
+                let msg = if r.protocol_number < 38 {
+                    LegacyReady(false, nicks)
+                } else {
+                    ClientFlags("-r".to_string(), nicks)
+                };
+                actions.push(msg.send_all().in_room(room_id).action());
             }
             server.react(client_id, actions);
         }

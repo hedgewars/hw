@@ -3,7 +3,7 @@ use mio;
 use crate::{
     server::{
         coretypes::{
-            ClientId, RoomId, Voting, VoteType,
+            ClientId, RoomId, Voting, VoteType, GameCfg,
             MAX_HEDGEHOGS_PER_TEAM
         },
         server::HWServer,
@@ -168,13 +168,20 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                     r.ready_players_number += 1;
                     "+r"
                 };
-                c.set_is_ready(!c.is_ready());
-                let mut v =
-                    vec![ClientFlags(flags.to_string(), vec![c.nick.clone()])
-                        .send_all().in_room(r.id).action()];
+
+                let msg = if c.protocol_number < 38 {
+                    LegacyReady(c.is_ready(), vec![c.nick.clone()])
+                } else {
+                    ClientFlags(flags.to_string(), vec![c.nick.clone()])
+                };
+
+                let mut v = vec![msg.send_all().in_room(r.id).action()];
+
                 if r.is_fixed() && r.ready_players_number == r.players_number {
                     v.push(StartRoomGame(r.id))
                 }
+
+                c.set_is_ready(!c.is_ready());
                 server.react(client_id, v);
             }
         }
@@ -192,7 +199,7 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 } else if r.is_team_add_restricted() {
                     actions.push(Warn("This room currently does not allow adding new teams.".to_string()));
                 } else {
-                    let team = r.add_team(c.id, *info);
+                    let team = r.add_team(c.id, *info, c.protocol_number < 42);
                     c.teams_in_game += 1;
                     c.clan = Some(team.color);
                     actions.push(TeamAccepted(team.name.clone())
@@ -278,6 +285,18 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, messa
                 } else if !c.is_master() {
                     vec![ProtocolError("You're not the room master!".to_string())]
                 } else {
+                    let cfg = match cfg {
+                        GameCfg::Scheme(name, mut values) => {
+                            if c.protocol_number == 49 && values.len() >= 2 {
+                                let mut s = "X".repeat(50);
+                                s.push_str(&values.pop().unwrap());
+                                values.push(s);
+                            }
+                            GameCfg::Scheme(name, values)
+                        }
+                        cfg => cfg
+                    };
+
                     let v = vec![cfg.to_server_msg()
                         .send_all().in_room(r.id).but_self().action()];
                     r.set_config(cfg);

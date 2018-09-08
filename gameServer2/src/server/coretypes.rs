@@ -20,7 +20,7 @@ pub enum GameCfg {
     Template(u32),
 
     Ammo(String, Option<String>),
-    Scheme(String, Option<Vec<String>>),
+    Scheme(String, Vec<String>),
     Script(String),
     Theme(String),
     DrawnMap(String)

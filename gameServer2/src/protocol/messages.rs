@@ -100,10 +100,14 @@ pub enum HWServerMessage {
     RoundFinished,
 
     ServerMessage(String),
+    Notice(String),
     Warning(String),
     Error(String),
     Connected(u32),
     Unreachable,
+
+    //Deprecated messages
+    LegacyReady(bool, Vec<String>)
 }
 
 pub fn server_chat(msg: String) -> HWServerMessage  {
@@ -123,8 +127,8 @@ impl GameCfg {
 
             Ammo(n, None) => ("AMMO".to_string(), vec![n.to_string()]),
             Ammo(n, Some(s)) => ("AMMO".to_string(), vec![n.to_string(), s.to_string()]),
-            Scheme(n, None) => ("SCHEME".to_string(), vec![n.to_string()]),
-            Scheme(n, Some(s)) => ("SCHEME".to_string(), {
+            Scheme(n, s) if s.is_empty() => ("SCHEME".to_string(), vec![n.to_string()]),
+            Scheme(n, s) => ("SCHEME".to_string(), {
                 let mut v = vec![n.to_string()];
                 v.extend(s.clone().into_iter());
                 v
@@ -299,8 +303,13 @@ impl HWServerMessage {
             RoundFinished => msg!["ROUND_FINISHED"],
             ChatMsg {nick, msg} => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
+            Notice(msg) => msg!["NOTICE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
+
+            LegacyReady(is_ready, nicks) =>
+                construct_message(&[if *is_ready {"READY"} else {"NOT_READY"}], &nicks),
+
             _ => msg!["ERROR", "UNIMPLEMENTED"],
         }
     }

@@ -24,7 +24,7 @@ struct Ammo {
 #[derive(Clone, Serialize, Deserialize)]
 struct Scheme {
     name: String,
-    settings: Option<Vec<String>>
+    settings: Vec<String>
 }
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -54,7 +54,7 @@ impl RoomConfig {
             template: 0,
 
             ammo: Ammo {name: "Default".to_string(), settings: None },
-            scheme: Scheme {name: "Default".to_string(), settings: None },
+            scheme: Scheme {name: "Default".to_string(), settings: Vec::new() },
             script: "Normal".to_string(),
             theme: "\u{1f994}".to_string(),
             drawn_map: None
@@ -180,11 +180,13 @@ impl HWRoom {
         MAX_HEDGEHOGS_IN_ROOM - self.hedgehogs_number()
     }
 
-    pub fn add_team(&mut self, owner_id: ClientId, mut team: TeamInfo) -> &TeamInfo {
-        team.color = iter::repeat(()).enumerate()
-            .map(|(i, _)| i as u8).take(u8::max_value() as usize + 1)
-            .find(|i| self.teams.iter().all(|(_, t)| t.color != *i ))
-            .unwrap_or(0u8);
+    pub fn add_team(&mut self, owner_id: ClientId, mut team: TeamInfo, preserve_color: bool) -> &TeamInfo {
+        if !preserve_color {
+            team.color = iter::repeat(()).enumerate()
+                .map(|(i, _)| i as u8).take(u8::max_value() as usize + 1)
+                .find(|i| self.teams.iter().all(|(_, t)| t.color != *i))
+                .unwrap_or(0u8)
+        };
         team.hedgehogs_number = if self.teams.is_empty() {
             self.default_hedgehog_number
         } else {
