@@ -88,6 +88,26 @@ impl NetworkClient {
         }
     }
 
+    #[cfg(feature = "tls-connections")]
+    fn handshake_impl(&mut self, handshake: MidHandshakeSslStream<TcpStream>) -> io::Result<NetworkClientState> {
+        match handshake.handshake() {
+            Ok(stream) => {
+                self.socket = ClientSocket::SslStream(stream);
+                debug!("TLS handshake with {} ({}) completed", self.id, self.peer_addr);
+                Ok(NetworkClientState::Idle)
+            }
+            Err(HandshakeError::WouldBlock(new_handshake)) => {
+                self.socket = ClientSocket::SslHandshake(Some(new_handshake));
+                Ok(NetworkClientState::Idle)
+            }
+            Err(HandshakeError::Failure(_)) => {
+                debug!("TLS handshake with {} ({}) failed", self.id, self.peer_addr);
+                Err(Error::new(ErrorKind::Other, "Connection failure"))
+            }
+            Err(HandshakeError::SetupFailure(_)) => unreachable!()
+        }
+    }
+
     fn read_impl<R: Read>(decoder: &mut ProtocolDecoder, source: &mut R,
                           id: ClientId, addr: &SocketAddr) -> NetworkResult<Vec<HWProtocolMessage>> {
         let mut bytes_read = 0;
@@ -135,24 +155,8 @@ impl NetworkClient {
         #[cfg(feature = "tls-connections")]
         match self.socket {
             ClientSocket::SslHandshake(ref mut handshake_opt) => {
-                let mut handshake = std::mem::replace(handshake_opt, None).unwrap();
-
-                match handshake.handshake() {
-                    Ok(stream) => {
-                        debug!("TLS handshake with {} ({}) completed", self.id, self.peer_addr);
-                        self.socket = ClientSocket::SslStream(stream);
-
-                        Ok((Vec::new(), NetworkClientState::Idle))
-                    }
-                    Err(HandshakeError::WouldBlock(new_handshake)) => {
-                        *handshake_opt = Some(new_handshake);
-                        Ok((Vec::new(), NetworkClientState::Idle))
-                    }
-                    Err(e) => {
-                        debug!("TLS handshake with {} ({}) failed", self.id, self.peer_addr);
-                        Err(Error::new(ErrorKind::Other, "Connection failure"))
-                    }
-                }
+                let handshake = std::mem::replace(handshake_opt, None).unwrap();
+                Ok((Vec::new(), self.handshake_impl(handshake)?))
             },
             ClientSocket::SslStream(ref mut stream) =>
                 NetworkClient::read_impl(&mut self.decoder, stream, self.id, &self.peer_addr)
@@ -186,8 +190,10 @@ impl NetworkClient {
 
             #[cfg(feature = "tls-connections")] {
                 match self.socket {
-                    ClientSocket::SslHandshake(_) =>
-                        Ok(((), NetworkClientState::Idle)),
+                    ClientSocket::SslHandshake(ref mut handshake_opt) => {
+                        let handshake = std::mem::replace(handshake_opt, None).unwrap();
+                        Ok(((), self.handshake_impl(handshake)?))
+                    }
                     ClientSocket::SslStream(ref mut stream) =>
                         NetworkClient::write_impl(&mut self.buf_out, stream)
                 }
