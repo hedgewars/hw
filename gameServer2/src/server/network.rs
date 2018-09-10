@@ -100,7 +100,8 @@ impl NetworkClient {
                 self.socket = ClientSocket::SslHandshake(Some(new_handshake));
                 Ok(NetworkClientState::Idle)
             }
-            Err(HandshakeError::Failure(_)) => {
+            Err(HandshakeError::Failure(new_handshake)) => {
+                self.socket = ClientSocket::SslHandshake(Some(new_handshake));
                 debug!("TLS handshake with {} ({}) failed", self.id, self.peer_addr);
                 Err(Error::new(ErrorKind::Other, "Connection failure"))
             }
