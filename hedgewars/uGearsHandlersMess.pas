@@ -5478,7 +5478,7 @@ begin
         Gear^.dY.isNegative := not Gear^.dY.isNegative;
         HHGear^.dX := Gear^.dX;
         HHGear^.dY := Gear^.dY;
-        AmmoShove(Gear, 0, 80);
+        AmmoShove(Gear, 0, 79);
         Gear^.dX.isNegative := not Gear^.dX.isNegative;
         Gear^.dY.isNegative := not Gear^.dY.isNegative;
         end;
