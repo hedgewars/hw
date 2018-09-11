@@ -254,7 +254,7 @@ close(f)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B', 'c', 'g', 'p', 'R');
+const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B', 'c', 'g', 'p', 'R', 'h');
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;

@@ -176,7 +176,7 @@ type
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
             siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
             siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle,
-            siPointType, siTeamRank);
+            siPointType, siTeamRank, siEverAfter);
 
     // Various 'emote' animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
@@ -493,7 +493,7 @@ type
             sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
             sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
             sidFPS, sidLuaParsingOff, sidLuaParsingOn, sidLuaParsingDenied,
-            sidAmmoCount, sidChat, sidChatTeam, sidChatHog);
+            sidAmmoCount, sidChat, sidChatTeam, sidChatHog, sidEverAfter);
 
     TCmdHelpStrId = (
             sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,

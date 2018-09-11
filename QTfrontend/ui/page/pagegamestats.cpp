@@ -401,5 +401,11 @@ void PageGameStats::GameStats(char type, const QString & info)
             scriptPlayerPosition = info.toInt();
             break;
         }
+        case 'h' :
+        {
+            QString message = "<p><img src=\":/res/StatsEverAfter.png\"> " + PageGameStats::tr("With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.") + "</p>";
+            AddStatText(message);
+            break;
+        }
     }
 }

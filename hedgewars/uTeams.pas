@@ -58,6 +58,7 @@ var AliveClan: PClan;
     s, cap: ansistring;
     ts: array[0..(cMaxTeams - 1)] of ansistring;
     t, AliveCount, i, j: LongInt;
+    allWin: boolean;
 begin
 CheckForWin:= false;
 AliveCount:= 0;
@@ -98,6 +99,7 @@ if not TeamsGameOver then
         end
     else // win
         begin
+        allWin:= false;
         with AliveClan^ do
             begin
             if TeamsNumber = 1 then // single team wins
@@ -118,8 +120,11 @@ if not TeamsGameOver then
 
                 // Write victory message for caption and stats page
                 if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
+                    begin
                     // No enemies for some reason … Everyone wins!!1!
-                    s:= trmsg[sidWinnerAll]
+                    s:= trmsg[sidWinnerAll];
+                    allWin:= true;
+                    end
                 else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
                     // List all winning teams in a list
                     s:= FormatA(trmsg[TMsgStrId(Ord(sidWinner2) + (TeamsNumber - 2))], ts);
@@ -144,6 +149,8 @@ if not TeamsGameOver then
 
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(s));
+        if allWin and SendAchievementsStatsOn then
+            SendStat(siEverAfter, '');
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
         end;
     SendStats;
