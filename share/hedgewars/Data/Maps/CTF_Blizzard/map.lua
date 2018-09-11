@@ -580,6 +580,10 @@ function onGameStart()
 	fSpawnX[1] = 3123
 	fSpawnY[1] = 1747
 
+	if ClansCount < 2 then
+		return
+	end
+
 	for i = 0, 1 do
 		fGear[i] = SpawnFakeAmmoCrate(fSpawnX[i],fSpawnY[i],false,false)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)

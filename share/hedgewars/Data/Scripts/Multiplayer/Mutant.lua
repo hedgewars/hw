@@ -153,9 +153,11 @@ function limitHogs(gear)
 end
 
 function onGameStart()
-    SendHealthStatsOff()
+    if ClansCount >= 2 then
+        SendHealthStatsOff()
+        SendAchievementsStatsOff()
+    end
     SendRankingStatsOff()
-    SendAchievementsStatsOff()
     trackTeams()
     teamScan()
     runOnHogs(saveStuff)
