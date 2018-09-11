@@ -179,6 +179,8 @@ end;
 procedure RenderClear();
 begin
     glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthFunc(GL_LEQUAL);
 end;
 
 {$IFDEF USE_S3D_RENDERING}
