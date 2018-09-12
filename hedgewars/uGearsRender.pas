@@ -301,7 +301,7 @@ var i, t: LongInt;
     sign, hx, hy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     dx, dy, ax, ay, aAngle, dAngle, hAngle, lx, ly: real;  // laser, change
     wraps: LongWord; // numbe of wraps for laser in world wrap
-    defaultPos, HatVisible: boolean;
+    defaultPos, HatVisible, inWorldBounds: boolean;
     HH: PHedgehog;
     CurWeapon: PAmmo;
     iceOffset:Longint;
@@ -444,7 +444,8 @@ begin
                 hx:= tx;
                 hy:= ty;
                 wraps:= 0;
-                while ((Land[ty, tx] and lfAll) = 0) do
+                inWorldBounds := ((ty and LAND_HEIGHT_MASK) or (tx and LAND_WIDTH_MASK)) = 0;
+                while inWorldBounds and ((Land[ty, tx] and lfAll) = 0) do
                     begin
                     if wraps > cMaxLaserSightWraps then
                         break;
