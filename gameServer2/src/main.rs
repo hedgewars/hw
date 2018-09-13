@@ -1,6 +1,5 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
-#![feature(rust_2018_preview)]
 
 extern crate rand;
 extern crate mio;
