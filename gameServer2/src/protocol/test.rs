@@ -1,7 +1,7 @@
 use proptest::{
     test_runner::{TestRunner, Reason},
     arbitrary::{any, any_with, Arbitrary, StrategyFor},
-    strategy::{Strategy, BoxedStrategy, Just, Map},
+    strategy::{Strategy, BoxedStrategy, Just, Map}
 };
 
 use crate::server::coretypes::{GameCfg, TeamInfo, HedgehogInfo};

@@ -1,4 +1,5 @@
 use super::coretypes::ClientId;
+use bitflags::*;
 
 bitflags!{
     pub struct ClientFlags: u8 {

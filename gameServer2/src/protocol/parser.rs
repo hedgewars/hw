@@ -17,7 +17,10 @@ use super::{
     messages::{HWProtocolMessage, HWProtocolMessage::*}
 };
 #[cfg(test)]
-use super::test::gen_proto_msg;
+use {
+    super::test::gen_proto_msg,
+    proptest::{proptest, proptest_helper}
+};
 use crate::server::coretypes::{
     HedgehogInfo, TeamInfo, GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM
 };

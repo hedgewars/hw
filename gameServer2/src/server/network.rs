@@ -13,6 +13,7 @@ use mio::{
 };
 use netbuf;
 use slab::Slab;
+use log::*;
 
 use crate::{
     utils,

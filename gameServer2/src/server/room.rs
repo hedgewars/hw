@@ -8,7 +8,9 @@ use crate::server::{
     },
     client::{HWClient}
 };
+use bitflags::*;
 use serde::{Serialize, Deserialize};
+use serde_derive::{Serialize, Deserialize};
 use serde_yaml;
 
 const MAX_TEAMS_IN_ROOM: u8 = 8;

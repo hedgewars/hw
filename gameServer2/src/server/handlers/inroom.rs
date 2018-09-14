@@ -23,6 +23,7 @@ use std::{
 };
 use base64::{encode, decode};
 use super::common::rnd_reply;
+use log::*;
 
 #[derive(Clone)]
 struct ByMsg<'a> {

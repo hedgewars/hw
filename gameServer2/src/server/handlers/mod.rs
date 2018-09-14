@@ -12,6 +12,7 @@ use crate::{
         HWServerMessage::*
     }
 };
+use log::*;
 
 mod loggingin;
 mod lobby;

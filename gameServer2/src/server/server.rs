@@ -8,6 +8,7 @@ use super::{
 use crate::protocol::messages::*;
 use rand::{RngCore, thread_rng};
 use base64::{encode};
+use log::*;
 
 type Slab<T> = slab::Slab<T>;
 

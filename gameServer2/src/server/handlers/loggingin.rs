@@ -15,6 +15,7 @@ use crate::{
 #[cfg(feature = "official-server")]
 use openssl::sha::sha1;
 use std::fmt::{Formatter, LowerHex};
+use log::*;
 
 #[derive(PartialEq)]
 struct Sha1Digest([u8; 20]);
