@@ -2199,8 +2199,8 @@ function lc_setsoundmask(L : Plua_State) : LongInt; Cdecl;
 var s: LongInt;
     soundState: boolean;
 const
-    call = 'SetSoundMasked';
-    params = 'soundId, isMasked]';
+    call = 'SetSoundMask';
+    params = 'soundId, isMasked';
 begin
     if CheckLuaParamCount(L, 2, call, params) then
         begin
@@ -2810,7 +2810,7 @@ var spr   : TSprite;
     placed, behind, flipHoriz, flipVert : boolean;
 const
     call = 'PlaceSprite';
-    params = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert, [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert [, landFlag, ... ]';
 begin
     placed:= false;
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
@@ -2858,7 +2858,7 @@ var spr   : TSprite;
     eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert : boolean;
 const
     call = 'EraseSprite';
-    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert, [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert [, landFlag, ... ]';
 begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
@@ -3212,7 +3212,7 @@ end;
 function lc_setturntimeleft(L : Plua_State) : LongInt; Cdecl;
 var number: Int64;
 begin
-    if CheckLuaParamCount(L, 1, 'SetTurnTimeLeft', 'TurnTimeLeft') then
+    if CheckLuaParamCount(L, 1, 'SetTurnTimeLeft', 'newTurnTimeLeft') then
         begin
         number:= Trunc(lua_tonumber(L, 1));
         if number < 0 then
@@ -3229,7 +3229,7 @@ end;
 function lc_setreadytimeleft(L : Plua_State) : LongInt; Cdecl;
 var number: Int64;
 begin
-    if CheckLuaParamCount(L, 1, 'SetReadyTimeLeft', 'ReadyTimeLeft') then
+    if CheckLuaParamCount(L, 1, 'SetReadyTimeLeft', 'newReadyTimeLeft') then
         begin
         number:= Trunc(lua_tonumber(L, 1));
         if number < 0 then

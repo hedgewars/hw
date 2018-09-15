@@ -110,8 +110,8 @@ Server:
 
 Lua API:
  * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
- + New call: SetTurnTimeLeft(TurnTimeLeft): Set remaining turn time
- + New call: SetReadyTimeLeft(ReadyTimeLeft): Set remaining ready time
+ + New call: SetTurnTimeLeft(newTurnTimeLeft): Set remaining turn time
+ + New call: SetReadyTimeLeft(newReadyTimeLeft): Set remaining ready time
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New call: EnableSwitchHog(): Enable hog switching
