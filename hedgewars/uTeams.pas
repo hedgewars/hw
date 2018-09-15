@@ -76,11 +76,13 @@ CheckForWin:= true;
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 
-// if the game ends during a multishot, do last TurnStats + TurnReaction
-if (not bBetweenTurns) and isInMultiShoot then
+// If the game ends during a multishot, or after the Sudden Death
+// water has risen, do last turn stats / reaction.
+if ((not bBetweenTurns) and isInMultiShoot) or (bDuringWaterRise) then
     begin
     TurnStats();
-    TurnReaction();
+    if (not bDuringWaterRise) then
+        TurnReaction();
     TurnStatsReset();
     end;
 
