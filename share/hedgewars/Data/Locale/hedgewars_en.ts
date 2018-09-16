@@ -1463,7 +1463,7 @@ just enter your nickname.</translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation type="unfinished"></translation>
+        <translation>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</translation>
     </message>
 </context>
 <context>
@@ -4652,95 +4652,95 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>This server only allows registered users to join.</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation type="unfinished"></translation>
+        <translation>heads</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation type="unfinished"></translation>
+        <translation>tails</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation type="unfinished"></translation>
+        <translation>This server does not support replays!</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting [message]: Set or clear greeting message to be shown to players who join the room</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation type="unfinished"></translation>
+        <translation>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete &lt;config ID&gt;: Delete a votable room configuration</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</translation>
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>‘Registered only’ state toggled.</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Super power activated.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unknown command or invalid parameters. Say ‘/help’ in chat for a list of commands.</translation>
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation type="unfinished"></translation>
+        <translation>You can’t kick yourself!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation type="unfinished"></translation>
+        <translation>You can’t kick the only other player!</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation type="unfinished"></translation>
+        <translation>The player is not in your room.</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation type="unfinished"></translation>
+        <translation>This player is protected from being kicked.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation type="unfinished"></translation>
+        <translation>You’re not the room master or a server admin!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>You’re already the room master.</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Greeting message cleared.</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Greeting message set.</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: This is only allowed in rooms without a room master.</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: No maps available.</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>You’re the new room master!</translation>
     </message>
 </context>
 </TS>
