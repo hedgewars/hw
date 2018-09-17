@@ -248,6 +248,7 @@ local function victory()
 	ShowMission(loc("Basic Movement Training"), loc("Training complete!"),loc("Congratulations! You have completed the obstacle course!"), 0, 0)
 	SendStat(siGameResult, loc("You have completed the Basic Movement Training!"))
 	SendStat(siCustomAchievement, loc("Congratulations!"))
+	SendStat(siCustomAchievement, loc("Return to the training menu by pressing the “Go back” button."))
 	SendStat(siPlayerKills, "0", loc("Training Team"))
 	PlaySound(sndVictory, CurrentHedgehog)
 	-- Disable controls, end game
