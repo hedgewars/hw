@@ -162,7 +162,8 @@ local function LoadGearData()
 	PlaceSprite(1175, 1772, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1226, 1738, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1275, 1705, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
-	PlaceSprite(1325, 1683, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1325, 1700, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1342, 1638, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1368, 1560, sprAmGirder, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1390, 1665, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1481, 1716, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
@@ -192,7 +193,7 @@ local function LoadGearData()
 	PlaceSprite(1545, 1811, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1577, 1761, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(1610, 1811, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
-	PlaceSprite(1440, 1531, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1440, 1511, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(2082, 1337, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(2187, 1273, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 	PlaceSprite(2097, 1246, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
@@ -237,7 +238,7 @@ local function LoadGearData()
 	crates[4] = SpawnHealthCrate(889, 1829)			-- Back Jumping
 	crates[5] = SpawnHealthCrate(1486, 1694)		-- Walking on Ice
 	crates[6] = SpawnHealthCrate(2033, 1470)		-- Walking on Ice completed
-	crates[7] = SpawnHealthCrate(1297, 1683)		-- Back Jumping 2
+	crates[7] = SpawnHealthCrate(1198, 1750)		-- Back Jumping 2
 	crates[8] = SpawnSupplyCrate(1851, 1402, amSwitch, 100)	-- Switch Hedgehog
 	crates[9] = SpawnHealthCrate(564, 1772)			-- Health
 	crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
@@ -310,10 +311,8 @@ function onGearDelete(gear)
 		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 6600)
 	elseif gear == crates[7] then
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
-		loc("To get over the next obstacle, you need to perform your back jump precisely.").."|"..
-		loc("Hint: Hit “High Jump” again when you're close to the highest point of a high jump.").."|"..
-		loc("Hint: Don't stand too close at the wall before you jump!").."|"..
-		loc("Hint: Use the flower for orientation.").."|"..
+		loc("To get over the next obstacles, keep some distance from the wall before you back jump.").."|"..
+		loc("Hint: To jump higher, wait a bit before you hit “High Jump” a second time.").."|"..
 		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 15000)
 	elseif gear == crates[5] then
 		ShowMission(loc("Basic Movement Training"), loc("Walking on Ice"),

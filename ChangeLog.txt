@@ -95,6 +95,7 @@ Campaigns and missions:
  * A Space Adventure, final mission: Don't say "Missed" or "Yes, Sir!" when inappropriate
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practicse: Suppress “X remaining” message
+ * Basic Movement Training: Back jumps should be easier now
  * Fix resurrection animation appearing at wrong position for some missions and styles
 
 Content:
