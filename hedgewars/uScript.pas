@@ -3654,7 +3654,7 @@ if f = nil then
 hedgewarsMountPackage(Str2PChar(copy(s, 3, length(s)-6)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
-if Pos('Locale/',s) <> 0 then
+if (Pos('Locale/',s) <> 0) or (s = 'Scripts/OfficialChallengeHashes.lua') then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
 else
 	begin
