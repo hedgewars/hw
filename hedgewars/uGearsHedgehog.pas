@@ -186,6 +186,9 @@ begin
 Gear^.Message:= Gear^.Message and (not gmTimer);
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^.Hedgehog^ do
+    if (((Gear^.State and gstAttacked) <> 0) and (GameFlags and gfInfAttack = 0))
+    or ((Gear^.State and gstHHDriven) = 0) then
+        exit;
     if ((Gear^.Message and gmPrecise) <> 0) and ((CurWeapon^.Propz and ammoprop_SetBounce) <> 0) then
         begin
         color:= Gear^.Hedgehog^.Team^.Clan^.Color;
