@@ -3268,7 +3268,7 @@ begin
     with HHGear^ do
         begin
         State := State and (not gstAttacking);
-        Message := Message and (not gmAttack)
+        Message := Message and (not (gmAttack or gmSwitch))
         end
 end;
 
