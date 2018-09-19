@@ -869,6 +869,9 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     exit
     end;
 
+if (Gear^.Hedgehog^.Unplaced) then
+    exit;
+
     if ((Gear^.Message and gmAnimate) <> 0) then
         begin
         Gear^.Message:= 0;
