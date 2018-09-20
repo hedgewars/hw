@@ -28,6 +28,6 @@ function detectMapWithDigest()
         end
 
         --WriteLnToConsole(mapString)
-        return(maps[mapString])
+        return(official_racer_maps[mapString])
     end
 end

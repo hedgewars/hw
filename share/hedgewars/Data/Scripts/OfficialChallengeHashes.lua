@@ -1,4 +1,4 @@
-local maps = {
+official_racer_maps = {
     ["Border,60526986531,838018718"] = "Racer Challenge #1"
     , ["Border,71022545335,-490229244"] = "Racer Challenge #2"
     , ["Border,40469748943,806689586"] = "Racer Challenge #3"
@@ -28,4 +28,4 @@ local maps = {
     , ["Border,19662506742,-975391975"] = "Tech Racer #6"
     , ["Border,19662806736,-975391975"] = "Tech Racer #7"
     , ["Border,19663106730,-975391975"] = "Tech Racer #8"
-    }
+}
