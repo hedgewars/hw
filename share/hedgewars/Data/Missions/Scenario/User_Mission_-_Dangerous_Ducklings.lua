@@ -114,7 +114,7 @@ function onGameTick()
 		if (CurrentHedgehog ~= nil) and (CurrentHedgehog == instructor) then
 			if endTimer >= 3000 then
 				--SetHealth(instructor,0)
-				TurnTimeLeft = 1
+				SetTurnTimeLeft(1)
 				DismissTeam(loc("Bloody Rookies"))
 			end
 			ShowMission(loc("Dangerous Ducklings"), loc("MISSION FAILED"), loc("You've failed. Try again."), -amRope, 5000);
@@ -136,14 +136,14 @@ function onGearDelete(gear)
 			gameLost = true
 		elseif (gear == instructor) and (GetY(gear) > WaterLine) then
 			HogSay(player, loc("See ya!"), SAY_THINK)
-			TurnTimeLeft = 3000
+			Retreat(3000)
 			awardAchievement(loc("Naughty Ninja"))
 			DismissTeam(loc("Blue Team"))
 			gameWon = true
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
 			gameWon = true
-			TurnTimeLeft = 3000
+			Retreat(3000)
 		end
 
 	end

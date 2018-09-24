@@ -362,7 +362,7 @@ function AfterStartAnim()
   end
   FollowGear(native)
   AddNewEvent(CheckGearsDead, {{crates[1], crates[2]}}, PutCrates, {2}, 0) 
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to get rid of the crates first.") .. "|" ..
                                                   loc("As the ammo is sparse, you might want to reuse ropes while mid-air.") .. "|" ..
                                                   loc("The enemy can't move but it might be a good idea to stay out of sight!") .. "|" ..
@@ -381,7 +381,7 @@ end
 function AfterKillAnim()
   if not cyborgsKilledBeforeCrates then
     PutWeaponCrates()
-    TurnTimeLeft = TurnTime
+    SetTurnTimeLeft(TurnTime)
     AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
     ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
   end
@@ -396,7 +396,7 @@ end
 function AfterKilledAnim()
   -- Final mission segment with the portal gun
   HideHedge(cyborg)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   SetGearMessage(native, 0)
   SpawnSupplyCrate(1184, 399, amPortalGun, 100)
   SpawnSupplyCrate(2259, 755, amTeleport, 2)
@@ -745,7 +745,7 @@ function onNewTurn()
       AddAmmo(CurrentHedgehog, amSniperRifle, 1)
       AddAmmo(CurrentHedgehog, amDEagle, 1)
     end
-    TurnTimeLeft = 30000
+    SetTurnTimeLeft(30000)
   elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
     EndTurn(true)
   end

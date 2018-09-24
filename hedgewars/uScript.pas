@@ -34,12 +34,13 @@ interface
 procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
-procedure ScriptLoad(name : shortstring);
+function ScriptLoad(name : shortstring; mustExist : boolean): boolean;
 procedure ScriptOnPreviewInit;
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
 procedure ScriptSetInteger(name : shortstring; value : LongInt);
 procedure ScriptSetString(name : shortstring; value : shortstring);
+procedure ScriptSetMapGlobals;
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -99,9 +100,10 @@ var luaState : Plua_State;
     ScriptAmmoDelay : shortstring;
     ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
-    mapDims : boolean;
     PointsBuffer: shortstring;
     PrevCursorX, PrevCursorY: LongInt;
+    PendingTurnTimeLeft, PendingReadyTimeLeft: LongWord;
+    isPendingTurnTimeLeft, isPendingReadyTimeLeft: boolean;
 
 {$IFDEF USE_LUA_SCRIPT}
 procedure ScriptPrepareAmmoStore; forward;
@@ -112,6 +114,7 @@ procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 var LuaDebugInfo: lua_Debug;
 
 procedure SetGlobals; forward;
+procedure GetGlobals; forward;
 procedure LuaParseString(s: shortString);
 begin
     SetGlobals;
@@ -121,7 +124,9 @@ begin
         begin
         AddFileLog('[Lua] input string parsing error!');
         AddChatString(#5 + '[Lua] Error while parsing!');
-        end;
+        end
+    else
+        GetGlobals();
 end;
 
 function LuaUpdateDebugInfo(): Boolean;
@@ -136,24 +141,41 @@ begin
     exit(true);
 end;
 
-procedure LuaError(s: shortstring);
-var src: shortstring;
+procedure LuaErrorOrWarning(s: shortstring; isWarning: boolean);
+var src, intro: shortstring;
 const
     maxsrclen = 20;
 begin
+    if isWarning then
+        intro:= 'LUA WARNING'
+    else
+        intro:= 'LUA ERROR';
     if LuaUpdateDebugInfo() then
         begin
         src:= StrPas(LuaDebugInfo.source);
-        s:= 'LUA ERROR [ ... '
+        s:= intro + ': [ ... '
             + copy(src, Length(src) - maxsrclen, maxsrclen - 3) + ':'
             + inttostr(LuaDebugInfo.currentLine) + ']: ' + s;
         end
     else
-        s:= 'LUA ERROR: ' + s;
+        s:= intro + ': ' + s;
     WriteLnToConsole(s);
-    AddChatString(#5 + s);
-    if cTestLua then
+    if isWarning then
+        AddChatString(#0 + s)
+    else
+        AddChatString(#5 + s);
+    if cTestLua and (not isWarning) then
         halt(HaltTestLuaError);
+end;
+
+procedure LuaError(s: shortstring);
+begin
+    LuaErrorOrWarning(s, false);
+end;
+
+procedure LuaWarning(s: shortstring);
+begin
+    LuaErrorOrWarning(s, true);
 end;
 
 procedure LuaCallError(error, call, paramsyntax: shortstring);
@@ -1999,9 +2021,10 @@ begin
         else
             respectFactor:= True;
         if respectFactor then
-            TurnTimeLeft:= (time * cGetAwayTime) div 100
+            PendingTurnTimeLeft:= (time * cGetAwayTime) div 100
         else
-            TurnTimeLeft:= time;
+            PendingTurnTimeLeft:= time;
+        isPendingTurnTimeLeft:= true;
         if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
             begin
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstAttacked;
@@ -2176,8 +2199,8 @@ function lc_setsoundmask(L : Plua_State) : LongInt; Cdecl;
 var s: LongInt;
     soundState: boolean;
 const
-    call = 'SetSoundMasked';
-    params = 'soundId, isMasked]';
+    call = 'SetSoundMask';
+    params = 'soundId, isMasked';
 begin
     if CheckLuaParamCount(L, 2, call, params) then
         begin
@@ -2787,7 +2810,7 @@ var spr   : TSprite;
     placed, behind, flipHoriz, flipVert : boolean;
 const
     call = 'PlaceSprite';
-    params = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert, [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert [, landFlag, ... ]';
 begin
     placed:= false;
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
@@ -2835,7 +2858,7 @@ var spr   : TSprite;
     eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert : boolean;
 const
     call = 'EraseSprite';
-    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert, [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert [, landFlag, ... ]';
 begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
@@ -3066,12 +3089,20 @@ end;
 
 
 function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
+var success : boolean;
+    n : LongInt;
 begin
-    if CheckLuaParamCount(L, 1, 'HedgewarsScriptLoad', 'scriptPath') then
-        ScriptLoad(lua_tostring(L, 1))
+    if CheckAndFetchParamCount(L, 1, 2, 'HedgewarsScriptLoad', 'scriptPath [, mustExist]', n) then
+        begin
+        if n = 1 then
+            success:= ScriptLoad(lua_tostring(L, 1), true)
+        else
+            success:= ScriptLoad(lua_tostring(L, 1), lua_toboolean(L, 2));
+        end
     else
-        lua_pushnil(L);
-    lc_hedgewarsscriptload:= 0;
+        success:= false;
+    lua_pushboolean(L, success);
+    lc_hedgewarsscriptload:= 1;
 end;
 
 
@@ -3176,6 +3207,40 @@ begin
     else
         lua_pushboolean(L, false);
     lc_explode:= 1;
+end;
+
+function lc_setturntimeleft(L : Plua_State) : LongInt; Cdecl;
+var number: Int64;
+begin
+    if CheckLuaParamCount(L, 1, 'SetTurnTimeLeft', 'newTurnTimeLeft') then
+        begin
+        number:= Trunc(lua_tonumber(L, 1));
+        if number < 0 then
+            number:= 0;
+        if number > cMaxTurnTime then
+            number:= cMaxTurnTime;
+        // The real TurnTimeLeft will be set in SetGlobals
+        PendingTurnTimeLeft:= number;
+        isPendingTurnTimeLeft:= true;
+        end;
+    lc_setturntimeleft:= 0;
+end;
+
+function lc_setreadytimeleft(L : Plua_State) : LongInt; Cdecl;
+var number: Int64;
+begin
+    if CheckLuaParamCount(L, 1, 'SetReadyTimeLeft', 'newReadyTimeLeft') then
+        begin
+        number:= Trunc(lua_tonumber(L, 1));
+        if number < 0 then
+            number:= 0;
+        if number > cMaxTurnTime then
+            number:= cMaxTurnTime;
+        // The real ReadyTimeLeft will be set in SetGlobals
+        PendingReadyTimeLeft:= number;
+        isPendingReadyTimeLeft:= true;
+        end;
+    lc_setreadytimeleft:= 0;
 end;
 
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
@@ -3475,7 +3540,6 @@ if ScriptExists('onAmmoStoreInit') or ScriptExists('onNewAmmoStore') then
 
 ScriptSetInteger('ClansCount', ClansCount);
 ScriptSetInteger('TeamsCount', TeamsCount);
-mapDims:= false
 end;
 
 
@@ -3560,7 +3624,7 @@ begin
 end;
 // ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 
-procedure ScriptLoad(name : shortstring);
+function ScriptLoad(name : shortstring; mustExist : boolean): boolean;
 var ret : LongInt;
       s : shortstring;
       f : PFSFile;
@@ -3575,18 +3639,22 @@ locSum:= 0;
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
     begin
-    AddFileLog('[LUA] Script not found: ' + name);
+    if mustExist then
+        OutError('Script not found: ' + name, true)
+    else
+        AddFileLog('[LUA] Script not found: ' + name);
+    ScriptLoad:= false;
     exit;
     end;
 
 f:= pfsOpenRead(s);
 if f = nil then
-    exit;
+    OutError('Error reading script: ' + name, true);
 
 hedgewarsMountPackage(Str2PChar(copy(s, 3, length(s)-6)+'.hwp'));
 
 physfsReaderSetBuffer(@buf);
-if Pos('Locale/',s) <> 0 then
+if (Pos('Locale/',s) <> 0) or (s = 'Scripts/OfficialChallengeHashes.lua') then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
 else
 	begin
@@ -3599,13 +3667,15 @@ if ret <> 0 then
     begin
     LuaError('Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
     LuaError(lua_tostring(luaState, -1));
+    ScriptLoad:= false;
     end
 else
     begin
     WriteLnToConsole('Lua: ' + name + ' loaded');
     // call the script file
     lua_pcall(luaState, 0, 0, 0);
-    ScriptLoaded:= true
+    ScriptLoaded:= true;
+    ScriptLoad:= true;
     end;
 end;
 
@@ -3638,31 +3708,57 @@ else
     PrevCursorY:= NoPointX
     end;
 
-if not mapDims then
-    begin
-    mapDims:= true;
-    ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
-    ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
-    ScriptSetInteger('LeftX', leftX);
-    ScriptSetInteger('RightX', rightX);
-    ScriptSetInteger('TopY', topY)
-    end;
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
     ScriptSetNil('CurrentHedgehog');
 end;
 
-procedure GetGlobals;
+procedure ScriptSetMapGlobals;
 begin
-// TODO
-// Use setters instead, because globals should be read-only!
-// Otherwise globals might be changed by Lua, but then unexpectatly overwritten by engine when a ScriptCall is triggered by whatever Lua is doing!
-// Sure, one could work around that in engine (e.g. by setting writable globals in SetGlobals only when their engine-side value has actually changed since SetGlobals was called the last time...), but things just get messier and messier then.
-// It is inconsistent anyway to have some globals be read-only and others not with no indication whatsoever.
-// -- sheepluva
-TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
-ReadyTimeLeft:= ScriptGetInteger('ReadyTimeLeft');
+ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
+ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
+ScriptSetInteger('LeftX', leftX);
+ScriptSetInteger('RightX', rightX);
+ScriptSetInteger('TopY', topY);
+end;
+
+procedure GetGlobals;
+var currentTTL, currentRTL, newTTL, newRTL: LongInt;
+begin
+// Setting TurnTimeLeft and ReadyTimeLeft should now be done in the setter functions.
+// SetTurnTimeLeft and SetReadTimeLeft.
+// GetGloals should be removed in a future release.
+
+// DEPRECATED: Read TurnTimeLeft and ReadyTimeLeft from script directly.
+// TODO: Remove this behaviour in a future version.
+currentTTL:= TurnTimeLeft;
+currentRTL:= ReadyTimeLeft;
+newTTL:= ScriptGetInteger('TurnTimeLeft');
+newRTL:= ScriptGetInteger('ReadyTimeLeft');
+if (currentTTL <> newTTL) and (not isPendingTurnTimeLeft) then
+    begin
+    TurnTimeLeft:= newTTL;
+    LuaWarning('Writing to TurnTimeLeft directly is deprecated! Use SetTurnTimeLeft instead!');
+    end;
+
+if (currentRTL <> newRTL) and (not isPendingReadyTimeLeft) then
+    begin
+    ReadyTimeLeft:= newRTL;
+    LuaWarning('Writing to ReadyTimeLeft directly is deprecated! Use SetReadyTimeLeft instead!');
+    end;
+
+// Set TurnTimeLeft and ReadyTimeLeft if activated by SetTurnTimeLeft and SetReadyTimeLeft before
+if isPendingTurnTimeLeft then
+    begin
+    TurnTimeLeft:= PendingTurnTimeLeft;
+    isPendingTurnTimeLeft:= false;
+    end;
+if isPendingReadyTimeLeft then
+    begin
+    ReadyTimeLeft:= PendingReadyTimeLeft;
+    isPendingReadyTimeLeft:= false;
+    end;
 end;
 
 procedure ScriptCall(fname : shortstring);
@@ -3926,9 +4022,9 @@ ScriptSetInteger('SAY_SHOUT', 3);
 ScriptSetInteger('AMMO_INFINITE', AMMO_INFINITE);
 ScriptSetInteger('JETPACK_FUEL_INFINITE', JETPACK_FUEL_INFINITE);
 ScriptSetInteger('BIRDY_ENERGY_INFINITE', BIRDY_ENERGY_INFINITE);
-ScriptSetInteger('NoPointX', NoPointX);
-ScriptSetInteger('cMaxHogHealth', cMaxHogHealth);
-ScriptSetInteger('cMaxTurnTime', cMaxTurnTime);
+ScriptSetInteger('NO_CURSOR', NoPointX);
+ScriptSetInteger('MAX_HOG_HEALTH', cMaxHogHealth);
+ScriptSetInteger('MAX_TURN_TIME', cMaxTurnTime);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
@@ -4162,6 +4258,8 @@ lua_register(luaState, _P'GetVampiric', @lc_getvampiric);
 lua_register(luaState, _P'SetLaserSight', @lc_setlasersight);
 lua_register(luaState, _P'GetLaserSight', @lc_getlasersight);
 lua_register(luaState, _P'Explode', @lc_explode);
+lua_register(luaState, _P'SetTurnTimeLeft', @lc_setturntimeleft);
+lua_register(luaState, _P'SetReadyTimeLeft', @lc_setreadytimeleft);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
@@ -4283,10 +4381,11 @@ end;
 
 procedure initModule;
 begin
-mapDims:= false;
 PointsBuffer:= '';
 PrevCursorX:= NoPointX;
 PrevCursorY:= NoPointX;
+isPendingTurnTimeLeft:= false;
+isPendingReadyTimeLeft:= false;
 end;
 
 procedure freeModule;

@@ -86,7 +86,7 @@ end
 
 
 function onNewTurn()
-	TurnTimeLeft = -1
+	SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function onGameTick()

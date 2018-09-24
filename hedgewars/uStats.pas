@@ -29,6 +29,7 @@ var TotalRoundsPre: LongInt; // Helper variable for calculating start of Sudden 
     SendRankingStatsOn : boolean = true;
     SendAchievementsStatsOn : boolean = true;
     SendHealthStatsOn : boolean = true;
+    ClanDeathLog : PClanDeathLogEntry;
 
 procedure initModule;
 procedure freeModule;
@@ -39,7 +40,9 @@ procedure HedgehogSacrificed(Hedgehog: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 procedure TargetHit;
 procedure Skipped;
+procedure TurnStats;
 procedure TurnReaction;
+procedure TurnStatsReset;
 procedure SendStats;
 procedure hedgehogFlight(Gear: PGear; time: Longword);
 procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
@@ -135,14 +138,70 @@ inc(SkippedTurns);
 isTurnSkipped:= true
 end;
 
-procedure TurnReaction;
+procedure TurnStats;
 var i, t: LongInt;
-    killsCheck: LongInt;
+    c: Longword;
+    newEntry: PClanDeathLogEntry;
+begin
+inc(FinishedTurnsTotal);
+
+for t:= 0 to Pred(TeamsCount) do // send even on zero turn
+    with TeamsArray[t]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i].stats do
+                begin
+                inc(DamageRecv, StepDamageRecv);
+                inc(DamageGiven, StepDamageGiven);
+                if StepDamageRecv > MaxStepDamageRecv then
+                    MaxStepDamageRecv:= StepDamageRecv;
+                if StepDamageGiven > MaxStepDamageGiven then
+                    MaxStepDamageGiven:= StepDamageGiven;
+                if StepKills > MaxStepKills then
+                    MaxStepKills:= StepKills;
+                end;
+
+// Write into the death log which clans died in this turn,
+// important for final rankings.
+c:= 0;
+newEntry:= nil;
+for t:= 0 to Pred(ClansCount) do
+    with ClansArray[t]^ do
+        begin
+        if (ClanHealth = 0) and (ClansArray[t]^.DeathLogged = false) then
+            begin
+            if c = 0 then
+                begin
+                new(newEntry);
+                newEntry^.Turn := FinishedTurnsTotal;
+                newEntry^.NextEntry := nil;
+                end;
+
+            newEntry^.KilledClans[c]:= ClansArray[t];
+            inc(c);
+            newEntry^.KilledClansCount := c;
+            ClansArray[t]^.DeathLogged:= true;
+            end;
+
+        if SendHealthStatsOn then
+            SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
+        end;
+if newEntry <> nil then
+    begin
+    if ClanDeathLog <> nil then
+        begin
+        newEntry^.NextEntry:= ClanDeathLog;
+        end;
+    ClanDeathLog:= newEntry;
+    end;
+
+end;
+
+procedure TurnReaction;
+var killsCheck: LongInt;
     s: ansistring;
 begin
 //TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
-inc(FinishedTurnsTotal);
 if FinishedTurnsTotal <> 0 then
     begin
     s:= ansistring(CurrentHedgehog^.Name);
@@ -209,34 +268,22 @@ if FinishedTurnsTotal <> 0 then
         AddCaption(FormatA(GetEventString(eidTurnSkipped), s), capcolDefault, capgrpMessage);
         end
     end;
+end;
 
-
+procedure TurnStatsReset;
+var t, i: LongInt;
+begin
 for t:= 0 to Pred(TeamsCount) do // send even on zero turn
     with TeamsArray[t]^ do
         for i:= 0 to cMaxHHIndex do
             with Hedgehogs[i].stats do
                 begin
-                inc(DamageRecv, StepDamageRecv);
-                inc(DamageGiven, StepDamageGiven);
-                if StepDamageRecv > MaxStepDamageRecv then
-                    MaxStepDamageRecv:= StepDamageRecv;
-                if StepDamageGiven > MaxStepDamageGiven then
-                    MaxStepDamageGiven:= StepDamageGiven;
-                if StepKills > MaxStepKills then
-                    MaxStepKills:= StepKills;
                 StepKills:= 0;
                 StepDamageRecv:= 0;
                 StepDamageGiven:= 0;
                 StepPoisoned:= false;
                 StepDied:= false;
                 end;
-
-if SendHealthStatsOn then
-    for t:= 0 to Pred(ClansCount) do
-        with ClansArray[t]^ do
-            begin
-            SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
-            end;
 
 Kills:= 0;
 KillsClan:= 0;
@@ -247,7 +294,7 @@ PoisonClan:= 0;
 PoisonTurn:= 0;
 AmmoUsedCount:= 0;
 AmmoDamagingUsed:= false;
-isTurnSkipped:= false
+isTurnSkipped:= false;
 end;
 
 procedure AmmoUsed(am: TAmmoType);
@@ -268,7 +315,7 @@ if time > 4000 then
 end;
 
 procedure SendStats;
-var i, t: LongInt;
+var i, t, c: LongInt;
     msd, msk: Longword; msdhh, mskhh: PHedgehog;
     mskcnt: Longword;
     maxTeamKills : Longword;
@@ -278,6 +325,8 @@ var i, t: LongInt;
     maxTeamDamage : Longword;
     maxTeamDamageName : shortstring;
     winnersClan : PClan;
+    deathEntry : PClanDeathLogEntry;
+    currentRank: Longword;
 begin
 if SendHealthStatsOn then
     msd:= 0; msdhh:= nil;
@@ -287,6 +336,7 @@ if SendHealthStatsOn then
     maxTurnSkips := 0;
     maxTeamDamage := 0;
     winnersClan:= nil;
+    currentRank:= 0;
 
     for t:= 0 to Pred(TeamsCount) do
         with TeamsArray[t]^ do
@@ -311,13 +361,18 @@ if SendHealthStatsOn then
                         end;
             end;
 
-            { send player stats for winner teams }
+            { Send player stats for winner clans/teams.
+            The clan that survived is ranked 1st. }
             if Clan^.ClanHealth > 0 then
                 begin
                 winnersClan:= Clan;
                 if SendRankingStatsOn then
+                    begin
+                    currentRank:= 1;
+                    SendStat(siTeamRank, '1');
                     SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
                         IntToStr(stats.Kills) + ' ' + TeamName);
+                    end;
             end;
 
             { determine maximum values of TeamKills, TurnSkips, TeamDamage }
@@ -339,19 +394,41 @@ if SendHealthStatsOn then
 
         end;
 
-    { now send player stats for loser teams }
+    inc(currentRank);
+
+    { Now send player stats for loser teams/clans.
+    The losing clans are ranked in the reverse order they died.
+    The clan that died last is ranked 2nd,
+    the clan that died second to last is ranked 3rd,
+    and so on.
+    Clans that died in the same turn share their rank.
+    If a clan died multiple times in the match
+    (e.g. due to resurrection), only the *latest* death of
+    that clan counts (handled in gtResurrector).
+    }
+    deathEntry := ClanDeathLog;
+    i:= 0;
     if SendRankingStatsOn then
-        for t:= 0 to Pred(TeamsCount) do
+        while (deathEntry <> nil) do
             begin
-            with TeamsArray[t]^ do
-                begin
-                if Clan^.ClanHealth = 0 then
+            for c:= 0 to Pred(deathEntry^.KilledClansCount) do
+                if ((deathEntry^.KilledClans[c]^.ClanHealth) = 0) and (not deathEntry^.KilledClans[c]^.StatsHandled) then
                     begin
-                    SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                        IntToStr(stats.Kills) + ' ' + TeamName);
-                end;
+                    for t:= 0 to Pred(TeamsCount) do
+                        if TeamsArray[t]^.Clan^.ClanIndex = deathEntry^.KilledClans[c]^.ClanIndex then
+                            begin
+                            SendStat(siTeamRank, IntToStr(currentRank));
+                            SendStat(siPlayerKills, IntToStr(deathEntry^.killedClans[c]^.Color) + ' ' +
+                                IntToStr(TeamsArray[t]^.stats.Kills) + ' ' + TeamsArray[t]^.TeamName);
+                            end;
+                    deathEntry^.KilledClans[c]^.StatsHandled:= true;
+                    inc(i);
+                    end;
+            if i > 0 then
+                inc(currentRank, i);
+            i:= 0;
+            deathEntry:= deathEntry^.NextEntry;
             end;
-        end;
 
     // “Achievements” / Details part of stats screen
     if SendAchievementsStatsOn then
@@ -428,6 +505,7 @@ begin
     TotalRoundsPre:= -1;
     TotalRoundsReal:= -1;
     FinishedTurnsTotal:= -1;
+    ClanDeathLog:= nil;
 end;
 
 procedure freeModule;

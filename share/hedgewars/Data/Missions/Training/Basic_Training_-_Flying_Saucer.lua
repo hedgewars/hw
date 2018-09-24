@@ -198,7 +198,7 @@ TargetPos[12] = { Modifier = true, Func = function()
 	SendStat(siCustomAchievement, loc("Good job!"))
 	SendStat(siPlayerKills, "0", loc("Hogonauts"))
 
-	TurnTimeLeft = 0
+	EndTurn(true)
 	EndGame()
 end,
 }
@@ -365,7 +365,7 @@ end
 function onGameInit()
 	Seed = 1
 	GameFlags = gfInfAttack + gfOneClanMode + gfSolidLand + gfDisableWind
-	TurnTime = cMaxTurnTime --[[ This effectively hides the turn time; a turn time above 1000s is not displayed.
+	TurnTime = MAX_TURN_TIME --[[ This effectively hides the turn time; a turn time above 1000s is not displayed.
 			   	     We will also ensure this timer always stays above 999s later ]]
 	CaseFreq = 0
 	MinesNum = 0
@@ -504,7 +504,7 @@ end
 
 function onGameTick20()
 	if (TurnTimeLeft < 1500000 and not Objective) then
-		TurnTimeLeft = TurnTime
+		SetTurnTimeLeft(TurnTime)
 	end
 	if Check then
 		CheckTimer = CheckTimer - 20

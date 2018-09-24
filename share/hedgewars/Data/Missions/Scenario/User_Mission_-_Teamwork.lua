@@ -104,7 +104,7 @@ function onGearDelete(gear)
 	end
 
 	if GetGearType(gear) == gtCase then
-		TurnTimeLeft = TurnTimeLeft + 5000
+		SetTurnTimeLeft(TurnTimeLeft + 5000)
 	end
 	-- Note: The victory sequence is done automatically by Hedgewars
 	if  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then

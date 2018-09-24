@@ -393,19 +393,14 @@
 ; Round ends in a draw
 02:04=Unentschieden
 02:04=Es ist unentschieden!
-02:04=Keiner gewinnt! Unentschieden
-02:04=Unglaublich, diese Runde endet unentschieden
 02:04=Unentschieden, wie langweilig
-02:04=Unmöglich! Es ist unentschieden
 02:04=Unentschieden! Jetzt müssen wir von vorne anfangen …
-02:04=Spiel vorbei! Es hat niemand gewonnen
 02:04=Unentschieden, was für eine Enttäuschung!
-02:04=Heute ist jeder ein Verlierer
+02:04=Unentschieden. Alle kämpften bis zum bitteren Ende
 02:04=Hey, wo ist der Sieger?
 02:04=Wo sind all die Igel hin?
 02:04=Öde! Ich will mein Geld zurück!
-
-02:04=Ach nö, es steht Unentschieden!
+02:04=Alle sind tot. Gut so!
 
 ; New health crate
 02:05=Hilfspaket gesichtet!
@@ -661,7 +656,6 @@
 02:06=Es ist gefährlich da draußen. Nimm dies!
 02:06=Der Himmel spielt gern mit Sterblichen
 02:06=Peng-peng in einer Kiste!
-02:06=Können ein paar von euch bitte sterben?
 
 02:06=Waffenkiste: Nur echt mit dem Fragezeichen
 02:06=Ein schlagkräftiges Argument!

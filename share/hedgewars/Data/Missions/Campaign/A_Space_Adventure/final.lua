@@ -38,7 +38,7 @@ local teamA = {
 function onGameInit()
 	GameFlags = gfDisableWind + gfOneClanMode
 	Seed = 1
-	TurnTime = cMaxTurnTime
+	TurnTime = MAX_TURN_TIME
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
@@ -160,6 +160,8 @@ function heroDeath(gear)
 end
 
 function heroBoomReaction(gear)
+	SetSoundMask(sndMissed, true)
+	SetSoundMask(sndYesSir, true)
 	if GetHealth(gear) and GetHealth(gear) > 0 then
 		HogSay(gear, loc("Kaboom! Hahahaha! Take this, stupid meteorite!"), SAY_SHOUT, 2)
 	end

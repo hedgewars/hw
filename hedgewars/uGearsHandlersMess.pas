@@ -307,9 +307,28 @@ or (SuddenDeathDmg and (SDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) th
         AddVisualGear(bubbleX, bubbleY, vgtBubble)
 else if Random(12) = 0 then
         AddVisualGear(bubbleX, bubbleY, vgtBubble);
+// Insta-delete gear and skip drowning animation if water is 100% opaque
 if (not SuddenDeathDmg and (WaterOpacity > $FE))
-or (SuddenDeathDmg and (SDWaterOpacity > $FE))
-or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
+or (SuddenDeathDmg and (SDWaterOpacity > $FE)) then
+    begin
+    // Teleport gear to a suitable position for the damage tag in the water
+    if (WorldEdge = weSea) and (hwRound(Gear^.X) - Gear^.Radius < leftX) then
+        begin
+        if (hwRound(Gear^.X) - Gear^.Radius > leftX - 90) then
+            Gear^.X := Gear^.X - _90
+        end
+    else if (WorldEdge = weSea) and (hwRound(Gear^.X) + Gear^.Radius > rightX) then
+        begin
+        if (hwRound(Gear^.X) - Gear^.Radius < rightX + 90) then
+            Gear^.X := Gear^.X + _90
+        end
+    else
+        Gear^.Y := int2hwFloat(Gear^.Radius + cWaterLine + cVisibleWater);
+    DeleteGear(Gear);
+    exit;
+    end;
+// Delete normally if gear is outside of visible range
+if (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
     DeleteGear(Gear);
 end;
 
@@ -3249,7 +3268,7 @@ begin
     with HHGear^ do
         begin
         State := State and (not gstAttacking);
-        Message := Message and (not gmAttack)
+        Message := Message and (not (gmAttack or gmSwitch))
         end
 end;
 
@@ -5459,7 +5478,7 @@ begin
         Gear^.dY.isNegative := not Gear^.dY.isNegative;
         HHGear^.dX := Gear^.dX;
         HHGear^.dY := Gear^.dY;
-        AmmoShove(Gear, 0, 80);
+        AmmoShove(Gear, 0, 79);
         Gear^.dX.isNegative := not Gear^.dX.isNegative;
         Gear^.dY.isNegative := not Gear^.dY.isNegative;
         end;
@@ -5889,6 +5908,8 @@ begin
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
+                { Reviving a hog implies its clan is now alive, too. }
+                resgear^.Hedgehog^.Team^.Clan^.DeathLogged:= false;
                 s:= ansistring(resgear^.Hedgehog^.Name);
                 AddCaption(FormatA(GetEventString(eidResurrected), s), capcolDefault, capgrpMessage);
                 // only make hat-less hedgehogs look like zombies, preserve existing hats

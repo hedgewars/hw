@@ -66,13 +66,13 @@ finalAnim = {}
 --------------------------Anim skip functions--------------------------
 function AfterHogDeadAnim()
   freshDead = nil
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function AfterStartAnim()
   local goal = loc("Defeat the cannibals!|")
   local chiefgoal = loc("Try to protect the chief! You won't lose if he dies, but it is advised that he survives.")
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("United We Stand"), loc("Invasion"), goal .. chiefgoal, 1, 6000)
 end
 
@@ -532,7 +532,7 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
   if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then

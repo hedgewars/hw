@@ -35,6 +35,37 @@ const maxCheckedGameDuration = 3*60*60*1000;
 var i,j : LongInt;
     s: ansistring;
 begin
+
+inc(SoundTimerTicks, Lag);
+if SoundTimerTicks >= 50 then
+    begin
+    SoundTimerTicks:= 0;
+    if cVolumeDelta <> 0 then
+        begin
+        j:= Volume;
+        i:= ChangeVolume(cVolumeDelta);
+        if (not cIsSoundEnabled) or (isAudioMuted and (j<>i)) then
+            AddCaption(trmsg[sidMute], capcolSetting, capgrpVolume)
+        else if not isAudioMuted then
+            begin
+            s:= ansistring(inttostr(i));
+            AddCaption(FormatA(trmsg[sidVolume], s), capcolSetting, capgrpVolume)
+            end
+        end
+    else if cMuteToggle then
+        begin
+        MuteAudio;
+        if isAudioMuted then
+            AddCaption(trmsg[sidMute], capcolSetting, capgrpVolume)
+        else
+            begin
+            s:= ansistring(inttostr(GetVolumePercent()));
+            AddCaption(FormatA(trmsg[sidVolume], s), capcolSetting, capgrpVolume);
+            end;
+        cMuteToggle:= false;
+        end;
+    end;
+
 if isPaused then
     exit;
 
@@ -78,35 +109,6 @@ if GameType <> gmtRecord then
 if cTestLua then
     Lag:= High(LongInt);
 
-inc(SoundTimerTicks, Lag);
-if SoundTimerTicks >= 50 then
-    begin
-    SoundTimerTicks:= 0;
-    if cVolumeDelta <> 0 then
-        begin
-        j:= Volume;
-        i:= ChangeVolume(cVolumeDelta);
-        if (not cIsSoundEnabled) or (isAudioMuted and (j<>i)) then
-            AddCaption(trmsg[sidMute], capcolSetting, capgrpVolume)
-        else if not isAudioMuted then
-            begin
-            s:= ansistring(inttostr(i));
-            AddCaption(FormatA(trmsg[sidVolume], s), capcolSetting, capgrpVolume)
-            end
-        end
-    else if cMuteToggle then
-        begin
-        MuteAudio;
-        if isAudioMuted then
-            AddCaption(trmsg[sidMute], capcolSetting, capgrpVolume)
-        else
-            begin
-            s:= ansistring(inttostr(GetVolumePercent()));
-            AddCaption(FormatA(trmsg[sidVolume], s), capcolSetting, capgrpVolume);
-            end;
-        cMuteToggle:= false;
-        end;
-    end;
 PlayNextVoice;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) and allOK do

@@ -176,7 +176,7 @@ type
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
             siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
             siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle,
-            siPointType);
+            siPointType, siTeamRank, siEverAfter);
 
     // Various 'emote' animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
@@ -350,6 +350,16 @@ type
         TeamDamage : Longword;
         end;
 
+    PClanDeathLogEntry = ^TClanDeathLogEntry;
+
+    TClanDeathLogEntry = record
+        Turn : Longword; // turn in which the clans were killed
+        KilledClans : array[0..Pred(cMaxTeams)] of PClan; // array of clans that have died
+        KilledClansCount: Longword; // number of clans that died
+        NextEntry : PClanDeathLogEntry; // linked list
+        end;
+
+
     TBinds = record
                  indices: array[0..cKbdMaxIndex] of byte;
                  // zeroth element is reserved, indices[i] == 0 means no binding
@@ -443,6 +453,8 @@ type
             ClanHealth: LongInt;
             ClanIndex: LongInt;
             TurnNumber: LongWord;
+            DeathLogged: boolean; // true if clan is dead and its latest death has been logged in the clan death log
+            StatsHandled : boolean; // true if clan's rank has been handled for stats screen
             Flawless: boolean;
             end;
 
@@ -481,7 +493,7 @@ type
             sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
             sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
             sidFPS, sidLuaParsingOff, sidLuaParsingOn, sidLuaParsingDenied,
-            sidAmmoCount, sidChat, sidChatTeam, sidChatHog);
+            sidAmmoCount, sidChat, sidChatTeam, sidChatHog, sidEverAfter);
 
     TCmdHelpStrId = (
             sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,

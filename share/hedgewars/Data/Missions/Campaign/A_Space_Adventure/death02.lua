@@ -108,7 +108,7 @@ function onNewTurn()
 	battleStarted = true
 	if firstTurn then
 		-- Generous ready time in first turn to more time to read the mission panel
-		ReadyTimeLeft = 35000
+		SetReadyTimeLeft(35000)
 		firstTurn = false
 	end
 	if CurrentHedgehog ~= hero.gear then

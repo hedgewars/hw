@@ -295,7 +295,7 @@ function AfterStartAnim()
   AddNewEvent(CheckOutOfCluster, {}, DoOutOfCluster, {}, 1)
   AddNewEvent(CheckOutOfGrenade, {}, DoOutOfGrenade, {}, 1)
 --  AddNewEvent(CheckNeedToHide, {}, DoNeedToHide, {}, 1)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("Family Reunion"), loc("Hostage Situation"), loc("Save the princess! All your hogs must survive!|Hint: Kill the cyborgs first! Use the ammo very carefully!|Hint: You might want to spare a girder for cover!"), 1, 7000)
 end
 
@@ -636,7 +636,7 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
   if CurrentHedgehog == cyborg then

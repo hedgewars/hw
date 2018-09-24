@@ -175,7 +175,7 @@ function SpeedShoppaMission(params)
 				local time = startTime - endTime
 				SendStat(siPlayerKills, tostring(time), params.teamName)
 				SendStat(siCustomAchievement, string.format(loc("You have finished the challenge in %.3f s."), (time/1000)))
-				TurnTimeLeft = 0
+				SetTurnTimeLeft(0)
 			else
 				SendStat(siGameResult, loc("Challenge failed!"))
 				SendStat(siPointType, loc("crate(s)"))

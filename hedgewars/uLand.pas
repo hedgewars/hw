@@ -873,6 +873,7 @@ PrettifyLandAlpha();
 if (WorldEdge <> weNone) and (not hasBorder) then
     InitWorldEdges();
 
+ScriptSetMapGlobals;
 end;
 
 procedure GenPreview(out Preview: TPreview);
@@ -888,6 +889,8 @@ begin
     else
         OutError('Unknown mapgen', true);
     end;
+
+    ScriptSetMapGlobals;
 
     // strict scaling needed here since preview assumes a rectangle
     rh:= max(LAND_HEIGHT,2048);
@@ -938,6 +941,8 @@ begin
         OutError('Unknown mapgen', true);
     end;
 
+    ScriptSetMapGlobals;
+
     // strict scaling needed here since preview assumes a rectangle
     rh:= max(LAND_HEIGHT, 2048);
     rw:= max(LAND_WIDTH, 4096);
@@ -979,12 +984,14 @@ end;
 
 procedure chSendLandDigest(var s: shortstring);
 var i: LongInt;
+	landPixelDigest  : LongInt;	
 begin
+	landPixelDigest:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
-        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @Land[i,0], LAND_WIDTH*2);
-    s:= 'M' + IntToStr(syncedPixelDigest); // + cScriptName; script name is no longer needed. scripts are hashed
+        landPixelDigest:= Adler32Update(landPixelDigest, @Land[i,0], LAND_WIDTH*2);
+    s:= 'M' + IntToStr(syncedPixelDigest)+'|'+IntToStr(landPixelDigest);
 
-    ScriptSetString('LandDigest', s);
+    ScriptSetString('LandDigest',IntToStr(landPixelDigest));
 
     chLandCheck(s);
     if allOK then SendIPCRaw(@s[0], Length(s) + 1)

@@ -79,6 +79,7 @@
     <tip>Mind the wind, because flames and some projectiles are affected by wind.</tip>
     <tip>Use a blow torch to push hedgehogs and mines with a long timer.</tip>
     <tip>Running with a blow torch into a barrel is an explosive recipe for disaster!</tip>
+    <tip>Enter “/help” in chat for a list of chat commands. Chat commands give you access to some special features like taunts or voting.</tip>
     <windows-only>
         <tip>You can find your Hedgewars configuration files under “My Documents\Hedgewars”. Create backups or take the files with you, but don’t edit them by hand.</tip>
     </windows-only>

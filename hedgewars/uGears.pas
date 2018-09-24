@@ -62,9 +62,9 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stInit, stDelay, stChDmg, stSweep, stTurnReact,
-    stAfterDelay, stChWin, stWater, stChWin2, stHealth,
-    stSpawn, stNTurn);
+    step: (stInit, stDelay, stChDmg, stSweep, stTurnStats, stChWin1,
+    stTurnReact, stAfterDelay, stChWin2, stWater, stChWin3,
+    stHealth, stSpawn, stNTurn);
     NewTurnTick: LongWord;
     //SDMusic: shortstring;
 
@@ -289,11 +289,25 @@ case step of
     else
         inc(step);
 
+    stTurnStats:
+        begin
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            uStats.TurnStats;
+        inc(step)
+        end;
+
+    stChWin1:
+        begin
+        CheckForWin();
+        inc(step)
+        end;
+
     stTurnReact:
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
             begin
             uStats.TurnReaction;
+            uStats.TurnStatsReset;
             inc(step)
             end
         else
@@ -310,7 +324,7 @@ case step of
         if delay = 0 then
             inc(step)
             end;
-    stChWin:
+    stChWin2:
         begin
         CheckForWin();
         inc(step)
@@ -322,14 +336,18 @@ case step of
         if TotalRoundsPre = cSuddenDTurns + 1 then
             bWaterRising:= true;
         if bWaterRising and (cWaterRise > 0) then
+            begin
+            bDuringWaterRise:= true;
             AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
+            end;
         inc(step)
         end
-    else // since we are not raising the water, a second win-check isn't needed
+    else // since we are not raising the water, another win-check isn't needed
         inc(step,2);
-    stChWin2:
+    stChWin3:
         begin
         CheckForWin;
+        bDuringWaterRise:= false;
         inc(step)
         end;
 
@@ -444,7 +462,7 @@ if TurnTimeLeft > 0 then
         if (cHedgehogTurnTime >= 10000)
         and (CurrentHedgehog^.Gear <> nil)
         and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0)
-        and (not isGetAwayTime) then
+        and (not isGetAwayTime) and (ReadyTimeLeft = 0) then
             if TurnTimeLeft = 5000 then
                 PlaySoundV(sndHurry, CurrentTeam^.voicepack)
             else if TurnTimeLeft = 4000 then
@@ -1202,8 +1220,7 @@ begin
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
                 end;
-            //ParseCommand('/say [' + hh^.Name + '] '+text, true)
-            AddChatString(#9+'[' + HH^.Name + '] '+text);
+            AddChatString(#9+FormatA(trmsg[sidChatHog], [HH^.Name, text]));
             end
         end
     else if (x >= 4) then

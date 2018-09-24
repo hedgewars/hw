@@ -53,9 +53,11 @@ function EndTurnCS(seconds)
 	-- Set attacked state to prevent “Boring” sound to be played
 	SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstAttacked))
 	--set escape time
-	TurnTimeLeft = GetAwayTime*10*seconds
-	if TurnTimeLeft > 0 then
-		Retreat(TurnTimeLeft, false)
+	local escapeTime = GetAwayTime*10*seconds
+	if escapeTime > 0 then
+		Retreat(escapeTime, false)
+	else
+		SetTurnTimeLeft(escapeTime)
 	end
  end
 
@@ -1212,7 +1214,7 @@ function onNewTurn()
 				CS.HOG_HEALTH=GetHealth(CurrentHedgehog)
 			end
 
-			TurnTimeLeft=100000
+			SetTurnTimeLeft(100000)
 
 			AddCaption(string.format(CS.SELECT_WEP_INFORMATION_SHORT, GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 			AddCaption(loc("No continent selected"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
@@ -1637,8 +1639,11 @@ function SabotageSmokeInactive(gear)
 	end
 end
 
-function ShowContinentLabel()
-	if CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] == 0 then
+function ShowContinentLabel(continent)
+	if not continent then
+		continent = CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]
+	end
+	if continent == 0 then
 		AddCaption(loc("Random continent"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 	else
 		AddCaption(CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1], GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
@@ -1680,7 +1685,15 @@ function onGameTick()
 		CS.SELECT_CONTINENT_CHECK=false
 		EndTurnCS(0)
 		PlaySound(sndPlaced)
-		ShowContinentLabel()
+		if(CurrentHedgehog and CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
+		then
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+			SetContinentWeapons()
+			HideMission()
+			ShowContinentLabel(0)
+		else
+			ShowContinentLabel()
+		end
 		CS.CONFIRM_CONTINENT_SELECTION = -1
 	end
 

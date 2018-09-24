@@ -72,16 +72,21 @@ local HogData =	{
 
 local playerTeamName = loc("Wannabe Shoppsta")
 
-function GenericEnd()
-	EndGame()
-end
-
 function GetKillScore()
 	return math.ceil((hogsKilled / 16)*6000)
 end
 
+function ProtectEnemies()
+	for i=1, 16 do
+		if hhs[i] and GetHealth(hhs[i]) then
+			SetEffect(hhs[i], heInvulnerable, 1)
+		end
+	end
+end
+
 function GameOverMan()
 	missionWon = false
+	ProtectEnemies()
 	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge over!"), loc("Oh no! Just try again!"), -amSkip, 0)
 	SendStat(siGameResult, loc("Challenge over!"))
 	local score = GetKillScore()
@@ -89,6 +94,7 @@ function GameOverMan()
 	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	PlaySound(sndHellish)
+	EndGame()
 end
 
 function GG()
@@ -100,11 +106,17 @@ function GG()
 	local hogScore = GetKillScore()
 	local timeScore = math.ceil((finishTime/TurnTime)*6000)
 	local score = hogScore + timeScore
+
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, hogScore))
 	SendStat(siCustomAchievement, string.format(loc("You have completed this challenge in %.2f s (+%d points)."), completeTime, timeScore))
 	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	SetTeamLabel(playerTeamName, tostring(score))
+
+	if hhs[0] and GetHealth(hhs[0]) then
+		SetEffect(hhs[0], heInvulnerable, 1)
+	end
+	SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function AssignCharacter(p)
@@ -217,7 +229,7 @@ function onGameTick()
 
 		endTimer = endTimer - 1
 		if endTimer == 1 then
-			GenericEnd()
+			EndGame()
 		end
 
 		if missionWon == true then
@@ -234,6 +246,7 @@ function onGearDamage(gear, damage)
 
 	if gear == hhs[0] then
 		ouchies = true
+		ProtectEnemies()
 	end
 
 	if gear ~= hhs[0] and GetGearType(gear) == gtHedgehog and missionWon == nil and ouchies == false then

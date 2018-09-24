@@ -186,6 +186,9 @@ begin
 Gear^.Message:= Gear^.Message and (not gmTimer);
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^.Hedgehog^ do
+    if (((Gear^.State and gstAttacked) <> 0) and (GameFlags and gfInfAttack = 0))
+    or ((Gear^.State and gstHHDriven) = 0) then
+        exit;
     if ((Gear^.Message and gmPrecise) <> 0) and ((CurWeapon^.Propz and ammoprop_SetBounce) <> 0) then
         begin
         color:= Gear^.Hedgehog^.Team^.Clan^.Color;
@@ -596,15 +599,14 @@ with Gear^,
                 if (not CurrentTeam^.ExtDriven) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
                     SendIPC(_S'a');
                 AfterAttack;
-                end
+                end;
+            TargetPoint.X := NoPointX;
             end
         else
             Message:= Message and (not gmAttack);
 
     ScriptCall('onHogAttack', ord(usedAmmoType));
     end; // of with Gear^, Gear^.Hedgehog^ do
-
-    TargetPoint.X := NoPointX;
 end;
 
 procedure AfterAttack;
@@ -639,10 +641,13 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
-                     TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
-                else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
-                IsGetAwayTime := true;
+                if (HHGear <> nil) and ((HHGear^.State and gstHHDriven) <> 0) then
+                    begin
+                    if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
+                         TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
+                    else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
+                    IsGetAwayTime := true;
+                    end;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then
                 HHGear^.State:= HHGear^.State or gstAttacked;
@@ -864,6 +869,9 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     exit
     end;
 
+if (Gear^.Hedgehog^.Unplaced) then
+    exit;
+
     if ((Gear^.Message and gmAnimate) <> 0) then
         begin
         Gear^.Message:= 0;
@@ -908,7 +916,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         end;
 
     if (Gear^.Message and (gmLeft or gmRight) <> 0) and (Gear^.State and gstMoving = 0) and 
-		(CheckGearNear(Gear, gtPortal, 26, 26) <> nil) then 
+		(CheckGearNear(Gear, gtPortal, 26, 26) = nil) then
 		Gear^.PortalCounter:= 0;
     PrevdX:= hwSign(Gear^.dX);
     if (Gear^.Message and gmLeft  )<>0 then

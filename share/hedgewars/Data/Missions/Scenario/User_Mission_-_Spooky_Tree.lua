@@ -140,11 +140,11 @@ end
 function onGearDelete(gear)
 
 	if gear == GirderCrate then
-		TurnTimeLeft = TurnTimeLeft + 30000
+		SetTurnTimeLeft(TurnTimeLeft + 30000)
 	end
 
 	if GetGearType(gear) == gtCase then
-		TurnTimeLeft = TurnTimeLeft + 5000
+		SetTurnTimeLeft(TurnTimeLeft + 5000)
 	end
 
 	if (gear == enemy) and (GameOver == false) then

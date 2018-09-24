@@ -424,7 +424,7 @@ function onNewTurn()
 					end
 				end			
 			end
-			TurnTimeLeft = 1
+			SetTurnTimeLeft(1)
 		end
 
 	end

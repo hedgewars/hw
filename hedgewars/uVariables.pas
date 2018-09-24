@@ -177,6 +177,7 @@ var
 
     bBetweenTurns   : boolean;
     bWaterRising    : boolean;
+    bDuringWaterRise: boolean;
 
     CrosshairX      : LongInt;
     CrosshairY      : LongInt;
@@ -2856,6 +2857,7 @@ begin
     flagDumpLand    := false;
     bBetweenTurns   := false;
     bWaterRising    := false;
+    bDuringWaterRise:= false;
     isCursorVisible := false;
     isInLag         := false;
     isPaused        := false;

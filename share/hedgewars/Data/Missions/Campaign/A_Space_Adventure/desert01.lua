@@ -213,9 +213,9 @@ function onNewTurn()
 	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
 		AnimSwitchHog(hero.gear)
 		getReady(hero.gear)
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
 		AnimSwitchHog(smuggler1.gear)
 		getReady(smuggler1.gear)
@@ -270,11 +270,13 @@ function onGearDelete(gear)
 			-- Turn the other crate into a fake crate; this will “contain” the device.
 			SetGearPos(other_crate_table.gear, bor(GetGearPos(other_crate_table.gear), 0x8))
 		elseif cratesFound == 1 then
-			-- Second win crate collected:
-			-- This crate contains the anti-gravity part! VICTORY!
-			PlaySound(sndShotgunReload)
-			-- It's displayed as if collecting a normal ammo/utility crate. :-)
-			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			if not candidate_crate_table.destroyed then
+				-- Second win crate collected:
+				-- This crate contains the anti-gravity part! VICTORY!
+				PlaySound(sndShotgunReload)
+				-- It's displayed as if collecting a normal ammo/utility crate. :-)
+				AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			end
 		end
 	end
 
@@ -308,7 +310,7 @@ function onHeroDeath(gear)
 end
 
 function onHeroAtFirstBattle(gear)
-	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450 and GetX(hero.gear) > 80
+	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1233 and GetX(hero.gear) > 80
 			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-40 and
 			-- If hero is standing or at a rope
 			(StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then

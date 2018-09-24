@@ -58,6 +58,7 @@ var AliveClan: PClan;
     s, cap: ansistring;
     ts: array[0..(cMaxTeams - 1)] of ansistring;
     t, AliveCount, i, j: LongInt;
+    allWin: boolean;
 begin
 CheckForWin:= false;
 AliveCount:= 0;
@@ -75,9 +76,15 @@ CheckForWin:= true;
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 
-// if the game ends during a multishot, do last TurnReaction
-if (not bBetweenTurns) and isInMultiShoot then
-    TurnReaction();
+// If the game ends during a multishot, or after the Sudden Death
+// water has risen, do last turn stats / reaction.
+if ((not bBetweenTurns) and isInMultiShoot) or (bDuringWaterRise) then
+    begin
+    TurnStats();
+    if (not bDuringWaterRise) then
+        TurnReaction();
+    TurnStatsReset();
+    end;
 
 if not TeamsGameOver then
     begin
@@ -86,10 +93,15 @@ if not TeamsGameOver then
         AddCaption(GetEventString(eidRoundDraw), capcolDefault, capgrpGameState);
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(trmsg[sidDraw]));
+        if PreviousTeam <> nil then
+            AddVoice(sndNutter, PreviousTeam^.voicepack)
+        else
+            AddVoice(sndNutter, TeamsArray[0]^.voicepack);
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
         begin
+        allWin:= false;
         with AliveClan^ do
             begin
             if TeamsNumber = 1 then // single team wins
@@ -110,8 +122,11 @@ if not TeamsGameOver then
 
                 // Write victory message for caption and stats page
                 if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
+                    begin
                     // No enemies for some reason … Everyone wins!!1!
-                    s:= trmsg[sidWinnerAll]
+                    s:= trmsg[sidWinnerAll];
+                    allWin:= true;
+                    end
                 else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
                     // List all winning teams in a list
                     s:= FormatA(trmsg[TMsgStrId(Ord(sidWinner2) + (TeamsNumber - 2))], ts);
@@ -136,6 +151,8 @@ if not TeamsGameOver then
 
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(s));
+        if allWin and SendAchievementsStatsOn then
+            SendStat(siEverAfter, '');
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
         end;
     SendStats;
@@ -305,7 +322,9 @@ if PlacingHogs then
         begin
         for i:= 0 to ClansCount do
             if ClansArray[i] <> nil then
+                begin
                 ClansArray[i]^.TurnNumber:= 0;
+                end;
         ResetWeapons
         end;
 
@@ -468,7 +487,9 @@ if c < 0 then
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
         TagTeamIndex:= 0;
-        Flawless:= true
+        Flawless:= true;
+        DeathLogged:= false;
+        StatsHandled:= false;
         end
     end
 else

@@ -7,6 +7,8 @@ See also: <https://hedgewars.org/kb/BuildingHedgewars>
 
 Dependencies
 ------------
+### Hardware dependencies
+See README.md.
 
 ### Core dependencies
 

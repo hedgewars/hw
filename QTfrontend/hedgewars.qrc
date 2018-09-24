@@ -209,6 +209,7 @@
         <file>res/StatsMostSelfDamage.png</file>
         <file>res/StatsSelfKilled.png</file>
         <file>res/StatsSkipped.png</file>
+        <file>res/StatsEverAfter.png</file>
         <file>res/StatsCustomAchievement.png</file>
         <file>res/Start.png</file>
         <file>res/mapRandom.png</file>

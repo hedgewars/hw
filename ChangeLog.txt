@@ -9,6 +9,7 @@ Game:
  + Increase hedgehog limit to 64
  + Campaigns and missions now use the user's chosen custom clan colors
  + New default brown clan color for better contrast
+ + Allow to change volume during pause
  * Functionality of controllers restored
  * Fix crash when 2 or more controllers were connected
  * Fix hammer and pickhammer not digging correctly at wrap world edge
@@ -24,15 +25,21 @@ Game:
  * Fix invisible projectile timer, attack bar, target on other side of wrap world edge
  * Fix attack bar drawn over GUI elements
  * Fix hog being unable to walk after using sniper rifle without firing both shots
+ * Fix bee weapon becoming unusable when hitting attack key in mid-air
  * Fix video recorder not working when game audio was disabled
  * Fix cursor teleporting to center after leaving game with a video recording
  * Fix teleport tooltip claiming it doesn't end turn in hog placing phase with inf. attack
  * Fix /hta, /hsa and /hya commands not writing message in chat
  * Limit hedgehog health to 268435455 to prevent some bugs
  * Fix Sudden Death starting in the second turn of a round rather than the first
+ * Prevent voices from being spoken directly before a victory voice
+ * Fix damage not being displayed if hog drowns in water with 100% opacity (like in Compost theme)
+ * Fix retreat timer appearing after using baseball bat or whip and immediately taking damage
 
 Frontend:
  + Add setting to disable audio dampening when losing window focus
+ + Rework player rankings: Losing clans are now ranked in the reverse order they died
+ * Fix player rankings on round draw: Clans that died in the same turn now have the same rank
  * Fix rare crash when aborting video encoding in progress
  * Fix critical failure to cleanup teams list after rejoining game under certain conditions
  * Controllers are detected again
@@ -46,6 +53,12 @@ Highlander:
 
 TechRacer:
  * Fix rare bug causing crates and other objects to not appear on start of turn
+
+Balanced Random Weapon:
+ + Can adjust weapon start and crate probabilities
+
+Random Weapon:
+ * Fix breakage when enabling per-hog ammo
 
 Continental supplies:
  + Continents are now selected before the game starts
@@ -67,6 +80,7 @@ Continental supplies:
 Space Invasion:
  + Display round score in a separate row
  + Keep round score displayed after round ends, remove round score announcer message
+ + If team scores are tied at the end, continue playing rounds with the tied teams until there's a winner
  * Fix rare Lua error message spam at end of game
  * Fix round score and other info numbers messing up after screen resize
  * Fix kamikaze bonus not being shown
@@ -75,9 +89,13 @@ Campaigns and missions:
  * A Classic Fairytale: Fix clan membership of princess in some missions
  * A Classic Fairytale, Mission 5: Tribe was not in same clan as Natives, screwing up stats a bit
  + A Space Adventure, final mission: Terrain types are easier to distinguish
- * A Space Adeventure: Fix clan membership of PAotH in main Death Planet mission
+ * A Space Adventure, Searching in the Dust: Fix display error when destroying device crate
+ * A Space Adventure, Searching in the Dust: Don't take away control right above the pit near Sandy
+ * A Space Adventure: Fix clan membership of PAotH in main Death Planet mission
+ * A Space Adventure, final mission: Don't say "Missed" or "Yes, Sir!" when inappropriate
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practicse: Suppress “X remaining” message
+ * Basic Movement Training: Back jumps should be easier now
  * Fix resurrection animation appearing at wrong position for some missions and styles
 
 Content:
@@ -92,6 +110,9 @@ Server:
  * Fix many server messages being not translated
 
 Lua API:
+ * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
+ + New call: SetTurnTimeLeft(newTurnTimeLeft): Set remaining turn time
+ + New call: SetReadyTimeLeft(newReadyTimeLeft): Set remaining ready time
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New call: EnableSwitchHog(): Enable hog switching
@@ -100,22 +121,26 @@ Lua API:
  + New call: GetLaserSight(): Returns true if laser sight (as utility) is currenctly active (ignoring sniper rifle)
  + New call: IsHogHidden(gear): Returns true if hog is hidden
  + Changed call: AddTeam: 2nd param. color: Accepts negative value to use a default clan color from player settings
+ + Changed call: HedgewarsScriptLoad: 2nd param. mustExist. If false, it's allowed for the script to not exist
+ + Changed call: HedgewarsScriptLoad: Return true on success and false on failure
  + Change callback: onGearResurrect: 2nd parameter for visual gear spawned at resurrect position (might be nil)
  + New parameter: SetAmmoTexts: 5th param. showExtra: Set to false to hide texts like “Not yet available”
  + New parameter: ShowMission: 6th param. forceDisplay: Set to true to prevent this particular mission panel to be hidden manually by player
+ + Can set custom team rank: Call SendStat with 1st param siTeamRank and 2nd param to the desired rank, as string. Must be called before siPlayerKills of the team for which this applies
  + New Lua library: Achievements
  + Add sprite tint globals in Utilts library: U_LAND_TINT_NORMAL, U_LAND_TINT_ICE, U_LAND_TINT_INDESTRUCTIBLE and U_LAND_TINT_BOUNCY
- + Can enable infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
+ + New globals: Infinite fly time for jetpack/Birdy by setting health to JETPACK_FUEL_INFINITE or BIRDY_ENERGY_INFINITE, respectively
  + New global game variable: MaxCaseDrops. Max. number of crats which can be in game by crate drops
- + New global: NoPointX. Value of CursorX and CursorY if cursor is inactive
+ + New global: NO_CURSOR. Value of CursorX and CursorY if cursor is inactive
  + New global: AMMO_INFINITE. Value for infinite ammo count for AddAmmo and other functions
- + New global: cMaxHogHealth. Maximum possible hedgehog health
- + New global: cMaxTurnTime. Maximum possible turn time
+ + New global: MAX_HOG_HEALTH. Maximum possible hedgehog health
+ + New global: MAX_TURN_TIME. Maximum possible turn time
  + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
  + New globals: capcolDefault, capcolSetting: Default caption colors
  * Animate library: Remove defunct follow argument for AnimVisualGear
  * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
+ * Fixed variables: LeftX, RightX, TopY, LAND_WIDTH, LAND_HEIGHT were broken if onVisualGearAdd was defined
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set
 
 ====================== 0.9.24.1 ====================

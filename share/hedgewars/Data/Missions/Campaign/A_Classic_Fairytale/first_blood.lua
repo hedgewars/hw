@@ -546,7 +546,7 @@ end
 
 function DoCratesColled()
   RemoveEventFunc(CheckTimesUp)
-  TurnTimeLeft = -1
+  SetTurnTimeLeft(MAX_TURN_TIME)
   AddCaption(loc("As the challenge was completed, Leaks A Lot set foot on the ground..."))
 end
 
@@ -573,7 +573,7 @@ function DoTimesUp()
   challengeFailed = true
   deleteCrate = true
   DeleteGear(crates[1])
-  TurnTimeLeft = -1
+  SetTurnTimeLeft(MAX_TURN_TIME)
   AddCaption(loc("And so happened that Leaks A Lot failed to complete the challenge! He landed, pressured by shame ..."))
   AddEvent(CheckChallengeFailed, {}, DoChallengeFailed, {}, 0)
 end
@@ -658,7 +658,7 @@ end
 function StartChallenge(time)
   cratesCollected = 0
   PutCrate(1)
-  TurnTimeLeft = time
+  SetTurnTimeLeft(time)
   ShowMission(loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000)
 end
 
@@ -684,11 +684,11 @@ function SetChoice()
 end
 
 function SetTime(time)
-  TurnTimeLeft = time
+  SetTurnTimeLeft(time)
 end
 
 function ResetTurnTime()
-  TurnTimeLeft = tTime
+  SetTurnTimeLeft(tTime)
   tTime = -1
 end
 
@@ -751,7 +751,7 @@ end
 
 function onGameStart()
   progress = tonumber(GetCampaignVar("Progress"))
-  TurnTimeLeft = -1
+  SetTurnTimeLeft(MAX_TURN_TIME)
   FollowGear(youngh)
 	ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training|Hint: Animations can be skipped with the [Precise] key."), -amSkip, 0)
   HideHog(cannibal)
@@ -846,7 +846,7 @@ function onNewTurn()
   end
   SwitchHog(youngh)
   FollowGear(youngh)
-  TurnTimeLeft = -1
+  SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function onGearDamage(gear, damage)

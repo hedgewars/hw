@@ -864,10 +864,12 @@ function InterpretPoints()
 end
 
 function onGameStart()
-	SendGameResultOff()
-	SendRankingStatsOff()
-	SendAchievementsStatsOff()
-	SendHealthStatsOff()
+	if ClansCount >= 2 then
+		SendGameResultOff()
+		SendRankingStatsOff()
+		SendAchievementsStatsOff()
+		SendHealthStatsOff()
+	end
 
 	trackTeams()
 

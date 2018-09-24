@@ -71,7 +71,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 const
     colors: array[#0..#9] of TSDL_Color = (
-            (r:$FF; g:$FF; b:$FF; a:$FF), // #0 unused, feel free to take it for anything
+            (r:$FF; g:$FF; b:$00; a:$FF), // #0 warning message [Yellow]
             (r:$FF; g:$FF; b:$FF; a:$FF), // #1 chat message [White]
             (r:$FF; g:$00; b:$FF; a:$FF), // #2 action message [Purple]
             (r:$90; g:$FF; b:$90; a:$FF), // #3 join/leave message [Lime]

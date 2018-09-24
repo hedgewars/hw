@@ -2868,7 +2868,7 @@ end
 
 -- Display the X and Y coordinates of the cursor while the cursor is active
 function updateCursorCoords()
-	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= NoPointX then
+	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= NO_CURSOR then
 		local x1, y = 12, 24
 		if tagCursorX then
 			DeleteVisualGear(tagCursorX)
@@ -3785,7 +3785,7 @@ function onNewTurn()
 	-- regardless of our other ammo, give stuff that is useful for editing
 	SetEditingWeps(100)
 	if GetHogLevel(CurrentHedgehog) == 0 then
-		TurnTimeLeft = cMaxTurnTime
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	else
 		SkipTurn() -- skip the computer's turn
 	end

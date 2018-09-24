@@ -208,7 +208,7 @@ function TargetPracticeMission(params)
 				generateStats()
 				EndGame()
 			else
-				TurnTimeLeft = time_goal
+				SetTurnTimeLeft(time_goal)
 			end
 	   	     end_timer = end_timer - 20
 		end
