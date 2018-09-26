@@ -11,6 +11,7 @@ Game:
  + New default brown clan color for better contrast
  + Allow to change volume during pause
  * Functionality of controllers restored
+ * Fix sine gun dealing damage to attacker if shooting up
  * Fix crash when 2 or more controllers were connected
  * Fix hammer and pickhammer not digging correctly at wrap world edge
  * Fix drill rocket exploding when digging at bounce/wrap world edge
