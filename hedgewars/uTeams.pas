@@ -58,7 +58,7 @@ var AliveClan: PClan;
     s, cap: ansistring;
     ts: array[0..(cMaxTeams - 1)] of ansistring;
     t, AliveCount, i, j: LongInt;
-    allWin: boolean;
+    allWin, winCamera: boolean;
 begin
 CheckForWin:= false;
 AliveCount:= 0;
@@ -137,12 +137,21 @@ if not TeamsGameOver then
                 // TODO (maybe): Show victory animation/captions per-team instead of all winners at once?
                 end;
 
+            // Enable winner state for winning hogs and move camera to a winning hedgehog
+            winCamera:= false;
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
                     for i:= 0 to cMaxHHIndex do
                         with Hedgehogs[i] do
                             if (Gear <> nil) then
+                                begin
+                                if (not winCamera) then
+                                    begin
+                                    FollowGear:= Gear;
+                                    winCamera:= true;
+                                    end;
                                 Gear^.State:= gstWinner;
+                                end;
             if Flawless then
                 AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
