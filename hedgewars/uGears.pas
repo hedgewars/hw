@@ -422,7 +422,8 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         dec(delay2);
 
         if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
-        and (not CurrentHedgehog^.Unplaced) then
+        and (not CurrentHedgehog^.Unplaced)
+        and (not PlacingHogs) then
             begin
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0)
             and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
