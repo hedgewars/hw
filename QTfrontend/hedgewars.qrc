@@ -35,30 +35,6 @@
         <file>res/botlevels/net3.png</file>
         <file>res/botlevels/net4.png</file>
         <file>res/botlevels/net5.png</file>
-        <file>res/campaign/A_Classic_Fairytale/first_blood.png</file>
-        <file>res/campaign/A_Classic_Fairytale/shadow.png</file>
-        <file>res/campaign/A_Classic_Fairytale/journey.png</file>
-        <file>res/campaign/A_Classic_Fairytale/united.png</file>
-        <file>res/campaign/A_Classic_Fairytale/backstab.png</file>
-        <file>res/campaign/A_Classic_Fairytale/dragon.png</file>
-        <file>res/campaign/A_Classic_Fairytale/family.png</file>
-        <file>res/campaign/A_Classic_Fairytale/queen.png</file>
-        <file>res/campaign/A_Classic_Fairytale/enemy.png</file>
-        <file>res/campaign/A_Classic_Fairytale/epil.png</file>
-        <file>res/campaign/A_Space_Adventure/cosmos.png</file>
-        <file>res/campaign/A_Space_Adventure/moon01.png</file>
-        <file>res/campaign/A_Space_Adventure/moon02.png</file>
-        <file>res/campaign/A_Space_Adventure/ice01.png</file>
-        <file>res/campaign/A_Space_Adventure/ice02.png</file>
-        <file>res/campaign/A_Space_Adventure/desert01.png</file>
-        <file>res/campaign/A_Space_Adventure/desert02.png</file>
-        <file>res/campaign/A_Space_Adventure/desert03.png</file>
-        <file>res/campaign/A_Space_Adventure/fruit01.png</file>
-        <file>res/campaign/A_Space_Adventure/fruit02.png</file>
-        <file>res/campaign/A_Space_Adventure/fruit03.png</file>
-        <file>res/campaign/A_Space_Adventure/death01.png</file>
-        <file>res/campaign/A_Space_Adventure/death02.png</file>
-        <file>res/campaign/A_Space_Adventure/final.png</file>
         <file>res/bonus.png</file>
         <file>res/Hedgehog.png</file>
         <file>res/net.png</file>

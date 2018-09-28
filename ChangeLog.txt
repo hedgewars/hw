@@ -40,6 +40,7 @@ Game:
 Frontend:
  + Add setting to disable audio dampening when losing window focus
  + Rework player rankings: Losing clans are now ranked in the reverse order they died
+ + Add-ons now support preview images for campaign missions
  * Fix player rankings on round draw: Clans that died in the same turn now have the same rank
  * Fix rare crash when aborting video encoding in progress
  * Fix critical failure to cleanup teams list after rejoining game under certain conditions

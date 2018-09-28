@@ -137,8 +137,8 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
                 missionInfo.realName = m_info->value(scriptPrefix+".name", missionInfo.name).toString();
                 missionInfo.description = m_info->value(scriptPrefix + ".desc",
                                             QObject::tr("No description available")).toString();
-                QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
-                missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+                QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString("@2x.png"));
+                missionInfo.image = "physfs://Graphics/Missions/Campaign/"+campaignName+"/"+image;
                 if (!QFile::exists(missionInfo.image))
                     missionInfo.image = ":/res/CampaignDefault.png";
                 missionInfoList.append(missionInfo);
@@ -159,8 +159,8 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
             missionInfo.realName = m_info->value(scriptPrefix+".name", missionInfo.name).toString();
             missionInfo.description = m_info->value(scriptPrefix + ".desc",
                                             QObject::tr("No description available")).toString();
-            QString image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString(".png"));
-            missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+            QString image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString("@2x.png"));
+            missionInfo.image = "physfs://Graphics/Missions/Campaign/"+campaignName+"/"+image;
             if (!QFile::exists(missionInfo.image))
                 missionInfo.image = ":/res/CampaignDefault.png";
             missionInfoList.append(missionInfo);
