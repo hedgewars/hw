@@ -23,6 +23,7 @@
 #include "togglebutton.h"
 
 class FreqSpinBox;
+class SDTimeoutSpinBox;
 class MinesTimeSpinBox;
 
 class PageScheme : public AbstractPage
@@ -80,7 +81,7 @@ class PageScheme : public AbstractPage
         QSpinBox * SB_DamageModifier;
         QSpinBox * SB_TurnTime;
         QSpinBox * SB_InitHealth;
-        QSpinBox * SB_SuddenDeath;
+        SDTimeoutSpinBox * SB_SuddenDeath;
         QSpinBox * SB_WaterRise;
         QSpinBox * SB_HealthDecrease;
         FreqSpinBox * SB_CaseProb;

@@ -44,6 +44,7 @@ Frontend:
  * Fix player rankings on round draw: Clans that died in the same turn now have the same rank
  * Fix rare crash when aborting video encoding in progress
  * Fix critical failure to cleanup teams list after rejoining game under certain conditions
+ * Fix displayed Sudden Death timeout being off by one
  * Controllers are detected again
  * Fix failure to shutdown game window properly after player got kicked
  * No longer allow having schemes with equal names (case-insensitive)

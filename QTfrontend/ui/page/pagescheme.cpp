@@ -30,6 +30,7 @@
 #include "gameSchemeModel.h"
 #include "pagescheme.h"
 #include "FreqSpinBox.h"
+#include "SDTimeoutSpinBox.h"
 #include "MinesTimeSpinBox.h"
 
 
@@ -251,9 +252,21 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setWhatsThis(wtSuddenDeath);
     l->setPixmap(QPixmap(":/res/iconSuddenDeathTime.png"));
     glBSLayout->addWidget(l,3,1,1,1);
-    SB_SuddenDeath = new QSpinBox(gbBasicSettings);
+    /* NOTE:
+       The internally stored value for Sudden Death Timeout
+       is defined as
+       "number of full rounds to play till Sudden Death, minus one"
+       i.e. value 0 means Sudden Death starts in 2nd round.
+       The lowest possible internal value is 0.
+       The user-facing value is different, it's defined as
+       "number of full rounds to play till Sudden Death"
+       i.e. the user-facing value 1 is equivalent to internal value 0.
+       We use SDTimeoutSpinBox for the magic to happen. */
+    SB_SuddenDeath = new SDTimeoutSpinBox(gbBasicSettings);
     SB_SuddenDeath->setWhatsThis(wtSuddenDeath);
-    SB_SuddenDeath->setRange(0, 50);
+    // Will display as 1-52
+    SB_SuddenDeath->setRange(0, 51);
+    // Will display as 16
     SB_SuddenDeath->setValue(15);
     SB_SuddenDeath->setSingleStep(3);
     glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
