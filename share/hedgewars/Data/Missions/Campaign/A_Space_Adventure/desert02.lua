@@ -5,6 +5,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
@@ -17,6 +18,10 @@ local dialog01 = {}
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!") .. "|" .. loc("Mines time: 1 second"), 1, 4500},
 }
+-- For an achievement/award (see below)
+local cratesCollected = 0
+local totalCrates = 0
+local damageTaken = false
 -- health crates
 healthX = 565
 health1Y = 1400
@@ -121,12 +126,25 @@ end
 function onGearAdd(gear)
 	if GetGearType(gear) == gtRope then
 		HideMission()
+	elseif GetGearType(gear) == gtCase then
+		totalCrates = totalCrates + 1
 	end
 end
 
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+		damageTaken = true
+	end
+	-- Crate collected
+	if GetGearType(gear) == gtCase and band(GetGearMessage(gear), gmDestroy) ~= 0 then
+		cratesCollected = cratesCollected + 1
+	end
+end
+
+function onGearDamage(gear)
+	if gear == hero.gear then
+		damageTaken = true
 	end
 end
 
@@ -176,6 +194,10 @@ function heroSafe(gear)
 		if record ~= nil then
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
+	end
+	-- Achievement awarded for escaping with all crates collected and no damage taken
+	if (not damageTaken) and (cratesCollected >= totalCrates) then
+		awardAchievement(loc("Better Safe Than Sorry"))
 	end
 	sendSimpleTeamRankings({teamA.name})
 	SaveCampaignVar("Mission7Won", "true")
