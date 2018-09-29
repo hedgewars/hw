@@ -93,6 +93,7 @@ Campaigns and missions:
  + A Space Adventure, final mission: Terrain types are easier to distinguish
  * A Space Adventure, Searching in the Dust: Fix display error when destroying device crate
  * A Space Adventure, Searching in the Dust: Don't take away control right above the pit near Sandy
+ * A Space Adventure, Hard Flying: Fix incorrect recorded time, was 6 seconds more than reality
  * A Space Adventure: Fix clan membership of PAotH in main Death Planet mission
  * A Space Adventure, final mission: Don't say "Missed" or "Yes, Sir!" when inappropriate
  * The Great Escape: Infinite attack mode did not work

@@ -281,9 +281,9 @@ function placeNextWaypoint()
 			SetVisualGearValues(wp.gear2, wp.x,wp.y, 20, 200, 0, 0, 100, radius - 6, 2, GREEN)
 			-- Give extra time, if needed
 			if TurnTimeLeft <= 16000 then
-				SetTurnTimeLeft(TurnTimeLeft + 6000)
-				totalTime = totalTime + 6000
 				if currentWaypoint ~= 1 then
+					SetTurnTimeLeft(TurnTimeLeft + 6000)
+					totalTime = totalTime + 6000
 					PlaySound(sndExtraTime)
 					AnimCaption(hero.gear, loc("6 more seconds added to the clock"), 4000)
 				end
