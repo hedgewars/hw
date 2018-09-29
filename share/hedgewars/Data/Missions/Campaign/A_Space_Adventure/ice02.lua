@@ -18,10 +18,10 @@ local totalTime = 15000
 local totalSaucers = 3
 local gameEnded = false
 local RED = 0xff0000ff
-local GREEN = 0x38d61cff
+local GREEN = 0x00ff00ff
 local challengeObjectives = loc("To win the game you have to pass into the rings in time.")..
 	"|"..loc("You'll get extra time in case you need it when you pass a ring.").."|"..
-	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer.").."|"..
+	loc("Green double rings also give you a new flying saucer.").."|"..
 	loc("Use the attack key twice to change the flying saucer while floating in mid-air.")
 local timeRecord
 -- dialogs
@@ -246,15 +246,18 @@ function placeNextWaypoint()
 	if currentWaypoint > 1 then
 		local wp = waypoints[currentWaypoint-1]
 		DeleteVisualGear(wp.gear)
+		DeleteVisualGear(wp.gear2)
 	end
 	if currentWaypoint < 16 then
 		local wp = waypoints[currentWaypoint]
 		wp.gear = AddVisualGear(1,1,vgtCircle,1,true)
-		-- add bonus time and "fuel"
+		-- 1st, 3rd, 5th, 7th, 9th, ... ring
 		if currentWaypoint % 2 == 0 then
-			PlaySound(sndShotgunReload)
+			-- Render single red ring
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, RED)
+			-- Give 1 flying saucer and, if needed, extra time
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
+			PlaySound(sndShotgunReload)
 			totalSaucers = totalSaucers + 1
 			local vgear = AddVisualGear(GetX(hero.gear), GetY(hero.gear), vgtAmmo, 0, true)
 			if vgear ~= nil then
@@ -270,8 +273,13 @@ function placeNextWaypoint()
 				message = loc("Got 1 more saucer")
 			end
 			AnimCaption(hero.gear, message, 4000)
+		-- 2nd, 4th, 6th, 8th, 10th, ... ring
 		else
+			-- Render double green ring
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, GREEN)
+			wp.gear2 = AddVisualGear(1,1,vgtCircle,1,true)
+			SetVisualGearValues(wp.gear2, wp.x,wp.y, 20, 200, 0, 0, 100, radius - 6, 2, GREEN)
+			-- Give extra time, if needed
 			if TurnTimeLeft <= 16000 then
 				SetTurnTimeLeft(TurnTimeLeft + 6000)
 				totalTime = totalTime + 6000
@@ -306,7 +314,7 @@ function heroLost()
 	SendStat(siGameResult, loc("Oh man! Learn how to fly!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time."))
 	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring."))
-	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers."))
+	SendStat(siCustomAchievement, loc("Green double rings also give you a new flying saucer."))
 	SendStat(siCustomAchievement, loc("Use the attack key twice to change the flying saucer while being in air."))
 	sendSimpleTeamRankings({teamA.name})
 	EndGame()
