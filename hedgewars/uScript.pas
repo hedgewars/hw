@@ -3752,11 +3752,13 @@ if (currentRTL <> newRTL) and (not isPendingReadyTimeLeft) then
 if isPendingTurnTimeLeft then
     begin
     TurnTimeLeft:= PendingTurnTimeLeft;
+    ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
     isPendingTurnTimeLeft:= false;
     end;
 if isPendingReadyTimeLeft then
     begin
     ReadyTimeLeft:= PendingReadyTimeLeft;
+    ScriptSetInteger('ReadyTimeLeft', ReadyTimeLeft);
     isPendingReadyTimeLeft:= false;
     end;
 end;
