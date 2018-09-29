@@ -13,10 +13,11 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 local missionName = loc("Hard flying")
 local challengeStarted = false
 local currentWaypoint = 1
-local radius = 75
-local totalTime = 15000
+local radius = 75 -- Ring radius. Will become smaller and smaller
+local totalTime = 15000 -- Total available time. Initial value is start time; is added to later when player wins extra time
 local totalSaucers = 3
 local gameEnded = false
+local heroTurn = false
 local RED = 0xff0000ff
 local GREEN = 0x00ff00ff
 local challengeObjectives = loc("To win the game you have to pass into the rings in time.")..
@@ -45,7 +46,6 @@ teamA.color = -6
 teamB.name = loc("Allies")
 teamB.color = -6
 -- way points
-local current waypoint = 1
 local waypoints = {
 	[1] = {x=1450, y=140},
 	[2] = {x=990, y=580},
@@ -69,7 +69,7 @@ local waypoints = {
 function onGameInit()
 	GameFlags = gfInvulnerable + gfOneClanMode
 	Seed = 1
-	TurnTime = 15000
+	TurnTime = totalTime
 	Ready = 25000
 	CaseFreq = 0
 	MinesNum = 0
@@ -132,6 +132,7 @@ function onNewTurn()
 	elseif not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
 		SetWeapon(amJetpack)
 	end
+	heroTurn = CurrentHedgehog == hero.gear
 end
 
 function onGameTick()
@@ -152,6 +153,7 @@ function onGameTick20()
 			local totalTimePrinted  = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
+			SetTeamLabel(teamA.name, string.format(loc("%.3f s"), totalTimePrinted))
 			SendStat(siGameResult, loc("Hooray! You are a champion!"))
 			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds."), totalTimePrinted))
 			if timeRecord ~= nil and totalTime >= timeRecord then
@@ -175,8 +177,14 @@ function onGameTick20()
 			SendStat(siPlayerKills, totalTime, GetHogTeamName(hero.gear))
 			SaveCampaignVar("Mission6Won", "true")
 			checkAllMissionsCompleted()
+			SetTurnTimeLeft(MAX_TURN_TIME)
 			EndGame()
 		end
+	end
+	if heroTurn and challengeStarted and not gameEnded and not hero.dead and ReadyTimeLeft == 0 then
+		local time = totalTime - TurnTimeLeft
+		local timePrinted  = time / 1000
+		SetTeamLabel(teamA.name, string.format(loc("%.1f s"), timePrinted))
 	end
 end
 
