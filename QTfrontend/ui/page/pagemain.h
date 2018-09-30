@@ -40,6 +40,7 @@ class PageMain : public AbstractPage
         QPushButton * BtnInfo;
         QPushButton * BtnDataDownload;
         QPushButton * BtnVideos;
+        QPushButton * BtnHelp;
         QLabel * mainNote;
 
     private:

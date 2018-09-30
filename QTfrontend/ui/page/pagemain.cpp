@@ -113,7 +113,10 @@ QLayout * PageMain::footerLayoutDefinition()
     BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
 #endif
 
-    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 2, true, Qt::AlignBottom);
+    BtnHelp = addButton(":/res/Help.png", bottomLayout, 2, true, Qt::AlignBottom);
+    BtnHelp->setWhatsThis(tr("Open the Hedgewars online game manual in your web browser"));
+
+    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 3, true, Qt::AlignBottom);
     BtnSetup->setWhatsThis(tr("Edit game preferences"));
 
     return bottomLayout;

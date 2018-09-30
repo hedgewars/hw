@@ -246,6 +246,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnDataDownload, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnDataDownload, ID_PAGE_DATADOWNLOAD);
 
+    connect(ui.pageMain->BtnHelp, SIGNAL(clicked()), this, SLOT(GoToHelp()));
 
 #ifdef VIDEOREC
     connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -639,6 +640,13 @@ void HWForm::GoToEditScheme()
 {
     ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
     GoToPage(ID_PAGE_SCHEME);
+}
+
+void HWForm::GoToHelp()
+{
+    // For now just opens the Hedgewars Wiki in external browser.
+    // TODO: Replace this with an offline help someday (bug 660).
+    QDesktopServices::openUrl(QUrl("https://hedgewars.org/wiki"));
 }
 
 void HWForm::GoToVideos()
