@@ -44,6 +44,7 @@ moc_*.cpp_parameters
 *.rej
 project_files/hwc/*.c
 project_files/hwc/*.h
+project_files/hwc/*.out
 project_files/Android-build/SDL-android-project/jni/**
 project_files/Android-build/SDL-android-project/obj
 project_files/Android-build/SDL-android-project/libs/armeabi*
