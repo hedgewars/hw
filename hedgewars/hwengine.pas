@@ -45,14 +45,18 @@ function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
+{$IFNDEF PAS2C}
 procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
+{$ENDIF}
 
 implementation
 {$ELSE}
 procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
+{$IFNDEF PAS2C}
 procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer); forward;
+{$ENDIF}
 {$ENDIF}
 
 {$IFDEF WIN32}
@@ -600,6 +604,7 @@ begin
     freeEverything(false);
 end;
 
+{$IFNDEF PAS2C}
 // Write backtrace to console and log when an unhandled exception occurred
 procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
 var
@@ -621,6 +626,7 @@ begin
         WriteLnToConsole(BackTraceStrFunc(Frames[i]));
     end;
 end;
+{$ENDIF}
 
 {$IFDEF HWLIBRARY}
 function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
@@ -649,8 +655,10 @@ begin
     // workaround for pascal's ParamStr and ParamCount
     init(argc, argv);
 {$ENDIF}
+{$IFNDEF PAS2C}
     // Custom procedure for unhandled exceptions; ExceptProc is used by sysutils module
     ExceptProc:= @catchUnhandledException;
+{$ENDIF}
 
     preInitEverything();
 
