@@ -503,7 +503,7 @@ type
             sidCmdHeaderTaunts, sidCmdSpeech, sidCmdThink, sidCmdYell,
             sidCmdSpeechNumberHint, sidCmdHsa, sidCmdHta, sidCmdHya,
             sidCmdHurrah, sidCmdIlovelotsoflemonade, sidCmdJuggle,
-            sidCmdRollup, sidCmdShrug, sidCmdWave);
+            sidCmdRollup, sidCmdShrug, sidCmdWave, sidCmdUnknown);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,

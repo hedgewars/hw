@@ -604,6 +604,8 @@ if (s[1] = '/') then
 
     if (gameType = gmtNet) then
         SendConsoleCommand(s)
+    else
+        AddChatString(#0 + trcmd[sidCmdUnknown]);
     end
 else
     begin

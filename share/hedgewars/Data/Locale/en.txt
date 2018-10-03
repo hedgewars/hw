@@ -1325,3 +1325,4 @@
 06:23=/rollup: Make hedgehog roll up
 06:24=/shrug: Make hedgehog shrug
 06:25=/wave: Make hedgehog wave its hand
+06:26=Unknown command or invalid parameters. Say “/help” in chat for a list of commands.

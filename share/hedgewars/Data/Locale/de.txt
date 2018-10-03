@@ -1422,3 +1422,4 @@
 06:23=/rollup: Igel sich einigeln lassen
 06:24=/shrug: Igel mit den Achseln zucken lassen
 06:25=/wave: Igel winken lassen
+06:26=Unbekannter Befehl oder ungültige Parameter. Sag »/help« im Chat für eine Liste an Befehlen.
