@@ -1873,6 +1873,8 @@ void HWForm::CreateNetGame()
     connect(game, SIGNAL(SendConsoleCommand(const QString&)), hwnet, SLOT(consoleCommand(const QString&)));
     connect(game, SIGNAL(SendTeamMessage(const QString &)), hwnet, SLOT(SendTeamMessage(const QString &)));
     connect(hwnet, SIGNAL(chatStringFromNet(const QString &)), game, SLOT(FromNetChat(const QString &)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(Warning(const QString&)), game, SLOT(FromNetWarning(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(Error(const QString&)), game, SLOT(FromNetError(const QString&)), Qt::QueuedConnection);
 
     game->StartNet();
 }

@@ -346,6 +346,20 @@ void HWGame::FromNetChat(const QString & msg)
     RawSendIPC(buf);
 }
 
+void HWGame::FromNetWarning(const QString & msg)
+{
+    QByteArray buf;
+    HWProto::addStringToBuffer(buf, "s\x00" + msg + "\x20\x20");
+    RawSendIPC(buf);
+}
+
+void HWGame::FromNetError(const QString & msg)
+{
+    QByteArray buf;
+    HWProto::addStringToBuffer(buf, "s\x05" + msg + "\x20\x20");
+    RawSendIPC(buf);
+}
+
 void HWGame::onClientRead()
 {
     quint8 msglen;
