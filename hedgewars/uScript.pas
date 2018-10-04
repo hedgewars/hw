@@ -3565,6 +3565,7 @@ function  ScriptReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; Cdecl;
 var mybuf: PChar;
     i: LongInt;
 begin
+    SetRandomSeed(cSeed,true);
     mybuf := physfsReader(L, f, sz);
     if (mybuf <> nil) and ((sz^) > 0) then
         begin
