@@ -225,7 +225,7 @@ var HHGear: PGear;
 begin
 t:= LocalTeam;
 
-if not CurrentTeam^.ExtDriven then
+if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
     for i:= 0 to Pred(TeamsCount) do
         if (TeamsArray[i] = CurrentTeam) then
             t:= i;
