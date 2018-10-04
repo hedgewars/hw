@@ -226,4 +226,4 @@ handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
 handleCmd_lobby ["STATS"] = serverAdminOnly $
     return [Stats]
 
-handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
+handleCmd_lobby (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in lobby)"]
