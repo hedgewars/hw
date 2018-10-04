@@ -204,7 +204,7 @@ for y:= 0 to Pred(Image^.h) do
                 pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
 
             alpha:= (color and AMask) shr AShift;
-            if (alpha <> $FF) and (pLandColor^ <> 0) then
+            if ((alpha <> $FF) and ((pLandColor^) <> 0)) then
                 begin
                 landColor:= pLandColor^;
                 color:=
