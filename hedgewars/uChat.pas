@@ -1130,7 +1130,7 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
-        s:= #1 + Format(trmsg[sidChat], [UserNick, s]);
+        s:= #1 + Format(trmsg[sidChat], UserNick, s);
 
     AddChatString(s)
 end;
@@ -1139,7 +1139,7 @@ procedure chTeamSay(var s: shortstring);
 begin
     SendIPC('b' + s);
 
-    s:= #4 + Format(trmsg[sidChatTeam], [UserNick, s]);
+    s:= #4 + Format(trmsg[sidChatTeam], UserNick, s);
 
     AddChatString(s)
 end;

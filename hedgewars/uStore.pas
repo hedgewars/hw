@@ -511,7 +511,7 @@ if (not cOnlyStats) and allOK then
     AFKTexture:= RenderStringTex(trmsg[sidAFK], cCentralMessageColor, fntBig);
     keyConfirm:= KeyBindToName('confirm');
     keyQuit:= KeyBindToName('quit');
-    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], [keyConfirm, keyQuit]), cCentralMessageColor, fntBig);
+    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], keyConfirm, keyQuit), cCentralMessageColor, fntBig);
     SyncTexture:= RenderStringTex(trmsg[sidSync], cCentralMessageColor, fntBig);
 
     if not reload then

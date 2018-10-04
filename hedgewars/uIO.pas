@@ -195,7 +195,7 @@ case s[1] of
                 msg:= msg + s[i];
                 inc(i)
                 end;
-             s:= 'b' + Format(trmsg[sidChatTeam], [nick, msg]);
+             s:= 'b' + Format(trmsg[sidChatTeam], nick, msg);
              if (nick = '') or (msg = '') then
                  isProcessed:= false
              else

@@ -129,7 +129,18 @@ if not TeamsGameOver then
                     end
                 else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
                     // List all winning teams in a list
-                    s:= FormatA(trmsg[TMsgStrId(Ord(sidWinner2) + (TeamsNumber - 2))], ts);
+                    if (TeamsNumber = 2) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner2)], ts[0], ts[1])
+                    else if (TeamsNumber = 3) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner3)], ts[0], ts[1], ts[2])
+                    else if (TeamsNumber = 4) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner4)], ts[0], ts[1], ts[2], ts[3])
+                    else if (TeamsNumber = 5) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner5)], ts[0], ts[1], ts[2], ts[3], ts[4])
+                    else if (TeamsNumber = 6) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner6)], ts[0], ts[1], ts[2], ts[3], ts[4], ts[5])
+                    else if (TeamsNumber = 7) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner7)], ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6]);
 
                 // The winner caption is the same as the stats message and not randomized
                 cap:= s;
