@@ -65,6 +65,10 @@ handleCmd cmd = do
         else
         handleCmd_NotEntered cmd
 
+unknownCmdWarningText :: B.ByteString
+unknownCmdWarningText = loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."
+
+handleCmd_loggedin ["CMD"] = return [Warning unknownCmdWarningText]
 
 handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
@@ -74,8 +78,6 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "SAVE" n | not $ B.null n = let (sn, ln) = B.break (== ' ') n in if B.null ln then return [] else handleCmd ["SAVE", sn, B.tail ln]
         h "DELETE" n | not $ B.null n = handleCmd ["DELETE", n]
         h "STATS" _ = handleCmd ["STATS"]
-        h "PART" m | not $ B.null m = handleCmd ["PART", m]
-                   | otherwise = handleCmd ["PART"]
         h "QUIT" m | not $ B.null m = handleCmd ["QUIT", m]
                    | otherwise = handleCmd ["QUIT"]
         h "RND" p = handleCmd ("RND" : B.words p)
@@ -94,8 +96,6 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
                      | otherwise = handleCmd ["VOTE", ""]
         h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
                       | otherwise = handleCmd ["VOTE", "", "FORCE"]
-        h "VOTE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg]
-        h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
         h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
         h "HELP" _ = handleCmd ["HELP"]
@@ -113,7 +113,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
                 [ModifyClient (\c -> c{hasSuperPower = True})
                 , AnswerClients [sendChan cl] ["CHAT", nickServer, loc "Super power activated."]
                 ]
-        h _ _ = return [Warning $ loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands." ]
+        h _ _ = return [Warning unknownCmdWarningText]
 
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)

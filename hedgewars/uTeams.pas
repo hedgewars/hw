@@ -58,6 +58,7 @@ var AliveClan: PClan;
     s, cap: ansistring;
     ts: array[0..(cMaxTeams - 1)] of ansistring;
     t, AliveCount, i, j: LongInt;
+    allWin, winCamera: boolean;
 begin
 CheckForWin:= false;
 AliveCount:= 0;
@@ -75,11 +76,13 @@ CheckForWin:= true;
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 
-// if the game ends during a multishot, do last TurnStats + TurnReaction
-if (not bBetweenTurns) and isInMultiShoot then
+// If the game ends during a multishot, or after the Sudden Death
+// water has risen, do last turn stats / reaction.
+if ((not bBetweenTurns) and isInMultiShoot) or (bDuringWaterRise) then
     begin
     TurnStats();
-    TurnReaction();
+    if (not bDuringWaterRise) then
+        TurnReaction();
     TurnStatsReset();
     end;
 
@@ -98,6 +101,7 @@ if not TeamsGameOver then
         end
     else // win
         begin
+        allWin:= false;
         with AliveClan^ do
             begin
             if TeamsNumber = 1 then // single team wins
@@ -118,11 +122,25 @@ if not TeamsGameOver then
 
                 // Write victory message for caption and stats page
                 if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
+                    begin
                     // No enemies for some reason … Everyone wins!!1!
-                    s:= trmsg[sidWinnerAll]
+                    s:= trmsg[sidWinnerAll];
+                    allWin:= true;
+                    end
                 else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
                     // List all winning teams in a list
-                    s:= FormatA(trmsg[TMsgStrId(Ord(sidWinner2) + (TeamsNumber - 2))], ts);
+                    if (TeamsNumber = 2) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner2)], ts[0], ts[1])
+                    else if (TeamsNumber = 3) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner3)], ts[0], ts[1], ts[2])
+                    else if (TeamsNumber = 4) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner4)], ts[0], ts[1], ts[2], ts[3])
+                    else if (TeamsNumber = 5) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner5)], ts[0], ts[1], ts[2], ts[3], ts[4])
+                    else if (TeamsNumber = 6) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner6)], ts[0], ts[1], ts[2], ts[3], ts[4], ts[5])
+                    else if (TeamsNumber = 7) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner7)], ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6]);
 
                 // The winner caption is the same as the stats message and not randomized
                 cap:= s;
@@ -130,12 +148,21 @@ if not TeamsGameOver then
                 // TODO (maybe): Show victory animation/captions per-team instead of all winners at once?
                 end;
 
+            // Enable winner state for winning hogs and move camera to a winning hedgehog
+            winCamera:= false;
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
                     for i:= 0 to cMaxHHIndex do
                         with Hedgehogs[i] do
                             if (Gear <> nil) then
+                                begin
+                                if (not winCamera) then
+                                    begin
+                                    FollowGear:= Gear;
+                                    winCamera:= true;
+                                    end;
                                 Gear^.State:= gstWinner;
+                                end;
             if Flawless then
                 AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
@@ -144,6 +171,8 @@ if not TeamsGameOver then
 
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(s));
+        if allWin and SendAchievementsStatsOn then
+            SendStat(siEverAfter, '');
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
         end;
     SendStats;

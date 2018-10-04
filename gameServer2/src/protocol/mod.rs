@@ -7,6 +7,7 @@ use nom::{
 };
 
 pub mod messages;
+#[cfg(test)]
 pub mod test;
 mod parser;
 

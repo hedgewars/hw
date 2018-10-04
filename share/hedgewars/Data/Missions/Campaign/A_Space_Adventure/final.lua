@@ -160,6 +160,8 @@ function heroDeath(gear)
 end
 
 function heroBoomReaction(gear)
+	SetSoundMask(sndMissed, true)
+	SetSoundMask(sndYesSir, true)
 	if GetHealth(gear) and GetHealth(gear) > 0 then
 		HogSay(gear, loc("Kaboom! Hahahaha! Take this, stupid meteorite!"), SAY_SHOUT, 2)
 	end

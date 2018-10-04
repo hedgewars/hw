@@ -2005,6 +2005,8 @@ var
     ammoStr: ansistring;
     tmpsurf: PSDL_Surface;
 begin
+    if cOnlyStats then exit;
+    
     ammoStrId := Ammoz[ammoType].NameId;
 
     trluaammo[ammoStrId] := name;
@@ -2014,7 +2016,7 @@ begin
         ammoStr:= trammo[ammoStrId];
 
     if checkFails(length(ammoStr) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ammoType)) + '!',true) then exit;
-        
+
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(ammoStr,fnt16)].Handle, PChar(ammoStr), cWhiteColorChannels);
     if checkFails(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ammoType)) + ' failed!',true) then exit;
     tmpsurf:= doSurfaceConversion(tmpsurf);

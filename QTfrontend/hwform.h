@@ -75,6 +75,7 @@ class HWForm : public QMainWindow
         void GoToSaves();
         void GoToDemos();
         void GoToNet();
+        void GoToHelp();
         void GoToEditWeapons();
         void GoToNewWeapons();
         void GoToWeapons(int index);

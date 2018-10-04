@@ -1,7 +1,7 @@
 use proptest::{
     test_runner::{TestRunner, Reason},
     arbitrary::{any, any_with, Arbitrary, StrategyFor},
-    strategy::{Strategy, BoxedStrategy, Just, Map},
+    strategy::{Strategy, BoxedStrategy, Just, Map}
 };
 
 use crate::server::coretypes::{GameCfg, TeamInfo, HedgehogInfo};
@@ -21,9 +21,6 @@ impl Into2<Vec<String>> for Vec<Ascii> {
 impl Into2<String> for Ascii { fn into2(self) -> String { self.0 } }
 impl Into2<Option<String>> for Option<Ascii>{
     fn into2(self) -> Option<String> { self.map(|x| {x.0}) }
-}
-impl Into2<Option<Vec<String>>> for Option<Vec<Ascii>>{
-    fn into2(self) -> Option<Vec<String>> { self.map(|x| {x.into2()}) }
 }
 
 macro_rules! proto_msg_case {
@@ -74,7 +71,7 @@ impl Arbitrary for GameCfg {
             4 => Seed(Ascii),
             5 => Template(u32),
             6 => Ammo(Ascii, Option<Ascii>),
-            7 => Scheme(Ascii, Option<Vec<Ascii>>),
+            7 => Scheme(Ascii, Vec<Ascii>),
             8 => Script(Ascii),
             9 => Theme(Ascii),
             10 => DrawnMap(Ascii))
@@ -120,7 +117,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
         9 => Nick(Ascii),
         10 => Proto(u16),
         11 => Password(Ascii, Ascii),
-        12 => Checker(u32, Ascii, Ascii),
+        12 => Checker(u16, Ascii, Ascii),
         13 => List(),
         14 => Chat(Ascii),
         15 => CreateRoom(Ascii, Option<Ascii>),

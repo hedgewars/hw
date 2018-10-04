@@ -13,6 +13,7 @@ use crate::{
     utils::is_name_illegal
 };
 use super::common::rnd_reply;
+use log::*;
 
 pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     use crate::protocol::messages::HWProtocolMessage::*;

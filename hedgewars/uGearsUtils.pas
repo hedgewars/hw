@@ -1332,17 +1332,8 @@ while i > 0 do
     if (Gear^.State and gstNoDamage) = 0 then
         begin
 
-        if (not (Gear^.Kind in [gtMinigun, gtPortal])) and
-            (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet]) then
-            begin
-            VGear := AddVisualGear(t^.cX[i], t^.cY[i], vgtBulletHit);
-            if VGear <> nil then
-                VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
-            end;
-
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then
             Gear^.FlightTime:= 1;
-
 
         case Gear^.Kind of
             gtHedgehog,
@@ -1355,6 +1346,12 @@ while i > 0 do
             gtExplosives: //,
             //gtStructure:
             begin
+            if Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet] then
+                begin
+                VGear := AddVisualGear(t^.cX[i], t^.cY[i], vgtBulletHit);
+                if VGear <> nil then
+                    VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
+                end;
             if (Ammo^.Kind = gtDrill) then
                 begin
                 Ammo^.Timer:= 0;
@@ -1397,13 +1394,13 @@ while i > 0 do
 
             if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
                 begin
-                Gear^.dX:= Gear^.dX + Ammo^.dX * Power * _0_005;
-                Gear^.dY:= Gear^.dY + Ammo^.dY * Power * _0_005
+                Gear^.dX:= Ammo^.dX * Power * _0_005;
+                Gear^.dY:= Ammo^.dY * Power * _0_005
                 end
             else if ((Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog)) and (Power <> 0) then
                 begin
-                Gear^.dX:= Gear^.dX + Ammo^.dX * Power * _0_01;
-                Gear^.dY:= Gear^.dY + Ammo^.dY * Power * _0_01
+                Gear^.dX:= Ammo^.dX * Power * _0_01;
+                Gear^.dY:= Ammo^.dY * Power * _0_01
                 end;
 
             if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then

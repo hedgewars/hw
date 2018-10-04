@@ -82,7 +82,9 @@ function onGameStart()
     for i=0, ClansCount-1 do
         clantimes[i] = 0
     end
-    SendAchievementsStatsOff()
+    if ClansCount >= 2 then
+        SendAchievementsStatsOff()
+    end
 end
 
 function onAmmoStoreInit()

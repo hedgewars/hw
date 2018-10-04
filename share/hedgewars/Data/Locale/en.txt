@@ -1301,7 +1301,7 @@
 ; Chat command help
 06:00=List of basic client chat commands:
 06:01=/togglechat: Toggle chat display
-06:02=/team <message>: Send message to clan members only
+06:02=/clan <message>: Send message to clan members only
 06:03=/me <message>: Chat action, e.g. “/me eats pizza” becomes “* Player eats pizza”
 06:04=/pause: Toggle pause
 06:05=/pause: Toggle auto skip
@@ -1325,3 +1325,4 @@
 06:23=/rollup: Make hedgehog roll up
 06:24=/shrug: Make hedgehog shrug
 06:25=/wave: Make hedgehog wave its hand
+06:26=Unknown command or invalid parameters. Say “/help” in chat for a list of commands.

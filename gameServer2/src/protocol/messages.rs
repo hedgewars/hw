@@ -20,7 +20,7 @@ pub enum HWProtocolMessage {
     Nick(String),
     Proto(u16),
     Password(String, String),
-    Checker(u32, String, String),
+    Checker(u16, String, String),
     // lobby
     List,
     Chat(String),
@@ -77,6 +77,7 @@ pub enum HWServerMessage {
     Bye(String),
     Nick(String),
     Proto(u16),
+    ServerAuth(String),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
     ChatMsg {nick: String, msg: String},
@@ -99,10 +100,14 @@ pub enum HWServerMessage {
     RoundFinished,
 
     ServerMessage(String),
+    Notice(String),
     Warning(String),
     Error(String),
     Connected(u32),
     Unreachable,
+
+    //Deprecated messages
+    LegacyReady(bool, Vec<String>)
 }
 
 pub fn server_chat(msg: String) -> HWServerMessage  {
@@ -122,8 +127,8 @@ impl GameCfg {
 
             Ammo(n, None) => ("AMMO".to_string(), vec![n.to_string()]),
             Ammo(n, Some(s)) => ("AMMO".to_string(), vec![n.to_string(), s.to_string()]),
-            Scheme(n, None) => ("SCHEME".to_string(), vec![n.to_string()]),
-            Scheme(n, Some(s)) => ("SCHEME".to_string(), {
+            Scheme(n, s) if s.is_empty() => ("SCHEME".to_string(), vec![n.to_string()]),
+            Scheme(n, s) => ("SCHEME".to_string(), {
                 let mut v = vec![n.to_string()];
                 v.extend(s.clone().into_iter());
                 v
@@ -151,6 +156,7 @@ macro_rules! msg {
     };
 }
 
+#[cfg(test)]
 macro_rules! several {
     [$part: expr] => { once($part) };
     [$part: expr, $($other: expr),*] => { once($part).chain(several![$($other),*]) };
@@ -161,6 +167,7 @@ impl HWProtocolMessage {
      *
      * This is the inverse of the `message` parser.
      */
+    #[cfg(test)]
     pub(crate) fn to_raw_protocol(&self) -> String {
         use self::HWProtocolMessage::*;
         match self {
@@ -265,6 +272,7 @@ impl HWServerMessage {
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
             Proto(proto) => msg!["PROTO", proto],
+            ServerAuth(hash) => msg!["SERVER_AUTH", hash],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
             LobbyJoined(nicks) =>
                 construct_message(&["LOBBY:JOINED"], &nicks),
@@ -295,8 +303,13 @@ impl HWServerMessage {
             RoundFinished => msg!["ROUND_FINISHED"],
             ChatMsg {nick, msg} => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
+            Notice(msg) => msg!["NOTICE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
+
+            LegacyReady(is_ready, nicks) =>
+                construct_message(&[if *is_ready {"READY"} else {"NOT_READY"}], &nicks),
+
             _ => msg!["ERROR", "UNIMPLEMENTED"],
         }
     }

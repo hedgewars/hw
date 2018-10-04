@@ -1,6 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Pas2C where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
 import Data.Char

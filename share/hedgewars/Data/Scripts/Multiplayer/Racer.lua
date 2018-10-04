@@ -697,10 +697,12 @@ function InstructionsRace()
 end
 
 function onGameStart()
-	SendGameResultOff()
-	SendRankingStatsOff()
-        SendHealthStatsOff()
-	SendAchievementsStatsOff()
+	if ClansCount >= 2 then
+		SendGameResultOff()
+		SendRankingStatsOff()
+        	SendHealthStatsOff()
+		SendAchievementsStatsOff()
+	end
 
         SetSoundMask(sndIncoming, true)
         SetSoundMask(sndMissed, true)

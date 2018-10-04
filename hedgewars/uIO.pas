@@ -39,7 +39,7 @@ procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uLocale;
 
 const
     cSendEmptyPacketTime = 1000;
@@ -147,6 +147,8 @@ end;
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
     isProcessed: boolean;
+    nick, msg: shortstring;
+    i: LongInt;
 begin
 isProcessed := true;
 
@@ -175,7 +177,30 @@ case s[1] of
           else
              isProcessed:= false;
      'b': if gameType = gmtNet then
-             ParseChatCommand('chatmsg ' + #4, s, 2)
+             // parse team message from net
+             // expected format: <PLAYER NAME>]<MESSAGE>
+             begin
+             i:= 2;
+             nick:= '';
+             while (i <= length(s)) and (s[i] <> ']') do
+                begin
+                nick:= nick + s[i];
+                inc(i)
+                end;
+
+             inc(i);
+             msg:= '';
+             while (i <= length(s)) do
+                begin
+                msg:= msg + s[i];
+                inc(i)
+                end;
+             s:= 'b' + Format(trmsg[sidChatTeam], nick, msg);
+             if (nick = '') or (msg = '') then
+                 isProcessed:= false
+             else
+                 ParseChatCommand('chatmsg ' + #4, s, 2);
+             end
           else
              isProcessed:= false;
      else
@@ -254,7 +279,7 @@ close(f)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B', 'c', 'g', 'p', 'R');
+const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B', 'c', 'g', 'p', 'R', 'h');
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;

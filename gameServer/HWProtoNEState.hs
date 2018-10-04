@@ -101,4 +101,6 @@ handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
         parsedProto = readInt_ protoNum
 #endif
 
-handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]
+handleCmd_NotEntered (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: not entered)"]
+
+handleCmd_NotEntered [] = return [ProtocolError "Empty command (state: not entered)"]

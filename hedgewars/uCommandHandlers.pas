@@ -131,7 +131,8 @@ end;
 procedure chCurU_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 0;
+if CursorMovementY < 0 then
+    CursorMovementY:= 0;
 end;
 
 procedure chCurD_p(var s: shortstring);
@@ -143,7 +144,8 @@ end;
 procedure chCurD_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 0;
+if CursorMovementY > 0 then
+    CursorMovementY:= 0;
 end;
 
 procedure chCurL_p(var s: shortstring);
@@ -155,7 +157,8 @@ end;
 procedure chCurL_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 0;
+if CursorMovementX < 0 then
+    CursorMovementX:= 0;
 end;
 
 procedure chCurR_p(var s: shortstring);
@@ -167,7 +170,8 @@ end;
 procedure chCurR_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 0;
+if CursorMovementX > 0 then
+    CursorMovementX:= 0;
 end;
 
 procedure chLeft_p(var s: shortstring);

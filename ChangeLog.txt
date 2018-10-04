@@ -9,7 +9,10 @@ Game:
  + Increase hedgehog limit to 64
  + Campaigns and missions now use the user's chosen custom clan colors
  + New default brown clan color for better contrast
+ + Allow to change volume during pause
+ + Rename chat command “/team” to “/clan” (but “/team” still works)
  * Functionality of controllers restored
+ * Fix sine gun dealing damage to attacker if shooting up
  * Fix crash when 2 or more controllers were connected
  * Fix hammer and pickhammer not digging correctly at wrap world edge
  * Fix drill rocket exploding when digging at bounce/wrap world edge
@@ -38,9 +41,12 @@ Game:
 Frontend:
  + Add setting to disable audio dampening when losing window focus
  + Rework player rankings: Losing clans are now ranked in the reverse order they died
+ + Add-ons now support preview images for campaign missions
+ + Add help button in main menu (link to Hedgewars Wiki)
  * Fix player rankings on round draw: Clans that died in the same turn now have the same rank
  * Fix rare crash when aborting video encoding in progress
  * Fix critical failure to cleanup teams list after rejoining game under certain conditions
+ * Fix displayed Sudden Death timeout being off by one
  * Controllers are detected again
  * Fix failure to shutdown game window properly after player got kicked
  * No longer allow having schemes with equal names (case-insensitive)
@@ -88,12 +94,16 @@ Space Invasion:
 Campaigns and missions:
  * A Classic Fairytale: Fix clan membership of princess in some missions
  * A Classic Fairytale, Mission 5: Tribe was not in same clan as Natives, screwing up stats a bit
+ * A Space Adventure, Hard Flying: Display current flying time next to team bar
  + A Space Adventure, final mission: Terrain types are easier to distinguish
  * A Space Adventure, Searching in the Dust: Fix display error when destroying device crate
  * A Space Adventure, Searching in the Dust: Don't take away control right above the pit near Sandy
- * A Space Adeventure: Fix clan membership of PAotH in main Death Planet mission
+ * A Space Adventure, Hard Flying: Fix incorrect recorded time, was 6 seconds more than reality
+ * A Space Adventure: Fix clan membership of PAotH in main Death Planet mission
+ * A Space Adventure, final mission: Don't say "Missed" or "Yes, Sir!" when inappropriate
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practicse: Suppress “X remaining” message
+ * Basic Movement Training: Back jumps should be easier now
  * Fix resurrection animation appearing at wrong position for some missions and styles
 
 Content:
@@ -109,8 +119,8 @@ Server:
 
 Lua API:
  * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
- + New call: SetTurnTimeLeft(TurnTimeLeft): Set remaining turn time
- + New call: SetReadyTimeLeft(ReadyTimeLeft): Set remaining ready time
+ + New call: SetTurnTimeLeft(newTurnTimeLeft): Set remaining turn time
+ + New call: SetReadyTimeLeft(newReadyTimeLeft): Set remaining ready time
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
  + New call: GetAmmoTimer(gearUid, ammoType): Returns current set timer for given ammoType and hog gear in ms. Returns nil for non-timerable ammo
  + New call: EnableSwitchHog(): Enable hog switching

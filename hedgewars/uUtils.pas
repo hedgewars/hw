@@ -50,6 +50,7 @@ function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
+function  StrToInt(s: shortstring; var success: boolean): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
 function  DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
@@ -331,9 +332,22 @@ begin
 str(n, IntToStr)
 end;
 
-function StrToInt(s: shortstring): LongInt;
+// Convert string to longint, with error checking.
+// Success will be set to false when conversion failed.
+// See documentation on Val procedure for syntax of s
+function StrToInt(s: shortstring; var success: boolean): LongInt;
+var Code: Word;
 begin
-val(s, StrToInt);
+val(s, StrToInt, Code);
+success:= Code = 0;
+end;
+
+// Convert string to longint, without error checking
+function StrToInt(s: shortstring): LongInt;
+var success: boolean; // ignored
+begin
+success:= true; // avoid compiler hint
+StrToInt:= StrToInt(s, success);
 end;
 
 function FloatToStr(n: hwFloat): shortstring;

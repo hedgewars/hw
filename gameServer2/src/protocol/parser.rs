@@ -14,11 +14,15 @@ use std::{
     ops::Range
 };
 use super::{
-    messages::{HWProtocolMessage, HWProtocolMessage::*},
-    test::gen_proto_msg
+    messages::{HWProtocolMessage, HWProtocolMessage::*}
+};
+#[cfg(test)]
+use {
+    super::test::gen_proto_msg,
+    proptest::{proptest, proptest_helper}
 };
 use crate::server::coretypes::{
-    HedgehogInfo, TeamInfo, GameCfg, VoteType
+    HedgehogInfo, TeamInfo, GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM
 };
 
 named!(end_of_message, tag!("\n\n"));
@@ -42,7 +46,7 @@ named!(opt_space_param<&[u8], Option<String> >, alt!(
 named!(hog_line<&[u8], HedgehogInfo>,
     do_parse!(name: str_line >> eol >> hat: str_line >>
         (HedgehogInfo{name: name.to_string(), hat: hat.to_string()})));
-named!(_8_hogs<&[u8], [HedgehogInfo; 8]>,
+named!(_8_hogs<&[u8], [HedgehogInfo; MAX_HEDGEHOGS_PER_TEAM as usize]>,
     do_parse!(h1: hog_line >> eol >> h2: hog_line >> eol >>
               h3: hog_line >> eol >> h4: hog_line >> eol >>
               h5: hog_line >> eol >> h6: hog_line >> eol >>
@@ -131,7 +135,7 @@ named!(complex_message<&[u8], HWProtocolMessage>, alt!(
                     s: a_line     >>
                     (Password(p, s)))
     | do_parse!(tag!("CHECKER")   >> eol >>
-                    i: u32_line   >> eol >>
+                    i: u16_line   >> eol >>
                     n: a_line     >> eol >>
                     p: a_line     >>
                     (Checker(i, n, p)))
@@ -196,7 +200,7 @@ named!(cfg_message<&[u8], HWProtocolMessage>, preceded!(tag!("CFG\n"), map!(alt!
     | do_parse!(tag!("SCHEME")   >> eol >>
                 name: a_line     >>
                 values: opt!(preceded!(eol, separated_list!(eol, a_line))) >>
-                (GameCfg::Scheme(name, values)))
+                (GameCfg::Scheme(name, values.unwrap_or(Vec::new()))))
     | do_parse!(tag!("FEATURE_SIZE") >> eol >>
                 value: u32_line    >>
                 (GameCfg::FeatureSize(value)))
@@ -242,6 +246,7 @@ named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
 
 named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(message)));
 
+#[cfg(test)]
 proptest! {
     #[test]
     fn is_parser_composition_idempotent(ref msg in gen_proto_msg()) {

@@ -966,7 +966,7 @@ Karte bearbeiten</translation>
 
 Please check the host name and port settings and/or try again later.</source>
         <translation>Die Verbindung wurde vom Host abgelehnt oder die maximale Wartezeit ist abgelaufen. Dies könnte einen der folgenden Gründe haben:
-– Das Hedgewars-Server-Programm läuft momentant nicht auf dem Host
+– Das Hedgewars-Server-Programm läuft momentan nicht auf dem Host
 – Die angegebene Portnummer ist falsch
 – Es gibt ein temporäres Netzwerkproblem
 
@@ -1187,7 +1187,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>PageAdmin</name>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation>Zwischenspeicher leeren</translation>
+        <translation>Konten-Zwischenspeicher leeren</translation>
     </message>
     <message>
         <source>Fetch data</source>
@@ -1228,7 +1228,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Expiration</source>
-        <translation>Ablaufzeitpunkt</translation>
+        <translation>Ablaufzeit</translation>
     </message>
     <message>
         <source>Reason</source>
@@ -1544,6 +1544,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; der eigenen Igel.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; der eigenen Igel.</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
+        <translation>Da alle die gleiche Klanfarbe hatten, gab es keinen Grund für einen Kampf. Und wenn sie nicht gestorben sind, dann leben die Igel noch heute in Frieden.</translation>
     </message>
 </context>
 <context>
@@ -4732,7 +4736,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: Wirft eine virtuelle Münze und antwortet mit »heads« oder »tails«</translation>
+        <translation>/rnd: Wirft eine virtuelle Münze und antwortet mit »Kopf« oder »Zahl«</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
@@ -4756,7 +4760,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
-        <translation>/greeting &lt;Nachricht&gt;: Begrüßungsnachricht für Spieler, die diesen Raum betreten, setzen</translation>
+        <translation type="vanished">/greeting &lt;Nachricht&gt;: Begrüßungsnachricht für Spieler, die diesen Raum betreten, setzen</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
@@ -4780,7 +4784,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/save &lt;parameter&gt;</source>
-        <translation>/save &lt;Parameter&gt;</translation>
+        <translation type="vanished">/save &lt;Parameter&gt;</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
@@ -4800,15 +4804,15 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
-        <translation>/saveroom &lt;Dateiname&gt;: Raumeinstellungen in eine Datei speichern</translation>
+        <translation type="vanished">/saveroom &lt;Dateiname&gt;: Raumeinstellungen in eine Datei speichern</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
-        <translation>/loadroom &lt;Dateiname&gt;: Raumeinstellungen aus einer Datei laden</translation>
+        <translation type="vanished">/loadroom &lt;Dateiname&gt;: Raumeinstellungen aus einer Datei laden</translation>
     </message>
     <message>
         <source>/delete &lt;parameter&gt;</source>
-        <translation>/delete &lt;Parameter&gt;</translation>
+        <translation type="vanished">/delete &lt;Parameter&gt;</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
@@ -4824,11 +4828,11 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Unknown command:</source>
-        <translation>Unbekannter Befehl</translation>
+        <translation type="vanished">Unbekannter Befehl</translation>
     </message>
     <message>
         <source>Say &apos;/help&apos; in chat for a list of commands</source>
-        <translation>Sag »/help« im Chat für eine Liste von Befehlen</translation>
+        <translation type="vanished">Sag »/help« im Chat für eine Liste von Befehlen</translation>
     </message>
     <message>
         <source>room</source>
@@ -4861,6 +4865,98 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     <message>
         <source>Kicked</source>
         <translation>Hinausgeworfen</translation>
+    </message>
+    <message>
+        <source>This server only allows registered users to join.</source>
+        <translation>Dieser Server lässt nur registrierte Server rein.</translation>
+    </message>
+    <message>
+        <source>heads</source>
+        <translation>Kopf</translation>
+    </message>
+    <message>
+        <source>tails</source>
+        <translation>Zahl</translation>
+    </message>
+    <message>
+        <source>This server does not support replays!</source>
+        <translation>Dieser Server unterstützt keine Wiederholungen!</translation>
+    </message>
+    <message>
+        <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
+        <translation>/greeting [Nachricht]: Setze oder leere die Begrüßungsnachricht für Spieler, die den Raum betreten</translation>
+    </message>
+    <message>
+        <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
+        <translation>/save &lt;Konfig-ID&gt; &lt;Konfig-Name&gt;: Aktuelle Raumeinstellung als Wahloption für /callvote map hinzufügen</translation>
+    </message>
+    <message>
+        <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
+        <translation>/delete &lt;Konfig-ID&gt;: Eine wählbare Raumeinstellung löschen</translation>
+    </message>
+    <message>
+        <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
+        <translation>/saveroom &lt;Dateiname&gt;: Alle wählbaren Raumeinstellungen (und die Begrüßung) dieses Raums in eine Datei speichern</translation>
+    </message>
+    <message>
+        <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
+        <translation>/loadroom &lt;Dateiname&gt;: Wählbare Raumeinstellungen (und Begrüßung) aus einer Datei laden</translation>
+    </message>
+    <message>
+        <source>&apos;Registered only&apos; state toggled.</source>
+        <translation>»Registered only«-Zustand umgeschaltet.</translation>
+    </message>
+    <message>
+        <source>Super power activated.</source>
+        <translation>Superkraft aktiviert.</translation>
+    </message>
+    <message>
+        <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
+        <translation>Unbekannter Befehl oder ungültige Parameter. Sag »/help« im Chat für eine Liste an Befehlen.</translation>
+    </message>
+    <message>
+        <source>You can&apos;t kick yourself!</source>
+        <translation>Du kannst dich nicht selbst hinauswerfen!</translation>
+    </message>
+    <message>
+        <source>You can&apos;t kick the only other player!</source>
+        <translation>Du kannst nicht den einzigen anderen Spieler hinauswerfen!</translation>
+    </message>
+    <message>
+        <source>The player is not in your room.</source>
+        <translation>Der Spieler befindet sich nicht in deinem Raum.</translation>
+    </message>
+    <message>
+        <source>This player is protected from being kicked.</source>
+        <translation>Dieser Spieler wird vor Hinauswürfen geschützt.</translation>
+    </message>
+    <message>
+        <source>You&apos;re not the room master or a server admin!</source>
+        <translation>Du bist nicht der Raumleiter oder ein Server-Admin!</translation>
+    </message>
+    <message>
+        <source>You&apos;re already the room master.</source>
+        <translation>Du bist bereits der Raumleiter.</translation>
+    </message>
+    <message>
+        <source>Greeting message cleared.</source>
+        <translation>Begrüßungsnachricht geleert.</translation>
+    </message>
+    <message>
+        <source>Greeting message set.</source>
+        <translation>Begrüßungsnachricht gesetzt.</translation>
+    </message>
+    <message>
+        <source>/callvote kick: This is only allowed in rooms without a room master.</source>
+        <translation>/callvote kick: Dies ist nur in Räumen ohne Raumleiter erlaubt.</translation>
+    </message>
+    <message>
+        <source>/callvote map: No maps available.</source>
+        <translation>/callvote map: Keine Karten verfügbar.</translation>
+    </message>
+    <message>
+        <source>You&apos;re the new room master!</source>
+        <translation>Du bist der neue Raumleiter!</translation>
     </message>
 </context>
 </TS>

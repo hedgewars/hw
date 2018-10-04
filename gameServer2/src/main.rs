@@ -1,28 +1,12 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
-#![feature(rust_2018_preview)]
-
-extern crate rand;
-extern crate mio;
-extern crate slab;
-extern crate netbuf;
-extern crate base64;
-#[macro_use]
-extern crate nom;
-#[macro_use]
-extern crate log;
-extern crate env_logger;
-#[macro_use] extern crate proptest;
-#[macro_use] extern crate bitflags;
-extern crate serde;
-extern crate serde_yaml;
-#[macro_use] extern crate serde_derive;
 
 //use std::io::*;
 //use rand::Rng;
 //use std::cmp::Ordering;
 use mio::net::*;
 use mio::*;
+use log::*;
 
 mod utils;
 mod server;
@@ -32,7 +16,7 @@ use crate::server::network::NetworkLayer;
 use std::time::Duration;
 
 fn main() {
-    env_logger::init().unwrap();
+    env_logger::init();
 
     info!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
 

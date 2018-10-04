@@ -336,14 +336,18 @@ case step of
         if TotalRoundsPre = cSuddenDTurns + 1 then
             bWaterRising:= true;
         if bWaterRising and (cWaterRise > 0) then
+            begin
+            bDuringWaterRise:= true;
             AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
+            end;
         inc(step)
         end
-    else // since we are not raising the water, a second win-check isn't needed
+    else // since we are not raising the water, another win-check isn't needed
         inc(step,2);
     stChWin3:
         begin
         CheckForWin;
+        bDuringWaterRise:= false;
         inc(step)
         end;
 
@@ -418,7 +422,8 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         dec(delay2);
 
         if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
-        and (not CurrentHedgehog^.Unplaced) then
+        and (not CurrentHedgehog^.Unplaced)
+        and (not PlacingHogs) then
             begin
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0)
             and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
@@ -1216,7 +1221,7 @@ begin
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
                 end;
-            AddChatString(#9+FormatA(trmsg[sidChatHog], [HH^.Name, text]));
+            AddChatString(#9+FormatA(trmsg[sidChatHog], HH^.Name, text));
             end
         end
     else if (x >= 4) then

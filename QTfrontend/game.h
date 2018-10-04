@@ -105,6 +105,8 @@ class HWGame : public TCPBase
     public slots:
         void FromNet(const QByteArray & msg);
         void FromNetChat(const QString & msg);
+        void FromNetWarning(const QString & msg);
+        void FromNetError(const QString & msg);
 
     private:
         char msgbuf[MAXMSGCHARS];

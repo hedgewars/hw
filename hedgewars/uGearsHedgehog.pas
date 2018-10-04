@@ -186,6 +186,9 @@ begin
 Gear^.Message:= Gear^.Message and (not gmTimer);
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^.Hedgehog^ do
+    if (((Gear^.State and gstAttacked) <> 0) and (GameFlags and gfInfAttack = 0))
+    or ((Gear^.State and gstHHDriven) = 0) then
+        exit;
     if ((Gear^.Message and gmPrecise) <> 0) and ((CurWeapon^.Propz and ammoprop_SetBounce) <> 0) then
         begin
         color:= Gear^.Hedgehog^.Team^.Clan^.Color;
@@ -579,7 +582,7 @@ with Gear^,
                     speech^.Text:= SpeechText;
                     speech^.Hedgehog:= Gear^.Hedgehog;
                     speech^.FrameTicks:= SpeechType;
-                    AddChatString(#9+FormatA(trmsg[sidChatHog], [Gear^.Hedgehog^.Name, SpeechText]));
+                    AddChatString(#9+FormatA(trmsg[sidChatHog], Gear^.Hedgehog^.Name, SpeechText));
                     end;
                 SpeechText:= ''
                 end;
@@ -866,6 +869,9 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     exit
     end;
 
+if (Gear^.Hedgehog^.Unplaced) then
+    exit;
+
     if ((Gear^.Message and gmAnimate) <> 0) then
         begin
         Gear^.Message:= 0;
@@ -910,7 +916,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         end;
 
     if (Gear^.Message and (gmLeft or gmRight) <> 0) and (Gear^.State and gstMoving = 0) and 
-		(CheckGearNear(Gear, gtPortal, 26, 26) <> nil) then 
+		(CheckGearNear(Gear, gtPortal, 26, 26) = nil) then
 		Gear^.PortalCounter:= 0;
     PrevdX:= hwSign(Gear^.dX);
     if (Gear^.Message and gmLeft  )<>0 then

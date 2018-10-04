@@ -1,10 +1,13 @@
-cargo-features = ["edition"]
-
 [package]
 edition = "2018"
 name = "hedgewars-server"
 version = "0.0.1"
 authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
+
+[features]
+official-server = ["openssl"]
+tls-connections = ["openssl"]
+default = []
 
 [dependencies]
 rand = "0.5"
@@ -12,11 +15,14 @@ mio = "0.6"
 slab = "0.4"
 netbuf = "0.4"
 nom = "4.0"
-env_logger = "0.4"
+env_logger = "0.5"
 log = "0.4"
-proptest = "0.8"
 base64 = "0.9"
 bitflags = "1.0"
 serde = "1.0"
-serde_yaml = "0.7"
+serde_yaml = "0.8"
 serde_derive = "1.0"
+openssl = { version = "0.10", optional = true }
+
+[dev-dependencies]
+proptest = "0.8"

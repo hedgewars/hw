@@ -437,12 +437,15 @@ if s <> LocalStrs[localLastStr] then
 
 t:= LocalTeam;
 x:= 0;
+// speech bubble
 if (s[1] = '"') and (s[Length(s)] = '"')
     then x:= 1
 
+// thinking bubble
 else if (s[1] = '''') and (s[Length(s)] = '''') then
     x:= 2
 
+// yelling bubble
 else if (s[1] = '-') and (s[Length(s)] = '-') then
     x:= 3;
 
@@ -462,7 +465,16 @@ if x <> 0 then
 
 if (s[1] = '/') then
     begin
-    // These 3 are same as above, only are to make the hedgehog say it on next attack
+
+    // Ignore message-type commands with empty argument list
+    if (copy(s, 2, 2) = 'me') and (Length(s) = 3) then
+        exit;
+    if ((copy(s, 2, 3) = 'hsa') or (copy(s, 2, 3) = 'hta') or (copy(s, 2, 3) = 'hya')) and (Length(s) = 4) then
+        exit;
+    if ((copy(s, 2, 4) = 'team') or (copy(s, 2, 4) = 'clan')) and (Length(s) = 5) then
+        exit;
+
+    // Speech bubble, but on next attack
     if (copy(s, 2, 4) = 'hsa ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -472,6 +484,7 @@ if (s[1] = '/') then
         exit
         end;
 
+    // Thinking bubble, but on next attack
     if (copy(s, 2, 4) = 'hta ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -481,6 +494,7 @@ if (s[1] = '/') then
         exit
         end;
 
+    // Yelling bubble, but on next attack
     if (copy(s, 2, 4) = 'hya ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -490,9 +504,10 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 2, 5) = 'team ') and (length(s) > 6) then
+    // “/clan” or “/team” (“/team” is an alias for “/clan”)
+    if ((copy(s, 2, 5) = 'clan ') or (copy(s, 2, 5) = 'team ')) and (length(s) > 6) then
         begin
-        ParseCommand(s, true);
+        ParseCommand('team ' + copy(s, 7, Length(s) - 6), true);
         exit
         end;
 
@@ -604,6 +619,8 @@ if (s[1] = '/') then
 
     if (gameType = gmtNet) then
         SendConsoleCommand(s)
+    else
+        AddChatString(#0 + trcmd[sidCmdUnknown]);
     end
 else
     begin
@@ -1113,7 +1130,7 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
-        s:= #1 + Format(trmsg[sidChat], [UserNick, s]);
+        s:= #1 + Format(trmsg[sidChat], UserNick, s);
 
     AddChatString(s)
 end;
@@ -1122,7 +1139,7 @@ procedure chTeamSay(var s: shortstring);
 begin
     SendIPC('b' + s);
 
-    s:= #4 + Format(trmsg[sidChatTeam], [UserNick, s]);
+    s:= #4 + Format(trmsg[sidChatTeam], UserNick, s);
 
     AddChatString(s)
 end;
@@ -1160,7 +1177,7 @@ begin
         SetLine(InputStr, '', true)
     else
         begin
-        SetLine(InputStr, '/team ', true);
+        SetLine(InputStr, '/clan ', true);
         cursorPos:= 6;
         UpdateCursorCoords();
         end;
