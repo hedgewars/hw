@@ -361,7 +361,7 @@ if isInChatMode and (InputStr.Tex <> nil) then
             // default to current hedgehog (if own) or first hedgehog
             if SpeechHogNumber = 0 then
                 begin
-                if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
+                if not CurrentTeam^.ExtDriven then
                     SpeechHogNumber:= CurrentTeam^.CurrHedgehog + 1
                 else
                     SpeechHogNumber:= 1;
@@ -449,7 +449,7 @@ else if (s[1] = '''') and (s[Length(s)] = '''') then
 else if (s[1] = '-') and (s[Length(s)] = '-') then
     x:= 3;
 
-if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) and (x <> 0) then
+if (not CurrentTeam^.ExtDriven) and (x <> 0) then
     for c:= 0 to Pred(TeamsCount) do
         if (TeamsArray[c] = CurrentTeam) then
             t:= c;
@@ -477,7 +477,7 @@ if (s[1] = '/') then
     // Speech bubble, but on next attack
     if (copy(s, 2, 4) = 'hsa ') then
         begin
-        if (CurrentTeam^.ExtDriven or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0)) then
+        if CurrentTeam^.ExtDriven then
             ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
         else
             SendHogSpeech(#4 + copy(s, 6, Length(s)-5));
@@ -487,7 +487,7 @@ if (s[1] = '/') then
     // Thinking bubble, but on next attack
     if (copy(s, 2, 4) = 'hta ') then
         begin
-        if (CurrentTeam^.ExtDriven or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0)) then
+        if CurrentTeam^.ExtDriven then
             ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
         else
             SendHogSpeech(#5 + copy(s, 6, Length(s)-5));
@@ -497,7 +497,7 @@ if (s[1] = '/') then
     // Yelling bubble, but on next attack
     if (copy(s, 2, 4) = 'hya ') then
         begin
-        if (CurrentTeam^.ExtDriven or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0)) then
+        if CurrentTeam^.ExtDriven then
             ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
         else
             SendHogSpeech(#6 + copy(s, 6, Length(s)-5));
