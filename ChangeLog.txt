@@ -10,6 +10,7 @@ Game:
  + Campaigns and missions now use the user's chosen custom clan colors
  + New default brown clan color for better contrast
  + Allow to change volume during pause
+ + Rename chat command “/team” to “/clan” (but “/team” still works)
  * Functionality of controllers restored
  * Fix sine gun dealing damage to attacker if shooting up
  * Fix crash when 2 or more controllers were connected

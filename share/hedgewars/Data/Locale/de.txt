@@ -1398,7 +1398,7 @@
 ; Chat command help
 06:00=Liste der grundlegenden Client-Chatbefehle:
 06:01=/togglechat: Chatanzeige umschalten
-06:02=/team <Nachricht>: Nachricht nur an Klanmitglieder schicken
+06:02=/clan <Nachricht>: Nachricht nur an Klanmitglieder schicken
 06:03=/me <Nachricht>: Chataktion, z.B. wird »/me isst Pizza« zu »* Spieler isst Pizza«
 06:04=/pause: Pause umschalten
 06:05=/pause: Automatisches Überspringen umschalten

@@ -490,9 +490,10 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 2, 5) = 'team ') and (length(s) > 6) then
+    // “/clan” or “/team” (“/team” is an alias for “/clan”)
+    if ((copy(s, 2, 5) = 'clan ') or (copy(s, 2, 5) = 'team ')) and (length(s) > 6) then
         begin
-        ParseCommand(s, true);
+        ParseCommand('team ' + copy(s, 7, Length(s) - 6), true);
         exit
         end;
 
@@ -1162,7 +1163,7 @@ begin
         SetLine(InputStr, '', true)
     else
         begin
-        SetLine(InputStr, '/team ', true);
+        SetLine(InputStr, '/clan ', true);
         cursorPos:= 6;
         UpdateCursorCoords();
         end;
