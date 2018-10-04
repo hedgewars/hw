@@ -65,6 +65,10 @@ handleCmd cmd = do
         else
         handleCmd_NotEntered cmd
 
+unknownCmdWarningText :: B.ByteString
+unknownCmdWarningText = loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."
+
+handleCmd_loggedin ["CMD"] = return [Warning unknownCmdWarningText]
 
 handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
@@ -111,7 +115,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
                 [ModifyClient (\c -> c{hasSuperPower = True})
                 , AnswerClients [sendChan cl] ["CHAT", nickServer, loc "Super power activated."]
                 ]
-        h _ _ = return [Warning $ loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands." ]
+        h _ _ = return [Warning unknownCmdWarningText]
 
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
