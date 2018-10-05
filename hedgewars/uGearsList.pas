@@ -735,26 +735,6 @@ gtFlamethrower: begin
                 gear^.Density:= _0;
                 end;
         gtDuck: begin
-{
-                gear^.Pos:= 0;               // 0: in air, 1-4: on water, 5-8: underwater
-                                             // 1: bottom, 2: bottom (mirrored),
-                                             // 3: left Sea edge, 4: right Sea edge
-                                             // 6: bottom, 7: bottom (mirrored)
-                                             // 7: left Sea edge, 8: right Sea edge
-                gear^.Tag:= 1;               // 1: facing right, -1: facing left
-                if gear^.Timer = 0 then      
-                    gear^.Timer:= 15000;     // Explosion timer to avoid duck existing forever
-                gear^.Radius:= 9;            // Collision radius (with landscape)
-                gear^.Karma:= 24;            // Distance from water when swimming
-                gear^.Damage:= 500;          // Speed factor when swimming on water (multiplied with wind speed)
-                gear^.State:= gear^.State or gstSubmersible;
-                gear^.Elasticity:= _0_6;
-                gear^.Friction:= _0_8;
-                gear^.Density:= _0_5;
-                gear^.AdvBounce:= 1;
-}
-
-
                 gear^.Radius:= cHHRadius;
                 gear^.Elasticity:= _0_35;
                 gear^.Friction:= _0_93;
