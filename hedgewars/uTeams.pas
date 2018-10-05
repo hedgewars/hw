@@ -782,6 +782,7 @@ end;
 procedure chTeamGone(var s:shortstring);
 var t, i: LongInt;
     isSynced: boolean;
+    tmp: ansistring;
 begin
     isSynced:= s[1] = 's';
 
@@ -802,7 +803,9 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString(#7 + '* '+ FormatA(trmsg[sidTeamGone], TeamName));
+                    tmp:= ' ' + trmsg[sidTeamGone];
+                    tmp:= '*' + tmp;
+                    AddChatString(#7 + FormatA(tmp, TeamName));
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -825,6 +828,7 @@ end;
 procedure chTeamBack(var s:shortstring);
 var t: LongInt;
     isSynced: boolean;
+    tmp: ansistring;
 begin
     isSynced:= s[1] = 's';
 
@@ -841,7 +845,9 @@ begin
         with TeamsArray[t]^ do
             if hasGone then
                 begin
-                AddChatString(#8 + '* '+ FormatA(trmsg[sidTeamBack], TeamName));
+                tmp:= ' '+trmsg[sidTeamBack];
+                tmp:= '*'+trmsg[sidTeamBack];
+                AddChatString(#8 + FormatA(tmp, TeamName));
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
