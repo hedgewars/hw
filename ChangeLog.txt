@@ -68,6 +68,8 @@ Frontend:
  * Controllers are detected again
  * Fix failure to shutdown game window properly after player got kicked
  * No longer allow having schemes with equal names (case-insensitive)
+ * Refuse to load schemes which match the name of a default scheme
+ * No longer save default weapon schemes into file
  * Pseudo player names in chat (like “[server]”) are no longer clickable
  * Lobby/room: No longer allow opening context menu if no player selected
 

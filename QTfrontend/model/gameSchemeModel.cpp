@@ -738,6 +738,11 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
     }
+    QStringList predefSchemesNamesLower;
+    for (int i = 0; i < predefSchemesNames.size(); ++i)
+    {
+        predefSchemesNamesLower.append(predefSchemesNames[i].toLower());
+    }
     if (!QDir(directory).exists()) {
         QDir().mkdir(directory);
 
@@ -751,7 +756,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             legacyFileConfig.setArrayIndex(i);
 
             QString schemeName = legacyFileConfig.value(spNames[0]).toString();
-            if (!schemeName.isNull() && !predefSchemesNames.contains(schemeName))
+            if (!schemeName.isNull() && !predefSchemesNamesLower.contains(schemeName.toLower()))
             {
                 QList<QVariant> scheme;
                 QFile file(directory + "/" + schemeName + ".hwg");
@@ -793,6 +798,11 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             QString schemeName = scheme_dir[i];
             if (schemeName.endsWith(".hwg", Qt::CaseInsensitive)) {
                 schemeName.chop(4);
+            }
+            // Don't load scheme if name collides with default scheme
+            if (predefSchemesNamesLower.contains(schemeName.toLower())) {
+                qWarning("Game scheme \"%s\" not loaded from file, name collides with a default scheme!", qPrintable(schemeName));
+                continue;
             }
             // Parse game scheme file
             if (file.open(QIODevice::ReadOnly)) {
