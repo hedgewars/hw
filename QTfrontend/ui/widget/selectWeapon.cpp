@@ -94,23 +94,22 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
     }
+    QStringList defaultAmmos;
+    for(int i = 0; i < cDefaultAmmos.size(); ++i)
+    {
+        defaultAmmos.append(cDefaultAmmos[i].first.toLower());
+    }
     if (!QDir(cfgdir->absolutePath() + "/Schemes/Ammo").exists()) {
         qDebug("No /Schemes/Ammo directory found. Trying to import weapon schemes from weapons.ini.");
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes/Ammo");
 
         QSettings old_wconf(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat);
 
-        QStringList defaultAmmos;
-        for(int i = 0; i < cDefaultAmmos.size(); ++i)
-        {
-            defaultAmmos.append(cDefaultAmmos[i].first);
-        }
-
         QStringList keys = old_wconf.allKeys();
         int imported = 0;
         for(int i = 0; i < keys.size(); i++)
         {
-            if (!defaultAmmos.contains(keys[i])) {
+            if (!defaultAmmos.contains(keys[i].toLower())) {
                 wconf->insert(keys[i], fixWeaponSet(old_wconf.value(keys[i]).toString()));
                 QFile file(cfgdir->absolutePath() + "/Schemes/Ammo/" + keys[i] + ".hwa");
                 if (file.open(QIODevice::WriteOnly)) {
@@ -140,7 +139,11 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
             if (schemeName.endsWith(".hwa", Qt::CaseInsensitive)) {
                 schemeName.chop(4);
             }
-            wconf->insert(schemeName, fixWeaponSet(config));
+            // Don't load weapon scheme if name collides with any default scheme
+            if (!defaultAmmos.contains(schemeName.toLower()))
+                wconf->insert(schemeName, fixWeaponSet(config));
+            else
+                qWarning("Weapon scheme \"%s\" not loaded from file, name collides with a default scheme!", qPrintable(schemeName));
         }
     }
 
@@ -253,6 +256,13 @@ void SelWeaponWidget::save()
         return;
     if (m_name->text() == "")
         return;
+
+    // Don't save an default ammo scheme
+    for(int i = 0; i < cDefaultAmmos.size(); ++i)
+    {
+        if(curWeaponsName == cDefaultAmmos[i].first)
+            return;
+    }
 
     QString state1;
     QString state2;
