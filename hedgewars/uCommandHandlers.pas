@@ -445,7 +445,7 @@ if t <> MSGPARAM_INVALID then
         t:= 1;
     tb:= t mod 255;
     // Delegate the actual change to /timer
-    ParseCommand('timer ' + Chr(tb + Ord('0')), true);
+    ParseCommand('timer ' + Char(tb + Ord('0')), true);
     end;
 end;
 

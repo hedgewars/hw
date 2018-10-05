@@ -612,7 +612,7 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
     varDeclDecision True True varStr expStr = varStr <+> expStr
     varDeclDecision False True varStr expStr = if externVar then varStr else varStr <+> expStr
     varDeclDecision False False varStr expStr = varStr <+> expStr
-    varDeclDecision True False _ _ = empty
+    varDeclDecision True False varStr expStr = varStr <+> expStr
     arrayDimension a = case a of
         ArrayDecl Nothing t' -> let a' = arrayDimension t' in 
                                    if a' > 3 then error "Dynamic array with dimension > 4 is not supported." else 1 + a'
