@@ -570,8 +570,7 @@ void HWChatWidget::clear()
     // add default commands
     QStringList cmds;
     // /saveStyleSheet is(/was?) broken because of Physfs or something
-    // cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
-    cmds << "/me" << "/info" << "/quit" << "/clear" << "/discardStyleSheet";
+    cmds << "/clear" << "/help" << "/info" << "/me" << "/quit" << "/rnd";
     chatEditLine->addCommands(cmds);
 
     chatText->clear();
