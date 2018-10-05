@@ -705,7 +705,8 @@ initExpr2C' hi@(BuiltInFunction "high" [e@(InitReference e')]) = do
          (BTArray i _ _) -> initExpr2C' $ BuiltInFunction "pred" [InitRange i]
          BTInt _ -> case e' of
                   (Identifier "LongInt" _) -> return $ int (2147483647)
-         _ -> error $ "BuiltInFunction 'high' in initExpr: " ++ show e'
+                  (Identifier "LongWord" _) -> return $ text "4294967295"
+                  _ -> error $ "BuiltInFunction 'high' in initExpr: " ++ show e'
          a -> error $ "BuiltInFunction 'high' in initExpr: " ++ show a ++ ": " ++ show hi
 initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
