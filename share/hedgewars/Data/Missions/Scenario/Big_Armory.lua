@@ -5,7 +5,7 @@ local heroAmmo = {}
 for a=0, amDuck do
 	if a == amExtraTime then
 		heroAmmo[a] = 2
-	elseif a ~= amNothing then
+	elseif a ~= amNothing and a ~= amDuck then
 		heroAmmo[a] = 100
 	end
 end

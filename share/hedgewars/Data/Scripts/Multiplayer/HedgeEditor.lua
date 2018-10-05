@@ -314,7 +314,6 @@ local atkArray =
 				{amMortar, 	"amMortar"},
 				{amDrill, 	"amDrill"},
 				{amSnowball, 	"amSnowball"},
-				{amDuck,	"amDuck"},
 
 				{amGrenade,	"amGrenade"},
 				{amClusterBomb,	"amClusterBomb"},

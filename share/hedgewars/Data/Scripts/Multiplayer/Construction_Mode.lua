@@ -153,7 +153,6 @@ local atkArray = {
 	{amMortar,	 1*costFactor},
 	{amDrill,	 3*costFactor},
 	{amSnowball,	 3*costFactor},
-	{amDuck,	 2*costFactor},
 
 	{amGrenade,	 2*costFactor},
 	{amClusterBomb,	 3*costFactor},
