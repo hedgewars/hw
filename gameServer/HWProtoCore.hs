@@ -33,7 +33,7 @@ import RoomsAndClients
 import Utils
 import Consts
 
-handleCmd, handleCmd_loggedin :: CmdHandler
+handleCmd, handleCmd_loggedin, handleCmd_lobbyOnly, handleCmd_roomOnly :: CmdHandler
 
 
 handleCmd ["PING"] = answerClient ["PONG"]
@@ -65,6 +65,21 @@ handleCmd cmd = do
         else
         handleCmd_NotEntered cmd
 
+handleCmd_lobbyOnly cmd = do
+    (ci, rnc) <- ask
+    if (clientRoom rnc ci) == lobbyId then
+        handleCmd cmd
+    else
+        return [Warning $ loc "This command is only available in the lobby."]
+
+handleCmd_roomOnly cmd = do
+    (ci, rnc) <- ask
+    if (clientRoom rnc ci) == lobbyId then
+        return [Warning $ loc "This command is only available in rooms."]
+    else
+        handleCmd cmd
+
+-- Chat command handling
 unknownCmdWarningText :: B.ByteString
 unknownCmdWarningText = loc "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."
 
@@ -72,12 +87,29 @@ handleCmd_loggedin ["CMD"] = return [Warning unknownCmdWarningText]
 
 handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
-        h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
-        h "SAVEROOM" n | not $ B.null n = handleCmd ["SAVEROOM", n]
-        h "LOADROOM" n | not $ B.null n = handleCmd ["LOADROOM", n]
-        h "SAVE" n | not $ B.null n = let (sn, ln) = B.break (== ' ') n in if B.null ln then return [] else handleCmd ["SAVE", sn, B.tail ln]
-        h "DELETE" n | not $ B.null n = handleCmd ["DELETE", n]
-        h "STATS" _ = handleCmd ["STATS"]
+        -- room-only commands
+        h "DELEGATE" n | not $ B.null n = handleCmd_roomOnly ["DELEGATE", n]
+        h "SAVEROOM" n | not $ B.null n = handleCmd_roomOnly ["SAVEROOM", n]
+        h "LOADROOM" n | not $ B.null n = handleCmd_roomOnly ["LOADROOM", n]
+        h "SAVE" n | not $ B.null n = let (sn, ln) = B.break (== ' ') n in if B.null ln then return [Warning unknownCmdWarningText] else handleCmd_roomOnly ["SAVE", sn, B.tail ln]
+        h "DELETE" n | not $ B.null n = handleCmd_roomOnly ["DELETE", n]
+        h "FIX" _ = handleCmd_roomOnly ["FIX"]
+        h "UNFIX" _ = handleCmd_roomOnly ["UNFIX"]
+        h "GREETING" msg = handleCmd_roomOnly ["GREETING", msg]
+        h "CALLVOTE" msg | B.null msg = handleCmd_roomOnly ["CALLVOTE"]
+                         | otherwise = let (c, p) = extractParameters msg in
+                                           if B.null p then handleCmd_roomOnly ["CALLVOTE", c] else handleCmd_roomOnly ["CALLVOTE", c, p]
+        h "VOTE" msg | not $ B.null msg = handleCmd_roomOnly ["VOTE", upperCase msg]
+                     | otherwise = handleCmd_roomOnly ["VOTE", ""]
+        h "FORCE" msg | not $ B.null msg = handleCmd_roomOnly ["VOTE", upperCase msg, "FORCE"]
+                      | otherwise = handleCmd_roomOnly ["VOTE", "", "FORCE"]
+        h "MAXTEAMS" n | not $ B.null n = handleCmd_roomOnly ["MAXTEAMS", n]
+
+        -- lobby-only commands
+        h "STATS" _ = handleCmd_lobbyOnly ["STATS"]
+        h "RESTART_SERVER" "YES" = handleCmd_lobbyOnly ["RESTART_SERVER"]
+
+        -- room and lobby commands
         h "QUIT" m | not $ B.null m = handleCmd ["QUIT", m]
                    | otherwise = handleCmd ["QUIT"]
         h "RND" p = handleCmd ("RND" : B.words p)
@@ -86,20 +118,8 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
             let chans = map (sendChan . client rnc) $ allClients rnc
             return [AnswerClients chans ["CHAT", nickGlobal, p]]
         h "WATCH" f = return [QueryReplay f]
-        h "FIX" _ = handleCmd ["FIX"]
-        h "UNFIX" _ = handleCmd ["UNFIX"]
-        h "GREETING" msg = handleCmd ["GREETING", msg]
-        h "CALLVOTE" msg | B.null msg = handleCmd ["CALLVOTE"]
-                         | otherwise = let (c, p) = extractParameters msg in
-                                           if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
-        h "VOTE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg]
-                     | otherwise = handleCmd ["VOTE", ""]
-        h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
-                      | otherwise = handleCmd ["VOTE", "", "FORCE"]
-        h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
         h "HELP" _ = handleCmd ["HELP"]
-        h "RESTART_SERVER" "YES" = handleCmd ["RESTART_SERVER"]
         h "REGISTERED_ONLY" _ = serverAdminOnly $ do
             cl <- thisClient
             return
