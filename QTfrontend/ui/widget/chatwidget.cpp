@@ -868,6 +868,12 @@ bool HWChatWidget::parseCommand(const QString & line)
     if (line[0] == '/')
     {
         QString tline = line.trimmed();
+        if (tline.length() <= 1)
+        {
+            // Empty chat command
+            displayWarning(QCoreApplication::translate("server", "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."));
+            return true;
+        }
         if (tline.startsWith("/me"))
             return false; // not a real command
         else if (tline == "/clear") {

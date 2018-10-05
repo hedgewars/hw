@@ -465,6 +465,12 @@ if x <> 0 then
 
 if (s[1] = '/') then
     begin
+    if (Length(s) <= 1) then
+        begin
+        // empty chat command
+        AddChatString(#0 + trcmd[sidCmdUnknown]);
+        exit;
+        end;
 
     // Ignore message-type commands with empty argument list
     if (copy(s, 2, 2) = 'me') and (Length(s) = 3) then
