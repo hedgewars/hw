@@ -435,7 +435,7 @@ char *__PHYSFS_platformCalcUserDir(void)
         GOTO_MACRO(errcodeFromWinApi(), done);
     else
     {
-        DWORD psize = 0;
+        DWORD psize = 1;
         WCHAR dummy = 0;
         LPWSTR wstr = NULL;
         BOOL rc = 0;
