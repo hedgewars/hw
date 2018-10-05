@@ -511,9 +511,10 @@ if (s[1] = '/') then
         end;
 
     // “/clan” or “/team” (“/team” is an alias for “/clan”)
-    if ((copy(s, 2, 5) = 'clan ') or (copy(s, 2, 5) = 'team ')) and (length(s) > 6) then
+    if ((copy(s, 2, 5) = 'clan ') or (copy(s, 2, 5) = 'team ')) then
         begin
-        ParseCommand('team ' + copy(s, 7, Length(s) - 6), true);
+        if (Length(s) > 6) then
+            ParseCommand('team ' + copy(s, 7, Length(s) - 6), true);
         exit
         end;
 
