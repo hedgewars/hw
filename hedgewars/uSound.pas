@@ -639,7 +639,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
+            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit(-1);
             WriteLnToConsole(msgOK);
             end;
         if fadems > 0 then
