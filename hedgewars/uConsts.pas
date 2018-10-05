@@ -178,6 +178,7 @@ const
     // hedgehog info
     cMaxTeams        = 8; // maximum number of teams
     cMaxHHIndex      = 7; // maximum hedgehog index (counting starts at 0)
+                          // NOTE: If you change cMaxHHIndex, also change cMaxHogHealth!
     cMaxHHs          = cMaxTeams * (cMaxHHIndex+1); // maximum number of hogs
 
     cClanColors      = 9; // number of possible clan colors
@@ -187,7 +188,8 @@ const
     cHHRadius = 9; // hedgehog radius
     cHHStepTicks = 29;
 
-    cMaxHogHealth : LongInt = High(LongInt) div (cMaxHHIndex+1); // maximum hedgehog health
+    cMaxHogHealth = 268435455; // maximum hedgehog health
+    // cMaxHogHealth was calculated by: High(LongInt) div (cMaxHHIndex+1);
 
     // Z levels
     cHHZ = 1000;
