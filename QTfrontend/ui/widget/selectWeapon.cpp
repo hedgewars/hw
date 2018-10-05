@@ -180,7 +180,9 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     int i = 0, k = 0;
     for(; i < m_numItems; ++i)
     {
-        if (i == 6) continue;
+        // Hide amSkip (6) and amCreeper (57)
+        // TODO: Unhide amCreeper when this weapon is done
+        if (i == 6 || i == 57) continue;
         if (k % 4 == 0) ++j;
         SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(swi);

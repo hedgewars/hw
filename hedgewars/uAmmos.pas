@@ -116,7 +116,10 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         or ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0))
         or ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0))
         or ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0))
-        or ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000)) then
+        or ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000))
+        // Always remove creeper because it's unfinished.
+        // TODO: Re-enable creeper when creeper is done
+        or (a = amCreeper) then
             begin
             cnt:= 0;
             Ammoz[a].Probability:= 0
