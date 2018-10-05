@@ -1221,7 +1221,7 @@ begin
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
                 end;
-            AddChatString(#9+FormatA(trmsg[sidChatHog], ansistring(HH^.Name), ansistring(text)));
+            AddChatString(#9+Format(trmsg[sidChatHog], HH^.Name, text));
             end
         end
     else if (x >= 4) then
