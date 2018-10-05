@@ -698,11 +698,12 @@ initExpr2C' (BuiltInFunction "low" [InitReference e]) = return $
          (Identifier "LongInt" _) -> int (-2^31)
          (Identifier "SmallInt" _) -> int (-2^15)
          _ -> error $ "BuiltInFunction 'low': " ++ show e
-initExpr2C' (BuiltInFunction "high" [InitReference e]) = return $
-    case e of
-         (Identifier "LongInt" _) -> int (2^31 - 1)
-         (Identifier "SmallInt" _) -> int (2^15 - 1)
-         _ -> error $ "BuiltInFunction 'high': " ++ show e
+initExpr2C' (BuiltInFunction "high" [e]) = do
+    void $ initExpr2C e
+    t <- gets lastType
+    case t of
+         (BTArray i _ _) -> initExpr2C' $ BuiltInFunction "pred" [InitRange i]
+         a -> error $ "BuiltInFunction 'high': " ++ show a
 initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C' e
