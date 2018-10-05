@@ -781,10 +781,12 @@ const
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: false; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprCloudL
             (FileName:     'SDCloudsL'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: false; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprSDCloudL
+            // TODO: Rename creeper image
             (FileName:     'Duck'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprDuck
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprCreeper
+            // TODO: Rename creeper hand image
             (FileName:    'amDuck'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandDuck
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandCreeper
             (FileName: 'amMinigun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprMinigun
             );
@@ -2429,8 +2431,8 @@ const
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
-// Rubber duck
-            (NameId: sidDuck;
+// Creeper
+            (NameId: sidCreeper;
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
@@ -2442,7 +2444,7 @@ const
                 NumPerTurn: 0;
                 Timer: 15000;
                 Pos: 0;
-                AmmoType: amDuck;
+                AmmoType: amCreeper;
                 AttackVoice: sndNone;
                 Bounciness: defaultBounciness);
             Slot: 0;

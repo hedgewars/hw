@@ -2,10 +2,10 @@ HedgewarsScriptLoad("/Scripts/SimpleMission.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local heroAmmo = {}
-for a=0, amDuck do
+for a=0, amCreeper do
 	if a == amExtraTime then
 		heroAmmo[a] = 2
-	elseif a ~= amNothing and a ~= amDuck then
+	elseif a ~= amNothing and a ~= amCreeper then
 		heroAmmo[a] = 100
 	end
 end

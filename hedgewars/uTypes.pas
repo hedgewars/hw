@@ -91,7 +91,7 @@ type
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
             sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
             sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprFrozenAirMine, sprAirMine, sprHandAirMine,
-            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprDuck, sprHandDuck, sprMinigun
+            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprCreeper, sprHandCreeper, sprMinigun
             );
 
     // Gears that interact with other Gears and/or Land
@@ -109,7 +109,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtDuck, gtMinigun, gtMinigunBullet); // 68
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtCreeper, gtMinigun, gtMinigunBullet); // 68
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -150,7 +150,7 @@ type
             sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime, sndLaserSight,
             sndInvulnerable, sndJetpackLaunch, sndJetpackBoost, sndPortalShot, sndPortalSwitch,
             sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4,
-            sndDuckDrop, sndDuckWater, sndDuckDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
+            sndCreeperDrop, sndCreeperWater, sndCreeperDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
             sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun);
 
     // Available ammo types to be used by hedgehogs
@@ -163,7 +163,7 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine, amDuck, amMinigun); // 59
+            amIceGun, amKnife, amRubber, amAirMine, amCreeper, amMinigun); // 59
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -482,7 +482,7 @@ type
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
             {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine,
-            sidDuck, sidMinigun);
+            sidCreeper, sidMinigun);
 
     TMsgStrId = (sidLoading, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,

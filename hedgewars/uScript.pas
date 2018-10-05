@@ -3970,6 +3970,12 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetString(_S'LOCALE', cLocale);
 
+// Add aliases for amDuck and gtDuck because rubber duck was removed.
+// amDuck and gtDuck are deprecated and should be removed later.
+// TODO: Remove these aliases in a later version.
+ScriptSetInteger('amDuck', Ord(amCreeper));
+ScriptSetInteger('gtDuck', Ord(gtCreeper));
+
 // import game flags
 ScriptSetInteger('gfSwitchHog', gfSwitchHog);
 ScriptSetInteger('gfMultiWeapon', gfMultiWeapon);

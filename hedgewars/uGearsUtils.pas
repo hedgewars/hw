@@ -1770,10 +1770,7 @@ begin
             Scale:= imageScale;
             State:= ord(sprBoing)
             end;
-    if Gear^.Kind = gtDuck then
-        PlaySound(sndDuckDrop, true)
-    else
-        PlaySound(sndMelonImpact, true)
+    PlaySound(sndMelonImpact, true)
 end;
 
 function IsHogLocal(HH: PHedgehog): boolean;

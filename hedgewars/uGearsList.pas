@@ -105,7 +105,7 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
-(*           gtDuck *) , amDuck
+(*        gtCreeper *) , amCreeper
 (*        gtMinigun *) , amMinigun
 (*  gtMinigunBullet *) , amMinigun
     );
@@ -267,7 +267,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
                     else Gear^.Boom := 3;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
-           gtDuck: Gear^.Boom := 100;
+        gtCreeper: Gear^.Boom := 100;
     gtMinigunBullet: Gear^.Boom := 2;
     end;
 
@@ -734,7 +734,8 @@ gtFlamethrower: begin
                 gear^.Radius:= 8;
                 gear^.Density:= _0;
                 end;
-        gtDuck: begin
+     gtCreeper: begin
+                // TODO: Finish creeper initialization implementation
                 gear^.Radius:= cHHRadius;
                 gear^.Elasticity:= _0_35;
                 gear^.Friction:= _0_93;
@@ -745,7 +746,7 @@ gtFlamethrower: begin
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
                 gear^.Radius:= 8;
-                gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+                gear^.Angle:= 175; // Radius at which it will start "seeking". $FFFFFFFF = unlimited. check is skipped.
                 gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                 gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
                 if gear^.Timer = 0 then

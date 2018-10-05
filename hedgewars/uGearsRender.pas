@@ -790,7 +790,7 @@ begin
                 amSkip: DrawSpriteRotated(sprHandSkip, hx, hy, sign, aangle);
                 amClusterBomb: DrawSpriteRotated(sprHandCluster, hx, hy, sign, aangle);
                 amDynamite: DrawSpriteRotated(sprHandDynamite, hx, hy, sign, aangle);
-                amDuck: DrawSpriteRotatedF(sprHandDuck, hx, hy, 0, sign, aangle);
+                amCreeper: DrawSpriteRotatedF(sprHandCreeper, hx, hy, 0, sign, aangle);
                 amHellishBomb: DrawSpriteRotated(sprHandHellish, hx, hy, sign, aangle);
                 amGasBomb: DrawSpriteRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
@@ -1622,9 +1622,9 @@ begin
                                 end
                           end
                       end;
-            gtDuck: if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
-					     DrawSpriteRotatedF(sprDuck, x, y, 1, hwRound(SignAs(_1,Gear^.Hedgehog^.Gear^.X-Gear^.X)), 0) 
-					else DrawSpriteRotatedF(sprDuck, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0); 
+            gtCreeper: if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+					     DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.Hedgehog^.Gear^.X-Gear^.X)), 0)
+					else DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0);
 
             gtGenericFaller: begin
                              // DEBUG: draw gtGenericFaller

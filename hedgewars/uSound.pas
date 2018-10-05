@@ -278,9 +278,10 @@ var cInitVolume: LongInt;
             (FileName:           'countdown2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown2
             (FileName:           'countdown3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown3
             (FileName:           'countdown4.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown4
-            (FileName:      'rubberduck_drop.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDrop
-            (FileName:     'rubberduck_water.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckWater
-            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDie
+            // TODO: Check which creeper (formerly rubberduck) sounds are needed, maybe rename them
+            (FileName:      'rubberduck_drop.ogg'; Path: ptSounds; AltPath: ptNone),// sndCreeperDrop
+            (FileName:     'rubberduck_water.ogg'; Path: ptSounds; AltPath: ptNone),// sndCreeperWater
+            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone),// sndCreeperDie
             (FileName:              'custom1.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom1
             (FileName:              'custom2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom2
             (FileName:              'custom3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom3

@@ -4779,10 +4779,6 @@ begin
             if not ((Gear^.dX*ox + Gear^.dY*oy).isNegative) then
                 continue;
 
-        if iterator^.Kind = gtDuck then
-            // Make duck go into “falling” mode again
-            iterator^.Pos:= 0;
-
         isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot, gtMinigunBullet]);
 
         r:= int2hwFloat(iterator^.Radius);
@@ -6603,6 +6599,7 @@ if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
     end
 end;
 
+// TODO: Finish creeper implementation
 procedure doStepCreeper(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;

@@ -35,7 +35,7 @@ local atkWeps = {
 	[amSeduction]=true, [amHammer]=true, [amMine]=true, [amDynamite]=true, [amCake]=true,
 	[amBallgun]=true, [amSMine]=true, [amRCPlane]=true, [amBirdy]=true, [amKnife]=true,
 	[amAirAttack]=true, [amMineStrike]=true, [amNapalm]=true, [amDrillStrike]=true, [amPiano]=true, [amAirMine] = true,
-	[amDuck]=true,
+	[amCreeper]=true,
 }
 
 local utilWeps =  {

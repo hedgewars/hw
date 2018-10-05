@@ -393,14 +393,16 @@ with Gear^,
                                  newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
                                  end;
                      amDynamite: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
-                         amDuck: begin
-                                 // Does duck spawn inside water?
+                      amCreeper: begin
+                                 // TODO: Implement proper creeper spawning code. This is still the old rubber duck code.
+
+                                 // Does it spawn inside water?
                                  if (LeftX > hwRound(Gear^.X) - Gear^.Karma) or (RightX < hwRound(Gear^.X) + Gear^.Karma) or (cWaterLine < hwRound(Gear^.Y) + Gear^.Karma) then
                                      PlaySound(sndDroplet2)
                                  else
-                                     // Duck spawned in air, normal drop sound
-                                     PlaySound(sndDuckDrop);
-                                 newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDuck, 0, SignAs(_0_03, dX), _0, 0);
+                                     // spawned in air, normal drop sound
+                                     PlaySound(sndCreeperDrop);
+                                 newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtCreeper, 0, SignAs(_0_03, dX), _0, 0);
                                  if not ((not dX.isNegative) xor ((State and gstHHHJump) <> 0)) then
                                      newGear^.Tag:= -1
                                  else

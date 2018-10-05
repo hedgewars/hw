@@ -141,6 +141,7 @@ Themes:
 
 Lua API:
  * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
+ * Deprecation: Symbols amDuck/gtDuck are deprecated, will be removed later. For now, they alias to amCreeper/gtCreeper
  + New call: SetTurnTimeLeft(newTurnTimeLeft): Set remaining turn time
  + New call: SetReadyTimeLeft(newReadyTimeLeft): Set remaining ready time
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
