@@ -41,10 +41,9 @@ handleCmd ["PING"] = answerClient ["PONG"]
 
 handleCmd ("QUIT" : xs) = return [ByeClient msg]
     where
-        -- "User quit: " is a special string parsed by frontend, do not localize.
-        -- It denotes when the /quit command has been used with message parameter.
-        -- "bye" is also a special string.
-        msg = if not $ null xs then "User quit: " `B.append` (head xs) else "bye"
+        -- "bye" is a special string (do not translate!) when the user quits manually,
+        -- otherwise there will be an additional server message
+        msg = if not $ null xs then (head xs) else "bye"
 
 
 handleCmd ["PONG"] = do
@@ -110,8 +109,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "RESTART_SERVER" "YES" = handleCmd_lobbyOnly ["RESTART_SERVER"]
 
         -- room and lobby commands
-        h "QUIT" m | not $ B.null m = handleCmd ["QUIT", m]
-                   | otherwise = handleCmd ["QUIT"]
+        h "QUIT" _ = handleCmd ["QUIT"]
         h "RND" p = handleCmd ("RND" : B.words p)
         h "GLOBAL" p = serverAdminOnly $ do
             rnc <- liftM snd ask

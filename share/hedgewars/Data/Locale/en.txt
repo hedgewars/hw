@@ -1306,7 +1306,7 @@
 06:04=/pause: Toggle pause
 06:05=/pause: Toggle auto skip
 06:06=/fullscreen: Toggle fullscreen
-06:07=/quit [message]: Quit Hedgewars with optional message
+06:07=/quit: Quit Hedgewars
 06:08=/help: List basic client chat commands
 06:09=/help taunts: List taunt chat commands
 06:10=/history: Toggle long chat history display
