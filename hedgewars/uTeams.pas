@@ -782,7 +782,7 @@ end;
 procedure chTeamGone(var s:shortstring);
 var t, i: LongInt;
     isSynced: boolean;
-    tmp: ansistring;
+    tmp: shortstring;
 begin
     isSynced:= s[1] = 's';
 
@@ -805,7 +805,7 @@ begin
                     begin
                     tmp:= ' ' + trmsg[sidTeamGone];
                     tmp:= '*' + tmp;
-                    AddChatString(#7 + FormatA(tmp, TeamName));
+                    AddChatString(#7 + Format(tmp, TeamName));
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -828,7 +828,7 @@ end;
 procedure chTeamBack(var s:shortstring);
 var t: LongInt;
     isSynced: boolean;
-    tmp: ansistring;
+    tmp: shortstring;
 begin
     isSynced:= s[1] = 's';
 
@@ -846,8 +846,8 @@ begin
             if hasGone then
                 begin
                 tmp:= ' '+trmsg[sidTeamBack];
-                tmp:= '*'+trmsg[sidTeamBack];
-                AddChatString(#8 + FormatA(tmp, TeamName));
+                tmp:= '*'+tmp;
+                AddChatString(#8 + Format(tmp, TeamName));
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
