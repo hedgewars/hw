@@ -36,6 +36,7 @@ cmdHelpSharedPlayer = [
 #if defined(OFFICIAL_SERVER)
     loc "/watch <id>: Watch a demo stored on the server with the given ID",
 #endif
+    loc "/quit: Quit the server",
     loc "/help: Show chat command help"
     ]
 
