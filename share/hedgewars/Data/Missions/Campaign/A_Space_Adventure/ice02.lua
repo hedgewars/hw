@@ -153,7 +153,7 @@ function onGameTick20()
 			local totalTimePrinted  = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
-			SetTeamLabel(teamA.name, string.format(loc("%.3f s"), totalTimePrinted))
+			SetTeamLabel(teamA.name, string.format(loc("%.3fs"), totalTimePrinted))
 			SendStat(siGameResult, loc("Hooray! You are a champion!"))
 			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds."), totalTimePrinted))
 			if timeRecord ~= nil and totalTime >= timeRecord then
@@ -184,7 +184,7 @@ function onGameTick20()
 	if heroTurn and challengeStarted and not gameEnded and not hero.dead and ReadyTimeLeft == 0 then
 		local time = totalTime - TurnTimeLeft
 		local timePrinted  = time / 1000
-		SetTeamLabel(teamA.name, string.format(loc("%.1f s"), timePrinted))
+		SetTeamLabel(teamA.name, string.format(loc("%.1fs"), timePrinted))
 	end
 end
 
