@@ -313,8 +313,10 @@ bool FileEngine::supportsExtension(Extension extension) const
 
 FileEngineHandler::FileEngineHandler(char *argv0)
 {
-    PHYSFS_init(argv0);
-
+    if (!PHYSFS_init(argv0))
+    {
+        qDebug("PHYSFS initialization failed");
+    }
     qDebug("%s", QString("[PHYSFS] Init: %1").arg(errorStr()).toLocal8Bit().constData());
 }
 
