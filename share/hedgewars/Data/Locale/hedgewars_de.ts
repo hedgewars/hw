@@ -154,11 +154,11 @@
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation>Please specify an IP address.</translation>
+        <translation>Bitte gib eine IP-Addresse an.</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation>Please specify a nickname.</translation>
+        <translation>Bitte gib einen Spitznamen an.</translation>
     </message>
 </context>
 <context>
@@ -208,7 +208,7 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation>Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt ist (auf Englisch):</translation>
+        <translation>Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt ist (auf Englisch): </translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
@@ -1624,7 +1624,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Hedgewars-Online-Spielanleitung in deinem Webbrowser öffnen</translation>
     </message>
 </context>
 <context>
@@ -2049,7 +2049,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>Keine Landschaftsobjekte beim Generieren von Zufallskarten platzieren. </translation>
+        <translation>Keine Landschaftsobjekte beim Generieren von Zufallskarten platzieren.</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
@@ -2937,7 +2937,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>Diese Entwicklungsversion ist unfertig und könnte nicht kompatibel mit anderen Versionen des Spiels sein, wobei sogar einige Funktionen sogar kaputt oder unfertig sein könnten.</translation>
+        <translation>Diese Entwicklungsversion ist unfertig und könnte nicht kompatibel mit anderen Versionen des Spiels sein, wobei sogar einige Funktionen sogar kaputt oder unfertig sein könnten!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -3651,8 +3651,7 @@ Du scheinst hier neu zu sein. Möchtest zuerst ein paar Übungsmissionen spielen
     <name>TCPBase</name>
     <message>
         <source>Unable to start server at %1.</source>
-        <translation>Der Server konnte nicht gestartet werden.
-Pfad: %1</translation>
+        <translation>Der Server konnte nicht gestartet werden. Pfad: %1</translation>
     </message>
     <message>
         <source>Unable to run engine at %1
@@ -4672,7 +4671,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>Die Raumversion ist inkompatibel zu deiner Hedgewars-Version.</translation>
+        <translation>Die Raumversion ist inkompatibel zu deiner Hedgewars-Version!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
@@ -4964,15 +4963,15 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/quit: Den Server verlassen</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieser Befehl ist nur in der Lobby verfügbar.</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieser Befehl ist nur in Räumen verfügbar.</translation>
     </message>
 </context>
 </TS>
