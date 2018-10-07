@@ -443,7 +443,7 @@ Please check your installation!</translation>
     </message>
     <message>
         <source>%1 has left (message: &quot;%2&quot;)</source>
-        <translation>%1 has left (message: “%2”)</translation>
+        <translation type="vanished">%1 has left (message: “%2”)</translation>
     </message>
 </context>
 <context>
@@ -907,7 +907,7 @@ Last engine message:
     </message>
     <message>
         <source>User quit</source>
-        <translation>User quit</translation>
+        <translation type="vanished">User quit</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -945,7 +945,7 @@ Please check the host name and port settings and/or try again later.</translatio
     </message>
     <message>
         <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
-        <translation>%1 *** %2 has left (message: “%3”)</translation>
+        <translation type="vanished">%1 *** %2 has left (message: “%3”)</translation>
     </message>
 </context>
 <context>
@@ -1537,6 +1537,10 @@ just enter your nickname.</translation>
     <message>
         <source>Play official network game</source>
         <translation>Play official network game</translation>
+    </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
+        <translation>Open the Hedgewars online game manual in your web browser</translation>
     </message>
 </context>
 <context>
@@ -4741,6 +4745,18 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     <message>
         <source>You&apos;re the new room master!</source>
         <translation>You’re the new room master!</translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation>/quit: Quit the server</translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation>This command is only available in the lobby.</translation>
+    </message>
+    <message>
+        <source>This command is only available in rooms.</source>
+        <translation>This command is only available in rooms.</translation>
     </message>
 </context>
 </TS>

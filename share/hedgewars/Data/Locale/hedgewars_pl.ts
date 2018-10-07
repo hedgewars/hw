@@ -467,10 +467,6 @@ Sprawdź poprawność instalacji!</translation>
         <source>List of players</source>
         <translation>Lista graczy</translation>
     </message>
-    <message>
-        <source>%1 has left (message: &quot;%2&quot;)</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -947,7 +943,7 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>User quit</source>
-        <translation>Użytkownik wyszedł</translation>
+        <translation type="vanished">Użytkownik wyszedł</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -976,10 +972,6 @@ Ostatnia wiadomość silnika:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1597,6 +1589,10 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Play official network game</source>
         <translation>Zagraj na oficjalnym serwerze</translation>
+    </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4933,6 +4929,18 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in rooms.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

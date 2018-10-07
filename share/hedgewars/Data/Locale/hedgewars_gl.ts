@@ -430,10 +430,6 @@ Please check your installation!</source>
         <source>List of players</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>%1 has left (message: &quot;%2&quot;)</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -839,10 +835,6 @@ Last engine message:
         <translation>%1 *** %2 marchou</translation>
     </message>
     <message>
-        <source>User quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Remote host has closed connection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,10 +861,6 @@ Last engine message:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1420,6 +1408,10 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play official network game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4323,6 +4315,18 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in rooms.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

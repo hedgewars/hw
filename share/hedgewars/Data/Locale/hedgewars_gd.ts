@@ -449,10 +449,6 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
         <source>List of players</source>
         <translation>Liosta dhe chluicheadairean</translation>
     </message>
-    <message>
-        <source>%1 has left (message: &quot;%2&quot;)</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -892,7 +888,7 @@ Last engine message:
     </message>
     <message>
         <source>User quit</source>
-        <translation>Dh’fhàg an cleachdaiche an-seo</translation>
+        <translation type="vanished">Dh’fhàg an cleachdaiche an-seo</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -921,10 +917,6 @@ Last engine message:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1532,6 +1524,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Play official network game</source>
         <translation>Cluich geama lìonraidh oifigeil</translation>
+    </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4646,6 +4642,18 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in rooms.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

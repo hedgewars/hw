@@ -479,7 +479,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>%1 has left (message: &quot;%2&quot;)</source>
-        <translation>%1 ist gegangen (Nachricht: »%2«)</translation>
+        <translation type="vanished">%1 ist gegangen (Nachricht: »%2«)</translation>
     </message>
 </context>
 <context>
@@ -936,7 +936,7 @@ Karte bearbeiten</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation>Benutzer ist gegangen</translation>
+        <translation type="vanished">Benutzer ist gegangen</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -974,7 +974,7 @@ Bitte überprüfe den Hostnamen und den Port und/oder versuche es später erneut
     </message>
     <message>
         <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
-        <translation>%1 *** %2 ist gegangen (Nachricht: »%3«)</translation>
+        <translation type="vanished">%1 *** %2 ist gegangen (Nachricht: »%3«)</translation>
     </message>
 </context>
 <context>
@@ -1621,6 +1621,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Play official network game</source>
         <translation>Im offiziellem Netzwerk spielen</translation>
+    </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4957,6 +4961,18 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     <message>
         <source>You&apos;re the new room master!</source>
         <translation>Du bist der neue Raumleiter!</translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This command is only available in rooms.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
