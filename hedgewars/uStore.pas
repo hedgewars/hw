@@ -774,7 +774,6 @@ var i: LongInt;
     key, value, l, temp: shortstring;
     color, tempColor: Longword;
     clanID, tempClanID: byte;
-    conversionSuccess: boolean;
 begin
     if cOnlyStats then exit;
 
@@ -787,7 +786,6 @@ begin
         while (not pfsEOF(f)) and (l <> '[colors]') do
             pfsReadLn(f, l);
 
-        conversionSuccess:= false;
         while (not pfsEOF(f)) and (l <> '') do
             begin
             pfsReadLn(f, l);
@@ -803,11 +801,8 @@ begin
             if temp = 'color' then
                 begin
                 temp:= copy(key, 6, length(key) - 5);
-                tempClanID:= StrToInt(temp, conversionSuccess);
-                if conversionSuccess then
-                    clanID:= tempClanID
-                else
-                    continue;
+                tempClanID:= StrToInt(temp);
+                clanID:= tempClanID
                 end
             else
                 continue;
@@ -822,11 +817,8 @@ begin
                 if value[1] <> '#' then
                     continue;
                 temp:= copy(value, 2, length(value) - 1);
-                tempColor:= StrToInt('0x'+temp, conversionSuccess);
-                if conversionSuccess then
-                    color:= tempColor
-                else
-                    continue;
+                tempColor:= StrToInt('0x'+temp);
+				color:= tempColor
                 end;
 
             if clanID <= cClanColors then
