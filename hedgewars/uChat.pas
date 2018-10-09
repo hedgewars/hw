@@ -468,7 +468,7 @@ if (s[1] = '/') then
     if (Length(s) <= 1) then
         begin
         // empty chat command
-        AddChatString(#0 + trcmd[sidCmdUnknown]);
+        AddChatString(#0 + shortstring(trcmd[sidCmdUnknown]));
         exit;
         end;
 
@@ -550,59 +550,59 @@ if (s[1] = '/') then
             if liveLua then
                 begin
                 AddFileLog('[Lua] chat input string parsing enabled');
-                AddChatString(#3 + trmsg[sidLuaParsingOn]);
+                AddChatString(#3 + shortstring(trmsg[sidLuaParsingOn]));
                 end
             else
                 begin
                 AddFileLog('[Lua] chat input string parsing disabled');
-                AddChatString(#3 + trmsg[sidLuaParsingOff]);
+                AddChatString(#3 + shortstring(trmsg[sidLuaParsingOff]));
                 end;
             UpdateInputLinePrefix();
             end
         else
-            AddChatString(#5 + trmsg[sidLuaParsingDenied]);
+            AddChatString(#5 + shortstring(trmsg[sidLuaParsingDenied]));
         exit
         end;
 
     // Help commands
     if (copy(s, 2, 11) = 'help taunts') then
         begin
-        AddChatString(#3 + trcmd[sidCmdHeaderTaunts]);
-        AddChatString(#3 + trcmd[sidCmdSpeech]);
-        AddChatString(#3 + trcmd[sidCmdThink]);
-        AddChatString(#3 + trcmd[sidCmdYell]);
-        AddChatString(#3 + trcmd[sidCmdSpeechNumberHint]);
-        AddChatString(#3 + trcmd[sidCmdHsa]);
-        AddChatString(#3 + trcmd[sidCmdHta]);
-        AddChatString(#3 + trcmd[sidCmdHya]);
-        AddChatString(#3 + trcmd[sidCmdHurrah]);
-        AddChatString(#3 + trcmd[sidCmdIlovelotsoflemonade]);
-        AddChatString(#3 + trcmd[sidCmdJuggle]);
-        AddChatString(#3 + trcmd[sidCmdRollup]);
-        AddChatString(#3 + trcmd[sidCmdShrug]);
-        AddChatString(#3 + trcmd[sidCmdWave]);
+        AddChatString(#3 + shortstring(trcmd[sidCmdHeaderTaunts]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdSpeech]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdThink]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdYell]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdSpeechNumberHint]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHsa]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHta]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHya]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHurrah]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdIlovelotsoflemonade]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdJuggle]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdRollup]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdShrug]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdWave]));
         exit
         end;
 
     if (copy(s, 2, 4) = 'help') then
         begin
-        AddChatString(#3 + trcmd[sidCmdHeaderBasic]);
+        AddChatString(#3 + shortstring(trcmd[sidCmdHeaderBasic]));
         if gameType = gmtNet then
-            AddChatString(#3 + trcmd[sidCmdPauseNet])
+            AddChatString(#3 + shortstring(trcmd[sidCmdPauseNet]))
         else
-            AddChatString(#3 + trcmd[sidCmdPause]);
-        AddChatString(#3 + trcmd[sidCmdFullscreen]);
-        AddChatString(#3 + trcmd[sidCmdQuit]);
+            AddChatString(#3 + shortstring(trcmd[sidCmdPause]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdFullscreen]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdQuit]));
         if gameType <> gmtNet then
-            AddChatString(#3 + trcmd[sidLua]);
+            AddChatString(#3 + shortstring(trcmd[sidLua]));
         // history and help commands needs to be close to the end because they are always visible
         // with a short chat history length.
-        AddChatString(#3 + trcmd[sidCmdTeam]);
-        AddChatString(#3 + trcmd[sidCmdMe]);
-        AddChatString(#3 + trcmd[sidCmdTogglechat]);
-        AddChatString(#3 + trcmd[sidCmdHistory]);
-        AddChatString(#3 + trcmd[sidCmdHelp]);
-        AddChatString(#3 + trcmd[sidCmdHelpTaunts]);
+        AddChatString(#3 + shortstring(trcmd[sidCmdTeam]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdMe]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdTogglechat]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHistory]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHelp]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHelpTaunts]));
         exit
         end;
 
@@ -627,7 +627,7 @@ if (s[1] = '/') then
     if (gameType = gmtNet) then
         SendConsoleCommand(s)
     else
-        AddChatString(#0 + trcmd[sidCmdUnknown]);
+        AddChatString(#0 + shortstring(trcmd[sidCmdUnknown]));
     end
 else
     begin
@@ -1137,7 +1137,7 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
-        s:= #1 + Format(trmsg[sidChat], UserNick, s);
+        s:= #1 + Format(shortstring(trmsg[sidChat]), UserNick, s);
 
     AddChatString(s)
 end;
@@ -1146,7 +1146,7 @@ procedure chTeamSay(var s: shortstring);
 begin
     SendIPC('b' + s);
 
-    s:= #4 + Format(trmsg[sidChatTeam], UserNick, s);
+    s:= #4 + Format(shortstring(trmsg[sidChatTeam]), UserNick, s);
 
     AddChatString(s)
 end;

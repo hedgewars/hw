@@ -243,35 +243,35 @@ end;
 
 function FormatA(fmt: ansistring; arg1: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, '', '', '', '', '', '', '', '', 1);
+    FormatA:= FormatA(fmt, arg1, ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), 1);
 end;
 function FormatA(fmt: ansistring; arg1, arg2: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, '', '', '', '', '', '', '', 2);
+    FormatA:= FormatA(fmt, arg1, arg2, ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), 2);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, arg3, '', '', '', '', '', '', 3);
+    FormatA:= FormatA(fmt, arg1, arg2, arg3, ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), 3);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3, arg4: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, '', '', '', '', '', 4);
+    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, ansistring(''), ansistring(''), ansistring(''), ansistring(''), ansistring(''), 4);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3, arg4, arg5: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, '', '', '', '', 5);
+    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, ansistring(''), ansistring(''), ansistring(''), ansistring(''), 5);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3, arg4, arg5, arg6: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, arg6, '', '', '', 6);
+    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, arg6, ansistring(''), ansistring(''), ansistring(''), 6);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3, arg4, arg5, arg6, arg7: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, '', '', 7);
+    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, ansistring(''), ansistring(''), 7);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8: ansistring): ansistring;
 begin
-    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, '', 8);
+    FormatA:= FormatA(fmt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, ansistring(''), 8);
 end;
 function FormatA(fmt: ansistring; arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9: ansistring): ansistring;
 begin

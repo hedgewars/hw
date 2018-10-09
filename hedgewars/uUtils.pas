@@ -336,10 +336,9 @@ end;
 // Success will be set to false when conversion failed.
 // See documentation on Val procedure for syntax of s
 function StrToInt(s: shortstring; var success: boolean): LongInt;
-var Code: Word;
 begin
-val(s, StrToInt, Code);
-success:= Code = 0;
+val(s, StrToInt);
+success:= StrToInt <> nil;
 end;
 
 // Convert string to longint, without error checking
