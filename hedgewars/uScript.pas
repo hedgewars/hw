@@ -1651,7 +1651,7 @@ begin
                vgear^.Text:= lua_tostring(L, 2);
                if Gear^.Kind = gtHedgehog then
                    begin
-                   AddChatString(#9+Format(trmsg[sidChatHog], gear^.Hedgehog^.Name, vgear^.text));
+                   AddChatString(#9+Format(shortstring(trmsg[sidChatHog]), gear^.Hedgehog^.Name, vgear^.text));
                    vgear^.Hedgehog:= gear^.Hedgehog
                    end
                else vgear^.Frame:= gear^.uid;

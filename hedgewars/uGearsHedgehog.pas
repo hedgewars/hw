@@ -51,7 +51,7 @@ begin
     t:= 0;
     while (TeamsArray[t] <> CurrentTeam) do inc(t);
 
-    AddChatString(#2 + Format(trmsg[sidAutoSkip], CurrentTeam^.TeamName));
+    AddChatString(#2 + Format(shortstring(trmsg[sidAutoSkip]), CurrentTeam^.TeamName));
 
     ParseCommand('/skip', true)
 end;
@@ -584,7 +584,7 @@ with Gear^,
                     speech^.Text:= SpeechText;
                     speech^.Hedgehog:= Gear^.Hedgehog;
                     speech^.FrameTicks:= SpeechType;
-                    AddChatString(#9+Format(trmsg[sidChatHog], Gear^.Hedgehog^.Name, SpeechText));
+                    AddChatString(#9+Format(shortstring(trmsg[sidChatHog]), Gear^.Hedgehog^.Name, SpeechText));
                     end;
                 SpeechText:= ''
                 end;

@@ -357,7 +357,7 @@ begin
     RegisterBind(DefaultBinds, _S'`', 'history');
     RegisterBind(DefaultBinds, 'delete', 'rotmask');
     RegisterBind(DefaultBinds, 'home', 'rottags');
-    RegisterBind(DefaultBinds, 'm', '+mission');
+    RegisterBind(DefaultBinds, _S'm', '+mission');
 
     //numpad
     //DefaultBinds[265]:= '+volup';
@@ -382,7 +382,7 @@ begin
 
     for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
     for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
-    RegisterBind(DefaultBinds, 'n', 'timer_u');
+    RegisterBind(DefaultBinds, _S'n', 'timer_u');
 
     RegisterBind(DefaultBinds, 'mousel', '/put');
     RegisterBind(DefaultBinds, 'mouser', 'ammomenu');

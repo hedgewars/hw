@@ -511,7 +511,7 @@ if (not cOnlyStats) and allOK then
     AFKTexture:= RenderStringTex(trmsg[sidAFK], cCentralMessageColor, fntBig);
     keyConfirm:= KeyBindToName('confirm');
     keyQuit:= KeyBindToName('quit');
-    ConfirmTexture:= RenderStringTex(Format(trmsg[sidConfirm], keyConfirm, keyQuit), cCentralMessageColor, fntBig);
+    ConfirmTexture:= RenderStringTex(FormatA(trmsg[sidConfirm], ansistring(keyConfirm), ansistring(keyQuit)), cCentralMessageColor, fntBig);
     SyncTexture:= RenderStringTex(trmsg[sidSync], cCentralMessageColor, fntBig);
 
     if not reload then
@@ -533,7 +533,7 @@ if (not cOnlyStats) and allOK then
     // number of weapons in ammo menu
     for i:= Low(CountTexz) to High(CountTexz) do
         begin
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(Format(trmsg[sidAmmoCount], IntToStr(i))), cWhiteColorChannels);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(Format(shortstring(trmsg[sidAmmoCount]), IntToStr(i))), cWhiteColorChannels);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeAndNilTexture(CountTexz[i]);
         CountTexz[i]:= Surface2Tex(tmpsurf, false);
