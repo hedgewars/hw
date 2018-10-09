@@ -369,7 +369,7 @@ if SendHealthStatsOn then
                 if SendRankingStatsOn then
                     begin
                     currentRank:= 1;
-                    SendStat(siTeamRank, '1');
+                    SendStat(siTeamRank, _S'1');
                     SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
                         IntToStr(stats.Kills) + ' ' + TeamName);
                     end;
