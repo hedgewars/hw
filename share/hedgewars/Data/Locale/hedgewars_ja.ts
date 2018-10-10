@@ -4264,7 +4264,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation></translation>
+        <translation>/quit:サーバーを去る</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
