@@ -36,47 +36,47 @@
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
     </message>
 </context>
 <context>
@@ -122,7 +122,7 @@
     </message>
     <message>
         <source>Warning</source>
-        <translation>警報</translation>
+        <translation>忠告</translation>
     </message>
     <message>
         <source>permanent</source>
@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation>バグ発見の際、以前の報告の有無を確認してください： </translation>
+        <translation>バグ発見の際、以前の報告の有無をこちらで確認してください： </translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
@@ -184,7 +184,7 @@
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>この情報の入力は任意ですが、不具合を修正するための応援になる可能性があります。</translation>
     </message>
 </context>
 <context>
@@ -195,7 +195,7 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1ターンごとに</numerusform>
         </translation>
     </message>
@@ -204,7 +204,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation>武器を編集</translation>
+        <translation>武器編集</translation>
     </message>
     <message>
         <source>Edit schemes</source>
@@ -253,31 +253,31 @@
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1分</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1時間</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1時間</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1日</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1日</numerusform>
         </translation>
     </message>
@@ -302,52 +302,52 @@ Please check your installation!</source>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>利用説明</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>設定</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>接続列</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>設定</translation>
     </message>
     <message>
         <source>Display this help</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>設定を表示する</translation>
     </message>
     <message>
         <source>Custom path for configuration data and user data</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>コンフィグとユーザーデータへのカスタムパス</translation>
     </message>
     <message>
         <source>Custom path to the game data folder</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>ゲームデータへのカスタムパス</translation>
     </message>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>起動中に%1を使うことができます「例：%2」</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>不正オプション：%1</translation>
     </message>
     <message>
         <source>Unknown option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>未知オプション：%1</translation>
     </message>
 </context>
 <context>
@@ -463,7 +463,7 @@ Please check your installation!</source>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation>指定されたニックネーム（%1）はもうこのサーバーで使用中です。
+        <translation>指定されたニックネーム（%1）はこのサーバーですでに使用されています。
 違うニックネームを指定してください：</translation>
     </message>
     <message>
@@ -480,7 +480,7 @@ To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
         <translation>指定されたニックネームは登録されていません。
 他のプレーヤーからの使用を防ぐためには,
-「www.hedgewars.org」をアクセスして登録してください</translation>
+「www.hedgewars.org」をアクセスして登録してください。</translation>
     </message>
     <message>
         <source>
@@ -547,7 +547,7 @@ If this nick isn&apos;t yours, please register your own nick at www.hedgewars.or
 Password:</source>
         <translation>指定されたニックネームはすでに登録されていますが、パスワードが指定されていません。
 
-ご自分のニックネームではなければ「www.hedgewars.org」をアクセスして違うニックネームを登録してください
+ご自分のニックネームではなければ「www.hedgewars.org」をアクセスして違うニックネームを登録してください。
 
 パスワード：</translation>
     </message>
@@ -804,14 +804,14 @@ Last engine message:
     <message>
         <source>Port</source>
         <extracomment>short for &quot;port number&quot;, part of server address</extracomment>
-        <translation>ポート</translation>
+        <translation>ポート番号</translation>
     </message>
 </context>
 <context>
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>ホストが見つかりませんでした。ホスト名とポート設定を確認してください。</translation>
+        <translation>ホストが見つかりませんでした。ホスト名とポート番号設定を確認してください。</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -851,7 +851,7 @@ Last engine message:
     </message>
     <message>
         <source>The server is too old. Disconnecting now.</source>
-        <translation>サーバーのバージョンは古すぎますため、コネクションを中断します。</translation>
+        <translation>サーバーのバージョンが古すぎますため、コネクションを中断します。</translation>
     </message>
     <message>
         <source>Server authentication error</source>
@@ -859,11 +859,11 @@ Last engine message:
     </message>
     <message>
         <source>Reason:</source>
-        <translation type="unfinished"></translation>
+        <translation>理由：</translation>
     </message>
     <message>
         <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>接続拒否かタイムアウトが発生しました。</translation>
     </message>
     <message>
         <source>The connection was refused by the host or timed out. This might have one of the following reasons:
@@ -872,7 +872,12 @@ Last engine message:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>接続拒否かタイムアウトが発生しました。原因は以下のような理由の可能性があります：
+・指定されたホストにはヘッジウォーズサーバーが起動されていません
+・ポート番号が間違っています
+・一時的なネットワーク不具合が発生しました
+
+ホスト名とポートばんご設定を確認してください。</translation>
     </message>
 </context>
 <context>
@@ -886,7 +891,7 @@ Please check the host name and port settings and/or try again later.</source>
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-        <translation>サーバーに接続するために、ログインしてください。
+        <translation>サーバーに接続するためには、ログインしてください。
 
 「www.hedgewars.org」アカウントをお持ちでない場合,ニックネームだけを入力してください。
 </translation>
@@ -994,7 +999,7 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1秒</numerusform>
         </translation>
     </message>
@@ -1109,7 +1114,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation>この機能はインターネット接続が必要です（エラー%1）。</translation>
+        <translation>この機能はインターネット接続が必要です。今はネットに接続していないようです（エラー%1）。</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
@@ -1183,7 +1188,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
-        <translation>アクションを選んで、このチームの専用のキーを指定してください</translation>
+        <translation>このチームの専用のキーを指定するには、アクションを選んでください</translation>
     </message>
     <message>
         <source>Use my default</source>
@@ -1275,33 +1280,33 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>最高射撃賞は&lt;b&gt;%2&lt;/b&gt;ダメージを与えた&lt;b&gt;%1&lt;/b&gt;が受賞します。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>一ターンに針鼠&lt;b&gt;%2&lt;/b&gt;匹を倒した&lt;b&gt;%1&lt;/b&gt;が最強です。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation type="unfinished">
-            <numerusform>針鼠はラウンド中に、&lt;b&gt;%1&lt;/b&gt;匹亡くなりました。
+        <translation>
+            <numerusform>針鼠はラウンド中に、&lt;b&gt;%1&lt;/b&gt;匹倒されました。
         </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
         <extracomment>Number of kills in stats screen, written after the team name</extracomment>
-        <translation type="unfinished">
+        <translation>
             <numerusform>（倒した針鼠数：%1匹）</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt;は、怖くて自分のターンを&lt;b&gt;%2&lt;/b&gt;回もスキップしました。</numerusform>
         </translation>
     </message>
@@ -1316,25 +1321,25 @@ just enter your nickname.</source>
     <message numerus="yes">
         <source>(%1 %2)</source>
         <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
-        <translation type="unfinished">
+        <translation>
             <numerusform>(%1 %2)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt;は自分の針鼠に&lt;b&gt;%2&lt;/b&gt;ダメージを与えてもいいと思いました。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt;は自分の針鼠を&lt;b&gt;%2&lt;/b&gt;匹犠牲にしました。</numerusform>
         </translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation type="unfinished"></translation>
+        <translation>みんなが同じクランの一員であるため、戦う必要もありません。めでたしめでたし。</translation>
     </message>
 </context>
 <context>
@@ -1375,7 +1380,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation>ヘッジウォーズのウェッブサイトから、ユーザー制追加コンテンツをダウンロードする</translation>
+        <translation>ヘッジウォーズのウェブサイトから、ユーザー制追加コンテンツをダウンロードする</translation>
     </message>
     <message>
         <source>Exit game</source>
@@ -1411,7 +1416,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>ウェブブラウザでヘッジウォーズのマニュアルを見る</translation>
     </message>
 </context>
 <context>
@@ -1433,7 +1438,7 @@ just enter your nickname.</source>
     <name>PageNetGame</name>
     <message>
         <source>Edit game preferences</source>
-        <translation>ゲーム設定の編集</translation>
+        <translation>ゲーム設定を調整する</translation>
     </message>
     <message>
         <source>Start</source>
@@ -1468,7 +1473,7 @@ just enter your nickname.</source>
     <name>PageNetServer</name>
     <message>
         <source>Click here for details</source>
-        <translation>詳細を見るため、ここを押してください</translation>
+        <translation>詳細を見るためには、ここを押してください</translation>
     </message>
     <message>
         <source>Insert your address here</source>
@@ -1492,7 +1497,7 @@ just enter your nickname.</source>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>
-            チーム選択からチームを編集することはできません。チームの追加、編集、削除をするために、メインメニューに戻ってください。</translation>
+            チーム選択からチームを編集することができません。チームの追加、編集、削除をするためには、メインメニュー画面に戻ってください。</translation>
     </message>
     <message>
         <source>New scheme</source>
@@ -1528,11 +1533,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Proxy host</source>
-        <translation>プロクシのホスト</translation>
+        <translation>プロクシのホスト名</translation>
     </message>
     <message>
         <source>Proxy port</source>
-        <translation>プロクシのポート</translation>
+        <translation>プロクシのポート番号</translation>
     </message>
     <message>
         <source>Proxy login</source>
@@ -1648,7 +1653,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
-        <translation>「%1」言語は欠けています</translation>
+        <translation>「%1」言語が欠けています</translation>
     </message>
     <message>
         <source>Can&apos;t delete last team</source>
@@ -1699,7 +1704,7 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>オンラインプレーヤー：%1名</numerusform>
         </translation>
     </message>
@@ -1752,7 +1757,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation>針鼠は動くことができません。</translation>
+        <translation>針鼠は動くことができません</translation>
     </message>
     <message>
         <source>New</source>
@@ -1764,7 +1769,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>ターン準をランダム化します。</translation>
+        <translation>ターン準をランダム化する。</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
@@ -1788,11 +1793,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation>ＣＯＭが死亡した時に、再発生します。</translation>
+        <translation>ＣＯＭは倒された時に、再発生します。</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation>生きている針鼠はターン開始時に、完全に回復します</translation>
+        <translation>生きている針鼠はターン開始時に、完全に回復します。</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
@@ -1804,7 +1809,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>針鼠はチーㇺと弾薬を共有していません</translation>
+        <translation>針鼠はチーㇺと弾薬を共有していません。</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
@@ -1824,11 +1829,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation>地形の回りに不滅の縁を追加します</translation>
+        <translation>地形の回りに不滅の縁を追加します。</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation>マップ底に不滅の縁を追加します</translation>
+        <translation>マップ底に不滅の縁を追加します。</translation>
     </message>
     <message>
         <source>None (Default)</source>
@@ -1848,11 +1853,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation>各クランは自分の地域からゲームを始めます</translation>
+        <translation>各クランは自分の地域からゲームを始めます。</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
-        <translation>総体的なダメージとノックバックの百分率</translation>
+        <translation>総体的なダメージとノックバックの百分率。</translation>
     </message>
     <message>
         <source>Turn time in seconds</source>
@@ -1896,7 +1901,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation>中サイズの島マップに配置される地雷の大体の数。この数はマップサイズに応じて拡大や縮小されます。</translation>
+        <translation>中サイズの島マップに配置される地雷の平均数。この数はマップサイズに応じて調整されます。</translation>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
@@ -1904,11 +1909,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation>中サイズの島マップに配置される樽の大体の数。この数はマップサイズに応じて拡大や縮小されます。</translation>
+        <translation>中サイズの島マップに配置される樽の平均数。この数はマップサイズに応じて調整されます。</translation>
     </message>
     <message>
         <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation>中サイズの島マップに配置される空中地雷の大体の数。この数はマップサイズに応じて拡大や縮小されます。</translation>
+        <translation>中サイズの島マップに配置される空中地雷の平均数。この数はマップサイズに応じて調整されます。</translation>
     </message>
     <message>
         <source>Affects the left and right boundaries of the map</source>
@@ -1920,7 +1925,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
-        <translation>ゲームスタイル調整の追加パラメータ。その意味はスタイルによって異なりますので、ドキュメントを参照してください。疑問を感じた場合、空にしてください。</translation>
+        <translation>ゲームスタイル調整の追加パラメータ。その意味はスタイルによって異なりますので、マニュアルを参照してください。疑問を感じた場合、空にしてください。</translation>
     </message>
     <message>
         <source>Name of this scheme</source>
@@ -1932,11 +1937,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
-        <translation type="unfinished"></translation>
+        <translation>地は大体の武器に対しては不滅です。</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1（%2）</translation>
+        <translation>%1（%2）</translation>
     </message>
 </context>
 <context>
@@ -1993,7 +1998,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Select a mission!</source>
-        <translation>任務選択！</translation>
+        <translation>任務を選択してください！</translation>
     </message>
     <message>
         <source>Start fighting</source>
@@ -2036,7 +2041,7 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1バイト</numerusform>
         </translation>
     </message>
@@ -2243,11 +2248,11 @@ just enter your nickname.</source>
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>フォーカス外れで低音</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation type="unfinished"></translation>
+        <translation>ゲームウィンドウのフォーカスが外れた場合、音量を下げる</translation>
     </message>
 </context>
 <context>
@@ -2408,11 +2413,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Host:</source>
-        <translation>ホスト：</translation>
+        <translation>ホスト名：</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>ポート：</translation>
+        <translation>ポート番号：</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -2428,7 +2433,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Server port:</source>
-        <translation>サーバーポート：</translation>
+        <translation>サーバーポート番号：</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -2448,7 +2453,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation>サドンデスの時間切れ</translation>
+        <translation>サドンデスまでの時間</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
@@ -2546,7 +2551,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>この開発中のビルドは、他のバージョンとの間に非互換、または不完全な機能が存在する可能性があります。</translation>
+        <translation>この開発中のビルドには、他のバージョンとの間に非互換、または不完全な機能が存在する可能性があります。</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -2729,11 +2734,11 @@ Do you really want to quit?</source>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation>参加しようとしているゲームはもう始まりました。それでも参加しますか？</translation>
+        <translation>参加しようとしているゲームはすでに始まっています。それでも参加しますか？</translation>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation>スキーム - 警報</translation>
+        <translation>スキーム - 忠告</translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
@@ -2753,7 +2758,7 @@ Do you still want to join the room?</source>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1ファイルを削除します。よろしいですか？</numerusform>
         </translation>
     </message>
@@ -2807,11 +2812,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
-        <translation>メールアドレス以外の全てのフィールドに記入してください。</translation>
+        <translation>メールアドレス以外の全ての項目に記入してください。メールアドレスの指定は任意です。</translation>
     </message>
     <message>
         <source>Hedgewars - Warning</source>
-        <translation>ヘッジウォーズ - 警報</translation>
+        <translation>ヘッジウォーズ - 忠告</translation>
     </message>
     <message>
         <source>Hedgewars - Information</source>
@@ -2819,12 +2824,12 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Not all players are ready</source>
-        <translation>準備が出来ていないプレーヤーがあります。</translation>
+        <translation>準備が出来ていないプレーヤーがいます。</translation>
     </message>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-        <translation>準備が出来ていないプレーヤーがあります。それでもゲームを始めてもよろしいですか？</translation>
+        <translation>準備が出来ていないプレーヤーがいます。それでもゲームを始めてもよろしいですか？</translation>
     </message>
     <message>
         <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
@@ -2852,7 +2857,7 @@ Current number of hedgehogs: %1</source>
     </message>
     <message>
         <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
-        <translation>チーㇺ名「%1」がすでに使用中なため、チームを「%2」に改名します。</translation>
+        <translation>チーム名「%1」がすでに使用中なため、チームを「%2」に改名します。</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars</source>
@@ -2868,23 +2873,23 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
-        <translation>武器スキーム「%1」を使用できません！</translation>
+        <translation>武器セット「%1」を使用できません！</translation>
     </message>
     <message>
         <source>The connection to the server is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバー接続が中断しました。</translation>
     </message>
     <message>
         <source>Schemes - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>スキーム - スキーム名使用中</translation>
     </message>
     <message>
         <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>スキーム名「%1」のスキームはすでに存在します。編集中のスキームは「%2」に変名されました。</translation>
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation type="unfinished"></translation>
+        <translation>武器セット「%1」はすでに存在します。編集中の武器セットは「%2」に変名されました。</translation>
     </message>
 </context>
 <context>
@@ -2986,7 +2991,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
-        <translation>デフォルトのサーバーポートを指定する</translation>
+        <translation>デフォルトのサーバーポート番号を指定する</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
@@ -3384,15 +3389,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>タイマー変換</translation>
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>任務情報表示</translation>
     </message>
     <message>
         <source>clan chat</source>
-        <translation type="unfinished"></translation>
+        <translation>クランチャット</translation>
     </message>
 </context>
 <context>
@@ -3430,7 +3435,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation>アクティブ針鼠を切り替える（可能の時に限って）：</translation>
+        <translation>操作中の針鼠を切り替える（可能の時に限って）：</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
@@ -3490,7 +3495,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Talk to your clan or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>自分のクランか全てのプレーヤーと会話する：</translation>
     </message>
 </context>
 <context>
@@ -3813,22 +3818,22 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>D-pad</source>
-        <translation type="unfinished"></translation>
+        <translation>十字ボタン</translation>
     </message>
     <message>
         <source>Axis %1 %2</source>
         <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>軸%1%2</translation>
     </message>
     <message>
         <source>Button %1</source>
         <extracomment>Game controller button. %1 = button number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ボタン%1</translation>
     </message>
     <message>
         <source>D-pad %1 %2</source>
         <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>十字ボタン%1%2</translation>
     </message>
 </context>
 <context>
@@ -3839,7 +3844,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>権利を持っていません</translation>
+        <translation>チェッカー権利を持っていません</translation>
     </message>
     <message>
         <source>Authentication failed</source>
@@ -3883,7 +3888,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation>警報！チャット洪水防護が作動中</translation>
+        <translation>忠告！チャット洪水防護が作動中</translation>
     </message>
     <message>
         <source>Excess flood</source>
@@ -3895,7 +3900,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation>警報！参加洪水防護が作動中</translation>
+        <translation>忠告！参加洪水防護が作動中</translation>
     </message>
     <message>
         <source>new seed</source>
@@ -3939,7 +3944,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>同名のチームがすでにリストに載ってます</translation>
+        <translation>同名のチームがすでに参加チームリストに載ってます</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
@@ -4031,7 +4036,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>すでに投票済みです</translation>
+        <translation>すでに投票済みです。</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
@@ -4055,219 +4060,219 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
+        <translation>/info ＜ニックネーム＞：プレーヤー情報を表示する</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/me ＜メッセージ＞:チャットアクション</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd：「表」か「裏」をランダムに出力する</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd ＜選択肢１＞　＜選択肢２＞　。。。:選択肢のうちの一つをランダムに出力する</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
+        <translation>/watch ＜番号＞：サーバーで保存されたデモを再生する</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
+        <translation>/help：チャットコマンドの説明を読む</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote ＜投票タイプ＞:投票を始める</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote　＜投票＞：賛成「yes」か反対「no」で投票する</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
+        <translation>/delegate ＜ニックネーム＞: 他のプレーヤーをルーム管理人にする</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams　＜数＞：最大のチーム数を指定する</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/global　＜メッセージ＞：グロリアチャットにメッセージを送る</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
+        <translation>/registered_only：非登録プレーヤー制限状態を切り替える</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
+        <translation>/super_power:サーバーから去るまでの間でアドミン権限を作動する。</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
+        <translation>/stats：サーバー統計を出力する</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/force　＜投票＞：投票結果を強制的に賛成「yes」か反対「no」かにする</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>/fix：ルームがプレーヤーなしでも存在続けるようにする</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation type="unfinished"></translation>
+        <translation>/unfix：「/fix」との逆効果</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>ロビーで利用可能コマンド：</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>ルームで利用可能コマンド</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバーアドミン専用コマンド：</translation>
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーム</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>ロビー</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation type="unfinished"></translation>
+        <translation>「プレー中」</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation type="unfinished"></translation>
+        <translation>「観戦中」</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>プレイヤーがオフラインです。</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/force：賛成「yes」か反対「no」で投票してください。</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote：賛成「yes」か反対「no」で投票してください。</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>キックされました</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>このサーバーは登録プレーヤーのみが参加できます。</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation type="unfinished"></translation>
+        <translation>表</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation type="unfinished"></translation>
+        <translation>裏</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation type="unfinished"></translation>
+        <translation>このサーバーではデモ再生はサポートされていません</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting　＜メッセージ＞：歓迎メッセージを指定する</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation type="unfinished"></translation>
+        <translation>/save ＜コンフィグID＞　＜コンフィグ名＞：現在のルームコンフィグを「/callvote map」で投票できるようにします</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete ＜コンフィグID＞：指定されたルームコンフィグを「/callvote map」で投票できないようにします</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom　＜ファイル名＞：投票できるルームコンフィグを指定されたファイルに保存する</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom　＜ファイル名＞：投票できるルームコンフィグを指定されたファイルから読み込む</translation>
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>登録専用状態が切り替えられました。</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>アドミン権限が作動されました。</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
-        <translation type="unfinished"></translation>
+        <translation>不正なコマンド。こまんど説明を読むには「/help」を入力してください。</translation>
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation type="unfinished"></translation>
+        <translation>自分をキックすることができません！</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation type="unfinished"></translation>
+        <translation>唯一の他のプレーヤーをキックすることができません！</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation type="unfinished"></translation>
+        <translation>指定されたプレイヤーがこのロームに参加していません。</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation type="unfinished"></translation>
+        <translation>指定されたプレーヤーをキックすることができません。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーム管理人でもサーバーアドミニストレータでもありません！</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>すでにルーム管理人です</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>歓迎メッセージが消却されました。</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation type="unfinished"></translation>
+        <translation>歓迎メッセージがセットされました。</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick：ルーム管理人無しのルームのみで可能です</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map：選択できるマップがありません。</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>ルーム管理人になりました！</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation type="unfinished"></translation>
+        <translation>このコマンドはロビー専用です</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation type="unfinished"></translation>
+        <translation>このコマンドはルーム専用です</translation>
     </message>
 </context>
 </TS>
