@@ -24,6 +24,7 @@ typedef union astring_
     {
         struct {
             uint16_t len;
+            unsigned char str[MAX_ANSISTRING_LENGTH];
         };
         struct {
             unsigned char _dummy2;

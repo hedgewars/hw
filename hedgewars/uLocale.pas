@@ -197,10 +197,7 @@ for i:=0 to argCount - 1 do
         else
             begin
             delete(tempstr, p, 2);
-//FIXME rtl/system needs an ansi insert
-{$IFNDEF PAS2C}
             insert(curArg, tempstr, p);
-{$ENDIF}
             end;
     end;
 FormatA:= tempstr;
