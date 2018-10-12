@@ -127,29 +127,15 @@ impl PartialOrd for FPNum {
 impl Ord for FPNum {
     #[inline]
     fn cmp(&self, rhs: &Self) -> cmp::Ordering {
-        if self.value == 0 && rhs.value == 0 {
-            cmp::Ordering::Equal
-        } else if self.is_negative != rhs.is_negative {
-            if self.is_negative {
-                cmp::Ordering::Less
+        #[inline]
+        fn extend(n: &FPNum) -> i128 {
+            if n.is_negative {
+                -(n.value as i128)
             } else {
-                cmp::Ordering::Greater
-            }
-        } else if self.value == rhs.value {
-            cmp::Ordering::Equal
-        } else if self.is_negative {
-            if self.value > rhs.value {
-                cmp::Ordering::Less
-            } else {
-                cmp::Ordering::Greater
-            }
-        } else {
-            if self.value < rhs.value {
-                cmp::Ordering::Less
-            } else {
-                cmp::Ordering::Greater
+                n.value as i128
             }
         }
+        extend(self).cmp(&(extend(rhs)))
     }
 }
 
@@ -311,6 +297,19 @@ fn zero() {
     assert!((-z).is_negative);
     assert_eq!(n - n, z);
     assert_eq!(-n + n, z);
+}
+
+#[test]
+fn ord() {
+    let z = FPNum::from(0);;
+    let n1_5 = FPNum::new(3, 2);
+    let n2_25 = FPNum::new(9, 4);
+
+    assert!(!(z > z));
+    assert!(!(z < z));
+    assert!(n2_25 > n1_5);
+    assert!(-n2_25 < n1_5);
+    assert!(-n2_25 < -n1_5);
 }
 
 #[test]
