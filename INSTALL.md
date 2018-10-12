@@ -24,6 +24,7 @@ To compile and install Hedgewars, you need at least:
 - SDL\_mixer >= 2.0
 - SDL\_image >= 2.0
 - SDL\_ttf >= 2.0
+- PhysFS >= 3.0.0
 
 ### Recommended optional dependencies
 
@@ -32,7 +33,6 @@ usually better to have them installed. Hedgewars has fallback mechanisms
 in if these are not found on your system.
 
 - qtstyleplugins (for Qt 5)
-- PhysFS >= 2.0.0
 - Lua = 5.1.0
 
 ### Optional dependencies
@@ -46,9 +46,6 @@ For some additional features, you can optionally install these dependencies:
 - For the Hedgewars Server:
     - GHC >= 6.10
     - Various Haskell packages (see below)
-
-PhysFS will be internally built if `-DPHYSFS_SYSTEM=OFF` is passed to `cmake`
-(also allows to set `PHYSFS_LIBRARY` and `PHYSFS_INCLUDE_DIR` if needed).
 
 Lua will be automatically built if not found.
 
@@ -123,7 +120,6 @@ Important CMake options:
 - `CMAKE_INSTALL_PREFIX`: Installation directory
 - `NOSERVER`: Set to `ON` to *not* build the server
 - `NOVIDEOREC`: Set to `ON` to *not* build the video recorder
-- `SYSTEM_PHYSFS`: Set to `OFF` to use Hedgewars-bundled PhysFS
 
 ### Step 2: Make
 
@@ -158,15 +154,6 @@ If this happens, set the following CMake option:
 
 If this didn't work, make sure you have the correct Qt version
 (see above).
-
-### Hedgewars compiles successfully, but games instantly crash the map preview fails
-
-This is likely to be a problem with PhysFS. Try to build Hedgewars
-with the Hedgewars-bundled PhysFS by setting the CMake option
-`SYSTEM_PHYSFS=OFF`, then try to run `make` again.
-
-If the _bundled_ PhysFS fails, too, this is likely to be a bug in
-Hedgewars, please report at <https://issues.hedgewars.org/>.
 
 ### Broken/missing Haskell dependencies
 

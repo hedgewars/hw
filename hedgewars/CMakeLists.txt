@@ -164,17 +164,10 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-if(PHYSFS_SYSTEM)
-    get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
-else()
-    add_definitions(-dPHYSFS_INTERNAL)
-    list(APPEND HW_LINK_LIBS physfs)
-    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
-    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
-    #(should be harmless on other platforms)
-    add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
-endif()
+# PhysFS
+get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
+add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+
 list(APPEND HW_LINK_LIBS physlayer)
 
 
