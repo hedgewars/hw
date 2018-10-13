@@ -186,6 +186,7 @@ toCFiles _ _ (_, System _) = return ()
 toCFiles _ _ (_, Redo _) = return ()
 toCFiles outputPath ns pu@(fileName, _) = do
     hPutStrLn stdout $ "Rendering '" ++ fileName ++ "'..."
+    --let (fn, p) = pu in writeFile (outputPath ++ fn ++ ".dump") $ show p
     toCFiles' pu
     where
     toCFiles' (fn, p@(Program {})) = writeFile (outputPath ++ fn ++ ".c") $ "#include \"fpcrtl.h\"\n" ++ (render2C initialState . pascal2C) p

@@ -1805,7 +1805,6 @@ const Template45Points: array[0..11] of TSDL_Rect =
        (x:1005; y: 805; w:   0; h:   0)
       );
 
-      
 const Template46Points: array[0..19] of TSDL_Rect =
       (
        (x:  800; y: 1424; w:    1; h:    1),
