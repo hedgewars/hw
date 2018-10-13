@@ -1054,56 +1054,53 @@ else
     end
 end;
 
-function CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
-var t: PGear;
-	width: hwFloat;
+function CheckGearNearImpl(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt, exclude: PGear): PGear;
 begin
-t:= GearsList;
-rX:= sqr(rX);
-rY:= sqr(rY);
-width:= int2hwFloat(RightX-LeftX);
+    var t: PGear;
+    halfWidth, dX, dY: hwFloat;
+    isHit: Boolean;
+begin
+    t:= GearsList;
+    rX:= sqr(rX);
+    rY:= sqr(rY);
+    halfWidth:= int2hwFloat(RightX - LeftX) / _2;
 
-while t <> nil do
+    while t <> nil do
     begin
-    if (t^.Kind = Kind) then
-        if (not ((hwSqr(X - t^.X) / rX + hwSqr(Y - t^.Y) / rY) > _1)) or
-        ((WorldEdge = weWrap) and (
-        (not ((hwSqr(X - width - t^.X) / rX + hwSqr(Y - t^.Y) / rY) > _1)) or
-        (not ((hwSqr(X + width - t^.X) / rX + hwSqr(Y - t^.Y) / rY) > _1)))) then
+        if (t <> exclude) and (t^.Kind = Kind) then
         begin
-            CheckGearNear:= t;
-            exit;
+            dX := X - t^.X;
+            dY := Y - t^.Y;
+            isHit := not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1);
+
+            if (not isHit) and (WorldEdge = weWrap) then
+            begin
+                if (dX > halfWidth) and (not ((hwSqr(dX - halfWidth) / rX + hwSqr(dY) / rY) > _1)) then
+                    isHit := true
+                else if (dX < -halfWidth) and (not ((hwSqr(dX + halfWidth) / rX + hwSqr(dY) / rY) > _1)) then
+                    isHit := true
+            end;
+
+            if isHit then
+            begin
+                CheckGearNear:= t;
+                exit;
+            end;
         end;
-    t:= t^.NextGear
+        t:= t^.NextGear
     end;
 
-CheckGearNear:= nil
+    CheckGearNear:= nil
+end;
+
+function CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
+begin
+    CheckGearNear := CheckGearNearImpl(Kind, X, Y, rX, rY, nil);
 end;
 
 function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
-var t: PGear;
-	width: hwFloat;
 begin
-t:= GearsList;
-rX:= sqr(rX);
-rY:= sqr(rY);
-width:= int2hwFloat(RightX-LeftX);
-
-while t <> nil do
-    begin
-    if (t <> Gear) and (t^.Kind = Kind) then
-        if (not ((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
-        ((WorldEdge = weWrap) and (
-        (not ((hwSqr(Gear^.X - width - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)) or
-        (not ((hwSqr(Gear^.X + width - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1)))) then
-        begin
-            CheckGearNear:= t;
-            exit;
-        end;
-    t:= t^.NextGear
-    end;
-
-CheckGearNear:= nil
+    CheckGearNear := CheckGearNearImpl(Kind, Gear^.X, Gear^.Y, rX, rY, Gear);
 end;
 
 procedure CheckCollision(Gear: PGear); inline;
