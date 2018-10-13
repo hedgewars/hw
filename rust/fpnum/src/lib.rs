@@ -12,6 +12,7 @@ impl FPNum {
         FPNum::from(numerator) / denominator
     }
 
+    #[inline]
     fn signum(&self) -> i8 {
         if self.is_negative {
             -1
@@ -20,18 +21,22 @@ impl FPNum {
         }
     }
 
+    #[inline]
     fn is_negative(&self) -> bool {
         self.is_negative
     }
 
+    #[inline]
     fn is_positive(&self) -> bool {
         !self.is_negative
     }
 
+    #[inline]
     fn is_zero(&self) -> bool {
         self.value == 0
     }
 
+    #[inline]
     fn abs(&self) -> Self {
         Self {
             is_negative: false,
@@ -39,6 +44,7 @@ impl FPNum {
         }
     }
 
+    #[inline]
     fn round(&self) -> i64 {
         if self.is_negative {
             -((self.value >> 32) as i64)
@@ -47,6 +53,7 @@ impl FPNum {
         }
     }
 
+    #[inline]
     fn sqr(&self) -> Self {
         Self {
             is_negative: false,
@@ -111,6 +118,7 @@ impl From<FPNum> for f64 {
 }
 
 impl PartialEq for FPNum {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.value == other.value && (self.is_negative == other.is_negative || self.value == 0)
     }
@@ -119,6 +127,7 @@ impl PartialEq for FPNum {
 impl Eq for FPNum {}
 
 impl PartialOrd for FPNum {
+    #[inline]
     fn partial_cmp(&self, rhs: &Self) -> std::option::Option<std::cmp::Ordering> {
         Some(self.cmp(rhs))
     }
