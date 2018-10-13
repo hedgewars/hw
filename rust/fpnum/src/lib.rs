@@ -270,6 +270,12 @@ impl ops::Div<u32> for FPNum {
     }
 }
 
+macro_rules! fp {
+    (-$n: tt / $d: tt) => { FPNum::new(-$n, $d) };
+    ($n: tt / $d: tt) => { FPNum::new($n, $d) };
+    ($n: tt) => { FPNum::from($n) };
+}
+
 /* TODO:
  Distance
  DistanceI
@@ -281,7 +287,7 @@ impl ops::Div<u32> for FPNum {
 #[cfg(test)]
 #[test]
 fn basics() {
-    let n = FPNum::new(15, 2);
+    let n = fp!(15/2);
     assert!(n.is_positive());
     assert!(!n.is_negative());
 
@@ -290,7 +296,7 @@ fn basics() {
 
     assert_eq!(-(-n), n);
     assert_eq!((-n).abs(), n);
-    assert_eq!(-n, FPNum::new(-15, 2));
+    assert_eq!(-n, fp!(-15/2));
 
     assert_eq!(n.round(), 7);
     assert_eq!((-n).round(), -7);
@@ -298,8 +304,8 @@ fn basics() {
 
 #[test]
 fn zero() {
-    let z = FPNum::from(0);
-    let n = FPNum::new(15, 2);
+    let z = fp!(0);
+    let n = fp!(15/2);
 
     assert!(z.is_zero());
     assert!(z.is_positive());
@@ -310,9 +316,9 @@ fn zero() {
 
 #[test]
 fn ord() {
-    let z = FPNum::from(0);;
-    let n1_5 = FPNum::new(3, 2);
-    let n2_25 = FPNum::new(9, 4);
+    let z = fp!(0);
+    let n1_5 = fp!(3/2);
+    let n2_25 = fp!(9/4);
 
     assert!(!(z > z));
     assert!(!(z < z));
@@ -323,12 +329,12 @@ fn ord() {
 
 #[test]
 fn arith() {
-    let n1_5 = FPNum::new(3, 2);
-    let n2_25 = FPNum::new(9, 4);
-    let n_0_15 = FPNum::new(-15, 100);
+    let n1_5 = fp!(3/2);
+    let n2_25 = fp!(9/4);
+    let n_0_15 = fp!(-15/100);
 
-    assert_eq!(n1_5 + n1_5, FPNum::from(3));
-    assert_eq!(-n1_5 - n1_5, FPNum::from(-3));
+    assert_eq!(n1_5 + n1_5, fp!(3));
+    assert_eq!(-n1_5 - n1_5, fp!(-3));
 
     assert_eq!(n1_5 * n1_5, n2_25);
     assert_eq!(-n1_5 * -n1_5, n2_25);
