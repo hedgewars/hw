@@ -309,13 +309,15 @@ fn zero() {
     assert!(z.is_zero());
     assert!(z.is_positive());
     assert!((-z).is_negative);
-    assert_eq!(n - n, z)
+    assert_eq!(n - n, z);
+    assert_eq!(-n + n, z);
 }
 
 #[test]
 fn arith() {
     let n1_5 = FPNum::new(3, 2);
     let n2_25 = FPNum::new(9, 4);
+    let n_0_15 = FPNum::new(-15, 100);
 
     assert_eq!(n1_5 + n1_5, FPNum::from(3));
     assert_eq!(-n1_5 - n1_5, FPNum::from(-3));
@@ -324,6 +326,9 @@ fn arith() {
     assert_eq!(-n1_5 * -n1_5, n2_25);
     assert_eq!(n1_5 * -n1_5, -n2_25);
     assert_eq!(-n1_5 * n1_5, -n2_25);
+
+    assert_eq!(-n2_25 / -n1_5, n1_5);
+    assert_eq!(n1_5 / -10, n_0_15);
 
     assert_eq!(n1_5.sqr(), n2_25);
     assert_eq!((-n1_5).sqr(), n2_25);
