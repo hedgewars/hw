@@ -1057,13 +1057,14 @@ end;
 function CheckGearNearImpl(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt, exclude: PGear): PGear;
 begin
     var t: PGear;
-    halfWidth, dX, dY: hwFloat;
+    width, halfWidth, dX, dY: hwFloat;
     isHit: Boolean;
 begin
     t:= GearsList;
     rX:= sqr(rX);
     rY:= sqr(rY);
-    halfWidth:= int2hwFloat(RightX - LeftX) / _2;
+    width:= int2hwFloat(RightX - LeftX);
+    halfWidth:= width / _2;
 
     while t <> nil do
     begin
@@ -1075,9 +1076,9 @@ begin
 
             if (not isHit) and (WorldEdge = weWrap) then
             begin
-                if (dX > halfWidth) and (not ((hwSqr(dX - halfWidth) / rX + hwSqr(dY) / rY) > _1)) then
+                if (dX > halfWidth) and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
                     isHit := true
-                else if (dX < -halfWidth) and (not ((hwSqr(dX + halfWidth) / rX + hwSqr(dY) / rY) > _1)) then
+                else if (dX < -halfWidth) and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
                     isHit := true
             end;
 
