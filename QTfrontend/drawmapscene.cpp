@@ -29,6 +29,10 @@
 #define DRAWN_MAP_COLOR_CURSOR_PEN (Qt::green)
 #define DRAWN_MAP_COLOR_CURSOR_ERASER (Qt::red)
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 template <class T> T sqr(const T & x)
 {
     return x*x;

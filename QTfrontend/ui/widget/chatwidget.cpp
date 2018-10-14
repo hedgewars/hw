@@ -308,7 +308,7 @@ void HWChatWidget::setSettings(QSettings * settings)
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
-    if ((link.scheme() == "http") or (link.scheme() == "https"))
+    if ((link.scheme() == "http") || (link.scheme() == "https"))
         QDesktopServices::openUrl(link);
     else if (link.scheme() == "hwnick")
     {

@@ -100,12 +100,16 @@ About::About(QWidget * parent) :
     //: For the version numbers of Hedgewars' software dependencies
     QString libinfo = QString(tr("Dependency versions:") + QString("<br>"));
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
     libinfo.append(QString(tr("<a href=\"https://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));
-    libinfo.append(QString("<br>"));
-#else
-    libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
+#elif defined(WIN32_VCPKG)
+    libinfo.append(QString(tr("<a href=\"https://visualstudio.microsoft.com\">VC++</a>: %1")).arg(_MSC_FULL_VER));
+#elif defined(__VERSION__)
+    libinfo.append(QString(tr("Unknown Compiler: %1")).arg(__VERSION__));
+#else 
+    libinfo.append(QString(tr("Unknown Compiler")));
 #endif
+    libinfo.append(QString("<br>"));
 
     const SDL_version *sdl_ver;
     SDL_version sdl_version;

@@ -155,7 +155,7 @@ void HWNamegen::teamRandomHats(HWTeam & team, bool withDLC)
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         HWHog hh = team.hedgehog(i);
-        if (sameHogs and i > 0)
+        if (sameHogs && i > 0)
             hh.Hat = team.hedgehog(i-1).Hat;
         else
             hh.Hat = getRandomHat(withDLC);
