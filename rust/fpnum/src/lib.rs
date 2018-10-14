@@ -328,6 +328,19 @@ fn ord() {
 }
 
 #[test]
+fn ord() {
+    let z = FPNum::from(0);;
+    let n1_5 = FPNum::new(3, 2);
+    let n2_25 = FPNum::new(9, 4);
+
+    assert!(!(z > z));
+    assert!(!(z < z));
+    assert!(n2_25 > n1_5);
+    assert!(-n2_25 < n1_5);
+    assert!(-n2_25 < -n1_5);
+}
+
+#[test]
 fn arith() {
     let n1_5 = fp!(3/2);
     let n2_25 = fp!(9/4);
