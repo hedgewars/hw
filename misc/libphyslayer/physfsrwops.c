@@ -24,6 +24,10 @@
 #include <stdio.h>  /* used for SEEK_SET, SEEK_CUR, SEEK_END ... */
 #include "physfsrwops.h"
 
+#ifdef WIN32_VCPKG
+#define SDLCALL __cdecl
+#endif
+
 /* SDL's RWOPS interface changed a little in SDL 1.3... */
 #if defined(SDL_VERSION_ATLEAST)
 #if SDL_VERSION_ATLEAST(1, 3, 0)
