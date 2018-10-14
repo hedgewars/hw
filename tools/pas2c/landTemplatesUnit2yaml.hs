@@ -62,7 +62,7 @@ extractTemplatePoints templateNumber decls = (breakNTPX . head . catMaybes $ map
         toTemplatePointInit _ _ = Nothing
 
         breakNTPX :: InitExpression -> [InitExpression]
-        breakNTPX (InitArray ia) = map (InitArray . filter (not . isNtpx)) $ groupBy (\a _ -> not $ isNtpx a) ia
+        breakNTPX (InitArray ia) = map InitArray . filter ((<) 0 . length) . map (filter (not . isNtpx)) $ groupBy (\a b -> isNtpx a == isNtpx b) ia
         breakNTPX a = error $ show a
         isNtpx :: InitExpression -> Bool
         isNtpx (InitRecord ((Identifier "x" _, InitReference (Identifier "NTPX" _)):_)) = True
