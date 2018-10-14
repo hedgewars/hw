@@ -1056,8 +1056,7 @@ end;
 
 function CheckGearNearImpl(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt; exclude: PGear): PGear;
 var t: PGear;
-    width, dX, dY: hwFloat;
-    bound: LongInt;
+    width, bound, dX, dY: hwFloat;
     isHit: Boolean;
 begin
     t:= GearsList;
@@ -1087,14 +1086,14 @@ begin
 
             if isHit then
             begin
-                CheckGearNear:= t;
+                CheckGearNearImpl:= t;
                 exit;
             end;
         end;
         t:= t^.NextGear
     end;
 
-    CheckGearNear:= nil
+    CheckGearNearImpl:= nil
 end;
 
 function CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
