@@ -33,15 +33,11 @@ impl<T> IndexMut<usize> for Vec2D<T> {
 
 impl<T: Copy> Vec2D<T> {
     pub fn new(width: usize, height: usize, value: T) -> Self {
-        let mut vec = Self {
-            data: Vec::new(),
+        Self {
+            data: vec![value; width * height],
             width,
             height,
-        };
-
-        vec.data.extend(iter::repeat(value).take(width * height));
-
-        vec
+        }
     }
 
     #[inline]
