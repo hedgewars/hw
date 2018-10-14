@@ -1,0 +1,7 @@
+[package]
+name = "land2d"
+version = "0.1.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+
+[dependencies]
+vec2d = { path = "../vec2d" }
