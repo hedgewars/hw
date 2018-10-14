@@ -24,10 +24,6 @@
 #include <stdio.h>  /* used for SEEK_SET, SEEK_CUR, SEEK_END ... */
 #include "physfsrwops.h"
 
-#ifdef WIN32_VCPKG
-#define SDLCALL __cdecl
-#endif
-
 /* SDL's RWOPS interface changed a little in SDL 1.3... */
 #if defined(SDL_VERSION_ATLEAST)
 #if SDL_VERSION_ATLEAST(1, 3, 0)
@@ -36,7 +32,7 @@
 #endif
 
 #if TARGET_SDL13
-static SDLCALL Sint64 physfsrwops_size(struct SDL_RWops *rw)
+static Sint64 SDLCALL physfsrwops_size(struct SDL_RWops *rw)
 {
     PHYSFS_File *handle = (PHYSFS_File *) rw->hidden.unknown.data1;
     return PHYSFS_fileLength(handle);
@@ -44,7 +40,7 @@ static SDLCALL Sint64 physfsrwops_size(struct SDL_RWops *rw)
 #endif
 
 #if TARGET_SDL13
-static SDLCALL Sint64 physfsrwops_seek(struct SDL_RWops *rw, Sint64 offset, int whence)
+static Sint64 SDLCALL physfsrwops_seek(struct SDL_RWops *rw, Sint64 offset, int whence)
 #else
 static int physfsrwops_seek(SDL_RWops *rw, int offset, int whence)
 #endif
