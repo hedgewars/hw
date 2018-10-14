@@ -1055,8 +1055,7 @@ else
 end;
 
 function CheckGearNearImpl(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt; exclude: PGear): PGear;
-begin
-    var t: PGear;
+var t: PGear;
     width, dX, dY: hwFloat;
     bound: LongInt;
     isHit: Boolean;
