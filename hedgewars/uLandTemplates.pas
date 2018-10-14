@@ -31,8 +31,6 @@ type TPointArray = array[0..64] of TSDL_Rect;
                      BasePointsCount: Longword;
                      FillPoints: PPointArray;
                      FillPointsCount: Longword;
-                     BezierizeCount: Longword;
-                     RandPassesCount: Longword;
                      TemplateHeight, TemplateWidth: Longword;
                      canMirror, canFlip, isNegative, canInvert: boolean;
                      hasGirders: boolean;
@@ -1841,8 +1839,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template0Points));
         FillPoints: PPointArray(@Template0FPoints);
         FillPointsCount: Succ(High(Template0FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1852,8 +1848,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template1Points));
         FillPoints: PPointArray(@Template1FPoints);
         FillPointsCount: Succ(High(Template1FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1863,8 +1857,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template2Points));
         FillPoints: PPointArray(@Template2FPoints);
         FillPointsCount: Succ(High(Template2FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1874,8 +1866,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template3Points));
         FillPoints: PPointArray(@Template3FPoints);
         FillPointsCount: Succ(High(Template3FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1885,8 +1875,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template4Points));
         FillPoints: PPointArray(@Template4FPoints);
         FillPointsCount: Succ(High(Template4FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1896,8 +1884,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template5Points));
         FillPoints: PPointArray(@Template5FPoints);
         FillPointsCount: Succ(High(Template5FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1907,8 +1893,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template6Points));
         FillPoints: PPointArray(@Template6FPoints);
         FillPointsCount: Succ(High(Template6FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1918,8 +1902,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template7Points));
         FillPoints: PPointArray(@Template7FPoints);
         FillPointsCount: Succ(High(Template7FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1929,8 +1911,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template8Points));
         FillPoints: PPointArray(@Template8FPoints);
         FillPointsCount: Succ(High(Template8FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1940,8 +1920,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template9Points));
         FillPoints: PPointArray(@Template9FPoints);
         FillPointsCount: Succ(High(Template9FPoints));
-        BezierizeCount: 1;
-        RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1951,8 +1929,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template10Points));
         FillPoints: PPointArray(@Template10FPoints);
         FillPointsCount: Succ(High(Template10FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1962,8 +1938,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template11Points));
         FillPoints: PPointArray(@Template11FPoints);
         FillPointsCount: Succ(High(Template11FPoints));
-        BezierizeCount: 1;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1973,8 +1947,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template12Points));
         FillPoints: PPointArray(@Template12FPoints);
         FillPointsCount: Succ(High(Template12FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1984,8 +1956,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template13Points));
         FillPoints: PPointArray(@Template13FPoints);
         FillPointsCount: Succ(High(Template13FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -1995,8 +1965,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template14Points));
         FillPoints: PPointArray(@Template14FPoints);
         FillPointsCount: Succ(High(Template14FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2006,8 +1974,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template15Points));
         FillPoints: PPointArray(@Template15FPoints);
         FillPointsCount: Succ(High(Template15FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2017,8 +1983,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template16Points));
         FillPoints: PPointArray(@Template16FPoints);
         FillPointsCount: Succ(High(Template16FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2028,8 +1992,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template17Points));
         FillPoints: PPointArray(@Template17FPoints);
         FillPointsCount: Succ(High(Template17FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2039,8 +2001,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template18Points));
         FillPoints: PPointArray(@Template18FPoints);
         FillPointsCount: Succ(High(Template18FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2050,8 +2010,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template19Points));
         FillPoints: PPointArray(@Template19FPoints);
         FillPointsCount: Succ(High(Template19FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2061,8 +2019,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template20Points));
         FillPoints: PPointArray(@Template20FPoints);
         FillPointsCount: Succ(High(Template20FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2072,8 +2028,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template21Points));
         FillPoints: PPointArray(@Template21FPoints);
         FillPointsCount: Succ(High(Template21FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2083,8 +2037,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template22Points));
         FillPoints: PPointArray(@Template22FPoints);
         FillPointsCount: Succ(High(Template22FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2094,8 +2046,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template23Points));
         FillPoints: PPointArray(@Template23FPoints);
         FillPointsCount: Succ(High(Template23FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2105,8 +2055,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template24Points));
         FillPoints: PPointArray(@Template24FPoints);
         FillPointsCount: Succ(High(Template24FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2116,8 +2064,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template25Points));
         FillPoints: PPointArray(@Template25FPoints);
         FillPointsCount: Succ(High(Template25FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2127,8 +2073,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template26Points));
         FillPoints: PPointArray(@Template26FPoints);
         FillPointsCount: Succ(High(Template26FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2138,8 +2082,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template27Points));
         FillPoints: PPointArray(@Template27FPoints);
         FillPointsCount: Succ(High(Template27FPoints));
-        BezierizeCount: 1;
-        RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2149,8 +2091,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template28Points));
         FillPoints: PPointArray(@Template28FPoints);
         FillPointsCount: Succ(High(Template28FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2160,8 +2100,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template29Points));
         FillPoints: PPointArray(@Template29FPoints);
         FillPointsCount: Succ(High(Template29FPoints));
-        BezierizeCount: 1;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2171,8 +2109,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template30Points));
         FillPoints: PPointArray(@Template30FPoints);
         FillPointsCount: Succ(High(Template30FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2182,8 +2118,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template31Points));
         FillPoints: PPointArray(@Template31FPoints);
         FillPointsCount: Succ(High(Template31FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2193,8 +2127,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template32Points));
         FillPoints: PPointArray(@Template32FPoints);
         FillPointsCount: Succ(High(Template32FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2204,8 +2136,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template33Points));
         FillPoints: PPointArray(@Template33FPoints);
         FillPointsCount: Succ(High(Template33FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2215,8 +2145,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template34Points));
         FillPoints: PPointArray(@Template34FPoints);
         FillPointsCount: Succ(High(Template34FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2226,8 +2154,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template35Points));
         FillPoints: PPointArray(@Template35FPoints);
         FillPointsCount: Succ(High(Template35FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2237,8 +2163,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template36Points));
         FillPoints: PPointArray(@Template36FPoints);
         FillPointsCount: Succ(High(Template36FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
         TemplateHeight: 1024; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
@@ -2248,8 +2172,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template37Points));
         FillPoints: PPointArray(@Template37FPoints);
         FillPointsCount: Succ(High(Template37FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 3;
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2259,8 +2181,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template38Points));
         FillPoints: PPointArray(@Template38FPoints);
         FillPointsCount: Succ(High(Template38FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 4;
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2270,8 +2190,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template39Points));
         FillPoints: PPointArray(@Template39FPoints);
         FillPointsCount: Succ(High(Template39FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 3;
         TemplateHeight: 512; TemplateWidth: 1536;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
@@ -2281,8 +2199,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template40Points));
         FillPoints: PPointArray(@Template40FPoints);
         FillPointsCount: Succ(High(Template40FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 3;
         TemplateHeight: 1024; TemplateWidth: 1024;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
@@ -2292,8 +2208,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template41Points));
         FillPoints: PPointArray(@Template41FPoints);
         FillPointsCount: Succ(High(Template41FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 9;
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2303,8 +2217,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template42Points));
         FillPoints: PPointArray(@Template42FPoints);
         FillPointsCount: Succ(High(Template42FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 3;
         TemplateHeight: 512; TemplateWidth: 1536;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
@@ -2314,8 +2226,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template43Points));
         FillPoints: PPointArray(@Template43FPoints);
         FillPointsCount: Succ(High(Template43FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 9;
         TemplateHeight: 4096; TemplateWidth: 4096;
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
@@ -2325,8 +2235,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template44Points));
         FillPoints: PPointArray(@Template44FPoints);
         FillPointsCount: Succ(High(Template44FPoints));
-        BezierizeCount: 5;
-        RandPassesCount: 3;
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: false; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
@@ -2336,8 +2244,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template45Points));
         FillPoints: PPointArray(@Template45FPoints);
         FillPointsCount: Succ(High(Template45FPoints));
-        BezierizeCount: 5;
-        RandPassesCount: 7;
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: false; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
@@ -2347,8 +2253,6 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template46Points));
         FillPoints: PPointArray(@Template46FPoints);
         FillPointsCount: Succ(High(Template46FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;

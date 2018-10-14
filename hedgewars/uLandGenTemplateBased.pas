@@ -82,21 +82,6 @@ begin
     end
 end;
 
-
-procedure Distort1(var Template: TEdgeTemplate; var pa: TPixAr);
-var i: Longword;
-begin
-    for i:= 1 to Template.BezierizeCount do
-        begin
-        BezierizeEdge(pa, _0_5);
-        RandomizePoints(pa);
-        RandomizePoints(pa)
-        end;
-    for i:= 1 to Template.RandPassesCount do
-        RandomizePoints(pa);
-    BezierizeEdge(pa, _0_1);
-end;
-
 procedure FindPoint(si: LongInt; fillPointsCount: LongWord; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 40;
 var p1, p2, p4, fp, mp: TPoint;
