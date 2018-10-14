@@ -12,12 +12,10 @@ type TPixAr = record
 procedure DrawEdge(var pa: TPixAr; value: Word);
 procedure FillLand(x, y: LongInt; border, value: Word);
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
-procedure RandomizePoints(var pa: TPixAr);
 
 implementation
 
-uses uLandGraphics, uDebug, uVariables, uLandTemplates, uRandom, uUtils;
-
+uses uLandGraphics, uDebug, uVariables, uLandTemplates;
 
 
 var Stack: record
@@ -267,46 +265,5 @@ begin
         end;
     CheckSelfIntersect:= false
 end;
-
-procedure RandomizePoints(var pa: TPixAr);
-const cEdge = 55;
-      cMinDist = 8;
-var radz: array[0..Pred(cMaxEdgePoints)] of LongInt;
-    i, k, dist, px, py: LongInt;
-begin
-    for i:= 0 to Pred(pa.Count) do
-    begin
-    radz[i]:= 0;
-        with pa.ar[i] do
-            if x <> NTPX then
-            begin
-            radz[i]:= Min(Max(x - cEdge, 0), Max(LAND_WIDTH - cEdge - x, 0));
-            radz[i]:= Min(radz[i], Min(Max(y - cEdge, 0), Max(LAND_HEIGHT - cEdge - y, 0)));
-            if radz[i] > 0 then
-                for k:= 0 to Pred(i) do
-                begin
-                dist:= Max(abs(x - pa.ar[k].x), abs(y - pa.ar[k].y));
-                radz[k]:= Max(0, Min((dist - cMinDist) div 2, radz[k]));
-                radz[i]:= Max(0, Min(dist - radz[k] - cMinDist, radz[i]))
-                end
-            end;
-    end;
-
-    for i:= 0 to Pred(pa.Count) do
-        with pa.ar[i] do
-            if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
-            begin
-            px:= x;
-            py:= y;
-            x:= x + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
-            y:= y + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
-            if CheckSelfIntersect(pa, i) then
-                begin
-                x:= px;
-                y:= py
-                end;
-            end
-end;
-
 
 end.
