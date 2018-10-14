@@ -273,6 +273,7 @@ impl ops::Div<u32> for FPNum {
 macro_rules! fp {
     (-$n: tt / $d: tt) => { FPNum::new(-$n, $d) };
     ($n: tt / $d: tt) => { FPNum::new($n, $d) };
+    (-$n: tt) => { FPNum::from(-$n) };
     ($n: tt) => { FPNum::from($n) };
 }
 
@@ -319,19 +320,6 @@ fn ord() {
     let z = fp!(0);
     let n1_5 = fp!(3/2);
     let n2_25 = fp!(9/4);
-
-    assert!(!(z > z));
-    assert!(!(z < z));
-    assert!(n2_25 > n1_5);
-    assert!(-n2_25 < n1_5);
-    assert!(-n2_25 < -n1_5);
-}
-
-#[test]
-fn ord() {
-    let z = FPNum::from(0);;
-    let n1_5 = FPNum::new(3, 2);
-    let n2_25 = FPNum::new(9, 4);
 
     assert!(!(z > z));
     assert!(!(z < z));
