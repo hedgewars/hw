@@ -46,6 +46,15 @@ impl LaggedFibonacciPRNG {
     }
 }
 
+impl Iterator for LaggedFibonacciPRNG {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<u32> {
+        self.get_next();
+        Some(self.get_next())
+    }
+}
+
 #[cfg(test)]
 #[test]
 fn compatibility() {
