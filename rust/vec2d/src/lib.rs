@@ -1,7 +1,7 @@
-use std::iter;
 use std::ops::{Index, IndexMut};
+use std::slice::SliceIndex;
 
-struct Vec2D<T> {
+pub struct Vec2D<T> {
     data: Vec<T>,
     width: usize,
     height: usize,
@@ -49,6 +49,11 @@ impl<T: Copy> Vec2D<T> {
     pub fn height(&self) -> usize {
         self.height
     }
+
+    #[inline]
+    pub fn get_mut(&mut self, row: usize, column: usize) -> Option<&mut <usize as SliceIndex<[T]>>::Output> {
+        self.data.get_mut(row * self.width + column)
+    }
 }
 
 #[cfg(test)]
@@ -69,5 +74,10 @@ mod tests {
 
         assert_eq!(v[2][0], 0xff);
         assert_eq!(v[2][1], 0);
+
+        v.get_mut(2, 1).map(|v| *v = 1);
+        assert_eq!(v[2][1], 1);
+
+        assert_eq!(v.get_mut(2, 2), None);
     }
 }
