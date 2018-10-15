@@ -5,8 +5,14 @@ unit uPhysFSLayer;
 interface
 uses SDLh, LuaPas;
 
-const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhwphysfs'{$ELSE}'libphysfs'{$ENDIF};
-const PhyslayerLibName = 'libphyslayer';
+const PhysfsLibName =
+{$IFDEF PHYSFS_INTERNAL}
+    'libhwphysfs'
+{$ELSE}
+    {$IFDEF WIN32_VCPKG}'physfs'{$ELSE}'libphysfs'{$ENDIF};
+{$ENDIF}
+const PhyslayerLibName =
+    {$IFDEF WIN32_VCPKG}'physlayer'{$ELSE}'libphyslayer'{$ENDIF};
 
 {$IFNDEF WIN32}
     {$linklib physfs}

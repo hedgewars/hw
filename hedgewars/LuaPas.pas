@@ -14,7 +14,12 @@ interface
 uses uConsts;
 {.$DEFINE LUA_GETHOOK}
 
-const LuaLibName = {$IFDEF LUA_INTERNAL}'libhwlua'{$ELSE}'liblua'{$ENDIF};
+const LuaLibName =
+{$IFDEF LUA_INTERNAL}
+    {$IFDEF WIN32_VCPKG}'hwlua'{$ELSE}'libhwlua'{$ENDIF}
+{$ELSE}
+    {$IFDEF WIN32_VCPKG}'lua'{$ELSE}'liblua'{$ENDIF}
+{$ENDIF};
 
 {$IFNDEF WIN32}
     {$linklib lua}

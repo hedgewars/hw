@@ -186,6 +186,10 @@ foreach(loop_var ${engine_sources})
     list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
 endforeach(loop_var)
 
+if (WIN32 AND VCPKG_TOOLCHAIN)
+    add_definitions(-dWIN32_VCPKG)
+endif()
+
 
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
