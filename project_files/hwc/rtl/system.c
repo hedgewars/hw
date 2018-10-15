@@ -74,7 +74,7 @@ astring fpcrtl_copyA(astring s, Integer index, Integer count) {
     return result;
 }
 
-void fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
+void __attribute__((overloadable)) fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
     int num_insert;
     int num_shift;
     int num_preshift;
