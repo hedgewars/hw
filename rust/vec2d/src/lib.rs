@@ -54,6 +54,11 @@ impl<T: Copy> Vec2D<T> {
     pub fn get_mut(&mut self, row: usize, column: usize) -> Option<&mut <usize as SliceIndex<[T]>>::Output> {
         self.data.get_mut(row * self.width + column)
     }
+
+    #[inline]
+    pub fn get(&self, row: usize, column: usize) -> Option<&<usize as SliceIndex<[T]>>::Output> {
+        self.data.get(row * self.width + column)
+    }
 }
 
 #[cfg(test)]

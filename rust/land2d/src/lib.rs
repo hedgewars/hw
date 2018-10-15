@@ -8,7 +8,7 @@ pub struct Land2D<T> {
     height_mask: usize,
 }
 
-impl<T: Default + Copy> Land2D<T> {
+impl<T: Default + Copy + PartialEq> Land2D<T> {
     pub fn new(width: usize, height: usize) -> Self {
         assert!(width.is_power_of_two());
         assert!(height.is_power_of_two());
@@ -21,7 +21,17 @@ impl<T: Default + Copy> Land2D<T> {
     }
 
     #[inline]
-    fn is_valid_coordinate(&self, x: i32, y: i32) -> bool {
+    pub fn width(&self) -> usize {
+        self.pixels.width()
+    }
+
+    #[inline]
+    pub fn height(&self) -> usize {
+        self.pixels.height()
+    }
+
+    #[inline]
+    pub fn is_valid_coordinate(&self, x: i32, y: i32) -> bool {
         (x as usize & self.width_mask) == 0 && (y as usize & self.height_mask) == 0
     }
 
@@ -80,6 +90,83 @@ impl<T: Default + Copy> Land2D<T> {
             self.map(y, x, |p| *p = value);
         }
     }
+
+    pub fn fill(&mut self, start_x: i32, start_y: i32, border_value: T, fill_value: T) {
+        debug_assert!(self.is_valid_coordinate(start_x - 1, start_y));
+        debug_assert!(self.is_valid_coordinate(start_x, start_y));
+
+        let mut stack: Vec<(usize, usize, usize, isize)> = Vec::new();
+        fn push<T: Default + Copy + PartialEq>(
+            land: &Land2D<T>,
+            stack: &mut Vec<(usize, usize, usize, isize)>,
+            xl: usize,
+            xr: usize,
+            y: usize,
+            dir: isize,
+        ) {
+            let yd = y as isize + dir;
+
+            if land.is_valid_coordinate(0, yd as i32) {
+                stack.push((xl, xr, yd as usize, dir));
+            }
+        };
+
+        let start_x_l = (start_x - 1) as usize;
+        let start_x_r = start_x as usize;
+        push(self, &mut stack, start_x_l, start_x_r, start_y as usize, -1);
+        push(self, &mut stack, start_x_l, start_x_r, start_y as usize, 1);
+
+        loop {
+            let a = stack.pop();
+            match a {
+                None => return,
+                Some(a) => {
+                    let (mut xl, mut xr, y, mut dir) = a;
+
+                    while xl > 0 && self
+                        .pixels
+                        .get(y, xl)
+                        .map_or(false, |v| *v != border_value && *v != fill_value)
+                    {
+                        xl -= 1;
+                    }
+
+                    while xr < self.width() - 1 && self
+                        .pixels
+                        .get(y, xr)
+                        .map_or(false, |v| *v != border_value && *v != fill_value)
+                    {
+                        xr += 1;
+                    }
+
+                    while xl < xr {
+                        while xl <= xr
+                            && (self.pixels[y][xl] == border_value
+                                || self.pixels[y][xl] == fill_value)
+                        {
+                            xl += 1;
+                        }
+
+                        let mut x = xl;
+
+                        while xl <= xr
+                            && (self.pixels[y][xl] != border_value
+                                && self.pixels[y][xl] != fill_value)
+                        {
+                            self.pixels[y][xl] = fill_value;
+
+                            xl += 1;
+                        }
+
+                        if x < xl {
+                            push(self, &mut stack, x, xl - 1, y, dir);
+                            push(self, &mut stack, x, xl - 1, y, -dir);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -88,7 +175,7 @@ mod tests {
 
     #[test]
     fn basics() {
-        let  l:Land2D<u8> = Land2D::new(32, 64);
+        let l: Land2D<u8> = Land2D::new(32, 64);
 
         assert!(l.is_valid_coordinate(0, 0));
         assert!(!l.is_valid_coordinate(-1, -1));
@@ -98,4 +185,34 @@ mod tests {
         assert!(!l.is_valid_coordinate(31, 64));
     }
 
+    #[test]
+    fn fill() {
+        let mut l: Land2D<u8> = Land2D::new(128, 128);
+
+        l.draw_line(0, 0, 32, 96, 1);
+        l.draw_line(32, 96, 64, 32, 1);
+        l.draw_line(64, 32, 96, 80, 1);
+        l.draw_line(96, 80, 128, 0, 1);
+
+        l.draw_line(0, 128, 64, 96, 1);
+        l.draw_line(128, 128, 64, 96, 1);
+
+        l.fill(32, 32, 1, 2);
+        l.fill(16, 96, 1, 3);
+        l.fill(60, 100, 1, 4);
+
+        assert_eq!(l.pixels[0][0], 1);
+        assert_eq!(l.pixels[96][64], 1);
+
+        assert_eq!(l.pixels[40][32], 2);
+        assert_eq!(l.pixels[40][96], 2);
+        assert_eq!(l.pixels[5][0], 3);
+        assert_eq!(l.pixels[120][0], 3);
+        assert_eq!(l.pixels[5][127], 3);
+        assert_eq!(l.pixels[120][127], 3);
+        assert_eq!(l.pixels[35][64], 3);
+        assert_eq!(l.pixels[120][20], 4);
+        assert_eq!(l.pixels[120][100], 4);
+        assert_eq!(l.pixels[100][64], 4);
+    }
 }
