@@ -7,14 +7,21 @@ pub struct Outline {
     points: Vec<Point>,
 }
 
-fn check_intersect(v1: &Point, v2: &Point, v3: &Point, v4: &Point) -> bool {
-    let dm: i32 = (v4.y - v3.y) * (v2.x - v1.x) - (v4.x - v3.x) * (v2.y - v1.y);
+fn check_intersect(
+    segment1_start: &Point,
+    segment1_end: &Point,
+    segment2_start: &Point,
+    segment2_end: &Point,
+) -> bool {
+    let dm: i32 = (segment2_end.y - segment2_start.y) * (segment1_end.x - segment1_start.x)
+        - (segment2_end.x - segment2_start.x) * (segment1_end.y - segment1_start.y);
 
     if dm == 0 {
         return false;
     }
 
-    let c1: i32 = (v4.x - v3.x) * (v1.y - v3.y) - (v4.y - v3.y) * (v1.x - v3.x);
+    let c1: i32 = (segment2_end.x - segment2_start.x) * (segment1_start.y - segment2_start.y)
+        - (segment2_end.y - segment2_start.y) * (segment1_start.x - segment2_start.x);
 
     if dm > 0 {
         if (c1 < 0) || (c1 > dm) {
@@ -26,7 +33,8 @@ fn check_intersect(v1: &Point, v2: &Point, v3: &Point, v4: &Point) -> bool {
         }
     }
 
-    let c2: i32 = (v2.x - v3.x) * (v1.y - v3.y) - (v2.y - v3.y) * (v1.x - v3.x);
+    let c2: i32 = (segment1_end.x - segment2_start.x) * (segment1_start.y - segment2_start.y)
+        - (segment1_end.y - segment2_start.y) * (segment1_start.x - segment2_start.x);
 
     if dm > 0 {
         if (c2 < 0) || (c2 > dm) {
@@ -75,11 +83,11 @@ impl Outline {
 #[cfg(test)]
 #[test]
 fn intersection() {
-    let p1 = Point{x: 0, y: 0};
-    let p2 = Point{x: 0, y: 10};
-    let p3 = Point{x: -5, y: 5};
-    let p4 = Point{x: 5, y: 5};
-    let p5 = Point{x: 5, y: 16};
+    let p1 = Point { x: 0, y: 0 };
+    let p2 = Point { x: 0, y: 10 };
+    let p3 = Point { x: -5, y: 5 };
+    let p4 = Point { x: 5, y: 5 };
+    let p5 = Point { x: 5, y: 16 };
 
     assert!(check_intersect(&p1, &p2, &p3, &p4));
     assert!(!check_intersect(&p1, &p2, &p3, &p5));
