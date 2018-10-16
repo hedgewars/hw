@@ -439,7 +439,7 @@ fn zero() {
     assert!((-z).is_negative);
     assert_eq!(n - n, z);
     assert_eq!(-n + n, z);
-    assert_eq!(z.with_sign_as(-n), -z);
+    assert_eq!(n.with_sign_as(-n), -n);
 }
 
 #[test]
