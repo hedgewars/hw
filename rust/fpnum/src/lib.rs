@@ -9,12 +9,12 @@ pub struct FPNum {
 
 impl FPNum {
     #[inline]
-    fn new(numerator: i32, denominator: u32) -> Self {
+    pub fn new(numerator: i32, denominator: u32) -> Self {
         FPNum::from(numerator) / denominator
     }
 
     #[inline]
-    fn signum(&self) -> i8 {
+    pub fn signum(&self) -> i8 {
         if self.is_negative {
             -1
         } else {
@@ -23,22 +23,22 @@ impl FPNum {
     }
 
     #[inline]
-    fn is_negative(&self) -> bool {
+    pub fn is_negative(&self) -> bool {
         self.is_negative
     }
 
     #[inline]
-    fn is_positive(&self) -> bool {
+    pub fn is_positive(&self) -> bool {
         !self.is_negative
     }
 
     #[inline]
-    fn is_zero(&self) -> bool {
+    pub fn is_zero(&self) -> bool {
         self.value == 0
     }
 
     #[inline]
-    fn abs(&self) -> Self {
+    pub fn abs(&self) -> Self {
         Self {
             is_negative: false,
             value: self.value,
@@ -46,7 +46,7 @@ impl FPNum {
     }
 
     #[inline]
-    fn round(&self) -> i64 {
+    pub fn round(&self) -> i64 {
         if self.is_negative {
             -((self.value >> 32) as i64)
         } else {
@@ -55,14 +55,14 @@ impl FPNum {
     }
 
     #[inline]
-    fn sqr(&self) -> Self {
+    pub fn sqr(&self) -> Self {
         Self {
             is_negative: false,
             value: ((self.value as u128).pow(2) >> 32) as u64,
         }
     }
 
-    fn sqrt(&self) -> Self {
+    pub fn sqrt(&self) -> Self {
         debug_assert!(!self.is_negative);
 
         let mut t: u64 = 0x4000000000000000;
@@ -87,17 +87,17 @@ impl FPNum {
     }
 
     #[inline]
-    fn with_sign(&self, is_negative: bool) -> FPNum {
+    pub fn with_sign(&self, is_negative: bool) -> FPNum {
         FPNum{ is_negative, ..*self}
     }
 
     #[inline]
-    fn with_sign_as(self, other: FPNum) -> FPNum {
+    pub fn with_sign_as(self, other: FPNum) -> FPNum {
         self.with_sign(other.is_negative)
     }
 
     #[inline]
-    fn point(self) -> FPPoint {
+    pub fn point(self) -> FPPoint {
         FPPoint::new(self, self)
     }
 }
@@ -286,6 +286,7 @@ impl ops::Div<u32> for FPNum {
     }
 }
 
+#[macro_export]
 macro_rules! fp {
     (-$n: tt / $d: tt) => { FPNum::new(-$n, $d) };
     ($n: tt / $d: tt) => { FPNum::new($n, $d) };
@@ -296,7 +297,7 @@ macro_rules! fp {
 const LINEARIZE_TRESHOLD: u64 = 0x1_0000;
 
 #[derive(Clone, Copy, Debug)]
-struct FPPoint {
+pub struct FPPoint {
     x_is_negative: bool,
     y_is_negative: bool,
     x_value: u64,
@@ -305,7 +306,7 @@ struct FPPoint {
 
 impl FPPoint {
     #[inline]
-    fn new(x: FPNum, y: FPNum) -> Self {
+    pub fn new(x: FPNum, y: FPNum) -> Self {
         Self {
             x_is_negative: x.is_negative,
             y_is_negative: y.is_negative,
@@ -315,16 +316,16 @@ impl FPPoint {
     }
 
     #[inline]
-    fn zero() -> FPPoint { FPPoint::new(fp!(0), fp!(0)) }
+    pub fn zero() -> FPPoint { FPPoint::new(fp!(0), fp!(0)) }
 
     #[inline]
-    fn unit_x() -> FPPoint { FPPoint::new(fp!(1), fp!(0)) }
+    pub fn unit_x() -> FPPoint { FPPoint::new(fp!(1), fp!(0)) }
 
     #[inline]
-    fn unit_y() -> FPPoint { FPPoint::new(fp!(0), fp!(1)) }
+    pub fn unit_y() -> FPPoint { FPPoint::new(fp!(0), fp!(1)) }
 
     #[inline]
-    fn x(&self) -> FPNum {
+    pub fn x(&self) -> FPNum {
         FPNum {
             is_negative: self.x_is_negative,
             value: self.x_value
@@ -332,7 +333,7 @@ impl FPPoint {
     }
 
     #[inline]
-    fn y(&self) -> FPNum {
+    pub fn y(&self) -> FPNum {
         FPNum {
             is_negative: self.y_is_negative,
             value: self.y_value
@@ -340,12 +341,17 @@ impl FPPoint {
     }
 
     #[inline]
-    fn sqr_distance(&self) -> FPNum {
+    pub fn max_norm(&self) -> FPNum {
+        std::cmp::max(self.x(), self.y())
+    }
+
+    #[inline]
+    pub fn sqr_distance(&self) -> FPNum {
         self.x().sqr() + self.y().sqr()
     }
 
     #[inline]
-    fn distance(&self) -> FPNum {
+    pub fn distance(&self) -> FPNum {
         let r = self.x_value | self.y_value;
         if r < LINEARIZE_TRESHOLD {
             FPNum::from(r as u32)
@@ -355,13 +361,12 @@ impl FPPoint {
     }
 
     #[inline]
-    fn is_in_range(&self, radius: FPNum) -> bool {
-        std::cmp::max(self.x(), self.y()) < radius
-            && self.sqr_distance() < radius.sqr()
+    pub fn is_in_range(&self, radius: FPNum) -> bool {
+        self.max_norm() < radius && self.sqr_distance() < radius.sqr()
     }
 
     #[inline]
-    fn dot(&self, other: &FPPoint) -> FPNum {
+    pub fn dot(&self, other: &FPPoint) -> FPNum {
         self.x() * other.x() + self.y() * other.y()
     }
 }
@@ -421,7 +426,7 @@ scalar_bin_op_impl!(ops::Sub<FPNum>, sub);
 scalar_bin_op_impl!(ops::Div<FPNum>, div);
 
 #[inline]
-fn distance<T>(x: T, y: T) -> FPNum
+pub fn distance<T>(x: T, y: T) -> FPNum
     where T: ops::Add + ops::Mul + Copy +
              From<<T as ops::Add>::Output> +
              From<<T as ops::Mul>::Output> +
