@@ -8,13 +8,13 @@ pub struct Land2D<T> {
     height_mask: usize,
 }
 
-impl<T: Default + Copy + PartialEq> Land2D<T> {
-    pub fn new(width: usize, height: usize) -> Self {
+impl<T: Copy + PartialEq> Land2D<T> {
+    pub fn new(width: usize, height: usize, fill_value: T) -> Self {
         assert!(width.is_power_of_two());
         assert!(height.is_power_of_two());
 
         Self {
-            pixels: vec2d::Vec2D::new(width, height, T::default()),
+            pixels: vec2d::Vec2D::new(width, height, fill_value),
             width_mask: !(width - 1),
             height_mask: !(height - 1),
         }
@@ -31,14 +31,26 @@ impl<T: Default + Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
+    pub fn is_valid_x(&self, x: i32) -> bool {
+        (x as usize & self.width_mask) == 0
+    }
+
+    #[inline]
+    pub fn is_valid_y(&self, y: i32) -> bool {
+        (y as usize & self.height_mask) == 0
+    }
+
+    #[inline]
     pub fn is_valid_coordinate(&self, x: i32, y: i32) -> bool {
-        (x as usize & self.width_mask) == 0 && (y as usize & self.height_mask) == 0
+        self.is_valid_x(x) && self.is_valid_y(y)
     }
 
     #[inline]
     pub fn map<U, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) {
         if self.is_valid_coordinate(x, y) {
-            self.pixels.get_mut(y as usize, x as usize).map(f);
+            unsafe { // hey, I just checked that coordinates are valid!
+                f(self.pixels.get_unchecked_mut(y as usize, x as usize));
+            }
         }
     }
 
@@ -96,7 +108,7 @@ impl<T: Default + Copy + PartialEq> Land2D<T> {
         debug_assert!(self.is_valid_coordinate(start_x, start_y));
 
         let mut stack: Vec<(usize, usize, usize, isize)> = Vec::new();
-        fn push<T: Default + Copy + PartialEq>(
+        fn push<T: Copy + PartialEq>(
             land: &Land2D<T>,
             stack: &mut Vec<(usize, usize, usize, isize)>,
             xl: usize,
@@ -167,6 +179,74 @@ impl<T: Default + Copy + PartialEq> Land2D<T> {
             }
         }
     }
+
+    #[inline]
+    fn fill_circle_line<F: Fn(&mut T) -> usize>(
+        &mut self,
+        y: i32,
+        x_from: i32,
+        x_to: i32,
+        f: &F,
+    ) -> usize {
+        let mut result = 0;
+
+        if self.is_valid_y(y) {
+            for i in cmp::min(x_from, 0) as usize..cmp::max(x_to as usize, self.width() - 1) {
+                unsafe { // coordinates are valid at this point
+                    result += f(self.pixels.get_unchecked_mut(y as usize, i));
+                }
+            }
+        }
+
+        result
+    }
+
+    #[inline]
+    fn fill_circle_lines<F: Fn(&mut T) -> usize>(
+        &mut self,
+        x: i32,
+        y: i32,
+        dx: i32,
+        dy: i32,
+        f: &F,
+    ) -> usize {
+        self.fill_circle_line(y + dy, x - dx, x + dx, f)
+            + self.fill_circle_line(y - dy, x - dx, x + dx, f)
+            + self.fill_circle_line(y + dx, x - dy, x + dy, f)
+            + self.fill_circle_line(y - dx, x - dy, x + dy, f)
+    }
+
+    pub fn change_round<F: Fn(&mut T) -> usize>(
+        &mut self,
+        x: i32,
+        y: i32,
+        radius: i32,
+        f: F,
+    ) -> usize {
+        let mut dx: i32 = 0;
+        let mut dy: i32 = radius;
+        let mut d = 3 - 2 * radius;
+        let mut result = 0;
+
+        while dx < dy {
+            result += self.fill_circle_lines(x, y, dx, dy, &f);
+
+            if d < 0 {
+                d += 4 * dx + 6;
+            } else {
+                d += 4 * (dx - dy) + 10;
+                dy -= 1;
+            }
+
+            dx += 1;
+        }
+
+        if dx == dy {
+            result += self.fill_circle_lines(x, y, dx, dy, &f);
+        }
+
+        result
+    }
 }
 
 #[cfg(test)]
@@ -175,7 +255,7 @@ mod tests {
 
     #[test]
     fn basics() {
-        let l: Land2D<u8> = Land2D::new(32, 64);
+        let l: Land2D<u8> = Land2D::new(32, 64, 0);
 
         assert!(l.is_valid_coordinate(0, 0));
         assert!(!l.is_valid_coordinate(-1, -1));
@@ -187,7 +267,7 @@ mod tests {
 
     #[test]
     fn fill() {
-        let mut l: Land2D<u8> = Land2D::new(128, 128);
+        let mut l: Land2D<u8> = Land2D::new(128, 128, 0);
 
         l.draw_line(0, 0, 32, 96, 1);
         l.draw_line(32, 96, 64, 32, 1);
