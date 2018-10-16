@@ -51,13 +51,23 @@ impl<T: Copy> Vec2D<T> {
     }
 
     #[inline]
+    pub fn get(&self, row: usize, column: usize) -> Option<&<usize as SliceIndex<[T]>>::Output> {
+        self.data.get(row * self.width + column)
+    }
+
+    #[inline]
     pub fn get_mut(&mut self, row: usize, column: usize) -> Option<&mut <usize as SliceIndex<[T]>>::Output> {
         self.data.get_mut(row * self.width + column)
     }
 
     #[inline]
-    pub fn get(&self, row: usize, column: usize) -> Option<&<usize as SliceIndex<[T]>>::Output> {
-        self.data.get(row * self.width + column)
+    pub unsafe fn get_unchecked(&self, row: usize, column: usize) -> &<usize as SliceIndex<[T]>>::Output {
+        self.data.get_unchecked(row * self.width + column)
+    }
+
+    #[inline]
+    pub unsafe fn get_unchecked_mut(&mut self, row: usize, column: usize) -> &mut <usize as SliceIndex<[T]>>::Output {
+        self.data.get_unchecked_mut(row * self.width + column)
     }
 }
 
