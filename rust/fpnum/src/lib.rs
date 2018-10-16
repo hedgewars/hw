@@ -8,6 +8,7 @@ pub struct FPNum {
 }
 
 impl FPNum {
+    #[inline]
     fn new(numerator: i32, denominator: u32) -> Self {
         FPNum::from(numerator) / denominator
     }
@@ -85,6 +86,7 @@ impl FPNum {
         }
     }
 
+    #[inline]
     fn with_sign(&self, is_negative: bool) -> FPNum {
         FPNum{ is_negative, ..*self}
     }
@@ -92,6 +94,11 @@ impl FPNum {
     #[inline]
     fn with_sign_as(self, other: FPNum) -> FPNum {
         self.with_sign(other.is_negative)
+    }
+
+    #[inline]
+    fn point(self) -> FPPoint {
+        FPPoint::new(self, self)
     }
 }
 
@@ -378,7 +385,7 @@ impl ops::Neg for FPPoint {
 }
 
 macro_rules! bin_op_impl {
-    ($op: path, $name: tt) => {
+    ($op: ty, $name: tt) => {
         impl $op for FPPoint {
             type Output = Self;
 
@@ -391,9 +398,27 @@ macro_rules! bin_op_impl {
     }
 }
 
+macro_rules! scalar_bin_op_impl {
+    ($op: ty, $name: tt) => {
+        impl $op for FPPoint {
+            type Output = Self;
+
+            #[inline]
+            fn $name(self, rhs: FPNum) -> Self {
+                Self::new(self.x().$name(rhs),
+                          self.y().$name(rhs))
+            }
+        }
+    }
+}
+
 bin_op_impl!(ops::Add, add);
 bin_op_impl!(ops::Sub, sub);
 bin_op_impl!(ops::Mul, mul);
+scalar_bin_op_impl!(ops::Add<FPNum>, add);
+scalar_bin_op_impl!(ops::Mul<FPNum>, mul);
+scalar_bin_op_impl!(ops::Sub<FPNum>, sub);
+scalar_bin_op_impl!(ops::Div<FPNum>, div);
 
 #[inline]
 fn distance<T>(x: T, y: T) -> FPNum
@@ -490,4 +515,5 @@ fn point() {
     assert_eq!(p * z, z);
     assert_eq!(p.dot(&z), fp!(0));
     assert_eq!(distance(4, 3), fp!(5));
+    assert_eq!(p * fp!(-3), FPPoint::new(fp!(-3), fp!(6)));
 }
