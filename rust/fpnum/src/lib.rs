@@ -84,6 +84,15 @@ impl FPNum {
             value: r << 16,
         }
     }
+
+    fn with_sign(&self, is_negative: bool) -> FPNum {
+        FPNum{ is_negative, ..*self}
+    }
+
+    #[inline]
+    fn with_sign_as(self, other: FPNum) -> FPNum {
+        self.with_sign(other.is_negative)
+    }
 }
 
 impl From<i32> for FPNum {
@@ -277,10 +286,127 @@ macro_rules! fp {
     ($n: tt) => { FPNum::from($n) };
 }
 
+const LINEARIZE_TRESHOLD: u64 = 0x1_0000;
+
+#[derive(Clone, Copy, Debug)]
+struct FPPoint {
+    x_is_negative: bool,
+    y_is_negative: bool,
+    x_value: u64,
+    y_value: u64,
+}
+
+impl FPPoint {
+    #[inline]
+    fn new(x: FPNum, y: FPNum) -> Self {
+        Self {
+            x_is_negative: x.is_negative,
+            y_is_negative: y.is_negative,
+            x_value: x.value,
+            y_value: y.value
+        }
+    }
+
+    #[inline]
+    fn zero() -> FPPoint { FPPoint::new(fp!(0), fp!(0)) }
+
+    #[inline]
+    fn unit_x() -> FPPoint { FPPoint::new(fp!(1), fp!(0)) }
+
+    #[inline]
+    fn unit_y() -> FPPoint { FPPoint::new(fp!(0), fp!(1)) }
+
+    #[inline]
+    fn x(&self) -> FPNum {
+        FPNum {
+            is_negative: self.x_is_negative,
+            value: self.x_value
+        }
+    }
+
+    #[inline]
+    fn y(&self) -> FPNum {
+        FPNum {
+            is_negative: self.y_is_negative,
+            value: self.y_value
+        }
+    }
+
+    #[inline]
+    fn sqr_distance(&self) -> FPNum {
+        self.x().sqr() + self.y().sqr()
+    }
+
+    #[inline]
+    fn distance(&self) -> FPNum {
+        let r = self.x_value | self.y_value;
+        if r < LINEARIZE_TRESHOLD {
+            FPNum::from(r as u32)
+        } else {
+            self.sqr_distance().sqrt()
+        }
+    }
+
+    #[inline]
+    fn is_in_range(&self, radius: FPNum) -> bool {
+        std::cmp::max(self.x(), self.y()) < radius
+            && self.sqr_distance() < radius.sqr()
+    }
+
+    #[inline]
+    fn dot(&self, other: &FPPoint) -> FPNum {
+        self.x() * other.x() + self.y() * other.y()
+    }
+}
+
+impl PartialEq for FPPoint {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.x() == other.x() && self.y() == other.y()
+    }
+}
+
+impl Eq for FPPoint {}
+
+impl ops::Neg for FPPoint {
+    type Output = Self;
+
+    #[inline]
+    fn neg(self) -> Self {
+        Self::new(-self.x(), -self.y())
+    }
+}
+
+macro_rules! bin_op_impl {
+    ($op: path, $name: tt) => {
+        impl $op for FPPoint {
+            type Output = Self;
+
+            #[inline]
+            fn $name(self, rhs: Self) -> Self {
+                Self::new(self.x().$name(rhs.x()),
+                          self.y().$name(rhs.y()))
+            }
+        }
+    }
+}
+
+bin_op_impl!(ops::Add, add);
+bin_op_impl!(ops::Sub, sub);
+bin_op_impl!(ops::Mul, mul);
+
+#[inline]
+fn distance<T>(x: T, y: T) -> FPNum
+    where T: ops::Add + ops::Mul + Copy +
+             From<<T as ops::Add>::Output> +
+             From<<T as ops::Mul>::Output> +
+             Into<FPNum>
+{
+    let sqr: FPNum = T::from(T::from(x * x) + T::from(y * y)).into();
+    sqr.sqrt()
+}
+
 /* TODO:
- Distance
- DistanceI
- SignAs
  AngleSin
  AngleCos
 */
@@ -313,6 +439,7 @@ fn zero() {
     assert!((-z).is_negative);
     assert_eq!(n - n, z);
     assert_eq!(-n + n, z);
+    assert_eq!(z.with_sign_as(-n), -z);
 }
 
 #[test]
@@ -351,4 +478,16 @@ fn arith() {
     assert_eq!(n2_25.sqrt(), n1_5);
 
     assert_eq!((n1_5 * n1_5 * n1_5.sqr()).sqrt(), n2_25);
+}
+
+#[test]
+fn point() {
+    let z = FPPoint::zero();
+    let p = FPPoint::new(fp!(1), fp!(-2));
+
+    assert_eq!(p.sqr_distance(), fp!(5));
+    assert_eq!(p + -p, FPPoint::zero());
+    assert_eq!(p * z, z);
+    assert_eq!(p.dot(&z), fp!(0));
+    assert_eq!(distance(4, 3), fp!(5));
 }
