@@ -420,10 +420,42 @@ macro_rules! scalar_bin_op_impl {
 bin_op_impl!(ops::Add, add);
 bin_op_impl!(ops::Sub, sub);
 bin_op_impl!(ops::Mul, mul);
+bin_op_impl!(ops::Div, div);
 scalar_bin_op_impl!(ops::Add<FPNum>, add);
 scalar_bin_op_impl!(ops::Mul<FPNum>, mul);
 scalar_bin_op_impl!(ops::Sub<FPNum>, sub);
 scalar_bin_op_impl!(ops::Div<FPNum>, div);
+
+macro_rules! bin_assign_op_impl {
+    ($typ: tt, $($op: tt)::+, $name: tt, $delegate: tt) => {
+        bin_assign_op_impl!($typ, $($op)::+<$typ>, $name, $delegate);
+    };
+    ($typ: tt, $($op: tt)::+<$arg: tt>, $name: tt, $delegate: tt) => {
+        impl $($op)::+<$arg> for $typ {
+            #[inline]
+            fn $name(&mut self, rhs: $arg) {
+                *self = *self $delegate rhs;
+            }
+        }
+    }
+}
+
+bin_assign_op_impl!(FPNum, ops::AddAssign, add_assign, +);
+bin_assign_op_impl!(FPNum, ops::SubAssign, sub_assign, -);
+bin_assign_op_impl!(FPNum, ops::MulAssign, mul_assign, *);
+bin_assign_op_impl!(FPNum, ops::DivAssign, div_assign, /);
+bin_assign_op_impl!(FPNum, ops::MulAssign<i32>, mul_assign, *);
+bin_assign_op_impl!(FPNum, ops::DivAssign<i32>, div_assign, /);
+bin_assign_op_impl!(FPNum, ops::DivAssign<u32>, div_assign, /);
+
+bin_assign_op_impl!(FPPoint, ops::AddAssign, add_assign, +);
+bin_assign_op_impl!(FPPoint, ops::SubAssign, sub_assign, -);
+bin_assign_op_impl!(FPPoint, ops::MulAssign, mul_assign, *);
+bin_assign_op_impl!(FPPoint, ops::DivAssign, div_assign, /);
+bin_assign_op_impl!(FPPoint, ops::AddAssign<FPNum>, add_assign, +);
+bin_assign_op_impl!(FPPoint, ops::SubAssign<FPNum>, sub_assign, -);
+bin_assign_op_impl!(FPPoint, ops::MulAssign<FPNum>, mul_assign, *);
+bin_assign_op_impl!(FPPoint, ops::DivAssign<FPNum>, div_assign, /);
 
 #[inline]
 pub fn distance<T>(x: T, y: T) -> FPNum
@@ -508,6 +540,10 @@ fn arith() {
     assert_eq!(n2_25.sqrt(), n1_5);
 
     assert_eq!((n1_5 * n1_5 * n1_5.sqr()).sqrt(), n2_25);
+
+    let mut m = fp!(1);
+    m += n1_5;
+    assert_eq!(m, fp!(5/2));
 }
 
 #[test]
