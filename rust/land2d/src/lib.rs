@@ -1,6 +1,7 @@
 extern crate vec2d;
 
 use std::cmp;
+use std::ops;
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
@@ -46,15 +47,25 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
-    pub fn map<U, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) {
+    pub fn map<U: Default, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) -> U {
         if self.is_valid_coordinate(x, y) {
-            unsafe { // hey, I just checked that coordinates are valid!
-                f(self.pixels.get_unchecked_mut(y as usize, x as usize));
+            unsafe {
+                // hey, I just checked that coordinates are valid!
+                f(self.pixels.get_unchecked_mut(y as usize, x as usize))
             }
+        } else {
+            U::default()
         }
     }
 
-    pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32, value: T) {
+    fn apply_along_line<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
+        x1: i32,
+        y1: i32,
+        x2: i32,
+        y2: i32,
+        f: &mut F,
+    ) -> U {
+        let mut result = U::default();
         let mut e_x: i32 = 0;
         let mut e_y: i32 = 0;
         let mut d_x: i32 = x2 - x1;
@@ -99,8 +110,46 @@ impl<T: Copy + PartialEq> Land2D<T> {
                 y += s_y;
             }
 
-            self.map(y, x, |p| *p = value);
+            result += f(x, y);
         }
+
+        result
+    }
+
+    fn apply_around_circle<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
+        radius: i32,
+        f: &mut F,
+    ) -> U {
+        let mut dx: i32 = 0;
+        let mut dy: i32 = radius;
+        let mut d = 3 - 2 * radius;
+        let mut result = U::default();
+
+        while dx < dy {
+            result += f(dx, dy);
+
+            if d < 0 {
+                d += 4 * dx + 6;
+            } else {
+                d += 4 * (dx - dy) + 10;
+                dy -= 1;
+            }
+
+            dx += 1;
+        }
+
+        if dx == dy {
+            result += f(dx, dy);
+        }
+
+        result
+    }
+
+    pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32, value: T) -> usize {
+        <Land2D<T>>::apply_along_line(x1, y1, x2, y2, &mut |x, y| {
+            self.map(y, x, |p| *p = value);
+            1
+        })
     }
 
     pub fn fill(&mut self, start_x: i32, start_y: i32, border_value: T, fill_value: T) {
@@ -192,7 +241,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
         if self.is_valid_y(y) {
             for i in cmp::min(x_from, 0) as usize..cmp::max(x_to as usize, self.width() - 1) {
-                unsafe { // coordinates are valid at this point
+                unsafe {
+                    // coordinates are valid at this point
                     result += f(self.pixels.get_unchecked_mut(y as usize, i));
                 }
             }
@@ -223,29 +273,55 @@ impl<T: Copy + PartialEq> Land2D<T> {
         radius: i32,
         f: F,
     ) -> usize {
-        let mut dx: i32 = 0;
-        let mut dy: i32 = radius;
-        let mut d = 3 - 2 * radius;
-        let mut result = 0;
+        <Land2D<T>>::apply_around_circle(radius, &mut |dx, dy| {
+            self.fill_circle_lines(x, y, dx, dy, &f)
+        })
+    }
 
-        while dx < dy {
-            result += self.fill_circle_lines(x, y, dx, dy, &f);
-
-            if d < 0 {
-                d += 4 * dx + 6;
-            } else {
-                d += 4 * (dx - dy) + 10;
-                dy -= 1;
-            }
-
-            dx += 1;
-        }
-
-        if dx == dy {
-            result += self.fill_circle_lines(x, y, dx, dy, &f);
-        }
+    #[inline]
+    fn change_dots_around<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
+        x: i32,
+        y: i32,
+        xx: i32,
+        yy: i32,
+        f: &mut F,
+    ) -> U {
+        let mut result = U::default();
+        result += f(y + yy, x + xx);
+        result += f(y - yy, x + xx);
+        result += f(y + yy, x - xx);
+        result += f(y - yy, x - xx);
+        result += f(y + xx, x + yy);
+        result += f(y - xx, x + yy);
+        result += f(y + xx, x - yy);
+        result += f(y - xx, x - yy);
 
         result
+    }
+
+    pub fn draw_thick_line(
+        &mut self,
+        x1: i32,
+        y1: i32,
+        x2: i32,
+        y2: i32,
+        radius: i32,
+        value: T,
+    ) -> usize {
+        <Land2D<T>>::apply_around_circle(radius, &mut |dx, dy| {
+            <Land2D<T>>::apply_along_line(x1, y1, x2, y2, &mut |x, y| {
+                <Land2D<T>>::change_dots_around(x, y, dx, dy, &mut |x, y| {
+                    self.map(x, y, |p| {
+                        if *p != value {
+                            *p = value;
+                            1
+                        } else {
+                            0
+                        }
+                    })
+                })
+            })
+        })
     }
 }
 
