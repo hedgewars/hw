@@ -1,3 +1,4 @@
+extern crate integral_geometry;
 extern crate vec2d;
 
 use std::cmp;
@@ -146,10 +147,13 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32, value: T) -> usize {
-        <Land2D<T>>::apply_along_line(x1, y1, x2, y2, &mut |x, y| {
-            self.map(y, x, |p| *p = value);
-            1
-        })
+        integral_geometry::LinePoints::new(x1, y1, x2, y2)
+            .filter_map(|(x, y)| {
+                self.map(y, x, |p| {
+                    *p = value;
+                    Some(1)
+                })
+            }).count()
     }
 
     pub fn fill(&mut self, start_x: i32, start_y: i32, border_value: T, fill_value: T) {

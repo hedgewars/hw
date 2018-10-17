@@ -5,3 +5,4 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 
 [dependencies]
 vec2d = { path = "../vec2d" }
+integral-geometry = { path = "../integral-geometry" }
