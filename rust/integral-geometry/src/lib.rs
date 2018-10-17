@@ -85,7 +85,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let v = vec![(0, 0), (1, 1), (2, 2), (3, 3)];
+        let v = vec![(0, 0), (1, 1), (2, 2), (3, 3), (123, 456)];
 
         for (&a, b) in v.iter().zip(LinePoints::new(0, 0, 3, 3)) {
             assert_eq!(a, b);
