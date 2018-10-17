@@ -49,7 +49,7 @@ impl LaggedFibonacciPRNG {
 impl Iterator for LaggedFibonacciPRNG {
     type Item = u32;
 
-    fn next(&mut self) -> Option<u32> {
+    fn next(&mut self) -> Option<Self::Item> {
         self.get_next();
         Some(self.get_next())
     }
