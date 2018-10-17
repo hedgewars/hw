@@ -403,9 +403,9 @@ macro_rules! bin_op_impl {
     }
 }
 
-macro_rules! scalar_bin_op_impl {
-    ($op: ty, $name: tt) => {
-        impl $op for FPPoint {
+macro_rules! right_scalar_bin_op_impl {
+    ($($op: tt)::+, $name: tt) => {
+        impl $($op)::+<FPNum> for FPPoint {
             type Output = Self;
 
             #[inline]
@@ -417,14 +417,29 @@ macro_rules! scalar_bin_op_impl {
     }
 }
 
+macro_rules! left_scalar_bin_op_impl {
+    ($($op: tt)::+, $name: tt) => {
+        impl $($op)::+<FPPoint> for FPNum {
+            type Output = FPPoint;
+
+            #[inline]
+            fn $name(self, rhs: FPPoint) -> Self::Output {
+                Self::Output::new(self.$name(rhs.x()),
+                                  self.$name(rhs.y()))
+            }
+        }
+    }
+}
+
 bin_op_impl!(ops::Add, add);
 bin_op_impl!(ops::Sub, sub);
 bin_op_impl!(ops::Mul, mul);
 bin_op_impl!(ops::Div, div);
-scalar_bin_op_impl!(ops::Add<FPNum>, add);
-scalar_bin_op_impl!(ops::Mul<FPNum>, mul);
-scalar_bin_op_impl!(ops::Sub<FPNum>, sub);
-scalar_bin_op_impl!(ops::Div<FPNum>, div);
+right_scalar_bin_op_impl!(ops::Add, add);
+right_scalar_bin_op_impl!(ops::Mul, mul);
+right_scalar_bin_op_impl!(ops::Sub, sub);
+right_scalar_bin_op_impl!(ops::Div, div);
+left_scalar_bin_op_impl!(ops::Mul, mul);
 
 macro_rules! bin_assign_op_impl {
     ($typ: tt, $($op: tt)::+, $name: tt, $delegate: tt) => {
@@ -549,12 +564,14 @@ fn arith() {
 #[test]
 fn point() {
     let z = FPPoint::zero();
+    let n = fp!(16/9);
     let p = FPPoint::new(fp!(1), fp!(-2));
 
     assert_eq!(p.sqr_distance(), fp!(5));
     assert_eq!(p + -p, FPPoint::zero());
     assert_eq!(p * z, z);
     assert_eq!(p.dot(&z), fp!(0));
+    assert_eq!(n * p, p * n);
     assert_eq!(distance(4, 3), fp!(5));
     assert_eq!(p * fp!(-3), FPPoint::new(fp!(-3), fp!(6)));
 }
