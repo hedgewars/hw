@@ -3970,6 +3970,12 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetString(_S'LOCALE', cLocale);
 
+{$IFDEF MOBILE}
+ScriptSetString(_S'PLATFORM', 'Mobile');
+{$ELSE}
+ScriptSetString(_S'PLATFORM', 'Desktop');
+{$ENDIF}
+
 // Add aliases for amDuck and gtDuck because rubber duck was removed.
 // amDuck and gtDuck are deprecated and should be removed later.
 // TODO: Remove these aliases in a later version.
