@@ -4,7 +4,7 @@ extern crate vec2d;
 use std::cmp;
 use std::ops;
 
-use integral_geometry::{Point, LinePoints};
+use integral_geometry::{LinePoints, ArcPoints, Point};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
@@ -149,9 +149,15 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     pub fn fill_from_iter<I>(&mut self, i: I, value: T) -> usize
-        where I: std::iter::Iterator<Item = Point>
+    where
+        I: std::iter::Iterator<Item = Point>,
     {
-        i.map(|p| self.map(p.y, p.x, |v| {*v = value; 1})).count()
+        i.map(|p| {
+            self.map(p.y, p.x, |v| {
+                *v = value;
+                1
+            })
+        }).count()
     }
 
     pub fn draw_line(&mut self, from: Point, to: Point, value: T) -> usize {
@@ -279,9 +285,9 @@ impl<T: Copy + PartialEq> Land2D<T> {
         radius: i32,
         f: F,
     ) -> usize {
-        <Land2D<T>>::apply_around_circle(radius, &mut |dx, dy| {
-            self.fill_circle_lines(x, y, dx, dy, &f)
-        })
+        ArcPoints::new(radius)
+            .map(&mut |p: Point| self.fill_circle_lines(x, y, p.x, p.y, &f))
+            .sum()
     }
 
     #[inline]
@@ -307,13 +313,16 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
     pub fn draw_thick_line(
         &mut self,
-        x1: i32,
-        y1: i32,
-        x2: i32,
-        y2: i32,
+        from: Point, to: Point,
         radius: i32,
         value: T,
     ) -> usize {
+        for deltas in ArcPoints::new(radius) {
+            for points in LinePoints::new(from, to) {
+
+            }
+        }
+
         <Land2D<T>>::apply_around_circle(radius, &mut |dx, dy| {
             <Land2D<T>>::apply_along_line(x1, y1, x2, y2, &mut |x, y| {
                 <Land2D<T>>::change_dots_around(x, y, dx, dy, &mut |x, y| {

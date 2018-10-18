@@ -170,7 +170,7 @@ impl EquidistantPoints {
     pub fn new(vector: Point) -> Self {
         Self {
             vector,
-            iteration: 0,
+            iteration: if vector.x == vector.y { 4 } else { 8 },
         }
     }
 }
@@ -179,7 +179,7 @@ impl Iterator for EquidistantPoints {
     type Item = Point;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.iteration < 8 {
+        if self.iteration > 0 {
             self.vector.x = -self.vector.x;
             if self.iteration & 1 == 0 {
                 self.vector.y = -self.vector.y;
@@ -189,7 +189,7 @@ impl Iterator for EquidistantPoints {
                 std::mem::swap(&mut self.vector.x, &mut self.vector.y);
             }
 
-            self.iteration += 1;
+            self.iteration -= 1;
 
             Some(self.vector)
         } else {
@@ -236,7 +236,7 @@ mod tests {
     }
 
     #[test]
-    fn equidistant() {
+    fn equidistant_full() {
         let n = EquidistantPoints::new(Point::new(1, 3));
         let v = get_points(&[
             (-1, -3),
@@ -249,6 +249,16 @@ mod tests {
             (3, 1),
             (123, 456),
         ]);
+
+        for (&a, b) in v.iter().zip(n) {
+            assert_eq!(a, b);
+        }
+    }
+
+    #[test]
+    fn equidistant_half() {
+        let n = EquidistantPoints::new(Point::new(2, 2));
+        let v = get_points(&[(-2, -2), (2, -2), (-2, 2), (2, 2), (123, 456)]);
 
         for (&a, b) in v.iter().zip(n) {
             assert_eq!(a, b);
