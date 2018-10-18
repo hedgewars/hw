@@ -342,7 +342,7 @@ impl FPPoint {
 
     #[inline]
     pub fn max_norm(&self) -> FPNum {
-        std::cmp::max(self.x(), self.y())
+        std::cmp::max(self.x().abs(), self.y().abs())
     }
 
     #[inline]
@@ -574,4 +574,5 @@ fn point() {
     assert_eq!(n * p, p * n);
     assert_eq!(distance(4, 3), fp!(5));
     assert_eq!(p * fp!(-3), FPPoint::new(fp!(-3), fp!(6)));
+    assert_eq!(p.max_norm(), fp!(2));
 }
