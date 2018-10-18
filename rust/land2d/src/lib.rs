@@ -50,20 +50,15 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
-    pub fn get_mut(&mut self, y: i32, x: i32) -> Option<&mut T> {
+    pub fn map<U: Default, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) -> U {
         if self.is_valid_coordinate(x, y) {
             unsafe {
                 // hey, I just checked that coordinates are valid!
-                Some(self.pixels.get_unchecked_mut(y as usize, x as usize))
+                f(self.pixels.get_unchecked_mut(y as usize, x as usize))
             }
         } else {
-            None
+            U::default()
         }
-    }
-
-    #[inline]
-    pub fn map<U: Default, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) -> U {
-        self.get_mut(y, x).map(f).unwrap_or_default()
     }
 
     fn apply_along_line<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
@@ -156,7 +151,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
     pub fn fill_from_iter<I>(&mut self, i: I, value: T) -> usize
         where I: std::iter::Iterator<Item = Point>
     {
-        i.map(|p| self.get_mut(p.y, p.x).map(|v| *v = value)).count()
+        i.map(|p| self.map(p.y, p.x, |v| {*v = value; 1})).count()
     }
 
     pub fn draw_line(&mut self, from: Point, to: Point, value: T) -> usize {
