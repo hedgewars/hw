@@ -161,6 +161,43 @@ impl Iterator for ArcPoints {
     }
 }
 
+pub struct EquidistantPoints {
+    vector: Point,
+    iteration: u8,
+}
+
+impl EquidistantPoints {
+    pub fn new(vector: Point) -> Self {
+        Self {
+            vector,
+            iteration: 0,
+        }
+    }
+}
+
+impl Iterator for EquidistantPoints {
+    type Item = Point;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.iteration < 8 {
+            self.vector.x = -self.vector.x;
+            if self.iteration & 1 == 0 {
+                self.vector.y = -self.vector.y;
+            }
+
+            if self.iteration == 4 {
+                std::mem::swap(&mut self.vector.x, &mut self.vector.y);
+            }
+
+            self.iteration += 1;
+
+            Some(self.vector)
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -170,7 +207,7 @@ mod tests {
     }
 
     #[test]
-    fn basic() {
+    fn line_basic() {
         let line = LinePoints::new(Point::new(0, 0), Point::new(3, 3));
         let v = get_points(&[(0, 0), (1, 1), (2, 2), (3, 3), (123, 456)]);
 
@@ -180,7 +217,7 @@ mod tests {
     }
 
     #[test]
-    fn skewed() {
+    fn line_skewed() {
         let line = LinePoints::new(Point::new(0, 0), Point::new(5, -7));
         let v = get_points(&[
             (0, 0),
@@ -194,6 +231,26 @@ mod tests {
         ]);
 
         for (&a, b) in v.iter().zip(line) {
+            assert_eq!(a, b);
+        }
+    }
+
+    #[test]
+    fn equidistant() {
+        let n = EquidistantPoints::new(Point::new(1, 3));
+        let v = get_points(&[
+            (-1, -3),
+            (1, -3),
+            (-1, 3),
+            (1, 3),
+            (-3, -1),
+            (3, -1),
+            (-3, 1),
+            (3, 1),
+            (123, 456),
+        ]);
+
+        for (&a, b) in v.iter().zip(n) {
             assert_eq!(a, b);
         }
     }
