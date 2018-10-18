@@ -1,5 +1,5 @@
 use std::cmp;
-use std::ops::{Add, Sub, Mul, Div, AddAssign, SubAssign, MulAssign, DivAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Point {
@@ -10,7 +10,7 @@ pub struct Point {
 impl Point {
     #[inline]
     pub fn new(x: i32, y: i32) -> Self {
-        Self {x, y}
+        Self { x, y }
     }
 
     #[inline]
@@ -46,23 +46,22 @@ macro_rules! bin_op_impl {
 
             #[inline]
             fn $name(self, rhs: Self) -> Self::Output {
-                Self::new(self.x.$name(rhs.x),
-                          self.y.$name(rhs.y))
+                Self::new(self.x.$name(rhs.x), self.y.$name(rhs.y))
             }
         }
-    }
+    };
 }
 
 macro_rules! bin_assign_op_impl {
     ($op: ty, $name: tt) => {
         impl $op for Point {
             #[inline]
-            fn $name(&mut self, rhs: Self){
+            fn $name(&mut self, rhs: Self) {
                 self.x.$name(rhs.x);
                 self.y.$name(rhs.y);
             }
         }
-    }
+    };
 }
 
 bin_op_impl!(Add, add);
@@ -123,6 +122,45 @@ impl Iterator for LinePoints {
     }
 }
 
+pub struct ArcPoints {
+    point: Point,
+    step: i32,
+}
+
+impl ArcPoints {
+    pub fn new(radius: i32) -> Self {
+        Self {
+            point: Point::new(0, radius),
+            step: 3 - 2 * radius,
+        }
+    }
+}
+
+impl Iterator for ArcPoints {
+    type Item = Point;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.point.x < self.point.y {
+            let result = self.point;
+
+            if self.step < 0 {
+                self.step += self.point.x * 4 + 6;
+            } else {
+                self.step += (self.point.x - self.point.y) * 4 + 10;
+                self.point.y -= 1;
+            }
+
+            self.point.x += 1;
+
+            Some(result)
+        } else if self.point.x == self.point.y {
+            Some(self.point)
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -144,7 +182,16 @@ mod tests {
     #[test]
     fn skewed() {
         let line = LinePoints::new(Point::new(0, 0), Point::new(5, -7));
-        let v = get_points(&[(0, 0), (1, -1), (2, -2), (2, -3), (3, -4), (4, -5), (4, -6), (5, -7)]);
+        let v = get_points(&[
+            (0, 0),
+            (1, -1),
+            (2, -2),
+            (2, -3),
+            (3, -4),
+            (4, -5),
+            (4, -6),
+            (5, -7),
+        ]);
 
         for (&a, b) in v.iter().zip(line) {
             assert_eq!(a, b);
