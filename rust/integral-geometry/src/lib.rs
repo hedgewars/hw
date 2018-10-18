@@ -1,78 +1,122 @@
 use std::cmp;
+use std::ops::{Add, Sub, Mul, Div, AddAssign, SubAssign, MulAssign, DivAssign};
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub struct Point {
+    pub x: i32,
+    pub y: i32,
+}
+
+impl Point {
+    #[inline]
+    pub fn new(x: i32, y: i32) -> Self {
+        Self {x, y}
+    }
+
+    #[inline]
+    pub fn zero() -> Self {
+        Self::new(0, 0)
+    }
+
+    #[inline]
+    pub fn signum(self) -> Self {
+        Self::new(self.x.signum(), self.y.signum())
+    }
+
+    #[inline]
+    pub fn abs(self) -> Self {
+        Self::new(self.x.abs(), self.y.abs())
+    }
+
+    #[inline]
+    pub fn dot(self, other: Point) -> i32 {
+        self.x * other.x + self.y * other.y
+    }
+
+    #[inline]
+    pub fn max_norm(self) -> i32 {
+        std::cmp::max(self.x.abs(), self.y.abs())
+    }
+}
+
+macro_rules! bin_op_impl {
+    ($op: ty, $name: tt) => {
+        impl $op for Point {
+            type Output = Self;
+
+            #[inline]
+            fn $name(self, rhs: Self) -> Self::Output {
+                Self::new(self.x.$name(rhs.x),
+                          self.y.$name(rhs.y))
+            }
+        }
+    }
+}
+
+macro_rules! bin_assign_op_impl {
+    ($op: ty, $name: tt) => {
+        impl $op for Point {
+            #[inline]
+            fn $name(&mut self, rhs: Self){
+                self.x.$name(rhs.x);
+                self.y.$name(rhs.y);
+            }
+        }
+    }
+}
+
+bin_op_impl!(Add, add);
+bin_op_impl!(Sub, sub);
+bin_op_impl!(Mul, mul);
+bin_op_impl!(Div, div);
+bin_assign_op_impl!(AddAssign, add_assign);
+bin_assign_op_impl!(SubAssign, sub_assign);
+bin_assign_op_impl!(MulAssign, mul_assign);
+bin_assign_op_impl!(DivAssign, div_assign);
 
 pub struct LinePoints {
-    e_x: i32,
-    e_y: i32,
-    d_x: i32,
-    d_y: i32,
-    s_x: i32,
-    s_y: i32,
-    x: i32,
-    y: i32,
-    d: i32,
-    i: i32,
+    accumulator: Point,
+    direction: Point,
+    sign: Point,
+    current: Point,
+    total_steps: i32,
+    step: i32,
 }
 
 impl LinePoints {
-    pub fn new(x1: i32, y1: i32, x2: i32, y2: i32) -> Self {
-        let mut d_x: i32 = x2 - x1;
-        let mut d_y: i32 = y2 - y1;
-        let s_x: i32;
-        let s_y: i32;
-
-        if d_x > 0 {
-            s_x = 1;
-        } else if d_x < 0 {
-            s_x = -1;
-            d_x = -d_x;
-        } else {
-            s_x = d_x;
-        }
-
-        if d_y > 0 {
-            s_y = 1;
-        } else if d_y < 0 {
-            s_y = -1;
-            d_y = -d_y;
-        } else {
-            s_y = d_y;
-        }
+    pub fn new(from: Point, to: Point) -> Self {
+        let dir = to - from;
 
         Self {
-            e_x: 0,
-            e_y: 0,
-            d_x,
-            d_y,
-            s_x,
-            s_y,
-            x: x1,
-            y: y1,
-            d: cmp::max(d_x, d_y),
-            i: 0,
+            accumulator: Point::zero(),
+            direction: dir.abs(),
+            sign: dir.signum(),
+            current: from,
+            total_steps: dir.max_norm(),
+            step: 0,
         }
     }
 }
 
 impl Iterator for LinePoints {
-    type Item = (i32, i32);
+    type Item = Point;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.i <= self.d {
-            self.e_x += self.d_x;
-            self.e_y += self.d_y;
+        if self.step <= self.total_steps {
+            self.accumulator += self.direction;
 
-            if self.e_x > self.d {
-                self.e_x -= self.d;
-                self.x += self.s_x;
+            if self.accumulator.x > self.total_steps {
+                self.accumulator.x -= self.total_steps;
+                self.current.x += self.sign.x;
             }
-            if self.e_y > self.d {
-                self.e_y -= self.d;
-                self.y += self.s_y;
+            if self.accumulator.y > self.total_steps {
+                self.accumulator.y -= self.total_steps;
+                self.current.y += self.sign.y;
             }
 
-            self.i += 1;
+            self.step += 1;
 
-            Some((self.x, self.y))
+            Some(self.current)
         } else {
             None
         }
@@ -83,11 +127,26 @@ impl Iterator for LinePoints {
 mod tests {
     use super::*;
 
+    fn get_points(coords: &[(i32, i32)]) -> Vec<Point> {
+        coords.iter().map(|(x, y)| Point::new(*x, *y)).collect()
+    }
+
     #[test]
     fn basic() {
-        let v = vec![(0, 0), (1, 1), (2, 2), (3, 3), (123, 456)];
+        let line = LinePoints::new(Point::new(0, 0), Point::new(3, 3));
+        let v = get_points(&[(0, 0), (1, 1), (2, 2), (3, 3), (123, 456)]);
 
-        for (&a, b) in v.iter().zip(LinePoints::new(0, 0, 3, 3)) {
+        for (&a, b) in v.iter().zip(line) {
+            assert_eq!(a, b);
+        }
+    }
+
+    #[test]
+    fn skewed() {
+        let line = LinePoints::new(Point::new(0, 0), Point::new(5, -7));
+        let v = get_points(&[(0, 0), (1, -1), (2, -2), (2, -3), (3, -4), (4, -5), (4, -6), (5, -7)]);
+
+        for (&a, b) in v.iter().zip(line) {
             assert_eq!(a, b);
         }
     }

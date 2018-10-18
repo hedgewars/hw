@@ -1,5 +1,7 @@
 mod outline;
 
+extern crate integral_geometry;
+
 #[cfg(test)]
 mod tests {
     #[test]

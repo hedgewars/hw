@@ -1,7 +1,4 @@
-pub struct Point {
-    x: i32,
-    y: i32,
-}
+use integral_geometry::Point;
 
 pub struct Outline {
     points: Vec<Point>,

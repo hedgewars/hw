@@ -4,6 +4,8 @@ extern crate vec2d;
 use std::cmp;
 use std::ops;
 
+use integral_geometry::{Point, LinePoints};
+
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
     width_mask: usize,
@@ -48,15 +50,20 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
-    pub fn map<U: Default, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) -> U {
+    pub fn get_mut(&mut self, y: i32, x: i32) -> Option<&mut T> {
         if self.is_valid_coordinate(x, y) {
             unsafe {
                 // hey, I just checked that coordinates are valid!
-                f(self.pixels.get_unchecked_mut(y as usize, x as usize))
+                Some(self.pixels.get_unchecked_mut(y as usize, x as usize))
             }
         } else {
-            U::default()
+            None
         }
+    }
+
+    #[inline]
+    pub fn map<U: Default, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) -> U {
+        self.get_mut(y, x).map(f).unwrap_or_default()
     }
 
     fn apply_along_line<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
@@ -146,14 +153,14 @@ impl<T: Copy + PartialEq> Land2D<T> {
         result
     }
 
-    pub fn draw_line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32, value: T) -> usize {
-        integral_geometry::LinePoints::new(x1, y1, x2, y2)
-            .filter_map(|(x, y)| {
-                self.map(y, x, |p| {
-                    *p = value;
-                    Some(1)
-                })
-            }).count()
+    pub fn fill_from_iter<I>(&mut self, i: I, value: T) -> usize
+        where I: std::iter::Iterator<Item = Point>
+    {
+        i.map(|p| self.get_mut(p.y, p.x).map(|v| *v = value)).count()
+    }
+
+    pub fn draw_line(&mut self, from: Point, to: Point, value: T) -> usize {
+        self.fill_from_iter(LinePoints::new(from, to), value)
     }
 
     pub fn fill(&mut self, start_x: i32, start_y: i32, border_value: T, fill_value: T) {
@@ -349,13 +356,13 @@ mod tests {
     fn fill() {
         let mut l: Land2D<u8> = Land2D::new(128, 128, 0);
 
-        l.draw_line(0, 0, 32, 96, 1);
-        l.draw_line(32, 96, 64, 32, 1);
-        l.draw_line(64, 32, 96, 80, 1);
-        l.draw_line(96, 80, 128, 0, 1);
+        l.draw_line(Point::new(0, 0), Point::new(32, 96), 1);
+        l.draw_line(Point::new(32, 96), Point::new(64, 32), 1);
+        l.draw_line(Point::new(64, 32), Point::new(96, 80), 1);
+        l.draw_line(Point::new(96, 80), Point::new(128, 0), 1);
 
-        l.draw_line(0, 128, 64, 96, 1);
-        l.draw_line(128, 128, 64, 96, 1);
+        l.draw_line(Point::new(0, 128), Point::new(64, 96), 1);
+        l.draw_line(Point::new(128, 128), Point::new(64, 96), 1);
 
         l.fill(32, 32, 1, 2);
         l.fill(16, 96, 1, 3);
