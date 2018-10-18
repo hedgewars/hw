@@ -4,7 +4,7 @@ extern crate vec2d;
 use std::cmp;
 use std::ops;
 
-use integral_geometry::{LinePoints, ArcPoints, Point};
+use integral_geometry::{ArcPoints, EquidistantPoints, LinePoints, Point};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
@@ -61,91 +61,9 @@ impl<T: Copy + PartialEq> Land2D<T> {
         }
     }
 
-    fn apply_along_line<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
-        x1: i32,
-        y1: i32,
-        x2: i32,
-        y2: i32,
-        f: &mut F,
-    ) -> U {
-        let mut result = U::default();
-        let mut e_x: i32 = 0;
-        let mut e_y: i32 = 0;
-        let mut d_x: i32 = x2 - x1;
-        let mut d_y: i32 = y2 - y1;
-
-        let s_x: i32;
-        let s_y: i32;
-
-        if d_x > 0 {
-            s_x = 1;
-        } else if d_x < 0 {
-            s_x = -1;
-            d_x = -d_x;
-        } else {
-            s_x = d_x;
-        }
-
-        if d_y > 0 {
-            s_y = 1;
-        } else if d_y < 0 {
-            s_y = -1;
-            d_y = -d_y;
-        } else {
-            s_y = d_y;
-        }
-
-        let d = cmp::max(d_x, d_y);
-
-        let mut x = x1;
-        let mut y = y1;
-
-        for _i in 0..=d {
-            e_x += d_x;
-            e_y += d_y;
-
-            if e_x > d {
-                e_x -= d;
-                x += s_x;
-            }
-            if e_y > d {
-                e_y -= d;
-                y += s_y;
-            }
-
-            result += f(x, y);
-        }
-
-        result
-    }
-
-    fn apply_around_circle<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
-        radius: i32,
-        f: &mut F,
-    ) -> U {
-        let mut dx: i32 = 0;
-        let mut dy: i32 = radius;
-        let mut d = 3 - 2 * radius;
-        let mut result = U::default();
-
-        while dx < dy {
-            result += f(dx, dy);
-
-            if d < 0 {
-                d += 4 * dx + 6;
-            } else {
-                d += 4 * (dx - dy) + 10;
-                dy -= 1;
-            }
-
-            dx += 1;
-        }
-
-        if dx == dy {
-            result += f(dx, dy);
-        }
-
-        result
+    #[inline]
+    pub fn map_point<U: Default, F: FnOnce(&mut T) -> U>(&mut self, point: Point, f: F) -> U {
+        self.map(point.y, point.x, f)
     }
 
     pub fn fill_from_iter<I>(&mut self, i: I, value: T) -> usize
@@ -290,53 +208,23 @@ impl<T: Copy + PartialEq> Land2D<T> {
             .sum()
     }
 
-    #[inline]
-    fn change_dots_around<U: Default + ops::AddAssign, F: FnMut(i32, i32) -> U>(
-        x: i32,
-        y: i32,
-        xx: i32,
-        yy: i32,
-        f: &mut F,
-    ) -> U {
-        let mut result = U::default();
-        result += f(y + yy, x + xx);
-        result += f(y - yy, x + xx);
-        result += f(y + yy, x - xx);
-        result += f(y - yy, x - xx);
-        result += f(y + xx, x + yy);
-        result += f(y - xx, x + yy);
-        result += f(y + xx, x - yy);
-        result += f(y - xx, x - yy);
+    pub fn draw_thick_line(&mut self, from: Point, to: Point, radius: i32, value: T) -> usize {
+        let mut result = 0;
 
-        result
-    }
-
-    pub fn draw_thick_line(
-        &mut self,
-        from: Point, to: Point,
-        radius: i32,
-        value: T,
-    ) -> usize {
-        for deltas in ArcPoints::new(radius) {
-            for points in LinePoints::new(from, to) {
-
+        for point in LinePoints::new(from, to) {
+            for vector in ArcPoints::new(radius) {
+                for delta in EquidistantPoints::new(vector) {
+                    self.map_point(point + delta, |p| {
+                        if *p != value {
+                            *p = value;
+                            result += 1;
+                        }
+                    })
+                }
             }
         }
 
-        <Land2D<T>>::apply_around_circle(radius, &mut |dx, dy| {
-            <Land2D<T>>::apply_along_line(x1, y1, x2, y2, &mut |x, y| {
-                <Land2D<T>>::change_dots_around(x, y, dx, dy, &mut |x, y| {
-                    self.map(x, y, |p| {
-                        if *p != value {
-                            *p = value;
-                            1
-                        } else {
-                            0
-                        }
-                    })
-                })
-            })
-        })
+        result
     }
 }
 
