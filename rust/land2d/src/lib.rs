@@ -1,8 +1,7 @@
 extern crate integral_geometry;
 extern crate vec2d;
 
-use std::cmp;
-use std::ops;
+use std::{cmp, mem::replace};
 
 use integral_geometry::{ArcPoints, EquidistantPoints, LinePoints, Point};
 
@@ -214,12 +213,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
         for point in LinePoints::new(from, to) {
             for vector in ArcPoints::new(radius) {
                 for delta in EquidistantPoints::new(vector) {
-                    self.map_point(point + delta, |p| {
-                        if *p != value {
-                            *p = value;
-                            result += 1;
-                        }
-                    })
+                    self.map_point(point + delta, |p|
+                        result += (replace(p, value) != value) as usize)
                 }
             }
         }
