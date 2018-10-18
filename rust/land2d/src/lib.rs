@@ -225,9 +225,9 @@ impl<T: Copy + PartialEq> Land2D<T> {
     pub fn draw_thick_line(&mut self, from: Point, to: Point, radius: i32, value: T) -> usize {
         let mut result = 0;
 
-        for point in LinePoints::new(from, to) {
-            for vector in ArcPoints::new(radius) {
-                for delta in EquidistantPoints::new(vector) {
+        for vector in ArcPoints::new(radius) {
+            for delta in EquidistantPoints::new(vector) {
+                for point in LinePoints::new(from, to) {
                     self.map_point(point + delta, |p| {
                         if *p != value {
                             *p = value;
