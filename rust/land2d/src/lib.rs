@@ -82,9 +82,9 @@ impl<T: Copy + PartialEq> Land2D<T> {
         self.fill_from_iter(LinePoints::new(from, to), value)
     }
 
-    pub fn fill(&mut self, start_x: i32, start_y: i32, border_value: T, fill_value: T) {
-        debug_assert!(self.is_valid_coordinate(start_x - 1, start_y));
-        debug_assert!(self.is_valid_coordinate(start_x, start_y));
+    pub fn fill(&mut self, start_point: Point, border_value: T, fill_value: T) {
+        debug_assert!(self.is_valid_coordinate(start_point.x - 1, start_point.y));
+        debug_assert!(self.is_valid_coordinate(start_point.x, start_point.y));
 
         let mut stack: Vec<(usize, usize, usize, isize)> = Vec::new();
         fn push<T: Copy + PartialEq>(
@@ -102,10 +102,24 @@ impl<T: Copy + PartialEq> Land2D<T> {
             }
         };
 
-        let start_x_l = (start_x - 1) as usize;
-        let start_x_r = start_x as usize;
-        push(self, &mut stack, start_x_l, start_x_r, start_y as usize, -1);
-        push(self, &mut stack, start_x_l, start_x_r, start_y as usize, 1);
+        let start_x_l = (start_point.x - 1) as usize;
+        let start_x_r = start_point.x as usize;
+        push(
+            self,
+            &mut stack,
+            start_x_l,
+            start_x_r,
+            start_point.y as usize,
+            -1,
+        );
+        push(
+            self,
+            &mut stack,
+            start_x_l,
+            start_x_r,
+            start_point.y as usize,
+            1,
+        );
 
         loop {
             let a = stack.pop();
@@ -256,9 +270,9 @@ mod tests {
         l.draw_line(Point::new(0, 128), Point::new(64, 96), 1);
         l.draw_line(Point::new(128, 128), Point::new(64, 96), 1);
 
-        l.fill(32, 32, 1, 2);
-        l.fill(16, 96, 1, 3);
-        l.fill(60, 100, 1, 4);
+        l.fill(Point::new(32, 32), 1, 2);
+        l.fill(Point::new(16, 96), 1, 3);
+        l.fill(Point::new(60, 100), 1, 4);
 
         assert_eq!(l.pixels[0][0], 1);
         assert_eq!(l.pixels[96][64], 1);
