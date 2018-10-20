@@ -109,6 +109,7 @@ begin
     WriteLn(stdout, 'Miscellaneous:');
     WriteLn(stdout, '  --nick <name>: Set user nickname');
     WriteLn(stdout, '  --help: Show a list of command-line options and exit');
+    WriteLn(stdout, '  --protocol: Display protocol number and exit');
     WriteLn(stdout, '');
     Writeln(stdout, 'Advanced options:');
     Writeln(stdout, '  --stereo <value>: Set stereoscopic rendering (1 to 14)');
@@ -116,6 +117,13 @@ begin
     WriteLn(stdout, '  --raw-quality <flags>: Manually specify the reduced quality flags');
     WriteLn(stdout, '  --stats-only: Write the round information to console without launching the game, useful for statistics only');
     WriteLn(stdout, '  --lua-test <path to script>: Run a Lua test script');
+    GameType:= gmtSyntaxHelp;
+    helpCommandUsed:= true;
+end;
+
+procedure DisplayProtocol;
+begin
+    WriteLn(stdout, IntToStr(cNetProtoVersion));
     GameType:= gmtSyntaxHelp;
     helpCommandUsed:= true;
 end;
@@ -231,13 +239,13 @@ const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-h
       otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
       mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allarray: array [0..18] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--nodampen','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..36] of shortstring = (
+      reallyAll: array[0..37] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound', '--nodampen',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
+  {misc}        '--stats-only', '--gci', '--help','--protocol', '--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -283,11 +291,12 @@ begin
         {--stats-only}          29 : statsOnlyGame();
         {--gci}                 30 : GciEasterEgg();
         {--help}                31 : DisplayUsage();
-        {--no-teamtag}          32 : cTagsMask := cTagsMask and (not htTeamName);
-        {--no-hogtag}           33 : cTagsMask := cTagsMask and (not htName);
-        {--no-healthtag}        34 : cTagsMask := cTagsMask and (not htHealth);
-        {--translucent-tags}    35 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            36 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--protocol}            32 : DisplayProtocol();
+        {--no-teamtag}          33 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           34 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        35 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    36 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            37 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
         //Assume the first "non parameter" is the demo file, anything else is invalid

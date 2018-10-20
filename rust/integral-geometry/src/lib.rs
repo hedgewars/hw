@@ -155,7 +155,7 @@ impl Iterator for ArcPoints {
             Some(result)
         } else if self.point.x == self.point.y {
             self.point.x += 1;
-            
+
             Some(self.point)
         } else {
             None
