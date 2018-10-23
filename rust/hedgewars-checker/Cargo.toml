@@ -1,7 +1,7 @@
 [package]
 name = "hedgewars-checker"
 version = "0.1.0"
-authors = ["Andrei Korotaev <andrey.korotaev@aptomar.com>"]
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 
 [dependencies]
 rust-ini = "0.13"
@@ -10,3 +10,5 @@ argparse = "0.2.2"
 log = "0.4"
 stderrlog = "0.4"
 netbuf = "0.4"
+tempfile = "3.0"
+base64 = "0.9.3"

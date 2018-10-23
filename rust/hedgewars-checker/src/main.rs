@@ -1,18 +1,22 @@
 #[macro_use]
 extern crate log;
 extern crate argparse;
+extern crate base64;
 extern crate dirs;
 extern crate ini;
 extern crate netbuf;
 extern crate stderrlog;
+extern crate tempfile;
 
 use argparse::{ArgumentParser, Store};
 use ini::Ini;
 use netbuf::Buf;
-use std::io::{Result, Write};
+use std::io::Write;
 use std::net::TcpStream;
 use std::process::Command;
 use std::str::FromStr;
+
+type CheckError = Box<std::error::Error>;
 
 fn extract_packet(buf: &mut Buf) -> Option<netbuf::Buf> {
     let packet_end = (&buf[..]).windows(2).position(|window| window == b"\n\n")?;
@@ -26,13 +30,44 @@ fn extract_packet(buf: &mut Buf) -> Option<netbuf::Buf> {
     Some(tail)
 }
 
+fn check(executable: &str, data_prefix: &str, buffer: &[u8]) -> Result<Vec<Vec<u8>>, CheckError> {
+    let mut replay = tempfile::NamedTempFile::new()?;
+
+    for line in buffer.split(|b| *b == '\n' as u8) {
+        replay.write(&base64::decode(line)?);
+    }
+
+    let temp_file_path = replay.path();
+
+    let mut home_dir = dirs::home_dir().unwrap();
+    home_dir.push(".hedgewars");
+
+    let output = Command::new(executable)
+        .arg("--user-prefix")
+        .arg(&home_dir)
+        .arg("--prefix")
+        .arg(data_prefix)
+        .arg("--nomusic")
+        .arg("--nosound")
+        .arg("--stats-only")
+        .arg(temp_file_path)
+        .output()?;
+
+    let mut result = Vec::new();
+    for line in output.stdout.split(|b| *b == '\n' as u8) {
+        result.push(line.to_vec());
+    }
+
+    Ok(result)
+}
+
 fn connect_and_run(
     username: &str,
     password: &str,
     protocol_number: u32,
     executable: &str,
     data_prefix: &str,
-) -> Result<()> {
+) -> Result<(), CheckError> {
     info!("Connecting...");
 
     let mut stream = TcpStream::connect("hedgewars.org:46631")?;
@@ -56,8 +91,22 @@ fn connect_and_run(
             } else if msg[..].starts_with(b"LOGONPASSED") {
                 info!("Logged in");
                 stream.write(b"READY\n\n")?;
+            } else if msg[..].starts_with(b"REPLAY") {
+                info!("Got a replay");
+                let result = check(executable, data_prefix, &msg[7..])?;
+
+                debug!(
+                    "Check result: [{}]",
+                    String::from_utf8_lossy(&result.join(&(',' as u8)))
+                );
+
+                stream.write(&result.join(&('\n' as u8)))?;
+                stream.write(b"\n\n")?;
             } else if msg[..].starts_with(b"BYE") {
                 warn!("Received BYE: {}", String::from_utf8_lossy(&msg[..]));
+                return Ok(());
+            } else if msg[..].starts_with(b"ERROR") {
+                warn!("Received ERROR: {}", String::from_utf8_lossy(&msg[..]));
                 return Ok(());
             } else {
                 warn!(
@@ -69,7 +118,7 @@ fn connect_and_run(
     }
 }
 
-fn get_protocol_number(executable: &str) -> Result<u32> {
+fn get_protocol_number(executable: &str) -> std::io::Result<u32> {
     let output = Command::new(executable).arg("--protocol").output()?;
 
     Ok(u32::from_str(&String::from_utf8(output.stdout).unwrap().as_str()).unwrap_or(55))
