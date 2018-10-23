@@ -121,53 +121,45 @@ impl<T: Copy + PartialEq> Land2D<T> {
             1,
         );
 
-        loop {
-            let a = stack.pop();
-            match a {
-                None => return,
-                Some(a) => {
-                    let (mut xl, mut xr, y, mut dir) = a;
+        while let Some(a) = stack.pop() {
+            let (mut xl, mut xr, y, mut dir) = a;
 
-                    while xl > 0 && self
-                        .pixels
-                        .get(y, xl)
-                        .map_or(false, |v| *v != border_value && *v != fill_value)
-                    {
-                        xl -= 1;
-                    }
+            while xl > 0 && self
+                .pixels
+                .get(y, xl)
+                .map_or(false, |v| *v != border_value && *v != fill_value)
+            {
+                xl -= 1;
+            }
 
-                    while xr < self.width() - 1 && self
-                        .pixels
-                        .get(y, xr)
-                        .map_or(false, |v| *v != border_value && *v != fill_value)
-                    {
-                        xr += 1;
-                    }
+            while xr < self.width() - 1 && self
+                .pixels
+                .get(y, xr)
+                .map_or(false, |v| *v != border_value && *v != fill_value)
+            {
+                xr += 1;
+            }
 
-                    while xl < xr {
-                        while xl <= xr
-                            && (self.pixels[y][xl] == border_value
-                                || self.pixels[y][xl] == fill_value)
-                        {
-                            xl += 1;
-                        }
+            while xl < xr {
+                while xl <= xr
+                    && (self.pixels[y][xl] == border_value || self.pixels[y][xl] == fill_value)
+                {
+                    xl += 1;
+                }
 
-                        let mut x = xl;
+                let mut x = xl;
 
-                        while xl <= xr
-                            && (self.pixels[y][xl] != border_value
-                                && self.pixels[y][xl] != fill_value)
-                        {
-                            self.pixels[y][xl] = fill_value;
+                while xl <= xr
+                    && (self.pixels[y][xl] != border_value && self.pixels[y][xl] != fill_value)
+                {
+                    self.pixels[y][xl] = fill_value;
 
-                            xl += 1;
-                        }
+                    xl += 1;
+                }
 
-                        if x < xl {
-                            push(self, &mut stack, x, xl - 1, y, dir);
-                            push(self, &mut stack, x, xl - 1, y, -dir);
-                        }
-                    }
+                if x < xl {
+                    push(self, &mut stack, x, xl - 1, y, dir);
+                    push(self, &mut stack, x, xl - 1, y, -dir);
                 }
             }
         }
