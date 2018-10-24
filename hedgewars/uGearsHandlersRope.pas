@@ -66,7 +66,7 @@ begin
     or (TestCollisionYwithGear(HHGear, 1) <> 0) then
         begin
         DeleteGear(Gear);
-        if (TestCollisionYwithGear(HHGear, 1) <> 0) and (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+        if (TestCollisionYwithGear(HHGear, 1) <> 0) and (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
             HHGear^.Hedgehog^.CurAmmoType:= amRope;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
@@ -451,7 +451,7 @@ begin
         HHGear^.State := HHGear^.State and (not (gstAttacking or gstHHJumping or gstHHHJump));
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         DeleteGear(Gear);
-        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
             HHGear^.Hedgehog^.CurAmmoType:= amRope;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
@@ -529,7 +529,7 @@ begin
                 Message := Message and (not gmAttack)
                 end;
         DeleteGear(Gear);
-        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
             HHGear^.Hedgehog^.CurAmmoType:= amRope;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);

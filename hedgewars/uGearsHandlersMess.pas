@@ -2877,7 +2877,7 @@ begin
             State := State or gstMoving;
             end;
         DeleteGear(Gear);
-        if (GetAmmoEntry(HHGear^.Hedgehog^, amParachute)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amParachute)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
             HHGear^.Hedgehog^.CurAmmoType:= amParachute;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
@@ -4376,7 +4376,7 @@ begin
                 State := State or gstMoving
                 end;
             DeleteGear(Gear);
-            if (GetAmmoEntry(HHGear^.Hedgehog^, amJetpack)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+            if (GetAmmoEntry(HHGear^.Hedgehog^, amJetpack)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
                 HHGear^.Hedgehog^.CurAmmoType:= amJetpack;
             isCursorVisible := false;
             ApplyAmmoChanges(HHGear^.Hedgehog^);

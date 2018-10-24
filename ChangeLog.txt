@@ -19,6 +19,7 @@ Game, gameplay:
  + Remove rubber duck
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix sine gun dealing damage to attacker if shooting up
+ * Hedgehog was able to drop more than 2 sticky mines if dropping first one from utility, then stop using utility
  * Fix Sudden Death starting in the second turn of a round rather than the first
  * Fix hammer and pickhammer not digging correctly at wrap world edge
  * Fix drill rocket exploding when digging at bounce/wrap world edge
