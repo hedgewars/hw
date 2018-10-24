@@ -3572,7 +3572,7 @@ begin
             for i:= 0 to sz^-1 do
                 begin
                     if (lastChar = '-') and (mybuf[i] = '-') then
-                        inComment := true
+                        inComment := false  // FIXME - set to false because lua considers --[====[ ]=====] Non-comment stuff to be sensible
                     // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
                     else if not inComment and (byte(mybuf[i]) > $20) and (byte(mybuf[i]) < $7F) and (mybuf[i]<>'-') then
                         begin
