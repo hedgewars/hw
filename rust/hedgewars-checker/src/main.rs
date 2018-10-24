@@ -154,6 +154,18 @@ fn connect_and_run(
             } else if msg[..].starts_with(b"BYE") {
                 warn!("Received BYE: {}", String::from_utf8_lossy(&msg[..]));
                 return Ok(());
+            } else if msg[..].starts_with(b"CHAT") {
+                let body = String::from_utf8_lossy(&msg[5..]);
+                let mut l = body.lines();
+                info!("Chat [{}]: {}", l.next().unwrap(), l.next().unwrap());
+            } else if msg[..].starts_with(b"ROOM") {
+                let body = String::from_utf8_lossy(&msg[5..]);
+                let mut l = body.lines();
+                if let Some(action) = l.next() {
+                    if action == "ADD" {
+                        info!("Room added: {}", l.skip(1).next().unwrap());
+                    }
+                }
             } else if msg[..].starts_with(b"ERROR") {
                 warn!("Received ERROR: {}", String::from_utf8_lossy(&msg[..]));
                 return Ok(());
