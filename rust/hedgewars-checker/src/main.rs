@@ -34,13 +34,15 @@ fn check(executable: &str, data_prefix: &str, buffer: &[u8]) -> Result<Vec<Vec<u
     let mut replay = tempfile::NamedTempFile::new()?;
 
     for line in buffer.split(|b| *b == '\n' as u8) {
-        replay.write(&base64::decode(line)?);
+        replay.write(&base64::decode(line)?)?;
     }
 
     let temp_file_path = replay.path();
 
     let mut home_dir = dirs::home_dir().unwrap();
     home_dir.push(".hedgewars");
+
+    debug!("Checking replay in {}", temp_file_path.to_string_lossy());
 
     let output = Command::new(executable)
         .arg("--user-prefix")
@@ -54,11 +56,50 @@ fn check(executable: &str, data_prefix: &str, buffer: &[u8]) -> Result<Vec<Vec<u
         .output()?;
 
     let mut result = Vec::new();
-    for line in output.stdout.split(|b| *b == '\n' as u8) {
-        result.push(line.to_vec());
+
+    let mut engine_lines = output
+        .stderr
+        .split(|b| *b == '\n' as u8)
+        .skip_while(|l| *l != b"WINNERS" && *l != b"DRAW");
+
+    loop {
+        match engine_lines.next() {
+            Some(b"DRAW") => result.push(b"DRAW".to_vec()),
+            Some(b"WINNERS") => {
+                result.push(b"WINNERS".to_vec());
+                let winners = engine_lines.next().unwrap();
+                let winners_num = u32::from_str(&String::from_utf8(winners.to_vec())?)?;
+                result.push(winners.to_vec());
+
+                for _i in 0..winners_num {
+                    result.push(engine_lines.next().unwrap().to_vec());
+                }
+            }
+            Some(b"GHOST_POINTS") => {
+                result.push(b"GHOST_POINTS".to_vec());
+                let points = engine_lines.next().unwrap();
+                let points_num = u32::from_str(&String::from_utf8(points.to_vec())?)? * 2;
+                result.push(points.to_vec());
+
+                for _i in 0..points_num {
+                    result.push(engine_lines.next().unwrap().to_vec());
+                }
+            }
+            Some(b"ACHIEVEMENT") => {
+                result.push(b"ACHIEVEMENT".to_vec());
+                for _i in 0..4 {
+                    result.push(engine_lines.next().unwrap().to_vec());
+                }
+            }
+            _ => break,
+        }
     }
 
-    Ok(result)
+    if result.len() > 0 {
+        Ok(result)
+    } else {
+        Err("no data from engine".into())
+    }
 }
 
 fn connect_and_run(
@@ -93,15 +134,23 @@ fn connect_and_run(
                 stream.write(b"READY\n\n")?;
             } else if msg[..].starts_with(b"REPLAY") {
                 info!("Got a replay");
-                let result = check(executable, data_prefix, &msg[7..])?;
+                match check(executable, data_prefix, &msg[7..]) {
+                    Ok(result) => {
+                        info!("Checked");
+                        debug!(
+                            "Check result: [{}]",
+                            String::from_utf8_lossy(&result.join(&(',' as u8)))
+                        );
 
-                debug!(
-                    "Check result: [{}]",
-                    String::from_utf8_lossy(&result.join(&(',' as u8)))
-                );
-
-                stream.write(&result.join(&('\n' as u8)))?;
-                stream.write(b"\n\n")?;
+                        stream.write(b"CHECKED\nOK\n")?;
+                        stream.write(&result.join(&('\n' as u8)))?;
+                        stream.write(b"\n\nREADY\n\n")?;
+                    }
+                    Err(e) => {
+                        info!("Check failed: {:?}", e);
+                        stream.write(b"CHECKED\nFAIL\nerror\n\nREADY\n\n")?;
+                    }
+                }
             } else if msg[..].starts_with(b"BYE") {
                 warn!("Received BYE: {}", String::from_utf8_lossy(&msg[..]));
                 return Ok(());
