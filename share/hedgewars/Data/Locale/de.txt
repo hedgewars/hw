@@ -1241,6 +1241,7 @@
 02:17=%1 stirbt auf dramatische Weise
 02:17=Das Königreich von %1 wurde besiegt
 02:17=%1 wurde schachmatt gesetzt
+02:17=%1 ist tot, lang lebe %1!
 
 ; Weapon Categories
 03:00=Zeitzünder-Granate

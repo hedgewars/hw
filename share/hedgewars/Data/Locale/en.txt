@@ -1144,6 +1144,7 @@
 02:17=Down with %1!
 02:17=The Kingdom of %1 has fallen!
 02:17=%1 has been checkmated
+02:17=%1 is dead, long live %1!
 
 ; Weapon Categories
 03:00=Timed grenade

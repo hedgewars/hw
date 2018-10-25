@@ -322,6 +322,7 @@
 02:17=%1 žil nebezpečne
 02:17=%1 mal priveľa nepriateľov
 02:17=%1 dostal šach-mat
+02:17=%1 je mŕtvy, nech žije %1!
 
 ; Kategórie zbraní
 03:00=Časovaný granát
