@@ -383,17 +383,25 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         QString action;
         QString message;
+        QString sender = lst[1];
         // '[' is a special character used in fake nick names of server messages.
         // Those are supposed to be translated
-        if(!lst[1].startsWith('['))
+        if(!sender.startsWith('['))
         {
             // Normal message
             message = lst[2];
             // Another kind of fake nick. '(' nicks are server messages, but they must not be translated
-            if(!lst[1].startsWith('('))
+            if(!sender.startsWith('('))
             {
                 // Check for action (/me command)
                 action = HWProto::chatStringToAction(message);
+            }
+            else
+            {
+                // If parenthesis were used, replace them with square brackets
+                // for a consistent style.
+                sender.replace(0, 1, '[');
+                sender.replace(sender.length()-1, 1, ']');
             }
         }
         else
@@ -406,17 +414,17 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if (netClientState == InLobby)
         {
             if (!action.isNull())
-                emit lobbyChatAction(lst[1], action);
+                emit lobbyChatAction(sender, action);
             else
-                emit lobbyChatMessage(lst[1], message);
+                emit lobbyChatMessage(sender, message);
         }
         else
         {
-            emit chatStringFromNet(HWProto::formatChatMsg(lst[1], message));
+            emit chatStringFromNet(HWProto::formatChatMsg(sender, message));
             if (!action.isNull())
-                emit roomChatAction(lst[1], action);
+                emit roomChatAction(sender, action);
             else
-                emit roomChatMessage(lst[1], message);
+                emit roomChatMessage(sender, message);
         }
         return;
     }
