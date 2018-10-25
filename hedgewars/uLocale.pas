@@ -159,14 +159,14 @@ for i:=0 to argCount - 1 do
             8: curArg:= arg9;
         end;
 
+        repeat
         p:= Pos('%'+IntToStr(i+1), tempstr);
-        if (p = 0) then
-            break
-        else
+        if (p <> 0) then
             begin
             delete(tempstr, p, 2);
             insert(curArg, tempstr, p);
             end;
+        until (p = 0);
     end;
 Format:= tempstr;
 end;
@@ -191,14 +191,14 @@ for i:=0 to argCount - 1 do
             8: curArg:= arg9;
         end;
 
+        repeat
         p:= Pos('%'+IntToStr(i+1), tempstr);
-        if (p = 0) then
-            break
-        else
+        if (p <> 0) then
             begin
             delete(tempstr, p, 2);
             insert(curArg, tempstr, p);
             end;
+        until (p = 0);
     end;
 FormatA:= tempstr;
 end;

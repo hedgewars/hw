@@ -88,18 +88,6 @@ for CHECKED_LANG_FILE in $CHECKED_FILES;
 	MISSING_STRINGS=0;
 	HAS_PROBLEMS=0;
 
-	# Find duplicate placeholders
-	for i in 0 1 2 3 4 5 6 7 8 9
-	do
-		grep -G "%$i.*%$i" $CHECKED_LANG_FILE > $TEMP_CHECK;
-		if [ -s $TEMP_CHECK ]
-		then
-			echo "ERROR! Duplicate placeholders found:";
-			cat $TEMP_CHECK;
-			HAS_PROBLEMS=1;
-		fi
-	done;
-
 	if [ $CHECKED_LANG_FILE != en.txt ]
 	then
 		grep -o "^[0-9][0-9]:[0-9][0-9]=" $CHECKED_LANG_FILE | cut -c1-5 | sort | uniq > $TEMP_SYMBOLS;
