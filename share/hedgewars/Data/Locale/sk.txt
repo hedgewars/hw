@@ -314,15 +314,15 @@
 02:16=%1 mal veľmi dlhú prípravu
 
 ; Kráľ (%1) je mŕtvy
-02:27=%1 je mŕtvy, nech žije %1!
-02:27=Kráľovská tragédia: %1 zomrel
-02:27=%1 už nie je medzi nami
-02:27=Náš milovaný kráľ %1 nás opustil
-02:27=Konečne sme sa ťa zbavili, %1!
-02:27=%1 je ex-kráľom
-02:27=%1 žil nebezpečne
-02:27=%1 mal priveľa nepriateľov
-02:27=%1 dostal šach-mat
+02:17=%1 je mŕtvy, nech žije %1!
+02:17=Kráľovská tragédia: %1 zomrel
+02:17=%1 už nie je medzi nami
+02:17=Náš milovaný kráľ %1 nás opustil
+02:17=Konečne sme sa ťa zbavili, %1!
+02:17=%1 je ex-kráľom
+02:17=%1 žil nebezpečne
+02:17=%1 mal priveľa nepriateľov
+02:17=%1 dostal šach-mat
 
 ; Kategórie zbraní
 03:00=Časovaný granát
