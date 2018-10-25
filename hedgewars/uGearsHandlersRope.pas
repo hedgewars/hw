@@ -214,12 +214,12 @@ begin
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not ((TestCollisionXwithXYShift(HHGear, _2*hwSign(ropeDx), 0, hwSign(ropeDx), true) <> 0)
-        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
+        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not ((TestCollisionXwithXYShift(HHGear, -_2*hwSign(ropeDx), 0, -hwSign(ropeDx), true) <> 0)
-        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, 1*-hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
+        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, -hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -227,8 +227,6 @@ begin
 
     HHGear^.dX := HHGear^.X - tx;
     HHGear^.dY := HHGear^.Y - ty;
-    ////
-
 
     haveDivided := false;
     // check whether rope needs dividing
@@ -429,7 +427,6 @@ var
     HHGear: PGear;
     tx, ty, tt: hwFloat;
 begin
-    
     Gear^.X := Gear^.X - Gear^.dX;
     Gear^.Y := Gear^.Y - Gear^.dY;
     Gear^.Elasticity := Gear^.Elasticity + _1;
@@ -466,6 +463,11 @@ begin
         Gear^.X := Gear^.X + HHGear^.dX;
         Gear^.Y := Gear^.Y + HHGear^.dY;
 
+        // hedgehog can teleport up to 5 pixels upwards when sliding,
+        // so we have to give up the maintained rope length
+        // after doStepHedgehogMoving() call and recalculate
+        // it based on the gear and current hedgehog positions
+        Gear^.Elasticity:= int2hwFloat(hwRound(Distance(Gear^.X - HHGear^.X, Gear^.Y - HHGear^.Y) + _0_001));
 
         tt := Gear^.Elasticity;
         tx := _0;
@@ -478,6 +480,7 @@ begin
                 Gear^.Y := Gear^.Y + ty;
                 Gear^.Elasticity := tt;
                 Gear^.doStep := @doStepRopeWork;
+
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
                     begin
@@ -486,8 +489,6 @@ begin
                     end;
 
                 RopeRemoveFromAmmo(Gear, HHGear);
-
-                tt := _0;
                 exit
                 end;
             tx := tx + Gear^.dX + Gear^.dX;
