@@ -288,7 +288,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
             QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
             emit SendChat(msgbody);
             QByteArray buf;
-            HWProto::addStringToBuffer(buf, "s" + HWProto::formatChatMsg(config->netNick(), msgbody) + "\x20\x20");
+            HWProto::addStringToBuffer(buf, "s" + HWProto::formatChatMsg(config->netNick(), msgbody));
             demo.append(buf);
             break;
         }
@@ -342,21 +342,21 @@ void HWGame::FromNet(const QByteArray & msg)
 void HWGame::FromNetChat(const QString & msg)
 {
     QByteArray buf;
-    HWProto::addStringToBuffer(buf, 's' + msg + "\x20\x20");
+    HWProto::addStringToBuffer(buf, 's' + msg);
     RawSendIPC(buf);
 }
 
 void HWGame::FromNetWarning(const QString & msg)
 {
     QByteArray buf;
-    HWProto::addStringToBuffer(buf, "s\x00" + msg + "\x20\x20");
+    HWProto::addStringToBuffer(buf, "s\x00" + msg);
     RawSendIPC(buf);
 }
 
 void HWGame::FromNetError(const QString & msg)
 {
     QByteArray buf;
-    HWProto::addStringToBuffer(buf, "s\x05" + msg + "\x20\x20");
+    HWProto::addStringToBuffer(buf, "s\x05" + msg);
     RawSendIPC(buf);
 }
 
