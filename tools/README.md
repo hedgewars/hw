@@ -9,6 +9,7 @@ it often contains a brief comment at the top.
 
 ### Files
 * `update_locale_files.sh`: Update locale files
+* `check_engine_locale_files.sh`: Check the engine locale files for missing translations and problems
 * `hwmap2lua.sh`: Convert HWMAP files to Lua code for usage in missions
 * `create_dmg.sh`: Generate a .dmg file (relevant for Mac)
 * `dmg_pkg_install.sh`: Downloads and install a .dmg from a URL (relevant for Mac)
