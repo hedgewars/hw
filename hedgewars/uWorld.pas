@@ -1693,7 +1693,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             Frames:= 0;
             CountTicks:= 0;
             s:= Format(shortstring(trmsg[sidFPS]), inttostr(FPS));
-            tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+            tmpSurface:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trmsg[sidFPS],fnt16)].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
             FreeAndNilTexture(fpsTexture);
             fpsTexture:= Surface2Tex(tmpSurface, false);
