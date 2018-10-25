@@ -25,6 +25,7 @@ Game, gameplay:
  * Fix drill rocket exploding when digging at bounce/wrap world edge
  * Fix freezer ray not working through wrap world edge
  * Fix freezer ray going through bounce world edge
+ * Fix freezer ray extending with low fuel usage when firing straight up/down while holding up/down key
  * Fix cake walking through bounce world edge
  * Fix cake walking through land when reaching wrap world edge
  * Laser sight now works properly through wrap world edge

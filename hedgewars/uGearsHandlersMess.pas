@@ -6332,7 +6332,7 @@ begin
         HedgehogChAngle(HHGear);
         ndX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _4;
         ndY:= -AngleCos(HHGear^.Angle) * _4;
-        if (ndX <> dX) or (ndY <> dY) or
+        if (ndX <> dX) or (ndY <> dY) or (Gear^.Message and (gmUp or gmDown) <> 0) or
            (((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
              (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) = nil)) then
