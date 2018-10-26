@@ -733,6 +733,7 @@ gtFlamethrower: begin
                 gear^.Health:= 1000;
                 gear^.Radius:= 8;
                 gear^.Density:= _0;
+                gear^.Tag:= 0; // sound state: 0 = no sound, 1 = ice beam sound, 2 = idle sound
                 end;
      gtCreeper: begin
                 // TODO: Finish creeper initialization implementation

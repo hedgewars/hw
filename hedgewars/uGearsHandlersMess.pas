@@ -6270,14 +6270,22 @@ begin
     end;
     if Gear^.Message and (gmUp or gmDown) <> 0 then
         begin
-        StopSoundChan(Gear^.SoundChannel);
-        Gear^.SoundChannel:= -1;
+        if (Gear^.Tag <> 2) then
+            begin
+            StopSoundChan(Gear^.SoundChannel);
+            Gear^.SoundChannel:= LoopSound(sndIceBeamIdle);
+            Gear^.Tag:= 2;
+            end;
         if GameTicks mod 40 = 0 then dec(Gear^.Health)
         end
     else
         begin
-        if Gear^.SoundChannel = -1 then
-            Gear^.SoundChannel := LoopSound(sndIceBeam);
+        if (Gear^.Tag <> 1) then
+            begin
+            StopSoundChan(Gear^.SoundChannel);
+            Gear^.SoundChannel:= LoopSound(sndIceBeam);
+            Gear^.Tag:= 1;
+            end;
         if GameTicks mod 10 = 0 then dec(Gear^.Health)
         end
 end;

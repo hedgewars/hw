@@ -298,7 +298,8 @@ var cInitVolume: LongInt;
             (FileName:              'custom7.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom7
             (FileName:              'custom8.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom8
             (FileName:              'minigun.ogg'; Path: ptSounds; AltPath: ptNone),// sndMinigun
-            (FileName:         'flamethrower.ogg'; Path: ptSounds; AltPath: ptNone) // sndFlamethrower
+            (FileName:         'flamethrower.ogg'; Path: ptSounds; AltPath: ptNone),// sndFlamethrower
+            (FileName:        'ice_beam_idle.ogg'; Path: ptSounds; AltPath: ptNone) // sndIceBeamIdle
             );
 
 
