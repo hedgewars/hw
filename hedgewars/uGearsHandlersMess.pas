@@ -5593,6 +5593,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if HHGear = nil then
         begin
+        StopSoundChan(gear^.SoundChannel);
         DeleteGear(gear);
         exit
         end;
@@ -5639,6 +5640,7 @@ begin
         begin
         HHGear^.Message:= HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstNotKickable);
+        StopSoundChan(gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack
         end
@@ -5662,6 +5664,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not (gmUp or gmDown or gmLeft or gmRight or gmAttack));
     HHGear^.State := HHGear^.State or gstNotKickable;
+    Gear^.SoundChannel := LoopSound(sndLandGun);
     Gear^.doStep := @doStepLandGunWork
 end;
 
