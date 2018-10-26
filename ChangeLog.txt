@@ -31,6 +31,7 @@ Game, gameplay:
  * Laser sight now works properly through wrap world edge
  * Fix projectiles behaving incorrectly with land just behind the wrap world edge
  * Fix bee weapon becoming unusable when hitting attack key in mid-air
+ * Fix hog sometimes getting stuck in land if roping very fast
  * Limit hedgehog health to 268435455 to prevent some bugs
 
 Game, controls and commands:
@@ -57,6 +58,7 @@ Game, audiovisuals:
  * Prevent voices from being spoken directly before a victory voice
  * Fix damage not being displayed if hog drowns in water with 100% opacity (like in Compost theme)
  * Fix retreat timer appearing after using baseball bat or whip and immediately taking damage
+ * Fix Ride of the Valkyries not playing if music is enabled and sounds are disabled
 
 Frontend:
  + Add help button in main menu (link to Hedgewars Wiki)

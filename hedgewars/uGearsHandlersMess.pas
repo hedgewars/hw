@@ -4174,8 +4174,7 @@ begin
     if (HHGear <> nil) and ((HHGear^.Message and gmLJump) <> 0) and ((Gear^.State and gsttmpFlag) = 0) then
         begin
         Gear^.State := Gear^.State or gsttmpFlag;
-        PauseMusic;
-        playSound(sndRideOfTheValkyries);
+        PlayMusicSound(sndRideOfTheValkyries);
         inCinematicMode:= true;
         end;
 
@@ -4190,8 +4189,7 @@ begin
         begin
         inCinematicMode:= false;
         StopSoundChan(Gear^.SoundChannel);
-        StopSound(sndRideOfTheValkyries);
-        ResumeMusic;
+        StopMusicSound(sndRideOfTheValkyries);
 
         if ((Gear^.State and gstCollision) <> 0) then
             begin
