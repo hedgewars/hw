@@ -5188,19 +5188,21 @@ var
     odY: hwFloat;
 begin
     AllInactive := false;
+    // Play piano notes with slot keys
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and
         ((CurrentHedgehog^.Gear^.Message and gmSlot) <> 0) then
             begin
+                // Piano notes are played if sound OR music (or both) is enabled
                 case CurrentHedgehog^.Gear^.MsgParam of
-                0: PlaySound(sndPiano0);
-                1: PlaySound(sndPiano1);
-                2: PlaySound(sndPiano2);
-                3: PlaySound(sndPiano3);
-                4: PlaySound(sndPiano4);
-                5: PlaySound(sndPiano5);
-                6: PlaySound(sndPiano6);
-                7: PlaySound(sndPiano7);
-                else PlaySound(sndPiano8);
+                0: PlaySound(sndPiano0, false, false, true);
+                1: PlaySound(sndPiano1, false, false, true);
+                2: PlaySound(sndPiano2, false, false, true);
+                3: PlaySound(sndPiano3, false, false, true);
+                4: PlaySound(sndPiano4, false, false, true);
+                5: PlaySound(sndPiano5, false, false, true);
+                6: PlaySound(sndPiano6, false, false, true);
+                7: PlaySound(sndPiano7, false, false, true);
+                8: PlaySound(sndPiano8, false, false, true);
             end;
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
