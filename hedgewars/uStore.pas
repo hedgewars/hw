@@ -936,7 +936,7 @@ var tmpsurf: PSDL_SURFACE;
     font: THWFont;
     r, r2: TSDL_Rect;
     wa, ha: LongInt;
-    tmpline, tmpline2, tmpdesc: ansistring;
+    tmpline, tmpline2, tmpline3, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
 if length(caption) = 0 then
@@ -1023,17 +1023,27 @@ while length(tmpdesc) > 0 do
     r2:= r;
     if length(tmpline) > 0 then
         begin
-        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline));
 
-        // render highlighted caption (if there is a ':')
+        // Render highlighted caption if there is a ':',
+        // from the beginning of the line to (and including) the ':'.
+        // With '::', the colons will be suppressed in the final text.
         tmpline2:= _S'';
         SplitByCharA(tmpline, tmpline2, ':');
         if length(tmpline2) > 0 then
             begin
-            tmpline:= tmpline + ':';
+            if (tmpline2[1] <> ':') then
+                begin
+                tmpline:= tmpline + ':';
+                tmpline3:= tmpline + tmpline2;
+                end
+            else
+                tmpline3:= tmpline + Copy(tmpline2, 2, Length(tmpline2)-1);
+            r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline3));
             WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, PChar(tmpline));
-            end;
-        end
+            end
+        else
+            r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline));
+        end;
     end;
 
 if length(extra) > 0 then
