@@ -455,7 +455,14 @@ handleCmd_inRoom ["CALLVOTE"] = do
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote kick: You need to specify a nickname."]]
+    rm <- thisRoom
+    return
+        [AnswerClients [sendChan cl] ["CHAT", nickServer,
+        if isJust $ masterID rm then
+            loc "/callvote kick: This is only allowed in rooms without a room master."
+        else
+            loc "/callvote kick: You need to specify a nickname."
+        ]]
 
 handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     (thisClientId, rnc) <- ask
