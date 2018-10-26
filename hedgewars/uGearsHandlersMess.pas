@@ -5576,6 +5576,7 @@ begin
 
     if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
+        HHGear^.Message:= HHGear^.Message and (not (gmAttack or gmLeft or gmRight));
         HHGear^.State := HHGear^.State and (not gstNotKickable);
         StopSoundChan(Gear^.SoundChannel, 300);
         DeleteGear(Gear);
@@ -5661,7 +5662,7 @@ begin
 
     if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
-        HHGear^.Message:= HHGear^.Message and (not gmAttack);
+        HHGear^.Message:= HHGear^.Message and (not (gmAttack or gmLeft or gmRight));
         HHGear^.State := HHGear^.State and (not gstNotKickable);
         StopSoundChan(gear^.SoundChannel);
         DeleteGear(Gear);
