@@ -30,6 +30,9 @@ procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
 
+procedure EscapeCharA(var a: ansistring; e: char);
+procedure UnEscapeCharA(var a: ansistring; e: char);
+
 function ExtractFileDir(s: shortstring) : shortstring;
 function ExtractFileName(s: shortstring) : shortstring;
 
@@ -250,6 +253,40 @@ if i > 0 then
     SetLengthA(a, Pred(i));
     end else b:= '';
 end; { SplitByCharA }
+
+// In the ansistring a, escapes all instances of
+// '\e' with an ASCII ESC character, where e is
+// a char chosen by you.
+procedure EscapeCharA(var a: ansistring; e: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(e, a);
+    if (i > 1) and (a[i - 1] = '\') then
+        begin
+        a[i]:= ^[; // ASCII ESC
+        Delete(a, i - 1, 1);
+        end
+    else
+        break;
+until (i <= 0);
+end; { EscapeCharA }
+
+// Unescapes a previously escaped string and inserts
+// e back into the string. e is a char chosen by you.
+procedure UnEscapeCharA(var a: ansistring; e: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(^[, a); // ASCII ESC
+    if (i > 0) then
+        begin
+        a[i]:= e;
+        end
+    else
+        break;
+until (i <= 0);
+end; { UnEscapeCharA }
 
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin

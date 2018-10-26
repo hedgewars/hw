@@ -976,7 +976,9 @@ tmpdesc:= description;
 while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
+    EscapeCharA(tmpline, '|');
     SplitByCharA(tmpline, tmpdesc, '|');
+    UnEscapeCharA(tmpline, '|');
     if length(tmpline) > 0 then
         begin
         TTF_SizeUTF8(Fontz[font].Handle, PChar(tmpline), @i, @j);
@@ -1019,7 +1021,9 @@ tmpdesc:= description;
 while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
+    EscapeCharA(tmpline, '|');
     SplitByCharA(tmpline, tmpdesc, '|');
+    UnEscapeCharA(tmpline, '|');
     r2:= r;
     if length(tmpline) > 0 then
         begin
@@ -1027,6 +1031,7 @@ while length(tmpdesc) > 0 do
         // Render highlighted caption if there is a ':',
         // from the beginning of the line to (and including) the ':'.
         // With '::', the colons will be suppressed in the final text.
+        EscapeCharA(tmpline, ':');
         tmpline2:= _S'';
         SplitByCharA(tmpline, tmpline2, ':');
         if length(tmpline2) > 0 then
@@ -1038,11 +1043,15 @@ while length(tmpdesc) > 0 do
                 end
             else
                 tmpline3:= tmpline + Copy(tmpline2, 2, Length(tmpline2)-1);
+            UnEscapeCharA(tmpline3, ':');
             r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline3));
             WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, PChar(tmpline));
             end
         else
+            begin
+            UnEscapeCharA(tmpline, ':');
             r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline));
+            end
         end;
     end;
 
