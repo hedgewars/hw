@@ -625,7 +625,7 @@ with CurrentHedgehog^ do
         begin
         Inc(MultiShootAttacks);
 
-        if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) and ((GameFlags and gfMultiWeapon) = 0) then
+        if (Ammoz[a].Ammo.NumPerTurn > 0) and ((GameFlags and gfMultiWeapon) = 0) then
             begin
             s:= ansistring(inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1));
             AddCaption(formatA(trmsg[sidRemaining], s), capcolDefault, capgrpAmmostate);
