@@ -5862,9 +5862,6 @@ var
     i: LongInt;
     s: ansistring;
 begin
-    if (TurnTimeLeft > 0) then
-        dec(TurnTimeLeft);
-
     AllInactive := false;
     hh := Gear^.Hedgehog;
 

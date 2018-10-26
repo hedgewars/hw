@@ -2172,7 +2172,8 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
                           ammoprop_Utility or
-                          ammoprop_NoRoundEnd;
+                          ammoprop_NoRoundEnd or
+                          ammoprop_DoesntStopTimerWhileAttacking;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
