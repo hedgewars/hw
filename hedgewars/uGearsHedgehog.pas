@@ -465,7 +465,7 @@ with Gear^,
                                  cLowGravity := true
                                  end;
                   amExtraDamage: begin
-                                 PlaySound(sndHellishImpact4);
+                                 PlaySound(sndExtraDamage);
                                  cDamageModifier:= _1_5
                                  end;
                  amInvulnerable: begin

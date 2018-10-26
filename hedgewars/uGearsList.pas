@@ -478,7 +478,7 @@ case Kind of
                 gear^.Sticky:= true;
                 end;
         gtCase: begin
-                gear^.ImpactSound:= sndGraveImpact;
+                gear^.ImpactSound:= sndCaseImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_3;

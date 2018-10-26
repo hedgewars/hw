@@ -163,6 +163,7 @@ var cInitVolume: LongInt;
             (FileName:          'graveimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndGraveImpact
             (FileName:           'mineimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndMineImpact
             (FileName:             'minetick.ogg'; Path: ptSounds; AltPath: ptNone),// sndMineTicks
+            // TODO: New mudball sound?
             (FileName:             'Droplet1.ogg'; Path: ptSounds; AltPath: ptNone),// sndMudballImpact
             (FileName:           'pickhammer.ogg'; Path: ptSounds; AltPath: ptNone),// sndPickhammer
             (FileName:                  'gun.ogg'; Path: ptSounds; AltPath: ptNone),// sndGun
@@ -300,7 +301,10 @@ var cInitVolume: LongInt;
             (FileName:              'minigun.ogg'; Path: ptSounds; AltPath: ptNone),// sndMinigun
             (FileName:         'flamethrower.ogg'; Path: ptSounds; AltPath: ptNone),// sndFlamethrower
             (FileName:        'ice_beam_idle.ogg'; Path: ptSounds; AltPath: ptNone),// sndIceBeamIdle
-            (FileName:              'landgun.ogg'; Path: ptSounds; AltPath: ptNone) // sndLandGun
+            (FileName:              'landgun.ogg'; Path: ptSounds; AltPath: ptNone),// sndLandGun
+            (FileName:          'graveimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndCaseImpact
+            // TODO: New Extra Damage sound
+            (FileName:             'hell_ugh.ogg'; Path: ptSounds; AltPath: ptNone) // sndExtraDamage
             );
 
 
