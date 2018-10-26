@@ -297,7 +297,8 @@ var cInitVolume: LongInt;
             (FileName:              'custom6.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom6
             (FileName:              'custom7.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom7
             (FileName:              'custom8.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom8
-            (FileName:              'minigun.ogg'; Path: ptSounds; AltPath: ptNone) // sndMinigun
+            (FileName:              'minigun.ogg'; Path: ptSounds; AltPath: ptNone),// sndMinigun
+            (FileName:         'flamethrower.ogg'; Path: ptSounds; AltPath: ptNone) // sndFlamethrower
             );
 
 

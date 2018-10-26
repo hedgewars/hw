@@ -151,7 +151,7 @@ type
             sndInvulnerable, sndJetpackLaunch, sndJetpackBoost, sndPortalShot, sndPortalSwitch,
             sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4,
             sndCreeperDrop, sndCreeperWater, sndCreeperDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
-            sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun);
+            sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun, sndFlamethrower);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
