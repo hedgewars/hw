@@ -1092,7 +1092,7 @@ function SetCSAmmoDescriptions(mode)
 
 	elseif mode == "weapons" then
 		local specSelect = loc("Switch: Select weapon special")
-		local specHeader = loc("Available weapon specials:")
+		local specHeader = loc("Available weapon specials:") .. " "
 		local specText="|"..
 			specSelect.."| |"..
 			specHeader.."|"
