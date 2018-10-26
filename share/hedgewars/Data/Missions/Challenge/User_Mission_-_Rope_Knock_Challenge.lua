@@ -6,6 +6,7 @@ local endTimer = 1000
 local hogsKilled = 0
 local finishTime
 local ouchies = false
+local valkyriesTimer = -1
 
 local HogData =	{
 					{"amn",			"NinjaFull",false},
@@ -85,6 +86,8 @@ function ProtectEnemies()
 end
 
 function GameOverMan()
+	StopMusicSound(sndRideOfTheValkyries)
+	valkyriesTimer = -1
 	missionWon = false
 	ProtectEnemies()
 	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge over!"), loc("Oh no! Just try again!"), -amSkip, 0)
@@ -242,10 +245,21 @@ function onGameTick()
 
 end
 
+function onGameTick20()
+	if (valkyriesTimer > 0) then
+		valkyriesTimer = valkyriesTimer - 20
+		if valkyriesTimer <= 0 then
+			StopMusicSound(sndRideOfTheValkyries)
+		end
+	end
+end
+
 function onGearDamage(gear, damage)
 
 	if gear == hhs[0] then
 		ouchies = true
+		StopMusicSound(sndRideOfTheValkyries)
+		valkyriesTimer = -1
 		ProtectEnemies()
 	end
 
@@ -260,7 +274,9 @@ function onGearDamage(gear, damage)
 		SetTeamLabel(playerTeamName, tostring(GetKillScore()))
 
 		if hogsKilled == 15 then
-			PlaySound(sndRideOfTheValkyries)
+			PlayMusicSound(sndRideOfTheValkyries)
+			-- Time in ms after which to return to normal music
+			valkyriesTimer = 20000
 		elseif hogsKilled == 16 then
 			finishTime = TurnTimeLeft
 			GG()
