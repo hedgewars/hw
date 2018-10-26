@@ -534,6 +534,7 @@ if (not cOnlyStats) and allOK then
     for i:= Low(CountTexz) to High(CountTexz) do
         begin
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trmsg[sidAmmoCount],fnt16)].Handle, Str2PChar(Format(shortstring(trmsg[sidAmmoCount]), IntToStr(i))), cWhiteColorChannels);
+        if checkFails(tmpsurf <> nil,'Number texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true) then exit;
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeAndNilTexture(CountTexz[i]);
         CountTexz[i]:= Surface2Tex(tmpsurf, false);
