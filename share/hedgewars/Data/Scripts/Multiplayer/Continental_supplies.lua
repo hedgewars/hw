@@ -274,7 +274,7 @@ CS.CONTINENT_INFORMATION =
 {loc("North America"),
 loc("The continent of firearms"),
 loc("The Union: You can select a hedgehog at the start of your turns.").."| |"..
-loc("Special weapons:").."|"..
+loc("Special weapons:").." |"..
 GetAmmoName(amShotgun)..": "..CS.SHOTGUN_SPECIAL_INFO.."|"..
 GetAmmoName(amSniperRifle)..": "..CS.SNIPER_SPECIAL_INFO,
 {amSniperRifle,1},
@@ -283,7 +283,7 @@ GetAmmoName(amSniperRifle)..": "..CS.SNIPER_SPECIAL_INFO,
 
 {loc("South America"),
 loc("The continent of guerilla tactics"),
-"| |"..loc("Special weapons:").."|"
+"| |"..loc("Special weapons:").." |"
 ..GetAmmoName(amGasBomb)..": "..CS.CHEESE_SPECIAL_INFO,
 {amGasBomb,2},
 {{amBirdy,100},{amHellishBomb,1},{amBee,100},{amGasBomb,100},{amFlamethrower,100},{amNapalm,2},{amExtraDamage,3}},
@@ -291,7 +291,7 @@ loc("The continent of guerilla tactics"),
 
 {loc("Europe"),
 loc("The continent of medicine"),
-"| |"..loc("Special weapons:").."|"
+"| |"..loc("Special weapons:").." |"
 ..GetAmmoName(amMolotov)..": "..CS.MOLOTOV_SPECIAL_INFO,
 {amBazooka,3},
 {{amBazooka,100},{amGrenade,100},{amMortar,100},{amMolotov,100},{amVampiric,4},{amPiano,1},{amResurrector,2},{amJetpack,4}},
@@ -299,7 +299,7 @@ loc("The continent of medicine"),
 
 {loc("Africa"),
 loc("The continent of dust"),
-"| |"..loc("Special weapons:").."|"..
+"| |"..loc("Special weapons:").." |"..
 GetAmmoName(amSeduction)..": "..CS.SEDUCTION_SPECIAL_INFO.."|"..
 CS.INVULNERABLE_SPECIAL_INFO.."|"..
 GetAmmoName(amSMine)..": "..CS.STICKY_PROJECTILE_INFO.."|"..
@@ -311,7 +311,7 @@ GetAmmoName(amSMine)..": "..CS.STICKY_NAPALM_INFO,
 {loc("Asia"),
 loc("The continent of ninjas"),
 loc("Textile industry: Will give you a parachute every second turn.").."| |"..
-loc("Special weapons:").."|"..
+loc("Special weapons:").." |"..
 GetAmmoName(amParachute)..": "..CS.PARACHUTE_SPECIAL_INFO,
 {amRope,5},
 {{amRope,100},{amFirePunch,100},{amParachute,1},{amKnife,2},{amDynamite,1}},
@@ -319,7 +319,7 @@ GetAmmoName(amParachute)..": "..CS.PARACHUTE_SPECIAL_INFO,
 
 {loc("Australia"),
 loc("The continent of sports"),
-"| |"..loc("Special weapons:").."|"..
+"| |"..loc("Special weapons:").." |"..
 GetAmmoName(amBaseballBat)..": "..CS.BASEBALLBAT_CRICKET_INFO.."|"..
 GetAmmoName(amBaseballBat)..": "..CS.BASEBALLBAT_BOOMERANG_INFO.."|"..
 loc("Baseball bat specials cannot be used close to other hogs."),
@@ -330,7 +330,7 @@ loc("Baseball bat specials cannot be used close to other hogs."),
 {loc("Antarctica"),
 loc("The continent of ice and science"),
 loc("Antarctic summer: Every 4th turn you get 1 girder, 1 mudball, 2 sine guns and 1 portable portal device.").."| |"..
-loc("Special weapons:").."|"..
+loc("Special weapons:").." |"..
 GetAmmoName(amPickHammer)..": "..CS.PICKHAMMER_SPECIAL_INFO,
 {amIceGun,7},
 {{amSnowball,2},{amPickHammer,100},{amSineGun,4},{amGirder,1},{amExtraTime,1},{amIceGun,1},{amPortalGun,2}},
@@ -338,7 +338,7 @@ GetAmmoName(amPickHammer)..": "..CS.PICKHAMMER_SPECIAL_INFO,
 
 {loc("Kerguelen"),
 loc("The continent of cowards"),
-"| |"..loc("Special weapons:").."|"..
+"| |"..loc("Special weapons:").." |"..
 GetAmmoName(amHammer)..": "..CS.HAMMER_ROAR_INFO.."|"..
 GetAmmoName(amHammer)..": "..CS.HAMMER_SWAP_INFO.."|"..
 GetAmmoName(amHammer)..": "..CS.HAMMER_LONELY_INFO.."|"..
