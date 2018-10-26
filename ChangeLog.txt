@@ -32,6 +32,7 @@ Game, gameplay:
  * Fix projectiles behaving incorrectly with land just behind the wrap world edge
  * Fix bee weapon becoming unusable when hitting attack key in mid-air
  * Fix hog sometimes getting stuck in land if roping very fast
+ * Fix seduction not stopping if hog took damage before attack was complete
  * Limit hedgehog health to 268435455 to prevent some bugs
 
 Game, controls and commands:

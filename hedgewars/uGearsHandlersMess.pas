@@ -3738,8 +3738,19 @@ end;
 procedure doStepSeductionWork(Gear: PGear);
 var i: LongInt;
     hogs: PGearArrayS;
+    HHGear: PGear;
 begin
     AllInactive := false;
+
+    HHGear := Gear^.Hedgehog^.Gear;
+    if (HHGear <> nil) and ((HHGear^.State and gstHHDriven) = 0) then
+        begin
+        StopSound(sndYoohoo);
+        AfterAttack;
+        DeleteGear(Gear);
+        exit;
+        end;
+
     hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
     if hogs.size > 0 then
         begin
@@ -3759,8 +3770,9 @@ begin
                 else if Hedgehog^.Effects[heFrozen] > 255 then
                     Hedgehog^.Effects[heFrozen]:= 255
         end ;
-        AfterAttack;
-        DeleteGear(Gear);
+    AfterAttack;
+    DeleteGear(Gear);
+
 (*
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
@@ -3788,8 +3800,19 @@ end;
 
 procedure doStepSeductionWear(Gear: PGear);
 var heart: PVisualGear;
+    HHGear: PGear;
 begin
     AllInactive := false;
+
+    HHGear := Gear^.Hedgehog^.Gear;
+    if (HHGear <> nil) and ((HHGear^.State and gstHHDriven) = 0) then
+        begin
+        StopSound(sndYoohoo);
+        AfterAttack;
+        DeleteGear(Gear);
+        exit;
+        end;
+
     inc(Gear^.Timer);
     if Gear^.Timer > 250 then
         begin
