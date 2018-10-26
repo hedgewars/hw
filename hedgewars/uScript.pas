@@ -2195,6 +2195,37 @@ begin
     lc_playsound:= 0;
 end;
 
+function lc_playmusicsound(L : Plua_State) : LongInt; Cdecl;
+var s: LongInt;
+const
+    call = 'PlayMusicSound';
+    params = 'soundId';
+begin
+    if CheckLuaParamCount(L, 1, call, params) then
+        begin
+        s:= LuaToSoundOrd(L, 1, call, params);
+        if s >= 0 then
+            PlayMusicSound(TSound(s))
+        end;
+    lc_playmusicsound:= 0;
+end;
+
+function lc_stopmusicsound(L : Plua_State) : LongInt; Cdecl;
+var s: LongInt;
+const
+    call = 'StopMusicSound';
+    params = 'soundId';
+begin
+    if CheckLuaParamCount(L, 1, call, params) then
+        begin
+        s:= LuaToSoundOrd(L, 1, call, params);
+        if s >= 0 then
+            StopMusicSound(TSound(s))
+        end;
+    lc_stopmusicsound:= 0;
+end;
+
+
 function lc_setsoundmask(L : Plua_State) : LongInt; Cdecl;
 var s: LongInt;
     soundState: boolean;
@@ -4189,6 +4220,8 @@ lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'GetAmmo', @lc_getammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
+lua_register(luaState, _P'PlayMusicSound', @lc_playmusicsound);
+lua_register(luaState, _P'StopMusicSound', @lc_stopmusicsound);
 lua_register(luaState, _P'SetSoundMask', @lc_setsoundmask);
 lua_register(luaState, _P'GetTeamName', @lc_getteamname);
 lua_register(luaState, _P'GetTeamIndex', @lc_getteamindex);
