@@ -513,10 +513,12 @@ handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
         else 
         return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote pause: No game in progress!"]]
 
+handleCmd_inRoom ["CALLVOTE", "PAUSE", _] = handleCmd_inRoom ["CALLVOTE", "PAUSE"]
 
 handleCmd_inRoom ["CALLVOTE", "NEWSEED"] = do
     startVote VoteNewSeed
 
+handleCmd_inRoom ["CALLVOTE", "NEWSEED", _] = handleCmd_inRoom ["CALLVOTE", "NEWSEED"]
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS"] = do
     cl <- thisClient
@@ -532,6 +534,8 @@ handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
         else
         return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote hedgehogs: Specify number from 1 to 8."]]
 
+handleCmd_inRoom ["CALLVOTE", _] = handleCmd_inRoom ["CALLVOTE"]
+handleCmd_inRoom ["CALLVOTE", _, _] = handleCmd_inRoom ["CALLVOTE"]
 
 handleCmd_inRoom ("VOTE" : m : p) = do
     cl <- thisClient
