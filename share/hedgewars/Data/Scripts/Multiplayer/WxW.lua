@@ -1535,12 +1535,22 @@ end
 
 function HandleStartingStage()
 
-	temp = menu[menuIndex].line
-	menu[menuIndex].line = "--> " .. menu[menuIndex].line
+	local renderedLines = {}
+	for m = 1, #menu do
+		local marker
+		local line = menu[m].line
+		if m == menuIndex then
+			marker = "▶"
+		else
+			marker = "▷"
+			line = string.gsub(line, ":", "\\:")
+		end
+		table.insert(renderedLines, marker .. " " .. line)
+	end
 
 	missionComment = ""
-	for i = 1, #menu do
-		missionComment = missionComment .. menu[i].line
+	for l = 1, #renderedLines do
+		missionComment = missionComment .. renderedLines[l]
 	end
 
 	ShowMission	(
@@ -1551,8 +1561,6 @@ function HandleStartingStage()
 				postMenuCfg ..
 				"", 2, 9999000, true
 				)
-
-	menu[menuIndex].line = temp
 
 end
 
