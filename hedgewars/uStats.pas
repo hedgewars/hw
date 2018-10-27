@@ -272,12 +272,13 @@ if FinishedTurnsTotal <> 0 then
     // Missed shot
     // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit
     else if AmmoDamagingUsed and (Kills <= killsCheck) and (PoisonTurn = 0) and (PoisonClan = 0) and (DamageTurn = 0) and (HitTargets = 0) then
-        // Chance to call hedgehog stupid if sacrificed for nothing
+        // Chance to call hedgehog stupid or nutter if sacrificed for nothing
         if CurrentHedgehog^.stats.Sacrificed then
-            if random(2) = 0 then
-                AddVoice(sndMissed, PreviousTeam^.voicepack)
-            else
-                AddVoice(sndStupid, PreviousTeam^.voicepack)
+            case random(3) of
+            0: AddVoice(sndMissed, PreviousTeam^.voicepack);
+            1: AddVoice(sndStupid, PreviousTeam^.voicepack);
+            2: AddVoice(sndNutter, PreviousTeam^.voicepack);
+            end
         else
             AddVoice(sndMissed, PreviousTeam^.voicepack)
 
