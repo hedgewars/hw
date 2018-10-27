@@ -39,6 +39,9 @@ Sameteam.ogg
 Solong.ogg
 Stupid.ogg
 Takecover.ogg
+# NOTE: Thisoneismine.ogg intentionally not included.
+# Reason: The text "Threat detected" does not fit.
+# This sound is for crate drops.
 Traitor.ogg
 Uh-oh.ogg
 Victory.ogg
