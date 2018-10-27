@@ -217,8 +217,8 @@ if FinishedTurnsTotal <> 0 then
 
     // Hog hurts, poisons or kills itself (except sacrifice)
     else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.stats.StepDied)) then
-        // Hurting itself only (not drowning)
-        if (CurrentHedgehog^.stats.StepDamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
+        // Hurt itself only (without dying)
+        if (CurrentHedgehog^.stats.StepDamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) and (not CurrentHedgehog^.stats.StepDied) then
             begin
             // Announcer message + random taunt
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), capcolDefault, capgrpMessage);
@@ -229,7 +229,7 @@ if FinishedTurnsTotal <> 0 then
                 2: AddVoice(sndDrat, CurrentTeam^.voicepack);
                 end;
             end
-        // Hurt itself and others
+        // Hurt itself and others, or died
         else
             AddVoice(sndStupid, PreviousTeam^.voicepack)
 
