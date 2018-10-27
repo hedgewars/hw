@@ -217,12 +217,21 @@ if FinishedTurnsTotal <> 0 then
 
     // Hog hurts, poisons or kills itself (except sacrifice)
     else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.stats.StepDied)) then
-        begin
-        AddVoice(sndStupid, PreviousTeam^.voicepack);
-        // Message for hurting itself only (not drowning)
+        // Hurting itself only (not drowning)
         if (CurrentHedgehog^.stats.StepDamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
+            begin
+            // Announcer message + random taunt
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), capcolDefault, capgrpMessage);
-        end
+            if (CurrentHedgehog^.stats.StepDamageGiven <= CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
+                case random(3) of
+                0: AddVoice(sndStupid, PreviousTeam^.voicepack);
+                1: AddVoice(sndBugger, CurrentTeam^.voicepack);
+                2: AddVoice(sndDrat, CurrentTeam^.voicepack);
+                end;
+            end
+        // Hurt itself and others
+        else
+            AddVoice(sndStupid, PreviousTeam^.voicepack)
 
     // Hog hurts, poisons or kills own team/clan member. Sacrifice is taken into account
     else if (DamageClan <> 0) or (KillsClan > killsCheck) or (PoisonClan <> 0) then
@@ -242,7 +251,10 @@ if FinishedTurnsTotal <> 0 then
         if Kills > killsCheck then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         else
-            AddVoice(sndRegret, vpHurtEnemy)
+            if random(2) = 0 then
+                AddVoice(sndRegret, vpHurtEnemy)
+            else
+                AddVoice(sndGonnaGetYou, vpHurtEnemy)
 
     // Missed shot
     // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit

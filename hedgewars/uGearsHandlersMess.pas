@@ -216,7 +216,10 @@ begin
             if (d > 1) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) and (GetRandom(2) = 0) then
                 begin
                 if (CurrentHedgehog^.Gear = gi) then
-                    PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack)
+                    if random(4) = 0 then
+                        PlaySoundV(sndWhatThe, gi^.Hedgehog^.Team^.voicepack)
+                    else
+                        PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack)
 
                 else
                     begin
@@ -234,7 +237,10 @@ begin
                         PlaySoundV(sndGrenade, gi^.Hedgehog^.Team^.voicepack)
                     else
                         if d > r div 2 then
-                            PlaySoundV(sndNooo, gi^.Hedgehog^.Team^.voicepack)
+                            if random(3) = 0 then
+                                PlaySoundV(sndWhatThe, gi^.Hedgehog^.Team^.voicepack)
+                            else
+                                PlaySoundV(sndNooo, gi^.Hedgehog^.Team^.voicepack)
                         else
                             PlaySoundV(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
 

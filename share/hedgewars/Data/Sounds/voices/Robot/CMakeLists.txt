@@ -1,12 +1,15 @@
 file(GLOB VoiceSounds
 Boring.ogg
+Bugger.ogg
 Byebye.ogg
 Comeonthen.ogg
 Coward.ogg
+Drat.ogg
 Enemydown.ogg
 Firstblood.ogg
 Firepunch*.ogg
 Flawless.ogg
+Gonnagetyou.ogg
 Grenade.ogg
 Hello.ogg
 Hurry.ogg
@@ -20,6 +23,7 @@ Melon.ogg
 Missed.ogg
 Nooo.ogg
 Nutter.ogg
+Ohdear.ogg
 Ooff*.ogg
 Oops.ogg
 Ow*.ogg
@@ -27,12 +31,14 @@ PoisonCough.ogg
 PoisonMoan.ogg
 Reinforcements.ogg
 Sameteam.ogg
+Solong.ogg
 Stupid.ogg
 Takecover.ogg
 Traitor.ogg
 Uh-oh.ogg
 Victory.ogg
 Watchit.ogg
+Whatthe.ogg
 Yessir.ogg
 Youllregretthat.ogg
 )

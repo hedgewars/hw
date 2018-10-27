@@ -306,7 +306,14 @@ var cInitVolume: LongInt;
             // TODO: New Extra Damage sound
             (FileName:             'hell_ugh.ogg'; Path: ptSounds; AltPath: ptNone),// sndExtraDamage
             (FileName:        'firepunch_hit.ogg'; Path: ptSounds; AltPath: ptNone),// sndFirePunchHit
-            (FileName:              'Grenade.ogg'; Path: ptVoices; AltPath: ptNone) // sndGrenade
+            (FileName:              'Grenade.ogg'; Path: ptVoices; AltPath: ptNone),// sndGrenade
+            (FileName:        'Thisoneismine.ogg'; Path: ptVoices; AltPath: ptNone),// sndThisOneIsMine
+            (FileName:              'Whatthe.ogg'; Path: ptVoices; AltPath: ptNone),// sndWhatThe
+            (FileName:               'Solong.ogg'; Path: ptVoices; AltPath: ptNone),// sndSoLong
+            (FileName:               'Ohdear.ogg'; Path: ptVoices; AltPath: ptNone),// sndOhDear
+            (FileName:          'Gonnagetyou.ogg'; Path: ptVoices; AltPath: ptNone),// sndGonnaGetYou
+            (FileName:                 'Drat.ogg'; Path: ptVoices; AltPath: ptNone),// sndDrat
+            (FileName:               'Bugger.ogg'; Path: ptVoices; AltPath: ptNone) // sndBugger
             );
 
 
@@ -512,11 +519,23 @@ begin
                     snd := sndOw1
                 else if (snd in [sndOoff2, sndOoff3]) then
                     snd := sndOoff1
+                // Other fallback sounds
                 else if (snd = sndGrenade) then
                     if random(2) = 0 then
                         snd := sndNooo
                     else
-                        snd := sndUhOh;
+                        snd := sndUhOh
+                else if (snd in [sndDrat, sndBugger]) then
+                    snd := sndStupid
+                else if (snd = sndGonnaGetYou) then
+                    snd := sndRegret
+                else if (snd in [sndOhDear, sndSoLong]) then
+                    snd := sndByeBye
+                else if (snd = sndWhatThe) then
+                    snd := sndNooo
+                else if (snd = sndThisOneIsMine) then
+                    snd := sndReinforce;
+
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');

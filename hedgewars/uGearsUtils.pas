@@ -1622,7 +1622,11 @@ if (FollowGear <> nil) then
     FindPlace(FollowGear, true, 0, LAND_WIDTH);
 
     if (FollowGear <> nil) then
-        AddVoice(sndReinforce, CurrentTeam^.voicepack)
+        if random(3) = 0 then
+            // TODO: Play this when a crate drops close to a hog, not randomly
+            AddVoice(sndThisOneIsMine, CurrentTeam^.voicepack)
+        else
+            AddVoice(sndReinforce, CurrentTeam^.voicepack);
     end
 end;
 

@@ -700,7 +700,11 @@ else // Gear^.Timer = 0
     Gear^.Z:= cCurrHHZ;
     RemoveGearFromList(Gear);
     InsertGearToList(Gear);
-    PlaySoundV(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
+    case random(3) of
+    0: PlaySoundV(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
+    1: PlaySoundV(sndSoLong, Gear^.Hedgehog^.Team^.voicepack);
+    2: PlaySoundV(sndOhDear, Gear^.Hedgehog^.Team^.voicepack);
+    end;
     Gear^.Pos:= 0;
     Gear^.Timer:= timertime
     end
