@@ -1346,7 +1346,7 @@ while i > 0 do
             gtExplosives: //,
             //gtStructure:
             begin
-            if Ammo^.Kind = gtFirePunch then
+            if (Ammo^.Kind = gtFirePunch) and (Gear^.Kind <> gtSMine) then
                 PlaySound(sndFirePunchHit);
 
             if Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet] then
