@@ -248,9 +248,22 @@ if FinishedTurnsTotal <> 0 then
 
     // Hog hurts, kills or poisons enemy
     else if (CurrentHedgehog^.stats.StepDamageGiven <> 0) or (CurrentHedgehog^.stats.StepKills > killsCheck) or (PoisonTurn <> 0) then
-        if Kills > killsCheck then
+        // 3 kills or more
+        if Kills > killsCheck + 2 then
+            AddVoice(sndAmazing, CurrentTeam^.voicepack)
+        // 2 kills
+        else if Kills = (killsCheck + 2) then
+            if random(2) = 0 then
+                AddVoice(sndBrilliant, CurrentTeam^.voicepack)
+            else
+                AddVoice(sndExcellent, CurrentTeam^.voicepack)
+        // 1 kill
+        else if Kills = (killsCheck + 1) then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
+        // 0 kills, only damage or poison
         else
+            // TODO: Play sndExcellent for a high damage shot.
+            // Not done yet because the fallback is sndEnemyDown.
             if random(2) = 0 then
                 AddVoice(sndRegret, vpHurtEnemy)
             else

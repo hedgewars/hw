@@ -313,7 +313,10 @@ var cInitVolume: LongInt;
             (FileName:               'Ohdear.ogg'; Path: ptVoices; AltPath: ptNone),// sndOhDear
             (FileName:          'Gonnagetyou.ogg'; Path: ptVoices; AltPath: ptNone),// sndGonnaGetYou
             (FileName:                 'Drat.ogg'; Path: ptVoices; AltPath: ptNone),// sndDrat
-            (FileName:               'Bugger.ogg'; Path: ptVoices; AltPath: ptNone) // sndBugger
+            (FileName:               'Bugger.ogg'; Path: ptVoices; AltPath: ptNone),// sndBugger
+            (FileName:              'Amazing.ogg'; Path: ptVoices; AltPath: ptNone),// sndAmazing
+            (FileName:            'Brilliant.ogg'; Path: ptVoices; AltPath: ptNone),// sndBrilliant
+            (FileName:            'Excellent.ogg'; Path: ptVoices; AltPath: ptNone) // sndExcellent
             );
 
 
@@ -534,7 +537,9 @@ begin
                 else if (snd = sndWhatThe) then
                     snd := sndNooo
                 else if (snd = sndThisOneIsMine) then
-                    snd := sndReinforce;
+                    snd := sndReinforce
+                else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
+                    snd := sndEnemyDown;
 
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;

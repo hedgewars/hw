@@ -153,7 +153,8 @@ type
             sndCreeperDrop, sndCreeperWater, sndCreeperDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
             sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun, sndFlamethrower, sndIceBeamIdle,
             sndLandGun, sndCaseImpact, sndExtraDamage, sndFirePunchHit, sndGrenade, sndThisOneIsMine,
-            sndWhatThe, sndSoLong, sndOhDear, sndGonnaGetYou, sndDrat, sndBugger);
+            sndWhatThe, sndSoLong, sndOhDear, sndGonnaGetYou, sndDrat, sndBugger, sndAmazing,
+            sndBrilliant, sndExcellent);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
