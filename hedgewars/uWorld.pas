@@ -1601,6 +1601,23 @@ if UIDisplay <> uiNone then
     end;
 {$ENDIF}
 
+// Chat
+DrawChat;
+
+
+// Mission panel
+if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fastUntilLag or (GameState = gsConfirm) then
+    begin
+    if (ReadyTimeLeft = 0) and (missionTimer > 0) then
+        dec(missionTimer, Lag);
+    if missionTimer < 0 then
+        missionTimer:= 0; // avoid subtracting below 0
+    if missionTex <> nil then
+        DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+    end;
+if missionTimer = 0 then
+    isForceMission := false;
+
 // AmmoMenu
 if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
     begin
@@ -1622,14 +1639,6 @@ if (not bShowAmmoMenu) and ((AMstate = AMShowing) or (AMState = AMShowingUp)) th
 if bShowAmmoMenu or (AMState = AMHiding) then
     ShowAmmoMenu;
 
-// Cursor
-if isCursorVisible and bShowAmmoMenu then
-    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
-
-// Chat
-DrawChat;
-
-
 // Centered status/menu messages (synchronizing, auto skip, pause, etc.)
 if fastUntilLag then
     DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture)
@@ -1638,18 +1647,9 @@ else if isAFK then
 else if isPaused then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
 
-// Mission panel
-if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fastUntilLag or (GameState = gsConfirm) then
-    begin
-    if (ReadyTimeLeft = 0) and (missionTimer > 0) then
-        dec(missionTimer, Lag);
-    if missionTimer < 0 then
-        missionTimer:= 0; // avoid subtracting below 0
-    if missionTex <> nil then
-        DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
-    end;
-if missionTimer = 0 then
-    isForceMission := false;
+// Cursor
+if isCursorVisible and bShowAmmoMenu then
+    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 
 // FPS and demo replay time
 {$IFDEF USE_TOUCH_INTERFACE}
