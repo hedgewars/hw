@@ -7,6 +7,7 @@ Enemydown.ogg
 Firstblood.ogg
 Firepunch*.ogg
 Flawless.ogg
+Grenade.ogg
 Hello.ogg
 Hurry.ogg
 Illgetyou.ogg

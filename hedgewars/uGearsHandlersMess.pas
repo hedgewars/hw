@@ -32,7 +32,7 @@ interface
 uses uTypes, uFloat;
 
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
-procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
+procedure makeHogsWorry(x, y: hwFloat; r: LongInt; gearType: TGearType);
 procedure HideHog(HH: PHedgehog);
 procedure doStepDrowningGear(Gear: PGear);
 procedure doStepFallingGear(Gear: PGear);
@@ -201,10 +201,11 @@ begin
         end;
 end;
 
-procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
+procedure makeHogsWorry(x, y: hwFloat; r: LongInt; gearType: TGearType);
 var
     gi: PGear;
     d: LongInt;
+    grenadeTaunt: boolean;
 begin
     gi := GearsList;
     while gi <> nil do
@@ -225,10 +226,18 @@ begin
                         gi^.State := gi^.State or gstLoser;
                         end;
 
-                    if d > r div 2 then
-                        PlaySoundV(sndNooo, gi^.Hedgehog^.Team^.voicepack)
+                    grenadeTaunt:= false;
+                    if (gearType = gtGrenade) then
+                        grenadeTaunt:= random(2) = 0;
+
+                    if grenadeTaunt then
+                        PlaySoundV(sndGrenade, gi^.Hedgehog^.Team^.voicepack)
                     else
-                        PlaySoundV(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
+                        if d > r div 2 then
+                            PlaySoundV(sndNooo, gi^.Hedgehog^.Team^.voicepack)
+                        else
+                            PlaySoundV(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
+
                     end;
                 end;
             end;
@@ -552,8 +561,8 @@ begin
             gtGrenade,
             gtClusterBomb,
             gtWatermelon,
-            gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, Gear^.Boom);
-            gtGasBomb: makeHogsWorry(Gear^.X, Gear^.Y, 50);
+            gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, Gear^.Boom, Gear^.Kind);
+            gtGasBomb: makeHogsWorry(Gear^.X, Gear^.Y, 50, Gear^.Kind);
         end;
 
     if (Gear^.Kind = gtBall) and ((Gear^.State and gstTmpFlag) <> 0) then
@@ -2285,7 +2294,7 @@ begin
     if Gear^.Timer mod 166 = 0 then
         inc(Gear^.Tag);
     if Gear^.Timer = 1000 then // might need better timing
-        makeHogsWorry(Gear^.X, Gear^.Y, 75);
+        makeHogsWorry(Gear^.X, Gear^.Y, 75, Gear^.Kind);
     if Gear^.Timer = 0 then
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);

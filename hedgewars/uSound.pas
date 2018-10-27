@@ -305,7 +305,8 @@ var cInitVolume: LongInt;
             (FileName:          'graveimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndCaseImpact
             // TODO: New Extra Damage sound
             (FileName:             'hell_ugh.ogg'; Path: ptSounds; AltPath: ptNone),// sndExtraDamage
-            (FileName:        'firepunch_hit.ogg'; Path: ptSounds; AltPath: ptNone) // sndFirePunchHit
+            (FileName:        'firepunch_hit.ogg'; Path: ptSounds; AltPath: ptNone),// sndFirePunchHit
+            (FileName:              'Grenade.ogg'; Path: ptVoices; AltPath: ptNone) // sndGrenade
             );
 
 
@@ -501,15 +502,21 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
+            // Fallback sounds
             if (not pfsExists(s)) then
                 begin
+                // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
                 if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
                     snd := sndFirePunch1
                 else if (snd in [sndOw2, sndOw3, sndOw4]) then
                     snd := sndOw1
                 else if (snd in [sndOoff2, sndOoff3]) then
-                    snd := sndOoff1;
+                    snd := sndOoff1
+                else if (snd = sndGrenade) then
+                    if random(2) = 0 then
+                        snd := sndNooo
+                    else
+                        snd := sndUhOh;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
