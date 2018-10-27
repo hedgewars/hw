@@ -50,7 +50,7 @@ Game, audiovisuals:
  + Campaigns and missions now use the user's chosen custom clan colors
  + New default brown clan color for better contrast
  + Allow to change volume during pause
- + Add sounds for flamethrower, landspray and idle freezer
+ + Add sounds: flamethrower, landspray, idle freezer, shorykuen hit
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix some flakes disappearing in world wrap worlds while moving camera
  * Fix invisible projectile timer, attack bar, target on other side of wrap world edge
