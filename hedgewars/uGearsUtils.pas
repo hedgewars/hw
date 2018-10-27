@@ -1322,7 +1322,7 @@ while i > 0 do
     dec(i);
     Gear:= t^.ar[i];
     if (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet,
-                       gtFirePunch, gtKamikaze])
+                       gtFirePunch, gtKamikaze, gtWhip])
         and (((Ammo^.Data <> nil) and (PGear(Ammo^.Data) = Gear))
              or (not UpdateHitOrder(Gear, Ammo^.WDTimer))) then
         continue;

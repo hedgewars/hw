@@ -2596,13 +2596,17 @@ begin
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
+    ClearHitOrder();
+    RefillProximityCache(Gear, 100);
     for i:= 0 to 3 do
         begin
         AddVisualGear(hwRound(Gear^.X) + hwSign(Gear^.dX) * (10 + 6 * i), hwRound(Gear^.Y) + 12 + Random(6), vgtDust);
-        AmmoShove(Gear, Gear^.Boom, 25);
+        AmmoShoveCache(Gear, Gear^.Boom, 25);
         Gear^.X := Gear^.X + Gear^.dX * 5
         end;
 
+    ClearHitOrder();
+    ClearProximityCache();
     HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
 
     Gear^.Timer := 250;
