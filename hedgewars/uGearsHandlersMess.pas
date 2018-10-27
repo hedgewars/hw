@@ -2566,7 +2566,12 @@ begin
     if Gear^.Timer = 0 then
         begin
         inc(Gear^.Tag);
-        Gear^.Timer := 50
+        Gear^.Timer := 50;
+        if Gear^.Tag = 3 then
+            begin
+            ClearHitOrder();
+            RefillProximityCache(Gear, 100);
+            end;
         end;
 
     if Gear^.Tag = 3 then
@@ -2575,12 +2580,14 @@ begin
         HHGear^.State := HHGear^.State or gstNoDamage;
         DeleteCI(HHGear);
 
-        AmmoShove(Gear, Gear^.Boom, 115);
+        AmmoShoveCache(Gear, Gear^.Boom, 115);
 
         HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
         end
     else if Gear^.Tag = 4 then
         begin
+        ClearHitOrder();
+        ClearProximityCache();
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle
         end
