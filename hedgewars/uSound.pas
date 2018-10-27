@@ -316,7 +316,9 @@ var cInitVolume: LongInt;
             (FileName:               'Bugger.ogg'; Path: ptVoices; AltPath: ptNone),// sndBugger
             (FileName:              'Amazing.ogg'; Path: ptVoices; AltPath: ptNone),// sndAmazing
             (FileName:            'Brilliant.ogg'; Path: ptVoices; AltPath: ptNone),// sndBrilliant
-            (FileName:            'Excellent.ogg'; Path: ptVoices; AltPath: ptNone) // sndExcellent
+            (FileName:            'Excellent.ogg'; Path: ptVoices; AltPath: ptNone),// sndExcellent
+            (FileName:                 'Fire.ogg'; Path: ptVoices; AltPath: ptNone),// sndFire
+            (FileName:            'Watchthis.ogg'; Path: ptVoices; AltPath: ptNone) // sndWatchThis
             );
 
 

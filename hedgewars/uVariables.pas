@@ -924,7 +924,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBazooka;
-                AttackVoice: sndNone;
+                AttackVoice: sndFire;
                 Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
@@ -952,7 +952,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBee;
-                AttackVoice: sndNone;
+                AttackVoice: sndFire;
                 Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
@@ -1573,7 +1573,7 @@ const
                 Timer: 5000;
                 Pos: 0;
                 AmmoType: amHellishBomb;
-                AttackVoice: sndNone;
+                AttackVoice: sndWatchThis;
                 Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
@@ -1627,7 +1627,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amDrill;
-                AttackVoice: sndNone;
+                AttackVoice: sndFire;
                 Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
@@ -1938,7 +1938,7 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amMolotov;
-                AttackVoice: sndNone;
+                AttackVoice: sndFire;
                 Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
@@ -2368,7 +2368,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amKnife;
-                AttackVoice: sndNone;
+                AttackVoice: sndWatchThis;
                 Bounciness: defaultBounciness);
             Slot: 6;
             TimeAfterTurn: 3000;

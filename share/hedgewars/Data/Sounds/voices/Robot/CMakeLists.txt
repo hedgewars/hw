@@ -10,6 +10,7 @@ Drat.ogg
 Enemydown.ogg
 Excellent.ogg
 Firstblood.ogg
+Fire.ogg
 Firepunch*.ogg
 Flawless.ogg
 Gonnagetyou.ogg
@@ -41,6 +42,7 @@ Traitor.ogg
 Uh-oh.ogg
 Victory.ogg
 Watchit.ogg
+Watchthis.ogg
 Whatthe.ogg
 Yessir.ogg
 Youllregretthat.ogg
