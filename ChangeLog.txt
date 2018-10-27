@@ -17,7 +17,7 @@ HIGHLIGHTS:
 Game, gameplay:
  + Increase hedgehog limit to 64
  + Remove rubber duck
- + Shotgun, Desert Eagle and sniper rifle can now hit air mines
+ + Shotgun, Desert Eagle, Sniper Rifle, Firepunch, Kamikaze, Whip and Baseball Bat can now hit air mines (and some other moving gears)
  + Shotgun shots can now pass through portals
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix sine gun dealing damage to attacker if shooting up
