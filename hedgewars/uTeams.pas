@@ -94,9 +94,9 @@ if not TeamsGameOver then
         if SendGameResultOn then
             SendStat(siGameResult, shortstring(trmsg[sidDraw]));
         if PreviousTeam <> nil then
-            AddVoice(sndNutter, PreviousTeam^.voicepack)
+            AddVoice(sndStupid, PreviousTeam^.voicepack)
         else
-            AddVoice(sndNutter, TeamsArray[0]^.voicepack);
+            AddVoice(sndStupid, TeamsArray[0]^.voicepack);
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
