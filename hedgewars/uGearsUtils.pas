@@ -1544,8 +1544,12 @@ begin
 end;
 
 procedure SpawnBoxOfSmth;
-var t, aTot, uTot, a, h: LongInt;
+const
+    // Max. distance between hog and crate for sndThisOneIsMine taunt
+    ThisOneIsMineDistance : LongInt = 130;
+var t, aTot, uTot, a, h, d, minD: LongInt;
     i: TAmmoType;
+    gi, closestHog: PGear;
 begin
 if (PlacingHogs) or
     (cCaseFactor = 0)
@@ -1621,12 +1625,39 @@ if (FollowGear <> nil) then
     begin
     FindPlace(FollowGear, true, 0, LAND_WIDTH);
 
+    // Taunt
     if (FollowGear <> nil) then
-        if random(3) = 0 then
-            // TODO: Play this when a crate drops close to a hog, not randomly
-            AddVoice(sndThisOneIsMine, CurrentTeam^.voicepack)
+        begin
+        // Look for hog closest to the crate (on the X axis)
+        gi := GearsList;
+        minD := LAND_WIDTH + ThisOneIsMineDistance + 1;
+        closestHog:= nil;
+        while gi <> nil do
+            begin
+            if (gi^.Kind = gtHedgehog) then
+                begin
+                // Y axis is ignored to simplify calculations
+                d := hwRound(hwAbs(gi^.X - FollowGear^.X));
+                if d < minD then
+                    begin
+                    minD := d;
+                    closestHog:= gi;
+                    end;
+                end;
+            gi := gi^.NextGear;
+            end;
+
+        // Is closest hog close enough to the crate (on the X axis)?
+        if (closestHog <> nil) and (closestHog^.Hedgehog <> nil) and (minD <= ThisOneIsMineDistance) then
+            // If so, there's a chance for a special taunt
+            if random(3) > 0 then
+                AddVoice(sndThisOneIsMine, closestHog^.Hedgehog^.Team^.voicepack)
+            else
+                AddVoice(sndReinforce, CurrentTeam^.voicepack)
         else
+        // Default crate drop taunt
             AddVoice(sndReinforce, CurrentTeam^.voicepack);
+        end;
     end
 end;
 
