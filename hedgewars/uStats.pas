@@ -100,7 +100,6 @@ else
 //////////////////////////
 
 inc(Attacker^.stats.StepDamageGiven, Damage);
-inc(Attacker^.stats.DamageGiven, Damage);
 inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
 
 if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Damage);
@@ -221,7 +220,7 @@ if FinishedTurnsTotal <> 0 then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         // Message for hurting itself only (not drowning)
-        if (CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
+        if (CurrentHedgehog^.stats.StepDamageGiven = CurrentHedgehog^.stats.StepDamageRecv) and (CurrentHedgehog^.stats.StepDamageRecv >= 1) then
             AddCaption(FormatA(GetEventString(eidHurtSelf), s), capcolDefault, capgrpMessage);
         end
 
