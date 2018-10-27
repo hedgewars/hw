@@ -1346,6 +1346,9 @@ while i > 0 do
             gtExplosives: //,
             //gtStructure:
             begin
+            if Ammo^.Kind = gtFirePunch then
+                PlaySound(sndFirePunchHit);
+
             if Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet] then
                 begin
                 VGear := AddVisualGear(t^.cX[i], t^.cY[i], vgtBulletHit);

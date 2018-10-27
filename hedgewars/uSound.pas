@@ -304,7 +304,8 @@ var cInitVolume: LongInt;
             (FileName:              'landgun.ogg'; Path: ptSounds; AltPath: ptNone),// sndLandGun
             (FileName:          'graveimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndCaseImpact
             // TODO: New Extra Damage sound
-            (FileName:             'hell_ugh.ogg'; Path: ptSounds; AltPath: ptNone) // sndExtraDamage
+            (FileName:             'hell_ugh.ogg'; Path: ptSounds; AltPath: ptNone),// sndExtraDamage
+            (FileName:        'firepunch_hit.ogg'; Path: ptSounds; AltPath: ptNone) // sndFirePunchHit
             );
 
 
