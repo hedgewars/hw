@@ -216,10 +216,18 @@ begin
             if (d > 1) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) and (GetRandom(2) = 0) then
                 begin
                 if (CurrentHedgehog^.Gear = gi) then
-                    if random(4) = 0 then
-                        PlaySoundV(sndWhatThe, gi^.Hedgehog^.Team^.voicepack)
+                    if (CurrentHedgehog^.Gear^.FlightTime = 0) then
+                        case random(4) of
+                        0: PlaySoundV(sndWhatThe, gi^.Hedgehog^.Team^.voicepack);
+                        1: PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack);
+                        2: PlaySoundV(sndRunAway, gi^.Hedgehog^.Team^.voicepack);
+                        3: PlaySoundV(sndRunAway, gi^.Hedgehog^.Team^.voicepack);
+                        end
                     else
-                        PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack)
+                        if random(4) = 0 then
+                           PlaySoundV(sndWhatThe, gi^.Hedgehog^.Team^.voicepack)
+                        else
+                           PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack)
 
                 else
                     begin

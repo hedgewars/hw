@@ -318,7 +318,8 @@ var cInitVolume: LongInt;
             (FileName:            'Brilliant.ogg'; Path: ptVoices; AltPath: ptNone),// sndBrilliant
             (FileName:            'Excellent.ogg'; Path: ptVoices; AltPath: ptNone),// sndExcellent
             (FileName:                 'Fire.ogg'; Path: ptVoices; AltPath: ptNone),// sndFire
-            (FileName:            'Watchthis.ogg'; Path: ptVoices; AltPath: ptNone) // sndWatchThis
+            (FileName:            'Watchthis.ogg'; Path: ptVoices; AltPath: ptNone),// sndWatchThis
+            (FileName:              'Runaway.ogg'; Path: ptVoices; AltPath: ptNone) // sndRunAway
             );
 
 
@@ -538,6 +539,8 @@ begin
                     snd := sndByeBye
                 else if (snd = sndWhatThe) then
                     snd := sndNooo
+                else if (snd = sndRunAway) then
+                    snd := sndOops
                 else if (snd = sndThisOneIsMine) then
                     snd := sndReinforce
                 else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
