@@ -1938,7 +1938,7 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amMolotov;
-                AttackVoice: sndFire;
+                AttackVoice: sndWatchThis;
                 Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
