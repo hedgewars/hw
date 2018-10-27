@@ -17,6 +17,8 @@ HIGHLIGHTS:
 Game, gameplay:
  + Increase hedgehog limit to 64
  + Remove rubber duck
+ + Shotgun, Desert Eagle and sniper rifle can now hit air mines
+ + Shotgun shots can now pass through portals
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix sine gun dealing damage to attacker if shooting up
  * Hedgehog was able to drop more than 2 sticky mines if dropping first one from utility, then stop using utility
@@ -145,6 +147,7 @@ A Space Adventure:
 Themes:
  + New Sudden Death water texture for CrazyMission theme
  + Add dust flakes for Cheese and CrazyMission themes
+ + New land objects for Beach theme
  * Fix repeating sun in Hoggywood theme
 
 Lua API:
