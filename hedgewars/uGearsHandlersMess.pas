@@ -2814,7 +2814,7 @@ begin
         DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y - _1, _0_5, _0, cHHRadius * 4+2, 2);
         HHGear^.State := HHGear^.State or gstNoDamage;
         Gear^.Y := HHGear^.Y;
-        AmmoShove(Gear, Gear^.Boom, 40);
+        AmmoShoveCache(Gear, Gear^.Boom, 40);
         HHGear^.State := HHGear^.State and (not gstNoDamage)
         end;
 
@@ -2824,6 +2824,7 @@ begin
         begin
         HHGear^.State := HHGear^.State or gstMoving;
         ClearHitOrder();
+        ClearProximityCache();
         DeleteGear(Gear);
         AfterAttack;
         exit
@@ -2831,7 +2832,10 @@ begin
 
     if CheckLandValue(hwRound(HHGear^.X), hwRound(HHGear^.Y + HHGear^.dY + SignAs(_6,Gear^.dY)),
         lfIndestructible) then
-            HHGear^.Y := HHGear^.Y + HHGear^.dY
+            HHGear^.Y := HHGear^.Y + HHGear^.dY;
+
+    if (Gear^.Timer mod 200) = 0 then
+        RefillProximityCache(Gear, 300);
 end;
 
 procedure doStepFirePunch(Gear: PGear);
@@ -2847,6 +2851,7 @@ begin
     HHGear^.dY := - _0_3;
 
     ClearHitOrder();
+    RefillProximityCache(Gear, 300);
 
     Gear^.X := HHGear^.X;
     Gear^.dX := SignAs(_0_45, Gear^.dX);

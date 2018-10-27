@@ -24,6 +24,7 @@ uses uFloat, uTypes, uUtils;
 
 const cMaxGearArrayInd = 1023;
 const cMaxGearHitOrderInd = 1023;
+const cMaxGearProximityCacheInd = 1023;
 
 type PGearArray = ^TGearArray;
     TGearArray = record
@@ -40,6 +41,12 @@ type PGearHitOrder = ^TGearHitOrder;
         Count: Longword
         end;
 
+type PGearProximityCache = ^TGearProximityCache;
+    TGearProximityCache = record
+        ar: array[0..cMaxGearProximityCacheInd] of PGear;
+        Count: Longword
+        end;
+
 type TLineCollision = record
         hasCollision: Boolean;
         cX, cY: LongInt; //for visual effects only
@@ -53,6 +60,7 @@ procedure DeleteCI(Gear: PGear);
 
 function  CheckGearsCollision(Gear: PGear): PGearArray;
 function  CheckAllGearsCollision(SourceGear: PGear): PGearArray;
+function  CheckCacheCollision(SourceGear: PGear): PGearArray;
 
 function  CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
@@ -60,6 +68,10 @@ function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat)
 function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
 procedure ClearHitOrderLeq(MinOrder: LongInt);
 procedure ClearHitOrder();
+
+procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
+procedure RemoveFromProximityCache(Gear: PGear);
+procedure ClearProximityCache();
 
 function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
@@ -97,6 +109,7 @@ var Count: Longword;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
     ordera: TGearHitOrder;
+    proximitya: TGearProximityCache;
 
 procedure AddCI(Gear: PGear);
 begin
@@ -180,8 +193,8 @@ begin
                (sqr(mx - hwRound(Gear^.x)) + sqr(my - hwRound(Gear^.y)) <= sqr(Gear^.Radius + tr))then
             begin
                 ga.ar[ga.Count]:= Gear;
-                ga.cX[ga.Count]:= hwround(SourceGear^.X);
-                ga.cY[ga.Count]:= hwround(SourceGear^.Y);
+                ga.cX[ga.Count]:= mx;
+                ga.cY[ga.Count]:= my;
                 inc(ga.Count)
             end;
 
@@ -287,6 +300,33 @@ begin
     end;
 end;
 
+function CheckCacheCollision(SourceGear: PGear): PGearArray;
+var mx, my, tr, i: LongInt;
+    Gear: PGear;
+begin
+    CheckCacheCollision:= @ga;
+    ga.Count:= 0;
+
+    mx:= hwRound(SourceGear^.X);
+    my:= hwRound(SourceGear^.Y);
+
+    tr:= SourceGear^.Radius + 2;
+
+    for i:= 0 to proximitya.Count - 1 do
+    begin
+        Gear:= proximitya.ar[i];
+        // Assuming the cache has been filled correctly, it will not contain SourceGear
+        // and other gears won't be far enough for sqr overflow
+        if (sqr(mx - hwRound(Gear^.X)) + sqr(my - hwRound(Gear^.Y)) <= sqr(Gear^.Radius + tr)) then
+        begin
+            ga.ar[ga.Count]:= Gear;
+            ga.cX[ga.Count]:= mx;
+            ga.cY[ga.Count]:= my;
+            inc(ga.Count)
+        end;
+    end;
+end;
+
 function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
 var i: LongInt;
 begin
@@ -335,6 +375,50 @@ end;
 procedure ClearHitOrder();
 begin
     ordera.Count:= 0;
+end;
+
+procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
+var cx, cy, dx, dy, r: LongInt;
+    Gear: PGear;
+begin
+    proximitya.Count:= 0;
+    cx:= hwRound(SourceGear^.X);
+    cy:= hwRound(SourceGear^.Y);
+    Gear:= GearsList;
+
+    while (Gear <> nil) and (proximitya.Count <= cMaxGearProximityCacheInd) do
+    begin
+        dx:= abs(hwRound(Gear^.X) - cx);
+        dy:= abs(hwRound(Gear^.Y) - cy);
+        r:= radius + Gear^.radius + 2;
+        if (Gear <> SourceGear) and (max(dx, dy) <= r) and (sqr(dx) + sqr(dy) <= sqr(r)) then
+        begin
+            proximitya.ar[proximitya.Count]:= Gear;
+            inc(proximitya.Count)
+        end;
+        Gear := Gear^.NextGear
+    end;
+end;
+
+procedure RemoveFromProximityCache(Gear: PGear);
+var i: LongInt;
+begin
+    i := 0;
+    while i < proximitya.Count do
+        begin
+        if proximitya.ar[i] = Gear then
+            begin
+                proximitya.ar[i]:= proximitya.ar[proximitya.Count - 1];
+                dec(proximitya.Count);
+            end
+        else
+            inc(i);
+        end;
+end;
+
+procedure ClearProximityCache();
+begin
+    proximitya.Count:= 0;
 end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;

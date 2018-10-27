@@ -791,6 +791,7 @@ begin
 ScriptCall('onGearDelete', gear^.uid);
 
 DeleteCI(Gear);
+RemoveFromProximityCache(Gear);
 
 FreeAndNilTexture(Gear^.Tex);
 
