@@ -2823,6 +2823,7 @@ begin
     if not (HHGear^.dY.isNegative) or (Gear^.Timer = 0) then
         begin
         HHGear^.State := HHGear^.State or gstMoving;
+        ClearHitOrder();
         DeleteGear(Gear);
         AfterAttack;
         exit
@@ -2844,6 +2845,8 @@ begin
     HHGear^.dX := SignAs(cLittle, Gear^.dX);
 
     HHGear^.dY := - _0_3;
+
+    ClearHitOrder();
 
     Gear^.X := HHGear^.X;
     Gear^.dX := SignAs(_0_45, Gear^.dX);
