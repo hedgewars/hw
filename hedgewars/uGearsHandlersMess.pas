@@ -3330,6 +3330,8 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if HHGear = nil then
         begin
+        ClearHitOrder();
+        ClearProximityCache();
         DeleteGear(Gear);
         exit
         end;
@@ -3361,6 +3363,8 @@ begin
         if CheckGearDrowning(HHGear) then
             begin
             AfterAttack;
+            ClearHitOrder();
+            ClearProximityCache();
             DeleteGear(Gear);
             exit;
             end;
@@ -3385,7 +3389,7 @@ begin
                 Gear^.Pos := 2;
             end;
 
-        AmmoShove(Gear, Gear^.Boom, 40);
+        AmmoShoveCache(Gear, Gear^.Boom, 40);
 
         DrawTunnel(HHGear^.X - HHGear^.dX * 10,
                     HHGear^.Y - _2 - HHGear^.dY * 10 + hwAbs(HHGear^.dY) * 2,
@@ -3396,6 +3400,10 @@ begin
 
         upd := 0
         end;
+
+    inc(Gear^.Timer);
+    if (Gear^.Timer mod 100) = 0 then
+        RefillProximityCache(Gear, 300);
 
     if Gear^.Health < Gear^.Damage then
         begin
@@ -3423,6 +3431,8 @@ begin
         uStats.HedgehogSacrificed(Gear^.Hedgehog);
         AfterAttack;
         HHGear^.Message:= HHGear^.Message or gmDestroy;
+        ClearHitOrder();
+        ClearProximityCache();
         DeleteGear(Gear);
         end
     else
@@ -3440,6 +3450,8 @@ begin
         begin
         Gear^.Pos := 1;
         PlaySoundV(sndKamikaze, Gear^.Hedgehog^.Team^.voicepack);
+        ClearHitOrder();
+        RefillProximityCache(Gear, 300);
         Gear^.doStep := @doStepKamikazeWork
         end
 end;

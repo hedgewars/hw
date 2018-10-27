@@ -1321,7 +1321,8 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
-    if (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet, gtFirePunch])
+    if (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet,
+                       gtFirePunch, gtKamikaze])
         and (((Ammo^.Data <> nil) and (PGear(Ammo^.Data) = Gear))
              or (not UpdateHitOrder(Gear, Ammo^.WDTimer))) then
         continue;
@@ -1347,7 +1348,7 @@ while i > 0 do
             gtExplosives: //,
             //gtStructure:
             begin
-            if (Ammo^.Kind = gtFirePunch) and (Gear^.Kind <> gtSMine) then
+            if (Ammo^.Kind in [gtFirePunch, gtKamikaze]) and (Gear^.Kind <> gtSMine) then
                 PlaySound(sndFirePunchHit);
 
             if Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet] then
