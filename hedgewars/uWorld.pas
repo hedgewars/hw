@@ -1223,6 +1223,7 @@ ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div
 // note: offsetY is negative!
 offsetY:= 10 *  Min(0, -145 - ScreenBottom); // TODO limit this in the other direction too
 
+// Sky and horizont
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
@@ -1315,13 +1316,12 @@ if SuddenDeathDmg then
 else
     DrawWater(WaterOpacity, 0, 0);
 
-    // Waves
+// Waves
 ChangeDepth(RM, cStereo_Water_near);
 DrawWaves( 1, 25 - WorldDx div 9, 0, 0, 12);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
-    //DrawWater(WaterOpacity, - offsetY div 40);
     ChangeDepth(RM, cStereo_Water_near);
     DrawWaves(-1, 50 + WorldDx div 6, - offsetY div 40, 23, 8);
     if SuddenDeathDmg then
@@ -1396,7 +1396,7 @@ DrawGearsGui();
 
     DrawVisualGears(3, false);
 
-// Target
+// Target (e.g. air attack, bee, ...)
 if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> nil) then
     begin
     with PHedgehog(CurrentHedgehog)^ do
@@ -1440,12 +1440,13 @@ if replicateToRight then
 
 RenderAttackBar();
 
+// World edge
 RenderWorldEdge();
 
-// this scale is used to keep the various widgets at the same dimension at all zoom levels
+// This scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
 
-// cinematic effects
+// Cinematic Mode: Effects
 if CinematicScript or (InCinematicMode and autoCameraOn
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
     or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo))) then
@@ -1464,7 +1465,7 @@ else if CinematicSteps > 0 then
         CinematicSteps:= 0;
     end;
 
-// render black bars
+// Cinematic Mode: Render black bars
 if CinematicSteps > 0 then
     begin
     r.x:= ViewLeftX;
@@ -1536,6 +1537,7 @@ DrawScreenWidget(@pauseButton);
 DrawScreenWidget(@utilityWidget);
 {$ENDIF}
 
+// Team bars
 if UIDisplay = uiAll then
     RenderTeamsHealth;
 
@@ -1628,13 +1630,15 @@ if isCursorVisible and bShowAmmoMenu then
 DrawChat;
 
 
-// various captions
+// Centered status/menu messages (synchronizing, auto skip, pause, etc.)
 if fastUntilLag then
     DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture)
 else if isAFK then
     DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture)
 else if isPaused then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
+
+// Mission panel
 if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then
@@ -1647,7 +1651,7 @@ if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fast
 if missionTimer = 0 then
     isForceMission := false;
 
-// fps
+// FPS and demo replay time
 {$IFDEF USE_TOUCH_INTERFACE}
 offsetX:= pauseButton.frame.y + pauseButton.frame.h + 12;
 {$ELSE}
@@ -1660,6 +1664,8 @@ if (RM = rmDefault) or (RM = rmRightEye) then
 
     if cShowFPS or (GameType = gmtDemo) then
         inc(CountTicks, Lag);
+
+    // Demo replay time
     if (GameType = gmtDemo) and (CountTicks >= 1000) then
         begin
         i:= GameTicks div 1000;
@@ -1685,6 +1691,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
     if timeTexture <> nil then
         DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
 
+    // FPS counter
     if cShowFPS then
         begin
         if CountTicks >= 1000 then
@@ -1704,7 +1711,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         end;
 end;
 
-
+// Quit Y/N question
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1)-40, ConfirmTexture);
 
@@ -1739,7 +1746,7 @@ if ScreenFade <> sfNone then
     end;
 
 {$IFDEF USE_VIDEO_RECORDING}
-// during video prerecording draw red blinking circle and text 'rec'
+// During video prerecording draw red blinking circle and text 'rec'
 if flagPrerecording then
     begin
     if recTexture = nil then
@@ -1753,7 +1760,6 @@ if flagPrerecording then
         end;
     DrawTexture( -(cScreenWidth shr 1) + 50, 20, recTexture);
 
-    //a:= Byte(Round(127*(1 + sin(RealTicks*0.007))));
     a:= Byte(min(255, abs(-255 + ((RealTicks div 2) and 511))));
 
     // draw red circle
@@ -1788,7 +1794,6 @@ if isCursorVisible and (not bShowAmmoMenu) then
                 Untint();
                 end;
             end;
-    //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
     DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
     end;
 
