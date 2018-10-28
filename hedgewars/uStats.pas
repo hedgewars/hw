@@ -64,6 +64,7 @@ var DamageClan  : Longword = 0;
     HitTargets  : LongWord = 0; // Target (gtTarget) hits per turn
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
+    LeaveMeAlone : boolean = false;
     SkippedTurns: LongWord = 0;
     isTurnSkipped: boolean = false;
     vpHurtSameClan: PVoicepack = nil;
@@ -99,10 +100,15 @@ else
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
     if (not killed) then
         begin
+        // Check if victim got attacked by RevengeHog again
+        if (Gear^.Hedgehog^.RevengeHog <> nil) and (Gear^.Hedgehog^.RevengeHog = Attacker) then
+            LeaveMeAlone:= true;
         // Check if attacker got revenge
         if (Attacker^.RevengeHog <> nil) and (Attacker^.RevengeHog = Gear^.Hedgehog) then
             begin
             Attacker^.stats.GotRevenge:= true;
+            // Also reset the "in-row" counter to restore LeaveMeAlone/CutItOut taunts
+            Attacker^.stats.StepDamageRecvInRow:= 0;
             Attacker^.RevengeHog:= nil;
             end
         // If not, victim remembers their attacker to plan *their* revenge
@@ -161,6 +167,7 @@ inc(FinishedTurnsTotal);
 for t:= 0 to Pred(TeamsCount) do // send even on zero turn
     with TeamsArray[t]^ do
         for i:= 0 to cMaxHHIndex do
+            begin
             with Hedgehogs[i].stats do
                 begin
                 inc(DamageRecv, StepDamageRecv);
@@ -171,7 +178,18 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                     MaxStepDamageGiven:= StepDamageGiven;
                 if StepKills > MaxStepKills then
                     MaxStepKills:= StepKills;
+                if (Hedgehogs[i].Team <> nil) and (Hedgehogs[i].Team^.Clan^.ClanIndex <> CurrentHedgehog^.Team^.Clan^.ClanIndex) then
+                    begin
+                    if StepDamageRecv > 0 then
+                        inc(StepDamageRecvInRow)
+                    else
+                        StepDamageRecvInRow:= 0;
+                    if StepDamageRecvInRow >= 3 then
+                        LeaveMeAlone:= true;
+                    end;
                 end;
+            end;
+
 
 // Write into the death log which clans died in this turn,
 // important for final rankings.
@@ -276,15 +294,23 @@ if FinishedTurnsTotal <> 0 then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         // 0 kills, only damage or poison
         else
+            // possible reactions of victim, in the order of preference:
+            // 1. claiming revenge
+            // 2. complaining about getting attacked too often
+            // 3. threatening enemy with retaliation
             if CurrentHedgehog^.stats.GotRevenge then
                 AddVoice(sndRevenge, CurrentHedgehog^.Team^.voicepack)
             else
-                // TODO: Maybe play sndExcellent for a high damage shot.
-                // Not done yet because the fallback is sndEnemyDown.
-                if random(2) = 0 then
-                    AddVoice(sndRegret, vpHurtEnemy)
+                if LeaveMeAlone then
+                    if random(2) = 0 then
+                        AddVoice(sndCutItOut, vpHurtEnemy)
+                    else
+                        AddVoice(sndLeaveMeAlone, vpHurtEnemy)
                 else
-                    AddVoice(sndGonnaGetYou, vpHurtEnemy)
+                    if random(2) = 0 then
+                        AddVoice(sndRegret, vpHurtEnemy)
+                    else
+                        AddVoice(sndGonnaGetYou, vpHurtEnemy)
 
     // Missed shot
     // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit
@@ -336,6 +362,7 @@ HitTargets:= 0;
 PoisonClan:= 0;
 PoisonTurn:= 0;
 AmmoUsedCount:= 0;
+LeaveMeAlone:= false;
 AmmoDamagingUsed:= false;
 isTurnSkipped:= false;
 end;
@@ -541,6 +568,7 @@ begin
     HitTargets  := 0;
     AmmoUsedCount := 0;
     AmmoDamagingUsed := false;
+    LeaveMeAlone := false;
     SkippedTurns:= 0;
     isTurnSkipped:= false;
     vpHurtSameClan:= nil;

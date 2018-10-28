@@ -6,6 +6,7 @@ Bugger.ogg
 Byebye.ogg
 Comeonthen.ogg
 Coward.ogg
+Cutitout.ogg
 Drat.ogg
 Enemydown.ogg
 Excellent.ogg
@@ -23,6 +24,7 @@ Jump*.ogg
 Justyouwait.ogg
 Kamikaze.ogg
 Laugh.ogg
+Leavemealone.ogg
 Melon.ogg
 Missed.ogg
 Nooo.ogg
