@@ -465,6 +465,40 @@ begin
         end;
 end;
 
+// Get a fallback voice, assuming that snd is not available. Returns sndNone if none is found.
+function GetFallbackV(snd: TSound): TSound;
+begin
+    // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
+    if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+        GetFallbackV := sndFirePunch1
+    else if (snd in [sndOw2, sndOw3, sndOw4]) then
+        GetFallbackV := sndOw1
+    else if (snd in [sndOoff2, sndOoff3]) then
+        GetFallbackV := sndOoff1
+    // Other fallback sounds
+    else if (snd = sndGrenade) then
+        if random(2) = 0 then
+            GetFallbackV := sndNooo
+        else
+            GetFallbackV := sndUhOh
+    else if (snd in [sndDrat, sndBugger]) then
+        GetFallbackV := sndStupid
+    else if (snd in [sndGonnaGetYou, sndCutItOut, sndLeaveMeAlone]) then
+        GetFallbackV := sndRegret
+    else if (snd in [sndOhDear, sndSoLong]) then
+        GetFallbackV := sndByeBye
+    else if (snd = sndWhatThe) then
+        GetFallbackV := sndNooo
+    else if (snd = sndRunAway) then
+        GetFallbackV := sndOops
+    else if (snd = sndThisOneIsMine) then
+        GetFallbackV := sndReinforce
+    else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
+        GetFallbackV := sndEnemyDown
+    else
+        GetFallbackV := sndNone;
+end;
+
 procedure PlaySound(snd: TSound);
 begin
     PlaySoundV(snd, nil, false, false, false);
@@ -518,37 +552,12 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            // Fallback sounds
+            // Fallback taunts
             if (not pfsExists(s)) then
                 begin
-                // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
-                if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
-                    snd := sndFirePunch1
-                else if (snd in [sndOw2, sndOw3, sndOw4]) then
-                    snd := sndOw1
-                else if (snd in [sndOoff2, sndOoff3]) then
-                    snd := sndOoff1
-                // Other fallback sounds
-                else if (snd = sndGrenade) then
-                    if random(2) = 0 then
-                        snd := sndNooo
-                    else
-                        snd := sndUhOh
-                else if (snd in [sndDrat, sndBugger]) then
-                    snd := sndStupid
-                else if (snd in [sndGonnaGetYou, sndCutItOut, sndLeaveMeAlone]) then
-                    snd := sndRegret
-                else if (snd in [sndOhDear, sndSoLong]) then
-                    snd := sndByeBye
-                else if (snd = sndWhatThe) then
-                    snd := sndNooo
-                else if (snd = sndRunAway) then
-                    snd := sndOops
-                else if (snd = sndThisOneIsMine) then
-                    snd := sndReinforce
-                else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
-                    snd := sndEnemyDown;
-
+                snd := GetFallbackV(snd);
+                if snd = sndNone then
+                    exit;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
