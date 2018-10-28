@@ -34,6 +34,7 @@ Ow*.ogg
 PoisonCough.ogg
 PoisonMoan.ogg
 Reinforcements.ogg
+Revenge.ogg
 Runaway.ogg
 Sameteam.ogg
 Solong.ogg

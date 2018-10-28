@@ -95,7 +95,21 @@ begin
 if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
     vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
 else
+    begin
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
+    if (not killed) then
+        begin
+        // Check if attacker got revenge
+        if (Attacker^.RevengeHog <> nil) and (Attacker^.RevengeHog = Gear^.Hedgehog) then
+            begin
+            Attacker^.stats.GotRevenge:= true;
+            Attacker^.RevengeHog:= nil;
+            end
+        // If not, victim remembers their attacker to plan *their* revenge
+        else
+            Gear^.Hedgehog^.RevengeHog:= Attacker;
+        end
+    end;
 
 //////////////////////////
 
@@ -262,12 +276,15 @@ if FinishedTurnsTotal <> 0 then
             AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         // 0 kills, only damage or poison
         else
-            // TODO: Play sndExcellent for a high damage shot.
-            // Not done yet because the fallback is sndEnemyDown.
-            if random(2) = 0 then
-                AddVoice(sndRegret, vpHurtEnemy)
+            if CurrentHedgehog^.stats.GotRevenge then
+                AddVoice(sndRevenge, CurrentHedgehog^.Team^.voicepack)
             else
-                AddVoice(sndGonnaGetYou, vpHurtEnemy)
+                // TODO: Maybe play sndExcellent for a high damage shot.
+                // Not done yet because the fallback is sndEnemyDown.
+                if random(2) = 0 then
+                    AddVoice(sndRegret, vpHurtEnemy)
+                else
+                    AddVoice(sndGonnaGetYou, vpHurtEnemy)
 
     // Missed shot
     // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit
@@ -308,6 +325,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDamageGiven:= 0;
                 StepPoisoned:= false;
                 StepDied:= false;
+                GotRevenge:= false;
                 end;
 
 Kills:= 0;

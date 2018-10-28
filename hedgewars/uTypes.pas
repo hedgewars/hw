@@ -154,7 +154,7 @@ type
             sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun, sndFlamethrower, sndIceBeamIdle,
             sndLandGun, sndCaseImpact, sndExtraDamage, sndFirePunchHit, sndGrenade, sndThisOneIsMine,
             sndWhatThe, sndSoLong, sndOhDear, sndGonnaGetYou, sndDrat, sndBugger, sndAmazing,
-            sndBrilliant, sndExcellent, sndFire, sndWatchThis, sndRunAway);
+            sndBrilliant, sndExcellent, sndFire, sndWatchThis, sndRunAway, sndRevenge);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
@@ -342,6 +342,7 @@ type
         MaxStepDamageGiven,
         MaxStepKills: Longword;
         FinishedTurns: Longword;
+        GotRevenge: boolean;     // True if hog got revenge in this turn
         end;
 
     TTeamStats = record
@@ -412,6 +413,7 @@ type
             Timer: Longword;
             HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;
+            RevengeHog: PHedgehog;   // For which hog this hog wants revenge most. For sndRevenge taunt
             end;
 
     TTeam = record

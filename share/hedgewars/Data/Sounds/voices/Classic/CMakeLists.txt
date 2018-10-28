@@ -34,6 +34,9 @@ Ow*.ogg
 PoisonCough.ogg
 PoisonMoan.ogg
 Reinforcements.ogg
+# FIXME: Revenge.ogg is "I'll get you back" but this taunt is meant for
+# successful reveng, not the announcement thereof.
+#Revenge.ogg
 Runaway.ogg
 Sameteam.ogg
 Solong.ogg

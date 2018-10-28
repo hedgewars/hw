@@ -708,6 +708,7 @@ with CurrentTeam^ do
     CurrentHedgehog^.Gear:= Gear;
     CurrentHedgehog^.Name:= id;
     CurrentHedgehog^.InitialHealth:= Gear^.Health;
+    CurrentHedgehog^.RevengeHog:= nil;
     CurrHedgehog:= HedgehogsNumber;
     inc(HedgehogsNumber)
     end
