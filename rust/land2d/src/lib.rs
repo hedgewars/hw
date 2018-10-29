@@ -2,25 +2,31 @@ extern crate integral_geometry;
 extern crate vec2d;
 
 use std::cmp;
-use std::ops;
 
 use integral_geometry::{ArcPoints, EquidistantPoints, LinePoints, Point};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
+    play_width: usize,
+    play_height: usize,
     width_mask: usize,
     height_mask: usize,
 }
 
 impl<T: Copy + PartialEq> Land2D<T> {
-    pub fn new(width: usize, height: usize, fill_value: T) -> Self {
-        assert!(width.is_power_of_two());
-        assert!(height.is_power_of_two());
+    pub fn new(play_width: usize, play_height: usize, fill_value: T) -> Self {
+        let real_width = play_width.next_power_of_two();
+        let real_height = play_height.next_power_of_two();
+
+        assert!(real_width > 0);
+        assert!(real_height > 0);
 
         Self {
-            pixels: vec2d::Vec2D::new(width, height, fill_value),
-            width_mask: !(width - 1),
-            height_mask: !(height - 1),
+            pixels: vec2d::Vec2D::new(real_width, real_height, fill_value),
+            play_width,
+            play_height,
+            width_mask: !(real_width - 1),
+            height_mask: !(real_height - 1),
         }
     }
 
@@ -32,6 +38,16 @@ impl<T: Copy + PartialEq> Land2D<T> {
     #[inline]
     pub fn height(&self) -> usize {
         self.pixels.height()
+    }
+
+    #[inline]
+    pub fn play_width(&self) -> usize {
+        self.play_width
+    }
+
+    #[inline]
+    pub fn play_height(&self) -> usize {
+        self.play_height
     }
 
     #[inline]
@@ -240,7 +256,12 @@ mod tests {
 
     #[test]
     fn basics() {
-        let l: Land2D<u8> = Land2D::new(32, 64, 0);
+        let l: Land2D<u8> = Land2D::new(30, 50, 0);
+
+        assert_eq!(l.play_width(), 30);
+        assert_eq!(l.play_height(), 50);
+        assert_eq!(l.width(), 32);
+        assert_eq!(l.height(), 64);
 
         assert!(l.is_valid_coordinate(0, 0));
         assert!(!l.is_valid_coordinate(-1, -1));
