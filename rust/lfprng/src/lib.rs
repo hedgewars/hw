@@ -4,7 +4,7 @@ pub struct LaggedFibonacciPRNG {
 }
 
 impl LaggedFibonacciPRNG {
-    fn new(init_values: &[u8]) -> Self {
+    pub fn new(init_values: &[u8]) -> Self {
         let mut buf = [0xa98765 + 68; 64];
 
         for i in 0..std::cmp::min(init_values.len(), 54) {
@@ -24,7 +24,7 @@ impl LaggedFibonacciPRNG {
     }
 
     #[inline]
-    fn get_next(&mut self) -> u32 {
+    pub fn get_next(&mut self) -> u32 {
         self.index = (self.index + 1) & 0x3f;
         self.circular_buffer[self.index] = (self.circular_buffer[(self.index + 40) & 0x3f]
             + self.circular_buffer[(self.index + 9) & 0x3f])
@@ -34,13 +34,13 @@ impl LaggedFibonacciPRNG {
     }
 
     #[inline]
-    fn get_random(&mut self, modulo: u32) -> u32 {
+    pub fn get_random(&mut self, modulo: u32) -> u32 {
         self.get_next();
         self.get_next() % modulo
     }
 
     #[inline]
-    fn add_randomness(&mut self, value: u32) {
+    pub fn add_randomness(&mut self, value: u32) {
         self.index = (self.index + 1) & 0x3f;
         self.circular_buffer[self.index] ^= value;
     }

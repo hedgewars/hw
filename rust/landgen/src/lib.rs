@@ -3,12 +3,12 @@ mod template_based;
 extern crate integral_geometry;
 extern crate land2d;
 
-struct LandGenerationParameters<T> {
+pub struct LandGenerationParameters<T> {
     zero: T,
     basic: T,
 }
 
-trait LandGenerator {
+pub trait LandGenerator {
     fn generate_land<T: Copy + PartialEq, I: Iterator<Item = u32>>(
         &self,
         parameters: LandGenerationParameters<T>,
