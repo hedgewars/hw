@@ -24,7 +24,7 @@ impl LaggedFibonacciPRNG {
     }
 
     #[inline]
-    pub fn get_next(&mut self) -> u32 {
+    fn get_next(&mut self) -> u32 {
         self.index = (self.index + 1) & 0x3f;
         self.circular_buffer[self.index] = (self.circular_buffer[(self.index + 40) & 0x3f]
             + self.circular_buffer[(self.index + 9) & 0x3f])
