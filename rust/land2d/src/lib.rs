@@ -50,6 +50,11 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
+    pub fn rows(&self) -> impl Iterator<Item = &[T]> {
+        self.pixels.rows()
+    }
+
+    #[inline]
     pub fn map<U: Default, F: FnOnce(&mut T) -> U>(&mut self, y: i32, x: i32, f: F) -> U {
         if self.is_valid_coordinate(x, y) {
             unsafe {

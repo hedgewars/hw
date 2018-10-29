@@ -69,6 +69,11 @@ impl<T: Copy> Vec2D<T> {
     pub unsafe fn get_unchecked_mut(&mut self, row: usize, column: usize) -> &mut <usize as SliceIndex<[T]>>::Output {
         self.data.get_unchecked_mut(row * self.width + column)
     }
+
+    #[inline]
+    pub fn rows(&self) -> impl Iterator<Item = &[T]> {
+        self.data.chunks(self.width)
+    }
 }
 
 #[cfg(test)]
