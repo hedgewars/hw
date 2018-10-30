@@ -4,23 +4,21 @@ extern crate vec2d;
 use std::cmp;
 use std::ops;
 
-use integral_geometry::{ArcPoints, EquidistantPoints, LinePoints, Point};
+use integral_geometry::{
+    ArcPoints, EquidistantPoints, LinePoints,
+    Point, Size, SizeMask
+};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
-    width_mask: usize,
-    height_mask: usize,
+    mask: SizeMask
 }
 
 impl<T: Copy + PartialEq> Land2D<T> {
-    pub fn new(width: usize, height: usize, fill_value: T) -> Self {
-        assert!(width.is_power_of_two());
-        assert!(height.is_power_of_two());
-
+    pub fn new(size: Size, fill_value: T) -> Self {
         Self {
-            pixels: vec2d::Vec2D::new(width, height, fill_value),
-            width_mask: !(width - 1),
-            height_mask: !(height - 1),
+            pixels: vec2d::Vec2D::new(size, fill_value),
+            mask: size.to_mask()
         }
     }
 
@@ -36,12 +34,12 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
     #[inline]
     pub fn is_valid_x(&self, x: i32) -> bool {
-        (x as usize & self.width_mask) == 0
+        self.mask.contains_x(x as usize)
     }
 
     #[inline]
     pub fn is_valid_y(&self, y: i32) -> bool {
-        (y as usize & self.height_mask) == 0
+        self.mask.contains_y(y as usize)
     }
 
     #[inline]
@@ -269,7 +267,7 @@ mod tests {
 
     #[test]
     fn basics() {
-        let l: Land2D<u8> = Land2D::new(32, 64, 0);
+        let l: Land2D<u8> = Land2D::new(Size::new(32, 64), 0);
 
         assert!(l.is_valid_coordinate(0, 0));
         assert!(!l.is_valid_coordinate(-1, -1));
@@ -281,7 +279,7 @@ mod tests {
 
     #[test]
     fn fill() {
-        let mut l: Land2D<u8> = Land2D::new(128, 128, 0);
+        let mut l: Land2D<u8> = Land2D::new(Size::square(128), 0);
 
         l.draw_line(Point::new(0, 0), Point::new(32, 96), 1);
         l.draw_line(Point::new(32, 96), Point::new(64, 32), 1);

@@ -1,4 +1,4 @@
-use integral_geometry::Point;
+use integral_geometry::{Point, Size};
 use land2d::Land2D;
 use LandGenerationParameters;
 use LandGenerator;
@@ -6,8 +6,7 @@ use LandGenerator;
 struct OutlineTemplate {
     islands: Vec<Vec<Point>>,
     fill_points: Vec<Point>,
-    width: usize,
-    height: usize,
+    size: Size,
     can_flip: bool,
     can_invert: bool,
     can_mirror: bool,
@@ -45,8 +44,7 @@ impl LandGenerator for TemplatedLandGenerator {
         }
 
         let mut land = Land2D::new(
-            self.outline_template.width,
-            self.outline_template.height,
+            self.outline_template.size,
             parameters.basic,
         );
 
