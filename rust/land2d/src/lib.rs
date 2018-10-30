@@ -4,23 +4,21 @@ extern crate vec2d;
 use std::cmp;
 use std::ops;
 
-use integral_geometry::{ArcPoints, EquidistantPoints, LinePoints, Point};
+use integral_geometry::{
+    ArcPoints, EquidistantPoints, LinePoints,
+    Point, Size, SizeMask
+};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
-    width_mask: usize,
-    height_mask: usize,
+    mask: SizeMask
 }
 
 impl<T: Copy + PartialEq> Land2D<T> {
-    pub fn new(width: usize, height: usize, fill_value: T) -> Self {
-        assert!(width.is_power_of_two());
-        assert!(height.is_power_of_two());
-
+    pub fn new(size: Size, fill_value: T) -> Self {
         Self {
-            pixels: vec2d::Vec2D::new(width, height, fill_value),
-            width_mask: !(width - 1),
-            height_mask: !(height - 1),
+            pixels: vec2d::Vec2D::new(size, fill_value),
+            mask: size.to_mask()
         }
     }
 
@@ -36,17 +34,22 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
     #[inline]
     pub fn is_valid_x(&self, x: i32) -> bool {
-        (x as usize & self.width_mask) == 0
+        self.mask.contains_x(x as usize)
     }
 
     #[inline]
     pub fn is_valid_y(&self, y: i32) -> bool {
-        (y as usize & self.height_mask) == 0
+        self.mask.contains_y(y as usize)
     }
 
     #[inline]
     pub fn is_valid_coordinate(&self, x: i32, y: i32) -> bool {
         self.is_valid_x(x) && self.is_valid_y(y)
+    }
+
+    #[inline]
+    pub fn rows(&self) -> impl Iterator<Item = &[T]> {
+        self.pixels.rows()
     }
 
     #[inline]
@@ -214,6 +217,30 @@ impl<T: Copy + PartialEq> Land2D<T> {
             .sum()
     }
 
+    fn fill_row(&mut self, center: Point, offset: Point, value: T) -> usize {
+        let row_index = center.y + offset.y;
+        if self.is_valid_y(row_index) {
+            let from_x = cmp::max(0, center.x - offset.x) as usize;
+            let to_x = cmp::min(self.width() - 1, (center.x + offset.x) as usize);
+            self.pixels[row_index as usize][from_x..=to_x]
+                .iter_mut().for_each(|v| *v = value);
+            to_x - from_x + 1
+        } else {
+            0
+        }
+    }
+
+    pub fn fill_circle(&mut self, center: Point, radius: i32, value: T) -> usize {
+        let transforms =
+            [[0, 1, 1, 0], [0, 1, -1, 0],
+             [1, 0, 0, 1], [1, 0, 0, -1]];
+        ArcPoints::new(radius).map(|vector| {
+            transforms.iter().map(|m|
+                self.fill_row(center, vector.transform(m), value)
+            ).sum::<usize>()
+        }).sum()
+    }
+
     pub fn draw_thick_line(&mut self, from: Point, to: Point, radius: i32, value: T) -> usize {
         let mut result = 0;
 
@@ -240,7 +267,7 @@ mod tests {
 
     #[test]
     fn basics() {
-        let l: Land2D<u8> = Land2D::new(32, 64, 0);
+        let l: Land2D<u8> = Land2D::new(Size::new(32, 64), 0);
 
         assert!(l.is_valid_coordinate(0, 0));
         assert!(!l.is_valid_coordinate(-1, -1));
@@ -252,7 +279,7 @@ mod tests {
 
     #[test]
     fn fill() {
-        let mut l: Land2D<u8> = Land2D::new(128, 128, 0);
+        let mut l: Land2D<u8> = Land2D::new(Size::square(128), 0);
 
         l.draw_line(Point::new(0, 0), Point::new(32, 96), 1);
         l.draw_line(Point::new(32, 96), Point::new(64, 32), 1);
