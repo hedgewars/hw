@@ -83,8 +83,10 @@ fn main() {
     }
 
     let mut land = Land2D::new(WIDTH as usize, HEIGHT as usize, 0);
-    for i in 0..64 {
+    for i in 0..32 {
         land.draw_thick_line(point(), point(), rnd(5), u32::max_value());
+
+        land.fill_circle(point(), rnd(60), u32::max_value());
     }
 
     fill_texture(&mut land_surf, &land);

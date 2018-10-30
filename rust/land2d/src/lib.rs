@@ -219,6 +219,30 @@ impl<T: Copy + PartialEq> Land2D<T> {
             .sum()
     }
 
+    fn fill_row(&mut self, center: Point, offset: Point, value: T) -> usize {
+        let row_index = center.y + offset.y;
+        if self.is_valid_y(row_index) {
+            let from_x = cmp::max(0, center.x - offset.x) as usize;
+            let to_x = cmp::min(self.width() - 1, (center.x + offset.x) as usize);
+            self.pixels[row_index as usize][from_x..=to_x]
+                .iter_mut().for_each(|v| *v = value);
+            to_x - from_x + 1
+        } else {
+            0
+        }
+    }
+
+    pub fn fill_circle(&mut self, center: Point, radius: i32, value: T) -> usize {
+        let transforms =
+            [[0, 1, 1, 0], [0, 1, -1, 0],
+             [1, 0, 0, 1], [1, 0, 0, -1]];
+        ArcPoints::new(radius).map(|vector| {
+            transforms.iter().map(|m|
+                self.fill_row(center, vector.transform(m), value)
+            ).sum::<usize>()
+        }).sum()
+    }
+
     pub fn draw_thick_line(&mut self, from: Point, to: Point, radius: i32, value: T) -> usize {
         let mut result = 0;
 

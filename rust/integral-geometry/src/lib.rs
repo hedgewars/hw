@@ -37,6 +37,12 @@ impl Point {
     pub fn max_norm(self) -> i32 {
         std::cmp::max(self.x.abs(), self.y.abs())
     }
+
+    #[inline]
+    pub fn transform(self, matrix: &[i32; 4]) -> Self {
+        Point::new(matrix[0] * self.x + matrix[1] * self.y,
+                   matrix[2] * self.x + matrix[3] * self.y)
+    }
 }
 
 macro_rules! bin_op_impl {
