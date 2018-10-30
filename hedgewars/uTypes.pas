@@ -384,6 +384,7 @@ type
     TVoice = record
         snd: TSound;
         voicepack: PVoicePack;
+        isFallback: boolean;
         end;
 
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;

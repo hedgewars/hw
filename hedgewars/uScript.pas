@@ -2187,7 +2187,7 @@ begin
                     if instaVoice then
                         PlaySoundV(TSound(s), gear^.Hedgehog^.Team^.Voicepack, false, true)
                     else
-                        AddVoice(TSound(s), gear^.Hedgehog^.Team^.Voicepack, true);
+                        AddVoice(TSound(s), gear^.Hedgehog^.Team^.Voicepack, true, false);
                     end;
                 end;
             end;

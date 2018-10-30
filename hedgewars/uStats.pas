@@ -299,7 +299,15 @@ if FinishedTurnsTotal <> 0 then
             // 2. complaining about getting attacked too often
             // 3. threatening enemy with retaliation
             if CurrentHedgehog^.stats.GotRevenge then
-                AddVoice(sndRevenge, CurrentHedgehog^.Team^.voicepack)
+                begin
+                AddVoice(sndRevenge, CurrentHedgehog^.Team^.voicepack);
+                // If revenge taunt was added, one of the following voices is
+                // added as fallback (4th param), in case of a missing Revenge sound file.
+                if random(2) = 0 then
+                    AddVoice(sndRegret, vpHurtEnemy, false, true)
+                else
+                    AddVoice(sndGonnaGetYou, vpHurtEnemy, false, true);
+                end
             else
                 if LeaveMeAlone then
                     if random(2) = 0 then
