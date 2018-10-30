@@ -53,12 +53,15 @@ implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScript;
 
 var DamageClan  : Longword = 0;
+    DamageTeam  : Longword = 0;
     DamageTotal : Longword = 0;
     DamageTurn  : Longword = 0;
     PoisonTurn  : Longword = 0; // Poisoned enemies per turn
     PoisonClan  : Longword = 0; // Poisoned own clan members in turn
+    PoisonTeam  : Longword = 0; // Poisoned own team members in turn
     PoisonTotal : Longword = 0; // Poisoned hogs in whole round
     KillsClan   : LongWord = 0;
+    KillsTeam   : LongWord = 0;
     Kills       : LongWord = 0;
     KillsTotal  : LongWord = 0;
     HitTargets  : LongWord = 0; // Target (gtTarget) hits per turn
@@ -72,10 +75,12 @@ var DamageClan  : Longword = 0;
 
 procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
 begin
-    if Attacker^.Team^.Clan = Gear^.HEdgehog^.Team^.Clan then
+    if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
         begin
-        vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack;
-        inc(PoisonClan)
+        vpHurtSameClan:= Gear^.Hedgehog^.Team^.voicepack;
+        inc(PoisonClan);
+        if Attacker^.Team = Gear^.Hedgehog^.Team then
+            inc(PoisonTeam);
         end
     else
         begin
@@ -94,7 +99,7 @@ end;
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 begin
 if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
-    vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
+    vpHurtSameClan:= Gear^.Hedgehog^.Team^.voicepack
 else
     begin
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
@@ -123,6 +128,7 @@ inc(Attacker^.stats.StepDamageGiven, Damage);
 inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
 
 if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Damage);
+if CurrentHedgehog^.Team = Gear^.Hedgehog^.Team then inc(DamageTeam, Damage);
 
 if killed then
     begin
@@ -139,7 +145,11 @@ if killed then
     if Gear = Attacker^.Gear then
         inc(Attacker^.Team^.stats.Suicides);
     if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
+        begin
         inc(KillsClan);
+        if Attacker^.Team = Gear^.Hedgehog^.Team then
+            inc(KillsTeam);
+        end;
     end;
 
 inc(DamageTotal, Damage);
@@ -273,8 +283,10 @@ if FinishedTurnsTotal <> 0 then
             else
                 AddVoice(sndWatchIt, vpHurtSameClan)
         else
-            if random(2) = 0 then
+            // Attacked same team
+            if (random(2) = 0) and ((DamageTeam <> 0) or (KillsTeam > killsCheck) or (PoisonTeam <> 0)) then
                 AddVoice(sndSameTeam, vpHurtSameClan)
+            // Attacked same team or a clan member
             else
                 AddVoice(sndTraitor, vpHurtSameClan)
 
@@ -364,10 +376,13 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
 
 Kills:= 0;
 KillsClan:= 0;
+KillsTeam:= 0;
 DamageClan:= 0;
+DamageTeam:= 0;
 DamageTurn:= 0;
 HitTargets:= 0;
 PoisonClan:= 0;
+PoisonTeam:= 0;
 PoisonTurn:= 0;
 AmmoUsedCount:= 0;
 LeaveMeAlone:= false;
@@ -566,11 +581,14 @@ end;
 procedure initModule;
 begin
     DamageClan  := 0;
+    DamageTeam  := 0;
     DamageTotal := 0;
     DamageTurn  := 0;
     PoisonClan  := 0;
+    PoisonTeam  := 0;
     PoisonTurn  := 0;
     KillsClan   := 0;
+    KillsTeam   := 0;
     Kills       := 0;
     KillsTotal  := 0;
     HitTargets  := 0;
