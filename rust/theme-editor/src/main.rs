@@ -7,7 +7,7 @@ use sdl2::{
     }
 };
 
-use integral_geometry::Point;
+use integral_geometry::{Point, Size};
 
 use rand::{
     thread_rng, RngCore, Rng,
@@ -64,6 +64,7 @@ fn rnd<T: Default + SampleUniform + Ord>(max: T) -> T {
 
 const WIDTH: u32 = 512;
 const HEIGHT: u32 = 512;
+const SIZE: Size = Size {width: 512, height: 512};
 
 fn main() {
     let sdl = sdl2::init().unwrap();
@@ -82,7 +83,7 @@ fn main() {
         Point::new(rnd(WIDTH as i32), rnd(HEIGHT as i32))
     }
 
-    let mut land = Land2D::new(WIDTH as usize, HEIGHT as usize, 0);
+    let mut land = Land2D::new(SIZE, 0);
     for i in 0..32 {
         land.draw_thick_line(point(), point(), rnd(5), u32::max_value());
 
