@@ -446,13 +446,12 @@ else
     end;
 IsGetAwayTime:= false;
 
+// turn start taunt: sndYesSir for own team, sndHmm for enemy or computer team
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
     if CurrentTeam^.ExtDriven then
         begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
+        AddVoice(sndHmm, CurrentTeam^.voicepack)
         end
     else
         begin
@@ -468,9 +467,7 @@ else
     begin
     if TurnTimeLeft > 0 then
         begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
+        AddVoice(sndHmm, CurrentTeam^.voicepack)
         end;
     ReadyTimeLeft:= 0
     end;

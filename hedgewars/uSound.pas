@@ -328,7 +328,8 @@ var cInitVolume: LongInt;
             (FileName:              'Revenge.ogg'; Path: ptVoices; AltPath: ptNone),// sndRevenge
             (FileName:             'Cutitout.ogg'; Path: ptVoices; AltPath: ptNone),// sndCutItOut
             (FileName:         'Leavemealone.ogg'; Path: ptVoices; AltPath: ptNone),// sndLeaveMeAlone
-            (FileName:                 'Ouch.ogg'; Path: ptVoices; AltPath: ptNone) // sndOuch
+            (FileName:                 'Ouch.ogg'; Path: ptVoices; AltPath: ptNone),// sndOuch
+            (FileName:                  'Hmm.ogg'; Path: ptVoices; AltPath: ptNone) // sndHmm
             );
 
 
@@ -501,6 +502,14 @@ begin
         GetFallbackV := sndReinforce
     else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
         GetFallbackV := sndEnemyDown
+    // Hmm is for enemy turn start
+    else if snd = sndHmm then
+        // these are not ideal fallbacks, but those were the voices which were used in older versions
+        // for enemy turn start
+        if random(2) = 0 then
+            GetFallbackV := sndIllGetYou
+        else
+            GetFallbackV := sndJustYouWait
     else
         GetFallbackV := sndNone;
 end;

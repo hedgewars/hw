@@ -315,10 +315,12 @@ if FinishedTurnsTotal <> 0 then
                 AddVoice(sndRevenge, CurrentHedgehog^.Team^.voicepack);
                 // If revenge taunt was added, one of the following voices is
                 // added as fallback (4th param), in case of a missing Revenge sound file.
-                if random(2) = 0 then
-                    AddVoice(sndRegret, vpHurtEnemy, false, true)
-                else
-                    AddVoice(sndGonnaGetYou, vpHurtEnemy, false, true);
+                case random(4) of
+                    0: AddVoice(sndRegret, vpHurtEnemy, false, true);
+                    1: AddVoice(sndGonnaGetYou, vpHurtEnemy, false, true);
+                    2: AddVoice(sndIllGetYou, vpHurtEnemy, false, true);
+                    3: AddVoice(sndJustYouWait, vpHurtEnemy, false, true);
+                    end;
                 end
             else
                 if LeaveMeAlone then
@@ -327,10 +329,12 @@ if FinishedTurnsTotal <> 0 then
                     else
                         AddVoice(sndLeaveMeAlone, vpHurtEnemy)
                 else
-                    if random(2) = 0 then
-                        AddVoice(sndRegret, vpHurtEnemy)
-                    else
-                        AddVoice(sndGonnaGetYou, vpHurtEnemy)
+                    case random(4) of
+                        0: AddVoice(sndRegret, vpHurtEnemy);
+                        1: AddVoice(sndGonnaGetYou, vpHurtEnemy);
+                        2: AddVoice(sndIllGetYou, vpHurtEnemy);
+                        3: AddVoice(sndJustYouWait, vpHurtEnemy);
+                    end
 
     // Missed shot
     // A miss is defined as a shot with a damaging weapon with 0 kills, 0 damage, 0 hogs poisoned and 0 targets hit
