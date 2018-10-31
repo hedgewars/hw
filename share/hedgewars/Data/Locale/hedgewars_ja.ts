@@ -3344,11 +3344,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>long jump</source>
-        <translation>遠いジャンプ</translation>
+        <translation>幅跳び</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation>高いジャンプ</translation>
+        <translation>高跳び</translation>
     </message>
     <message>
         <source>slot 10</source>
@@ -3423,7 +3423,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (descriptions)</name>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation>隙間や障害物を飛び越える：</translation>
+        <translation>隙間や障害物を跳び越える：</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
