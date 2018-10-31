@@ -32,6 +32,7 @@ Nutter.ogg
 Ohdear.ogg
 Ooff*.ogg
 Oops.ogg
+Ouch.ogg
 Ow*.ogg
 PoisonCough.ogg
 PoisonMoan.ogg

@@ -7,7 +7,7 @@ HIGHLIGHTS:
  + Rework team rankings
  + Tied teams now rank equally
  + Help button in main menu
- + 17 new hedgehog taunts
+ + 18 new hedgehog taunts
  + Many new Lua API features
  * Functionality of controllers restored
  * Fix at least 2 crashes
@@ -55,7 +55,7 @@ Game, audiovisuals:
  + Allow to change volume during pause
  + Add sounds: flamethrower, landspray, idle freezer, shorykuen hit
  + Add taunts: Amazing, Brilliant, Bugger, Cutitout, Drat, Excellent, Fire, Gonnagetyou, Grenade,
-               Leavemealone, Ohdear, Revenge, Runaway, Solong, Thisoneismine, Whatthe, Watchthis
+               Leavemealone, Ohdear, Ouch, Revenge, Runaway, Solong, Thisoneismine, Whatthe, Watchthis
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix some flakes disappearing in world wrap worlds while moving camera
  * Fix invisible projectile timer, attack bar, target on other side of wrap world edge

@@ -327,7 +327,8 @@ var cInitVolume: LongInt;
             (FileName:              'Runaway.ogg'; Path: ptVoices; AltPath: ptNone),// sndRunAway
             (FileName:              'Revenge.ogg'; Path: ptVoices; AltPath: ptNone),// sndRevenge
             (FileName:             'Cutitout.ogg'; Path: ptVoices; AltPath: ptNone),// sndCutItOut
-            (FileName:         'Leavemealone.ogg'; Path: ptVoices; AltPath: ptNone) // sndLeaveMeAlone
+            (FileName:         'Leavemealone.ogg'; Path: ptVoices; AltPath: ptNone),// sndLeaveMeAlone
+            (FileName:                 'Ouch.ogg'; Path: ptVoices; AltPath: ptNone) // sndOuch
             );
 
 
@@ -476,7 +477,7 @@ begin
     // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
     if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
         GetFallbackV := sndFirePunch1
-    else if (snd in [sndOw2, sndOw3, sndOw4]) then
+    else if (snd in [sndOw2, sndOw3, sndOw4, sndOuch]) then
         GetFallbackV := sndOw1
     else if (snd in [sndOoff2, sndOoff3]) then
         GetFallbackV := sndOoff1

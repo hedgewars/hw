@@ -89,6 +89,7 @@ var
     CheckSum        : LongWord;
     CampaignVariable: shortstring;
     GameTicks       : LongWord;
+    OuchTauntTimer  : LongWord; // Timer which blocks sndOuch from being played too often and fast
     GameState       : TGameState;
     GameType        : TGameType;
     InputMask       : LongWord;
@@ -2807,6 +2808,7 @@ begin
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
+    OuchTauntTimer      := 0;
     CheckSum            := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;

@@ -31,7 +31,7 @@ procedure AddBounceEffectForGear(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
 procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
-procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
+procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource; Damage: Longword);
 procedure HHHeal(Hedgehog: PHedgehog; healthBoost: LongInt; showMessage: boolean; vgTint: Longword);
 procedure HHHeal(Hedgehog: PHedgehog; healthBoost: LongInt; showMessage: boolean);
 function IncHogHealth(Hedgehog: PHedgehog; healthBoost: LongInt): LongInt;
@@ -280,7 +280,7 @@ begin
         Gear^.LastDamage := AttackerHog;
 
         Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
-        HHHurt(Gear^.Hedgehog, Source);
+        HHHurt(Gear^.Hedgehog, Source, Damage);
         AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
         tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
         if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
@@ -348,11 +348,17 @@ HHGear^.Active:= true;
 end;
 
 // Play effects for hurt hedgehog
-procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
+procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource; Damage: Longword);
 begin
 if Hedgehog^.Effects[heFrozen] <> 0 then exit;
 
-if (Source = dsFall) or (Source = dsExplosion) then
+if (Damage >= ouchDmg) and (OuchTauntTimer = 0) and ((Source = dsFall) or (Source = dsBullet) or (Source = dsShove) or (Source = dsHammer)) then
+    begin
+    PlaySoundV(sndOuch, Hedgehog^.Team^.voicepack);
+    // Prevent sndOuch from being played too often in short time
+    OuchTauntTimer:= 1250;
+    end
+else if (Source = dsFall) or (Source = dsExplosion) then
     case random(3) of
         0: PlaySoundV(sndOoff1, Hedgehog^.Team^.voicepack);
         1: PlaySoundV(sndOoff2, Hedgehog^.Team^.voicepack);
