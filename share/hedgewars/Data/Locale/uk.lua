@@ -3017,6 +3017,5 @@ locale = {
         ["'Zooka Team"] = "Команда 'Zooka",
 --      ["Zook"] = "", -- Target_Practice_-_Bazooka_easy, Target_Practice_-_Bazooka_hard
 --      ["Zork"] = "", -- A_Classic_Fairytale:dragon, A_Classic_Fairytale:family, A_Classic_Fairytale:queen
-        ["Ей! Так не чесно!"] = "", -- A_Classic_Fairytale:journey
         ["!!!"] = "Я!",
 }
