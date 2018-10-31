@@ -2,6 +2,7 @@ mod template_based;
 
 extern crate integral_geometry;
 extern crate land2d;
+extern crate itertools;
 
 pub struct LandGenerationParameters<T> {
     zero: T,

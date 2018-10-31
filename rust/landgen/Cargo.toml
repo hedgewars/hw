@@ -6,3 +6,4 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 [dependencies]
 integral-geometry = { path = "../integral-geometry" }
 land2d = { path = "../land2d" }
+itertools = "0.7.8"
