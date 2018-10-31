@@ -1394,7 +1394,7 @@ while i > 0 do
                 begin
                 if (Ammo^.Hedgehog^.Gear <> nil) then
                     Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and (not gstNotKickable);
-                ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsExplosion); // crank up damage for explosives + blowtorch
                 end;
 
             if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then

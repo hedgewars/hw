@@ -121,7 +121,7 @@ type
             vgtSmoothWindBar, vgtStraightShot, vgtNoPlaceWarn);
 
     // Damage can be caused by different sources
-    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
+    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison, dsHammer);
 
     // Available sounds
     TSound = (sndNone,
