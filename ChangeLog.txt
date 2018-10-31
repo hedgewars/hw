@@ -135,6 +135,7 @@ Missions and styles:
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practice: Suppress “X remaining” message
  * Fix resurrection animation appearing at wrong position for some missions and styles
+ * Fix Lua error when playing any mission or style in Lithuanian language
 
 A Classic Fairytale:
  * Fix clan membership of princess in some missions
