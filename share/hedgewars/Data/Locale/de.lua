@@ -157,7 +157,7 @@ locale = {
 ["Attack Captain Lime before he attacks back"]="Greif Leutnant Limone an, bevor er angreift.",
 ["Attack From Rope: %s"] = "Angriff Vom Seil: %s", -- WxW
 ["Attack From Rope: You may only attack from a rope."] = "Angriff Vom Seil: Du darfst nur vom Seil angreifen.", -- WxW
-["Attack rule: %s"] = "Angriffsregel", -- WxW
+["Attack rule: %s"] = "Angriffsregel: %s", -- WxW
 ["Attack: Select this continent"] = "Angreifen: Diesen Kontinent wählen", -- Continental_supplies
 ["Attack: [Space]"] = "Angreifen: [Leertaste]", -- Basic_Training_-_Bazooka, Basic_Training_-_Grenade, Basic_Training_-_Movement, Basic_Training_-_Rope
 ["Attack the assassins before they attack back"]="Greif die Assassinen an, bevor sie angreifen.",
@@ -715,7 +715,7 @@ locale = {
 ["Fuel: %d"] = "Treibstoff: %d", -- Tumbler
 ["Fuzzy Beard"] = "Stoppelbart", -- 
 ["“g=150”, where 150 is 150% of normal gravity."] = "»g=150«, wobei die »150« für 150% der Normalschwerkraft steht.", -- Gravity
-["“g=50, g2=150, period=4000” for gravity changing|from 50 to 150 and back with period of 4000 ms."] = "»g=50, g2=150, period=4000«, für Schwerkraft,|die von 50% bis 150% wechselt mit einer Periode von 4000ms.", -- Gravity
+["“g=50, g2=150, period=4000” for gravity changing|from 50 to 150 and back with period of 4000 ms."] = "»g=50, g2=150, period=4000«, für Schwerkraft,|die von 50 bis 150 wechselt mit einer Periode von 4000ms.", -- Gravity
 ["Galaxy Guardians"] = "Galaxiewächter", -- Big_Armory
 ["Game Modifiers: "]="Spiel-Modifikatoren: ",
 ["Game over!"] = "Spiel vorbei!", -- Space_Invasion
@@ -1908,8 +1908,8 @@ locale = {
 ["Shield is fully recharged!"]="Schild vollständig aufgeladen!",
 ["Shield Master! +10 points!"] = "Schildmeister! +10 Punkte!", -- Space_Invasion
 ["Shield Miser! +%d points!"] = "Schildgeiz! +%d Punkte!", -- Space_Invasion
-["Shield OFF: %d power remaining"] = "Schild AUS: %s Energie verbleibend", -- Space_Invasion
-["Shield ON: %d power remaining"] = "Schild EIN: %s Energie verbleibend", -- Space_Invasion
+["Shield OFF: %d power remaining"] = "Schild AUS: %d Energie verbleibend", -- Space_Invasion
+["Shield ON: %d power remaining"] = "Schild EIN: %d Energie verbleibend", -- Space_Invasion
 ["Shield Seeker! +10 points!"] = "Schildsucher! +10 Punkte!", -- Space_Invasion
 ["Shinobi"] = "Shinobi", -- 
 ["%s hit the ground."] = "%s traf den Boden.", -- User_Mission_-_Rope_Knock_Challenge

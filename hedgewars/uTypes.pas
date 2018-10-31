@@ -121,7 +121,7 @@ type
             vgtSmoothWindBar, vgtStraightShot, vgtNoPlaceWarn);
 
     // Damage can be caused by different sources
-    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
+    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison, dsHammer);
 
     // Available sounds
     TSound = (sndNone,
@@ -154,7 +154,8 @@ type
             sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun, sndFlamethrower, sndIceBeamIdle,
             sndLandGun, sndCaseImpact, sndExtraDamage, sndFirePunchHit, sndGrenade, sndThisOneIsMine,
             sndWhatThe, sndSoLong, sndOhDear, sndGonnaGetYou, sndDrat, sndBugger, sndAmazing,
-            sndBrilliant, sndExcellent, sndFire, sndWatchThis, sndRunAway);
+            sndBrilliant, sndExcellent, sndFire, sndWatchThis, sndRunAway, sndRevenge, sndCutItOut,
+            sndLeaveMeAlone, sndOuch, sndHmm);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
@@ -330,17 +331,19 @@ type
         end;
 
     TStatistics = record
-        DamageRecv,
-        DamageGiven: Longword;
-        StepDamageRecv,
-        StepDamageGiven,
-        StepKills: Longword;
-        StepPoisoned,
-        StepDied,
-        Sacrificed: boolean;
-        MaxStepDamageRecv,
-        MaxStepDamageGiven,
-        MaxStepKills: Longword;
+        DamageRecv,              // total damage received
+        DamageGiven: Longword;   // total damage dealt
+        StepDamageRecvInRow,     // number of enemy turns in row this hog received any damage
+        StepDamageRecv,          // damage received in this turn
+        StepDamageGiven,         // damage dealt in this turn
+        StepKills: Longword;     // kills in this turn
+        StepPoisoned,            // whether hog got poisoned this turn
+        StepDied,                // whether hog died this turn
+        Sacrificed,              // whether hog was sacrificed in suicide attack (kamikaze, piano)
+        GotRevenge: boolean;     // whether hog got revenge in this turn
+        MaxStepDamageRecv,       // most damage received in one turn
+        MaxStepDamageGiven,      // most damage dealt in one turn
+        MaxStepKills: Longword;  // most kills in one turn
         FinishedTurns: Longword;
         end;
 
@@ -381,6 +384,7 @@ type
     TVoice = record
         snd: TSound;
         voicepack: PVoicePack;
+        isFallback: boolean;
         end;
 
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
@@ -412,6 +416,7 @@ type
             Timer: Longword;
             HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;
+            RevengeHog: PHedgehog;   // For which hog this hog wants revenge most. For sndRevenge taunt
             end;
 
     TTeam = record

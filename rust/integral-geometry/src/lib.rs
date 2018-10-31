@@ -37,6 +37,87 @@ impl Point {
     pub fn max_norm(self) -> i32 {
         std::cmp::max(self.x.abs(), self.y.abs())
     }
+
+    #[inline]
+    pub fn transform(self, matrix: &[i32; 4]) -> Self {
+        Point::new(matrix[0] * self.x + matrix[1] * self.y,
+                   matrix[2] * self.x + matrix[3] * self.y)
+    }
+}
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub struct Size {
+    pub width: usize,
+    pub height: usize,
+}
+
+impl Size {
+    #[inline]
+    pub fn new(width: usize, height: usize) -> Self {
+        Size { width, height }
+    }
+
+    #[inline]
+    pub fn square(size: usize) -> Self {
+        Size { width: size, height: size }
+    }
+
+    #[inline]
+    pub fn area(&self) -> usize {
+        self.width * self.height
+    }
+
+    #[inline]
+    pub fn linear_index(&self, x: usize, y: usize) -> usize {
+        y * self.width + x
+    }
+
+    #[inline]
+    pub fn is_power_of_two(&self) -> bool {
+        self.width.is_power_of_two() && self.height.is_power_of_two()
+    }
+
+    #[inline]
+    pub fn next_power_of_two(&self) -> Self {
+        Self {
+            width: self.width.next_power_of_two(),
+            height: self.height.next_power_of_two()
+        }
+    }
+
+    #[inline]
+    pub fn to_mask(&self) -> SizeMask {
+        SizeMask::new(*self)
+    }
+}
+
+pub struct SizeMask{ size: Size }
+
+impl SizeMask {
+    #[inline]
+    pub fn new(size: Size) -> Self {
+        assert!(size.is_power_of_two());
+        let size = Size {
+            width: !(size.width - 1),
+            height: !(size.height - 1)
+        };
+        SizeMask { size }
+    }
+
+    #[inline]
+    pub fn contains_x<T: Into<usize>>(&self, x: T) -> bool {
+        (self.size.width & x.into()) == 0
+    }
+
+    #[inline]
+    pub fn contains_y<T: Into<usize>>(&self, y: T) -> bool {
+        (self.size.height & y.into()) == 0
+    }
+
+    #[inline]
+    pub fn contains(&self, point: Point) -> bool {
+        self.contains_x(point.x as usize) && self.contains_y(point.y as usize)
+    }
 }
 
 macro_rules! bin_op_impl {

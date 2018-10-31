@@ -163,7 +163,7 @@ begin
                 inc(Gear^.Damage, tmp);
                 if tmp > 0 then
                     // Make hedgehog moan on damage
-                    HHHurt(Gear^.Hedgehog, dsPoison);
+                    HHHurt(Gear^.Hedgehog, dsPoison, tmp);
                 end
             end;
 
@@ -509,7 +509,9 @@ if ((GameTicks and $FFFF) = $FFFF) then
     end;
 AddRandomness(CheckSum);
 TurnClockActive:= prevtime <> TurnTimeLeft;
-inc(GameTicks)
+inc(GameTicks);
+if (OuchTauntTimer > 0) then
+    dec(OuchTauntTimer);
 end;
 
 //Purpose, to reset all transient attributes toggled by a utility and clean up various gears and effects at end of turn

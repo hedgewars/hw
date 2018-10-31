@@ -435,7 +435,7 @@ else
         NextClan:= false;
         end;
 
-    if (GameFlags and gfSwitchHog) <> 0 then
+    if ((GameFlags and gfSwitchHog) <> 0) and not(CurrentTeam^.hasGone) then
         begin
         g:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
         CurAmmoGear:= g;
@@ -446,13 +446,12 @@ else
     end;
 IsGetAwayTime:= false;
 
+// turn start taunt: sndYesSir for own team, sndHmm for enemy or computer team
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
     if CurrentTeam^.ExtDriven then
         begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
+        AddVoice(sndHmm, CurrentTeam^.voicepack)
         end
     else
         begin
@@ -468,9 +467,7 @@ else
     begin
     if TurnTimeLeft > 0 then
         begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
+        AddVoice(sndHmm, CurrentTeam^.voicepack)
         end;
     ReadyTimeLeft:= 0
     end;
@@ -708,6 +705,7 @@ with CurrentTeam^ do
     CurrentHedgehog^.Gear:= Gear;
     CurrentHedgehog^.Name:= id;
     CurrentHedgehog^.InitialHealth:= Gear^.Health;
+    CurrentHedgehog^.RevengeHog:= nil;
     CurrHedgehog:= HedgehogsNumber;
     inc(HedgehogsNumber)
     end

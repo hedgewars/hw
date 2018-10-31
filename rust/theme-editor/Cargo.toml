@@ -13,4 +13,5 @@ features = ["image"]
 land2d = { path = "../land2d" }
 landgen = { path = "../landgen" }
 lfprng = { path = "../lfprng" }
+integral-geometry = { path = "../integral-geometry" }
 rand = "0.5"

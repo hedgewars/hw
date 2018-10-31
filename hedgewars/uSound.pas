@@ -62,14 +62,15 @@ procedure StopMusic;                            // Stops and releases the curren
 // Plays the sound snd [from a given voicepack],
 // if keepPlaying is given and true,
 // then the sound's playback won't be interrupted if asked to play again.
-procedure PlaySound(snd: TSound);
-procedure PlaySound(snd: TSound; keepPlaying: boolean);
-procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean);
-procedure PlaySound(snd: TSound; keepPlaying, ignoreMask, soundAsMusic: boolean);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask: boolean);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean);
+// Returns true if sound was found and is played, false otherwise.
+function PlaySound(snd: TSound): boolean;
+function PlaySound(snd: TSound; keepPlaying: boolean): boolean;
+function PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean): boolean;
+function PlaySound(snd: TSound; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask: boolean): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
 
 // Plays/stops a sound to replace the main background music temporarily.
 procedure PlayMusicSound(snd: TSound);
@@ -89,8 +90,11 @@ procedure StopSound(snd: TSound; soundAsMusic: boolean);
 procedure StopSoundChan(chn: LongInt);
 procedure StopSoundChan(chn, fadems: LongInt);
 
+// Add voice to the voice queue
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
-procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask: boolean);
+procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask, isFallback: boolean);
+
+// Actually play next voice
 procedure PlayNextVoice;
 
 
@@ -125,6 +129,7 @@ var MusicFN: shortstring; // music file name
 
 var Volume: LongInt;
     SoundTimerTicks: Longword;
+    LastVoiceFailed: boolean;
 implementation
 uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
 
@@ -140,14 +145,14 @@ var cInitVolume: LongInt;
     isAutoDampening: boolean;
     isSEBackup: boolean;
     VoiceList : array[0..7] of TVoice =  (
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil));
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false));
     Soundz: array[TSound] of record
             FileName: string[31];
             Path, AltPath    : TPathType;
@@ -319,7 +324,12 @@ var cInitVolume: LongInt;
             (FileName:            'Excellent.ogg'; Path: ptVoices; AltPath: ptNone),// sndExcellent
             (FileName:                 'Fire.ogg'; Path: ptVoices; AltPath: ptNone),// sndFire
             (FileName:            'Watchthis.ogg'; Path: ptVoices; AltPath: ptNone),// sndWatchThis
-            (FileName:              'Runaway.ogg'; Path: ptVoices; AltPath: ptNone) // sndRunAway
+            (FileName:              'Runaway.ogg'; Path: ptVoices; AltPath: ptNone),// sndRunAway
+            (FileName:              'Revenge.ogg'; Path: ptVoices; AltPath: ptNone),// sndRevenge
+            (FileName:             'Cutitout.ogg'; Path: ptVoices; AltPath: ptNone),// sndCutItOut
+            (FileName:         'Leavemealone.ogg'; Path: ptVoices; AltPath: ptNone),// sndLeaveMeAlone
+            (FileName:                 'Ouch.ogg'; Path: ptVoices; AltPath: ptNone),// sndOuch
+            (FileName:                  'Hmm.ogg'; Path: ptVoices; AltPath: ptNone) // sndHmm
             );
 
 
@@ -462,45 +472,89 @@ begin
         end;
 end;
 
-procedure PlaySound(snd: TSound);
+// Get a fallback voice, assuming that snd is not available. Returns sndNone if none is found.
+function GetFallbackV(snd: TSound): TSound;
 begin
-    PlaySoundV(snd, nil, false, false, false);
+    // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
+    if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+        GetFallbackV := sndFirePunch1
+    else if (snd in [sndOw2, sndOw3, sndOw4, sndOuch]) then
+        GetFallbackV := sndOw1
+    else if (snd in [sndOoff2, sndOoff3]) then
+        GetFallbackV := sndOoff1
+    // Other fallback sounds
+    else if (snd = sndGrenade) then
+        if random(2) = 0 then
+            GetFallbackV := sndNooo
+        else
+            GetFallbackV := sndUhOh
+    else if (snd in [sndDrat, sndBugger]) then
+        GetFallbackV := sndStupid
+    else if (snd in [sndGonnaGetYou, sndCutItOut, sndLeaveMeAlone]) then
+        GetFallbackV := sndRegret
+    else if (snd in [sndOhDear, sndSoLong]) then
+        GetFallbackV := sndByeBye
+    else if (snd = sndWhatThe) then
+        GetFallbackV := sndNooo
+    else if (snd = sndRunAway) then
+        GetFallbackV := sndOops
+    else if (snd = sndThisOneIsMine) then
+        GetFallbackV := sndReinforce
+    else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
+        GetFallbackV := sndEnemyDown
+    // Hmm is for enemy turn start
+    else if snd = sndHmm then
+        // these are not ideal fallbacks, but those were the voices which were used in older versions
+        // for enemy turn start
+        if random(2) = 0 then
+            GetFallbackV := sndIllGetYou
+        else
+            GetFallbackV := sndJustYouWait
+    else
+        GetFallbackV := sndNone;
 end;
 
-procedure PlaySound(snd: TSound; keepPlaying: boolean);
+function PlaySound(snd: TSound): boolean;
 begin
-    PlaySoundV(snd, nil, keepPlaying, false, false);
+    PlaySound:= PlaySoundV(snd, nil, false, false, false);
 end;
 
-procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean);
+function PlaySound(snd: TSound; keepPlaying: boolean): boolean;
 begin
-    PlaySoundV(snd, nil, keepPlaying, ignoreMask, false);
+    PlaySound:= PlaySoundV(snd, nil, keepPlaying, false, false);
 end;
 
-procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask, soundAsMusic: boolean);
+function PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean): boolean;
 begin
-    PlaySoundV(snd, nil, keepPlaying, ignoreMask, soundAsMusic);
+    PlaySound:= PlaySoundV(snd, nil, keepPlaying, ignoreMask, false);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
+function PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask, soundAsMusic: boolean): boolean;
 begin
-    PlaySoundV(snd, voicepack, false, false, false);
+    PlaySound:= PlaySoundV(snd, nil, keepPlaying, ignoreMask, soundAsMusic);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+function PlaySoundV(snd: TSound; voicepack: PVoicepack): boolean;
 begin
-    PlaySoundV(snd, voicepack, keepPlaying, false, false);
+    PlaySoundV:= PlaySoundV(snd, voicepack, false, false, false);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask: boolean);
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean): boolean;
 begin
-    PlaySoundV(snd, voicepack, keepPlaying, ignoreMask, false);
+    PlaySoundV:= PlaySoundV(snd, voicepack, keepPlaying, false, false);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean);
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask: boolean): boolean;
+begin
+    PlaySoundV:= PlaySoundV(snd, voicepack, keepPlaying, ignoreMask, false);
+end;
+
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
 var s:shortstring;
 rwops: PSDL_RWops;
 begin
+    s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+    PlaySoundV:= false;
     if ((not isSoundEnabled) and (not (soundAsMusic and isMusicEnabled))) or fastUntilLag then
         exit;
 
@@ -515,37 +569,12 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            // Fallback sounds
+            // Fallback taunts
             if (not pfsExists(s)) then
                 begin
-                // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
-                if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
-                    snd := sndFirePunch1
-                else if (snd in [sndOw2, sndOw3, sndOw4]) then
-                    snd := sndOw1
-                else if (snd in [sndOoff2, sndOoff3]) then
-                    snd := sndOoff1
-                // Other fallback sounds
-                else if (snd = sndGrenade) then
-                    if random(2) = 0 then
-                        snd := sndNooo
-                    else
-                        snd := sndUhOh
-                else if (snd in [sndDrat, sndBugger]) then
-                    snd := sndStupid
-                else if (snd = sndGonnaGetYou) then
-                    snd := sndRegret
-                else if (snd in [sndOhDear, sndSoLong]) then
-                    snd := sndByeBye
-                else if (snd = sndWhatThe) then
-                    snd := sndNooo
-                else if (snd = sndRunAway) then
-                    snd := sndOops
-                else if (snd = sndThisOneIsMine) then
-                    snd := sndReinforce
-                else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
-                    snd := sndEnemyDown;
-
+                snd := GetFallbackV(snd);
+                if snd = sndNone then
+                    exit;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
@@ -564,7 +593,8 @@ begin
             else
                 WriteLnToConsole(msgOK)
             end;
-        lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1)
+        lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1);
+        PlaySoundV:= true;
         end
     else
         begin
@@ -585,7 +615,8 @@ begin
             if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
             end;
-        lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
+        lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1);
+        PlaySoundV:= true;
         end;
 end;
 
@@ -603,10 +634,23 @@ end;
 
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 begin
-    AddVoice(snd, voicepack, false);
+    AddVoice(snd, voicepack, false, false);
 end;
 
-procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask: boolean);
+{
+AddVoice: Add a voice to the voice queue.
+* snd: Sound ID
+* voicepack: Hedgehog voicepack
+* ignoreMask: If true, the sound will be played anyway if masked by Lua
+* isFallback: If true, this sound is added as fallback if the sound previously added to the
+             queue was not found. Useful to make sure a voice is always played, even if
+             a voicepack is incomplete.
+             Example:
+                 AddVoice(sndRevenge, voiceAttacker);
+                 AddVoice(sndRegret, voiceVictim, false, true);
+             --> plays sndRegret if sndRevenge could not be played.
+}
+procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask, isFallback: boolean);
 var i : LongInt;
 begin
 
@@ -634,11 +678,13 @@ begin
         begin
         VoiceList[i].snd:= snd;
         VoiceList[i].voicepack:= voicepack;
+        VoiceList[i].isFallback:= isFallback;
         end
 end;
 
 procedure PlayNextVoice;
 var i : LongInt;
+    played : boolean;
 begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0)) then
         exit;
@@ -646,14 +692,19 @@ begin
     while (i<High(VoiceList)) and (VoiceList[i].snd = sndNone) do
         inc(i);
 
-    if (VoiceList[i].snd <> sndNone) then
+    played:= false;
+    if (VoiceList[i].snd <> sndNone) and ((not VoiceList[i].isFallback) or LastVoiceFailed) then
         begin
         LastVoice.snd:= VoiceList[i].snd;
         LastVoice.voicepack:= VoiceList[i].voicepack;
+        LastVoice.isFallback:= VoiceList[i].isFallback;
         VoiceList[i].snd:= sndNone;
-        PlaySoundV(LastVoice.snd, LastVoice.voicepack)
+        played:= PlaySoundV(LastVoice.snd, LastVoice.voicepack);
+        // Remember if sound was not played.
+        LastVoiceFailed:= (not played);
         end
-    else LastVoice.snd:= sndNone;
+    else
+        LastVoice.snd:= sndNone;
 end;
 
 function LoopSound(snd: TSound): LongInt;
@@ -953,6 +1004,7 @@ begin
     Volume:= 0;
     SoundTimerTicks:= 0;
     defVoicepack:= AskForVoicepack('Default');
+    LastVoiceFailed:= false;
 
     for i:= Low(TSound) to High(TSound) do
         lastChan[i]:= -1;

@@ -191,6 +191,8 @@ const
     cMaxHogHealth = 268435455; // maximum hedgehog health
     // cMaxHogHealth was calculated by: High(LongInt) div (cMaxHHIndex+1);
 
+    ouchDmg = 55;        // least amount of damage a hog must take in one blow for sndOuch to play
+
     // Z levels
     cHHZ = 1000;
     cCurrHHZ = Succ(cHHZ);

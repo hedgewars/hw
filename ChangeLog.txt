@@ -7,7 +7,7 @@ HIGHLIGHTS:
  + Rework team rankings
  + Tied teams now rank equally
  + Help button in main menu
- + 14 new hedgehog taunts
+ + 19 new hedgehog taunts
  + Many new Lua API features
  * Functionality of controllers restored
  * Fix at least 2 crashes
@@ -54,7 +54,10 @@ Game, audiovisuals:
  + New default brown clan color for better contrast
  + Allow to change volume during pause
  + Add sounds: flamethrower, landspray, idle freezer, shorykuen hit
- + Add taunts: Amazing, Brilliant, Bugger, Drat, Excellent, Fire, Gonnagetyou, Grenade, Ohdear, Runaway, Solong, Thisoneismine, Whatthe, Watchthis
+ + Add taunts: Amazing, Brilliant, Bugger, Cutitout, Drat, Excellent, Fire, Gonnagetyou, Grenade,
+               Hmm, Leavemealone, Ohdear, Ouch, Revenge, Runaway, Solong, Thisoneismine, Whatthe,
+               Watchthis
+ * Enemy/AI hogs now say “Hmm” on turn start instead of vowing for revenge (at least in most voice packs)
  * Fix extreme amounts of droplets when shooting with minigun into ocean world edge
  * Fix some flakes disappearing in world wrap worlds while moving camera
  * Fix invisible projectile timer, attack bar, target on other side of wrap world edge
@@ -132,6 +135,7 @@ Missions and styles:
  * The Great Escape: Infinite attack mode did not work
  * Shotgun/Sniper Rifle Target Practice: Suppress “X remaining” message
  * Fix resurrection animation appearing at wrong position for some missions and styles
+ * Fix Lua error when playing any mission or style in Lithuanian language
 
 A Classic Fairytale:
  * Fix clan membership of princess in some missions

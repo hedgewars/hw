@@ -5806,7 +5806,7 @@ while i > 0 do
                     dmg:= dmg div Gear^.Boom;
 
                     if dmg > 0 then
-                        ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
+                        ApplyDamage(tmp, CurrentHedgehog, dmg, dsHammer);
                     end;
 		tmp^.dY:= _0_03 * Gear^.Boom
                 end;

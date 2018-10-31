@@ -6,6 +6,7 @@ Bugger.ogg
 Byebye.ogg
 Comeonthen.ogg
 Coward.ogg
+Cutitout.ogg
 Drat.ogg
 Enemydown.ogg
 Excellent.ogg
@@ -16,6 +17,7 @@ Flawless.ogg
 Gonnagetyou.ogg
 Grenade.ogg
 Hello.ogg
+Hmm.ogg
 Hurry.ogg
 Illgetyou.ogg
 Incoming.ogg
@@ -23,6 +25,7 @@ Jump*.ogg
 Justyouwait.ogg
 Kamikaze.ogg
 Laugh.ogg
+Leavemealone.ogg
 Melon.ogg
 Missed.ogg
 Nooo.ogg
@@ -30,10 +33,14 @@ Nutter.ogg
 Ohdear.ogg
 Ooff*.ogg
 Oops.ogg
+Ouch.ogg
 Ow*.ogg
 PoisonCough.ogg
 PoisonMoan.ogg
 Reinforcements.ogg
+# FIXME: Revenge.ogg is "I'll get you back" but this taunt is meant for
+# successful reveng, not the announcement thereof.
+#Revenge.ogg
 Runaway.ogg
 Sameteam.ogg
 Solong.ogg
