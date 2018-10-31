@@ -959,11 +959,11 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>Reason:</source>
-        <translation type="unfinished"></translation>
+        <translation>Powód:</translation>
     </message>
     <message>
         <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączenie zostało odrzucone przez oficjalny serwer lub przekroczyło limit czasu. Coś zdaje się być w tej chwili nie w porządku z oficjalnym serwerem. To może być tymczasowy problem. Proszę spróbować ponownie.</translation>
     </message>
     <message>
         <source>The connection was refused by the host or timed out. This might have one of the following reasons:
@@ -972,7 +972,12 @@ Ostatnia wiadomość silnika:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączenie zostało odrzucone przez hosta lub przekroczyło limit czasu. Może to mieć jeden z poniższych powodów:
+- Program Serwera Hedgewars aktualnie nie chodzi na hoście
+- Podany numer portu jest nieprawidłowy
+- Jest tymczasowy problem z siecią
+
+Sprawdź nazwę hosta i ustawienia portu i/lub spróbuj ponownie później.</translation>
     </message>
 </context>
 <context>
@@ -1515,7 +1520,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponieważ każdy miał taki sam kolor klanu, nie było powodu do walki. I tak jeże żyły w pokoju długo i szczęśliwie.</translation>
     </message>
 </context>
 <context>
@@ -1592,7 +1597,7 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz podręcznik online Hedgewars w swojej przeglądarce internetowej</translation>
     </message>
 </context>
 <context>
@@ -2166,11 +2171,11 @@ po prostu wpisz swój nick.</translation>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
-        <translation type="unfinished"></translation>
+        <translation>Teren nie może zostać zniszczony przez większość broni.</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished">%1 (%2)</translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2511,11 +2516,11 @@ po prostu wpisz swój nick.</translation>
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Przycisz w tle</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmniejsz głośność audio, gdy okno gry działa w tle</translation>
     </message>
 </context>
 <context>
@@ -3312,19 +3317,19 @@ Wydajesz się być tu nowy. Zechcesz zagrać w jakieś misje treningowe, by pozn
     </message>
     <message>
         <source>The connection to the server is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączenie z serwerem zostało utracone.</translation>
     </message>
     <message>
         <source>Schemes - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Schematy - nazwa już zajęta</translation>
     </message>
     <message>
         <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schemat z nazwą &apos;%1&apos; już istnieje. Twój schemat został przemianowany na &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schemat broni z nazwą &apos;%1&apos; już istnieje. Zmiany dokonane w schemacie broni zostały odrzucone.</translation>
     </message>
 </context>
 <context>
@@ -3890,7 +3895,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>clan chat</source>
-        <translation type="unfinished"></translation>
+        <translation>czat klanu</translation>
     </message>
 </context>
 <context>
@@ -3996,7 +4001,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>Talk to your clan or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mów do swojego klanu lub wszystkich uczestników:</translation>
     </message>
 </context>
 <context>
@@ -4837,111 +4842,111 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>Kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyrzucony</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten serwer pozwala na dołączenie jedynie zarejestrowanym użytkownikom.</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation type="unfinished"></translation>
+        <translation>orzeł</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation type="unfinished"></translation>
+        <translation>reszka</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten serwer nie obsługuje powtórek!</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting [wiadomość]: Ustaw lub wyczyść wiadomość do pokazania graczom, którzy dołączają do pokoju</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation type="unfinished"></translation>
+        <translation>/save &lt;ID konfiguracji&gt; &lt;nazwa konfiguracji&gt;: Dodaj aktualną konfigurację jako głosowalny wybór w /callvote map</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete &lt;ID konfiguracji&gt;: Usuń głosowalną konfigurację pokoju</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom &lt;nazwa pliku&gt;: Zapisz wszystkie głosowalne konfiguracje (oraz powitanie) tego pokoju do pliku</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom &lt;nazwa pliku&gt;: Wczytaj głosowalne konfiguracje pokoju (oraz powitanie) z pliku</translation>
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stan &apos;tylko zarejestrowani&apos; przełączony.</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Super moc aktywowana.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznana komenda lub nieprawidłowe parametry. Powiedz na czacie &apos;/help&apos; dla listy komend.</translation>
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie możesz wyrzucić siebie!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie możesz wyrzucić jedynego innego gracza!</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gracz nie jest w twoim pokoju.</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gracz jest chroniony przed byciem wyrzuconym.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie jesteś mistrzem pokoju ani administratorem serwera!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>Już jesteś mistrzem pokoju.</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiadomość powitalna wyczyszczona.</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiadomość powitalna ustawiona.</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: To jest dozwolone tylko w pokojach bez mistrza.</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: Brak dostępnych map.</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Jesteś nowym mistrzem pokoju!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/quit: Wyjdź z serwera</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta komenda jest dostępna tylko w poczekalni.</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta komenda jest dostępna tylko w pokojach.</translation>
     </message>
 </context>
 </TS>

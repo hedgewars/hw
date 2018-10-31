@@ -60,7 +60,7 @@
 00:56=Tasak
 00:57=Guma
 00:58=Mina powietrzna
-
+00:59=Creeper
 00:60=Minigun
 
 01:00=Wczytywanie...
@@ -104,6 +104,13 @@
 01:38=%1 powraca.
 01:39=%1 automatycznie pomija turę.
 01:40=%1 klatek na sekundę
+01:41=Parsowanie Lua: WYŁĄCZONE
+01:42=Parsowanie Lua: WŁĄCZONE
+01:43=Parsowanie Lua jest niedozwolone w grze online!
+01:44=%1×
+01:45=%1: %2
+01:46=[Klan] %1: %2
+01:47=[%1]: %2
 
 ; Zdarzenia
 ; Jeż (%1) umiera
@@ -605,7 +612,7 @@
 03:56=Nie przytnij sobie igieł!
 03:57=Narzędzie
 03:58=Latająca bomba zbliżeniowa
-
+03:59=Niedokończona broń
 03:60=Ostateczna broń palna
 
 ; Weapon Descriptions (use | as line breaks)
@@ -640,7 +647,7 @@
 04:28=Krótko po wystrzeleniu, rakieta zacznie wiercić tunel w ziemi|i eksploduje gdy zapalnik zostanie uruchomiony lub jeśli|pojawi się po drugiej stronie terenu.|Atak: Przytrzymaj by strzelić z większą siłą
 04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwuje tony małych|kolorowych kulek wypełnionych materiałem|wybuchowym.|Atak: Strzel kulkami|Góra/Dół: Kontynuuj celowanie
 04:30=Wezwij samolot, żeby zrzucić dużą ilość|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz obszar
-04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Góra/Dół: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech Walkirie wkroczą na pole bitwy!
+04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Lewo/Prawo: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech Walkirie wkroczą na pole bitwy!
 04:32=Niska grawitacja jest skuteczniejsza od dowolnej|diety! Skacz wyżej i na większy dystans lub pozwól|przeciwnikom lecieć jeszcze dalej.|Atak: Aktywuj
 04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia. Włącze-|nie spowoduje zwiększenie zadawanych|obrażeń o 50% do końca tury.|Atak: Aktywuj
 04:34=Czyni Cię nieważliwym na obrażenia do za-|kończenia tury. Ale nie szalej, nadal możesz|utonąć.|Atak: Aktywuj
@@ -668,7 +675,7 @@
 04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)
 04:57=Tworzy elastyczne paski wykonane z gumy,|od których jeże i inne rzeczy odbijają się|bez obrażeń przy upadku.|Lewo/Prawo: Zmiana orientacji paska|Kursor: Umieść pasek w aktualnej pozycji
 04:58=Ta mina będzie się swobodnie unisić w powietrzu i|podążać za jeżami, które się do niej zblizą.|Jej eksplozja jest jednakże mniejsza niż miny przeciwpiechotnej.|Atak: Przytrzymaj by rzucić z większą siłą
-
+04:59=Ta broń jest niedokończona i eksperymentalna.|Używaj na własne ryzyko!
 04:60=Wywołaj deszcz pocisków na swoich wrogów!|A oni myśleli, że są bezpieczni za potrójną|warstwą belek.|Atak: Strzel z pełną mocą|Góra/Dół: Kontynuuj celowanie
           
 ; Game goal strings
@@ -695,3 +702,33 @@
 05:20=Każdy z jeży ma oddzielne uzbrojenie
 05:21=Zespół: Zespoły w klanie wykonują tury po kolei|Wspólny czas: Czas jest wspólny dla każdej drużyny w zespole
 05:22=Silny wiatr: Wiatr wpływa prawie na wszystko
+
+
+; Chat command help
+06:00=Lista podstawowych komend czatu klienta:
+06:01=/togglechat: Przełącz wyświetlanie czatu
+06:02=/clan <wiadomość>: Wyślij wiadomość tylko do członków klanu
+06:03=/me <wiadomość>: Akcja czatu, np. “/me je pizzę” staje się “* Gracz je pizzę”
+06:04=/pause: Przełącz pauzę
+06:05=/pause: Przełącz auto-pomijanie
+06:06=/fullscreen: Przełącz pełny ekran
+06:07=/quit: Wyjdź z Hedgewars
+06:08=/help: Wyświetl listę podstawowych komend czatu klienta
+06:09=/help taunts: Wyświetl listę kpiących komend czatu
+06:10=/history: Przełącz wyświetlanie długiej historii czatu
+06:11=/lua: Przełącz parsowanie Lua (dla twórców)
+06:12=Lista kpiacych komend czatu:
+06:13="tekst": Umieść tekst w dymku rozmowy
+06:14='tekst': Umieść tekst w dymku myślenia
+06:15=-tekst-: Umieść tekst w dymku krzyczenia
+06:16=Dla powyższych komend, podaj numer na początku tekstu, by wybrać jeża.
+06:17=/hsa <tekst>: Umieść tekst w dymku rozmowy w następnym ataku
+06:18=/hta <tekst>: Umieść tekst w dymku myślenia w następnym ataku
+06:19=/hya <tekst>: Umieść tekst w dymku krzyczenia w następnym ataku
+06:20=/hurrah: Spraw, by jeż się cieszył
+06:21=/ilovelotsoflemonade: Spraw, by jeż sikał
+06:22=/juggle: Spraw, by jeż żonglował
+06:23=/rollup: Spraw, by jeż przewrócił oczami
+06:24=/shrug: Spraw, by jeż wzruszył ramionami
+06:25=/wave: Spraw, by jeż pomachał dłonią
+06:26=Nieznana komenda lub niepoprawne parametry. Powiedz w czacie "/help" dla listy komend.
