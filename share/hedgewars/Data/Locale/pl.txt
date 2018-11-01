@@ -103,7 +103,7 @@
 01:37=%1 odchodzi.
 01:38=%1 powraca.
 01:39=%1 automatycznie pomija turę.
-01:40=%1 klatek na sekundę
+01:40=%1 fps
 01:41=Parsowanie Lua: WYŁĄCZONE
 01:42=Parsowanie Lua: WŁĄCZONE
 01:43=Parsowanie Lua jest niedozwolone w grze online!
