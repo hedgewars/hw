@@ -2086,7 +2086,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
-        <translation>Вероятность, что упавший ящик будет аптечкой. Остальные ящики будут с оружием или утилитами.</translation>
+        <translation>Вероятность, что упавший ящик будет аптечкой. Остальные ящики будут с оружием или приспособлениями.</translation>
     </message>
     <message>
         <source>Likelihood of a crate dropping before a turn</source>
@@ -3768,7 +3768,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation>Выстрел из выбранного оружия или активация утилиты:</translation>
+        <translation>Выстрел из выбранного оружия или использование приспособления:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
@@ -3780,7 +3780,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation>Подбор оружия или утилиты:</translation>
+        <translation>Подбор оружия или приспособления:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
