@@ -1,0 +1,9 @@
+[package]
+name = "hwphysics"
+version = "0.1.0"
+authors = ["Hedgewars Project"]
+edition = "2018"
+
+[dependencies]
+fpnum = { path = "../fpnum" }
+integral-geometry = { path = "../integral-geometry" }

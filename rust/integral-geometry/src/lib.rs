@@ -89,6 +89,10 @@ impl Size {
     pub fn to_mask(&self) -> SizeMask {
         SizeMask::new(*self)
     }
+
+    pub fn to_grid_index(&self) -> GridIndex {
+        GridIndex::new(*self)
+    }
 }
 
 pub struct SizeMask{ size: Size }
@@ -101,7 +105,7 @@ impl SizeMask {
             width: !(size.width - 1),
             height: !(size.height - 1)
         };
-        SizeMask { size }
+        Self { size }
     }
 
     #[inline]
@@ -117,6 +121,22 @@ impl SizeMask {
     #[inline]
     pub fn contains(&self, point: Point) -> bool {
         self.contains_x(point.x as usize) && self.contains_y(point.y as usize)
+    }
+}
+
+pub struct GridIndex{ shift: Point }
+
+impl GridIndex {
+    pub fn new(size: Size) -> Self {
+        assert!(size.is_power_of_two());
+        let shift = Point::new(size.width.trailing_zeros() as i32,
+                               size.height.trailing_zeros() as i32);
+        Self { shift }
+    }
+
+    pub fn map(&self, position: Point) -> Point {
+        Point::new(position.x >> self.shift.x,
+                   position.y >> self.shift.y)
     }
 }
 
