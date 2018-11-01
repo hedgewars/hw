@@ -2285,7 +2285,7 @@ just enter your nickname.</source>
     <name>QAction</name>
     <message>
         <source>Kick</source>
-        <translation>Выпнуть</translation>
+        <translation>Кикнуть</translation>
     </message>
     <message>
         <source>Restrict Joins</source>
@@ -2301,7 +2301,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Ban</source>
-        <translation>Заблокировать</translation>
+        <translation>Забанить</translation>
     </message>
     <message>
         <source>Follow</source>
