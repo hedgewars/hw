@@ -550,7 +550,8 @@ begin
 end;
 
 function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
-var s:shortstring;
+var s: shortstring;
+tempSnd: TSound;
 rwops: PSDL_RWops;
 begin
     s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
@@ -572,9 +573,9 @@ begin
             // Fallback taunts
             if (not pfsExists(s)) then
                 begin
-                snd := GetFallbackV(snd);
-                if snd = sndNone then
-                    exit;
+                tempSnd := GetFallbackV(snd);
+                if tempSnd <> sndNone then
+                    snd := tempSnd;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
