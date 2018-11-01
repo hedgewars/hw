@@ -1567,7 +1567,7 @@ begin
             if Gear^.Kind = gtMinigunBullet then
                 begin
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5,
-                                Gear^.Hedgehog, EXPLNoDamage{ or EXPLDontDraw or EXPLNoGfx});
+                                Gear^.Hedgehog, (EXPLNoDamage or EXPLDoNotTouchHH){ or EXPLDontDraw or EXPLNoGfx});
                 VGear := AddVisualGear(hwRound(Gear^.X + Gear^.dX * 5), hwRound(Gear^.Y + Gear^.dY * 5), vgtBulletHit);
                 end
             else
