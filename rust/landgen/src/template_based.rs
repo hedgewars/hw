@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use integral_geometry::{Point, Size, Rect};
+use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
 use LandGenerationParameters;
 use LandGenerator;
@@ -31,18 +31,79 @@ impl OutlinePoints {
                         }).collect()
                 }).collect(),
             fill_points: outline_template.fill_points.clone(),
-            size: outline_template.size
+            size: outline_template.size,
         }
     }
 
+    fn total_len(&self) -> usize {
+        self.islands.iter().map(|i| i.len()).sum::<usize>() + self.fill_points.len()
+    }
+
     fn iter_mut(&mut self) -> impl Iterator<Item = &mut Point> {
-        self.islands.iter_mut()
+        self.islands
+            .iter_mut()
             .flat_map(|i| i.iter_mut())
             .chain(self.fill_points.iter_mut())
     }
 
-    fn distort<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
+    fn divide_edge<I: Iterator<Item = u32>>(
+        &self,
+        start_point: Point,
+        end_point: Point,
+        random_numbers: &mut I,
+    ) -> Option<Point> {
+        None
+    }
+
+    fn divide_edges<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
+        for is in 0..self.islands.len() {
+            let island = &mut self.islands[is];
+            let mut i = 0;
+
+            while i < island.len() {
+                let start_point = island[i];
+                let end_point = if i + 1 < island.len() {
+                    island[i + 1]
+                } else {
+                    island[0]
+                };
+
+                if let Some(new_point) = self.divide_edge(start_point, end_point, random_numbers) {
+                    (*island).insert(i + 1, new_point);
+                    i += 2;
+                } else {
+                    i += 1;
+                }
+            }
+        }
+    }
+
+    fn bezierize(&mut self) {
         unimplemented!()
+    }
+
+    fn distort<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
+        loop {
+            let old_len = self.total_len();
+            self.divide_edges(random_numbers);
+
+            if self.total_len() != old_len {
+                break;
+            }
+        }
+
+        self.bezierize();
+    }
+
+    fn draw<T: Copy + PartialEq>(&self, land: &mut Land2D<T>, value: T) {
+        for island in &self.islands {
+            if island.len() > 1 {
+                for i in 0..island.len() - 1 {
+                    land.draw_line(island[i], island[i + 1], value);
+                }
+                land.draw_line(island[island.len() - 1], island[0], value);
+            }
+        }
     }
 }
 
@@ -65,41 +126,57 @@ impl OutlineTemplate {
             can_flip: false,
             can_invert: false,
             can_mirror: false,
-            is_negative: false
+            is_negative: false,
         }
     }
 
     pub fn flippable(self) -> Self {
-        Self { can_flip: true, ..self }
+        Self {
+            can_flip: true,
+            ..self
+        }
     }
 
     pub fn mirrorable(self) -> Self {
-        Self { can_mirror: true, ..self }
+        Self {
+            can_mirror: true,
+            ..self
+        }
     }
 
     pub fn invertable(self) -> Self {
-        Self { can_invert: true, ..self }
+        Self {
+            can_invert: true,
+            ..self
+        }
     }
 
     pub fn negative(self) -> Self {
-        Self { is_negative: true, ..self }
+        Self {
+            is_negative: true,
+            ..self
+        }
     }
 
-    pub fn with_fill_points(self, fill_points: Vec<Point>) -> Self
-    {
-        Self { fill_points, ..self }
+    pub fn with_fill_points(self, fill_points: Vec<Point>) -> Self {
+        Self {
+            fill_points,
+            ..self
+        }
     }
 
-    pub fn with_islands(mut self, islands: Vec<Vec<Rect>>) -> Self {
+    pub fn with_islands(self, islands: Vec<Vec<Rect>>) -> Self {
         Self { islands, ..self }
     }
 
     pub fn add_fill_points(mut self, points: &[Point]) -> Self {
-        self.fill_points.extend_from_slice(points); self
+        self.fill_points.extend_from_slice(points);
+        self
     }
 
     pub fn add_island(mut self, island: &[Rect]) -> Self {
-        self.islands.push(island.into()); self
+        self.islands.push(island.into());
+        self
     }
 }
 
@@ -137,7 +214,9 @@ impl LandGenerator for TemplatedLandGenerator {
         if self.outline_template.can_mirror {
             if let Some(b) = random_numbers.next() {
                 if b & 1 != 0 {
-                    points.iter_mut().for_each(|p| p.x = land.width() as i32 - 1 - p.x);
+                    points
+                        .iter_mut()
+                        .for_each(|p| p.x = land.width() as i32 - 1 - p.x);
                 }
             }
         }
@@ -146,21 +225,22 @@ impl LandGenerator for TemplatedLandGenerator {
         if self.outline_template.can_flip {
             if let Some(b) = random_numbers.next() {
                 if b & 1 != 0 {
-                    points.iter_mut().for_each(|p|
-                        p.y = land.height() as i32 - 1 - p.y);
+                    points
+                        .iter_mut()
+                        .for_each(|p| p.y = land.height() as i32 - 1 - p.y);
                 }
             }
         }
 
         points.distort(random_numbers);
 
-        // draw_edge(points, land, parameters.zero)
+        points.draw(&mut land, parameters.zero);
 
-        for p in points.fill_points {
-            land.fill(p, parameters.zero, parameters.zero)
+        for p in &points.fill_points {
+            land.fill(*p, parameters.zero, parameters.zero)
         }
 
-        // draw_edge(points, land, parameters.basic)
+        points.draw(&mut land, parameters.basic);
 
         land
     }
@@ -171,7 +251,7 @@ fn points_test() {
     let mut points = OutlinePoints {
         islands: vec![vec![]],
         fill_points: vec![Point::new(1, 1)],
-        size: Size::square(100)
+        size: Size::square(100),
     };
 
     points.iter_mut().for_each(|p| p.x = 2);
