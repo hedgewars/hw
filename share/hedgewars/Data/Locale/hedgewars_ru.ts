@@ -649,7 +649,14 @@ If this keeps happening, please click the &apos;Feedback&apos; button in the mai
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла фатальная ошибка! - Движку игры пришлось остановить работу.
+
+Мы очень сожалеем о произошедем :(
+
+Если это продолжает происходить, нажмите кнопку &apos;Отзыв&apos; в главном меню!
+
+Последнее сообщение от движка:
+%1</translation>
     </message>
 </context>
 <context>
@@ -916,11 +923,11 @@ Last engine message:
     </message>
     <message>
         <source>Reason:</source>
-        <translation type="unfinished"></translation>
+        <translation>Причина:</translation>
     </message>
     <message>
         <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Соединение было отклонено хостом или истекло время ожидания. Кажется, что-то пошло не так с официальным сервером. Это может быть временной проблемой. Пожалуйста, попробуйте чуть позже.</translation>
     </message>
     <message>
         <source>The connection was refused by the host or timed out. This might have one of the following reasons:
@@ -929,7 +936,12 @@ Last engine message:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Соединение было отклонено хостом или истекло время ожидания. Это могло произойти по одной из следующих причин:
+- В данный момент сервер Hegdewars не запущен на хосте
+- Указанный неправильный номер порта
+- Произошла временная ошибка сети
+
+Пожалуйста, проверьте имя хоста и настройки порта и/или попробуйте ещё раз.</translation>
     </message>
 </context>
 <context>
@@ -1068,15 +1080,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Player: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Игрок: %1</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished">Тема: %1</translation>
+        <translation>Тема: %1</translation>
     </message>
     <message>
         <source>Map: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Карта: %1</translation>
     </message>
     <message>
         <source>Record: %1</source>
@@ -1282,7 +1294,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Brush size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер кисти</translation>
     </message>
 </context>
 <context>
@@ -1325,7 +1337,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished">Случайная команда</translation>
+        <translation>Случайная команда</translation>
     </message>
     <message>
         <source>Play a random example of this voice</source>
@@ -1341,23 +1353,23 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Randomize the team name</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайное название команды</translation>
     </message>
     <message>
         <source>Randomize the grave</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайное надгробье</translation>
     </message>
     <message>
         <source>Randomize the flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайный флаг</translation>
     </message>
     <message>
         <source>Randomize the voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайный голос</translation>
     </message>
     <message>
         <source>Randomize the fort</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайный форт</translation>
     </message>
     <message>
         <source>CPU %1</source>
@@ -1552,7 +1564,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть онлайн документацию по Hedgewars в браузере</translation>
     </message>
 </context>
 <context>
@@ -2074,7 +2086,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вероятность, что упавший ящик будет аптечкой. Остальные ящики будут с оружием или утилитами.</translation>
     </message>
     <message>
         <source>Likelihood of a crate dropping before a turn</source>
@@ -2082,15 +2094,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Health bonus for collecting a health crate</source>
-        <translation type="unfinished"></translation>
+        <translation>Количество здоровья за сбор аптечки</translation>
     </message>
     <message>
         <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Время детонации мин. Случайное время находится между 0 и 5 секундами. Время детонации воздушных мин будет четвертью от времени обычных.</translation>
     </message>
     <message>
         <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Среднее количество мин, расставленных на карте среднего размера. Это число будет масштабировано на другие карты.</translation>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
@@ -2126,7 +2138,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
-        <translation type="unfinished"></translation>
+        <translation>Земля не может быть разрушена большинством оружия.</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
@@ -2818,7 +2830,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Framerate</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота кадров</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
@@ -2922,7 +2934,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ёжик %1</translation>
     </message>
 </context>
 <context>
@@ -2956,11 +2968,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить команду &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя удалить системную схему &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
@@ -3062,11 +3074,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу открыть &apos;%1&apos; для записи</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу открыть &apos;%1&apos; для чтения</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
@@ -3094,11 +3106,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Failed to generate captcha</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось сгенерировать капчу</translation>
     </message>
     <message>
         <source>Failed to download captcha</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось скачать капчу</translation>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
@@ -3697,7 +3709,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>autocam / find hedgehog</source>
-        <translation type="unfinished"></translation>
+        <translation>Автофокус / найти ёжика</translation>
     </message>
     <message>
         <source>speed up replay</source>
@@ -3820,7 +3832,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation type="unfinished">Включить автоматическую камеру / перенести фокус на активного ежа</translation>
+        <translation>Включить автоматическую камеру / перенести фокус на активного ежа</translation>
     </message>
     <message>
         <source>Demo replay:</source>
@@ -4023,11 +4035,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Enter</source>
-        <translation>Ввод</translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>=</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -4051,15 +4063,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Scroll lock</translation>
     </message>
     <message>
         <source>Right meta</source>
@@ -4233,7 +4245,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>New voting started</source>
-        <translation type="unfinished"></translation>
+        <translation>Началось новое голосование</translation>
     </message>
     <message>
         <source>kick</source>
@@ -4277,15 +4289,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams: укажите число от 2 до 8</translation>
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступные для голосования команды: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</translation>
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation type="unfinished"></translation>
+        <translation>Игра не может быть начата пока не будет как минимум две команды!</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
@@ -4305,83 +4317,83 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation type="unfinished"></translation>
+        <translation>Слишком много команд!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation type="unfinished"></translation>
+        <translation>Слишком много ёжиков!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>В списке уже есть команда с таким же названием.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation type="unfinished"></translation>
+        <translation>Присоединение невозможно: Идёт раунд.</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой комнате сейчас нельзя добавлять новые команды.</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка: Вы пытаетесь удалить несуществующую команду.</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы не можете удалить чужую команду.</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Некорректное название комнаты! Название должно иметь длину от 1 до 40 символов, не должно иметь пробелов в начале и конце и не должно содержать следующие символы: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Комната с таким названием уже существует.</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: Укажите ник</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: Нет такого пользователя!</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: Нет такой карты!</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote pause: Игра не запущена!</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote hedgehogs: Укажите число от 1 до 8.</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Некорректное название комнаты! Название должно иметь длину от 1 до 40 символов, не должно иметь пробелов в начале и конце и не должно содержать следующие символы: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет такой комнаты.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия комнаты не совместима с версией вашей игры!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ запрещён. К этой комнате сейчас запрещено подсоединяться.</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ запрещён. Эта комната только для зарегистрированных пользователей.</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы забанены в этой комнате.</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
@@ -4389,7 +4401,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Некорректный ник! Ник должен иметь длину от 1 до 40 символов, не должен иметь пробелов в начале и конце и не должен содержать следующие символы: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
@@ -4401,19 +4413,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сейчас не идёт голосование.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы уже проголосовали.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш голос был учтён.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосование закрыто.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
@@ -4421,7 +4433,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Время голосования истекло.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
@@ -4429,7 +4441,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
+        <translation>/info &lt;имя_игрока&gt;: Показать информацию об игроке</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
@@ -4585,11 +4597,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неправильная команда или параметры. Напишите в чате &apos;/help&apos; для вывода списка команд.</translation>
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы не можете кикнуть себя!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
@@ -4597,51 +4609,51 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Игрок не в вашей комнате.</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation type="unfinished"></translation>
+        <translation>Этого игрока нельзя кикнуть.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы не лидер комнаты или администатор сервера!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы уже лидер комнаты.</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сообщение приветствия очищено.</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сообщение приветствия установлено.</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: Команда доступна только в комнатах без лидера.</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: Нет доступных карт.</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы новый лидер комнаты!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/quit: Выйти с сервера</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта команда доступна только в лобби.</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта команда доступна только в комнате.</translation>
     </message>
 </context>
 </TS>
