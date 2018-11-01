@@ -57,19 +57,27 @@ impl OutlinePoints {
 
     fn divide_edges<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
         for is in 0..self.islands.len() {
-            let island = &mut self.islands[is];
             let mut i = 0;
+            let mut start_point = Point::zero();
+            let mut end_point = Point::zero();
 
-            while i < island.len() {
-                let start_point = island[i];
-                let end_point = if i + 1 < island.len() {
-                    island[i + 1]
-                } else {
-                    island[0]
-                };
+            loop {
+                {
+                    let island = &self.islands[is];
+                    if i < island.len() {
+                        start_point = island[i];
+                        end_point = if i + 1 < island.len() {
+                            island[i + 1]
+                        } else {
+                            island[0]
+                        };
+                    } else {
+                        break
+                    }
+                }
 
                 if let Some(new_point) = self.divide_edge(start_point, end_point, random_numbers) {
-                    (*island).insert(i + 1, new_point);
+                    self.islands[is].insert(i + 1, new_point);
                     i += 2;
                 } else {
                     i += 1;
