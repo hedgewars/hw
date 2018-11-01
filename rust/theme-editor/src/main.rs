@@ -7,7 +7,7 @@ use sdl2::{
     }
 };
 
-use integral_geometry::{Point, Size};
+use integral_geometry::{Point, Size, Rect};
 
 use rand::{
     thread_rng, RngCore, Rng,
@@ -15,6 +15,10 @@ use rand::{
 };
 
 use landgen::{
+    template_based::{
+        OutlineTemplate,
+        TemplatedLandGenerator
+    },
     LandGenerator,
     LandGenerationParameters
 };
@@ -35,6 +39,7 @@ impl <T: LandGenerator> LandSource<T> {
             generator
         }
     }
+
     fn next(&mut self, parameters: LandGenerationParameters<u32>) -> Land2D<u32> {
         self.generator.generate_land(parameters, &mut self.rnd)
     }
@@ -66,6 +71,30 @@ const WIDTH: u32 = 512;
 const HEIGHT: u32 = 512;
 const SIZE: Size = Size {width: 512, height: 512};
 
+fn point() -> Point {
+    Point::new(rnd(WIDTH as i32), rnd(HEIGHT as i32))
+}
+fn rect() -> Rect {
+    Rect::new(rnd(WIDTH as i32), rnd(HEIGHT as i32), rnd(128), rnd(128))
+}
+
+fn init_source() -> LandSource<TemplatedLandGenerator> {
+    let template = OutlineTemplate::new(SIZE)
+        .with_fill_points((0..32).map(|_| point()).collect())
+        .with_islands((0..16).map(|_| vec![rect()]).collect());
+
+    let generator = TemplatedLandGenerator::new(template);
+    LandSource::new(generator)
+}
+
+fn draw_random_lines(land: &mut Land2D<u32>) {
+    for i in 0..32 {
+        land.draw_thick_line(point(), point(), rnd(5), u32::max_value());
+
+        land.fill_circle(point(), rnd(60), u32::max_value());
+    }
+}
+
 fn main() {
     let sdl = sdl2::init().unwrap();
     let _image = sdl2::image::init(sdl2::image::INIT_PNG).unwrap();
@@ -77,18 +106,11 @@ fn main() {
         .position_centered()
         .build().unwrap();
 
+    let mut source = init_source();
+    let mut land = source.next(
+        LandGenerationParameters::new(0, u32::max_value()));
+
     let mut land_surf = Surface::new(WIDTH, HEIGHT, PixelFormatEnum::ARGB8888).unwrap();
-
-    fn point() -> Point {
-        Point::new(rnd(WIDTH as i32), rnd(HEIGHT as i32))
-    }
-
-    let mut land = Land2D::new(SIZE, 0);
-    for i in 0..32 {
-        land.draw_thick_line(point(), point(), rnd(5), u32::max_value());
-
-        land.fill_circle(point(), rnd(60), u32::max_value());
-    }
 
     fill_texture(&mut land_surf, &land);
 

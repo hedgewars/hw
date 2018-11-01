@@ -1,4 +1,4 @@
-mod template_based;
+pub mod template_based;
 
 extern crate integral_geometry;
 extern crate land2d;
@@ -7,6 +7,12 @@ extern crate itertools;
 pub struct LandGenerationParameters<T> {
     zero: T,
     basic: T,
+}
+
+impl <T: Copy + PartialEq> LandGenerationParameters<T> {
+    pub fn new(zero: T, basic: T) -> Self {
+        Self { zero, basic }
+    }
 }
 
 pub trait LandGenerator {

@@ -167,6 +167,16 @@ impl Rect {
     pub fn new(x: i32, y: i32, width: u32, height: u32) -> Self {
         Self { x, y, width, height }
     }
+
+    #[inline]
+    pub fn size(&self) -> Size {
+        Size::new(self.width as usize, self.height as usize)
+    }
+
+    #[inline]
+    pub fn area(&self) -> usize {
+        self.size().area()
+    }
 }
 
 
