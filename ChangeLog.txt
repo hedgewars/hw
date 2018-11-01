@@ -85,6 +85,7 @@ Frontend:
  * No longer save default weapon schemes into file
  * Pseudo player names in chat (like “[server]”) are no longer clickable
  * Lobby/room: No longer allow opening context menu if no player selected
+ * Fix game window width/height setting being broken when using Arabic locale
 
 Server:
  + Add “/help” chat command for command help

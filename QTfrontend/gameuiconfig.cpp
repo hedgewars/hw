@@ -240,8 +240,8 @@ void GameUIConfig::resizeToConfigValues()
 void GameUIConfig::SaveOptions()
 {
     setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
-    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->text());
-    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->text());
+    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->value());
+    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->value());
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
@@ -363,8 +363,8 @@ std::pair<QRect, QRect> GameUIConfig::vid_ResolutionPair() {
         full.setWidth(wh[0].toInt());
         full.setHeight(wh[1].toInt());
     }
-    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->text().toInt());
-    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->text().toInt());
+    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->value());
+    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->value());
     return std::make_pair(full, windowed);
 }
 
