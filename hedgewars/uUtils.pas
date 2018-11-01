@@ -567,7 +567,7 @@ while i < l do
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F))  or // CJK Compatibility Forms
-       ((#$FF66  <= u) and (u <= #$FF9D)))    // halfwidth katakana
+       ((#$FF00  <= u) and (u <= #$FFEF)))    // half- and fullwidth characters
        then
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
