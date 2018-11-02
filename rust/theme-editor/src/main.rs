@@ -7,7 +7,7 @@ use sdl2::{
     }
 };
 
-use integral_geometry::{Point, Size, Rect};
+use integral_geometry::{Point, Size, Rect, Line};
 
 use rand::{
     thread_rng, RngCore, Rng,
@@ -15,10 +15,8 @@ use rand::{
 };
 
 use landgen::{
-    template_based::{
-        OutlineTemplate,
-        TemplatedLandGenerator
-    },
+    template_based::TemplatedLandGenerator,
+    outline_template::OutlineTemplate,
     LandGenerator,
     LandGenerationParameters
 };
@@ -75,7 +73,7 @@ fn point() -> Point {
     Point::new(rnd(WIDTH as i32), rnd(HEIGHT as i32))
 }
 fn rect() -> Rect {
-    Rect::new(rnd(WIDTH as i32), rnd(HEIGHT as i32), rnd(128), rnd(128))
+    Rect::new(rnd(WIDTH as i32), rnd(HEIGHT as i32), rnd(120) + 8, rnd(120) + 8)
 }
 
 fn init_source() -> LandSource<TemplatedLandGenerator> {
@@ -89,7 +87,7 @@ fn init_source() -> LandSource<TemplatedLandGenerator> {
 
 fn draw_random_lines(land: &mut Land2D<u32>) {
     for i in 0..32 {
-        land.draw_thick_line(point(), point(), rnd(5), u32::max_value());
+        land.draw_thick_line(Line::new(point(), point()), rnd(5), u32::max_value());
 
         land.fill_circle(point(), rnd(60), u32::max_value());
     }
