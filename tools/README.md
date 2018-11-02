@@ -14,6 +14,7 @@ it often contains a brief comment at the top.
 * `create_dmg.sh`: Generate a .dmg file (relevant for Mac)
 * `dmg_pkg_install.sh`: Downloads and install a .dmg from a URL (relevant for Mac)
 * `docgen.sh`: Generate QTfrontend documentation with Doxygen (it's not very good)
+* `check_translations.sh`: Check most translation files for mistakes and generate a simple progress report
 
 ### Directories
 * `hwmapconverter`: C++ application to edit HWMAP files in text form
