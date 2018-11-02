@@ -2104,7 +2104,7 @@ begin
         tY:=Gear^.Y-targ^.Y;
         // allow escaping - should maybe flag this too
         if (GameTicks > Gear^.FlightTime + 10000) or
-            (not ((abs(hwRound(tX)) + abs(hwRound(tY)) < Gear^.Angle * 9) and
+            (not ((tX.Round + tY.Round < Gear^.Angle * 9) and
                   (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Angle * 6))))
              then
             targ:= nil
