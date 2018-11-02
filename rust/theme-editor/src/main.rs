@@ -76,10 +76,18 @@ fn rect() -> Rect {
     Rect::new(rnd(WIDTH as i32), rnd(HEIGHT as i32), rnd(120) + 8, rnd(120) + 8)
 }
 
+fn land_rect() -> Rect {
+    Rect::at_origin(SIZE)
+}
+
+fn test_template() -> OutlineTemplate {
+    OutlineTemplate::new(SIZE)
+        .with_fill_points(vec![land_rect().center()])
+        .add_island(&land_rect().split_at(land_rect().center()))
+}
+
 fn init_source() -> LandSource<TemplatedLandGenerator> {
-    let template = OutlineTemplate::new(SIZE)
-        .with_fill_points((0..32).map(|_| point()).collect())
-        .with_islands((0..16).map(|_| vec![rect()]).collect());
+    let template = test_template();
 
     let generator = TemplatedLandGenerator::new(template);
     LandSource::new(generator)
