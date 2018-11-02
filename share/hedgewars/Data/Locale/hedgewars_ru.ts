@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это не обязательно, но эта информация может помочь нам устранить ошибки и другие технические проблемы.</translation>
     </message>
 </context>
 <context>
@@ -1071,12 +1071,12 @@ just enter your nickname.</source>
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Видео метаданные. %1 = ширина видео, %2 = высота видео, %3 = кадров в секунду = %4 = название кодека</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Видео метаданные. %1 = ширина видео, %2 = высота видео, %3 = название кодека</translation>
     </message>
     <message>
         <source>Player: %1</source>
@@ -1092,7 +1092,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Record: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись: %1</translation>
     </message>
 </context>
 <context>
@@ -1305,7 +1305,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите действие, чтобы изменить привязку к клавише</translation>
     </message>
     <message>
         <source>Use my default</source>
