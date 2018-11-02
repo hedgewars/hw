@@ -127,11 +127,20 @@ fn test_template() -> OutlineTemplate {
         .add_fill_points(&[Point::new(1023, 0)])
 }
 
-
 fn init_source() -> LandSource<TemplatedLandGenerator> {
     let template = test_template();
     let generator = TemplatedLandGenerator::new(template);
     LandSource::new(generator)
+}
+
+fn draw_center_mark(land: &mut Land2D<u32>) {
+    for i in 0..32 {
+        land.draw_thick_line(Line::new(Point::new(LAND_WIDTH as i32 / 2, 0),
+                                       Point::new(LAND_WIDTH as i32 / 2, LAND_HEIGHT as i32)), 10, 128);
+        land.draw_thick_line(Line::new(Point::new(0, LAND_HEIGHT as i32 / 2),
+                                       Point::new(LAND_WIDTH as i32, LAND_HEIGHT as i32 / 2)), 10, 128);
+        land.fill_circle(Point::new(LAND_WIDTH as i32, LAND_HEIGHT as i32) / 2, 60, 128);
+    }
 }
 
 fn draw_random_lines(land: &mut Land2D<u32>) {
@@ -156,8 +165,7 @@ fn main() {
     let mut source = init_source();
     let mut land = source.next(
         LandGenerationParameters::new(0, u32::max_value()));
-    draw_random_lines(&mut land);
-
+    draw_center_mark(&mut land);
 
     let mut land_surf = Surface::new(LAND_WIDTH, LAND_HEIGHT, PixelFormatEnum::ARGB8888).unwrap();
 
