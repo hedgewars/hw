@@ -68,8 +68,8 @@ impl OutlinePoints {
     ) -> Option<Point> {
         #[inline]
         fn intersect(p: &Point, m: &Point, p1: &Point, p2: &Point) -> bool {
-            let t1 = (m.x - p1.x) * p.y - p.x * (m.y - p1.y);
-            let t2 = (m.x - p2.x) * p.y - p.x * (m.y - p2.y);
+            let t1 = (m - p1).cross(p);
+            let t2 = (m - p2).cross(p);
 
             (t1 > 0) != (t2 > 0)
         }
@@ -77,7 +77,7 @@ impl OutlinePoints {
         #[inline]
         fn solve_intersection(p: &Point, m: &Point, s: &Point, e: &Point) -> Option<(i32, u32)> {
             let f = *e - *s;
-            let aqpb = (p.x * f.y - f.x * p.y) as i64;
+            let aqpb = p.cross(f) as i64;
 
             if aqpb != 0 {
                 let iy = ((((s.x - m.x) as i64 * p.y as i64 + m.y as i64 * p.x as i64)
@@ -93,7 +93,7 @@ impl OutlinePoints {
                 let intersection_point = Point::new(ix, iy);
                 let diff_point = *m - intersection_point;
                 let d = diff_point.integral_norm();
-                let t = p.y * diff_point.y + p.x * diff_point.x;
+                let t = p.dot(diff_point);
 
                 Some((t, d))
             } else {
@@ -122,7 +122,7 @@ impl OutlinePoints {
             // check against left border
             let iyl = (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y;
             let dl = Point::new(mid_point.x - map_box.left(), mid_point.y - iyl).integral_norm();
-            let t = p.x * (mid_point.x - full_box.left()) + p.y * (mid_point.y - iyl);
+            let t = p.dot(mid_point - Point::new(full_box.left(), iy1));
 
             if t > 0 {
                 dist_left = dl;
@@ -145,7 +145,7 @@ impl OutlinePoints {
             // top border
             let ixl = (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x;
             let dl = Point::new(mid_point.y - map_box.top(), mid_point.x - ixl).integral_norm();
-            let t = p.y * (mid_point.y - full_box.top()) + p.x * (mid_point.x - ixl);
+            let t = p.dot(mid_point - Point::new(ix1, full_box.top());
 
             if t > 0 {
                 dist_left = min(dist_left, dl);

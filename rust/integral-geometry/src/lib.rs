@@ -63,6 +63,11 @@ impl Point {
     pub fn rotate90(self) -> Self {
         Point::new(self.y, -self.x)
     }
+
+    #[inline]
+    pub fn cross(self, other: Point) -> i32 {
+        self.dot(other.rotate90())
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
