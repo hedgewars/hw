@@ -554,7 +554,6 @@ var s: shortstring;
 tempSnd: TSound;
 rwops: PSDL_RWops;
 begin
-    s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
     PlaySoundV:= false;
     if ((not isSoundEnabled) and (not (soundAsMusic and isMusicEnabled))) or fastUntilLag then
         exit;
