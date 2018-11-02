@@ -699,7 +699,6 @@ function onGameInit()
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)
 	end
-	WriteLnToConsole("TechRacer: Using map "..tostring(mapID))
 
 	addHashData(mapID)
 
@@ -911,6 +910,8 @@ function onGameStart()
 	roundN = 0
 	lastRound = TotalRounds
 	RoundHasChanged = false
+	WriteLnToConsole("TechRacer: Using map #"..tostring(mapID-1).." (mapID="..tostring(mapID)..")")
+	officialChallenge = detectMapWithDigest()
 
 	RebuildTeamInfo()
 
@@ -1252,15 +1253,13 @@ function onAchievementsDeclaration()
 		raceType = "mixed race"
 	end
 
-	map = detectMapWithDigest()
-
 	for i = 0, (numTeams-1) do
 		if teamScore[i] < MAX_TURN_TIME then
-			DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+			DeclareAchievement(raceType, teamNameArr[i], officialChallenge, teamScore[i])
 		end
 	end
 
-	if map ~= nil and fastCount > 0 then
+	if officialChallenge ~= nil and fastCount > 0 then
 		StartGhostPoints(fastCount)
 
 		for i = 0, (fastCount - 1) do

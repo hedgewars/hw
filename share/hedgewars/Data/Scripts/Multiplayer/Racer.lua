@@ -118,6 +118,8 @@ local TeamRope = false
 local waypointCursor = false
 local waypointPreview = nil
 
+local officialChallenge
+
 --------------------------
 -- hog and team tracking variales
 --------------------------
@@ -710,6 +712,7 @@ function onGameStart()
         roundN = 0
         lastRound = TotalRounds
         RoundHasChanged = false
+        officialChallenge = detectMapWithDigest()
 
 	if GetBackgroundBrightness() == 1 then
 		-- Dark waypoint colour theme
@@ -1094,15 +1097,13 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMapWithDigest()
-
     for i = 0, (numTeams-1) do
         if teamScore[i] < MAX_TURN_TIME then
-            DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+            DeclareAchievement(raceType, teamNameArr[i], officialChallenge, teamScore[i])
         end
     end
 
-    if map ~= nil and fastCount > 0 then
+    if officialChallenge ~= nil and fastCount > 0 then
         StartGhostPoints(fastCount)
 
         for i = 0, (fastCount - 1) do

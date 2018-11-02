@@ -27,7 +27,11 @@ function detectMapWithDigest()
             mapString = "Border," .. mapString
         end
 
-        --WriteLnToConsole(mapString)
-        return(official_racer_maps[mapString])
+        WriteLnToConsole("OfficialChallenges: Hash: "..mapString)
+        local map = official_racer_maps[mapString]
+        if map ~= nil then
+            WriteLnToConsole("OfficialChallenges: Detected official challenge: "..map)
+        end
+        return map
     end
 end
