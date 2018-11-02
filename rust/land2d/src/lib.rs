@@ -17,7 +17,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
     pub fn new(play_size: Size, fill_value: T) -> Self {
         let real_size = play_size.next_power_of_two();
         let top_left = Point::new(
-            (real_size.width - play_size.width / 2) as i32,
+            ((real_size.width - play_size.width) / 2) as i32,
             (real_size.height - play_size.height) as i32,
         );
         let play_box = Rect::from_size(top_left, play_size);
