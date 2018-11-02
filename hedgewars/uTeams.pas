@@ -435,7 +435,7 @@ else
         NextClan:= false;
         end;
 
-    if ((GameFlags and gfSwitchHog) <> 0) and not(CurrentTeam^.hasGone) then
+    if ((GameFlags and gfSwitchHog) <> 0) and (not CurrentTeam^.hasGone) then
         begin
         g:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
         CurAmmoGear:= g;
