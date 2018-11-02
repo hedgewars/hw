@@ -58,6 +58,11 @@ impl Point {
             matrix[2] * self.x + matrix[3] * self.y,
         )
     }
+
+    #[inline]
+    pub fn rotate90(self) -> Self {
+        Point::new(-self.y, self.x)
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -415,6 +420,11 @@ impl Line {
     #[inline]
     pub fn center(&self) -> Point {
         (self.start + self.end) / 2
+    }
+
+    #[inline]
+    pub fn scaled_normal(&self) -> Point {
+        (self.end - self.start).rotate90()
     }
 }
 

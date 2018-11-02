@@ -105,10 +105,7 @@ impl OutlinePoints {
         // new point should fall inside this box
         let map_box = self.play_box.with_margin(min_distance);
 
-        let p = Point::new(
-            segment.end.y - segment.start.y,
-            segment.start.x - segment.end.x,
-        );
+        let p = -segment.scaled_normal();
         let mid_point = segment.center();
 
         if (p.integral_norm() < min_distance as u32 * 3) || !map_box.contains_inside(mid_point) {
