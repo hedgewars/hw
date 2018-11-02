@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 
 [dependencies]
+fpnum = { path = "../fpnum" }
