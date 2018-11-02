@@ -68,8 +68,8 @@ impl OutlinePoints {
     ) -> Option<Point> {
         #[inline]
         fn intersect(p: &Point, m: &Point, p1: &Point, p2: &Point) -> bool {
-            let t1 = (m - p1).cross(p);
-            let t2 = (m - p2).cross(p);
+            let t1 = (*m - *p1).cross(*p);
+            let t2 = (*m - *p2).cross(*p);
 
             (t1 > 0) != (t2 > 0)
         }
@@ -112,7 +112,7 @@ impl OutlinePoints {
             return None;
         }
 
-        let full_box = Rect::from_size(Point::zero(), self.size).with_margin(min_distance);
+        let full_box = Rect::at_origin(self.size).with_margin(min_distance);
 
         let mut dist_left = (self.size.width + self.size.height) as u32;
         let mut dist_right = dist_left;
@@ -122,7 +122,7 @@ impl OutlinePoints {
             // check against left border
             let iyl = (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y;
             let dl = Point::new(mid_point.x - map_box.left(), mid_point.y - iyl).integral_norm();
-            let t = p.dot(mid_point - Point::new(full_box.left(), iy1));
+            let t = p.dot(mid_point - Point::new(full_box.left(), iyl));
 
             if t > 0 {
                 dist_left = dl;
@@ -145,7 +145,7 @@ impl OutlinePoints {
             // top border
             let ixl = (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x;
             let dl = Point::new(mid_point.y - map_box.top(), mid_point.x - ixl).integral_norm();
-            let t = p.dot(mid_point - Point::new(ix1, full_box.top());
+            let t = p.dot(mid_point - Point::new(ixl, full_box.top()));
 
             if t > 0 {
                 dist_left = min(dist_left, dl);
