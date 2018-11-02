@@ -170,6 +170,19 @@ macro_rules! bin_op_impl {
     };
 }
 
+macro_rules! scalar_bin_op_impl {
+    ($($op: tt)::+, $name: tt) => {
+        impl $($op)::+<i32> for Point {
+            type Output = Self;
+
+            #[inline]
+            fn $name(self, rhs: i32) -> Self::Output {
+                Self::new(self.x.$name(rhs), self.y.$name(rhs))
+            }
+        }
+    };
+}
+
 macro_rules! bin_assign_op_impl {
     ($op: ty, $name: tt) => {
         impl $op for Point {
@@ -186,6 +199,8 @@ bin_op_impl!(Add, add);
 bin_op_impl!(Sub, sub);
 bin_op_impl!(Mul, mul);
 bin_op_impl!(Div, div);
+scalar_bin_op_impl!(Mul, mul);
+scalar_bin_op_impl!(Div, div);
 bin_assign_op_impl!(AddAssign, add_assign);
 bin_assign_op_impl!(SubAssign, sub_assign);
 bin_assign_op_impl!(MulAssign, mul_assign);
@@ -299,7 +314,7 @@ impl Line {
 
     #[inline]
     pub fn center(&self) -> Point {
-        (self.start + self.end) / Point::new(2, 2) // point div point, really?
+        (self.start + self.end) / 2
     }
 }
 
