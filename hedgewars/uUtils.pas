@@ -264,7 +264,7 @@ repeat
     i:= Pos(e, a);
     if (i > 1) and (a[i - 1] = '\') then
         begin
-        a[i]:= $1B; // ASCII ESC
+        a[i]:= Char($1B); // ASCII ESC
         Delete(a, i - 1, 1);
         end
     else
@@ -278,7 +278,7 @@ procedure UnEscapeCharA(var a: ansistring; e: char);
 var i: LongInt;
 begin
 repeat
-    i:= Pos($1B, a); // ASCII ESC
+    i:= Pos(Char($1B), a); // ASCII ESC
     if (i > 0) then
         begin
         a[i]:= e;
