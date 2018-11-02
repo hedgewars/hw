@@ -229,6 +229,11 @@ impl Line {
     pub fn zero() -> Self {
         Self::new(Point::zero(), Point::zero())
     }
+
+    #[inline]
+    pub fn center(&self) -> Point {
+        (self.start + self.end) / Point::new(2, 2) // point div point, really?
+    }
 }
 
 impl IntoIterator for Line {
@@ -377,17 +382,19 @@ mod tests {
 
     #[test]
     fn line_basic() {
-        let line = Line::new(Point::new(0, 0), Point::new(3, 3)).into_iter();
-        let v = get_points(&[(0, 0), (1, 1), (2, 2), (3, 3), (123, 456)]);
+        let line: Vec<Point> = Line::new(Point::new(0, 0), Point::new(3, 3))
+            .into_iter()
+            .collect();
+        let v = get_points(&[(0, 0), (1, 1), (2, 2), (3, 3)]);
 
-        for (&a, b) in v.iter().zip(line) {
-            assert_eq!(a, b);
-        }
+        assert_eq!(line, v);
     }
 
     #[test]
     fn line_skewed() {
-        let line = Line::new(Point::new(0, 0), Point::new(5, -7)).into_iter();
+        let line: Vec<Point> = Line::new(Point::new(0, 0), Point::new(5, -7))
+            .into_iter()
+            .collect();
         let v = get_points(&[
             (0, 0),
             (1, -1),
@@ -399,14 +406,12 @@ mod tests {
             (5, -7),
         ]);
 
-        for (&a, b) in v.iter().zip(line) {
-            assert_eq!(a, b);
-        }
+        assert_eq!(line, v);
     }
 
     #[test]
     fn equidistant_full() {
-        let n = EquidistantPoints::new(Point::new(1, 3));
+        let n: Vec<Point> = EquidistantPoints::new(Point::new(1, 3)).collect();
         let v = get_points(&[
             (-1, -3),
             (1, -3),
@@ -416,21 +421,23 @@ mod tests {
             (3, -1),
             (-3, 1),
             (3, 1),
-            (123, 456),
         ]);
 
-        for (&a, b) in v.iter().zip(n) {
-            assert_eq!(a, b);
-        }
+        assert_eq!(n, v);
     }
 
     #[test]
     fn equidistant_half() {
-        let n = EquidistantPoints::new(Point::new(2, 2));
-        let v = get_points(&[(-2, -2), (2, -2), (-2, 2), (2, 2), (123, 456)]);
+        let n: Vec<Point> = EquidistantPoints::new(Point::new(2, 2)).collect();
+        let v = get_points(&[(-2, -2), (2, -2), (-2, 2), (2, 2)]);
 
-        for (&a, b) in v.iter().zip(n) {
-            assert_eq!(a, b);
-        }
+        assert_eq!(n, v);
+    }
+
+    #[test]
+    fn line() {
+        let l = Line::new(Point::new(1, 1), Point::new(5, 6));
+
+        assert_eq!(l.center(), Point::new(3, 3));
     }
 }

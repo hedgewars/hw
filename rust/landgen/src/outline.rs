@@ -51,6 +51,7 @@ impl OutlinePoints {
         segment: Line,
         random_numbers: &mut I,
     ) -> Option<Point> {
+
         None
     }
 
