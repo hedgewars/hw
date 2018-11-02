@@ -168,7 +168,7 @@
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation>Отослать отзыв</translation>
+        <translation>Отправить отзыв</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
@@ -2211,23 +2211,23 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Pick the training to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите тренировку</translation>
     </message>
     <message>
         <source>Pick the challenge to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите испытание</translation>
     </message>
     <message>
         <source>Pick the scenario to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите сценарий</translation>
     </message>
     <message>
         <source>Trainings</source>
-        <translation type="unfinished"></translation>
+        <translation>Тренировки</translation>
     </message>
     <message>
         <source>Challenges</source>
-        <translation type="unfinished"></translation>
+        <translation>Испытания</translation>
     </message>
     <message>
         <source>Scenarios</source>
@@ -2850,27 +2850,27 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Your Email</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш емейл</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation type="unfinished"></translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <source>Send system information</source>
-        <translation type="unfinished"></translation>
+        <translation>Отправить системную информацию</translation>
     </message>
     <message>
         <source>Type the security code:</source>
-        <translation type="unfinished"></translation>
+        <translation>Напишите текст капчи:</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки вступят в силу после перезапуска.</translation>
     </message>
     <message>
         <source>Tip: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Подсказка: %1</translation>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
@@ -2886,15 +2886,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Air Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Воздушные мины</translation>
     </message>
     <message>
         <source>Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Игрок</translation>
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation>Бочки</translation>
     </message>
     <message>
         <source>% Retreat Time</source>
@@ -2911,7 +2911,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загружается&lt;br&gt;капча ...</translation>
     </message>
 </context>
 <context>
@@ -2964,7 +2964,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Команды - Вы уверены?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
@@ -2976,7 +2976,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Please select a record from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, выберите запись из списка</translation>
     </message>
     <message>
         <source>Unable to start server</source>
@@ -2984,15 +2984,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Hedgewars - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Ошибка</translation>
     </message>
     <message>
         <source>Hedgewars - Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Успех</translation>
     </message>
     <message>
         <source>All file associations have been set</source>
-        <translation type="unfinished"></translation>
+        <translation>Файловые ассоциации установлены</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -3004,11 +3004,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Netgame - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Сетевая игра - Ошибка</translation>
     </message>
     <message>
         <source>Please select a server from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите сервер из списка</translation>
     </message>
     <message>
         <source>Please enter room name</source>
@@ -3024,7 +3024,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Room Name - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Название комнаты - Ошибка</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
@@ -3032,7 +3032,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Название комнаты - Вы уверены?</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
@@ -3042,23 +3042,23 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Схемы - Предупреждение</translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Схемы - Вы уверены?</translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить схему &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Видео - вы уверены?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить видео &apos;%1&apos;?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
@@ -3082,27 +3082,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Оружие - Предупреждение</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя удалить стандартный набор оружия &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Оружие - Вы уверены?</translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить набор оружия &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Ник не зарегистрирован</translation>
     </message>
     <message>
         <source>System Information Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Просмотр системной информации</translation>
     </message>
     <message>
         <source>Failed to generate captcha</source>
@@ -3114,15 +3114,15 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста заполните все поля. Емейл необязательно.</translation>
     </message>
     <message>
         <source>Hedgewars - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Предупреждение</translation>
     </message>
     <message>
         <source>Hedgewars - Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Информация</translation>
     </message>
     <message>
         <source>Not all players are ready</source>
@@ -3136,53 +3136,55 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Teams - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Команды - Название уже занято</translation>
     </message>
     <message>
         <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Название команды &apos;%1&apos; уже занято, поэтому ваша команда будет переименована в &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Please select a file from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста выберите файл из списка.</translation>
     </message>
     <message>
         <source>Cannot rename file to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя переименовать файл %1.</translation>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя удалить файл %1.</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Добро пожаловать в Hedgewars</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars!
 
 You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
-        <translation type="unfinished"></translation>
+        <translation>Добро пожаловать в Hedgewars!
+
+Кажется, вы здесь новичок. Не желаете ли сыграть в тренировочные миссии для начала, чтобы освоиться в Hedgewars?</translation>
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Нельзя использовать схему оружия &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>The connection to the server is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропало соединение с сервером.</translation>
     </message>
     <message>
         <source>Schemes - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Схемы - Название уже занято</translation>
     </message>
     <message>
         <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема с названием &apos;%1&apos; уже существует. Ваша схема будет переименована в &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема с названием &apos;%1&apos; уже существует. Изменения схемы оружия будут сброшены.</translation>
     </message>
 </context>
 <context>
@@ -3300,7 +3302,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Установите сетевой порт Hedgewars</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
@@ -3312,7 +3314,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished"></translation>
+        <translation>Запустить личный сервер</translation>
     </message>
     <message>
         <source>Upload this video to your YouTube account</source>
@@ -3323,7 +3325,7 @@ You seem to be new around here. Would you like to play some training missions fi
     <name>QSpinBox</name>
     <message>
         <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
-        <translation type="unfinished"></translation>
+        <translation>Установите битрейт для записываемых видео кратным 1024 битам в секунду</translation>
     </message>
 </context>
 <context>
@@ -3903,7 +3905,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Backspace</source>
-        <translation>Забой</translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Tab</source>
