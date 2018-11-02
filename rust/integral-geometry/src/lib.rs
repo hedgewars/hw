@@ -1,7 +1,13 @@
 extern crate fpnum;
 
 use fpnum::distance;
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{
+    Add, AddAssign,
+    Div, DivAssign,
+    Mul, MulAssign,
+    Sub, SubAssign,
+    RangeInclusive
+};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Point {
@@ -287,11 +293,35 @@ impl Rect {
     }
 
     #[inline]
+    pub fn x_range(&self) -> RangeInclusive<i32> {
+        self.x..=self.x + self.width as i32
+    }
+
+    #[inline]
+    pub fn y_range(&self) -> RangeInclusive<i32> {
+        self.y..=self.y + self.height as i32
+    }
+
+    /* requires #[feature(range_contains)]
+    #[inline]
+    pub fn contains(&self, point: Point) -> bool {
+        x_range().contains(point.x) && y_range.contains(point.y)
+    }*/
+
+    #[inline]
     pub fn contains_inside(&self, point: Point) -> bool {
         point.x > self.left()
             && point.x < self.right()
             && point.y > self.top()
             && point.y < self.bottom()
+    }
+
+    #[inline]
+    pub fn intersects(&self, other: &Rect) -> bool {
+        self.left() <= self.right()
+            && self.right() >= other.left()
+            && self.top() <= other.bottom()
+            && self.bottom() >= other.top()
     }
 }
 
