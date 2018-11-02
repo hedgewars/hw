@@ -1,6 +1,5 @@
 use integral_geometry::{Point, Rect, Size};
 
-
 pub struct OutlineTemplate {
     pub islands: Vec<Vec<Rect>>,
     pub fill_points: Vec<Point>,

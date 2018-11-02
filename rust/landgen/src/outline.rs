@@ -46,6 +46,13 @@ impl OutlinePoints {
         self.islands.iter().map(|i| i.len()).sum::<usize>() + self.fill_points.len()
     }
 
+    pub fn iter(&self) -> impl Iterator<Item = &Point> {
+        self.islands
+            .iter()
+            .flat_map(|i| i.iter())
+            .chain(self.fill_points.iter())
+    }
+
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Point> {
         self.islands
             .iter_mut()
@@ -56,8 +63,44 @@ impl OutlinePoints {
     fn divide_edge<I: Iterator<Item = u32>>(
         &self,
         segment: Line,
+        distance_divisor: u32,
         random_numbers: &mut I,
     ) -> Option<Point> {
+        #[inline]
+        fn intersect(p: &Point, m: &Point, p1: &Point, p2: &Point) -> bool {
+            let t1 = (m.x - p1.x) * p.y - p.x * (m.y - p1.y);
+            let t2 = (m.x - p2.x) * p.y - p.x * (m.y - p2.y);
+
+            (t1 > 0) != (t2 > 0)
+        }
+
+        #[inline]
+        fn solve_intersection(p: &Point, m: &Point, s: &Point, e: &Point) -> Option<(i32, u32)> {
+            let f = *e - *s;
+            let aqpb = (p.x * f.y - f.x * p.y) as i64;
+
+            if aqpb != 0 {
+                let iy = ((((s.x - m.x) as i64 * p.y as i64 + m.y as i64 * p.x as i64)
+                    * f.y as i64
+                    - s.y as i64 * f.x as i64 * p.y as i64)
+                    / aqpb) as i32;
+                let ix = if p.y.abs() > f.y.abs() {
+                    (iy - m.y) * p.x / p.y + m.x
+                } else {
+                    (iy - s.y) * f.x / f.y + s.x
+                };
+
+                let intersection_point = Point::new(ix, iy);
+                let diff_point = *m - intersection_point;
+                let d = diff_point.integral_norm();
+                let t = p.y * diff_point.y + p.x * diff_point.x;
+
+                Some((t, d))
+            } else {
+                None
+            }
+        }
+
         let min_distance = 40;
         // new point should fall inside this box
         let map_box = self.play_box.with_margin(min_distance);
@@ -125,11 +168,71 @@ impl OutlinePoints {
         }
 
         // now go through all other segments
+        for s in self.segments_iter() {
+            if s != segment {
+                if intersect(&p, &mid_point, &s.start, &s.end) {
+                    if let Some((t, d)) = solve_intersection(&p, &mid_point, &s.start, &s.end) {
+                        if t > 0 {
+                            dist_left = min(d, dist_left);
+                        } else {
+                            dist_right = min(d, dist_right);
+                        }
+                    }
+                }
+            }
+        }
 
-        None
+        // go through all points, including fill points
+        for pi in self.iter() {
+            if *pi != segment.start && *pi != segment.end {
+                if intersect(&p, &pi, &segment.start, &segment.end) {
+                    // ray from segment.start
+                    if let Some((t, d)) = solve_intersection(&p, &mid_point, &segment.start, &pi) {
+                        if t > 0 {
+                            dist_left = min(d, dist_left);
+                        } else {
+                            dist_right = min(d, dist_right);
+                        }
+                    }
+
+                    // ray from segment.end
+                    if let Some((t, d)) = solve_intersection(&p, &mid_point, &segment.end, &pi) {
+                        if t > 0 {
+                            dist_left = min(d, dist_left);
+                        } else {
+                            dist_right = min(d, dist_right);
+                        }
+                    }
+                }
+            }
+        }
+
+        let max_dist = p.integral_norm() * 100 / distance_divisor;
+        dist_left = min(dist_left, max_dist);
+        dist_right = min(dist_right, max_dist);
+
+        if dist_right + dist_left < min_distance as u32 * 2 + 10 {
+            // limits are too narrow, just divide
+            Some(mid_point)
+        } else {
+            // select distance within [-dist_left; dist_right], keeping min_distance in mind
+            let d = -(dist_left as i32)
+                + min_distance
+                + random_numbers.next().unwrap() as i32
+                    % (dist_right as i32 + dist_left as i32 - min_distance * 2);
+
+            Some(Point::new(
+                mid_point.x + p.x * d / distance_divisor as i32,
+                mid_point.y + p.y * d / distance_divisor as i32,
+            ))
+        }
     }
 
-    fn divide_edges<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
+    fn divide_edges<I: Iterator<Item = u32>>(
+        &mut self,
+        distance_divisor: u32,
+        random_numbers: &mut I,
+    ) {
         for is in 0..self.islands.len() {
             let mut i = 0;
             let mut segment;
@@ -151,7 +254,8 @@ impl OutlinePoints {
                     segment = Line::new(island[i], end_point);
                 }
 
-                if let Some(new_point) = self.divide_edge(segment, random_numbers) {
+                if let Some(new_point) = self.divide_edge(segment, distance_divisor, random_numbers)
+                {
                     self.islands[is].insert(i + 1, new_point);
                     i += 2;
                 } else {
@@ -161,14 +265,16 @@ impl OutlinePoints {
         }
     }
 
-    pub fn bezierize(&mut self) {
-        unimplemented!()
-    }
+    pub fn bezierize(&mut self) {}
 
-    pub fn distort<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
+    pub fn distort<I: Iterator<Item = u32>>(
+        &mut self,
+        distance_divisor: u32,
+        random_numbers: &mut I,
+    ) {
         loop {
             let old_len = self.total_len();
-            self.divide_edges(random_numbers);
+            self.divide_edges(distance_divisor, random_numbers);
 
             if self.total_len() == old_len {
                 break;
@@ -193,15 +299,15 @@ impl OutlinePoints {
     }
 
     pub fn mirror(&mut self) {
-        let width = self.size.width as i32;
-        self.iter_mut()
-            .for_each(|p| p.x = width - 1 - p.x);
+        let r = self.size.width as i32 - 1;
+
+        self.iter_mut().for_each(|p| p.x = r - p.x);
     }
 
     pub fn flip(&mut self) {
-        let height = self.size.height as i32;
-        self.iter_mut()
-            .for_each(|p| p.y = height - 1 - p.y);
+        let t = self.size.height as i32 - 1;
+
+        self.iter_mut().for_each(|p| p.y = t - p.y);
     }
 }
 

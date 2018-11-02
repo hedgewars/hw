@@ -1,19 +1,24 @@
-pub mod template_based;
-pub mod outline_template;
 mod outline;
+pub mod outline_template;
+pub mod template_based;
 
 extern crate integral_geometry;
-extern crate land2d;
 extern crate itertools;
+extern crate land2d;
 
 pub struct LandGenerationParameters<T> {
     zero: T,
     basic: T,
+    distance_divisor: u32,
 }
 
-impl <T: Copy + PartialEq> LandGenerationParameters<T> {
+impl<T: Copy + PartialEq> LandGenerationParameters<T> {
     pub fn new(zero: T, basic: T) -> Self {
-        Self { zero, basic }
+        Self {
+            zero,
+            basic,
+            distance_divisor: 1,
+        }
     }
 }
 

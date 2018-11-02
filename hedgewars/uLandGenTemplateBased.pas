@@ -164,9 +164,9 @@ begin
             fp:= pa.ar[i + 1]
         else if (i <> si) then
         begin
-        p4:= pa.ar[i + 1];
-        if p4.x = NTPX then
-            p4:= fp;
+            p4:= pa.ar[i + 1];
+            if p4.x = NTPX then
+                p4:= fp;
 
             // check if it intersects
             t1:= (mp.x - pa.ar[i].x) * b - a * (mp.y - pa.ar[i].y);

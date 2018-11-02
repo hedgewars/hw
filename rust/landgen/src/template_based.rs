@@ -6,7 +6,6 @@ use LandGenerator;
 use outline::OutlinePoints;
 use outline_template::OutlineTemplate;
 
-
 pub struct TemplatedLandGenerator {
     outline_template: OutlineTemplate,
 }
@@ -25,8 +24,12 @@ impl LandGenerator for TemplatedLandGenerator {
     ) -> Land2D<T> {
         let mut land = Land2D::new(self.outline_template.size, parameters.basic);
 
-        let mut points =
-            OutlinePoints::from_outline_template(&self.outline_template, land.play_box(), land.size(), random_numbers);
+        let mut points = OutlinePoints::from_outline_template(
+            &self.outline_template,
+            land.play_box(),
+            land.size(),
+            random_numbers,
+        );
 
         // mirror
         if self.outline_template.can_mirror {
@@ -46,7 +49,7 @@ impl LandGenerator for TemplatedLandGenerator {
             }
         }
 
-        points.distort(random_numbers);
+        points.distort(parameters.distance_divisor, random_numbers);
 
         points.draw(&mut land, parameters.zero);
 
