@@ -61,7 +61,7 @@ impl Point {
 
     #[inline]
     pub fn rotate90(self) -> Self {
-        Point::new(-self.y, self.x)
+        Point::new(self.y, -self.x)
     }
 }
 
