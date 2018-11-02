@@ -202,6 +202,17 @@ impl Rect {
         }
     }
 
+    pub fn from_box(left: i32, right: i32, top: i32, bottom: i32) -> Self {
+        assert!(left <= right);
+        assert!(top <= bottom);
+
+        Rect::new(left, top, (right - left) as u32, (bottom - top) as u32)
+    }
+
+    pub fn from_size(top_left: Point, size: Size) -> Self {
+        Rect::new(top_left.x, top_left.y, size.width as u32, size.height as u32)
+    }
+
     #[inline]
     pub fn size(&self) -> Size {
         Size::new(self.width as usize, self.height as usize)
@@ -210,6 +221,41 @@ impl Rect {
     #[inline]
     pub fn area(&self) -> usize {
         self.size().area()
+    }
+
+    #[inline]
+    pub fn left(&self) -> i32 {
+        self.x
+    }
+
+    #[inline]
+    pub fn top(&self) -> i32 {
+        self.y
+    }
+
+    #[inline]
+    pub fn right(&self) -> i32 {
+        self.x + self.width as i32
+    }
+
+    #[inline]
+    pub fn bottom(&self) -> i32 {
+        self.y + self.height as i32
+    }
+
+    #[inline]
+    pub fn top_left(&self) -> Point {
+        Point::new(self.x, self.y)
+    }
+
+    #[inline]
+    pub fn with_margin(&self, margin: i32) -> Self {
+        Rect::from_box(
+            self.left() + margin,
+            self.right() - margin,
+            self.top() + margin,
+            self.bottom() - margin,
+        )
     }
 }
 
@@ -439,5 +485,13 @@ mod tests {
         let l = Line::new(Point::new(1, 1), Point::new(5, 6));
 
         assert_eq!(l.center(), Point::new(3, 3));
+    }
+
+    #[test]
+    fn rect() {
+        let r = Rect::from_box(10, 100, 0, 70);
+
+        assert_eq!(r.top_left(), Point::new(10, 0));
+        assert_eq!(r.with_margin(12), Rect::from_box(22, 88, 12, 58));
     }
 }

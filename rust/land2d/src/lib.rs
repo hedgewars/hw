@@ -3,24 +3,29 @@ extern crate vec2d;
 
 use std::cmp;
 
-use integral_geometry::{
-    ArcPoints, EquidistantPoints,
-    Point, Size, SizeMask, Line
-};
+use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, Rect, Size, SizeMask};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
     play_size: Size,
-    mask: SizeMask
+    play_box: Rect,
+
+    mask: SizeMask,
 }
 
 impl<T: Copy + PartialEq> Land2D<T> {
     pub fn new(play_size: Size, fill_value: T) -> Self {
         let real_size = play_size.next_power_of_two();
+        let top_left = Point::new(
+            (real_size.width - play_size.width / 2) as i32,
+            (real_size.height - play_size.height) as i32,
+        );
+        let play_box = Rect::from_size(top_left, play_size);
         Self {
             play_size,
+            play_box,
             pixels: vec2d::Vec2D::new(real_size, fill_value),
-            mask: real_size.to_mask()
+            mask: real_size.to_mask(),
         }
     }
 
@@ -52,6 +57,11 @@ impl<T: Copy + PartialEq> Land2D<T> {
     #[inline]
     pub fn play_size(&self) -> Size {
         self.play_size
+    }
+
+    #[inline]
+    pub fn play_box(&self) -> Rect {
+        self.play_box
     }
 
     #[inline]
@@ -245,7 +255,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
             let from_x = cmp::max(0, center.x - offset.x) as usize;
             let to_x = cmp::min(self.width() - 1, (center.x + offset.x) as usize);
             self.pixels[row_index as usize][from_x..=to_x]
-                .iter_mut().for_each(|v| *v = value);
+                .iter_mut()
+                .for_each(|v| *v = value);
             to_x - from_x + 1
         } else {
             0
@@ -253,14 +264,14 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     pub fn fill_circle(&mut self, center: Point, radius: i32, value: T) -> usize {
-        let transforms =
-            [[0, 1, 1, 0], [0, 1, -1, 0],
-             [1, 0, 0, 1], [1, 0, 0, -1]];
-        ArcPoints::new(radius).map(|vector| {
-            transforms.iter().map(|m|
-                self.fill_row(center, vector.transform(m), value)
-            ).sum::<usize>()
-        }).sum()
+        let transforms = [[0, 1, 1, 0], [0, 1, -1, 0], [1, 0, 0, 1], [1, 0, 0, -1]];
+        ArcPoints::new(radius)
+            .map(|vector| {
+                transforms
+                    .iter()
+                    .map(|m| self.fill_row(center, vector.transform(m), value))
+                    .sum::<usize>()
+            }).sum()
     }
 
     pub fn draw_thick_line(&mut self, line: Line, radius: i32, value: T) -> usize {

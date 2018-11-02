@@ -23,19 +23,10 @@ impl LandGenerator for TemplatedLandGenerator {
         parameters: LandGenerationParameters<T>,
         random_numbers: &mut I,
     ) -> Land2D<T> {
+        let mut land = Land2D::new(self.outline_template.size, parameters.basic);
+
         let mut points =
-            OutlinePoints::from_outline_template(&self.outline_template, random_numbers);
-
-        let mut land = Land2D::new(points.size, parameters.basic);
-
-        let top_left = Point::new(
-            (land.width() - land.play_width() / 2) as i32,
-            (land.height() - land.play_height()) as i32,
-        );
-
-        points.size = land.size();
-
-        points.iter_mut().for_each(|p| *p += top_left);
+            OutlinePoints::from_outline_template(&self.outline_template, land.play_box(), land.size(), random_numbers);
 
         // mirror
         if self.outline_template.can_mirror {
@@ -71,16 +62,4 @@ impl LandGenerator for TemplatedLandGenerator {
 
         land
     }
-}
-
-#[test()]
-fn points_test() {
-    let mut points = OutlinePoints {
-        islands: vec![vec![]],
-        fill_points: vec![Point::new(1, 1)],
-        size: Size::square(100),
-    };
-
-    points.iter_mut().for_each(|p| p.x = 2);
-    assert_eq!(points.fill_points[0].x, 2);
 }
