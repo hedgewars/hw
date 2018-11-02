@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use integral_geometry::{Point, Size};
+use integral_geometry::{Line, Point, Size};
 use land2d::Land2D;
 
 use outline_template::OutlineTemplate;
@@ -48,8 +48,7 @@ impl OutlinePoints {
 
     fn divide_edge<I: Iterator<Item = u32>>(
         &self,
-        start_point: Point,
-        end_point: Point,
+        segment: Line,
         random_numbers: &mut I,
     ) -> Option<Point> {
         None
@@ -58,25 +57,26 @@ impl OutlinePoints {
     fn divide_edges<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) {
         for is in 0..self.islands.len() {
             let mut i = 0;
-            let mut start_point = Point::zero();
-            let mut end_point = Point::zero();
+            let mut segment;
 
             loop {
                 {
                     let island = &self.islands[is];
+                    let mut end_point;
                     if i < island.len() {
-                        start_point = island[i];
                         end_point = if i + 1 < island.len() {
                             island[i + 1]
                         } else {
                             island[0]
                         };
                     } else {
-                        break
+                        break;
                     }
+
+                    segment = Line::new(island[i], end_point);
                 }
 
-                if let Some(new_point) = self.divide_edge(start_point, end_point, random_numbers) {
+                if let Some(new_point) = self.divide_edge(segment, random_numbers) {
                     self.islands[is].insert(i + 1, new_point);
                     i += 2;
                 } else {
@@ -104,13 +104,47 @@ impl OutlinePoints {
     }
 
     pub fn draw<T: Copy + PartialEq>(&self, land: &mut Land2D<T>, value: T) {
-        for island in &self.islands {
-            if island.len() > 1 {
-                for i in 0..island.len() - 1 {
-                    land.draw_line(island[i], island[i + 1], value);
-                }
-                land.draw_line(island[island.len() - 1], island[0], value);
+        for segment in self.segments_iter() {
+            land.draw_line(segment, value);
+        }
+    }
+
+    fn segments_iter(&self) -> OutlineSegmentsIterator {
+        OutlineSegmentsIterator {
+            outline: self,
+            island: 0,
+            index: 0,
+        }
+    }
+}
+
+struct OutlineSegmentsIterator<'a> {
+    outline: &'a OutlinePoints,
+    island: usize,
+    index: usize,
+}
+
+impl<'a> Iterator for OutlineSegmentsIterator<'a> {
+    type Item = Line;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.island < self.outline.islands.len() {
+            if self.index + 1 < self.outline.islands[self.index].len() {
+                Some(Line::new(
+                    self.outline.islands[self.index][self.index],
+                    self.outline.islands[self.index][self.index + 1],
+                ))
+            } else if self.index + 1 == self.outline.islands[self.index].len() {
+                Some(Line::new(
+                    self.outline.islands[self.index][self.index],
+                    self.outline.islands[self.index][0],
+                ))
+            } else {
+                self.island += 1;
+                self.next()
             }
+        } else {
+            None
         }
     }
 }

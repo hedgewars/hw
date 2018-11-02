@@ -1,4 +1,3 @@
-use std::cmp;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -40,8 +39,10 @@ impl Point {
 
     #[inline]
     pub fn transform(self, matrix: &[i32; 4]) -> Self {
-        Point::new(matrix[0] * self.x + matrix[1] * self.y,
-                   matrix[2] * self.x + matrix[3] * self.y)
+        Point::new(
+            matrix[0] * self.x + matrix[1] * self.y,
+            matrix[2] * self.x + matrix[3] * self.y,
+        )
     }
 }
 
@@ -59,7 +60,10 @@ impl Size {
 
     #[inline]
     pub fn square(size: usize) -> Self {
-        Size { width: size, height: size }
+        Size {
+            width: size,
+            height: size,
+        }
     }
 
     #[inline]
@@ -81,7 +85,7 @@ impl Size {
     pub fn next_power_of_two(&self) -> Self {
         Self {
             width: self.width.next_power_of_two(),
-            height: self.height.next_power_of_two()
+            height: self.height.next_power_of_two(),
         }
     }
 
@@ -95,7 +99,9 @@ impl Size {
     }
 }
 
-pub struct SizeMask{ size: Size }
+pub struct SizeMask {
+    size: Size,
+}
 
 impl SizeMask {
     #[inline]
@@ -103,7 +109,7 @@ impl SizeMask {
         assert!(size.is_power_of_two());
         let size = Size {
             width: !(size.width - 1),
-            height: !(size.height - 1)
+            height: !(size.height - 1),
         };
         Self { size }
     }
@@ -124,19 +130,22 @@ impl SizeMask {
     }
 }
 
-pub struct GridIndex{ shift: Point }
+pub struct GridIndex {
+    shift: Point,
+}
 
 impl GridIndex {
     pub fn new(size: Size) -> Self {
         assert!(size.is_power_of_two());
-        let shift = Point::new(size.width.trailing_zeros() as i32,
-                               size.height.trailing_zeros() as i32);
+        let shift = Point::new(
+            size.width.trailing_zeros() as i32,
+            size.height.trailing_zeros() as i32,
+        );
         Self { shift }
     }
 
     pub fn map(&self, position: Point) -> Point {
-        Point::new(position.x >> self.shift.x,
-                   position.y >> self.shift.y)
+        Point::new(position.x >> self.shift.x, position.y >> self.shift.y)
     }
 }
 
@@ -185,7 +194,12 @@ pub struct Rect {
 impl Rect {
     #[inline]
     pub fn new(x: i32, y: i32, width: u32, height: u32) -> Self {
-        Self { x, y, width, height }
+        Self {
+            x,
+            y,
+            width,
+            height,
+        }
     }
 
     #[inline]
@@ -199,6 +213,32 @@ impl Rect {
     }
 }
 
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub struct Line {
+    pub start: Point,
+    pub end: Point,
+}
+
+impl Line {
+    #[inline]
+    pub fn new(start: Point, end: Point) -> Self {
+        Self { start, end }
+    }
+
+    #[inline]
+    pub fn zero() -> Self {
+        Self::new(Point::zero(), Point::zero())
+    }
+}
+
+impl IntoIterator for Line {
+    type Item = Point;
+    type IntoIter = LinePoints;
+
+    fn into_iter(self) -> Self::IntoIter {
+        LinePoints::new(self)
+    }
+}
 
 pub struct LinePoints {
     accumulator: Point,
@@ -210,14 +250,14 @@ pub struct LinePoints {
 }
 
 impl LinePoints {
-    pub fn new(from: Point, to: Point) -> Self {
-        let dir = to - from;
+    pub fn new(line: Line) -> Self {
+        let dir = line.end - line.start;
 
         Self {
             accumulator: Point::zero(),
             direction: dir.abs(),
             sign: dir.signum(),
-            current: from,
+            current: line.start,
             total_steps: dir.max_norm(),
             step: 0,
         }
@@ -337,7 +377,7 @@ mod tests {
 
     #[test]
     fn line_basic() {
-        let line = LinePoints::new(Point::new(0, 0), Point::new(3, 3));
+        let line = Line::new(Point::new(0, 0), Point::new(3, 3)).into_iter();
         let v = get_points(&[(0, 0), (1, 1), (2, 2), (3, 3), (123, 456)]);
 
         for (&a, b) in v.iter().zip(line) {
@@ -347,7 +387,7 @@ mod tests {
 
     #[test]
     fn line_skewed() {
-        let line = LinePoints::new(Point::new(0, 0), Point::new(5, -7));
+        let line = Line::new(Point::new(0, 0), Point::new(5, -7)).into_iter();
         let v = get_points(&[
             (0, 0),
             (1, -1),

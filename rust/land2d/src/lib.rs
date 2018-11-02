@@ -4,8 +4,8 @@ extern crate vec2d;
 use std::cmp;
 
 use integral_geometry::{
-    ArcPoints, EquidistantPoints, LinePoints,
-    Point, Size, SizeMask
+    ArcPoints, EquidistantPoints,
+    Point, Size, SizeMask, Line
 };
 
 pub struct Land2D<T> {
@@ -103,8 +103,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
         }).count()
     }
 
-    pub fn draw_line(&mut self, from: Point, to: Point, value: T) -> usize {
-        self.fill_from_iter(LinePoints::new(from, to), value)
+    pub fn draw_line(&mut self, line: Line, value: T) -> usize {
+        self.fill_from_iter(line.into_iter(), value)
     }
 
     pub fn fill(&mut self, start_point: Point, border_value: T, fill_value: T) {
@@ -263,12 +263,12 @@ impl<T: Copy + PartialEq> Land2D<T> {
         }).sum()
     }
 
-    pub fn draw_thick_line(&mut self, from: Point, to: Point, radius: i32, value: T) -> usize {
+    pub fn draw_thick_line(&mut self, line: Line, radius: i32, value: T) -> usize {
         let mut result = 0;
 
         for vector in ArcPoints::new(radius) {
             for delta in EquidistantPoints::new(vector) {
-                for point in LinePoints::new(from, to) {
+                for point in line.into_iter() {
                     self.map_point(point + delta, |p| {
                         if *p != value {
                             *p = value;
@@ -308,13 +308,13 @@ mod tests {
     fn fill() {
         let mut l: Land2D<u8> = Land2D::new(Size::square(128), 0);
 
-        l.draw_line(Point::new(0, 0), Point::new(32, 96), 1);
-        l.draw_line(Point::new(32, 96), Point::new(64, 32), 1);
-        l.draw_line(Point::new(64, 32), Point::new(96, 80), 1);
-        l.draw_line(Point::new(96, 80), Point::new(128, 0), 1);
+        l.draw_line(Line::new(Point::new(0, 0), Point::new(32, 96)), 1);
+        l.draw_line(Line::new(Point::new(32, 96), Point::new(64, 32)), 1);
+        l.draw_line(Line::new(Point::new(64, 32), Point::new(96, 80)), 1);
+        l.draw_line(Line::new(Point::new(96, 80), Point::new(128, 0)), 1);
 
-        l.draw_line(Point::new(0, 128), Point::new(64, 96), 1);
-        l.draw_line(Point::new(128, 128), Point::new(64, 96), 1);
+        l.draw_line(Line::new(Point::new(0, 128), Point::new(64, 96)), 1);
+        l.draw_line(Line::new(Point::new(128, 128), Point::new(64, 96)), 1);
 
         l.fill(Point::new(32, 32), 1, 2);
         l.fill(Point::new(16, 96), 1, 3);
