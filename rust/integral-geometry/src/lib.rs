@@ -1,3 +1,6 @@
+extern crate fpnum;
+
+use fpnum::distance;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -35,6 +38,11 @@ impl Point {
     #[inline]
     pub fn max_norm(self) -> i32 {
         std::cmp::max(self.x.abs(), self.y.abs())
+    }
+
+    #[inline]
+    pub fn integral_norm(self) -> u32 {
+        distance(self.x, self.y).abs_round()
     }
 
     #[inline]
@@ -210,7 +218,12 @@ impl Rect {
     }
 
     pub fn from_size(top_left: Point, size: Size) -> Self {
-        Rect::new(top_left.x, top_left.y, size.width as u32, size.height as u32)
+        Rect::new(
+            top_left.x,
+            top_left.y,
+            size.width as u32,
+            size.height as u32,
+        )
     }
 
     #[inline]
@@ -256,6 +269,14 @@ impl Rect {
             self.top() + margin,
             self.bottom() - margin,
         )
+    }
+
+    #[inline]
+    pub fn contains_inside(&self, point: Point) -> bool {
+        point.x > self.left()
+            && point.x < self.right()
+            && point.y > self.top()
+            && point.y < self.bottom()
     }
 }
 
@@ -490,6 +511,9 @@ mod tests {
     #[test]
     fn rect() {
         let r = Rect::from_box(10, 100, 0, 70);
+
+        assert!(r.contains_inside(Point::new(99, 69)));
+        assert!(!r.contains_inside(Point::new(100, 70)));
 
         assert_eq!(r.top_left(), Point::new(10, 0));
         assert_eq!(r.with_margin(12), Rect::from_box(22, 88, 12, 58));

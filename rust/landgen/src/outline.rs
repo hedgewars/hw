@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use std::cmp::min;
 
 use integral_geometry::{Line, Point, Rect, Size};
 use land2d::Land2D;
@@ -57,6 +58,74 @@ impl OutlinePoints {
         segment: Line,
         random_numbers: &mut I,
     ) -> Option<Point> {
+        let min_distance = 40;
+        // new point should fall inside this box
+        let map_box = self.play_box.with_margin(min_distance);
+
+        let p = Point::new(
+            segment.end.y - segment.start.y,
+            segment.start.x - segment.start.y,
+        );
+        let mid_point = segment.center();
+
+        if (p.integral_norm() < min_distance as u32 * 3) || !map_box.contains_inside(p) {
+            return None;
+        }
+
+        let full_box = Rect::from_size(Point::zero(), self.size).with_margin(min_distance);
+
+        let mut dist_left = (self.size.width + self.size.height) as u32;
+        let mut dist_right = dist_left;
+
+        // find distances to map borders
+        if p.x != 0 {
+            // check against left border
+            let iyl = (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y;
+            let dl = Point::new(mid_point.x - map_box.left(), mid_point.y - iyl).integral_norm();
+            let t = p.x * (mid_point.x - full_box.left()) + p.y * (mid_point.y - iyl);
+
+            if t > 0 {
+                dist_left = dl;
+            } else {
+                dist_right = dl;
+            }
+
+            // right border
+            let iyr = (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y;
+            let dr = Point::new(mid_point.x - full_box.right(), mid_point.y - iyr).integral_norm();
+
+            if t > 0 {
+                dist_right = dr;
+            } else {
+                dist_left = dr;
+            }
+        }
+
+        if p.y != 0 {
+            // top border
+            let ixl = (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x;
+            let dl = Point::new(mid_point.y - map_box.top(), mid_point.x - ixl).integral_norm();
+            let t = p.y * (mid_point.y - full_box.top()) + p.x * (mid_point.x - ixl);
+
+            if t > 0 {
+                dist_left = min(dist_left, dl);
+            } else {
+                dist_right = min(dist_right, dl);
+            }
+
+            // bottom border
+            let ixr = (map_box.bottom() - mid_point.y) * p.x / p.y + mid_point.x;
+            let dr = Point::new(mid_point.y - full_box.bottom(), mid_point.x - ixr).integral_norm();
+
+            if t > 0 {
+                dist_right = min(dist_right, dr);
+            } else {
+                dist_left = min(dist_left, dr);
+            }
+        }
+
+        // now go through all other segments
+
         None
     }
 

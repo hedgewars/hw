@@ -55,6 +55,11 @@ impl FPNum {
     }
 
     #[inline]
+    pub fn abs_round(&self) -> u32 {
+        (self.value >> 32) as u32
+    }
+
+    #[inline]
     pub fn sqr(&self) -> Self {
         Self {
             is_negative: false,
