@@ -32,9 +32,7 @@ impl LandGenerator for TemplatedLandGenerator {
         if self.outline_template.can_mirror {
             if let Some(b) = random_numbers.next() {
                 if b & 1 != 0 {
-                    points
-                        .iter_mut()
-                        .for_each(|p| p.x = land.width() as i32 - 1 - p.x);
+                    points.mirror();
                 }
             }
         }
@@ -43,9 +41,7 @@ impl LandGenerator for TemplatedLandGenerator {
         if self.outline_template.can_flip {
             if let Some(b) = random_numbers.next() {
                 if b & 1 != 0 {
-                    points
-                        .iter_mut()
-                        .for_each(|p| p.y = land.height() as i32 - 1 - p.y);
+                    points.flip();
                 }
             }
         }

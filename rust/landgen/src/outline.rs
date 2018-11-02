@@ -191,6 +191,17 @@ impl OutlinePoints {
             index: 0,
         }
     }
+
+    pub fn mirror(&mut self) {
+        self.iter_mut()
+            .for_each(|p| p.x = self.size.width() - 1 - p.x);
+    }
+
+    pub fn flip(&mut self) {
+        points
+            .iter_mut()
+            .for_each(|p| p.y = self.size.height() - 1 - p.y);
+    }
 }
 
 struct OutlineSegmentsIterator<'a> {
