@@ -1,4 +1,6 @@
 pub mod template_based;
+pub mod outline_template;
+mod outline;
 
 extern crate integral_geometry;
 extern crate land2d;
