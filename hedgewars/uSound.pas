@@ -575,7 +575,10 @@ begin
                 begin
                 tempSnd := GetFallbackV(snd);
                 if tempSnd <> sndNone then
+                    begin
                     snd := tempSnd;
+                    LastVoice.snd := tempSnd;
+                    end;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
