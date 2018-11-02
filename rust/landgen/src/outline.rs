@@ -111,7 +111,7 @@ impl OutlinePoints {
         );
         let mid_point = segment.center();
 
-        if (p.integral_norm() < min_distance as u32 * 3) || !map_box.contains_inside(mp) {
+        if (p.integral_norm() < min_distance as u32 * 3) || !map_box.contains_inside(mid_point) {
             return None;
         }
 
