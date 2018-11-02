@@ -247,6 +247,10 @@ impl Rect {
         )
     }
 
+    pub fn at_origin(size: Size) -> Self {
+        Rect::from_size(Point::zero(), size)
+    }
+
     #[inline]
     pub fn size(&self) -> Size {
         Size::new(self.width as usize, self.height as usize)
@@ -280,6 +284,16 @@ impl Rect {
     #[inline]
     pub fn top_left(&self) -> Point {
         Point::new(self.x, self.y)
+    }
+
+    #[inline]
+    pub fn bottom_right(&self) -> Point {
+        Point::new(self.right(), self.bottom())
+    }
+
+    #[inline]
+    pub fn center(&self) -> Point {
+        (self.top_left() + self.bottom_right()) / 2
     }
 
     #[inline]
@@ -322,6 +336,17 @@ impl Rect {
             && self.right() >= other.left()
             && self.top() <= other.bottom()
             && self.bottom() >= other.top()
+    }
+
+    #[inline]
+    pub fn split_at(&self, point: Point) -> [Rect; 4] {
+        assert!(self.contains_inside(point));
+        [
+            Rect::from_box(self.left(), point.x, self.top(), point.y),
+            Rect::from_box(point.x, self.right(), self.top(), point.y),
+            Rect::from_box(self.left(), point.x, point.y, self.bottom()),
+            Rect::from_box(point.x, self.right(), point.y, self.bottom())
+        ]
     }
 }
 
