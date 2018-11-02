@@ -170,7 +170,7 @@ impl OutlinePoints {
             let old_len = self.total_len();
             self.divide_edges(random_numbers);
 
-            if self.total_len() != old_len {
+            if self.total_len() == old_len {
                 break;
             }
         }
