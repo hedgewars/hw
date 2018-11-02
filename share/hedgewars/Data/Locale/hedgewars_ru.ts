@@ -719,19 +719,19 @@ Last engine message:
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation>Рисованная карта</translation>
+        <translation>Нарисованная</translation>
     </message>
     <message>
         <source>Randomly generated</source>
-        <translation>Случайно сгенерированная</translation>
+        <translation>Сгенерированная</translation>
     </message>
     <message>
         <source>Random maze</source>
-        <translation>Случайный лабиринт</translation>
+        <translation>Лабиринт</translation>
     </message>
     <message>
         <source>Random</source>
-        <translation>Случайно</translation>
+        <translation>Случайная</translation>
     </message>
     <message>
         <source>Map preview:</source>
@@ -795,7 +795,7 @@ Last engine message:
     </message>
     <message>
         <source>Random perlin</source>
-        <translation>Случайная перлиновская</translation>
+        <translation>Перлиновская</translation>
     </message>
     <message>
         <source>Style:</source>
