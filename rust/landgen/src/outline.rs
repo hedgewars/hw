@@ -107,7 +107,7 @@ impl OutlinePoints {
 
         let p = Point::new(
             segment.end.y - segment.start.y,
-            segment.start.x - segment.start.y,
+            segment.start.x - segment.end.x,
         );
         let mid_point = segment.center();
 
