@@ -1,5 +1,6 @@
 official_racer_maps = {
-    ["Border,60526986531,-1902170174"] = "Racer Challenge #1"
+-- Racer
+      ["Border,60526986531,-1902170174"] = "Racer Challenge #1"
     , ["Border,71022545335,-68467181"] = "Racer Challenge #2"
     , ["Border,40469748943,-1955933813"] = "Racer Challenge #3"
     , ["85940488650,1891067114"] = "Racer Challenge #4"
@@ -15,12 +16,11 @@ official_racer_maps = {
     , ["Border,51825989393,-589164698"] = "Racer Challenge #14"
     , ["81841189250,-1216146050"] = "Racer Challenge #15"
     , ["Border,44246064625,-898958339"] = "Racer Challenge #16"
-    -- TODO: Add Racer Challenge #17
-    --, ["?????,?????"] = "Racer Challenge #17"
+    , ["60906776802,1910906941"] = "Racer Challenge #17"
     , ["Border,70774747774,1976202242"] = "Racer Challenge #18"
     , ["Border,50512019610,122061403"] = "Racer Challenge #19"
     , ["60715683005,45638031"] = "Racer Challenge #20"
--- tech racer
+-- TechRacer
     , ["Border,19661006772,634694529"] = "Tech Racer #1"
     , ["Border,19661306766,634694529"] = "Tech Racer #2"
     , ["Border,19661606760,634694529"] = "Tech Racer #3"
@@ -28,5 +28,4 @@ official_racer_maps = {
     , ["Border,19662206748,634694529"] = "Tech Racer #5"
     , ["Border,19662506742,634694529"] = "Tech Racer #6"
     , ["Border,19662806736,634694529"] = "Tech Racer #7"
-    , ["Border,19663106730,634694529"] = "Tech Racer #8"
 }
