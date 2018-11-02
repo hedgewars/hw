@@ -193,14 +193,15 @@ impl OutlinePoints {
     }
 
     pub fn mirror(&mut self) {
+        let width = self.size.width as i32;
         self.iter_mut()
-            .for_each(|p| p.x = self.size.width() - 1 - p.x);
+            .for_each(|p| p.x = width - 1 - p.x);
     }
 
     pub fn flip(&mut self) {
-        points
-            .iter_mut()
-            .for_each(|p| p.y = self.size.height() - 1 - p.y);
+        let height = self.size.height as i32;
+        self.iter_mut()
+            .for_each(|p| p.y = height - 1 - p.y);
     }
 }
 
