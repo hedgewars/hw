@@ -325,6 +325,51 @@ impl Rect {
     }
 }
 
+pub struct Polygon {
+    vertices: Vec<Point>
+}
+
+impl Polygon {
+    pub fn new(vertices: &[Point]) -> Self {
+        let mut v = Vec::with_capacity(vertices.len() + 1);
+        v.extend_from_slice(vertices);
+        if !v.is_empty() {
+            let start = v[0];
+            v.push(start);
+        }
+        Self { vertices: v }
+    }
+
+    pub fn edges_count(&self) -> usize {
+        self.vertices.len() - 1
+    }
+
+    pub fn get_edge(&self, index: usize) -> Line {
+        Line::new(self.vertices[index], self.vertices[index + 1])
+    }
+
+    pub fn iter<'a>(&'a self) -> impl Iterator<Item = Point> + 'a {
+        (&self.vertices[..self.edges_count()]).iter().cloned()
+    }
+
+    pub fn iter_edges<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
+        (&self.vertices[0..self.edges_count()])
+            .iter()
+            .zip(&self.vertices[1..])
+            .map(|(s, e)| Line::new(*s, *e))
+    }
+}
+
+impl From<Vec<Point>> for Polygon {
+    fn from(mut v: Vec<Point>) -> Self {
+        if !v.is_empty() && v[0] != v[v.len() - 1] {
+            let start = v[0];
+            v.push(start)
+        }
+        Self { vertices: v }
+    }
+}
+
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Line {
     pub start: Point,
