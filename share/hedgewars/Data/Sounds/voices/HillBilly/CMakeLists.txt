@@ -3,6 +3,7 @@ Boring.ogg
 Byebye.ogg
 Comeonthen.ogg
 Coward.ogg
+Cutitout.ogg
 Enemydown.ogg
 Firstblood.ogg
 Firepunch*.ogg
@@ -15,6 +16,7 @@ Jump*.ogg
 Justyouwait.ogg
 Kamikaze.ogg
 Laugh.ogg
+Leavemealone.ogg
 Melon.ogg
 Missed.ogg
 Nooo.ogg
