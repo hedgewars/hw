@@ -129,7 +129,7 @@ impl OutlinePoints {
                 (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y);
             dist_right = (mid_point - right_intersection).integral_norm();
 
-            if p.dot(mid_point - left_intersection) < 0 {
+            if p.x > 0 {
                 std::mem::swap(&mut dist_left, &mut dist_right);
             }
         }
@@ -147,7 +147,7 @@ impl OutlinePoints {
                 map_box.bottom());
             let dr = (mid_point - bottom_intersection).integral_norm();
 
-            if p.dot(mid_point - top_intersection) > 0 {
+            if p.y < 0 {
                 dist_left = min(dist_left, dl);
                 dist_right = min(dist_right, dr);
             } else {
