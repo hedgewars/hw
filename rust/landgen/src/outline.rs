@@ -106,9 +106,10 @@ impl OutlinePoints {
         let map_box = self.play_box.with_margin(min_distance);
 
         let p = segment.scaled_normal();
+        let p_norm = p.integral_norm();
         let mid_point = segment.center();
 
-        if (p.integral_norm() < min_distance as u32 * 3) || !map_box.contains_inside(mid_point) {
+        if (p_norm < min_distance as u32 * 3) || !map_box.contains_inside(mid_point) {
             return None;
         }
 
@@ -196,7 +197,7 @@ impl OutlinePoints {
             }
         }
 
-        let max_dist = p.integral_norm() * 100 / distance_divisor;
+        let max_dist = p_norm * 100 / distance_divisor;
         dist_left = min(dist_left, max_dist);
         dist_right = min(dist_right, max_dist);
 
@@ -210,10 +211,9 @@ impl OutlinePoints {
                 + random_numbers.next().unwrap() as i32
                     % (dist_right as i32 + dist_left as i32 - min_distance * 2);
 
-            let norm = p.integral_norm() as i32;
             Some(Point::new(
-                mid_point.x + p.x * d / norm,
-                mid_point.y + p.y * d / norm,
+                mid_point.x + p.x * d / p_norm as i32,
+                mid_point.y + p.y * d / p_norm as i32,
             ))
         }
     }
