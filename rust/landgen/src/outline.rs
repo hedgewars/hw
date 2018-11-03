@@ -162,9 +162,9 @@ impl OutlinePoints {
                 if intersect(&p, &mid_point, &s.start, &s.end) {
                     if let Some((t, d)) = solve_intersection(&p, &mid_point, &s.start, &s.end) {
                         if t > 0 {
-                            dist_left = min(d, dist_left);
+                            dist_right = min(dist_right, d);
                         } else {
-                            dist_right = min(d, dist_right);
+                            dist_left = min(dist_left, d);
                         }
                     }
                 }
@@ -178,18 +178,18 @@ impl OutlinePoints {
                     // ray from segment.start
                     if let Some((t, d)) = solve_intersection(&p, &mid_point, &segment.start, &pi) {
                         if t > 0 {
-                            dist_left = min(d, dist_left);
+                            dist_right = min(dist_right, d);
                         } else {
-                            dist_right = min(d, dist_right);
+                            dist_left = min(dist_left, d);
                         }
                     }
 
                     // ray from segment.end
                     if let Some((t, d)) = solve_intersection(&p, &mid_point, &segment.end, &pi) {
                         if t > 0 {
-                            dist_left = min(d, dist_left);
+                            dist_right = min(dist_right, d);
                         } else {
-                            dist_right = min(d, dist_right);
+                            dist_left = min(dist_left, d);
                         }
                     }
                 }
@@ -204,15 +204,16 @@ impl OutlinePoints {
             // limits are too narrow, just divide
             Some(mid_point)
         } else {
-            // select distance within [-dist_left; dist_right], keeping min_distance in mind
-            let d = -(dist_left as i32)
+            // select distance within [-dist_right; dist_left], keeping min_distance in mind
+            let d = -(dist_right as i32)
                 + min_distance
                 + random_numbers.next().unwrap() as i32
                     % (dist_right as i32 + dist_left as i32 - min_distance * 2);
 
+            let offset = d / p.integral_norm() as i32;
             Some(Point::new(
-                mid_point.x + p.x * d / distance_divisor as i32,
-                mid_point.y + p.y * d / distance_divisor as i32,
+                mid_point.x + p.x * offset as i32,
+                mid_point.y + p.y * offset as i32,
             ))
         }
     }
