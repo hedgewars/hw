@@ -1,5 +1,6 @@
 use std::cmp;
 use std::ops;
+use std::ops::Shl;
 
 #[derive(Clone, Debug, Copy)]
 pub struct FPNum {
@@ -93,7 +94,10 @@ impl FPNum {
 
     #[inline]
     pub fn with_sign(&self, is_negative: bool) -> FPNum {
-        FPNum{ is_negative, ..*self}
+        FPNum {
+            is_negative,
+            ..*self
+        }
     }
 
     #[inline]
@@ -293,10 +297,18 @@ impl ops::Div<u32> for FPNum {
 
 #[macro_export]
 macro_rules! fp {
-    (-$n: tt / $d: tt) => { FPNum::new(-$n, $d) };
-    ($n: tt / $d: tt) => { FPNum::new($n, $d) };
-    (-$n: tt) => { FPNum::from(-$n) };
-    ($n: tt) => { FPNum::from($n) };
+    (-$n: tt / $d: tt) => {
+        FPNum::new(-$n, $d)
+    };
+    ($n: tt / $d: tt) => {
+        FPNum::new($n, $d)
+    };
+    (-$n: tt) => {
+        FPNum::from(-$n)
+    };
+    ($n: tt) => {
+        FPNum::from($n)
+    };
 }
 
 const LINEARIZE_TRESHOLD: u64 = 0x1_0000;
@@ -316,24 +328,30 @@ impl FPPoint {
             x_is_negative: x.is_negative,
             y_is_negative: y.is_negative,
             x_value: x.value,
-            y_value: y.value
+            y_value: y.value,
         }
     }
 
     #[inline]
-    pub fn zero() -> FPPoint { FPPoint::new(fp!(0), fp!(0)) }
+    pub fn zero() -> FPPoint {
+        FPPoint::new(fp!(0), fp!(0))
+    }
 
     #[inline]
-    pub fn unit_x() -> FPPoint { FPPoint::new(fp!(1), fp!(0)) }
+    pub fn unit_x() -> FPPoint {
+        FPPoint::new(fp!(1), fp!(0))
+    }
 
     #[inline]
-    pub fn unit_y() -> FPPoint { FPPoint::new(fp!(0), fp!(1)) }
+    pub fn unit_y() -> FPPoint {
+        FPPoint::new(fp!(0), fp!(1))
+    }
 
     #[inline]
     pub fn x(&self) -> FPNum {
         FPNum {
             is_negative: self.x_is_negative,
-            value: self.x_value
+            value: self.x_value,
         }
     }
 
@@ -341,7 +359,7 @@ impl FPPoint {
     pub fn y(&self) -> FPNum {
         FPNum {
             is_negative: self.y_is_negative,
-            value: self.y_value
+            value: self.y_value,
         }
     }
 
@@ -361,7 +379,26 @@ impl FPPoint {
         if r < LINEARIZE_TRESHOLD {
             FPNum::from(r as u32)
         } else {
-            self.sqr_distance().sqrt()
+            let mut sqr: u128 = (self.x_value as u128).pow(2) + (self.y_value as u128).pow(2);
+
+            let mut t: u128 = 0x40000000_00000000_00000000_00000000;
+            let mut r: u128 = 0;
+
+            for _ in 0..64 {
+                let s = r + t;
+                r >>= 1;
+
+                if s <= sqr {
+                    sqr -= s;
+                    r += t;
+                }
+                t >>= 2;
+            }
+
+            FPNum {
+                is_negative: false,
+                value: r as u64,
+            }
         }
     }
 
@@ -401,11 +438,10 @@ macro_rules! bin_op_impl {
 
             #[inline]
             fn $name(self, rhs: Self) -> Self {
-                Self::new(self.x().$name(rhs.x()),
-                          self.y().$name(rhs.y()))
+                Self::new(self.x().$name(rhs.x()), self.y().$name(rhs.y()))
             }
         }
-    }
+    };
 }
 
 macro_rules! right_scalar_bin_op_impl {
@@ -477,15 +513,30 @@ bin_assign_op_impl!(FPPoint, ops::SubAssign<FPNum>, sub_assign, -);
 bin_assign_op_impl!(FPPoint, ops::MulAssign<FPNum>, mul_assign, *);
 bin_assign_op_impl!(FPPoint, ops::DivAssign<FPNum>, div_assign, /);
 
-#[inline]
 pub fn distance<T>(x: T, y: T) -> FPNum
-    where T: ops::Add + ops::Mul + Copy +
-             From<<T as ops::Add>::Output> +
-             From<<T as ops::Mul>::Output> +
-             Into<FPNum>
+where
+    T: Into<i64> + std::fmt::Debug,
 {
-    let sqr: FPNum = T::from(T::from(x * x) + T::from(y * y)).into();
-    sqr.sqrt()
+    let mut sqr: u128 = (x.into().pow(2) as u128).shl(64) + (y.into().pow(2) as u128).shl(64);
+
+    let mut t: u128 = 0x40000000_00000000_00000000_00000000;
+    let mut r: u128 = 0;
+
+    for _ in 0..64 {
+        let s = r + t;
+        r >>= 1;
+
+        if s <= sqr {
+            sqr -= s;
+            r += t;
+        }
+        t >>= 2;
+    }
+
+    FPNum {
+        is_negative: false,
+        value: r as u64,
+    }
 }
 
 /* TODO:
@@ -496,7 +547,7 @@ pub fn distance<T>(x: T, y: T) -> FPNum
 #[cfg(test)]
 #[test]
 fn basics() {
-    let n = fp!(15/2);
+    let n = fp!(15 / 2);
     assert!(n.is_positive());
     assert!(!n.is_negative());
 
@@ -505,7 +556,7 @@ fn basics() {
 
     assert_eq!(-(-n), n);
     assert_eq!((-n).abs(), n);
-    assert_eq!(-n, fp!(-15/2));
+    assert_eq!(-n, fp!(-15 / 2));
 
     assert_eq!(n.round(), 7);
     assert_eq!((-n).round(), -7);
@@ -514,7 +565,7 @@ fn basics() {
 #[test]
 fn zero() {
     let z = fp!(0);
-    let n = fp!(15/2);
+    let n = fp!(15 / 2);
 
     assert!(z.is_zero());
     assert!(z.is_positive());
@@ -527,8 +578,8 @@ fn zero() {
 #[test]
 fn ord() {
     let z = fp!(0);
-    let n1_5 = fp!(3/2);
-    let n2_25 = fp!(9/4);
+    let n1_5 = fp!(3 / 2);
+    let n2_25 = fp!(9 / 4);
 
     assert!(!(z > z));
     assert!(!(z < z));
@@ -539,9 +590,9 @@ fn ord() {
 
 #[test]
 fn arith() {
-    let n1_5 = fp!(3/2);
-    let n2_25 = fp!(9/4);
-    let n_0_15 = fp!(-15/100);
+    let n1_5 = fp!(3 / 2);
+    let n2_25 = fp!(9 / 4);
+    let n_0_15 = fp!(-15 / 100);
 
     assert_eq!(n1_5 + n1_5, fp!(3));
     assert_eq!(-n1_5 - n1_5, fp!(-3));
@@ -563,13 +614,22 @@ fn arith() {
 
     let mut m = fp!(1);
     m += n1_5;
-    assert_eq!(m, fp!(5/2));
+    assert_eq!(m, fp!(5 / 2));
+}
+
+#[test]
+fn test_distance_high_values() {
+    assert_eq!(distance(1_000_000i32, 0), fp!(1_000_000));
+    assert_eq!(
+        FPPoint::new(fp!(1_000_000), fp!(0)).distance(),
+        fp!(1_000_000)
+    );
 }
 
 #[test]
 fn point() {
     let z = FPPoint::zero();
-    let n = fp!(16/9);
+    let n = fp!(16 / 9);
     let p = FPPoint::new(fp!(1), fp!(-2));
 
     assert_eq!(p.sqr_distance(), fp!(5));

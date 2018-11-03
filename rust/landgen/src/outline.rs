@@ -36,8 +36,10 @@ impl OutlinePoints {
                                     (rnd_b % rect.height) as i32,
                                 )
                                 + play_box.top_left()
-                        }).collect()
-                }).collect(),
+                        })
+                        .collect()
+                })
+                .collect(),
             fill_points: outline_template.fill_points.clone(),
         }
     }
@@ -92,10 +94,14 @@ impl OutlinePoints {
 
                 let intersection_point = Point::new(ix, iy);
                 let diff_point = *m - intersection_point;
-                let d = diff_point.integral_norm();
                 let t = p.dot(diff_point);
+                if diff_point.max_norm() >= std::i16::MAX as i32 {
+                    Some((t, std::i32::MAX as u32))
+                } else {
+                    let d = diff_point.integral_norm();
 
-                Some((t, d))
+                    Some((t, d))
+                }
             } else {
                 None
             }
@@ -121,13 +127,15 @@ impl OutlinePoints {
             // where the normal line intersects the left map border
             let left_intersection = Point::new(
                 map_box.left(),
-                (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y);
+                (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y,
+            );
             dist_left = (mid_point - left_intersection).integral_norm();
 
             // same for the right border
             let right_intersection = Point::new(
                 map_box.right(),
-                (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y);
+                (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y,
+            );
             dist_right = (mid_point - right_intersection).integral_norm();
 
             if p.x > 0 {
@@ -139,13 +147,15 @@ impl OutlinePoints {
             // where the normal line intersects the top map border
             let top_intersection = Point::new(
                 (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x,
-                map_box.top());
+                map_box.top(),
+            );
             let dl = (mid_point - top_intersection).integral_norm();
 
             // same for the bottom border
             let bottom_intersection = Point::new(
                 (map_box.bottom() - mid_point.y) * p.x / p.y + mid_point.x,
-                map_box.bottom());
+                map_box.bottom(),
+            );
             let dr = (mid_point - bottom_intersection).integral_norm();
 
             if p.y < 0 {
