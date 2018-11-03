@@ -112,55 +112,47 @@ impl OutlinePoints {
             return None;
         }
 
-        let full_box = Rect::at_origin(self.size).with_margin(min_distance);
-
         let mut dist_left = (self.size.width + self.size.height) as u32;
         let mut dist_right = dist_left;
 
         // find distances to map borders
         if p.x != 0 {
-            // check against left border
-            let iyl = (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y;
-            let dl = Point::new(mid_point.x - map_box.left(), mid_point.y - iyl).integral_norm();
-            let t = p.dot(mid_point - Point::new(full_box.left(), iyl));
+            // where the normal line intersects the left map border
+            let left_intersection = Point::new(
+                map_box.left(),
+                (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y);
+            dist_left = (mid_point - left_intersection).integral_norm();
 
-            if t > 0 {
-                dist_left = dl;
-            } else {
-                dist_right = dl;
-            }
+            // same for the right border
+            let right_intersection = Point::new(
+                map_box.right(),
+                (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y);
+            dist_right = (mid_point - right_intersection).integral_norm();
 
-            // right border
-            let iyr = (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y;
-            let dr = Point::new(mid_point.x - full_box.right(), mid_point.y - iyr).integral_norm();
-
-            if t > 0 {
-                dist_right = dr;
-            } else {
-                dist_left = dr;
+            if p.dot(mid_point - left_intersection) < 0 {
+                std::mem::swap(&mut dist_left, &mut dist_right);
             }
         }
 
         if p.y != 0 {
-            // top border
-            let ixl = (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x;
-            let dl = Point::new(mid_point.y - map_box.top(), mid_point.x - ixl).integral_norm();
-            let t = p.dot(mid_point - Point::new(ixl, full_box.top()));
+            // where the normal line intersects the top map border
+            let top_intersection = Point::new(
+                (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x,
+                map_box.top());
+            let dl = (mid_point - top_intersection).integral_norm();
 
-            if t > 0 {
+            // same for the bottom border
+            let bottom_intersection = Point::new(
+                (map_box.bottom() - mid_point.y) * p.x / p.y + mid_point.x,
+                map_box.bottom());
+            let dr = (mid_point - bottom_intersection).integral_norm();
+
+            if p.dot(mid_point - top_intersection) > 0 {
                 dist_left = min(dist_left, dl);
-            } else {
-                dist_right = min(dist_right, dl);
-            }
-
-            // bottom border
-            let ixr = (map_box.bottom() - mid_point.y) * p.x / p.y + mid_point.x;
-            let dr = Point::new(mid_point.y - full_box.bottom(), mid_point.x - ixr).integral_norm();
-
-            if t > 0 {
                 dist_right = min(dist_right, dr);
             } else {
                 dist_left = min(dist_left, dr);
+                dist_right = min(dist_right, dl);
             }
         }
 
