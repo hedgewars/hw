@@ -383,8 +383,17 @@ impl Polygon {
         Line::new(self.vertices[index], self.vertices[index + 1])
     }
 
-    pub fn iter<'a>(&'a self) -> impl Iterator<Item = Point> + 'a {
-        (&self.vertices[..self.edges_count()]).iter().cloned()
+    pub fn split_edge(&mut self, edge_index: usize, vertex: Point) {
+        self.vertices.insert(edge_index + 1, vertex);
+    }
+
+    pub fn iter<'a>(&'a self) -> impl Iterator<Item = &Point> + 'a {
+        (&self.vertices[..self.edges_count()]).iter()
+    }
+
+    pub fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
+        let edges_count = self.edges_count();
+        (&mut self.vertices[..edges_count]).iter_mut()
     }
 
     pub fn iter_edges<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {

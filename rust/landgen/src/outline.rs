@@ -1,13 +1,15 @@
 use itertools::Itertools;
 use std::cmp::min;
 
-use integral_geometry::{Line, Point, Rect, Size};
+use integral_geometry::{
+    Line, Point, Rect, Size, Polygon
+};
 use land2d::Land2D;
 
 use outline_template::OutlineTemplate;
 
 pub struct OutlinePoints {
-    pub islands: Vec<Vec<Point>>,
+    pub islands: Vec<Polygon>,
     pub fill_points: Vec<Point>,
     pub size: Size,
     pub play_box: Rect,
@@ -37,7 +39,7 @@ impl OutlinePoints {
                                 )
                                 + play_box.top_left()
                         })
-                        .collect()
+                        .collect::<Vec<_>>().into()
                 })
                 .collect(),
             fill_points: outline_template.fill_points.clone(),
@@ -45,13 +47,13 @@ impl OutlinePoints {
     }
 
     pub fn total_len(&self) -> usize {
-        self.islands.iter().map(|i| i.len()).sum::<usize>() + self.fill_points.len()
+        self.islands.iter().map(|i| i.edges_count()).sum::<usize>() + self.fill_points.len()
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &Point> {
         self.islands
             .iter()
-            .flat_map(|i| i.iter())
+            .flat_map(|p| p.iter())
             .chain(self.fill_points.iter())
     }
 
@@ -235,28 +237,10 @@ impl OutlinePoints {
     ) {
         for is in 0..self.islands.len() {
             let mut i = 0;
-            let mut segment;
-
-            loop {
-                {
-                    let island = &self.islands[is];
-                    let mut end_point;
-                    if i < island.len() {
-                        end_point = if i + 1 < island.len() {
-                            island[i + 1]
-                        } else {
-                            island[0]
-                        };
-                    } else {
-                        break;
-                    }
-
-                    segment = Line::new(island[i], end_point);
-                }
-
-                if let Some(new_point) = self.divide_edge(segment, distance_divisor, random_numbers)
-                {
-                    self.islands[is].insert(i + 1, new_point);
+            while i < self.islands[is].edges_count() {
+                let segment = self.islands[is].get_edge(i);
+                if let Some(new_point) = self.divide_edge(segment, distance_divisor, random_numbers) {
+                    self.islands[is].split_edge(i, new_point);
                     i += 2;
                 } else {
                     i += 1;
@@ -288,12 +272,8 @@ impl OutlinePoints {
         }
     }
 
-    fn segments_iter(&self) -> OutlineSegmentsIterator {
-        OutlineSegmentsIterator {
-            outline: self,
-            island: 0,
-            index: 0,
-        }
+    fn segments_iter<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
+        self.islands.iter().flat_map(|p| p.iter_edges())
     }
 
     pub fn mirror(&mut self) {
@@ -309,53 +289,14 @@ impl OutlinePoints {
     }
 }
 
-struct OutlineSegmentsIterator<'a> {
-    outline: &'a OutlinePoints,
-    island: usize,
-    index: usize,
-}
-
-impl<'a> Iterator for OutlineSegmentsIterator<'a> {
-    type Item = Line;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.island < self.outline.islands.len() {
-            if self.index + 1 < self.outline.islands[self.island].len() {
-                let result = Some(Line::new(
-                    self.outline.islands[self.island][self.index],
-                    self.outline.islands[self.island][self.index + 1],
-                ));
-
-                self.index += 1;
-
-                result
-            } else if self.index + 1 == self.outline.islands[self.island].len() {
-                let result = Some(Line::new(
-                    self.outline.islands[self.island][self.index],
-                    self.outline.islands[self.island][0],
-                ));
-
-                self.island += 1;
-                self.index = 0;
-
-                result
-            } else {
-                self.island += 1;
-                self.index = 0;
-                self.next()
-            }
-        } else {
-            None
-        }
-    }
-}
-
 #[test()]
 fn points_test() {
+    ;
     let mut points = OutlinePoints {
+
         islands: vec![
-            vec![Point::new(0, 0), Point::new(20, 0), Point::new(30, 30)],
-            vec![Point::new(10, 15), Point::new(15, 20), Point::new(20, 15)],
+            Polygon::new(&[Point::new(0, 0), Point::new(20, 0), Point::new(30, 30)]),
+            Polygon::new(&[Point::new(10, 15), Point::new(15, 20), Point::new(20, 15)]),
         ],
         fill_points: vec![Point::new(1, 1)],
         play_box: Rect::from_box(0, 100, 0, 100).with_margin(10),
@@ -374,5 +315,5 @@ fn points_test() {
 
     points.iter_mut().for_each(|p| p.x = 2);
     assert_eq!(points.fill_points[0].x, 2);
-    assert_eq!(points.islands[0][0].x, 2);
+    assert_eq!(points.islands[0].get_edge(0).start.x, 2);
 }
