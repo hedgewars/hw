@@ -10,14 +10,18 @@ pub struct LandGenerationParameters<T> {
     zero: T,
     basic: T,
     distance_divisor: u32,
+    skip_distort: bool,
+    skip_bezier: bool,
 }
 
 impl<T: Copy + PartialEq> LandGenerationParameters<T> {
-    pub fn new(zero: T, basic: T) -> Self {
+    pub fn new(zero: T, basic: T, distance_divisor: u32, skip_distort: bool, skip_bezier: bool) -> Self {
         Self {
             zero,
             basic,
-            distance_divisor: 1,
+            distance_divisor,
+            skip_distort,
+            skip_bezier,
         }
     }
 }
@@ -25,7 +29,7 @@ impl<T: Copy + PartialEq> LandGenerationParameters<T> {
 pub trait LandGenerator {
     fn generate_land<T: Copy + PartialEq, I: Iterator<Item = u32>>(
         &self,
-        parameters: LandGenerationParameters<T>,
+        parameters: &LandGenerationParameters<T>,
         random_numbers: &mut I,
     ) -> land2d::Land2D<T>;
 }

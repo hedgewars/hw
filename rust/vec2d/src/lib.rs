@@ -55,6 +55,10 @@ impl<T: Copy> Vec2D<T> {
         Self { size, data: vec![value; size.area()] }
     }
 
+    pub fn raw_data(&self) -> &[T] {
+        &self.data
+    }
+
     #[inline]
     pub fn get(&self, row: usize, column: usize) -> Option<&<usize as SliceIndex<[T]>>::Output> {
         self.data.get(row * self.width() + column)

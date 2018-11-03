@@ -270,8 +270,6 @@ impl OutlinePoints {
                 break;
             }
         }
-
-        self.bezierize();
     }
 
     pub fn draw<T: Copy + PartialEq>(&self, land: &mut Land2D<T>, value: T) {

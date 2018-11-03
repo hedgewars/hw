@@ -19,7 +19,7 @@ impl TemplatedLandGenerator {
 impl LandGenerator for TemplatedLandGenerator {
     fn generate_land<T: Copy + PartialEq, I: Iterator<Item = u32>>(
         &self,
-        parameters: LandGenerationParameters<T>,
+        parameters: &LandGenerationParameters<T>,
         random_numbers: &mut I,
     ) -> Land2D<T> {
         let mut land = Land2D::new(self.outline_template.size, parameters.basic);
@@ -49,7 +49,13 @@ impl LandGenerator for TemplatedLandGenerator {
             }
         }
 
-        points.distort(parameters.distance_divisor, random_numbers);
+        if !parameters.skip_distort {
+            points.distort(parameters.distance_divisor, random_numbers);
+        }
+
+        if !parameters.skip_bezier {
+            points.bezierize();
+        }
 
         points.draw(&mut land, parameters.zero);
 
