@@ -39,7 +39,7 @@ impl <T: LandGenerator> LandSource<T> {
     }
 
     fn next(&mut self, parameters: LandGenerationParameters<u32>) -> Land2D<u32> {
-        self.generator.generate_land(parameters, &mut self.rnd)
+        self.generator.generate_land(&parameters, &mut self.rnd)
     }
 }
 
@@ -164,7 +164,7 @@ fn main() {
 
     let mut source = init_source();
     let mut land = source.next(
-        LandGenerationParameters::new(0, u32::max_value()));
+        LandGenerationParameters::new(0, u32::max_value(), 1, false, false));
     draw_center_mark(&mut land);
 
     let mut land_surf = Surface::new(LAND_WIDTH, LAND_HEIGHT, PixelFormatEnum::ARGB8888).unwrap();
