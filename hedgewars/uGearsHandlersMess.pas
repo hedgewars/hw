@@ -4736,7 +4736,7 @@ end;
 procedure doPortalColorSwitch();
 var CurWeapon: PAmmo;
 begin
-    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.Message and gmSwitch) <> 0) then
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) and ((CurrentHedgehog^.Gear^.Message and gmSwitch) <> 0) then
             with CurrentHedgehog^ do
                 if (CurAmmoType = amPortalGun) then
                     begin
