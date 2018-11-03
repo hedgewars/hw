@@ -43,12 +43,12 @@ voted forced vote = do
 
     case voting rm of
         Nothing -> 
-            return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "There's no voting going on."]]
+            return [Warning $ loc "There's no voting going on."]
         Just voting ->
             if (not forced) && (uid `L.notElem` entitledToVote voting) then
                 return []
             else if (not forced) && (uid `L.elem` map fst (votes voting)) then
-                return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "You already have voted."]]
+                return [Warning $ loc "You already have voted."]
             else if forced && (not $ isAdministrator cl) then
                 return []
             else

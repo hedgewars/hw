@@ -411,7 +411,7 @@ handleCmd_inRoom ["MAXTEAMS", n] = do
     if not $ isMaster cl then
         return [Warning $ loc "You're not the room master!"]
     else if m < 2 || m > cMaxTeams then
-        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/maxteams: specify number from 2 to 8"]]
+        return [Warning $ loc "/maxteams: specify number from 2 to 8"]
     else
         return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
 
@@ -457,12 +457,12 @@ handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
     rm <- thisRoom
     return
-        [AnswerClients [sendChan cl] ["CHAT", nickServer,
+        [Warning $
         if isJust $ masterID rm then
             loc "/callvote kick: This is only allowed in rooms without a room master."
         else
             loc "/callvote kick: You need to specify a nickname."
-        ]]
+        ]
 
 handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     (thisClientId, rnc) <- ask
@@ -473,12 +473,12 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
 
     if isJust $ masterID rm then
-        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote kick: This is only allowed in rooms without a room master."]]
+        return [Warning $ loc "/callvote kick: This is only allowed in rooms without a room master."]
         else
         if isJust maybeClientId && sameRoom then
             startVote $ VoteKick nickname
             else
-            return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote kick: No such user!"]]
+            return [Warning $ loc "/callvote kick: No such user!"]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP"] = do
@@ -501,7 +501,7 @@ handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
     if Map.member roomSave $ roomSaves rm then
         startVote $ VoteMap roomSave
         else
-        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote map: No such map!"]]
+        return [Warning $ loc "/callvote map: No such map!"]
 
 
 handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
@@ -511,7 +511,7 @@ handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
     if isJust $ gameInfo rm then
         startVote VotePause
         else 
-        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote pause: No game in progress!"]]
+        return [Warning $ loc "/callvote pause: No game in progress!"]
 
 handleCmd_inRoom ["CALLVOTE", "PAUSE", _] = handleCmd_inRoom ["CALLVOTE", "PAUSE"]
 
@@ -522,7 +522,7 @@ handleCmd_inRoom ["CALLVOTE", "NEWSEED", _] = handleCmd_inRoom ["CALLVOTE", "NEW
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote hedgehogs: Specify number from 1 to 8."]]
+    return [Warning $ loc "/callvote hedgehogs: Specify number from 1 to 8."]
 
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
@@ -532,7 +532,7 @@ handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
     if h > 0 && h <= cHogsPerTeam then
         startVote $ VoteHedgehogsPerTeam h
         else
-        return [AnswerClients [sendChan cl] ["CHAT", nickServer, loc "/callvote hedgehogs: Specify number from 1 to 8."]]
+        return [Warning $ loc "/callvote hedgehogs: Specify number from 1 to 8."]
 
 handleCmd_inRoom ["CALLVOTE", _] = handleCmd_inRoom ["CALLVOTE"]
 handleCmd_inRoom ["CALLVOTE", _, _] = handleCmd_inRoom ["CALLVOTE"]
@@ -543,12 +543,12 @@ handleCmd_inRoom ("VOTE" : m : p) = do
     if isJust b then
         voted (p == ["FORCE"]) (fromJust b)
     else
-        return [AnswerClients [sendChan cl] ["CHAT", nickServer,
+        return [Warning $
             if (p == ["FORCE"]) then
                 loc "/force: Please use 'yes' or 'no'."
             else
                 loc "/vote: Please use 'yes' or 'no'."
-        ]]
+        ]
 
 
 handleCmd_inRoom ["SAVE", stateName, location] = serverAdminOnly $ do
