@@ -354,8 +354,8 @@ impl Rect {
         [
             Rect::from_box(self.left(), point.x, self.top(), point.y),
             Rect::from_box(point.x, self.right(), self.top(), point.y),
-            Rect::from_box(self.left(), point.x, point.y, self.bottom()),
-            Rect::from_box(point.x, self.right(), point.y, self.bottom())
+            Rect::from_box(point.x, self.right(), point.y, self.bottom()),
+            Rect::from_box(self.left(), point.x, point.y, self.bottom())
         ]
     }
 }
