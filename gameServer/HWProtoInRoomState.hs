@@ -415,6 +415,8 @@ handleCmd_inRoom ["MAXTEAMS", n] = do
     else
         return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
 
+handleCmd_inRoom ["MAXTEAMS"] = handleCmd_inRoom ["MAXTEAMS", ""]
+
 handleCmd_inRoom ["FIX"] = serverAdminOnly $
     return [ModifyRoom (\r -> r{isSpecial = True})]
 

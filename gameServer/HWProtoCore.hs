@@ -103,6 +103,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "FORCE" msg | not $ B.null msg = handleCmd_roomOnly ["VOTE", upperCase msg, "FORCE"]
                       | otherwise = handleCmd_roomOnly ["VOTE", "", "FORCE"]
         h "MAXTEAMS" n | not $ B.null n = handleCmd_roomOnly ["MAXTEAMS", n]
+                       | otherwise = handleCmd_roomOnly ["MAXTEAMS"]
 
         -- lobby-only commands
         h "STATS" _ = handleCmd_lobbyOnly ["STATS"]
