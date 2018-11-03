@@ -27,6 +27,8 @@ struct Opt {
     dump_before_distort: bool,
     #[structopt(short = "b", long = "dump-before-bezierize")]
     dump_before_bezierize: bool,
+    #[structopt(short = "f", long = "distance-divisor", default_value = "100")]
+    distance_divisor: u32,
 }
 
 fn template() -> OutlineTemplate {
@@ -44,11 +46,12 @@ fn template() -> OutlineTemplate {
 
 fn dump(
     seed: &[u8],
+    distance_divisor: u32,
     skip_distort: bool,
     skip_bezier: bool,
     file_name: &Path,
 ) -> std::io::Result<()> {
-    let params = LandGenerationParameters::new(0 as u8, 255, 100, skip_distort, skip_bezier);
+    let params = LandGenerationParameters::new(0 as u8, 255, distance_divisor, skip_distort, skip_bezier);
     let landgen = TemplatedLandGenerator::new(template());
     let mut prng = LaggedFibonacciPRNG::new(seed);
     let land = landgen.generate_land(&params, &mut prng);
@@ -74,6 +77,7 @@ fn main() {
     if opt.dump_before_distort {
         dump(
             opt.seed.as_str().as_bytes(),
+            opt.distance_divisor,
             true,
             true,
             Path::new("out.before_distort.png"),
@@ -83,6 +87,7 @@ fn main() {
     if opt.dump_before_bezierize {
         dump(
             opt.seed.as_str().as_bytes(),
+            opt.distance_divisor,
             false,
             true,
             Path::new("out.before_bezier.png"),
@@ -91,6 +96,7 @@ fn main() {
     }
     dump(
         opt.seed.as_str().as_bytes(),
+        opt.distance_divisor,
         false,
         true,
         Path::new("out.full.png"),

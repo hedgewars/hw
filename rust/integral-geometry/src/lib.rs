@@ -1,13 +1,8 @@
 extern crate fpnum;
 
 use fpnum::distance;
-use std::ops::{
-    Add, AddAssign,
-    Div, DivAssign,
-    Mul, MulAssign,
-    Sub, SubAssign,
-    RangeInclusive
-};
+use std::cmp::max;
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Sub, SubAssign};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Point {
@@ -68,6 +63,26 @@ impl Point {
     pub fn cross(self, other: Point) -> i32 {
         self.dot(other.rotate90())
     }
+
+    #[inline]
+    pub fn fit(&self, rect: &Rect) -> Point {
+        let x = if self.x > rect.right() {
+            rect.right()
+        } else if self.x < rect.left() {
+            rect.left()
+        } else {
+            self.x
+        };
+        let y = if self.y > rect.bottom() {
+            rect.bottom()
+        } else if self.y < rect.top() {
+            rect.top()
+        } else {
+            self.y
+        };
+
+        Point::new(x, y)
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -116,6 +131,11 @@ impl Size {
     #[inline]
     pub fn to_mask(&self) -> SizeMask {
         SizeMask::new(*self)
+    }
+
+    #[inline]
+    pub fn to_square(&self) -> Size {
+        Size::square(max(self.width, self.height))
     }
 
     pub fn to_grid_index(&self) -> GridIndex {
@@ -355,13 +375,13 @@ impl Rect {
             Rect::from_box(self.left(), point.x, self.top(), point.y),
             Rect::from_box(point.x, self.right(), self.top(), point.y),
             Rect::from_box(point.x, self.right(), point.y, self.bottom()),
-            Rect::from_box(self.left(), point.x, point.y, self.bottom())
+            Rect::from_box(self.left(), point.x, point.y, self.bottom()),
         ]
     }
 }
 
 pub struct Polygon {
-    vertices: Vec<Point>
+    vertices: Vec<Point>,
 }
 
 impl Polygon {
@@ -656,5 +676,13 @@ mod tests {
 
         assert_eq!(r.top_left(), Point::new(10, 0));
         assert_eq!(r.with_margin(12), Rect::from_box(22, 88, 12, 58));
+    }
+
+    #[test]
+    fn fit() {
+        let r = Rect::from_box(10, 100, 0, 70);
+
+        assert_eq!(Point::new(0, -10).fit(&r), Point::new(10, 0));
+        assert_eq!(Point::new(1000, 1000).fit(&r), Point::new(100, 70));
     }
 }

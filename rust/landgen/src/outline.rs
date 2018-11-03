@@ -1,9 +1,7 @@
 use itertools::Itertools;
 use std::cmp::min;
 
-use integral_geometry::{
-    Line, Point, Rect, Size, Polygon
-};
+use integral_geometry::{Line, Point, Polygon, Rect, Size};
 use land2d::Land2D;
 
 use outline_template::OutlineTemplate;
@@ -13,6 +11,7 @@ pub struct OutlinePoints {
     pub fill_points: Vec<Point>,
     pub size: Size,
     pub play_box: Rect,
+    intersections_box: Rect,
 }
 
 impl OutlinePoints {
@@ -39,10 +38,13 @@ impl OutlinePoints {
                                 )
                                 + play_box.top_left()
                         })
-                        .collect::<Vec<_>>().into()
+                        .collect::<Vec<_>>()
+                        .into()
                 })
                 .collect(),
             fill_points: outline_template.fill_points.clone(),
+            intersections_box: Rect::at_origin(size)
+                .with_margin(size.to_square().width as i32 * -2),
         }
     }
 
@@ -79,15 +81,29 @@ impl OutlinePoints {
         }
 
         #[inline]
-        fn solve_intersection(p: &Point, m: &Point, s: &Point, e: &Point) -> Option<(i32, u32)> {
+        fn solve_intersection(
+            intersections_box: &Rect,
+            p: &Point,
+            m: &Point,
+            s: &Point,
+            e: &Point,
+        ) -> Option<(i32, u32)> {
             let f = *e - *s;
             let aqpb = p.cross(f) as i64;
 
             if aqpb != 0 {
-                let iy = ((((s.x - m.x) as i64 * p.y as i64 + m.y as i64 * p.x as i64)
+                let mut iy = ((((s.x - m.x) as i64 * p.y as i64 + m.y as i64 * p.x as i64)
                     * f.y as i64
                     - s.y as i64 * f.x as i64 * p.y as i64)
                     / aqpb) as i32;
+
+                // is there better way to do it?
+                if iy < intersections_box.top() {
+                    iy = intersections_box.top();
+                } else if iy > intersections_box.bottom() {
+                    iy = intersections_box.bottom();
+                }
+
                 let ix = if p.y.abs() > f.y.abs() {
                     (iy - m.y) * p.x / p.y + m.x
                 } else {
@@ -173,7 +189,13 @@ impl OutlinePoints {
         for s in self.segments_iter() {
             if s != segment {
                 if intersect(&p, &mid_point, &s.start, &s.end) {
-                    if let Some((t, d)) = solve_intersection(&p, &mid_point, &s.start, &s.end) {
+                    if let Some((t, d)) = solve_intersection(
+                        &self.intersections_box,
+                        &p,
+                        &mid_point,
+                        &s.start,
+                        &s.end,
+                    ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
                         } else {
@@ -189,7 +211,13 @@ impl OutlinePoints {
             if *pi != segment.start && *pi != segment.end {
                 if intersect(&p, &pi, &segment.start, &segment.end) {
                     // ray from segment.start
-                    if let Some((t, d)) = solve_intersection(&p, &mid_point, &segment.start, &pi) {
+                    if let Some((t, d)) = solve_intersection(
+                        &self.intersections_box,
+                        &p,
+                        &mid_point,
+                        &segment.start,
+                        &pi,
+                    ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
                         } else {
@@ -198,7 +226,13 @@ impl OutlinePoints {
                     }
 
                     // ray from segment.end
-                    if let Some((t, d)) = solve_intersection(&p, &mid_point, &segment.end, &pi) {
+                    if let Some((t, d)) = solve_intersection(
+                        &self.intersections_box,
+                        &p,
+                        &mid_point,
+                        &segment.end,
+                        &pi,
+                    ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
                         } else {
@@ -239,7 +273,8 @@ impl OutlinePoints {
             let mut i = 0;
             while i < self.islands[is].edges_count() {
                 let segment = self.islands[is].get_edge(i);
-                if let Some(new_point) = self.divide_edge(segment, distance_divisor, random_numbers) {
+                if let Some(new_point) = self.divide_edge(segment, distance_divisor, random_numbers)
+                {
                     self.islands[is].split_edge(i, new_point);
                     i += 2;
                 } else {
@@ -291,9 +326,7 @@ impl OutlinePoints {
 
 #[test()]
 fn points_test() {
-    ;
     let mut points = OutlinePoints {
-
         islands: vec![
             Polygon::new(&[Point::new(0, 0), Point::new(20, 0), Point::new(30, 30)]),
             Polygon::new(&[Point::new(10, 15), Point::new(15, 20), Point::new(20, 15)]),
@@ -301,6 +334,7 @@ fn points_test() {
         fill_points: vec![Point::new(1, 1)],
         play_box: Rect::from_box(0, 100, 0, 100).with_margin(10),
         size: Size::square(100),
+        intersections_box: Rect::from_box(0, 0, 100, 100),
     };
 
     let segments: Vec<Line> = points.segments_iter().collect();
@@ -314,6 +348,7 @@ fn points_test() {
     );
 
     points.iter_mut().for_each(|p| p.x = 2);
+
     assert_eq!(points.fill_points[0].x, 2);
     assert_eq!(points.islands[0].get_edge(0).start.x, 2);
 }
