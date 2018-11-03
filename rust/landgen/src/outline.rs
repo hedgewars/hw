@@ -210,10 +210,9 @@ impl OutlinePoints {
                 + random_numbers.next().unwrap() as i32
                     % (dist_right as i32 + dist_left as i32 - min_distance * 2);
 
-            let offset = d / p.integral_norm() as i32;
             Some(Point::new(
-                mid_point.x + p.x * offset as i32,
-                mid_point.y + p.y * offset as i32,
+                mid_point.x + p.x * d / p.integral_norm() as i32,
+                mid_point.y + p.y * d / p.integral_norm() as i32,
             ))
         }
     }
