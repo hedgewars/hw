@@ -110,7 +110,7 @@ impl OutlinePoints {
                     (iy - s.y) * f.x / f.y + s.x
                 };
 
-                let intersection_point = Point::new(ix, iy);
+                let intersection_point = Point::new(ix, iy).fit(intersections_box);
                 let diff_point = m - intersection_point;
                 let t = p.dot(diff_point);
                 if diff_point.max_norm() >= std::i16::MAX as i32 {
