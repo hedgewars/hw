@@ -73,9 +73,9 @@ impl OutlinePoints {
         random_numbers: &mut I,
     ) -> Option<Point> {
         #[inline]
-        fn intersect(p: &Point, m: &Point, p1: &Point, p2: &Point) -> bool {
-            let t1 = (*m - *p1).cross(*p);
-            let t2 = (*m - *p2).cross(*p);
+        fn intersect(p: Point, m: Point, p1: Point, p2: Point) -> bool {
+            let t1 = (m - p1).cross(p);
+            let t2 = (m - p2).cross(p);
 
             (t1 > 0) != (t2 > 0)
         }
@@ -83,12 +83,12 @@ impl OutlinePoints {
         #[inline]
         fn solve_intersection(
             intersections_box: &Rect,
-            p: &Point,
-            m: &Point,
-            s: &Point,
-            e: &Point,
+            p: Point,
+            m: Point,
+            s: Point,
+            e: Point,
         ) -> Option<(i32, u32)> {
-            let f = *e - *s;
+            let f = e - s;
             let aqpb = p.cross(f) as i64;
 
             if aqpb != 0 {
@@ -111,7 +111,7 @@ impl OutlinePoints {
                 };
 
                 let intersection_point = Point::new(ix, iy);
-                let diff_point = *m - intersection_point;
+                let diff_point = m - intersection_point;
                 let t = p.dot(diff_point);
                 if diff_point.max_norm() >= std::i16::MAX as i32 {
                     Some((t, std::i32::MAX as u32))
@@ -188,13 +188,13 @@ impl OutlinePoints {
         // now go through all other segments
         for s in self.segments_iter() {
             if s != segment {
-                if intersect(&p, &mid_point, &s.start, &s.end) {
+                if intersect(p, mid_point, s.start, s.end) {
                     if let Some((t, d)) = solve_intersection(
                         &self.intersections_box,
-                        &p,
-                        &mid_point,
-                        &s.start,
-                        &s.end,
+                        p,
+                        mid_point,
+                        s.start,
+                        s.end,
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
@@ -207,16 +207,16 @@ impl OutlinePoints {
         }
 
         // go through all points, including fill points
-        for pi in self.iter() {
-            if *pi != segment.start && *pi != segment.end {
-                if intersect(&p, &pi, &segment.start, &segment.end) {
+        for pi in self.iter().cloned() {
+            if pi != segment.start && pi != segment.end {
+                if intersect(p, pi, segment.start, segment.end) {
                     // ray from segment.start
                     if let Some((t, d)) = solve_intersection(
                         &self.intersections_box,
-                        &p,
-                        &mid_point,
-                        &segment.start,
-                        &pi,
+                        p,
+                        mid_point,
+                        segment.start,
+                        pi,
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
@@ -228,10 +228,10 @@ impl OutlinePoints {
                     // ray from segment.end
                     if let Some((t, d)) = solve_intersection(
                         &self.intersections_box,
-                        &p,
-                        &mid_point,
-                        &segment.end,
-                        &pi,
+                        p,
+                        mid_point,
+                        segment.end,
+                        pi,
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);

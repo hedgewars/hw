@@ -65,7 +65,7 @@ impl Point {
     }
 
     #[inline]
-    pub fn fit(&self, rect: &Rect) -> Point {
+    pub fn fit(self, rect: &Rect) -> Point {
         let x = if self.x > rect.right() {
             rect.right()
         } else if self.x < rect.left() {
