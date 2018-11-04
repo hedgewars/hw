@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 land2d = { path = "../land2d" }
 landgen = { path = "../landgen" }
+mapgen = { path = "../mapgen" }
 lfprng = { path = "../lfprng" }
 integral-geometry = { path = "../integral-geometry" }
 png = "0.13"

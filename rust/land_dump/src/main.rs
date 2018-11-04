@@ -1,21 +1,19 @@
-extern crate integral_geometry;
-extern crate land2d;
-extern crate landgen;
-extern crate lfprng;
-extern crate png;
-extern crate structopt;
-
 use png::HasParameters;
-use std::fs::File;
-use std::io::BufWriter;
-use std::path::Path;
+use std::{
+    fs::File,
+    io::{BufWriter, Read},
+    path::{Path, PathBuf}
+};
 use structopt::StructOpt;
 
 use integral_geometry::{Point, Rect, Size};
-use landgen::outline_template::OutlineTemplate;
-use landgen::template_based::TemplatedLandGenerator;
-use landgen::LandGenerationParameters;
-use landgen::LandGenerator;
+use landgen::{
+    outline_template::OutlineTemplate,
+    template_based::TemplatedLandGenerator,
+    LandGenerationParameters,
+    LandGenerator
+};
+use mapgen::MapGenerator;
 use lfprng::LaggedFibonacciPRNG;
 
 #[derive(StructOpt, Debug)]
@@ -29,6 +27,10 @@ struct Opt {
     dump_before_bezierize: bool,
     #[structopt(short = "f", long = "distance-divisor", default_value = "100")]
     distance_divisor: u32,
+    #[structopt(short = "i", long = "templates-file")]
+    templates_file: Option<String>,
+    #[structopt(short = "t", long = "template-type")]
+    template_type: Option<String>
 }
 
 fn template() -> OutlineTemplate {
@@ -45,6 +47,7 @@ fn template() -> OutlineTemplate {
 }
 
 fn dump(
+    template: &OutlineTemplate,
     seed: &[u8],
     distance_divisor: u32,
     skip_distort: bool,
@@ -52,7 +55,7 @@ fn dump(
     file_name: &Path,
 ) -> std::io::Result<()> {
     let params = LandGenerationParameters::new(0 as u8, 255, distance_divisor, skip_distort, skip_bezier);
-    let landgen = TemplatedLandGenerator::new(template());
+    let landgen = TemplatedLandGenerator::new(template.clone());
     let mut prng = LaggedFibonacciPRNG::new(seed);
     let land = landgen.generate_land(&params, &mut prng);
 
@@ -74,8 +77,36 @@ fn main() {
     let opt = Opt::from_args();
     println!("{:?}", opt);
 
+    let template =
+        if let Some(path) = opt.templates_file {
+            let mut result = String::new();
+            File::open(path)
+                .expect("Unable to read templates file")
+                .read_to_string(&mut result);
+
+            let mut generator = MapGenerator::new();
+
+            let bom = b"\xEF\xBB\xBF";
+            let source = if &result.as_bytes()[..bom.len()] == &bom[..] {
+                &result[bom.len()..]
+            } else {
+                &result[..]
+            };
+
+            generator.import_yaml_templates(source);
+
+            let template_type = &opt.template_type
+                .expect("No template type specified");
+            generator.get_template(template_type)
+                .expect(&format!("Template type {} not found", template_type))
+                .clone()
+        } else {
+            template()
+        };
+
     if opt.dump_before_distort {
         dump(
+            &template,
             opt.seed.as_str().as_bytes(),
             opt.distance_divisor,
             true,
@@ -86,6 +117,7 @@ fn main() {
     }
     if opt.dump_before_bezierize {
         dump(
+            &template,
             opt.seed.as_str().as_bytes(),
             opt.distance_divisor,
             false,
@@ -95,6 +127,7 @@ fn main() {
         .unwrap();
     }
     dump(
+        &template,
         opt.seed.as_str().as_bytes(),
         opt.distance_divisor,
         false,

@@ -111,6 +111,8 @@ mod tests {
     #[test]
     fn simple_load() {
         let text = r#"
+# comment
+
 templates:
   -
     width: 3072
@@ -132,10 +134,10 @@ templates:
         - {x: 1930, y: 1424, w: 1, h: 1}
     fill_points:
       - {x: 1023, y: 0}
+      - {x: 1023, y: 0}
 
 template_types:
     test: [0]
-
 "#;
 
         let mut generator = MapGenerator::new();
