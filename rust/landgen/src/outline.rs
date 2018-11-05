@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::cmp::min;
 
-use integral_geometry::{Line, Ray, Point, Polygon, Rect, RectInclusive, Size};
+use integral_geometry::{Line, Ray, Point, Polygon, Rect, Size};
 use land2d::Land2D;
 
 use outline_template::OutlineTemplate;
@@ -10,14 +10,14 @@ pub struct OutlinePoints {
     pub islands: Vec<Polygon>,
     pub fill_points: Vec<Point>,
     pub size: Size,
-    pub play_box: RectInclusive,
-    intersections_box: RectInclusive,
+    pub play_box: Rect,
+    intersections_box: Rect,
 }
 
 impl OutlinePoints {
     pub fn from_outline_template<I: Iterator<Item = u32>>(
         outline_template: &OutlineTemplate,
-        play_box: RectInclusive,
+        play_box: Rect,
         size: Size,
         random_numbers: &mut I,
     ) -> Self {
@@ -31,14 +31,14 @@ impl OutlinePoints {
                     i.iter()
                         .zip(random_numbers.tuples())
                         .map(|(rect, (rnd_a, rnd_b))| {
-                            play_box.top_left() + rect.quotient(rnd_a, rnd_b)
+                            play_box.top_left() + rect.quotient(rnd_a as usize, rnd_b as usize)
                         })
                         .collect::<Vec<_>>()
                         .into()
                 })
                 .collect(),
             fill_points: outline_template.fill_points.clone(),
-            intersections_box: RectInclusive::at_origin(size)
+            intersections_box: Rect::at_origin(size)
                 .with_margin(size.to_square().width as i32 * -2),
         }
     }
@@ -74,7 +74,7 @@ impl OutlinePoints {
 
         #[inline]
         fn solve_intersection(
-            intersections_box: &RectInclusive,
+            intersections_box: &Rect,
             ray: &Ray,
             edge: &Line
         ) -> Option<(i32, u32)>
@@ -313,9 +313,9 @@ fn points_test() {
             Polygon::new(&[Point::new(10, 15), Point::new(15, 20), Point::new(20, 15)]),
         ],
         fill_points: vec![Point::new(1, 1)],
-        play_box: RectInclusive::at_origin(size).with_margin(10),
+        play_box: Rect::at_origin(size).with_margin(10),
         size: Size::square(100),
-        intersections_box: RectInclusive::at_origin(size),
+        intersections_box: Rect::at_origin(size),
     };
 
     let segments: Vec<Line> = points.segments_iter().collect();

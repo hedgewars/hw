@@ -51,7 +51,9 @@ impl From<&TemplateDesc> for OutlineTemplate {
         OutlineTemplate {
             islands: desc.outline_points.iter()
                 .map(|v| v.iter()
-                    .map(|r| Rect::new(r.x as i32, r.y as i32, r.w, r.h))
+                    .map(|r| Rect::from_size(
+                        Point::new(r.x as i32, r.y as i32),
+                        Size::new(r.w as usize, r.h as usize)))
                     .collect())
                 .collect(),
             fill_points: desc.fill_points.iter()

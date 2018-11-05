@@ -73,7 +73,7 @@ impl Point {
     }
 
     #[inline]
-    pub fn clamp(self, rect: &RectInclusive) -> Point {
+    pub fn clamp(self, rect: &Rect) -> Point {
         Point::new(
             rect.x_range().clamp(self.x),
             rect.y_range().clamp(self.y)
@@ -260,158 +260,35 @@ bin_assign_op_impl!(DivAssign, div_assign);
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Rect {
-    x: i32,
-    y: i32,
-    width: u32,
-    height: u32
-}
-
-impl Rect {
-    #[inline]
-    pub fn new(x: i32, y: i32, width: u32, height: u32) -> Self {
-        Self { x, y, width, height }
-    }
-
-    pub fn from_size(top_left: Point, size: Size) -> Self {
-        Rect::new(
-            top_left.x,
-            top_left.y,
-            size.width as u32,
-            size.height as u32,
-        )
-    }
-
-    pub fn at_origin(size: Size) -> Self {
-        Rect::from_size(Point::zero(), size)
-    }
-
-    #[inline]
-    pub fn width(&self) -> usize {
-        self.width as usize
-    }
-
-    #[inline]
-    pub fn height(&self) -> usize {
-        self.height as usize
-    }
-
-    #[inline]
-    pub fn size(&self) -> Size {
-        Size::new(self.width(), self.height())
-    }
-
-    #[inline]
-    pub fn area(&self) -> usize {
-        self.size().area()
-    }
-
-    #[inline]
-    pub fn left(&self) -> i32 {
-        self.x
-    }
-
-    #[inline]
-    pub fn top(&self) -> i32 {
-        self.y
-    }
-
-    #[inline]
-    pub fn right(&self) -> i32 {
-        self.x + self.width as i32 - 1
-    }
-
-    #[inline]
-    pub fn bottom(&self) -> i32 {
-        self.y + self.height as i32 - 1
-    }
-
-    #[inline]
-    pub fn top_left(&self) -> Point {
-        Point::new(self.x, self.y)
-    }
-
-    #[inline]
-    pub fn bottom_right(&self) -> Point {
-        Point::new(self.right(), self.bottom())
-    }
-
-    #[inline]
-    pub fn center(&self) -> Point {
-        (self.top_left() + self.bottom_right()) / 2
-    }
-
-    #[inline]
-    pub fn x_range(&self) -> Range<i32> {
-        self.x..self.x + self.width as i32
-    }
-
-    #[inline]
-    pub fn y_range(&self) -> Range<i32> {
-        self.y..self.y + self.height as i32
-    }
-
-    #[inline]
-    pub fn contains(&self, point: Point) -> bool {
-        self.x_range().contains(point.x) && self.y_range().contains(point.y)
-    }
-
-    #[inline]
-    pub fn contains_inside(&self, point: Point) -> bool {
-        point.x > self.left()
-            && point.x < self.right()
-            && point.y > self.top()
-            && point.y < self.bottom()
-    }
-
-    #[inline]
-    pub fn intersects(&self, other: &Rect) -> bool {
-        self.left() <= self.right()
-            && self.right() >= other.left()
-            && self.top() <= other.bottom()
-            && self.bottom() >= other.top()
-    }
-
-    #[inline]
-    pub fn split_at(&self, point: Point) -> [RectInclusive; 4] {
-        RectInclusive::from(self.clone()).split_at(point)
-    }
-
-    #[inline]
-    pub fn quotient(self, x: u32, y: u32) -> Point {
-        self.top_left() +
-            Point::new(
-                (x % self.width) as i32,
-                (y % self.height) as i32
-            )
-    }
-}
-
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-pub struct RectInclusive {
     top_left: Point,
     bottom_right: Point,
 }
 
-impl RectInclusive {
+impl Rect {
     #[inline]
     pub fn new(top_left: Point, bottom_right: Point) -> Self {
-        assert!(top_left.x <= bottom_right.x);
-        assert!(top_left.y <= bottom_right.y);
+        assert!(top_left.x <= bottom_right.x + 1);
+        assert!(top_left.y <= bottom_right.y + 1);
         Self { top_left, bottom_right }
     }
 
     pub fn from_box(left: i32, right: i32, top: i32, bottom: i32) -> Self {
-        RectInclusive::new(Point::new(left, top), Point::new(right, bottom))
+        Self::new(Point::new(left, top), Point::new(right, bottom))
     }
+
     pub fn from_size(top_left: Point, size: Size) -> Self {
-        RectInclusive::new(
+        Self::new(
             top_left,
             top_left + Point::new(size.width as i32 - 1, size.height as i32 - 1)
         )
     }
 
+    pub fn from_size_coords(x: i32, y: i32, width: usize, height: usize) -> Self {
+        Self::from_size(Point::new(x, y), Size::new(width, height))
+    }
+
     pub fn at_origin(size: Size) -> Self {
-        RectInclusive::from_size(Point::zero(), size)
+        Self::from_size(Point::zero(), size)
     }
 
     #[inline]
@@ -436,22 +313,22 @@ impl RectInclusive {
 
     #[inline]
     pub fn left(&self) -> i32 {
-        self.top_left.x
+        self.top_left().x
     }
 
     #[inline]
     pub fn top(&self) -> i32 {
-        self.top_left.y
+        self.top_left().y
     }
 
     #[inline]
     pub fn right(&self) -> i32 {
-        self.bottom_right.x
+        self.bottom_right().x
     }
 
     #[inline]
     pub fn bottom(&self) -> i32 {
-        self.bottom_right.y
+        self.bottom_right().y
     }
 
     #[inline]
@@ -472,7 +349,7 @@ impl RectInclusive {
     #[inline]
     pub fn with_margin(&self, margin: i32) -> Self {
         let offset = Point::diag(margin);
-        RectInclusive::new(
+        Self::new(
             self.top_left() + offset,
             self.bottom_right() - offset
         )
@@ -502,7 +379,7 @@ impl RectInclusive {
     }
 
     #[inline]
-    pub fn intersects(&self, other: &RectInclusive) -> bool {
+    pub fn intersects(&self, other: &Rect) -> bool {
         self.left() <= self.right()
             && self.right() >= other.left()
             && self.top() <= other.bottom()
@@ -510,26 +387,23 @@ impl RectInclusive {
     }
 
     #[inline]
-    pub fn split_at(&self, point: Point) -> [RectInclusive; 4] {
+    pub fn split_at(&self, point: Point) -> [Rect; 4] {
         assert!(self.contains_inside(point));
         [
-            RectInclusive::from_box(self.left(), point.x, self.top(), point.y),
-            RectInclusive::from_box(point.x, self.right(), self.top(), point.y),
-            RectInclusive::from_box(point.x, self.right(), point.y, self.bottom()),
-            RectInclusive::from_box(self.left(), point.x, point.y, self.bottom()),
+            Self::from_box(self.left(), point.x, self.top(), point.y),
+            Self::from_box(point.x, self.right(), self.top(), point.y),
+            Self::from_box(point.x, self.right(), point.y, self.bottom()),
+            Self::from_box(self.left(), point.x, point.y, self.bottom()),
         ]
     }
-}
 
-impl From<RectInclusive> for Rect {
-    fn from(r: RectInclusive) -> Self {
-        Self::from_size(r.top_left, r.size())
-    }
-}
-
-impl From<Rect> for RectInclusive {
-    fn from(r: Rect) -> Self {
-        Self::new(r.top_left(), r.bottom_right())
+    #[inline]
+    pub fn quotient(self, x: usize, y: usize) -> Point {
+        self.top_left() +
+            Point::new(
+                (x % self.width()) as i32,
+                (y % self.height()) as i32
+            )
     }
 }
 
@@ -928,18 +802,18 @@ mod tests {
 
     #[test]
     fn rect() {
-        let r = RectInclusive::from_box(10, 100, 0, 70);
+        let r = Rect::from_box(10, 100, 0, 70);
 
         assert!(r.contains_inside(Point::new(99, 69)));
         assert!(!r.contains_inside(Point::new(100, 70)));
 
         assert_eq!(r.top_left(), Point::new(10, 0));
-        assert_eq!(r.with_margin(12), RectInclusive::from_box(22, 88, 12, 58));
+        assert_eq!(r.with_margin(12), Rect::from_box(22, 88, 12, 58));
     }
 
     #[test]
     fn fit() {
-        let r = RectInclusive::from_box(10, 100, 0, 70);
+        let r = Rect::from_box(10, 100, 0, 70);
 
         assert_eq!(Point::new(0, -10).clamp(&r), Point::new(10, 0));
         assert_eq!(Point::new(1000, 1000).clamp(&r), Point::new(100, 70));

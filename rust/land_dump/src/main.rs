@@ -36,10 +36,10 @@ struct Opt {
 fn template() -> OutlineTemplate {
     let mut template = OutlineTemplate::new(Size::new(4096, 2048));
     template.islands = vec![vec![
-        Rect::new(100, 2050, 1, 1),
-        Rect::new(100, 500, 400, 1200),
-        Rect::new(3600, 500, 400, 1200),
-        Rect::new(3900, 2050, 1, 1),
+        Rect::from_size_coords(100, 2050, 1, 1),
+        Rect::from_size_coords(100, 500, 400, 1200),
+        Rect::from_size_coords(3600, 500, 400, 1200),
+        Rect::from_size_coords(3900, 2050, 1, 1),
     ]];
     template.fill_points = vec![Point::new(2047, 2047)];
 
