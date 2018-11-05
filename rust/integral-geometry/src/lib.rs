@@ -2,7 +2,7 @@ extern crate fpnum;
 
 use fpnum::distance;
 use std::cmp::max;
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Point {
@@ -14,6 +14,11 @@ impl Point {
     #[inline]
     pub fn new(x: i32, y: i32) -> Self {
         Self { x, y }
+    }
+
+    #[inline]
+    pub fn diag(v: i32) -> Self {
+        Self::new(v, v)
     }
 
     #[inline]
@@ -65,23 +70,31 @@ impl Point {
     }
 
     #[inline]
-    pub fn fit(self, rect: &Rect) -> Point {
-        let x = if self.x > rect.right() {
-            rect.right()
-        } else if self.x < rect.left() {
-            rect.left()
-        } else {
-            self.x
-        };
-        let y = if self.y > rect.bottom() {
-            rect.bottom()
-        } else if self.y < rect.top() {
-            rect.top()
-        } else {
-            self.y
-        };
+    pub fn clamp(self, rect: &Rect) -> Point {
+        Point::new(
+            rect.x_range().clamp(self.x),
+            rect.y_range().clamp(self.y)
+        )
+    }
 
-        Point::new(x, y)
+    #[inline]
+    pub fn line_to(self, end: Point) -> Line {
+        Line::new(self, end)
+    }
+
+    #[inline]
+    pub fn ray_to(self, end: Point) -> Ray {
+        self.line_to(end).to_ray()
+    }
+
+    #[inline]
+    pub fn tangent(self) -> i32 {
+        self.y / self.x
+    }
+
+    #[inline]
+    pub fn cotangent(self) -> i32 {
+        self.x / self.y
     }
 }
 
@@ -346,11 +359,10 @@ impl Rect {
         self.y..=self.y + self.height as i32
     }
 
-    /* requires #[feature(range_contains)]
     #[inline]
     pub fn contains(&self, point: Point) -> bool {
-        x_range().contains(point.x) && y_range.contains(point.y)
-    }*/
+        self.x_range().contains(point.x) && self.y_range().contains(point.y)
+    }
 
     #[inline]
     pub fn contains_inside(&self, point: Point) -> bool {
@@ -377,6 +389,47 @@ impl Rect {
             Rect::from_box(point.x, self.right(), point.y, self.bottom()),
             Rect::from_box(self.left(), point.x, point.y, self.bottom()),
         ]
+    }
+
+    #[inline]
+    pub fn quotient(self, x: u32, y: u32) -> Point {
+        self.top_left() +
+            Point::new(
+                (x % self.width) as i32,
+                (y % self.height) as i32
+            )
+    }
+}
+
+trait RangeContains<T> {
+    fn contains(&self, value: T) -> bool;
+}
+
+impl <T: Ord> RangeContains<T> for Range<T> {
+    fn contains(&self, value: T) -> bool {
+        value >= self.start && value < self.end
+    }
+}
+
+impl <T: Ord> RangeContains<T> for RangeInclusive<T> {
+    fn contains(&self, value: T) -> bool {
+        value >= *self.start() && value <= *self.end()
+    }
+}
+
+trait RangeClamp<T> {
+    fn clamp(&self, value: T) -> T;
+}
+
+impl <T: Ord + Copy> RangeClamp<T> for RangeInclusive<T> {
+    fn clamp(&self, value: T) -> T {
+        if value < *self.start() {
+            *self.start()
+        } else if value > *self.end() {
+            *self.end()
+        } else {
+            value
+        }
     }
 }
 
@@ -435,6 +488,34 @@ impl From<Vec<Point>> for Polygon {
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub struct Ray {
+    pub start: Point,
+    pub direction: Point
+}
+
+impl Ray {
+    #[inline]
+    pub fn new(start: Point, direction: Point) -> Ray {
+        Self { start, direction }
+    }
+
+    #[inline]
+    pub fn tangent(&self) -> i32 {
+        self.direction.tangent()
+    }
+
+    #[inline]
+    pub fn cotangent(&self) -> i32 {
+        self.direction.cotangent()
+    }
+
+    #[inline]
+    pub fn orientation(&self, point: Point) -> i32 {
+        (point - self.start).cross(self.direction).signum()
+    }
+}
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Line {
     pub start: Point,
     pub end: Point,
@@ -457,8 +538,18 @@ impl Line {
     }
 
     #[inline]
+    pub fn scaled_direction(&self) -> Point {
+        self.end - self.start
+    }
+
+    #[inline]
     pub fn scaled_normal(&self) -> Point {
-        (self.end - self.start).rotate90()
+        self.scaled_direction().rotate90()
+    }
+
+    #[inline]
+    pub fn to_ray(&self) -> Ray {
+        Ray::new(self.start, self.scaled_direction())
     }
 }
 

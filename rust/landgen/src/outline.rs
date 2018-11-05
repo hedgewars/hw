@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::cmp::min;
 
-use integral_geometry::{Line, Point, Polygon, Rect, Size};
+use integral_geometry::{Line, Ray, Point, Polygon, Rect, Size};
 use land2d::Land2D;
 
 use outline_template::OutlineTemplate;
@@ -31,12 +31,7 @@ impl OutlinePoints {
                     i.iter()
                         .zip(random_numbers.tuples())
                         .map(|(rect, (rnd_a, rnd_b))| {
-                            rect.top_left()
-                                + Point::new(
-                                    (rnd_a % rect.width) as i32,
-                                    (rnd_b % rect.height) as i32,
-                                )
-                                + play_box.top_left()
+                            play_box.top_left() + rect.quotient(rnd_a, rnd_b)
                         })
                         .collect::<Vec<_>>()
                         .into()
@@ -73,28 +68,22 @@ impl OutlinePoints {
         random_numbers: &mut I,
     ) -> Option<Point> {
         #[inline]
-        fn intersect(p: Point, m: Point, p1: Point, p2: Point) -> bool {
-            let t1 = (m - p1).cross(p);
-            let t2 = (m - p2).cross(p);
-
-            (t1 > 0) != (t2 > 0)
+        fn intersects(ray: &Ray, edge: &Line) -> bool {
+            ray.orientation(edge.start) != ray.orientation(edge.end)
         }
 
         #[inline]
-        fn solve_intersection(
-            intersections_box: &Rect,
-            p: Point,
-            m: Point,
-            s: Point,
-            e: Point,
-        ) -> Option<(i32, u32)> {
-            let f = e - s;
-            let aqpb = p.cross(f) as i64;
+        fn solve_intersection(intersections_box: &Rect, ray: &Ray, edge: &Line) -> Option<(i32, u32)>
+        {
+            let edge_dir = edge.scaled_direction();
+            let aqpb = ray.direction.cross(edge_dir) as i64;
 
             if aqpb != 0 {
-                let mut iy = ((((s.x - m.x) as i64 * p.y as i64 + m.y as i64 * p.x as i64)
-                    * f.y as i64
-                    - s.y as i64 * f.x as i64 * p.y as i64)
+                let mut iy =
+                    ((((edge.start.x - ray.start.x) as i64 * ray.direction.y as i64
+                        + ray.start.y as i64 * ray.direction.x as i64)
+                    * edge_dir.y as i64
+                    - edge.start.y as i64 * edge_dir.x as i64 * ray.direction.y as i64)
                     / aqpb) as i32;
 
                 // is there better way to do it?
@@ -104,15 +93,15 @@ impl OutlinePoints {
                     iy = intersections_box.bottom();
                 }
 
-                let ix = if p.y.abs() > f.y.abs() {
-                    (iy - m.y) * p.x / p.y + m.x
+                let ix = if ray.direction.y.abs() > edge_dir.y.abs() {
+                    (iy - ray.start.y) * ray.direction.cotangent() + ray.start.x
                 } else {
-                    (iy - s.y) * f.x / f.y + s.x
+                    (iy - edge.start.y) * edge_dir.cotangent() + edge.start.x
                 };
 
                 let intersection_point = Point::new(ix, iy);
-                let diff_point = m - intersection_point;
-                let t = p.dot(diff_point);
+                let diff_point = ray.start - intersection_point;
+                let t = ray.direction.dot(diff_point);
                 if diff_point.max_norm() >= std::i16::MAX as i32 {
                     Some((t, std::i32::MAX as u32))
                 } else {
@@ -129,54 +118,55 @@ impl OutlinePoints {
         // new point should fall inside this box
         let map_box = self.play_box.with_margin(min_distance);
 
-        let p = segment.scaled_normal();
-        let p_norm = p.integral_norm();
+        let normal = segment.scaled_normal();
+        let normal_len = normal.integral_norm();
         let mid_point = segment.center();
 
-        if (p_norm < min_distance as u32 * 3) || !map_box.contains_inside(mid_point) {
+        if (normal_len < min_distance as u32 * 3) || !map_box.contains_inside(mid_point) {
             return None;
         }
 
+        let normal_ray = Ray::new(mid_point, normal);
         let mut dist_left = (self.size.width + self.size.height) as u32;
         let mut dist_right = dist_left;
 
         // find distances to map borders
-        if p.x != 0 {
+        if normal.x != 0 {
             // where the normal line intersects the left map border
             let left_intersection = Point::new(
                 map_box.left(),
-                (map_box.left() - mid_point.x) * p.y / p.x + mid_point.y,
+                (map_box.left() - mid_point.x) * normal.tangent() + mid_point.y,
             );
             dist_left = (mid_point - left_intersection).integral_norm();
 
             // same for the right border
             let right_intersection = Point::new(
                 map_box.right(),
-                (map_box.right() - mid_point.x) * p.y / p.x + mid_point.y,
+                (map_box.right() - mid_point.x) * normal.tangent() + mid_point.y,
             );
             dist_right = (mid_point - right_intersection).integral_norm();
 
-            if p.x > 0 {
+            if normal.x > 0 {
                 std::mem::swap(&mut dist_left, &mut dist_right);
             }
         }
 
-        if p.y != 0 {
+        if normal.y != 0 {
             // where the normal line intersects the top map border
             let top_intersection = Point::new(
-                (map_box.top() - mid_point.y) * p.x / p.y + mid_point.x,
+                (map_box.top() - mid_point.y) * normal.cotangent() + mid_point.x,
                 map_box.top(),
             );
             let dl = (mid_point - top_intersection).integral_norm();
 
             // same for the bottom border
             let bottom_intersection = Point::new(
-                (map_box.bottom() - mid_point.y) * p.x / p.y + mid_point.x,
+                (map_box.bottom() - mid_point.y) * normal.cotangent() + mid_point.x,
                 map_box.bottom(),
             );
             let dr = (mid_point - bottom_intersection).integral_norm();
 
-            if p.y < 0 {
+            if normal.y < 0 {
                 dist_left = min(dist_left, dl);
                 dist_right = min(dist_right, dr);
             } else {
@@ -188,14 +178,10 @@ impl OutlinePoints {
         // now go through all other segments
         for s in self.segments_iter() {
             if s != segment {
-                if intersect(p, mid_point, s.start, s.end) {
-                    if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box,
-                        p,
-                        mid_point,
-                        s.start,
-                        s.end,
-                    ) {
+                if intersects(&normal_ray, &s) {
+                    if let Some((t, d)) =
+                        solve_intersection(&self.intersections_box, &normal_ray, &s)
+                    {
                         if t > 0 {
                             dist_right = min(dist_right, d);
                         } else {
@@ -209,14 +195,10 @@ impl OutlinePoints {
         // go through all points, including fill points
         for pi in self.iter().cloned() {
             if pi != segment.start && pi != segment.end {
-                if intersect(p, pi, segment.start, segment.end) {
+                if intersects(&pi.ray_to(normal), &segment) {
                     // ray from segment.start
                     if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box,
-                        p,
-                        mid_point,
-                        segment.start,
-                        pi,
+                        &self.intersections_box, &normal_ray, &segment.start.line_to(pi),
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
@@ -227,11 +209,7 @@ impl OutlinePoints {
 
                     // ray from segment.end
                     if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box,
-                        p,
-                        mid_point,
-                        segment.end,
-                        pi,
+                        &self.intersections_box, &normal_ray, &segment.end.line_to(pi)
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
@@ -243,7 +221,7 @@ impl OutlinePoints {
             }
         }
 
-        let max_dist = p_norm * 100 / distance_divisor;
+        let max_dist = normal_len * 100 / distance_divisor;
         dist_left = min(dist_left, max_dist);
         dist_right = min(dist_right, max_dist);
 
@@ -257,10 +235,7 @@ impl OutlinePoints {
                 + random_numbers.next().unwrap() as i32
                     % (dist_right as i32 + dist_left as i32 - min_distance * 2);
 
-            Some(Point::new(
-                mid_point.x + p.x * d / p_norm as i32,
-                mid_point.y + p.y * d / p_norm as i32,
-            ))
+            Some(mid_point + normal * d / normal_len as i32)
         }
     }
 
