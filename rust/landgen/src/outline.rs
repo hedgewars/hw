@@ -54,11 +54,11 @@ impl OutlinePoints {
             .chain(self.fill_points.iter())
     }
 
-    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Point> {
-        self.islands
-            .iter_mut()
-            .flat_map(|i| i.iter_mut())
-            .chain(self.fill_points.iter_mut())
+    pub fn for_each<F>(&mut self, f: F)
+        where F: (Fn(&mut Point))
+    {
+        self.islands.iter_mut().for_each(|p| p.for_each(|x| f(x)));
+        self.fill_points.iter_mut().for_each(|p| f(p));
     }
 
     fn divide_edge<I: Iterator<Item = u32>>(
@@ -289,14 +289,12 @@ impl OutlinePoints {
 
     pub fn mirror(&mut self) {
         let r = self.size.width as i32 - 1;
-
-        self.iter_mut().for_each(|p| p.x = r - p.x);
+        self.for_each(|p| p.x = r - p.x);
     }
 
     pub fn flip(&mut self) {
         let t = self.size.height as i32 - 1;
-
-        self.iter_mut().for_each(|p| p.y = t - p.y);
+        self.for_each(|p| p.y = t - p.y);
     }
 }
 
@@ -323,7 +321,7 @@ fn points_test() {
         Some(&Line::new(Point::new(20, 15), Point::new(10, 15)))
     );
 
-    points.iter_mut().for_each(|p| p.x = 2);
+    points.for_each(|p| p.x = 2);
 
     assert_eq!(points.fill_points[0].x, 2);
     assert_eq!(points.islands[0].get_edge(0).start.x, 2);

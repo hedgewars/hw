@@ -464,9 +464,19 @@ impl Polygon {
         (&self.vertices[..self.edges_count()]).iter()
     }
 
-    pub fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
+    fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
         let edges_count = self.edges_count();
         (&mut self.vertices[..edges_count]).iter_mut()
+    }
+
+    pub fn for_each<F>(&mut self, f: F)
+        where F: (Fn(&mut Point))
+    {
+        if !self.vertices.is_empty() {
+            self.iter_mut().for_each(f);
+            let edges_count = self.edges_count();
+            self.vertices[edges_count] = self.vertices[0]
+        }
     }
 
     pub fn iter_edges<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
