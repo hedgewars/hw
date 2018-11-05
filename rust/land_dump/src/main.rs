@@ -131,7 +131,7 @@ fn main() {
         opt.seed.as_str().as_bytes(),
         opt.distance_divisor,
         false,
-        true,
+        false,
         Path::new("out.full.png"),
     )
     .unwrap();

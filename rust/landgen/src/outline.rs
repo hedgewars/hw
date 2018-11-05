@@ -99,9 +99,10 @@ impl OutlinePoints {
                     (iy - edge.start.y) * edge_dir.cotangent() + edge.start.x
                 };
 
-                let intersection_point = Point::new(ix, iy);
+                let intersection_point = Point::new(ix, iy).clamp(intersections_box);
                 let diff_point = ray.start - intersection_point;
                 let t = ray.direction.dot(diff_point);
+
                 if diff_point.max_norm() >= std::i16::MAX as i32 {
                     Some((t, std::i32::MAX as u32))
                 } else {
