@@ -3,12 +3,11 @@ extern crate vec2d;
 
 use std::cmp;
 
-use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, Rect, Size, SizeMask};
+use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, RectInclusive, Size, SizeMask};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
-    play_size: Size,
-    play_box: Rect,
+    play_box: RectInclusive,
 
     mask: SizeMask,
 }
@@ -20,9 +19,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
             ((real_size.width - play_size.width) / 2) as i32,
             (real_size.height - play_size.height) as i32,
         );
-        let play_box = Rect::from_size(top_left, play_size);
+        let play_box = RectInclusive::from_size(top_left, play_size);
         Self {
-            play_size,
             play_box,
             pixels: vec2d::Vec2D::new(real_size, fill_value),
             mask: real_size.to_mask(),
@@ -50,21 +48,21 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
     #[inline]
     pub fn play_width(&self) -> usize {
-        self.play_size.width
+        self.play_box.width()
     }
 
     #[inline]
     pub fn play_height(&self) -> usize {
-        self.play_size.height
+        self.play_box.height()
     }
 
     #[inline]
     pub fn play_size(&self) -> Size {
-        self.play_size
+        self.play_box.size()
     }
 
     #[inline]
-    pub fn play_box(&self) -> Rect {
+    pub fn play_box(&self) -> RectInclusive {
         self.play_box
     }
 
