@@ -264,7 +264,11 @@ impl OutlinePoints {
         }
     }
 
-    pub fn bezierize(&mut self) {}
+    pub fn bezierize(&mut self, segments_number: u32) {
+        for island in &mut self.islands {
+            island.bezierize(segments_number);
+        }
+    }
 
     pub fn distort<I: Iterator<Item = u32>>(
         &mut self,

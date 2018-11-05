@@ -54,7 +54,7 @@ impl LandGenerator for TemplatedLandGenerator {
         }
 
         if !parameters.skip_bezier {
-            points.bezierize();
+            points.bezierize(5);
         }
 
         points.draw(&mut land, parameters.zero);

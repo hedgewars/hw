@@ -133,7 +133,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
         ) {
             let yd = y as isize + dir;
 
-            if land.is_valid_coordinate(0, yd as i32) {
+            if land.is_valid_y(yd as i32) {
                 stack.push((xl, xr, yd as usize, dir));
             }
         };

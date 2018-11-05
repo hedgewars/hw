@@ -455,6 +455,17 @@ macro_rules! right_scalar_bin_op_impl {
                           self.y().$name(rhs))
             }
         }
+    };
+    ($($op: tt)::+<$arg: tt>, $name: tt) => {
+        impl $($op)::+<$arg> for FPPoint {
+            type Output = Self;
+
+            #[inline]
+            fn $name(self, rhs: $arg) -> Self {
+                Self::new(self.x().$name(rhs),
+                          self.y().$name(rhs))
+            }
+        }
     }
 }
 
@@ -480,6 +491,7 @@ right_scalar_bin_op_impl!(ops::Add, add);
 right_scalar_bin_op_impl!(ops::Mul, mul);
 right_scalar_bin_op_impl!(ops::Sub, sub);
 right_scalar_bin_op_impl!(ops::Div, div);
+right_scalar_bin_op_impl!(ops::Div<u32>, div);
 left_scalar_bin_op_impl!(ops::Mul, mul);
 
 macro_rules! bin_assign_op_impl {

@@ -3,8 +3,8 @@ extern crate fpnum;
 
 use fpnum::{distance, FPNum, FPPoint};
 use std::{
-    cmp::max,
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign}
+    cmp::{max, min},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign},
 };
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -74,10 +74,7 @@ impl Point {
 
     #[inline]
     pub fn clamp(self, rect: &Rect) -> Point {
-        Point::new(
-            rect.x_range().clamp(self.x),
-            rect.y_range().clamp(self.y)
-        )
+        Point::new(rect.x_range().clamp(self.x), rect.y_range().clamp(self.y))
     }
 
     #[inline]
@@ -274,7 +271,10 @@ impl Rect {
     pub fn new(top_left: Point, bottom_right: Point) -> Self {
         assert!(top_left.x <= bottom_right.x + 1);
         assert!(top_left.y <= bottom_right.y + 1);
-        Self { top_left, bottom_right }
+        Self {
+            top_left,
+            bottom_right,
+        }
     }
 
     pub fn from_box(left: i32, right: i32, top: i32, bottom: i32) -> Self {
@@ -284,7 +284,7 @@ impl Rect {
     pub fn from_size(top_left: Point, size: Size) -> Self {
         Self::new(
             top_left,
-            top_left + Point::new(size.width as i32 - 1, size.height as i32 - 1)
+            top_left + Point::new(size.width as i32 - 1, size.height as i32 - 1),
         )
     }
 
@@ -354,10 +354,7 @@ impl Rect {
     #[inline]
     pub fn with_margin(&self, margin: i32) -> Self {
         let offset = Point::diag(margin);
-        Self::new(
-            self.top_left() + offset,
-            self.bottom_right() - offset
-        )
+        Self::new(self.top_left() + offset, self.bottom_right() - offset)
     }
 
     #[inline]
@@ -404,11 +401,7 @@ impl Rect {
 
     #[inline]
     pub fn quotient(self, x: usize, y: usize) -> Point {
-        self.top_left() +
-            Point::new(
-                (x % self.width()) as i32,
-                (y % self.height()) as i32
-            )
+        self.top_left() + Point::new((x % self.width()) as i32, (y % self.height()) as i32)
     }
 }
 
@@ -416,13 +409,13 @@ trait RangeContains<T> {
     fn contains(&self, value: T) -> bool;
 }
 
-impl <T: Ord> RangeContains<T> for Range<T> {
+impl<T: Ord> RangeContains<T> for Range<T> {
     fn contains(&self, value: T) -> bool {
         value >= self.start && value < self.end
     }
 }
 
-impl <T: Ord> RangeContains<T> for RangeInclusive<T> {
+impl<T: Ord> RangeContains<T> for RangeInclusive<T> {
     fn contains(&self, value: T) -> bool {
         value >= *self.start() && value <= *self.end()
     }
@@ -432,7 +425,7 @@ trait RangeClamp<T> {
     fn clamp(&self, value: T) -> T;
 }
 
-impl <T: Ord + Copy> RangeClamp<T> for RangeInclusive<T> {
+impl<T: Ord + Copy> RangeClamp<T> for RangeInclusive<T> {
     fn clamp(&self, value: T) -> T {
         if value < *self.start() {
             *self.start()
@@ -479,7 +472,11 @@ impl Polygon {
         let edges_count = self.edges_count();
         let start = self.vertices.as_mut_ptr();
         let end = unsafe { start.add(self.vertices.len()) };
-        PolygonPointsIteratorMut { source: self, start, end }
+        PolygonPointsIteratorMut {
+            source: self,
+            start,
+            end,
+        }
     }
 
     fn force_close(&mut self) {
@@ -494,15 +491,66 @@ impl Polygon {
             .zip(&self.vertices[1..])
             .map(|(s, e)| Line::new(*s, *e))
     }
+
+    pub fn bezierize(&mut self, segments_number: u32) {
+        fn calc_point(p1: Point, p2: Point, p3: Point) -> FPPoint {
+            let diff13 = (p1 - p3).to_fppoint();
+            let diff13_norm = diff13.distance();
+
+            if diff13_norm.is_zero() {
+                diff13
+            } else {
+                let diff12_norm = (p1 - p2).to_fppoint().distance();
+                let diff23_norm = (p2 - p3).to_fppoint().distance();
+                let min_distance = min(diff13_norm, min(diff12_norm, diff23_norm));
+
+                diff13 * min_distance / diff13_norm / 3
+            }
+        }
+
+        if self.vertices.len() < 4 {
+            return;
+        }
+
+        let delta = fp!(1 / segments_number);
+        let mut bezierized_vertices = Vec::new();
+        let mut pi = 0;
+        let mut i = 1;
+        let mut ni = 2;
+        let mut right_point = calc_point(self.vertices[pi], self.vertices[i], self.vertices[ni]);
+        let mut left_point;
+
+        pi += 1;
+        while pi != 0 {
+            pi = i;
+            i = ni;
+            ni += 1;
+            if ni >= self.vertices.len() {
+                ni = 0;
+            }
+
+            left_point = right_point;
+            right_point = calc_point(self.vertices[pi], self.vertices[i], self.vertices[ni]);
+
+            bezierized_vertices.extend(BezierCurveSegments::new(
+                Line::new(self.vertices[pi], self.vertices[i]),
+                left_point,
+                -right_point,
+                delta,
+            ));
+        }
+
+        self.vertices = bezierized_vertices;
+    }
 }
 
 struct PolygonPointsIteratorMut<'a> {
     source: &'a mut Polygon,
     start: *mut Point,
-    end: *mut Point
+    end: *mut Point,
 }
 
-impl <'a> Iterator for PolygonPointsIteratorMut<'a> {
+impl<'a> Iterator for PolygonPointsIteratorMut<'a> {
     type Item = &'a mut Point;
 
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
@@ -518,7 +566,7 @@ impl <'a> Iterator for PolygonPointsIteratorMut<'a> {
     }
 }
 
-impl <'a> Drop for PolygonPointsIteratorMut<'a> {
+impl<'a> Drop for PolygonPointsIteratorMut<'a> {
     fn drop(&mut self) {
         self.source.force_close();
     }
@@ -537,7 +585,7 @@ impl From<Vec<Point>> for Polygon {
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Ray {
     pub start: Point,
-    pub direction: Point
+    pub direction: Point,
 }
 
 impl Ray {
@@ -741,17 +789,21 @@ pub struct BezierCurveSegments {
     c1: FPPoint,
     c2: FPPoint,
     offset: FPNum,
+    max_offset: FPNum,
     delta: FPNum,
+    have_finished: bool,
 }
 
 impl BezierCurveSegments {
-    pub fn new(segment: Line, p1: Point, p2: Point, delta: FPNum) -> Self {
+    pub fn new(segment: Line, p1: FPPoint, p2: FPPoint, delta: FPNum) -> Self {
         Self {
             segment,
-            c1: (segment.start - p1).to_fppoint(),
-            c2: (segment.end - p2).to_fppoint(),
+            c1: segment.start.to_fppoint() - p1,
+            c2: segment.end.to_fppoint() - p2,
             offset: fp!(0),
+            max_offset: fp!(4095 / 4096),
             delta,
+            have_finished: false,
         }
     }
 }
@@ -760,7 +812,7 @@ impl Iterator for BezierCurveSegments {
     type Item = Point;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.offset < fp!(1) {
+        if self.offset < self.max_offset {
             let offset_sq = self.offset * self.offset;
             let offset_cub = offset_sq * self.offset;
 
@@ -780,6 +832,10 @@ impl Iterator for BezierCurveSegments {
             self.offset += self.delta;
 
             Some(Point::new(x.round(), y.round()))
+        } else if !self.have_finished {
+            self.have_finished = true;
+
+            Some(self.segment.end)
         } else {
             None
         }
