@@ -1,8 +1,11 @@
 extern crate fpnum;
 
 use fpnum::distance;
-use std::cmp::max;
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign};
+use std::{
+    cmp::max,
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign}
+};
+
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Point {
@@ -464,18 +467,16 @@ impl Polygon {
         (&self.vertices[..self.edges_count()]).iter()
     }
 
-    fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
+    pub fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
         let edges_count = self.edges_count();
-        (&mut self.vertices[..edges_count]).iter_mut()
+        let start = self.vertices.as_mut_ptr();
+        let end = unsafe { start.add(self.vertices.len()) };
+        PolygonPointsIteratorMut { source: self, start, end }
     }
 
-    pub fn for_each<F>(&mut self, f: F)
-        where F: (Fn(&mut Point))
-    {
+    fn force_close(&mut self) {
         if !self.vertices.is_empty() {
-            self.iter_mut().for_each(f);
-            let edges_count = self.edges_count();
-            self.vertices[edges_count] = self.vertices[0]
+            self.vertices[0] = self.vertices[self.vertices.len() - 1];
         }
     }
 
@@ -484,6 +485,34 @@ impl Polygon {
             .iter()
             .zip(&self.vertices[1..])
             .map(|(s, e)| Line::new(*s, *e))
+    }
+}
+
+struct PolygonPointsIteratorMut<'a> {
+    source: &'a mut Polygon,
+    start: *mut Point,
+    end: *mut Point
+}
+
+impl <'a> Iterator for PolygonPointsIteratorMut<'a> {
+    type Item = &'a mut Point;
+
+    fn next(&mut self) -> Option<<Self as Iterator>::Item> {
+        if self.start == self.end {
+            None
+        } else {
+            unsafe {
+                let result = &mut *self.start;
+                self.start = self.start.add(1);
+                Some(result)
+            }
+        }
+    }
+}
+
+impl <'a> Drop for PolygonPointsIteratorMut<'a> {
+    fn drop(&mut self) {
+        self.source.force_close();
     }
 }
 
