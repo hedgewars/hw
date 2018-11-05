@@ -47,11 +47,11 @@ impl FPNum {
     }
 
     #[inline]
-    pub fn round(&self) -> i64 {
+    pub fn round(&self) -> i32 {
         if self.is_negative {
-            -((self.value >> 32) as i64)
+            -((self.value >> 32) as i32)
         } else {
-            (self.value >> 32) as i64
+            (self.value >> 32) as i32
         }
     }
 

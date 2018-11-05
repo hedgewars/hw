@@ -1,11 +1,11 @@
+#[macro_use]
 extern crate fpnum;
 
-use fpnum::distance;
+use fpnum::{distance, FPNum, FPPoint};
 use std::{
     cmp::max,
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign}
 };
-
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Point {
@@ -98,6 +98,11 @@ impl Point {
     #[inline]
     pub fn cotangent(self) -> i32 {
         self.x / self.y
+    }
+
+    #[inline]
+    pub fn to_fppoint(&self) -> FPPoint {
+        FPPoint::new(self.x.into(), self.y.into())
     }
 }
 
@@ -725,6 +730,56 @@ impl Iterator for EquidistantPoints {
             self.iteration -= 1;
 
             Some(self.vector)
+        } else {
+            None
+        }
+    }
+}
+
+pub struct BezierCurveSegments {
+    segment: Line,
+    c1: FPPoint,
+    c2: FPPoint,
+    offset: FPNum,
+    delta: FPNum,
+}
+
+impl BezierCurveSegments {
+    pub fn new(segment: Line, p1: Point, p2: Point, delta: FPNum) -> Self {
+        Self {
+            segment,
+            c1: (segment.start - p1).to_fppoint(),
+            c2: (segment.end - p2).to_fppoint(),
+            offset: fp!(0),
+            delta,
+        }
+    }
+}
+
+impl Iterator for BezierCurveSegments {
+    type Item = Point;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.offset < fp!(1) {
+            let offset_sq = self.offset * self.offset;
+            let offset_cub = offset_sq * self.offset;
+
+            let r1 = fp!(1) - self.offset * 3 + offset_sq * 3 - offset_cub;
+            let r2 = self.offset * 3 - offset_sq * 6 + offset_cub * 3;
+            let r3 = offset_sq * 3 - offset_cub * 3;
+
+            let x = r1 * self.segment.start.x
+                + r2 * self.c1.x()
+                + r3 * self.c2.x()
+                + offset_cub * self.segment.end.x;
+            let y = r1 * self.segment.start.y
+                + r2 * self.c1.y()
+                + r3 * self.c2.y()
+                + offset_cub * self.segment.end.y;
+
+            self.offset += self.delta;
+
+            Some(Point::new(x.round(), y.round()))
         } else {
             None
         }
