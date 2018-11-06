@@ -83,8 +83,8 @@ impl Point {
     }
 
     #[inline]
-    pub fn ray_to(self, end: Point) -> Ray {
-        self.line_to(end).to_ray()
+    pub fn ray_with_dir(self, direction: Point) -> Ray {
+        Ray::new(self, direction)
     }
 
     #[inline]

@@ -200,7 +200,7 @@ impl OutlinePoints {
         // go through all points, including fill points
         for pi in self.iter().cloned() {
             if pi != segment.start && pi != segment.end {
-                if intersects(&pi.ray_to(normal), &segment) {
+                if intersects(&pi.ray_with_dir(normal), &segment) {
                     // ray from segment.start
                     if let Some((t, d)) = solve_intersection(
                         &self.intersections_box, &normal_ray, &segment.start.line_to(pi),
