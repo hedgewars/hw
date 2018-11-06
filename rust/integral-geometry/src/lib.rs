@@ -98,8 +98,13 @@ impl Point {
     }
 
     #[inline]
-    pub fn to_fppoint(&self) -> FPPoint {
+    pub fn to_fppoint(self) -> FPPoint {
         FPPoint::new(self.x.into(), self.y.into())
+    }
+
+    #[inline]
+    pub fn from_fppoint(p: &FPPoint) -> Self {
+        Self::new(p.x().round(), p.y().round())
     }
 }
 

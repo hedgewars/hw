@@ -1,7 +1,10 @@
 extern crate integral_geometry;
 extern crate vec2d;
 
-use std::cmp;
+use std::{
+    cmp,
+    ops::Index
+};
 
 use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, Rect, Size, SizeMask};
 
@@ -292,6 +295,14 @@ impl<T: Copy + PartialEq> Land2D<T> {
         }
 
         result
+    }
+}
+
+impl<T> Index<usize> for Land2D<T> {
+    type Output = [T];
+    #[inline]
+    fn index(&self, row: usize) -> &[T] {
+        &self.pixels[row]
     }
 }
 

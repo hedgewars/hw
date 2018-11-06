@@ -1,7 +1,12 @@
+use std::{
+    ops::RangeInclusive
+};
+
 use fpnum::*;
 use integral_geometry::{
     Point, Size, GridIndex
 };
+use land2d::Land2D;
 
 type Index = u16;
 
@@ -12,7 +17,7 @@ struct PhysicsData {
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
-struct CollisionData {
+struct  CollisionData {
     bounds: CircleBounds
 }
 
@@ -48,11 +53,13 @@ pub struct World {
     enabled_physics: PhysicsCollection,
     disabled_physics: Vec<PhysicsData>,
 
-    collision: Vec<CollisionData>,
+    enabled_collision: Vec<CollisionData>,
+    disabled_collision: Vec<CollisionData>,
     grid: Grid,
 
     physics_cleanup: Vec<PhysicsData>,
-    collision_output: Vec<(Index, Index)>
+    collision_output: Vec<(Index, Index)>,
+    land_collision_output: Vec<Index>
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -62,8 +69,15 @@ struct CircleBounds {
 }
 
 impl CircleBounds {
-    fn intersects(&self, other: &CircleBounds) -> bool {
+    pub fn intersects(&self, other: &CircleBounds) -> bool {
         (other.center - self.center).is_in_range(self.radius + other.radius)
+    }
+
+    pub fn rows(&self) -> impl Iterator<Item = (usize, RangeInclusive<usize>)> {
+        let radius = self.radius.abs_round() as usize;
+        let center = Point::from_fppoint(&self.center);
+        (center.y as usize - radius..=center.y as usize + radius)
+            .map(move |row| (row, center.x as usize - radius..=center.x as usize + radius))
     }
 }
 
@@ -148,12 +162,20 @@ impl Grid {
 }
 
 impl World {
-    pub fn step(&mut self, time_step: FPNum) {
+    pub fn step(&mut self, time_step: FPNum, land: &Land2D<u32>) {
         for (pos, vel) in self.enabled_physics.iter_mut_pos() {
             *pos += *vel
         }
 
         self.grid.check_collisions(&mut self.collision_output);
+    }
+
+    fn check_land_collisions(&mut self, land: &Land2D<u32>) {
+        for collision in &self.enabled_collision {
+            if collision.bounds.rows().any(|(y, r)| (&land[y][r]).iter().any(|v| *v != 0)) {
+                self.land_collision_output.push(0)
+            }
+        }
     }
 
     pub fn add_gear(&mut self, data: JoinedData) {

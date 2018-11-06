@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 fpnum = { path = "../fpnum" }
 integral-geometry = { path = "../integral-geometry" }
+land2d = { path = "../land2d" }
