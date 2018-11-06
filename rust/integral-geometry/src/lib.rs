@@ -166,6 +166,7 @@ impl Size {
     }
 }
 
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct SizeMask {
     size: Size,
 }

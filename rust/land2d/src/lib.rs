@@ -125,9 +125,12 @@ impl<T: Copy + PartialEq> Land2D<T> {
         debug_assert!(self.is_valid_coordinate(start_point.x - 1, start_point.y));
         debug_assert!(self.is_valid_coordinate(start_point.x, start_point.y));
 
+        let mask = self.mask;
+        let width = self.width();
+
         let mut stack: Vec<(usize, usize, usize, isize)> = Vec::new();
-        fn push<T: Copy + PartialEq>(
-            land: &Land2D<T>,
+        fn push(
+            mask: SizeMask,
             stack: &mut Vec<(usize, usize, usize, isize)>,
             xl: usize,
             xr: usize,
@@ -135,70 +138,48 @@ impl<T: Copy + PartialEq> Land2D<T> {
             dir: isize,
         ) {
             let yd = y as isize + dir;
-
-            if land.is_valid_y(yd as i32) {
+            if mask.contains_y(yd as usize) {
                 stack.push((xl, xr, yd as usize, dir));
             }
         };
 
         let start_x_l = (start_point.x - 1) as usize;
         let start_x_r = start_point.x as usize;
-        push(
-            self,
-            &mut stack,
-            start_x_l,
-            start_x_r,
-            start_point.y as usize,
-            -1,
-        );
-        push(
-            self,
-            &mut stack,
-            start_x_l,
-            start_x_r,
-            start_point.y as usize,
-            1,
-        );
+        for dir in [-1, 1].iter().cloned() {
+            push(mask, &mut stack, start_x_l, start_x_r, start_point.y as usize, dir);
+        }
 
-        while let Some(a) = stack.pop() {
-            let (mut xl, mut xr, y, mut dir) = a;
-
-            while xl > 0 && self
-                .pixels
-                .get(y, xl)
+        while let Some((mut xl, mut xr, y, dir)) = stack.pop() {
+            let row = &mut self.pixels[y][..];
+            while xl > 0 && row.get(xl)
                 .map_or(false, |v| *v != border_value && *v != fill_value)
             {
                 xl -= 1;
             }
 
-            while xr < self.width() - 1 && self
-                .pixels
-                .get(y, xr)
+            while xr < width - 1 && row.get(xr)
                 .map_or(false, |v| *v != border_value && *v != fill_value)
             {
                 xr += 1;
             }
 
             while xl < xr {
-                while xl <= xr
-                    && (self.pixels[y][xl] == border_value || self.pixels[y][xl] == fill_value)
+                while xl <= xr && (row[xl] == border_value || row[xl] == fill_value)
                 {
                     xl += 1;
                 }
 
-                let mut x = xl;
+                let x = xl;
 
-                while xl <= xr
-                    && (self.pixels[y][xl] != border_value && self.pixels[y][xl] != fill_value)
+                while xl <= xr && (row[xl] != border_value && row[xl] != fill_value)
                 {
-                    self.pixels[y][xl] = fill_value;
-
+                    row[xl] = fill_value;
                     xl += 1;
                 }
 
                 if x < xl {
-                    push(self, &mut stack, x, xl - 1, y, dir);
-                    push(self, &mut stack, x, xl - 1, y, -dir);
+                    push(mask, &mut stack, x, xl - 1, y, dir);
+                    push(mask, &mut stack, x, xl - 1, y, -dir);
                 }
             }
         }
