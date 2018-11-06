@@ -2090,7 +2090,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Likelihood of a crate dropping before a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Вероятность выпадения ящика перед ходом</translation>
     </message>
     <message>
         <source>Health bonus for collecting a health crate</source>
@@ -2106,15 +2106,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вероятность, что мина не взорвётся. Не влияет на мины, поставленные ёжиками.</translation>
     </message>
     <message>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Среднее количество бочек, расставленных на карте среднего размера. Это число будет масштабировано на другие карты.</translation>
     </message>
     <message>
         <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Среднее количество воздушных мин, расставленных на карте среднего размера. Это число будет масштабировано на другие карты.</translation>
     </message>
     <message>
         <source>Affects the left and right boundaries of the map</source>
@@ -2122,7 +2122,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Time you get after an attack</source>
-        <translation type="unfinished"></translation>
+        <translation>Время, доступное после совершения атаки</translation>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
@@ -2134,7 +2134,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбирать ёжика в начале хода</translation>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
@@ -2349,15 +2349,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation>Показывать текущие игры</translation>
+        <translation>Показывать начавшиеся игры</translation>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать запароленные комнаты</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать закрытые комнаты</translation>
     </message>
     <message>
         <source>Delegate room control</source>
@@ -2481,11 +2481,11 @@ just enter your nickname.</source>
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Приглушить при потере фокуса</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить громкость звука, если игровое окно не в фокусе</translation>
     </message>
 </context>
 <context>
@@ -4303,19 +4303,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пустой конфиг.</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ запрещён.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы не лидер комнаты!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation type="unfinished"></translation>
+        <translation>Повреждена информация о ёжиках!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
@@ -4411,7 +4411,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Bad number.</source>
-        <translation type="unfinished"></translation>
+        <translation>Плохое число.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
@@ -4431,7 +4431,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Включена пауза.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
@@ -4439,7 +4439,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation type="unfinished"></translation>
+        <translation>ёжиков на команду: </translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
@@ -4447,27 +4447,27 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/me &lt;сообщение&gt;: Действие в чате, например &apos;/me ест пиццу&apos; становится &apos;* Игрок ест пиццу&apos;</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd: Подбросить виртуальную монетку и узнать, выпал &apos;орёл&apos; или &apos;решка&apos;</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd [A] [B] [C] [...]: Получить случайное слово из заданного списка</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
+        <translation>/watch &lt;id&gt;: Посмотреть демку, сохранённую на сервере с указанным номером</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
+        <translation>/help: Показать помощь по коммандам чата</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote [аргументы]: Начать голосование</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
@@ -4475,11 +4475,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
+        <translation>/delegate &lt;игрок&gt;: Передача управления комнатой выбранному игроку</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams &lt;N&gt;: Ограничить максимальное количество команд числом N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
@@ -4519,35 +4519,35 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation>Комманды только для администратора сервера:</translation>
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>комната</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>лобби</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation type="unfinished"></translation>
+        <translation>(играет)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation type="unfinished"></translation>
+        <translation>(наблюдает)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>Игрок не в сети.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/force: Пожалуйста напишите &apos;yes&apos; или &apos;no&apos;.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote: Пожалуйста напишите &apos;yes&apos; или &apos;no&apos;.</translation>
     </message>
     <message>
         <source>Kicked</source>
@@ -4555,23 +4555,23 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>Этот сервер позволяет подсоединяться только зарегистрированным игрокам.</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation type="unfinished"></translation>
+        <translation>орёл</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation type="unfinished"></translation>
+        <translation>решка</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation type="unfinished"></translation>
+        <translation>Этот сервер не поддерживает проигрывание повторов!</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting [сообщение]: Поставить или очистить сообщение, показываемое игрокам, которые присоединяются к комнате</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
