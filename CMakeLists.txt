@@ -69,6 +69,10 @@ if(BUILD_ENGINE_JS)
     set(target_library_install_dir "lib" CACHE PATH "install dest for libs")
 endif()
 
+if("${CMAKE_SIZEOF_VOID_P}" EQUAL "4" AND UNIX AND NOT APPLE)
+    set(BUILD_ENGINE_C ON CACHE STRING "PAS2C force-enabled due to a freepascal 32 bit alignment bug" FORCE)
+endif()
+
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
 #subdirectories will NOT be searched.
 #all fonts that can't be found will be bundled with hedgewars
