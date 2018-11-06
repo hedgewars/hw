@@ -1,0 +1,7 @@
+[package]
+name = "hedgewars-engine"
+version = "0.1.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+
+[dependencies]
+land2d = { path = "../land2d" }
