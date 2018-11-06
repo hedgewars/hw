@@ -254,12 +254,42 @@ macro_rules! bin_assign_op_impl {
     };
 }
 
+macro_rules! fp_scalar_bin_op_impl {
+    ($($op: tt)::+, $name: tt) => {
+        impl $($op)::+<FPNum> for Point {
+            type Output = FPPoint;
+
+            #[inline]
+            fn $name(self, rhs: FPNum) -> Self::Output {
+                FPPoint::new(rhs.$name(self.x), rhs.$name(self.y))
+            }
+        }
+    };
+}
+
+macro_rules! left_fp_scalar_bin_op_impl {
+    ($($op: tt)::+, $name: tt) => {
+        impl $($op)::+<Point> for FPNum {
+            type Output = FPPoint;
+
+            #[inline]
+            fn $name(self, rhs: Point) -> Self::Output {
+                FPPoint::new(self.$name(rhs.x), self.$name(rhs.y))
+            }
+        }
+    };
+}
+
 bin_op_impl!(Add, add);
 bin_op_impl!(Sub, sub);
 bin_op_impl!(Mul, mul);
 bin_op_impl!(Div, div);
 scalar_bin_op_impl!(Mul, mul);
 scalar_bin_op_impl!(Div, div);
+fp_scalar_bin_op_impl!(Mul, mul);
+fp_scalar_bin_op_impl!(Div, div);
+left_fp_scalar_bin_op_impl!(Mul, mul);
+left_fp_scalar_bin_op_impl!(Div, div);
 bin_assign_op_impl!(AddAssign, add_assign);
 bin_assign_op_impl!(SubAssign, sub_assign);
 bin_assign_op_impl!(MulAssign, mul_assign);
@@ -791,8 +821,8 @@ impl Iterator for EquidistantPoints {
 
 pub struct BezierCurveSegments {
     segment: Line,
-    c1: FPPoint,
-    c2: FPPoint,
+    control_point1: FPPoint,
+    control_point2: FPPoint,
     offset: FPNum,
     max_offset: FPNum,
     delta: FPNum,
@@ -803,8 +833,8 @@ impl BezierCurveSegments {
     pub fn new(segment: Line, p1: FPPoint, p2: FPPoint, delta: FPNum) -> Self {
         Self {
             segment,
-            c1: segment.start.to_fppoint() - p1,
-            c2: segment.end.to_fppoint() - p2,
+            control_point1: segment.start.to_fppoint() - p1,
+            control_point2: segment.end.to_fppoint() - p2,
             offset: fp!(0),
             max_offset: fp!(4095 / 4096),
             delta,
@@ -825,18 +855,14 @@ impl Iterator for BezierCurveSegments {
             let r2 = self.offset * 3 - offset_sq * 6 + offset_cub * 3;
             let r3 = offset_sq * 3 - offset_cub * 3;
 
-            let x = r1 * self.segment.start.x
-                + r2 * self.c1.x()
-                + r3 * self.c2.x()
-                + offset_cub * self.segment.end.x;
-            let y = r1 * self.segment.start.y
-                + r2 * self.c1.y()
-                + r3 * self.c2.y()
-                + offset_cub * self.segment.end.y;
+            let p = r1 * self.segment.start
+                + r2 * self.control_point1
+                + r3 * self.control_point2
+                + offset_cub * self.segment.end;
 
             self.offset += self.delta;
 
-            Some(Point::new(x.round(), y.round()))
+            Some(Point::from_fppoint(&p))
         } else if !self.have_finished {
             self.have_finished = true;
 
