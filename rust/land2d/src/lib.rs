@@ -122,8 +122,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     pub fn fill(&mut self, start_point: Point, border_value: T, fill_value: T) {
-        debug_assert!(self.is_valid_coordinate(start_point.x - 1, start_point.y));
-        debug_assert!(self.is_valid_coordinate(start_point.x, start_point.y));
+        assert!(self.is_valid_coordinate(start_point.x - 1, start_point.y));
+        assert!(self.is_valid_coordinate(start_point.x, start_point.y));
 
         let mask = self.mask;
         let width = self.width();
