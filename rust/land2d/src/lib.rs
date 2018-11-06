@@ -151,14 +151,12 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
         while let Some((mut xl, mut xr, y, dir)) = stack.pop() {
             let row = &mut self.pixels[y][..];
-            while xl > 0 && row.get(xl)
-                .map_or(false, |v| *v != border_value && *v != fill_value)
+            while xl > 0 && row[xl] != border_value && row[xl] != fill_value
             {
                 xl -= 1;
             }
 
-            while xr < width - 1 && row.get(xr)
-                .map_or(false, |v| *v != border_value && *v != fill_value)
+            while xr < width - 1 && row[xr] != border_value && row[xr] != fill_value
             {
                 xr += 1;
             }
@@ -171,7 +169,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
 
                 let x = xl;
 
-                while xl <= xr && (row[xl] != border_value && row[xl] != fill_value)
+                while xl <= xr && row[xl] != border_value && row[xl] != fill_value
                 {
                     row[xl] = fill_value;
                     xl += 1;
