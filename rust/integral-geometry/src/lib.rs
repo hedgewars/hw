@@ -88,13 +88,13 @@ impl Point {
     }
 
     #[inline]
-    pub fn tangent(self) -> i32 {
-        self.y / self.x
+    pub fn tangent_mul(self, x: i32) -> i32 {
+        x * self.y / self.x
     }
 
     #[inline]
-    pub fn cotangent(self) -> i32 {
-        self.x / self.y
+    pub fn cotangent_mul(self, y: i32) -> i32 {
+        y * self.x / self.y
     }
 
     #[inline]
@@ -595,13 +595,13 @@ impl Ray {
     }
 
     #[inline]
-    pub fn tangent(&self) -> i32 {
-        self.direction.tangent()
+    pub fn tangent_mul(&self, x: i32) -> i32 {
+        self.direction.tangent_mul(x)
     }
 
     #[inline]
-    pub fn cotangent(&self) -> i32 {
-        self.direction.cotangent()
+    pub fn cotangent_mul(&self, y: i32) -> i32 {
+        self.direction.cotangent_mul(y)
     }
 
     #[inline]

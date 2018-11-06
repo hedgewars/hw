@@ -98,9 +98,9 @@ impl OutlinePoints {
                 }
 
                 let ix = if ray.direction.y.abs() > edge_dir.y.abs() {
-                    (iy - ray.start.y) * ray.direction.cotangent() + ray.start.x
+                    ray.start.x + ray.direction.cotangent_mul(iy - ray.start.y)
                 } else {
-                    (iy - edge.start.y) * edge_dir.cotangent() + edge.start.x
+                    edge.start.x + edge_dir.cotangent_mul(iy - edge.start.y)
                 };
 
                 let intersection_point = Point::new(ix, iy).clamp(intersections_box);
@@ -140,14 +140,14 @@ impl OutlinePoints {
             // where the normal line intersects the left map border
             let left_intersection = Point::new(
                 map_box.left(),
-                (map_box.left() - mid_point.x) * normal.tangent() + mid_point.y,
+                mid_point.y + normal.tangent_mul(map_box.left() - mid_point.x),
             );
             dist_left = (mid_point - left_intersection).integral_norm();
 
             // same for the right border
             let right_intersection = Point::new(
                 map_box.right(),
-                (map_box.right() - mid_point.x) * normal.tangent() + mid_point.y,
+                mid_point.y + normal.tangent_mul(map_box.right() - mid_point.x)  ,
             );
             dist_right = (mid_point - right_intersection).integral_norm();
 
@@ -159,14 +159,14 @@ impl OutlinePoints {
         if normal.y != 0 {
             // where the normal line intersects the top map border
             let top_intersection = Point::new(
-                (map_box.top() - mid_point.y) * normal.cotangent() + mid_point.x,
+                mid_point.x + normal.cotangent_mul(map_box.top() - mid_point.y),
                 map_box.top(),
             );
             let dl = (mid_point - top_intersection).integral_norm();
 
             // same for the bottom border
             let bottom_intersection = Point::new(
-                (map_box.bottom() - mid_point.y) * normal.cotangent() + mid_point.x,
+                mid_point.x + normal.cotangent_mul(map_box.bottom() - mid_point.y),
                 map_box.bottom(),
             );
             let dr = (mid_point - bottom_intersection).integral_norm();
