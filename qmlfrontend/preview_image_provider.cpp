@@ -1,4 +1,4 @@
-#include "previewimageprovider.h"
+#include "preview_image_provider.h"
 
 PreviewImageProvider::PreviewImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Pixmap) {}
@@ -13,16 +13,8 @@ QPixmap PreviewImageProvider::requestPixmap(const QString &id, QSize *size,
   return m_px;
 }
 
-void PreviewImageProvider::setPixmap(const QByteArray &px) {
-  QVector<QRgb> colorTable;
-  colorTable.resize(256);
-  for (int i = 0; i < 256; ++i) colorTable[i] = qRgba(255, 255, 0, i);
-
-  const quint8 *buf = (const quint8 *)px.constData();
-  QImage im(buf, 256, 128, QImage::Format_Indexed8);
-  im.setColorTable(colorTable);
-
-  m_px = QPixmap::fromImage(im, Qt::ColorOnly);
+void PreviewImageProvider::setImage(const QImage &preview) {
+  m_px = QPixmap::fromImage(preview, Qt::ColorOnly);
   // QPixmap pxres(px.size());
   // QPainter p(&pxres);
 

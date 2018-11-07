@@ -3,7 +3,8 @@ import Hedgewars.Engine 1.0
 
 Page1Form {
   tickButton.onClicked: {
-    item1.tick(100)
+
+    //    item1.tick(100)
   }
   gameButton.onClicked: {
     HWEngine.runQuickGame()

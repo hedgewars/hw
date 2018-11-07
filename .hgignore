@@ -16,7 +16,6 @@ bin
 *.ppu
 *.*~
 *.core
-hedgewars.pro.user
 config.inc
 cmake_install.cmake
 QTfrontend/hwconsts.cpp
@@ -83,8 +82,10 @@ arch.c
 xcuserdata
 *.mode1v3
 *.mode2v3
-gameServer2/target
-gameServer2/Cargo.lock
-gameServer2/gameServer2.iml
 .idea
 Testing/
+rust/*/target
+*.lock
+*.user
+*.iml
+build-qmlfrontend*

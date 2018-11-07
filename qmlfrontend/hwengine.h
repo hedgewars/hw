@@ -4,12 +4,11 @@
 #include <QList>
 #include <QObject>
 
-#include "flib.h"
-#include "gameconfig.h"
+#include "engine_interface.h"
+#include "game_config.h"
 
 class QQmlEngine;
 class PreviewImageProvider;
-class RunQueue;
 
 class HWEngine : public QObject {
   Q_OBJECT
@@ -38,16 +37,9 @@ class HWEngine : public QObject {
  private:
   QQmlEngine* m_engine;
   PreviewImageProvider* m_previewProvider;
-  RunQueue* m_runQueue;
   GameConfig m_gameConfig;
   QByteArray m_seed;
   int m_previewHedgehogsCount;
-
-  static void guiMessagesCallback(void* context, MessageType mt,
-                                  const char* msg, uint32_t len);
-
- private slots:
-  void engineMessageHandler(MessageType mt, const QByteArray& msg);
 };
 
 #endif  // HWENGINE_H

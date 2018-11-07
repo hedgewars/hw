@@ -1,4 +1,4 @@
-#include "gameconfig.h"
+#include "game_config.h"
 
 GameConfig::GameConfig() : m_isPreview(true) { setPreview(m_isPreview); }
 

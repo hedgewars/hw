@@ -10,11 +10,10 @@ find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
 add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
     "hwengine.cpp" "hwengine.h"
-    "gameconfig.cpp" "gameconfig.h"
-    "runqueue.cpp" "runqueue.h"
-    "gameview.cpp" "gameview.h"
+    "game_config.cpp" "game_config.h"
     "team.cpp" "team.h"
-    "previewimageprovider.cpp" "previewimageprovider.h"
-    "flib.h")
+    "engine_instance.cpp" "engine_instance.h"
+    "preview_image_provider.cpp" "preview_image_provider.h"
+    "engine_interface.h")
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick)

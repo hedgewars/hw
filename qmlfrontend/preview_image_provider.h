@@ -12,7 +12,7 @@ class PreviewImageProvider : public QQuickImageProvider {
   QPixmap requestPixmap(const QString &id, QSize *size,
                         const QSize &requestedSize);
 
-  void setPixmap(const QByteArray &px);
+  void setImage(const QImage &preview);
 
  private:
   QPixmap m_px;
