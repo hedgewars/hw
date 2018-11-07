@@ -16,7 +16,7 @@ impl LaggedFibonacciPRNG {
             index: 54,
         };
 
-        for i in 0..2048 {
+        for _i in 0..2048 {
             prng.get_next();
         }
 

@@ -86,12 +86,7 @@ fn main() {
 
             let mut generator = MapGenerator::new();
 
-            let bom = b"\xEF\xBB\xBF";
-            let source = if &result.as_bytes()[..bom.len()] == &bom[..] {
-                &result[bom.len()..]
-            } else {
-                &result[..]
-            };
+            let source =  &result[..];
 
             generator.import_yaml_templates(source);
 
