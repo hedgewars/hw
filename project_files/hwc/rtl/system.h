@@ -94,7 +94,7 @@ void        fpcrtl_new__vars(void **p, int size);
 #define     fpcrtl_assigned(p)                              ((p) != NULL)
 #define     fpcrtl_Assigned                                 fpcrtl_assigned
 
-Integer     fpcrtl_trunc(extended n);
+Int64       fpcrtl_trunc(extended n);
 Integer     fpcrtl_ceil(extended n);
 
 #define     fpcrtl_val(s, a)                                fpcrtl_val__vars(s, &(a))

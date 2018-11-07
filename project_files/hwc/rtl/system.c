@@ -343,12 +343,12 @@ void fpcrtl_new__vars(void **p, int size) {
     *p = malloc(size);
 }
 
-Integer fpcrtl_trunc(extended n) {
-    return (int) n;
+Int64 fpcrtl_trunc(extended n) {
+    return (Int64) n;
 }
 
 Integer fpcrtl_ceil(extended n) {
-    return (int) (ceil(n));
+    return (Integer) (ceil(n));
 }
 
 LongInt str_to_int(char *src)
