@@ -1,4 +1,4 @@
-#!/bin/sh -
+#!/bin/bash -
 #
 # Tool which tries to find outdated translations in the engine strings (*.txt) using hg blame.
 # Note this is only a heuristic; the output might not be 100% accurate.
