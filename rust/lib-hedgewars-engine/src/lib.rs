@@ -4,6 +4,8 @@ extern crate landgen;
 extern crate lfprng;
 
 mod world;
+mod engine_message;
+mod command;
 
 #[repr(C)]
 pub struct EngineInstance {
