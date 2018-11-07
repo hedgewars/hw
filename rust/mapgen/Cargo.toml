@@ -5,6 +5,7 @@ authors = ["Hedgewars Project"]
 edition = "2018"
 
 [dependencies]
+vec2d = { path = "../vec2d" }
 land2d = { path = "../land2d" }
 landgen = { path = "../landgen" }
 lfprng = { path = "../lfprng" }

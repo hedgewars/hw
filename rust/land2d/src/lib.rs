@@ -30,7 +30,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     pub fn raw_pixels(&self) -> &[T] {
-        &self.pixels.raw_data()
+        &self.pixels.as_slice()
     }
 
     #[inline]

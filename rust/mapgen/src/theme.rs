@@ -6,23 +6,53 @@ use std::{
     path::Path
 };
 use png::{
-    BitDepth,
     ColorType,
     Decoder,
     DecodingError
 };
 
-use integral_geometry::{
-    Rect, Size
-};
+use integral_geometry::Size;
+use vec2d::Vec2D;
 
 pub struct ThemeSprite {
-    bounds: Size,
-    pixels: Vec<u32>
+    pixels: Vec2D<u32>
+}
+
+impl ThemeSprite {
+    #[inline]
+    pub fn width(&self) -> usize {
+        self.pixels.size().width
+    }
+
+    #[inline]
+    pub fn height(&self) -> usize {
+        self.pixels.size().height
+    }
+
+    #[inline]
+    pub fn bounds(&self) -> Size {
+        self.pixels.size()
+    }
+
+    #[inline]
+    pub fn rows(&self) -> impl Iterator<Item = &[u32]> {
+        self.pixels.rows()
+    }
+
+    #[inline]
+    pub fn get_row(&self, index: usize) -> &[u32] {
+        &self.pixels[index]
+    }
 }
 
 pub struct Theme {
     land_texture: Option<ThemeSprite>
+}
+
+impl Theme {
+    pub fn land_texture(&self) -> Option<&ThemeSprite> {
+        self.land_texture.as_ref()
+    }
 }
 
 pub enum ThemeLoadError {
@@ -66,18 +96,17 @@ impl Theme {
                 }
                 let size = Size::new(info.width as usize, info.height as usize);
 
-                let mut buffer: Vec<u32> = Vec::with_capacity(size.area());
-                let mut slice_u32 = buffer.as_mut_slice();
-                let mut slice_u8 = unsafe {
+                let mut buffer: Vec2D<u32> = Vec2D::new(size, 0);
+                let slice_u32 = buffer.as_mut_slice();
+                let slice_u8 = unsafe {
                     from_raw_parts_mut::<u8>(
                         slice_u32.as_mut_ptr() as *mut u8,
                         slice_u32.len() / 4
                     )
                 };
-                reader.next_frame(slice_u8);
+                reader.next_frame(slice_u8)?;
 
                 let land_tex = ThemeSprite {
-                    bounds: size,
                     pixels: buffer
                 };
                 theme.land_texture = Some(land_tex)

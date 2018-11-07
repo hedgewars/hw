@@ -5,7 +5,6 @@ use std::{
     borrow::Borrow,
     mem::replace
 };
-use serde::{Deserialize};
 use serde_derive::{Deserialize};
 use serde_yaml;
 use integral_geometry::{Point, Size, Rect};
@@ -14,6 +13,7 @@ use landgen::{
 };
 use rand::{thread_rng, Rng};
 use land2d::Land2D;
+use vec2d::Vec2D;
 use self::theme::Theme;
 
 #[derive(Deserialize)]
@@ -106,9 +106,50 @@ impl MapGenerator {
         self.templates.get(template_type).and_then(|t| thread_rng().choose(t))
     }
 
-    pub fn make_texture(&self, land: &Land2D<u32>, theme: &Theme) {
+    pub fn make_texture(&self, land: &Land2D<u32>, theme: &Theme) -> Vec2D<u32> {
+        let mut texture = Vec2D::new(land.size(), 0);
+        if let Some(land_sprite) = theme.land_texture() {
+            for (row_index, (land_row, tex_row)) in land.rows()
+                .zip(texture.rows_mut())
+                .enumerate()
+            {
+                let sprite_row = land_sprite.get_row(row_index % land_sprite.height());
+                let mut x_offset = 0;
+                while sprite_row.len() < land.width() - x_offset {
+                    let copy_range = x_offset..x_offset + sprite_row.len();
+                    tex_row_copy(
+                        &land_row[copy_range.clone()],
+                        &mut tex_row[copy_range],
+                        sprite_row
+                    );
 
+                    x_offset += land_sprite.width()
+                }
+
+                if x_offset < land.width() {
+                    let final_range = x_offset..land.width() - 1;
+                    tex_row_copy(
+                        &land_row[final_range.clone()],
+                        &mut tex_row[final_range],
+                        &sprite_row[..land.width() - x_offset]
+                    );
+                }
+            }
+        }
+        texture
     }
+}
+
+fn tex_row_copy(land_row: &[u32], tex_row: &mut [u32], sprite_row: &[u32]) {
+    for ((land_v, tex_v), sprite_v) in
+        land_row.iter().zip(tex_row.iter_mut()).zip(sprite_row)
+        {
+            *tex_v = if *land_v == 0 {
+                *sprite_v
+            } else {
+                0
+            }
+        }
 }
 
 #[cfg(test)]

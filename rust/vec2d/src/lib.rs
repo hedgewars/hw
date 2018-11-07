@@ -55,8 +55,14 @@ impl<T: Copy> Vec2D<T> {
         Self { size, data: vec![value; size.area()] }
     }
 
-    pub fn raw_data(&self) -> &[T] {
-        &self.data
+    #[inline]
+    pub fn as_slice(&self) -> &[T] {
+        self.data.as_slice()
+    }
+
+    #[inline]
+    pub fn as_mut_slice(&mut self) -> &mut [T] {
+        self.data.as_mut_slice()
     }
 
     #[inline]
@@ -82,6 +88,24 @@ impl<T: Copy> Vec2D<T> {
     #[inline]
     pub fn rows(&self) -> impl Iterator<Item = &[T]> {
         self.data.chunks(self.width())
+    }
+
+    #[inline]
+    pub fn rows_mut(&mut self) -> impl Iterator<Item = &mut [T]> {
+        let width = self.width();
+        self.data.chunks_mut(width)
+    }
+}
+
+impl<T: Copy> AsRef<[T]> for Vec2D<T> {
+    fn as_ref(&self) -> &[T] {
+        self.as_slice()
+    }
+}
+
+impl<T: Copy> AsMut<[T]> for Vec2D<T> {
+    fn as_mut(&mut self) -> &mut [T] {
+        self.as_mut_slice()
     }
 }
 
