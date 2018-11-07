@@ -1289,12 +1289,12 @@
 03:42=Portalöffner
 ; the misspelled "Beethoven" is intentional (-> to beat)
 03:43=Spiele Beathovens tödliche Sonate!
-03:44=Ziemlich alt und stinkig
+03:44=Mindestens haltbar bis: 1923
 03:45=Die Macht der Wissenschaft
 03:46=Heiß, heiß, heiß!
 03:47=Klebt (fast) überall
 03:48=In-den-Boden-Stampfer
-03:49=Tut, was man vermutet
+03:49=Hol die Toten zurück IN die Hölle!
 03:50=Maulwurfsfreund
 03:51=Am Boden gefunden
 03:52=NICHT IN VERWENDUNG
@@ -1387,7 +1387,7 @@
 05:12=Minenzünder: Minen explodieren nach %1 Sekunde(n)
 05:13=Minenzünder: Minen explodieren sofort
 05:14=Minenzünder: Minen explodieren nach 0–5 Sekunden
-05:15=Prozentualer Schaden: Alle Waffen verursachen %1 % Schaden
+05:15=Prozentualer Schaden: (Fast) alle Waffen verursachen %1 % Schaden
 05:16=Sanitäter: Alle Igel werden am Ende der Zuges bis zum Anfangswert geheilt
 05:17=KI-Wiederbelebung: Computergesteuerte Igel erscheinen nach dem Tod wieder
 05:18=Unbegrenzte Attacken: Angriffe beenden deinen Zug nicht
