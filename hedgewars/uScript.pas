@@ -954,17 +954,18 @@ begin
             lua_pushnumber(L, vg^.State);
             lua_pushnumber(L, vg^.Timer);
             lua_pushnumber(L, vg^.Tint);
+            lua_pushnumber(L, vg^.Scale);
             end
         else
             begin
             lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
             end
         end
     else
         begin
         lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
-        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
         end;
     lc_getvisualgearvalues:= 10
 end;
@@ -973,7 +974,7 @@ function lc_setvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
 var vg : PVisualGear;
 begin
 // Param count can be 1-11 at present
-//    if CheckLuaParamCount(L, 11, 'SetVisualGearValues', 'vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint') then
+//    if CheckLuaParamCount(L, 11, 'SetVisualGearValues', 'vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint, Scale') then
 //        begin
         vg:= VisualGearByUID(Trunc(lua_tonumber(L, 1)));
         if vg <> nil then
