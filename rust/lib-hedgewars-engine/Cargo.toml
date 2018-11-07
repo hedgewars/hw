@@ -1,0 +1,14 @@
+[package]
+name = "lib-hedgewars-engine"
+version = "0.1.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+
+[dependencies]
+land2d = { path = "../land2d" }
+lfprng = { path = "../lfprng" }
+integral-geometry = { path = "../integral-geometry" }
+landgen = { path = "../landgen" }
+
+[lib]
+name = "hedgewars_engine"
+crate-type = ["dylib"]
