@@ -15,6 +15,7 @@ it often contains a brief comment at the top.
 * `dmg_pkg_install.sh`: Downloads and install a .dmg from a URL (relevant for Mac)
 * `docgen.sh`: Generate QTfrontend documentation with Doxygen (it's not very good)
 * `check_translations.sh`: Check most translation files for mistakes and generate a simple progress report
+* `find_outdated_engine_translations.sh`: Check for strings in engine translations that MIGHT be outdated
 
 ### Directories
 * `hwmapconverter`: C++ application to edit HWMAP files in text form
