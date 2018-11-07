@@ -505,8 +505,9 @@ impl Polygon {
     }
 
     pub fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
+        let edges_count = self.edges_count();
         let start = self.vertices.as_mut_ptr();
-        let end = unsafe { start.add(self.vertices.len()) };
+        let end = unsafe { start.add(edges_count) };
         PolygonPointsIteratorMut {
             source: self,
             start,
