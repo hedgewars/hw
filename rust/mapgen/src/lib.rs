@@ -1,3 +1,5 @@
+pub mod theme;
+
 use std::{
     collections::hash_map::HashMap,
     borrow::Borrow,
@@ -11,6 +13,8 @@ use landgen::{
     outline_template::OutlineTemplate
 };
 use rand::{thread_rng, Rng};
+use land2d::Land2D;
+use theme::Theme;
 
 #[derive(Deserialize)]
 struct PointDesc {
@@ -100,6 +104,10 @@ impl MapGenerator {
 
     pub fn get_template(&self, template_type: &str) -> Option<&OutlineTemplate> {
         self.templates.get(template_type).and_then(|t| thread_rng().choose(t))
+    }
+
+    pub fn make_texture(&self, land: &Land2D<u32>, theme: &Theme) {
+
     }
 }
 
