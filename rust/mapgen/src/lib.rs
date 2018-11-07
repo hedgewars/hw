@@ -106,7 +106,7 @@ impl MapGenerator {
         self.templates.get(template_type).and_then(|t| thread_rng().choose(t))
     }
 
-    pub fn make_texture(&self, land: &Land2D<u32>, theme: &Theme) -> Vec2D<u32> {
+    pub fn make_texture(&self, land: &Land2D<u8>, theme: &Theme) -> Vec2D<u32> {
         let mut texture = Vec2D::new(land.size(), 0);
         if let Some(land_sprite) = theme.land_texture() {
             for (row_index, (land_row, tex_row)) in land.rows()
@@ -127,7 +127,7 @@ impl MapGenerator {
                 }
 
                 if x_offset < land.width() {
-                    let final_range = x_offset..land.width() - 1;
+                    let final_range = x_offset..land.width();
                     tex_row_copy(
                         &land_row[final_range.clone()],
                         &mut tex_row[final_range],
@@ -140,16 +140,16 @@ impl MapGenerator {
     }
 }
 
-fn tex_row_copy(land_row: &[u32], tex_row: &mut [u32], sprite_row: &[u32]) {
+fn tex_row_copy(land_row: &[u8], tex_row: &mut [u32], sprite_row: &[u32]) {
     for ((land_v, tex_v), sprite_v) in
         land_row.iter().zip(tex_row.iter_mut()).zip(sprite_row)
-        {
-            *tex_v = if *land_v == 0 {
-                *sprite_v
-            } else {
-                0
-            }
+    {
+        *tex_v = if *land_v == 0 {
+            *sprite_v
+        } else {
+            0
         }
+    }
 }
 
 #[cfg(test)]

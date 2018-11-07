@@ -1,5 +1,8 @@
 use std::{
-    slice::from_raw_parts_mut,
+    slice::{
+        from_raw_parts,
+        from_raw_parts_mut
+    },
     io,
     io::BufReader,
     fs::{File, read_dir},
@@ -55,6 +58,7 @@ impl Theme {
     }
 }
 
+#[derive(Debug)]
 pub enum ThemeLoadError {
     File(io::Error),
     Decoding(DecodingError),
@@ -86,8 +90,8 @@ impl Theme {
         for entry in read_dir(path)? {
             let file = entry?;
             if file.file_name() == "LandTex.png" {
-                let buffer = BufReader::new(File::create(file.path())?);
-                let decoder = Decoder::new(buffer);
+                let decoder = Decoder::new(
+                    BufReader::new(File::open(file.path())?));
                 let (info, mut reader) = decoder.read_info()?;
 
                 if info.color_type != ColorType::RGBA {
@@ -97,14 +101,7 @@ impl Theme {
                 let size = Size::new(info.width as usize, info.height as usize);
 
                 let mut buffer: Vec2D<u32> = Vec2D::new(size, 0);
-                let slice_u32 = buffer.as_mut_slice();
-                let slice_u8 = unsafe {
-                    from_raw_parts_mut::<u8>(
-                        slice_u32.as_mut_ptr() as *mut u8,
-                        slice_u32.len() / 4
-                    )
-                };
-                reader.next_frame(slice_u8)?;
+                reader.next_frame(slice_u32_to_u8_mut(buffer.as_mut_slice()))?;
 
                 let land_tex = ThemeSprite {
                     pixels: buffer
@@ -117,4 +114,21 @@ impl Theme {
     }
 }
 
+pub fn slice_u32_to_u8(slice_u32: &[u32]) -> &[u8] {
+    unsafe {
+        from_raw_parts::<u8>(
+            slice_u32.as_ptr() as *const u8,
+            slice_u32.len() * 4
+        )
+    }
+}
+
+pub fn slice_u32_to_u8_mut(slice_u32: &mut [u32]) -> &mut [u8] {
+    unsafe {
+        from_raw_parts_mut::<u8>(
+            slice_u32.as_mut_ptr() as *mut u8,
+            slice_u32.len() * 4
+        )
+    }
+}
 

@@ -13,8 +13,12 @@ use landgen::{
     LandGenerationParameters,
     LandGenerator
 };
-use mapgen::MapGenerator;
+use mapgen::{
+    MapGenerator,
+    theme::{Theme, slice_u32_to_u8}
+};
 use lfprng::LaggedFibonacciPRNG;
+use land2d::Land2D;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "basic")]
@@ -30,7 +34,9 @@ struct Opt {
     #[structopt(short = "i", long = "templates-file")]
     templates_file: Option<String>,
     #[structopt(short = "t", long = "template-type")]
-    template_type: Option<String>
+    template_type: Option<String>,
+    #[structopt(short = "z", long = "theme-dir")]
+    theme_dir: Option<String>
 }
 
 fn template() -> OutlineTemplate {
@@ -53,7 +59,7 @@ fn dump(
     skip_distort: bool,
     skip_bezier: bool,
     file_name: &Path,
-) -> std::io::Result<()> {
+) -> std::io::Result<Land2D<u8>> {
     let params = LandGenerationParameters::new(0 as u8, 255, distance_divisor, skip_distort, skip_bezier);
     let landgen = TemplatedLandGenerator::new(template.clone());
     let mut prng = LaggedFibonacciPRNG::new(seed);
@@ -70,7 +76,24 @@ fn dump(
 
     writer.write_image_data(land.raw_pixels()).unwrap();
 
-    Ok(())
+    Ok(land)
+}
+
+fn texturize(theme_dir: &Path, land: &Land2D<u8>, output_filename: &Path) {
+    let theme = Theme::load(theme_dir).unwrap();
+    let texture = MapGenerator::new().make_texture(land, &theme);
+
+    let file = File::create(output_filename).unwrap();
+    let ref mut w = BufWriter::new(file);
+
+    let mut encoder = png::Encoder::new(w, land.width() as u32, land.height() as u32); // Width is 2 pixels and height is 1.
+    encoder
+        .set(png::ColorType::RGBA)
+        .set(png::BitDepth::Eight);
+
+    let mut writer = encoder.write_header().unwrap();
+
+    writer.write_image_data(slice_u32_to_u8(texture.as_slice())).unwrap();
 }
 
 fn main() {
@@ -121,7 +144,7 @@ fn main() {
         )
         .unwrap();
     }
-    dump(
+    let land = dump(
         &template,
         opt.seed.as_str().as_bytes(),
         opt.distance_divisor,
@@ -130,4 +153,12 @@ fn main() {
         Path::new("out.full.png"),
     )
     .unwrap();
+
+    if let Some(dir) = opt.theme_dir {
+        texturize(
+            &Path::new(&dir),
+            &land,
+            &Path::new("out.texture.png")
+        );
+    }
 }
