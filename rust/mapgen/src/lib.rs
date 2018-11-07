@@ -14,7 +14,7 @@ use landgen::{
 };
 use rand::{thread_rng, Rng};
 use land2d::Land2D;
-use theme::Theme;
+use self::theme::Theme;
 
 #[derive(Deserialize)]
 struct PointDesc {

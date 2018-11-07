@@ -1,5 +1,5 @@
 use std::{
-    slice,
+    slice::from_raw_parts_mut,
     io,
     io::BufReader,
     fs::{File, read_dir},
@@ -69,9 +69,9 @@ impl Theme {
                 let mut buffer: Vec<u32> = Vec::with_capacity(size.area());
                 let mut slice_u32 = buffer.as_mut_slice();
                 let mut slice_u8 = unsafe {
-                    slice::from_raw_parts_mut::<u8>(
-                        slice.as_mut_ptr() as *mut u8,
-                        slice.len() / 4
+                    from_raw_parts_mut::<u8>(
+                        slice_u32.as_mut_ptr() as *mut u8,
+                        slice_u32.len() / 4
                     )
                 };
                 reader.next_frame(slice_u8);
