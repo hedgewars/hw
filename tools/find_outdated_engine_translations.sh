@@ -67,9 +67,9 @@ do
                 else
                     printf '━%.0s' $(seq $COLUMNS);
                 fi;
-                echo "$TEXT ← Current English";
-                echo "$OLD_TEXT ← English at time of translation";
-                echo "$(echo $OTHER | sed 's/^\s*[0-9]\+:\s*[0-9]\{2\}:[0-9]\{2\}=//') ← current translation";
+                echo "${CODE}=$TEXT ← Current English";
+                echo "${CODE}=$OLD_TEXT ← English at time of translation";
+                echo "${CODE}=$(echo $OTHER | sed 's/^\s*[0-9]\+:\s*[0-9]\{2\}:[0-9]\{2\}=//') ← current translation";
             fi;
         fi;
     fi;
