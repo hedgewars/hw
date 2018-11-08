@@ -33,8 +33,10 @@ BLAMELANGFILE="$BLAMELANG.txt";
 TEMP_EN=$(mktemp);
 TEMP_LANG=$(mktemp);
 
+#hg fa en.txt | grep -P "^\s*\d+:\s+0[013-6]:" > $TEMP_EN;
 hg blame en.txt | grep -P "^\s*\d+:\s+0[013-6]:" > $TEMP_EN;
 
+#hg fa $BLAMELANGFILE | grep -P "^\s*\d+:\s+0[013-6]:" > $TEMP_LANG;
 hg blame $BLAMELANGFILE | grep -P "^\s*\d+:\s+0[013-6]:" > $TEMP_LANG;
 
 cat $TEMP_EN | while read f;
@@ -48,7 +50,9 @@ do
         if (($REV>$OTHER_REV));
         then
             TEXT=$(echo $f | sed 's/^\s*[0-9]\+:\s*[0-9]\+:[0-9]\+=//');
-            OLD_TEXT=$(hg grep --all -r "1:$OTHER_REV" "$CODE" en.txt | tail -n1 | sed 's/.*en.txt:[0-9]\+:[+-]:[0-9]\+:[0-9]\+=//;s///');
+			# script runs ~20% faster than with blame but nonstandard
+            # OLD_TEXT=$(hg fa -r "$OTHER_REV" en.txt | grep -P "^\s*\d+:\s+${CODE}=" | sed 's/^\s*[0-9]\+:\s*[0-9]\+:[0-9]\+=//;s///');
+            OLD_TEXT=$(hg blame -r "$OTHER_REV" en.txt | grep -P "^\s*\d+:\s+${CODE}=" | sed 's/^\s*[0-9]\+:\s*[0-9]\+:[0-9]\+=//;s///');
 
             COMPARE_TEXT=$TEXT;
             COMPARE_OLD_TEXT=$OLD_TEXT;
