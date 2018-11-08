@@ -86,12 +86,12 @@ impl<T: Copy> Vec2D<T> {
     }
 
     #[inline]
-    pub fn rows(&self) -> impl Iterator<Item = &[T]> {
+    pub fn rows(&self) -> impl DoubleEndedIterator<Item = &[T]> {
         self.data.chunks(self.width())
     }
 
     #[inline]
-    pub fn rows_mut(&mut self) -> impl Iterator<Item = &mut [T]> {
+    pub fn rows_mut(&mut self) -> impl DoubleEndedIterator<Item = &mut [T]> {
         let width = self.width();
         self.data.chunks_mut(width)
     }

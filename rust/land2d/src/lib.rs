@@ -84,7 +84,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
-    pub fn rows(&self) -> impl Iterator<Item = &[T]> {
+    pub fn rows(&self) -> impl DoubleEndedIterator<Item = &[T]> {
         self.pixels.rows()
     }
 

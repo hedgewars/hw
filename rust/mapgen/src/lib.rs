@@ -108,6 +108,7 @@ impl MapGenerator {
 
     pub fn make_texture(&self, land: &Land2D<u8>, theme: &Theme) -> Vec2D<u32> {
         let mut texture = Vec2D::new(land.size(), 0);
+
         if let Some(land_sprite) = theme.land_texture() {
             for (row_index, (land_row, tex_row)) in land.rows()
                 .zip(texture.rows_mut())
@@ -136,7 +137,103 @@ impl MapGenerator {
                 }
             }
         }
+
+        if let Some(border_sprite) = theme.border_texture() {
+            assert!(border_sprite.height() <= 512);
+            let border_width = (border_sprite.height() / 2) as u8;
+
+            let mut offsets = vec![255u8; land.width()];
+
+            land_border_pass(
+                land.rows().rev().zip(texture.rows_mut().rev()),
+                &mut offsets,
+                border_width,
+                |x, y| border_sprite.get_pixel(
+                    x % border_sprite.width(),
+                    border_sprite.height() - 1 - y,
+                )
+            );
+
+            offsets.iter_mut().for_each(|v| *v = 255);
+
+            land_border_pass(
+                land.rows().zip(texture.rows_mut()),
+                &mut offsets,
+                border_width,
+                |x, y| border_sprite.get_pixel(
+                    x % border_sprite.width(),
+                    y,
+                )
+            );
+        }
+
         texture
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct Color(u32);
+
+impl Color {
+    #[inline]
+    fn red(self) -> u8 {
+        (self.0 >> 0 & 0xFF) as u8
+    }
+
+    #[inline]
+    fn green(self) -> u8 {
+        (self.0 >> 8 & 0xFF) as u8
+    }
+
+    #[inline]
+    fn blue(self) -> u8 {
+        (self.0 >> 16 & 0xFF) as u8
+    }
+
+    #[inline]
+    fn alpha(self) -> u8 {
+        (self.0 >> 24 & 0xFF) as u8
+    }
+}
+
+#[inline]
+fn lerp(from: u8, to: u8, coef: u8) -> u8 {
+    ((from as u16 * (256 - coef as u16) + to as u16 * coef as u16) / 256) as u8
+}
+
+#[inline]
+fn blend(source: u32, target: u32) -> u32 {
+    let source = Color(source);
+    let target = Color(target);
+    let alpha = lerp(target.alpha(), 255, source.alpha());
+    let red = lerp(target.red(), source.red(), source.alpha());
+    let green = lerp(target.green(), source.green(), source.alpha());
+    let blue = lerp(target.blue(), source.blue(), source.alpha());
+    (red as u32) << 0 | (green as u32) << 8 | (blue as u32) << 16 | (alpha as u32) << 24
+}
+
+fn land_border_pass<'a, T, F>(rows: T, offsets: &mut [u8], border_width: u8, pixel_getter: F)
+    where T: Iterator<Item = (&'a [u8], &'a mut [u32])>,
+          F: (Fn(usize, usize) -> u32)
+{
+    for (land_row, tex_row) in rows {
+        for (x, ((land_v, tex_v), offset_v)) in land_row.iter()
+            .zip(tex_row.iter_mut())
+            .zip(offsets.iter_mut())
+            .enumerate()
+        {
+            *offset_v = if *land_v == 0 {
+                if *offset_v < border_width {
+                    *tex_v = blend(
+                        pixel_getter(x, *offset_v as usize),
+                        *tex_v,
+                    )
+                }
+                offset_v.saturating_add(1)
+            } else {
+                0
+            }
+        }
     }
 }
 
