@@ -152,6 +152,11 @@ impl Size {
     }
 
     #[inline]
+    pub fn transpose(&self) -> Self {
+        Self::new(self.height, self.width)
+    }
+
+    #[inline]
     pub fn to_mask(&self) -> SizeMask {
         SizeMask::new(*self)
     }

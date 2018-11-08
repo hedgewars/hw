@@ -23,18 +23,18 @@ pub struct ThemeSprite {
 
 impl ThemeSprite {
     #[inline]
+    pub fn size(&self) -> Size {
+        self.pixels.size()
+    }
+
+    #[inline]
     pub fn width(&self) -> usize {
-        self.pixels.size().width
+        self.size().width
     }
 
     #[inline]
     pub fn height(&self) -> usize {
-        self.pixels.size().height
-    }
-
-    #[inline]
-    pub fn bounds(&self) -> Size {
-        self.pixels.size()
+        self.size().height
     }
 
     #[inline]
@@ -50,6 +50,65 @@ impl ThemeSprite {
     #[inline]
     pub fn get_pixel(&self, x: usize, y: usize) -> u32 {
         self.pixels[y][x]
+    }
+
+    pub fn to_transposed(&self) -> ThemeSprite {
+        let size = self.size().transpose();
+        let mut pixels = Vec2D::new(size, 0u32);
+        for (y, row) in self.pixels.rows().enumerate() {
+            for (x, v) in row.iter().enumerate() {
+                pixels[x][y] = *v;
+            }
+        }
+        ThemeSprite { pixels }
+    }
+
+    pub fn to_tiled(&self) -> TiledSprite {
+        let size = self.size();
+        assert!(size.is_power_of_two());
+        let tile_width_shift = size.width.trailing_zeros() as usize + 2;
+        let mut pixels = vec![0u32; size.area()];
+
+        for (y, row) in self.pixels.rows().enumerate() {
+            for (x, v) in row.iter().enumerate() {
+                pixels[get_tiled_index(x, y, tile_width_shift)] = *v;
+            }
+        }
+
+        TiledSprite { tile_width_shift, size, pixels }
+    }
+}
+
+#[inline]
+fn get_tiled_index(x: usize, y: usize, tile_width_shift: usize) -> usize {
+    (((y >> 2) << tile_width_shift) + ((x >> 2) << 4)) + ((y & 0b11) << 2) + (x & 0b11)
+}
+
+pub struct TiledSprite {
+    tile_width_shift: usize,
+    size: Size,
+    pixels: Vec<u32>
+}
+
+impl TiledSprite {
+    #[inline]
+    pub fn size(&self) -> Size {
+        self.size
+    }
+
+    #[inline]
+    pub fn width(&self) -> usize {
+        self.size().width
+    }
+
+    #[inline]
+    pub fn height(&self) -> usize {
+        self.size().height
+    }
+
+    #[inline]
+    pub fn get_pixel(&self, x: usize, y: usize) -> u32 {
+        self.pixels[get_tiled_index(x, y, self.tile_width_shift)]
     }
 }
 

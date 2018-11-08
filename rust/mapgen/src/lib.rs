@@ -141,6 +141,7 @@ impl MapGenerator {
         if let Some(border_sprite) = theme.border_texture() {
             assert!(border_sprite.height() <= 512);
             let border_width = (border_sprite.height() / 2) as u8;
+            let border_sprite = border_sprite.to_tiled();
 
             let mut offsets = vec![255u8; land.width()];
 
