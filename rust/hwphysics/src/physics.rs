@@ -1,5 +1,5 @@
 use crate::{
-    common::GearId
+    common::{GearId, GearData, GearDataProcessor}
 };
 use fpnum::*;
 use integral_geometry::{
@@ -12,6 +12,7 @@ pub struct PhysicsData {
     pub velocity: FPPoint,
 }
 
+impl GearData for PhysicsData {}
 
 pub struct DynamicPhysicsCollection {
     gear_ids: Vec<GearId>,
@@ -20,6 +21,14 @@ pub struct DynamicPhysicsCollection {
 }
 
 impl DynamicPhysicsCollection {
+    fn new() -> Self {
+        Self {
+            gear_ids: Vec::new(),
+            positions: Vec::new(),
+            velocities: Vec::new()
+        }
+    }
+
     fn len(&self) -> usize {
         self.gear_ids.len()
     }
@@ -43,6 +52,13 @@ pub struct StaticPhysicsCollection {
 }
 
 impl StaticPhysicsCollection {
+    fn new() -> Self {
+        Self {
+            gear_ids: Vec::new(),
+            positions: Vec::new()
+        }
+    }
+
     fn push(&mut self, gear_id: GearId, physics: PhysicsData) {
         self.gear_ids.push(gear_id);
         self.positions.push(physics.position);
@@ -54,15 +70,15 @@ pub struct PhysicsProcessor {
     static_physics: StaticPhysicsCollection,
 
     physics_cleanup: Vec<GearId>,
-    position_updates: PositionUpdate
+    position_updates: PositionUpdates
 }
 
-pub struct PositionUpdate {
+pub struct PositionUpdates {
     pub gear_ids: Vec<GearId>,
     pub positions: Vec<FPPoint>
 }
 
-impl PositionUpdate {
+impl PositionUpdates {
     pub fn new(capacity: usize) -> Self {
         Self {
             gear_ids: Vec::with_capacity(capacity),
@@ -77,7 +93,16 @@ impl PositionUpdate {
 }
 
 impl PhysicsProcessor {
-    pub fn process(&mut self, time_step: FPNum) -> &PositionUpdate {
+    pub fn new() -> Self {
+        PhysicsProcessor {
+            dynamic_physics: DynamicPhysicsCollection::new(),
+            static_physics: StaticPhysicsCollection::new(),
+            physics_cleanup: Vec::new(),
+            position_updates: PositionUpdates::new(0)
+        }
+    }
+
+    pub fn process(&mut self, time_step: FPNum) -> &PositionUpdates {
         for (gear_id, (pos, vel)) in self.dynamic_physics.iter_pos_update() {
             *pos += *vel * time_step;
             if !vel.is_zero() {
@@ -94,6 +119,16 @@ impl PhysicsProcessor {
             self.static_physics.push(gear_id, physics_data);
         } else {
             self.dynamic_physics.push(gear_id, physics_data);
+        }
+    }
+}
+
+impl GearDataProcessor<PhysicsData> for PhysicsProcessor {
+    fn add(&mut self, gear_id: GearId, gear_data: PhysicsData) {
+        if gear_data.velocity.is_zero() {
+            self.static_physics.push(gear_id, gear_data);
+        } else {
+            self.dynamic_physics.push(gear_id, gear_data);
         }
     }
 }

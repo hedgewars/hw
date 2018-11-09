@@ -30,7 +30,7 @@ impl GridBin {
     }
 }
 
-const GRID_BIN_SIZE: usize = 256;
+const GRID_BIN_SIZE: usize = 128;
 
 pub struct Grid {
     bins: Vec<GridBin>,
@@ -63,12 +63,12 @@ impl Grid {
         &mut self.bins[index.x as usize * self.bins_count.width + index.y as usize]
     }
 
-    pub fn insert_static(&mut self, gear_id: GearId, position: &FPPoint, bounds: &CircleBounds) {
-        self.lookup_bin(position).static_entries.push(*bounds)
+    pub fn insert_static(&mut self, gear_id: GearId, bounds: &CircleBounds) {
+        self.lookup_bin(&bounds.center).static_entries.push(*bounds)
     }
 
-    pub fn insert_dynamic(&mut self, gear_id: GearId, position: &FPPoint, bounds: &CircleBounds) {
-        self.lookup_bin(position).dynamic_entries.push(*bounds)
+    pub fn insert_dynamic(&mut self, gear_id: GearId, bounds: &CircleBounds) {
+        self.lookup_bin(&bounds.center).dynamic_entries.push(*bounds)
     }
 
     pub fn check_collisions(&self, collisions: &mut DetectedCollisions) {

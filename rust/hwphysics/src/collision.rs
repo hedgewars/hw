@@ -3,7 +3,7 @@ use std::{
 };
 
 use crate::{
-    common::GearId,
+    common::{GearId, GearData, GearDataProcessor},
     physics::PhysicsData,
     grid::Grid
 };
@@ -42,11 +42,15 @@ pub struct CollisionData {
     pub bounds: CircleBounds
 }
 
+impl GearData for CollisionData {}
+
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct ContactData {
     pub elasticity: FPNum,
     pub friction: FPNum
 }
+
+impl GearData for ContactData {}
 
 struct EnabledCollisionsCollection {
     gear_ids: Vec<GearId>,
@@ -54,6 +58,13 @@ struct EnabledCollisionsCollection {
 }
 
 impl EnabledCollisionsCollection {
+    fn new() -> Self {
+        Self {
+            gear_ids: Vec::new(),
+            collisions: Vec::new()
+        }
+    }
+
     fn push(&mut self, gear_id: GearId, collision: CollisionData) {
         self.gear_ids.push(gear_id);
         self.collisions.push(collision);
@@ -86,26 +97,32 @@ impl DetectedCollisions {
 
     pub fn push(&mut self, contact_gear_id1: GearId, contact_gear_id2: GearId, position: &FPPoint) {
         self.pairs.push((contact_gear_id1, contact_gear_id2));
-        self.positions.push(fppoint_round(position));
+        self.positions.push(fppoint_round(&position));
     }
 }
 
 impl CollisionProcessor {
-    pub fn process(&mut self, land: &Land2D<u32>, updates: &crate::physics::PositionUpdate) {
+    pub fn new(size: Size) -> Self {
+        Self {
+            grid: Grid::new(size),
+            enabled_collisions: EnabledCollisionsCollection::new(),
+            detected_collisions: DetectedCollisions::new(0)
+        }
+    }
+
+    pub fn process(&mut self, land: &Land2D<u32>, updates: &crate::physics::PositionUpdates) {
         self.grid.check_collisions(&mut self.detected_collisions);
 
         for (gear_id, collision) in self.enabled_collisions.iter() {
             if collision.bounds.rows().any(|(y, r)| (&land[y][r]).iter().any(|v| *v != 0)) {
-                self.detected_collisions.push(0, 0, &collision.bounds.center)
+                self.detected_collisions.push(gear_id, 0, &collision.bounds.center)
             }
         }
     }
+}
 
-    pub fn push(&mut self, gear_id: GearId, physics_data: PhysicsData, collision_data: CollisionData) {
-        if physics_data.velocity.is_zero() {
-            self.grid.insert_static(0, &physics_data.position, &collision_data.bounds);
-        } else {
-            self.grid.insert_dynamic(0, &physics_data.position, &collision_data.bounds);
-        }
+impl GearDataProcessor<CollisionData> for CollisionProcessor {
+    fn add(&mut self, gear_id: GearId, gear_data: CollisionData) {
+        self.grid.insert_static(gear_id, &gear_data.bounds);
     }
 }
