@@ -49,8 +49,8 @@ typedef int64_t Int64;
 typedef LongWord Cardinal;
 
 typedef LongInt Integer;
-typedef float extended;
-typedef float real;
+typedef long double extended;
+typedef double real;
 typedef float single;
 
 typedef bool boolean;

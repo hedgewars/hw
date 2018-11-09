@@ -32,11 +32,15 @@ float fpcrtl_csc(float x)
 
 float __attribute__((overloadable)) fpcrtl_abs(float x)
 {
-    return fabs(x);
+    return fabsf(x);
 }
 double __attribute__((overloadable)) fpcrtl_abs(double x)
 {
     return fabs(x);
+}
+long double __attribute__((overloadable)) fpcrtl_abs(long double x)
+{
+    return fabsl(x);
 }
 int __attribute__((overloadable)) fpcrtl_abs(int x)
 {
