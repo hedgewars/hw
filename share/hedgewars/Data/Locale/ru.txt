@@ -686,7 +686,7 @@
 03:57=Полезная вещь
 03:58=Летающая неконтактная бомба
 03:59=Незавершённое оружие
-03:60=Ультимативная пушка
+03:60=Наимощнейшая пушка
 
 ; Weapon Descriptions (use | as line breaks)
 ; TODO: Review all strings in this group (04:XX). Some of the translations might be outdated.
