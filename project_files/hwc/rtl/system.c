@@ -358,7 +358,7 @@ LongInt str_to_int(char *src)
     char *end;
     for(i = 0; i < len; i++)
     {
-        if((src[i] == 'x') || (src[i] == 'X')){
+        if(src[i] == '$'){
             // hex
             return strtol(src + i + 1, &end, 16);
         }
