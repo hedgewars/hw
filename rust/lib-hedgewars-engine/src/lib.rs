@@ -2,6 +2,8 @@ extern crate integral_geometry;
 extern crate land2d;
 extern crate landgen;
 extern crate lfprng;
+extern crate gfx;
+extern crate gfx_device_gl;
 
 mod world;
 mod engine_message;
@@ -10,6 +12,23 @@ mod command;
 #[repr(C)]
 pub struct EngineInstance {
     world: world::World,
+}
+
+impl EngineInstance {
+    pub fn new() -> Self {
+        let world = world::World::new();
+        Self { world }
+    }
+
+    pub fn render<R, C>(
+        &self,
+        context: &mut gfx::Encoder<R, C>,
+        target: &gfx::handle::RenderTargetView<R, gfx::format::Rgba8>)
+        where R: gfx::Resources,
+              C: gfx::CommandBuffer<R>
+    {
+        context.clear(target, [0.0, 0.5, 0.0, 1.0]);
+    }
 }
 
 #[repr(C)]
