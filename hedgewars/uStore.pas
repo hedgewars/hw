@@ -818,8 +818,8 @@ begin
                 if value[1] <> '#' then
                     continue;
                 temp:= copy(value, 2, length(value) - 1);
-                tempColor:= StrToInt('0x'+temp);
-				color:= tempColor
+                tempColor:= StrToInt('$'+temp);
+                color:= tempColor
                 end;
 
             if clanID <= cClanColors then
