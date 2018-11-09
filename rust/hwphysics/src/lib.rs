@@ -1,195 +1,108 @@
-use std::{
-    ops::RangeInclusive
-};
+mod common;
+mod physics;
+mod grid;
+mod collision;
 
-use fpnum::*;
-use integral_geometry::{
-    Point, Size, GridIndex
-};
+use fpnum::FPNum;
+use integral_geometry::Size;
 use land2d::Land2D;
 
-type Index = u16;
-
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-struct PhysicsData {
-    position: FPPoint,
-    velocity: FPPoint,
-}
-
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-struct  CollisionData {
-    bounds: CircleBounds
-}
-
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-struct ContactData {
-    elasticity: FPNum,
-    friction: FPNum
-}
-
-pub struct PhysicsCollection {
-    positions: Vec<FPPoint>,
-    velocities: Vec<FPPoint>
-}
-
-impl PhysicsCollection {
-    fn push(&mut self, data: PhysicsData) {
-        self.positions.push(data.position);
-        self.velocities.push(data.velocity);
+use crate::{
+    common::{
+        GearId,
+        GearData,
+        GearDataAggregator,
+        GearDataProcessor
+    },
+    physics::{
+        PhysicsProcessor,
+        PhysicsData
+    },
+    collision::{
+        CollisionProcessor,
+        CollisionData,
+        ContactData
     }
-
-    fn iter_mut_pos(&mut self) -> impl Iterator<Item = (&mut FPPoint, &FPPoint)> {
-        self.positions.iter_mut().zip(self.velocities.iter())
-    }
-}
+};
 
 pub struct JoinedData {
+    gear_id: GearId,
     physics: PhysicsData,
     collision: CollisionData,
     contact: ContactData
 }
 
 pub struct World {
-    enabled_physics: PhysicsCollection,
-    disabled_physics: Vec<PhysicsData>,
-
-    enabled_collision: Vec<CollisionData>,
-    disabled_collision: Vec<CollisionData>,
-    grid: Grid,
-
-    physics_cleanup: Vec<PhysicsData>,
-    collision_output: Vec<(Index, Index)>,
-    land_collision_output: Vec<Index>
+    physics: PhysicsProcessor,
+    collision: CollisionProcessor,
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-struct CircleBounds {
-    center: FPPoint,
-    radius: FPNum
-}
-
-impl CircleBounds {
-    pub fn intersects(&self, other: &CircleBounds) -> bool {
-        (other.center - self.center).is_in_range(self.radius + other.radius)
-    }
-
-    pub fn rows(&self) -> impl Iterator<Item = (usize, RangeInclusive<usize>)> {
-        let radius = self.radius.abs_round() as usize;
-        let center = Point::from_fppoint(&self.center);
-        (center.y as usize - radius..=center.y as usize + radius)
-            .map(move |row| (row, center.x as usize - radius..=center.x as usize + radius))
-    }
-}
-
-fn fppoint_round(point: &FPPoint) -> Point {
-    Point::new(point.x().round() as i32, point.y().round() as i32)
-}
-
-struct GridBin {
-    refs: Vec<Index>,
-    static_entries: Vec<CircleBounds>,
-    dynamic_entries: Vec<CircleBounds>
-}
-
-impl GridBin {
-    fn new() -> Self {
-        Self {
-            refs: vec![],
-            static_entries: vec![],
-            dynamic_entries: vec![]
-        }
-    }
-}
-
-const GRID_BIN_SIZE: usize = 256;
-
-struct Grid {
-    bins: Vec<GridBin>,
-    space_size: Size,
-    bins_count: Size,
-    index: GridIndex
-}
-
-impl Grid {
-    fn new(size: Size) -> Self {
-        assert!(size.is_power_of_two());
-        let bins_count =
-            Size::new(size.width / GRID_BIN_SIZE,
-                      size.height / GRID_BIN_SIZE);
-
-        Self {
-            bins: (0..bins_count.area()).map(|_| GridBin::new()).collect(),
-            space_size: size,
-            bins_count,
-            index: Size::square(GRID_BIN_SIZE).to_grid_index()
-        }
-    }
-
-    fn bin_index(&self, position: &FPPoint) -> Point {
-        self.index.map(fppoint_round(position))
-    }
-
-    fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {
-        let index = self.bin_index(position);
-        &mut self.bins[index.x as usize * self.bins_count.width + index.y as usize]
-    }
-
-    fn insert_static(&mut self, index: Index, position: &FPPoint, bounds: &CircleBounds) {
-        self.lookup_bin(position).static_entries.push(*bounds)
-    }
-
-    fn insert_dynamic(&mut self, index: Index, position: &FPPoint, bounds: &CircleBounds) {
-        self.lookup_bin(position).dynamic_entries.push(*bounds)
-    }
-
-    fn check_collisions(&self, collisions: &mut Vec<(Index, Index)>) {
-        for bin in &self.bins {
-            for bounds in &bin.dynamic_entries {
-                for other in &bin.dynamic_entries {
-                    if bounds.intersects(other) && bounds != other {
-                        collisions.push((0, 0))
-                    }
-                }
-
-                for other in &bin.static_entries {
-                    if bounds.intersects(other) {
-                        collisions.push((0, 0))
-                    }
-                }
+macro_rules! processor_map {
+    ( $data_type: ident => $field: ident ) => {
+        impl GearDataAggregator<$data_type> for World {
+            fn find_processor(&mut self) -> &mut GearDataProcessor<$data_type> {
+                &mut self.$field
             }
         }
     }
 }
+
+processor_map!(PhysicsData => physics);
+processor_map!(CollisionData => collision);
 
 impl World {
+    pub fn new(world_size: Size) -> Self {
+        Self {
+            physics: PhysicsProcessor::new(),
+            collision: CollisionProcessor::new(world_size)
+        }
+    }
+
     pub fn step(&mut self, time_step: FPNum, land: &Land2D<u32>) {
-        for (pos, vel) in self.enabled_physics.iter_mut_pos() {
-            *pos += *vel
-        }
-
-        self.grid.check_collisions(&mut self.collision_output);
+        let updates = self.physics.process(time_step);
+        self.collision.process(land, &updates);
     }
 
-    fn check_land_collisions(&mut self, land: &Land2D<u32>) {
-        for collision in &self.enabled_collision {
-            if collision.bounds.rows().any(|(y, r)| (&land[y][r]).iter().any(|v| *v != 0)) {
-                self.land_collision_output.push(0)
-            }
-        }
-    }
-
-    pub fn add_gear(&mut self, data: JoinedData) {
-        if data.physics.velocity == FPPoint::zero() {
-            self.disabled_physics.push(data.physics);
-            self.grid.insert_static(0, &data.physics.position, &data.collision.bounds);
-        } else {
-            self.enabled_physics.push(data.physics);
-            self.grid.insert_dynamic(0, &data.physics.position, &data.collision.bounds);
-        }
+    pub fn add_gear_data<T>(&mut self, gear_id: GearId, data: T)
+        where T: GearData,
+              Self: GearDataAggregator<T>
+    {
+        self.find_processor().add(gear_id, data);
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::{
+        World,
+        physics::PhysicsData,
+        collision::{CollisionData, CircleBounds}
+    };
+    use fpnum::{FPNum, FPPoint, fp};
+    use integral_geometry::Size;
+    use land2d::Land2D;
 
+    #[test]
+    fn data_flow() {
+        let world_size = Size::new(2048, 2048);
+
+        let mut world = World::new(world_size);
+        let gear_id = 46631;
+
+        world.add_gear_data(gear_id, PhysicsData {
+            position: FPPoint::zero(),
+            velocity: FPPoint::unit_y()
+        });
+
+        world.add_gear_data(gear_id, CollisionData {
+            bounds: CircleBounds {
+                center: FPPoint::zero(),
+                radius: fp!(10)
+            }
+        });
+
+        let land = Land2D::new(Size::new(world_size.width - 2, world_size.height - 2), 0);
+
+        world.step(fp!(1), &land);
+    }
 }

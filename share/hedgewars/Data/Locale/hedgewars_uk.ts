@@ -10,73 +10,73 @@
     <message>
         <source>Hedgewars %1</source>
         <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
-        <translation type="unfinished">Hedgewars %1</translation>
+        <translation>Hedgewars %1</translation>
     </message>
     <message>
         <source>Revision %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ревізія %1 (%2)</translation>
     </message>
     <message>
         <source>Visit our homepage: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Наша домашня сторінка: %1</translation>
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation type="unfinished">Ця програма поширюється згідно з %1.</translation>
+        <translation>Ця програма поширюється згідно з %1.</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
         <extracomment>Short for “GNU General Public License version 2”</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>GNU GPL v2</translation>
     </message>
     <message>
         <source>Dependency versions:</source>
         <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Версії залежностей:</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
     </message>
 </context>
 <context>
@@ -138,15 +138,15 @@
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>Забанити гравця</translation>
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть IP адресу.</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть нікнейм.</translation>
     </message>
 </context>
 <context>
@@ -188,11 +188,11 @@
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished">Відгук</translation>
+        <translation>Відгук</translation>
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Це необов&apos;язково, але ця інформація може допомогти нам у вирішенні проблем.</translation>
     </message>
 </context>
 <context>
@@ -249,19 +249,19 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нова</translation>
+        <translation>Нова</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Копія %1</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Нова (%1)</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копія %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -285,8 +285,8 @@
         <source>%1 hour</source>
         <translation>
             <numerusform>%1 година</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%1 години</numerusform>
+            <numerusform>%1 годин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -301,8 +301,8 @@
         <source>%1 day</source>
         <translation>
             <numerusform>%1 день</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%1 дні</numerusform>
+            <numerusform>%1 днів</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -334,52 +334,52 @@ Please check your installation!</source>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Використання</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>OPTION</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>CONNECTSTRING</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Опції</translation>
     </message>
     <message>
         <source>Display this help</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Показати цю довідку</translation>
     </message>
     <message>
         <source>Custom path for configuration data and user data</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Користувацький шлях до даних конфігурації та даних користувача</translation>
     </message>
     <message>
         <source>Custom path to the game data folder</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Користувацький шлях до теки даних гри</translation>
     </message>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars може використовувати %1 (напр. &quot;%2&quot;) щоб під&apos;єднуватися на старті.</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Невірний аргумент опції: %1</translation>
     </message>
     <message>
         <source>Unknown option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий аргумент опції: %1</translation>
     </message>
 </context>
 <context>
@@ -445,15 +445,15 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Chat log</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал чату</translation>
     </message>
     <message>
         <source>Enter chat messages here and send them with [Enter]</source>
-        <translation type="unfinished"></translation>
+        <translation>Вводіть повідомлення чату тут і надсилайте їх натиснувши [Enter]</translation>
     </message>
     <message>
         <source>List of players</source>
-        <translation type="unfinished"></translation>
+        <translation>Перелік гравців</translation>
     </message>
 </context>
 <context>
@@ -579,34 +579,34 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>The room is protected with password.
 Please, enter the password:</source>
-        <translation type="unfinished">Кімната захищена паролем.
+        <translation>Кімната захищена паролем.
 Будь ласка, введіть пароль:</translation>
     </message>
     <message>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда 1</translation>
     </message>
     <message>
         <source>Team %1</source>
         <extracomment>Default team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Команда %1</translation>
     </message>
     <message>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Комп&apos;ютер %1</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома помилка мережі (можливо відсутня бібліотека SSL).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ця функція потребує підключення до Інтернету, але ви, здається, не знаходитесь в мережі (код помилки: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутрішня помилка: об&apos;єкт відповіді недійсний.</translation>
     </message>
 </context>
 <context>
@@ -629,14 +629,21 @@ If this keeps happening, please click the &apos;Feedback&apos; button in the mai
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Виникла фатальна ПОМИЛКА! Ігровий двигун довелося зупинити.
+
+Нам дуже шкода за незручності. :-(
+
+Якщо це триватиме, натисніть кнопку &quot;Зворотний зв&apos;язок&quot; у головному меню!
+
+Останнє повідомлення двигуна:
+%1</translation>
     </message>
 </context>
 <context>
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>Під&apos;єднатись до сервера</translation>
     </message>
 </context>
 <context>
@@ -772,11 +779,11 @@ Last engine message:
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль:</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Форти</translation>
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
@@ -784,11 +791,11 @@ Last engine message:
     </message>
     <message>
         <source>Randomize the theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадкова тема</translation>
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть тему</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
@@ -812,15 +819,15 @@ Last engine message:
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть складність згенерованої мапи</translation>
     </message>
     <message>
         <source>Adjust the distance between forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть відстань між фортами</translation>
     </message>
     <message>
         <source>Click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Клацніть для зміни</translation>
     </message>
 </context>
 <context>
@@ -892,15 +899,15 @@ Last engine message:
     </message>
     <message>
         <source>Server authentication error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка автентифікації на сервері</translation>
     </message>
     <message>
         <source>Reason:</source>
-        <translation type="unfinished"></translation>
+        <translation>Причина:</translation>
     </message>
     <message>
         <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Зв&apos;язок розірвано офіційним сервером або закінчився час очікування. Здається на даний момент є проблеми з офіційним сервером. Це може бути тимчасовою проблемою. Будь ласка спробуйте пізніше.</translation>
     </message>
     <message>
         <source>The connection was refused by the host or timed out. This might have one of the following reasons:
@@ -909,7 +916,12 @@ Last engine message:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>З&apos;єднання розірвано хостом або закінчився час очікування. Це може мати одну з наступних причин:
+- Серверна частина Hedgewars наразі не працює на хості
+- Вказаний невірний номер порту
+- Існує тимчасова проблема з мережею
+
+Перевірте налаштування імені хоста та порту та/або повторіть спробу пізніше.</translation>
     </message>
 </context>
 <context>
@@ -938,7 +950,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>New Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий акаунт</translation>
     </message>
 </context>
 <context>
@@ -975,7 +987,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть капелюх</translation>
     </message>
 </context>
 <context>
@@ -1017,33 +1029,33 @@ just enter your nickname.</source>
     <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Тривалість: %1хв %2с</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Відео: %1x%2, %3 FPS, %4</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Відео: %1x%2, %3</translation>
     </message>
     <message>
         <source>Player: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Гравець: %1</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished">Тема: %1</translation>
+        <translation>Тема: %1</translation>
     </message>
     <message>
         <source>Map: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Мапа: %1</translation>
     </message>
     <message>
         <source>Record: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Рекорд: %1</translation>
     </message>
 </context>
 <context>
@@ -1057,12 +1069,12 @@ just enter your nickname.</source>
     <name>MinesTimeSpinBox</name>
     <message>
         <source>Random</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадково</translation>
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 секунд</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1136,19 +1148,19 @@ just enter your nickname.</source>
     <name>PageCampaign</name>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Команда</translation>
+        <translation>Команда</translation>
     </message>
     <message>
         <source>Campaign</source>
-        <translation type="unfinished"></translation>
+        <translation>Кампанія</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Місія</translation>
     </message>
     <message>
         <source>Start fighting</source>
-        <translation type="unfinished">Розпочати бій</translation>
+        <translation>Розпочати бій</translation>
     </message>
 </context>
 <context>
@@ -1170,23 +1182,23 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрити теку з пакунками</translation>
     </message>
     <message>
         <source>Load the start page</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити стартову сторінку</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідома помилка мережі (можливо відсутня бібліотека SSL).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ця функція потребує підключення до Інтернету, але ви, здається, не знаходитесь в мережі (код помилки: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутрішня помилка: об&apos;єкт відповіді недійсний.</translation>
     </message>
 </context>
 <context>
@@ -1241,11 +1253,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Optimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Оптимізувати</translation>
     </message>
     <message>
         <source>Brush size</source>
-        <translation type="unfinished"></translation>
+        <translation>Розмір пензля</translation>
     </message>
 </context>
 <context>
@@ -1292,44 +1304,44 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play a random example of this voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Програти випадковий приклад голосу</translation>
     </message>
     <message>
         <source>Random Hats</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадкові капелюхи</translation>
     </message>
     <message>
         <source>Random Names</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадкові імена</translation>
     </message>
     <message>
         <source>Randomize the team name</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадкова назва команди</translation>
     </message>
     <message>
         <source>Randomize the grave</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадкова могила</translation>
     </message>
     <message>
         <source>Randomize the flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадковий прапор</translation>
     </message>
     <message>
         <source>Randomize the voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадковий голос</translation>
     </message>
     <message>
         <source>Randomize the fort</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадковий форт</translation>
     </message>
     <message>
         <source>CPU %1</source>
         <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ЦП %1</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1348,7 +1360,7 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; пунктами нанесених втрат.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -1438,7 +1450,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation type="unfinished"></translation>
+        <translation>Оскільки клани мали той самий колір, не було причин для бою. Тому їжаки довго жили в мирі і щасті.</translation>
     </message>
 </context>
 <context>
@@ -1515,7 +1527,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Відкрийте онлайн посібник Hedgewars у своєму веб-переглядачі</translation>
     </message>
 </context>
 <context>
@@ -1530,7 +1542,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Розпочати бій (потребує хоча б 2 команди)</translation>
     </message>
 </context>
 <context>
@@ -1557,19 +1569,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва кімнати</translation>
     </message>
     <message>
         <source>Update the room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити назву кімнати</translation>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкніть лампочку, щоб показати іншим гравцям, коли будете готові до бою</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Розпочати бій (потребує хоча б 2 команди)</translation>
     </message>
 </context>
 <context>
@@ -1756,7 +1768,7 @@ just enter your nickname.</source>
     <message>
         <source>x</source>
         <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>x</translation>
     </message>
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
@@ -1764,15 +1776,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Check now</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірити зараз</translation>
     </message>
     <message>
         <source>Can&apos;t delete last team</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо видалити останню команду</translation>
     </message>
     <message>
         <source>You can&apos;t delete the last team!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви не можете видалити останню команду!</translation>
     </message>
 </context>
 <context>
@@ -1787,15 +1799,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play demo</source>
-        <translation type="unfinished">Грати демо</translation>
+        <translation>Грати демо</translation>
     </message>
     <message>
         <source>Play the selected demo</source>
-        <translation type="unfinished"></translation>
+        <translation>Грати обране демо</translation>
     </message>
     <message>
         <source>Load the selected game</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити обрану гру</translation>
     </message>
 </context>
 <context>
@@ -2001,7 +2013,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation type="unfinished"></translation>
+        <translation>Кожен клан стартує на своїй території.</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
@@ -2013,7 +2025,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Початкове здоров&apos;я їжаків</translation>
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
@@ -2029,7 +2041,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна довжина мотузки у відсотках</translation>
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
@@ -2041,7 +2053,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Health bonus for collecting a health crate</source>
-        <translation type="unfinished"></translation>
+        <translation>Бонус здоров&apos;я за підібраний ящик зі здоров&apos;ям</translation>
     </message>
     <message>
         <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
@@ -2069,7 +2081,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Time you get after an attack</source>
-        <translation type="unfinished"></translation>
+        <translation>Час, який у вас є після атаки</translation>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
@@ -2077,19 +2089,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Name of this scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва цієї схеми</translation>
     </message>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть їжака на початку ходу</translation>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
-        <translation type="unfinished"></translation>
+        <translation>Земля не може бути знищена більшістю зброї.</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2158,27 +2170,27 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Pick the training to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть навчальну гру</translation>
     </message>
     <message>
         <source>Pick the challenge to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть виклик</translation>
     </message>
     <message>
         <source>Pick the scenario to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть сценарій гри</translation>
     </message>
     <message>
         <source>Trainings</source>
-        <translation type="unfinished"></translation>
+        <translation>Навчання</translation>
     </message>
     <message>
         <source>Challenges</source>
-        <translation type="unfinished"></translation>
+        <translation>Виклики</translation>
     </message>
     <message>
         <source>Scenarios</source>
-        <translation type="unfinished"></translation>
+        <translation>Сценарії</translation>
     </message>
 </context>
 <context>
@@ -2195,8 +2207,8 @@ just enter your nickname.</source>
         <source>%1 bytes</source>
         <translation>
             <numerusform>%1 байт</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%1 байти</numerusform>
+            <numerusform>%1 байтів</numerusform>
         </translation>
     </message>
     <message>
@@ -2222,12 +2234,12 @@ just enter your nickname.</source>
     <message>
         <source>%1%</source>
         <extracomment>Video encoding progress. %1 = number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2%) - %3</translation>
     </message>
 </context>
 <context>
@@ -2290,15 +2302,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати захищені паролем</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати з обмеженим приєднанням</translation>
     </message>
     <message>
         <source>Delegate room control</source>
-        <translation type="unfinished"></translation>
+        <translation>Делегувати керування кімнатою</translation>
     </message>
 </context>
 <context>
@@ -2409,20 +2421,20 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable visual effects such as animated menu transitions and falling stars</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввімкнути візуальні ефекти, такі як анімаційні переходи меню та падіння зірок</translation>
     </message>
     <message>
         <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ввімкнено, Hedgewars додасть дату та час у вигляді &quot;YYYY-MM-DD_hh-mm&quot; до автоматично створених демо.</translation>
     </message>
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Занижувати звук при втраті фокусу</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation type="unfinished"></translation>
+        <translation>Знизити гучність звук гри, якщо вікно гри втратило фокус</translation>
     </message>
 </context>
 <context>
@@ -2517,31 +2529,31 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Computer (Level %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Комп&apos;ютер (Рівень %1)</translation>
     </message>
     <message>
         <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Стереоскопія створює ілюзію глибини, коли ви одягаєте 3D-окуляри.</translation>
     </message>
     <message>
         <source>24 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>24 FPS</translation>
     </message>
     <message>
         <source>25 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>25 FPS</translation>
     </message>
     <message>
         <source>30 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>30 FPS</translation>
     </message>
     <message>
         <source>50 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>50 FPS</translation>
     </message>
     <message>
         <source>60 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>60 FPS</translation>
     </message>
 </context>
 <context>
@@ -2851,15 +2863,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Air Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Повітряні міни</translation>
     </message>
     <message>
         <source>Player</source>
-        <translation type="unfinished"></translation>
+        <translation>Гравець</translation>
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation>Бочки</translation>
     </message>
     <message>
         <source>% Retreat Time</source>
@@ -2867,12 +2879,12 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Stereoscopy</source>
-        <translation type="unfinished"></translation>
+        <translation>Стереоскопія</translation>
     </message>
     <message>
         <source>Bitrate (Kibit/s)</source>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Бітрейт (Kibit/s)</translation>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
@@ -2895,11 +2907,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>unnamed (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>без_назви (%1)</translation>
     </message>
     <message>
         <source>Hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Їжак %1</translation>
     </message>
 </context>
 <context>
@@ -3137,53 +3149,55 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Teams - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Команди - Назва вже зайнята</translation>
     </message>
     <message>
         <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва команди &apos;%1&apos; вже зайнята, тому ваша команда була перейменована на &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Please select a file from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть файл зі списку.</translation>
     </message>
     <message>
         <source>Cannot rename file to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо перейменувати файл %1.</translation>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо видалити файл %1.</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Вітаємо в Hedgewars</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars!
 
 You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вітаємо в Hedgewars!
+
+Ви, схоже, новенький. Чи не хочете спочатку зіграти деякі навчальні місії, щоб вивчити основи Hedgewars?</translation>
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо використати схему зброї &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>The connection to the server is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>З&apos;єднання з сервером втрачено.</translation>
     </message>
     <message>
         <source>Schemes - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>Схеми - Назва вже зайнята</translation>
     </message>
     <message>
         <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема з назвою &apos;%1&apos; вже існує. Ваша схема перейменована на &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема зброї з назвою &apos;%1&apos; вже існує. Зміни, внесені до схеми зброї, були відхилені.</translation>
     </message>
 </context>
 <context>
@@ -3320,7 +3334,7 @@ You seem to be new around here. Would you like to play some training missions fi
     <name>QSpinBox</name>
     <message>
         <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть бітрейт записаного відео кратний 1024 бітам за секунду</translation>
     </message>
 </context>
 <context>
@@ -3400,7 +3414,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>Форти</translation>
     </message>
 </context>
 <context>
@@ -3424,7 +3438,7 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Seed</source>
         <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
-        <translation type="unfinished">Висів</translation>
+        <translation>Висів</translation>
     </message>
 </context>
 <context>
@@ -3455,19 +3469,19 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нова</translation>
+        <translation>Новий</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Новий (%1)</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Копія %1</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копія %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -3489,7 +3503,12 @@ Error code: %2</source>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ігровий двигун несподівано помер!
+(код виходу %1)
+
+Нам дуже шкода за незручності :(
+
+Якщо це триватиме, натисніть на кнопку &apos;%2&apos; в головному меню!</translation>
     </message>
 </context>
 <context>
@@ -3515,7 +3534,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть тему</translation>
     </message>
 </context>
 <context>
@@ -3860,7 +3879,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Delete</source>
-        <translation>Видалити</translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
@@ -3896,15 +3915,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Return</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <source>Space</source>
@@ -3972,11 +3991,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Дорівнює</translation>
     </message>
     <message>
         <source>Up</source>
@@ -3996,23 +4015,23 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Insert</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished"></translation>
+        <translation>Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished"></translation>
+        <translation>Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
@@ -4020,11 +4039,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
@@ -4052,27 +4071,27 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Права Meta</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Ліва Meta</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка Y</translation>
     </message>
     <message>
         <source>LB button</source>
@@ -4282,19 +4301,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>New voting started</source>
-        <translation type="unfinished"></translation>
+        <translation>Почалося нове голосування</translation>
     </message>
     <message>
         <source>kick</source>
-        <translation type="unfinished"></translation>
+        <translation>копнути</translation>
     </message>
     <message>
         <source>map</source>
-        <translation type="unfinished"></translation>
+        <translation>мапа</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation type="unfinished">пауза</translation>
+        <translation>пауза</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
@@ -4318,7 +4337,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>new seed</source>
-        <translation type="unfinished"></translation>
+        <translation>новий висів</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
@@ -4338,11 +4357,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ заборонено.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви не голова кімнати!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
@@ -4350,15 +4369,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation type="unfinished"></translation>
+        <translation>Забагато команд!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation type="unfinished"></translation>
+        <translation>Забагато їжаків!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда з таким же іменем вже є в списку.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
@@ -4410,7 +4429,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>No such room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Немає такої кімнати.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
@@ -4442,7 +4461,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Bad number.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невірне число.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
@@ -4450,15 +4469,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви вже проголосували.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш голос було враховано.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосування завершене.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
@@ -4466,11 +4485,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Голосування вже скінчилось.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation type="unfinished"></translation>
+        <translation>їжаків в команді: </translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
@@ -4554,11 +4573,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>кімната</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>вестибюль</translation>
     </message>
     <message>
         <source>(playing)</source>
@@ -4582,7 +4601,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Копнутий</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
@@ -4626,7 +4645,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Суперсила активована.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -4634,7 +4653,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не можна копати себе!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
@@ -4654,7 +4673,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви вже є головою кімнати!</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
@@ -4674,11 +4693,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ви новий голова кімнати!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/quit: Вийти з сервера</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
@@ -4686,7 +4705,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ця команда працює лише в кімнатах.</translation>
     </message>
 </context>
 </TS>

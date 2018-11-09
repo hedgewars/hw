@@ -364,6 +364,11 @@ impl FPPoint {
     }
 
     #[inline]
+    pub fn is_zero(&self) -> bool {
+        self.x().is_zero() && self.y().is_zero()
+    }
+
+    #[inline]
     pub fn max_norm(&self) -> FPNum {
         std::cmp::max(self.x().abs(), self.y().abs())
     }
