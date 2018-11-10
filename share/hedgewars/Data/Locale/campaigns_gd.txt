@@ -1,0 +1,61 @@
+A_Classic_Fairytale.name="Seann-sgeul"
+
+A_Classic_Fairytale-first_blood.name="Misean 1: A’ chiad fhuil"
+A_Classic_Fairytale-first_blood.desc="Cuidich Cuilean-Chulainn ach an coilean e an t-oideachadh aige ’s an dèid e ’na ghaisgeach gràineige. Gheibh thu oideachadh ann an ealan an ròpa, a’ pharasiuit, an t-shoryuken ’s iolaire an fhàsaich."
+
+A_Classic_Fairytale-shadow.name="Misean 2: Tha an sgàile a’ tighinn oirnn"
+A_Classic_Fairytale-shadow.desc="Thèid Cuilean-Chulainn agus Neul-Neulach a shealg. Ullaich airson nan cunnartan a bhiod romhaibh sa choille. Cuimhnich gun roghnaich thu gu glic."
+
+A_Classic_Fairytale-journey.name="Misean 3: An triall air ais"
+A_Classic_Fairytale-journey.desc="Feumaidh Cuilean-Chulainn dol gu taobh eile an eilein. Bi luath is cùramach."
+
+A_Classic_Fairytale-united.name="Misean 4: Seasaidh sinn còmhla"
+A_Classic_Fairytale-united.desc="Thill Cuilean-Chulainn dhan bhaile aige às dèidh a thurais fhaide. Gidheadh, chan eil ùine ann gus anail a ghabhail. Feumaidh tu am baile a dhìon o fhearg nan canabailean."
+
+A_Classic_Fairytale-backstab.name="Misean 5: An cùl-shàthadh"
+A_Classic_Fairytale-backstab.desc="Tha na canabailean uabhasach an toir air Cuilean-Chulainn ’s a charaidean. Cuir ruaig orra a-rithist agus dìon do chaidreabhaich. Cleachd na stòrasan agad mar as iomchaidh gus ruaig a thoirt air na nàimhdean a thig a-steach!"
+
+A_Classic_Fairytale-dragon.name="Misean 6: Làrach an dràgoin"
+A_Classic_Fairytale-dragon.desc="Feumaidh ar gaisgeach taobh thall an locha a ruigsinn. Rach ’nad mhaighstir air a’ ròpa agus seachnaich astasan an nàmhad."
+
+A_Classic_Fairytale-family.name="Misean 7: Tional an teaghlaich"
+A_Classic_Fairytale-family.desc="Feumaidh ar gaisgeach na tùsanaich a shàbhaladh a-rithist. Cuir às dha ghràineagan an nàmhad agus saor do chuideachd. Cleachd an stòras agad gu cùramach o nach eil pailteas dheth ann. Drilig tuill air san àite cheart gus teannadh dlùth air a’ bhana-phrionnsa."
+
+A_Classic_Fairytale-queen.name="Misean 8: Guma fada beò a’ bhànrigh"
+A_Classic_Fairytale-queen.desc="Feumaidh na tùsanaich sabaid a-rithist. Feumaidh iad am brathadair a cheannsachadh agus a h-uile stòras a chaitheamh mus dèid an latha leotha. Cuiribh ruaig air an nàmhaid!"
+
+A_Classic_Fairytale-enemy.name="Misean 9: Nàmhaid mo nàmhad"
+A_Classic_Fairytale-enemy.desc="Abair car air an sgeulachd! Feumaidh Cuilean-Chulainn sabaid a dhèanamh air taobh nan… “canabailean” an aghaidh an nàmhad cumanta: Na cyborgaichean olca!"
+
+A_Classic_Fairytale-epil.name="Misean 10: Crìoch-sgeòil"
+A_Classic_Fairytale-epil.desc="Meal do naidheachd! Tha sìth aig Cuilean-Chulainn mu dheireadh thall is gheibh e urram o na caraidean ùra aige ’s a chinneadh. Bi moiteil à d’ euchdan! ’S urrainn dhut na miseanan roimhe a chluich a-rithist agus deiridhean eile a’ sgeòil fhaicinn."
+
+A_Space_Adventure.name="Dàna-thuras san fhànas"
+A_Space_Adventure-cosmos.name="Clàr-taice: Turas san fhànas"
+A_Space_Adventure-cosmos.desc="Tha meatoraid ana-mhòr gu bhith bualadh air an Ugh, planaid nan gràineag. Ach am mair sibh beò, feumaidh tu Spìceach, am paidhleat as fhearr aig Comann nan Gràineag a stiùireadh air triall an fhànais mu na planaidean am fagas gus na 4 pìosan aig uidheam an-iom-tharraing a chruinneachadh a chailleadh o chionn aimsir!"
+A_Space_Adventure-moon01.name="Prìomh-mhisean: A’ chiad stad"
+A_Space_Adventure-moon01.desc="Laigh Spìceach air a’ ghealach gus connadh fhaighinn dhan t-soitheach aige ach ràinig an t-Ollamh Olc an t-àite roimhe agus ri esan fàth-feitheamh! Sàbhail luchd-rannsachaidh CnanG agus cuir ruaig air an Ollamh Olc!"
+A_Space_Adventure-moon02.name="Misean far-bhealaich: An toir air a’ ghràineag ghorm"
+A_Space_Adventure-moon02.desc="Tha Spìceach a’ tadhail air aonaran a tha ’na sheann-ghaisgeach CnanG ’s a’ fuireach air a’ ghealach gus fiosrachadh a chruinneachadh air dè tha an t-Ollamh Olc ris. Gidheadh, feumaidh e ruaig a chur air an aonaran, Dudar-Leum an ruithedair craicte, ann an rèis an toiseach!"
+A_Space_Adventure-ice01.name="Prìomh-mhisean: Dàna-thuras reòite"
+A_Space_Adventure-ice01.desc="Fàilte gu planaid na deighe. Tha i cho fuar an-seo nach obraich a’ mhòrchuid a dh’airm aig Spìceach. Feumaidh tu a’ phàirt chaillte fhaighinn o Shanntach, ceannard nan slaightearan le taic nan arm a lorgas tu ann!"
+A_Space_Adventure-ice02.name="Misean far-bhealaich: Itealaich chruaidh"
+A_Space_Adventure-ice02.desc="Cha b’ fhiach gun tadhladh Spìceach air planaid na deighe gun tadhal air Stèideam Oilimpeach na h-Itealaich Soithich! Dearbh na sgilean sgiathaidh agad sa mhisean seo agus faigh d’ àite air clàr nan curaidh!"
+A_Space_Adventure-desert01.name="Prìomh-mhisean: Lorg san duslach"
+A_Space_Adventure-desert01.desc="Laigh thu air planaid na gaineimh! Feumaidh Spìceach a’ phàirt a tha a dhìth a lorg sna tunailean fon talamh. Thoir an aire on a tha cùiltearan ri fàth-feitheamh ort!"
+A_Space_Adventure-desert02.name="Misean far-bhealaich: Ruith gus mairsinn beò"
+A_Space_Adventure-desert02.desc="Bha Spìceach a’ sireadh a’ phàirt san tunail seo nuair a thàinig tuile air gu h-obann! Tarraing às dhan uachdar agus thoir an aire nach buail thu ri mèinn."
+A_Space_Adventure-desert03.name="Misean far-bhealaich: Itealaich phongail"
+A_Space_Adventure-desert03.desc="Tha beagan ùine aig Spìceach airson beagan tlachd leis an itealan le smachd chèin aige. Stiùirich an t-itealan agus buail air na targaidean uile!"
+A_Space_Adventure-fruit01.name="Prìomh-mhisean: Droch-àm"
+A_Space_Adventure-fruit01.desc="Chan eil cùisean mar bu chòir air planaid nam meas. Chan eil na gràineagan a’ buain nam measan ach ag ullachadh airson a’ bhlàir. Feumaich tu co-dhùnadh a dhèanamh an teich thu no an sabaid thu."
+A_Space_Adventure-fruit02.name="Prìomh-mhisean: A’ ruigsinn an uidheim"
+A_Space_Adventure-fruit02.desc="Tha Spìceach a’ teannadh air a’ phàirt chaillte air planaid nam meas. An cuidich Caiptean Liomaid e ach am faigh e i gus nach cuidich?"
+A_Space_Adventure-fruit03.name="Prìomh-mhisean: Losgadh pongail"
+A_Space_Adventure-fruit03.desc="Chaidh Spìceach air seachran agus rinn na Sùbhan-làir Dearga fàth-feitheamh air. Cuidich e ach an cuir e às dhaibh gus am buannaich e connaidh airson an ath-mhisein “A’ ruigsinn an uidheim”."
+A_Space_Adventure-death01.name="Prìomh-mhisean: An tachairt mu dheireadh"
+A_Space_Adventure-death01.desc="’S e a’ phlanaid as mì-thorraiche a th’ ann am planaid a’ chrìonadh agus tha Spìceach glè dhlùth air pàirt mu dheireadh an uidheam a lorg oirre! Gidheadh, tha forbhas mì-thaitneach roimhe…"
+A_Space_Adventure-death02.name="Misean far-bhealaich: A’ marbhadh nan eòlaichean"
+A_Space_Adventure-death02.desc="Tha Spìceach ann an droch-staing a-rithist. Feuch an dèan a e’ chùis air na “5 gràineagan marbhtach”!"
+A_Space_Adventure-final.name="Prìomh-mhisean: Am brag mòr"
+A_Space_Adventure-final.desc="Feumaidh Spìceach stuthan-spreadhaidh a chaidh a chur air a’ mheatoraid a spreadhadh. Cuir taic dha ach an coilean e am misean aige gun leòn air!"
