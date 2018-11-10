@@ -54,7 +54,6 @@
 00:51=Bàla puill
 00:52=Gun arm
 00:53=Bogsa ama
-; 00:54=Togalach
 00:54=Stealladh talmhainn
 00:55=Reòthadair
 00:56=Corc
@@ -660,7 +659,6 @@
 03:51=Lorg sinn e air an làr
 03:52=GUN CHLEACHDADH
 03:53=Seòrsa 40
-;03:54=Tog rudeigin
 03:54=Goireas
 03:55=Chan fhàs i nas fhionnaire na seo!
 03:56=Dèan cleachdadh no droch chleachdadh

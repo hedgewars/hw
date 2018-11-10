@@ -55,7 +55,6 @@
 00:51=Bola de barro
 00:52=No hay arma seleccionada
 00:53=Cabina del tiempo
-; 00:54=Estructura
 00:54=Pistola de barro
 
 ; 01:00=Loading …
@@ -445,7 +444,6 @@
 03:51=Me la encontré por el suelo
 03:52=SIN USAR
 03:53=Tipo 40
-;03:54=Construye algo
 03:54=Herramienta
 
 ; Descripciones de armamento ( líneas delimitadas con | )
@@ -503,7 +501,6 @@
 04:51=¿Qué hay más barato que el barro?|Un tiro gratis gracias a la bola de barro.|Hará que el enemigo salga volando|y escuece un poco si te entra en los ojos.
 04:52=SIN USAR
 04:53=Vive una trepidante aventura a través del|espacio y el tiempo mientras tus compañeros|siguen luchando en tu lugar.|Estate preparado para volver en cualquier momento,|o al llegar la Muerte súbita si te has quedado solo.|Aviso: no funciona durante la Muerte súbita,|si estás solo o si eres el rey.
-;04:54=INCOMPLETO
 04:54=Esparce un chorro de pegajoso barro.|Construye puentes, entierra enemigos o cierra túneles.|¡Ten especial cuidado de no mancharte!
 
 ; Game goal strings

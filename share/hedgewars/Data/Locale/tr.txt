@@ -54,7 +54,6 @@
 00:51=Çamur Topu
 00:52=Silah Seçilmedi
 00:53=Zaman Kutusu
-; 00:54=Yapı
 00:54=Zemin Spreyi
 00:55=Dondurucu
 00:56=Satır
@@ -451,7 +450,6 @@
 03:51=Zeminde bulunan
 03:52=KULLANILMIYOR
 03:53=Tür 40
-; 03:54=Bir şey inşa et
 03:54=Yardımcı
 03:55=Bundan daha iyi olamazdı!
 03:56=Lütfen yanlış veya doğru, kullanın

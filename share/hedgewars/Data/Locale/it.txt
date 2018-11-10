@@ -54,7 +54,6 @@
 00:51=Palla di fango
 00:52=Nessuna arma selezionata
 00:53=Macchina Spazio-temporale
-; 00:54=Attrezzi da costruzione
 00:54=Terreno spray
 00:55=Raggio congelatore
 00:56=Mannarino
@@ -451,7 +450,6 @@
 03:51=Terreno al 100%
 03:52=NON USATO
 03:53=TARDIS modello 40
-;03:54=(Arma in sviluppo)
 03:54=Utilità di costruzione
 03:55=Arma di ibernazione di massa
 03:56=Ecco il grande chef!
@@ -511,7 +509,6 @@
 04:51=Spingete i nemici in acqua o sopra le mine!|Questa semplice arma non farà molti danni ma|spingerà con forza i nemici che colpisce!|Nei temi Snow e Christmas è una palla di neve!|Attacco: Tieni premuto per lanciare con più forza
 04:52=NON USATO
 04:53=Parti per un'avventura unica attraverso spazio e tempo,|lasciando i tuoi compagni da soli a combattere.|Preparati a ritornare in qualsiasi momento,|o per il Sudden Death o se sei l'ultimo sopravvissuto.|Attenzione! Non è utilizzabile durante il Sudden Death,|se sei rimasto da solo, o se sei il Re.|Attacco: Inzia la tua avventura nello spazio-tempo!
-;04:54=DESCRIZIONE NON DISPONIBILE (arma ancora in sviluppo)
 04:54=Con questo terreno spray non ti mancherà mai la terra |sotto ai piedi. Utilissimo per costruire ponti, |seppellire nemici e sigillare tunnel.|Ma fai attenzione a non usarlo a tuo svantaggio!|Attacco: Attiva|Su/Giù: Continua a mirare|Sinistra/Destra: Modifica la potenza di fuoriuscita del terreno
 04:55=L'era glaciale non è mai stata così imminente!|Con questo potente raggio potrai congelare i ricci nemici,|rendere il terreno scivoloso e salvarti dalle cadute|in acqua trasformando il mare in una distesa di ghiaccio!|Attacco: Attiva|Su/Giù: Continua a mirare
 04:56=Lancia due mannarini da cucina verso i tuoi nemici, se |lanciati con potenza possono rappresentare una... tagliente sorpresa!|Ricorda che rimarranno sul terreno dopo averli lanciati!|Attacco: Tieni premuto per lanciare con più forza

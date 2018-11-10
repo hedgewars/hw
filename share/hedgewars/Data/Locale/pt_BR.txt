@@ -54,7 +54,6 @@
 00:51=Bola de Lama
 00:52=Arma não selecionada
 00:53=Máquina do tempo
-; 00:54=Estrutura
 00:54=Spray de terra
 00:55=Freezer
 00:56=Machadinha
@@ -327,7 +326,6 @@
 03:51=Encontrei no chão
 03:52=Sem uso
 03:53=Tipo 40
-;03:54=Constrói algo
 03:54=Utilidade
 
 
@@ -391,7 +389,6 @@
 04:51=Ganhe um tiro de graça, atirando uma bola de barro.|Fará com que o inimigo saia voando|e arde a vista.
 04:52=Sem Uso
 04:53=Viage através do tempo e espaço,|deixando seus camaradas na mão.|Esteja preparado para retornar a qualquer momento,|ou para a Morte Súbita se todos os aliados foram mortos.|Aviso. Não funciona na Morte Súbita,|se você estiversozinho, ou se você for o Rei.
-;04:54=INCOMPLETO
 04:54=Atira um jorro de barro pegajoso.|Constrói pontes, enterra inimigos, sela túneis.|Cuidado para que não pegue em você!
 
 ; Game goal strings

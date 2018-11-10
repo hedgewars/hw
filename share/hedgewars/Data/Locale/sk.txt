@@ -54,7 +54,6 @@
 00:51=Blatová guľa
 00:52=Žiadna zbraň nie je vybraná
 00:53=Časová kapsula
-; 00:54=Budova
 00:54=Postrek zeme
 00:55=Zmrazovač
 00:56=Sekáčik
@@ -379,7 +378,6 @@
 03:51=Nájdené na zemi
 03:52=NEPOUŽÍVANÉ
 03:53=Typ 40
-;03:54=Postavte niečo
 03:54=Pomôcka
 03:55=Kúlovejšie už to byť nemôže!
 03:56=Použite alebo zneužite
@@ -442,7 +440,6 @@
 04:51=Nemíňajte muníciu - hod blatom je zdarma.|Trošku štípe a dokáže ježka zhodiť.
 04:52=NEPOUŽITÉ
 04:53=Vyberte sa na cestu časom a priestorom|a nechajte vašich priateľov bojovať bez vás.|Buďte pripravený vrátiť sa kedykoľvek,|buď pri Náhlej smrti alebo keď sú všetci porazení.|Poznámka: Nefunguje počas Náhlej smrti,|ak ste sám alebo ak ste kráľom.
-;04:54=NEKOMPLETNÉ
 04:54=Rozprášte prúd lepkavej hliny.|Postavte mosty, pochovajte nepriateľov,|zapečaťte tunely. Buďte|však opatrný a nezašpinte sa|od nej aj vy.
 04:55=Vráťme sa do doby ľadovej!|Zamrazte ježkov, urobte podlahu šmykľavú alebo|sa poistite pred utopením zmrazením vody.|Útok: Aktivuje/Deaktivuje ľadový lúč|Hore/Dole: Pokračuj v mierení
 04:56=Po nepriateľovi môžete hodiť dva sekáčiky,|zablokovať priechody a tunely a dokonca ich použiť pri šplhaní!|Buďte opatrný! Nože nie su na hranie.|Útok: Podržte pre hod väčšou silou (dvakrát)

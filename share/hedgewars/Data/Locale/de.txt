@@ -54,7 +54,6 @@
 00:51=Schlammball
 00:52=Keine Waffe ausgewählt
 00:53=Zeitkasten
-; 00:54=Bauwerk
 00:54=Landkanone
 00:55=Eiskanone
 00:56=Hackebeil
@@ -1299,7 +1298,6 @@
 03:51=Am Boden gefunden
 03:52=NICHT IN VERWENDUNG
 03:53=Typ 40
-;03:54=Baue etwas
 03:54=Werkzeug
 03:55=Cooler wird’s nicht
 03:56=Bitte ge- oder missbrauchen

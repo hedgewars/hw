@@ -54,7 +54,6 @@
 00:51=Bila de noroi
 00:52=Nici o armă selectată
 00:53=Cutia timpului
-; 00:54=Structură
 00:54=Spray de teren
 
 ; 01:00=Loading …
@@ -446,7 +445,6 @@
 03:51=Found on the ground
 03:52=UNUSED
 03:53=Type 40
-;03:54=Build something
 03:54=Utility
 
 ; Weapon Descriptions (use | as line breaks)
@@ -504,7 +502,6 @@
 04:51=Get in a free shot by hurling a ball of mud.|Stings a bit, and knocks hogs back.
 04:52=UNUSED
 04:53=Go on an adventure through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.
-;04:54=INCOMPLETE
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!
 
 ; Game goal strings

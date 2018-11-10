@@ -54,7 +54,6 @@
 00:51=Kula błotna
 00:52=Nie wybrano broni
 00:53=TARDIS
-; 00:54=Budynek
 00:54=Miotacz błota
 00:55=Zamrażarka
 00:56=Tasak
@@ -606,7 +605,6 @@
 03:51=Znalezione na ziemi
 03:52=UNUSED
 03:53=Typ 40
-;03:54=Zbuduj coś
 03:54=Narzędzie
 03:55=Chłodniej już nie będzie!
 03:56=Nie przytnij sobie igieł!

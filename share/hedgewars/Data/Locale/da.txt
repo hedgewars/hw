@@ -54,7 +54,6 @@
 00:51=Mudderklat
 00:52=Intet våben valgt
 00:53=Tidsboks
-; 00:54=Struktur
 00:54=Jordspray
 
 ; 01:00=Loading …
@@ -446,7 +445,6 @@
 03:51=Lige til at samle op
 03:52=UBRUGT
 03:53=Årgang 40
-;03:54=Byg noget
 03:54=Værktøj
 
 ; Weapon Descriptions (use |as line breaks)
@@ -504,7 +502,6 @@
 04:51=Få et skud lige ind med en Mudderklat.|Bider en smule og slår fjender omkuld.
 04:52=UBRUGT
 04:53=Tag på et eventyr gennem tid og rum,|mens du efterlader kampen til dine kammerater.|Vær klar til at vende tilbage når som helst,|eller hvis Pludselig Død indtræder|eller alle dine andre pindsvin dør.|Advarsel! Virker ikke under Pludselig Død,|hvis du er alene eller er Konge.
-;04:54=UFÆRDIG
 04:54=Sprøjt rundt med klistrende flammer.|Byg broer, begrav fjender, luk tunneler af.|Pas på ikke selv at få noget på dig.
 
 ; Game goal strings

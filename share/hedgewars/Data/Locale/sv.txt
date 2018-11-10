@@ -54,7 +54,6 @@
 00:51=Jordboll
 00:52=Inget vapen valt
 00:53=Tidslåda
-; 00:54=Struktur
 00:54=Markspruta
 
 ; 01:00=Loading …
@@ -476,7 +475,6 @@
 03:51=Upphittad på marken
 03:52=UNUSED
 03:53=Typ 40
-;03:54=Bygg något
 03:54=Verktyg
 
 ; Weapon Descriptions (use | as line breaks)
@@ -534,7 +532,6 @@
 04:51=Få till en gratisträff genom att kasta en boll med|jord. Känns lite gran, och knuffar tillbaka|igelkottar.
 04:52=UNUSED
 04:53=Åk på ett äventyr genom tid och rymd, medan dina|kamrater blir kvar själva att slåss. Var beredd|att komma tillbaka när som helst, eller till|Sudden Death eller om de andra blir besegrade.|Varning. Fungerar inte under Sudden Death, om du|är ensam, eller om du är en kung.
-;04:54=INCOMPLETE
 04:54=Spruta en ström av fästande jord.|Bygg broar, gräv ner fienden, stäng igen tunnlar.|Var försiktig så att du inte får något på dig!
 
 ; Game goal strings

@@ -54,7 +54,6 @@
 00:51=Purvo kamuolys
 00:52=Nepasirinktas joks ginklas
 00:53=TARDIS
-; 00:54=Struktūra
 00:54=Žemės purškimas
 00:55=Šaldymo kamera
 00:56=Cleaver
@@ -451,7 +450,6 @@
 03:51=Rastas ant žemės
 03:52=NENAUDOJAMAS
 03:53=Tipas 40
-;03:54=Pastatyk ką nors
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Pulk savo priešus su paprasta granata.|Ji sprogs kai jos laikmatis pasieks nulį.|1-5: Nustatyk granatos laikmatį|Ataka: Laikyk, kad mestum stipriau

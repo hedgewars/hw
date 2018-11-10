@@ -54,7 +54,6 @@
 00:51=Mudball
 00:52=No weapon selected
 00:53=Time Box
-; 00:54=Structure
 00:54=Land Spray
 00:55=Freezer
 00:56=Cleaver
@@ -1202,7 +1201,6 @@
 03:51=Found on the ground
 03:52=UNUSED
 03:53=Type 40
-;03:54=Build something
 03:54=Utility
 03:55=It doesn't get cooler than this!
 03:56=Please use or misuse
