@@ -2277,35 +2277,6 @@ const
             ejectX: 0;
             ejectY: 0),
 
-// Structure
-{
-            (NameId: sidStructure;
-            NameTex: nil;
-            Probability: 0;
-            NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or
-                          ammoprop_NoCrosshair or
-                          ammoprop_Utility or
-                          ammoprop_DontHold;
-                Count: 1;
-                NumPerTurn: 0;
-                Timer: 0;
-                Pos: 0;
-                AmmoType: amStructure;
-                AttackVoice: sndNone;
-                Bounciness: defaultBounciness);
-            Slot: 6;
-            TimeAfterTurn: 0;
-            minAngle: 0;
-            maxAngle: 0;
-            isDamaging: false;
-            SkipTurns: 0;
-            PosCount: 1;
-            PosSprite: sprWater;
-            ejectX: 0;
-            ejectY: 0),
-}
-
 // Land Gun
             (NameId: sidLandGun;
             NameTex: nil;

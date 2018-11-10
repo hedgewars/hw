@@ -501,7 +501,6 @@ with Gear^,
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtResurrector, 0, _0, _0, 0);
                                  newGear^.SoundChannel := LoopSound(sndResurrector);
                                  end;
-                    //amStructure: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, gstWait, SignAs(_0_02, dX), _0, 3000);
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 0);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
             end;
@@ -536,10 +535,9 @@ with Gear^,
                    amSeduction, amBallgun,
                      amJetpack, amBirdy,
                 amFlamethrower, amLandGun,
-                 amResurrector, //amStructure,
-                      amTardis, amPiano,
-                      amIceGun, amRubber,
-                      amMinigun: CurAmmoGear:= newGear;
+                 amResurrector, amTardis,
+                       amPiano, amIceGun,
+                      amRubber, amMinigun: CurAmmoGear:= newGear;
             end;
             if CurAmmoType = amCake then FollowGear:= newGear;
             if CurAmmoType = amAirMine then newGear^.Hedgehog:= nil;

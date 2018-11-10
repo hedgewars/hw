@@ -1570,7 +1570,6 @@ begin
                         if Gear^.FlightTime > 0 then
                             untint;
                         end;
-       //gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
           gtTardis: if Gear^.Pos <> 4 then
                         begin
                         if Gear^.Pos = 2 then

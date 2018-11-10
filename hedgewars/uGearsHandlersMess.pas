@@ -128,7 +128,6 @@ procedure doStepHammerHit(Gear: PGear);
 procedure doStepResurrectorWork(Gear: PGear);
 procedure doStepResurrector(Gear: PGear);
 procedure doStepNapalmBomb(Gear: PGear);
-//procedure doStepStructure(Gear: PGear);
 procedure doStepTardisWarp(Gear: PGear);
 procedure doStepTardis(Gear: PGear);
 procedure updateFuel(Gear: PGear);
@@ -6080,100 +6079,6 @@ begin
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
     dec(Gear^.Timer)
 end;
-
-(*
-////////////////////////////////////////////////////////////////////////////////
-procedure doStepStructure(Gear: PGear);
-var
-    x, y: LongInt;
-    HH: PHedgehog;
-    t: PGear;
-begin
-    HH:= Gear^.Hedgehog;
-
-    if (Gear^.State and gstMoving) <> 0 then
-        begin
-        AddCI(Gear);
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.State:= Gear^.State and (not gstMoving);
-        end;
-
-    dec(Gear^.Health, Gear^.Damage);
-    Gear^.Damage:= 0;
-
-    if Gear^.Pos = 1 then
-        begin
-        AddCI(Gear);
-        AfterAttack;
-        if Gear = CurAmmoGear then
-            CurAmmoGear:= nil;
-        if HH^.Gear <> nil then
-            HideHog(HH);
-        Gear^.Pos:= 2
-        end;
-
-    if Gear^.Pos = 2 then
-        begin
-        if ((GameTicks mod 100) = 0) and (Gear^.Timer < 1000) then
-            begin
-            if (Gear^.Timer mod 10) = 0 then
-                begin
-                DeleteCI(Gear);
-                Gear^.Y:= Gear^.Y - _0_5;
-                AddCI(Gear);
-                end;
-            inc(Gear^.Timer);
-            end;
-        if Gear^.Tag <= TotalRoundsPre then
-            Gear^.Pos:= 3;
-        end;
-
-    if Gear^.Pos = 3 then
-        if Gear^.Timer < 1000 then
-            begin
-            if (Gear^.Timer mod 10) = 0 then
-                begin
-                DeleteCI(Gear);
-                Gear^.Y:= Gear^.Y - _0_5;
-                AddCI(Gear);
-                end;
-            inc(Gear^.Timer);
-            end
-        else
-            begin
-            if HH^.GearHidden <> nil then
-                RestoreHog(HH);
-            Gear^.Pos:= 4;
-            end;
-
-    if Gear^.Pos = 4 then
-        if ((GameTicks mod 1000) = 0) and ((GameFlags and gfInvulnerable) = 0) then
-            begin
-            t:= GearsList;
-            while t <> nil do
-                begin
-                if (t^.Kind = gtHedgehog) and (t^.Hedgehog^.Team^.Clan = HH^.Team^.Clan) then
-                    t^.Hedgehog^.Effects[heInvulnerable]:= 1;
-                t:= t^.NextGear;
-                end;
-            end;
-
-    if Gear^.Health <= 0 then
-        begin
-        if HH^.GearHidden <> nil then
-            RestoreHog(HH);
-
-        x := hwRound(Gear^.X);
-        y := hwRound(Gear^.Y);
-
-        DeleteCI(Gear);
-        DeleteGear(Gear);
-
-        doMakeExplosion(x, y, 50, CurrentHedgehog, EXPLAutoSound);
-        end;
-end;
-*)
 
 ////////////////////////////////////////////////////////////////////////////////
 (*

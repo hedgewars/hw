@@ -1295,7 +1295,6 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            //@doStepStructure,
             @doStepLandGun,
             @doStepTardis,
             @doStepIceGun,

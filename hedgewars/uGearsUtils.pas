@@ -153,8 +153,7 @@ while Gear <> nil do
                 gtTarget,
                 gtFlame,
                 gtKnife,
-                gtExplosives: begin //,
-                //gtStructure: begin
+                gtExplosives: begin
 // Run the calcs only once we know we have a type that will need damage
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
@@ -330,7 +329,6 @@ begin
 			end
 	end
     end else
-    //else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         Gear^.Hedgehog:= AttackerHog;
     inc(Gear^.Damage, Damage);
 
@@ -1218,8 +1216,7 @@ while t <> nil do
             gtKnife,
             gtCase,
             gtTarget,
-            gtExplosives: begin//,
-//            gtStructure: begin
+            gtExplosives: begin
 //addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
                     dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
@@ -1351,8 +1348,7 @@ while i > 0 do
             gtKnife,
             gtTarget,
             gtCase,
-            gtExplosives: //,
-            //gtStructure:
+            gtExplosives:
             begin
             if (Ammo^.Kind in [gtFirePunch, gtKamikaze]) and (Gear^.Kind <> gtSMine) then
                 PlaySound(sndFirePunchHit);
