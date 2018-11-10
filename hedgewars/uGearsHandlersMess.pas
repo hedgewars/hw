@@ -4632,7 +4632,6 @@ begin
         Gear^.Hedgehog := nil;
         Gear^.Timer := 0;
         Gear^.State := Gear^.State or gstAnimation or gstTmpFlag;
-        Gear^.Timer := 0;
         Gear^.doStep := @doStepBirdyDisappear;
         CurAmmoGear := nil;
         isCursorVisible := false;

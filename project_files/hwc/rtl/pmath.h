@@ -7,7 +7,7 @@
 #define     fpcrtl_min(a, b)                ((a) < (b) ? (a) : (b))
 #define     fpcrtl_max(a, b)                ((a) > (b) ? (a) : (b))
 
-float       fpcrtl_power(float base, float exponent);
+#define     fpcrtl_power(a, b)              pow(a, b)
 
 /* Currently the games only uses sign of an integer */
 int         fpcrtl_signi(int x);
