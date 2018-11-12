@@ -1242,7 +1242,13 @@ while t <> nil do
                         t^.State:= t^.State or gstMoving;
                         if t^.Kind = gtKnife then t^.State:= t^.State and (not gstCollision);
                         t^.Active:= true;
-                        FollowGear:= t
+                        FollowGear:= t;
+
+                        if t^.Kind = gtAirmine then
+                        begin
+                            t^.Tag:= 1;
+                            t^.FlightTime:= 5000;
+                        end
                         end
                     end;
             gtGrave: begin
@@ -1388,7 +1394,13 @@ while i > 0 do
                                 State:= ord(sprStar)
                                 end
                         end;
-                ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
+                ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove);
+
+                if Gear^.Kind = gtAirmine then
+                    begin
+                        Gear^.Tag:= 1;
+                        Gear^.FlightTime:= 5000;
+                    end
                 end
             else
                 Gear^.State:= Gear^.State or gstWinner;

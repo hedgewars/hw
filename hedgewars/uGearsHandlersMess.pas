@@ -2090,6 +2090,16 @@ begin
     if (TurnTimeLeft = 0) and ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
         AllInactive := false;
 
+    //Disable targeting while the airmine is stunned
+    if Gear^.Tag <> 0 then
+        begin
+        Gear^.Hedgehog:= nil;
+        dec(Gear^.FlightTime);
+        if Gear^.FlightTime = 0 then
+            Gear^.Tag:= 0;
+        exit
+        end;
+
     if (TurnTimeLeft = 0) or (Gear^.Angle = 0) or (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Gear = nil) then
         begin
         Gear^.Hedgehog:= nil;
