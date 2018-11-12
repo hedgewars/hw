@@ -21,7 +21,7 @@ const LuaLibName =
     {$IFDEF WIN32_VCPKG}'lua'{$ELSE}'liblua'{$ENDIF}
 {$ENDIF};
 
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
     {$linklib lua}
 {$ENDIF}
 

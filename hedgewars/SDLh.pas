@@ -59,7 +59,7 @@ interface
 
 (*  SDL  *)
 const
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     SDLLibName = 'SDL2.dll';
     SDL_TTFLibName = 'SDL2_ttf.dll';
     SDL_MixerLibName = 'SDL2_mixer.dll';
@@ -657,7 +657,7 @@ type
         fd: LongInt;
         end;
 {$ELSE}
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     TWinbuffer = record
         data: Pointer;
         size, left: LongInt;
@@ -681,7 +681,7 @@ type
 {$IFDEF ANDROID}
             0: (androidio: TAndroidio);
 {$ELSE}
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
             0: (windowsio: TWindowsio);
 {$ENDIF}
 {$ENDIF}
@@ -1023,7 +1023,7 @@ type
                         sockets: PTCPSocket;
                         end;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
      TThreadFunction = function (p: pointer): Longword; stdcall;
      pfnSDL_CurrentBeginThread = function (
         _Security: pointer; 
@@ -1145,7 +1145,7 @@ function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; extern
 
 (* remember to mark the threaded functions as 'cdecl; export;'
    (or have fun debugging nil arguments) *)
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 // SDL uses wrapper in windows
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer; bt: pfnSDL_CurrentBeginThread; et: pfnSDL_CurrentEndThread): PSDL_Thread; cdecl; external SDLLibName;
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; overload;
@@ -1183,7 +1183,7 @@ function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; ext
 function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {$ENDIF}
@@ -1321,7 +1321,7 @@ begin
                   (PByteArray(buf)^[0] shl 24)
 end;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl;
 begin
     SDL_CreateThread:= SDL_CreateThread(fn, name, data, nil, nil)

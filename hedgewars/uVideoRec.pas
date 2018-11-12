@@ -27,7 +27,7 @@ implementation
 end.
 {$ELSE}
 
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
     {$linklib avwrapper}
 {$ENDIF}
 

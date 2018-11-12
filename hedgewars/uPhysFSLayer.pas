@@ -14,7 +14,7 @@ const PhysfsLibName =
 const PhyslayerLibName =
     {$IFDEF WIN32_VCPKG}'physlayer'{$ELSE}'libphyslayer'{$ENDIF};
 
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
     {$linklib physfs}
     {$linklib physlayer}
 {$ENDIF}

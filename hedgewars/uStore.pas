@@ -1219,7 +1219,7 @@ begin
         end;
 
     // these attributes must be set up before creating the sdl window
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
 (* On a large number of testers machines, SDL default to software rendering
    when opengl attributes were set. These attributes were "set" after
    CreateWindow in .15, which probably did nothing.

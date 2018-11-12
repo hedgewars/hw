@@ -18,7 +18,7 @@
 
 {$INCLUDE "options.inc"}
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 {$R res/hwengine.rc}
 {$ENDIF}
 
@@ -36,7 +36,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
-     {$IFDEF WIN32}, dynlibs{$ENDIF}
+     {$IFDEF WINDOWS}, dynlibs{$ENDIF}
      ;
 
 {$IFDEF HWLIBRARY}
@@ -59,7 +59,7 @@ procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longi
 {$ENDIF}
 {$ENDIF}
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 type TSetProcessDpiAwareness = function(value: Integer): Integer; stdcall;
 var SetProcessDpiAwareness: TSetProcessDpiAwareness;
 var ShcoreLibHandle: TLibHandle;
@@ -637,7 +637,7 @@ begin
 begin
 {$ENDIF}
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     ShcoreLibHandle := LoadLibrary('Shcore.dll');
     if (ShcoreLibHandle <> 0) then
     begin
