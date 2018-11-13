@@ -181,7 +181,12 @@ while Gear <> nil do
                                 if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) then
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                                 Gear^.Active:= true;
-                                if Gear^.Kind <> gtFlame then FollowGear:= Gear
+                                if Gear^.Kind <> gtFlame then FollowGear:= Gear;
+                                if Gear^.Kind = gtAirMine then
+                                    begin
+                                    Gear^.Tag:= 1;
+                                    Gear^.FlightTime:= 5000;
+                                    end
                                 end;
                             if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and
                                 (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) and
