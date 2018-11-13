@@ -5046,6 +5046,9 @@ begin
                 end;
             end;
 
+        if iterator^.Kind = gtKamikaze then
+            RefillProximityCache(iterator, 300);
+
         //
         // You're now officially portaled!
         //
