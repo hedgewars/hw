@@ -2094,8 +2094,6 @@ begin
     //Disable targeting while the airmine is stunned
     if Gear^.Tag <> 0 then
         begin
-        Gear^.Hedgehog:= nil;
-
         if ((Gear^.FlightTime and $FF) = 0) then
             begin
             sparkle:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
@@ -2110,7 +2108,12 @@ begin
 
         dec(Gear^.FlightTime);
         if Gear^.FlightTime = 0 then
+            begin
             Gear^.Tag:= 0;
+            Gear^.Hedgehog:= nil;
+            Gear^.State:= Gear^.State and (not gstAttacking);
+            Gear^.Timer:= Gear^.WDTimer
+            end;
         exit
         end;
 
