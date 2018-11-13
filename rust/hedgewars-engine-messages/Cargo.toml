@@ -2,6 +2,7 @@
 name = "hedgewars-engine-messages"
 version = "0.1.0"
 authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
 
 [dependencies]
 nom = "4.1.1"
