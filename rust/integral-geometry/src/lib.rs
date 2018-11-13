@@ -519,7 +519,8 @@ impl Polygon {
 
     fn force_close(&mut self) {
         if !self.vertices.is_empty() {
-            self.vertices[0] = self.vertices[self.vertices.len() - 1];
+            let edges_count = self.edges_count();
+            self.vertices[edges_count] = self.vertices[0];
         }
     }
 
