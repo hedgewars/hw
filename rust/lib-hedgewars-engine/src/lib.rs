@@ -6,7 +6,6 @@ extern crate gfx;
 extern crate gfx_device_gl;
 
 mod world;
-mod engine_message;
 mod command;
 
 #[repr(C)]
