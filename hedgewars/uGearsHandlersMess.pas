@@ -2065,6 +2065,7 @@ var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;
     trackSpeed, airFriction, tX, tY: hwFloat;
     isUnderwater: Boolean;
+    sparkle: PVisualGear;
 begin
 	if (Gear^.State and gstFrozen) <> 0 then
 		begin
@@ -2094,6 +2095,19 @@ begin
     if Gear^.Tag <> 0 then
         begin
         Gear^.Hedgehog:= nil;
+
+        if ((Gear^.FlightTime and $FF) = 0) then
+            begin
+            sparkle:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+            if sparkle <> nil then
+                begin
+                    sparkle^.dX:= 0.004 * (random(100) - 50);
+                    sparkle^.dY:= -0.05 + 0.004 * (random(100) - 50);
+                    sparkle^.Tint:= $D5CD8CFF;
+                    sparkle^.Angle:= random(360);
+                end;
+            end;
+
         dec(Gear^.FlightTime);
         if Gear^.FlightTime = 0 then
             Gear^.Tag:= 0;
