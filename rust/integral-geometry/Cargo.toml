@@ -2,6 +2,7 @@
 name = "integral-geometry"
 version = "0.1.0"
 authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
 
 [dependencies]
 fpnum = { path = "../fpnum" }

@@ -1,6 +1,3 @@
-extern crate integral_geometry;
-extern crate vec2d;
-
 use std::{
     cmp,
     ops::Index

@@ -2,6 +2,7 @@
 name = "hedgewars-checker"
 version = "1.0.0"
 authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
 
 [dependencies]
 rust-ini = "0.13"

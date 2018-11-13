@@ -1,10 +1,3 @@
-extern crate integral_geometry;
-extern crate land2d;
-extern crate landgen;
-extern crate lfprng;
-extern crate gfx;
-extern crate gfx_device_gl;
-
 mod world;
 mod command;
 

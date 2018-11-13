@@ -2,10 +2,6 @@ mod outline;
 pub mod outline_template;
 pub mod template_based;
 
-extern crate integral_geometry;
-extern crate itertools;
-extern crate land2d;
-
 pub struct LandGenerationParameters<T> {
     zero: T,
     basic: T,

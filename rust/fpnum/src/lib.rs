@@ -1,6 +1,8 @@
-use std::cmp;
-use std::ops;
-use std::ops::Shl;
+use std::{
+    cmp,
+    ops,
+    ops::Shl
+};
 
 #[derive(Clone, Debug, Copy)]
 pub struct FPNum {

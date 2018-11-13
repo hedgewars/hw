@@ -1,7 +1,4 @@
-#[macro_use]
-extern crate fpnum;
-
-use fpnum::{distance, FPNum, FPPoint};
+use fpnum::{distance, FPNum, FPPoint, fp};
 use std::{
     cmp::{max, min},
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign},
@@ -344,7 +341,7 @@ impl Rect {
 
     #[inline]
     pub fn height(&self) -> usize {
-        (self.right() - self.left() + 1) as usize
+        (self.bottom() - self.top() + 1) as usize
     }
 
     #[inline]

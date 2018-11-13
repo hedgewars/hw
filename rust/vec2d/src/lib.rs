@@ -1,7 +1,7 @@
-extern crate integral_geometry;
-
-use std::ops::{Index, IndexMut};
-use std::slice::SliceIndex;
+use std::{
+    ops::{Index, IndexMut},
+    slice::SliceIndex
+};
 use integral_geometry::Size;
 
 pub struct Vec2D<T> {

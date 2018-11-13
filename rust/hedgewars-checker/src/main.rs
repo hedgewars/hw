@@ -1,20 +1,13 @@
-#[macro_use]
-extern crate log;
-extern crate argparse;
-extern crate base64;
-extern crate dirs;
-extern crate ini;
-extern crate netbuf;
-extern crate stderrlog;
-extern crate tempfile;
-
 use argparse::{ArgumentParser, Store};
 use ini::Ini;
 use netbuf::Buf;
-use std::io::Write;
-use std::net::TcpStream;
-use std::process::Command;
-use std::str::FromStr;
+use log::{debug, warn, info};
+use std::{
+    io::Write,
+    net::TcpStream,
+    process::Command,
+    str::FromStr
+};
 
 type CheckError = Box<std::error::Error>;
 
@@ -219,7 +212,7 @@ fn main() {
 
     info!("Using protocol number {}", protocol_number);
 
-    connect_and_run(&username, &password, protocol_number, &exe, &prefix);
+    connect_and_run(&username, &password, protocol_number, &exe, &prefix).unwrap();
 }
 
 #[cfg(test)]
