@@ -23,6 +23,7 @@ pub enum SyncedEngineMessage {
     Skip,
     TeamControlGained(String),
     TeamControlLost(String),
+    TimeWrap,
 }
 
 #[derive(Debug, PartialEq)]
