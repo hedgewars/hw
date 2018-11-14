@@ -18,8 +18,9 @@ pub enum SyncedEngineMessage {
     Slot(u8),
     SetWeapon(u8),
     Put(i32, i32),
+    CursorMove(i32, i32),
     HighJump,
-    LowJump,
+    LongJump,
     Skip,
     TeamControlGained(String),
     TeamControlLost(String),
@@ -38,6 +39,8 @@ pub enum UnsyncedEngineMessage {
     GameOver,
     GameInterrupted,
     GameSetupChecksum(String),
+    TeamControlGained(String),
+    TeamControlLost(String),
 }
 
 #[derive(Debug, PartialEq)]
