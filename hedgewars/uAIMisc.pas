@@ -1042,7 +1042,7 @@ begin
 if Level <> 1 then exit(0);
 // at present level 2 doesn't track falls on most things
 //if Level = 2 then exit(round(targ.Radius*(random(5)-2)/2));
-if Level = 1 then exit(round(targ.Radius*(random(7)-3)/2))
+AIrndOffset := targ.Radius*(random(7)-3)*2
 end;
 
 procedure initModule;
