@@ -158,8 +158,8 @@ valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
-    else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
+         Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime
+    else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -544,8 +544,8 @@ if (WorldEdge = weWrap) then
 repeat
     inc(TestTime, 1000);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= (targXWrap - meX) / (TestTime + tDelta)
-    else Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+         Vx:= (targXWrap + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta)
+    else Vx:= (Targ.Point.X + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then

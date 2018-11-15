@@ -89,7 +89,8 @@ function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
 function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-function  AIrndSign(num: LongInt): LongInt;
+function  AIrndSign(num: LongInt): LongInt; inline;
+function  AIrndOffset(targ: TTarget; Level: LongWord): LongInt; inline;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -1028,12 +1029,20 @@ until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and 
 HHJump(AltGear, jmpHJump, GoInfo);
 end;
 
-function AIrndSign(num: LongInt): LongInt;
+function AIrndSign(num: LongInt): LongInt; inline;
 begin
 if random(2) = 0 then
     AIrndSign:=   num
 else
     AIrndSign:= - num
+end;
+
+function AIrndOffset(targ: TTarget; Level: LongWord): LongInt; inline;
+begin
+if Level <> 1 then exit(0);
+// at present level 2 doesn't track falls on most things
+//if Level = 2 then exit(round(targ.Radius*(random(5)-2)/2));
+if Level = 1 then exit(round(targ.Radius*(random(7)-3)/2))
 end;
 
 procedure initModule;
