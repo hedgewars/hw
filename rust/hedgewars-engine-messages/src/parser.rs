@@ -1,8 +1,10 @@
-use nom::{*, Err::Error};
+use nom::{Err::Error, *};
 use std::str;
 
-use super::messages::{*, EngineMessage::*, UnsyncedEngineMessage::*, SyncedEngineMessage::*, ConfigEngineMessage::*, KeystrokeAction::*};
-
+use super::messages::{
+    ConfigEngineMessage::*, EngineMessage::*, KeystrokeAction::*, SyncedEngineMessage::*,
+    UnorderedEngineMessage::*, UnsyncedEngineMessage::*, *,
+};
 
 macro_rules! eof_slice (
   ($i:expr,) => (
@@ -27,7 +29,7 @@ named!(length_without_timestamp<&[u8], usize>,
 );
 
 named!(synced_message<&[u8], SyncedEngineMessage>, alt!(
-      do_parse!(tag!("L") >> (Left(Press)))
+        do_parse!(tag!("L") >> (Left(Press)))
       | do_parse!(tag!("l") >> ( Left(Release) ))
       | do_parse!(tag!("R") >> ( Right(Press) ))
       | do_parse!(tag!("r") >> ( Right(Release) ))
@@ -53,16 +55,26 @@ named!(synced_message<&[u8], SyncedEngineMessage>, alt!(
       | do_parse!(tag!("P") >> x: be_i24 >> y: be_i24 >> ( CursorMove(x, y) ))
       | do_parse!(tag!("f") >> s: string_tail >> ( SyncedEngineMessage::TeamControlLost(s) ))
       | do_parse!(tag!("g") >> s: string_tail >> ( SyncedEngineMessage::TeamControlGained(s) ))
-      /*
-    Slot(u8),
-    SetWeapon(u8),
-          */
+      | do_parse!(tag!("h") >> s: string_tail >> ( HogSay(s) ))
+      | do_parse!(tag!("t") >> t: be_u8 >> ( Taunt(t) ))
+      | do_parse!(tag!("w") >> w: be_u8 >> ( SetWeapon(w) ))
+      | do_parse!(tag!("~") >> s: be_u8 >> ( Slot(s) ))
+      | do_parse!(tag!("+") >> ( Heartbeat ))
 ));
 
 named!(unsynced_message<&[u8], UnsyncedEngineMessage>, alt!(
-      do_parse!(tag!("?") >> (Ping))
-    | do_parse!(tag!("!") >> (Ping))
-    | do_parse!(tag!("esay ") >> s: string_tail >> (Say(s)))
+        do_parse!(tag!("F") >> s: string_tail >> ( UnsyncedEngineMessage::TeamControlLost(s) ))
+      | do_parse!(tag!("G") >> s: string_tail >> ( UnsyncedEngineMessage::TeamControlGained(s) ))
+));
+
+named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
+      do_parse!(tag!("?") >> ( Ping ))
+    | do_parse!(tag!("!") >> ( Ping ))
+    | do_parse!(tag!("s") >> s: string_tail >> ( ChatMessage(s)) )
+    | do_parse!(tag!("b") >> s: string_tail >> ( TeamMessage(s)) ) // TODO: wtf is the format
+    | do_parse!(tag!("M") >> s: string_tail >> ( GameSetupChecksum(s)) )
+    | do_parse!(tag!("o") >> ( StopSyncing ))
+    | do_parse!(tag!("I") >> ( PauseToggled ))
 ));
 
 named!(config_message<&[u8], ConfigEngineMessage>, alt!(
@@ -80,12 +92,11 @@ named!(unwrapped_message<&[u8], EngineMessage>,
     alt!(
         map!(timestamped_message, |(m, t)| Synced(m, t as u32))
         | do_parse!(tag!("#") >> (Synced(TimeWrap, 65535)))
+        | map!(unordered_message, |m| Unordered(m))
         | map!(unsynced_message, |m| Unsynced(m))
         | map!(config_message, |m| Config(m))
         | unrecognized_message
 ));
-
-
 
 named!(length_specifier<&[u8], u16>, alt!(
     verify!(map!(take!(1), |a : &[u8]| a[0] as u16), |l| l < 64)
@@ -114,18 +125,27 @@ fn parse_length() {
     assert_eq!(length_specifier(b"\x00"), Ok((&b""[..], 0)));
     assert_eq!(length_specifier(b"\x3f"), Ok((&b""[..], 63)));
     assert_eq!(length_specifier(b"\x40\x00"), Ok((&b""[..], 64)));
-    assert_eq!(length_specifier(b"\xff\xff"), Ok((&b""[..], 49215)));
+    assert_eq!(
+        length_specifier(b"\xff\xff"),
+        Ok((&b""[..], EngineMessage::MAX_LEN))
+    );
 }
 
 #[test]
 fn parse_synced_messages() {
-    assert_eq!(message(b"\x03L\x01\x02"), Ok((&b""[..], Synced(Left(Press), 258))));
+    assert_eq!(
+        message(b"\x03L\x01\x02"),
+        Ok((&b""[..], Synced(Left(Press), 258)))
+    );
     assert_eq!(message(b"\x01#"), Ok((&b""[..], Synced(TimeWrap, 65535))));
 }
 
 #[test]
 fn parse_unsynced_messages() {
-    assert_eq!(message(b"\x0aesay hello"), Ok((&b""[..], Unsynced(Say(String::from("hello"))))));
+    assert_eq!(
+        message(b"\x06shello"),
+        Ok((&b""[..], Unordered(ChatMessage(String::from("hello")))))
+    );
 }
 
 #[test]
@@ -139,14 +159,9 @@ fn parse_incorrect_messages() {
 
 #[test]
 fn parse_config_messages() {
-    assert_eq!(
-        message(b"\x01C"),
-        Ok((
-            &b""[..],
-            Config(ConfigRequest)
-        ))
-    );
+    assert_eq!(message(b"\x01C"), Ok((&b""[..], Config(ConfigRequest))));
 }
+
 #[test]
 fn parse_test_general() {
     assert_eq!(string_tail(b"abc"), Ok((&b""[..], String::from("abc"))));
