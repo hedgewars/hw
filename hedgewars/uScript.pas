@@ -3613,7 +3613,7 @@ begin
                     lastChar := mybuf[i];
                     // lua apparently allows --  [===============[  as a valid block comment start.  
                     // I can't be bothered to check for that nonsense. Will allow limited single line without [
-                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) or mybuf[i] = '[' then
+                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) or (mybuf[i] = '[') then
                         inComment := false
                 end;
         end;
@@ -3651,7 +3651,7 @@ begin
                         inc(wordCount);
                     lastChar := mybuf[i];
                     // this allows at least supporting the commented strings at end of line with lua script names
-                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) or mybuf[i] = '[' then
+                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) or (mybuf[i] = '[') then
                         inComment := false
                 end;
         end;
