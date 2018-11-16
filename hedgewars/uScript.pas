@@ -3604,15 +3604,16 @@ begin
             for i:= 0 to sz^-1 do
                 begin
                     if (lastChar = '-') and (mybuf[i] = '-') then
-                        inComment := false  // FIXME - set to false because lua considers --[====[ ]=====] Non-comment stuff to be sensible
-                    // gonna add any non-magic whitespace and skip - just to make comment avoidance easier
+                        inComment := true
                     else if not inComment and (byte(mybuf[i]) > $20) and (byte(mybuf[i]) < $7F) and (mybuf[i]<>'-') then
                         begin
                         AddRandomness(byte(mybuf[i]));  // wish I had the seed...
                         CheckSum := CheckSum xor GetRandom($FFFFFFFF);
                         end;
                     lastChar := mybuf[i];
-                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
+                    // lua apparently allows --  [===============[  as a valid block comment start.  
+                    // I can't be bothered to check for that nonsense. Will allow limited single line without [
+                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) or mybuf[i] = '[' then
                         inComment := false
                 end;
         end;
@@ -3649,7 +3650,8 @@ begin
                         ((byte(mybuf[i]) >= $30) and (byte(mybuf[i]) < $3A))) then
                         inc(wordCount);
                     lastChar := mybuf[i];
-                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) then
+                    // this allows at least supporting the commented strings at end of line with lua script names
+                    if (byte(mybuf[i]) = $0D) or (byte(mybuf[i]) = $0A) or mybuf[i] = '[' then
                         inComment := false
                 end;
         end;
@@ -3690,10 +3692,10 @@ physfsReaderSetBuffer(@buf);
 if (Pos('Locale/',s) <> 0) or (s = 'Scripts/OfficialChallengeHashes.lua') then
      ret:= lua_load(luaState, @ScriptLocaleReader, f, Str2PChar(s))
 else
-	begin
+    begin
     SetRandomSeed(cSeed,true);
-	ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s))
-	end;
+    ret:= lua_load(luaState, @ScriptReader, f, Str2PChar(s))
+    end;
 pfsClose(f);
 
 if ret <> 0 then
