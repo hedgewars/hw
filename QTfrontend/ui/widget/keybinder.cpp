@@ -170,7 +170,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         QComboBox * comboBox = CBBind[i] = new QComboBox(curTable);
         comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
         comboBox->setVisible(false);
-        comboBox->setFixedWidth(200);
+        comboBox->setMinimumWidth(400);
         comboBox->setMaxVisibleItems(50);
 
         // Table row
