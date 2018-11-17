@@ -2750,7 +2750,7 @@ begin
             cWindSpeedf := -cWindSpeedf;
         vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
         if vg <> nil then vg^.dAngle:= hwFloat2Float(cWindSpeed);
-            AddFileLog('Wind = '+FloatToStr(cWindSpeed));
+            AddFileLog('Script set wind = '+FloatToStr(cWindSpeed));
         end;
     lc_setwind:= 0
 end;

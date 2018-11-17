@@ -455,7 +455,6 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         end
     else
         begin
-        GetRandom(2); // needed to avoid extdriven desync
         AddVoice(sndYesSir, CurrentTeam^.voicepack);
         end;
     if cHedgehogTurnTime < 1000000 then
