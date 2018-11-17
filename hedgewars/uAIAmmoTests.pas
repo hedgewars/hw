@@ -183,9 +183,13 @@ repeat
 
         EX:= trunc(x);
         EY:= trunc(y);
-        if Level = 1 then
-            value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
-        else value:= RateExplosion(Me, EX, EY, 101);
+        if (((Me = CurrentHedgehog^.Gear) and TestColl(EX, EY, 3)) or
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, EX, EY, 3))) then
+			begin
+			if Level = 1 then
+				 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
+			else value:= RateExplosion(Me, EX, EY, 101);
+			end;
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             if GameFlags and gfSolidLand = 0 then
                  value := 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64
