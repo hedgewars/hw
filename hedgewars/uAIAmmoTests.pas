@@ -198,7 +198,7 @@ repeat
                  value := 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64
             else value := BadTurn;
 
-        if (valueResult < value) or (valueResult = value and Level < 3) then
+        if (valueResult < value) or ((valueResult = value) and (Level < 3)) then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
