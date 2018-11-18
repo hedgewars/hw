@@ -21,7 +21,7 @@ end
 
 function detectMapWithDigest()
     if RopePercent == 100 and MinesNum == 0 then
-        mapString = hashDigest() .. "," .. LandDigest
+        local mapString = hashDigest() .. "," .. LandDigest
 
         if band(GameFlags, gfBorder) ~= 0 then
             mapString = "Border," .. mapString

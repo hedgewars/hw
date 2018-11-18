@@ -1361,6 +1361,7 @@ end
 
 function LoadMap(mID)
 
+	local tempG
 	techX = {}
 	techY = {}
 	techCount = 1

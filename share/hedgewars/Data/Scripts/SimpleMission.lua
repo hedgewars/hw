@@ -342,7 +342,7 @@ function SimpleMission(params)
 			local g4 = (not goal.yMax) or gY <= goal.yMax
 			return g1 and g2 and g3 and g4
 		elseif goal.type == "distGearPos" or goal.type == "distGearGear" then
-			local gX, tY, tX, tY
+			local gX, gY, tX, tY
 			if goal.type == "distGearPos" then
 				if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
 					-- Fail if gear was destroyed
@@ -563,7 +563,7 @@ function SimpleMission(params)
 	end
 
 	_G.onSuddenDeath = function()
-		sm.isInSuddenDeath = true
+		_G.sm.isInSuddenDeath = true
 	end
 
 	_G.onGearWaterSkip = function(gear)

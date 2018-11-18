@@ -3,7 +3,7 @@
 --[[ FUNCTIONS ]]
 -- Check if a gear is inside a box
 function gearIsInBox(gear, x, y, w, h)
-    gx, gy = GetGearPosition(gear)
+    local gx, gy = GetGearPosition(gear)
     if gx >= x and gy >= y and gx <= x + w and gy <= y + h then
         return true
     end
@@ -12,7 +12,7 @@ end
 
 -- Check if a gear is inside a circle
 function gearIsInCircle(gear, x, y, r, useRadius)
-    gx, gy = GetGearPosition(gear)
+    local gx, gy = GetGearPosition(gear)
     if useRadius then
         r = r + GetGearRadius(gear)
     end

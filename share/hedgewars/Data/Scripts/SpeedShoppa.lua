@@ -68,7 +68,7 @@ local cratesCollected = 0
 local gameEnded = false
 local timeOut = false
 local hogHurt = false
-local endTime
+local startTime, endTime
 
 local crates
 

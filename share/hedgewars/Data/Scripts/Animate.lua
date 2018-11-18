@@ -1,7 +1,7 @@
 local animPos, lastx, lasty, jumpTypes, jumpTimes, moveDirs, jumpStarted
 local moveTime = 0
 local backJumped, jTimer, awTime, globalWait, stageEvents, seNum, curEvent
-local needtoDecrease
+local needToDecrease
 local AnimList, AnimListNum
 local FunctionList, FunctionListNum
 local skipFuncList
@@ -168,7 +168,7 @@ function AnimFollowGear(gear)
 end
 
 function AnimMove(gear, dir, posx, posy, maxMoveTime)
-  dirr = moveDirs[dir]
+  local dirr = moveDirs[dir]
   SetGearMessage(gear, dirr)
   moveTime = moveTime + 1
   if (maxMoveTime and moveTime > maxMoveTime) then
@@ -201,8 +201,8 @@ function AnimJump(gear, jumpType)
     SetGearMessage(gear, jumpTypes[jumpType])
     AnimGearWait(gear, jumpTimes["backback"])
   else
-    curx = GetX(gear)
-    cury = GetY(gear)
+    local curx = GetX(gear)
+    local cury = GetY(gear)
     if curx == lastx and cury == lasty then
       jumpStarted = false
       backJumped = false
@@ -274,7 +274,7 @@ function AnimCustomFunction(gear, func, args)
   if args == nil then
     args = {}
   end
-  retval = func(unpack(args))
+  local retval = func(unpack(args))
   if retval == false then
     return false
   else
@@ -342,7 +342,7 @@ function Animate(steps)
   end
 
   startCinemaLock()
-  retVal = steps[animPos].func(unpack(steps[animPos].args))
+  local retVal = steps[animPos].func(unpack(steps[animPos].args))
   if (retVal ~= false) then
     animPos = animPos + 1
   end
@@ -427,6 +427,6 @@ function StoppedGear(gear)
      -- We consider the gear to be “stopped” if it has been destroyed
      return true
   end
-  dx,dy = GetGearVelocity(gear)
+  local dx,dy = GetGearVelocity(gear)
   return math.abs(dx) <= 1 and math.abs(dy) <= 1
 end

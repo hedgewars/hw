@@ -177,10 +177,10 @@ function TargetPracticeMission(params)
 	end
 
 	_G.spawnTarget = function()
-		gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
+		local gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
 
-		x = targets[scored+1].x
-		y = targets[scored+1].y
+		local x = targets[scored+1].x
+		local y = targets[scored+1].y
 
 		SetGearPosition(gear, x, y)
 
