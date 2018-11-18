@@ -121,22 +121,18 @@ const cStereo_Sky           = 0.0500;
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId; i: LongInt): ansistring;
 var t: ansistring;
 begin
-{$IFNDEF PAS2C}
     if (GameFlags and gf) <> 0 then
         begin
         t:= inttostr(i);
         s:= s + FormatA(trgoal[si], t) + '|'
         end;
-{$ENDIF}
     AddGoal:= s;
 end;
 
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId): ansistring;
 begin
-{$IFNDEF PAS2C}
     if (GameFlags and gf) <> 0 then
         s:= s + trgoal[si] + '|';
-{$ENDIF}
     AddGoal:= s;
 end;
 
