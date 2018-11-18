@@ -675,7 +675,7 @@
 04:58=Ta mina będzie się swobodnie unisić w powietrzu i|podążać za jeżami, które się do niej zblizą.|Jej eksplozja jest jednakże mniejsza niż miny przeciwpiechotnej.|Atak: Przytrzymaj by rzucić z większą siłą
 04:59=Ta broń jest niedokończona i eksperymentalna.|Używaj na własne ryzyko!
 04:60=Wywołaj deszcz pocisków na swoich wrogów!|A oni myśleli, że są bezpieczni za potrójną|warstwą belek.|Atak: Strzel z pełną mocą|Góra/Dół: Kontynuuj celowanie
-          
+
 ; Game goal strings
 05:00=Ustawienia gry
 05:01=Obowiązują następujące zasady:

@@ -88,6 +88,16 @@ for CHECKED_LANG_FILE in $CHECKED_FILES;
 	MISSING_STRINGS=0;
 	HAS_PROBLEMS=0;
 
+	grep -o "^[^0-9;]" $CHECKED_LANG_FILE > $TEMP_CHECK
+	if [ -s $TEMP_CHECK ]
+	then
+		echo "ERROR! Line(s) which does not start with a digit or semicolon found. Problematic line(s):";
+		echo "----------";
+		cat $TEMP_CHECK;
+		echo "----------";
+		HAS_PROBLEMS=1;
+	fi
+
 	if [ $CHECKED_LANG_FILE != en.txt ]
 	then
 		grep -o "^[0-9][0-9]:[0-9][0-9]=" $CHECKED_LANG_FILE | cut -c1-5 | sort | uniq > $TEMP_SYMBOLS;
