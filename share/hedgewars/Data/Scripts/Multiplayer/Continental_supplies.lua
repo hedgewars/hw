@@ -452,16 +452,16 @@ function ValidateWeapon(hog,weapon,amount)
 end
 
 function SpawnRandomCrate(x,y,strength)
-	local tot=table.maxn(CS.WEAPONS_SUPPORT)+table.maxn(CS.WEAPONS_DAMAGE)
+	local tot=#CS.WEAPONS_SUPPORT + #CS.WEAPONS_DAMAGE
 	local rand=GetRandom(tot)+1
 
-	if(rand>table.maxn(CS.WEAPONS_SUPPORT))
+	if(rand > #CS.WEAPONS_SUPPORT)
 	then
-		local weapon=rand-table.maxn(CS.WEAPONS_SUPPORT)
+		local weapon = rand - #CS.WEAPONS_SUPPORT
 
 		while(wepNotValidBorder(CS.WEAPONS_DAMAGE[weapon][1])==false)
 		do
-			if(weapon>=table.maxn(CS.WEAPONS_DAMAGE))
+			if(weapon >= #CS.WEAPONS_DAMAGE)
 			then
 				weapon=0
 			end
@@ -582,7 +582,7 @@ function GetRandomWeapon(hog, weptype, power, onlyonewep, getdelayedweps, mypowe
 
 	if(rand_weaponset_power < power)
 	then
-		local numberofweapons=table.maxn(weptype)
+		local numberofweapons = #weptype
 
 		local random_weapon = math.abs(GetRandom(numberofweapons)+1)
 
@@ -909,8 +909,8 @@ function transferableParamToWeaponSet(string,icon)
 	continentinfo[4]={}
 	if(icon==1000)
 	then
-		local mid=table.maxn(CS.WEAPONS_DAMAGE)
-		local max=mid+table.maxn(CS.WEAPONS_SUPPORT)
+		local mid = #CS.WEAPONS_DAMAGE
+		local max = mid + #CS.WEAPONS_SUPPORT
 		local ic=(string.byte(string) % max)+1
 
 		if(ic>mid)
@@ -1233,7 +1233,7 @@ function onNewTurn()
 
 			if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
 			then
-				CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+				CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
 				SetContinentWeapons()
 			end
 			local currCont=CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]
@@ -1589,13 +1589,13 @@ function TrySelectNextContinent(reverse)
 	then
 		CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] + direction
 
-		if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]> table.maxn(CS.CONTINENT_INFORMATION))
+		if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]> #CS.CONTINENT_INFORMATION)
 		then
 			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=1
 		end
 		if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]<=0)
 		then
-			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=table.maxn(CS.CONTINENT_INFORMATION)
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] = #CS.CONTINENT_INFORMATION
 		end
 		SetContinentWeapons()
 
@@ -1687,7 +1687,7 @@ function onGameTick()
 		PlaySound(sndPlaced)
 		if(CurrentHedgehog and CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
 		then
-			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
 			SetContinentWeapons()
 			HideMission()
 			ShowContinentLabel(0)
@@ -1708,7 +1708,7 @@ function onGameTick20()
 	then
 		if(GetCurAmmoType()==amSwitch)
 		then
-			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
 			SetContinentWeapons()
 			SetWeapon(amSkip)
 			PlaySound(sndMineTick)

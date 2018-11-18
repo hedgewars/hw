@@ -30,7 +30,7 @@ function assignAmmo(hog)
         local ammo = getTeamValue(name, "ammo")
         -- If there is no ammo, get a random one from the list and store it
         if ammo == nil then
-            ammo = weapons[GetRandom(table.maxn(weapons)) + 1]
+            ammo = weapons[GetRandom(#weapons) + 1]
             setTeamValue(name, "ammo", ammo)
         end
         -- Add the ammo for the hog

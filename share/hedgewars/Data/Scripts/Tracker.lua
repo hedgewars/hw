@@ -34,7 +34,7 @@ function trackDeletion(gear)
     if trackingTeams and GetGearType(gear) == gtHedgehog then
     	hogs = teams[GetHogTeamName(gear)]
         if hogs ~= nil then
-            if table.maxn(hogs) == 1 then
+            if #hogs == 1 then
                 hogs = nil
             else
 				for k, hog in ipairs(hogs) do
@@ -89,7 +89,7 @@ function trackHiding(gear)
     	hogs = teams[GetHogTeamName(gear)]
     	
         if hogs ~= nil then
-            if table.maxn(hogs) == 1 then
+            if #hogs == 1 then
                 hogs = nil
             else
                 for k, hog in ipairs(hogs) do
@@ -286,7 +286,7 @@ end
 
 -- Run a function on hogs in a clan
 function runOnHogsInClan(func, clan)
-    for i = 1, table.maxn(clans) do
+    for i = 1, ClansCount do
         if clans[i] == clan then
             for k, hog in ipairs(teams[i]) do
                 func(hog)
@@ -297,7 +297,7 @@ end
 
 -- Run a function on hogs in other clans
 function runOnHogsInOtherClans(func, clan)
-    for i = 1, table.maxn(clans) do
+    for i = 1, ClansCount do
         if clans[i] ~= clan then
             for k, hog in ipairs(teams[i]) do
                 func(hog)
