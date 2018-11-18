@@ -1379,7 +1379,7 @@
 05:06=Karma: Igel leiden an dem von ihnen verursachten Schaden
 05:07=Schützt den König: Lass deinen König nicht sterben!
 05:08=Igel platzieren: Wähle vor dem Spielstart die Positionen deiner Igel
-05:09=Artillerie: Deine Igel können nicht laufen
+05:09=Artillerie: Igel können nicht laufen
 05:10=Unzerstörbares Terrain: Die meisten Waffen zerstören das Gelände nicht
 05:11=Gemeinsames Arsenal: Alle Teams gleicher Farbe teilen sich ihr Arsenal
 05:12=Minenzünder: Minen explodieren nach %1 Sekunde(n)
