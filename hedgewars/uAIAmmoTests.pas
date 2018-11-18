@@ -137,6 +137,7 @@ Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
 function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+const cExtraTime = 300;
 var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -179,22 +180,25 @@ repeat
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t < -cExtraTime);
 
         EX:= trunc(x);
         EY:= trunc(y);
-        if (((Me = CurrentHedgehog^.Gear) and TestColl(EX, EY, 3)) or
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, EX, EY, 3))) then
-			begin
-			if Level = 1 then
-				 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
-			else value:= RateExplosion(Me, EX, EY, 101);
-			end;
+        if t >= -cExtraTime then
+            begin
+                if Level = 1 then
+                    value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
+                else
+                    value:= RateExplosion(Me, EX, EY, 101);
+            end else
+                value:= BadTurn;
+
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             if GameFlags and gfSolidLand = 0 then
                  value := 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64
             else value := BadTurn;
-        if valueResult <= value then
+
+        if (valueResult < value) or (valueResult = value and Level < 3) then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
@@ -204,7 +208,6 @@ repeat
             valueResult:= value
             end;
         end
-//until (value > 204800) or (rTime > 4250); not so useful since adding score to the drowning
 until rTime > 5050 - Level * 800;
 TestBazooka:= valueResult
 end;

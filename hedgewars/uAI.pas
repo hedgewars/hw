@@ -254,7 +254,7 @@ procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius;
 var
     ticks, maxticks, oldticks, steps, tmp: Longword;
-    BaseRate, BestRate, Rate: integer;
+    BaseRate, BestRate, Rate: LongInt;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
