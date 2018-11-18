@@ -392,7 +392,6 @@ locale = {
       ["Congratulations! You win."] = "Поздравляем! Вы выиграли.", -- Big_Armory
       ["Congratulations, you won!"] = "Поздравляем, вы выиграли!", -- A_Space_Adventure:death01, A_Space_Adventure:death02, A_Space_Adventure:desert01, A_Space_Adventure:desert02, A_Space_Adventure:fruit02, A_Space_Adventure:fruit03, A_Space_Adventure:ice02
       ["Congratulations!"] = "Поздравления!",
-      ["Congratulations!"] = "Поздравляем!",
       ["Congratulations"] = "Поздравляем", -- Basic_Training_-_Rope
 --      ["Conquering the galaxy"] = "", -- A_Space_Adventure:cosmos
 --      ["Construction Mode tool"] = "", -- Construction_Mode
