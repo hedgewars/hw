@@ -72,7 +72,7 @@
 01:11=Esta arma ou utilitário ainda não está disponível!
 01:12=Último turno até Morte Súbita!
 01:13=%1 turnos até Morte Súbita!
-01:14=Prepara-te!
+; 01:14=Get ready, %1!
 01:15=Ligeiro
 01:16=Pouco
 01:17=Normal
