@@ -87,8 +87,9 @@ function onGearDelete(gear)
 		HogSay(CurrentHedgehog, loc("Hmmm..."), SAY_THINK)
 	end
 
-	if GetGearType(gear) == gtCase then
+	if (GetGearType(gear) == gtCase) and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
 		SetTurnTimeLeft(TurnTimeLeft + 5000)
+		PlaySound(sndExtraTime)
 	end
 	-- Note: The victory sequence is done automatically by Hedgewars
 	if  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then
