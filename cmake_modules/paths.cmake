@@ -60,7 +60,7 @@ if(APPLE)
     set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
     #install_name_tool for libraries
     set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
-else(APPLE AND NOT (${CMAKE_INSTALL_PREFIX} MATCHES "/usr"))
+elseif(NOT (${CMAKE_INSTALL_PREFIX} MATCHES "/usr"))
     #paths where to find libraries (final slash not optional):
     # - the first is relative to the executable
     # - the second is the same directory of the executable (so it runs in bin/)
