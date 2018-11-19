@@ -27,7 +27,7 @@
     <message>
         <source>GNU GPL v2</source>
         <extracomment>Short for “GNU General Public License version 2”</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>Dependency versions:</source>
@@ -36,47 +36,47 @@
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
 </context>
 <context>
@@ -160,7 +160,7 @@
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation>Вид</translation>
+        <translation>Посмотреть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation>Мы всегда рады новым предложениям, идям или сообщениям об ошибках.</translation>
+        <translation>Мы всегда рады новым предложениям, идеям или сообщениям об ошибках.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
@@ -1219,7 +1219,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation>Открыть папку с пакетами</translation>
+        <translation>Открыть папку с контентом</translation>
     </message>
     <message>
         <source>Load the start page</source>
@@ -1378,7 +1378,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
 </context>
 <context>
@@ -1903,7 +1903,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Room state</source>
-        <translation>Состояние комнаты</translation>
+        <translation>Фильтр комнат</translation>
     </message>
     <message>
         <source>Clear filters</source>
@@ -1922,7 +1922,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Раздели боль врага, раздели с ним его урон</translation>
+        <translation>Раздели боль врага, получи его урон тоже</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
@@ -2142,7 +2142,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
 </context>
 <context>
@@ -2345,19 +2345,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show games in lobby</source>
-        <translation>Показывать неначавшиеся игры</translation>
+        <translation>неначавшиеся игры</translation>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation>Показывать начавшиеся игры</translation>
+        <translation>начавшиеся игры</translation>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation>Показывать запароленные комнаты</translation>
+        <translation>запароленные комнаты</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation>Показывать закрытые комнаты</translation>
+        <translation>закрытые комнаты</translation>
     </message>
     <message>
         <source>Delegate room control</source>
@@ -2524,87 +2524,87 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный/Циановый</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Циановый/Красный</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный/Синий</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Синий/Красный</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный/Зелёный</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Зелёный/Красный</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>Слева и справа</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Сверху и снизу</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный/Циановый полутоновый</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Циановый/Красный полутоновый</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный/Синий полутоновый</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Синий/Красный полутоновый</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Красный/Зелёный полутоновый</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Зелёный/Красный полутоновый</translation>
     </message>
     <message>
         <source>Computer (Level %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Компьютер (Уровень %1)</translation>
     </message>
     <message>
         <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Стереоскопия создаёт ощущение глубины, когда вы надеваете 3D-очки.</translation>
     </message>
     <message>
         <source>24 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>25 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>30 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>50 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
     <message>
         <source>60 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation><!--Non-translatable text-->
     </message>
 </context>
 <context>
@@ -2850,7 +2850,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Your Email</source>
-        <translation>Ваш емейл</translation>
+        <translation>Ваш e-mail</translation>
     </message>
     <message>
         <source>Summary</source>
@@ -2902,12 +2902,12 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Stereoscopy</source>
-        <translation type="unfinished"></translation>
+        <translation>Стереоскопия</translation>
     </message>
     <message>
         <source>Bitrate (Kibit/s)</source>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Битрейт (Kibit/s)</translation>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
@@ -3062,10 +3062,10 @@ Do you still want to join the room?</source>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Вы действительно хотите удалить %1 файл?</numerusform>
+            <numerusform>Вы действительно хотите удалить %1 файлa?</numerusform>
+            <numerusform>Вы действительно хотите удалить %1 файлов?</numerusform>
         </translation>
     </message>
     <message>
@@ -3720,15 +3720,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>вкл/выкл информацию о командах</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
-        <translation type="unfinished"></translation>
+        <translation>пауза / автопропуск</translation>
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>вкл/выкл информацию о ёжиках</translation>
     </message>
     <message>
         <source>change timer</source>
@@ -3736,11 +3736,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>показать информацию о миссии</translation>
     </message>
     <message>
         <source>clan chat</source>
-        <translation type="unfinished"></translation>
+        <translation>чат клана</translation>
     </message>
 </context>
 <context>
@@ -3838,7 +3838,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Demo replay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Проиграть запись:</translation>
     </message>
     <message>
         <source>Heads-up display:</source>
@@ -4077,11 +4077,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Правая метаклавиша</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Левая метаклавишa</translation>
     </message>
     <message>
         <source>A button</source>
