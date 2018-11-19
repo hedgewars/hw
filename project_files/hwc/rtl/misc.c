@@ -163,19 +163,20 @@ astring fpcrtl_pchar2astr(const char *s)
 {
     astring result;
 
-    if(!s) {
+    if(!s) 
+    {
         result.len = 0;
-        return result;
+    } else
+    {
+        int rlen = strlen(s);
+
+        if(rlen > MAX_ANSISTRING_LENGTH){
+            rlen = MAX_ANSISTRING_LENGTH;
+        }
+
+        result.len = rlen;
+        memcpy(result.str, s, rlen);
     }
-
-    int rlen = strlen(s);
-
-    if(rlen > MAX_ANSISTRING_LENGTH){
-        rlen = MAX_ANSISTRING_LENGTH;
-    }
-
-    result.len = rlen;
-    memcpy(result.s + 1, s, rlen);
 
     return result;
 }
