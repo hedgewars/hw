@@ -89,6 +89,7 @@ function onGearDelete(gear)
 
 	if (GetGearType(gear) == gtCase) and (band(GetGearMessage(gear), gmDestroy) ~= 0) then
 		SetTurnTimeLeft(TurnTimeLeft + 5000)
+		AddCaption(string.format(loc("+%d seconds!"), 5), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage)
 		PlaySound(sndExtraTime)
 	end
 	-- Note: The victory sequence is done automatically by Hedgewars
