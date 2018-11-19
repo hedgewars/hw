@@ -171,6 +171,7 @@ function Skipanim(anim)
     ShowMission(unpack(goals[anim]))
   end
   if anim == startDialogue then
+    AnimSetGearPosition(youngh, 1952, 1365)
     HogTurnLeft(princess, false)
   end
 end
