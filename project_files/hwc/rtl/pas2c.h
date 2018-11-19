@@ -7,7 +7,7 @@
 #include <math.h>
 
 #define MAX_PARAMS 64
-#define MAX_ANSISTRING_LENGTH 16383
+#define MAX_ANSISTRING_LENGTH 16382
 
 typedef union string255_
     {

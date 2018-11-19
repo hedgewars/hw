@@ -277,7 +277,7 @@ Integer __attribute__((overloadable)) fpcrtl_pos(Char c, astring str) {
 
     FIX_STRINGA(str);
 
-    p = strchr(str.s + 1, c);
+    p = strchr(str.str, c);
 
     if (p == NULL) {
         return 0;
@@ -302,9 +302,7 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, astring str) 
     FIX_STRING(substr);
     FIX_STRINGA(str);
 
-    str.s[str.len] = 0;
-
-    p = strstr(str.s + 1, substr.str);
+    p = strstr(str.str, substr.str);
 
     if (p == NULL) {
         return 0;
