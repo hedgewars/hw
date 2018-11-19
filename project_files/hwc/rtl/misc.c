@@ -162,6 +162,12 @@ string255 fpcrtl_make_string(const char* s) {
 astring fpcrtl_pchar2astr(const char *s)
 {
     astring result;
+
+    if(!s) {
+        result.len = 0;
+        return result;
+    }
+
     int rlen = strlen(s);
 
     if(rlen > MAX_ANSISTRING_LENGTH){
