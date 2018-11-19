@@ -167,7 +167,7 @@ typeDecl = choice [
         if null r then
             return $ ArrayDecl Nothing t
             else
-            return $ foldr (\a b -> ArrayDecl (Just a) b) (ArrayDecl (Just $ head r) t) (tail r)
+            return $ foldr (\a b -> ArrayDecl (Just a) b) (ArrayDecl (Just $ last r) t) (init r)
     recordDecl = do
         try $ do
             optional $ (try $ string' "packed") >> comments

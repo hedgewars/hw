@@ -774,12 +774,6 @@ type2C t = do
         where
             bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
     type2C' (ArrayDecl Nothing t) = type2C (PointerTo t)
-    type2C' (ArrayDecl (Just r1) (ArrayDecl (Just r2) t)) = do
-        t' <- type2C t
-        lt <- gets lastType
-        r1' <- initExpr2C (InitRange r1)
-        r2' <- initExpr2C (InitRange r2)
-        return $ \i -> t' i <> brackets r2' <> brackets r1'
     type2C' (ArrayDecl (Just r) t) = do
         t' <- type2C t
         lt <- gets lastType
