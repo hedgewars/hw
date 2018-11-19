@@ -70,16 +70,6 @@ function onGameStart()
 
 end
 
-
---function onGameTick()
-
-	--if CurrentHedgehog ~= nil then
-	--	AddCaption(GetX(CurrentHedgehog) .. ";" .. GetY(CurrentHedgehog))
-	--end
-
---end
-
-
 function onAmmoStoreInit()
 	SetAmmo(amBlowTorch, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 1)
@@ -89,12 +79,6 @@ function onAmmoStoreInit()
 	SetAmmo(amBaseballBat, 0, 0, 0, 1)
 	SetAmmo(amSwitch, 9, 0, 0, 0)
 	SetAmmo(amSkip, 9, 0, 0, 0)
-end
-
-function onGearDamage(gear, damage)
-	if (gear == player) and (damage == 30) then
-		HogSay(player,loc("T_T"),SAY_SHOUT)
-	end
 end
 
 function onGearDelete(gear)

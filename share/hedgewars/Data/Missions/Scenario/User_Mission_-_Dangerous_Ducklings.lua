@@ -42,7 +42,7 @@ function onGameInit()
 	SetGearPosition(instructor,317,902)
 	SetGearPosition(enemy,1918,837)
 
-	HogSay(player, ".............................", SAY_THINK)
+	HogSay(player, loc("..."), SAY_THINK)
 	HogTurnLeft(instructor, true)
 
 end
