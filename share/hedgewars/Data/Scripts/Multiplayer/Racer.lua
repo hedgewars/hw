@@ -1041,8 +1041,6 @@ function onGearAdd(gear)
         elseif GetGearType(gear) == gtRope and TeamRope then
             SetTag(gear,1)
             SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
-        elseif GetGearType(gear) == gtAirMine then
-            DeleteGear(gear)
         end
 end
 
