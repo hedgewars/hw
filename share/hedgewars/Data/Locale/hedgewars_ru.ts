@@ -160,7 +160,7 @@
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation>Вид</translation>
+        <translation>Посмотреть</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation>Мы всегда рады новым предложениям, идям или сообщениям об ошибках.</translation>
+        <translation>Мы всегда рады новым предложениям, идеям или сообщениям об ошибках.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
@@ -1219,7 +1219,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation>Открыть папку с пакетами</translation>
+        <translation>Открыть папку с контентом</translation>
     </message>
     <message>
         <source>Load the start page</source>
@@ -1903,7 +1903,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Room state</source>
-        <translation>Состояние комнаты</translation>
+        <translation>Фильтр комнат</translation>
     </message>
     <message>
         <source>Clear filters</source>
@@ -1922,7 +1922,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Раздели боль врага, раздели с ним его урон</translation>
+        <translation>Раздели боль врага, получи его урон тоже</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
@@ -2345,19 +2345,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show games in lobby</source>
-        <translation>Показывать неначавшиеся игры</translation>
+        <translation>неначавшиеся игры</translation>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation>Показывать начавшиеся игры</translation>
+        <translation>начавшиеся игры</translation>
     </message>
     <message>
         <source>Show password protected</source>
-        <translation>Показывать запароленные комнаты</translation>
+        <translation>запароленные комнаты</translation>
     </message>
     <message>
         <source>Show join restricted</source>
-        <translation>Показывать закрытые комнаты</translation>
+        <translation>закрытые комнаты</translation>
     </message>
     <message>
         <source>Delegate room control</source>
@@ -2850,7 +2850,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Your Email</source>
-        <translation>Ваш емейл</translation>
+        <translation>Ваш e-mail</translation>
     </message>
     <message>
         <source>Summary</source>
