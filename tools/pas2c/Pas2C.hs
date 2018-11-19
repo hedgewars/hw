@@ -779,7 +779,7 @@ type2C t = do
         lt <- gets lastType
         r1' <- initExpr2C (InitRange r1)
         r2' <- initExpr2C (InitRange r2)
-        return $ \i -> t' i <> brackets r1' <> brackets r2'
+        return $ \i -> t' i <> brackets r2' <> brackets r1'
     type2C' (ArrayDecl (Just r) t) = do
         t' <- type2C t
         lt <- gets lastType
