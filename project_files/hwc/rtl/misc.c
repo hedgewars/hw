@@ -108,7 +108,7 @@ string255 fpcrtl_chrconcat(char a, char b)
 
 bool fpcrtl_strcompare(string255 str1, string255 str2)
 {
-    return memcmp(str1.str, str2.str, str1.len) == 0;
+    return memcmp(str1.s, str2.s, str1.len + 1) == 0;
 }
 
 bool fpcrtl_strcomparec(string255 a, char b)
