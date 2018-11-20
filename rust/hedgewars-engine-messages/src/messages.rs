@@ -1,3 +1,5 @@
+use byteorder::{BigEndian, WriteBytesExt};
+
 #[derive(Debug, PartialEq)]
 pub enum KeystrokeAction {
     Press,
@@ -50,6 +52,7 @@ pub enum UnorderedEngineMessage {
     GameSetupChecksum(String),
     PauseToggled,
 }
+
 #[derive(Debug, PartialEq)]
 pub enum ConfigEngineMessage {
     GameType(u8),
@@ -135,14 +138,14 @@ pub enum EngineMessage {
 
 macro_rules! em {
     [$msg: expr] => {
-        vec![($msg) as u8]
+        vec![($msg)]
     };
 }
 
 macro_rules! ems {
     [$msg: expr, $param: expr] => {
         {
-            let mut v = vec![($msg) as u8];
+            let mut v = vec![($msg)];
             v.extend(String::into_bytes($param.to_string()).iter());
             v
         }
@@ -154,33 +157,45 @@ impl SyncedEngineMessage {
         use self::KeystrokeAction::*;
         use self::SyncedEngineMessage::*;
         match self {
-            Left(Press) => em!['L'],
-            Left(Release) => em!['l'],
-            Right(Press) => em!['R'],
-            Right(Release) => em!['r'],
-            Up(Press) => em!['U'],
-            Up(Release) => em!['u'],
-            Down(Press) => em!['D'],
-            Down(Release) => em!['d'],
-            Precise(Press) => em!['Z'],
-            Precise(Release) => em!['z'],
-            Attack(Press) => em!['A'],
-            Attack(Release) => em!['a'],
-            NextTurn => em!['N'],
-            Switch => em!['S'],
-            Timer(t) => vec!['0' as u8 + t],
-            Slot(s) => vec!['~' as u8, *s],
-            SetWeapon(s) => vec!['~' as u8, *s],
-            Put(x, y) => unimplemented!(),
-            CursorMove(x, y) => unimplemented!(),
-            HighJump => em!['J'],
-            LongJump => em!['j'],
-            Skip => em![','],
-            TeamControlGained(str) => ems!['g', str],
-            TeamControlLost(str) => ems!['f', str],
-            Taunt(s) => vec!['t' as u8, *s],
-            HogSay(str) => ems!['h', str],
-            Heartbeat => em!['+'],
+            Left(Press) => em![b'L'],
+            Left(Release) => em![b'l'],
+            Right(Press) => em![b'R'],
+            Right(Release) => em![b'r'],
+            Up(Press) => em![b'U'],
+            Up(Release) => em![b'u'],
+            Down(Press) => em![b'D'],
+            Down(Release) => em![b'd'],
+            Precise(Press) => em![b'Z'],
+            Precise(Release) => em![b'z'],
+            Attack(Press) => em![b'A'],
+            Attack(Release) => em![b'a'],
+            NextTurn => em![b'N'],
+            Switch => em![b'S'],
+            Timer(t) => vec![b'0' + t],
+            Slot(s) => vec![b'~' , *s],
+            SetWeapon(s) => vec![b'~', *s],
+            Put(x, y) => {
+                let mut v = vec![b'p'];
+                v.write_i24::<BigEndian>(*x).unwrap();
+                v.write_i24::<BigEndian>(*y).unwrap();
+
+                v
+            },
+            CursorMove(x, y) => {
+                let mut v = vec![b'P'];
+                v.write_i24::<BigEndian>(*x).unwrap();
+                v.write_i24::<BigEndian>(*y).unwrap();
+
+                v
+            },
+            HighJump => em![b'J'],
+            LongJump => em![b'j'],
+            Skip => em![b','],
+            TeamControlGained(str) => ems![b'g', str],
+            TeamControlLost(str) => ems![b'f', str],
+            Taunt(s) => vec![b't', *s],
+            HogSay(str) => ems![b'h', str],
+            Heartbeat => em![b'+'],
             TimeWrap => unreachable!(),
         }
     }
@@ -190,21 +205,34 @@ impl UnsyncedEngineMessage {
     fn to_bytes(&self) -> Vec<u8> {
         use self::UnsyncedEngineMessage::*;
         match self {
-            TeamControlGained(str) => ems!['G', str],
-            TeamControlLost(str) => ems!['F', str],
+            TeamControlGained(str) => ems![b'G', str],
+            TeamControlLost(str) => ems![b'F', str],
         }
     }
 }
 
 impl UnorderedEngineMessage {
     fn to_bytes(&self) -> Vec<u8> {
-        unimplemented!()
+        use self::UnorderedEngineMessage::*;
+        match self {
+            Ping => em![b'?'],
+            Pong => em![b'!'],
+            ChatMessage(str) => ems![b's', str],
+            TeamMessage(str) => ems![b'b', str],
+            Error(str) => ems![b'E', str],
+            Warning(str) => unreachable!(),
+            StopSyncing => unreachable!(),
+            GameOver => em![b'q'],
+            GameInterrupted => em![b'Q'],
+            GameSetupChecksum(str) => ems![b'M', str],
+            PauseToggled => unreachable!(),
+        }
     }
 }
 
 impl ConfigEngineMessage {
     fn to_bytes(&self) -> Vec<u8> {
-        unimplemented!()
+        unreachable!()
     }
 }
 
@@ -216,7 +244,7 @@ impl EngineMessage {
         match self {
             Unknown => unreachable!("you're not supposed to construct such messages"),
             Empty => unreachable!("you're not supposed to construct such messages"),
-            Synced(SyncedEngineMessage::TimeWrap, _) => vec!['#' as u8, 0xff, 0xff],
+            Synced(SyncedEngineMessage::TimeWrap, _) => vec![b'#', 0xff, 0xff],
             Synced(msg, timestamp) => {
                 let mut v = msg.to_bytes();
                 v.push((*timestamp / 256) as u8);
@@ -255,10 +283,15 @@ impl EngineMessage {
 fn message_contruction() {
     assert_eq!(
         EngineMessage::Synced(SyncedEngineMessage::TimeWrap, 0).to_bytes(),
-        vec![3, '#' as u8, 255, 255]
+        vec![3, b'#', 255, 255]
     );
     assert_eq!(
         EngineMessage::Synced(SyncedEngineMessage::NextTurn, 258).to_bytes(),
-        vec![3, 'N' as u8, 1, 2]
+        vec![3, b'N', 1, 2]
+    );
+
+    assert_eq!(
+        EngineMessage::Synced(SyncedEngineMessage::Put(-31337, 65538), 0).to_bytes(),
+        vec![9, b'p', 255, 133, 151, 1, 0, 2, 0, 0]
     );
 }

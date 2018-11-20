@@ -5,4 +5,5 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 edition = "2018"
 
 [dependencies]
-nom = "4.1.1"
+nom = "4.1"
+byteorder = "1.2"
