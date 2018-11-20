@@ -7,11 +7,13 @@ edition = "2018"
 [dependencies]
 gfx = "0.17"
 gfx_device_gl = "0.15"
+netbuf = "0.4"
 
 land2d = { path = "../land2d" }
 lfprng = { path = "../lfprng" }
 integral-geometry = { path = "../integral-geometry" }
 landgen = { path = "../landgen" }
+hedgewars-engine-messages = { path = "../hedgewars-engine-messages" }
 
 [lib]
 name = "hedgewars_engine"

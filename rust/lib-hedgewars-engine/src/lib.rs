@@ -1,5 +1,5 @@
 mod world;
-mod command;
+mod ipc;
 
 #[repr(C)]
 pub struct EngineInstance {

@@ -70,7 +70,7 @@ named!(unsynced_message<&[u8], UnsyncedEngineMessage>, alt!(
 named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
       do_parse!(tag!("?") >> ( Ping ))
     | do_parse!(tag!("!") >> ( Ping ))
-    | do_parse!(tag!("E") >> s: string_tail >> ( Error(s)) )
+    | do_parse!(tag!("E") >> s: string_tail >> ( UnorderedEngineMessage::Error(s)) )
     | do_parse!(tag!("W") >> s: string_tail >> ( Warning(s)) )
     | do_parse!(tag!("s") >> s: string_tail >> ( ChatMessage(s)) )
     | do_parse!(tag!("b") >> s: string_tail >> ( TeamMessage(s)) ) // TODO: wtf is the format

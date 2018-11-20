@@ -220,7 +220,7 @@ impl UnorderedEngineMessage {
             ChatMessage(str) => ems![b's', str],
             TeamMessage(str) => ems![b'b', str],
             Error(str) => ems![b'E', str],
-            Warning(str) => unreachable!(),
+            Warning(_) => unreachable!(),
             StopSyncing => unreachable!(),
             GameOver => em![b'q'],
             GameInterrupted => em![b'Q'],
