@@ -3,6 +3,7 @@
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
  + Complete overhaul of Continental supplies
+ + Can adjust weapon start and crate probabilities in Balanced Random Weapon
  + Remove rubber duck
  + Rework team rankings
  + Tied teams now rank equally
@@ -19,7 +20,7 @@ Game, gameplay:
  + Increase hedgehog limit to 64
  + Remove rubber duck
  + Shotgun, Desert Eagle, Sniper Rifle, Firepunch, Kamikaze, Whip and Baseball Bat can now hit air mines (and some other moving gears) ...
- + ... also, air mines get stunned by getting hit by any of the weapons above
+ + Air mines get stunned by getting shoved
  + Shotgun shots can now pass through portals
  * Fix hog being unable to walk after using sniper rifle without firing both shots
  * Fix sine gun dealing damage to attacker if shooting up
@@ -102,7 +103,7 @@ Racer/TechRacer:
  * Fix ranking of teams if teams are tied
 
 Balanced Random Weapon:
- + Can adjust weapon start and crate probabilities
+ + Can adjust weapon start and crate probabilities by using ammo scheme
 
 Random Weapon:
  * Fix breakage when enabling per-hog ammo
@@ -165,6 +166,7 @@ Translations:
 Lua API:
  * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
  * Deprecation: Symbols amDuck/gtDuck are deprecated, will be removed later. For now, they alias to amCreeper/gtCreeper
+ * Changed global: lfCurrentHog becomes lfCurHogCrate
  + New call: SetTurnTimeLeft(newTurnTimeLeft): Set remaining turn time
  + New call: SetReadyTimeLeft(newReadyTimeLeft): Set remaining ready time
  + New call: Retreat(time [, respectGetAwayTimeFactor): Force current turn into retreating mode
@@ -195,7 +197,6 @@ Lua API:
  + New global: PLATFORM. Platform type. "Desktop" for desktop builds, "Mobile" for mobile device builds
  + New globals: capcolDefault, capcolSetting: Default caption colors
  * Animate library: Remove defunct follow argument for AnimVisualGear
- * Changed global: lfCurrentHog becomes lfCurHogCrate
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
  * Fixed variables: LeftX, RightX, TopY, LAND_WIDTH, LAND_HEIGHT were broken if onVisualGearAdd was defined
  * AI sometimes intentionally shot hedgehogs with aihDoesntMatter set
