@@ -102,7 +102,7 @@ class PageScheme : public AbstractPage
         QGroupBox * gbGameModes;
         QGroupBox * gbBasicSettings;
 
-        bool changingSchemes = false;
+        bool changingSchemes;
 
         void checkDupe();
 

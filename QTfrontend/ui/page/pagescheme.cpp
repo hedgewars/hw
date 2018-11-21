@@ -553,6 +553,7 @@ void PageScheme::connectSignals()
 
 PageScheme::PageScheme(QWidget* parent) : AbstractPage(parent)
 {
+    changingSchemes = false;
     initPage();
 }
 
