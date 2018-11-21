@@ -32,13 +32,11 @@ impl Write for IPC {
 
 impl Read for IPC {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
-        let result = self.out_buffer.as_ref().read(buf);
+        let read_bytes = self.out_buffer.as_ref().read(buf)?;
 
-        if let Ok(read_bytes) = result {
-            self.out_buffer.consume(read_bytes);
-        }
+        self.out_buffer.consume(read_bytes);
 
-        result
+        Ok(read_bytes)
     }
 }
 
