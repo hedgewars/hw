@@ -535,11 +535,11 @@ function setAIHints()
             SetGearAIHints(hhs[i], aihDoesntMatter)
         end
     end
-    for i = 0, #crates do
-        if CurrentHedgehog == mutant and crate[i] ~= nil  then
-            SetGearAIHints(crates[i], aihDoesntMatter)
+    for k,v in pairs(crates) do
+        if CurrentHedgehog == mutant and v ~= nil  then
+            SetGearAIHints(v, aihDoesntMatter)
         else
-            SetGearAIHints(crates[i], aihUsualProcessing)
+            SetGearAIHints(v, aihUsualProcessing)
         end
     end
 end
@@ -729,7 +729,7 @@ function onGearAdd(gear)
         numhhs = numhhs + 1
         SetEffect(gear, heResurrectable, 1)
     elseif GetGearType(gear) == gtCase then
-        crates[#crates] = gear
+        crates[gear] = gear
     elseif GetGearType(gear) == gtATFinishGame then
         if not gameOver then
             local winner = createEndGameStats()
