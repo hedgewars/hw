@@ -1374,7 +1374,7 @@ just enter your nickname.</source>
     <message>
         <source>CPU %1</source>
         <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>CPU %1</translation><!--Intended. This is better, than ЦП or ИИ, in my opinion-->
     </message>
     <message>
         <source>%1 (%2)</source>
@@ -1471,23 +1471,23 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; подумал, что это здорово пострелять в своих же ёжиков на &lt;b&gt;%2&lt;/b&gt; очко.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; подумал, что это здорово пострелять в своих же ёжиков на &lt;b&gt;%2&lt;/b&gt; очка.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; подумал, что это здорово пострелять в своих же ёжиков на &lt;b&gt;%2&lt;/b&gt; очков.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; своего ёжика.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; своих ёжиков.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; своих ёжиков.</numerusform>
         </translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда все имеют один и тот же цвет клана, нет причины воевать. И так ёжики жили долго и и счастливо в мире и согласии.</translation>
     </message>
 </context>
 <context>
@@ -2448,7 +2448,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Hog</source>
-        <translation>Ёж</translation>
+        <translation>Ёжик</translation>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
@@ -2874,7 +2874,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Отображение ярлыков над ёжиками и их прозрачность</translation>
     </message>
     <message>
         <source>World Edge</source>
@@ -3258,7 +3258,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Set default options</source>
-        <translation>Установить настройки по умолчанию</translation>
+        <translation>Восстановить настройки по умолчанию</translation>
     </message>
     <message>
         <source>Open videos directory</source>
@@ -3728,11 +3728,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation>вкл/выкл информацию о ёжиках</translation>
+        <translation>вкл/выкл ярлыки над ёжиками</translation>
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>увеличить таймер</translation>
     </message>
     <message>
         <source>show mission information</source>
@@ -3838,7 +3838,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Demo replay:</source>
-        <translation>Проиграть запись:</translation>
+        <translation>Проигрывание записи:</translation>
     </message>
     <message>
         <source>Heads-up display:</source>
@@ -4101,71 +4101,71 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый бампер</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый бампер</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка "назад"</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка "старт"</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый стик</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый стик</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый стик (вправо)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый стик (влево)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый стик (вниз)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый стик (вверх)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый триггер</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый триггер</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый стик (вниз)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый стик (вверх)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый стик (вправо)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый стик (влево)</translation>
     </message>
     <message>
         <source>D-pad</source>
-        <translation type="unfinished"></translation>
+        <translation>Крестовина</translation>
     </message>
     <message>
         <source>Axis %1 %2</source>
@@ -4175,7 +4175,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Button %1</source>
         <extracomment>Game controller button. %1 = button number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка %1</translation>
     </message>
     <message>
         <source>D-pad %1 %2</source>
@@ -4223,7 +4223,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Тайм-аут пинга</translation>
     </message>
     <message>
         <source>bye</source>
@@ -4279,7 +4279,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation>Предупреждение! Защита от флуда активирована</translation>
     </message>
     <message>
         <source>Your vote counted</source>
@@ -4287,7 +4287,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>new seed</source>
-        <translation type="unfinished"></translation>
+        <translation>новое зерно</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
@@ -4471,7 +4471,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote &lt;yes/no&gt;: Проголосовать &apos;да&apos; или &apos;нет&apos; в текущем голосовании</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
@@ -4487,15 +4487,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
+        <translation>/registered_only: Переключить режим &apos;только для зарегистрированных&apos;. Если включено, то только зарегистрированные игроки смогут присоединиться к серверу</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
+        <translation>/super_power: Активировать вашу суперсилу. С ней вы можете войти в любую комнату и вас нельзя будет кикнуть. Действие заканчивается при выходе с сервера</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
+        <translation>/stats: Запросить статистику сервера</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
@@ -4511,11 +4511,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Список комманд чата в лобби:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Список комманд чата в комнате:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
@@ -4551,7 +4551,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Кикнут</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
@@ -4591,11 +4591,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим &apos;только для зарегистрированных&apos; переключён</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Суперсила активирована.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
