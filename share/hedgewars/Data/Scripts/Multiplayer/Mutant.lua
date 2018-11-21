@@ -536,7 +536,7 @@ function setAIHints()
         end
     end
     for i = 0, #crates do
-        if CurrentHedgehog == mutant and crate[i] != nil  then
+        if CurrentHedgehog == mutant and crate[i] ~= nil  then
             SetGearAIHints(crates[i], aihDoesntMatter)
         else
             SetGearAIHints(crates[i], aihUsualProcessing)
