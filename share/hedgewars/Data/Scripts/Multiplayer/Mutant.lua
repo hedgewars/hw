@@ -12,7 +12,8 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 
 
 ----  Recommended settings:
-----    * one hedgehog per team
+----    * one hedgehog per team (forced by game)
+----    * one team per clan
 ----    * 'Small' one-island map
 
 --]]
@@ -23,13 +24,7 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 
 --[[
     MUTANT SCRIPT
-
-    To Do:  -Clean-up this fucking piece of code
-            -Debug
-            -Find a girlfriend
-            -Fix Sheepluva's hat  +[p]
-            -Cookies
------------------------]]
+]]
 
 local hhs = {}
 local crates = {}
@@ -104,8 +99,14 @@ local feederHat = "poke_slowpoke"
 
 function rules()
 
+    local mineStr
+    if MinesTime < 0 then
+        mineStr = loc("Mines time: 0s-5s")
+    else
+        mineStr = string.format(loc("Mines explode after %d s."), div(MinesTime, 1000))
+    end
     local ruleSet = loc("Hedgehogs will be revived after their death.") .. "|" ..
-    string.format(loc("Mines explode after %d s."), div(MinesTime, 1000)) .. "|" ..
+    mineStr .. "|" ..
     loc("The first hedgehog to kill someone becomes the Mutant.") .. "|" ..
     loc("The Mutant has super weapons and a lot of health.") .. "|" ..
     loc("The Mutant loses health quickly, but gains health by killing.") .. "|" ..
@@ -132,14 +133,13 @@ function showStartingInfo()
 end
 
 function onGameInit()
-    TurnTime = 20000
+    -- Sudden Death would be weird
     WaterRise = 0
     HealthDecrease = 0
-    EnableGameFlags(gfResetWeps, gfPerHogAmmo)
-    HealthCaseProb=0
-    HealthCaseAmount=0
-    MinesTime=1000
-    CaseFreq = 2
+    -- Weapons must be reset for the Mutant mechanic to work
+    EnableGameFlags(gfResetWeps)
+    -- King Mode messes with game too much
+    DisableGameFlags(gfKing)
 end
 
 
@@ -237,7 +237,7 @@ function onNewTurn()
     trackTeams()
     killsCounter = 0
 
-    if mutant == nil then
+    if mutant == nil and TotalRounds >= 0 then
         AddCaption( loc("First killer will mutate"), capcolDefault, capgrpGameState )
     end
 

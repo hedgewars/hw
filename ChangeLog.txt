@@ -108,6 +108,9 @@ Balanced Random Weapon:
 Random Weapon:
  * Fix breakage when enabling per-hog ammo
 
+Mutant:
+ + Unlock game scheme
+
 Continental supplies:
  + Continents are now selected before the game starts
  + Continents give hog different start health
