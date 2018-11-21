@@ -231,7 +231,8 @@ while Gear <> nil do
             , gtMelonPiece
             , gtMolotov: bonuses.activity:= true;
             gtCase:
-                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
+                if (Gear^.AIHints and aihDoesntMatter) = 0 then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);

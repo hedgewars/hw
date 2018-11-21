@@ -32,6 +32,7 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 -----------------------]]
 
 local hhs = {}
+local crates = {}
 local numhhs = 0
 local meh = false
 
@@ -103,30 +104,30 @@ local feederHat = "poke_slowpoke"
 
 function rules()
 
-	local ruleSet = loc("Hedgehogs will be revived after their death.") .. "|" ..
-	string.format(loc("Mines explode after %d s."), div(MinesTime, 1000)) .. "|" ..
-	loc("The first hedgehog to kill someone becomes the Mutant.") .. "|" ..
-	loc("The Mutant has super weapons and a lot of health.") .. "|" ..
-	loc("The Mutant loses health quickly, but gains health by killing.") .. "|" ..
-	" |" ..
-	loc("Score points by killing other hedgehogs.") .. "|" ..
-	loc("The hedgehog with least points (or most deaths) becomes the Bottom Feeder.") .. "|" ..
-	loc("The score and deaths are shown next to the team bar.") .. "|" ..
-	string.format(loc("Goal: Score %d points or more to win!"), winScore) .. "|" ..
+    local ruleSet = loc("Hedgehogs will be revived after their death.") .. "|" ..
+    string.format(loc("Mines explode after %d s."), div(MinesTime, 1000)) .. "|" ..
+    loc("The first hedgehog to kill someone becomes the Mutant.") .. "|" ..
+    loc("The Mutant has super weapons and a lot of health.") .. "|" ..
+    loc("The Mutant loses health quickly, but gains health by killing.") .. "|" ..
+    " |" ..
+    loc("Score points by killing other hedgehogs.") .. "|" ..
+    loc("The hedgehog with least points (or most deaths) becomes the Bottom Feeder.") .. "|" ..
+    loc("The score and deaths are shown next to the team bar.") .. "|" ..
+    string.format(loc("Goal: Score %d points or more to win!"), winScore) .. "|" ..
         " |" ..
-	loc("Scoring: ") .. "|" ..
-	loc("+2 for becoming the Mutant") .. "|" ..
-	loc("+1 to the Mutant for killing anyone") .. "|" ..
-	loc("+1 to the Bottom Feeder for killing anyone") .. "|" ..
-	loc("-1 to anyone for a suicide")
+    loc("Scoring: ") .. "|" ..
+    loc("+2 for becoming the Mutant") .. "|" ..
+    loc("+1 to the Mutant for killing anyone") .. "|" ..
+    loc("+1 to the Bottom Feeder for killing anyone") .. "|" ..
+    loc("-1 to anyone for a suicide")
 
-	return ruleSet
+    return ruleSet
 
 end
 
 function showStartingInfo()
 
-	ShowMission(loc("Mutant"), loc("A Hedgewars tag game"), rules(), 1, 5000)
+    ShowMission(loc("Mutant"), loc("A Hedgewars tag game"), rules(), 1, 5000)
 
 end
 
@@ -511,8 +512,8 @@ local only_low_score = true
     end
 
     if meh == false then
-		meh = true
-	end
+        meh = true
+    end
 
     end
 end
@@ -532,6 +533,13 @@ function setAIHints()
             SetGearAIHints(hhs[i], aihUsualProcessing)
         else
             SetGearAIHints(hhs[i], aihDoesntMatter)
+        end
+    end
+    for i = 0, #crates do
+        if CurrentHedgehog == mutant and crate[i] != nil  then
+            SetGearAIHints(crates[i], aihDoesntMatter)
+        else
+            SetGearAIHints(crates[i], aihUsualProcessing)
         end
     end
 end
@@ -696,20 +704,20 @@ end
 end
 
 function onGearDamage(gear, damage)
-	if not gameOver and GetGearType(gear) == gtHedgehog then
-		totalDamage = totalDamage + damage
-	end
+    if not gameOver and GetGearType(gear) == gtHedgehog then
+        totalDamage = totalDamage + damage
+    end
 end
 
 function onSkipTurn()
-	-- Record skips for achievement
-	local team = GetHogTeamName(CurrentHedgehog)
-	increaseTeamValue(team, "Skips")
-	if(getTeamValue(team, "Skips") > recordSkips) then
-		recordSkips = getTeamValue(team, "Skips")
-		recordSkipsHogName = getGearValue(CurrentHedgehog, "Name")
-		recordSkipsTeamName = team
-	end
+    -- Record skips for achievement
+    local team = GetHogTeamName(CurrentHedgehog)
+    increaseTeamValue(team, "Skips")
+    if(getTeamValue(team, "Skips") > recordSkips) then
+        recordSkips = getTeamValue(team, "Skips")
+        recordSkipsHogName = getGearValue(CurrentHedgehog, "Name")
+        recordSkipsTeamName = team
+    end
 end
 
 function onGearAdd(gear)
@@ -720,6 +728,8 @@ function onGearAdd(gear)
         hhs[numhhs] = gear
         numhhs = numhhs + 1
         SetEffect(gear, heResurrectable, 1)
+    elseif GetGearType(gear) == gtCase then
+        crates[#crates] = gear
     elseif GetGearType(gear) == gtATFinishGame then
         if not gameOver then
             local winner = createEndGameStats()
@@ -775,6 +785,7 @@ function onGearDelete(gear)
         end
         trackDeletion(gear)
     elseif GetGearType(gear) == gtCase then
+        crates[gear] = nil
         -- Check if a crate has been collected
         if band(GetGearMessage(gear), gmDestroy) ~= 0 and CurrentHedgehog ~= nil then
             -- Update crate collection achievement
