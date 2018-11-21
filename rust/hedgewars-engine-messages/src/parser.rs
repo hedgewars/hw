@@ -3,7 +3,7 @@ use std::str;
 
 use super::messages::{
     ConfigEngineMessage::*, EngineMessage::*, KeystrokeAction::*, SyncedEngineMessage::*,
-    UnorderedEngineMessage::*, UnsyncedEngineMessage::*, *,
+    UnorderedEngineMessage::*, *,
 };
 
 macro_rules! eof_slice (
@@ -121,6 +121,19 @@ named!(message<&[u8], EngineMessage>, alt!(
 
 named!(pub extract_messages<&[u8], Vec<EngineMessage> >, many0!(complete!(message)));
 
+pub fn extract_message(buf: &[u8]) -> Option<(usize, EngineMessage)> {
+    let parse_result = message(buf);
+    match parse_result {
+        Ok((tail, msg)) => {
+            let consumed = buf.len() - tail.len();
+
+            Some((consumed, msg))
+        },
+        Err(Err::Incomplete(_)) => None,
+        Err(Err::Error(_)) | Err(Err::Failure(_)) => unreachable!(),
+    }
+}
+
 #[test]
 fn parse_length() {
     assert_eq!(length_specifier(b"\x01"), Ok((&b""[..], 1)));
@@ -139,6 +152,7 @@ fn parse_synced_messages() {
         message(b"\x03L\x01\x02"),
         Ok((&b""[..], Synced(Left(Press), 258)))
     );
+
     assert_eq!(message(b"\x01#"), Ok((&b""[..], Synced(TimeWrap, 65535))));
 
     assert_eq!(message(&vec![9, b'p', 255, 133, 151, 1, 0, 2, 0, 0]), Ok((&b""[..], Synced(Put(-31337, 65538), 0))));
@@ -169,4 +183,7 @@ fn parse_config_messages() {
 #[test]
 fn parse_test_general() {
     assert_eq!(string_tail(b"abc"), Ok((&b""[..], String::from("abc"))));
+
+    assert_eq!(extract_message(b"\x02#"), None);
+    assert_eq!(extract_message(b"\x01#"), Some((2, Synced(TimeWrap, 65535))));
 }
