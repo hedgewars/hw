@@ -172,6 +172,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     // Right
     QLabel * l;
 
+//: Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces
     QString wtDamageModifier = tr("Overall damage and knockback in percent");
     QString wtTurnTime = tr("Turn time in seconds");
     QString wtInitHealth = tr("Initial health of hedgehogs");
@@ -458,6 +459,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(SB_AirMines,14,2,1,1);
 
     l = new QLabel(gbBasicSettings);
+//: Label of game scheme setting for the time you get after an attack
     l->setText(QLabel::tr("% Retreat Time"));
     l->setWhatsThis(wtGetAwayTime);
     l->setWordWrap(true);

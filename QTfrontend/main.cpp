@@ -150,11 +150,19 @@ QString getUsage()
 "\n"
 "%8"
 "\n"
-).arg(HWApplication::tr("Usage", "command-line"))
-.arg(HWApplication::tr("OPTION", "command-line"))
-.arg(HWApplication::tr("CONNECTSTRING", "command-line"))
-.arg(HWApplication::tr("Options", "command-line"))
-.arg(HWApplication::tr("Display this help", "command-line"))
+).arg(
+//: “Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line
+HWApplication::tr("Usage", "command-line")
+).arg(
+//: Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”
+HWApplication::tr("OPTION", "command-line")
+).arg(
+//: Name of a command-line argument, shown when running “hedgewars --help” in command-line
+HWApplication::tr("CONNECTSTRING", "command-line")
+).arg(
+//: “Options” as in “command-line options”
+HWApplication::tr("Options", "command-line")
+).arg(HWApplication::tr("Display this help", "command-line"))
 .arg(HWApplication::tr("Custom path for configuration data and user data", "command-line"))
 .arg(HWApplication::tr("Custom path to the game data folder", "command-line"))
 .arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));

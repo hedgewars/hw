@@ -664,6 +664,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
                 if(entryName.isEmpty())
                 {
                     // Show error and the locale identifier
+                    //: In the case of an error, this is shown in the language selection for a language with unknown name. %1 = language code
                     entryName = tr("MISSING LANGUAGE NAME [%1]").arg(lname);
                 }
                 CBLanguage->addItem(entryName, lname);
