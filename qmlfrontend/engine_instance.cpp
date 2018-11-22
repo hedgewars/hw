@@ -5,6 +5,13 @@ EngineInstance::EngineInstance(QObject *parent)
 
 EngineInstance::~EngineInstance() { Engine::cleanup(m_instance); }
 
+void EngineInstance::sendConfig(const GameConfig &config) {
+  for (auto b : config.config()) {
+    Engine::send_ipc(m_instance, reinterpret_cast<uint8_t *>(b.data()),
+                     static_cast<size_t>(b.size()));
+  }
+}
+
 Engine::PreviewInfo EngineInstance::generatePreview() {
   Engine::PreviewInfo pinfo;
 

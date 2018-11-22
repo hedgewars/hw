@@ -5,7 +5,6 @@
 
 #include "engine_instance.h"
 #include "engine_interface.h"
-#include "game_view.h"
 #include "preview_image_provider.h"
 
 #include "hwengine.h"
@@ -40,6 +39,8 @@ void HWEngine::getPreview() {
   m_gameConfig.setPreview(true);
 
   EngineInstance engine;
+  engine.sendConfig(m_gameConfig);
+
   Engine::PreviewInfo preview = engine.generatePreview();
 
   QVector<QRgb> colorTable;

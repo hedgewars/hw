@@ -11,6 +11,8 @@ protocol_version_t* protocol_version;
 start_engine_t* start_engine;
 generate_preview_t* generate_preview;
 cleanup_t* cleanup;
+send_ipc_t* send_ipc;
+read_ipc_t* read_ipc;
 };  // namespace Engine
 
 void loadEngineLibrary() {
@@ -31,6 +33,11 @@ void loadEngineLibrary() {
       hwlib.resolve("generate_preview"));
   Engine::cleanup =
       reinterpret_cast<Engine::cleanup_t*>(hwlib.resolve("cleanup"));
+
+  Engine::send_ipc =
+      reinterpret_cast<Engine::send_ipc_t*>(hwlib.resolve("send_ipc"));
+  Engine::read_ipc =
+      reinterpret_cast<Engine::read_ipc_t*>(hwlib.resolve("read_ipc"));
 
   if (Engine::protocol_version)
     qDebug() << "Loaded engine library with protocol version"
