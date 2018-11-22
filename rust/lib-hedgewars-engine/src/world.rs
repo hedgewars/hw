@@ -19,6 +19,10 @@ impl World {
         }
     }
 
+    pub fn set_seed(&mut self, seed: &[u8]) {
+        self.random_numbers_gen = LaggedFibonacciPRNG::new(seed);
+    }
+
     pub fn preview(&self) -> &Land2D<u8> {
         &self.preview
     }

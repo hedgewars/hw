@@ -18,6 +18,10 @@ impl IPC {
     pub fn send_message(&mut self, message: &EngineMessage) {
         self.out_buffer.write(&message.to_bytes()).unwrap();
     }
+
+    pub fn iter(& mut self) -> IPCMessagesIterator {
+        IPCMessagesIterator::new(self)
+    }
 }
 
 impl Write for IPC {
@@ -40,13 +44,25 @@ impl Read for IPC {
     }
 }
 
-impl Iterator for IPC {
+pub struct IPCMessagesIterator<'a> {
+    ipc: &'a mut IPC
+}
+
+impl<'a> IPCMessagesIterator<'a> {
+    pub fn new(ipc: &'a mut IPC) -> Self {
+        Self {
+            ipc
+        }
+    }
+}
+
+impl<'a> Iterator for IPCMessagesIterator<'a> {
     type Item = EngineMessage;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let (consumed, message) = extract_message(&self.in_buffer[..])?;
+        let (consumed, message) = extract_message(&self.ipc.in_buffer[..])?;
 
-        self.in_buffer.consume(consumed);
+        self.ipc.in_buffer.consume(consumed);
 
         Some(message)
     }

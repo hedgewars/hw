@@ -1,36 +1,10 @@
 mod ipc;
 mod world;
+mod instance;
 
 use std::io::{Read, Write};
 
-use self::ipc::IPC;
-
-#[repr(C)]
-pub struct EngineInstance {
-    world: world::World,
-    ipc: IPC,
-}
-
-impl EngineInstance {
-    pub fn new() -> Self {
-        let world = world::World::new();
-        Self {
-            world,
-            ipc: IPC::new(),
-        }
-    }
-
-    pub fn render<R, C>(
-        &self,
-        context: &mut gfx::Encoder<R, C>,
-        target: &gfx::handle::RenderTargetView<R, gfx::format::Rgba8>,
-    ) where
-        R: gfx::Resources,
-        C: gfx::CommandBuffer<R>,
-    {
-        context.clear(target, [0.0, 0.5, 0.0, 1.0]);
-    }
-}
+use self::instance::EngineInstance;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -55,6 +29,8 @@ pub extern "C" fn start_engine() -> *mut EngineInstance {
 
 #[no_mangle]
 pub extern "C" fn generate_preview(engine_state: &mut EngineInstance, preview: &mut PreviewInfo) {
+    (*engine_state).process_ipc_queue();
+
     (*engine_state).world.generate_preview();
 
     let land_preview = (*engine_state).world.preview();
@@ -68,19 +44,19 @@ pub extern "C" fn generate_preview(engine_state: &mut EngineInstance, preview: &
 }
 
 #[no_mangle]
-pub extern "C" fn send_ipc(engine_state: &mut EngineInstance, buf: *const [u8], size: usize) {
+pub extern "C" fn send_ipc(engine_state: &mut EngineInstance, buf: *const u8, size: usize) {
     unsafe {
-        (*engine_state).ipc.write(&(*buf)[0..size]);
+        (*engine_state).ipc.write(std::slice::from_raw_parts(buf, size)).unwrap();
     }
 }
 
 #[no_mangle]
 pub extern "C" fn read_ipc(
     engine_state: &mut EngineInstance,
-    buf: *mut [u8],
+    buf: *mut u8,
     size: usize,
 ) -> usize {
-    unsafe { (*engine_state).ipc.read(&mut (*buf)[0..size]).unwrap_or(0) }
+    unsafe { (*engine_state).ipc.read(std::slice::from_raw_parts_mut(buf, size)).unwrap_or(0) }
 }
 
 #[no_mangle]

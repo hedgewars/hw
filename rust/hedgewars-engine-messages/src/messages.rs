@@ -1,12 +1,12 @@
 use byteorder::{BigEndian, WriteBytesExt};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum KeystrokeAction {
     Press,
     Release,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum SyncedEngineMessage {
     Left(KeystrokeAction),
     Right(KeystrokeAction),
@@ -32,13 +32,13 @@ pub enum SyncedEngineMessage {
     Heartbeat,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum UnsyncedEngineMessage {
     TeamControlGained(String),
     TeamControlLost(String),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum UnorderedEngineMessage {
     Ping,
     Pong,
@@ -53,7 +53,7 @@ pub enum UnorderedEngineMessage {
     PauseToggled,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum ConfigEngineMessage {
     GameType(u8),
     ConfigRequest,
@@ -126,7 +126,7 @@ pub enum ConfigEngineMessage {
     SetShoppaBorder(bool),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum EngineMessage {
     Unknown,
     Empty,
