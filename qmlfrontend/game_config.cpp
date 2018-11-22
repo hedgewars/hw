@@ -1,5 +1,7 @@
 #include "game_config.h"
 
+#include <QtEndian>
+
 GameConfig::GameConfig() {}
 
 const char** GameConfig::argv() const {
@@ -54,9 +56,20 @@ void GameConfig::cmdTeam(const Team& team) {
 }
 
 void GameConfig::cfgAppend(const QByteArray& cmd) {
-  Q_ASSERT(cmd.size() < 256);
+  Q_ASSERT(cmd.size() <= 49215);
 
-  quint8 len = cmd.size();
-  m_cfg.append(QByteArray::fromRawData(reinterpret_cast<const char*>(&len), 1) +
-               cmd);
+  if (cmd.size() < 64) {
+    quint8 len = static_cast<quint8>(cmd.size());
+    m_cfg.append(
+        QByteArray::fromRawData(reinterpret_cast<const char*>(&len), 1));
+  } else {
+    quint16 size = static_cast<quint16>(cmd.size()) - 64;
+    size = (size / 256 + 64) * 256 + size & 0xff;
+    quint16 size_be = qToBigEndian(size);
+
+    m_cfg.append(
+        QByteArray::fromRawData(reinterpret_cast<const char*>(&size_be), 2));
+  }
+
+  m_cfg.append(cmd);
 }
