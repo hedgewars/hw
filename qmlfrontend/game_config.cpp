@@ -1,6 +1,6 @@
 #include "game_config.h"
 
-GameConfig::GameConfig() : m_isPreview(true) { setPreview(m_isPreview); }
+GameConfig::GameConfig() {}
 
 const char** GameConfig::argv() const {
   m_argv.resize(m_arguments.size());
@@ -51,25 +51,6 @@ void GameConfig::cmdTeam(const Team& team) {
   cfgAppend(
       "eammreinf 1311110312111111123114111111111111111211111111111111111111");
   cfgAppend("eammstore");
-}
-
-bool GameConfig::isPreview() const { return m_isPreview; }
-
-void GameConfig::setPreview(bool isPreview) {
-  m_isPreview = isPreview;
-
-  m_arguments.clear();
-
-  if (m_isPreview) {
-    m_arguments << ""
-                << "--internal"
-                << "--landpreview";
-
-  } else {
-    m_arguments << ""
-                << "--internal"
-                << "--nomusic";
-  }
 }
 
 void GameConfig::cfgAppend(const QByteArray& cmd) {

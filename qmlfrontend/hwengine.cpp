@@ -34,9 +34,10 @@ void HWEngine::exposeToQML() {
 }
 
 void HWEngine::getPreview() {
-  m_seed = QUuid::createUuid().toByteArray();
-  m_gameConfig.cmdSeed(m_seed);
-  m_gameConfig.setPreview(true);
+  emit previewIsRendering();
+
+  m_gameConfig = GameConfig();
+  m_gameConfig.cmdSeed(QUuid::createUuid().toByteArray());
 
   EngineInstance engine;
   engine.sendConfig(m_gameConfig);
@@ -47,7 +48,8 @@ void HWEngine::getPreview() {
   colorTable.resize(256);
   for (int i = 0; i < 256; ++i) colorTable[i] = qRgba(255, 255, 0, i);
 
-  QImage previewImage(preview.land, preview.width, preview.height,
+  QImage previewImage(preview.land, static_cast<int>(preview.width),
+                      static_cast<int>(preview.height),
                       QImage::Format_Indexed8);
   previewImage.setColorTable(colorTable);
   previewImage.detach();
@@ -59,7 +61,6 @@ void HWEngine::getPreview() {
 }
 
 void HWEngine::runQuickGame() {
-  m_gameConfig.cmdSeed(m_seed);
   m_gameConfig.cmdTheme("Nature");
   Team team1;
   team1.name = "team1";
@@ -68,7 +69,6 @@ void HWEngine::runQuickGame() {
   team2.color = "7654321";
   m_gameConfig.cmdTeam(team1);
   m_gameConfig.cmdTeam(team2);
-  m_gameConfig.setPreview(false);
 
   // m_runQueue->queue(m_gameConfig);
 }

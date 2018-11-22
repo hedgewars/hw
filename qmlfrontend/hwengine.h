@@ -38,7 +38,6 @@ class HWEngine : public QObject {
   QQmlEngine* m_engine;
   PreviewImageProvider* m_previewProvider;
   GameConfig m_gameConfig;
-  QByteArray m_seed;
   int m_previewHedgehogsCount;
 };
 

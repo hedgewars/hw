@@ -69,7 +69,7 @@ named!(unsynced_message<&[u8], UnsyncedEngineMessage>, alt!(
 
 named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
       do_parse!(tag!("?") >> ( Ping ))
-    | do_parse!(tag!("!") >> ( Ping ))
+    | do_parse!(tag!("!") >> ( Pong ))
     | do_parse!(tag!("E") >> s: string_tail >> ( UnorderedEngineMessage::Error(s)) )
     | do_parse!(tag!("W") >> s: string_tail >> ( Warning(s)) )
     | do_parse!(tag!("s") >> s: string_tail >> ( ChatMessage(s)) )
@@ -81,6 +81,7 @@ named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
 
 named!(config_message<&[u8], ConfigEngineMessage>, alt!(
     do_parse!(tag!("C") >> (ConfigRequest))
+    | do_parse!(tag!("eseed ") >> s: string_tail >> ( SetSeed(s)) )
 ));
 
 named!(timestamped_message<&[u8], (SyncedEngineMessage, u16)>,
