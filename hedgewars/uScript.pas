@@ -2285,6 +2285,7 @@ var teamValue: ansistring;
     i, n: LongInt;
     success: boolean;
 begin
+	success:= false;
     if CheckAndFetchParamCount(L, 1, 2, 'SetTeamLabel', 'teamname[, label]', n) then
         begin
         success:= false;
@@ -3124,6 +3125,7 @@ function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
 var success : boolean;
     n : LongInt;
 begin
+	success:= false;
     if CheckAndFetchParamCount(L, 1, 2, 'HedgewarsScriptLoad', 'scriptPath [, mustExist]', n) then
         begin
         if n = 1 then
