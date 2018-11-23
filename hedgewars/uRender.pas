@@ -1845,8 +1845,8 @@ if (WorldEdge <> weSea) then
 else
     PrepareVbForWater(true,
         OffsetY + WorldDy + cWaterLine, ViewTopY,
-        LongInt(LeftX)  + WorldDx - OffsetX, ViewLeftX,
-        LongInt(RightX) + WorldDx + OffsetX, ViewRightX,
+        leftX  + WorldDx - OffsetX, ViewLeftX,
+        rightX + WorldDx + OffsetX, ViewRightX,
         ViewBottomY,
         first, count);
 
@@ -1936,8 +1936,8 @@ realHeight:= SpritesData[sprite].Texture^.ry / waterFrames;
 dY:= -cWaveHeight + dy;
 ox:= -cWaveHeight + ox;
 
-lx:= LongInt(LeftX)  + WorldDx - ox;
-rx:= LongInt(RightX) + WorldDx + ox;
+lx:= leftX  + WorldDx - ox;
+rx:= rightX + WorldDx + ox;
 
 topy:= cWaterLine + WorldDy + dY;
 

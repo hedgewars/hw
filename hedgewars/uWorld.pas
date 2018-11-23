@@ -891,7 +891,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
 
     rect.y:= ViewTopY;
     rect.h:= ViewHeight;
-    tmp:= LongInt(leftX) + WorldDx;
+    tmp:= leftX + WorldDx;
     w:= tmp - ViewLeftX;
 
     if w > 0 then
@@ -903,7 +903,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
 
-    tmp:= LongInt(rightX) + WorldDx;
+    tmp:= rightX + WorldDx;
     w:= ViewRightX - tmp;
 
     if w > 0 then
@@ -1210,8 +1210,8 @@ if WorldEdge <> weWrap then
     end
 else
     begin
-    replicateToLeft := (LongInt(leftX)  + WorldDx > ViewLeftX);
-    replicateToRight:= (LongInt(rightX) + WorldDx < ViewRightX);
+    replicateToLeft := (leftX  + WorldDx > ViewLeftX);
+    replicateToRight:= (rightX + WorldDx < ViewRightX);
     end;
 
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
@@ -1831,9 +1831,9 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
 
             if (WorldEdge = weWrap) then
                 begin
-                    if dstX - prevPoint.X < (LongInt(leftX) - LongInt(rightX)) div 2 then
+                    if dstX - prevPoint.X < (leftX - rightX) div 2 then
                         CursorPoint.X:= (prevPoint.X * 7 + dstX - (leftX - rightX)) div 8
-                    else if dstX - prevPoint.X > (LongInt(rightX) - LongInt(leftX)) div 2 then
+                    else if dstX - prevPoint.X > (rightX - leftX) div 2 then
                         CursorPoint.X:= (prevPoint.X * 7 + dstX - (rightX - leftX)) div 8
                     else
                         CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
@@ -1851,10 +1851,10 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
 
 if (WorldEdge = weWrap) then
     begin
-        if -WorldDx < LongInt(leftX) then
-            WorldDx:= WorldDx - LongInt(rightX) + leftX
-        else if -WorldDx > LongInt(rightX) then
-            WorldDx:= WorldDx + LongInt(rightX) - leftX;
+        if -WorldDx < leftX then
+            WorldDx:= WorldDx - rightX + leftX
+        else if -WorldDx > rightX then
+            WorldDx:= WorldDx + rightX - leftX;
     end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));

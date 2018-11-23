@@ -145,7 +145,7 @@ end;
 function CheckCoordInWater(X, Y: LongInt): boolean; inline;
 begin
     CheckCoordInWater:= (Y > cWaterLine)
-        or ((WorldEdge = weSea) and ((X < LongInt(leftX)) or (X > LongInt(rightX))));
+        or ((WorldEdge = weSea) and ((X < leftX) or (X > rightX)));
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;

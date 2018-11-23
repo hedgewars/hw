@@ -2461,7 +2461,8 @@ var
     LandDirty: TDirtyTag;
     hasBorder: boolean;
     hasGirders: boolean;
-    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+    playHeight, playWidth, leftX, rightX, topY: LongInt;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+	MaxHedgehogs: LongWord;
     LandBackSurface: PSDL_Surface;
     CurAmmoGear: PGear;
     lastGearByUID: PGear;

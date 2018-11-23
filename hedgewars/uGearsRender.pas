@@ -816,30 +816,30 @@ begin
                         begin
                         if WorldEdge = weWrap then
                             begin
-                            if hwRound(Gear^.X) < LongInt(leftX) + 256 then
+                            if hwRound(Gear^.X) < leftX + 256 then
                                 DrawSpriteClipped(sprGirder,
                                                 rightX+(ox-leftX)-256,
                                                 oy-256,
                                                 LongInt(topY)+WorldDy,
-                                                LongInt(rightX)+WorldDx,
+                                                rightX+WorldDx,
                                                 cWaterLine+WorldDy,
-                                                LongInt(leftX)+WorldDx);
-                            if hwRound(Gear^.X) > LongInt(rightX) - 256 then
+                                                leftX+WorldDx);
+                            if hwRound(Gear^.X) > rightX - 256 then
                                 DrawSpriteClipped(sprGirder,
                                                 leftX-(rightX-ox)-256,
                                                 oy-256,
                                                 LongInt(topY)+WorldDy,
-                                                LongInt(rightX)+WorldDx,
+                                                rightX+WorldDx,
                                                 cWaterLine+WorldDy,
-                                                LongInt(leftX)+WorldDx)
+                                                leftX+WorldDx)
                             end;
                         DrawSpriteClipped(sprGirder,
                                         ox-256,
                                         oy-256,
                                         LongInt(topY)+WorldDy,
-                                        LongInt(rightX)+WorldDx,
+                                        rightX+WorldDx,
                                         cWaterLine+WorldDy,
-                                        LongInt(leftX)+WorldDx)
+                                        leftX+WorldDx)
                         end
                     else if cBuildMaxDist > 0 then
                         begin

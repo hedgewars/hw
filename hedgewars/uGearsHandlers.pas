@@ -97,7 +97,7 @@ begin
 
     // Handle world wrap and bounce edge manually
     if (WorldEdge = weWrap) and
-        ((hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX))) then
+        ((hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX)) then
         begin
         LeftImpactTimer:= 150;
         RightImpactTimer:= 150;
@@ -105,9 +105,9 @@ begin
         Gear^.Karma:= 1;
         end
     else if (WorldEdge = weBounce) and
-        (((hwRound(Gear^.X) - Gear^.Radius) < LongInt(leftX)) or ((hwRound(Gear^.X) + Gear^.Radius) > LongInt(rightX))) then
+        (((hwRound(Gear^.X) - Gear^.Radius) < leftX) or ((hwRound(Gear^.X) + Gear^.Radius) > rightX)) then
         begin
-        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
+        if (hwRound(Gear^.X) - Gear^.Radius < leftX) then
             LeftImpactTimer:= 333
         else
             RightImpactTimer:= 333;

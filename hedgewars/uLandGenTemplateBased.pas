@@ -114,8 +114,8 @@ begin
     // don't process too short segments or those which are too close to map borders
     if (p1.x = NTPX)
             or (dab < minDistance * 3)
-            or (mp.x < LongInt(leftX) + mapBorderMargin)
-            or (mp.x > LongInt(rightX) - mapBorderMargin)
+            or (mp.x < leftX + mapBorderMargin)
+            or (mp.x > rightX - mapBorderMargin)
             or (mp.y < LongInt(topY) + mapBorderMargin)
             or (mp.y > LongInt(LAND_HEIGHT) - mapBorderMargin)
     then
@@ -128,13 +128,13 @@ begin
     if a <> 0 then
     begin
         // left border
-        iy:= (LongInt(leftX) + mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (leftX + mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - leftX - mapBorderMargin, mp.y - iy).Round;
         t1:= a * (mp.x - mapBorderMargin) + b * (mp.y - iy);
         if t1 > 0 then distL:= d else distR:= d;
 
         // right border
-        iy:= (LongInt(rightX) - mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (rightX - mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - rightX + mapBorderMargin, mp.y - iy).Round;
         if t1 > 0 then distR:= d else distL:= d;
     end else

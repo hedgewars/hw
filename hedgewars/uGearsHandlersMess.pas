@@ -308,7 +308,7 @@ Gear^.Y := Gear^.Y + cDrownSpeed;
 
 if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
     begin
-    if LongInt(leftX) + Gear^.Radius > hwRound(Gear^.X) then
+    if leftX + Gear^.Radius > hwRound(Gear^.X) then
         Gear^.X := Gear^.X - cDrownSpeed
     else
         Gear^.X := Gear^.X + cDrownSpeed;
@@ -375,7 +375,7 @@ begin
         if (not Gear^.Sticky) then
             begin
             Gear^.X:= tX;
-            Gear^.dX.isNegative:= (gX > LongInt(leftX) + Gear^.Radius*2);
+            Gear^.dX.isNegative:= (gX > leftX + Gear^.Radius*2);
             Gear^.dX := Gear^.dX * Gear^.Friction;
             end;
         Gear^.State := Gear^.State or gstCollision;
@@ -842,9 +842,9 @@ if gun then
         draw:= true;
     xx:= hwRound(Gear^.X);
     yy:= hwRound(Gear^.Y);
-    if draw and (WorldEdge = weWrap) and ((xx < LongInt(leftX) + 3) or (xx > LongInt(rightX) - 3)) then
+    if draw and (WorldEdge = weWrap) and ((xx < leftX + 3) or (xx > rightX - 3)) then
         begin
-        if xx < LongInt(leftX) + 3 then
+        if xx < leftX + 3 then
              xx:= rightX-3
         else xx:= leftX+3;
         Gear^.X:= int2hwFloat(xx)
@@ -3681,7 +3681,7 @@ begin
         begin
         // Update coordinates
         tdx:=Gear^.X;
-        if (hwRound(Gear^.X) < LongInt(leftX)) then
+        if (hwRound(Gear^.X) < leftX) then
              Gear^.X:= Gear^.X + int2hwfloat(rightX - leftX)
         else Gear^.X:= Gear^.X - int2hwfloat(rightX - leftX);
 
@@ -5431,20 +5431,20 @@ begin
 
         if WorldEdge = weWrap then
             begin
-            if x > LongInt(rightX) then
+            if x > rightX then
                 repeat
                     dec(x,  playWidth);
                     dec(rx, playWidth);
-                until x <= LongInt(rightX)
-            else if x < LongInt(leftX) then
+                until x <= rightX
+            else if x < leftX then
                 repeat
                     inc(x,  playWidth);
                     inc(rx, playWidth);
-                until x >= LongInt(leftX);
+                until x >= leftX;
             end
         else if (WorldEdge = weBounce) then
             begin
-            if (not justBounced) and ((x > LongInt(rightX)) or (x < LongInt(leftX))) then
+            if (not justBounced) and ((x > rightX) or (x < leftX)) then
                 begin
                 // reflect
                 lX:= lX - ldX + ((oX - lX) * 2);
@@ -6390,8 +6390,8 @@ begin
                          (Land[Target.Y, Target.X] = lfIce) and
                          ((Target.Y+iceHeight+5 > cWaterLine) or
                           ((WorldEdge = weSea) and
-                           ((Target.X+iceHeight+5 > LongInt(rightX)) or
-                            (Target.X-iceHeight-5 < LongInt(leftX)))))
+                           ((Target.X+iceHeight+5 > rightX) or
+                            (Target.X-iceHeight-5 < leftX))))
                          ) then
                     begin
                     if Timer = iceWaitCollision then
@@ -6500,7 +6500,7 @@ begin
                         DrawIceBreak(Target.X, Target.Y, iceRadius, iceHeight)
                     else if Target.Y+iceHeight+5 > cWaterLine then
                         DrawIceBreak(Target.X, Target.Y+iceHeight+5, iceRadius, iceHeight)
-                    else if Target.X+iceHeight+5 > LongInt(rightX) then
+                    else if Target.X+iceHeight+5 > rightX then
                         DrawIceBreak(Target.X+iceHeight+5, Target.Y, iceRadius, iceHeight)
                     else
                         DrawIceBreak(Target.X-iceHeight-5, Target.Y, iceRadius, iceHeight);
@@ -6613,7 +6613,7 @@ if Gear^.Timer < $FFFFFFFF then
 if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
     begin
     doStepFallingGear(Gear);
-    if (Gear^.Tag = 1) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX)) or (hwRound(Gear^.Y) < LongInt(topY)) then
+    if (Gear^.Tag = 1) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX) or (hwRound(Gear^.Y) < LongInt(topY)) then
         begin
         Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
         Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);

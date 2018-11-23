@@ -1273,7 +1273,7 @@ if (Gear^.State and gstMoving) <> 0 then
 if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
     begin
     inc(Gear^.FlightTime);
-    if (Gear^.FlightTime > 1500) and ((hwRound(Gear^.X) < LongInt(leftX)-250) or (hwRound(Gear^.X) > LongInt(rightX)+250))  then
+    if (Gear^.FlightTime > 1500) and ((hwRound(Gear^.X) < leftX-250) or (hwRound(Gear^.X) > rightX+250))  then
         begin
         Gear^.FlightTime:= 0;
         s:= ansistring(CurrentHedgehog^.Name);
@@ -1580,7 +1580,7 @@ if WorldWrap(Gear) then
         // Stop hedgehog if it collides with land *just* behind other side of world wrap edge
         if ((Gear^.State and gstNotKickable) = 0) then
             begin
-            if (hwRound(tX) > LongInt(leftX) + Gear^.Radius * 2) then
+            if (hwRound(tX) > leftX + Gear^.Radius * 2) then
                 Gear^.X:= int2HwFloat(RightX)
             else
                 Gear^.X:= int2HwFloat(LeftX);

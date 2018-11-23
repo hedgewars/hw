@@ -363,27 +363,27 @@ repeat
     x1:= gX;
     x2:= gX;
 
-    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y, girderHeight) = 0) do
+    while (x1 > leftX+150) and (CountNonZeroz(x1, y, girderHeight) = 0) do
         dec(x1, 2);
 
     i:= x1 - 12;
     repeat
         k:= CountNonZeroz(x1, y, girderHeight);
         dec(x1, 2)
-    until (x1 < Longint(leftX) + 100) or (k = 0) or (k = girderHeight) or (x1 < i);
+    until (x1 < leftX + 100) or (k = 0) or (k = girderHeight) or (x1 < i);
 
     inc(x1, 2);
     if k = girderHeight then
         begin
-        while (x2 < (LongInt(rightX) - 100)) and (CountNonZeroz(x2, y, girderHeight) = 0) do
+        while (x2 < (rightX - 100)) and (CountNonZeroz(x2, y, girderHeight) = 0) do
             inc(x2, 2);
         i:= x2 + 12;
         repeat
         inc(x2, 2);
         k:= CountNonZeroz(x2, y, girderHeight)
-        until (x2 >= (LongInt(rightX)-150)) or (k = 0) or (k = girderHeight) or (x2 > i) or (x2 - x1 >= 900);
+        until (x2 >= (rightX-150)) or (k = 0) or (k = girderHeight) or (x2 > i) or (x2 - x1 >= 900);
 
-        if (x2 < (LongInt(rightX) - 100)) and (k = girderHeight) and (x2 - x1 > 200) and (x2 - x1 < 900)
+        if (x2 < (rightX - 100)) and (k = girderHeight) and (x2 - x1 > 200) and (x2 - x1 < 900)
         and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
                 break;
         end;

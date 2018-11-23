@@ -238,12 +238,12 @@ if (WorldEdge = weWrap) then
         break;
 
     // Radius + 5 because that's the actual radius the explosion changes graphically
-    if X + (Radius + 5) > LongInt(rightX) then
+    if X + (Radius + 5) > rightX then
         begin
         dec(X, playWidth);
         wrap:= true;
         end
-    else if X - (Radius + 5) < LongInt(leftX) then
+    else if X - (Radius + 5) < leftX then
         begin
         inc(X, playWidth);
         wrap:= true;
@@ -664,7 +664,7 @@ begin
     if WorldEdge = weSea then
         begin
         tmp:= dist2Water;
-        dist2Water:= min(dist2Water, min(X - Gear^.Radius - LongInt(leftX), LongInt(rightX) - (X + Gear^.Radius)));
+        dist2Water:= min(dist2Water, min(X - Gear^.Radius - leftX, rightX - (X + Gear^.Radius)));
         // if water on sides is closer than on bottom -> horizontal direction
         isDirH:= tmp <> dist2Water;
         end;
@@ -935,7 +935,7 @@ ignoreOverlap:= false; // this not only skips proximity, but allows overlapping 
 tryAgain:= true;
 if WorldEdge <> weNone then
     begin
-    Left:= max(Left, LongInt(leftX) + Gear^.Radius);
+    Left:= max(Left, leftX + Gear^.Radius);
     Right:= min(Right,rightX-Gear^.Radius)
     end;
 while tryAgain do
@@ -1748,12 +1748,12 @@ function WorldWrap(var Gear: PGear): boolean;
 begin
 WorldWrap:= false;
 if WorldEdge = weNone then exit(false);
-if (hwRound(Gear^.X) < LongInt(leftX)) or
-   (hwRound(Gear^.X) > LongInt(rightX)) then
+if (hwRound(Gear^.X) < leftX) or
+   (hwRound(Gear^.X) > rightX) then
     begin
     if WorldEdge = weWrap then
         begin
-        if (hwRound(Gear^.X) < LongInt(leftX)) then
+        if (hwRound(Gear^.X) < leftX) then
              Gear^.X:= Gear^.X + int2hwfloat(rightX - leftX)
         else Gear^.X:= Gear^.X - int2hwfloat(rightX - leftX);
         LeftImpactTimer:= 150;
@@ -1761,11 +1761,11 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
         end
     else if WorldEdge = weBounce then
         begin
-        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
+        if (hwRound(Gear^.X) - Gear^.Radius < leftX) then
             begin
             LeftImpactTimer:= 333;
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(LongInt(leftX) + Gear^.Radius)
+            Gear^.X:= int2hwfloat(leftX + Gear^.Radius)
             end
         else
             begin

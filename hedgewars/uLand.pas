@@ -376,7 +376,7 @@ begin
 
     if gameFlags and gfShoppaBorder <> 0 then DrawShoppaBorder;
 
-    for x:= leftX+2 to rightX-2 do
+    for x:= LongWord(leftX+2) to LongWord(rightX-2) do
         for y:= topY+2 to LAND_HEIGHT-3 do
             if (Land[y, x] = 0) and
                (((Land[y, x-1] = lfBasic) and ((Land[y+1,x] = lfBasic)) or (Land[y-1,x] = lfBasic)) or
@@ -692,7 +692,7 @@ procedure DrawBottomBorder; // broken out from other borders for doing a floor-o
 var x, w, c, y: Longword;
 begin
 for w:= 0 to 23 do
-    for x:= leftX to rightX do
+    for x:= LongWord(leftX) to LongWord(rightX) do
         begin
         y:= Longword(cWaterLine) - 1 - w;
         Land[y, x]:= lfIndestructible;
@@ -753,7 +753,7 @@ if (GameFlags and gfBorder) <> 0 then
     hasBorder:= true
 else
     for y:= topY to topY + 5 do
-        for x:= leftX to rightX do
+        for x:= LongWord(leftX) to LongWord(rightX) do
             if Land[y, x] <> 0 then
                 begin
                 inc(c);
@@ -770,7 +770,7 @@ if hasBorder then
         begin
         for y:= 0 to LAND_HEIGHT - 1 do
             for x:= 0 to LAND_WIDTH - 1 do
-                if (y < topY) or (x < leftX) or (x > rightX) then
+                if (y < topY) or (x < LongWord(leftX)) or (x > LongWord(rightX)) then
                     Land[y, x]:= lfIndestructible;
         end
     else if topY > 0 then
@@ -809,7 +809,7 @@ if hasBorder then
                         end;
                     end;
 
-        for x:= leftX to rightX do
+        for x:= LongWord(leftX) to LongWord(rightX) do
             begin
             Land[topY + w, x]:= lfIndestructible;
             if (x + w) mod 32 < 16 then
@@ -844,7 +844,7 @@ if not allOK then exit;
 if GrayScale then
     begin
     if (cReducedQuality and rqBlurryLand) = 0 then
-        for x:= leftX to rightX do
+        for x:= LongWord(leftX) to LongWord(rightX) do
             for y:= topY to LAND_HEIGHT-1 do
                 begin
                 w:= LandPixels[y,x];
@@ -857,7 +857,7 @@ if GrayScale then
                 LandPixels[y,x]:= w or (LandPixels[y, x] and AMask)
                 end
     else
-        for x:= leftX div 2 to rightX div 2 do
+        for x:= LongWord(leftX div 2) to LongWord(rightX div 2) do
             for y:= topY div 2 to LAND_HEIGHT-1 div 2 do
                 begin
                 w:= LandPixels[y div 2,x div 2];
