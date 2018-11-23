@@ -1831,9 +1831,9 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
 
             if (WorldEdge = weWrap) then
                 begin
-                    if dstX - prevPoint.X < (LongInt(leftX) - rightX) div 2 then
+                    if dstX - prevPoint.X < (LongInt(leftX) - LongInt(rightX)) div 2 then
                         CursorPoint.X:= (prevPoint.X * 7 + dstX - (leftX - rightX)) div 8
-                    else if dstX - prevPoint.X > (LongInt(rightX) - leftX) div 2 then
+                    else if dstX - prevPoint.X > (LongInt(rightX) - LongInt(leftX)) div 2 then
                         CursorPoint.X:= (prevPoint.X * 7 + dstX - (rightX - leftX)) div 8
                     else
                         CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
@@ -1851,9 +1851,9 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
 
 if (WorldEdge = weWrap) then
     begin
-        if -WorldDx < leftX then
+        if -WorldDx < LongInt(leftX) then
             WorldDx:= WorldDx - LongInt(rightX) + leftX
-        else if -WorldDx > rightX then
+        else if -WorldDx > LongInt(rightX) then
             WorldDx:= WorldDx + LongInt(rightX) - leftX;
     end;
 
