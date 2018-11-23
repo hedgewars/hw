@@ -300,10 +300,11 @@ end;
 function SelectTemplate: LongInt;
 var l: LongInt;
 begin
+	SelectTemplate:= 0;
     if (cReducedQuality and rqLowRes) <> 0 then
         SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))]
     else
-    begin
+		begin
         if cTemplateFilter = 0 then
             begin
             l:= getRandom(GroupedTemplatesCount);
@@ -311,22 +312,23 @@ begin
                 inc(cTemplateFilter);
                 dec(l, TemplateCounts[cTemplateFilter]);
             until l < 0;
-            end else getRandom(1);
+            end
+			else getRandom(1);
 
-        case cTemplateFilter of
-        0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
-        1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-        2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-        3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-        4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-        5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-// For lua only!
-        6: begin
-           SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
-           GetRandom(2) // burn 1
-           end
-        end
-    end;
+			case cTemplateFilter of
+			0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
+			1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+			2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+			3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+			4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+			5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+	// For lua only!
+			6: begin
+			   SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
+			   GetRandom(2) // burn 1
+			   end
+			end
+		end;
 
     WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
 end;

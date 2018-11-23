@@ -2677,6 +2677,7 @@ const
     call = 'GetAmmo';
     params = 'ammoType';
 begin
+	lc_getammo:= 0
     if CheckLuaParamCount(L, 1, call, params) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
@@ -2700,8 +2701,6 @@ begin
             lua_pushnumber(L, Ammoz[TAmmoType(at)].NumberInCase);
             lc_getammo:= 4
             end
-        else
-            lc_getammo:= 0
         end;
 end;
 

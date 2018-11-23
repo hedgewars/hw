@@ -33,6 +33,8 @@ end;
 procedure updatePosition;
 var x, y: LongInt;
 begin
+	x:= cScreenWidth div 2;
+	y:= cScreenHeight div 2;
     if GameType <> gmtRecord then
         SDL_GetMouseState(@x, @y);
 

@@ -1443,6 +1443,7 @@ end;
 procedure CreateBubblesForBullet(Gear: PGear);
 var i, iInit: LongWord;
 begin
+iInit:= 0;
 if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Health > 0) then
     begin
     // draw bubbles
@@ -2067,6 +2068,7 @@ var i,t,targDist,tmpDist: LongWord;
     isUnderwater: Boolean;
     sparkle: PVisualGear;
 begin
+	targ:= nil;
 	if (Gear^.State and gstFrozen) <> 0 then
 		begin
 		if Gear^.Damage > 0 then
@@ -6630,6 +6632,7 @@ var i,t,targDist,tmpDist: LongWord;
     tX, tY: hwFloat;
     vg: PVisualGear;
 begin
+	targ:= nil;
     doStepFallingGear(Gear);
 	if (Gear^.State and gstFrozen) <> 0 then
 		begin
