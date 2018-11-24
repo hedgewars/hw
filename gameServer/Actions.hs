@@ -43,10 +43,10 @@ import qualified Data.Traversable as DT
 import Text.Regex.TDFA
 import qualified Text.Regex.TDFA as TDFA
 import qualified Text.Regex.TDFA.ByteString as TDFAB
-import qualified Data.Yaml as YAML
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
+import qualified Data.Yaml as YAML
 #endif
 import CoreTypes
 import Utils
@@ -820,14 +820,6 @@ processAction (QueryReplay rname) = do
     uid <- client's clUID
     io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) rname
 
-#else
-processAction SaveReplay = return ()
-processAction CheckRecord = return ()
-processAction (CheckFailed _) = return ()
-processAction (CheckSuccess _) = return ()
-processAction (QueryReplay _) = processAction $ Warning $ loc "This server does not support replays!"
-#endif
-
 processAction (ShowReplay rname) = do
     c <- client's sendChan
     cl <- client's id
@@ -860,6 +852,17 @@ processAction (SaveRoom rname) = do
 processAction (LoadRoom rname) = do
     Right (g, rs) <- io $ YAML.decodeFileEither (B.unpack rname)
     processAction $ ModifyRoom $ \r -> r{greeting = g, roomSaves = rs}
+	
+#else
+processAction SaveReplay = return ()
+processAction CheckRecord = return ()
+processAction (CheckFailed _) = return ()
+processAction (CheckSuccess _) = return ()
+processAction (QueryReplay _) = processAction $ Warning $ loc "This server does not support replays!"
+processAction (ShowReplay rname) = return ()
+processAction (SaveRoom rname) = return ()
+processAction (LoadRoom rname) = return ()
+#endif
 
 processAction Cleanup = do
     jm <- gets joinsMonitor

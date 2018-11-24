@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings,CPP #-}
 module Utils where
 
 import Data.Char
@@ -32,8 +32,10 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
 import Data.Maybe
+#if defined(OFFICIAL_SERVER)
 import qualified Data.Aeson.Types as Aeson
 import qualified Data.Text as Text
+#endif
 -------------------------------------------------
 import CoreTypes
 
@@ -259,6 +261,7 @@ sanitizeName = B.map sc
 isRegistered :: ClientInfo -> Bool
 isRegistered = (<) 0 . B.length . webPassword
 
+#if defined(OFFICIAL_SERVER)
 instance Aeson.ToJSON B.ByteString where
   toJSON = Aeson.toJSON . B.unpack
 
@@ -270,4 +273,4 @@ instance Aeson.ToJSONKey B.ByteString where
   
 instance Aeson.FromJSONKey B.ByteString where
   fromJSONKey = Aeson.FromJSONKeyTextParser (return . B.pack . Text.unpack)
-  
+#endif  
