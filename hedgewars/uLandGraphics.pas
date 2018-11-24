@@ -753,7 +753,7 @@ case bpp of
                    ((not force) and (Land[cpY + y, cpX + x] <> 0))) or
 
                    (not outOfMap and
-                       (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                       (((cpY + y) <= topY) or ((cpY + y) >= LAND_HEIGHT) or
                        ((cpX + x) <= leftX) or ((cpX + x) >= rightX) or
                        ((not force) and (Land[cpY + y, cpX + x] <> 0)))) then
                    begin
@@ -873,7 +873,7 @@ p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                if ((cpY + y) <= topY) or ((cpY + y) >= LAND_HEIGHT) or
                    ((cpX + x) <= leftX) or ((cpX + x) >= rightX) then
                    begin
                    if SDL_MustLock(Image) then
@@ -976,7 +976,7 @@ for y:= 0 to Pred(h) do
     begin
     for x:= 0 to Pred(w) do
         if ((p^[x] and AMask) <> 0)
-            and (((cpY + y) < Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+            and (((cpY + y) < topY) or ((cpY + y) >= LAND_HEIGHT) or
             ((cpX + x) < leftX) or ((cpX + x) > rightX) or (Land[cpY + y, cpX + x] <> 0)) then
                 pt^[x]:= cWhiteColor
         else
@@ -1074,7 +1074,7 @@ if (Land[Y, X] and lfDamaged) = 0 then
     exit;
 
 // check location
-if (Y <= LongInt(topY) + 1) or (Y >= LAND_HEIGHT-2)
+if (Y <= topY + 1) or (Y >= LAND_HEIGHT-2)
 or (X <= leftX + 1) or (X >= rightX - 1) then
     exit;
 
@@ -1126,7 +1126,7 @@ end;
 procedure Smooth_oldImpl(X, Y: LongInt);
 begin
 // a bit of AA for explosions
-if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
+if (Land[Y, X] = 0) and (Y > topY + 1) and
     (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
@@ -1185,7 +1185,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
     end
 else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixels[Y, X] and AMask) = AMask)
 and (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic)
-and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
+and (Y > topY + 1) and (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
     or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then

@@ -820,7 +820,7 @@ begin
                                 DrawSpriteClipped(sprGirder,
                                                 rightX+(ox-leftX)-256,
                                                 oy-256,
-                                                LongInt(topY)+WorldDy,
+                                                topY+WorldDy,
                                                 rightX+WorldDx,
                                                 cWaterLine+WorldDy,
                                                 leftX+WorldDx);
@@ -828,7 +828,7 @@ begin
                                 DrawSpriteClipped(sprGirder,
                                                 leftX-(rightX-ox)-256,
                                                 oy-256,
-                                                LongInt(topY)+WorldDy,
+                                                topY+WorldDy,
                                                 rightX+WorldDx,
                                                 cWaterLine+WorldDy,
                                                 leftX+WorldDx)
@@ -836,7 +836,7 @@ begin
                         DrawSpriteClipped(sprGirder,
                                         ox-256,
                                         oy-256,
-                                        LongInt(topY)+WorldDy,
+                                        topY+WorldDy,
                                         rightX+WorldDx,
                                         cWaterLine+WorldDy,
                                         leftX+WorldDx)

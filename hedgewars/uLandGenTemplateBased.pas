@@ -116,7 +116,7 @@ begin
             or (dab < minDistance * 3)
             or (mp.x < leftX + mapBorderMargin)
             or (mp.x > rightX - mapBorderMargin)
-            or (mp.y < LongInt(topY) + mapBorderMargin)
+            or (mp.y < topY + mapBorderMargin)
             or (mp.y > LongInt(LAND_HEIGHT) - mapBorderMargin)
     then
     begin
@@ -146,7 +146,7 @@ begin
     if b <> 0 then
     begin
         // top border
-        ix:= (LongInt(topY) + mapBorderMargin - mp.y) * a div b + mp.x;
+        ix:= (topY + mapBorderMargin - mp.y) * a div b + mp.x;
         d:= DistanceI(mp.y - topY - mapBorderMargin, mp.x - ix).Round;
         t2:= b * (mp.y - mapBorderMargin) + a * (mp.x - ix);
         if t2 > 0 then distL:= min(d, distL) else distR:= min(d, distR);

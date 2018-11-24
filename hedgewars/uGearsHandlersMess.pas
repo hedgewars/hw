@@ -6615,7 +6615,7 @@ if Gear^.Timer < $FFFFFFFF then
 if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
     begin
     doStepFallingGear(Gear);
-    if (Gear^.Tag = 1) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX) or (hwRound(Gear^.Y) < LongInt(topY)) then
+    if (Gear^.Tag = 1) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX) or (hwRound(Gear^.Y) < topY) then
         begin
         Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
         Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);

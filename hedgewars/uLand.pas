@@ -379,7 +379,7 @@ begin
     if gameFlags and gfShoppaBorder <> 0 then DrawShoppaBorder;
 
     for x:= LongWord(leftX+2) to LongWord(rightX-2) do
-        for y:= topY+2 to LAND_HEIGHT-3 do
+        for y:= LongWord(topY+2) to LAND_HEIGHT-3 do
             if (Land[y, x] = 0) and
                (((Land[y, x-1] = lfBasic) and ((Land[y+1,x] = lfBasic)) or (Land[y-1,x] = lfBasic)) or
                ((Land[y, x+1] = lfBasic) and ((Land[y-1,x] = lfBasic) or (Land[y+1,x] = lfBasic)))) then
@@ -754,7 +754,7 @@ c:= 0;
 if (GameFlags and gfBorder) <> 0 then
     hasBorder:= true
 else
-    for y:= topY to topY + 5 do
+    for y:= LongWord(topY) to LongWord(topY + 5) do
         for x:= LongWord(leftX) to LongWord(rightX) do
             if Land[y, x] <> 0 then
                 begin
@@ -772,12 +772,12 @@ if hasBorder then
         begin
         for y:= 0 to LAND_HEIGHT - 1 do
             for x:= 0 to LAND_WIDTH - 1 do
-                if (y < topY) or (x < LongWord(leftX)) or (x > LongWord(rightX)) then
+                if (y < LongWord(topY)) or (x < LongWord(leftX)) or (x > LongWord(rightX)) then
                     Land[y, x]:= lfIndestructible;
         end
     else if topY > 0 then
         begin
-        for y:= 0 to LongInt(topY) - 1 do
+        for y:= 0 to LongWord(topY - 1) do
             for x:= 0 to LAND_WIDTH - 1 do
                 Land[y, x]:= lfIndestructible;
         end;
@@ -786,7 +786,7 @@ if hasBorder then
     for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
         begin
         if (WorldEdge <> weBounce) and (WorldEdge <> weWrap) then
-            for y:= topY to LAND_HEIGHT - 1 do
+            for y:= LongWord(topY) to LAND_HEIGHT - 1 do
                     begin
                     Land[y, leftX + w]:= lfIndestructible;
                     Land[y, rightX - w]:= lfIndestructible;
@@ -847,7 +847,7 @@ if GrayScale then
     begin
     if (cReducedQuality and rqBlurryLand) = 0 then
         for x:= LongWord(leftX) to LongWord(rightX) do
-            for y:= topY to LAND_HEIGHT-1 do
+            for y:= LongWord(topY) to LAND_HEIGHT-1 do
                 begin
                 w:= LandPixels[y,x];
                 w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
@@ -860,7 +860,7 @@ if GrayScale then
                 end
     else
         for x:= LongWord(leftX div 2) to LongWord(rightX div 2) do
-            for y:= topY div 2 to LAND_HEIGHT-1 div 2 do
+            for y:= LongWord(topY div 2) to LAND_HEIGHT-1 div 2 do
                 begin
                 w:= LandPixels[y div 2,x div 2];
                 w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
