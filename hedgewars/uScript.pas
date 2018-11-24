@@ -2677,7 +2677,7 @@ const
     call = 'GetAmmo';
     params = 'ammoType';
 begin
-	lc_getammo:= 0
+    lc_getammo:= 0;
     if CheckLuaParamCount(L, 1, call, params) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
