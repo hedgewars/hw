@@ -112,7 +112,8 @@ pub extern "C" fn render_frame(engine_state: &mut EngineInstance) {
 
 #[no_mangle]
 pub extern "C" fn advance_simulation(engine_state: &mut EngineInstance, ticks: u32) -> bool {
-    unimplemented!()
+    engine_state.world.step();
+    true
 }
 #[no_mangle]
 pub extern "C" fn cleanup(engine_state: *mut EngineInstance) {

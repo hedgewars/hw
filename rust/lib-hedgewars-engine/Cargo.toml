@@ -9,11 +9,13 @@ gfx = "0.17"
 gfx_device_gl = "0.15"
 netbuf = "0.4"
 
+fpnum = { path = "../fpnum" }
 land2d = { path = "../land2d" }
 lfprng = { path = "../lfprng" }
 integral-geometry = { path = "../integral-geometry" }
 landgen = { path = "../landgen" }
 hedgewars-engine-messages = { path = "../hedgewars-engine-messages" }
+hwphysics = { path = "../hwphysics" }
 
 [lib]
 name = "hedgewars_engine"

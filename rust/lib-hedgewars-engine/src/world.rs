@@ -1,14 +1,33 @@
+use fpnum::{FPNum, fp};
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
 use landgen::{
-    outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
-    LandGenerationParameters, LandGenerator,
+    outline_template::OutlineTemplate,
+    template_based::TemplatedLandGenerator,
+    LandGenerationParameters,
+    LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
+use hwphysics as hwp;
+
+struct GameState {
+    land: Land2D<u32>,
+    physics: hwp::World,
+}
+
+impl GameState {
+    fn new(land: Land2D<u32>, physics: hwp::World) -> Self {
+        Self {
+            land,
+            physics,
+        }
+    }
+}
 
 pub struct World {
     random_numbers_gen: LaggedFibonacciPRNG,
     preview: Land2D<u8>,
+    game_state: Option<GameState>,
 }
 
 impl World {
@@ -16,6 +35,7 @@ impl World {
         Self {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
             preview: Land2D::new(Size::new(0, 0), 0),
+            game_state: None,
         }
     }
 
@@ -41,8 +61,24 @@ impl World {
             template
         }
 
-        let params = LandGenerationParameters::new(0 as u8, 255, 5, false, false);
+        let params = LandGenerationParameters::new(0u8, u8::max_value(), 5, false, false);
         let landgen = TemplatedLandGenerator::new(template());
         self.preview = landgen.generate_land(&params, &mut self.random_numbers_gen);
+    }
+
+    pub fn init(&mut self, template: OutlineTemplate) {
+        let physics = hwp::World::new(template.size);
+
+        let params = LandGenerationParameters::new(0u32, u32::max_value(), 5, false, false);
+        let landgen = TemplatedLandGenerator::new(template);
+        let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
+
+        self.game_state = Some(GameState::new(land, physics));
+    }
+
+    pub fn step(&mut self) {
+        if let Some(ref mut state) = self.game_state {
+            state.physics.step(fp!(1), &state.land);
+        }
     }
 }
