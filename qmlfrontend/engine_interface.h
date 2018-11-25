@@ -29,6 +29,13 @@ typedef void send_ipc_t(EngineInstance* engine_state, uint8_t* buf,
 typedef size_t read_ipc_t(EngineInstance* engine_state, uint8_t* buf,
                           size_t size);
 
+typedef void setup_current_gl_context_t(EngineInstance* engine_state,
+                                        uint16_t width, uint16_t height,
+                                        void (*())(const char*));
+typedef void render_frame_t(EngineInstance* engine_state);
+
+typedef bool advance_simulation_t(EngineInstance* engine_state, uint32_t ticks);
+
 extern protocol_version_t* protocol_version;
 extern start_engine_t* start_engine;
 extern generate_preview_t* generate_preview;
@@ -36,6 +43,10 @@ extern cleanup_t* cleanup;
 
 extern send_ipc_t* send_ipc;
 extern read_ipc_t* read_ipc;
+
+extern setup_current_gl_context_t* setup_current_gl_context;
+extern render_frame_t* render_frame;
+extern advance_simulation_t* advance_simulation;
 
 #ifdef __cplusplus
 }

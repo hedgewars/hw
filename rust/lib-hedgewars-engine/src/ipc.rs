@@ -19,7 +19,7 @@ impl IPC {
         self.out_buffer.write(&message.to_bytes()).unwrap();
     }
 
-    pub fn iter(& mut self) -> IPCMessagesIterator {
+    pub fn iter(&mut self) -> IPCMessagesIterator {
         IPCMessagesIterator::new(self)
     }
 }
@@ -45,14 +45,12 @@ impl Read for IPC {
 }
 
 pub struct IPCMessagesIterator<'a> {
-    ipc: &'a mut IPC
+    ipc: &'a mut IPC,
 }
 
 impl<'a> IPCMessagesIterator<'a> {
     pub fn new(ipc: &'a mut IPC) -> Self {
-        Self {
-            ipc
-        }
+        Self { ipc }
     }
 }
 

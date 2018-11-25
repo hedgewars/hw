@@ -5,6 +5,7 @@
 
 #include "engine_instance.h"
 #include "engine_interface.h"
+#include "game_view.h"
 #include "preview_image_provider.h"
 
 #include "hwengine.h"
@@ -30,7 +31,7 @@ void HWEngine::exposeToQML() {
   qDebug("HWEngine::exposeToQML");
   qmlRegisterSingletonType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine",
                                      hwengine_singletontype_provider);
-  // qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
+  qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
 }
 
 void HWEngine::getPreview() {

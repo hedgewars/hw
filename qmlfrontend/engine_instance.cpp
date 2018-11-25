@@ -1,5 +1,7 @@
 #include "engine_instance.h"
 
+extern "C" void (*getProcAddress())(const char* fn) { return nullptr; }
+
 EngineInstance::EngineInstance(QObject* parent)
     : QObject(parent), m_instance(Engine::start_engine()) {}
 
@@ -16,7 +18,9 @@ void EngineInstance::advance(quint32 ticks) {}
 
 void EngineInstance::renderFrame() {}
 
-void EngineInstance::setOpenGLContext(QOpenGLContext* context) {}
+void EngineInstance::setOpenGLContext(QOpenGLContext* context) {
+  Engine::setup_current_gl_context(m_instance, 0, 0, &getProcAddress);
+}
 
 Engine::PreviewInfo EngineInstance::generatePreview() {
   Engine::PreviewInfo pinfo;

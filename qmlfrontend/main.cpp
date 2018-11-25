@@ -13,6 +13,9 @@ generate_preview_t* generate_preview;
 cleanup_t* cleanup;
 send_ipc_t* send_ipc;
 read_ipc_t* read_ipc;
+setup_current_gl_context_t* setup_current_gl_context;
+render_frame_t* render_frame;
+advance_simulation_t* advance_simulation;
 };  // namespace Engine
 
 void loadEngineLibrary() {
@@ -38,6 +41,14 @@ void loadEngineLibrary() {
       reinterpret_cast<Engine::send_ipc_t*>(hwlib.resolve("send_ipc"));
   Engine::read_ipc =
       reinterpret_cast<Engine::read_ipc_t*>(hwlib.resolve("read_ipc"));
+
+  Engine::setup_current_gl_context =
+      reinterpret_cast<Engine::setup_current_gl_context_t*>(
+          hwlib.resolve("setup_current_gl_context"));
+  Engine::render_frame =
+      reinterpret_cast<Engine::render_frame_t*>(hwlib.resolve("render_frame"));
+  Engine::advance_simulation = reinterpret_cast<Engine::advance_simulation_t*>(
+      hwlib.resolve("advance_simulation"));
 
   if (Engine::protocol_version)
     qDebug() << "Loaded engine library with protocol version"

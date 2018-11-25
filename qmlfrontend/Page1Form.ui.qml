@@ -11,8 +11,8 @@ Item {
   width: 1024
   height: 800
   property alias tickButton: tickButton
+  property alias gameView: gameView
 
-  //property alias item1: item1
   ColumnLayout {
     anchors.fill: parent
 
@@ -73,13 +73,11 @@ Item {
       }
     }
   }
-  /*
-    GameView {
-        id: item1
-        x: 8
-        y: 154
-        width: 1008
-        height: 638
-    }
-    */
+  GameView {
+    id: gameView
+    x: 8
+    y: 154
+    width: 1008
+    height: 638
+  }
 }
