@@ -15,7 +15,7 @@ use gfx::{
 
 use gfx_window_glutin::init_existing;
 
-use hedgewars_engine::EngineInstance;
+use hedgewars_engine::instance::EngineInstance;
 
 fn init(event_loop: &EventsLoop, size: LogicalSize) -> GlWindow {
     use glutin::{

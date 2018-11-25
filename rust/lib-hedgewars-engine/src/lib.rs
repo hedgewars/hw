@@ -1,10 +1,24 @@
 mod ipc;
 mod world;
-mod instance;
+pub mod instance;
 
-use std::io::{Read, Write};
+use std::{
+    io::{Read, Write},
+    ffi::{CString},
+    os::raw::{c_void, c_char},
+    mem::replace
+};
+use gfx::{
+    Encoder,
+    format::Formatted,
+};
 
-use self::instance::EngineInstance;
+use gfx_device_gl as gfx_gl;
+
+use self::instance::{
+    EngineInstance,
+    EngineGlContext
+};
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -57,6 +71,45 @@ pub extern "C" fn read_ipc(
     size: usize,
 ) -> usize {
     unsafe { (*engine_state).ipc.read(std::slice::from_raw_parts_mut(buf, size)).unwrap_or(0) }
+}
+
+#[no_mangle]
+pub extern "C" fn setup_current_gl_context(
+    engine_state: &mut EngineInstance,
+    width: u16,
+    height: u16,
+    gl_loader: extern "C" fn (*const c_char) -> *const c_void
+) {
+    let (device, mut factory) = gfx_gl::create(|name| {
+        let c_name = CString::new(name).unwrap();
+        gl_loader(c_name.as_ptr())
+    });
+
+    let dimensions = (width, height, 1u16, gfx::texture::AaMode::Single);
+    let (render_target, depth_buffer) = gfx_gl::create_main_targets_raw(
+        dimensions,
+        gfx::format::Rgba8::get_format().0,
+        gfx::format::Depth::get_format().0
+    );
+
+    let mut command_buffer: Encoder<_, _> = factory.create_command_buffer().into();
+
+    engine_state.gl_context = Some(EngineGlContext {
+        device,
+        factory,
+        render_target: gfx::memory::Typed::new(render_target),
+        depth_buffer: gfx::memory::Typed::new(depth_buffer),
+        command_buffer
+    })
+}
+
+#[no_mangle]
+pub extern "C" fn render_frame(engine_state: &mut EngineInstance) {
+    let mut context = replace(&mut engine_state.gl_context, None);
+    if let Some(ref mut c) = context {
+        engine_state.render(&mut c.command_buffer, &mut c.render_target)
+    }
+    replace(&mut engine_state.gl_context, context);
 }
 
 #[no_mangle]
