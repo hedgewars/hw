@@ -23,9 +23,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
--- These define weps allowed by the script.
--- These were arbitrarily defined out-of-order in initial script, so that was preserved here, resulting 
--- in a moderately odd syntax.
+-- These define weapons allowed by the script.
 local atkWeps = {
 	[amBazooka]=true, [amBee]=true, [amMortar]=true, [amDrill]=true, [amSnowball]=true,
 	[amGrenade]=true, [amClusterBomb]=true, [amMolotov]=true, [amWatermelon]=true,
@@ -259,6 +257,30 @@ function onGameInit()
 end
 
 function onGameStart()
+	-- Remove air strikes in maps with border
+	if MapHasBorder() or GetGameFlag(gfBorder) then
+		atkWeps[amAirAttack] = nil
+		atkWeps[amMineStrike] = nil
+		atkWeps[amNapalm] = nil
+		atkWeps[amDrillStrike] = nil
+		atkWeps[amPiano] = nil
+	end
+	-- Disable redundant utilities
+	if GetGameFlag(gfVampiric) then
+		utilWeps[amVampiric] = nil
+	end
+	if GetGameFlag(gfLowGravity) then
+		utilWeps[amLowGravity] = nil
+	end
+	if GetGameFlag(gfLaserSight) then
+		utilWeps[amLaserSight] = nil
+	end
+	if GetGameFlag(gfInvulnerable) then
+		utilWeps[amInvulnerable] = nil
+	end
+	if TurnTime > 999000 then
+		utilWeps[amExtraTime] = nil
+	end
 	utilChoices[amSkip] = 0
 	local c = 0
 	for i = 0, AmmoTypeMax do

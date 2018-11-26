@@ -97,6 +97,7 @@ Server:
 
 Highlander:
  * Fix all hogs receiving a free teleport after hog placement phase
+ * Fix hogs receiving air strikes in maps with border
 
 Racer/TechRacer:
  * Fix rare bug in TechRacer causing crates and other objects to not appear on start of turn
