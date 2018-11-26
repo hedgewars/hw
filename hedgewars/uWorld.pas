@@ -363,7 +363,7 @@ with arrowDown do
 
 with pauseButton do
     begin
-    show:= true;
+    show:= gameType <> gmtNet;
     sprite:= sprPauseButton;
     frame.w:= Round(spritesData[sprPauseButton].Texture^.w * buttonScale);
     frame.h:= Round(spritesData[sprPauseButton].Texture^.h * buttonScale);
@@ -1655,7 +1655,10 @@ if isCursorVisible and bShowAmmoMenu then
 
 // FPS and demo replay time
 {$IFDEF USE_TOUCH_INTERFACE}
-offsetX:= pauseButton.frame.y + pauseButton.frame.h + 12;
+if pauseButton.show then
+    offsetX:= pauseButton.frame.y + pauseButton.frame.h + 12
+else
+    offsetX:= 10;
 {$ELSE}
 offsetX:= 10;
 {$ENDIF}
