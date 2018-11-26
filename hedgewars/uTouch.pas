@@ -74,9 +74,6 @@ var
     moveCursor : boolean;
     invertCursor : boolean;
 
-    xTouchClick,yTouchClick : LongInt;
-    timeSinceClick : Longword;
-
     //Pinch to zoom
     pinchSize : LongInt;
     baseZoomValue: GLFloat;
@@ -317,16 +314,6 @@ end;
 
 procedure onTouchClick(finger: TTouch_Data);
 begin
-//if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
-//    begin
-//    onTouchDoubleClick(finger);
-//    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds)
-//    exit;
-//    end;
-
-xTouchClick:= finger.x;
-yTouchClick:= finger.y;
-timeSinceClick:= RealTicks;
 
 if bShowAmmoMenu then
     begin
@@ -637,7 +624,6 @@ end;
 procedure initModule;
 var
     index: Longword;
-    //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
     buttonsDown:= 0;
     pointerCount:= 0;
