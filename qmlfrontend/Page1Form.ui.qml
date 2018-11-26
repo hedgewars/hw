@@ -40,8 +40,8 @@ Item {
       border.width: 5
       radius: 5
 
+      Layout.minimumHeight: 256
       Layout.fillWidth: true
-      Layout.fillHeight: true
 
       gradient: Gradient {
         GradientStop {
@@ -72,12 +72,12 @@ Item {
         cache: false
       }
     }
-  }
-  GameView {
-    id: gameView
-    x: 8
-    y: 154
-    width: 1008
-    height: 638
+
+    GameView {
+      id: gameView
+
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+    }
   }
 }

@@ -6,7 +6,8 @@ Page1Form {
     gameView.tick(100)
   }
   gameButton.onClicked: {
-    HWEngine.runQuickGame()
+    var engineInstance = HWEngine.runQuickGame()
+    gameView.engineInstance = engineInstance
   }
   button1.onClicked: {
     HWEngine.getPreview()

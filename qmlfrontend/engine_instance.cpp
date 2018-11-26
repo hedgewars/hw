@@ -1,6 +1,16 @@
 #include "engine_instance.h"
 
-extern "C" void (*getProcAddress())(const char* fn) { return nullptr; }
+#include <QDebug>
+#include <QOpenGLFunctions>
+#include <QSurface>
+
+static QOpenGLContext* currentOpenglContext = nullptr;
+extern "C" void (*getProcAddress(const char* fn))() {
+  if (!currentOpenglContext)
+    return nullptr;
+  else
+    return currentOpenglContext->getProcAddress(fn);
+}
 
 EngineInstance::EngineInstance(QObject* parent)
     : QObject(parent), m_instance(Engine::start_engine()) {}
@@ -14,12 +24,19 @@ void EngineInstance::sendConfig(const GameConfig& config) {
   }
 }
 
-void EngineInstance::advance(quint32 ticks) {}
+void EngineInstance::advance(quint32 ticks) {
+  Engine::advance_simulation(m_instance, ticks);
+}
 
-void EngineInstance::renderFrame() {}
+void EngineInstance::renderFrame() { Engine::render_frame(m_instance); }
 
 void EngineInstance::setOpenGLContext(QOpenGLContext* context) {
-  Engine::setup_current_gl_context(m_instance, 0, 0, &getProcAddress);
+  currentOpenglContext = context;
+
+  auto size = context->surface()->size();
+  Engine::setup_current_gl_context(
+      m_instance, static_cast<quint16>(size.width()),
+      static_cast<quint16>(size.height()), &getProcAddress);
 }
 
 Engine::PreviewInfo EngineInstance::generatePreview() {

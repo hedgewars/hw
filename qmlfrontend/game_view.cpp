@@ -45,13 +45,15 @@ void GameView::setEngineInstance(EngineInstance* engineInstance) {
 
   cleanup();
   m_engineInstance = engineInstance;
-  engineInstance->setOpenGLContext(window()->openglContext());
+
   emit engineInstanceChanged(m_engineInstance);
 }
 
 void GameView::sync() {
-  if (!m_renderer) {
+  if (!m_renderer && m_engineInstance) {
+    m_engineInstance->setOpenGLContext(window()->openglContext());
     m_renderer.reset(new GameViewRenderer());
+    m_renderer->setEngineInstance(m_engineInstance);
     connect(window(), &QQuickWindow::beforeRendering, m_renderer.data(),
             &GameViewRenderer::paint, Qt::DirectConnection);
   }
@@ -68,7 +70,7 @@ void GameView::sync() {
   // mousePos.y()))
   //  QCursor::setPos(mapToGlobal(QPointF(m_centerX, m_centerY)).toPoint());
 
-  m_renderer->tick(m_delta);
+  if (m_renderer) m_renderer->tick(m_delta);
 }
 
 GameViewRenderer::GameViewRenderer()

@@ -32,6 +32,9 @@ void HWEngine::exposeToQML() {
   qmlRegisterSingletonType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine",
                                      hwengine_singletontype_provider);
   qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
+  qmlRegisterUncreatableType<EngineInstance>("Hedgewars.Engine", 1, 0,
+                                             "EngineInstance",
+                                             "Create by HWEngine run methods");
 }
 
 void HWEngine::getPreview() {
@@ -61,7 +64,7 @@ void HWEngine::getPreview() {
   // m_runQueue->queue(m_gameConfig);
 }
 
-void HWEngine::runQuickGame() {
+EngineInstance* HWEngine::runQuickGame() {
   m_gameConfig.cmdTheme("Nature");
   Team team1;
   team1.name = "team1";
@@ -71,6 +74,8 @@ void HWEngine::runQuickGame() {
   m_gameConfig.cmdTeam(team1);
   m_gameConfig.cmdTeam(team2);
 
+  EngineInstance* engine = new EngineInstance(this);
+  return engine;
   // m_runQueue->queue(m_gameConfig);
 }
 

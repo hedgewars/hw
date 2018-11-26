@@ -9,6 +9,7 @@
 
 class QQmlEngine;
 class PreviewImageProvider;
+class EngineInstance;
 
 class HWEngine : public QObject {
   Q_OBJECT
@@ -23,7 +24,7 @@ class HWEngine : public QObject {
   static void exposeToQML();
 
   Q_INVOKABLE void getPreview();
-  Q_INVOKABLE void runQuickGame();
+  Q_INVOKABLE EngineInstance* runQuickGame();
 
   int previewHedgehogsCount() const;
 

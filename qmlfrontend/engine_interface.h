@@ -31,7 +31,7 @@ typedef size_t read_ipc_t(EngineInstance* engine_state, uint8_t* buf,
 
 typedef void setup_current_gl_context_t(EngineInstance* engine_state,
                                         uint16_t width, uint16_t height,
-                                        void (*())(const char*));
+                                        void (*(const char*))());
 typedef void render_frame_t(EngineInstance* engine_state);
 
 typedef bool advance_simulation_t(EngineInstance* engine_state, uint32_t ticks);
