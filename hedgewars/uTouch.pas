@@ -149,7 +149,7 @@ if isOnWidget(arrowDown, finger^) then
 
 if isOnWidget(pauseButton, finger^) then
     begin
-    isPaused:= not isPaused;
+    ParseTeamCommand('pause');
     moveCursor:= false;
     finger^.pressedWidget:= @pauseButton;
     exit;
