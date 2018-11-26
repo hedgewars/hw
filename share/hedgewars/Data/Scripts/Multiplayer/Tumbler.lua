@@ -281,29 +281,51 @@ end
 
 function DrawTag(i)
 
-	zoomL = 1.3
+	local zoomL = 1.3
 
-	xOffset = 40
+	local xOffset, yOffset, tValue, tCol
 
 	if i == 0 then
-		yOffset = 40
+		if INTERFACE == "touch" then
+			xOffset = 60
+			yOffset = ScreenHeight - 35
+		else
+			xOffset = 40
+			yOffset = 40
+		end
 		tCol = 0xffee00ff
 		tValue = TimeLeft
 	elseif i == 1 then
 		zoomL = 1.1
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40
+			yOffset = 70
+		end
 		tCol = wepCol[0]
 		tValue = wepAmmo[0]
 	elseif i == 2 then
 		zoomL = 1.1
-		xOffset = 40 + 35
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 35
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 35
+			yOffset = 70
+		end
 		tCol = wepCol[1]
 		tValue = wepAmmo[1]
 	elseif i == 3 then
 		zoomL = 1.1
-		xOffset = 40 + 70
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 70
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 70
+			yOffset = 70
+		end
 		tCol = wepCol[2]
 		tValue = wepAmmo[2]
 	end

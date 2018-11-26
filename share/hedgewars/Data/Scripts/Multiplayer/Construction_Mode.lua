@@ -297,8 +297,14 @@ end
 function DrawClanPowerTag()
 
 	local zoomL = 1.1
-	local xOffset = 45
-	local yOffset = 70
+	local xOffset, yOffset
+	if INTERFACE == "touch" then
+		xOffset = 126
+		yOffset = ScreenHeight - 32
+	else
+		xOffset = 45
+		yOffset = 70
+	end
 	local tValue = clanPower[GetHogClan(CurrentHedgehog)]
 	local tCol = GetClanColor(GetHogClan(CurrentHedgehog))
 

@@ -331,28 +331,49 @@ end
 function DrawTag(i)
 
 	local zoomL = 1.3
-	local xOffset = 40
-	local yOffset, tValue, tCol
+	local xOffset, yOffset, tValue, tCol
 
 	if i == SI.TAG_TIME then
-		yOffset = 40
+		if INTERFACE == "touch" then
+			xOffset = 60
+			yOffset = ScreenHeight - 35
+		else
+			xOffset = 40
+			yOffset = 40
+		end
 		tCol = SI.colorTimer
 		tValue = SI.TimeLeft
 	elseif i == SI.TAG_BARRELS then
 		zoomL = 1.1
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40
+			yOffset = 70
+		end
 		tCol = SI.colorAmmo
 		tValue = SI.wepAmmo[SI.wepIndex]
 	elseif i == SI.TAG_SHIELD then
 		zoomL = 1.1
-		xOffset = 40 + 35
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 35
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 35
+			yOffset = 70
+		end
 		tCol = SI.colorShield
 		tValue = SI.shieldHealth - 80
 	elseif i == SI.TAG_ROUND_SCORE then
 		zoomL = 1.1
-		xOffset = 40
-		yOffset = 100
+		if INTERFACE == "touch" then
+			xOffset = 126 + 70
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40
+			yOffset = 100
+		end
 		tCol = SI.colorScore
 		tValue = SI.roundScore
 	end
