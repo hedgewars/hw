@@ -299,8 +299,13 @@ if ChatHidden and (not showAll) then
     visibleCount:= 0;
 
 // draw chat lines with some distance from screen border
+{$IFDEF USE_TOUCH_INTERFACE}
+left:= 4 - cScreenWidth div 2;
+top := 55 + visibleCount * ClHeight; // we start with input line (if any)
+{$ELSE}
 left:= 4 - cScreenWidth div 2;
 top := 10 + visibleCount * ClHeight; // we start with input line (if any)
+{$ENDIF}
 
 // draw chat input line first and under all other lines
 if isInChatMode and (InputStr.Tex <> nil) then
