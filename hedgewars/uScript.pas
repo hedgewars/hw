@@ -4005,10 +4005,10 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetString(_S'LOCALE', cLocale);
 
-{$IFDEF MOBILE}
-ScriptSetString(_S'PLATFORM', 'Mobile');
+{$IFDEF USE_TOUCH_INTERFACE}
+ScriptSetString(_S'INTERFACE', 'touch');
 {$ELSE}
-ScriptSetString(_S'PLATFORM', 'Desktop');
+ScriptSetString(_S'INTERFACE', 'desktop');
 {$ENDIF}
 
 // Add aliases for amDuck and gtDuck because rubber duck was removed.

@@ -198,7 +198,7 @@ Lua API:
  + New global: MAX_HOG_HEALTH. Maximum possible hedgehog health
  + New global: MAX_TURN_TIME. Maximum possible turn time
  + New global: EXPLForceDraw. Flag for Explode function, forces land removal even with gfSolidLand on
- + New global: PLATFORM. Platform type. "Desktop" for desktop builds, "Mobile" for mobile device builds
+ + New global: INTERFACE. Type of the game interface: "desktop" for desktop, "touch" for touchscreen
  + New globals: capcolDefault, capcolSetting: Default caption colors
  * Animate library: Remove defunct follow argument for AnimVisualGear
  * Fixed variable: TotalRounds was -1 (instead of 0) in first real round after hog placement phase
