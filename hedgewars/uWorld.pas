@@ -1575,19 +1575,26 @@ if UIDisplay <> uiNone then
         end
     end;
 
-{$IFNDEF USE_TOUCH_INTERFACE}
 // Indicators for global effects (extra damage, low gravity)
-// TODO: Add support for touch interface (need to find out correct offset)
 if UIDisplay <> uiNone then
     begin
+{$IFDEF USE_TOUCH_INTERFACE}
+    offsetX:= (cScreenWidth shr 1) - 95;
+    offsetY:= cScreenHeight - 21;
+{$ELSE}
     offsetX:= 45;
     offsetY:= 51;
+{$ENDIF}
 
     if cDamageModifier = _1_5 then
         begin
             DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
             DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amExtraDamage) - 1, 1, 32, 32);
+{$IFDEF USE_TOUCH_INTERFACE}
+            offsetX := offsetX - 33
+{$ELSE}
             offsetX := offsetX + 33
+{$ENDIF}
         end;
     if (cLowGravity) or ((GameFlags and gfLowGravity) <> 0) then
         begin
@@ -1595,7 +1602,6 @@ if UIDisplay <> uiNone then
             DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLowGravity) - 1, 1, 32, 32);
         end;
     end;
-{$ENDIF}
 
 // Chat
 DrawChat;
