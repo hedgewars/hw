@@ -303,7 +303,7 @@ const
     // ammo slots
     cMaxSlotIndex       = 10; // maximum slot index (including hidden slot) (row in ammo menu)
     cHiddenSlotIndex    = cMaxSlotIndex; // slot for hidden ammo types, not visible and has no key
-    cMaxSlotAmmoIndex   = 6; // maximum index for ammos per slot (column in ammo menu)
+    cMaxSlotAmmoIndex   = 5; // maximum index for ammos per slot (column in ammo menu)
 
     // AI hints to be set for any gear
     aihUsualProcessing    = $00000000; // treat gear as usual

@@ -2105,7 +2105,7 @@ const
                 AmmoType: amFlamethrower;
                 AttackVoice: sndNone;
                 Bounciness: defaultBounciness);
-            Slot: 2;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2342,7 +2342,7 @@ const
                 AmmoType: amKnife;
                 AttackVoice: sndWatchThis;
                 Bounciness: defaultBounciness);
-            Slot: 6;
+            Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
@@ -2420,7 +2420,9 @@ const
                 AmmoType: amCreeper;
                 AttackVoice: sndNone;
                 Bounciness: defaultBounciness);
-            Slot: 0;
+            // Slot chosen to prevent ammo column overflow
+            // TODO: Change slot when creeper is finished
+            Slot: 8;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
