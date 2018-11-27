@@ -368,7 +368,7 @@ Please check your installation!</source>
     <message>
         <source>Custom path to the game data folder</source>
         <comment>command-line</comment>
-        <translation type>Свой путь к каталогу игры</translation>
+        <translation>Свой путь к каталогу игры</translation>
     </message>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
