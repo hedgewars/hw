@@ -1633,7 +1633,7 @@ end
 
 -- Spawn sabotage smoke for inactive hogs (red smoke, more subtle than for active hogs)
 function SabotageSmokeInactive(gear)
-	if GetGearType(gear) == gtHedgehog and gear ~= CurrentHedgehog and CS.SABOTAGE_HOGS[gear]~=nil and CS.SABOTAGE_HOGS[gear]>=1 then
+	if GetGearType(gear) == gtHedgehog and (gear ~= CurrentHedgehog or ReadyTimeLeft > 0) and CS.SABOTAGE_HOGS[gear]~=nil and CS.SABOTAGE_HOGS[gear]>=1 then
 		local vg = AddVisualGear(GetX(gear), GetY(gear), vgtSmokeWhite, 0, false)
 		SetVisualGearValues(vg, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFF8080B0)
 	end
@@ -1773,7 +1773,7 @@ function onGameTick20()
 	if(CS.SABOTAGE_HOGS[CurrentHedgehog]~=nil and CS.SABOTAGE_HOGS[CurrentHedgehog]>=1)
 	then
 		--for sabotage
-		if(CS.SABOTAGE_HOGS[CurrentHedgehog]==1)
+		if(CS.SABOTAGE_HOGS[CurrentHedgehog]==1 and ReadyTimeLeft == 0)
 		then
 			AddCaption(loc("You are sabotaged, RUN!"))
 
@@ -1785,7 +1785,7 @@ function onGameTick20()
 			CS.SABOTAGE_HOGS[CurrentHedgehog]=2
 		end
 
-		if(CS.SABOTAGE_COUNTER % 20 == 0)
+		if(CS.SABOTAGE_HOGS[CurrentHedgehog]==2 and CS.SABOTAGE_COUNTER % 20 == 0)
 		then
 			-- Sabotage effect (red smoke)
 			local vg = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmokeWhite, 0, false)
@@ -1799,10 +1799,11 @@ function onGameTick20()
 		then
 			-- Sabotage decreases hog health regularily,
 			-- but invulnerable protects.
-			-- Also do not decrease health while retreating or attacking.
+			-- Also do not decrease health while retreating, attacking or in ready phase.
 			if(GetEffect(CurrentHedgehog, heInvulnerable) == 0 and
 			band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and
-			band(GetState(CurrentHedgehog), gstAttacked+gstAttacking) == 0)
+			band(GetState(CurrentHedgehog), gstAttacked+gstAttacking) == 0) and
+			(ReadyTimeLeft == 0)
 			then
 				if(GetHealth(CurrentHedgehog)<=CS.SABOTAGE_DAMAGE)
 				then
