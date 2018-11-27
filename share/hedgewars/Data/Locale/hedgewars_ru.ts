@@ -4250,7 +4250,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global &lt;сообщение&gt;: Отправить общее сообщение, которое будет видно все на сервере</translation>
+        <translation>/global &lt;сообщение&gt;: Отправить общее сообщение, которое будет видно всем на сервере</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
