@@ -138,6 +138,23 @@ void closeResources(void)
     }
 }
 
+// Simple Message handler that suppresses Qt debug and info messages (qDebug, qInfo).
+// Used when printing command line help (--help) or related error to keep console clean.
+void restrictedMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(context)
+    QByteArray localMsg = msg.toLocal8Bit();
+    switch (type) {
+    case QtWarningMsg:
+    case QtCriticalMsg:
+    case QtFatalMsg:
+        fprintf(stderr, "%s\n", localMsg.constData());
+        break;
+    default:
+        break;
+    }
+}
+
 QString getUsage()
 {
     return QString(
@@ -183,8 +200,21 @@ int main(int argc, char *argv[]) {
     // file engine, to be initialized later
     engine = NULL;
 
-    // parse arguments
+    /*
+    This is for messages frelated to translatable command-line arguments.
+    If it is non-zero, will print out a message after loading locale
+    and exit.
+    */
+    enum cmdMsgStateEnum {
+        cmdMsgNone,
+        cmdMsgHelp,
+        cmdMsgMalformedArg,
+        cmdMsgUnknownArg,
+    };
+    enum cmdMsgStateEnum cmdMsgState = cmdMsgNone;
+    QString cmdMsgStateStr;
 
+    // parse arguments
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
     {
@@ -205,14 +235,17 @@ int main(int argc, char *argv[]) {
                 if(arg.startsWith("--")) {
                     if(arg == "--help")
                     {
-                        printf("%s", getUsage().toUtf8().constData());
-                        return 0;
+                        cmdMsgState = cmdMsgHelp;
+                        qInstallMessageHandler(restrictedMessageHandler);
                     }
-                    // argument is something wrong
-                    fprintf(stderr, "%s\n\n%s",
-                        HWApplication::tr("Malformed option argument: %1", "command-line").arg(arg).toUtf8().constData(),
-                        getUsage().toUtf8().constData());
-                    return 1;
+                    else
+                    {
+                        // argument is something wrong
+                        cmdMsgState = cmdMsgMalformedArg;
+                        cmdMsgStateStr = arg;
+                        qInstallMessageHandler(restrictedMessageHandler);
+                        break;
+                    }
                 }
 
                 // if not starting with --, then always skip
@@ -222,70 +255,74 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(parsedArgs.contains("data-dir"))
+    if(cmdMsgState == 0)
     {
-        QFileInfo f(parsedArgs["data-dir"]);
-        parsedArgs.remove("data-dir");
-        if(!f.exists())
+        if(parsedArgs.contains("data-dir"))
         {
-            qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
+            QFileInfo f(parsedArgs["data-dir"]);
+            parsedArgs.remove("data-dir");
+            if(!f.exists())
+            {
+                qWarning() << "WARNING: Cannot open data-dir=" << f.absoluteFilePath();
+            }
+            *cDataDir = f.absoluteFilePath();
+            custom_data = true;
         }
-        *cDataDir = f.absoluteFilePath();
-        custom_data = true;
-    }
 
-    if(parsedArgs.contains("config-dir"))
-    {
-        QFileInfo f(parsedArgs["config-dir"]);
-        parsedArgs.remove("config-dir");
-        cfgdir->setPath(f.absoluteFilePath());
-        custom_config = true;
-    }
-    else
-    {
-        cfgdir->setPath(QDir::homePath());
-        custom_config = false;
-    }
-
-    if (!parsedArgs.isEmpty()) {
-        foreach (const QString & key, parsedArgs.keys())
+        if(parsedArgs.contains("config-dir"))
         {
-            fprintf(stderr, "%s\n", HWApplication::tr("Unknown option argument: %1", "command-line").arg(QString("--") + key).toUtf8().constData());
+            QFileInfo f(parsedArgs["config-dir"]);
+            parsedArgs.remove("config-dir");
+            cfgdir->setPath(f.absoluteFilePath());
+            custom_config = true;
         }
-        fprintf(stderr, "\n%s", getUsage().toUtf8().constData());
-        return 1;
-    }
+        else
+        {
+            cfgdir->setPath(QDir::homePath());
+            custom_config = false;
+        }
 
-    // end of parameter parsing
+        if (!parsedArgs.isEmpty())
+        {
+            cmdMsgState = cmdMsgUnknownArg;
+            qInstallMessageHandler(restrictedMessageHandler);
+        }
 
-    // Select Qt style
-    /* Qt5 Base removed Motif, Plastique. These are now in the Qt style plugins
-    (Ubuntu: qt5-style-plugins, which was NOT backported by Debian/Ubuntu to stable/LTS).
-    Windows appears to render best of the remaining options but still isn't quite right. */
+        // end of parameter parsing
 
-    // Try setting Plastique if available
-    QStyle* coreStyle;
-    coreStyle = QStyleFactory::create("Plastique");
-    if(coreStyle != 0) {
-        QApplication::setStyle(coreStyle);
-        qDebug("Qt style set: Plastique");
-    } else {
-        // Use Windows as fallback.
-        // FIXME: Under Windows style, some widgets like scrollbars don't render as nicely
-        coreStyle = QStyleFactory::create("Windows");
+        // Select Qt style
+        /* Qt5 Base removed Motif, Plastique. These are now in the Qt style plugins
+        (Ubuntu: qt5-style-plugins, which was NOT backported by Debian/Ubuntu to stable/LTS).
+        Windows appears to render best of the remaining options but still isn't quite right. */
+
+        // Try setting Plastique if available
+        QStyle* coreStyle;
+        coreStyle = QStyleFactory::create("Plastique");
         if(coreStyle != 0) {
             QApplication::setStyle(coreStyle);
-            qDebug("Qt style set: Windows");
+            qDebug("Qt style set: Plastique");
         } else {
-            // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
-            qWarning("No Qt style could be set! Using the default one.");
+            // Use Windows as fallback.
+            // FIXME: Under Windows style, some widgets like scrollbars don't render as nicely
+            coreStyle = QStyleFactory::create("Windows");
+            if(coreStyle != 0) {
+                QApplication::setStyle(coreStyle);
+                qDebug("Qt style set: Windows");
+            } else {
+                // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
+                qWarning("No Qt style could be set! Using the default one.");
+            }
         }
     }
 
 #ifdef Q_OS_WIN
+    // Splash screen for Windows
     QPixmap pixmap(":/res/splash.png");
     QSplashScreen splash(pixmap);
-    splash.show();
+    if(cmdMsgState == cmdMsgNone)
+    {
+        splash.show();
+    }
 #endif
 
     QDateTime now = QDateTime::currentDateTime();
@@ -362,23 +399,6 @@ int main(int argc, char *argv[]) {
         QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
         settings.setIniCodec("UTF-8");
 
-        // Heuristic to figure out if the user is (probably) a first-time player.
-        // If nickname is not set, then probably yes.
-        // The hidden setting firstLaunch is, if present, used to force HW to
-        // treat iself as if it were launched the first time.
-        QString nick = settings.value("net/nick", QString()).toString();
-        if (settings.contains("frontend/firstLaunch"))
-        {
-            isProbablyNewPlayer = settings.value("frontend/firstLaunch").toBool();
-        }
-        else
-        {
-            isProbablyNewPlayer = nick.isNull();
-        }
-
-        // Set firstLaunch to false to make sure we remember we have been launched before.
-        settings.setValue("frontend/firstLaunch", false);
-
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
         {
@@ -408,6 +428,54 @@ int main(int argc, char *argv[]) {
             app.installTranslator(&TranslatorQt);
         }
         app.setLayoutDirection(QLocale().textDirection());
+
+        // Handle command line messages
+        switch(cmdMsgState)
+        {
+            case cmdMsgHelp:
+            {
+                printf("%s", getUsage().toUtf8().constData());
+                return 0;
+            }
+            case cmdMsgMalformedArg:
+            {
+                fprintf(stderr, "%s\n\n%s",
+                    HWApplication::tr("Malformed option argument: %1", "command-line").arg(cmdMsgStateStr).toUtf8().constData(),
+                    getUsage().toUtf8().constData());
+                return 1;
+            }
+            case cmdMsgUnknownArg:
+            {
+                foreach (const QString & key, parsedArgs.keys())
+                {
+                    fprintf(stderr, "%s\n",
+                        HWApplication::tr("Unknown option argument: %1", "command-line").arg(QString("--") + key).toUtf8().constData());
+                }
+                fprintf(stderr, "\n%s", getUsage().toUtf8().constData());
+                return 1;
+            }
+            default:
+            {
+                break;
+            }
+        }
+
+        // Heuristic to figure out if the user is (probably) a first-time player.
+        // If nickname is not set, then probably yes.
+        // The hidden setting firstLaunch is, if present, used to force HW to
+        // treat iself as if it were launched the first time.
+        QString nick = settings.value("net/nick", QString()).toString();
+        if (settings.contains("frontend/firstLaunch"))
+        {
+            isProbablyNewPlayer = settings.value("frontend/firstLaunch").toBool();
+        }
+        else
+        {
+            isProbablyNewPlayer = nick.isNull();
+        }
+
+        // Set firstLaunch to false to make sure we remember we have been launched before.
+        settings.setValue("frontend/firstLaunch", false);
     }
 
 #ifdef _WIN32
@@ -464,7 +532,8 @@ int main(int argc, char *argv[]) {
 
     app.form = new HWForm(NULL, style);
 #ifdef Q_OS_WIN
-    splash.finish(app.form);
+    if(cmdMsgState == 0)
+        splash.finish(app.form);
 #endif
     app.form->show();
 

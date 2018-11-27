@@ -315,7 +315,7 @@ FileEngineHandler::FileEngineHandler(char *argv0)
 {
     if (!PHYSFS_init(argv0))
     {
-        qDebug("PHYSFS initialization failed");
+        qCritical("PHYSFS initialization failed");
     }
     qDebug("%s", QString("[PHYSFS] Init: %1").arg(errorStr()).toLocal8Bit().constData());
 }
