@@ -1252,11 +1252,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>This hedgehog&apos;s name</source>
-        <translation>Имя этого ежа</translation>
+        <translation>Имя этого ёжика</translation>
     </message>
     <message>
         <source>Randomize this hedgehog&apos;s name</source>
-        <translation>Выбрать случайное имя для этого ежа</translation>
+        <translation>Выбрать случайное имя для этого ёжика</translation>
     </message>
     <message>
         <source>Random Team</source>
@@ -1338,7 +1338,7 @@ just enter your nickname.</source>
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation>
             <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит в течение игры.</numerusform>
-            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ежа были убиты в течение игры.</numerusform>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжика были убиты в течение игры.</numerusform>
             <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ежей были убиты в течение игры.</numerusform>
         </translation>
     </message>
@@ -1825,7 +1825,7 @@ just enter your nickname.</source>
     <name>PageScheme</name>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>80% урона, нанесённого врагу, вернётся в виде здоровья вашему ежу</translation>
+        <translation>80% урона, нанесённого врагу, вернётся в виде здоровья вашему ёжику</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
@@ -1901,7 +1901,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation>Все (живые) ежи полностью поправляются в конце хода</translation>
+        <translation>Все (живые) ёжики полностью поправляются в конце хода</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
@@ -1913,7 +1913,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>У каждого ежа свой набор оружия, не являющийся общим для команды.</translation>
+        <translation>У каждого ёжика свой набор оружия, не являющийся общим для команды.</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
@@ -1981,7 +1981,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
-        <translation>Сколько здоровья будут терять ежи каждый ход во время Внезапной смерти вплоть до 1. Установите 0 для здоровья и воды, чтобы отключить Внезапную Смерть.</translation>
+        <translation>Сколько здоровья будут терять ёжики каждый ход во время Внезапной смерти вплоть до 1. Установите 0 для здоровья и воды, чтобы отключить Внезапную Смерть.</translation>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
@@ -3621,7 +3621,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation>Переключение вашего активного ежа (если возможно):</translation>
+        <translation>Переключение вашего активного ёжика (если возможно):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
@@ -3633,7 +3633,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="obsolete">Передвижение камеры на активного ежа:</translation>
+        <translation type="obsolete">Передвижение камеры на активного ёжика:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -3665,11 +3665,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Hedgehog movement</source>
-        <translation>Движение ежа</translation>
+        <translation>Движение ёжика</translation>
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation>Включить автоматическую камеру / перенести фокус на активного ежа</translation>
+        <translation>Включить автоматическую камеру / перенести фокус на активного ёжика</translation>
     </message>
     <message>
         <source>Demo replay:</source>
