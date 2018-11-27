@@ -4463,7 +4463,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation>/help: Показать помощь по коммандам чата</translation>
+        <translation>/help: Показать помощь по командам чата</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
@@ -4511,11 +4511,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation>Список комманд чата в лобби:</translation>
+        <translation>Список команд чата в лобби:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation>Список комманд чата в комнате:</translation>
+        <translation>Список команд чата в комнате:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
