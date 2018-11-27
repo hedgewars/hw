@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(cmdMsgState == 0)
+    if(cmdMsgState == cmdMsgNone)
     {
         if(parsedArgs.contains("data-dir"))
         {
@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
 
     app.form = new HWForm(NULL, style);
 #ifdef Q_OS_WIN
-    if(cmdMsgState == 0)
+    if(cmdMsgState == cmdMsgNone)
         splash.finish(app.form);
 #endif
     app.form->show();
