@@ -8,7 +8,7 @@
  <summary xml:lang="de">Lustiges zugbasiertes Artilleriespiel mit kämpfenden Igeln!</summary>
  <description>
   <p>
-   Hedgewars is a turn based strategy, artillery, action and comedy game, featuring the antics of pink hedgehogs with attitude as they battle from the depths of hell to the depths of space.
+   Hedgewars is a turn-based strategy, artillery, action and comedy game, featuring the antics of pink hedgehogs with attitude as they battle from the depths of hell to the depths of space.
   </p>
   <p xml:lang="de">
    Hedgewars ist ein lustiges zugbasiertes Strategie- und Artilleriespiel mit grotesken und launischen rosa Igeln, die sich von den Untiefen der Hölle bis zu den Tiefen des Weltraums gegenseitig bekämpfen.</p>
@@ -23,24 +23,28 @@
   <ul>
    <li>Hilarious and strategic turn based combat for up to 8 players</li>
    <li xml:lang="de">Absurder und strategischer zugbasierter Kampf mit bis zu 8 Spielern</li>
+   <li>Singpleplayer mode with two campaigns and many scenarios and challenges</li>
+   <li xml:lang="de">Einzelspielermodus mit zwei Kampagnen und vielen Szenarios und Herausforderungen</li>
    <li>Both local and network multiplayer, with optional AI opponents</li>
    <li xml:lang="de">Mehrspielermodus sowohl lokal als auch über das Netzwerk, mit optionalen KI-Gegnern</li>
    <li>Battle on an infinite number of randomly generated maps, with over 22 environments</li>
    <li xml:lang="de">Kämpfe auf einer unendlichen Anzahl auf zufällig erstellten Landschaften mit über 22 Szenerien</li>
-   <li>Utilise 47 (and counting) devastating weapons!</li>
-   <li xml:lang="de">Benutze 47 zerstörerische Waffen – und es werden ständig mehr</li>
+   <li>Attack with one of over 38 devastating weapons!</li>
+   <li xml:lang="de">Greif mit einer von über 38 zerstörerischen Waffen an</li>
    <li>Including the piano strike and explosive robotic cake</li>
    <li xml:lang="de">Darunter auch der Pianoangriff und ein explosiver robotischer Kuchen</li>
-   <li>Play the game your way, with 18 different game modifiers, tweak almost every aspect of the match</li>
-   <li xml:lang="de">Spiel das Spiel wie du magst, mit 18 verschiedenen Spielmodifikatoren; du kannst fast jeden Aspekt des Spiels anpassen</li>
-   <li>Customize your team, with over 120 costumes, 30 graves, 12 forts, 100s of flags and unique voice packs</li>
-   <li xml:lang="de">Gestalte dein Team mit über 120 Kostümen, 30 Gräbern, 12 Festungen, hunderten Flaggen und einzigartigen Stimmen</li>
-   <li>Huge battles with up to 48 hogs</li>
-   <li xml:lang="de">Riesige Schlachten mit bis zu 48 Igeln</li>
+   <li>Utilise over 16 utilities like the rope or portable portal device to pave your path to victory</li>
+   <li xml:lang="de">Benutze über 16 Werkzeuge wie das Seil oder das tragbare Portalgerät, um dir zum Sieg zu verhelfen</li>
+   <li>Play the game your way, with many different game modifiers, tweak almost every aspect of the match</li>
+   <li xml:lang="de">Spiel das Spiel, wie du magst, mit vielen verschiedenen Spielmodifikatoren; du kannst fast jeden Aspekt des Spiels anpassen</li>
+   <li>Customize your team, with numerous hats, costumes, graves, forts, flags and unique voice packs</li>
+   <li xml:lang="de">Gestalte dein Team mit zahlreichen Hüten, Kostümen, Gräbern, Festungen, Flaggen und einzigartigen Stimmen</li>
+   <li>Huge battles with up to 64 hedgehogs</li>
+   <li xml:lang="de">Riesige Schlachten mit bis zu 64 Igeln</li>
    <li>Play both singleplayer and multiplayer minigames</li>
    <li xml:lang="de">Spiele Minispiele im Einzel- und Mehrspielermodus</li>
    <li>Plugin your own custom maps, costumes, and other artwork</li>
-   <li xml:lang="de">Baue benutzerestellte Karten, Kostüme und andere Werke ein</li>
+   <li xml:lang="de">Baue deine eigene Karten, Kostüme und andere Werke ein</li>
   </ul>
  </description>
  <provides>
