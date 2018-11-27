@@ -125,14 +125,6 @@
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <source>Please, specify %1</source>
-        <translation type="vanished">Пожалуйста, укажите %1</translation>
-    </message>
-    <message>
-        <source>nickname</source>
-        <translation type="vanished">псевдоним</translation>
-    </message>
-    <message>
         <source>permanent</source>
         <translation>постоянный</translation>
     </message>
@@ -467,10 +459,6 @@ Please check your installation!</source>
         <translation>Не могу сохранить запись в файл %1</translation>
     </message>
     <message>
-        <source>DefaultTeam</source>
-        <translation type="vanished">Команда по умолчанию</translation>
-    </message>
-    <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
         <translation>Файл записи игры hedgewars</translation>
@@ -567,10 +555,6 @@ Please wait a few seconds and try again.</source>
 Пожалуйста, попробуйте снова через несколько секунд.</translation>
     </message>
     <message>
-        <source>This page requires an internet connection.</source>
-        <translation type="vanished">Для этой страницы нужно соединение с интернетом.</translation>
-    </message>
-    <message>
         <source>Guest</source>
         <translation>Гость</translation>
     </message>
@@ -621,24 +605,6 @@ Please, enter the password:</source>
     <message>
         <source>Cannot open demofile %1</source>
         <translation>Не могу открыть демо %1</translation>
-    </message>
-    <message>
-        <source>A Fatal ERROR occured! - The game engine had to stop.
-
-We are very sorry for the inconvenience :(
-
-If this keeps happening, please click the &apos;%1&apos; button in the main menu!
-
-Last two engine messages:
-%2</source>
-        <translation type="vanished">Произошла фатальная ошибка! - Движку игры пришлось остановить работу .
-
-Мы очень сожалеем о произошедем :(
-
-Если это продолжает происходить, нажмите кнопку &apos;%1&apos; в главном меню!
-
-Последние два сообщения от движка:
-%2</translation>
     </message>
     <message>
         <source>A fatal ERROR occured! The game engine had to stop.
@@ -874,14 +840,6 @@ Last engine message:
         <translation>Ошибка подключения. Проверьте имя сервера и номер порта.</translation>
     </message>
     <message>
-        <source>Connection refused</source>
-        <translation type="vanished">Отказано в соединении</translation>
-    </message>
-    <message>
-        <source>Quit reason: </source>
-        <translation type="vanished">Вышел: </translation>
-    </message>
-    <message>
         <source>Room destroyed</source>
         <translation>Комната удалена</translation>
     </message>
@@ -904,10 +862,6 @@ Last engine message:
     <message>
         <source>%1 *** %2 has left</source>
         <translation>%1 *** %2 ушёл</translation>
-    </message>
-    <message>
-        <source>User quit</source>
-        <translation type="vanished">Пользователь вышел</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -974,17 +928,6 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
-    <name>HWUploadVideoDialog</name>
-    <message>
-        <source>Upload video</source>
-        <translation type="vanished">Залить видео</translation>
-    </message>
-    <message>
-        <source>Upload</source>
-        <translation type="vanished">Залить</translation>
-    </message>
-</context>
-<context>
     <name>HatButton</name>
     <message>
         <source>Change hat (%1)</source>
@@ -1048,25 +991,9 @@ just enter your nickname.</source>
         <translation>неизвестно</translation>
     </message>
     <message>
-        <source>Duration: %1m %2s</source>
-        <translation type="vanished">Длительность: %1мин %2сек</translation>
-    </message>
-    <message>
-        <source>Video: %1x%2</source>
-        <translation type="vanished">Видео: %1x%2</translation>
-    </message>
-    <message>
-        <source>%1 fps</source>
-        <translation type="vanished">%1 кадров/сек</translation>
-    </message>
-    <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
         <translation>Длительность: %1 мин %2 сек</translation>
-    </message>
-    <message>
-        <source>%1 FPS</source>
-        <translation type="vanished">%1 кадров/сек</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
@@ -1212,10 +1139,6 @@ just enter your nickname.</source>
     <message>
         <source>Loading, please wait.</source>
         <translation>Идёт загрузка пожалуйста, подождите.</translation>
-    </message>
-    <message>
-        <source>This page requires an internet connection.</source>
-        <translation type="vanished">Для этой страницы нужно соединение с интернетом.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
@@ -1426,22 +1349,6 @@ just enter your nickname.</source>
             <numerusform>(%1 убийство)</numerusform>
             <numerusform>(%1 убийства)</numerusform>
             <numerusform>(%1 убийств)</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="vanished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пункт урона.</numerusform>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пункта урона.</numerusform>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пунктов урона.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="vanished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзника.</numerusform>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзников.</numerusform>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзников.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1953,10 +1860,6 @@ just enter your nickname.</source>
         <translation type="obsolete">Команды располагаются в противоположных сторонах карты, два цвета команды на карте!</translation>
     </message>
     <message>
-        <source>Land can not be destroyed!</source>
-        <translation type="vanished">Земля не может быть разрушена!</translation>
-    </message>
-    <message>
         <source>Lower gravity</source>
         <translation>Пониженная гравитация</translation>
     </message>
@@ -2261,10 +2164,6 @@ just enter your nickname.</source>
         <translation>кодирование</translation>
     </message>
     <message>
-        <source>uploading</source>
-        <translation type="vanished">отправка</translation>
-    </message>
-    <message>
         <source>Date: %1
 </source>
         <translation type="obsolete">Дата: %1</translation>
@@ -2393,14 +2292,6 @@ just enter your nickname.</source>
     <message>
         <source>Save password</source>
         <translation>Сохранить пароль</translation>
-    </message>
-    <message>
-        <source>Save account name and password</source>
-        <translation type="vanished">Сохранить псевдоним и пароль</translation>
-    </message>
-    <message>
-        <source>Video is private</source>
-        <translation type="vanished">Частное видео</translation>
     </message>
     <message>
         <source>Record audio</source>
@@ -2777,10 +2668,6 @@ just enter your nickname.</source>
         <translation>% длины верёвки</translation>
     </message>
     <message>
-        <source>Stereo rendering</source>
-        <translation type="vanished">Стереоизображение</translation>
-    </message>
-    <message>
         <source>Style</source>
         <translation>Стиль</translation>
     </message>
@@ -2803,10 +2690,6 @@ Do you really want to quit?</source>
         <translation>Сейчас происходит обработка видео.
 Выход отменить обработку.
 Всё равно выйти?</translation>
-    </message>
-    <message>
-        <source>Password: </source>
-        <translation type="vanished">Пароль: </translation>
     </message>
     <message>
         <source>Description</source>
@@ -2951,16 +2834,8 @@ Do you really want to quit?</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <source>Connection to server is lost</source>
-        <translation type="vanished">Соединение с сервером потеряно</translation>
-    </message>
-    <message>
         <source>File association failed.</source>
         <translation>Сопоставление не удалось.</translation>
-    </message>
-    <message>
-        <source>Login or password is incorrect</source>
-        <translation type="vanished">Некорректное имя пользователя или пароль</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -3013,14 +2888,6 @@ Do you really want to quit?</source>
     <message>
         <source>Please enter room name</source>
         <translation>Введите название комнаты</translation>
-    </message>
-    <message>
-        <source>Please select record from the list</source>
-        <translation type="vanished">Выберите запись из списка</translation>
-    </message>
-    <message>
-        <source>Cannot delete file </source>
-        <translation type="vanished">Не могу удалить файл </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -3269,14 +3136,6 @@ You seem to be new around here. Would you like to play some training missions fi
         <translation>Проиграть</translation>
     </message>
     <message>
-        <source>Upload to YouTube</source>
-        <translation type="vanished">Отправить на YouTube</translation>
-    </message>
-    <message>
-        <source>Cancel uploading</source>
-        <translation type="vanished">Отменить отправку</translation>
-    </message>
-    <message>
         <source>Restore default coding parameters</source>
         <translation>Восстановить параметры кодирования</translation>
     </message>
@@ -3291,10 +3150,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Delete this video</source>
         <translation>Удалить видео</translation>
-    </message>
-    <message>
-        <source>Upload this video to your Youtube account</source>
-        <translation type="vanished">Отправить на YouTube</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -3315,10 +3170,6 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Start private server</source>
         <translation>Запустить личный сервер</translation>
-    </message>
-    <message>
-        <source>Upload this video to your YouTube account</source>
-        <translation type="vanished">Отправить на YouTube</translation>
     </message>
 </context>
 <context>
@@ -3650,10 +3501,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>сменить режим</translation>
     </message>
     <message>
-        <source>pause</source>
-        <translation type="vanished">пауза</translation>
-    </message>
-    <message>
         <source>slot 9</source>
         <translation>слот 9</translation>
     </message>
@@ -3704,10 +3551,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>record</source>
         <translation>записать</translation>
-    </message>
-    <message>
-        <source>hedgehog info</source>
-        <translation type="vanished">информация о еже</translation>
     </message>
     <message>
         <source>autocam / find hedgehog</source>
@@ -3801,10 +3644,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>Изменение уровня увеличения камеры:</translation>
     </message>
     <message>
-        <source>Talk to your team or all participants:</source>
-        <translation type="vanished">Разговор с командой или всеми участниками:</translation>
-    </message>
-    <message>
         <source>Pause, continue or leave your game:</source>
         <translation>Пауза, продолжение или выход из игры:</translation>
     </message>
@@ -3819,10 +3658,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Take a screenshot:</source>
         <translation>Создание скриншота:</translation>
-    </message>
-    <message>
-        <source>Toggle labels above hedgehogs:</source>
-        <translation type="vanished">Переключение меток над ежами:</translation>
     </message>
     <message>
         <source>Record video:</source>
@@ -3851,34 +3686,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
 </context>
 <context>
     <name>binds (keys)</name>
-    <message>
-        <source>Axis</source>
-        <translation type="vanished">Ось</translation>
-    </message>
-    <message>
-        <source>(Up)</source>
-        <translation type="vanished">(Вверх)</translation>
-    </message>
-    <message>
-        <source>(Down)</source>
-        <translation type="vanished">(Вниз)</translation>
-    </message>
-    <message>
-        <source>Hat</source>
-        <translation type="vanished">Шляпа</translation>
-    </message>
-    <message>
-        <source>(Left)</source>
-        <translation type="vanished">(Влево)</translation>
-    </message>
-    <message>
-        <source>(Right)</source>
-        <translation type="vanished">(Вправо)</translation>
-    </message>
-    <message>
-        <source>Button</source>
-        <translation type="vanished">Кнопка</translation>
-    </message>
     <message>
         <source>Keyboard</source>
         <translation>Клавиатура</translation>
@@ -4186,22 +3993,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
 <context>
     <name>server</name>
     <message>
-        <source>too many teams</source>
-        <translation type="vanished">слишком много команд</translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="vanished">слишком много ежей</translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="vanished">В списке уже есть команда с таким названием</translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="vanished">ограничено</translation>
-    </message>
-    <message>
         <source>Nickname is already in use</source>
         <translation>Псевдоним уже используется</translation>
     </message>
@@ -4224,26 +4015,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Ping timeout</source>
         <translation>Тайм-аут пинга</translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="vanished">пока</translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="vanished">Нет такой комнаты</translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="vanished">Вход ограничен</translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="vanished">Только для зарегистрированных игроков</translation>
-    </message>
-    <message>
-        <source>Restricted</source>
-        <translation type="vanished">Ограничено</translation>
     </message>
     <message>
         <source>New voting started</source>
@@ -4280,10 +4051,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Warning! Joins flood protection activated</source>
         <translation>Предупреждение! Защита от флуда активирована</translation>
-    </message>
-    <message>
-        <source>Your vote counted</source>
-        <translation type="vanished">Ваш голос учтён</translation>
     </message>
     <message>
         <source>new seed</source>
