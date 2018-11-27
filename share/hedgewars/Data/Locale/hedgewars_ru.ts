@@ -1339,7 +1339,7 @@ just enter your nickname.</source>
         <translation>
             <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит в течение игры.</numerusform>
             <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжика были убиты в течение игры.</numerusform>
-            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ежей были убиты в течение игры.</numerusform>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжиков были убиты в течение игры.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1881,7 +1881,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>Расставить ежей вручную перед игрой.</translation>
+        <translation>Расставить ёжиков вручную перед игрой.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
@@ -1969,7 +1969,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
-        <translation>Начальное здоровье ежей</translation>
+        <translation>Начальное здоровье ёжиков</translation>
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
@@ -2343,7 +2343,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
-        <translation>Включить ярлыки ежей по умолчанию</translation>
+        <translation>Включить ярлыки ёжиков по умолчанию</translation>
     </message>
     <message>
         <source>Health</source>
