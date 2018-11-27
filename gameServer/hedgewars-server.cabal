@@ -36,6 +36,8 @@ Executable hedgewars-server
     zlib >= 0.5.3 && < 0.7,
     regex-tdfa,
     binary >= 0.8.5.1,
+
+-- These dependencies are for OFFICIAL_SERVER only and do not need to be mentioned in docs
     yaml >= 0.8.30,
     aeson,
     text >= 1.2
