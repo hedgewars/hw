@@ -391,7 +391,7 @@ Bitte überprüfe deine Installation!</translation>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation>Hedgewars kann ein %1 (z.B. »%2«) verwenden, um beim Start zu verbinden.</translation>
+        <translation>Hedgewars kann einen %1 (z.B. »%2«) verwenden, um sich beim Start zu verbinden.</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
