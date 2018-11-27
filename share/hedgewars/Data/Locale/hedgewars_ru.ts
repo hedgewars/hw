@@ -343,47 +343,47 @@ Please check your installation!</source>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>ОПЦИЯ</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>СТРОКА ПОДКЛЮЧЕНИЯ</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Опции</translation>
     </message>
     <message>
         <source>Display this help</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Отобразить эту справку</translation>
     </message>
     <message>
         <source>Custom path for configuration data and user data</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Свой путь к конфигурационным и пользовательским данным</translation>
     </message>
     <message>
         <source>Custom path to the game data folder</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation type>Свой путь к каталогу игры</translation>
     </message>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>В Hedgewars доступна %1 (например &quot;%2&quot;) для подсоединения прямо со старта.</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Неверный аргумент опции: %1</translation>
     </message>
     <message>
         <source>Unknown option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная опция: %1</translation>
     </message>
 </context>
 <context>
@@ -1809,7 +1809,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>ОТСУТСТВУЕТ ЯЗЫК [%1]</translation>
     </message>
     <message>
         <source>Check now</source>
@@ -2058,7 +2058,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
-        <translation type="unfinished"></translation>
+        <translation>Процент урона и силы отбрасывания</translation>
     </message>
     <message>
         <source>Turn time in seconds</source>
@@ -2118,7 +2118,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Affects the left and right boundaries of the map</source>
-        <translation type="unfinished"></translation>
+        <translation>Влияет на левую и правую границы карты</translation>
     </message>
     <message>
         <source>Time you get after an attack</source>
@@ -2126,7 +2126,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительный параметр для конфигурирования стиля игры. Значение зависит от выбранного стиля, в соответствии с документацией. Если сомневаетесь, оставьте его пустым.</translation>
     </message>
     <message>
         <source>Name of this scheme</source>
@@ -2834,7 +2834,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта версия находится в разработке, поэтому может быть не совместима с другими версиями игры и некоторые возможности могут быть не работать!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -2898,7 +2898,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>% Retreat Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% времени на отход</translation>
     </message>
     <message>
         <source>Stereoscopy</source>
@@ -3977,63 +3977,63 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished"></translation>
+        <translation>Цифровая клавиатура +</translation>
     </message>
     <message>
         <source>Enter</source>
