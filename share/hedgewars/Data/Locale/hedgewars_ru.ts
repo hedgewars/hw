@@ -2309,7 +2309,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Info</source>
-        <translation>Инфо</translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <source>Ban</source>
@@ -2317,7 +2317,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Follow</source>
-        <translation>Следовать</translation>
+        <translation>Присоединиться</translation>
     </message>
     <message>
         <source>Ignore</source>
