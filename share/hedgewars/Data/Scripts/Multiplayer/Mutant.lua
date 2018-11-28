@@ -313,23 +313,34 @@ function onGameTick()
         end
     end
 
-    if TurnTimeLeft==0 and mt_hurt then
+    if (TurnTimeLeft==0 or band(GetState(mutant), gstHHDriven) == 0) and mt_hurt then
         mt_hurt = false
     end
 
-    if mt_hurt and mutant~=nil then
+    -- Mutant's disease
+    -- Hurt Mutant during its turn time
+    -- Mutant's health is safe in ready phase
+    if mt_hurt and mutant~=nil and ReadyTimeLeft == 0 then
         timer = timer + 1
-            if timer > disease_timer then
-                timer = 0
-                SetHealth(mutant, GetHealth(mutant)-disease )
-                AddVisualGear(GetX(mutant), GetY(mutant)-5, vgtHealthTag, disease, true)
-                    if GetHealth(mutant)<=0 then
-                        SetHealth(mutant,0)
-                        mt_hurt= false
-                        setGearValue(mutant,"SelfDestruct",true)
-                        EndTurn()
-                    end
+        if timer > disease_timer then
+            timer = 0
+            local h = GetHealth(mutant)-disease
+            SetHealth(mutant, h)
+            -- Low health warning
+            if h <= 75 then
+                PlaySound(sndPoisonMoan, mutant)
+            elseif h <= 150 then
+                PlaySound(sndPoisonCough, mutant)
             end
+            local tag = AddVisualGear(GetX(mutant), GetY(mutant)-5, vgtHealthTag, disease, true)
+            SetVisualGearValues(tag, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(mutant)))
+            if GetHealth(mutant)<=0 then
+                SetHealth(mutant,0)
+                mt_hurt= false
+                setGearValue(mutant,"SelfDestruct",true)
+                EndTurn()
+            end
+        end
     end
 
 end
