@@ -1852,8 +1852,13 @@ var
     prevX: LongInt;
 begin
     AllInactive := false;
-    WorldWrap(Gear);
     dec(Gear^.Timer);
+
+    if WorldWrap(Gear) or (((Gear^.Timer) mod 500) = 0) then
+    begin
+        ClearHitOrder();
+        RefillProximityCache(Gear, 100);
+    end;
 
     if Gear^.Hedgehog^.Gear = nil then
         begin
@@ -1918,7 +1923,7 @@ begin
                 Gear^.Y := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
                 end;
             HHGear^.State := HHGear^.State or gstNoDamage;
-            AmmoShove(Gear, Gear^.Boom, 15);
+            AmmoShoveCache(Gear, Gear^.Boom, 15);
             HHGear^.State := HHGear^.State and (not gstNoDamage)
             end;
         end;
@@ -1935,6 +1940,8 @@ begin
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0)
     or ((HHGear^.Message and gmAttack) <> 0) then
         begin
+        ClearHitOrder();
+        ClearProximityCache();
         StopSoundChan(Gear^.SoundChannel);
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
@@ -1961,7 +1968,10 @@ begin
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.SoundChannel := LoopSound(sndBlowTorch);
-    Gear^.doStep := @doStepBlowTorchWork
+    Gear^.doStep := @doStepBlowTorchWork;
+
+    ClearHitOrder();
+    RefillProximityCache(Gear, 100);
 end;
 
 
