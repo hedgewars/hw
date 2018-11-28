@@ -1,5 +1,6 @@
 pub mod instance;
 mod ipc;
+mod render;
 mod world;
 
 use gfx::{format::Formatted, Encoder};
