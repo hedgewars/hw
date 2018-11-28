@@ -4258,7 +4258,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power: Активировать вашу суперсилу. С ней вы можете войти в любую комнату и вас нельзя будет кикнуть. Действие заканчивается при выходе с сервера</translation>
+        <translation>/super_power: Активировать вашу суперсилу. С ней вы можете войти в любую комнату, и вас нельзя будет кикнуть. Действие заканчивается при выходе с сервера</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
