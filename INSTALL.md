@@ -76,7 +76,7 @@ To compile it, you need:
     - `utf8-string`
     - `SHA`
     - `entropy`
-    - `zlib` >= 0.5.3 and < 0.6
+    - `zlib` >= 0.5.3 and < 0.7
     - `regex-tdfa`
     - `binary` >= 0.8.5.1
 

@@ -5,6 +5,7 @@ HIGHLIGHTS:
  + Complete overhaul of Continental supplies
  + Can adjust weapon start and crate probabilities in Balanced Random Weapon
  + Remove rubber duck
+ + New air mine features
  + Rework team rankings
  + Tied teams now rank equally
  + Help button in main menu
@@ -19,7 +20,8 @@ HIGHLIGHTS:
 Game, gameplay:
  + Increase hedgehog limit to 64
  + Remove rubber duck
- + Shotgun, Desert Eagle, Sniper Rifle, Firepunch, Kamikaze, Whip and Baseball Bat can now hit air mines (and some other moving gears) ...
+ + Shotgun, Desert Eagle, Sniper Rifle, Firepunch, Kamikaze, Whip and Baseball Bat can now hit air mines (and some other projectiles)
+ + Freezer can freeze air mines when they don't move too fast
  + Air mines get stunned by getting shoved
  + Shotgun shots can now pass through portals
  * Fix hog being unable to walk after using sniper rifle without firing both shots
@@ -75,7 +77,6 @@ Frontend:
  + Add help button in main menu (link to Hedgewars Wiki)
  + Add setting to disable audio dampening when losing window focus
  + Rework player rankings: Losing clans are now ranked in the reverse order they died
- + Add-ons now support preview images for campaign missions
  * Fix player rankings on round draw: Clans that died in the same turn now have the same rank
  * Fix rare crash when aborting video encoding in progress
  * Fix critical failure to cleanup teams list after rejoining game under certain conditions
@@ -110,6 +111,8 @@ Random Weapon:
  * Fix breakage when enabling per-hog ammo
 
 Mutant:
+ + Do not reduce mutant's health in Ready phase
+ + Play poison hurt sound when mutant is low on health
  + Unlock game scheme
 
 Continental supplies:
@@ -122,6 +125,7 @@ Continental supplies:
  + Show message when hog receives new continent ammo
  + Sabotaged hedgehogs also emit smoke when it's not their turn
  + Can switch continent in reverse order with [Precise]+[Switch]
+ * Sabotage deals no damage in ready phase, while attacking or retreating
  * Invulnerability now protects from sabotage damage
  * Sabotage kills hog instantly when health reaches 0
  * Reliably prevent using of Lonely Cries and baseball bat specials when usage not allowed
@@ -162,6 +166,10 @@ Themes:
  + Add dust flakes for Cheese and CrazyMission themes
  + New land objects for Beach theme
  * Fix repeating sun in Hoggywood theme
+
+Content creation:
+ + HWPs can be nested inside HWPs (1 layer deep only)
+ + Add-ons now support preview images for campaign missions
 
 Translations:
  + Translations kept up-to-date: German, Polish
