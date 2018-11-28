@@ -3031,7 +3031,7 @@ Not all players are ready.</source>
 You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
         <translation>Добро пожаловать в Hedgewars!
 
-Кажется, вы здесь новичок. Не желаете ли сыграть в тренировочные миссии для начала, чтобы освоиться в Hedgewars?</translation>
+Кажется, вы здесь новичок. Не желаете ли сначала сыграть в тренировочные миссии, чтобы освоиться в Hedgewars?</translation>
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
