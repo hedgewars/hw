@@ -6471,6 +6471,7 @@ begin
                                 begin
 								iter^.Damage:= 0;
 								iter^.State:= iter^.State or gstFrozen;
+                AddCI(iter);
 								if (hwRound(iter^.X) < RightX) and (hwRound(iter^.X) > 0) and 
 									(hwRound(iter^.Y) < LAND_HEIGHT) and (hwRound(iter^.Y) > 0) then
 									begin
