@@ -10,7 +10,8 @@ use glutin::{
 use gfx::{
     texture,
     format,
-    Encoder
+    Encoder,
+    Device
 };
 
 use gfx_window_glutin::init_existing;
@@ -62,5 +63,6 @@ fn main() {
         encoder.flush(&mut device);
 
         window.swap_buffers().unwrap();
+        device.cleanup();
     }
 }
