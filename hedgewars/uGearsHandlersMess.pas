@@ -2073,7 +2073,8 @@ begin
         begin
         if Gear^.Damage > 0 then
             begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound or EXPLForceDraw);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound or EXPLDontDraw);
+            DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom+1);
             DeleteGear(Gear)
             end;
         doStepFallingGear(Gear);
