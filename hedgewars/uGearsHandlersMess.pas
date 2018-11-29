@@ -6432,7 +6432,7 @@ begin
                         begin
                         if (iter^.State and gstFrozen = 0) and
                            ((iter^.Kind = gtExplosives) or (iter^.Kind = gtAirMine) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine) or (iter^.Kind = gtSMine)) and
-                           (abs(LongInt(iter^.X.Round) - target.x) + abs(LongInt(iter^.Y.Round) - target.y) + 2 < 2 * iceRadius)
+                           (abs(hwRound(iter^.X) - target.x) + abs(hwRound(iter^.Y) - target.y) + 2 < 2 * iceRadius)
                            and (Distance(iter^.X - int2hwFloat(target.x), iter^.Y - int2hwFloat(target.y)) < int2hwFloat(iceRadius * 2)) then
                             begin
                             for t:= 0 to 5 do
