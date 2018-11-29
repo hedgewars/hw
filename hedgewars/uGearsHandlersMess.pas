@@ -6479,10 +6479,10 @@ begin
                                 begin
                                 iter^.Damage:= 0;
                                 iter^.State:= iter^.State or gstFrozen;
-                                AddCI(iter);
                                 if (hwRound(iter^.X) < RightX-16) and (hwRound(iter^.X) > LeftX+16) and 
                                     (hwRound(iter^.Y) > topY+16) and (hwRound(iter^.Y) < LAND_HEIGHT-16) then
                                     begin
+                                    AddCI(iter);
 									iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), LeftX+16)));
 									iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),TopY+16)));
                                     ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);    
