@@ -2068,16 +2068,17 @@ var i,t,targDist,tmpDist: LongWord;
     isUnderwater: Boolean;
     sparkle: PVisualGear;
 begin
-	targ:= nil;
-	if (Gear^.State and gstFrozen) <> 0 then
-		begin
-		if Gear^.Damage > 0 then
-			begin
-			doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound or EXPLForceDraw);
-			DeleteGear(Gear)
-			end;
-		exit
-		end;
+    targ:= nil;
+    if (Gear^.State and gstFrozen) <> 0 then
+        begin
+        if Gear^.Damage > 0 then
+            begin
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound or EXPLForceDraw);
+            DeleteGear(Gear)
+            end;
+        doStepFallingGear(Gear);
+        exit
+        end;
     isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
     if Gear^.Pos > 0 then
         begin
@@ -2704,7 +2705,7 @@ begin
             Gear^.dX:= tdX;
             Gear^.dY:= tdY;
             Gear^.Radius := 1
-	    end;
+        end;
 
         if ((GameTicks mod 100) = 0) then
             begin
@@ -5653,7 +5654,7 @@ begin
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
                 flame^.CollisionMask:= lfNotCurHogCrate;
-		//flame^.FlightTime:= 500;
+        //flame^.FlightTime:= 500;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
@@ -5839,7 +5840,7 @@ while i > 0 do
                     if dmg > 0 then
                         ApplyDamage(tmp, CurrentHedgehog, dmg, dsHammer);
                     end;
-		tmp^.dY:= _0_03 * Gear^.Boom
+        tmp^.dY:= _0_03 * Gear^.Boom
                 end;
 
             if (tmp^.Kind <> gtHedgehog) or (dmg > 0) or (tmp^.Health > tmp^.Damage) then
@@ -6469,16 +6470,24 @@ begin
                                 end
                             else if iter^.Kind = gtAirMine then
                                 begin
-								iter^.Damage:= 0;
-								iter^.State:= iter^.State or gstFrozen;
-                AddCI(iter);
-								if (hwRound(iter^.X) < RightX) and (hwRound(iter^.X) > 0) and 
-									(hwRound(iter^.Y) < LAND_HEIGHT) and (hwRound(iter^.Y) > 0) then
+                                iter^.Damage:= 0;
+                                iter^.State:= iter^.State or gstFrozen;
+                                AddCI(iter);
+                                if (hwRound(iter^.X) < RightX-16) and (hwRound(iter^.X) > LeftX+16) and 
+                                    (hwRound(iter^.Y) > topY+16) and (hwRound(iter^.Y) < LAND_HEIGHT-16) then
+                                    begin
+									iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), LeftX+16)));
+									iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),TopY+16)));
+                                    ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);    
+                                    iter^.State:= iter^.State or gstInvisible
+                                    end
+                                else
 									begin
-									iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), 16)));
-									iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),16)));
-									ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);	
-									iter^.State:= iter^.State or gstInvisible
+									updateTarget(Gear, ndX, ndY);
+									FlightTime := 0;
+									Timer := iceWaitCollision;
+									Power := GameTicks;
+                                    iter^.State:= iter^.State and not gstNoGravity
 									end
                                 end
                             else // gtExplosives
@@ -6493,7 +6502,7 @@ begin
                     // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;
                     Timer := iceWaitCollision;
-					Power:= GameTicks
+                    Power:= GameTicks
                     end;
 
                 if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime div 2) then
@@ -6553,17 +6562,17 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
                 end
-			else
-				begin
-				iter:= CheckGearNear(Gear, gtAirMine, Gear^.Radius*2, Gear^.Radius*2);
-				if (iter <> nil) and (iter^.State <> gstFrozen) then
-					begin
-					Target.X:= gX;
-					Target.Y:= gY;
-					X:= HHGear^.X;
-					Y:= HHGear^.Y
-					end 
-				end;
+            else
+                begin
+                iter:= CheckGearNear(Gear, gtAirMine, Gear^.Radius*2, Gear^.Radius*2);
+                if (iter <> nil) and (iter^.State <> gstFrozen) then
+                    begin
+                    Target.X:= gX;
+                    Target.Y:= gY;
+                    X:= HHGear^.X;
+                    Y:= HHGear^.Y
+                    end 
+                end;
             if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
@@ -6633,17 +6642,17 @@ var i,t,targDist,tmpDist: LongWord;
     tX, tY: hwFloat;
     vg: PVisualGear;
 begin
-	targ:= nil;
+    targ:= nil;
     doStepFallingGear(Gear);
-	if (Gear^.State and gstFrozen) <> 0 then
-		begin
-		if Gear^.Damage > 0 then
-			begin
-			doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
-			DeleteGear(Gear)
-			end;
-		exit
-		end;
+    if (Gear^.State and gstFrozen) <> 0 then
+        begin
+        if Gear^.Damage > 0 then
+            begin
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+            DeleteGear(Gear)
+            end;
+        exit
+        end;
     if (TurnTimeLeft = 0) or (Gear^.Angle = 0) or (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Gear = nil) then
         begin
         Gear^.Hedgehog:= nil;

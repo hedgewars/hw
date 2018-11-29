@@ -1337,9 +1337,9 @@ begin
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
          gtAirMine: 
-					if (Gear^.State and gstFrozen <> 0) then 
-                        DrawSprite(sprFrozenAirMine, x-16, y-16, 15)
-          else if (Gear^.Tag <> 0) then
+					if (Gear^.State and gstFrozen <> 0) then
+                        DrawSprite(sprFrozenAirMine, x-16, y-16, 0)
+					else if (Gear^.Tag <> 0) then
                         DrawSprite(sprAirMine, x-16, y-16, 16 + ((RealTicks div 50 + Gear^.Uid) mod 16))
 					else if (Gear^.State and gstTmpFlag = 0) then                // mine is inactive
                         begin
