@@ -386,8 +386,8 @@ local utilArray =
 
 				--skiphog is 6
 
-local effectArray = { heInvulnerable, hePoisoned, heResurrectable, heResurrected, heFrozen }
-local effectStr = { "heInvulnerable", "hePoisoned", "heResurrectable", "heResurrected", "heFrozen" }
+local effectArray = { heInvulnerable, hePoisoned, heResurrectable, heResurrected, heFrozen, heArtillery }
+local effectStr = { "heInvulnerable", "hePoisoned", "heResurrectable", "heResurrected", "heFrozen", "heArtillery" }
 
 ----------------------------
 -- hog and map editing junk
@@ -3137,6 +3137,10 @@ function HandleHedgeEditor()
 			if(band(GetState(g), gstDrowning) ~= 0) then
 				DeleteVisualGear(v)
 				tagGears[g] = nil
+			-- Delete tag for frozen mines and air mines
+			elseif(band(GetState(g), gstFrozen) ~= 0 and (gt == gtAirMine or gt == gtSMine)) then
+				DeleteVisualGear(v)
+				tagGears[g] = nil
 			elseif(tagGears[g] ~= nil and tagGears[g] ~= -1) then
 				local tag, actualvalue, offset_x, offset_y
 				tag = GetState(v)
@@ -3846,7 +3850,7 @@ function onGearAdd(gear)
 	else
 		tagTint = 0x00000000
 	end
-	if ((GetGearType(gear) == gtMine and GetHealth(gear) ~= 0) or GetGearType(gear) == gtSMine) then
+	if ((GetGearType(gear) == gtMine and GetHealth(gear) ~= 0) or (GetGearType(gear) == gtSMine and band(GetState(gear), gstFrozen) == 0)) then
 		local v = AddVisualGear(0, 0, vgtHealthTag, GetTimer(gear), true)
 		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
 		tagGears[gear] = v
@@ -3856,7 +3860,7 @@ function onGearAdd(gear)
 		local v = AddVisualGear(0, 0, vgtHealthTag, 36 - dmg, true)
 		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
 		tagGears[gear] = v
-	elseif (GetGearType(gear) == gtAirMine) then
+	elseif (GetGearType(gear) == gtAirMine and band(GetState(gear), gstFrozen) == 0) then
 		local _, wdTimer
 		_, _, wdTimer = GetGearValues(gear)
 		local v = AddVisualGear(0, 0, vgtHealthTag, wdTimer, true)
