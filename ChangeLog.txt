@@ -115,6 +115,9 @@ Mutant:
  + Play poison hurt sound when mutant is low on health
  + Unlock game scheme
 
+Construction Mode:
+ * Fix girder/rubber cost not being updated correctly after selection
+
 Continental supplies:
  + Continents are now selected before the game starts
  + Continents give hog different start health

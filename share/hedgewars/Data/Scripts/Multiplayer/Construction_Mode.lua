@@ -1189,10 +1189,12 @@ function HandleConstructionModeTools()
 		if (curWep == amGirder) then
 			cIndex = 1
 			RedefineSubset()
+			updateCost()
 			updated = true
 		elseif (curWep == amRubber) then
 			cIndex = 2
 			RedefineSubset()
+			updateCost()
 			updated = true
 		elseif (curWep == amCMStructurePlacer) then
 			cIndex = 9
@@ -1537,7 +1539,6 @@ function rotateMode(pDir)
 
 	if foundMatch == true then
 		RedefineSubset()
-		--updateCost()
 		HandleConstructionModeTools()
 	end
 end
