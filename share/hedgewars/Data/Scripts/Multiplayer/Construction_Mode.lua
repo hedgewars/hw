@@ -286,12 +286,14 @@ function IsConstructionModeAmmo(ammoType)
 end
 
 function RenderClanPower()
+	DrawClanPowerTag()
+end
+
+function UpdateTeamLabels()
 	for i=0, TeamsCount-1 do
 		local name = GetTeamName(i)
 		SetTeamLabel(name, clanPower[GetTeamClan(name)])
 	end
-
-	DrawClanPowerTag()
 end
 
 function DrawClanPowerTag()
@@ -1086,6 +1088,7 @@ function PlaceObject(x,y)
 			-- Pay the price
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
 			RenderClanPower()
+			UpdateTeamLabels()
 			if cat[cIndex] == "Girder Placement Mode" or cat[cIndex] == "Rubber Placement Mode" then
 				PlaySound(sndPlaced)
 			end
@@ -1345,6 +1348,10 @@ end
 function HandleConstructionMode()
 
 	HandleStructures()
+
+	if GameTime % 100 == 0 then
+		UpdateTeamLabels()
+	end
 
 	if CurrentHedgehog ~= nil then
 
@@ -1834,6 +1841,7 @@ function onNewTurn()
 	clanCratesSpawned[clan] = 0
 
 	RenderClanPower()
+	UpdateTeamLabels()
 end
 
 function onEndTurn()
