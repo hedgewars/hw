@@ -2073,8 +2073,13 @@ begin
         begin
         if Gear^.Damage > 0 then
             begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound or EXPLDontDraw);
-            DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom+1);
+            // Normal, damaging explosion
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+            // Remove land created by frozen air mine sprite pixel-perfectly
+            EraseLand(
+                hwRound(Gear^.X) - SpritesData[sprFrozenAirMine].Width div 2,
+                hwRound(Gear^.Y) - SpritesData[sprFrozenAirMine].Height div 2,
+                sprFrozenAirMine, 0, 0, false, false, false, false);
             DeleteGear(Gear)
             end;
         doStepFallingGear(Gear);
