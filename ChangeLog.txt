@@ -41,6 +41,7 @@ Game, gameplay:
  * Fix hog sometimes getting stuck in land if roping very fast
  * Fix seduction not stopping if hog took damage before attack was complete
  * Limit hedgehog health to 268435455 to prevent some bugs
+ * Fix rare possibility that hog is resurrected and starts with 0 or negative health
 
 Game, controls and commands:
  + Add new key to show mission panel (default: M)

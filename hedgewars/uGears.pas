@@ -128,11 +128,12 @@ begin
         if Gear^.Kind = gtHedgehog then
             begin
             tmp:= 0;
+            // Deal poison damage (when not frozen)
             if (Gear^.Hedgehog^.Effects[hePoisoned] <> 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) then
                 begin
                 inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then
-                    dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
+                    dec(Gear^.Hedgehog^.InitialHealth);
                 end;
             // Apply SD health decrease as soon as SD starts
             if (TotalRoundsPre > cSuddenDTurns - 1) then
@@ -141,6 +142,7 @@ begin
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth, cHealthDecrease)
                 end;
+            // Reduce king health when he is alone in team
             if Gear^.Hedgehog^.King then
                 begin
                 flag:= false;
@@ -156,6 +158,10 @@ begin
                         dec(Gear^.Hedgehog^.InitialHealth, 5)
                     end
                 end;
+            // Initial health must never be below 1 because hog might be resurrected
+            if Gear^.Hedgehog^.InitialHealth < 1 then
+                Gear^.Hedgehog^.InitialHealth:= 1;
+            // Set real damage
             if tmp > 0 then
                 begin
                 // SD damage never reduces health below 1
