@@ -107,19 +107,19 @@ impl HWServer {
     }
 
     pub fn find_room(&self, name: &str) -> Option<&HWRoom> {
-        self.rooms.iter().find(|(_, r)| r.name == name).map(|(_, r)| r)
+        self.rooms.iter().find_map(|(_, r)| Some(r).filter(|r| r.name == name))
     }
 
     pub fn find_room_mut(&mut self, name: &str) -> Option<&mut HWRoom> {
-        self.rooms.iter_mut().find(|(_, r)| r.name == name).map(|(_, r)| r)
+        self.rooms.iter_mut().find_map(|(_, r)| Some(r).filter(|r| r.name == name))
     }
 
     pub fn find_client(&self, nick: &str) -> Option<&HWClient> {
-        self.clients.iter().find(|(_, c)| c.nick == nick).map(|(_, c)| c)
+        self.clients.iter().find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
     pub fn find_client_mut(&mut self, nick: &str) -> Option<&mut HWClient> {
-        self.clients.iter_mut().find(|(_, c)| c.nick == nick).map(|(_, c)| c)
+        self.clients.iter_mut().find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
     pub fn select_clients<F>(&self, f: F) -> Vec<ClientId>

@@ -228,7 +228,7 @@ impl HWRoom {
 
     pub fn find_team<F>(&self, f: F) -> Option<&TeamInfo>
         where F: Fn(&TeamInfo) -> bool {
-        self.teams.iter().map(|(_, t)| t).find(|t| f(*t))
+        self.teams.iter().find_map(|(_, t)| Some(t).filter(|t| f(&t)))
     }
 
     pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> {

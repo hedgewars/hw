@@ -253,7 +253,7 @@ impl HWProtocolMessage {
 }
 
 fn construct_message(header: &[&str], msg: &[String]) -> String {
-    let mut v: Vec<_> = header.iter().map(|s| *s).collect();
+    let mut v: Vec<_> = header.iter().cloned().collect();
     v.extend(msg.iter().map(|s| &s[..]));
     v.push("\n");
     v.join("\n")

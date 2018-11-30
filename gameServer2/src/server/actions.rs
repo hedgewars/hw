@@ -339,7 +339,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             if let Some(r) = server.room(client_id) {
                 let mut result = None;
                 if let Some(ref mut voting) = r.voting {
-                    if is_forced || voting.votes.iter().find(|(id, _)| client_id == *id).is_none() {
+                    if is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
                         actions.push(server_chat("Your vote has been counted.".to_string())
                             .send_self().action());
                         voting.votes.push((client_id, vote));
