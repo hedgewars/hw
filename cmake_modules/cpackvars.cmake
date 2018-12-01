@@ -82,7 +82,6 @@ set(CPACK_SOURCE_IGNORE_FILES
     "[rR]elease$"
     "CPack"
     "CTestTestfile.cmake"
-    "gameServer2"
     "cmake_install\\\\.cmake$"
     "cmake_uninstall\\\\.cmake$"
     "CMakeCache\\\\.txt$"
@@ -104,6 +103,9 @@ set(CPACK_SOURCE_IGNORE_FILES
     "^${CMAKE_CURRENT_SOURCE_DIR}/install_manifest.txt"
     "^${CMAKE_CURRENT_SOURCE_DIR}/CMakeCache.txt"
     "^${CMAKE_CURRENT_SOURCE_DIR}/hedgewars\\\\."
+    "^${CMAKE_CURRENT_SOURCE_DIR}/gameServer2"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/rust"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/qmlfrontend"
 )
 
 include(CPack)
