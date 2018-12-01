@@ -228,8 +228,8 @@
     <message numerus="yes">
         <source>Every %1 turn</source>
         <translation>
-            <numerusform>Jede Runde</numerusform>
-            <numerusform>Jede %1. Runde</numerusform>
+            <numerusform>Jeden Zug</numerusform>
+            <numerusform>Jeden %1. Zug</numerusform>
         </translation>
     </message>
 </context>
@@ -1475,8 +1475,8 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>Der blutigste Kämpfer ist &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Opfer in einer Runde.</numerusform>
-            <numerusform>Der blutigste Kämpfer ist &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Opfern in einer Runde.</numerusform>
+            <numerusform>Der blutigste Kämpfer ist &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Opfer in einem Zug.</numerusform>
+            <numerusform>Der blutigste Kämpfer ist &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Opfern in einem Zug.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1511,8 +1511,8 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runde.</numerusform>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runden.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Zug.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Züge.</numerusform>
         </translation>
     </message>
     <message>
@@ -1989,7 +1989,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Teile den Schmerz deines Gegners, teile seinen verursachten Schaden</translation>
+        <translation>Teile den Schmerz deines Gegners, teile seinen erleideten Schaden</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
@@ -2029,15 +2029,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>Gespielt wird in zufälliger Reihenfolge.</translation>
+        <translation>Gespielt wird in zufälliger Reihenfolge statt in Raum-Reihenfolge.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>Beschütze deinen König! Ohne ihn hast du verloren.</translation>
+        <translation>Spiele mit einem König. Wenn er stirbt, stirbt dein Team.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>Platziere deine Igel selbständig vor Rundenbeginn.</translation>
+        <translation>Platziere deine Igel selbstständig vor Spielbeginn.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
@@ -2057,15 +2057,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation>Alle (lebenden) Igel werden am Ende der Runde vollkommen geheilt</translation>
+        <translation>Alle (lebenden) Igel werden am Ende des Zuges vollkommen geheilt</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation>Angriffe beenden die Runde nicht.</translation>
+        <translation>Angriffe beenden deinen Zug nicht.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation>Arsenal wird jede Runde zurückgesetzt.</translation>
+        <translation>Arsenal wird jeden Zug zurückgesetzt.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
@@ -2169,7 +2169,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Time you get after an attack</source>
-        <translation>Zeit, die du nach einem Angriff erhälst</translation>
+        <translation>Zeit, die du nach einem Angriff erhältst</translation>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
@@ -2753,7 +2753,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Turn Time</source>
-        <translation>Rundenzeit</translation>
+        <translation>Zugzeit</translation>
     </message>
     <message>
         <source>Initial Health</source>

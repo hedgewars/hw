@@ -6,7 +6,7 @@
 00:03=Zielsuchende Biene
 00:04=Schrotflinte
 00:05=Presslufthammer
-00:06=Runde überspringen
+00:06=Überspringen
 00:07=Seil
 00:08=Mine
 00:09=Desert Eagle
@@ -72,9 +72,7 @@
 01:07=%1 verbleibend
 01:08=Treibstoff: %1%
 01:09=Synchronisiere …
-01:10=Benutzung beendet nicht die eigene Runde!
-01:11=Waffe oder Werkzeug noch nicht verfügbar!
-01:10=Benutzung beendet nicht die eigene Runde!
+01:10=Benutzung beendet nicht den eigenen Zug!
 01:11=Waffe oder Werkzeug noch nicht verfügbar!
 01:12=Letzte Runde bis zum Sudden Death!
 01:13=%1 Runden bis zum Sudden Death!
@@ -1009,10 +1007,10 @@
 02:12=%1 braucht bald Erste Hilfe
 02:12=%1 sollte eine Gesundheitskiste aufheben
 02:12=%1 wurde von einer Kobra geküsst
-02:11=%1 hat ein geschwächtes Immunsystem
-02:11=%1 spielte zu lange mit kranken Freunden
-02:11=%1 wurde von Bakterien infiziert
-02:11=%1 hat einen inneren Kampf gegen einen Virus
+02:12=%1 hat ein geschwächtes Immunsystem
+02:12=%1 spielte zu lange mit kranken Freunden
+02:12=%1 wurde von Bakterien infiziert
+02:12=%1 hat einen inneren Kampf gegen einen Virus
 
 02:12=%1 fallen die Stacheln aus
 02:12=%1 meldet sich krank
@@ -1313,7 +1311,7 @@
 04:03=Starte eine explosive Biene, die auf ein gewähltes|Ziel zusteuern wird. Feuere nicht mit voller Kraft,|um die Zielgenauigkeit zu verbessern.|Cursor: Ziel wählen|Angriff: Halten, um mit mehr Kraft zu feuern
 04:04=Greife deine Feinde mit einer Schrotflinte und|zwei Schüssen an. Durch die Streuung musst du|nicht genau zielen, um trotzdem zu treffen.|Angriff: Feuern (mehrfach)
 04:05=Ab in den Untergrund! Benutze den Presslufthammer,|um einen Schacht nach unten zu graben und so|andere Gebiete zu erreichen.|Angriff: Presslufthammer ein- oder ausschalten|Links/Rechts: Schräg bohren
-04:06=Gelangweilt? Keine Optionen? Munition sparen?|Kein Problem! Passe einfach diese Runde, Feigling!|Angriff: Runde ohne Angriff aussetzen
+04:06=Gelangweilt? Kein Möglichkeiten? Munition sparen?|Kein Problem! Überspringe einfach deinen Zug, Feigling!|Angriff: Zug ohne Angriff überspringen
 04:07=Überbrücke große Distanzen mit gezielt abgefeuerten|Seilschüssen. Benutze deine Bewegungsenergie, um|andere Igel zu schubsen oder wirf vom Seil aus Granaten|und ähnliche Waffen.|Angriff: Seil abfeuern oder lösen|Links/Rechts/Hoch/Runter: Seil schwingen/verkürzen/verlängern|Weitsprung: Waffe benutzen
 04:08=Halte dir deine Feinde fern oder blockiere sie,|indem du ihnen Minen vor die Beine wirfst.|Sei aber schnell genug, damit du sie nicht noch|selbst auslöst!|Angriff: Mine legen|Genaues Zielen + 1-5: Sprungkraft einstellen
 04:09=Nicht so ganz zielsicher? Versuche es mit der|Desert Eagle, denn diese bietet dir vier Schuss.|Angriff: Feuern (mehrfach)
@@ -1344,7 +1342,7 @@
 04:34=Dies macht dich immun gegenüber Schaden für den Rest|des Zuges. Aber sei nicht zu übermütig, denn du könntest|immer noch ertrinken.|Angriff: Aktivieren
 04:35=Manchmal vergeht die Zeit einfach zu schnell.|Schnapp dir 30 zusätzliche Sekunden, um|deinen Angriff abzuschließen.|Angriff: Aktivieren
 04:36=Nun, manchmal trifft man einfach nicht. In solchen|Fällen kann die moderne Technik natürlich nachhelfen.|Angriff: Aktivieren
-04:37=Fürchte nicht das Tageslicht! Die Wirkung hält|nur eine Runde an, aber sie erlaubt es deinem|Igel, 80% des Schadens, den andere Igel während|seines Zuges erleiden, als Leben zu absorbieren.|Angriff: Aktivieren
+04:37=Fürchte nicht das Tageslicht! Die Wirkung hält|nur einen Zug lang an, aber sie erlaubt es deinem|Igel, 80% des Schadens, den andere Igel während|seines Zuges erleiden, als Leben zu absorbieren.|Angriff: Aktivieren
 04:38=Das Scharfschützengewehr kann die vernichtendste|Waffe im gesamten Arsenal sein, allerdings ist|sie auf kurze Distanz sehr ineffektiv. Der|verursachte Schaden nimmt mit der Distanz zu.|Das Zielen ist schwierig, und du musst deine|Stellung halten, sobald die Waffe aktiviert wurde.|Angriff: Zielvisier aktivieren, dann feuern (zwei mal)|Links/Rechts: Umdrehen (zwischen Schüssen)
 04:39=Fliege mit der fliegenden Untertasse in andere|Teile der Karte. Sie ist schwer zu beherrschen,|bringt dich aber an so gut wie jeden Ort.|Angriff: Aktivieren/Deaktivieren|Hoch/Links/Rechts: Einmalig in eine Richtung beschleunigen|Weitsprung: Waffe fallen lassen|Genaues Zielen + Weitsprung: Waffe in Zielrichtung feuern|Genaues Zielen + Hoch/Runter: Zielen
 04:40=Entzünde einen Teil der Landschaft mit dieser|(schon bald) brennenden Flüssigkeit.|Angriff: Halten, um mit mehr Kraft zu werfen
