@@ -852,7 +852,7 @@ processAction (SaveRoom rname) = do
 processAction (LoadRoom rname) = do
     Right (g, rs) <- io $ YAML.decodeFileEither (B.unpack rname)
     processAction $ ModifyRoom $ \r -> r{greeting = g, roomSaves = rs}
-	
+
 #else
 processAction SaveReplay = return ()
 processAction CheckRecord = return ()
