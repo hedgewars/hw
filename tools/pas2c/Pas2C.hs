@@ -239,7 +239,7 @@ pascal2C (Unit _ interface implementation _ _) =
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    [main] <- tvar2C True False True True 
+    main <- liftM head $ tvar2C True False True True
         (FunctionDeclaration (Identifier "main" (BTInt True)) False False False (SimpleType $ Identifier "int" (BTInt True)) 
             [VarDeclaration False False ([Identifier "argc" (BTInt True)], SimpleType (Identifier "Integer" (BTInt True))) Nothing
             , VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] 
