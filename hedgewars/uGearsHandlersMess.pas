@@ -6494,7 +6494,7 @@ begin
 									FlightTime := 0;
 									Timer := iceWaitCollision;
 									Power := GameTicks;
-                                    iter^.State:= iter^.State and not gstNoGravity
+                                    iter^.State:= iter^.State and (not gstNoGravity)
 									end
                                 end
                             else // gtExplosives
