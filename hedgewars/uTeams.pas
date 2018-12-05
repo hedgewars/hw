@@ -123,7 +123,7 @@ if not TeamsGameOver then
                 // Write victory message for caption and stats page
                 if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
                     begin
-                    // No enemies for some reason … Everyone wins!!1!
+                    // No enemies for some reason ... Everyone wins!!1!
                     s:= trmsg[sidWinnerAll];
                     allWin:= true;
                     end

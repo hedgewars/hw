@@ -3593,7 +3593,6 @@ var locSum: LongWord;
 var braceCount: LongWord;
 var wordCount: LongWord;
 var lastChar: char;
-// ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 function  ScriptReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; Cdecl;
 var mybuf: PChar;
     i: LongInt;
@@ -3658,7 +3657,6 @@ begin
         end;
     ScriptLocaleReader:= mybuf
 end;
-// ⭒⭐⭒✨⭐⭒✨⭐☆✨⭐✨✧✨☆✨✧✨☆⭒✨☆⭐⭒☆✧✨⭒✨⭐✧⭒☆⭒✧☆✨✧⭐☆✨☆✧⭒✨✧⭒☆⭐☆✧
 
 function ScriptLoad(name : shortstring; mustExist : boolean): boolean;
 var ret : LongInt;
