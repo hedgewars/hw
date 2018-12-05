@@ -226,8 +226,10 @@ function TargetPracticeMission(params)
 	end
 
 	_G.onGearAdd = function(gear)
-		if GetGearType(gear) == params.gearType or (params.secGearType and GetGearType(gear) == params.secGearType) then
+		if GetGearType(gear) == params.gearType then
 			shots = shots + 1
+		end
+		if GetGearType(gear) == params.gearType or (params.secGearType and GetGearType(gear) == params.secGearType) then
 			gearsInGameCount = gearsInGameCount + 1
 			gearsInGame[gear] = true
 		end
