@@ -18,7 +18,7 @@ typedef struct {
   unsigned char* land;
 } PreviewInfo;
 
-typedef uint32_t protocol_version_t();
+typedef uint32_t hedgewars_engine_protocol_version_t();
 typedef EngineInstance* start_engine_t();
 typedef void generate_preview_t(EngineInstance* engine_state,
                                 PreviewInfo* preview);
@@ -36,7 +36,7 @@ typedef void render_frame_t(EngineInstance* engine_state);
 
 typedef bool advance_simulation_t(EngineInstance* engine_state, uint32_t ticks);
 
-extern protocol_version_t* protocol_version;
+extern hedgewars_engine_protocol_version_t* hedgewars_engine_protocol_version;
 extern start_engine_t* start_engine;
 extern generate_preview_t* generate_preview;
 extern cleanup_t* cleanup;

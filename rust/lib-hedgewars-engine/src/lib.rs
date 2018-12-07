@@ -25,8 +25,8 @@ pub struct PreviewInfo {
 }
 
 #[no_mangle]
-pub extern "C" fn protocol_version() -> u32 {
-    56
+pub extern "C" fn hedgewars_engine_protocol_version() -> u32 {
+    58
 }
 
 #[no_mangle]

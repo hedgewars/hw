@@ -7,7 +7,7 @@
 #include "hwengine.h"
 
 namespace Engine {
-protocol_version_t* protocol_version;
+hedgewars_engine_protocol_version_t* hedgewars_engine_protocol_version;
 start_engine_t* start_engine;
 generate_preview_t* generate_preview;
 cleanup_t* cleanup;
@@ -28,8 +28,9 @@ void loadEngineLibrary() {
   if (!hwlib.load())
     qWarning() << "Engine library not found" << hwlib.errorString();
 
-  Engine::protocol_version = reinterpret_cast<Engine::protocol_version_t*>(
-      hwlib.resolve("protocol_version"));
+  Engine::hedgewars_engine_protocol_version =
+      reinterpret_cast<Engine::hedgewars_engine_protocol_version_t*>(
+          hwlib.resolve("hedgewars_engine_protocol_version"));
   Engine::start_engine =
       reinterpret_cast<Engine::start_engine_t*>(hwlib.resolve("start_engine"));
   Engine::generate_preview = reinterpret_cast<Engine::generate_preview_t*>(
@@ -50,9 +51,9 @@ void loadEngineLibrary() {
   Engine::advance_simulation = reinterpret_cast<Engine::advance_simulation_t*>(
       hwlib.resolve("advance_simulation"));
 
-  if (Engine::protocol_version)
+  if (Engine::hedgewars_engine_protocol_version)
     qDebug() << "Loaded engine library with protocol version"
-             << Engine::protocol_version();
+             << Engine::hedgewars_engine_protocol_version();
 }
 
 int main(int argc, char* argv[]) {
