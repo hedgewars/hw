@@ -527,7 +527,7 @@ if SendHealthStatsOn then
             deathEntry:= deathEntry^.NextEntry;
             end;
 
-    // “Achievements” / Details part of stats screen
+    // "Achievements" / Details part of stats screen
     if SendAchievementsStatsOn then
         begin
         if msdhh <> nil then

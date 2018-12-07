@@ -775,7 +775,8 @@ begin
         if (ammo = amNothing) or (cnt = 0) then
             s:= trmsg[sidEmptyCrate]
         else if cnt >= AMMO_INFINITE then
-            s:= name + ansistring(' (+∞)')
+            // infinity symbol
+            s:= name + ansistring(' (+' + char($E2) + char($88) + char($9E) +')')
         else
             s:= name + ansistring(' (+' + IntToStr(cnt) + ')');
 

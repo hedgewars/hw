@@ -475,7 +475,7 @@ end;
 // Get a fallback voice, assuming that snd is not available. Returns sndNone if none is found.
 function GetFallbackV(snd: TSound): TSound;
 begin
-    // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
+    // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a "higher-numbered" sound is missing
     if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
         GetFallbackV := sndFirePunch1
     else if (snd in [sndOw2, sndOw3, sndOw4, sndOuch]) then

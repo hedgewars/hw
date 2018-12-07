@@ -515,7 +515,7 @@ if (s[1] = '/') then
         exit
         end;
 
-    // “/clan” or “/team” (“/team” is an alias for “/clan”)
+    // "/clan" or "/team" ("/team" is an alias for "/clan")
     if ((copy(s, 2, 5) = 'clan ') or (copy(s, 2, 5) = 'team ')) then
         begin
         if (Length(s) > 6) then

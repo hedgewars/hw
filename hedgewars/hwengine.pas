@@ -358,6 +358,9 @@ procedure GameRoutine;
 var s: shortstring;
     i: LongInt;
 begin
+{$IFDEF PAS2C}
+    AddFileLog('Generated using pas2c');
+{$ENDIF}
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');

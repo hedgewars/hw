@@ -588,7 +588,7 @@ function DoChallengeFailed()
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeFailedAnim)
   chalTries = chalTries + 1
-  difficulty = 0
+  difficulty = 1
   AddFunction({func = SetChoice, args = {}})
 end
 
