@@ -4,7 +4,9 @@
 #include <QQmlApplicationEngine>
 
 #include "engine_interface.h"
+#include "game_view.h"
 #include "hwengine.h"
+#include "preview_acceptor.h"
 
 namespace Engine {
 hedgewars_engine_protocol_version_t* hedgewars_engine_protocol_version;
@@ -17,6 +19,14 @@ setup_current_gl_context_t* setup_current_gl_context;
 render_frame_t* render_frame;
 advance_simulation_t* advance_simulation;
 };  // namespace Engine
+
+static QObject* previewacceptor_singletontype_provider(
+    QQmlEngine* engine, QJSEngine* scriptEngine) {
+  Q_UNUSED(scriptEngine)
+
+  PreviewAcceptor* acceptor = new PreviewAcceptor(engine);
+  return acceptor;
+}
 
 void loadEngineLibrary() {
 #ifdef Q_OS_WIN
@@ -64,7 +74,14 @@ int main(int argc, char* argv[]) {
 
   QQmlApplicationEngine engine;
 
-  HWEngine::exposeToQML();
+  qmlRegisterSingletonType<PreviewAcceptor>(
+      "Hedgewars.Engine", 1, 0, "PreviewAcceptor",
+      previewacceptor_singletontype_provider);
+  qmlRegisterType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine");
+  qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
+  qmlRegisterUncreatableType<EngineInstance>("Hedgewars.Engine", 1, 0,
+                                             "EngineInstance",
+                                             "Create by HWEngine run methods");
 
   engine.load(QUrl(QLatin1String("qrc:/main.qml")));
   if (engine.rootObjects().isEmpty()) return -1;

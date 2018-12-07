@@ -1,4 +1,7 @@
+#include "hwengine.h"
+
 #include <QDebug>
+#include <QImage>
 #include <QLibrary>
 #include <QQmlEngine>
 #include <QUuid>
@@ -6,36 +9,11 @@
 #include "engine_instance.h"
 #include "engine_interface.h"
 #include "game_view.h"
-#include "preview_image_provider.h"
+#include "preview_acceptor.h"
 
-#include "hwengine.h"
-
-HWEngine::HWEngine(QQmlEngine* engine, QObject* parent)
-    : QObject(parent),
-      m_engine(engine),
-      m_previewProvider(new PreviewImageProvider()) {
-  m_engine->addImageProvider(QLatin1String("preview"), m_previewProvider);
-}
+HWEngine::HWEngine(QObject* parent) : QObject(parent) {}
 
 HWEngine::~HWEngine() {}
-
-static QObject* hwengine_singletontype_provider(QQmlEngine* engine,
-                                                QJSEngine* scriptEngine) {
-  Q_UNUSED(scriptEngine)
-
-  HWEngine* hwengine = new HWEngine(engine);
-  return hwengine;
-}
-
-void HWEngine::exposeToQML() {
-  qDebug("HWEngine::exposeToQML");
-  qmlRegisterSingletonType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine",
-                                     hwengine_singletontype_provider);
-  qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
-  qmlRegisterUncreatableType<EngineInstance>("Hedgewars.Engine", 1, 0,
-                                             "EngineInstance",
-                                             "Create by HWEngine run methods");
-}
 
 void HWEngine::getPreview() {
   emit previewIsRendering();
@@ -58,7 +36,7 @@ void HWEngine::getPreview() {
   previewImage.setColorTable(colorTable);
   previewImage.detach();
 
-  m_previewProvider->setImage(previewImage);
+  if (m_previewAcceptor) m_previewAcceptor->setImage(previewImage);
 
   emit previewImageChanged();
   // m_runQueue->queue(m_gameConfig);
@@ -80,3 +58,12 @@ EngineInstance* HWEngine::runQuickGame() {
 }
 
 int HWEngine::previewHedgehogsCount() const { return m_previewHedgehogsCount; }
+
+PreviewAcceptor* HWEngine::previewAcceptor() const { return m_previewAcceptor; }
+
+void HWEngine::setPreviewAcceptor(PreviewAcceptor* previewAcceptor) {
+  if (m_previewAcceptor == previewAcceptor) return;
+
+  m_previewAcceptor = previewAcceptor;
+  emit previewAcceptorChanged(m_previewAcceptor);
+}

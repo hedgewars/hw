@@ -15,6 +15,8 @@ add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
     "team.cpp" "team.h"
     "engine_instance.cpp" "engine_instance.h"
     "preview_image_provider.cpp" "preview_image_provider.h"
-    "engine_interface.h")
+    "engine_interface.h"
+    "preview_acceptor.cpp" "preview_acceptor.h"
+    )
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick)
