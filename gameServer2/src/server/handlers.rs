@@ -2,7 +2,7 @@ use mio;
 use std::{io, io::Write};
 
 use super::{
-    server::HWServer,
+    core::HWServer,
     actions::{Action, Action::*},
     coretypes::ClientId
 };

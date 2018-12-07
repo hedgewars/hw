@@ -1,4 +1,4 @@
-pub mod server;
+pub mod core;
 pub mod client;
 pub mod room;
 pub mod network;
