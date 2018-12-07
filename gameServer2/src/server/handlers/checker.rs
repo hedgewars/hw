@@ -3,7 +3,7 @@ use log::*;
 
 use crate::{
     server::{
-        server::HWServer,
+        core::HWServer,
         coretypes::ClientId,
     },
     protocol::messages::{

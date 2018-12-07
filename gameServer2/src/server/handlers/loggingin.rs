@@ -3,7 +3,7 @@ use mio;
 use crate::{
     server::{
         client::HWClient,
-        server::HWServer,
+        core::HWServer,
         coretypes::ClientId,
         actions::{Action, Action::*}
     },

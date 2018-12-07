@@ -1,5 +1,5 @@
 use crate::{
-    server::{actions::Action, server::HWServer},
+    server::{actions::Action, core::HWServer},
     protocol::messages::{
         HWProtocolMessage::{self, Rnd}, HWServerMessage::{self, ChatMsg},
     }

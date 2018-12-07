@@ -20,7 +20,7 @@ use crate::{
     protocol::{ProtocolDecoder, messages::*}
 };
 use super::{
-    server::{HWServer},
+    core::{HWServer},
     coretypes::ClientId
 };
 #[cfg(feature = "tls-connections")]

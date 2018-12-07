@@ -6,7 +6,7 @@ use crate::{
             ClientId, RoomId, Voting, VoteType, GameCfg,
             MAX_HEDGEHOGS_PER_TEAM
         },
-        server::HWServer,
+        core::HWServer,
         room::{HWRoom, RoomFlags},
         actions::{Action, Action::*}
     },

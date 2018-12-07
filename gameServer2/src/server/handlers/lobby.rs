@@ -2,7 +2,7 @@ use mio;
 
 use crate::{
     server::{
-        server::HWServer,
+        core::HWServer,
         coretypes::ClientId,
         actions::{Action, Action::*}
     },

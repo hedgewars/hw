@@ -4,7 +4,7 @@ use std::{
     mem::replace
 };
 use super::{
-    server::HWServer,
+    core::HWServer,
     room::{GameInfo, RoomFlags},
     client::HWClient,
     coretypes::{ClientId, RoomId, GameCfg, VoteType},
