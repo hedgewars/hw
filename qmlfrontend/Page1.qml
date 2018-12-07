@@ -8,6 +8,7 @@ Page1Form {
     id: hwEngineComponent
 
     HWEngine {
+      engineLibrary: "./libhedgewars_engine.so"
       previewAcceptor: PreviewAcceptor
       onPreviewImageChanged: previewImage.source = "image://preview/image"
       onPreviewIsRendering: previewImage.source = "qrc:/res/iconTime.png"

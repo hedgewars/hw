@@ -18,6 +18,8 @@ class HWEngine : public QObject {
                  previewHedgehogsCountChanged)
   Q_PROPERTY(PreviewAcceptor* previewAcceptor READ previewAcceptor WRITE
                  setPreviewAcceptor NOTIFY previewAcceptorChanged)
+  Q_PROPERTY(QString engineLibrary READ engineLibrary WRITE setEngineLibrary
+                 NOTIFY engineLibraryChanged)
 
  public:
   explicit HWEngine(QObject* parent = nullptr);
@@ -28,9 +30,11 @@ class HWEngine : public QObject {
 
   int previewHedgehogsCount() const;
   PreviewAcceptor* previewAcceptor() const;
+  QString engineLibrary() const;
 
  public slots:
   void setPreviewAcceptor(PreviewAcceptor* previewAcceptor);
+  void setEngineLibrary(const QString& engineLibrary);
 
  signals:
   void previewIsRendering();
@@ -39,12 +43,14 @@ class HWEngine : public QObject {
   void gameFinished();
   void previewHedgehogsCountChanged(int previewHedgehogsCount);
   void previewAcceptorChanged(PreviewAcceptor* previewAcceptor);
+  void engineLibraryChanged(const QString& engineLibrary);
 
  private:
   QQmlEngine* m_engine;
   GameConfig m_gameConfig;
   int m_previewHedgehogsCount;
   PreviewAcceptor* m_previewAcceptor;
+  QString m_engineLibrary;
 };
 
 #endif  // HWENGINE_H

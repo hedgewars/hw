@@ -21,7 +21,10 @@ void HWEngine::getPreview() {
   m_gameConfig = GameConfig();
   m_gameConfig.cmdSeed(QUuid::createUuid().toByteArray());
 
-  EngineInstance engine;
+  EngineInstance engine(m_engineLibrary);
+  if (!engine.isValid())  // TODO: error notification
+    return;
+
   engine.sendConfig(m_gameConfig);
 
   Engine::PreviewInfo preview = engine.generatePreview();
@@ -52,7 +55,8 @@ EngineInstance* HWEngine::runQuickGame() {
   m_gameConfig.cmdTeam(team1);
   m_gameConfig.cmdTeam(team2);
 
-  EngineInstance* engine = new EngineInstance(this);
+  EngineInstance* engine = new EngineInstance(m_engineLibrary, this);
+
   return engine;
   // m_runQueue->queue(m_gameConfig);
 }
@@ -61,9 +65,18 @@ int HWEngine::previewHedgehogsCount() const { return m_previewHedgehogsCount; }
 
 PreviewAcceptor* HWEngine::previewAcceptor() const { return m_previewAcceptor; }
 
+QString HWEngine::engineLibrary() const { return m_engineLibrary; }
+
 void HWEngine::setPreviewAcceptor(PreviewAcceptor* previewAcceptor) {
   if (m_previewAcceptor == previewAcceptor) return;
 
   m_previewAcceptor = previewAcceptor;
   emit previewAcceptorChanged(m_previewAcceptor);
+}
+
+void HWEngine::setEngineLibrary(const QString& engineLibrary) {
+  if (m_engineLibrary == engineLibrary) return;
+
+  m_engineLibrary = engineLibrary;
+  emit engineLibraryChanged(m_engineLibrary);
 }
