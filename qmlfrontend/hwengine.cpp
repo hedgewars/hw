@@ -2,8 +2,6 @@
 
 #include <QDebug>
 #include <QImage>
-#include <QLibrary>
-#include <QQmlEngine>
 #include <QUuid>
 
 #include "engine_instance.h"
@@ -27,17 +25,7 @@ void HWEngine::getPreview() {
 
   engine.sendConfig(m_gameConfig);
 
-  Engine::PreviewInfo preview = engine.generatePreview();
-
-  QVector<QRgb> colorTable;
-  colorTable.resize(256);
-  for (int i = 0; i < 256; ++i) colorTable[i] = qRgba(255, 255, 0, i);
-
-  QImage previewImage(preview.land, static_cast<int>(preview.width),
-                      static_cast<int>(preview.height),
-                      QImage::Format_Indexed8);
-  previewImage.setColorTable(colorTable);
-  previewImage.detach();
+  QImage previewImage = engine.generatePreview();
 
   if (m_previewAcceptor) m_previewAcceptor->setImage(previewImage);
 

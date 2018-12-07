@@ -26,7 +26,7 @@ impl GameState {
 
 pub struct World {
     random_numbers_gen: LaggedFibonacciPRNG,
-    preview: Land2D<u8>,
+    preview: Option<Land2D<u8>>,
     game_state: Option<GameState>,
 }
 
@@ -34,7 +34,7 @@ impl World {
     pub fn new() -> Self {
         Self {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
-            preview: Land2D::new(Size::new(0, 0), 0),
+            preview: None,
             game_state: None,
         }
     }
@@ -43,7 +43,7 @@ impl World {
         self.random_numbers_gen = LaggedFibonacciPRNG::new(seed);
     }
 
-    pub fn preview(&self) -> &Land2D<u8> {
+    pub fn preview(&self) -> &Option<Land2D<u8>> {
         &self.preview
     }
 
@@ -63,7 +63,11 @@ impl World {
 
         let params = LandGenerationParameters::new(0u8, u8::max_value(), 5, false, false);
         let landgen = TemplatedLandGenerator::new(template());
-        self.preview = landgen.generate_land(&params, &mut self.random_numbers_gen);
+        self.preview = Some(landgen.generate_land(&params, &mut self.random_numbers_gen));
+    }
+
+    pub fn dispose_preview(&mut self) {
+        self.preview = None
     }
 
     pub fn init(&mut self, template: OutlineTemplate) {

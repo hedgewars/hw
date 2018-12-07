@@ -27,6 +27,8 @@ EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
       reinterpret_cast<Engine::start_engine_t*>(hwlib.resolve("start_engine"));
   generate_preview = reinterpret_cast<Engine::generate_preview_t*>(
       hwlib.resolve("generate_preview"));
+  dispose_preview = reinterpret_cast<Engine::dispose_preview_t*>(
+      hwlib.resolve("dispose_preview"));
   cleanup = reinterpret_cast<Engine::cleanup_t*>(hwlib.resolve("cleanup"));
 
   send_ipc = reinterpret_cast<Engine::send_ipc_t*>(hwlib.resolve("send_ipc"));
@@ -41,8 +43,9 @@ EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
       hwlib.resolve("advance_simulation"));
 
   m_isValid = hedgewars_engine_protocol_version && start_engine &&
-              generate_preview && cleanup && send_ipc && read_ipc &&
-              setup_current_gl_context && render_frame && advance_simulation;
+              generate_preview && dispose_preview && cleanup && send_ipc &&
+              read_ipc && setup_current_gl_context && render_frame &&
+              advance_simulation;
   emit isValidChanged(m_isValid);
 
   if (isValid()) {
@@ -79,12 +82,23 @@ void EngineInstance::setOpenGLContext(QOpenGLContext* context) {
                            &getProcAddress);
 }
 
-Engine::PreviewInfo EngineInstance::generatePreview() {
+QImage EngineInstance::generatePreview() {
   Engine::PreviewInfo pinfo;
 
   generate_preview(m_instance, &pinfo);
 
-  return pinfo;
+  QVector<QRgb> colorTable;
+  colorTable.resize(256);
+  for (int i = 0; i < 256; ++i) colorTable[i] = qRgba(255, 255, 0, i);
+
+  QImage previewImage(pinfo.land, static_cast<int>(pinfo.width),
+                      static_cast<int>(pinfo.height), QImage::Format_Indexed8);
+  previewImage.setColorTable(colorTable);
+
+  // Cannot use it here, since QImage refers to original bytes
+  // dispose_preview(m_instance);
+
+  return previewImage;
 }
 
 bool EngineInstance::isValid() const { return m_isValid; }

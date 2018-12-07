@@ -1,6 +1,7 @@
 #ifndef ENGINEINSTANCE_H
 #define ENGINEINSTANCE_H
 
+#include <QImage>
 #include <QObject>
 #include <QOpenGLContext>
 
@@ -20,7 +21,7 @@ class EngineInstance : public QObject {
   void advance(quint32 ticks);
   void renderFrame();
   void setOpenGLContext(QOpenGLContext* context);
-  Engine::PreviewInfo generatePreview();
+  QImage generatePreview();
 
   bool isValid() const;
 
@@ -36,6 +37,7 @@ class EngineInstance : public QObject {
       hedgewars_engine_protocol_version;
   Engine::start_engine_t* start_engine;
   Engine::generate_preview_t* generate_preview;
+  Engine::dispose_preview_t* dispose_preview;
   Engine::cleanup_t* cleanup;
   Engine::send_ipc_t* send_ipc;
   Engine::read_ipc_t* read_ipc;

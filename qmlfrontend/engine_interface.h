@@ -22,6 +22,7 @@ typedef uint32_t hedgewars_engine_protocol_version_t();
 typedef EngineInstance* start_engine_t();
 typedef void generate_preview_t(EngineInstance* engine_state,
                                 PreviewInfo* preview);
+typedef void dispose_preview_t(EngineInstance* engine_state);
 typedef void cleanup_t(EngineInstance* engine_state);
 
 typedef void send_ipc_t(EngineInstance* engine_state, uint8_t* buf,
