@@ -490,11 +490,11 @@ begin
             GetFallbackV := sndUhOh
     else if (snd in [sndDrat, sndBugger]) then
         GetFallbackV := sndStupid
-    else if (snd in [sndGonnaGetYou, sndCutItOut, sndLeaveMeAlone]) then
+    else if (snd in [sndGonnaGetYou, sndIllGetYou, sndJustYouWait, sndCutItOut, sndLeaveMeAlone]) then
         GetFallbackV := sndRegret
     else if (snd in [sndOhDear, sndSoLong]) then
         GetFallbackV := sndByeBye
-    else if (snd = sndWhatThe) then
+    else if (snd in [sndWhatThe, sndUhOh]) then
         GetFallbackV := sndNooo
     else if (snd = sndRunAway) then
         GetFallbackV := sndOops
@@ -502,6 +502,19 @@ begin
         GetFallbackV := sndReinforce
     else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
         GetFallbackV := sndEnemyDown
+    else if (snd = sndPoisonCough) then
+        GetFallbackV := sndPoisonMoan
+    else if (snd = sndPoisonMoan) then
+        GetFallbackV := sndPoisonCough
+    else if (snd = sndFlawless) then
+        GetFallbackV := sndVictory
+    else if (snd = sndSameTeam) then
+        GetFallbackV := sndTraitor
+    else if (snd = sndMelon) then
+        GetFallbackV := sndCover
+    // sndHmm is used for enemy turn start, so sndHello is an "okay" replacement
+    else if (snd = sndHmm) then
+        GetFallbackV := sndHello
     else
         GetFallbackV := sndNone;
 end;
