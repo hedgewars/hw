@@ -103,6 +103,7 @@ data Action =
     | ReactCmd [B.ByteString]
     | CheckVotes
     | SetRandomSeed
+    | ShowRegisteredOnlyState [ClientChan]
 
 
 data Event = LobbyChatMessage

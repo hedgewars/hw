@@ -885,3 +885,13 @@ processAction (ReactCmd cmd) = do
 
 processAction CheckVotes =
     checkVotes >>= mapM_ processAction
+
+processAction (ShowRegisteredOnlyState chans) = do
+    si <- gets serverInfo
+    processAction $ AnswerClients chans
+        ["CHAT", nickServer,
+        if isRegisteredUsersOnly si then
+            loc "This server no longer allows unregistered players to join."
+        else
+            loc "This server now allows unregistered players to join."
+        ]

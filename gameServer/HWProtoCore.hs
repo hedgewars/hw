@@ -120,11 +120,11 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
         h "HELP" _ = handleCmd ["HELP"]
         h "REGISTERED_ONLY" _ = serverAdminOnly $ do
-            cl <- thisClient
+            rnc <- liftM snd ask
+            let chans = map (sendChan . client rnc) $ allClients rnc
             return
                 [ModifyServerInfo(\s -> s{isRegisteredUsersOnly = not $ isRegisteredUsersOnly s})
-                -- TODO: Say whether 'registered only' state is on or off
-                , AnswerClients [sendChan cl] ["CHAT", nickServer, loc "'Registered only' state toggled."]
+                , ShowRegisteredOnlyState chans
                 ]
         h "SUPER_POWER" _ = serverAdminOnly $ do
             cl <- thisClient
