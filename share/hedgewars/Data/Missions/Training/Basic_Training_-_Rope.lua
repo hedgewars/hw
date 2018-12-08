@@ -194,10 +194,16 @@ function onGameStart()
 end
 
 function onNewTurn()
+	local ctrl = ""
 	if not wasFirstTurn then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Open ammo menu: Tap the [suitcase]")
+		end
 		ShowMission(loc("Basic Rope Training"), loc("Select Rope"),
 		loc("Select the rope to begin!").."|"..
-		loc("Open ammo menu: [Right click]"), 2, 7500)
+		ctrl, 2, 7500)
 		wasFirstTurn = true
 	end
 	if isInMineChallenge then
@@ -212,11 +218,18 @@ function onGameTick()
 
 	-- First rope selection
 	if not ropeSelected and GetCurAmmoType() == amRope then
+		local ctrl = ""
+		if INTERFACE == "desktop" then
+			ctrl = loc("Aim: [Up]/[Down]").."|"..
+			loc("Attack: [Space]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Aim: [Up]/[Down]").."|"..
+			loc("Attack: Tap the [bomb]")
+		end
 		ShowMission(loc("Basic Rope Training"), loc("Getting Started"),
 		loc("You can use the rope to reach new places.").."|"..
 		loc("Aim at the ceiling and hold [Attack] pressed until the rope attaches.").."|"..
-		loc("Aim: [Up]/[Down]").."|"..
-		loc("Attack: [Space]"), 2, 15000)
+		ctrl, 2, 15000)
 		ropeSelected = true
 	-- Rope attach
 	elseif ropeGear and band(GetState(ropeGear), gstCollision) ~= 0 then
@@ -367,11 +380,18 @@ function onGearDelete(gear)
 	elseif GetGearType(gear) == gtRope then
 		ropeGear = nil
 		if ropeAttached and not target1Reached then
+			local ctrl = ""
+			if INTERFACE == "desktop" then
+				ctrl = loc("Aim: [Up]/[Down]").."|"..
+				loc("Attack: [Space]")
+			elseif INTERFACE == "touch" then
+				ctrl = loc("Aim: [Up]/[Down]").."|"..
+				loc("Attack: Tap the [bomb]")
+			end
 			ShowMission(loc("Basic Rope Training"), loc("How to Rope"),
 			loc("Go to the target.").."|"..
 			loc("Hold [Attack] to attach the rope.").."|"..
-			loc("Aim: [Up]/[Down]").."|"..
-			loc("Attack: [Space]"), 2, 13000)
+			ctrl, 2, 13000)
 			ropeAttached = false
 		end
 	elseif GetGearType(gear) == gtMine then

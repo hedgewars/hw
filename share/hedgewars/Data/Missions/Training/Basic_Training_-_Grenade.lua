@@ -96,10 +96,14 @@ local function spawnTargets()
 		AddGear(945, 498, gtTarget, 0, 0, 0, 0)
 	-- Bounciness
 	elseif gamePhase == 4 then
-		AddGear(323, 960, gtTarget, 0, 0, 0, 0)
 		AddGear(1318, 208, gtTarget, 0, 0, 0, 0)
 		AddGear(1697, 250, gtTarget, 0, 0, 0, 0)
-		AddGear(1852, 100, gtTarget, 0, 0, 0, 0)
+		if INTERFACE ~= "touch" then
+			-- These targets may be too hard in touch interface because you cannot set bounciness yet
+			-- FIXME: Allow these targets in touch when bounciness can be set
+			AddGear(323, 960, gtTarget, 0, 0, 0, 0)
+			AddGear(1852, 100, gtTarget, 0, 0, 0, 0)
+		end
 	-- Grand Final
 	elseif gamePhase == 5 then
 		AddGear(186, 473, gtTarget, 0, 0, 0, 0)
@@ -117,24 +121,42 @@ end
 
 function newGamePhase()
 	-- Spawn targets, update wind and ammo, show instructions
+	local ctrl = ""
 	if gamePhase == 0 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]").."|"..
+			loc("Select weapon: [Left click]")
+		else
+			ctrl = loc("Open ammo menu: Tap the [suitcase]")
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Select Weapon"), loc("To begin with the training, select the grenade from the ammo menu!").."|"..
-		loc("Open ammo menu: [Right click]").."|"..
-		loc("Select weapon: [Left click]"), 2, 5000)
+		ctrl, 2, 5000)
 	elseif gamePhase == 1 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Attack: [Space]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Change direction: [Left]/[Right]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Attack: Tap the [bomb]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Change direction: [Left]/[Right]")
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Warming Up"),
 		loc("Throw a grenade to destroy the target!").."|"..
 		loc("Hold the Attack key pressed for more power.").."|"..
-		loc("Attack: [Space]").."|"..
-		loc("Aim: [Up]/[Down]").."|"..
-		loc("Change direction: [Left]/[Right]").."|"..
+		ctrl.."|"..
 		loc("Note: Walking is disabled in this mission."), 2, 20000)
 		spawnTargets()
 	elseif gamePhase == 2 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Set detonation timer: [1]-[5]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Change detonation timer: Tap the [clock]")
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Timer"),
 		loc("You can change the detonation timer of grenades.").."|"..
 		loc("Grenades explode after 1 to 5 seconds (you decide).").."|"..
-		loc("Set detonation timer: [1]-[5]"), 2, 15000)
+		ctrl, 2, 15000)
 		spawnTargets()
 	elseif gamePhase == 3 then
 		ShowMission(loc("Basic Grenade Training"), loc("No Wind Influence"), loc("Unlike bazookas, grenades are not influenced by wind.").."|"..
@@ -142,17 +164,28 @@ function newGamePhase()
 		SetWind(50)
 		spawnTargets()
 	elseif gamePhase == 4 then
-		ShowMission(loc("Basic Grenade Training"), loc("Bounciness"),
-		loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
-		loc("Grenades with high bounciness bounce a lot and behave chaotic.").."|"..
-		loc("With low bounciness, it barely bounces at all, but it is much more predictable.").."|"..
-		loc("Try out different bounciness levels to reach difficult targets.").."|"..
-		loc("Set bounciness: [Left Shift] + [1]-[5]"),
-		2, 20000)
+		local caption = loc("Bounciness")
+		if INTERFACE == "desktop" then
+			ctrl = loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
+			loc("Grenades with high bounciness bounce a lot and behave chaotic.").."|"..
+			loc("With low bounciness, it barely bounces at all, but it is much more predictable.").."|"..
+			loc("Try out different bounciness levels to reach difficult targets.").."|"..
+			loc("Set bounciness: [Left Shift] + [1]-[5]")
+		elseif INTERFACE == "touch" then
+			-- FIXME: Bounciness can't be set in touch yet. :(
+			caption = loc("Well done!")
+			ctrl = loc("You're getting pretty good! Here are more targets for you.")
+		end
+
+		ShowMission(loc("Basic Grenade Training"), caption, ctrl, 2, 20000)
 		spawnTargets()
 	elseif gamePhase == 5 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Precise Aim: [Left Shift] + [Up]/[Down]")
+			-- FIXME: No precise aim in touch interface yet :(
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Final Targets"), loc("Good job! Now destroy the final targets to finish the training.").."|"..
-		loc("Precise Aim: [Left Shift] + [Up]/[Down]"),
+		ctrl,
 		2, 7000)
 		spawnTargets()
 	elseif gamePhase == 6 then

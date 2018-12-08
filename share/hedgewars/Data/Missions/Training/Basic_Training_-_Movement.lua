@@ -241,7 +241,10 @@ local function LoadGearData()
 	crates[7] = SpawnHealthCrate(1198, 1750)		-- Back Jumping 2
 	crates[8] = SpawnSupplyCrate(1851, 1402, amSwitch, 100)	-- Switch Hedgehog
 	crates[9] = SpawnHealthCrate(564, 1772)			-- Health
-	crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
+	-- FIXME: Not available in touch because no “precise” button
+	if INTERFACE ~= "touch" then
+		crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
+	end
 end
 
 local function victory()
@@ -265,11 +268,17 @@ local function switchHedgehogText()
 		loc("To finish hedgehog selection, just do anything|with him, like walking."),
 		2, 20000)
 	else
+		local ctrl = ""
+		if INTERFACE == "desktop" then
+			ctrl = loc("Hit the “Switch Hedgehog” key until you have|selected Cappy, the hedgehog with the cap!").."|"..
+			loc("Switch hedgehog: [Tabulator]")
+		else
+			ctrl = loc("Tap the “rotating arrow” button on the left|until you have selected Cappy, the hedgehog with the cap!")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (2/3)"),
 		loc("You have activated Switch Hedgehog!").."|"..
 		loc("The spinning arrows above your hedgehog show|which hedgehog is selected right now.").."|"..
-		loc("Hit the “Switch Hedgehog” key until you have|selected Cappy, the hedgehog with the cap!").."|"..
-		loc("Switch hedgehog: [Tabulator]"), 2, 20000)
+		ctrl, 2, 20000)
 	end
 end
 
@@ -281,6 +290,7 @@ function onGearAdd(gear)
 end
 
 function onGearDelete(gear)
+	local ctrl = ""
 	-- Switching done
 	if GetGearType(gear) == gtSwitcher then
 		switcherGear = nil
@@ -290,57 +300,99 @@ function onGearDelete(gear)
 			loc("Collect the remaining crates to complete the training."),
 			2, 0)
 		else
+			if INTERFACE == "desktop" then
+				ctrl = loc("Open ammo menu: [Right click]").."|"..
+				loc("Attack: [Space]")
+			elseif INTERFACE == "touch" then
+				ctrl = loc("Open ammo menu: Tap the [suitcase]").."|"..
+				loc("Attack: Tap the [bomb]")
+			end
 			ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (Failed!)"),
 			loc("Oops! You have selected the wrong hedgehog! Just try again.").."|"..
 			loc("Select “Switch Hedgehog” from the ammo menu and|hit the “Attack” key to proceed.").."|"..
-			loc("Open ammo menu: [Right click]").."|"..
-			loc("Attack: [Space]"), 2, 0)
+			ctrl, 2, 0)
 		end
 
 	-- Crate collected (or destroyed, but this should not be possible)
 	elseif gear == crates[1] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Long Jump: [Enter]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Long Jump: Tap the [curvy arrow] for long")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Jumping"),
 		loc("Get the next crate by jumping over the abyss.").."|"..
 		loc("Careful, hedgehogs can't swim!").."|"..
-		loc("Long Jump: [Enter]"), 2, 5000)
+		ctrl, 2, 5000)
 	elseif gear == crates[2] then
 		victory()
 	elseif gear == crates[4] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("High Jump: Tap the [curvy arrow] shortly").."|"..loc("Back Jump: Double-tap the [curvy arrow]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (1/2)"),
 		loc("For the next crate, you have to do back jumps.") .. "|" ..
 		loc("To reach higher ground, walk to a ledge, look to the left, then do a back jump.") .. "|" ..
-		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 6600)
+		ctrl, 2, 6600)
 	elseif gear == crates[7] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("High Jump: Tap the [curvy arrow] short").."|"..loc("Back Jump: Double-tap the [curvy arrow]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
 		loc("To get over the next obstacles, keep some distance from the wall before you back jump.").."|"..
 		loc("Hint: To jump higher, wait a bit before you hit “High Jump” a second time.").."|"..
-		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 15000)
+		ctrl, 2, 15000)
 	elseif gear == crates[5] then
+		-- FIXME: Touch doesn't have precise aim yet :(
+		if INTERFACE == "desktop" then
+			ctrl = "|" ..
+			loc("You can also hold down the key for “Precise Aim” to prevent slipping.") .. "|" ..
+			loc("Precise Aim: [Left Shift]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Walking on Ice"),
 		loc("These girders are slippery, like ice.").."|"..
 		loc("And you need to move to the top!").."|"..
-		loc("If you don't want to slip away, you have to keep moving!").."|"..
-		loc("You can also hold down the key for “Precise Aim” to prevent slipping.").."|"..
-		loc("Precise Aim: [Left Shift]"), 2, 9000)
+		loc("If you don't want to slip away, you have to keep moving!")..
+		ctrl, 2, 9000)
 	elseif gear == crates[6] then
+		-- FIXME: Touch doesn't have precise aim yet :(
+		if INTERFACE == "desktop" then
+			ctrl = "|" .. loc("Remember: Hold down [Left Shift] to prevent slipping")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("A mysterious Box"),
-		loc("The next crate is an utility crate.").."|"..loc("What's in the box, you ask? Let's find out!").."|"..
-		loc("Remember: Hold down [Left Shift] to prevent slipping"), 2, 6000)
+		loc("The next crate is an utility crate.").."|"..loc("What's in the box, you ask? Let's find out!")..
+		ctrl, 2, 6000)
 	elseif gear == crates[8] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]").."|"..
+			loc("Attack: [Space]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Open ammo menu: Tap the [suitcase]").."|"..
+			loc("Attack: Tap the [bomb]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (1/3)"),
 		loc("You have collected the “Switch Hedgehog” utility!").."|"..
 		loc("This allows to select any hedgehog in your team!").."|"..
 		loc("Select “Switch Hedgehog” from the ammo menu and|hit the “Attack” key.").."|"..
-		loc("Open ammo menu: [Right click]").."|"..
-		loc("Attack: [Space]"), 2, 30000)
+		ctrl, 2, 30000)
 	elseif gear == crates[3] then
 		ShowMission(loc("Basic Movement Training"), loc("Rubber"), loc("As you probably noticed, these rubber bands|are VERY elastic. Hedgehogs and many other|things will bounce off without taking any damage.").."|"..
 		loc("Now try to get out of this bounce house|and take the next crate."), 2, 8000)
 	elseif gear == crates[9] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Look around: [Mouse movement]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Look around: [Tap or swipe on the screen]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Health"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
 		loc("Now go to the next crate.").."|"..
-		loc("Look around: [Mouse movement]"), 2, 10000)
+		ctrl, 2, 10000)
 	elseif gear == crates[10] then
+		-- FIXME: This crate is unused in touch atm
 		ShowMission(loc("Basic Movement Training"), loc("Turning Around"),
 		loc("By the way, you can turn around without walking|by holding down Precise when you hit a walk control.").."|"..
 		loc("Get the final crate to the right to complete the training.").."|"..
@@ -369,17 +421,26 @@ local function firstMission()
 	-- This part is CRITICALLY important for all future missions.
 	-- Because the player must know how to show the current mission texts again.
 	-- We force the player to hit Attack before the actual training begins.
+	local ctrl = ""
+	if INTERFACE == "desktop" then
+		ctrl = loc("IMPORTANT: To see the mission panel again, hold the mission panel key.").."| |"..
+		loc("Note: This basic training assumes default controls.").."|"..
+		loc("Mission panel: [M]").."|"..
+		loc("Quit: [Esc]").."|"..
+		loc("Pause: [P]").."| |"..
+		loc("To begin with the training, hit the attack key!").."|"..
+		loc("Attack: [Space]")
+	elseif INTERFACE == "touch" then
+		ctrl = loc("IMPORTANT: To see the mission panel again, pause the game.").."| |"..
+		loc("Pause: Tap the [pause symbol]").."| |"..
+		loc("To begin with the training, tap the attack button!").."|"..
+		loc("Attack: Tap the [bomb]")
+	end
 	ShowMission(loc("Basic Movement Training"), loc("Mission Panel"),
 	loc("This is the mission panel.").."|"..
 	loc("Here you will find the current mission instructions.").."|"..
 	loc("Normally, the mission panel disappears after a few seconds.").."|"..
-	loc("IMPORTANT: To see the mission panel again, hold the mission panel key.").."| |"..
-	loc("Note: This basic training assumes default controls.").."|"..
-        loc("Mission panel: [M]").."|"..
-	loc("Quit: [Esc]").."|"..
-	loc("Pause: [P]").."| |"..
-	loc("To begin with the training, hit the attack key!").."|"..
-	loc("Attack: [Space]"), 2, 900000, true)
+	ctrl, 2, 900000, true)
 
 	-- TODO: This and other training missions are currently hardcoding control names.
 	-- This should be fixed eventually.
