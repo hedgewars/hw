@@ -340,7 +340,7 @@ function onGearDelete(gear)
 		if INTERFACE == "desktop" then
 			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("High Jump: Tap the [curvy arrow] short").."|"..loc("Back Jump: Double-tap the [curvy arrow]")
+			ctrl = loc("High Jump: Tap the [curvy arrow] shortly").."|"..loc("Back Jump: Double-tap the [curvy arrow]")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
 		loc("To get over the next obstacles, keep some distance from the wall before you back jump.").."|"..
