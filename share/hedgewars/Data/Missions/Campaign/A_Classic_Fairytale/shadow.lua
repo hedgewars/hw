@@ -144,6 +144,17 @@ hogNr = {}
 cannibalDead = {}
 isHidden = {}
 
+local grenadeHint = loc("Grenade hint: Set timer with the [Timer] controls, aim with [Up]/[Down].") .. "|" ..
+                    loc("Hold [Attack] pressed to throw with more power.")
+if INTERFACE == "touch" then
+  grenadeHint = grenadeHint .. "|" ..
+                loc("Set timer: Tap the [Clock]") .. "|" ..
+                loc("Attack: Tap the [Bomb]")
+else
+  grenadeHint = grenadeHint .. "|" ..
+                loc("Set detonation timer: [1]-[5]") .. "|" ..
+                loc("Attack: [Space]")
+end
 
 --------------------------Anim skip functions--------------------------
 function AfterRefusedAnim()
@@ -316,7 +327,7 @@ function AfterAttackedAnim()
     return
   end
   stage = aloneStage
-  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!") .. "|" .. grenadeHint, 1, 12000)
   AddAmmo(cannibals[6], amGrenade, 1)
   AddAmmo(cannibals[6], amFirePunch, 0)
   AddAmmo(cannibals[6], amBaseballBat, 0)
@@ -844,7 +855,13 @@ function DoNeedGirder()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
+  local ctrl = loc("Hint: To place a girder, select it,|then use [Left] and [Right] to select angle and length,|then choose a location for the girder.")
+  if INTERFACE == "touch" then
+    ctrl = ctrl .. "|" .. loc("Choose location: Tap the [Target] button, then tap on the spot you want to choose")
+  else
+    ctrl = ctrl .. "|" .. loc("Choose location: Left click")
+  end
+  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. ctrl, 1, 6000)
 end
 
 function CheckNeedWeapons()
@@ -874,7 +891,8 @@ function DoReadyForStronglings()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
+
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Defeat the cannibals!") .."|".. loc("Leaks A Lot must survive!") .. "|" .. grenadeHint, 1, 12000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)
@@ -1027,7 +1045,14 @@ function onGameStart()
   AddAnim(startDialogue)
   AddFunction({func = AfterStartDialogue, args = {}})
   AddEvent(CheckBrainiacDead, {}, DoBrainiacDead, {}, 0)
-  ShowMission(loc("The Shadow Falls"), loc("The First Encounter"), loc("Survive!|Hint: Cinematics can be skipped with the [Precise] key."), 1, 0)
+  local hint
+  if INTERFACE == "touch" then
+     -- FIXME: No precise key available in Touch yet.
+     hint = ""
+  else
+     hint = "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
+  end
+  ShowMission(loc("The Shadow Falls"), loc("The First Encounter"), loc("Survive!") .. hint, 1, 0)
 end
 
 function onGameTick()
