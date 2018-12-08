@@ -452,7 +452,7 @@ handleCmd_inRoom ["GREETING", msg] = do
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient
     return [AnswerClients [sendChan cl]
-        ["CHAT", nickServer, loc "Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs"]
+        ["CHAT", nickServer, loc "Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>"]
         ]
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
