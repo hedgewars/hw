@@ -220,8 +220,14 @@ handleCmd_lobby ["GET_SERVER_VAR"] = serverAdminOnly $
 handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = serverAdminOnly $
     return [ClearAccountsCache]
 
-handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+handleCmd_lobby ["RESTART_SERVER", "YES"] = serverAdminOnly $
     return [RestartServer]
+
+handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+    return [Warning $ loc "Please confirm server restart with '/restart_server yes'."]
+
+handleCmd_lobby ["RESTART_SERVER", _] = handleCmd_lobby ["RESTART_SERVER"]
+
 
 handleCmd_lobby ["STATS"] = serverAdminOnly $
     return [Stats]

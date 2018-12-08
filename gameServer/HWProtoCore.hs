@@ -107,7 +107,7 @@ handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameter
 
         -- lobby-only commands
         h "STATS" _ = handleCmd_lobbyOnly ["STATS"]
-        h "RESTART_SERVER" "YES" = handleCmd_lobbyOnly ["RESTART_SERVER"]
+        h "RESTART_SERVER" p = handleCmd_lobbyOnly ["RESTART_SERVER", upperCase p]
 
         -- room and lobby commands
         h "QUIT" _ = handleCmd ["QUIT"]
