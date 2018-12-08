@@ -589,6 +589,15 @@ if (s[1] = '/') then
         exit
         end;
 
+    if (copy(s, 2, 9) = 'help room') then
+        begin
+        if (gameType = gmtNet) then
+            SendConsoleCommand('/help')
+        else
+            AddChatString(#0 + shortstring(trcmd[sidCmdHelpRoomFail]));
+        exit;
+        end;
+
     if (copy(s, 2, 4) = 'help') then
         begin
         AddChatString(#3 + shortstring(trcmd[sidCmdHeaderBasic]));
@@ -608,6 +617,8 @@ if (s[1] = '/') then
         AddChatString(#3 + shortstring(trcmd[sidCmdHistory]));
         AddChatString(#3 + shortstring(trcmd[sidCmdHelp]));
         AddChatString(#3 + shortstring(trcmd[sidCmdHelpTaunts]));
+        if gameType = gmtNet then
+            AddChatString(#3 + shortstring(trcmd[sidCmdHelpRoom]));
         exit
         end;
 

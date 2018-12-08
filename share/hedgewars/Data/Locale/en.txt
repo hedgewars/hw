@@ -1325,3 +1325,5 @@
 06:24=/shrug: Make hedgehog shrug
 06:25=/wave: Make hedgehog wave its hand
 06:26=Unknown command or invalid parameters. Say “/help” in chat for a list of commands.
+06:27=/help room: List room chat commands
+06:28=You're not online!

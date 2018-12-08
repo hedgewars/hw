@@ -1,5 +1,8 @@
 + features
 * bugfixes
+=============== 1.0.0 (unreleased) =================
+ + New chat command: “/help room” (shows room chat commands within the game)
+
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
  + Complete overhaul of Continental supplies
