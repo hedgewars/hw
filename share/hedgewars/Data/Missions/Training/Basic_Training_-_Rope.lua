@@ -199,7 +199,7 @@ function onNewTurn()
 		if INTERFACE == "desktop" then
 			ctrl = loc("Open ammo menu: [Right click]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Open ammo menu: Tap the [suitcase]")
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
 		end
 		ShowMission(loc("Basic Rope Training"), loc("Select Rope"),
 		loc("Select the rope to begin!").."|"..
@@ -224,7 +224,7 @@ function onGameTick()
 			loc("Attack: [Space]")
 		elseif INTERFACE == "touch" then
 			ctrl = loc("Aim: [Up]/[Down]").."|"..
-			loc("Attack: Tap the [bomb]")
+			loc("Attack: Tap the [Bomb]")
 		end
 		ShowMission(loc("Basic Rope Training"), loc("Getting Started"),
 		loc("You can use the rope to reach new places.").."|"..
@@ -386,7 +386,7 @@ function onGearDelete(gear)
 				loc("Attack: [Space]")
 			elseif INTERFACE == "touch" then
 				ctrl = loc("Aim: [Up]/[Down]").."|"..
-				loc("Attack: Tap the [bomb]")
+				loc("Attack: Tap the [Bomb]")
 			end
 			ShowMission(loc("Basic Rope Training"), loc("How to Rope"),
 			loc("Go to the target.").."|"..

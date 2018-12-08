@@ -137,7 +137,7 @@ function newGamePhase()
 			ctrl = loc("Open ammo menu: [Right click]").."|"..
 			loc("Select weapon: [Left click]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Open ammo menu: Tap the [suitcase]")
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
 		end
 		ShowMission(loc("Basic Bazooka Training"), loc("Select Weapon"), loc("To begin with the training, select the bazooka from the ammo menu!").."|"..
 		ctrl, 2, 5000)
@@ -147,7 +147,7 @@ function newGamePhase()
 			loc("Aim: [Up]/[Down]").."|"..
 			loc("Walk: [Left]/[Right]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Attack: Tap the [bomb]").."|"..
+			ctrl = loc("Attack: Tap the [Bomb]").."|"..
 			loc("Aim: [Up]/[Down]").."|"..
 			loc("Walk: [Left]/[Right]")
 		end

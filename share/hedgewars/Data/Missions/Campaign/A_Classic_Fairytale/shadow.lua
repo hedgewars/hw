@@ -148,7 +148,7 @@ local grenadeHint = loc("Grenade hint: Set timer with the [Timer] controls, aim 
                     loc("Hold [Attack] pressed to throw with more power.")
 if INTERFACE == "touch" then
   grenadeHint = grenadeHint .. "|" ..
-                loc("Set timer: Tap the [Clock]") .. "|" ..
+                loc("Change detonation timer: Tap the [Clock]") .. "|" ..
                 loc("Attack: Tap the [Bomb]")
 else
   grenadeHint = grenadeHint .. "|" ..

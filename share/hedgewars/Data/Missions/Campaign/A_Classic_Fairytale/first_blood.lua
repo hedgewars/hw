@@ -156,9 +156,9 @@ if INTERFACE == "touch" then
     ctrlMissionPanel = loc("Hint: Pause the game to review the mission texts.")
     ctrlAttack = loc("Attack: Tap the [Bomb]")
 else
-    ctrlJump = loc("Long Jump: Enter")
+    ctrlJump = loc("Long Jump: [Enter]")
     ctrlMissionPanel = loc("Hint: Hold down [M] to review the mission texts.")
-    ctrlAttack = loc("Attack: Space")
+    ctrlAttack = loc("Attack: [Space]")
 end
 
 goals = {
@@ -777,7 +777,7 @@ function onGameStart()
     -- FIXME: Precise key is not available in Touch
     msgSkip = ""
   else
-    msgSkip = "|" .. loc("Hint: Animations can be skipped with the [Precise] key.")
+    msgSkip = "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
   end
   ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training.") .. msgSkip, -amSkip, 0)
   HideHog(cannibal)

@@ -127,7 +127,7 @@ function newGamePhase()
 			ctrl = loc("Open ammo menu: [Right click]").."|"..
 			loc("Select weapon: [Left click]")
 		else
-			ctrl = loc("Open ammo menu: Tap the [suitcase]")
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
 		end
 		ShowMission(loc("Basic Grenade Training"), loc("Select Weapon"), loc("To begin with the training, select the grenade from the ammo menu!").."|"..
 		ctrl, 2, 5000)
@@ -137,7 +137,7 @@ function newGamePhase()
 			loc("Aim: [Up]/[Down]").."|"..
 			loc("Change direction: [Left]/[Right]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Attack: Tap the [bomb]").."|"..
+			ctrl = loc("Attack: Tap the [Bomb]").."|"..
 			loc("Aim: [Up]/[Down]").."|"..
 			loc("Change direction: [Left]/[Right]")
 		end
@@ -151,7 +151,7 @@ function newGamePhase()
 		if INTERFACE == "desktop" then
 			ctrl = loc("Set detonation timer: [1]-[5]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Change detonation timer: Tap the [clock]")
+			ctrl = loc("Change detonation timer: Tap the [Clock]")
 		end
 		ShowMission(loc("Basic Grenade Training"), loc("Timer"),
 		loc("You can change the detonation timer of grenades.").."|"..
@@ -173,8 +173,8 @@ function newGamePhase()
 			loc("Set bounciness: [Left Shift] + [1]-[5]")
 		elseif INTERFACE == "touch" then
 			-- FIXME: Bounciness can't be set in touch yet. :(
-			caption = loc("Well done!")
-			ctrl = loc("You're getting pretty good! Here are more targets for you.")
+			caption = loc("Well done.")
+			ctrl = loc("You're doing well! Here are more targets for you.")
 		end
 
 		ShowMission(loc("Basic Grenade Training"), caption, ctrl, 2, 20000)

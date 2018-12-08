@@ -304,8 +304,8 @@ function onGearDelete(gear)
 				ctrl = loc("Open ammo menu: [Right click]").."|"..
 				loc("Attack: [Space]")
 			elseif INTERFACE == "touch" then
-				ctrl = loc("Open ammo menu: Tap the [suitcase]").."|"..
-				loc("Attack: Tap the [bomb]")
+				ctrl = loc("Open ammo menu: Tap the [Suitcase]").."|"..
+				loc("Attack: Tap the [Bomb]")
 			end
 			ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (Failed!)"),
 			loc("Oops! You have selected the wrong hedgehog! Just try again.").."|"..
@@ -318,7 +318,7 @@ function onGearDelete(gear)
 		if INTERFACE == "desktop" then
 			ctrl = loc("Long Jump: [Enter]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Long Jump: Tap the [curvy arrow] for long")
+			ctrl = loc("Long Jump: Tap the [Curvy Arrow] button for long")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Jumping"),
 		loc("Get the next crate by jumping over the abyss.").."|"..
@@ -330,7 +330,7 @@ function onGearDelete(gear)
 		if INTERFACE == "desktop" then
 			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("High Jump: Tap the [curvy arrow] shortly").."|"..loc("Back Jump: Double-tap the [curvy arrow]")
+			ctrl = loc("High Jump: Tap the [Curvy Arrow] shortly").."|"..loc("Back Jump: Double-tap the [Curvy Arrow]")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (1/2)"),
 		loc("For the next crate, you have to do back jumps.") .. "|" ..
@@ -340,7 +340,7 @@ function onGearDelete(gear)
 		if INTERFACE == "desktop" then
 			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("High Jump: Tap the [curvy arrow] shortly").."|"..loc("Back Jump: Double-tap the [curvy arrow]")
+			ctrl = loc("High Jump: Tap the [Curvy Arrow] shortly").."|"..loc("Back Jump: Double-tap the [Curvy Arrow]")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
 		loc("To get over the next obstacles, keep some distance from the wall before you back jump.").."|"..
@@ -371,8 +371,8 @@ function onGearDelete(gear)
 			ctrl = loc("Open ammo menu: [Right click]").."|"..
 			loc("Attack: [Space]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Open ammo menu: Tap the [suitcase]").."|"..
-			loc("Attack: Tap the [bomb]")
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]").."|"..
+			loc("Attack: Tap the [Bomb]")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (1/3)"),
 		loc("You have collected the “Switch Hedgehog” utility!").."|"..
@@ -432,9 +432,9 @@ local function firstMission()
 		loc("Attack: [Space]")
 	elseif INTERFACE == "touch" then
 		ctrl = loc("IMPORTANT: To see the mission panel again, pause the game.").."| |"..
-		loc("Pause: Tap the [pause symbol]").."| |"..
+		loc("Pause: Tap the [Pause] button").."| |"..
 		loc("To begin with the training, tap the attack button!").."|"..
-		loc("Attack: Tap the [bomb]")
+		loc("Attack: Tap the [Bomb]")
 	end
 	ShowMission(loc("Basic Movement Training"), loc("Mission Panel"),
 	loc("This is the mission panel.").."|"..
