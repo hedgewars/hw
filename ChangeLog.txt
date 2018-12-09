@@ -3,6 +3,9 @@
 =============== 1.0.0 (unreleased) =================
  + New chat command: “/help room” (shows room chat commands within the game)
 
+Lua API:
+ + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
+
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
  + Complete overhaul of Continental supplies

@@ -686,11 +686,20 @@ end;
 
 function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
+    explode, poison: boolean;
+    n: LongInt;
 begin
-    if CheckLuaParamCount(L, 4,'SpawnFakeHealthCrate', 'x, y, explode, poison') then
+    if CheckAndFetchParamCountRange(L, 2, 4, 'SpawnFakeHealthCrate', 'x, y [, explode [, poison]]', n) then
         begin
+        explode:= false;
+        poison:= false;
+        if (n >= 3) and (not lua_isnil(L, 3)) then
+            explode:= lua_toboolean(L, 3);
+        if (n = 4) and (not lua_isnil(L, 4)) then
+            poison:= lua_toboolean(L, 4);
+
         gear := SpawnFakeCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)),
-        HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
+        HealthCrate, explode, poison);
         if gear <> nil then
              lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L)
@@ -702,11 +711,20 @@ end;
 
 function lc_spawnfakeammocrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
+    explode, poison: boolean;
+    n: LongInt;
 begin
-    if CheckLuaParamCount(L, 4,'SpawnFakeAmmoCrate', 'x, y, explode, poison') then
+    if CheckAndFetchParamCountRange(L, 2, 4, 'SpawnFakeAmmoCrate', 'x, y [, explode [, poison]]', n) then
         begin
+        explode:= false;
+        poison:= false;
+        if (n >= 3) and (not lua_isnil(L, 3)) then
+            explode:= lua_toboolean(L, 3);
+        if (n = 4) and (not lua_isnil(L, 4)) then
+            poison:= lua_toboolean(L, 4);
+
         gear := SpawnFakeCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)),
-        AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
+        AmmoCrate, explode, poison);
         if gear <> nil then
              lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L)
@@ -718,11 +736,20 @@ end;
 
 function lc_spawnfakeutilitycrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
+    explode, poison: boolean;
+    n: LongInt;
 begin
-    if CheckLuaParamCount(L, 4,'SpawnFakeUtilityCrate', 'x, y, explode, poison') then
+    if CheckAndFetchParamCountRange(L, 2, 4, 'SpawnFakeUtilityCrate', 'x, y [, explode [, poison]]', n) then
         begin
+        explode:= false;
+        poison:= false;
+        if (n >= 3) and (not lua_isnil(L, 3)) then
+            explode:= lua_toboolean(L, 3);
+        if (n = 4) and (not lua_isnil(L, 4)) then
+            poison:= lua_toboolean(L, 4);
+
         gear := SpawnFakeCrateAt(Trunc(lua_tonumber(L, 1)), Trunc(lua_tonumber(L, 2)),
-        UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
+        UtilityCrate, explode, poison);
         if gear <> nil then
              lua_pushnumber(L, gear^.uid)
         else lua_pushnil(L)
