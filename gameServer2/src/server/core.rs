@@ -1,6 +1,7 @@
 use slab;
 use crate::utils;
 use super::{
+    io::HWServerIO,
     client::HWClient, room::HWRoom, actions, handlers,
     coretypes::{ClientId, RoomId},
     actions::{Destination, PendingMessage}
@@ -12,24 +13,25 @@ use log::*;
 
 type Slab<T> = slab::Slab<T>;
 
-
 pub struct HWServer {
     pub clients: Slab<HWClient>,
     pub rooms: Slab<HWRoom>,
     pub lobby_id: RoomId,
     pub output: Vec<(Vec<ClientId>, HWServerMessage)>,
     pub removed_clients: Vec<ClientId>,
+    pub io: Box<dyn HWServerIO>
 }
 
 impl HWServer {
-    pub fn new(clients_limit: usize, rooms_limit: usize) -> HWServer {
+    pub fn new(clients_limit: usize, rooms_limit: usize, io: Box<dyn HWServerIO>) -> HWServer {
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = Slab::with_capacity(clients_limit);
         let mut server = HWServer {
             clients, rooms,
             lobby_id: 0,
             output: vec![],
-            removed_clients: vec![]
+            removed_clients: vec![],
+            io
         };
         server.lobby_id = server.add_room();
         server

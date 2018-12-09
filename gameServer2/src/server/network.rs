@@ -20,6 +20,7 @@ use crate::{
     protocol::{ProtocolDecoder, messages::*}
 };
 use super::{
+    io::FileServerIO,
     core::{HWServer},
     coretypes::ClientId
 };
@@ -236,7 +237,7 @@ pub struct NetworkLayer {
 
 impl NetworkLayer {
     pub fn new(listener: TcpListener, clients_limit: usize, rooms_limit: usize) -> NetworkLayer {
-        let server = HWServer::new(clients_limit, rooms_limit);
+        let server = HWServer::new(clients_limit, rooms_limit, Box::new(FileServerIO::new()));
         let clients = Slab::with_capacity(clients_limit);
         let pending = HashSet::with_capacity(2 * clients_limit);
         let pending_cache = Vec::with_capacity(2 * clients_limit);
