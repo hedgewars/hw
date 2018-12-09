@@ -175,7 +175,7 @@ fn connect_and_run(
 fn get_protocol_number(executable: &str) -> std::io::Result<u32> {
     let output = Command::new(executable).arg("--protocol").output()?;
 
-    Ok(u32::from_str(&String::from_utf8(output.stdout).unwrap().as_str()).unwrap_or(55))
+    Ok(u32::from_str(&String::from_utf8(output.stdout).unwrap().trim()).unwrap_or(55))
 }
 
 fn main() {
