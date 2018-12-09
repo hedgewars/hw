@@ -1200,7 +1200,7 @@ var i, t: LongInt;
     r: TSDL_Rect;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
-    replicateToLeft, replicateToRight, tmp: boolean;
+    replicateToLeft, replicateToRight, tmp, notHiddenByCinematic: boolean;
 {$IFDEF USE_VIDEO_RECORDING}
     a: Byte;
 {$ENDIF}
@@ -1449,7 +1449,8 @@ RenderWorldEdge();
 // This scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
 
-// Cinematic Mode: Effects
+notHiddenByCinematic:= true;
+// Cinematic Mode: Determine effects and state
 if CinematicScript or (InCinematicMode and autoCameraOn
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
     or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo))) then
@@ -1458,7 +1459,10 @@ if CinematicScript or (InCinematicMode and autoCameraOn
         begin
         inc(CinematicSteps, Lag);
         if CinematicSteps > 300 then
-        CinematicSteps:= 300;
+            begin
+            CinematicSteps:= 300;
+            notHiddenByCinematic:= false;
+            end;
         end;
     end
 else if CinematicSteps > 0 then
@@ -1468,22 +1472,8 @@ else if CinematicSteps > 0 then
         CinematicSteps:= 0;
     end;
 
-// Cinematic Mode: Render black bars
-if CinematicSteps > 0 then
-    begin
-    r.x:= ViewLeftX;
-    r.w:= ViewWidth;
-    r.y:= ViewTopY;
-    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
-    r.h:= CinematicBarH;
-    DrawRect(r, 0, 0, 0, $FF, true);
-    r.y:= ViewBottomY - r.h;
-    DrawRect(r, 0, 0, 0, $FF, true);
-    end;
-
-
 // Turn time
-if UIDisplay <> uiNone then
+if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
@@ -1522,34 +1512,14 @@ if UIDisplay <> uiNone then
         DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
         end;
 
-// Captions
-    DrawCaptions
     end;
 
-{$IFDEF USE_TOUCH_INTERFACE}
-// Draw buttons Related to the Touch interface
-DrawScreenWidget(@arrowLeft);
-DrawScreenWidget(@arrowRight);
-DrawScreenWidget(@arrowUp);
-DrawScreenWidget(@arrowDown);
-
-DrawScreenWidget(@fireButton);
-DrawScreenWidget(@jumpWidget);
-DrawScreenWidget(@AMWidget);
-DrawScreenWidget(@pauseButton);
-DrawScreenWidget(@utilityWidget);
-{$ENDIF}
-
 // Team bars
-if UIDisplay = uiAll then
+if (UIDisplay = uiAll) and (notHiddenByCinematic) then
     RenderTeamsHealth;
 
-// Lag alert
-if isInLag then
-    DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
-
 // Wind bar
-if UIDisplay <> uiNone then
+if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
@@ -1583,7 +1553,7 @@ if UIDisplay <> uiNone then
     end;
 
 // Indicators for global effects (extra damage, low gravity)
-if UIDisplay <> uiNone then
+if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= (cScreenWidth shr 1) - 95;
@@ -1609,6 +1579,41 @@ if UIDisplay <> uiNone then
             DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLowGravity) - 1, 1, 32, 32);
         end;
     end;
+
+// Cinematic Mode: Render black bars
+if CinematicSteps > 0 then
+    begin
+    r.x:= ViewLeftX;
+    r.w:= ViewWidth;
+    r.y:= ViewTopY;
+    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
+    r.h:= CinematicBarH;
+    DrawRect(r, 0, 0, 0, $FF, true);
+    r.y:= ViewBottomY - r.h;
+    DrawRect(r, 0, 0, 0, $FF, true);
+    end;
+
+// Touchscreen interface widgets
+{$IFDEF USE_TOUCH_INTERFACE}
+DrawScreenWidget(@arrowLeft);
+DrawScreenWidget(@arrowRight);
+DrawScreenWidget(@arrowUp);
+DrawScreenWidget(@arrowDown);
+
+DrawScreenWidget(@fireButton);
+DrawScreenWidget(@jumpWidget);
+DrawScreenWidget(@AMWidget);
+DrawScreenWidget(@utilityWidget);
+DrawScreenWidget(@pauseButton);
+{$ENDIF}
+
+// Captions
+if UIDisplay <> uiNone then
+    DrawCaptions;
+
+// Lag alert
+if isInLag then
+    DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Chat
 DrawChat;
