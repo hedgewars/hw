@@ -3303,6 +3303,22 @@ begin
     lc_setreadytimeleft:= 0;
 end;
 
+function lc_setturntimepaused(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'SetTurnTimePaused', 'isPaused') then
+        LuaClockPaused:= lua_toboolean(L, 1);
+    lc_setturntimepaused:= 0;
+end;
+
+function lc_getturntimepaused(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 0, 'GetTurnTimePaused', '') then
+        lua_pushboolean(L, LuaClockPaused)
+    else
+        lua_pushnil(L);
+    lc_getturntimepaused:= 1;
+end;
+
 function lc_startghostpoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 1, 'StartGhostPoints', 'count') then
@@ -4337,6 +4353,8 @@ lua_register(luaState, _P'GetLaserSight', @lc_getlasersight);
 lua_register(luaState, _P'Explode', @lc_explode);
 lua_register(luaState, _P'SetTurnTimeLeft', @lc_setturntimeleft);
 lua_register(luaState, _P'SetReadyTimeLeft', @lc_setreadytimeleft);
+lua_register(luaState, _P'SetTurnTimePaused', @lc_setturntimepaused);
+lua_register(luaState, _P'GetTurnTimePaused', @lc_getturntimepaused);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);

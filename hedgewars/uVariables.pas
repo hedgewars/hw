@@ -261,6 +261,9 @@ var
     LuaEndTurnRequested: boolean;
     LuaNoEndTurnTaunts: boolean;
 
+    // whether Lua requested to pause the clock
+    LuaClockPaused: boolean;
+
     MaskedSounds : array[TSound] of boolean;
 
     LastVoice : TVoice;
