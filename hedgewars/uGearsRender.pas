@@ -1189,7 +1189,9 @@ begin
 
                 dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
 
+                Tint(Team^.Clan^.Color shl 8 or $FF);
                 DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
+                untint;
                 end;
 
 
@@ -1264,7 +1266,13 @@ begin
         //DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1, 0, 0, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8, 1, 22, 22, (RealTicks shr 3) mod 360)
         DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1/(1+(RealTicks shr 8) mod 5), 0, 0, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8, 1, 22, 22, (RealTicks shr 3) mod 360)
     else
+        begin
+        if CurrentHedgehog <> nil then
+            Tint(CurrentHedgehog^.Team^.Clan^.Color shl 8 or $FF);
         DrawSpriteRotatedF(sprTargetP, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+        if CurrentHedgehog <> nil then
+            untint;
+        end;
 
     case Gear^.Kind of
           gtGrenade: DrawSpriteRotated(sprBomb, x, y, 0, Gear^.DirAngle);
@@ -1467,7 +1475,13 @@ begin
                         DrawSpriteRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0)
                         end
                     end;
-        gtSwitcher: DrawSprite(sprSwitch, x - 16, y - 56, (RealTicks shr 6) mod 12);
+        gtSwitcher: begin
+                    setTintAdd(true);
+                    Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
+                    DrawSprite(sprSwitch, x - 16, y - 56, (RealTicks shr 6) mod 12);
+                    untint;
+                    setTintAdd(false);
+                    end;
           gtTarget: begin
                     Tint($FF, $FF, $FF, round($FF * Gear^.Timer / 1000));
                     DrawSprite(sprTarget, x - 16, y - 16, 0);

@@ -1146,7 +1146,9 @@ for t:= 0 to Pred(TeamsCount) do
             h:= -NameTagTex^.w - 24;
             if OwnerTex <> nil then
                 h:= h - OwnerTex^.w - 4;
+            Tint(TeamsArray[t]^.Clan^.Color shl 8 or $FF);
             DrawSpriteRotatedF(sprFinger, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFinger].Width div 4, 0, 1, -90);
+            untint;
             end;
         end;
       end;
@@ -1400,7 +1402,10 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
         if CurAmmoType = amBee then
             spr:= sprTargetBee
         else
+            begin
             spr:= sprTargetP;
+            Tint(Team^.Clan^.Color shl 8 or $FF);
+            end;
         if replicateToLeft then
             begin
             ShiftWorld(-1);
@@ -1416,6 +1421,8 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
             end;
 
         DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+        if spr = sprTargetP then
+            untint;
         end;
     end;
 

@@ -2,6 +2,7 @@
 * bugfixes
 =============== 1.0.0 (unreleased) =================
  + New chat command: “/help room” (shows room chat commands within the game)
+ + Colorize switching arrows, pointing arrow and target cross in clan color
 
 Lua API:
  + New call: SetTurnTimePaused(isPaused): Call with true to pause turn time, false to unpause
