@@ -43,7 +43,7 @@ end
 
 function onGameInit()
 
-	if TurnTime > 10001 then
+	if TurnTime > 8000 then
 		Ready = 8000
 	else
 		Ready = TurnTime
