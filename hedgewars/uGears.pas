@@ -62,11 +62,18 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stInit, stDelay, stChDmg, stSweep, stTurnStats, stChWin1,
-    stTurnReact, stAfterDelay, stChWin2, stWater, stChWin3,
-    stChKing, stHealth, stSpawn, stNTurn);
+    step: (stInit, stDelay1, stChDmg, stSweep, stTurnStats, stChWin1,
+    stTurnReact, stDelay2, stChWin2, stWater, stChWin3,
+    stChKing, stSuddenDeath, stDelay3, stHealth, stSpawn, stDelay4,
+    stNTurn);
     NewTurnTick: LongWord;
     //SDMusic: shortstring;
+
+const delaySDStart = 1600;
+      delaySDWarning = 1000;
+      delayDamageTag = 500;
+      delayTurnReact = 1500;
+      delayFinal = 100;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
 var Gear: PGear;
@@ -120,6 +127,15 @@ This doesn't fit well w/ the new loser sprite which is cringing from an attack.
         end;
     Gear:= Gear^.NextGear
     end;
+end;
+
+function DoDelay: boolean;
+begin
+if delay <= 0 then
+    delay:= 1
+else
+    dec(delay);
+DoDelay:= delay = 0;
 end;
 
 function CheckMinionsDie: boolean;
@@ -296,22 +312,17 @@ case step of
             ScriptCall('onEndTurn');
         inc(step)
         end;
-    stDelay:
-        begin
-        if delay = 0 then
-            delay:= cInactDelay
-        else
-            dec(delay);
-
-        if delay = 0 then
-            inc(step)
-        end;
-
+    stDelay1:
+        if DoDelay() then
+            inc(step);
     stChDmg:
     if CheckNoDamage then
         inc(step)
     else
-        step:= stDelay;
+        begin
+        delay:= delayDamageTag;
+        step:= stDelay1;
+        end;
 
     stSweep:
     if SweepDirty then
@@ -341,22 +352,16 @@ case step of
             begin
             uStats.TurnReaction;
             uStats.TurnStatsReset;
+            delay:= delayTurnReact;
             inc(step)
             end
         else
             inc(step, 2);
         end;
 
-    stAfterDelay:
-        begin
-        if delay = 0 then
-            delay:= cInactDelay
-        else
-            dec(delay);
-
-        if delay = 0 then
-            inc(step)
-            end;
+    stDelay2:
+        if DoDelay() then
+            inc(step);
     stChWin2:
         begin
         CheckForWin();
@@ -391,39 +396,65 @@ case step of
         else
             inc(step);
         end;
-    stHealth:
+    stSuddenDeath:
         begin
         if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
             begin
             if (TotalRoundsPre = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
-                StartSuddenDeath()
+                begin
+                StartSuddenDeath();
+                delay:= delaySDStart;
+                end
             else if (TotalRoundsPre < cSuddenDTurns) and (not isInMultiShoot) then
                 begin
                 i:= cSuddenDTurns - TotalRoundsPre;
                 s:= ansistring(inttostr(i));
                 if i = 1 then
-                    AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState)
+                    begin
+                    AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState);
+                    delay:= delaySDWarning;
+                    end
                 else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
+                    begin
                     AddCaption(FormatA(trmsg[sidRoundsSD], s), capcolDefault, capgrpGameState);
+                    delay:= delaySDWarning;
+                    end
                 end;
+            inc(step);
+            end
+        else
+            inc(step, 2);
+        end;
+    stDelay3:
+        if DoDelay() then
+            inc(step);
+    stHealth:
+        begin
+        if bBetweenTurns
+        or isInMultiShoot
+        or (TotalRoundsPre = -1) then
+            inc(step)
+        else
+            begin
+            bBetweenTurns:= true;
+            HealthMachine;
+            step:= stChDmg
             end;
-            if bBetweenTurns
-            or isInMultiShoot
-            or (TotalRoundsPre = -1) then
-                inc(step)
-            else
-                begin
-                bBetweenTurns:= true;
-                HealthMachine;
-                step:= stChDmg
-                end
-            end;
+        end;
     stSpawn:
         begin
-        if not isInMultiShoot then
+        if (not isInMultiShoot) then
+            begin
             SpawnBoxOfSmth;
-        inc(step)
+            delay:= delayFinal;
+            inc(step);
+            end
+        else
+            inc(step, 2)
         end;
+    stDelay4:
+        if DoDelay() then
+            inc(step);
     stNTurn:
         begin
         if isInMultiShoot then
@@ -1367,7 +1398,7 @@ begin
     //typed const
     delay:= 0;
     delay2:= 0;
-    step:= stDelay;
+    step:= stDelay1;
     upd:= 0;
 
     //SDMusic:= 'hell.ogg';
