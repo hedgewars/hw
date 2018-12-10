@@ -67,6 +67,7 @@ var DamageClan  : Longword = 0;
     HitTargets  : LongWord = 0; // Target (gtTarget) hits per turn
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
+    FirstBlood  : boolean = false;
     LeaveMeAlone : boolean = false;
     SkippedTurns: LongWord = 0;
     isTurnSkipped: boolean = false;
@@ -254,8 +255,11 @@ if FinishedTurnsTotal <> 0 then
         killsCheck:= 0;
 
     // First blood (first damage, poison or kill)
-    if ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
-        AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
+    if (not FirstBlood) and ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
+        begin
+        FirstBlood:= true;
+        AddVoice(sndFirstBlood, CurrentTeam^.voicepack);
+        end
 
     // Hog hurts, poisons or kills itself (except sacrifice)
     else if (CurrentHedgehog^.stats.Sacrificed = false) and ((CurrentHedgehog^.stats.StepDamageRecv > 0) or (CurrentHedgehog^.stats.StepPoisoned) or (CurrentHedgehog^.stats.StepDied)) then
@@ -598,6 +602,7 @@ begin
     HitTargets  := 0;
     AmmoUsedCount := 0;
     AmmoDamagingUsed := false;
+    FirstBlood:= false;
     LeaveMeAlone := false;
     SkippedTurns:= 0;
     isTurnSkipped:= false;
