@@ -1307,7 +1307,7 @@ if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) 
 else if not isInMultiShoot then
     AllInactive:= false;
 
-if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (LuaEndTurnRequested = true) then
+if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) or (((GameFlags and gfKing) <> 0) and (not Hedgehog^.Team^.hasKing)) or (LuaEndTurnRequested = true) then
     begin
     if (Hedgehog^.CurAmmoType = amKnife) then
        LoadHedgehogHat(Hedgehog^, Hedgehog^.Hat);
