@@ -542,11 +542,11 @@ if TurnTimeLeft > 0 then
     if IsClockRunning() then
         //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
         begin
-        if (cHedgehogTurnTime >= 10000)
+        if (cHedgehogTurnTime > TurnTimeLeft)
         and (CurrentHedgehog^.Gear <> nil)
         and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0)
         and (not isGetAwayTime) and (ReadyTimeLeft = 0) then
-            if TurnTimeLeft = 5000 then
+            if (TurnTimeLeft = 5000) and (cHedgehogTurnTime >= 10000) then
                 PlaySoundV(sndHurry, CurrentTeam^.voicepack)
             else if TurnTimeLeft = 4000 then
                 PlaySound(sndCountdown4)
