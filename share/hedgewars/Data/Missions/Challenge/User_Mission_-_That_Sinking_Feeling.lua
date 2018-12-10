@@ -38,7 +38,8 @@ function onGameInit()
 	Explosives = 0
 	Map = "Islands"
 	Theme = "City"
-	SuddenDeathTurns = 1
+	HealthDecrease = 0
+	WaterRise = 0
 
 	AddTeam(loc("Hapless Hogs"), -1, "Simple", "Island", "Default")
 	hh[0] = AddHog(loc("Sinky"), 1, 100, "fr_lemon")
