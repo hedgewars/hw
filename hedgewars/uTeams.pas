@@ -560,6 +560,7 @@ for t:= 0 to Pred(TeamsCount) do
         // Some initial King buffs
         if (GameFlags and gfKing) <> 0 then
             begin
+            hasKing:= true;
             Hedgehogs[0].King:= true;
             Hedgehogs[0].Hat:= 'crown';
             Hedgehogs[0].Effects[hePoisoned] := 0;

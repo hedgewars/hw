@@ -444,6 +444,7 @@ type
             voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
             stats: TTeamStats;
+            hasKing: boolean; // true if team has a living king
             hasGone: boolean;
             skippedTurns: Longword;
             isGoneFlagPendingToBeSet, isGoneFlagPendingToBeUnset: boolean;

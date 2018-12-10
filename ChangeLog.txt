@@ -3,6 +3,8 @@
 =============== 1.0.0 (unreleased) =================
  + New chat command: “/help room” (shows room chat commands within the game)
  + Colorize switching arrows, pointing arrow and target cross in clan color
+ * King Mode: Fix team sometimes not being killed properly if king drowned
+ * King Mode: Kill resurrected minions if king is not alive
  * Hide most HUD elements in cinematic mode
 
 Lua API:

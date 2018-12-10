@@ -64,7 +64,7 @@ var delay: LongWord;
     delay2: LongWord;
     step: (stInit, stDelay, stChDmg, stSweep, stTurnStats, stChWin1,
     stTurnReact, stAfterDelay, stChWin2, stWater, stChWin3,
-    stHealth, stSpawn, stNTurn);
+    stChKing, stHealth, stSpawn, stNTurn);
     NewTurnTick: LongWord;
     //SDMusic: shortstring;
 
@@ -86,7 +86,7 @@ while Gear <> nil do
             CheckNoDamage:= false;
 
             dmg:= Gear^.Damage;
-            if Gear^.Health < dmg then
+            if (Gear^.Health < dmg) then
                 begin
                 Gear^.Active:= true;
                 Gear^.Health:= 0
@@ -105,13 +105,40 @@ This doesn't fit well w/ the new loser sprite which is cringing from an attack.
             RenderHealth(Gear^.Hedgehog^);
             RecountTeamHealth(Gear^.Hedgehog^.Team);
 
+            end
+        else if ((GameFlags and gfKing) <> 0) and (not Gear^.Hedgehog^.Team^.hasKing) then
+            begin
+            Gear^.Active:= true;
+            Gear^.Health:= 0;
+            RenderHealth(Gear^.Hedgehog^);
+            RecountTeamHealth(Gear^.Hedgehog^.Team);
             end;
+
         if (not isInMultiShoot) then
             Gear^.Karma:= 0;
         Gear^.Damage:= 0
         end;
     Gear:= Gear^.NextGear
     end;
+end;
+
+function CheckMinionsDie: boolean;
+var Gear: PGear;
+begin
+    CheckMinionsDie:= false;
+    if (GameFlags and gfKing) = 0 then
+        exit;
+
+    Gear:= GearsList;
+    while Gear <> nil do
+        begin
+        if (Gear^.Kind = gtHedgehog) and (not Gear^.Hedgehog^.King) and (not Gear^.Hedgehog^.Team^.hasKing) then
+            begin
+            CheckMinionsDie:= true;
+            exit;
+            end;
+        Gear:= Gear^.NextGear;
+        end;
 end;
 
 procedure HealthMachine;
@@ -357,10 +384,17 @@ case step of
         inc(step)
         end;
 
+    stChKing:
+        begin
+        if (not isInMultiShoot) and (CheckMinionsDie) then
+            step:= stChDmg
+        else
+            inc(step);
+        end;
     stHealth:
         begin
         if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
-             begin
+            begin
             if (TotalRoundsPre = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
                 StartSuddenDeath()
             else if (TotalRoundsPre < cSuddenDTurns) and (not isInMultiShoot) then

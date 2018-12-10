@@ -771,7 +771,6 @@ end;
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t,i: Longword;
-    k: boolean;
     cakeData: PCakeData;
     iterator: PGear;
 begin
@@ -857,19 +856,14 @@ else if Gear^.Kind = gtHedgehog then
 
         if Gear^.Hedgehog^.King then
             begin
-            // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
-            k:= false;
+            Gear^.Hedgehog^.Team^.hasKing:= false;
             for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then
-                    k:= true;
-            if not k then
-                for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                    with team^.Clan^.Teams[i]^ do
-                        for t:= 0 to cMaxHHIndex do
-                            if Hedgehogs[t].Gear <> nil then
-                                Hedgehogs[t].Gear^.Health:= 0
-                            else if (Hedgehogs[t].GearHidden <> nil) then
-                                Hedgehogs[t].GearHidden^.Health:= 0  // hog is still hidden. if tardis should return though, lua, eh...
+                with team^.Clan^.Teams[i]^ do
+                    for t:= 0 to cMaxHHIndex do
+                        if Hedgehogs[t].Gear <> nil then
+                            Hedgehogs[t].Gear^.Health:= 0
+                        else if (Hedgehogs[t].GearHidden <> nil) then
+                            Hedgehogs[t].GearHidden^.Health:= 0  // hog is still hidden. if tardis should return though, lua, eh...
             end;
 
         // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog

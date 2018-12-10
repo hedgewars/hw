@@ -6023,6 +6023,8 @@ begin
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
+                if resgear^.Hedgehog^.King then
+                    resgear^.Hedgehog^.Team^.hasKing:= true;
                 { Reviving a hog implies its clan is now alive, too. }
                 resgear^.Hedgehog^.Team^.Clan^.DeathLogged:= false;
                 s:= ansistring(resgear^.Hedgehog^.Name);
