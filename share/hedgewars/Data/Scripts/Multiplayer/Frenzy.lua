@@ -26,10 +26,13 @@ function showStartingInfo()
 	ruleSet = "" ..
 	loc("RULES:") .. " |" ..
 	loc("Each turn is only ONE SECOND!") .. "|" ..
-	loc("Use your ready time to think.") .. "|" ..
-	loc("Slot keys save time! (F1-F10 by default)") .. "| |"
-	for i=1, #frenzyAmmos do
-		ruleSet = ruleSet .. string.format(loc("Slot %d: %s"), i, GetAmmoName(frenzyAmmos[i])) .. "|"
+	loc("Use your ready time to think.")
+	if INTERFACE ~= "touch" then
+		ruleSet = ruleSet .. "|" ..
+		loc("Slot keys save time! (F1-F10 by default)") .. "| |"
+		for i=1, #frenzyAmmos do
+			ruleSet = ruleSet .. string.format(loc("Slot %d: %s"), i, GetAmmoName(frenzyAmmos[i])) .. "|"
+		end
 	end
 
 	ShowMission(loc("FRENZY"),
