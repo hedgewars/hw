@@ -402,29 +402,36 @@ case step of
         end;
     stSuddenDeath:
         begin
-        if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
+        if ((cWaterRise <> 0) or (cHealthDecrease <> 0)) and (not (isInMultiShoot or bBetweenTurns)) then
             begin
-            if (TotalRoundsPre = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
+            // Start Sudden Death
+            if (TotalRoundsPre = cSuddenDTurns) and (not SuddenDeath) then
                 begin
                 StartSuddenDeath();
                 delay:= delaySDStart;
+                inc(step);
                 end
-            else if (TotalRoundsPre < cSuddenDTurns) and (not isInMultiShoot) then
+            // Show Sudden Death warning message
+            else if (TotalRoundsPre < cSuddenDTurns) and ((LastSuddenDWarn = -2) or (LastSuddenDWarn <> TotalRoundsPre)) then
                 begin
                 i:= cSuddenDTurns - TotalRoundsPre;
                 s:= ansistring(inttostr(i));
-                if i = 1 then
+                // X rounds before SD. X = 1, 2, 5, 10, 15, 20, 25, 50, 100, ...
+                if (i > 0) and ((i <= 2) or ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
                     begin
-                    AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState);
+                    if i = 1 then
+                        AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState)
+                    else
+                        AddCaption(FormatA(trmsg[sidRoundsSD], s), capcolDefault, capgrpGameState);
                     delay:= delaySDWarning;
+                    inc(step);
+                    LastSuddenDWarn:= TotalRoundsPre;
                     end
-                else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                    begin
-                    AddCaption(FormatA(trmsg[sidRoundsSD], s), capcolDefault, capgrpGameState);
-                    delay:= delaySDWarning;
-                    end
-                end;
-            inc(step);
+                else
+                    inc(step, 2);
+                end
+            else
+                inc(step, 2);
             end
         else
             inc(step, 2);

@@ -104,6 +104,7 @@ var
     IsGetAwayTime   : boolean;
     GameOver        : boolean;
     cSuddenDTurns   : LongInt;
+    LastSuddenDWarn : LongInt; // last round in which the last SD warning appeared. -2 = no warning so far
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
@@ -2801,6 +2802,7 @@ begin
     TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
+    LastSuddenDWarn     := -2;
     cDamagePercent      := 100;
     cRopePercent        := 100;
     cGetAwayTime        := 100;
