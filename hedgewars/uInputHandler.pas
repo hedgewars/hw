@@ -500,20 +500,15 @@ begin
 {$ELSE}
 var i, code: LongInt;
 begin
-    WriteLnToConsole('Check');
     for i:=1 to cMaxSlotIndex do
         begin
         code:= KeyNameToCode('f'+IntToStr(i));
-        WriteLnToConsole('f'+IntToStr(i));
-        WriteLnToConsole(CurrentBinds.binds[CurrentBinds.indices[code]]);
         if CurrentBinds.binds[CurrentBinds.indices[code]] <> 'slot '+char(i+48) then
             begin
-            WriteLnToConsole('false');
             CheckDefaultSlotKeys:= false;
             exit;
             end;
         end;
-    WriteLnToConsole('true');
     CheckDefaultSlotKeys:= true;
 {$ENDIF}
 end;
