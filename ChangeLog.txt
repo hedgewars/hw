@@ -6,6 +6,7 @@
  + Longer delays between turns so its easier to see damage and messages
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
+ * Fix poison damage not working in first round
  * Hide most HUD elements in cinematic mode
 
 Lua API:

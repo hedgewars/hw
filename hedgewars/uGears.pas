@@ -432,7 +432,7 @@ case step of
         begin
         if bBetweenTurns
         or isInMultiShoot
-        or (TotalRoundsPre = -1) then
+        or (TotalRoundsReal = -1) then
             inc(step)
         else
             begin
