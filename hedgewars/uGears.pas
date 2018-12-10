@@ -71,8 +71,9 @@ var delay: LongWord;
 
 const delaySDStart = 1600;
       delaySDWarning = 1000;
-      delayDamageTag = 500;
-      delayTurnReact = 1500;
+      delayDamageTagFull = 1500;
+      delayDamageTagShort = 500;
+      delayTurnReact = 1000;
       delayFinal = 100;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
@@ -320,7 +321,10 @@ case step of
         inc(step)
     else
         begin
-        delay:= delayDamageTag;
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            delay:= delayDamageTagShort
+        else
+            delay:= delayDamageTagFull;
         step:= stDelay1;
         end;
 
