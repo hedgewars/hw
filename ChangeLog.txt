@@ -9,6 +9,7 @@
  * King Mode: Kill resurrected minions if king is not alive
  * Fix poison damage not working in first round
  * Hide most HUD elements in cinematic mode
+ * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
 
 Lua API:
  + New call: SetTurnTimePaused(isPaused): Call with true to pause turn time, false to unpause

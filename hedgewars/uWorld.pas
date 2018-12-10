@@ -63,6 +63,7 @@ uses
     , uCommands
     , uTeams
     , uDebug
+    , uInputHandler
 {$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
 {$ENDIF}
@@ -415,7 +416,10 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     STurns: LongInt;
     amSurface: PSDL_Surface;
     AMRect: TSDL_Rect;
-{$IFDEF USE_AM_NUMCOLUMN}tmpsurf: PSDL_Surface;{$ENDIF}
+{$IFDEF USE_AM_NUMCOLUMN}
+    tmpsurf: PSDL_Surface;
+    usesDefaultSlotKeys: boolean;
+{$ENDIF}
 begin
     if cOnlyStats then exit(nil);
 
@@ -451,6 +455,9 @@ begin
 
     x:= AMRect.x;
     y:= AMRect.y;
+{$IFDEF USE_AM_NUMCOLUMN}
+    usesDefaultSlotKeys:= CheckDefaultSlotKeys;
+{$ENDIF USE_AM_NUMCOLUMN}
     for i:= 0 to cMaxSlotIndex do
         if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
@@ -460,7 +467,13 @@ begin
             x:= AMRect.x;
 {$ENDIF}
 {$IFDEF USE_AM_NUMCOLUMN}
-            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F' + IntToStr(i+1)), cWhiteColorChannels);
+            // Ammo slot number column
+            if usesDefaultSlotKeys then
+                // F1, F2, F3, F4, ...
+                tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F'+IntToStr(i+1)), cWhiteColorChannels)
+            else
+                // 1, 2, 3, 4, ...
+                tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i+1)), cWhiteColorChannels);
             copyToXY(tmpsurf, amSurface,
                      x + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.w shr 1),
                      y + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.h shr 1));
