@@ -600,12 +600,14 @@ if AMState = AMShowing then
 
 if AMState = AMShowingUp then // show ammo menu
     begin
-    if (cReducedQuality and rqSlowMenu) <> 0 then
+    // No "appear" animation in low quality or playing with very short turn time.
+    if ((cReducedQuality and rqSlowMenu) <> 0) or (cHedgehogTurnTime <= 10000) then
         begin
         AMShiftX:= 0;
         AMShiftY:= 0;
         AMState:= AMShowing;
         end
+    // "Appear" animation
     else
         if AMAnimState < 1 then
             begin
@@ -625,12 +627,14 @@ if AMState = AMShowingUp then // show ammo menu
     end;
 if AMState = AMHiding then // hide ammo menu
     begin
-    if (cReducedQuality and rqSlowMenu) <> 0 then
+    // No "disappear" animation (see above)
+    if ((cReducedQuality and rqSlowMenu) <> 0) or (cHedgehogTurnTime <= 10000) then
         begin
         AMShiftX:= AMShiftTargetX;
         AMShiftY:= AMShiftTargetY;
         AMState:= AMHidden;
         end
+    // "Disappear" animation
     else
         if AMAnimState < 1 then
             begin
