@@ -94,7 +94,6 @@ function onGameInit()
 	MinesNum = 3
 	MinesTime = 1500
 	Explosives = 2
-	Delay = 3
 	HealthCaseAmount = 50
 	-- gfTagTeam makes it easier to skip the PAotH team
 	GameFlags = gfTagTeam

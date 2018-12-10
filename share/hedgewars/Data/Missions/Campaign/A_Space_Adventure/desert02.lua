@@ -63,7 +63,6 @@ function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
 	TurnTime = 8000
-	Delay = 2
 	CaseFreq = 0
 	HealthCaseAmount = 50
 	MinesNum = 500

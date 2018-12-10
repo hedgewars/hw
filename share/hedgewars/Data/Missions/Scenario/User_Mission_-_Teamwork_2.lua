@@ -22,7 +22,6 @@ function onGameInit()
 	WaterRise = 0
 
 	Explosives = 0
-	Delay = 10
 	Map = "CrazyMission"
 	Theme = "CrazyMission"
 

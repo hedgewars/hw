@@ -107,7 +107,6 @@ function onGameInit()
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0
-	Delay = 5
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0

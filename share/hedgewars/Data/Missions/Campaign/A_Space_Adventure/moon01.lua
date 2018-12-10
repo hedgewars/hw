@@ -109,7 +109,6 @@ function onGameInit()
 	Explosives = 0
 	HealthDecrease = 0
 	WaterRise = 0
-	Delay = 5
 	Map = "moon01_map"
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
 	-- Hog Solo

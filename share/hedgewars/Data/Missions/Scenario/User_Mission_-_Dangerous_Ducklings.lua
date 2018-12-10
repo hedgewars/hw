@@ -24,7 +24,6 @@ function onGameInit()
 	CaseFreq = 0 -- The frequency of crate drops
 	MinesNum = 0 -- The number of mines being placed
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 0 -- The delay between each round
 	Map = "Bath" -- The map to be played
 	Theme = "Bath" -- The theme to be used
 	-- Disable Sudden Death

@@ -1080,7 +1080,6 @@ function onGameInit()
 		MinesTime = 5000
 	end
 	Explosives = 0
-	Delay = 5
     Map = "A_Classic_Fairytale_journey"
     Theme = "Nature"
 

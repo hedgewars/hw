@@ -23,7 +23,6 @@ function onGameInit()
 	MinesNum = 0 -- The number of mines being placed
 	MinesTime  = 1
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 10 -- The delay between each round
 	Map = "Tree" -- The map to be played
 	Theme = "Halloween" -- The theme to be used
 	-- Disable Sudden Death

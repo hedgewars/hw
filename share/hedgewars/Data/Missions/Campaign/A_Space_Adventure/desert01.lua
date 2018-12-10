@@ -91,7 +91,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	HealthCaseAmount = 30
 	-- Disable Sudden Death
 	HealthDecrease = 0

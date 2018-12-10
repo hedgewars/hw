@@ -94,7 +94,6 @@ function SpeedShoppaMission(params)
 		CaseFreq = 0 
 		MinesNum = 0 
 		Explosives = 0 
-		Delay = 10 
 		Theme = params.theme
 		Map = params.map
 		-- Disable Sudden Death

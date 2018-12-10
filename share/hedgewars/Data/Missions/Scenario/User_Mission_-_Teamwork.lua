@@ -17,7 +17,6 @@ function onGameInit()
 	MinesNum = 0 -- The number of mines being placed
 	MinesTime  = 1
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 10 -- The delay between each round
 	Map = "Mushrooms" -- The map to be played
 	Theme = "Nature" -- The theme to be used
 	-- Disable Sudden Death

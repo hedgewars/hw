@@ -66,7 +66,6 @@ function onGameInit()
 	Explosives = 0
 	Map = "death02_map"
 	Theme = "Hell"
-	Delay = 600 -- this makes the messages between turns more readable
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0

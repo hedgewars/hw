@@ -432,7 +432,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 2
-	Delay = 10 
   Map = "Hogville"
 	Theme = "Nature"
 	-- Disable Sudden Death

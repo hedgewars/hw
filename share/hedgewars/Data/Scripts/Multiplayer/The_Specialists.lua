@@ -175,7 +175,6 @@ end
 function onGameInit()
 	ClearGameFlags()
 	EnableGameFlags(gfRandomOrder, gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo, gfSwitchHog)
-	Delay = 10
 	HealthCaseProb = 100
 end
 

@@ -123,8 +123,6 @@ function onGameInit()
 	MinesNum = 0
 	-- The number of explosives being placed
 	Explosives = 0
-	-- The delay between each round
-	Delay = 0
 	-- The map to be played
 	Map = "Ropes"
 	-- The theme to be used

@@ -1020,7 +1020,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
 	Map = "A_Classic_Fairytale_shadow"
 	Theme = "Nature"
 	-- Disable Sudden Death

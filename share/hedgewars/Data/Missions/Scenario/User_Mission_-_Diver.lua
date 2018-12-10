@@ -19,7 +19,6 @@ function onGameInit()
 	MinesNum = 0 -- The number of mines being placed
 	MinesTime  = 1000
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 10 -- The delay between each round
 	Map = "Hydrant" -- The map to be played
 	Theme = "City" -- The theme to be used
 

@@ -154,7 +154,6 @@ function onGameInit()
 	GameFlags = gfBorder + gfSolidLand
 
 	TurnTime = 180 * 1000
-	Delay = 500
 	Map = "Ropes"
 	Theme = "Eyes"
 

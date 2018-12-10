@@ -88,7 +88,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	Map = "ice01_map"
 	Theme = "Snow"
 	-- Disable Sudden Death

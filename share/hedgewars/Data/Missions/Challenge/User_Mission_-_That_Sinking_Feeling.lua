@@ -36,7 +36,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime  = 3000
 	Explosives = 0
-	Delay = 10
 	Map = "Islands"
 	Theme = "City"
 	SuddenDeathTurns = 1

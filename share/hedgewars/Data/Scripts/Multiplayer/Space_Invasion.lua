@@ -1091,7 +1091,6 @@ function onGameInit()
 	end
 	CaseFreq = 0
 	HealthCaseProb = 0
-	Delay = 1000
 	SuddenDeathTurns = 50
 	WaterRise = 0
 	HealthDecrease = 0
