@@ -73,7 +73,7 @@ const delaySDStart = 1600;
       delaySDWarning = 1000;
       delayDamageTagFull = 1500;
       delayDamageTagShort = 500;
-      delayTurnReact = 1000;
+      delayTurnReact = 800;
       delayFinal = 100;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
