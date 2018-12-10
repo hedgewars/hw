@@ -416,8 +416,8 @@ case step of
                 begin
                 i:= cSuddenDTurns - TotalRoundsPre;
                 s:= ansistring(inttostr(i));
-                // X rounds before SD. X = 1, 2, 5, 10, 15, 20, 25, 50, 100, ...
-                if (i > 0) and ((i <= 2) or ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
+                // X rounds before SD. X = 1, 2, 3, 5, 7, 10, 15, 20, 25, 50, 100, ...
+                if (i > 0) and ((i <= 3) or (i = 7) or ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
                     begin
                     if i = 1 then
                         AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState)
