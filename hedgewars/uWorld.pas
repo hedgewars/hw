@@ -1217,7 +1217,7 @@ var i, t: LongInt;
     r: TSDL_Rect;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
-    replicateToLeft, replicateToRight, tmp, notHiddenByCinematic: boolean;
+    replicateToLeft, replicateToRight, tmp, isNotHiddenByCinematic: boolean;
 {$IFDEF USE_VIDEO_RECORDING}
     a: Byte;
 {$ENDIF}
@@ -1466,7 +1466,7 @@ RenderWorldEdge();
 // This scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
 
-notHiddenByCinematic:= true;
+isNotHiddenByCinematic:= true;
 // Cinematic Mode: Determine effects and state
 if CinematicScript or (InCinematicMode and autoCameraOn
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
@@ -1478,7 +1478,7 @@ if CinematicScript or (InCinematicMode and autoCameraOn
         if CinematicSteps > 300 then
             begin
             CinematicSteps:= 300;
-            notHiddenByCinematic:= false;
+            isNotHiddenByCinematic:= false;
             end;
         end;
     end
@@ -1490,7 +1490,7 @@ else if CinematicSteps > 0 then
     end;
 
 // Turn time
-if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
+if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
@@ -1532,11 +1532,11 @@ if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
     end;
 
 // Team bars
-if (UIDisplay = uiAll) and (notHiddenByCinematic) then
+if (UIDisplay = uiAll) and (isNotHiddenByCinematic) then
     RenderTeamsHealth;
 
 // Wind bar
-if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
+if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
@@ -1570,7 +1570,7 @@ if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
     end;
 
 // Indicators for global effects (extra damage, low gravity)
-if (UIDisplay <> uiNone) and (notHiddenByCinematic) then
+if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= (cScreenWidth shr 1) - 95;
