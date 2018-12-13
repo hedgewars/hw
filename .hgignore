@@ -20,6 +20,7 @@ config.inc
 cmake_install.cmake
 QTfrontend/hwconsts.cpp
 QTfrontend/servermessages.h
+QTfrontend/creditsmessages.h
 CPackConfig.cmake
 CPackSourceConfig.cmake
 tools/cmake_uninstall.cmake

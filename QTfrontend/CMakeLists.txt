@@ -45,6 +45,29 @@ endforeach(l)
 list(APPEND locsout ${firstline} "\n}\\;\n")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
 
+
+# Credits localization
+file(GLOB CreditsCSV ${CMAKE_SOURCE_DIR}/QTfrontend/res/credits.csv)
+foreach(csvfile ${CreditsCSV})
+    file(READ ${csvfile} csv)
+    string(REGEX MATCHALL "\n(\"[^\n\"]+\")" locs ${csv})
+    foreach(str ${locs})
+        string(REGEX REPLACE "\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"credits\", \"\\1\")" s ${str})
+        list(APPEND csvlocs ${s})
+    endforeach(str)
+endforeach(csvfile)
+
+list(REMOVE_DUPLICATES csvlocs)
+list(GET csvlocs 0 firstline)
+list(REMOVE_AT csvlocs 0)
+set(locsout "const char * creditsMessages[] = {")
+foreach(l ${csvlocs})
+    list(APPEND locsout ${l} ",")
+endforeach(l)
+list(APPEND locsout ${firstline} "\n}\\;\n")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h ${locsout})
+
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)

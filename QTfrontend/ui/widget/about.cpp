@@ -32,6 +32,8 @@
 #include "SDL.h"
 #include "SDL_version.h"
 #include "physfs.h"
+#include "creditsmessages.h"
+#include "HWApplication.h"
 
 #ifdef VIDEOREC
 extern "C"
@@ -160,19 +162,33 @@ QString About::getCreditsHtml()
                 QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
                 if(task.isEmpty() && mail.isEmpty())
                 {
+                    // Name only
                     out = out + "<li>" + name + "</li>\n";
                 }
                 else if(task.isEmpty())
                 {
+                    // Name and e-mail
+                    //: Part of credits. %1: Contribution name. %2: E-mail address
                     out = out + "<li>" + tr("%1 &lt;%2&gt;").arg(name).arg(mailLink) + "</li>\n";
                 }
                 else if(mail.isEmpty())
                 {
-                    out = out + "<li>" + tr("%1: %2").arg(task).arg(name) + "</li>\n";
+                    // Contribution and name
+                    //: Part of credits. %1: Description of contribution. %2: Contributor name
+                    out = out + "<li>" + tr("%1: %2")
+                        .arg(HWApplication::translate("credits", task.toLatin1().constData()))
+                        .arg(name)
+                        + "</li>\n";
                 }
                 else
                 {
-                    out = out + "<li>" + tr("%1: %2 &lt;%3&gt;").arg(task).arg(name).arg(mailLink) + "</li>\n";
+                    // Contribution, name and e-mail
+                    //: Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address
+                    out = out + "<li>" + tr("%1: %2 &lt;%3&gt;")
+                        .arg(HWApplication::translate("credits", task.toLatin1().constData()))
+                        .arg(name)
+                        .arg(mailLink)
+                        + "</li>\n";
                 }
             }
             lineComplete = false;
