@@ -151,14 +151,14 @@ QString About::getCreditsHtml()
                 // section
                 if (!firstSection)
                     out = out + "</ul>\n";
-                out = out + "<h2>" + task + "</h2>\n<ul>\n";
+                out = out + "<h2>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</h2>\n<ul>\n";
                 firstSection = false;
             }
             else if(type == "U")
             {
                 // subsection
                 out = out + "</ul>\n";
-                out = out + "<h3>" + task + "</h3>\n<ul>\n";
+                out = out + "<h3>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</h3>\n<ul>\n";
             }
             else if(type == "M")
             {
