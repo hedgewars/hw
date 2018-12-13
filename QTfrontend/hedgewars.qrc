@@ -206,7 +206,7 @@
         <file>res/chat/lamp_off.png</file>
         <file>res/chat/ingame.png</file>
         <file>res/splash.png</file>
-        <file>res/html/about.html</file>
+        <file>res/credits.csv</file>
         <file>res/chat/hedgehogcontributor.png</file>
         <file>res/chat/hedgehogcontributor_gray.png</file>
         <file>res/chat/roomadmincontributor.png</file>

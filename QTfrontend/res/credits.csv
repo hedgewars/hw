@@ -1,0 +1,100 @@
+!__SECTION,"Programming",
+"Engine, frontend, net server","Andrey Korotaev","unC0Rr@gmail.com"
+"Many frontend improvements","Igor Ulyanov","disinbox@gmail.com"
+"Many engine and frontend improvements","Derek Pomery","nemo@m8y.org"
+"Drill rocket, ballgun, RC plane weapons","Martin Boze","afffect@gmail.com"
+"Mine number and time game settings","David A. Cuadrado","krawek@gmail.com"
+"Frontend improvements","Martin Minarik","ttsmj@pokec.sk"
+"Frontend improvements","Kristian Lehmann","email@thexception.net"
+"Mac OS X/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com"
+"Many engine and frontend improvements (and bugs)","Richard Karolyi","sheepluva@ercatec.net"
+"Gamepad and Lua integration","Mario Liebisch","mario.liebisch@gmail.com"
+"Many engine improvements","Carlos Vives","mail@carlosvives.es"
+"Maze maps","Henning Kühn","prg@cooco.de"
+"Engine and frontend improvements","Henrik Rostedt","henrik.rostedt@gmail.com"
+"Lua game modes and missions","John Lambert","redgrinner@gmail.com"
+"Frontend improvements","Mayur Pawashe","zorgiepoo@gmail.com"
+"Android port","Richard Deurwaarder","xeli@xelification.com"
+"Android netplay, portability abstraction","Simeon Maxein","smaxein@googlemail.com"
+"WebGL port, some pas2c and GLES2 work","Meng Xiangyun","xymengxy@gmail.com"
+"Video recording","Stepan Podoskin","stepik-777@mail.ru"
+"Campaign support, A Classic Fairytale campaign","Szabolcs Orbàn","szabibibi@gmail.com"
+"Keybinds, feedback, maps and hats interfaces","Drew Gottlieb","gottlieb.drew@gmail.com"
+"Login dialogs, frontend improvements","Ondrej Skopek","skopekondrej@gmail.com"
+"Freezer weapon","Julia Struchenko","urbertar@gmail.com"
+"iPhone/iPad ports","Anton Malmygin","antonc27@mail.ru"
+"Battalion style","Anachron","Anachron14@gmx.de"
+"Scripting, engine, frontend improvements, some missions","Wuzzy","Wuzzy2@mail.ru"
+"Theme customization improvements","KoBeWi",
+"Theme music, engine and frontend improvements","Valentin Kraevskiy",
+!__SECTION,"Graphics",
+!__SUBSECTION,"General",
+,"John Dum","fizzy@gmail.com"
+,"Joshua Frese","joshfrese@gmail.com"
+,"Stanko Tadić","stanko@mfhinc.net"
+,"Julien Koesten","julienkoesten@aol.com"
+,"Joshua O'Sullivan","coheedftw@hotmail.co.uk"
+,"Nils Lück","nils.luck.design@gmail.com"
+,"Guillaume Englert","genglert@hybird.org"
+,"CopherNeue","ppicondo.cvac@gmail.com"
+,"Valentin Kraevskiy",
+,"Carlos Vives","mail@carlosvives.es"
+!__SUBSECTION,"Themes",
+"TODO","TODO","nobody@nowhere.invalid"
+!__SUBSECTION,"Hats",
+,"Trey Perry","perry.j@gmail.com",
+!__MISC,,
+!__SECTION,"Sounds",
+"Hedgehogs voice","Stephen Alexander","ArmagonNo1@gmail.com"
+,"John Dum","fizzy@gmail.com"
+,"Jonatan Nilsson","jonatanfan@gmail.com"
+,"Daniel Martin","elhombresinremedio@gmail.com"
+!__SECTION,"Music",
+"TODO","TODO","nobody@nowhere.invalid"
+!__SECTION,"Translations",
+"Brazilian Portuguese","Romulo Fernandes Machado","abra185@gmail.com"
+"Bulgarian","Svetoslav Stefanov",
+"Czech","Petr Řezáček","rezacek@gmail.com"
+"Chinese","Jie Luo","lililjlj@gmail.com"
+"Finnish","Nina Kuisma","ninnnu@gmail.com"
+"Finnish","Janne Uusitupa",
+"French","Antoine Turmel","geekshadow@gmail.com"
+"French","Clement Woitrain","sphrixclement@gmail.com"
+"French","Matisumi",
+"French","Case_Of",
+"German","Peter Hüwe","PeterHuewe@gmx.de"
+"German","Mario Liebisch","mario.liebisch@gmail.com"
+"German","Richard Karolyi","sheepluva@ercatec.net"
+"German","Wuzzy","Wuzzy2@mail.ru"
+"Greek",,"talos_kriti@yahoo.gr"
+"Italian","Luca Bonora","bonora.luca@gmail.com"
+"Italian","Marco Bresciani","m.bresciani@email.it"
+"Italian","Gianfranco Costamagna","costamagnagianfranco@yahoo.it"
+"Italian","Enrico","enricobe@hotmail.com"
+"Japanese","ADAM Etienne","etienne.adam@gmail.com"
+"Japanese","Marco Bresciani","m.bresciani@email.it"
+"Korean","Anthony Bellew","anthonyreflected@gmail.com"
+"Lithuanian","Lukas Urbonas","lukasu08@gmail.com"
+"Polish","Maciej Mroziński","mynick2@o2.pl"
+"Polish","Wojciech Latkowski","magik17l@gmail.com"
+"Polish","Piotr Mitana",
+"Polish","Maciej Górny",
+"Polish","KoBeWi",
+"Portuguese","Fábio Canário","inufabie@gmail.com"
+"Russian","Andrey Korotaev","unC0Rr@gmail.com"
+"Russian","Vitaly Novichkov","admin@wohlnet.ru"
+"Russian","Anton Malmygina","antonc27@mail.ru"
+"Russian","Grigory Ustinov","grenka@altlinux.org"
+"Scottish Gaelic","GunChleoc",
+"Slovak","Jose Riha",
+"Spanish","Carlos Vives","mail@carlosvives.es"
+"Swedish","Niklas Grahn","raewolusjoon@yaoo.com"
+"Swedish","Henrik Rostedt","henrik.rostedt@gmail.com"
+"Ukrainian","Eugene V. Lyubimkin","jackyf.devel@gmail.com"
+"Ukrainian","Igor Paliychuk","mansonigor@gmail.com"
+"Ukrainian","Eugene Sakara","eresid@gmail.com"
+!__SECTION,"Special thanks",
+,"Aleksey Andreev","blaknayabr@gmail.com",
+,"Aleksander Rudalev","alexv@pomorsu.ru",
+,"Natasha Korotaeva","layout@pisem.net",
+,"Adam ""ahigerd"" Higerd",

@@ -53,6 +53,143 @@ extern "C"
 
 #include "about.h"
 
+QString About::getCreditsHtml()
+{
+    // Open the credits file
+
+    /* *** FILE FORMAT OF CREDITS FILE ***
+    The credits file is an RFC-4180-compliant CSV file with 3 columns:
+    * Task/contribution
+    * Contributor name
+    * Contributor e-mail
+
+    The first and last columns are optional.
+
+    There are special rows, which are marked by putting a "!__" in the
+    beginning of the first. The following special rows are supported:
+
+    !__SECTION: Section. Column 1 is the section name
+    !__SUBSECTION: Subsection. Column 1 is the subsection name
+    !__MISC: Placeholder for other or unknown authors
+    */
+    QFile creditsFile(":/res/credits.csv");
+    if (!creditsFile.open(QIODevice::ReadOnly))
+    {
+        qWarning("ERROR: Credits file could not be opened!");
+        return "<p>ERROR: Credits file could not be opened!</p>";
+    }
+    QString creditsString = creditsFile.readAll();
+    QString out = QString("<h1>" + tr("Credits") + "</h1>\n");
+    QStringList cells = QStringList() << QString("") << QString("") << QString("");
+    bool firstSection = true;
+    unsigned long int column = 0;
+    unsigned long int charInCell = 0;
+    bool isInQuote = false;
+    bool ignoreChar = false;
+    bool lineComplete = false;
+    QChar currChar;
+    QChar prevChar;
+    for(long long int i = 0; i<creditsString.length(); i++)
+    {
+        currChar = creditsString.at(i);
+        QString task, name, mail;
+        if(currChar == '"')
+        {
+            if(charInCell == 0)
+            {
+                isInQuote = true;
+                ignoreChar = true;
+            }
+            else if(isInQuote && prevChar != '"')
+            {
+                ignoreChar = true;
+            }
+        }
+        else if(isInQuote && charInCell > 0 && prevChar == '"' && (currChar == '\r' || currChar == ','))
+        {
+            isInQuote = false;
+            ignoreChar = true;
+        }
+
+        charInCell++;
+        if(!isInQuote && currChar == ',')
+        {
+            column++;
+            charInCell = 0;
+        }
+        else if(!isInQuote && currChar == '\n' && prevChar == '\r')
+        {
+            lineComplete = true;
+        }
+        if(!isInQuote && (currChar == '\r' || currChar == '\n' || currChar == ','))
+        {
+            ignoreChar = true;
+        }
+
+
+        if(!ignoreChar)
+        {
+            cells[column].append(currChar);
+        }
+        ignoreChar = false;
+
+        if(lineComplete)
+        {
+            task = cells[0];
+            name = cells[1];
+            mail = cells[2];
+
+            if(task == "!__SECTION")
+            {
+                if (!firstSection)
+                    out = out + "</ul>\n";
+                out = out + "<h2>" + name + "</h2>\n<ul>\n";
+                firstSection = false;
+            }
+            else if(task == "!__SUBSECTION")
+            {
+                out = out + "</ul>\n";
+                out = out + "<h3>" + name + "</h3>\n<ul>\n";
+            }
+            else if(task == "!__MISC")
+            {
+                out = out + "<li>" + tr("Other people") + "</li>" + "\n";
+            }
+            else
+            {
+                QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
+                if(task.isEmpty() && mail.isEmpty())
+                {
+                    out = out + "<li>" + name + "</li>\n";
+                }
+                else if(task.isEmpty())
+                {
+                    out = out + "<li>" + tr("%1 &lt;%2&gt;").arg(name).arg(mailLink) + "</li>\n";
+                }
+                else if(mail.isEmpty())
+                {
+                    out = out + "<li>" + tr("%1: %2").arg(task).arg(name) + "</li>\n";
+                }
+                else
+                {
+                    out = out + "<li>" + tr("%1: %2 &lt;%3&gt;").arg(task).arg(name).arg(mailLink) + "</li>\n";
+                }
+            }
+            lineComplete = false;
+            column = 0;
+            cells[0] = "";
+            cells[1] = "";
+            cells[2] = "";
+            charInCell = 0;
+        }
+
+        prevChar = currChar;
+    }
+    creditsFile.close();
+    out = out + "</ul>";
+    return out;
+}
+
 About::About(QWidget * parent) :
     QWidget(parent)
 {
@@ -89,11 +226,32 @@ About::About(QWidget * parent) :
     lbl1->setWordWrap(true);
     mainLayout->addWidget(lbl1, 0, 1);
 
-    lbl2 = new QTextBrowser(this);
-    lbl2->setOpenExternalLinks(true);
-    QUrl localpage = QUrl::fromLocalFile(":/res/html/about.html");
-    lbl2->setSource(localpage); //sets the source of the label from the file above
-    mainLayout->addWidget(lbl2, 1, 1);
+    /* Credits */
+    creditsBrowser = new QTextBrowser(this);
+    creditsBrowser->setOpenExternalLinks(true);
+    QString credits = getCreditsHtml();
+
+    QString header =
+        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
+        "<head>"
+        "<title>Hedgewars Credits</title>"
+        "<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />"
+        "<style type=\"text/css\">"
+        "     body { color: orange; }"
+        "     a { color: #ffe270; }"
+        "     a:hover { color: yellow; }"
+        "     ul { list-style-type: none; }"
+        "</style>"
+        "</head>"
+        "<body>"
+        "";
+    QString footer =
+        ""
+        "</body></html>";
+
+    creditsBrowser->setHtml(header + credits + footer);
+    mainLayout->addWidget(creditsBrowser, 1, 1);
 
     /* Library information */
 
