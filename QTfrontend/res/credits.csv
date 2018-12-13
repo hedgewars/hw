@@ -41,12 +41,14 @@ E,,"Valentin Kraevskiy",
 U,"Missions and styles",,
 E,"A Classic Fairytale","Szabolcs Orbàn","szabibibi@gmail.com"
 E,"A Space Adventure","Master_ex",
-E,"Capture the Flag, Construction Mode, Continental supplies, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW","mikade",
+E,"Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW","mikade",
 E,"Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance","Wuzzy","Wuzzy2@mail.ru"
 E,"Some styles and missions","John Lambert","redgrinner@gmail.com"
 E,"Battalion","Anachron","Anachron14@gmx.de"
 E,"Continental supplies","Vatten",
 E,"Teamwork 2","Arkhnen",
+E,"Climb Home","Derek Pomery","nemo@m8y.org"
+E,"Portal Mind Challenge","sphrix",
 M,,,
 U,"Game server",,
 E,"Creator","Andrey Korotaev","unC0Rr@gmail.com"
@@ -70,29 +72,48 @@ E,,"CopherNeue","ppicondo.cvac@gmail.com"
 E,,"Valentin Kraevskiy",
 E,,"Carlos Vives","mail@carlosvives.es"
 U,"Themes",,
-E,"Nature, Snow, City","John Dum","fizzy@gmail.com"
+E,"Nature, Snow, City, Castle, Halloween, Island","John Dum","fizzy@gmail.com"
 E,"Bamboo, EarthRise, BambooPlinko","Joshua Frese","joshfrese@gmail.com"
-E,"Hell","Stanko Tadić","stanko@mfhinc.net"
-E,"Sheep","Julien Koesten","julienkoesten@aol.com"
-E,"Jungle","KoRn666",
+E,"Golf, Hoggywood, Stage","RoFra",
+E,"Hoggywood","Wuzzy",
+E,"Cave, Olympics","Guillaume Englert","genglert@hybird.org"
 E,"Fruit, Cake","Randy Broda",
+E,"Art","Zippy",
+E,"Beach","CopherNeue","ppicondo.cvac@gmail.com"
+
+E,"Beach","Miguelac",
+E,"Brick","AlexYeCu",
+E,"Christmas","Other",
+E,"Hell","Stanko Tadić","stanko@mfhinc.net"
+E,"Jungle","KoRn666",
+E,"Sheep","Julien Koesten","julienkoesten@aol.com"
 M,,,
 U,"Maps",,
-E,"Bath, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane","John Dum","fizzy@gmail.com"
-E,"Bamboo, EarthRise, Freeway","Joshua Frese","joshfrese@gmail.com"
+E,"Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree","John Dum","fizzy@gmail.com"
+E,"SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle","Chucklefish, Ltd",
+E,"Bamboo, Blox, Cake, Cogs, EarthRise, Freeway","Joshua Frese","joshfrese@gmail.com"
 E,"Castle, PirateFlag","Stanko Tadić","stanko@mfhinc.net"
+E,"ShoppaKing, TrophyRace","wolfmarc & Dragonfly",
+E,"Battlefield","nickstu",
+E,"CTF_Blizzard","Palewolf",
+E,"Cheese","CopherNeue","ppicondo.cvac@gmail.com"
+
+E,"ClimbHome","Derek Pomery","nemo@m8y.org"
+E,"Lonely_Island","Maciej Mrozinski (alias alzen)",
+E,"Octorama","jessor",
+E,"portal","sphrix",
+E,"Ruler","Guillaume Englert","genglert@hybrid.org"
 E,"Sticks","dctPL",
-E,"TrophyRace, ShoppaKing","wolfmarc & Dragonfly",
 M,,,
 U,"Forts",,
-E,"Tank","Carlos Vives",
 E,"EvilChicken","Dragonfly",
-E,"SteelTower","Randy Broda",
+E,"Lonely_Island","Maciej Mrozinski (alias alzen)",
+E,"Olympic","Guillaume Englert","genglert@hybird.org"
+E,"Olympic","Wuzzy",
+E,"Tank","Carlos Vives",
 E,"Snail","Jon Dum",
 E,"Snail","Wuzzy",
-E,"Lonely_Island","Maciej Mrozinski (alias alzen)",
-E,"Olympic","Guillaume Englert",
-E,"Olympic","Wuzzy",
+E,"SteelTower","Randy Broda",
 M,,,
 U,"Hats, graves, other",,
 E,"See CREDITS text file",,
