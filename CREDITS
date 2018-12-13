@@ -1,8 +1,7 @@
 =============================
 === EXTENDED CREDITS LIST ===
 =============================
-
-For the normal credits, click on the Hedgewars logo in the main menu.
+For the main credits, click on the Hedgewars logo in the main menu.
 
 IF NOT OTHERWISE SPECIFIED, ALL OTHER CONTENT IS PROPERTY OF Andrey Korotaev <unC0Rr@gmail.com>.
 IF NO LICENSE IS SPECIFIED, THE LICENSE IS THE SAME AS MENTIONED IN README.md.
@@ -13,26 +12,6 @@ Note: The asterisk is a placeholder which stands for any sequence of characters.
 = FONTS
 ==========
 - see Fonts_LICENSE.txt
-
-=================
-= FRONTEND IMAGES
-=================
-(File name suffixes are omitted)
-
-- Tango Project and Wuzzy -> audio, home (CC0)
-- abustany and Wuzzy -> Videos (CC0)
-- Juliane Krug and Wuzzy -> Palette (CC0)
-- raseone and Wuzzy -> folder (CC0)
-
-==========
-= FORTS
-==========
-- Carlos Vives -> Tank (2010)
-- Dragonfly -> EvilChicken (2010)
-- Randy Broda -> SteelTower (2013)
-- Jon Dum and Wuzzy -> Snail (2017)
-- Maciej Mroziński (a.k.a. alzen) and Wuzzy -> Lonely_Island (2017)
-- Guillaume Englert and Wuzzy -> Olympic (2017)
 
 ==========
 = HATS
@@ -53,57 +32,32 @@ Note: The asterisk is a placeholder which stands for any sequence of characters.
 - Terrington_Snyde -> pirate_eyepatch (2013), jester (2013)
 - Wohlstand -> policegirl [based on policecap and sm_daisy] (2014)
 - TheMadCharles -> barrelhider (CC BY 3.0) (2015)
+- Trey Perry <perry.j@gmail.com> -> Other hats
 
 ==========
-= GRAVESTONES
+= GRAVES
 ==========
 - Randy Broda -> dragonball (2012)
 - CheezeMonkey -> pi (2011)
 - rosenholz -> Whisky (2013)
 
-==========
-= MAPS
-==========
-- John Dum <fizzy@gmail.com> -> Bath (2008), Hedgelove (2008), Hedgewars (2008), Hydrant (2008), mushrooms (2008), Plane (2008)
-- Joshua Frese <joshfrese@gmail.com> -> Bamboo (2008), EarthRise (2008), Freeway (2008), BambooPlinko (2008)
-- Stanko Tadić <stanko@mfhinc.net> -> Castle (2008), PirateFlag (2008)
-- dctPL -> Sticks (2010)
-- wolfmarc & Dragonfly -> TrophyRace (2010), ShoppaKing (2010)
+=================
+= FRONTEND IMAGES
+=================
+(File name suffixes are omitted)
+
+- Tango Project and Wuzzy -> audio, home (CC0)
+- abustany and Wuzzy -> Videos (CC0)
+- Juliane Krug and Wuzzy -> Palette (CC0)
+- raseone and Wuzzy -> folder (CC0)
+
+==================
+= OTHER GRAPHICS =
+==================
+- Custom ammo images for Continental supplies: KarBoy2314PL
 
 ==========
-= MUSIC
-==========
-- HSR ( http://elhombresinremedio.com ) -> (new) City theme, Rock theme and many other tracks
-- John Dum <fizzy@gmail.com> -> Nature theme
-- Jonatan Nilsson <jonatanfan@gmail.com> -> Pirate theme, EarthRise (former City) theme, Oriental theme, Snow theme)
-- yd - http://opengameart.org/users/yd -> "oriented", used as Olympics SD theme
-- Kevin MacLeod - http://incompetech.com/ -> "hitman", used as basis for preliminary default SD theme
-- Valentin Kraevskiy (alias alfadur) -> Jungle theme, Fruit theme
-
-==========
-= THEMES
-==========
-- John Dum <fizzy@gmail.com> -> Nature (2008), Snow (2008), City
-- Joshua Frese <joshfrese@gmail.com> -> Bamboo (2008), EarthRise (2008), Freeway (2008), BambooPlinko (2008)
-- Stanko Tadić <stanko@mfhinc.net> -> Hell (2008)
-- Julien Koesten <julienkoesten@aol.com> -> Sheep (2008)
-- KoRn666 - Jungle (2010)
-- Randy Broda -> Fruit (2013), Cake (2014)
-
-==========
-= VOICES
-==========
-- Stephen Alexander <ArmagonNo1@gmail.com>
-- mtg90pl <mtg90pl@gmail.com>: Default_pl, Russian_pl
-
-==========
-= MISSIONS
-==========
-- Arkhnen -> Teamwork 2 (2012)
-- Wuzzy -> Big Armory (2016)
-
-==========
-= SOUNDS
+= SOUND EFFECTS
 ==========
 - Mine impact sound from http://www.freesound.org/people/adcbicycle/sounds/13947/
 - Hammer sound from http://www.freesound.org/people/Syna-Max/sounds/43586/
@@ -140,11 +94,6 @@ Note: The asterisk is a placeholder which stands for any sequence of characters.
      https://freesound.org/people/saugox/sounds/37548/
 - Shoryuken hit: Based off sound by CGEffex (CC-BY 3.0), tweaked by alfadur
      http://freesound.org/people/CGEffex/sounds/98341/
-
-==================
-= OTHER GRAPHICS =
-==================
-- Custom ammo images for Continental supplies: KarBoy2314PL
 
 ======================
 = LICENSE REFERENCES =

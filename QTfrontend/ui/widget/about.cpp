@@ -172,10 +172,15 @@ QString About::getCreditsHtml()
             {
                 // credits list entry
                 QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
-                if(task.isEmpty() && mail.isEmpty())
+                if(task.isEmpty() && mail.isEmpty() && !name.isEmpty())
                 {
                     // Name only
                     out = out + "<li>" + name + "</li>\n";
+                }
+                else if(name.isEmpty() && mail.isEmpty() && !task.isEmpty())
+                {
+                    // Task only
+                    out = out + "<li>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</li>\n";
                 }
                 else if(task.isEmpty())
                 {

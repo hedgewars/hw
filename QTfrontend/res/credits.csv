@@ -69,28 +69,48 @@ E,,"Guillaume Englert","genglert@hybird.org"
 E,,"CopherNeue","ppicondo.cvac@gmail.com"
 E,,"Valentin Kraevskiy",
 E,,"Carlos Vives","mail@carlosvives.es"
-U,"Hats",,
-E,,"Trey Perry","perry.j@gmail.com",
+U,"Themes",,
+E,"Nature, Snow, City","John Dum","fizzy@gmail.com"
+E,"Bamboo, EarthRise, BambooPlinko","Joshua Frese","joshfrese@gmail.com"
+E,"Hell","Stanko Tadić","stanko@mfhinc.net"
+E,"Sheep","Julien Koesten","julienkoesten@aol.com"
+E,"Jungle","KoRn666",
+E,"Fruit, Cake","Randy Broda",
 M,,,
+U,"Maps",,
+E,"Bath, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane","John Dum","fizzy@gmail.com"
+E,"Bamboo, EarthRise, Freeway","Joshua Frese","joshfrese@gmail.com"
+E,"Castle, PirateFlag","Stanko Tadić","stanko@mfhinc.net"
+E,"Sticks","dctPL",
+E,"TrophyRace, ShoppaKing","wolfmarc & Dragonfly",
+M,,,
+U,"Forts",,
+E,"Tank","Carlos Vives",
+E,"EvilChicken","Dragonfly",
+E,"SteelTower","Randy Broda",
+E,"Snail","Jon Dum",
+E,"Snail","Wuzzy",
+E,"Lonely_Island","Maciej Mrozinski (alias alzen)",
+E,"Olympic","Guillaume Englert",
+E,"Olympic","Wuzzy",
+M,,,
+U,"Hats, graves, other",,
+E,"See CREDITS text file",,
 S,"Sounds",,
 E,"Hedgehogs voice","Stephen Alexander","ArmagonNo1@gmail.com"
+E,"Default_pl, Russian_pl voices","mtg90pl","mtg90pl@gmail.com"
 E,,"John Dum","fizzy@gmail.com"
 E,,"Jonatan Nilsson","jonatanfan@gmail.com"
-E,,"Daniel Martin","elhombresinremedio@gmail.com"
-M,,,
+E,,"Daniel Martin (alias HSR)","elhombresinremedio@gmail.com"
+E,"Various authors from www.freesound.org (see CREDITS text file)",
 S,"Music",,
-E,"City","HSR <http://elhombresinremedio.com>",
+E,"City, Rock, others","Daniel Martin (alias HSR)","elhombresinremedio@gmail.com"
 E,"Compost","HG"
-E,"EarthRise","Jonatan Nilsson",
-E,"Fruit","Valentin Kraevskiy",
-E,"Jungle","Valentin Kraevskiy",
+E,"EarthRise, oriental, Pirate, snow","Jonatan Nilsson",
+E,"Fruit, Jungle","Valentin Kraevskiy",
 E,"Nature","John Dum",
-E,"Pirate","Jonatan Nilsson",
-E,"Rock","HSR <http://elhombresinremedio.com>",
-E,"olympics_sd","yd <http://opengameart.org/users/yd>",
-E,"oriental","Jonatan Nilsson",
+E,"olympics_sd","yd &lt;http://opengameart.org/users/yd&gt;",
 E,"sdmusic (Hitman [sheepluva edit])","Kevin MacLeod",
-E,"snow","Jonatan Nilsson",
 M,,,
 S,"Translations",,
 E,"Brazilian Portuguese","Romulo Fernandes Machado","abra185@gmail.com"
