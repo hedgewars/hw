@@ -60,19 +60,23 @@ QString About::getCreditsHtml()
     // Open the credits file
 
     /* *** FILE FORMAT OF CREDITS FILE ***
-    The credits file is an RFC-4180-compliant CSV file with 3 columns:
-    * Task/contribution
-    * Contributor name
-    * Contributor e-mail
+    The credits file is an RFC-4180-compliant CSV file with 4 columns.
+    The first colum is always 1 letter long and is the row type.
+    The row type determines the meaning of the other columns.
+    The following row types are supported:
 
-    The first and last columns are optional.
-
-    There are special rows, which are marked by putting a "!__" in the
-    beginning of the first. The following special rows are supported:
-
-    !__SECTION: Section. Column 1 is the section name
-    !__SUBSECTION: Subsection. Column 1 is the subsection name
-    !__MISC: Placeholder for other or unknown authors
+    * E: Credits entry
+        * Column 2: Task/contribution
+        * Column 3: Contributor name
+        * Column 4: Contributor e-mail
+    * M: Alternative credits entry that is a placeholder for other or unknown authors
+        * Columns 2-4: Unused
+    * S: Section
+        * Column 2: Section name
+        * Columns 3-4: Unused
+    * U: Subsection
+        * Column 2: Subsection name
+        * Columns 3-4: Unused
     */
     QFile creditsFile(":/res/credits.csv");
     if (!creditsFile.open(QIODevice::ReadOnly))
@@ -82,7 +86,7 @@ QString About::getCreditsHtml()
     }
     QString creditsString = creditsFile.readAll();
     QString out = QString("<h1>" + tr("Credits") + "</h1>\n");
-    QStringList cells = QStringList() << QString("") << QString("") << QString("");
+    QStringList cells = QStringList() << QString("") << QString("") << QString("") << QString("");
     bool firstSection = true;
     unsigned long int column = 0;
     unsigned long int charInCell = 0;
@@ -94,7 +98,7 @@ QString About::getCreditsHtml()
     for(long long int i = 0; i<creditsString.length(); i++)
     {
         currChar = creditsString.at(i);
-        QString task, name, mail;
+        QString type, task, name, mail;
         if(currChar == '"')
         {
             if(charInCell == 0)
@@ -137,28 +141,33 @@ QString About::getCreditsHtml()
 
         if(lineComplete)
         {
-            task = cells[0];
-            name = cells[1];
-            mail = cells[2];
+            type = cells[0];
+            task = cells[1];
+            name = cells[2];
+            mail = cells[3];
 
-            if(task == "!__SECTION")
+            if(type == "S")
             {
+                // section
                 if (!firstSection)
                     out = out + "</ul>\n";
-                out = out + "<h2>" + name + "</h2>\n<ul>\n";
+                out = out + "<h2>" + task + "</h2>\n<ul>\n";
                 firstSection = false;
             }
-            else if(task == "!__SUBSECTION")
+            else if(type == "U")
             {
+                // subsection
                 out = out + "</ul>\n";
-                out = out + "<h3>" + name + "</h3>\n<ul>\n";
+                out = out + "<h3>" + task + "</h3>\n<ul>\n";
             }
-            else if(task == "!__MISC")
+            else if(type == "M")
             {
+                // other people
                 out = out + "<li>" + tr("Other people") + "</li>" + "\n";
             }
-            else
+            else if(type == "E")
             {
+                // credits list entry
                 QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
                 if(task.isEmpty() && mail.isEmpty())
                 {
@@ -191,11 +200,16 @@ QString About::getCreditsHtml()
                         + "</li>\n";
                 }
             }
+            else
+            {
+                qWarning("Invalid row type in credits.csv: %s", qPrintable(type));
+            }
             lineComplete = false;
             column = 0;
             cells[0] = "";
             cells[1] = "";
             cells[2] = "";
+            cells[3] = "";
             charInCell = 0;
         }
 
