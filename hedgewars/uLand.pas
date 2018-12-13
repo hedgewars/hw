@@ -300,11 +300,11 @@ end;
 function SelectTemplate: LongInt;
 var l: LongInt;
 begin
-	SelectTemplate:= 0;
+    SelectTemplate:= 0;
     if (cReducedQuality and rqLowRes) <> 0 then
         SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))]
     else
-		begin
+        begin
         if cTemplateFilter = 0 then
             begin
             l:= getRandom(GroupedTemplatesCount);
@@ -313,22 +313,22 @@ begin
                 dec(l, TemplateCounts[cTemplateFilter]);
             until l < 0;
             end
-			else getRandom(1);
+            else getRandom(1);
 
-			case cTemplateFilter of
-			0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
-			1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-			2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-			3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-			4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-			5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-	// For lua only!
-			6: begin
-			   SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
-			   GetRandom(2) // burn 1
-			   end
-			end
-		end;
+            case cTemplateFilter of
+            0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
+            1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+            2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+            3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+            4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+            5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+    // For lua only!
+            6: begin
+               SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
+               GetRandom(2) // burn 1
+               end
+            end
+        end;
 
     WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
 end;
@@ -886,7 +886,7 @@ begin
         mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-        mgDrawn: begin cFeatureSize:= 12;GenDrawnMap; end;
+        mgDrawn: begin cFeatureSize:= 3;GenDrawnMap; end;
         mgForts: MakeFortsPreview();
     else
         OutError('Unknown mapgen', true);
@@ -895,8 +895,16 @@ begin
     ScriptSetMapGlobals;
 
     // strict scaling needed here since preview assumes a rectangle
-    rh:= max(LAND_HEIGHT,2048);
-    rw:= max(LAND_WIDTH,4096);
+    if (cMapGen <> mgDrawn) then
+        begin
+        rh:= max(LAND_HEIGHT, 2048);
+        rw:= max(LAND_WIDTH, 4096);
+        end
+    else
+        begin
+        rh:= LAND_HEIGHT;
+        rw:= LAND_WIDTH
+        end;
     ox:= 0;
     if rw < rh*2 then
         begin
@@ -937,7 +945,7 @@ begin
         mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-        mgDrawn: begin cFeatureSize:= 12;GenDrawnMap; end;
+        mgDrawn: begin cFeatureSize:= 3;GenDrawnMap; end;
         mgForts: MakeFortsPreview;
     else
         OutError('Unknown mapgen', true);
@@ -945,9 +953,19 @@ begin
 
     ScriptSetMapGlobals;
 
+
     // strict scaling needed here since preview assumes a rectangle
-    rh:= max(LAND_HEIGHT, 2048);
-    rw:= max(LAND_WIDTH, 4096);
+    if (cMapGen <> mgDrawn) then
+        begin
+        rh:= max(LAND_HEIGHT, 2048);
+        rw:= max(LAND_WIDTH, 4096);
+        end
+    else
+        begin
+        rh:= LAND_HEIGHT;
+        rw:= LAND_WIDTH
+        end;
+
     ox:= 0;
     if rw < rh*2 then
         begin
@@ -986,9 +1004,9 @@ end;
 
 procedure chSendLandDigest(var s: shortstring);
 var i: LongInt;
-	landPixelDigest  : LongInt;	
+    landPixelDigest  : LongInt;
 begin
-	landPixelDigest:= 1;
+    landPixelDigest:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
         landPixelDigest:= Adler32Update(landPixelDigest, @Land[i,0], LAND_WIDTH*2);
     s:= 'M' + IntToStr(syncedPixelDigest)+'|'+IntToStr(landPixelDigest);
