@@ -1,6 +1,6 @@
 + features
 * bugfixes
-=============== 1.0.0 (unreleased) =================
+============== 1.0.0-dev (unreleased) ==============
  + New chat command: “/help room” (shows room chat commands within the game)
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Longer delays between turns so its easier to see damage and messages
