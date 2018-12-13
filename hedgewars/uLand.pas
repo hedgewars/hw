@@ -285,13 +285,13 @@ end;
 
 procedure GenDrawnMap;
 begin
-    ResizeLand(4096, 2048);
+    ResizeLand((4096 * max(min(cFeatureSize,24),3)) div 12, (2048 * max(min(cFeatureSize,24),3)) div 12);
     uLandPainted.Draw;
 
-    MaxHedgehogs:= 48;
+    MaxHedgehogs:= 64;
     hasGirders:= true;
-    playHeight:= 2048;
-    playWidth:= 4096;
+    playHeight:= LAND_HEIGHT;
+    playWidth:= LAND_WIDTH;
     leftX:= ((LAND_WIDTH - playWidth) div 2);
     rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
     topY:= LAND_HEIGHT - playHeight;
@@ -886,7 +886,7 @@ begin
         mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-        mgDrawn: GenDrawnMap;
+        mgDrawn: begin cFeatureSize:= 12;GenDrawnMap; end;
         mgForts: MakeFortsPreview();
     else
         OutError('Unknown mapgen', true);
@@ -937,7 +937,7 @@ begin
         mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-        mgDrawn: GenDrawnMap;
+        mgDrawn: begin cFeatureSize:= 12;GenDrawnMap; end;
         mgForts: MakeFortsPreview;
     else
         OutError('Unknown mapgen', true);

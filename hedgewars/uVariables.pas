@@ -2808,7 +2808,7 @@ begin
     cGetAwayTime        := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
-    cFeatureSize        := 50;
+    cFeatureSize        := 12;
     cMapGen             := mgRandom;
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;

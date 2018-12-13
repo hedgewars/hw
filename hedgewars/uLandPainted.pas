@@ -58,6 +58,7 @@ begin
         rec:= prec^;
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);
+		
         if rec.X < -318 then rec.X:= -318;
         if rec.X > 4096+318 then rec.X:= 4096+318;
         if rec.Y < -318 then rec.Y:= -318;
@@ -81,7 +82,7 @@ procedure Draw;
 var pe: PPointEntry;
     prevPoint: PointRec;
     radius: LongInt;
-    color: Longword;
+    color, Xoffset, Yoffset: Longword;
     lineNumber, linePoints: Longword;
 begin
     // shutup compiler
@@ -89,6 +90,8 @@ begin
     prevPoint.Y:= 0;
     radius:= 0;
     linePoints:= 0;
+ 	Xoffset:= (LAND_WIDTH-(4096*max(min(cFeatureSize,24),3) div 12)) div 2;
+ 	Yoffset:= (LAND_HEIGHT-(2048*max(min(cFeatureSize,24),3) div 12));
 
     pe:= pointsListHead;
     while (pe <> nil) and (pe^.point.flags and $80 = 0) do
@@ -101,6 +104,8 @@ begin
 
     while(pe <> nil) do
         begin
+		pe^.point.X:= (LongInt(pe^.point.X) * max(min(cFeatureSize,24),3)) div 12 + Xoffset;
+		pe^.point.Y:= (LongInt(pe^.point.Y) * max(min(cFeatureSize,24),3)) div 12 + Yoffset;
         if (pe^.point.flags and $80 <> 0) then
             begin
             if (lineNumber > 0) and (linePoints = 0) and cAdvancedMapGenMode then
@@ -113,9 +118,10 @@ begin
                 else
                 color:= lfBasic;
             radius:= (pe^.point.flags and $3F) * 5 + 3;
+			radius:= (radius * max(min(cFeatureSize,24),3)) div 12;
             linePoints:= FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color);
             end
-            else
+		else
             begin
             inc(linePoints, DrawThickLine(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color));
             end;

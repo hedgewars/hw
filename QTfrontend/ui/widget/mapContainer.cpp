@@ -921,6 +921,7 @@ void HWMapContainer::updateHelpTexts(MapModel::MapType type)
     QString randomNoMapPrev = tr("Click to randomize the theme and seed");
     QString mfsComplex = QString(tr("Adjust the complexity of the generated map"));
     QString mfsFortsDistance = QString(tr("Adjust the distance between forts"));
+    QString mfsDrawnMap = QString(tr("Scale size of the drawn map"));
     switch (type)
     {
         case MapModel::GeneratedMap:
@@ -938,6 +939,7 @@ void HWMapContainer::updateHelpTexts(MapModel::MapType type)
         case MapModel::HandDrawnMap:
             mapPreview->setWhatsThis(tr("Click to edit"));
             btnRandomize->setWhatsThis(randomSeed);
+            mapFeatureSize->setWhatsThis(mfsDrawnMap);
             break;
         case MapModel::FortsMap:
             mapPreview->setWhatsThis(randomNoMapPrev);
@@ -990,7 +992,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             mapgen = MAPGEN_DRAWN;
             setMapInfo(MapModel::MapInfoDrawn);
             btnLoadMap->show();
-            mapFeatureSize->hide();
+            //mapFeatureSize->hide();
             btnEditMap->show();
             break;
         case MapModel::MissionMap:
@@ -1075,14 +1077,15 @@ void HWMapContainer::setFeatureSize(int val)
     //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
     {
         m_prevMapFeatureSize = m_mapFeatureSize;
-        updatePreview();
+		if(m_mapInfo.type!= MapModel::HandDrawnMap)
+			updatePreview();
     }
 }
 
 // unused because I needed the space for the slider
 void HWMapContainer::updateThemeButtonSize()
 {
-    if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::HandDrawnMap)
+    if (m_mapInfo.type != MapModel::StaticMap)
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);
