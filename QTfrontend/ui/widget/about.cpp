@@ -60,7 +60,7 @@ QString About::getCreditsHtml()
     // Open the credits file
 
     /* *** FILE FORMAT OF CREDITS FILE ***
-    The credits file is an RFC-4180-compliant CSV file with 4 columns.
+    The credits file is an RFC-4180-compliant CSV file with 5 columns.
     The first column (column 1) is always 1 letter long and is the row type.
     The row type determines the meaning of the other columns.
 
@@ -70,16 +70,17 @@ QString About::getCreditsHtml()
         * Column 2: Task/contribution
         * Column 3: Contributor name
         * Column 4: Contributor e-mail
+        * Column 5: Contributor nickname
     * M: Alternative credits entry that is a placeholder for other or unknown authors
-        * Columns 2-4: Unused
+        * Columns 2-5: Unused
     * S: Section
         * Column 2: Section name
-        * Columns 3-4: Unused
+        * Columns 3-5: Unused
     * U: Subsection
         * Column 2: Subsection name
-        * Columns 3-4: Unused
+        * Columns 3-5: Unused
 
-    Column 2 MUST be in US-ASCII.
+    Columns 2, 3 and 5 MUST be in US-ASCII.
     */
     QFile creditsFile(":/res/credits.csv");
     if (!creditsFile.open(QIODevice::ReadOnly))
@@ -89,7 +90,7 @@ QString About::getCreditsHtml()
     }
     QString creditsString = creditsFile.readAll();
     QString out = QString("<h1>" + tr("Credits") + "</h1>\n");
-    QStringList cells = QStringList() << QString("") << QString("") << QString("") << QString("");
+    QStringList cells = QStringList() << QString("") << QString("") << QString("") << QString("") << QString("");
     bool firstSection = true;
     unsigned long int column = 0;
     unsigned long int charInCell = 0;
@@ -101,7 +102,7 @@ QString About::getCreditsHtml()
     for(long long int i = 0; i<creditsString.length(); i++)
     {
         currChar = creditsString.at(i);
-        QString type, task, name, mail;
+        QString type, task, name, mail, nick;
         if(currChar == '"')
         {
             if(charInCell == 0)
@@ -148,6 +149,7 @@ QString About::getCreditsHtml()
             task = cells[1];
             name = cells[2];
             mail = cells[3];
+            nick = cells[4];
 
             if(type == "S")
             {
@@ -170,14 +172,21 @@ QString About::getCreditsHtml()
             }
             else if(type == "E")
             {
+                QString showName = QString("");
+                if(!name.isEmpty() && !nick.isEmpty())
+                    showName = tr("%1 (alias %2)").arg(name).arg(nick);
+                else if(name.isEmpty() && !nick.isEmpty())
+                    showName = nick;
+                else if(!name.isEmpty() && nick.isEmpty())
+                    showName = name;
                 // credits list entry
                 QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
-                if(task.isEmpty() && mail.isEmpty() && !name.isEmpty())
+                if(task.isEmpty() && mail.isEmpty() && !showName.isEmpty())
                 {
                     // Name only
-                    out = out + "<li>" + name + "</li>\n";
+                    out = out + "<li>" + showName + "</li>\n";
                 }
-                else if(name.isEmpty() && mail.isEmpty() && !task.isEmpty())
+                else if(showName.isEmpty() && mail.isEmpty() && !task.isEmpty())
                 {
                     // Task only
                     out = out + "<li>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</li>\n";
@@ -185,8 +194,8 @@ QString About::getCreditsHtml()
                 else if(task.isEmpty())
                 {
                     // Name and e-mail
-                    //: Part of credits. %1: Contribution name. %2: E-mail address
-                    out = out + "<li>" + tr("%1 &lt;%2&gt;").arg(name).arg(mailLink) + "</li>\n";
+                    //: Part of credits. %1: Contributor name. %2: E-mail address
+                    out = out + "<li>" + tr("%1 &lt;%2&gt;").arg(showName).arg(mailLink) + "</li>\n";
                 }
                 else if(mail.isEmpty())
                 {
@@ -194,7 +203,7 @@ QString About::getCreditsHtml()
                     //: Part of credits. %1: Description of contribution. %2: Contributor name
                     out = out + "<li>" + tr("%1: %2")
                         .arg(HWApplication::translate("credits", task.toLatin1().constData()))
-                        .arg(name)
+                        .arg(showName)
                         + "</li>\n";
                 }
                 else
@@ -203,7 +212,7 @@ QString About::getCreditsHtml()
                     //: Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address
                     out = out + "<li>" + tr("%1: %2 &lt;%3&gt;")
                         .arg(HWApplication::translate("credits", task.toLatin1().constData()))
-                        .arg(name)
+                        .arg(showName)
                         .arg(mailLink)
                         + "</li>\n";
                 }
@@ -218,6 +227,7 @@ QString About::getCreditsHtml()
             cells[1] = "";
             cells[2] = "";
             cells[3] = "";
+            cells[4] = "";
             charInCell = 0;
         }
 

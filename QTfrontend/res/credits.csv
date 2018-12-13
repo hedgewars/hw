@@ -1,182 +1,179 @@
-S,"Project founder",,
-E,,"Andrey Korotaev","unC0Rr@gmail.com"
-S,"Programming",,
-U,"Game engine",,
-E,"Creator","Andrey Korotaev","unC0Rr@gmail.com"
-E,"Many engine improvements","Derek Pomery","nemo@m8y.org"
-E,"Many engine improvements","Carlos Vives","mail@carlosvives.es"
-E,"Many engine improvements","Richard Karolyi","sheepluva@ercatec.net"
-E,,"Wuzzy","Wuzzy2@mail.ru"
-E,,"Henrik Rostedt","henrik.rostedt@gmail.com"
-E,"Gamepad and Lua integration","Mario Liebisch","mario.liebisch@gmail.com"
-E,"Campaign support","Szabolcs Orbàn","szabibibi@gmail.com"
-E,"Theme customization improvements","KoBeWi",
-E,"Some Pas2C and GLES2 work","Meng Xiangyun","xymengxy@gmail.com"
-E,"Video recording","Stepan Podoskin","stepik-777@mail.ru"
-E,"Other improvements","Valentin Kraevskiy",
-U,"Map generation",,
-E,"Core map generators","Andrey Korotaev","unC0Rr@gmail.com"
-E,"Perlin maps and other improvements","Derek Pomery","nemo@m8y.org"
-E,"Maze maps","Henning Kühn","prg@cooco.de"
-U,"Weapons",,
-E,"Most core weapons","Andrey Korotaev","unC0Rr@gmail.com"
-E,"Air mine, rubber, others","Derek Pomery","nemo@m8y.org"
-E,"Drill rocket, ballgun, RC plane","Martin Boze","afffect@gmail.com"
-E,"Freezer","Julia Struchenko","urbertar@gmail.com"
-E,"Mine number and time game settings","David A. Cuadrado","krawek@gmail.com"
-M,,,
-U,"Frontend / main menu",,
-E,"Creator","Andrey Korotaev","unC0Rr@gmail.com"
-E,"Many frontend improvements","Derek Pomery","nemo@m8y.org"
-E,"Many frontend improvements","Richard Karolyi","sheepluva@ercatec.net"
-E,"Many frontend improvements","Igor Ulyanov","disinbox@gmail.com"
-E,"Keybinds, feedback, maps and hats interfaces","Drew Gottlieb","gottlieb.drew@gmail.com"
-E,"Login dialogs, other improvements","Ondrej Skopek","skopekondrej@gmail.com"
-E,,"Wuzzy","Wuzzy2@mail.ru"
-E,,"Martin Minarik","ttsmj@pokec.sk"
-E,,"Kristian Lehmann","email@thexception.net"
-E,,"Henrik Rostedt","henrik.rostedt@gmail.com"
-E,,"Mayur Pawashe","zorgiepoo@gmail.com"
-E,,"Valentin Kraevskiy",
-U,"Missions and styles",,
-E,"A Classic Fairytale","Szabolcs Orbàn","szabibibi@gmail.com"
-E,"A Space Adventure","Master_ex",
-E,"Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW","mikade",
-E,"Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance","Wuzzy","Wuzzy2@mail.ru"
-E,"Some styles and missions","John Lambert","redgrinner@gmail.com"
-E,"Battalion","Anachron","Anachron14@gmx.de"
-E,"Continental supplies","Vatten",
-E,"Teamwork 2","Arkhnen",
-E,"Climb Home","Derek Pomery","nemo@m8y.org"
-E,"Portal Mind Challenge","sphrix",
-M,,,
-U,"Game server",,
-E,"Creator","Andrey Korotaev","unC0Rr@gmail.com"
-M,,,
-U,"Ports",,
-E,"macOS/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com"
-E,"Android port","Richard Deurwaarder","xeli@xelification.com"
-E,"Android netplay, portability abstraction","Simeon Maxein","smaxein@googlemail.com"
-E,"WebGL port","Meng Xiangyun","xymengxy@gmail.com"
-E,"iPhone/iPad ports","Anton Malmygin","antonc27@mail.ru"
-S,"Graphics",,
-U,"General",,
-E,,"John Dum","fizzy@gmail.com"
-E,,"Joshua Frese","joshfrese@gmail.com"
-E,,"Stanko Tadić","stanko@mfhinc.net"
-E,,"Julien Koesten","julienkoesten@aol.com"
-E,,"Joshua O'Sullivan","coheedftw@hotmail.co.uk"
-E,,"Nils Lück","nils.luck.design@gmail.com"
-E,,"Guillaume Englert","genglert@hybird.org"
-E,,"CopherNeue","ppicondo.cvac@gmail.com"
-E,,"Valentin Kraevskiy",
-E,,"Carlos Vives","mail@carlosvives.es"
-U,"Themes",,
-E,"Nature, Snow, City, Castle, Halloween, Island","John Dum","fizzy@gmail.com"
-E,"Bamboo, EarthRise, BambooPlinko","Joshua Frese","joshfrese@gmail.com"
-E,"Golf, Hoggywood, Stage","RoFra",
-E,"Hoggywood","Wuzzy",
-E,"Cave, Olympics","Guillaume Englert","genglert@hybird.org"
-E,"Fruit, Cake","Randy Broda",
-E,"Art","Zippy",
-E,"Beach","CopherNeue","ppicondo.cvac@gmail.com"
-
-E,"Beach","Miguelac",
-E,"Brick","AlexYeCu",
-E,"Christmas","Other",
-E,"Hell","Stanko Tadić","stanko@mfhinc.net"
-E,"Jungle","KoRn666",
-E,"Sheep","Julien Koesten","julienkoesten@aol.com"
-M,,,
-U,"Maps",,
-E,"Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree","John Dum","fizzy@gmail.com"
-E,"SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle","Chucklefish, Ltd",
-E,"Bamboo, Blox, Cake, Cogs, EarthRise, Freeway","Joshua Frese","joshfrese@gmail.com"
-E,"Castle, PirateFlag","Stanko Tadić","stanko@mfhinc.net"
-E,"ShoppaKing, TrophyRace","wolfmarc & Dragonfly",
-E,"Battlefield","nickstu",
-E,"CTF_Blizzard","Palewolf",
-E,"Cheese","CopherNeue","ppicondo.cvac@gmail.com"
-
-E,"ClimbHome","Derek Pomery","nemo@m8y.org"
-E,"Lonely_Island","Maciej Mrozinski (alias alzen)",
-E,"Octorama","jessor",
-E,"portal","sphrix",
-E,"Ruler","Guillaume Englert","genglert@hybrid.org"
-E,"Sticks","dctPL",
-M,,,
-U,"Forts",,
-E,"EvilChicken","Dragonfly",
-E,"Lonely_Island","Maciej Mrozinski (alias alzen)",
-E,"Olympic","Guillaume Englert","genglert@hybird.org"
-E,"Olympic","Wuzzy",
-E,"Tank","Carlos Vives",
-E,"Snail","Jon Dum",
-E,"Snail","Wuzzy",
-E,"SteelTower","Randy Broda",
-M,,,
-U,"Hats, graves, other",,
-E,"See CREDITS text file",,
-S,"Sounds",,
-E,"Hedgehogs voice","Stephen Alexander","ArmagonNo1@gmail.com"
-E,"Default_pl, Russian_pl voices","mtg90pl","mtg90pl@gmail.com"
-E,,"John Dum","fizzy@gmail.com"
-E,,"Jonatan Nilsson","jonatanfan@gmail.com"
-E,,"Daniel Martin (alias HSR)","elhombresinremedio@gmail.com"
-E,"Various authors from www.freesound.org (see CREDITS text file)",
-S,"Music",,
-E,"City, Rock, others","Daniel Martin (alias HSR)","elhombresinremedio@gmail.com"
-E,"Compost","HG"
-E,"EarthRise, oriental, Pirate, snow","Jonatan Nilsson",
-E,"Fruit, Jungle","Valentin Kraevskiy",
-E,"Nature","John Dum",
-E,"olympics_sd","yd &lt;http://opengameart.org/users/yd&gt;",
-E,"sdmusic (Hitman [sheepluva edit])","Kevin MacLeod",
-M,,,
-S,"Translations",,
-E,"Brazilian Portuguese","Romulo Fernandes Machado","abra185@gmail.com"
-E,"Bulgarian","Svetoslav Stefanov",
-E,"Czech","Petr Řezáček","rezacek@gmail.com"
-E,"Chinese","Jie Luo","lililjlj@gmail.com"
-E,"Finnish","Nina Kuisma","ninnnu@gmail.com"
-E,"Finnish","Janne Uusitupa",
-E,"French","Antoine Turmel","geekshadow@gmail.com"
-E,"French","Clement Woitrain","sphrixclement@gmail.com"
-E,"French","Matisumi",
-E,"French","Case_Of",
-E,"German","Peter Hüwe","PeterHuewe@gmx.de"
-E,"German","Mario Liebisch","mario.liebisch@gmail.com"
-E,"German","Richard Karolyi","sheepluva@ercatec.net"
-E,"German","Wuzzy","Wuzzy2@mail.ru"
-E,"Greek",,"talos_kriti@yahoo.gr"
-E,"Italian","Luca Bonora","bonora.luca@gmail.com"
-E,"Italian","Marco Bresciani","m.bresciani@email.it"
-E,"Italian","Gianfranco Costamagna","costamagnagianfranco@yahoo.it"
-E,"Italian","Enrico","enricobe@hotmail.com"
-E,"Japanese","ADAM Etienne","etienne.adam@gmail.com"
-E,"Japanese","Marco Bresciani","m.bresciani@email.it"
-E,"Korean","Anthony Bellew","anthonyreflected@gmail.com"
-E,"Lithuanian","Lukas Urbonas","lukasu08@gmail.com"
-E,"Polish","Maciej Mroziński","mynick2@o2.pl"
-E,"Polish","Wojciech Latkowski","magik17l@gmail.com"
-E,"Polish","Piotr Mitana",
-E,"Polish","Maciej Górny",
-E,"Polish","KoBeWi",
-E,"Portuguese","Fábio Canário","inufabie@gmail.com"
-E,"Russian","Andrey Korotaev","unC0Rr@gmail.com"
-E,"Russian","Vitaly Novichkov","admin@wohlnet.ru"
-E,"Russian","Anton Malmygina","antonc27@mail.ru"
-E,"Russian","Grigory Ustinov","grenka@altlinux.org"
-E,"Scottish Gaelic","GunChleoc",
-E,"Slovak","Jose Riha",
-E,"Spanish","Carlos Vives","mail@carlosvives.es"
-E,"Swedish","Niklas Grahn","raewolusjoon@yaoo.com"
-E,"Swedish","Henrik Rostedt","henrik.rostedt@gmail.com"
-E,"Ukrainian","Eugene V. Lyubimkin","jackyf.devel@gmail.com"
-E,"Ukrainian","Igor Paliychuk","mansonigor@gmail.com"
-E,"Ukrainian","Eugene Sakara","eresid@gmail.com"
-S,"Special thanks",,
-E,,"Aleksey Andreev","blaknayabr@gmail.com",
-E,,"Aleksander Rudalev","alexv@pomorsu.ru",
-E,,"Natasha Korotaeva","layout@pisem.net",
-E,,"Adam Higerd (alias ahigerd)",
+S,"Project founder",,,
+E,,"Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+S,"Programming",,,
+U,"Game engine",,,
+E,"Creator","Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+E,"Many engine improvements","Derek Pomery","nemo@m8y.org","nemo"
+E,"Many engine improvements","Carlos Vives","mail@carlosvives.es",
+E,"Many engine improvements","Richard Karolyi","sheepluva@ercatec.net","sheepluva"
+E,,,"Wuzzy2@mail.ru","Wuzzy"
+E,,"Henrik Rostedt","henrik.rostedt@gmail.com",
+E,"Gamepad and Lua integration","Mario Liebisch","mario.liebisch@gmail.com",
+E,"Campaign support","Szabolcs Orbàn","szabibibi@gmail.com",
+E,"Theme customization improvements",,,"KoBeWi"
+E,"Some Pas2C and GLES2 work","Meng Xiangyun","xymengxy@gmail.com",
+E,"Video recording","Stepan Podoskin","stepik-777@mail.ru",
+E,"Other improvements","Valentin Kraevskiy",,"alfadur"
+U,"Map generation",,,
+E,"Core map generators","Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+E,"Perlin maps and other improvements","Derek Pomery","nemo@m8y.org","nemo"
+E,"Maze maps","Henning Kühn","prg@cooco.de",
+U,"Weapons",,,
+E,"Most core weapons","Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+E,"Air mine, rubber, others","Derek Pomery","nemo@m8y.org","nemo"
+E,"Drill rocket, ballgun, RC plane","Martin Boze","afffect@gmail.com",
+E,"Freezer","Julia Struchenko","urbertar@gmail.com",
+E,"Mine number and time game settings","David A. Cuadrado","krawek@gmail.com",
+M,,,,
+U,"Frontend / main menu",,,
+E,"Creator","Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+E,"Many frontend improvements","Derek Pomery","nemo@m8y.org","nemo"
+E,"Many frontend improvements","Richard Karolyi","sheepluva@ercatec.net","sheepluva"
+E,"Many frontend improvements","Igor Ulyanov","disinbox@gmail.com",
+E,"Keybinds, feedback, maps and hats interfaces","Drew Gottlieb","gottlieb.drew@gmail.com",
+E,"Login dialogs, other improvements","Ondrej Skopek","skopekondrej@gmail.com",
+E,,,"Wuzzy2@mail.ru","Wuzzy"
+E,,"Martin Minarik","ttsmj@pokec.sk",
+E,,"Kristian Lehmann","email@thexception.net",
+E,,"Henrik Rostedt","henrik.rostedt@gmail.com",
+E,,"Mayur Pawashe","zorgiepoo@gmail.com",
+E,,"Valentin Kraevskiy",,"alfadur"
+U,"Missions and styles",,,
+E,"A Classic Fairytale","Szabolcs Orbàn","szabibibi@gmail.com",
+E,"A Space Adventure",,,"Master_ex"
+E,"Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW","mikade",,"mikade"
+E,"Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance",,"Wuzzy2@mail.ru","Wuzzy"
+E,"Some styles and missions","John Lambert","redgrinner@gmail.com","redgrinner"
+E,"Battalion",,"Anachron14@gmx.de","Anachron"
+E,"Continental supplies",,,"Vatten"
+E,"Teamwork 2",,,"Arkhnen"
+E,"Climb Home","Derek Pomery","nemo@m8y.org","nemo"
+E,"Portal Mind Challenge",,,"sphrix"
+M,,,,
+U,"Game server",,,
+E,"Creator","Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+M,,,,
+U,"Ports",,,
+E,"macOS/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com",
+E,"Android port","Richard Deurwaarder","xeli@xelification.com","xeli"
+E,"Android netplay, portability abstraction","Simeon Maxein","smaxein@googlemail.com",
+E,"WebGL port","Meng Xiangyun","xymengxy@gmail.com",
+E,"iPhone/iPad ports","Anton Malmygina","antonc27@mail.ru",
+S,"Graphics",,,
+U,"General",,,
+E,,"John Dum","fizzy@gmail.com",
+E,,"Joshua Frese","joshfrese@gmail.com",
+E,,"Stanko Tadić","stanko@mfhinc.net",
+E,,"Julien Koesten","julienkoesten@aol.com",
+E,,"Joshua O'Sullivan","coheedftw@hotmail.co.uk",
+E,,"Nils Lück","nils.luck.design@gmail.com",
+E,,"Guillaume Englert","genglert@hybird.org",
+E,,,"ppicondo.cvac@gmail.com","CopherNeue"
+E,,"Valentin Kraevskiy",,"alfadur"
+E,,"Carlos Vives","mail@carlosvives.es",
+U,"Themes",,,
+E,"Nature, Snow, City, Castle, Halloween, Island","John Dum","fizzy@gmail.com",
+E,"Bamboo, EarthRise, BambooPlinko","Joshua Frese","joshfrese@gmail.com",
+E,"Golf, Hoggywood, Stage",,,"RoFra"
+E,"Hoggywood",,"Wuzzy2@mail.ru","Wuzzy"
+E,"Cave, Olympics","Guillaume Englert","genglert@hybird.org",
+E,"Fruit, Cake","Randy Broda",,"Randy"
+E,"Art",,,"Zippy"
+E,"Beach",,"ppicondo.cvac@gmail.com","CopherNeue"
+E,"Beach",,,"Miguelac"
+E,"Brick",,,"AlexYeCu"
+E,"Hell","Stanko Tadić","stanko@mfhinc.net",
+E,"Jungle",,,"KoRn666"
+E,"Sheep","Julien Koesten","julienkoesten@aol.com",
+M,,,,
+U,"Maps",,,
+E,"Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree","John Dum","fizzy@gmail.com",
+E,"SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle","Chucklefish, Ltd",,
+E,"Bamboo, Blox, Cake, Cogs, EarthRise, Freeway","Joshua Frese","joshfrese@gmail.com",
+E,"Castle, PirateFlag","Stanko Tadić","stanko@mfhinc.net",
+E,"ShoppaKing, TrophyRace",,,"wolfmarc & Dragonfly"
+E,"Battlefield",,,"nickstu"
+E,"CTF_Blizzard",,,"Palewolf"
+E,"Cheese",,"ppicondo.cvac@gmail.com","CopherNeue"
+E,"ClimbHome","Derek Pomery","nemo@m8y.org","nemo"
+E,"Lonely_Island","Maciej Mrozinski","mynick2@o2.pl","alzen"
+E,"Octorama",,,"jessor"
+E,"portal",,,"sphrix"
+E,"Ruler","Guillaume Englert","genglert@hybrid.org",
+E,"Sticks",,,"dctPL"
+M,,,,
+U,"Forts",,,
+E,"EvilChicken",,,"Dragonfly"
+E,"Lonely_Island","Maciej Mrozinski","mynick2@o2.pl","alzen"
+E,"Olympic","Guillaume Englert","genglert@hybird.org",
+E,"Olympic",,"Wuzzy2@mail.ru","Wuzzy"
+E,"Tank","Carlos Vives","mail@carlosvives.es",
+E,"Snail","John Dum","fizzy@gmail.com",
+E,"Snail",,"Wuzzy2@mail.ru","Wuzzy"
+E,"SteelTower","Randy Broda",,"Randy"
+M,,,,
+U,"Hats, graves, other",,,
+E,"See CREDITS text file",,,
+S,"Sounds",,,
+E,"Hedgehogs voice","Stephen Alexander","ArmagonNo1@gmail.com","Armagon"
+E,"Default_pl, Russian_pl voices",,"mtg90pl@gmail.com","mtg90pl"
+E,,"John Dum","fizzy@gmail.com",
+E,,"Jonatan Nilsson","jonatanfan@gmail.com",
+E,,"Daniel Martin","elhombresinremedio@gmail.com","HSR"
+E,"Various authors from www.freesound.org (see CREDITS text file)",,
+S,"Music",,,
+E,"City, Rock, others","Daniel Martin","elhombresinremedio@gmail.com","HSR"
+E,"Compost",,,"HG"
+E,"EarthRise, oriental, Pirate, snow","Jonatan Nilsson","jonatanfan@gmail.com",
+E,"Fruit, Jungle","Valentin Kraevskiy",,"alfadur"
+E,"Nature","John Dum","fizzy@gmail.com",
+E,"olympics_sd",,,"yd &lt;http://opengameart.org/users/yd&gt;"
+E,"sdmusic (Hitman [sheepluva edit])","Kevin MacLeod",,
+M,,,,
+S,"Translations",,,
+E,"Brazilian Portuguese","Romulo Fernandes Machado","abra185@gmail.com",
+E,"Bulgarian","Svetoslav Stefanov",,
+E,"Czech","Petr Řezáček","rezacek@gmail.com",
+E,"Chinese","Jie Luo","lililjlj@gmail.com",
+E,"Finnish","Nina Kuisma","ninnnu@gmail.com",
+E,"Finnish","Janne Uusitupa",,
+E,"French","Antoine Turmel","geekshadow@gmail.com",
+E,"French","Clement Woitrain","sphrixclement@gmail.com",
+E,"French",,,"Matisumi"
+E,"French",,,"Case_Of"
+E,"German","Peter Hüwe","PeterHuewe@gmx.de",
+E,"German","Mario Liebisch","mario.liebisch@gmail.com",
+E,"German","Richard Karolyi","sheepluva@ercatec.net","sheepluva"
+E,"German",,"Wuzzy2@mail.ru","Wuzzy"
+E,"Greek",,"talos_kriti@yahoo.gr",
+E,"Italian","Luca Bonora","bonora.luca@gmail.com",
+E,"Italian","Marco Bresciani","m.bresciani@email.it",
+E,"Italian","Gianfranco Costamagna","costamagnagianfranco@yahoo.it",
+E,"Italian",,"enricobe@hotmail.com","Enrico"
+E,"Japanese","ADAM Etienne","etienne.adam@gmail.com",
+E,"Japanese","Marco Bresciani","m.bresciani@email.it",
+E,"Korean","Anthony Bellew","anthonyreflected@gmail.com",
+E,"Lithuanian","Lukas Urbonas","lukasu08@gmail.com",
+E,"Polish","Maciej Mroziński","mynick2@o2.pl","alzen"
+E,"Polish","Wojciech Latkowski","magik17l@gmail.com",
+E,"Polish","Piotr Mitana",,
+E,"Polish","Maciej Górny",,
+E,"Polish",,,"KoBeWi"
+E,"Portuguese","Fábio Canário","inufabie@gmail.com",
+E,"Russian","Andrey Korotaev","unC0Rr@gmail.com","unC0Rr"
+E,"Russian","Vitaly Novichkov","admin@wohlnet.ru",
+E,"Russian","Anton Malmygina","antonc27@mail.ru",
+E,"Russian","Grigory Ustinov","grenka@altlinux.org","grenka"
+E,"Scottish Gaelic",,,"GunChleoc"
+E,"Slovak","Jose Riha",,
+E,"Spanish","Carlos Vives","mail@carlosvives.es",
+E,"Swedish","Niklas Grahn","raewolusjoon@yaoo.com",
+E,"Swedish","Henrik Rostedt","henrik.rostedt@gmail.com",
+E,"Ukrainian","Eugene V. Lyubimkin","jackyf.devel@gmail.com",
+E,"Ukrainian","Igor Paliychuk","mansonigor@gmail.com",
+E,"Ukrainian","Eugene Sakara","eresid@gmail.com",
+S,"Special thanks",,,
+E,,"Aleksey Andreev","blaknayabr@gmail.com",,
+E,,"Aleksander Rudalev","alexv@pomorsu.ru",,
+E,,"Natasha Korotaeva","layout@pisem.net",,
+E,,"Adam Higerd",,"ahigerd"
