@@ -186,7 +186,8 @@ void fpcrtl_blockRead__vars(File f, void *buf, Integer count, Integer *result) {
  */
 void fpcrtl_blockWrite__vars(File f, const void *buf, Integer count,
         Integer *result) {
-    assert(0);
+    assert(f->record_len > 0);
+    *result = fwrite(buf, f->record_len, count, f->fp);
 }
 
 bool fpcrtl_directoryExists(string255 dir) {
