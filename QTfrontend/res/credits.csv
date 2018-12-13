@@ -11,9 +11,9 @@ E,,"Henrik Rostedt","henrik.rostedt@gmail.com"
 E,"Gamepad and Lua integration","Mario Liebisch","mario.liebisch@gmail.com"
 E,"Campaign support","Szabolcs Orbàn","szabibibi@gmail.com"
 E,"Theme customization improvements","KoBeWi",
-E,"Other improvements","Valentin Kraevskiy",
 E,"Some Pas2C and GLES2 work","Meng Xiangyun","xymengxy@gmail.com"
 E,"Video recording","Stepan Podoskin","stepik-777@mail.ru"
+E,"Other improvements","Valentin Kraevskiy",
 U,"Map generation",,
 E,"Core map generators","Andrey Korotaev","unC0Rr@gmail.com"
 E,"Perlin maps and other improvements","Derek Pomery","nemo@m8y.org"
@@ -52,7 +52,7 @@ U,"Game server",,
 E,"Creator","Andrey Korotaev","unC0Rr@gmail.com"
 M,,,
 U,"Ports",,
-E,"Mac OS X/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com"
+E,"macOS/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com"
 E,"Android port","Richard Deurwaarder","xeli@xelification.com"
 E,"Android netplay, portability abstraction","Simeon Maxein","smaxein@googlemail.com"
 E,"WebGL port","Meng Xiangyun","xymengxy@gmail.com"

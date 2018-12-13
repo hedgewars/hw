@@ -61,8 +61,9 @@ QString About::getCreditsHtml()
 
     /* *** FILE FORMAT OF CREDITS FILE ***
     The credits file is an RFC-4180-compliant CSV file with 4 columns.
-    The first colum is always 1 letter long and is the row type.
+    The first column (column 1) is always 1 letter long and is the row type.
     The row type determines the meaning of the other columns.
+
     The following row types are supported:
 
     * E: Credits entry
@@ -77,6 +78,8 @@ QString About::getCreditsHtml()
     * U: Subsection
         * Column 2: Subsection name
         * Columns 3-4: Unused
+
+    Column 2 MUST be in US-ASCII.
     */
     QFile creditsFile(":/res/credits.csv");
     if (!creditsFile.open(QIODevice::ReadOnly))
