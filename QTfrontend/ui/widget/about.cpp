@@ -294,7 +294,7 @@ About::About(QWidget * parent) :
         "     a { color: #ffe270; }"
         "     ul { list-style-type: none; }"
         "     .name { color: #ffffff; font-weight: bold; }"
-        "     .nick { color: #00ff00; font-weight: bold; }"
+        "     .nick { color: #ffff00; font-weight: bold; }"
         "</style>"
         "</head>"
         "<body>"
