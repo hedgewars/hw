@@ -1,32 +1,62 @@
+!__SECTION,"Project founder",
+,"Andrey Korotaev","unC0Rr@gmail.com"
 !__SECTION,"Programming",
-"Engine, frontend, net server","Andrey Korotaev","unC0Rr@gmail.com"
-"Many frontend improvements","Igor Ulyanov","disinbox@gmail.com"
-"Many engine and frontend improvements","Derek Pomery","nemo@m8y.org"
-"Drill rocket, ballgun, RC plane weapons","Martin Boze","afffect@gmail.com"
-"Mine number and time game settings","David A. Cuadrado","krawek@gmail.com"
-"Frontend improvements","Martin Minarik","ttsmj@pokec.sk"
-"Frontend improvements","Kristian Lehmann","email@thexception.net"
-"Mac OS X/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com"
-"Many engine and frontend improvements (and bugs)","Richard Karolyi","sheepluva@ercatec.net"
-"Gamepad and Lua integration","Mario Liebisch","mario.liebisch@gmail.com"
+!__SUBSECTION,"Game engine",
+"Creator","Andrey Korotaev","unC0Rr@gmail.com"
+"Many engine improvements","Derek Pomery","nemo@m8y.org"
 "Many engine improvements","Carlos Vives","mail@carlosvives.es"
+"Many engine improvements","Richard Karolyi","sheepluva@ercatec.net"
+,"Wuzzy","Wuzzy2@mail.ru"
+,"Henrik Rostedt","henrik.rostedt@gmail.com"
+"Gamepad and Lua integration","Mario Liebisch","mario.liebisch@gmail.com"
+"Campaign support","Szabolcs Orbàn","szabibibi@gmail.com"
+"Theme customization improvements","KoBeWi",
+"Other improvements","Valentin Kraevskiy",
+"Some Pas2C and GLES2 work","Meng Xiangyun","xymengxy@gmail.com"
+"Video recording","Stepan Podoskin","stepik-777@mail.ru"
+!__SUBSECTION,"Map generation",
+"Core map generators","Andrey Korotaev","unC0Rr@gmail.com"
+"Perlin maps and other improvements","Derek Pomery","nemo@m8y.org"
 "Maze maps","Henning Kühn","prg@cooco.de"
-"Engine and frontend improvements","Henrik Rostedt","henrik.rostedt@gmail.com"
-"Lua game modes and missions","John Lambert","redgrinner@gmail.com"
-"Frontend improvements","Mayur Pawashe","zorgiepoo@gmail.com"
+!__SUBSECTION,"Weapons",
+"Most core weapons","Andrey Korotaev","unC0Rr@gmail.com"
+"Air mine, rubber, others","Derek Pomery","nemo@m8y.org"
+"Drill rocket, ballgun, RC plane","Martin Boze","afffect@gmail.com"
+"Freezer","Julia Struchenko","urbertar@gmail.com"
+"Mine number and time game settings","David A. Cuadrado","krawek@gmail.com"
+!__MISC,,
+!__SUBSECTION,"Frontend / main menu",
+"Creator","Andrey Korotaev","unC0Rr@gmail.com"
+"Many frontend improvements","Derek Pomery","nemo@m8y.org"
+"Many frontend improvements","Richard Karolyi","sheepluva@ercatec.net"
+"Many frontend improvements","Igor Ulyanov","disinbox@gmail.com"
+"Keybinds, feedback, maps and hats interfaces","Drew Gottlieb","gottlieb.drew@gmail.com"
+"Login dialogs, other improvements","Ondrej Skopek","skopekondrej@gmail.com"
+,"Wuzzy","Wuzzy2@mail.ru"
+,"Martin Minarik","ttsmj@pokec.sk"
+,"Kristian Lehmann","email@thexception.net"
+,"Henrik Rostedt","henrik.rostedt@gmail.com"
+,"Mayur Pawashe","zorgiepoo@gmail.com"
+,"Valentin Kraevskiy",
+!__SUBSECTION,"Missions and styles",
+"A Classic Fairytale","Szabolcs Orbàn","szabibibi@gmail.com"
+"A Space Adventure","Master_ex",
+"Capture the Flag, Construction Mode, Continental supplies, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW","mikade",
+"Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance","Wuzzy","Wuzzy2@mail.ru"
+"Some styles and missions","John Lambert","redgrinner@gmail.com"
+"Battalion","Anachron","Anachron14@gmx.de"
+"Continental supplies","Vatten",
+"Teamwork 2","Arkhnen",
+!__MISC,,
+!__SUBSECTION,"Game server",
+"Creator","Andrey Korotaev","unC0Rr@gmail.com"
+!__MISC,,
+!__SUBSECTION,"Ports",
+"Mac OS X/iPhone port, OpenGL-ES conversion","Vittorio Giovara","vittorio.giovara@gmail.com"
 "Android port","Richard Deurwaarder","xeli@xelification.com"
 "Android netplay, portability abstraction","Simeon Maxein","smaxein@googlemail.com"
-"WebGL port, some pas2c and GLES2 work","Meng Xiangyun","xymengxy@gmail.com"
-"Video recording","Stepan Podoskin","stepik-777@mail.ru"
-"Campaign support, A Classic Fairytale campaign","Szabolcs Orbàn","szabibibi@gmail.com"
-"Keybinds, feedback, maps and hats interfaces","Drew Gottlieb","gottlieb.drew@gmail.com"
-"Login dialogs, frontend improvements","Ondrej Skopek","skopekondrej@gmail.com"
-"Freezer weapon","Julia Struchenko","urbertar@gmail.com"
+"WebGL port","Meng Xiangyun","xymengxy@gmail.com"
 "iPhone/iPad ports","Anton Malmygin","antonc27@mail.ru"
-"Battalion style","Anachron","Anachron14@gmx.de"
-"Scripting, engine, frontend improvements, some missions","Wuzzy","Wuzzy2@mail.ru"
-"Theme customization improvements","KoBeWi",
-"Theme music, engine and frontend improvements","Valentin Kraevskiy",
 !__SECTION,"Graphics",
 !__SUBSECTION,"General",
 ,"John Dum","fizzy@gmail.com"
@@ -39,8 +69,6 @@
 ,"CopherNeue","ppicondo.cvac@gmail.com"
 ,"Valentin Kraevskiy",
 ,"Carlos Vives","mail@carlosvives.es"
-!__SUBSECTION,"Themes",
-"TODO","TODO","nobody@nowhere.invalid"
 !__SUBSECTION,"Hats",
 ,"Trey Perry","perry.j@gmail.com",
 !__MISC,,
@@ -49,8 +77,21 @@
 ,"John Dum","fizzy@gmail.com"
 ,"Jonatan Nilsson","jonatanfan@gmail.com"
 ,"Daniel Martin","elhombresinremedio@gmail.com"
+!__MISC,,
 !__SECTION,"Music",
-"TODO","TODO","nobody@nowhere.invalid"
+"City","HSR <http://elhombresinremedio.com>",
+"Compost","HG"
+"EarthRise","Jonatan Nilsson",
+"Fruit","Valentin Kraevskiy",
+"Jungle","Valentin Kraevskiy",
+"Nature","John Dum",
+"Pirate","Jonatan Nilsson",
+"Rock","HSR <http://elhombresinremedio.com>",
+"olympics_sd","yd <http://opengameart.org/users/yd>",
+"oriental","Jonatan Nilsson",
+"sdmusic (""Hitman [sheepluva edit]"")","Kevin MacLeod",
+"snow","Jonatan Nilsson",
+!__MISC,,
 !__SECTION,"Translations",
 "Brazilian Portuguese","Romulo Fernandes Machado","abra185@gmail.com"
 "Bulgarian","Svetoslav Stefanov",
