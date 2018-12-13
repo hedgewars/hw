@@ -173,6 +173,10 @@ QString About::getCreditsHtml()
             else if(type == "E")
             {
                 QString showName = QString("");
+                if(!name.isEmpty())
+                    name = "<span class=\"name\">"+name+"</span>";
+                if(!nick.isEmpty())
+                    nick= "<span class=\"nick\">"+nick+"</span>";
                 if(!name.isEmpty() && !nick.isEmpty())
                     showName = tr("%1 (alias %2)").arg(name).arg(nick);
                 else if(name.isEmpty() && !nick.isEmpty())
@@ -288,8 +292,9 @@ About::About(QWidget * parent) :
         "<style type=\"text/css\">"
         "     body { color: orange; }"
         "     a { color: #ffe270; }"
-        "     a:hover { color: yellow; }"
         "     ul { list-style-type: none; }"
+        "     .name { color: #ffffff; font-weight: bold; }"
+        "     .nick { color: #00ff00; font-weight: bold; }"
         "</style>"
         "</head>"
         "<body>"
