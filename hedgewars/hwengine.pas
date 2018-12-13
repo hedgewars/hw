@@ -140,12 +140,14 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
-        {$IFNDEF PAS2C}
         if flagDumpLand then
              s:= '/Screenshots/mapdump_'
         else s:= '/Screenshots/hw_';
+        {$IFDEF PAS2C}
         s:= s + inttostr(GameTicks);
+        {$ELSE}
         s:= s + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        {$ENDIF}
 
         // flash
         playSound(sndShutter);
@@ -161,7 +163,6 @@ begin
             WriteLnToConsole('Screenshot failed.');
             AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
             end
-        {$ENDIF}
         end;
 end;
 
