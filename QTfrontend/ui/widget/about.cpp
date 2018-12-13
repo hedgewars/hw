@@ -248,6 +248,8 @@ About::About(QWidget * parent) :
         "";
     QString footer =
         ""
+        "<h2>" + tr("Extended Credits") + "</h2>"
+        "<p>" + tr("An extended credits list can be found in the CREDITS text file.") + "</p>"
         "</body></html>";
 
     creditsBrowser->setHtml(header + credits + footer);
