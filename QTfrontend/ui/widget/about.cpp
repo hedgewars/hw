@@ -102,6 +102,10 @@ About::About(QWidget * parent) :
 
 #if defined(__GNUC__)
     libinfo.append(QString(tr("<a href=\"https://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));
+#elif defined(WIN32_VCPKG)
+    libinfo.append(QString(tr("<a href=\"https://visualstudio.microsoft.com\">VC++</a>: %1")).arg(_MSC_FULL_VER));
+#elif defined(__VERSION__)
+    libinfo.append(QString(tr("Unknown Compiler: %1")).arg(__VERSION__));
 #else
     libinfo.append(QString(tr("Unknown Compiler")));
 #endif
