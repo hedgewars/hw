@@ -8,6 +8,7 @@
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Restructure credits
  + Credits screen in main menu is now translatable
+ * Fix last 2 characters in demo chat being missing
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
  * Fix poison damage not working in first round
