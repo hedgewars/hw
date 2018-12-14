@@ -659,7 +659,6 @@ end
 
 function AfterStartAnim()
   AnimSwitchHog(natives[leaksNum])
-  EndTurn(true)
   stage = spyKillStage
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
