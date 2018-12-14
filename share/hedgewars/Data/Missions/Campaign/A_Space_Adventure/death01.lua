@@ -143,6 +143,8 @@ function onGameInit()
 end
 
 function onGameStart()
+	ShowMission(unpack(goals[dialog01]))
+	HideMission()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
@@ -273,7 +275,7 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to eliminate all your enemies."))
+	SendStat(siCustomAchievement, loc("To win the game you have to eliminate Professor Hogevil."))
 	sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
 	EndGame()
 end
