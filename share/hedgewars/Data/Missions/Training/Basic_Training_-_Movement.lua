@@ -24,6 +24,7 @@ local switcherGear
 local tookDamage = false
 local switchTextDelay = -1
 local missionPanelConfirmed = false
+local missionPanelConfirmedTimer = 0
 local turnStarted = false
 
 local map = {
@@ -418,9 +419,9 @@ function onSwitch()
 end
 
 local function firstMission()
-	-- This part is CRITICALLY important for all future missions.
-	-- Because the player must know how to show the current mission texts again.
+	-- Here we teach player must know how to show the current mission texts again.
 	-- We force the player to hit Attack before the actual training begins.
+	-- Later, the mission panel key is perma-shown as caption.
 	local ctrl = ""
 	if INTERFACE == "desktop" then
 		ctrl = loc("IMPORTANT: To see the mission panel again, hold the mission panel key.").."| |"..
@@ -456,6 +457,19 @@ function onGameTick20()
 	if turnStarted and GameTime % 10000 == 0 and not missionPanelConfirmed then
 		-- Forces the first mission panel to be displayed without time limit
 		firstMission()
+	end
+	if missionPanelConfirmed then
+		missionPanelConfirmedTimer = missionPanelConfirmedTimer + 20
+		--[[ After confirming the initial mission panel,
+		show the mission panel key as permanent caption
+		so the player can't overlook or forget it. ]]
+		if missionPanelConfirmedTimer > 7000 then
+			if INTERFACE == "desktop" then
+				AddCaption(loc("Press [M] to see the mission texts"), capcolDefault, capgrpMessage2)
+			elseif INTERFACE == "touch" then
+				AddCaption(loc("Tap [Pause] to see the mission texts"), capcolDefault, capgrpMessage2)
+			end
+		end
 	end
 end
 
