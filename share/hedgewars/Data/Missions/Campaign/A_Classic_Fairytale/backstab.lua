@@ -1125,11 +1125,13 @@ function onNewTurn()
   end
 
   if stage == spyKillStage then
-    if CurrentHedgehog == spyHog or GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+    if GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
       EndTurn(true)
     else
+      if CurrentHedgehog == spyHog then
+        AnimSwitchHog(natives[leaksNum])
+      end
       SetGearMessage(CurrentHedgehog, 0)
-      --AnimSwitchHog(natives[leaksNum])
       SetTurnTimeLeft(MAX_TURN_TIME)
     end
   else
