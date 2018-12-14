@@ -212,4 +212,7 @@
         <file>res/chat/roomadmincontributor.png</file>
         <file>res/chat/roomadmincontributor_gray.png</file>
     </qresource>
+    <qresource lang="en">
+        <file alias="res/Trainings.png">res/Trainings_en.png</file>
+    </qresource>
 </RCC>
