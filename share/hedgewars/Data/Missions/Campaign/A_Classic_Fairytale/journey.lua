@@ -135,6 +135,7 @@ m2SpikyDead = 0
 TurnsLeft = 0
 stage = 0
 
+startAnimStarted = false
 blowTaken = false
 fireTaken = false
 gravityTaken = false
@@ -782,8 +783,6 @@ function StartMission()
     end
     SetupPlaceAlone()
     SetupEventsAlone()
-    AddAnim(startAnim)
-    AddFunction({func = AfterStartAnim, args = {}})
   else
     if m2Choice == choiceAccepted then
       SetupAnimAcceptedLived()
@@ -792,8 +791,6 @@ function StartMission()
     end
     SetupPlaceDuo()
     SetupEventsDuo()
-    AddAnim(startAnim)
-    AddFunction({func = AfterStartAnim, args = {}})
   end
   HideHedge(cyborg)
   HideHedge(princess)
@@ -1087,6 +1084,8 @@ function onGameInit()
     HealthDecrease = 0
     WaterRise = 0
 
+  AnimInit(true)
+
   AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
@@ -1115,8 +1114,6 @@ function onGameInit()
   AnimSetGearPosition(leaks, 0, 0)
   AnimSetGearPosition(cyborg, 0, 0)
   AnimSetGearPosition(princess, 0, 0)
-  
-  AnimInit()
 end
 
 function onGameStart()
@@ -1186,6 +1183,11 @@ function onAmmoStoreInit()
 end
 
 function onNewTurn()
+  if not startAnimStarted then
+      AddAnim(startAnim)
+      AddFunction({func = AfterStartAnim, args = {}})
+      startAnimStarted = true
+  end
   if AnimInProgress() then
     SetTurnTimeLeft(MAX_TURN_TIME)
   elseif victory then
