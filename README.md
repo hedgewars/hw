@@ -155,8 +155,8 @@ images and sounds are distributed under the terms of the GNU Free Documentation
 Licence version 1.2. See the `COPYING` file for the full text of the licenses.
 
 Copyright 2004-2018 Andrey Korotaev <unC0Rr@gmail.com> and others.
-See `QTfrontend/res/html/about.html` and `CREDITS` for a more complete list of
-authors.
+Click on the Hedgewars logo in the main menu and read the `CREDITS` text file
+for a more complete list of authors.
 
 Contact
 -------

@@ -1,10 +1,13 @@
 + features
 * bugfixes
 ============== 1.0.0-dev (unreleased) ==============
+ + Hand-drawn maps can now be scaled with slider
  + New chat command: “/help room” (shows room chat commands within the game)
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Longer delays between turns so its easier to see damage and messages
  + Skip ammo menu animation when playing with turn time of 10s or less
+ + Restructure credits
+ + Credits screen in main menu is now translatable
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
  * Fix poison damage not working in first round
