@@ -382,7 +382,7 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     where
         -- This is formatted in a way so it can parsed by engine to make it translatable
         -- Format: b<PLAYER NAME>]<MESSAGE>
-        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "]", msg]
+        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "]", msg, "\x20\x20"]
 
 
 handleCmd_inRoom ["BAN", banNick] = do
