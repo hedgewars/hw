@@ -403,7 +403,7 @@ function onGearDelete(gear)
 end
 
 function onGearDamage(gear)
-	if GetGearType(gear) == gtHedgehog and tookDamage == false then
+	if GetGearType(gear) == gtHedgehog and tookDamage == false and GetX(gear) > 1362 then
 		ShowMission(loc("Basic Movement Training"), loc("Fall Damage"), loc("Ouch! You just took fall damage.").."|"..
 		loc("Better get yourself another health crate to heal your wounds."), 2, 5000)
 		tookDamage = true
