@@ -242,7 +242,7 @@ function onGameTick()
 			loc("Swing: [Left]/[Right]").."|"..
 			loc("Release rope: [Attack]"), 2, 15000)
 			ropeAttached = true
-		elseif currentTarget > 1 then
+		elseif currentTarget > 1 and not (currentTarget == 6 and barrelsBoom) then
 			HideMission()
 		end
 	end
@@ -376,6 +376,10 @@ function onGearDelete(gear)
 			AddAmmo(hog, amBaseballBat, 100)
 			eraseGirder(2)
 			eraseGirder(3)
+			ShowMission(loc("Basic Rope Training"),
+				loc("Kaboom!"),
+				loc("Follow the path and destroy the next target."),
+				2, 5000)
 		end
 	elseif GetGearType(gear) == gtRope then
 		ropeGear = nil
