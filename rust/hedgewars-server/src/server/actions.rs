@@ -22,6 +22,9 @@ use crate::{
 };
 use rand::{thread_rng, Rng, distributions::Uniform};
 
+#[cfg(feature = "official-server")]
+use super::database;
+
 pub enum Destination {
     ToId(ClientId),
     ToSelf,

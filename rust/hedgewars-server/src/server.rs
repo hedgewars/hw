@@ -6,3 +6,5 @@ pub mod network;
 pub mod coretypes;
 mod actions;
 mod handlers;
+#[cfg(feature = "official-server")]
+mod database;

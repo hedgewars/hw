@@ -5,7 +5,7 @@ version = "0.0.1"
 authors = [ "Andrey Korotaev <a.korotaev@hedgewars.org>" ]
 
 [features]
-official-server = ["openssl"]
+official-server = ["openssl", "mysql"]
 tls-connections = ["openssl"]
 default = []
 
@@ -23,6 +23,7 @@ serde = "1.0"
 serde_yaml = "0.8"
 serde_derive = "1.0"
 openssl = { version = "0.10", optional = true }
+mysql = { version = "14.2", optional = true }
 
 [dev-dependencies]
 proptest = "0.8"
